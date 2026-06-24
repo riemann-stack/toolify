@@ -20,11 +20,11 @@ const FAQ_LD = [
               },
               {
                 q: '타율 3할의 의미는 무엇인가요?',
-                a: '타율 0.300(3할)은 100번 타석에 30번 안타를 친다는 의미로 KBO·MLB 모두에서 우수 타자의 기준선으로 통합니다. KBO 전체 타자 중 약 10~15%만이 3할을 달성합니다. 4할(0.400)은 단축시즌 외에는 사실상 불가능에 가까운 기록입니다.',
+                a: '타율 0.300(3할)은 100타수 중 30개의 안타를 친다는 의미입니다(볼넷·사구·희생타는 타수에서 제외). KBO·MLB 모두에서 우수 타자의 기준선으로 통하며, KBO 규정타석을 채운 타자 중 약 10~15%만이 3할을 달성합니다. 4할(0.400)은 단축시즌 외에는 사실상 불가능에 가까운 기록입니다.',
               },
               {
                 q: 'ERA와 FIP 중 어느 것을 봐야 하나요?',
-                a: 'ERA는 실제 자책점 기반이라 직관적이지만 수비력에 영향을 받습니다. <strong>FIP는 투수가 직접 컨트롤하는 요소(삼진·볼넷·홈런)만으로 계산</strong>해 투수의 진짜 실력을 더 정확히 보여줍니다. ERA보다 FIP가 낮으면 운이 좋았다는 신호, ERA보다 FIP가 높으면 운이 나빴다는 신호입니다.',
+                a: 'ERA는 실제 자책점 기반이라 직관적이지만 수비력에 영향을 받습니다. <strong>FIP는 투수가 직접 컨트롤하는 요소(삼진·볼넷·홈런)만으로 계산</strong>해 투수의 진짜 실력을 더 정확히 보여줍니다. <strong>FIP가 ERA보다 낮으면</strong> 수비·운이 받쳐주지 않아 자책점이 부풀려진(운이 나빴던) 신호로 이후 ERA가 내려갈 여지가 있고, 반대로 <strong>FIP가 ERA보다 높으면</strong> 운이 좋았던 신호로 ERA가 오를 여지가 있습니다.',
               },
               {
                 q: '투수 이닝에서 5.1, 5.2는 무슨 의미인가요?',
@@ -179,11 +179,14 @@ export default function BaseballStatsPage() {
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
                 <li>최저 ERA — <strong>선동열 0.78 (1993)</strong></li>
                 <li>최다 탈삼진 — <strong>최동원 223개 (1984)</strong></li>
-                <li>최다 승 — <strong>정민철 25승 (1996)</strong></li>
+                <li>최다 승 — <strong>장명부 30승 (1983)</strong></li>
                 <li>최다 세이브 — <strong>오승환 47세이브 (2006)</strong></li>
               </ul>
             </div>
           </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
+            ※ KBO 공식 기록실(koreabaseball.com) 기준이며, 집계 시점·출처에 따라 소폭 차이날 수 있습니다.
+          </p>
         </div>
 
         {/* ── 6. 자주 검색되는 질문 ── */}
@@ -193,7 +196,7 @@ export default function BaseballStatsPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             {[
-              { q: '"3할 타자" 기준은?', a: '타율 0.300 = 10타석 3안타', sub: 'KBO 전체 타자 중 10~15%만 달성' },
+              { q: '"3할 타자" 기준은?', a: '타율 0.300 = 10타수 3안타', sub: 'KBO 규정타석 타자 중 10~15%만 달성' },
               { q: '20-20 클럽',         a: '시즌 20+ 홈런 + 20+ 도루', sub: '파워와 스피드 겸비한 5툴 지표' },
               { q: '30-30 클럽',         a: '시즌 30+ 홈런 + 30+ 도루', sub: 'KBO에서 손에 꼽히는 위업' },
               { q: '퀄리티스타트 (QS)',  a: '선발 6이닝+ / 자책 3점 이하', sub: '선발 투수의 기본 평가 지표' },

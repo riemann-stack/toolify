@@ -7,7 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/sports/one-rm',
   title: '1RM 계산기 — 벤치·스쿼트·데드 최대 중량 + 워밍업 자동 + 성·연령 보정',
-  description: '12종 1RM 공식(Epley·Brzycki·Lombardi·O\'Conner)으로 진짜 최대 무게 추정 + RPE 보정·성·연령 수준·워밍업 5세트 자동·진행 그래프.',
+  description: '12종 운동·4개 공식(Epley·Brzycki·Lombardi·O\'Conner)으로 진짜 최대 무게 추정 + RPE 보정·성·연령 수준·워밍업 5세트 자동·진행 그래프.',
   keywords: ['1RM계산기', '벤치프레스1RM', '스쿼트1RM', '데드리프트1RM', '워밍업계산기', 'RPE계산기', '훈련중량계산기', '헬스1RM', '1RM공식', '체중대비1RM'],
 })
 
@@ -75,7 +75,7 @@ const FAQ_LD = [
   { "q":"워밍업은 정말 5세트나 필요한가요? 시간이 너무 오래 걸려요.","a":"본 세트가 80% 이상이면 5세트가 표준입니다. 60% 미만이면 2~3세트로 충분하고, 본 도구는 본 세트 강도에 따라 자동으로 워밍업 세트 수를 조절합니다. 워밍업을 줄이고 부상으로 한 달 쉬는 것보다, 매 세션 5분 더 투자하는 게 훨씬 효율적입니다." },
   { "q":"컨디션에 따라 1RM이 왜 이렇게 차이가 나죠?","a":"1RM은 수면·영양·스트레스·카페인에 민감하게 반응합니다. 10~15% 일일 편차는 정상이며, 주간 평균을 보는 것이 더 정확합니다. 디로드 주간 뒤에는 일시적으로 5~10% 떨어질 수 있어요. 본 도구의 &ldquo;내 기록&rdquo; 탭에 누적하면 추세선으로 변동성을 흡수할 수 있습니다." },
   { "q":"1RM을 얼마나 자주 갱신해야 하나요?","a":"초보자는 4~6주, 중급 이상은 8~12주마다 재측정이 적절합니다. 프로그램 전환·디로드 후가 좋은 타이밍입니다. 매주 갱신은 오히려 변동성 노이즈에 흔들려 장기 추세를 놓치기 쉬워요." },
-  { "q":"풀업·딥스 같은 맨몸 운동의 1RM은 어떻게 계산하나요?","a":"맨몸 운동은 체중 + 추가 중량으로 봅니다. 예: 체중 70kg + 풀업 벨트 20kg = 총 90kg이 작업 중량. 본 도구의 풀업·친업·딥스는 이 &ldquo;추가 중량&rdquo; 기준이며, 수준 표의 &ldquo;+0.3×&rdquo;는 체중 70kg이면 +21kg 추가가 중급이라는 뜻입니다." },
+  { "q":"풀업·딥스 같은 맨몸 운동의 1RM은 어떻게 계산하나요?","a":"도구에는 체중을 뺀 추가 중량(벨트·조끼)만 입력하세요. 예: 풀업에서 20kg 벨트를 찼다면 20kg만 입력합니다. 입력칸에도 &ldquo;추가 중량&rdquo;으로 표시됩니다. 수준 표의 &ldquo;+0.3×&rdquo;는 체중 70kg이면 +21kg 추가가 중급이라는 뜻입니다." },
   { "q":"기록은 어디에 저장되나요? 데이터가 사라질 수 있나요?","a":"모든 기록은 이 브라우저(localStorage)에만 저장됩니다. 서버로 전송되지 않으며, 브라우저 데이터를 지우거나 시크릿 모드로 접속하면 사라집니다. 다른 기기에서는 보이지 않으니 중요한 기록은 별도로 메모해두세요." }
 ]
 
@@ -290,11 +290,11 @@ export default function OneRMPage() {
       </p>
 
       {/* 5. 종목별 체중 대비 수준 기준표 (확장) */}
-      <h2 style={sectionTitle}>📊 12종 운동 체중 대비 수준 기준표</h2>
+      <h2 style={sectionTitle}>📊 11종 운동 체중 대비 수준 기준표</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         20대 남성 기준입니다. 도구 내에서 성별·연령을 선택하면 자동 보정된 값으로 평가됩니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden', marginBottom: '14px' }}>
+      <div style={{ ...card, padding: 0, overflowX: 'auto', marginBottom: '14px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -443,11 +443,11 @@ export default function OneRMPage() {
           </thead>
           <tbody>
             <tr><td style={cell}><strong>40kg</strong></td><td style={cell}>10</td><td style={cell}><strong>100kg</strong></td><td style={cell}>20 + 20</td></tr>
-            <tr><td style={cell}><strong>50kg</strong></td><td style={cell}>15</td><td style={cell}><strong>110kg</strong></td><td style={cell}>20 + 20 + 5</td></tr>
-            <tr><td style={cell}><strong>60kg</strong></td><td style={cell}>20</td><td style={cell}><strong>120kg</strong></td><td style={cell}>20 + 20 + 10</td></tr>
-            <tr><td style={cell}><strong>70kg</strong></td><td style={cell}>20 + 5</td><td style={cell}><strong>140kg</strong></td><td style={cell}>20 × 3</td></tr>
-            <tr><td style={cell}><strong>80kg</strong></td><td style={cell}>20 + 10</td><td style={cell}><strong>160kg</strong></td><td style={cell}>25 + 20 + 15</td></tr>
-            <tr><td style={cell}><strong>90kg</strong></td><td style={cell}>20 + 15</td><td style={cell}><strong>180kg</strong></td><td style={cell}>25 × 2 + 20 + 10</td></tr>
+            <tr><td style={cell}><strong>50kg</strong></td><td style={cell}>15</td><td style={cell}><strong>110kg</strong></td><td style={cell}>25 + 20</td></tr>
+            <tr><td style={cell}><strong>60kg</strong></td><td style={cell}>20</td><td style={cell}><strong>120kg</strong></td><td style={cell}>25 + 25</td></tr>
+            <tr><td style={cell}><strong>70kg</strong></td><td style={cell}>25</td><td style={cell}><strong>140kg</strong></td><td style={cell}>20 × 3</td></tr>
+            <tr><td style={cell}><strong>80kg</strong></td><td style={cell}>15 + 15</td><td style={cell}><strong>160kg</strong></td><td style={cell}>25 + 25 + 20</td></tr>
+            <tr><td style={cell}><strong>90kg</strong></td><td style={cell}>20 + 15</td><td style={cell}><strong>180kg</strong></td><td style={cell}>20 × 4</td></tr>
           </tbody>
         </table>
       </div>
@@ -518,7 +518,7 @@ export default function OneRMPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q9. 풀업·딥스 같은 맨몸 운동의 1RM은 어떻게 계산하나요?</summary>
         <div style={faqAnswer}>
-          맨몸 운동은 <strong style={{ color: 'var(--text)' }}>체중 + 추가 중량</strong>으로 봅니다. 예: 체중 70kg + 풀업 벨트 20kg = 총 90kg이 작업 중량. 본 도구의 풀업·친업·딥스는 이 &ldquo;추가 중량&rdquo; 기준이며, 수준 표의 &ldquo;+0.3×&rdquo;는 체중 70kg이면 +21kg 추가가 중급이라는 뜻입니다.
+          도구에는 <strong style={{ color: 'var(--text)' }}>체중을 뺀 추가 중량(벨트·조끼)만</strong> 입력하세요. 예: 풀업에서 20kg 벨트를 찼다면 20kg만 입력합니다. 입력칸에도 &ldquo;추가 중량&rdquo;으로 표시됩니다. 수준 표의 &ldquo;+0.3×&rdquo;는 체중 70kg이면 +21kg 추가가 중급이라는 뜻입니다.
         </div>
       </details>
 

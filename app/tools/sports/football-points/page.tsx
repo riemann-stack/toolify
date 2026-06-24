@@ -32,7 +32,7 @@ const FAQ_LD = [
               },
               {
                 q: '챔피언스리그 진출권은 몇 위까지인가요?',
-                a: 'EPL·라리가·분데스리가는 <strong>1~4위</strong>, 세리에A는 1~4위(2024–25 시즌부터 1~5위로 확대 가능), 리그앙은 1~3위까지 챔피언스리그 본선·플레이오프 진출권을 가집니다. K리그1은 1위가 챔피언스리그 엘리트, 2~3위가 챔피언스리그 투(아시아 대회) 출전권을 받습니다.',
+                a: '주요 유럽 리그는 보통 <strong>상위 4팀</strong>이 챔피언스리그 본선에 직행합니다. 여기에 UEFA의 <strong>리그 성과 순위(European Performance Spots)</strong>에 따라 직전 시즌 대회 성적이 가장 좋은 1~2개 리그에 5번째 진출권이 추가될 수 있어, 리그별 장수가 매 시즌 달라집니다. 리그앙은 대체로 1~3위, K리그1은 1위가 ACL 엘리트, 2~3위가 ACL2(아시아 대회) 출전권을 받습니다. 정확한 장수는 매 시즌 공식 발표를 확인하세요.',
               },
             ]
 
@@ -103,7 +103,7 @@ export default function FootballPointsPage() {
                   { l: '🇮🇹 세리에A',  t: '20팀', g: '38경기', c: '82~88점', s: '32점 이하' },
                   { l: '🇩🇪 분데스리가',t: '18팀', g: '34경기', c: '75~80점', s: '30점 이하' },
                   { l: '🇫🇷 리그앙',    t: '18팀', g: '34경기', c: '78~85점', s: '30점 이하' },
-                  { l: '🇯🇵 J리그',     t: '18팀', g: '34경기', c: '70~75점', s: '30점 이하' },
+                  { l: '🇯🇵 J리그',     t: '20팀', g: '38경기', c: '72~80점', s: '32점 이하' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.l}</td>
@@ -117,7 +117,7 @@ export default function FootballPointsPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ※ 승점 범위는 최근 5~10시즌 통계 기준 추정치이며 시즌별로 차이가 있습니다. K리그1은 12팀 체제 기준이며 강등권은 11위(승강 PO) 또는 12위(직강) 기준입니다.
+            ※ 팀 수·경기 수는 2025 시즌 구조 기준이며(리그 개편 시 변동), 승점 범위는 최근 시즌 통계 추정치로 시즌별 차이가 있습니다. K리그1은 12팀 체제 기준이며 강등권은 11위(승강 PO) 또는 12위(직강) 기준입니다.
           </p>
         </div>
 
@@ -234,10 +234,10 @@ export default function FootballPointsPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/sports/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',     desc: 'WHS 방식 핸디캡·코스 핸디캡 계산' },
-              { href: '/tools/sports/golf-cost',     icon: '🏌️', name: '골프 비용 계산기', desc: '그린피·카트·캐디·식사 1인 정산' },
-              { href: '/tools/date/dday',          icon: '📅', name: 'D-day 계산기',           desc: '다음 경기까지 D-day' },
-              { href: '/tools/life/random',        icon: '🎲', name: '랜덤 추첨기',             desc: '대진표·순서 무작위 추첨' },
+              { href: '/tools/sports/formation',      icon: '⚽', name: '축구 포메이션 생성기', desc: '5·7·9·11인제 포메이션 + 명단 시각화·PNG 저장' },
+              { href: '/tools/date/dday',             icon: '📅', name: 'D-day 계산기',           desc: '다음 경기·시즌 종료까지 D-day' },
+              { href: '/tools/life/random',           icon: '🎲', name: '랜덤 추첨기',             desc: '대진표·순서 무작위 추첨' },
+              { href: '/tools/sports/baseball-stats', icon: '⚾', name: '야구 타율 계산기',       desc: '타율·OPS·ERA·WHIP + 리그 평균 비교' },
             ].map((t, i) => (
               <Link
                 key={i}

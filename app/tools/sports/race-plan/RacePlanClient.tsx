@@ -9,7 +9,7 @@ import {
   type DistKey, type Strategy, type Segment,
 } from './racePlanUtils'
 
-const MAX_KM = 50
+const MAX_KM = 100   // 100K 울트라까지 지원 (긴 거리는 구간 리스트 접기로 처리)
 
 function resize<T>(arr: T[], n: number, fill: T): T[] {
   const out = arr.slice(0, n)
@@ -45,9 +45,11 @@ export default function RacePlanClient() {
   const [paceStrs, setPaceStrs] = useState<string[]>(() => fillStrategy(parsePace('6:00'), 10, 'even').map(fmtPace))
   const [altStrs, setAltStrs] = useState<string[]>(() => Array(10).fill(''))
   const [copied, setCopied] = useState(false)
+  const [expandSegs, setExpandSegs] = useState(false)  // 긴 거리 구간 리스트 접기/펼치기
 
   const segments = buildSegments(distKm)
   const n = segments.length
+  const longList = n > 15   // 하프·풀·울트라 — 구간 리스트 접기 대상
   // 길이 안전 보정 (거리 변경 직후 렌더 안정성)
   const paceStrsView = paceStrs.length === n ? paceStrs : resize(paceStrs, n, '')
   const altStrsView = altStrs.length === n ? altStrs : resize(altStrs, n, '')
@@ -93,7 +95,10 @@ export default function RacePlanClient() {
       if (gradeAdjust && elevOn) flat = applyGrade(flat, gradesFrom(segs, nextAlts.map(parseAlt), startElev))
       setPaceStrs(flat.map(fmtPace))
     } else {
-      setPaceStrs(prev => resize(prev, m, ''))
+      // custom 상태에서 거리 연장 시 새 구간을 빈칸(0초→완주시간 과소계산) 대신 기준 페이스로 채움
+      const bp = parsePace(basePace)
+      const fillStr = bp > 0 ? fmtPace(bp) : ''
+      setPaceStrs(prev => resize(prev, m, fillStr))
     }
   }
 
@@ -177,9 +182,14 @@ export default function RacePlanClient() {
               value={customKm}
               onChange={e => {
                 const v = e.target.value.replace(/[^0-9.]/g, '')
-                setCustomKm(v)
                 const km = parseFloat(v)
-                if (isFinite(km) && km > 0) changeDistance(km, 'custom')
+                // 표시값과 계산 기준 일치 — 상한(50km) 초과 시 입력칸도 상한값으로 고정
+                if (isFinite(km) && km > MAX_KM) {
+                  setCustomKm(String(MAX_KM)); changeDistance(MAX_KM, 'custom')
+                } else {
+                  setCustomKm(v)
+                  if (isFinite(km) && km > 0) changeDistance(km, 'custom')
+                }
               }} />
             <span className={s.customUnit}>km</span>
           </div>
@@ -207,7 +217,11 @@ export default function RacePlanClient() {
             <label className={s.fieldLabel} htmlFor="rp-clock">출발 시각 (선택)</label>
             <input id="rp-clock" className={s.input} type="text" inputMode="numeric"
               placeholder="예: 08:00" value={startClock}
+              aria-invalid={startClock.trim() !== '' && startClockMin == null}
               onChange={e => setStartClock(e.target.value.replace(/[^0-9:]/g, ''))} />
+            {startClock.trim() !== '' && startClockMin == null && (
+              <p className={s.fieldError} role="status">시:분 형식(0~23시)으로 입력하세요. 예: 08:00</p>
+            )}
           </div>
         </div>
         <p className={s.hint}>기준 페이스를 정하고 아래 전략을 누르면 구간이 자동 채워집니다. 출발 시각을 넣으면 지점별 통과 예상 시각이 표시됩니다.</p>
@@ -266,7 +280,18 @@ export default function RacePlanClient() {
         <div className={s.segHead}>
           <span className={s.cardLabel}>구간별 페이스 {elevOn && '· 고도'}</span>
           {strategy === 'custom' && <span className={s.customTag}>직접 조정됨</span>}
+          {longList && (
+            <button type="button" className={s.segToggle} aria-expanded={expandSegs}
+              onClick={() => setExpandSegs(v => !v)}>
+              {expandSegs ? '접기 ▴' : `전체 ${n}개 편집 ▾`}
+            </button>
+          )}
         </div>
+        {longList && !expandSegs ? (
+          <p className={s.segCollapsed}>
+            {n}개 구간이 <strong>{STRATEGY_LABEL[strategy]}</strong> 전략으로 자동 채워졌습니다. 구간별 통과 시각은 아래 <strong>주요 지점 통과</strong>에서 확인하세요. 직접 조정하려면 <strong>전체 {n}개 편집</strong>을 누르세요.
+          </p>
+        ) : (
         <div className={s.segList}>
           {result.rows.map((r, i) => (
             <div key={i} className={`${s.segRow} ${elevOn ? s.segRowElev : ''}`}>
@@ -301,6 +326,7 @@ export default function RacePlanClient() {
             </div>
           ))}
         </div>
+        )}
       </div>
 
       {/* ── 결과: 통과 요약 + 프로파일 ── */}

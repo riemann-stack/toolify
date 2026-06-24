@@ -1,7 +1,8 @@
 // ─────────────────────────────────────────────────────────
 // 경조사비(축의금·부의금) 데이터
-//  금액 단위는 모두 "만원". 추천값은 한국의 일반적 관례(2024~2025 시세)를
-//  반영한 참고치이며, 지역·집안·개인 사정에 따라 달라질 수 있다.
+//  금액 단위는 모두 "만원". 추천값은 결혼정보·취업포털 등의 축의금 설문과
+//  일반적 관례를 종합한 참고치(예식장 1인 식대 3~5만원 상승 추세 반영, 기준 2026)이며,
+//  공식 고시가 아니라 사회 통념이라 지역·집안·개인 사정에 따라 달라진다.
 // ─────────────────────────────────────────────────────────
 
 export type Mode = 'wedding' | 'funeral'
@@ -36,9 +37,9 @@ export const REL_MAP: Record<string, Relationship> = Object.fromEntries(RELATION
 // 동반(결혼식 식대 가산용) — 본인 외 추가 인원
 export interface Companion { id: string; label: string; extra: number }
 export const COMPANIONS: Companion[] = [
-  { id: 'solo',   label: '혼자',          extra: 0 },
-  { id: 'spouse', label: '배우자 동반',    extra: 1 },
-  { id: 'family', label: '가족 동반(자녀)', extra: 2 },
+  { id: 'solo',   label: '나 혼자',       extra: 0 },
+  { id: 'spouse', label: '배우자와 (2인)', extra: 1 },
+  { id: 'family', label: '가족과 (3인)',  extra: 2 },
 ]
 
 // 1인 식대 추정(만원). 결혼식 참석 시 동반 인원에 곱해 가산.
@@ -66,6 +67,8 @@ export interface Result {
   low: number
   high: number
   attendBased: boolean
+  base: number      // 관계 기준액(관례 보정 후, 만원)
+  mealAdd: number   // 동반 식대 가산(만원)
 }
 
 export function calcGift(
@@ -75,20 +78,22 @@ export function calcGift(
   companionExtra: number,
 ): Result {
   const pair = mode === 'wedding' ? rel.wedding : rel.funeral
-  const base = attend ? pair.attend : pair.absent
+  // 관계 기준액을 관례 금액으로 보정(데이터는 이미 관례값이라 사실상 그대로).
+  const base = snapCustomary(Math.max(MEAL_COST, attend ? pair.attend : pair.absent))
 
-  // 결혼식 + 참석 + 동반: 식대 가산(가까운 가족 제외)
+  // 결혼식 + 참석 + 동반: 동반 1인당 식대를 "그대로" 가산해 추천에 반영한다.
+  // (스냅으로 흡수하면 20+5=25가 20으로 내려가 '인원수만큼 더 얹는다'는 안내와 충돌)
+  // 금액이 식대를 크게 웃도는 가까운 가족(기준액 > 캡)은 가산하지 않는다.
   const mealAdd = attend && mode === 'wedding' && base <= MEAL_ADD_CAP
     ? companionExtra * MEAL_COST
     : 0
 
-  const raw = Math.max(MEAL_COST, base + mealAdd) // 최소 5만원
-  const recommend = snapCustomary(raw)
+  const recommend = base + mealAdd
 
   const low = Math.min(pair.absent, pair.attend)
-  const high = snapCustomary(Math.max(pair.attend, raw))
+  const high = Math.max(pair.attend, recommend)
 
-  return { recommend, low, high, attendBased: pair.attend !== pair.absent }
+  return { recommend, low, high, attendBased: pair.attend !== pair.absent, base, mealAdd }
 }
 
 // ── 봉투 문구 ──

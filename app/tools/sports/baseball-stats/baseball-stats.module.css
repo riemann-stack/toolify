@@ -392,38 +392,13 @@
   align-items: center;
   gap: 6px;
 }
-.advTip {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--bg3);
-  color: var(--muted);
-  font-size: 10px;
-  text-align: center;
-  line-height: 14px;
-  cursor: help;
-  position: relative;
-}@media (hover: hover) {
-  .advTip:hover::after {
-  content: attr(data-tip);
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg);
-  color: var(--text);
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
+.advDesc {
   font-size: 11px;
-  white-space: nowrap;
-  z-index: 10;
-  pointer-events: none;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 400;
-  letter-spacing: 0;
-}
+  color: var(--muted);
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  line-height: 1.55;
 }
 .advValue {
   font-family: 'Inter', system-ui, sans-serif;

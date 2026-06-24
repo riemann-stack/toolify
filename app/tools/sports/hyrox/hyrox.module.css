@@ -67,6 +67,9 @@
 
 /* 스테이션 시간 입력 그리드 */
 .stationGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+/* 좁은 화면: 탭 텍스트 넘침 방지 + 스테이션 입력칸 1열로 넓게 */
+@media (max-width: 380px) { .tabBtn { font-size: 12px; padding: 10px 3px; letter-spacing: -0.2px; } }
+@media (max-width: 360px) { .stationGrid { grid-template-columns: 1fr; } }
 .stationItem {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 9px 11px; display: flex; flex-direction: column; gap: 6px; min-width: 0;
@@ -80,7 +83,7 @@
 .stationInput {
   flex: 1; min-width: 0;
   background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
-  padding: 7px 9px; font-family: 'Inter', system-ui, sans-serif; font-size: 14px;
+  padding: 7px 9px; font-family: 'Inter', system-ui, sans-serif; font-size: 16px;
   font-weight: 700; color: var(--text); text-align: right; outline: none;
   -moz-appearance: textfield; appearance: textfield;
 }
@@ -154,6 +157,10 @@
 .note {
   font-size: 12px; color: var(--muted); line-height: 1.7; margin: 12px 0 0;
   font-family: 'Noto Sans KR', sans-serif;
+}
+.zeroWarn {
+  font-size: 12px; color: var(--warning); line-height: 1.6; margin: 10px 0 0;
+  font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
 }
 .note strong { color: var(--text); }
 

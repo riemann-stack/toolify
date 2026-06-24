@@ -688,7 +688,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 10px;
-  font-size: 14px;
+  font-size: 16px; /* iOS 포커스 줌 방지 (16px 미만 시 자동 확대) */
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   color: var(--text);

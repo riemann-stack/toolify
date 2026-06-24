@@ -98,9 +98,11 @@ export default function SwimPaceClient() {
 
   const distM = parseAmount(distStr)
   const laps = poolLen > 0 ? Math.round(distM / poolLen) : 0
+  // 거리가 풀 길이로 나누어떨어지지 않으면 바퀴 수가 반올림됨 (안내용)
+  const distNotDivisible = distM > 0 && poolLen > 0 && distM % poolLen !== 0
   const pace100 = paceToSec100(paceMin, paceSec)
 
-  // 거리 ↔ 왕복수 동기
+  // 거리 ↔ 바퀴 수(편도) 동기
   const setLaps = (n: number) => {
     if (!Number.isFinite(n) || n < 0) return
     setDistStr(String(poolLen * Math.round(n)))
@@ -126,7 +128,7 @@ export default function SwimPaceClient() {
     return { mPerS, kmh: mPerS * 3.6 }
   }, [pace100])
 
-  // 거리별 예상기록 (현재 페이스 유지 + 영법 계수)
+  // 거리별 예상기록 (입력=자유형 페이스로 보고 영법 계수로 환산)
   const strokeCoef = STROKES.find(s => s.key === stroke)!.coef
   const tableRows = useMemo(() => {
     if (pace100 <= 0) return []
@@ -165,6 +167,21 @@ export default function SwimPaceClient() {
     setPaceSec(String(s % 60))
   }
 
+  // blur 시 60초 이상 입력을 분으로 올림 정규화 (입력칸 표시 ↔ 계산 일치)
+  const normMMSS = (mm: string, ss: string, setMm: (v: string) => void, setSs: (v: string) => void) => {
+    if (toInt(ss) < 60) return
+    const total = Math.max(0, toInt(mm)) * 60 + Math.max(0, toInt(ss))
+    setMm(String(Math.floor(total / 60)))
+    setSs(String(total % 60).padStart(2, '0'))
+  }
+  const normTime = () => {
+    if (toInt(tSec) < 60 && toInt(tMin) < 60) return
+    const total = timeToSec(tHour, tMin, tSec)
+    setTHour(String(Math.floor(total / 3600)))
+    setTMin(String(Math.floor((total % 3600) / 60)).padStart(2, '0'))
+    setTSec(String(total % 60).padStart(2, '0'))
+  }
+
   const handleCopy = async () => {
     if (pace100 <= 0) return
     const lines = [
@@ -174,7 +191,7 @@ export default function SwimPaceClient() {
         ? `${fmtComma(distM)}m (${poolLen}m풀 ${laps}바퀴) 총기록: ${secToTimeKo(totalFromPace)}`
         : '',
       speed ? `평균 속도: ${speed.kmh.toFixed(2)} km/h · ${speed.mPerS.toFixed(2)} m/s` : '',
-      swolf ? `SWOLF(25m): ${swolf.score} (${swolf.t}초 + ${swolf.s}스트로크)` : '',
+      swolf ? `SWOLF(${poolLen}m): ${swolf.score} (${swolf.t}초 + ${swolf.s}스트로크)` : '',
       sendoff ? `send-off: ${secToMmss(sendoff.total)} (구간 ${secToMmss(sendoff.target)} + 휴식 ${sendoff.rest}초)` : '',
       '',
       'youtil.kr/tools/sports/swim-pace',
@@ -215,9 +232,9 @@ export default function SwimPaceClient() {
         </div>
       </div>
 
-      {/* ── 거리 × 왕복수 ── */}
+      {/* ── 거리 × 바퀴 수(편도) ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel} htmlFor="swim-dist">총 거리 · 왕복수</label>
+        <label className={styles.cardLabel} htmlFor="swim-dist">총 거리 · 바퀴 수</label>
         <div className={styles.distGrid}>
           <div className={styles.field}>
             <div className={styles.inputBox}>
@@ -235,14 +252,20 @@ export default function SwimPaceClient() {
             <div className={styles.inputBox}>
               <input className={styles.amountInput}
                 type="text" inputMode="numeric"
+                aria-label="바퀴 수"
                 value={laps > 0 ? String(laps) : ''}
                 placeholder="60"
                 onChange={e => setLaps(parseAmount(e.target.value))} />
               <span className={styles.inputUnit}>바퀴</span>
             </div>
-            <span className={styles.fieldHint}>{poolLen}m × 왕복수</span>
+            <span className={styles.fieldHint}>1바퀴 = {poolLen}m(편도)</span>
           </div>
         </div>
+        {distNotDivisible && (
+          <p className={styles.divHint}>
+            ⚠️ {fmtComma(distM)}m는 {poolLen}m로 정확히 나누어떨어지지 않아 약 {laps}바퀴({fmtComma(laps * poolLen)}m)로 표시됩니다.
+          </p>
+        )}
         <div className={styles.quickDist}>
           {[
             { m: 50, label: '50m' },
@@ -253,6 +276,7 @@ export default function SwimPaceClient() {
           ].map(q => (
             <button key={q.m} type="button"
               className={`${styles.chip} ${distM === q.m ? styles.chipActive : ''}`}
+              aria-pressed={distM === q.m}
               onClick={() => setDistStr(String(q.m))}>{q.label}</button>
           ))}
         </div>
@@ -265,12 +289,14 @@ export default function SwimPaceClient() {
           <input className={styles.paceInput} type="text" inputMode="numeric"
             aria-label="100m 페이스 분"
             value={paceMin} placeholder="1"
-            onChange={e => setPaceMin(e.target.value.replace(/[^\d]/g, '').slice(0, 2))} />
+            onChange={e => setPaceMin(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
+            onBlur={() => normMMSS(paceMin, paceSec, setPaceMin, setPaceSec)} />
           <span className={styles.paceSep}>:</span>
           <input className={styles.paceInput} type="text" inputMode="numeric"
             aria-label="100m 페이스 초"
             value={paceSec} placeholder="45"
-            onChange={e => setPaceSec(e.target.value.replace(/[^\d]/g, '').slice(0, 2))} />
+            onChange={e => setPaceSec(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
+            onBlur={() => normMMSS(paceMin, paceSec, setPaceMin, setPaceSec)} />
           <span className={styles.paceUnit}>/100m</span>
         </div>
         <div className={styles.quickRow}>
@@ -281,6 +307,7 @@ export default function SwimPaceClient() {
               return (
                 <button key={`${q.mm}-${q.ss}`} type="button"
                   className={`${styles.chip} ${active ? styles.chipActive : ''}`}
+                  aria-pressed={active}
                   onClick={() => setQuick(q.mm, q.ss)}>
                   {q.mm}:{String(q.ss).padStart(2, '0')}
                 </button>
@@ -329,21 +356,24 @@ export default function SwimPaceClient() {
             <input className={styles.timeInput} type="text" inputMode="numeric"
               aria-label="총기록 시"
               value={tHour} placeholder="0"
-              onChange={e => setTHour(e.target.value.replace(/[^\d]/g, '').slice(0, 2))} />
+              onChange={e => setTHour(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
+              onBlur={normTime} />
             <span className={styles.timeLabel}>시</span>
           </div>
           <div className={styles.timeField}>
             <input className={styles.timeInput} type="text" inputMode="numeric"
               aria-label="총기록 분"
               value={tMin} placeholder="22"
-              onChange={e => setTMin(e.target.value.replace(/[^\d]/g, '').slice(0, 2))} />
+              onChange={e => setTMin(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
+              onBlur={normTime} />
             <span className={styles.timeLabel}>분</span>
           </div>
           <div className={styles.timeField}>
             <input className={styles.timeInput} type="text" inputMode="numeric"
               aria-label="총기록 초"
               value={tSec} placeholder="30"
-              onChange={e => setTSec(e.target.value.replace(/[^\d]/g, '').slice(0, 2))} />
+              onChange={e => setTSec(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
+              onBlur={normTime} />
             <span className={styles.timeLabel}>초</span>
           </div>
         </div>
@@ -373,11 +403,12 @@ export default function SwimPaceClient() {
       {/* ── 거리별 예상기록 표 ── */}
       {tableRows.length > 0 && (
         <div className={styles.card}>
-          <label className={styles.cardLabel}>거리별 예상기록 (현재 페이스 유지)</label>
+          <label className={styles.cardLabel}>거리별 예상기록 (자유형 페이스 기준·영법 환산)</label>
           <div className={styles.strokeRow}>
             {STROKES.map(s => (
               <button key={s.key} type="button"
                 className={`${styles.chip} ${stroke === s.key ? styles.chipActive : ''}`}
+                aria-pressed={stroke === s.key}
                 onClick={() => setStroke(s.key)}>{s.name}</button>
             ))}
           </div>
@@ -409,17 +440,17 @@ export default function SwimPaceClient() {
 
       {/* ── SWOLF ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>SWOLF (25m 1바퀴)</label>
+        <label className={styles.cardLabel}>SWOLF ({poolLen}m 1바퀴)</label>
         <div className={styles.swolfRow}>
           <div className={styles.field}>
             <div className={styles.inputBox}>
               <input className={styles.amountInput} type="text" inputMode="numeric"
-                aria-label="25m 소요 시간(초)"
+                aria-label={`${poolLen}m 소요 시간(초)`}
                 value={lapTimeStr} placeholder="20"
                 onChange={e => setLapTimeStr(e.target.value.replace(/[^\d]/g, '').slice(0, 3))} />
               <span className={styles.inputUnit}>초</span>
             </div>
-            <span className={styles.fieldHint}>25m 소요</span>
+            <span className={styles.fieldHint}>{poolLen}m 소요</span>
           </div>
           <span className={styles.eqSign}>+</span>
           <div className={styles.field}>
@@ -451,14 +482,16 @@ export default function SwimPaceClient() {
               <input className={styles.paceInputSm} type="text" inputMode="numeric"
                 aria-label="목표 구간기록 분"
                 value={soMin} placeholder="1"
-                onChange={e => setSoMin(e.target.value.replace(/[^\d]/g, '').slice(0, 2))} />
+                onChange={e => setSoMin(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
+                onBlur={() => normMMSS(soMin, soSec, setSoMin, setSoSec)} />
               <span className={styles.paceSepSm}>:</span>
               <input className={styles.paceInputSm} type="text" inputMode="numeric"
                 aria-label="목표 구간기록 초"
                 value={soSec} placeholder="40"
-                onChange={e => setSoSec(e.target.value.replace(/[^\d]/g, '').slice(0, 2))} />
+                onChange={e => setSoSec(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
+                onBlur={() => normMMSS(soMin, soSec, setSoMin, setSoSec)} />
             </div>
-            <span className={styles.fieldHint}>목표 구간기록</span>
+            <span className={styles.fieldHint}>목표 구간기록 (예: 100m 반복 1회)</span>
           </div>
           <span className={styles.eqSign}>+</span>
           <div className={styles.field}>

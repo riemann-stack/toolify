@@ -8,7 +8,7 @@ export const metadata = buildMetadata({
   path: '/tools/sports/hiking-time',
   title: '등산 시간 계산기 — Naismith·Tobler·한국 표준 3공식 + 100대 명산 35+ 프리셋 + 턴어라운드 안전 시간',
   description:
-    'Naismith·Tobler·한국 등산교실 3공식 + 북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋. 일몰 전 하산 진단.',
+    'Naismith·Tobler·한국 코스타임 3공식 + 북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋. 일몰 전 하산 진단.',
   keywords: [
     '등산 시간 계산', '등산 소요시간', '산행 시간 계산',
     '북한산 시간', '북한산 백운대 시간', '설악산 시간', '설악산 대청봉 시간',
@@ -48,11 +48,11 @@ const card: React.CSSProperties = {
 const FAQ: { q: string; a: string }[] = [
   {
     q: 'Naismith vs Tobler 공식 차이는?',
-    a: '<strong style="color:var(--text)">Naismith (1892)</strong>: 가장 오래된 등산 시간 공식. 평지 5km/h + 오르막 600m당 1시간. 단순하지만 내리막 보정이 없어 부정확.<br/><br/><strong style="color:var(--text)">Tobler Function (1993)</strong>: 경사도 함수 기반. 가파른 내리막에서는 오히려 속도가 느려진다는 사실 반영. 최대속도 6km/h가 약간 내리막(-2.86%)에서 발생.<br/><br/>한국 산은 가파르고 등산로가 좁아 두 공식 모두 보수적 추정이 필요. 본 도구의 <strong style="color:var(--accent)">한국 등산교실</strong> 표준이 가장 현실적.',
+    a: '<strong style="color:var(--text)">Naismith (1892)</strong>: 가장 오래된 등산 시간 공식. 평지 5km/h + 오르막 600m당 1시간. 단순하지만 내리막 보정이 없어 부정확.<br/><br/><strong style="color:var(--text)">Tobler Function (1993)</strong>: 경사도 함수 기반. 가파른 내리막에서는 오히려 속도가 느려진다는 사실 반영. 최대속도 6km/h가 약간 내리막(-2.86%)에서 발생.<br/><br/>한국 산은 가파르고 등산로가 좁아 두 공식 모두 보수적 추정이 필요. 본 도구의 <strong style="color:var(--accent)">한국 코스타임</strong> 기준(100대 명산 표준 소요시간 보정)이 가장 현실적.',
   },
   {
     q: '한국 산에서 평균 페이스는?',
-    a: '일반 체력 기준 <strong style="color:var(--text)">평균 2.5~3km/h</strong>. 한국 산은 가파른 편이라 국제 표준(5km/h)보다 느립니다.<ul style="padding-left:20px;margin:8px 0"><li><strong>오르막</strong>: 100m 표고차 = 30분 (한국 등산교실 표준)</li><li><strong>내리막</strong>: 100m 표고차 = 15분</li><li><strong>평지</strong>: 1km = 24분 (2.5km/h)</li></ul>트레일러닝 수준이면 1.5배 빠름, 초보는 1.25배 느림.',
+    a: '한국 산은 가파르고 등산로가 좁아 국제 표준(평지 5km/h)보다 느립니다. 본 도구는 <strong style="color:var(--text)">100대 명산 표준 코스타임</strong>에 맞춰 보정했습니다.<ul style="padding-left:20px;margin:8px 0"><li><strong>오르막</strong>: 표고 100m당 약 16분 (≈ 시속 고도 375m)</li><li><strong>내리막</strong>: 표고 100m당 약 7분</li><li><strong>거리</strong>: 1km당 약 10분</li><li><strong>휴식</strong>: 50분 보행마다 10분 (별도 합산)</li></ul>종합하면 일반 코스 평균 약 1.5~2.5km/h(경사에 따라). 트레일러닝 수준이면 1.5배 빠름, 초보는 1.25배 느림.',
   },
   {
     q: '체력 등급은 어떻게 정하나요?',
@@ -60,7 +60,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: '오르막 100m가 평지 1km보다 오래 걸리는 이유?',
-    a: '<strong style="color:var(--text)">물리적 일량(에너지)이 다르기 때문</strong>입니다. 오르막은 중력에 거슬러 올라가야 하므로 같은 거리라도 평지보다 5~10배 에너지 소모.<br/><br/>Naismith 공식: 600m 오르막 = 1시간 = 평지 5km. 즉 <strong>오르막 100m ≈ 평지 833m</strong>의 시간 가치. 한국 표준은 더 보수적이어서 100m 오르막 = 평지 1.25km 수준.<br/><br/>한국에서 거리는 짧아도 표고차가 큰 코스(설악산 오색 9km/1300m 등)는 거리만 보면 안 되고 표고차가 핵심.',
+    a: '<strong style="color:var(--text)">물리적 일량(에너지)이 다르기 때문</strong>입니다. 오르막은 중력에 거슬러 올라가야 하므로 같은 거리라도 평지보다 5~10배 에너지 소모.<br/><br/>Naismith 공식: 600m 오르막 = 1시간 = 평지 5km. 즉 <strong>오르막 100m ≈ 평지 833m</strong>의 시간 가치. 한국 코스타임 기준은 더 보수적이어서 오르막 100m(약 16분) ≈ 평지 1.6km(약 16분) 수준.<br/><br/>한국에서 거리는 짧아도 표고차가 큰 코스(설악산 오색 9km/1300m 등)는 거리만 보면 안 되고 표고차가 핵심.',
   },
   {
     q: '야간 산행은 얼마나 더 걸리나?',
@@ -113,9 +113,9 @@ export default function HikingTimePage() {
               </thead>
               <tbody>
                 {[
-                  ['Naismith Rule',     '1892',  '평지 5km/h + 600m당 +1h',     '⭐⭐⭐',    '단순·계산 쉬움. 영국 표준'],
-                  ['Tobler Function',   '1993',  '경사도 기반 속도 함수',        '⭐⭐⭐⭐',  '경사 정밀. 내리막 보정 ✓'],
-                  ['한국 등산교실',     '한국',  '평균 2.5km/h, 100m당 30분',   '⭐⭐⭐⭐⭐', '한국 산 환경 최적화'],
+                  ['Naismith Rule',     '1892',  '평지 5km/h + 600m당 +1h',          '⭐⭐⭐',    '단순·계산 쉬움. 영국 표준'],
+                  ['Tobler Function',   '1993',  '경사도 기반 속도 함수',             '⭐⭐⭐⭐',  '경사 정밀. 내리막 보정 ✓'],
+                  ['한국 코스타임',     '보정',  '거리 10분/km + 오르막 100m당 16분', '⭐⭐⭐⭐⭐', '100대 명산 표준 코스타임 보정'],
                 ].map(([name, year, assumption, fit, note], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{name}</td>

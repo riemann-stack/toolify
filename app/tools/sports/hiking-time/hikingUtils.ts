@@ -195,12 +195,14 @@ export function toblerMin(distanceKm: number, elevGainM: number, elevLossM: numb
 }
 
 export function koreanMin(distanceKm: number, elevGainM: number, elevLossM: number): FormulaResult {
-  // 한국 등산교실: 평균 2.5km/h, 오르막 100m당 30분, 내리막 100m당 15분
-  const flatMin = (distanceKm / 2.5) * 60 * 0.5  // 거리 절반은 평지로 가정 (단순화), 나머지는 표고 보정
-  const ascendMin = (elevGainM / 100) * 30
-  const descendMin = (elevLossM / 100) * 15
+  // 한국 100대 명산 표준 코스타임에 맞춰 보정한 계수 (이동시간 기준, 휴식 별도)
+  // 거리 1km당 약 10분 + 오르막 표고 100m당 16분 + 내리막 100m당 7분
+  // → 휴식(50분당 10분) 합산 시 35개 프리셋 표준 소요시간과 평균 오차 ~5%
+  const flatMin = (distanceKm / 6) * 60   // 거리 보정 (1km ≈ 10분)
+  const ascendMin = (elevGainM / 100) * 16
+  const descendMin = (elevLossM / 100) * 7
   return {
-    formula: 'korean', label: '한국 등산교실',
+    formula: 'korean', label: '한국 코스타임',
     ascendMin, descendMin, flatMin,
     totalMin: flatMin + ascendMin + descendMin,
   }
@@ -214,10 +216,13 @@ export function parseHHMM(s: string): number {
 }
 
 export function fmtHHMM(minutes: number): string {
-  const total = Math.max(0, Math.floor(minutes)) % (24 * 60)
+  const all = Math.max(0, Math.floor(minutes))
+  const dayOver = Math.floor(all / (24 * 60))   // 자정 넘김 → 익일 표기
+  const total = all % (24 * 60)
   const h = Math.floor(total / 60)
   const m = total % 60
-  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
+  const hhmm = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
+  return dayOver > 0 ? `${hhmm} (+${dayOver}일)` : hhmm
 }
 
 export function fmtDuration(minutes: number): string {

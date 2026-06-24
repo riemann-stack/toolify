@@ -80,7 +80,7 @@ export default function LsdPage() {
             {[
               { t: '① 대화 테스트', d: '옆 사람과 문장을 끊김 없이 말할 수 있는 속도. 말이 끊기면 너무 빠른 것. 장비 없이 가장 확실한 기준.' },
               { t: '② 존2 심박', d: '최대심박의 약 60~70%. 코로만 호흡해도 버틸 정도. 심박계가 있다면 위 계산기로 BPM 구간 확인.' },
-              { t: '③ 페이스 기준', d: '10K 페이스보다 약 20~30% 느리게(보통 마라톤 페이스 + 60~90초/km). 위 계산기가 자동 산출.' },
+              { t: '③ 페이스 기준', d: '10K 페이스보다 약 20~30% 느리게(대개 마라톤 페이스보다 30~75초/km 느림). 위 계산기가 자동 산출.' },
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: ACCENT, marginBottom: 6 }}>{x.t}</p>
@@ -108,7 +108,20 @@ export default function LsdPage() {
           </div>
         </section>
 
-        {/* 5. FAQ */}
+        {/* 5. 계산 기준·공식·한계 */}
+        <section>
+          <h2 style={sectionTitle}>계산 기준·공식·한계</h2>
+          <div style={{ ...card }}>
+            <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.9, paddingLeft: 18, margin: 0 }}>
+              <li><strong style={{ color: 'var(--text)' }}>페이스 환산</strong>: 입력 기록을 Riegel 공식(T2 = T1 × (D2/D1)<sup>1.06</sup>)으로 10K·마라톤 페이스로 환산. 이지·LSD = 10K 환산 페이스의 약 1.2~1.3배(20~30% 느리게), 임계(템포) = 약 1.05배.</li>
+              <li><strong style={{ color: 'var(--text)' }}>최대심박·존2</strong>: Tanaka 공식(208 − 0.7 × 나이). 안정시 심박을 입력하면 Karvonen(심박예비)으로 존2를 60~70%로, 미입력 시 최대심박의 60~70%로 산출.</li>
+              <li><strong style={{ color: 'var(--text)' }}>훈련 배분</strong>: 저강도 80% : 고강도 20%(80/20 법칙)에 기반한 일반 가이드.</li>
+              <li><strong style={{ color: 'var(--text)' }}>한계</strong>: Riegel은 짧은 기록에서 마라톤을 다소 빠르게 예측하는 경향이 있고, 공식 심박은 개인차(±10bpm 이상)가 큽니다. 모든 값은 참고용 추정 범위이며, 실제 강도는 &lsquo;대화 가능 여부·체감&rsquo;을 우선하세요.</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 6. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />

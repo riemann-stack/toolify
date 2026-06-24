@@ -10,7 +10,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/vin-decoder',
   title: '차대번호(VIN) 해석기 — 제조국·제조사·연식·체크 디지트',
   description:
-    '17자리 차대번호(VIN)를 자리별로 분해해 제조국·제조사·차종·연식·조립공장을 해석합니다. 체크 디지트 검증, 연식 코드 변환, 제조사 코드 사전까지. 구조 해석 도구 (사고·이력 조회 아님).',
+    '17자리 차대번호(VIN)를 자리별로 분해해 제조국·제조사·연식·조립공장을 해석하고 차종 코드(VDS) 구간을 분리합니다. 체크 디지트 검증, 연식 코드 변환, 제조사 코드 사전까지. 구조 해석 도구 (사고·이력 조회 아님).',
   keywords: ['차대번호 해석', 'VIN 해석', 'VIN 디코더', '차대번호 연식', 'WMI 코드', '차대번호 자리', '체크 디지트', '차량식별번호', 'VIN decoder', '제조사 코드'],
 })
 
@@ -47,8 +47,8 @@ export default function VinDecoderPage() {
         🚗 차대번호(VIN) 해석기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        17자리 차대번호를 자리별로 분해해 <strong style={{ color: 'var(--text)' }}>제조국·제조사·차종·연식·공장</strong>을 해석합니다.
-        체크 디지트 검증까지. <strong style={{ color: 'var(--text)' }}>(사고·이력 조회 아님 — 구조 해석 도구)</strong>
+        17자리 차대번호를 자리별로 분해해 <strong style={{ color: 'var(--text)' }}>제조국·제조사·연식·공장</strong>을 해석합니다.
+        차종 코드(VDS)는 구간만 분리하고, 체크 디지트 검증까지. <strong style={{ color: 'var(--text)' }}>(사고·이력 조회 아님 — 구조 해석 도구)</strong>
       </p>
 
       <VinDecoderClient />
@@ -76,6 +76,9 @@ export default function VinDecoderPage() {
           </tbody>
         </table>
       </div>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '10px 2px 0', lineHeight: 1.7 }}>
+        📚 <strong style={{ color: 'var(--text)' }}>표준·근거</strong> — VIN 구조는 <strong style={{ color: 'var(--text)' }}>ISO 3779</strong>, 제조사 식별자(WMI)는 <strong style={{ color: 'var(--text)' }}>ISO 3780</strong>, 9번째 체크 디지트는 미국 <a href="https://www.ecfr.gov/current/title-49/part-565" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>NHTSA 49 CFR §565</a>를 따릅니다. 제조사 코드는 공개 WMI 목록과 교차 확인한 참고 데이터입니다.
+      </p>
 
       {/* 2. WMI 제조국 */}
       <h2 style={sectionTitle}>🌍 1번째 자리 — 제조 지역</h2>
@@ -129,8 +132,9 @@ export default function VinDecoderPage() {
         예를 들어 <code style={{ fontFamily: 'ui-monospace, monospace' }}>1HGCM82633A004352</code>의 계산 결과는 <strong style={{ color: 'var(--text)' }}>3</strong>으로, 9번째 자리와 일치합니다.
       </p>
       <p style={para}>
-        다만 이 방식은 <strong style={{ color: 'var(--text)' }}>북미(NHTSA) 표준</strong>입니다. 유럽·일부 제조사는 적용하지 않거나 규칙이 달라,
-        <strong style={{ color: 'var(--text)' }}> 불일치가 곧 위변조를 의미하지는 않습니다</strong>. 단순 오타이거나 비적용 차량일 수 있습니다.
+        다만 이 검증식은 <strong style={{ color: 'var(--text)' }}>북미(NHTSA)·중국에서 의무</strong>인 표준입니다. 한국 현대·기아·제네시스도 적용해 보통 일치하지만,
+        <strong style={{ color: 'var(--text)' }}>유럽 수입차(BMW·벤츠·아우디 등)는 적용하지 않아</strong> 9번째 자리가 계산값과 달라도 정상입니다.
+        따라서 <strong style={{ color: 'var(--text)' }}>불일치가 곧 위변조를 의미하지는 않습니다</strong> — 단순 오타이거나 비적용 차량일 수 있습니다. 본 도구는 북미·중국산이 아닌 차량에서 값이 다르면 “미적용일 수 있음”으로만 안내합니다.
       </p>
 
       {/* 6. VIN vs 번호판 */}

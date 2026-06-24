@@ -26,12 +26,14 @@ const SUB_GOALS = [
   { label: '서브3',    sec: 3 * 3600 },
 ]
 
+// intensity = Daniels %VO2max. paceFromVdot로 환산 시 Daniels 공식 훈련 페이스 표 재현
+// (예: VDOT 50 → M 4:30 / T 4:15 / I 3:54 / R 3:39 — 공식표 4:31/4:15/3:55/3:40과 일치)
 const PACE_ZONES = [
   { key: 'E', name: 'Easy',       desc: '회복·지구력 (회복일·LSD)',           intensity: 0.59, color: '#0891B2' },
-  { key: 'M', name: 'Marathon',   desc: '대회 페이스 (장거리 페이스 런)',      intensity: 0.70, color: '#0EA5E9' },
-  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: 0.78, color: '#A16207' },
-  { key: 'I', name: 'Interval',   desc: 'V̇O₂max (3~5분 인터벌·심화는 인터벌 도구)', intensity: 0.85, color: '#EA580C' },
-  { key: 'R', name: 'Repetition', desc: '스피드·러닝 이코노미 (200~600m)',     intensity: 0.93, color: '#DC2626' },
+  { key: 'M', name: 'Marathon',   desc: '대회 페이스 (장거리 페이스 런)',      intensity: 0.82, color: '#0EA5E9' },
+  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: 0.88, color: '#A16207' },
+  { key: 'I', name: 'Interval',   desc: 'V̇O₂max (3~5분 인터벌·심화는 인터벌 도구)', intensity: 0.97, color: '#EA580C' },
+  { key: 'R', name: 'Repetition', desc: '스피드·러닝 이코노미 (200~600m)',     intensity: 1.06, color: '#DC2626' },
 ]
 
 // ─────────────────────────────────────────────────────────────
@@ -123,9 +125,10 @@ export default function RacePredictorClient() {
   const [gender, setGender] = useState<Gender>('male')
   const [ageBand, setAgeBand] = useState<AgeBand>('30-40')
 
-  const baseKm = baseDist === 'custom' ? Math.max(0.5, customKm) : DISTS.find((d) => d.key === baseDist)!.km
+  // 표시값과 계산 기준 일치 — 0.5km 미만은 silent 클램프 대신 '미입력' 처리(결과 미표시)
+  const baseKm = baseDist === 'custom' ? customKm : DISTS.find((d) => d.key === baseDist)!.km
   const baseSec = hmsToSec(bh, bm, bs)
-  const validBase = baseSec >= 60
+  const validBase = baseSec >= 60 && baseKm >= 0.5
 
   const vdot = useMemo(() => validBase ? vdotFromRace(baseKm, baseSec) : 0, [baseKm, baseSec, validBase])
   const level = useMemo(() => vdotLevel(vdot), [vdot])
@@ -236,9 +239,11 @@ export default function RacePredictorClient() {
       s.segTime *= scale
       cum += s.segTime
       s.cum = cum
-      if (Math.abs(s.to - 21.0975) < 0.5) s.mark = '🏁 하프'
-      else if (Math.abs(s.to - 30) < 0.5) s.mark = '🔴 마의 30km'
-      else if (Math.abs(s.to - 42.195) < 0.5) s.mark = '🏆 결승'
+      // 랜드마크는 '구간 끝 ≈ 지점'이 아니라 '구간이 지점을 통과'로 판정해야 한다.
+      // (5km 단위라 하프 21.0975는 20~25 구간 안에 들어와 경계 판정으로는 절대 안 잡힘)
+      if (Math.abs(s.to - stratKm) < 1e-6) s.mark = '🏆 결승'
+      else if (stratKm > 21.6 && s.from < 21.0975 && 21.0975 <= s.to) s.mark = '🏁 하프'
+      else if (stratKm > 30.5 && s.from < 30 && 30 <= s.to) s.mark = '🔴 마의 30km'
     }
     return segs
   }, [goalSec, stratKm, strategy])
@@ -292,7 +297,7 @@ export default function RacePredictorClient() {
           { href: '/tools/sports/one-rm', label: '1RM 계산기' }
         ]}
       >
-        본 도구는 일반 가이드입니다 3공식 평균으로 오차 완화 — 5km → 풀 예측은 거리차 大, 10km 이상 기준 권장 환경 보정·연령 보정도 평균 통계 (실제 ±20% 차이 가능) 25°C 이상 시 열사병 위험 — 어지러움 즉시 중단·119
+        본 도구는 일반 가이드입니다. 3공식 평균으로 오차를 줄였으나 5km→풀 예측은 거리차가 커 10km 이상 기록을 권장합니다. 환경·연령 보정도 평균 통계라 개인차가 큽니다(실제 ±20% 차이 가능). 25°C 이상은 열사병 위험 — 어지러움 즉시 중단·119.
       </Disclaimer>
 
       {/* ── 탭 헤더 ── */}
@@ -303,7 +308,7 @@ export default function RacePredictorClient() {
           { k: 'strategy', l: '📊 페이스 전략' },
           { k: 'records',  l: '📈 내 기록' },
         ] as const).map((t) => (
-          <button key={t.k} className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`} onClick={() => setTab(t.k)}>
+          <button key={t.k} type="button" aria-pressed={tab === t.k} className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`} onClick={() => setTab(t.k)}>
             {t.l}
           </button>
         ))}
@@ -316,22 +321,26 @@ export default function RacePredictorClient() {
             <label className={styles.label}>기준 거리</label>
             <div className={styles.distGrid}>
               {DISTS.map((d) => (
-                <button key={d.key}
+                <button key={d.key} type="button" aria-pressed={baseDist === d.key}
                   className={`${styles.distBtn} ${baseDist === d.key ? styles.distBtnActive : ''}`}
                   onClick={() => setBaseDist(d.key)}>
                   {d.label}
                 </button>
               ))}
-              <button className={`${styles.distBtn} ${baseDist === 'custom' ? styles.distBtnActive : ''}`}
+              <button type="button" aria-pressed={baseDist === 'custom'}
+                className={`${styles.distBtn} ${baseDist === 'custom' ? styles.distBtnActive : ''}`}
                 onClick={() => setBaseDist('custom')}>커스텀</button>
             </div>
             {baseDist === 'custom' && (
               <div className={styles.customRow}>
-                <input type="number" inputMode="decimal" min={0.5} step={0.1} value={customKm}
-                  onChange={(e) => setCustomKm(+e.target.value || 0)}
-                  className={styles.customInput} />
+                <input type="number" inputMode="decimal" min={0.5} max={100} step={0.1} value={customKm}
+                  onChange={(e) => setCustomKm(Math.min(100, +e.target.value || 0))}
+                  className={styles.customInput} aria-label="커스텀 기준 거리 (km)" />
                 <span className={styles.unit}>km</span>
               </div>
+            )}
+            {baseDist === 'custom' && customKm > 0 && customKm < 0.5 && (
+              <p style={{ fontSize: 12, color: 'var(--warning)', margin: '6px 0 0' }} role="status">0.5km 이상 입력해 주세요.</p>
             )}
           </section>
 
@@ -355,7 +364,7 @@ export default function RacePredictorClient() {
             <label className={styles.label}>예측할 거리 <span className={styles.labelSub}>(다중 선택)</span></label>
             <div className={styles.targetGrid}>
               {TARGETS.map((t) => (
-                <button key={t.key}
+                <button key={t.key} type="button" aria-pressed={selected.has(t.key)}
                   className={`${styles.targetBtn} ${selected.has(t.key) ? styles.targetBtnActive : ''}`}
                   onClick={() => toggleTarget(t.key)}>
                   {t.label}
@@ -490,10 +499,10 @@ export default function RacePredictorClient() {
               <div className={styles.optionBody}>
                 <div className={styles.demoRow}>
                   <div className={styles.pillRow}>
-                    <button className={`${styles.pill} ${gender === 'male' ? styles.pillActive : ''}`} onClick={() => setGender('male')}>남성</button>
-                    <button className={`${styles.pill} ${gender === 'female' ? styles.pillActive : ''}`} onClick={() => setGender('female')}>여성</button>
+                    <button type="button" aria-pressed={gender === 'male'} className={`${styles.pill} ${gender === 'male' ? styles.pillActive : ''}`} onClick={() => setGender('male')}>남성</button>
+                    <button type="button" aria-pressed={gender === 'female'} className={`${styles.pill} ${gender === 'female' ? styles.pillActive : ''}`} onClick={() => setGender('female')}>여성</button>
                   </div>
-                  <select className={styles.select} value={ageBand}
+                  <select className={styles.select} value={ageBand} aria-label="연령대"
                     onChange={(e) => setAgeBand(e.target.value as AgeBand)}>
                     {(Object.keys(AGE_BAND_LABEL) as AgeBand[]).map((k) => (
                       <option key={k} value={k}>{AGE_BAND_LABEL[k]}</option>
@@ -588,7 +597,7 @@ export default function RacePredictorClient() {
             <label className={styles.label}>🎯 목표 거리</label>
             <div className={styles.distGrid}>
               {DISTS.filter((d) => d.key !== 'custom').map((d) => (
-                <button key={d.key}
+                <button key={d.key} type="button" aria-pressed={revDist === d.key}
                   className={`${styles.distBtn} ${revDist === d.key ? styles.distBtnActive : ''}`}
                   onClick={() => setRevDist(d.key)}>
                   {d.label}
@@ -615,7 +624,7 @@ export default function RacePredictorClient() {
 
           {validRev && requiredAbilities && (
             <>
-              <section className={styles.hero}>
+              <section className={styles.hero} role="status" aria-live="polite">
                 <p className={styles.heroLabel}>목표 달성에 필요한 능력</p>
                 <p className={styles.heroTime}>VDOT {requiredVdot.toFixed(1)}</p>
                 <p className={styles.heroPace}>
@@ -625,6 +634,7 @@ export default function RacePredictorClient() {
 
               <section>
                 <label className={styles.label}>거리별 필요 기록</label>
+                <div className={styles.tableWrap}>
                 <table className={styles.predTable}>
                   <thead><tr><th scope="col">거리</th><th scope="col">필요 기록</th><th scope="col">페이스</th></tr></thead>
                   <tbody>
@@ -642,13 +652,14 @@ export default function RacePredictorClient() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </section>
 
               <section className={styles.optionCard}>
                 <p className={styles.gapTitle}>📊 본인 현재 기록 입력 (격차 분석 — 선택)</p>
                 <div className={styles.distGrid}>
                   {DISTS.filter((d) => d.key !== 'custom').map((d) => (
-                    <button key={d.key}
+                    <button key={d.key} type="button" aria-pressed={curDist === d.key}
                       className={`${styles.distBtn} ${curDist === d.key ? styles.distBtnActive : ''}`}
                       onClick={() => setCurDist(d.key)}>
                       {d.label}
@@ -694,7 +705,7 @@ export default function RacePredictorClient() {
             <label className={styles.label}>목표 거리</label>
             <div className={styles.distGrid}>
               {DISTS.filter((d) => d.key !== 'custom').map((d) => (
-                <button key={d.key}
+                <button key={d.key} type="button" aria-pressed={stratDist === d.key}
                   className={`${styles.distBtn} ${stratDist === d.key ? styles.distBtnActive : ''}`}
                   onClick={() => setStratDist(d.key)}>
                   {d.label}
@@ -716,7 +727,7 @@ export default function RacePredictorClient() {
                 { k: 'negative', l: '네거티브 스플릿', desc: '후반에 더 빠르게 (-3%)' },
                 { k: 'positive', l: '포지티브 스플릿', desc: '전반에 더 빠르게 (+3%)' },
               ] as const).map((s) => (
-                <button key={s.k}
+                <button key={s.k} type="button" aria-pressed={strategy === s.k}
                   className={`${styles.stratBtn} ${strategy === s.k ? styles.stratBtnActive : ''}`}
                   onClick={() => setStrategy(s.k)}>
                   <span className={styles.stratLabel}>{s.l}</span>
@@ -888,7 +899,9 @@ function RecordsChart({ records }: { records: RaceRecord[] }) {
   const first = sorted[0]
   const last = sorted[sorted.length - 1]
   const diff = last.vdot - first.vdot
-  const days = Math.round((new Date(last.date).getTime() - new Date(first.date).getTime()) / (1000 * 60 * 60 * 24))
+  // 'YYYY-MM-DD' 직접 new Date() 금지(UTC 해석) — 분해 파싱
+  const parseYMD = (s: string) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, (m || 1) - 1, d || 1).getTime() }
+  const days = Math.round((parseYMD(last.date) - parseYMD(first.date)) / 86400000)
 
   return (
     <div className={styles.chartWrap}>

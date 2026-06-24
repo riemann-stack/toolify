@@ -99,6 +99,12 @@ export type SavedGolfCourse = {
   caddieFee: number
   defaultMeal?: number
   defaultTransport?: number
+  // 계산 모드 (불러올 때 동일 조건으로 재계산되도록 저장)
+  cartMode?: 'team' | 'perPerson'
+  mealMode?: 'each' | 'team'
+  caddieEnabled?: boolean
+  transportMode?: string   // 'self' | 'carpool' | 'bus' | 'transit'
+  tipAmount?: number
   notes?: string
   lastUsed: string         // YYYY-MM-DD
 }

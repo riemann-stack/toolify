@@ -77,7 +77,7 @@ export const WEIGHT_TABLE: StationSpec[] = [
   { station: '썰매 끌기 (Sled Pull)',   open_m: '103kg', open_f: '78kg',  pro_m: '153kg', pro_f: '103kg' },
   { station: '파머스 캐리 (Farmers)',   open_m: '2×24kg', open_f: '2×16kg', pro_m: '2×32kg', pro_f: '2×24kg' },
   { station: '샌드백 런지 (Lunges)',    open_m: '20kg',  open_f: '10kg',  pro_m: '30kg',  pro_f: '20kg' },
-  { station: '월 볼 (Wall Balls)',     open_m: '6kg·100회', open_f: '4kg·75회', pro_m: '9kg·100회', pro_f: '6kg·75회' },
+  { station: '월 볼 (Wall Balls)',     open_m: '6kg·100회', open_f: '4kg·75회', pro_m: '9kg·100회', pro_f: '6kg·100회' },
 ]
 
 // 무게 무관 종목(거리/횟수 동일)
@@ -88,7 +88,7 @@ export const FIXED_SPECS: { station: string; spec: string }[] = [
   { station: '런 (Run)',           spec: '1km × 8회 = 8km' },
 ]
 
-export const DIVISION_NOTE = '월 볼 목표 높이: 남자 3.0m · 여자 2.7m. 썰매 중량은 썰매 자체 무게 포함값입니다. Doubles(2인)는 작업을 분담, Relay(4인)는 4명이 코스를 나눠 진행합니다.'
+export const DIVISION_NOTE = '월 볼 횟수: 남자·여자 Pro 100회, 여자 Open 75회(2025/26 시즌 조정). 목표 높이: 남자 3.0m · 여자 2.7m. 썰매 중량은 썰매 자체 무게 포함값입니다. Doubles(2인)는 작업을 분담, Relay(4인)는 4명이 코스를 나눠 진행합니다.'
 
 // ─── 계산 ───
 export interface PredictInput {

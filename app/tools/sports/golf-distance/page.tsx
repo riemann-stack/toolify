@@ -46,7 +46,7 @@ const FAQ_LD = [
               },
               {
                 q: '7번 아이언만 알면 정말 모든 클럽을 추정할 수 있나요?',
-                a: '네, 큰 윤곽은 정확. 7I 145m 가정 시: DR ≒ 약 220m / 5I ≒ 155m / PW ≒ 110m / SW ≒ 80m.<br/>⚠️ 단: 드라이버는 별도(스윙 메커닉스 다름) / 개인별 차이 ±20% 가능 / 직접 측정이 가장 정확. 본 도구는 입력 많을수록 정확 — 드라이버 + 7I 두 개만 입력해도 충분.',
+                a: '네, 큰 윤곽은 정확. 7I 145m 가정 시: DR ≒ 약 220m / 5I ≒ 165m / PW ≒ 110m / SW ≒ 90m.<br/>⚠️ 단: 드라이버는 별도(스윙 메커닉스 다름) / 개인별 차이 ±20% 가능 / 직접 측정이 가장 정확. 본 도구는 입력 많을수록 정확 — 드라이버 + 7I 두 개만 입력해도 충분.',
               },
               {
                 q: 'm와 yard 차이가 어떻게 되나요?',
@@ -76,7 +76,8 @@ export default function GolfDistancePage() {
             아마추어 평균 클럽별 비거리
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            한국 아마추어 골퍼의 평균 비거리(m). 개인 스윙 스피드와 클럽 스펙에 따라 ±20~30% 편차가 있습니다.
+            한국 아마추어 골퍼의 평균 비거리(m). 개인 스윙 스피드와 클럽 스펙에 따라 ±20~30% 편차가 있습니다.<br/>
+            <span style={{ fontSize: '12px' }}>※ 공식 통계가 아니라, 일반적으로 알려진 아마추어 비거리 범위를 Youtil이 정리한 참고 추정치입니다 (기준 2026.06).</span>
           </p>
 
           {/* 남성 */}
@@ -181,7 +182,7 @@ export default function GolfDistancePage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎯 갭웨지(AW)가 필요한 이유
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(96px, 1fr))', gap: '10px', marginBottom: '14px' }}>
             {[
               { name: 'PW', distance: '110~115m', loft: '44~48°', color: '#0891B2' },
               { name: 'AW', distance: '95~100m',  loft: '50~52°', color: '#0EA5E9' },
@@ -226,7 +227,7 @@ export default function GolfDistancePage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '12px', padding: '16px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>🔢 비거리 추정의 기준</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
-                7번 아이언 비거리만 알면 다른 클럽의 평균 비율(DR ≒ 2.3배, PW ≒ 0.76배 등)로 전체 비거리를 추정할 수 있습니다.
+                7번 아이언 비거리만 알면 다른 클럽의 평균 비율(DR ≒ 1.5배, PW ≒ 0.76배 등)로 전체 비거리를 추정할 수 있습니다.
                 개인별 차이가 있으나 큰 윤곽을 잡기에 충분합니다.
               </p>
             </div>
@@ -272,7 +273,7 @@ export default function GolfDistancePage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⚠️ 본 추정은 일반 가이드(PGA·Trackman 데이터 기반). 실제 ±10% 차이 가능.
+            ⚠️ 일반적으로 알려진 PGA·Trackman 경향을 참고해 Youtil이 정리한 추정 기준이며 공식 수치가 아닙니다 (기준 2026.06). 실제는 ±10% 이상 차이 날 수 있습니다.
           </p>
         </div>
 

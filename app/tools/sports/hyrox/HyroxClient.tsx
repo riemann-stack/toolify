@@ -16,6 +16,12 @@ const num = (v: string): number => {
   const x = parseFloat(v)
   return Number.isFinite(x) && x >= 0 ? x : 0
 }
+// 분/초 칸 정규화 — 숫자만 + 상한 클램프 (입력값과 계산 기준 일치)
+const clampStr = (v: string, max: number): string => {
+  const d = v.replace(/[^\d]/g, '')
+  if (d === '') return ''
+  return String(Math.min(max, parseInt(d, 10)))
+}
 
 export default function HyroxClient() {
   const [tab, setTab] = useState<Tab>('predict')
@@ -38,14 +44,25 @@ export default function HyroxClient() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const j = JSON.parse(raw)
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (j.level) setLevel(j.level)
-        if (j.paceMin) setPaceMin(j.paceMin)
-        if (j.paceSec) setPaceSec(j.paceSec)
-        if (j.stationStr) setStationStr(j.stationStr)
-        if (j.roxStr) setRoxStr(j.roxStr)
+      const j: unknown = raw ? JSON.parse(raw) : null
+      // 손상·구버전·변조 방어 — enum/타입 검증 후 사용 (무검증 신뢰 금지)
+      if (j && typeof j === 'object') {
+        const o = j as Record<string, unknown>
+        const lv = LEVELS.find(l => l.id === o.level)
+        /* eslint-disable react-hooks/set-state-in-effect */
+        if (lv) setLevel(lv.id)
+        if (typeof o.paceMin === 'string') setPaceMin(o.paceMin.replace(/[^\d]/g, ''))
+        if (typeof o.paceSec === 'string') setPaceSec(o.paceSec.replace(/[^\d]/g, ''))
+        if (typeof o.roxStr === 'string') setRoxStr(o.roxStr.replace(/[^\d]/g, ''))
+        if (o.stationStr && typeof o.stationStr === 'object') {
+          const src = o.stationStr as Record<string, unknown>
+          setStationStr(prev => {
+            const next = { ...prev }
+            for (const st of STATIONS) if (src[st.id] != null) next[st.id] = String(src[st.id]).replace(/[^\d]/g, '')
+            return next
+          })
+        }
+        /* eslint-enable react-hooks/set-state-in-effect */
       }
     } catch {}
     setHydrated(true)
@@ -88,8 +105,13 @@ export default function HyroxClient() {
       cum += t
       rows.push({ label: `${st.name}`, time: t, cum, isRun: false })
     })
+    // 록스존(전환)을 마지막 행으로 추가 — 누적 합계가 예상 완주 시간과 일치하도록
+    if (roxzoneSec > 0) {
+      cum += roxzoneSec
+      rows.push({ label: '🔄 록스존 (전환 8회)', time: roxzoneSec, cum, isRun: false })
+    }
     return rows
-  }, [runPaceSec, stationSec])
+  }, [runPaceSec, stationSec, roxzoneSec])
 
   // 목표 역산
   const targetSec = num(tgtH) * 3600 + num(tgtM) * 60
@@ -124,7 +146,7 @@ export default function HyroxClient() {
             </div>
             <div className={s.segRow}>
               {LEVELS.map(l => (
-                <button key={l.id} type="button" className={`${s.segBtn} ${level === l.id ? s.segActive : ''}`} onClick={() => applyLevel(l.id)}>
+                <button key={l.id} type="button" aria-pressed={level === l.id} className={`${s.segBtn} ${level === l.id ? s.segActive : ''}`} onClick={() => applyLevel(l.id)}>
                   {l.label}
                 </button>
               ))}
@@ -133,9 +155,9 @@ export default function HyroxClient() {
             <div style={{ marginTop: 14 }}>
               <span className={s.fieldLabel}>1km 런 평균 페이스</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} inputMode="numeric" value={paceMin} onChange={e => setPaceMin(e.target.value.replace(/[^\d]/g, ''))} />
+                <input className={s.numInput} inputMode="numeric" aria-label="런 페이스 분" value={paceMin} onChange={e => setPaceMin(clampStr(e.target.value, 59))} />
                 <span className={s.unit}>분</span>
-                <input className={s.numInput} inputMode="numeric" value={paceSec} onChange={e => setPaceSec(e.target.value.replace(/[^\d]/g, ''))} />
+                <input className={s.numInput} inputMode="numeric" aria-label="런 페이스 초" value={paceSec} onChange={e => setPaceSec(clampStr(e.target.value, 59))} />
                 <span className={s.unit}>초 / km</span>
               </div>
             </div>
@@ -153,6 +175,7 @@ export default function HyroxClient() {
                   <span className={s.stationName}>{st.name}<span className={s.stationSpec}>{st.spec}</span></span>
                   <div className={s.stationInputRow}>
                     <input className={s.stationInput} inputMode="numeric"
+                      aria-label={`${st.name} 예상 시간 (초)`}
                       value={stationStr[st.id] ?? ''}
                       onChange={e => setStationStr(prev => ({ ...prev, [st.id]: e.target.value.replace(/[^\d]/g, '') }))} />
                     <span className={s.stationUnit}>초</span>
@@ -163,10 +186,13 @@ export default function HyroxClient() {
             <div style={{ marginTop: 10 }}>
               <span className={s.fieldLabel}>록스존 (전환 8회 총합)</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} inputMode="numeric" value={roxStr} onChange={e => setRoxStr(e.target.value.replace(/[^\d]/g, ''))} />
+                <input className={s.numInput} inputMode="numeric" aria-label="록스존 전환 시간 (초)" value={roxStr} onChange={e => setRoxStr(e.target.value.replace(/[^\d]/g, ''))} />
                 <span className={s.unit}>초</span>
               </div>
             </div>
+            {STATIONS.some(st => (stationSec[st.id] || 0) <= 0) && (
+              <p className={s.zeroWarn} role="status">⚠️ 시간이 0초인 스테이션이 있어 예상 완주 시간이 실제보다 짧게 계산됩니다.</p>
+            )}
           </div>
         </>
       )}
@@ -230,9 +256,9 @@ export default function HyroxClient() {
           </div>
           <span className={s.fieldLabel}>목표 완주 시간</span>
           <div className={s.inputRow}>
-            <input className={s.numInput} inputMode="numeric" value={tgtH} onChange={e => setTgtH(e.target.value.replace(/[^\d]/g, ''))} />
+            <input className={s.numInput} inputMode="numeric" aria-label="목표 완주 시간(시)" value={tgtH} onChange={e => setTgtH(clampStr(e.target.value, 23))} />
             <span className={s.unit}>시간</span>
-            <input className={s.numInput} inputMode="numeric" value={tgtM} onChange={e => setTgtM(e.target.value.replace(/[^\d]/g, ''))} />
+            <input className={s.numInput} inputMode="numeric" aria-label="목표 완주 시간(분)" value={tgtM} onChange={e => setTgtM(clampStr(e.target.value, 59))} />
             <span className={s.unit}>분</span>
           </div>
 

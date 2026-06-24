@@ -8,7 +8,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 export const metadata = buildMetadata({
   path: '/tools/sports/interval-training',
   title: '인터벌 훈련 계산기 — VDOT 페이스·야소 800·E/M/T/I/R 강도',
-  description: 'VDOT 기반 정확한 인터벌 페이스 + 거리별 1바퀴 랩타임·워밍업~쿨다운 세션 자동 정리 + 4~16주 트레이닝 스케줄. E·M·T·I·R 5가지 강도 완벽 설명.',
+  description: 'VDOT 공식 기반 인터벌 페이스 + 거리별 1바퀴 랩타임·워밍업~쿨다운 세션 자동 정리 + 4~16주 트레이닝 스케줄. E·M·T·I·R 5가지 강도 설명.',
   keywords: ['인터벌훈련계산기', '인터벌페이스', '야소800계산기', '400m페이스', '800m페이스', '마라톤풀코스예측', '러닝인터벌', '인터벌스케줄', 'VDOT 계산기', 'I 페이스', 'R 페이스', 'Jack Daniels VDOT', '한국 마라톤 훈련', '풀코스 예측'],
 })
 
@@ -43,7 +43,7 @@ const FAQ_LD = [
               },
               {
                 q: 'VDOT 43.4가 무슨 의미인가요?',
-                a: 'Jack Daniels의 V̇O2 max 추정 지표입니다.<br/>• VDOT 30: 5km 35분 수준<br/>• VDOT 40: 5km 24분<br/>• VDOT 50: 5km 19분<br/>• VDOT 60: 5km 16분<br/>• VDOT 70: 엘리트 수준<br/>본인 5km·10km·하프 기록으로 VDOT 자동 계산 (숫자 ↑ = 능력 ↑). 본 도구는 VDOT 기반으로 5가지 강도(E·M·T·I·R) 페이스를 정확 산출합니다.',
+                a: 'Jack Daniels의 V̇O2 max 추정 지표입니다.<br/>• VDOT 30: 5km 약 31분 수준<br/>• VDOT 40: 5km 약 24분<br/>• VDOT 50: 5km 약 20분<br/>• VDOT 60: 5km 약 17분<br/>• VDOT 70: 5km 약 15분(엘리트)<br/>본인 5km·10km·하프 기록으로 VDOT 자동 계산 (숫자 ↑ = 능력 ↑). 본 도구는 VDOT 기반으로 5가지 강도(E·M·T·I·R) 페이스를 산출합니다.',
               },
               {
                 q: '인터벌 훈련 중 부상이 의심되면 어떻게 해야 하나요?',
@@ -65,7 +65,7 @@ export default function IntervalTrainingPage() {
         🏃‍♂️ 인터벌 훈련 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        VDOT 기반 정확한 인터벌 페이스 + <strong style={{ color: 'var(--text)' }}>4~16주 풀 트레이닝 스케줄</strong>.
+        VDOT 공식 기반 인터벌 페이스 + <strong style={{ color: 'var(--text)' }}>4~16주 풀 트레이닝 스케줄</strong>.
       </p>
 
       <IntervalTrainingClient />
@@ -84,7 +84,7 @@ export default function IntervalTrainingPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '18px' }}>
             미국 러닝 코치 <strong style={{ color: 'var(--text)' }}>잭 다니엘스(Jack Daniels)</strong>는 모든 러닝 훈련을 <strong style={{ color: 'var(--text)' }}>딱 5가지 강도</strong>로 나눴습니다.
             느린 것부터 빠른 순서로 <strong style={{ color: 'var(--text)' }}>E → M → T → I → R</strong>이며, 강도마다 키워지는 능력이 다릅니다.
-            아래 표의 페이스는 <strong style={{ color: 'var(--text)' }}>마라톤 5시간 / 5km 30분 수준</strong>의 러너를 예시로 든 것으로, 본인 기록을 입력하면 위 계산기가 정확한 페이스를 계산해 줍니다.
+            아래 표의 페이스는 <strong style={{ color: 'var(--text)' }}>마라톤 5시간 / 5km 30분 수준</strong>의 러너를 예시로 든 것으로, 본인 기록을 입력하면 위 계산기가 VDOT 공식으로 페이스를 계산해 줍니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
@@ -120,7 +120,7 @@ export default function IntervalTrainingPage() {
                 i: 'R', n: 'Repetition · 반복주', c: '#DC2626',
                 what: '스피드·러닝 이코노미(달리기 효율)·무산소 파워',
                 feel: '거의 전력 질주. 폼이 무너지지 않는 선까지만',
-                pace: '약 1마일(1.5km) 레이스 페이스 — 가장 빠름',
+                pace: '약 1마일(1.6km) 레이스 페이스 — 가장 빠름',
                 use: '200~400m 짧은 반복 + 충분한 완전 회복(2~3배)',
               },
             ].map((g, i) => (
@@ -176,6 +176,7 @@ export default function IntervalTrainingPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>💡 좁은 화면에서는 표를 좌우로 스크롤할 수 있습니다.</p>
         </div>
 
         {/* ── 3. 야소 800 가이드 ── */}
@@ -242,12 +243,12 @@ export default function IntervalTrainingPage() {
               </thead>
               <tbody>
                 {[
-                  { t: '25:00', v: 38, i: '4:54', r: '1:54' },
-                  { t: '22:00', v: 44, i: '4:18', r: '1:42' },
-                  { t: '20:00', v: 49, i: '3:54', r: '1:33' },
-                  { t: '18:00', v: 54, i: '3:34', r: '1:25' },
-                  { t: '17:00', v: 57, i: '3:24', r: '1:22' },
-                  { t: '16:00', v: 60, i: '3:14', r: '1:18' },
+                  { t: '25:00', v: 38, i: '4:49', r: '1:44' },
+                  { t: '22:00', v: 45, i: '4:15', r: '1:31' },
+                  { t: '20:00', v: 50, i: '3:56', r: '1:24' },
+                  { t: '18:00', v: 56, i: '3:37', r: '1:17' },
+                  { t: '17:00', v: 60, i: '3:27', r: '1:13' },
+                  { t: '16:00', v: 65, i: '3:16', r: '1:10' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
@@ -259,6 +260,9 @@ export default function IntervalTrainingPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            💡 좁은 화면에서는 표를 좌우로 스크롤할 수 있습니다. ※ 페이스는 잭 다니엘스(Jack Daniels)의 VDOT 공식 기반이며, 계산기는 VDOT 35~70 구간을 5단위로 보간하고 그 범위를 벗어나면 근사 처리합니다. 출처·러너 컨디션에 따라 실제 최적 페이스는 다소 차이날 수 있습니다.
+          </p>
         </div>
 
         {/* ── 5. 회복 가이드 ── */}

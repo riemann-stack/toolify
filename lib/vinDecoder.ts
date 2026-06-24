@@ -13,12 +13,14 @@ export interface WmiInfo {
   maker?: string     // 제조사 매칭 시
   matched?: string   // 매칭된 WMI 접두 (예: 'KMH')
   estimated?: boolean // country가 first-char 추정치인지
+  approx?: boolean    // 2자리 폴백 매칭(정확한 3자리 WMI 미수록 — 제조사 계열만 식별)
 }
 export interface CheckInfo {
   computable: boolean // I·O·Q 포함·길이 부족 시 false
   expected: string    // 계산된 체크 디지트
   actual: string      // 9번째 자리 실제 값
   valid: boolean
+  required: boolean   // 북미(1~5)·중국(L)은 의무 적용 → 불일치 시 오타 가능성↑, 그 외는 미적용일 수 있음
 }
 export interface YearInfo {
   code: string
@@ -193,7 +195,7 @@ export function lookupWmi(clean: string): WmiInfo {
   for (const len of [3, 2, 1]) {
     if (clean.length >= len) {
       const hit = WMI_MAP.get(clean.slice(0, len))
-      if (hit) return { region, country: hit.country, maker: hit.maker, matched: hit.prefix }
+      if (hit) return { region, country: hit.country, maker: hit.maker, matched: hit.prefix, approx: hit.prefix.length < 3 }
     }
   }
   const hint = COUNTRY_HINT[first]
@@ -212,16 +214,18 @@ const WEIGHTS = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2]
 /** 17자리 → 기대 체크 디지트·일치 여부. I·O·Q 등 변환 불가 문자/길이 부족이면 computable=false */
 export function calcCheckDigit(clean: string): CheckInfo {
   const actual = clean[8] || ''
-  if (clean.length !== 17) return { computable: false, expected: '', actual, valid: false }
+  // 체크 디지트는 북미(첫 글자 1~5)·중국(L)에서 의무 — 그 외 지역(유럽 수입차 등)은 미적용일 수 있음
+  const required = /[1-5L]/.test(clean[0] || '')
+  if (clean.length !== 17) return { computable: false, expected: '', actual, valid: false, required }
   let sum = 0
   for (let i = 0; i < 17; i++) {
     const v = TRANSLIT[clean[i]]
-    if (v === undefined) return { computable: false, expected: '', actual, valid: false }
+    if (v === undefined) return { computable: false, expected: '', actual, valid: false, required }
     sum += v * WEIGHTS[i]
   }
   const r = sum % 11
   const expected = r === 10 ? 'X' : String(r)
-  return { computable: true, expected, actual, valid: expected === actual }
+  return { computable: true, expected, actual, valid: expected === actual, required }
 }
 
 // ── 4) 모델 연식 (10번째 자리) — 30년 주기 ─────────────────

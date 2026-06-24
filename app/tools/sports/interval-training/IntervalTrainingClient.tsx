@@ -19,12 +19,15 @@ const KOREA_RACES: { name: string; month: number; distances: string }[] = [
   { name: 'JTBC서울마라톤',  month: 11, distances: '풀·하프·10km' },
 ]
 
-function weeksUntilMonth(targetMonth: number): number {
+// 실제 D-day(days)와 스케줄 생성용 클램프 주수(weeks 4~16)를 분리 반환
+// — 둘을 합치면 16주 밖 대회가 전부 D-112로 보이는 버그 발생
+function raceTiming(targetMonth: number): { days: number; weeks: number } {
   const now = new Date()
   const year = now.getMonth() + 1 < targetMonth ? now.getFullYear() : now.getFullYear() + 1
   const target = new Date(year, targetMonth - 1, 15)  // 대회 평균 중순
-  const diffMs = target.getTime() - now.getTime()
-  return Math.max(4, Math.min(16, Math.round(diffMs / (7 * 86400000))))
+  const days = Math.max(0, Math.round((target.getTime() - now.getTime()) / 86400000))
+  const weeks = Math.max(4, Math.min(16, Math.round(days / 7)))
+  return { days, weeks }
 }
 
 // ─────────────────────────────────────────────
@@ -37,16 +40,19 @@ const n = (v: string | number, d = 0): number => {
 const pad = (v: number) => v.toString().padStart(2, '0')
 const fmtMS = (totalSec: number): string => {
   if (!Number.isFinite(totalSec) || totalSec < 0) return '-:--'
-  const m = Math.floor(totalSec / 60)
-  const s = Math.round(totalSec - m * 60)
-  return `${m}:${pad(s)}`
+  let m = Math.floor(totalSec / 60)
+  let sec = Math.round(totalSec - m * 60)
+  if (sec === 60) { sec = 0; m += 1 }   // 59.5초 이상 반올림 시 "X:60" 방지
+  return `${m}:${pad(sec)}`
 }
 const fmtHMS = (totalSec: number): string => {
   if (!Number.isFinite(totalSec) || totalSec < 0) return '-:--:--'
-  const h = Math.floor(totalSec / 3600)
-  const m = Math.floor((totalSec - h * 3600) / 60)
-  const s = Math.round(totalSec - h * 3600 - m * 60)
-  return `${h}:${pad(m)}:${pad(s)}`
+  let h = Math.floor(totalSec / 3600)
+  let m = Math.floor((totalSec - h * 3600) / 60)
+  let sec = Math.round(totalSec - h * 3600 - m * 60)
+  if (sec === 60) { sec = 0; m += 1 }
+  if (m === 60) { m = 0; h += 1 }
+  return `${h}:${pad(m)}:${pad(sec)}`
 }
 const toSec = (m: number, sec: number, h = 0) => h * 3600 + m * 60 + sec
 
@@ -322,43 +328,46 @@ export default function IntervalTrainingClient() {
   // ─────────────────────────────────────────────
   const schedule = useMemo(() => {
     const recordSec = toSec(n(schedRecord.min, 0), n(schedRecord.sec, 0))
-    const dist = schedRaceType === '5k' ? 5000 : 10000
+    // 입력 기록의 거리는 종목과 일치해야 VDOT가 정확 (하프/풀을 10km로 잡으면 VDOT 폭락)
+    const dist = schedRaceType === '5k' ? 5000
+      : schedRaceType === '10k' ? 10000
+      : schedRaceType === 'half' ? 21097.5
+      : 42195
     const vdot = calcVDOT(recordSec, dist)
-    const intensity: Intensity = schedRaceType === 'half' ? 'T' : schedRaceType === 'marathon' ? 'I' : 'I'
-    const basePace = vdot > 0 ? getPace(vdot, intensity) : 0
-    // 부상 이력 시 강도 -10% (페이스 +10%)
-    const finalPace = injuryHistory ? basePace * 1.1 : basePace
+    // 메뉴마다 목적 강도(R/I/T/M)가 다르므로 페이스를 개별 산출 (부상 이력 시 +10%)
+    const injuryMult = injuryHistory ? 1.1 : 1
+    const paceOf = (it: Intensity) => (vdot > 0 ? getPace(vdot, it) * injuryMult : 0)
 
-    type Menu = { name: string; goal: string; recovery: string; dist: number; reps: number }
+    type Menu = { name: string; goal: string; intensity: Intensity; recovery: string; dist: number; reps: number }
     const menuPool: Record<typeof schedRaceType, Menu[]> = {
       '5k': [
-        { name: '400m × 6회',  goal: '스피드',     recovery: '200m 조깅', dist: 400, reps: 6 },
-        { name: '600m × 5회',  goal: '5km 페이스', recovery: '300m 조깅', dist: 600, reps: 5 },
-        { name: '800m × 5회',  goal: '5km 페이스', recovery: '400m 조깅', dist: 800, reps: 5 },
-        { name: '1km × 4회',   goal: 'V̇O2',       recovery: '400m 조깅', dist: 1000, reps: 4 },
-        { name: '400m × 8회',  goal: '스피드',     recovery: '200m 조깅', dist: 400, reps: 8 },
+        { name: '400m × 6회',  goal: '스피드',     intensity: 'R', recovery: '200m 조깅', dist: 400, reps: 6 },
+        { name: '600m × 5회',  goal: '5km 페이스', intensity: 'I', recovery: '300m 조깅', dist: 600, reps: 5 },
+        { name: '800m × 5회',  goal: '5km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 5 },
+        { name: '1km × 4회',   goal: 'V̇O2',       intensity: 'I', recovery: '400m 조깅', dist: 1000, reps: 4 },
+        { name: '400m × 8회',  goal: '스피드',     intensity: 'R', recovery: '200m 조깅', dist: 400, reps: 8 },
       ],
       '10k': [
-        { name: '800m × 5회',  goal: '10km 페이스', recovery: '400m 조깅', dist: 800, reps: 5 },
-        { name: '800m × 6회',  goal: '10km 페이스', recovery: '400m 조깅', dist: 800, reps: 6 },
-        { name: '1km × 5회',   goal: '10km 페이스', recovery: '400m 조깅', dist: 1000, reps: 5 },
-        { name: '1.6km × 3회', goal: '역치',        recovery: '600m 조깅', dist: 1600, reps: 3 },
-        { name: '1.2km × 4회', goal: 'V̇O2',        recovery: '400m 조깅', dist: 1200, reps: 4 },
-        { name: '1.6km × 4회', goal: '역치',        recovery: '600m 조깅', dist: 1600, reps: 4 },
+        { name: '800m × 5회',  goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 5 },
+        { name: '800m × 6회',  goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 6 },
+        { name: '1km × 5회',   goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 1000, reps: 5 },
+        { name: '1.6km × 3회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 3 },
+        { name: '1.2km × 4회', goal: 'V̇O2',        intensity: 'I', recovery: '400m 조깅', dist: 1200, reps: 4 },
+        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 4 },
       ],
       half: [
-        { name: '1km × 6회',   goal: '역치',        recovery: '400m 조깅', dist: 1000, reps: 6 },
-        { name: '1.6km × 4회', goal: '역치',        recovery: '600m 조깅', dist: 1600, reps: 4 },
-        { name: '2km × 3회',   goal: '역치',        recovery: '600m 조깅', dist: 2000, reps: 3 },
-        { name: '3km × 2회',   goal: '하프 페이스', recovery: '800m 조깅', dist: 3000, reps: 2 },
-        { name: '1.6km × 5회', goal: '역치',        recovery: '600m 조깅', dist: 1600, reps: 5 },
+        { name: '1km × 6회',   goal: '역치',        intensity: 'T', recovery: '400m 조깅', dist: 1000, reps: 6 },
+        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 4 },
+        { name: '2km × 3회',   goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 2000, reps: 3 },
+        { name: '3km × 2회',   goal: '하프 페이스', intensity: 'T', recovery: '800m 조깅', dist: 3000, reps: 2 },
+        { name: '1.6km × 5회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 5 },
       ],
       marathon: [
-        { name: '800m × 6회 (야소)',   goal: '야소 800', recovery: '400m 조깅', dist: 800, reps: 6 },
-        { name: '800m × 8회 (야소)',   goal: '야소 800', recovery: '400m 조깅', dist: 800, reps: 8 },
-        { name: '800m × 10회 (야소)',  goal: '야소 800', recovery: '400m 조깅', dist: 800, reps: 10 },
-        { name: '1.6km × 4회',         goal: '역치',     recovery: '800m 조깅', dist: 1600, reps: 4 },
-        { name: '2km × 3회 (M 페이스)', goal: 'M 페이스', recovery: '600m 조깅', dist: 2000, reps: 3 },
+        { name: '800m × 6회 (야소)',   goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 6 },
+        { name: '800m × 8회 (야소)',   goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 8 },
+        { name: '800m × 10회 (야소)',  goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 10 },
+        { name: '1.6km × 4회',         goal: '역치',     intensity: 'T', recovery: '800m 조깅', dist: 1600, reps: 4 },
+        { name: '2km × 3회 (M 페이스)', goal: 'M 페이스', intensity: 'M', recovery: '600m 조깅', dist: 2000, reps: 3 },
       ],
     }
     const pool = menuPool[schedRaceType]
@@ -369,6 +378,7 @@ export default function IntervalTrainingClient() {
       label: string
       menu1: Menu
       menu2: Menu | null
+      pace1: number
       phase: 'adapt' | 'develop' | 'recover' | 'peak' | 'taper'
     }[] = []
 
@@ -415,9 +425,13 @@ export default function IntervalTrainingClient() {
       }
 
       const menu1 = pool[Math.min(pool.length - 1, menuIdx)]
-      weeks.push({ week: w, label, menu1, menu2: secondMenu, phase })
+      weeks.push({
+        week: w, label, menu1, menu2: secondMenu,
+        pace1: paceOf(menu1.intensity),
+        phase,
+      })
     }
-    return { weeks, vdot, finalPace }
+    return { weeks, vdot }
   }, [schedRaceType, schedRecord, weeksLeft, experience, intervalsPerWeek, injuryHistory])
 
   // ─────────────────────────────────────────────
@@ -453,11 +467,12 @@ export default function IntervalTrainingClient() {
   async function copyResult() {
     let text = ''
     if (tab === 'pace') {
-      const vdotLabel = vdotInfo.vdot > 0 ? `VDOT ${vdotInfo.vdot.toFixed(1)}` : '-'
-      const goalLabel = GOALS.find(g => g.key === goal)?.label
+      const headline = inputMode === 'record'
+        ? `${vdotInfo.vdot > 0 ? `VDOT ${vdotInfo.vdot.toFixed(1)}` : '-'} · ${GOALS.find(g => g.key === goal)?.label} 목적`
+        : '입력한 목표 페이스'
       text = [
         `[인터벌 페이스]`,
-        `${vdotLabel} · ${goalLabel} 목적`,
+        headline,
         `1km 인터벌 페이스: ${fmtMS(intervalPaceSec)}/km`,
         ``,
         ...lapRows.map(r => `· ${r.distance}m: ${fmtMS(r.lapSec)} (${r.laps}바퀴)`),
@@ -554,25 +569,25 @@ export default function IntervalTrainingClient() {
                 </div>
                 {recordType === '5k' && (
                   <div className={s.timeInputRow}>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={r5min} onChange={e => setR5min(e.target.value)} />
+                    <input className={s.timeInput} aria-label="5km 기록 분" type="number" inputMode="numeric" min="0" value={r5min} onChange={e => setR5min(e.target.value)} />
                     <span className={s.timeColon}>:</span>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={r5sec} onChange={e => setR5sec(e.target.value)} />
+                    <input className={s.timeInput} aria-label="5km 기록 초" type="number" inputMode="numeric" min="0" max="59" value={r5sec} onChange={e => setR5sec(e.target.value)} />
                   </div>
                 )}
                 {recordType === '10k' && (
                   <div className={s.timeInputRow}>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={r10min} onChange={e => setR10min(e.target.value)} />
+                    <input className={s.timeInput} aria-label="10km 기록 분" type="number" inputMode="numeric" min="0" value={r10min} onChange={e => setR10min(e.target.value)} />
                     <span className={s.timeColon}>:</span>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={r10sec} onChange={e => setR10sec(e.target.value)} />
+                    <input className={s.timeInput} aria-label="10km 기록 초" type="number" inputMode="numeric" min="0" max="59" value={r10sec} onChange={e => setR10sec(e.target.value)} />
                   </div>
                 )}
                 {recordType === 'half' && (
                   <div className={s.timeInputRow3}>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={rHh} onChange={e => setRHh(e.target.value)} />
+                    <input className={s.timeInput} aria-label="하프 기록 시간" type="number" inputMode="numeric" min="0" value={rHh} onChange={e => setRHh(e.target.value)} />
                     <span className={s.timeColon}>:</span>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={rHmin} onChange={e => setRHmin(e.target.value)} />
+                    <input className={s.timeInput} aria-label="하프 기록 분" type="number" inputMode="numeric" min="0" max="59" value={rHmin} onChange={e => setRHmin(e.target.value)} />
                     <span className={s.timeColon}>:</span>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={rHsec} onChange={e => setRHsec(e.target.value)} />
+                    <input className={s.timeInput} aria-label="하프 기록 초" type="number" inputMode="numeric" min="0" max="59" value={rHsec} onChange={e => setRHsec(e.target.value)} />
                   </div>
                 )}
                 {vdotInfo.vdot > 0 && (
@@ -593,9 +608,9 @@ export default function IntervalTrainingClient() {
                 <p className={s.modeSubLabel}>달성하고 싶은 목표 1km 페이스를 입력하세요 (대회 목표 등)</p>
                 <span className={s.subLabel}>목표 1km 페이스 (분 : 초)</span>
                 <div className={s.timeInputRow}>
-                  <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={targetMin} onChange={e => setTargetMin(e.target.value)} />
+                  <input className={s.timeInput} aria-label="목표 1km 페이스 분" type="number" inputMode="numeric" min="0" value={targetMin} onChange={e => setTargetMin(e.target.value)} />
                   <span className={s.timeColon}>:</span>
-                  <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={targetSec} onChange={e => setTargetSec(e.target.value)} />
+                  <input className={s.timeInput} aria-label="목표 1km 페이스 초" type="number" inputMode="numeric" min="0" max="59" value={targetSec} onChange={e => setTargetSec(e.target.value)} />
                 </div>
               </>
             )}
@@ -623,6 +638,11 @@ export default function IntervalTrainingClient() {
                   </button>
                 ))}
               </div>
+              {(goal === 'marathon' || goal === 'half') && (
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+                  💡 {goal === 'marathon' ? '풀코스' : '하프'} 목적의 인터벌 페이스는 <strong style={{ color: 'var(--text)' }}>V̇O₂max·역치를 자극하는 보조 훈련</strong> 기준입니다. 실제 대회에서 유지할 목표 페이스(M)는 이보다 느립니다 — 아래 [E·M·T·I·R] 표를 참고하세요.
+                </p>
+              )}
             </div>
           )}
 
@@ -657,11 +677,17 @@ export default function IntervalTrainingClient() {
                   <span className={s.heroUnit}>/km</span>
                 </div>
                 <p className={s.heroSub}>
-                  {inputMode === 'record' && vdotInfo.vdot > 0 && (
-                    <>VDOT <span className={s.heroSubAccent}>{vdotInfo.vdot.toFixed(1)}</span> 러너 · </>
+                  {inputMode === 'record' ? (
+                    <>
+                      {vdotInfo.vdot > 0 && (
+                        <>VDOT <span className={s.heroSubAccent}>{vdotInfo.vdot.toFixed(1)}</span> 러너 · </>
+                      )}
+                      {GOALS.find(g => g.key === goal)?.label} 목적 ·
+                      {' '}<span className={s.heroSubAccent}>{GOAL_INTENSITY[goal]} 페이스</span>
+                    </>
+                  ) : (
+                    <span className={s.heroSubAccent}>입력한 목표 페이스</span>
                   )}
-                  {GOALS.find(g => g.key === goal)?.label} 목적 ·
-                  {' '}<span className={s.heroSubAccent}>{GOAL_INTENSITY[goal]} 페이스</span>
                 </p>
               </div>
             )}
@@ -688,10 +714,11 @@ export default function IntervalTrainingClient() {
                   {lapRows.map(r => {
                     const label = `${r.distance}m`
                     const time = fmtMS(r.lapSec)
-                    // 1바퀴(400m) 페이스
+                    // 1바퀴(400m) 페이스 — 0.1초 반올림이 60.0이 되면 분으로 올림
                     const lapTime400 = (r.lapSec * 400) / r.distance
-                    const min400 = Math.floor(lapTime400 / 60)
-                    const sec400 = lapTime400 - min400 * 60
+                    let min400 = Math.floor(lapTime400 / 60)
+                    let sec400 = Math.round((lapTime400 - min400 * 60) * 10) / 10
+                    if (sec400 >= 60) { sec400 -= 60; min400 += 1 }
                     const lap400Str = `${min400}:${sec400.toFixed(1).padStart(4, '0')}`
                     return (
                       <tr key={r.distance} className={STANDARD_DISTANCES.has(r.distance) ? s.standardRow : ''}>
@@ -875,9 +902,9 @@ export default function IntervalTrainingClient() {
               <>
                 <span className={s.subLabel}>800m 평균 기록 (분 : 초)</span>
                 <div className={s.timeInputRow}>
-                  <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={yMin} onChange={e => setYMin(e.target.value)} />
+                  <input className={s.timeInput} aria-label="800m 평균 기록 분" type="number" inputMode="numeric" min="0" value={yMin} onChange={e => setYMin(e.target.value)} />
                   <span className={s.timeColon}>:</span>
-                  <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={yYsec} onChange={e => setYYsec(e.target.value)} />
+                  <input className={s.timeInput} aria-label="800m 평균 기록 초" type="number" inputMode="numeric" min="0" max="59" value={yYsec} onChange={e => setYYsec(e.target.value)} />
                 </div>
                 <div style={{ marginTop: 12 }}>
                   <span className={s.subLabel}>반복 횟수: {yReps}회</span>
@@ -889,9 +916,9 @@ export default function IntervalTrainingClient() {
                 <div style={{ marginTop: 12 }}>
                   <span className={s.subLabel}>회복 시간 (선택)</span>
                   <div className={s.timeInputRow}>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={yRecMin} onChange={e => setYRecMin(e.target.value)} />
+                    <input className={s.timeInput} aria-label="회복 시간 분" type="number" inputMode="numeric" min="0" value={yRecMin} onChange={e => setYRecMin(e.target.value)} />
                     <span className={s.timeColon}>:</span>
-                    <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={yRecSec} onChange={e => setYRecSec(e.target.value)} />
+                    <input className={s.timeInput} aria-label="회복 시간 초" type="number" inputMode="numeric" min="0" max="59" value={yRecSec} onChange={e => setYRecSec(e.target.value)} />
                   </div>
                 </div>
 
@@ -908,6 +935,7 @@ export default function IntervalTrainingClient() {
                           <input
                             key={i}
                             className={s.splitInput}
+                            aria-label={`${i + 1}회차 800m 기록`}
                             type="text"
                             placeholder={`#${i + 1}`}
                             value={splitsRaw[i] ?? ''}
@@ -929,9 +957,9 @@ export default function IntervalTrainingClient() {
               <>
                 <span className={s.subLabel}>목표 풀코스 기록 (시 : 분)</span>
                 <div className={s.timeInputRow}>
-                  <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={tgH} onChange={e => setTgH(e.target.value)} />
+                  <input className={s.timeInput} aria-label="목표 풀코스 시간" type="number" inputMode="numeric" min="0" value={tgH} onChange={e => setTgH(e.target.value)} />
                   <span className={s.timeColon}>:</span>
-                  <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={tgM} onChange={e => setTgM(e.target.value)} />
+                  <input className={s.timeInput} aria-label="목표 풀코스 분" type="number" inputMode="numeric" min="0" max="59" value={tgM} onChange={e => setTgM(e.target.value)} />
                 </div>
               </>
             )}
@@ -1072,12 +1100,12 @@ export default function IntervalTrainingClient() {
             </div>
             <div className={s.raceGrid}>
               {KOREA_RACES.map(race => {
-                const w = weeksUntilMonth(race.month)
+                const { days, weeks } = raceTiming(race.month)
                 return (
                   <button key={race.name} type="button"
                     className={s.raceBtn}
                     onClick={() => {
-                      setWeeksLeft(w)
+                      setWeeksLeft(weeks)  // 스케줄은 4~16주 클램프, 표시는 실제 D-day
                       // 자동으로 풀 또는 하프 선택
                       if (race.distances.includes('풀')) setSchedRaceType('marathon')
                       else if (race.distances.includes('하프')) setSchedRaceType('half')
@@ -1085,7 +1113,7 @@ export default function IntervalTrainingClient() {
                     }}>
                     <span className={s.raceMonth}>{race.month}월</span>
                     <span className={s.raceName}>{race.name}</span>
-                    <span className={s.raceMeta}>{race.distances} · D-{w * 7}</span>
+                    <span className={s.raceMeta}>{race.distances} · D-{days}</span>
                   </button>
                 )
               })}
@@ -1111,9 +1139,9 @@ export default function IntervalTrainingClient() {
                 <button className={`${s.recordTabBtn} ${schedRaceType === 'marathon' ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('marathon'); setSchedRecord({ min: '210', sec: '00' }) }}>풀</button>
               </div>
               <div className={s.timeInputRow}>
-                <input className={s.timeInput} type="number" inputMode="numeric" min="0" value={schedRecord.min} onChange={e => setSchedRecord(r => ({ ...r, min: e.target.value }))} />
+                <input className={s.timeInput} aria-label="최근 기록 분" type="number" inputMode="numeric" min="0" value={schedRecord.min} onChange={e => setSchedRecord(r => ({ ...r, min: e.target.value }))} />
                 <span className={s.timeColon}>:</span>
-                <input className={s.timeInput} type="number" inputMode="numeric" min="0" max="59" value={schedRecord.sec} onChange={e => setSchedRecord(r => ({ ...r, sec: e.target.value }))} />
+                <input className={s.timeInput} aria-label="최근 기록 초" type="number" inputMode="numeric" min="0" max="59" value={schedRecord.sec} onChange={e => setSchedRecord(r => ({ ...r, sec: e.target.value }))} />
               </div>
             </div>
 
@@ -1155,7 +1183,7 @@ export default function IntervalTrainingClient() {
           </div>
 
           {/* 스케줄 표 (확장: 6컬럼) */}
-          {schedule.weeks.length > 0 && schedule.finalPace > 0 && (
+          {schedule.weeks.length > 0 && schedule.vdot > 0 && (
             <div className={s.card}>
               <div className={s.cardLabel}>
                 <span>{weeksLeft}주 인터벌 스케줄</span>
@@ -1175,10 +1203,11 @@ export default function IntervalTrainingClient() {
                   </thead>
                   <tbody>
                     {schedule.weeks.map(w => {
-                      const lapSec = (schedule.finalPace * w.menu1.dist) / 1000
+                      const lapSec = (w.pace1 * w.menu1.dist) / 1000
                       const distLabel = w.menu1.dist >= 1000 ? `${w.menu1.dist / 1000}km` : `${w.menu1.dist}m`
                       const fastKm = (w.menu1.dist * w.menu1.reps) / 1000
-                      const totalKm = fastKm + 3 // 워밍업·쿨다운
+                      const fastKm2 = w.menu2 ? (w.menu2.dist * w.menu2.reps) / 1000 : 0
+                      const totalKm = fastKm + fastKm2 + 3 * (w.menu2 ? 2 : 1) // 세션별 워밍업·쿨다운 각 3km
                       const phaseColor =
                         w.phase === 'adapt'   ? '#059669' :
                         w.phase === 'develop' ? '#A16207' :
@@ -1220,13 +1249,14 @@ export default function IntervalTrainingClient() {
           )}
 
           {/* 모바일 카드 뷰 (xs 화면 전용) */}
-          {schedule.weeks.length > 0 && schedule.finalPace > 0 && (
+          {schedule.weeks.length > 0 && schedule.vdot > 0 && (
             <div className={s.scheduleCardsMobile}>
               {schedule.weeks.map(w => {
-                const lapSec = (schedule.finalPace * w.menu1.dist) / 1000
+                const lapSec = (w.pace1 * w.menu1.dist) / 1000
                 const distLabel = w.menu1.dist >= 1000 ? `${w.menu1.dist / 1000}km` : `${w.menu1.dist}m`
                 const fastKm = (w.menu1.dist * w.menu1.reps) / 1000
-                const totalKm = fastKm + 3
+                const fastKm2 = w.menu2 ? (w.menu2.dist * w.menu2.reps) / 1000 : 0
+                const totalKm = fastKm + fastKm2 + 3 * (w.menu2 ? 2 : 1)
                 const phaseColor =
                   w.phase === 'adapt'   ? '#059669' :
                   w.phase === 'develop' ? '#A16207' :

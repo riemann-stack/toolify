@@ -54,12 +54,13 @@ export default function ClimbingGradeClient() {
         <span className={s.cardLabel}>내 등급 입력</span>
 
         <div className={s.field}>
-          <span className={s.fieldLabel}>기준 체계</span>
-          <div className={s.segment} style={{ gridTemplateColumns: `repeat(${systems.length}, 1fr)` }}>
+          <span className={s.fieldLabel} id="cg-system-label">기준 체계</span>
+          <div className={s.segment} role="group" aria-labelledby="cg-system-label" style={{ gridTemplateColumns: `repeat(${systems.length}, 1fr)` }}>
             {systems.map((x) => (
               <button
                 key={x.id}
                 type="button"
+                aria-pressed={systemId === x.id}
                 className={`${s.segBtn} ${systemId === x.id ? s.segActive : ''}`}
                 onClick={() => setSystemId(x.id)}
               >{x.label}</button>
@@ -72,6 +73,7 @@ export default function ClimbingGradeClient() {
           <div className={s.selectWrap}>
             <select
               className={s.select}
+              aria-label={`${sys.label} 등급 선택`}
               value={idx}
               onChange={(e) => setRowIdx(Number(e.target.value))}
             >

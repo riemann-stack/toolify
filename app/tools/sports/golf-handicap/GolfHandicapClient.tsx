@@ -7,22 +7,10 @@ import s from './golf-handicap.module.css'
 import {
   loadRounds, saveRounds, loadCourses, saveCourses, newId, todayStr,
   calcHandicapIndex, getProgressPoints, analyzeProgress, downloadCsv,
+  getUsedCount, handicapIndexFromDiffs, lowRoundAdjustment,
   TEE_LABEL, WEATHER_LABEL,
   type RoundRecord, type SavedCourse, type TeeColor, type Weather,
 } from './golfHandicapUtils'
-
-// ── 라운드 수별 사용 디퍼런셜 개수 ──
-function getUsedCount(n: number): number {
-  if (n < 3) return 0
-  if (n <= 5) return 1
-  if (n <= 8) return 2
-  if (n <= 11) return 3
-  if (n <= 14) return 4
-  if (n <= 16) return 5
-  if (n === 17) return 6
-  if (n === 18) return 7
-  return 8
-}
 
 function getGrade(index: number): { label: string; cls: string } {
   if (index <= 0) return { label: '스크래치', cls: s.gradeScratch }
@@ -57,6 +45,9 @@ const SAMPLE_ROUNDS: Omit<Round, 'id'>[] = [
   { gross: '89', cr: '72.0', sr: '125', holes: 18 },
   { gross: '91', cr: '71.8', sr: '123', holes: 18 },
 ]
+
+// 스태블포드 표준 예시 홀별 파 (파 72) — 실제 코스의 홀별 파·스트로크 인덱스와 다를 수 있음
+const STABLEFORD_PARS = [4, 4, 3, 4, 5, 3, 4, 4, 5, 4, 3, 5, 4, 4, 3, 4, 5, 4]
 
 // ── 탭 1: 핸디캡 지수 계산기 ──
 function HandicapIndexTab({
@@ -116,11 +107,8 @@ function HandicapIndexTab({
   }, [validRounds, usedCount])
 
   const handicapIndex = useMemo(() => {
-    if (usedCount === 0) return null
-    const used = validRounds.filter(r => usedIds.has(r.id))
-    const avg = used.reduce((sum, r) => sum + (r.diff as number), 0) / used.length
-    return Math.round(avg * 0.96 * 10) / 10
-  }, [validRounds, usedIds, usedCount])
+    return handicapIndexFromDiffs(validRounds.map(r => r.diff as number))
+  }, [validRounds])
 
   const grade = handicapIndex !== null ? getGrade(handicapIndex) : null
 
@@ -133,7 +121,10 @@ function HandicapIndexTab({
             <div className={s.heroLeft}>
               <div className={s.heroLabel}>Handicap Index</div>
               <div className={s.heroNum}>{handicapIndex.toFixed(1)}</div>
-              <div className={s.heroSub}>{validRounds.length}라운드 중 최저 {usedCount}개 평균 × 0.96</div>
+              <div className={s.heroSub}>
+                {validRounds.length}라운드 중 최저 {usedCount}개 평균
+                {lowRoundAdjustment(validRounds.length) !== 0 ? ` ${lowRoundAdjustment(validRounds.length).toFixed(1)} 보정` : ''} (WHS)
+              </div>
             </div>
             <div className={s.heroRight}>
               <span className={`${s.gradeBadge} ${grade.cls}`}>{grade.label}</span>
@@ -162,6 +153,7 @@ function HandicapIndexTab({
                   <label className={s.roundInputLabel}>그로스</label>
                   <input
                     type="number" inputMode="numeric" className={s.roundInput}
+                    aria-label={`${idx + 1}번 라운드 그로스 스코어`}
                     value={r.gross} onChange={e => updateRound(r.id, 'gross', e.target.value)}
                     placeholder="92"
                   />
@@ -171,6 +163,7 @@ function HandicapIndexTab({
                   <label className={s.roundInputLabel}>코스 레이팅</label>
                   <input
                     type="number" inputMode="decimal" step="0.1" className={s.roundInput}
+                    aria-label={`${idx + 1}번 라운드 코스 레이팅`}
                     value={r.cr} onChange={e => updateRound(r.id, 'cr', e.target.value)}
                     placeholder="72.0"
                   />
@@ -180,6 +173,7 @@ function HandicapIndexTab({
                   <label className={s.roundInputLabel}>슬로프</label>
                   <input
                     type="number" inputMode="numeric" className={s.roundInput}
+                    aria-label={`${idx + 1}번 라운드 슬로프 레이팅`}
                     value={r.sr} onChange={e => updateRound(r.id, 'sr', e.target.value)}
                     placeholder="113"
                   />
@@ -189,11 +183,11 @@ function HandicapIndexTab({
 
                 <div style={{ gridColumn: '1 / -1' }} className={s.roundMeta}>
                   <div className={s.holeToggle}>
-                    <button
+                    <button type="button" aria-pressed={r.holes === 18}
                       className={`${s.holeBtn} ${r.holes === 18 ? s.holeBtnActive : ''}`}
                       onClick={() => updateRound(r.id, 'holes', 18)}
                     >18홀</button>
-                    <button
+                    <button type="button" aria-pressed={r.holes === 9}
                       className={`${s.holeBtn} ${r.holes === 9 ? s.holeBtnActive : ''}`}
                       onClick={() => updateRound(r.id, 'holes', 9)}
                     >9홀</button>
@@ -391,7 +385,7 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
 
   // 홀별 (스태블포드)
   const [holes, setHoles] = useState<string[]>(Array(18).fill(''))
-  const holePars = [4,4,3,4,5,3,4,4,5,4,3,5,4,4,3,4,5,4] // 파72 예시
+  const holePars = STABLEFORD_PARS
 
   const ch = parseInt(courseHandicap)
   const grossN = parseFloat(totalGross)
@@ -402,7 +396,7 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
     return grossN - ch
   }, [grossN, ch])
 
-  // 홀별 핸디캡 스트로크 분배 (코스핸디캡 만큼 난이도 1~18 순서로 분배)
+  // 홀별 핸디캡 스트로크 분배 (코스핸디캡 만큼 홀 순서대로 1스트로크씩 — 실제는 스트로크 인덱스順)
   const holeStrokes = useMemo(() => {
     if (isNaN(ch) || ch <= 0) return Array(18).fill(0)
     const strokes = Array(18).fill(0)
@@ -433,7 +427,7 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
       else pts = 0
       return pts
     })
-  }, [holes, holeStrokes])
+  }, [holes, holeStrokes, holePars])
 
   const stableTotal = stablefordPoints.reduce((sum: number, p) => p !== null ? sum + p : sum, 0)
   const stableFilled = stablefordPoints.filter(p => p !== null).length
@@ -451,10 +445,10 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
       <div className={s.card}>
         <span className={s.cardLabel}>계산 방식</span>
         <div className={s.modeRow}>
-          <button className={`${s.modeBtn} ${mode === 'stroke' ? s.modeActive : ''}`} onClick={() => setMode('stroke')}>
+          <button type="button" aria-pressed={mode === 'stroke'} className={`${s.modeBtn} ${mode === 'stroke' ? s.modeActive : ''}`} onClick={() => setMode('stroke')}>
             스트로크 플레이
           </button>
-          <button className={`${s.modeBtn} ${mode === 'stable' ? s.modeActive : ''}`} onClick={() => setMode('stable')}>
+          <button type="button" aria-pressed={mode === 'stable'} className={`${s.modeBtn} ${mode === 'stable' ? s.modeActive : ''}`} onClick={() => setMode('stable')}>
             스태블포드
           </button>
         </div>
@@ -523,6 +517,9 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
 
       {mode === 'stable' && (
         <>
+          <div className={s.infoBox}>
+            ⚠️ 홀별 파는 <strong>표준 예시(파 72)</strong>이고, 핸디캡 스트로크는 1번 홀부터 순서대로 배분합니다. 실제 스태블포드는 코스의 홀별 파·<strong>스트로크 인덱스(난이도 순서)</strong>를 따르므로 결과가 다를 수 있어요.
+          </div>
           <div className={s.card}>
             <span className={s.cardLabel}>홀별 스코어 (Out · 1~9홀)</span>
             <div className={s.holeGrid}>
@@ -531,6 +528,7 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
                   <span className={s.holeLabel}>#{i + 1}</span>
                   <input
                     type="number" inputMode="numeric" className={s.holeScore}
+                    aria-label={`${i + 1}번 홀 스코어`}
                     value={holes[i]}
                     onChange={e => {
                       const n = [...holes]; n[i] = e.target.value; setHoles(n)
@@ -557,6 +555,7 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
                     <span className={s.holeLabel}>#{idx + 1}</span>
                     <input
                       type="number" inputMode="numeric" className={s.holeScore}
+                      aria-label={`${idx + 1}번 홀 스코어`}
                       value={holes[idx]}
                       onChange={e => {
                         const n = [...holes]; n[idx] = e.target.value; setHoles(n)
@@ -618,17 +617,17 @@ export default function GolfHandicapClient() {
         WHS(세계 핸디캡 시스템) 기준 <strong>비공식 산출</strong>이며, 공식 핸디캡 인덱스는 대한골프협회(KGA)·소속 클럽을 통해 확인하세요.
       </Disclaimer>
 
-      <div className={s.tabs4}>
-        <button className={`${s.tab} ${tab === 'index' ? s.tabActive : ''}`} onClick={() => setTab('index')}>
+      <div className={s.tabs4} role="tablist">
+        <button type="button" role="tab" aria-selected={tab === 'index'} className={`${s.tab} ${tab === 'index' ? s.tabActive : ''}`} onClick={() => setTab('index')}>
           📊 핸디캡 지수
         </button>
-        <button className={`${s.tab} ${tab === 'course' ? s.tabActive : ''}`} onClick={() => setTab('course')}>
+        <button type="button" role="tab" aria-selected={tab === 'course'} className={`${s.tab} ${tab === 'course' ? s.tabActive : ''}`} onClick={() => setTab('course')}>
           ⛳ 코스 핸디캡
         </button>
-        <button className={`${s.tab} ${tab === 'score' ? s.tabActive : ''}`} onClick={() => setTab('score')}>
+        <button type="button" role="tab" aria-selected={tab === 'score'} className={`${s.tab} ${tab === 'score' ? s.tabActive : ''}`} onClick={() => setTab('score')}>
           🎯 네트·스태블포드
         </button>
-        <button className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>
+        <button type="button" role="tab" aria-selected={tab === 'records'} className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>
           📅 내 기록
         </button>
       </div>

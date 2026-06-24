@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -55,6 +54,8 @@ const num = (s: string): number => {
 }
 const fmtKg = (n: number): string =>
   (Math.round(n * 10) / 10).toLocaleString('ko-KR', { maximumFractionDigits: 1 })
+// 체중 배수 표시는 내림(floor) — 반올림이 임계값을 넘겨 표시(3.75)↔판정(초보)이 어긋나는 것 방지
+const fmtRatio = (r: number): string => (Math.floor(r * 100) / 100).toFixed(2)
 
 function levelOf(ratio: number, thresholds: number[]): number {
   let idx = 0
@@ -188,6 +189,8 @@ export default function StrengthLevelClient() {
   const dotsScore = dots(total, bw, sex)
   const ipfScore = ipfGL(total, bw, sex)
   const valid = bw > 0 && total > 0
+  // Wilks·DOTS·IPF GL·3대 합·종합 레벨은 3종목 전부 입력해야 의미가 있음 (한 종목만 넣으면 보정 점수가 왜곡)
+  const allThree = bw > 0 && squat > 0 && bench > 0 && dead > 0
 
   // 시도 — 종목별 1·2·3차 + 3차 합계 투영
   const attempts = LIFTS.map(({ key, label, emoji }) => ({ key, label, emoji, set: attemptSet(liftVals[key]) }))
@@ -206,22 +209,42 @@ export default function StrengthLevelClient() {
     ] : []
   )
 
-  function handleCopy() {
+  async function handleCopy() {
     const txt = [
       '── 파워리프팅 ──',
       `${sex === 'male' ? '남성' : '여성'} · ${AGE_BAND_LABEL[age]} · 체중 ${fmtKg(bw)}kg`,
       `스쿼트 ${fmtKg(squat)} / 벤치 ${fmtKg(bench)} / 데드 ${fmtKg(dead)} (kg)`,
-      `3대 합: ${fmtKg(total)}kg (체중 ${totalRatio.toFixed(2)}배) · 종합 ${LEVELS[overallIdx]}`,
+      `3대 합: ${fmtKg(total)}kg (체중 ${fmtRatio(totalRatio)}배) · 종합 ${LEVELS[overallIdx]}`,
       `DOTS ${dotsScore.toFixed(1)} · Wilks ${wilksScore.toFixed(1)} · IPF GL ${ipfScore.toFixed(1)}`,
       'youtil.kr/tools/sports/strength-level',
     ].join('\n')
-    navigator.clipboard?.writeText(txt).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
-    })
+    const done = () => { setCopied(true); window.setTimeout(() => setCopied(false), 1200) }
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(txt)
+        done()
+        return
+      }
+      throw new Error('clipboard unavailable')
+    } catch {
+      // 비보안 컨텍스트·권한 차단 등 — execCommand 폴백 (구형/일부 인앱 브라우저)
+      try {
+        const ta = document.createElement('textarea')
+        ta.value = txt
+        ta.setAttribute('readonly', '')
+        ta.style.position = 'fixed'
+        ta.style.top = '-9999px'
+        document.body.appendChild(ta)
+        ta.select()
+        document.execCommand('copy')
+        document.body.removeChild(ta)
+        done()
+      } catch { /* 최종 실패 — 조용히 무시 */ }
+    }
   }
 
   function saveRecord() {
-    if (!valid) return
+    if (!allThree) return
     const d = new Date()
     const date = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`
     const id = `${d.getTime()}`
@@ -307,32 +330,41 @@ export default function StrengthLevelClient() {
       {/* ── 탭: 수준·점수 ── */}
       {tab === 'level' && (valid ? (
         <>
-          <div className={styles.hero} role="status">
-            <p className={styles.heroLabel}>3대 합 (스쿼트+벤치+데드)</p>
-            <p className={styles.heroValue}><strong>{fmtKg(total)}</strong> kg</p>
-            <p className={styles.heroSub}>체중의 {totalRatio.toFixed(2)}배</p>
-            <span className={styles.overallBadge} style={{ background: LEVEL_COLORS[overallIdx], color: '#fff' }}>
-              종합 {LEVELS[overallIdx]}
-            </span>
-          </div>
+          {allThree ? (
+            <>
+              <div className={styles.hero} role="status">
+                <p className={styles.heroLabel}>3대 합 (스쿼트+벤치+데드)</p>
+                <p className={styles.heroValue}><strong>{fmtKg(total)}</strong> kg</p>
+                <p className={styles.heroSub}>체중의 {fmtRatio(totalRatio)}배</p>
+                <span className={styles.overallBadge} style={{ background: LEVEL_COLORS[overallIdx], color: '#fff' }}>
+                  종합 {LEVELS[overallIdx]}
+                </span>
+              </div>
 
-          <div className={styles.scoreGrid}>
-            <div className={styles.scoreCard}>
-              <span className={styles.scoreName}>DOTS</span>
-              <span className={styles.scoreValue}>{dotsScore.toFixed(1)}</span>
-              <span className={styles.scoreBand}>{scoreBand(dotsScore)}</span>
+              <div className={styles.scoreGrid}>
+                <div className={styles.scoreCard}>
+                  <span className={styles.scoreName}>DOTS</span>
+                  <span className={styles.scoreValue}>{dotsScore.toFixed(1)}</span>
+                  <span className={styles.scoreBand}>{scoreBand(dotsScore)}</span>
+                </div>
+                <div className={styles.scoreCard}>
+                  <span className={styles.scoreName}>Wilks</span>
+                  <span className={styles.scoreValue}>{wilksScore.toFixed(1)}</span>
+                  <span className={styles.scoreBand}>{scoreBand(wilksScore)}</span>
+                </div>
+                <div className={styles.scoreCard}>
+                  <span className={styles.scoreName}>IPF GL</span>
+                  <span className={styles.scoreValue}>{ipfScore.toFixed(1)}</span>
+                  <span className={styles.scoreBand}>클래식 기준</span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className={styles.emptyHint} role="status">
+              <strong>3종목(스쿼트·벤치·데드)을 모두 입력</strong>하면 3대 합·종합 레벨·Wilks·DOTS·IPF GL 점수가 표시됩니다.<br />
+              아래에서 지금 입력한 종목의 레벨은 바로 확인할 수 있어요.
             </div>
-            <div className={styles.scoreCard}>
-              <span className={styles.scoreName}>Wilks</span>
-              <span className={styles.scoreValue}>{wilksScore.toFixed(1)}</span>
-              <span className={styles.scoreBand}>{scoreBand(wilksScore)}</span>
-            </div>
-            <div className={styles.scoreCard}>
-              <span className={styles.scoreName}>IPF GL</span>
-              <span className={styles.scoreValue}>{ipfScore.toFixed(1)}</span>
-              <span className={styles.scoreBand}>클래식 기준</span>
-            </div>
-          </div>
+          )}
 
           <div className={styles.card}>
             <span className={styles.cardLabel}>종목별 레벨</span>
@@ -345,7 +377,7 @@ export default function StrengthLevelClient() {
                       {p.valid ? (
                         <>
                           <strong style={{ color: LEVEL_COLORS[p.idx] }}>{LEVELS[p.idx]}</strong>
-                          <span className={styles.liftRatio}> · 체중 {p.ratio.toFixed(2)}배</span>
+                          <span className={styles.liftRatio}> · 체중 {fmtRatio(p.ratio)}배</span>
                         </>
                       ) : (<span className={styles.liftRatio}>중량 입력</span>)}
                     </span>
@@ -369,9 +401,11 @@ export default function StrengthLevelClient() {
             </p>
           </div>
 
-          <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-            {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
-          </button>
+          {allThree && (
+            <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
+              {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+            </button>
+          )}
         </>
       ) : (
         <div className={styles.emptyHint}>체중과 3대 중량을 입력하면 레벨·DOTS·Wilks·IPF GL 점수가 표시됩니다.</div>
@@ -399,7 +433,7 @@ export default function StrengthLevelClient() {
               </div>
               <div className={styles.projBox}>
                 <span>3차 성공 시 합계 <strong>{fmtKg(projTotal)}kg</strong></span>
-                {valid && <span className={styles.projScore}>DOTS {projDots.toFixed(1)} · IPF GL {projIpf.toFixed(1)}</span>}
+                {allThree && <span className={styles.projScore}>DOTS {projDots.toFixed(1)} · IPF GL {projIpf.toFixed(1)}</span>}
               </div>
               <p className={styles.helpText}>
                 1차(오프너)는 1RM의 약 90%를 <strong>내림</strong>해 확실히 드는 무게로 — 실격을 막는 보험입니다. 2차 ~95%, 3차는 현재 1RM(≈100%). PR에 도전하면 3차에 +2.5~5kg. 95%+ 시도는 폼·세이프티·스포터 필수.
@@ -465,11 +499,11 @@ export default function StrengthLevelClient() {
         <div className={styles.card}>
           <span className={styles.cardLabel}>내 기록 (이 기기에 저장)</span>
           <button type="button" className={`${styles.copyBtn} ${saved ? styles.copied : ''}`}
-            onClick={saveRecord} disabled={!valid}
-            style={!valid ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}>
+            onClick={saveRecord} disabled={!allThree}
+            style={!allThree ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}>
             {saved ? '✓ 저장됨' : '＋ 현재 합계·점수 저장'}
           </button>
-          {!valid && <p className={styles.helpText}>체중과 3대 중량을 입력한 뒤 저장하세요.</p>}
+          {!allThree && <p className={styles.helpText}>3종목(스쿼트·벤치·데드)을 모두 입력한 뒤 저장하세요.</p>}
 
           {mounted && hasTrend && (
             <div className={styles.trendBox}>

@@ -59,10 +59,9 @@ export default function VinDecoderClient() {
 
   // ── 해석 (렌더 중 파생 — 순수·저비용) ──
   const r = decodeVin(vin)
-  const show17 = r.length === 17
 
   function saveCurrent() {
-    if (!show17) return
+    if (!r.valid17) return
     const next = [r.clean, ...recents.filter((v) => v !== r.clean)].slice(0, 8)
     setRecents(next); saveRecents(next)
     setSavedFlash(true); window.setTimeout(() => setSavedFlash(false), 1200)
@@ -114,15 +113,14 @@ export default function VinDecoderClient() {
                 autoCapitalize="characters"
                 autoCorrect="off"
                 spellCheck={false}
-                maxLength={17}
                 aria-label="차대번호(VIN) 입력"
                 placeholder="예: KMHLN4AG7PU100001 (17자리)"
                 value={vin}
                 onChange={(e) => setVin(sanitizeVin(e.target.value))}
               />
               <div className={styles.inputMeta}>
-                <span className={`${styles.lenCount} ${show17 ? styles.lenOk : ''}`}>
-                  {r.length}/17{show17 ? ' ✓' : ''}
+                <span className={`${styles.lenCount} ${r.valid17 ? styles.lenOk : ''}`}>
+                  {r.length}/17{r.valid17 ? ' ✓' : ''}
                 </span>
                 {r.length > 0 && (
                   <button type="button" className={styles.clearBtn} onClick={() => setVin('')}>지우기</button>
@@ -153,7 +151,7 @@ export default function VinDecoderClient() {
             </p>
           </div>
 
-          {show17 ? (
+          {r.valid17 ? (
             <>
               {/* 자리별 분해 시각화 (시각 보조 — 텍스트 결과는 아래 카드) */}
               <div className={styles.card}>
@@ -195,7 +193,9 @@ export default function VinDecoderClient() {
                       </span>
                       <span className={styles.resSub}>
                         {r.wmi.maker
-                          ? `WMI 매칭: ${r.wmi.matched}`
+                          ? (r.wmi.approx
+                              ? `${r.wmi.matched} 계열로 제조사 식별 — 정확한 3자리 WMI는 미수록`
+                              : `WMI 매칭: ${r.wmi.matched} (정확)`)
                           : '수록되지 않은 WMI입니다. 1번째 자리로 제조 지역만 추정했습니다 (정확한 제조사는 제조사·등록증 확인).'}
                       </span>
                     </div>
@@ -211,22 +211,24 @@ export default function VinDecoderClient() {
                   </div>
                   {/* Check */}
                   <div className={styles.resRow}>
-                    <span className={styles.resIcon}>{r.check.computable ? (r.check.valid ? '✅' : '⚠️') : '➖'}</span>
+                    <span className={styles.resIcon}>{!r.check.computable ? '➖' : r.check.valid ? '✅' : r.check.required ? '⚠️' : '➖'}</span>
                     <div className={styles.resMain}>
                       <span className={styles.resLabel}>체크 디지트 (9번째)</span>
                       <span className={styles.resValue}>
                         <span className={styles.resCode}>{r.sections.check || '—'}</span>{' '}
-                        {r.check.computable ? (
-                          <span className={`${styles.badge} ${r.check.valid ? styles.badgeOk : styles.badgeWarn}`}>
-                            {r.check.valid ? '계산값 일치' : `불일치 (계산값 ${r.check.expected})`}
-                          </span>
-                        ) : (
+                        {!r.check.computable ? (
                           <span className={`${styles.badge} ${styles.badgeNeutral}`}>계산 불가</span>
+                        ) : r.check.valid ? (
+                          <span className={`${styles.badge} ${styles.badgeOk}`}>계산값 일치</span>
+                        ) : r.check.required ? (
+                          <span className={`${styles.badge} ${styles.badgeWarn}`}>불일치 · 오타 확인 (계산값 {r.check.expected})</span>
+                        ) : (
+                          <span className={`${styles.badge} ${styles.badgeNeutral}`}>미적용일 수 있음 (북미식 계산값 {r.check.expected})</span>
                         )}
                       </span>
                       <span className={styles.resSub}>
-                        북미(NHTSA) 표준 검증식입니다. 유럽·일부 제조사는 적용하지 않거나 규칙이 달라,
-                        <strong> 불일치가 곧 위조를 뜻하지는 않습니다</strong> (오타·비적용 가능). 정확한 확인은 제조사·자동차등록증.
+                        체크 디지트는 <strong>북미(NHTSA)·중국</strong>에서 의무인 검증식입니다. 한국 현대·기아·제네시스는 적용해 보통 일치하지만,
+                        <strong> 유럽 수입차(BMW·벤츠 등)는 적용하지 않아 달라도 정상</strong>입니다 — 불일치가 곧 위조는 아닙니다(오타·비적용 가능). 정확한 확인은 제조사·자동차등록증.
                       </span>
                     </div>
                   </div>
@@ -274,6 +276,11 @@ export default function VinDecoderClient() {
                 </button>
               </div>
             </>
+          ) : r.length === 17 && r.hasIOQ ? (
+            <div className={styles.emptyHint}>
+              I·O·Q가 포함되어 있어 해석할 수 없습니다 — 위 경고에서 잘못 입력된 문자를 확인하세요
+              (대개 <strong>I→1, O·Q→0</strong> 오타입니다).
+            </div>
           ) : (
             <div className={styles.emptyHint}>
               17자리 차대번호(VIN)를 입력하면 제조국·제조사·연식·공장·체크 디지트를 자리별로 해석합니다.<br />

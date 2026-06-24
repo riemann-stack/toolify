@@ -13,31 +13,41 @@ function paceToSec(mm: string, ss: string) {
   return parseInt(mm || '0') * 60 + parseInt(ss || '0')
 }
 function secToPace(sec: number) {
-  const m = Math.floor(sec / 60)
-  const s = Math.round(sec % 60)
+  const t = Math.round(sec)          // 먼저 정수 초로 반올림 → "5:60" 같은 표기 방지
+  const m = Math.floor(t / 60)
+  const s = t % 60
   return `${m}:${String(s).padStart(2, '0')}`
 }
 function timeToSec(hh: string, mm: string, ss: string) {
   return parseInt(hh || '0') * 3600 + parseInt(mm || '0') * 60 + parseInt(ss || '0')
 }
 function secToTime(sec: number) {
-  const h = Math.floor(sec / 3600)
-  const m = Math.floor((sec % 3600) / 60)
-  const s = Math.round(sec % 60)
+  const t = Math.round(sec)
+  const h = Math.floor(t / 3600)
+  const m = Math.floor((t % 3600) / 60)
+  const s = t % 60
   return h > 0
     ? `${h}시간 ${m}분 ${String(s).padStart(2, '0')}초`
     : `${m}분 ${String(s).padStart(2, '0')}초`
 }
 function secToHms(sec: number) {
-  const h = Math.floor(sec / 3600)
-  const m = Math.floor((sec % 3600) / 60)
-  const s = Math.round(sec % 60)
+  const t = Math.round(sec)
+  const h = Math.floor(t / 3600)
+  const m = Math.floor((t % 3600) / 60)
+  const s = t % 60
   return h > 0
     ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
     : `${m}:${String(s).padStart(2, '0')}`
 }
 function paceSecToKph(paceSec: number) { return 3600 / paceSec }
 function kphToPaceSec(kph: number) { return 3600 / kph }
+// 입력 정수 클램프 (빈칸 허용) — 초 0~59, 분 비현실값·소수 차단
+function clampField(v: string, min: number, max: number) {
+  if (v === '') return ''
+  const n = Math.floor(Number(v))
+  if (!Number.isFinite(n)) return ''
+  return String(Math.max(min, Math.min(max, n)))
+}
 
 const DISTANCES = [
   { label: '5km',       km: 5 },
@@ -50,51 +60,68 @@ const DISTANCES = [
 type SplitRow = { distanceKm: number; label: string; landmark?: string }
 
 function getSplits(distanceKm: number): SplitRow[] {
-  if (distanceKm <= 5) {
+  const EPS = 1e-6
+  const eq = (a: number, b: number) => Math.abs(a - b) < EPS
+
+  // ── 표준 거리: 풍부한 랜드마크 ──
+  if (eq(distanceKm, 5)) {
     return [1, 2, 3, 4, 5].map(d => ({
       distanceKm: d, label: `${d}km`,
       landmark: d === 5 ? '🏁 5km 완주' : undefined,
     }))
   }
-  if (distanceKm <= 10) {
+  if (eq(distanceKm, 10)) {
     return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(d => ({
       distanceKm: d, label: `${d}km`,
       landmark: d === 5 ? '⏱️ 절반' : d === 10 ? '🏁 10km 완주' : undefined,
     }))
   }
-  if (distanceKm <= 22) {
+  if (eq(distanceKm, 21.0975)) {
     return [
       { distanceKm: 5,        label: '5km' },
-      { distanceKm: 10,       label: '10km',                 landmark: '⏱️ 절반 부근' },
+      { distanceKm: 10,       label: '10km',       landmark: '⏱️ 절반 부근' },
       { distanceKm: 15,       label: '15km' },
       { distanceKm: 20,       label: '20km' },
-      { distanceKm: 21.0975,  label: '21.0975km',            landmark: '🏁 하프 완주' },
+      { distanceKm: 21.0975,  label: '21.0975km',  landmark: '🏁 하프 완주' },
     ]
   }
-  // 풀
-  return [
-    { distanceKm: 5,       label: '5km' },
-    { distanceKm: 10,      label: '10km' },
-    { distanceKm: 15,      label: '15km' },
-    { distanceKm: 20,      label: '20km' },
-    { distanceKm: 21.0975, label: '21.0975km',  landmark: '🏁 하프 통과' },
-    { distanceKm: 25,      label: '25km' },
-    { distanceKm: 30,      label: '30km',       landmark: '🔴 마의 30km' },
-    { distanceKm: 35,      label: '35km' },
-    { distanceKm: 40,      label: '40km' },
-    { distanceKm: 42.195,  label: '42.195km',   landmark: '🏆 풀 완주' },
-  ]
+  if (eq(distanceKm, 42.195)) {
+    return [
+      { distanceKm: 5,       label: '5km' },
+      { distanceKm: 10,      label: '10km' },
+      { distanceKm: 15,      label: '15km' },
+      { distanceKm: 20,      label: '20km' },
+      { distanceKm: 21.0975, label: '21.0975km',  landmark: '🏁 하프 통과' },
+      { distanceKm: 25,      label: '25km' },
+      { distanceKm: 30,      label: '30km',       landmark: '🔴 마의 30km' },
+      { distanceKm: 35,      label: '35km' },
+      { distanceKm: 40,      label: '40km' },
+      { distanceKm: 42.195,  label: '42.195km',   landmark: '🏆 풀 완주' },
+    ]
+  }
+
+  // ── 커스텀 거리: 실제 거리에서 잘라내고 마지막에 완주 지점 표시 ──
+  const rows: SplitRow[] = []
+  const step = distanceKm <= 10.5 ? 1 : 5
+  for (let d = step; d < distanceKm - EPS; d += step) {
+    rows.push({ distanceKm: d, label: `${d}km`, landmark: d === 30 ? '🔴 마의 30km' : undefined })
+  }
+  if (distanceKm > 21.0975 + EPS) {
+    rows.push({ distanceKm: 21.0975, label: '21.0975km', landmark: '🏁 하프 통과' })
+    rows.sort((a, b) => a.distanceKm - b.distanceKm)
+  }
+  rows.push({ distanceKm, label: `${distanceKm}km`, landmark: '🏁 완주' })
+  return rows
 }
 
 // 빠른 페이스 칩
+// 한국 인기 마라톤 목표 페이스 (풀 42.195km 기준, 본문 표와 일치)
 const QUICK_PACES = [
-  { mm: 4, ss: 0,  label: '엘리트',    color: '#DC2626' },
-  { mm: 4, ss: 30, label: '서브3',     color: '#EA580C' },
-  { mm: 5, ss: 0,  label: '준중급',    color: '#A16207' },
-  { mm: 5, ss: 30, label: '중급',      color: '#0EA5E9' },
-  { mm: 6, ss: 0,  label: '가벼운 조깅', color: '#059669' },
-  { mm: 6, ss: 30, label: '조깅',      color: '#0891B2' },
-  { mm: 7, ss: 0,  label: '초보',      color: '#9B59B6' },
+  { mm: 4, ss: 16, label: '서브3',    color: '#DC2626' },
+  { mm: 4, ss: 59, label: '서브3:30', color: '#EA580C' },
+  { mm: 5, ss: 41, label: '서브4',    color: '#A16207' },
+  { mm: 6, ss: 24, label: '서브4:30', color: '#0891B2' },
+  { mm: 7, ss: 7,  label: '서브5',    color: '#059669' },
 ]
 
 const STORAGE_KEY = 'youtil-pace-record-v1'
@@ -220,7 +247,7 @@ export default function PaceClient() {
     if (!result1) return
     const lines = [
       `🏃 러닝 페이스 결과`,
-      `페이스 ${result1.paceStr}/km × ${dist === 5 ? '5km' : dist === 10 ? '10km' : dist === 21.0975 ? '하프' : '풀 마라톤'}`,
+      `페이스 ${result1.paceStr}/km × ${distLabel(dist)}`,
       `예상 완주: ${result1.time}`,
       `트레드밀 시속: ${result1.kph} km/h`,
       `400m 트랙 1바퀴: ${result1.track400}`,
@@ -254,12 +281,12 @@ export default function PaceClient() {
       </Disclaimer>
 
       {/* 모드 탭 */}
-      <div className={styles.tabs}>
-        <button className={`${styles.tab} ${mode === 'pace-to-time' ? styles.tabActive : ''}`}
+      <div className={styles.tabs} role="tablist">
+        <button type="button" role="tab" aria-selected={mode === 'pace-to-time'} className={`${styles.tab} ${mode === 'pace-to-time' ? styles.tabActive : ''}`}
           onClick={() => setMode('pace-to-time')}>📏 페이스 → 완주 시간</button>
-        <button className={`${styles.tab} ${mode === 'time-to-pace' ? styles.tabActive : ''}`}
+        <button type="button" role="tab" aria-selected={mode === 'time-to-pace'} className={`${styles.tab} ${mode === 'time-to-pace' ? styles.tabActive : ''}`}
           onClick={() => setMode('time-to-pace')}>⏱️ 완주 시간 → 페이스</button>
-        <button className={`${styles.tab} ${mode === 'treadmill' ? styles.tabActive : ''}`}
+        <button type="button" role="tab" aria-selected={mode === 'treadmill'} className={`${styles.tab} ${mode === 'treadmill' ? styles.tabActive : ''}`}
           onClick={() => setMode('treadmill')}>🏃 트레드밀 변환</button>
       </div>
 
@@ -277,18 +304,18 @@ export default function PaceClient() {
             <div className={styles.inputRow1}>
               <div className={styles.paceRow}>
                 <input className={styles.paceInput} type="number" inputMode="numeric"
-                  placeholder="5" value={paceMin}
-                  onChange={e => setPaceMin(e.target.value)} min={1} max={30} />
+                  aria-label="페이스 분" placeholder="5" value={paceMin}
+                  onChange={e => setPaceMin(clampField(e.target.value, 1, 30))} min={1} max={30} />
                 <span className={styles.paceSep}>:</span>
                 <input className={styles.paceInput} type="number" inputMode="numeric"
-                  placeholder="30" value={paceSec}
-                  onChange={e => setPaceSec(e.target.value)} min={0} max={59} />
+                  aria-label="페이스 초" placeholder="30" value={paceSec}
+                  onChange={e => setPaceSec(clampField(e.target.value, 0, 59))} min={0} max={59} />
                 <span className={styles.paceUnit}>/km</span>
               </div>
               <span className={styles.timesSign}>×</span>
               <div className={styles.distRow}>
                 {DISTANCES.map(d => (
-                  <button key={d.km}
+                  <button key={d.km} type="button" aria-pressed={dist === d.km}
                     className={`${styles.distBtn} ${dist === d.km ? styles.distBtnActive : ''}`}
                     onClick={() => setDist(d.km)}>{d.label}</button>
                 ))}
@@ -297,12 +324,13 @@ export default function PaceClient() {
                     type="number"
                     inputMode="decimal"
                     className={styles.distCustomInput}
+                    aria-label="직접 거리 (km)"
                     placeholder="직접"
                     min={0.1} max={500} step={0.1}
                     value={DISTANCES.some(d => d.km === dist) ? '' : dist}
                     onChange={e => {
                       const v = parseFloat(e.target.value)
-                      if (Number.isFinite(v) && v > 0) setDist(v)
+                      if (Number.isFinite(v) && v > 0) setDist(Math.min(500, v))
                     }}
                   />
                   <span className={styles.distCustomUnit}>km</span>
@@ -317,7 +345,7 @@ export default function PaceClient() {
                 {QUICK_PACES.map(q => {
                   const active = parseInt(paceMin) === q.mm && parseInt(paceSec) === q.ss
                   return (
-                    <button key={`${q.mm}-${q.ss}`}
+                    <button key={`${q.mm}-${q.ss}`} type="button" aria-pressed={active}
                       className={`${styles.quickChip} ${active ? styles.quickChipActive : ''}`}
                       onClick={() => setQuickPace(q.mm, q.ss)}
                       style={active ? { borderColor: q.color } : undefined}>
@@ -336,7 +364,7 @@ export default function PaceClient() {
           {result1 && (
             <>
               {/* 히어로 */}
-              <div className={styles.heroCard}>
+              <div className={styles.heroCard} role="status">
                 <div className={styles.heroLabel}>🏃 {result1.paceStr}/km × {distLabel(dist)}</div>
                 <div className={styles.heroNum}>{result1.time}</div>
                 <div className={styles.heroSub}>예상 완주 시간</div>
@@ -438,24 +466,24 @@ export default function PaceClient() {
               <div className={styles.timeRow}>
                 <div className={styles.timeField}>
                   <input className={styles.timeInput} type="number" inputMode="numeric"
-                    placeholder="0" value={tHour} onChange={e => setTHour(e.target.value)} min={0} max={9} />
+                    aria-label="완주 시간 (시)" placeholder="0" value={tHour} onChange={e => setTHour(clampField(e.target.value, 0, 9))} min={0} max={9} />
                   <span className={styles.timeLabel}>시간</span>
                 </div>
                 <div className={styles.timeField}>
                   <input className={styles.timeInput} type="number" inputMode="numeric"
-                    placeholder="25" value={tMin} onChange={e => setTMin(e.target.value)} min={0} max={59} />
+                    aria-label="완주 시간 (분)" placeholder="25" value={tMin} onChange={e => setTMin(clampField(e.target.value, 0, 59))} min={0} max={59} />
                   <span className={styles.timeLabel}>분</span>
                 </div>
                 <div className={styles.timeField}>
                   <input className={styles.timeInput} type="number" inputMode="numeric"
-                    placeholder="00" value={tSec} onChange={e => setTSec(e.target.value)} min={0} max={59} />
+                    aria-label="완주 시간 (초)" placeholder="00" value={tSec} onChange={e => setTSec(clampField(e.target.value, 0, 59))} min={0} max={59} />
                   <span className={styles.timeLabel}>초</span>
                 </div>
               </div>
               <span className={styles.timesSign}>×</span>
               <div className={styles.distRow}>
                 {DISTANCES.map(d => (
-                  <button key={d.km}
+                  <button key={d.km} type="button" aria-pressed={dist2 === d.km}
                     className={`${styles.distBtn} ${dist2 === d.km ? styles.distBtnActive : ''}`}
                     onClick={() => setDist2(d.km)}>{d.label}</button>
                 ))}
@@ -464,12 +492,13 @@ export default function PaceClient() {
                     type="number"
                     inputMode="decimal"
                     className={styles.distCustomInput}
+                    aria-label="직접 거리 (km)"
                     placeholder="직접"
                     min={0.1} max={500} step={0.1}
                     value={DISTANCES.some(d => d.km === dist2) ? '' : dist2}
                     onChange={e => {
                       const v = parseFloat(e.target.value)
-                      if (Number.isFinite(v) && v > 0) setDist2(v)
+                      if (Number.isFinite(v) && v > 0) setDist2(Math.min(500, v))
                     }}
                   />
                   <span className={styles.distCustomUnit}>km</span>
@@ -480,7 +509,7 @@ export default function PaceClient() {
 
           {result2 ? (
             <>
-              <div className={styles.heroCard}>
+              <div className={styles.heroCard} role="status">
                 <div className={styles.heroLabel}>{distLabel(dist2)} 완주 필요 페이스</div>
                 <div className={styles.heroNum}>{result2.pace}<span className={styles.heroNumUnit}>/km</span></div>
               </div>
@@ -515,7 +544,7 @@ export default function PaceClient() {
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>시속 입력 → 페이스</p>
                 <div className={styles.inputRow}>
                   <input className={styles.numInput} type="number" inputMode="decimal"
-                    placeholder="9.0" value={kphInput}
+                    aria-label="트레드밀 시속 (km/h)" placeholder="9.0" value={kphInput}
                     onChange={e => setKphInput(e.target.value)} step={0.1} />
                   <span className={styles.unit}>km/h</span>
                 </div>
@@ -533,7 +562,7 @@ export default function PaceClient() {
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>페이스 입력 → 시속</p>
                 <div className={styles.inputRow}>
                   <input className={styles.numInput} type="text" inputMode="numeric"
-                    placeholder="6:40" value={paceInput}
+                    aria-label="페이스 (분:초)" placeholder="6:40" value={paceInput}
                     onChange={e => setPaceInput(e.target.value)} />
                   <span className={styles.unit}>/km</span>
                 </div>

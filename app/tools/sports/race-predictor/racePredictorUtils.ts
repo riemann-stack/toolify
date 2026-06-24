@@ -283,13 +283,23 @@ export interface RaceRecord {
 
 export const STORAGE_KEY = 'youtil:race-predictor:records-v1'
 
+// 손상·구버전 localStorage 방어 — vdot/timeSec 없는 레코드는 toFixed/fmt에서 크래시.
+function isValidRecord(r: unknown): r is RaceRecord {
+  if (typeof r !== 'object' || r === null) return false
+  const o = r as Record<string, unknown>
+  return typeof o.id === 'string'
+    && typeof o.date === 'string'
+    && typeof o.timeSec === 'number' && Number.isFinite(o.timeSec)
+    && typeof o.vdot === 'number' && Number.isFinite(o.vdot)
+}
+
 export function loadRecords(): RaceRecord[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw) as RaceRecord[]
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isValidRecord) : []
   } catch { return [] }
 }
 

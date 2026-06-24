@@ -77,6 +77,11 @@ const PLATE_COLORS: Record<number, string> = {
 }
 const DEFAULT_PLATES = [25, 20, 15, 10, 5, 2.5, 1.25, 0.5]
 
+// 맨몸(체중+α) 종목 — 바벨 포함 토글 비적용
+const BODYWEIGHT_KEYS = ['pullup', 'dips', 'chinup']
+// 표준 바 무게 (입력 단위 기준)
+const STD_BAR = { kg: 20, lb: 45 }
+
 /* ════════════════════════════════════════════════════════════
    유틸
    ════════════════════════════════════════════════════════════ */
@@ -157,11 +162,16 @@ export default function OneRMClient() {
 
   /* 1RM 계산 */
   const exercise = EXERCISES.find((e) => e.key === exerciseKey) ?? EXERCISES[0]
+  const isBodyweight = BODYWEIGHT_KEYS.includes(exerciseKey)
   const weightKg = useMemo(() => {
     const w = parseFloat(weight)
     if (!isFinite(w) || w <= 0) return 0
-    return unit === 'kg' ? w : lbToKg(w)
-  }, [weight, unit])
+    // '바벨 무게 포함' 해제 시 표준 바(20kg/45lb)를 더해 총 중량으로 환산.
+    // 맨몸 종목은 바가 없으므로 토글과 무관하게 입력값을 그대로 사용.
+    const bw = BODYWEIGHT_KEYS.includes(exerciseKey)
+    const total = (includesBar || bw) ? w : w + STD_BAR[unit]
+    return unit === 'kg' ? total : lbToKg(total)
+  }, [weight, unit, includesBar, exerciseKey])
   const validCalc = weightKg > 0 && reps >= 1
 
   const oneRMs = useMemo(() => {
@@ -239,11 +249,11 @@ export default function OneRMClient() {
         1RM은 공식 기반 <strong>추정치</strong>이며 개인의 근육 타입·경험·동작에 따라 차이가 큽니다. 실제 고중량 측정은 <strong>워밍업·보조자(스포터)·안전바</strong>를 갖추고 하시고, 통증·관절 이상 시 즉시 중단하세요. 부상 우려 시 정형외과·재활의학과 상담을 권장합니다.
       </Disclaimer>
 
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>1RM 계산</button>
-        <button className={`${s.tab} ${tab === 'training' ? s.tabActive : ''}`} onClick={() => setTab('training')}>훈련 중량</button>
-        <button className={`${s.tab} ${tab === 'plate' ? s.tabActive : ''}`} onClick={() => setTab('plate')}>원판</button>
-        <button className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>내 기록</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="계산기 탭">
+        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>1RM 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'training'} className={`${s.tab} ${tab === 'training' ? s.tabActive : ''}`} onClick={() => setTab('training')}>훈련 중량</button>
+        <button type="button" role="tab" aria-selected={tab === 'plate'} className={`${s.tab} ${tab === 'plate' ? s.tabActive : ''}`} onClick={() => setTab('plate')}>원판</button>
+        <button type="button" role="tab" aria-selected={tab === 'records'} className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>내 기록</button>
       </div>
 
       {tab === 'calc' && (
@@ -257,6 +267,7 @@ export default function OneRMClient() {
           setUnit={setUnit}
           includesBar={includesBar}
           setIncludesBar={setIncludesBar}
+          isBodyweight={isBodyweight}
           reps={reps}
           setReps={setReps}
           rpe={rpe}
@@ -353,6 +364,7 @@ interface CalcTabProps {
   setUnit: (u: Unit) => void
   includesBar: boolean
   setIncludesBar: (v: boolean) => void
+  isBodyweight: boolean
   reps: number
   setReps: (v: number) => void
   rpe: number
@@ -386,7 +398,7 @@ function CalcTab(props: CalcTabProps) {
   const {
     exercise, exerciseKey, setExerciseKey,
     weight, setWeight, unit, setUnit,
-    includesBar, setIncludesBar, reps, setReps,
+    includesBar, setIncludesBar, isBodyweight, reps, setReps,
     rpe, setRpe, useRpe, setUseRpe,
     gender, setGender, ageBand, setAgeBand,
     formulaKey, setFormulaKey, roundUnit, setRoundUnit,
@@ -404,6 +416,8 @@ function CalcTab(props: CalcTabProps) {
           {EXERCISES.map((e) => (
             <button
               key={e.key}
+              type="button"
+              aria-pressed={exerciseKey === e.key}
               className={`${s.exerciseBtn} ${exerciseKey === e.key ? s.exerciseBtnActive : ''}`}
               onClick={() => setExerciseKey(e.key)}
             >
@@ -421,15 +435,21 @@ function CalcTab(props: CalcTabProps) {
           <div className={s.rowInline} style={{ justifyContent: 'space-between' }}>
             <label className={s.fieldLabel}>중량</label>
             <div className={s.unitToggle}>
-              <button className={`${s.unitBtn} ${unit === 'kg' ? s.unitBtnActive : ''}`} onClick={() => setUnit('kg')}>kg</button>
-              <button className={`${s.unitBtn} ${unit === 'lb' ? s.unitBtnActive : ''}`} onClick={() => setUnit('lb')}>lb</button>
+              <button type="button" aria-pressed={unit === 'kg'} className={`${s.unitBtn} ${unit === 'kg' ? s.unitBtnActive : ''}`} onClick={() => setUnit('kg')}>kg</button>
+              <button type="button" aria-pressed={unit === 'lb'} className={`${s.unitBtn} ${unit === 'lb' ? s.unitBtnActive : ''}`} onClick={() => setUnit('lb')}>lb</button>
             </div>
           </div>
-          <input type="number" inputMode="decimal" className={s.input} value={weight} min={0} onChange={(e) => setWeight(e.target.value)} />
-          <label className={s.checkRow} style={{ marginTop: 4 }}>
-            <input type="checkbox" checked={includesBar} onChange={(e) => setIncludesBar(e.target.checked)} />
-            바벨 무게 포함
-          </label>
+          <input type="number" inputMode="decimal" className={s.input} value={weight} min={0}
+            aria-label={isBodyweight ? `추가 중량 (${unit})` : `중량 (${unit})`}
+            onChange={(e) => setWeight(e.target.value)} />
+          {isBodyweight ? (
+            <p className={s.rpeHint} style={{ marginTop: 4 }}>※ 체중을 뺀 <strong>추가 중량</strong>만 입력하세요 (예: 풀업 벨트 20kg).</p>
+          ) : (
+            <label className={s.checkRow} style={{ marginTop: 4 }}>
+              <input type="checkbox" checked={includesBar} onChange={(e) => setIncludesBar(e.target.checked)} />
+              바벨 무게 포함 <span style={{ color: 'var(--muted)' }}>(해제 시 봉 {STD_BAR[unit]}{unit} 가산)</span>
+            </label>
+          )}
         </div>
 
         <div className={s.field}>
@@ -441,14 +461,17 @@ function CalcTab(props: CalcTabProps) {
               max={15}
               step={1}
               value={reps}
+              aria-label="반복 횟수"
+              aria-valuetext={`${reps}회`}
               onChange={(e) => setReps(parseInt(e.target.value))}
               className={`${s.slider} ${reps > 10 ? s.sliderWarn : ''}`}
             />
             <input
-              type="number" inputMode="decimal"
+              type="number" inputMode="numeric"
               min={1}
               max={15}
               value={reps}
+              aria-label="반복 횟수 직접 입력"
               onChange={(e) => setReps(Math.max(1, Math.min(15, parseInt(e.target.value) || 1)))}
               className={s.sliderValInput}
             />
@@ -469,6 +492,8 @@ function CalcTab(props: CalcTabProps) {
                 {[6, 7, 8, 9, 10].map((v) => (
                   <button
                     key={v}
+                    type="button"
+                    aria-pressed={rpe === v}
                     className={`${s.pill} ${rpe === v ? s.pillActive : ''}`}
                     onClick={() => setRpe(v)}
                   >RPE {v}</button>
@@ -493,6 +518,8 @@ function CalcTab(props: CalcTabProps) {
               return (
                 <button
                   key={k}
+                  type="button"
+                  aria-pressed={formulaKey === k}
                   className={`${s.pill} ${formulaKey === k ? s.pillActive : ''}`}
                   onClick={() => setFormulaKey(k)}
                 >{label}</button>
@@ -507,6 +534,8 @@ function CalcTab(props: CalcTabProps) {
             {[0.5, 1, 2.5, 5].map((v) => (
               <button
                 key={v}
+                type="button"
+                aria-pressed={roundUnit === v}
                 className={`${s.pill} ${roundUnit === v ? s.pillActive : ''}`}
                 onClick={() => setRoundUnit(v)}
               >{v}{unit}</button>
@@ -523,8 +552,8 @@ function CalcTab(props: CalcTabProps) {
           <label className={s.fieldLabel}>성별 · 연령대 (선택) — 수준 보정</label>
           <div className={s.ageGenderRow}>
             <div className={s.pillRow} style={{ flex: 1 }}>
-              <button className={`${s.pill} ${gender === 'male' ? s.pillActive : ''}`} onClick={() => setGender('male')}>남성</button>
-              <button className={`${s.pill} ${gender === 'female' ? s.pillActive : ''}`} onClick={() => setGender('female')}>여성</button>
+              <button type="button" aria-pressed={gender === 'male'} className={`${s.pill} ${gender === 'male' ? s.pillActive : ''}`} onClick={() => setGender('male')}>남성</button>
+              <button type="button" aria-pressed={gender === 'female'} className={`${s.pill} ${gender === 'female' ? s.pillActive : ''}`} onClick={() => setGender('female')}>여성</button>
             </div>
             <select
               className={s.select}
@@ -624,7 +653,7 @@ function CalcTab(props: CalcTabProps) {
 
           <div className={s.card}>
             <span className={s.cardLabel}>진행 추적 (로컬 저장)</span>
-            <button className={s.addRecordBtn} onClick={addRecord}>
+            <button type="button" className={s.addRecordBtn} onClick={addRecord}>
               + 오늘 기록 추가 ({exercise.name} · {fmt(oneRMDisplay, 0)}{unit})
             </button>
             <div className={s.recordsHint}>
@@ -739,8 +768,8 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
         <div className={s.rowInline} style={{ justifyContent: 'space-between', marginBottom: 10 }}>
           <label className={s.fieldLabel}>직접 입력 (비우면 계산 탭 값 사용)</label>
           <div className={s.unitToggle}>
-            <button className={`${s.unitBtn} ${unit === 'kg' ? s.unitBtnActive : ''}`} onClick={() => setUnit('kg')}>kg</button>
-            <button className={`${s.unitBtn} ${unit === 'lb' ? s.unitBtnActive : ''}`} onClick={() => setUnit('lb')}>lb</button>
+            <button type="button" aria-pressed={unit === 'kg'} className={`${s.unitBtn} ${unit === 'kg' ? s.unitBtnActive : ''}`} onClick={() => setUnit('kg')}>kg</button>
+            <button type="button" aria-pressed={unit === 'lb'} className={`${s.unitBtn} ${unit === 'lb' ? s.unitBtnActive : ''}`} onClick={() => setUnit('lb')}>lb</button>
           </div>
         </div>
         <input
@@ -769,6 +798,7 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
                     <div className={s.intensityReps}>{row.reps}</div>
                     <div className={s.intensityPurpose}>{row.purpose}</div>
                     <button
+                      type="button"
                       className={`${s.intensityCopy} ${copiedKey === k ? s.intensityCopyDone : ''}`}
                       onClick={() => copy(decl, k)}
                       aria-label="복사"
@@ -787,6 +817,8 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
                 {[60, 70, 75, 80, 85, 90, 95].map((p) => (
                   <button
                     key={p}
+                    type="button"
+                    aria-pressed={warmupPct === p}
                     className={`${s.pill} ${warmupPct === p ? s.pillActive : ''}`}
                     onClick={() => setWarmupPct(p)}
                   >{p}%</button>
@@ -914,32 +946,70 @@ function calcPlates(targetKg: number, barKg: number, available: number[]): {
   alt?: { lower: number; upper: number }
 } {
   const perSideTarget = (targetKg - barKg) / 2
-  if (perSideTarget < 0) {
-    return { perSide: [], totalPerSide: 0, achieved: barKg, exact: targetKg === barKg, alt: undefined }
+  if (perSideTarget < -1e-4) {
+    return { perSide: [], totalPerSide: 0, achieved: barKg, exact: Math.abs(targetKg - barKg) < 0.01, alt: undefined }
+  }
+  if (perSideTarget < 1e-4) {
+    return { perSide: [], totalPerSide: 0, achieved: barKg, exact: true, alt: undefined }
+  }
+  const plates = available.filter((p) => p > 0)
+  if (plates.length === 0) {
+    return { perSide: [], totalPerSide: 0, achieved: barKg, exact: Math.abs(targetKg - barKg) < 0.01, alt: undefined }
   }
 
-  // Greedy with available plates (sorted descending)
-  const plates = [...available].sort((a, b) => b - a)
-  const result: number[] = []
-  let remaining = perSideTarget
-  for (const p of plates) {
-    while (remaining >= p - 0.0001) {
-      result.push(p)
-      remaining -= p
+  // 0.25kg 단위 정수 그리드 (1.25=5·0.5=2 등 모두 정수화) — 최소 매수 → 동률 시 최대 원판 최소화(밸런스)
+  // greedy(큰 원판부터)가 놓치던 조합(예: 20/15판만으로 70kg→실제 80kg 가능)을 정확히 탐색
+  const UNIT = 0.25
+  const denom = plates.map((p) => Math.round(p / UNIT))
+  const targetU = Math.round(perSideTarget / UNIT)
+  const maxDenom = Math.max(...denom)
+  const MAXU = targetU + maxDenom
+  const dp: { count: number; maxPlate: number; from: number }[] =
+    Array.from({ length: MAXU + 1 }, () => ({ count: Infinity, maxPlate: Infinity, from: -1 }))
+  dp[0] = { count: 0, maxPlate: 0, from: -1 }
+  for (let i = 1; i <= MAXU; i++) {
+    for (const d of denom) {
+      if (d > i) continue
+      const prev = dp[i - d]
+      if (prev.count === Infinity) continue
+      const count = prev.count + 1
+      const maxPlate = Math.max(prev.maxPlate, d)
+      if (count < dp[i].count || (count === dp[i].count && maxPlate < dp[i].maxPlate)) {
+        dp[i] = { count, maxPlate, from: d }
+      }
     }
   }
-  const achievedPerSide = perSideTarget - remaining
+  const reachable = (i: number) => i >= 0 && i <= MAXU && dp[i].count !== Infinity
+
+  let lowerU = -1
+  for (let i = Math.min(targetU, MAXU); i >= 0; i--) { if (reachable(i)) { lowerU = i; break } }
+  let upperU = -1
+  for (let i = targetU; i <= MAXU; i++) { if (reachable(i)) { upperU = i; break } }
+
+  let chosenU: number
+  if (reachable(targetU)) chosenU = targetU
+  else if (lowerU < 0) chosenU = upperU
+  else if (upperU < 0) chosenU = lowerU
+  else chosenU = (targetU - lowerU <= upperU - targetU) ? lowerU : upperU
+
+  const result: number[] = []
+  let cur = chosenU
+  while (cur > 0 && dp[cur].from > 0) {
+    result.push(dp[cur].from * UNIT)
+    cur -= dp[cur].from
+  }
+  result.sort((a, b) => b - a)
+
+  const achievedPerSide = chosenU * UNIT
   const achieved = barKg + achievedPerSide * 2
-  const exact = Math.abs(targetKg - achieved) < 0.01
+  const exact = Math.abs(achieved - targetKg) < 0.01
 
   let alt: { lower: number; upper: number } | undefined
   if (!exact) {
-    // 가능한 가장 가까운 상·하 중량 (같은 그리디로 상한 시도)
-    const lower = achieved
-    // upper: add smallest plate step ×2
-    const smallest = plates[plates.length - 1] ?? 0
-    const upper = achieved + smallest * 2
-    alt = { lower, upper }
+    alt = {
+      lower: lowerU >= 0 ? barKg + lowerU * UNIT * 2 : barKg,
+      upper: upperU >= 0 ? barKg + upperU * UNIT * 2 : achieved,
+    }
   }
 
   return { perSide: result, totalPerSide: achievedPerSide, achieved, exact, alt }
@@ -996,8 +1066,8 @@ function PlateTab({
           <div className={s.rowInline} style={{ justifyContent: 'space-between' }}>
             <label className={s.fieldLabel}>목표 중량</label>
             <div className={s.unitToggle}>
-              <button className={`${s.unitBtn} ${unit === 'kg' ? s.unitBtnActive : ''}`} onClick={() => setUnit('kg')}>kg</button>
-              <button className={`${s.unitBtn} ${unit === 'lb' ? s.unitBtnActive : ''}`} onClick={() => setUnit('lb')}>lb</button>
+              <button type="button" aria-pressed={unit === 'kg'} className={`${s.unitBtn} ${unit === 'kg' ? s.unitBtnActive : ''}`} onClick={() => setUnit('kg')}>kg</button>
+              <button type="button" aria-pressed={unit === 'lb'} className={`${s.unitBtn} ${unit === 'lb' ? s.unitBtnActive : ''}`} onClick={() => setUnit('lb')}>lb</button>
             </div>
           </div>
           <input type="number" inputMode="decimal" className={s.input} value={targetWeight} min={0} onChange={(e) => setTargetWeight(e.target.value)} />
@@ -1014,6 +1084,8 @@ function PlateTab({
             ].map((b) => (
               <button
                 key={b.v}
+                type="button"
+                aria-pressed={barWeight === b.v}
                 className={`${s.pill} ${barWeight === b.v ? s.pillActive : ''}`}
                 onClick={() => setBarWeight(b.v)}
               >{b.label}</button>
@@ -1041,8 +1113,10 @@ function PlateTab({
                 className={`${s.plateCheck} ${enabledPlates.has(p) ? s.plateCheckActive : ''}`}
                 onClick={() => togglePlate(p)}
                 role="button"
+                aria-pressed={enabledPlates.has(p)}
+                aria-label={`${p}kg 원판 ${enabledPlates.has(p) ? '사용' : '미사용'}`}
                 tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') togglePlate(p) }}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePlate(p) } }}
               >{p}kg</div>
             ))}
           </div>
@@ -1207,10 +1281,11 @@ function RecordsTab({ history, setHistory, mounted }: RecordsTabProps) {
   const stats = useMemo(() => {
     if (filtered.length === 0) return null
     const max = Math.max(...filtered.map((r) => r.oneRM))
-    const first = filtered[0]
-    const last = filtered[filtered.length - 1]
-    const diff = last.oneRM - first.oneRM
-    return { max, first, last, diff, count: filtered.length }
+    // 변화량은 같은 종목끼리만 의미 있음 — 여러 종목 혼합('전체') 시 비교 무의미
+    const sameExercise = new Set(filtered.map((r) => r.exerciseKey)).size === 1
+    const sorted = [...filtered].sort((a, b) => a.date.localeCompare(b.date))
+    const diff = sameExercise ? sorted[sorted.length - 1].oneRM - sorted[0].oneRM : null
+    return { max, diff, count: filtered.length, sameExercise }
   }, [filtered])
 
   if (!mounted) {
@@ -1239,6 +1314,8 @@ function RecordsTab({ history, setHistory, mounted }: RecordsTabProps) {
         <span className={s.cardLabel}>운동 필터</span>
         <div className={s.pillRow}>
           <button
+            type="button"
+            aria-pressed={filterKey === 'all'}
             className={`${s.pill} ${filterKey === 'all' ? s.pillActive : ''}`}
             onClick={() => setFilterKey('all')}
           >전체</button>
@@ -1247,6 +1324,8 @@ function RecordsTab({ history, setHistory, mounted }: RecordsTabProps) {
             return (
               <button
                 key={k}
+                type="button"
+                aria-pressed={filterKey === k}
                 className={`${s.pill} ${filterKey === k ? s.pillActive : ''}`}
                 onClick={() => setFilterKey(k)}
               >{ex?.emoji ?? '•'} {ex?.name ?? k}</button>
@@ -1266,10 +1345,14 @@ function RecordsTab({ history, setHistory, mounted }: RecordsTabProps) {
             <span className={s.statValue}>{fmt(stats.max, 0)}kg</span>
           </div>
           <div className={s.statCard}>
-            <span className={s.statLabel}>변화량</span>
-            <span className={`${s.statValue} ${stats.diff > 0 ? s.statUp : stats.diff < 0 ? s.statDown : ''}`}>
-              {stats.diff > 0 ? '+' : ''}{fmt(stats.diff, 1)}kg
-            </span>
+            <span className={s.statLabel}>변화량{stats.diff === null ? ' (종목별)' : ''}</span>
+            {stats.diff === null ? (
+              <span className={s.statValue} style={{ fontSize: 13, color: 'var(--muted)' }}>종목 선택 시</span>
+            ) : (
+              <span className={`${s.statValue} ${stats.diff > 0 ? s.statUp : stats.diff < 0 ? s.statDown : ''}`}>
+                {stats.diff > 0 ? '+' : ''}{fmt(stats.diff, 1)}kg
+              </span>
+            )}
           </div>
         </div>
       )}
@@ -1278,6 +1361,11 @@ function RecordsTab({ history, setHistory, mounted }: RecordsTabProps) {
         <div className={s.card}>
           <span className={s.cardLabel}>진행 그래프</span>
           <HistoryChart history={filtered} />
+          {stats && !stats.sameExercise && (
+            <p className={s.recordsHint} style={{ marginTop: 8 }}>
+              ※ 여러 종목이 섞여 있습니다 — 위 <strong>운동 필터</strong>에서 한 종목을 선택하면 단일 추세선으로 볼 수 있어요.
+            </p>
+          )}
         </div>
       )}
 
@@ -1296,9 +1384,10 @@ function RecordsTab({ history, setHistory, mounted }: RecordsTabProps) {
                 <span className={s.historyVal}>{fmt(rec.oneRM, 0)}kg</span>
                 <span className={`${s.historyDiff} ${diffClass}`}>{diffText}</span>
                 <button
+                  type="button"
                   className={s.historyRemove}
                   onClick={() => setHistory((p) => p.filter((h) => h.id !== rec.id))}
-                  aria-label="삭제"
+                  aria-label="기록 삭제"
                 >✕</button>
               </div>
             )
@@ -1306,6 +1395,7 @@ function RecordsTab({ history, setHistory, mounted }: RecordsTabProps) {
         </div>
         {history.length > 0 && (
           <button
+            type="button"
             className={s.clearBtn}
             onClick={() => {
               if (confirm('모든 기록을 삭제하시겠습니까?')) setHistory([])

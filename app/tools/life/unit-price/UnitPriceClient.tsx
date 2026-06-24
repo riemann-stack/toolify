@@ -91,22 +91,20 @@ export default function UnitPriceClient() {
   const valid = products.map(p => {
     const price = num(p.price); const amount = num(p.amount); const count = num(p.count)
     if (price <= 0 || amount <= 0 || count < 1) return null
-    if (UNIT_KIND[p.unit] !== base.kind) return { ...p, _mismatched: true as const }
+    if (UNIT_KIND[p.unit] !== base.kind) return null  // 다른 단위 계열은 비교 제외(아래 hasMultipleKinds 경고로 안내)
     const total = calcTotalAmount(p)
     const final = calcFinalPrice(p)
     const unitPrice = (final / total) * base.factor
     const effectiveTotal = total * (p.consumption / 100)
     const effectiveUnitPrice = effectiveTotal > 0 ? (final / effectiveTotal) * base.factor : 0
-    return { product: p, totalAmount: total, finalPrice: final, unitPrice, effectiveUnitPrice, mismatched: false }
+    return { product: p, totalAmount: total, finalPrice: final, unitPrice, effectiveUnitPrice }
   })
 
   type Calc = {
     product: Product; totalAmount: number; finalPrice: number;
-    unitPrice: number; effectiveUnitPrice: number; mismatched: false
+    unitPrice: number; effectiveUnitPrice: number
   }
-  const validCalcs: Calc[] = valid.filter(
-    (v): v is Calc => !!v && 'unitPrice' in v && v.mismatched === false
-  )
+  const validCalcs: Calc[] = valid.filter((v): v is Calc => v !== null)
 
   // 랭킹 기준 = 실질 단가(소비 가능량 반영). 모두 100%면 표시 단가와 동일.
   // winner를 ranked[0]로 통일해 동률 시 히어로/트로피가 어긋나지 않게 함.

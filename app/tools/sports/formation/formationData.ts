@@ -66,41 +66,95 @@ export function getFormationsByCount(total: number): Formation[] {
   }
 }
 
-/* ─── 포지션 라벨 (라인별·라인 내 위치별 자동 할당) ─── */
-export function positionLabel(lineIdx: number, posInLine: number, lineCount: number, totalLines: number): string {
-  // lineIdx: 0=수비라인, totalLines-1=최전방
+/* ─── 포지션 라벨 (라인 구성 전체를 보고 역할 추정) ───
+   - lines 전체를 받아 수비형/공격형 미드, 윙백, 풋살 역할까지 구분 */
+export function positionLabel(lines: number[], lineIdx: number, posInLine: number): string {
+  const lineCount = lines[lineIdx]
+  const totalLines = lines.length
+  const total = 1 + lines.reduce((a, b) => a + b, 0)
+  const pick = (arr: string[]) => arr[posInLine] ?? `P${posInLine + 1}`
   const isDef = lineIdx === 0
   const isAtk = lineIdx === totalLines - 1
-  const center = (lineCount - 1) / 2
-  const sideOf = posInLine - center  // 음수=왼쪽 / 양수=오른쪽
 
-  if (isDef) {
-    if (lineCount === 5) {
-      return ['LWB', 'LCB', 'CB', 'RCB', 'RWB'][posInLine] ?? `D${posInLine + 1}`
+  /* 5인제(풋살): 골레이로 제외 픽소·알라·피보 */
+  if (total === 5) {
+    if (isDef) return lineCount >= 2 ? pick(['L픽소', 'R픽소']) : '픽소'
+    if (isAtk) {
+      if (lineCount === 1) return '피보'
+      if (lineCount === 2) return pick(['L피보', 'R피보'])
+      return pick(['L알라', '피보', 'R알라'])
     }
-    if (lineCount === 4) return ['LB', 'LCB', 'RCB', 'RB'][posInLine] ?? `D${posInLine + 1}`
-    if (lineCount === 3) return ['LCB', 'CB', 'RCB'][posInLine] ?? `D${posInLine + 1}`
-    if (lineCount === 2) return ['LB', 'RB'][posInLine] ?? `D${posInLine + 1}`
-    return `CB`
+    if (lineCount === 1) return '알라'
+    if (lineCount === 2) return pick(['L알라', 'R알라'])
+    return pick(['L알라', '피보', 'R알라'])
   }
+
+  /* 수비 라인 */
+  if (isDef) {
+    if (lineCount === 5) return pick(['LWB', 'LCB', 'CB', 'RCB', 'RWB'])
+    if (lineCount === 4) return pick(['LB', 'LCB', 'RCB', 'RB'])
+    if (lineCount === 3) return pick(['LCB', 'CB', 'RCB'])
+    if (lineCount === 2) return pick(['LB', 'RB'])
+    return 'CB'
+  }
+  /* 공격 라인 */
   if (isAtk) {
-    if (lineCount === 3) return ['LW', 'ST', 'RW'][posInLine] ?? `F${posInLine + 1}`
-    if (lineCount === 2) return ['LST', 'RST'][posInLine] ?? `F${posInLine + 1}`
+    if (lineCount === 3) return pick(['LW', 'ST', 'RW'])
+    if (lineCount === 2) return pick(['ST', 'ST'])
     return 'ST'
   }
-  // 미드필드
-  if (lineCount === 1) return sideOf === 0 ? 'CM' : sideOf < 0 ? 'LM' : 'RM'
-  if (lineCount === 2) return ['LCM', 'RCM'][posInLine] ?? `M${posInLine + 1}`
-  if (lineCount === 3) return ['LM', 'CM', 'RM'][posInLine] ?? `M${posInLine + 1}`
-  if (lineCount === 4) return ['LM', 'LCM', 'RCM', 'RM'][posInLine] ?? `M${posInLine + 1}`
-  if (lineCount === 5) return ['LM', 'LCM', 'CM', 'RCM', 'RM'][posInLine] ?? `M${posInLine + 1}`
-  return `M${posInLine + 1}`
+
+  /* 미드필드 — 깊이별 역할 */
+  const midLineCount = totalLines - 2
+  const isFirstMid = lineIdx === 1                 // 가장 수비형
+  const isLastMid = lineIdx === totalLines - 2     // 공격라인 바로 뒤
+  const threeBack = lines[0] === 3                 // 스리백 → 5미드 양끝은 윙백
+
+  // 단일 미드 라인 (4-4-2 / 4-3-3 / 3-5-2 …)
+  if (midLineCount === 1) {
+    if (lineCount >= 5) {
+      if (posInLine === 0) return threeBack ? 'LWB' : 'LM'
+      if (posInLine === lineCount - 1) return threeBack ? 'RWB' : 'RM'
+      const k = posInLine - 1
+      const innerCount = lineCount - 2
+      if (innerCount === 1) return 'CM'
+      if (innerCount === 2) return ['LCM', 'RCM'][k]
+      if (innerCount === 3) return ['LCM', 'CM', 'RCM'][k]
+      return ['LM', 'LCM', 'CM', 'RCM', 'RM'][k] ?? 'CM'
+    }
+    if (lineCount === 4) return pick(['LM', 'LCM', 'RCM', 'RM'])
+    if (lineCount === 3) return pick(['LCM', 'CM', 'RCM'])
+    if (lineCount === 2) return pick(['LCM', 'RCM'])
+    return 'CM'
+  }
+
+  // 다중 미드 라인
+  if (isFirstMid) {            // 홀딩/수비형 미드 (4-2-3-1의 2, 4-1-4-1의 1)
+    if (lineCount === 1) return 'CDM'
+    if (lineCount === 2) return pick(['LDM', 'RDM'])
+    if (lineCount === 3) return pick(['LDM', 'CDM', 'RDM'])
+    return pick(['LM', 'LCM', 'RCM', 'RM'])
+  }
+  if (isLastMid) {             // 공격형 미드 (4-2-3-1의 3, 크리스마스트리의 2)
+    if (lineCount === 1) return 'CAM'
+    if (lineCount === 2) return pick(['LAM', 'RAM'])
+    if (lineCount === 3) return pick(['LW', 'CAM', 'RW'])
+    if (lineCount === 4) return pick(['LM', 'LCM', 'RCM', 'RM'])
+    return pick(['LM', 'LAM', 'CAM', 'RAM', 'RM'])
+  }
+  // 중간 미드 라인
+  if (lineCount === 1) return 'CM'
+  if (lineCount === 2) return pick(['LCM', 'RCM'])
+  if (lineCount === 3) return pick(['LM', 'CM', 'RM'])
+  return pick(['LM', 'LCM', 'CM', 'RCM', 'RM'])
 }
 
 /* ─── 커스텀 포메이션 파싱: "4-3-3" → [4,3,3] ─── */
 export function parseFormation(text: string): number[] | null {
-  const parts = text.split(/[-\s]+/).map(s => parseInt(s, 10)).filter(n => Number.isFinite(n) && n > 0)
-  if (parts.length < 2 || parts.length > 5) return null
-  if (parts.some(n => n > 10)) return null
+  const tokens = text.trim().split(/[-\s]+/).filter(Boolean)
+  if (tokens.length < 2 || tokens.length > 5) return null
+  if (!tokens.every(t => /^\d+$/.test(t))) return null   // 숫자만 허용 ("4abc"·"4.5" 거부)
+  const parts = tokens.map(t => parseInt(t, 10))
+  if (parts.some(n => n < 1 || n > 10)) return null
   return parts
 }

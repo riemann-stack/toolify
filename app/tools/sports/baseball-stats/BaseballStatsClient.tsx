@@ -196,6 +196,8 @@ export default function BaseballStatsClient() {
     // 검증 메시지
     const validMsgs: string[] = []
     if (_h < _b2 + _b3 + _hr) validMsgs.push(`안타(${_h}) < 2B+3B+HR(${_b2 + _b3 + _hr}) — 1루타 음수 발생, 입력을 확인하세요.`)
+    if (_ab > 0 && _h > _ab) validMsgs.push(`안타(${_h})가 타수(${_ab})보다 많습니다 — 타율 1.000 초과는 불가능합니다.`)
+    if (_ab > 0 && _k > _ab) validMsgs.push(`삼진(${_k})이 타수(${_ab})보다 많습니다 — 입력을 확인하세요.`)
     if (_ab > 0 && pa < _ab) validMsgs.push('타석 합계가 타수보다 작습니다.')
     if (sbAttempts > 0 && _cs > _sb + _cs) validMsgs.push('도루 실패 수치를 확인하세요.')
 
@@ -209,7 +211,8 @@ export default function BaseballStatsClient() {
 
   /* ───── 투수 파생 계산 ───── */
   const pcalc = useMemo(() => {
-    const ip   = parseInnings(Number(pIp))
+    const ipRaw = Number(pIp)
+    const ip   = parseInnings(ipRaw)
     const er   = n(pEr)
     const _h   = n(pH)
     const _bb  = n(pBb)
@@ -226,7 +229,12 @@ export default function BaseballStatsClient() {
       ? ((13 * _hr + 3 * (_bb + _hbp) - 2 * _k) / ip) + 3.1
       : 0
 
-    return { ip, era, whip, k9, bb9, kbb, fip }
+    // 이닝 표기 검증: 야구는 .1(⅓)·.2(⅔)만 유효 — 한 자리 소수 .3~.9는 표기 오류
+    const frac = Number.isFinite(ipRaw) ? ipRaw - Math.floor(ipRaw) : 0
+    const tenth = Math.round(frac * 10)
+    const ipNotationWarn = ipRaw > 0 && tenth >= 3 && Math.abs(frac * 10 - tenth) < 0.001
+
+    return { ip, era, whip, k9, bb9, kbb, fip, ipNotationWarn }
   }, [pIp, pEr, pH, pBb, pHbp, pHr, pK])
 
   /* ───── 시즌 페이스 환산 ───── */
@@ -234,14 +242,16 @@ export default function BaseballStatsClient() {
     const g = n(gPlayed)
     const total = league.games
     if (g <= 0 || total <= 0) return null
-    const ratio = total / g
+    // 입력 경기수가 시즌 경기수를 넘으면 ratio<1로 기록이 줄어드는 모순 → 1로 클램프(현재 기록 그대로)
+    const over = g > total
+    const ratio = Math.max(1, total / g)
     const projHits = Math.round(n(h) * ratio)
     const projHr   = Math.round(n(hr) * ratio)
     const projRbi  = Math.round(n(rbi) * ratio)
     const projRun  = Math.round(n(run) * ratio)
     const projSb   = Math.round(n(sb) * ratio)
 
-    return { ratio, projHits, projHr, projRbi, projRun, projSb }
+    return { ratio, over, total, projHits, projHr, projRbi, projRun, projSb }
   }, [gPlayed, h, hr, rbi, run, sb, league])
 
   /* OPS 수준 */
@@ -351,7 +361,7 @@ export default function BaseballStatsClient() {
     return (
       <div className={`${styles.statCell} ${cls ?? ''}`}>
         <div className={styles.statLabel}>{label} <small>({abbr})</small></div>
-        <input className={styles.statInput} type="number" inputMode="numeric" min={0} value={value} onChange={e => setter(e.target.value)} />
+        <input className={styles.statInput} type="number" inputMode="numeric" min={0} aria-label={`${label} (${abbr})`} value={value} onChange={e => setter(e.target.value)} />
       </div>
     )
   }
@@ -367,7 +377,7 @@ export default function BaseballStatsClient() {
           { href: '/tools/sports/one-rm', label: '1RM 계산기' }
         ]}
       >
-        본 계산기는 통계 참고용입니다.
+        본 계산기는 <strong>팬·아마추어용 간편 계산 도구</strong>입니다. 타율·OPS·ERA 등 기본 지표 공식은 정확하지만 OPS+·ERA+·wOBA는 간이 추정값이며, 공식 기록(KBO·MLB 등)과는 집계·반올림 방식에 따라 차이가 날 수 있습니다.
       </Disclaimer>
 
       {/* 리그 프리셋 */}
@@ -381,6 +391,7 @@ export default function BaseballStatsClient() {
             <button
               key={l.id}
               type="button"
+              aria-pressed={leagueId === l.id}
               className={`${styles.leagueBtn} ${styles[l.cls]} ${leagueId === l.id ? styles.leagueActive : ''}`}
               onClick={() => setLeagueId(l.id)}
             >
@@ -423,7 +434,7 @@ export default function BaseballStatsClient() {
               {StatCell('희생플라이','SF',  sf,  setSf,  styles.cellOut)}
             </div>
 
-            <button type="button" className={styles.advancedToggle} onClick={() => setShowAdv(v => !v)}>
+            <button type="button" aria-expanded={showAdv} className={styles.advancedToggle} onClick={() => setShowAdv(v => !v)}>
               {showAdv ? '▾' : '▸'} 고급 입력 — 삼진·도루·타점·득점·희생번트
             </button>
             {showAdv && (
@@ -454,6 +465,7 @@ export default function BaseballStatsClient() {
             <p className={styles.heroLead}>OPS</p>
             <p className={styles.heroNum}>{calc.ops.toFixed(3)}</p>
             <span className={`${styles.heroBadge} ${opsLv.cls}`}>{opsLv.label}</span>
+            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.5 }}>등급은 KBO 절대 기준 · 리그 보정은 아래 간이 OPS+ 참고</p>
           </div>
 
           {/* 4 KPI */}
@@ -512,7 +524,7 @@ export default function BaseballStatsClient() {
             {/* OPS+ — 리그 보정 지표 */}
             <div className={styles.plusBox}>
               <div className={styles.plusHead}>
-                <span className={styles.plusName}>OPS+ <small>리그 평균 = 100</small></span>
+                <span className={styles.plusName}>OPS+ (간이) <small>리그 평균 = 100</small></span>
                 <span className={styles.plusVal} style={{ color: opsPlusLv.color }}>
                   {opsPlus}
                   <small style={{ color: 'var(--muted)', marginLeft: 8, fontWeight: 600 }}>{opsPlusLv.label}</small>
@@ -520,7 +532,7 @@ export default function BaseballStatsClient() {
               </div>
               <p className={styles.plusDesc}>
                 같은 OPS 0.900이라도 <strong>타고투저</strong>인 해엔 흔하고 <strong>투고타저</strong>인 해엔 귀합니다.
-                OPS+는 그해 {league.name} 환경을 보정해 100을 평균으로 환산한 값이라, 리그·시즌이 달라도 타격 가치를 같은 잣대로 비교할 수 있습니다.
+                이 <strong>간이 OPS+</strong>는 입력한 {league.name} 평균 OBP·SLG(평균 타율·OPS에서 추정)에 100을 맞춘 근사치입니다. 구장(파크)·시즌별 보정은 빠져 있어 공식 OPS+와는 차이가 납니다.
               </p>
             </div>
           </div>
@@ -554,40 +566,32 @@ export default function BaseballStatsClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}>
               <span>세이버메트릭스 (고급 지표)</span>
-              <span className={styles.cardLabelHint}>ⓘ 호버 시 설명</span>
+              <span className={styles.cardLabelHint}>지표별 설명 포함</span>
             </div>
             <div className={styles.advGrid}>
               <div className={styles.advCard}>
-                <div className={styles.advLabel}>
-                  ISO (순수 장타력)
-                  <span className={styles.advTip} data-tip="장타율 − 타율, 단타 외 장타 비율">ⓘ</span>
-                </div>
+                <div className={styles.advLabel}>ISO (순수 장타력)</div>
                 <div className={styles.advValue}>{calc.iso.toFixed(3)}</div>
                 <div className={styles.advSub}>{calc.iso >= 0.200 ? '슬러거급' : calc.iso >= 0.140 ? '평균 이상' : '평균 이하'}</div>
+                <div className={styles.advDesc}>장타율 − 타율, 단타 외 장타 비율</div>
               </div>
               <div className={styles.advCard}>
-                <div className={styles.advLabel}>
-                  BABIP (인플레이 타율)
-                  <span className={styles.advTip} data-tip="인플레이 타구의 타율, 운 요소 판단">ⓘ</span>
-                </div>
+                <div className={styles.advLabel}>BABIP (인플레이 타율)</div>
                 <div className={styles.advValue}>{calc.babip.toFixed(3)}</div>
                 <div className={styles.advSub}>{calc.babip >= 0.350 ? '운빨 의심' : calc.babip <= 0.250 ? '불운 가능' : '평균 수준'}</div>
+                <div className={styles.advDesc}>인플레이 타구의 타율, 운 요소 판단</div>
               </div>
               <div className={styles.advCard}>
-                <div className={styles.advLabel}>
-                  wOBA (간이)
-                  <span className={styles.advTip} data-tip="타격 가치를 출루율 척도로 통합">ⓘ</span>
-                </div>
+                <div className={styles.advLabel}>wOBA (간이)</div>
                 <div className={styles.advValue}>{calc.wobaSimple.toFixed(3)}</div>
                 <div className={styles.advSub}>{calc.wobaSimple >= 0.370 ? '엘리트' : calc.wobaSimple >= 0.330 ? '평균 이상' : '평균 이하'}</div>
+                <div className={styles.advDesc}>타격 가치를 출루율 척도로 통합 (간이 가중치)</div>
               </div>
               <div className={styles.advCard}>
-                <div className={styles.advLabel}>
-                  도루 성공률
-                  <span className={styles.advTip} data-tip="SB ÷ (SB + CS) — 75% 이상 권장">ⓘ</span>
-                </div>
+                <div className={styles.advLabel}>도루 성공률</div>
                 <div className={styles.advValue}>{calc.sbAttempts > 0 ? `${calc.sbRate.toFixed(0)}%` : '—'}</div>
                 <div className={styles.advSub}>{calc.sbAttempts > 0 ? `${n(sb)}회 / ${calc.sbAttempts}회 시도` : '입력 없음'}</div>
+                <div className={styles.advDesc}>SB ÷ (SB+CS) — 75% 이상 권장</div>
               </div>
             </div>
           </div>
@@ -637,7 +641,7 @@ export default function BaseballStatsClient() {
             <div className={styles.statGrid}>
               <div className={styles.statCell}>
                 <div className={styles.statLabel}>투구이닝 <small>(IP)</small></div>
-                <input className={styles.statInput} type="number" inputMode="decimal" min={0} step={0.1} value={pIp} onChange={e => setPIp(e.target.value)} />
+                <input className={styles.statInput} type="number" inputMode="decimal" min={0} step={0.1} aria-label="투구이닝 (IP) — 5.1은 5와 3분의 1이닝" value={pIp} onChange={e => setPIp(e.target.value)} />
               </div>
               {StatCell('자책점', 'ER', pEr, setPEr, styles.cellOut)}
               {StatCell('실점',   'R',  pR,  setPR)}
@@ -659,13 +663,19 @@ export default function BaseballStatsClient() {
               {StatCell('세이브', 'SV', pSave, setPSave)}
               {StatCell('홀드',   'HLD',pHold, setPHold)}
             </div>
+            {pcalc.ipNotationWarn && (
+              <div className={styles.validMsg}>
+                ⚠️ 이닝은 <strong>.1(⅓)·.2(⅔)</strong>까지만 유효합니다. <strong>{pIp}</strong>의 소수점 이하 .3~.9는 야구 표기가 아닙니다 — 5⅓이닝은 <strong>5.1</strong>로 입력하세요. (현재는 입력값을 그대로 소수 이닝으로 계산 중)
+              </div>
+            )}
           </div>
 
           {/* 히어로 */}
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>ERA</p>
             <p className={styles.heroNum}>{pcalc.era.toFixed(2)}</p>
             <span className={`${styles.heroBadge} ${eraLv.cls}`}>{eraLv.label}</span>
+            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.5 }}>등급은 KBO 절대 기준 · 리그 보정은 아래 간이 ERA+ 참고</p>
           </div>
 
           {/* 4 KPI */}
@@ -695,7 +705,7 @@ export default function BaseballStatsClient() {
               <div className={styles.kpiValue}>{pcalc.fip.toFixed(2)}</div>
             </div>
             <div className={styles.kpiCard}>
-              <div className={styles.kpiLabel}>실투 이닝</div>
+              <div className={styles.kpiLabel}>환산 이닝</div>
               <div className={styles.kpiValue}>{pcalc.ip.toFixed(2)}</div>
             </div>
             <div className={styles.kpiCard}>
@@ -727,15 +737,15 @@ export default function BaseballStatsClient() {
             {/* ERA+ — 리그 보정 지표 */}
             <div className={styles.plusBox}>
               <div className={styles.plusHead}>
-                <span className={styles.plusName}>ERA+ <small>리그 평균 = 100</small></span>
+                <span className={styles.plusName}>ERA+ (간이) <small>리그 평균 = 100</small></span>
                 <span className={styles.plusVal} style={{ color: eraPlusLv.color }}>
                   {eraPlus}
                   <small style={{ color: 'var(--muted)', marginLeft: 8, fontWeight: 600 }}>{eraPlusLv.label}</small>
                 </span>
               </div>
               <p className={styles.plusDesc}>
-                ERA 3점대의 가치는 그해 리그 환경에 따라 천차만별입니다. ERA+는 {league.name} 평균 ERA를 100으로 놓고 보정한 값으로,
-                100보다 크면 평균보다 잘 던진 것입니다. (구장 보정은 생략한 간이값)
+                ERA 3점대의 가치는 그해 리그 환경에 따라 천차만별입니다. 이 <strong>간이 ERA+</strong>는 입력한 {league.name} 평균 ERA를 100으로 놓고 환산한 근사치로,
+                100보다 크면 평균보다 잘 던진 것입니다. (구장 보정은 생략)
               </p>
             </div>
           </div>
@@ -755,7 +765,7 @@ export default function BaseballStatsClient() {
             <div className={styles.statGrid3}>
               <div className={styles.statCell}>
                 <div className={styles.statLabel}>출전 경기 <small>(G)</small></div>
-                <input className={styles.statInput} type="number" inputMode="numeric" min={0} value={gPlayed} onChange={e => setGPlayed(e.target.value)} />
+                <input className={styles.statInput} type="number" inputMode="numeric" min={0} aria-label="출전 경기 수 (G)" value={gPlayed} onChange={e => setGPlayed(e.target.value)} />
               </div>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
@@ -765,7 +775,12 @@ export default function BaseballStatsClient() {
 
           {pace ? (
             <>
-              <div className={styles.hero}>
+              {pace.over && (
+                <div className={styles.validMsg}>
+                  ⚠️ 입력한 경기 수가 {league.name} 정규시즌({pace.total}경기)보다 많습니다. 더 줄어드는 환산은 의미가 없어 <strong>현재 기록을 그대로</strong> 시즌 예상으로 표시합니다.
+                </div>
+              )}
+              <div className={styles.hero} role="status">
                 <p className={styles.heroLead}>시즌 종료 예상 기록</p>
                 <p className={styles.heroNum}>{pace.projHits}<span style={{ fontSize: 18, color: 'var(--muted)', marginLeft: 6, verticalAlign: 'middle' }}>안타</span></p>
                 <p style={{ marginTop: 8, fontSize: 13, color: 'var(--muted)' }}>

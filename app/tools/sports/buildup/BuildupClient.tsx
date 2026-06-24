@@ -21,6 +21,8 @@ type TabKey = 'design' | 'race' | 'preset' | 'routines'
 
 function uid(): string { return Math.random().toString(36).slice(2, 10) }
 function pad2(n: number) { return String(n).padStart(2, '0') }
+// 페이스 입력 select가 5초 단위라, VDOT 파생 페이스를 5초 그리드에 스냅 → 표시값=계산값 일치
+function round5(sec: number) { return Math.round(sec / 5) * 5 }
 
 /* ─── 페이스 입력 — 분·초 드롭다운 ─── */
 const PACE_MIN_OPTIONS = [3, 4, 5, 6, 7, 8, 9, 10]
@@ -45,12 +47,12 @@ function PaceField({ label, value, onChange }: {
     <div className={s.field}>
       <label className={s.fieldLabel}>{label}</label>
       <div className={s.timeRow}>
-        <select className={s.timeSelect} value={PACE_MIN_OPTIONS.includes(mm) ? mm : 5}
+        <select className={s.timeSelect} aria-label={`${label} 분`} value={PACE_MIN_OPTIONS.includes(mm) ? mm : 5}
           onChange={e => setMm(parseInt(e.target.value))}>
           {PACE_MIN_OPTIONS.map(m => <option key={m} value={m}>{m}</option>)}
         </select>
         <span className={s.timeColon}>:</span>
-        <select className={s.timeSelect} value={ssRounded}
+        <select className={s.timeSelect} aria-label={`${label} 초`} value={ssRounded}
           onChange={e => setSs(parseInt(e.target.value))}>
           {PACE_SEC_OPTIONS.map(v => <option key={v} value={v}>{pad2(v)}</option>)}
         </select>
@@ -90,19 +92,19 @@ function HMSField({ label, value, onChange, withHours }: {
       <div className={s.timeRow}>
         {withHours && (
           <>
-            <select className={s.timeSelect} value={h}
+            <select className={s.timeSelect} aria-label={`${label} 시간`} value={h}
               onChange={e => onChange(buildStr(parseInt(e.target.value), mm, ss))}>
               {hourOptions.map(v => <option key={v} value={v}>{v}h</option>)}
             </select>
             <span className={s.timeColon}>:</span>
           </>
         )}
-        <select className={s.timeSelect} value={mm}
+        <select className={s.timeSelect} aria-label={`${label} 분`} value={mm}
           onChange={e => onChange(buildStr(h, parseInt(e.target.value), ss))}>
           {minOptions.map(v => <option key={v} value={v}>{pad2(v)}{!withHours ? '분' : ''}</option>)}
         </select>
         <span className={s.timeColon}>:</span>
-        <select className={s.timeSelect} value={ssRounded}
+        <select className={s.timeSelect} aria-label={`${label} 초`} value={ssRounded}
           onChange={e => onChange(buildStr(h, mm, parseInt(e.target.value)))}>
           {secOptions.map(v => <option key={v} value={v}>{pad2(v)}{!withHours ? '초' : ''}</option>)}
         </select>
@@ -125,7 +127,7 @@ export default function BuildupClient() {
 
   // VDOT (선택) — 5K/10K/하프 기록으로 추정
   const [refDist, setRefDist] = useState<'5k' | '10k' | 'half'>('10k')
-  const [refTime, setRefTime] = useState<string>('50:00')   // hh:mm:ss or mm:ss
+  const [refTime, setRefTime] = useState<string>('48:00')   // hh:mm:ss or mm:ss — 기본 6:00→5:00이 깨끗한 E→T 예시가 되도록
 
   // 자가체크
   const [hardYesterday, setHardYesterday] = useState(false)
@@ -230,9 +232,9 @@ export default function BuildupClient() {
     setSplitMode(p.splitMode)
     if (vdot && p.startFromE !== undefined && p.endFromIntensity) {
       const ePace = paceFromVdot(vdot, INTENSITY_LABEL.E.pct)
-      const startS = ePace + p.startFromE
+      const startS = round5(ePace + p.startFromE)
       const endIntensity = p.endFromIntensity
-      const endS = paceFromVdot(vdot, INTENSITY_LABEL[endIntensity].pct)
+      const endS = round5(paceFromVdot(vdot, INTENSITY_LABEL[endIntensity].pct))
       setStartPace(fmtPace(startS))
       setEndPace(fmtPace(endS))
     } else {
@@ -356,7 +358,7 @@ export default function BuildupClient() {
             <span className={s.cardLabel}>구간 분할</span>
             <div className={s.pillRow}>
               {(Object.keys(SPLIT_LABEL) as SplitMode[]).map((m) => (
-                <button key={m}
+                <button key={m} type="button" aria-pressed={splitMode === m}
                   className={`${s.pill} ${splitMode === m ? s.pillActive : ''}`}
                   onClick={() => setSplitMode(m)}>{SPLIT_LABEL[m]}</button>
               ))}
@@ -367,7 +369,7 @@ export default function BuildupClient() {
             <span className={s.cardLabel}>빌드업 프로파일</span>
             <div className={s.profileGrid}>
               {(Object.keys(PROFILE_LABEL) as Profile[]).map((p) => (
-                <button key={p}
+                <button key={p} type="button" aria-pressed={profile === p}
                   className={`${s.profileBtn} ${profile === p ? s.profileBtnActive : ''}`}
                   onClick={() => setProfile(p)}>
                   <span className={s.profileName}>{PROFILE_LABEL[p]}</span>
@@ -383,7 +385,7 @@ export default function BuildupClient() {
             <div className={s.vdotRow}>
               <div className={s.pillRow}>
                 {(['5k', '10k', 'half'] as const).map((d) => (
-                  <button key={d} className={`${s.pill} ${refDist === d ? s.pillActive : ''}`}
+                  <button key={d} type="button" aria-pressed={refDist === d} className={`${s.pill} ${refDist === d ? s.pillActive : ''}`}
                     onClick={() => setRefDist(d)}>
                     {d === 'half' ? '하프' : d.toUpperCase()}
                   </button>
@@ -392,14 +394,14 @@ export default function BuildupClient() {
               <HMSField label="기록"
                 value={refTime}
                 onChange={setRefTime}
-                withHours={refDist === 'half'}
+                withHours={refDist === 'half' || refDist === '10k'}
               />
             </div>
             {vdot && (
               <p className={s.optionHint}>
-                VDOT 약 <strong>{vdot.toFixed(1)}</strong> · E {fmtPace(paceFromVdot(vdot, 0.59))} ·
-                M {fmtPace(paceFromVdot(vdot, 0.70))} · T {fmtPace(paceFromVdot(vdot, 0.78))} ·
-                I {fmtPace(paceFromVdot(vdot, 0.85))}
+                VDOT 약 <strong>{vdot.toFixed(1)}</strong> · E {fmtPace(paceFromVdot(vdot, INTENSITY_LABEL.E.pct))} ·
+                M {fmtPace(paceFromVdot(vdot, INTENSITY_LABEL.M.pct))} · T {fmtPace(paceFromVdot(vdot, INTENSITY_LABEL.T.pct))} ·
+                I {fmtPace(paceFromVdot(vdot, INTENSITY_LABEL.I.pct))}
               </p>
             )}
             {!vdot && (
@@ -447,7 +449,7 @@ export default function BuildupClient() {
             return (
               <>
                 {/* 히어로 */}
-                <div className={s.hero}>
+                <div className={s.hero} role="status">
                   <p className={s.heroLabel}>{sessionKm.toFixed(1)}km {PROFILE_LABEL[profile]}</p>
                   <p className={s.heroValue}>약 {fmtHMS(sessionSec)}</p>
                   <p className={s.heroSub}>
@@ -463,6 +465,7 @@ export default function BuildupClient() {
                 {/* 페이스표 */}
                 <div className={s.card}>
                   <span className={s.cardLabel}>구간별 페이스표</span>
+                  <div className={s.tableScroll}>
                   <table className={s.paceTable}>
                     <thead>
                       <tr>
@@ -514,6 +517,7 @@ export default function BuildupClient() {
                       )}
                     </tbody>
                   </table>
+                  </div>
                 </div>
 
               {/* 안전성 체크 */}
@@ -567,7 +571,7 @@ export default function BuildupClient() {
             <div className={s.vdotRow}>
               <div className={s.pillRow}>
                 {(['5k', '10k', 'half'] as const).map((d) => (
-                  <button key={d} className={`${s.pill} ${refDist === d ? s.pillActive : ''}`}
+                  <button key={d} type="button" aria-pressed={refDist === d} className={`${s.pill} ${refDist === d ? s.pillActive : ''}`}
                     onClick={() => setRefDist(d)}>
                     {d === 'half' ? '하프' : d.toUpperCase()}
                   </button>
@@ -576,7 +580,7 @@ export default function BuildupClient() {
               <HMSField label="기록"
                 value={refTime}
                 onChange={setRefTime}
-                withHours={refDist === 'half'}
+                withHours={refDist === 'half' || refDist === '10k'}
               />
             </div>
           </div>
@@ -595,6 +599,7 @@ export default function BuildupClient() {
 
               <div className={s.card}>
                 <span className={s.cardLabel}>📊 강도별 페이스</span>
+                <div className={s.tableScroll}>
                 <table className={s.paceTable}>
                   <thead>
                     <tr><th scope="col">강도</th><th scope="col">페이스</th><th scope="col">사용</th></tr>
@@ -624,6 +629,7 @@ export default function BuildupClient() {
                     })}
                   </tbody>
                 </table>
+                </div>
               </div>
 
               <div className={s.card}>
@@ -635,8 +641,8 @@ export default function BuildupClient() {
                     { name: '🏃 하프 대비', km: 14, profile: 'race-pace-ladder' as Profile, sM: 'equal-4' as SplitMode, end: 'T' as Intensity, eOff: 0 },
                     { name: '💪 풀 대비', km: 20, profile: 'back-loaded' as Profile, sM: 'equal-4' as SplitMode, end: 'M' as Intensity, eOff: 30 },
                   ].map((r, i) => {
-                    const startS = paceFromVdot(vdot, INTENSITY_LABEL.E.pct) + r.eOff
-                    const endS = paceFromVdot(vdot, INTENSITY_LABEL[r.end].pct)
+                    const startS = round5(paceFromVdot(vdot, INTENSITY_LABEL.E.pct) + r.eOff)
+                    const endS = round5(paceFromVdot(vdot, INTENSITY_LABEL[r.end].pct))
                     const apply = () => {
                       setTotalKm(String(r.km))
                       setProfile(r.profile)
@@ -671,8 +677,8 @@ export default function BuildupClient() {
       {tab === 'preset' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📋 검증된 빌드업 프리셋 ({PRESETS.length}개)</span>
-            <p className={s.cardSub}>한 번 클릭으로 설계 탭에 적용. VDOT 입력 시 본인 능력 기반 자동 계산.</p>
+            <span className={s.cardLabel}>📋 빌드업 프리셋 ({PRESETS.length}개)</span>
+            <p className={s.cardSub}>일반 러닝 훈련 원칙 기반 예시입니다. 한 번 클릭으로 설계 탭에 적용 · VDOT 입력 시 본인 능력 기반 자동 계산.</p>
           </div>
 
           {(['회복', '평일', '10K', '하프', '풀', '스피드'] as const).map((cat) => {

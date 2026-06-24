@@ -6,7 +6,7 @@ import Disclaimer from '@/components/Disclaimer'
 import s from './golf-distance.module.css'
 import {
   GENDER_AGE_LABEL, SENIOR_FACTOR, LIE_LABEL,
-  calcEnvCorrected,
+  calcEnvCorrected, convertDistance,
   loadRecords, saveRecords, newId, todayStr, analyzeRecords,
   LOCATION_LABEL,
   type GenderAge, type DistanceUnit, type WindDirection, type LieType,
@@ -41,13 +41,13 @@ const CLUB_NAME_KR: Record<Club, string> = {
   LW: '로브 웨지',
 }
 
-// 7번 아이언 기준 추정 계수
+// 7번 아이언 기준 추정 계수 (= 아래 AVG_DISTANCE.male 비거리 / 7I 비거리, 우드·드라이버 포함 일관)
 const RATIO_FROM_7I: Record<Club, number> = {
-  DR:  2.30,
-  '3W': 1.93,
-  '5W': 1.76,
-  '4U': 1.67,
-  '5U': 1.57,
+  DR:  1.50,
+  '3W': 1.32,
+  '5W': 1.21,
+  '4U': 1.18,
+  '5U': 1.11,
   '4I': 1.21,
   '5I': 1.14,
   '6I': 1.07,
@@ -120,12 +120,26 @@ export default function GolfDistanceClient() {
     setInputs(prev => ({ ...prev, [club]: val.replace(/[^0-9.]/g, '') }))
   }
 
+  // 단위 토글 시 입력값을 실제 거리 그대로 변환 (m↔yard) — 같은 비거리를 유지
+  const switchUnit = (next: DistanceUnit) => {
+    if (next === unit) return
+    setInputs(prev => {
+      const out = { ...prev }
+      for (const c of CLUB_LIST) {
+        const n = parseFloat(prev[c])
+        if (!isNaN(n) && n > 0) out[c] = String(Math.round(convertDistance(n, unit, next)))
+      }
+      return out
+    })
+    setUnit(next)
+  }
+
   // 추정 결과
   const results = useMemo(() => {
     const numInputs: Partial<Record<Club, number>> = {}
     for (const c of CLUB_LIST) {
       const v = parseFloat(inputs[c])
-      if (!isNaN(v) && v > 0) numInputs[c] = v
+      if (!isNaN(v) && v > 0) numInputs[c] = convertDistance(v, unit, 'm')
     }
     const base7I = numInputs['7I']
     const baseDR = numInputs['DR']
@@ -153,7 +167,7 @@ export default function GolfDistanceClient() {
 
       return { club, distance: estimated, isActual: false }
     }).filter((r): r is { club: Club; distance: number; isActual: boolean } => r.distance !== null && r.distance > 0)
-  }, [inputs, style])
+  }, [inputs, style, unit])
 
   // 시니어 평균 (참고용 - 평균 비교에만 적용)
   const seniorAdjustedAvg = useMemo(() => {
@@ -202,14 +216,14 @@ export default function GolfDistanceClient() {
         const middle = Math.round((from.distance + to.distance) / 2 / 5) * 5
         const between = clubBetween(from.club, to.club)
         suggestion = between
-          ? `${between} 추가 고려 (예상 ${middle}m)`
-          : `약 ${middle}m 거리를 채울 클럽 고려`
+          ? `${between} 추가 고려 (예상 ${showDist(middle, unit)}${unit})`
+          : `약 ${showDist(middle, unit)}${unit} 거리를 채울 클럽 고려`
       }
 
       gaps.push({ from: from.club, to: to.club, gap, level, suggestion })
     }
     return gaps
-  }, [results])
+  }, [results, unit])
 
   /* ── 추천 카드 ── */
   const recommendations = useMemo(() => {
@@ -226,8 +240,8 @@ export default function GolfDistanceClient() {
       const middle = Math.round((from.distance + to.distance) / 2 / 5) * 5
       const fillerName = clubBetween(widest.from, widest.to)
       const text = fillerName
-        ? `${widest.from}(${from.distance}m)와 ${widest.to}(${to.distance}m) 사이 ${widest.gap}m 간격이 있습니다. ${fillerName} 추가를 고려해보세요. 예상 비거리: 약 ${middle}m`
-        : `${widest.from}(${from.distance}m)와 ${widest.to}(${to.distance}m) 사이 ${widest.gap}m 간격이 큽니다. 약 ${middle}m 거리를 채울 클럽을 검토해보세요.`
+        ? `${widest.from}(${showDist(from.distance, unit)}${unit})와 ${widest.to}(${showDist(to.distance, unit)}${unit}) 사이 ${showDist(widest.gap, unit)}${unit} 간격이 있습니다. ${fillerName} 추가를 고려해보세요. 예상 비거리: 약 ${showDist(middle, unit)}${unit}`
+        : `${widest.from}(${showDist(from.distance, unit)}${unit})와 ${widest.to}(${showDist(to.distance, unit)}${unit}) 사이 ${showDist(widest.gap, unit)}${unit} 간격이 큽니다. 약 ${showDist(middle, unit)}${unit} 거리를 채울 클럽을 검토해보세요.`
       recs.push({ title: '거리 공백 보완', text })
     }
 
@@ -240,17 +254,18 @@ export default function GolfDistanceClient() {
       const to = sorted.find(r => r.club === tightest.to)!
       recs.push({
         title: '간격 중복 정리',
-        text: `${tightest.from}(${from.distance}m)와 ${tightest.to}(${to.distance}m) 사이 간격이 ${tightest.gap}m로 좁습니다. 클럽 수가 많다면 ${tightest.from} 또는 ${tightest.to} 중 하나 제거를 고려해보세요.`,
+        text: `${tightest.from}(${showDist(from.distance, unit)}${unit})와 ${tightest.to}(${showDist(to.distance, unit)}${unit}) 사이 간격이 ${showDist(tightest.gap, unit)}${unit}로 좁습니다. 클럽 수가 많다면 ${tightest.from} 또는 ${tightest.to} 중 하나 제거를 고려해보세요.`,
       })
     }
 
     return recs
-  }, [gapList, results])
+  }, [gapList, results, unit])
 
   /* ── 7번 아이언 등급 ── */
   const sevenIronGrade = useMemo(() => {
-    const v = parseFloat(inputs['7I'])
-    if (!v || v <= 0) return null
+    const raw = parseFloat(inputs['7I'])
+    if (!raw || raw <= 0) return null
+    const v = convertDistance(raw, unit, 'm')
     if (gender === 'male') {
       if (v >= 150) return { grade: '상위 10%', cls: s.gradeTop, note: '평균 대비 매우 우수합니다.' }
       if (v >= 140) return { grade: '평균 이상', cls: s.gradeHigh, note: '아마추어 평균보다 길게 보냅니다.' }
@@ -264,7 +279,7 @@ export default function GolfDistanceClient() {
       if (v >= 85)  return { grade: '평균 이하', cls: s.gradeLow, note: '컨택 정확도부터 다져보세요.' }
       return { grade: '하위 20%', cls: s.gradeBeg, note: '입문 단계. 꾸준한 연습으로 비거리가 늘어납니다.' }
     }
-  }, [inputs, gender])
+  }, [inputs, gender, unit])
 
   /* ── 표시 클럽 (입력 모드) ── */
   const visibleClubs: Club[] = expandAll
@@ -286,14 +301,14 @@ export default function GolfDistanceClient() {
       </Disclaimer>
 
       {/* 탭 (4개) */}
-      <div className={s.tabs4}>
+      <div className={s.tabs4} role="tablist" aria-label="비거리 계산기 탭">
         {([
           { id: 'estimate', label: '📏 비거리 계산' },
           { id: 'analysis', label: '🔍 클럽 분석' },
           { id: 'env',      label: '🌬️ 환경 보정' },
           { id: 'records',  label: '📅 내 기록' },
         ] as const).map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}>
             {t.label}
@@ -305,10 +320,10 @@ export default function GolfDistanceClient() {
       <div className={s.unitToggleRow}>
         <span className={s.unitLabel}>📏 거리 단위</span>
         <div className={s.unitToggle}>
-          <button className={`${s.unitBtn} ${unit === 'm' ? s.unitBtnActive : ''}`}
-            onClick={() => setUnit('m')}>m (한국 표준)</button>
-          <button className={`${s.unitBtn} ${unit === 'yard' ? s.unitBtnActive : ''}`}
-            onClick={() => setUnit('yard')}>yard</button>
+          <button type="button" aria-pressed={unit === 'm'} className={`${s.unitBtn} ${unit === 'm' ? s.unitBtnActive : ''}`}
+            onClick={() => switchUnit('m')}>m (한국 표준)</button>
+          <button type="button" aria-pressed={unit === 'yard'} className={`${s.unitBtn} ${unit === 'yard' ? s.unitBtnActive : ''}`}
+            onClick={() => switchUnit('yard')}>yard</button>
         </div>
       </div>
 
@@ -324,7 +339,7 @@ export default function GolfDistanceClient() {
           <span className={s.fieldLabel}>성별·연령 (평균 비교 기준)</span>
           <div className={s.gaGrid}>
             {(Object.keys(GENDER_AGE_LABEL) as GenderAge[]).map(k => (
-              <button key={k}
+              <button key={k} type="button" aria-pressed={genderAge === k}
                 className={`${s.toggleBtn} ${genderAge === k ? s.toggleBtnActive : ''}`}
                 onClick={() => setGenderAge(k)}
                 style={{ padding: '10px 6px', fontSize: 12 }}>
@@ -341,7 +356,7 @@ export default function GolfDistanceClient() {
               { key: 'balance', label: '균형형' },
               { key: 'control', label: '컨트롤형' },
             ] as const).map(p => (
-              <button key={p.key}
+              <button key={p.key} type="button" aria-pressed={style === p.key}
                 className={`${s.toggleBtn} ${style === p.key ? s.toggleBtnActive : ''}`}
                 onClick={() => setStyle(p.key)}
                 style={{ flex: 1, padding: '10px 6px' }}>
@@ -369,7 +384,8 @@ export default function GolfDistanceClient() {
                     className={s.clubInput}
                     type="text"
                     inputMode="decimal"
-                    placeholder={club === 'DR' || club === '7I' ? `필수 (예: ${unit === 'm' ? '210' : '230'})` : '추정됩니다'}
+                    aria-label={`${CLUB_NAME_KR[club]} 비거리 (${unit})`}
+                    placeholder={club === 'DR' ? `필수 (예: ${unit === 'm' ? '210' : '230'})` : club === '7I' ? `필수 (예: ${unit === 'm' ? '140' : '155'})` : '추정됩니다'}
                     value={inputs[club]}
                     onChange={e => setClub(club, e.target.value)}
                   />
@@ -380,7 +396,7 @@ export default function GolfDistanceClient() {
           })}
         </div>
 
-        <button className={s.expandBtn} onClick={() => setExpandAll(v => !v)}>
+        <button type="button" aria-expanded={expandAll} className={s.expandBtn} onClick={() => setExpandAll(v => !v)}>
           {expandAll ? '간단 입력 모드로 ▲' : '전체 클럽 직접 입력하기 ▼'}
         </button>
       </div>
@@ -388,8 +404,8 @@ export default function GolfDistanceClient() {
       {/* ── 탭 내용 ── */}
       {tab === 'env' ? (
         <EnvTab
-          baseI7={parseFloat(inputs['7I']) || 0}
-          baseDR={parseFloat(inputs['DR']) || 0}
+          baseI7={convertDistance(parseFloat(inputs['7I']) || 0, unit, 'm')}
+          baseDR={convertDistance(parseFloat(inputs['DR']) || 0, unit, 'm')}
           unit={unit}
         />
       ) : tab === 'records' ? (
@@ -446,7 +462,7 @@ function EstimateView({
     <>
       {/* 7I 등급 카드 */}
       {sevenIronGrade && (
-        <div className={s.evalCard}>
+        <div className={s.evalCard} role="status">
           <div className={s.evalTop}>
             <div>
               <div className={s.evalLabel}>7번 아이언 평가</div>
@@ -569,8 +585,8 @@ function AnalysisView({
         <span className={s.cardLabel}>클럽 구성 총평</span>
         <div className={s.summaryGrid}>
           <div className={s.summaryCell}>
-            <div className={s.summaryLabel}>현재 클럽 수</div>
-            <div className={s.summaryValue}>{results.length}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>/ 14</span></div>
+            <div className={s.summaryLabel}>추정 클럽 종류</div>
+            <div className={s.summaryValue}>{results.length}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>종</span></div>
           </div>
           <div className={s.summaryCell}>
             <div className={s.summaryLabel}>비거리 범위</div>
@@ -686,15 +702,15 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
       <div className={s.card}>
         <span className={s.cardLabel}>① 기본 비거리</span>
         <div className={s.toggleRow} style={{ marginBottom: 10 }}>
-          <button className={`${s.toggleBtn} ${baseClub === '7I' ? s.toggleBtnActive : ''}`}
+          <button type="button" aria-pressed={baseClub === '7I'} className={`${s.toggleBtn} ${baseClub === '7I' ? s.toggleBtnActive : ''}`}
             onClick={() => handleClubChange('7I')}
             style={{ flex: 1 }}>7번 아이언</button>
-          <button className={`${s.toggleBtn} ${baseClub === 'DR' ? s.toggleBtnActive : ''}`}
+          <button type="button" aria-pressed={baseClub === 'DR'} className={`${s.toggleBtn} ${baseClub === 'DR' ? s.toggleBtnActive : ''}`}
             onClick={() => handleClubChange('DR')}
             style={{ flex: 1 }}>드라이버</button>
         </div>
         <div className={s.envSliderRow}>
-          <input type="range" min={50} max={300} step={5}
+          <input type="range" min={50} max={300} step={5} aria-label="기본 비거리"
             value={baseDistance} onChange={e => setBaseDistance(parseInt(e.target.value))}
             className={s.envSlider} />
           <span className={s.envSliderValue}>{showDist(baseDistance, unit)}{unit}</span>
@@ -708,7 +724,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
         <div className={s.envFactorRow}>
           <span className={s.envFactorLabel}>🌡️ 기온</span>
           <div className={s.envSliderRow}>
-            <input type="range" min={-10} max={40} step={1}
+            <input type="range" min={-10} max={40} step={1} aria-label="기온"
               value={temperature} onChange={e => setTemperature(parseInt(e.target.value))}
               className={s.envSlider} />
             <span className={s.envSliderValue} style={{ color: temperature < 10 ? '#0891B2' : temperature > 28 ? '#EA580C' : 'var(--accent)' }}>
@@ -721,7 +737,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
         <div className={s.envFactorRow}>
           <span className={s.envFactorLabel}>🏔️ 고도</span>
           <div className={s.envSliderRow}>
-            <input type="range" min={0} max={3000} step={50}
+            <input type="range" min={0} max={3000} step={50} aria-label="고도"
               value={elevation} onChange={e => setElevation(parseInt(e.target.value))}
               className={s.envSlider} />
             <span className={s.envSliderValue}>{elevation}m</span>
@@ -738,7 +754,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
               { key: 'tail', label: '등' },
               { key: 'cross', label: '옆' },
             ] as const).map(w => (
-              <button key={w.key}
+              <button key={w.key} type="button" aria-pressed={windDir === w.key}
                 className={`${s.toggleBtn} ${windDir === w.key ? s.toggleBtnActive : ''}`}
                 onClick={() => setWindDir(w.key)}
                 style={{ flex: 1, padding: '8px 4px', fontSize: 12 }}>
@@ -751,7 +767,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
           <div className={s.envFactorRow}>
             <span className={s.envFactorLabel}>바람 세기</span>
             <div className={s.envSliderRow}>
-              <input type="range" min={0} max={15} step={1}
+              <input type="range" min={0} max={15} step={1} aria-label="바람 세기"
                 value={windSpeed} onChange={e => setWindSpeed(parseInt(e.target.value))}
                 className={s.envSlider} />
               <span className={s.envSliderValue}>{windSpeed}m/s</span>
@@ -763,7 +779,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
         <div className={s.envFactorRow}>
           <span className={s.envFactorLabel}>⛰️ 경사 (양수=오르막)</span>
           <div className={s.envSliderRow}>
-            <input type="range" min={-10} max={10} step={1}
+            <input type="range" min={-10} max={10} step={1} aria-label="경사 (양수=오르막)"
               value={slopeAngle} onChange={e => setSlopeAngle(parseInt(e.target.value))}
               className={s.envSlider} />
             <span className={s.envSliderValue}>{slopeAngle > 0 ? '+' : ''}{slopeAngle}°</span>
@@ -775,7 +791,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
           <span className={s.envFactorLabel}>🌿 라이</span>
           <div className={s.lieGrid}>
             {(Object.keys(LIE_LABEL) as LieType[]).map(l => (
-              <button key={l}
+              <button key={l} type="button" aria-pressed={lieType === l}
                 className={`${s.toggleBtn} ${lieType === l ? s.toggleBtnActive : ''}`}
                 onClick={() => setLieType(l)}
                 style={{ padding: '8px 4px', fontSize: 11 }}>
@@ -787,7 +803,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
       </div>
 
       {/* 결과 */}
-      <div className={s.envResultCard}>
+      <div className={s.envResultCard} role="status">
         <div className={s.envResultHead}>
           <span className={s.cardLabel}>🌬️ 환경 보정 비거리</span>
           <span className={s.envResultBadge} style={{
@@ -885,8 +901,8 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
       date,
       ts: new Date(date + 'T12:00:00').getTime(),
       location,
-      driver: dr > 0 ? dr : undefined,
-      iron7:  i7 > 0 ? i7 : undefined,
+      driver: dr > 0 ? Math.round(convertDistance(dr, unit, 'm')) : undefined,
+      iron7:  i7 > 0 ? Math.round(convertDistance(i7, unit, 'm')) : undefined,
       temperature: tempInput ? parseFloat(tempInput) : undefined,
       windSpeed:   windInput ? parseFloat(windInput) : undefined,
       notes: notes.trim() || undefined,
@@ -944,12 +960,12 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
         <div className={s.recordFormGrid}>
           <div>
             <span className={s.fieldLabel}>날짜</span>
-            <input type="date" className={s.recordDateInput}
+            <input type="date" className={s.recordDateInput} aria-label="기록 날짜"
               value={date} onChange={e => setDate(e.target.value)} />
           </div>
           <div>
             <span className={s.fieldLabel}>장소</span>
-            <select className={s.recordSelect}
+            <select className={s.recordSelect} aria-label="기록 장소"
               value={location} onChange={e => setLocation(e.target.value as RecordLocation)}>
               {(Object.keys(LOCATION_LABEL) as RecordLocation[]).map(k => (
                 <option key={k} value={k}>{LOCATION_LABEL[k]}</option>
@@ -960,13 +976,13 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
         <div className={s.recordFormGrid} style={{ marginTop: 8 }}>
           <div>
             <span className={s.fieldLabel}>드라이버 ({unit})</span>
-            <input type="text" inputMode="decimal" className={s.recordInput}
+            <input type="text" inputMode="decimal" className={s.recordInput} aria-label={`기록할 드라이버 비거리 (${unit})`}
               placeholder={unit === 'm' ? '예: 220' : '예: 240'}
               value={drInput} onChange={e => setDrInput(e.target.value.replace(/[^0-9.]/g, ''))} />
           </div>
           <div>
             <span className={s.fieldLabel}>7I ({unit})</span>
-            <input type="text" inputMode="decimal" className={s.recordInput}
+            <input type="text" inputMode="decimal" className={s.recordInput} aria-label={`기록할 7번 아이언 비거리 (${unit})`}
               placeholder={unit === 'm' ? '예: 145' : '예: 160'}
               value={i7Input} onChange={e => setI7Input(e.target.value.replace(/[^0-9.]/g, ''))} />
           </div>
@@ -974,20 +990,20 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
         <div className={s.recordFormGrid} style={{ marginTop: 8 }}>
           <div>
             <span className={s.fieldLabel}>기온 (°C, 선택)</span>
-            <input type="text" inputMode="decimal" className={s.recordInput}
+            <input type="text" inputMode="decimal" className={s.recordInput} aria-label="기온 (°C, 선택)"
               placeholder="예: 18"
               value={tempInput} onChange={e => setTempInput(e.target.value.replace(/[^0-9.\-]/g, ''))} />
           </div>
           <div>
             <span className={s.fieldLabel}>바람 (m/s, 선택)</span>
-            <input type="text" inputMode="decimal" className={s.recordInput}
+            <input type="text" inputMode="decimal" className={s.recordInput} aria-label="바람 (m/s, 선택)"
               placeholder="예: 3"
               value={windInput} onChange={e => setWindInput(e.target.value.replace(/[^0-9.]/g, ''))} />
           </div>
         </div>
         <div style={{ marginTop: 8 }}>
           <span className={s.fieldLabel}>메모 (선택)</span>
-          <input type="text" className={s.recordInput}
+          <input type="text" className={s.recordInput} aria-label="메모 (선택)"
             placeholder="컨디션·코스명 등"
             value={notes} onChange={e => setNotes(e.target.value)} maxLength={50} />
         </div>

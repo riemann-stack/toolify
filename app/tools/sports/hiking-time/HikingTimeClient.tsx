@@ -1,11 +1,10 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './hiking-time.module.css'
 import {
-  type CalcInputs, type CalcResult, type TimelineStep,
+  type CalcInputs, type TimelineStep,
   type FitnessLevel, type TerrainType, type PackWeight, type GroupType, type WeatherType,
   MOUNTAINS, FITNESS, TERRAIN, PACK, GROUP, WEATHER,
   SUN_AVERAGES, CHECKLIST, EMERGENCY,
@@ -36,14 +35,35 @@ export default function HikingTimeClient() {
   const [region, setRegion] = useState<string>('수도권')
   const [mounted, setMounted] = useState(false)
 
-  /* localStorage 복원 */
+  /* localStorage 복원 — 손상·변조 방어 (무검증 spread 시 NaN 결과 가능) */
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const parsed = JSON.parse(raw)
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setInputs((prev) => ({ ...prev, ...parsed }))
+        const j: unknown = JSON.parse(raw)
+        if (j && typeof j === 'object') {
+          const o = j as Record<string, unknown>
+          const n3 = (v: unknown, lo: number, hi: number, d: number) =>
+            typeof v === 'number' && Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d
+          const en = <T,>(v: unknown, arr: { id: T }[], d: T) => arr.some((x) => x.id === v) ? (v as T) : d
+          const tm = (v: unknown, d: string) => typeof v === 'string' && /^\d{1,2}:\d{2}$/.test(v) ? v : d
+          const safe: CalcInputs = {
+            distanceKm: n3(o.distanceKm, 1, 50, DEFAULT_INPUTS.distanceKm),
+            elevGainM:  n3(o.elevGainM, 0, 2000, DEFAULT_INPUTS.elevGainM),
+            elevLossM:  n3(o.elevLossM, 0, 2000, DEFAULT_INPUTS.elevLossM),
+            fitness: en(o.fitness, FITNESS, DEFAULT_INPUTS.fitness),
+            terrain: en(o.terrain, TERRAIN, DEFAULT_INPUTS.terrain),
+            pack:    en(o.pack, PACK, DEFAULT_INPUTS.pack),
+            group:   en(o.group, GROUP, DEFAULT_INPUTS.group),
+            weather: en(o.weather, WEATHER, DEFAULT_INPUTS.weather),
+            startTime:  tm(o.startTime, DEFAULT_INPUTS.startTime),
+            sunsetTime: tm(o.sunsetTime, DEFAULT_INPUTS.sunsetTime),
+            restMode: o.restMode === 'manual' ? 'manual' : 'auto',
+            manualRestMin: n3(o.manualRestMin, 0, 300, 0),
+          }
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setInputs(safe)
+        }
       }
     } catch { /* ignore */ }
     // 현재 시각 ± 일몰 자동 설정 (hydration safe)
@@ -108,6 +128,7 @@ export default function HikingTimeClient() {
         sources={[
           { label: '국립공원공단', href: 'https://www.knps.or.kr' },
           { label: '산림청', href: 'https://www.forest.go.kr' },
+          { label: '한국천문연구원(일출·일몰)', href: 'https://astro.kasi.re.kr/life/pageView/9' },
         ]}
       >
         개인 페이스·날씨·등산로 상태에 따라 <strong>±20% 차이</strong> 가능. 일몰 1시간 전 하산을 권장하며, 동계·우천·야간 산행은 경험자만 시도하세요. 응급 상황 시 <strong>119</strong> 즉시 신고 (산림청 산림안전 앱으로 GPS 좌표 전송). 국립공원·도립공원은 계절별 입산 시간 제한이 있으니 사전 확인 필수.
@@ -118,7 +139,7 @@ export default function HikingTimeClient() {
         <label className={styles.label}>🏔️ 한국 100대 명산 프리셋 ({MOUNTAINS.length}개)</label>
         <div className={styles.regionTabs}>
           {REGIONS.map((r) => (
-            <button key={r}
+            <button key={r} type="button" aria-pressed={region === r}
               className={`${styles.regionTab} ${region === r ? styles.regionTabActive : ''}`}
               onClick={() => setRegion(r)}>
               {r}
@@ -127,7 +148,7 @@ export default function HikingTimeClient() {
         </div>
         <div className={styles.mountainGrid}>
           {filteredMountains.map((m) => (
-            <button key={m.id}
+            <button key={m.id} type="button" aria-pressed={activePreset === m.id}
               className={`${styles.mountainCard} ${activePreset === m.id ? styles.mountainCardActive : ''}`}
               onClick={() => applyPreset(m.id)}>
               <div className={styles.mountainHead}>
@@ -146,7 +167,8 @@ export default function HikingTimeClient() {
         {activePresetData && (
           <div className={styles.presetTip}>
             <strong>📍 {activePresetData.name}</strong>
-            <span>· 거리 {activePresetData.distanceKm}km · 표고차 +{activePresetData.elevGainM}m / -{activePresetData.elevLossM}m · 표준 {activePresetData.baseHours}시간</span>
+            <span>· 거리 {activePresetData.distanceKm}km · 표고차 +{activePresetData.elevGainM}m / -{activePresetData.elevLossM}m · {activePresetData.difficulty} · 표준 {activePresetData.baseHours}시간</span>
+            <span className={styles.presetTipNote}>※ 표준 시간은 이 산의 <strong>지형 난이도({activePresetData.difficulty})가 반영된</strong> 일반 페이스 추정입니다. 아래 체력·지형·날씨 보정은 본인 조건에 맞춰 추가로 조정하세요.</span>
           </div>
         )}
       </section>
@@ -157,25 +179,46 @@ export default function HikingTimeClient() {
         <div className={styles.sliderRow}>
           <div className={styles.sliderHead}>
             <span>거리</span>
-            <strong>{inputs.distanceKm.toFixed(1)} km</strong>
+            <span className={styles.headInput}>
+              <input type="number" inputMode="decimal" min={1} max={50} step={0.5}
+                aria-label="거리 직접 입력 (km)" value={inputs.distanceKm}
+                onChange={(e) => update('distanceKm', Math.min(50, Math.max(1, +e.target.value || 0)))}
+                className={styles.headNumber} />
+              <span className={styles.headUnit}>km</span>
+            </span>
           </div>
           <input type="range" min={1} max={50} step={0.5} value={inputs.distanceKm}
+            aria-label="거리 (km)" aria-valuetext={`${inputs.distanceKm.toFixed(1)}km`}
             onChange={(e) => update('distanceKm', +e.target.value)} className={styles.slider} />
         </div>
         <div className={styles.sliderRow}>
           <div className={styles.sliderHead}>
             <span>오르막 표고차</span>
-            <strong>+{inputs.elevGainM} m</strong>
+            <span className={styles.headInput}>
+              <input type="number" inputMode="numeric" min={0} max={2000} step={10}
+                aria-label="오르막 표고차 직접 입력 (m)" value={inputs.elevGainM}
+                onChange={(e) => update('elevGainM', Math.min(2000, Math.max(0, +e.target.value || 0)))}
+                className={styles.headNumber} />
+              <span className={styles.headUnit}>m</span>
+            </span>
           </div>
           <input type="range" min={0} max={2000} step={10} value={inputs.elevGainM}
+            aria-label="오르막 표고차 (m)" aria-valuetext={`${inputs.elevGainM}m`}
             onChange={(e) => update('elevGainM', +e.target.value)} className={styles.slider} />
         </div>
         <div className={styles.sliderRow}>
           <div className={styles.sliderHead}>
             <span>내리막 표고차</span>
-            <strong>-{inputs.elevLossM} m</strong>
+            <span className={styles.headInput}>
+              <input type="number" inputMode="numeric" min={0} max={2000} step={10}
+                aria-label="내리막 표고차 직접 입력 (m)" value={inputs.elevLossM}
+                onChange={(e) => update('elevLossM', Math.min(2000, Math.max(0, +e.target.value || 0)))}
+                className={styles.headNumber} />
+              <span className={styles.headUnit}>m</span>
+            </span>
           </div>
           <input type="range" min={0} max={2000} step={10} value={inputs.elevLossM}
+            aria-label="내리막 표고차 (m)" aria-valuetext={`${inputs.elevLossM}m`}
             onChange={(e) => update('elevLossM', +e.target.value)} className={styles.slider} />
         </div>
       </section>
@@ -184,7 +227,7 @@ export default function HikingTimeClient() {
         <p className={styles.gapTitle}>💪 체력 등급</p>
         <div className={styles.pillRow}>
           {FITNESS.map((f) => (
-            <button key={f.id}
+            <button key={f.id} type="button" aria-pressed={inputs.fitness === f.id}
               className={`${styles.pill} ${inputs.fitness === f.id ? styles.pillActive : ''}`}
               onClick={() => update('fitness', f.id as FitnessLevel)}
               title={f.desc}>
@@ -200,7 +243,7 @@ export default function HikingTimeClient() {
         <p className={styles.gapTitle}>🪨 지형 유형</p>
         <div className={styles.pillRow}>
           {TERRAIN.map((t) => (
-            <button key={t.id}
+            <button key={t.id} type="button" aria-pressed={inputs.terrain === t.id}
               className={`${styles.pill} ${inputs.terrain === t.id ? styles.pillActive : ''}`}
               onClick={() => update('terrain', t.id as TerrainType)}>
               {t.label}
@@ -215,7 +258,7 @@ export default function HikingTimeClient() {
         <p className={styles.gapTitle}>🎒 배낭 무게</p>
         <div className={styles.pillRow}>
           {PACK.map((p) => (
-            <button key={p.id}
+            <button key={p.id} type="button" aria-pressed={inputs.pack === p.id}
               className={`${styles.pill} ${inputs.pack === p.id ? styles.pillActive : ''}`}
               onClick={() => update('pack', p.id as PackWeight)}>
               {p.label} {p.weightKg}kg
@@ -229,7 +272,7 @@ export default function HikingTimeClient() {
         <p className={styles.gapTitle}>👥 그룹 인원</p>
         <div className={styles.pillRow}>
           {GROUP.map((g) => (
-            <button key={g.id}
+            <button key={g.id} type="button" aria-pressed={inputs.group === g.id}
               className={`${styles.pill} ${inputs.group === g.id ? styles.pillActive : ''}`}
               onClick={() => update('group', g.id as GroupType)}>
               {g.label}
@@ -243,7 +286,7 @@ export default function HikingTimeClient() {
         <p className={styles.gapTitle}>🌤️ 계절·날씨</p>
         <div className={styles.pillRow}>
           {WEATHER.map((w) => (
-            <button key={w.id}
+            <button key={w.id} type="button" aria-pressed={inputs.weather === w.id}
               className={`${styles.pill} ${inputs.weather === w.id ? styles.pillActive : ''}`}
               onClick={() => update('weather', w.id as WeatherType)}>
               {w.label}
@@ -275,12 +318,12 @@ export default function HikingTimeClient() {
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>☕ 휴식 시간</p>
         <div className={styles.pillRow}>
-          <button
+          <button type="button" aria-pressed={inputs.restMode === 'auto'}
             className={`${styles.pill} ${inputs.restMode === 'auto' ? styles.pillActive : ''}`}
             onClick={() => update('restMode', 'auto')}>
             자동 (50분 보행 + 10분 휴식)
           </button>
-          <button
+          <button type="button" aria-pressed={inputs.restMode === 'manual'}
             className={`${styles.pill} ${inputs.restMode === 'manual' ? styles.pillActive : ''}`}
             onClick={() => update('restMode', 'manual')}>
             수동 입력
@@ -302,7 +345,7 @@ export default function HikingTimeClient() {
 
       {/* ════════ 3. 결과 카드 ════════ */}
       <section>
-        <div className={`${styles.resultMain} ${result.isDanger ? styles.resultDanger : result.isRisky ? styles.resultRisky : styles.resultSafe}`}>
+        <div role="status" aria-live="polite" className={`${styles.resultMain} ${result.isDanger ? styles.resultDanger : result.isRisky ? styles.resultRisky : styles.resultSafe}`}>
           <div className={styles.resultLeft}>
             <p className={styles.resultLabel}>총 소요 시간 (한국 표준 기준)</p>
             <p className={styles.resultBig}>{fmtDuration(result.totalMin)}</p>
@@ -322,7 +365,7 @@ export default function HikingTimeClient() {
               <strong>{fmtDuration(result.selected.ascendMin)}</strong>
             </div>
             <div>
-              <span>내리막</span>
+              <span>내리막·평지</span>
               <strong>{fmtDuration(result.selected.descendMin + result.selected.flatMin)}</strong>
             </div>
             <div>
@@ -353,12 +396,12 @@ export default function HikingTimeClient() {
                 <p className={styles.formulaName}>{f.label}</p>
                 <p className={styles.formulaTime}>{fmtDuration(f.totalMin)}</p>
                 <p className={styles.formulaSub}>
-                  ↑ {fmtDuration(f.ascendMin)} · ↓ {fmtDuration(f.descendMin + f.flatMin)}
+                  오르막 {fmtDuration(f.ascendMin)} · 내림·평지 {fmtDuration(f.descendMin + f.flatMin)}
                 </p>
               </div>
             ))}
           </div>
-          <p className={styles.note}>※ 한국 등산교실 표준이 한국 산 환경에 가장 가까움 (기본 적용). Naismith는 영국 평균, Tobler는 경사 정밀.</p>
+          <p className={styles.note}>※ 한국 코스타임(100대 명산 표준 소요시간 보정)이 한국 산 환경에 가장 가까움 (기본 적용). Naismith는 영국 평균, Tobler는 경사 정밀.</p>
         </div>
       </section>
 
@@ -411,7 +454,7 @@ export default function HikingTimeClient() {
               </tbody>
             </table>
           </div>
-          <p className={styles.note}>※ 월별 평균치 — 정확한 일자별은 네이버 &quot;일몰&quot; 검색.</p>
+          <p className={styles.note}>※ 월별 평균 근사치(중순 기준) — 정확한 일자별·지역별 시각은 <a href="https://astro.kasi.re.kr/life/pageView/9" target="_blank" rel="noopener noreferrer">한국천문연구원 일출·일몰 시각 계산</a> 또는 네이버 &quot;[지역명] 일몰&quot; 검색에서 확인하세요.</p>
         </div>
 
         {/* 비상 연락 */}
@@ -422,9 +465,9 @@ export default function HikingTimeClient() {
               <span className={styles.emergencyNum}>119</span>
               <span>소방·구급·산악구조</span>
             </a>
-            <a href="tel:02-911" className={styles.emergencyItem}>
-              <span className={styles.emergencyNum}>02-911</span>
-              <span>국립공원 산악구조대</span>
+            <a href="tel:1670-9201" className={styles.emergencyItem}>
+              <span className={styles.emergencyNum}>1670-9201</span>
+              <span>국립공원공단 콜센터<br/>(국립공원 사고·문의)</span>
             </a>
             <div className={styles.emergencyItem}>
               <span className={styles.emergencyApp}>📱</span>
@@ -479,7 +522,8 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
 
   return (
     <div className={styles.timelineSvgWrap}>
-      <svg viewBox={`0 0 ${W} ${H}`} className={styles.timelineSvg} preserveAspectRatio="xMidYMid meet">
+      <svg viewBox={`0 0 ${W} ${H}`} className={styles.timelineSvg} preserveAspectRatio="xMidYMid meet"
+        role="img" aria-label="등산 진행 타임라인 — 출발·정상·도착 시각과 일몰 시점 표시 (아래 목록에 동일 정보)">
         {/* 메인 라인 */}
         <line x1={padL} y1={H/2} x2={W-padR} y2={H/2} stroke="var(--border)" strokeWidth="2" />
 

@@ -7,7 +7,7 @@ import Faq from '@/components/Faq'
 export const metadata = buildMetadata({
   path: '/tools/sports/swim-pace',
   title: '수영 페이스·SWOLF 계산기 — 100m 페이스·풀 환산·인터벌 send-off',
-  description: '100m 페이스 ↔ 총기록 양방향, 25m·50m 풀 왕복수 환산, SWOLF·send-off·영법별 예상기록까지 한 화면에서.',
+  description: '100m 페이스 ↔ 총기록 양방향, 25m·50m 풀 바퀴 수 환산, SWOLF·send-off·영법별 예상기록까지 한 화면에서.',
   keywords: ['수영페이스계산기', '스월프계산기', '100m페이스', '수영인터벌', '단수장수환산', '수영send off', '수영예상기록'],
 })
 
@@ -15,7 +15,7 @@ const FAQ_LD = [
   { q: '수영 페이스는 어떤 단위로 읽나요?',
     a: '수영은 보통 <strong>100m당 시간</strong>으로 페이스를 말합니다. &ldquo;1:45 페이스&rdquo;는 100m를 1분 45초에 간다는 뜻입니다. 본 도구는 모든 입력을 100m당 초로 정규화해 계산하므로, 200m·400m처럼 거리가 달라도 같은 기준으로 비교됩니다. 25m 1바퀴 기록만 알 때는 그 시간을 4배 하면 대략 100m 페이스가 됩니다.' },
   { q: '1500m는 25m 풀과 50m 풀에서 각각 몇 바퀴인가요?',
-    a: '왕복수 = 총거리 ÷ 풀 길이입니다.<br/>• <strong>25m 단수(SC)</strong>: 1500 ÷ 25 = <strong>60바퀴</strong><br/>• <strong>50m 장수(LC)</strong>: 1500 ÷ 50 = <strong>30바퀴</strong><br/>본 도구의 풀 길이 토글을 바꾸면 같은 거리의 왕복수가 자동으로 다시 계산됩니다. 거리 칸과 왕복수 칸은 서로 동기화되어 한쪽만 바꿔도 됩니다.' },
+    a: '여기서 <strong>1바퀴 = 풀을 한 번 건너가는 편도(= 풀 길이)</strong>로, 바퀴 수 = 총거리 ÷ 풀 길이입니다.<br/>• <strong>25m 단수(SC)</strong>: 1500 ÷ 25 = <strong>60바퀴(편도)</strong><br/>• <strong>50m 장수(LC)</strong>: 1500 ÷ 50 = <strong>30바퀴(편도)</strong><br/>가고 오는 왕복(턴) 횟수로 세면 이 값의 절반입니다. 본 도구의 풀 길이 토글을 바꾸면 같은 거리의 바퀴 수가 자동으로 다시 계산되고, 거리 칸과 바퀴 칸은 서로 동기화되어 한쪽만 바꿔도 됩니다.' },
   { q: 'SWOLF 점수는 어떻게 계산하고 무엇을 의미하나요?',
     a: 'SWOLF는 <strong>한 바퀴(보통 25m) 소요 초 + 그 바퀴의 스트로크 수</strong>를 더한 값입니다. 예를 들어 25m를 20초에, 18번 저어 갔다면 SWOLF는 38입니다. 시간과 동작 수를 함께 보기 때문에 <strong>낮을수록 효율적</strong>이라고 해석합니다. 다만 키·팔 길이·영법에 따라 적정 스트로크 수가 달라 절대 등급표는 의미가 약합니다. 같은 사람이 같은 풀에서 추이를 보는 용도로 쓰는 편이 낫습니다.' },
   { q: '인터벌 보내기시간(send-off)은 어떻게 정하나요?',
@@ -37,7 +37,7 @@ export default function SwimPacePage() {
         🏊 수영 페이스·SWOLF 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        100m 페이스 ↔ 총기록을 양방향으로 환산하고, <strong style={{ color: 'var(--text)' }}>25m·50m 풀 왕복수</strong>·SWOLF·인터벌 send-off를 한 화면에서 확인합니다.
+        100m 페이스 ↔ 총기록을 양방향으로 환산하고, <strong style={{ color: 'var(--text)' }}>25m·50m 풀 바퀴 수</strong>·SWOLF·인터벌 send-off를 한 화면에서 확인합니다.
       </p>
 
       <SwimPaceClient />

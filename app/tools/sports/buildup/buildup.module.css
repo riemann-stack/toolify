@@ -64,7 +64,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 14px;
-  font-size: 15px;
+  font-size: 16px; /* iOS 포커스 줌 방지 (16px 미만 시 자동 확대) */
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   outline: none;
@@ -220,8 +220,11 @@
 .heroSub { font-size: 13px; color: var(--muted); margin: 0; }
 
 /* ── 페이스표 ── */
+/* 좁은 화면(320px)에서 강도 열이 잘리지 않도록 가로 스크롤 래퍼 */
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .paceTable {
   width: 100%;
+  min-width: 320px;
   border-collapse: collapse;
   font-size: 13px;
 }

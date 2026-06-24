@@ -158,7 +158,7 @@ function n(v: string | number): number {
   return x
 }
 
-/* 적정 체급 추천 (BMI 22 ± 3kg 기반) */
+/* 적정 체급 추천 (BMI 22 기준, -3~+6kg 범위) */
 function recommendClasses(height: number, weight: number, classes: WeightClass[], gender: Gender): WeightClass[] {
   if (height <= 0) {
     // 키 미입력 시 현재 체중 기준 ±2kg 범위에서 추천
@@ -249,9 +249,10 @@ export default function FightWeightClient() {
   // 목표 체급 (직접 선택 or 추천 첫 번째)
   const targetClass = useMemo(() => {
     if (targetClassName) return availableClasses.find(c => c.name === targetClassName)
-    // 디폴트: 현재 체중 이상 가장 가까운 체급
-    const above = availableClasses.find(c => c.limit >= weight && c.limit !== Infinity)
-    return above ?? availableClasses[availableClasses.length - 1]
+    // 디폴트: 현재 체중에서 한 체급 아래(실제 감량 목표). 없으면 가장 가벼운 체급 — "이미 통과"가 기본값이 되지 않게.
+    const finite = availableClasses.filter(c => c.limit !== Infinity)
+    const below = [...finite].reverse().find(c => c.limit < weight)
+    return below ?? finite[0] ?? availableClasses[availableClasses.length - 1]
   }, [targetClassName, availableClasses, weight])
 
   // 감량 필요량
@@ -259,8 +260,9 @@ export default function FightWeightClient() {
 
   // D-day
   const today = useMemo(() => { const d = new Date(); d.setHours(0,0,0,0); return d }, [])
-  const weighIn = useMemo(() => new Date(weighInDate), [weighInDate])
-  const daysToWeighIn = Math.max(1, Math.ceil((weighIn.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)))
+  const weighInMs = useMemo(() => new Date(weighInDate + 'T00:00:00').getTime(), [weighInDate])
+  const validDate = Number.isFinite(weighInMs)   // 날짜를 비우면 NaN → 가드
+  const daysToWeighIn = validDate ? Math.max(1, Math.ceil((weighInMs - today.getTime()) / (1000 * 60 * 60 * 24))) : 1
 
   // 일평균/주간 감량
   const dailyLossKg  = needToLose / daysToWeighIn
@@ -269,9 +271,10 @@ export default function FightWeightClient() {
   // 위험도
   const risk = evalRisk(weeklyLossKg, weight)
 
-  // 단계 분리 (체지방 70% / 수분 30%)
-  const fatPhaseLoss   = needToLose * 0.7
-  const waterPhaseLoss = needToLose * 0.3
+  // 단계 분리 — ONE은 수분 감량(사우나) 금지 단체라 전량 체지방 감량으로 배정
+  const waterCut = sport.id !== 'one'
+  const fatPhaseLoss   = needToLose * (waterCut ? 0.7 : 1)
+  const waterPhaseLoss = needToLose * (waterCut ? 0.3 : 0)
 
   // 체지방 단계는 D-day부터 7일 전까지 (즉 daysToWeighIn - 7일간), 단 daysToWeighIn ≤ 7이면 모두 체지방으로 간주
   const fatDays   = Math.max(1, daysToWeighIn - 7)
@@ -321,8 +324,9 @@ export default function FightWeightClient() {
         const fatEnd = weight - fatPhaseLoss
         const waterElapsed = (waterDays - d + 1) / waterDays
         target = fatEnd - waterPhaseLoss * waterElapsed
-        phase = 'water'
-        if (d >= 7) advice = advicesWater.D7
+        phase = waterCut ? 'water' : 'fat'
+        if (!waterCut) advice = '체지방 위주 점진 감량 — ONE은 수분 감량·사우나 금지'
+        else if (d >= 7) advice = advicesWater.D7
         else if (d >= 5) advice = advicesWater.D5
         else if (d >= 3) advice = advicesWater.D3
         else advice = advicesWater.D1
@@ -332,19 +336,19 @@ export default function FightWeightClient() {
         advice = '계체 통과 🎯'
       } else {
         // d === -1: 재수화
-        const rehydrate = sport.weighInHours > 12 ? 5 : sport.weighInHours > 4 ? 2.5 : 1
+        const rehydrate = !waterCut ? 0 : sport.weighInHours > 12 ? 5 : sport.weighInHours > 4 ? 2.5 : 1
         target = (targetClass ? targetClass.limit : weight - needToLose) + rehydrate
         phase = 'rehy'
         advice = sport.id === 'one'
           ? '재수화 제한 — 자연 회복'
-          : `IV 또는 음용 재수화 (${rehydrate.toFixed(1)}kg 회복 예시)`
+          : `경구 재수화 — 물·전해질 (${rehydrate.toFixed(1)}kg 회복 예시)`
       }
 
       const dLabel = d === 0 ? 'D-Day' : d > 0 ? `D-${d}` : `D+${Math.abs(d)}`
       rows.push({ dLabel, weightTarget: Math.max(0, target), phase, advice })
     }
     return rows
-  }, [needToLose, daysToWeighIn, weight, fatPhaseLoss, waterPhaseLoss, fatDays, waterDays, targetClass, sport.weighInHours, sport.id])
+  }, [needToLose, daysToWeighIn, weight, fatPhaseLoss, waterPhaseLoss, fatDays, waterDays, targetClass, sport.weighInHours, sport.id, waterCut])
 
   // 체급 변경 권장 여부
   const recommendNextClass = useMemo(() => {
@@ -434,7 +438,9 @@ export default function FightWeightClient() {
           { href: '/tools/sports/one-rm', label: '1RM 계산기' }
         ]}
       >
-        본 계산기는 참고용 정보입니다.
+        본 계산기는 <strong>참고용 추정</strong>이며 의학적 조언이 아닙니다. 급격한 체중 감량(특히 마지막 수분 감량)은 탈수·신장 손상·심정지로 이어질 수 있어,
+        반드시 <strong>전문 코치·영양사·스포츠의학 전문의 감독</strong> 하에 진행하고 청소년·아마추어는 무리한 감량을 피하세요.
+        계체 후 <strong>정맥(IV) 수액 재수화는 USADA·WADA 도핑 규정상 금지</strong>(의료 목적 예외)이므로 경구(물·전해질) 재수화를 권장합니다.
       </Disclaimer>
 
       {/* 종목 선택 */}
@@ -478,22 +484,22 @@ export default function FightWeightClient() {
               <div className={styles.inputCell}>
                 <p className={styles.inputLabel}>체중</p>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0} step="0.1" value={weightStr} onChange={e => setWeightStr(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0} step="0.1" aria-label="현재 체중 (kg)" value={weightStr} onChange={e => setWeightStr(e.target.value)} />
                   <span className={styles.unit}>kg</span>
                 </div>
               </div>
               <div className={styles.inputCell}>
                 <p className={styles.inputLabel}>키</p>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0} step="1" value={heightStr} onChange={e => setHeightStr(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0} step="1" aria-label="키 (cm)" value={heightStr} onChange={e => setHeightStr(e.target.value)} />
                   <span className={styles.unit}>cm</span>
                 </div>
               </div>
               <div className={styles.inputCell}>
                 <p className={styles.inputLabel}>성별</p>
                 <div className={styles.genderRow}>
-                  <button type="button" className={`${styles.genderBtn} ${gender === 'male' ? styles.genderActive : ''}`}   onClick={() => setGender('male')} aria-label="남성">♂</button>
-                  <button type="button" className={`${styles.genderBtn} ${gender === 'female' ? styles.genderActive : ''}`} onClick={() => setGender('female')} aria-label="여성">♀</button>
+                  <button type="button" aria-pressed={gender === 'male'} className={`${styles.genderBtn} ${gender === 'male' ? styles.genderActive : ''}`}   onClick={() => setGender('male')} aria-label="남성">♂</button>
+                  <button type="button" aria-pressed={gender === 'female'} className={`${styles.genderBtn} ${gender === 'female' ? styles.genderActive : ''}`} onClick={() => setGender('female')} aria-label="여성">♀</button>
                 </div>
               </div>
             </div>
@@ -565,7 +571,7 @@ export default function FightWeightClient() {
               <span className={styles.cardLabelHint}>현재 {weight}kg · {sport.label}</span>
             </div>
             <p className={styles.inputLabel} style={{ marginBottom: 6 }}>목표 체급</p>
-            <select className={styles.classSelect} value={targetClassName} onChange={e => setTargetClassName(e.target.value)}>
+            <select className={styles.classSelect} aria-label="목표 체급 선택" value={targetClassName} onChange={e => setTargetClassName(e.target.value)}>
               <option value="">— 자동 추천 —</option>
               {availableClasses.map((c, i) => (
                 <option key={i} value={c.name}>
@@ -574,10 +580,18 @@ export default function FightWeightClient() {
               ))}
             </select>
             <div style={{ height: 12 }} />
-            <p className={styles.inputLabel} style={{ marginBottom: 6 }}>계체 예정일 (D-{daysToWeighIn})</p>
-            <input className={styles.dateInput} type="date" value={weighInDate} onChange={e => setWeighInDate(e.target.value)} />
+            <p className={styles.inputLabel} style={{ marginBottom: 6 }}>계체 예정일{validDate ? ` (D-${daysToWeighIn})` : ''}</p>
+            <input className={styles.dateInput} type="date" aria-label="계체 예정일" value={weighInDate} onChange={e => setWeighInDate(e.target.value)} />
           </div>
 
+          {!validDate && (
+            <div className={styles.healthWarn} style={{ background: 'rgba(234,88,12,0.08)', borderColor: 'rgba(234,88,12,0.45)', color: 'var(--text)' }}>
+              <span className={styles.warnIcon}>📅</span>
+              <div><p><strong>계체 예정일을 선택하세요.</strong> 날짜를 입력해야 D-day·감량 일정·위험도가 계산됩니다.</p></div>
+            </div>
+          )}
+
+          {validDate && (<>
           {/* 히어로 — 감량 필요량 */}
           {targetClass && (
             <div className={styles.hero}>
@@ -637,8 +651,8 @@ export default function FightWeightClient() {
               </div>
               <div className={styles.kpiCard}>
                 <span className={`${styles.phaseChip} ${styles.chipWater}`}>수분</span>
-                <div className={styles.kpiValue} style={{ marginTop: 6 }}>{waterPhaseLoss.toFixed(2)}<span style={{ fontSize: 12, color: 'var(--muted)', marginLeft: 4 }}>kg</span></div>
-                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>D-7 ~ D-1</div>
+                <div className={styles.kpiValue} style={{ marginTop: 6 }}>{waterCut ? <>{waterPhaseLoss.toFixed(2)}<span style={{ fontSize: 12, color: 'var(--muted)', marginLeft: 4 }}>kg</span></> : '금지'}</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{waterCut ? 'D-7 ~ D-1' : 'ONE은 수분 감량 금지'}</div>
               </div>
               <div className={styles.kpiCard}>
                 <span className={`${styles.phaseChip} ${styles.chipRehy}`}>재수화</span>
@@ -719,6 +733,7 @@ export default function FightWeightClient() {
               </div>
             </div>
           )}
+          </>)}
 
           {/* 종목별 감량 정책 */}
           <div className={styles.card}>

@@ -12,6 +12,7 @@
 }
 .hint { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 10px 0 0; }
 .hint strong { color: var(--text); }
+.fieldError { font-size: 12px; color: var(--warning); line-height: 1.5; margin: 6px 0 0; }
 
 /* ── 히어로 결과 ── */
 .hero {
@@ -89,12 +90,21 @@
 .gradeToggle { align-self: end; padding-bottom: 10px; }
 
 /* ── 구간 편집 ── */
-.segHead { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }
+.segHead { display: flex; justify-content: flex-start; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
 .customTag {
   font-size: 11px; font-weight: 700; color: var(--accent);
   background: rgba(14,165,233,0.14); border: 1px solid rgba(14,165,233,0.3);
   padding: 2px 8px; border-radius: 999px;
 }
+.segToggle {
+  margin-left: auto; flex-shrink: 0;
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 999px;
+  padding: 5px 12px; min-height: 32px; cursor: pointer;
+}
+@media (hover: hover) { .segToggle:hover { border-color: var(--accent); } }
+.segCollapsed { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0; }
+.segCollapsed strong { color: var(--text); }
 .segList { display: flex; flex-direction: column; gap: 6px; }
 .segRow {
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px;

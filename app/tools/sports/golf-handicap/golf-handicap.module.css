@@ -141,7 +141,7 @@
 .roundNum { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); text-align: center; }
 .roundInput {
   width: 100%; min-width: 0; background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 8px 10px; font-size: 14px;
+  border-radius: 8px; padding: 8px 10px; font-size: 16px;
   font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text);
   outline: none; transition: border-color 0.15s;
   -moz-appearance: textfield; appearance: textfield;
@@ -320,7 +320,11 @@
 }
 
 @media (max-width: 520px) {
-  .roundRow { grid-template-columns: 24px 1fr 1fr auto; grid-auto-rows: auto; }
+  /* 5개 자식(번호·그로스·CR·슬로프·삭제)을 한 줄에 — 4열이면 슬로프가 2행으로 밀려 잘림 */
+  .card { padding: 16px 12px; }
+  .roundRow { grid-template-columns: 22px 1fr 1fr 1fr auto; gap: 6px; padding: 10px 8px; grid-auto-rows: auto; }
+  .roundInput { padding: 8px 6px; }
+  .roundInputLabel { font-size: 9px; }
   .roundMeta { grid-template-columns: 1fr auto; }
   .grid2 { grid-template-columns: 1fr; }
   .resultGrid { grid-template-columns: 1fr 1fr; }

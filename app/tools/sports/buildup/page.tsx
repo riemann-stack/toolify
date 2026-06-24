@@ -160,7 +160,7 @@ export default function BuildupPage() {
         </table>
       </div>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-        💡 본 도구의 <strong>📋 프리셋 탭</strong>에서 12개 검증된 프리셋을 한 번 클릭으로 적용 가능.
+        💡 본 도구의 <strong>📋 프리셋 탭</strong>에서 12개 프리셋(일반 러닝 훈련 원칙 기반 예시)을 한 번 클릭으로 적용 가능.
       </p>
 
       {/* 4. 자주 하는 실수 5가지 */}

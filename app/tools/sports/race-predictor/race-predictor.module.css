@@ -598,9 +598,11 @@
 /* ════════════════════════════════════════════════════════════
    v2 — 4탭, 환경 보정, 연령/성별, 목표 역산, 내 기록
    ════════════════════════════════════════════════════════════ */
-.tabs4 { grid-template-columns: repeat(4, 1fr); }
+/* .tabs는 flex라 grid-template만으론 무효 — display:grid 명시해야 4열/모바일 2×2 적용됨 */
+.tabs4 { display: grid; grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 600px) {
   .tabs4 { grid-template-columns: repeat(2, 1fr); }
+  .tabs4 .tab { white-space: normal; }
 }
 
 /* 시간 numeric 입력 */

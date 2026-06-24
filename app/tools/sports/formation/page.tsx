@@ -73,7 +73,7 @@ const faqAnswer: React.CSSProperties = {
 
 const FAQ_LD = [
   { "q":"포메이션 표기 「4-3-3」은 어떻게 읽나요?","a":"골키퍼 제외, 뒤(수비)부터 앞(공격) 순으로 라인별 인원을 적습니다. 4-3-3 = 수비 4 + 미드 3 + 공격 3 (+ GK 1) = 11명 4-2-3-1 = 수비 4 + 수비형 미드 2 + 공격형 미드 3 + 톱 1 (+ GK 1) = 11명 3-4-3 = 스리백 3 + 미드 4 + 스리톱 3 (+ GK 1) = 11명 본 도구의 「커스텀」 입력에 동일한 형식으로 적으면 자동 그려집니다." },
-  { "q":"5인제 풋살에서 가장 많이 쓰는 포메이션은?","a":"1-2-1 다이아몬드가 가장 흔합니다. 한 명씩 사방으로 자리 잡아 공·수 균형이 좋고, 피사도(고정수)·알라(측면) 역할이 명확합니다. 1-2-1: 다이아 — 표준 2-2: 박스 — 점유·짧은 패스 3-1: 피라미드 — 압박 1-3: 역피라미드 — 공격적" },
+  { "q":"5인제 풋살에서 가장 많이 쓰는 포메이션은?","a":"1-2-1 다이아몬드가 가장 흔합니다. 한 명씩 사방으로 자리 잡아 공·수 균형이 좋고, 픽소(고정수)·알라(측면) 역할이 명확합니다. 1-2-1: 다이아 — 표준 2-2: 박스 — 점유·짧은 패스 3-1: 피라미드 — 압박 1-3: 역피라미드 — 공격적" },
   { "q":"등번호·이름은 어떻게 입력하나요?","a":"그라운드 위 선수 원 카드를 클릭하면 등번호·이름 편집 모달이 뜹니다. 하단의 「📋 선수 명단」 행을 클릭해도 같은 편집창이 열립니다. 등번호 미입력 시 자동으로 1(GK)·2·3·…·11 번호로 표시 이름은 6자 초과 시 자동 ellipsis (… 표시) 모든 변경은 자동 저장 — 새로고침해도 유지" },
   { "q":"PNG로 저장한 이미지를 단톡에 어떻게 보내나요?","a":"「🖼️ PNG 다운로드」를 누르면 1600 × 2000 고해상도 이미지가 다운로드됩니다. 파일명은 팀이름-4-3-3.png 형태. 카카오톡·디스코드·인스타·블로그에 그대로 첨부 가능. 모바일에서는 다운로드 후 갤러리에서 공유 메뉴로 보낼 수 있습니다." },
   { "q":"한국축구협회(KFA) 9인제 규정에 맞나요?","a":"KFA U-12 9인제 표준 권장은 3-3-2입니다 (수비 3 + 미드 3 + 공격 2 + GK). 본 도구의 9인 프리셋은 KFA 표준 + 변형 5종을 제공합니다. 경기장 규격(68×47m)·경기 시간(25분 × 2)·교체는 본 도구 외 각 협회 공식 규정을 따르세요." },
@@ -215,6 +215,7 @@ export default function FormationPage() {
             대한민국 대표팀과 K리그에서 자주 쓰이는 포메이션은 시대별로 변화해 왔습니다.
             현재 한국 축구의 주류는 <strong style={{ color: 'var(--text)' }}>4-2-3-1·4-1-4-1</strong>이며,
             클린스만 사임 후 황선홍·홍명보 체제에서 4-2-3-1을 표준으로 정착시켰습니다.
+            <span style={{ display: 'block', marginTop: 6, fontSize: 12 }}>※ 대표팀 감독·주류 포메이션은 2025년 기준이며 시기에 따라 달라질 수 있습니다.</span>
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -226,7 +227,7 @@ export default function FormationPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={cell}>2002 한일 월드컵</td><td style={cell}><strong>3-4-3</strong></td><td style={cell}>거스 히딩크 — 공격적 스리백, 박지성 황의조 시대 시작</td></tr>
+                <tr><td style={cell}>2002 한일 월드컵</td><td style={cell}><strong>3-4-3</strong></td><td style={cell}>거스 히딩크 — 공격적 스리백, 4강 신화 (박지성·안정환·이영표 황금세대)</td></tr>
                 <tr><td style={cell}>2010 남아공 월드컵</td><td style={cell}><strong>4-4-2 다이아</strong></td><td style={cell}>허정무 — 박지성 톱2.5, 박주영 원톱</td></tr>
                 <tr><td style={cell}>2018 러시아 월드컵</td><td style={cell}><strong>4-4-2 / 4-2-3-1</strong></td><td style={cell}>신태용 — 손흥민 윙·박주호 풀백</td></tr>
                 <tr><td style={cell}>2022 카타르 월드컵</td><td style={cell}><strong>4-2-3-1 / 4-4-2</strong></td><td style={cell}>벤투 — 빌드업 강화, 황희찬·이강인·조규성</td></tr>
@@ -276,12 +277,12 @@ export default function FormationPage() {
               <tbody>
                 <tr><td style={cell}><strong>1</strong></td><td style={cell}>골키퍼 (필수)</td><td style={cell}>김승규·노이어·부폰</td></tr>
                 <tr><td style={cell}><strong>2~5</strong></td><td style={cell}>수비수 (2 RB, 3 LB, 4·5 CB)</td><td style={cell}>4번 = 캡틴·리베로 상징</td></tr>
-                <tr><td style={cell}><strong>6</strong></td><td style={cell}>수비형 미드 / 리베로</td><td style={cell}>로드리·페르난도 토레스</td></tr>
-                <tr><td style={cell}><strong>7</strong></td><td style={cell}>우측 윙 / 에이스</td><td style={cell}>호날두·베컴·박지성</td></tr>
-                <tr><td style={cell}><strong>8</strong></td><td style={cell}>중앙 미드 (박투박)</td><td style={cell}>제라드·이니에스타·손흥민(토트넘)</td></tr>
+                <tr><td style={cell}><strong>6</strong></td><td style={cell}>수비형 미드 / 리베로</td><td style={cell}>로드리·사비 알론소·부스케츠</td></tr>
+                <tr><td style={cell}><strong>7</strong></td><td style={cell}>우측 윙 / 에이스</td><td style={cell}>호날두·박지성·손흥민</td></tr>
+                <tr><td style={cell}><strong>8</strong></td><td style={cell}>중앙 미드 (박투박)</td><td style={cell}>제라드·램파드·이니에스타</td></tr>
                 <tr><td style={cell}><strong>9</strong></td><td style={cell}>중앙 공격수 (스트라이커)</td><td style={cell}>홀란드·음바페·황의조</td></tr>
                 <tr><td style={cell}><strong>10</strong></td><td style={cell}>플레이메이커·팀 에이스</td><td style={cell}>메시·펠레·마라도나·이강인</td></tr>
-                <tr><td style={cell}><strong>11</strong></td><td style={cell}>좌측 윙·세컨드 스트라이커</td><td style={cell}>살라·비니시우스·손흥민(대표팀)</td></tr>
+                <tr><td style={cell}><strong>11</strong></td><td style={cell}>좌측 윙·세컨드 스트라이커</td><td style={cell}>살라·비니시우스·로번</td></tr>
               </tbody>
             </table>
           </div>
@@ -324,7 +325,7 @@ export default function FormationPage() {
             <summary style={faqSummary}>Q2. 5인제 풋살에서 가장 많이 쓰는 포메이션은?</summary>
             <div style={faqAnswer}>
               <strong style={{ color: 'var(--text)' }}>1-2-1 다이아몬드</strong>가 가장 흔합니다.
-              한 명씩 사방으로 자리 잡아 공·수 균형이 좋고, 피사도(고정수)·알라(측면) 역할이 명확합니다.
+              한 명씩 사방으로 자리 잡아 공·수 균형이 좋고, 픽소(고정수)·알라(측면) 역할이 명확합니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>1-2-1: 다이아 — 표준</li>
                 <li>2-2: 박스 — 점유·짧은 패스</li>

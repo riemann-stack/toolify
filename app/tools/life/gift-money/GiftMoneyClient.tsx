@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import {
-  RELATIONSHIPS, REL_MAP, COMPANIONS, ENVELOPE, calcGift, type Mode,
+  RELATIONSHIPS, REL_MAP, COMPANIONS, ENVELOPE, calcGift, MEAL_COST, type Mode,
 } from './giftMoneyData'
 import s from './gift-money.module.css'
 
@@ -21,6 +21,10 @@ export default function GiftMoneyClient() {
   const res = calcGift(rel, mode, attend, comp.extra)
   const accent = MODE_COLOR[mode]
   const isWedding = mode === 'wedding'
+  // 동반(식대 가산)이 추천액을 실제로 바꾸는 관계에서만 노출 — 가까운 친척·직계가족은
+  // 금액이 식대를 크게 웃돌아 동반을 더해도 관례 금액이 그대로(죽은 컨트롤 방지)
+  const companionMatters = isWedding && attend
+    && calcGift(rel, 'wedding', true, 2).recommend !== calcGift(rel, 'wedding', true, 0).recommend
 
   return (
     <div className={s.wrap}>
@@ -38,14 +42,15 @@ export default function GiftMoneyClient() {
 
       {/* 관계 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>{isWedding ? '결혼·돌·개업 — 누구의 경사인가요?' : '장례 — 고인·상주와의 관계는?'}</span>
+        <span className={s.cardLabel}>{isWedding ? '결혼식 — 누구의 경사인가요?' : '장례 — 고인·상주와의 관계는?'}</span>
         <div className={s.selectWrap}>
-          <select className={s.select} value={relId} onChange={(e) => setRelId(e.target.value)}>
+          <select className={s.select} value={relId} onChange={(e) => setRelId(e.target.value)}
+            aria-label={isWedding ? '결혼 당사자와의 관계' : '고인·상주와의 관계'}>
             {RELATIONSHIPS.map((r) => (
               <option key={r.id} value={r.id}>{r.label} — {r.hint}</option>
             ))}
           </select>
-          <span className={s.selectArrow}>▼</span>
+          <span className={s.selectArrow} aria-hidden="true">▼</span>
         </div>
       </div>
 
@@ -63,10 +68,10 @@ export default function GiftMoneyClient() {
             onClick={() => setAttend(false)}>{isWedding ? '불참 (마음만)' : '못 감 (마음만)'}</button>
         </div>
 
-        {/* 동반 — 결혼식 참석 시에만 */}
-        {isWedding && attend && (
+        {/* 동반 — 식대 가산이 추천액을 바꾸는 관계에서만 */}
+        {companionMatters && (
           <div style={{ marginTop: 14 }}>
-            <span className={s.subLabel}>동반 인원 (식대 고려)</span>
+            <span className={s.subLabel}>동반 인원 — 1인당 식대 약 {MEAL_COST}만원 가산</span>
             <div className={s.segment} role="group" aria-label="동반 인원">
               {COMPANIONS.map((c) => (
                 <button key={c.id} type="button" aria-pressed={compId === c.id}
@@ -86,9 +91,11 @@ export default function GiftMoneyClient() {
         <p className={s.heroWon}>{won(res.recommend)}원</p>
         <p className={s.heroSub}>
           일반적으로 <strong>{res.low === res.high ? `${res.high}만원` : `${res.low}만 ~ ${res.high}만원`}</strong> 선
-          {res.attendBased && ` · ${attend
-            ? (isWedding ? '식사하므로 식대 고려' : '직접 조문 기준')
-            : (isWedding ? '참석 안 해 한 단계 낮게' : '조문 못 해 한 단계 낮게')}`}
+          {res.mealAdd > 0
+            ? ` · 기본 ${res.base}만 + 동반 식대 ${res.mealAdd}만 (1인 ${MEAL_COST}만 기준)`
+            : (res.attendBased ? ` · ${attend
+                ? (isWedding ? '식사하므로 식대 고려' : '직접 조문 기준')
+                : (isWedding ? '참석 안 해 한 단계 낮게' : '조문 못 해 한 단계 낮게')}` : '')}
         </p>
       </div>
 

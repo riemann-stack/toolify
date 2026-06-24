@@ -131,6 +131,9 @@ export default function FightWeightPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             격투기 감량의 3단계 완전 가이드
           </h2>
+          <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: 12, padding: '12px 16px', marginBottom: 12, fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
+            ⚠️ 아래는 <strong>실행 매뉴얼이 아니라 위험을 이해하기 위한 설명</strong>입니다. 특히 2단계 수분 감량(나트륨·수분 제한·사우나)은 탈수·신장 손상·심정지로 이어질 수 있어, <strong>반드시 전문 코치·영양사·스포츠의학 전문의 감독</strong> 하에서만 진행해야 합니다. 청소년·아마추어는 수분 감량보다 평소 체중을 체급 한도 가까이 유지하는 방식을 권장합니다.
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>1단계 · 체지방 감량 (D-30 ~ D-7)</p>
@@ -153,8 +156,8 @@ export default function FightWeightPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 6 }}>3단계 · 재수화 (계체 후 ~ 시합)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>계체 직후 IV 수액 (UFC 등 일부 단체 금지)</li>
-                <li>전해질 음료 + 탄수화물 보충</li>
+                <li>경구 재수화만 — 전해질 음료를 천천히 (IV 정맥수액은 USADA·WADA 도핑 금지)</li>
+                <li>탄수화물 보충 (체중 1kg당 1g)</li>
                 <li>6~24시간 내 4~12kg 회복</li>
                 <li>ONE Championship은 재수화 제한</li>
               </ul>
@@ -194,6 +197,9 @@ export default function FightWeightPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ 체급 한계는 각 단체 공식 규정 기준(UFC·복싱 WBC/WBA/IBF/WBO·유도 IJF·레슬링 UWW·태권도 WT·ONE Championship), 계체·재수화 시간은 단체 규정과 통념을 종합한 참고치입니다(기준 2026). 단체·대회·아마추어/프로에 따라 달라지니 출전 규정을 반드시 확인하세요.
+          </p>
         </div>
 
         {/* ── 4-1. 체중 1kg = 며칠? 감량 기간 추정 ── */}

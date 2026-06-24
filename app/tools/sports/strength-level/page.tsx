@@ -69,7 +69,7 @@ const faqAnswer: React.CSSProperties = {
 
 const FAQ_LD = [
   { "q": "3대 운동이 뭔가요? 왜 이 세 가지인가요?", "a": "3대 운동은 <strong>스쿼트·벤치프레스·데드리프트</strong>를 말합니다. 하체·상체 밀기·전신 당기기를 대표하는 복합 다관절 운동으로, 세 종목의 1RM 합(3대 합)이 전신 근력의 표준 지표로 널리 쓰입니다. 파워리프팅 경기 종목도 이 세 가지입니다." },
-  { "q": "Wilks 점수와 DOTS 점수는 무슨 차이인가요?", "a": "둘 다 <strong>체중이 다른 사람의 근력을 공정하게 비교</strong>하기 위한 보정 점수입니다. 같은 100kg을 들어도 가벼운 사람이 더 높은 점수를 받습니다. Wilks는 오래 쓰여 인지도가 높고, DOTS는 2020년 전후 도입된 최신 공식으로 현재 다수 연맹이 채택합니다. 본 도구는 두 점수를 모두 보여줍니다." },
+  { "q": "Wilks 점수와 DOTS 점수는 무슨 차이인가요?", "a": "둘 다 <strong>체중이 다른 사람의 근력을 공정하게 비교</strong>하기 위한 보정 점수입니다. 같은 100kg을 들어도 가벼운 사람이 더 높은 점수를 받습니다. Wilks는 오래 쓰여 인지도가 높고, DOTS는 2019년 전후 도입된 최신 공식으로 현재 다수 연맹이 채택합니다. 본 도구는 두 점수를 모두 보여줍니다." },
   { "q": "레벨(입문~엘리트)은 어떤 기준으로 나뉘나요?", "a": "체중 대비 1RM 비율을 기준으로 합니다. 예를 들어 20대 남성 벤치프레스는 체중의 0.5배=초보, 1.0배=중급, 1.25배=상급, 1.5배 이상=엘리트입니다. 본 도구는 <strong>1RM 계산기와 동일한 기준</strong>을 사용하며, 성별·연령에 따라 자동 보정합니다." },
   { "q": "여성인데 점수가 낮게 나와요. 정상인가요?", "a": "레벨 기준은 성별 보정이 적용되므로 <strong>같은 레벨이라도 여성의 절대 무게 기준은 더 낮습니다</strong>(체중 대비 약 0.7배). Wilks·DOTS 점수는 성별 다항식으로 계산되어 남녀 점수를 직접 비교할 수 있게 설계돼 있습니다. 절대 무게가 아니라 같은 성별·체중대 내에서의 위치로 해석하세요." },
   { "q": "'3대 500'이면 어느 정도 수준인가요?", "a": "체중에 따라 다릅니다. 체중 70~80kg 남성 기준 3대 합 500kg은 대체로 <strong>상급</strong>에 해당하며, 꾸준히 훈련한 헬스인의 의미 있는 목표선입니다. 다만 체중 100kg인 사람의 500과 60kg인 사람의 500은 상대 근력이 크게 다릅니다 — 그래서 Wilks·DOTS 점수를 함께 보는 것이 정확합니다." },
@@ -113,7 +113,8 @@ export default function StrengthLevelPage() {
         20대 남성 기준 (체중 대비 1RM 배수)입니다. 도구에서 성별·연령을 선택하면 자동 보정된 값으로 평가되며,
         <Link href="/tools/sports/one-rm" style={{ color: 'var(--accent)' }}> 1RM 계산기</Link>와 동일한 기준을 사용합니다.
       </p>
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+        <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -131,9 +132,10 @@ export default function StrengthLevelPage() {
             <tr><td style={cell}><strong>3대 합</strong></td><td style={cell}>2.25×</td><td style={cell}>3.75×</td><td style={cell}>4.75×</td><td style={cell}>6.0×+</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-        예) 체중 75kg 남성의 3대 합이 281kg이면 3.75배 → <strong style={{ color: 'var(--text)' }}>중급</strong>. 450kg이면 6.0배 → 엘리트입니다.
+        예) 체중 75kg 남성은 3대 합 <strong style={{ color: 'var(--text)' }}>281kg이면 3.74배 → 초보</strong>, <strong style={{ color: 'var(--text)' }}>282kg(3.76배)부터 중급</strong>입니다(중급 문턱은 체중의 3.75배 = 약 281.3kg). 450kg이면 6.0배 → 엘리트입니다.
       </p>
 
       {/* 3. Wilks vs DOTS vs IPF GL */}
@@ -142,7 +144,8 @@ export default function StrengthLevelPage() {
         모두 체중이 다른 사람의 근력을 한 줄로 세우기 위한 <strong style={{ color: 'var(--text)' }}>계수 보정 점수</strong>입니다.
         3대 합(kg)에 체중·성별 기반 계수를 곱해 산출하며, 본 도구는 세 점수를 모두 보여줍니다.
       </p>
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+        <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 440 }}>
           <thead>
             <tr>
@@ -159,9 +162,14 @@ export default function StrengthLevelPage() {
             <tr><td style={cell}>활용</td><td style={cell}>예전 기록·커뮤니티</td><td style={cell}>현행 랭킹</td><td style={cell}>IPF 대회 공식 순위</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
         ※ 본 도구의 IPF GL은 <strong style={{ color: 'var(--text)' }}>클래식(논장비) 풀파워 기준</strong> 2020 계수를 사용합니다. 장비(기어드)·벤치 단일 종목은 계수가 달라 값이 다릅니다. IPF GL은 약 <strong style={{ color: 'var(--text)' }}>100이 세계 정상권</strong>으로 스케일됩니다.
+        <br />
+        <span style={{ fontSize: '12px' }}>
+          계수 출처: <a href="https://www.powerlifting.sport/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>IPF</a> 공식 IPF GL Coefficients(2020), Wilks·DOTS는 공개된 표준 계수. 기준연도 2020·DOTS 2019 전후.
+        </span>
       </p>
 
       {/* 3-2. 대회 시도·원판 */}
@@ -183,7 +191,8 @@ export default function StrengthLevelPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
         대략적인 해석 기준입니다 (남녀 공통, 점수 자체가 성별 보정을 포함). 절대선이 아니라 <strong style={{ color: 'var(--text)' }}>참고 구간</strong>으로 보세요.
       </p>
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+        <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -199,6 +208,7 @@ export default function StrengthLevelPage() {
             <tr><td style={cell}><strong style={{ color: '#9333EA' }}>500+</strong></td><td style={cell}>엘리트급 — 전국·국제 수준</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* 5. 성별·연령 보정 */}
@@ -207,7 +217,8 @@ export default function StrengthLevelPage() {
         레벨 기준은 20대 남성을 기준으로, 여성·고연령일수록 같은 레벨에 더 낮은 절대 무게로 도달하도록 보정합니다
         (<Link href="/tools/sports/one-rm" style={{ color: 'var(--accent)' }}>1RM 계산기</Link>와 동일).
       </p>
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+        <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -224,6 +235,7 @@ export default function StrengthLevelPage() {
             <tr><td style={cell}><strong>여성</strong></td><td style={cell}>0.70×</td><td style={cell}>0.665×</td><td style={cell}>0.595×</td><td style={cell}>0.525×</td><td style={cell}>0.455×</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
         이 계수는 레벨 <strong style={{ color: 'var(--text)' }}>기준 무게</strong>에 곱해집니다. Wilks·DOTS 점수는 별도의 공식 다항식으로 계산되어 연령 보정과 무관합니다.

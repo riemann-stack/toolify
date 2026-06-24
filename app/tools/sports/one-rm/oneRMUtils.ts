@@ -61,17 +61,31 @@ export function generateWarmup(oneRM: number, workingPercent: number): WarmupSet
     { setNumber: 5, weightKg: oneRM * 0.8, weightPercent: 80, reps: 1, restSec: 180, notes: '예열 싱글' },
   ]
 
-  // 본 세트 강도가 낮으면 워밍업 줄임
-  if (intensityRatio < 0.6) return baseSets.slice(0, 2)
-  if (intensityRatio < 0.8) return baseSets.slice(0, 3)
-  // 95%+ 도전이면 워밍업 ↑
-  if (intensityRatio > 0.95) {
-    return [
+  // 본 세트 강도에 따라 워밍업 세트 수 조절
+  let selected: WarmupSet[]
+  if (intensityRatio < 0.6) selected = baseSets.slice(0, 2)
+  else if (intensityRatio < 0.8) selected = baseSets.slice(0, 3)
+  else if (intensityRatio > 0.95) {
+    // 95%+ 도전이면 워밍업 ↑
+    selected = [
       ...baseSets,
       { setNumber: 6, weightKg: oneRM * 0.9, weightPercent: 90, reps: 1, restSec: 240, notes: '예열 싱글 2' },
     ]
+  } else selected = baseSets
+
+  // 가벼운 1RM 보정: 빈 봉(20kg)보다 가벼운 % 세트는 봉에 실을 수 없어 물리적으로 불가 →
+  // 빈 봉 미만 세트 제거 + 중량이 단조 증가하는 세트만 남기고 번호 재부여
+  const BAR_KG = 20
+  const out: WarmupSet[] = []
+  let prevKg = 0
+  for (const set of selected) {
+    const isBar = set.weightKg === BAR_KG && set.setNumber === 1
+    if (!isBar && set.weightKg < BAR_KG - 0.001) continue
+    if (set.weightKg <= prevKg + 0.001) continue
+    out.push(set)
+    prevKg = set.weightKg
   }
-  return baseSets
+  return out.map((set, i) => ({ ...set, setNumber: i + 1 }))
 }
 
 export function suggestRestForIntensity(percent: number): { sec: number; label: string } {

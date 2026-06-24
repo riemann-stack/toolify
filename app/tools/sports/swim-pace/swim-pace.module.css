@@ -32,7 +32,7 @@
   font-weight: 700;
 }
 
-/* ── 거리 × 왕복수 ── */
+/* ── 거리 × 바퀴 수(편도) ── */
 .distGrid, .swolfRow, .soRow {
   display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;
 }
@@ -54,6 +54,10 @@
 }
 .amountInput::placeholder { color: var(--muted); font-weight: 400; }
 .inputUnit { font-size: 13px; color: var(--muted); flex-shrink: 0; }
+.divHint {
+  font-size: 12px; color: var(--warning); line-height: 1.6;
+  margin: 12px 0 0; padding-top: 10px; border-top: 1px dashed var(--border);
+}
 
 .quickDist, .strokeRow {
   display: flex; flex-wrap: wrap; gap: 6px;

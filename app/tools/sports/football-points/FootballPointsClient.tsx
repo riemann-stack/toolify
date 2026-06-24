@@ -8,27 +8,33 @@ import styles from './football-points.module.css'
  * ───────────────────────────────────────────────────────── */
 const LEAGUES: Array<{ id: string; flag: string; name: string; games: number; isK?: boolean }> = [
   { id: 'k1',     flag: '🇰🇷', name: 'K리그1',    games: 38, isK: true },
-  { id: 'k2',     flag: '🇰🇷', name: 'K리그2',    games: 36, isK: true },
+  { id: 'k2',     flag: '🇰🇷', name: 'K리그2',    games: 39, isK: true },
   { id: 'epl',    flag: '🏴',   name: 'EPL',        games: 38 },
   { id: 'laliga', flag: '🇪🇸', name: '라리가',    games: 38 },
   { id: 'seria',  flag: '🇮🇹', name: '세리에A',  games: 38 },
   { id: 'bundes', flag: '🇩🇪', name: '분데스',    games: 34 },
   { id: 'ligue1', flag: '🇫🇷', name: '리그앙',    games: 34 },
-  { id: 'jleague',flag: '🇯🇵', name: 'J리그',     games: 34 },
+  { id: 'jleague',flag: '🇯🇵', name: 'J리그',     games: 38 },
   { id: 'custom', flag: '⚙️',   name: '직접 입력', games: 38 },
 ]
 
 /* 리그별 우승 평균 승점 추천 */
 const TARGET_PRESETS_BY_LEAGUE: Record<string, { champ: number; ucl: number; uel: number; safe: number }> = {
   k1:      { champ: 75, ucl: 60, uel: 50, safe: 35 },
-  k2:      { champ: 70, ucl: 55, uel: 45, safe: 32 },
+  k2:      { champ: 76, ucl: 60, uel: 49, safe: 35 },
   epl:     { champ: 88, ucl: 70, uel: 60, safe: 40 },
   laliga:  { champ: 85, ucl: 70, uel: 60, safe: 38 },
   seria:   { champ: 85, ucl: 68, uel: 58, safe: 38 },
   bundes:  { champ: 75, ucl: 62, uel: 52, safe: 35 },
   ligue1:  { champ: 78, ucl: 62, uel: 52, safe: 35 },
-  jleague: { champ: 72, ucl: 58, uel: 48, safe: 32 },
+  jleague: { champ: 80, ucl: 65, uel: 54, safe: 36 },
   custom:  { champ: 75, ucl: 60, uel: 50, safe: 35 },
+}
+
+/* 정수 파싱 — 승·무·패·득점·목표 승점 등 카운트는 음수·소수 불가 (1.5승 방지) */
+function clampInt(v: string): number {
+  const x = Math.floor(Number(v))
+  return Number.isFinite(x) && x > 0 ? x : 0
 }
 
 interface TeamStats {
@@ -108,7 +114,7 @@ export default function FootballPointsClient() {
   const [copied, setCopied] = useState(false)
 
   /* 승점 시스템 */
-  const sys = pointsSystem === 'modern' ? { w: 3, d: 1 } : { w: 2, d: 1 }
+  const sys = useMemo(() => (pointsSystem === 'modern' ? { w: 3, d: 1 } : { w: 2, d: 1 }), [pointsSystem])
 
   /* 리그 변경 시 총 경기 수 갱신 */
   function selectLeague(id: string) {
@@ -170,8 +176,11 @@ export default function FootballPointsClient() {
   }, [targetAnalysis, stats.remaining, sys])
 
   /* 시뮬레이터 — 슬라이더로 직접 시나리오 시뮬레이션 */
-  const simDraws = Math.max(0, stats.remaining - simWins - simLosses)
-  const simPoints = stats.points + simWins * sys.w + simDraws * sys.d
+  // 남은 경기가 줄어든 뒤(리그 변경 등) 슬라이더 값이 이월되어 남은 경기를 초과하지 않도록 클램프
+  const simWinsC   = Math.min(simWins, stats.remaining)
+  const simLossesC = Math.min(simLosses, Math.max(0, stats.remaining - simWinsC))
+  const simDraws = Math.max(0, stats.remaining - simWinsC - simLossesC)
+  const simPoints = stats.points + simWinsC * sys.w + simDraws * sys.d
   const simReachedTarget = simPoints >= target
 
   /* 라이벌 통계 */
@@ -183,11 +192,12 @@ export default function FootballPointsClient() {
   /* 시즌 종료 예상 순위 */
   const projectedRanking = useMemo(() => {
     const all = [
-      { name: team.name, projected: stats.projectedFinal, isOurs: true },
-      ...rivalStats.map(r => ({ name: r.team.name, projected: r.calc.projectedFinal, isOurs: false })),
+      { name: team.name, projected: stats.projectedFinal, gd: stats.goalDiff, gf: team.goalsFor, isOurs: true },
+      ...rivalStats.map(r => ({ name: r.team.name, projected: r.calc.projectedFinal, gd: r.calc.goalDiff, gf: r.team.goalsFor, isOurs: false })),
     ]
-    return all.sort((a, b) => b.projected - a.projected)
-  }, [team.name, stats.projectedFinal, rivalStats])
+    // 승점(예상) 동률 시 득실차 → 다득점 순 2차 정렬 (대부분 리그 타이브레이커, 상대전적 제외)
+    return all.sort((a, b) => b.projected - a.projected || b.gd - a.gd || b.gf - a.gf)
+  }, [team.name, stats.projectedFinal, stats.goalDiff, team.goalsFor, rivalStats])
 
   /* 라이벌 추격 분석 — 라이벌별 격차/추월 가능성 */
   function analyzeRival(r: { team: TeamStats; calc: CalcResult }) {
@@ -198,11 +208,20 @@ export default function FootballPointsClient() {
       const theirMax = r.calc.maxPossible
       const ourMin = stats.minPossible
       if (theirMax > ourMin) {
-        const needWins = Math.max(0, Math.ceil((theirMax - stats.points + 1) / sys.w))
+        const ptsClinch = theirMax - stats.points + 1
+        const needWins = Math.max(0, Math.ceil(ptsClinch / sys.w))
+        if (needWins <= stats.remaining) {
+          return {
+            status: 'leading' as const,
+            gap: Math.abs(gap),
+            msg: `${Math.abs(gap)}점 앞서 있습니다. 라이벌이 남은 ${r.calc.remaining}경기 전승 시 최대 ${theirMax}점 — 우리가 ${ptsClinch}점만 더 확보하면(예: ${needWins}승, 또는 동일 승점의 승·무 조합) 추월이 불가능합니다.`,
+          }
+        }
+        // 우리가 앞서지만 남은 경기로는 단독 확정 불가 (라이벌 잔여 경기가 더 많은 경우 등)
         return {
-          status: 'leading' as const,
+          status: 'chase' as const,
           gap: Math.abs(gap),
-          msg: `${Math.abs(gap)}점 앞서 있습니다. 라이벌이 남은 ${r.calc.remaining}경기 전승 시 최대 ${theirMax}점 가능 — 우리가 추가 ${needWins}승만 거둬도 추월 불가능합니다.`,
+          msg: `${Math.abs(gap)}점 앞서 있지만, 남은 ${stats.remaining}경기로는 단독 안전을 확정하기 어렵습니다. 라이벌이 전승하면 최대 ${theirMax}점으로 우리 최대치(${stats.maxPossible}점)에 근접·역전할 수 있어 라이벌 경기 결과도 지켜봐야 합니다.`,
         }
       }
       return {
@@ -215,11 +234,12 @@ export default function FootballPointsClient() {
     const ourMax = stats.maxPossible
     const theirMin = r.calc.minPossible
     if (ourMax >= theirMin + 1) {
-      const winsNeeded = Math.max(0, Math.ceil((r.calc.points - stats.points + 1) / sys.w))
+      const ptsCatch = r.calc.points - stats.points + 1
+      const winsNeeded = Math.max(0, Math.ceil(ptsCatch / sys.w))
       return {
         status: 'chase' as const,
         gap,
-        msg: `${gap}점 뒤져 있습니다. 라이벌이 남은 ${r.calc.remaining}경기 전패하더라도 ${theirMin}점 → 우리가 남은 ${stats.remaining}경기에서 최소 ${winsNeeded}승 이상 거둬야 추월 가능합니다.`,
+        msg: `${gap}점 뒤져 있습니다. 라이벌이 남은 ${r.calc.remaining}경기 전패해도 ${theirMin}점 — 추월하려면 최소 ${ptsCatch}점(예: ${winsNeeded}승, 또는 동일 승점의 승·무 조합)을 더 따야 합니다.`,
       }
     }
     return { status: 'impossible' as const, gap, msg: `${gap}점 뒤져 있으며, 남은 경기를 모두 승리해도 라이벌의 현재 승점을 따라잡을 수 없습니다.` }
@@ -267,6 +287,7 @@ export default function FootballPointsClient() {
             <button
               key={l.id}
               type="button"
+              aria-pressed={leagueId === l.id}
               className={`${styles.leagueBtn} ${l.isK ? styles.leagueK : ''} ${leagueId === l.id ? styles.leagueActive : ''}`}
               onClick={() => selectLeague(l.id)}
             >
@@ -276,30 +297,35 @@ export default function FootballPointsClient() {
           ))}
         </div>
 
+        <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+          경기 수는 2025 시즌 구조 기준입니다(J리그 20팀·38R, K리그2 14팀·39R 등). 팀 수·일정 개편 시 <strong style={{ color: 'var(--text)' }}>‘직접 입력’</strong>으로 총 경기 수를 조정하세요.
+        </p>
+
         {leagueId === 'custom' && (
           <div style={{ marginTop: 12 }}>
-            <label style={{ fontSize: 12, color: 'var(--muted)' }}>총 경기 수</label>
+            <label htmlFor="fpCustomGames" style={{ fontSize: 12, color: 'var(--muted)' }}>총 경기 수</label>
             <input
+              id="fpCustomGames"
               className={styles.targetInput}
               type="number" inputMode="decimal"
               min={1}
               max={200}
               value={totalGames}
-              onChange={e => setTotalGames(Math.max(1, Number(e.target.value) || 1))}
+              onChange={e => setTotalGames(Math.max(1, clampInt(e.target.value)))}
               style={{ marginTop: 6, fontSize: 20, padding: 10 }}
             />
           </div>
         )}
 
-        <button type="button" className={styles.advancedToggle} onClick={() => setShowAdvanced(v => !v)}>
+        <button type="button" aria-expanded={showAdvanced} className={styles.advancedToggle} onClick={() => setShowAdvanced(v => !v)}>
           {showAdvanced ? '▾' : '▸'} 고급 옵션 — 승점 시스템
         </button>
         {showAdvanced && (
           <div className={styles.advancedBox}>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>승점 시스템</p>
             <div className={styles.systemRow}>
-              <button type="button" className={`${styles.systemBtn} ${pointsSystem === 'modern'  ? styles.systemActive : ''}`} onClick={() => setPointsSystem('modern')}>현대 (3-1-0)</button>
-              <button type="button" className={`${styles.systemBtn} ${pointsSystem === 'classic' ? styles.systemActive : ''}`} onClick={() => setPointsSystem('classic')}>고전 (2-1-0)</button>
+              <button type="button" aria-pressed={pointsSystem === 'modern'} className={`${styles.systemBtn} ${pointsSystem === 'modern'  ? styles.systemActive : ''}`} onClick={() => setPointsSystem('modern')}>현대 (3-1-0)</button>
+              <button type="button" aria-pressed={pointsSystem === 'classic'} className={`${styles.systemBtn} ${pointsSystem === 'classic' ? styles.systemActive : ''}`} onClick={() => setPointsSystem('classic')}>고전 (2-1-0)</button>
             </div>
           </div>
         )}
@@ -322,6 +348,7 @@ export default function FootballPointsClient() {
         <input
           className={styles.teamNameInput}
           type="text"
+          aria-label="우리 팀 이름"
           value={team.name}
           onChange={e => setTeam({ ...team, name: e.target.value || '우리 팀' })}
           placeholder="팀 이름"
@@ -334,8 +361,9 @@ export default function FootballPointsClient() {
               className={styles.wdlInput}
               type="number" inputMode="decimal"
               min={0}
+              aria-label="승 수"
               value={team.wins}
-              onChange={e => setTeam({ ...team, wins: Math.max(0, Number(e.target.value) || 0) })}
+              onChange={e => setTeam({ ...team, wins: clampInt(e.target.value) })}
             />
           </div>
           <div className={`${styles.wdlCell} ${styles.wdlDraw}`}>
@@ -344,8 +372,9 @@ export default function FootballPointsClient() {
               className={styles.wdlInput}
               type="number" inputMode="decimal"
               min={0}
+              aria-label="무 수"
               value={team.draws}
-              onChange={e => setTeam({ ...team, draws: Math.max(0, Number(e.target.value) || 0) })}
+              onChange={e => setTeam({ ...team, draws: clampInt(e.target.value) })}
             />
           </div>
           <div className={`${styles.wdlCell} ${styles.wdlLoss}`}>
@@ -354,8 +383,9 @@ export default function FootballPointsClient() {
               className={styles.wdlInput}
               type="number" inputMode="decimal"
               min={0}
+              aria-label="패 수"
               value={team.losses}
-              onChange={e => setTeam({ ...team, losses: Math.max(0, Number(e.target.value) || 0) })}
+              onChange={e => setTeam({ ...team, losses: clampInt(e.target.value) })}
             />
           </div>
         </div>
@@ -369,8 +399,9 @@ export default function FootballPointsClient() {
                 className={styles.gfInput}
                 type="number" inputMode="decimal"
                 min={0}
+                aria-label="득점 (GF)"
                 value={team.goalsFor}
-                onChange={e => setTeam({ ...team, goalsFor: Math.max(0, Number(e.target.value) || 0) })}
+                onChange={e => setTeam({ ...team, goalsFor: clampInt(e.target.value) })}
               />
             </div>
           </div>
@@ -382,8 +413,9 @@ export default function FootballPointsClient() {
                 className={styles.gfInput}
                 type="number" inputMode="decimal"
                 min={0}
+                aria-label="실점 (GA)"
                 value={team.goalsAgainst}
-                onChange={e => setTeam({ ...team, goalsAgainst: Math.max(0, Number(e.target.value) || 0) })}
+                onChange={e => setTeam({ ...team, goalsAgainst: clampInt(e.target.value) })}
               />
             </div>
           </div>
@@ -395,6 +427,12 @@ export default function FootballPointsClient() {
             {stats.goalDiff > 0 ? '+' : ''}{stats.goalDiff}
           </span>
         </div>
+
+        {stats.played > totalGames && (
+          <div role="alert" style={{ marginTop: 12, padding: '10px 12px', background: 'rgba(234,88,12,0.08)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: 8, fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
+            ⚠️ 치른 경기 <strong>{stats.played}</strong>경기가 시즌 총 <strong>{totalGames}</strong>경기를 초과합니다. 승·무·패 또는 리그(총 경기 수)를 확인하세요.
+          </div>
+        )}
       </div>
 
       {/* ─────────────────────────── 탭 1: 승점 계산 ─────────────────────────── */}
@@ -483,6 +521,7 @@ export default function FootballPointsClient() {
                   <button
                     key={it.label}
                     type="button"
+                    aria-pressed={target === it.v}
                     className={`${styles.targetBtn} ${target === it.v ? styles.targetActive : ''}`}
                     onClick={() => setTarget(it.v)}
                   >
@@ -496,8 +535,9 @@ export default function FootballPointsClient() {
               className={styles.targetInput}
               type="number" inputMode="decimal"
               min={0}
+              aria-label="목표 승점"
               value={target}
-              onChange={e => setTarget(Math.max(0, Number(e.target.value) || 0))}
+              onChange={e => setTarget(clampInt(e.target.value))}
             />
           </div>
 
@@ -566,14 +606,15 @@ export default function FootballPointsClient() {
                   type="range"
                   min={0}
                   max={stats.remaining}
-                  value={simWins}
+                  aria-label="남은 경기 중 승리 수"
+                  value={simWinsC}
                   onChange={e => {
                     const w = Number(e.target.value)
                     setSimWins(w)
                     if (w + simLosses > stats.remaining) setSimLosses(stats.remaining - w)
                   }}
                 />
-                <span className={styles.simNum}>{simWins}</span>
+                <span className={styles.simNum}>{simWinsC}</span>
               </div>
 
               <div className={styles.simRow}>
@@ -589,14 +630,15 @@ export default function FootballPointsClient() {
                   type="range"
                   min={0}
                   max={stats.remaining}
-                  value={simLosses}
+                  aria-label="남은 경기 중 패배 수"
+                  value={simLossesC}
                   onChange={e => {
                     const l = Number(e.target.value)
                     setSimLosses(l)
                     if (l + simWins > stats.remaining) setSimWins(stats.remaining - l)
                   }}
                 />
-                <span className={styles.simNum}>{simLosses}</span>
+                <span className={styles.simNum}>{simLossesC}</span>
               </div>
 
               <div className={styles.simResult}>
@@ -641,9 +683,9 @@ export default function FootballPointsClient() {
                   onChange={e => updateRival(i, { name: e.target.value || `라이벌 ${i + 1}` })}
                   placeholder={`라이벌 ${String.fromCharCode(65 + i)}`}
                 />
-                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.wins}   onChange={e => updateRival(i, { wins:   Math.max(0, Number(e.target.value) || 0) })} title="승" />
-                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.draws}  onChange={e => updateRival(i, { draws:  Math.max(0, Number(e.target.value) || 0) })} title="무" />
-                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.losses} onChange={e => updateRival(i, { losses: Math.max(0, Number(e.target.value) || 0) })} title="패" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.wins}   onChange={e => updateRival(i, { wins:   clampInt(e.target.value) })} title="승" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.draws}  onChange={e => updateRival(i, { draws:  clampInt(e.target.value) })} title="무" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.losses} onChange={e => updateRival(i, { losses: clampInt(e.target.value) })} title="패" />
                 <button type="button" className={styles.rivalRemoveBtn} onClick={() => removeRival(i)} aria-label="삭제">✕</button>
               </div>
             ))}
@@ -654,8 +696,8 @@ export default function FootballPointsClient() {
             {rivals.map((r, i) => (
               <div key={`gf-${i}`} className={styles.rivalRow} style={{ gridTemplateColumns: '1.4fr 1fr 1fr' }}>
                 <span style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center' }}>{r.name}</span>
-                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.goalsFor}     onChange={e => updateRival(i, { goalsFor:     Math.max(0, Number(e.target.value) || 0) })} title="득점" />
-                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.goalsAgainst} onChange={e => updateRival(i, { goalsAgainst: Math.max(0, Number(e.target.value) || 0) })} title="실점" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.goalsFor}     onChange={e => updateRival(i, { goalsFor:     clampInt(e.target.value) })} title="득점" />
+                <input className={styles.rivalNumInput} type="number" inputMode="decimal" min={0} value={r.goalsAgainst} onChange={e => updateRival(i, { goalsAgainst: clampInt(e.target.value) })} title="실점" />
               </div>
             ))}
 
@@ -737,6 +779,9 @@ export default function FootballPointsClient() {
                 )
               })}
             </div>
+            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 10, lineHeight: 1.6 }}>
+              예상 승점이 같으면 득실차·다득점 순으로 정렬합니다(상대전적·승자승 미반영). 실제 순위는 남은 경기 결과에 따라 달라집니다.
+            </p>
           </div>
         </>
       )}

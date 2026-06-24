@@ -34,12 +34,13 @@ export const STRATEGY_DESC: Record<Strategy, string> = {
 const RAMP = 0.03
 
 // ── 시간/페이스 입력 파서 ───────────────
-/** "5:30" 또는 "5.5"(분) → 초/km. 빈/불량 입력은 0 */
+/** "5:30"(분:초) 또는 "5.5"(소수 분 = 5분 30초) → 초/km. 빈/불량 입력은 0
+ *  점(.)은 소수 구분자로만 해석 — "5.5"→5:30, "5.30"→5:18. 분:초는 콜론으로. */
 export function parsePace(s: string): number {
   const t = (s || '').trim()
-  const m = t.match(/^(\d{1,2})\s*[:.]\s*(\d{1,2})$/)
-  if (m) return parseInt(m[1], 10) * 60 + parseInt(m[2], 10)
-  const n = parseFloat(t)
+  const m = t.match(/^(\d{1,2})\s*:\s*(\d{1,2})$/)   // 콜론만 분:초 구분자
+  if (m) return parseInt(m[1], 10) * 60 + Math.min(59, parseInt(m[2], 10))
+  const n = parseFloat(t)                              // 점/정수는 소수 분 (5.5 → 330초)
   return isFinite(n) && n > 0 ? Math.round(n * 60) : 0
 }
 /** "HH:MM" → 자정 기준 분. 불량이면 null */
@@ -180,6 +181,9 @@ export function timeAtDistance(rows: PlanRow[], targetKm: number): number | null
 export function planWarnings(res: PlanResult): string[] {
   const w: string[] = []
   if (res.rows.length === 0) return w
+  // 빈 구간(페이스 0) — 완주 시간이 실제보다 짧게 계산됨
+  if (res.rows.some(r => r.paceSec <= 0))
+    w.push('페이스가 비어 있는 구간이 있어 완주 시간이 실제보다 짧게 계산됩니다 — 모든 구간을 채워주세요.')
   // 평균 페이스 비현실: 마라톤 세계기록 ≈ 2:55/km, 5K WR ≈ 2:35/km
   if (res.avgPaceSec > 0 && res.avgPaceSec < 170)
     w.push(`평균 ${fmtPace(res.avgPaceSec)}/km는 세계기록(약 2:55/km)보다 빠릅니다 — 페이스를 다시 확인하세요.`)

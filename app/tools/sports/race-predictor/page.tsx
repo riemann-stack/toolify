@@ -69,8 +69,8 @@ const faqAnswer: React.CSSProperties = {
 const FAQ_LD = [
   { "q":"5km 기록으로 풀 마라톤을 예측해도 정확한가요?","a":"5km는 유산소·무산소 혼합 에너지 시스템에 의존하지만 풀 마라톤은 순수 유산소 지구력이 결정합니다. 거리 차이가 클수록 예측 오차가 커지므로 10km 이상 기록을 기준으로 권장. 본 도구는 3개 공식 평균값으로 오차를 완화합니다." },
   { "q":"VDOT과 VO2max는 같은 개념인가요?","a":"엄밀히 다릅니다. VO2max는 실험실에서 측정하는 최대산소섭취량(ml/kg/min)이고, VDOT은 실제 레이스 기록에서 역산한 &ldquo;해당 기록을 내려면 필요한 유산소 능력&rdquo; 지표입니다. 두 숫자의 크기는 비슷하지만 VDOT은 러닝 경제성·정신력까지 포함된 통합 지표에 가깝습니다." },
-  { "q":"대회 당일 기온·습도가 다르면 기록이 얼마나 차이 나나요?","a":"본 도구의 환경 보정 활용. 봄·가을(15°C 이하·습도 60% 이하)은 평시 기록, 여름(25°C·습도 80%)은 약 +5~7%, 겨울(영하·바람)은 페이스 ↓·근육 경직 위험. 서브3 러너 기준: 평시 3:00 → 25°C 약 3:11(+11분) → 30°C 약 3:25(+25분, ⚠️ 위험). 25°C 이상은 열사병 위험 — 평시 페이스 -10%로 시작, 충분한 수분·전해질, 어지러움 시 즉시 중단·119." },
-  { "q":"서브3:30 달성하려면 5km 기록이 얼마여야 하나요?","a":"본 도구의 목표 역산 탭에서 즉시 확인. 서브3:30 (VDOT 44 기준): 5km 약 21:15 / 10km 약 44:00 / 하프 약 1:38:00. ⚠️ 단 짧은 거리 능력만으로 풀 마라톤 보장 X — 30km+ 장거리 훈련, 16주+ 체계적 준비 필수. 본인 현재 기록을 함께 입력하면 격차(VDOT 차)와 예상 향상 기간이 표시됩니다." },
+  { "q":"대회 당일 기온·습도가 다르면 기록이 얼마나 차이 나나요?","a":"본 도구의 환경 보정 활용. 봄·가을(15°C 이하·습도 60% 이하)은 평시 기록, 여름(25°C·습도 80%)은 약 +4~6%, 겨울(영하·바람)은 페이스 ↓·근육 경직 위험. 서브3 러너 기준: 평시 3:00 → 25°C·습도 80% 약 3:08(+8분) → 30°C·습도 80% 약 3:13(+13분, ⚠️ 위험). 25°C 이상은 열사병 위험 — 평시 페이스 -10%로 시작, 충분한 수분·전해질, 어지러움 시 즉시 중단·119." },
+  { "q":"서브3:30 달성하려면 5km 기록이 얼마여야 하나요?","a":"본 도구의 목표 역산 탭에서 즉시 확인. 서브3:30 (VDOT 약 45 기준): 5km 약 22:00 / 10km 약 45:40 / 하프 약 1:41:00. ⚠️ 단 짧은 거리 능력만으로 풀 마라톤 보장 X — 30km+ 장거리 훈련, 16주+ 체계적 준비 필수. 본인 현재 기록을 함께 입력하면 격차(VDOT 차)와 예상 향상 기간이 표시됩니다." },
   { "q":"50대 마라톤 시작하는데 너무 늦었나요?","a":"늦지 않았습니다. 한국 마스터스 마라톤(40대+) 인구는 매우 큽니다. 50대 풀 평균 약 4:00~4:30, 60대+ 풀 5:00~5:30 충분 가능. 세계 기록 보유자 60대도 풀 3:00:00 가능. 본 도구의 연령 보정을 적용하면 본인 잠재력을 동급 능력 기준으로 비교 가능. ⚠️ 시작 시 의사 상담(특히 50대+), 점진적(걷기 → 조깅 → 러닝), 부상 예방(스트레칭·근력) 권장." },
   { "q":"훈련 페이스 E·M·T·I·R는 무엇이며 본 도구와 인터벌 훈련 계산기 차이는?","a":"E(Easy·회복), M(Marathon·대회 페이스), T(Threshold·역치 템포), I(Interval·V̇O₂max), R(Repetition·스피드) — Jack Daniels 5단계 훈련 존입니다. 주간 훈련 중 E가 80%, 고강도(T/I/R)가 20% 수준이 이상적. 📊 본 도구: 기록 예측·환경 보정·목표 역산 중심 (훈련 페이스는 결과 부산물). 🏃 인터벌 훈련 계산기: 인터벌 페이스 정확·400m 랩·4~16주 훈련 스케줄·한국 대회 매칭. 매일 페이스 추적은 별도 러닝 앱 활용." },
   { "q":"네거티브 스플릿이 왜 유리한가요?","a":"전반부를 아껴두면 글리코겐 고갈·근피로 누적을 늦출 수 있어 후반부 페이스 저하가 작아집니다. 세계기록 대부분은 네거티브 또는 이븐 스플릿이었습니다. 초보자는 전반을 평균 페이스보다 5초/km 느리게 출발하는 것만으로도 효과를 볼 수 있어요. 본 도구의 페이스 전략 탭에서 균등·네거티브·포지티브 3가지 스플릿을 거리별로 자동 계산." },
@@ -100,7 +100,7 @@ export default function RacePredictorPage() {
             desc: '가장 널리 쓰이는 공식. 지수 1.06은 거리 증가에 따른 페이스 저하를 반영. 5~30km 예측에서 안정적.' },
           { name: 'VDOT (Daniels)', color: '#EA580C', formula: 'vo2 ÷ %VO2max',
             desc: '잭 다니엘스의 유산소 능력 통합 지표. 시간에 따른 최대산소섭취량 비율 감소를 지수 함수로 보정.' },
-          { name: 'Cameron (1998)', color: '#0891B2', formula: 't₂ = t₁ × a(d₂)/a(d₁)',
+          { name: 'Cameron (1998)', color: '#0891B2', formula: 't₂ = t₁ × (d₂/d₁) × a(d₁)/a(d₂)',
             desc: '엘리트 기록 통계 회귀 함수 a(d). 10마일+ 장거리 마라톤 예측 편차가 작은 편.' },
         ].map((f, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: '12px', padding: '16px 18px' }}>
@@ -198,11 +198,11 @@ export default function RacePredictorPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>서브5 (5:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~30</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~30:40</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~63:46</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~2:21:04</td></tr>
-            <tr><td style={cell}><strong>서브4:30</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~34</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~26:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~55:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~2:03:30</td></tr>
-            <tr><td style={cell}><strong>서브4 (4:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~39</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~23:30</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~49:00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~1:48:30</td></tr>
-            <tr><td style={cell}><strong>서브3:30</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~44</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~21:15</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~44:00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~1:38:00</td></tr>
-            <tr><td style={cell}><strong>서브3 (3:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~52</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~17:50</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~37:10</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>~1:23:00</td></tr>
+            <tr><td style={cell}><strong>서브5 (5:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>28.7</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>31:49</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1:06:11</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>2:26:28</td></tr>
+            <tr><td style={cell}><strong>서브4:30</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>32.8</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>28:30</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>59:13</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>2:11:14</td></tr>
+            <tr><td style={cell}><strong>서브4 (4:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>37.9</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>25:14</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>52:22</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1:56:06</td></tr>
+            <tr><td style={cell}><strong>서브3:30</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>44.6</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>22:00</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>45:37</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1:41:06</td></tr>
+            <tr><td style={cell}><strong>서브3 (3:00:00)</strong></td><td style={{ ...cell, textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>53.5</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>18:48</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>38:59</td><td style={{ ...cell, textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1:26:16</td></tr>
           </tbody>
         </table>
       </div>
@@ -301,8 +301,8 @@ export default function RacePredictorPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q3. 대회 당일 기온·습도가 다르면 기록이 얼마나 차이 나나요?</summary>
         <div style={faqAnswer}>
-          본 도구의 환경 보정 활용. 봄·가을(15°C 이하·습도 60% 이하)은 평시 기록, 여름(25°C·습도 80%)은 약 +5~7%, 겨울(영하·바람)은 페이스 ↓·근육 경직 위험.
-          서브3 러너 기준: 평시 3:00 → 25°C 약 3:11(+11분) → 30°C 약 3:25(+25분, ⚠️ 위험).
+          본 도구의 환경 보정 활용. 봄·가을(15°C 이하·습도 60% 이하)은 평시 기록, 여름(25°C·습도 80%)은 약 +4~6%, 겨울(영하·바람)은 페이스 ↓·근육 경직 위험.
+          서브3 러너 기준: 평시 3:00 → 25°C·습도 80% 약 3:08(+8분) → 30°C·습도 80% 약 3:13(+13분, ⚠️ 위험).
           25°C 이상은 열사병 위험 — 평시 페이스 -10%로 시작, 충분한 수분·전해질, 어지러움 시 즉시 중단·119.
         </div>
       </details>
@@ -310,7 +310,7 @@ export default function RacePredictorPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q4. 서브3:30 달성하려면 5km 기록이 얼마여야 하나요?</summary>
         <div style={faqAnswer}>
-          본 도구의 <strong style={{ color: 'var(--text)' }}>목표 역산 탭</strong>에서 즉시 확인. 서브3:30 (VDOT 44 기준): 5km 약 21:15 / 10km 약 44:00 / 하프 약 1:38:00.
+          본 도구의 <strong style={{ color: 'var(--text)' }}>목표 역산 탭</strong>에서 즉시 확인. 서브3:30 (VDOT 약 45 기준): 5km 약 22:00 / 10km 약 45:40 / 하프 약 1:41:00.
           ⚠️ 단 짧은 거리 능력만으로 풀 마라톤 보장 X — 30km+ 장거리 훈련, 16주+ 체계적 준비 필수. 본인 현재 기록을 함께 입력하면 격차(VDOT 차)와 예상 향상 기간이 표시됩니다.
         </div>
       </details>

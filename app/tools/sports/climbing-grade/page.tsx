@@ -48,9 +48,9 @@ const FAQ_LD = [
   { q: '등급이 정확히 1:1로 변환되나요?', a: '아닙니다. 클라이밍 등급은 <strong>주관적이고 구간이 겹칩니다</strong>. 같은 V4라도 Font 6B일 수도 6B+일 수도 있고, 루트 성향(파워형·지구력형)이나 출처에 따라 한 단계 차이날 수 있습니다. 본 변환기는 <strong>표준 환산표 기준 근사치</strong>이며, 정확한 비교는 실제 등반 감각으로 보정하세요.' },
   { q: '실내 클라이밍장 색깔 난이도는 왜 체육관마다 다른가요?', a: '색깔 난이도(빨강·파랑 등)는 <strong>각 체육관이 자체적으로 정한 것</strong>이라 표준이 없습니다. 같은 “파랑”이라도 A체육관과 B체육관의 V등급이 다를 수 있어요. 그래서 본 변환기는 색깔이 아니라 <strong>국제 표준 체계(V·Font·YDS 등)</strong> 기준으로 환산합니다. 다니는 체육관의 색깔 ↔ V등급 표를 한번 확인해 두면 비교가 쉽습니다.' },
   { q: '볼더링 등급과 루트 등급을 직접 비교할 수 있나요?', a: '직접 1:1 비교는 어렵습니다. 볼더링(V·Font)은 <strong>짧고 폭발적인 힘</strong>, 루트(YDS·French)는 <strong>지구력과 긴 시퀀스</strong>를 보기 때문에 측정하는 능력이 다릅니다. 대략 V등급에 한 동작의 어려움이, YDS에 전체 루트의 지속적 난이도가 반영된다고 이해하면 됩니다. 본 도구는 모드(볼더링/루트)를 나눠 각 체계 안에서만 환산합니다.' },
-  { q: '처음 시작하면 어느 등급부터 도전하나요?', a: '실내 볼더링이라면 <strong>V0~V1(Font 4~5)</strong>부터 시작해 기본 무브와 발 쓰기를 익힙니다. 몇 달 꾸준히 다니면 V2~V3(초급), 1년 안팎이면 V4~V5(중급)에 도전하는 경우가 많습니다. 다만 진도는 개인차·체형·훈련량에 따라 크게 다르니 등급보다 <strong>꾸준함과 부상 없는 등반</strong>에 집중하세요.' },
+  { q: '처음 시작하면 어느 등급부터 도전하나요?', a: '실내 볼더링이라면 <strong>V0~V1(Font 4~5)</strong>부터 시작해 기본 무브와 발 쓰기를 익힙니다. 몇 달 꾸준히 다니면 V2(초급)~V3, 1년 안팎이면 V4~V5(중급)에 도전하는 경우가 많습니다. 다만 진도는 개인차·체형·훈련량에 따라 크게 다르니 등급보다 <strong>꾸준함과 부상 없는 등반</strong>에 집중하세요.' },
   { q: 'Font 6A(볼더링)와 French 6a(루트)는 같은 난이도인가요?', a: '아닙니다. 표기는 비슷하지만 <strong>완전히 다른 체계</strong>입니다. 관례상 볼더링 Font 등급은 대문자(6A·7B+), 루트 French 등급은 소문자(6a·7b+)로 구분해 적습니다. 같은 숫자·알파벳이라도 볼더링 쪽이 훨씬 어려워, Font 6C+의 무브 난이도는 French 7c 루트에 가깝다고 알려져 있습니다. 통용 환산으로 <strong>Font 6A ≈ V3</strong>(볼더링), <strong>French 6a ≈ 5.10a</strong>(루트) 수준입니다.' },
-  { q: '현재 세계에서 가장 어려운 클라이밍 등급은 무엇인가요?', a: '2026년 6월 기준 볼더링 최고 통용 등급은 <strong>V17(Font 9A)</strong>입니다. 2016년 날레 후카타이발이 핀란드의 ‘버든 오브 드림스(Burden of Dreams)’를 초등하며 처음 제안했고, 2025년 5월에는 한국의 <strong>이성수</strong>가 이 문제를 완등했습니다. 루트(리드) 최고 등급은 <strong>9c(5.15d)</strong>로, 2017년 아담 온드라가 노르웨이의 ‘사일런스(Silence)’를 초등한 것이 세계 최초의 9c입니다.' },
+  { q: '현재 세계에서 가장 어려운 클라이밍 등급은 무엇인가요?', a: '2026년 6월 기준 볼더링 최고 통용 등급은 <strong>V17(Font 9A)</strong>입니다. 2016년 날레 후카타이발이 핀란드의 ‘버든 오브 드림스(Burden of Dreams)’를 초등하며 처음 제안했고, 이후 여러 클라이머가 반복 완등했습니다 — 2025년 5월에는 한국의 <strong>이성수</strong>가 완등해 화제가 됐고, 2026년에도 추가 완등이 이어졌습니다. 루트(리드) 최고 등급은 <strong>9c(5.15d)</strong>로, 2017년 아담 온드라가 노르웨이의 ‘사일런스(Silence)’를 초등한 것이 세계 최초의 9c입니다.' },
   { q: 'UIAA 등급은 어디에서 쓰이나요?', a: 'UIAA(국제산악연맹) 등급은 로마숫자(IV·VII+ 등)를 쓰며, 주로 <strong>독일·오스트리아·스위스 등 중부 유럽</strong>과 알파인(전통) 등반 자료에서 사용됩니다. 스포츠 클라이밍 가이드북은 대부분 French를 쓰기 때문에, UIAA는 알파인 루트나 유럽 가이드북을 볼 때 환산 용도로 알아두면 좋습니다. French·YDS와의 환산은 출처에 따라 반 단계~한 단계 차이가 날 수 있습니다.' },
 ]
 
@@ -71,6 +71,7 @@ export default function ClimbingGradePage() {
         sources={[
           { label: 'Wikipedia — Grade (climbing)', href: 'https://en.wikipedia.org/wiki/Grade_(climbing)' },
           { label: '99Boulders', href: 'https://www.99boulders.com/bouldering-grades' },
+          { label: 'Guide Dolomiti — Rock climbing grades', href: 'https://www.guidedolomiti.com/en/rock-climbing-grades/' },
         ]}
       />
 
@@ -174,7 +175,7 @@ export default function ClimbingGradePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
             <div style={{ ...card, borderTop: '3px solid #94A3B8' }}>
-              <p style={{ fontSize: '13px', color: '#64748B', fontWeight: 700, marginBottom: '8px' }}>입문 · V0~V2 (Font 4~5+)</p>
+              <p style={{ fontSize: '13px', color: '#64748B', fontWeight: 700, marginBottom: '8px' }}>입문·초급 · V0~V2 (Font 4~5+)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>클라이밍을 막 시작한 단계</li>
                 <li>기본 무브·발 쓰기·홀드 잡기 학습</li>

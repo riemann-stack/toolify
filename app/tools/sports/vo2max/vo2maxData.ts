@@ -2,6 +2,8 @@
    VO2 Max 계산기 데이터
    ─────────────────────────────────────────────────────────── */
 
+import { timeFromVdot, paceFromVdot } from '../race-predictor/racePredictorUtils'
+
 export type MethodId = 'cooper' | 'mile1_5' | 'rockport' | 'queens' | 'norway' | 'hrr'
 export type Sex = 'male' | 'female'
 
@@ -149,19 +151,15 @@ export interface RacePrediction {
   fullM: number
 }
 
-/** VO2max → 5K 시간(초) 근사. Daniels VDOT 테이블 단순 회귀 */
+/** VO2max를 Daniels VDOT로 보고 거리별 예상 시간(초) 산출 (race-predictor의 검증된 VDOT 역산 재사용) */
 export function predictRaces(vo2: number): RacePrediction {
   if (vo2 <= 0) return { fiveK: 0, tenK: 0, halfM: 0, fullM: 0 }
-  // 5K 시간(초) — VDOT 30~80 범위에서 회귀
-  // VDOT 30 → 5K 약 38분, VDOT 60 → 5K 약 18분, VDOT 80 → 5K 약 13.5분
-  // 근사: T_5k(sec) = 3600 / (vo2 × 0.0556 + 1.94)
-  // Better: Daniels의 race time vs VDOT 표 회귀 — 단순화
-  const fiveK = Math.max(60, 9000 / (vo2 * 0.85))  // 약 VDOT 50 → 18:30
-  // Riegel 공식: T2 = T1 × (D2/D1)^1.06
-  const tenK = fiveK * Math.pow(10 / 5, 1.06)
-  const halfM = fiveK * Math.pow(21.0975 / 5, 1.06)
-  const fullM = fiveK * Math.pow(42.195 / 5, 1.06)
-  return { fiveK, tenK, halfM, fullM }
+  return {
+    fiveK: timeFromVdot(5, vo2),
+    tenK:  timeFromVdot(10, vo2),
+    halfM: timeFromVdot(21.0975, vo2),
+    fullM: timeFromVdot(42.195, vo2),
+  }
 }
 
 /** 초 → "HH:MM:SS" 또는 "MM:SS" */
@@ -195,14 +193,13 @@ export interface TrainingPaces {
 }
 export function trainingPaces(vo2: number): TrainingPaces {
   if (vo2 <= 0) return { E: 0, M: 0, T: 0, I: 0, R: 0 }
-  // 5K 페이스 (sec/km) 기준 비율
-  const fiveKPace = (9000 / (vo2 * 0.85)) / 5  // ~ I 페이스에 가까움
+  // VO2max를 VDOT로 보고 Daniels %VO2max 강도로 페이스 산출 (race-predictor·buildup과 동일 기준)
   return {
-    E: fiveKPace * 1.45,   // ~75% HRmax
-    M: fiveKPace * 1.20,   // 마라톤 페이스
-    T: fiveKPace * 1.07,   // 역치 (1시간 race pace)
-    I: fiveKPace * 0.98,   // V̇O2max (5K~3K race pace)
-    R: fiveKPace * 0.92,   // 단거리 반복
+    E: paceFromVdot(vo2, 0.59),
+    M: paceFromVdot(vo2, 0.82),
+    T: paceFromVdot(vo2, 0.88),
+    I: paceFromVdot(vo2, 0.97),
+    R: paceFromVdot(vo2, 1.06),
   }
 }
 

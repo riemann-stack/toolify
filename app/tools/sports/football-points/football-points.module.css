@@ -608,14 +608,16 @@
   margin-bottom: 8px;
 }
 @media (max-width: 600px) {
-  .rivalRow { grid-template-columns: 1.4fr 0.7fr 0.7fr 0.7fr 0.4fr; gap: 4px; }
+  /* 모바일: 팀명 한 줄 + 승·무·패·삭제 한 줄로 분리 (터치 영역 확보) */
+  .rivalRow { grid-template-columns: repeat(3, 1fr) auto; gap: 6px; row-gap: 6px; }
+  .rivalNameInput { grid-column: 1 / -1; }
 }
 .rivalNameInput {
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 12px;
-  font-size: 13px;
+  font-size: 16px;       /* iOS 줌 방지 */
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--text);
   outline: none;

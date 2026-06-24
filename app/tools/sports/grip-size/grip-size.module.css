@@ -103,6 +103,29 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+.numInputWrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  min-width: 78px;
+  justify-content: flex-end;
+}
+.numInput {
+  width: 48px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 6px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+.numInput:focus { border-color: var(--accent); }
+.numUnit { font-size: 12px; color: var(--muted); font-weight: 700; }
 .tickRow {
   display: flex;
   justify-content: space-between;

@@ -5,10 +5,9 @@ import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
 import s from './grip-size.module.css'
 import {
-  TENNIS_GRIPS, GOLF_GRIPS, BADMINTON_GRIPS, SQUASH_GRIPS,
   recommendTennis, gloveByHandLength, golfGripByGlove,
   recommendBadminton, recommendSquash,
-  palmToFullHand, fullHandToPalm, cmToInchFraction,
+  palmToFullHand, cmToInchFraction,
   INJURIES,
 } from './gripData'
 
@@ -33,21 +32,26 @@ export default function GripSizeClient() {
   /* 펜슬 테스트 결과 입력 */
   const [pencilResult, setPencilResult] = useState<'snug' | 'fit' | 'gap' | null>(null)
 
-  /* 성별·체형 빠른 프리셋 */
+  /* 손 전체 길이를 직접 조정했는지 — 조정 후엔 손바닥 값과 독립(각각 실측 입력 허용) */
+  const [fullTouched, setFullTouched] = useState(false)
+
+  /* 성별·체형 빠른 프리셋 — 두 값을 일관된 쌍으로 채우고 연동 초기화 */
   const applyPreset = (palm: number) => {
     setPalmCm(palm)
     setFullCm(palmToFullHand(palm))
+    setFullTouched(false)
     setUseDirectGlove(false)
   }
 
-  /* 두 측정값 연동 — 사용자가 한쪽만 바꿔도 다른 쪽 자동 갱신 */
+  /* 손바닥+약지 → 손 전체는 자동 추정(편의)이되, 사용자가 손 전체를 직접 만진 뒤엔 덮어쓰지 않음 */
   const onPalmChange = (v: number) => {
     setPalmCm(v)
-    setFullCm(palmToFullHand(v))
+    if (!fullTouched) setFullCm(palmToFullHand(v))
   }
+  /* 손 전체(골프 전용)는 독립 설정 — 손바닥 값을 바꾸지 않음 */
   const onFullChange = (v: number) => {
     setFullCm(v)
-    setPalmCm(fullHandToPalm(v))
+    setFullTouched(true)
   }
 
   /* localStorage */
@@ -56,14 +60,21 @@ export default function GripSizeClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      const clamp = (v: unknown, lo: number, hi: number): number | null =>
+        typeof v === 'number' && isFinite(v) ? Math.min(hi, Math.max(lo, v)) : null
+      const palm = clamp(j.palmCm, 8, 13)
+      const full = clamp(j.fullCm, 14, 24)
+      const glove = clamp(j.gloveSize, 20, 30)
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (typeof j.palmCm === 'number') setPalmCm(j.palmCm)
-      if (typeof j.fullCm === 'number') setFullCm(j.fullCm)
-      if (typeof j.gloveSize === 'number') setGloveSize(j.gloveSize)
+      if (palm !== null) setPalmCm(palm)
+      if (full !== null) setFullCm(full)
+      // 저장된 손 전체 값이 손바닥 추정값과 다르면 = 직접 입력한 것 → 연동 해제 유지
+      if (palm !== null && full !== null && Math.abs(full - palmToFullHand(palm)) > 0.15) setFullTouched(true)
+      if (glove !== null) setGloveSize(Math.round(glove))
       if (typeof j.useDirectGlove === 'boolean') setUseDirectGlove(j.useDirectGlove)
-      if (typeof j.tennisOvergrip === 'number') setTennisOvergrip(j.tennisOvergrip)
-      if (typeof j.badmintonOvergrip === 'number') setBadmintonOvergrip(j.badmintonOvergrip)
-      if (j.method) setMethod(j.method)
+      if (j.tennisOvergrip === 0 || j.tennisOvergrip === 1 || j.tennisOvergrip === 2) setTennisOvergrip(j.tennisOvergrip)
+      if (j.badmintonOvergrip === 0 || j.badmintonOvergrip === 1 || j.badmintonOvergrip === 2) setBadmintonOvergrip(j.badmintonOvergrip)
+      if (j.method === 'ruler' || j.method === 'pencil') setMethod(j.method)
     } catch {}
   }, [])
   useEffect(() => {
@@ -101,6 +112,7 @@ export default function GripSizeClient() {
         <div className={s.methodRow}>
           <button
             type="button"
+            aria-pressed={method === 'ruler'}
             className={`${s.methodBtn} ${method === 'ruler' ? s.methodActive : ''}`}
             onClick={() => setMethod('ruler')}
           >
@@ -110,6 +122,7 @@ export default function GripSizeClient() {
           </button>
           <button
             type="button"
+            aria-pressed={method === 'pencil'}
             className={`${s.methodBtn} ${method === 'pencil' ? s.methodActive : ''}`}
             onClick={() => setMethod('pencil')}
           >
@@ -135,11 +148,12 @@ export default function GripSizeClient() {
             <input
               type="range"
               min={8} max={13} step={0.1}
+              aria-label="손바닥 + 약지 길이 (cm)"
               value={palmCm}
               onChange={e => onPalmChange(parseFloat(e.target.value))}
               className={s.slider}
             />
-            <span className={s.sliderVal}>{palmCm.toFixed(1)} cm</span>
+            <NumStepInput value={palmCm} min={8} max={13} onCommit={onPalmChange} ariaLabel="손바닥 + 약지 길이 직접 입력 (cm)" />
           </div>
           <div className={s.tickRow}>
             <span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
@@ -152,11 +166,12 @@ export default function GripSizeClient() {
             <input
               type="range"
               min={14} max={24} step={0.1}
+              aria-label="손 전체 길이 (손목 주름 ~ 중지 끝, cm)"
               value={fullCm}
               onChange={e => onFullChange(parseFloat(e.target.value))}
               className={s.slider}
             />
-            <span className={s.sliderVal}>{fullCm.toFixed(1)} cm</span>
+            <NumStepInput value={fullCm} min={14} max={24} onCommit={onFullChange} ariaLabel="손 전체 길이 직접 입력 (cm)" />
           </div>
 
           <div className={s.subLabel} style={{ marginTop: 14 }}>빠른 프리셋</div>
@@ -193,15 +208,15 @@ export default function GripSizeClient() {
           </ol>
 
           <div className={s.pencilResultRow}>
-            <button type="button"
+            <button type="button" aria-pressed={pencilResult === 'snug'}
               className={`${s.pencilBtn} ${pencilResult === 'snug' ? s.pencilActiveS : ''}`}
-              onClick={() => { setPencilResult('snug'); setPalmCm(Math.max(8, palmCm - 0.3)); setFullCm(palmToFullHand(Math.max(8, palmCm - 0.3))) }}
+              onClick={() => { setPencilResult('snug'); const next = Math.min(13, palmCm + 0.3); setPalmCm(next); setFullCm(palmToFullHand(next)) }}
             >
               <span className={s.pencilEmoji}>🔴</span>
               <strong>검지가 안 들어감</strong>
               <small>그립이 너무 작음 → 한 사이즈 ↑ 권장</small>
             </button>
-            <button type="button"
+            <button type="button" aria-pressed={pencilResult === 'fit'}
               className={`${s.pencilBtn} ${pencilResult === 'fit' ? s.pencilActiveF : ''}`}
               onClick={() => setPencilResult('fit')}
             >
@@ -209,9 +224,9 @@ export default function GripSizeClient() {
               <strong>검지가 딱 맞게 들어감</strong>
               <small>현재 그립이 적당함</small>
             </button>
-            <button type="button"
+            <button type="button" aria-pressed={pencilResult === 'gap'}
               className={`${s.pencilBtn} ${pencilResult === 'gap' ? s.pencilActiveG : ''}`}
-              onClick={() => { setPencilResult('gap'); setPalmCm(Math.min(13, palmCm + 0.3)); setFullCm(palmToFullHand(Math.min(13, palmCm + 0.3))) }}
+              onClick={() => { setPencilResult('gap'); const next = Math.max(8, palmCm - 0.3); setPalmCm(next); setFullCm(palmToFullHand(next)) }}
             >
               <span className={s.pencilEmoji}>🟠</span>
               <strong>검지보다 여유 있음</strong>
@@ -237,6 +252,7 @@ export default function GripSizeClient() {
             {[0, 1, 2].map(n => (
               <button key={n}
                 type="button"
+                aria-pressed={tennisOvergrip === n}
                 className={`${s.overgripBtn} ${tennisOvergrip === n ? s.overgripActive : ''}`}
                 onClick={() => setTennisOvergrip(n as 0 | 1 | 2)}
               >
@@ -253,6 +269,7 @@ export default function GripSizeClient() {
             {[0, 1, 2].map(n => (
               <button key={n}
                 type="button"
+                aria-pressed={badmintonOvergrip === n}
                 className={`${s.overgripBtn} ${badmintonOvergrip === n ? s.overgripActive : ''}`}
                 onClick={() => setBadmintonOvergrip(n as 0 | 1 | 2)}
               >
@@ -277,6 +294,7 @@ export default function GripSizeClient() {
               <input
                 type="range"
                 min={20} max={30} step={1}
+                aria-label="골프 글러브 호수"
                 value={gloveSize}
                 onChange={e => setGloveSize(parseInt(e.target.value))}
                 className={s.slider}
@@ -288,7 +306,7 @@ export default function GripSizeClient() {
       </div>
 
       {/* ── 4. 결과 — 4종목 카드 ── */}
-      <div className={s.resultGrid}>
+      <div className={s.resultGrid} role="status" aria-label="그립 사이즈 추천 결과">
         {/* 테니스 */}
         <div className={s.resultCard} style={{ '--accent': '#FFD93E' } as React.CSSProperties}>
           <div className={s.resultHeader}>
@@ -421,6 +439,33 @@ export default function GripSizeClient() {
         </ul>
       </div>
     </div>
+  )
+}
+
+/* ─── 슬라이더 값 = 직접 숫자 입력 겸용 (모바일 0.1cm 정밀 조정) ───
+ * 편집 중엔 draft 원시 문자열을 보여주고, blur 시 클램프된 값으로 재포맷 */
+function NumStepInput({ value, min, max, onCommit, ariaLabel }: {
+  value: number; min: number; max: number; onCommit: (v: number) => void; ariaLabel: string
+}) {
+  const [draft, setDraft] = useState<string | null>(null)
+  return (
+    <span className={s.numInputWrap}>
+      <input
+        type="text"
+        inputMode="decimal"
+        aria-label={ariaLabel}
+        className={s.numInput}
+        value={draft ?? value.toFixed(1)}
+        onChange={e => {
+          const raw = e.target.value.replace(/[^0-9.]/g, '')
+          setDraft(raw)
+          const n = parseFloat(raw)
+          if (!isNaN(n)) onCommit(Math.min(max, Math.max(min, n)))
+        }}
+        onBlur={() => setDraft(null)}
+      />
+      <span className={s.numUnit}>cm</span>
+    </span>
   )
 }
 

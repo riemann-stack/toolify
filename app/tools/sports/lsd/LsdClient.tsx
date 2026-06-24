@@ -24,20 +24,26 @@ function riegel(t1Sec: number, d1Km: number, d2Km: number): number {
 
 function fmtPace(secPerKm: number): string {
   if (!isFinite(secPerKm) || secPerKm <= 0) return '–'
-  const m = Math.floor(secPerKm / 60)
-  const s = Math.round(secPerKm % 60)
-  return `${m}:${pad(s)}`
+  const total = Math.round(secPerKm)          // 먼저 반올림 후 분해 → "5:60" 방지
+  return `${Math.floor(total / 60)}:${pad(total % 60)}`
 }
 function fmtDur(sec: number): string {
   if (!isFinite(sec) || sec <= 0) return '–'
-  const h = Math.floor(sec / 3600)
-  const m = Math.floor((sec % 3600) / 60)
-  const ss = Math.round(sec % 60)
+  const total = Math.round(sec)               // 반올림 후 분해 → "60초"/"60분" 캐리 자동 처리
+  const h = Math.floor(total / 3600)
+  const m = Math.floor((total % 3600) / 60)
+  const ss = total % 60
   if (h > 0) return `${h}시간 ${pad(m)}분`
   return `${m}분 ${pad(ss)}초`
 }
 const intOr0 = (v: string) => { const n = parseInt(v, 10); return isFinite(n) && n > 0 ? n : 0 }
 const floatOr0 = (v: string) => { const n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0 }
+// 분·초 입력 정규화: 0~59 (max 속성은 스피너만 제한 — 직접 입력은 정규화되지 않음)
+const clampSexa = (v: string): string => {
+  if (v.trim() === '') return ''
+  const n = parseInt(v, 10)
+  return isFinite(n) ? String(Math.min(59, Math.max(0, n))) : ''
+}
 
 // ─────────────────────────────────────────────
 // 컴포넌트
@@ -56,6 +62,19 @@ export default function LsdClient() {
 
   const raceSec = intOr0(hh) * 3600 + intOr0(mm) * 60 + intOr0(ssStr)
 
+  // 거리 프리셋 변경 시 기존 기록을 새 거리로 Riegel 환산 → 실력 유지
+  // (거리만 바뀌어 "하프 50분" 같은 비현실 입력으로 말도 안 되는 페이스가 나오는 것 방지)
+  function switchDist(newKm: number) {
+    if (newKm === distKm) return
+    if (raceSec > 0 && distKm > 0) {
+      const t = Math.round(riegel(raceSec, distKm, newKm))
+      setHh(String(Math.floor(t / 3600)))
+      setMm(String(Math.floor((t % 3600) / 60)))
+      setSsStr(pad(t % 60))
+    }
+    setDistKm(newKm)
+  }
+
   // ── 페이스 계산 ──
   const pace = useMemo(() => {
     if (raceSec <= 0 || distKm <= 0) return null
@@ -65,9 +84,8 @@ export default function LsdClient() {
     const paceM = tM / 42.195                        // 마라톤 환산 페이스
     const threshold = pace10 * 1.05                  // 임계(템포)
     const easyFast = pace10 * 1.20                   // 이지 빠른 끝
-    const easySlow = pace10 * 1.30                   // 이지 느린 끝
-    const recovSlow = easySlow * 1.08                // 회복주
-    return { pace10, paceM, threshold, easyFast, easySlow, recovSlow }
+    const easySlow = pace10 * 1.30                   // 이지 느린 끝 (회복주는 이보다 더 느리게)
+    return { pace10, paceM, threshold, easyFast, easySlow }
   }, [raceSec, distKm])
 
   // ── 심박 존2 ──
@@ -144,24 +162,24 @@ export default function LsdClient() {
         <span className={s.cardLabel}>최근 기록 (또는 현재 실력)</span>
         <div className={s.distRow}>
           {DIST_PRESETS.map(d => (
-            <button key={d.label} type="button"
+            <button key={d.label} type="button" aria-pressed={distKm === d.km}
               className={`${s.distBtn} ${distKm === d.km ? s.distActive : ''}`}
-              onClick={() => setDistKm(d.km)}>
+              onClick={() => switchDist(d.km)}>
               {d.label}
             </button>
           ))}
         </div>
         <div className={s.timeRow}>
           <div className={s.timeField}>
-            <input className={s.timeInput} type="number" min={0} inputMode="numeric" value={hh} onChange={e => setHh(e.target.value)} />
+            <input className={s.timeInput} aria-label="기록 시" type="number" min={0} inputMode="numeric" value={hh} onChange={e => setHh(e.target.value)} />
             <span className={s.timeUnit}>시</span>
           </div>
           <div className={s.timeField}>
-            <input className={s.timeInput} type="number" min={0} max={59} inputMode="numeric" value={mm} onChange={e => setMm(e.target.value)} />
+            <input className={s.timeInput} aria-label="기록 분" type="number" min={0} max={59} inputMode="numeric" value={mm} onChange={e => setMm(clampSexa(e.target.value))} />
             <span className={s.timeUnit}>분</span>
           </div>
           <div className={s.timeField}>
-            <input className={s.timeInput} type="number" min={0} max={59} inputMode="numeric" value={ssStr} onChange={e => setSsStr(e.target.value)} />
+            <input className={s.timeInput} aria-label="기록 초" type="number" min={0} max={59} inputMode="numeric" value={ssStr} onChange={e => setSsStr(clampSexa(e.target.value))} />
             <span className={s.timeUnit}>초</span>
           </div>
         </div>
@@ -219,11 +237,11 @@ export default function LsdClient() {
             <div className={s.hrInputRow}>
               <div className={s.hrField}>
                 <span className={s.hrFieldLabel}>나이</span>
-                <input className={s.hrInput} type="number" min={5} max={100} inputMode="numeric" value={age} onChange={e => setAge(e.target.value)} />
+                <input className={s.hrInput} aria-label="나이" type="number" min={5} max={100} inputMode="numeric" value={age} onChange={e => setAge(e.target.value)} />
               </div>
               <div className={s.hrField}>
                 <span className={s.hrFieldLabel}>안정시 심박 (선택)</span>
-                <input className={s.hrInput} type="number" min={30} max={120} inputMode="numeric" value={restHr} onChange={e => setRestHr(e.target.value)} placeholder="예: 60" />
+                <input className={s.hrInput} aria-label="안정시 심박 (선택)" type="number" min={30} max={120} inputMode="numeric" value={restHr} onChange={e => setRestHr(e.target.value)} placeholder="예: 60" />
               </div>
             </div>
             {hr && (
@@ -241,17 +259,17 @@ export default function LsdClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>롱런 보급 플래너</span>
             <div className={s.segRow}>
-              <button type="button" className={`${s.segBtn} ${longMode === 'dist' ? s.segActive : ''}`} onClick={() => setLongMode('dist')}>거리로</button>
-              <button type="button" className={`${s.segBtn} ${longMode === 'time' ? s.segActive : ''}`} onClick={() => setLongMode('time')}>시간으로</button>
+              <button type="button" aria-pressed={longMode === 'dist'} className={`${s.segBtn} ${longMode === 'dist' ? s.segActive : ''}`} onClick={() => setLongMode('dist')}>거리로</button>
+              <button type="button" aria-pressed={longMode === 'time'} className={`${s.segBtn} ${longMode === 'time' ? s.segActive : ''}`} onClick={() => setLongMode('time')}>시간으로</button>
             </div>
             {longMode === 'dist' ? (
               <div className={s.longInputRow}>
-                <input className={s.longInput} type="number" min={1} inputMode="decimal" value={longKm} onChange={e => setLongKm(e.target.value)} />
+                <input className={s.longInput} aria-label="롱런 거리(km)" type="number" min={1} inputMode="decimal" value={longKm} onChange={e => setLongKm(e.target.value)} />
                 <span className={s.longUnit}>km</span>
               </div>
             ) : (
               <div className={s.longInputRow}>
-                <input className={s.longInput} type="number" min={10} inputMode="numeric" value={longMin} onChange={e => setLongMin(e.target.value)} />
+                <input className={s.longInput} aria-label="롱런 시간(분)" type="number" min={10} inputMode="numeric" value={longMin} onChange={e => setLongMin(e.target.value)} />
                 <span className={s.longUnit}>분</span>
               </div>
             )}

@@ -176,6 +176,13 @@ export default function GolfCostClient() {
     })
   }, [players, perPlayerOn, playerData, bettingOn, betPlayers, perPerson])
 
+  // 참여자별 최종 합계 vs 팀 총액 — 조정·내기가 상쇄되지 않으면 정산이 안 맞음
+  const settlementSum = useMemo(
+    () => playerSettlements.reduce((sum, p) => sum + p.base, 0),
+    [playerSettlements],
+  )
+  const settlementDiff = Math.round(settlementSum - teamTotal)
+
   // breakdown
   const breakdown = useMemo(() => {
     return [
@@ -223,13 +230,13 @@ export default function GolfCostClient() {
       </Disclaimer>
 
       {/* 탭 네비 */}
-      <div className={s.tabs3}>
+      <div className={s.tabs3} role="tablist">
         {([
           { id: 'main',       label: '🧮 오늘 정산' },
           { id: 'membership', label: '🏆 회원권 손익' },
           { id: 'courses',    label: '⛳ 내 골프장' },
         ] as { id: TabId; label: string }[]).map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${s.tabBtn} ${tab === t.id ? s.tabBtnActive : ''}`}
             onClick={() => setTab(t.id)}>
             {t.label}
@@ -249,6 +256,12 @@ export default function GolfCostClient() {
             setCartFee(c.cartFee)
             setCaddieFee(c.caddieFee)
             if (c.defaultMeal) setMealAmount(c.defaultMeal)
+            // 계산 모드 복원 (구버전 저장값엔 없을 수 있어 가드)
+            if (c.cartMode === 'team' || c.cartMode === 'perPerson') setCartMode(c.cartMode)
+            if (c.mealMode === 'each' || c.mealMode === 'team') setMealMode(c.mealMode)
+            if (typeof c.caddieEnabled === 'boolean') setCaddieEnabled(c.caddieEnabled)
+            if (c.transportMode === 'self' || c.transportMode === 'carpool' || c.transportMode === 'bus' || c.transportMode === 'transit') setTransportMode(c.transportMode)
+            if (typeof c.tipAmount === 'number') setTipAmount(c.tipAmount)
           }}
           currentSnapshot={{
             greenFee, cartFee, caddieFee,
@@ -264,7 +277,7 @@ export default function GolfCostClient() {
         <div className={s.courseGrid}>
           {COURSE_LABELS.map(c => (
             <button
-              key={c.key}
+              key={c.key} type="button" aria-pressed={courseType === c.key}
               className={`${s.courseBtn} ${c.cls} ${courseType === c.key ? s.courseActive : ''}`}
               onClick={() => setCourseType(c.key)}
             >
@@ -280,7 +293,7 @@ export default function GolfCostClient() {
         <div className={s.playerRow}>
           {([2, 3, 4] as PlayerCount[]).map(n => (
             <button
-              key={n}
+              key={n} type="button" aria-pressed={players === n}
               className={`${s.playerBtn} ${players === n ? s.playerActive : ''}`}
               onClick={() => setPlayers(n)}
             >
@@ -295,7 +308,7 @@ export default function GolfCostClient() {
         <span className={s.cardLabel}>⛳ 그린피</span>
         <div className={s.subLabel}>1인당 그린피</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" value={greenFee || ''} onChange={e => setGreenFee(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="number" inputMode="decimal" aria-label="1인당 그린피" value={greenFee || ''} onChange={e => setGreenFee(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -308,12 +321,12 @@ export default function GolfCostClient() {
         <span className={s.cardLabel}>🛺 카트비</span>
         <div className={s.subLabel}>부과 방식</div>
         <div className={s.toggleRow}>
-          <button className={`${s.toggleBtn} ${cartMode === 'team' ? s.toggleOn : s.toggleOff}`} onClick={() => setCartMode('team')}>팀당</button>
-          <button className={`${s.toggleBtn} ${cartMode === 'perPerson' ? s.toggleOn : s.toggleOff}`} onClick={() => setCartMode('perPerson')}>1인당</button>
+          <button type="button" aria-pressed={cartMode === 'team'} className={`${s.toggleBtn} ${cartMode === 'team' ? s.toggleOn : s.toggleOff}`} onClick={() => setCartMode('team')}>팀당</button>
+          <button type="button" aria-pressed={cartMode === 'perPerson'} className={`${s.toggleBtn} ${cartMode === 'perPerson' ? s.toggleOn : s.toggleOff}`} onClick={() => setCartMode('perPerson')}>1인당</button>
         </div>
         <div className={`${s.subLabel} ${s.subLabelTop}`}>{cartMode === 'team' ? '팀당 카트비' : '1인당 카트비'}</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" value={cartFee || ''} onChange={e => setCartFee(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="number" inputMode="decimal" aria-label="카트비 금액" value={cartFee || ''} onChange={e => setCartFee(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -326,8 +339,8 @@ export default function GolfCostClient() {
         <div className={s.toggleHeader}>
           <span className={s.cardLabel} style={{ marginBottom: 0 }}>👤 캐디피</span>
           <div className={s.toggleRow} style={{ width: 200 }}>
-            <button className={`${s.toggleBtn} ${caddieEnabled ? s.toggleOn : s.toggleOff}`} onClick={() => setCaddieEnabled(true)}>있음</button>
-            <button className={`${s.toggleBtn} ${!caddieEnabled ? s.toggleOn : s.toggleOff}`} onClick={() => setCaddieEnabled(false)}>노캐디</button>
+            <button type="button" aria-pressed={caddieEnabled} className={`${s.toggleBtn} ${caddieEnabled ? s.toggleOn : s.toggleOff}`} onClick={() => setCaddieEnabled(true)}>있음</button>
+            <button type="button" aria-pressed={!caddieEnabled} className={`${s.toggleBtn} ${!caddieEnabled ? s.toggleOn : s.toggleOff}`} onClick={() => setCaddieEnabled(false)}>노캐디</button>
           </div>
         </div>
 
@@ -335,20 +348,20 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel}>팀당 캐디피</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" value={caddieFee || ''} onChange={e => setCaddieFee(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="number" inputMode="decimal" aria-label="팀당 캐디피" value={caddieFee || ''} onChange={e => setCaddieFee(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
 
             <div className={`${s.subLabel} ${s.subLabelTop}`}>봉사료(팁)</div>
             <div className={s.pills}>
               {[0, 10_000, 20_000, 30_000].map(v => (
-                <button key={v} className={`${s.pill} ${tipAmount === v ? s.pillActive : ''}`} onClick={() => setTipAmount(v)}>
+                <button key={v} type="button" aria-pressed={tipAmount === v} className={`${s.pill} ${tipAmount === v ? s.pillActive : ''}`} onClick={() => setTipAmount(v)}>
                   {v === 0 ? '없음' : `+${(v / 10_000).toFixed(0)}만원`}
                 </button>
               ))}
             </div>
             <div className={s.inputRow} style={{ marginTop: 8 }}>
-              <input className={s.numInput} type="number" inputMode="decimal" value={tipAmount || ''} onChange={e => setTipAmount(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="number" inputMode="decimal" aria-label="캐디 봉사료(팁)" value={tipAmount || ''} onChange={e => setTipAmount(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
 
@@ -371,19 +384,19 @@ export default function GolfCostClient() {
         <span className={s.cardLabel}>🍱 식사·그늘집</span>
         <div className={s.subLabel}>식사비 부과 방식</div>
         <div className={s.toggleRow}>
-          <button className={`${s.toggleBtn} ${mealMode === 'each' ? s.toggleOn : s.toggleOff}`} onClick={() => setMealMode('each')}>각자 결제</button>
-          <button className={`${s.toggleBtn} ${mealMode === 'team' ? s.toggleOn : s.toggleOff}`} onClick={() => setMealMode('team')}>팀 일괄</button>
+          <button type="button" aria-pressed={mealMode === 'each'} className={`${s.toggleBtn} ${mealMode === 'each' ? s.toggleOn : s.toggleOff}`} onClick={() => setMealMode('each')}>각자 결제</button>
+          <button type="button" aria-pressed={mealMode === 'team'} className={`${s.toggleBtn} ${mealMode === 'team' ? s.toggleOn : s.toggleOff}`} onClick={() => setMealMode('team')}>팀 일괄</button>
         </div>
 
         <div className={`${s.subLabel} ${s.subLabelTop}`}>{mealMode === 'each' ? '1인당 식사비' : '팀 식사비 총액'}</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" value={mealAmount || ''} onChange={e => setMealAmount(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="number" inputMode="decimal" aria-label="식사비" value={mealAmount || ''} onChange={e => setMealAmount(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
 
         <div className={`${s.subLabel} ${s.subLabelTop}`}>그늘집 비용 (팀당)</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" value={shadeAmount || ''} onChange={e => setShadeAmount(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="number" inputMode="decimal" aria-label="그늘집 비용(팀당)" value={shadeAmount || ''} onChange={e => setShadeAmount(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
 
@@ -404,7 +417,7 @@ export default function GolfCostClient() {
             { key: 'transit', label: '대중교통' },
           ] as { key: TransportMode; label: string }[]).map(m => (
             <button
-              key={m.key}
+              key={m.key} type="button" aria-pressed={transportMode === m.key}
               className={`${s.courseBtn} ${transportMode === m.key ? s.courseActive : ''}`}
               style={{ borderStyle: 'solid' }}
               onClick={() => setTransportMode(m.key)}
@@ -420,14 +433,14 @@ export default function GolfCostClient() {
               <div>
                 <div className={s.subLabel}>왕복 거리</div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={tripDistance || ''} onChange={e => setTripDistance(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+                  <input className={s.numInput} type="number" inputMode="decimal" aria-label="왕복 거리(km)" value={tripDistance || ''} onChange={e => setTripDistance(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
                   <span className={s.unit}>km</span>
                 </div>
               </div>
               <div>
                 <div className={s.subLabel}>연비</div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" inputMode="decimal" step="0.1" value={efficiency || ''} onChange={e => setEfficiency(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+                  <input className={s.numInput} type="number" inputMode="decimal" step="0.1" aria-label="연비(km/L)" value={efficiency || ''} onChange={e => setEfficiency(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
                   <span className={s.unit}>km/L</span>
                 </div>
               </div>
@@ -435,7 +448,7 @@ export default function GolfCostClient() {
             <div style={{ marginTop: 10 }}>
               <div className={s.subLabel}>유가</div>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" value={fuelPrice || ''} onChange={e => setFuelPrice(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+                <input className={s.numInput} type="number" inputMode="decimal" aria-label="유가(원/L)" value={fuelPrice || ''} onChange={e => setFuelPrice(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
                 <span className={s.unit}>원/L</span>
               </div>
             </div>
@@ -447,7 +460,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>총 교통비 (유류비·통행료 합산)</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" value={carpoolTotal || ''} onChange={e => setCarpoolTotal(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="number" inputMode="decimal" aria-label="총 교통비(유류비·통행료)" value={carpoolTotal || ''} onChange={e => setCarpoolTotal(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>{players}명이 나누면 1인당 {fmt(carpoolTotal / players)}</div>
@@ -458,7 +471,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>1인당 버스·셔틀 요금</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" value={busPerPerson || ''} onChange={e => setBusPerPerson(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="number" inputMode="decimal" aria-label="1인당 버스·셔틀 요금" value={busPerPerson || ''} onChange={e => setBusPerPerson(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>팀 합계 {fmt(busPerPerson * players)}</div>
@@ -469,7 +482,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>1인당 대중교통비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" value={transitPerPerson || ''} onChange={e => setTransitPerPerson(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="number" inputMode="decimal" aria-label="1인당 대중교통비" value={transitPerPerson || ''} onChange={e => setTransitPerPerson(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>팀 합계 {fmt(transitPerPerson * players)}</div>
@@ -484,21 +497,21 @@ export default function GolfCostClient() {
           <div>
             <div className={s.subLabel}>장갑/볼/티</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" value={glovesCost || ''} onChange={e => setGlovesCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="number" inputMode="decimal" aria-label="장갑·볼·티(1인당)" value={glovesCost || ''} onChange={e => setGlovesCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
           </div>
           <div>
             <div className={s.subLabel}>로커비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" value={lockerFee || ''} onChange={e => setLockerFee(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="number" inputMode="decimal" aria-label="로커비(1인당)" value={lockerFee || ''} onChange={e => setLockerFee(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
           </div>
         </div>
         <div className={`${s.subLabel} ${s.subLabelTop}`}>기타</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" value={otherCost || ''} onChange={e => setOtherCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+          <input className={s.numInput} type="number" inputMode="decimal" aria-label="기타 비용(1인당)" value={otherCost || ''} onChange={e => setOtherCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -544,10 +557,7 @@ export default function GolfCostClient() {
                   value={betPlayers[i]?.amount || ''}
                   onChange={e => {
                     const next = [...betPlayers]
-                    next[i] = { ...next[i], amount: parseAmount(e.target.value) || (e.target.value.startsWith('-') ? -parseAmount(e.target.value) : 0) }
-                    // simpler: parse with sign
-                    const raw = e.target.value
-                    const v = parseFloat(raw.replace(/[^0-9.\-]/g, ''))
+                    const v = parseFloat(e.target.value.replace(/[^0-9.\-]/g, ''))
                     next[i] = { ...next[i], amount: isNaN(v) ? 0 : v }
                     setBetPlayers(next)
                   }}
@@ -612,6 +622,12 @@ export default function GolfCostClient() {
                 </div>
               </div>
             ))}
+            <div className={`${s.bettingSum} ${settlementDiff === 0 ? s.bettingSumOk : s.bettingSumWarn}`}>
+              참여자 합계 {fmtNum(settlementSum)}원 · 팀 총액 {fmtNum(teamTotal)}원
+              {settlementDiff === 0
+                ? ' ✓ 일치'
+                : ` ⚠ ${settlementDiff > 0 ? '+' : ''}${fmtNum(settlementDiff)}원 — 조정·내기 합이 상쇄되지 않아 정산이 맞지 않습니다`}
+            </div>
           </>
         )}
       </div>
@@ -717,6 +733,7 @@ export default function GolfCostClient() {
             data={{
               name: '', type: courseType, greenFee, cartFee, caddieFee,
               defaultMeal: mealAmount,
+              cartMode, mealMode, caddieEnabled, transportMode, tipAmount,
             }}
           />
         </div>
@@ -728,7 +745,11 @@ export default function GolfCostClient() {
 
 /* ──────────────────────── 골프장 저장 버튼 ──────────────────────── */
 function CourseSaveButton({ data }: {
-  data: { name: string; type: string; greenFee: number; cartFee: number; caddieFee: number; defaultMeal?: number }
+  data: {
+    name: string; type: string; greenFee: number; cartFee: number; caddieFee: number; defaultMeal?: number
+    cartMode?: 'team' | 'perPerson'; mealMode?: 'each' | 'team'; caddieEnabled?: boolean
+    transportMode?: string; tipAmount?: number
+  }
 }) {
   const [name, setName] = useState('')
   const [saved, setSaved] = useState(false)
@@ -743,6 +764,11 @@ function CourseSaveButton({ data }: {
       cartFee: data.cartFee,
       caddieFee: data.caddieFee,
       defaultMeal: data.defaultMeal,
+      cartMode: data.cartMode,
+      mealMode: data.mealMode,
+      caddieEnabled: data.caddieEnabled,
+      transportMode: data.transportMode,
+      tipAmount: data.tipAmount,
       lastUsed: todayStr(),
     }
     saveCourses([newCourse, ...courses])

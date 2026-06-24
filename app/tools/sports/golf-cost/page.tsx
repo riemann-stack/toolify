@@ -76,7 +76,7 @@ export default function GolfCostPage() {
             골프장 타입별 평균 비용 (참고)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            한국 주요 골프장 평균값 기준이며, 실제 비용은 시즌·요일·지역·평일/주말에 따라 ±20~30% 변동합니다.
+            한국 주요 골프장의 공개 요금·운영자 경험을 바탕으로 한 <strong style={{ color: 'var(--text)' }}>일반 평균 추정(2026년 기준)</strong>이며 공식 고시가가 아닙니다. 실제 비용은 시즌·요일·지역·평일/주말에 따라 ±20~30% 변동하니 예약 시 명세를 확인하세요.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -120,15 +120,15 @@ export default function GolfCostPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#0EA5E9', marginBottom: '8px' }}>예시 1 — 퍼블릭 주말 4인 (캐디 동반)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
-                그린피 13만(인당) · 카트비 4만(팀) · 캐디피 12만(팀) · 식사 1.5만(인당) · 자차 카풀
+                그린피 13만(인당) · 카트비 10만(팀) · 캐디피 12만(팀) · 식사 1.5만(인당) · 자차 카풀
               </p>
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
                 그린피 13만 × 4 = 52만<br/>
-                카트비 4만 (팀 부담)<br/>
+                카트비 10만 (팀 부담)<br/>
                 캐디피 12만 + 팁 4만 = 16만 (팀 부담)<br/>
                 식사 1.5만 × 4 = 6만<br/>
                 교통비 8만 (자차 카풀, 팀 분담)<br/>
-                <span style={{ color: '#0EA5E9' }}>팀 합계 = 86만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 21.5만원</strong>
+                <span style={{ color: '#0EA5E9' }}>팀 합계 = 92만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 23만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 한국 평균 주말 라운딩의 표준 가격대입니다.</p>
             </div>
@@ -136,15 +136,15 @@ export default function GolfCostPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>예시 2 — 세미퍼블릭 주중 4인 (노캐디)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
-                그린피 16만(인당) · 카트비 5만(팀) · 캐디 미사용 · 식사 1.5만(인당) · KTX 이동
+                그린피 16만(인당) · 카트비 10만(팀) · 캐디 미사용 · 식사 1.5만(인당) · KTX 이동
               </p>
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
                 그린피 16만 × 4 = 64만<br/>
-                카트비 5만 (팀)<br/>
+                카트비 10만 (팀)<br/>
                 캐디피 0 (노캐디)<br/>
                 식사 1.5만 × 4 = 6만<br/>
                 교통비 4만 × 4 = 16만 (KTX 왕복 인당)<br/>
-                <span style={{ color: '#0891B2' }}>팀 합계 = 91만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 22.8만원</strong>
+                <span style={{ color: '#0891B2' }}>팀 합계 = 96만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 24만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 노캐디로 캐디피 16만을 아꼈지만, 그린피 차이로 비용이 비슷해질 수 있습니다.</p>
             </div>
@@ -152,15 +152,15 @@ export default function GolfCostPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#A16207', marginBottom: '8px' }}>예시 3 — 회원제 비회원 동반 (4인)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
-                그린피 25만(인당) · 카트비 4만(팀) · 캐디피 14만(팀) + 팁 6만 · 식사 2만 · 자차
+                그린피 25만(인당) · 카트비 10만(팀) · 캐디피 14만(팀) + 팁 6만 · 식사 2만 · 자차
               </p>
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
                 그린피 25만 × 4 = 100만<br/>
-                카트비 4만<br/>
+                카트비 10만<br/>
                 캐디피 14만 + 팁 6만 = 20만<br/>
                 식사 2만 × 4 = 8만<br/>
                 교통비 8만 (자차 카풀)<br/>
-                <span style={{ color: '#A16207' }}>팀 합계 = 140만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 35만원</strong>
+                <span style={{ color: '#A16207' }}>팀 합계 = 146만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 36.5만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 회원 동반(그린피 할인) 여부에 따라 1인당 10~15만원이 줄어들 수 있습니다.</p>
             </div>
@@ -214,7 +214,7 @@ export default function GolfCostPage() {
             🏆 회원권 손익분기 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            본 도구의 [🏆 회원권 손익] 탭에서 직접 시뮬레이션 가능. 일반적 손익분기 (5억 회원권 + 연회비 200만원 + 매각 잔존 3억 가정).
+            아래는 <strong style={{ color: 'var(--text)' }}>[🏆 회원권 손익] 탭 기본값과 동일한 가정</strong> — 5억 회원권·연회비 200만·매각 잔존 3억·10년 보유, 비회원 1라운드 24만·회원 8만. 탭에서 본인 값으로 바로 시뮬레이션할 수 있습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -228,10 +228,10 @@ export default function GolfCostPage() {
               </thead>
               <tbody>
                 {[
-                  { r: '월 1회 (12회)', m: '약 3.16억', n: '약 2.64억', v: '🔴 비회원' },
-                  { r: '월 2회 (24회)', m: '약 4.12억', n: '약 5.28억', v: '🟢 회원 (1.16억 절약)' },
-                  { r: '월 3회 (36회)', m: '약 5.08억', n: '약 7.92억', v: '🟢 회원 (2.84억 절약)' },
-                  { r: '주 1회 (48회)', m: '약 6.04억', n: '약 10.56억', v: '🟢 회원 (4.52억 절약)' },
+                  { r: '월 1회 (12회)', m: '약 2.30억', n: '약 2,880만', v: '🔴 비회원' },
+                  { r: '월 2회 (24회)', m: '약 2.39억', n: '약 5,760만', v: '🔴 비회원' },
+                  { r: '월 3회 (36회)', m: '약 2.49억', n: '약 8,640만', v: '🔴 비회원' },
+                  { r: '주 1회 (48회)', m: '약 2.58억', n: '약 1.15억', v: '🔴 비회원' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.r}</td>
@@ -244,7 +244,7 @@ export default function GolfCostPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            💡 <strong style={{ color: 'var(--text)' }}>연 24회 이상 + 10년 보유</strong>면 회원권 이득. ⚠️ 단 — 골프장 부도(보호 X) / 시세 하락(-30~50%) / 매각 어려움(유동성 ↓) / 본인 빈도 변화 리스크. 변호사·회계사 상담 권장.
+            💡 <strong style={{ color: 'var(--text)' }}>5억급 고가 회원권은 라운드 비용 절감만으로는 회수가 어렵습니다</strong> — 위 가정에선 어떤 빈도에서도 비회원이 더 쌉니다. 고가 회원권은 예약 우선권·코스 접근성·동반자 혜택 등 비(非)금전 가치로 판단하세요. 비용 회수가 목적이면 저가(수천만원)·고빈도 시나리오를 [🏆 회원권 손익] 탭에서 직접 확인하세요. ⚠️ 골프장 부도(보호 X)·시세 하락(-30~50%)·매각 어려움(유동성 ↓)·빈도 변화 리스크 — 변호사·회계사 상담 권장.
           </p>
         </div>
 
@@ -332,7 +332,7 @@ export default function GolfCostPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            ⚠️ 본 가격은 시즌·환율·항공편에 따라 ±50% 변동. 캐디 관행·비자·코로나 정책도 다름. 본 도구는 평균 안내만 — 특정 여행사·예약 사이트 추천 X. 정확한 패키지는 직접 확인 권장.
+            ⚠️ 위 수치는 <strong style={{ color: 'var(--text)' }}>2026년 기준 일반 패키지 평균 추정</strong>(공식 시세 아님)이며 시즌·환율·항공편에 따라 ±50% 변동. 캐디 관행·비자·정책도 다름. 본 도구는 평균 안내만 — 특정 여행사·예약 사이트 추천 X. 정확한 패키지는 직접 확인 권장.
           </p>
         </div>
 

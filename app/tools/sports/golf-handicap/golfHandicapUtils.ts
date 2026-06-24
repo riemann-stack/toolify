@@ -111,6 +111,7 @@ export function calcDifferential(grossScore: number, cr: number, slope: number, 
   return (gross - adjCr) * 113 / slope
 }
 
+// WHS 표준: 제출 라운드 수별 사용 디퍼런셜 개수
 export function getUsedCount(n: number): number {
   if (n < 3) return 0
   if (n <= 5) return 1
@@ -118,9 +119,30 @@ export function getUsedCount(n: number): number {
   if (n <= 11) return 3
   if (n <= 14) return 4
   if (n <= 16) return 5
-  if (n === 17) return 6
-  if (n === 18) return 7
+  if (n <= 18) return 6
+  if (n === 19) return 7
   return 8
+}
+
+// WHS 표준: 라운드 부족 시 평균에 더하는 조정값
+export function lowRoundAdjustment(n: number): number {
+  if (n === 3) return -2.0
+  if (n === 4) return -1.0
+  if (n === 6) return -1.0
+  return 0
+}
+
+export const MAX_HANDICAP_INDEX = 54.0
+
+// WHS 핸디캡 지수 = 최저 N개 평균 + 조정 (0.96 미적용 — 2020 WHS에서 폐지), 최대 54.0
+export function handicapIndexFromDiffs(diffs: number[]): number | null {
+  const n = diffs.length
+  const used = getUsedCount(n)
+  if (used === 0) return null
+  const sorted = [...diffs].sort((a, b) => a - b).slice(0, used)
+  const avg = sorted.reduce((s, d) => s + d, 0) / sorted.length
+  const hi = avg + lowRoundAdjustment(n)
+  return Math.min(MAX_HANDICAP_INDEX, Math.round(hi * 10) / 10)
 }
 
 export function calcHandicapIndex(rounds: RoundRecord[]): number | null {
@@ -129,11 +151,7 @@ export function calcHandicapIndex(rounds: RoundRecord[]): number | null {
   const diffs = recent
     .map(r => calcDifferential(r.grossScore, r.cr, r.slope, r.is9Holes))
     .filter(d => d > 0 || d === 0)
-  const used = getUsedCount(diffs.length)
-  if (used === 0) return null
-  const sorted = [...diffs].sort((a, b) => a - b).slice(0, used)
-  const avg = sorted.reduce((s, d) => s + d, 0) / sorted.length
-  return Math.round(avg * 0.96 * 10) / 10
+  return handicapIndexFromDiffs(diffs)
 }
 
 // ── 발전 추이 (라운드별 디퍼런셜 + 이동 핸디캡) ──

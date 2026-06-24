@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: 'WHS 핸디캡은 EGA 핸디캡과 어떻게 다른가요?',
-                a: '2020년 세계골프협회가 기존 6개 핸디캡 시스템(EGA·USGA·CONGU 등)을 WHS(World Handicap System)로 통합했습니다. 기존 EGA 방식은 유럽 중심이었고 버퍼존 개념을 사용했지만, WHS는 스코어 디퍼런셜과 0.96 조정 계수를 적용해 더 공정하고 전 세계에서 통용됩니다.',
+                a: '2020년 세계골프협회가 기존 6개 핸디캡 시스템(EGA·USGA·CONGU 등)을 WHS(World Handicap System)로 통합했습니다. 기존 EGA 방식은 유럽 중심이었고 버퍼존 개념을 사용했지만, WHS는 스코어 디퍼런셜의 최저 8개 평균(라운드 부족 시 조정)으로 산출해 더 공정하고 전 세계에서 통용됩니다. 과거 USGA가 쓰던 0.96 계수는 WHS에서 폐지됐습니다.',
               },
               {
                 q: '코스 레이팅과 슬로프 레이팅은 어디서 확인하나요?',
@@ -25,8 +25,8 @@ const FAQ_LD = [
                 a: '네. 9홀 스코어는 두 배로 환산하거나 동일 코스를 두 번 플레이한 것으로 간주해 18홀 디퍼런셜로 변환합니다. 단 9홀 레이팅값이 별도로 필요하며, 본 계산기는 단순 2배 환산 방식을 사용합니다 (정확도 ±5% 차이).',
               },
               {
-                q: '0.96을 곱하는 이유는?',
-                a: 'WHS에서는 선수가 최고 컨디션일 때의 성적을 반영하면서 동시에 &ldquo;최고 성적이 그 선수의 일반적 실력은 아니다&rdquo;라는 점을 보정하기 위해 평균에 0.96(약 4% 할인)을 적용합니다. 이를 &ldquo;봉 팩터(Bonus for Excellence)&rdquo;라고 부릅니다.',
+                q: 'WHS도 0.96(봉 팩터)을 곱하나요?',
+                a: '<strong>아닙니다.</strong> 0.96 &ldquo;봉 팩터(Bonus for Excellence)&rdquo;는 2020년 이전 USGA 핸디캡 시스템에서 쓰던 계수로, 현행 WHS에서는 폐지됐습니다. WHS 핸디캡 지수는 최근 20라운드 중 최저 8개 디퍼런셜의 단순 평균이며, 제출 라운드가 3·4·6개로 적을 때만 평균에 −2.0/−1.0/−1.0을 더해 보정합니다. 본 도구도 0.96 없이 WHS 방식으로 산출합니다.',
               },
               {
                 q: '핸디캡 지수 최대값은?',
@@ -38,7 +38,7 @@ const FAQ_LD = [
               },
               {
                 q: '본 도구의 핸디캡이 공식 핸디캡인가요?',
-                a: '<strong>아닙니다.</strong> 본 도구는 WHS 표준 공식 정확 적용 + 본인 실력 추정·발전 참고용 — <strong>비공식 산출</strong>입니다. 공식 핸디캡 (한국)은 대한골프협회(KGA) 발급, 회원 골프 클럽 통해 신청, 공식 인증 = 대회 참가 자격, 연 회비 발생. 본 도구는 일상 라운드·동호회 친선용. 공식 인증이 필요하면 KGA(kgagolf.or.kr) 또는 소속 클럽 문의.',
+                a: '<strong>아닙니다.</strong> 본 도구는 WHS 지수 공식 기반(홀별 네트 더블보기 보정 등 일부 절차는 생략) + 본인 실력 추정·발전 참고용 — <strong>비공식 산출</strong>입니다. 공식 핸디캡 (한국)은 대한골프협회(KGA) 발급, 회원 골프 클럽 통해 신청, 공식 인증 = 대회 참가 자격, 연 회비 발생. 본 도구는 일상 라운드·동호회 친선용. 공식 인증이 필요하면 KGA(kgagolf.or.kr) 또는 소속 클럽 문의.',
               },
               {
                 q: '라운드 데이터는 어디에 저장되나요?',
@@ -46,7 +46,7 @@ const FAQ_LD = [
               },
               {
                 q: '핸디캡 지수가 자주 바뀌는데 정상인가요?',
-                a: '네, 정상. WHS 핸디캡:<br/>• 라운드 추가 시마다 재계산<br/>• 최근 20라운드 중 최저 8개 평균 × 0.96<br/>• 좋은 라운드 추가 = 지수 ↓<br/>• 나쁜 라운드 추가 = 큰 변화 X (최저 8개에 안 들어가면)<br/>안정화: 20라운드 채우면 안정. 4~5라운드는 변동 큼. 한 번 좋은 라운드로 -3~-5 변화 가능. 본 도구의 [📅 내 기록] 탭에서 발전 추이 그래프로 변화 시각화.',
+                a: '네, 정상. WHS 핸디캡:<br/>• 라운드 추가 시마다 재계산<br/>• 최근 20라운드 중 최저 8개 평균 (0.96 미적용)<br/>• 좋은 라운드 추가 = 지수 ↓<br/>• 나쁜 라운드 추가 = 큰 변화 X (최저 8개에 안 들어가면)<br/>안정화: 20라운드 채우면 안정. 4~5라운드는 변동 큼. 한 번 좋은 라운드로 -3~-5 변화 가능. 본 도구의 [📅 내 기록] 탭에서 발전 추이 그래프로 변화 시각화.',
               },
               {
                 q: '본 도구의 라운드 데이터를 어떻게 백업하나요?',
@@ -82,17 +82,17 @@ export default function GolfHandicapPage() {
                 스코어 디퍼런셜 = (그로스 스코어 − 코스 레이팅) × 113 ÷ 슬로프 레이팅
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.6 }}>
-                각 라운드의 실력을 &ldquo;표준 코스(슬로프 113)&rdquo; 기준으로 환산한 값. 낮을수록 좋은 성적입니다.
+                각 라운드의 실력을 &ldquo;표준 코스(슬로프 113)&rdquo; 기준으로 환산한 값. 낮을수록 좋은 성적입니다. 정식 WHS는 그로스 대신 <strong style={{ color: 'var(--text)' }}>조정 총타수(AGS)</strong>—홀별 최대 &ldquo;네트 더블보기&rdquo;로 캡한 점수—를 쓰지만, 본 도구는 홀별 입력이 없어 <strong style={{ color: 'var(--text)' }}>입력한 총 그로스를 그대로 사용</strong>합니다. 한 홀 크게 무너진 라운드는 디퍼런셜이 다소 높게(불리하게) 나올 수 있습니다.
               </p>
             </div>
 
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
               <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '10px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Handicap Index</p>
               <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6 }}>
-                핸디캡 지수 = 최근 20라운드 중 최저 N개 평균 × 0.96
+                핸디캡 지수 = 최근 20라운드 중 최저 N개 평균 (+ 라운드 부족 시 조정)
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.6 }}>
-                라운드 수에 따라 사용하는 디퍼런셜 개수(N)가 달라집니다. 0.96은 &ldquo;최고 성적이 일반 실력은 아니다&rdquo;를 보정하는 계수.
+                라운드 수에 따라 사용하는 디퍼런셜 개수(N)가 달라집니다. 2020년 WHS는 과거 USGA의 0.96 계수(Bonus for Excellence)를 폐지하고, 최저 N개 단순 평균에 라운드 부족 시 조정만 적용합니다.
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function GolfHandicapPage() {
                 디퍼런셜 = (그로스 − 72.0) × 113 ÷ 113 = 그로스 − 72<br/>
                 108 → 36.0 · 103 → 31.0 · 99 → 27.0 · 105 → 33.0 · 101 → 29.0<br/>
                 <span style={{ color: '#059669' }}>5라운드 → 최저 1개 사용: 27.0</span><br/>
-                핸디캡 지수 = 27.0 × 0.96 = <strong style={{ color: 'var(--accent)' }}>25.9</strong>
+                핸디캡 지수 = 27.0 (5라운드는 추가 조정 없음) = <strong style={{ color: 'var(--accent)' }}>27.0</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 하이 핸디캐퍼 등급. 꾸준히 라운드를 쌓으면 최저 N개가 늘어나 지수가 안정화됩니다.</p>
             </div>
@@ -124,10 +124,10 @@ export default function GolfHandicapPage() {
                 20라운드 디퍼런셜 중 최저 8개 평균이 10.5라고 가정
               </p>
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '10px' }}>
-                핸디캡 지수 = 10.5 × 0.96 = <strong style={{ color: 'var(--accent)' }}>10.1</strong><br/>
+                핸디캡 지수 = 최저 8개 평균 10.5 (조정 없음) = <strong style={{ color: 'var(--accent)' }}>10.5</strong><br/>
                 <br/>
                 <span style={{ color: '#0EA5E9' }}>오늘 코스</span> 슬로프 128 / CR 72.5 / 파 72<br/>
-                코스 핸디캡 = 10.1 × (128 ÷ 113) + (72.5 − 72) = 11.4 + 0.5 ≈ <strong style={{ color: 'var(--accent)' }}>12</strong><br/>
+                코스 핸디캡 = 10.5 × (128 ÷ 113) + (72.5 − 72) = 11.9 + 0.5 ≈ <strong style={{ color: 'var(--accent)' }}>12</strong><br/>
                 <br/>
                 <span style={{ color: '#0891B2' }}>그로스 85타 쳤다면</span><br/>
                 네트 스코어 = 85 − 12 = <strong style={{ color: 'var(--accent)' }}>73 (+1)</strong>
@@ -153,15 +153,17 @@ export default function GolfHandicapPage() {
               </thead>
               <tbody>
                 {[
-                  ['3',      '최저 1개', '지수 산출 최소 기준'],
-                  ['4~5',    '최저 1개', '초기 단계'],
-                  ['6~8',    '최저 2개', ''],
+                  ['3',      '최저 1개', '−2.0 보정 (최소 기준)'],
+                  ['4',      '최저 1개', '−1.0 보정'],
+                  ['5',      '최저 1개', '초기 단계'],
+                  ['6',      '최저 2개', '−1.0 보정'],
+                  ['7~8',    '최저 2개', ''],
                   ['9~11',   '최저 3개', ''],
                   ['12~14',  '최저 4개', ''],
                   ['15~16',  '최저 5개', ''],
-                  ['17',     '최저 6개', ''],
-                  ['18',     '최저 7개', ''],
-                  ['19~20',  '최저 8개', '표준 기준 (안정화)'],
+                  ['17~18',  '최저 6개', ''],
+                  ['19',     '최저 7개', ''],
+                  ['20',     '최저 8개', '표준 기준 (안정화)'],
                 ].map(([rounds, used, note], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{rounds}</td>
@@ -173,7 +175,7 @@ export default function GolfHandicapPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * WHS는 &ldquo;최고 성적 8개 평균&rdquo;을 기준으로 하되, 라운드가 부족할 때는 단계적으로 개수를 줄여 운영합니다.
+            * WHS는 &ldquo;최고 성적 8개 평균&rdquo;을 기준으로 하되, 라운드가 부족할 때는 단계적으로 개수를 줄이고 3·4·6라운드는 평균에 보정(−2.0/−1.0/−1.0)을 더합니다. (2020 WHS는 과거 USGA의 0.96 계수를 쓰지 않습니다.)
           </p>
         </div>
 
@@ -363,13 +365,13 @@ export default function GolfHandicapPage() {
             📌 한국 공식 핸디캡 인증
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            본 도구는 WHS 표준 공식을 정확히 적용하지만 <strong style={{ color: '#EA580C' }}>비공식 산출 (참고용)</strong>입니다. 공식 핸디캡 인증은 별도 절차가 필요합니다.
+            본 도구는 WHS 핸디캡 지수 공식을 따르지만(홀별 네트 더블보기 보정·PCC 등 일부 절차는 생략) <strong style={{ color: '#EA580C' }}>비공식 산출 (참고용)</strong>입니다. 공식 핸디캡 인증은 별도 절차가 필요합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>🟢 본 도구 (비공식)</p>
               <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
-                <li>WHS 표준 공식 정확 적용</li>
+                <li>WHS 지수 공식 기반 (AGS 보정 생략)</li>
                 <li>본인 실력 추정·발전 참고</li>
                 <li>일상 라운드·동호회 친선용</li>
                 <li>무료, 즉시 사용</li>
