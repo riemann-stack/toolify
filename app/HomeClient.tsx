@@ -20,6 +20,79 @@ const popularTools = [
 
 const RANDOM_PICK_COUNT = 5
 
+/* ── Hero 우측 라이브 미리보기 (정적 샘플 스니펫, 실제 계산 호출 없음 — 로직 불변) ──
+   경로는 기존 레지스트리에서 가져온 실제 라우트. example=true는 가정값이라 "예시" 칩 표시. */
+const HERO_PREVIEWS: { href: string; icon: string; name: string; input: string; result: string; example: boolean }[] = [
+  { href: '/tools/finance/car-cost', icon: '🚗', name: '자동차 유지비 계산기', input: '준중형 · 월 1,500km', result: '월 유지비 약 45만원', example: true },
+  { href: '/tools/health/weightloss', icon: '⚖️', name: '체중 감량 기간 계산기', input: '목표 −5kg · 주 0.5kg', result: '약 10주', example: true },
+  { href: '/tools/cooking/microwave', icon: '🍳', name: '전자레인지 출력 환산기', input: '700W 3분 → 1000W', result: '약 2분 6초', example: false },
+  { href: '/tools/sports/race-predictor', icon: '🏃', name: '마라톤 기록 계산기', input: '풀코스 Sub-4', result: '페이스 5′41″/km', example: false },
+  { href: '/tools/unit/converter', icon: '📐', name: '단위 변환기', input: '10평', result: '약 33.1㎡', example: false },
+]
+
+function HeroPreview() {
+  const [idx, setIdx] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [animate, setAnimate] = useState(false) // 모션 허용 여부 — 마운트 후 결정(SSR 정적)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setAnimate(!mq.matches)
+    const onChange = () => setAnimate(!mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  useEffect(() => {
+    if (!animate || paused) return
+    const t = setInterval(() => setIdx(i => (i + 1) % HERO_PREVIEWS.length), 4500)
+    return () => clearInterval(t)
+  }, [animate, paused])
+
+  const active = HERO_PREVIEWS[idx]
+  return (
+    <div
+      className={styles.previewPanel}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
+      <div className={styles.previewStack} aria-hidden="true">
+        <span className={styles.previewGhost2} />
+        <span className={styles.previewGhost1} />
+      </div>
+      <Link href={active.href} className={styles.previewCard} key={active.href}>
+        <div className={styles.previewHead}>
+          <span className={styles.previewIcon} aria-hidden="true">{active.icon}</span>
+          <span className={styles.previewName}>{active.name}</span>
+        </div>
+        <div className={styles.previewBody}>
+          <span className={styles.previewInput}>{active.input}</span>
+          <span className={styles.previewArrow} aria-hidden="true">→</span>
+          <span className={styles.previewResult}>
+            {active.result}
+            {active.example && <span className={styles.previewExample}>예시</span>}
+          </span>
+        </div>
+      </Link>
+      <div className={styles.previewDots} role="tablist" aria-label="도구 미리보기 선택">
+        {HERO_PREVIEWS.map((p, i) => (
+          <button
+            key={p.href}
+            type="button"
+            role="tab"
+            aria-selected={i === idx}
+            aria-label={p.name}
+            className={`${styles.previewDot} ${i === idx ? styles.previewDotActive : ''}`}
+            onClick={() => setIdx(i)}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // Mac 판별 — userAgentData 우선, navigator.platform 폴백 (mounted 후 호출)
 function isMacPlatform(): boolean {
   if (typeof navigator === 'undefined') return false
@@ -115,27 +188,32 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
 
           {/* 텍스트 영역 */}
           <div className={styles.heroLeft}>
+            <span className={styles.heroTag}>
+              <span className={styles.dot} aria-hidden="true" />
+              {totalTools}+개 도구 · 로그인 없이 바로
+            </span>
             <h1 className={styles.h1}>
               모든 계산,<br /><em className={styles.accent}>한 곳에서.</em>
             </h1>
             <p className={styles.heroSub}>
-              일상에서 자주 쓰는 도구들을 빠르고 간편하게 사용하세요.
+              연봉·세금·건강·요리·날짜·단위변환까지, 일상의 계산을 빠르게.
             </p>
 
-            {/* 검색창 — 주요 동작이므로 발견 섹션보다 위에 배치 */}
+            {/* 검색창 — 주요 동작이므로 발견 섹션보다 위에 배치 (⌘K 커맨드 진입점) */}
             <div className={styles.searchWrap}>
+              <svg className={styles.searchIcon} width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
               <input
                 ref={searchInputRef}
                 className={styles.searchInput}
                 type="text"
-                placeholder="필요한 도구를 검색하세요."
+                placeholder="필요한 도구를 검색하세요"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 autoComplete="off"
+                aria-label="도구 검색"
               />
-              <svg className={styles.searchIcon} width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
               <kbd className={styles.searchKbd} aria-hidden="true">{isMac ? '⌘K' : 'Ctrl K'}</kbd>
 
               {/* 검색 결과 드롭다운 */}
@@ -259,9 +337,9 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
             </div>
           </div>
 
-          {/* Y 심볼 — 우측 비주얼 */}
-          <div className={styles.heroRight} aria-hidden="true">
-            <span className={styles.ySymbol}>Y</span>
+          {/* 우측 비주얼 — 라이브 미리보기 패널 (데스크톱) */}
+          <div className={styles.heroRight}>
+            <HeroPreview />
           </div>
 
         </div>
@@ -270,12 +348,28 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
       {/* CONTENT */}
       <div className={styles.content}>
 
-        {/* 상황별 가이드 (큐레이션) — 서버에서 계산한 오늘의 시즌 추천을 prop으로 전달 → 첫 페인트부터 정합 */}
+        {/* POPULAR TOOLS — 첫 화면에서 바로 실행 가능한 도구 (카테고리 위로) */}
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>상황별 가이드</h2>
-          <Link href="/collections" className={styles.sectionLink}>전체 보기 →</Link>
+          <h2 className={styles.sectionTitle}>인기 도구</h2>
+          <Link href="/tools" className={styles.sectionLink}>전체 보기 →</Link>
         </div>
-        <CollectionBanner initialSlug={initialFeaturedSlug} />
+        <div className={styles.toolsGrid}>
+          {popularTools.map(tool => (
+            <Link key={tool.href} href={tool.href} className={styles.toolCard}>
+              <div className={styles.toolIconCol}>
+                <div className={styles.toolIconWrap}>{tool.icon}</div>
+              </div>
+              <div className={styles.toolInfo}>
+                <div className={styles.toolNameRow}>
+                  <span className={styles.toolName}>{tool.name}</span>
+                  {tool.badge === 'hot' && <span className={`${styles.badge} ${styles.badgeHot}`}>HOT</span>}
+                  {tool.badge === 'new' && <span className={`${styles.badge} ${styles.badgeNew}`}>NEW</span>}
+                </div>
+                <div className={styles.toolDesc}>{tool.desc}</div>
+              </div>
+            </Link>
+          ))}
+        </div>
 
         {/* CATEGORIES */}
         <div className={styles.sectionHeader} style={{ marginTop: 56 }}>
@@ -287,38 +381,25 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
             <Link
               key={cat.id}
               href={`/tools/${cat.id}`}
-              className={`${styles.catCard} ${styles[`cat_${cat.id}`]}`}
+              className={styles.catCard}
+              style={{ ['--cat' as string]: cat.color }}
             >
               <span className={styles.catIcon}>{cat.icon}</span>
-              <span className={styles.catName} style={{ color: cat.color }}>{cat.name}</span>
+              <span className={styles.catName}>{cat.name}</span>
               <span className={styles.catCount}>{cat.tools.length}개 도구</span>
             </Link>
           ))}
         </div>
 
-        {/* AD SLOT */}
+        {/* AD SLOT — 공간 예약(minHeight)으로 CLS 방지 */}
         <AdSlot position="in-article" minHeight={200} />
 
-        {/* POPULAR TOOLS */}
+        {/* 상황별 가이드 (큐레이션) — 서버 계산 시즌 추천을 prop으로 → 첫 페인트부터 정합 */}
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>인기 도구</h2>
-          <Link href="/tools" className={styles.sectionLink}>전체 보기 →</Link>
+          <h2 className={styles.sectionTitle}>상황별 가이드</h2>
+          <Link href="/collections" className={styles.sectionLink}>전체 보기 →</Link>
         </div>
-        <div className={styles.toolsGrid}>
-          {popularTools.map(tool => (
-            <Link key={tool.href} href={tool.href} className={styles.toolCard}>
-              <div className={styles.toolIconCol}>
-                <div className={styles.toolIconWrap}>{tool.icon}</div>
-                {tool.badge === 'hot' && <span className={`${styles.badge} ${styles.badgeHot}`}>HOT</span>}
-                {tool.badge === 'new' && <span className={`${styles.badge} ${styles.badgeNew}`}>NEW</span>}
-              </div>
-              <div className={styles.toolInfo}>
-                <div className={styles.toolName}>{tool.name}</div>
-                <div className={styles.toolDesc}>{tool.desc}</div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <CollectionBanner initialSlug={initialFeaturedSlug} />
 
         {/* 실시간 날짜·시각 위젯 — 페이지 하단 보조 정보 */}
         <LiveWidget />

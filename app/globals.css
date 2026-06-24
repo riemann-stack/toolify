@@ -47,6 +47,25 @@
   --warning: #B45309;         /* amber-700, 5.0:1 — 600레벨은 텍스트 AA 미달 */
   --danger:  #DC2626;         /* red-600, 4.5:1 */
   --danger-soft: #fef2f2;
+
+  /* ── 홈 "커맨드 센터" 토큰 ─────────────────────────────
+     홈·공통 컴포넌트(Hero·카드·검색) 전용 추가분. 기존 토큰(--accent·--bg·--text 등)은
+     185개 도구 페이지가 의존하므로 미변경. 액센트는 신호로만(태그·배지·점·hover), 면적 칠 금지. */
+  --brand:        #2563EB;   /* blue-600 — 홈 주 액션·포커스 신호 (UI/대형 ≥3:1) */
+  --brand-ink:    #1D4ED8;   /* blue-700 — 소형 링크/텍스트용 (흰 위 ~6.3:1 AA) */
+  --brand-soft:   #EFF4FF;   /* 브랜드 배경 틴트 */
+  --brand-line:   #D6E2FF;   /* 브랜드 헤어라인 보더 */
+  --accent-mint:  #10B981;   /* 신호(건강·성공 계열) */
+  --mint-soft:    #ECFDF5;
+  --accent-lime:  #65A30D;   /* 신호(절제) */
+  --accent-coral: #FB7185;   /* HOT 신호(점·보더) */
+  --coral-ink:    #E11D48;   /* rose-600 — 코랄 텍스트 AA (4.5:1) */
+  --coral-soft:   #FFF1F2;
+  --ink-faint:    #94A3B8;   /* 캡션·메타(대형/비텍스트 한정) */
+  --radius-lg:    16px;      /* 홈 카드 */
+  /* 그림자 2단계 — 쿨톤·저확산. resting은 헤어라인 보더 겸용 */
+  --shadow-rest:  0 1px 2px rgba(15,23,41,.04), 0 0 0 1px rgba(15,23,41,.05);
+  --shadow-lift:  0 6px 20px rgba(15,23,41,.08);
 }
 
 *, *::before, *::after {
