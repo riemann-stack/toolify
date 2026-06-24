@@ -5,6 +5,15 @@
   gap: 12px;
 }
 
+/* 피처드(시즌 추천) 카드 — 따뜻한 틴트는 인라인(컬렉션 색), 떠 있는 표면감만 토큰으로 */
+.featured {
+  box-shadow: var(--shadow-rest);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+@media (hover: hover) {
+  .featured:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+}
+
 /* 나머지 컬렉션 — 데스크탑: 그리드 / 모바일: 가로 스크롤 선반 */
 .others {
   display: grid;
@@ -19,12 +28,14 @@
   text-decoration: none;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 14px 16px;
   min-width: 0;
+  box-shadow: var(--shadow-rest);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
 @media (hover: hover) {
-  .otherCard:hover { border-color: var(--border-hover); }
+  .otherCard:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
 }
 
 /* 데스크톱: 카드 12개로 cap — 나머지는 /collections 인덱스('전체 보기')에 위임 */

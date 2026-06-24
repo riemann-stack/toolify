@@ -27,11 +27,12 @@ export default function CollectionBanner({ initialSlug }: CollectionBannerProps 
       {/* 대표(시즌 추천) 카드 */}
       <Link
         href={`/collections/${featured.slug}`}
+        className={s.featured}
         style={{
           display: 'block', textDecoration: 'none',
           borderRadius: 16, padding: '22px 24px',
-          background: `linear-gradient(135deg, ${featured.color}22 0%, var(--bg2) 70%)`,
-          border: `1px solid ${featured.color}55`,
+          background: `linear-gradient(135deg, ${featured.color}1c 0%, var(--bg2) 68%)`,
+          border: `1px solid ${featured.color}4d`,
         }}
       >
         <span
