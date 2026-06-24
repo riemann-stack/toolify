@@ -45,19 +45,25 @@
 .catLink {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   padding: 0 14px;
   height: 100%;
-  font-size: 13px;
-  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--muted-strong);
   text-decoration: none;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   transition: color 0.15s;
   white-space: nowrap;
+  /* button 트리거 리셋 */
+  background: none;
+  border: none;
+  cursor: pointer;
 }@media (hover: hover) {
   .catLink:hover { color: var(--text); }
 }
-.catLinkActive { color: var(--accent) !important; }
+.catLinkActive { color: var(--brand-ink) !important; }
 
 .chevron {
   opacity: 0.4;
@@ -77,11 +83,11 @@
   transform: translateX(-50%);
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px;
-  width: 720px;
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  width: 600px;
   max-width: calc(100vw - 32px);
-  box-shadow: 0 8px 32px rgba(15,23,42,0.08);
+  box-shadow: var(--shadow-lift);
   z-index: 400;
   animation: megaIn 0.15s ease;
 }
@@ -170,6 +176,31 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ── 메가 메뉴: 카테고리 그리드 (단일 메뉴) ── */
+.megaCatGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+.megaCatItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  border-left: 3px solid color-mix(in srgb, var(--cat, var(--accent)) 55%, var(--border));
+  text-decoration: none;
+  transition: background 0.12s, border-left-color 0.12s;
+}
+@media (hover: hover) {
+  .megaCatItem:hover { background: var(--bg3); border-left-color: var(--cat, var(--accent)); }
+}
+.megaCatItemIcon { font-size: 19px; flex-shrink: 0; }
+.megaCatItemBody { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.megaCatItemName { font-size: 13px; font-weight: 600; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.megaCatItemCount { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* 즐겨찾기 별 (메가 메뉴·검색 결과 공통) */
 .megaItemFav {
@@ -668,6 +699,22 @@
   flex-direction: column;
   gap: 6px;
 }
+
+/* 드로어 상단 바로가기 (상황별 가이드) */
+.drawerNavLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  background: var(--brand-soft);
+  border: 1px solid var(--brand-line);
+  border-radius: 12px;
+  text-decoration: none;
+  margin-bottom: 2px;
+}
+.drawerNavLinkIcon { font-size: 18px; flex-shrink: 0; }
+.drawerNavLinkText { flex: 1; font-size: 14px; font-weight: 700; color: var(--brand-ink); font-family: 'Noto Sans KR', sans-serif; }
+.drawerNavLinkArrow { color: var(--brand-ink); font-weight: 700; flex-shrink: 0; }
 
 /* ── 3) 아코디언 — details/summary ── */
 .drawerAccItem {

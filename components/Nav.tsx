@@ -222,6 +222,7 @@ export default function Nav() {
       if (e.key === 'Escape') {
         if (searchOpen) { setSearchOpen(false); setQuery('') }
         if (mobileOpen) setMobileOpen(false)
+        setActivecat(null)
       }
     }
     window.addEventListener('keydown', onKey)
@@ -296,66 +297,67 @@ export default function Nav() {
           You<span>til</span>
         </Link>
 
-        {/* 데스크탑 카테고리 */}
+        {/* 데스크탑 — 카테고리 단일 메가메뉴 + 상황별 가이드 (11개 직접 노출 폐지) */}
         <ul className={styles.links}>
-          {categories.map((cat) => (
-            <li key={cat.id} className={styles.catItem}
-              onMouseEnter={() => handleCatEnter(`/tools/${cat.id}`)}
-              onMouseLeave={handleCatLeave}>
-              <Link
-                href={`/tools/${cat.id}`}
-                className={`${styles.catLink} ${pathname.startsWith(`/tools/${cat.id}`) ? styles.catLinkActive : ''}`}>
-                {cat.name}
-                <svg className={styles.chevron} width="10" height="10" viewBox="0 0 10 10" fill="none">
-                  <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </Link>
+          <li className={styles.catItem}
+            onMouseEnter={() => handleCatEnter('all')}
+            onMouseLeave={handleCatLeave}>
+            <button
+              type="button"
+              className={`${styles.catLink} ${activecat === 'all' ? styles.catLinkActive : ''}`}
+              aria-haspopup="true"
+              aria-expanded={activecat === 'all'}
+              onClick={() => setActivecat((c) => (c === 'all' ? null : 'all'))}
+            >
+              카테고리
+              <svg className={styles.chevron} width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </button>
 
-              {/* 메가 메뉴 — 3컬럼 그리드 */}
-              {activecat === `/tools/${cat.id}` && (
-                <div
-                  ref={megaRef}
-                  className={styles.megaMenu}
-                  onMouseEnter={handleDropdownEnter}
-                  onMouseLeave={handleCatLeave}
-                >
-                  <div className={styles.megaHead}>
-                    <span className={styles.megaCatLabel}>
-                      <span className={styles.megaCatIcon}>{cat.icon}</span> {cat.name}
-                    </span>
-                    <Link href={`/tools/${cat.id}`} className={styles.megaAllLink}
-                      onClick={() => setActivecat(null)}>
-                      전체 보기 →
-                    </Link>
-                  </div>
-                  <div className={styles.megaGrid}>
-                    {cat.tools.map((tool) => (
-                      <Link key={tool.href} href={tool.href} className={styles.megaItem}
-                        onClick={() => setActivecat(null)}>
-                        <span className={styles.megaItemIcon}>{tool.icon}</span>
-                        <span className={styles.megaItemBody}>
-                          <span className={styles.megaItemName}>
-                            {tool.name}
-                            {tool.badge === 'new' && <span className={styles.badgeNew}>NEW</span>}
-                            {tool.badge === 'hot' && <span className={styles.badgeHot}>HOT</span>}
-                          </span>
-                          <span className={styles.megaItemDesc}>{tool.desc}</span>
-                        </span>
-                        <button
-                          className={`${styles.megaItemFav} ${isFav(tool.href) ? styles.megaItemFavActive : ''}`}
-                          onClick={(e) => handleToggleFav(e, tool.href)}
-                          aria-label={isFav(tool.href) ? '즐겨찾기 제거' : '즐겨찾기 추가'}
-                          title={isFav(tool.href) ? '즐겨찾기 제거' : '즐겨찾기 추가'}
-                        >
-                          {isFav(tool.href) ? '★' : '☆'}
-                        </button>
-                      </Link>
-                    ))}
-                  </div>
+            {/* 메가 메뉴 — 11개 카테고리 그리드 */}
+            {activecat === 'all' && (
+              <div
+                ref={megaRef}
+                className={styles.megaMenu}
+                onMouseEnter={handleDropdownEnter}
+                onMouseLeave={handleCatLeave}
+              >
+                <div className={styles.megaHead}>
+                  <span className={styles.megaCatLabel}>전체 카테고리</span>
+                  <Link href="/tools" className={styles.megaAllLink} onClick={() => setActivecat(null)}>
+                    전체 도구 →
+                  </Link>
                 </div>
-              )}
-            </li>
-          ))}
+                <div className={styles.megaCatGrid}>
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.id}
+                      href={`/tools/${cat.id}`}
+                      className={styles.megaCatItem}
+                      style={{ ['--cat' as string]: cat.color }}
+                      onClick={() => setActivecat(null)}
+                    >
+                      <span className={styles.megaCatItemIcon}>{cat.icon}</span>
+                      <span className={styles.megaCatItemBody}>
+                        <span className={styles.megaCatItemName}>{cat.name}</span>
+                        <span className={styles.megaCatItemCount}>{cat.tools.length}개 도구</span>
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </li>
+
+          <li className={styles.catItem}>
+            <Link
+              href="/collections"
+              className={`${styles.catLink} ${pathname.startsWith('/collections') ? styles.catLinkActive : ''}`}
+            >
+              상황별 가이드
+            </Link>
+          </li>
         </ul>
 
         {/* 오른쪽 버튼 영역 */}
@@ -601,6 +603,14 @@ export default function Nav() {
                 })()
               ) : (
                 <>
+                  {/* 상황별 가이드 — 드로어 상단 바로가기 */}
+                  <Link href="/collections" className={styles.drawerNavLink}
+                    onClick={() => setMobileOpen(false)}>
+                    <span className={styles.drawerNavLinkIcon}>🗂️</span>
+                    <span className={styles.drawerNavLinkText}>상황별 가이드</span>
+                    <span className={styles.drawerNavLinkArrow}>→</span>
+                  </Link>
+
                   {/* 즐겨찾기·최근 사용 (있을 때만, 축약 노출) */}
                   {favoriteTools.length > 0 && (
                     <details className={styles.drawerAccItem} open>
