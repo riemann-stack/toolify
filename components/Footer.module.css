@@ -1,10 +1,11 @@
 /* @hover-wrapped */
+/* ── 면책 밴드 — 중성 화이트 (페이퍼/쿨톤 캔버스 어디서든 성립) ── */
 .disclaimer {
-  border-top: 1px solid var(--border);
-  background: rgba(8, 145, 178, 0.04);
+  border-top: 1px solid var(--paper-line);
+  background: var(--paper-card);
   padding: 16px 48px;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--paper-ink-soft);
   line-height: 1.75;
   text-align: center;
 }
@@ -13,19 +14,29 @@
   margin: 0 auto;
 }
 .disclaimer strong {
-  color: var(--text);
+  color: var(--paper-ink);
   font-weight: 600;
 }
+.disclaimerIcon {
+  display: inline-flex;
+  vertical-align: -2px;
+  margin-right: 4px;
+  color: var(--warning);
+}
 .disclaimerLink {
-  color: #0891B2;
-  text-decoration: none;
+  color: var(--paper-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }@media (hover: hover) {
   .disclaimerLink:hover {
-  text-decoration: underline;
+  color: var(--paper-ink-soft);
 }
 }
 
+/* ── 푸터 — 잉크 다크 블록 ── */
 .footer {
+  background: var(--paper-ink);
   padding: 28px 48px;
   display: flex;
   align-items: center;
@@ -37,20 +48,33 @@
 .left {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 16px;
-  color: var(--muted);
+  color: #ffffff;
 }
-.logo span { color: var(--accent); }
+.logoMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  flex-shrink: 0;
+}
 
 .copy {
   font-size: 12px;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--paper) 68%, transparent);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -60,10 +84,10 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent);
-  background: var(--accent-dim);
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.14);
   padding: 1px 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   letter-spacing: 0.02em;
 }
 
@@ -75,7 +99,7 @@
 
 .link {
   font-size: 12px;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--paper) 78%, transparent);
   text-decoration: none;
   transition: color 0.15s;
   /* 시각 레이아웃 유지하며 터치 영역만 확장 (WCAG 2.5.8) */
@@ -83,7 +107,7 @@
   padding: 8px 4px;
   margin: -8px -4px;
 }@media (hover: hover) {
-  .link:hover { color: var(--text); }
+  .link:hover { color: #ffffff; }
 }
 
 @media (max-width: 600px) {

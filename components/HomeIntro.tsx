@@ -4,6 +4,7 @@
 
 import Link from 'next/link'
 import { totalTools, categories } from '@/lib/tools'
+import CatIcon from './CatIcon'
 
 const h2: React.CSSProperties = {
   fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
@@ -11,20 +12,27 @@ const h2: React.CSSProperties = {
   fontWeight: 800,
   letterSpacing: '-0.02em',
   marginBottom: '14px',
+  color: 'var(--paper-ink)',
 }
 const h3: React.CSSProperties = {
   fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '17px',
   fontWeight: 700,
   marginBottom: '8px',
+  color: 'var(--paper-ink)',
 }
 const p: React.CSSProperties = {
   fontSize: '14px',
-  color: 'var(--muted)',
+  color: 'var(--paper-ink-soft)',
   lineHeight: 1.85,
   margin: 0,
 }
-const linkStyle: React.CSSProperties = { color: 'var(--accent)', fontWeight: 600 }
+const linkStyle: React.CSSProperties = {
+  color: 'var(--paper-ink)',
+  fontWeight: 600,
+  textDecoration: 'underline',
+  textUnderlineOffset: '2px',
+}
 
 export default function HomeIntro() {
   const featured = ['finance', 'health', 'cooking', 'life']
@@ -87,15 +95,17 @@ export default function HomeIntro() {
                 gap: '6px',
                 padding: '8px 14px',
                 borderRadius: '999px',
-                border: '1px solid var(--border)',
-                background: 'var(--bg2)',
+                border: '1px solid var(--paper-line)',
+                background: 'var(--paper-card)',
                 fontSize: '13px',
                 fontWeight: 600,
-                color: 'var(--text)',
+                color: 'var(--paper-ink)',
                 textDecoration: 'none',
               }}
             >
-              <span>{cat.icon}</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', color: cat.color }} aria-hidden="true">
+                <CatIcon id={cat.id} size={14} />
+              </span>
               {cat.name}
             </Link>
           ))}
@@ -106,10 +116,11 @@ export default function HomeIntro() {
               alignItems: 'center',
               padding: '8px 14px',
               borderRadius: '999px',
-              border: '1px solid var(--accent)',
+              border: '1px solid var(--paper-ink)',
+              background: 'var(--paper-ink)',
               fontSize: '13px',
               fontWeight: 700,
-              color: 'var(--accent)',
+              color: '#ffffff',
               textDecoration: 'none',
             }}
           >
