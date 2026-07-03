@@ -1,31 +1,37 @@
 /* @hover-wrapped */
-/* ── 카테고리 페이지 ── */
+/* ── 카테고리 허브 — 페이퍼 캔버스 + 솔리드 컬러 히어로 (홈 벤토 타일과 동일 문법) ── */
+.canvas { background: var(--paper); }
+
 .wrap {
   max-width: 1080px;
   margin: 0 auto;
-  padding: 56px 24px 80px;
+  padding: 32px 24px 80px;
 }
 
-/* ── 헤더 ── */
-.header {
+/* ── 히어로 타일 — 배경은 --cat 76% + 잉크(~700레벨)로 흰 글자 AA 확보 ── */
+.hero {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 48px;
-  position: relative;
+  gap: 14px;
+  background: color-mix(in srgb, var(--cat-color, var(--accent)) 76%, var(--paper-ink));
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 26px;
+  color: #ffffff;
+  margin-bottom: 32px;
 }
 .crumb {
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.85);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  margin: 0;
 }
 .title {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: clamp(32px, 5vw, 48px);
+  font-size: clamp(30px, 4.6vw, 44px);
   font-weight: 800;
   letter-spacing: -1px;
-  line-height: 1.1;
+  line-height: 1.12;
   margin: 0;
   display: inline-flex;
   align-items: center;
@@ -36,17 +42,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  font-size: 32px;
-  border: 1px solid var(--border);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.18);
   flex-shrink: 0;
 }
-.titleText { line-height: 1.1; }
+.titleText { line-height: 1.12; }
 .desc {
   font-size: 15px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.92);
   line-height: 1.7;
   margin: 0;
   max-width: 720px;
@@ -56,17 +61,17 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 .metaChip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: var(--muted);
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 999px;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-pill);
   padding: 5px 12px;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -74,6 +79,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
   display: inline-block;
 }
 
@@ -81,7 +87,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 @media (max-width: 720px) {
   .grid { grid-template-columns: 1fr; }
@@ -92,12 +98,12 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px 22px;
+  background: var(--paper-card);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
   text-decoration: none;
-  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
   overflow: hidden;
 }
 .card::before {
@@ -111,8 +117,8 @@
 }@media (hover: hover) {
   .card:hover {
   transform: translateY(-2px);
-  border-color: var(--cat-color, var(--accent));
-  background: var(--bg3);
+  border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 40%, var(--paper-line));
+  box-shadow: var(--shadow-lift);
 }
 }@media (hover: hover) {
   .card:hover::before { opacity: 1; }
@@ -124,16 +130,14 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: 11px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  font-size: 22px;
+  border-radius: var(--radius-m);
+  background: color-mix(in srgb, var(--cat-color, var(--accent)) 10%, var(--paper-card));
+  color: var(--cat-color, var(--accent));
   flex-shrink: 0;
-  transition: background 0.18s ease, border-color 0.18s ease;
+  transition: background 0.18s ease;
 }@media (hover: hover) {
   .card:hover .iconBox {
-  background: color-mix(in srgb, var(--cat-color, var(--accent)) 14%, var(--bg3));
-  border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, var(--border));
+  background: color-mix(in srgb, var(--cat-color, var(--accent)) 16%, var(--paper-card));
 }
 }
 
@@ -147,7 +151,7 @@
 .name {
   font-size: 15px;
   font-weight: 600;
-  color: var(--text);
+  color: var(--paper-ink);
   font-family: 'Noto Sans KR', sans-serif;
   line-height: 1.4;
   display: inline-flex;
@@ -157,7 +161,7 @@
 }
 .descLine {
   font-size: 13px;
-  color: var(--muted);
+  color: var(--paper-ink-soft);
   line-height: 1.55;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -172,7 +176,7 @@
   width: 28px;
   height: 28px;
   flex-shrink: 0;
-  color: var(--muted);
+  color: var(--paper-ink-faint);
   opacity: 0;
   transform: translateX(-4px);
   transition: opacity 0.18s ease, transform 0.18s ease, color 0.18s ease;
@@ -185,21 +189,21 @@
 }
 }
 
-/* 배지 */
+/* 배지 — 홈 인기 카드와 동일 문법 */
 .badge {
   font-size: 10px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   padding: 2px 7px;
-  border-radius: 4px;
+  border-radius: var(--radius-pill);
   letter-spacing: 0.05em;
   line-height: 1.4;
   border: 1px solid;
 }
 .badgeHot {
-  color: #DC2626;
-  background: rgba(220, 38, 38, 0.1);
-  border-color: rgba(220, 38, 38, 0.3);
+  color: var(--coral-ink);
+  background: var(--coral-soft);
+  border-color: color-mix(in srgb, var(--accent-coral) 45%, transparent);
 }
 .badgeNew {
   color: var(--cat-color, var(--accent));
@@ -209,3 +213,12 @@
 
 /* 광고 슬롯 여백 */
 .adSlot { margin-top: 40px; }
+
+/* ── 모바일 ── */
+@media (max-width: 600px) {
+  .wrap { padding-top: 20px; }
+  .hero { padding: 22px 20px; margin-bottom: 24px; }
+  .titleIcon { width: 44px; height: 44px; border-radius: var(--radius-m); }
+  .card { padding: 15px 16px; gap: 13px; }
+  .iconBox { width: 38px; height: 38px; }
+}

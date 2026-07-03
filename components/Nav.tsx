@@ -6,6 +6,9 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import styles from './Nav.module.css'
 import { categories, allTools, type Tool } from '@/lib/tools'
+import CatIcon from './CatIcon'
+import ToolCatIcon from './ToolCatIcon'
+import UiIcon from './UiIcon'
 import { searchTools } from '@/lib/search'
 import {
   loadUserNav, saveUserNav, recordVisit, toggleFavorite, isToolPath,
@@ -52,13 +55,13 @@ function isMacPlatform(): boolean {
   return /mac/i.test(nav.userAgentData?.platform ?? nav.platform ?? '')
 }
 
-const POPULAR_TOOLS: Array<Pick<Tool, 'href' | 'name' | 'icon'>> = [
-  { name: '연봉 실수령액', href: '/tools/finance/salary',  icon: '💰' },
-  { name: '나이 계산기',   href: '/tools/date/age',         icon: '🎂' },
-  { name: 'BMI 계산기',    href: '/tools/health/bmi',       icon: '⚖️' },
-  { name: '로또 생성기',   href: '/tools/life/lotto',       icon: '🎰' },
-  { name: '더치페이',      href: '/tools/life/dutch',       icon: '🍻' },
-  { name: '군대 전역일',   href: '/tools/date/military',    icon: '🎖️' },
+const POPULAR_TOOLS: Array<Pick<Tool, 'href' | 'name'>> = [
+  { name: '연봉 실수령액', href: '/tools/finance/salary' },
+  { name: '나이 계산기',   href: '/tools/date/age' },
+  { name: 'BMI 계산기',    href: '/tools/health/bmi' },
+  { name: '로또 생성기',   href: '/tools/life/lotto' },
+  { name: '더치페이',      href: '/tools/life/dutch' },
+  { name: '군대 전역일',   href: '/tools/date/military' },
 ]
 
 /* ─── 공유 버튼 ─── */
@@ -292,9 +295,17 @@ export default function Nav() {
   return (
     <>
       <nav className={styles.nav}>
-        {/* 로고 */}
+        {/* 로고 — 잉크 마크 + 워드마크 (벤토 리디자인 정합) */}
         <Link href="/" className={styles.logo}>
-          You<span>til</span>
+          <span className={styles.logoMark} aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 3m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+              <path d="M8 7m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v1a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z" />
+              <path d="M8 14l0 .01" /><path d="M12 14l0 .01" /><path d="M16 14l0 .01" />
+              <path d="M8 17l0 .01" /><path d="M12 17l0 .01" /><path d="M16 17l0 .01" />
+            </svg>
+          </span>
+          Youtil
         </Link>
 
         {/* 데스크탑 — 카테고리 단일 메가메뉴 + 상황별 가이드 (11개 직접 노출 폐지) */}
@@ -338,7 +349,9 @@ export default function Nav() {
                       style={{ ['--cat' as string]: cat.color }}
                       onClick={() => setActivecat(null)}
                     >
-                      <span className={styles.megaCatItemIcon}>{cat.icon}</span>
+                      <span className={styles.megaCatItemIcon} style={{ color: cat.color }}>
+                        <CatIcon id={cat.id} size={18} />
+                      </span>
                       <span className={styles.megaCatItemBody}>
                         <span className={styles.megaCatItemName}>{cat.name}</span>
                         <span className={styles.megaCatItemCount}>{cat.tools.length}개 도구</span>
@@ -439,7 +452,7 @@ export default function Nav() {
                     onMouseEnter={() => setHighlightIdx(idx)}
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                    <span className={styles.searchResultIcon}>{tool.icon}</span>
+                    <ToolCatIcon href={tool.href} size={18} />
                     <span className={styles.searchResultBody}>
                       <span className={styles.searchResultName}>{tool.name}</span>
                       <span className={styles.searchResultCat}>{categoryNameByHref(tool.href)}</span>
@@ -464,13 +477,13 @@ export default function Nav() {
             <div className={styles.searchQuick}>
               {favoriteTools.length > 0 && (
                 <>
-                  <span className={styles.searchQuickLabel}>⭐ 즐겨찾기</span>
+                  <span className={styles.searchQuickLabel}><UiIcon name="star" size={12} /> 즐겨찾기</span>
                   <div className={styles.searchQuickList}>
                     {favoriteTools.map((t) => (
                       <Link key={t.href} href={t.href} className={styles.searchQuickItem}
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                        <span>{t.icon}</span>
+                        <ToolCatIcon href={t.href} size={14} />
                         <span>{t.name}</span>
                       </Link>
                     ))}
@@ -480,13 +493,13 @@ export default function Nav() {
 
               {recentTools.length > 0 && (
                 <>
-                  <span className={styles.searchQuickLabel}>🕐 최근 사용</span>
+                  <span className={styles.searchQuickLabel}><UiIcon name="clock" size={12} /> 최근 사용</span>
                   <div className={styles.searchQuickList}>
                     {recentTools.map((t) => (
                       <Link key={t.href} href={t.href} className={styles.searchQuickItem}
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                        <span>{t.icon}</span>
+                        <ToolCatIcon href={t.href} size={14} />
                         <span>{t.name}</span>
                       </Link>
                     ))}
@@ -494,13 +507,13 @@ export default function Nav() {
                 </>
               )}
 
-              <span className={styles.searchQuickLabel}>🔥 인기 도구</span>
+              <span className={styles.searchQuickLabel}><UiIcon name="flame" size={12} /> 인기 도구</span>
               <div className={styles.searchQuickList}>
                 {POPULAR_TOOLS.map((t) => (
                   <Link key={t.href} href={t.href} className={styles.searchQuickItem}
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                    <span>{t.icon}</span>
+                    <ToolCatIcon href={t.href} size={14} />
                     <span>{t.name}</span>
                   </Link>
                 ))}
@@ -555,12 +568,12 @@ export default function Nav() {
                             className={styles.drawerSearchItem}
                             onClick={() => { setTimeout(() => setMobileOpen(false), 0) }}
                           >
-                            <span className={styles.drawerSearchIcon}>{tool.icon}</span>
+                            <span className={styles.drawerSearchIcon}><ToolCatIcon href={tool.href} size={18} /></span>
                             <span className={styles.drawerSearchBody}>
                               <span className={styles.drawerSearchName}>{tool.name}</span>
                               {category && (
                                 <span className={styles.drawerSearchCat} style={{ color: category.color }}>
-                                  {category.icon} {category.name}
+                                  {category.name}
                                 </span>
                               )}
                             </span>
@@ -590,7 +603,7 @@ export default function Nav() {
                             className={styles.drawerSearchItem}
                             onClick={() => { setTimeout(() => setMobileOpen(false), 0) }}
                           >
-                            <span className={styles.drawerSearchIcon}>{tool.icon}</span>
+                            <span className={styles.drawerSearchIcon}><ToolCatIcon href={tool.href} size={18} /></span>
                             <span className={styles.drawerSearchBody}>
                               <span className={styles.drawerSearchName}>{tool.name}</span>
                               <span className={styles.drawerSearchDesc}>{tool.desc}</span>
@@ -606,7 +619,7 @@ export default function Nav() {
                   {/* 상황별 가이드 — 드로어 상단 바로가기 */}
                   <Link href="/collections" className={styles.drawerNavLink}
                     onClick={() => setMobileOpen(false)}>
-                    <span className={styles.drawerNavLinkIcon}>🗂️</span>
+                    <span className={styles.drawerNavLinkIcon}><UiIcon name="compass" size={18} /></span>
                     <span className={styles.drawerNavLinkText}>상황별 가이드</span>
                     <span className={styles.drawerNavLinkArrow}>→</span>
                   </Link>
@@ -615,7 +628,7 @@ export default function Nav() {
                   {favoriteTools.length > 0 && (
                     <details className={styles.drawerAccItem} open>
                       <summary className={styles.drawerAccSummary}>
-                        <span className={styles.drawerAccIcon}>⭐</span>
+                        <span className={styles.drawerAccIcon}><UiIcon name="star" size={16} /></span>
                         <span className={styles.drawerAccTitle}>즐겨찾기</span>
                         <span className={styles.drawerAccCount}>{favoriteTools.length}</span>
                       </summary>
@@ -623,7 +636,7 @@ export default function Nav() {
                         {favoriteTools.map((t) => (
                           <Link key={t.href} href={t.href} className={styles.drawerToolItem}
                             onClick={() => setMobileOpen(false)}>
-                            <span>{t.icon}</span>
+                            <ToolCatIcon href={t.href} size={14} />
                             <span>{t.name}</span>
                           </Link>
                         ))}
@@ -634,7 +647,7 @@ export default function Nav() {
                   {recentTools.length > 0 && (
                     <details className={styles.drawerAccItem}>
                       <summary className={styles.drawerAccSummary}>
-                        <span className={styles.drawerAccIcon}>🕐</span>
+                        <span className={styles.drawerAccIcon}><UiIcon name="clock" size={16} /></span>
                         <span className={styles.drawerAccTitle}>최근 사용</span>
                         <span className={styles.drawerAccCount}>{recentTools.length}</span>
                       </summary>
@@ -642,7 +655,7 @@ export default function Nav() {
                         {recentTools.map((t) => (
                           <Link key={t.href} href={t.href} className={styles.drawerToolItem}
                             onClick={() => setMobileOpen(false)}>
-                            <span>{t.icon}</span>
+                            <ToolCatIcon href={t.href} size={14} />
                             <span>{t.name}</span>
                           </Link>
                         ))}
@@ -658,7 +671,9 @@ export default function Nav() {
                       className={styles.drawerAccItem}
                     >
                       <summary className={styles.drawerAccSummary}>
-                        <span className={styles.drawerAccIcon}>{cat.icon}</span>
+                        <span className={styles.drawerAccIcon} style={{ color: cat.color }}>
+                          <CatIcon id={cat.id} size={16} />
+                        </span>
                         <span className={styles.drawerAccTitle} style={{ color: cat.color }}>{cat.name}</span>
                         <span className={styles.drawerAccCount}>{cat.tools.length}</span>
                       </summary>
@@ -673,7 +688,7 @@ export default function Nav() {
                         {cat.tools.map((tool) => (
                           <Link key={tool.href} href={tool.href} className={styles.drawerToolItem}
                             onClick={() => setMobileOpen(false)}>
-                            <span>{tool.icon}</span>
+                            <ToolCatIcon href={tool.href} size={14} />
                             <span>{tool.name}</span>
                           </Link>
                         ))}

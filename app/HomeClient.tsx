@@ -2,13 +2,16 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { categories, allTools, totalTools } from '@/lib/tools'
+import { categories, allTools, totalTools, type Category } from '@/lib/tools'
 import { loadUserNav } from '@/lib/userNav'
 import { searchTools } from '@/lib/search'
 import AdSlot from '@/components/AdSlot'
 import LiveWidget from '@/components/LiveWidget'
 import CollectionBanner from '@/components/CollectionBanner'
 import HomeJsonLd from '@/components/HomeJsonLd'
+import CatIcon from '@/components/CatIcon'
+import ToolCatIcon from '@/components/ToolCatIcon'
+import UiIcon from '@/components/UiIcon'
 import styles from './page.module.css'
 
 // 인기 툴 — badge 있는 것 우선, 나머지는 카테고리별 첫 번째
@@ -20,76 +23,39 @@ const popularTools = [
 
 const RANDOM_PICK_COUNT = 5
 
-/* ── Hero 우측 라이브 미리보기 (정적 샘플 스니펫, 실제 계산 호출 없음 — 로직 불변) ──
-   경로는 기존 레지스트리에서 가져온 실제 라우트. example=true는 가정값이라 "예시" 칩 표시. */
-const HERO_PREVIEWS: { href: string; icon: string; name: string; input: string; result: string; example: boolean }[] = [
-  { href: '/tools/finance/car-cost', icon: '🚗', name: '자동차 유지비 계산기', input: '준중형 · 월 1,500km', result: '월 유지비 약 45만원', example: true },
-  { href: '/tools/health/weightloss', icon: '⚖️', name: '체중 감량 기간 계산기', input: '목표 −5kg · 주 0.5kg', result: '약 10주', example: true },
-  { href: '/tools/cooking/microwave', icon: '🍳', name: '전자레인지 출력 환산기', input: '700W 3분 → 1000W', result: '약 2분 6초', example: false },
-  { href: '/tools/sports/race-predictor', icon: '🏃', name: '마라톤 기록 계산기', input: '풀코스 Sub-4', result: '페이스 5′41″/km', example: false },
-  { href: '/tools/unit/converter', icon: '📐', name: '단위 변환기', input: '10평', result: '약 33.1㎡', example: false },
+// 인기 카드 틴트용 — 도구 href → 소속 카테고리 색
+const catColorByHref = new Map<string, string>()
+for (const c of categories) for (const t of c.tools) catColorByHref.set(t.href, c.color)
+
+/* ── 벤토 배치 순서 — 4열 그리드에서 빈 칸 없이 맞물리도록 수동 배열.
+   검색(2×2)·금융(2×1)·가이드(2×1)·전체보기(2×1) 스팬 기준. 목록에 없는
+   신규 카테고리는 뒤쪽에 자동 합류. */
+const BENTO_FRONT = ['finance', 'health', 'cooking', 'sports', 'interior', 'unit', 'date']
+const BENTO_BACK = ['art', 'edu', 'dev', 'life']
+const catById = new Map(categories.map(c => [c.id, c]))
+const bentoFront = BENTO_FRONT.map(id => catById.get(id)).filter((c): c is Category => !!c)
+const bentoBack = [
+  ...BENTO_BACK.map(id => catById.get(id)).filter((c): c is Category => !!c),
+  ...categories.filter(c => !BENTO_FRONT.includes(c.id) && !BENTO_BACK.includes(c.id)),
 ]
 
-function HeroPreview() {
-  const [idx, setIdx] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const [animate, setAnimate] = useState(false) // 모션 허용 여부 — 마운트 후 결정(SSR 정적)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setAnimate(!mq.matches)
-    const onChange = () => setAnimate(!mq.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
-
-  useEffect(() => {
-    if (!animate || paused) return
-    const t = setInterval(() => setIdx(i => (i + 1) % HERO_PREVIEWS.length), 4500)
-    return () => clearInterval(t)
-  }, [animate, paused])
-
-  const active = HERO_PREVIEWS[idx]
+function CatTile({ cat }: { cat: Category }) {
+  const wide = cat.id === 'finance'
   return (
-    <div
-      className={styles.previewPanel}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={() => setPaused(false)}
+    <Link
+      href={`/tools/${cat.id}`}
+      className={`${styles.tile} ${styles.catTile}${wide ? ` ${styles.tileWide}` : ''}`}
+      style={{ ['--cat' as string]: cat.color }}
     >
-      <div className={styles.previewStack} aria-hidden="true">
-        <span className={styles.previewGhost2} />
-        <span className={styles.previewGhost1} />
-      </div>
-      <Link href={active.href} className={styles.previewCard} key={active.href}>
-        <div className={styles.previewHead}>
-          <span className={styles.previewIcon} aria-hidden="true">{active.icon}</span>
-          <span className={styles.previewName}>{active.name}</span>
-        </div>
-        <div className={styles.previewBody}>
-          <span className={styles.previewInput}>{active.input}</span>
-          <span className={styles.previewArrow} aria-hidden="true">→</span>
-          <span className={styles.previewResult}>
-            {active.result}
-            {active.example && <span className={styles.previewExample}>예시</span>}
-          </span>
-        </div>
-      </Link>
-      <div className={styles.previewDots} role="tablist" aria-label="도구 미리보기 선택">
-        {HERO_PREVIEWS.map((p, i) => (
-          <button
-            key={p.href}
-            type="button"
-            role="tab"
-            aria-selected={i === idx}
-            aria-label={p.name}
-            className={`${styles.previewDot} ${i === idx ? styles.previewDotActive : ''}`}
-            onClick={() => setIdx(i)}
-          />
-        ))}
-      </div>
-    </div>
+      <span className={styles.catTileHead}>
+        <CatIcon id={cat.id} size={20} />
+        <span className={styles.catTileCount}>{cat.tools.length}개</span>
+      </span>
+      <span className={styles.catTileBody}>
+        <span className={styles.catTileName}>{cat.name}</span>
+        {cat.tagline && <span className={styles.catTileDesc}>{cat.tagline}</span>}
+      </span>
+    </Link>
   )
 }
 
@@ -182,211 +148,200 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
   return (
     <>
       <HomeJsonLd />
-      {/* HERO */}
+      {/* HERO — 헤드라인 + 벤토 그리드 (검색·카테고리·가이드가 한 판에) */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>
+          <span className={styles.heroTag}>
+            <span className={styles.dot} aria-hidden="true" />
+            로그인 없이 바로 쓰는 무료 계산기 · 2026년 기준 최신
+          </span>
+          <h1 className={styles.h1}>
+            모든 계산,<br />한 곳에서.
+          </h1>
+          <p className={styles.heroSub}>
+            연봉·세금·건강·요리·날짜·단위변환까지 — 입력하면 바로 답이 나옵니다.
+          </p>
 
-          {/* 텍스트 영역 */}
-          <div className={styles.heroLeft}>
-            <span className={styles.heroTag}>
-              <span className={styles.dot} aria-hidden="true" />
-              {totalTools}+개 도구 · 로그인 없이 바로
-            </span>
-            <h1 className={styles.h1}>
-              모든 계산,<br /><em className={styles.accent}>한 곳에서.</em>
-            </h1>
-            <p className={styles.heroSub}>
-              연봉·세금·건강·요리·날짜·단위변환까지, 일상의 계산을 빠르게.
-            </p>
+          <div className={styles.bento}>
+            {/* 검색 타일 (2×2) — ⌘K 커맨드 진입점 + 발견 탭 */}
+            <div className={`${styles.tile} ${styles.searchTile}`}>
+              <p className={styles.searchTileTitle}>무엇을 계산할까요?</p>
 
-            {/* 검색창 — 주요 동작이므로 발견 섹션보다 위에 배치 (⌘K 커맨드 진입점) */}
-            <div className={styles.searchWrap}>
-              <svg className={styles.searchIcon} width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <input
-                ref={searchInputRef}
-                className={styles.searchInput}
-                type="text"
-                placeholder="필요한 도구를 검색하세요"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                autoComplete="off"
-                aria-label="도구 검색"
-              />
-              <kbd className={styles.searchKbd} aria-hidden="true">{isMac ? '⌘K' : 'Ctrl K'}</kbd>
+              <div className={styles.searchWrap}>
+                <svg className={styles.searchIcon} width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input
+                  ref={searchInputRef}
+                  className={styles.searchInput}
+                  type="text"
+                  placeholder="연봉, 칼로리, 평수…"
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  autoComplete="off"
+                  aria-label="도구 검색"
+                />
+                <kbd className={styles.searchKbd} aria-hidden="true">{isMac ? '⌘K' : 'Ctrl K'}</kbd>
 
-              {/* 검색 결과 드롭다운 */}
-              {query.trim() && (
-                <div className={styles.searchDropdown}>
-                  {searchHits.length > 0 ? (
-                    searchHits.map(({ tool, category }) => (
-                      <Link
-                        key={tool.href}
-                        href={tool.href}
-                        className={styles.searchItem}
-                        prefetch={false}
-                        // 근본 원인: 결과 클릭 시 포커스된 입력창이 blur되며(모바일은 키보드 닫힘)
-                        // 첫 클릭/탭이 그 동작에 흡수돼 무시됨. onMouseDown preventDefault로
-                        // 포커스 이탈을 막아 첫 클릭이 바로 Link로 전달되게 한다(Nav 검색과 동일).
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => { setTimeout(() => setQuery(''), 0) }}
-                      >
-                        <span className={styles.searchItemIcon}>{tool.icon}</span>
-                        <div className={styles.searchItemBody}>
-                          <div className={styles.searchItemNameRow}>
-                            <span className={styles.searchItemName}>{tool.name}</span>
-                            {category && (
-                              <span
-                                className={styles.searchItemCat}
-                                style={{ color: category.color, borderColor: `color-mix(in srgb, ${category.color} 33%, transparent)` }}
-                              >
-                                {category.icon} {category.name}
-                              </span>
-                            )}
+                {/* 검색 결과 드롭다운 */}
+                {query.trim() && (
+                  <div className={styles.searchDropdown}>
+                    {searchHits.length > 0 ? (
+                      searchHits.map(({ tool, category }) => (
+                        <Link
+                          key={tool.href}
+                          href={tool.href}
+                          className={styles.searchItem}
+                          prefetch={false}
+                          // 근본 원인: 결과 클릭 시 포커스된 입력창이 blur되며(모바일은 키보드 닫힘)
+                          // 첫 클릭/탭이 그 동작에 흡수돼 무시됨. onMouseDown preventDefault로
+                          // 포커스 이탈을 막아 첫 클릭이 바로 Link로 전달되게 한다(Nav 검색과 동일).
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => { setTimeout(() => setQuery(''), 0) }}
+                        >
+                          <ToolCatIcon href={tool.href} size={18} />
+                          <div className={styles.searchItemBody}>
+                            <div className={styles.searchItemNameRow}>
+                              <span className={styles.searchItemName}>{tool.name}</span>
+                              {category && (
+                                <span
+                                  className={styles.searchItemCat}
+                                  style={{ color: category.color, borderColor: `color-mix(in srgb, ${category.color} 33%, transparent)` }}
+                                >
+                                  {category.name}
+                                </span>
+                              )}
+                            </div>
+                            <div className={styles.searchItemDesc}>{tool.desc}</div>
                           </div>
-                          <div className={styles.searchItemDesc}>{tool.desc}</div>
-                        </div>
-                      </Link>
-                    ))
-                  ) : (
-                    <div className={styles.searchEmpty}>검색 결과가 없습니다</div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* 발견한 도구 — 섹션 카드 + 세그먼트 컨트롤 */}
-            <section className={styles.randomSection}>
-              <div className={styles.discoverHeader}>
-                <div className={styles.discoverTabs} role="tablist" aria-label="도구 발견 탭">
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={tab === 'recent'}
-                    className={`${styles.discoverTab} ${tab === 'recent' ? styles.discoverTabActive : ''}`}
-                    onClick={() => setTab('recent')}
-                  >
-                    🕒 최근
-                    {mounted && recentTools.length > 0 && (
-                      <span className={styles.discoverTabCount}>{recentTools.length}</span>
+                        </Link>
+                      ))
+                    ) : (
+                      <div className={styles.searchEmpty}>검색 결과가 없습니다</div>
                     )}
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={tab === 'favorite'}
-                    className={`${styles.discoverTab} ${tab === 'favorite' ? styles.discoverTabActive : ''}`}
-                    onClick={() => setTab('favorite')}
-                  >
-                    ⭐ 즐겨찾기
-                    {mounted && favoriteTools.length > 0 && (
-                      <span className={styles.discoverTabCount}>{favoriteTools.length}</span>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={tab === 'random'}
-                    className={`${styles.discoverTab} ${tab === 'random' ? styles.discoverTabActive : ''}`}
-                    onClick={() => setTab('random')}
-                  >
-                    🎰 랜덤
-                  </button>
-                </div>
-                {tab === 'random' && (
-                  <button
-                    type="button"
-                    className={styles.randomReroll}
-                    onClick={pickRandom}
-                    aria-label="다시 뽑기"
-                  >
-                    🔄 다시 뽑기
-                  </button>
+                  </div>
                 )}
               </div>
 
-              {activeChips.length > 0 ? (
-                <div className={styles.randomChips}>
-                  {activeChips.map(tool => (
-                    <Link key={tool.href} href={tool.href} className={styles.randomChip}>
-                      <span className={styles.randomChipIcon}>{tool.icon}</span>
-                      <span className={styles.randomChipName}>{tool.name}</span>
-                    </Link>
-                  ))}
+              {/* 발견한 도구 — 세그먼트 컨트롤 (로직 불변) */}
+              <section className={styles.randomSection}>
+                <div className={styles.discoverHeader}>
+                  <div className={styles.discoverTabs} role="tablist" aria-label="도구 발견 탭">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={tab === 'recent'}
+                      className={`${styles.discoverTab} ${tab === 'recent' ? styles.discoverTabActive : ''}`}
+                      onClick={() => setTab('recent')}
+                    >
+                      <UiIcon name="clock" size={13} /> 최근
+                      {mounted && recentTools.length > 0 && (
+                        <span className={styles.discoverTabCount}>{recentTools.length}</span>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={tab === 'favorite'}
+                      className={`${styles.discoverTab} ${tab === 'favorite' ? styles.discoverTabActive : ''}`}
+                      onClick={() => setTab('favorite')}
+                    >
+                      <UiIcon name="star" size={13} /> 즐겨찾기
+                      {mounted && favoriteTools.length > 0 && (
+                        <span className={styles.discoverTabCount}>{favoriteTools.length}</span>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={tab === 'random'}
+                      className={`${styles.discoverTab} ${tab === 'random' ? styles.discoverTabActive : ''}`}
+                      onClick={() => setTab('random')}
+                    >
+                      <UiIcon name="dice" size={13} /> 랜덤
+                    </button>
+                  </div>
+                  {tab === 'random' && (
+                    <button
+                      type="button"
+                      className={styles.randomReroll}
+                      onClick={pickRandom}
+                      aria-label="다시 뽑기"
+                    >
+                      <UiIcon name="refresh" size={12} /> 다시 뽑기
+                    </button>
+                  )}
                 </div>
-              ) : (
-                <div className={styles.discoverEmpty}>
-                  {tab === 'recent'
-                    ? '아직 사용한 도구가 없어요. 마음에 드는 도구를 한 번 써보면 여기에 모여요.'
-                    : '⭐를 눌러 즐겨찾기에 담아두면 다음에 한 번에 찾을 수 있어요.'}
-                </div>
-              )}
-            </section>
 
-            {/* 통계 + 전체 도구 보기 버튼 */}
-            <div className={styles.statsRow}>
-              <div className={styles.statsLine}>
-                <strong className={styles.statsLineNum}>{totalTools}<span className={styles.accent}>+</span></strong>
-                <span className={styles.statsLineSep}>·</span>
-                <span className={styles.statsLineLabel}>{categories.length} 카테고리</span>
-              </div>
-              <Link href="/tools" className={styles.ctaBtn}>
-                전체 도구 →
-              </Link>
+                {activeChips.length > 0 ? (
+                  <div className={styles.randomChips}>
+                    {activeChips.map(tool => (
+                      <Link key={tool.href} href={tool.href} className={styles.randomChip}>
+                        <ToolCatIcon href={tool.href} size={14} />
+                        <span className={styles.randomChipName}>{tool.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <div className={styles.discoverEmpty}>
+                    {tab === 'recent'
+                      ? '아직 사용한 도구가 없어요. 마음에 드는 도구를 한 번 써보면 여기에 모여요.'
+                      : '★를 눌러 즐겨찾기에 담아두면 다음에 한 번에 찾을 수 있어요.'}
+                  </div>
+                )}
+              </section>
+
+              <p className={styles.searchTileFoot}>
+                로그인 없음 · 전부 무료 · {categories.length}개 카테고리 {totalTools}개 도구
+              </p>
             </div>
-          </div>
 
-          {/* 우측 비주얼 — 라이브 미리보기 패널 (데스크톱) */}
-          <div className={styles.heroRight}>
-            <HeroPreview />
-          </div>
+            {bentoFront.map(cat => <CatTile key={cat.id} cat={cat} />)}
 
+            {/* 상황별 가이드 타일 — 아래 큐레이션 섹션으로 안내 */}
+            <Link href="/collections" className={`${styles.tile} ${styles.guideTile}`}>
+              <span className={styles.guideTileTag}>상황별 가이드 · 시즌 추천</span>
+              <span className={styles.guideTileTitle}>오늘 상황에 맞는 도구 모음 →</span>
+            </Link>
+
+            {bentoBack.map(cat => <CatTile key={cat.id} cat={cat} />)}
+
+            <Link href="/tools" className={`${styles.tile} ${styles.allTile}`}>
+              <span>
+                <span className={styles.allTileTitle}>{totalTools}개 도구 전체 보기</span>
+                <span className={styles.allTileDesc}>금융부터 개발자 도구까지 한 페이지에</span>
+              </span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M5 12h14" /><path d="M13 18l6-6" /><path d="M13 6l6 6" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* CONTENT */}
       <div className={styles.content}>
 
-        {/* POPULAR TOOLS — 첫 화면에서 바로 실행 가능한 도구 (카테고리 위로) */}
+        {/* POPULAR TOOLS — 카테고리 틴트 랭킹 카드 */}
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>인기 도구</h2>
           <Link href="/tools" className={styles.sectionLink}>전체 보기 →</Link>
         </div>
-        <div className={styles.toolsGrid}>
-          {popularTools.map(tool => (
-            <Link key={tool.href} href={tool.href} className={styles.toolCard}>
-              <div className={styles.toolIconCol}>
-                <div className={styles.toolIconWrap}>{tool.icon}</div>
-              </div>
-              <div className={styles.toolInfo}>
-                <div className={styles.toolNameRow}>
-                  <span className={styles.toolName}>{tool.name}</span>
-                  {tool.badge === 'hot' && <span className={`${styles.badge} ${styles.badgeHot}`}>HOT</span>}
-                  {tool.badge === 'new' && <span className={`${styles.badge} ${styles.badgeNew}`}>NEW</span>}
-                </div>
-                <div className={styles.toolDesc}>{tool.desc}</div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* CATEGORIES */}
-        <div className={styles.sectionHeader} style={{ marginTop: 56 }}>
-          <h2 className={styles.sectionTitle}>카테고리</h2>
-          <Link href="/tools" className={styles.sectionLink}>전체 보기 →</Link>
-        </div>
-        <div className={styles.catGrid}>
-          {categories.map(cat => (
+        <div className={styles.popGrid}>
+          {popularTools.map((tool, i) => (
             <Link
-              key={cat.id}
-              href={`/tools/${cat.id}`}
-              className={styles.catCard}
-              style={{ ['--cat' as string]: cat.color }}
+              key={tool.href}
+              href={tool.href}
+              className={styles.popCard}
+              style={{ ['--cat' as string]: catColorByHref.get(tool.href) ?? 'var(--accent)' }}
             >
-              <span className={styles.catIcon}>{cat.icon}</span>
-              <span className={styles.catName}>{cat.name}</span>
-              <span className={styles.catCount}>{cat.tools.length}개 도구</span>
+              <span className={styles.popRank}>
+                인기 {i + 1}위
+                {tool.badge === 'hot' && <span className={`${styles.badge} ${styles.badgeHot}`}>HOT</span>}
+                {tool.badge === 'new' && <span className={`${styles.badge} ${styles.badgeNew}`}>NEW</span>}
+              </span>
+              <span className={styles.popName}>{tool.name}</span>
+              <span className={styles.popDesc}>{tool.desc}</span>
             </Link>
           ))}
         </div>

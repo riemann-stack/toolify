@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { totalTools, categories } from '@/lib/tools'
 import AdSlot from '@/components/AdSlot'
+import CatIcon from '@/components/CatIcon'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolsBrowser from './ToolsBrowser'
 import { buildMetadata } from '@/lib/seo'
@@ -51,16 +52,18 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: '-0.01em',
   marginBottom: '14px',
+  color: 'var(--paper-ink)',
 }
 
 export default function ToolsPage() {
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px', overflowX: 'hidden' }}>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <div style={{ background: 'var(--paper)' }}>
+    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 24px 80px', overflowX: 'hidden' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px', color: 'var(--paper-ink)' }}>
         전체 도구 목록
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        연봉·대출·세금부터 BMI·레시피·여행까지, 일상에서 자주 쓰는 <strong style={{ color: 'var(--accent)' }}>{totalTools}가지</strong> 무료 도구를
+      <p style={{ fontSize: '15px', color: 'var(--paper-ink-soft)', lineHeight: 1.7, marginBottom: '24px' }}>
+        연봉·대출·세금부터 BMI·레시피·여행까지, 일상에서 자주 쓰는 <strong style={{ color: 'var(--paper-ink)' }}>{totalTools}가지</strong> 무료 도구를
         11개 카테고리로 모았습니다. 로그인 없이 브라우저에서 즉시 사용하고, 입력값은 기기 밖으로 나가지 않습니다.
       </p>
 
@@ -78,17 +81,17 @@ export default function ToolsPage() {
                 display: 'block',
                 padding: '16px',
                 borderRadius: '14px',
-                border: '1px solid var(--border)',
-                background: 'var(--bg2)',
+                border: '1px solid var(--paper-line)',
+                background: 'var(--paper-card)',
                 textDecoration: 'none',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                <span style={{ fontSize: '20px' }}>{cat.icon}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', color: cat.color }} aria-hidden="true"><CatIcon id={cat.id} size={18} /></span>
                 <span style={{ fontSize: '15px', fontWeight: 700, color: cat.color }}>{cat.name}</span>
-                <span style={{ fontSize: '12px', color: 'var(--muted)', marginLeft: 'auto' }}>{cat.tools.length}개</span>
+                <span style={{ fontSize: '12px', color: 'var(--paper-ink-faint)', marginLeft: 'auto' }}>{cat.tools.length}개</span>
               </div>
-              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>
+              <p style={{ fontSize: '13px', color: 'var(--paper-ink-soft)', lineHeight: 1.6, margin: 0 }}>
                 {CATEGORY_TAGLINES[cat.id] ?? `${cat.name} 관련 무료 도구 모음입니다.`}
               </p>
             </Link>
@@ -102,9 +105,9 @@ export default function ToolsPage() {
         <FaqJsonLd items={FAQS} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {FAQS.map((faq, i) => (
-            <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-              <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{faq.q}</summary>
-              <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, margin: '8px 0 0' }}>{faq.a}</p>
+            <details key={i} style={{ background: 'var(--paper-card)', border: '1px solid var(--paper-line)', borderRadius: '12px', padding: '12px 14px' }}>
+              <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--paper-ink)' }}>{faq.q}</summary>
+              <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.8, margin: '8px 0 0' }}>{faq.a}</p>
             </details>
           ))}
         </div>
@@ -114,6 +117,7 @@ export default function ToolsPage() {
       <div style={{ marginTop: '48px' }}>
         <AdSlot position="footer" minHeight={250} />
       </div>
+    </div>
     </div>
   )
 }

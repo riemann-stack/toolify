@@ -1,0 +1,48 @@
+/* UI 글리프 라인 아이콘 — Tabler Icons(MIT) outline 경로. 탭·라벨의 이모지 대체용.
+   색은 currentColor 상속 — 사용처 텍스트 색을 그대로 따라간다. */
+
+const UI_PATHS: Record<string, string[]> = {
+  clock: [
+    'M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0',
+    'M12 7v5l3 3',
+  ],
+  star: [
+    'M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z',
+  ],
+  refresh: [
+    'M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4',
+    'M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4',
+  ],
+  dice: [
+    'M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z',
+    'M8.5 8.5l0 .01', 'M15.5 8.5l0 .01', 'M15.5 15.5l0 .01', 'M8.5 15.5l0 .01', 'M12 12l0 .01',
+  ],
+  flame: [
+    'M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.621 -2.333 5.588c0 3.704 3.134 6.706 7 6.706s7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235',
+  ],
+  compass: [
+    'M8 16l2 -6l6 -2l-2 6l-6 2',
+    'M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0',
+    'M12 3l0 2', 'M12 19l0 2', 'M3 12l2 0', 'M19 12l2 0',
+  ],
+}
+
+export default function UiIcon({ name, size = 14 }: { name: string; size?: number }) {
+  const paths = UI_PATHS[name]
+  if (!paths) return null
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {paths.map(d => <path key={d} d={d} />)}
+    </svg>
+  )
+}

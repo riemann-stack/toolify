@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { categories } from '@/lib/tools'
 import { searchTools, categoryOf } from '@/lib/search'
 import AdSlot from '@/components/AdSlot'
+import CatIcon from '@/components/CatIcon'
+import ToolCatIcon from '@/components/ToolCatIcon'
 import styles from './tools.module.css'
 
 export default function ToolsBrowser() {
@@ -59,7 +61,7 @@ export default function ToolsBrowser() {
                   const cat = categoryOf(tool.href)
                   return (
                     <Link key={tool.href} href={tool.href} className={styles.toolCard}>
-                      <span className={styles.toolIcon}>{tool.icon}</span>
+                      <span className={styles.toolIcon}><ToolCatIcon href={tool.href} size={18} /></span>
                       <div className={styles.toolInfo}>
                         <div className={styles.toolName}>{tool.name}</div>
                         <div className={styles.toolDesc}>{tool.desc}</div>
@@ -83,7 +85,7 @@ export default function ToolsBrowser() {
                 className={styles.catChip}
                 style={{ ['--chip-color' as string]: cat.color }}
               >
-                <span className={styles.catChipIcon}>{cat.icon}</span>
+                <span className={styles.catChipIcon} style={{ color: cat.color }}><CatIcon id={cat.id} size={15} /></span>
                 <span className={styles.catChipName}>{cat.name}</span>
                 <span className={styles.catChipCount}>{cat.tools.length}</span>
               </a>
@@ -95,7 +97,7 @@ export default function ToolsBrowser() {
               <section key={cat.id} id={`cat-${cat.id}`} className={styles.catSection}>
                 <div className={styles.catHeader}>
                   <div className={styles.catHeaderLeft}>
-                    <span className={styles.catHeaderIcon}>{cat.icon}</span>
+                    <span className={styles.catHeaderIcon} style={{ color: cat.color }}><CatIcon id={cat.id} size={20} /></span>
                     <span className={styles.catHeaderName} style={{ color: cat.color }}>{cat.name}</span>
                     <span className={styles.catHeaderCount}>({cat.tools.length}개)</span>
                   </div>
@@ -105,7 +107,7 @@ export default function ToolsBrowser() {
                 <div className={styles.toolGrid}>
                   {cat.tools.map((tool) => (
                     <Link key={tool.href} href={tool.href} className={styles.toolCard}>
-                      <span className={styles.toolIcon}>{tool.icon}</span>
+                      <span className={styles.toolIcon}><ToolCatIcon href={tool.href} size={18} /></span>
                       <div className={styles.toolInfo}>
                         <div className={styles.toolName}>{tool.name}</div>
                         <div className={styles.toolDesc}>{tool.desc}</div>

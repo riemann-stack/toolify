@@ -186,6 +186,77 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/finance/stock-decision': ['주식매수', '주식매도', '팔까살까', '익절', '손절', '투자심리', '결정장애', '행동경제학'],
   '/tools/finance/gold-converter': ['금시세', '돈', '한돈', '금변환', '금값'],
   '/tools/finance/historical-money': ['화폐사', '화폐가치', '환', '구원', '옛날돈', '인플레이션', '구매력', '화폐개혁', '1953', '1962', 'cpi', '소비자물가지수'],
+
+  // ── 커버리지 보강 (2026-07) — 별칭 없던 도구 일괄 추가 ──────
+  // 금융
+  '/tools/finance/year-end-tax': ['연말정산', '환급', '13월의월급', '결정세액', '신용카드공제', '월세공제'],
+  '/tools/finance/capital-gains-tax': ['양도세', '양도소득세', '1주택', '12억비과세', '장특공', '장기보유특별공제'],
+  '/tools/finance/property-holding-tax': ['보유세', '재산세', '종부세', '종합부동산세', '공시가격', '공시지가'],
+  '/tools/finance/unemployment-benefit': ['실업급여', '구직급여', '퇴사', '실업수당', '수급기간'],
+  '/tools/finance/national-pension': ['국민연금', '노령연금', '연금수령', '조기수령', '연기연금', '예상수령액'],
+  '/tools/finance/wealth-rank': ['자산순위', '순자산', '상위1퍼센트', '상위10퍼센트', '부자기준'],
+
+  // 건강
+  '/tools/health/child-height': ['예상키', '키계산', '자녀키', '아이키', '유전키', 'mph'],
+
+  // 요리
+  '/tools/cooking/sourdough': ['사워도우', '스타터', '르방', '천연발효종', '급이'],
+  '/tools/cooking/frying': ['튀김', '튀김온도', '에어프라이어', '기름온도'],
+  '/tools/cooking/nuts': ['견과류', '아몬드', '호두', '하루견과'],
+  '/tools/cooking/serving': ['1인분', '분량', '장보기', '식단'],
+  '/tools/cooking/food-storage': ['보관기간', '유통기한', '소비기한', '냉동보관', '냉장보관'],
+  '/tools/cooking/substitute': ['대체재료', '재료대체', '버터대체', '베이킹파우더'],
+  '/tools/cooking/tea': ['차', '홍차', '녹차', '말차', '우롱차', '냉침'],
+  '/tools/cooking/baking-schedule': ['제빵일정', '발효시간', '오토리즈', '빵굽기'],
+  '/tools/cooking/fruit-syrup': ['과일청', '매실청', '레몬청', '유자청', '청담그기'],
+
+  // 생활
+  '/tools/life/travel-tip': ['팁', '팁문화', '팁계산', '미국팁'],
+  '/tools/life/laundry-dry': ['빨래', '건조시간', '빨래건조', '제습'],
+  '/tools/life/cleaning': ['청소', '세제', '락스', '희석', '곰팡이', '기름때'],
+  '/tools/life/fart-risk': ['방귀', '가스', '복부팽만', '포드맵', 'fodmap'],
+  '/tools/life/gift-money': ['축의금', '부의금', '조의금', '경조사', '결혼식', '장례식', '봉투'],
+  '/tools/life/vin-decoder': ['차대번호', 'vin', '차량식별번호', '연식조회'],
+
+  // 스포츠
+  '/tools/sports/league-scenarios': ['경우의수', '순위경우의수', '승자승', '골득실', '조별리그', '16강'],
+  '/tools/sports/race-plan': ['페이스플랜', '레이스플랜', '스플릿', '네거티브스플릿'],
+  '/tools/sports/lsd': ['lsd', '이지런', '존2', 'zone2', '롱런', '조깅'],
+  '/tools/sports/swim-pace': ['수영', '수영페이스', 'swolf', '스울프', '자유형', '접영'],
+  '/tools/sports/climbing-grade': ['클라이밍', '볼더링', '암벽', 'v등급', '난이도'],
+  '/tools/sports/strength-level': ['3대', '3대500', '파워리프팅', '윌크스', 'wilks', 'dots'],
+  '/tools/sports/grip-size': ['그립', '그립사이즈', '테니스그립', '배드민턴그립'],
+
+  // 단위
+  '/tools/unit/window-tint': ['썬팅', '선팅', '틴팅', 'vlt', '투과율', '열차단'],
+
+  // 날짜
+  '/tools/date/holiday-bridge': ['연휴', '연차', '징검다리', '샌드위치휴일', '대체공휴일'],
+  '/tools/date/history-era': ['연호', '단기', '불기', '간지', '조선왕조', '갑자'],
+  '/tools/date/schengen': ['쉥겐', '솅겐', '유럽여행', '무비자', '90일', '체류기간'],
+
+  // 예술·창작
+  '/tools/art/golden-ratio': ['황금비', '황금비율', '1.618', '비율'],
+  '/tools/art/paint-mix': ['물감', '색혼합', '물감섞기', '조색'],
+  '/tools/art/knit-gauge': ['뜨개질', '게이지', '니트', '코바늘', '대바늘'],
+  '/tools/art/print-resolution': ['dpi', 'ppi', '해상도', '인쇄', '메가픽셀'],
+  '/tools/art/morse-code': ['모스부호', '모스', 'sos', 'nato', '음성기호'],
+
+  // 교육
+  '/tools/edu/planet-comparison': ['행성', '화성', '목성', '중력', '행성몸무게'],
+  '/tools/edu/cosmic-calendar': ['우주달력', '빅뱅', '우주역사', '칼세이건'],
+  '/tools/edu/circuit-simulator': ['옴의법칙', '회로', '전압', '전류', '저항', '직렬', '병렬'],
+  '/tools/edu/sound-speed': ['음속', '천둥', '번개', '소리속도', '마하'],
+  '/tools/edu/room-mode': ['룸모드', '룸어쿠스틱', '정재파', '슈로더', '베이스트랩'],
+  '/tools/edu/review-interval': ['복습', '에빙하우스', '망각곡선', '암기', 'anki'],
+  '/tools/edu/cognitive-test': ['반응속도', '스트룹', '집중력테스트', '인지테스트'],
+  '/tools/edu/fermi-estimate': ['페르미', '페르미추정', '어림계산', '추정'],
+
+  // 개발자
+  '/tools/dev/tech-stack': ['기술스택', '스택추천', '프레임워크', '백엔드', '프론트엔드'],
+  '/tools/dev/keyboard-layout': ['한영타', 'dkssud', '한영변환', '한타', '영타', '한영키'],
+  '/tools/dev/jwt': ['jwt', '토큰디코딩', 'accesstoken', 'payload', 'exp'],
+  '/tools/dev/cron': ['크론', 'crontab', '크론탭', '스케줄러', '주기실행'],
 }
 
 // ── 카테고리 인덱스 ────────────────────────────────────────────
