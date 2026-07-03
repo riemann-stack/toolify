@@ -176,6 +176,16 @@ select.input {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+.scrollHint {
+  display: none;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  margin: 0 0 6px;
+}
+@media (max-width: 560px) {
+  .scrollHint { display: block; }
+}
 /* 넓은 매트릭스(5열)만 가로 스크롤 — 2열 상세표는 모바일에서 그대로 보이게 */
 .tableScroll .compactTable {
   min-width: 460px;
@@ -239,7 +249,7 @@ select.input {
 /* 가전 프리셋 */
 .presetGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
   gap: 10px;
 }
 .presetCard {

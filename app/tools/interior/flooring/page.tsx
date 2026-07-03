@@ -197,12 +197,12 @@ export default function FlooringPage() {
                 {[
                   { p: '5평',  m: 16.5,  s: 8,  k: 7,  o: 10, d: 6 },
                   { p: '7평',  m: 23.1,  s: 11, k: 10, o: 13, d: 8 },
-                  { p: '10평', m: 33.1,  s: 15, k: 14, o: 19, d: 11 },
+                  { p: '10평', m: 33.1,  s: 16, k: 14, o: 19, d: 12 },
                   { p: '15평', m: 49.6,  s: 23, k: 21, o: 28, d: 17 },
-                  { p: '20평', m: 66.1,  s: 31, k: 28, o: 37, d: 22 },
+                  { p: '20평', m: 66.1,  s: 31, k: 28, o: 37, d: 23 },
                   { p: '25평', m: 82.6,  s: 38, k: 35, o: 46, d: 28 },
-                  { p: '30평', m: 99.2,  s: 46, k: 42, o: 55, d: 33 },
-                  { p: '35평', m: 115.7, s: 53, k: 49, o: 64, d: 39 },
+                  { p: '30평', m: 99.2,  s: 46, k: 42, o: 55, d: 34 },
+                  { p: '35평', m: 115.7, s: 54, k: 49, o: 64, d: 39 },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>

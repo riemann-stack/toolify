@@ -9,7 +9,7 @@ import {
   METRIC_SCREWS, METRIC_QUICK,
   UNIFIED_SCREWS, PT_SCREWS, WOOD_PILOTS,
   STD_INCH_FRACTIONS, STD_MM_SIZES,
-  calcMetricTapDrill, calcClearance, generalTorque,
+  calcMetricTapDrill, generalTorque,
   inchToMm, mmToInch, parseInchInput, mmToNearestFraction, fmtFraction,
   fmtMm, INCH_TO_MM,
   type ScrewSystem, type Material, type Engagement,
@@ -54,7 +54,10 @@ export default function ScrewClient() {
     if (!metricSpec) return null
     return calcMetricTapDrill(metricDiameter, currentPitch, engagement, material)
   }, [metricSpec, metricDiameter, currentPitch, engagement, material])
-  const metricClearance = useMemo(() => calcClearance(metricDiameter), [metricDiameter])
+  // 관통홀은 ISO 273 표값(spec)을 직접 사용 — 사이즈 표 탭과 일치
+  const metricClearance = useMemo(() => metricSpec
+    ? { tight: metricSpec.clearanceTight, normal: metricSpec.clearanceNormal, loose: metricSpec.clearanceLoose }
+    : { tight: 0, normal: 0, loose: 0 }, [metricSpec])
   const metricTorque = useMemo(() => generalTorque(metricDiameter), [metricDiameter])
 
   // ── 유니파이 spec ────────────────────
@@ -70,12 +73,16 @@ export default function ScrewClient() {
       Math.abs(a.diameter - woodDiameter) - Math.abs(b.diameter - woodDiameter))
     return sorted[0]
   }, [woodDiameter])
+  const woodPilot = woodHardness === 'hard' ? woodSpec.hardwood : woodSpec.softwood
+  const woodPilotRatio = woodDiameter > 0 ? Math.round((woodPilot / woodDiameter) * 100) : 0
+  // WOOD_PILOTS 데이터 범위(2.5~6.0mm)를 벗어나면 가장 가까운 값으로 근사
+  const woodOutOfRange = woodDiameter > 6.0 || woodDiameter < 2.5
 
   // ── 인치 ↔ mm 변환 ──────────────────
   const [inchInput, setInchInput] = useState<string>('1/2')
   const [mmInput, setMmInput] = useState<string>('25.4')
   const inchValue = useMemo(() => parseInchInput(inchInput), [inchInput])
-  const mmValue = useMemo(() => parseFloat(mmInput) || 0, [mmInput])
+  const mmValue = useMemo(() => Math.max(0, parseFloat(mmInput) || 0), [mmInput])
   const inchToMmResult = inchValue !== null ? inchToMm(inchValue) : null
   const mmToInchResult = mmValue > 0 ? mmToInch(mmValue) : null
   const mmToFraction = mmValue > 0 ? mmToNearestFraction(mmValue, 64) : null
@@ -96,10 +103,10 @@ export default function ScrewClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs3}`}>
-        <button className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>🔩 탭드릴 계산</button>
-        <button className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`} onClick={() => setTab('convert')}>📏 인치 ↔ mm</button>
-        <button className={`${s.tab} ${tab === 'tables' ? s.tabActive : ''}`} onClick={() => setTab('tables')}>📋 사이즈 표</button>
+      <div className={`${s.tabs} ${s.tabs3}`} role="tablist" aria-label="나사 규격 도구 모드">
+        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>🔩 탭드릴 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'convert'} className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`} onClick={() => setTab('convert')}>📏 인치 ↔ mm</button>
+        <button type="button" role="tab" aria-selected={tab === 'tables'} className={`${s.tab} ${tab === 'tables' ? s.tabActive : ''}`} onClick={() => setTab('tables')}>📋 사이즈 표</button>
       </div>
 
       {/* ══════════ TAB 1: 탭드릴 계산 ══════════ */}
@@ -110,10 +117,10 @@ export default function ScrewClient() {
             <span className={s.cardLabel}>① 나사 종류</span>
             <div className={s.systemGrid}>
               {SYSTEMS.map((sys) => (
-                <button key={sys.key}
+                <button key={sys.key} type="button" aria-pressed={system === sys.key}
                   className={`${s.systemBtn} ${system === sys.key ? s.systemBtnActive : ''}`}
                   onClick={() => setSystem(sys.key)}>
-                  <span className={s.systemEmoji}>{sys.emoji}</span>
+                  <span className={s.systemEmoji} aria-hidden="true">{sys.emoji}</span>
                   <span className={s.systemLabel}>{sys.label}</span>
                   <span className={s.systemDesc}>{sys.desc}</span>
                 </button>
@@ -128,13 +135,13 @@ export default function ScrewClient() {
                 <span className={s.cardLabel}>② 호칭 사이즈</span>
                 <div className={s.pillRow}>
                   {METRIC_QUICK.map((d) => (
-                    <button key={d}
+                    <button key={d} type="button" aria-pressed={metricDiameter === d}
                       className={`${s.pill} ${metricDiameter === d ? s.pillActive : ''}`}
                       onClick={() => setMetricDiameter(d)}>M{d}</button>
                   ))}
                 </div>
                 <div className={s.customInput}>
-                  <select className={s.input}
+                  <select className={s.input} aria-label="미터 나사 호칭 사이즈"
                     value={metricDiameter}
                     onChange={(e) => setMetricDiameter(parseFloat(e.target.value))}>
                     {METRIC_SCREWS.map((m) => (
@@ -147,17 +154,17 @@ export default function ScrewClient() {
               <div className={s.card}>
                 <span className={s.cardLabel}>③ 피치 (mm)</span>
                 <div className={s.pillRow}>
-                  <button className={`${s.pill} ${pitchMode === 'coarse' ? s.pillActive : ''}`}
+                  <button type="button" aria-pressed={pitchMode === 'coarse'} className={`${s.pill} ${pitchMode === 'coarse' ? s.pillActive : ''}`}
                     onClick={() => setPitchMode('coarse')}>
                     표준 ({metricSpec?.pitchCoarse}mm)
                   </button>
                   {metricSpec?.pitchFine && (
-                    <button className={`${s.pill} ${pitchMode === 'fine' ? s.pillActive : ''}`}
+                    <button type="button" aria-pressed={pitchMode === 'fine'} className={`${s.pill} ${pitchMode === 'fine' ? s.pillActive : ''}`}
                       onClick={() => setPitchMode('fine')}>
                       정밀 ({metricSpec.pitchFine}mm)
                     </button>
                   )}
-                  <button className={`${s.pill} ${pitchMode === 'custom' ? s.pillActive : ''}`}
+                  <button type="button" aria-pressed={pitchMode === 'custom'} className={`${s.pill} ${pitchMode === 'custom' ? s.pillActive : ''}`}
                     onClick={() => setPitchMode('custom')}>직접 입력</button>
                 </div>
                 {pitchMode === 'custom' && (
@@ -165,7 +172,7 @@ export default function ScrewClient() {
                     <input type="number" inputMode="decimal" min={0.25} max={3.0} step={0.05}
                       className={s.input}
                       value={customPitch}
-                      onChange={(e) => setCustomPitch(parseFloat(e.target.value) || 1)} />
+                      onChange={(e) => setCustomPitch(Math.min(3, Math.max(0.1, parseFloat(e.target.value) || 1)))} />
                     <span className={s.unitText}>mm</span>
                   </div>
                 )}
@@ -177,7 +184,7 @@ export default function ScrewClient() {
           {(system === 'unc' || system === 'unf') && (
             <div className={s.card}>
               <span className={s.cardLabel}>② {system === 'unc' ? 'UNC' : 'UNF'} 사이즈</span>
-              <select className={s.input}
+              <select className={s.input} aria-label={`${system === 'unc' ? 'UNC' : 'UNF'} 나사 사이즈`}
                 value={unifiedKey}
                 onChange={(e) => setUnifiedKey(e.target.value)}>
                 {UNIFIED_SCREWS.filter((u) => u.system === system).map((u) => (
@@ -193,7 +200,7 @@ export default function ScrewClient() {
           {(system === 'pt' || system === 'npt') && (
             <div className={s.card}>
               <span className={s.cardLabel}>② {system === 'pt' ? 'PT' : 'NPT'} 사이즈</span>
-              <select className={s.input}
+              <select className={s.input} aria-label={`${system === 'pt' ? 'PT' : 'NPT'} 파이프 나사 사이즈`}
                 value={pipeKey}
                 onChange={(e) => setPipeKey(e.target.value)}>
                 {PT_SCREWS.filter((p) => p.system === system).map((p) => (
@@ -218,7 +225,7 @@ export default function ScrewClient() {
                     onChange={(e) => setWoodDiameter(parseFloat(e.target.value) || 3.5)} />
                   <div className={s.pillRow}>
                     {[3.0, 3.5, 4.0, 4.5, 5.0].map((d) => (
-                      <button key={d}
+                      <button key={d} type="button" aria-pressed={woodDiameter === d}
                         className={`${s.pill} ${woodDiameter === d ? s.pillActive : ''}`}
                         onClick={() => setWoodDiameter(d)}>{d}mm</button>
                     ))}
@@ -232,7 +239,7 @@ export default function ScrewClient() {
                     onChange={(e) => setWoodLength(parseInt(e.target.value) || 30)} />
                   <div className={s.pillRow}>
                     {[20, 30, 40, 50, 65].map((l) => (
-                      <button key={l}
+                      <button key={l} type="button" aria-pressed={woodLength === l}
                         className={`${s.pill} ${woodLength === l ? s.pillActive : ''}`}
                         onClick={() => setWoodLength(l)}>{l}mm</button>
                     ))}
@@ -243,9 +250,9 @@ export default function ScrewClient() {
                 <div className={s.field} style={{ marginTop: 10 }}>
                   <label className={s.fieldLabel}>목재 종류</label>
                   <div className={s.pillRow}>
-                    <button className={`${s.pill} ${woodHardness === 'hard' ? s.pillActive : ''}`}
+                    <button type="button" aria-pressed={woodHardness === 'hard'} className={`${s.pill} ${woodHardness === 'hard' ? s.pillActive : ''}`}
                       onClick={() => setWoodHardness('hard')}>경질목 (오크·메이플)</button>
-                    <button className={`${s.pill} ${woodHardness === 'soft' ? s.pillActive : ''}`}
+                    <button type="button" aria-pressed={woodHardness === 'soft'} className={`${s.pill} ${woodHardness === 'soft' ? s.pillActive : ''}`}
                       onClick={() => setWoodHardness('soft')}>연질목 (소나무·삼나무)</button>
                   </div>
                 </div>
@@ -253,16 +260,16 @@ export default function ScrewClient() {
             </div>
           )}
 
-          {/* 소재 (M·UNC·UNF·PT만) */}
-          {(system === 'metric' || system === 'unc' || system === 'unf' || system === 'pt' || system === 'npt') && (
+          {/* 소재 (미터 나사만 탭드릴 보정에 반영됨) */}
+          {system === 'metric' && (
             <div className={s.card}>
               <span className={s.cardLabel}>④ 소재 (탭드릴 보정)</span>
               <div className={s.materialGrid}>
                 {MATERIALS.map((m) => (
-                  <button key={m.key}
+                  <button key={m.key} type="button" aria-pressed={material === m.key}
                     className={`${s.materialBtn} ${material === m.key ? s.materialBtnActive : ''}`}
                     onClick={() => setMaterial(m.key)}>
-                    <span className={s.materialEmoji}>{m.emoji}</span>
+                    <span className={s.materialEmoji} aria-hidden="true">{m.emoji}</span>
                     <span className={s.materialLabel}>{m.label}</span>
                     <span className={s.materialNote}>{m.note}</span>
                   </button>
@@ -277,7 +284,7 @@ export default function ScrewClient() {
               <span className={s.cardLabel}>⑤ 결합률 (탭드릴 정밀도)</span>
               <div className={s.pillRow}>
                 {([50, 75, 85] as Engagement[]).map((e) => (
-                  <button key={e}
+                  <button key={e} type="button" aria-pressed={engagement === e}
                     className={`${s.pill} ${engagement === e ? s.pillActive : ''}`}
                     onClick={() => setEngagement(e)}>
                     {ENGAGEMENT_LABEL[e]}
@@ -290,7 +297,7 @@ export default function ScrewClient() {
           {/* ══════════ 결과 — 미터 ══════════ */}
           {system === 'metric' && metricSpec && metricTapDrill !== null && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLabel}>M{metricDiameter} × P{currentPitch} ({MATERIALS.find((m) => m.key === material)?.label})</p>
                 <p className={s.heroValue}>탭드릴 약 <strong>{metricTapDrill.toFixed(2)}mm</strong></p>
                 <p className={s.heroSub}>{engagement}% 결합률 · 외경 {metricDiameter}mm · 피치 {currentPitch}mm</p>
@@ -357,7 +364,7 @@ export default function ScrewClient() {
           {/* ══════════ 결과 — 유니파이 ══════════ */}
           {(system === 'unc' || system === 'unf') && unifiedSpec && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLabel}>{unifiedSpec.label} ({unifiedSpec.system.toUpperCase()})</p>
                 <p className={s.heroValue}>탭드릴 약 <strong>{unifiedSpec.tapDrillMm}mm</strong></p>
                 <p className={s.heroSub}>외경 {unifiedSpec.diameterInch}&quot; ({unifiedSpec.diameterMm.toFixed(2)}mm) · {unifiedSpec.tpi} TPI</p>
@@ -392,7 +399,7 @@ export default function ScrewClient() {
           {/* ══════════ 결과 — 파이프 ══════════ */}
           {(system === 'pt' || system === 'npt') && pipeSpec && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLabel}>{pipeSpec.label}</p>
                 <p className={s.heroValue}>탭드릴 약 <strong>{pipeSpec.tapDrillMm}mm</strong></p>
                 <p className={s.heroSub}>외경 {pipeSpec.outerDiameterMm}mm · 산둘레 {pipeSpec.threadsPerInch}/인치</p>
@@ -420,18 +427,16 @@ export default function ScrewClient() {
           {/* ══════════ 결과 — 목재/석고 ══════════ */}
           {(system === 'wood' || system === 'drywall') && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLabel}>{system === 'wood' ? '목재피스' : '석고피스'} {woodDiameter}×{woodLength}mm</p>
                 <p className={s.heroValue}>
                   파일럿홀 약 <strong>
-                    {system === 'wood'
-                      ? `${(woodHardness === 'hard' ? woodSpec.hardwood : woodSpec.softwood).toFixed(1)}mm`
-                      : '불필요'}
+                    {system === 'wood' ? `${woodPilot.toFixed(1)}mm` : '불필요'}
                   </strong>
                 </p>
                 <p className={s.heroSub}>
                   {system === 'wood'
-                    ? `${woodHardness === 'hard' ? '경질목' : '연질목'} 기준 (외경 약 ${(woodHardness === 'hard' ? 70 : 65)}%)`
+                    ? `${woodHardness === 'hard' ? '경질목' : '연질목'} 기준 (외경의 약 ${woodPilotRatio}%)${woodOutOfRange ? ` · ⚠️ ${woodSpec.diameter}mm 기준 근사` : ''}`
                     : '석고보드는 직접 박기 가능 (드라이버 직결)'}
                 </p>
               </div>
@@ -453,7 +458,7 @@ export default function ScrewClient() {
                       <tr><td>길이</td><td>{woodLength}mm</td></tr>
                       <tr>
                         <td>카운터싱크 권장 (접시머리)</td>
-                        <td>∅{(woodDiameter * 1.8).toFixed(1)}mm × 깊이 {(woodDiameter * 0.5).toFixed(1)}mm</td>
+                        <td>∅{(woodDiameter * 1.8).toFixed(1)}mm · 깊이 ≈ 나사 머리 두께</td>
                       </tr>
                     </tbody>
                   </table>
@@ -476,6 +481,7 @@ export default function ScrewClient() {
                   </table>
                   <p className={s.noteSmall}>
                     💡 석고보드 전용 — 목재에 박으면 잘 빠짐. 콘크리트는 칼블록 + 콘크리트 앵커 사용.
+                    <br />⚠️ 선반·거울·TV 등 <strong>하중물은 석고피스만으로 부족</strong> — 토글 앵커 또는 스터드(목상) 위에 고정하세요.
                   </p>
                 </div>
               )}
@@ -499,12 +505,13 @@ export default function ScrewClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>📏 인치 → mm</span>
               <input type="text" className={s.input}
+                aria-label="인치 입력 (분수 또는 소수)"
                 placeholder='예: 5/8 또는 0.625'
                 value={inchInput}
                 onChange={(e) => setInchInput(e.target.value)} />
               <div className={s.pillRow} style={{ marginTop: 8 }}>
                 {STD_INCH_FRACTIONS.map((f) => (
-                  <button key={f.label}
+                  <button key={f.label} type="button"
                     className={s.pill}
                     onClick={() => setInchInput(f.label)}>{f.label}&quot;</button>
                 ))}
@@ -515,18 +522,22 @@ export default function ScrewClient() {
                   <p className={s.convertValue}>{inchToMmResult.toFixed(3)}mm</p>
                 </div>
               )}
+              {inchInput.trim() !== '' && inchValue === null && (
+                <p className={s.noteSmall}>입력 형식을 확인하세요 — 예: 5/8, 1 1/2, 0.625</p>
+              )}
             </div>
 
             <div className={s.card}>
               <span className={s.cardLabel}>📏 mm → 인치</span>
               <input type="number" inputMode="decimal" min={0} step={0.1}
                 className={s.input}
+                aria-label="mm 입력"
                 placeholder="예: 25.4"
                 value={mmInput}
                 onChange={(e) => setMmInput(e.target.value)} />
               <div className={s.pillRow} style={{ marginTop: 8 }}>
                 {STD_MM_SIZES.map((m) => (
-                  <button key={m}
+                  <button key={m} type="button"
                     className={s.pill}
                     onClick={() => setMmInput(String(m))}>{m}mm</button>
                 ))}

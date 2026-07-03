@@ -86,8 +86,9 @@ export function withLoss(weightKg: number, lossPct: number): number {
   return weightKg * (1 + lossPct / 100)
 }
 
-/** 결속선 추가 (100kg당 6kg) */
-export function tyingWire(weightKg: number, factor = 0.06): number {
+/** 결속선 추가 — 건설공사 표준품셈 기준 철근 1톤당 약 6.5kg(보통 구조, ≈0.65%).
+    간단한 구조 5kg / 보통 6.5kg / 복잡한 구조 8kg (톤당) */
+export function tyingWire(weightKg: number, factor = 0.0065): number {
   return weightKg * factor
 }
 
@@ -108,8 +109,9 @@ export function weightToCount(targetKg: number, size: RebarSize, lengthM: number
   return perBar > 0 ? Math.ceil(targetKg / perBar) : 0
 }
 
-/** 예산(만원) → 가능 중량(kg) */
+/** 예산(만원) → 가능 중량(kg) — 단가 0/음수면 0 반환 (÷0 Infinity 방지) */
 export function budgetToWeight(budgetMan: number, pricePerTonMan: number, strength: Strength = 'SD400'): number {
+  if (budgetMan <= 0 || pricePerTonMan <= 0) return 0
   const factor = STRENGTH_META[strength].priceFactor
   return (budgetMan / (pricePerTonMan * factor)) * 1000
 }
@@ -148,7 +150,7 @@ export const REBAR_PLANS: RebarPlan[] = [
     size: 'D10',
     spacing: 200,
     cover: 50,
-    perM2: 10,   // 1m² 당 약 10m (가로 5 + 세로 5)
+    perM2: 20,   // 양면 격자 = 1면 약 10m(가로5+세로5) × 2면
     caution: '높이 1.5m 이상은 구조 설계 필수 (건축법)',
   },
   {
@@ -167,7 +169,7 @@ export const REBAR_PLANS: RebarPlan[] = [
     id: 'stair',
     emoji: '🪜',
     label: '콘크리트 계단',
-    desc: '셀프 시공 가능한 짧은 계단 (최대 5단).',
+    desc: '참고용 짧은 계단 예시 (최대 5단).',
     spec: 'D10 @150, 사선 배근',
     size: 'D10',
     spacing: 150,

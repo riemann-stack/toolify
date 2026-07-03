@@ -50,10 +50,10 @@ export default function RebarClient() {
       if (!raw) return
       const j = JSON.parse(raw)
       if (j.size && REBAR_SIZES.includes(j.size)) setSize(j.size)
-      if (j.strength) setStrength(j.strength)
-      if (j.pricePerTon) setPricePerTon(j.pricePerTon)
-      if (j.standardLen) setStandardLen(j.standardLen)
-      if (j.count) setCount(j.count)
+      if (j.strength in STRENGTH_META) setStrength(j.strength)
+      if (typeof j.pricePerTon === 'string') setPricePerTon(j.pricePerTon)
+      if ((STANDARD_LENGTHS as readonly number[]).includes(j.standardLen)) setStandardLen(j.standardLen)
+      if (typeof j.count === 'string') setCount(j.count)
     } catch {}
   }, [])
   useEffect(() => {
@@ -66,25 +66,26 @@ export default function RebarClient() {
 
   /* 계산 */
   const data = REBAR_DATA[size]
-  const length = lengthMode === 'standard' ? standardLen : (parseFloat(customLen) || 0)
-  const countN = parseInt(count) || 0
-  const lossPctN = parseFloat(lossPct) || 0
-  const priceTon = parseFloat(pricePerTon) || 0
+  const length = lengthMode === 'standard' ? standardLen : Math.max(0, parseFloat(customLen) || 0)
+  const countN = Math.max(0, parseInt(count) || 0)
+  const lossPctN = Math.max(0, parseFloat(lossPct) || 0)
+  const priceTon = Math.max(0, parseFloat(pricePerTon) || 0)
 
   const baseKg = useMemo(() => totalWeight(size, length, countN), [size, length, countN])
   const lossKg = useMemo(() => withLoss(baseKg, lossPctN), [baseKg, lossPctN])
   const tyingKg = useMemo(() => tyingWire(lossKg), [lossKg])
   const finalKg = withTying ? lossKg + tyingKg : lossKg
-  const priceMan = useMemo(() => calcPrice(finalKg, priceTon, strength), [finalKg, priceTon, strength])
+  // 가격은 철근(로스 포함)만 — 결속선은 별도 품목이라 철근 톤단가·강도 보정 대상 아님
+  const priceMan = useMemo(() => calcPrice(lossKg, priceTon, strength), [lossKg, priceTon, strength])
   const piece = perPiece(size, length)
 
   /* 탭 2 */
   const targetKg = revMode === 'weight'
-    ? (parseFloat(revTons) || 0) * 1000
-    : budgetToWeight(parseFloat(revBudget) || 0, priceTon, strength)
+    ? Math.max(0, parseFloat(revTons) || 0) * 1000
+    : budgetToWeight(Math.max(0, parseFloat(revBudget) || 0), priceTon, strength)
 
   /* 탭 3 */
-  const shipKgN = parseFloat(shipKg) || 0
+  const shipKgN = Math.max(0, parseFloat(shipKg) || 0)
   const availableTrucks = TRUCKS.filter((t) => t.maxLengthM >= shipMaxLen)
 
   return (
@@ -102,7 +103,7 @@ export default function RebarClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="철근 계산 모드">
         {([
           { id: 'calc',    label: '⚖️ 본수→중량' },
           { id: 'reverse', label: '🔄 중량→본수' },
@@ -111,6 +112,8 @@ export default function RebarClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -129,6 +132,7 @@ export default function RebarClient() {
               {REBAR_SIZES.map((b) => (
                 <button
                   key={b}
+                  aria-pressed={size === b}
                   className={`${s.pill} ${size === b ? s.pillActive : ''}`}
                   onClick={() => setSize(b)}
                   type="button"
@@ -151,6 +155,7 @@ export default function RebarClient() {
               <label className={s.fieldLabel}>길이 모드</label>
               <div className={s.pillRow}>
                 <button
+                  aria-pressed={lengthMode === 'standard'}
                   className={`${s.pill} ${lengthMode === 'standard' ? s.pillActive : ''}`}
                   onClick={() => setLengthMode('standard')}
                   type="button"
@@ -158,6 +163,7 @@ export default function RebarClient() {
                   표준 길이
                 </button>
                 <button
+                  aria-pressed={lengthMode === 'custom'}
                   className={`${s.pill} ${lengthMode === 'custom' ? s.pillActive : ''}`}
                   onClick={() => setLengthMode('custom')}
                   type="button"
@@ -174,6 +180,7 @@ export default function RebarClient() {
                   {STANDARD_LENGTHS.map((l) => (
                     <button
                       key={l}
+                      aria-pressed={standardLen === l}
                       className={`${s.pill} ${standardLen === l ? s.pillActive : ''}`}
                       onClick={() => setStandardLen(l)}
                       type="button"
@@ -232,14 +239,15 @@ export default function RebarClient() {
               </div>
             </div>
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text)', cursor: 'pointer', marginTop: 6 }}>
+            <label htmlFor="rebar-tying" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text)', cursor: 'pointer', marginTop: 6 }}>
               <input
+                id="rebar-tying"
                 type="checkbox"
                 checked={withTying}
                 onChange={(e) => setWithTying(e.target.checked)}
                 style={{ width: 16, height: 16 }}
               />
-              결속선 자동 포함 (총 중량의 6%)
+              결속선 자동 포함 (철근 1톤당 약 6.5kg)
             </label>
           </div>
 
@@ -252,6 +260,7 @@ export default function RebarClient() {
                   {(Object.keys(STRENGTH_META) as Strength[]).map((st) => (
                     <button
                       key={st}
+                      aria-pressed={strength === st}
                       className={`${s.pill} ${strength === st ? s.pillActive : ''}`}
                       onClick={() => setStrength(st)}
                       type="button"
@@ -290,7 +299,7 @@ export default function RebarClient() {
               총 중량 <strong>{fmtKg(finalKg)}</strong>
             </p>
             <p className={s.heroSub}>
-              예상 가격{' '}
+              철근 예상 가격{' '}
               <strong style={{ color: 'var(--accent)' }}>
                 {fmt(priceMan, 1)} 만원
               </strong>
@@ -312,13 +321,13 @@ export default function RebarClient() {
                   <tr><td>기본 총 중량</td><td className={s.cellMono}>{fmt(baseKg, 1)} kg</td></tr>
                   <tr><td>+ 절단 로스 ({lossPctN}%)</td><td className={s.cellMono}>{fmt(lossKg - baseKg, 1)} kg</td></tr>
                   {withTying && (
-                    <tr><td>+ 결속선 (6%)</td><td className={s.cellMono}>{fmt(tyingKg, 1)} kg</td></tr>
+                    <tr><td>+ 결속선 (톤당 6.5kg)</td><td className={s.cellMono}>{fmt(tyingKg, 1)} kg</td></tr>
                   )}
                   <tr><td>발주 권장 중량</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtKg(finalKg)}</td></tr>
-                  <tr className={s.cellSubtitle}><td colSpan={2}>가격 (참고치)</td></tr>
+                  <tr className={s.cellSubtitle}><td colSpan={2}>가격 (참고치 — 철근만, 결속선 별도)</td></tr>
                   <tr><td>SD400 톤당</td><td className={s.cellMono}>{priceTon} 만원</td></tr>
                   <tr><td>{strength} 보정</td><td className={s.cellMono}>×{STRENGTH_META[strength].priceFactor}</td></tr>
-                  <tr><td>예상 총액</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(priceMan, 1)} 만원</td></tr>
+                  <tr><td>철근 예상 총액 ({fmt(lossKg, 1)} kg)</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(priceMan, 1)} 만원</td></tr>
                 </tbody>
               </table>
             </div>
@@ -328,7 +337,7 @@ export default function RebarClient() {
             <strong>📌 발주 팁</strong>
             <p>
               • 절단 로스는 일반 현장 <strong>5~10%</strong> 권장 (설계 도면대로 시공 시 5%, 임의 절단 다발 시 10%)<br />
-              • 결속선(#18~#21)은 보통 100kg당 5~7kg 별도 발주<br />
+              • 결속선(#18~#21)은 표준품셈상 <strong>철근 1톤당 약 5~8kg</strong>(간단 5·보통 6.5·복잡 8kg)<br />
               • 가격은 시기·시세에 따라 변동 → <strong>한국철강협회·POSCO·현대제철 시세</strong> 참고<br />
               • SD500/SD600 고강도는 SD400 대비 10~20% 더 비쌈
             </p>
@@ -343,6 +352,7 @@ export default function RebarClient() {
             <span className={s.cardLabel}>역계산 모드</span>
             <div className={s.pillRow}>
               <button
+                aria-pressed={revMode === 'weight'}
                 className={`${s.pill} ${revMode === 'weight' ? s.pillActive : ''}`}
                 onClick={() => setRevMode('weight')}
                 type="button"
@@ -350,6 +360,7 @@ export default function RebarClient() {
                 목표 톤수로 계산
               </button>
               <button
+                aria-pressed={revMode === 'budget'}
                 className={`${s.pill} ${revMode === 'budget' ? s.pillActive : ''}`}
                 onClick={() => setRevMode('budget')}
                 type="button"
@@ -406,6 +417,7 @@ export default function RebarClient() {
                   {STANDARD_LENGTHS.map((l) => (
                     <button
                       key={l}
+                      aria-pressed={revLength === l}
                       className={`${s.pill} ${revLength === l ? s.pillActive : ''}`}
                       onClick={() => setRevLength(l)}
                       type="button"
@@ -418,7 +430,7 @@ export default function RebarClient() {
             </div>
           </div>
 
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>
               {revMode === 'weight' ? `${revTons}톤` : `${revBudget}만원`} ·{' '}
               {revLength}m 길이 기준
@@ -427,7 +439,9 @@ export default function RebarClient() {
               ≈ <strong>{fmtKg(targetKg)}</strong>
             </p>
             <p className={s.heroSub}>
-              {revMode === 'budget' && `${strength} ${priceTon}만원/톤 기준`}
+              {revMode === 'budget' && (priceTon > 0
+                ? `${strength} ${priceTon}만원/톤 기준`
+                : '⚠️ 본수→중량 탭에서 톤당 단가를 먼저 입력하세요')}
             </p>
           </div>
 
@@ -503,6 +517,7 @@ export default function RebarClient() {
                   {STANDARD_LENGTHS.map((l) => (
                     <button
                       key={l}
+                      aria-pressed={shipMaxLen === l}
                       className={`${s.pill} ${shipMaxLen === l ? s.pillActive : ''}`}
                       onClick={() => setShipMaxLen(l)}
                       type="button"
@@ -521,8 +536,6 @@ export default function RebarClient() {
               {TRUCKS.map((t) => {
                 const trips = truckTrips(shipKgN, t.id)
                 const canCarry = t.maxLengthM >= shipMaxLen
-                const totalCost = trips * 12   // 평균 12만원 가정 (단순 표시용 X — 실제는 표시 안 함)
-                void totalCost
                 return (
                   <div
                     key={t.id}
@@ -572,7 +585,7 @@ export default function RebarClient() {
       {tab === 'plan' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>셀프 시공 4가지 배근 시나리오</span>
+            <span className={s.cardLabel}>소형 비구조물 참고 배근 예시 4가지 (시공은 전문가 확인 필수)</span>
             <div className={s.planGrid}>
               {REBAR_PLANS.map((p) => (
                 <div key={p.id} className={s.planCard}>

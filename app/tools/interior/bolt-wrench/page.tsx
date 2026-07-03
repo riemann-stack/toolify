@@ -119,7 +119,7 @@ export default function BoltWrenchPage() {
               <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 13 mm / JIS 12 mm</td></tr>
               <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 17 mm / JIS 14 mm</td></tr>
               <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 19 mm / JIS 17 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 22 mm / JIS 19 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 22 mm / JIS 21 mm</td></tr>
             </tbody>
           </table>
         </div>
@@ -144,7 +144,7 @@ export default function BoltWrenchPage() {
             <p style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 700, margin: '0 0 6px' }}>내부 6각 (알렌)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
               머리 안쪽 6각 홈 평면 사이 거리.
-              볼트 직경보다 작음 (약 0.7~0.8배).
+              볼트 직경보다 작음 (대략 0.75~0.9배).
             </p>
           </div>
         </div>

@@ -218,6 +218,16 @@ select.input {
 .tableScroll table {
   min-width: 480px;
 }
+.scrollHint {
+  display: none;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  margin: 0 0 6px;
+}
+@media (max-width: 560px) {
+  .scrollHint { display: block; }
+}
 
 /* 도움말 */
 .helpText {

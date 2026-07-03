@@ -66,13 +66,13 @@ interface PaintType {
   defaultPrice: number
 }
 const PAINT_TYPES: PaintType[] = [
-  { id: 'water',    name: '수성 페인트',  coveragePerL: 10, badge: '실내 표준',  badgeCls: 'bgWater',    cls: 'pntWater',    defaultPrice: 18000 },
-  { id: 'oil',      name: '유성 페인트',  coveragePerL: 12, badge: '나무·금속',  badgeCls: 'bgOil',      cls: 'pntOil',      defaultPrice: 22000 },
-  { id: 'enamel',   name: '에나멜',       coveragePerL: 14, badge: '광택',       badgeCls: 'bgEnamel',   cls: 'pntEnamel',   defaultPrice: 25000 },
-  { id: 'exterior', name: '외부용',       coveragePerL: 8,  badge: '방수',       badgeCls: 'bgExterior', cls: 'pntExterior', defaultPrice: 28000 },
-  { id: 'primer',   name: '프라이머',     coveragePerL: 9,  badge: '밑칠',       badgeCls: 'bgPrimer',   cls: 'pntPrimer',   defaultPrice: 14000 },
-  { id: 'eco',      name: '친환경 (저VOC)', coveragePerL: 10, badge: '아이방',  badgeCls: 'bgEco',      cls: 'pntEco',      defaultPrice: 35000 },
-  { id: 'custom',   name: '직접 입력',   coveragePerL: 10, badge: '',           badgeCls: 'bgWater',    cls: 'pntCustom',   defaultPrice: 18000 },
+  { id: 'water',    name: '수성 페인트',  coveragePerL: 10, badge: '실내 표준',  badgeCls: 'bgWater',    cls: 'pntWater',    defaultPrice: 10000 },
+  { id: 'oil',      name: '유성 페인트',  coveragePerL: 12, badge: '나무·금속',  badgeCls: 'bgOil',      cls: 'pntOil',      defaultPrice: 13000 },
+  { id: 'enamel',   name: '에나멜',       coveragePerL: 14, badge: '광택',       badgeCls: 'bgEnamel',   cls: 'pntEnamel',   defaultPrice: 16000 },
+  { id: 'exterior', name: '외부용',       coveragePerL: 8,  badge: '방수',       badgeCls: 'bgExterior', cls: 'pntExterior', defaultPrice: 14000 },
+  { id: 'primer',   name: '프라이머',     coveragePerL: 9,  badge: '밑칠',       badgeCls: 'bgPrimer',   cls: 'pntPrimer',   defaultPrice: 8000 },
+  { id: 'eco',      name: '친환경 (저VOC)', coveragePerL: 10, badge: '아이방',  badgeCls: 'bgEco',      cls: 'pntEco',      defaultPrice: 18000 },
+  { id: 'custom',   name: '직접 입력',   coveragePerL: 10, badge: '',           badgeCls: 'bgWater',    cls: 'pntCustom',   defaultPrice: 10000 },
 ]
 
 /* 한국 브랜드 프리셋 */
@@ -86,10 +86,10 @@ const BRANDS = [
 
 /* 가격 프리셋 (1L) */
 const PRICE_TIERS = [
-  { id: 'cheap',   label: '저렴',     price: 9000  },
-  { id: 'normal',  label: '일반',     price: 18000 },
-  { id: 'premium', label: '고급',     price: 35000 },
-  { id: 'luxury',  label: '프리미엄', price: 60000 },
+  { id: 'cheap',   label: '저렴',     price: 7000  },
+  { id: 'normal',  label: '일반',     price: 10000 },
+  { id: 'premium', label: '고급',     price: 20000 },
+  { id: 'luxury', label: '프리미엄', price: 40000 },
 ]
 
 /* 창문 프리셋 */
@@ -102,8 +102,7 @@ const WIN_PRESETS = [
   { id: 'custom', label: '직접 입력',   w: 0,   h: 0,   count: 0 },
 ]
 
-/* 한국 시판 페인트 용량 */
-const CAN_SIZES = [18, 4, 2, 1]
+/* 한국 시판 페인트 용량 (recommendCans 내부에서 18·4·2·1L 조합 탐색) */
 const PYUNG_TO_M2 = 3.3058
 
 /* 유틸 */
@@ -126,12 +125,12 @@ function fmtKRW(amount: number): string {
   const parts: string[] = []
   if (eok > 0) parts.push(`${eok.toLocaleString('ko-KR')}억`)
   if (man > 0) parts.push(`${man.toLocaleString('ko-KR')}만`)
-  if (won > 0 && eok === 0 && man === 0) parts.push(`${won.toLocaleString('ko-KR')}`)
+  if (won > 0) parts.push(`${won.toLocaleString('ko-KR')}`)
   if (parts.length === 0) return '0원'
   return `${sign}${parts.join(' ')}원`
 }
 function parseComma(s: string): number {
-  const cleaned = s.replace(/[^0-9.-]/g, '')
+  const cleaned = s.replace(/[^0-9.]/g, '')   // 음수 불허 (면적·가격 입력)
   const v = Number(cleaned)
   return Number.isFinite(v) ? v : 0
 }
@@ -144,6 +143,8 @@ function parseComma(s: string): number {
 interface Combo { c18: number; c4: number; c2: number; c1: number; total: number; cans: number; surplus: number }
 function recommendCans(requiredL: number): { best: Combo | null; alts: Combo[] } {
   if (requiredL <= 0) return { best: null, alts: [] }
+  // 비현실적 대용량(잘못된 입력)으로 조합 탐색 루프가 폭주해 UI가 멈추는 것을 방지 — 400L 상한
+  if (requiredL > 400) requiredL = 400
 
   const candidates: Combo[] = []
   const max18 = Math.floor(requiredL / 18) + 1
@@ -196,6 +197,12 @@ type SizeMode = 'pyung' | 'meter'
 
 export default function PaintClient() {
   const [tab, setTab] = useState<TabId>('simple')
+  /* 마지막으로 사용한 계산 탭 — 견적이 간편/상세 중 어느 결과를 쓸지 결정 */
+  const [lastCalcTab, setLastCalcTab] = useState<'simple' | 'detail'>('simple')
+  function switchTab(t: TabId) {
+    setTab(t)
+    if (t === 'simple' || t === 'detail') setLastCalcTab(t)
+  }
 
   /* 공간 입력 */
   const [sizeMode, setSizeMode] = useState<SizeMode>('pyung')
@@ -236,7 +243,7 @@ export default function PaintClient() {
   const [rooms, setRooms] = useState<RoomInput[]>(() => [makeRoom('거실')])
 
   /* 탭 3: 견적 */
-  const [pricePerLStr, setPricePerLStr] = useState('18000')
+  const [pricePerLStr, setPricePerLStr] = useState('10000')
   const [priceTierId, setPriceTierId] = useState<string | null>('normal')
   const [rollerCost, setRollerCost] = useState(15000)
   const [brushTapeCost, setBrushTapeCost] = useState(20000)
@@ -254,7 +261,8 @@ export default function PaintClient() {
       const side = Math.sqrt(m2)
       return { width: side, length: side, area: m2 }
     }
-    const w = n(widthM), l = n(lengthM)
+    // 비현실적으로 큰 치수(예: 9999m)가 면적·소요량을 폭주시켜 추천 루프를 멈추지 않도록 상한 100m
+    const w = Math.min(100, n(widthM)), l = Math.min(100, n(lengthM))
     return { width: w, length: l, area: w * l }
   }, [sizeMode, effectivePyung, widthM, lengthM])
 
@@ -311,11 +319,13 @@ export default function PaintClient() {
     const rows: Array<{ roomId: string; roomName: string; part: string; area: number; coats: number; paintL: number }> = []
 
     rooms.forEach(r => {
-      // 벽 (모든 벽 합산)
+      // 벽 (벽별로 창문·문 차감 후 합산 — 한 벽보다 큰 개구부가 다른 벽을 깎지 않도록)
       if (r.paintWalls) {
-        const wallGross = r.walls.reduce((s, w) => s + w.wallW * w.wallH, 0)
-        const openingsArea = r.walls.reduce((s, w) => s + w.openings.reduce((so, o) => so + o.w * o.h, 0), 0)
-        const wallNet = Math.max(0, wallGross - openingsArea)
+        const wallNet = r.walls.reduce((s, w) => {
+          const gross = w.wallW * w.wallH
+          const openings = w.openings.reduce((so, o) => so + o.w * o.h, 0)
+          return s + Math.max(0, gross - openings)
+        }, 0)
         const paintL = (wallNet * r.coats / coverage) * (1 + lossPct / 100)
         rows.push({ roomId: r.id, roomName: r.name, part: '벽', area: wallNet, coats: r.coats, paintL })
       }
@@ -348,19 +358,24 @@ export default function PaintClient() {
   }, [t2Rows])
   const t2Cans = useMemo(() => recommendCans(t2Total.paint), [t2Total.paint])
 
-  /* ─── 탭 3 견적 (탭 1 기준 자동 사용) ─── */
-  const usedPaintL = tab === 'detail' ? t2Total.paint : t1.requiredPaint
-  const usedArea = tab === 'detail' ? t2Total.area : t1.totalArea
-  const usedCans = tab === 'detail' ? t2Cans : t1Cans
+  /* ─── 탭 3 견적 — 마지막 계산 탭이 상세이고 결과가 있으면 상세, 아니면 간편 ─── */
+  const quoteSource: 'simple' | 'detail' =
+    lastCalcTab === 'detail' && t2Total.paint > 0 ? 'detail' : 'simple'
+  const usedPaintL = quoteSource === 'detail' ? t2Total.paint : t1.requiredPaint
+  const usedArea = quoteSource === 'detail' ? t2Total.area : t1.totalArea
+  const usedCans = quoteSource === 'detail' ? t2Cans : t1Cans
   const totalCans = usedCans.best?.total ?? Math.ceil(usedPaintL)
   const pricePerL = parseComma(pricePerLStr)
   const paintTotalCost = totalCans * pricePerL  // 구매 용량 기준
-  const selfTotal = paintTotalCost + rollerCost + brushTapeCost + (paintCeiling ? ladderCost : 0)
+  // 사다리는 천장 도장 시에만 — 견적 출처(간편/상세)의 실제 천장 선택을 반영
+  const quoteHasCeiling = quoteSource === 'detail' ? rooms.some(r => r.paintCeiling) : paintCeiling
+  const selfTotal = paintTotalCost + rollerCost + brushTapeCost + (quoteHasCeiling ? ladderCost : 0)
   const proLaborTotal = proLaborPerL * usedPaintL
   const proTotal = paintTotalCost + proLaborTotal
-  const usedPyung = usedArea / PYUNG_TO_M2
-  const selfPerPyung = usedPyung > 0 ? selfTotal / usedPyung : 0
-  const proPerPyung = usedPyung > 0 ? proTotal / usedPyung : 0
+  // 바닥(floor) 평당 비용 — 업계 '평당'은 바닥 평수 기준. 간편 계산일 때만 바닥 면적을 안다.
+  const floorPyung = quoteSource === 'simple' ? tab1Dims.area / PYUNG_TO_M2 : 0
+  const selfPerFloorPyung = floorPyung > 0 ? selfTotal / floorPyung : 0
+  const proPerFloorPyung = floorPyung > 0 ? proTotal / floorPyung : 0
 
   function selectPriceTier(id: string) {
     setPriceTierId(id)
@@ -483,9 +498,9 @@ export default function PaintClient() {
       </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
-        <button type="button" role="tab" aria-selected={tab === 'simple'} className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => setTab('simple')}>간편 계산</button>
-        <button type="button" role="tab" aria-selected={tab === 'detail'} className={`${styles.tabBtn} ${tab === 'detail' ? styles.tabActive : ''}`} onClick={() => setTab('detail')}>상세 계산</button>
-        <button type="button" role="tab" aria-selected={tab === 'quote'} className={`${styles.tabBtn} ${tab === 'quote' ? styles.tabActive : ''}`}  onClick={() => setTab('quote')}>비용 견적</button>
+        <button type="button" role="tab" aria-selected={tab === 'simple'} className={`${styles.tabBtn} ${tab === 'simple' ? styles.tabActive : ''}`} onClick={() => switchTab('simple')}>간편 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'detail'} className={`${styles.tabBtn} ${tab === 'detail' ? styles.tabActive : ''}`} onClick={() => switchTab('detail')}>상세 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'quote'} className={`${styles.tabBtn} ${tab === 'quote' ? styles.tabActive : ''}`}  onClick={() => switchTab('quote')}>비용 견적</button>
       </div>
 
       {/* ────────────── 탭 1: 간편 ────────────── */}
@@ -494,13 +509,13 @@ export default function PaintClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>공간 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
               <>
-                <select className={styles.pyungSelect} value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
+                <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
                   if (e.target.value === 'custom') { setPyungCustom(15) }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
@@ -509,7 +524,7 @@ export default function PaintClient() {
                 </select>
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
+                    <input className={styles.smallInput} aria-label="평수 직접 입력" type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
@@ -519,9 +534,9 @@ export default function PaintClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} aria-label="가로 (m)" type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} aria-label="세로 (m)" type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (≈ {fmt(tab1Dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
@@ -530,12 +545,12 @@ export default function PaintClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
               ))}
             </div>
           </div>
@@ -564,7 +579,7 @@ export default function PaintClient() {
                 <input type="checkbox" checked={paintDoors} onChange={e => setPaintDoors(e.target.checked)} />
                 <div>
                   <div className={styles.partLabel}>🚪 문 (양면)</div>
-                  <span className={styles.partSub}>1개당 약 3.78㎡ × 양면</span>
+                  <span className={styles.partSub}>1개당 약 3.78㎡ (0.9×2.1 양면 합산)</span>
                 </div>
               </label>
               <label className={`${styles.partCard} ${styles.partFrame} ${paintFrame ? styles.partActive : ''}`}>
@@ -579,7 +594,7 @@ export default function PaintClient() {
             <div style={{ height: 12 }} />
             <span className={styles.subLabel}>기타 도장 면적 (㎡)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="decimal" value={extraAreaStr} onChange={e => setExtraAreaStr(e.target.value)} />
+              <input className={styles.smallInput} aria-label="기타 도장 면적 (㎡)" type="text" inputMode="decimal" value={extraAreaStr} onChange={e => setExtraAreaStr(e.target.value.replace(/[^0-9.]/g, ''))} />
               <span className={styles.unit}>㎡</span>
             </div>
           </div>
@@ -593,7 +608,7 @@ export default function PaintClient() {
               <span className={styles.subLabel}>창문 — 빠른 선택</span>
               <div className={styles.presetGrid}>
                 {WIN_PRESETS.map(p => (
-                  <button key={p.id} type="button" className={`${styles.presetBtn} ${winPreset === p.id ? styles.presetActive : ''}`} onClick={() => applyWinPreset(p.id)}>
+                  <button key={p.id} type="button" aria-pressed={winPreset === p.id} className={`${styles.presetBtn} ${winPreset === p.id ? styles.presetActive : ''}`} onClick={() => applyWinPreset(p.id)}>
                     {p.label}
                   </button>
                 ))}
@@ -602,15 +617,15 @@ export default function PaintClient() {
                 <div className={styles.openingRow}>
                   <div>
                     <span className={styles.subLabel}>개수</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
+                    <input className={styles.smallInput} aria-label="창문 개수" type="number" inputMode="decimal" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>가로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
+                    <input className={styles.smallInput} aria-label="창문 가로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>세로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
+                    <input className={styles.smallInput} aria-label="창문 세로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
                   </div>
                 </div>
               )}
@@ -620,15 +635,15 @@ export default function PaintClient() {
               <div className={styles.openingRow}>
                 <div>
                   <span className={styles.subLabel}>개수</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
+                  <input className={styles.smallInput} aria-label="문 개수" type="number" inputMode="decimal" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>가로 (m)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="문 가로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>세로 (m)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="문 세로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
                 </div>
               </div>
             </div>
@@ -646,13 +661,13 @@ export default function PaintClient() {
             </div>
             <div className={styles.paintGrid}>
               {PAINT_TYPES.filter(p => p.id !== 'custom').map(p => (
-                <button key={p.id} type="button" className={`${styles.paintCard} ${styles[p.cls]} ${paintId === p.id ? styles.pntActive : ''}`} onClick={() => selectPaint(p.id)}>
+                <button key={p.id} type="button" aria-pressed={paintId === p.id} className={`${styles.paintCard} ${styles[p.cls]} ${paintId === p.id ? styles.pntActive : ''}`} onClick={() => selectPaint(p.id)}>
                   <p className={styles.paintName}>{p.name}</p>
                   <p className={styles.paintCoverage}>1L당 약 {p.coveragePerL}㎡</p>
                   {p.badge && <span className={`${styles.paintBadge} ${styles[p.badgeCls]}`}>{p.badge}</span>}
                 </button>
               ))}
-              <button type="button" className={`${styles.paintCard} ${styles.pntCustom} ${paintId === 'custom' ? styles.pntActive : ''}`} onClick={() => selectPaint('custom')}>
+              <button type="button" aria-pressed={paintId === 'custom'} className={`${styles.paintCard} ${styles.pntCustom} ${paintId === 'custom' ? styles.pntActive : ''}`} onClick={() => selectPaint('custom')}>
                 <p className={styles.paintName}>⚙️ 직접 입력</p>
                 <p className={styles.paintCoverage}>제품별 다름</p>
               </button>
@@ -663,7 +678,7 @@ export default function PaintClient() {
                 <span className={styles.subLabel} style={{ marginTop: 14 }}>한국 브랜드 프리셋 (선택, coverage 보정)</span>
                 <div className={styles.brandRow}>
                   {BRANDS.map(b => (
-                    <button key={b.id} type="button" className={`${styles.brandBtn} ${styles[b.cls]} ${brandId === b.id ? styles.brandActive : ''}`} onClick={() => selectBrand(b.id)}>
+                    <button key={b.id} type="button" aria-pressed={brandId === b.id} className={`${styles.brandBtn} ${styles[b.cls]} ${brandId === b.id ? styles.brandActive : ''}`} onClick={() => selectBrand(b.id)}>
                       {b.label}
                     </button>
                   ))}
@@ -679,11 +694,11 @@ export default function PaintClient() {
               <div className={styles.coverageInputRow}>
                 <div>
                   <span className={styles.subLabel}>제품명</span>
-                  <input className={styles.textInput} type="text" value={customName} onChange={e => setCustomName(e.target.value)} />
+                  <input className={styles.textInput} aria-label="제품명" type="text" value={customName} onChange={e => setCustomName(e.target.value)} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>1L당 도장 면적 (㎡)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.5} min={1} value={customCoverage} onChange={e => setCustomCoverage(n(e.target.value, 0.5))} />
+                  <input className={styles.smallInput} aria-label="1L당 도장 면적 (㎡)" type="number" inputMode="decimal" step={0.5} min={1} value={customCoverage} onChange={e => setCustomCoverage(n(e.target.value, 0.5))} />
                 </div>
               </div>
             )}
@@ -695,13 +710,13 @@ export default function PaintClient() {
               <span className={styles.cardLabelHint}>2회 표준 권장</span>
             </div>
             <div className={styles.coatGrid}>
-              <button type="button" className={`${styles.coatBtn} ${styles.coatOnce} ${coats === 1 ? styles.coatActive : ''}`}  onClick={() => setCoats(1)}>
+              <button type="button" aria-pressed={coats === 1} className={`${styles.coatBtn} ${styles.coatOnce} ${coats === 1 ? styles.coatActive : ''}`}  onClick={() => setCoats(1)}>
                 <small>1회</small>덧칠·간단
               </button>
-              <button type="button" className={`${styles.coatBtn} ${styles.coatTwice} ${coats === 2 ? styles.coatActive : ''}`} onClick={() => setCoats(2)}>
+              <button type="button" aria-pressed={coats === 2} className={`${styles.coatBtn} ${styles.coatTwice} ${coats === 2 ? styles.coatActive : ''}`} onClick={() => setCoats(2)}>
                 <small>2회</small>한국 표준
               </button>
-              <button type="button" className={`${styles.coatBtn} ${styles.coatThree} ${coats === 3 ? styles.coatActive : ''}`} onClick={() => setCoats(3)}>
+              <button type="button" aria-pressed={coats === 3} className={`${styles.coatBtn} ${styles.coatThree} ${coats === 3 ? styles.coatActive : ''}`} onClick={() => setCoats(3)}>
                 <small>3회</small>색상 변경
               </button>
             </div>
@@ -713,13 +728,13 @@ export default function PaintClient() {
               <span className={styles.cardLabelHint}>10% 표준 권장</span>
             </div>
             <div className={styles.lossGrid}>
-              <button type="button" className={`${styles.lossBtn} ${styles.lossSafe} ${lossPct === 5 ? styles.lossActive : ''}`}  onClick={() => setLossPct(5)}>
+              <button type="button" aria-pressed={lossPct === 5} className={`${styles.lossBtn} ${styles.lossSafe} ${lossPct === 5 ? styles.lossActive : ''}`}  onClick={() => setLossPct(5)}>
                 <small>5%</small>단순 평면
               </button>
-              <button type="button" className={`${styles.lossBtn} ${styles.lossStd} ${lossPct === 10 ? styles.lossActive : ''}`}  onClick={() => setLossPct(10)}>
+              <button type="button" aria-pressed={lossPct === 10} className={`${styles.lossBtn} ${styles.lossStd} ${lossPct === 10 ? styles.lossActive : ''}`}  onClick={() => setLossPct(10)}>
                 <small>10%</small>한국 표준
               </button>
-              <button type="button" className={`${styles.lossBtn} ${styles.lossWarn} ${lossPct === 15 ? styles.lossActive : ''}`} onClick={() => setLossPct(15)}>
+              <button type="button" aria-pressed={lossPct === 15} className={`${styles.lossBtn} ${styles.lossWarn} ${lossPct === 15 ? styles.lossActive : ''}`} onClick={() => setLossPct(15)}>
                 <small>15%</small>모서리 많음
               </button>
             </div>
@@ -857,7 +872,7 @@ export default function PaintClient() {
           {rooms.map(r => (
             <div key={r.id} className={styles.roomBlock}>
               <div className={styles.roomHeader}>
-                <input className={styles.roomHeaderInput} type="text" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value || '방' })} />
+                <input className={styles.roomHeaderInput} aria-label="방 이름" type="text" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value || '방' })} />
                 {rooms.length > 1 && (
                   <button type="button" className={styles.removeRoomBtn} onClick={() => removeRoom(r.id)}>방 삭제</button>
                 )}
@@ -880,23 +895,23 @@ export default function PaintClient() {
                   <div className={styles.wallDimRow}>
                     <div>
                       <span className={styles.subLabel}>가로 (m)</span>
-                      <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
+                      <input className={styles.smallInput} aria-label={`${w.label} 가로 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
                     </div>
                     <div>
                       <span className={styles.subLabel}>높이 (m)</span>
-                      <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
+                      <input className={styles.smallInput} aria-label={`${w.label} 높이 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
                     </div>
                   </div>
 
                   <p className={styles.openingsHeader}>창문·문 ({w.openings.length}/5)</p>
                   {w.openings.map(o => (
                     <div key={o.id} className={styles.openingMiniRow}>
-                      <button type="button" className={`${styles.openingTypeBtn} ${o.type === 'window' ? styles.openingWindow : styles.openingDoor}`} onClick={() => updateOpening(r.id, w.id, o.id, { type: o.type === 'window' ? 'door' : 'window' })}>
+                      <button type="button" aria-label={o.type === 'window' ? '창문 (누르면 문으로 변경)' : '문 (누르면 창문으로 변경)'} className={`${styles.openingTypeBtn} ${o.type === 'window' ? styles.openingWindow : styles.openingDoor}`} onClick={() => updateOpening(r.id, w.id, o.id, { type: o.type === 'window' ? 'door' : 'window' })}>
                         {o.type === 'window' ? '창문' : '문'}
                       </button>
-                      <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} />
-                      <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} />
-                      <button type="button" className={`${styles.iconBtn} ${styles.removeBtn}`} onClick={() => removeOpening(r.id, w.id, o.id)}>✕</button>
+                      <input className={styles.smallInput} aria-label={`${o.type === 'window' ? '창문' : '문'} 가로 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} />
+                      <input className={styles.smallInput} aria-label={`${o.type === 'window' ? '창문' : '문'} 세로 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} />
+                      <button type="button" aria-label="이 창문·문 삭제" className={`${styles.iconBtn} ${styles.removeBtn}`} onClick={() => removeOpening(r.id, w.id, o.id)}>✕</button>
                     </div>
                   ))}
                   {w.openings.length < 5 && (
@@ -912,11 +927,11 @@ export default function PaintClient() {
                 <div className={styles.wallDimRow} style={{ marginTop: 10 }}>
                   <div>
                     <span className={styles.subLabel}>천장 가로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingW} onChange={e => updateRoom(r.id, { ceilingW: n(e.target.value) })} />
+                    <input className={styles.smallInput} aria-label="천장 가로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingW} onChange={e => updateRoom(r.id, { ceilingW: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>천장 세로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingL} onChange={e => updateRoom(r.id, { ceilingL: n(e.target.value) })} />
+                    <input className={styles.smallInput} aria-label="천장 세로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingL} onChange={e => updateRoom(r.id, { ceilingL: n(e.target.value) })} />
                   </div>
                 </div>
               )}
@@ -926,27 +941,30 @@ export default function PaintClient() {
                 <span>문 도장 (양면)</span>
               </label>
               {r.paintDoors && (
-                <div className={styles.openingRow} style={{ marginTop: 6, gridTemplateColumns: '1fr' }}>
-                  <div>
-                    <span className={styles.subLabel}>문 개수</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={r.doorCount} onChange={e => updateRoom(r.id, { doorCount: Math.max(0, Number(e.target.value) || 0) })} />
+                <>
+                  <div className={styles.openingRow} style={{ marginTop: 6, gridTemplateColumns: '1fr' }}>
+                    <div>
+                      <span className={styles.subLabel}>문 개수</span>
+                      <input className={styles.smallInput} aria-label="문 개수" type="number" inputMode="decimal" min={0} value={r.doorCount} onChange={e => updateRoom(r.id, { doorCount: Math.max(0, Number(e.target.value) || 0) })} />
+                    </div>
                   </div>
-                </div>
+                  <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>문 1개 = 0.9 × 2.1m 표준 × 양면 기준</p>
+                </>
               )}
 
               <div style={{ height: 10 }} />
               <span className={styles.subLabel}>기타 면적 (몰딩·걸레받이·가구) (㎡)</span>
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.5} min={0} value={r.extraArea} onChange={e => updateRoom(r.id, { extraArea: n(e.target.value) })} />
+                <input className={styles.smallInput} aria-label="기타 면적 (몰딩·걸레받이·가구) (㎡)" type="number" inputMode="decimal" step={0.5} min={0} value={r.extraArea} onChange={e => updateRoom(r.id, { extraArea: n(e.target.value) })} />
                 <span className={styles.unit}>㎡</span>
               </div>
 
               <div style={{ height: 10 }} />
               <span className={styles.subLabel}>이 방의 도장 횟수</span>
               <div className={styles.coatGrid}>
-                <button type="button" className={`${styles.coatBtn} ${styles.coatOnce} ${r.coats === 1 ? styles.coatActive : ''}`}  onClick={() => updateRoom(r.id, { coats: 1 })}><small>1회</small></button>
-                <button type="button" className={`${styles.coatBtn} ${styles.coatTwice} ${r.coats === 2 ? styles.coatActive : ''}`} onClick={() => updateRoom(r.id, { coats: 2 })}><small>2회</small></button>
-                <button type="button" className={`${styles.coatBtn} ${styles.coatThree} ${r.coats === 3 ? styles.coatActive : ''}`} onClick={() => updateRoom(r.id, { coats: 3 })}><small>3회</small></button>
+                <button type="button" aria-pressed={r.coats === 1} className={`${styles.coatBtn} ${styles.coatOnce} ${r.coats === 1 ? styles.coatActive : ''}`}  onClick={() => updateRoom(r.id, { coats: 1 })}><small>1회</small></button>
+                <button type="button" aria-pressed={r.coats === 2} className={`${styles.coatBtn} ${styles.coatTwice} ${r.coats === 2 ? styles.coatActive : ''}`} onClick={() => updateRoom(r.id, { coats: 2 })}><small>2회</small></button>
+                <button type="button" aria-pressed={r.coats === 3} className={`${styles.coatBtn} ${styles.coatThree} ${r.coats === 3 ? styles.coatActive : ''}`} onClick={() => updateRoom(r.id, { coats: 3 })}><small>3회</small></button>
               </div>
             </div>
           ))}
@@ -1033,20 +1051,20 @@ export default function PaintClient() {
               <span className={styles.cardLabelHint}>{tab === 'quote' ? `필요 ${fmt(usedPaintL, 1)}L · 구매 ${totalCans}L` : ''}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-              간편 계산 기준 — 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평) · 필요 페인트 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedPaintL, 1)}L</strong> · 추천 구매 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{totalCans}L</strong>
+              {quoteSource === 'detail' ? '상세' : '간편'} 계산 기준 — 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> · 필요 페인트 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedPaintL, 1)}L</strong> · 추천 구매 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{totalCans}L</strong>
             </p>
 
             <span className={styles.subLabel}>페인트 1L 가격</span>
             <div className={styles.priceTierGrid}>
               {PRICE_TIERS.map(t => (
-                <button key={t.id} type="button" className={`${styles.priceTierBtn} ${priceTierId === t.id ? styles.priceTierActive : ''}`} onClick={() => selectPriceTier(t.id)}>
+                <button key={t.id} type="button" aria-pressed={priceTierId === t.id} className={`${styles.priceTierBtn} ${priceTierId === t.id ? styles.priceTierActive : ''}`} onClick={() => selectPriceTier(t.id)}>
                   {t.label}
                   <small>{(t.price / 1000).toLocaleString()}k</small>
                 </button>
               ))}
             </div>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric"
+              <input className={styles.smallInput} aria-label="페인트 1L 가격 (원)" type="text" inputMode="numeric"
                 value={fmt(pricePerL, 0)}
                 onChange={e => { setPricePerLStr(parseComma(e.target.value).toString()); setPriceTierId(null) }} />
               <span className={styles.unit}>원/L</span>
@@ -1055,28 +1073,28 @@ export default function PaintClient() {
             <div style={{ height: 12 }} />
             <span className={styles.subLabel}>롤러·트레이 세트 (셀프, 1회)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={rollerCost} onChange={e => setRollerCost(n(e.target.value))} />
+              <input className={styles.smallInput} aria-label="롤러·트레이 세트 비용 (원)" type="number" inputMode="decimal" step={1000} min={0} value={rollerCost} onChange={e => setRollerCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>붓·테이프·커버 (셀프, 1세트)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={brushTapeCost} onChange={e => setBrushTapeCost(n(e.target.value))} />
+              <input className={styles.smallInput} aria-label="붓·테이프·커버 비용 (원)" type="number" inputMode="decimal" step={1000} min={0} value={brushTapeCost} onChange={e => setBrushTapeCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>사다리 (천장 도장 시)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={5000} min={0} value={ladderCost} onChange={e => setLadderCost(n(e.target.value))} />
+              <input className={styles.smallInput} aria-label="사다리 비용 (원)" type="number" inputMode="decimal" step={5000} min={0} value={ladderCost} onChange={e => setLadderCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>전문 시공 인건비 (1L당)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={proLaborPerL} onChange={e => setProLaborPerL(n(e.target.value))} />
+              <input className={styles.smallInput} aria-label="전문 시공 인건비 1L당 (원)" type="number" inputMode="decimal" step={1000} min={0} value={proLaborPerL} onChange={e => setProLaborPerL(n(e.target.value))} />
               <span className={styles.unit}>원/L</span>
             </div>
           </div>
@@ -1107,7 +1125,7 @@ export default function PaintClient() {
                     <td>1세트</td>
                     <td>{fmtKRW(brushTapeCost)}</td>
                   </tr>
-                  {paintCeiling && (
+                  {quoteHasCeiling && (
                     <tr className={styles.selfRow}>
                       <td>사다리</td>
                       <td>—</td>
@@ -1137,8 +1155,17 @@ export default function PaintClient() {
           </div>
 
           <div className={styles.compareLine}>
-            평당 비용 — 셀프 약 <strong>{fmt(selfPerPyung, 0)}원/평</strong> · 전문 약 <strong>{fmt(proPerPyung, 0)}원/평</strong>
-            <br />한국 평균: 셀프 5,000~10,000원/평 · 전문 15,000~25,000원/평
+            {floorPyung > 0 ? (
+              <>
+                바닥 평당 비용 — 셀프 약 <strong>{fmt(selfPerFloorPyung, 0)}원/평</strong> · 전문 약 <strong>{fmt(proPerFloorPyung, 0)}원/평</strong> (바닥 {fmt(floorPyung, 1)}평 기준)
+                <br />한국 평균(바닥 평당): 셀프 5,000~10,000원(재료) · 전문 30,000~50,000원(인건비 포함)
+              </>
+            ) : (
+              <>
+                현재 견적 — 셀프 <strong>{fmtKRW(selfTotal)}</strong> · 전문 <strong>{fmtKRW(proTotal)}</strong>
+                <br />업계 &apos;바닥 평당&apos; 비교는 [간편 계산] 탭(평수·가로세로)에서 제공됩니다.
+              </>
+            )}
           </div>
         </>
       )}

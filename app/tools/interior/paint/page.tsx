@@ -123,7 +123,7 @@ export default function PaintPage() {
             평수별 페인트 양 빠른 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            천장 2.4m, 창문·문 1개씩, <strong style={{ color: 'var(--text)' }}>벽만 2회 도장</strong>, 10% 로스율, 수성 페인트 기준
+            정사각형 한 공간 가정 · 천장 2.4m · 표준 창문(1.5×1.5m)·문(0.9×2.1m) 각 1개 차감 · <strong style={{ color: 'var(--text)' }}>벽만 2회 도장</strong> · 로스율 10% · 수성(1L당 10㎡) 기준. 도장 면적은 개구부를 뺀 실제 벽 면적입니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
@@ -136,13 +136,13 @@ export default function PaintPage() {
               </thead>
               <tbody>
                 {[
-                  { p: '5평',   a: '25㎡',  l: '5.5L',  rec: '4L + 2L = 6L' },
-                  { p: '7평',   a: '32㎡',  l: '7.0L',  rec: '4L + 4L = 8L 또는 4L + 2L + 1L = 7L' },
-                  { p: '10평',  a: '42㎡',  l: '9.2L',  rec: '4L + 4L + 1L = 9L (부족) → 18L 1통' },
-                  { p: '15평',  a: '58㎡',  l: '12.8L', rec: '4L × 4 = 16L 또는 18L 1통' },
-                  { p: '20평',  a: '75㎡',  l: '16.5L', rec: '18L 1통' },
-                  { p: '24평',  a: '88㎡',  l: '19.4L', rec: '18L + 2L = 20L' },
-                  { p: '30평',  a: '110㎡', l: '24.2L', rec: '18L + 4L + 2L = 24L (소폭 부족) 또는 18L + 4L + 4L' },
+                  { p: '5평',   a: '35㎡',  l: '7.7L',  rec: '4L × 2 = 8L' },
+                  { p: '7평',   a: '42㎡',  l: '9.2L',  rec: '4L × 2 + 2L = 10L' },
+                  { p: '10평',  a: '51㎡',  l: '11.2L', rec: '4L × 3 = 12L' },
+                  { p: '15평',  a: '63㎡',  l: '14.0L', rec: '4L × 3 + 2L = 14L' },
+                  { p: '20평',  a: '74㎡',  l: '16.3L', rec: '4L × 4 + 1L = 17L' },
+                  { p: '24평',  a: '81㎡',  l: '17.9L', rec: '18L × 1 = 18L' },
+                  { p: '30평',  a: '91㎡',  l: '20.1L', rec: '18L + 2L + 1L = 21L' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.p}</td>
@@ -198,6 +198,9 @@ export default function PaintPage() {
               </div>
             ))}
           </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginTop: '12px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 14px' }}>
+            💡 <strong style={{ color: 'var(--text)' }}>계산기에 반영하는 법</strong> — 위 보정은 계산기의 <strong style={{ color: 'var(--text)' }}>로스율</strong> 버튼으로 적용하세요. 시멘트·무도장 목재처럼 흡수율이 높은 면은 로스율을 <strong style={{ color: 'var(--text)' }}>15%</strong>로 올리고, 벽지 위·금속처럼 흡수가 적은 면은 <strong style={{ color: 'var(--text)' }}>5~10%</strong>면 충분합니다. 새 시멘트·목재는 <strong style={{ color: 'var(--text)' }}>프라이머 1회</strong>를 별도로 — 페인트 종류에서 &lsquo;프라이머&rsquo;를 골라 1회 도장으로 따로 계산한 뒤 합산하면 됩니다.
+          </p>
         </div>
 
         {/* ── 6. 시공 단계 가이드 ── */}
@@ -246,7 +249,7 @@ export default function PaintPage() {
                 <li>24평 기준 약 80~120만원</li>
                 <li>시간: 1~2일 (빠르게)</li>
                 <li>깔끔한 마감</li>
-                <li>평당 15,000~25,000원</li>
+                <li>바닥 평당 약 33,000~50,000원 (인건비 포함)</li>
               </ul>
             </div>
           </div>

@@ -8,8 +8,9 @@ import styles from './ac-capacity.module.css'
  * 상수
  * ───────────────────────────────────────────────────────── */
 const PYUNG_TO_M2 = 3.3058
-const W_PER_PYEONG = 580            // 1평형 = 약 580W
-const BTU_PER_PYEONG = 1980         // 1평형 = 약 1,980 BTU/h
+const LOAD_W_PER_SQM = 123          // KS C 9306 부속서 D — 거주공간 냉방부하 약 123 W/㎡ (8,100W 이하)
+const W_PER_PYEONG = 407            // 1평형 정격 냉방능력 ≈ 123 W/㎡ × 3.3058 ≈ 407W (KS·실측 기준)
+const BTU_PER_PYEONG = 1389         // 1평형 ≈ 0.407kW ≈ 1,389 BTU/h (= 407 × 3.412)
 const STANDARD_PYEONG = [6, 9, 11, 13, 15, 18, 22, 25, 30, 36]
 
 /* 공간 용도 */
@@ -94,9 +95,9 @@ export default function AcCapacityClient() {
   /* 탭 2 환산기 */
   const [convertMode, setConvertMode] = useState<'pyeong' | 'btu' | 'w' | 'kw'>('pyeong')
   const [pyeongInput, setPyeongInput] = useState(13)
-  const [btuInput, setBtuInput] = useState(25740)
-  const [wInput, setWInput] = useState(7540)
-  const [kwInput, setKwInput] = useState(7.54)
+  const [btuInput, setBtuInput] = useState(18057)
+  const [wInput, setWInput] = useState(5291)
+  const [kwInput, setKwInput] = useState(5.29)
 
   /* 복사 */
   const [copied, setCopied] = useState(false)
@@ -121,8 +122,8 @@ export default function AcCapacityClient() {
 
   /* ─── 핵심 계산 ─── */
   const calc = useMemo(() => {
-    const baseLoadPerSqm = 140
-    const baseLoad = dims.area * baseLoadPerSqm
+    const valid = dims.area > 0
+    const baseLoad = dims.area * LOAD_W_PER_SQM
     const ceilingFactor = 1 + Math.max(0, (heightM - 2.4)) * 0.25
 
     const adjustedLoad = baseLoad
@@ -132,17 +133,21 @@ export default function AcCapacityClient() {
       * insulation.factor
       * ceilingFactor
 
-    const occupantLoad = occupants * 100
-    const applianceLoad = appliance.load
-    const totalLoadW = adjustedLoad + occupantLoad + applianceLoad
+    const occupantLoad = valid ? occupants * 100 : 0
+    const applianceLoad = valid ? appliance.load : 0
+    const totalLoadW = valid ? adjustedLoad + occupantLoad + applianceLoad : 0
 
+    const maxStd = STANDARD_PYEONG[STANDARD_PYEONG.length - 1]
     const exactPyeong = totalLoadW / W_PER_PYEONG
-    const matched = STANDARD_PYEONG.find(p => p >= exactPyeong) ?? STANDARD_PYEONG[STANDARD_PYEONG.length - 1]
+    const matched = valid ? (STANDARD_PYEONG.find(p => p >= exactPyeong) ?? maxStd) : 0
     const matchedIdx = STANDARD_PYEONG.indexOf(matched)
-    const conservative = matchedIdx > 0 ? STANDARD_PYEONG[matchedIdx - 1] : matched
-    const bigger = matchedIdx < STANDARD_PYEONG.length - 1 ? STANDARD_PYEONG[matchedIdx + 1] : matched
+    const conservative = matched === 0 ? 0 : matchedIdx > 0 ? STANDARD_PYEONG[matchedIdx - 1] : matched
+    const bigger = matched === 0 ? 0 : matchedIdx < STANDARD_PYEONG.length - 1 ? STANDARD_PYEONG[matchedIdx + 1] : matched
+    const overCapacity = valid && exactPyeong > maxStd   // 시판 최대 평형 초과
 
     return {
+      valid,
+      overCapacity,
       baseLoad: Math.round(baseLoad),
       adjustedLoad: Math.round(adjustedLoad),
       occupantLoad,
@@ -154,7 +159,9 @@ export default function AcCapacityClient() {
       conservative,
       bigger,
       btuPerHour: Math.round(matched * BTU_PER_PYEONG),
-      kw: matched * 0.58,
+      kw: (matched * W_PER_PYEONG) / 1000,
+      loadBtuPerHour: Math.round(totalLoadW * BTU_PER_PYEONG / W_PER_PYEONG),
+      loadKw: totalLoadW / 1000,
     }
   }, [dims.area, heightM, space, direction, floor, insulation, occupants, appliance])
 
@@ -196,9 +203,12 @@ export default function AcCapacityClient() {
   const electricCost = useMemo(() => {
     const dailyHours = 8
     const days = 30
-    // 인버터: 평균 60% 출력 / 정속형: 평균 100% on-off cycling
-    const wattInverter = calc.matched * W_PER_PYEONG * 0.4
-    const wattFixed    = calc.matched * W_PER_PYEONG * 0.6
+    // 평형(407W)은 정격 냉방능력 → 소비전력 = 능력 ÷ COP(정격 효율 약 3.5)
+    const COP = 3.5
+    const ratedPowerW = (calc.matched * W_PER_PYEONG) / COP
+    // 평균 소비 비율: 인버터 ≈ 40%(부분부하 연속 운전) / 정속형 ≈ 60%(풀가동 on-off)
+    const wattInverter = ratedPowerW * 0.4
+    const wattFixed    = ratedPowerW * 0.6
     const kwhInverter = (wattInverter * dailyHours * days) / 1000
     const kwhFixed    = (wattFixed * dailyHours * days) / 1000
     // 누진 1단계 단순 가정 130원/kWh
@@ -206,7 +216,7 @@ export default function AcCapacityClient() {
     return {
       inverterCost: kwhInverter * KRW_PER_KWH,
       fixedCost: kwhFixed * KRW_PER_KWH,
-      max: Math.max(kwhInverter, kwhFixed) * KRW_PER_KWH,
+      max: Math.max(kwhInverter, kwhFixed, 0.001) * KRW_PER_KWH,
     }
   }, [calc.matched])
 
@@ -240,13 +250,16 @@ export default function AcCapacityClient() {
 
       <Disclaimer
         variant="safety"
+        sources={[
+          { label: 'KS C 9306 에어컨디셔너 (e-나라 표준인증)', href: 'https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSC9306' },
+        ]}
         related={[
           { href: '/tools/interior/wallpaper', label: '도배 소요량' },
           { href: '/tools/interior/paint', label: '페인트 계산' },
           { href: '/tools/interior/room-area', label: '방 면적 계산' }
         ]}
       >
-        본 계산기는 한국 표준(㎡당 130~150W 냉방 부하) 기준 참고용
+        냉방 부하·냉방능력은 <strong>KS C 9306 부속서 D(거주공간 약 123 W/㎡, 1평형 ≈ 0.41kW 정격 냉방능력)</strong> 기준 참고용입니다. 향·층·단열 보정은 일반 통계 가정이며, 실제 제품 평형 라벨은 마케팅 반올림(예 6평형 = 18.7㎡)으로 ±1단계 차이가 있을 수 있습니다. 대형(정격 8,100W↑) 제품은 110 W/㎡ 기준이라 표기보다 넓은 면적을 커버합니다. (기준일: 2026-06)
       </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
@@ -261,13 +274,13 @@ export default function AcCapacityClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>공간 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
               <>
-                <select className={styles.pyungSelect} value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
+                <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
                   if (e.target.value === 'custom') { setPyungCustom(15) }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
@@ -276,7 +289,7 @@ export default function AcCapacityClient() {
                 </select>
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
+                    <input className={styles.smallInput} aria-label="평수 직접 입력" type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
@@ -286,23 +299,25 @@ export default function AcCapacityClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} aria-label="가로 (m)" type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} aria-label="세로 (m)" type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
-                <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (≈ {fmt(dims.area / PYUNG_TO_M2, 1)}평)</p>
+                {dims.area <= 0
+                  ? <p className={styles.areaShow} style={{ color: 'var(--danger)' }}>⚠️ 가로·세로(m)를 입력하세요</p>
+                  : <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (≈ {fmt(dims.area / PYUNG_TO_M2, 1)}평)</p>}
               </>
             )}
 
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
               ))}
             </div>
           </div>
@@ -314,7 +329,7 @@ export default function AcCapacityClient() {
             </div>
             <div className={styles.spaceGrid}>
               {SPACE_TYPES.map(s => (
-                <button key={s.id} type="button" className={`${styles.spaceBtn} ${styles[s.cls]} ${spaceId === s.id ? styles.spActive : ''}`} onClick={() => setSpaceId(s.id)}>
+                <button key={s.id} type="button" aria-pressed={spaceId === s.id} className={`${styles.spaceBtn} ${styles[s.cls]} ${spaceId === s.id ? styles.spActive : ''}`} onClick={() => setSpaceId(s.id)}>
                   <span className="icon">{s.icon}</span>
                   {s.name}
                 </button>
@@ -329,7 +344,7 @@ export default function AcCapacityClient() {
             </div>
             <div className={styles.directionGrid}>
               {DIRECTIONS.map(d => (
-                <button key={d.id} type="button" className={`${styles.dirBtn} ${styles[d.cls]} ${directionId === d.id ? styles.dirActive : ''}`} onClick={() => setDirectionId(d.id)}>
+                <button key={d.id} type="button" aria-pressed={directionId === d.id} className={`${styles.dirBtn} ${styles[d.cls]} ${directionId === d.id ? styles.dirActive : ''}`} onClick={() => setDirectionId(d.id)}>
                   <span style={{ fontSize: 18 }}>{d.icon}</span>
                   {d.name}
                 </button>
@@ -344,7 +359,7 @@ export default function AcCapacityClient() {
             </div>
             <div className={styles.floorGrid}>
               {FLOORS.map(f => (
-                <button key={f.id} type="button" className={`${styles.floorBtn} ${styles[f.cls]} ${floorId === f.id ? styles.flActive : ''}`} onClick={() => setFloorId(f.id)}>
+                <button key={f.id} type="button" aria-pressed={floorId === f.id} className={`${styles.floorBtn} ${styles[f.cls]} ${floorId === f.id ? styles.flActive : ''}`} onClick={() => setFloorId(f.id)}>
                   <span style={{ fontSize: 16 }}>{f.icon}</span>
                   {f.name}
                   <small>{f.desc}</small>
@@ -360,7 +375,7 @@ export default function AcCapacityClient() {
             </div>
             <div className={styles.insulationGrid}>
               {INSULATIONS.map(i => (
-                <button key={i.id} type="button" className={`${styles.insBtn} ${styles[i.cls]} ${insulationId === i.id ? styles.insActive : ''}`} onClick={() => setInsulationId(i.id)}>
+                <button key={i.id} type="button" aria-pressed={insulationId === i.id} className={`${styles.insBtn} ${styles[i.cls]} ${insulationId === i.id ? styles.insActive : ''}`} onClick={() => setInsulationId(i.id)}>
                   <span style={{ fontSize: 16 }}>{i.icon}</span>
                   {i.name}
                   <small>{i.desc}</small>
@@ -376,7 +391,7 @@ export default function AcCapacityClient() {
             </div>
             <span className={styles.subLabel}>거주 인원</span>
             <div className={styles.occupantRow}>
-              <input className={styles.slider} type="range" min={1} max={6} step={1} value={occupants} onChange={e => setOccupants(Number(e.target.value))} />
+              <input className={styles.slider} aria-label="거주 인원" aria-valuetext={`${occupants}명`} type="range" min={1} max={6} step={1} value={occupants} onChange={e => setOccupants(Number(e.target.value))} />
               <span className={styles.sliderValue}>{occupants}명</span>
             </div>
 
@@ -384,19 +399,31 @@ export default function AcCapacityClient() {
             <span className={styles.subLabel}>발열 가전</span>
             <div className={styles.applianceGrid}>
               {APPLIANCES.map(a => (
-                <button key={a.id} type="button" className={`${styles.applianceBtn} ${applianceId === a.id ? styles.applianceActive : ''}`} onClick={() => setApplianceId(a.id)}>
+                <button key={a.id} type="button" aria-pressed={applianceId === a.id} className={`${styles.applianceBtn} ${applianceId === a.id ? styles.applianceActive : ''}`} onClick={() => setApplianceId(a.id)}>
                   {a.name}
                 </button>
               ))}
             </div>
           </div>
 
+          {/* 입력 경고 */}
+          {!calc.valid && (
+            <div role="alert" style={{ background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '12px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
+              ⚠️ 공간 면적을 입력하세요 (가로·세로 &gt; 0). 면적이 없으면 추천 평형을 계산할 수 없습니다.
+            </div>
+          )}
+          {calc.overCapacity && (
+            <div role="alert" style={{ background: 'var(--bg2)', border: '1px solid var(--warning)', borderLeft: '3px solid var(--warning)', borderRadius: 10, padding: '12px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
+              ⚠️ 냉방 부하가 한국 시판 최대(36평형)를 초과합니다 — 약 <strong>{calc.exactPyeong.toFixed(1)}평형</strong> 필요. 에어컨을 <strong>2대로 분산 설치</strong>하거나 상업용·시스템 냉방을 검토하세요.
+            </div>
+          )}
+
           {/* HERO */}
           <div className={styles.hero} role="status">
             <p className={styles.heroLead}>추천 에어컨 평형</p>
             <p className={styles.heroNum}>{calc.matched}<span className={styles.heroUnit}>평형</span></p>
             <p className={styles.heroSub}>
-              약 <strong className={styles.heroSubAccent}>{fmt(calc.totalLoadW)}W</strong> 냉방 부하 ({fmt(calc.btuPerHour)} BTU/h, {calc.kw.toFixed(2)}kW)
+              약 <strong className={styles.heroSubAccent}>{fmt(calc.totalLoadW)}W</strong> 냉방 부하 ({fmt(calc.loadBtuPerHour)} BTU/h, {calc.loadKw.toFixed(2)}kW)
             </p>
           </div>
 
@@ -431,9 +458,10 @@ export default function AcCapacityClient() {
           {/* 부하 분석 표 */}
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>냉방 부하 분석</span></div>
+            <div style={{ overflowX: 'auto' }}>
             <table className={styles.loadTable}>
               <tbody>
-                <tr><td>면적 ({fmt(dims.area)}㎡ × 140W/㎡)</td><td>{fmt(calc.baseLoad)}W</td></tr>
+                <tr><td>면적 ({fmt(dims.area)}㎡ × 123W/㎡)</td><td>{fmt(calc.baseLoad)}W</td></tr>
                 {calc.ceilingFactor !== 1 && (
                   <tr className={calc.ceilingFactor > 1 ? styles.factorUp : styles.factorDown}>
                     <td>천장 높이 보정 ({heightM}m, ×{calc.ceilingFactor.toFixed(2)})</td>
@@ -469,10 +497,11 @@ export default function AcCapacityClient() {
                   </tr>
                 )}
                 <tr className={styles.totalRow}><td>총 냉방 부하</td><td>{fmt(calc.totalLoadW)}W</td></tr>
-                <tr className={styles.totalRow}><td>평형 환산 ({fmt(calc.totalLoadW)} ÷ 580)</td><td>약 {calc.exactPyeong.toFixed(1)}평형</td></tr>
+                <tr className={styles.totalRow}><td>평형 환산 ({fmt(calc.totalLoadW)} ÷ 407)</td><td>약 {calc.exactPyeong.toFixed(1)}평형</td></tr>
                 <tr className={styles.totalRow}><td>한국 시판 매칭</td><td>{calc.matched}평형 ✅</td></tr>
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* BTU·kW 환산 */}
@@ -498,7 +527,7 @@ export default function AcCapacityClient() {
 
           {/* 한국 시판 안내 */}
           <div className={styles.infoCard}>
-            ℹ️ <strong>{calc.matched}평형</strong> 에어컨은 한국 주요 브랜드(삼성·LG·캐리어·위니아)에서 일반적으로 판매됩니다. <strong style={{ color: 'var(--accent)' }}>인버터 모델 권장</strong> (전기료 약 30~40% 절감, 한 시즌만에 가격 차이 회수 가능).
+            ℹ️ <strong>{calc.matched}평형</strong> 에어컨은 한국 주요 브랜드(삼성·LG·캐리어·위니아)에서 일반적으로 판매됩니다. <strong style={{ color: 'var(--accent)' }}>인버터 모델 권장</strong> (장시간 사용 시 전기료 약 30~40% 절감 — 사용량이 많으면 1~2시즌 내 가격 차이 회수).
           </div>
 
           {/* 전기료 비교 */}
@@ -540,17 +569,17 @@ export default function AcCapacityClient() {
               <span className={styles.cardLabelHint}>하나만 입력 → 자동 환산</span>
             </div>
             <div className={styles.convertModeRow}>
-              <button type="button" className={`${styles.convertModeBtn} ${convertMode === 'pyeong' ? styles.convertModeActive : ''}`} onClick={() => setConvertMode('pyeong')}>평형</button>
-              <button type="button" className={`${styles.convertModeBtn} ${convertMode === 'btu' ? styles.convertModeActive : ''}`}    onClick={() => setConvertMode('btu')}>BTU/h</button>
-              <button type="button" className={`${styles.convertModeBtn} ${convertMode === 'w' ? styles.convertModeActive : ''}`}      onClick={() => setConvertMode('w')}>W</button>
-              <button type="button" className={`${styles.convertModeBtn} ${convertMode === 'kw' ? styles.convertModeActive : ''}`}     onClick={() => setConvertMode('kw')}>kW</button>
+              <button type="button" aria-pressed={convertMode === 'pyeong'} className={`${styles.convertModeBtn} ${convertMode === 'pyeong' ? styles.convertModeActive : ''}`} onClick={() => setConvertMode('pyeong')}>평형</button>
+              <button type="button" aria-pressed={convertMode === 'btu'} className={`${styles.convertModeBtn} ${convertMode === 'btu' ? styles.convertModeActive : ''}`}    onClick={() => setConvertMode('btu')}>BTU/h</button>
+              <button type="button" aria-pressed={convertMode === 'w'} className={`${styles.convertModeBtn} ${convertMode === 'w' ? styles.convertModeActive : ''}`}      onClick={() => setConvertMode('w')}>W</button>
+              <button type="button" aria-pressed={convertMode === 'kw'} className={`${styles.convertModeBtn} ${convertMode === 'kw' ? styles.convertModeActive : ''}`}     onClick={() => setConvertMode('kw')}>kW</button>
             </div>
 
             {convertMode === 'pyeong' && (
               <>
                 <span className={styles.subLabel}>평형 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={1} value={pyeongInput} onChange={e => setPyeongInput(n(e.target.value, 1))} />
+                  <input className={styles.bigInput} aria-label="평형 입력" type="number" inputMode="decimal" min={1} step={1} value={pyeongInput} onChange={e => setPyeongInput(n(e.target.value, 1))} />
                   <span className={styles.unit}>평형</span>
                 </div>
               </>
@@ -559,7 +588,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>BTU/h 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={1000} step={500} value={btuInput} onChange={e => setBtuInput(n(e.target.value, 1000))} />
+                  <input className={styles.bigInput} aria-label="BTU/h 입력" type="number" inputMode="decimal" min={1000} step={500} value={btuInput} onChange={e => setBtuInput(n(e.target.value, 1000))} />
                   <span className={styles.unit}>BTU/h</span>
                 </div>
               </>
@@ -568,7 +597,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>W 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={100} step={100} value={wInput} onChange={e => setWInput(n(e.target.value, 100))} />
+                  <input className={styles.bigInput} aria-label="W 입력" type="number" inputMode="decimal" min={100} step={100} value={wInput} onChange={e => setWInput(n(e.target.value, 100))} />
                   <span className={styles.unit}>W</span>
                 </div>
               </>
@@ -577,7 +606,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>kW 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={kwInput} onChange={e => setKwInput(n(e.target.value, 0.1))} />
+                  <input className={styles.bigInput} aria-label="kW 입력" type="number" inputMode="decimal" min={0.1} step={0.1} value={kwInput} onChange={e => setKwInput(n(e.target.value, 0.1))} />
                   <span className={styles.unit}>kW</span>
                 </div>
               </>
@@ -607,7 +636,7 @@ export default function AcCapacityClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}>
               <span>한국 시판 평형 표준</span>
-              <span className={styles.cardLabelHint}>1평형 ≈ 580W ≈ 1,980 BTU/h</span>
+              <span className={styles.cardLabelHint}>1평형 ≈ 407W ≈ 1,389 BTU/h</span>
             </div>
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.refTable}>
@@ -630,7 +659,7 @@ export default function AcCapacityClient() {
                     <tr key={i}>
                       <td>{r.p}평형</td>
                       <td>{fmt(r.p * BTU_PER_PYEONG)}</td>
-                      <td>{(r.p * 0.58).toFixed(1)}</td>
+                      <td>{((r.p * W_PER_PYEONG) / 1000).toFixed(1)}</td>
                       <td>{r.rooms}</td>
                     </tr>
                   ))}
@@ -641,11 +670,11 @@ export default function AcCapacityClient() {
 
           <div className={styles.infoCard}>
             🌐 <strong>해외 직구 시 BTU 변환</strong> — 미국·동남아 에어컨은 BTU/h로 표기됩니다.<br />
-            • 12,000 BTU/h ≈ 6평형<br />
-            • 18,000 BTU/h ≈ 9평형<br />
-            • 24,000 BTU/h ≈ 12평형<br />
-            • 36,000 BTU/h ≈ 18평형<br />
-            ※ <strong>1 BTU/h ≈ 0.293W</strong>, <strong>1 kW ≈ 1.72평형</strong>
+            • 12,000 BTU/h ≈ 9평형<br />
+            • 18,000 BTU/h ≈ 13평형<br />
+            • 24,000 BTU/h ≈ 17평형<br />
+            • 36,000 BTU/h ≈ 26평형<br />
+            ※ <strong>1 BTU/h ≈ 0.293W</strong>, <strong>1 kW ≈ 2.46평형</strong>
           </div>
         </>
       )}

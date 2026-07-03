@@ -150,7 +150,8 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
-.tableScroll table {
+/* 넓은 매트릭스(4열)만 가로 스크롤 — 2열 상세표는 모바일에서 그대로 보이게 */
+.tableScroll .compactTable {
   min-width: 480px;
 }
 
@@ -242,7 +243,7 @@
 /* 배근 가이드 */
 .planGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
   gap: 10px;
 }
 .planCard {

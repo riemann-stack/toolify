@@ -18,17 +18,17 @@ export interface SpaceStandard {
 
 export const SPACE_STANDARDS: SpaceStandard[] = [
   { id: 'bedroom',   name: '침실',         icon: '🛏️', achMin: 0.5, achMax: 1,  achRecommended: 0.7,
-    desc: '취침 중심 · 낮은 환기율로 충분', standard: '국토교통부 (신축 0.5 ACH 의무)' },
+    desc: '취침 중심 · 낮은 환기율로 충분', standard: '국토교통부 (신축 공동주택 0.5 ACH 의무)' },
   { id: 'living',    name: '거실',         icon: '🛋️', achMin: 0.5, achMax: 1,  achRecommended: 0.8,
-    desc: '주거 일반', standard: '국토교통부' },
+    desc: '주거 일반', standard: '국토교통부 (신축 공동주택 0.5 ACH)' },
   { id: 'study',     name: '공부방·서재',  icon: '📚', achMin: 2,   achMax: 4,  achRecommended: 3,
-    desc: '집중·CO₂ 누적 방지', standard: 'ASHRAE 62.1' },
+    desc: '집중·CO₂ 누적 방지', standard: 'ASHRAE 권장 환기율 (ACH 환산)' },
   { id: 'office',    name: '사무실',       icon: '💼', achMin: 2,   achMax: 6,  achRecommended: 4,
-    desc: '업무 공간', standard: 'ASHRAE 62.1' },
+    desc: '업무 공간', standard: 'ASHRAE 권장 환기율 (ACH 환산)' },
   { id: 'meeting',   name: '회의실',       icon: '👥', achMin: 6,   achMax: 10, achRecommended: 8,
-    desc: '인원 밀집·짧은 체류', standard: 'ASHRAE 62.1' },
+    desc: '인원 밀집·짧은 체류', standard: 'ASHRAE 권장 환기율 (ACH 환산)' },
   { id: 'classroom', name: '교실',         icon: '🎒', achMin: 4,   achMax: 6,  achRecommended: 5,
-    desc: '학생 1인당 21.6㎥/h', standard: '교육부 학교보건법 시행규칙' },
+    desc: '학생 1인당 21.6㎥/h (ACH 환산)', standard: '교육부 학교보건법 시행규칙' },
   { id: 'cafe',      name: '카페·식당',    icon: '☕', achMin: 8,   achMax: 12, achRecommended: 10,
     desc: '냄새·습기·인원 밀집', standard: 'KOSHA' },
   { id: 'gym',       name: '헬스장',       icon: '🏋️', achMin: 6,   achMax: 10, achRecommended: 8,
@@ -36,9 +36,9 @@ export const SPACE_STANDARDS: SpaceStandard[] = [
   { id: 'kitchen',   name: '주방',         icon: '🍳', achMin: 10,  achMax: 15, achRecommended: 12,
     desc: '조리 시 · 후드 사용', standard: '국토교통부' },
   { id: 'bathroom',  name: '화장실',       icon: '🚽', achMin: 5,   achMax: 8,  achRecommended: 6,
-    desc: '습기·냄새 배출', standard: '국토교통부 (5 ACH 의무)' },
+    desc: '습기·냄새 배출', standard: '국토교통부 (강제배기) · 5~8 ACH 권장' },
   { id: 'medical',   name: '의료시설',     icon: '🏥', achMin: 6,   achMax: 12, achRecommended: 8,
-    desc: '감염 예방 (병실 기준)', standard: '의료법 시행규칙' },
+    desc: '감염 예방 · 병실 기준 (수술실·격리실 별도)', standard: '의료법 시행규칙' },
 ]
 
 /* ─── 활동별 CO₂ 배출량 (L/h, 1인당) ─── */
@@ -128,11 +128,16 @@ export interface VentilationInput {
   targetAch: number
 }
 
+// 1인당 권장 외기 (㎥/h·인) — 학교보건법 환기 기준
+const PER_PERSON_REC = 21.6
+
 export interface VentilationResult {
   volume: number
   requiredAirflow: number      // ㎥/h
   perPersonAirflow: number     // 1인당 ㎥/h
   oneCycleMinutes: number
+  occupantBasedAirflow: number // 인원 기준 권장 환기량 (㎥/h)
+  occupantBasedAch: number     // 인원 기준 환기량의 ACH 환산
   achInfo: { min: number; max: number; recommended: string; standard: string } | null
 }
 
@@ -141,6 +146,10 @@ export function calcRequiredAirflow(input: VentilationInput): VentilationResult 
   const requiredAirflow = volume * input.targetAch
   const perPersonAirflow = input.occupants > 0 ? requiredAirflow / input.occupants : 0
   const oneCycleMinutes = input.targetAch > 0 ? 60 / input.targetAch : 0
+
+  // 인원 기준 권장 환기량 (ACH 기준 환기량과 별개로, 인원 밀집 시 부족 여부 판단용)
+  const occupantBasedAirflow = Math.round(input.occupants * PER_PERSON_REC)
+  const occupantBasedAch = volume > 0 ? Math.round((occupantBasedAirflow / volume) * 10) / 10 : 0
 
   const std = SPACE_STANDARDS.find(s => s.id === input.spaceTypeId)
   const achInfo = std
@@ -152,6 +161,8 @@ export function calcRequiredAirflow(input: VentilationInput): VentilationResult 
     requiredAirflow: Math.round(requiredAirflow),
     perPersonAirflow: Math.round(perPersonAirflow),
     oneCycleMinutes: Math.round(oneCycleMinutes),
+    occupantBasedAirflow,
+    occupantBasedAch,
     achInfo,
   }
 }
@@ -197,14 +208,20 @@ export function evaluateCurrentPerformance(
   const requiredAirflow = volume * targetAch
   const shortageAirflow = Math.max(0, requiredAirflow - currentAirflow)
 
+  // 목표 대비 비율로 등급 결정 — '적정(녹색)'은 목표를 100% 충족할 때만(부족 경고와 일치)
+  const ratio = targetAch > 0 ? currentAch / targetAch : 0
   let efficiency: PerformanceResult['efficiency'] = 'adequate'
   let efficiencyLabel = '🟢 적정'
   let efficiencyColor = '#059669'
-  if (currentAch < targetAch * 0.7) {
+  if (ratio < 0.7) {
     efficiency = 'low'
     efficiencyLabel = '🟠 부족'
     efficiencyColor = '#EA580C'
-  } else if (currentAch > targetAch * 1.5) {
+  } else if (ratio < 1.0) {
+    efficiency = 'low'
+    efficiencyLabel = '🟡 다소 부족'
+    efficiencyColor = '#A16207'
+  } else if (ratio > 1.5) {
     efficiency = 'high'
     efficiencyLabel = '🔵 충분'
     efficiencyColor = '#0891B2'
@@ -249,7 +266,7 @@ export function estimateWindowVentilationTime(
 
   let recommendation = ''
   if (modeId === 'cross') {
-    recommendation = '맞통풍은 가장 효율적인 자연환기입니다. 5~10분 짧은 환기로도 충분합니다.'
+    recommendation = '맞통풍은 가장 효율적인 자연환기입니다. 바람이 강할수록 빨라지며, 약하면 위 결과 시간만큼 열어두세요.'
   } else if (modeId === 'small-one') {
     recommendation = '한쪽 창을 조금만 열면 환기 효율이 낮습니다. 가능하면 맞통풍을 권장합니다.'
   } else if (modeId === 'fan-assisted') {
@@ -281,6 +298,8 @@ export interface Co2Result {
   riskLevel: Co2Threshold
   recommendVentilateMinutes: number
   ppmIncrease: number
+  steadyStatePpm: number | null   // 환기 지속 시 평형 농도 (무환기는 null)
+  isVentilated: boolean
   warning: string
 }
 
@@ -288,31 +307,32 @@ export function estimateCO2Risk(input: Co2Input): Co2Result | null {
   const activity = CO2_BY_ACTIVITY.find(a => a.id === input.activityId)
   if (!activity || input.volume <= 0 || input.occupants <= 0) return null
 
-  const co2LperHour = activity.co2LperHour * input.occupants
-  const co2LperMinute = co2LperHour / 60
+  const co2M3PerHour = (activity.co2LperHour * input.occupants) / 1000  // 생성량 G (㎥/h)
+  const co2LperMinute = (activity.co2LperHour * input.occupants) / 60
   const outdoorPpm = 420  // 도시 평균
+  const tHours = input.durationMinutes / 60
+  const Q = input.airflowM3PerHour    // 환기량 (㎥/h)
+  const V = input.volume
 
-  let estimatedPpm: number
+  // 단일존 질량수지 전이식: C(t) = C_ss·(1 − e^(−Q·t/V)).
+  // Q→0이면 선형 누적(G·t/V)으로 수렴하므로 무환기·환기 모두 체류 시간이 반영된다.
   let ppmIncrease: number
-
-  if (input.airflowM3PerHour <= 0) {
-    // 무환기 — 시간 비례 누적
-    const co2GeneratedM3 = (co2LperMinute / 1000) * input.durationMinutes
-    ppmIncrease = (co2GeneratedM3 / input.volume) * 1_000_000
-    estimatedPpm = outdoorPpm + ppmIncrease
+  let steadyStatePpm: number | null = null
+  if (Q <= 0) {
+    ppmIncrease = (co2M3PerHour * tHours / V) * 1_000_000
   } else {
-    // 환기 있음 — 정상상태 농도 근사
-    const co2M3PerHour = co2LperHour / 1000
-    ppmIncrease = (co2M3PerHour / input.airflowM3PerHour) * 1_000_000
-    estimatedPpm = outdoorPpm + ppmIncrease
+    const steadyExcess = co2M3PerHour / Q                       // 평형 초과 농도(부피분율)
+    ppmIncrease = steadyExcess * (1 - Math.exp(-(Q / V) * tHours)) * 1_000_000
+    steadyStatePpm = Math.round(outdoorPpm + steadyExcess * 1_000_000)
   }
+  const estimatedPpm = outdoorPpm + ppmIncrease
 
   const riskLevel = CO2_THRESHOLDS.find(t => estimatedPpm <= t.max) ?? CO2_THRESHOLDS[CO2_THRESHOLDS.length - 1]
 
-  // 권장 환기 주기 (1,000 ppm 도달 시점)
+  // 권장 환기 주기 (무환기 기준 1,000 ppm 도달 시점)
   const targetPpm = 1000
   const ppmRoom = Math.max(0, targetPpm - outdoorPpm)
-  const co2VolumeBeforeAlert = (ppmRoom / 1_000_000) * input.volume * 1000  // L
+  const co2VolumeBeforeAlert = (ppmRoom / 1_000_000) * V * 1000  // L
   const recommendVentilateMinutes = co2LperMinute > 0
     ? Math.min(Math.round(co2VolumeBeforeAlert / co2LperMinute), 240)
     : 240
@@ -322,6 +342,8 @@ export function estimateCO2Risk(input: Co2Input): Co2Result | null {
     riskLevel,
     recommendVentilateMinutes,
     ppmIncrease: Math.round(ppmIncrease),
+    steadyStatePpm,
+    isVentilated: Q > 0,
     warning: '본 추정은 단순화 모델 (±50% 오차 가능). 정확한 측정은 CO₂ 센서 사용을 권장합니다.',
   }
 }

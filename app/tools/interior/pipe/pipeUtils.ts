@@ -65,7 +65,7 @@ export const MATERIALS: MaterialMeta[] = [
   },
   {
     id: 'pvc', emoji: '🔵', label: 'PVC관 (경질염화비닐)',
-    std: 'KS M 3401',
+    std: 'KS M 3404 (VG 등급)',
     desc: '경량·내약품·시공 쉬움. 자외선·고온 약함. 옥내 급수·배수·통기 표준.',
     use: '급수·배수·환기·통신관',
     grades: [
@@ -76,7 +76,7 @@ export const MATERIALS: MaterialMeta[] = [
   },
   {
     id: 'pb', emoji: '🟠', label: 'PB관 (폴리부틸렌)',
-    std: 'KS M 3360',
+    std: 'KS M 3363',
     desc: '유연·내열·녹슬지 않음. 그립링+슬리브 시공. 한일·슈퍼 부속 호환 주의.',
     use: '급수·급탕·바닥난방·세대내 배관',
   },
@@ -99,13 +99,10 @@ export const MATERIALS: MaterialMeta[] = [
   },
   {
     id: 'sts', emoji: '⚪', label: '스테인리스관 (STS)',
-    std: 'KS D 3595 / 3596',
-    desc: '내식·위생 최강. 박벽으로 가벼움. 프레스·메탈터치 시공.',
+    std: 'STS 위생관 일반치 (제조사 도면 우선)',
+    desc: '내식·위생 최강. 박벽으로 가벼움. 프레스·메탈터치 시공. 외경은 시스템(프레스·에이콘 등)·제조사별 상이.',
     use: '음용수·위생관·식품·화학·고급 주택',
-    grades: [
-      { id: 'su',  label: 'Su (위생관 박벽)',  note: 'KS D 3595 · 음용수·위생' },
-      { id: 'sts', label: 'STS 일반관',         note: 'KS D 3596 · 일반 압력' },
-    ],
+    // 등급 없음: 위생관(Su)·일반관(KS D 3576) 외경 체계가 자료마다 엇갈려 단일 일반치만 제공
   },
 ]
 
@@ -138,10 +135,10 @@ const STEEL_SGP: Record<PipeSize, PipeDim> = {
   '150A': { od: 165.2, id: 155.2, t: 5.0 },
 }
 
-/* 강관 STPG Sch 80 두께 보정 */
+/* 강관 STPG Sch 80 두께 보정 (ASME B36.10M / KS D 3562) */
 const STEEL_SCH80_T: Record<PipeSize, number> = {
   '15A': 3.7, '20A': 3.9, '25A': 4.5, '32A': 4.9, '40A': 5.1, '50A': 5.5,
-  '65A': 6.0, '80A': 6.6, '100A': 7.1, '125A': 8.1, '150A': 9.3,
+  '65A': 7.0, '80A': 7.6, '100A': 8.6, '125A': 9.5, '150A': 11.0,
 }
 
 /* PVC관 (KS M 3401) — VG1 기준 */
@@ -253,6 +250,7 @@ export function getDim(material: Material, size: PipeSize, grade?: string): Pipe
         const t = PVC_VG2_T[size]
         return { od: base.od, id: +(base.od - 2 * t).toFixed(2), t }
       }
+      // vg1·hi_vg는 외경·두께 동일 — HI-VG는 내충격 첨가만 다르고 치수는 VG1과 같음
       return base
     }
     case 'pb':     return PB_DATA[size]

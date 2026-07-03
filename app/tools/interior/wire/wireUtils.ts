@@ -13,7 +13,8 @@ export const WIRE_SIZES = [
 ] as const
 export type WireSize = (typeof WIRE_SIZES)[number]
 
-/* KEC 2021 — HIV/IV 동선·30°C·일반 부설 허용전류 (A) */
+/* HIV 동선·30°C·기중 직접고정(참조 부설방법 C, IEC 60364-5-52 = KEC 채택) 허용전류 (A)
+   — 부설방법별로 달라지므로 방법 C를 기준선으로 두고 ENV_FACTOR로 보정 */
 export const AMPACITY_HIV: Record<WireSize, number> = {
   1.5: 19,
   2.5: 26,
@@ -76,9 +77,9 @@ export const TEMP_FACTOR: Record<number, number> = {
 
 /* 부하 종류 → 역률 */
 export const LOAD_PF: Record<LoadType, { pf: number; label: string; emoji: string }> = {
-  heater: { pf: 1.00, label: '전열·조명·EV',  emoji: '🔥' },
+  heater: { pf: 1.00, label: '전열·인덕션·EV·조명',  emoji: '🔥' },   // PFC 인덕션 역률 ≈0.95~1.0
   mixed:  { pf: 0.85, label: '혼합·콘센트·일반', emoji: '🔌' },
-  motor:  { pf: 0.80, label: '모터·인버터·인덕션', emoji: '⚙️' },
+  motor:  { pf: 0.80, label: '모터·인버터·펌프', emoji: '⚙️' },
 }
 
 /* 권장 전압강하율 (%) */
@@ -116,6 +117,7 @@ export function calcPower(currentA: number, voltage: Voltage, phase: Phase, pf: 
  */
 export function calcVoltageDrop(currentA: number, lengthM: number, sqMm: number, phase: Phase): number {
   if (sqMm <= 0) return Infinity
+  if (lengthM <= 0 || currentA <= 0) return 0
   const k = phase === 'three' ? 30.8 : 35.6
   return (k * lengthM * currentA) / (1000 * sqMm)
 }
@@ -144,7 +146,8 @@ export function correctedAmpacity(
 
 /**
  * 권장 전선 굵기 자동 선정
- * - 부하전류 × 1.25 (KEC 232.4) 이상 견디는 가장 작은 sq
+ * - 부하전류 × 1.25(연속부하 125% 설계 여유) 이상 견디는 가장 작은 sq
+ *   ※ 과전류 보호 기본 원칙은 KEC 212 (IB ≤ 차단기정격 ≤ 전선허용전류)
  */
 export function recommendWireSize(
   currentA: number,
@@ -152,6 +155,7 @@ export function recommendWireSize(
   env: Environment,
   tempC: number,
 ): WireSize | null {
+  if (currentA <= 0) return null
   const target = currentA * 1.25
   for (const sq of WIRE_SIZES) {
     if (correctedAmpacity(sq, kind, env, tempC) >= target) return sq
@@ -173,6 +177,7 @@ export function recommendWireSizeWithDrop(
   tempC: number,
   app: Application,
 ): { ampacitySize: WireSize | null; dropSize: WireSize | null; finalSize: WireSize | null } {
+  if (currentA <= 0) return { ampacitySize: null, dropSize: null, finalSize: null }
   const ampacitySize = recommendWireSize(currentA, kind, env, tempC)
   const limit = (DROP_LIMIT[app].pct / 100) * voltage
   let dropSize: WireSize | null = null
@@ -180,22 +185,39 @@ export function recommendWireSizeWithDrop(
     const drop = calcVoltageDrop(currentA, lengthM, sq, phase)
     if (drop <= limit) { dropSize = sq; break }
   }
-  let finalSize: WireSize | null = null
-  if (ampacitySize && dropSize) {
-    finalSize = (ampacitySize >= dropSize ? ampacitySize : dropSize) as WireSize
+  // 허용전류(안전) 조건은 필수 — 만족하는 전선이 없으면 전압강하만으로 추천하지 않음(범위 초과)
+  let finalSize: WireSize | null
+  if (!ampacitySize) {
+    finalSize = null
+  } else if (dropSize) {
+    finalSize = ampacitySize >= dropSize ? ampacitySize : dropSize
   } else {
-    finalSize = ampacitySize ?? dropSize
+    finalSize = ampacitySize   // 허용전류는 충족하나 강하 목표는 최대 굵기로도 미달(경고는 강하% 표시로)
   }
   return { ampacitySize, dropSize, finalSize }
 }
 
 /** 권장 차단기 사이즈 (부하전류 × 1.25 이상의 가장 작은 표준값) */
 export function recommendBreaker(currentA: number): number | null {
+  if (currentA <= 0) return null
   const target = currentA * 1.25
   for (const b of BREAKER_SIZES) {
     if (b >= target) return b
   }
   return null
+}
+
+/**
+ * 전선 허용전류를 보호할 수 있는 최대 차단기 (과전류 보호 원칙 In ≤ Iz)
+ * — 차단기 정격은 전선 허용전류 이하여야 전선이 먼저 과열되지 않음
+ */
+export function maxBreakerForAmpacity(ampacityA: number): number | null {
+  let best: number | null = null
+  for (const b of BREAKER_SIZES) {
+    if (b <= ampacityA) best = b
+    else break
+  }
+  return best
 }
 
 /** 차단기 사이즈 → 가능한 전선 굵기 후보 */
@@ -227,8 +249,8 @@ export const APPLIANCES: AppliancePreset[] = [
   { id: 'ac15',   emoji: '🌬️', label: '에어컨 1.5RT (1.8kW)',     powerW: 1800, voltage: 220, phase: 'single', load: 'motor',  sq: 2.5, breaker: 15 },
   { id: 'ac30',   emoji: '🌬️', label: '에어컨 3RT (3.5kW)',        powerW: 3500, voltage: 220, phase: 'single', load: 'motor',  sq: 4,   breaker: 20 },
   { id: 'ac70',   emoji: '🌬️', label: '시스템 에어컨 7kW',         powerW: 7000, voltage: 220, phase: 'single', load: 'motor',  sq: 6,   breaker: 40 },
-  { id: 'ind1',   emoji: '🍳',  label: '인덕션 1구 (1.8kW)',         powerW: 1800, voltage: 220, phase: 'single', load: 'motor',  sq: 2.5, breaker: 15 },
-  { id: 'ind3',   emoji: '🍳',  label: '인덕션 3구 (7kW)',           powerW: 7000, voltage: 220, phase: 'single', load: 'motor',  sq: 6,   breaker: 40, note: '단독 분기 + 누전차단기 필수' },
+  { id: 'ind1',   emoji: '🍳',  label: '인덕션 1구 (1.8kW)',         powerW: 1800, voltage: 220, phase: 'single', load: 'heater', sq: 2.5, breaker: 15 },
+  { id: 'ind3',   emoji: '🍳',  label: '인덕션 3구 (7kW)',           powerW: 7000, voltage: 220, phase: 'single', load: 'heater', sq: 6,   breaker: 40, note: '단독 분기 + 누전차단기 필수' },
   { id: 'water',  emoji: '🔥',  label: '전기온수기 5kW',             powerW: 5000, voltage: 220, phase: 'single', load: 'heater', sq: 4,   breaker: 30 },
   { id: 'ev7',    emoji: '🚗',  label: 'EV 완속 충전기 7kW ⭐',      powerW: 7000, voltage: 220, phase: 'single', load: 'heater', sq: 6,   breaker: 40, note: '한전 신청·완속 충전기 표준' },
   { id: 'ev11',   emoji: '🚗',  label: 'EV 완속 11kW (삼상)',        powerW: 11000, voltage: 380, phase: 'three',  load: 'heater', sq: 4,   breaker: 20 },

@@ -19,7 +19,7 @@ const FAQ_LD = [
               },
               {
                 q: '평수와 ㎡ 환산이 정확한가요?',
-                a: '<strong>1평은 정확히 3.3058㎡</strong>입니다 (일본식 척관법 기준 6자×6자). 간이 계산 시 1평 = 3.3㎡로 사용해도 큰 차이는 없지만, 대형 면적(30평 이상)에서는 정확한 값(3.3058)을 사용하는 것이 권장됩니다. 한국 부동산은 "공급면적"과 "전용면적"을 구분하므로 평수만으로는 실제 사용 면적을 정확히 알기 어렵습니다.',
+                a: '<strong>1평은 약 3.3058㎡</strong>입니다 (정확히는 3.305785…㎡, 일본식 척관법 6자×6자 기준이라 무한소수). 간이 계산 시 1평 = 3.3㎡로 사용해도 큰 차이는 없지만, 대형 면적(30평 이상)에서는 3.3058 정도까지 사용하는 것이 권장됩니다. 본 계산기는 3.3058을 적용합니다. 한국 부동산은 "공급면적"과 "전용면적"을 구분하므로 평수만으로는 실제 사용 면적을 정확히 알기 어렵습니다.',
               },
               {
                 q: '천장 면적은 바닥 면적과 같나요?',
@@ -35,7 +35,7 @@ const FAQ_LD = [
               },
               {
                 q: '방이 ㄱ자 모양인데 어떻게 계산하나요?',
-                a: '두 가지 방법이 있습니다 — ① <strong>[상세 계산 (방·벽별)] 탭</strong>에서 큰 사각형 + 작은 사각형을 별도 방으로 입력 후 합산. 큰 사각형 면적에서 ㄱ자로 빠진 부분을 음수로 추가하면 정확한 ㄱ자 면적이 나옵니다. ② 빠른 계산 시 [간편 계산]에서 ㄱ자를 둘러싸는 큰 사각형 면적을 입력 후 빠진 부분(예: 1.5m × 1.5m = 2.25㎡)을 별도 메모로 빼주세요. ㄱ자 모양은 <strong>외부 둘레가 늘어나는 만큼 벽 면적도 증가</strong>하므로 도배·페인트 계산 시 주의가 필요합니다.',
+                a: '두 가지 방법이 있습니다 — ① <strong>[상세 계산 (방·벽별)] 탭</strong>에서 ㄱ자를 직사각형 2개로 나눠 각각 <strong>별도 방으로 입력</strong>하면 자동 합산됩니다. 큰 사각형에서 빠진 부분을 빼는 방식이 아니라, 실제로 채워진 두 사각형을 <strong>더하는</strong> 방식입니다(이 도구는 면적을 더하기만 합니다). 이때 <strong>바닥·부피는 정확</strong>하지만, 두 사각형이 맞닿는 안쪽 변은 양쪽 모두 벽으로 잡혀 <strong>벽 면적이 (맞닿은 길이 × 천장 높이 × 2)만큼 과다</strong> 계산되니 도배·페인트용 벽 면적에서는 이 내부 경계를 빼고 보세요. ② 빠른 계산 시 [간편 계산]에서 ㄱ자를 둘러싸는 큰 사각형 면적을 입력한 뒤, 빠진 부분(예: 1.5m × 1.5m = 2.25㎡)은 결과에서 직접 빼주세요. ㄱ자 모양은 <strong>외부 둘레가 늘어나는 만큼 벽 면적도 증가</strong>하므로 도배·페인트 계산 시 주의가 필요합니다.',
               },
               {
                 q: '다락방·경사 천장은 어떻게 계산하나요?',
@@ -120,7 +120,7 @@ export default function RoomAreaPage() {
             lineHeight: 1.85,
             marginBottom: 14,
           }}>
-            <p>1평 = <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>3.3058㎡</strong> (공식 환산값, 일본식 척관법 6자×6자 기준)</p>
+            <p>1평 ≈ <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>3.3058㎡</strong> (정확히는 3.305785…㎡, 일본식 척관법 6자×6자 기준)</p>
             <p style={{ color: 'var(--muted)', fontSize: 13 }}>1평 ≈ 3.3㎡ (간이 환산)</p>
           </div>
           <div>
@@ -211,13 +211,13 @@ export default function RoomAreaPage() {
         {/* ── 5. 창문·문 차감 가이드 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            🪟 창문·문 표준 크기 (차감 참고)
+            🪟 창문·문 일반 크기 예시 (차감 참고)
           </h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['종류', '한국 표준 크기', '면적'].map((h, i) => (
+                  {['종류', '일반적인 크기(예시)', '면적'].map((h, i) => (
                     <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 2 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
@@ -250,6 +250,7 @@ export default function RoomAreaPage() {
             lineHeight: 1.75,
           }}>
             <strong style={{ color: 'var(--accent)' }}>💡 계산 시 주의</strong><br />
+            • 위 크기는 일반적인 예시이며 <strong>건물·제품마다 다르니</strong> 실측을 권장합니다<br />
             • <strong>도배·페인트</strong>는 창문·문 모두 차감<br />
             • <strong>단열·방음</strong>은 차감하지 않거나 별도 계산<br />
             • <strong>천장 도배</strong>는 창문·문과 무관 (천장 면적 그대로)

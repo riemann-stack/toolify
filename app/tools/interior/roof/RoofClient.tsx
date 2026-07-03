@@ -52,9 +52,12 @@ export default function RoofClient() {
   const numW = Math.max(0, parseFloat(W) || 0)
 
   const input: RoofInput = useMemo(() => {
-    const eaves = eavesAdvanced
-      ? { front: eavesFront, back: eavesBack, left: eavesLeft, right: eavesRight }
-      : uniformEaves(eavesUniform)
+    // 평지붕(옥상)은 처마 개념이 없음 — 방수 면적은 바닥(L×W) 기준. 처마는 0으로 고정.
+    const eaves = type === 'flat'
+      ? uniformEaves(0)
+      : eavesAdvanced
+        ? { front: eavesFront, back: eavesBack, left: eavesLeft, right: eavesRight }
+        : uniformEaves(eavesUniform)
     return {
       type,
       L: numL,
@@ -106,9 +109,9 @@ export default function RoofClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs2}`}>
-        <button className={`${s.tab} ${tab === 'area' ? s.tabActive : ''}`} onClick={() => setTab('area')}>📐 면적 계산</button>
-        <button className={`${s.tab} ${tab === 'material' ? s.tabActive : ''}`} onClick={() => setTab('material')}>💰 자재 견적</button>
+      <div className={`${s.tabs} ${s.tabs2}`} role="tablist" aria-label="계산 모드">
+        <button type="button" role="tab" aria-selected={tab === 'area'} className={`${s.tab} ${tab === 'area' ? s.tabActive : ''}`} onClick={() => setTab('area')}>📐 면적 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'material'} className={`${s.tab} ${tab === 'material' ? s.tabActive : ''}`} onClick={() => setTab('material')}>💰 자재 견적</button>
       </div>
 
       {/* ══════════ TAB 1: 면적 계산 ══════════ */}
@@ -119,15 +122,18 @@ export default function RoofClient() {
             <span className={s.cardLabel}>① 지붕 형태</span>
             <div className={s.typeGrid}>
               {ROOF_TYPES.map((rt) => (
-                <button key={rt.key}
+                <button key={rt.key} type="button" aria-pressed={type === rt.key}
                   className={`${s.typeBtn} ${type === rt.key ? s.typeBtnActive : ''}`}
                   onClick={() => setType(rt.key)}>
-                  <span className={s.typeEmoji}>{rt.emoji}</span>
+                  <span className={s.typeEmoji} aria-hidden="true">{rt.emoji}</span>
                   <span className={s.typeName}>{rt.label}</span>
                   <span className={s.typeDesc}>{rt.desc}</span>
                 </button>
               ))}
             </div>
+            <p className={s.fieldHint} style={{ marginTop: 10 }}>
+              💡 경사형 4종(박공·모임·외쪽·맞배)은 같은 치수·물매면 <strong>표면적이 동일</strong>합니다(수평투영 면적 정리). 형태는 능선 디테일·통상 물매·자투리(로스) 차이일 뿐이며, 로스율은 ⑤에서 직접 조정하세요.
+            </p>
           </div>
 
           {/* 치수 */}
@@ -140,8 +146,8 @@ export default function RoofClient() {
                   value={L} onChange={(e) => setL(e.target.value)} />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>세로 (측면)</label>
-                <input type="number" inputMode="decimal" min={1} step={0.1} className={s.input}
+                <label className={s.fieldLabel} htmlFor="roof-f2">세로 (측면)</label>
+                <input id="roof-f2" type="number" inputMode="decimal" min={1} step={0.1} className={s.input}
                   value={W} onChange={(e) => setW(e.target.value)} />
               </div>
             </div>
@@ -152,9 +158,9 @@ export default function RoofClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>③ 지붕 경사 (물매 또는 경사각)</span>
               <div className={s.modeToggle}>
-                <button className={`${s.modeBtn} ${pitchMode === 'moemae' ? s.modeBtnActive : ''}`}
+                <button type="button" aria-pressed={pitchMode === 'moemae'} className={`${s.modeBtn} ${pitchMode === 'moemae' ? s.modeBtnActive : ''}`}
                   onClick={() => setPitchMode('moemae')}>📏 물매 (한국 표준)</button>
-                <button className={`${s.modeBtn} ${pitchMode === 'angle' ? s.modeBtnActive : ''}`}
+                <button type="button" aria-pressed={pitchMode === 'angle'} className={`${s.modeBtn} ${pitchMode === 'angle' ? s.modeBtnActive : ''}`}
                   onClick={() => setPitchMode('angle')}>🔢 경사각 (도)</button>
               </div>
 
@@ -162,13 +168,14 @@ export default function RoofClient() {
                 <div className={s.field}>
                   <div className={s.sliderRow}>
                     <input type="range" min={1} max={10} step={0.5} className={s.slider}
-                      value={Math.round(currentMoemae * 2) / 2}
+                      aria-label="물매 (지붕 경사)"
+                      value={Math.min(10, Math.round(currentMoemae * 2) / 2)}
                       onChange={(e) => setMoemae(parseFloat(e.target.value))} />
                     <span className={s.sliderValue}>{fmtMoemae(currentMoemae)}</span>
                   </div>
                   <div className={s.quickRow}>
                     {MOEMAE_QUICK.map((m) => (
-                      <button key={m}
+                      <button key={m} type="button" aria-pressed={Math.abs(currentMoemae - m) < 0.3}
                         className={`${s.quickChip} ${Math.abs(currentMoemae - m) < 0.3 ? s.quickChipActive : ''}`}
                         onClick={() => setMoemae(m)}>{m}물매</button>
                     ))}
@@ -178,14 +185,15 @@ export default function RoofClient() {
               ) : (
                 <div className={s.field}>
                   <div className={s.sliderRow}>
-                    <input type="range" min={0} max={60} step={1} className={s.slider}
+                    <input type="range" min={0} max={45} step={1} className={s.slider}
+                      aria-label="경사각 (도)"
                       value={Math.round(pitchDeg)}
                       onChange={(e) => setPitchDeg(parseFloat(e.target.value))} />
                     <span className={s.sliderValue}>{Math.round(pitchDeg)}°</span>
                   </div>
                   <div className={s.quickRow}>
                     {ANGLE_QUICK.map((a) => (
-                      <button key={a}
+                      <button key={a} type="button" aria-pressed={Math.abs(pitchDeg - a) < 1}
                         className={`${s.quickChip} ${Math.abs(pitchDeg - a) < 1 ? s.quickChipActive : ''}`}
                         onClick={() => setPitchDeg(a)}>{a}°</button>
                     ))}
@@ -196,61 +204,74 @@ export default function RoofClient() {
             </div>
           )}
 
-          {/* 처마 */}
-          <div className={s.card}>
-            <span className={s.cardLabel}>④ 처마 길이 (m)</span>
-            <label className={s.checkRow}>
-              <input type="checkbox" checked={eavesAdvanced}
-                onChange={(e) => setEavesAdvanced(e.target.checked)} />
-              <span>4면 개별 입력 (앞·뒤·좌·우 다름)</span>
-            </label>
+          {/* 처마 (경사형 전용 — 평지붕은 처마 개념 없음) */}
+          {type !== 'flat' ? (
+            <div className={s.card}>
+              <span className={s.cardLabel}>④ 처마 길이 (m)</span>
+              <label className={s.checkRow}>
+                <input type="checkbox" checked={eavesAdvanced}
+                  onChange={(e) => setEavesAdvanced(e.target.checked)} />
+                <span>4면 개별 입력 (앞·뒤·좌·우 다름)</span>
+              </label>
 
-            {!eavesAdvanced ? (
-              <>
-                <div className={s.sliderRow}>
-                  <input type="range" min={0} max={1.5} step={0.05} className={s.slider}
-                    value={eavesUniform}
-                    onChange={(e) => setEavesUniform(parseFloat(e.target.value))} />
-                  <span className={s.sliderValue}>{(eavesUniform * 100).toFixed(0)}cm</span>
-                </div>
-                <div className={s.quickRow}>
-                  {EAVES_QUICK_CM.map((cm) => (
-                    <button key={cm}
-                      className={`${s.quickChip} ${Math.abs(eavesUniform * 100 - cm) < 1 ? s.quickChipActive : ''}`}
-                      onClick={() => setEavesUniform(cm / 100)}>{cm}cm</button>
+              {!eavesAdvanced ? (
+                <>
+                  <div className={s.sliderRow}>
+                    <input type="range" min={0} max={1.5} step={0.05} className={s.slider}
+                      aria-label="처마 길이 (cm)"
+                      value={eavesUniform}
+                      onChange={(e) => setEavesUniform(parseFloat(e.target.value))} />
+                    <span className={s.sliderValue}>{(eavesUniform * 100).toFixed(0)}cm</span>
+                  </div>
+                  <div className={s.quickRow}>
+                    {EAVES_QUICK_CM.map((cm) => (
+                      <button key={cm} type="button" aria-pressed={Math.abs(eavesUniform * 100 - cm) < 1}
+                        className={`${s.quickChip} ${Math.abs(eavesUniform * 100 - cm) < 1 ? s.quickChipActive : ''}`}
+                        onClick={() => setEavesUniform(cm / 100)}>{cm}cm</button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className={s.row2}>
+                  {([
+                    { label: '앞', value: eavesFront, setter: setEavesFront },
+                    { label: '뒤', value: eavesBack, setter: setEavesBack },
+                    { label: '좌', value: eavesLeft, setter: setEavesLeft },
+                    { label: '우', value: eavesRight, setter: setEavesRight },
+                  ] as const).map(({ label, value, setter }) => (
+                    <div key={label} className={s.field}>
+                      <label className={s.fieldLabel} htmlFor={`roof-eave-${label}`}>{label}</label>
+                      <input id={`roof-eave-${label}`} type="number" inputMode="decimal" min={0} max={2} step={0.05} className={s.input}
+                        aria-label={`${label} 처마 길이 (m)`}
+                        value={value} onChange={(e) => setter(Math.max(0, parseFloat(e.target.value) || 0))} />
+                    </div>
                   ))}
                 </div>
-              </>
-            ) : (
-              <div className={s.row2}>
-                {([
-                  { label: '앞', value: eavesFront, setter: setEavesFront },
-                  { label: '뒤', value: eavesBack, setter: setEavesBack },
-                  { label: '좌', value: eavesLeft, setter: setEavesLeft },
-                  { label: '우', value: eavesRight, setter: setEavesRight },
-                ] as const).map(({ label, value, setter }) => (
-                  <div key={label} className={s.field}>
-                    <label className={s.fieldLabel}>{label}</label>
-                    <input type="number" inputMode="decimal" min={0} max={2} step={0.05} className={s.input}
-                      value={value} onChange={(e) => setter(parseFloat(e.target.value) || 0)} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          ) : (
+            <div className={s.card}>
+              <span className={s.cardLabel}>④ 평지붕(옥상) 방수 면적 기준</span>
+              <p className={s.cardSub}>
+                옥상 방수 면적은 <strong>바닥(가로×세로)</strong> 기준입니다 — 처마는 적용하지 않습니다.
+                우레탄·시트 방수 시 <strong>파라펫(방수턱) 입상부</strong>(보통 둘레 × 0.3~0.5m)는 별도로 가산하세요.
+              </p>
+            </div>
+          )}
 
           {/* 로스율 */}
           <div className={s.card}>
             <span className={s.cardLabel}>⑤ 로스율 (자재 손실·여유분)</span>
             <div className={s.sliderRow}>
               <input type="range" min={0} max={30} step={1} className={s.slider}
+                aria-label="로스율 (자재 손실·여유분, %)"
                 value={lossPct}
                 onChange={(e) => setLossPct(parseInt(e.target.value))} />
               <span className={s.sliderValue}>{lossPct}%</span>
             </div>
             <div className={s.quickRow}>
               {LOSS_QUICK.map((p) => (
-                <button key={p}
+                <button key={p} type="button" aria-pressed={lossPct === p}
                   className={`${s.quickChip} ${lossPct === p ? s.quickChipActive : ''}`}
                   onClick={() => setLossPct(p)}>{p}%</button>
               ))}
@@ -321,7 +342,7 @@ export default function RoofClient() {
               {/* 자재 견적 안내 */}
               <div className={s.crossLinkCard}>
                 <p>
-                  💰 자재별 단가·예상 비용은 <button className={s.linkBtn} onClick={() => setTab('material')}>자재 견적 탭 →</button>
+                  💰 자재별 단가·예상 비용은 <button type="button" className={s.linkBtn} onClick={() => setTab('material')}>자재 견적 탭 →</button>
                 </p>
               </div>
             </>
@@ -343,14 +364,25 @@ export default function RoofClient() {
                 <p className={s.cardSub}>
                   {ROOF_TYPES.find((r) => r.key === type)?.label} · 표면 {result.surfaceArea.toFixed(1)}㎡ · <strong style={{ color: 'var(--accent)' }}>로스 {lossPct}% 포함 {result.materialArea.toFixed(1)}㎡ ({result.materialPyeong.toFixed(1)}평)</strong>
                 </p>
+                <p className={s.fieldHint} style={{ marginTop: 8 }}>
+                  💡 {type === 'flat'
+                    ? '평지붕은 우레탄·시트 등 방수재 위주로 검토하세요. 지붕재(슁글·기와)는 경사 지붕용입니다.'
+                    : '경사 지붕은 슁글·기와·금속 등 지붕재 위주로 검토하세요. 방수재는 평지붕(옥상)용입니다.'}
+                </p>
               </div>
 
-              {(['지붕재', '방수재', '특수'] as const).map((cat) => {
+              {(type === 'flat'
+                ? (['방수재', '지붕재', '특수'] as const)
+                : (['지붕재', '방수재', '특수'] as const)
+              ).map((cat, ci) => {
                 const items = ROOF_MATERIALS.filter((m) => m.category === cat)
                 if (items.length === 0) return null
                 return (
                   <div key={cat} className={s.card}>
-                    <span className={s.cardLabel}>{cat === '지붕재' ? '🏠 지붕재' : cat === '방수재' ? '🛡️ 방수재 (평지붕)' : '✨ 특수재'}</span>
+                    <span className={s.cardLabel}>
+                      {cat === '지붕재' ? '🏠 지붕재' : cat === '방수재' ? '🛡️ 방수재 (평지붕)' : '✨ 특수재'}
+                      {ci === 0 && <span style={{ color: 'var(--accent)', marginLeft: 6 }}>· 추천</span>}
+                    </span>
                     <div className={s.materialList}>
                       {items.map((m) => {
                         const selected = selectedMaterials[m.key] !== undefined
@@ -359,8 +391,8 @@ export default function RoofClient() {
                         return (
                           <div key={m.key}
                             className={`${s.materialItem} ${selected ? s.materialItemActive : ''}`}>
-                            <button className={s.materialHead} onClick={() => toggleMaterial(m)}>
-                              <span className={s.materialEmoji}>{m.emoji}</span>
+                            <button type="button" aria-expanded={selected} className={s.materialHead} onClick={() => toggleMaterial(m)}>
+                              <span className={s.materialEmoji} aria-hidden="true">{m.emoji}</span>
                               <div className={s.materialInfo}>
                                 <span className={s.materialName}>{m.name}</span>
                                 <span className={s.materialNote}>{m.note}</span>
@@ -373,15 +405,15 @@ export default function RoofClient() {
                             {selected && (
                               <div className={s.materialBody}>
                                 <div className={s.priceInputRow}>
-                                  <label>실제 단가 (원/㎡)</label>
-                                  <input type="number" inputMode="numeric" min={0}
+                                  <label htmlFor={`roof-price-${m.key}`}>실제 단가 (원/㎡)</label>
+                                  <input id={`roof-price-${m.key}`} type="number" inputMode="numeric" min={0}
                                     className={s.input}
                                     value={userPrice}
                                     onChange={(e) => setMaterialPrice(m.key, parseInt(e.target.value) || 0)} />
                                 </div>
                                 <div className={s.quickRow} style={{ marginTop: 6 }}>
                                   {PRICE_PER_SQM_QUICK.map((p) => (
-                                    <button key={p}
+                                    <button key={p} type="button" aria-pressed={userPrice === p}
                                       className={`${s.quickChip} ${userPrice === p ? s.quickChipActive : ''}`}
                                       onClick={() => setMaterialPrice(m.key, p)}>
                                       {fmtKrwShort(p)}/㎡
@@ -471,12 +503,16 @@ function RoofVisualization({ input }: { input: RoofInput }) {
   const elevBaseY = 180  // 지면
   const wallHeight = 60
   const wallTopY = elevBaseY - wallHeight
-  // 지붕 높이 = (W/2) × tan(pitch)
-  const ridgeHeightScaled = (elevWidth / 2) * Math.tan(input.pitchDeg * Math.PI / 180)
+  // 지붕 높이 — 박공·모임·맞배는 능선이 중앙이라 (W/2)×tan, 외쪽(shed)은 한 사면이
+  // 전체 폭에 걸쳐 상승하므로 W×tan. (면적 계산은 별개 — 시각화 정확성용)
+  const tanPitch = Math.tan(input.pitchDeg * Math.PI / 180)
+  const rawRidge = input.type === 'shed' ? elevWidth * tanPitch : (elevWidth / 2) * tanPitch
+  // 뷰박스(높이 240, 지붕 꼭짓점 y=wallTopY-h) 밖으로 넘치지 않게 클램프
+  const ridgeHeightScaled = Math.min(rawRidge, wallTopY - 30)
 
   return (
     <div className={s.vizWrap}>
-      <svg viewBox={`0 0 ${W_view} ${H_view}`} className={s.vizSvg} preserveAspectRatio="xMidYMid meet">
+      <svg viewBox={`0 0 ${W_view} ${H_view}`} className={s.vizSvg} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         {/* 영역 라벨 */}
         <text x={planArea.cx} y={20} fontSize="12" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR">평면도 (위에서 본)</text>
         <text x={elevArea.cx} y={20} fontSize="12" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR">측면도</text>
@@ -585,7 +621,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
 
         {/* 경사각 표기 */}
         {input.type !== 'flat' && (
-          <text x={elevArea.cx} y={wallTopY - ridgeHeightScaled - 8} fontSize="11" fill="#EA580C"
+          <text x={elevArea.cx} y={Math.max(wallTopY - ridgeHeightScaled - 8, 16)} fontSize="11" fill="#EA580C"
             textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
             {input.pitchDeg.toFixed(1)}° ({fmtMoemae(degToMoemae(input.pitchDeg))})
           </text>

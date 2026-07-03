@@ -19,7 +19,7 @@ const FAQ_LD = [
               },
               {
                 q: '백열전구 60W는 LED 몇 W와 같은 밝기인가요?',
-                a: '백열전구 60W는 약 <strong>720 루멘</strong>이며, LED로는 약 <strong>7~8W</strong>에 해당합니다. LED는 같은 밝기를 내는 데 백열전구의 약 1/8 전력만 사용해 매우 효율적입니다. 예를 들어 60W 백열전구를 7W LED로 교체하면 연간 전기료를 약 <strong>80% 절감</strong>할 수 있고 수명도 25~40배 깁니다.',
+                a: '백열전구 60W는 약 <strong>720~800 루멘</strong>이며, LED로는 약 <strong>7~8W</strong>에 해당합니다. LED는 같은 밝기를 내는 데 백열전구의 약 1/8 전력만 사용해 매우 효율적입니다. 예를 들어 60W 백열전구를 7~8W LED로 교체하면 연간 전기료를 약 <strong>85~88% 절감</strong>할 수 있고 수명도 25~40배 깁니다.',
               },
               {
                 q: '침실은 왜 다른 공간보다 어둡게 권장되나요?',
@@ -31,7 +31,7 @@ const FAQ_LD = [
               },
               {
                 q: '간접 조명은 메인 조명보다 더 밝게 해야 하나요?',
-                a: '네. <strong>간접 조명은 빛이 벽이나 천장에 반사되어 사용</strong>되므로 직접 조명에 비해 약 50% 더 많은 루멘이 필요합니다. 예를 들어 거실 4,950 lm이 필요한 경우 간접 조명만으로는 약 <strong>7,400 lm</strong>이 필요합니다. 가장 좋은 방법은 메인(직접) + 보조(간접) 혼합 조명을 구성해 균일한 밝기와 분위기를 동시에 얻는 것입니다.',
+                a: '네. <strong>간접 조명은 빛이 벽이나 천장에 반사되어 사용</strong>되므로 직접 조명에 비해 약 50% 더 많은 루멘이 필요합니다. 예를 들어 거실 4,950 lm이 필요한 경우 간접 조명만으로는 약 <strong>7,400 lm</strong>(1.5배)이 필요합니다. 가장 좋은 방법은 메인(직접) + 보조(간접) 혼합 조명을 구성해 균일한 밝기와 분위기를 동시에 얻는 것입니다.',
               },
             ]
 
@@ -85,8 +85,11 @@ export default function LightingPage() {
         {/* ── 2. 공간별 권장 lux ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            한국 공간별 권장 lux (KS A 3011)
+            한국 공간별 권장 lux (KS A 3011 참고)
           </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+            한국산업표준 <strong style={{ color: 'var(--text)' }}>KS A 3011</strong>(조도 기준)의 권장 범위를 가정용으로 정리한 <strong style={{ color: 'var(--text)' }}>참고 대표값</strong>입니다. 실제 적정 조도는 작업 종류·연령·취향에 따라 달라집니다.
+          </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
@@ -108,6 +111,8 @@ export default function LightingPage() {
                   { s: '복도·현관',     l: '75~150 lux',    u: '안전' },
                   { s: '홈오피스',      l: '400~750 lux',   u: '눈 피로 적게' },
                   { s: '작업실·DIY',    l: '500~1000 lux',  u: '정밀 작업' },
+                  { s: '드레스룸',      l: '300~500 lux',   u: '색감 정확' },
+                  { s: '아기방',        l: '50~150 lux',    u: '편안한 수면' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
@@ -186,7 +191,7 @@ export default function LightingPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            💡 <strong style={{ color: 'var(--text)' }}>LED는 백열전구의 약 1/8 전력</strong>으로 같은 밝기 → 연간 전기료 약 80% 절감, 수명 25~40배 길음.
+            💡 <strong style={{ color: 'var(--text)' }}>LED는 백열전구의 약 1/8 전력</strong>으로 같은 밝기 → 연간 전기료 약 85~88% 절감, 수명 25~40배 길음. <span style={{ fontSize: 11 }}>※ 백열등 효율은 와트에 따라 10~16 lm/W로 변동 — 위 표는 시장 표준 등가값, 계산기는 평균 12 lm/W 적용.</span>
           </p>
         </div>
 
@@ -219,7 +224,7 @@ export default function LightingPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
               { s: '소형',     w: '6~9W',     lm: '600~900 lm',     u: '작은방·복도', c: '#0891B2' },
-              { s: '중형',     w: '12~15W',   lm: '1,200~1,500 lm', u: '침실·서재',   c: 'var(--accent)' },
+              { s: '중형',     w: '12~20W',   lm: '1,200~2,000 lm', u: '침실·서재·중간방', c: 'var(--accent)' },
               { s: '대형',     w: '30~50W',   lm: '3,000~5,000 lm', u: '거실·큰방',   c: '#EA580C' },
               { s: '초대형',   w: '50~75W',   lm: '5,000~7,500 lm', u: '대형 거실',   c: '#DC2626' },
             ].map((s, i) => (

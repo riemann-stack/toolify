@@ -39,8 +39,8 @@ export default function VentilationClient() {
   const [occupants, setOccupants] = useState(2)
   const [targetAch, setTargetAch] = useState(0.8)
 
-  const areaN = parseFloat(area) || 0
-  const ceilingN = parseFloat(ceilingHeight) || 0
+  const areaN = Math.min(10000, Math.max(0, parseFloat(area) || 0))
+  const ceilingN = Math.min(20, Math.max(0, parseFloat(ceilingHeight) || 0))
 
   /* 공간 변경 시 권장 ACH 자동 적용 */
   const handleSpaceChange = (id: string) => {
@@ -72,7 +72,7 @@ export default function VentilationClient() {
   const [currentAirflow, setCurrentAirflow] = useState('120')
   const perf = useMemo(() => {
     const v = main?.volume ?? 0
-    const af = parseFloat(currentAirflow) || 0
+    const af = Math.max(0, parseFloat(currentAirflow) || 0)
     if (v <= 0) return null
     return evaluateCurrentPerformance(v, af, targetAch)
   }, [main, currentAirflow, targetAch])
@@ -132,12 +132,13 @@ export default function VentilationClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={styles.tabs}>
+      <div className={styles.tabs} role="tablist" aria-label="환기 계산 도구 탭">
         {TABS.map(t => (
           <button key={t.id}
+            type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
-            <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
+            <span style={{ marginRight: 4 }} aria-hidden="true">{t.icon}</span>{t.name}
           </button>
         ))}
       </div>
@@ -178,9 +179,10 @@ export default function VentilationClient() {
         <div className={styles.spaceGrid}>
           {SPACE_STANDARDS.map(s => (
             <button key={s.id}
+              type="button" aria-pressed={spaceTypeId === s.id}
               className={`${styles.spaceCard} ${spaceTypeId === s.id ? styles.spaceCardActive : ''}`}
               onClick={() => handleSpaceChange(s.id)}>
-              <span className={styles.spaceCardIcon}>{s.icon}</span>
+              <span className={styles.spaceCardIcon} aria-hidden="true">{s.icon}</span>
               <span className={styles.spaceCardName}>{s.name}</span>
               <span className={styles.spaceCardAch}>{s.achMin}~{s.achMax} ACH</span>
             </button>
@@ -215,7 +217,7 @@ export default function VentilationClient() {
       {/* ─── 탭 1: 환기량 ─── */}
       {tab === 'main' && main && (
         <>
-          <div className={styles.hero}
+          <div className={styles.hero} role="status"
             style={{ borderColor: 'rgba(234,88,12,0.40)', background: 'rgba(234,88,12,0.06)' }}>
             <div className={styles.heroLabel}>필요 환기량</div>
             <div className={styles.heroNum} style={{ color: '#E89757' }}>
@@ -252,13 +254,22 @@ export default function VentilationClient() {
             </div>
           )}
 
+          {occupants > 0 && main.perPersonAirflow < 15 && (
+            <div className={main.perPersonAirflow < 8 ? styles.warnBox : styles.infoBox}>
+              {main.perPersonAirflow < 8 ? '⚠️' : '💡'} <strong>인원 대비 1인당 환기량 {fmt(main.perPersonAirflow)}㎥/h</strong> — 권장 최소 외기 약 21.6㎥/h·인(학교보건법)보다 낮습니다.
+              {main.perPersonAirflow < 8
+                ? <><br />인원 밀집으로 환기량이 크게 부족합니다 — 이 인원에는 약 <strong style={{ color: '#DC2626' }}>{fmt(main.occupantBasedAirflow)}㎥/h</strong>(ACH 약 {main.occupantBasedAch}) 이상 또는 인원·체류 시간 축소를 권장합니다.</>
+                : <><br />장시간·다인 체류 시 목표 ACH를 높이거나 [CO₂·인원] 탭에서 농도를 확인하세요.</>}
+            </div>
+          )}
+
           <div className={styles.resultActions}>
-            <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+            <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(`${SPACE_STANDARDS.find(s => s.id === spaceTypeId)?.name} (${fmt(main.volume, 1)}㎥) → 필요 환기량 ${fmt(main.requiredAirflow)}㎥/h (${targetAch} ACH)`)}>
               {copied ? '✓ 복사됨' : '📋 복사'}
             </button>
-            <button className={styles.copyBtn} onClick={() => setTab('cadr')}>🌀 공기청정기 CADR</button>
-            <button className={styles.copyBtn} onClick={() => setTab('window')}>🪟 창문 환기 시간</button>
+            <button type="button" className={styles.copyBtn} onClick={() => setTab('cadr')}>🌀 공기청정기 CADR</button>
+            <button type="button" className={styles.copyBtn} onClick={() => setTab('window')}>🪟 창문 환기 시간</button>
           </div>
         </>
       )}
@@ -270,7 +281,7 @@ export default function VentilationClient() {
             🌀 <strong>공기청정기 CADR</strong>는 미국 AHAM 표준 (㎥/h). 한국 공기청정기는 <strong>표시면적(㎡)</strong>으로 표기하며 본 계산기가 환산합니다.
           </div>
 
-          <div className={styles.hero}
+          <div className={styles.hero} role="status"
             style={{ borderColor: 'rgba(8,145,178,0.40)', background: 'rgba(8,145,178,0.06)' }}>
             <div className={styles.heroLabel}>권장 CADR</div>
             <div className={styles.heroNum} style={{ color: '#0891B2' }}>
@@ -278,6 +289,7 @@ export default function VentilationClient() {
             </div>
             <div className={styles.heroSub}>
               한국 공기청정기 표시면적 ≈ <strong style={{ color: '#0891B2' }}>{cadr.displayAreaApprox}㎡</strong> 제품 권장
+              <br /><span style={{ fontSize: 12 }}>(빠른 청정 4~5 ACH 기준 · 실사용 면적의 약 1.5배)</span>
             </div>
           </div>
 
@@ -322,7 +334,7 @@ export default function VentilationClient() {
             </p>
           </div>
 
-          <div className={styles.hero}
+          <div className={styles.hero} role="status"
             style={{ borderColor: `${perf.efficiencyColor}50`, background: `${perf.efficiencyColor}0F` }}>
             <div className={styles.heroLabel}>현재 ACH</div>
             <div className={styles.heroNum} style={{ color: perf.efficiencyColor }}>
@@ -341,7 +353,8 @@ export default function VentilationClient() {
             <div className={styles.warnBox}>
               ⚠️ <strong>목표 ACH 대비 약 {Math.round((1 - perf.currentAch / targetAch) * 100)}% 부족</strong>
               <br />추가 풍량 필요: <strong style={{ color: '#DC2626' }}>약 {fmt(perf.shortageAirflow)} ㎥/h</strong>
-              <br /><br />옵션 — ① 더 강한 환풍기 설치 / ② 창문 환기 보조 (탭 4) / ③ 공기청정기 추가 (CADR {Math.ceil(perf.shortageAirflow)}+, 미세먼지 한정).
+              <br /><br />옵션 — ① 더 강한 환풍기·전열교환기 설치 / ② 창문 맞통풍 보조 (탭 4) / ③ 인원·체류 시간 줄이기.
+              <br /><span style={{ fontSize: 12 }}>※ 공기청정기는 미세먼지만 줄일 뿐 외기 도입(환기)을 대체하지 못해 환기 부족 해소에는 쓸 수 없습니다.</span>
             </div>
           )}
 
@@ -365,6 +378,7 @@ export default function VentilationClient() {
             <div className={styles.optionRow}>
               {WINDOW_MODES.map(m => (
                 <button key={m.id}
+                  type="button" aria-pressed={windowMode === m.id}
                   className={`${styles.optionBtn} ${windowMode === m.id ? styles.optionActive : ''}`}
                   onClick={() => setWindowMode(m.id)}>
                   {m.name}
@@ -380,6 +394,7 @@ export default function VentilationClient() {
             <div className={styles.optionRow4}>
               {WIND_SPEEDS.map(w => (
                 <button key={w.id}
+                  type="button" aria-pressed={windSpeed === w.id}
                   className={`${styles.optionBtn} ${windSpeed === w.id ? styles.optionActive : ''}`}
                   onClick={() => setWindSpeed(w.id)}>
                   {w.name}
@@ -395,6 +410,7 @@ export default function VentilationClient() {
             <div className={styles.optionRow4}>
               {[1, 2, 3, 5].map(n => (
                 <button key={n}
+                  type="button" aria-pressed={cycles === n}
                   className={`${styles.optionBtn} ${cycles === n ? styles.optionActive : ''}`}
                   onClick={() => setCycles(n)}>
                   {n}회
@@ -405,7 +421,7 @@ export default function VentilationClient() {
 
           {window && (
             <>
-              <div className={styles.hero}
+              <div className={styles.hero} role="status"
                 style={{ borderColor: 'rgba(16,185,129,0.40)', background: 'rgba(16,185,129,0.06)' }}>
                 <div className={styles.heroLabel}>{window.modeName} · 바람 {window.windName} · {window.cycles}회 교체</div>
                 <div className={styles.heroNum} style={{ color: '#059669', fontSize: 'clamp(36px, 9vw, 52px)' }}>
@@ -431,6 +447,7 @@ export default function VentilationClient() {
             <div className={styles.dustGrid}>
               {DUST_LEVELS.map(d => (
                 <button key={d.id}
+                  type="button" aria-pressed={dustLevel === d.id}
                   className={`${styles.dustChip} ${dustLevel === d.id ? styles.dustChipActive : ''}`}
                   style={dustLevel === d.id ? { color: d.color, borderColor: d.color } : {}}
                   onClick={() => setDustLevel(d.id)}>
@@ -473,6 +490,7 @@ export default function VentilationClient() {
             <div className={styles.optionRow5}>
               {CO2_BY_ACTIVITY.map(a => (
                 <button key={a.id}
+                  type="button" aria-pressed={co2Activity === a.id}
                   className={`${styles.optionBtn} ${co2Activity === a.id ? styles.optionActive : ''}`}
                   onClick={() => setCo2Activity(a.id)}>
                   {a.name}
@@ -485,14 +503,17 @@ export default function VentilationClient() {
 
           {co2 && occupants > 0 && (
             <>
-              <div className={styles.hero}
+              <div className={styles.hero} role="status"
                 style={{ borderColor: `${co2.riskLevel.color}50`, background: `${co2.riskLevel.color}0F` }}>
                 <div className={styles.heroLabel}>추정 CO₂ 농도</div>
                 <div className={styles.heroNum} style={{ color: co2.riskLevel.color }}>
                   {fmt(co2.estimatedPpm)}<span className={styles.heroNumUnit}>ppm</span>
                 </div>
                 <div className={styles.heroSub}>
-                  {co2Airflow ? '환기 시 정상상태' : '무환기 시 누적'} · 외부 공기(420 ppm) +{fmt(co2.ppmIncrease)}
+                  {co2Duration}분 체류 추정 · 외부 공기(420 ppm) +{fmt(co2.ppmIncrease)}
+                  {co2.isVentilated && co2.steadyStatePpm !== null && (
+                    <><br /><span style={{ fontSize: 12 }}>계속 머무르면 평형 약 {fmt(co2.steadyStatePpm)} ppm</span></>
+                  )}
                 </div>
                 <div className={styles.heroCategory}
                   style={{ background: `${co2.riskLevel.color}22`, color: co2.riskLevel.color, border: `1px solid ${co2.riskLevel.color}66` }}>
@@ -509,7 +530,7 @@ export default function VentilationClient() {
                     return (
                       <div key={t.level}
                         className={`${styles.co2Row} ${isCurrent ? styles.co2RowActive : ''}`}
-                        style={{ borderLeftColor: t.color, ...(isCurrent ? { borderColor: t.color, background: `${t.color}15` } : {}) }}>
+                        style={{ borderLeftColor: t.color, ...(isCurrent ? { borderTopColor: t.color, borderRightColor: t.color, borderBottomColor: t.color, background: `${t.color}15` } : {}) }}>
                         <span className={styles.co2Range} style={{ color: t.color }}>
                           {prevMax === 400 ? '~' + t.max : `${prevMax}~${t.max}`}
                           <small style={{ display: 'block', color: 'var(--muted)', fontSize: 9.5 }}>ppm</small>
@@ -524,14 +545,19 @@ export default function VentilationClient() {
                 </div>
               </div>
 
-              {co2Airflow === 0 && (
-                <div className={styles.infoBox}>
-                  💡 <strong>환기 권장 주기</strong> — 무환기 상태에서 1,000 ppm 도달까지 약 <strong style={{ color: '#0891B2' }}>{co2.recommendVentilateMinutes}분</strong>.
-                  {co2.recommendVentilateMinutes < 60
-                    ? ' 30~45분마다 5~10분 맞통풍 환기를 권장합니다.'
-                    : ' 1~2시간마다 짧은 환기로 충분합니다.'}
-                </div>
-              )}
+              {co2Airflow === 0 && (() => {
+                const m = co2.recommendVentilateMinutes
+                const advice = m <= 15
+                  ? `인원·활동량이 많아 CO₂ 누적이 빠릅니다 — 상시 맞통풍 또는 약 ${Math.max(5, Math.floor(m / 5) * 5)}분마다 환기를 권장합니다.`
+                  : m < 90
+                    ? `1,000 ppm 도달 전, 약 ${Math.floor(m / 10) * 10}분마다 5~10분 맞통풍 환기를 권장합니다.`
+                    : '1~2시간마다 짧은 환기로 충분합니다.'
+                return (
+                  <div className={styles.infoBox}>
+                    💡 <strong>환기 권장 주기</strong> — 무환기 상태에서 1,000 ppm 도달까지 약 <strong style={{ color: '#0891B2' }}>{m}분</strong>. {advice}
+                  </div>
+                )
+              })()}
 
               <div className={styles.warnBox}>
                 ⚠️ <strong>{co2.warning}</strong> CO₂ 자체보다 &quot;환기 부족&quot;의 지표로 보는 것이 정확합니다. 의학적 진단·산업안전 도구가 아닙니다.

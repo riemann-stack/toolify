@@ -28,7 +28,7 @@ const FAQ_LD = [
               },
               {
                 q: 'CADR 100 vs 표시면적 30㎡, 어느 게 큰가요?',
-                a: '비슷한 수준입니다. <strong>대략적 환산</strong> — 표시면적 (㎡) × 7~8 ≈ CADR (㎥/h). 표시면적 30㎡ ≈ CADR 약 210~240 / 50㎡ ≈ CADR 약 350~400. 한국 공기청정기는 보수적 환산을 사용하므로 실제 CADR이 약 1.4배 높을 수 있습니다.',
+                a: '<strong>표시면적 30㎡ 쪽이 약 2배 이상 큽니다.</strong> 대략적 환산 — 표시면적 (㎡) × 7~8 ≈ CADR (㎥/h). 즉 <strong>표시면적 30㎡ ≈ CADR 약 210~240㎥/h</strong>이고, <strong>CADR 100 ≈ 표시면적 13~14㎡</strong>에 해당합니다 (50㎡ ≈ CADR 약 350~400). 한국 공기청정기는 보수적 환산을 사용하므로 실제 CADR이 약 1.4배 높을 수 있습니다.',
               },
               {
                 q: 'CO₂ 1,000 ppm이 정말 위험한가요?',
@@ -44,7 +44,7 @@ const FAQ_LD = [
               },
               {
                 q: '회의실에 4명, 1시간 회의 시 환기는 어느 정도 필요한가요?',
-                a: '본 도구의 [환기량 계산] 탭에서 <strong>회의실 (8 ACH 권장)</strong>로 자동 계산됩니다. 예 — 20㎡ × 2.4m = 48㎥ 회의실 → 필요 환기량 약 384㎥/h. 무환기 시 약 30~45분이면 CO₂ 1,000 ppm 도달 가능하므로 30~45분마다 5~10분 맞통풍 환기를 권장합니다.',
+                a: '본 도구의 [환기량 계산] 탭에서 <strong>회의실 (8 ACH 권장)</strong>로 자동 계산됩니다. 예 — 20㎡ × 2.4m = 48㎥ 회의실 → 필요 환기량 약 384㎥/h. 무환기 시 약 20~25분이면 CO₂ 1,000 ppm에 도달할 수 있으므로(4명·대화~업무 기준) 20분 안팎마다 5~10분 맞통풍 환기를 권장합니다. 인원·활동량에 따라 달라지며 [CO₂·인원] 탭에서 자동 계산됩니다.',
               },
               {
                 q: '천식이나 호흡기 질환자가 있는 집은?',
@@ -98,17 +98,17 @@ export default function VentilationPage() {
               </thead>
               <tbody>
                 {[
-                  ['🛏️ 침실',          '0.5~1',  '국토교통부 (신축 0.5 ACH 의무)'],
-                  ['🛋️ 거실',          '0.5~1',  '국토교통부'],
-                  ['📚 공부방·서재',   '2~4',    'ASHRAE 62.1 (집중·CO₂ 누적 방지)'],
-                  ['💼 사무실',        '2~6',    'ASHRAE 62.1'],
-                  ['👥 회의실',        '6~10',   'ASHRAE 62.1 (인원 밀집)'],
-                  ['🎒 교실',          '4~6',    '교육부 학교보건법 (학생 1인당 21.6㎥/h)'],
+                  ['🛏️ 침실',          '0.5~1',  '국토교통부 (신축 공동주택 0.5 ACH 의무)'],
+                  ['🛋️ 거실',          '0.5~1',  '국토교통부 (신축 공동주택 0.5 ACH)'],
+                  ['📚 공부방·서재',   '2~4',    'ASHRAE 권장 환기율·ACH 환산 (집중·CO₂)'],
+                  ['💼 사무실',        '2~6',    'ASHRAE 권장 환기율 (ACH 환산)'],
+                  ['👥 회의실',        '6~10',   'ASHRAE 권장 환기율·ACH 환산 (인원 밀집)'],
+                  ['🎒 교실',          '4~6',    '교육부 학교보건법 1인당 21.6㎥/h (ACH 환산)'],
                   ['☕ 카페·식당',     '8~12',   'KOSHA (냄새·습기·인원 밀집)'],
                   ['🏋️ 헬스장',        '6~10',   'KOSHA (운동·CO₂ 빠른 누적)'],
                   ['🍳 주방',          '10~15',  '국토교통부 (조리 시 후드 사용)'],
-                  ['🚽 화장실',        '5~8',    '국토교통부 (5 ACH 의무)'],
-                  ['🏥 의료시설',      '6~12',   '의료법 시행규칙 (감염 예방)'],
+                  ['🚽 화장실',        '5~8',    '국토교통부 (강제배기) · 5~8 ACH 권장'],
+                  ['🏥 의료시설',      '6~12',   '의료법 시행규칙 · 병실 기준 (수술실·격리실 별도)'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
@@ -119,6 +119,9 @@ export default function VentilationPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ⓘ 위 ACH는 표준의 1인당·면적당 외기량(L/s·인, L/s·㎡)을 일반 천장고로 <strong style={{ color: 'var(--text)' }}>ACH로 환산</strong>한 실무 권장값입니다. 0.5 ACH 의무(국토교통부)와 학교 1인당 21.6㎥/h(교육부)는 법령 수치이며, 그 외 범위는 권장 가이드입니다. 정확한 설계는 아래 참고 자료의 원문(판본·조항)을 확인하세요.
+          </p>
         </section>
 
         {/* 3. CADR vs 한국 표시면적 */}
@@ -131,6 +134,7 @@ export default function VentilationPage() {
             <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 16, fontWeight: 800, color: '#0891B2' }}>
               CADR (㎥/h) ≈ 한국 표시면적 (㎡) × 7~8
             </p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>본 계산기는 보수적으로 7.5를 적용합니다.</p>
           </div>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -138,7 +142,7 @@ export default function VentilationPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>한국 표시면적</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>대략 CADR</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>적합 공간 부피</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>적합 공간 (라벨 최소)</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,6 +161,9 @@ export default function VentilationPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ⓘ 위 &apos;적합 공간&apos;은 제조사 표시면적 라벨 기준의 <strong style={{ color: 'var(--text)' }}>최소 적용 부피</strong>입니다. 본 계산기 [공기청정기] 탭은 더 빠른 청정(4~5 ACH)을 기준으로 <strong style={{ color: 'var(--text)' }}>실사용 면적의 약 1.5배</strong> 표시면적을 권장하므로, 같은 방이라도 표보다 큰 제품을 제시할 수 있습니다. 민감군·미세먼지 잦은 지역은 큰 쪽을 권장합니다.
+          </p>
         </section>
 
         {/* 4. 공기청정기 ≠ 환기 */}
@@ -299,18 +306,23 @@ export default function VentilationPage() {
         <section>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>참고 자료</p>
-            <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {[
-                '국토교통부 「건축물의 설비기준 등에 관한 규칙」',
-                '교육부 「학교보건법 시행규칙」',
-                'KOSHA (한국산업안전보건공단) 「산업환기 지침」',
-                'ASHRAE 62.1 (실내공기질 표준)',
-                'AHAM CADR (공기청정기 표준)',
-                '의료법 시행규칙 (의료시설 환기 기준)',
-              ].map((source, i) => (
-                <li key={i} style={{ fontSize: '12px', color: 'var(--muted)' }}>{source}</li>
+                { label: '국토교통부 「건축물의 설비기준 등에 관한 규칙」 (신축 공동주택 0.5 ACH)', href: 'https://www.law.go.kr/법령/건축물의설비기준등에관한규칙' },
+                { label: '교육부 「학교보건법 시행규칙」 (1인당 21.6㎥/h)', href: 'https://www.law.go.kr/법령/학교보건법시행규칙' },
+                { label: '의료법 시행규칙 (의료시설 환기 기준)', href: 'https://www.law.go.kr/법령/의료법시행규칙' },
+                { label: 'KOSHA (한국산업안전보건공단) 산업환기 지침', href: 'https://www.kosha.or.kr' },
+                { label: 'ANSI/ASHRAE 62.1-2025 (실내공기질 환기 표준)', href: 'https://www.ashrae.org/technical-resources/bookstore/standards-62-1-62-2' },
+                { label: 'AHAM CADR / 한국 표준사용면적 (공기청정기 표준)', href: 'https://www.ahamverifide.org' },
+              ].map((s, i) => (
+                <li key={i} style={{ fontSize: '12px', color: 'var(--muted)' }}>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>{s.label}</a>
+                </li>
               ))}
             </ul>
+            <p style={{ fontSize: '11px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.6 }}>
+              ※ 국내 법령은 국가법령정보센터(law.go.kr) 현행 원문 기준. 외부 링크는 새 창에서 열립니다.
+            </p>
           </div>
         </section>
 

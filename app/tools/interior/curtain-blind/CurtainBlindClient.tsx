@@ -20,7 +20,7 @@ type ProductId = typeof PRODUCTS[number]['id']
 const LOCATIONS = [
   { id: 'normal',  label: '일반 방 창',     hint: '120~180 × 120~150', w: 150, h: 130 },
   { id: 'living',  label: '거실 창 (중)',   hint: '200~250 × 150',      w: 220, h: 150 },
-  { id: 'big',     label: '전면 거실 창',   hint: '300~400 × 200',      w: 350, h: 200 },
+  { id: 'big',     label: '거실 창 (대형)',  hint: '300~400 × 200',      w: 350, h: 200 },
   { id: 'veranda', label: '베란다 창',      hint: '150 × 200~230',      w: 150, h: 220 },
   { id: 'small',   label: '욕실·작은 창',  hint: '60~90 × 60~90',      w: 80,  h: 80  },
   { id: 'custom',  label: '직접 입력',      hint: '',                   w: 0,   h: 0   },
@@ -73,11 +73,12 @@ export default function CurtainBlindClient() {
   const [locationId, setLocationId] = useState('living')
   const [winW, setWinW] = useState(220)
   const [winH, setWinH] = useState(150)
-  const [winFromFloor, setWinFromFloor] = useState(85)   // 창문 하단~바닥 (cm)
+  const [winFromFloor, setWinFromFloor] = useState(70)   // 창문 하단~바닥 (cm)
   const [ceilingH, setCeilingH] = useState(240)            // cm
+  const [frameDepth, setFrameDepth] = useState(7)          // 창문틀 깊이 (cm) — 인사이드 마운트 가능 여부
 
-  /* 설치 방식 — 커튼류는 wall-mount 기본, 블라인드류는 inside-mount 기본 */
-  const isCurtainFamily = productId === 'curtain' || productId === 'roman'
+  /* 설치 방식 — 커튼만 wall-mount 기본, 블라인드·롤·버티칼·로만은 inside-mount 기본 */
+  const isCurtainFamily = productId === 'curtain'
   const [installId, setInstallId] = useState<InstallId>('wall-mount')
 
   /* 길이 옵션 (커튼만) */
@@ -108,7 +109,7 @@ export default function CurtainBlindClient() {
   /* 제품 변경 시 설치 방식 기본값 보정 */
   function selectProduct(id: ProductId) {
     setProductId(id)
-    const isBlindNow = id === 'blind' || id === 'roll' || id === 'vert'
+    const isBlindNow = id === 'blind' || id === 'roll' || id === 'vert' || id === 'roman'
     if (isBlindNow && (installId === 'ceiling-recessed' || installId === 'ceiling-mount' || installId === 'wall-mount')) {
       setInstallId('inside-mount')
     } else if (!isBlindNow && (installId === 'inside-mount' || installId === 'outside-mount')) {
@@ -130,8 +131,8 @@ export default function CurtainBlindClient() {
         // 천장 기준
         if (lengthOpt === 'floor') curtainLength = ceilingH - 5
         else if (lengthOpt === 'pooling') curtainLength = ceilingH + 15
-        else if (lengthOpt === 'window') curtainLength = winH + 10
-        else curtainLength = winFromFloor + winH - 50  // knee — 정확하진 않지만 천장 매립이면 의미 작음
+        else if (lengthOpt === 'window') curtainLength = ceilingH - winFromFloor  // 천장 봉 ~ 창문 하단(=창문 전체 가림)
+        else curtainLength = ceilingH - 50  // knee — 천장에서 바닥 50cm(무릎) 위까지
       } else {
         // 벽 부착 기준 (창문 위 약 10cm 위에 봉)
         const rodAboveWindow = 10
@@ -140,7 +141,8 @@ export default function CurtainBlindClient() {
         else if (lengthOpt === 'floor') curtainLength = winH + rodAboveWindow + winFromFloor - 5
         else curtainLength = winH + rodAboveWindow + winFromFloor + 15  // pooling
       }
-      const finalLength = Math.max(0, curtainLength) + 10  // 헴 10cm
+      const finishedLength = Math.max(0, curtainLength)   // 완성(걸었을 때) 길이
+      const orderLength = finishedLength + 10              // 원단 재단 주문 길이 (헴 10cm 포함)
 
       return {
         type: 'curtain' as const,
@@ -148,7 +150,8 @@ export default function CurtainBlindClient() {
         totalCurtainWidth,
         widthPerPanel,
         panelCount,
-        curtainLength: finalLength,
+        curtainLength: finishedLength,
+        orderLength,
       }
     }
 
@@ -156,10 +159,10 @@ export default function CurtainBlindClient() {
       let width = 0, height = 0
       if (installId === 'inside-mount') {
         width = winW - 1
-        height = winH
+        height = winH - 0.5   // 인사이드 — 헤드레일 작동 여유 (블라인드와 동일)
       } else {
         width = winW + 10
-        height = winH + 5
+        height = winH + 10    // 아웃사이드 — 상하 커버 (블라인드·롤과 동일)
       }
       return { type: 'roman' as const, width, height }
     }
@@ -190,11 +193,12 @@ export default function CurtainBlindClient() {
       lines.push(`커튼봉 길이: ${fmt(result.rodLength)}cm`)
       lines.push(`커튼 전체 폭: ${fmt(result.totalCurtainWidth)}cm (주름 ${pleatRatio}배)`)
       lines.push(`1패널당 폭: ${fmt(result.widthPerPanel)}cm × ${result.panelCount}장`)
-      lines.push(`커튼 길이: ${fmt(result.curtainLength)}cm`)
+      lines.push(`커튼 길이(완성): ${fmt(result.curtainLength)}cm`)
+      lines.push(`원단 주문 길이(헴 10cm 포함): ${fmt(result.orderLength)}cm`)
     } else if (result.type === 'roman') {
-      lines.push(`로만쉐이드 폭: ${fmt(result.width)}cm × 길이 ${fmt(result.height)}cm`)
+      lines.push(`로만쉐이드 폭: ${fmt(result.width)}cm × 길이 ${fmt(result.height, 1)}cm`)
     } else {
-      lines.push(`${productName} 폭: ${fmt(result.width)}cm × 길이 ${fmt(result.height)}cm`)
+      lines.push(`${productName} 폭: ${fmt(result.width)}cm × 길이 ${fmt(result.height, 1)}cm`)
     }
     if (doubleLayer) lines.push('이중 커튼 (시어 + 암막)')
     lines.push('youtil.kr/tools/interior/curtain-blind')
@@ -207,8 +211,8 @@ export default function CurtainBlindClient() {
   const panelTip = useMemo(() => {
     if (winW <= 100) return { kind: 'small',  text: '작은 창 (≤100cm) — 단일 패널 또는 블라인드·롤스크린 추천' }
     if (winW <= 200) return { kind: 'medium', text: '일반 방 창 (100~200cm) — 양쪽 한 쌍 권장' }
-    if (winW <= 350) return { kind: 'large',  text: '큰 거실 창 (200~350cm) — 양쪽 한 쌍 (각 패널 폭 200~350cm)' }
-    return                  { kind: 'huge',   text: '전면 거실 창 (≥350cm) — 3분할 (양쪽 + 중앙) 또는 4분할 권장 — 1패널당 폭 200cm 이하 권장' }
+    if (winW <= 350) return { kind: 'large',  text: '큰 거실 창 (200~350cm) — 양쪽 한 쌍 권장. 1패널당 폭이 200cm를 넘으면 3분할도 고려' }
+    return                  { kind: 'huge',   text: '전면 거실 창 (≥350cm) — 3분할 (양쪽 + 중앙) 권장 — 1패널당 폭 200cm 이하. 더 넓은 창은 맞춤 업체 상담' }
   }, [winW])
 
   /* 현재 설치 방식 정보 */
@@ -217,7 +221,7 @@ export default function CurtainBlindClient() {
     if (installId === 'ceiling-recessed') return { title: '천장 매립 (커튼박스)', body: '커튼박스가 있는 경우 사용. 길이는 천장에서 바닥까지로 계산. 천장 높이를 정확히 측정하세요.' }
     if (installId === 'ceiling-mount')    return { title: '천장 부착',            body: '천장에 직접 봉 또는 레일 설치. 무게 분산 고려. 콘크리트 천장은 앵커 필요, 석고보드는 보강 필요.' }
     if (installId === 'wall-mount')       return { title: '벽면 부착 (가장 일반적)', body: '창문 위쪽 벽에 봉 또는 레일 설치. 창문 상단에서 약 10~15cm 위에 부착하면 시각적으로 천장이 높아 보입니다.' }
-    if (installId === 'inside-mount')     return { title: '창문틀 안 (인사이드 마운트)', body: '창문틀 안쪽에 정확히 맞춰 설치. 좌우 0.5cm씩 여유를 두어 작동에 방해되지 않게 함. 창문틀 깊이 6cm 이상 권장.' }
+    if (installId === 'inside-mount')     return { title: '창문틀 안 (인사이드 마운트)', body: '창문틀 안쪽에 정확히 맞춰 설치. 폭은 좌우 0.5cm씩(−1cm), 높이는 0.5cm 여유를 두어 작동·마찰에 방해되지 않게 함. 창문틀 깊이 6cm 이상 권장.' }
     return                                       { title: '창문틀 밖 (아웃사이드 마운트)', body: '창문틀 밖에 설치. 창문보다 좌우 5cm씩 더 크게. 빛 차단 효과 우수, 작은 창을 크게 보이게 함.' }
   }, [installId])
 
@@ -250,7 +254,7 @@ export default function CurtainBlindClient() {
             </div>
             <div className={styles.productGrid}>
               {PRODUCTS.map(p => (
-                <button key={p.id} type="button" className={`${styles.productBtn} ${styles[p.cls]} ${productId === p.id ? styles.prodActive : ''}`} onClick={() => selectProduct(p.id)}>
+                <button key={p.id} type="button" aria-pressed={productId === p.id} className={`${styles.productBtn} ${styles[p.cls]} ${productId === p.id ? styles.prodActive : ''}`} onClick={() => selectProduct(p.id)}>
                   <span className={styles.icon}>{p.icon}</span>
                   {p.label}
                   <small>{p.sub}</small>
@@ -268,7 +272,7 @@ export default function CurtainBlindClient() {
             <span className={styles.subLabel}>창문 위치 — 빠른 선택</span>
             <div className={styles.locationGrid}>
               {LOCATIONS.map(l => (
-                <button key={l.id} type="button" className={`${styles.locationBtn} ${locationId === l.id ? styles.locationActive : ''}`} onClick={() => selectLocation(l.id)}>
+                <button key={l.id} type="button" aria-pressed={locationId === l.id} className={`${styles.locationBtn} ${locationId === l.id ? styles.locationActive : ''}`} onClick={() => selectLocation(l.id)}>
                   {l.label}
                   {l.hint && <small>{l.hint}</small>}
                 </button>
@@ -278,9 +282,9 @@ export default function CurtainBlindClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>창문 가로 × 세로 (cm)</span>
             <div className={styles.dimRow}>
-              <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={1} value={winW} onChange={e => { setWinW(n(e.target.value, 1)); setLocationId('custom') }} />
+              <input className={styles.bigInput} aria-label="창문 가로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winW} onChange={e => { setWinW(n(e.target.value, 1)); setLocationId('custom') }} />
               <span className={styles.dimSep}>×</span>
-              <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={1} value={winH} onChange={e => { setWinH(n(e.target.value, 1)); setLocationId('custom') }} />
+              <input className={styles.bigInput} aria-label="창문 세로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winH} onChange={e => { setWinH(n(e.target.value, 1)); setLocationId('custom') }} />
             </div>
 
             {(productId === 'curtain') && (
@@ -288,18 +292,31 @@ export default function CurtainBlindClient() {
                 <div style={{ height: 12 }} />
                 <span className={styles.subLabel}>창문 하단 ~ 바닥 (cm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} max={300} value={winFromFloor} onChange={e => setWinFromFloor(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="창문 하단에서 바닥까지 (cm)" type="number" inputMode="decimal" min={0} max={300} value={winFromFloor} onChange={e => setWinFromFloor(n(e.target.value))} />
                   <span className={styles.unit}>cm</span>
                 </div>
-                {(installId === 'ceiling-recessed' || installId === 'ceiling-mount') && (
-                  <>
-                    <div style={{ height: 8 }} />
-                    <span className={styles.subLabel}>천장 높이 (cm)</span>
-                    <div className={styles.inputRow}>
-                      <input className={styles.smallInput} type="number" inputMode="decimal" min={150} max={500} value={ceilingH} onChange={e => setCeilingH(n(e.target.value, 150))} />
-                      <span className={styles.unit}>cm</span>
-                    </div>
-                  </>
+                <div style={{ height: 8 }} />
+                <span className={styles.subLabel}>천장 높이 (cm)</span>
+                <div className={styles.inputRow}>
+                  <input className={styles.smallInput} aria-label="천장 높이 (cm)" type="number" inputMode="decimal" min={150} max={500} value={ceilingH} onChange={e => setCeilingH(n(e.target.value, 150))} />
+                  <span className={styles.unit}>cm</span>
+                </div>
+              </>
+            )}
+
+            {/* 인사이드 마운트 — 창문틀 깊이 (블라인드·롤·버티칼·로만) */}
+            {!isCurtainFamily && installId === 'inside-mount' && (
+              <>
+                <div style={{ height: 12 }} />
+                <span className={styles.subLabel}>창문틀 깊이 (cm)</span>
+                <div className={styles.inputRow}>
+                  <input className={styles.smallInput} aria-label="창문틀 깊이 (cm)" type="number" inputMode="decimal" min={0} max={50} value={frameDepth} onChange={e => setFrameDepth(n(e.target.value))} />
+                  <span className={styles.unit}>cm</span>
+                </div>
+                {frameDepth > 0 && frameDepth < 6 && (
+                  <div role="alert" style={{ marginTop: 8, background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '10px 12px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6 }}>
+                    ⚠️ 창문틀 깊이 {fmt(frameDepth)}cm — 인사이드 마운트는 <strong>6cm 이상</strong> 권장. 깊이가 부족하면 본체가 튀어나오니 <strong>아웃사이드(창문틀 밖)</strong>를 권장합니다.
+                  </div>
                 )}
               </>
             )}
@@ -315,7 +332,7 @@ export default function CurtainBlindClient() {
               {INSTALL_TYPES
                 .filter(i => isCurtainFamily ? i.forCurtain : i.forBlind)
                 .map(i => (
-                  <button key={i.id} type="button" className={`${styles.installBtn} ${styles[i.cls]} ${installId === i.id ? styles.installActive : ''}`} onClick={() => setInstallId(i.id)}>
+                  <button key={i.id} type="button" aria-pressed={installId === i.id} className={`${styles.installBtn} ${styles[i.cls]} ${installId === i.id ? styles.installActive : ''}`} onClick={() => setInstallId(i.id)}>
                     <span style={{ fontSize: 16 }}>{i.icon}</span>
                     <span>{i.label}</span>
                     <small style={{ fontSize: 10, color: 'var(--muted)' }}>{i.sub}</small>
@@ -339,7 +356,7 @@ export default function CurtainBlindClient() {
                   // 각 옵션별 미니 SVG (창문 + 커튼 길이 비교)
                   const heights = { window: 35, knee: 50, floor: 70, pooling: 78 }
                   return (
-                    <button key={opt.id} type="button" className={`${styles.lengthBtn} ${lengthOpt === opt.id ? styles.lengthActive : ''}`} onClick={() => setLengthOpt(opt.id)}>
+                    <button key={opt.id} type="button" aria-pressed={lengthOpt === opt.id} className={`${styles.lengthBtn} ${lengthOpt === opt.id ? styles.lengthActive : ''}`} onClick={() => setLengthOpt(opt.id)}>
                       <svg className={styles.lengthSvg} width="40" height="80" viewBox="0 0 40 80" aria-hidden="true">
                         {/* 창문 */}
                         <rect x="8" y="14" width="24" height="22" fill="rgba(8,145,178,0.15)" stroke="#0891B2" strokeWidth="1" />
@@ -366,12 +383,12 @@ export default function CurtainBlindClient() {
                 <span className={styles.cardLabelHint}>한국 표준 2배</span>
               </div>
               <div className={styles.pleatRow}>
-                <input className={styles.slider} type="range" min={1.5} max={3.0} step={0.5} value={pleatRatio} onChange={e => setPleatRatio(Number(e.target.value))} />
+                <input className={styles.slider} aria-label="주름 배수" aria-valuetext={`${pleatRatio.toFixed(1)}배`} type="range" min={1.5} max={3.0} step={0.5} value={pleatRatio} onChange={e => setPleatRatio(Number(e.target.value))} />
                 <span className={styles.sliderValue}>×{pleatRatio.toFixed(1)}</span>
               </div>
               <div className={styles.pleatPills}>
                 {[1.5, 2.0, 2.5, 3.0].map(r => (
-                  <button key={r} type="button"
+                  <button key={r} type="button" aria-pressed={pleatRatio === r}
                     className={`${styles.pleatPill} ${r === 2.0 ? styles.pleatPillStd : ''} ${pleatRatio === r ? styles.pleatPillActive : ''}`}
                     onClick={() => setPleatRatio(r)}
                   >
@@ -393,7 +410,7 @@ export default function CurtainBlindClient() {
               </div>
               <div className={styles.panelGrid}>
                 {PANEL_STYLES.map(p => (
-                  <button key={p.id} type="button" className={`${styles.panelBtn} ${panelStyle === p.id ? styles.panelActive : ''}`} onClick={() => setPanelStyle(p.id)}>
+                  <button key={p.id} type="button" aria-pressed={panelStyle === p.id} className={`${styles.panelBtn} ${panelStyle === p.id ? styles.panelActive : ''}`} onClick={() => setPanelStyle(p.id)}>
                     {p.label}
                     <small>{p.count}장</small>
                   </button>
@@ -408,6 +425,22 @@ export default function CurtainBlindClient() {
               </div>
             </div>
           )}
+
+          {/* 입력 기하 경고 — 천장보다 창문 상단/봉 위치가 높으면 설치 불가 */}
+          {productId === 'curtain' && (() => {
+            const isCeil = installId === 'ceiling-recessed' || installId === 'ceiling-mount'
+            const windowTop = winFromFloor + winH
+            const wallRodTop = windowTop + 10   // 벽 부착 봉(창문 위 10cm)
+            const conflict = isCeil ? ceilingH < windowTop : wallRodTop > ceilingH
+            if (!conflict) return null
+            return (
+              <div role="alert" style={{ background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '12px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
+                {isCeil
+                  ? `⚠️ 천장 높이(${fmt(ceilingH)}cm)가 창문 상단(${fmt(windowTop)}cm = 하단 ${fmt(winFromFloor)} + 높이 ${fmt(winH)})보다 낮습니다. 천장 높이 또는 창문 하단~바닥 값을 확인하세요.`
+                  : `⚠️ 벽 부착 봉 위치(창문 상단 +10cm = ${fmt(wallRodTop)}cm)가 천장(${fmt(ceilingH)}cm)보다 높습니다. 창문이 천장에 닿을 듯 높아 벽면 봉 설치가 어렵습니다 — 천장 부착을 고려하거나 입력값을 확인하세요.`}
+              </div>
+            )
+          })()}
 
           {/* 결과 — HERO */}
           <div className={styles.hero} role="status">
@@ -433,7 +466,7 @@ export default function CurtainBlindClient() {
                 <span className={styles.heroDualSep}>×</span>
                 <div>
                   <p className={styles.heroDualLabel}>길이</p>
-                  <p className={styles.heroDualNum}>{fmt(result.height)}<span className={styles.heroDualUnit}>cm</span></p>
+                  <p className={styles.heroDualNum}>{fmt(result.height, 1)}<span className={styles.heroDualUnit}>cm</span></p>
                 </div>
               </div>
             ) : (
@@ -445,13 +478,14 @@ export default function CurtainBlindClient() {
                 <span className={styles.heroDualSep}>×</span>
                 <div>
                   <p className={styles.heroDualLabel}>길이</p>
-                  <p className={styles.heroDualNum}>{fmt(result.height)}<span className={styles.heroDualUnit}>cm</span></p>
+                  <p className={styles.heroDualNum}>{fmt(result.height, 1)}<span className={styles.heroDualUnit}>cm</span></p>
                 </div>
               </div>
             )}
             {result.type === 'curtain' && (
               <p className={styles.heroSub}>
-                1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
+                길이는 <strong style={{ color: 'var(--text)' }}>완성(걸었을 때)</strong> 기준 · 원단 재단 주문 시 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(result.orderLength)}cm</strong>(헴 10cm 포함)
+                <br />1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
                 {doubleLayer && ' · 이중 (시어 + 암막)'}
               </p>
             )}
@@ -461,6 +495,18 @@ export default function CurtainBlindClient() {
               </p>
             )}
           </div>
+
+          {/* 패널 담당 폭(봉 구간 ÷ 패널수) 과다 경고 — 200cm 초과 시 봉 처짐·작동 불량 */}
+          {result.type === 'curtain' && (result.rodLength / result.panelCount) > 200 && (
+            <div role="alert" style={{ background: 'var(--bg2)', border: '1px solid var(--warning)', borderLeft: '3px solid var(--warning)', borderRadius: 10, padding: '12px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
+              ⚠️ <strong>1패널이 약 {fmt(result.rodLength / result.panelCount)}cm 구간을 담당</strong>합니다 — 권장 200cm 초과. 무게로 봉이 처지거나 여닫기가 불편할 수 있으니 <strong>분할 수를 늘리세요</strong>
+              {(() => {
+                const next = result.panelCount < 3 ? 3 : result.panelCount + 1
+                const cover = result.rodLength / next
+                return ` (${next}분할 시 1패널 약 ${fmt(cover)}cm 담당).`
+              })()}
+            </div>
+          )}
 
           {/* 상세 사이즈 표 */}
           <div className={styles.card}>
@@ -472,14 +518,15 @@ export default function CurtainBlindClient() {
                     <tr><td>커튼봉 길이</td><td>{fmt(result.rodLength)}cm</td><td>창문 폭 + 좌우 15cm씩</td></tr>
                     <tr><td>커튼 전체 폭</td><td>{fmt(result.totalCurtainWidth)}cm</td><td>봉 길이 × 주름 {pleatRatio}배</td></tr>
                     <tr><td>패널 1장 폭</td><td>{fmt(result.widthPerPanel)}cm</td><td>{result.panelCount}장 분할</td></tr>
-                    <tr className={styles.highlightRow}><td>커튼 길이</td><td>{fmt(result.curtainLength)}cm</td><td>{LENGTH_OPTIONS.find(o => o.id === lengthOpt)?.desc} + 헴 10cm</td></tr>
+                    <tr className={styles.highlightRow}><td>커튼 길이 (완성)</td><td>{fmt(result.curtainLength)}cm</td><td>{LENGTH_OPTIONS.find(o => o.id === lengthOpt)?.desc} · 걸었을 때 길이</td></tr>
+                    <tr><td>원단 주문 길이</td><td>{fmt(result.orderLength)}cm</td><td>재단·맞춤 시 헴 10cm 포함</td></tr>
                     <tr><td>패널 수</td><td>{result.panelCount}장</td><td>{PANEL_STYLES.find(p => p.id === panelStyle)?.label}</td></tr>
                     {doubleLayer && <tr><td>이중 커튼</td><td>×2</td><td>시어 + 암막 각각 동일 사이즈</td></tr>}
                   </>
                 ) : (
                   <>
                     <tr><td>{PRODUCTS.find(p => p.id === productId)?.label} 폭</td><td>{fmt(result.width)}cm</td><td>{installId === 'inside-mount' ? '창문 안쪽 -1cm (좌우 0.5씩)' : '창문 +10cm'}</td></tr>
-                    <tr className={styles.highlightRow}><td>{PRODUCTS.find(p => p.id === productId)?.label} 길이</td><td>{fmt(result.height)}cm</td><td>{installId === 'inside-mount' ? '창문 안쪽 -0.5cm' : '창문 +10cm'}</td></tr>
+                    <tr className={styles.highlightRow}><td>{PRODUCTS.find(p => p.id === productId)?.label} 길이</td><td>{fmt(result.height, 1)}cm</td><td>{installId === 'inside-mount' ? '창문 안쪽 -0.5cm' : '창문 +10cm'}</td></tr>
                     <tr><td>설치 방식</td><td>{installId === 'inside-mount' ? '인사이드' : installId === 'outside-mount' ? '아웃사이드' : '벽 부착'}</td><td>{currentInstall.label}</td></tr>
                   </>
                 )}
@@ -531,8 +578,7 @@ export default function CurtainBlindClient() {
                       const rodX1 = winX - rodExt
                       const rodX2 = winX + drawWinW + rodExt
                       const rodY = winY - 12
-                      // 커튼 길이 비율
-                      const heightTotal = winFromFloor + winH
+                      // 커튼 길이 비율 (시각화용 — 옵션별 바닥 위치)
                       const drawCurtainBottom = lengthOpt === 'window' ? winY + drawWinH + 5
                         : lengthOpt === 'knee' ? winY + drawWinH + (drawWinH * 0.4)
                         : lengthOpt === 'floor' ? VBH - 10
@@ -713,7 +759,7 @@ export default function CurtainBlindClient() {
             </div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>3</span>
-              <span className={styles.guideStepBody}>길이 측정 — 봉 위치 ~ 원하는 종료점 + 헴 10cm</span>
+              <span className={styles.guideStepBody}>길이 측정 — 봉 위치 ~ 원하는 종료점(<strong>완성 길이</strong>). 원단 재단·맞춤 주문 시 <strong>헴 10cm</strong> 추가</span>
             </div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>4</span>
@@ -725,11 +771,11 @@ export default function CurtainBlindClient() {
             <div className={styles.cardLabel}><span>📏 블라인드 측정법 — 인사이드 마운트</span></div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>1</span>
-              <span className={styles.guideStepBody}>창문 안쪽 폭 — <strong>3개 지점 측정 후 가장 작은 값</strong> -0.5cm</span>
+              <span className={styles.guideStepBody}>창문 안쪽 폭 — <strong>3개 지점 측정 후 가장 작은 값</strong> -1cm (좌우 0.5씩)</span>
             </div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>2</span>
-              <span className={styles.guideStepBody}>창문 안쪽 높이 — 좌·중·우 측정 후 가장 작은 값</span>
+              <span className={styles.guideStepBody}>창문 안쪽 높이 — 좌·중·우 측정 후 가장 작은 값 <strong>-0.5cm</strong></span>
             </div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>3</span>

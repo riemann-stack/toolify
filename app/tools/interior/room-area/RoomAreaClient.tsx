@@ -58,9 +58,10 @@ function estimateWallpaperRolls(netWallArea: number): number {
 function estimatePaintL(netWallArea: number): number {
   return Math.round((netWallArea * 2 / 10) * 1.10 * 10) / 10
 }
-/* 에어컨 평형 권장 (바닥 평수 기준 +1평 마진) */
-function estimateAirConPyung(floorPyeong: number): number {
-  return Math.ceil(floorPyeong + 1)
+/* 에어컨 평형 권장 (바닥 평수 + 천장 높이 반영, +1평 마진)
+ * 냉방 부하는 부피에 비례하므로 표준 천장(2.4m) 대비 높은 천장은 부피 비례로 가산 */
+function estimateAirConPyung(floorPyeong: number, heightM: number): number {
+  return Math.ceil(floorPyeong * (heightM / 2.4) + 1)
 }
 /* 조명 루멘 권장 (거실 300 lux × 면적) */
 function estimateLumenRange(floorArea: number): { low: number; high: number } {
@@ -163,7 +164,12 @@ export default function RoomAreaClient() {
     return rooms.map(r => {
       const wallGross = r.walls.reduce((s, w) => s + w.wallW * w.wallH, 0)
       const openings = r.walls.reduce((s, w) => s + w.openings.reduce((so, o) => so + o.w * o.h, 0), 0)
-      const wallNet = Math.max(0, wallGross - openings)
+      // 개구부는 자기 벽 안에서만 차감 (창·문이 벽보다 커도 다른 벽까지 깎이는 누출 방지)
+      const wallNet = r.walls.reduce((s, w) => {
+        const gross = w.wallW * w.wallH
+        const open = w.openings.reduce((so, o) => so + o.w * o.h, 0)
+        return s + Math.max(0, gross - open)
+      }, 0)
       const floor = r.floorW * r.floorL
       const ceiling = floor
       const volume = floor * r.h
@@ -256,7 +262,7 @@ export default function RoomAreaClient() {
   /* 활용 추천: 탭 1 기준 자동 계산 */
   const wallpaperRolls = estimateWallpaperRolls(t1.netWallArea)
   const paintL = estimatePaintL(t1.netWallArea)
-  const airConP = estimateAirConPyung(t1.floorPyeong)
+  const airConP = estimateAirConPyung(t1.floorPyeong, heightM)
   const lumen = estimateLumenRange(t1.floorArea)
 
   /* ────────────────────────────── 렌더 ────────────────────────────── */
@@ -285,8 +291,8 @@ export default function RoomAreaClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>공간 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
@@ -301,18 +307,22 @@ export default function RoomAreaClient() {
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
                     <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
+                      aria-label="평수 직접 입력"
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
                 )}
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (정사각형 가정)</p>
+                <p style={{ fontSize: 12, color: 'var(--warning)', lineHeight: 1.6, marginTop: 6, fontFamily: 'Noto Sans KR, sans-serif' }}>
+                  ⚠️ 바닥 면적은 정확하지만, 정사각형은 둘레가 가장 짧아 <strong>벽 면적이 실제보다 작게</strong> 나올 수 있어요. 도배·페인트용 벽 면적은 <strong>📏 가로×세로(m)</strong> 모드로 실측 입력을 권장합니다.
+                </p>
               </>
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} aria-label="가로 (m)" value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} aria-label="세로 (m)" value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (≈ {fmt(tab1Dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
@@ -321,12 +331,12 @@ export default function RoomAreaClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} aria-label="천장 높이 (m)" value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
               ))}
             </div>
           </div>
@@ -339,7 +349,7 @@ export default function RoomAreaClient() {
             <span className={styles.subLabel}>창문 — 빠른 선택</span>
             <div className={styles.presetGrid}>
               {WIN_PRESETS.map(p => (
-                <button key={p.id} type="button" className={`${styles.presetBtn} ${winPreset === p.id ? styles.presetActive : ''}`} onClick={() => applyWinPreset(p.id)}>
+                <button key={p.id} type="button" aria-pressed={winPreset === p.id} className={`${styles.presetBtn} ${winPreset === p.id ? styles.presetActive : ''}`} onClick={() => applyWinPreset(p.id)}>
                   {p.label}
                 </button>
               ))}
@@ -348,15 +358,15 @@ export default function RoomAreaClient() {
               <div className={styles.openingRow}>
                 <div>
                   <span className={styles.subLabel}>개수</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} aria-label="창문 개수" value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>가로 (m)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="창문 가로 (m)" value={winW} onChange={e => setWinW(n(e.target.value))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>세로 (m)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="창문 세로 (m)" value={winH} onChange={e => setWinH(n(e.target.value))} />
                 </div>
               </div>
             )}
@@ -366,21 +376,21 @@ export default function RoomAreaClient() {
             <div className={styles.openingRow}>
               <div>
                 <span className={styles.subLabel}>개수</span>
-                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} aria-label="문 개수" value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
               </div>
               <div>
                 <span className={styles.subLabel}>가로 (m)</span>
-                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="문 가로 (m)" value={doorW} onChange={e => setDoorW(n(e.target.value))} />
               </div>
               <div>
                 <span className={styles.subLabel}>세로 (m)</span>
-                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="문 세로 (m)" value={doorH} onChange={e => setDoorH(n(e.target.value))} />
               </div>
             </div>
           </div>
 
           {/* 6개 면적 카드 */}
-          <div className={styles.areaGrid}>
+          <div className={styles.areaGrid} role="status" aria-live="polite" aria-label="공간 면적 계산 결과">
             <div className={`${styles.areaCard} ${styles.areaWallTotal}`}>
               <p className={styles.areaTitle}>벽 면적 (전체)</p>
               <p className={styles.areaValue}>{fmt(t1.totalWallArea)}<span className={styles.areaUnit}>㎡</span></p>
@@ -435,6 +445,11 @@ export default function RoomAreaClient() {
               <span className={styles.cardLabelHint}>{tab1Dims.width.toFixed(1)} × {tab1Dims.length.toFixed(1)} × {heightM}m</span>
             </div>
             <div className={styles.visGrid}>
+              {(tab1Dims.width <= 0 || tab1Dims.length <= 0) && (
+                <p className={styles.areaShow} style={{ gridColumn: '1 / -1', textAlign: 'center', margin: 0 }}>
+                  가로·세로 치수를 입력하면 평면도와 3D 박스가 표시됩니다.
+                </p>
+              )}
               {/* ─── 평면도 (top-down) ─── */}
               {(() => {
                 const VBW = 360, VBH = 280, MARGIN = 40
@@ -568,7 +583,7 @@ export default function RoomAreaClient() {
                 <span className={styles.usageIcon}>❄️</span>
                 <div className={styles.usageBody}>
                   <span className={styles.usageTitle}>에어컨 평형</span>
-                  <span className={styles.usageDesc}>바닥 {fmt(t1.floorArea)}㎡ ({fmt(t1.floorPyeong, 1)}평) → 약 <strong>{airConP}평형</strong> 권장</span>
+                  <span className={styles.usageDesc}>바닥 {fmt(t1.floorArea)}㎡ · 천장 {heightM}m → 약 <strong>{airConP}평형</strong> 권장 (천장 높이 반영)</span>
                 </div>
                 <span className={styles.usageBtn}>자세히 →</span>
               </Link>
@@ -594,7 +609,7 @@ export default function RoomAreaClient() {
             return (
               <div key={r.id} className={styles.roomBlock}>
                 <div className={styles.roomHeader}>
-                  <input className={styles.roomHeaderInput} type="text" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value || '방' })} />
+                  <input className={styles.roomHeaderInput} type="text" aria-label="방 이름" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value || '방' })} />
                   {rooms.length > 1 && (
                     <button type="button" className={styles.removeRoomBtn} onClick={() => removeRoom(r.id)}>방 삭제</button>
                   )}
@@ -603,17 +618,17 @@ export default function RoomAreaClient() {
                 <div className={styles.wallDimRow}>
                   <div>
                     <span className={styles.subLabel}>바닥 가로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.floorW} onChange={e => updateRoom(r.id, { floorW: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="바닥 가로 (m)" value={r.floorW} onChange={e => updateRoom(r.id, { floorW: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>바닥 세로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.floorL} onChange={e => updateRoom(r.id, { floorL: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="바닥 세로 (m)" value={r.floorL} onChange={e => updateRoom(r.id, { floorL: n(e.target.value) })} />
                   </div>
                 </div>
                 <div style={{ height: 8 }} />
-                <span className={styles.subLabel}>천장 높이 (m)</span>
+                <span className={styles.subLabel}>천장 높이 (m) <span className={styles.cardLabelHint}>· 전체 벽 높이에 적용</span></span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={r.h} onChange={e => updateRoom(r.id, { h: Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)) })} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} aria-label="천장 높이 (m) — 전체 벽 높이에 적용" value={r.h} onChange={e => { const nh = Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)); updateRoom(r.id, { h: nh, walls: r.walls.map(w => ({ ...w, wallH: nh })) }) }} />
                   <span className={styles.unit}>m</span>
                 </div>
 
@@ -623,23 +638,23 @@ export default function RoomAreaClient() {
                     <div className={styles.wallDimRow}>
                       <div>
                         <span className={styles.subLabel}>가로 (m)</span>
-                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label={`${w.label} 가로 (m)`} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
                       </div>
                       <div>
                         <span className={styles.subLabel}>높이 (m)</span>
-                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label={`${w.label} 높이 (m)`} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
                       </div>
                     </div>
 
                     <p className={styles.openingsHeader}>창문·문 ({w.openings.length}/5)</p>
                     {w.openings.map(o => (
                       <div key={o.id} className={styles.openingMiniRow}>
-                        <button type="button" className={`${styles.openingTypeBtn} ${o.type === 'window' ? styles.openingWindow : styles.openingDoor}`} onClick={() => updateOpening(r.id, w.id, o.id, { type: o.type === 'window' ? 'door' : 'window' })}>
+                        <button type="button" aria-label={`종류: ${o.type === 'window' ? '창문' : '문'} (눌러서 ${o.type === 'window' ? '문' : '창문'}으로 변경)`} className={`${styles.openingTypeBtn} ${o.type === 'window' ? styles.openingWindow : styles.openingDoor}`} onClick={() => updateOpening(r.id, w.id, o.id, { type: o.type === 'window' ? 'door' : 'window' })}>
                           {o.type === 'window' ? '창문' : '문'}
                         </button>
-                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} />
-                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} />
-                        <button type="button" className={`${styles.iconBtn} ${styles.removeBtn}`} onClick={() => removeOpening(r.id, w.id, o.id)}>✕</button>
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label={`${o.type === 'window' ? '창문' : '문'} 가로 (m)`} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} />
+                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label={`${o.type === 'window' ? '창문' : '문'} 세로 (m)`} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} />
+                        <button type="button" aria-label={`${o.type === 'window' ? '창문' : '문'} 삭제`} className={`${styles.iconBtn} ${styles.removeBtn}`} onClick={() => removeOpening(r.id, w.id, o.id)}>✕</button>
                       </div>
                     ))}
                     {w.openings.length < 5 && (
@@ -690,7 +705,7 @@ export default function RoomAreaClient() {
               <span>전체 합산</span>
               <span className={styles.cardLabelHint}>{rooms.length}개 방</span>
             </div>
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ overflowX: 'auto' }} role="status" aria-live="polite" aria-label="방별 면적 합산 결과">
               <table className={styles.summaryTable}>
                 <thead>
                   <tr><th scope="col">방</th><th scope="col">바닥</th><th scope="col">벽 (실)</th><th scope="col">부피</th></tr>

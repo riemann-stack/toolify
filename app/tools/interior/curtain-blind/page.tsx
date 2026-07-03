@@ -31,7 +31,7 @@ const FAQ_LD = [
               },
               {
                 q: '큰 거실 창문은 커튼 패널을 몇 장 해야 하나요?',
-                a: '• 가로 200cm 이하: <strong>양쪽 한 쌍 (좌·우 각 1장)</strong><br/>• 가로 200~350cm: 양쪽 한 쌍 (각 패널 폭 200~350cm)<br/>• 가로 350cm 이상: <strong>3분할 (양쪽 + 중앙) 또는 4분할</strong><br/>패널이 너무 넓으면 무게 때문에 봉이 휘거나 작동이 어려워지므로 1패널당 폭 200cm 이하를 권장합니다.',
+                a: '• 가로 200cm 이하: <strong>양쪽 한 쌍 (좌·우 각 1장)</strong><br/>• 가로 200~350cm: 양쪽 한 쌍 (1패널당 폭이 200cm를 넘으면 3분할 고려)<br/>• 가로 350cm 이상: <strong>3분할 (양쪽 + 중앙) 권장</strong>, 더 넓으면 맞춤 업체 상담<br/>패널이 너무 넓으면 무게 때문에 봉이 휘거나 작동이 어려워지므로 1패널당 폭 200cm 이하를 권장합니다.',
               },
             ]
 
@@ -75,9 +75,10 @@ export default function CurtainBlindPage() {
             <div><span style={{ color: 'var(--muted)' }}>봉 길이</span> = 창문 폭 + 30cm (좌우 15cm씩)</div>
             <div><span style={{ color: 'var(--muted)' }}>커튼 폭</span> = 봉 길이 × 주름 배수 (1.5~3배)</div>
             <div><span style={{ color: 'var(--muted)' }}>1패널당 폭</span> = 커튼 폭 ÷ 패널 수</div>
-            <div><span style={{ color: 'var(--muted)' }}>커튼 길이</span> = 봉 위치 ~ 끝 + 헴 10cm</div>
+            <div><span style={{ color: 'var(--muted)' }}>커튼 길이(완성)</span> = 봉 위치 ~ 끝점</div>
+            <div><span style={{ color: 'var(--muted)' }}>원단 주문 길이</span> = 완성 + 헴 10cm <span style={{ color: 'var(--muted)' }}>(재단·맞춤 시)</span></div>
             <div style={{ marginTop: 14, color: '#0891B2', fontWeight: 700 }}>블라인드 (인사이드)</div>
-            <div><span style={{ color: 'var(--muted)' }}>폭</span> = 창문 안쪽 폭 − 1cm</div>
+            <div><span style={{ color: 'var(--muted)' }}>폭</span> = 창문 안쪽 폭 − 1cm (좌우 0.5씩)</div>
             <div><span style={{ color: 'var(--muted)' }}>길이</span> = 창문 안쪽 높이 − 0.5cm</div>
             <div style={{ marginTop: 14, color: '#EA580C', fontWeight: 700 }}>블라인드 (아웃사이드)</div>
             <div><span style={{ color: 'var(--muted)' }}>폭</span> = 창문 폭 + 10cm</div>

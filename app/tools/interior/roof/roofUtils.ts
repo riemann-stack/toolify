@@ -132,13 +132,13 @@ export interface RoofMaterial {
 export const ROOF_MATERIALS: RoofMaterial[] = [
   // 지붕재
   { key: 'shingle',    name: '아스팔트 슁글',  emoji: '🟫', category: '지붕재',
-    priceMin: 30000, priceMax: 50000, note: '가장 흔함 · 시공 단순 · 30년 보증' },
+    priceMin: 30000, priceMax: 50000, note: '가장 흔함 · 시공 단순 · 제품군별 장기 보증 상품' },
   { key: 'cementTile', name: '시멘트 기와',    emoji: '🟧', category: '지붕재',
     priceMin: 25000, priceMax: 45000, note: '내구성 ↑ · 무거움 · 점토보다 저렴' },
-  { key: 'metalPanel', name: '금속 패널 (강판)', emoji: '⬜', category: '지붕재',
-    priceMin: 60000, priceMax: 120000, note: '경량·내구성 ↑ · 단열 약함' },
+  { key: 'metalPanel', name: '금속 패널 (칼라강판·리얼징크)', emoji: '⬜', category: '지붕재',
+    priceMin: 40000, priceMax: 120000, note: '칼라강판(저가)~리얼징크(고가) · 경량·내구성 ↑ · 단열 약함' },
   { key: 'clayTile',   name: '점토 기와',      emoji: '🟦', category: '지붕재',
-    priceMin: 50000, priceMax: 100000, note: '한옥 전통 · 자연 단열 · 무거움' },
+    priceMin: 60000, priceMax: 130000, note: '한옥 전통 · 자연 단열 · 무거움 · 구조 보강 필요' },
   { key: 'polycarb',   name: '폴리카보네이트', emoji: '⚫', category: '특수',
     priceMin: 30000, priceMax: 70000, note: '투명 · 베란다·테라스용' },
   // 방수재 (평지붕)

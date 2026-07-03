@@ -108,7 +108,7 @@ function fmtKRW(amount: number): string {
   const parts: string[] = []
   if (eok > 0) parts.push(`${eok.toLocaleString('ko-KR')}억`)
   if (man > 0) parts.push(`${man.toLocaleString('ko-KR')}만`)
-  if (won > 0 && eok === 0 && man === 0) parts.push(`${won.toLocaleString('ko-KR')}`)
+  if (won > 0) parts.push(`${won.toLocaleString('ko-KR')}`)
   if (parts.length === 0) return '0원'
   return `${sign}${parts.join(' ')}원`
 }
@@ -208,7 +208,7 @@ export default function WallpaperClient() {
   const [priceTierId, setPriceTierId] = useState<string | null>('normal')
   const [pasteUnit, setPasteUnit] = useState(5000)   // 풀 1kg 가격
   const [toolCost, setToolCost]   = useState(30000)
-  const [ladderCost, setLadderCost] = useState(20000)
+  const [ladderCost, setLadderCost] = useState(0)   // 천장 미선택 시 자동 포함되지 않도록 기본 0
   const [proLaborPerRoll, setProLaborPerRoll] = useState(30000)
 
   /* 복사 */
@@ -267,29 +267,51 @@ export default function WallpaperClient() {
       const wallsToUse = r.pointOnly && r.pointWallId
         ? r.walls.filter(w => w.id === r.pointWallId)
         : r.walls
-      const totalWallArea = wallsToUse.reduce((sum, w) => sum + w.wallW * w.wallH, 0)
-      const openingsArea = wallsToUse.reduce((sum, w) => {
-        return sum + w.openings.reduce((s, o) => s + o.w * o.h, 0)
+      // 벽별로 개구부를 차감 — 한 벽의 큰 개구부가 다른 벽 면적을 깎지 않도록 벽 단위로 max(0,…)
+      const netWallArea = wallsToUse.reduce((sum, w) => {
+        const openSum = w.openings.reduce((s, o) => s + o.w * o.h, 0)
+        return sum + Math.max(0, w.wallW * w.wallH - openSum)
       }, 0)
-      const netWallArea = Math.max(0, totalWallArea - openingsArea)
       const ceilingArea = r.includeCeiling ? r.ceilingW * r.ceilingL : 0
       const totalArea = netWallArea + ceilingArea
       const requiredArea = totalArea * (1 + lossPct / 100)
       const areaPerRoll = wpWidth * rollLength
-      const rollsNeeded = areaPerRoll > 0 ? Math.ceil(requiredArea / areaPerRoll) : 0
+      const areaRolls = areaPerRoll > 0 ? Math.ceil(requiredArea / areaPerRoll) : 0
+      // 장 수(스트립) 기준 — 간편 탭과 일관되게 부족분 방지(둘레가 넓고 천장이 낮을 때 면적 기준만으론 모자랄 수 있음)
+      const maxWallH = Math.max(0.1, ...wallsToUse.map(w => w.wallH))
+      const stripsPerRoll = Math.max(1, Math.floor(rollLength / maxWallH))
+      const totalStrips = wallsToUse.reduce((s, w) => s + Math.ceil(w.wallW / Math.max(0.1, wpWidth)), 0)
+      const stripRolls = stripsPerRoll > 0 ? Math.ceil(totalStrips / stripsPerRoll) : 0
+      const rollsNeeded = Math.max(areaRolls, stripRolls)
       return { id: r.id, name: r.name, totalArea, requiredArea, rollsNeeded }
     })
   }, [rooms, wpWidth, rollLength, lossPct])
 
   const t2Total = useMemo(() => {
-    return t2Rooms.reduce(
-      (acc, r) => ({
-        area: acc.area + r.totalArea,
-        rolls: acc.rolls + r.rollsNeeded,
-      }),
-      { area: 0, rolls: 0 }
-    )
-  }, [t2Rooms])
+    const area = t2Rooms.reduce((s, r) => s + r.totalArea, 0)
+    const roomRollSum = t2Rooms.reduce((s, r) => s + r.rollsNeeded, 0)
+    // 통합 구매 (같은 벽지를 한 번에 구매·자투리 공유) — 전체 면적·장수를 한 번만 올림.
+    // 방별로 올림한 뒤 합산하면 14.4㎡(=7.2㎡ 벽 2개)도 2롤로 과대 계산되므로, 통합 기준을 합계로 사용.
+    let netSum = 0, totalStrips = 0, maxWallH = 0.1
+    for (const r of rooms) {
+      const wallsToUse = r.pointOnly && r.pointWallId
+        ? r.walls.filter(w => w.id === r.pointWallId)
+        : r.walls
+      for (const w of wallsToUse) {
+        const openSum = w.openings.reduce((a, o) => a + o.w * o.h, 0)
+        netSum += Math.max(0, w.wallW * w.wallH - openSum)
+        totalStrips += Math.ceil(w.wallW / Math.max(0.1, wpWidth))
+        if (w.wallH > maxWallH) maxWallH = w.wallH
+      }
+      if (r.includeCeiling) netSum += r.ceilingW * r.ceilingL
+    }
+    const areaPerRoll = wpWidth * rollLength
+    const areaRolls = areaPerRoll > 0 ? Math.ceil(netSum * (1 + lossPct / 100) / areaPerRoll) : 0
+    const stripsPerRoll = Math.max(1, Math.floor(rollLength / maxWallH))
+    const stripRolls = Math.ceil(totalStrips / stripsPerRoll)
+    const rolls = Math.max(areaRolls, stripRolls)
+    return { area, rolls, roomRollSum }
+  }, [t2Rooms, rooms, wpWidth, rollLength, lossPct])
 
   /* ─── 탭 3 견적 ─── */
   /* 마지막 계산 탭이 상세이고 결과가 있으면 상세 결과를, 아니면 간편 결과를 견적에 사용 */
@@ -304,14 +326,24 @@ export default function WallpaperClient() {
   const selfTotal = wpTotalCost + pasteTotalCost + toolCost + ladderCost
   const proLaborTotal = proLaborPerRoll * usedRolls
   const proTotal = wpTotalCost + pasteTotalCost + proLaborTotal
-  const usedPyung = usedArea / PYUNG_TO_M2
-  const selfPerPyung = usedPyung > 0 ? selfTotal / usedPyung : 0
-  const proPerPyung = usedPyung > 0 ? proTotal / usedPyung : 0
+  const usedPyung = usedArea / PYUNG_TO_M2   // 시공(벽) 면적의 평 환산 — 표시용
+  // 바닥(floor) 평당 비용 — 업계 '평당' 견적은 바닥 평수 기준이므로 바닥 면적으로 환산해야 비교 가능.
+  // 간편 계산은 바닥 면적(tab1Dims.area)을 알지만, 상세 탭은 벽만 모델링하므로 바닥 평수를 알 수 없음.
+  const floorPyung = quoteSource === 'simple' ? tab1Dims.area / PYUNG_TO_M2 : 0
+  const selfPerFloorPyung = floorPyung > 0 ? selfTotal / floorPyung : 0
+  const proPerFloorPyung = floorPyung > 0 ? proTotal / floorPyung : 0
 
   function selectPriceTier(id: string) {
     setPriceTierId(id)
     const t = PRICE_TIERS.find(x => x.id === id)
     if (t) setPricePerRollStr(String(t.price))
+  }
+
+  /* 벽지 종류 선택 시 견적 단가를 해당 벽지 기본가로 갱신 (실크 25,000 / 합지 12,000 / PVC 40,000) */
+  function selectWallpaper(id: string) {
+    setWpId(id)
+    const t = WALLPAPER_TYPES.find(x => x.id === id)
+    if (t) { setPricePerRollStr(String(t.defaultPrice)); setPriceTierId(null) }
   }
 
   /* ─── 방 추가/삭제·벽 수정 ─── */
@@ -375,7 +407,7 @@ export default function WallpaperClient() {
     if (tab === 'simple') {
       lines.push(
         '🧱 도배 소요량 계산 결과',
-        `방: ${effectivePyung}평 (가로 ${tab1Dims.width.toFixed(2)}m × 세로 ${tab1Dims.length.toFixed(2)}m × 높이 ${heightM}m)`,
+        `방: ${fmt(tab1Dims.area, 1)}㎡ (약 ${fmt(tab1Dims.area / PYUNG_TO_M2, 1)}평, 가로 ${tab1Dims.width.toFixed(2)}m × 세로 ${tab1Dims.length.toFixed(2)}m × 높이 ${heightM}m)`,
         `벽지: ${wp.name} (폭 ${wpWidth}m × ${rollLength}m)`,
         `시공 면적: ${fmt(t1.netWallArea + t1.ceilingArea)}㎡ (로스율 ${lossPct}% 포함 ${fmt(t1.requiredArea)}㎡)`,
         `필요 롤: ${t1.finalRolls}롤`,
@@ -432,13 +464,13 @@ export default function WallpaperClient() {
             <div className={styles.cardLabel}><span>방 크기</span></div>
 
             <div className={styles.modeToggle}>
-              <button type="button" className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
               <>
-                <select className={styles.pyungSelect} value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
+                <select className={styles.pyungSelect} aria-label="방 크기 (평수 선택)" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
                   if (e.target.value === 'custom') { setPyungCustom(15) }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
@@ -449,6 +481,7 @@ export default function WallpaperClient() {
                   <div style={{ marginTop: 8 }}>
                     <input
                       className={styles.smallInput}
+                      aria-label="평수 직접 입력"
                       type="number" inputMode="decimal"
                       min={1}
                       max={300}
@@ -462,23 +495,27 @@ export default function WallpaperClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} aria-label="방 가로 (m)" type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} aria-label="방 세로 (m)" type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (≈ {fmt(tab1Dims.area / PYUNG_TO_M2, 1)}평)</p>
               </>
             )}
 
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+              ※ 간편 계산은 <strong style={{ color: 'var(--text)' }}>한 공간(방 1개)</strong> 기준입니다 — 정사각형으로 가정하므로 칸막이 벽이 많은 <strong style={{ color: 'var(--text)' }}>아파트 전체</strong>보다 적게 나옵니다. 집 전체는 <strong style={{ color: 'var(--accent)' }}>[상세 계산]</strong> 탭에서 방·거실·주방을 각각 추가해 합산하세요.
+            </p>
+
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
               ))}
             </div>
           </div>
@@ -492,7 +529,7 @@ export default function WallpaperClient() {
             <span className={styles.subLabel}>창문 — 빠른 선택</span>
             <div className={styles.presetGrid}>
               {OPENING_PRESETS.map(p => (
-                <button key={p.id} type="button" className={`${styles.presetBtn} ${winPreset === p.id ? styles.presetActive : ''}`} onClick={() => applyWinPreset(p.id)}>
+                <button key={p.id} type="button" aria-pressed={winPreset === p.id} className={`${styles.presetBtn} ${winPreset === p.id ? styles.presetActive : ''}`} onClick={() => applyWinPreset(p.id)}>
                   {p.label}
                 </button>
               ))}
@@ -501,15 +538,15 @@ export default function WallpaperClient() {
               <div className={styles.openingRow}>
                 <div>
                   <span className={styles.subLabel}>창문 개수</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
+                  <input className={styles.smallInput} aria-label="창문 개수" type="number" inputMode="decimal" min={0} value={winCount} onChange={e => setWinCount(Math.max(0, Number(e.target.value) || 0))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>가로 (m)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="창문 가로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={winW} onChange={e => setWinW(n(e.target.value))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>세로 (m)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="창문 세로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={winH} onChange={e => setWinH(n(e.target.value))} />
                 </div>
               </div>
             )}
@@ -519,15 +556,15 @@ export default function WallpaperClient() {
             <div className={styles.openingRow}>
               <div>
                 <span className={styles.subLabel}>개수</span>
-                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
+                <input className={styles.smallInput} aria-label="문 개수" type="number" inputMode="decimal" min={0} value={doorCount} onChange={e => setDoorCount(Math.max(0, Number(e.target.value) || 0))} />
               </div>
               <div>
                 <span className={styles.subLabel}>가로 (m)</span>
-                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
+                <input className={styles.smallInput} aria-label="문 가로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={doorW} onChange={e => setDoorW(n(e.target.value))} />
               </div>
               <div>
                 <span className={styles.subLabel}>세로 (m)</span>
-                <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
+                <input className={styles.smallInput} aria-label="문 세로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={doorH} onChange={e => setDoorH(n(e.target.value))} />
               </div>
             </div>
           </div>
@@ -547,8 +584,9 @@ export default function WallpaperClient() {
                 <button
                   key={t.id}
                   type="button"
+                  aria-pressed={wpId === t.id}
                   className={`${styles.wallpaperCard} ${styles[t.cls]} ${wpId === t.id ? styles.wpActive : ''}`}
-                  onClick={() => setWpId(t.id)}
+                  onClick={() => selectWallpaper(t.id)}
                 >
                   <p className={styles.wpName}>{t.name}</p>
                   <p className={styles.wpSpec}>{t.spec}</p>
@@ -562,11 +600,11 @@ export default function WallpaperClient() {
               <div className={styles.customWpRow}>
                 <div>
                   <span className={styles.subLabel}>폭 (m)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.01} min={0.1} value={wpCustomW} onChange={e => setWpCustomW(n(e.target.value, 0.1))} />
+                  <input className={styles.smallInput} aria-label="벽지 폭 (m)" type="number" inputMode="decimal" step={0.01} min={0.1} value={wpCustomW} onChange={e => setWpCustomW(n(e.target.value, 0.1))} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>1롤 길이 (m)</span>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1} value={wpCustomLen} onChange={e => setWpCustomLen(n(e.target.value, 1))} />
+                  <input className={styles.smallInput} aria-label="벽지 1롤 길이 (m)" type="number" inputMode="decimal" step={0.1} min={1} value={wpCustomLen} onChange={e => setWpCustomLen(n(e.target.value, 1))} />
                 </div>
               </div>
             )}
@@ -587,6 +625,7 @@ export default function WallpaperClient() {
                 <button
                   key={o.v}
                   type="button"
+                  aria-pressed={lossPct === o.v}
                   className={`${styles.lossBtn} ${styles[o.cls]} ${lossPct === o.v ? styles[o.activeCls] : ''}`}
                   onClick={() => setLossPct(o.v)}
                 >
@@ -595,10 +634,13 @@ export default function WallpaperClient() {
                 </button>
               ))}
             </div>
-            <label className={styles.toggleRow}>
-              <input type="checkbox" checked={includeCeiling} onChange={e => setIncludeCeiling(e.target.checked)} />
-              <span>천장도 도배 (천장 면적 추가)</span>
-            </label>
+            {/* 천장 옵션은 간편 계산에만 적용 — 상세 탭은 방별 '천장도 도배'를 따로 사용 */}
+            {tab === 'simple' && (
+              <label className={styles.toggleRow}>
+                <input type="checkbox" checked={includeCeiling} onChange={e => setIncludeCeiling(e.target.checked)} />
+                <span>천장도 도배 (천장 면적 추가)</span>
+              </label>
+            )}
           </div>
         </>
       )}
@@ -729,6 +771,7 @@ export default function WallpaperClient() {
               <div className={styles.roomHeader}>
                 <input
                   className={styles.roomHeaderInput}
+                  aria-label="방 이름"
                   type="text"
                   value={r.name}
                   onChange={e => updateRoom(r.id, { name: e.target.value || '방' })}
@@ -752,6 +795,7 @@ export default function WallpaperClient() {
                       <button
                         key={w.id}
                         type="button"
+                        aria-pressed={r.pointWallId === w.id}
                         className={`${styles.presetBtn} ${r.pointWallId === w.id ? styles.presetActive : ''}`}
                         onClick={() => updateRoom(r.id, { pointWallId: w.id })}
                       >
@@ -762,6 +806,10 @@ export default function WallpaperClient() {
                 </div>
               )}
 
+              <details open style={{ marginTop: 4 }}>
+                <summary style={{ cursor: 'pointer', fontSize: 13, fontWeight: 700, color: 'var(--text)', padding: '6px 0' }}>
+                  벽 입력 {r.pointOnly ? '(포인트 1면)' : '(4면)'}
+                </summary>
               {r.walls.map(w => {
                 const isHidden = r.pointOnly && r.pointWallId !== w.id
                 if (isHidden) return null
@@ -771,11 +819,11 @@ export default function WallpaperClient() {
                     <div className={styles.wallDimRow}>
                       <div>
                         <span className={styles.subLabel}>가로 (m)</span>
-                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
+                        <input className={styles.smallInput} aria-label={`${w.label} 가로 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallW} onChange={e => updateWall(r.id, w.id, { wallW: n(e.target.value) })} />
                       </div>
                       <div>
                         <span className={styles.subLabel}>높이 (m)</span>
-                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
+                        <input className={styles.smallInput} aria-label={`${w.label} 높이 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={w.wallH} onChange={e => updateWall(r.id, w.id, { wallH: n(e.target.value) })} />
                       </div>
                     </div>
 
@@ -784,13 +832,14 @@ export default function WallpaperClient() {
                       <div key={o.id} className={styles.openingMiniRow}>
                         <button
                           type="button"
+                          aria-label={o.type === 'window' ? '창문 (누르면 문으로 변경)' : '문 (누르면 창문으로 변경)'}
                           className={`${styles.openingTypeBtn} ${o.type === 'window' ? styles.openingWindow : styles.openingDoor}`}
                           onClick={() => updateOpening(r.id, w.id, o.id, { type: o.type === 'window' ? 'door' : 'window' })}
                         >
                           {o.type === 'window' ? '창문' : '문'}
                         </button>
-                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} placeholder="가로" />
-                        <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} placeholder="세로" />
+                        <input className={styles.smallInput} aria-label="개구부 가로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={o.w} onChange={e => updateOpening(r.id, w.id, o.id, { w: n(e.target.value) })} placeholder="가로" />
+                        <input className={styles.smallInput} aria-label="개구부 세로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={o.h} onChange={e => updateOpening(r.id, w.id, o.id, { h: n(e.target.value) })} placeholder="세로" />
                         <button type="button" className={`${styles.iconBtn} ${styles.removeBtn}`} onClick={() => removeOpening(r.id, w.id, o.id)}>✕</button>
                       </div>
                     ))}
@@ -803,6 +852,7 @@ export default function WallpaperClient() {
                   </div>
                 )
               })}
+              </details>
 
               <label className={styles.toggleRow}>
                 <input type="checkbox" checked={r.includeCeiling} onChange={e => updateRoom(r.id, { includeCeiling: e.target.checked })} />
@@ -812,11 +862,11 @@ export default function WallpaperClient() {
                 <div className={styles.wallDimRow} style={{ marginTop: 8 }}>
                   <div>
                     <span className={styles.subLabel}>천장 가로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingW} onChange={e => updateRoom(r.id, { ceilingW: n(e.target.value) })} />
+                    <input className={styles.smallInput} aria-label="천장 가로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingW} onChange={e => updateRoom(r.id, { ceilingW: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>천장 세로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingL} onChange={e => updateRoom(r.id, { ceilingL: n(e.target.value) })} />
+                    <input className={styles.smallInput} aria-label="천장 세로 (m)" type="number" inputMode="decimal" step={0.1} min={0} value={r.ceilingL} onChange={e => updateRoom(r.id, { ceilingL: n(e.target.value) })} />
                   </div>
                 </div>
               )}
@@ -847,7 +897,7 @@ export default function WallpaperClient() {
                     </tr>
                   ))}
                   <tr className={styles.summaryTotal}>
-                    <td>합계</td>
+                    <td>합계 (통합 구매)</td>
                     <td>{fmt(t2Total.area)}㎡</td>
                     <td>{t2Total.rolls}롤</td>
                   </tr>
@@ -855,7 +905,7 @@ export default function WallpaperClient() {
               </table>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-              💡 전체 공사 시 안전 여유로 <strong style={{ color: 'var(--text)' }}>1~2롤 추가 구매</strong>를 권장합니다.
+              💡 합계는 <strong style={{ color: 'var(--text)' }}>같은 벽지를 한 번에 구매(자투리 공유)</strong>하는 기준입니다 — 방별로 따로 구매하면 {t2Total.roomRollSum}롤이 필요합니다. 전체 공사 시 안전 여유로 1~2롤 추가 구매를 권장합니다.
             </p>
           </div>
         </>
@@ -879,6 +929,7 @@ export default function WallpaperClient() {
                 <button
                   key={t.id}
                   type="button"
+                  aria-pressed={priceTierId === t.id}
                   className={`${styles.priceTierBtn} ${priceTierId === t.id ? styles.priceTierActive : ''}`}
                   onClick={() => selectPriceTier(t.id)}
                 >
@@ -890,6 +941,7 @@ export default function WallpaperClient() {
             <div className={styles.inputRow}>
               <input
                 className={styles.smallInput}
+                aria-label="벽지 1롤 가격 (원)"
                 type="text"
                 inputMode="numeric"
                 value={fmt(pricePerRoll, 0)}
@@ -901,28 +953,28 @@ export default function WallpaperClient() {
             <div style={{ height: 12 }} />
             <span className={styles.subLabel}>도배풀 단가 (1kg, 보통 5,000원)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={500} min={0} value={pasteUnit} onChange={e => setPasteUnit(n(e.target.value))} />
+              <input className={styles.smallInput} aria-label="도배풀 1kg 단가 (원)" type="number" inputMode="decimal" step={500} min={0} value={pasteUnit} onChange={e => setPasteUnit(n(e.target.value))} />
               <span className={styles.unit}>원/kg</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>도구비 (벽지칼·롤러·솔, 셀프 시 1회)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={toolCost} onChange={e => setToolCost(n(e.target.value))} />
+              <input className={styles.smallInput} aria-label="도구비 (원)" type="number" inputMode="decimal" step={1000} min={0} value={toolCost} onChange={e => setToolCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
-            <span className={styles.subLabel}>사다리 (천장 도배 시)</span>
+            <span className={styles.subLabel}>사다리 (선택 · 천장·고소 작업용, 필요 없으면 0)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={5000} min={0} value={ladderCost} onChange={e => setLadderCost(n(e.target.value))} />
+              <input className={styles.smallInput} aria-label="사다리 비용 (원, 필요 없으면 0)" type="number" inputMode="decimal" step={5000} min={0} value={ladderCost} onChange={e => setLadderCost(n(e.target.value))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 8 }} />
             <span className={styles.subLabel}>전문 시공 인건비 (1롤당)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={1000} min={0} value={proLaborPerRoll} onChange={e => setProLaborPerRoll(n(e.target.value))} />
+              <input className={styles.smallInput} aria-label="전문 시공 인건비 (1롤당, 원)" type="number" inputMode="decimal" step={1000} min={0} value={proLaborPerRoll} onChange={e => setProLaborPerRoll(n(e.target.value))} />
               <span className={styles.unit}>원/롤</span>
             </div>
           </div>
@@ -981,8 +1033,17 @@ export default function WallpaperClient() {
           </div>
 
           <div className={styles.compareLine}>
-            평당 비용 — 셀프 약 <strong>{fmt(selfPerPyung, 0)}원/평</strong> · 전문 약 <strong>{fmt(proPerPyung, 0)}원/평</strong>
-            <br />한국 평균: 셀프 5,000~10,000원/평 · 전문(실크) 12,000~18,000원/평
+            {floorPyung > 0 ? (
+              <>
+                바닥 평당 비용 — 셀프 약 <strong>{fmt(selfPerFloorPyung, 0)}원/평</strong> · 전문 약 <strong>{fmt(proPerFloorPyung, 0)}원/평</strong> (바닥 {fmt(floorPyung, 1)}평 기준)
+                <br />한국 평균(바닥 평당): 셀프 5,000~10,000원 · 전문(실크) 15,000~25,000원
+              </>
+            ) : (
+              <>
+                현재 견적 — 셀프 <strong>{fmtKRW(selfTotal)}</strong> · 전문 <strong>{fmtKRW(proTotal)}</strong>
+                <br />업계 &apos;바닥 평당&apos; 비교는 [간편 계산] 탭(평수·가로세로)에서 제공됩니다.
+              </>
+            )}
           </div>
         </>
       )}

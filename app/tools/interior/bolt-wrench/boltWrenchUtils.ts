@@ -42,7 +42,7 @@ export interface BoltData {
   allenFlat: number       // 플랫헤드 (ISO 10642 / DIN 7991)
   allenSet: number        // 세트스크류 (DIN 913·914·915·916)
   /* 너트 높이 (mm) */
-  nutStd: number          // 표준 6각 너트 (ISO 4032 / KS B 1012)
+  nutStd: number          // 표준 6각 너트 높이 — DIN 934 계열 일반 유통값 (ISO 4032는 약간 더 높음)
   nutThin: number         // 박형 너트 (ISO 4035)
   /* 평와셔 (KS B 1326 / ISO 7089) */
   washerInner: number     // d (내경)
@@ -71,7 +71,7 @@ export const BOLT_DATA: Record<BoltSize, BoltData> = {
   M8:  { spannerISO: 13,  spannerJIS: 12,  allenSocket: 6,   allenButton: 5,   allenFlat: 5,   allenSet: 4,   nutStd: 6.5,  nutThin: 4.0,  washerInner: 8.4,  washerOuter: 16,   washerThick: 1.6, springInner: 8.2,  springOuter: 14.8, springThick: 2.0, clearanceHole: 9,    pitchCoarse: 1.25, torque4_8: 11,    torque8_8: 24,     torque10_9: 33,    torque12_9: 40    },
   M10: { spannerISO: 17,  spannerJIS: 14,  allenSocket: 8,   allenButton: 6,   allenFlat: 6,   allenSet: 5,   nutStd: 8.0,  nutThin: 5.0,  washerInner: 10.5, washerOuter: 20,   washerThick: 2.0, springInner: 10.2, springOuter: 18.1, springThick: 2.2, clearanceHole: 11,   pitchCoarse: 1.5,  torque4_8: 23,    torque8_8: 47,     torque10_9: 65,    torque12_9: 79    },
   M12: { spannerISO: 19,  spannerJIS: 17,  allenSocket: 10,  allenButton: 8,   allenFlat: 8,   allenSet: 6,   nutStd: 10.0, nutThin: 6.0,  washerInner: 13,   washerOuter: 24,   washerThick: 2.5, springInner: 12.2, springOuter: 21.1, springThick: 2.5, clearanceHole: 13.5, pitchCoarse: 1.75, torque4_8: 39,    torque8_8: 81,     torque10_9: 114,   torque12_9: 136   },
-  M14: { spannerISO: 22,  spannerJIS: 19,  allenSocket: 12,  allenButton: 10,  allenFlat: 10,  allenSet: 6,   nutStd: 11.0, nutThin: 7.0,  washerInner: 15,   washerOuter: 28,   washerThick: 2.5, springInner: 14.2, springOuter: 24.1, springThick: 3.0, clearanceHole: 15.5, pitchCoarse: 2.0,  torque4_8: 62,    torque8_8: 128,    torque10_9: 181,   torque12_9: 217   },
+  M14: { spannerISO: 22,  spannerJIS: 21,  allenSocket: 12,  allenButton: 10,  allenFlat: 10,  allenSet: 6,   nutStd: 11.0, nutThin: 7.0,  washerInner: 15,   washerOuter: 28,   washerThick: 2.5, springInner: 14.2, springOuter: 24.1, springThick: 3.0, clearanceHole: 15.5, pitchCoarse: 2.0,  torque4_8: 62,    torque8_8: 128,    torque10_9: 181,   torque12_9: 217   },
   M16: { spannerISO: 24,  spannerJIS: 24,  allenSocket: 14,  allenButton: 10,  allenFlat: 10,  allenSet: 8,   nutStd: 13.0, nutThin: 8.0,  washerInner: 17,   washerOuter: 30,   washerThick: 3.0, springInner: 16.2, springOuter: 27.4, springThick: 3.5, clearanceHole: 17.5, pitchCoarse: 2.0,  torque4_8: 96,    torque8_8: 197,    torque10_9: 277,   torque12_9: 333   },
   M18: { spannerISO: 27,  spannerJIS: 27,  allenSocket: 14,  allenButton: 12,  allenFlat: 12,  allenSet: 10,  nutStd: 15.0, nutThin: 9.0,  washerInner: 19,   washerOuter: 34,   washerThick: 3.0, springInner: 18.2, springOuter: 31.4, springThick: 4.0, clearanceHole: 20,   pitchCoarse: 2.5,  torque4_8: 132,   torque8_8: 273,    torque10_9: 384,   torque12_9: 461   },
   M20: { spannerISO: 30,  spannerJIS: 30,  allenSocket: 17,  allenButton: 14,  allenFlat: 12,  allenSet: 10,  nutStd: 16.0, nutThin: 10.0, washerInner: 21,   washerOuter: 37,   washerThick: 3.0, springInner: 20.2, springOuter: 33.6, springThick: 4.0, clearanceHole: 22,   pitchCoarse: 2.5,  torque4_8: 187,   torque8_8: 385,    torque10_9: 541,   torque12_9: 649   },

@@ -15,7 +15,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '24평 아파트 도배에 벽지 몇 롤이 필요한가요?',
-                a: '24평(약 79㎡) 아파트 전체 도배에 실크벽지 약 <strong>18~24롤</strong>이 필요합니다. 방 3개 + 거실 + 주방 기준 천장 도배 제외, 10% 로스율 적용 시 평균 20롤 정도가 표준입니다. 부분 도배라면 5~8롤로 충분합니다.',
+                a: '24평(약 79㎡) 아파트 <strong>전체</strong> 도배(방 3개 + 거실 + 주방, 천장 제외, 10% 로스율)에는 실크벽지 약 <strong>18~24롤</strong>(평균 20롤)이 필요합니다. 단, 이는 칸막이 벽이 많은 <strong>집 전체</strong> 기준입니다 — 계산기 [간편 계산]에 24평을 넣으면 <strong>한 공간(정사각형) 기준 약 6롤</strong>만 나오므로, 아파트 전체 소요량은 <strong>[상세 계산]</strong> 탭에서 방·거실·주방을 각각 추가해 합산하세요. 방 1개(7~10평) 부분 도배라면 3~5롤입니다.',
               },
               {
                 q: '벽지 1롤로 몇 ㎡를 시공할 수 있나요?',
@@ -31,7 +31,7 @@ const FAQ_LD = [
               },
               {
                 q: '도배 비용은 평당 얼마인가요?',
-                a: '2024년 기준 한국 평균:<br/>• 셀프 도배: <strong>평당 5,000~10,000원</strong> (재료비만)<br/>• 일반 시공 (합지): <strong>평당 8,000~12,000원</strong><br/>• 일반 시공 (실크): <strong>평당 12,000~18,000원</strong><br/>• 고급 시공 (수입·디자이너): 평당 20,000원 이상<br/>※ 지역·시기·시공사에 따라 차이 있음.',
+                a: '2025년 기준 한국 시장 평균(바닥 평당):<br/>• 셀프 도배: <strong>평당 5,000~10,000원</strong> (재료비만)<br/>• 일반 시공 (합지): <strong>평당 8,000~12,000원</strong> (벽지 포함)<br/>• 일반 시공 (실크): <strong>평당 15,000~25,000원</strong> (벽지 포함)<br/>• 고급 시공 (수입·디자이너): 평당 25,000원 이상<br/>※ 지역·시기·시공사에 따라 차이가 크며, 견적 비교 시 참고용으로만 활용하세요.',
               },
             ]
 
@@ -112,7 +112,7 @@ export default function WallpaperPage() {
             평수별 벽지 롤 수 빠른 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            천장 2.4m, 창문·문 1개씩, 10% 로스율, 실크벽지 기준
+            천장 2.4m, 창문·문 1개씩, 10% 로스율, 실크벽지, <strong style={{ color: 'var(--text)' }}>한 공간(정사각형) 기준</strong> — 계산기 [간편 계산]과 동일 기준입니다. 칸막이 벽이 많은 아파트 전체는 [상세 계산] 탭에서 방별로 합산하세요.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
@@ -125,13 +125,13 @@ export default function WallpaperPage() {
               </thead>
               <tbody>
                 {[
-                  { p: '5평',  a: '16.5㎡', s: '25㎡',  r: '2롤' },
-                  { p: '7평',  a: '23㎡',   s: '32㎡',  r: '3롤' },
-                  { p: '10평', a: '33㎡',   s: '42㎡',  r: '3롤' },
-                  { p: '15평', a: '49.6㎡', s: '58㎡',  r: '4롤' },
-                  { p: '20평', a: '66㎡',   s: '75㎡',  r: '5롤' },
-                  { p: '25평', a: '82.6㎡', s: '92㎡',  r: '6롤' },
-                  { p: '30평', a: '99㎡',   s: '110㎡', r: '7롤' },
+                  { p: '5평',  a: '16.5㎡', s: '35㎡', r: '3롤' },
+                  { p: '7평',  a: '23㎡',   s: '42㎡', r: '4롤' },
+                  { p: '10평', a: '33㎡',   s: '51㎡', r: '4롤' },
+                  { p: '15평', a: '49.6㎡', s: '64㎡', r: '5롤' },
+                  { p: '20평', a: '66㎡',   s: '74㎡', r: '6롤' },
+                  { p: '25평', a: '82.6㎡', s: '83㎡', r: '6롤' },
+                  { p: '30평', a: '99㎡',   s: '92㎡', r: '7롤' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.p}</td>
@@ -236,6 +236,9 @@ export default function WallpaperPage() {
               <li>프라이머·바인더 (벽 상태 안 좋을 때)</li>
               <li>마스킹 테이프 (보호용)</li>
             </ul>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.6 }}>
+              * 1롤당 약 3kg는 일반 가루풀 기준 평균 추정값이며, 벽 상태·접착 농도·시공 방식에 따라 약 ±20% 차이가 날 수 있습니다.
+            </p>
           </div>
         </div>
 

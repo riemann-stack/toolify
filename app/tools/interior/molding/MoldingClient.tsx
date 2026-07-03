@@ -150,15 +150,16 @@ export default function MoldingClient() {
       if (t.key === 'baseboard' && excludeDoors) {
         base -= n(doorCount, 0) * n(doorWidth, 0)
       }
-      // 출입문 프레임은 둘레가 아니라 문틀 둘레 (문 1개당 약 5.4m = 0.9*2 + 2.1*2)
+      // 출입문 프레임(문선): ㄷ자 3면 = 2×높이 + 폭 (바닥 문턱은 몰딩 없음). 문 1개 ≈ 2×2.1 + 0.9 = 5.1m
       if (t.key === 'door') {
         const dw = n(doorWidth, 0)
         const dh = 2.1
-        const perDoor = 2 * (dw + dh)
+        const perDoor = 2 * dh + dw
         base = perDoor * n(doorCount, 1)
       }
       base = Math.max(0, base)
-      const lossM = base * (lossRate / 100) + cornerLossM
+      // 모서리 손실은 방 둘레(천장·걸레받이·띠몰딩)에만 적용 — 문선은 방 모서리 없음
+      const lossM = base * (lossRate / 100) + (t.key === 'door' ? 0 : cornerLossM)
       const total = base + lossM
       const count = effectiveUnitLen > 0 ? Math.ceil(total / effectiveUnitLen) : 0
       const cost = count * effectiveUnitLen * effectivePrice
@@ -326,11 +327,11 @@ export default function MoldingClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>
+      <div className={s.tabs} role="tablist">
+        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tabBtn} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>
           몰딩 길이 계산
         </button>
-        <button className={`${s.tabBtn} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tabBtn} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>
           종류별 가이드
         </button>
       </div>
@@ -344,27 +345,28 @@ export default function MoldingClient() {
               <span className={s.cardLabelHint}>평수 · 가로×세로 · 둘레 직접 입력</span>
             </div>
             <div className={s.modeToggle3}>
-              <button className={`${s.modeBtn} ${s.modePyung}     ${mode === 'pyung'     ? s.modeActive : ''}`} onClick={() => setMode('pyung')}>평수</button>
-              <button className={`${s.modeBtn} ${s.modeMeter}     ${mode === 'meter'     ? s.modeActive : ''}`} onClick={() => setMode('meter')}>가로×세로</button>
-              <button className={`${s.modeBtn} ${s.modePerimeter} ${mode === 'perimeter' ? s.modeActive : ''}`} onClick={() => setMode('perimeter')}>둘레 직접</button>
+              <button type="button" aria-pressed={mode === 'pyung'} className={`${s.modeBtn} ${s.modePyung}     ${mode === 'pyung'     ? s.modeActive : ''}`} onClick={() => setMode('pyung')}>평수</button>
+              <button type="button" aria-pressed={mode === 'meter'} className={`${s.modeBtn} ${s.modeMeter}     ${mode === 'meter'     ? s.modeActive : ''}`} onClick={() => setMode('meter')}>가로×세로</button>
+              <button type="button" aria-pressed={mode === 'perimeter'} className={`${s.modeBtn} ${s.modePerimeter} ${mode === 'perimeter' ? s.modeActive : ''}`} onClick={() => setMode('perimeter')}>둘레 직접</button>
             </div>
 
             {mode === 'pyung' && (
               <>
-                <select className={s.pyungSelect} value={pyungValue} onChange={e => setPyungValue(e.target.value)}>
+                <select className={s.pyungSelect} aria-label="평수 선택" value={pyungValue} onChange={e => setPyungValue(e.target.value)}>
                   {PYUNG_OPTIONS.map(p => (<option key={p} value={p}>{p}평</option>))}
                 </select>
                 <p className={s.areaShow}>≈ {fmt(dims.area, 1)} ㎡ · 정사각형 가정 둘레 ≈ {fmt(dims.perimeter, 1)} m</p>
+                <p className={s.areaShow} style={{ fontSize: 11, color: 'var(--muted)' }}>※ 단일 정사각형 공간 가정. 아파트 전체는 방마다 둘레를 더해 더 길어지니 방별로 <strong>가로×세로</strong>를 쓰거나 실측을 권장합니다.</p>
               </>
             )}
 
             {mode === 'meter' && (
               <>
                 <div className={s.dimRow}>
-                  <input className={s.bigInput} type="number" inputMode="decimal" step="0.1" min="0" value={width}
+                  <input className={s.bigInput} aria-label="가로 (m)" type="number" inputMode="decimal" step="0.1" min="0" value={width}
                     onChange={e => setWidth(e.target.value)} placeholder="가로" />
                   <span className={s.dimSep}>×</span>
-                  <input className={s.bigInput} type="number" inputMode="decimal" step="0.1" min="0" value={depth}
+                  <input className={s.bigInput} aria-label="세로 (m)" type="number" inputMode="decimal" step="0.1" min="0" value={depth}
                     onChange={e => setDepth(e.target.value)} placeholder="세로" />
                 </div>
                 <p className={s.areaShow}>면적 {fmt(dims.area, 2)} ㎡ · 둘레 {fmt(dims.perimeter, 1)} m</p>
@@ -374,7 +376,7 @@ export default function MoldingClient() {
             {mode === 'perimeter' && (
               <>
                 <div className={s.inputRow}>
-                  <input className={s.bigInput} type="number" inputMode="decimal" step="0.1" min="0" value={perimeterDirect}
+                  <input className={s.bigInput} aria-label="둘레 (m)" type="number" inputMode="decimal" step="0.1" min="0" value={perimeterDirect}
                     onChange={e => setPerimeterDirect(e.target.value)} placeholder="둘레 (m)" />
                   <span className={s.unit}>m</span>
                 </div>
@@ -395,6 +397,7 @@ export default function MoldingClient() {
                 return (
                   <button
                     key={t.key}
+                    aria-pressed={active}
                     className={`${s.typeCard} ${t.cls} ${active ? s.tActive : ''}`}
                     onClick={() => toggleType(t.key)}
                     type="button"
@@ -409,26 +412,38 @@ export default function MoldingClient() {
               })}
             </div>
 
-            {/* 문 제외 옵션 (걸레받이 선택 시) */}
+            {/* 문 옵션 (걸레받이 또는 출입문 프레임 선택 시) */}
             {(selectedTypes.has('baseboard') || selectedTypes.has('door')) && (
               <div className={s.doorOption}>
-                <label className={s.doorOptionHeader}>
-                  <input type="checkbox" checked={excludeDoors} onChange={e => setExcludeDoors(e.target.checked)} />
-                  걸레받이 시공 시 문 폭 제외 / 문틀 둘레 산정
-                </label>
-                {excludeDoors && (
+                {/* 걸레받이 문 폭 제외 체크는 걸레받이에만 영향 */}
+                {selectedTypes.has('baseboard') && (
+                  <label className={s.doorOptionHeader}>
+                    <input type="checkbox" checked={excludeDoors} onChange={e => setExcludeDoors(e.target.checked)} />
+                    걸레받이에서 문 폭 제외 (문 있는 곳은 걸레받이가 끊김)
+                  </label>
+                )}
+                {/* 문 개수·폭 입력 — 출입문 프레임 산정 또는 걸레받이 문 폭 제외에 사용 */}
+                {(selectedTypes.has('door') || (selectedTypes.has('baseboard') && excludeDoors)) && (
                   <div className={s.doorOptionInputs}>
                     <div>
                       <span className={s.subLabel}>문 개수</span>
-                      <input className={s.smallInput} type="number" inputMode="numeric" min="0" step="1" value={doorCount}
+                      <input className={s.smallInput} aria-label="문 개수" type="number" inputMode="numeric" min="0" step="1" value={doorCount}
                         onChange={e => setDoorCount(e.target.value)} />
                     </div>
                     <div>
                       <span className={s.subLabel}>문 폭 (m)</span>
-                      <input className={s.smallInput} type="number" inputMode="decimal" min="0" step="0.1" value={doorWidth}
+                      <input className={s.smallInput} aria-label="문 폭 (m)" type="number" inputMode="decimal" min="0" step="0.1" value={doorWidth}
                         onChange={e => setDoorWidth(e.target.value)} />
                     </div>
                   </div>
+                )}
+                {selectedTypes.has('door') && (
+                  <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+                    ※ 출입문 프레임은 위 걸레받이 체크와 <strong style={{ color: 'var(--text)' }}>무관하게</strong> 문 개수·폭으로 항상 산정됩니다 (문 1개 ㄷ자 3면 = 2×높이 2.1m + 폭 ≈ 5.1m).
+                  </p>
+                )}
+                {selectedTypes.has('door') && n(doorCount, 0) <= 0 && (
+                  <p style={{ fontSize: 11, color: 'var(--danger)', marginTop: 6 }}>⚠️ 출입문 프레임을 선택했지만 문 개수가 0입니다. 문 개수를 1개 이상 입력하세요.</p>
                 )}
               </div>
             )}
@@ -444,6 +459,7 @@ export default function MoldingClient() {
               {MATERIALS.map(m => (
                 <button
                   key={m.key}
+                  aria-pressed={material === m.key}
                   className={`${s.matCard} ${m.cls} ${material === m.key ? s.matActive : ''}`}
                   onClick={() => setMaterial(m.key)}
                   type="button"
@@ -457,10 +473,14 @@ export default function MoldingClient() {
             {material === 'custom' && (
               <div className={s.customPriceRow}>
                 <span className={s.subLabel}>m당 가격 (원)</span>
-                <input className={s.smallInput} type="number" inputMode="numeric" min="0" step="100" value={customPrice}
+                <input className={s.smallInput} aria-label="m당 가격 (원)" type="number" inputMode="numeric" min="0" step="100" value={customPrice}
                   onChange={e => setCustomPrice(e.target.value)} />
               </div>
             )}
+            {material === 'custom' && n(customPrice, 0) <= 0 && (
+              <p style={{ fontSize: 11, color: 'var(--danger)', marginTop: 6 }}>⚠️ m당 가격을 입력하세요 (0원이면 비용이 계산되지 않습니다).</p>
+            )}
+            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>※ 단가는 <strong style={{ color: 'var(--text)' }}>1m당</strong> 가격입니다 — 몰딩 1본(2.4m) 가격은 ×2.4. 매장·폭·등급에 따라 편차가 큽니다.</p>
           </div>
 
           {/* ── 4. 단위 길이 ── */}
@@ -473,6 +493,7 @@ export default function MoldingClient() {
               {UNIT_LENGTHS.map(u => (
                 <button
                   key={u.v}
+                  aria-pressed={unitLen === u.v}
                   className={`${s.unitLenBtn} ${unitLen === u.v ? s.unitLenActive : ''}`}
                   onClick={() => setUnitLen(u.v)}
                   type="button"
@@ -485,7 +506,7 @@ export default function MoldingClient() {
             {unitLen === 0 && (
               <div className={s.customLenRow}>
                 <span className={s.subLabel}>몰딩 1개 길이 (m)</span>
-                <input className={s.smallInput} type="number" inputMode="decimal" min="0.1" step="0.1" value={customLen}
+                <input className={s.smallInput} aria-label="몰딩 1개 길이 (m)" type="number" inputMode="decimal" min="0.1" step="0.1" value={customLen}
                   onChange={e => setCustomLen(e.target.value)} />
               </div>
             )}
@@ -501,6 +522,7 @@ export default function MoldingClient() {
               {LOSS_OPTIONS.map(l => (
                 <button
                   key={l.v}
+                  aria-pressed={lossRate === l.v}
                   className={`${s.lossBtn} ${l.cls} ${lossRate === l.v ? s.lossActive : ''}`}
                   onClick={() => setLossRate(l.v)}
                   type="button"
@@ -620,9 +642,9 @@ export default function MoldingClient() {
           {/* 모서리 안내 */}
           {selectedTypes.size > 0 && dims.perimeter > 0 && (
             <div className={s.cornerNote}>
-              📐 모서리 <strong>{cornerCount}개 × {cornerExtraCm}cm = {cornerCount * cornerExtraCm}cm</strong> 자동 추가
-              · 45도 마이터 절단 마감 시 모서리 1개당 약 5~10cm 여유분 권장
-              · 마이터 박스 또는 마이터 톱 필수
+              📐 방 둘레 몰딩(천장·걸레받이·띠몰딩)마다 모서리 <strong>{cornerCount}개 × {cornerExtraCm}cm = {cornerCount * cornerExtraCm}cm</strong> 자동 추가 (출입문 프레임은 제외)
+              · 45도 마이터 절단 마감 시 모서리 1개당 약 5~10cm 여유분 권장 · 마이터 박스 또는 마이터 톱 필수
+              · <strong>직사각형(모서리 4개) 기준</strong>이므로 ㄱ자·복도형 등 모서리가 더 많은 공간은 여유분을 더 잡으세요
             </div>
           )}
 
@@ -694,7 +716,7 @@ export default function MoldingClient() {
                 { n: '천장 몰딩 (Crown Molding)', d: '천장과 벽 경계 마감. 한국에서 가장 흔한 PVC·MDF.', s: '폭 5~10cm · 1,500~5,000원/m' },
                 { n: '걸레받이 (Baseboard)',       d: '벽과 바닥 경계 마감. 청소 흔적·의자 상처 가림.',  s: '높이 6~10cm · 1,000~3,000원/m' },
                 { n: '띠몰딩 (Chair Rail)',         d: '벽 중간 장식 (보통 바닥에서 90cm). 데코 목적.',  s: '폭 3~6cm · 2,000~5,000원/m' },
-                { n: '출입문 프레임 몰딩',          d: '문틀 둘레 마감. 폭 4~7cm 표준.',                  s: '문 1개 ≈ 5.4m · 2,000~6,000원/m' },
+                { n: '출입문 프레임 몰딩',          d: '문틀 ㄷ자 3면(좌·우·상). 폭 4~7cm 표준.',          s: '문 1개 ≈ 5.1m · 2,000~6,000원/m' },
               ].map((g, i) => (
                 <div key={i} className={s.guideRow}>
                   <p className={s.guideRowTitle}>{g.n}</p>

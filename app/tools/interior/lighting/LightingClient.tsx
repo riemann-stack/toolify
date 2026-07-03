@@ -97,6 +97,7 @@ export default function LightingClient() {
   const [inputW, setInputW] = useState(60)
   const [inputLm, setInputLm] = useState(800)
   const [referenceBulb, setReferenceBulb] = useState('incandescent')
+  const [kwhPrice, setKwhPrice] = useState(KRW_PER_KWH)   // 전기 단가 (원/kWh) — 사용자 조정 가능
 
   /* 복사 피드백 */
   const [copied, setCopied] = useState(false)
@@ -128,10 +129,11 @@ export default function LightingClient() {
     if (lightingType === 'mixed')    typeFactor = 1.2
 
     const totalLumens = area * actualLux * ceilingFactor * typeFactor
-    const lpl = Math.max(1, lumenPerLight)
-    const lightCount = Math.max(1, Math.ceil(totalLumens / lpl))
+    const lpl = Math.max(50, lumenPerLight)   // 입력 최소값(50lm)과 일치
+    const lightCount = area > 0 ? Math.max(1, Math.ceil(totalLumens / lpl)) : 0   // 면적 0이면 0개
     const installedLumens = lightCount * lpl
-    const installedLux = area > 0 ? installedLumens / (area * ceilingFactor * typeFactor) : 0
+    const installedLux = area > 0 ? installedLumens / (area * ceilingFactor * typeFactor) : 0   // 보정 후 체감 lux
+    const installedLuxRaw = area > 0 ? installedLumens / area : 0   // 단순 광량 (lm/㎡)
 
     return {
       area,
@@ -142,6 +144,7 @@ export default function LightingClient() {
       lightCount,
       installedLumens,
       installedLux,
+      installedLuxRaw,
     }
   }, [dims.area, space, intensity, heightM, lightingType, lumenPerLight])
 
@@ -150,11 +153,9 @@ export default function LightingClient() {
     const need = calc.totalLumens
     const opts: Array<{ title: string; desc: string; total: number }> = []
 
-    // 옵션 1: 가장 큰 LED 1개로 가장 가깝게
-    const oneCandidate = LED_PRESETS.reduce((best, p) =>
-      Math.abs(p.lm - need) < Math.abs(best.lm - need) ? p : best
-    , LED_PRESETS[0])
-    if (oneCandidate.lm >= need * 0.85) {
+    // 옵션 1: 한 개로 충당 가능한 가장 작은 LED (필요 루멘 이상 — 옵션2·3과 동일 기준)
+    const oneCandidate = LED_PRESETS.find(p => p.lm >= need)
+    if (oneCandidate) {
       opts.push({ title: `${oneCandidate.name} × 1개`,
         desc: `메인 1개로 충당 (${oneCandidate.w}W)`, total: oneCandidate.lm })
     }
@@ -222,10 +223,10 @@ export default function LightingClient() {
     const dailyHours = 5
     const incKwh = (incRow.w * dailyHours * 365) / 1000
     const ledKwh = (ledRow.w * dailyHours * 365) / 1000
-    const incCost = incKwh * KRW_PER_KWH
-    const ledCost = ledKwh * KRW_PER_KWH
-    return { incCost, ledCost, saving: incCost - ledCost, max: Math.max(incCost, ledCost) }
-  }, [convertResult.rows])
+    const incCost = incKwh * kwhPrice
+    const ledCost = ledKwh * kwhPrice
+    return { incCost, ledCost, saving: incCost - ledCost, max: Math.max(incCost, ledCost, 1) }
+  }, [convertResult.rows, kwhPrice])
 
   /* 색온도 마커 위치 (2700~6500 → 0~100%) */
   const colorTempCenter = (space.colorTemp.min + space.colorTemp.max) / 2
@@ -265,7 +266,12 @@ export default function LightingClient() {
   function LayoutSvg() {
     const VBW = 360, VBH = 220, padding = 32
     const w = dims.width, l = dims.length
-    if (w <= 0 || l <= 0) return null
+    if (w <= 0 || l <= 0) {
+      return <p style={{ padding: '24px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: 13, lineHeight: 1.6 }}>유효한 면적을 입력하세요 (가로·세로 &gt; 0)</p>
+    }
+    if (calc.lightCount > 40) {
+      return <p style={{ padding: '24px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: 13, lineHeight: 1.6 }}>조명 <strong style={{ color: 'var(--accent)' }}>{calc.lightCount}개</strong> — 개수가 많아 배치도는 생략합니다. 공간을 나눠 구역별로 분산 설치하세요.</p>
+    }
     const ratio = w / l
     let drawW = VBW - padding * 2
     let drawH = VBH - padding * 2
@@ -341,13 +347,13 @@ export default function LightingClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>공간 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
               <>
-                <select className={styles.pyungSelect} value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
+                <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
                   if (e.target.value === 'custom') { setPyungCustom(15) }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
@@ -356,7 +362,7 @@ export default function LightingClient() {
                 </select>
                 {pyungCustom !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
+                    <input className={styles.smallInput} aria-label="평수 직접 입력" type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
                       onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
                   </div>
@@ -366,23 +372,25 @@ export default function LightingClient() {
             ) : (
               <>
                 <div className={styles.dimRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
+                  <input className={styles.bigInput} aria-label="가로 (m)" type="number" inputMode="decimal" min={0.1} step={0.1} value={widthM} onChange={e => setWidthM(e.target.value)} />
                   <span className={styles.dimSep}>×</span>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
+                  <input className={styles.bigInput} aria-label="세로 (m)" type="number" inputMode="decimal" min={0.1} step={0.1} value={lengthM} onChange={e => setLengthM(e.target.value)} />
                 </div>
-                <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (≈ {fmt(dims.area / PYUNG_TO_M2, 1)}평)</p>
+                {dims.area <= 0
+                  ? <p className={styles.areaShow} style={{ color: 'var(--danger)' }}>⚠️ 가로·세로(m)를 입력하세요</p>
+                  : <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (≈ {fmt(dims.area / PYUNG_TO_M2, 1)}평)</p>}
               </>
             )}
 
             <div style={{ height: 14 }} />
-            <span className={styles.subLabel}>천장 높이</span>
+            <span className={styles.subLabel}>천장 높이 <span style={{ fontWeight: 400, color: 'var(--muted)' }}>(2.4m 기준 · 높을수록 보정↑)</span></span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
               ))}
             </div>
           </div>
@@ -390,11 +398,11 @@ export default function LightingClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}>
               <span>공간 용도</span>
-              <span className={styles.cardLabelHint}>한국 KS 기준 권장 lux</span>
+              <span className={styles.cardLabelHint}>KS A 3011 참고 · 가정용 대표값</span>
             </div>
             <div className={styles.spaceGrid}>
               {SPACE_TYPES.map(s => (
-                <button key={s.id} type="button" className={`${styles.spaceBtn} ${styles[s.cls]} ${spaceId === s.id ? styles.spActive : ''}`} onClick={() => setSpaceId(s.id)}>
+                <button key={s.id} type="button" aria-pressed={spaceId === s.id} className={`${styles.spaceBtn} ${styles[s.cls]} ${spaceId === s.id ? styles.spActive : ''}`} onClick={() => setSpaceId(s.id)}>
                   <span className="icon">{s.icon}</span>
                   {s.name}
                   <small>{s.lux}lx</small>
@@ -403,6 +411,7 @@ export default function LightingClient() {
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
               현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{space.range}</strong>
+              <br /><span style={{ fontSize: 11 }}>※ KS A 3011(조도 기준)을 가정용으로 참고한 대표 중앙값입니다. 실제 권장값은 작업·연령·취향에 따라 달라집니다.</span>
             </p>
           </div>
 
@@ -412,9 +421,9 @@ export default function LightingClient() {
               <span className={styles.cardLabelHint}>권장 범위 내 조정</span>
             </div>
             <div className={styles.intensityGrid}>
-              <button type="button" className={`${styles.intensityBtn} ${styles.intDim} ${intensity === 'dim' ? styles.intActive : ''}`}           onClick={() => setIntensity('dim')}>어둡게<small>×0.7 무드</small></button>
-              <button type="button" className={`${styles.intensityBtn} ${styles.intStandard} ${intensity === 'standard' ? styles.intActive : ''}`} onClick={() => setIntensity('standard')}>표준<small>×1.0 권장</small></button>
-              <button type="button" className={`${styles.intensityBtn} ${styles.intBright} ${intensity === 'bright' ? styles.intActive : ''}`}     onClick={() => setIntensity('bright')}>밝게<small>×1.3 활동</small></button>
+              <button type="button" aria-pressed={intensity === 'dim'} className={`${styles.intensityBtn} ${styles.intDim} ${intensity === 'dim' ? styles.intActive : ''}`}           onClick={() => setIntensity('dim')}>어둡게<small>×0.7 무드</small></button>
+              <button type="button" aria-pressed={intensity === 'standard'} className={`${styles.intensityBtn} ${styles.intStandard} ${intensity === 'standard' ? styles.intActive : ''}`} onClick={() => setIntensity('standard')}>표준<small>×1.0 권장</small></button>
+              <button type="button" aria-pressed={intensity === 'bright'} className={`${styles.intensityBtn} ${styles.intBright} ${intensity === 'bright' ? styles.intActive : ''}`}     onClick={() => setIntensity('bright')}>밝게<small>×1.3 활동</small></button>
             </div>
           </div>
 
@@ -424,13 +433,13 @@ export default function LightingClient() {
               <span className={styles.cardLabelHint}>방식별 보정 계수</span>
             </div>
             <div className={styles.lightTypeGrid}>
-              <button type="button" className={`${styles.lightTypeBtn} ${styles.ltDirect} ${lightingType === 'direct' ? styles.ltActive : ''}`}     onClick={() => setLightingType('direct')}>
+              <button type="button" aria-pressed={lightingType === 'direct'} className={`${styles.lightTypeBtn} ${styles.ltDirect} ${lightingType === 'direct' ? styles.ltActive : ''}`}     onClick={() => setLightingType('direct')}>
                 직접 조명<small>천장등·펜던트 (×1.0)</small>
               </button>
-              <button type="button" className={`${styles.lightTypeBtn} ${styles.ltIndirect} ${lightingType === 'indirect' ? styles.ltActive : ''}`} onClick={() => setLightingType('indirect')}>
+              <button type="button" aria-pressed={lightingType === 'indirect'} className={`${styles.lightTypeBtn} ${styles.ltIndirect} ${lightingType === 'indirect' ? styles.ltActive : ''}`} onClick={() => setLightingType('indirect')}>
                 간접 조명<small>벽 반사·코브 (×1.5)</small>
               </button>
-              <button type="button" className={`${styles.lightTypeBtn} ${styles.ltMixed} ${lightingType === 'mixed' ? styles.ltActive : ''}`}       onClick={() => setLightingType('mixed')}>
+              <button type="button" aria-pressed={lightingType === 'mixed'} className={`${styles.lightTypeBtn} ${styles.ltMixed} ${lightingType === 'mixed' ? styles.ltActive : ''}`}       onClick={() => setLightingType('mixed')}>
                 직접+간접<small>혼합 (×1.2)</small>
               </button>
             </div>
@@ -443,7 +452,7 @@ export default function LightingClient() {
             </div>
             <div className={styles.ledGrid}>
               {LED_PRESETS.map(p => (
-                <button key={p.w} type="button" className={`${styles.ledBtn} ${ledPresetId === p.w ? styles.ledActive : ''}`} onClick={() => selectLed(p.w)}>
+                <button key={p.w} type="button" aria-pressed={ledPresetId === p.w} className={`${styles.ledBtn} ${ledPresetId === p.w ? styles.ledActive : ''}`} onClick={() => selectLed(p.w)}>
                   <span>
                     {p.name}
                     <span className={styles.ledRoom}>{p.room}</span>
@@ -454,7 +463,7 @@ export default function LightingClient() {
             </div>
             <span className={styles.subLabel}>또는 직접 입력 (lm)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" min={50} step={50} value={lumenPerLight} onChange={e => onLumenChange(n(e.target.value, 50))} />
+              <input className={styles.smallInput} aria-label="조명 1개당 루멘 (lm)" type="number" inputMode="decimal" min={50} step={50} value={lumenPerLight} onChange={e => onLumenChange(n(e.target.value, 50))} />
               <span className={styles.unit}>lm</span>
             </div>
           </div>
@@ -479,7 +488,8 @@ export default function LightingClient() {
                 <tr className={styles.totalRow}><td>필요 총 루멘</td><td>{fmt(calc.totalLumens)} lm</td></tr>
                 <tr><td>조명 1개당</td><td>{fmt(lumenPerLight)} lm</td></tr>
                 <tr className={styles.totalRow}><td>필요 조명 개수</td><td>{calc.lightCount}개</td></tr>
-                <tr><td>실제 설치 시 밝기</td><td>{fmt(calc.installedLux)} lux {calc.installedLux >= calc.targetLux ? '✅' : '⚠️'}</td></tr>
+                <tr><td>설치 총 광량 (단순 lm/㎡)</td><td>{fmt(calc.installedLuxRaw)} lux</td></tr>
+                <tr><td>보정 후 체감 밝기 (목표 대비)</td><td>{fmt(calc.installedLux)} lux {calc.lightCount === 0 ? '' : calc.installedLux <= calc.targetLux * 1.4 ? '✅ 적정' : '⚠️ 과다(권장보다 밝음)'}</td></tr>
               </tbody>
             </table>
           </div>
@@ -542,14 +552,14 @@ export default function LightingClient() {
               <span>변환 방향</span>
             </div>
             <div className={styles.convertModeRow}>
-              <button type="button" className={`${styles.convertModeBtn} ${convertMode === 'w-to-lm' ? styles.convertModeActive : ''}`} onClick={() => setConvertMode('w-to-lm')}>W → lm</button>
-              <button type="button" className={`${styles.convertModeBtn} ${convertMode === 'lm-to-w' ? styles.convertModeActive : ''}`} onClick={() => setConvertMode('lm-to-w')}>lm → W</button>
+              <button type="button" aria-pressed={convertMode === 'w-to-lm'} className={`${styles.convertModeBtn} ${convertMode === 'w-to-lm' ? styles.convertModeActive : ''}`} onClick={() => setConvertMode('w-to-lm')}>W → lm</button>
+              <button type="button" aria-pressed={convertMode === 'lm-to-w'} className={`${styles.convertModeBtn} ${convertMode === 'lm-to-w' ? styles.convertModeActive : ''}`} onClick={() => setConvertMode('lm-to-w')}>lm → W</button>
             </div>
 
             <span className={styles.subLabel}>기준 조명 종류</span>
             <div className={styles.bulbGrid}>
               {BULB_EFFICIENCY.map(b => (
-                <button key={b.id} type="button" className={`${styles.bulbBtn} ${styles[b.cls]} ${referenceBulb === b.id ? styles.bulbActive : ''}`} onClick={() => setReferenceBulb(b.id)}>
+                <button key={b.id} type="button" aria-pressed={referenceBulb === b.id} className={`${styles.bulbBtn} ${styles[b.cls]} ${referenceBulb === b.id ? styles.bulbActive : ''}`} onClick={() => setReferenceBulb(b.id)}>
                   {b.name}
                   <small>{b.lmPerW}lm/W</small>
                 </button>
@@ -561,7 +571,7 @@ export default function LightingClient() {
               <>
                 <span className={styles.subLabel}>입력 — 와트 (W)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={1} value={inputW} onChange={e => setInputW(n(e.target.value, 1))} />
+                  <input className={styles.bigInput} aria-label="와트 (W)" type="number" inputMode="decimal" min={1} max={2000} step={1} value={inputW} onChange={e => setInputW(Math.min(2000, n(e.target.value, 1)))} />
                   <span className={styles.unit}>W</span>
                 </div>
               </>
@@ -569,14 +579,14 @@ export default function LightingClient() {
               <>
                 <span className={styles.subLabel}>입력 — 루멘 (lm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} type="number" inputMode="decimal" min={1} step={50} value={inputLm} onChange={e => setInputLm(n(e.target.value, 1))} />
+                  <input className={styles.bigInput} aria-label="루멘 (lm)" type="number" inputMode="decimal" min={1} max={100000} step={50} value={inputLm} onChange={e => setInputLm(Math.min(100000, n(e.target.value, 1)))} />
                   <span className={styles.unit}>lm</span>
                 </div>
               </>
             )}
           </div>
 
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLead}>{convertMode === 'w-to-lm' ? '환산 결과' : '같은 밝기'}</p>
             <p className={styles.heroNum}>{fmt(convertResult.baseLumens)}<span className={styles.heroUnit}>lm</span></p>
             <p className={styles.heroSub}>
@@ -594,7 +604,7 @@ export default function LightingClient() {
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.convertTable}>
                 <thead>
-                  <tr><th scope="col">종류</th><th scope="col">1L당 효율</th><th scope="col">같은 밝기 W</th><th scope="col">수명</th></tr>
+                  <tr><th scope="col">종류</th><th scope="col">효율 (lm/W)</th><th scope="col">같은 밝기 W</th><th scope="col">수명</th></tr>
                 </thead>
                 <tbody>
                   {convertResult.rows.map(r => (
@@ -608,15 +618,23 @@ export default function LightingClient() {
                 </tbody>
               </table>
             </div>
+            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+              ※ 평균 효율값 기준. 백열등은 와트에 따라 10~16 lm/W로 변동하므로(예: 시장 표준 60W ≈ 800lm) 아래 빠른 참조표와 약간 다를 수 있습니다.
+            </p>
           </div>
 
           {/* 연간 전기료 비교 */}
           <div className={styles.savingCard}>
             <div className={styles.cardLabel} style={{ marginBottom: 0, color: '#059669' }}>
               <span>💚 연간 전기료 비교</span>
-              <span className={styles.cardLabelHint}>1일 5시간 사용 · {KRW_PER_KWH}원/kWh</span>
+              <span className={styles.cardLabelHint}>1일 5시간 사용 기준</span>
             </div>
             <p className={styles.savingLead}>같은 밝기를 내는 백열전구 vs LED 1년 전기료</p>
+            <div className={styles.inputRow} style={{ marginBottom: 8 }}>
+              <span className={styles.subLabel} style={{ marginRight: 8 }}>전기 단가</span>
+              <input className={styles.smallInput} aria-label="전기 단가 (원/kWh)" type="number" inputMode="decimal" min={10} max={1000} step={10} value={kwhPrice} onChange={e => setKwhPrice(Math.min(1000, n(e.target.value, 10)))} />
+              <span className={styles.unit}>원/kWh</span>
+            </div>
             <div className={styles.savingBars}>
               <div className={styles.savingBar}>
                 <span className={styles.savingBarName}>백열전구</span>
@@ -637,6 +655,9 @@ export default function LightingClient() {
               LED 절감액 — <strong>{fmt(annualCost.saving)}원/년</strong>
               {annualCost.incCost > 0 && <> (약 <strong>{fmt((annualCost.saving / annualCost.incCost) * 100, 0)}%</strong> 절감)</>}
             </p>
+            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.6 }}>
+              ※ 단순 참고 단가입니다. 실제 가정용 전기요금은 누진제·계절·계약종별에 따라 달라집니다(2024년 기준 주택용 약 110~280원/kWh).
+            </p>
           </div>
         </>
       )}
@@ -647,7 +668,7 @@ export default function LightingClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}>
               <span>📋 공간별 종합 가이드</span>
-              <span className={styles.cardLabelHint}>한국 KS A 3011 기준</span>
+              <span className={styles.cardLabelHint}>KS A 3011 참고 · 가정용 대표값</span>
             </div>
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.guideTable}>

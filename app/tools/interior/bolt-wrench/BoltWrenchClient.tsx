@@ -43,7 +43,7 @@ export default function BoltWrenchClient() {
       if (!raw) return
       const j = JSON.parse(raw)
       if (j.size && BOLT_SIZES.includes(j.size)) setSize(j.size)
-      if (j.boltType) setBoltType(j.boltType)
+      if (j.boltType && BOLT_TYPES.some((t) => t.id === j.boltType)) setBoltType(j.boltType)
       if (j.std === 'iso' || j.std === 'jis') setStd(j.std)
     } catch {}
   }, [])
@@ -95,7 +95,7 @@ export default function BoltWrenchClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="볼트 스패너 도구 모드">
         {([
           { id: 'find',      label: '🔍 사이즈 찾기' },
           { id: 'reverse',   label: '🔄 역검색' },
@@ -104,6 +104,8 @@ export default function BoltWrenchClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -123,11 +125,12 @@ export default function BoltWrenchClient() {
               {BOLT_TYPES.map((t) => (
                 <button
                   key={t.id}
+                  aria-pressed={boltType === t.id}
                   className={`${s.systemBtn} ${boltType === t.id ? s.systemBtnActive : ''}`}
                   onClick={() => setBoltType(t.id)}
                   type="button"
                 >
-                  <span className={s.systemEmoji}>{t.emoji}</span>
+                  <span className={s.systemEmoji} aria-hidden="true">{t.emoji}</span>
                   <span className={s.systemLabel}>{t.label}</span>
                   <span className={s.systemDesc}>{t.desc}</span>
                 </button>
@@ -145,6 +148,7 @@ export default function BoltWrenchClient() {
                 {BOLT_SIZES.map((b) => (
                   <button
                     key={b}
+                    aria-pressed={size === b}
                     className={`${s.pill} ${size === b ? s.pillActive : ''}`}
                     onClick={() => setSize(b)}
                     type="button"
@@ -160,6 +164,7 @@ export default function BoltWrenchClient() {
                 <label className={s.fieldLabel}>규격 (외부 6각만 차이)</label>
                 <div className={s.pillRow}>
                   <button
+                    aria-pressed={std === 'iso'}
                     className={`${s.pill} ${std === 'iso' ? s.pillActive : ''}`}
                     onClick={() => setStd('iso')}
                     type="button"
@@ -167,6 +172,7 @@ export default function BoltWrenchClient() {
                     ISO·DIN·KS (현행)
                   </button>
                   <button
+                    aria-pressed={std === 'jis'}
                     className={`${s.pill} ${std === 'jis' ? s.pillActive : ''}`}
                     onClick={() => setStd('jis')}
                     type="button"
@@ -233,7 +239,7 @@ export default function BoltWrenchClient() {
                   <tr><td>플랫헤드 (DIN 7991)</td><td className={s.cellMono}>{data.allenFlat} mm</td></tr>
                   <tr><td>무두볼트 (DIN 913~916)</td><td className={s.cellMono}>{data.allenSet} mm</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>너트 높이</td></tr>
-                  <tr><td>표준 너트 (KS B 1012)</td><td className={s.cellMono}>{data.nutStd} mm</td></tr>
+                  <tr><td>표준 너트 (DIN 934 계열)</td><td className={s.cellMono}>{data.nutStd} mm</td></tr>
                   <tr><td>박형 너트 (ISO 4035)</td><td className={s.cellMono}>{data.nutThin} mm</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>평와셔 (KS B 1326)</td></tr>
                   <tr><td>내경 d</td><td className={s.cellMono}>⌀ {data.washerInner} mm</td></tr>
@@ -330,6 +336,7 @@ export default function BoltWrenchClient() {
                   </button>
                 ))}
               </div>
+              <p className={s.helpText} style={{ marginTop: 8 }}>지원 범위 4~50mm · 표준 사이즈만 매칭됩니다.</p>
             </div>
 
             <div className={s.convertResult}>
@@ -381,6 +388,7 @@ export default function BoltWrenchClient() {
                   </button>
                 ))}
               </div>
+              <p className={s.helpText} style={{ marginTop: 8 }}>지원 범위 1~24mm · 표준 사이즈만 매칭됩니다.</p>
             </div>
 
             <div className={s.convertResult}>
@@ -414,6 +422,7 @@ export default function BoltWrenchClient() {
                 {INCH_SPANNERS.map((i) => (
                   <button
                     key={i.fraction}
+                    aria-pressed={revInch === i.fraction.replace('″', '')}
                     className={`${s.pill} ${revInch === i.fraction.replace('″', '') ? s.pillActive : ''}`}
                     onClick={() => setRevInch(i.fraction.replace('″', ''))}
                     type="button"
@@ -477,11 +486,12 @@ export default function BoltWrenchClient() {
               {NUT_TYPES.map((n) => (
                 <button
                   key={n.id}
+                  aria-pressed={nutTypeId === n.id}
                   className={`${s.systemBtn} ${nutTypeId === n.id ? s.systemBtnActive : ''}`}
                   onClick={() => setNutTypeId(n.id)}
                   type="button"
                 >
-                  <span className={s.systemEmoji}>{n.emoji}</span>
+                  <span className={s.systemEmoji} aria-hidden="true">{n.emoji}</span>
                   <span className={s.systemLabel}>{n.label}</span>
                   <span className={s.systemDesc}>{n.desc}</span>
                 </button>
@@ -505,7 +515,10 @@ export default function BoltWrenchClient() {
             </div>
 
             {/* 너트 사이즈 표 (표준 6각 너트 기준) */}
-            <div className={s.tableScroll} style={{ marginTop: 14 }}>
+            <p className={s.helpText} style={{ marginTop: 14 }}>
+              📋 아래 표는 <strong>표준 6각 너트(DIN 934 계열)</strong> 기준 공통 치수입니다 — 위에서 고른 너트 종류와 무관합니다.
+            </p>
+            <div className={s.tableScroll} style={{ marginTop: 8 }}>
               <table className={s.compactTable}>
                 <thead>
                   <tr>
@@ -536,11 +549,12 @@ export default function BoltWrenchClient() {
               {WASHER_TYPES.map((w) => (
                 <button
                   key={w.id}
+                  aria-pressed={washerTypeId === w.id}
                   className={`${s.systemBtn} ${washerTypeId === w.id ? s.systemBtnActive : ''}`}
                   onClick={() => setWasherTypeId(w.id)}
                   type="button"
                 >
-                  <span className={s.systemEmoji}>{w.emoji}</span>
+                  <span className={s.systemEmoji} aria-hidden="true">{w.emoji}</span>
                   <span className={s.systemLabel}>{w.label}</span>
                   <span className={s.systemDesc}>{w.desc}</span>
                 </button>
@@ -555,7 +569,10 @@ export default function BoltWrenchClient() {
             </div>
 
             {/* 와셔 사이즈 표 */}
-            <div className={s.tableScroll} style={{ marginTop: 14 }}>
+            <p className={s.helpText} style={{ marginTop: 14 }}>
+              📋 아래 표는 <strong>평와셔·스프링와셔</strong> 기준 치수입니다 — 위에서 고른 와셔 종류와 무관합니다.
+            </p>
+            <div className={s.tableScroll} style={{ marginTop: 8 }}>
               <table className={s.compactTable}>
                 <thead>
                   <tr>
@@ -624,11 +641,12 @@ export default function BoltWrenchClient() {
               {TOOL_KITS.map((k) => (
                 <button
                   key={k.id}
+                  aria-pressed={kitId === k.id}
                   className={`${s.systemBtn} ${kitId === k.id ? s.systemBtnActive : ''}`}
                   onClick={() => setKitId(k.id)}
                   type="button"
                 >
-                  <span className={s.systemEmoji}>{k.emoji}</span>
+                  <span className={s.systemEmoji} aria-hidden="true">{k.emoji}</span>
                   <span className={s.systemLabel}>{k.label}</span>
                   <span className={s.systemDesc}>{k.desc}</span>
                 </button>
@@ -636,7 +654,7 @@ export default function BoltWrenchClient() {
             </div>
           </div>
 
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{kit.emoji} {kit.label} 추천 구성</p>
             <p className={s.heroValue}><strong>예산 {kit.budget}</strong></p>
             <p className={s.heroSub}>{kit.desc}</p>

@@ -19,7 +19,7 @@ const FAQ_LD = [
               },
               {
                 q: '에어컨 BTU와 평형은 어떻게 환산하나요?',
-                a: '한국 <strong>1평형 ≈ 1,980 BTU/h</strong>입니다. 해외 직구나 비즈니스용 에어컨은 BTU로 표시되므로 변환이 필요합니다. 예를 들어 18,000 BTU = 9평형, 24,000 BTU = 12평형 정도입니다. kW로는 1평형 ≈ 0.58 kW이며 한국·일본은 평형, 미국·동남아는 BTU, 유럽은 kW를 주로 사용합니다.',
+                a: '한국 <strong>1평형 ≈ 1,389 BTU/h ≈ 0.41 kW</strong>입니다(KS C 9306 부속서 D, 정격 냉방능력 약 123 W/㎡ 기준). 해외 직구나 비즈니스용 에어컨은 BTU로 표시되므로 변환이 필요합니다. 예를 들어 12,000 BTU ≈ 9평형, 18,000 BTU ≈ 13평형, 24,000 BTU ≈ 17평형 정도입니다. 여기서 평형은 <strong>냉방면적(공간 크기)</strong>을 뜻하며, 한국·일본은 평형, 미국·동남아는 BTU, 유럽은 kW를 주로 사용합니다.',
               },
               {
                 q: '평형이 너무 크면 더 시원할까요?',
@@ -71,16 +71,16 @@ export default function AcCapacityPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div><span style={{ color: 'var(--muted)' }}>냉방 부하 (W)</span> = 면적(㎡) × 140 × 보정 계수</div>
-            <div><span style={{ color: 'var(--muted)' }}>추천 평형</span> = 냉방 부하 ÷ 580W (1평형당 능력)</div>
-            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 한국 1평형 ≈ 580W ≈ 1,980 BTU/h ≈ 0.58 kW</div>
+            <div><span style={{ color: 'var(--muted)' }}>냉방 부하 (W)</span> = 면적(㎡) × 123 × 보정 계수 + 인원 × 100W + 가전 부하</div>
+            <div><span style={{ color: 'var(--muted)' }}>추천 평형</span> = 냉방 부하 ÷ 407W (1평형 정격 냉방능력)</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 한국 1평형(냉방면적) ≈ 407W ≈ 1,389 BTU/h ≈ 0.41 kW — KS C 9306 부속서 D(123 W/㎡)</div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 거실 16.5㎡, 남향 8층, 일반 단열, 4명 + TV·PC<br />
-            • 기본: 16.5 × 140 = <strong>2,310W</strong><br />
+            • 기본: 16.5 × 123 = <strong>2,030W</strong><br />
             • 보정: 거실(1.05) × 남향(1.15) × 중층(1.05) = <strong>1.27배</strong><br />
-            • 최종: 2,930W + 인원 400W + 가전 200W = <strong style={{ color: 'var(--accent)' }}>3,530W</strong><br />
-            • 평형: 3,530 ÷ 580 ≈ 6.1 → 한국 시판 매칭 <strong style={{ color: 'var(--accent)' }}>9평형</strong>
+            • 최종: 2,574W + 인원 400W + 가전 200W = <strong style={{ color: 'var(--accent)' }}>3,174W</strong><br />
+            • 평형: 3,174 ÷ 407 ≈ 7.8 → 한국 시판 매칭 <strong style={{ color: 'var(--accent)' }}>9평형</strong>
           </div>
         </div>
 
@@ -100,13 +100,13 @@ export default function AcCapacityPage() {
               </thead>
               <tbody>
                 {[
-                  { p: '6평형',  k: '3.5 kW',  u: '작은방 (3~4평)' },
-                  { p: '9평형',  k: '5.2 kW',  u: '일반 침실 (5~7평)' },
-                  { p: '11평형', k: '6.4 kW',  u: '중간 방·작은 거실' },
-                  { p: '13평형', k: '7.5 kW',  u: '일반 거실' },
-                  { p: '15평형', k: '8.7 kW',  u: '큰 거실' },
-                  { p: '18평형', k: '10.4 kW', u: '큰 거실·매장' },
-                  { p: '22~36평형', k: '12.8~20.9 kW', u: '매장·상가·사무실' },
+                  { p: '6평형',  k: '2.4 kW',  u: '작은방 (3~4평)' },
+                  { p: '9평형',  k: '3.7 kW',  u: '일반 침실 (5~7평)' },
+                  { p: '11평형', k: '4.5 kW',  u: '중간 방·작은 거실' },
+                  { p: '13평형', k: '5.3 kW',  u: '일반 거실' },
+                  { p: '15평형', k: '6.1 kW',  u: '큰 거실' },
+                  { p: '18평형', k: '7.3 kW',  u: '큰 거실·매장' },
+                  { p: '22~36평형', k: '9.0~14.7 kW', u: '매장·상가·사무실' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
@@ -180,13 +180,13 @@ export default function AcCapacityPage() {
             color: 'var(--text)',
             lineHeight: 1.95,
           }}>
-            <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 10 }}>1평형 ≈ 580W ≈ 1,980 BTU/h ≈ 0.58 kW</p>
+            <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 10 }}>1평형 ≈ 407W ≈ 1,389 BTU/h ≈ 0.41 kW</p>
             <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 10 }}>해외 직구 시 BTU 표기 → 한국 평형 변환:</p>
             <ul style={{ paddingLeft: 22, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.9 }}>
-              <li>12,000 BTU/h = 약 <strong style={{ color: 'var(--accent)' }}>6평형</strong></li>
-              <li>18,000 BTU/h = 약 <strong style={{ color: 'var(--accent)' }}>9평형</strong></li>
-              <li>24,000 BTU/h = 약 <strong style={{ color: 'var(--accent)' }}>12평형</strong></li>
-              <li>36,000 BTU/h = 약 <strong style={{ color: 'var(--accent)' }}>18평형</strong></li>
+              <li>12,000 BTU/h = 약 <strong style={{ color: 'var(--accent)' }}>9평형</strong></li>
+              <li>18,000 BTU/h = 약 <strong style={{ color: 'var(--accent)' }}>13평형</strong></li>
+              <li>24,000 BTU/h = 약 <strong style={{ color: 'var(--accent)' }}>17평형</strong></li>
+              <li>36,000 BTU/h = 약 <strong style={{ color: 'var(--accent)' }}>26평형</strong></li>
             </ul>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
               ※ <strong style={{ color: 'var(--text)' }}>BTU(British Thermal Unit)</strong>는 미국·동남아 표기, 한국·일본은 평형, 유럽은 kW 표기

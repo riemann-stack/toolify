@@ -15,6 +15,7 @@ import {
 type Tab = 'convert' | 'compare' | 'fitting' | 'flow'
 
 const STORAGE_KEY = 'youtil_pipe_v1'
+const VEL_MAX = 30   // 유속 상한 (m/s) — 비현실적 입력 클램프
 
 export default function PipeClient() {
   const [tab, setTab] = useState<Tab>('convert')
@@ -26,6 +27,7 @@ export default function PipeClient() {
   const [velocity, setVelocity] = useState('1.5')
   const [flowMaterial, setFlowMaterial] = useState<Material>('steel')
   const [flowSize, setFlowSize] = useState<PipeSize>('20A')
+  const [flowGrade, setFlowGrade] = useState<string>('sgp_white')
 
   /* 탭 3 (부속) */
   const [fitMaterial, setFitMaterial] = useState<Material>('steel')
@@ -37,8 +39,8 @@ export default function PipeClient() {
       if (!raw) return
       const j = JSON.parse(raw)
       if (j.size && PIPE_SIZES.includes(j.size)) setSize(j.size)
-      if (j.material) setMaterial(j.material)
-      if (j.grade) setGrade(j.grade)
+      if (j.material && MATERIALS.some((m) => m.id === j.material)) setMaterial(j.material)
+      if (typeof j.grade === 'string') setGrade(j.grade)
     } catch {}
   }, [])
   useEffect(() => {
@@ -56,6 +58,17 @@ export default function PipeClient() {
     }
   }, [material, grade])
 
+  /* 유량 탭도 동일하게 grade 리셋 */
+  useEffect(() => {
+    const m = getMaterial(flowMaterial)
+    if (m.grades && m.grades.length > 0) {
+      const has = m.grades.some((g) => g.id === flowGrade)
+      if (!has) setFlowGrade(m.grades[0].id)
+    } else {
+      setFlowGrade('')
+    }
+  }, [flowMaterial, flowGrade])
+
   /* 계산 */
   const meta = getSizeMeta(size)
   const matMeta = getMaterial(material)
@@ -64,11 +77,14 @@ export default function PipeClient() {
   const fittings = FITTINGS[fitMaterial]
 
   /* 유량 */
-  const flowDim = getDim(flowMaterial, flowSize)
+  const flowMatMeta = getMaterial(flowMaterial)
+  const flowDim = getDim(flowMaterial, flowSize, flowGrade)
+  const rawV = parseFloat(velocity)
+  const velExceeded = !isNaN(rawV) && rawV > VEL_MAX
+  const effV = isNaN(rawV) ? NaN : Math.min(Math.max(rawV, 0), VEL_MAX)
   const flow = useMemo(() => {
-    const v = parseFloat(velocity)
-    return isNaN(v) || v <= 0 ? null : calcFlow(flowDim.id, v)
-  }, [velocity, flowDim.id])
+    return isNaN(effV) || effV <= 0 ? null : calcFlow(flowDim.id, effV)
+  }, [effV, flowDim.id])
 
   /* 6재질 비교 데이터 (탭 2) */
   const compareData = MATERIALS.map((m) => ({
@@ -76,6 +92,8 @@ export default function PipeClient() {
     dim: getDim(m.id, size),
   }))
   const maxOd = Math.max(...compareData.map((c) => c.dim.od))
+  const minOd = Math.min(...compareData.map((c) => c.dim.od))
+  const odSpread = maxOd - minOd
 
   return (
     <div className={s.wrap}>
@@ -92,7 +110,7 @@ export default function PipeClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="배관 규격 도구 모드">
         {([
           { id: 'convert',  label: '🔁 호칭 변환' },
           { id: 'compare',  label: '⚖️ 재질 비교' },
@@ -101,6 +119,8 @@ export default function PipeClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -120,6 +140,7 @@ export default function PipeClient() {
               {MATERIALS.map((m) => (
                 <button
                   key={m.id}
+                  aria-pressed={material === m.id}
                   className={`${s.systemBtn} ${material === m.id ? s.systemBtnActive : ''}`}
                   onClick={() => setMaterial(m.id)}
                   type="button"
@@ -143,6 +164,7 @@ export default function PipeClient() {
                   return (
                     <button
                       key={p}
+                      aria-pressed={size === p}
                       className={`${s.pill} ${size === p ? s.pillActive : ''}`}
                       onClick={() => setSize(p)}
                       type="button"
@@ -162,6 +184,7 @@ export default function PipeClient() {
                   {matMeta.grades.map((g) => (
                     <button
                       key={g.id}
+                      aria-pressed={grade === g.id}
                       className={`${s.pill} ${grade === g.id ? s.pillActive : ''}`}
                       onClick={() => setGrade(g.id)}
                       type="button"
@@ -228,7 +251,8 @@ export default function PipeClient() {
             <strong>⚠️ 주의 — 호칭 ≠ 외경</strong>
             <p>
               {size}는 <strong style={{ color: '#D97706' }}>모든 재질에서 같은 호칭</strong>이지만,
-              실제 외경은 재질별로 <strong>최대 5~6mm까지 차이</strong>가 납니다.
+              실제 외경은 재질별로 <strong>{size} 기준 최대 {fmt(odSpread, 1)}mm까지 차이</strong>가 납니다
+              (⌀{fmt(minOd, 1)}~{fmt(maxOd, 1)}mm).
               <br />이종 재질 연결에는 반드시 <strong>이종 어댑터·이종조인</strong>이 필요합니다.
               <br />→ 재질 비교 탭에서 차이를 확인해 보세요.
             </p>
@@ -245,6 +269,7 @@ export default function PipeClient() {
               {PIPE_SIZES.map((p) => (
                 <button
                   key={p}
+                  aria-pressed={size === p}
                   className={`${s.pill} ${size === p ? s.pillActive : ''}`}
                   onClick={() => setSize(p)}
                   type="button"
@@ -255,9 +280,9 @@ export default function PipeClient() {
             </div>
           </div>
 
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>📏 {size} ({meta.inch} · {meta.dn}) 재질별 외경 비교</p>
-            <p className={s.heroValue}><strong>최대 {fmt(maxOd - Math.min(...compareData.map((c) => c.dim.od)), 2)} mm 차이</strong></p>
+            <p className={s.heroValue}><strong>최대 {fmt(odSpread, 2)} mm 차이</strong></p>
             <p className={s.heroSub}>같은 호칭이지만 재질·표준에 따라 외경 다름</p>
           </div>
 
@@ -288,6 +313,7 @@ export default function PipeClient() {
 
           <div className={s.card}>
             <span className={s.cardLabel}>{size} · 6재질 상세 비교표</span>
+            <p className={s.scrollHint} aria-hidden="true">← 좌우로 스크롤 →</p>
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
                 <thead>
@@ -333,6 +359,7 @@ export default function PipeClient() {
               {MATERIALS.map((m) => (
                 <button
                   key={m.id}
+                  aria-pressed={fitMaterial === m.id}
                   className={`${s.systemBtn} ${fitMaterial === m.id ? s.systemBtnActive : ''}`}
                   onClick={() => setFitMaterial(m.id)}
                   type="button"
@@ -344,7 +371,7 @@ export default function PipeClient() {
             </div>
           </div>
 
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>{fitMatMeta.label} 연결법</p>
             <p className={s.heroValue}><strong>{fittings.length}가지</strong> 표준 시공법</p>
             <p className={s.heroSub}>{fitMatMeta.desc}</p>
@@ -413,6 +440,24 @@ export default function PipeClient() {
               </div>
             </div>
 
+            {flowMatMeta.grades && flowMatMeta.grades.length > 0 && (
+              <div className={s.field}>
+                <label className={s.fieldLabel} htmlFor="pipe-f4">등급 / 두께 종류</label>
+                <select id="pipe-f4"
+                  className={s.input}
+                  value={flowGrade}
+                  onChange={(e) => setFlowGrade(e.target.value)}
+                >
+                  {flowMatMeta.grades.map((g) => (
+                    <option key={g.id} value={g.id}>{g.label}</option>
+                  ))}
+                </select>
+                <p className={s.helpText} style={{ marginTop: 4 }}>
+                  등급에 따라 내경(ID)이 달라져 유량도 바뀝니다.
+                </p>
+              </div>
+            )}
+
             <div className={s.field}>
               <label className={s.fieldLabel} htmlFor="pipe-f3">유속 (m/s)</label>
               <input id="pipe-f3"
@@ -428,6 +473,7 @@ export default function PipeClient() {
                 {[1.0, 1.5, 2.0, 2.5, 3.0].map((v) => (
                   <button
                     key={v}
+                    aria-label={`유속 ${v} m/s 설정`}
                     className={s.pill}
                     onClick={() => setVelocity(String(v))}
                     type="button"
@@ -441,11 +487,16 @@ export default function PipeClient() {
             <div className={s.helpText} style={{ marginTop: 4 }}>
               내경 자동 계산: <strong>⌀ {fmt(flowDim.id, 2)} mm</strong>
             </div>
+            {velExceeded && (
+              <p className={s.helpText} style={{ marginTop: 4, color: 'var(--warning)' }}>
+                ⚠️ 유속은 최대 {VEL_MAX} m/s까지만 계산합니다 (배관 실무 상한). 입력값 {fmt(rawV, 0)} → {VEL_MAX} m/s로 제한해 표시합니다.
+              </p>
+            )}
           </div>
 
           {flow && (
-            <div className={s.hero}>
-              <p className={s.heroLabel}>{flowMaterial} {flowSize} · 유속 {velocity} m/s</p>
+            <div className={s.hero} role="status">
+              <p className={s.heroLabel}>{flowMatMeta.label} {flowSize}{flowGrade && flowMatMeta.grades ? ` (${flowMatMeta.grades.find((g) => g.id === flowGrade)?.label ?? ''})` : ''} · 유속 {velExceeded ? VEL_MAX : velocity} m/s</p>
               <p className={s.heroValue}><strong>{fmt(flow.lpm, 1)} L/min</strong></p>
               <p className={s.heroSub}>
                 = {fmt(flow.m3h, 2)} m³/h · 단면적 {fmt(Math.PI * Math.pow(flowDim.id / 2, 2), 0)} mm²
@@ -455,6 +506,7 @@ export default function PipeClient() {
 
           <div className={s.card}>
             <span className={s.cardLabel}>용도별 권장 유속</span>
+            <p className={s.scrollHint} aria-hidden="true">← 좌우로 스크롤 →</p>
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
                 <thead>
@@ -468,7 +520,7 @@ export default function PipeClient() {
                     <tr key={g.use}>
                       <td>{g.emoji} {g.use}</td>
                       <td className={s.cellMono}>
-                        {g.min === 0 ? '~' : g.min} ~ {g.max}
+                        {g.min === 0 ? `최대 ${g.max}` : `${g.min} ~ ${g.max}`}
                       </td>
                     </tr>
                   ))}
@@ -508,10 +560,10 @@ export default function PipeClient() {
               </ul>
             </div>
             <div className={s.gradeBox}>
-              <p className={s.gradeTitle}>스테인리스</p>
+              <p className={s.gradeTitle}>스테인리스 (STS)</p>
               <ul>
-                <li><strong>Su (KS D 3595)</strong> — 위생관, 박벽, 음용수</li>
-                <li><strong>STS (KS D 3596)</strong> — 일반관, 압력</li>
+                <li><strong>위생관(Su) 박벽</strong> — 음용수·식품. 프레스·메탈터치 시공</li>
+                <li><strong>일반관(KS D 3576)</strong> — 압력 배관. 외경·두께는 시스템·제조사 도면 우선</li>
               </ul>
             </div>
             <p className={s.helpText}>

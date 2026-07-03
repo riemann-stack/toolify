@@ -14,8 +14,8 @@ export const metadata = buildMetadata({
 
 const FAQ_LD = [
               {
-                q: '24평 아파트 천장 몰딩에 몇 개가 필요한가요?',
-                a: '24평 아파트 거실·방을 합친 둘레는 보통 약 28~32m 정도입니다. 천장 몰딩만 시공할 경우 둘레 + 10% 로스 + 모서리 여유 ≈ <strong>약 36m</strong>가 필요하며, <strong>2.4m 몰딩 15개</strong> 또는 <strong>3.6m 몰딩 10개</strong> 정도가 적정합니다. 걸레받이까지 함께 시공하면 약 두 배가 필요합니다.',
+                q: '24평 공간 천장 몰딩에 몇 개가 필요한가요?',
+                a: '본 계산기는 평수를 <strong>단일 정사각형 공간</strong>으로 가정합니다. 24평이면 둘레 ≈ √면적×4 = <strong>약 35.6m</strong>이고, 천장 몰딩만 시공할 경우 +10% 로스 + 모서리 여유 ≈ <strong>약 39m</strong>로 <strong>2.4m 몰딩 17개</strong> 또는 <strong>3.6m 몰딩 11개</strong> 정도입니다. 걸레받이까지 함께 시공하면 약 두 배입니다. 다만 실제 아파트는 방이 여러 개로 나뉘어 방마다 둘레가 더해지므로 길이가 더 늘어납니다 — 방별로 가로×세로를 입력하거나 실측을 권장합니다.',
               },
               {
                 q: '걸레받이는 문 폭을 빼야 하나요?',
@@ -31,7 +31,7 @@ const FAQ_LD = [
               },
               {
                 q: '몰딩 가격은 보통 얼마인가요?',
-                a: '한국 시판 기준으로 <strong>스티렌 1,000원/m, PVC 1,500원/m, MDF 2,500원/m, 석고 4,000원/m, 우드 5,000~10,000원/m</strong> 정도입니다. 24평 천장+걸레받이를 MDF로 시공하면 <strong>자재비 약 18~20만원</strong>, 전문 시공비는 m당 5,000원 추가로 약 <strong>총 50만원 내외</strong>가 일반적입니다.',
+                a: '한국 시판 기준으로 <strong>스티렌 1,000원/m, PVC 1,500원/m, MDF 2,500원/m, 석고 4,000원/m, 우드 5,000~10,000원/m</strong> 정도입니다(1m당, 1본 2.4m이면 ×2.4 · 매장·등급별 편차 큼). 24평(단일 정사각형 공간 가정) 천장+걸레받이를 MDF로 시공하면 <strong>자재비 약 20만원</strong>, 전문 시공비는 m당 5,000원 추가로 <strong>약 59만원</strong> 정도입니다.',
               },
             ]
 
@@ -66,7 +66,7 @@ export default function MoldingPage() {
               { t: '천장 몰딩 (Crown)',   c: 'var(--accent)', d: '천장과 벽 경계 마감. 한국에서 가장 흔한 PVC·MDF.', s: '폭 5~10cm · 1,500~5,000원/m' },
               { t: '걸레받이 (Baseboard)', c: '#EA580C',       d: '벽-바닥 경계. 청소 흔적·의자 상처 가림.',           s: '높이 6~10cm · 1,000~3,000원/m' },
               { t: '띠몰딩 (Chair Rail)',  c: '#9B59B6',       d: '벽 중간 장식 (보통 바닥 90cm). 데코 목적.',         s: '폭 3~6cm · 2,000~5,000원/m' },
-              { t: '출입문 프레임',         c: '#0891B2',       d: '문틀 둘레 마감. 폭 4~7cm 표준.',                    s: '문 1개 ≈ 5.4m · 2,000~6,000원/m' },
+              { t: '출입문 프레임',         c: '#0891B2',       d: '문틀 ㄷ자 3면(좌·우·상) 마감. 폭 4~7cm 표준.',       s: '문 1개 ≈ 5.1m · 2,000~6,000원/m' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
@@ -98,10 +98,10 @@ export default function MoldingPage() {
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 길이가 길수록 자투리 손실이 적지만, 운반·취급 난이도 ↑</div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 24평 아파트, 천장 몰딩 + 걸레받이<br />
-            • 둘레 ≈ 32m × 2(천장·걸레받이) = 64m<br />
-            • +10% 로스율 + 모서리 8개×5cm = 약 71m<br />
-            • <strong style={{ color: 'var(--accent)' }}>2.4m 30개</strong> 또는 <strong style={{ color: 'var(--accent)' }}>3.6m 20개</strong>
+            📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 24평 단일 정사각형 공간, 천장 몰딩 + 걸레받이<br />
+            • 둘레 ≈ 35.6m (√면적×4) × 2(천장·걸레받이) ≈ 71m<br />
+            • +10% 로스율 + 모서리 8개×5cm = 약 78m<br />
+            • <strong style={{ color: 'var(--accent)' }}>2.4m 34개</strong> 또는 <strong style={{ color: 'var(--accent)' }}>3.6m 22개</strong>
           </div>
         </div>
 
@@ -187,27 +187,20 @@ export default function MoldingPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { p: '5평',  peri: 12.9 },
-                  { p: '7평',  peri: 15.2 },
-                  { p: '10평', peri: 18.2 },
-                  { p: '15평', peri: 22.3 },
-                  { p: '20평', peri: 25.7 },
-                  { p: '24평', peri: 28.2 },
-                  { p: '30평', peri: 31.5 },
-                  { p: '35평', peri: 34.0 },
-                ].map((r, i) => {
+                {[5, 7, 10, 15, 20, 24, 30, 35].map((py, i) => {
+                  // 둘레 = √(평×3.3058)×4 (정사각형 가정 — 계산기와 동일)
+                  const peri = Math.sqrt(py * 3.3058) * 4
                   // 천장 + 걸레받이 (걸레받이는 문 1개 -0.9m)
-                  const ceil = r.peri * 1.10 + 0.20 // +10% + 모서리 4×5cm
-                  const base = (r.peri - 0.9) * 1.10 + 0.20
+                  const ceil = peri * 1.10 + 0.20 // +10% + 모서리 4×5cm
+                  const base = (peri - 0.9) * 1.10 + 0.20
                   const total = ceil + base
                   const c24 = Math.ceil(ceil / 2.4) + Math.ceil(base / 2.4)
                   const c36 = Math.ceil(ceil / 3.6) + Math.ceil(base / 3.6)
                   const cost = c24 * 2.4 * 2500
                   return (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                      <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.peri.toFixed(1)}m</td>
+                      <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{py}평</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{peri.toFixed(1)}m</td>
                       <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{total.toFixed(1)}m</td>
                       <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{c24}개</td>
                       <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{c36}개</td>
@@ -219,7 +212,8 @@ export default function MoldingPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 정사각형 가정 둘레, 천장 몰딩 + 걸레받이(문 1개 폭 0.9m 제외) 모두 시공 기준, MDF 2,500원/m 자재비
+            ※ <strong style={{ color: 'var(--text)' }}>단일 정사각형 공간</strong> 가정 둘레(√면적×4), 천장 몰딩 + 걸레받이(문 1개 폭 0.9m 제외) 모두 시공 기준, MDF 2,500원/m 자재비.
+            아파트 전체는 방마다 둘레를 더해 더 길어지니 방별로 가로×세로 입력 또는 실측을 권장합니다.
           </p>
         </div>
 

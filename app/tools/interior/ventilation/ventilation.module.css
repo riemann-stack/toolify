@@ -89,8 +89,9 @@
 
 .fieldRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .fieldRow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+/* 공통 입력(면적·천장·인원)은 좁은 화면에서도 2열 유지 — 결과까지 스크롤 거리 단축 */
 @media (max-width: 540px) { .fieldRow3 { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 480px) { .fieldRow, .fieldRow3 { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .fieldRow { grid-template-columns: 1fr; } }
 
 /* 입력 */
 .numInput {

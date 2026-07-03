@@ -181,14 +181,8 @@ export function calcMetricTapDrill(
   return diameter - pitch * factor + adjust
 }
 
-/** 일반 관통홀 (정밀/일반/헐거움) */
-export function calcClearance(diameter: number): { tight: number; normal: number; loose: number } {
-  return {
-    tight: diameter + 0.4,
-    normal: diameter + 1.0,
-    loose: diameter + 2.0,
-  }
-}
+// 관통홀(정밀/일반/헐거움)은 ISO 273 표값(METRIC_SCREWS.clearanceTight/Normal/Loose)을 직접 사용.
+// 옛 D+0.4/+1.0/+2.0 근사식은 ISO 273과 어긋나 제거함.
 
 // ── 인치 ↔ mm 변환 ──────────────────
 export const INCH_TO_MM = 25.4
@@ -202,16 +196,19 @@ export function mmToInch(mm: number): number {
 
 /** "5/8" or "5/8\"" or "0.625" → 인치 숫자 */
 export function parseInchInput(s: string): number | null {
-  const cleaned = s.trim().replace(/["'']/g, '').replace(/\s+/g, '')
-  if (!cleaned) return null
-  // 분수 형태: "5/8", "1 1/2"
-  const mixed = cleaned.match(/^(\d+)[\s_-](\d+)\/(\d+)$/)
+  // 내부 공백은 단일 공백으로만 정리 — "1 1/2"(대분수) 구분자를 보존
+  const trimmed = s.trim().replace(/["'']/g, '').replace(/\s+/g, ' ')
+  if (!trimmed) return null
+  // 대분수: "1 1/2", "1-1/2", "1_1/2"
+  const mixed = trimmed.match(/^(\d+)[\s_-](\d+)\/(\d+)$/)
   if (mixed) {
     const whole = parseInt(mixed[1])
     const num = parseInt(mixed[2])
     const den = parseInt(mixed[3])
     if (den > 0) return whole + num / den
   }
+  // 단순 분수·소수는 공백 제거 후 파싱
+  const cleaned = trimmed.replace(/\s+/g, '')
   const frac = cleaned.match(/^(\d+)\/(\d+)$/)
   if (frac) {
     const num = parseInt(frac[1])

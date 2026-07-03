@@ -3,6 +3,7 @@ import RebarClient from './RebarClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/rebar',
@@ -56,11 +57,11 @@ const FAQ_LD = [
   { "q":"철근 절단 로스율은 보통 얼마?","a":"현장 일반 5~10%. 도면대로 정확히 시공하면 5%, 임의 절단이 잦거나 복잡한 형상이면 7~10%. 후크·갈고리·이음 길이가 많으면 더 높을 수 있습니다. 소량·DIY는 안전하게 10% 정도로 잡고 발주하세요." },
   { "q":"SD400과 SD500 차이는?","a":"SD 뒤 숫자는 항복강도(MPa). SD400은 400 MPa, SD500은 500 MPa로 25% 더 강합니다. 같은 강도가 필요한 부재라면 SD500은 더 가는 철근으로 대체 가능 — 무게·운반·시공이 줄어요. 가격은 SD500이 SD400보다 약 10% 비쌉니다. 한국 일반 건축물(공동주택·상가)은 SD400이 표준이며, 교량·고층·대형은 SD500/SD600." },
   { "q":"6m 철근과 12m 철근 어느 게 유리?","a":"현장 규모에 따라 다릅니다. • 6m — 1톤 트럭 운반 가능, 소형 현장·셀프 시공·자투리 활용에 좋음 • 12m — 이음(겹침) 횟수가 줄어 강도·시공성 우수, 자투리 적음. 단 5톤 카고 이상 차량 필요 → 운반비 ↑ 대형 현장이라면 12m가 종합적으로 유리한 경우가 많아요." },
-  { "q":"결속선·스페이서는 얼마나 필요한가요?","a":"• 결속선(#18~#21): 철근 100kg당 약 5~7kg. 교차점마다 묶음 필요. • 콘크리트 스페이서: 1m²당 5~8개 (피복두께 유지용). 이 도구는 결속선을 6%로 자동 포함하는 옵션을 제공하며, 스페이서는 별도 발주가 일반적입니다." },
+  { "q":"결속선·스페이서는 얼마나 필요한가요?","a":"• 결속선(#18~#21): 건설공사 표준품셈상 철근 1톤당 약 5~8kg(간단한 구조 5·보통 6.5·복잡한 구조 8kg). 교차점마다 묶음 필요. • 콘크리트 스페이서: 1m²당 5~8개 (피복두께 유지용). 이 도구는 결속선을 철근 1톤당 약 6.5kg(≈0.65%)으로 자동 포함하는 옵션을 제공하며, 스페이서는 별도 발주가 일반적입니다." },
   { "q":"옹벽·기초·계단 셀프 배근 가능한가요?","a":"소형·비구조물에 한정해 가능합니다. • 가능: 담장·울타리, 옹벽 1m 미만, 카포트 기초, 짧은 계단(5단 이하) • 불가: 주택 슬래브·지하실·옹벽 1.5m↑·차고 천장 — 구조기술사 도면 + 건설업 등록업체 필수 건축법 위반 시 시정명령·과태료, 사고 시 형사 책임이 있습니다. 배근 가이드 탭은 참고용이며 대형·구조 부재는 반드시 전문가에게 의뢰하세요." },
-  { "q":"철근 가격 변동은 어떻게 확인?","a":"철근 가격은 국제 원자재 시세·환율·계절·정부 정책에 따라 매주 변동합니다. 참고처: • 한국철강협회 시세표 — 월별 평균 발표 • POSCO·현대제철·동국제강 공식 발표가 • 건설사·철근 도매상 견적 — 실제 발주가에 가장 가까움 일반 SD400 톤당 80~120만원 범위가 최근 평균치입니다 (2026년 기준)." },
-  { "q":"1톤 트럭에 D10 6m 몇 본 실릴까?","a":"D10 6m 1본 = 3.36kg. 1톤(1000kg) ÷ 3.36 ≈ 약 297본. 단, 1톤 트럭은 적재 길이 제약(6m가 한계, 살짝 돌출)도 있어 결박을 단단히 해야 합니다. 더 굵은 철근(D25)은 6m 1본 24kg → 1톤이면 약 41본만 실립니다." },
-  { "q":"고철 매도 시 중량 산정은?","a":"고철 매입은 실측 중량(저울)이 우선입니다. 본 도구로 추정한 중량은 본수·길이가 정확할 때만 일치하며, 부식·녹·절단 변형이 있으면 ±10% 오차가 있을 수 있어요. 철근 고철 시세는 kg당 200~400원(2026년 기준 변동 큼)으로, 1톤이면 약 25~50만원. 매입 업체별로 가격 차이가 크므로 2~3곳 견적을 받으세요." }
+  { "q":"철근 가격 변동은 어떻게 확인?","a":"철근 가격은 국제 원자재 시세·환율·계절·정부 정책에 따라 매주 변동합니다. 참고처: • 한국철강협회 시세표 — 월별 평균 발표 • POSCO·현대제철·동국제강 공식 발표가 • 건설사·철근 도매상 견적 — 실제 발주가에 가장 가까움 일반 SD400 톤당 80~120만원 범위가 최근 평균치입니다 (2026년 상반기 기준, 한국철강협회 시세 참고 — 발주 시 재확인)." },
+  { "q":"1톤 트럭에 D10 6m 몇 본 실릴까?","a":"D10 6m 1본 = 3.36kg. 1톤(1000kg) ÷ 3.36 ≈ 약 298본. 단, 1톤 트럭은 적재 길이 제약(6m가 한계, 살짝 돌출)도 있어 결박을 단단히 해야 합니다. 더 굵은 철근(D25)은 6m 1본 23.9kg → 1톤이면 약 42본만 실립니다." },
+  { "q":"고철 매도 시 중량 산정은?","a":"고철 매입은 실측 중량(저울)이 우선입니다. 본 도구로 추정한 중량은 본수·길이가 정확할 때만 일치하며, 부식·녹·절단 변형이 있으면 ±10% 오차가 있을 수 있어요. 철근 고철 시세는 kg당 200~400원(2026년 상반기 기준, 변동 큼)으로, 1톤이면 약 25~50만원. 매입 업체별로 가격 차이가 크므로 2~3곳 견적을 받으세요." }
 ]
 
 export default function RebarPage() {
@@ -72,9 +73,15 @@ export default function RebarPage() {
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         🏗️ 철근 중량 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '20px' }}>
         KS D 3504 12규격 + 길이별 본수·중량·톤·단가 + <strong style={{ color: 'var(--text)' }}>트럭 적재 매칭</strong>.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="단위중량 KS D 3504 · 결속선 건설공사 표준품셈 기준 — 가격·고철 시세는 변동치(발주 시 재확인)"
+        sources={[{ label: '한국철강협회', href: 'https://www.kosa.or.kr' }]}
+      />
 
       <RebarClient />
 
@@ -148,7 +155,8 @@ export default function RebarPage() {
       <h2 style={sectionTitle}>📏 철근 표준 길이 — 왜 6m·12m인가?</h2>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          한국 시장의 철근 표준 길이는 <strong>6m / 8m / 10m / 12m / 13.7m</strong>이 일반적입니다.
+          한국 이형철근의 정척(표준 길이)은 <strong>6·7·8·9·10·11·12m</strong>(대표 정척 8m)이며,
+          현장에서는 6·8·10·12m가 흔히 쓰입니다. <strong>13.7m</strong>는 수출·특수 주문용 장척입니다.
           길이가 결정되는 핵심 요인은 <strong>운반 차량</strong>과 <strong>현장 작업성</strong>이에요.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
@@ -156,7 +164,7 @@ export default function RebarPage() {
             <li><strong style={{ color: 'var(--text)' }}>6m</strong> — 1톤 트럭 적재 가능, 소형 현장·셀프 시공 표준</li>
             <li><strong style={{ color: 'var(--text)' }}>8m·10m</strong> — 2.5톤 이상, 중간 현장</li>
             <li><strong style={{ color: 'var(--text)' }}>12m</strong> — 5톤 카고 이상, 대형 현장 (자투리 적음·이음 줄음)</li>
-            <li><strong style={{ color: 'var(--text)' }}>13.7m</strong> — 11톤 카고, 초대형·플랜트</li>
+            <li><strong style={{ color: 'var(--text)' }}>13.7m</strong> — 11톤 카고, 초대형·플랜트 (수출·특수 주문 장척)</li>
           </ul>
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -239,9 +247,9 @@ export default function RebarPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q6. 결속선·스페이서는 얼마나 필요한가요?</summary>
         <p style={faqAnswer}>
-          • <strong>결속선(#18~#21)</strong>: 철근 100kg당 약 5~7kg. 교차점마다 묶음 필요.<br />
+          • <strong>결속선(#18~#21)</strong>: 건설공사 표준품셈상 <strong>철근 1톤당 약 5~8kg</strong>(간단 5·보통 6.5·복잡 8kg). 교차점마다 묶음 필요.<br />
           • <strong>콘크리트 스페이서</strong>: 1m²당 5~8개 (피복두께 유지용).
-          이 도구는 결속선을 6%로 자동 포함하는 옵션을 제공하며, 스페이서는 별도 발주가 일반적입니다.
+          이 도구는 결속선을 <strong>철근 1톤당 약 6.5kg(≈0.65%)</strong>으로 자동 포함하는 옵션을 제공하며, 스페이서는 별도 발주가 일반적입니다.
         </p>
       </details>
 
@@ -264,16 +272,17 @@ export default function RebarPage() {
           • <strong>한국철강협회 시세표</strong> — 월별 평균 발표<br />
           • <strong>POSCO·현대제철·동국제강</strong> 공식 발표가<br />
           • <strong>건설사·철근 도매상</strong> 견적 — 실제 발주가에 가장 가까움<br />
-          일반 SD400 톤당 80~120만원 범위가 최근 평균치입니다 (2026년 기준).
+          일반 SD400 톤당 80~120만원 범위가 최근 평균치입니다
+          (2026년 상반기 기준, 한국철강협회 시세 참고 — 발주 시 재확인).
         </p>
       </details>
 
       <details style={faqDetails}>
         <summary style={faqSummary}>Q9. 1톤 트럭에 D10 6m 몇 본 실릴까?</summary>
         <p style={faqAnswer}>
-          D10 6m 1본 = 3.36kg. 1톤(1000kg) ÷ 3.36 ≈ <strong>약 297본</strong>.
+          D10 6m 1본 = 3.36kg. 1톤(1000kg) ÷ 3.36 ≈ <strong>약 298본</strong>.
           단, 1톤 트럭은 적재 길이 제약(6m가 한계, 살짝 돌출)도 있어 결박을 단단히 해야 합니다.
-          더 굵은 철근(D25)은 6m 1본 24kg → 1톤이면 약 41본만 실립니다.
+          더 굵은 철근(D25)은 6m 1본 23.9kg → 1톤이면 약 42본만 실립니다.
         </p>
       </details>
 
@@ -282,7 +291,7 @@ export default function RebarPage() {
         <p style={faqAnswer}>
           고철 매입은 <strong>실측 중량(저울)</strong>이 우선입니다. 본 도구로 추정한 중량은
           본수·길이가 정확할 때만 일치하며, 부식·녹·절단 변형이 있으면 ±10% 오차가 있을 수 있어요.
-          철근 고철 시세는 <strong>kg당 200~400원</strong>(2026년 기준 변동 큼)으로,
+          철근 고철 시세는 <strong>kg당 200~400원</strong>(2026년 상반기 기준, 변동 큼)으로,
           1톤이면 <strong>약 25~50만원</strong>. 매입 업체별로 가격 차이가 크므로 2~3곳 견적을 받으세요.
         </p>
       </details>

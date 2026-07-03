@@ -11,7 +11,7 @@ import {
   type WireSize, type WireKind, type Voltage, type Phase, type LoadType, type Environment, type Application,
   calcCurrent, calcPower, calcVoltageDrop, calcDropPercent,
   correctedAmpacity, recommendWireSizeWithDrop,
-  recommendBreaker, breakerToSizes, getWireKind, fmt,
+  recommendBreaker, maxBreakerForAmpacity, breakerToSizes, getWireKind, fmt,
 } from './wireUtils'
 
 type Tab = 'pw' | 'reverse' | 'drop' | 'preset'
@@ -51,13 +51,13 @@ export default function WireClient() {
       const j = JSON.parse(raw)
       if (j.voltage === 220 || j.voltage === 380) setVoltage(j.voltage)
       if (j.phase === 'single' || j.phase === 'three') setPhase(j.phase)
-      if (j.load) setLoad(j.load)
-      if (j.kind) setKind(j.kind)
-      if (j.env) setEnv(j.env)
-      if (j.tempC) setTempC(j.tempC)
-      if (j.app) setApp(j.app)
-      if (j.powerKw) setPowerKw(j.powerKw)
-      if (j.lengthM) setLengthM(j.lengthM)
+      if (j.load in LOAD_PF) setLoad(j.load)
+      if (WIRE_KINDS.some((k) => k.id === j.kind)) setKind(j.kind)
+      if (j.env in ENV_FACTOR) setEnv(j.env)
+      if (j.tempC === 30 || j.tempC === 40 || j.tempC === 50) setTempC(j.tempC)
+      if (j.app in DROP_LIMIT) setApp(j.app)
+      if (typeof j.powerKw === 'string') setPowerKw(j.powerKw)
+      if (typeof j.lengthM === 'string') setLengthM(j.lengthM)
     } catch {}
   }, [])
   useEffect(() => {
@@ -76,8 +76,8 @@ export default function WireClient() {
 
   /* ───────── 계산 ───────── */
   const pf = LOAD_PF[load].pf
-  const powerW = (parseFloat(powerKw) || 0) * 1000
-  const length = parseFloat(lengthM) || 0
+  const powerW = Math.max(0, parseFloat(powerKw) || 0) * 1000
+  const length = Math.max(0, parseFloat(lengthM) || 0)
   const current = useMemo(() => calcCurrent(powerW, voltage, phase, pf), [powerW, voltage, phase, pf])
   const reco = useMemo(
     () => recommendWireSizeWithDrop(current, voltage, phase, length, kind, env, tempC, app),
@@ -89,12 +89,13 @@ export default function WireClient() {
 
   /* 역계산 */
   const revAmpacity = correctedAmpacity(revSq, kind, env, tempC)
-  const revPower = calcPower(revAmpacity, voltage, phase, pf) / 1000
+  const revPowerMax = calcPower(revAmpacity, voltage, phase, pf) / 1000        // 허용전류 100% 기준 최대
+  const revPowerCont = calcPower(revAmpacity / 1.25, voltage, phase, pf) / 1000 // 권장 연속부하(÷1.25, ≈80%)
   const revFromBreaker = breakerToSizes(revBreaker, kind, env, tempC)
 
   /* 전압강하 탭 */
-  const dropI_ = parseFloat(dropI) || 0
-  const dropL_ = parseFloat(dropL) || 0
+  const dropI_ = Math.max(0, parseFloat(dropI) || 0)
+  const dropL_ = Math.max(0, parseFloat(dropL) || 0)
   const dropV = calcVoltageDrop(dropI_, dropL_, dropSq, phase)
   const dropPct = calcDropPercent(dropV, voltage)
   const dropLimit = DROP_LIMIT[app].pct
@@ -120,7 +121,7 @@ export default function WireClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="전선 계산 모드">
         {([
           { id: 'pw',      label: '⚡ 전력→전선' },
           { id: 'reverse', label: '🔎 전선 용량 조회' },
@@ -129,6 +130,8 @@ export default function WireClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -148,8 +151,8 @@ export default function WireClient() {
             <div className={s.field}>
               <label className={s.fieldLabel}>전압 · 상</label>
               <div className={s.pillRow}>
-                <button className={`${s.pill} ${voltage === 220 ? s.pillActive : ''}`} onClick={() => setVoltage(220)} type="button">단상 220V</button>
-                <button className={`${s.pill} ${voltage === 380 ? s.pillActive : ''}`} onClick={() => setVoltage(380)} type="button">삼상 380V</button>
+                <button aria-pressed={voltage === 220} className={`${s.pill} ${voltage === 220 ? s.pillActive : ''}`} onClick={() => setVoltage(220)} type="button">단상 220V</button>
+                <button aria-pressed={voltage === 380} className={`${s.pill} ${voltage === 380 ? s.pillActive : ''}`} onClick={() => setVoltage(380)} type="button">삼상 380V</button>
               </div>
             </div>
 
@@ -260,16 +263,27 @@ export default function WireClient() {
               예상 전류 <strong>{fmt(current, 1)} A</strong>
             </p>
             <p className={s.heroSub}>
-              권장 전선 굵기{' '}
-              <strong style={{ color: 'var(--accent)' }}>
-                {reco.finalSize ? `${reco.finalSize} sq` : '범위 초과'}
-              </strong>
-              {' · '}
-              권장 차단기{' '}
-              <strong style={{ color: 'var(--accent)' }}>
-                {breakerReco ? `${breakerReco}A` : '—'}
-              </strong>
+              {current <= 0 ? (
+                '소비전력(kW)을 입력하세요'
+              ) : (
+                <>
+                  권장 전선 굵기{' '}
+                  <strong style={{ color: 'var(--accent)' }}>
+                    {reco.finalSize ? `${reco.finalSize} sq` : '허용전류 범위 초과'}
+                  </strong>
+                  {' · '}
+                  권장 차단기{' '}
+                  <strong style={{ color: 'var(--accent)' }}>
+                    {breakerReco ? `${breakerReco}A` : '—'}
+                  </strong>
+                </>
+              )}
             </p>
+            {current > 0 && !reco.ampacitySize && (
+              <p className={s.heroSub} style={{ color: 'var(--warning)', marginTop: 4 }}>
+                ⚠️ 이 부하({fmt(current, 0)}A)를 견디는 단일 전선이 표(최대 240sq)에 없습니다. 회로 분할·상위 규격 검토가 필요합니다.
+              </p>
+            )}
           </div>
 
           {/* 상세표 */}
@@ -305,7 +319,7 @@ export default function WireClient() {
             <ul className={s.bullets}>
               <li><strong>전선 굵기</strong>는 허용전류와 전압강하 중 큰 쪽을 따라 결정됩니다.</li>
               <li><strong>거리가 길수록</strong> 전압강하 때문에 한 단계 굵은 전선이 필요해요.</li>
-              <li><strong>차단기는 부하전류 × 1.25 이상</strong>의 가장 작은 표준값을 선택합니다 (KEC 232.4).</li>
+              <li><strong>차단기는 부하전류 × 1.25 이상</strong>의 가장 작은 표준값을 선택합니다 (연속부하 125% 설계 여유). 단, 차단기 정격은 <strong>전선 허용전류 이하</strong>여야 합니다 (KEC 212 과전류 보호, IB≤In≤Iz).</li>
               <li>가정용 분기는 별도로 <strong>누전차단기(ELCB·30mA·0.03초)</strong>가 의무입니다.</li>
             </ul>
           </div>
@@ -323,6 +337,7 @@ export default function WireClient() {
                 {WIRE_SIZES.map((sq) => (
                   <button
                     key={sq}
+                    aria-pressed={revSq === sq}
                     className={`${s.pill} ${revSq === sq ? s.pillActive : ''}`}
                     onClick={() => setRevSq(sq)}
                     type="button"
@@ -339,7 +354,9 @@ export default function WireClient() {
               </p>
               <p className={s.convertValue}>{fmt(revAmpacity, 1)} A</p>
               <p className={s.convertSub}>
-                ≈ 보호 가능 부하 <strong>{fmt(revPower, 2)} kW</strong> (역률 {pf} 기준)
+                허용전류 기준 최대 <strong>{fmt(revPowerMax, 2)} kW</strong>
+                {' · '}권장 연속부하(÷1.25) <strong style={{ color: 'var(--accent)' }}>{fmt(revPowerCont, 2)} kW</strong>
+                {' '}(역률 {pf})
               </p>
             </div>
           </div>
@@ -352,6 +369,7 @@ export default function WireClient() {
                 {BREAKER_SIZES.map((b) => (
                   <button
                     key={b}
+                    aria-pressed={revBreaker === b}
                     className={`${s.pill} ${revBreaker === b ? s.pillActive : ''}`}
                     onClick={() => setRevBreaker(b)}
                     type="button"
@@ -376,6 +394,7 @@ export default function WireClient() {
           {/* 전체 매트릭스 표 */}
           <div className={s.card}>
             <span className={s.cardLabel}>sq별 허용전류·차단기 매트릭스</span>
+            <p className={s.scrollHint} aria-hidden="true">← 좌우로 밀어 표 전체 보기 →</p>
             <div className={s.tableScroll}>
               <table className={s.compactTable}>
                 <thead>
@@ -384,14 +403,14 @@ export default function WireClient() {
                     <th scope="col">HIV 기본 (A)</th>
                     <th scope="col">보정 후 (A)</th>
                     <th scope="col">적정 차단기</th>
-                    <th scope="col">보호 부하 ({voltage}V)</th>
+                    <th scope="col">권장부하 연속 ({voltage}V)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {WIRE_SIZES.map((sq) => {
                     const a = correctedAmpacity(sq, kind, env, tempC)
-                    const b = recommendBreaker(a / 1.25) ?? '—'
-                    const w = calcPower(a, voltage, phase, pf) / 1000
+                    const b = maxBreakerForAmpacity(a) ?? '—'
+                    const w = calcPower(a / 1.25, voltage, phase, pf) / 1000
                     return (
                       <tr key={sq} className={revSq === sq ? s.rowActive : ''}>
                         <td className={s.cellMono}>{sq}</td>
@@ -447,6 +466,7 @@ export default function WireClient() {
                 {WIRE_SIZES.map((sq) => (
                   <button
                     key={sq}
+                    aria-pressed={dropSq === sq}
                     className={`${s.pill} ${dropSq === sq ? s.pillActive : ''}`}
                     onClick={() => setDropSq(sq)}
                     type="button"
@@ -459,7 +479,7 @@ export default function WireClient() {
           </div>
 
           {/* 강하 게이지 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
             <p className={s.heroLabel}>전압강하 (한도 {dropLimit}%)</p>
             <p className={s.heroValue}>
               {fmt(dropV, 2)} V <strong>({fmt(dropPct, 2)}%)</strong>
@@ -556,23 +576,29 @@ export default function WireClient() {
                 </div>
               ))}
             </div>
+            <p className={s.helpText}>
+              ※ 프리셋은 국내 표준 시공 사례(IB ≤ 차단기 ≤ 전선허용전류) 기준입니다. 메인 &quot;전력→전선&quot; 탭은
+              연속부하 125% 여유를 더해 계산하므로 차단기·전선이 한 단계 크게 나올 수 있어요.
+              인덕션은 PFC 모델 기준 역률 ≈1.0으로 계산합니다(옵션 없는 구형은 다소 과소 가능).
+            </p>
           </div>
 
           <div className={s.card}>
             <span className={s.cardLabel}>차단기 ↔ 전선 매트릭스 ({voltage}V {phase === 'three' ? '삼상' : '단상'} · {getWireKind(kind).label.split(' ')[0]})</span>
+            <p className={s.scrollHint} aria-hidden="true">← 좌우로 밀어 표 전체 보기 →</p>
             <div className={s.tableScroll}>
               <table className={s.compactTable}>
                 <thead>
                   <tr>
                     <th scope="col">차단기</th>
                     <th scope="col">최소 전선</th>
-                    <th scope="col">보호 부하 (kW)</th>
+                    <th scope="col">권장부하 연속 (kW)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[15, 20, 30, 40, 50, 60, 75, 100].map((b) => {
                     const sq = breakerToSizes(b, kind, env, tempC)
-                    const w = calcPower(b, voltage, phase, pf) / 1000
+                    const w = calcPower(b / 1.25, voltage, phase, pf) / 1000
                     return (
                       <tr key={b}>
                         <td className={s.cellMono}>{b}A</td>
@@ -591,7 +617,7 @@ export default function WireClient() {
             <p>
               완속 7kW는 <strong>40A 차단기 + 6sq HIV/F-CV</strong>가 한국 표준 조합입니다.<br />
               한전 신청 + 누전차단기(RCBO·EV용) + 매설 시 F-CV 권장.<br />
-              22kW 급속은 삼상 380V로 전선 굵기를 작게 가져갈 수 있어요.<br />
+              22kW 삼상(완속·중속)은 380V로 상당 분산되어 전선을 상대적으로 가늘게 가져갈 수 있어요 (급속은 별도의 DC 50kW+ 방식).<br />
               EV 충전 콘센트(EV-Plug) 단독 분기 + 누전 30mA 의무.
             </p>
           </div>
