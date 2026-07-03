@@ -3,6 +3,7 @@ import Script from 'next/script'
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import BottomNav from '@/components/BottomNav'
 import SiteJsonLd from '@/components/SiteJsonLd'
 import AutoAds from '@/components/AutoAds'
 
@@ -107,6 +108,8 @@ export default function RootLayout({
         <Nav />
         <main>{children}</main>
         <Footer />
+        {/* 모바일 하단 탭바 — 전제: AdSense 앵커 광고 콘솔 OFF (BottomNav.tsx 주석 참조) */}
+        <BottomNav />
       </body>
     </html>
   )

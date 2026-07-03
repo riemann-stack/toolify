@@ -1,0 +1,59 @@
+/* @hover-wrapped */
+/* ── 모바일 하단 탭바 — 640px 이하 전용. 상단 Nav와 같은 중성 크롬(반투명 화이트+블러) ── */
+.bar {
+  display: none;
+}
+.spacer {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* 드로어(250)·상단 Nav(300)보다 아래 — 드로어가 열리면 탭바를 덮는다 */
+    z-index: 200;
+    display: flex;
+    align-items: stretch;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--paper-line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .spacer {
+    display: block;
+    height: calc(56px + env(safe-area-inset-bottom));
+  }
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 56px;
+  color: var(--paper-ink-faint);
+  text-decoration: none;
+  /* button 리셋 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: color 0.15s;
+}
+.tabActive {
+  color: var(--paper-ink);
+}
+.tabLabel {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+.tabActive .tabLabel {
+  font-weight: 700;
+}

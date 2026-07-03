@@ -9,6 +9,7 @@ import { categories, allTools, type Tool } from '@/lib/tools'
 import CatIcon from './CatIcon'
 import ToolCatIcon from './ToolCatIcon'
 import UiIcon from './UiIcon'
+import { OPEN_SEARCH_EVENT } from './BottomNav'
 import { searchTools } from '@/lib/search'
 import {
   loadUserNav, saveUserNav, recordVisit, toggleFavorite, isToolPath,
@@ -213,6 +214,13 @@ export default function Nav() {
     if (mobileOpen) setTimeout(() => mobileSearchRef.current?.focus(), 50)
     else setMobileQuery('')
   }, [mobileOpen])
+
+  // 모바일 하단 탭바 '검색' → 드로어 열기 (검색창 자동 포커스는 mobileOpen 효과가 처리)
+  useEffect(() => {
+    const onOpenSearch = () => setMobileOpen(true)
+    window.addEventListener(OPEN_SEARCH_EVENT, onOpenSearch)
+    return () => window.removeEventListener(OPEN_SEARCH_EVENT, onOpenSearch)
+  }, [])
 
   // Cmd+K / Ctrl+K + 전역 ESC
   useEffect(() => {
