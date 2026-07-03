@@ -3,6 +3,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Link from 'next/link'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/art/lorem',
@@ -43,7 +44,7 @@ export default function LoremPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📝 더미 텍스트 생성기
+        <ToolIconBadge catId="art" />더미 텍스트 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         문단·버튼·카드·리뷰·JSON 더미를 <strong style={{ color: 'var(--text)' }}>UI 목업에 바로</strong> 붙여 쓸 수 있게.

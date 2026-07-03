@@ -3,6 +3,7 @@ import JwtClient from './JwtClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/jwt',
@@ -61,7 +62,7 @@ export default function JwtPage() {
         개발자
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔑 JWT 디코더
+        <ToolIconBadge catId="dev" />JWT 디코더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         JWT를 붙여넣으면 header·payload를 풀어 <strong style={{ color: 'var(--text)' }}>클레임을 표로</strong> 보여주고,

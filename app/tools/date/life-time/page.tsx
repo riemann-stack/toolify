@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/date/life-time',
@@ -43,7 +44,7 @@ export default function LifeTimePage() {
         날짜·시간
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⏳ 생애 시간 계산기
+        <ToolIconBadge catId="date" />생애 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         기대수명 기준 살아온 시간·앞으로의 시간을 <strong style={{ color: 'var(--text)' }}>행동 가치로 환산</strong>해 보여줍니다.

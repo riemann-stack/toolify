@@ -3,6 +3,7 @@ import TokenCounterClient from './TokenCounterClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/token-counter',
@@ -65,7 +66,7 @@ export default function TokenCounterPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🪙 AI 프롬프트 토큰 카운터
+        <ToolIconBadge catId="dev" />AI 프롬프트 토큰 카운터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         GPT·Claude·Gemini 토큰 수와 컨텍스트 사용량을 한 화면에. <strong style={{ color: 'var(--text)' }}>한국어 비효율과 API 비용</strong>까지 동시 추정.

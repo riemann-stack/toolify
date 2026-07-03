@@ -6,6 +6,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/property-holding-tax',
@@ -97,7 +98,7 @@ export default function PropertyHoldingTaxPage() {
         금융·재테크
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏠 주택 보유세 계산기
+        <ToolIconBadge catId="finance" />주택 보유세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
         공시가격을 넣으면 <strong style={strong}>재산세와 종합부동산세</strong>를 한 번에 추정합니다. 도시지역분·지방교육세·농어촌특별세까지 분해해 보여주고, 1세대 1주택 특례세율·12억 공제·고령자/장기보유 세액공제를 2026년 기준으로 반영합니다.

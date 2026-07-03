@@ -3,6 +3,7 @@ import BloodAlcoholClient from './BloodAlcoholClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/health/blood-alcohol',
@@ -34,7 +35,7 @@ export default function BloodAlcoholPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍺 혈중알코올 잔존량 추정기
+        <ToolIconBadge catId="health" />혈중알코올 잔존량 추정기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         음주 후 체내 알코올이 얼마나 <strong style={{ color: 'var(--text)' }}>남아있는지 추정</strong> — 다음날 아침·여러 자리 누적·ALDH2 분해 속도 반영. <strong style={{ color: 'var(--text)' }}>운전 위험 확인용</strong>.

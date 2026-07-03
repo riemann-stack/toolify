@@ -3,6 +3,7 @@ import TeaClient from './TeaClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/tea',
@@ -69,7 +70,7 @@ export default function TeaPage() {
         요리·식품
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍵 차 우리기 계산기
+        <ToolIconBadge catId="cooking" />차 우리기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         녹차·말차·우롱·홍차·보이·허브 9종 + 온도/시간/비율 + <strong style={{ color: 'var(--text)' }}>냉침 모드와 떫음 게이지</strong>.

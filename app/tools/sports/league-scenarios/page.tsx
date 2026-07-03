@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/league-scenarios',
@@ -52,7 +53,7 @@ export default function LeagueScenariosPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⚽ 축구 순위 경우의 수 계산기
+        <ToolIconBadge catId="sports" />축구 순위 경우의 수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         조별리그·정규 리그의 <strong style={strong}>잔여 경기 결과 조합</strong>을 모두 따져 진출 확정 경우의 수와 <strong style={strong}>자력·타력 진출 조건</strong>을 정리합니다. 월드컵·K리그·챔피언스리그 등 대회별 동점 규칙(골득실·승자승)을 프리셋으로 반영합니다.

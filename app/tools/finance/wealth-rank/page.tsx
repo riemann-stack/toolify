@@ -6,6 +6,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/wealth-rank',
@@ -111,7 +112,7 @@ export default function WealthRankPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📊 자산 순위 계산기
+        <ToolIconBadge catId="finance" />자산 순위 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         내 <strong style={{ color: 'var(--text)' }}>순자산</strong>이 상위 몇 %인지 — <strong style={{ color: 'var(--text)' }}>전국·시도·연령대·세계</strong> 기준으로 한 번에. 2025 가계금융복지조사 분포와 상위 구간 보도치, UBS 세계 부 보고서를 바탕으로 계산합니다.

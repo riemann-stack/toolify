@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/baseball-stats',
@@ -43,7 +44,7 @@ export default function BaseballStatsPage() {
         스포츠
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⚾ 야구 타율 계산기
+        <ToolIconBadge catId="sports" />야구 타율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + <strong style={{ color: 'var(--text)' }}>KBO 평균 비교</strong>.

@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/lighting',
@@ -42,7 +43,7 @@ export default function LightingPage() {
         인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💡 조명 밝기 계산기
+        <ToolIconBadge catId="interior" />조명 밝기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         공간별 <strong style={{ color: 'var(--text)' }}>권장 루멘과 조명 개수</strong> + W↔lm 환산과 색온도 가이드.

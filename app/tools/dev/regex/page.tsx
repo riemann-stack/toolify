@@ -3,6 +3,7 @@ import RegexClient from './RegexClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/regex',
@@ -85,7 +86,7 @@ export default function RegexPage() {
         개발자
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔍 정규식 테스트기
+        <ToolIconBadge catId="dev" />정규식 테스트기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         JavaScript 정규식 실시간 매칭·하이라이트 + 캡처·치환·분할 + <strong style={{ color: 'var(--text)' }}>한국 데이터 패턴 30+</strong>.

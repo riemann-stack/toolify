@@ -3,6 +3,7 @@ import PackingClient from './PackingClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/life/packing',
@@ -70,7 +71,7 @@ export default function PackingPage() {
         생활·재미
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧳 여행 짐 계산기
+        <ToolIconBadge catId="life" />여행 짐 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         일수·기온·세탁 가능·활동량으로 카테고리별 옷 개수 + <strong style={{ color: 'var(--text)' }}>최소·넉넉 2버전</strong>.

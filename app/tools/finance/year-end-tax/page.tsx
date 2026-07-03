@@ -5,6 +5,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/year-end-tax',
@@ -92,7 +93,7 @@ export default function YearEndTaxPage() {
         금융·재테크
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧾 연말정산 환급·추가납부 시뮬레이터
+        <ToolIconBadge catId="finance" />연말정산 환급·추가납부 시뮬레이터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
         총급여와 신용카드·연금저축·의료비·월세 등 공제를 넣으면 <strong style={strong}>결정세액과 기납부세액을 비교</strong>해 예상 환급·추가납부액을 추정합니다. 2026년 기준.

@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/cosmic-calendar',
@@ -42,7 +43,7 @@ export default function CosmicCalendarPage() {
         교육·학습
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🌌 코스믹 캘린더
+        <ToolIconBadge catId="edu" />코스믹 캘린더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         138억 년 우주 역사를 <strong style={{ color: 'var(--text)' }}>1년 달력으로 압축</strong>한 인터랙티브 타임라인.

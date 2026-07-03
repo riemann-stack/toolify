@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/installment',
@@ -59,7 +60,7 @@ export default function CardInstallmentPage() {
         금융·재테크
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💳 카드 할부 계산기
+        <ToolIconBadge catId="finance" />카드 할부 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         할부 개월수별 진짜 이자와 <strong style={{ color: 'var(--text)' }}>일시불·무이자 비교</strong>. 카드 선택의 기준을 숫자로.

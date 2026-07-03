@@ -84,6 +84,9 @@
 }
 .guideDividerLabel {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 14px;
   font-weight: 800;

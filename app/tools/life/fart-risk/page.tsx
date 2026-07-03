@@ -3,6 +3,7 @@ import FartRiskClient from './FartRiskClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/life/fart-risk',
@@ -37,7 +38,7 @@ export default function FartRiskPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💨 방귀 위험도 계산기
+        <ToolIconBadge catId="life" />방귀 위험도 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         가스량·냄새·복부팽만 3축 점수로 원인 진단 + <strong style={{ color: 'var(--text)' }}>저FODMAP 대체</strong>와 증상별 대처.

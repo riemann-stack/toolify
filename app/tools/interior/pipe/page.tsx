@@ -3,6 +3,7 @@ import PipeClient from './PipeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/pipe',
@@ -69,7 +70,7 @@ export default function PipePage() {
         주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔧 배관 규격 변환기
+        <ToolIconBadge catId="interior" />배관 규격 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         A호칭·인치·DN 통합 + <strong style={{ color: 'var(--text)' }}>강관·PVC·PB·XL·동관·STS</strong> 6재질 실제 OD/ID와 유량.

@@ -3,6 +3,7 @@ import SwimPaceClient from './SwimPaceClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/swim-pace',
@@ -34,7 +35,7 @@ export default function SwimPacePage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏊 수영 페이스·SWOLF 계산기
+        <ToolIconBadge catId="sports" />수영 페이스·SWOLF 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         100m 페이스 ↔ 총기록을 양방향으로 환산하고, <strong style={{ color: 'var(--text)' }}>25m·50m 풀 바퀴 수</strong>·SWOLF·인터벌 send-off를 한 화면에서 확인합니다.

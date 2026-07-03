@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/circuit-simulator',
@@ -42,7 +43,7 @@ export default function CircuitSimulatorPage() {
         교육·학습
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⚡ 옴의 법칙 계산기
+        <ToolIconBadge catId="edu" />옴의 법칙 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         직렬·병렬 회로 전압·전류·저항·전력 시각화 + <strong style={{ color: 'var(--text)' }}>단계별 풀이와 빈출 7문제</strong>.

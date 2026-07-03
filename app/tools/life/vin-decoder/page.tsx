@@ -5,6 +5,7 @@ import Disclaimer from '@/components/Disclaimer'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/life/vin-decoder',
@@ -44,7 +45,7 @@ export default function VinDecoderPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🚗 차대번호(VIN) 해석기
+        <ToolIconBadge catId="life" />차대번호(VIN) 해석기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         17자리 차대번호를 자리별로 분해해 <strong style={{ color: 'var(--text)' }}>제조국·제조사·연식·공장</strong>을 해석합니다.

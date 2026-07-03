@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/json',
@@ -42,7 +43,7 @@ export default function JsonPage() {
         개발자
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📋 JSON 포맷터
+        <ToolIconBadge catId="dev" />JSON 포맷터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         JSON 정렬·압축·검증·트리 뷰 + <strong style={{ color: 'var(--text)' }}>TypeScript 인터페이스 자동</strong> + YAML/CSV 변환.

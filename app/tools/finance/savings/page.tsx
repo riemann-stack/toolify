@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/savings',
@@ -73,7 +74,7 @@ export default function SavingsPage() {
         금융·재테크
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💰 저축액 계산기
+        <ToolIconBadge catId="finance" />저축액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         수입·지출 → 저축률과 한국 평균 비교 + <strong style={{ color: 'var(--text)' }}>6 항아리 분배</strong>. 청년도약·ISA 절세 시뮬.

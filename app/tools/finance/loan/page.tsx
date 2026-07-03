@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import { calcEqualPayment } from './loanUtils'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 /* §3 금리별 3억/30년 비교표 — 계산 엔진으로 직접 생성 (정적 수치 드리프트 방지) */
 const RATE_TABLE_ROWS = [2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0].map(rate => {
@@ -84,7 +85,7 @@ export default function LoanPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💳 대출이자 계산기
+        <ToolIconBadge catId="finance" />대출이자 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지 — <strong style={{ color: 'var(--text)' }}>매달 얼마 나갈지</strong> 정확하게.

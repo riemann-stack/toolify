@@ -3,6 +3,7 @@ import GolfHandicapClient from './GolfHandicapClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-handicap',
@@ -59,7 +60,7 @@ export default function GolfHandicapPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⛳ 골프 핸디캡 계산기
+        <ToolIconBadge catId="sports" />골프 핸디캡 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         WHS 핸디캡·코스 핸디캡·스태블포드 + 라운드 자동 저장으로 <strong style={{ color: 'var(--text)' }}>발전 추이</strong>까지.

@@ -3,6 +3,7 @@ import SleepDebtClient from './SleepDebtClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/health/sleep-debt',
@@ -86,7 +87,7 @@ export default function SleepDebtPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        😴 수면 부채 트래커
+        <ToolIconBadge catId="health" />수면 부채 트래커
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         지난 7·14·30일 누적 수면 부족 시간 + <strong style={{ color: 'var(--text)' }}>회복까지 며칠 더 자야 0</strong>이 되는지 자동.

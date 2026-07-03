@@ -3,6 +3,7 @@ import BoltWrenchClient from './BoltWrenchClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/bolt-wrench',
@@ -70,7 +71,7 @@ export default function BoltWrenchPage() {
         주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔧 볼트 스패너 계산기
+        <ToolIconBadge catId="interior" />볼트 스패너 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
         M3~M24 + ISO/DIN/KS vs 옛 JIS 비교 + <strong style={{ color: 'var(--text)' }}>알렌렌치·와셔·너트·토크 등급</strong>.

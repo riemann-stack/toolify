@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/health/child-height',
@@ -77,7 +78,7 @@ export default function ChildHeightPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📏 자녀 예상 키 계산기
+        <ToolIconBadge catId="health" />자녀 예상 키 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
         아버지·어머니 키만 입력하면 <strong style={{ color: 'var(--text)' }}>중간부모키(MPH) 공식</strong>으로 아들·딸의 예상 성인 키와 ±8.5cm 범위를 계산합니다. 통계적 추정이며 의학 진단이 아닙니다.

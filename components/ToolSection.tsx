@@ -14,13 +14,14 @@
       전 소스 사용 0건으로 제거됨 — import 경로는 그대로 유지.
    ────────────────────────────────────────────────────── */
 import styles from './ToolSection.module.css'
+import UiIcon from './UiIcon'
 
 /** SEO 본문과 도구 사이 명확한 구분선 — page.tsx 에서 사용 */
 export function GuideDivider({ label = '알아두면 좋아요' }: { label?: string }) {
   return (
     <div className={styles.guideDivider} aria-hidden="false">
       <span className={styles.guideDividerLine} />
-      <span className={styles.guideDividerLabel}>📚 {label}</span>
+      <span className={styles.guideDividerLabel}><UiIcon name="book" size={13} />{label}</span>
       <span className={styles.guideDividerLine} />
     </div>
   )

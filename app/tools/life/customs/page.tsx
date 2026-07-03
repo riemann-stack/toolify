@@ -3,6 +3,7 @@ import CustomsClient from './CustomsClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/life/customs',
@@ -70,7 +71,7 @@ export default function CustomsPage() {
         생활·재미
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📦 관부가세 계산기
+        <ToolIconBadge catId="life" />관부가세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         미국·중국·유럽·일본 직구 면세 한도(물품가격 기준) + 29개 품목 관세율·부가세·개소세·주세. <strong style={{ color: 'var(--text)' }}>간이 예상세액</strong> (HS·원산지·FTA 미반영).

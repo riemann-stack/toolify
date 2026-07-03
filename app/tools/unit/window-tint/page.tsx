@@ -6,6 +6,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/window-tint',
@@ -54,7 +55,7 @@ export default function WindowTintPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🪟 썬팅 투과율(VLT) 계산기
+        <ToolIconBadge catId="unit" />썬팅 투과율(VLT) 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
         원유리와 필름 농도를 <strong style={{ color: 'var(--text)' }}>곱해서</strong> 실제 가시광선 투과율을 구합니다. 표기값이 필름 자체값인지 부착 후 합산값인지 구분하고, 앞면 70%·옆면 40% 법규 기준과 바로 대조합니다.

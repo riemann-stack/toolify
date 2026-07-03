@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/cron',
@@ -50,7 +51,7 @@ export default function CronPage() {
         개발자
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⏱️ Cron 표현식 생성기·해석기
+        <ToolIconBadge catId="dev" />Cron 표현식 생성기·해석기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         크론 표현식을 입력하면 <strong style={{ color: 'var(--text)' }}>한국어 한 줄 해석</strong>과 다음 실행 시각을 보여줍니다.

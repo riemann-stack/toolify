@@ -3,6 +3,7 @@ import FovClient from './FovClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/art/fov',
@@ -76,7 +77,7 @@ export default function FovPage() {
         예술·창작 · 사진
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        📷 카메라 화각 계산기
+        <ToolIconBadge catId="art" />카메라 화각 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         풀프레임~스마트폰 7종 센서 × 4-800mm 35mm 환산 + <strong style={{ color: 'var(--text)' }}>화각·시야 너비·등가 조리개</strong>.

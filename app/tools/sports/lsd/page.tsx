@@ -3,6 +3,7 @@ import LsdClient from './LsdClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/lsd',
@@ -37,7 +38,7 @@ export default function LsdPage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏃 LSD·이지런 페이스 계산기
+        <ToolIconBadge catId="sports" />LSD·이지런 페이스 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         최근 기록으로 <strong style={{ color: 'var(--text)' }}>적정 이지 페이스 범위·존2 심박</strong>을 구하고, &lsquo;너무 빠른 이지런(정크 마일)&rsquo;을 피하세요. 롱런 보급 플래너 포함.

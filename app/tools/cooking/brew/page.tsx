@@ -3,6 +3,7 @@ import BrewClient from './BrewClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/brew',
@@ -69,7 +70,7 @@ export default function BrewPage() {
         요리·식품
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ☕ 커피 브루잉 계산기
+        <ToolIconBadge catId="cooking" />커피 브루잉 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         핸드드립·콜드브루·에어로프레스 <strong style={{ color: 'var(--text)' }}>6가지 추출법</strong> + 비율·온도·시간·분쇄도 매트릭스.

@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/cost-rate',
@@ -56,7 +57,7 @@ export default function CostRatePage() {
         금융·재테크
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍽️ 음식점 원가율 계산기
+        <ToolIconBadge catId="finance" />음식점 원가율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         재료비·배달 수수료·포장재까지 반영한 <strong style={{ color: 'var(--text)' }}>실질 원가율과 마진</strong>. 메뉴 가격 결정에 바로.

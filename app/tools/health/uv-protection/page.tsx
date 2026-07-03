@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/health/uv-protection',
@@ -62,7 +63,7 @@ export default function UvProtectionPage() {
         건강·웰빙
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ☀️ 자외선 지수 계산기
+        <ToolIconBadge catId="health" />자외선 지수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         오늘 UV 지수와 내 피부 타입 기준 <strong style={{ color: 'var(--text)' }}>일광화상 위험 시간</strong> + SPF 차단제 권장.

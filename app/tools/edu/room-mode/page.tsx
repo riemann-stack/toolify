@@ -3,6 +3,7 @@ import RoomModeClient from './RoomModeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/room-mode',
@@ -70,7 +71,7 @@ export default function RoomModePage() {
         교육·학습
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔊 룸 모드 계산기
+        <ToolIconBadge catId="edu" />룸 모드 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         방 가로·세로·높이로 축방향·접선·사선 모드 + <strong style={{ color: 'var(--text)' }}>슈로더 주파수와 베이스 트랩</strong> 가이드.

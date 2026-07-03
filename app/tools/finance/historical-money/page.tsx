@@ -3,6 +3,7 @@ import HistoricalMoneyClient from './HistoricalMoneyClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/historical-money',
@@ -66,7 +67,7 @@ export default function HistoricalMoneyPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💰 한국 화폐가치 환산기
+        <ToolIconBadge catId="finance" />한국 화폐가치 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         圓·환·원 화폐사 + <strong style={{ color: 'var(--text)' }}>1945~2026 구매력 환산</strong>. &ldquo;1960년 짜장면 250환은 지금 얼마?&rdquo;

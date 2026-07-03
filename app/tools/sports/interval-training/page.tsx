@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/interval-training',
@@ -62,7 +63,7 @@ export default function IntervalTrainingPage() {
         스포츠
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏃‍♂️ 인터벌 훈련 계산기
+        <ToolIconBadge catId="sports" />인터벌 훈련 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         VDOT 공식 기반 인터벌 페이스 + <strong style={{ color: 'var(--text)' }}>4~16주 풀 트레이닝 스케줄</strong>.

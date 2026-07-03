@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock-decision',
@@ -65,7 +66,7 @@ export default function StockDecisionPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧠 주식 매도·매수 심리 진단
+        <ToolIconBadge catId="finance" />주식 매도·매수 심리 진단
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         팔까 살까 망설일 때, <strong style={{ color: 'var(--text)' }}>행동경제학 7대 편향 자가진단</strong>으로 내 결정에 끼어든 감정을 먼저 점검하세요. <strong style={{ color: 'var(--text)' }}>투자 권유·종목 추천이 아닙니다.</strong>

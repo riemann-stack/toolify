@@ -6,6 +6,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolIconBadge from '@/components/ToolIconBadge'
 import {
   BENEFIT_DAYS_2019,
   COVERAGE_BRACKETS,
@@ -87,7 +88,7 @@ export default function UnemploymentBenefitPage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        💵 실업급여(구직급여) 계산기
+        <ToolIconBadge catId="finance" />실업급여(구직급여) 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
         퇴직 전 3개월 급여와 이직 당시 나이·고용보험 가입기간으로 2026년 구직급여가 <strong style={{ color: 'var(--text)' }}>하루 얼마, 며칠, 총 얼마</strong>인지 계산합니다. 2026년 상한 {won(UI_DAILY_CAP_2026)}원·하한 {won(UI_DAILY_FLOOR_2026)}원을 반영합니다.

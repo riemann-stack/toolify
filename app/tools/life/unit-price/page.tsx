@@ -3,6 +3,7 @@ import UnitPriceClient from './UnitPriceClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/life/unit-price',
@@ -41,7 +42,7 @@ export default function UnitPricePage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🏷️ 단가 비교 계산기
+        <ToolIconBadge catId="life" />단가 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         마트·편의점·코스트코 가격을 <strong style={{ color: 'var(--text)' }}>1ml·1g·1개당 실질 단가</strong>로 즉시. 1+1·2+1도 정확히.

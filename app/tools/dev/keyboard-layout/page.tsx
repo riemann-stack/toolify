@@ -3,6 +3,7 @@ import KeyboardLayoutClient from './KeyboardLayoutClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/keyboard-layout',
@@ -59,7 +60,7 @@ export default function KeyboardLayoutPage() {
         개발자
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⌨️ 한영타 변환기
+        <ToolIconBadge catId="dev" />한영타 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         한/영 전환을 깜빡하고 친 글자를 원래 의도한 글자로 되돌립니다. <code style={{ background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>dkssud</code> → <strong style={{ color: 'var(--text)' }}>안녕</strong>, <code style={{ background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>ㅗ디ㅣㅐ</code> → <strong style={{ color: 'var(--text)' }}>hello</strong>처럼 양방향으로 변환합니다.

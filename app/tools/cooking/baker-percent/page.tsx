@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/baker-percent',
@@ -42,7 +43,7 @@ export default function BakerPercentPage() {
         요리·식품
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🥖 베이커 퍼센트 계산기
+        <ToolIconBadge catId="cooking" />베이커 퍼센트 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         밀가루 100% 기준 모든 재료 비율 자동 + <strong style={{ color: 'var(--text)' }}>수분율·르방</strong>. 빵 종류별 프리셋 8종.

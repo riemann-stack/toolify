@@ -3,6 +3,7 @@ import TravelBudgetClient from './TravelBudgetClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/life/travel-budget',
@@ -70,7 +71,7 @@ export default function TravelBudgetPage() {
         생활·재미
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ✈️ 해외여행 예산 계산기
+        <ToolIconBadge catId="life" />해외여행 예산 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         18개 도시 × 배낭·중간·럭셔리 3스타일 평균 + <strong style={{ color: 'var(--text)' }}>9개 항목 자동 추천</strong>을 도넛 차트로.

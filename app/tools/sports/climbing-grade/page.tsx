@@ -7,6 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
 import { BANDS, BOULDER_ROWS, ROUTE_ROWS } from './climbingData'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/climbing-grade',
@@ -59,7 +60,7 @@ export default function ClimbingGradePage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧗 클라이밍 등급 변환기
+        <ToolIconBadge catId="sports" />클라이밍 등급 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         볼더링 <strong style={{ color: 'var(--text)' }}>V등급 ↔ Font</strong>, 루트 <strong style={{ color: 'var(--text)' }}>YDS ↔ French ↔ UIAA</strong> 난이도를 한 번에 환산.

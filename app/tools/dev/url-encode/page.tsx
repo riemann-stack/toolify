@@ -3,6 +3,7 @@ import UrlEncodeClient from './UrlEncodeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/url-encode',
@@ -87,7 +88,7 @@ export default function UrlEncodePage() {
         개발자
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🔗 URL 인코더/디코더
+        <ToolIconBadge catId="dev" />URL 인코더/디코더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         URL 인코드/디코드 + URL 분해와 쿼리 파라미터 표 편집. <strong style={{ color: 'var(--text)' }}>UTM·추적 파라미터 일괄 정리</strong>.

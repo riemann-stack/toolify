@@ -3,6 +3,7 @@ import ServerTimeClient from './ServerTimeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 // FAQ 본문 + 구조화 데이터(FAQPage)를 함께 쓰기 위해 배열로 추출
 const FAQS = [
@@ -67,7 +68,7 @@ export default function ServerTimePage() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⏱️ 실시간 서버 시간
+        <ToolIconBadge catId="date" />실시간 서버 시간
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         수강신청·티켓팅을 위한 <strong style={{ color: 'var(--text)' }}>NTP 동기화 KST를 밀리초</strong>로. 카운트다운·알림음 포함.

@@ -3,6 +3,7 @@ import HolidayTableClient from './HolidayTableClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/holiday-table',
@@ -84,7 +85,7 @@ export default function HolidayTablePage() {
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🍱 명절 상차림 계산기
+        <ToolIconBadge catId="cooking" />명절 상차림 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         설날·추석·제사 × 상 형식 + 인원만 입력하면 <strong style={{ color: 'var(--text)' }}>품목별 수량과 비용 자동</strong>. 주요 농산물 KAMIS 실시간 시세 + 5열 차례상 배치 가이드.

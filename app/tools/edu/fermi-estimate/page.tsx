@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/fermi-estimate',
@@ -42,7 +43,7 @@ export default function FermiEstimatePage() {
         교육·학습
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        🧮 페르미 추정 계산기
+        <ToolIconBadge catId="edu" />페르미 추정 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         막막한 문제를 변수로 쪼개고 시나리오로 비교해 <strong style={{ color: 'var(--text)' }}>대략 답을 추정</strong>하는 사고력 훈련.
