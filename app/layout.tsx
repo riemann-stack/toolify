@@ -70,6 +70,10 @@ export const metadata: Metadata = {
   },
 }
 
+// 폰트 CSS URL — preload·삽입 스크립트·noscript 3곳이 동일 URL을 참조해야 캐시가 한 번만 쓰임
+const FONT_CSS_URL =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap'
+
 export default function RootLayout({
   children,
 }: {
@@ -84,11 +88,19 @@ export default function RootLayout({
         {/* 폰트 CDN preconnect — fonts.googleapis CSS + fonts.gstatic 폰트 파일 모두 단축 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* 폰트 CSS — HTML 파싱 시점에 발견되도록 <link>로 로드 (globals.css @import 체인 대체) */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        {/* 폰트 CSS 비차단 로드 — 파서 삽입 stylesheet는 렌더를 차단(모바일 LCP 주범, ~115KB)하므로
+            preload로 조기 fetch만 걸고, 스크립트 삽입 stylesheet(스펙상 비차단)로 적용.
+            display=swap과 결합해 첫 페인트는 시스템 폰트로 즉시 → 로드 후 스왑.
+            next/font 전환 금지(인라인 fontFamily 실명 참조 264파일)·웨이트 축소 불가(5웨이트 전부 실사용) 제약 하의 최적안. */}
+        <link rel="preload" as="style" href={FONT_CSS_URL} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='${FONT_CSS_URL}';document.head.appendChild(l);})();`,
+          }}
         />
+        <noscript>
+          <link rel="stylesheet" href={FONT_CSS_URL} />
+        </noscript>
 
         {/* Google Analytics */}
         <Script
