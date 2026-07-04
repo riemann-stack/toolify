@@ -129,7 +129,6 @@
   align-items: center;
   gap: 6px;
 }
-.megaCatIcon { font-size: 16px; }
 .megaAllLink {
   font-size: 11px;
   color: var(--paper-ink-soft);
@@ -140,56 +139,6 @@
   font-family: 'Inter', sans-serif;
 }@media (hover: hover) {
   .megaAllLink:hover { opacity: 1; }
-}
-
-.megaGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-}
-.megaItem {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.12s;
-  min-width: 0;
-}@media (hover: hover) {
-  .megaItem:hover { background: var(--paper-dim); }
-}
-.megaItemIcon {
-  font-size: 18px;
-  flex-shrink: 0;
-  line-height: 1.3;
-}
-.megaItemBody {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  flex: 1;
-}
-.megaItemName {
-  font-size: 13px;
-  color: var(--paper-ink);
-  font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.megaItemDesc {
-  font-size: 11px;
-  color: var(--paper-ink-faint);
-  line-height: 1.45;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 /* ── 메가 메뉴: 카테고리 그리드 (단일 메뉴) ── */
@@ -231,30 +180,20 @@
   transition: opacity 0.15s, color 0.15s, background 0.15s;
   font-family: inherit;
   line-height: 1;
-}@media (hover: hover) {
-  .megaItem:hover .megaItemFav,
-.megaItemFavActive,
-.searchResultItem:hover .megaItemFav,
-.searchResultItemActive .megaItemFav {
-  opacity: 1;
 }
-}@media (hover: hover) {
+/* 터치 기기 — 투명한 채 탭 가능한 유령 버튼 방지: 상시 표시 */
+@media (hover: none) {
+  .megaItemFav { opacity: 1; }
+}
+@media (hover: hover) {
+  .searchResultItem:hover .megaItemFav,
+  .searchResultItemActive .megaItemFav {
+    opacity: 1;
+  }
   .megaItemFav:hover { background: var(--paper-dim); color: var(--paper-ink); }
 }
+.megaItemFav:focus-visible { opacity: 1; }
 .megaItemFavActive { color: #A16207; opacity: 1; }
-
-/* 배지 */
-.badgeNew, .badgeHot {
-  font-size: 9px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 3px;
-  letter-spacing: 0.04em;
-  line-height: 1.4;
-}
-.badgeNew { background: rgba(8,145,178,0.15); color: #0891B2; }
-.badgeHot { background: rgba(234,88,12,0.15); color: #EA580C; }
 
 /* ── 오른쪽 액션 버튼 영역 ── */
 .actions {
@@ -411,15 +350,23 @@
   gap: 12px;
   padding: 10px 8px;
   border-radius: 8px;
-  text-decoration: none;
   transition: background 0.12s;
-}@media (hover: hover) {
-  .searchResultItem:hover,
-.searchResultItemActive {
-  background: var(--paper-dim);
 }
+/* 화살표 키 하이라이트 — 호버 불가 기기에서도 보여야 하므로 미디어쿼리 밖 */
+.searchResultItemActive { background: var(--paper-dim); }
+@media (hover: hover) {
+  .searchResultItem:hover { background: var(--paper-dim); }
 }
-.searchResultIcon { font-size: 18px; flex-shrink: 0; }
+/* 행 = div 래퍼, 링크는 내부 (a 안 button 중첩 해소) */
+.searchResultLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+}
+.searchResultLink:focus-visible { outline-offset: -2px; }
 .searchResultBody {
   display: flex;
   flex-direction: column;
@@ -661,52 +608,6 @@
   text-align: center;
   margin: 0 0 6px;
   font-family: 'Noto Sans KR', sans-serif;
-}
-
-/* ── 2) 가로 스크롤 카테고리 탭 ── */
-.drawerCatTabs {
-  display: flex;
-  gap: 6px;
-  padding: 4px 0 14px;
-  margin-bottom: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  border-bottom: 1px solid var(--paper-line);
-}
-.drawerCatTabs::-webkit-scrollbar { display: none; }
-.drawerCatTab {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--paper-dim);
-  border: 1px solid var(--paper-line);
-  border-radius: 999px;
-  padding: 7px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--paper-ink);
-  font-family: 'Noto Sans KR', sans-serif;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: border-color 0.12s, color 0.12s;
-}
-.drawerCatTab:active {
-  border-color: var(--chip-color, var(--paper-ink));
-  color: var(--chip-color, var(--paper-ink));
-}
-@media (hover: hover) {
-  .drawerCatTab:hover {
-    border-color: var(--chip-color, var(--paper-ink));
-    color: var(--chip-color, var(--paper-ink));
-  }
-}
-.drawerCatTabCount {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11px;
-  color: var(--paper-ink-faint);
-  font-weight: 700;
 }
 
 /* ── 본문 — 드로어가 스크롤하므로 일반 블록 흐름 ── */

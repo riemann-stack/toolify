@@ -166,11 +166,12 @@
   transition: background 0.15s;
 }
 .searchItem:last-child { border-bottom: none; }
+/* overflow:hidden 컨테이너 안 — 포커스 링을 안쪽으로 그려 절단 방지 */
+.searchItem:focus-visible { outline-offset: -2px; }
 @media (hover: hover) {
   .searchItem:hover { background: var(--paper-dim); }
 }
 
-.searchItemIcon { font-size: 20px; flex-shrink: 0; }
 .searchItemBody { flex: 1; min-width: 0; }
 .searchItemNameRow {
   display: flex;
@@ -231,7 +232,12 @@
   border: 1px solid var(--paper-line);
   border-radius: var(--radius-pill);
   padding: 3px;
+  /* 320px + 카운트 2개 동시 표시 시 넘침 방지 (QA 실측 8px 오버플로) */
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.discoverTabs::-webkit-scrollbar { display: none; }
 .discoverTab {
   display: inline-flex;
   align-items: center;
@@ -332,10 +338,6 @@
     transform: translateY(-1px);
   }
 }
-.randomChipIcon {
-  font-size: 14px;
-  flex-shrink: 0;
-}
 .randomChipName {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -367,7 +369,8 @@
 .catTileCount {
   font-size: 11px;
   font-weight: 700;
-  background: rgba(255, 255, 255, 0.22);
+  /* 밝은 반투명은 중간 명도 타일에서 흰 글자 대비를 깎음(axe 검출) — 잉크 틴트로 어둡게 */
+  background: color-mix(in srgb, var(--paper-ink) 28%, transparent);
   border-radius: var(--radius-pill);
   padding: 2px 8px;
   font-variant-numeric: tabular-nums;
@@ -387,7 +390,7 @@
 }
 .catTileDesc {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.92);
+  color: #ffffff;
   font-family: 'Noto Sans KR', sans-serif;
   /* 좁은 타일(모바일 2열)에서 한 줄 유지 — 잘리면 말줄임 */
   white-space: nowrap;
@@ -395,10 +398,12 @@
   text-overflow: ellipsis;
 }
 
-/* 상황별 가이드 타일 */
+/* 상황별 가이드 타일 — --coral-soft(#FFF1F2)는 페이퍼 캔버스와 명도가 거의 같아
+   경계가 안 보임(모바일 확인) → 틴트 강화 + 코랄 헤어라인 */
 .guideTile {
   grid-column: span 2;
-  background: var(--coral-soft);
+  background: color-mix(in srgb, var(--accent-coral) 16%, var(--paper-card));
+  border: 1px solid color-mix(in srgb, var(--accent-coral) 45%, transparent);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -507,7 +512,8 @@
   gap: 6px;
   font-size: 11px;
   font-weight: 700;
-  color: color-mix(in srgb, var(--cat, var(--accent)) 80%, var(--paper-ink));
+  /* 70% 믹스 — 80%는 cooking 4.04로 AA 미달 (QA 검산) */
+  color: color-mix(in srgb, var(--cat, var(--accent)) 70%, var(--paper-ink));
   font-family: 'Noto Sans KR', sans-serif;
   font-variant-numeric: tabular-nums;
 }
@@ -572,4 +578,10 @@
   .discoverTab { padding: 6px 9px; font-size: 12px; }
   .randomChip { padding: 6px 10px; font-size: 12px; }
   .searchKbd { display: none; }
+  /* kbd 숨김에 맞춰 우측 데드 패딩 제거 (320px 입력 가시폭 확보) */
+  .searchInput { padding-right: 16px; }
+}
+@media (max-width: 380px) {
+  /* iPhone SE 계열 — heroTag 문구가 랩되는 구간: 축소 + 랩 시에도 정돈된 형태 */
+  .heroTag { font-size: 11px; border-radius: 14px; line-height: 1.5; }
 }

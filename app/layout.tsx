@@ -12,6 +12,8 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  // 홈 화면 추가(standalone) 실행 시 하단 탭바의 env(safe-area-inset-bottom)이 유효하려면 필수
+  viewportFit: 'cover',
   themeColor: '#f0f7ff',
   colorScheme: 'light',
 }

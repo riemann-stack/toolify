@@ -59,7 +59,7 @@
   --mint-soft:    #ECFDF5;
   --accent-lime:  #65A30D;   /* 신호(절제) */
   --accent-coral: #FB7185;   /* HOT 신호(점·보더) */
-  --coral-ink:    #E11D48;   /* rose-600 — 코랄 텍스트 AA (4.5:1) */
+  --coral-ink:    #BE123C;   /* rose-700 — 코랄 텍스트 AA: 흰 위 6.1:1, --coral-soft 위 5.5:1 (rose-600은 soft 위 4.28 미달) */
   --coral-soft:   #FFF1F2;
   --ink-faint:    #94A3B8;   /* 캡션·메타(대형/비텍스트 한정) */
   --radius-lg:    16px;      /* 홈 카드 */
@@ -77,7 +77,7 @@
   --paper-line:      #E5E3DC;  /* 헤어라인 */
   --paper-ink:       #1C1B18;  /* 제목·다크 타일 배경 */
   --paper-ink-soft:  #55524A;  /* 보조 텍스트 (흰 위 7.0:1) */
-  --paper-ink-faint: #706D64;  /* 캡션 (흰 위 5.5:1 AA) */
+  --paper-ink-faint: #67645B;  /* 캡션 — 흰 위 5.8:1, --paper-dim 위 5.2:1 (이전 #706D64는 dim 위 4.57 경계) */
 }
 
 *, *::before, *::after {

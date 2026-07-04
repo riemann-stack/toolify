@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { categories, allTools, totalTools, type Category } from '@/lib/tools'
 import { loadUserNav } from '@/lib/userNav'
 import { searchTools } from '@/lib/search'
@@ -126,6 +127,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
     [query],
   )
 
+  const router = useRouter()
   const searchInputRef = useRef<HTMLInputElement>(null)
   // `/` 또는 Cmd/Ctrl+K 로 검색창 포커스
   useEffect(() => {
@@ -178,6 +180,15 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
                   placeholder="연봉, 칼로리, 평수…"
                   value={query}
                   onChange={e => setQuery(e.target.value)}
+                  // Enter = 최상위 결과로 이동, ESC = 드롭다운 해제 (Nav 검색과 동작 일치)
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && searchHits.length > 0) {
+                      router.push(searchHits[0].tool.href)
+                      setQuery('')
+                    } else if (e.key === 'Escape') {
+                      setQuery('')
+                    }
+                  }}
                   autoComplete="off"
                   aria-label="도구 검색"
                 />
@@ -206,7 +217,11 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
                               {category && (
                                 <span
                                   className={styles.searchItemCat}
-                                  style={{ color: category.color, borderColor: `color-mix(in srgb, ${category.color} 33%, transparent)` }}
+                                  style={{
+                                    // 원색(600)은 소형 텍스트 AA 미달 — 잉크 믹스 다크닝 (보더는 원색 유지)
+                                    color: `color-mix(in srgb, ${category.color} 70%, var(--paper-ink))`,
+                                    borderColor: `color-mix(in srgb, ${category.color} 33%, transparent)`,
+                                  }}
                                 >
                                   {category.name}
                                 </span>
@@ -226,11 +241,12 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
               {/* 발견한 도구 — 세그먼트 컨트롤 (로직 불변) */}
               <section className={styles.randomSection}>
                 <div className={styles.discoverHeader}>
-                  <div className={styles.discoverTabs} role="tablist" aria-label="도구 발견 탭">
+                  {/* 세그먼트 필터 — ARIA tabs 패턴(tabpanel·화살표 내비)을 완성하는 대신
+                      토글 버튼 그룹(aria-pressed)으로 정직하게 선언 */}
+                  <div className={styles.discoverTabs} role="group" aria-label="도구 발견 필터">
                     <button
                       type="button"
-                      role="tab"
-                      aria-selected={tab === 'recent'}
+                      aria-pressed={tab === 'recent'}
                       className={`${styles.discoverTab} ${tab === 'recent' ? styles.discoverTabActive : ''}`}
                       onClick={() => setTab('recent')}
                     >
@@ -241,8 +257,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
                     </button>
                     <button
                       type="button"
-                      role="tab"
-                      aria-selected={tab === 'favorite'}
+                      aria-pressed={tab === 'favorite'}
                       className={`${styles.discoverTab} ${tab === 'favorite' ? styles.discoverTabActive : ''}`}
                       onClick={() => setTab('favorite')}
                     >
@@ -253,8 +268,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
                     </button>
                     <button
                       type="button"
-                      role="tab"
-                      aria-selected={tab === 'random'}
+                      aria-pressed={tab === 'random'}
                       className={`${styles.discoverTab} ${tab === 'random' ? styles.discoverTabActive : ''}`}
                       onClick={() => setTab('random')}
                     >

@@ -32,7 +32,8 @@ export default function LiveWidget() {
       style={{
         textAlign: 'center',
         padding: '8px 0 2px',
-        color: 'var(--muted)',
+        // 홈 페이퍼 캔버스 정합 — 쿨 슬레이트(--muted) 대신 웜 잉크
+        color: 'var(--paper-ink-soft)',
         fontVariantNumeric: 'tabular-nums',
       }}
     >
@@ -47,7 +48,8 @@ export default function LiveWidget() {
       >
         {text}
       </div>
-      <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>
+      {/* opacity 감산은 AA 미달(~2.7:1)이었음 — faint 토큰 직접 지정 */}
+      <div style={{ fontSize: 11, color: 'var(--paper-ink-faint)', marginTop: 2 }}>
         내 기기 시계 기준 ·{' '}
         <Link
           href="/tools/date/server-time"

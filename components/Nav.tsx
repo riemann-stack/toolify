@@ -150,8 +150,20 @@ export default function Nav() {
   const mobileSearchRef = useRef<HTMLInputElement>(null)
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const megaRef = useRef<HTMLDivElement | null>(null)
+  // ESC로 오버레이를 닫을 때 포커스를 트리거로 복귀시키기 위한 참조 (APG dialog/menu 패턴)
+  const searchBtnRef = useRef<HTMLButtonElement>(null)
+  const burgerRef = useRef<HTMLButtonElement>(null)
+  const catBtnRef = useRef<HTMLButtonElement>(null)
 
   useBodyScrollLock(mobileOpen)
+
+  // 드로어 열림 = 모달 — 가려진 본문·푸터·하단 탭바를 포커스/AT 트리에서 제외
+  useEffect(() => {
+    if (!mobileOpen) return
+    const els = Array.from(document.querySelectorAll<HTMLElement>('main, footer, nav[aria-label="하단 메뉴"]'))
+    els.forEach(el => el.setAttribute('inert', ''))
+    return () => els.forEach(el => el.removeAttribute('inert'))
+  }, [mobileOpen])
 
   // localStorage 초기 로드
   useEffect(() => {
@@ -231,14 +243,15 @@ export default function Nav() {
         setMobileOpen(false)
       }
       if (e.key === 'Escape') {
-        if (searchOpen) { setSearchOpen(false); setQuery('') }
-        if (mobileOpen) setMobileOpen(false)
-        setActivecat(null)
+        // 닫을 때 포커스를 연 트리거로 복귀 — 미복귀 시 포커스가 body로 유실됨
+        if (searchOpen) { setSearchOpen(false); setQuery(''); searchBtnRef.current?.focus() }
+        if (mobileOpen) { setMobileOpen(false); burgerRef.current?.focus() }
+        if (activecat) { setActivecat(null); catBtnRef.current?.focus() }
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [searchOpen, mobileOpen])
+  }, [searchOpen, mobileOpen, activecat])
 
   const searchResults: Tool[] = (() => {
     if (!query.trim()) return []
@@ -261,7 +274,7 @@ export default function Nav() {
   }
 
   const handleSearchKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') { setSearchOpen(false); setQuery('') }
+    if (e.key === 'Escape') { setSearchOpen(false); setQuery(''); searchBtnRef.current?.focus() }
     else if (e.key === 'ArrowDown') {
       e.preventDefault()
       setHighlightIdx((i) => Math.min(searchResults.length - 1, i + 1))
@@ -302,7 +315,7 @@ export default function Nav() {
 
   return (
     <>
-      <nav className={styles.nav}>
+      <nav className={styles.nav} aria-label="주 메뉴">
         {/* 로고 — 잉크 마크 + 워드마크 (벤토 리디자인 정합) */}
         <Link href="/" className={styles.logo}>
           <span className={styles.logoMark} aria-hidden="true">
@@ -322,6 +335,7 @@ export default function Nav() {
             onMouseEnter={() => handleCatEnter('all')}
             onMouseLeave={handleCatLeave}>
             <button
+              ref={catBtnRef}
               type="button"
               className={`${styles.catLink} ${activecat === 'all' ? styles.catLinkActive : ''}`}
               aria-haspopup="true"
@@ -375,6 +389,7 @@ export default function Nav() {
             <Link
               href="/collections"
               className={`${styles.catLink} ${pathname.startsWith('/collections') ? styles.catLinkActive : ''}`}
+              aria-current={pathname.startsWith('/collections') ? 'page' : undefined}
             >
               상황별 가이드
             </Link>
@@ -401,9 +416,12 @@ export default function Nav() {
           <ShareButton />
 
           <button
+            ref={searchBtnRef}
             className={`${styles.searchBtn} ${searchOpen ? styles.searchBtnActive : ''}`}
             onClick={() => setSearchOpen((o) => !o)}
             aria-label={isMac ? '검색 (⌘K)' : '검색 (Ctrl K)'}
+            aria-expanded={searchOpen}
+            aria-controls="nav-search-panel"
             title={isMac ? '검색 (⌘K)' : '검색 (Ctrl K)'}>
             {searchOpen ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -416,7 +434,7 @@ export default function Nav() {
             )}
           </button>
 
-          <button className={styles.burger} onClick={() => setMobileOpen((o) => !o)} aria-label="메뉴" aria-expanded={mobileOpen}>
+          <button ref={burgerRef} className={styles.burger} onClick={() => setMobileOpen((o) => !o)} aria-label="메뉴" aria-expanded={mobileOpen}>
             <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineTop : ''}`} />
             <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineMid : ''}`} />
             <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineBot : ''}`} />
@@ -426,7 +444,7 @@ export default function Nav() {
 
       {/* 검색창 슬라이드다운 */}
       {searchOpen && (
-        <div className={styles.searchBar}>
+        <div className={styles.searchBar} id="nav-search-panel">
           <div className={styles.searchBarInner}>
             <svg className={styles.searchBarIcon} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -439,6 +457,16 @@ export default function Nav() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleSearchKey}
+              // 콤보박스 — 화살표 하이라이트를 AT에 통지 (aria-activedescendant)
+              role="combobox"
+              aria-expanded={!!query.trim()}
+              aria-controls="nav-search-results"
+              aria-autocomplete="list"
+              aria-activedescendant={
+                query.trim() && searchResults.length > 0
+                  ? `nav-search-opt-${Math.min(highlightIdx, searchResults.length - 1)}`
+                  : undefined
+              }
             />
             <kbd className={styles.searchKbd}>↑↓ Enter · ESC</kbd>
             {query && (
@@ -450,27 +478,35 @@ export default function Nav() {
             )}
           </div>
 
-          {/* 검색 결과 */}
+          {/* 검색 결과 — 행 = div(option), 링크·즐겨찾기 버튼은 형제 (a 안 button 중첩 금지) */}
           {query.trim() && (
-            <div className={styles.searchResults}>
+            <div className={styles.searchResults} role="listbox" id="nav-search-results" aria-label="검색 결과">
               {searchResults.length > 0 ? (
                 searchResults.map((tool, idx) => (
-                  <Link key={tool.href} href={tool.href}
+                  <div
+                    key={tool.href}
+                    id={`nav-search-opt-${idx}`}
+                    role="option"
+                    aria-selected={idx === highlightIdx}
                     className={`${styles.searchResultItem} ${idx === highlightIdx ? styles.searchResultItemActive : ''}`}
                     onMouseEnter={() => setHighlightIdx(idx)}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                    <ToolCatIcon href={tool.href} size={18} />
-                    <span className={styles.searchResultBody}>
-                      <span className={styles.searchResultName}>{tool.name}</span>
-                      <span className={styles.searchResultCat}>{categoryNameByHref(tool.href)}</span>
-                    </span>
+                  >
+                    <Link href={tool.href}
+                      className={styles.searchResultLink}
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
+                      <ToolCatIcon href={tool.href} size={18} />
+                      <span className={styles.searchResultBody}>
+                        <span className={styles.searchResultName}>{tool.name}</span>
+                        <span className={styles.searchResultCat}>{categoryNameByHref(tool.href)}</span>
+                      </span>
+                    </Link>
                     <button
                       className={`${styles.megaItemFav} ${isFav(tool.href) ? styles.megaItemFavActive : ''}`}
                       onClick={(e) => handleToggleFav(e, tool.href)}
                       aria-label={isFav(tool.href) ? '즐겨찾기 제거' : '즐겨찾기 추가'}
                     >{isFav(tool.href) ? '★' : '☆'}</button>
-                  </Link>
+                  </div>
                 ))
               ) : (
                 <div className={styles.searchEmpty}>
@@ -534,7 +570,7 @@ export default function Nav() {
       {/* ── 모바일 드로어 ── 검색·카테고리 탭·아코디언 3단 구조 */}
       {mobileOpen && (
         <>
-          <div className={styles.drawer}>
+          <div className={styles.drawer} role="dialog" aria-modal="true" aria-label="메뉴">
             {/* 1) 상단 고정 검색 */}
             <div className={styles.drawerSearchSticky}>
               <div className={styles.drawerSearchInner}>
@@ -580,7 +616,7 @@ export default function Nav() {
                             <span className={styles.drawerSearchBody}>
                               <span className={styles.drawerSearchName}>{tool.name}</span>
                               {category && (
-                                <span className={styles.drawerSearchCat} style={{ color: category.color }}>
+                                <span className={styles.drawerSearchCat} style={{ color: `color-mix(in srgb, ${category.color} 70%, var(--paper-ink))` }}>
                                   {category.name}
                                 </span>
                               )}
@@ -682,7 +718,7 @@ export default function Nav() {
                         <span className={styles.drawerAccIcon} style={{ color: cat.color }}>
                           <CatIcon id={cat.id} size={16} />
                         </span>
-                        <span className={styles.drawerAccTitle} style={{ color: cat.color }}>{cat.name}</span>
+                        <span className={styles.drawerAccTitle} style={{ color: `color-mix(in srgb, ${cat.color} 70%, var(--paper-ink))` }}>{cat.name}</span>
                         <span className={styles.drawerAccCount}>{cat.tools.length}</span>
                       </summary>
                       <div className={styles.drawerTools}>

@@ -17,7 +17,8 @@
     z-index: 200;
     display: flex;
     align-items: stretch;
-    background: rgba(255, 255, 255, 0.92);
+    /* 0.97 — 다크 콘텐츠(잉크 푸터·타일)가 뒤를 지나도 라벨 대비 4.9:1+ 유지 */
+    background: rgba(255, 255, 255, 0.97);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-top: 1px solid var(--paper-line);

@@ -21,7 +21,7 @@ export default function BottomNav() {
       {/* 고정 바에 가리는 콘텐츠가 없도록 문서 흐름에 같은 높이 확보 (모바일 한정, CSS 제어) */}
       <div className={styles.spacer} aria-hidden="true" />
       <nav className={styles.bar} aria-label="하단 메뉴">
-        <Link href="/" className={`${styles.tab} ${pathname === '/' ? styles.tabActive : ''}`}>
+        <Link href="/" className={`${styles.tab} ${pathname === '/' ? styles.tabActive : ''}`} aria-current={pathname === '/' ? 'page' : undefined}>
           <UiIcon name="home" size={20} />
           <span className={styles.tabLabel}>홈</span>
         </Link>
@@ -33,11 +33,11 @@ export default function BottomNav() {
           <UiIcon name="search" size={20} />
           <span className={styles.tabLabel}>검색</span>
         </button>
-        <Link href="/tools" className={`${styles.tab} ${pathname === '/tools' ? styles.tabActive : ''}`}>
+        <Link href="/tools" className={`${styles.tab} ${pathname === '/tools' ? styles.tabActive : ''}`} aria-current={pathname === '/tools' ? 'page' : undefined}>
           <UiIcon name="grid" size={20} />
           <span className={styles.tabLabel}>전체 도구</span>
         </Link>
-        <Link href="/collections" className={`${styles.tab} ${pathname.startsWith('/collections') ? styles.tabActive : ''}`}>
+        <Link href="/collections" className={`${styles.tab} ${pathname.startsWith('/collections') ? styles.tabActive : ''}`} aria-current={pathname.startsWith('/collections') ? 'page' : undefined}>
           <UiIcon name="compass" size={20} />
           <span className={styles.tabLabel}>가이드</span>
         </Link>

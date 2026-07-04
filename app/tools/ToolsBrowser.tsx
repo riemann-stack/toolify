@@ -66,7 +66,7 @@ export default function ToolsBrowser() {
                         <div className={styles.toolName}>{tool.name}</div>
                         <div className={styles.toolDesc}>{tool.desc}</div>
                       </div>
-                      {cat && <span className={styles.toolCatTag} style={{ color: cat.color }}>{cat.name}</span>}
+                      {cat && <span className={styles.toolCatTag} style={{ color: `color-mix(in srgb, ${cat.color} 70%, var(--paper-ink))` }}>{cat.name}</span>}
                     </Link>
                   )
                 })}
@@ -98,7 +98,7 @@ export default function ToolsBrowser() {
                 <div className={styles.catHeader}>
                   <div className={styles.catHeaderLeft}>
                     <span className={styles.catHeaderIcon} style={{ color: cat.color }}><CatIcon id={cat.id} size={20} /></span>
-                    <span className={styles.catHeaderName} style={{ color: cat.color }}>{cat.name}</span>
+                    <span className={styles.catHeaderName} style={{ color: `color-mix(in srgb, ${cat.color} 70%, var(--paper-ink))` }}>{cat.name}</span>
                     <span className={styles.catHeaderCount}>({cat.tools.length}개)</span>
                   </div>
                   <Link href={`/tools/${cat.id}`} className={styles.catHeaderMore}>카테고리 보기 →</Link>

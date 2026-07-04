@@ -108,7 +108,8 @@
 }
 }
 .catChipIcon { display: inline-flex; align-items: center; }
-.catChipName { color: var(--chip-color, var(--paper-ink)); }
+/* 원색(600) 소형 텍스트는 AA 미달(QA 검산) — 잉크 믹스 다크닝 */
+.catChipName { color: color-mix(in srgb, var(--chip-color, var(--paper-ink)) 70%, var(--paper-ink)); }
 .catChipCount {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 11px;

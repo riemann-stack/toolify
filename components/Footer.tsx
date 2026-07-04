@@ -5,8 +5,8 @@ import styles from './Footer.module.css'
 
 export default function Footer() {
   return (
-    <>
-      {/* 면책 안내 — 푸터 바로 위 중성 화이트 밴드 (페이퍼·쿨톤 양쪽 캔버스 공통) */}
+    <footer>
+      {/* 면책 안내 — 중성 화이트 밴드 (contentinfo 랜드마크 안에 포함 — 랜드마크 밖 법적 문구 방지) */}
       <div className={styles.disclaimer}>
         <p>
           <span className={styles.disclaimerIcon}><UiIcon name="alert" size={13} /></span>
@@ -17,8 +17,8 @@ export default function Footer() {
         </p>
       </div>
 
-      {/* 푸터 — 잉크 다크 블록 (홈 '전체 보기' 타일·Nav 로고 마크와 수미상관) */}
-      <footer className={styles.footer}>
+      {/* 푸터 바 — 잉크 다크 블록 (홈 '전체 보기' 타일·Nav 로고 마크와 수미상관) */}
+      <div className={styles.footer}>
         <div className={styles.left}>
           <div className={styles.logo}>
             <span className={styles.logoMark} aria-hidden="true">
@@ -44,7 +44,7 @@ export default function Footer() {
           <Link href="/terms"      className={styles.link}>이용약관</Link>
           <Link href="/disclaimer" className={styles.link}>면책조항</Link>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   )
 }
