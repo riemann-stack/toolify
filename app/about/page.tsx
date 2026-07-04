@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { categories, totalTools } from '@/lib/tools'
 import { buildMetadata } from '@/lib/seo'
+import CatIcon from '@/components/CatIcon'
 
 export const metadata = buildMetadata({
   path: '/about',
@@ -10,21 +11,22 @@ export const metadata = buildMetadata({
 
 export default function AboutPage() {
   return (
+    <div style={{ background: 'var(--paper)' }}>
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
 
       {/* ── 1. 도입부 ── */}
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>
+      <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>
         About Youtil
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '20px', lineHeight: 1.15 }}>
         복잡한 계산은 Youtil에게,<br />
-        <span style={{ color: 'var(--accent)' }}>당신의 시간에 집중하세요.</span>
+        <span style={{ color: 'var(--paper-ink-soft)' }}>당신의 시간에 집중하세요.</span>
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-        <strong style={{ color: 'var(--text)' }}>Youtil</strong>은 <strong style={{ color: 'var(--text)' }}>「Your Utility」</strong>의 약자로, 일상과 업무 속에서 마주하는 번거로운 계산들을 가장 빠르고 정확하게 해결해 드리기 위해 탄생했습니다.
+      <p style={{ fontSize: '15px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '12px' }}>
+        <strong style={{ color: 'var(--paper-ink)' }}>Youtil</strong>은 <strong style={{ color: 'var(--paper-ink)' }}>「Your Utility」</strong>의 약자로, 일상과 업무 속에서 마주하는 번거로운 계산들을 가장 빠르고 정확하게 해결해 드리기 위해 탄생했습니다.
       </p>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '48px' }}>
-        수많은 정보 속에서 믿을 수 있는 수치를 찾는 수고를 덜어드리는 것이 우리의 목표입니다. 단순한 도구 모음을 넘어, <strong style={{ color: 'var(--text)' }}>정확성과 편의성</strong>을 최우선으로 설계된 유틸리티 서비스입니다.
+      <p style={{ fontSize: '15px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '48px' }}>
+        수많은 정보 속에서 믿을 수 있는 수치를 찾는 수고를 덜어드리는 것이 우리의 목표입니다. 단순한 도구 모음을 넘어, <strong style={{ color: 'var(--paper-ink)' }}>정확성과 편의성</strong>을 최우선으로 설계된 유틸리티 서비스입니다.
       </p>
 
       {/* ── 2. 3가지 약속 ── */}
@@ -35,39 +37,32 @@ export default function AboutPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {[
             {
-              icon: '⚡',
               title: '무설치·무로그인',
               desc: '어떠한 가입 절차나 설치 없이 웹브라우저만 있으면 어디서든 즉시 실행됩니다. 사용자의 개인정보를 요구하지 않아 안전합니다.',
-              color: '#0EA5E9',
+              color: 'color-mix(in srgb, var(--cat-dev) 70%, var(--paper-ink))',
             },
             {
-              icon: '🆓',
               title: '지속 가능한 무료 서비스',
               desc: 'Youtil의 모든 도구는 누구나 제한 없이 무료로 이용할 수 있습니다. 쾌적한 서비스 유지를 위해 최소한의 광고로 운영됩니다.',
-              color: '#0891B2',
+              color: 'color-mix(in srgb, var(--cat-health) 70%, var(--paper-ink))',
             },
             {
-              icon: '🎯',
               title: '데이터의 정확성',
               desc: '최신 법령(만 나이 통일법, 2026년 4대보험 요율 등)과 신뢰할 수 있는 수식을 바탕으로 정밀한 계산 결과를 제공합니다.',
-              color: '#EA580C',
+              color: 'color-mix(in srgb, var(--cat-life) 70%, var(--paper-ink))',
             },
           ].map((item) => (
             <div key={item.title} style={{
-              background: 'var(--bg2)',
-              border: '1px solid var(--border)',
+              background: 'var(--paper-card)',
+              border: '1px solid var(--paper-line)',
               borderRadius: '14px',
               padding: '20px 22px',
-              display: 'flex',
-              gap: '16px',
-              alignItems: 'flex-start',
             }}>
-              <span style={{ fontSize: '28px', flexShrink: 0, marginTop: '2px' }}>{item.icon}</span>
               <div>
                 <p style={{ fontSize: '15px', fontWeight: 700, color: item.color, marginBottom: '6px', fontFamily: 'Noto Sans KR, sans-serif' }}>
                   {item.title}
                 </p>
-                <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
+                <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.8 }}>
                   {item.desc}
                 </p>
               </div>
@@ -81,22 +76,22 @@ export default function AboutPage() {
         <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
           만든 사람
         </h2>
-        <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            Youtil은 <strong style={{ color: 'var(--text)' }}>리만</strong>이 혼자 만들고 운영하는 1인 무료 웹서비스입니다.
+        <div style={{ background: 'var(--paper-card)', border: '1px solid var(--paper-line)', borderRadius: '14px', padding: '24px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '16px' }}>
+            Youtil은 <strong style={{ color: 'var(--paper-ink)' }}>리만</strong>이 혼자 만들고 운영하는 1인 무료 웹서비스입니다.
             도구 제작부터 데이터 검증, 문의 응답까지 직접 담당합니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '12px' }}>
             모든 도구는 같은 절차로 만들어집니다.
           </p>
-          <ol style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '20px', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <li><strong style={{ color: 'var(--text)' }}>공식 출처 확인</strong> — 국세청·식약처·WHO 등 공신력 있는 기관의 산식·기준을 먼저 확인합니다.</li>
-            <li><strong style={{ color: 'var(--text)' }}>교차 검증</strong> — 구현 후 공식 예시·자료와 결과를 대조해 검증합니다.</li>
-            <li><strong style={{ color: 'var(--text)' }}>지속 갱신</strong> — 법령·요율이 바뀌면 갱신하고, 주요 도구에는 최종 업데이트 시점을 표기합니다.</li>
+          <ol style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, paddingLeft: '20px', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <li><strong style={{ color: 'var(--paper-ink)' }}>공식 출처 확인</strong> — 국세청·식약처·WHO 등 공신력 있는 기관의 산식·기준을 먼저 확인합니다.</li>
+            <li><strong style={{ color: 'var(--paper-ink)' }}>교차 검증</strong> — 구현 후 공식 예시·자료와 결과를 대조해 검증합니다.</li>
+            <li><strong style={{ color: 'var(--paper-ink)' }}>지속 갱신</strong> — 법령·요율이 바뀌면 갱신하고, 주요 도구에는 최종 업데이트 시점을 표기합니다.</li>
           </ol>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
+          <p style={{ fontSize: '13px', color: 'var(--paper-ink-soft)', lineHeight: 1.8 }}>
             잘못된 정보를 발견하셨다면{' '}
-            <a href="mailto:contact@youtil.kr" style={{ color: 'var(--accent)', textDecoration: 'none' }}>contact@youtil.kr</a>
+            <a href="mailto:contact@youtil.kr" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>contact@youtil.kr</a>
             로 알려주세요. 확인 후 바로 수정합니다.
           </p>
         </div>
@@ -107,7 +102,7 @@ export default function AboutPage() {
         <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
           제공 도구 — {totalTools}가지
         </h2>
-        <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '20px' }}>
+        <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.8, marginBottom: '20px' }}>
           금융·건강·요리·생활·단위·날짜·개발자까지, {categories.length}개 카테고리에 걸쳐 실생활에 꼭 필요한 도구들을 제공합니다.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -116,19 +111,21 @@ export default function AboutPage() {
               key={cat.id}
               href={`/tools/${cat.id}`}
               style={{
-                background: 'var(--bg2)',
-                border: '1px solid var(--border)',
+                background: 'var(--paper-card)',
+                border: '1px solid var(--paper-line)',
                 borderRadius: '14px',
                 padding: '16px 20px',
                 textDecoration: 'none',
                 display: 'block',
               }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                <span style={{ fontSize: '18px' }}>{cat.icon}</span>
-                <span style={{ fontSize: '14px', fontWeight: 600, color: cat.color }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', color: cat.color }} aria-hidden="true">
+                  <CatIcon id={cat.id} size={18} />
+                </span>
+                <span style={{ fontSize: '14px', fontWeight: 600, color: `color-mix(in srgb, ${cat.color} 70%, var(--paper-ink))` }}>
                   {cat.name}
                 </span>
-                <span style={{ fontSize: '12px', color: 'var(--muted)', marginLeft: 'auto' }}>
+                <span style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', marginLeft: 'auto' }}>
                   {cat.tools.length}개 →
                 </span>
               </div>
@@ -136,9 +133,9 @@ export default function AboutPage() {
                 {cat.tools.map(tool => (
                   <span key={tool.href} style={{
                     fontSize: '12px',
-                    color: 'var(--muted)',
-                    background: 'var(--bg3)',
-                    border: '1px solid var(--border)',
+                    color: 'var(--paper-ink-soft)',
+                    background: 'var(--paper-dim)',
+                    border: '1px solid var(--paper-line)',
                     borderRadius: '999px',
                     padding: '3px 10px',
                   }}>
@@ -156,26 +153,25 @@ export default function AboutPage() {
         <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
           지속적인 업데이트
         </h2>
-        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '24px' }}>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            Youtil은 <strong style={{ color: 'var(--text)' }}>2026년 최신 데이터</strong>(국민연금 인상분, 개정 세법, 만 나이 통일법 등)를 지속적으로 반영하고 있습니다.
+        <div style={{ background: 'var(--paper-card)', border: '1px solid var(--paper-line)', borderRadius: '14px', padding: '24px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '16px' }}>
+            Youtil은 <strong style={{ color: 'var(--paper-ink)' }}>2026년 최신 데이터</strong>(국민연금 인상분, 개정 세법, 만 나이 통일법 등)를 지속적으로 반영하고 있습니다.
             단순한 계산기를 넘어, 사용자의 삶에 실질적인 도움이 되는 유틸리티를 꾸준히 추가해 나가고 있습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
             {[
-              { icon: '📅', label: '2026년 기준', desc: '4대보험·세법 최신 반영' },
-              { icon: '🔧', label: '지속 개선',   desc: '사용자 피드백 반영' },
-              { icon: '📱', label: '모바일 최적화', desc: '어떤 기기에서도 편리하게' },
+              { label: '2026년 기준', desc: '4대보험·세법 최신 반영' },
+              { label: '지속 개선',   desc: '사용자 피드백 반영' },
+              { label: '모바일 최적화', desc: '어떤 기기에서도 편리하게' },
             ].map(item => (
               <div key={item.label} style={{
-                background: 'var(--bg3)',
+                background: 'var(--paper-dim)',
                 borderRadius: '10px',
                 padding: '14px',
                 textAlign: 'center',
               }}>
-                <div style={{ fontSize: '22px', marginBottom: '6px' }}>{item.icon}</div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>{item.label}</div>
-                <div style={{ fontSize: '12px', color: 'var(--muted)' }}>{item.desc}</div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--paper-ink)', marginBottom: '4px' }}>{item.label}</div>
+                <div style={{ fontSize: '12px', color: 'var(--paper-ink-soft)' }}>{item.desc}</div>
               </div>
             ))}
           </div>
@@ -187,7 +183,7 @@ export default function AboutPage() {
         <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
           사용자의 목소리로 성장합니다
         </h2>
-        <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+        <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '20px' }}>
           Youtil은 사용자 여러분의 피드백을 통해 매일 더 똑똑해집니다.
           필요한 도구가 없거나 개선이 필요한 부분이 있다면 언제든 편하게 연락해 주세요.
           작은 의견 하나하나가 더 나은 Youtil을 만드는 원동력이 됩니다.
@@ -195,9 +191,8 @@ export default function AboutPage() {
         <a href="mailto:contact@youtil.kr" style={{
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '10px',
-          background: 'var(--accent)',
-          color: '#0D0D0D',
+          background: 'var(--paper-ink)',
+          color: '#ffffff',
           borderRadius: '12px',
           padding: '14px 24px',
           fontSize: '14px',
@@ -206,18 +201,18 @@ export default function AboutPage() {
           fontFamily: 'Noto Sans KR, sans-serif',
           transition: 'opacity 0.15s',
         }}>
-          <span>📧</span>
           contact@youtil.kr 이메일 보내기
         </a>
       </section>
 
       {/* ── 하단 링크 ── */}
-      <div style={{ borderTop: '1px solid var(--border)', paddingTop: '24px', display: 'flex', gap: '20px', fontSize: '13px' }}>
-        <Link href="/tools"   style={{ color: 'var(--muted)' }}>전체 도구 보기</Link>
-        <Link href="/privacy" style={{ color: 'var(--muted)' }}>개인정보처리방침</Link>
-        <Link href="/terms"   style={{ color: 'var(--muted)' }}>이용약관</Link>
+      <div style={{ borderTop: '1px solid var(--paper-line)', paddingTop: '24px', display: 'flex', gap: '20px', fontSize: '13px' }}>
+        <Link href="/tools"   style={{ color: 'var(--paper-ink-soft)' }}>전체 도구 보기</Link>
+        <Link href="/privacy" style={{ color: 'var(--paper-ink-soft)' }}>개인정보처리방침</Link>
+        <Link href="/terms"   style={{ color: 'var(--paper-ink-soft)' }}>이용약관</Link>
       </div>
 
+    </div>
     </div>
   )
 }

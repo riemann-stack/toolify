@@ -17,27 +17,27 @@ const sectionTitle: React.CSSProperties = {
   fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
   fontSize: '20px',
   fontWeight: 700,
-  color: 'var(--text)',
+  color: 'var(--paper-ink)',
   marginBottom: '14px',
   marginTop: '40px',
   letterSpacing: '-0.5px',
 }
 const card: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
+  background: 'var(--paper-card)',
+  border: '1px solid var(--paper-line)',
   borderRadius: '14px',
   padding: '18px 22px',
   marginBottom: '12px',
 }
 const para: React.CSSProperties = {
   fontSize: '14px',
-  color: 'var(--text)',
+  color: 'var(--paper-ink)',
   lineHeight: 1.85,
   margin: '0 0 10px',
 }
 const muted: React.CSSProperties = {
   fontSize: '13px',
-  color: 'var(--muted)',
+  color: 'var(--paper-ink-soft)',
   lineHeight: 1.8,
   margin: '0 0 8px',
 }
@@ -59,7 +59,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'medical',
     emoji: '🏥',
     title: '의료·건강',
-    color: '#DB2777',
+    color: 'var(--cat-date)',
     tools: 'BMI · BMR · 다이어트 · 임신 주수 · 반려동물 나이 · 혈중알코올농도 · 영양제 상호작용 · 자외선 차단 · 생리 주기 추적',
     warnings: [
       '본 도구는 의학적 진단·치료·처방을 대체하지 않으며, 의사·약사·영양사 등 의료 전문가의 자문을 대신할 수 없습니다.',
@@ -75,7 +75,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'tax',
     emoji: '💰',
     title: '세무·재무',
-    color: '#0891B2',
+    color: 'var(--cat-health)',
     tools: '연봉 실수령액 · 4대보험료 · 상속세 · 양도소득세 · 부동산 취득세 · 퇴직금 · 부가가치세 · 종합소득세 (해당 시) · 자동차 비용',
     warnings: [
       '세금 계산 결과는 2026년 기준 공식 요율을 적용하나, 비과세 항목·부양가족·세액공제·감면·중과세·이월결손금 등 개인 상황을 완전히 반영하지 못합니다.',
@@ -91,7 +91,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'finance',
     emoji: '📈',
     title: '금융·투자',
-    color: '#0D9488',
+    color: 'var(--cat-edu)',
     tools: '주식 평단가·손익 · 배당금 · 복리 · 적금·예금 · 공모주 청약 환급 · 종목 매수 결정 · 대출 이자 · 부동산 계산기 · 경매',
     warnings: [
       '본 서비스는 일반 금융 계산만 제공하며 「자본시장법」 제9조에 따른 투자권유·자문·매매중개·집합투자업에 해당하지 않습니다.',
@@ -108,7 +108,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'legal',
     emoji: '⚖️',
     title: '법률·민원',
-    color: '#D97706',
+    color: 'var(--cat-cooking)',
     tools: '군 복무 D-day · 역사 시대 환산 · 한자·생활 단위 · 기타 법령 인용 도구',
     warnings: [
       '본 도구의 법률·법령 정보는 2026년 시점 공개 자료를 인용한 일반 정보입니다.',
@@ -123,7 +123,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'food',
     emoji: '🍳',
     title: '식품·요리',
-    color: '#EA580C',
+    color: 'var(--cat-life)',
     tools: '식품 보관 기간 · 해동 시간 · 발효 일정 · 베이커 퍼센트 · 염도(절임·김치) · 시럽·당도 · 튀김 온도 · 차·커피 추출',
     warnings: [
       '식품 보관·해동 시간은 일반 권장치이며, 식품의 초기 신선도·냉장고 온도·포장 상태에 따라 실제 안전 기간이 크게 달라집니다.',
@@ -140,7 +140,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'construction',
     emoji: '🏗️',
     title: '건축·인테리어·구조',
-    color: '#9B59B6',
+    color: 'var(--cat-art)',
     tools: '벽지·페인트·바닥재·몰딩·지붕 · 전선·배관·철근·볼트 토크·스크류 · 에어컨 평형 · 조명 와트',
     warnings: [
       '건축·인테리어 계산은 표준 시공 기준 어림치이며, 실제 자재 손실(10~15%)·시공 환경·구조 안전성을 고려하지 않습니다.',
@@ -157,7 +157,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'chemical',
     emoji: '🧪',
     title: '화학·약품',
-    color: '#FFA63E',
+    color: 'var(--warning)',
     tools: '농도 변환 (%·ppm·ppb·mg/L·g/L) · 소독액 희석 · 비료 EC',
     warnings: [
       '약품·소독액 농도 계산은 수용액 가정의 일반 환산이며, 실제 사용 농도·반응 시간은 제조사 라벨을 우선해야 합니다.',
@@ -174,7 +174,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'sports',
     emoji: '🏃',
     title: '운동·스포츠',
-    color: '#0D9488',
+    color: 'var(--cat-edu)',
     tools: '러닝 페이스 · 마라톤 예측 · 1RM · 인터벌 트레이닝 · 골프 핸디캡·비거리·비용 · 야구·축구 통계 · 격투기 체급',
     warnings: [
       '1RM(1회 최대 중량) 추정은 Epley·Brzycki 등 공식 기반이며, 실제 시도 전 자격 트레이너 지도와 워밍업이 필수입니다.',
@@ -190,7 +190,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'art',
     emoji: '🎨',
     title: '예술·창작·공예',
-    color: '#9333EA',
+    color: 'var(--cat-art)',
     tools: '물감·잉크 혼합 · 색상 변환 · 사진 노출·화각 · 황금비율 · 뜨개질 게이지 · 글자수 · 더미 텍스트',
     warnings: [
       '본 도구의 색 시뮬레이션은 디지털 RGB 공간의 근사이며, 실제 물감·잉크의 안료 농도·매체(수성/유성)·건조 후 변색을 완전히 반영하지 않습니다. 정확한 색은 반드시 소량 테스트 후 작업하세요.',
@@ -208,7 +208,7 @@ const DOMAINS: DomainBlock[] = [
     id: 'dev',
     emoji: '🖥️',
     title: '개발자·인코딩·암호',
-    color: '#0EA5E9',
+    color: 'var(--cat-dev)',
     tools: 'Base64 · JSON · CSS 변환 · 진법 변환 · 해시 생성기 · 정규식 테스트기 · YAML ↔ JSON 변환 · URL 인코더/디코더 · cURL 변환기 · HTTP 상태 코드 검색기',
     warnings: [
       '본 도구의 해시 알고리즘 중 MD5·SHA-1은 충돌 공격이 알려져 비밀번호 해싱·디지털 서명·SSL 인증서 용도로 사용 금지. 파일 무결성 확인 용도로만 사용하세요.',
@@ -230,27 +230,28 @@ const DOMAINS: DomainBlock[] = [
 
 export default function DisclaimerPage() {
   return (
+    <div style={{ background: 'var(--paper)' }}>
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
+      <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         법적 고지
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         ⚠️ 면책조항 (Disclaimer)
       </h1>
-      <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '28px' }}>
-        최종 업데이트: {LAST_UPDATED} · 「<a href="/terms" style={{ color: 'var(--accent)' }}>이용약관</a>」 제7조의 보강 문서
+      <p style={{ fontSize: '13px', color: 'var(--paper-ink-soft)', marginBottom: '28px' }}>
+        최종 업데이트: {LAST_UPDATED} · 「<a href="/terms" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>이용약관</a>」 제7조의 보강 문서
       </p>
 
       {/* 핵심 요약 */}
       <div style={{
-        background: 'rgba(255, 138, 62, 0.06)',
-        border: '1px solid rgba(255, 138, 62, 0.40)',
+        background: 'color-mix(in srgb, var(--warning) 6%, var(--paper-card))',
+        border: '1px solid color-mix(in srgb, var(--warning) 32%, var(--paper-line))',
         borderRadius: '14px',
         padding: '18px 22px',
         marginBottom: '32px',
       }}>
-        <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
-          <strong style={{ color: '#FFA63E' }}>핵심 요약</strong> — {SITE_NAME}의 모든 도구는{' '}
+        <p style={{ fontSize: '14px', color: 'var(--paper-ink)', lineHeight: 1.85, margin: 0 }}>
+          <strong style={{ color: 'var(--warning)' }}>핵심 요약</strong> — {SITE_NAME}의 모든 도구는{' '}
           <strong>일반 정보 제공·교육·참고 목적</strong>입니다. 의료·세무·금융·법률 등 전문가 자문이 필요한 사안에 본 서비스의 계산 결과를 단독 근거로 사용하지 마세요.
           본 서비스는 <strong>「있는 그대로(As-Is)」</strong> 제공되며 정확성·완전성·최신성을 보장하지 않습니다.
           서비스 이용으로 발생한 직접·간접 손해에 대해 운영자는 법적 책임을 지지 않습니다.
@@ -259,18 +260,18 @@ export default function DisclaimerPage() {
 
       {/* 분야 빠른 이동 */}
       <div style={card}>
-        <p style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 12px', fontWeight: 600 }}>
+        <p style={{ fontSize: 11, color: 'var(--paper-ink-soft)', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 12px', fontWeight: 600 }}>
           📑 분야별 빠른 이동
         </p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {DOMAINS.map((d) => (
             <a key={d.id} href={`#${d.id}`} style={{
-              background: 'var(--bg3)',
-              border: '1px solid var(--border)',
+              background: 'var(--paper-dim)',
+              border: '1px solid var(--paper-line)',
               borderRadius: 999,
               padding: '6px 12px',
               fontSize: 12,
-              color: 'var(--text)',
+              color: 'var(--paper-ink)',
               textDecoration: 'none',
               fontWeight: 600,
             }}>
@@ -311,8 +312,8 @@ export default function DisclaimerPage() {
           key={d.id}
           id={d.id}
           style={{
-            background: 'var(--bg2)',
-            border: `1px solid ${d.color}40`,
+            background: 'var(--paper-card)',
+            border: `1px solid color-mix(in srgb, ${d.color} 25%, var(--paper-line))`,
             borderLeft: `4px solid ${d.color}`,
             borderRadius: '14px',
             padding: '20px 24px',
@@ -324,30 +325,30 @@ export default function DisclaimerPage() {
             fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
             fontSize: '18px',
             fontWeight: 700,
-            color: d.color,
+            color: `color-mix(in srgb, ${d.color} 70%, var(--paper-ink))`,
             margin: '0 0 6px',
           }}>
             {d.emoji} {d.title}
           </h3>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 14px', lineHeight: 1.7 }}>
-            관련 도구: <span style={{ color: 'var(--text)' }}>{d.tools}</span>
+          <p style={{ fontSize: 12, color: 'var(--paper-ink-soft)', margin: '0 0 14px', lineHeight: 1.7 }}>
+            관련 도구: <span style={{ color: 'var(--paper-ink)' }}>{d.tools}</span>
           </p>
           <ul style={{ paddingLeft: 18, margin: '0 0 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {d.warnings.map((w, i) => (
-              <li key={i} style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{w}</li>
+              <li key={i} style={{ fontSize: 13, color: 'var(--paper-ink)', lineHeight: 1.75 }}>{w}</li>
             ))}
           </ul>
           <div style={{
-            background: 'var(--bg3)',
+            background: 'var(--paper-dim)',
             borderRadius: 8,
             padding: '10px 14px',
             marginBottom: 8,
           }}>
-            <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
-              ⚖️ <strong style={{ color: 'var(--text)' }}>법령 관계</strong> — {d.legal}
+            <p style={{ fontSize: 12, color: 'var(--paper-ink-soft)', margin: 0, lineHeight: 1.7 }}>
+              ⚖️ <strong style={{ color: 'var(--paper-ink)' }}>법령 관계</strong> — {d.legal}
             </p>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: 'var(--paper-ink-soft)', margin: 0, lineHeight: 1.7 }}>
             {d.recommend}
           </p>
         </div>
@@ -365,7 +366,7 @@ export default function DisclaimerPage() {
           <li style={muted}>인용된 공식·표준이 잘못 인용되었거나 누락된 경우 정정 요청을 환영합니다.</li>
         </ul>
         <p style={muted}>
-          정확한 최신 법령은 <a href="https://www.law.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국가법령정보센터(www.law.go.kr)</a>, 세제는 <a href="https://www.nts.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국세청 홈택스</a>·<a href="https://www.hometax.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국세청 126</a>에서 확인하실 수 있습니다.
+          정확한 최신 법령은 <a href="https://www.law.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>국가법령정보센터(www.law.go.kr)</a>, 세제는 <a href="https://www.nts.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>국세청 홈택스</a>·<a href="https://www.hometax.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>국세청 126</a>에서 확인하실 수 있습니다.
         </p>
       </div>
 
@@ -387,8 +388,8 @@ export default function DisclaimerPage() {
           계산 오류, 잘못된 인용, 부정확한 안내, 법령 개정 미반영 등을 발견하셨다면 아래 채널로 알려주세요. 빠르게 검토·수정하겠습니다.
         </p>
         <ul style={{ paddingLeft: 20, margin: '0 0 8px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <li style={muted}>📧 <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--accent)' }}>{CONTACT_EMAIL}</a> — 도구명·입력값·예상 결과·실제 결과를 함께 보내주시면 빠르게 처리됩니다.</li>
-          <li style={muted}>💬 <Link href="/contact" style={{ color: 'var(--accent)' }}>문의 페이지</Link> — 일반 문의·기능 요청·도구 추가 제안</li>
+          <li style={muted}>📧 <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>{CONTACT_EMAIL}</a> — 도구명·입력값·예상 결과·실제 결과를 함께 보내주시면 빠르게 처리됩니다.</li>
+          <li style={muted}>💬 <Link href="/contact" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>문의 페이지</Link> — 일반 문의·기능 요청·도구 추가 제안</li>
         </ul>
         <p style={muted}>
           신고 시 개인정보(주민번호·계좌번호·연락처 등)는 절대 포함하지 마세요. 익명 신고도 환영합니다.
@@ -400,19 +401,19 @@ export default function DisclaimerPage() {
       <div style={card}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>날짜</th>
-              <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>변경 내용</th>
+            <tr style={{ borderBottom: '1px solid var(--paper-line)' }}>
+              <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--paper-ink-soft)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>날짜</th>
+              <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--paper-ink-soft)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>변경 내용</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td style={{ padding: '10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2026-05-05</td>
-              <td style={{ padding: '10px', color: 'var(--text)' }}>면책조항 페이지 신설(이용약관 제7조 보강) — 8개 분야별 강화 면책 추가</td>
+              <td style={{ padding: '10px', color: 'var(--paper-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2026-05-05</td>
+              <td style={{ padding: '10px', color: 'var(--paper-ink)' }}>면책조항 페이지 신설(이용약관 제7조 보강) — 8개 분야별 강화 면책 추가</td>
             </tr>
             <tr>
-              <td style={{ padding: '10px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>2026-04-12</td>
-              <td style={{ padding: '10px', color: 'var(--text)' }}>이용약관 제7조 면책조항 작성 (금융 일반)</td>
+              <td style={{ padding: '10px', color: 'var(--paper-ink-soft)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>2026-04-12</td>
+              <td style={{ padding: '10px', color: 'var(--paper-ink)' }}>이용약관 제7조 면책조항 작성 (금융 일반)</td>
             </tr>
           </tbody>
         </table>
@@ -420,17 +421,18 @@ export default function DisclaimerPage() {
 
       {/* 마무리 */}
       <div style={{
-        background: 'var(--bg2)',
-        border: '1px solid var(--border)',
+        background: 'var(--paper-card)',
+        border: '1px solid var(--paper-line)',
         borderRadius: '12px',
         padding: '16px 20px',
         marginTop: 24,
       }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.8 }}>
-          본 면책조항은 「<Link href="/terms" style={{ color: 'var(--accent)' }}>이용약관</Link>」의 일부를 구성합니다. 면책조항과 이용약관 간 해석상 충돌이 있을 경우, <strong style={{ color: 'var(--text)' }}>본 면책조항이 우선 적용</strong>됩니다.
+        <p style={{ fontSize: 13, color: 'var(--paper-ink-soft)', margin: 0, lineHeight: 1.8 }}>
+          본 면책조항은 「<Link href="/terms" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>이용약관</Link>」의 일부를 구성합니다. 면책조항과 이용약관 간 해석상 충돌이 있을 경우, <strong style={{ color: 'var(--paper-ink)' }}>본 면책조항이 우선 적용</strong>됩니다.
           서비스 이용으로 본 면책조항에 동의한 것으로 간주됩니다.
         </p>
       </div>
+    </div>
     </div>
   )
 }

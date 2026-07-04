@@ -13,19 +13,20 @@ const CONTACT_EMAIL = 'contact@youtil.kr'
 
 export default function PrivacyPage() {
   return (
+    <div style={{ background: 'var(--paper)' }}>
     <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px', color: 'var(--paper-ink)' }}>
         개인정보처리방침
       </h1>
-      <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '48px' }}>
+      <p style={{ fontSize: '13px', color: 'var(--paper-ink-soft)', marginBottom: '48px' }}>
         최종 업데이트: {LAST_UPDATED}
       </p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', fontSize: '14px', lineHeight: '1.9', color: 'var(--muted)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', fontSize: '14px', lineHeight: '1.9', color: 'var(--paper-ink-soft)' }}>
 
         {/* 1 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             1. 총칙
           </h2>
           <p>
@@ -37,7 +38,7 @@ export default function PrivacyPage() {
 
         {/* 2 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             2. 수집하는 개인정보
           </h2>
           <p style={{ marginBottom: '12px' }}>
@@ -61,7 +62,7 @@ export default function PrivacyPage() {
 
         {/* 3 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             3. 개인정보 수집 목적
           </h2>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -73,26 +74,26 @@ export default function PrivacyPage() {
 
         {/* 4 — 보강된 쿠키 정책 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             4. 쿠키(Cookie) 정책
           </h2>
           <p style={{ marginBottom: '12px' }}>
             {SITE_NAME}은 Google Analytics 및 Google AdSense를 통해 쿠키와 더불어
-            <strong style={{ color: 'var(--text)' }}> 웹 비콘(Web Beacon)·픽셀 태그·IP 주소·광고 식별자 등 기타 식별자</strong>를
+            <strong style={{ color: 'var(--paper-ink)' }}> 웹 비콘(Web Beacon)·픽셀 태그·IP 주소·광고 식별자 등 기타 식별자</strong>를
             사용할 수 있습니다. 쿠키는 이용자의 브라우저에 저장되는 소량의 데이터이며, 웹 비콘은
             페이지·광고의 열람 여부를 측정하는 기술입니다. 이들은 서비스 이용 패턴 분석 및
             맞춤형 광고 제공에 활용됩니다.
           </p>
           <p style={{ marginBottom: '12px' }}>
-            Google AdSense는 <strong style={{ color: 'var(--text)' }}>DART 쿠키</strong>를 사용하여
+            Google AdSense는 <strong style={{ color: 'var(--paper-ink)' }}>DART 쿠키</strong>를 사용하여
             이용자가 본 사이트 및 인터넷의 다른 사이트를 방문할 때 광고를 게재합니다.
             이용자는 아래 방법으로 맞춤형 광고를 거부할 수 있습니다.
           </p>
 
           {/* 맞춤형 광고 거부 안내 박스 */}
           <div style={{
-            background: 'var(--bg2)',
-            border: '1px solid rgba(14,165,233,0.2)',
+            background: 'var(--paper-card)',
+            border: '1px solid var(--paper-line)',
             borderRadius: '12px',
             padding: '16px 20px',
             marginBottom: '12px',
@@ -100,27 +101,27 @@ export default function PrivacyPage() {
             flexDirection: 'column',
             gap: '10px',
           }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--paper-ink-soft)', marginBottom: '4px' }}>
               맞춤형 광고 거부 방법
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div>
-                <p style={{ fontSize: '13px', color: 'var(--text)', marginBottom: '2px' }}>① Google 광고 설정 페이지</p>
+                <p style={{ fontSize: '13px', color: 'var(--paper-ink)', marginBottom: '2px' }}>① Google 광고 설정 페이지</p>
                 <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: '13px', color: 'var(--accent)', wordBreak: 'break-all' }}>
+                  style={{ fontSize: '13px', color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px', wordBreak: 'break-all' }}>
                   https://www.google.com/settings/ads
                 </a>
-                <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '2px' }}>
+                <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', marginTop: '2px' }}>
                   구글 계정의 광고 설정을 방문하여 맞춤형 광고를 게재하지 않도록 설정할 수 있습니다.
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: '13px', color: 'var(--text)', marginBottom: '2px' }}>② 디지털 광고 연합(DAA) 옵트아웃</p>
+                <p style={{ fontSize: '13px', color: 'var(--paper-ink)', marginBottom: '2px' }}>② 디지털 광고 연합(DAA) 옵트아웃</p>
                 <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: '13px', color: 'var(--accent)' }}>
+                  style={{ fontSize: '13px', color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
                   www.aboutads.info
                 </a>
-                <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '2px' }}>
+                <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', marginTop: '2px' }}>
                   타사 공급업체의 맞춤형 광고용 쿠키 사용을 차단할 수 있습니다.
                 </p>
               </div>
@@ -131,13 +132,13 @@ export default function PrivacyPage() {
             브라우저 설정에서 쿠키를 거부할 수 있으나, 일부 서비스 이용이 제한될 수 있습니다.
             Google의 개인정보 처리에 대한 자세한 내용은{' '}
             <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
-              style={{ color: 'var(--accent)' }}>Google 개인정보처리방침</a>을 참고하세요.
+              style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>Google 개인정보처리방침</a>을 참고하세요.
           </p>
         </section>
 
         {/* 5 — 구체화된 제3자 제공 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             5. 제3자 광고 서비스 이용
           </h2>
           <p style={{ marginBottom: '12px' }}>
@@ -154,7 +155,7 @@ export default function PrivacyPage() {
 
         {/* 6 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             6. 보유 및 이용 기간
           </h2>
           <p>
@@ -165,7 +166,7 @@ export default function PrivacyPage() {
 
         {/* 7 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             7. 이용자의 권리
           </h2>
           <p>
@@ -176,15 +177,15 @@ export default function PrivacyPage() {
 
         {/* 8 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             8. 개인정보 보호책임자
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--paper-card)', border: '1px solid var(--paper-line)', borderRadius: '12px', padding: '16px 20px' }}>
             <p>서비스명: {SITE_NAME}</p>
             <p style={{ marginTop: '6px' }}>개인정보 보호책임자: 이주훈</p>
             <p style={{ marginTop: '6px' }}>
               이메일:{' '}
-              <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--accent)' }}>
+              <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
                 {CONTACT_EMAIL}
               </a>
             </p>
@@ -193,7 +194,7 @@ export default function PrivacyPage() {
 
         {/* 9 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             9. 방침 변경 안내
           </h2>
           <p>
@@ -205,19 +206,19 @@ export default function PrivacyPage() {
 
         {/* 10 — 신규: SSL 보안 조치 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             10. 개인정보 보호를 위한 노력
           </h2>
           <p style={{ marginBottom: '12px' }}>
             {SITE_NAME}은 이용자의 보안을 위해 전체 사이트에{' '}
-            <strong style={{ color: 'var(--text)' }}>SSL(Secure Sockets Layer) 암호화</strong>를 적용하여
+            <strong style={{ color: 'var(--paper-ink)' }}>SSL(Secure Sockets Layer) 암호화</strong>를 적용하여
             데이터 전송 시 안전을 기하고 있습니다.
             브라우저 주소창의 자물쇠(🔒) 아이콘을 통해 암호화된 연결을 확인하실 수 있습니다.
           </p>
           <p>
-            {SITE_NAME}은 별도의 서버에 개인정보를 저장하지 않으며, <strong style={{ color: 'var(--text)' }}>건강·재무 등 민감한
+            {SITE_NAME}은 별도의 서버에 개인정보를 저장하지 않으며, <strong style={{ color: 'var(--paper-ink)' }}>건강·재무 등 민감한
             계산 입력값은 이용자의 브라우저 내에서만 처리</strong>됩니다. 다만 일부 도구는 기능 제공을 위해
-            이용자가 직접 입력·선택한 <strong style={{ color: 'var(--text)' }}>공개 정보</strong>(예: 확인할 웹사이트 주소,
+            이용자가 직접 입력·선택한 <strong style={{ color: 'var(--paper-ink)' }}>공개 정보</strong>(예: 확인할 웹사이트 주소,
             조회할 농산물 품목)를 본 사이트 서버 또는 외부 공개 서비스로 전송해 결과(서버 시간·시세 등)를
             받아옵니다. 이 과정에도 건강·재무·신체정보와 같은 개인 식별·민감 정보는 포함되지 않습니다
             (자세한 내용은 아래 11조 참고).
@@ -226,20 +227,19 @@ export default function PrivacyPage() {
           {/* 보안 포인트 3개 */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginTop: '16px' }}>
             {[
-              { icon: '🔒', title: 'HTTPS 적용',   desc: '전체 사이트 SSL 암호화' },
-              { icon: '🚫', title: '서버 미저장',   desc: '계산 입력값은 브라우저 내에서 처리' },
-              { icon: '👤', title: '비회원 서비스', desc: '개인정보 수집 없음' },
+              { title: 'HTTPS 적용',   desc: '전체 사이트 SSL 암호화' },
+              { title: '서버 미저장',   desc: '계산 입력값은 브라우저 내에서 처리' },
+              { title: '비회원 서비스', desc: '개인정보 수집 없음' },
             ].map(item => (
               <div key={item.title} style={{
-                background: 'var(--bg2)',
-                border: '1px solid var(--border)',
+                background: 'var(--paper-card)',
+                border: '1px solid var(--paper-line)',
                 borderRadius: '10px',
                 padding: '14px 12px',
                 textAlign: 'center',
               }}>
-                <div style={{ fontSize: '20px', marginBottom: '6px' }}>{item.icon}</div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>{item.title}</div>
-                <div style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.5 }}>{item.desc}</div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--paper-ink)', marginBottom: '4px' }}>{item.title}</div>
+                <div style={{ fontSize: '11px', color: 'var(--paper-ink-soft)', lineHeight: 1.5 }}>{item.desc}</div>
               </div>
             ))}
           </div>
@@ -247,44 +247,44 @@ export default function PrivacyPage() {
 
         {/* 11 — 신규: 입력값(건강·재무 등 민감정보) 처리 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
             11. 계산기 입력값(건강·재무 등 민감정보) 처리
           </h2>
           <p style={{ marginBottom: '12px' }}>
             {SITE_NAME}의 계산기·도구에 입력하시는 값(예: 체중·키·생리주기 등 건강 정보,
-            소득·대출·자산 등 재무 정보)은 <strong style={{ color: 'var(--text)' }}>민감한 정보로 취급</strong>되며,
+            소득·대출·자산 등 재무 정보)은 <strong style={{ color: 'var(--paper-ink)' }}>민감한 정보로 취급</strong>되며,
             아래 원칙에 따라 처리됩니다.
           </p>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <li>
-              <strong style={{ color: 'var(--text)' }}>건강·재무 입력값은 브라우저 내에서만 처리됩니다.</strong>{' '}
+              <strong style={{ color: 'var(--paper-ink)' }}>건강·재무 입력값은 브라우저 내에서만 처리됩니다.</strong>{' '}
               체중·소득·대출 등 민감한 수치를 다루는 계산은 이용자의 브라우저(클라이언트)에서 이루어지며,
               {SITE_NAME}의 서버나 외부로 전송·저장되지 않습니다. 단, 아래 마지막 항목과 같이 공개 정보를
               조회해 결과를 받아오는 일부 도구는 예외이며, 해당 도구에서도 민감 정보 자체는 외부로
               전송되지 않습니다.
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>Google Analytics 등 분석 이벤트에 입력값이 포함되지 않습니다.</strong>{' '}
+              <strong style={{ color: 'var(--paper-ink)' }}>Google Analytics 등 분석 이벤트에 입력값이 포함되지 않습니다.</strong>{' '}
               방문·이용 통계만 수집하며, 이용자가 입력한 구체적 수치는 분석 이벤트에 담기지 않습니다.
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>URL 주소(파라미터)에 입력값을 저장하지 않습니다.</strong>{' '}
+              <strong style={{ color: 'var(--paper-ink)' }}>URL 주소(파라미터)에 입력값을 저장하지 않습니다.</strong>{' '}
               입력값이 주소창에 노출되거나 링크 공유를 통해 외부로 새어 나가지 않습니다.
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>광고 타기팅에 입력값을 사용하지 않습니다.</strong>{' '}
+              <strong style={{ color: 'var(--paper-ink)' }}>광고 타기팅에 입력값을 사용하지 않습니다.</strong>{' '}
               건강·재무 입력값은 Google AdSense를 포함한 어떤 광고의 타기팅·맞춤화에도 활용되지 않습니다.
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>일부 도구는 편의를 위해 입력값을 본인 브라우저에만 저장</strong>합니다.{' '}
+              <strong style={{ color: 'var(--paper-ink)' }}>일부 도구는 편의를 위해 입력값을 본인 브라우저에만 저장</strong>합니다.{' '}
               (예: 생리주기 기록 등은 브라우저의 로컬 저장소(localStorage)에 저장되며, 다른 기기와
               동기화되지 않고 서버로 전송되지 않습니다.)
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>일부 도구는 기능 제공을 위해 공개 정보를 외부로 조회합니다.</strong>{' '}
+              <strong style={{ color: 'var(--paper-ink)' }}>일부 도구는 기능 제공을 위해 공개 정보를 외부로 조회합니다.</strong>{' '}
               예를 들어 서버 시간 동기화·외부 사이트 시각 확인(/api/proxy-time), 링크 미리보기 OG 태그 조회
               (/api/og-preview), 농산물 시세(KAMIS) 조회(/api/produce-price) 기능은 이용자가 입력·선택한
-              <strong style={{ color: 'var(--text)' }}> 공개 정보(웹사이트 주소·조회 품목 등)</strong>를 본 사이트 서버
+              <strong style={{ color: 'var(--paper-ink)' }}> 공개 정보(웹사이트 주소·조회 품목 등)</strong>를 본 사이트 서버
               또는 해당 외부 서비스로 전송해 결과(서버 시간·메타 정보·시세 등)를 받아옵니다. 이 과정에
               건강·재무·신체정보와 같은 개인 식별·민감 정보는 포함되지 않으며, 조회 요청 자체는 일반적인
               웹 서버 접속 로그(IP·시각 등) 수준으로만 기록될 수 있습니다.
@@ -292,20 +292,20 @@ export default function PrivacyPage() {
           </ul>
 
           <div style={{
-            background: 'var(--bg2)',
-            border: '1px solid var(--border)',
+            background: 'var(--paper-card)',
+            border: '1px solid var(--paper-line)',
             borderRadius: '12px',
             padding: '16px 20px',
             marginTop: '16px',
           }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '8px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--paper-ink-soft)', marginBottom: '8px' }}>
               브라우저에 저장된 데이터 삭제 방법
             </p>
             <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
               <li>각 도구 내 「전체 삭제」·「초기화」 버튼이 있는 경우 클릭하면 즉시 삭제됩니다.</li>
               <li>
                 브라우저 설정에서 직접 삭제할 수도 있습니다 —{' '}
-                <span style={{ color: 'var(--text)' }}>설정 → 개인정보 및 보안 → 인터넷 사용 기록(쿠키·사이트 데이터) 삭제</span>.
+                <span style={{ color: 'var(--paper-ink)' }}>설정 → 개인정보 및 보안 → 인터넷 사용 기록(쿠키·사이트 데이터) 삭제</span>.
               </li>
               <li>해당 사이트 데이터만 지우려면 주소창의 자물쇠(🔒) 아이콘 → 사이트 설정 → 데이터 삭제를 이용하세요.</li>
             </ul>
@@ -313,6 +313,7 @@ export default function PrivacyPage() {
         </section>
 
       </div>
+    </div>
     </div>
   )
 }

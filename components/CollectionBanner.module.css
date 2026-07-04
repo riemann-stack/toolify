@@ -26,9 +26,9 @@
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  background: var(--paper-card);
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius-card);
   padding: 14px 16px;
   min-width: 0;
   box-shadow: var(--shadow-rest);
@@ -41,18 +41,18 @@
 /* 데스크톱: 카드 12개로 cap — 나머지는 /collections 인덱스('전체 보기')에 위임 */
 .otherCard:nth-child(n + 13) { display: none; }
 
-.otherEmoji { font-size: 22px; flex-shrink: 0; }
+.otherIcon { display: inline-flex; align-items: center; flex-shrink: 0; }
 .otherBody { min-width: 0; }
 .otherTitle {
   font-size: 13px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--paper-ink);
   margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.otherCount { font-size: 12px; color: var(--muted); }
+.otherCount { font-size: 12px; color: var(--paper-ink-faint); }
 
 /* 모바일: 가로 스크롤 선반 — 카드 1.3개 정도 보여 스크롤 가능함을 암시 */
 @media (max-width: 600px) {

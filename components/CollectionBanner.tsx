@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { COLLECTIONS, collectionToolCount } from '@/lib/collections'
+import CollectionIcon from './CollectionIcon'
 import s from './CollectionBanner.module.css'
 
 interface CollectionBannerProps {
@@ -30,32 +31,45 @@ export default function CollectionBanner({ initialSlug }: CollectionBannerProps 
         className={s.featured}
         style={{
           display: 'block', textDecoration: 'none',
-          borderRadius: 16, padding: '22px 24px',
-          background: `linear-gradient(135deg, ${featured.color}1c 0%, var(--bg2) 68%)`,
-          border: `1px solid ${featured.color}4d`,
+          borderRadius: 'var(--radius-lg)', padding: '22px 24px',
+          // 벤토 문법 — 그라디언트 대신 플랫 틴트 + 페이퍼 카드
+          background: `color-mix(in srgb, ${featured.color} 9%, var(--paper-card))`,
+          border: `1px solid color-mix(in srgb, ${featured.color} 30%, transparent)`,
         }}
       >
         <span
           style={{
             display: 'inline-block', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em',
-            color: featured.color, background: `${featured.color}1f`,
+            // 원색 소형 텍스트는 AA 미달 — 잉크 믹스 다크닝 (QA 표준)
+            color: `color-mix(in srgb, ${featured.color} 70%, var(--paper-ink))`,
+            background: `color-mix(in srgb, ${featured.color} 12%, transparent)`,
             borderRadius: 999, padding: '4px 10px', marginBottom: 12,
           }}
         >
           이런 상황이라면
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: 34, flexShrink: 0 }} aria-hidden>{featured.emoji}</span>
+          <span
+            aria-hidden
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+              background: `color-mix(in srgb, ${featured.color} 14%, var(--paper-card))`,
+              color: featured.color,
+            }}
+          >
+            <CollectionIcon slug={featured.slug} size={24} />
+          </span>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: 'clamp(18px, 4vw, 22px)', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em' }}>
+            <div style={{ fontSize: 'clamp(18px, 4vw, 22px)', fontWeight: 800, color: 'var(--paper-ink)', letterSpacing: '-0.02em' }}>
               {featured.title}
             </div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 13, color: 'var(--paper-ink-soft)', marginTop: 4, lineHeight: 1.6 }}>
               {featured.lead}
             </div>
           </div>
         </div>
-        <div style={{ marginTop: 14, fontSize: 13, fontWeight: 700, color: featured.color }}>
+        <div style={{ marginTop: 14, fontSize: 13, fontWeight: 700, color: `color-mix(in srgb, ${featured.color} 70%, var(--paper-ink))` }}>
           도구 {collectionToolCount(featured)}개 모아보기 →
         </div>
       </Link>
@@ -69,7 +83,9 @@ export default function CollectionBanner({ initialSlug }: CollectionBannerProps 
             className={s.otherCard}
             style={{ borderLeft: `3px solid ${c.color}` }}
           >
-            <span className={s.otherEmoji} aria-hidden>{c.emoji}</span>
+            <span className={s.otherIcon} style={{ color: c.color }} aria-hidden>
+              <CollectionIcon slug={c.slug} size={18} />
+            </span>
             <div className={s.otherBody}>
               <div className={s.otherTitle}>{c.short}</div>
               <div className={s.otherCount}>도구 {collectionToolCount(c)}개</div>
