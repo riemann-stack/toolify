@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmi',
@@ -84,6 +85,8 @@ export default function BmiPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         키·몸무게로 비만도와 정상 체중 범위. <strong style={{ color: 'var(--text)' }}>허리둘레·체지방률 추정</strong>까지 한 화면에.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="BMI = 체중(kg) ÷ 키(m)² · 비만 기준 한국(대한비만학회) BMI 25·복부비만 허리둘레 남 90/여 85cm, WHO BMI 30 · 체지방률은 미 해군(U.S. Navy) 추정식" sources={[{ label: '대한비만학회 비만 진료지침(2022)', href: 'https://general.kosso.or.kr/html/user/core/view/reaction/main/kosso/inc/data/guideline2022_vol8.pdf' }, { label: 'WHO — Obesity and overweight', href: 'https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight' }]} />
 
       <BmiClient />
 

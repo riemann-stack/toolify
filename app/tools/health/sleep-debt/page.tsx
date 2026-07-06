@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/sleep-debt',
@@ -92,6 +93,15 @@ export default function SleepDebtPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         지난 7·14·30일 누적 수면 부족 시간 + <strong style={{ color: 'var(--text)' }}>회복까지 며칠 더 자야 0</strong>이 되는지 자동.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="연령별 권장 수면 범위(NSF 2015, 성인 7~9시간) 기준 · 일별 부채 = 목표 − 실제 수면, 초과 수면은 회복효율 0.5 적용(단순화 가정)"
+        sources={[
+          { label: 'NSF 2015 — 권장 수면 시간(최종 보고)', href: 'https://www.sleephealthjournal.org/article/S2352-7218(15)00160-6/abstract' },
+          { label: 'CDC — About Sleep (성인 7시간+)', href: 'https://www.cdc.gov/sleep/about/index.html' },
+        ]}
+      />
 
       <SleepDebtClient />
 

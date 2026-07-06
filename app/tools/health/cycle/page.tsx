@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/cycle',
@@ -90,6 +91,15 @@ export default function CyclePage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         마지막 생리일과 평균 주기로 다음 생리·배란·가임기를 <strong style={{ color: 'var(--text)' }}>원형 시각화</strong> + phase별 컨디션.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="황체기 14일 고정 모델 — 배란일 = 다음 생리 −14일, 가임기 = 배란 −5일~+1일(정자 생존 최대 5일·난자 약 24시간), 정상 주기 성인 21~35일·청소년 최대 45일"
+        sources={[
+          { label: 'NICHD — Menstruation', href: 'https://www.nichd.nih.gov/health/topics/menstruation/conditioninfo' },
+          { label: 'ACOG — 가임인지법(FABM)', href: 'https://www.acog.org/womens-health/faqs/fertility-awareness-based-methods-of-family-planning' },
+        ]}
+      />
 
       <CycleClient />
 

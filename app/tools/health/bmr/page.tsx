@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmr',
@@ -71,6 +72,8 @@ export default function BmrPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         기초대사량과 하루 총 소비 칼로리 + <strong style={{ color: 'var(--text)' }}>운동일/휴식일별 목표 칼로리</strong> 자동.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="BMR 공식 4종 — Mifflin-St Jeor(1990)·Harris-Benedict(Roza-Shizgal 1984 개정)·Katch-McArdle·Cunningham · 활동계수 1.2~1.9" sources={[{ label: 'Mifflin 외(1990) — Am J Clin Nutr', href: 'https://pubmed.ncbi.nlm.nih.gov/2305711/' }, { label: 'Roza·Shizgal(1984) — Am J Clin Nutr', href: 'https://pubmed.ncbi.nlm.nih.gov/6741850/' }]} />
 
       <BmrClient />
 

@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import { dogHumanAge, calculateAll } from './petUtils'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/pet',
@@ -60,6 +61,15 @@ export default function PetPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         강아지·고양이 사람 나이와 사료량·체중 평가·<strong style={{ color: 'var(--text)' }}>수명 진행률</strong>을 한눈에.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="RER = 70 × 체중(kg)^0.75, DER = RER × 생활계수(중성화×활동 6조합 1.2~1.8·퍼피/키튼 2.0~3.0·시니어 1.1) — 수의영양 표준"
+        sources={[
+          { label: 'Merck Veterinary Manual — 소동물 영양요구량', href: 'https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/nutritional-requirements-of-small-animals' },
+          { label: 'WSAVA — Global Nutrition Guidelines', href: 'https://wsava.org/global-guidelines/global-nutrition-guidelines/' },
+        ]}
+      />
 
       <PetClient />
 

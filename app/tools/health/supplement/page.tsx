@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/supplement',
@@ -57,6 +58,8 @@ export default function SupplementPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
         복용 중인 영양제 50종 자동 합산 → <strong style={{ color: 'var(--text)' }}>상한 초과·약물 상호작용</strong> 경고.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="영양소 권장량·상한량(한국인 영양소 섭취기준 등 공개 기준) · 오메가3 EPA+DHA 합산 250~500mg 목표·총 3,000mg 한도(미국 FDA 권고)" sources={[{ label: '보건복지부·한국영양학회 (KDRIs)', href: 'https://www.kns.or.kr' }, { label: 'NIH ODS 오메가3', href: 'https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/' }]} />
 
       <SupplementClient />
 

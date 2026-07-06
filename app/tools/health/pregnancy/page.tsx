@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 const PREGNANCY_FAQ = [
   { q: '임신 주수는 어떻게 계산하나요?', a: '임신 주수는 마지막 생리 시작일로부터 계산합니다. 실제 수정은 배란일(생리 시작 후 약 14일)에 일어나지만, 정확한 배란일을 알기 어렵기 때문에 의학적으로는 마지막 생리 시작일을 기준으로 삼습니다. 따라서 임신 1주차는 아직 수정 전인 시기입니다.' },
@@ -41,6 +42,15 @@ export default function PregnancyPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         지금 임신 몇 주차인지 + 산전 검사·태아 크기·출산 준비를 <strong style={{ color: 'var(--text)' }}>자동 타임라인</strong>으로.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="네겔레 공식 — 마지막 생리일(LMP) + 280일(40주) = 출산 예정일, 배란 LMP+14일·주기 28일 외 ±보정, GBS 검사 36~37주 일정"
+        sources={[
+          { label: 'NCBI Bookshelf — Estimated Date of Delivery', href: 'https://www.ncbi.nlm.nih.gov/books/NBK536986/' },
+          { label: 'ACOG — GBS 조기 감염 예방 지침', href: 'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2020/02/prevention-of-group-b-streptococcal-early-onset-disease-in-newborns' },
+        ]}
+      />
 
       <PregnancyClient />
 

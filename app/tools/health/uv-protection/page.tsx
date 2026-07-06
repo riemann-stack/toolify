@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/uv-protection',
@@ -68,6 +69,8 @@ export default function UvProtectionPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         오늘 UV 지수와 내 피부 타입 기준 <strong style={{ color: 'var(--text)' }}>일광화상 위험 시간</strong> + SPF 차단제 권장.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="WHO 자외선지수 정의(1 UVI = 홍반가중 자외선 0.025W/㎡) · Fitzpatrick 피부 타입별 MED 기반 추정 · 차단제 2시간 재도포(미국 FDA 권고)" sources={[{ label: 'WHO 자외선지수 실용 가이드', href: 'https://www.who.int/publications/i/item/9241590076' }, { label: 'FDA 자외선 차단제 안내', href: 'https://www.fda.gov/drugs/understanding-over-counter-medicines/sunscreen-how-help-protect-your-skin-sun' }]} />
 
       <UvProtectionClient />
 

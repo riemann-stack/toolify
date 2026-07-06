@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/weightloss',
@@ -67,6 +68,8 @@ export default function WeightLossPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         목표 체중까지 며칠 — <strong style={{ color: 'var(--text)' }}>안전 감량 속도</strong>로 계산하고, 정체기·요요 방지 가이드까지. 식단·운동 칼로리 자동 분리.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="지방 1kg ≈ 7,700kcal(Wishnofsky, 1958) · 주당 체중 0.3~1.5% 감량 속도 옵션 · 운동 칼로리 METs 기준(신체활동 컴펜디엄)" sources={[{ label: 'Wishnofsky(1958) 원 논문 (DOI)', href: 'https://doi.org/10.1093/ajcn/6.5.542' }, { label: 'Compendium of Physical Activities', href: 'https://pacompendium.com/' }]} />
 
       <WeightLossClient />
 

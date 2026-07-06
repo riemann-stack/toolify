@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/blood-alcohol',
@@ -40,6 +41,8 @@ export default function BloodAlcoholPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         음주 후 체내 알코올이 얼마나 <strong style={{ color: 'var(--text)' }}>남아있는지 추정</strong> — 다음날 아침·여러 자리 누적·ALDH2 분해 속도 반영. <strong style={{ color: 'var(--text)' }}>운전 위험 확인용</strong>.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="위드마크(Widmark) 공식 — 체내분포계수 남 0.68·여 0.55, 시간당 분해율 0.010~0.020g/dL(기본 0.015) · 단속 기준 도로교통법 0.03%(면허정지)·0.08%(면허취소)" sources={[{ label: '국가법령정보센터 — 도로교통법', href: 'https://www.law.go.kr/' }, { label: '도로교통공단 — 음주운전 처벌 기준', href: 'https://www.koroad.or.kr/kp_web/drunkDriveInfo4.do' }]} />
 
       <BloodAlcoholClient />
 

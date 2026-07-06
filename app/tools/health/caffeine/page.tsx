@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/caffeine',
@@ -93,6 +94,8 @@ export default function CaffeinePage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         지금 체내 카페인 mg과 <strong style={{ color: 'var(--text)' }}>취침 시 잔존량</strong>을 반감기 5h로 실시간 추적. 24+ 한국 음료 프리셋.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="반감기 지수감쇠 모델(기본 5시간, 3~12시간 선택) · 1일 한도 성인 400mg(FDA·식약처)·임산부 200mg(ACOG)·어린이·청소년 체중 1kg당 2.5mg(식약처)" sources={[{ label: 'FDA — 카페인 섭취 안내', href: 'https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much' }, { label: '식품의약품안전처', href: 'https://www.mfds.go.kr' }, { label: 'ACOG — 임신 중 카페인', href: 'https://www.acog.org/womens-health/experts-and-stories/ask-acog/how-much-coffee-can-i-drink-while-pregnant' }]} />
 
       <CaffeineClient />
 
