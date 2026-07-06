@@ -126,7 +126,77 @@ export default function SigFigsPage() {
           </p>
         </section>
 
-        {/* 4. FAQ */}
+        {/* 4. 실전 워크스루 — 밀도 측정 */}
+        <section>
+          <h2 style={h2}>실전 워크스루 — 밀도 측정 오차 합성</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
+            저울로 잰 질량 <strong style={{ color: 'var(--text)' }}>m = 25.32 ± 0.01 g</strong>과 메스실린더로 잰 부피
+            <strong style={{ color: 'var(--text)' }}> V = 10.2 ± 0.1 mL</strong>로 밀도 ρ = m/V를 구하는 전형적인 실험 상황을 끝까지 풀어봅니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { t: '① 측정값 정리', d: 'm = 25.32 g (유효숫자 4개), V = 10.2 mL (3개). 나눗셈이므로 결과 유효숫자는 적은 쪽인 3개가 상한.' },
+              { t: '② 상대오차로 변환', d: 'δm/m = 0.01/25.32 ≈ 0.040%, δV/V = 0.1/10.2 ≈ 0.98%. 부피 오차가 질량의 약 25배 — 부피가 지배적.' },
+              { t: '③ 나눗셈 → 제곱합 합성', d: 'δρ/ρ = √(0.040² + 0.98²)% ≈ 0.98%. 지배항이 있으면 합성 결과는 지배항과 거의 같아집니다.' },
+              { t: '④ 절대 불확도 환산', d: 'ρ = 25.32/10.2 = 2.4824 g/mL, δρ = 2.4824 × 0.0098 ≈ 0.024 g/mL.' },
+              { t: '⑤ 최종 표기', d: '불확도 1자리로 정리하면 ρ = 2.48 ± 0.02 g/mL. 유효숫자 규칙(3개)으로 맞춘 2.48과도 일치.' },
+            ].map((x, i) => (
+              <div key={i} style={{ ...card }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{x.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{x.d}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ 이 분석의 실용적 결론: 더 좋은 저울을 사도 결과는 거의 나아지지 않습니다. 상대오차가 0.98%로 지배적인
+            <strong style={{ color: 'var(--text)' }}> 부피 측정(피펫·뷰렛 사용 등)을 개선</strong>해야 최종 불확도가 줄어듭니다.
+            오차 전파는 "어느 측정에 투자할지"를 알려주는 도구이기도 합니다.
+          </p>
+        </section>
+
+        {/* 5. 로그·지수·삼각함수 오차 전파 */}
+        <section>
+          <h2 style={h2}>로그·지수·삼각함수의 오차 전파</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
+            사칙연산이 아닌 함수는 1차 근사 <strong style={{ color: 'var(--text)' }}>δR = |dR/dA| × δA</strong>로 전파합니다.
+            pH·반감기·감쇠 계산에서 자주 쓰는 형태를 정리했습니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['함수 R', '불확도 δR', '비고·용례'].map((hh, i) => (
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{hh}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['ln A', 'δR = δA/A', 'A의 상대오차가 그대로 절대 불확도가 됨'],
+                  ['log₁₀ A', 'δR = δA/(A·ln10) ≈ 0.434·(δA/A)', 'pH = −log[H⁺] 계산'],
+                  ['eᴬ', 'δR/R = δA', 'A의 절대 불확도가 상대오차가 됨 (지수 감쇠)'],
+                  ['10ᴬ', 'δR/R = ln10·δA ≈ 2.303·δA', 'pH → 농도 역산'],
+                  ['sin A', 'δR = |cos A|·δA', 'δA는 라디안 단위'],
+                  ['tan A', 'δR = δA/cos²A', '90° 부근에서 급격히 커짐'],
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ 예시: 농도 [H⁺] = (2.0 ± 0.2)×10⁻⁵ M(상대오차 10%)이면 pH = 4.70이고
+            δpH ≈ 0.434 × 0.10 ≈ <strong style={{ color: 'var(--text)' }}>0.04</strong> — 즉 pH = 4.70 ± 0.04.
+            로그는 상대오차를 절대오차로 바꾸므로, 농도 오차가 커도 pH 불확도는 의외로 작게 나옵니다.
+            반대로 pH ± 0.01의 측정으로 농도를 역산하면 상대오차는 2.303 × 0.01 ≈ 2.3%가 됩니다.
+          </p>
+        </section>
+
+        {/* 6. FAQ */}
         <section>
           <h2 style={h2}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -140,7 +210,7 @@ export default function SigFigsPage() {
           </div>
         </section>
 
-        {/* 5. 관련 도구 */}
+        {/* 7. 관련 도구 */}
         <section>
           <h2 style={h2}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>

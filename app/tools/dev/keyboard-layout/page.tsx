@@ -124,7 +124,93 @@ export default function KeyboardLayoutPage() {
           </div>
         </div>
 
-        {/* 3. 변환이 안 되는 경우 */}
+        {/* 3. 빈출 오타 조견표 */}
+        <div>
+          <h2 style={sectionTitle}>빈출 한영타 오타 조견표</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            한/영 전환 실수는 인사말·감사 인사처럼 손에 익어 빠르게 치는 문장에서 자주 반복됩니다. 많이 찾는 오타 문자열과 복원 결과를 조견표로 정리했습니다. 된소리(ㅃㅉㄸㄲㅆ)와 ㅒ·ㅖ는 Shift 키에 있으므로 <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>dPQmek</code>처럼 <strong style={{ color: 'var(--text)' }}>대문자를 그대로 유지</strong>해야 정확히 복원됩니다. 마지막 세 줄은 반대로 한글 모드인 채 영어 단어를 친 경우로, 한글 → 영문 방향의 복원 결과입니다. 표에 없는 문장은 공백·숫자·문장부호가 섞여 있어도 그대로 두고 변환되므로, 통째로 붙여넣으면 됩니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['잘못 친 입력', '복원 결과', '비고'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 1 ? 'center' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { en: 'dkssud', ko: '안녕', note: '' },
+                  { en: 'dkssudgktpdy', ko: '안녕하세요', note: '' },
+                  { en: 'rkskek', ko: '가나다', note: '' },
+                  { en: 'rkatkgkqslek', ko: '감사합니다', note: '' },
+                  { en: 'rhakqtmqslek', ko: '고맙습니다', note: '' },
+                  { en: 'tkfkdgo', ko: '사랑해', note: '' },
+                  { en: 'rhoscksgdkdy', ko: '괜찮아요', note: '겹모음 ㅙ · 겹받침 ㄶ' },
+                  { en: 'anjgo', ko: '뭐해', note: '겹모음 ㅝ' },
+                  { en: 'aldksgo', ko: '미안해', note: '' },
+                  { en: 'dhsmf', ko: '오늘', note: '' },
+                  { en: 'sodlf', ko: '내일', note: '' },
+                  { en: 'gksrmf', ko: '한글', note: '' },
+                  { en: 'qlalfqjsgh', ko: '비밀번호', note: '' },
+                  { en: 'wjsghkqjsgh', ko: '전화번호', note: '겹모음 ㅘ' },
+                  { en: 'dPQmek', ko: '예쁘다', note: 'Shift — P=ㅖ · Q=ㅃ' },
+                  { en: 'Ekfrl', ko: '딸기', note: 'Shift — E=ㄸ' },
+                  { en: 'ㅗ디ㅣㅐ', ko: 'hello', note: '한글 → 영문' },
+                  { en: 'ㅜㅁㅍㄷㄱ', ko: 'naver', note: '한글 → 영문' },
+                  { en: 'ㅛㅐㅕ셔ㅠㄷ', ko: 'youtube', note: '한글 → 영문' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', color: 'var(--text)', fontWeight: 600 }}>{r.en}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-mono)', color: 'var(--cat-dev)', fontWeight: 700, fontSize: 15 }}>{r.ko}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* 4. 도깨비불 현상 */}
+        <div>
+          <h2 style={sectionTitle}>받침이 다음 글자로 넘어가는 이유 — 도깨비불 현상</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            두벌식 자판의 자음 키에는 초성용·종성용 구분이 없습니다. 그래서 입력기는 모음 뒤에 온 자음을 <strong style={{ color: 'var(--text)' }}>일단 받침으로 붙여 두고</strong>, 다음 입력이 모음이면 그 받침을 떼어 다음 음절의 초성으로 넘깁니다. 받침이 다음 칸으로 옮겨붙으며 화면 글자가 깜빡이듯 바뀌는 모습 때문에 이를 <strong style={{ color: 'var(--text)' }}>도깨비불 현상</strong>이라고 부릅니다. <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>rkrtk</code>를 한 키씩 눌렀을 때 화면이 바뀌는 과정입니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['누른 키', '자모', '화면 표시', '오토마타 동작'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 1 || i === 2 ? 'center' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { key: 'r', jamo: 'ㄱ', screen: 'ㄱ', desc: '초성 후보로 대기' },
+                  { key: 'k', jamo: 'ㅏ', screen: '가', desc: '초성 + 중성 조합' },
+                  { key: 'r', jamo: 'ㄱ', screen: '각', desc: '자음이라 일단 받침(종성)으로' },
+                  { key: 't', jamo: 'ㅅ', screen: '갃', desc: 'ㄱ + ㅅ → 겹받침 ㄳ 조합' },
+                  { key: 'k', jamo: 'ㅏ', screen: '각사', desc: '모음이 오자 ㅅ이 떨어져 다음 음절 초성으로' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', color: 'var(--text)', fontWeight: 600 }}>{r.key}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-mono)', color: 'var(--text)' }}>{r.jamo}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-mono)', color: 'var(--cat-dev)', fontWeight: 700, fontSize: 15 }}>{r.screen}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12 }}>
+            마지막 단계에서 겹받침 ㄳ이 쪼개져 ㅅ만 다음 글자로 넘어갔습니다. 이 규칙 때문에 한영타 복원은 글자 하나씩 바꾸는 단순 치환으로는 불가능하고, 이 도구처럼 키 순서 전체를 오토마타로 다시 실행해야 합니다. 같은 자음 키가 위치에 따라 초성도 종성도 되지만, 키 순서가 정해지면 결과는 한 가지로 결정됩니다. <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>rkqtl</code>은 항상 <strong style={{ color: 'var(--text)' }}>갑시</strong>, ㅇ(d)이 하나 끼어든 <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>rkqtdl</code>은 항상 <strong style={{ color: 'var(--text)' }}>값이</strong>로 복원되는 이유입니다.
+          </p>
+        </div>
+
+        {/* 5. 변환이 안 되는 경우 */}
         <div>
           <h2 style={sectionTitle}>변환이 안 되거나 깨지는 경우</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -142,12 +228,12 @@ export default function KeyboardLayoutPage() {
           </div>
         </div>
 
-        {/* 4. FAQ */}
+        {/* 6. FAQ */}
         <div>
           <Faq items={FAQ_LD} />
         </div>
 
-        {/* 5. 관련 도구 */}
+        {/* 7. 관련 도구 */}
         <div>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>

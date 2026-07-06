@@ -148,7 +148,72 @@ export default function Base64Page() {
           </div>
         </div>
 
-        {/* ── 4. JWT 구조 ── */}
+        {/* ── 4. 환경별 코드 스니펫 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            환경별 Base64 코드 — 한글 처리 3종 비교
+          </h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            브라우저의 <code>btoa()</code>는 Latin-1(0~255) 범위 문자만 받으므로 한글을 직접 넣으면 <strong style={{ color: 'var(--text)' }}>InvalidCharacterError</strong>가 발생합니다.
+            해결의 핵심은 어떤 환경이든 <strong style={{ color: 'var(--text)' }}>문자열을 UTF-8 바이트로 먼저 변환</strong>하는 것이며, 아래 세 패턴 모두 &quot;한글&quot;을 동일한 결과 <code>7ZWc6riA</code>로 인코딩합니다.
+          </p>
+          <div style={{
+            background: 'var(--bg2)',
+            border: '1px solid var(--border)',
+            borderRadius: '12px',
+            padding: '18px 20px',
+            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontSize: '13px',
+            color: 'var(--text)',
+            lineHeight: 2,
+            overflowX: 'auto',
+          }}>
+            <div><span style={{ color: 'var(--muted)' }}># 1) 브라우저 — 레거시 한 줄 패턴</span></div>
+            <div>{"btoa(unescape(encodeURIComponent('한글')))  // \"7ZWc6riA\""}</div>
+            <div>{"decodeURIComponent(escape(atob(b64)))      // \"한글\""}</div>
+            <div></div>
+            <div><span style={{ color: 'var(--muted)' }}># 2) 브라우저 — TextEncoder (표준 권장)</span></div>
+            <div>{"const bytes = new TextEncoder().encode('한글')"}</div>
+            <div>{"btoa(String.fromCharCode(...bytes))        // \"7ZWc6riA\""}</div>
+            <div></div>
+            <div><span style={{ color: 'var(--muted)' }}># 3) Node.js — Buffer</span></div>
+            <div>{"Buffer.from('한글', 'utf8').toString('base64')  // \"7ZWc6riA\""}</div>
+            <div>{"Buffer.from(b64, 'base64').toString('utf8')     // \"한글\""}</div>
+          </div>
+          <div style={{ overflowX: 'auto', marginTop: 12 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['항목', '① 레거시 패턴', '② TextEncoder', '③ Node Buffer'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: '한글 처리',   v1: '✓ 가능', v2: '✓ 가능', v3: '✓ 가능' },
+                  { k: '표준 상태',   v1: 'unescape 폐기(deprecated)', v2: '웹 표준 권장', v3: 'Node 내장 (브라우저 불가)' },
+                  { k: 'URL-safe',   v1: '수동 치환 필요', v2: '수동 치환 필요', v3: "'base64url' 지정" },
+                  { k: '주의점',     v1: '한 줄로 간편·구형 코드에 잔존', v2: '대용량은 스프레드 대신 청크 분할', v3: '디코딩 시 인코딩 문자열 명시' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{r.v1}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{r.v2}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{r.v3}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
+            💡 <strong style={{ color: '#0891B2' }}>선택 기준:</strong> 새로 작성하는 브라우저 코드는 ② TextEncoder, 서버 코드는 ③ Buffer가 기본입니다.
+            ①은 <code>unescape</code>가 폐기 API라 신규 코드에는 권장되지 않지만, 기존 코드 해석을 위해 알아둘 가치가 있습니다.
+            ②에서 수십 KB 이상 대용량을 다룰 땐 <code>String.fromCharCode(...bytes)</code>의 인수 개수 제한 때문에 바이트 배열을 청크로 나눠 처리해야 합니다.
+          </div>
+        </div>
+
+        {/* ── 5. JWT 구조 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JWT(JSON Web Token) 구조
@@ -196,7 +261,59 @@ export default function Base64Page() {
           </div>
         </div>
 
-        {/* ── 5. Data URI ── */}
+        {/* ── 6. JWT exp·iat 읽기 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            JWT exp·iat 읽는 법 — epoch 초 → 한국 시간
+          </h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            JWT 표준(RFC 7519)은 <strong style={{ color: 'var(--text)' }}>exp</strong>(만료)·<strong style={{ color: 'var(--text)' }}>iat</strong>(발급)·<strong style={{ color: 'var(--text)' }}>nbf</strong>(활성 시작)를
+            1970-01-01 00:00 UTC부터 경과한 <strong style={{ color: 'var(--text)' }}>초 단위 숫자(NumericDate)</strong>로 정의합니다.
+            JavaScript의 <code>Date</code>는 밀리초 기준이므로 <strong style={{ color: 'var(--text)' }}>1000을 곱한 뒤</strong> 변환하고, 한국 시간(KST)은 UTC보다 9시간 빠릅니다.
+          </p>
+          <div style={{
+            background: 'var(--bg2)',
+            border: '1px solid var(--border)',
+            borderRadius: '12px',
+            padding: '18px 20px',
+            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontSize: '13px',
+            color: 'var(--text)',
+            lineHeight: 2,
+            overflowX: 'auto',
+          }}>
+            <div><span style={{ color: 'var(--muted)' }}># PAYLOAD 예시</span></div>
+            <div>{'{ "iat": 1767222000, "exp": 1767225600 }'}</div>
+            <div></div>
+            <div><span style={{ color: 'var(--muted)' }}># epoch(초) → KST</span></div>
+            <div>{"new Date(1767225600 * 1000)"}</div>
+            <div>{"  .toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })"}</div>
+            <div>{'// → 2026-01-01 09:00 KST '}<span style={{ color: 'var(--muted)' }}>(= 2026-01-01 00:00 UTC)</span></div>
+            <div></div>
+            <div><span style={{ color: 'var(--muted)' }}># 만료 판정 — 현재 시각도 초 단위로 맞춰 비교</span></div>
+            <div>{"Math.floor(Date.now() / 1000) >= exp  // true면 만료"}</div>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12 }}>
+            위 예시 토큰은 <strong style={{ color: 'var(--text)' }}>2026-01-01 08:00 KST에 발급(iat)되어 09:00 KST에 만료(exp)</strong>되는
+            유효기간 1시간짜리입니다 (1767225600 − 1767222000 = 3,600초). 본 도구의 JWT 모드에 토큰을 붙여 넣으면 이 변환을 자동으로 수행합니다.
+          </p>
+          <div style={{
+            background: 'rgba(234,88,12,0.05)',
+            border: '1px solid rgba(234,88,12,0.30)',
+            borderRadius: 12,
+            padding: '12px 16px',
+            fontSize: 13,
+            color: 'var(--text)',
+            marginTop: 12,
+            lineHeight: 1.85,
+          }}>
+            ⚠️ <strong style={{ color: '#EA580C' }}>흔한 실수 — 초 vs 밀리초:</strong> ×1000을 빼먹고 <code>new Date(1767225600)</code>을 호출하면
+            <strong> 1970-01-21</strong>로 계산되어 &quot;항상 만료&quot;로 오판합니다. 반대로 서버가 밀리초 값을 exp에 넣으면 수만 년 뒤 만료로 인식돼 사실상 무기한 토큰이 됩니다.
+            exp가 <strong style={{ color: 'var(--text)' }}>10자리(초, 2001~2286년 구간)인지 13자리(밀리초)인지</strong>부터 확인하세요.
+          </div>
+        </div>
+
+        {/* ── 7. Data URI ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             이미지 Data URI 활용
@@ -233,7 +350,7 @@ export default function Base64Page() {
           </div>
         </div>
 
-        {/* ── 6. 다중 인코딩 비교 ── */}
+        {/* ── 8. 다중 인코딩 비교 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             인코딩 방식 비교 (&quot;Hi&quot; 기준)
@@ -267,7 +384,7 @@ export default function Base64Page() {
           </div>
         </div>
 
-        {/* ── 7. 보안 주의 ── */}
+        {/* ── 9. 보안 주의 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚠️ Base64는 암호화가 아닙니다
@@ -294,7 +411,7 @@ export default function Base64Page() {
 
         <AdSlot position="between-tools" minHeight={250} />
 
-        {/* ── 8. FAQ ── */}
+        {/* ── 10. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
@@ -315,7 +432,7 @@ export default function Base64Page() {
           </div>
         </div>
 
-        {/* ── 9. 관련 도구 ── */}
+        {/* ── 11. 관련 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구

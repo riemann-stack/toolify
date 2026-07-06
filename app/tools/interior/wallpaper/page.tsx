@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -45,9 +46,14 @@ export default function WallpaperPage() {
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />도배 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '20px' }}>
         벽 면적으로 필요한 <strong style={{ color: 'var(--text)' }}>벽지 롤 수</strong>와 셀프 시공 비용 견적.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="국내 유통 표준 규격(실크 폭 106cm×15.6m · 합지 93cm×17.5m) 기준 — 벽지·시공 단가는 시장 변동치(견적 시 재확인)"
+      />
 
       <WallpaperClient />
 
@@ -113,36 +119,82 @@ export default function WallpaperPage() {
             평수별 벽지 롤 수 빠른 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            천장 2.4m, 창문·문 1개씩, 10% 로스율, 실크벽지, <strong style={{ color: 'var(--text)' }}>한 공간(정사각형) 기준</strong> — 계산기 [간편 계산]과 동일 기준입니다. 칸막이 벽이 많은 아파트 전체는 [상세 계산] 탭에서 방별로 합산하세요.
+            천장 2.4m, 창문·문 1개씩, 10% 로스율, 실크벽지, <strong style={{ color: 'var(--text)' }}>한 공간(정사각형) 기준</strong> — 계산기 [간편 계산]과 동일 기준입니다. [천장 포함] 열은 같은 조건에 천장 면적(≈바닥 면적)을 더해 계산한 값입니다. 칸막이 벽이 많은 아파트 전체는 [상세 계산] 탭에서 방별로 합산하세요.
           </p>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['평수', '면적', '시공 면적', '실크 롤'].map((h, i) => (
+                  {['평수', '면적', '시공 면적', '실크 롤', '천장 포함'].map((h, i) => (
                     <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { p: '5평',  a: '16.5㎡', s: '35㎡', r: '3롤' },
-                  { p: '7평',  a: '23㎡',   s: '42㎡', r: '4롤' },
-                  { p: '10평', a: '33㎡',   s: '51㎡', r: '4롤' },
-                  { p: '15평', a: '49.6㎡', s: '64㎡', r: '5롤' },
-                  { p: '20평', a: '66㎡',   s: '74㎡', r: '6롤' },
-                  { p: '25평', a: '82.6㎡', s: '83㎡', r: '6롤' },
-                  { p: '30평', a: '99㎡',   s: '92㎡', r: '7롤' },
+                  { p: '5평',  a: '16.5㎡', s: '35㎡', r: '3롤', c: '4롤' },
+                  { p: '7평',  a: '23㎡',   s: '42㎡', r: '4롤', c: '5롤' },
+                  { p: '10평', a: '33㎡',   s: '51㎡', r: '4롤', c: '6롤' },
+                  { p: '15평', a: '49.6㎡', s: '63㎡', r: '5롤', c: '8롤' },
+                  { p: '20평', a: '66㎡',   s: '74㎡', r: '6롤', c: '10롤' },
+                  { p: '25평', a: '82.6㎡', s: '83㎡', r: '6롤', c: '12롤' },
+                  { p: '30평', a: '99㎡',   s: '91㎡', r: '7롤', c: '13롤' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.a}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.c}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* ── 3-1. 천장 포함 소요량 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            천장 도배 포함 시 소요량 계산
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.8 }}>
+            직사각형 방에서 천장 면적은 가로 × 세로, 즉 <strong style={{ color: 'var(--text)' }}>바닥 면적과 같습니다</strong>. 천장까지 도배한다면 벽 시공 면적에 바닥 면적을 그대로 더하면 됩니다. 계산기 [간편 계산]의 [천장도 도배] 체크박스와 [상세 계산]의 방별 천장 옵션이 이 방식으로 계산합니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+            📌 <strong style={{ color: 'var(--text)' }}>예시 — 15평 한 공간:</strong> 벽 시공 면적 63.5㎡ + 천장 49.6㎡ = <strong style={{ color: 'var(--text)' }}>113㎡</strong><br />
+            • 10% 로스율: <strong style={{ color: 'var(--accent)' }}>124.3㎡</strong> → 실크벽지(1롤 16.5㎡) 기준 <strong style={{ color: 'var(--accent)' }}>8롤</strong> — 벽만 도배(5롤)보다 3롤 증가<br />
+            • 벽 면적은 둘레를 따라 완만하게 늘지만 천장 면적은 평수에 정비례하므로, <strong style={{ color: 'var(--text)' }}>평수가 클수록 천장 몫이 커집니다</strong>. 25평이면 벽만 6롤 ↔ 천장 포함 12롤로 2배입니다.
+          </div>
+          <div style={{
+            background: 'rgba(234,88,12,0.06)',
+            border: '1px solid rgba(234,88,12,0.25)',
+            borderRadius: 12,
+            padding: '12px 16px',
+            fontSize: 13,
+            color: 'var(--text)',
+            marginTop: 12,
+            lineHeight: 1.75,
+          }}>
+            ⚠️ <strong style={{ color: '#EA580C' }}>천장은 난이도가 다릅니다</strong> — 풀 먹인 벽지를 머리 위에서 지탱하며 붙여야 해 벽보다 시공이 훨씬 어렵고, 셀프라면 사다리(우마)와 2인 작업이 사실상 필수입니다. 전문 시공도 천장 포함 여부에 따라 견적이 달라지므로 견적 요청 시 천장 포함 여부를 반드시 명시하세요.
+          </div>
+        </div>
+
+        {/* ── 3-2. 포인트 벽 폭 수 계산 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            포인트 벽(부분 도배) 폭 수 계산
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.8 }}>
+            벽 1면만 바꾸는 포인트 도배는 면적보다 <strong style={{ color: 'var(--text)' }}>폭(장) 수</strong>로 세는 편이 정확합니다. 필요한 폭 수 = 벽 너비 ÷ 벽지 폭(실크 1.06m) 올림. 계산기 [상세 계산] 탭의 [포인트 도배 (1면만)] 옵션이 같은 방식으로 계산합니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+            📌 <strong style={{ color: 'var(--text)' }}>예시 — 너비 3.6m·천장 2.4m 벽:</strong> 3.6 ÷ 1.06 = 3.4 → <strong style={{ color: 'var(--accent)' }}>4폭</strong><br />
+            • 민무늬: 1롤(15.6m)에서 2.4m짜리 <strong style={{ color: 'var(--text)' }}>6장</strong> 재단 가능 → 4폭이면 <strong style={{ color: 'var(--accent)' }}>1롤</strong>로 충분<br />
+            • 무늬 벽지: 장마다 무늬를 맞추느라 커트 길이가 리피트(무늬 반복 길이)만큼 길어집니다. 예컨대 리피트 64cm 패턴이면 커트 약 3.0m → 1롤에서 <strong style={{ color: 'var(--text)' }}>5장</strong>. 너비 5m가 넘는 거실 아트월(5폭)은 여유가 없어지므로 로스율을 한 단계 높여 잡으세요.
+          </div>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.75 }}>
+            💡 <strong style={{ color: 'var(--accent)' }}>로트(lot) 번호는 반드시 통일</strong> — 같은 제품이라도 생산 차수(로트)마다 잉크 배합·인쇄 조건이 미세하게 달라 색상이 조금씩 다를 수 있습니다. 다른 로트를 나란히 붙이면 이음매에서 색 차이가 드러나므로, 여유분까지 포함한 전체 수량을 <strong style={{ color: 'var(--text)' }}>한 번에 같은 로트로</strong> 구매하고, 추가 구매 시엔 라벨의 로트 번호가 같은지 확인하세요.
           </div>
         </div>
 

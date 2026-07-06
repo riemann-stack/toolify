@@ -128,7 +128,28 @@ export default function CssConverterPage() {
           </div>
         </div>
 
-        {/* 3. clamp() 가이드 */}
+        {/* 3. 62.5% 트릭의 함정 */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>px→rem 62.5% 트릭(1rem = 10px)의 함정</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            html에 <strong style={{ color: 'var(--text)' }}>font-size: 62.5%</strong>를 선언하면 브라우저 기본 16px × 0.625 = <strong style={{ color: 'var(--text)' }}>10px</strong>가 되어 1.6rem = 16px, 2.4rem = 24px처럼 암산이 쉬워집니다. 문제는 rem이 <strong style={{ color: 'var(--text)' }}>문서 전체에 적용되는 전역 기준</strong>이라는 점입니다. Shadow DOM 내부의 rem까지 예외 없이 바뀌므로, 1rem = 16px를 전제로 만들어진 서드파티 코드가 전부 62.5% 크기로 줄어듭니다.
+          </p>
+          <div style={codeBox}>
+{`html { font-size: 62.5%; }    /* 1rem = 10px */
+
+/* 내 코드 — 의도대로 */
+h1   { font-size: 3.2rem; }   /* 32px ✅ */
+
+/* 1rem = 16px 전제의 서드파티 — 함께 축소 */
+.btn { font-size: 1rem; }     /* 기대 16px → 실제 10px ❌ */
+.p-4 { padding: 1rem; }       /* Tailwind 4단위, 기대 16px → 10px ❌ */`}
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
+            타이포그래피·여백 기본값을 rem으로 정의한 Bootstrap 5, spacing 1단위 = 0.25rem인 Tailwind CSS, rem을 쓰는 임베드 위젯(댓글·결제창 등)이 대표적인 충돌 지점입니다. 게다가 이 트릭은 프로젝트 전체를 한 번에 바꾸는 일괄 전환만 가능해, 이미 rem이 섞인 코드베이스에 점진적으로 도입할 수 없습니다. 62.5%가 고정 <span style={{ fontFamily: "'Fira Code', monospace" }}>font-size: 10px</span> 선언보다 나은 점은 사용자의 브라우저 글꼴 크기 설정에 비례해 확대된다는 것 하나인데, 루트를 100%로 두어도 같은 이점을 얻습니다. 결론적으로 외부 CSS를 전부 통제할 수 없다면 루트를 100%(16px)로 유지하고 px ÷ 16 나눗셈은 변환기에 맡기는 편이 안전합니다 — 이 변환기의 root font-size 기본값이 16인 이유입니다.
+          </p>
+        </div>
+
+        {/* 4. clamp() 가이드 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>clamp() 완전 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -154,7 +175,51 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
           </div>
         </div>
 
-        {/* 4. aspect-ratio vs padding-top */}
+        {/* 5. 100vh 문제와 dvh·svh·lvh */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>100vh 모바일 주소창 문제 — dvh·svh·lvh</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            모바일 브라우저의 주소창은 스크롤에 따라 나타났다 사라지지만, 기존 <strong style={{ color: 'var(--text)' }}>100vh는 주소창이 접힌 가장 큰 화면 기준</strong>으로 계산되는 경우가 대부분입니다. 그래서 첫 화면에서 100vh 요소의 하단 — 고정 버튼·CTA — 이 주소창에 가려지는 문제가 생깁니다. CSS Values Level 4는 이를 해결하는 세 가지 뷰포트 높이 단위를 추가했습니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={headCell}>단위</th>
+                  <th scope="col" style={headCell}>기준</th>
+                  <th scope="col" style={headCell}>적합한 곳</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['100svh', '주소창이 모두 표시된 가장 작은 화면', '첫 화면 히어로·하단 고정 버튼 — 절대 가려지지 않음'],
+                  ['100lvh', '주소창이 접힌 가장 큰 화면',          '배경·장식 레이어 — 기존 모바일 100vh와 사실상 동일'],
+                  ['100dvh', '지금 실제로 보이는 높이(실시간 변동)', '풀스크린 모달·채팅 입력창 — 스크롤 중 리사이즈 주의'],
+                ].map((row, i, arr) => (
+                  <tr key={i}>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace", fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom }}>{row[1]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)' }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px', marginBottom: '12px' }}>
+            기존 vh를 dvh로 바꿔야 하는 경우는 <strong style={{ color: 'var(--text)' }}>스크롤 중에도 요소가 항상 보이는 영역과 일치해야 할 때</strong>뿐입니다. dvh는 주소창이 움직일 때마다 다시 계산되므로 대형 레이아웃이나 font-size에 쓰면 스크롤 중 요소가 계속 늘었다 줄었다 합니다. 첫 화면 잘림만 문제라면 svh가 더 안정적입니다. px→vh 공식(px ÷ viewportHeight × 100)은 세 단위에 그대로 적용되며 기준 높이만 달라집니다.
+          </p>
+          <div style={codeBox}>
+{`/* 구형 브라우저 폴백 — 아랫줄이 지원되면 덮어씀 */
+.hero { height: 100vh; height: 100dvh; }`}
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px' }}>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Chrome 108+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Firefox 101+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Safari 15.4+</span>
+          </div>
+        </div>
+
+        {/* 6. aspect-ratio vs padding-top */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>aspect-ratio vs padding-top trick</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
@@ -184,7 +249,7 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
           </div>
         </div>
 
-        {/* 5. line-height unitless */}
+        {/* 7. line-height unitless */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>line-height unitless 권장 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -202,7 +267,7 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
           </div>
         </div>
 
-        {/* 6. Figma → CSS */}
+        {/* 8. Figma → CSS */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Figma → CSS 변환 치트시트</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
@@ -231,7 +296,7 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
           </div>
         </div>
 
-        {/* 7. FAQ */}
+        {/* 9. FAQ */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
@@ -252,7 +317,7 @@ clamp(1rem, 0.5rem + 2.22vw, 2rem)
           </div>
         </div>
 
-        {/* 8. 관련 도구 */}
+        {/* 10. 관련 도구 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

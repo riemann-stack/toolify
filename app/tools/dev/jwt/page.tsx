@@ -166,6 +166,98 @@ export default function JwtPage() {
           </div>
         </div>
 
+        {/* 5. alg 혼동·none 공격 */}
+        <div>
+          <h2 style={h2}>alg 혼동·none 공격 — header의 alg를 믿으면 안 되는 이유</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            서명 검증에서 가장 흔한 실수는 <strong style={{ color: 'var(--text)' }}>header에 적힌 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>alg</code> 값을 그대로 믿는 것</strong>입니다.
+            공격자는 header만 고쳐도 되므로, 검증 서버가 알고리즘을 고정하지 않으면 두 가지 우회가 생깁니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['공격', '조작', '통하는 조건'].map((hh, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{hh}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: 'alg:none', n: 'alg을 none으로 바꾸고 서명을 비움', d: '라이브러리가 none을 서명 없는 토큰으로 통과시킬 때' },
+                  { k: 'RS256→HS256', n: 'alg을 HS256으로 바꿔 공개키를 HMAC 비밀키로 사용', d: 'verify가 header의 alg를 따라 공개키로 HMAC 검증할 때' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontSize: 12 }}>{r.n}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12, marginBottom: 12 }}>
+            RS256→HS256 혼동은 공개키가 JWKS로 공개돼 있다는 점을 노립니다. 공개키를 그대로 HMAC 비밀키로 써서
+            토큰을 다시 서명하면, header의 alg만 보고 공개키로 HMAC 검증하는 서버는 이를 유효한 서명으로 받아들입니다.
+            실제로 node-jsonwebtoken 4.2.2 이전 버전은 비대칭키를 기대하는 검증에 대칭 알고리즘 토큰을 넣어 우회할 수 있었고
+            (<code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>CVE-2015-9235</code>, CVSS 9.8),
+            pyjwt·php-jwt 등 여러 라이브러리가 같은 결함을 공유했습니다.
+          </p>
+          <div style={card}>
+            <ul style={{ paddingLeft: 22, margin: 0 }}>
+              <li><strong style={{ color: 'var(--text)' }}>알고리즘 화이트리스트:</strong> 검증 호출에서 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>algorithms: ['RS256']</code>처럼 허용 알고리즘을 명시하고, 그 외에는 거부합니다. RFC 8725 §3.1은 라이브러리가 허용 집합을 지정하게 하고 header의 alg가 실제 연산과 같은지 확인하도록 요구합니다.</li>
+              <li style={{ marginTop: 6 }}><strong style={{ color: 'var(--text)' }}>none 금지:</strong> RFC 8725 §3.2는 명시적 요청이 없는 한 none을 소비하지 말라고 권고합니다. 발급·검증 어느 쪽에서도 none을 기본 허용하지 않습니다.</li>
+              <li style={{ marginTop: 6 }}><strong style={{ color: 'var(--text)' }}>알고리즘 고정:</strong> 발급 때 쓴 알고리즘을 서버가 이미 알고 있으므로, 검증은 header가 아니라 서버가 정한 알고리즘으로만 수행합니다.</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* 6. 액세스 vs 리프레시 토큰 수명 */}
+        <div>
+          <h2 style={h2}>액세스 vs 리프레시 토큰 — 수명 설계</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            토큰의 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>exp − iat</code>로 종류를 역추정할 수 있습니다.
+            수명이 짧으면 API 호출용 <strong style={{ color: 'var(--text)' }}>액세스 토큰</strong>, 며칠~몇 주로 길면 재발급용 <strong style={{ color: 'var(--text)' }}>리프레시 토큰</strong>일 가능성이 큽니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['구분', 'exp − iat 예시', '역할'].map((hh, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{hh}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: '액세스 토큰', n: '900~3600초 (15분~1시간)', d: '리소스 접근에 직접 제시. 짧게 유지해 탈취 시 피해 창을 줄임' },
+                  { k: '리프레시 토큰', n: '수 일~수 주', d: '만료된 액세스 토큰을 재발급받는 용도. 노출 위험이 커 회전이 필요' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontSize: 12 }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 12 }}>{r.n}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12, marginBottom: 12 }}>
+            짧은 수명 + <strong style={{ color: 'var(--text)' }}>리프레시 토큰 회전(rotation)</strong>이 권장되는 이유는, 토큰이 새면 피해를 줄이기 위해서입니다.
+            회전은 재발급 때마다 리프레시 토큰을 새로 내주고 이전 것을 즉시 폐기해, 한 번 쓰인 토큰이 다시 쓰이면 재사용을 탐지해 토큰 계열 전체를 무효화합니다.
+            RFC 9700은 공개 클라이언트의 리프레시 토큰을 회전하거나 발신자 제약(mTLS·DPoP)으로 묶으라고 요구합니다.
+          </p>
+          <div style={{ ...card, background: 'var(--bg2)', color: 'var(--muted)' }}>
+            <p style={{ margin: 0 }}>
+              <strong style={{ color: 'var(--text)' }}>왜 로그아웃 즉시 무효화가 어려운가:</strong> JWT는 서명만 맞으면
+              서버 조회 없이 유효하다고 판단하는 <strong style={{ color: 'var(--text)' }}>무상태(stateless)</strong> 토큰입니다.
+              그래서 발급 뒤에는 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>exp</code>가 지나기 전까지 서버가 회수할 수단이 기본적으로 없습니다.
+              로그아웃해도 이미 나간 액세스 토큰은 만료까지 살아 있어, 즉시 차단하려면 블랙리스트·짧은 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>exp</code>·서명키 교체 같은 상태 저장 장치를 더해야 합니다.
+              이는 무상태의 장점을 일부 포기하는 트레이드오프입니다. 그래서 액세스 토큰을 짧게 두고 실질적 회수는 리프레시 단계에서 처리하는 설계가 자리 잡았습니다.
+            </p>
+          </div>
+        </div>
+
         {/* FAQ */}
         <div>
           <Faq items={FAQ_LD} />

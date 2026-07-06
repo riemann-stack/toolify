@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/lighting',
@@ -45,9 +46,15 @@ export default function LightingPage() {
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />조명 밝기 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
         공간별 <strong style={{ color: 'var(--text)' }}>권장 루멘과 조명 개수</strong> + W↔lm 환산과 색온도 가이드.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="KS A 3011 조도 기준 참고 · LED 평균 효율 100lm/W 기준"
+        sources={[{ label: 'e나라표준인증 — KS A 3011 조도기준', href: 'https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=919&topMenuId=502&upperMenuId=503&ksNo=KSA3011&tmprKsNo=KSA3011&reformNo=09' }]}
+      />
 
       <LightingClient />
 
@@ -267,6 +274,97 @@ export default function LightingPage() {
             lineHeight: 1.75,
           }}>
             💡 <strong style={{ color: 'var(--accent)' }}>조명 3종 권장 비율</strong> — 메인 70% + 보조 20% + 무드 10%
+          </div>
+        </div>
+
+        {/* ── 8. LED 방등 교체 체크리스트 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            🔧 LED 방등 교체 체크리스트
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+            형광등 방등을 LED로 바꿀 때는 <strong style={{ color: 'var(--text)' }}>기존 안정기 처리 방식</strong>부터 확인해야 합니다. 크게 두 갈래입니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px', marginBottom: 14 }}>
+            {[
+              { t: '안정기 일체형 (컨버터 내장)', d: '기존 형광등 안정기를 그대로 두고 램프만 끼우는 방식. 설치는 간편하지만 비호환 안정기가 있어 제조사 호환 리스트 확인이 필수.', c: '#0891B2' },
+              { t: '컨버터 외장형 (안정기 제거)', d: '기존 안정기를 떼고 LED 전용 컨버터를 배선. 손이 더 가지만 안정기 손실이 없어 효율·수명에 유리. 전기 작업이 익숙하지 않으면 기사 시공 권장.', c: 'var(--accent)' },
+            ].map((s, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 16px' }}>
+                <p style={{ fontSize: 14, color: s.c, fontWeight: 700, marginBottom: 6 }}>{s.t}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{s.d}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
+            <strong style={{ color: 'var(--text)' }}>기존 형광등 방등 → LED 와트 매칭.</strong> 핵심은 W가 아니라 <strong style={{ color: 'var(--text)' }}>루멘</strong>입니다. LED 광효율 100 lm/W 기준으로 시장 대체품 값을 정리하면:
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['기존 형광등 방등', '대략 광속', '대체 LED', '비고'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 2 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: 'FPL 36W 1등',      l: '약 2,300 lm', led: 'LED 18W', u: '작은방·서재' },
+                  { s: 'FPL 55W 1등',      l: '약 3,400 lm', led: 'LED 24W', u: '중간방' },
+                  { s: 'FPL 55W 2등',      l: '약 5,000 lm', led: 'LED 45~50W', u: '거실·큰방' },
+                  { s: '형광등 32W 원형',  l: '약 2,000 lm', led: 'LED 20W', u: '주방·복도' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.led}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            💡 <strong style={{ color: 'var(--text)' }}>플리커프리·연색성도 함께 확인.</strong> 플리커(깜빡임)가 있는 저가 LED는 눈 피로와 촬영 시 줄무늬를 유발하므로 <strong style={{ color: 'var(--text)' }}>플리커프리</strong> 표기 제품을 고르세요. 연색성은 <strong style={{ color: 'var(--accent)' }}>CRI 80</strong>이면 거실·침실 등 일반 공간에 무난하고, 음식·화장·의류처럼 <strong style={{ color: 'var(--accent)' }}>색 구분이 중요한 주방·드레스룸</strong>은 <strong style={{ color: 'var(--accent)' }}>CRI 90 이상</strong>이 유리합니다.
+          </p>
+        </div>
+
+        {/* ── 9. 천장 높이·반사율 루멘 보정 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            📏 천장 높이·벽 반사율에 따른 루멘 보정
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+            앞의 공식은 표준 천장(약 2.3~2.4m)·밝은 마감을 전제로 합니다. 실제 조명설계의 <strong style={{ color: 'var(--text)' }}>광속법</strong>에서는 실제 작업면에 도달하는 빛의 비율인 <strong style={{ color: 'var(--text)' }}>조명률(U)</strong>을 곱하는데, 이 값은 천장이 높을수록, 벽·천장·바닥이 어두울수록 낮아집니다. 즉 조건이 나쁠수록 <strong style={{ color: 'var(--text)' }}>더 많은 루멘</strong>이 필요합니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['조건', '표준 대비', '실무 대응'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 1 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: '천장 2.3~2.4m (표준)', v: '기준', u: '표에서 계산한 루멘 그대로' },
+                  { s: '천장 2.7~3.0m',       v: '가산', u: '높을수록 조명률↓ — 루멘 상향' },
+                  { s: '어두운 벽지·바닥',      v: '가산', u: '반사 감소 — 루멘 상향' },
+                  { s: '밝은 벽·화이트 천장',   v: '여유', u: '반사 이득 — 기준값으로 충분' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+            📌 <strong style={{ color: 'var(--text)' }}>왜 그럴까?</strong> 조명설계 표에서 조명률(U)은 대략 <strong style={{ color: 'var(--accent)' }}>0.28~0.75</strong> 범위입니다. 천장이 높아 등기구와 바닥 거리가 멀거나 벽·천장 반사율이 낮으면 U가 하한 쪽으로 내려가, 같은 밝기를 내려면 필요 루멘이 그만큼 커집니다. 반대로 흰 천장·밝은 벽은 빛을 되반사해 U를 끌어올립니다. 정밀 설계는 <strong style={{ color: 'var(--text)' }}>실지수·감광보상률(약 1.3~2.4)</strong>까지 넣지만, 가정에서는 <strong style={{ color: 'var(--text)' }}>&ldquo;천장이 높거나 벽이 어두우면 루멘을 넉넉히&rdquo;</strong>로 기억하면 충분합니다.
           </div>
         </div>
 

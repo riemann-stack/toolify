@@ -165,7 +165,94 @@ export default function BrewingPage() {
           </div>
         </section>
 
-        {/* 4. FAQ */}
+        {/* 4. 비중계 온도 보정 */}
+        <section>
+          <h2 style={sectionTitle}>비중계 온도 보정 — 교정 온도와 시료 온도가 다를 때</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            비중계는 <strong style={{ color: 'var(--text)' }}>교정 온도에서만 정확</strong>합니다. 최근 제품은 대부분 20°C, 구형·수입품은 15.6°C(60°F) 교정이며 내부 스케일 종이에 표기되어 있습니다. 시료가 교정 온도보다 따뜻하면 밀도가 낮아져 실제보다 낮게 읽히고, 차가우면 반대입니다. 아래 보정값을 읽은 값에 그대로 더하세요(음수면 빼기).
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['시료 온도', '20°C 교정 비중계', '15.6°C(60°F) 교정 비중계'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['10°C', '−0.0015', '−0.0007'],
+                  ['15°C', '−0.0009', '−0.0001'],
+                  ['20°C', '0 (보정 불필요)', '+0.0008'],
+                  ['25°C', '+0.0012', '+0.0020'],
+                  ['30°C', '+0.0026', '+0.0034'],
+                  ['35°C', '+0.0042', '+0.0050'],
+                  ['40°C', '+0.0061', '+0.0069'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '12px', marginBottom: '10px' }}>
+            보정값은 순수 물의 온도별 밀도비로 계산한 값(읽은 값 1.010 부근 기준)으로, 브루잉 계산기들이 쓰는 Lyons(1992) 보정 다항식과 ±0.0001 이내로 일치합니다. 맥주·와인 범위(SG 1.000~1.100)에서 오차는 ±0.0002 이내. 40°C를 넘는 뜨거운 워트는 표 밖 외삽이 커지므로 20°C 부근까지 식혀 재는 것이 정확하고 안전합니다.
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>
+            굴절계의 <strong style={{ color: 'var(--text)' }}>ATC(자동온도보정)</strong>는 시료가 아니라 <strong style={{ color: 'var(--text)' }}>프리즘 온도</strong> 기준으로 작동합니다. 확인법: 실온 증류수를 2~3방울 올려 0.0 Brix가 나오는지 체크하고, 아니면 교정 나사로 영점을 맞추세요. 뜨거운 워트는 프리즘에 올린 뒤 20~30초 기다려 온도가 평형된 후 판독해야 하며, 제품 스펙의 ATC 범위(보급형은 대개 10~30°C)를 벗어나면 보정되지 않습니다.
+          </p>
+        </section>
+
+        {/* 5. 굴절계 FG 보정 워크스루 */}
+        <section>
+          <h2 style={sectionTitle}>발효 후 굴절계 보정 — Sean Terrill 공식 워크스루</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            굴절계는 알코올이 생기면 실제보다 높게 읽으므로, 굴절계만으로 발효 후 도수를 구하려면 보정식이 필요합니다. <strong style={{ color: 'var(--text)' }}>발효 전 12.5 Brix, 발효 후 6.0 Brix</strong>로 측정한 맥주를 예로 순서대로 계산하면:
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {[
+              {
+                t: '① 워트 보정계수(WCF 1.04) 적용',
+                d: '<code style="color: var(--text)">12.5 ÷ 1.04 = 12.02 &nbsp;/&nbsp; 6.0 ÷ 1.04 = 5.77</code>',
+                desc: '맥아 워트는 자당 100%가 아니라서 굴절계가 약간 높게 읽음 — 발효 전·후 판독값 모두 1.04로 나눕니다.',
+                c: '#059669',
+              },
+              {
+                t: '② OG 환산',
+                d: '<code style="color: var(--text)">12.02 Brix → SG 1.0485</code>',
+                desc: '보정된 발효 전 Brix를 본 도구의 5종 환산으로 SG로 바꿉니다.',
+                c: '#0891B2',
+              },
+              {
+                t: '③ 보정 FG — Terrill 선형식',
+                d: '<code style="color: var(--text)">FG = 1.0000 − 0.00085683×12.02 + 0.0034941×5.77 = 1.0099</code>',
+                desc: '1.0000 − 0.0103 + 0.0202 = 1.0099. 알코올이 부풀린 판독값에서 진짜 잔당 수준의 FG를 복원합니다.',
+                c: '#9333EA',
+              },
+              {
+                t: '④ ABV 계산',
+                d: '<code style="color: var(--text)">(1.0485 − 1.0099) × 131.25 ≈ 5.1%</code>',
+                desc: '복원한 FG를 단순 공식에 넣으면 완성. 이 값을 본 도구 OG/FG 입력에 넣어 교차 확인할 수 있습니다.',
+                c: '#DC2626',
+              },
+            ].map((m, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${m.c}`, borderRadius: 10, padding: '14px 18px' }}>
+                <p style={{ fontSize: 14, color: m.c, fontWeight: 700, margin: '0 0 6px' }}>{m.t}</p>
+                <p style={{ fontSize: 14, color: 'var(--text)', margin: '0 0 6px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }} dangerouslySetInnerHTML={{ __html: m.d }} />
+                <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.65 }}>{m.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, margin: '12px 0 0' }}>
+            보정 없이 6.0 Brix를 그대로 당도로 환산하면 FG 1.0236, ABV 3.3%가 되어 실제보다 약 1.8%p 낮게 나옵니다 — 알코올이 굴절률을 끌어올려 잔당이 많아 보이기 때문입니다. Terrill의 3차(큐빅) 식은 같은 예에서 FG 1.0109·ABV 4.9%로 선형식과 0.2%p 이내이며, 병입 시점 판단 같은 최종 확인은 여전히 비중계 SG 직접 측정이 표준입니다.
+          </p>
+        </section>
+
+        {/* 6. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -184,7 +271,7 @@ export default function BrewingPage() {
           </div>
         </section>
 
-        {/* 5. 함께 쓰면 좋은 도구 */}
+        {/* 7. 함께 쓰면 좋은 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>

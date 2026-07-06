@@ -64,6 +64,19 @@ const SIZE_ROWS = [
   { name: '명함 (90×50)', cm: '9.0 × 5.0', px300: '1063 × 591', mp: '0.6MP' },
 ]
 
+const PHONE_ROWS = [
+  { mp: '12MP', who: '갤럭시 S24 울트라 등 기본 저장', px: '4000 × 3000', d300: '약 34 × 25cm (A4 이상)', d150: '약 68 × 51cm (A2급)' },
+  { mp: '24MP', who: '아이폰 15·16 기본 저장', px: '5712 × 4284', d300: '약 48 × 36cm (A3 이상)', d150: '약 97 × 73cm (A1급)' },
+  { mp: '48MP', who: '아이폰 고해상도 옵션', px: '8064 × 6048', d300: '약 68 × 51cm (A2 이상)', d150: '약 137 × 102cm (A0급)' },
+]
+
+const SCAN_ROWS = [
+  { src: '4×6″ 인화 사진 (10.2×15.2cm)', target: '같은 크기 재인화', ratio: '1.0배', need: '300', set: '300DPI' },
+  { src: '4×6″ 인화 사진', target: 'A4 (21×29.7cm)', ratio: '약 1.95배', need: '585', set: '600DPI' },
+  { src: '4×6″ 인화 사진', target: 'A3 (29.7×42cm)', ratio: '약 2.8배', need: '827', set: '1200DPI' },
+  { src: '35mm 필름 (36×24mm)', target: 'A4', ratio: '약 8.3배', need: '2475', set: '2400~4800DPI' },
+]
+
 const FAQ_LD = [
   { q: 'DPI(PPI)가 정확히 무엇인가요?', a: 'DPI(Dots Per Inch)는 <strong>1인치(2.54cm) 안에 점이 몇 개 찍히는가</strong>를 뜻합니다. 같은 사진이라도 300DPI로 작게 뽑으면 선명하고, 100DPI로 크게 뽑으면 흐려집니다. 디지털 이미지에서는 PPI(Pixels Per Inch)와 사실상 같은 의미로 쓰입니다. 필요한 픽셀 = <strong>(인치 크기) × DPI</strong> 공식으로 계산해요.' },
   { q: 'DPI는 무조건 높을수록 좋은가요?', a: '아닙니다. <strong>보는 거리</strong>가 핵심입니다. 손에 들고 보는 사진·명함은 300DPI가 필요하지만, 몇 m 떨어져 보는 대형 포스터나 현수막은 사람 눈이 점을 구분하지 못해 <strong>100DPI 이하로도 충분</strong>합니다. 불필요하게 높은 DPI는 파일만 무거워지고 인쇄 비용·시간이 늘 뿐 화질 체감 차이는 없습니다.' },
@@ -162,6 +175,76 @@ export default function PrintResolutionPage() {
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
             테두리 재단(도련)이 필요한 인쇄물은 사방 1~3mm 여유를 더하면 좋습니다. 위 값은 재단 여백을 제외한 마감 크기 기준이에요.
+          </p>
+        </div>
+
+        {/* 스마트폰 화소별 최대 인쇄 크기 */}
+        <div>
+          <h2 style={sectionTitle}>📱 스마트폰 사진, 어디까지 인쇄할 수 있나</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
+            카메라 스펙의 “2억 화소”와 실제 저장되는 픽셀은 다릅니다. 최신 폰은 여러 픽셀을 하나로 묶어 찍는 <strong style={{ color: 'var(--text)' }}>픽셀 비닝</strong>이 기본값이라, 갤럭시 S24 울트라는 200MP 센서로도 기본 12MP로 저장하고, 아이폰 16은 48MP 센서로 기본 24MP(5712×4284)를 저장합니다. 인쇄 가능 크기는 센서 화소가 아니라 이 <strong style={{ color: 'var(--text)' }}>저장 픽셀</strong> 기준으로 계산해야 합니다.
+          </p>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: '12px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={th}>저장 화소</th>
+                  <th scope="col" style={th}>대표 사례</th>
+                  <th scope="col" style={th}>픽셀</th>
+                  <th scope="col" style={th}>300DPI 최대</th>
+                  <th scope="col" style={th}>150DPI 최대</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PHONE_ROWS.map((r, i) => (
+                  <tr key={i}>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{r.mp}</td>
+                    <td style={{ ...td, color: 'var(--muted)' }}>{r.who}</td>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.px}</td>
+                    <td style={td}>{r.d300}</td>
+                    <td style={{ ...td, color: 'var(--muted)' }}>{r.d150}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+            큰 인쇄가 목적이면 촬영 전에 카메라 설정에서 고해상도 모드(아이폰 48MP, 갤럭시 50·200MP 등)를 직접 켜야 합니다. 이미 12MP로 찍은 사진은 확대해도 디테일이 늘지 않아요. 디지털 줌·저조도 사진은 픽셀 수가 같아도 체감 선명도가 떨어지므로 표보다 한 단계 작게 잡는 게 안전합니다.
+          </p>
+        </div>
+
+        {/* 스캔 해상도 역산 */}
+        <div>
+          <h2 style={sectionTitle}>🖨️ 옛 사진·필름 확대 인쇄 — 스캔 DPI 역산</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
+            옛 인화 사진이나 필름을 스캔해 더 크게 다시 뽑을 때는 <strong style={{ color: 'var(--text)' }}>스캔 DPI = 출력 DPI × 확대율(목표 크기 ÷ 원본 크기)</strong>로 역산합니다. 원본을 키우는 만큼 원본에서 픽셀을 더 촘촘히 읽어야 하기 때문이에요. 예를 들어 4×6″ 사진을 A4로 키우면 긴 변 기준 약 1.95배 확대이므로, 300DPI 인쇄용으로는 300 × 1.95 ≈ 585, 즉 <strong style={{ color: 'var(--text)' }}>600DPI로 스캔</strong>하면 됩니다.
+          </p>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: '12px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={th}>원본</th>
+                  <th scope="col" style={th}>목표 크기</th>
+                  <th scope="col" style={th}>확대율</th>
+                  <th scope="col" style={th}>계산값</th>
+                  <th scope="col" style={th}>권장 스캔 설정</th>
+                </tr>
+              </thead>
+              <tbody>
+                {SCAN_ROWS.map((r, i) => (
+                  <tr key={i}>
+                    <td style={{ ...td, fontWeight: 700 }}>{r.src}</td>
+                    <td style={td}>{r.target}</td>
+                    <td style={{ ...td, color: 'var(--muted)' }}>{r.ratio}</td>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{r.need}</td>
+                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{r.set}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
+            스캐너는 300·600·1200·2400DPI처럼 단계로 동작하므로 계산값을 넘는 가장 가까운 단계를 고르세요(35mm 필름→A4는 2400DPI가 계산값 2475에 살짝 못 미치지만 체감 차이는 거의 없습니다). 확대율은 긴 변 기준이며, 4×6″(3:2)와 A4는 가로세로 비율이 달라 여백이 남거나 일부가 잘립니다. 스펙표의 ‘보간 해상도’가 아닌 광학 해상도 기준으로 판단하세요.
           </p>
         </div>
 

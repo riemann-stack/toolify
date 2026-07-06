@@ -138,7 +138,51 @@ export default function TapTempoPage() {
           </p>
         </div>
 
-        {/* ── 4. 사용 팁 ── */}
+        {/* ── 4. K-POP 실측 BPM 앵커 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            K-POP 실측 BPM 앵커 — 아는 곡으로 검증하기
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            장르 범위표만으로 감이 안 잡히면 이미 아는 곡을 틀어 놓고 탭한 뒤, 공개된 BPM과 비교해 보세요.
+            탭 결과가 표의 값과 ±2 이내면 강박을 제대로 잡은 것이고, 절반이나 2배가 나오면 하프타임·더블타임 문제입니다.
+            아래 수치는 Tunebat·SongBPM 등 공개 BPM 데이터베이스 기준으로, 분석 소스에 따라 ±1 BPM 정도 차이가 날 수 있습니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['곡 — 아티스트', 'BPM', '대역', '탭 포인트'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : i === 3 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { song: '밤편지 — IU',           bpm: '79',  band: '팝 발라드',   tip: '어쿠스틱 스트로크 기준 — 8분음표를 따라가면 158로 잡힘' },
+                  { song: 'Hype Boy — NewJeans',   bpm: '100', band: '댄스팝',      tip: '보컬 리듬 대신 킥·스네어 기준으로 탭' },
+                  { song: 'Dynamite — BTS',        bpm: '114', band: '댄스팝',      tip: '디스코 리듬의 킥이 또렷해 측정 연습에 최적' },
+                  { song: '강남스타일 — PSY',      bpm: '132', band: 'EDM·하우스',  tip: '매 박 들어가는 킥(포 온 더 플로어)마다 탭' },
+                  { song: 'Ditto — NewJeans',      bpm: '134', band: '클럽 비트',   tip: '킥 패턴이 변칙적 — 스네어(2·4박) 기준이 안정적' },
+                  { song: '뚜두뚜두 — BLACKPINK',  bpm: '140', band: '힙합·트랩',   tip: '하프타임 체감(70) — 절반으로 측정되면 2배' },
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row.song}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.bpm}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row.band}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row.tip}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            연습 순서는 느린 곡부터가 좋습니다. 밤편지(79)로 강박 잡기를 익히고, Dynamite(114)처럼 킥이 또렷한 곡으로 넘어간 뒤,
+            뚜두뚜두(140)처럼 하프타임으로 체감되는 곡에서 절반·2배를 스스로 판별할 수 있으면 어떤 곡이든 측정할 수 있습니다.
+          </p>
+        </div>
+
+        {/* ── 5. 사용 팁 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             정확한 BPM 측정 팁
@@ -160,7 +204,55 @@ export default function TapTempoPage() {
           </div>
         </div>
 
-        {/* ── 5. FAQ ── */}
+        {/* ── 6. 러닝 케이던스 ↔ BPM ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            러닝 케이던스(spm) ↔ BPM 매칭
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            러닝 케이던스는 분당 걸음 수(spm)로, BPM과 구조가 같은 단위입니다. 러닝머신에서 발이 닿는 순간마다(양발 모두) 탭하면
+            측정값이 그대로 내 케이던스가 됩니다. 한쪽 발만 세어 탭했다면 2배 하세요.
+            흔히 말하는 &lsquo;이상적 케이던스 180&rsquo;은 잭 대니얼스 코치가 1984년 올림픽 장거리 선수들을 관찰한 데서 나온
+            벤치마크일 뿐 절대 규칙이 아니며, 일반 러너는 편한 페이스에서 155~175spm대가 흔합니다.
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            선곡은 두 가지 방법이 있습니다. 케이던스와 같은 BPM 곡에 한 박 = 한 걸음을 맞추는 <strong style={{ color: 'var(--text)' }}>정박 매칭</strong>이 기본이지만,
+            170~180 BPM 곡은 주류 음악에 드뭅니다. 대신 <strong style={{ color: 'var(--text)' }}>절반 BPM(85~90) 곡에 한 박당 두 걸음</strong>을
+            맞추는 더블타임 활용법을 쓰면 발라드·힙합까지 선곡 폭이 크게 넓어집니다. 85 BPM × 2 = 170spm으로 효과는 동일합니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['목표 케이던스', '정박 매칭 곡', '더블타임 활용 곡'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { spm: '160 spm', full: '160 BPM', half: '80 BPM' },
+                  { spm: '165 spm', full: '165 BPM', half: '82~83 BPM' },
+                  { spm: '170 spm', full: '170 BPM', half: '85 BPM' },
+                  { spm: '175 spm', full: '175 BPM', half: '87~88 BPM' },
+                  { spm: '180 spm', full: '180 BPM', half: '90 BPM' },
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.spm}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.full}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{row.half}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            앵커 표의 밤편지(79 BPM)를 더블타임으로 쓰면 158spm — 가벼운 조깅 케이던스와 맞아떨어지는 식입니다.
+            무리하게 180에 맞추기보다, 먼저 탭으로 자신의 자연 케이던스를 재고 거기서 가까운 BPM부터 시작하세요.
+          </p>
+        </div>
+
+        {/* ── 7. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -179,7 +271,7 @@ export default function TapTempoPage() {
           </div>
         </div>
 
-        {/* ── 6. 함께 쓰면 좋은 도구 ── */}
+        {/* ── 8. 함께 쓰면 좋은 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

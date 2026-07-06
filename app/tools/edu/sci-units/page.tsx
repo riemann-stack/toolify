@@ -119,6 +119,74 @@ export default function SciUnitsPage() {
           </p>
         </section>
 
+        {/* 2-1. SI 접두어 vs 이진 접두어 */}
+        <section>
+          <h2 style={h2}>SI 접두어 vs 이진 접두어 — 1TB가 931GB로 보이는 이유</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
+            SI 접두어는 10의 거듭제곱(십진)이지만 컴퓨터 메모리는 2의 거듭제곱으로 커집니다. 이 혼동을 정리하려고
+            국제 표준 <strong style={{ color: 'var(--text)' }}>IEC 80000-13</strong>은 이진 접두어(Ki·Mi·Gi·Ti)를 따로 정의했습니다.
+            1 KiB(키비바이트) = 2¹⁰ = 1,024바이트로 1 kB(1,000바이트)와 2.4% 차이가 나고, 단위가 커질수록 격차도 벌어집니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['SI(십진)', '값', 'IEC(이진)', '값', '격차'].map((hh, i) => (
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{hh}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['kB 킬로', '10³ B', 'KiB 키비', '2¹⁰ = 1,024 B', '+2.4%'],
+                  ['MB 메가', '10⁶ B', 'MiB 메비', '2²⁰ ≈ 1.049×10⁶ B', '+4.9%'],
+                  ['GB 기가', '10⁹ B', 'GiB 기비', '2³⁰ ≈ 1.074×10⁹ B', '+7.4%'],
+                  ['TB 테라', '10¹² B', 'TiB 테비', '2⁴⁰ ≈ 1.100×10¹² B', '+10.0%'],
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r[0]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[3]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: 12 }}>{r[4]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ 실전 예: SSD 제조사는 십진 기준으로 1 TB = 10¹² 바이트를 담아 팝니다. 그런데 윈도우 탐색기는 용량을
+            2³⁰바이트(GiB) 단위로 나눠 계산하면서 표기만 &lsquo;GB&rsquo;로 하기 때문에, 10¹² ÷ 2³⁰ ≈ 931.3이 되어
+            같은 드라이브가 931GB로 보입니다. 용량이 사라진 게 아니라 나누는 기준이 다를 뿐입니다.
+          </p>
+        </section>
+
+        {/* 2-2. 유효숫자와 지수 표기 계산 */}
+        <section>
+          <h2 style={h2}>유효숫자와 지수 표기 계산 규칙</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
+            측정값을 곱하거나 나눌 때 결과의 유효숫자는 <strong style={{ color: 'var(--text)' }}>피연산자 중 가장 적은 자릿수</strong>를 따릅니다.
+            계산기가 뱉는 긴 소수를 그대로 옮겨 적으면 실제보다 정밀한 척하는 셈이 됩니다. 과학적 표기의 장점이 여기서 드러납니다 —
+            3000은 유효숫자가 1자리인지 4자리인지 모호하지만, 3.0×10³으로 쓰면 2자리임이 명확합니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { t: '① 가수끼리 곱한다', d: '1.5×10⁻⁶ × 2.0×10³을 계산해 봅니다. 먼저 가수만 곱하면 1.5 × 2.0 = 3.0.' },
+              { t: '② 지수끼리 더한다', d: '10의 지수는 곱셈에서 서로 더해집니다. (-6) + 3 = -3이므로 중간 결과는 3.0×10⁻³.' },
+              { t: '③ 유효숫자를 맞춘다', d: '두 값 모두 유효숫자 2자리이므로 결과도 2자리. 이때 3×10⁻³이 아니라 소수점 아래 0을 남긴 3.0×10⁻³으로 써야 2자리 정밀도가 전달됩니다.' },
+            ].map((x, i) => (
+              <div key={i} style={{ ...card }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{x.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{x.d}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ 반올림이 필요한 예: 2.46×10⁵ × 1.2×10² = 2.952×10⁷ → 유효숫자 2자리로 반올림해 3.0×10⁷.
+            덧셈·뺄셈은 규칙이 다릅니다 — 유효숫자 개수가 아니라 <strong>소수점 자릿값</strong>이 가장 낮은 정밀도에 맞춥니다(예: 12.1 + 0.532 = 12.632 → 12.6).
+          </p>
+        </section>
+
         {/* 3. 과학 단위 예시 */}
         <section>
           <h2 style={h2}>자주 쓰는 과학 단위</h2>

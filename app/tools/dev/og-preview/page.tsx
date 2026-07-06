@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/og-preview',
@@ -73,6 +74,16 @@ export default function OgPreviewPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         <strong style={{ color: 'var(--text)' }}>카카오톡·페이스북·X·LinkedIn·Slack</strong>에서 공유했을 때 어떻게 보일지 한 화면에. 메타태그 검증 + 코드 생성까지.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="태그 해석·검증 규칙 = Open Graph 프로토콜 + 플랫폼 공식 개발자 문서 기준"
+        sources={[
+          { label: 'Open Graph 프로토콜', href: 'https://ogp.me/' },
+          { label: 'Meta 공유 이미지 가이드', href: 'https://developers.facebook.com/docs/sharing/webmasters/images/' },
+          { label: '카카오 공유 디버거', href: 'https://developers.kakao.com/tool/clear/og' },
+        ]}
+      />
 
       <OgPreviewClient />
 
@@ -161,7 +172,86 @@ export default function OgPreviewPage() {
           </div>
         </section>
 
-        {/* 4. FAQ */}
+        {/* 4. OG 이미지 안전 영역 */}
+        <section>
+          <h2 style={sectionTitle}>1200×630 안전 영역 — 제목 텍스트, 어디까지 잘리나</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            1200×630 한 장으로 통일해도 플랫폼마다 <strong style={{ color: 'var(--text)' }}>표시 비율이 달라 가장자리가 잘립니다</strong>.
+            X는 카드 비율에 맞춰 이미지를 중앙 기준으로 잘라내고, Facebook은 &ldquo;1.91:1에 가깝게 유지해야 피드에서 크롭 없이 전체가 표시된다&rdquo;고 공식 문서에 명시합니다.
+            1200×630 원본이 각 비율에서 잃는 픽셀을 계산하면 이렇습니다(중앙 크롭 기준 — 크롭 위치는 앱 버전에 따라 달라질 수 있으니 중앙 배치가 안전).
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['표시 비율', '대표 사례', '잘리는 픽셀', '살아남는 영역'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['1.91:1', 'Facebook·LinkedIn 큰 카드',        '상하 각 약 1px',  '사실상 원본 그대로'],
+                  ['2:1',    'X 큰 카드·카카오톡 기본형',          '상하 각 15px',    '중앙 1200×600'],
+                  ['1:1',    'X summary·리스트형 작은 썸네일',     '좌우 각 285px',   '중앙 630×630'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12 }}>
+            상하 15px 크롭은 여유가 있지만, 진짜 위험은 <strong style={{ color: 'var(--text)' }}>정사각 썸네일</strong> — 좌우 폭의 절반 가까이가 사라집니다.
+            제목 텍스트·로고는 <strong style={{ color: 'var(--text)' }}>중앙 80% 영역(가로 960×세로 504px)</strong> 안에 두고,
+            정사각 크롭까지 버텨야 한다면 핵심 요소를 <strong style={{ color: 'var(--text)' }}>중앙 630px 폭</strong> 안에 배치하세요.
+            Facebook 공식 기준으로 이미지는 최소 200×200px 이상이어야 하고, 600×315px 이상이어야 큰 이미지 카드로 표시되며, 파일 용량은 8MB를 넘을 수 없습니다.
+          </p>
+        </section>
+
+        {/* 5. 프레임워크별 OG 삽입 위치 */}
+        <section>
+          <h2 style={sectionTitle}>프레임워크별 삽입 위치 — 순수 HTML·Next.js·워드프레스</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            검증이 끝났으면 실제 코드에 넣을 차례. 순수 HTML이라면 <code style={{ color: 'var(--text)' }}>&lt;head&gt;</code> 안에 아래 5줄이 최소 세트입니다 — 이 도구의 코드 생성 결과와 같은 골격이에요.
+          </p>
+          <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', overflowX: 'auto', marginBottom: '12px' }}>
+{`<meta property="og:title" content="글 제목" />
+<meta property="og:description" content="한 줄 설명" />
+<meta property="og:image" content="https://example.com/og.png" />
+<meta property="og:url" content="https://example.com/page" />
+<meta name="twitter:card" content="summary_large_image" />`}
+          </pre>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            <strong style={{ color: 'var(--text)' }}>Next.js(App Router)</strong>는 메타태그를 직접 쓰지 않고 <code style={{ color: 'var(--text)' }}>page.tsx</code>의 <code style={{ color: 'var(--text)' }}>metadata</code> 객체로 선언합니다.
+            같은 라우트 폴더에 <code style={{ color: 'var(--text)' }}>opengraph-image.png</code>(또는 ImageResponse를 반환하는 <code style={{ color: 'var(--text)' }}>opengraph-image.tsx</code>)를 두면 og:image 태그가 자동 생성됩니다.
+          </p>
+          <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', overflowX: 'auto', marginBottom: '12px' }}>
+{`// app/blog/[slug]/page.tsx
+export const metadata = {
+  openGraph: {
+    title: '글 제목',
+    description: '한 줄 설명',
+    url: 'https://example.com/blog/1',
+    siteName: '사이트 이름',
+    images: [{ url: '/og.png', width: 1200, height: 630 }],
+    type: 'article',
+  },
+  twitter: { card: 'summary_large_image' },
+}`}
+          </pre>
+          <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
+            <li><strong style={{ color: 'var(--text)' }}>워드프레스 + Yoast SEO</strong> — 글 편집 화면의 Yoast SEO 박스에서 <strong style={{ color: 'var(--text)' }}>소셜(Social) 탭</strong>을 열면 게시물별 OG 이미지·제목·설명을 지정할 수 있고, 여기 입력한 이미지가 대표 이미지보다 우선 적용됩니다.</li>
+            <li><strong style={{ color: 'var(--text)' }}>워드프레스 + Rank Math</strong> — 메타박스의 <strong style={{ color: 'var(--text)' }}>Social 탭</strong>에서 Facebook용·X용 이미지를 따로 설정하고, X 카드 타입(summary / summary_large_image)도 선택합니다.</li>
+            <li>어느 쪽이든 발행 후 이 도구에 URL을 넣어 실제 출력을 확인하고, 수정했다면 카카오·Facebook 캐시를 초기화하세요.</li>
+          </ul>
+        </section>
+
+        {/* 6. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -180,7 +270,7 @@ export default function OgPreviewPage() {
           </div>
         </section>
 
-        {/* 5. 함께 쓰면 좋은 도구 */}
+        {/* 7. 함께 쓰면 좋은 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>

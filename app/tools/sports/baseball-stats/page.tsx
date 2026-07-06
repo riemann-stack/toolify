@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/baseball-stats',
@@ -50,6 +51,15 @@ export default function BaseballStatsPage() {
         타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + <strong style={{ color: 'var(--text)' }}>KBO 평균 비교</strong>.
       </p>
 
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="타율·출루율·OPS·ERA·WHIP 표준 공식 · 규정타석(경기수×3.1)·규정이닝(경기수×1.0) = 공식야구규칙 9.22 기준"
+        sources={[
+          { label: 'KBO 공식 기록실', href: 'https://www.koreabaseball.com/Record/Player/HitterBasic/Basic1.aspx' },
+          { label: 'MLB 공식 용어집(Rate Stats Qualifiers)', href: 'https://www.mlb.com/glossary/standard-stats/rate-stats-qualifiers' },
+        ]}
+      />
+
       <BaseballStatsClient />
 
       {/* 본문 광고 */}
@@ -79,6 +89,52 @@ export default function BaseballStatsPage() {
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 루타수 = 1루타 + 2루타×2 + 3루타×3 + 홈런×4</div>
             <div><span style={{ color: 'var(--muted)' }}>OPS</span> = 출루율 + 장타율</div>
           </div>
+        </div>
+
+        {/* ── 1-1. 타석(PA) vs 타수(AB) 구분 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            타석(PA) vs 타수(AB) — 입력 실수 방지 가이드
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginBottom: '14px' }}>
+            타율이 이상하게 나오는 가장 흔한 원인은 <strong style={{ color: 'var(--text)' }}>타석(PA)과 타수(AB)의 혼동</strong>입니다.
+            타석은 타자가 타격을 완료한 모든 기회이고, 타수는 거기서 볼넷·사구·희생번트·희생플라이를 뺀 값입니다.
+            지표마다 분모가 달라서, 기록지의 어느 칸을 입력하느냐가 결과를 좌우합니다. 모든 항목은 타석(PA)에는 포함됩니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['기록 항목', '타수(AB)', '출루율 분모', '지표에 미치는 영향'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { item: '안타·범타·삼진',        ab: '포함', obp: '포함', note: '타율·출루율 모두 반영' },
+                  { item: '볼넷 (BB)',              ab: '제외', obp: '포함', note: '타율 불변 · 출루율 상승' },
+                  { item: '사구 (HBP, 몸에 맞는 공)', ab: '제외', obp: '포함', note: '볼넷과 동일 취급' },
+                  { item: '희생번트 (SH)',          ab: '제외', obp: '제외', note: '타율·출루율 모두 불변' },
+                  { item: '희생플라이 (SF)',        ab: '제외', obp: '포함', note: '타율 불변 · 출루율은 하락' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.item}</td>
+                    <td style={{ padding: '10px 12px', color: r.ab === '포함' ? 'var(--success)' : 'var(--danger)', fontWeight: 600 }}>{r.ab}</td>
+                    <td style={{ padding: '10px 12px', color: r.obp === '포함' ? 'var(--success)' : 'var(--danger)', fontWeight: 600 }}>{r.obp}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '12px' }}>
+            예를 들어 한 경기 5타석에서 <strong style={{ color: 'var(--text)' }}>안타 1·볼넷 1·희생번트 1·희생플라이 1·뜬공 아웃 1</strong>을 기록했다면
+            타수는 2(안타+뜬공 아웃)입니다. 타율 = 1÷2 = 0.500, 출루율 = (1+1)÷(2+1+1) = 0.500이 됩니다.
+            볼넷을 타수에 넣어 1÷3 = 0.333으로 계산하는 것이 대표적인 실수입니다.
+            희생번트는 출루율 분모에서도 빠져 기록상 손해가 없지만, 희생플라이는 분모에만 들어가 출루율을 깎는다는 점도 자주 헷갈리는 부분입니다.
+            KBO 공식 기록실 역시 PA·AB·희생번트(SAC)·희생플라이(SF)를 별도 열로 나눠 집계합니다.
+          </p>
         </div>
 
         {/* ── 2. OPS 수준 평가 ── */}
@@ -137,6 +193,50 @@ export default function BaseballStatsPage() {
             <div><span style={{ color: 'var(--muted)' }}>FIP (간이)</span> = (13×HR + 3×(BB+HBP) − 2×K) ÷ IP + 3.1</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ FIP = 수비·운 요소 제거한 투수 진짜 실력</div>
           </div>
+        </div>
+
+        {/* ── 3-1. 규정타석·규정이닝 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            규정타석·규정이닝 — 순위표에 오르는 최소 기준
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginBottom: '14px' }}>
+            타율·출루율·ERA 같은 비율 지표 순위에 이름을 올리려면 최소 출전 기준을 채워야 합니다.
+            공식야구규칙 9.22는 <strong style={{ color: 'var(--text)' }}>규정타석 = 팀 경기수 × 3.1</strong>,
+            <strong style={{ color: 'var(--text)' }}> 규정이닝 = 팀 경기수 × 1.0</strong>으로 정하며,
+            소수점이 나오면 가장 가까운 정수로 반올림합니다(예: 502.2 → 502).
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['리그', '시즌 경기수', '규정타석 (×3.1)', '규정이닝 (×1.0)'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { lg: 'KBO', games: '144경기', pa: '144 × 3.1 = 446.4 → 446타석', ip: '144이닝' },
+                  { lg: 'MLB', games: '162경기', pa: '162 × 3.1 = 502.2 → 502타석', ip: '162이닝' },
+                  { lg: 'NPB', games: '143경기', pa: '143 × 3.1 = 443.3 → 443타석', ip: '143이닝' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.lg}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.games}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.pa}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.ip}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '12px' }}>
+            3.1은 주전 타자가 경기당 들어서는 평균적인 타석 수에서 나온 비율로, 시즌 내내 꾸준히 출전한 선수만 비율 지표 타이틀을 다투게 하려는 장치입니다.
+            타자에게는 구제 조항도 있습니다 — 규정타석에 못 미친 타자라도 <strong style={{ color: 'var(--text)' }}>부족한 타석을 전부 무안타 타수로 채워 다시 계산했을 때 여전히 리그 1위</strong>라면
+            타이틀이 인정되며, 공식 기록에는 원래 타율이 표기됩니다(규칙 9.22(a)).
+            사회인 리그에도 같은 비율을 적용할 수 있습니다. 예컨대 30경기 리그라면 30 × 3.1 = 93타석, 투수는 30이닝이 공정한 비교 기준이 됩니다.
+          </p>
         </div>
 
         {/* ── 4. 세이버메트릭스 입문 ── */}

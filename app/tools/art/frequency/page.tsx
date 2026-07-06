@@ -20,7 +20,7 @@ const FAQ_LD = [
               { q: 'MIDI 번호는 어떻게 활용하나요?',
                 a: 'MIDI(Musical Instrument Digital Interface) 번호는 0~127 범위의 정수로 음정을 표현합니다. <strong>중간 C(C4) = MIDI 60, A4 = MIDI 69</strong>. DAW(디지털 오디오 워크스테이션), 미디 편집 소프트웨어, 신디사이저에서 음정을 숫자로 다룰 때 필수적입니다.' },
               { q: '인간이 들을 수 있는 주파수 범위는?',
-                a: '일반적으로 <strong>20 Hz ~ 20,000 Hz (20 kHz)</strong>입니다. 나이가 들면서 고주파 가청 범위가 줄어들어 성인은 보통 16 kHz까지 잘 들립니다. 음악에서 실용적으로 사용되는 범위는 약 16 Hz(피아노 최저음 C0) ~ 4,186 Hz(피아노 최고음 C8)입니다.' },
+                a: '일반적으로 <strong>20 Hz ~ 20,000 Hz (20 kHz)</strong>입니다. 나이가 들면서 고주파 가청 범위가 줄어들어 성인은 보통 16 kHz까지 잘 들립니다. 음악에서 실용적으로 사용되는 범위는 약 27.5 Hz(88건반 피아노 최저음 A0) ~ 4,186 Hz(피아노 최고음 C8)입니다.' },
               { q: '기타 개방현의 표준 튜닝 주파수는?',
                 a: '<code>기타 6번줄(E2) = 82.41 Hz, 5번줄(A2) = 110 Hz, 4번줄(D3) = 146.83 Hz, 3번줄(G3) = 196 Hz, 2번줄(B3) = 246.94 Hz, 1번줄(E4) = 329.63 Hz</code>입니다. 이 계산기의 "음정 → Hz" 탭에서 각 음을 선택해 정확한 주파수를 확인하고 튜닝에 활용할 수 있습니다.' },
             ]
@@ -168,7 +168,114 @@ export default function FrequencyPage() {
           </div>
         </div>
 
-        {/* ── 4. FAQ ── */}
+        {/* ── 4. 현악기 개방현 튜닝 주파수 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            현악기 개방현 튜닝 주파수 (A4 = 440 Hz)
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            기타 외의 현악기도 같은 방식으로 튜닝할 수 있습니다.
+            평균율 A4 = 440 Hz 기준으로 계산한 주요 현악기의 개방현 주파수입니다.
+            바이올린·첼로는 인접한 현이 완전5도 간격, 더블베이스는 완전4도 간격으로 조율되며,
+            우쿨렐레(하이 G 표준 튜닝)는 4번줄 G4가 3번줄 C4보다 높은 &lsquo;리엔트런트(reentrant)&rsquo; 배열이라는 점이 특징입니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['악기', '현', '음이름', 'Hz', 'MIDI'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['바이올린', '4번줄', 'G3', '196.00', '55', '#0EA5E9'],
+                  ['바이올린', '3번줄', 'D4', '293.66', '62', '#0EA5E9'],
+                  ['바이올린', '2번줄', 'A4', '440.00', '69', '#0EA5E9'],
+                  ['바이올린', '1번줄', 'E5', '659.26', '76', '#0EA5E9'],
+                  ['첼로', '4번줄', 'C2', '65.41', '36', '#059669'],
+                  ['첼로', '3번줄', 'G2', '98.00', '43', '#059669'],
+                  ['첼로', '2번줄', 'D3', '146.83', '50', '#059669'],
+                  ['첼로', '1번줄', 'A3', '220.00', '57', '#059669'],
+                  ['더블베이스', '4번줄', 'E1', '41.20', '28', '#0891B2'],
+                  ['더블베이스', '3번줄', 'A1', '55.00', '33', '#0891B2'],
+                  ['더블베이스', '2번줄', 'D2', '73.42', '38', '#0891B2'],
+                  ['더블베이스', '1번줄', 'G2', '98.00', '43', '#0891B2'],
+                  ['우쿨렐레', '4번줄', 'G4', '392.00', '67', '#EA580C'],
+                  ['우쿨렐레', '3번줄', 'C4', '261.63', '60', '#EA580C'],
+                  ['우쿨렐레', '2번줄', 'E4', '329.63', '64', '#EA580C'],
+                  ['우쿨렐레', '1번줄', 'A4', '440.00', '69', '#EA580C'],
+                ].map(([inst, str, note, hz, midi, color], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{inst}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{str}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{note}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{hz}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{midi}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
+            바이올린 2번줄과 우쿨렐레 1번줄은 기준음 A4(440 Hz) 그 자체여서 튜너 없이 기준음만 듣고도 맞출 수 있습니다.
+            더블베이스 최저현 E1은 41.2 Hz로 사람 가청 하한(20 Hz)의 약 두 배에 불과할 만큼 낮은 음이므로,
+            튜너 표시가 의심스러울 때 이 계산기로 목표 Hz와 MIDI 번호를 교차 확인해 두면 좋습니다.
+          </p>
+        </div>
+
+        {/* ── 5. 평균율 vs 순정률 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            평균율 vs 순정률 — 주요 음정 센트 비교
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            평균율(12-TET)은 옥타브를 정확히 100센트짜리 반음 12개로 균등 분할한 체계이고,
+            순정률(Just Intonation)은 3:2, 5:4처럼 단순한 정수비로 음정을 쌓는 체계입니다.
+            순정률 음정을 센트로 환산(1200 × log₂(비율))해 평균율과 비교하면 두 체계의 차이가 명확해집니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['음정', '순정률 비율', '순정률(센트)', '평균율(센트)', '차이(순정−평균)'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['장2도', '9:8', '203.9', '200', '+3.9'],
+                  ['단3도', '6:5', '315.6', '300', '+15.6'],
+                  ['장3도', '5:4', '386.3', '400', '−13.7'],
+                  ['완전4도', '4:3', '498.0', '500', '−2.0'],
+                  ['완전5도', '3:2', '702.0', '700', '+2.0'],
+                  ['장6도', '5:3', '884.4', '900', '−15.6'],
+                  ['옥타브', '2:1', '1200.0', '1200', '0'],
+                ].map(([name, ratio, ji, et, diff], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{name}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{ratio}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{ji}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{et}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{diff}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
+            기타 튜닝에서 3번줄(G)과 2번줄(B) 사이가 유난히 안 맞는 것처럼 들리는 이유가 여기에 있습니다.
+            두 줄의 간격은 장3도인데, 귀로 맥놀이(울림의 떨림)가 사라지게 맞추면 순정 장3도(약 386센트)가 되어
+            평균율 기준보다 약 14센트 낮아집니다. 반대로 튜너로 평균율에 정확히 맞추면
+            이 장3도는 순정률보다 14센트 가까이 넓어 미세한 맥놀이가 남습니다.
+            튜너가 고장 난 것이 아니라, 모든 조(key)에서 균등하게 연주하기 위해
+            평균율이 장3도를 조금 넓게 잡는 타협을 선택한 결과입니다.
+          </p>
+        </div>
+
+        {/* ── 6. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -187,7 +294,7 @@ export default function FrequencyPage() {
           </div>
         </div>
 
-        {/* ── 5. 함께 쓰면 좋은 도구 ── */}
+        {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

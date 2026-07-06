@@ -30,6 +30,15 @@ const mcStyle: React.CSSProperties = { fontFamily: 'Inter, system-ui, monospace'
 
 const EN_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 const EN_DIGITS = '0123456789'.split('')
+const EN_PUNCT = ['.', ',', '?', '!', "'", '"', '/', '(', ')', ':', ';', '=', '+', '-', '_', '@', '&', '$']
+const PROSIGNS = [
+  { sign: 'AR', code: '·−·−·', mean: '전문(메시지) 끝 — "+" 기호와 같은 부호' },
+  { sign: 'SK', code: '···−·−', mean: '교신 종료(end of work)' },
+  { sign: 'BT', code: '−···−', mean: '단락 구분·잠깐 쉼 — "=" 기호와 같은 부호' },
+  { sign: 'K', code: '−·−', mean: '송신하세요(상대에게 응답 요청)' },
+  { sign: 'AS', code: '·−···', mean: '잠시 대기(wait) — "&" 기호와 같은 부호' },
+  { sign: 'HH', code: '········', mean: '정정 — 점 8개, 틀린 직전 단어를 다시 보냄' },
+]
 const KO_CONS = 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ'.split('')
 const KO_VOWELS = 'ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㅐㅔ'.split('')
 const toBar = (m: string) => m.replace(/\./g, '·').replace(/-/g, '−')
@@ -114,6 +123,36 @@ export default function MorseCodePage() {
           </div>
         </div>
 
+        {/* 문장부호·절차신호 */}
+        <div>
+          <h2 style={sectionTitle}>✒️ 문장부호 부호표 + 절차신호(Prosign)</h2>
+          <div style={{ ...card }}>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              물음표·쉼표 같은 문장부호도 국제 표준인 <strong style={{ color: 'var(--text)' }}>ITU-R 권고 M.1677-1</strong>에 부호가 정해져 있습니다. 물음표(··−−··)와 쉼표(−−··−−)는 점·선을 서로 뒤집은 <strong style={{ color: 'var(--text)' }}>거울 관계</strong>라 짝으로 외우면 쉽고, 마침표(·−·−·−)는 점·선이 번갈아 나오는 리듬입니다. 느낌표(−·−·−−)·세미콜론(;)·밑줄(_)·달러($)는 ITU 표준 문서에는 없지만 관용적으로 널리 쓰이는 부호로, 이 변환기도 함께 지원합니다.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))', gap: '6px', marginBottom: '18px' }}>
+              {EN_PUNCT.map((c) => (
+                <div key={c} style={codeCell}><span style={chStyle}>{c}</span><span style={mcStyle}>{toBar(MORSE_EN[c])}</span></div>
+              ))}
+            </div>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, margin: '0 0 10px' }}>
+              <strong style={{ color: 'var(--text)' }}>절차신호(prosign)</strong>는 두 글자를 글자 간격 없이 붙여 하나의 신호로 보내는 운용 신호입니다. 예를 들어 AR은 A(·−)와 R(·−·)을 이어 ·−·−·가 되죠. 전보·아마추어무선 교신에서 문장부호 대신 대화의 흐름을 제어하는 데 씁니다.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {PROSIGNS.map((p) => (
+                <div key={p.sign} style={{ ...codeCell, justifyContent: 'flex-start', gap: '12px' }}>
+                  <span style={{ ...chStyle, minWidth: '28px' }}>{p.sign}</span>
+                  <span style={{ ...mcStyle, minWidth: '88px' }}>{p.code}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.5 }}>{p.mean}</span>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '14px 0 0', lineHeight: 1.7 }}>
+              ITU 표준에는 이 밖에도 송신 시작(−·−·−)·수신 양해 Understood(···−·) 신호가 정의되어 있습니다.
+            </p>
+          </div>
+        </div>
+
         {/* NATO */}
         <div>
           <h2 style={sectionTitle}>🗣️ NATO 음성기호란?</h2>
@@ -123,6 +162,22 @@ export default function MorseCodePage() {
             </p>
             <p style={{ margin: 0 }}>
               총 {NATO.filter((n) => /[A-Z]/.test(n.ch)).length}개 알파벳 + 숫자로 구성되며, <strong style={{ color: 'var(--text)' }}>콜센터·항공·예약번호·운송장 번호</strong> 확인에 특히 유용합니다. 위 도구의 NATO 모드에서 바로 변환해 보세요.
+            </p>
+          </div>
+        </div>
+
+        {/* 학습법 */}
+        <div>
+          <h2 style={sectionTitle}>🎧 모스 학습법 — 코흐 방식과 판스워스 타이밍</h2>
+          <div style={{ ...card, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
+            <p style={{ margin: '0 0 10px' }}>
+              <strong style={{ color: 'var(--text)' }}>코흐(Koch) 방식</strong>은 1930년대 독일의 루트비히 코흐(Ludwig Koch)가 고안한 훈련법입니다. 처음부터 실전 속도(보통 15~20 WPM)의 리듬으로 딱 <strong style={{ color: 'var(--text)' }}>2글자</strong>만 듣기 시작하고, 정답률 90%를 넘기면 글자를 하나씩 추가해요. 점·선 개수를 세는 습관이 굳기 전에 글자를 통째로 ‘소리 패턴’으로 외우게 하는 것이 핵심입니다.
+            </p>
+            <p style={{ margin: '0 0 10px' }}>
+              <strong style={{ color: 'var(--text)' }}>판스워스(Farnsworth) 타이밍</strong>은 글자 하나하나는 빠른 속도의 리듬으로 보내되, 글자·단어 사이 간격만 길게 늘려 전체 속도를 낮추는 방식입니다. 느린 속도로 배우면 나중에 빠른 리듬을 처음부터 다시 익혀야 하는 정체 구간이 생기는데, 이를 피할 수 있죠.
+            </p>
+            <p style={{ margin: 0 }}>
+              이 도구의 <strong style={{ color: 'var(--text)' }}>WPM 슬라이더(5~30)</strong>로 비슷하게 연습할 수 있습니다. 단점 1개 길이는 1.2초 ÷ WPM(20 WPM이면 0.06초)이에요. ① 20 WPM 안팎에서 E(·)·T(−)처럼 쉬운 글자 한두 개를 반복 재생하며 소리로 구분하고 → ② 글자가 익으면 짧은 단어를 같은 속도로 듣고 → ③ 문장 전체는 10~13 WPM쯤에서 시작해 조금씩 올려 보세요.
             </p>
           </div>
         </div>

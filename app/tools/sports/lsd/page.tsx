@@ -23,6 +23,22 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px',
 }
+const cell: React.CSSProperties = {
+  padding: '10px 14px',
+  borderBottom: '1px solid var(--border)',
+  fontSize: '13px',
+  color: 'var(--text)',
+  verticalAlign: 'top',
+}
+const headCell: React.CSSProperties = {
+  padding: '10px 14px',
+  textAlign: 'left',
+  fontWeight: 700,
+  fontSize: '12px',
+  color: 'var(--muted)',
+  borderBottom: '1px solid var(--border)',
+  background: 'var(--bg3)',
+}
 const ACCENT = '#059669'
 
 const FAQ_LD = [
@@ -91,6 +107,51 @@ export default function LsdPage() {
           </div>
         </section>
 
+        {/* 3-2. 존2 판정 기준 3종 비교 */}
+        <section>
+          <h2 style={sectionTitle}>존2 판정 기준 3종 비교 — 같은 &lsquo;존2&rsquo;라도 숫자가 다르다</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
+            존2를 정하는 방식은 크게 셋 — <strong style={{ color: 'var(--text)' }}>최대심박 백분율(%HRmax)</strong>, <strong style={{ color: 'var(--text)' }}>카보넨(심박예비, HRR)</strong>, <strong style={{ color: 'var(--text)' }}>젖산역치 심박(LTHR)</strong> 기준입니다. 같은 사람이라도 어느 방식을 쓰느냐에 따라 BPM 경계가 크게 달라집니다. 40세·안정시 심박 60인 러너(Tanaka 최대심박 180)를 예로 들면:
+          </p>
+          <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            <div className="tableScroll">
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
+                <thead>
+                  <tr>
+                    <th scope="col" style={headCell}>기준</th>
+                    <th scope="col" style={headCell}>존2 정의</th>
+                    <th scope="col" style={headCell}>예시 BPM</th>
+                    <th scope="col" style={headCell}>특징</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={cell}><strong>%HRmax</strong></td>
+                    <td style={cell}>최대심박 × 60~70%</td>
+                    <td style={cell}>108~126</td>
+                    <td style={cell}>가장 단순하지만 안정시 심박을 무시 — 훈련된 러너에겐 지나치게 낮게 나오는 경향</td>
+                  </tr>
+                  <tr>
+                    <td style={cell}><strong>카보넨(HRR)</strong></td>
+                    <td style={cell}>안정시 + (최대 − 안정시) × 60~70%</td>
+                    <td style={cell}>132~144</td>
+                    <td style={cell}>안정시 심박을 반영해 개인화. 이 계산기가 안정시 심박 입력 시 쓰는 방식</td>
+                  </tr>
+                  <tr>
+                    <td style={cell}><strong>LTHR</strong></td>
+                    <td style={cell}>젖산역치 심박 × 85~89%<br />(Friel 러닝 기준)</td>
+                    <td style={cell}>140~147<br />(LTHR 165 가정)</td>
+                    <td style={cell}>30분 단독 타임트라이얼의 마지막 20분 평균 심박으로 실측 — 나이 공식 오차가 없음</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginTop: 12 }}>
+            하한만 봐도 <strong style={{ color: 'var(--text)' }}>108 vs 132 vs 140 — 30bpm 이상</strong> 벌어집니다. 108bpm은 훈련된 러너에겐 빠르게 걷기 수준이라, %HRmax 단독 기준은 강도를 저평가하기 쉽습니다. 안정시 심박을 알고 있다면 반드시 입력해 카보넨 값을 쓰고, 스포츠워치의 &lsquo;존2&rsquo; 알림이 셋 중 어느 방식으로 계산된 것인지도 확인하세요. 세 방식의 숫자가 달라도 목표 강도는 같습니다 — 헷갈리면 대화 테스트로 검증하면 됩니다.
+          </p>
+        </section>
+
         {/* 4. 롱런 영양·수분 */}
         <section>
           <h2 style={sectionTitle}>롱런 영양·수분 가이드</h2>
@@ -107,6 +168,42 @@ export default function LsdPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* 4-2. 풀코스 16주 롱런 진행 예시 */}
+        <section>
+          <h2 style={sectionTitle}>풀코스 16주 롱런 진행 예시</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
+            마라톤 준비의 뼈대는 <strong style={{ color: 'var(--text)' }}>주 1회 롱런의 점진적 확장</strong>입니다. 아래는 최장 12~14km를 이미 소화할 수 있는 러너가 16주에 걸쳐 롱런을 32km까지 끌어올리는 예시입니다. &lsquo;3주 늘리고 1주 줄이는&rsquo; 감량주 리듬과 대회 전 3주 테이퍼가 골격입니다. 시간은 LSD 페이스 6:30/km 가정 — 본인 시간은 위 계산기가 산출한 페이스로 잡으세요.
+          </p>
+          <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            <div className="tableScroll">
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 520 }}>
+                <thead>
+                  <tr>
+                    <th scope="col" style={headCell}>주차</th>
+                    <th scope="col" style={headCell}>단계</th>
+                    <th scope="col" style={headCell}>롱런 거리</th>
+                    <th scope="col" style={headCell}>6:30/km 기준 시간</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style={cell}>1~3주</td><td style={cell}>기초 쌓기</td><td style={cell}>14 → 16 → 18km</td><td style={cell}>91 → 117분</td></tr>
+                  <tr><td style={cell}>4주</td><td style={cell}>감량주</td><td style={cell}>14km</td><td style={cell}>91분</td></tr>
+                  <tr><td style={cell}>5~6주</td><td style={cell}>축적</td><td style={cell}>20 → 22km</td><td style={cell}>130 → 143분</td></tr>
+                  <tr><td style={cell}>7주</td><td style={cell}>감량주</td><td style={cell}>16km</td><td style={cell}>104분</td></tr>
+                  <tr><td style={cell}>8~9주</td><td style={cell}>축적</td><td style={cell}>24 → 26km</td><td style={cell}>156 → 169분</td></tr>
+                  <tr><td style={cell}>10주</td><td style={cell}>감량주</td><td style={cell}>18km</td><td style={cell}>117분</td></tr>
+                  <tr><td style={cell}>11~13주</td><td style={cell}><strong>피크</strong></td><td style={cell}>28 → 30 → 32km</td><td style={cell}>182 → 208분</td></tr>
+                  <tr><td style={cell}>14~15주</td><td style={cell}>테이퍼</td><td style={cell}>22 → 16km</td><td style={cell}>143 → 104분</td></tr>
+                  <tr><td style={cell}>16주</td><td style={cell}>대회 주</td><td style={cell}>8~10km + 풀코스</td><td style={cell}>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginTop: 12 }}>
+            주당 10% 규칙은 롱런 단독이 아니라 <strong style={{ color: 'var(--text)' }}>주간 총 거리</strong> 기준입니다. 롱런 자체는 회당 2km 이내로 늘리고, 3~4주마다 감량주로 피로를 털어내세요. 18km(약 2시간)부터는 매번 보급이 필요한 거리이므로, 위 계산기의 <strong style={{ color: 'var(--text)' }}>롱런 보급 플래너</strong>에 그 주의 거리를 넣어 수분·탄수 시점을 미리 계획하고, 피크 롱런에서는 대회 당일 먹을 젤·음료를 그대로 리허설하세요. 예시보다 컨디션이 처지면 거리를 유지하거나 감량주를 앞당기는 쪽이 안전합니다.
+          </p>
         </section>
 
         {/* 5. 계산 기준·공식·한계 */}

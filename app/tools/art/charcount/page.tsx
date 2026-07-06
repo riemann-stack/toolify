@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/art/charcount',
@@ -15,7 +16,7 @@ export const metadata = buildMetadata({
 
 const FAQ_LD = [
               { q: '공백을 글자수에 포함해야 하나요?', a: '플랫폼·문서 종류에 따라 다릅니다. <strong>SNS·자기소개서</strong>는 보통 공백 포함, <strong>학술 논문 분량 측정</strong>은 공백 제외가 일반적입니다. 본 도구는 두 값을 모두 표시하므로 양식에 맞게 사용하세요.' },
-              { q: '이모지는 몇 글자로 세야 하나요?', a: '단순 카운트 기준으로 이모지 1개 = 1글자입니다. 단 <strong>UTF-8 바이트는 4바이트</strong>이므로 SMS 전송 시에는 더 큰 비중을 차지합니다. X(트위터)는 이모지를 가중치 2로 계산합니다.' },
+              { q: '이모지는 몇 글자로 세야 하나요?', a: '세는 기준에 따라 다릅니다. 본 도구의 총 글자수는 UTF-16 코드 유닛(JavaScript String.length) 기준이라 😀 같은 기본 이모지 1개가 <strong>2글자</strong>, 👨‍👩‍👧 같은 결합 이모지는 8글자로 집계됩니다. UTF-8 바이트로는 기본 이모지 1개가 4바이트이고, X(트위터)는 이모지를 가중치 2로 계산합니다.' },
               { q: '한글 자모(ㄱㄴㄷ)는 어떻게 세나요?', a: '본 도구는 자모(ㄱ, ㅏ 등)와 완성형 한글(가, 나)을 모두 한글로 카운트하며 별도 통계로 분리해 보여줍니다. 자모만 입력된 경우 일반적인 한글로 인식되지 않을 수 있어 입력 검증이 필요합니다.' },
               { q: 'X(트위터) 글자수가 280인데 한글로는 왜 140자인가요?', a: 'X는 영문/숫자/일부 라틴 문자를 가중치 1, 한글·중국어·일본어·이모지를 가중치 2로 계산해 <strong>총 280 가중치 한도</strong>를 적용합니다. 한글로만 글을 쓰면 약 140자가 한계입니다.' },
             ]
@@ -32,6 +33,15 @@ export default function CharCountPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         공백 포함·제외 <strong style={{ color: 'var(--text)' }}>실시간 카운트</strong>. SNS·자소서·논문 글자 수 체크.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="총 글자수 = UTF-16 코드 유닛(String.length) 기준 · 플랫폼 한도는 공식 문서 확인값"
+        sources={[
+          { label: '유튜브 고객센터', href: 'https://support.google.com/youtube/answer/57404?hl=ko' },
+          { label: 'X twitter-text 공식 설정', href: 'https://github.com/twitter/twitter-text/blob/master/config/v3.json' },
+        ]}
+      />
 
       <CharCountClient />
 
@@ -94,6 +104,52 @@ export default function CharCountPage() {
           </div>
         </div>
 
+        {/* ── 결합 이모지·그래핌 단위 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            결합 이모지 👨‍👩‍👧는 왜 8글자로 세어질까
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+            가족 이모지 👨‍👩‍👧는 눈에는 1글자지만, 실제로는 👨·👩·👧 세 이모지를 폭이 없는 결합 문자 <strong style={{ color: 'var(--text)' }}>ZWJ(U+200D)</strong> 2개로
+            이어 붙인 시퀀스입니다. 어떤 단위로 세느냐에 따라 1(그래핌)·5(코드포인트)·8(UTF-16 코드 유닛)로 답이 전부 달라지는데,
+            글자수 카운터마다 결과가 다른 이유가 바로 이것입니다. 본 도구의 총 글자수는 JavaScript <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text)' }}>String.length</span>와
+            같은 <strong style={{ color: 'var(--text)' }}>UTF-16 코드 유닛 기준</strong>입니다. HTML 표준의 입력창 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text)' }}>maxlength</span>도
+            같은 코드 유닛 단위로 정의되어 있어, 웹 입력 폼의 글자수 제한과 대부분 일치합니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['입력', '눈에 보이는 글자(그래핌)', '본 도구 총 글자수', '코드포인트', 'UTF-8'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { t: '안녕',            g: '2', l: '2', cp: '2', b: '6바이트' },
+                  { t: '😀',              g: '1', l: '2', cp: '1', b: '4바이트' },
+                  { t: '👍🏽 (피부색 조합)', g: '1', l: '4', cp: '2', b: '8바이트' },
+                  { t: '🇰🇷 (국기)',        g: '1', l: '4', cp: '2', b: '8바이트' },
+                  { t: '👨‍👩‍👧 (ZWJ 결합)',   g: '1', l: '8', cp: '5', b: '18바이트' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.g}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.cp}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+            ※ 문자 종류별 분석은 코드포인트 단위로 순회하므로 👨‍👩‍👧는 이모지 3 + 특수(ZWJ) 2로 집계됩니다.
+            워드프로세서처럼 그래핌 단위로 세는 카운터와 값이 다를 수 있으니, 제출 대상 시스템이 어느 기준인지 먼저 확인하세요.
+          </p>
+        </div>
+
         {/* ── 3. SMS 한도 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
@@ -149,6 +205,48 @@ export default function CharCountPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* ── 플랫폼 공식 한도 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            주요 플랫폼 글자수 한도 — 공식 문서 확인값
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+            플랫폼 글자수 제한은 블로그마다 값이 제각각이라, 공식 고객센터·공식 명세로 확인되는 값 위주로 정리했습니다.
+            입력한 텍스트가 각 한도의 몇 %인지 실시간 비교는 계산기의 &lsquo;플랫폼별 제한&rsquo; 탭에서 할 수 있습니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['항목', '한도', '비고'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 1 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: '유튜브 동영상 제목',       l: '100자',      n: '고객센터 명시. 유효하지 않은 문자 포함 불가' },
+                  { s: '유튜브 동영상 설명',       l: '5,000자',    n: '고객센터 명시' },
+                  { s: 'X(트위터) 게시물',         l: '280 가중치', n: '한글·이모지 = 2, 영문·숫자 = 1 → 한글만 쓰면 약 140자' },
+                  { s: '인스타그램 캡션',          l: '2,200자',    n: '피드에서는 처음 125자만 보이고 이후 더 보기로 접힘' },
+                  { s: '인스타그램 프로필 소개',   l: '150자',      n: '복수 가이드 일치값' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.n}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+            ※ X 가중치는 공식 오픈소스 twitter-text 설정값(기본 가중치 2, 라틴 문자 등 일부 구간만 1, 총 280 한도)을 따른 것입니다.
+            네이버 블로그·카카오톡처럼 공식 문서에 한도가 명시되지 않은 서비스는 표에서 제외했으며, 플랫폼 정책은 수시로 바뀔 수 있으니
+            제출 직전 해당 서비스에서 최종 확인을 권장합니다.
+          </p>
         </div>
 
         {/* ── 5. 자기소개서 가이드 ── */}

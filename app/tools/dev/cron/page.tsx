@@ -209,6 +209,90 @@ export default function CronPage() {
           </div>
         </div>
 
+        {/* ── 6. crontab 실무 등록·디버깅 ── */}
+        <div>
+          <h2 style={H2}>crontab 등록과 디버깅 — cron에서만 안 될 때</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            리눅스에서는 <code style={CODE}>crontab -e</code>로 편집기를 열어 한 줄 추가하고 저장하면 즉시 등록됩니다.
+            <code style={CODE}>crontab -l</code>로 목록을 확인하고, <code style={CODE}>crontab -r</code>은 확인 질문 없이
+            전체 삭제되므로 주의하세요. "터미널에서 직접 실행하면 되는데 cron에서만 안 된다"면 대부분 환경변수 차이가 원인입니다 —
+            cron은 로그인 셸이 아니라 <code style={CODE}>SHELL=/bin/sh</code>, <code style={CODE}>PATH=/usr/bin:/bin</code>의
+            최소 환경으로 명령을 실행합니다(crontab(5) 기준).
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['증상', '원인', '해결'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: 'command not found', c: 'PATH가 /usr/bin:/bin뿐이라 /usr/local/bin 등을 못 찾음', f: '명령을 절대경로로 쓰거나 crontab 상단에 PATH= 선언' },
+                  { s: '수동 실행은 OK, cron만 실패', c: '비로그인 sh 실행이라 ~/.bashrc의 변수·alias 미적용', f: '필요한 환경변수를 crontab이나 스크립트 안에 직접 선언' },
+                  { s: 'date +%d 뒤 명령이 잘림', c: '%는 crontab에서 개행으로 해석, 이후는 표준입력으로 전달', f: '\\%로 이스케이프하거나 스크립트 파일로 분리' },
+                  { s: '실행됐는지 흔적이 없음', c: '출력이 파일이 아닌 메일로만 감', f: '명령 뒤에 >> /var/log/작업.log 2>&1 리다이렉트' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 600, fontSize: 12 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontSize: 12 }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12, fontFamily: 'var(--font-mono)' }}>{r.f}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ ...CARD, marginTop: 12 }}>
+            cron은 명령이 출력(stdout·stderr)을 내면 그 내용을 메일로 보내려 시도합니다. crontab 상단에
+            <code style={CODE}>MAILTO=me@example.com</code>을 적으면 수신 주소를 지정하고, <code style={CODE}>MAILTO=""</code>는
+            메일 발송을 끕니다. 실행 여부 자체는 <code style={CODE}>grep CRON /var/log/syslog</code>(데비안·우분투)나
+            <code style={CODE}>journalctl -u cron</code>(RHEL 계열은 crond)으로 확인할 수 있습니다.
+          </div>
+        </div>
+
+        {/* ── 7. 비자명 주기 레시피 ── */}
+        <div>
+          <h2 style={H2}>한 줄로 안 되는 주기 — 실무 레시피</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            "매월 마지막 날"이나 "2주마다"는 표준 5필드 문법만으로 표현할 수 없습니다. 이럴 땐 트리거를
+            조금 넓게 걸어 두고, 명령 앞에서 날짜 조건을 확인해 아니면 빠져나가는 패턴을 씁니다(GNU date 기준).
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['원하는 주기', '표현식', '조건·비고'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { p: '매월 마지막 날 0시', e: '0 0 28-31 * *', n: '[ "$(date -d tomorrow +\\%d)" = "01" ] && 명령 — 표준 cron엔 L(말일)이 없어 "내일이 1일인지"로 판별' },
+                  { p: '2주마다 월요일 9시', e: '0 9 * * 1', n: '[ $(( $(date +\\%V) % 2 )) -eq 1 ] && 명령 — ISO 주차 홀짝 체크. 53주가 있는 해의 연말·연초엔 한 번 어긋날 수 있음' },
+                  { p: '업무시간만 10분마다', e: '*/10 9-17 * * 1-5', n: '*/10 9-18로 쓰면 18:50까지 돌아감 — 18시 정각에 끝내려면 0 18 * * 1-5 한 줄 추가' },
+                  { p: '격월(홀수 달) 1일', e: '0 0 1 1-11/2 *', n: '1·3·5·7·9·11월 — 범위+스텝 문법으로 한 줄 해결 가능' },
+                  { p: '매월 첫째 월요일', e: '0 9 * * 1', n: '[ $(date +\\%d) -le 7 ] && 명령 — 0 9 1-7 * 1은 OR 규칙 탓에 1~7일 전부에도 실행되므로 금물' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 600, fontSize: 12 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12, whiteSpace: 'nowrap' }}>{r.e}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.n}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ ...CARD, marginTop: 12 }}>
+            예시의 <code style={CODE}>\%</code>는 crontab 한 줄에 인라인으로 넣을 때의 이스케이프이며, 별도 스크립트 파일
+            안에서는 그냥 <code style={CODE}>%</code>를 씁니다. macOS·BSD의 date는 <code style={CODE}>-d tomorrow</code> 대신
+            <code style={CODE}>date -v+1d</code>를 사용합니다. 조건이 두 개 이상 겹치면 crontab 한 줄에 욱여넣지 말고
+            스크립트로 빼는 편이 읽기도, 로그 남기기도 쉽습니다.
+          </div>
+        </div>
+
         <AdSlot position="between-tools" minHeight={250} />
 
         {/* ── FAQ ── */}
