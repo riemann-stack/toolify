@@ -23,6 +23,8 @@ const FAQ_LD = [
                 a: '네, 다릅니다. 카포가 높을수록 현의 진동 부분이 짧아져 <strong>더 밝고 날카로운 소리</strong>가 납니다. 카포 없는 낮은 포지션은 따뜻하고 풍부한 음색, 카포 5프렛 이상은 맑고 영롱한 음색입니다. 같은 C키라도 카포 없음(C코드)과 카포 3프렛(A코드)은 음색이 확실히 다릅니다.' },
               { q: '우쿨렐레에도 카포를 쓸 수 있나요?',
                 a: '네. <strong>우쿨렐레용 카포가 별도로 있으며</strong> 기타와 같은 원리로 작동합니다. 다만 우쿨렐레는 G-C-E-A 조율이 기본이라 코드 이름이 기타와 다를 수 있습니다. 이 계산기의 반음 단위 계산 원리는 동일하게 적용됩니다.' },
+              { q: '여성 키 곡을 남성 키로 바꾸려면 몇 키를 내려야 하나요?',
+                a: '정해진 표준은 없으며, <strong>통상 3~5키(반음) 범위에서 곡과 본인 음역대에 맞춰 조정</strong>하는 것이 일반적입니다. 참고로 노래방에서 말하는 \'한 키\'는 반음 1개에 해당합니다. 키를 내린 뒤에는 본문 가이드의 역산 절차대로 <code>카포 위치 = 목표 키 − 코드 모양 키</code>를 계산하면 익숙한 코드 모양을 유지할 수 있습니다.' },
             ]
 
 export default function CapoPage() {
@@ -185,45 +187,124 @@ export default function CapoPage() {
           </p>
         </div>
 
-        {/* ── 5. 다이아토닉 코드 & 진행 ── */}
+        {/* ── 5. 통기타 애창곡 실전 카포 사례 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            다이아토닉 코드와 기본 진행
+            통기타 애창곡 실전 카포 사례
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-            메이저 키에는 7개의 다이아토닉 코드가 있으며 각각 로마 숫자(I~vii°)로 표기합니다.
-            이 7개 코드만으로 팝·록·포크 대부분의 진행이 구성됩니다.
+            악보 사이트에서 통용되는 편곡 기준으로, 통기타로 많이 연주되는 곡들의 원곡 키와 카포 위치를 정리했습니다.
+            플랫(♭) 계열 키(B♭·E♭·A♭)의 곡은 오픈 코드 모양이 없어 카포가 사실상 필수인 반면,
+            E키인 벚꽃 엔딩처럼 오픈 코드가 가능한 키는 카포 없이 원키 연주가 통용됩니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['곡 — 아티스트', '원곡 키', '통용 카포', '연주 코드 모양'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { song: '밤편지 — 아이유',                 key: 'A♭', capo: '3프렛', shape: 'F키 (F·G·Em·Am·Dm)' },
+                  { song: '주저하는 연인들을 위해 — 잔나비',  key: 'B♭', capo: '1프렛', shape: 'A키 (Bm·C♯m 포함)' },
+                  { song: '모든 날, 모든 순간 — 폴킴',        key: 'E♭', capo: '1프렛', shape: 'D키 (바레는 Bm 하나)' },
+                  { song: '벚꽃 엔딩 — 버스커버스커',         key: 'E',  capo: '없음',  shape: 'E키 오픈 코드' },
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row.song}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row.key}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{row.capo}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row.shape}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+            * 악보 사이트·편곡자에 따라 카포 위치는 달라질 수 있습니다. 검산은 이 계산기 공식 그대로 —
+            연주 코드 모양의 키 + 카포 반음 수 = 원곡 키 (예: F키 모양 + 3반음 = A♭).
+          </p>
+        </div>
+
+        {/* ── 6. 카포 종류별 비교 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            카포 종류별 비교 — 스프링·스크류·롤링·파셜
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            카포는 장착 방식에 따라 속도와 튜닝 안정성이 크게 달라집니다.
+            스프링(트리거)식은 한 손으로 가장 빠르게 옮길 수 있지만 압력이 고정이라 세게 눌리면 음이 샤프(♯)하게 뜰 수 있고,
+            스크류식은 느린 대신 나사로 압력을 미세 조절할 수 있어 튜닝이 가장 안정적입니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['종류', '장착·이동', '압력 조절', '적합 상황·주의점'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { type: '스프링(트리거)', move: '한 손 · 가장 빠름',     adj: '불가 (스프링 고정)', fit: '라이브·잦은 키 변경. 과압착 시 샤프 주의' },
+                  { type: '스크류',         move: '두 손 · 느림',          adj: '나사로 미세 조절',   fit: '녹음·연습. 튜닝 안정성이 가장 좋음' },
+                  { type: '롤링(롤러)',     move: '떼지 않고 밀어서 이동', adj: '불가',               fit: '곡 중간 전조 라이브. 접촉면이 넓어 압력이 비교적 고른 편' },
+                  { type: '파셜',           move: '일반 카포와 비슷',      adj: '제품별 상이',        fit: '일부 현만 눌러 오픈 튜닝 느낌의 보이싱. 숙련자용' },
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.type}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontWeight: 600 }}>{row.move}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row.adj}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row.fit}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+            * 어떤 종류든 프렛 바로 뒤(프렛 위 아님)에 장착하고, 장착 후에는 튜닝을 다시 확인하세요.
+            버징 없이 소리가 나는 최소한의 압력이 이상적입니다.
+          </p>
+        </div>
+
+        {/* ── 7. 남성 키 ↔ 여성 키 전환 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            남성 키 ↔ 여성 키 전환 — 카포 역산 3단계
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            같은 곡도 남성·여성 보컬의 음역이 달라 키를 옮겨 부르는 경우가 많습니다.
+            몇 키를 옮길지 정해진 표준은 없으며, <strong style={{ color: 'var(--text)' }}>통상 3~5키(반음) 범위에서 곡과 본인 음역대에 맞춰 조정</strong>하는 것이 일반적입니다.
+            노래방에서 말하는 &lsquo;한 키&rsquo;는 반음 1개에 해당합니다. 키를 정한 뒤에는 아래 순서로 카포를 역산하면 익숙한 코드 모양을 그대로 쓸 수 있습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '16px' }}>
             {[
-              { role: 'I (토닉, T)',       color: '#0EA5E9', desc: '곡의 중심. 시작·끝·안정감을 담당' },
-              { role: 'IV (서브도미넌트, SD)', color: '#0891B2', desc: '긴장을 만들며 V로 이어짐' },
-              { role: 'V (도미넌트, D)',   color: '#EA580C', desc: '가장 강한 긴장. I로 해결' },
+              { n: '①', title: '목표 키 계산',     desc: '원곡 키에서 내릴 반음 수를 뺍니다. 예: A♭에서 4키(4반음) 내리면 E.' },
+              { n: '②', title: '코드 모양 선택',   desc: '카포 위치 = 목표 키 − 코드 모양 키(반음). 카포가 0~5프렛이 되는 모양을 고릅니다. E키 = E모양+카포 없음 = D모양+2프렛 = C모양+4프렛.' },
+              { n: '③', title: '기존 악보 재활용', desc: '같은 코드 모양을 유지하려면 새 카포 = 기존 카포 − 내린 반음 수. 음수가 나오면 그 모양은 불가능하므로 ②에서 다른 모양을 고릅니다.' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13px', color: item.color, fontWeight: 700, marginBottom: '4px' }}>{item.role}</p>
-                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{item.desc}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '4px' }}>{item.n} {item.title}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</p>
               </div>
             ))}
           </div>
-
-          <h3 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text)', marginBottom: '10px' }}>가장 많이 쓰이는 진행: I - V - vi - IV</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {[
-              { key: 'C 키', chords: 'C - G - Am - F' },
-              { key: 'G 키', chords: 'G - D - Em - C' },
-              { key: 'D 키', chords: 'D - A - Bm - G' },
-              { key: 'A 키', chords: 'A - E - F♯m - D' },
-            ].map((row, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: '13px', color: 'var(--accent)', minWidth: 50 }}>{row.key}</span>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)' }}>{row.chords}</span>
-              </div>
-            ))}
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '20px 22px' }}>
+            <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>실전 예시 — 밤편지를 남성 키로</p>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px', letterSpacing: '-0.3px' }}>
+              원곡 A♭ (카포 3 + F키 모양) → 4키 내려 E키
+            </p>
+            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '-0.2px' }}>
+              F 모양 유지 시 카포 3 − 4 = −1프렛(불가) → 카포 없이 E 오픈 코드, 또는 카포 2 + D키 모양
+            </p>
           </div>
         </div>
 
-        {/* ── 6. FAQ ── */}
+        {/* ── 8. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -242,7 +323,7 @@ export default function CapoPage() {
           </div>
         </div>
 
-        {/* ── 7. 함께 쓰면 좋은 도구 ── */}
+        {/* ── 9. 함께 쓰면 좋은 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
