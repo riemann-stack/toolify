@@ -306,7 +306,7 @@ function GiftTab(p: GiftTabProps) {
 
       {/* ─── 부동산 단순 추정 (NEW) ─── */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🏠 부동산 증여 (단순 추정)</span>
+        <span className={s.cardLabel}>부동산 증여 (단순 추정)</span>
         <div className={s.optionRow3} role="group" aria-label="부동산 증여 모드">
           <button aria-pressed={p.propertyMode === 'none'} className={`${s.optionBtn} ${p.propertyMode === 'none' ? s.optionActive : ''}`}
             onClick={() => p.setPropertyMode('none')}>사용 안 함</button>
@@ -627,7 +627,7 @@ function InheritTab(p: InheritTabProps) {
       {/* ★ 배우자 상속공제 정량 시뮬 (NEW) ★ */}
       {p.hasSpouse && spouseSim.length > 0 && (
         <div className={s.card}>
-          <span className={s.cardLabel}>📊 배우자 상속공제 정량 시뮬 — 실제 상속분에 따른 차이</span>
+          <span className={s.cardLabel}>배우자 상속공제 정량 시뮬 — 실제 상속분에 따른 차이</span>
           <div className={s.spouseSimTable}>
             <div className={`${s.spouseSimRow} ${s.headerRow}`}>
               <span>배우자 실제 상속분</span>
@@ -891,7 +891,7 @@ function HeirsTab(p: HeirsTabProps) {
 
           {/* 유류분 안내 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>⚖️ 유류분 (법정상속분의 1/2 또는 1/3)</span>
+            <span className={s.cardLabel}>유류분 (법정상속분의 1/2 또는 1/3)</span>
             <div className={s.heirsTableWrap}>
               <table className={s.heirsTable} style={{ minWidth: 480 }}>
                 <thead>
@@ -935,7 +935,7 @@ function HeirsTab(p: HeirsTabProps) {
 
       {/* 법정상속분 가이드 표 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>📚 법정상속분 가이드</span>
+        <span className={s.cardLabel}>법정상속분 가이드</span>
         <div className={s.heirsTableWrap}>
           <table className={s.heirsTable} style={{ minWidth: 520 }}>
             <thead>
@@ -1036,7 +1036,7 @@ function SplitTab(p: SplitTabProps) {
 
       {/* 비교 표 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>📊 분산 증여 시나리오 비교</span>
+        <span className={s.cardLabel}>분산 증여 시나리오 비교</span>
         <div className={s.heirsTableWrap}>
           <table className={s.heirsTable} style={{ minWidth: 560 }}>
             <thead>
@@ -1069,7 +1069,7 @@ function SplitTab(p: SplitTabProps) {
 
       {/* 10년 주기 타임라인 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>📅 10년 주기 활용 — 30년 절세 계획</span>
+        <span className={s.cardLabel}>10년 주기 활용 — 30년 절세 계획</span>
         <div className={s.timelineWrap}>
           <div className={s.timelineLine} />
           <div className={s.timelineNodes}>
@@ -1187,7 +1187,7 @@ function CompareTab(p: CompareTabProps) {
 
       {/* 세율표 (참고) */}
       <div className={s.card}>
-        <span className={s.cardLabel}>📊 증여세·상속세 세율 (동일 누진 구조)</span>
+        <span className={s.cardLabel}>증여세·상속세 세율 (동일 누진 구조)</span>
         <div className={s.heirsTableWrap}>
           <table className={s.heirsTable} style={{ minWidth: 420 }}>
             <thead>

@@ -229,7 +229,7 @@ function TodayHeroDisplay({ year }: { year: number }) {
   return (
     <div className={styles.todayHero}>
       <div className={styles.todayHead}>
-        <span className={styles.todayLabel}>📅 오늘은 무슨 해?</span>
+        <span className={styles.todayLabel}>오늘은 무슨 해?</span>
         <span className={styles.todayYear}>{year}년 {ganjji.split(' · ')[0]}</span>
       </div>
       <div className={styles.todayGrid}>

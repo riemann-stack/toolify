@@ -130,7 +130,7 @@ export default function VO2MaxClient() {
 
       {/* ── 1. 신체 정보 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>👤 신체 정보 (공통)</div>
+        <div className={s.cardLabel}>신체 정보 (공통)</div>
         <div className={s.bioGrid}>
           <div className={s.field}>
             <label>성별</label>
@@ -156,7 +156,7 @@ export default function VO2MaxClient() {
 
       {/* ── 2. 측정 방법 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📊 측정 방법 선택</div>
+        <div className={s.cardLabel}>측정 방법 선택</div>
         <div className={s.methodGrid}>
           {METHODS.map(m => (
             <button
@@ -185,7 +185,7 @@ export default function VO2MaxClient() {
 
       {/* ── 3. 방법별 입력 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📝 {currentMethod.emoji} {currentMethod.name} — 측정값 입력</div>
+        <div className={s.cardLabel}>{currentMethod.emoji} {currentMethod.name} — 측정값 입력</div>
 
         {methodId === 'cooper' && (
           <div className={s.singleField}>
@@ -317,7 +317,7 @@ export default function VO2MaxClient() {
       {/* ── 5. 비슷한 연령대 비교 — 가로 5분할 차트 ── */}
       {vo2 > 0 && (
         <div className={s.card}>
-          <div className={s.cardLabel}>📊 비슷한 연령대 비교 ({age}세 {sex === 'male' ? '남성' : '여성'})</div>
+          <div className={s.cardLabel}>비슷한 연령대 비교 ({age}세 {sex === 'male' ? '남성' : '여성'})</div>
           <div className={s.segChart}>
             {[
               { id: 'poor',      label: '매우 미흡', range: `~${band.below}` },
@@ -347,7 +347,7 @@ export default function VO2MaxClient() {
       {/* ── 6. 마라톤·구간 예측 ── */}
       {vo2 > 0 && (
         <div className={s.card}>
-          <div className={s.cardLabel}>🏅 마라톤·구간 예상 시간 (Daniels VDOT 기반)</div>
+          <div className={s.cardLabel}>마라톤·구간 예상 시간 (Daniels VDOT 기반)</div>
           <div className={s.raceGrid}>
             <div className={s.raceCard}>
               <span className={s.raceDist}>5K</span>
@@ -381,7 +381,7 @@ export default function VO2MaxClient() {
       {/* ── 7. 강도별 트레이닝 페이스 ── */}
       {vo2 > 0 && (
         <div className={s.card}>
-          <div className={s.cardLabel}>🎯 강도별 트레이닝 페이스</div>
+          <div className={s.cardLabel}>강도별 트레이닝 페이스</div>
           <div className={s.paceGrid}>
             {[
               { id: 'E', name: 'Easy (회복)', desc: '대화 가능. 70~75% HRmax', sec: paces.E, color: '#059669' },
@@ -406,7 +406,7 @@ export default function VO2MaxClient() {
 
       {/* ── 8. VO2max 개선 방법 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>💪 VO₂ Max 개선 방법</div>
+        <div className={s.cardLabel}>VO₂ Max 개선 방법</div>
         <div className={s.improveGrid}>
           {IMPROVE_TIPS.map((t, i) => (
             <div key={i} className={s.improveCard}>

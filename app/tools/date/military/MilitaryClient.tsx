@@ -376,8 +376,8 @@ export default function MilitaryClient() {
           <span className={styles.cardLabelHint}>휴가 복귀일·생일 기준 미리보기</span>
         </div>
         <div className={styles.refToggle}>
-          <button type="button" className={`${styles.refBtn} ${refMode === 'today' ? styles.refActive : ''}`}  onClick={() => setRefMode('today')}>📅 오늘 기준</button>
-          <button type="button" className={`${styles.refBtn} ${refMode === 'custom' ? styles.refActive : ''}`} onClick={() => { setRefMode('custom'); setRefY(currentYear); setRefM(todayState.getMonth() + 1); setRefD(todayState.getDate()) }}>🎯 특정 날짜</button>
+          <button type="button" className={`${styles.refBtn} ${refMode === 'today' ? styles.refActive : ''}`}  onClick={() => setRefMode('today')}>오늘 기준</button>
+          <button type="button" className={`${styles.refBtn} ${refMode === 'custom' ? styles.refActive : ''}`} onClick={() => { setRefMode('custom'); setRefY(currentYear); setRefM(todayState.getMonth() + 1); setRefD(todayState.getDate()) }}>특정 날짜</button>
         </div>
         {refMode === 'custom' && (
           <>
@@ -541,7 +541,7 @@ export default function MilitaryClient() {
           </div>
 
           <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-            {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+            {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
           </button>
         </>
       )}

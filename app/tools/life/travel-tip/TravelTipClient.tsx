@@ -107,10 +107,10 @@ export default function TravelTipClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="팁 계산기 모드">
         {([
-          { id: 'calc',     label: '💵 팁 계산' },
-          { id: 'manner',   label: '🌍 국가별 매너' },
-          { id: 'service',  label: '🛎️ 서비스 가이드' },
-          { id: 'scenario', label: '🧳 시나리오' },
+          { id: 'calc',     label: '팁 계산' },
+          { id: 'manner',   label: '국가별 매너' },
+          { id: 'service',  label: '서비스 가이드' },
+          { id: 'scenario', label: '시나리오' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -135,7 +135,7 @@ export default function TravelTipClient() {
               type="text"
               className={s.input}
               aria-label="국가 검색"
-              placeholder="🔍 국가 검색 (예: 미국, 일본, 태국)"
+              placeholder="국가 검색 (예: 미국, 일본, 태국)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ marginBottom: 10 }}
@@ -254,7 +254,7 @@ export default function TravelTipClient() {
           {/* 봉사료 자동 포함 안내 */}
           {country.serviceCharge && (
             <div className={s.warnCard}>
-              <strong>📋 Service Charge 자동 포함 안내</strong>
+              <strong>Service Charge 자동 포함 안내</strong>
               <p>
                 {country.shortName}은 식당·호텔에 <strong>봉사료(Service Charge)가 자동 포함</strong>되는 경우가 많습니다.
                 영수증의 <strong>&quot;Service Charge&quot;·&quot;Gratuity&quot;·&quot;봉사료&quot;</strong> 표시를 확인하세요.
@@ -266,7 +266,7 @@ export default function TravelTipClient() {
           {/* 단체 자동 팁 안내 (강제 적용이 아니라 업장 정책 안내) */}
           {result.groupAutoApplied && (
             <div className={s.warnCardStrong}>
-              <strong>👥 단체 자동 팁(서비스 차지) 안내</strong>
+              <strong>단체 자동 팁(서비스 차지) 안내</strong>
               <p>
                 {country.shortName}은 <strong>{country.groupAuto?.size}명 이상 단체</strong>일 때 업장 정책에 따라
                 <strong> 자동 {country.groupAuto?.pct}% 팁(Auto Gratuity)이 청구될 수 있습니다</strong>.
@@ -373,7 +373,7 @@ export default function TravelTipClient() {
               type="text"
               className={s.input}
               aria-label="국가 검색"
-              placeholder="🔍 국가 검색"
+              placeholder="국가 검색"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ marginBottom: 10 }}
@@ -475,7 +475,7 @@ export default function TravelTipClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 서비스별 매너</strong>
+            <strong>서비스별 매너</strong>
             <p>
               • <strong>식당</strong>: 미국·캐나다는 의무, 유럽은 선택, 일본·중국은 X<br />
               • <strong>택시</strong>: 영어권은 잔돈 반올림 + 5~10%, 동남아는 잔돈만<br />
@@ -610,7 +610,7 @@ export default function TravelTipClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/date/jet-lag" className={s.crossLink}>
-        ✈️ 시차 적응 계산기 → 여행 전·중·후 수면 타이밍
+        시차 적응 계산기 → 여행 전·중·후 수면 타이밍
       </Link>
     </div>
   )

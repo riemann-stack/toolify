@@ -108,7 +108,7 @@ export default function GripSizeClient() {
 
       {/* ── 1. 측정 방법 선택 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📐 측정 방법</div>
+        <div className={s.cardLabel}>측정 방법</div>
         <div className={s.methodRow}>
           <button
             type="button"
@@ -136,7 +136,7 @@ export default function GripSizeClient() {
       {/* ── 2. 측정값 입력 ── */}
       {method === 'ruler' && (
         <div className={s.card}>
-          <div className={s.cardLabel}>✋ 손 측정 (cm)</div>
+          <div className={s.cardLabel}>손 측정 (cm)</div>
 
           {/* SVG 가이드 */}
           <HandMeasureSvg palmCm={palmCm} fullCm={fullCm} />
@@ -198,7 +198,7 @@ export default function GripSizeClient() {
 
       {method === 'pencil' && (
         <div className={s.card}>
-          <div className={s.cardLabel}>✏️ 펜슬 테스트 (라켓 보유자)</div>
+          <div className={s.cardLabel}>펜슬 테스트 (라켓 보유자)</div>
           <PencilTestSvg result={pencilResult} />
 
           <ol className={s.steps}>
@@ -244,10 +244,10 @@ export default function GripSizeClient() {
 
       {/* ── 3. 옵션: 오버그립·글러브 직접 입력 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>⚙️ 세부 옵션</div>
+        <div className={s.cardLabel}>세부 옵션</div>
 
         <div className={s.optBlock}>
-          <div className={s.optTitle}>🎾 테니스 오버그립</div>
+          <div className={s.optTitle}>테니스 오버그립</div>
           <div className={s.overgripRow}>
             {[0, 1, 2].map(n => (
               <button key={n}
@@ -264,7 +264,7 @@ export default function GripSizeClient() {
         </div>
 
         <div className={s.optBlock}>
-          <div className={s.optTitle}>🏸 배드민턴 오버그립</div>
+          <div className={s.optTitle}>배드민턴 오버그립</div>
           <div className={s.overgripRow}>
             {[0, 1, 2].map(n => (
               <button key={n}
@@ -281,7 +281,7 @@ export default function GripSizeClient() {
         </div>
 
         <div className={s.optBlock}>
-          <div className={s.optTitle}>⛳ 골프 글러브 호수 (직접 입력)</div>
+          <div className={s.optTitle}>골프 글러브 호수 (직접 입력)</div>
           <label className={s.toggleLabel}>
             <input type="checkbox"
               checked={useDirectGlove}
@@ -310,7 +310,7 @@ export default function GripSizeClient() {
         {/* 테니스 */}
         <div className={s.resultCard} style={{ '--accent': '#FFD93E' } as React.CSSProperties}>
           <div className={s.resultHeader}>
-            <span className={s.resultSport}>🎾 테니스</span>
+            <span className={s.resultSport}>테니스</span>
             <span className={s.resultBadge}>{tennis.grip.eu}</span>
           </div>
           <div className={s.resultBig}>{tennis.grip.size}</div>
@@ -326,7 +326,7 @@ export default function GripSizeClient() {
         {/* 골프 */}
         <div className={s.resultCard} style={{ '--accent': '#059669' } as React.CSSProperties}>
           <div className={s.resultHeader}>
-            <span className={s.resultSport}>⛳ 골프</span>
+            <span className={s.resultSport}>골프</span>
             <span className={s.resultBadge}>{effectiveGlove}호</span>
           </div>
           <div className={s.resultBig}>{golf.name}</div>
@@ -340,7 +340,7 @@ export default function GripSizeClient() {
         {/* 배드민턴 */}
         <div className={s.resultCard} style={{ '--accent': '#0891B2' } as React.CSSProperties}>
           <div className={s.resultHeader}>
-            <span className={s.resultSport}>🏸 배드민턴</span>
+            <span className={s.resultSport}>배드민턴</span>
             <span className={s.resultBadge}>{badminton.id}</span>
           </div>
           <div className={s.resultBig}>{badminton.id}</div>
@@ -356,7 +356,7 @@ export default function GripSizeClient() {
         {/* 스쿼시 */}
         <div className={s.resultCard} style={{ '--accent': '#B885DA' } as React.CSSProperties}>
           <div className={s.resultHeader}>
-            <span className={s.resultSport}>🎾 스쿼시</span>
+            <span className={s.resultSport}>스쿼시</span>
             <span className={s.resultBadge}>{cmToInchFraction(squash.inches * 2.54)}</span>
           </div>
           <div className={s.resultBig}>{squash.size.split(' (')[0]}</div>
@@ -369,7 +369,7 @@ export default function GripSizeClient() {
 
       {/* ── 5. 사이즈 차트 (참고) ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📊 사이즈 차트 — 측정값 기준 가까운 사이즈</div>
+        <div className={s.cardLabel}>사이즈 차트 — 측정값 기준 가까운 사이즈</div>
         <div className={s.tableWrap}>
           <table className={s.gripTable}>
             <thead>
@@ -428,7 +428,7 @@ export default function GripSizeClient() {
 
       {/* ── 7. 핵심 팁 ── */}
       <div className={s.tipCard}>
-        <div className={s.cardLabel}>💡 그립 사이즈 핵심 팁</div>
+        <div className={s.cardLabel}>그립 사이즈 핵심 팁</div>
         <ul className={s.tipList}>
           <li><strong>의심스러우면 작게 가고 오버그립으로 보정</strong> — 키우긴 쉬워도 줄이긴 어렵다</li>
           <li><strong>한국 라켓 출고 표준</strong> — 테니스 L2~L3, 배드민턴 G4, 골프 표준</li>

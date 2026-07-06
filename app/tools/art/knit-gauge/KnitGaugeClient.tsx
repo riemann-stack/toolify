@@ -144,17 +144,17 @@ export default function KnitGaugeClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'gauge' ? s.tabActive : ''}`}   onClick={() => setTab('gauge')}>📐 게이지</button>
-        <button className={`${s.tab} ${tab === 'pattern' ? s.tabActive : ''}`} onClick={() => setTab('pattern')}>🔄 패턴 변환</button>
-        <button className={`${s.tab} ${tab === 'size' ? s.tabActive : ''}`}    onClick={() => setTab('size')}>📏 사이즈별</button>
-        <button className={`${s.tab} ${tab === 'tools' ? s.tabActive : ''}`}   onClick={() => setTab('tools')}>📊 늘림·실 양</button>
+        <button className={`${s.tab} ${tab === 'gauge' ? s.tabActive : ''}`}   onClick={() => setTab('gauge')}>게이지</button>
+        <button className={`${s.tab} ${tab === 'pattern' ? s.tabActive : ''}`} onClick={() => setTab('pattern')}>패턴 변환</button>
+        <button className={`${s.tab} ${tab === 'size' ? s.tabActive : ''}`}    onClick={() => setTab('size')}>사이즈별</button>
+        <button className={`${s.tab} ${tab === 'tools' ? s.tabActive : ''}`}   onClick={() => setTab('tools')}>늘림·실 양</button>
       </div>
 
       {/* ═══════════════════ 탭 1: 게이지 입력 ═══════════════════ */}
       {tab === 'gauge' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📏 측정 단위</span>
+            <span className={s.cardLabel}>측정 단위</span>
             <div className={s.unitRow}>
               {([
                 { id: '10cm',  label: '10cm² (한국·유럽 표준)' },
@@ -173,7 +173,7 @@ export default function KnitGaugeClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🧶 내 게이지 입력</span>
+            <span className={s.cardLabel}>내 게이지 입력</span>
 
             {/* 코 게이지 */}
             <div className={s.field}>
@@ -274,7 +274,7 @@ export default function KnitGaugeClient() {
 
           {/* SVG 게이지 시각화 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🎨 10×10cm 게이지 시각화</span>
+            <span className={s.cardLabel}>10×10cm 게이지 시각화</span>
             <GaugeSvg stsPer10cm={stsPer10cm} rowsPer10cm={rowsPer10cm} />
             <p className={s.hint}>
               💡 격자가 빽빽할수록 가는 실(높은 게이지). 빨간 점선 = 5코·5단 단위 안내선.
@@ -283,7 +283,7 @@ export default function KnitGaugeClient() {
 
           {/* 스와치 가이드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📚 게이지 스와치 만드는 법</span>
+            <span className={s.cardLabel}>게이지 스와치 만드는 법</span>
             <ol className={s.swatchSteps}>
               <li>
                 <strong>15×15cm 시험 편물</strong>을 같은 실·바늘로 떠 줍니다.<br />
@@ -308,7 +308,7 @@ export default function KnitGaugeClient() {
       {tab === 'pattern' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📋 패턴 정보 (도안에서)</span>
+            <span className={s.cardLabel}>패턴 정보 (도안에서)</span>
             <div className={s.gridTwo}>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="knit-gauge-cm">패턴 코 게이지 / 10cm</label>
@@ -352,7 +352,7 @@ export default function KnitGaugeClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🧶 내 게이지 (탭 1에서 자동)</span>
+            <span className={s.cardLabel}>내 게이지 (탭 1에서 자동)</span>
             <p className={s.bigGaugeText}>
               <strong>{fmt(stsPer10cm, 1)}</strong>코 × <strong>{fmt(rowsPer10cm, 1)}</strong>단 / 10cm
               <br />
@@ -399,7 +399,7 @@ export default function KnitGaugeClient() {
       {tab === 'size' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>👕 부위 선택</span>
+            <span className={s.cardLabel}>부위 선택</span>
             <div className={s.bodyPartRow}>
               {BODY_PARTS.map((b) => (
                 <button
@@ -415,7 +415,7 @@ export default function KnitGaugeClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>📐 치수 입력</span>
+            <span className={s.cardLabel}>치수 입력</span>
             <div className={s.gridTwo}>
               <div className={s.field}>
                 <div className={s.fieldHead}>
@@ -475,7 +475,7 @@ export default function KnitGaugeClient() {
 
           {/* 빠른 사이즈 칩 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🇰🇷 한국 표준 사이즈 — 클릭 시 가로(가슴/2) + 세로(길이) 자동 적용</span>
+            <span className={s.cardLabel}>한국 표준 사이즈 — 클릭 시 가로(가슴/2) + 세로(길이) 자동 적용</span>
             <div className={s.sizeChipGroup}>
               <p className={s.sizeChipLabel}>여성</p>
               <div className={s.sizeChipRow}>
@@ -542,7 +542,7 @@ export default function KnitGaugeClient() {
         <>
           {/* 섹션 A — 늘림·줄임 분배 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🔢 늘림 / 줄임 균등 분배</span>
+            <span className={s.cardLabel}>늘림 / 줄임 균등 분배</span>
             <div className={s.gridTwo}>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="knit-gauge-current">현재 코 수</label>
@@ -586,7 +586,7 @@ export default function KnitGaugeClient() {
 
             {/* 약어 용어집 */}
             <details className={s.glossary}>
-              <summary className={s.glossarySummary}>📖 늘림·줄임 약어 용어집 (펼치기)</summary>
+              <summary className={s.glossarySummary}>늘림·줄임 약어 용어집 (펼치기)</summary>
               <div className={s.glossaryGrid}>
                 {INC_DEC_GLOSSARY.map((g) => (
                   <div key={g.abbr} className={s.glossaryItem}>
@@ -601,7 +601,7 @@ export default function KnitGaugeClient() {
 
           {/* 섹션 B — 실 양 추정 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🧶 실 양 추정기</span>
+            <span className={s.cardLabel}>실 양 추정기</span>
 
             <div className={s.field}>
               <label className={s.fieldLabel} htmlFor="knit-gauge-cyc">실 굵기 (CYC)</label>
@@ -656,7 +656,7 @@ export default function KnitGaugeClient() {
 
           {/* 섹션 C — 바늘 호수 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🪡 바늘 호수 ↔ 게이지 룩업</span>
+            <span className={s.cardLabel}>바늘 호수 ↔ 게이지 룩업</span>
             <div className={s.tableWrap}>
               <table className={s.dataTable}>
                 <thead>
@@ -691,7 +691,7 @@ export default function KnitGaugeClient() {
 
           {/* 실 굵기 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📚 CYC 표준 실 굵기</span>
+            <span className={s.cardLabel}>CYC 표준 실 굵기</span>
             <div className={s.tableWrap}>
               <table className={s.dataTable}>
                 <thead>

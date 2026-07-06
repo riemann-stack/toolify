@@ -274,8 +274,8 @@ export default function AcCapacityClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>공간 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
@@ -430,24 +430,24 @@ export default function AcCapacityClient() {
           {/* 3옵션 비교 */}
           <div className={styles.card}>
             <div className={styles.cardLabel}>
-              <span>📦 3가지 평형 옵션 비교</span>
+              <span>3가지 평형 옵션 비교</span>
               <span className={styles.cardLabelHint}>크기별 장단점</span>
             </div>
             <div className={styles.optionGrid}>
               <div className={`${styles.optionCard} ${styles.optConservative}`}>
-                <p className={styles.optionLabel}>🔻 보수적</p>
+                <p className={styles.optionLabel}>보수적</p>
                 <p className={styles.optionPyeong}>{calc.conservative}<span className={styles.optionPyeongUnit}>평형</span></p>
                 <p className={styles.optionDesc}>한 단계 작게. 매우 더운 날 부족할 수 있음. 풀가동으로 전기료 ↑</p>
                 <span className={`${styles.optionBadge} ${styles.badgeAlt}`}>비추천</span>
               </div>
               <div className={`${styles.optionCard} ${styles.optRecommended}`}>
-                <p className={styles.optionLabel}>✅ 권장</p>
+                <p className={styles.optionLabel}>권장</p>
                 <p className={styles.optionPyeong}>{calc.matched}<span className={styles.optionPyeongUnit}>평형</span></p>
                 <p className={styles.optionDesc}>적정 평형. 효율적 운전. 전기료 균형. 가장 추천하는 선택.</p>
                 <span className={`${styles.optionBadge} ${styles.badgeRec}`}>가장 추천</span>
               </div>
               <div className={`${styles.optionCard} ${styles.optBigger}`}>
-                <p className={styles.optionLabel}>🔺 여유</p>
+                <p className={styles.optionLabel}>여유</p>
                 <p className={styles.optionPyeong}>{calc.bigger}<span className={styles.optionPyeongUnit}>평형</span></p>
                 <p className={styles.optionDesc}>한 단계 크게. 가격 +10~15%. 너무 크면 자주 꺼져 습도 조절 ❌</p>
                 <span className={`${styles.optionBadge} ${styles.badgeAlt}`}>여유 시</span>
@@ -507,7 +507,7 @@ export default function AcCapacityClient() {
           {/* BTU·kW 환산 */}
           <div className={styles.btuCard}>
             <div className={styles.cardLabel} style={{ color: 'var(--accent)', marginBottom: 0 }}>
-              <span>🌡️ {calc.matched}평형 환산</span>
+              <span>{calc.matched}평형 환산</span>
             </div>
             <div className={styles.btuGrid}>
               <div className={styles.btuCell}>
@@ -533,7 +533,7 @@ export default function AcCapacityClient() {
           {/* 전기료 비교 */}
           <div className={styles.savingCard}>
             <div className={styles.cardLabel} style={{ marginBottom: 0, color: '#E89757' }}>
-              <span>💰 월 전기료 예상 (1일 8시간 × 30일)</span>
+              <span>월 전기료 예상 (1일 8시간 × 30일)</span>
               <span className={styles.cardLabelHint}>{calc.matched}평형 기준</span>
             </div>
             <p className={styles.savingLead}>인버터 vs 정속형 전기료 차이</p>
@@ -684,7 +684,7 @@ export default function AcCapacityClient() {
         <>
           <div className={styles.card}>
             <div className={styles.cardLabel}>
-              <span>📋 거실 추천 평형</span>
+              <span>거실 추천 평형</span>
               <span className={styles.cardLabelHint}>천장 2.4m, 4인 가구 기준</span>
             </div>
             <table className={styles.guideTable}>
@@ -699,7 +699,7 @@ export default function AcCapacityClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>🛏️ 침실 추천 평형</span></div>
+            <div className={styles.cardLabel}><span>침실 추천 평형</span></div>
             <table className={styles.guideTable}>
               <thead><tr><th scope="col">침실 평수</th><th scope="col">추천 평형</th></tr></thead>
               <tbody>
@@ -711,7 +711,7 @@ export default function AcCapacityClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>🍳 주방·다이닝 (조리 발열 고려)</span></div>
+            <div className={styles.cardLabel}><span>주방·다이닝 (조리 발열 고려)</span></div>
             <table className={styles.guideTable}>
               <thead><tr><th scope="col">주방 평수</th><th scope="col">추천 평형</th></tr></thead>
               <tbody>
@@ -722,7 +722,7 @@ export default function AcCapacityClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>🏠 원룸 (전체 공간)</span></div>
+            <div className={styles.cardLabel}><span>원룸 (전체 공간)</span></div>
             <table className={styles.guideTable}>
               <thead><tr><th scope="col">원룸 평수</th><th scope="col">추천 평형</th></tr></thead>
               <tbody>
@@ -738,7 +738,7 @@ export default function AcCapacityClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>⚡ 인버터 vs 정속형</span></div>
+            <div className={styles.cardLabel}><span>인버터 vs 정속형</span></div>
             <div className={styles.invComparGrid}>
               <div className={`${styles.invCard} ${styles.invInverter}`}>
                 <p className={styles.invTitle}>✅ 인버터 에어컨</p>
@@ -766,7 +766,7 @@ export default function AcCapacityClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>🔧 설치 시 주의사항</span></div>
+            <div className={styles.cardLabel}><span>설치 시 주의사항</span></div>
             <div className={styles.infoCard} style={{ background: 'transparent', border: 'none', padding: 0 }}>
               <ul style={{ paddingLeft: 18, margin: 0, lineHeight: 2 }}>
                 <li><strong>실외기 위치</strong> — 통풍 잘 되는 곳, 그늘</li>
@@ -780,7 +780,7 @@ export default function AcCapacityClient() {
       )}
 
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
     </div>
   )

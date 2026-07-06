@@ -18,8 +18,8 @@ type Tab = 'bmr' | 'budget'
 type ActivityMode = 'simple' | 'detailed'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'bmr',      name: 'BMR·TDEE',   icon: '🔥' },
-  { id: 'budget',   name: '칼로리 예산', icon: '💰' },
+  { id: 'bmr',      name: 'BMR·TDEE',   icon: '' },
+  { id: 'budget',   name: '칼로리 예산', icon: '' },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
@@ -283,12 +283,12 @@ export default function BmrClient() {
               <button type="button" aria-pressed={actMode === 'simple'}
                 className={`${styles.optionBtn} ${actMode === 'simple' ? styles.optionActive : ''}`}
                 onClick={() => setActMode('simple')}>
-                🟢 단순 (5단계)
+                단순 (5단계)
               </button>
               <button type="button" aria-pressed={actMode === 'detailed'}
                 className={`${styles.optionBtn} ${actMode === 'detailed' ? styles.optionActive : ''}`}
                 onClick={() => setActMode('detailed')}>
-                🎯 정밀 (직업·걸음·운동)
+                정밀 (직업·걸음·운동)
               </button>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
@@ -521,10 +521,10 @@ export default function BmrClient() {
               <div className={styles.resultActions}>
                 <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`BMR ${fmt(bmr)} / TDEE ${fmt(tdeeSimple)} kcal (${FORMULAS.find(f => f.id === formula)?.name}, ${actMode === 'detailed' ? '정밀' : ACTIVITY_FACTORS[actIdx].name})`)}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
+                  {copied ? '✓ 복사됨' : '복사'}
                 </button>
-                <button type="button" className={styles.copyBtn} onClick={() => setTab('budget')}>💰 칼로리 예산</button>
-                <button type="button" className={styles.copyBtn} onClick={saveCurrent}>💾 기록 저장</button>
+                <button type="button" className={styles.copyBtn} onClick={() => setTab('budget')}>칼로리 예산</button>
+                <button type="button" className={styles.copyBtn} onClick={saveCurrent}>기록 저장</button>
               </div>
             </>
           ) : (

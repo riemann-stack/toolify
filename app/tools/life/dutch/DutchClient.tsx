@@ -69,11 +69,11 @@ function RemainderSelect({ value, onChange }: { value: RemainderId; onChange: (v
 type Tab = 'simple' | 'drink' | 'person' | 'prepaid' | 'share'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'simple',  name: '간단 N빵',     icon: '🍻' },
-  { id: 'drink',   name: '술값 분리',    icon: '🍺' },
-  { id: 'person',  name: '개인별 정산',  icon: '🍱' },
-  { id: 'prepaid', name: '선결제자 정산', icon: '💸' },
-  { id: 'share',   name: '카톡 공유',    icon: '💬' },
+  { id: 'simple',  name: '간단 N빵',     icon: '' },
+  { id: 'drink',   name: '술값 분리',    icon: '' },
+  { id: 'person',  name: '개인별 정산',  icon: '' },
+  { id: 'prepaid', name: '선결제자 정산', icon: '' },
+  { id: 'share',   name: '카톡 공유',    icon: '' },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
@@ -433,12 +433,12 @@ export default function DutchClient() {
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`총 ${fmt(parseAmount(sTotal))}원 / ${sPeople}명 → 1인당 ${fmt(simpleResult.perPerson)}원`)}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
+                  {copied ? '✓ 복사됨' : '복사'}
                 </button>
                 <button className={styles.copyBtn} onClick={() => { setShareSrc('simple'); setTab('share') }}>
-                  💬 카톡 공유
+                  카톡 공유
                 </button>
-                <button className={styles.copyBtn} onClick={saveCurrent}>💾 저장</button>
+                <button className={styles.copyBtn} onClick={saveCurrent}>저장</button>
               </div>
             </>
           ) : (
@@ -555,12 +555,12 @@ export default function DutchClient() {
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`비음주 ${fmt(drinkResult.nonDrinkerAmount)}원 / 음주 ${fmt(drinkResult.drinkerAmount)}원`)}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
+                  {copied ? '✓ 복사됨' : '복사'}
                 </button>
                 <button className={styles.copyBtn} onClick={() => { setShareSrc('drink'); setTab('share') }}>
-                  💬 카톡 공유
+                  카톡 공유
                 </button>
-                <button className={styles.copyBtn} onClick={saveCurrent}>💾 저장</button>
+                <button className={styles.copyBtn} onClick={saveCurrent}>저장</button>
               </div>
             </>
           ) : (
@@ -709,12 +709,12 @@ export default function DutchClient() {
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(personResult.rows.map(r => `${r.name}: ${fmt(r.total)}원`).join('\n'))}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
+                  {copied ? '✓ 복사됨' : '복사'}
                 </button>
                 <button className={styles.copyBtn} onClick={() => { setShareSrc('person'); setTab('share') }}>
-                  💬 카톡 공유
+                  카톡 공유
                 </button>
-                <button className={styles.copyBtn} onClick={saveCurrent}>💾 저장</button>
+                <button className={styles.copyBtn} onClick={saveCurrent}>저장</button>
               </div>
             </>
           ) : (
@@ -841,13 +841,13 @@ export default function DutchClient() {
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   disabled={!prepaidResult.isBalanced}
                   onClick={() => copy(prepaidResult.transfers.map(t => `${t.from} → ${t.to}: ${fmt(t.amount)}원`).join('\n'))}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
+                  {copied ? '✓ 복사됨' : '복사'}
                 </button>
                 <button className={styles.copyBtn} disabled={!prepaidResult.isBalanced}
                   onClick={() => { setShareSrc('prepaid'); setTab('share') }}>
-                  💬 카톡 공유
+                  카톡 공유
                 </button>
-                <button className={styles.copyBtn} disabled={!prepaidResult.isBalanced} onClick={saveCurrent}>💾 저장</button>
+                <button className={styles.copyBtn} disabled={!prepaidResult.isBalanced} onClick={saveCurrent}>저장</button>
               </div>
             </>
           ) : (
@@ -863,7 +863,7 @@ export default function DutchClient() {
       {tab === 'share' && (
         <>
           <div className={styles.disclaimer}>
-            <strong>💬 카카오톡 공유</strong> — 어느 탭의 결과를 공유할지 선택하면
+            <strong>카카오톡 공유</strong> — 어느 탭의 결과를 공유할지 선택하면
             카카오톡 형식의 메시지가 자동 생성됩니다. 복사해서 채팅방에 붙여넣으세요.
           </div>
 
@@ -909,9 +909,9 @@ export default function DutchClient() {
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(shareMessage)}>
-                  {copied ? '✓ 복사됨' : '📋 메시지 복사'}
+                  {copied ? '✓ 복사됨' : '메시지 복사'}
                 </button>
-                <button className={styles.copyBtn} onClick={saveCurrent}>💾 저장</button>
+                <button className={styles.copyBtn} onClick={saveCurrent}>저장</button>
               </div>
             </>
           ) : (

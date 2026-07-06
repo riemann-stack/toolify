@@ -433,7 +433,7 @@ export default function DividendClient() {
               </div>
 
               <div className={styles.interpret}>
-                <p><strong>💡 해석:</strong> 월배당 목표는 배당수익률보다 <strong>세후 수익률</strong> 기준이 더 현실적입니다.</p>
+                <p><strong>해석:</strong> 월배당 목표는 배당수익률보다 <strong>세후 수익률</strong> 기준이 더 현실적입니다.</p>
                 <p>이 계산은 현재 배당수익률이 유지된다고 가정합니다.</p>
               </div>
             </>
@@ -693,7 +693,7 @@ export default function DividendClient() {
           </div>
 
           <div className={styles.infoBox}>
-            <strong>💡 종합과세 회피 전략:</strong><br />
+            <strong>종합과세 회피 전략:</strong><br />
             <strong style={{ color: '#0891B2' }}>① ISA 계좌</strong> — 200~400만 비과세 + 9.9% 분리과세, <strong>종합과세 비포함</strong> · 연 2,000만 한도 / 총 1억<br />
             <strong style={{ color: '#0891B2' }}>② 연금저축·IRP</strong> — 5.5% 분리과세 (55세 이후) + 16.5% 세액공제<br />
             <strong style={{ color: '#0891B2' }}>③ 자산 분산</strong> — 부부 명의 분산, 자녀 명의(증여세 별도), 시점 분산<br />
@@ -838,7 +838,7 @@ export default function DividendClient() {
           {/* 환율 변동 영향 */}
           {usAssets.length > 0 && usAnnualUSD > 0 && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>💱 환율 변동 영향 — 미국 ETF (가정 1,300원/$)</label>
+              <label className={styles.cardLabel}>환율 변동 영향 — 미국 ETF (가정 1,300원/$)</label>
               <div className={styles.fxTable}>
                 <div className={`${styles.fxRow} ${styles.headerRow}`}>
                   <span>변동</span><span>환율</span><span>원화 배당 (세전)</span>

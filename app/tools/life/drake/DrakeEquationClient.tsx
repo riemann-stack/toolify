@@ -431,7 +431,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
       {/* 거리·통신 카드 */}
       {distance && (
         <div className={styles.distCard}>
-          <div className={styles.distLabel}>📏 거리·통신 추정 (N = {formatN(N)})</div>
+          <div className={styles.distLabel}>거리·통신 추정 (N = {formatN(N)})</div>
           {N < 1 ? (
             <p className={styles.distHint} style={{ margin: 0 }}>
               🌑 기대 문명 수가 <strong>1개 미만</strong>입니다. 은하 안에 우리뿐일 가능성이 높아,
@@ -480,7 +480,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
       {/* 페르미 역설 가설 추천 */}
       {fermiTop.length > 0 && (
         <div className={styles.fermiCard}>
-          <div className={styles.distLabel}>🤔 N = {formatN(N)}에 어울리는 페르미 역설 가설 (참고용)</div>
+          <div className={styles.distLabel}>N = {formatN(N)}에 어울리는 페르미 역설 가설 (참고용)</div>
           <div className={styles.fermiList}>
             {fermiTop.map((h, i) => (
               <div key={h.id} className={styles.fermiItem}>
@@ -540,7 +540,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
       {/* 공유 */}
       <div className={styles.shareRow}>
         <button type="button" className={`${styles.shareBtn} ${shareCopied ? styles.shareBtnDone : ''}`} onClick={handleShare}>
-          {shareCopied ? '✓ 링크와 결과가 복사되었습니다' : '🔗 결과 공유하기'}
+          {shareCopied ? '✓ 링크와 결과가 복사되었습니다' : '결과 공유하기'}
         </button>
       </div>
     </div>

@@ -297,9 +297,9 @@ export default function LaundryDryClient() {
       {/* ── 탭 네비 ── */}
       <div className={styles.tabs} role="tablist" aria-label="건조 계산 모드">
         {([
-          { id: 'main',   label: '🧮 건조 시간 계산' },
-          { id: 'combo',  label: '⚡ 최단 조합 추천' },
-          { id: 'target', label: '🎯 목표 시간 역산' },
+          { id: 'main',   label: '건조 시간 계산' },
+          { id: 'combo',  label: '최단 조합 추천' },
+          { id: 'target', label: '목표 시간 역산' },
         ] as { id: TabId; label: string }[]).map(t => (
           <button key={t.id}
             type="button" role="tab" aria-selected={tab === t.id}
@@ -596,7 +596,7 @@ export default function LaundryDryClient() {
           </div>
         </div>
         <div className={styles.speedBadge} style={{ color: speed.color, borderColor: speed.color + '55' }}>
-          🌬️ 현재 조건은 <strong>{speed.label}</strong>입니다
+          현재 조건은 <strong>{speed.label}</strong>입니다
         </div>
         <span aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
           완전 건조 예상 {formatHours(result.dryHours)}{finishAt && anchorMs != null ? `, ${formatFinishTime(finishAt, new Date(anchorMs))}까지` : ''} · {speed.label}
@@ -650,7 +650,7 @@ export default function LaundryDryClient() {
       {/* 팁 */}
       {tips.length > 0 && (
         <div className={styles.card}>
-          <div className={styles.cardLabel}>💡 더 빨리 말리는 팁</div>
+          <div className={styles.cardLabel}>더 빨리 말리는 팁</div>
           <div className={styles.tipList}>
             {tips.map((tip, i) => (
               <div key={i} className={styles.tipItem}>
@@ -926,7 +926,7 @@ function TargetTab({ baselineHours, now, envCtx }: { baselineHours: number; now:
       {scenarios && minutesAvailable !== null && scenarios.fastest ? (
         <>
           <div className={styles.hero}>
-            <div className={styles.heroLabel}>🎯 목표 시간까지</div>
+            <div className={styles.heroLabel}>목표 시간까지</div>
             <div className={styles.heroNumMain}>
               {scenarios.fastest.minutes <= minutesAvailable
                 ? '✅ 가능'

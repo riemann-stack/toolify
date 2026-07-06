@@ -33,11 +33,11 @@ export default function GiftMoneyClient() {
         <button type="button" role="tab" aria-selected={isWedding}
           className={`${s.modeBtn} ${isWedding ? s.modeActive : ''}`}
           style={isWedding ? { background: accent, color: '#fff' } : undefined}
-          onClick={() => setMode('wedding')}>🎉 축의금</button>
+          onClick={() => setMode('wedding')}>축의금</button>
         <button type="button" role="tab" aria-selected={!isWedding}
           className={`${s.modeBtn} ${!isWedding ? s.modeActive : ''}`}
           style={!isWedding ? { background: accent, color: '#fff' } : undefined}
-          onClick={() => setMode('funeral')}>🕊️ 부의금</button>
+          onClick={() => setMode('funeral')}>부의금</button>
       </div>
 
       {/* 관계 */}

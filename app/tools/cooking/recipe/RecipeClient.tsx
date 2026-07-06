@@ -373,10 +373,10 @@ function ScaleTab() {
             </div>
             <div className={s.resultActions}>
               <button className={`${s.resultBtn} ${copied ? s.resultBtnDone : ''}`} onClick={handleCopy}>
-                {copied ? '✓ 복사됨' : '📋 텍스트 복사'}
+                {copied ? '✓ 복사됨' : '텍스트 복사'}
               </button>
               <button className={`${s.resultBtn} ${savedConfirm ? s.resultBtnDone : ''}`} onClick={handleSaveToMyRecipes}>
-                {savedConfirm ? '✓ 저장됨' : '💾 내 레시피로 저장'}
+                {savedConfirm ? '✓ 저장됨' : '내 레시피로 저장'}
               </button>
             </div>
           </div>
@@ -389,7 +389,7 @@ function ScaleTab() {
         </>
       ) : (
         <div className={s.empty}>
-          <div className={s.emptyTitle}>📝 재료를 입력해 주세요</div>
+          <div className={s.emptyTitle}>재료를 입력해 주세요</div>
           <p>위 [빠른 시작] 프리셋으로 즉시 시작하거나 재료명·양·단위를 직접 입력하세요.</p>
         </div>
       )}
@@ -762,7 +762,7 @@ function SavedTab({ active }: { active: boolean }) {
 
       {recipes.length === 0 && loaded && !showForm && (
         <div className={s.empty}>
-          <div className={s.emptyTitle}>📭 저장된 레시피가 없어요</div>
+          <div className={s.emptyTitle}>저장된 레시피가 없어요</div>
           <p>[+ 새 레시피 추가]로 첫 레시피를 등록하거나, [인분 비율 계산] 탭에서 만든 레시피를 저장할 수 있습니다.</p>
         </div>
       )}
@@ -793,11 +793,11 @@ function SavedTab({ active }: { active: boolean }) {
         <div className={s.card}>
           <label className={s.cardLabel}>데이터 백업</label>
           <div className={s.backupRow}>
-            <button className={s.backupBtn} onClick={handleExport}>📥 백업 다운로드</button>
-            <button className={s.backupBtn} onClick={() => fileRef.current?.click()}>📤 가져오기</button>
+            <button className={s.backupBtn} onClick={handleExport}>백업 다운로드</button>
+            <button className={s.backupBtn} onClick={() => fileRef.current?.click()}>가져오기</button>
             <button className={`${s.backupBtn} ${s.backupDanger}`}
               onClick={() => { if (confirm('모든 레시피를 삭제하시겠습니까?')) setRecipes([]) }}>
-              🗑️ 전체 삭제
+              전체 삭제
             </button>
             <input ref={fileRef} type="file" accept=".json,application/json" hidden
               onChange={e => { const f = e.target.files?.[0]; if (f) handleImport(f) }} />
@@ -926,16 +926,16 @@ function ShoppingTab({ active }: { active: boolean }) {
           </div>
           <div className={s.shopActions}>
             <button className={`${s.resultBtn} ${copied ? s.resultBtnDone : ''}`} onClick={handleCopy}>
-              {copied ? '✓ 복사됨' : '📋 텍스트 복사 (카톡 공유용)'}
+              {copied ? '✓ 복사됨' : '텍스트 복사 (카톡 공유용)'}
             </button>
-            <button className={`${s.resultBtn} ${s.miniDanger}`} onClick={handleClear}>🗑️ 리스트 비우기</button>
+            <button className={`${s.resultBtn} ${s.miniDanger}`} onClick={handleClear}>리스트 비우기</button>
           </div>
         </div>
       )}
 
       {entries.length === 0 && loaded && (
         <div className={s.empty}>
-          <div className={s.emptyTitle}>🛒 레시피를 추가해 주세요</div>
+          <div className={s.emptyTitle}>레시피를 추가해 주세요</div>
           <p>위 드롭다운에서 레시피를 선택해 인분과 함께 추가하세요. 여러 레시피의 동일 재료가 자동 합산됩니다.</p>
         </div>
       )}

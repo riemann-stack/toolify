@@ -116,7 +116,7 @@ export default function MorseCodeClient() {
           onClick={() => { if (playing) stop(); setMode('morse') }}>· − 모스 부호</button>
         <button type="button" role="tab" aria-selected={mode === 'nato'}
           className={`${s.modeBtn} ${mode === 'nato' ? s.modeActive : ''}`}
-          onClick={() => { if (playing) stop(); setMode('nato') }}>🔤 NATO 음성기호</button>
+          onClick={() => { if (playing) stop(); setMode('nato') }}>NATO 음성기호</button>
       </div>
 
       {mode === 'morse' ? (
@@ -172,7 +172,7 @@ export default function MorseCodeClient() {
               <button type="button" className={`${s.playBtn} ${playing ? s.playStop : ''}`} onClick={play} disabled={!/[.-]/.test(morseToPlay)}>
                 {playing ? '■ 정지' : '▶ 재생'}
               </button>
-              <button type="button" className={s.sosBtn} onClick={sos}>🆘 SOS</button>
+              <button type="button" className={s.sosBtn} onClick={sos}>SOS</button>
             </div>
             <div className={s.speedRow}>
               <span className={s.speedLabel}>속도 {wpm} WPM</span>

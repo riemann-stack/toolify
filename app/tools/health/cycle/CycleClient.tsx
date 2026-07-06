@@ -192,7 +192,7 @@ export default function CycleClient() {
     <div className={s.wrap}>
       {/* 프라이버시 안내 — 항상 최상단 */}
       <div className={s.privacyBanner}>
-        <strong>🔒 프라이버시 보호</strong>
+        <strong>프라이버시 보호</strong>
         모든 입력·기록은 본인 브라우저(localStorage)에만 저장됩니다.
         youtil 서버·외부 전송 X · 익명 사용 · <button className={s.wipeLink} onClick={wipeAllData}>한 번 클릭 전체 삭제</button>
       </div>
@@ -215,10 +215,10 @@ export default function CycleClient() {
 
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="생리주기 도구 탭">
-        <button type="button" role="tab" aria-selected={tab === 'calendar'} className={`${s.tab} ${tab === 'calendar' ? s.tabActive : ''}`} onClick={() => setTab('calendar')}>🌙 주기 캘린더</button>
-        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>💆 컨디션 가이드</button>
-        <button type="button" role="tab" aria-selected={tab === 'fertility'} className={`${s.tab} ${tab === 'fertility' ? s.tabActive : ''}`} onClick={() => setTab('fertility')}>👶 가임기 참고</button>
-        <button type="button" role="tab" aria-selected={tab === 'records'} className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>📋 내 기록</button>
+        <button type="button" role="tab" aria-selected={tab === 'calendar'} className={`${s.tab} ${tab === 'calendar' ? s.tabActive : ''}`} onClick={() => setTab('calendar')}>주기 캘린더</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>컨디션 가이드</button>
+        <button type="button" role="tab" aria-selected={tab === 'fertility'} className={`${s.tab} ${tab === 'fertility' ? s.tabActive : ''}`} onClick={() => setTab('fertility')}>가임기 참고</button>
+        <button type="button" role="tab" aria-selected={tab === 'records'} className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>내 기록</button>
       </div>
 
       {/* ══════════ TAB 1: 주기 캘린더 ══════════ */}
@@ -303,7 +303,7 @@ export default function CycleClient() {
               {/* 오래된 입력 안내 — 마지막 생리일이 한 주기 이상 지나 자동 보정된 경우 */}
               {result.cyclesSinceLog >= 1 && (
                 <div className={s.warningCard}>
-                  <strong>📅 마지막 생리일이 오래되었어요</strong>
+                  <strong>마지막 생리일이 오래되었어요</strong>
                   <p>입력한 마지막 생리 시작일이 한 주기(<strong>{avgCycle}일</strong>) 이상 지났습니다. 아래 결과는 평균 주기로 <strong>자동 보정</strong>한 추정치예요. 최근에 생리를 다시 시작했다면 위 <strong>①번 날짜를 업데이트</strong>하면 더 정확합니다.</p>
                 </div>
               )}
@@ -313,7 +313,7 @@ export default function CycleClient() {
 
               {/* 요약 */}
               <div className={s.card}>
-                <span className={s.cardLabel}>📅 주요 일정 요약</span>
+                <span className={s.cardLabel}>주요 일정 요약</span>
                 <table className={s.summaryTable}>
                   <tbody>
                     <tr>
@@ -407,7 +407,7 @@ export default function CycleClient() {
       {tab === 'guide' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>💆 라이프스타일 (선택 — 가이드 강조)</span>
+            <span className={s.cardLabel}>라이프스타일 (선택 — 가이드 강조)</span>
             <div className={s.pillRow} role="group" aria-label="라이프스타일 선택">
               {(Object.keys(LIFESTYLE_LABEL) as Lifestyle[]).map((l) => (
                 <button key={l}
@@ -483,7 +483,7 @@ export default function CycleClient() {
 
           {/* 운동 강도 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🏃 phase별 운동 강도 (일반 안내)</span>
+            <span className={s.cardLabel}>phase별 운동 강도 (일반 안내)</span>
             <table className={s.guideTable}>
               <thead>
                 <tr><th scope="col">Phase</th><th scope="col">운동 강도</th></tr>
@@ -528,7 +528,7 @@ export default function CycleClient() {
           {trackingPregnancy === true && result && (
             <>
               <div className={s.card}>
-                <span className={s.cardLabel}>👶 가임기 참고 정보</span>
+                <span className={s.cardLabel}>가임기 참고 정보</span>
                 <table className={s.summaryTable}>
                   <tbody>
                     <tr>
@@ -574,7 +574,7 @@ export default function CycleClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>🧪 임신 테스트기 시점 안내</span>
+                <span className={s.cardLabel}>임신 테스트기 시점 안내</span>
                 <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, margin: 0 }}>
                   임신 테스트기는 보통 <strong style={{ color: 'var(--accent)' }}>생리 예정일 이후가 더 정확</strong>합니다.
                   너무 이른 검사는 음성이 나와도 확정 X. 양성·음성 관계없이 정확한 진단은 산부인과 상담.
@@ -603,7 +603,7 @@ export default function CycleClient() {
       {tab === 'records' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>✅ 오늘 자가체크 ({fmtKor(today)})</span>
+            <span className={s.cardLabel}>오늘 자가체크 ({fmtKor(today)})</span>
 
             <div className={s.field}>
               <label className={s.fieldLabel}>오늘 컨디션</label>
@@ -638,13 +638,13 @@ export default function CycleClient() {
                 value={todayNotes} onChange={(e) => setTodayNotes(e.target.value)} />
             </div>
 
-            <button className={s.saveBtn} onClick={saveTodayCheck}>💾 오늘 기록 저장</button>
+            <button className={s.saveBtn} onClick={saveTodayCheck}>오늘 기록 저장</button>
           </div>
 
           {/* 누적 분석 */}
           {analysis && analysis.count >= 2 && (
             <div className={`${s.card} ${analysis.isRegular ? s.analysisGood : s.analysisCaution}`}>
-              <span className={s.cardLabel}>📊 누적 주기 분석 ({analysis.count}회)</span>
+              <span className={s.cardLabel}>누적 주기 분석 ({analysis.count}회)</span>
               <p style={{ fontSize: 14, color: 'var(--text)', margin: '0 0 8px' }}>
                 최근 {analysis.cycles.length}개 주기: {analysis.cycles.join('·')}일
               </p>
@@ -662,7 +662,7 @@ export default function CycleClient() {
           {/* 기록 리스트 */}
           {records.length > 0 && (
             <div className={s.card}>
-              <span className={s.cardLabel}>📝 저장된 기록 ({records.length})</span>
+              <span className={s.cardLabel}>저장된 기록 ({records.length})</span>
               <div className={s.recordList}>
                 {records.slice(0, 30).map((r) => (
                   <div key={r.id} className={s.recordItem}>
@@ -686,10 +686,10 @@ export default function CycleClient() {
 
           {/* 데이터 관리 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🔒 데이터 관리</span>
+            <span className={s.cardLabel}>데이터 관리</span>
             <div className={s.dataActions}>
-              <button className={s.copyBtn} onClick={downloadCSV}>📊 CSV 다운로드 (백업)</button>
-              <button className={s.copyBtn} onClick={() => fileInputRef.current?.click()}>📤 CSV 가져오기 (복원)</button>
+              <button className={s.copyBtn} onClick={downloadCSV}>CSV 다운로드 (백업)</button>
+              <button className={s.copyBtn} onClick={() => fileInputRef.current?.click()}>CSV 가져오기 (복원)</button>
               <input ref={fileInputRef} type="file" accept=".csv,text/csv"
                 style={{ display: 'none' }}
                 onChange={(e) => {
@@ -697,7 +697,7 @@ export default function CycleClient() {
                   if (file) importCSV(file)
                   e.target.value = ''
                 }} />
-              <button className={s.dangerBtn} onClick={wipeAllData}>🗑️ 전체 삭제 (모든 입력·기록)</button>
+              <button className={s.dangerBtn} onClick={wipeAllData}>전체 삭제 (모든 입력·기록)</button>
             </div>
             <p className={s.noteSmall}>
               모든 데이터는 본인 브라우저(localStorage)에만 저장 · 서버 전송 X · 다른 기기 자동 동기화 X.

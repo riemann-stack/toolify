@@ -259,9 +259,9 @@ export default function ServingClient() {
 
       {/* 탭 */}
       <div className={`${styles.tabs} ${styles.tabs3}`} role="tablist">
-        <button role="tab" aria-selected={tab === 'serving'} className={`${styles.tab} ${tab === 'serving' ? styles.tabActive : ''}`} onClick={() => setTab('serving')}>🍽️ 재료별 분량</button>
-        <button role="tab" aria-selected={tab === 'shopping'} className={`${styles.tab} ${tab === 'shopping' ? styles.tabActive : ''}`} onClick={() => setTab('shopping')}>🛒 장보기 목록</button>
-        <button role="tab" aria-selected={tab === 'family'} className={`${styles.tab} ${tab === 'family' ? styles.tabActive : ''}`} onClick={() => setTab('family')}>👪 내 가족</button>
+        <button role="tab" aria-selected={tab === 'serving'} className={`${styles.tab} ${tab === 'serving' ? styles.tabActive : ''}`} onClick={() => setTab('serving')}>재료별 분량</button>
+        <button role="tab" aria-selected={tab === 'shopping'} className={`${styles.tab} ${tab === 'shopping' ? styles.tabActive : ''}`} onClick={() => setTab('shopping')}>장보기 목록</button>
+        <button role="tab" aria-selected={tab === 'family'} className={`${styles.tab} ${tab === 'family' ? styles.tabActive : ''}`} onClick={() => setTab('family')}>내 가족</button>
       </div>
 
       {/* ══════════ TAB 1: 재료별 분량 ══════════ */}
@@ -288,7 +288,7 @@ export default function ServingClient() {
 
           {/* 재료 선택 — accordion + 검색 */}
           <div className={styles.card}>
-            <label className={styles.cardLabel} htmlFor="serving-f1">🍴 재료 선택 (복수 선택)</label>
+            <label className={styles.cardLabel} htmlFor="serving-f1">재료 선택 (복수 선택)</label>
             <input id="serving-f1" type="text" className={styles.searchInput}
               placeholder="🔍 재료 검색 (예: 삼겹살, 파스타)…"
               value={search}
@@ -327,14 +327,14 @@ export default function ServingClient() {
             })}
             {selected.length > 1 && (
               <p className={styles.cardSub}>
-                ✅ {selectedItems.length}종 선택 — 합산 장보기 목록은 <strong>🛒 장보기 목록</strong> 탭에서.
+                ✅ {selectedItems.length}종 선택 — 합산 장보기 목록은 <strong>장보기 목록</strong> 탭에서.
               </p>
             )}
           </div>
 
           {/* 인원 + 가족 자동 적용 */}
           <div className={styles.card}>
-            <label className={styles.cardLabel}>👥 인원</label>
+            <label className={styles.cardLabel}>인원</label>
             {family.length > 0 && (
               <label className={styles.useFamilyRow}>
                 <input type="checkbox" checked={useFamily} onChange={(e) => setUseFamily(e.target.checked)} />
@@ -389,7 +389,7 @@ export default function ServingClient() {
                   )}
                   {ageGroup !== 'adultOnly' && (
                     <p className={styles.cardSub} style={{ marginTop: 8 }}>
-                      기본 모드의 아이는 평균 계수(약 0.6)로 계산합니다. 영아·유아·초등·중·고생 등 <strong>연령별 정확 계산</strong>은 위 <strong>👪 내 가족</strong> 탭을 이용하세요.
+                      기본 모드의 아이는 평균 계수(약 0.6)로 계산합니다. 영아·유아·초등·중·고생 등 <strong>연령별 정확 계산</strong>은 위 <strong>내 가족</strong> 탭을 이용하세요.
                     </p>
                   )}
                 </div>
@@ -399,7 +399,7 @@ export default function ServingClient() {
 
           {/* 식사 조건 */}
           <div className={styles.card}>
-            <label className={styles.cardLabel}>🍽️ 식사 조건</label>
+            <label className={styles.cardLabel}>식사 조건</label>
             <div style={{ marginBottom: 14 }}>
               <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>식사 유형</div>
               <div className={styles.condRow}>
@@ -523,9 +523,9 @@ export default function ServingClient() {
       {tab === 'shopping' && (
         <>
           <div className={styles.card}>
-            <label className={styles.cardLabel}>🛒 합산 장보기 — {peopleLabel}</label>
+            <label className={styles.cardLabel}>합산 장보기 — {peopleLabel}</label>
             {selectedItems.length === 0 ? (
-              <p className={styles.empty}>먼저 <strong>🍽️ 재료별 분량</strong> 탭에서 재료를 선택해주세요.</p>
+              <p className={styles.empty}>먼저 <strong>재료별 분량</strong> 탭에서 재료를 선택해주세요.</p>
             ) : (
               <p className={styles.cardSub}>
                 선택한 {selectedItems.length}종 재료의 사야 할 양을 합산. 각 재료별 <strong>📦 이미 있는 양</strong> 입력 시 자동으로 빼고 표시.
@@ -536,7 +536,7 @@ export default function ServingClient() {
           {finalShoppingItems.length > 0 && (
             <>
               <div className={styles.card}>
-                <label className={styles.cardLabel}>📦 냉장고 보유 (선택 — 사야 할 양에서 자동 차감)</label>
+                <label className={styles.cardLabel}>냉장고 보유 (선택 — 사야 할 양에서 자동 차감)</label>
                 <table className={styles.fridgeTable}>
                   <thead>
                     <tr>
@@ -575,18 +575,18 @@ export default function ServingClient() {
 
               <div className={styles.shopCard}>
                 <div className={styles.shopHead}>
-                  <span className={styles.shopTitle}>📋 장보기 마크다운 카드</span>
+                  <span className={styles.shopTitle}>장보기 마크다운 카드</span>
                   <button type="button"
                     className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                     onClick={copyShopping}>
-                    {copied ? '✅ 복사됨' : '📋 복사'}
+                    {copied ? '복사됨' : '복사'}
                   </button>
                 </div>
                 <pre className={styles.shopList}>{shoppingMarkdown}</pre>
               </div>
 
               <div className={styles.crossLinks}>
-                <p className={styles.crossLinksTitle}>🔗 다음 단계</p>
+                <p className={styles.crossLinksTitle}>다음 단계</p>
                 <div className={styles.crossLinksGrid}>
                   <Link href="/tools/life/unit-price" className={styles.crossLink}>💰 단가 비교 (가격 분석)</Link>
                   <Link href="/tools/cooking/substitute" className={styles.crossLink}>🔄 식재료 대체 (부족 시)</Link>
@@ -603,7 +603,7 @@ export default function ServingClient() {
       {tab === 'family' && (
         <>
           <div className={styles.card}>
-            <label className={styles.cardLabel}>👪 가족 구성 (브라우저 로컬 저장)</label>
+            <label className={styles.cardLabel}>가족 구성 (브라우저 로컬 저장)</label>
             <p className={styles.cardSub}>
               가족 구성을 저장하면 매번 입력 X. 연령·식사량별 인분 환산 자동.
             </p>

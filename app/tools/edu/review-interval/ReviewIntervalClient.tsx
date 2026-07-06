@@ -750,7 +750,7 @@ export default function ReviewIntervalClient() {
           </div>
 
           <div className={s.scoreGuide}>
-            📚 <strong>점수별 동작:</strong>
+            <strong>점수별 동작:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li><strong style={{ color: '#DC2626' }}>0~2점:</strong> 처음부터 다시 시작 (간격 1일, 횟수 0)</li>
               <li><strong style={{ color: '#A16207' }}>3점:</strong> 간격 약간 증가, EF 약간 ↓</li>
@@ -889,9 +889,9 @@ export default function ReviewIntervalClient() {
                       }`}>{dDay(next)}</span>
                     </div>
                     <div className={s.itemMeta}>
-                      <span>📅 학습 <strong>{item.startDate}</strong></span>
-                      <span>🔄 다음 <strong>{item.nextReviewDate}</strong></span>
-                      <span>📊 {item.repetitions}회차 (EF {item.ef.toFixed(2)})</span>
+                      <span>학습 <strong>{item.startDate}</strong></span>
+                      <span>다음 <strong>{item.nextReviewDate}</strong></span>
+                      <span>{item.repetitions}회차 (EF {item.ef.toFixed(2)})</span>
                     </div>
                     {item.memo && (
                       <p style={{ fontSize: 12, color: 'var(--muted)', fontStyle: 'italic', marginBottom: 6 }}>💭 {item.memo}</p>
@@ -934,12 +934,12 @@ export default function ReviewIntervalClient() {
               <span>데이터 관리</span>
             </div>
             <div className={s.dataMgmt}>
-              <button className={s.itemActionBtn} onClick={exportData} disabled={items.length === 0} type="button">📥 백업 다운로드</button>
+              <button className={s.itemActionBtn} onClick={exportData} disabled={items.length === 0} type="button">백업 다운로드</button>
               <label className={s.itemActionBtn} style={{ cursor: 'pointer' }}>
-                📤 백업 가져오기
+                백업 가져오기
                 <input type="file" accept=".json,application/json" onChange={importData} style={{ display: 'none' }} />
               </label>
-              <button className={`${s.itemActionBtn} ${s.itemActionDanger}`} onClick={clearAll} disabled={items.length === 0} type="button">⚠️ 전체 삭제</button>
+              <button className={`${s.itemActionBtn} ${s.itemActionDanger}`} onClick={clearAll} disabled={items.length === 0} type="button">전체 삭제</button>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
               ※ 데이터는 이 브라우저의 localStorage에 저장됩니다. 다른 기기에서 사용하려면 백업 다운로드를 활용하세요.

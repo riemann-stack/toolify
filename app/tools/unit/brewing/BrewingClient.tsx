@@ -155,7 +155,7 @@ export default function BrewingClient() {
       {/* 와인 예상 ABV (Brix 기준) */}
       {result && result.brix > 8 && result.brix < 30 && (
         <div className={s.tipCard}>
-          <strong>🍷 와인 머스트 예상 ABV</strong>
+          <strong>와인 머스트 예상 ABV</strong>
           <p>
             현재 <strong>{result.brix.toFixed(1)} °Bx</strong>로 발효하면 (FG ≈ 0.992 가정){' '}
             <strong className={s.accentVal}>{wineAbv.low.toFixed(1)} ~ {wineAbv.high.toFixed(1)} % ABV</strong>{' '}
@@ -279,7 +279,7 @@ export default function BrewingClient() {
 
       {/* pH 가이드 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🧪 pH 측정 참고 — TA(산도)는 별도 측정 필요</span>
+        <span className={s.cardLabel}>pH 측정 참고 — TA(산도)는 별도 측정 필요</span>
         <div className={s.phList}>
           {PH_GUIDE.map((p, i) => (
             <div key={i} className={s.phRow}>

@@ -194,7 +194,7 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
           <MiniGoldenRect A={result.A} B={result.B} unit={unit} />
 
           <button className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy} style={{ marginTop: 10 }}>
-            {copied ? '✓ 복사됨' : '📋 결과 복사'}
+            {copied ? '✓ 복사됨' : '결과 복사'}
           </button>
         </div>
       ) : (
@@ -439,15 +439,15 @@ function SpiralTab() {
             <button
               className={`${styles.selectBtn} ${theme === 'dark' ? styles.selectBtnActive : ''}`}
               onClick={() => setTheme('dark')}
-            >🌙 다크</button>
+            >다크</button>
             <button
               className={`${styles.selectBtn} ${theme === 'light' ? styles.selectBtnActive : ''}`}
               onClick={() => setTheme('light')}
-            >☀️ 라이트</button>
+            >라이트</button>
           </div>
           <div className={styles.spiralControlsRight}>
             <button className={styles.downloadBtn} onClick={handleDownload}>
-              📥 PNG 저장
+              PNG 저장
             </button>
           </div>
         </div>
@@ -527,13 +527,13 @@ export default function GoldenRatioClient() {
       {/* 탭 */}
       <div className={styles.tabs}>
         <button className={`${styles.tab} ${tab === 'ratio'   ? styles.tabActive : ''}`} onClick={() => setTab('ratio')}>
-          📐 황금 비율 계산
+          황금 비율 계산
         </button>
         <button className={`${styles.tab} ${tab === 'convert' ? styles.tabActive : ''}`} onClick={() => setTab('convert')}>
-          🔄 비율 변환
+          비율 변환
         </button>
         <button className={`${styles.tab} ${tab === 'spiral'  ? styles.tabActive : ''}`} onClick={() => setTab('spiral')}>
-          🌀 황금 나선
+          황금 나선
         </button>
       </div>
 
@@ -568,7 +568,7 @@ function RatioCompareCard() {
 
   return (
     <div className={styles.compareCard}>
-      <span className={styles.compareLabel}>📐 비율 비교 시각화</span>
+      <span className={styles.compareLabel}>비율 비교 시각화</span>
       <p className={styles.compareDesc}>
         같은 세로 높이 기준 가로 길이 비교. 황금 비율(φ = 1.618)의 균형감을 다른 표준 비율과 함께 확인하세요.
       </p>

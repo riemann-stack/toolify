@@ -115,10 +115,10 @@ export default function CurlClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`}  onClick={() => setTab('convert')}>🔄 변환</button>
-        <button className={`${s.tab} ${tab === 'analyze' ? s.tabActive : ''}`}  onClick={() => setTab('analyze')}>📦 요청 구조</button>
-        <button className={`${s.tab} ${tab === 'examples' ? s.tabActive : ''}`} onClick={() => setTab('examples')}>📚 예시</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>📖 가이드</button>
+        <button className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`}  onClick={() => setTab('convert')}>변환</button>
+        <button className={`${s.tab} ${tab === 'analyze' ? s.tabActive : ''}`}  onClick={() => setTab('analyze')}>요청 구조</button>
+        <button className={`${s.tab} ${tab === 'examples' ? s.tabActive : ''}`} onClick={() => setTab('examples')}>예시</button>
+        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {toast && <div className={s.toast}>{toast}</div>}
@@ -129,9 +129,9 @@ export default function CurlClient() {
           <div className={s.card}>
             <div className={s.cardHeaderFlex}>
               <span className={s.cardLabel} style={{ marginBottom: 0 }}>
-                🌀 cURL 명령 입력 ({formatBytes(byteLength(input))})
+                cURL 명령 입력 ({formatBytes(byteLength(input))})
               </span>
-              <button className={s.smBtn} onClick={() => setInput('')} disabled={!input}>🗑️ 비우기</button>
+              <button className={s.smBtn} onClick={() => setInput('')} disabled={!input}>비우기</button>
             </div>
             <textarea
               value={input}
@@ -169,7 +169,7 @@ export default function CurlClient() {
                 <code className={s.summaryUrl}>{parsed.url.length > 60 ? parsed.url.slice(0, 60) + '...' : parsed.url}</code>
                 <span className={s.summaryStat}>헤더 {parsed.headers.length}</span>
                 {parsed.bodyType && <span className={s.summaryStat}>body: {parsed.bodyType}</span>}
-                {parsed.auth && <span className={s.summaryStat}>🔐 Basic Auth</span>}
+                {parsed.auth && <span className={s.summaryStat}>Basic Auth</span>}
               </div>
             )}
           </div>
@@ -181,7 +181,7 @@ export default function CurlClient() {
         <>
           {/* 출력 옵션 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>⚙️ 출력 옵션</span>
+            <span className={s.cardLabel}>출력 옵션</span>
             <div className={s.optBlock}>
               <span className={s.optTitle}>비동기 스타일 (JS)</span>
               <div className={s.optBtnRow}>
@@ -207,7 +207,7 @@ export default function CurlClient() {
                   <div className={s.codeHeader}>
                     <span className={s.codeLang}>{lang.emoji} <strong>{lang.name}</strong></span>
                     <button className={s.smBtn} onClick={() => copy(lang.id, codes[lang.id])}>
-                      {copiedKey === lang.id ? '✓ 복사됨' : '📋 복사'}
+                      {copiedKey === lang.id ? '✓ 복사됨' : '복사'}
                     </button>
                   </div>
                   <pre className={s.codeBlock}>{codes[lang.id]}</pre>
@@ -223,7 +223,7 @@ export default function CurlClient() {
         <>
           {/* METHOD 큰 배지 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🌐 HTTP 요청 구조</span>
+            <span className={s.cardLabel}>HTTP 요청 구조</span>
             <div className={s.methodBig} style={{ background: METHOD_COLORS[parsed.method] + '20', color: METHOD_COLORS[parsed.method], borderColor: METHOD_COLORS[parsed.method] }}>
               {parsed.method}
             </div>
@@ -232,7 +232,7 @@ export default function CurlClient() {
           {/* URL */}
           <div className={s.card}>
             <div className={s.cardHeaderFlex}>
-              <span className={s.cardLabel} style={{ marginBottom: 0 }}>🔗 URL</span>
+              <span className={s.cardLabel} style={{ marginBottom: 0 }}>URL</span>
               <button className={s.smBtn} onClick={() => copy('url', parsed.url)}>{copiedKey === 'url' ? '✓' : '📋'}</button>
             </div>
             <code className={s.urlBlock}>{parsed.url}</code>
@@ -244,7 +244,7 @@ export default function CurlClient() {
           {/* Query Parameters */}
           {parsed.queryParams.length > 0 && (
             <div className={s.card}>
-              <span className={s.cardLabel}>🔎 Query Parameters ({parsed.queryParams.length})</span>
+              <span className={s.cardLabel}>Query Parameters ({parsed.queryParams.length})</span>
               <table className={s.kvTable}>
                 <thead>
                   <tr><th scope="col">key</th><th scope="col">value</th></tr>
@@ -264,7 +264,7 @@ export default function CurlClient() {
           {/* Headers */}
           {parsed.headers.length > 0 && (
             <div className={s.card}>
-              <span className={s.cardLabel}>📋 Headers ({parsed.headers.length})</span>
+              <span className={s.cardLabel}>Headers ({parsed.headers.length})</span>
               <table className={s.kvTable}>
                 <thead>
                   <tr><th scope="col">key</th><th scope="col">value</th></tr>
@@ -293,7 +293,7 @@ export default function CurlClient() {
           {/* Auth */}
           {parsed.auth && (
             <div className={s.card}>
-              <span className={s.cardLabel}>🔐 Basic Auth</span>
+              <span className={s.cardLabel}>Basic Auth</span>
               <div className={s.authGrid}>
                 <div><span className={s.optLabel}>user</span> <code>{opts.maskSensitive ? maskValue(parsed.auth.user) : parsed.auth.user}</code></div>
                 <div><span className={s.optLabel}>password</span> <code>{opts.maskSensitive ? '***' : parsed.auth.password}</code></div>
@@ -304,7 +304,7 @@ export default function CurlClient() {
           {/* Cookies */}
           {parsed.cookies.length > 0 && (
             <div className={s.card}>
-              <span className={s.cardLabel}>🍪 Cookies ({parsed.cookies.length})</span>
+              <span className={s.cardLabel}>Cookies ({parsed.cookies.length})</span>
               <table className={s.kvTable}>
                 <thead><tr><th scope="col">name</th><th scope="col">value</th></tr></thead>
                 <tbody>
@@ -324,7 +324,7 @@ export default function CurlClient() {
             <div className={s.card}>
               <div className={s.cardHeaderFlex}>
                 <span className={s.cardLabel} style={{ marginBottom: 0 }}>
-                  📤 Body — {parsed.bodyType.toUpperCase()}
+                  Body — {parsed.bodyType.toUpperCase()}
                 </span>
                 <button className={s.smBtn} onClick={() => copy('body', parsed.rawBody)}>{copiedKey === 'body' ? '✓' : '📋'}</button>
               </div>
@@ -364,20 +364,20 @@ export default function CurlClient() {
           {/* 옵션 표시 */}
           {(parsed.flags.insecure || parsed.flags.followRedirects || parsed.flags.compressed || parsed.flags.get || parsed.flags.verbose) && (
             <div className={s.card}>
-              <span className={s.cardLabel}>⚙️ 추가 옵션</span>
+              <span className={s.cardLabel}>추가 옵션</span>
               <div className={s.flagList}>
-                {parsed.flags.insecure && <span className={s.flagPill}>🔓 -k --insecure (SSL 검증 비활성)</span>}
-                {parsed.flags.followRedirects && <span className={s.flagPill}>↪️ -L --location (리다이렉트 따라가기)</span>}
-                {parsed.flags.compressed && <span className={s.flagPill}>📦 --compressed (gzip 응답)</span>}
-                {parsed.flags.get && <span className={s.flagPill}>🔍 -G --get (data → query)</span>}
-                {parsed.flags.verbose && <span className={s.flagPill}>📢 -v --verbose (자세한 로그)</span>}
+                {parsed.flags.insecure && <span className={s.flagPill}>-k --insecure (SSL 검증 비활성)</span>}
+                {parsed.flags.followRedirects && <span className={s.flagPill}>-L --location (리다이렉트 따라가기)</span>}
+                {parsed.flags.compressed && <span className={s.flagPill}>--compressed (gzip 응답)</span>}
+                {parsed.flags.get && <span className={s.flagPill}>-G --get (data → query)</span>}
+                {parsed.flags.verbose && <span className={s.flagPill}>-v --verbose (자세한 로그)</span>}
               </div>
             </div>
           )}
 
           {/* 통계 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 통계</span>
+            <span className={s.cardLabel}>통계</span>
             <div className={s.statGrid}>
               <div><span className={s.statLabel}>METHOD</span><strong>{parsed.method}</strong></div>
               <div><span className={s.statLabel}>헤더</span><strong>{fmtInt(parsed.headers.length)}</strong></div>
@@ -394,7 +394,7 @@ export default function CurlClient() {
       {tab === 'examples' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📂 카테고리</span>
+            <span className={s.cardLabel}>카테고리</span>
             <div className={s.categoryRow}>
               {CATEGORIES.map((c) => (
                 <button
@@ -428,7 +428,7 @@ export default function CurlClient() {
         <>
           {/* cURL 옵션 치트시트 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📖 cURL 옵션 치트시트 (15+)</span>
+            <span className={s.cardLabel}>cURL 옵션 치트시트 (15+)</span>
             <div className={s.tableWrap}>
               <table className={s.guideTable}>
                 <thead>
@@ -466,7 +466,7 @@ export default function CurlClient() {
 
           {/* 5 언어 비교 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🆚 5 언어 차이 비교</span>
+            <span className={s.cardLabel}>5 언어 차이 비교</span>
             <div className={s.tableWrap}>
               <table className={s.guideTable}>
                 <thead>

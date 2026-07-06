@@ -303,7 +303,7 @@ export default function TimezoneClient() {
             {showAdd ? '도시 목록 닫기' : '＋ 도시 추가'}
           </button>
           <button className={styles.shareBtn} onClick={copyShare}>
-            {copyOk ? '✓ 복사됨' : '📋 텍스트 복사'}
+            {copyOk ? '✓ 복사됨' : '텍스트 복사'}
           </button>
         </div>
 

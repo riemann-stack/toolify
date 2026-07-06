@@ -515,7 +515,7 @@ export default function FryingClient() {
               </div>
 
               <div className={styles.tipBox}>
-                <strong>💡 겉바속촉 포인트</strong><br />
+                <strong>겉바속촉 포인트</strong><br />
                 {d.tip}
               </div>
 
@@ -535,7 +535,7 @@ export default function FryingClient() {
 
               {showAir && (
                 <div className={styles.airBox}>
-                  <div className={styles.airHead}>🌀 에어프라이어로 변환</div>
+                  <div className={styles.airHead}>에어프라이어로 변환</div>
                   <div className={styles.airGrid}>
                     <div className={styles.airItem}>
                       <div className={styles.airLabel}>온도</div>
@@ -556,7 +556,7 @@ export default function FryingClient() {
                 <button type="button"
                   className={styles.startBtn}
                   onClick={() => startTimerFor(Math.round(t1max), d.secondFry)}>
-                  ⏱ {fmtSec(t1max)} 타이머 시작 ({d.secondFry === 'unnecessary' ? '최대 튀김 시간 기준' : '1차 최대 시간 기준'})
+                  {fmtSec(t1max)} 타이머 시작 ({d.secondFry === 'unnecessary' ? '최대 튀김 시간 기준' : '1차 최대 시간 기준'})
                 </button>
               )}
             </div>

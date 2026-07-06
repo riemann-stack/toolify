@@ -814,11 +814,11 @@ export default function BaseballStatsClient() {
                 </div>
                 {(() => {
                   const items = [
-                    { title: '🎯 30홈런 도달',  current: pace.projHr,  target: 30 },
-                    { title: '🎯 100타점 도달', current: pace.projRbi, target: 100 },
-                    { title: '🎯 100득점 도달', current: pace.projRun, target: 100 },
-                    { title: '🎯 200안타 도달', current: pace.projHits, target: 200 },
-                    { title: '🎯 30도루 도달', current: pace.projSb, target: 30 },
+                    { title: '30홈런 도달',  current: pace.projHr,  target: 30 },
+                    { title: '100타점 도달', current: pace.projRbi, target: 100 },
+                    { title: '100득점 도달', current: pace.projRun, target: 100 },
+                    { title: '200안타 도달', current: pace.projHits, target: 200 },
+                    { title: '30도루 도달', current: pace.projSb, target: 30 },
                   ]
                   return items.map((m, i) => {
                     const s = milestoneStatus(m.current, m.target)
@@ -877,7 +877,7 @@ export default function BaseballStatsClient() {
 
       {/* 결과 복사 */}
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
     </div>
   )

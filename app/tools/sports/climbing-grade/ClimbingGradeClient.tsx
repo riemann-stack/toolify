@@ -39,14 +39,14 @@ export default function ClimbingGradeClient() {
           aria-selected={mode === 'boulder'}
           className={`${s.modeBtn} ${mode === 'boulder' ? s.modeActive : ''}`}
           onClick={() => switchMode('boulder')}
-        >🧗 볼더링</button>
+        >볼더링</button>
         <button
           type="button"
           role="tab"
           aria-selected={mode === 'route'}
           className={`${s.modeBtn} ${mode === 'route' ? s.modeActive : ''}`}
           onClick={() => switchMode('route')}
-        >🧗‍♀️ 루트(리드)</button>
+        >루트(리드)</button>
       </div>
 
       {/* 입력 */}

@@ -467,7 +467,7 @@ export default function UvProtectionClient() {
 
           {/* 행동 가이드 */}
           <div className={s.guideCard}>
-            <p className={s.guideTitle}>🛡️ 권장 보호 행동</p>
+            <p className={s.guideTitle}>권장 보호 행동</p>
             <ul>
               <li>오전 10시~오후 4시 야외 활동 자제</li>
               <li>SPF 30 이상 광범위(UVA·UVB) 차단제 사용</li>
@@ -481,7 +481,7 @@ export default function UvProtectionClient() {
           {/* 환경별 추가 안내 */}
           {envNotes.length > 0 && (
             <div className={s.envNoteCard}>
-              <strong>📌 {env.icon} {env.name} 추가 안내:</strong>
+              <strong>{env.icon} {env.name} 추가 안내:</strong>
               <ul style={{ paddingLeft: 18, marginTop: 6 }}>
                 {envNotes.map((note, i) => <li key={i}>{note}</li>)}
               </ul>
@@ -490,7 +490,7 @@ export default function UvProtectionClient() {
 
           {/* 재도포 카운트다운 */}
           <div className={s.reapplyCard}>
-            <p className={s.reapplyTitle}>⏰ 재도포 알림 (권장 {result.reapplyMinutes}분 간격)</p>
+            <p className={s.reapplyTitle}>재도포 알림 (권장 {result.reapplyMinutes}분 간격)</p>
             <div className={s.reapplyTimer}>
               {reapplyStartedAt === null || reapplyCountdown === null ? (
                 <>
@@ -503,7 +503,7 @@ export default function UvProtectionClient() {
                 <>
                   <p className={s.reapplyValue} style={{ color: '#EA580C' }}>재도포 필요!<small>지금</small></p>
                   <button className={s.reapplyBtn} onClick={() => setReapplyStartedAt(Date.now())} type="button">
-                    🔄 다시 도포
+                    다시 도포
                   </button>
                 </>
               ) : (
@@ -693,7 +693,7 @@ export default function UvProtectionClient() {
 
           {/* 실제 SPF vs 라벨 SPF */}
           <div className={s.guideCard}>
-            <p className={s.guideTitle}>📊 실제 SPF vs 라벨 SPF</p>
+            <p className={s.guideTitle}>실제 SPF vs 라벨 SPF</p>
             <p style={{ fontSize: 13, color: 'var(--text)', marginBottom: 8, lineHeight: 1.85 }}>
               실제 일상 사용 시 라벨 SPF의 <strong style={{ color: '#0891B2' }}>약 50% 정도 효과</strong>입니다:
             </p>
@@ -736,7 +736,7 @@ export default function UvProtectionClient() {
 
       {/* 공식 자료 출처 (모든 탭 공통 푸터) */}
       <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 12, padding: '12px 16px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
-        <p style={{ fontWeight: 700, color: '#0891B2', marginBottom: 6, fontFamily: '"Noto Sans KR", sans-serif' }}>📚 공식 자료 출처</p>
+        <p style={{ fontWeight: 700, color: '#0891B2', marginBottom: 6, fontFamily: '"Noto Sans KR", sans-serif' }}>공식 자료 출처</p>
         <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>기상청 자외선지수</a>
         {' · '}<a href="https://www.epa.gov/sunsafety/uv-index-scale-0" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>EPA UV Index</a>
         {' · '}<a href="https://www.who.int/health-topics/ultraviolet-radiation" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>WHO UV</a>

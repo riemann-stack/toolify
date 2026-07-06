@@ -191,7 +191,7 @@ export default function UnemploymentClient() {
         <p className={s.helpText} style={{ margin: 0 }}>
           🔒 입력한 나이·가입기간·급여 정보는 <strong>이 브라우저(localStorage)에만 저장</strong>되며 서버로 전송되지 않습니다. 공용 PC라면 사용 후 초기화하세요.
         </p>
-        <button type="button" className={s.resetBtn} onClick={resetAll}>🗑️ 입력값 초기화</button>
+        <button type="button" className={s.resetBtn} onClick={resetAll}>입력값 초기화</button>
       </div>
 
       {/* 나이·가입기간·장애인 */}
@@ -344,7 +344,7 @@ export default function UnemploymentClient() {
         <>
           {/* 히어로 — 1일 구직급여액 */}
           <div className={s.hero} role="status" aria-label="1일 구직급여액">
-            <p className={s.heroLabel}>💵 1일 구직급여액</p>
+            <p className={s.heroLabel}>1일 구직급여액</p>
             <p className={s.heroValue}>
               {won(result.dailyBenefit)}<span className={s.heroUnit}>원/일</span>
             </p>
@@ -482,7 +482,7 @@ export default function UnemploymentClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/severance" className={s.crossLink}>
-        💼 퇴직금 계산기 → 퇴사 시 받는 퇴직금·퇴직소득세도 함께 확인
+        퇴직금 계산기 → 퇴사 시 받는 퇴직금·퇴직소득세도 함께 확인
       </Link>
     </div>
   )

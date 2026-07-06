@@ -197,10 +197,10 @@ export default function IpoDepositClient() {
 
       {/* ── 탭 ── */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="계산 모드">
-        <button type="button" role="tab" aria-selected={tab === 'deposit'} className={`${s.tab} ${tab === 'deposit' ? s.tabActive : ''}`} onClick={() => setTab('deposit')}>💰 비례 → 증거금</button>
-        <button type="button" role="tab" aria-selected={tab === 'shares'} className={`${s.tab} ${tab === 'shares' ? s.tabActive : ''}`} onClick={() => setTab('shares')}>📊 증거금 → 주수</button>
-        <button type="button" role="tab" aria-selected={tab === 'scenario'} className={`${s.tab} ${tab === 'scenario' ? s.tabActive : ''}`} onClick={() => setTab('scenario')}>📈 시나리오</button>
-        <button type="button" role="tab" aria-selected={tab === 'memo'} className={`${s.tab} ${tab === 'memo' ? s.tabActive : ''}`} onClick={() => setTab('memo')}>📋 내 청약 메모</button>
+        <button type="button" role="tab" aria-selected={tab === 'deposit'} className={`${s.tab} ${tab === 'deposit' ? s.tabActive : ''}`} onClick={() => setTab('deposit')}>비례 → 증거금</button>
+        <button type="button" role="tab" aria-selected={tab === 'shares'} className={`${s.tab} ${tab === 'shares' ? s.tabActive : ''}`} onClick={() => setTab('shares')}>증거금 → 주수</button>
+        <button type="button" role="tab" aria-selected={tab === 'scenario'} className={`${s.tab} ${tab === 'scenario' ? s.tabActive : ''}`} onClick={() => setTab('scenario')}>시나리오</button>
+        <button type="button" role="tab" aria-selected={tab === 'memo'} className={`${s.tab} ${tab === 'memo' ? s.tabActive : ''}`} onClick={() => setTab('memo')}>내 청약 메모</button>
       </div>
 
       {/* ── 공통 입력 (모든 계산 탭에서 사용) ── */}
@@ -308,7 +308,7 @@ export default function IpoDepositClient() {
       {tab === 'deposit' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🎯 목표 비례 배정 주수</span>
+            <span className={s.cardLabel}>목표 비례 배정 주수</span>
             <input type="number" inputMode="numeric" min={0} className={s.input}
               value={targetShares} onChange={(e) => setTargetShares(e.target.value)} />
             <div className={s.quickRow}>
@@ -336,7 +336,7 @@ export default function IpoDepositClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>📊 상세 결과</span>
+                <span className={s.cardLabel}>상세 결과</span>
                 <table className={s.detailTable}>
                   <tbody>
                     <tr><td>목표 비례 배정</td><td className={s.cellAccent}>{numTarget}주</td></tr>
@@ -377,7 +377,7 @@ export default function IpoDepositClient() {
 
               <div className={s.card}>
                 <button className={`${s.copyBtn} ${copied ? s.copyBtnDone : ''}`} onClick={copyMarkdown}>
-                  {copied ? '✅ 복사됨' : '📋 마크다운 카드 복사 (메모장·노션)'}
+                  {copied ? '복사됨' : '마크다운 카드 복사 (메모장·노션)'}
                 </button>
               </div>
             </>
@@ -389,7 +389,7 @@ export default function IpoDepositClient() {
       {tab === 'shares' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>💰 내 증거금 (원)</span>
+            <span className={s.cardLabel}>내 증거금 (원)</span>
             <input type="number" inputMode="numeric" min={0} className={s.input}
               value={myDeposit} onChange={(e) => setMyDeposit(e.target.value)} />
             <div className={s.quickRow}>
@@ -414,7 +414,7 @@ export default function IpoDepositClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>📊 상세 결과</span>
+                <span className={s.cardLabel}>상세 결과</span>
                 <table className={s.detailTable}>
                   <tbody>
                     <tr><td>내 증거금</td><td className={s.cellAccent}>{fmtKrw(numDeposit)}원</td></tr>
@@ -456,7 +456,7 @@ export default function IpoDepositClient() {
       {tab === 'scenario' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🎯 목표 비례 배정 주수 (시나리오 기준)</span>
+            <span className={s.cardLabel}>목표 비례 배정 주수 (시나리오 기준)</span>
             <input type="number" inputMode="numeric" min={0} className={s.input}
               value={targetShares} onChange={(e) => setTargetShares(e.target.value)} />
             <div className={s.quickRow}>
@@ -472,7 +472,7 @@ export default function IpoDepositClient() {
 
           {scenarios.length > 0 && (
             <div className={s.card}>
-              <span className={s.cardLabel}>📈 경쟁률 변동 시나리오 (목표 {numTarget}주, 공모가 {fmtKrw(numPrice)}원, {(numRatio * 100).toFixed(0)}%)</span>
+              <span className={s.cardLabel}>경쟁률 변동 시나리오 (목표 {numTarget}주, 공모가 {fmtKrw(numPrice)}원, {(numRatio * 100).toFixed(0)}%)</span>
               <table className={s.scenarioTable}>
                 <thead>
                   <tr>
@@ -505,7 +505,7 @@ export default function IpoDepositClient() {
       {tab === 'memo' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📋 청약 종목 메모 (브라우저 로컬)</span>
+            <span className={s.cardLabel}>청약 종목 메모 (브라우저 로컬)</span>
             <p className={s.cardSub}>본 메모는 본인 브라우저에만 저장 · 종목 추천 X · 일정 자동 알림 X · 정확 일정은 증권신고서 확인.</p>
 
             <div className={s.field}>
@@ -607,9 +607,9 @@ export default function IpoDepositClient() {
                         {m.expectedAllocation != null && ` · 예상 ${m.expectedAllocation}주`}
                       </div>
                       <div className={s.memoDates}>
-                        {sub && <span className={s.memoDateChip}>📅 청약 {sub.label}</span>}
-                        {refund && <span className={s.memoDateChip}>💰 환불 {refund.label}</span>}
-                        {listing && <span className={`${s.memoDateChip} ${s.memoDateChipAccent}`}>📈 상장 {listing.label}</span>}
+                        {sub && <span className={s.memoDateChip}>청약 {sub.label}</span>}
+                        {refund && <span className={s.memoDateChip}>환불 {refund.label}</span>}
+                        {listing && <span className={`${s.memoDateChip} ${s.memoDateChipAccent}`}>상장 {listing.label}</span>}
                       </div>
                       {expectedRefund !== null && (
                         <div className={s.memoRefund}>예상 환불: 약 {fmtKrwShort(expectedRefund)}</div>
@@ -620,7 +620,7 @@ export default function IpoDepositClient() {
                 })}
               </div>
               <div className={s.memoActions}>
-                <button className={s.saveBtn} onClick={downloadCSV}>📊 CSV 다운로드</button>
+                <button className={s.saveBtn} onClick={downloadCSV}>CSV 다운로드</button>
                 <button className={s.clearBtn}
                   onClick={() => { if (confirm('모든 메모를 삭제하시겠습니까?')) setMemos([]) }}>
                   전체 삭제

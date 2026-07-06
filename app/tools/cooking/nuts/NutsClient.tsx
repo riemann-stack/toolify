@@ -343,7 +343,7 @@ export default function NutsClient() {
         <>
           {/* 합산 카드 */}
           <div className={styles.summary}>
-            <div className={styles.summaryHead}>📊 합산 — {selectedNuts.length}종 / 총 {Math.round(totals.grams)}g</div>
+            <div className={styles.summaryHead}>합산 — {selectedNuts.length}종 / 총 {Math.round(totals.grams)}g</div>
             <div className={styles.summaryKcal}>{Math.round(totals.kcal).toLocaleString()} kcal</div>
             <div className={styles.summaryKcalSub}>나트륨 {Math.round(totals.sodium)}mg · 셀레늄 {Math.round(totals.selenium)}μg</div>
 

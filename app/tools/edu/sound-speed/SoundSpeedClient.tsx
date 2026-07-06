@@ -454,19 +454,19 @@ export default function SoundSpeedClient() {
           {/* 결과 4분할 */}
           <div className={s.resultGrid}>
             <div className={`${s.resultCard} ${s.resCardSound}`}>
-              <p className={s.resultLabel}>🔊 소리 도달</p>
+              <p className={s.resultLabel}>소리 도달</p>
               <p className={s.resultValue}>{fmtTime(arrivalResult.soundTime)}</p>
             </div>
             <div className={`${s.resultCard} ${s.resCardLight}`}>
-              <p className={s.resultLabel}>💡 빛 도달</p>
+              <p className={s.resultLabel}>빛 도달</p>
               <p className={s.resultValue}>{fmtTime(arrivalResult.lightTime)}</p>
             </div>
             <div className={`${s.resultCard} ${s.resCardDist}`}>
-              <p className={s.resultLabel}>📏 거리</p>
+              <p className={s.resultLabel}>거리</p>
               <p className={s.resultValue}>{fmtDist(distM)}</p>
             </div>
             <div className={`${s.resultCard} ${s.resCardRatio}`}>
-              <p className={s.resultLabel}>⚡ 빛/소리 비율</p>
+              <p className={s.resultLabel}>빛/소리 비율</p>
               <p className={s.resultValue}>×{Math.round(arrivalResult.ratio).toLocaleString()}</p>
             </div>
           </div>
@@ -501,7 +501,7 @@ export default function SoundSpeedClient() {
           </div>
 
           <div className={s.funFactCard}>
-            <p className={s.funFactTitle}>💡 흥미로운 사실</p>
+            <p className={s.funFactTitle}>흥미로운 사실</p>
             소리는 1km를 가는 데 약 <strong>2.9초</strong>가 걸립니다.
             반면 빛은 같은 1km를 <strong>0.0000033초</strong>에 갑니다.
             빛이 지구를 한 바퀴 도는 데 <strong>0.13초</strong>면 충분하지만,
@@ -606,7 +606,7 @@ export default function SoundSpeedClient() {
           </div>
 
           <div className={s.funFactCard}>
-            <p className={s.funFactTitle}>💡 흥미로운 사실 모음</p>
+            <p className={s.funFactTitle}>흥미로운 사실 모음</p>
             <ul style={{ paddingLeft: 20, margin: 0, lineHeight: 2 }}>
               <li>음속을 처음 돌파한 건 <strong>1947년 척 예거</strong>의 X-1 비행기</li>
               <li>음속 돌파 시 <strong>소닉붐</strong>(충격파) 발생</li>
@@ -762,7 +762,7 @@ export default function SoundSpeedClient() {
               </div>
 
               <div className={s.rt60Card}>
-                <p className={s.rt60Title}>📊 일반 공간 RT60 비교</p>
+                <p className={s.rt60Title}>일반 공간 RT60 비교</p>
                 {ROOM_PRESETS.map(p => (
                   <div key={p.name} className={s.rt60Row}>
                     <span>{p.name}</span>
@@ -772,7 +772,7 @@ export default function SoundSpeedClient() {
               </div>
 
               <div className={s.funFactCard}>
-                <p className={s.funFactTitle}>💡 콘서트홀 설계의 비밀</p>
+                <p className={s.funFactTitle}>콘서트홀 설계의 비밀</p>
                 콘서트홀은 음악에 적합한 <strong>1.5~2초 RT60</strong>로 의도적 설계됩니다.
                 너무 짧으면 음악이 메마르고(드라이), 너무 길면 흐려져서 명료도가 떨어집니다.
                 예술의전당·세종문화회관 같은 한국 주요 콘서트홀은 약 1.8초로 조정되어 있습니다.

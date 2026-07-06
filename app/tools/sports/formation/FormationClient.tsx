@@ -232,7 +232,7 @@ export default function FormationClient() {
 
       {/* ── 인원 수 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>👥 인원 수</div>
+        <div className={s.cardLabel}>인원 수</div>
         <div className={s.countRow}>
           {([5, 7, 9, 11] as const).map(n => (
             <button
@@ -253,7 +253,7 @@ export default function FormationClient() {
 
       {/* ── 포메이션 선택 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📋 포메이션 (총 {total}인 = GK 1 + 필드 {total - 1})</div>
+        <div className={s.cardLabel}>포메이션 (총 {total}인 = GK 1 + 필드 {total - 1})</div>
         <div className={s.formationGrid}>
           {formations.map(f => {
             const on = !customLines && formationId === f.id
@@ -323,7 +323,7 @@ export default function FormationClient() {
           <label className={s.labelToggleBtn}>
             <input type="checkbox" checked={showLabels}
               onChange={e => setShowLabels(e.target.checked)} />
-            <span>📍 라벨</span>
+            <span>라벨</span>
           </label>
         </div>
       </div>
@@ -487,10 +487,10 @@ export default function FormationClient() {
         <div className={s.pitchActions}>
           <button type="button" className={`${s.copyBtn} ${copied ? s.copied : ''}`}
             onClick={copyMarkdown}>
-            {copied ? '✓ 복사됨' : '📋 마크다운 복사'}
+            {copied ? '✓ 복사됨' : '마크다운 복사'}
           </button>
           <button type="button" className={s.copyBtn} onClick={downloadPng} disabled={downloading}>
-            {downloading ? '생성 중…' : '🖼️ PNG 다운로드'}
+            {downloading ? '생성 중…' : 'PNG 다운로드'}
           </button>
         </div>
       </div>
@@ -531,7 +531,7 @@ export default function FormationClient() {
 
       {/* ── 선수 명단 표 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📋 선수 명단 (클릭으로 편집)</div>
+        <div className={s.cardLabel}>선수 명단 (클릭으로 편집)</div>
         <div className={s.rosterList}>
           {positions.map(pos => {
             const p = players[pos.idx]

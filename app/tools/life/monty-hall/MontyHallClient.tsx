@@ -115,9 +115,9 @@ export default function MontyHallClient() {
   return (
     <div className={styles.wrap}>
       <div className={styles.tabs} role="tablist" aria-label="몬티 홀 모드">
-        <button type="button" role="tab" id="mh-tab-play" aria-controls="mh-panel-play" aria-selected={tab === 'play'} className={`${styles.tab} ${tab === 'play' ? styles.tabActive : ''}`} onClick={() => setTab('play')}>🎮 직접 해보기</button>
-        <button type="button" role="tab" id="mh-tab-sim" aria-controls="mh-panel-sim" aria-selected={tab === 'sim'} className={`${styles.tab} ${tab === 'sim' ? styles.tabActive : ''}`} onClick={() => setTab('sim')}>⚡ 자동 시뮬레이션</button>
-        <button type="button" role="tab" id="mh-tab-why" aria-controls="mh-panel-why" aria-selected={tab === 'why'} className={`${styles.tab} ${tab === 'why' ? styles.tabActive : ''}`} onClick={() => setTab('why')}>💡 왜 바꿔야 할까?</button>
+        <button type="button" role="tab" id="mh-tab-play" aria-controls="mh-panel-play" aria-selected={tab === 'play'} className={`${styles.tab} ${tab === 'play' ? styles.tabActive : ''}`} onClick={() => setTab('play')}>직접 해보기</button>
+        <button type="button" role="tab" id="mh-tab-sim" aria-controls="mh-panel-sim" aria-selected={tab === 'sim'} className={`${styles.tab} ${tab === 'sim' ? styles.tabActive : ''}`} onClick={() => setTab('sim')}>자동 시뮬레이션</button>
+        <button type="button" role="tab" id="mh-tab-why" aria-controls="mh-panel-why" aria-selected={tab === 'why'} className={`${styles.tab} ${tab === 'why' ? styles.tabActive : ''}`} onClick={() => setTab('why')}>왜 바꿔야 할까?</button>
       </div>
 
       {/* 탭을 모두 마운트한 채 숨김 토글 — 전환해도 플레이 전적·시뮬 설정/결과 유지 */}
@@ -620,7 +620,7 @@ function SimTab() {
 
           {/* 공유 */}
           <button type="button" className={styles.shareBtn} onClick={share}>
-            {copied ? '✓ 복사 완료!' : '📋 결과 텍스트 복사'}
+            {copied ? '✓ 복사 완료!' : '결과 텍스트 복사'}
           </button>
         </>
       )}

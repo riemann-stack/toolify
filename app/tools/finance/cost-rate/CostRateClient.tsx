@@ -361,10 +361,10 @@ export default function CostRateClient() {
               <span className={styles.cardLabelHint}>채널별로 비용 구성 다름</span>
             </div>
             <div className={styles.channelGrid} role="group" aria-label="판매 채널">
-              <button type="button" aria-pressed={channel === 'store'} className={`${styles.channelBtn} ${channel === 'store' ? styles.channelActive : ''}`}    onClick={() => selectChannel('store')}>🏪 매장</button>
-              <button type="button" aria-pressed={channel === 'delivery'} className={`${styles.channelBtn} ${channel === 'delivery' ? styles.channelActive : ''}`} onClick={() => selectChannel('delivery')}>🛵 배달</button>
-              <button type="button" aria-pressed={channel === 'pickup'} className={`${styles.channelBtn} ${channel === 'pickup' ? styles.channelActive : ''}`}   onClick={() => selectChannel('pickup')}>📦 포장</button>
-              <button type="button" aria-pressed={channel === 'all'} className={`${styles.channelBtn} ${channel === 'all' ? styles.channelActive : ''}`}      onClick={() => selectChannel('all')}>🌐 모두 비교</button>
+              <button type="button" aria-pressed={channel === 'store'} className={`${styles.channelBtn} ${channel === 'store' ? styles.channelActive : ''}`}    onClick={() => selectChannel('store')}>매장</button>
+              <button type="button" aria-pressed={channel === 'delivery'} className={`${styles.channelBtn} ${channel === 'delivery' ? styles.channelActive : ''}`} onClick={() => selectChannel('delivery')}>배달</button>
+              <button type="button" aria-pressed={channel === 'pickup'} className={`${styles.channelBtn} ${channel === 'pickup' ? styles.channelActive : ''}`}   onClick={() => selectChannel('pickup')}>포장</button>
+              <button type="button" aria-pressed={channel === 'all'} className={`${styles.channelBtn} ${channel === 'all' ? styles.channelActive : ''}`}      onClick={() => selectChannel('all')}>모두 비교</button>
             </div>
           </div>
 
@@ -663,9 +663,9 @@ export default function CostRateClient() {
                   const round1k = Math.ceil(exact / 1000) * 1000
                   const psychological = round1k - 100  // ex: 12,000 → 11,900
                   const items = [
-                    { label: '🎯 정확',   price: round100,        desc: '100원 단위 반올림' },
-                    { label: '✨ 심리가격', price: psychological,   desc: '1,000원대 심리 효과', highlight: true },
-                    { label: '⚪ 라운드', price: round1k,         desc: '1,000원 단위 정돈' },
+                    { label: '정확',   price: round100,        desc: '100원 단위 반올림' },
+                    { label: '심리가격', price: psychological,   desc: '1,000원대 심리 효과', highlight: true },
+                    { label: '라운드', price: round1k,         desc: '1,000원 단위 정돈' },
                   ]
                   return (
                     <div className={styles.priceRecGrid}>
@@ -694,7 +694,7 @@ export default function CostRateClient() {
           )}
 
           <div className={styles.warnBox}>
-            <strong>💡 업종별 권장 원가율</strong> · 한식·중식 28~35% · 양식 30~35% · 카페·디저트 25~30% · 분식 30~33% · 파인다이닝 35~40%.
+            <strong>업종별 권장 원가율</strong> · 한식·중식 28~35% · 양식 30~35% · 카페·디저트 25~30% · 분식 30~33% · 파인다이닝 35~40%.
           </div>
         </>
       )}
@@ -775,7 +775,7 @@ export default function CostRateClient() {
           </div>
 
           <div className={styles.breakEvenCard}>
-            <p className={styles.breakEvenLead}>📊 손익분기 판매량</p>
+            <p className={styles.breakEvenLead}>손익분기 판매량</p>
             {monthlyMenuStats.avgMarginPerItem > 0 ? (
               <>
                 <p className={styles.breakEvenValue}>월 {monthlyMenuStats.breakEvenItems.toLocaleString('ko-KR')}개</p>
@@ -817,7 +817,7 @@ export default function CostRateClient() {
 
       {/* 결과 복사 */}
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
     </div>
   )

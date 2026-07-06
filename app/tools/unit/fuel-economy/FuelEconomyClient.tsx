@@ -73,13 +73,13 @@ export default function FuelEconomyClient() {
           className={`${styles.tab} ${tab === 'fuel' ? styles.tabActive : ''}`}
           onClick={() => setTab('fuel')}
         >
-          ⛽ 연비 변환
+          연비 변환
         </button>
         <button
           className={`${styles.tab} ${tab === 'ev' ? styles.tabActive : ''}`}
           onClick={() => setTab('ev')}
         >
-          🔌 전기차 전비
+          전기차 전비
         </button>
       </div>
 
@@ -208,7 +208,7 @@ function FuelTab() {
                   {formatNumber(r.value)}
                 </div>
                 <span className={`${styles.copyHint} ${copied === r.id ? styles.copyHintDone : ''}`}>
-                  {copied === r.id ? '✓ 복사됨' : '📋 복사'}
+                  {copied === r.id ? '✓ 복사됨' : '복사'}
                 </span>
               </button>
             )
@@ -358,7 +358,7 @@ function EvTab() {
                   {formatNumber(r.value)}
                 </div>
                 <span className={`${styles.copyHint} ${copied === r.id ? styles.copyHintDone : ''}`}>
-                  {copied === r.id ? '✓ 복사됨' : '📋 복사'}
+                  {copied === r.id ? '✓ 복사됨' : '복사'}
                 </span>
               </button>
             )

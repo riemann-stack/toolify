@@ -211,10 +211,10 @@ export default function UrlEncodeClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'encode' ? s.tabActive : ''}`} onClick={() => setTab('encode')}>🔤 인코드/디코드</button>
-        <button className={`${s.tab} ${tab === 'parse' ? s.tabActive : ''}`}  onClick={() => setTab('parse')}>🔗 URL 분해·편집</button>
-        <button className={`${s.tab} ${tab === 'clean' ? s.tabActive : ''}`}  onClick={() => setTab('clean')}>🧹 추적 정리</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}  onClick={() => setTab('guide')}>📖 가이드</button>
+        <button className={`${s.tab} ${tab === 'encode' ? s.tabActive : ''}`} onClick={() => setTab('encode')}>인코드/디코드</button>
+        <button className={`${s.tab} ${tab === 'parse' ? s.tabActive : ''}`}  onClick={() => setTab('parse')}>URL 분해·편집</button>
+        <button className={`${s.tab} ${tab === 'clean' ? s.tabActive : ''}`}  onClick={() => setTab('clean')}>추적 정리</button>
+        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}  onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {toast && <div className={s.toast}>{toast}</div>}
@@ -224,13 +224,13 @@ export default function UrlEncodeClient() {
         <>
           {/* 옵션 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>⚙️ 옵션</span>
+            <span className={s.cardLabel}>옵션</span>
             <div className={s.optBlock}>
               <span className={s.optTitle}>모드</span>
               <div className={s.optBtnRow}>
-                <button className={`${s.optBtn} ${encMode === 'auto' ? s.optBtnActive : ''}`} onClick={() => setEncMode('auto')}>🤖 자동 감지</button>
-                <button className={`${s.optBtn} ${encMode === 'encode' ? s.optBtnActive : ''}`} onClick={() => setEncMode('encode')}>🔒 인코드</button>
-                <button className={`${s.optBtn} ${encMode === 'decode' ? s.optBtnActive : ''}`} onClick={() => setEncMode('decode')}>🔓 디코드</button>
+                <button className={`${s.optBtn} ${encMode === 'auto' ? s.optBtnActive : ''}`} onClick={() => setEncMode('auto')}>자동 감지</button>
+                <button className={`${s.optBtn} ${encMode === 'encode' ? s.optBtnActive : ''}`} onClick={() => setEncMode('encode')}>인코드</button>
+                <button className={`${s.optBtn} ${encMode === 'decode' ? s.optBtnActive : ''}`} onClick={() => setEncMode('decode')}>디코드</button>
               </div>
             </div>
 
@@ -260,7 +260,7 @@ export default function UrlEncodeClient() {
           <div className={s.splitGrid}>
             <div className={s.paneCard}>
               <div className={s.paneHeader}>
-                <span className={s.paneLabel}>📝 입력</span>
+                <span className={s.paneLabel}>입력</span>
                 <div className={s.paneActions}>
                   <span className={s.paneStat}>{formatBytes(byteLength(encInput))}</span>
                   <button className={s.smBtn} onClick={() => setEncInput('')} disabled={!encInput}>🗑️</button>
@@ -274,13 +274,13 @@ export default function UrlEncodeClient() {
                 spellCheck={false}
               />
               <p className={s.detectInfo}>
-                자동 감지: <strong>{actualMode === 'encode' ? '🔒 인코드' : '🔓 디코드'}</strong>
+                자동 감지: <strong>{actualMode === 'encode' ? '인코드' : '디코드'}</strong>
               </p>
             </div>
 
             <div className={s.paneCard}>
               <div className={s.paneHeader}>
-                <span className={s.paneLabel}>📤 결과</span>
+                <span className={s.paneLabel}>결과</span>
                 <div className={s.paneActions}>
                   {encResult && <span className={s.paneStat}>{fmtMs(encResult.ms)}</span>}
                   <button className={s.smBtn} onClick={() => copy('enc-result', encResult?.result || '')} disabled={!encResult?.result}>
@@ -317,7 +317,7 @@ export default function UrlEncodeClient() {
           {koreanAnalysis.length > 0 && (
             <div className={s.card}>
               <span className={s.cardLabel}>
-                🇰🇷 한글·이모지 UTF-8 bytes 분석 ({koreanAnalysis.length}개 글자 · {koreanAnalysis.reduce((a, b) => a + b.bytes.length, 0)} bytes)
+                한글·이모지 UTF-8 bytes 분석 ({koreanAnalysis.length}개 글자 · {koreanAnalysis.reduce((a, b) => a + b.bytes.length, 0)} bytes)
               </span>
               <table className={s.koreanTable}>
                 <thead>
@@ -346,7 +346,7 @@ export default function UrlEncodeClient() {
       {tab === 'parse' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🔗 URL 입력</span>
+            <span className={s.cardLabel}>URL 입력</span>
             <textarea
               value={parseInput}
               onChange={(e) => { guardInput(e.target.value, setParseInput); setParseInitialized(false) }}
@@ -370,7 +370,7 @@ export default function UrlEncodeClient() {
             <>
               {/* 분해 카드 */}
               <div className={s.card}>
-                <span className={s.cardLabel}>🧩 URL 구성 요소</span>
+                <span className={s.cardLabel}>URL 구성 요소</span>
                 <div className={s.partsGrid}>
                   <PartCard label="scheme" value={parsed.scheme} onCopy={() => copy('p-scheme', parsed.scheme)} copied={copiedKey === 'p-scheme'} />
                   {parsed.user && <PartCard label="user" value={parsed.user} onCopy={() => copy('p-user', parsed.user!)} copied={copiedKey === 'p-user'} />}
@@ -386,7 +386,7 @@ export default function UrlEncodeClient() {
               {/* 쿼리 편집 표 */}
               <div className={s.card}>
                 <div className={s.cardHeaderFlex}>
-                  <span className={s.cardLabel} style={{ marginBottom: 0 }}>📋 쿼리 파라미터 편집 ({editParams.length}개)</span>
+                  <span className={s.cardLabel} style={{ marginBottom: 0 }}>쿼리 파라미터 편집 ({editParams.length}개)</span>
                   <div className={s.actionRow}>
                     <button className={s.smBtn} onClick={reparseUrl}>↻ URL 다시 분석</button>
                     <button className={s.smBtn} onClick={addParam}>➕ 추가</button>
@@ -429,7 +429,7 @@ export default function UrlEncodeClient() {
                             placeholder="value"
                             className={s.paramInput}
                           />
-                          {isTracking && <span className={s.trackingBadge}>📊 추적</span>}
+                          {isTracking && <span className={s.trackingBadge}>추적</span>}
                           <button className={s.smBtn} onClick={() => removeParam(idx)} title="삭제">🗑️</button>
                         </div>
                       )
@@ -455,10 +455,10 @@ export default function UrlEncodeClient() {
               {/* 재구성 결과 */}
               <div className={s.card}>
                 <div className={s.cardHeaderFlex}>
-                  <span className={s.cardLabel} style={{ marginBottom: 0 }}>🔧 재구성된 URL</span>
+                  <span className={s.cardLabel} style={{ marginBottom: 0 }}>재구성된 URL</span>
                   <div className={s.actionRow}>
                     <button className={s.smBtn} onClick={() => copy('rebuilt', rebuiltUrl)} disabled={!rebuiltUrl}>
-                      {copiedKey === 'rebuilt' ? '✓' : '📋'} 복사
+                      {copiedKey === 'rebuilt' ? '✓ ' : ''}복사
                     </button>
                   </div>
                 </div>
@@ -479,7 +479,7 @@ export default function UrlEncodeClient() {
       {tab === 'clean' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🔗 URL 입력</span>
+            <span className={s.cardLabel}>URL 입력</span>
             <textarea
               value={cleanInput}
               onChange={(e) => guardInput(e.target.value, setCleanInput)}
@@ -498,7 +498,7 @@ export default function UrlEncodeClient() {
 
           {cleanGroups.length === 0 && !cleanResult.error && cleanInput.trim() && (
             <div className={s.emptyState}>
-              <p>✨ 추적 파라미터가 발견되지 않았습니다 — URL이 이미 깔끔합니다!</p>
+              <p>추적 파라미터가 발견되지 않았습니다 — URL이 이미 깔끔합니다!</p>
             </div>
           )}
 
@@ -506,7 +506,7 @@ export default function UrlEncodeClient() {
             <>
               {/* 빠른 액션 */}
               <div className={s.actionRow} style={{ justifyContent: 'flex-end', marginBottom: 0 }}>
-                <button className={s.actionBtn} onClick={removeAll}>🗑️ 모든 추적 제거</button>
+                <button className={s.actionBtn} onClick={removeAll}>모든 추적 제거</button>
                 <button className={s.actionBtn} onClick={restoreAll}>↩️ 원본 복원</button>
               </div>
 
@@ -550,14 +550,14 @@ export default function UrlEncodeClient() {
               <div className={s.card}>
                 <div className={s.cardHeaderFlex}>
                   <span className={s.cardLabel} style={{ marginBottom: 0 }}>
-                    ✨ 정리된 URL
+                    정리된 URL
                     {cleanResult.removedCount > 0 && (
                       <span className={s.removedBadge}>{cleanResult.removedCount}개 제거됨</span>
                     )}
                   </span>
                   <div className={s.actionRow}>
                     <button className={s.smBtn} onClick={() => copy('clean-result', cleanResult.cleanUrl)} disabled={!cleanResult.cleanUrl}>
-                      {copiedKey === 'clean-result' ? '✓' : '📋'} 복사
+                      {copiedKey === 'clean-result' ? '✓ ' : ''}복사
                     </button>
                     <button className={s.smBtn} onClick={() => download(cleanResult.cleanUrl, 'txt')} disabled={!cleanResult.cleanUrl}>💾</button>
                   </div>
@@ -589,7 +589,7 @@ export default function UrlEncodeClient() {
           {/* 추적 파라미터 사전 */}
           <div className={s.card}>
             <details>
-              <summary className={s.summaryLabel}>📚 추적 파라미터 사전 (50+ 펼치기)</summary>
+              <summary className={s.summaryLabel}>추적 파라미터 사전 (50+ 펼치기)</summary>
               <div className={s.dictionaryGrid}>
                 {TRACKING_GROUPS.map((g) => (
                   <div key={g.id} className={s.dictItem}>
@@ -611,7 +611,7 @@ export default function UrlEncodeClient() {
         <>
           {/* encodeURIComponent vs encodeURI */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🔧 encodeURIComponent vs encodeURI 비교</span>
+            <span className={s.cardLabel}>encodeURIComponent vs encodeURI 비교</span>
             <div className={s.tableWrap}>
               <table className={s.compareTable}>
                 <thead>
@@ -643,7 +643,7 @@ export default function UrlEncodeClient() {
 
           {/* RFC 3986 안전 문자 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🔠 RFC 3986 안전 문자 분류</span>
+            <span className={s.cardLabel}>RFC 3986 안전 문자 분류</span>
             <ul className={s.warnList}>
               <li><strong>Unreserved</strong> (인코드 불필요): <code className={s.codeMono}>A-Z a-z 0-9 - _ . ~</code></li>
               <li><strong>Reserved · gen-delims</strong> (URL 구조 구분자): <code className={s.codeMono}>: / ? # [ ] @</code></li>
@@ -654,7 +654,7 @@ export default function UrlEncodeClient() {
 
           {/* 한글·이모지 UTF-8 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🇰🇷 한글·이모지 UTF-8 인코딩 원리</span>
+            <span className={s.cardLabel}>한글·이모지 UTF-8 인코딩 원리</span>
             <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 12px' }}>
               ASCII 외 문자(한글·한자·이모지)는 <strong>UTF-8 멀티바이트</strong>로 변환된 후 각 바이트가 <code className={s.codeMono}>%XX</code>로 인코딩됩니다.
             </p>
@@ -692,7 +692,7 @@ export default function UrlEncodeClient() {
 
           {/* 추적 파라미터 사전 (가이드 탭에도 펼침) */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 추적 파라미터 사전 (50+)</span>
+            <span className={s.cardLabel}>추적 파라미터 사전 (50+)</span>
             <div className={s.dictionaryGrid}>
               {TRACKING_GROUPS.map((g) => (
                 <div key={g.id} className={s.dictItem}>

@@ -278,11 +278,11 @@ export default function SourdoughClient() {
       <div className={styles.tabs} role="tablist" aria-label="사워도우 계산 모드">
         <button type="button" role="tab" aria-selected={tab === 'diagnose'}
           className={`${styles.tab} ${tab === 'diagnose' ? styles.tabActive : ''}`} onClick={() => setTab('diagnose')}>
-          🔬 안정화 진단
+          안정화 진단
         </button>
         <button type="button" role="tab" aria-selected={tab === 'predict'}
           className={`${styles.tab} ${tab === 'predict' ? styles.tabActive : ''}`} onClick={() => setTab('predict')}>
-          📈 피크 시간 예측
+          피크 시간 예측
         </button>
       </div>
 
@@ -448,7 +448,7 @@ export default function SourdoughClient() {
 
             {/* 급이 스케줄러 */}
             <div className={styles.schedCard}>
-              <p className={styles.schedTitle}>📅 다음 급이 스케줄러</p>
+              <p className={styles.schedTitle}>다음 급이 스케줄러</p>
               <div className={styles.schedRow}>
                 <span className={styles.schedLabel}>마지막 급이 시각</span>
                 <div className={styles.schedInputs}>
@@ -577,7 +577,7 @@ export default function SourdoughClient() {
 
             {/* 사용 적정 타이밍 */}
             <div className={styles.useCard}>
-              <p className={styles.useLabel}>⏰ 사용 적정 타이밍</p>
+              <p className={styles.useLabel}>사용 적정 타이밍</p>
               <p className={styles.useDesc}>피크 전 30분 ~ 피크 직후 1시간이 최적 윈도우입니다</p>
               <div className={styles.useBadge}>
                 지금 급이 시 → <strong>{fmtDayClock(useStart, now)} ~ {fmtDayClock(useEnd, now)}</strong>
@@ -612,7 +612,7 @@ export default function SourdoughClient() {
 
             {/* 역산 타이머 */}
             <div className={styles.reverseCard}>
-              <p className={styles.reverseTitle}>🔁 빵 굽는 날 역산 타이머</p>
+              <p className={styles.reverseTitle}>빵 굽는 날 역산 타이머</p>
               <div className={styles.reverseRow}>
                 <span className={styles.reverseLabel}>내일 반죽 예정 시각</span>
                 <select value={bakeHour} onChange={e => setBakeHour(+e.target.value)} className={styles.schedSel}>

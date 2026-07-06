@@ -364,8 +364,8 @@ export default function FlooringClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>방 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
@@ -532,7 +532,7 @@ export default function FlooringClient() {
           {/* 비용 카드 */}
           <div className={styles.costCard}>
             <div className={styles.cardLabel} style={{ color: 'var(--accent)', marginBottom: 6 }}>
-              <span>💰 자재비 견적</span>
+              <span>자재비 견적</span>
               <span className={styles.cardLabelHint}>{fmt(effectivePrice)}원/㎡</span>
             </div>
             <div className={styles.costRow}><span>시공 면적 비용 ({fmt(dims.area)}㎡)</span><strong>{fmtKRW(calc.materialCost)}</strong></div>
@@ -632,7 +632,7 @@ export default function FlooringClient() {
           {/* 빠른 참조표 */}
           <div className={styles.card}>
             <div className={styles.cardLabel}>
-              <span>📋 평수별 빠른 참조</span>
+              <span>평수별 빠른 참조</span>
               <span className={styles.cardLabelHint}>{fl.name} ({effectiveUnitArea}㎡/{fl.unitLabel}) · 로스 {lossPct + method.loss}%</span>
             </div>
             <div style={{ overflowX: 'auto' }}>
@@ -772,7 +772,7 @@ export default function FlooringClient() {
         <>
           <div className={styles.card}>
             <div className={styles.cardLabel}>
-              <span>📋 자재 가격 가이드</span>
+              <span>자재 가격 가이드</span>
               <span className={styles.cardLabelHint}>한국 평균 (1㎡당)</span>
             </div>
             <div style={{ overflowX: 'auto' }}>
@@ -885,7 +885,7 @@ export default function FlooringClient() {
                     <td>{fmtKRW(protectCost)}</td>
                   </tr>
                   <tr className={styles.totalRowSelf}>
-                    <td>🔧 셀프 자재 합계</td>
+                    <td>셀프 자재 합계</td>
                     <td colSpan={2}></td>
                     <td>{fmtKRW(selfTotal)}</td>
                   </tr>
@@ -896,7 +896,7 @@ export default function FlooringClient() {
                     <td>{fmtKRW(proLaborTotal)}</td>
                   </tr>
                   <tr className={styles.totalRowPro}>
-                    <td>🏗️ 전문 시공 합계</td>
+                    <td>전문 시공 합계</td>
                     <td colSpan={2}></td>
                     <td>{fmtKRW(proTotal)}</td>
                   </tr>
@@ -913,7 +913,7 @@ export default function FlooringClient() {
       )}
 
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
     </div>
   )

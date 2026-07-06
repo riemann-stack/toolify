@@ -445,11 +445,11 @@ export default function StockClient() {
           <button type="button" aria-pressed={!isUsStock}
             className={`${styles.toggleBtn} ${!isUsStock ? styles.toggleActive : ''}`}
             onClick={() => setIsUsStock(false)}
-          >🇰🇷 한국 주식 (거래세 0.20%)</button>
+          >한국 주식 (거래세 0.20%)</button>
           <button type="button" aria-pressed={isUsStock}
             className={`${styles.toggleBtn} ${isUsStock ? styles.toggleActive : ''}`}
             onClick={() => setIsUsStock(true)}
-          >🇺🇸 미국 주식 (환율 + 양도세)</button>
+          >미국 주식 (환율 + 양도세)</button>
         </div>
         {isUsStock && (
           <div className={styles.twoCol} style={{ marginTop: 10 }}>
@@ -481,11 +481,11 @@ export default function StockClient() {
             <div className={styles.cardLabel}>추가 매수 입력 방식</div>
             <div className={styles.optionRow3} role="group" aria-label="추가 매수 입력 방식">
               <button type="button" aria-pressed={inputMode === 'slider'} className={`${styles.optionBtn} ${inputMode === 'slider' ? styles.optionActive : ''}`}
-                onClick={() => setInputMode('slider')}>🎚️ 슬라이더</button>
+                onClick={() => setInputMode('slider')}>슬라이더</button>
               <button type="button" aria-pressed={inputMode === 'shares'} className={`${styles.optionBtn} ${inputMode === 'shares' ? styles.optionActive : ''}`}
-                onClick={() => setInputMode('shares')}>📊 수량 기준</button>
+                onClick={() => setInputMode('shares')}>수량 기준</button>
               <button type="button" aria-pressed={inputMode === 'amount'} className={`${styles.optionBtn} ${inputMode === 'amount' ? styles.optionActive : ''}`}
-                onClick={() => setInputMode('amount')}>💰 금액 기준</button>
+                onClick={() => setInputMode('amount')}>금액 기준</button>
             </div>
 
             {inputMode === 'slider' && validBase && (
@@ -663,7 +663,7 @@ export default function StockClient() {
 
               {/* 종목 비중 */}
               <div className={styles.card}>
-                <div className={styles.cardLabel}>📊 종목 비중 점검 (선택)</div>
+                <div className={styles.cardLabel}>종목 비중 점검 (선택)</div>
                 <div className={styles.inputRow}>
                   <input className={styles.numInput} type="number" inputMode="numeric"
                     placeholder="총 자산 (만원)" value={totalAssets}
@@ -683,10 +683,10 @@ export default function StockClient() {
 
               {/* 빠른 이동 */}
               <div className={styles.actionGrid}>
-                <button className={styles.actionBtn} onClick={() => setTab('reverse')}>🎯 목표 평단 역산</button>
-                <button className={styles.actionBtn} onClick={() => setTab('dca')}>📊 분할 매수</button>
-                <button className={styles.actionBtn} onClick={() => setTab('recovery')}>📈 회복 시나리오</button>
-                <button className={styles.actionBtn} onClick={() => setTab('compare')}>⚖️ 손절 vs 물타기</button>
+                <button className={styles.actionBtn} onClick={() => setTab('reverse')}>목표 평단 역산</button>
+                <button className={styles.actionBtn} onClick={() => setTab('dca')}>분할 매수</button>
+                <button className={styles.actionBtn} onClick={() => setTab('recovery')}>회복 시나리오</button>
+                <button className={styles.actionBtn} onClick={() => setTab('compare')}>손절 vs 물타기</button>
               </div>
             </>
           ) : !validBase ? (
@@ -865,7 +865,7 @@ export default function StockClient() {
                   next.push({ price: String(Math.max(p, 1000)), amount: '100' })
                 }
                 setTranches(next)
-              }}>🤖 자동 입력 ({dcaReco.tranches}차)</button>
+              }}>자동 입력 ({dcaReco.tranches}차)</button>
             </div>
           </div>
 
@@ -1134,7 +1134,7 @@ export default function StockClient() {
               </div>
 
               <div className={styles.infoBox}>
-                <strong>💡 차이:</strong> 두 시나리오 차이는 약 {formatEok(compareResult.differenceAbs)}.
+                <strong>차이:</strong> 두 시나리오 차이는 약 {formatEok(compareResult.differenceAbs)}.
                 본 종목이 회복할 가능성이 높다면 <strong>물타기</strong>가 유리하고, 회복 못할 가능성이 높다면 <strong>손절 + 대안</strong>이 유리합니다.
                 회복 가능성을 솔직히 평가하세요.
               </div>
@@ -1142,7 +1142,7 @@ export default function StockClient() {
           )}
 
           <div className={styles.decisionBox}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, fontFamily: 'Noto Sans KR, sans-serif' }}>📋 손절 vs 물타기 결정 가이드</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, fontFamily: 'Noto Sans KR, sans-serif' }}>손절 vs 물타기 결정 가이드</h3>
             <div className={styles.decisionList}>
               <div>
                 <h4 style={{ color: '#DC2626' }}>❌ 손절 검토 신호</h4>

@@ -247,7 +247,7 @@ export default function RacePlanClient() {
         <label className={s.toggleRow}>
           <input type="checkbox" className={s.check} checked={elevOn}
             onChange={e => setElevOn(e.target.checked)} />
-          <span className={s.toggleLabel}>🏔️ 코스 고도 입력 (언덕 반영)</span>
+          <span className={s.toggleLabel}>코스 고도 입력 (언덕 반영)</span>
         </label>
         {elevOn && (
           <div className={s.elevBody}>
@@ -371,7 +371,7 @@ export default function RacePlanClient() {
 
           <div className={s.actionRow}>
             <button type="button" className={`${s.shareBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-              {copied ? '✅ 복사됨!' : '📋 플랜 복사'}
+              {copied ? '복사됨!' : '플랜 복사'}
             </button>
             <button type="button" className={s.resetBtn} onClick={reset}>초기화</button>
           </div>

@@ -361,7 +361,7 @@ export default function NationalPensionClient() {
             <span>{birthYearN}년생은 만 <strong>{startAge}세</strong>부터</span>
           </div>
           <button type="button" className={s.copyBtn} onClick={onCopy}>
-            {copied ? '✅ 복사됨' : '📋 결과 요약 복사'}
+            {copied ? '복사됨' : '결과 요약 복사'}
           </button>
         </div>
       )}
@@ -475,7 +475,7 @@ export default function NationalPensionClient() {
         href="/tools/finance/4-insurance"
         className={s.crossLink}
       >
-        🧾 4대보험 계산기 → 매달 내는 국민연금 보험료부터 확인
+        4대보험 계산기 → 매달 내는 국민연금 보험료부터 확인
       </a>
     </div>
   )

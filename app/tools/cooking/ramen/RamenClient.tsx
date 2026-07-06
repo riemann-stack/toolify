@@ -295,7 +295,7 @@ export default function RamenClient() {
 
               {/* 조리 타임라인 */}
               <div className={styles.card}>
-                <div className={styles.cardLabel}>🕐 조리 단계 타임라인 ({isCup ? '물 붓기 기준' : '면 투입 기준'})</div>
+                <div className={styles.cardLabel}>조리 단계 타임라인 ({isCup ? '물 붓기 기준' : '면 투입 기준'})</div>
                 <div className={styles.timelineList}>
                   <div className={styles.timelineRow}>
                     <span className={styles.timelineTime}>-5:00</span>
@@ -358,12 +358,12 @@ export default function RamenClient() {
 
               {/* 액션 */}
               <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={copyResult}>
-                {copied ? '✓ 복사 완료' : '📋 결과 복사 (카톡 공유)'}
+                {copied ? '✓ 복사 완료' : '결과 복사 (카톡 공유)'}
               </button>
               <div className={styles.actionGrid}>
-                <button className={styles.actionBtn} onClick={() => setTab('topping')}>🥢 토핑·시간 자세히</button>
-                <button className={styles.actionBtn} onClick={() => setTab('preset')}>🍜 라면 {RAMEN_TYPES.length}종 보기</button>
-                <button className={styles.actionBtn} onClick={() => setTab('nutrition')}>💪 영양 정보</button>
+                <button className={styles.actionBtn} onClick={() => setTab('topping')}>토핑·시간 자세히</button>
+                <button className={styles.actionBtn} onClick={() => setTab('preset')}>라면 {RAMEN_TYPES.length}종 보기</button>
+                <button className={styles.actionBtn} onClick={() => setTab('nutrition')}>영양 정보</button>
               </div>
             </>
           )}
@@ -382,7 +382,7 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}>🥢 토핑별 영향 (전체 16종)</div>
+            <div className={styles.cardLabel}>토핑별 영향 (전체 16종)</div>
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.nutritionTable}>
                 <thead>
@@ -414,7 +414,7 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}>⏱️ 면 익힘 정도별 시간</div>
+            <div className={styles.cardLabel}>면 익힘 정도별 시간</div>
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.nutritionTable}>
                 <thead>
@@ -445,7 +445,7 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.adviceBox}>
-            <strong>💡 토핑 추천 조합:</strong>
+            <strong>토핑 추천 조합:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18, fontSize: 12, color: 'var(--muted)' }}>
               <li>🥚 계란 + 🌿 대파 — 한국 표준 (영양·풍미)</li>
               <li>🍡 떡 + 🥟 만두 — 떡만두라면 (포만감 ↑)</li>
@@ -486,7 +486,7 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.adviceBox}>
-            <strong>💡 짜장·볶음·비빔면 조리법 (일반 라면과 다름):</strong>
+            <strong>짜장·볶음·비빔면 조리법 (일반 라면과 다름):</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18, fontSize: 12, color: 'var(--muted)' }}>
               <li><strong style={{ color: '#A16207' }}>짜파게티</strong>: 600ml로 끓인 후 물 8큰술(120ml) 남기고 따라낸 뒤 분말스프 + 올리브유 비빔</li>
               <li><strong style={{ color: '#A16207' }}>불닭볶음면</strong>: 600ml로 끓인 후 물 8큰술 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비빔</li>
@@ -517,7 +517,7 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}>📊 {result.ramenInfo.name} 영양 (제조사 표기 · {result.ramenInfo.servingG}g 기준)</div>
+            <div className={styles.cardLabel}>{result.ramenInfo.name} 영양 (제조사 표기 · {result.ramenInfo.servingG}g 기준)</div>
             <div style={{ overflowX: 'auto' }}>
               <table className={styles.nutritionTable}>
                 <thead>
@@ -570,7 +570,7 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}>📊 나트륨 진행 막대 (WHO 일일 권장 2g 기준)</div>
+            <div className={styles.cardLabel}>나트륨 진행 막대 (WHO 일일 권장 2g 기준)</div>
             <div className={styles.nutritionBar}>
               <div className={result.totalSodium > WHO_DAILY_SODIUM ? styles.nutritionBarFillDanger : styles.nutritionBarFillWarn}
                 style={{ width: `${Math.min(100, result.totalSodium / WHO_DAILY_SODIUM * 100)}%` }} />
@@ -581,7 +581,7 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.adviceBox}>
-            <strong>💡 라면 건강하게 먹는 팁:</strong>
+            <strong>라면 건강하게 먹는 팁:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18, fontSize: 12, color: 'var(--muted)' }}>
               <li>국물 다 먹지 X — 나트륨 약 50% 줄임</li>
               <li>단백질 토핑 추가 (계란·만두·콩) — 영양 균형</li>

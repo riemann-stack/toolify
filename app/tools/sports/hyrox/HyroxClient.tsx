@@ -108,7 +108,7 @@ export default function HyroxClient() {
     // 록스존(전환)을 마지막 행으로 추가 — 누적 합계가 예상 완주 시간과 일치하도록
     if (roxzoneSec > 0) {
       cum += roxzoneSec
-      rows.push({ label: '🔄 록스존 (전환 8회)', time: roxzoneSec, cum, isRun: false })
+      rows.push({ label: '록스존 (전환 8회)', time: roxzoneSec, cum, isRun: false })
     }
     return rows
   }, [runPaceSec, stationSec, roxzoneSec])

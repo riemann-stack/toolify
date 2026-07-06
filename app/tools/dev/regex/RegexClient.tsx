@@ -151,17 +151,17 @@ export default function RegexClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'match' ? s.tabActive : ''}`}      onClick={() => setTab('match')}>🔍 매칭</button>
-        <button className={`${s.tab} ${tab === 'replace' ? s.tabActive : ''}`}    onClick={() => setTab('replace')}>🔄 치환·분할</button>
-        <button className={`${s.tab} ${tab === 'library' ? s.tabActive : ''}`}    onClick={() => setTab('library')}>📚 패턴 라이브러리</button>
-        <button className={`${s.tab} ${tab === 'cheatsheet' ? s.tabActive : ''}`} onClick={() => setTab('cheatsheet')}>📖 치트시트</button>
+        <button className={`${s.tab} ${tab === 'match' ? s.tabActive : ''}`}      onClick={() => setTab('match')}>매칭</button>
+        <button className={`${s.tab} ${tab === 'replace' ? s.tabActive : ''}`}    onClick={() => setTab('replace')}>치환·분할</button>
+        <button className={`${s.tab} ${tab === 'library' ? s.tabActive : ''}`}    onClick={() => setTab('library')}>패턴 라이브러리</button>
+        <button className={`${s.tab} ${tab === 'cheatsheet' ? s.tabActive : ''}`} onClick={() => setTab('cheatsheet')}>치트시트</button>
       </div>
 
       {/* ═════════════ 공통: 정규식 + flags + 테스트 문자열 (탭 1·2 공유) ═════════════ */}
       {(tab === 'match' || tab === 'replace') && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🔣 정규식 패턴</span>
+            <span className={s.cardLabel}>정규식 패턴</span>
             <div className={s.patternRow}>
               <span className={s.patternSlash}>/</span>
               <input
@@ -183,7 +183,7 @@ export default function RegexClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🚩 flags ({flagsStr || '없음'})</span>
+            <span className={s.cardLabel}>flags ({flagsStr || '없음'})</span>
             <div className={s.flagsRow}>
               {ALL_FLAGS.map((f) => (
                 <label key={f.id} className={`${s.flagChip} ${flags[f.id] ? s.flagChipActive : ''}`} title={f.longDesc}>
@@ -201,7 +201,7 @@ export default function RegexClient() {
 
           <div className={s.card}>
             <span className={s.cardLabel}>
-              📝 테스트 문자열 ({fmtInt(textBytes)} / {fmtInt(MAX_INPUT_BYTES)} bytes)
+              테스트 문자열 ({fmtInt(textBytes)} / {fmtInt(MAX_INPUT_BYTES)} bytes)
             </span>
             <textarea
               value={text}
@@ -222,7 +222,7 @@ export default function RegexClient() {
       {tab === 'match' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 통계</span>
+            <span className={s.cardLabel}>통계</span>
             <p className={s.statText}>
               <strong className={s.statBig}>{fmtInt(matchResult.matches.length)}</strong>개 매치
               {' · '}실행 <strong className={matchResult.executionMs >= SLOW_THRESHOLD_MS ? s.slowText : ''}>{fmtMs(matchResult.executionMs)}</strong>
@@ -234,7 +234,7 @@ export default function RegexClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>✨ 하이라이트 미리보기</span>
+            <span className={s.cardLabel}>하이라이트 미리보기</span>
             <div className={s.previewBox}>
               {tokens.length === 1 && tokens[0].matchIndex === -1 && !built.regex ? (
                 <span className={s.muted}>정규식을 입력하면 매치가 강조됩니다.</span>
@@ -263,7 +263,7 @@ export default function RegexClient() {
           {/* 매치 카드 리스트 */}
           {matchResult.matches.length > 0 && (
             <div className={s.card}>
-              <span className={s.cardLabel}>📋 매치 상세 ({matchResult.matches.length}개)</span>
+              <span className={s.cardLabel}>매치 상세 ({matchResult.matches.length}개)</span>
               <div className={s.matchList}>
                 {matchResult.matches.slice(0, 100).map((m, i) => (
                   <div key={i} className={s.matchItem} style={{ borderLeftColor: colorForMatch(i) }}>
@@ -309,17 +309,17 @@ export default function RegexClient() {
       {tab === 'replace' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🎛️ 모드</span>
+            <span className={s.cardLabel}>모드</span>
             <div className={s.unitRow}>
-              <button className={`${s.unitBtn} ${mode === 'replace' ? s.unitBtnActive : ''}`} onClick={() => setMode('replace')}>🔄 치환</button>
-              <button className={`${s.unitBtn} ${mode === 'split' ? s.unitBtnActive : ''}`} onClick={() => setMode('split')}>✂️ 분할</button>
+              <button className={`${s.unitBtn} ${mode === 'replace' ? s.unitBtnActive : ''}`} onClick={() => setMode('replace')}>치환</button>
+              <button className={`${s.unitBtn} ${mode === 'split' ? s.unitBtnActive : ''}`} onClick={() => setMode('split')}>분할</button>
             </div>
           </div>
 
           {mode === 'replace' && (
             <>
               <div className={s.card}>
-                <span className={s.cardLabel}>🔄 치환 패턴</span>
+                <span className={s.cardLabel}>치환 패턴</span>
                 <input
                   type="text"
                   value={replacement}
@@ -329,7 +329,7 @@ export default function RegexClient() {
                   style={{ width: '100%' }}
                 />
                 <details className={s.helpDetails}>
-                  <summary>💡 치환 패턴 도움말</summary>
+                  <summary>치환 패턴 도움말</summary>
                   <ul className={s.helpList}>
                     <li><code>$&</code> — 전체 매치 (예: <code>[$&]</code> → 매치를 [..]로 감싸기)</li>
                     <li><code>$1</code> ~ <code>$9</code> — 캡처 그룹 (예: <code>(\w+)@(\w+)</code> + <code>$2/$1</code> → 도메인/유저)</li>
@@ -343,7 +343,7 @@ export default function RegexClient() {
               {replaceResult && (
                 <>
                   <div className={s.card}>
-                    <span className={s.cardLabel}>📤 치환 결과 (실행 {fmtMs(replaceResult.executionMs)})</span>
+                    <span className={s.cardLabel}>치환 결과 (실행 {fmtMs(replaceResult.executionMs)})</span>
                     <textarea
                       value={replaceResult.result}
                       readOnly
@@ -360,7 +360,7 @@ export default function RegexClient() {
           {mode === 'split' && splitResult && (
             <>
               <div className={s.card}>
-                <span className={s.cardLabel}>✂️ 분할 결과 — {fmtInt(splitResult.parts.length)}개 항목 (실행 {fmtMs(splitResult.executionMs)})</span>
+                <span className={s.cardLabel}>분할 결과 — {fmtInt(splitResult.parts.length)}개 항목 (실행 {fmtMs(splitResult.executionMs)})</span>
                 <div className={s.splitList}>
                   {splitResult.parts.slice(0, 200).map((p, i) => (
                     <div key={i} className={s.splitItem}>
@@ -383,7 +383,7 @@ export default function RegexClient() {
       {tab === 'library' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📂 카테고리</span>
+            <span className={s.cardLabel}>카테고리</span>
             <div className={s.categoryRow}>
               {CATEGORIES.map((c) => (
                 <button
@@ -420,7 +420,7 @@ export default function RegexClient() {
         <>
           {/* flags 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🚩 flags 6종</span>
+            <span className={s.cardLabel}>flags 6종</span>
             <table className={s.cheatTable}>
               <thead>
                 <tr><th scope="col">flag</th><th scope="col">의미</th><th scope="col">설명</th></tr>
@@ -473,7 +473,7 @@ export default function RegexClient() {
 
           {/* 흔한 실수 박스 */}
           <div className={s.tipBox}>
-            <p className={s.tipTitle}>💡 흔한 실수 5가지</p>
+            <p className={s.tipTitle}>흔한 실수 5가지</p>
             <ul className={s.warnList}>
               <li><strong>메타문자 escape 빠뜨림</strong> — <code>.</code>은 모든 글자, 점 자체는 <code>\.</code>로 (예: 이메일 도메인)</li>
               <li><strong>Greedy 함정</strong> — <code>&lt;.*&gt;</code>는 첫 <code>&lt;</code>부터 마지막 <code>&gt;</code>까지 → <code>&lt;.*?&gt;</code> (lazy) 사용</li>
@@ -499,7 +499,7 @@ function CodeSnippetBox({ pattern, flags, mode, replacement }: {
   const snippet = formatLangSnippet(lang, pattern, flags, mode, replacement)
   return (
     <div className={s.card}>
-      <span className={s.cardLabel}>💻 코드 스니펫</span>
+      <span className={s.cardLabel}>코드 스니펫</span>
       <div className={s.langRow}>
         {(['js', 'python', 'java', 'php'] as LangId[]).map((l) => (
           <button

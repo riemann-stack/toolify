@@ -153,13 +153,13 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
       {/* 탭 — 모바일에서도 가로 배치 */}
       <div className={styles.tabs} role="tablist" aria-label="띠·별자리 계산 모드">
         <button type="button" role="tab" aria-selected={tab === 'profile'} className={`${styles.tabBtn} ${tab === 'profile' ? styles.tabActive : ''}`} onClick={() => setTab('profile')}>
-          <span aria-hidden="true">🐯</span> 본인
+          본인
         </button>
         <button type="button" role="tab" aria-selected={tab === 'compat'} className={`${styles.tabBtn} ${tab === 'compat' ? styles.tabActiveCompat : ''}`} onClick={() => setTab('compat')}>
-          <span aria-hidden="true">💕</span> 두 사람 궁합
+          두 사람 궁합
         </button>
         <button type="button" role="tab" aria-selected={tab === 'family'} className={`${styles.tabBtn} ${tab === 'family' ? styles.tabActiveFamily : ''}`} onClick={() => setTab('family')}>
-          <span aria-hidden="true">👨‍👩‍👧</span> 가족 궁합
+          가족 궁합
         </button>
       </div>
 
@@ -204,7 +204,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               {/* ★ 통합 프로필 카드 (NEW) */}
               <div className={styles.profileCard} aria-live="polite">
                 <div className={styles.profileTitle}>
-                  🎂 {profile.year}년 {profile.month}월 {profile.day}일 (양력)
+                  {profile.year}년 {profile.month}월 {profile.day}일 (양력)
                 </div>
                 <div className={styles.profileBigRow}>
                   <div className={styles.profileBigItem}>
@@ -222,24 +222,24 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 </div>
                 <div className={styles.profileMeta}>
                   <div className={styles.profileMetaCard}>
-                    <div className={styles.profileMetaLabel}>📅 60갑자</div>
+                    <div className={styles.profileMetaLabel}>60갑자</div>
                     <div className={styles.profileMetaValue}>{profile.ganji.hanja} ({profile.ganji.hangul})</div>
                     <div className={styles.profileMetaSub}>
                       {profile.ganji.stem.element} · {profile.ganji.branch.element} 조합
                     </div>
                   </div>
                   <div className={styles.profileMetaCard}>
-                    <div className={styles.profileMetaLabel}>🌬️ 별자리 원소</div>
+                    <div className={styles.profileMetaLabel}>별자리 원소</div>
                     <div className={styles.profileMetaValue} style={{ color: profile.star.color }}>{profile.star.element}</div>
                     <div className={styles.profileMetaSub}>{profile.star.traits.join(' · ')}</div>
                   </div>
                   <div className={styles.profileMetaCard}>
-                    <div className={styles.profileMetaLabel}>✨ {profile.month}월 탄생석</div>
+                    <div className={styles.profileMetaLabel}>{profile.month}월 탄생석</div>
                     <div className={styles.profileMetaValue}>{profile.birthMonth.stone}</div>
                     <div className={styles.profileMetaSub}>🌸 {profile.birthMonth.flower} · 🎨 {profile.birthMonth.color}</div>
                   </div>
                   <div className={styles.profileMetaCard}>
-                    <div className={styles.profileMetaLabel}>🎂 만 나이 · 다음 생일</div>
+                    <div className={styles.profileMetaLabel}>만 나이 · 다음 생일</div>
                     <div className={styles.profileMetaValue}>만 {profile.ageInfo.age}세 · {profile.ageInfo.daysToBirthday === 0 ? '오늘 생일 🎉' : `D-${profile.ageInfo.daysToBirthday}`}</div>
                     <div className={styles.profileMetaSub}>환갑(만 60세): {profile.ageInfo.hwangapYear}년</div>
                   </div>
@@ -321,7 +321,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <button type="button"
                   className={`${styles.shareBtn} ${copied ? styles.copied : ''}`}
                   onClick={handleCopy}>
-                  {copied ? '✅ 복사됨' : '📋 결과 복사'}
+                  {copied ? '✅ 복사됨' : '결과 복사'}
                 </button>
               </div>
             </>
@@ -348,7 +348,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
 
             <div className={styles.twoPersonRow}>
               <div className={styles.personPanel}>
-                <div className={styles.personPanelTitle}><span aria-hidden="true">🙋</span> 나</div>
+                <div className={styles.personPanelTitle}>나</div>
                 <div className={styles.personPanelRow}>
                   <select className={styles.personPanelSelect} aria-label="나 출생 연도" value={aYear} onChange={e => setAYearC(e.target.value)}>
                     {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
@@ -370,7 +370,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 )}
               </div>
               <div className={styles.personPanel}>
-                <div className={styles.personPanelTitle}><span aria-hidden="true">👤</span> 상대</div>
+                <div className={styles.personPanelTitle}>상대</div>
                 <div className={styles.personPanelRow}>
                   <select className={styles.personPanelSelect} aria-label="상대 출생 연도" value={bYear} onChange={e => setBYearC(e.target.value)}>
                     {YEARS.map(y => <option key={y} value={y}>{y}년</option>)}
@@ -436,7 +436,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
 
               {/* 띠 궁합 */}
               <div className={styles.card}>
-                <label className={styles.cardLabel}>🐯 띠 궁합 ({compatResult.a.chinese.name} × {compatResult.b.chinese.name})</label>
+                <label className={styles.cardLabel}>띠 궁합 ({compatResult.a.chinese.name} × {compatResult.b.chinese.name})</label>
                 <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
                   <strong style={{ color: 'var(--accent)' }}>{compatResult.zodiacEval.type}</strong> 조합 — {compatResult.zodiacEval.desc}
                 </p>
@@ -444,7 +444,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
 
               {/* 별자리 원소 궁합 */}
               <div className={styles.card}>
-                <label className={styles.cardLabel}>🌬️ 별자리 원소 궁합 ({compatResult.a.star.element} × {compatResult.b.star.element})</label>
+                <label className={styles.cardLabel}>별자리 원소 궁합 ({compatResult.a.star.element} × {compatResult.b.star.element})</label>
                 <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
                   {elementSynergyText(compatResult.a.star.element, compatResult.b.star.element)}
                 </p>
@@ -465,7 +465,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
       {tab === 'family' && famLoaded && (
         <>
           <div className={styles.card}>
-            <label className={styles.cardLabel}>👨‍👩‍👧 가족 구성원 추가 <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(브라우저에 저장)</span></label>
+            <label className={styles.cardLabel}>가족 구성원 추가 <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(브라우저에 저장)</span></label>
             <div className={styles.familyAddGrid}>
               <select className={styles.personPanelSelect} aria-label="가족 관계" value={newRel} onChange={e => setNewRel(e.target.value as FamilyMember['relation'])}>
                 <option value="본인">본인</option>
@@ -504,7 +504,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
           {family.length > 0 && (
             <>
               <div className={styles.card}>
-                <label className={styles.cardLabel}>📋 가족 띠 표 ({family.length}명)</label>
+                <label className={styles.cardLabel}>가족 띠 표 ({family.length}명)</label>
                 <div className={styles.familyTableWrap}>
                   <table className={styles.familyTable}>
                     <thead>
@@ -543,7 +543,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               {/* 가족 궁합 매트릭스 */}
               {family.length >= 2 && (
                 <div className={styles.card}>
-                  <label className={styles.cardLabel}>💕 가족 궁합 매트릭스 (재미용)</label>
+                  <label className={styles.cardLabel}>가족 궁합 매트릭스 (재미용)</label>
                   <div className={styles.familyTableWrap}>
                     <table className={styles.familyTable}>
                       <thead>

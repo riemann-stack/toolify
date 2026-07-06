@@ -518,7 +518,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
         onClick={() => copy('a11y-summary',
           `텍스트: ${textHex}\n배경: ${bgHex}\n대비비: ${ratio.toFixed(2)}:1 (${grade.level})\nAA 일반: ${grade.aa_normal ? '통과' : '미달'}\nAA 큰 텍스트: ${grade.aa_large ? '통과' : '미달'}`
         )}>
-        {copiedKey === 'a11y-summary' ? '✓ 복사됨' : '📋 분석 결과 복사'}
+        {copiedKey === 'a11y-summary' ? '✓ 복사됨' : '분석 결과 복사'}
       </button>
     </>
   )
@@ -690,7 +690,7 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
           className={`${styles.copyBtn} ${copiedKey === 'pal-export' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('pal-export', exportCode)}>
-          {copiedKey === 'pal-export' ? '✓ 복사됨' : '📋 코드 복사'}
+          {copiedKey === 'pal-export' ? '✓ 복사됨' : '코드 복사'}
         </button>
       </div>
     </>
@@ -801,7 +801,7 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
           className={`${styles.copyBtn} ${copiedKey === 'css-vars' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('css-vars', cssVars)}>
-          {copiedKey === 'css-vars' ? '✓ 복사됨' : '📋 CSS 변수 복사'}
+          {copiedKey === 'css-vars' ? '✓ 복사됨' : 'CSS 변수 복사'}
         </button>
       </div>
 
@@ -813,7 +813,7 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
           className={`${styles.copyBtn} ${copiedKey === 'tw-config' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('tw-config', tailwindConfig)}>
-          {copiedKey === 'tw-config' ? '✓ 복사됨' : '📋 Tailwind 설정 복사'}
+          {copiedKey === 'tw-config' ? '✓ 복사됨' : 'Tailwind 설정 복사'}
         </button>
       </div>
 
@@ -861,7 +861,7 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
           className={`${styles.copyBtn} ${copiedKey === 'ui-css' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('ui-css', uiCss)}>
-          {copiedKey === 'ui-css' ? '✓ 복사됨' : '📋 UI CSS 복사'}
+          {copiedKey === 'ui-css' ? '✓ 복사됨' : 'UI CSS 복사'}
         </button>
       </div>
 
@@ -1005,7 +1005,7 @@ background: conic-gradient(from 0deg, ${stopStr});`
           className={`${styles.copyBtn} ${copiedKey === 'grad-css' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('grad-css', `background: ${cssGradient};`)}>
-          {copiedKey === 'grad-css' ? '✓ 복사됨' : '📋 CSS 복사'}
+          {copiedKey === 'grad-css' ? '✓ 복사됨' : 'CSS 복사'}
         </button>
       </div>
 
@@ -1034,7 +1034,7 @@ background: conic-gradient(from 0deg, ${stopStr});`
           className={`${styles.copyBtn} ${copiedKey === 'grad-vars' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('grad-vars', cssVariations)}>
-          {copiedKey === 'grad-vars' ? '✓ 복사됨' : '📋 모든 형식 복사'}
+          {copiedKey === 'grad-vars' ? '✓ 복사됨' : '모든 형식 복사'}
         </button>
       </div>
 
@@ -1258,7 +1258,7 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
                   className={`${styles.copyBtn} ${copiedKey === 'ex-css' ? styles.copied : ''}`}
                   style={{ marginTop: 10 }}
                   onClick={() => copy('ex-css', exportPalette)}>
-                  {copiedKey === 'ex-css' ? '✓ 복사됨' : '📋 CSS 복사'}
+                  {copiedKey === 'ex-css' ? '✓ 복사됨' : 'CSS 복사'}
                 </button>
               </div>
             </>

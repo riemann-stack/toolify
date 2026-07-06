@@ -404,7 +404,7 @@ export default function CapitalGainsClient() {
             <span>유효세율 <strong>{fmtPct(result.effectiveRate)}</strong></span>
           </div>
           <button type="button" className={s.copyBtn} onClick={onCopy}>
-            {copied ? '✅ 복사됨' : '📋 결과 요약 복사'}
+            {copied ? '복사됨' : '결과 요약 복사'}
           </button>
         </div>
       )}
@@ -517,7 +517,7 @@ export default function CapitalGainsClient() {
       )}
 
       <a href="/tools/finance/real-estate" className={s.crossLink}>
-        🏠 부동산 수익률 계산기 → 매도 후 실투자수익률도 함께 확인
+        부동산 수익률 계산기 → 매도 후 실투자수익률도 함께 확인
       </a>
     </div>
   )

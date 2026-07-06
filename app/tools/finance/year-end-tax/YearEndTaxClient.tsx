@@ -368,7 +368,7 @@ export default function YearEndTaxClient() {
           <span>기납부세액 <strong>{won(r.prepaidTotal)}원</strong>{r.prepaidEstimated && <span className={s.estBadge}>추정</span>}</span>
         </div>
         <button type="button" className={s.copyBtn} onClick={onCopy}>
-          {copied ? '✅ 복사됨' : '📋 결과 요약 복사'}
+          {copied ? '복사됨' : '결과 요약 복사'}
         </button>
       </div>
 
@@ -509,7 +509,6 @@ export default function YearEndTaxClient() {
       {/* ── 추가 입력 그룹 (접기) ── */}
       <details className={s.group} open>
         <summary>
-          <span className={s.groupIcon}>💳</span>
           신용카드·현금영수증
           <span className={s.groupHint}>총급여 25% 초과분 공제</span>
           <svg className={s.groupChevron} width="14" height="14" viewBox="0 0 12 12" aria-hidden>
@@ -526,7 +525,6 @@ export default function YearEndTaxClient() {
 
       <details className={s.group}>
         <summary>
-          <span className={s.groupIcon}>🏦</span>
           연금계좌·보험
           <span className={s.groupHint}>연금저축 600·합산 900만 한도</span>
           <svg className={s.groupChevron} width="14" height="14" viewBox="0 0 12 12" aria-hidden>
@@ -543,7 +541,6 @@ export default function YearEndTaxClient() {
 
       <details className={s.group}>
         <summary>
-          <span className={s.groupIcon}>🩺</span>
           의료비·교육비·기부금
           <span className={s.groupHint}>의료비 총급여 3% 초과분</span>
           <svg className={s.groupChevron} width="14" height="14" viewBox="0 0 12 12" aria-hidden>
@@ -560,7 +557,6 @@ export default function YearEndTaxClient() {
 
       <details className={s.group}>
         <summary>
-          <span className={s.groupIcon}>🏠</span>
           월세 (무주택 세대주)
           <span className={s.groupHint}>총급여 8천만 이하</span>
           <svg className={s.groupChevron} width="14" height="14" viewBox="0 0 12 12" aria-hidden>
@@ -586,7 +582,6 @@ export default function YearEndTaxClient() {
 
       <details className={s.group}>
         <summary>
-          <span className={s.groupIcon}>⚙️</span>
           고급 (경로·장애·4대보험 직접입력)
           <span className={s.groupHint}>비우면 자동 추정</span>
           <svg className={s.groupChevron} width="14" height="14" viewBox="0 0 12 12" aria-hidden>
@@ -607,7 +602,7 @@ export default function YearEndTaxClient() {
       </details>
 
       <a href="/tools/finance/salary" className={s.crossLink}>
-        💰 연봉 실수령액 계산기 → 매달 떼이는 세금·4대보험부터 확인
+        연봉 실수령액 계산기 → 매달 떼이는 세금·4대보험부터 확인
       </a>
     </div>
   )

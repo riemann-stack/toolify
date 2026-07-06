@@ -286,7 +286,7 @@ export default function Base64Client() {
           {sizeAnalysis && (
             <div className={s.card}>
               <div className={s.cardTop}>
-                <label className={s.cardLabel}>📏 사이즈 분석</label>
+                <label className={s.cardLabel}>사이즈 분석</label>
               </div>
               <div className={s.sizeRow}><span>원본 (UTF-8 바이트)</span><strong>{sizeAnalysis.origBytes.toLocaleString()} B</strong></div>
               <div className={s.sizeRow}><span>Base64 결과</span><strong>{sizeAnalysis.encBytes.toLocaleString()} B</strong></div>
@@ -326,7 +326,7 @@ export default function Base64Client() {
               {/* 파일 정보 */}
               <div className={s.card}>
                 <div className={s.cardTop}>
-                  <label className={s.cardLabel}>📁 파일 정보</label>
+                  <label className={s.cardLabel}>파일 정보</label>
                   <button className={s.clearBtn} onClick={clearFile}>다른 파일</button>
                 </div>
                 <div className={s.sizeRow}><span>파일 이름</span><strong style={{ fontFamily: 'var(--font-mono)' }}>{fileName}</strong></div>
@@ -421,7 +421,7 @@ export default function Base64Client() {
               {jwtExpInfo && (jwtExpInfo.exp || jwtExpInfo.iat) && (
                 <div className={s.card}>
                   <div className={s.cardTop}>
-                    <label className={s.cardLabel}>⏱️ 시간 클레임 분석</label>
+                    <label className={s.cardLabel}>시간 클레임 분석</label>
                   </div>
                   {jwtExpInfo.iat && (
                     <div className={s.sizeRow}>
@@ -493,7 +493,7 @@ export default function Base64Client() {
           )}
 
           <div className={s.seoCard}>
-            <p className={s.seoCardTitle}>💡 사용 팁</p>
+            <p className={s.seoCardTitle}>사용 팁</p>
             <p className={s.seoCardText}>
               <strong>Base64</strong>: 이메일·이미지 임베드 / <strong>URL-safe</strong>: JWT·URL 파라미터 /
               <strong> Hex</strong>: 해시·암호화 / <strong>URL Encoded</strong>: 쿼리 스트링 /

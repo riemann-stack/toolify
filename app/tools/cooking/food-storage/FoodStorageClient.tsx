@@ -800,7 +800,7 @@ function GuideTab() {
 
       {/* 보관 팁 */}
       <div className={s.tipCard}>
-        <div className={s.tipLabel}>📌 보관 팁</div>
+        <div className={s.tipLabel}>보관 팁</div>
         <ul className={s.tipList}>
           <li>냉장고 온도는 0~4°C, 냉동고는 -18°C 이하로 유지하세요.</li>
           <li>위험 온도대(4~60°C)에서 2시간 이상 노출된 식품은 폐기를 고려하세요.</li>

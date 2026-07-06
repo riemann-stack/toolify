@@ -895,7 +895,7 @@ export default function LoremClient() {
           </div>
 
           <div className={styles.btnRow}>
-            <button className={styles.actionBtn} onClick={handleGenerateP}>✨ 문단 생성</button>
+            <button className={styles.actionBtn} onClick={handleGenerateP}>문단 생성</button>
           </div>
 
           {pOutput && (
@@ -909,7 +909,7 @@ export default function LoremClient() {
                 <button
                   className={`${styles.copyBtn} ${copiedKey === 'p' ? styles.copied : ''}`}
                   onClick={() => copy('p', pOutput)}>
-                  {copiedKey === 'p' ? '✓ 복사됨' : '📋 전체 복사'}
+                  {copiedKey === 'p' ? '✓ 복사됨' : '전체 복사'}
                 </button>
               </div>
             </div>
@@ -946,7 +946,7 @@ export default function LoremClient() {
           </div>
 
           <div className={styles.btnRow}>
-            <button className={styles.actionBtn} onClick={handleGenerateUI}>✨ UI 요소 생성</button>
+            <button className={styles.actionBtn} onClick={handleGenerateUI}>UI 요소 생성</button>
           </div>
 
           {uiOutput.length > 0 && (
@@ -971,7 +971,7 @@ export default function LoremClient() {
                 <button
                   className={`${styles.copyBtn} ${copiedKey === 'ui-all' ? styles.copied : ''}`}
                   onClick={() => copy('ui-all', uiOutput.join('\n'))}>
-                  {copiedKey === 'ui-all' ? '✓ 복사됨' : '📋 전체 복사 (줄바꿈 구분)'}
+                  {copiedKey === 'ui-all' ? '✓ 복사됨' : '전체 복사 (줄바꿈 구분)'}
                 </button>
               </div>
             </div>
@@ -1021,7 +1021,7 @@ export default function LoremClient() {
           </div>
 
           <div className={styles.btnRow}>
-            <button className={styles.actionBtn} onClick={handleGenerateD}>✨ 데이터 생성</button>
+            <button className={styles.actionBtn} onClick={handleGenerateD}>데이터 생성</button>
           </div>
 
           {dOutput && (
@@ -1035,7 +1035,7 @@ export default function LoremClient() {
                 <button
                   className={`${styles.copyBtn} ${copiedKey === 'd' ? styles.copied : ''}`}
                   onClick={() => copy('d', dOutput)}>
-                  {copiedKey === 'd' ? '✓ 복사됨' : '📋 복사'}
+                  {copiedKey === 'd' ? '✓ 복사됨' : '복사'}
                 </button>
               </div>
             </div>
@@ -1071,7 +1071,7 @@ export default function LoremClient() {
           </div>
 
           <div className={styles.btnRow}>
-            <button className={styles.actionBtn} onClick={generateCards}>✨ 카드 목업 생성</button>
+            <button className={styles.actionBtn} onClick={generateCards}>카드 목업 생성</button>
           </div>
 
           {cards.length > 0 && (
@@ -1151,7 +1151,7 @@ export default function LoremClient() {
               <button
                 className={`${styles.copyBtn} ${copiedKey === 'ux' ? styles.copied : ''}`}
                 onClick={() => copy('ux', `[${ux.title}]\n${ux.body}\n\n${ux.primary} / ${ux.secondary}`)}>
-                {copiedKey === 'ux' ? '✓ 복사됨' : '📋 카피 복사'}
+                {copiedKey === 'ux' ? '✓ 복사됨' : '카피 복사'}
               </button>
             </div>
           </div>

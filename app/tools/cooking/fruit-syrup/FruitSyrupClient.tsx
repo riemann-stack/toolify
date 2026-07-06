@@ -288,7 +288,7 @@ export default function FruitSyrupClient() {
       )}
 
       <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} type="button" onClick={handleCopy}>
-        {copied ? '✓ 복사됨' : '📋 결과 복사'}
+        {copied ? '✓ 복사됨' : '결과 복사'}
       </button>
     </div>
   )

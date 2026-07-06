@@ -944,7 +944,7 @@ export default function RealEstateClient() {
         className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
         onClick={handleCopy}
       >
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
 
     </div>

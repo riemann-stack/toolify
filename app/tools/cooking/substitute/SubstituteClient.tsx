@@ -571,8 +571,8 @@ export default function SubstituteClient() {
 
       {/* 탭 */}
       <div className={styles.tabs} role="tablist">
-        <button role="tab" aria-selected={tab === 'search'} className={`${styles.tab} ${tab === 'search' ? styles.tabActive : ''}`} onClick={() => setTab('search')}>🔍 대체 검색</button>
-        <button role="tab" aria-selected={tab === 'browse'} className={`${styles.tab} ${tab === 'browse' ? styles.tabActive : ''}`} onClick={() => setTab('browse')}>📚 카테고리 둘러보기</button>
+        <button role="tab" aria-selected={tab === 'search'} className={`${styles.tab} ${tab === 'search' ? styles.tabActive : ''}`} onClick={() => setTab('search')}>대체 검색</button>
+        <button role="tab" aria-selected={tab === 'browse'} className={`${styles.tab} ${tab === 'browse' ? styles.tabActive : ''}`} onClick={() => setTab('browse')}>카테고리 둘러보기</button>
       </div>
 
       {tab === 'search' ? (

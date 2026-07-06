@@ -291,8 +291,8 @@ export default function RoomAreaClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>공간 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
@@ -314,7 +314,7 @@ export default function RoomAreaClient() {
                 )}
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (정사각형 가정)</p>
                 <p style={{ fontSize: 12, color: 'var(--warning)', lineHeight: 1.6, marginTop: 6, fontFamily: 'Noto Sans KR, sans-serif' }}>
-                  ⚠️ 바닥 면적은 정확하지만, 정사각형은 둘레가 가장 짧아 <strong>벽 면적이 실제보다 작게</strong> 나올 수 있어요. 도배·페인트용 벽 면적은 <strong>📏 가로×세로(m)</strong> 모드로 실측 입력을 권장합니다.
+                  ⚠️ 바닥 면적은 정확하지만, 정사각형은 둘레가 가장 짧아 <strong>벽 면적이 실제보다 작게</strong> 나올 수 있어요. 도배·페인트용 벽 면적은 <strong>가로×세로(m)</strong> 모드로 실측 입력을 권장합니다.
                 </p>
               </>
             ) : (
@@ -737,7 +737,7 @@ export default function RoomAreaClient() {
       )}
 
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
     </div>
   )

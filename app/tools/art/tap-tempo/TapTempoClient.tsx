@@ -174,7 +174,7 @@ function TapTempoTab() {
           onClick={handleLock}
           disabled={bpm == null}
         >
-          {locked ? `🔒 ${locked} 고정됨` : '🔒 BPM 고정'}
+          {locked ? `${locked} 고정됨` : 'BPM 고정'}
         </button>
         <a
           className={`${styles.ctrlBtn} ${styles.ctrlBtnLink}`}
@@ -182,7 +182,7 @@ function TapTempoTab() {
           aria-disabled={displayBpm == null}
           onClick={e => { if (displayBpm == null) e.preventDefault() }}
         >
-          🎛️ 이 BPM으로 딜레이 계산 →
+          이 BPM으로 딜레이 계산 →
         </a>
       </div>
     </div>
@@ -535,7 +535,7 @@ function RhythmTestTab() {
               <button
                 className={styles.ctrlBtn}
                 onClick={() => setTargetBpm(Math.floor(Math.random() * 121) + 60)}
-              >🎲 랜덤 BPM</button>
+              >랜덤 BPM</button>
             </div>
           </div>
 
@@ -546,7 +546,7 @@ function RhythmTestTab() {
               3. 탭 BPM과 목표 BPM의 오차로 점수가 계산됩니다
             </p>
             <button className={styles.startBtn} onClick={startTest}>
-              🎯 테스트 시작 — {targetBpm} BPM
+              테스트 시작 — {targetBpm} BPM
             </button>
           </div>
         </>
@@ -555,7 +555,7 @@ function RhythmTestTab() {
       {/* Preview phase */}
       {phase === 'preview' && (
         <div className={styles.testStageCard}>
-          <div className={styles.testStageLabel}>🔊 목표 BPM 미리 듣기</div>
+          <div className={styles.testStageLabel}>목표 BPM 미리 듣기</div>
           <div className={styles.testTarget}>{targetBpm}</div>
           <div className={styles.testTargetSub}>BPM</div>
           <div className={styles.previewDots}>
@@ -573,7 +573,7 @@ function RhythmTestTab() {
       {/* Tap phase */}
       {phase === 'tap' && (
         <div className={styles.testStageCard}>
-          <div className={styles.testStageLabel}>🎯 같은 속도로 탭하세요 — {taps.length}/8</div>
+          <div className={styles.testStageLabel}>같은 속도로 탭하세요 — {taps.length}/8</div>
           <button
             className={styles.testTapBtn}
             onPointerDown={handleTap}
@@ -629,7 +629,7 @@ function RhythmTestTab() {
           <div className={styles.resultActions}>
             <button className={styles.ctrlBtn} onClick={reset}>↺ 다시 하기</button>
             <button className={`${styles.ctrlBtn} ${shareCopied ? styles.ctrlBtnActive : ''}`} onClick={handleShare}>
-              {shareCopied ? '✓ 복사됨' : '📋 결과 복사'}
+              {shareCopied ? '✓ 복사됨' : '결과 복사'}
             </button>
           </div>
         </div>
@@ -646,13 +646,13 @@ export default function TapTempoClient() {
     <div className={styles.wrap}>
       <div className={styles.tabs}>
         <button className={`${styles.tab} ${tab === 'tap'       ? styles.tabActive : ''}`} onClick={() => setTab('tap')}>
-          👆 탭 템포
+          탭 템포
         </button>
         <button className={`${styles.tab} ${tab === 'metronome' ? styles.tabActive : ''}`} onClick={() => setTab('metronome')}>
-          🎵 메트로놈
+          메트로놈
         </button>
         <button className={`${styles.tab} ${tab === 'test'      ? styles.tabActive : ''}`} onClick={() => setTab('test')}>
-          🎯 박자감 테스트
+          박자감 테스트
         </button>
       </div>
 

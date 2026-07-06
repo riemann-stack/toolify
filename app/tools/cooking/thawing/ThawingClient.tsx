@@ -226,7 +226,7 @@ function ThawTab() {
 
       {/* ★ 한국 인기 프리셋 (NEW) */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🇰🇷 한국 인기 냉동 식품 (빠른 입력)</span>
+        <span className={s.cardLabel}>한국 인기 냉동 식품 (빠른 입력)</span>
         <div className={s.presetGrid2}>
           {KOREA_FROZEN_PRESETS.map(p => (
             <button key={p.id} className={s.presetBtn2} onClick={() => {
@@ -413,7 +413,7 @@ function ThawTab() {
           risk.level === 'warning' ? s.riskCardWarning : s.riskCardDanger
         }`}>
           <div className={s.riskHeader}>
-            <div className={s.riskTitle}>📊 식품 안전 위험도 평가</div>
+            <div className={s.riskTitle}>식품 안전 위험도 평가</div>
             <span className={s.riskBadge}
               style={{ background: `${risk.levelColor}20`, color: risk.levelColor, border: `1px solid ${risk.levelColor}55` }}>
               {risk.levelLabel}
@@ -439,7 +439,7 @@ function ThawTab() {
 
       {/* ★ 역산: 조리 시각 → 해동 시작 (NEW) */}
       <div className={s.card}>
-        <span className={s.cardLabel}>⏰ 역산: 조리 예정 시각 → 해동 시작 시각</span>
+        <span className={s.cardLabel}>역산: 조리 예정 시각 → 해동 시작 시각</span>
         <div className={s.btnGroup} style={{ marginBottom: 10 }}>
           <button className={`${s.toggleBtn} ${!reverseMode ? s.toggleActive : ''}`}
             onClick={() => setReverseMode(false)}>정방향 (지금 시작)</button>
@@ -500,7 +500,7 @@ function ThawTab() {
       )}
 
       <button className={`${s.copyBtn} ${copied ? s.copyBtnDone : ''}`} onClick={copyResult}>
-        {copied ? '✓ 복사 완료' : '📋 결과 복사'}
+        {copied ? '✓ 복사 완료' : '결과 복사'}
       </button>
     </div>
   )
@@ -538,7 +538,7 @@ function FreezeTab() {
     <div className={s.wrap}>
       {/* 한국 인기 프리셋 — 해동과 동일 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🇰🇷 한국 인기 냉동 식품 (빠른 입력)</span>
+        <span className={s.cardLabel}>한국 인기 냉동 식품 (빠른 입력)</span>
         <div className={s.presetGrid2}>
           {KOREA_FROZEN_PRESETS.map(p => (
             <button key={p.id} className={s.presetBtn2} onClick={() => {
@@ -701,7 +701,7 @@ function ThermometerBox() {
   return (
     <div className={s.thermBox}>
       <div className={s.thermHeader}>
-        <div className={s.cardTitle} style={{ marginBottom: 0 }}>🌡️ 식품 안전 온도 구간</div>
+        <div className={s.cardTitle} style={{ marginBottom: 0 }}>식품 안전 온도 구간</div>
         <span className={s.thermRule}>⚠ 2시간 규칙 · 위험 온도대 2시간 초과 노출 시 폐기 권장</span>
       </div>
       <svg className={s.thermSvg} viewBox="0 0 560 80" preserveAspectRatio="xMidYMid meet" role="img" aria-label="식품 안전 온도 구간 도해">
@@ -788,15 +788,15 @@ export default function ThawingClient() {
         <button
           className={`${s.tab} ${tab === 'thaw' ? s.tabThawActive : ''}`}
           onClick={() => setTab('thaw')}
-        >🔥 해동</button>
+        >해동</button>
         <button
           className={`${s.tab} ${tab === 'freeze' ? s.tabFreezeActive : ''}`}
           onClick={() => setTab('freeze')}
-        >🧊 냉동</button>
+        >냉동</button>
         <button
           className={`${s.tab} ${tab === 'guide' ? s.tabGuideActive : ''}`}
           onClick={() => setTab('guide')}
-        >📖 식품별 가이드</button>
+        >식품별 가이드</button>
       </div>
 
       {/* 모든 탭을 마운트 유지 — 탭 전환 시 입력값 보존 (display 토글) */}

@@ -179,7 +179,7 @@ export default function VinDecoderClient() {
 
               {/* 해석 결과 카드 */}
               <div className={styles.card} aria-live="polite">
-                <span className={styles.cardLabel}>🚗 VIN 해석 결과</span>
+                <span className={styles.cardLabel}>VIN 해석 결과</span>
                 <div className={styles.resultList}>
                   {/* WMI */}
                   <div className={styles.resRow}>
@@ -272,7 +272,7 @@ export default function VinDecoderClient() {
                   onClick={saveCurrent}
                   style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 14,
                     border: '1px solid var(--border)', borderRadius: 8, padding: '8px 12px', color: savedFlash ? '#059669' : 'var(--muted)' }}>
-                  {savedFlash ? '✓ 이 브라우저에 저장됨' : '📌 최근 조회에 저장 (이 브라우저에만)'}
+                  {savedFlash ? '✓ 이 브라우저에 저장됨' : '최근 조회에 저장 (이 브라우저에만)'}
                 </button>
               </div>
             </>
@@ -315,7 +315,7 @@ export default function VinDecoderClient() {
 
           {/* VIN 위치 / vs 번호판 안내 */}
           <div className={styles.infoCard}>
-            <p className={styles.infoTitle}>🔍 차대번호(VIN)는 어디에 있나요?</p>
+            <p className={styles.infoTitle}>차대번호(VIN)는 어디에 있나요?</p>
             <ul className={styles.infoList}>
               <li>운전석 <strong>앞유리 하단</strong>(대시보드 끝)에서 밖으로 보이는 금속판</li>
               <li>운전석 <strong>도어를 열면 보이는 안쪽 스티커</strong></li>
@@ -324,7 +324,7 @@ export default function VinDecoderClient() {
             </ul>
           </div>
           <div className={styles.infoCard}>
-            <p className={styles.infoTitle}>📌 차대번호(VIN) vs 차량번호(번호판)</p>
+            <p className={styles.infoTitle}>차대번호(VIN) vs 차량번호(번호판)</p>
             <ul className={styles.infoList}>
               <li><strong>차대번호(VIN):</strong> 차량 고유 식별번호 · 17자리 · 영구 불변</li>
               <li><strong>차량번호(번호판):</strong> 등록 번호 · 이전·말소 시 변경 가능</li>

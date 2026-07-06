@@ -12,9 +12,9 @@ import {
 type TabId = 'main' | 'alt' | 'symptom'
 
 const TABS: { id: TabId; label: string }[] = [
-  { id: 'main',    label: '🧮 오늘 점수' },
-  { id: 'alt',     label: '🔄 대체 음식' },
-  { id: 'symptom', label: '🩺 증상 대처' },
+  { id: 'main',    label: '오늘 점수' },
+  { id: 'alt',     label: '대체 음식' },
+  { id: 'symptom', label: '증상 대처' },
 ]
 
 export default function FartRiskClient() {
@@ -159,7 +159,7 @@ function MainTab() {
         <>
           {/* 히어로 */}
           <div className={s.heroCard} role="status" aria-live="polite" style={{ borderColor: result.riskColor + 'aa', background: result.riskColor + '14' }}>
-            <div className={s.heroLabel}><span aria-hidden="true">💨 </span>오늘의 가스 리스크</div>
+            <div className={s.heroLabel}>오늘의 가스 리스크</div>
             <div className={s.heroScore} style={{ color: result.riskColor }}>{result.total}<span className={s.heroUnit}>점</span></div>
             <div className={s.heroRiskBadge} style={{ color: result.riskColor, borderColor: result.riskColor + '55' }}>
               {result.riskLabel}
@@ -168,7 +168,7 @@ function MainTab() {
 
           {/* 3축 점수 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 3축 점수</span>
+            <span className={s.cardLabel}>3축 점수</span>
             {[
               { label: '💨 가스량',    val: result.gas,   color: '#0EA5E9' },
               { label: '🦨 냄새',      val: result.smell, color: '#E11D48' },
@@ -210,7 +210,7 @@ function MainTab() {
           {/* 음식 TOP 3 */}
           {result.topFoods.length > 0 && (
             <div className={s.card}>
-              <span className={s.cardLabel}>🏆 원인 음식 TOP {result.topFoods.length}</span>
+              <span className={s.cardLabel}>원인 음식 TOP {result.topFoods.length}</span>
               <div className={s.topList}>
                 {result.topFoods.map((f, i) => (
                   <div key={f.id} className={s.topRow}>
@@ -248,25 +248,25 @@ function MainTab() {
 
           {/* 완화 팁 */}
           <div className={s.tipCard}>
-            <div className={s.tipHead}>💡 완화 팁</div>
-            <p className={s.tipSubHead}>✅ 즉시</p>
+            <div className={s.tipHead}>완화 팁</div>
+            <p className={s.tipSubHead}>즉시</p>
             <ul className={s.tipUl}>
               <li>식후 10~15분 가벼운 산책</li>
               <li>따뜻한 물 또는 페퍼민트차·생강차</li>
               <li>무릎 당기기 스트레칭 (가스 배출)</li>
             </ul>
-            <p className={s.tipSubHead} style={{ marginTop: 10 }}>✅ 다음 식사</p>
+            <p className={s.tipSubHead} style={{ marginTop: 10 }}>다음 식사</p>
             <ul className={s.tipUl}>
               {result.primaryTypes.some(p => p.type === 'fermentation') && <li>양파·마늘·콩류·인공감미료 양 ↓</li>}
               {result.primaryTypes.some(p => p.type === 'lactose') && <li>유제품 → 락토프리 또는 식물성 음료</li>}
               {result.primaryTypes.some(p => p.type === 'air') && <li>탄산 대신 물·따뜻한 차</li>}
               {result.primaryTypes.some(p => p.type === 'slow') && <li>식사량 ↓, 천천히 씹기 (한 입 30회)</li>}
               {result.primaryTypes.some(p => p.type === 'smell') && <li>황 성분(계란·고기·브로콜리) 양 조절</li>}
-              <li>본 도구의 [🔄 대체 음식] 탭에서 저FODMAP 대체 확인</li>
+              <li>본 도구의 [대체 음식] 탭에서 저FODMAP 대체 확인</li>
             </ul>
             {result.riskLevel === 'extreme' && (
               <p className={s.tipWarn}>
-                ⚠️ 폭탄급 — 좁은 공간 피하고 환기. 본 도구의 [🩺 증상 대처] 탭 활용.
+                ⚠️ 폭탄급 — 좁은 공간 피하고 환기. 본 도구의 [증상 대처] 탭 활용.
               </p>
             )}
           </div>
@@ -274,7 +274,7 @@ function MainTab() {
           {/* 액션 */}
           <div className={s.actionRow}>
             <button type="button" className={`${s.shareBtn} ${copied ? s.copied : ''}`} onClick={handleShare}>
-              {copied ? '✅ 복사됨!' : '오늘 점수 공유 💨'}
+              {copied ? '✅ 복사됨!' : '오늘 점수 공유'}
             </button>
             <button type="button" className={s.resetBtn} onClick={reset}>다시 계산</button>
           </div>
@@ -342,7 +342,7 @@ function AlternativeTab() {
       ))}
 
       <div className={s.tipCard}>
-        <div className={s.tipHead}>💡 저FODMAP 대체 사용 가이드</div>
+        <div className={s.tipHead}>저FODMAP 대체 사용 가이드</div>
         <ul className={s.tipUl}>
           <li>새 음식 시도 시 <strong>소량부터</strong> 시작</li>
           <li>한 번에 여러 변경 X — 효과 구분 어려움</li>
@@ -403,13 +403,13 @@ function SymptomTab() {
           </div>
           <div className={s.symGrid}>
             <div>
-              <p className={s.symSubHead} style={{ color: '#0891B2' }}>✅ 즉시</p>
+              <p className={s.symSubHead} style={{ color: '#0891B2' }}>즉시</p>
               <ul className={s.tipUl}>
                 {sym.immediate.map((t, i) => <li key={i}>{t}</li>)}
               </ul>
             </div>
             <div>
-              <p className={s.symSubHead} style={{ color: 'var(--accent)' }}>✅ 다음 식사</p>
+              <p className={s.symSubHead} style={{ color: 'var(--accent)' }}>다음 식사</p>
               <ul className={s.tipUl}>
                 {sym.nextMeal.map((t, i) => <li key={i}>{t}</li>)}
               </ul>

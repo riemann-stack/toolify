@@ -14,9 +14,9 @@ import {
 type Tab = 'plan' | 'split' | 'date'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'plan',    name: '식단 조절',   icon: '🥗' },
-  { id: 'split',   name: '식단+운동',   icon: '🍽️' },
-  { id: 'date',    name: '목표일 기준', icon: '📅' },
+  { id: 'plan',    name: '식단 조절',   icon: '' },
+  { id: 'split',   name: '식단+운동',   icon: '' },
+  { id: 'date',    name: '목표일 기준', icon: '' },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
@@ -304,7 +304,7 @@ export default function WeightLossClient() {
           🔴 <strong>계산 불가</strong> — 선택한 감량 속도의 하루 적자({fmt(plan.dailyDeficit)}kcal)가 TDEE({fmt(td)}kcal)를 초과해 <strong>목표 섭취 칼로리가 0 이하</strong>가 됩니다. 물리적으로 불가능한 계획이므로, 더 느린 감량 속도를 선택하거나 TDEE를 확인하세요.
           <button type="button" className={styles.copyBtn} style={{ marginTop: 10 }}
             onClick={() => setSpeedId('slow')}>
-            ✨ 안정 감량(0.5%/주)으로 변경
+            안정 감량(0.5%/주)으로 변경
           </button>
         </div>
       )}
@@ -344,7 +344,7 @@ export default function WeightLossClient() {
             <div className={styles.heroSub}>
               주당 {fmt1(plan.weeklyLossKg)}kg · 하루 적자 {fmt(plan.dailyDeficit)}kcal · 목표 섭취 {fmt(plan.targetDailyCalories)}kcal/일
             </div>
-            <div className={styles.heroDate}>📅 종료일: {formatDateKo(plan.endDate)}</div>
+            <div className={styles.heroDate}>종료일: {formatDateKo(plan.endDate)}</div>
             <div style={{ marginTop: 12 }}>
               <span className={`${styles.severityBadge} ${SEVERITY_CLASS[plan.safety.severity]}`}>
                 {SEVERITY_LABEL[plan.safety.severity]}
@@ -388,7 +388,7 @@ export default function WeightLossClient() {
               {(plan.safety.severity === 'danger' || plan.safety.severity === 'warning') && (
                 <button type="button" className={styles.copyBtn} style={{ marginTop: 8 }}
                   onClick={() => setSpeedId('slow')}>
-                  ✨ 안정 감량(0.5%/주)으로 변경
+                  안정 감량(0.5%/주)으로 변경
                 </button>
               )}
             </div>
@@ -517,7 +517,7 @@ export default function WeightLossClient() {
           {/* 탄단지 (매크로) — 결과로 자동 표시 */}
           {macros && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>🥗 탄단지(매크로) 분배 — {fmt(plan.targetDailyCalories)}kcal/일 기준</label>
+              <label className={styles.cardLabel}>탄단지(매크로) 분배 — {fmt(plan.targetDailyCalories)}kcal/일 기준</label>
 
               {/* 단백질 목표 선택 */}
               <div className={styles.optionRow4} role="group" aria-label="단백질 목표">
@@ -583,9 +583,9 @@ export default function WeightLossClient() {
           <div className={styles.resultActions}>
             <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(`${cw}kg → ${tw}kg (${fmt1(plan.totalLossKg)}kg) / ${plan.weeksRequired}주 / 하루 적자 ${fmt(plan.dailyDeficit)}kcal / 목표 섭취 ${fmt(plan.targetDailyCalories)}kcal·일 / 종료일 ${plan.endDate}`)}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
+              {copied ? '✓ 복사됨' : '복사'}
             </button>
-            <button type="button" className={styles.copyBtn} onClick={() => setTab('split')}>🍽️ 식단+운동 분리 보기</button>
+            <button type="button" className={styles.copyBtn} onClick={() => setTab('split')}>식단+운동 분리 보기</button>
           </div>
         </>
       )}
@@ -630,7 +630,7 @@ export default function WeightLossClient() {
                 <div className={styles.heroSub}>
                   주당 {fmt1(targetDateResult.weeklyLossKg)}kg ({targetDateResult.weeklyLossPercent}%) · 목표 섭취 {fmt(targetDateResult.targetDailyCalories)}kcal/일
                 </div>
-                <div className={styles.heroDate}>📅 {formatDateKo(targetDate)}</div>
+                <div className={styles.heroDate}>{formatDateKo(targetDate)}</div>
                 <div style={{ marginTop: 12 }}>
                   <span className={`${styles.severityBadge} ${
                     targetDateResult.feasibility === 'safe' ? styles.severitySafe :

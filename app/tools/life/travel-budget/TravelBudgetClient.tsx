@@ -179,10 +179,10 @@ export default function TravelBudgetClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="여행 예산 모드">
         {([
-          { id: 'calc',     label: '✈️ 예산 계산' },
-          { id: 'cities',   label: '🌆 도시별 평균' },
-          { id: 'diagnose', label: '📊 항목 진단' },
-          { id: 'compare',  label: '⚖️ 3 스타일' },
+          { id: 'calc',     label: '예산 계산' },
+          { id: 'cities',   label: '도시별 평균' },
+          { id: 'diagnose', label: '항목 진단' },
+          { id: 'compare',  label: '3 스타일' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -282,7 +282,7 @@ export default function TravelBudgetClient() {
               </div>
             </div>
             <button className={s.autoBtn} onClick={() => fillAuto()} type="button">
-              ⚡ 도시·스타일·시즌으로 9 항목 자동 채우기
+              도시·스타일·시즌으로 9 항목 자동 채우기
             </button>
           </div>
 
@@ -469,7 +469,7 @@ export default function TravelBudgetClient() {
               type="text"
               className={s.input}
               aria-label="도시 검색"
-              placeholder="🔍 도시 검색 (예: 도쿄, 파리, 발리)"
+              placeholder="도시 검색 (예: 도쿄, 파리, 발리)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -511,7 +511,7 @@ export default function TravelBudgetClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 데이터 안내</strong>
+            <strong>데이터 안내</strong>
             <p>
               표시 금액은 <strong>1박 1인 기준 만원 단위 평균치</strong>입니다 (숙박+식비+교통/투어).<br />
               항공권은 별도 — 일본 LCC 비수기 약 25만원, 동남아 35만원, 미국·유럽 90~100만원.<br />
@@ -525,7 +525,7 @@ export default function TravelBudgetClient() {
       {tab === 'diagnose' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>📊 본인 입력 vs {city.shortName} {STYLES.find((s) => s.id === style)!.label} 평균</p>
+            <p className={s.heroLabel}>본인 입력 vs {city.shortName} {STYLES.find((s) => s.id === style)!.label} 평균</p>
             <p className={s.heroValue}>
               {vsAvgPct > 0 ? '+' : ''}<strong>{vsAvgPct.toFixed(0)}%</strong>
             </p>
@@ -581,7 +581,7 @@ export default function TravelBudgetClient() {
 
           {/* 절감 팁 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>💡 절감 가능 항목 추천</span>
+            <span className={s.cardLabel}>절감 가능 항목 추천</span>
             <div className={s.tipGrid}>
               {[
                 { emoji: '🏨', t: '숙박 절감', d: '호스텔(2~5만원)·에어비앤비·게스트하우스·유스호스텔 활용' },
@@ -677,7 +677,7 @@ export default function TravelBudgetClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 스타일 선택 팁</strong>
+            <strong>스타일 선택 팁</strong>
             <p>
               • <strong>🎒 배낭</strong>: 호스텔·로컬식·대중교통. 1인 하루 약 5~20만원, 자유로움<br />
               • <strong>🧳 중간</strong>: 3~4성 호텔·일반 식당·기본 투어. 1인 하루 약 12~40만원, 가성비 최고<br />
@@ -692,7 +692,7 @@ export default function TravelBudgetClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/life/travel-tip" className={s.crossLink}>
-        💵 해외여행 팁 계산기 → 18개국 × 9 서비스 + 만족도 + 원화 환산
+        해외여행 팁 계산기 → 18개국 × 9 서비스 + 만족도 + 원화 환산
       </Link>
     </div>
   )

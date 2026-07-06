@@ -467,7 +467,7 @@ export default function LeagueScenariosClient() {
       {/* ── 이미 치른 맞대결 (승자승 정확 계산용) ── */}
       <details className={s.collapse} open={competition.needsHeadToHead && played.length > 0 ? true : undefined}>
         <summary className={s.collapseSummary}>
-          🤝 이미 치른 맞대결 결과 입력 {competition.needsHeadToHead ? '(승자승 우선 — 권장)' : '(선택)'}
+          이미 치른 맞대결 결과 입력 {competition.needsHeadToHead ? '(승자승 우선 — 권장)' : '(선택)'}
         </summary>
         <div className={s.collapseBody}>
           <p className={s.collapseHint}>
@@ -528,7 +528,7 @@ export default function LeagueScenariosClient() {
           {/* 관심 팀 시나리오 카드 */}
           {validRemaining.length > 0 && (
             <div className={s.focusCard}>
-              <p className={s.focusTitle}>⚽ {result.focusName} {advanceLabel} 시나리오</p>
+              <p className={s.focusTitle}>{result.focusName} {advanceLabel} 시나리오</p>
               {result.selfPaths.map((p, i) => (
                 <SelfPathRow key={i} path={p} focusId={focusId} nameOf={nameOf} />
               ))}
@@ -576,7 +576,7 @@ export default function LeagueScenariosClient() {
           {/* 전체 시나리오 표 */}
           {validRemaining.length > 0 && (
             <details className={s.tableDetails}>
-              <summary className={s.tableSummary}>📋 전체 시나리오 표 보기 ({result.total}가지)</summary>
+              <summary className={s.tableSummary}>전체 시나리오 표 보기 ({result.total}가지)</summary>
               <div className={`tableScroll ${s.tableScroll}`}>
                 <table className={s.scenTable}>
                   <thead>

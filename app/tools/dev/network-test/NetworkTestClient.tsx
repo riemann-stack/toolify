@@ -227,7 +227,7 @@ export default function NetworkTestClient() {
 
       {/* ─── 시작 카드 ─── */}
       <div className={s.startCard}>
-        <div className={s.startTitle}>🌐 회선 종합 진단</div>
+        <div className={s.startTitle}>회선 종합 진단</div>
         <p className={s.startDesc}>
           핑·지터 20회 → 한국 주요 티켓팅 사이트 응답 → 다운로드 속도까지 약 <strong>15~30초</strong> 소요.
           티켓팅·수강신청에 적합한 회선인지 종합 판정.
@@ -294,7 +294,7 @@ export default function NetworkTestClient() {
       {/* ─── 핑·지터 결과 ─── */}
       {latency && latency.samples.length > 0 && (
         <div className={s.card}>
-          <div className={s.cardLabel}>📡 회선 응답 시간 (User → youtil Edge·서울)</div>
+          <div className={s.cardLabel}>회선 응답 시간 (User → youtil Edge·서울)</div>
           <div className={s.statGrid}>
             <div className={s.statBox} style={{ borderColor: `${rateLatency(latency.min).color}66` }}>
               <div className={s.statLabel}>최소 핑</div>
@@ -340,7 +340,7 @@ export default function NetworkTestClient() {
       {/* ─── 사이트 응답 ─── */}
       {sites.length > 0 && (
         <div className={s.card}>
-          <div className={s.cardLabel}>🎯 한국 주요 티켓팅 사이트 응답 시간</div>
+          <div className={s.cardLabel}>한국 주요 티켓팅 사이트 응답 시간</div>
           <p className={s.note}>
             ⚠️ 측정값은 <strong>「내 브라우저 → youtil Edge → 사이트」</strong>의 총 왕복 시간입니다.
             실제 티켓팅 시 「내 브라우저 → 사이트」 직접 경로와 다를 수 있습니다.
@@ -375,7 +375,7 @@ export default function NetworkTestClient() {
       {/* ─── 다운로드 속도 ─── */}
       {download && (
         <div className={s.card}>
-          <div className={s.cardLabel}>⬇️ 다운로드 속도</div>
+          <div className={s.cardLabel}>다운로드 속도</div>
           <div className={s.dlMain}>
             <div className={s.dlNum} style={{ color: rateSpeed(download.mbps).color }}>
               {download.mbps.toFixed(1)}<span>Mbps</span>
@@ -409,7 +409,7 @@ export default function NetworkTestClient() {
 
       {/* ─── 사용 가이드 ─── */}
       <div className={s.guideCard}>
-        <div className={s.cardLabel}>💡 측정값 해석 가이드</div>
+        <div className={s.cardLabel}>측정값 해석 가이드</div>
         <ul className={s.guideList}>
           <li><strong>핑(Latency)</strong> — 요청 후 응답까지 시간. 티켓팅에서 <strong>가장 중요</strong>. 50ms 이하 권장</li>
           <li><strong>지터(Jitter)</strong> — 핑의 변동성. 낮을수록 안정. 15ms 초과면 Wi-Fi 채널·라우터 점검</li>

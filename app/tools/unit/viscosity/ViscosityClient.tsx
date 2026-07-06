@@ -197,7 +197,7 @@ export default function ViscosityClient() {
       {tempRef === '100' && result && valid && (
         <div className={s.card}>
           <span className={s.cardLabel}>
-            🚗 SAE J300 엔진오일 등급 매칭
+            SAE J300 엔진오일 등급 매칭
             <span className={s.cardHint}>{result.cst.toFixed(2)} cSt @100°C 기준</span>
           </span>
           {saeMatches.length > 0 ? (
@@ -235,7 +235,7 @@ export default function ViscosityClient() {
       {tempRef === '40' && result && valid && (
         <div className={s.card}>
           <span className={s.cardLabel}>
-            🏭 ISO VG (3448) 산업 윤활유 등급
+            ISO VG (3448) 산업 윤활유 등급
             <span className={s.cardHint}>{result.cst.toFixed(2)} cSt @40°C 기준</span>
           </span>
           {isoMatch ? (
@@ -267,7 +267,7 @@ export default function ViscosityClient() {
 
       {/* 자동차 오일 가이드 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🚗 자동차·산업 윤활유 가이드</span>
+        <span className={s.cardLabel}>자동차·산업 윤활유 가이드</span>
         <div className={s.oilGrid}>
           {OIL_GUIDES.map((o) => (
             <div key={o.type} className={s.oilCard}>
@@ -284,7 +284,7 @@ export default function ViscosityClient() {
 
       {/* 일상 유체 참고 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🍯 일상 유체 점도 (참고)</span>
+        <span className={s.cardLabel}>일상 유체 점도 (참고)</span>
         <div className={s.fluidList}>
           {FLUID_REFS.map((f) => (
             <div key={f.name} className={s.fluidRow}>

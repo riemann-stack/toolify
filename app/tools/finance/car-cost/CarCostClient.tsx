@@ -276,9 +276,9 @@ export default function CarCostClient() {
 
             <div className={`${s.subLabel} ${s.firstSub}`}>연료 타입</div>
             <div className={s.fuelGrid} role="group" aria-label="연료 타입">
-              <button aria-pressed={fuelType === 'gas'} className={`${s.fuelBtn} ${s.fuelGas} ${fuelType === 'gas' ? s.fuelActive : ''}`} onClick={() => setFuelType('gas')}>⛽ 가솔린/LPG</button>
-              <button aria-pressed={fuelType === 'ev'} className={`${s.fuelBtn} ${s.fuelEv} ${fuelType === 'ev' ? s.fuelActive : ''}`} onClick={() => setFuelType('ev')}>🔋 전기차</button>
-              <button aria-pressed={fuelType === 'hybrid'} className={`${s.fuelBtn} ${s.fuelHybrid} ${fuelType === 'hybrid' ? s.fuelActive : ''}`} onClick={() => setFuelType('hybrid')}>⚡ 하이브리드</button>
+              <button aria-pressed={fuelType === 'gas'} className={`${s.fuelBtn} ${s.fuelGas} ${fuelType === 'gas' ? s.fuelActive : ''}`} onClick={() => setFuelType('gas')}>가솔린/LPG</button>
+              <button aria-pressed={fuelType === 'ev'} className={`${s.fuelBtn} ${s.fuelEv} ${fuelType === 'ev' ? s.fuelActive : ''}`} onClick={() => setFuelType('ev')}>전기차</button>
+              <button aria-pressed={fuelType === 'hybrid'} className={`${s.fuelBtn} ${s.fuelHybrid} ${fuelType === 'hybrid' ? s.fuelActive : ''}`} onClick={() => setFuelType('hybrid')}>하이브리드</button>
             </div>
 
             <div className={s.subLabel}>월 주행거리</div>
@@ -602,7 +602,7 @@ export default function CarCostClient() {
 
           {/* ★ 3·5·10년 비교 카드 (NEW) */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📅 보유 기간별 총 유지비 비교</span>
+            <span className={s.cardLabel}>보유 기간별 총 유지비 비교</span>
             <div className={s.periodGrid}>
               <div className={s.periodCard}>
                 <div className={s.periodCardLabel}>3년</div>
@@ -611,7 +611,7 @@ export default function CarCostClient() {
                 {deprOn && <div className={s.periodCardIncl}>{formatKoreanCurrency(result.threeYearIncl)} (감가 포함)</div>}
               </div>
               <div className={`${s.periodCard} ${s.periodCardHighlight}`}>
-                <div className={s.periodStarBadge}>⭐ 한국 평균</div>
+                <div className={s.periodStarBadge}>한국 평균</div>
                 <div className={s.periodCardLabel}>5년</div>
                 <div className={s.periodCardExcl}>{formatKoreanCurrency(result.fiveYearExcl)}</div>
                 <div className={s.periodCardSubLabel}>감가 제외</div>
@@ -714,7 +714,7 @@ export default function CarCostClient() {
           {/* 액션 */}
           <div className={s.actionRow}>
             <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={onCopy}>
-              {copied ? '✓ 복사됨' : '📋 결과 복사하기'}
+              {copied ? '✓ 복사됨' : '결과 복사하기'}
             </button>
           </div>
         </>
@@ -814,7 +814,7 @@ export default function CarCostClient() {
           </div>
 
           <div className={s.infoBox}>
-            <strong>💡 본인 상황별 추천:</strong>
+            <strong>본인 상황별 추천:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
               <li>자금 충분 + 5년+ 보유: <strong style={{ color: 'var(--accent)' }}>현금 구매</strong></li>
               <li>자금 부족 + 5년+ 보유: <strong style={{ color: '#A16207' }}>할부</strong></li>
@@ -901,7 +901,7 @@ export default function CarCostClient() {
 
           {/* 비교 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 차종별 5년 총비용 비교</span>
+            <span className={s.cardLabel}>차종별 5년 총비용 비교</span>
             <div className={s.carCompareWrap}>
               <table className={s.carCompareTable}>
                 <thead>
@@ -981,7 +981,7 @@ export default function CarCostClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 연료 타입별 {fYears}년 총비용 (연료 + 감가)</span>
+            <span className={s.cardLabel}>연료 타입별 {fYears}년 총비용 (연료 + 감가)</span>
             <div className={s.carCompareWrap}>
               <table className={s.carCompareTable}>
                 <thead>
@@ -1016,7 +1016,7 @@ export default function CarCostClient() {
           </div>
 
           <div className={s.infoBox}>
-            <strong>💡 5년 보유 시 일반적 결론:</strong>
+            <strong>5년 보유 시 일반적 결론:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
               <li>연료비 최저: 전기 (가정 충전, 가솔린의 1/3)</li>
               <li>총비용 최저: LPG 또는 하이브리드 (감가 적음)</li>
@@ -1046,7 +1046,7 @@ export default function CarCostClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🚗 쏘카 평균 (2026 기준)</span>
+            <span className={s.cardLabel}>쏘카 평균 (2026 기준)</span>
             <div className={s.threeCol}>
               <div>
                 <div className={s.subLabel}>시간당 요금</div>
@@ -1067,7 +1067,7 @@ export default function CarCostClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 월 주행거리별 비교</span>
+            <span className={s.cardLabel}>월 주행거리별 비교</span>
             <div className={s.shareTable}>
               <div className={`${s.shareRow} ${s.headerRow}`}>
                 <span>월 주행</span><span>보유 (월)</span><span>쏘카 (월)</span><span>유리한 쪽</span>
@@ -1086,7 +1086,7 @@ export default function CarCostClient() {
           </div>
 
           <div className={s.infoBox}>
-            <strong>💡 손익분기 가이드:</strong>
+            <strong>손익분기 가이드:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
               <li>월 500km 미만: <strong style={{ color: '#9333EA' }}>쏘카·그린카 압도적 유리</strong></li>
               <li>월 500~800km: 카쉐어링 약간 유리</li>
@@ -1096,7 +1096,7 @@ export default function CarCostClient() {
           </div>
 
           <div className={s.infoBox}>
-            <strong>📍 추가 고려:</strong>
+            <strong>추가 고려:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
               <li>편의성 (즉시 사용·예약 X)</li>
               <li>짐 운반·아이 카시트</li>

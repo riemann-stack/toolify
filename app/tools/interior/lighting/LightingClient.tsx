@@ -347,8 +347,8 @@ export default function LightingClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>공간 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
@@ -496,7 +496,7 @@ export default function LightingClient() {
 
           <div className={styles.card}>
             <div className={styles.cardLabel}>
-              <span>📦 조명 추천 옵션</span>
+              <span>조명 추천 옵션</span>
               <span className={styles.cardLabelHint}>약 {fmt(calc.totalLumens)}lm 충당 조합</span>
             </div>
             <div className={styles.recOptionGrid}>
@@ -515,7 +515,7 @@ export default function LightingClient() {
           {/* 색온도 가이드 */}
           <div className={styles.colorTempCard}>
             <div className={styles.cardLabel} style={{ marginBottom: 0 }}>
-              <span>🎨 {space.name} 색온도 추천</span>
+              <span>{space.name} 색온도 추천</span>
               <span className={styles.cardLabelHint}>{space.colorTemp.min}~{space.colorTemp.max}K</span>
             </div>
             <div className={styles.colorTempBar}>
@@ -626,7 +626,7 @@ export default function LightingClient() {
           {/* 연간 전기료 비교 */}
           <div className={styles.savingCard}>
             <div className={styles.cardLabel} style={{ marginBottom: 0, color: '#059669' }}>
-              <span>💚 연간 전기료 비교</span>
+              <span>연간 전기료 비교</span>
               <span className={styles.cardLabelHint}>1일 5시간 사용 기준</span>
             </div>
             <p className={styles.savingLead}>같은 밝기를 내는 백열전구 vs LED 1년 전기료</p>
@@ -667,7 +667,7 @@ export default function LightingClient() {
         <>
           <div className={styles.card}>
             <div className={styles.cardLabel}>
-              <span>📋 공간별 종합 가이드</span>
+              <span>공간별 종합 가이드</span>
               <span className={styles.cardLabelHint}>KS A 3011 참고 · 가정용 대표값</span>
             </div>
             <div style={{ overflowX: 'auto' }}>
@@ -689,7 +689,7 @@ export default function LightingClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>💡 조명 종류별 활용</span></div>
+            <div className={styles.cardLabel}><span>조명 종류별 활용</span></div>
             <div className={styles.lightingKindGrid}>
               <div className={`${styles.lightingKindCard} ${styles.lkMain}`}>
                 <p className={styles.lkTitle}>메인 조명 (시일링·천장등)</p>
@@ -717,7 +717,7 @@ export default function LightingClient() {
 
           <div className={styles.card}>
             <div className={styles.cardLabel}>
-              <span>⚡ 루멘 vs 와트 빠른 참조</span>
+              <span>루멘 vs 와트 빠른 참조</span>
               <span className={styles.cardLabelHint}>같은 밝기 비교</span>
             </div>
             <div style={{ overflowX: 'auto' }}>
@@ -750,7 +750,7 @@ export default function LightingClient() {
       )}
 
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
     </div>
   )

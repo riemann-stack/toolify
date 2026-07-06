@@ -414,7 +414,7 @@ export default function NumberBaseClient() {
               <div className={s.baseGrid}>
                 <div className={`${s.baseCard} ${s.baseBin}`}>
                   <div className={s.baseCardHeader}>
-                    <span className={s.baseCardLabel}>🔢 2진수 (Binary)</span>
+                    <span className={s.baseCardLabel}>2진수 (Binary)</span>
                     <span className={s.basePrefix}>0b</span>
                   </div>
                   <p className={s.baseValue}>{groupBinary(conversion.binary.replace('-', ''))}{conversion.binary.startsWith('-') ? ' (negative)' : ''}</p>
@@ -424,7 +424,7 @@ export default function NumberBaseClient() {
                 </div>
                 <div className={`${s.baseCard} ${s.baseOct}`}>
                   <div className={s.baseCardHeader}>
-                    <span className={s.baseCardLabel}>🔢 8진수 (Octal)</span>
+                    <span className={s.baseCardLabel}>8진수 (Octal)</span>
                     <span className={s.basePrefix}>0o</span>
                   </div>
                   <p className={s.baseValue}>{conversion.octal}</p>
@@ -434,7 +434,7 @@ export default function NumberBaseClient() {
                 </div>
                 <div className={`${s.baseCard} ${s.baseDec}`}>
                   <div className={s.baseCardHeader}>
-                    <span className={s.baseCardLabel}>🔢 10진수 (Decimal)</span>
+                    <span className={s.baseCardLabel}>10진수 (Decimal)</span>
                     <span className={s.basePrefix}>—</span>
                   </div>
                   <p className={s.baseValue}>{conversion.decimal.toLocaleString('ko-KR')}</p>
@@ -444,7 +444,7 @@ export default function NumberBaseClient() {
                 </div>
                 <div className={`${s.baseCard} ${s.baseHex}`}>
                   <div className={s.baseCardHeader}>
-                    <span className={s.baseCardLabel}>🔢 16진수 (Hex)</span>
+                    <span className={s.baseCardLabel}>16진수 (Hex)</span>
                     <span className={s.basePrefix}>0x</span>
                   </div>
                   <p className={s.baseValue}>{groupHex(conversion.hex.replace('-', ''))}{conversion.hex.startsWith('-') ? ' (negative)' : ''}</p>
@@ -457,7 +457,7 @@ export default function NumberBaseClient() {
               {/* 의미 부여 */}
               {meanings.length > 0 && (
                 <div className={s.meaningCard}>
-                  💡 <strong>의미:</strong>
+                  <strong>의미:</strong>
                   <ul style={{ paddingLeft: 22, margin: '6px 0 0' }}>
                     {meanings.map((n, i) => <li key={i} style={{ padding: '2px 0' }}>{n}</li>)}
                   </ul>
@@ -497,7 +497,7 @@ export default function NumberBaseClient() {
               {/* 색상 연결 */}
               {isRgbCandidate && decimalValue !== null && (
                 <div className={s.meaningCard} style={{ background: 'rgba(234,88,12,0.05)', borderLeftColor: '#EA580C' }}>
-                  🎨 <strong style={{ color: '#EA580C' }}>색상 코드:</strong>
+                  <strong style={{ color: '#EA580C' }}>색상 코드:</strong>
                   &nbsp;<code style={{ background: 'var(--bg3)', padding: '2px 8px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>
                     #{decimalValue.toString(16).toUpperCase().padStart(6, '0').slice(-6)}
                   </code>
@@ -838,7 +838,7 @@ export default function NumberBaseClient() {
                 </div>
               </div>
               <div className={s.meaningCard}>
-                ✅ 결과: <strong>{learnValue.trim()}</strong>
+                결과: <strong>{learnValue.trim()}</strong>
                 <sub style={{ fontSize: 10 }}>{learnSteps.source}</sub>
                 {' '}={' '}
                 <strong>{learnSteps.dec}</strong>
@@ -882,7 +882,7 @@ export default function NumberBaseClient() {
                 </div>
               </div>
               <div className={s.meaningCard}>
-                ✅ 결과: <strong>{learnSteps.dec}</strong>
+                결과: <strong>{learnSteps.dec}</strong>
                 <sub style={{ fontSize: 10 }}>10</sub>
                 {' '}={' '}
                 {learnSteps.dec < 0 && '−'}
@@ -895,7 +895,7 @@ export default function NumberBaseClient() {
           {/* 핵심 공식 카드 */}
           <div className={s.card}>
             <div className={s.cardTop}>
-              <label className={s.cardLabel}>📚 핵심 공식 모음</label>
+              <label className={s.cardLabel}>핵심 공식 모음</label>
             </div>
             <div style={{
               background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10,

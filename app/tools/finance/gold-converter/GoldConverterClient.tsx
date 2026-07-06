@@ -38,9 +38,9 @@ const DEFAULT_PRICE: PriceInputs = {
 const PRODUCT_ORDER: GoldProduct[] = ['bar', 'krx', 'bankbook']
 
 const TABS = [
-  { k: 'convert', l: '⚖️ 단위·순도' },
-  { k: 'price',   l: '💰 가격 계산' },
-  { k: 'guide',   l: '📚 가이드' },
+  { k: 'convert', l: '단위·순도' },
+  { k: 'price',   l: '가격 계산' },
+  { k: 'guide',   l: '가이드' },
 ] as const
 
 const SPREAD_PRESETS = [3, 5, 7, 10]
@@ -235,7 +235,7 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
       <section>
         <label className={styles.label}>단위 변환 결과 <span className={styles.labelSub}>({grams.toLocaleString(undefined, { maximumFractionDigits: 4 })}g 기준)</span></label>
 
-        <p className={styles.regionTitle}>🇰🇷 한국 단위</p>
+        <p className={styles.regionTitle}>한국 단위</p>
         <div className={styles.unitGrid}>
           {koreanUnits.map((u) => {
             const value = fromGram(grams, u.key)
@@ -252,7 +252,7 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
           })}
         </div>
 
-        <p className={styles.regionTitle} style={{ marginTop: 16 }}>🌐 국제 단위</p>
+        <p className={styles.regionTitle} style={{ marginTop: 16 }}>국제 단위</p>
         <div className={styles.unitGrid}>
           {intlUnits.map((u) => {
             const value = fromGram(grams, u.key)
@@ -344,7 +344,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
     <div className={styles.panel}>
       {/* 상품 유형 — 부가세·스프레드 전제가 다름 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🏷️ 상품 유형</p>
+        <p className={styles.gapTitle}>상품 유형</p>
         <div className={styles.productRow} role="group" aria-label="금 상품 유형 선택">
           {PRODUCT_ORDER.map((pt) => (
             <button key={pt}
@@ -362,7 +362,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
 
       {/* 시세 입력 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>📈 24K 1g 시세 (KRW)</p>
+        <p className={styles.gapTitle}>24K 1g 시세 (KRW)</p>
         <p className={styles.note}>
           오늘 시세는 <a href="https://www.koreagoldx.co.kr" target="_blank" rel="noreferrer">한국금거래소</a>·<a href="https://www.komsco.com" target="_blank" rel="noreferrer">한국조폐공사</a>·은행 사이트에서 확인 후 입력하세요.
         </p>
@@ -387,7 +387,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
 
       {/* 거래 비용 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>💸 거래 비용</p>
+        <p className={styles.gapTitle}>거래 비용</p>
         <div className={styles.numberRow}>
           <label>매수-매도 스프레드</label>
           <div className={styles.presetRow} role="group" aria-label="매수-매도 스프레드 프리셋">
@@ -432,7 +432,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
         <label className={styles.label}>현재 입력 ({weight} {UNITS.find((u) => u.key === unit)?.short} {karat.toUpperCase()}) 매수·매도 가격</label>
         <div className={styles.priceCardGrid}>
           <div className={`${styles.priceCard} ${styles.priceCardBuy}`}>
-            <p className={styles.priceLabel}>📥 매수 실비용</p>
+            <p className={styles.priceLabel}>매수 실비용</p>
             <p className={styles.priceBig}>{fmtKRW(result.buyCost)}</p>
             <p className={styles.priceFull}>{fmtKRWFull(result.buyCost)}</p>
             <div className={styles.priceBreak}>
@@ -446,7 +446,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
           </div>
 
           <div className={`${styles.priceCard} ${styles.priceCardSell}`}>
-            <p className={styles.priceLabel}>📤 매도 실수령</p>
+            <p className={styles.priceLabel}>매도 실수령</p>
             <p className={styles.priceBig}>{fmtKRW(result.sellRevenue)}</p>
             <p className={styles.priceFull}>{fmtKRWFull(result.sellRevenue)}</p>
             <div className={styles.priceBreak}>
@@ -497,7 +497,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
 
       {/* 코리아 프리미엄 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🌐 코리아 프리미엄 (한국 vs 국제 시세)</p>
+        <p className={styles.gapTitle}>코리아 프리미엄 (한국 vs 국제 시세)</p>
         <div className={styles.numberRow}>
           <label>USD/KRW 환율</label>
           <CompactInput value={price.usdKrw} onChange={(n) => updatePrice('usdKrw', n)} decimal max={100_000} />
@@ -532,7 +532,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
 
       {/* 자산 합산 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>📊 자산 가치 합산기</p>
+        <p className={styles.gapTitle}>자산 가치 합산기</p>
         <p className={styles.note}>보유한 금을 모두 추가해 합계 시세 가치와 매도 시 실수령액을 확인하세요.</p>
         {assets.length === 0 && (
           <p className={styles.emptyMsg}>아직 추가된 자산이 없습니다. 아래 버튼으로 시작하세요.</p>
@@ -593,7 +593,7 @@ function GuideTab() {
     <div className={styles.panel}>
       {/* 비교표 */}
       <section>
-        <label className={styles.label}>🔍 KRX 금현물 vs 골드바 vs 금통장</label>
+        <label className={styles.label}>KRX 금현물 vs 골드바 vs 금통장</label>
         <div className={styles.comparisonGrid}>
           {[
             {
@@ -654,7 +654,7 @@ function GuideTab() {
 
       {/* 한국 인기 골드바 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🥇 한국 인기 골드바 종류</p>
+        <p className={styles.gapTitle}>한국 인기 골드바 종류</p>
         <ul className={styles.guideList}>
           <li><strong>한국조폐공사 (KOMSCO)</strong> — 정부 기관 발행. 신뢰도 최고. 1g/3.75g/10g/한냥/100g/1kg</li>
           <li><strong>한국금거래소</strong> — 다양한 무게·디자인. 카드 매수 가능.</li>
@@ -666,7 +666,7 @@ function GuideTab() {
 
       {/* 거래 비용 구조 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>💸 골드바 거래 비용 구조</p>
+        <p className={styles.gapTitle}>골드바 거래 비용 구조</p>
         <div className={styles.costFlow}>
           <div className={styles.costStep}>
             <span className={styles.costStepNum}>1</span>
@@ -697,7 +697,7 @@ function GuideTab() {
 
       {/* 관련 도구 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🔗 관련 도구</p>
+        <p className={styles.gapTitle}>관련 도구</p>
         <ul className={styles.relatedList}>
           <li><Link href="/tools/finance/vat">부가세 계산기</Link> — 부가세 역산·견적서</li>
           <li><Link href="/tools/finance/compound">복리 계산기</Link> — 금 vs 예금·주식 장기 수익 비교</li>

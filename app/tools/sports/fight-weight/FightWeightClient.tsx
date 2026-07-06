@@ -508,7 +508,7 @@ export default function FightWeightClient() {
           {/* 적정 체급 추천 */}
           {recommended.length > 0 && (
             <div className={styles.recommendCard}>
-              <p className={styles.recommendLead}>💡 적정 체급 추천</p>
+              <p className={styles.recommendLead}>적정 체급 추천</p>
               <p className={styles.recommendBody}>
                 {height > 0 && <>키 <strong>{height}cm</strong> · </>}체중 <strong>{weight}kg</strong> {gender === 'male' ? '남성' : '여성'} → {sport.label}{' '}
                 <strong>{recommended.map(c => `${c.name} (${c.limit}kg 이하)`).join(', ')}</strong> 후보 적정.
@@ -768,7 +768,7 @@ export default function FightWeightClient() {
 
       {/* 결과 복사 */}
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
     </div>
   )

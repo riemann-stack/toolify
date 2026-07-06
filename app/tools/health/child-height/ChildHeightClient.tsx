@@ -291,7 +291,7 @@ export default function ChildHeightClient() {
             className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
             onClick={copy}
           >
-            {copied ? '✓ 복사됨' : '📋 결과 복사'}
+            {copied ? '✓ 복사됨' : '결과 복사'}
           </button>
         </>
       ) : (
@@ -303,7 +303,7 @@ export default function ChildHeightClient() {
 
       {/* 간이 두배법 안내 — 계산이 아닌 텍스트 안내 */}
       <div className={styles.tipBox}>
-        <div className={styles.tipBoxTitle}>📐 간이 두배법 (참고용 · 계산 입력 아님)</div>
+        <div className={styles.tipBoxTitle}>간이 두배법 (참고용 · 계산 입력 아님)</div>
         <ul className={styles.tipBoxList}>
           <li>· 남아: <strong>만 2세 키 × 2</strong> ≈ 성인 키</li>
           <li>· 여아: <strong>만 18개월(1.5세) 키 × 2</strong> ≈ 성인 키</li>

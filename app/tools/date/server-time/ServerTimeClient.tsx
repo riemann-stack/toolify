@@ -388,7 +388,7 @@ export default function ServerTimeClient() {
 
       {/* ─── 외부 사이트 트래킹 ─── */}
       <div className={s.externalCard}>
-        <div className={s.cardLabel}>🌐 외부 사이트 서버 시간 트래킹</div>
+        <div className={s.cardLabel}>외부 사이트 서버 시간 트래킹</div>
 
         <p className={s.extNote}>
           티켓팅·신청 사이트의 <strong>HTTP <code>Date</code> 헤더</strong>를 프록시로 측정합니다.
@@ -421,7 +421,7 @@ export default function ServerTimeClient() {
             onChange={(e) => setExtAutoRefresh(e.target.checked)}
             disabled={!extUrl.trim()}
           />
-          <span>🔄 5초마다 자동 재측정</span>
+          <span>5초마다 자동 재측정</span>
         </label>
 
         <div className={s.sitePresetGrid}>
@@ -469,7 +469,7 @@ export default function ServerTimeClient() {
                 <span className={s.metaValue}>{extResult.httpStatus}</span>
               </div>
             </div>
-            <p className={s.extFinalUrl}>📍 {extResult.finalUrl}</p>
+            <p className={s.extFinalUrl}>{extResult.finalUrl}</p>
             <p className={s.extWarn}>
               ⚠️ 표시 시각은 마지막 측정값에 클라이언트 경과를 더한 추정치입니다.
               네트워크 지연·서버 처리 시간으로 ±1초 오차 가능 — 새로고침은 0.5~1초 여유를 두세요.
@@ -499,7 +499,7 @@ export default function ServerTimeClient() {
 
       {/* ─── 카운트다운 ─── */}
       <div className={s.countdownCard}>
-        <div className={s.cardLabel}>⏱️ 카운트다운 — 목표 시각까지</div>
+        <div className={s.cardLabel}>카운트다운 — 목표 시각까지</div>
 
         <div className={s.targetRow}>
           <input
@@ -518,7 +518,7 @@ export default function ServerTimeClient() {
                 if (e.target.checked) { const ctx = getAudio(); if (ctx?.state === 'suspended') ctx.resume() }
               }}
             />
-            <span>🔔 알림음 (3초·1초 전·정각)</span>
+            <span>알림음 (3초·1초 전·정각)</span>
           </label>
         </div>
 
@@ -526,7 +526,7 @@ export default function ServerTimeClient() {
           <p className={s.targetError}>형식: HH:MM 또는 HH:MM:SS (예: 14:00 또는 14:00:00)</p>
         ) : (
           <>
-            <p className={s.targetDisplay}>🎯 {targetDisplay}</p>
+            <p className={s.targetDisplay}>{targetDisplay}</p>
             <div className={`${s.cdGrid} ${cd.negative ? s.cdNegative : remainMs < 10000 ? s.cdUrgent : ''}`}>
               <div className={s.cdBox}>
                 <div className={s.cdNum}>{cd.hours}</div>
@@ -577,7 +577,7 @@ export default function ServerTimeClient() {
 
       {/* ─── 정확한 클릭 가이드 ─── */}
       <div className={s.tipCard}>
-        <div className={s.cardLabel}>💡 정확한 클릭을 위한 팁</div>
+        <div className={s.cardLabel}>정확한 클릭을 위한 팁</div>
         <ul className={s.tipList}>
           <li><strong>새로고침은 목표 시각 0.5~1초 전</strong> — 너무 빠르면 서버가 못 받음, 너무 늦으면 매진</li>
           <li><strong>F5보다 URL 직접 접속이 빠름</strong> — 브라우저 캐시 재검증 단계 X</li>

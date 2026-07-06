@@ -112,10 +112,10 @@ export default function PipeClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="배관 규격 도구 모드">
         {([
-          { id: 'convert',  label: '🔁 호칭 변환' },
-          { id: 'compare',  label: '⚖️ 재질 비교' },
-          { id: 'fitting',  label: '🔧 부속·연결' },
-          { id: 'flow',     label: '💧 유량·등급' },
+          { id: 'convert',  label: '호칭 변환' },
+          { id: 'compare',  label: '재질 비교' },
+          { id: 'fitting',  label: '부속·연결' },
+          { id: 'flow',     label: '유량·등급' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -281,7 +281,7 @@ export default function PipeClient() {
           </div>
 
           <div className={s.hero} role="status">
-            <p className={s.heroLabel}>📏 {size} ({meta.inch} · {meta.dn}) 재질별 외경 비교</p>
+            <p className={s.heroLabel}>{size} ({meta.inch} · {meta.dn}) 재질별 외경 비교</p>
             <p className={s.heroValue}><strong>최대 {fmt(odSpread, 2)} mm 차이</strong></p>
             <p className={s.heroSub}>같은 호칭이지만 재질·표준에 따라 외경 다름</p>
           </div>
@@ -396,7 +396,7 @@ export default function PipeClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>📌 시공 자격 안내</strong>
+            <strong>시공 자격 안내</strong>
             <p>
               • <strong>가스배관(도시가스·LPG)</strong>: 가스시설시공업·가스기능사 등록 사업자만 시공 가능 (자가시공 불법)<br />
               • <strong>고압·플랜트 용접</strong>: 산업기사·용접사 자격 필수<br />

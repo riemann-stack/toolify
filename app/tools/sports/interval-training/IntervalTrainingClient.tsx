@@ -555,8 +555,8 @@ export default function IntervalTrainingClient() {
               <span className={s.cardLabelHint}>VDOT 자동 계산</span>
             </div>
             <div className={s.modeToggle}>
-              <button className={`${s.modeBtn} ${s.modeRecord} ${inputMode === 'record' ? s.modeActive : ''}`} onClick={() => setInputMode('record')}>📊 최근 기록</button>
-              <button className={`${s.modeBtn} ${s.modeTarget} ${inputMode === 'target' ? s.modeActive : ''}`} onClick={() => setInputMode('target')}>🎯 목표 기록</button>
+              <button className={`${s.modeBtn} ${s.modeRecord} ${inputMode === 'record' ? s.modeActive : ''}`} onClick={() => setInputMode('record')}>최근 기록</button>
+              <button className={`${s.modeBtn} ${s.modeTarget} ${inputMode === 'target' ? s.modeActive : ''}`} onClick={() => setInputMode('target')}>목표 기록</button>
             </div>
 
             {inputMode === 'record' && (
@@ -749,7 +749,7 @@ export default function IntervalTrainingClient() {
           {/* 추천 인터벌 세션 — 거리·횟수 직접 선택 */}
           {intervalPaceSec > 0 && (
             <div className={s.recoCard}>
-              <p className={s.recoTitle}>🎯 추천 인터벌 세션</p>
+              <p className={s.recoTitle}>추천 인터벌 세션</p>
               <p className={s.recoSubLabel}>인터벌 거리와 반복 횟수를 고르면 워밍업~쿨다운 전체 세션을 정리해 드려요</p>
 
               <div className={s.customGrid}>
@@ -1095,7 +1095,7 @@ export default function IntervalTrainingClient() {
           {/* 한국 인기 대회 빠른 입력 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>📌 한국 인기 대회 빠른 선택</span>
+              <span>한국 인기 대회 빠른 선택</span>
               <span className={s.cardLabelHint}>대회까지 남은 주 자동 계산</span>
             </div>
             <div className={s.raceGrid}>
@@ -1156,9 +1156,9 @@ export default function IntervalTrainingClient() {
             <div style={{ marginTop: 14 }}>
               <span className={s.subLabel}>인터벌 경험</span>
               <div className={s.recordTabs}>
-                <button className={`${s.recordTabBtn} ${experience === 'none'    ? s.recordTabActive : ''}`} onClick={() => setExperience('none')}>❌ 없음</button>
-                <button className={`${s.recordTabBtn} ${experience === 'some'    ? s.recordTabActive : ''}`} onClick={() => setExperience('some')}>🌱 조금</button>
-                <button className={`${s.recordTabBtn} ${experience === 'regular' ? s.recordTabActive : ''}`} onClick={() => setExperience('regular')}>💪 꾸준히</button>
+                <button className={`${s.recordTabBtn} ${experience === 'none'    ? s.recordTabActive : ''}`} onClick={() => setExperience('none')}>없음</button>
+                <button className={`${s.recordTabBtn} ${experience === 'some'    ? s.recordTabActive : ''}`} onClick={() => setExperience('some')}>조금</button>
+                <button className={`${s.recordTabBtn} ${experience === 'regular' ? s.recordTabActive : ''}`} onClick={() => setExperience('regular')}>꾸준히</button>
               </div>
             </div>
 
@@ -1294,7 +1294,7 @@ export default function IntervalTrainingClient() {
           {/* 워밍업·쿨다운 공통 안내 (별도 카드) */}
           {schedule.weeks.length > 0 && (
             <div className={s.warmupCard}>
-              <p className={s.warmupTitle}>💡 모든 주차 공통</p>
+              <p className={s.warmupTitle}>모든 주차 공통</p>
               <ul className={s.warmupList}>
                 <li><strong>워밍업</strong>: 1.5km 가벼운 조깅 + 동적 스트레칭 5~10분</li>
                 <li><strong>쿨다운</strong>: 1.5km 가벼운 조깅 + 정적 스트레칭</li>

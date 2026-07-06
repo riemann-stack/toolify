@@ -14,11 +14,11 @@ import {
 type Tab = 'main' | 'cadr' | 'perf' | 'window' | 'co2'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'main',   name: '환기량 계산',   icon: '💨' },
-  { id: 'cadr',   name: '공기청정기',     icon: '🌀' },
-  { id: 'perf',   name: '성능 평가',      icon: '⚙️' },
-  { id: 'window', name: '창문 환기',      icon: '🪟' },
-  { id: 'co2',    name: 'CO₂·인원',       icon: '🫁' },
+  { id: 'main',   name: '환기량 계산',   icon: '' },
+  { id: 'cadr',   name: '공기청정기',     icon: '' },
+  { id: 'perf',   name: '성능 평가',      icon: '' },
+  { id: 'window', name: '창문 환기',      icon: '' },
+  { id: 'co2',    name: 'CO₂·인원',       icon: '' },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
@@ -266,10 +266,10 @@ export default function VentilationClient() {
           <div className={styles.resultActions}>
             <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(`${SPACE_STANDARDS.find(s => s.id === spaceTypeId)?.name} (${fmt(main.volume, 1)}㎥) → 필요 환기량 ${fmt(main.requiredAirflow)}㎥/h (${targetAch} ACH)`)}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
+              {copied ? '✓ 복사됨' : '복사'}
             </button>
-            <button type="button" className={styles.copyBtn} onClick={() => setTab('cadr')}>🌀 공기청정기 CADR</button>
-            <button type="button" className={styles.copyBtn} onClick={() => setTab('window')}>🪟 창문 환기 시간</button>
+            <button type="button" className={styles.copyBtn} onClick={() => setTab('cadr')}>공기청정기 CADR</button>
+            <button type="button" className={styles.copyBtn} onClick={() => setTab('window')}>창문 환기 시간</button>
           </div>
         </>
       )}

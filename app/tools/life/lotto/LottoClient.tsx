@@ -236,7 +236,7 @@ function GenerateTab() {
       </div>
 
       <button className={s.bigGenerate} onClick={handleGenerate}>
-        🎰 {GENERATION_MODES.find(m => m.id === mode)?.name} {gameCount}게임 생성
+        {GENERATION_MODES.find(m => m.id === mode)?.name} {gameCount}게임 생성
       </button>
 
       {/* 결과 */}
@@ -253,9 +253,9 @@ function GenerateTab() {
                   <div className={s.miniRow}>
                     <button className={s.miniBtn}
                       onClick={() => navigator.clipboard.writeText(g.numbers.join(', '))}>
-                      📋 복사
+                      복사
                     </button>
-                    <button className={s.miniBtn} onClick={() => handleSaveOne(g)}>💾 저장</button>
+                    <button className={s.miniBtn} onClick={() => handleSaveOne(g)}>저장</button>
                   </div>
                 </div>
                 <div className={s.balls}>
@@ -275,7 +275,7 @@ function GenerateTab() {
 
           <div className={s.resultActions}>
             <button className={`${s.copyBtn} ${saveConfirm ? s.copied : ''}`} onClick={handleSaveAll}>
-              {saveConfirm ? '✓ 저장됨' : '💾 저장'}
+              {saveConfirm ? '✓ 저장됨' : '저장'}
             </button>
           </div>
         </>
@@ -300,7 +300,7 @@ function SavedList({ saved, onChange }: { saved: SavedNumber[]; onChange: (next:
   return (
     <div className={s.card}>
       <label className={s.cardLabel}>
-        💾 저장된 번호
+        저장된 번호
         <span className={s.cardLabelHint}>{saved.length}개</span>
       </label>
       <div className={s.savedList}>
@@ -320,7 +320,7 @@ function SavedList({ saved, onChange }: { saved: SavedNumber[]; onChange: (next:
         })}
       </div>
       <button className={`${s.miniBtn} ${s.miniDanger}`} style={{ marginTop: 8 }} onClick={handleClear}>
-        🗑️ 모두 삭제
+        모두 삭제
       </button>
     </div>
   )
@@ -346,7 +346,7 @@ function NumberPicker({ selected, onChange }: { selected: number[]; onChange: (n
       <div className={s.pickerHead}>
         <span className={s.pickerCount}>선택 <strong style={{ color: 'var(--accent)' }}>{selected.length}</strong> / 6</span>
         <div className={s.miniRow}>
-          <button className={s.miniBtn} onClick={random}>🎲 무작위 6개</button>
+          <button className={s.miniBtn} onClick={random}>무작위 6개</button>
           <button className={s.miniBtn} onClick={clear} disabled={selected.length === 0}>전체 해제</button>
         </div>
       </div>
@@ -397,7 +397,7 @@ function AnalyzeTab() {
 
       {!ready && (
         <div className={s.empty}>
-          <div className={s.emptyTitle}>🔢 6개 번호를 모두 선택해 주세요</div>
+          <div className={s.emptyTitle}>6개 번호를 모두 선택해 주세요</div>
           <p>홀짝·저고·구간·소수·연속·간격 등 통계 패턴을 분석합니다.</p>
         </div>
       )}
@@ -537,7 +537,7 @@ function SimulatorTab() {
       </div>
 
       <button className={s.bigGenerate} onClick={handleSim} disabled={!ready || running}>
-        {running ? '시뮬레이션 중...' : `🎲 ${drawCount.toLocaleString()}회 가상 추첨`}
+        {running ? '시뮬레이션 중...' : `${drawCount.toLocaleString()}회 가상 추첨`}
       </button>
 
       {!ready && (
@@ -654,7 +654,7 @@ function JackpotTab() {
       </div>
 
       <button className={s.bigGenerate} onClick={handleSim} disabled={running}>
-        {running ? '시뮬레이션 중...' : '🎯 1등까지 시뮬레이션'}
+        {running ? '시뮬레이션 중...' : '1등까지 시뮬레이션'}
       </button>
 
       {/* 수학적 평균 안내 */}

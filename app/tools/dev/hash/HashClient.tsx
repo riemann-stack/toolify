@@ -179,17 +179,17 @@ export default function HashClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'text' ? s.tabActive : ''}`}  onClick={() => setTab('text')}>📝 텍스트</button>
-        <button className={`${s.tab} ${tab === 'file' ? s.tabActive : ''}`}  onClick={() => setTab('file')}>📁 파일</button>
-        <button className={`${s.tab} ${tab === 'hmac' ? s.tabActive : ''}`}  onClick={() => setTab('hmac')}>🔑 HMAC</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>📚 가이드</button>
+        <button className={`${s.tab} ${tab === 'text' ? s.tabActive : ''}`}  onClick={() => setTab('text')}>텍스트</button>
+        <button className={`${s.tab} ${tab === 'file' ? s.tabActive : ''}`}  onClick={() => setTab('file')}>파일</button>
+        <button className={`${s.tab} ${tab === 'hmac' ? s.tabActive : ''}`}  onClick={() => setTab('hmac')}>HMAC</button>
+        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {/* ═════════════ 탭 1: 텍스트 해시 ═════════════ */}
       {tab === 'text' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📝 입력 텍스트</span>
+            <span className={s.cardLabel}>입력 텍스트</span>
             <textarea
               value={textInput}
               onChange={(e) => setTextInput(e.target.value)}
@@ -206,7 +206,7 @@ export default function HashClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>⚙️ 옵션</span>
+            <span className={s.cardLabel}>옵션</span>
             <div className={s.optRow}>
               <div className={s.optGroup}>
                 <span className={s.optLabel}>인코딩</span>
@@ -264,7 +264,7 @@ export default function HashClient() {
 
           {/* 검증 모드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>✅ 무결성 검증 (옵션)</span>
+            <span className={s.cardLabel}>무결성 검증 (옵션)</span>
             <div className={s.verifyRow}>
               <select
                 value={verifyAlgorithm}
@@ -306,10 +306,10 @@ export default function HashClient() {
               <div key={idx} className={s.fileCard}>
                 <div className={s.fileHeader}>
                   <div className={s.fileMeta}>
-                    <p className={s.fileName}>📄 {entry.name}</p>
+                    <p className={s.fileName}>{entry.name}</p>
                     <p className={s.fileSpec}>{fmtBytes(entry.size)} · {entry.type}</p>
                   </div>
-                  <button className={s.smBtn} onClick={() => removeFile(idx)}>🗑️ 제거</button>
+                  <button className={s.smBtn} onClick={() => removeFile(idx)}>제거</button>
                 </div>
                 {isLarge && entry.computing && (
                   <p className={s.warnText}>⚠️ 100MB 초과 — 메모리 사용↑, 시간 소요. 잠시 기다려 주세요.</p>
@@ -364,7 +364,7 @@ export default function HashClient() {
       {tab === 'hmac' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🔑 HMAC 알고리즘</span>
+            <span className={s.cardLabel}>HMAC 알고리즘</span>
             <div className={s.algRow}>
               {HMAC_ALGORITHMS.map((alg) => (
                 <button
@@ -380,7 +380,7 @@ export default function HashClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🗝️ Secret Key</span>
+            <span className={s.cardLabel}>Secret Key</span>
             <div className={s.optGroup} style={{ marginBottom: 10 }}>
               <span className={s.optLabel}>형식</span>
               <button className={`${s.optBtn} ${hmacKeyFormat === 'text' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('text')}>Text</button>
@@ -397,7 +397,7 @@ export default function HashClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>📝 Message</span>
+            <span className={s.cardLabel}>Message</span>
             <textarea
               value={hmacMessage}
               onChange={(e) => setHmacMessage(e.target.value)}
@@ -408,14 +408,14 @@ export default function HashClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>📤 출력 형식</span>
+            <span className={s.cardLabel}>출력 형식</span>
             <div className={s.optGroup}>
               <button className={`${s.optBtn} ${hmacFormat === 'hex_lower' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('hex_lower')}>hex</button>
               <button className={`${s.optBtn} ${hmacFormat === 'hex_upper' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('hex_upper')}>HEX</button>
               <button className={`${s.optBtn} ${hmacFormat === 'base64' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('base64')}>Base64</button>
               <button className={`${s.optBtn} ${hmacFormat === 'base64url' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('base64url')}>Base64URL (JWT)</button>
             </div>
-            <button className={s.primaryBtn} onClick={runHmac}>🔐 서명 생성</button>
+            <button className={s.primaryBtn} onClick={runHmac}>서명 생성</button>
             {hmacError && <p className={s.warnText}>⚠️ {hmacError}</p>}
           </div>
 
@@ -432,14 +432,14 @@ export default function HashClient() {
                 className={s.copyBigBtn}
                 onClick={() => copy('hmac-result', hmacResult)}
               >
-                {copiedKey === 'hmac-result' ? '✓ 복사됨' : '📋 복사'}
+                {copiedKey === 'hmac-result' ? '✓ 복사됨' : '복사'}
               </button>
             </div>
           )}
 
           {/* 시나리오 카드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🌐 사용 시나리오 — 클릭 시 알고리즘·형식 자동 설정</span>
+            <span className={s.cardLabel}>사용 시나리오 — 클릭 시 알고리즘·형식 자동 설정</span>
             <div className={s.presetGrid}>
               {WEBHOOK_PRESETS.map((p) => (
                 <button key={p.id} className={s.presetCard} onClick={() => applyWebhookPreset(p)}>
@@ -464,7 +464,7 @@ export default function HashClient() {
         <>
           {/* 알고리즘 비교 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🧮 알고리즘 비교</span>
+            <span className={s.cardLabel}>알고리즘 비교</span>
             <table className={s.compareTable}>
               <thead>
                 <tr>
@@ -505,7 +505,7 @@ export default function HashClient() {
 
           {/* 무결성 vs 비밀번호 vs 서명 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🎯 용도별 선택 가이드</span>
+            <span className={s.cardLabel}>용도별 선택 가이드</span>
             <table className={s.compareTable}>
               <thead>
                 <tr>
@@ -528,7 +528,7 @@ export default function HashClient() {
 
           {/* SRI 사용법 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🌐 SRI (Subresource Integrity) 사용법</span>
+            <span className={s.cardLabel}>SRI (Subresource Integrity) 사용법</span>
             <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 10px' }}>
               CDN에서 로드하는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다.
               본 도구의 [📝 텍스트] 탭에서 <strong>SHA-384</strong> + <strong>Base64</strong> 출력을 사용하세요.
@@ -545,7 +545,7 @@ export default function HashClient() {
 
           {/* CLI 명령 비교 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>💻 CLI 명령 대조</span>
+            <span className={s.cardLabel}>CLI 명령 대조</span>
             <table className={s.compareTable}>
               <thead>
                 <tr>
@@ -604,7 +604,7 @@ function HashResultCard({
           <span className={s.algSafetyBadge} style={{ color: algorithm.badgeColor }}>{algorithm.badgeLabel}</span>
         </div>
         <button className={s.smBtn} onClick={onCopy} disabled={!hash}>
-          {copied ? '✓ 복사됨' : '📋 복사'}
+          {copied ? '✓ 복사됨' : '복사'}
         </button>
       </div>
       <code className={s.resultHash}>{hash || '입력 대기 중...'}</code>

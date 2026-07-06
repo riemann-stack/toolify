@@ -100,8 +100,8 @@ export default function TeaClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs2}`} role="tablist" aria-label="차 계산기 메뉴">
         {([
-          { id: 'calc',  label: '🍵 우리기 계산' },
-          { id: 'guide', label: '📊 차 가이드' },
+          { id: 'calc',  label: '우리기 계산' },
+          { id: 'guide', label: '차 가이드' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -378,7 +378,7 @@ export default function TeaClient() {
           {/* 진하기 조절 원칙 */}
           {!coldOn && (
             <div className={s.tipCard}>
-              <strong>💡 진하게 마시고 싶다면</strong>
+              <strong>진하게 마시고 싶다면</strong>
               <ul>
                 <li>✅ <strong>찻잎 양 1.5배</strong> (3g → 4.5g)</li>
                 <li>✅ <strong>물 줄이기</strong> (1:50 → 1:40)</li>
@@ -414,7 +414,7 @@ export default function TeaClient() {
 
           {/* 다탕 우림 팁 — 정리된 ul */}
           <div className={s.tipCard}>
-            <strong>🍵 다탕(多湯) 우림 팁</strong>
+            <strong>다탕(多湯) 우림 팁</strong>
             <ul>
               <li>같은 찻잎으로 여러 번 우려 풍미 변화를 즐기는 방식</li>
               <li>우롱·보이는 <strong>5~8탕</strong>까지, 녹차·홍차는 보통 <strong>2~3탕</strong></li>
@@ -440,7 +440,7 @@ export default function TeaClient() {
               </table>
             </div>
             <div className={s.tipBox}>
-              💡 <strong>{tea.shortName} 팁</strong> — {tea.tip}
+              <strong>{tea.shortName} 팁</strong> — {tea.tip}
             </div>
           </div>
         </>

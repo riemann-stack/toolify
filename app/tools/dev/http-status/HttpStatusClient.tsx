@@ -129,10 +129,10 @@ export default function HttpStatusClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'search' ? s.tabActive : ''}`}     onClick={() => setTab('search')}>🔍 검색</button>
-        <button className={`${s.tab} ${tab === 'categories' ? s.tabActive : ''}`} onClick={() => setTab('categories')}>📊 카테고리</button>
-        <button className={`${s.tab} ${tab === 'debug' ? s.tabActive : ''}`}      onClick={() => setTab('debug')}>🐛 디버깅</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}      onClick={() => setTab('guide')}>📖 가이드</button>
+        <button className={`${s.tab} ${tab === 'search' ? s.tabActive : ''}`}     onClick={() => setTab('search')}>검색</button>
+        <button className={`${s.tab} ${tab === 'categories' ? s.tabActive : ''}`} onClick={() => setTab('categories')}>카테고리</button>
+        <button className={`${s.tab} ${tab === 'debug' ? s.tabActive : ''}`}      onClick={() => setTab('debug')}>디버깅</button>
+        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}      onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {/* ═════════════ 탭 1: 검색 ═════════════ */}
@@ -219,7 +219,7 @@ export default function HttpStatusClient() {
       {tab === 'categories' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 통계</span>
+            <span className={s.cardLabel}>통계</span>
             <p className={s.statText}>
               총 <strong className={s.statBig}>{stats.total}</strong>개 코드 · 표준 {stats.standard}개 · 비표준 {stats.nonstandard}개
             </p>
@@ -268,7 +268,7 @@ export default function HttpStatusClient() {
       {tab === 'debug' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🏷️ 시나리오 카테고리</span>
+            <span className={s.cardLabel}>시나리오 카테고리</span>
             <div className={s.filterRow}>
               {DEBUG_FILTERS.map((f) => (
                 <button
@@ -286,13 +286,13 @@ export default function HttpStatusClient() {
             <div key={sc.id} className={s.scenarioCard}>
               <p className={s.scenarioTitle}>{sc.emoji} {sc.title}</p>
               <div className={s.scenarioSection}>
-                <p className={s.scenarioSubtitle}>📍 가능한 원인</p>
+                <p className={s.scenarioSubtitle}>가능한 원인</p>
                 <ul className={s.scenarioList}>
                   {sc.causes.map((cause, i) => <li key={i}>{cause}</li>)}
                 </ul>
               </div>
               <div className={s.scenarioSection}>
-                <p className={s.scenarioSubtitle}>🔧 단계별 해결</p>
+                <p className={s.scenarioSubtitle}>단계별 해결</p>
                 <ol className={s.scenarioListNum}>
                   {sc.steps.map((step, i) => <li key={i}>{step}</li>)}
                 </ol>
@@ -324,7 +324,7 @@ export default function HttpStatusClient() {
         <>
           {/* 5 카테고리 의미 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 5+1 카테고리 의미</span>
+            <span className={s.cardLabel}>5+1 카테고리 의미</span>
             <table className={s.guideTable}>
               <thead>
                 <tr><th scope="col">카테고리</th><th scope="col">범위</th><th scope="col">의미</th><th scope="col">대표 코드</th></tr>
@@ -348,7 +348,7 @@ export default function HttpStatusClient() {
 
           {/* 흔한 혼동 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🆚 흔한 혼동 비교 5쌍</span>
+            <span className={s.cardLabel}>흔한 혼동 비교 5쌍</span>
             <div className={s.confusionGrid}>
               {CONFUSION_PAIRS.map((pair, i) => {
                 const a = findCode(pair.a)
@@ -377,7 +377,7 @@ export default function HttpStatusClient() {
 
           {/* 표준 vs 비표준 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📜 표준 vs 비표준 출처</span>
+            <span className={s.cardLabel}>표준 vs 비표준 출처</span>
             <ul className={s.warnList}>
               <li><strong>표준 (RFC)</strong>: 7231 (HTTP/1.1)·6585 (추가)·8297 (103)·7235 (인증)·7232 (조건부)·7538 (308)·7540 (HTTP/2)·4918 (WebDAV)·9110 (HTTP 의미론, 최신)</li>
               <li><strong>Cloudflare 5xx (520~530)</strong>: Cloudflare 자체 정의 — Origin 서버 통신 문제</li>
@@ -388,7 +388,7 @@ export default function HttpStatusClient() {
 
           {/* 프레임워크별 응답 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🛠️ 프레임워크별 기본 응답 코드</span>
+            <span className={s.cardLabel}>프레임워크별 기본 응답 코드</span>
             <table className={s.guideTable}>
               <thead>
                 <tr><th scope="col">프레임워크</th><th scope="col">패턴</th><th scope="col">기본 응답</th></tr>
@@ -409,7 +409,7 @@ export default function HttpStatusClient() {
 
           {/* 외부 링크 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🔗 참고 링크</span>
+            <span className={s.cardLabel}>참고 링크</span>
             <ul className={s.linkList}>
               <li><a href="https://datatracker.ietf.org/doc/html/rfc7231" target="_blank" rel="noopener noreferrer">RFC 7231 — HTTP/1.1 의미론</a></li>
               <li><a href="https://datatracker.ietf.org/doc/html/rfc9110" target="_blank" rel="noopener noreferrer">RFC 9110 — HTTP 의미론 (최신, 2022)</a></li>
@@ -488,14 +488,14 @@ function DetailCard({ code, isFav, onToggleFav, onClose, color, categoryLabel }:
       <p className={s.detailLong}>{code.longDesc}</p>
 
       <div className={s.detailSection}>
-        <h4 className={s.detailSectionTitle}>📍 언제 발생하나</h4>
+        <h4 className={s.detailSectionTitle}>언제 발생하나</h4>
         <ul className={s.detailList}>
           {code.whenItHappens.map((w, i) => <li key={i}>{w}</li>)}
         </ul>
       </div>
 
       <div className={s.detailSection}>
-        <h4 className={s.detailSectionTitle}>🔧 해결 힌트</h4>
+        <h4 className={s.detailSectionTitle}>해결 힌트</h4>
         <ul className={s.detailList}>
           {code.howToFix.map((h, i) => <li key={i}>{h}</li>)}
         </ul>
@@ -503,20 +503,20 @@ function DetailCard({ code, isFav, onToggleFav, onClose, color, categoryLabel }:
 
       {code.koreanCase && (
         <div className={s.koreanBox}>
-          <p className={s.koreanLabel}>🇰🇷 한국 사이트 사례</p>
+          <p className={s.koreanLabel}>한국 사이트 사례</p>
           <p className={s.koreanText}>{code.koreanCase}</p>
         </div>
       )}
 
       {code.example && (
         <div className={s.detailSection}>
-          <h4 className={s.detailSectionTitle}>📤 응답 예시</h4>
+          <h4 className={s.detailSectionTitle}>응답 예시</h4>
           <pre className={s.codeBlock}>{code.example.body}</pre>
         </div>
       )}
 
       {code.rfc && (
-        <p className={s.detailRfc}>📎 {code.rfc}</p>
+        <p className={s.detailRfc}>{code.rfc}</p>
       )}
     </div>
   )

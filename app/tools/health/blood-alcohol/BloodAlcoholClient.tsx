@@ -248,10 +248,10 @@ export default function BloodAlcoholClient() {
       {/* 4개 탭 */}
       <div className={s.tabs} role="tablist" aria-label="계산 모드">
         {[
-          { id: 'main',       label: '🍺 BAC 계산',       cls: s.tabActive },
-          { id: 'tomorrow',   label: '🌅 다음날 아침',     cls: s.tabActiveTomorrow },
-          { id: 'cumulative', label: '🔢 여러 자리 누적',  cls: s.tabActiveCumul },
-          { id: 'guide',      label: '📖 영향·면허 가이드', cls: s.tabActiveGuide },
+          { id: 'main',       label: 'BAC 계산',       cls: s.tabActive },
+          { id: 'tomorrow',   label: '다음날 아침',     cls: s.tabActiveTomorrow },
+          { id: 'cumulative', label: '여러 자리 누적',  cls: s.tabActiveCumul },
+          { id: 'guide',      label: '영향·면허 가이드', cls: s.tabActiveGuide },
         ].map(t => (
           <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${s.tabBtn} ${tab === t.id ? t.cls : ''}`}
@@ -506,12 +506,12 @@ export default function BloodAlcoholClient() {
           {/* ── 실시간 카운트다운 ── */}
           <div className={s.liveCard}>
             <div className={s.liveHeader}>
-              <span className={s.liveBadge}>🕐 실시간 카운트다운 (KST)</span>
+              <span className={s.liveBadge}>실시간 카운트다운 (KST)</span>
               <span className={s.liveClock}>{pad2(realHH)}:{pad2(realMM)}:{pad2(realSS)}</span>
             </div>
             {endInFuture ? (
               <p className={s.liveNote}>
-                ⏳ 음주 종료 시각이 아직 미래입니다 ({pad2(endH)}:{pad2(endM)}).
+                음주 종료 시각이 아직 미래입니다 ({pad2(endH)}:{pad2(endM)}).
                 음주 종료 후 다시 확인하세요.
               </p>
             ) : (
@@ -549,7 +549,7 @@ export default function BloodAlcoholClient() {
           {/* ── 숙취(아세트알데히드) 회복 타임라인 ── */}
           {peakBAC > 0.05 && (
             <div className={s.hangoverCard}>
-              <div className={s.cardLabel}>💧 숙취 회복 단계 (BAC 0 ≠ 완전 회복)</div>
+              <div className={s.cardLabel}>숙취 회복 단계 (BAC 0 ≠ 완전 회복)</div>
               <p className={s.hangoverIntro}>
                 알코올이 분해돼 BAC가 0이 돼도 <strong>아세트알데히드(독성 대사물)·탈수·수면 부채</strong>로
                 인지·운동 능력은 6~24시간 추가로 영향 받습니다.
@@ -690,7 +690,7 @@ export default function BloodAlcoholClient() {
 
       {/* ── 안전 귀가 ── */}
       <div className={s.safeBox}>
-        <div className={s.safeTitle}>🚕 안전 귀가 안내</div>
+        <div className={s.safeTitle}>안전 귀가 안내</div>
         <div className={s.safeList}>
           <div>• <strong>카카오 T 대리 · 티맵 대리</strong> 앱으로 즉시 호출</div>
           <div>• <strong>전국 대리운전 대표번호</strong> 이용 또는 지역 대리운전</div>
@@ -756,7 +756,7 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
   if (peakBAC <= 0) {
     return (
       <div className={s.infoBox}>
-        💡 먼저 「BAC 계산」 탭에서 음주량과 음주 종료 시각을 입력해주세요.
+        먼저 「BAC 계산」 탭에서 음주량과 음주 종료 시각을 입력해주세요.
       </div>
     )
   }
@@ -820,7 +820,7 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
 
       {/* 타임라인 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>📅 안전 운전 타임라인</span>
+        <span className={s.cardLabel}>안전 운전 타임라인</span>
         <div className={s.timelineList}>
           <div className={s.timelineRow}>
             <span className={s.timelineTime}>{fmtTimeMin(result.endMin)}</span>
@@ -865,7 +865,7 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
 
       {/* 안전 출근 가이드 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🚕 안전 출근 가이드</span>
+        <span className={s.cardLabel}>안전 출근 가이드</span>
         <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
           <li><strong style={{ color: 'var(--text)' }}>택시·지하철·버스 이용</strong> — 가장 안전</li>
           <li>재택 근무 또는 휴가 검토</li>
@@ -961,7 +961,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
   if (weightKg <= 0) {
     return (
       <div className={s.infoBox}>
-        💡 먼저 「BAC 계산」 탭에서 체중·성별을 설정해주세요.
+        먼저 「BAC 계산」 탭에서 체중·성별을 설정해주세요.
       </div>
     )
   }
@@ -1141,7 +1141,7 @@ function GuideTab() {
     <>
       {/* BAC 단계별 영향 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>📊 BAC 단계별 신체·정신 영향</span>
+        <span className={s.cardLabel}>BAC 단계별 신체·정신 영향</span>
         <div style={{ overflowX: 'auto' }}>
           <table className={s.cumTable}>
             <thead>
@@ -1168,7 +1168,7 @@ function GuideTab() {
 
       {/* 면허 종류별 기준 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🚗 운전 면허 종류별 기준</span>
+        <span className={s.cardLabel}>운전 면허 종류별 기준</span>
         <div style={{ overflowX: 'auto' }}>
           <table className={s.cumTable}>
             <thead>
@@ -1195,7 +1195,7 @@ function GuideTab() {
 
       {/* 약물 + 알코올 위험 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>💊 약물 + 알코올 위험 체크</span>
+        <span className={s.cardLabel}>약물 + 알코올 위험 체크</span>
         <div className={s.drinkLabel}>현재 복용 중인 약물 (해당 시 모두 선택)</div>
         <div className={s.drugGrid}>
           {DRUG_ALCOHOL_RISKS.map(d => (
@@ -1240,7 +1240,7 @@ function GuideTab() {
           <li>「측정기에 안 잡힐 정도」 X — 측정 시 양성이면 단속</li>
           <li>자가용·자전거·전동킥보드 모두 처벌</li>
         </ul>
-        <strong>🚕 안전 귀가</strong>
+        <strong>안전 귀가</strong>
         <ul>
           <li>카카오 T 대리: <strong>1577-1577</strong></li>
           <li>티맵 대리: <strong>1644-3030</strong></li>

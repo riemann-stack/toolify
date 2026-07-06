@@ -123,10 +123,10 @@ export default function WireClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="전선 계산 모드">
         {([
-          { id: 'pw',      label: '⚡ 전력→전선' },
-          { id: 'reverse', label: '🔎 전선 용량 조회' },
-          { id: 'drop',    label: '📉 전압강하' },
-          { id: 'preset',  label: '🏠 가전 프리셋' },
+          { id: 'pw',      label: '전력→전선' },
+          { id: 'reverse', label: '전선 용량 조회' },
+          { id: 'drop',    label: '전압강하' },
+          { id: 'preset',  label: '가전 프리셋' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -315,7 +315,7 @@ export default function WireClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>📌 결과 해석</strong>
+            <strong>결과 해석</strong>
             <ul className={s.bullets}>
               <li><strong>전선 굵기</strong>는 허용전류와 전압강하 중 큰 쪽을 따라 결정됩니다.</li>
               <li><strong>거리가 길수록</strong> 전압강하 때문에 한 단계 굵은 전선이 필요해요.</li>
@@ -545,7 +545,7 @@ export default function WireClient() {
           )}
 
           <div className={s.warnCard}>
-            <strong>💡 전압강하 공식</strong>
+            <strong>전압강하 공식</strong>
             <p>
               단상: e = (35.6 × L × I) / (1000 × A) [V]<br />
               삼상: e = (30.8 × L × I) / (1000 × A) [V]<br />
@@ -613,7 +613,7 @@ export default function WireClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>⭐ EV 충전기 시공 팁</strong>
+            <strong>EV 충전기 시공 팁</strong>
             <p>
               완속 7kW는 <strong>40A 차단기 + 6sq HIV/F-CV</strong>가 한국 표준 조합입니다.<br />
               한전 신청 + 누전차단기(RCBO·EV용) + 매설 시 F-CV 권장.<br />

@@ -281,7 +281,7 @@ export default function VatClient() {
 
               {mode === 'remove' && (
                 <div className={styles.formulaBox}>
-                  <p className={styles.formulaTitle}>📐 역산 공식</p>
+                  <p className={styles.formulaTitle}>역산 공식</p>
                   <p className={styles.formulaLine}>
                     공급가액 = {formatKRW(mainResult.total)} ÷ {(1 + parseFloat(rate)/100).toFixed(2)} = <strong>{formatKRW(mainResult.supplyAmount)}원</strong>
                   </p>
@@ -296,7 +296,7 @@ export default function VatClient() {
                   `공급가액: ${formatKRW(mainResult.supplyAmount)}원\n부가세 (${rate}%): ${formatKRW(mainResult.vat)}원\n합계: ${formatKRW(mainResult.total)}원`,
                   'main',
                 )}>
-                {copied === 'main' ? '✓ 복사 완료' : '📋 결과 복사'}
+                {copied === 'main' ? '✓ 복사 완료' : '결과 복사'}
               </button>
             </>
           ) : (
@@ -384,12 +384,12 @@ export default function VatClient() {
               const text = `품목\t수량\t단가\t공급가액\t부가세\t합계\n${lines.join('\n')}\n합계\t\t\t${formatKRW(quoteResult.totalSupply)}\t${formatKRW(quoteResult.totalVat)}\t${formatKRW(quoteResult.grandTotal)}`
               copy(text, 'quote')
             }}>
-            {copied === 'quote' ? '✓ 복사 완료' : '📋 견적서 표 복사 (탭 구분)'}
+            {copied === 'quote' ? '✓ 복사 완료' : '견적서 표 복사 (탭 구분)'}
           </button>
 
           {/* 부가세 별도 vs 포함 비교 */}
           <div className={styles.card}>
-            <div className={styles.cardLabel}>💡 부가세 별도 vs 포함 — 계약 시 차이</div>
+            <div className={styles.cardLabel}>부가세 별도 vs 포함 — 계약 시 차이</div>
             <div className={styles.inputRow}>
               <input className={styles.numInput} type="number" inputMode="numeric"
                 placeholder="비교할 금액 (원)" value={exclVsInclAmount}
@@ -437,7 +437,7 @@ export default function VatClient() {
               </div>
 
               <div className={styles.infoBox}>
-                <strong>💡 차이 {formatKRW(exclVsIncl.diff)}원.</strong> 같은 「{formatEok(exclVsIncl.amount)}」 계약이라도
+                <strong>차이 {formatKRW(exclVsIncl.diff)}원.</strong> 같은 「{formatEok(exclVsIncl.amount)}」 계약이라도
                 <strong>「부가세 별도」</strong>가 본인 실수입이 더 큽니다. 프리랜서·사업자는 협상 시 「부가세 별도」 명시를 권장합니다.
               </div>
             </>
@@ -561,7 +561,7 @@ export default function VatClient() {
               </div>
 
               <div className={styles.infoBox}>
-                <strong>💡 3.3% 원천세 vs 10% 부가세 — 완전히 다른 세금:</strong><br />
+                <strong>3.3% 원천세 vs 10% 부가세 — 완전히 다른 세금:</strong><br />
                 <strong style={{ color: '#0891B2' }}>3.3% 원천세</strong>는 사업자 등록 X 프리랜서에게 발주처가 차감 후 입금 (종합소득세 신고 시 정산).
                 <strong style={{ color: '#EA580C' }}>10% 부가세</strong>는 사업자 등록자에게 별도 청구되는 본인 돈이 아닌 신고·납부 의무 금액 (분기별·반기별 신고).
               </div>
@@ -668,7 +668,7 @@ export default function VatClient() {
               const text = `[세금계산서 입력 참고]\n작성일자: ${invoiceDate}\n공급자: ${invoiceProvider}\n공급받는자: ${invoiceClient}\n\n품목명\t수량\t단가\t공급가액\t세액\n${lines.join('\n')}\n\n공급가액 합계: ${formatKRW(invoiceQuote.totalSupply)}원\n세액 합계: ${formatKRW(invoiceQuote.totalVat)}원\n합계금액: ${formatKRW(invoiceQuote.grandTotal)}원`
               copy(text, 'invoice')
             }}>
-            {copied === 'invoice' ? '✓ 복사 완료' : '📋 텍스트 복사 (홈택스 입력 참고)'}
+            {copied === 'invoice' ? '✓ 복사 완료' : '텍스트 복사 (홈택스 입력 참고)'}
           </button>
 
           <div className={styles.warnBox}>

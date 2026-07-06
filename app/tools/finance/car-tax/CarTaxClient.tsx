@@ -108,7 +108,7 @@ export default function CarTaxClient() {
 
       {/* ── 1. 차량 정보 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>🚗 1. 차량 정보</div>
+        <div className={s.cardLabel}>1. 차량 정보</div>
 
         <div className={s.field}>
           <label htmlFor="car-tax-price">차량 가격 (출고가)</label>
@@ -191,7 +191,7 @@ export default function CarTaxClient() {
 
       {/* ── 2. 운행 정보 (유류세용) ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>⛽ 2. 운행 정보 — 유류세 추정용</div>
+        <div className={s.cardLabel}>2. 운행 정보 — 유류세 추정용</div>
         <div className={s.grid2}>
           <div className={s.field}>
             <label htmlFor="car-tax-distance">월 주행거리</label>
@@ -220,7 +220,7 @@ export default function CarTaxClient() {
 
       {/* ── 3. 옵션 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>⚙️ 3. 옵션</div>
+        <div className={s.cardLabel}>3. 옵션</div>
 
         <div className={s.subLabel}>감면 자격</div>
         <div className={s.exemptionList} role="group" aria-label="감면 자격 선택">
@@ -279,7 +279,7 @@ export default function CarTaxClient() {
 
       {/* ── 취득 시 세금 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>🛒 취득 시점 세금</div>
+        <div className={s.cardLabel}>취득 시점 세금</div>
         <ul className={s.taxList}>
           <li className={s.taxItem}>
             <div>
@@ -317,7 +317,7 @@ export default function CarTaxClient() {
 
       {/* ── 연간 세금 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>🗓️ 연간 세금 (현재 시점)</div>
+        <div className={s.cardLabel}>연간 세금 (현재 시점)</div>
         <ul className={s.taxList}>
           <li className={s.taxItem}>
             <div>
@@ -370,7 +370,7 @@ export default function CarTaxClient() {
 
       {/* ── 연도별 누적 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📈 {yearsToHold}년간 연도별 누적</div>
+        <div className={s.cardLabel}>{yearsToHold}년간 연도별 누적</div>
         <div className={s.tableWrap}>
           <table className={s.yearlyTable}>
             <thead>
@@ -411,7 +411,7 @@ export default function CarTaxClient() {
 
       {/* ── 자동차세 단가표 (가이드) ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📋 자동차세 단가 (비영업용 cc당)</div>
+        <div className={s.cardLabel}>자동차세 단가 (비영업용 cc당)</div>
         <ul className={s.tipList}>
           {TAX_TABLE_NON_BUSINESS.map((t, i) => (
             <li key={i}>
@@ -434,7 +434,7 @@ export default function CarTaxClient() {
 
       {/* ── 절세 팁 ── */}
       <div className={s.tipCard}>
-        <div className={s.cardLabel}>💡 자동차 세금 절세 팁</div>
+        <div className={s.cardLabel}>자동차 세금 절세 팁</div>
         <ul className={s.tipList}>
           {SAVING_TIPS.map((t, i) => (
             <li key={i}><strong>{t.title}</strong> — {t.detail}</li>

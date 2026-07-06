@@ -421,7 +421,7 @@ export default function CurtainBlindClient() {
                 <span>이중 커튼 (시어 + 암막)</span>
               </label>
               <div className={styles.panelTipCard} style={{ marginTop: 12 }}>
-                <strong>💡 패널 권장</strong> — {panelTip.text}
+                <strong>패널 권장</strong> — {panelTip.text}
               </div>
             </div>
           )}
@@ -682,7 +682,7 @@ export default function CurtainBlindClient() {
           </div>
 
           <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-            {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+            {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
           </button>
         </>
       )}
@@ -729,7 +729,7 @@ export default function CurtainBlindClient() {
             <div className={styles.cardLabel}><span>롤스크린 vs 로만쉐이드</span></div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
               <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #A16207', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#A16207', fontWeight: 700, marginBottom: 6 }}>📜 롤스크린</p>
+                <p style={{ fontSize: 13, color: '#A16207', fontWeight: 700, marginBottom: 6 }}>롤스크린</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>단순한 천 형태, 위로 말려 올라감</li>
                   <li>작은 창·욕실·주방에 인기</li>
@@ -737,7 +737,7 @@ export default function CurtainBlindClient() {
                 </ul>
               </div>
               <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #9B59B6', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>🧵 로만쉐이드</p>
+                <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>로만쉐이드</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>가로 주름이 잡히며 올라감</li>
                   <li>커튼처럼 부드러운 느낌</li>
@@ -748,7 +748,7 @@ export default function CurtainBlindClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>📏 커튼 측정법</span></div>
+            <div className={styles.cardLabel}><span>커튼 측정법</span></div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>1</span>
               <span className={styles.guideStepBody}>창문 폭 측정 — <strong>창문 안쪽 끝 ~ 끝</strong></span>
@@ -768,7 +768,7 @@ export default function CurtainBlindClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>📏 블라인드 측정법 — 인사이드 마운트</span></div>
+            <div className={styles.cardLabel}><span>블라인드 측정법 — 인사이드 마운트</span></div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>1</span>
               <span className={styles.guideStepBody}>창문 안쪽 폭 — <strong>3개 지점 측정 후 가장 작은 값</strong> -1cm (좌우 0.5씩)</span>
@@ -784,7 +784,7 @@ export default function CurtainBlindClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}><span>📏 블라인드 측정법 — 아웃사이드 마운트</span></div>
+            <div className={styles.cardLabel}><span>블라인드 측정법 — 아웃사이드 마운트</span></div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>1</span>
               <span className={styles.guideStepBody}>가리고 싶은 영역 폭 — 창문 폭 + <strong>좌우 5cm씩</strong></span>

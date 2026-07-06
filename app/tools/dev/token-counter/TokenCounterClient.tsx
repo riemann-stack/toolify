@@ -132,7 +132,7 @@ export default function TokenCounterClient() {
       {/* 한국어 효율 인사이트 */}
       {krRatio > 0.25 && gptCount.chars > 20 && (
         <div className={s.insightCard}>
-          <strong>🇰🇷 한국어 효율 인사이트</strong>
+          <strong>한국어 효율 인사이트</strong>
           <p>
             이 텍스트의 <strong>{Math.round(krRatio * 100)}%</strong>가 한국어/CJK 문자입니다. 영문으로 같은 내용을 작성하면 GPT-4o 기준 약{' '}
             <strong className={s.savingAmt}>{fmtTokens(englishEstimateGpt)}</strong> 토큰으로 줄어들 수 있어요{' '}

@@ -211,7 +211,7 @@ export default function KimjangClient() {
 
       {/* ── 인원·소비 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>👨‍👩‍👧 가족 구성 · 소비 패턴</div>
+        <div className={s.cardLabel}>가족 구성 · 소비 패턴</div>
 
         <div className={s.numRow}>
           <div className={s.numField}>
@@ -267,7 +267,7 @@ export default function KimjangClient() {
 
       {/* ── 부가 김치 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>🥢 추가 김치 종류 (선택)</div>
+        <div className={s.cardLabel}>추가 김치 종류 (선택)</div>
         <div className={s.variantGrid}>
           {KIMCHI_VARIANTS.map(v => {
             const on = selectedVariants.includes(v.id)
@@ -302,7 +302,7 @@ export default function KimjangClient() {
 
       {/* ── 재료 리스트 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>🧂 재료 + 비용 상세</div>
+        <div className={s.cardLabel}>재료 + 비용 상세</div>
 
         {(['주재료', '양념', '젓갈·액젓', '기타'] as const).map(cat => {
           const inCat = itemsPriced.filter(it => it.ing.cat === cat)
@@ -355,13 +355,13 @@ export default function KimjangClient() {
         </div>
 
         <button type="button" className={s.copyBtn} onClick={copyShoppingList}>
-          {copied ? '✓ 복사됨' : '📋 장보기 리스트 복사 (마크다운)'}
+          {copied ? '✓ 복사됨' : '장보기 리스트 복사 (마크다운)'}
         </button>
       </div>
 
       {/* ── 김장 일정 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📅 김장 D-day 일정</div>
+        <div className={s.cardLabel}>김장 D-day 일정</div>
         <div className={s.timeline}>
           {KIMJANG_SCHEDULE.map((step, i) => {
             const positive = step.day >= 0
@@ -382,7 +382,7 @@ export default function KimjangClient() {
 
       {/* ── 팁 ── */}
       <div className={s.tipCard}>
-        <div className={s.cardLabel}>💡 김장 잘하는 팁</div>
+        <div className={s.cardLabel}>김장 잘하는 팁</div>
         <ul className={s.tipList}>
           <li><strong>배추는 절임 전 3kg, 절임 후 2.5kg</strong> — 1포기로 약 1주 4인 가족 분량</li>
           <li><strong>고춧가루는 햇고추로</strong> — 9~10월 수확한 햇고추가 색·향 최상</li>

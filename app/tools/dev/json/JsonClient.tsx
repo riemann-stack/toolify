@@ -449,7 +449,7 @@ export default function JsonClient() {
           {sizes && (
             <div className={s.card}>
               <div className={s.cardTop}>
-                <label className={s.cardLabel}>📏 사이즈 비교</label>
+                <label className={s.cardLabel}>사이즈 비교</label>
               </div>
               <div className={s.sizeRow}><span>원본 입력</span><strong>{fmtBytes(sizes.origBytes)}</strong></div>
               <div className={s.sizeRow}><span>정렬 (Beautify, 들여쓰기 {indent})</span><strong>{fmtBytes(sizes.fmtBytes)}</strong></div>
@@ -523,7 +523,7 @@ export default function JsonClient() {
 
           {transformMode === 'ts' && parsed.ok && (
             <div className={s.seoCard}>
-              <p className={s.seoCardTitle}>💡 TypeScript 인터페이스 활용</p>
+              <p className={s.seoCardTitle}>TypeScript 인터페이스 활용</p>
               <p className={s.seoCardText}>
                 API 응답 JSON을 그대로 붙여넣으면 자동으로 TypeScript 타입을 생성합니다.
                 중첩 객체는 별도 인터페이스로 분리되며, 동일 구조는 재사용됩니다.
@@ -532,7 +532,7 @@ export default function JsonClient() {
           )}
           {transformMode === 'yaml' && parsed.ok && (
             <div className={s.seoCard}>
-              <p className={s.seoCardTitle}>💡 YAML 활용</p>
+              <p className={s.seoCardTitle}>YAML 활용</p>
               <p className={s.seoCardText}>
                 Kubernetes·GitHub Actions·Docker Compose·Ansible 등에서 사용됩니다.
                 JSON 대비 가독성이 좋고 주석 작성이 가능합니다.

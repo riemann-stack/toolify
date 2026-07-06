@@ -786,7 +786,7 @@ export default function CardInstallmentClient() {
           {/* 기회비용 분석 */}
           {parseComma(cmpAmount) > 0 && (
             <div className={s.opportunityCard}>
-              <p className={s.opportunityTitle}>💡 기회비용 분석</p>
+              <p className={s.opportunityTitle}>기회비용 분석</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7, marginBottom: 12 }}>
                 무이자 할부의 진짜 가치는 <strong style={{ color: 'var(--text)' }}>현금 보유</strong>에서 나옵니다.
                 일시불 할인과 무이자 + 파킹통장 운용을 비교해 봅니다.
@@ -926,7 +926,7 @@ export default function CardInstallmentClient() {
           {/* 추천 카드 */}
           {recommendation && (
             <div className={s.recoCard}>
-              <p className={s.recoTitle}>📌 이 구매에 적정한 할부 개월</p>
+              <p className={s.recoTitle}>이 구매에 적정한 할부 개월</p>
               <p className={s.recoText}>{recommendation.text}</p>
             </div>
           )}

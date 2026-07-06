@@ -105,10 +105,10 @@ export default function RebarClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="철근 계산 모드">
         {([
-          { id: 'calc',    label: '⚖️ 본수→중량' },
-          { id: 'reverse', label: '🔄 중량→본수' },
-          { id: 'truck',   label: '🚚 트럭·운반' },
-          { id: 'plan',    label: '🏗️ 배근 가이드' },
+          { id: 'calc',    label: '본수→중량' },
+          { id: 'reverse', label: '중량→본수' },
+          { id: 'truck',   label: '트럭·운반' },
+          { id: 'plan',    label: '배근 가이드' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -334,7 +334,7 @@ export default function RebarClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>📌 발주 팁</strong>
+            <strong>발주 팁</strong>
             <p>
               • 절단 로스는 일반 현장 <strong>5~10%</strong> 권장 (설계 도면대로 시공 시 5%, 임의 절단 다발 시 10%)<br />
               • 결속선(#18~#21)은 표준품셈상 <strong>철근 1톤당 약 5~8kg</strong>(간단 5·보통 6.5·복잡 8kg)<br />
@@ -476,7 +476,7 @@ export default function RebarClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 활용 팁</strong>
+            <strong>활용 팁</strong>
             <p>
               • 같은 1톤이라도 D10은 약 <strong>298본</strong>, D25는 약 <strong>42본</strong><br />
               • 운반 차량 적재 한도 기준 본수 미리 가늠<br />
@@ -569,7 +569,7 @@ export default function RebarClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🚚 트럭 선정 팁</strong>
+            <strong>트럭 선정 팁</strong>
             <p>
               • <strong>1톤 트럭</strong>은 6m 철근 적재 길이 가능 (적재함 위로 살짝 돌출 가능)<br />
               • <strong>12m 철근</strong>은 5톤 카고 이상 필수, 적재 결박 강하게<br />
@@ -604,7 +604,7 @@ export default function RebarClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🏗️ 배근 기본 원칙</strong>
+            <strong>배근 기본 원칙</strong>
             <p>
               • <strong>피복두께</strong>: 콘크리트 표면에서 철근까지 거리. 옥내 30~40mm, 옥외 50mm, 토중 70mm 이상.<br />
               • <strong>이음 길이</strong>: 일반 40d (D10이면 400mm), 인장은 60d 이상.<br />

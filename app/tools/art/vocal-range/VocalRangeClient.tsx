@@ -251,7 +251,7 @@ export default function VocalRangeClient() {
       {/* 마이크 컨트롤 */}
       {!running ? (
         <button className={styles.startBtn} onClick={startAnalyzer}>
-          🎤 마이크 시작 — 권한 허용 후 음정 감지
+          마이크 시작 — 권한 허용 후 음정 감지
         </button>
       ) : (
         <button className={styles.stopBtn} onClick={stopAnalyzer}>
@@ -390,7 +390,7 @@ export default function VocalRangeClient() {
                 setMeasureStep('low')
               }}
               disabled={measureStep === 'low'}>
-              {measureStep === 'low' ? '측정 중...' : measuredLowMidi !== null ? '🔄 다시 측정' : '▶ 시작'}
+              {measureStep === 'low' ? '측정 중...' : measuredLowMidi !== null ? '다시 측정' : '▶ 시작'}
             </button>
             {measureStep === 'low' && (
               <button className={styles.copyBtn} style={{ marginTop: 5 }}
@@ -424,7 +424,7 @@ export default function VocalRangeClient() {
                 setMeasureStep('high')
               }}
               disabled={measureStep === 'high'}>
-              {measureStep === 'high' ? '측정 중...' : measuredHighMidi !== null ? '🔄 다시 측정' : '▶ 시작'}
+              {measureStep === 'high' ? '측정 중...' : measuredHighMidi !== null ? '다시 측정' : '▶ 시작'}
             </button>
             {measureStep === 'high' && (
               <button className={styles.copyBtn} style={{ marginTop: 5 }}
@@ -466,7 +466,7 @@ export default function VocalRangeClient() {
               </button>
               <button className={styles.copyBtn}
                 onClick={() => { stopAnalyzer(); setTab('result') }}>
-                🎯 결과 보기 →
+                결과 보기 →
               </button>
             </div>
           </div>
@@ -631,11 +631,11 @@ export default function VocalRangeClient() {
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`내 음역대: ${lowNote.name}~${highNote.name} · ${stats.octaves}옥타브 · ${classification.name}${falsettoNote ? ` · 가성 ${falsettoNote.name}` : ''}`)}>
-                  {copied ? '✓ 복사됨' : '📋 결과 복사'}
+                  {copied ? '✓ 복사됨' : '결과 복사'}
                 </button>
                 <button className={`${styles.copyBtn} ${saved ? styles.copied : ''}`}
                   onClick={handleSave}>{saved ? '✓ 저장됨' : '💾 기록 저장'}</button>
-                <button className={styles.copyBtn} onClick={() => setTab('measure')}>🔄 다시 측정</button>
+                <button className={styles.copyBtn} onClick={() => setTab('measure')}>다시 측정</button>
               </div>
             </>
           )}

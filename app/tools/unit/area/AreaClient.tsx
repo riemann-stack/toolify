@@ -23,10 +23,10 @@ const APT_SIZES = [
 type Tab = 'convert' | 'apt-table' | 'area-types' | 'room-guide'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'convert',    name: '면적 변환',  icon: '🔄' },
-  { id: 'apt-table',  name: '아파트 평형표', icon: '🏢' },
-  { id: 'area-types', name: '전용·공급·계약', icon: '📐' },
-  { id: 'room-guide', name: '평형별 방 가이드', icon: '🛋️' },
+  { id: 'convert',    name: '면적 변환',  icon: '' },
+  { id: 'apt-table',  name: '아파트 평형표', icon: '' },
+  { id: 'area-types', name: '전용·공급·계약', icon: '' },
+  { id: 'room-guide', name: '평형별 방 가이드', icon: '' },
 ]
 
 const fmt = (n: number) => {
@@ -158,7 +158,7 @@ export default function AreaClient() {
 
               <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                 onClick={() => copy(`${fmt(result.sqm)}㎡ = ${fmt(result.pyeong)}평`)}>
-                {copied ? '✓ 복사됨' : '📋 복사'}
+                {copied ? '✓ 복사됨' : '복사'}
               </button>
             </>
           )}
@@ -256,9 +256,9 @@ export default function AreaClient() {
 
           <div className={styles.cardGrid}>
             {[
-              { name: '✅ 실거주 면적이 궁금할 때', use: '전용면적', color: '#059669' },
-              { name: '🏷️ 분양·매매 광고 평수', use: '공급면적', color: 'var(--accent)' },
-              { name: '💰 분양가 비교·재산세', use: '계약면적', color: '#DC2626' },
+              { name: '실거주 면적이 궁금할 때', use: '전용면적', color: '#059669' },
+              { name: '분양·매매 광고 평수', use: '공급면적', color: 'var(--accent)' },
+              { name: '분양가 비교·재산세', use: '계약면적', color: '#DC2626' },
             ].map((c, i) => (
               <div key={i} className={styles.guideCard} style={{ borderColor: `${c.color}40` }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: c.color, marginBottom: 4 }}>{c.name}</p>

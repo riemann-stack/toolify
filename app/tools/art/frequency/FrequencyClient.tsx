@@ -207,7 +207,7 @@ function HzToNoteTab({ a4 }: { a4: number }) {
           </div>
 
           <button className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy}>
-            {copied ? '✓ 복사됨' : '📋 결과 복사'}
+            {copied ? '✓ 복사됨' : '결과 복사'}
           </button>
           <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz 기준 · 피아노 건반은 C3–B4 표시</p>
         </div>
@@ -299,7 +299,7 @@ function NoteToHzTab({ a4 }: { a4: number }) {
         </div>
 
         <button className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy}>
-          {copied ? '✓ 복사됨' : '📋 결과 복사'}
+          {copied ? '✓ 복사됨' : '결과 복사'}
         </button>
         <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz 기준 · 파장 = 34,300 cm/s ÷ Hz</p>
       </div>
@@ -398,13 +398,13 @@ export default function FrequencyClient() {
       {/* 탭 */}
       <div className={styles.tabs}>
         <button className={`${styles.tab} ${tab === 'hz2note'  ? styles.tabActive : ''}`} onClick={() => setTab('hz2note')}>
-          🔊 Hz → 음정
+          Hz → 음정
         </button>
         <button className={`${styles.tab} ${tab === 'note2hz'  ? styles.tabActive : ''}`} onClick={() => setTab('note2hz')}>
-          🎹 음정 → Hz
+          음정 → Hz
         </button>
         <button className={`${styles.tab} ${tab === 'interval' ? styles.tabActive : ''}`} onClick={() => setTab('interval')}>
-          📏 음정 간격
+          음정 간격
         </button>
       </div>
 

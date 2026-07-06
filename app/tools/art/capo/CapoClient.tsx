@@ -198,7 +198,7 @@ function CapoTab() {
                     className={`${styles.thFret} ${fret === f ? styles.thFretActive : ''} ${recommendedFrets.has(f) ? styles.thFretRec : ''}`}
                   >
                     <div className={styles.thFretNum}>{f === 0 ? '없음' : `${f}F`}</div>
-                    {recommendedFrets.has(f) && <div className={styles.thFretBadge}>✨ 추천</div>}
+                    {recommendedFrets.has(f) && <div className={styles.thFretBadge}>추천</div>}
                   </th>
                 ))}
               </tr>
@@ -231,7 +231,7 @@ function CapoTab() {
 
       {/* 추천 배지 */}
       <div className={styles.recCard}>
-        <div className={styles.recLabel}>✨ 쉬운 코드 추천 카포 위치</div>
+        <div className={styles.recLabel}>쉬운 코드 추천 카포 위치</div>
         <div className={styles.recList}>
           {recommended.map((r, i) => {
             const pk = NOTES[((NOTES.indexOf(targetKey) - r.fret) % 12 + 12) % 12]
@@ -471,7 +471,7 @@ function DegreeTab() {
             </div>
           ))}
         </div>
-        <button className={styles.copyBtn} onClick={handleCopy}>📋 코드 목록 복사</button>
+        <button className={styles.copyBtn} onClick={handleCopy}>코드 목록 복사</button>
       </div>
 
       <div className={styles.card}>
@@ -509,13 +509,13 @@ export default function CapoClient() {
     <div className={styles.wrap}>
       <div className={styles.tabs}>
         <button className={`${styles.tab} ${tab === 'capo' ? styles.tabActive : ''}`} onClick={() => setTab('capo')}>
-          🎸 카포 계산기
+          카포 계산기
         </button>
         <button className={`${styles.tab} ${tab === 'transpose' ? styles.tabActive : ''}`} onClick={() => setTab('transpose')}>
-          🔄 전조 계산
+          전조 계산
         </button>
         <button className={`${styles.tab} ${tab === 'degree' ? styles.tabActive : ''}`} onClick={() => setTab('degree')}>
-          🎼 다이아토닉
+          다이아토닉
         </button>
       </div>
 

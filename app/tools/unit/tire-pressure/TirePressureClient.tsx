@@ -76,10 +76,10 @@ export default function TirePressureClient() {
   const [tab, setTab] = useState<MainTab>('convert')
 
   const TABS: { id: MainTab; label: string }[] = [
-    { id: 'convert', label: '🛞 단위 변환' },
-    { id: 'check',   label: '✅ 공기압 체크' },
-    { id: 'size',    label: '📐 규격 해석' },
-    { id: 'wear',    label: '🔧 교체·마모' },
+    { id: 'convert', label: '단위 변환' },
+    { id: 'check',   label: '공기압 체크' },
+    { id: 'size',    label: '규격 해석' },
+    { id: 'wear',    label: '교체·마모' },
   ]
 
   return (
@@ -401,7 +401,7 @@ function CheckTab() {
 
       {/* 냉간/온간 + 계절 보정 */}
       <div className={styles.seasonBox}>
-        <p className={styles.seasonTitle}>🌡️ 냉간·온간 & 계절별 보정 가이드</p>
+        <p className={styles.seasonTitle}>냉간·온간 & 계절별 보정 가이드</p>
         <ul className={styles.seasonList}>
           <li>• 측정은 <strong>주행 전 “냉간(cold)” 상태</strong>에서 — 주행 후에는 마찰열로 <strong>+3~4 psi</strong> 더 높게 측정됩니다(2~3시간 주차 후 권장).</li>
           <li>• <strong>기온 10°C 변화 시 공기압 약 1~2 psi(≈ 7~14 kPa) 변동</strong></li>
@@ -413,7 +413,7 @@ function CheckTab() {
 
       {/* TPMS 경고등 기준 */}
       <div className={styles.card}>
-        <span className={styles.cardLabel}>🚨 TPMS 경고등 점등 기준</span>
+        <span className={styles.cardLabel}>TPMS 경고등 점등 기준</span>
         <ul className={styles.seasonList}>
           <li>• TPMS(타이어 공기압 경고장치)는 보통 <strong>권장값의 약 25% 이하(≈ −25%)</strong>로 떨어지면 점등됩니다.</li>
           <li>• 예: 권장 33 psi → 약 <strong>25 psi</strong> 부근에서 경고등 ON</li>
@@ -672,7 +672,7 @@ function WearTab() {
         <div className={styles.statusDesc}>{tj.desc}</div>
       </div>
       <div className={styles.seasonBox}>
-        <p className={styles.seasonTitle}>🪙 트레드 깊이 간단 측정 (한국 100원 동전)</p>
+        <p className={styles.seasonTitle}>트레드 깊이 간단 측정 (한국 100원 동전)</p>
         <ul className={styles.seasonList}>
           <li>• 100원 동전을 홈에 거꾸로 꽂아 <strong>이순신 장군의 상투(감투)</strong>가 보이면 약 2.5mm 이하 — 교체 시기입니다.</li>
           <li>• 타이어 홈 안의 <strong>△ 마모 한계 표시(1.6mm)</strong>가 트레드 면과 같은 높이가 되면 즉시 교체.</li>

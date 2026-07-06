@@ -430,7 +430,7 @@ export default function SleepDebtClient() {
 
       {/* ─── 설정 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>⚙️ 개인 설정</div>
+        <div className={s.cardLabel}>개인 설정</div>
         <div className={s.subLabel}>목표 수면 시간 / 일</div>
         <div className={s.sliderRow}>
           <input
@@ -464,7 +464,7 @@ export default function SleepDebtClient() {
 
       {/* ─── 입력 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>➕ 수면 기록 추가</div>
+        <div className={s.cardLabel}>수면 기록 추가</div>
 
         <div className={s.subLabel}>날짜 (기상한 날)</div>
         <div className={s.dateRow}>
@@ -489,11 +489,11 @@ export default function SleepDebtClient() {
           <button type="button"
             aria-pressed={!directMode}
             className={`${s.modeBtn} ${!directMode ? s.modeActive : ''}`}
-            onClick={() => setDirectMode(false)}>🛏️ 잠든 시각 · 일어난 시각</button>
+            onClick={() => setDirectMode(false)}>잠든 시각 · 일어난 시각</button>
           <button type="button"
             aria-pressed={directMode}
             className={`${s.modeBtn} ${directMode ? s.modeActive : ''}`}
-            onClick={() => setDirectMode(true)}>⏱️ 시간 직접 입력</button>
+            onClick={() => setDirectMode(true)}>시간 직접 입력</button>
         </div>
 
         {!directMode ? (
@@ -574,7 +574,7 @@ export default function SleepDebtClient() {
       {/* ─── 차트 ─── */}
       {chartData.some(d => d.hours !== null) && (
         <div className={s.chartCard}>
-          <div className={s.cardLabel}>📊 지난 {period}일 수면 패턴</div>
+          <div className={s.cardLabel}>지난 {period}일 수면 패턴</div>
           <svg viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
             {/* Y축 그리드 */}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
@@ -646,7 +646,7 @@ export default function SleepDebtClient() {
       {/* ─── 일관성 ─── */}
       {cons && (
         <div className={s.card}>
-          <div className={s.cardLabel}>🎯 수면 규칙성 (Sleep Consistency)</div>
+          <div className={s.cardLabel}>수면 규칙성 (Sleep Consistency)</div>
           <div className={s.consGrid}>
             <div className={s.consBox}>
               <div className={s.consLabel}>취침 시각 변동</div>
@@ -670,7 +670,7 @@ export default function SleepDebtClient() {
       {/* ─── 회복 계획 ─── */}
       {analysis.totalDebt >= 0.5 && (
         <div className={s.recoveryCard}>
-          <div className={s.cardLabel}>💤 회복 계획</div>
+          <div className={s.cardLabel}>회복 계획</div>
 
           <div className={s.recoveryRow}>
             <div className={s.recoveryField}>
@@ -727,7 +727,7 @@ export default function SleepDebtClient() {
       {/* ─── 기록 리스트 ─── */}
       <div className={s.card}>
         <div className={s.cardLabel}>
-          <span>📋 기록 ({entries.length})</span>
+          <span>기록 ({entries.length})</span>
           {entries.length > 0 && (
             <button className={s.clearBtn} onClick={clearAll}>전체 삭제</button>
           )}
@@ -766,7 +766,7 @@ export default function SleepDebtClient() {
 
       {/* ─── 가이드 ─── */}
       <div className={s.tipCard}>
-        <div className={s.cardLabel}>💡 수면 부채 회복 가이드</div>
+        <div className={s.cardLabel}>수면 부채 회복 가이드</div>
         <ul className={s.tipList}>
           <li><strong>1~2주 누적 부채는 회복 가능</strong> — 그 이상 만성화되면 회복이 더디고 장기 건강 위험 ↑ (만성화 전 회복 권장)</li>
           <li><strong>매일 +1시간씩 7~10일</strong>이 가장 효과적 — 주말 몰아 자기보다 우월</li>

@@ -157,7 +157,7 @@ export default function CleaningClient() {
             </div>
           )}
           <div className={s.metaItem}>
-            <span className={s.metaLabel}>💡 주의</span>
+            <span className={s.metaLabel}>주의</span>
             <span>{sit.caution}</span>
           </div>
         </div>

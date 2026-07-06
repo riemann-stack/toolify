@@ -110,8 +110,8 @@ export default function RoofClient() {
 
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs2}`} role="tablist" aria-label="계산 모드">
-        <button type="button" role="tab" aria-selected={tab === 'area'} className={`${s.tab} ${tab === 'area' ? s.tabActive : ''}`} onClick={() => setTab('area')}>📐 면적 계산</button>
-        <button type="button" role="tab" aria-selected={tab === 'material'} className={`${s.tab} ${tab === 'material' ? s.tabActive : ''}`} onClick={() => setTab('material')}>💰 자재 견적</button>
+        <button type="button" role="tab" aria-selected={tab === 'area'} className={`${s.tab} ${tab === 'area' ? s.tabActive : ''}`} onClick={() => setTab('area')}>면적 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'material'} className={`${s.tab} ${tab === 'material' ? s.tabActive : ''}`} onClick={() => setTab('material')}>자재 견적</button>
       </div>
 
       {/* ══════════ TAB 1: 면적 계산 ══════════ */}
@@ -159,9 +159,9 @@ export default function RoofClient() {
               <span className={s.cardLabel}>③ 지붕 경사 (물매 또는 경사각)</span>
               <div className={s.modeToggle}>
                 <button type="button" aria-pressed={pitchMode === 'moemae'} className={`${s.modeBtn} ${pitchMode === 'moemae' ? s.modeBtnActive : ''}`}
-                  onClick={() => setPitchMode('moemae')}>📏 물매 (한국 표준)</button>
+                  onClick={() => setPitchMode('moemae')}>물매 (한국 표준)</button>
                 <button type="button" aria-pressed={pitchMode === 'angle'} className={`${s.modeBtn} ${pitchMode === 'angle' ? s.modeBtnActive : ''}`}
-                  onClick={() => setPitchMode('angle')}>🔢 경사각 (도)</button>
+                  onClick={() => setPitchMode('angle')}>경사각 (도)</button>
               </div>
 
               {pitchMode === 'moemae' ? (
@@ -304,7 +304,7 @@ export default function RoofClient() {
 
               {/* 상세 */}
               <div className={s.card}>
-                <span className={s.cardLabel}>📊 상세 결과</span>
+                <span className={s.cardLabel}>상세 결과</span>
                 <table className={s.detailTable}>
                   <tbody>
                     <tr>
@@ -354,13 +354,13 @@ export default function RoofClient() {
       {tab === 'material' && (
         <>
           {!result && (
-            <div className={s.empty}>먼저 <strong>📐 면적 계산</strong> 탭에서 치수를 입력하세요.</div>
+            <div className={s.empty}>먼저 <strong>면적 계산</strong> 탭에서 치수를 입력하세요.</div>
           )}
 
           {result && (
             <>
               <div className={s.card}>
-                <span className={s.cardLabel}>📊 자재 구매 면적 (계산 결과)</span>
+                <span className={s.cardLabel}>자재 구매 면적 (계산 결과)</span>
                 <p className={s.cardSub}>
                   {ROOF_TYPES.find((r) => r.key === type)?.label} · 표면 {result.surfaceArea.toFixed(1)}㎡ · <strong style={{ color: 'var(--accent)' }}>로스 {lossPct}% 포함 {result.materialArea.toFixed(1)}㎡ ({result.materialPyeong.toFixed(1)}평)</strong>
                 </p>
@@ -380,7 +380,7 @@ export default function RoofClient() {
                 return (
                   <div key={cat} className={s.card}>
                     <span className={s.cardLabel}>
-                      {cat === '지붕재' ? '🏠 지붕재' : cat === '방수재' ? '🛡️ 방수재 (평지붕)' : '✨ 특수재'}
+                      {cat === '지붕재' ? '지붕재' : cat === '방수재' ? '방수재 (평지붕)' : '특수재'}
                       {ci === 0 && <span style={{ color: 'var(--accent)', marginLeft: 6 }}>· 추천</span>}
                     </span>
                     <div className={s.materialList}>

@@ -171,7 +171,7 @@ function LengthTab() {
         </div>
 
         <button className={s.configToggle} onClick={() => setShowCfg((p) => !p)}>
-          <span>⚙️ 설정값</span>
+          <span>설정값</span>
           <span>{showCfg ? '▲' : '▼'}</span>
         </button>
         {showCfg && (
@@ -324,7 +324,7 @@ function LineHeightTab() {
     const unitless = px / fs
     return [
       { fmt: 'px',       val: `${fmt(px, 2)}px`,              note: '절대값' },
-      { fmt: 'unitless', val: fmt(unitless),                  note: '✅ 권장', recommend: true },
+      { fmt: 'unitless', val: fmt(unitless),                  note: '권장', recommend: true },
       { fmt: 'em',       val: `${fmt(unitless)}em`,           note: '상속 주의' },
       { fmt: '%',        val: `${fmt(unitless * 100, 2)}%`,   note: '상속 주의' },
     ]
@@ -888,15 +888,15 @@ function ClampTab() {
               <button
                 className={`${s.copyBtn} ${copiedKey === 'cl-val' ? s.copyBtnDone : ''}`}
                 onClick={() => copy(clampStr, 'cl-val')}
-              >{copiedKey === 'cl-val' ? '✅ 복사됨' : '값만 복사'}</button>
+              >{copiedKey === 'cl-val' ? '복사됨' : '값만 복사'}</button>
               <button
                 className={`${s.copyBtn} ${copiedKey === 'cl-decl2' ? s.copyBtnDone : ''}`}
                 onClick={() => copy(declOnly, 'cl-decl2')}
-              >{copiedKey === 'cl-decl2' ? '✅ 복사됨' : '속성: 값; 복사'}</button>
+              >{copiedKey === 'cl-decl2' ? '복사됨' : '속성: 값; 복사'}</button>
               <button
                 className={`${s.copyBtn} ${copiedKey === 'cl-var' ? s.copyBtnDone : ''}`}
                 onClick={() => copy(cssVar, 'cl-var')}
-              >{copiedKey === 'cl-var' ? '✅ 복사됨' : 'CSS 변수 복사'}</button>
+              >{copiedKey === 'cl-var' ? '복사됨' : 'CSS 변수 복사'}</button>
             </div>
 
             {graph && (
@@ -1002,7 +1002,7 @@ function TimeAngleTab() {
     <>
       {/* 섹션 A — 시간 */}
       <div className={s.card}>
-        <p className={s.sectionTitle}>⏱️ 시간 변환 (ms ↔ s)</p>
+        <p className={s.sectionTitle}>시간 변환 (ms ↔ s)</p>
 
         <div className={s.field}>
           <label className={s.fieldLabel} htmlFor="css-converter-f16">값</label>
@@ -1067,7 +1067,7 @@ function TimeAngleTab() {
 
       {/* 섹션 B — 각도 */}
       <div className={s.card}>
-        <p className={s.sectionTitle}>🔄 각도 변환 (deg ↔ rad ↔ turn ↔ grad)</p>
+        <p className={s.sectionTitle}>각도 변환 (deg ↔ rad ↔ turn ↔ grad)</p>
 
         <div className={s.field}>
           <label className={s.fieldLabel} htmlFor="css-converter-f17">값</label>

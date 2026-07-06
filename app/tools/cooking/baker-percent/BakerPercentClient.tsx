@@ -211,7 +211,7 @@ function TextureCard({ analysis }: { analysis: AnalysisLike }) {
   const t = textureDesc(analysis)
   return (
     <div className={s.textureCard}>
-      <div className={s.textureLabel}>🧁 예상 식감·외관</div>
+      <div className={s.textureLabel}>예상 식감·외관</div>
       <p className={s.textureBody}>{t.headline}</p>
       <p className={s.textureBody} style={{ fontSize: 13, color: 'var(--muted)', marginTop: 6 }}>{t.detail}</p>
       {t.tags.length > 0 && (
@@ -871,22 +871,22 @@ export default function BakerPercentClient() {
             <>
               <div className={s.metricsGrid}>
                 <div className={`${s.metricCard} ${s.metricHydration}`}>
-                  <p className={s.metricLabel}>💧 수분율</p>
+                  <p className={s.metricLabel}>수분율</p>
                   <p className={s.metricValue}>{round1(analysis1.hydration)}%</p>
                   <p className={s.metricHint}>{hydroDesc(analysis1.hydration).split(' — ')[0]}</p>
                 </div>
                 <div className={`${s.metricCard} ${s.metricSalt}`}>
-                  <p className={s.metricLabel}>🧂 소금</p>
+                  <p className={s.metricLabel}>소금</p>
                   <p className={s.metricValue}>{round1(analysis1.saltPct)}%</p>
                   <p className={s.metricHint}>{saltDesc(analysis1.saltPct).split(' — ')[0]}</p>
                 </div>
                 <div className={`${s.metricCard} ${s.metricYeast}`}>
-                  <p className={s.metricLabel}>🧫 이스트</p>
+                  <p className={s.metricLabel}>이스트</p>
                   <p className={s.metricValue}>{round1(analysis1.yeastPct)}%</p>
                   <p className={s.metricHint}>{yeastDesc(analysis1.yeastPct).split(' — ')[0]}</p>
                 </div>
                 <div className={`${s.metricCard} ${s.metricSugar}`}>
-                  <p className={s.metricLabel}>🍯 설탕</p>
+                  <p className={s.metricLabel}>설탕</p>
                   <p className={s.metricValue}>{round1(analysis1.sugarPct)}%</p>
                   <p className={s.metricHint}>{analysis1.sugarPct < 5 ? '단맛 적음' : analysis1.sugarPct < 10 ? '식빵 수준' : '단과자빵 수준'}</p>
                 </div>
@@ -924,7 +924,7 @@ export default function BakerPercentClient() {
               {/* 재료 배합 도넛 차트 */}
               <div className={s.card}>
                 <div className={s.cardLabel}>
-                  <span>🥧 재료 배합 비율</span>
+                  <span>재료 배합 비율</span>
                   <span className={s.cardLabelHint}>전체 반죽 중 차지 비중</span>
                 </div>
                 <CompositionChart ingredients={ing1} />
@@ -1094,7 +1094,7 @@ export default function BakerPercentClient() {
           {analysis2.flourTotal > 0 && (
             <div className={s.card}>
               <div className={s.cardLabel}>
-                <span>🥧 재료 배합 비율</span>
+                <span>재료 배합 비율</span>
                 <span className={s.cardLabelHint}>전체 반죽 중 차지 비중</span>
               </div>
               <CompositionChart ingredients={ing2} />
@@ -1131,7 +1131,7 @@ export default function BakerPercentClient() {
           {/* 즐겨찾기 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>⭐ 즐겨찾기 레시피</span>
+              <span>즐겨찾기 레시피</span>
               <span className={s.cardLabelHint}>{favorites.length} / 20</span>
             </div>
             <div className={s.favSaveRow}>
@@ -1459,7 +1459,7 @@ export default function BakerPercentClient() {
 
       {/* ─ 공통: 이스트 변환기 ─ */}
       <div className={s.yeastCard}>
-        <p className={s.yeastTitle}>🧫 이스트 종류 변환 (인스턴트 드라이 5g 기준)</p>
+        <p className={s.yeastTitle}>이스트 종류 변환 (인스턴트 드라이 5g 기준)</p>
         {YEAST_RATIOS.map(y => (
           <div key={y.key} className={s.yeastConvRow}>
             <span>{y.name}</span>

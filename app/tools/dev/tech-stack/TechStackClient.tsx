@@ -21,8 +21,8 @@ type TabKey = 'recommend' | 'guide'
 const STORAGE_KEY = 'youtil:tech-stack:v1'
 
 const TABS = [
-  { k: 'recommend', l: '🎯 추천 받기' },
-  { k: 'guide',     l: '📚 비교 가이드' },
+  { k: 'recommend', l: '추천 받기' },
+  { k: 'guide',     l: '비교 가이드' },
 ] as const
 
 export default function TechStackClient() {
@@ -134,7 +134,7 @@ function RecommendTab(props: {
     <div className={styles.panel}>
       {/* 시나리오 프리셋 */}
       <section>
-        <label className={styles.label}>🎬 시나리오 프리셋 — 한 클릭 적용</label>
+        <label className={styles.label}>시나리오 프리셋 — 한 클릭 적용</label>
         <div className={styles.scenarioGrid}>
           {SCENARIOS.map((s) => (
             <button key={s.id}
@@ -150,7 +150,7 @@ function RecommendTab(props: {
         </div>
         {activeScenarioData && (
           <div className={styles.scenarioTip}>
-            <strong>💡 {activeScenarioData.label} 핵심 팁</strong>
+            <strong>{activeScenarioData.label} 핵심 팁</strong>
             <ul>
               {activeScenarioData.tips.map((t, i) => <li key={i}>{t}</li>)}
             </ul>
@@ -244,7 +244,7 @@ function RecommendTab(props: {
 
       {/* 가중치 시각화 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>⚖️ 적용된 가중치 (입력값 자동 분석)</p>
+        <p className={styles.gapTitle}>적용된 가중치 (입력값 자동 분석)</p>
         <div className={styles.weightChips}>
           {(Object.entries(weights) as Array<[keyof typeof weights, number]>).map(([k, v]) => (
             <span key={k} className={styles.weightChip}>
@@ -257,7 +257,7 @@ function RecommendTab(props: {
 
       {/* 추천 결과 — 요약 카드 (한눈에 보기) */}
       <section>
-        <label className={styles.label}>🏆 추천 풀스택 — 한눈에 보기</label>
+        <label className={styles.label}>추천 풀스택 — 한눈에 보기</label>
         <div className={styles.summaryStackGrid}>
           {recommendations.map((rec) => (
             <div key={`summary-${rec.category}`} className={styles.summaryStackCard}>
@@ -275,7 +275,7 @@ function RecommendTab(props: {
 
       {/* 추천 결과 — 상세 */}
       <section>
-        <label className={styles.label}>📋 카테고리별 상세 ({recommendations.length}개)</label>
+        <label className={styles.label}>카테고리별 상세 ({recommendations.length}개)</label>
         <div className={styles.recommendGrid}>
           {recommendations.map((rec) => (
             <RecommendCard key={rec.category} rec={rec} weights={weights} onCopy={copyCmd} copiedId={copiedId} />
@@ -306,7 +306,7 @@ function RecommendTab(props: {
       {/* 트레이드오프 표 — Frontend 카테고리만 별도 표시 */}
       {recommendations.find((r) => r.category === 'frontend') && (
         <section>
-          <label className={styles.label}>📊 Frontend 트레이드오프 (추천 vs 대안)</label>
+          <label className={styles.label}>Frontend 트레이드오프 (추천 vs 대안)</label>
           <TradeoffTable rec={recommendations.find((r) => r.category === 'frontend')!} />
         </section>
       )}
@@ -314,7 +314,7 @@ function RecommendTab(props: {
       {/* 7축 레이더 차트 — 추천 vs 대안 비교 */}
       {recommendations.find((r) => r.category === 'frontend') && (
         <section>
-          <label className={styles.label}>🕸️ Frontend 7축 점수 비교</label>
+          <label className={styles.label}>Frontend 7축 점수 비교</label>
           <RadarChart rec={recommendations.find((r) => r.category === 'frontend')!} />
         </section>
       )}
@@ -578,7 +578,7 @@ function GuideTab() {
 
       {/* 한국 특화 통합 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🇰🇷 한국 특화 통합 가이드</p>
+        <p className={styles.gapTitle}>한국 특화 통합 가이드</p>
         <div className={styles.koreaGuideGrid}>
           {[
             { title: '카카오 OAuth',     desc: 'Auth.js + 카카오 provider 또는 react-kakao-login. 카카오 디벨로퍼 등록 필요.' },

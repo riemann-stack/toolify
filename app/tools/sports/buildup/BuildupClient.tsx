@@ -317,7 +317,7 @@ export default function BuildupClient() {
         <>
           {/* 통합 입력 카드: 거리 + 시작 페이스 + 끝 페이스 (3-col / 모바일 2-col) */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📐 빌드업 본체</span>
+            <span className={s.cardLabel}>빌드업 본체</span>
             <div className={s.coreInputGrid}>
               <div className={`${s.field} ${s.distanceField}`}>
                 <label className={s.fieldLabel} htmlFor="buildup-km">총 거리 (km)</label>
@@ -336,7 +336,7 @@ export default function BuildupClient() {
 
           {/* 웜업·쿨다운 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🌱 웜업·쿨다운 (선택)</span>
+            <span className={s.cardLabel}>웜업·쿨다운 (선택)</span>
             <div className={s.warmCoolGrid}>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="buildup-km-2">웜업 (km)</label>
@@ -381,7 +381,7 @@ export default function BuildupClient() {
 
           {/* VDOT 입력 (선택) */}
           <div className={s.optionCard}>
-            <p className={s.optionTitle}>🏅 VDOT 추정 (선택 — 강도 라벨·정확한 안전성 체크)</p>
+            <p className={s.optionTitle}>VDOT 추정 (선택 — 강도 라벨·정확한 안전성 체크)</p>
             <div className={s.vdotRow}>
               <div className={s.pillRow}>
                 {(['5k', '10k', 'half'] as const).map((d) => (
@@ -413,7 +413,7 @@ export default function BuildupClient() {
 
           {/* 자가체크 */}
           <div className={s.optionCard}>
-            <p className={s.optionTitle}>☑️ 자가체크 (선택)</p>
+            <p className={s.optionTitle}>자가체크 (선택)</p>
             <label className={s.checkRow}>
               <input type="checkbox" checked={hardYesterday} onChange={(e) => setHardYesterday(e.target.checked)} />
               <span>전날 강도 높은 훈련을 했다</span>
@@ -522,7 +522,7 @@ export default function BuildupClient() {
 
               {/* 안전성 체크 */}
               <div className={s.card}>
-                <span className={s.cardLabel}>🛡️ 안전성 체크</span>
+                <span className={s.cardLabel}>안전성 체크</span>
                 <div className={s.warnList}>
                   {warnings.map((w, i) => (
                     <div key={i} className={`${s.warnItem} ${s[`warnLevel_${w.level}`]}`}>
@@ -535,15 +535,15 @@ export default function BuildupClient() {
 
               {/* 복사 */}
               <div className={s.card}>
-                <span className={s.cardLabel}>📋 복사·저장</span>
+                <span className={s.cardLabel}>복사·저장</span>
                 <div className={s.copyRow}>
                   <button className={`${s.copyBtn} ${copied === 'md' ? s.copyBtnDone : ''}`}
                     onClick={() => copy('md')}>
-                    {copied === 'md' ? '✅ 복사됨' : '📋 마크다운 (메모·노션)'}
+                    {copied === 'md' ? '복사됨' : '마크다운 (메모·노션)'}
                   </button>
                   <button className={`${s.copyBtn} ${copied === 'watch' ? s.copyBtnDone : ''}`}
                     onClick={() => copy('watch')}>
-                    {copied === 'watch' ? '✅ 복사됨' : '⌚ 워치 워크아웃'}
+                    {copied === 'watch' ? '복사됨' : '워치 워크아웃'}
                   </button>
                 </div>
                 <div className={s.routineSaveRow}>
@@ -566,7 +566,7 @@ export default function BuildupClient() {
       {tab === 'race' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🏅 최근 레이스 기록 입력</span>
+            <span className={s.cardLabel}>최근 레이스 기록 입력</span>
             <p className={s.cardSub}>VDOT 기반으로 E·M·T·I·R 페이스 자동 산출 + 빌드업 추천</p>
             <div className={s.vdotRow}>
               <div className={s.pillRow}>
@@ -598,7 +598,7 @@ export default function BuildupClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>📊 강도별 페이스</span>
+                <span className={s.cardLabel}>강도별 페이스</span>
                 <div className={s.tableScroll}>
                 <table className={s.paceTable}>
                   <thead>
@@ -633,7 +633,7 @@ export default function BuildupClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>🏃 능력 기준 추천 빌드업</span>
+                <span className={s.cardLabel}>능력 기준 추천 빌드업</span>
                 <div className={s.recoList}>
                   {[
                     { name: '🌱 회복 빌드업', km: 6, profile: 'sprint-finish' as Profile, sM: 'equal-3' as SplitMode, end: 'M' as Intensity, eOff: 30 },
@@ -677,7 +677,7 @@ export default function BuildupClient() {
       {tab === 'preset' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📋 빌드업 프리셋 ({PRESETS.length}개)</span>
+            <span className={s.cardLabel}>빌드업 프리셋 ({PRESETS.length}개)</span>
             <p className={s.cardSub}>일반 러닝 훈련 원칙 기반 예시입니다. 한 번 클릭으로 설계 탭에 적용 · VDOT 입력 시 본인 능력 기반 자동 계산.</p>
           </div>
 
@@ -709,7 +709,7 @@ export default function BuildupClient() {
       {tab === 'routines' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>💾 저장된 빌드업 루틴</span>
+            <span className={s.cardLabel}>저장된 빌드업 루틴</span>
             <p className={s.cardSub}>
               본 루틴은 본인 브라우저(localStorage)에만 저장. 서버 전송 X · 다른 기기 동기화 X.
               백업은 CSV 다운로드 활용.
@@ -750,7 +750,7 @@ export default function BuildupClient() {
                   ))}
                 </div>
                 <div className={s.routineActions}>
-                  <button className={s.copyBtn} onClick={downloadCSV}>📊 CSV 다운로드</button>
+                  <button className={s.copyBtn} onClick={downloadCSV}>CSV 다운로드</button>
                   <button className={s.clearBtn}
                     onClick={() => { if (confirm('모든 루틴을 삭제하시겠습니까?')) setRoutines([]) }}>
                     전체 삭제
@@ -802,7 +802,7 @@ function BuildupChart({ result }: { result: ReturnType<typeof calcBuildup> }) {
 
   return (
     <div className={s.chartWrap}>
-      <p className={s.chartTitle}>📊 페이스 그래프</p>
+      <p className={s.chartTitle}>페이스 그래프</p>
       <svg viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
         {/* y축 라벨 (빠른 페이스 ↑·느린 페이스 ↓) */}
         <text x={padL - 6} y={padT + 8} fontSize="11" fill="var(--muted)" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>

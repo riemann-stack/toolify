@@ -481,9 +481,9 @@ export default function BmiClient() {
               <div className={styles.resultActions}>
                 <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`키 ${Math.round(heightCm)}cm / 체중 ${Math.round(weightKg * 10) / 10}kg → BMI ${rich.bmi} (${rich.category.name})`)}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
+                  {copied ? '✓ 복사됨' : '복사'}
                 </button>
-                <button type="button" className={styles.copyBtn} onClick={saveCurrent}>💾 기록 저장</button>
+                <button type="button" className={styles.copyBtn} onClick={saveCurrent}>기록 저장</button>
               </div>
             </>
           ) : (

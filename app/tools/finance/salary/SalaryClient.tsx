@@ -22,9 +22,9 @@ const comma = (v: string): string => {
 
 type Tab = 'main' | 'reverse'
 
-const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'main',    name: '실수령액',  icon: '💰' },
-  { id: 'reverse', name: '역산',      icon: '🔄' },
+const TABS: { id: Tab; name: string }[] = [
+  { id: 'main',    name: '실수령액', },
+  { id: 'reverse', name: '역산',     },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
@@ -181,7 +181,7 @@ export default function SalaryClient() {
           <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
-            <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
+            {t.name}
           </button>
         ))}
       </div>
@@ -525,7 +525,7 @@ export default function SalaryClient() {
           <div className={styles.resultActions}>
             <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(`연봉 ${formatEok(annualGross)} → 월 실수령 ${won(result.netMonthly)} (실수령률 ${result.takeHomeRate.toFixed(1)}%)`)}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
+              {copied ? '✓ 복사됨' : '복사'}
             </button>
           </div>
         </>
@@ -603,12 +603,12 @@ export default function SalaryClient() {
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`월 실수령 ${won(targetNetMonthly)} → 필요 세전 연봉 ${formatEok(reverseResult.grossYearly)}`)}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
+                  {copied ? '✓ 복사됨' : '복사'}
                 </button>
                 <button className={styles.copyBtn} onClick={() => {
                   setAnnualMan(comma(String(reverseResult.grossYearly / 10_000)))
                   setTab('main')
-                }}>💰 실수령 탭으로 적용</button>
+                }}>실수령 탭으로 적용</button>
               </div>
             </>
           )}

@@ -97,13 +97,13 @@ export default function HistoricalMoneyClient() {
             aria-pressed={direction === 'past_to_now'}
             className={`${s.dirBtn} ${direction === 'past_to_now' ? s.dirBtnActive : ''}`}
             onClick={() => setDirection('past_to_now')}
-          >📅 과거 → 현재</button>
+          >과거 → 현재</button>
           <button
             type="button"
             aria-pressed={direction === 'now_to_past'}
             className={`${s.dirBtn} ${direction === 'now_to_past' ? s.dirBtnActive : ''}`}
             onClick={() => setDirection('now_to_past')}
-          >🕰️ 현재 → 과거</button>
+          >현재 → 과거</button>
         </div>
       </div>
 

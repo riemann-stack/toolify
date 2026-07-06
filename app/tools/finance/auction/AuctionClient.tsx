@@ -156,10 +156,10 @@ export default function AuctionClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="경매 계산 모드">
         {([
-          { id: 'cost',     label: '💵 총비용 계산' },
-          { id: 'loan',     label: '🏦 대출·자기자본' },
-          { id: 'scenario', label: '🔄 시나리오 비교' },
-          { id: 'analyze',  label: '📊 비용 분석' },
+          { id: 'cost',     label: '총비용 계산' },
+          { id: 'loan',     label: '대출·자기자본' },
+          { id: 'scenario', label: '시나리오 비교' },
+          { id: 'analyze',  label: '비용 분석' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -506,7 +506,7 @@ export default function AuctionClient() {
                   <tr><td>LTV {ltvPct}% 한도</td><td className={s.cellMono}>{fmtMan(loanResult.ltvLimit)}</td></tr>
                   <tr><td>DSR 40% 한도</td><td className={s.cellMono}>{fmtMan(loanResult.dsrLimit)}</td></tr>
                   <tr><td>실제 가능 대출 (작은 값)</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(loanResult.loanAmount)}</td></tr>
-                  <tr><td>한도 결정 요인</td><td>{loanResult.capacityType === 'ltv' ? '🏛️ LTV' : '💼 DSR'}</td></tr>
+                  <tr><td>한도 결정 요인</td><td>{loanResult.capacityType === 'ltv' ? 'LTV' : 'DSR'}</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>월 상환 시뮬</td></tr>
                   <tr><td>월 원리금</td><td className={s.cellMono}>{fmt(loanResult.monthlyPayment, 1)} 만원</td></tr>
                   <tr><td>총 이자 부담 ({years}년)</td><td className={s.cellMono}>{fmtMan(loanResult.monthlyPayment * 12 * (parseFloat(years) || 1) - loanResult.loanAmount)}</td></tr>
@@ -520,7 +520,7 @@ export default function AuctionClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>📌 LTV·DSR 안내</strong>
+            <strong>LTV·DSR 안내</strong>
             <p>
               • <strong>LTV (담보인정비율)</strong>: 부동산 가치 대비 대출 한도 — 일반 70%, 규제지역 50~60%, 다주택 30%<br />
               • <strong>DSR (총부채원리금상환비율)</strong>: 연소득 대비 연 원리금 — 40% 한도<br />
@@ -530,7 +530,7 @@ export default function AuctionClient() {
           </div>
 
           <Link href="/tools/finance/loan" className={s.crossLink}>
-            💳 대출이자 계산기 → 원리금균등·원금균등·중도상환·갈아타기 시뮬
+            대출이자 계산기 → 원리금균등·원금균등·중도상환·갈아타기 시뮬
           </Link>
         </>
       )}
@@ -606,7 +606,7 @@ export default function AuctionClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 시나리오 활용 팁</strong>
+            <strong>시나리오 활용 팁</strong>
             <p>
               • <strong>실거주 1주택</strong>: 취득세 1.1~3.3% — 가장 유리 (양도세 비과세 요건은 보유·거주 2년으로 별개)<br />
               • <strong>2주택</strong>: 비규제지역 1주택 세율, 조정대상지역 8.4% 적용<br />
@@ -692,7 +692,7 @@ export default function AuctionClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/real-estate" className={s.crossLink}>
-        🏘️ 부동산 수익률 계산기 → 매매·임대·레버리지 자기자본 수익률
+        부동산 수익률 계산기 → 매매·임대·레버리지 자기자본 수익률
       </Link>
     </div>
   )

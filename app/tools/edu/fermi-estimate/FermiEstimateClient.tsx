@@ -34,10 +34,10 @@ type Template = {
 }
 
 const CATEGORIES: { key: CategoryKey; label: string; emoji: string; cls: string; tplCls: string }[] = [
-  { key: 'daily',       label: '🌟 생활·소비', emoji: '🌟', cls: s.catDaily,       tplCls: s.tplDaily },
-  { key: 'environment', label: '🌍 환경',     emoji: '🌍', cls: s.catEnvironment, tplCls: s.tplEnvironment },
-  { key: 'business',    label: '💼 비즈니스', emoji: '💼', cls: s.catBusiness,    tplCls: s.tplBusiness },
-  { key: 'education',   label: '🎓 교육·고전', emoji: '🎓', cls: s.catEducation,   tplCls: s.tplEducation },
+  { key: 'daily',       label: '생활·소비', emoji: '🌟', cls: s.catDaily,       tplCls: s.tplDaily },
+  { key: 'environment', label: '환경',     emoji: '🌍', cls: s.catEnvironment, tplCls: s.tplEnvironment },
+  { key: 'business',    label: '비즈니스', emoji: '💼', cls: s.catBusiness,    tplCls: s.tplBusiness },
+  { key: 'education',   label: '교육·고전', emoji: '🎓', cls: s.catEducation,   tplCls: s.tplEducation },
 ]
 
 const TEMPLATES: Template[] = [
@@ -629,15 +629,15 @@ export default function FermiEstimateClient() {
             <>
               <div className={s.actionRow}>
                 <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={() => setTab('scenarios')} type="button">
-                  📊 시나리오 비교 →
+                  시나리오 비교 →
                 </button>
                 <button className={s.actionBtn} onClick={() => setTab('library')} type="button">
-                  💾 라이브러리에 저장 →
+                  라이브러리에 저장 →
                 </button>
               </div>
 
               <div className={s.interpretCard}>
-                💡 <strong>해석:</strong> 페르미 추정은 정확한 답이 아닌 <strong>자릿수(order of magnitude)</strong>를 맞히는 도구입니다.
+                <strong>해석:</strong> 페르미 추정은 정확한 답이 아닌 <strong>자릿수(order of magnitude)</strong>를 맞히는 도구입니다.
                 실제 값의 1/3~3배 범위에 들어가면 좋은 추정으로 평가합니다.
               </div>
             </>
@@ -689,7 +689,7 @@ export default function FermiEstimateClient() {
 
               {scenarioRatio !== null && (
                 <div className={s.diffCard}>
-                  📏 <strong>보수적 ↔ 낙관적</strong>: 약 <strong>{scenarioRatio.toFixed(1)}배</strong> 차이 ·
+                  <strong>보수적 ↔ 낙관적</strong>: 약 <strong>{scenarioRatio.toFixed(1)}배</strong> 차이 ·
                   {' '}이 차이가 크다는 건 <strong>입력 가정의 불확실성이 크다</strong>는 신호입니다.
                 </div>
               )}
@@ -756,7 +756,7 @@ export default function FermiEstimateClient() {
       {tab === 'library' && (
         <>
           <div className={s.libraryAddBox}>
-            <p className={s.libTitle}>💾 현재 추정 저장</p>
+            <p className={s.libTitle}>현재 추정 저장</p>
             {vars.length === 0 || baseResult === null ? (
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 자유 추정 탭에서 변수를 입력한 후 저장할 수 있습니다.

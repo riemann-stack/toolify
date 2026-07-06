@@ -104,9 +104,9 @@ export default function ScrewClient() {
 
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs3}`} role="tablist" aria-label="나사 규격 도구 모드">
-        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>🔩 탭드릴 계산</button>
-        <button type="button" role="tab" aria-selected={tab === 'convert'} className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`} onClick={() => setTab('convert')}>📏 인치 ↔ mm</button>
-        <button type="button" role="tab" aria-selected={tab === 'tables'} className={`${s.tab} ${tab === 'tables' ? s.tabActive : ''}`} onClick={() => setTab('tables')}>📋 사이즈 표</button>
+        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>탭드릴 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'convert'} className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`} onClick={() => setTab('convert')}>인치 ↔ mm</button>
+        <button type="button" role="tab" aria-selected={tab === 'tables'} className={`${s.tab} ${tab === 'tables' ? s.tabActive : ''}`} onClick={() => setTab('tables')}>사이즈 표</button>
       </div>
 
       {/* ══════════ TAB 1: 탭드릴 계산 ══════════ */}
@@ -304,11 +304,11 @@ export default function ScrewClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>📐 탭드릴·관통홀</span>
+                <span className={s.cardLabel}>탭드릴·관통홀</span>
                 <table className={s.detailTable}>
                   <tbody>
                     <tr className={s.rowBig}>
-                      <td>🔩 탭드릴 (탭 가공용)</td>
+                      <td>탭드릴 (탭 가공용)</td>
                       <td className={s.cellAccent}>∅{metricTapDrill.toFixed(2)}mm</td>
                     </tr>
                     <tr><td colSpan={2} className={s.cellSubtitle}>관통홀 (볼트 통과용)</td></tr>
@@ -329,7 +329,7 @@ export default function ScrewClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>🔧 호환 공구</span>
+                <span className={s.cardLabel}>호환 공구</span>
                 <table className={s.detailTable}>
                   <tbody>
                     <tr>
@@ -371,11 +371,11 @@ export default function ScrewClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>📐 탭드릴·관통홀</span>
+                <span className={s.cardLabel}>탭드릴·관통홀</span>
                 <table className={s.detailTable}>
                   <tbody>
                     <tr className={s.rowBig}>
-                      <td>🔩 탭드릴</td>
+                      <td>탭드릴</td>
                       <td className={s.cellAccent}>∅{unifiedSpec.tapDrillMm}mm</td>
                     </tr>
                     <tr>
@@ -406,11 +406,11 @@ export default function ScrewClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>📐 파이프 나사 정보</span>
+                <span className={s.cardLabel}>파이프 나사 정보</span>
                 <table className={s.detailTable}>
                   <tbody>
                     <tr className={s.rowBig}>
-                      <td>🔩 탭드릴</td>
+                      <td>탭드릴</td>
                       <td className={s.cellAccent}>∅{pipeSpec.tapDrillMm}mm</td>
                     </tr>
                     <tr><td>외경</td><td>{pipeSpec.outerDiameterMm}mm</td></tr>
@@ -443,7 +443,7 @@ export default function ScrewClient() {
 
               {system === 'wood' && (
                 <div className={s.card}>
-                  <span className={s.cardLabel}>📐 목재피스 파일럿홀</span>
+                  <span className={s.cardLabel}>목재피스 파일럿홀</span>
                   <table className={s.detailTable}>
                     <tbody>
                       <tr className={s.rowBig}>
@@ -470,7 +470,7 @@ export default function ScrewClient() {
 
               {system === 'drywall' && (
                 <div className={s.card}>
-                  <span className={s.cardLabel}>📐 석고피스 정보</span>
+                  <span className={s.cardLabel}>석고피스 정보</span>
                   <table className={s.detailTable}>
                     <tbody>
                       <tr><td>외경</td><td>{woodDiameter}mm</td></tr>
@@ -503,7 +503,7 @@ export default function ScrewClient() {
         <>
           <div className={s.convertSplit}>
             <div className={s.card}>
-              <span className={s.cardLabel}>📏 인치 → mm</span>
+              <span className={s.cardLabel}>인치 → mm</span>
               <input type="text" className={s.input}
                 aria-label="인치 입력 (분수 또는 소수)"
                 placeholder='예: 5/8 또는 0.625'
@@ -528,7 +528,7 @@ export default function ScrewClient() {
             </div>
 
             <div className={s.card}>
-              <span className={s.cardLabel}>📏 mm → 인치</span>
+              <span className={s.cardLabel}>mm → 인치</span>
               <input type="number" inputMode="decimal" min={0} step={0.1}
                 className={s.input}
                 aria-label="mm 입력"
@@ -559,7 +559,7 @@ export default function ScrewClient() {
 
           {/* 변환 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📋 표준 인치 ↔ mm 변환표</span>
+            <span className={s.cardLabel}>표준 인치 ↔ mm 변환표</span>
             <table className={s.compactTable}>
               <thead>
                 <tr><th scope="col">인치</th><th scope="col">mm</th><th scope="col">인치</th><th scope="col">mm</th></tr>
@@ -607,7 +607,7 @@ export default function ScrewClient() {
         <>
           {/* 미터 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🔩 미터 나사 (Metric) — 자주 쓰는 사이즈</span>
+            <span className={s.cardLabel}>미터 나사 (Metric) — 자주 쓰는 사이즈</span>
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
                 <thead>
@@ -642,7 +642,7 @@ export default function ScrewClient() {
 
           {/* 유니파이 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🔧 유니파이 나사 (UNC / UNF)</span>
+            <span className={s.cardLabel}>유니파이 나사 (UNC / UNF)</span>
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
                 <thead>
@@ -673,7 +673,7 @@ export default function ScrewClient() {
 
           {/* 파이프 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🚿 파이프 나사 (PT / NPT)</span>
+            <span className={s.cardLabel}>파이프 나사 (PT / NPT)</span>
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
                 <thead>
@@ -700,7 +700,7 @@ export default function ScrewClient() {
 
           {/* 목재 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🪵 목재피스 파일럿홀 가이드</span>
+            <span className={s.cardLabel}>목재피스 파일럿홀 가이드</span>
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
                 <thead>

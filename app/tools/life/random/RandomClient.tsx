@@ -34,11 +34,11 @@ export default function RandomClient() {
 
       <div className={s.tabs} role="tablist" aria-label="랜덤 추첨 도구 탭">
         {([
-          ['roulette', '🎰 룰렛'],
-          ['weighted', '⚖️ 가중치'],
-          ['team',     '👥 팀'],
-          ['order',    '📋 순서·자리'],
-          ['fair',     '📊 공정성'],
+          ['roulette', '룰렛'],
+          ['weighted', '가중치'],
+          ['team',     '팀'],
+          ['order',    '순서·자리'],
+          ['fair',     '공정성'],
         ] as [Tab, string][]).map(([key, label]) => {
           const cls =
             tab !== key ? '' :
@@ -363,18 +363,18 @@ function RouletteTab() {
           <circle cx={150} cy={150} r={14} className={s.rouletteHub} />
         </svg>
         <button className={s.bigDraw} onClick={handleSpin} disabled={spinning || valid.length < 2}>
-          {spinning ? '🌀 회전 중...' : '🎰 룰렛 돌리기'}
+          {spinning ? '회전 중...' : '룰렛 돌리기'}
         </button>
       </div>
 
       {winner && !spinning && (
         <div className={s.rouletteResult} role="status" aria-live="polite">
-          <div className={s.rouletteResultLabel}>🎉 결과 발표</div>
+          <div className={s.rouletteResultLabel}>결과 발표</div>
           <div className={s.rouletteResultName}>{winner}</div>
           <button className={s.copyBtn}
             onClick={() => navigator.clipboard.writeText(winner)}
             style={{ marginTop: 14, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
-            📋 결과 복사
+            결과 복사
           </button>
         </div>
       )}
@@ -492,12 +492,12 @@ function WeightedTab() {
       </div>
 
       <button className={s.bigDraw} onClick={handleDraw} disabled={valid.length === 0}>
-        🎯 가중치 추첨
+        가중치 추첨
       </button>
 
       {results.length > 0 && (
         <div className={s.resultCard} role="status" aria-live="polite">
-          <div className={s.resultLabel}>🎉 가중치 추첨 결과</div>
+          <div className={s.resultLabel}>가중치 추첨 결과</div>
           {results.length === 1 ? (
             <div className={s.resultBig}>{results[0]}</div>
           ) : (
@@ -512,7 +512,7 @@ function WeightedTab() {
           )}
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}
             style={{ marginTop: 14, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
-            {copied ? '✓ 복사됨' : '📋 복사'}
+            {copied ? '✓ 복사됨' : '복사'}
           </button>
         </div>
       )}
@@ -652,7 +652,7 @@ function TeamTab() {
       )}
 
       <button className={s.bigDraw} onClick={handleDraw} disabled={names.length === 0}>
-        👥 팀 나누기
+        팀 나누기
       </button>
 
       {teams.length > 0 && (
@@ -676,7 +676,7 @@ function TeamTab() {
           </div>
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}
             style={{ marginTop: 4, maxWidth: 240, marginLeft: 'auto', marginRight: 'auto' }}>
-            {copied ? '✓ 복사됨' : '📋 텍스트 복사'}
+            {copied ? '✓ 복사됨' : '텍스트 복사'}
           </button>
         </>
       )}
@@ -871,13 +871,13 @@ function OrderTab() {
 
       <button className={s.bigDraw} onClick={mode === 'order' ? handleOrder : handleSeat}
         disabled={names.length === 0}>
-        {mode === 'order' ? '📋 순서 추첨' : '💺 자리 배치'}
+        {mode === 'order' ? '순서 추첨' : '자리 배치'}
       </button>
 
       {order && (
         <>
           <div className={s.card} role="status" aria-live="polite">
-            <label className={s.cardLabel}>📋 발표 순서</label>
+            <label className={s.cardLabel}>발표 순서</label>
             <div className={s.orderList}>
               {order.map((n, i) => {
                 const fixed = fixedSet.has(n)
@@ -896,7 +896,7 @@ function OrderTab() {
           </div>
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}
             style={{ marginTop: 4, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
-            {copied ? '✓ 복사됨' : '📋 복사'}
+            {copied ? '✓ 복사됨' : '복사'}
           </button>
         </>
       )}
@@ -904,7 +904,7 @@ function OrderTab() {
       {seats && (
         <>
           <div className={s.card} role="status" aria-live="polite">
-            <label className={s.cardLabel}>💺 자리 배치 ({rows} × {cols})</label>
+            <label className={s.cardLabel}>자리 배치 ({rows} × {cols})</label>
             <div className={s.seatGrid} style={{ gridTemplateColumns: `repeat(${cols}, minmax(36px, 1fr))` }}>
               {seats.map((row, r) => row.map((cell, c) => (
                 <div key={`${r}-${c}`}
@@ -918,7 +918,7 @@ function OrderTab() {
           </div>
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}
             style={{ marginTop: 4, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
-            {copied ? '✓ 복사됨' : '📋 복사'}
+            {copied ? '✓ 복사됨' : '복사'}
           </button>
         </>
       )}
@@ -1014,7 +1014,7 @@ function FairnessTab() {
 
       <button className={s.bigDraw} onClick={handleRun}
         disabled={running || valid.length < 2}>
-        {running ? '시뮬레이션 중...' : `📊 ${trials.toLocaleString()}회 시뮬레이션`}
+        {running ? '시뮬레이션 중...' : `${trials.toLocaleString()}회 시뮬레이션`}
       </button>
 
       {results && (

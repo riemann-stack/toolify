@@ -209,17 +209,17 @@ export default function SeveranceClient() {
             borderRadius: 8, cursor: 'pointer',
           }}
         >
-          🗑️ 입력값 초기화
+          입력값 초기화
         </button>
       </div>
 
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="퇴직금 계산 탭">
         {([
-          { id: 'calc',    label: '💼 퇴직금' },
-          { id: 'compare', label: '⚖️ 평균 vs 통상' },
-          { id: 'sim',     label: '📅 퇴사일 시뮬' },
-          { id: 'total',   label: '💰 퇴사월 총입금' },
+          { id: 'calc',    label: '퇴직금' },
+          { id: 'compare', label: '평균 vs 통상' },
+          { id: 'sim',     label: '퇴사일 시뮬' },
+          { id: 'total',   label: '퇴사월 총입금' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -260,11 +260,11 @@ export default function SeveranceClient() {
         <div className={s.helpText}>
           {datesValid ? (
             <>
-              📅 재직일수: <strong className={s.cellAccent}>{eligibility.daysWorked.toLocaleString()}일</strong>
+              재직일수: <strong className={s.cellAccent}>{eligibility.daysWorked.toLocaleString()}일</strong>
               {' · '}<strong>{eligibility.yearsRaw.toFixed(2)}년</strong>
             </>
           ) : (
-            <>📅 입사일과 퇴사일을 입력하면 재직일수가 계산됩니다</>
+            <>입사일과 퇴사일을 입력하면 재직일수가 계산됩니다</>
           )}
         </div>
       </div>
@@ -296,7 +296,7 @@ export default function SeveranceClient() {
         <>
           {/* 산정기간 자동 표시 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📅 평균임금 산정기간 (퇴사 전 3개월)</span>
+            <span className={s.cardLabel}>평균임금 산정기간 (퇴사 전 3개월)</span>
             <div className={s.periodBox}>
               <p>
                 기간: <strong>{fmtDate(period.start)}</strong> ~ <strong>{fmtDate(period.end)}</strong>
@@ -360,7 +360,7 @@ export default function SeveranceClient() {
 
           {/* 메인 결과 */}
           <div className={s.hero}>
-            <p className={s.heroLabel}>💼 예상 퇴직금</p>
+            <p className={s.heroLabel}>예상 퇴직금</p>
             <p className={s.heroValue}>
               세전 <strong>{fmtMan(displaySev)}</strong>
             </p>
@@ -452,7 +452,7 @@ export default function SeveranceClient() {
           <div className={s.compareGrid}>
             {/* 평균임금 카드 */}
             <div className={`${s.compareCard} ${dailyAvgWage >= dailyOrdWage ? s.compareWin : ''}`}>
-              <p className={s.compareTitle}>📊 평균임금</p>
+              <p className={s.compareTitle}>평균임금</p>
               <p className={s.compareValue}>{fmt(dailyAvgWage * 10000, 0)} 원/일</p>
               <p className={s.compareDesc}>
                 3개월 임금 총액({fmtMan(totals.total)}) ÷ 총일수({period.days}일)
@@ -466,7 +466,7 @@ export default function SeveranceClient() {
 
             {/* 통상임금 카드 */}
             <div className={`${s.compareCard} ${dailyOrdWage > dailyAvgWage ? s.compareWin : ''}`}>
-              <p className={s.compareTitle}>⏱️ 통상임금</p>
+              <p className={s.compareTitle}>통상임금</p>
               <p className={s.compareValue}>{fmt(dailyOrdWage * 10000, 0)} 원/일</p>
               <p className={s.compareDesc}>
                 월 통상임금({monthlyOrdinary}만원) ÷ 209시간 × {dailyHrs}시간
@@ -492,7 +492,7 @@ export default function SeveranceClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>📌 평균임금 vs 통상임금</strong>
+            <strong>평균임금 vs 통상임금</strong>
             <p>
               근로기준법 §2 ②: <strong>평균임금이 통상임금보다 적으면 통상임금을 평균임금으로 함.</strong><br />
               → 근로자에게 유리한 큰 금액 적용 원칙.<br />
@@ -585,7 +585,7 @@ export default function SeveranceClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>📅 퇴사일 결정 팁</strong>
+            <strong>퇴사일 결정 팁</strong>
             <p>
               • <strong>유일한 절벽은 1년</strong>: 1년 미만이면 0원, 1년을 채우는 순간 약 1개월치 발생<br />
               • 1년 이후엔 <strong>하루하루 근속일수에 비례</strong>해 꾸준히 증가 (2·3·5년에 특별한 점프 없음 — 마일스톤은 참고용 시점)<br />
@@ -657,7 +657,7 @@ export default function SeveranceClient() {
           </div>
 
           <div className={s.hero}>
-            <p className={s.heroLabel}>💰 퇴사월 총 입금 예상액</p>
+            <p className={s.heroLabel}>퇴사월 총 입금 예상액</p>
             <p className={s.heroValue}>
               <strong>{fmtMan(totalDeposit)}</strong>
             </p>
@@ -697,7 +697,7 @@ export default function SeveranceClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 퇴사 전 체크리스트</strong>
+            <strong>퇴사 전 체크리스트</strong>
             <p>
               ✅ <strong>미사용 연차</strong>를 모두 사용·정산 받기<br />
               ✅ 마지막 월급 정확 계산 (일할 계산 X / O 회사 규정 확인)<br />
@@ -712,7 +712,7 @@ export default function SeveranceClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/savings" className={s.crossLink}>
-        💰 월 저축 계산기 → 퇴직금으로 자산 형성·재무 진단
+        월 저축 계산기 → 퇴직금으로 자산 형성·재무 진단
       </Link>
     </div>
   )

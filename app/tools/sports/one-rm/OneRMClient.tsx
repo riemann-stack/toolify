@@ -338,7 +338,7 @@ export default function OneRMClient() {
       </div>
 
       <div className={s.injuryCard}>
-        <strong>🛡️ 부상 예방 체크리스트</strong>
+        <strong>부상 예방 체크리스트</strong>
         <ul className={s.injuryList}>
           <li>관절·허리 통증이 있는 날에는 1RM 도전 금지</li>
           <li>워밍업 5세트(최소 3세트) 필수 — 빈 봉부터 점진적 증가</li>
@@ -893,15 +893,15 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
                 return (
                   <>
                     <div className={s.programCard}>
-                      <div className={s.programHead}>💪 근력 중심 (저반복·고중량)</div>
+                      <div className={s.programHead}>근력 중심 (저반복·고중량)</div>
                       <div className={s.programItem}><strong>5×5</strong> @ 80% — {d(pct80)}{unit} × 5회 × 5세트</div>
                     </div>
                     <div className={s.programCard}>
-                      <div className={s.programHead}>🔥 근비대 (중반복)</div>
+                      <div className={s.programHead}>근비대 (중반복)</div>
                       <div className={s.programItem}><strong>4×8~12</strong> @ 70~75% — {d(pct70)}~{d(pct75)}{unit} × 8~12회 × 4세트</div>
                     </div>
                     <div className={s.programCard}>
-                      <div className={s.programHead}>🚴 볼륨/지구력</div>
+                      <div className={s.programHead}>볼륨/지구력</div>
                       <div className={s.programItem}><strong>3×15</strong> @ 60% — {d(pct60)}{unit} × 15회 × 3세트</div>
                     </div>
                   </>

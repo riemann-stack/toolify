@@ -398,13 +398,13 @@ export default function CircuitSimulatorClient() {
     if (type === 'series') {
       const sumV = result.perResistor.reduce((a, r) => a + r.voltage, 0)
       return {
-        title: '✅ 키르히호프 전압 법칙 (KVL)',
+        title: '키르히호프 전압 법칙 (KVL)',
         line: `V_${result.perResistor.map(r => r.label).join(' + V_')} = ${result.perResistor.map(r => r.voltage.toFixed(2)).join(' + ')} = ${sumV.toFixed(2)}V = V_전체`,
       }
     }
     const sumI = result.perResistor.reduce((a, r) => a + r.current, 0)
     return {
-      title: '✅ 키르히호프 전류 법칙 (KCL)',
+      title: '키르히호프 전류 법칙 (KCL)',
       line: `I_${result.perResistor.map(r => r.label).join(' + I_')} = ${result.perResistor.map(r => (r.current * 1000).toFixed(1) + 'mA').join(' + ')} = ${(sumI * 1000).toFixed(1)}mA = I_전체`,
     }
   }, [type, result, resistors])
@@ -710,7 +710,7 @@ export default function CircuitSimulatorClient() {
               <p className={s.verifyTitle}>{verifyText.title}</p>
               <div className={s.verifyLine}>{verifyText.line}</div>
               <div className={s.verifyLine}>
-                ⚡ 전력 합산: P = V × I = {voltage.toFixed(1)} × {fmtA(result.totalCurrent)} = <strong>{fmtW(result.totalPower)}</strong>
+                전력 합산: P = V × I = {voltage.toFixed(1)} × {fmtA(result.totalCurrent)} = <strong>{fmtW(result.totalPower)}</strong>
               </div>
             </div>
           )}
@@ -798,7 +798,7 @@ export default function CircuitSimulatorClient() {
 
           {/* 가이드 */}
           <div className={s.formulaCard}>
-            <p className={s.formulaTitle}>💡 직관 가이드</p>
+            <p className={s.formulaTitle}>직관 가이드</p>
             <div>전압이 2배 → 전류도 2배 (저항 일정)</div>
             <div>저항이 2배 → 전류는 절반 (전압 일정)</div>
             <div>전류 또는 전압 2배 → 전력 2배 (다른 변수 일정)</div>
@@ -808,7 +808,7 @@ export default function CircuitSimulatorClient() {
           {/* LED 저항 빠른 계산 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>💡 LED 전류 제한 저항 빠른 계산</span>
+              <span>LED 전류 제한 저항 빠른 계산</span>
             </div>
             <div className={s.formulaCard} style={{ marginTop: 0 }}>
               <p className={s.formulaTitle}>R = (V_source − V_LED) / I_LED</p>
@@ -824,7 +824,7 @@ export default function CircuitSimulatorClient() {
       {tab === 'learn' && (
         <>
           <div className={s.formulaCard}>
-            <p className={s.formulaTitle}>📚 핵심 공식 모음</p>
+            <p className={s.formulaTitle}>핵심 공식 모음</p>
             <div><strong>옴의 법칙:</strong> V = I × R</div>
             <div><strong>전력:</strong> P = V × I = I² × R = V² / R</div>
             <div><strong>직렬 합성:</strong> R_total = R₁ + R₂ + ... + Rₙ</div>
@@ -870,7 +870,7 @@ export default function CircuitSimulatorClient() {
       {tab === 'exam' && (
         <>
           <div className={s.formulaCard}>
-            <p className={s.formulaTitle}>📝 한국 중3·고1 물리 빈출 회로 7문제</p>
+            <p className={s.formulaTitle}>한국 중3·고1 물리 빈출 회로 7문제</p>
             <div>각 문제의 정답을 클릭한 뒤 [정답·풀이 보기]로 단계별 풀이 확인</div>
           </div>
 

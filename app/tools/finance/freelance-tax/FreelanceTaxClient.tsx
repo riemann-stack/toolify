@@ -247,7 +247,7 @@ function QuickCalcTab({ inputs, result, update }: {
 
       {/* 종합소득공제 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>👨‍👩‍👧 종합소득공제</p>
+        <p className={styles.gapTitle}>종합소득공제</p>
 
         <div className={styles.checkRow}>
           <label className={styles.checkLabel}>
@@ -303,7 +303,7 @@ function QuickCalcTab({ inputs, result, update }: {
           <span>원/연</span>
         </div>
 
-        <p className={styles.gapTitle} style={{ marginTop: 14 }}>💸 세액공제</p>
+        <p className={styles.gapTitle} style={{ marginTop: 14 }}>세액공제</p>
 
         <div className={styles.numberRow}>
           <label htmlFor="freelance-tax-saving">연금저축 납입액 <span className={styles.smallNote}>(한도 600만)</span></label>
@@ -337,7 +337,7 @@ function QuickCalcTab({ inputs, result, update }: {
 
       {/* 원천징수 옵션 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🧾 원천징수 (이미 떼인 세금)</p>
+        <p className={styles.gapTitle}>원천징수 (이미 떼인 세금)</p>
         <div className={styles.pillRow} role="group" aria-label="원천징수 입력 방식">
           <button
             type="button"
@@ -524,7 +524,7 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
 
         <div className={styles.simRow}>
           <div className={styles.simHead}>
-            <span>☂️ 노란우산공제</span>
+            <span>노란우산공제</span>
             <strong>{fmtKRW(yellowSim)}</strong>
           </div>
           <input
@@ -543,7 +543,7 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
 
         <div className={styles.simRow}>
           <div className={styles.simHead}>
-            <span>💰 연금저축</span>
+            <span>연금저축</span>
             <strong>{fmtKRW(pensionSim)}</strong>
           </div>
           <input
@@ -562,7 +562,7 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
 
         <div className={styles.simRow}>
           <div className={styles.simHead}>
-            <span>👨‍👩‍👦 부양가족</span>
+            <span>부양가족</span>
             <strong>{depSim}명</strong>
           </div>
           <input
@@ -583,7 +583,7 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
       {/* 추천 절세 조합 */}
       {tips.length > 0 && (
         <section className={styles.optionCard}>
-          <p className={styles.gapTitle}>🎯 추천 절세 전략</p>
+          <p className={styles.gapTitle}>추천 절세 전략</p>
           <div className={styles.tipList}>
             {tips.map((t, i) => (
               <div key={i} className={styles.tipCard}>
@@ -666,7 +666,7 @@ function GuideTab() {
 
       {/* 체크리스트 */}
       <section>
-        <label className={styles.label}>📋 신고 전 준비 서류</label>
+        <label className={styles.label}>신고 전 준비 서류</label>
         <ul className={styles.checklist}>
           {checklist.map((item, i) => (
             <li key={i}>{item}</li>
@@ -676,7 +676,7 @@ function GuideTab() {
 
       {/* 신고 절차 */}
       <section>
-        <label className={styles.label}>🪜 홈택스 신고 단계</label>
+        <label className={styles.label}>홈택스 신고 단계</label>
         <div className={styles.stepList}>
           {steps.map((s) => (
             <div key={s.step} className={styles.stepCard}>
@@ -698,7 +698,7 @@ function GuideTab() {
 
       {/* 관련 도구 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🔗 관련 도구</p>
+        <p className={styles.gapTitle}>관련 도구</p>
         <ul className={styles.relatedList}>
           <li><Link href="/tools/finance/4-insurance">4대보험 계산기</Link> — 국민연금·건강보험 부담액</li>
           <li><Link href="/tools/finance/salary">연봉 실수령액 계산기</Link> — 직장인 + 부업 합산 시 본업 실수령</li>

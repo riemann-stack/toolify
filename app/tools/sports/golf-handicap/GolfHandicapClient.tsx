@@ -619,16 +619,16 @@ export default function GolfHandicapClient() {
 
       <div className={s.tabs4} role="tablist">
         <button type="button" role="tab" aria-selected={tab === 'index'} className={`${s.tab} ${tab === 'index' ? s.tabActive : ''}`} onClick={() => setTab('index')}>
-          📊 핸디캡 지수
+          핸디캡 지수
         </button>
         <button type="button" role="tab" aria-selected={tab === 'course'} className={`${s.tab} ${tab === 'course' ? s.tabActive : ''}`} onClick={() => setTab('course')}>
-          ⛳ 코스 핸디캡
+          코스 핸디캡
         </button>
         <button type="button" role="tab" aria-selected={tab === 'score'} className={`${s.tab} ${tab === 'score' ? s.tabActive : ''}`} onClick={() => setTab('score')}>
-          🎯 네트·스태블포드
+          네트·스태블포드
         </button>
         <button type="button" role="tab" aria-selected={tab === 'records'} className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>
-          📅 내 기록
+          내 기록
         </button>
       </div>
 
@@ -760,7 +760,7 @@ function RecordsTab() {
       {/* 핸디캡 추이 차트 */}
       {points.length >= 2 && (
         <div className={s.card}>
-          <span className={s.cardLabel}>📈 발전 추이 ({records.length}라운드)</span>
+          <span className={s.cardLabel}>발전 추이 ({records.length}라운드)</span>
           <ProgressChart points={points} />
           {stats.startIndex !== null && stats.currentIndex !== null && (
             <div className={s.chartStats}>
@@ -811,7 +811,7 @@ function RecordsTab() {
 
       {/* 새 라운드 추가 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>➕ 새 라운드 추가</span>
+        <span className={s.cardLabel}>새 라운드 추가</span>
 
         {courses.length > 0 && (
           <div style={{ marginBottom: 12 }}>
@@ -917,13 +917,13 @@ function RecordsTab() {
         </div>
 
         <button type="button" className={s.bigSaveBtn} onClick={handleAddRound}>
-          📅 라운드 저장
+          라운드 저장
         </button>
       </div>
 
       {/* 골프장 저장 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>💾 자주 가는 골프장 저장</span>
+        <span className={s.cardLabel}>자주 가는 골프장 저장</span>
         <p className={s.helperText} style={{ marginBottom: 10 }}>
           위 입력한 CR·슬로프·파·티 값을 골프장 이름과 함께 저장. 다음 라운드 입력 시 한 번의 선택으로 자동 입력됩니다.
         </p>
@@ -935,7 +935,7 @@ function RecordsTab() {
             maxLength={40} style={{ flex: 1 }} />
           <button type="button" className={s.smallSaveBtn}
             onClick={handleSaveCourse} disabled={!newCourseName.trim()}>
-            💾 저장
+            저장
           </button>
         </div>
 
@@ -964,11 +964,11 @@ function RecordsTab() {
       {records.length > 0 ? (
         <div className={s.card}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <span className={s.cardLabel} style={{ marginBottom: 0 }}>📅 저장된 라운드 ({records.length})</span>
+            <span className={s.cardLabel} style={{ marginBottom: 0 }}>저장된 라운드 ({records.length})</span>
             <div style={{ display: 'flex', gap: 6 }}>
               <button type="button" onClick={() => downloadCsv(records)}
                 className={s.smallActionBtn}>
-                📊 CSV
+                CSV
               </button>
               <button type="button" onClick={handleClearAll}
                 className={s.smallActionBtn} style={{ color: '#DC2626' }}>

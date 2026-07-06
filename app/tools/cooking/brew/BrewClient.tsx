@@ -140,10 +140,10 @@ export default function BrewClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="브루잉 계산기 메뉴">
         {([
-          { id: 'ratio',     label: '⚖️ 비율 계산' },
-          { id: 'pour',      label: '⏱️ 푸어 스케줄' },
-          { id: 'intensity', label: '🎚️ 강도·로스팅' },
-          { id: 'cost',      label: '💰 비용 비교' },
+          { id: 'ratio',     label: '비율 계산' },
+          { id: 'pour',      label: '푸어 스케줄' },
+          { id: 'intensity', label: '강도·로스팅' },
+          { id: 'cost',      label: '비용 비교' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -383,7 +383,7 @@ export default function BrewClient() {
               </table>
             </div>
             <div className={s.tipBox}>
-              💡 <strong>추출 팁</strong> — {m.tip}
+              <strong>추출 팁</strong> — {m.tip}
             </div>
           </div>
         </>
@@ -484,7 +484,7 @@ export default function BrewClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>⏱️ 푸어 팁</strong>
+            <strong>푸어 팁</strong>
             <p>
               • <strong>블루밍</strong>: 신선한 원두는 부풀어 오름. 거품 안 나면 로스팅 일자 1주 이상 경과<br />
               • <strong>1차·2차 푸어</strong>: 가운데서 시계 방향 원형, 가장자리는 닿지 않게<br />
@@ -625,7 +625,7 @@ export default function BrewClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🌡️ 추출 변수 우선순위</strong>
+            <strong>추출 변수 우선순위</strong>
             <p>
               비율보다 더 큰 영향을 주는 변수: ① <strong>원두 신선도(로스팅 일자 7~21일)</strong> ②{' '}
               <strong>분쇄도</strong> ③ <strong>물 온도</strong> ④ <strong>추출 시간</strong> ⑤ <strong>비율</strong>.
@@ -726,7 +726,7 @@ export default function BrewClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💰 홈브루 입문 비용 (참고)</strong>
+            <strong>홈브루 입문 비용 (참고)</strong>
             <p>
               • <strong>핸드드립</strong>: 드리퍼 + 필터 + 저울 + 케틀 = 약 5~15만원<br />
               • <strong>프렌치프레스</strong>: 본체만 2~5만원 (가장 가벼운 시작)<br />

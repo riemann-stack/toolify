@@ -272,7 +272,7 @@ function CommonInputs(p: CommonInputsProps) {
       {/* 수면 시간 — 야간에 손이 가야 하는 단계 자동 경고 */}
       <div className={s.card}>
         <label className={s.cardLabel}>
-          🛌 수면 시간
+          수면 시간
           <span className={s.cardLabelHint}>이 시간대에 작업이 잡히면 경고합니다</span>
         </label>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -335,7 +335,7 @@ function DDTPanel(p: CommonInputsProps) {
   return (
     <div className={s.ddtCard}>
       <div className={s.ddtTitle}>
-        🌡️ DDT — 권장 물 온도
+        DDT — 권장 물 온도
         <small>{hasLevain ? `${prefermentName} 사용 (×4 공식)` : '이스트 사용 (×3 공식)'}</small>
       </div>
 
@@ -579,12 +579,12 @@ function ForwardTab(p: CommonInputsProps) {
 
           {result.preset.notes && (
             <div className={s.presetNote}>
-              <strong>💡 {result.preset.name.split(' ')[0]} 팁:</strong> {result.preset.notes}
+              <strong>{result.preset.name.split(' ')[0]} 팁:</strong> {result.preset.notes}
             </div>
           )}
 
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-            {copied ? '✓ 복사됨' : '📋 일정 텍스트 복사'}
+            {copied ? '✓ 복사됨' : '일정 텍스트 복사'}
           </button>
         </>
       )}
@@ -680,7 +680,7 @@ function BackwardTab(p: CommonInputsProps) {
           </div>
 
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-            {copied ? '✓ 복사됨' : '📋 일정 텍스트 복사'}
+            {copied ? '✓ 복사됨' : '일정 텍스트 복사'}
           </button>
         </>
       )}
@@ -758,7 +758,7 @@ function PresetTab({ onApply }: { onApply: (id: string) => void }) {
         </div>
 
         <div className={s.presetNote}>
-          <strong>💡 핵심 팁:</strong> {preset.notes}
+          <strong>핵심 팁:</strong> {preset.notes}
         </div>
 
         <div>
@@ -926,7 +926,7 @@ function RecipeTab({
 
       {recipes.length === 0 && loaded && !showForm && (
         <div className={s.empty}>
-          <div className={s.emptyTitle}>📭 저장된 레시피가 없어요</div>
+          <div className={s.emptyTitle}>저장된 레시피가 없어요</div>
           <p>다른 탭에서 빵·발효·온도 설정 후 [+ 새 레시피 저장]으로 등록하세요.</p>
         </div>
       )}
@@ -986,7 +986,7 @@ function SleepConflictBanner({ result, sleepStart, sleepEnd }: { result: Schedul
       lineHeight: 1.7,
     }}>
       <strong style={{ color: '#D97706', display: 'block', marginBottom: 6 }}>
-        🛌 수면 시간 ({sleepStart} ~ {sleepEnd}) 중 작업 {conflicts.length}건
+        수면 시간 ({sleepStart} ~ {sleepEnd}) 중 작업 {conflicts.length}건
       </strong>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 8 }}>
         {conflicts.map((c, i) => (

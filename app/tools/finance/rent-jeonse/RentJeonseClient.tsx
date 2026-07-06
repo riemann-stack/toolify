@@ -35,9 +35,9 @@ const DEFAULT_INPUTS: CalcInputs = {
 }
 
 const TABS = [
-  { k: 'compare', l: '🏠 빠른 비교' },
-  { k: 'sim',     l: '📈 시뮬레이션' },
-  { k: 'guide',   l: '📚 가이드·체크리스트' },
+  { k: 'compare', l: '빠른 비교' },
+  { k: 'sim',     l: '시뮬레이션' },
+  { k: 'guide',   l: '가이드·체크리스트' },
 ] as const
 
 export default function RentJeonseClient() {
@@ -122,7 +122,7 @@ function CompareTab({ inputs, update, results, best }: {
 
       {/* 전세 옵션 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🏦 전세 옵션</p>
+        <p className={styles.gapTitle}>전세 옵션</p>
         <div className={styles.numberRow}>
           <label>전세 보증금</label>
           <CompactInput value={inputs.jeonseDeposit} onChange={(n) => update('jeonseDeposit', n)} />
@@ -153,7 +153,7 @@ function CompareTab({ inputs, update, results, best }: {
 
       {/* 월세 옵션 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🏘️ 월세 옵션</p>
+        <p className={styles.gapTitle}>월세 옵션</p>
         <div className={styles.numberRow}>
           <label>월세 보증금</label>
           <CompactInput value={inputs.monthlyDeposit} onChange={(n) => update('monthlyDeposit', n)} />
@@ -178,7 +178,7 @@ function CompareTab({ inputs, update, results, best }: {
 
       {/* 반전세 (전월세 전환율) */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🔁 반전세 시뮬 (전세 일부 → 월세 전환)</p>
+        <p className={styles.gapTitle}>반전세 시뮬 (전세 일부 → 월세 전환)</p>
         <div className={styles.numberRow}>
           <label>전월세 전환율</label>
           <PercentInput value={inputs.conversionRate} onChange={(n) => update('conversionRate', n)} min={2} max={10} />
@@ -200,7 +200,7 @@ function CompareTab({ inputs, update, results, best }: {
 
       {/* 공통 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>⚙️ 공통 조건</p>
+        <p className={styles.gapTitle}>공통 조건</p>
         <div className={styles.numberRow}>
           <label>관리비 (월)</label>
           <CompactInput value={inputs.maintenance} onChange={(n) => update('maintenance', n)} placeholder="200,000" />
@@ -238,7 +238,7 @@ function CompareTab({ inputs, update, results, best }: {
           ))}
         </div>
         <div className={styles.bestSummary}>
-          <strong>💡 권장:</strong> 입력 조건 기준 <strong className={styles.bestText}>{results.find((r) => r.option === best)?.label}</strong>가 누적 비용이 가장 낮습니다.
+          <strong>권장:</strong> 입력 조건 기준 <strong className={styles.bestText}>{results.find((r) => r.option === best)?.label}</strong>가 누적 비용이 가장 낮습니다.
           가장 비싼 옵션 대비 <strong className={styles.bestText}>{fmtKRW(Math.max(...results.map((r) => r.cumulativeCost)) - Math.min(...results.map((r) => r.cumulativeCost)))}</strong> 절약.
         </div>
       </section>
@@ -467,7 +467,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
     <div className={styles.panel}>
       {/* 전세사기 위험 점수 */}
       <section>
-        <label className={styles.label}>🛡️ 전세사기 위험 점수 <span className={styles.labelSub}>(체크박스 선택)</span></label>
+        <label className={styles.label}>전세사기 위험 점수 <span className={styles.labelSub}>(체크박스 선택)</span></label>
         <div className={styles.riskScoreCard} style={{ borderColor: levelColor[assessment.level] + '60' }}>
           <p className={styles.riskScoreLabel}>위험 점수</p>
           <p className={styles.riskScoreBig} style={{ color: levelColor[assessment.level] }}>
@@ -509,7 +509,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
 
         {assessment.recommendations.length > 0 && (
           <div className={styles.optionCard}>
-            <p className={styles.gapTitle}>📌 권장 조치</p>
+            <p className={styles.gapTitle}>권장 조치</p>
             <ul className={styles.recList}>
               {assessment.recommendations.map((r, i) => (
                 <li key={i}>{r}</li>
@@ -521,7 +521,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
 
       {/* 절세 가이드 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>💸 절세 가이드</p>
+        <p className={styles.gapTitle}>절세 가이드</p>
         <div className={styles.savingGuide}>
           <div>
             <p className={styles.savingTitle}>월세 세액공제</p>
@@ -550,7 +550,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
 
       {/* 계약 전 체크리스트 */}
       <section>
-        <label className={styles.label}>📋 계약 전 체크리스트</label>
+        <label className={styles.label}>계약 전 체크리스트</label>
         <ol className={styles.contractList}>
           <li><strong>등기부등본 발급</strong> (대법원 인터넷등기소 700원) — 근저당·신탁·압류 확인</li>
           <li><strong>국토부 실거래가 확인</strong> (rt.molit.go.kr) — 시세 대비 전세가율 80% 미만 권장</li>
@@ -565,7 +565,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
 
       {/* 관련 도구 */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🔗 관련 도구</p>
+        <p className={styles.gapTitle}>관련 도구</p>
         <ul className={styles.relatedList}>
           <li><Link href="/tools/finance/loan">대출이자 계산기</Link> — 전세자금대출 원리금균등·금리 시뮬</li>
           <li><Link href="/tools/finance/real-estate">부동산 수익률 계산기</Link> — 매수 결정 시</li>

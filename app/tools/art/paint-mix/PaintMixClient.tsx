@@ -170,10 +170,10 @@ export default function PaintMixClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'mix' ? s.tabActive : ''}`}    onClick={() => setTab('mix')}>🎨 색 혼합</button>
-        <button className={`${s.tab} ${tab === 'volume' ? s.tabActive : ''}`} onClick={() => setTab('volume')}>📏 분량 환산</button>
-        <button className={`${s.tab} ${tab === 'match' ? s.tabActive : ''}`}  onClick={() => setTab('match')}>🔄 컬러 매칭</button>
-        <button className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => setTab('recipe')}>📚 레시피·색환</button>
+        <button className={`${s.tab} ${tab === 'mix' ? s.tabActive : ''}`}    onClick={() => setTab('mix')}>색 혼합</button>
+        <button className={`${s.tab} ${tab === 'volume' ? s.tabActive : ''}`} onClick={() => setTab('volume')}>분량 환산</button>
+        <button className={`${s.tab} ${tab === 'match' ? s.tabActive : ''}`}  onClick={() => setTab('match')}>컬러 매칭</button>
+        <button className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => setTab('recipe')}>레시피·색환</button>
       </div>
 
       {/* ═════════════ 탭 1: 색 혼합 시뮬레이터 ═════════════ */}
@@ -181,7 +181,7 @@ export default function PaintMixClient() {
         <>
           {/* 모델 토글 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🧪 혼합 모델</span>
+            <span className={s.cardLabel}>혼합 모델</span>
             <div className={s.modelRow}>
               {([
                 { id: 'subtractive', label: 'Subtractive (물감)' },
@@ -202,7 +202,7 @@ export default function PaintMixClient() {
           {/* 색 슬롯 */}
           <div className={s.card}>
             <div className={s.slotHead}>
-              <span className={s.cardLabel}>🎨 혼합할 색 ({slots.length}/4)</span>
+              <span className={s.cardLabel}>혼합할 색 ({slots.length}/4)</span>
               <div className={s.slotActions}>
                 <button className={s.smBtn} onClick={resetEqual}>균등</button>
                 <button className={s.smBtn} onClick={addSlot} disabled={slots.length >= 4}>+ 색 추가</button>
@@ -238,7 +238,7 @@ export default function PaintMixClient() {
 
           {/* 색공간 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 색공간 변환</span>
+            <span className={s.cardLabel}>색공간 변환</span>
             <table className={s.dataTable}>
               <tbody>
                 <tr><td>HEX</td><td className={s.mono}>{mixedHex}</td></tr>
@@ -256,7 +256,7 @@ export default function PaintMixClient() {
       {tab === 'volume' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📏 총 분량</span>
+            <span className={s.cardLabel}>총 분량</span>
             <div className={s.volRow}>
               <input
                 type="number" inputMode="decimal"
@@ -285,7 +285,7 @@ export default function PaintMixClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🧪 안료 농도 보정 (옵션)</span>
+            <span className={s.cardLabel}>안료 농도 보정 (옵션)</span>
             <div className={s.sliderHead}>
               <span className={s.sliderLabel}>진하기 배수</span>
               <span className={s.sliderValue}>×{pigmentScale.toFixed(2)}</span>
@@ -319,7 +319,7 @@ export default function PaintMixClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>📋 색별 분량</span>
+            <span className={s.cardLabel}>색별 분량</span>
             <table className={s.dataTable}>
               <thead>
                 <tr>
@@ -363,7 +363,7 @@ export default function PaintMixClient() {
       {tab === 'match' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🎯 목표 색</span>
+            <span className={s.cardLabel}>목표 색</span>
             <div className={s.targetRow}>
               <div className={s.previewBox} style={{ background: targetHex }} />
               <div className={s.targetInputs}>
@@ -379,7 +379,7 @@ export default function PaintMixClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🎒 사용 가능한 색 팔레트</span>
+            <span className={s.cardLabel}>사용 가능한 색 팔레트</span>
             <div className={s.paletteRow}>
               {PALETTES.map((p) => (
                 <button
@@ -399,7 +399,7 @@ export default function PaintMixClient() {
               onClick={startMatching}
               disabled={matching}
             >
-              {matching ? '🔍 분석 중...' : '🔄 매칭 시작'}
+              {matching ? '분석 중...' : '매칭 시작'}
             </button>
           </div>
 
@@ -407,7 +407,7 @@ export default function PaintMixClient() {
             <>
               {/* 비교 결과 */}
               <div className={s.card}>
-                <span className={s.cardLabel}>⚖️ 매칭 결과 비교</span>
+                <span className={s.cardLabel}>매칭 결과 비교</span>
                 <div className={s.compareRow}>
                   <div className={s.compareCell}>
                     <div className={s.previewBox} style={{ background: targetHex }} />
@@ -426,7 +426,7 @@ export default function PaintMixClient() {
 
               {/* 추천 레시피 */}
               <div className={s.card}>
-                <span className={s.cardLabel}>📝 추천 혼합 레시피</span>
+                <span className={s.cardLabel}>추천 혼합 레시피</span>
                 <div className={s.recipeView}>
                   {matchResult.colors.map((c, i) => (
                     <div key={i} className={s.recipeItem}>
@@ -439,7 +439,7 @@ export default function PaintMixClient() {
 
                 {/* 화이트·블랙 미세 조정 */}
                 <div className={s.adjustBlock}>
-                  <p className={s.adjustLabel}>🎚️ 미세 조정</p>
+                  <p className={s.adjustLabel}>미세 조정</p>
                   <div className={s.field}>
                     <label className={s.fieldLabel} htmlFor="paint-mix-parts">흰색 추가 — {whiteAdd} parts</label>
                     <input id="paint-mix-parts" type="range" min={0} max={5} step={1}
@@ -459,7 +459,7 @@ export default function PaintMixClient() {
                 </div>
 
                 <button className={s.primaryBtn} onClick={applyMatchToTab1}>
-                  🎨 탭 1에 적용
+                  탭 1에 적용
                 </button>
               </div>
             </>
@@ -472,21 +472,21 @@ export default function PaintMixClient() {
         <>
           {/* 색환 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🎡 12색 색환 — 클릭하면 보색·유사색·삼각배색 표시</span>
+            <span className={s.cardLabel}>12색 색환 — 클릭하면 보색·유사색·삼각배색 표시</span>
             <ColorWheel selectedIdx={wheelIdx} onSelect={setWheelIdx} />
             <div className={s.wheelInfo}>
               <div className={s.wheelInfoBlock}>
-                <p className={s.wheelInfoLabel}>🟣 선택</p>
+                <p className={s.wheelInfoLabel}>선택</p>
                 <div className={s.colorChip} style={{ background: COLOR_WHEEL_12[wheelIdx].hex }} />
                 <p className={s.wheelInfoText}>{COLOR_WHEEL_12[wheelIdx].name}</p>
               </div>
               <div className={s.wheelInfoBlock}>
-                <p className={s.wheelInfoLabel}>♻️ 보색</p>
+                <p className={s.wheelInfoLabel}>보색</p>
                 <div className={s.colorChip} style={{ background: wheelComp.hex }} />
                 <p className={s.wheelInfoText}>{wheelComp.name}</p>
               </div>
               <div className={s.wheelInfoBlock}>
-                <p className={s.wheelInfoLabel}>🌗 유사색</p>
+                <p className={s.wheelInfoLabel}>유사색</p>
                 <div className={s.chipPair}>
                   {wheelAna.map((c, i) => (
                     <div key={i}>
@@ -497,7 +497,7 @@ export default function PaintMixClient() {
                 </div>
               </div>
               <div className={s.wheelInfoBlock}>
-                <p className={s.wheelInfoLabel}>🔺 삼각배색</p>
+                <p className={s.wheelInfoLabel}>삼각배색</p>
                 <div className={s.chipPair}>
                   {wheelTri.map((c, i) => (
                     <div key={i}>
@@ -516,7 +516,7 @@ export default function PaintMixClient() {
 
           {/* 레시피 그리드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📚 자주 쓰는 색 레시피 (클릭 시 탭 1에 적용)</span>
+            <span className={s.cardLabel}>자주 쓰는 색 레시피 (클릭 시 탭 1에 적용)</span>
             <div className={s.recipeGrid}>
               {RECIPES.map((r, i) => {
                 /* 미리보기 색 계산 */
@@ -541,7 +541,7 @@ export default function PaintMixClient() {
 
           {/* 분야별 가이드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🎓 분야별 추천 색 세트</span>
+            <span className={s.cardLabel}>분야별 추천 색 세트</span>
             <div className={s.fieldList}>
               {FIELD_GUIDES.map((f) => (
                 <div key={f.id} className={s.fieldCard}>

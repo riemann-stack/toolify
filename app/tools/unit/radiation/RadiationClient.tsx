@@ -252,7 +252,7 @@ export default function RadiationClient() {
       {/* ─── 5. 일상 노출 비교 ─── */}
       <div className={s.card}>
         <span className={s.cardLabel}>
-          🌍 일상 노출 비교
+          일상 노출 비교
           <span className={s.cardHint}>입력 선량 {fmtSci(currentMSv, 4)} mSv 위치 강조</span>
         </span>
         <div className={s.expList}>
@@ -301,7 +301,7 @@ export default function RadiationClient() {
       {/* ─── 7. 비이온화 EMF 별도 섹션 ─── */}
       <div className={s.emfCard}>
         <div className={s.emfHead}>
-          <strong>📡 비이온화 전자파 (EMF) — 별도 영역</strong>
+          <strong>비이온화 전자파 (EMF) — 별도 영역</strong>
           <p>휴대폰·기지국·송전선·가전 등 일상 EMF는 위의 방사선 단위(Sv·Gy·Bq)와 <strong>물리적으로 다른 영역</strong>이라 직접 환산할 수 없어요. 참고용 측정값입니다.</p>
         </div>
 

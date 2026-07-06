@@ -268,7 +268,7 @@ export default function LifeTimeClient() {
       {/* 메멘토 진입 확인 */}
       {stage === 'mementoConfirm' && (
         <div className={styles.mementoConfirm}>
-          <p className={styles.mementoConfirmTitle}>📿 메멘토 모리 모드 진입 안내</p>
+          <p className={styles.mementoConfirmTitle}>메멘토 모리 모드 진입 안내</p>
           <p className={styles.mementoConfirmBody}>
             이 모드는 <strong style={{ color: '#D7B6E8' }}>시간의 유한성을 직시</strong>하기 위한 모드입니다.
             심리적으로 무겁게 느껴질 수 있어, 진입 전 안내를 드립니다.
@@ -558,7 +558,7 @@ export default function LifeTimeClient() {
       {/* 공유 */}
       {stage === 'show' && (
         <button type="button" className={`${styles.shareBtn} ${copied ? styles.copied : ''}`} onClick={handleShare}>
-          {copied ? '✓ 복사 완료' : '✨ 공유 텍스트 복사'}
+          {copied ? '✓ 복사 완료' : '공유 텍스트 복사'}
         </button>
       )}
 

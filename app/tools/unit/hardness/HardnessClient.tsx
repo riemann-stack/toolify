@@ -146,7 +146,7 @@ export default function HardnessClient() {
 
       {/* 칼 경도 가이드 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🔪 칼 경도 가이드</span>
+        <span className={s.cardLabel}>칼 경도 가이드</span>
         <div className={s.refList}>
           {KNIFE_EXAMPLES.map((k) => (
             <ExampleRow key={k.name} item={k} currentHrc={result?.hrc ?? null} />
@@ -156,7 +156,7 @@ export default function HardnessClient() {
 
       {/* 공구 경도 가이드 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🔧 공구·부품 경도 가이드</span>
+        <span className={s.cardLabel}>공구·부품 경도 가이드</span>
         <div className={s.refList}>
           {TOOL_EXAMPLES.map((k) => (
             <ExampleRow key={k.name} item={k} currentHrc={result?.hrc ?? null} />
@@ -166,7 +166,7 @@ export default function HardnessClient() {
 
       {/* 모스 경도 비교 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>🪨 모스(Mohs) 경도 비교</span>
+        <span className={s.cardLabel}>모스(Mohs) 경도 비교</span>
         <div className={s.mohsList}>
           {MOHS_TABLE.map((m) => (
             <div key={m.mohs} className={s.mohsRow}>
@@ -184,7 +184,7 @@ export default function HardnessClient() {
 
       {/* Shore 분리 안내 */}
       <div className={s.shoreCard}>
-        <strong className={s.shoreTitle}>📐 {SHORE_NOTE.title}</strong>
+        <strong className={s.shoreTitle}>{SHORE_NOTE.title}</strong>
         <p className={s.shoreBody}>{SHORE_NOTE.body}</p>
       </div>
     </div>

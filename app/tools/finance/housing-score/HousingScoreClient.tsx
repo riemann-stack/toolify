@@ -170,7 +170,7 @@ export default function HousingScoreClient() {
 
       {/* ─── 1. 신청자 정보 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>👤 1. 신청자 정보</div>
+        <div className={s.cardLabel}>1. 신청자 정보</div>
 
         <div className={s.fieldRow}>
           <div className={s.field}>
@@ -210,7 +210,7 @@ export default function HousingScoreClient() {
 
       {/* ─── 2. 무주택 기간 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>🏠 2. 무주택 기간 ({unhomedScore(unhomedYears)}점 / 32점)</div>
+        <div className={s.cardLabel}>2. 무주택 기간 ({unhomedScore(unhomedYears)}점 / 32점)</div>
 
         <div className={s.subLabel}>주택 보유 상태</div>
         <div className={s.statusRow} role="group" aria-label="주택 보유 상태">
@@ -229,7 +229,7 @@ export default function HousingScoreClient() {
             className={`${s.statusBtn} ${houseStatus === 'one_sell' ? s.statusActive : ''}`}
             onClick={() => setHouseStatus('one_sell')}
           >
-            <strong>🏚️ 1주택 (처분 서약)</strong>
+            <strong>1주택 (처분 서약)</strong>
             <small>입주 전 처분 동의 → 가점제</small>
           </button>
           <button
@@ -238,7 +238,7 @@ export default function HousingScoreClient() {
             className={`${s.statusBtn} ${houseStatus === 'one_keep' ? s.statusActive : ''}`}
             onClick={() => setHouseStatus('one_keep')}
           >
-            <strong>🏠 1주택 (미서약)</strong>
+            <strong>1주택 (미서약)</strong>
             <small>가점제 X — 추첨제만</small>
           </button>
           <button
@@ -308,7 +308,7 @@ export default function HousingScoreClient() {
 
       {/* ─── 3. 부양가족 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>👨‍👩‍👧‍👦 3. 부양가족 ({dependentScore(dependentCount)}점 / 35점)</div>
+        <div className={s.cardLabel}>3. 부양가족 ({dependentScore(dependentCount)}점 / 35점)</div>
 
         <p className={s.cardHint}>본인 제외. 배우자·미성년 자녀·만 30세 미만 미혼 자녀·동거 직계존속만 인정.</p>
 
@@ -366,7 +366,7 @@ export default function HousingScoreClient() {
 
       {/* ─── 4. 청약통장 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>💳 4. 청약통장 ({bankbookScore(bankbookYears)}점 / 17점)</div>
+        <div className={s.cardLabel}>4. 청약통장 ({bankbookScore(bankbookYears)}점 / 17점)</div>
 
         <div className={s.fieldRow}>
           <div className={s.field}>
@@ -437,7 +437,7 @@ export default function HousingScoreClient() {
 
       {/* ─── 인기 단지 커트라인 비교 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>🎯 최근 인기 단지 평균 당첨 가점 비교</div>
+        <div className={s.cardLabel}>최근 인기 단지 평균 당첨 가점 비교</div>
         <div className={s.cutlineList}>
           {CUTLINES.map(c => {
             const ok = score.total >= c.avg
@@ -464,7 +464,7 @@ export default function HousingScoreClient() {
 
       {/* ─── 시뮬레이션 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📈 시뮬레이션 — 가점 올리려면?</div>
+        <div className={s.cardLabel}>시뮬레이션 — 가점 올리려면?</div>
         <div className={s.simGrid}>
           {simulations.map(({ sim, result, delta }) => (
             <div key={sim.label} className={s.simCard}>
@@ -487,7 +487,7 @@ export default function HousingScoreClient() {
 
       {/* ─── 특별공급 자격 가이드 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>✨ 특별공급 자격 가이드 (점수 무관)</div>
+        <div className={s.cardLabel}>특별공급 자격 가이드 (점수 무관)</div>
         <p className={s.cardHint}>가점이 부족해도 특별공급으로 당첨 가능. 항목을 펼쳐 본인 해당 조건을 확인하세요 (소득·자산 요건은 청약홈에서 확인).</p>
 
         <div className={s.specialList}>

@@ -233,7 +233,7 @@ export default function LadderClient() {
         </label>
         <div className={s.inputSection}>
           <div className={s.inputCol}>
-            <div className={s.colHeader}>👥 참가자</div>
+            <div className={s.colHeader}>참가자</div>
             {names.map((n, i) => (
               <div key={i} className={s.inputWithDot}>
                 <span className={s.dot} title={`참가자 ${i + 1}`}>
@@ -247,7 +247,7 @@ export default function LadderClient() {
             ))}
           </div>
           <div className={s.inputCol}>
-            <div className={s.colHeader}>🎯 결과</div>
+            <div className={s.colHeader}>결과</div>
             {Array.from({ length: count }, (_, i) => (
               <input key={i} className={`${s.nameInput} ${s.resultInput}`} type="text"
                 aria-label={`결과 ${i + 1}`}
@@ -263,7 +263,7 @@ export default function LadderClient() {
           <span className={s.countNum}>{count}명</span>
           <button className={s.countBtn} onClick={addPerson} disabled={count >= MAX_PARTICIPANTS}>+ 늘리기</button>
           <button className={s.shuffleBtn} onClick={handleShuffle} title="참가자·결과 순서 무작위 + 새 사다리">
-            🔀 순서 섞기
+            순서 섞기
           </button>
         </div>
       </div>
@@ -414,14 +414,14 @@ export default function LadderClient() {
       <div className={s.startBtnRow}>
         <button className={s.bigGenerate} onClick={handleRevealAll}
           disabled={count < MIN_PARTICIPANTS}>
-          👥 한 번에 공개
+          한 번에 공개
         </button>
         <button className={s.startBtnSecondary} onClick={handleNewRungs}
           disabled={count < MIN_PARTICIPANTS}>
-          🔄 가로선 새로 만들기
+          가로선 새로 만들기
         </button>
         <button className={s.startBtnSecondary} onClick={handleNewGame}>
-          🆕 새 게임 (초기화)
+          새 게임 (초기화)
         </button>
       </div>
 
@@ -429,7 +429,7 @@ export default function LadderClient() {
       {allRevealed && tableReady && (
         <div className={s.card} role="status" aria-live="polite">
           <label className={s.cardLabel}>
-            🎉 결과표
+            결과표
             <span className={s.cardLabelHint}>{count}명 모두 공개</span>
           </label>
           <div className={s.resultTable}>
@@ -450,10 +450,10 @@ export default function LadderClient() {
       {revealed.size > 0 && (
         <div className={s.resultActions}>
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-            {copied ? '✓ 복사됨' : '📋 결과 텍스트 복사'}
+            {copied ? '✓ 복사됨' : '결과 텍스트 복사'}
           </button>
           <button className={s.copyBtn} onClick={allRevealed ? handleHideAll : handleRevealAll}>
-            {allRevealed ? '🙈 전체 숨기기' : '👁️ 전체 공개'}
+            {allRevealed ? '전체 숨기기' : '전체 공개'}
           </button>
         </div>
       )}
@@ -559,7 +559,7 @@ function SavedGamesSection({
   return (
     <div className={s.card}>
       <label className={s.cardLabel}>
-        💾 저장된 게임
+        저장된 게임
         <span className={s.cardLabelHint}>{games.length}/30 · 자주 쓰는 사다리 보관</span>
       </label>
 
@@ -597,8 +597,8 @@ function SavedGamesSection({
             ))}
           </div>
           <div className={s.miniRow} style={{ marginTop: 10 }}>
-            <button className={s.miniBtn} onClick={handleExport}>📥 백업 다운로드</button>
-            <button className={s.miniBtn} onClick={() => fileRef.current?.click()}>📤 가져오기</button>
+            <button className={s.miniBtn} onClick={handleExport}>백업 다운로드</button>
+            <button className={s.miniBtn} onClick={() => fileRef.current?.click()}>가져오기</button>
             <input ref={fileRef} type="file" accept=".json" hidden
               onChange={e => { const f = e.target.files?.[0]; if (f) handleImport(f) }} />
           </div>

@@ -328,7 +328,7 @@ export default function EggTimerClient() {
 
       {/* ═══ 한국 요리 프리셋 ═══ */}
       <section>
-        <label className={styles.label}>🍳 한국 요리 프리셋 빠른 적용</label>
+        <label className={styles.label}>한국 요리 프리셋 빠른 적용</label>
         <div className={styles.recipeGrid}>
           {RECIPES.map((r) => (
             <button key={r.id}
@@ -342,7 +342,7 @@ export default function EggTimerClient() {
         </div>
         {activeRecipeData && (
           <div className={styles.recipeTip}>
-            <strong>💡 {activeRecipeData.label.replace(/^[^\s]+\s/, '')} 팁:</strong>
+            <strong>{activeRecipeData.label.replace(/^[^\s]+\s/, '')} 팁:</strong>
             <p>{activeRecipeData.tip}</p>
           </div>
         )}
@@ -350,7 +350,7 @@ export default function EggTimerClient() {
 
       {/* ═══ 입력 영역 ═══ */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🥚 익힘 단계</p>
+        <p className={styles.gapTitle}>익힘 단계</p>
         {/* 컴팩트 — 이미지 없이 라벨 + 시간만, 4×2 그리드 */}
         <div className={styles.donenessCompactGrid}>
           {DONENESS.map((d) => (
@@ -367,7 +367,7 @@ export default function EggTimerClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>📏 한국 계란 크기</p>
+        <p className={styles.gapTitle}>한국 계란 크기</p>
         <div className={styles.pillRow}>
           {SIZES.map((s) => (
             <button key={s.id}
@@ -383,7 +383,7 @@ export default function EggTimerClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🌡️ 시작 온도</p>
+        <p className={styles.gapTitle}>시작 온도</p>
         <div className={styles.pillRow}>
           {START_TEMPS.map((t) => (
             <button key={t.id}
@@ -398,7 +398,7 @@ export default function EggTimerClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🍳 조리 방법</p>
+        <p className={styles.gapTitle}>조리 방법</p>
         <div className={styles.methodGrid}>
           {METHODS.map((m) => (
             <button key={m.id}
@@ -421,7 +421,7 @@ export default function EggTimerClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>⚙️ 추가 옵션</p>
+        <p className={styles.gapTitle}>추가 옵션</p>
         {/* 컴팩트 — 라벨·값·슬라이더 한 줄 */}
         <div className={styles.optionCompact}>
           <div className={styles.optionRowInline}>
@@ -470,7 +470,7 @@ export default function EggTimerClient() {
         {/* 보정 사유 */}
         {result.adjustments.length > 0 && (
           <div className={styles.adjustmentsBox}>
-            <p className={styles.adjustmentsTitle}>📐 보정 내역</p>
+            <p className={styles.adjustmentsTitle}>보정 내역</p>
             <div className={styles.adjustmentsList}>
               <div className={styles.adjItem}>
                 <span>기본 ({result.doneness.label})</span>
@@ -494,7 +494,7 @@ export default function EggTimerClient() {
         <div className={styles.timerBox}>
           {phase === 'idle' && (
             <button className={styles.timerStartBtn} onClick={startTimer} disabled={result.totalSec === 0}>
-              ⏱️ 타이머 시작 ({fmtMS(result.totalSec)})
+              타이머 시작 ({fmtMS(result.totalSec)})
             </button>
           )}
           {phase !== 'idle' && (
@@ -505,9 +505,9 @@ export default function EggTimerClient() {
               <p className={styles.timerCountdown}>{fmtMS(remaining)}</p>
               <div className={styles.timerControls}>
                 {running ? (
-                  <button className={styles.timerBtn} onClick={pauseTimer}>⏸️ 일시정지</button>
+                  <button className={styles.timerBtn} onClick={pauseTimer}>일시정지</button>
                 ) : (
-                  <button className={styles.timerBtn} onClick={resumeTimer}>▶️ 재개</button>
+                  <button className={styles.timerBtn} onClick={resumeTimer}>재개</button>
                 )}
                 <button className={`${styles.timerBtn} ${styles.timerBtnCancel}`} onClick={cancelTimer}>✕ 취소</button>
               </div>
@@ -523,7 +523,7 @@ export default function EggTimerClient() {
 
       {/* ═══ 익힘 8단계 시각화 ═══ */}
       <section>
-        <label className={styles.label}>🥚 익힘 8단계 스펙트럼</label>
+        <label className={styles.label}>익힘 8단계 스펙트럼</label>
         <div className={styles.spectrumGrid}>
           {DONENESS.map((d) => (
             <div key={d.id} className={`${styles.spectrumItem} ${inputs.donenessId === d.id ? styles.spectrumItemActive : ''}`}>
@@ -538,7 +538,7 @@ export default function EggTimerClient() {
 
       {/* ═══ 응고 온도 과학 ═══ */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🔬 단백질 응고 온도 (왜 이 시간들인가)</p>
+        <p className={styles.gapTitle}>단백질 응고 온도 (왜 이 시간들인가)</p>
         <div className={styles.scienceGrid}>
           <ScienceBar label="흰자 응고 시작"  temp={62} color="#FFFFFF" />
           <ScienceBar label="노른자 응고 시작" temp={65} color="#FFD460" />
@@ -553,7 +553,7 @@ export default function EggTimerClient() {
 
       {/* ═══ 트러블슈팅 ═══ */}
       <section>
-        <label className={styles.label}>🛠️ 트러블슈팅 가이드</label>
+        <label className={styles.label}>트러블슈팅 가이드</label>
         <div className={styles.troubleGrid}>
           {TROUBLESHOOTS.map((t) => (
             <div key={t.id} className={styles.troubleCard}>

@@ -145,10 +145,10 @@ export default function PackingClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="여행 짐 도구 모드">
         {([
-          { id: 'calc',     label: '🧳 옷 계산' },
-          { id: 'check',    label: '✅ 체크리스트' },
-          { id: 'climate',  label: '🌡️ 기온별 가이드' },
-          { id: 'scenario', label: '🎯 시나리오' },
+          { id: 'calc',     label: '옷 계산' },
+          { id: 'check',    label: '체크리스트' },
+          { id: 'climate',  label: '기온별 가이드' },
+          { id: 'scenario', label: '시나리오' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -273,7 +273,7 @@ export default function PackingClient() {
               </button>
             </div>
             <p className={s.helpText} style={{ marginTop: 6 }}>{lauMeta.desc}</p>
-            {needBaby && <p className={s.helpText} style={{ marginTop: 2 }}>👶 아기 용품은 <strong>✅ 체크리스트</strong> 탭에 별도 카테고리로 추가됩니다 (의류 수량 계산과는 별개).</p>}
+            {needBaby && <p className={s.helpText} style={{ marginTop: 2 }}>👶 아기 용품은 <strong>체크리스트</strong> 탭에 별도 카테고리로 추가됩니다 (의류 수량 계산과는 별개).</p>}
           </div>
 
           {/* 메인 결과 */}
@@ -331,7 +331,7 @@ export default function PackingClient() {
 
           {/* 캐리어 안내 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🛄 캐리어·항공사 수하물 (1인 기준)</span>
+            <span className={s.cardLabel}>캐리어·항공사 수하물 (1인 기준)</span>
             <p className={s.tipBox}>{comfortResult.airline}</p>
             <div className={s.tableScroll} style={{ marginTop: 10 }}>
               <table className={s.detailTable}>
@@ -381,7 +381,7 @@ export default function PackingClient() {
       {tab === 'check' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>✅ 통합 체크리스트</p>
+            <p className={s.heroLabel}>통합 체크리스트</p>
             <p className={s.heroValue}>
               <strong>{checkedCount}</strong> / {totalCheckItems}
             </p>
@@ -390,7 +390,7 @@ export default function PackingClient() {
               <br /><span style={{ fontSize: 12, color: 'var(--muted)' }}>의류(계산 결과) + {needBaby ? '아기 포함 ' : ''}준비물 기준</span>
             </p>
             <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 14, flexWrap: 'wrap' }}>
-              <button className={s.copyBtn} onClick={copyChecklist} type="button">📋 클립보드 복사</button>
+              <button className={s.copyBtn} onClick={copyChecklist} type="button">클립보드 복사</button>
               <button className={s.copyBtn} onClick={() => setChecked({})} type="button">↺ 초기화</button>
             </div>
           </div>
@@ -432,7 +432,7 @@ export default function PackingClient() {
       {tab === 'climate' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>🌡️ 기온대별 패킹 가이드</p>
+            <p className={s.heroLabel}>기온대별 패킹 가이드</p>
             <p className={s.heroValue}>6 기온대</p>
             <p className={s.heroSub}>여행지 기온에 맞게 의류·아우터·악세서리 추천</p>
           </div>
@@ -468,7 +468,7 @@ export default function PackingClient() {
       {tab === 'scenario' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>🎯 한국인 자주 가는 6 시나리오</p>
+            <p className={s.heroLabel}>한국인 자주 가는 6 시나리오</p>
             <p className={s.heroValue}>원클릭 자동 입력</p>
             <p className={s.heroSub}>신혼·동남아·유럽·골프·캠핑·아기 동반</p>
           </div>
@@ -506,7 +506,7 @@ export default function PackingClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/life/travel-budget" className={s.crossLink}>
-        ✈️ 해외여행 예산 계산기 → 18 도시 × 3 스타일 + 항목 진단
+        해외여행 예산 계산기 → 18 도시 × 3 스타일 + 항목 진단
       </Link>
     </div>
   )

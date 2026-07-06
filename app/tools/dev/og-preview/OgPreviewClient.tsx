@@ -108,12 +108,12 @@ export default function OgPreviewClient() {
             type="button"
             className={`${s.modeBtn} ${mode === 'url' ? s.modeBtnActive : ''}`}
             onClick={() => setMode('url')}
-          >🔗 URL 입력</button>
+          >URL 입력</button>
           <button
             type="button"
             className={`${s.modeBtn} ${mode === 'html' ? s.modeBtnActive : ''}`}
             onClick={() => setMode('html')}
-          >📝 HTML 붙여넣기</button>
+          >HTML 붙여넣기</button>
           <button type="button" className={s.sampleBtn} onClick={handleSample}>샘플 불러오기</button>
         </div>
 
@@ -187,7 +187,7 @@ export default function OgPreviewClient() {
             <div className={s.cardHead}>
               <span className={s.cardLabel}>완성된 메타태그 코드</span>
               <button className={`${s.copyBtn} ${copied ? s.copyBtnDone : ''}`} onClick={copyCode}>
-                {copied ? '✓ 복사됨' : '📋 복사'}
+                {copied ? '✓ 복사됨' : '복사'}
               </button>
             </div>
             <pre className={s.code}>{generatedCode}</pre>
@@ -200,7 +200,7 @@ export default function OgPreviewClient() {
 
       {!hasData && (
         <div className={s.empty}>
-          <p className={s.emptyTitle}>📋 위 입력칸에 URL이나 HTML을 넣으면 5개 플랫폼 미리보기가 표시됩니다</p>
+          <p className={s.emptyTitle}>위 입력칸에 URL이나 HTML을 넣으면 5개 플랫폼 미리보기가 표시됩니다</p>
           <p>지원: 🇰🇷 카카오톡 · Facebook · X(Twitter) · LinkedIn · Slack</p>
         </div>
       )}
@@ -212,7 +212,7 @@ export default function OgPreviewClient() {
 function KakaoPreview({ meta, image, domain }: { meta: MetaData; image: string; domain: string }) {
   return (
     <div className={s.previewBlock}>
-      <p className={s.previewHead}>🇰🇷 카카오톡 (가로형)</p>
+      <p className={s.previewHead}>카카오톡 (가로형)</p>
       <div className={s.kakaoWrap}>
         <div className={s.kakaoCard}>
           {image ? (

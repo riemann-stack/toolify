@@ -123,10 +123,10 @@ export default function ScaleClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
-          { id: 'scale',    label: '🎼 스케일' },
-          { id: 'guitar',   label: '🎸 기타 지판' },
-          { id: 'diatonic', label: '🎹 다이어토닉' },
-          { id: 'modes',    label: '🌐 모드 비교' },
+          { id: 'scale',    label: '스케일' },
+          { id: 'guitar',   label: '기타 지판' },
+          { id: 'diatonic', label: '다이어토닉' },
+          { id: 'modes',    label: '모드 비교' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -204,7 +204,7 @@ export default function ScaleClient() {
 
           {/* 피아노 SVG */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🎹 피아노 건반 (1.5 옥타브)</span>
+            <span className={s.cardLabel}>피아노 건반 (1.5 옥타브)</span>
             <PianoSVG
               scaleNotes={scaleNotes}
               scale={scale}
@@ -299,7 +299,7 @@ export default function ScaleClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🎸 기타 지판 (0~15 프렛)</span>
+            <span className={s.cardLabel}>기타 지판 (0~15 프렛)</span>
             <FretboardSVG
               scaleNotes={scaleNotes}
               rootKey={rootKey}
@@ -316,7 +316,7 @@ export default function ScaleClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🎸 기타 1박스 운지법</strong>
+            <strong>기타 1박스 운지법</strong>
             <p>
               한 박스(5프렛 범위) 안의 모든 스케일 음을 한 손 모양으로 익히는 것이 즉흥 연주의 시작.<br />
               • <strong>1박스 (5포지션)</strong>: minor pentatonic의 가장 흔한 박스<br />
@@ -442,7 +442,7 @@ export default function ScaleClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🌐 교회 모드 (Church Modes)</strong>
+            <strong>교회 모드 (Church Modes)</strong>
             <p>
               교회 모드는 메이저 스케일의 음을 다른 음에서 시작한 7가지 변형입니다.<br />
               • <strong>Ionian</strong> = Major (1도부터)<br />
@@ -457,7 +457,7 @@ export default function ScaleClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/art/chord" className={s.crossLink}>
-        🎹 코드 구성음 계산기 → 스케일 안의 코드를 자세히 분석
+        코드 구성음 계산기 → 스케일 안의 코드를 자세히 분석
       </Link>
     </div>
   )

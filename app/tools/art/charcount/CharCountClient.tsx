@@ -29,7 +29,7 @@ function isSpace(ch: string): boolean {
 type PlatformLimit = { name: string; limit: number; note?: string; method?: 'len' | 'twitterWeighted' | 'bytes' | 'lines' }
 const PLATFORM_GROUPS: { group: string; items: PlatformLimit[] }[] = [
   {
-    group: '🌐 글로벌 SNS',
+    group: '글로벌 SNS',
     items: [
       { name: 'X (트위터) — 한글 가중치',  limit: 280,    method: 'twitterWeighted', note: '한글 1자 = 2 weight' },
       { name: '인스타그램 캡션',           limit: 2200,   method: 'len' },
@@ -43,7 +43,7 @@ const PLATFORM_GROUPS: { group: string; items: PlatformLimit[] }[] = [
     ],
   },
   {
-    group: '📺 동영상 플랫폼',
+    group: '동영상 플랫폼',
     items: [
       { name: '유튜브 제목',               limit: 100,    method: 'len',   note: '검색 최적화 70자 이내 권장' },
       { name: '유튜브 설명',               limit: 5000,   method: 'len',   note: '처음 150자가 검색 결과 표시' },
@@ -53,7 +53,7 @@ const PLATFORM_GROUPS: { group: string; items: PlatformLimit[] }[] = [
     ],
   },
   {
-    group: '🇰🇷 한국 메신저·SMS',
+    group: '한국 메신저·SMS',
     items: [
       { name: '카카오톡 메시지',           limit: 10000,  method: 'len' },
       { name: '카카오톡 프로필 상태',      limit: 60,     method: 'len' },
@@ -63,7 +63,7 @@ const PLATFORM_GROUPS: { group: string; items: PlatformLimit[] }[] = [
     ],
   },
   {
-    group: '📝 한국 블로그·커뮤니티',
+    group: '한국 블로그·커뮤니티',
     items: [
       { name: '네이버 블로그 제목',        limit: 100,    method: 'len' },
       { name: '네이버 블로그 본문',        limit: 1500000,method: 'len' },
@@ -74,7 +74,7 @@ const PLATFORM_GROUPS: { group: string; items: PlatformLimit[] }[] = [
     ],
   },
   {
-    group: '💼 채용·자기소개서',
+    group: '채용·자기소개서',
     items: [
       { name: '자기소개서 (단문)',         limit: 500,    method: 'len' },
       { name: '자기소개서 (일반)',         limit: 1000,   method: 'len' },
@@ -84,7 +84,7 @@ const PLATFORM_GROUPS: { group: string; items: PlatformLimit[] }[] = [
     ],
   },
   {
-    group: '🛒 쇼핑·앱스토어',
+    group: '쇼핑·앱스토어',
     items: [
       { name: 'Apple App Store 제목',      limit: 30,     method: 'len' },
       { name: 'Apple App Store 설명',      limit: 4000,   method: 'len' },
@@ -95,7 +95,7 @@ const PLATFORM_GROUPS: { group: string; items: PlatformLimit[] }[] = [
     ],
   },
   {
-    group: '🔍 SEO·메타',
+    group: 'SEO·메타',
     items: [
       { name: 'HTML title (검색결과)',     limit: 60,     method: 'len',  note: '50~60자가 검색결과 표시 최적' },
       { name: 'meta description',          limit: 160,    method: 'len',  note: '120~160자 권장' },
@@ -410,22 +410,22 @@ export default function CharCountClient() {
               <label className={s.cardLabel}>문자 종류별 분석</label>
             </div>
             <div className={s.statsGrid6}>
-              <div className={s.miniStat}><p className={s.miniStatLabel}>🇰🇷 한글</p>     <p className={s.miniStatValue}>{fmt(stats.hangul)}</p></div>
-              <div className={s.miniStat}><p className={s.miniStatLabel}>🅰️ 영문</p>     <p className={s.miniStatValue}>{fmt(stats.latin)}</p></div>
-              <div className={s.miniStat}><p className={s.miniStatLabel}>🔢 숫자</p>     <p className={s.miniStatValue}>{fmt(stats.digit)}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>한글</p>     <p className={s.miniStatValue}>{fmt(stats.hangul)}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>영문</p>     <p className={s.miniStatValue}>{fmt(stats.latin)}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>숫자</p>     <p className={s.miniStatValue}>{fmt(stats.digit)}</p></div>
               <div className={s.miniStat}><p className={s.miniStatLabel}>·  특수</p>     <p className={s.miniStatValue}>{fmt(stats.special)}</p></div>
-              <div className={s.miniStat}><p className={s.miniStatLabel}>📝 한자</p>     <p className={s.miniStatValue}>{fmt(stats.cjk)}</p></div>
-              <div className={s.miniStat}><p className={s.miniStatLabel}>😀 이모지</p>   <p className={s.miniStatValue}>{fmt(stats.emoji)}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>한자</p>     <p className={s.miniStatValue}>{fmt(stats.cjk)}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>이모지</p>   <p className={s.miniStatValue}>{fmt(stats.emoji)}</p></div>
             </div>
           </div>
 
           {/* 원고지·읽기·말하기 시간 + 추출 */}
           <div className={s.statsGrid4}>
-            <div className={s.miniStat}><p className={s.miniStatLabel}>📄 원고지(200자)</p> <p className={s.miniStatValue}>{fmt(stats.manuscript200)}매</p></div>
-            <div className={s.miniStat}><p className={s.miniStatLabel}>📖 묵독 시간</p>     <p className={s.miniStatValue}>{fmtMin(stats.readingMin)}</p></div>
-            <div className={s.miniStat}><p className={s.miniStatLabel}>🎙️ 발화 시간</p>     <p className={s.miniStatValue}>{fmtMin(stats.speakingMin)}</p></div>
+            <div className={s.miniStat}><p className={s.miniStatLabel}>원고지(200자)</p> <p className={s.miniStatValue}>{fmt(stats.manuscript200)}매</p></div>
+            <div className={s.miniStat}><p className={s.miniStatLabel}>묵독 시간</p>     <p className={s.miniStatValue}>{fmtMin(stats.readingMin)}</p></div>
+            <div className={s.miniStat}><p className={s.miniStatLabel}>발화 시간</p>     <p className={s.miniStatValue}>{fmtMin(stats.speakingMin)}</p></div>
             <div className={s.miniStat}><p className={s.miniStatLabel}>#해시태그</p>        <p className={s.miniStatValue}>{fmt(stats.hashtags)}</p></div>
-            <div className={s.miniStat}><p className={s.miniStatLabel}>🔗 URL</p>           <p className={s.miniStatValue}>{fmt(stats.urls)}</p></div>
+            <div className={s.miniStat}><p className={s.miniStatLabel}>URL</p>           <p className={s.miniStatValue}>{fmt(stats.urls)}</p></div>
             <div className={s.miniStat}><p className={s.miniStatLabel}>@멘션</p>            <p className={s.miniStatValue}>{fmt(stats.mentions)}</p></div>
           </div>
 

@@ -283,11 +283,11 @@ export default function PaceClient() {
       {/* 모드 탭 */}
       <div className={styles.tabs} role="tablist">
         <button type="button" role="tab" aria-selected={mode === 'pace-to-time'} className={`${styles.tab} ${mode === 'pace-to-time' ? styles.tabActive : ''}`}
-          onClick={() => setMode('pace-to-time')}>📏 페이스 → 완주 시간</button>
+          onClick={() => setMode('pace-to-time')}>페이스 → 완주 시간</button>
         <button type="button" role="tab" aria-selected={mode === 'time-to-pace'} className={`${styles.tab} ${mode === 'time-to-pace' ? styles.tabActive : ''}`}
-          onClick={() => setMode('time-to-pace')}>⏱️ 완주 시간 → 페이스</button>
+          onClick={() => setMode('time-to-pace')}>완주 시간 → 페이스</button>
         <button type="button" role="tab" aria-selected={mode === 'treadmill'} className={`${styles.tab} ${mode === 'treadmill' ? styles.tabActive : ''}`}
-          onClick={() => setMode('treadmill')}>🏃 트레드밀 변환</button>
+          onClick={() => setMode('treadmill')}>트레드밀 변환</button>
       </div>
 
       {/* ── 모드 1: 페이스 → 완주 시간 ── */}
@@ -365,7 +365,7 @@ export default function PaceClient() {
             <>
               {/* 히어로 */}
               <div className={styles.heroCard} role="status">
-                <div className={styles.heroLabel}>🏃 {result1.paceStr}/km × {distLabel(dist)}</div>
+                <div className={styles.heroLabel}>{result1.paceStr}/km × {distLabel(dist)}</div>
                 <div className={styles.heroNum}>{result1.time}</div>
                 <div className={styles.heroSub}>예상 완주 시간</div>
               </div>
@@ -393,7 +393,7 @@ export default function PaceClient() {
               {/* 구간 스플릿 (동적) */}
               {splits.length > 0 && (
                 <div className={styles.card}>
-                  <label className={styles.cardLabel}>📐 구간 스플릿 (일정 페이스 가정)</label>
+                  <label className={styles.cardLabel}>구간 스플릿 (일정 페이스 가정)</label>
                   <div style={{ overflowX: 'auto' }}>
                     <table className={styles.splitTable}>
                       <thead>
@@ -420,7 +420,7 @@ export default function PaceClient() {
               {/* 네거티브 스플릿 가이드 (하프·풀만) */}
               {negativeSplit && (
                 <div className={styles.negCard}>
-                  <p className={styles.negTitle}>💡 네거티브 스플릿 권장 (하프·풀)</p>
+                  <p className={styles.negTitle}>네거티브 스플릿 권장 (하프·풀)</p>
                   <p className={styles.negDesc}>
                     후반을 전반보다 약간 빠르게 — 초반 오버페이스 ↓, 후반 무너짐 ↓
                   </p>
@@ -446,7 +446,7 @@ export default function PaceClient() {
               <button type="button"
                 className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`}
                 onClick={handleCopy}>
-                {copied ? '✅ 복사됨!' : '📋 결과 + 스플릿 복사'}
+                {copied ? '복사됨!' : '결과 + 스플릿 복사'}
               </button>
             </>
           )}
@@ -538,7 +538,7 @@ export default function PaceClient() {
       {mode === 'treadmill' && (
         <>
           <div className={styles.card}>
-            <label className={styles.cardLabel}>🏃 트레드밀 페이스 ↔ 시속 변환</label>
+            <label className={styles.cardLabel}>트레드밀 페이스 ↔ 시속 변환</label>
             <div className={styles.treadmillGrid}>
               <div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>시속 입력 → 페이스</p>
@@ -583,7 +583,7 @@ export default function PaceClient() {
 
       {/* 다른 러닝 도구 안내 (영역 침범 X) */}
       <div className={styles.crossToolCard}>
-        <p className={styles.crossToolTitle}>🏃 다음 단계로</p>
+        <p className={styles.crossToolTitle}>다음 단계로</p>
         <div className={styles.crossToolGrid}>
           <a href="/tools/sports/interval-training" className={styles.crossToolBtn}>
             <span className={styles.crossToolIcon}>🏃‍♂️</span>

@@ -698,7 +698,7 @@ export default function CosmicCalendarClient() {
           {/* 내 나이 입력 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>🎂 내 인생 → 코스믹 시간</span>
+              <span>내 인생 → 코스믹 시간</span>
               <span className={s.cardLabelHint}>나이·이름 입력</span>
             </div>
             <div className={s.gridTwo}>
@@ -788,13 +788,13 @@ export default function CosmicCalendarClient() {
             </div>
             <div className={s.compressionToggle}>
               <button className={`${s.compressionBtn} ${compressionMode === '1year'   ? s.compressionActive : ''}`} onClick={() => setCompressionMode('1year')}   type="button">
-                🗓️ 우주 1년<small>칼 세이건 방식</small>
+                우주 1년<small>칼 세이건 방식</small>
               </button>
               <button className={`${s.compressionBtn} ${compressionMode === '24hours' ? s.compressionActive : ''}`} onClick={() => setCompressionMode('24hours')} type="button">
-                🕐 우주 24시간<small>하루로 압축</small>
+                우주 24시간<small>하루로 압축</small>
               </button>
               <button className={`${s.compressionBtn} ${compressionMode === '1km'     ? s.compressionActive : ''}`} onClick={() => setCompressionMode('1km')}     type="button">
-                📐 우주 1km<small>거리로 압축</small>
+                우주 1km<small>거리로 압축</small>
               </button>
             </div>
           </div>

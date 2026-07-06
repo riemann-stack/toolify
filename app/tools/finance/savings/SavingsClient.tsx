@@ -370,7 +370,7 @@ export default function SavingsClient() {
       {tab === 'jars' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>🏺 T. Harv Eker의 6 항아리(JARS) 모델</p>
+            <p className={s.heroLabel}>T. Harv Eker의 6 항아리(JARS) 모델</p>
             <p className={s.heroValue}>
               월 수입 <strong>{fmtMan(totalIncome)}</strong> 분배
             </p>
@@ -440,7 +440,7 @@ export default function SavingsClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🏺 6 항아리 모델 사용 팁</strong>
+            <strong>6 항아리 모델 사용 팁</strong>
             <p>
               • <strong>입문자</strong>: 권장 비율로 시작 → 3개월 운영 후 조정<br />
               • <strong>한국 상황 보정</strong>: 월세·통신비 비싼 한국은 NEC 60~65%, 기부 0~3%로 현실적 조정<br />
@@ -579,7 +579,7 @@ export default function SavingsClient() {
           </div>
 
           <Link href="/tools/finance/compound" className={s.crossLink}>
-            📈 복리 계산기 → 일시금·증액·시나리오 비교까지 자세히
+            복리 계산기 → 일시금·증액·시나리오 비교까지 자세히
           </Link>
         </>
       )}
@@ -660,7 +660,7 @@ export default function SavingsClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 절세 상품 우선순위 추천</strong>
+            <strong>절세 상품 우선순위 추천</strong>
             <p>
               • <strong>20~30대 청년</strong>: 청년도약계좌 → 주택청약 → ISA → 연금저축 순<br />
               • <strong>30~40대 직장인</strong>: 연금저축 600 → IRP 300 추가 (총 900) → ISA → 주택청약<br />
@@ -685,13 +685,13 @@ export default function SavingsClient() {
             borderRadius: 8, cursor: 'pointer',
           }}
         >
-          🗑️ 전체 입력 초기화
+          전체 입력 초기화
         </button>
       </div>
 
       {/* 크로스링크 */}
       <Link href="/tools/finance/dividend" className={s.crossLink}>
-        💰 월배당 목표 자산 계산기 → 은퇴 자산·배당 ETF 시뮬은 여기로
+        월배당 목표 자산 계산기 → 은퇴 자산·배당 ETF 시뮬은 여기로
       </Link>
     </div>
   )

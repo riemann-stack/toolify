@@ -15,10 +15,10 @@ import {
 type Tab = 'mix' | 'dilute' | 'equiv' | 'party'
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: 'mix',    label: '🍹 혼합 도수' },
-  { id: 'dilute', label: '💧 목표 희석' },
-  { id: 'equiv',  label: '⚖️ 알코올 환산' },
-  { id: 'party',  label: '👥 1인당 분배' },
+  { id: 'mix',    label: '혼합 도수' },
+  { id: 'dilute', label: '목표 희석' },
+  { id: 'equiv',  label: '알코올 환산' },
+  { id: 'party',  label: '1인당 분배' },
 ]
 
 interface DrinkItem { id: number; name: string; volume: string; abv: string }
@@ -531,7 +531,7 @@ function EquivTab() {
       {/* 혈중알코올 도구 연결 */}
       <Link href="/tools/health/blood-alcohol" className={styles.linkBanner}>
         <div>
-          <div className={styles.linkBannerText}>🚗 음주 후 혈중알코올(BAC) 참고 추정</div>
+          <div className={styles.linkBannerText}>음주 후 혈중알코올(BAC) 참고 추정</div>
           <div className={styles.linkBannerSub}>BAC 추정 도구로 이동 · 운전 가능 판단엔 사용 불가 →</div>
         </div>
         <span className={styles.linkBannerArrow}>→</span>
@@ -705,7 +705,7 @@ function PartyTab() {
           {/* 혈중알코올 연결 */}
           <Link href="/tools/health/blood-alcohol" className={styles.linkBanner}>
             <div>
-              <div className={styles.linkBannerText}>🚗 1인당 혈중알코올(BAC) 참고 추정</div>
+              <div className={styles.linkBannerText}>1인당 혈중알코올(BAC) 참고 추정</div>
               <div className={styles.linkBannerSub}>혈중알코올 도구로 이동 · 운전 판단엔 사용 불가 →</div>
             </div>
             <span className={styles.linkBannerArrow}>→</span>
@@ -754,7 +754,7 @@ export default function AlcoholClient() {
 
       {/* 본인 기준 도수 변환 (모든 탭 공통) */}
       <div className={styles.card} style={{ marginTop: 8 }}>
-        <label className={styles.cardLabel}>🍶 본인 기준 도수로 변환 (알코올 g → 잔/병)</label>
+        <label className={styles.cardLabel}>본인 기준 도수로 변환 (알코올 g → 잔/병)</label>
         <div className={styles.itemInputs} style={{ marginBottom: 12 }}>
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>알코올 양</label>

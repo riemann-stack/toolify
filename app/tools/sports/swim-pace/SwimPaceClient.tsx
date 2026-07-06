@@ -518,7 +518,7 @@ export default function SwimPaceClient() {
       <button type="button"
         className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`}
         onClick={handleCopy}>
-        {copied ? '✅ 복사됨!' : '📋 결과 복사'}
+        {copied ? '복사됨!' : '결과 복사'}
       </button>
     </div>
   )

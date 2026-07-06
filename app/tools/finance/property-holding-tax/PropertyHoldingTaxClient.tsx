@@ -365,7 +365,7 @@ export default function PropertyHoldingTaxClient() {
               <span>공시가 대비 실효세율 <strong>{pct(r.effectiveRate)}</strong></span>
             </div>
             <button type="button" className={s.copyBtn} onClick={onCopy}>
-              {copied ? '✅ 복사됨' : '📋 결과 요약 복사'}
+              {copied ? '복사됨' : '결과 요약 복사'}
             </button>
           </div>
 
@@ -374,12 +374,12 @@ export default function PropertyHoldingTaxClient() {
             <span className={s.cardLabel}>세목별 합계</span>
             <div className={s.summaryGrid}>
               <div className={s.summaryItem}>
-                <div className={s.sumLabel}>🏛️ 재산세 합계</div>
+                <div className={s.sumLabel}>재산세 합계</div>
                 <div className={s.sumValue}>{fmtWon(p.total)}<span className="won">원</span></div>
               </div>
               <div className={s.summaryItem}>
                 <div className={s.sumLabel}>
-                  📑 종합부동산세
+                  종합부동산세
                   {!c.taxable && <span className={s.exemptTag}>비과세</span>}
                 </div>
                 <div className={s.sumValue}>{fmtWon(c.total)}<span className="won">원</span></div>
@@ -503,7 +503,7 @@ export default function PropertyHoldingTaxClient() {
       )}
 
       <a href="/tools/finance/real-estate" className={s.crossLink}>
-        🏘️ 부동산 수익률 계산기 → 보유세·대출까지 반영한 실제 수익률 확인
+        부동산 수익률 계산기 → 보유세·대출까지 반영한 실제 수익률 확인
       </a>
     </div>
   )

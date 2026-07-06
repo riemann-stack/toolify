@@ -249,7 +249,7 @@ export default function UnitPriceClient() {
       {/* ── 비교 표 ── */}
       {validCalcs.length >= 2 && (
         <div className={s.card}>
-          <div className={s.cardTitle}>📊 단가 비교 ({baseLabelDisplay}{anyPartial ? ' · 실질' : ''})</div>
+          <div className={s.cardTitle}>단가 비교 ({baseLabelDisplay}{anyPartial ? ' · 실질' : ''})</div>
           <div className={s.tableWrap}>
             <table className={s.compareTable}>
               <thead>
@@ -297,7 +297,7 @@ export default function UnitPriceClient() {
           {/* 실질 단가 (소비 가능량 < 100% 시) */}
           {validCalcs.some(c => c.product.consumption < 100) && (
             <div className={s.effectiveBox}>
-              <p className={s.effectiveTitle}>💡 실질 단가 (사용 가능량 반영)</p>
+              <p className={s.effectiveTitle}>실질 단가 (사용 가능량 반영)</p>
               {validCalcs.map(c => {
                 if (c.product.consumption >= 100) return null
                 return (
@@ -316,7 +316,7 @@ export default function UnitPriceClient() {
 
           {diff && (
             <div className={s.diffCard}>
-              <div className={s.diffHead}>🔍 차이</div>
+              <div className={s.diffHead}>차이</div>
               <div className={s.diffGrid}>
                 <div className={s.diffBox}>
                   <div className={s.diffLabel}>{anyPartial ? '실질 단가 차이' : '단가 차이'} ({baseLabelDisplay})</div>
@@ -348,7 +348,7 @@ export default function UnitPriceClient() {
 
           <div className={s.actionRow}>
             <button type="button" className={`${s.shareBtn} ${copied ? s.copied : ''}`} onClick={handleCopy}>
-              {copied ? '✅ 복사됨!' : '📋 비교 결과 복사'}
+              {copied ? '✅ 복사됨!' : '비교 결과 복사'}
             </button>
             <button type="button" className={s.resetBtn} onClick={resetAll}>초기화</button>
           </div>
@@ -441,7 +441,7 @@ function ProductCard({
         <details className={s.advancedDetails} open={p.advancedOpen}
           onToggle={e => onChange('advancedOpen', (e.target as HTMLDetailsElement).open)}>
           <summary className={s.advancedSummary}>
-            ⚙️ 실제 소비 가능량
+            실제 소비 가능량
           </summary>
           <div className={s.advancedBody}>
             <div className={s.consumptionPills}>

@@ -143,7 +143,7 @@ function ListTab({ now }: { now: Date }) {
 
       {items.length === 0 && loaded && (
         <div className={s.empty}>
-          <div className={s.emptyTitle}>📭 아직 저장된 D-day가 없어요</div>
+          <div className={s.emptyTitle}>아직 저장된 D-day가 없어요</div>
           <p>[+ 새 D-day 추가] 로 첫 일정을 등록해 보세요.</p>
         </div>
       )}
@@ -288,7 +288,7 @@ function DdayEditForm({ editing, onSave, onCancel }: {
 
   return (
     <div className={s.editForm}>
-      <div className={s.editFormTitle}>{isNew ? '+ 새 D-day' : '✏️ D-day 편집'}</div>
+      <div className={s.editFormTitle}>{isNew ? '+ 새 D-day' : 'D-day 편집'}</div>
 
       <div>
         <span className={s.inlineLabel}>제목 *</span>

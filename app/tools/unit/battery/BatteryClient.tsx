@@ -259,7 +259,7 @@ export default function BatteryClient() {
 
       {/* 항공 규정 안내 */}
       <div className={styles.ruleBox}>
-        <p className={styles.ruleTitle}>📋 국제 항공 규정 (ICAO·IATA 기준, 2026-06 기준)</p>
+        <p className={styles.ruleTitle}>국제 항공 규정 (ICAO·IATA 기준, 2026-06 기준)</p>
         <ul className={styles.ruleList}>
           <li>• <strong>보조배터리는 1인당 최대 2개</strong> (160Wh 이하) — 2026-04-20 시행 ICAO 국제기준</li>
           <li>• <strong>100Wh 이하</strong>: 항공사 승인 없이 휴대 반입 가능 (개수는 2개 제한에 포함)</li>

@@ -149,7 +149,7 @@ export default function RoomModeClient() {
       {tab === 'modes' && (
         <>
           <div className={s.hero} role="status">
-            <p className={s.heroLabel}>📊 룸 모드 분석</p>
+            <p className={s.heroLabel}>룸 모드 분석</p>
             <p className={s.heroValue}>
               총 <strong>{modes.length}개</strong> 모드 (20~300Hz)
             </p>
@@ -221,7 +221,7 @@ export default function RoomModeClient() {
       {tab === 'plan' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>🗺️ {fmt(Wn, 1)}m × {fmt(Ln, 1)}m 평면도</p>
+            <p className={s.heroLabel}>{fmt(Wn, 1)}m × {fmt(Ln, 1)}m 평면도</p>
             <p className={s.heroValue}>
               청취 위치 점수 <strong>{listenerScore(listener.x, listener.y)} / 100</strong>
             </p>
@@ -283,7 +283,7 @@ export default function RoomModeClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🎯 38% 룰 (Wilson Audio)</strong>
+            <strong>38% 룰 (Wilson Audio)</strong>
             <p>
               청취자를 방 길이의 <strong>38% 위치 (앞 벽에서)</strong>에 두는 것이 음향적으로 가장 안정.<br />
               본인 방 기준 <strong>앞 벽에서 {fmt(Ln * 0.38, 2)}m</strong> 지점.<br />
@@ -297,7 +297,7 @@ export default function RoomModeClient() {
       {tab === 'ratio' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>📐 방 비율 진단</p>
+            <p className={s.heroLabel}>방 비율 진단</p>
             <p className={s.heroValue} style={{ color: ratio.color }}>
               {ratio.diagnosis}등급 · <strong>{ratio.label}</strong>
             </p>
@@ -372,7 +372,7 @@ export default function RoomModeClient() {
       {tab === 'traps' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>🛡️ 베이스 트랩 권장</p>
+            <p className={s.heroLabel}>베이스 트랩 권장</p>
             <p className={s.heroValue}>
               슈로더 미만 모드 <strong>{modes.filter((m) => m.freq < fSchroeder).length}개</strong>
             </p>
@@ -404,7 +404,7 @@ export default function RoomModeClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🛠️ 시공 가이드 (우선순위)</strong>
+            <strong>시공 가이드 (우선순위)</strong>
             <p>
               1. <strong>코너 트랩 3~4개</strong>를 앞 양쪽 코너 + 뒤 1개 (필수)<br />
               2. <strong>1차 반사 지점 벽 트랩</strong> 4개 (스피커-청취자 사이 측벽)<br />
@@ -417,7 +417,7 @@ export default function RoomModeClient() {
           </div>
 
           <div className={s.warnCardStrong}>
-            <strong>📏 본인 방 권장 트랩 수량 (참고)</strong>
+            <strong>본인 방 권장 트랩 수량 (참고)</strong>
             <p>
               체적 <strong>{fmt(Wn * Ln * Hn, 1)} m³</strong> 기준:<br />
               • 코너 트랩: <strong>{Math.max(3, Math.min(8, Math.ceil(Wn * Ln * Hn / 15)))}개</strong><br />

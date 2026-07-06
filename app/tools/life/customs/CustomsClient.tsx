@@ -92,10 +92,10 @@ export default function CustomsClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="관부가세 도구 모드">
         {([
-          { id: 'calc',      label: '📦 관부가세 계산' },
-          { id: 'items',     label: '📊 품목별 관세' },
-          { id: 'countries', label: '🌍 국가별 한도' },
-          { id: 'scenarios', label: '🎯 시나리오' },
+          { id: 'calc',      label: '관부가세 계산' },
+          { id: 'items',     label: '품목별 관세' },
+          { id: 'countries', label: '국가별 한도' },
+          { id: 'scenarios', label: '시나리오' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -232,7 +232,7 @@ export default function CustomsClient() {
 
           {/* 최종 가격 */}
           <div className={s.heroFinal} aria-live="polite">
-            <p className={s.heroLabel}>💰 예상 결제액 (상품+배송+세금, 간이 추정)</p>
+            <p className={s.heroLabel}>예상 결제액 (상품+배송+세금, 간이 추정)</p>
             <p className={s.heroValueLarge}>
               <strong>{fmtKrw(result.finalKrw)}</strong>
             </p>
@@ -282,7 +282,7 @@ export default function CustomsClient() {
           {/* 주류 경고 */}
           {item.liquor && (
             <div className={s.warnCardStrong}>
-              <strong>🍷 주류 직구 주의</strong>
+              <strong>주류 직구 주의</strong>
               <p>
                 주류는 <strong>소액면세 대상이 아니며</strong> 관세·주세·교육세·부가세가 모두 부과됩니다.
                 또한 <strong>자가소비 수량 한도·식품 검역·통신판매 제한</strong> 등 별도 규정이 있어 통관이 거부될 수 있어요.
@@ -307,7 +307,7 @@ export default function CustomsClient() {
       {tab === 'items' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>📊 품목별 관세율 매트릭스</p>
+            <p className={s.heroLabel}>품목별 관세율 매트릭스</p>
             <p className={s.heroValue}>{ITEMS.length}개 품목</p>
             <p className={s.heroSub}>한국 직구 인기 품목 + HS Code (참고)</p>
           </div>
@@ -354,7 +354,7 @@ export default function CustomsClient() {
 
           {/* 목록통관 — 배제대상 관리 방식 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📋 목록통관 — 배제대상만 일반신고</span>
+            <span className={s.cardLabel}>목록통관 — 배제대상만 일반신고</span>
             <p className={s.helpText} style={{ marginTop: 0, marginBottom: 10 }}>
               목록통관은 <strong>허용 품목을 지정</strong>하는 방식이 아니라, <strong>배제대상</strong>만 따로 정해 그 외 대부분의 자가사용 소비재를 간이절차로 통관하는 방식입니다.
             </p>
@@ -376,7 +376,7 @@ export default function CustomsClient() {
       {tab === 'countries' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>🌍 국가별 면세 한도</p>
+            <p className={s.heroLabel}>국가별 면세 한도</p>
             <p className={s.heroValue}>미국 $200 vs 기타 $150</p>
             <p className={s.heroSub}>가장 큰 면세 한도 = 미국. 한미 FTA 효과.</p>
           </div>
@@ -402,7 +402,7 @@ export default function CustomsClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>📌 환율 환산 기준</strong>
+            <strong>환율 환산 기준</strong>
             <p>
               관세청은 <strong>매주 화요일 환율 고시</strong>하여 다음 주 통관에 적용합니다.<br />
               본 도구는 <strong>USD 기준</strong>으로 면세 한도를 비교 (USD가 아니어도 USD로 환산).<br />
@@ -416,7 +416,7 @@ export default function CustomsClient() {
       {tab === 'scenarios' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>🎯 한국인 자주 가는 6 시나리오</p>
+            <p className={s.heroLabel}>한국인 자주 가는 6 시나리오</p>
             <p className={s.heroValue}>아마존·알리·매치스·라쿠텐</p>
             <p className={s.heroSub}>원클릭 자동 입력</p>
           </div>
@@ -463,7 +463,7 @@ export default function CustomsClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/unit/size" className={s.crossLink}>
-        🛍️ 사이즈 변환기 → US·EU·UK 한국 사이즈 환산
+        사이즈 변환기 → US·EU·UK 한국 사이즈 환산
       </Link>
     </div>
   )

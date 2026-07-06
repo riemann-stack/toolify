@@ -136,7 +136,7 @@ export default function HikingTimeClient() {
 
       {/* ════════ 1. 한국 100대 명산 프리셋 ════════ */}
       <section>
-        <label className={styles.label}>🏔️ 한국 100대 명산 프리셋 ({MOUNTAINS.length}개)</label>
+        <label className={styles.label}>한국 100대 명산 프리셋 ({MOUNTAINS.length}개)</label>
         <div className={styles.regionTabs}>
           {REGIONS.map((r) => (
             <button key={r} type="button" aria-pressed={region === r}
@@ -166,7 +166,7 @@ export default function HikingTimeClient() {
         </div>
         {activePresetData && (
           <div className={styles.presetTip}>
-            <strong>📍 {activePresetData.name}</strong>
+            <strong>{activePresetData.name}</strong>
             <span>· 거리 {activePresetData.distanceKm}km · 표고차 +{activePresetData.elevGainM}m / -{activePresetData.elevLossM}m · {activePresetData.difficulty} · 표준 {activePresetData.baseHours}시간</span>
             <span className={styles.presetTipNote}>※ 표준 시간은 이 산의 <strong>지형 난이도({activePresetData.difficulty})가 반영된</strong> 일반 페이스 추정입니다. 아래 체력·지형·날씨 보정은 본인 조건에 맞춰 추가로 조정하세요.</span>
           </div>
@@ -175,7 +175,7 @@ export default function HikingTimeClient() {
 
       {/* ════════ 2. 입력 영역 ════════ */}
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>📏 거리 · 표고차 (수동 입력 가능)</p>
+        <p className={styles.gapTitle}>거리 · 표고차 (수동 입력 가능)</p>
         <div className={styles.sliderRow}>
           <div className={styles.sliderHead}>
             <span>거리</span>
@@ -224,7 +224,7 @@ export default function HikingTimeClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>💪 체력 등급</p>
+        <p className={styles.gapTitle}>체력 등급</p>
         <div className={styles.pillRow}>
           {FITNESS.map((f) => (
             <button key={f.id} type="button" aria-pressed={inputs.fitness === f.id}
@@ -240,7 +240,7 @@ export default function HikingTimeClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🪨 지형 유형</p>
+        <p className={styles.gapTitle}>지형 유형</p>
         <div className={styles.pillRow}>
           {TERRAIN.map((t) => (
             <button key={t.id} type="button" aria-pressed={inputs.terrain === t.id}
@@ -255,7 +255,7 @@ export default function HikingTimeClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🎒 배낭 무게</p>
+        <p className={styles.gapTitle}>배낭 무게</p>
         <div className={styles.pillRow}>
           {PACK.map((p) => (
             <button key={p.id} type="button" aria-pressed={inputs.pack === p.id}
@@ -269,7 +269,7 @@ export default function HikingTimeClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>👥 그룹 인원</p>
+        <p className={styles.gapTitle}>그룹 인원</p>
         <div className={styles.pillRow}>
           {GROUP.map((g) => (
             <button key={g.id} type="button" aria-pressed={inputs.group === g.id}
@@ -283,7 +283,7 @@ export default function HikingTimeClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🌤️ 계절·날씨</p>
+        <p className={styles.gapTitle}>계절·날씨</p>
         <div className={styles.pillRow}>
           {WEATHER.map((w) => (
             <button key={w.id} type="button" aria-pressed={inputs.weather === w.id}
@@ -297,7 +297,7 @@ export default function HikingTimeClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>🕐 시작·일몰 시각</p>
+        <p className={styles.gapTitle}>시작·일몰 시각</p>
         <div className={styles.timeRow}>
           <div className={styles.timeInputBlock}>
             <label htmlFor="hiking-time-time">출발 시각</label>
@@ -316,7 +316,7 @@ export default function HikingTimeClient() {
       </section>
 
       <section className={styles.optionCard}>
-        <p className={styles.gapTitle}>☕ 휴식 시간</p>
+        <p className={styles.gapTitle}>휴식 시간</p>
         <div className={styles.pillRow}>
           <button type="button" aria-pressed={inputs.restMode === 'auto'}
             className={`${styles.pill} ${inputs.restMode === 'auto' ? styles.pillActive : ''}`}
@@ -377,7 +377,7 @@ export default function HikingTimeClient() {
 
         {/* 보정 내역 */}
         <div className={styles.adjustmentsBox}>
-          <p className={styles.adjustmentsTitle}>📐 적용 보정 (총 ×{result.appliedFactor.toFixed(2)})</p>
+          <p className={styles.adjustmentsTitle}>적용 보정 (총 ×{result.appliedFactor.toFixed(2)})</p>
           <div className={styles.adjustmentsList}>
             {result.factorBreakdown.map((f, i) => (
               <span key={i} className={styles.adjChip}>
@@ -389,7 +389,7 @@ export default function HikingTimeClient() {
 
         {/* 3공식 비교 */}
         <div className={styles.formulaCompare}>
-          <p className={styles.formulaTitle}>📊 3 공식 비교 (보정 적용)</p>
+          <p className={styles.formulaTitle}>3 공식 비교 (보정 적용)</p>
           <div className={styles.formulaGrid}>
             {result.formulas.map((f) => (
               <div key={f.formula} className={`${styles.formulaCard} ${f.formula === 'korean' ? styles.formulaCardActive : ''}`}>
@@ -407,7 +407,7 @@ export default function HikingTimeClient() {
 
       {/* ════════ 4. 단계별 타임라인 ════════ */}
       <section>
-        <label className={styles.label}>📍 단계별 도착 예상 시각</label>
+        <label className={styles.label}>단계별 도착 예상 시각</label>
         <TimelineSvg timeline={timeline} sunsetMinutes={parseHHMM(inputs.sunsetTime)} startMinutes={parseHHMM(inputs.startTime)} />
         <div className={styles.timelineList}>
           {timeline.map((step, i) => {
@@ -427,11 +427,11 @@ export default function HikingTimeClient() {
 
       {/* ════════ 5. 안전 가이드 ════════ */}
       <section>
-        <label className={styles.label}>🛡️ 등산 안전 가이드</label>
+        <label className={styles.label}>등산 안전 가이드</label>
 
         {/* 일출·일몰 평균표 */}
         <div className={styles.optionCard}>
-          <p className={styles.gapTitle}>🌅 월별 일출·일몰 평균 (한국 도시별)</p>
+          <p className={styles.gapTitle}>월별 일출·일몰 평균 (한국 도시별)</p>
           <div className={styles.tableWrap}>
             <table className={styles.sunTable}>
               <thead>
@@ -478,7 +478,7 @@ export default function HikingTimeClient() {
 
         {/* 체크리스트 */}
         <div className={styles.optionCard}>
-          <p className={styles.gapTitle}>📋 등산 준비 체크리스트</p>
+          <p className={styles.gapTitle}>등산 준비 체크리스트</p>
           <ul className={styles.checklist}>
             {CHECKLIST.map((item, i) => (
               <li key={i}>{item}</li>

@@ -303,10 +303,10 @@ export default function GolfDistanceClient() {
       {/* 탭 (4개) */}
       <div className={s.tabs4} role="tablist" aria-label="비거리 계산기 탭">
         {([
-          { id: 'estimate', label: '📏 비거리 계산' },
-          { id: 'analysis', label: '🔍 클럽 분석' },
-          { id: 'env',      label: '🌬️ 환경 보정' },
-          { id: 'records',  label: '📅 내 기록' },
+          { id: 'estimate', label: '비거리 계산' },
+          { id: 'analysis', label: '클럽 분석' },
+          { id: 'env',      label: '환경 보정' },
+          { id: 'records',  label: '내 기록' },
         ] as const).map(t => (
           <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
@@ -318,7 +318,7 @@ export default function GolfDistanceClient() {
 
       {/* 단위 토글 (모든 탭 공통) */}
       <div className={s.unitToggleRow}>
-        <span className={s.unitLabel}>📏 거리 단위</span>
+        <span className={s.unitLabel}>거리 단위</span>
         <div className={s.unitToggle}>
           <button type="button" aria-pressed={unit === 'm'} className={`${s.unitBtn} ${unit === 'm' ? s.unitBtnActive : ''}`}
             onClick={() => switchUnit('m')}>m (한국 표준)</button>
@@ -722,7 +722,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
 
         {/* 기온 */}
         <div className={s.envFactorRow}>
-          <span className={s.envFactorLabel}>🌡️ 기온</span>
+          <span className={s.envFactorLabel}>기온</span>
           <div className={s.envSliderRow}>
             <input type="range" min={-10} max={40} step={1} aria-label="기온"
               value={temperature} onChange={e => setTemperature(parseInt(e.target.value))}
@@ -735,7 +735,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
 
         {/* 고도 */}
         <div className={s.envFactorRow}>
-          <span className={s.envFactorLabel}>🏔️ 고도</span>
+          <span className={s.envFactorLabel}>고도</span>
           <div className={s.envSliderRow}>
             <input type="range" min={0} max={3000} step={50} aria-label="고도"
               value={elevation} onChange={e => setElevation(parseInt(e.target.value))}
@@ -746,7 +746,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
 
         {/* 바람 */}
         <div className={s.envFactorRow}>
-          <span className={s.envFactorLabel}>💨 바람 방향</span>
+          <span className={s.envFactorLabel}>바람 방향</span>
           <div className={s.toggleRow} style={{ flex: 1 }}>
             {([
               { key: 'none', label: '없음' },
@@ -777,7 +777,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
 
         {/* 경사 */}
         <div className={s.envFactorRow}>
-          <span className={s.envFactorLabel}>⛰️ 경사 (양수=오르막)</span>
+          <span className={s.envFactorLabel}>경사 (양수=오르막)</span>
           <div className={s.envSliderRow}>
             <input type="range" min={-10} max={10} step={1} aria-label="경사 (양수=오르막)"
               value={slopeAngle} onChange={e => setSlopeAngle(parseInt(e.target.value))}
@@ -788,7 +788,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
 
         {/* 라이 */}
         <div className={s.envFactorRow}>
-          <span className={s.envFactorLabel}>🌿 라이</span>
+          <span className={s.envFactorLabel}>라이</span>
           <div className={s.lieGrid}>
             {(Object.keys(LIE_LABEL) as LieType[]).map(l => (
               <button key={l} type="button" aria-pressed={lieType === l}
@@ -805,7 +805,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
       {/* 결과 */}
       <div className={s.envResultCard} role="status">
         <div className={s.envResultHead}>
-          <span className={s.cardLabel}>🌬️ 환경 보정 비거리</span>
+          <span className={s.cardLabel}>환경 보정 비거리</span>
           <span className={s.envResultBadge} style={{
             color: result.changePercent >= 0 ? '#059669' : '#DC2626',
             borderColor: (result.changePercent >= 0 ? '#059669' : '#DC2626') + '55',
@@ -929,7 +929,7 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
       {/* 누적 통계 */}
       {records.length > 0 && (
         <div className={s.recordStatsCard}>
-          <span className={s.cardLabel}>📊 누적 통계 ({records.length}회 기록)</span>
+          <span className={s.cardLabel}>누적 통계 ({records.length}회 기록)</span>
           <div className={s.recordStatsGrid}>
             <div className={s.recordStat}>
               <div className={s.recordStatLabel}>드라이버 평균</div>
@@ -956,7 +956,7 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
 
       {/* 새 기록 입력 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>➕ 새 기록 추가</span>
+        <span className={s.cardLabel}>새 기록 추가</span>
         <div className={s.recordFormGrid}>
           <div>
             <span className={s.fieldLabel}>날짜</span>
@@ -1008,7 +1008,7 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
             value={notes} onChange={e => setNotes(e.target.value)} maxLength={50} />
         </div>
         <button type="button" className={s.recordSaveBtn} onClick={handleSave}>
-          📅 기록 저장
+          기록 저장
         </button>
       </div>
 
@@ -1016,7 +1016,7 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
       {records.length > 0 ? (
         <div className={s.card}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <span className={s.cardLabel} style={{ marginBottom: 0 }}>📅 최근 기록 (최대 1년 보관)</span>
+            <span className={s.cardLabel} style={{ marginBottom: 0 }}>최근 기록 (최대 1년 보관)</span>
             <button type="button" onClick={handleClearAll}
               style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, padding: '4px 10px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
               전체 삭제

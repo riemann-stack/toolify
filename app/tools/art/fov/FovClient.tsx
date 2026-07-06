@@ -65,17 +65,17 @@ export default function FovClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'equiv' ? s.tabActive : ''}`}    onClick={() => setTab('equiv')}>📷 35mm 환산·화각</button>
-        <button className={`${s.tab} ${tab === 'frame' ? s.tabActive : ''}`}    onClick={() => setTab('frame')}>📏 시야 너비</button>
-        <button className={`${s.tab} ${tab === 'compare' ? s.tabActive : ''}`}  onClick={() => setTab('compare')}>🔍 화각 비교</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>🎯 용도별 가이드</button>
+        <button className={`${s.tab} ${tab === 'equiv' ? s.tabActive : ''}`}    onClick={() => setTab('equiv')}>35mm 환산·화각</button>
+        <button className={`${s.tab} ${tab === 'frame' ? s.tabActive : ''}`}    onClick={() => setTab('frame')}>시야 너비</button>
+        <button className={`${s.tab} ${tab === 'compare' ? s.tabActive : ''}`}  onClick={() => setTab('compare')}>화각 비교</button>
+        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>용도별 가이드</button>
       </div>
 
       {/* ───── 탭 1: 35mm 환산·화각 ───── */}
       {tab === 'equiv' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📐 카메라 센서</span>
+            <span className={s.cardLabel}>카메라 센서</span>
             <select value={sensorId} onChange={(e) => setSensorId(e.target.value as SensorId)} className={s.input}>
               {SENSORS.map((sm) => (
                 <option key={sm.id} value={sm.id}>
@@ -90,7 +90,7 @@ export default function FovClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🔭 실제 초점거리 (mm)</span>
+            <span className={s.cardLabel}>실제 초점거리 (mm)</span>
             <div className={s.sliderHead}>
               <span className={s.sliderLabel}>렌즈 표기 mm</span>
               <span className={s.sliderValue}>{fmt(focalLength, 0)} mm</span>
@@ -112,7 +112,7 @@ export default function FovClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🌀 조리개 (등가 조리개 환산용)</span>
+            <span className={s.cardLabel}>조리개 (등가 조리개 환산용)</span>
             <div className={s.sliderHead}>
               <span className={s.sliderLabel}>f/N</span>
               <span className={s.sliderValue}>f/{fmt(aperture, 1)}</span>
@@ -150,7 +150,7 @@ export default function FovClient() {
 
           {/* 화각 결과 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📐 화각 (Angle of View)</span>
+            <span className={s.cardLabel}>화각 (Angle of View)</span>
             <div className={s.aovGrid}>
               <div className={s.aovCell}>
                 <p className={s.aovLabel}>수평 (Horizontal)</p>
@@ -177,7 +177,7 @@ export default function FovClient() {
 
           {/* 등가 조리개 + 별 룰 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🎯 추가 환산</span>
+            <span className={s.cardLabel}>추가 환산</span>
             <div className={s.tableSimple}>
               <div className={s.row}>
                 <span className={s.rowKey}>등가 조리개 (심도 환산)</span>
@@ -207,7 +207,7 @@ export default function FovClient() {
       {tab === 'frame' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📐 카메라 + 렌즈 + 거리</span>
+            <span className={s.cardLabel}>카메라 + 렌즈 + 거리</span>
             <div className={s.field}>
               <label className={s.fieldLabel} htmlFor="fov-f1">센서</label>
               <select id="fov-f1" value={sensorId} onChange={(e) => setSensorId(e.target.value as SensorId)} className={s.input}>
@@ -263,7 +263,7 @@ export default function FovClient() {
 
           {/* 거리별 비교 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 같은 렌즈로 거리별 시야 너비</span>
+            <span className={s.cardLabel}>같은 렌즈로 거리별 시야 너비</span>
             <table className={s.dataTable}>
               <thead>
                 <tr>
@@ -305,7 +305,7 @@ export default function FovClient() {
       {tab === 'compare' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📐 비교 기준 센서</span>
+            <span className={s.cardLabel}>비교 기준 센서</span>
             <select value={compareSensorId} onChange={(e) => setCompareSensorId(e.target.value as SensorId)} className={s.input}>
               {SENSORS.map((sm) => (
                 <option key={sm.id} value={sm.id}>{sm.label} (×{sm.cropFactor})</option>
@@ -317,7 +317,7 @@ export default function FovClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🔍 35mm 환산별 화각 비교 (수평)</span>
+            <span className={s.cardLabel}>35mm 환산별 화각 비교 (수평)</span>
             <div className={s.compareSvgWrap}>
               <CompareDiagram sensorWidth={getSensor(compareSensorId).width} />
             </div>
@@ -351,7 +351,7 @@ export default function FovClient() {
 
           {/* 렌즈 카테고리 가이드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📚 35mm 환산 렌즈 카테고리</span>
+            <span className={s.cardLabel}>35mm 환산 렌즈 카테고리</span>
             <div className={s.lensCatList}>
               {LENS_CATEGORIES_FOR_DISPLAY.map((cat, i) => (
                 <div key={i} className={s.lensCatCard}>
@@ -369,7 +369,7 @@ export default function FovClient() {
       {tab === 'guide' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>🎯 10 용도별 추천 — 35mm 환산</span>
+            <span className={s.cardLabel}>10 용도별 추천 — 35mm 환산</span>
             <div className={s.useCaseGrid}>
               {USE_CASES.map((u) => (
                 <button key={u.id} className={s.useCaseCard} onClick={() => {
@@ -401,7 +401,7 @@ export default function FovClient() {
 
           {/* 환산 빠른 참고 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🧮 35mm 환산 ↔ 실제 mm 변환표</span>
+            <span className={s.cardLabel}>35mm 환산 ↔ 실제 mm 변환표</span>
             <table className={s.dataTable}>
               <thead>
                 <tr>

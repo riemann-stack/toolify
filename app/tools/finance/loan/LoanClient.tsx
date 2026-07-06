@@ -20,13 +20,13 @@ const comma = (v: string): string => {
 
 type Tab = 'main' | 'prepay' | 'refi' | 'rate' | 'reverse' | 'compare'
 
-const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'main',    name: '기본 계산',   icon: '💳' },
-  { id: 'prepay',  name: '중도상환',    icon: '💰' },
-  { id: 'refi',    name: '갈아타기',    icon: '🔄' },
-  { id: 'rate',    name: '금리 변동',    icon: '📊' },
-  { id: 'reverse', name: '역산',        icon: '🎯' },
-  { id: 'compare', name: '비교표',      icon: '📋' },
+const TABS: { id: Tab; name: string }[] = [
+  { id: 'main',    name: '기본 계산',  },
+  { id: 'prepay',  name: '중도상환',   },
+  { id: 'refi',    name: '갈아타기',   },
+  { id: 'rate',    name: '금리 변동',   },
+  { id: 'reverse', name: '역산',       },
+  { id: 'compare', name: '비교표',     },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
@@ -245,7 +245,7 @@ export default function LoanClient() {
           <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
-            <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
+            {t.name}
           </button>
         ))}
       </div>
@@ -400,7 +400,7 @@ export default function LoanClient() {
           <div className={styles.resultActions}>
             <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(`대출 ${formatEok(principalWon)} / ${rateNum}% / ${monthsNum}개월 / 원리금균등 → 월 ${won(ep.monthlyPayment)} · 총 이자 ${formatEok(ep.totalInterest)}`)}>
-              {copied ? '✓ 복사됨' : '📋 복사'}
+              {copied ? '✓ 복사됨' : '복사'}
             </button>
           </div>
         </>

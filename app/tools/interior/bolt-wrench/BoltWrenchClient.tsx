@@ -97,10 +97,10 @@ export default function BoltWrenchClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="볼트 스패너 도구 모드">
         {([
-          { id: 'find',      label: '🔍 사이즈 찾기' },
-          { id: 'reverse',   label: '🔄 역검색' },
-          { id: 'nutwasher', label: '🔘 너트·와셔' },
-          { id: 'kit',       label: '🧰 공구 세트' },
+          { id: 'find',      label: '사이즈 찾기' },
+          { id: 'reverse',   label: '역검색' },
+          { id: 'nutwasher', label: '너트·와셔' },
+          { id: 'kit',       label: '공구 세트' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -685,7 +685,7 @@ export default function BoltWrenchClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 공구 구입 팁</strong>
+            <strong>공구 구입 팁</strong>
             <p>
               • 처음엔 <strong>9피스 알렌렌치 세트 + 8~19mm 콤비스패너 세트</strong>면 80% 커버<br />
               • 자동차는 <strong>3/8″ 라쳇 + 소켓 풀세트</strong>가 핵심<br />

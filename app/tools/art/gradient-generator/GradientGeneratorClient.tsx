@@ -260,9 +260,9 @@ export default function GradientGeneratorClient() {
       {/* ── 탭 ── */}
       <div className={styles.tabs}>
         {([
-          { k: 'create',  l: '🎨 만들기' },
-          { k: 'analyze', l: '🔍 분석·접근성' },
-          { k: 'presets', l: '📚 프리셋' },
+          { k: 'create',  l: '만들기' },
+          { k: 'analyze', l: '분석·접근성' },
+          { k: 'presets', l: '프리셋' },
         ] as const).map((t) => (
           <button key={t.k} className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`} onClick={() => setTab(t.k)}>
             {t.l}
@@ -520,7 +520,7 @@ export default function GradientGeneratorClient() {
             </div>
             <div className={styles.codeBox}>
               <button className={styles.copyBtn} onClick={() => copyCode(activeCode)}>
-                {copied === activeCode ? '✓ 복사됨' : '📋 복사'}
+                {copied === activeCode ? '✓ 복사됨' : '복사'}
               </button>
               <pre className={styles.codePre}>{codes[activeCode]}</pre>
             </div>
@@ -537,7 +537,7 @@ export default function GradientGeneratorClient() {
 
           {/* 내보내기 (PNG/SVG) + 저장 */}
           <section className={styles.optionCard}>
-            <p className={styles.gapTitle}>📥 이미지 내보내기 + 즐겨찾기</p>
+            <p className={styles.gapTitle}>이미지 내보내기 + 즐겨찾기</p>
             <div className={styles.exportRow}>
               <select className={styles.select} value={exportSize} onChange={(e) => setExportSize(+e.target.value)}>
                 {EXPORT_SIZES.map((s, i) => <option key={i} value={i}>{s.label}</option>)}
@@ -551,7 +551,7 @@ export default function GradientGeneratorClient() {
               <button className={styles.primaryBtn} onClick={handlePngDownload}>PNG 다운로드</button>
               <button className={styles.secondaryBtn} onClick={handleSvgDownload}>SVG 다운로드</button>
               <button className={styles.secondaryBtn} onClick={addToFavs} disabled={favs.length >= 30}>
-                ⭐ 즐겨찾기 ({favs.length}/30)
+                즐겨찾기 ({favs.length}/30)
               </button>
             </div>
             {mounted && favs.length > 0 && (
@@ -624,7 +624,7 @@ export default function GradientGeneratorClient() {
 
           {/* 이미지에서 추출 */}
           <section className={styles.optionCard}>
-            <p className={styles.gapTitle}>🖼️ 이미지에서 색상 추출 → 그라디언트</p>
+            <p className={styles.gapTitle}>이미지에서 색상 추출 → 그라디언트</p>
             <p className={styles.note}>이미지는 <strong>브라우저 내에서만 처리</strong>되며 서버로 전송되지 않습니다 (K-means 5색 추출).</p>
             <div className={styles.uploadRow}>
               <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className={styles.fileInput} />
@@ -651,7 +651,7 @@ export default function GradientGeneratorClient() {
         <div className={styles.panel}>
           {/* 자동 추천 */}
           <section className={styles.optionCard}>
-            <p className={styles.gapTitle}>🎯 1색에서 자동 생성</p>
+            <p className={styles.gapTitle}>1색에서 자동 생성</p>
             <div className={styles.autoRow}>
               <input
                 type="color"
@@ -690,10 +690,10 @@ export default function GradientGeneratorClient() {
           </section>
 
           {/* 한국 프리셋 */}
-          <PresetGroup title="🇰🇷 한국 무드" subtitle={`${KOREAN_PRESETS.length}종 · 계절·풍경·트렌드`} presets={KOREAN_PRESETS} onApply={(p) => setCfg({ ...cfg, ...presetToConfig(p) })} />
+          <PresetGroup title="한국 무드" subtitle={`${KOREAN_PRESETS.length}종 · 계절·풍경·트렌드`} presets={KOREAN_PRESETS} onApply={(p) => setCfg({ ...cfg, ...presetToConfig(p) })} />
 
           {/* 글로벌 프리셋 */}
-          <PresetGroup title="🌐 글로벌 트렌드" subtitle={`${GLOBAL_PRESETS.length}종 · 부드러운·Retro·UI·파스텔`} presets={GLOBAL_PRESETS} onApply={(p) => setCfg({ ...cfg, ...presetToConfig(p) })} />
+          <PresetGroup title="글로벌 트렌드" subtitle={`${GLOBAL_PRESETS.length}종 · 부드러운·Retro·UI·파스텔`} presets={GLOBAL_PRESETS} onApply={(p) => setCfg({ ...cfg, ...presetToConfig(p) })} />
         </div>
       )}
     </div>

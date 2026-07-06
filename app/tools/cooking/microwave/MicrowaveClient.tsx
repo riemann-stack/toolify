@@ -216,10 +216,10 @@ export default function MicrowaveClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
         {([
-          { id: 'convert', label: '⚡ 출력 환산' },
-          { id: 'food',    label: '🍱 식품 프리셋' },
-          { id: 'timer',   label: '⏱️ 타이머' },
-          { id: 'guide',   label: '📚 가이드' },
+          { id: 'convert', label: '출력 환산' },
+          { id: 'food',    label: '식품 프리셋' },
+          { id: 'timer',   label: '타이머' },
+          { id: 'guide',   label: '가이드' },
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
@@ -328,7 +328,7 @@ export default function MicrowaveClient() {
               }}
               type="button"
             >
-              ⏱️ 이 시간으로 타이머 시작
+              이 시간으로 타이머 시작
             </button>
           </div>
 
@@ -364,7 +364,7 @@ export default function MicrowaveClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>💡 빠른 팁</strong>
+            <strong>빠른 팁</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18, lineHeight: 1.7 }}>
               <li><strong>처음엔 환산 시간의 80%로 시작</strong> → 부족하면 10~15초씩 추가 (과조리 방지)</li>
               <li>600W 이하·1000W 이상은 효율 보정이 자동 적용됩니다 (저출력 +7%, 고출력 -5%)</li>
@@ -491,14 +491,14 @@ export default function MicrowaveClient() {
                   }}
                   type="button"
                 >
-                  {food.restSec > 0 ? '⏱️ 전체 과정 타이머' : '⏱️ 타이머 시작'}
+                  {food.restSec > 0 ? '전체 과정 타이머' : '타이머 시작'}
                 </button>
               </div>
 
               <div className={s.card}>
                 <span className={s.cardLabel}>{food.label} 가이드</span>
                 <div className={s.tipBox}>
-                  <strong>💡 팁</strong> {food.tip}
+                  <strong>팁</strong> {food.tip}
                 </div>
                 {food.warning && (
                   <div className={s.warnNote}>
@@ -657,7 +657,7 @@ export default function MicrowaveClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>🔔 알림음</strong>
+            <strong>알림음</strong>
             <p>
               종료 시 <strong>3회 비프음</strong>이 울립니다 (마지막 3초 카운트도 비프).<br />
               브라우저 음소거·시스템 볼륨을 확인하세요. 모바일은 최초 ▶ 시작 버튼 클릭 후 작동.
@@ -691,7 +691,7 @@ export default function MicrowaveClient() {
           })}
 
           <div className={s.card}>
-            <span className={s.cardLabel}>💡 골든 팁 10가지</span>
+            <span className={s.cardLabel}>골든 팁 10가지</span>
             <div className={s.tipsGrid}>
               {GOLDEN_TIPS.map((t, i) => (
                 <div key={i} className={s.tipCard}>

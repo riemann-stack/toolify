@@ -420,7 +420,7 @@ export default function CaffeineClient() {
 
       {/* ─── 설정: 반감기·일일 한도 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>⚙️ 개인 설정</div>
+        <div className={s.cardLabel}>개인 설정</div>
 
         <div className={s.subLabel}>반감기 (대사 속도)</div>
         <div className={s.optionGrid} role="group" aria-label="반감기(대사 속도) 선택">
@@ -460,7 +460,7 @@ export default function CaffeineClient() {
 
       {/* ─── 음료 추가 ─── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>➕ 음료 추가</div>
+        <div className={s.cardLabel}>음료 추가</div>
 
         <div className={s.subLabel}>마신 시각</div>
         <div className={s.timeRow} role="group" aria-label="마신 시각 입력 방식">
@@ -555,7 +555,7 @@ export default function CaffeineClient() {
       {/* ─── 오늘 기록 ─── */}
       <div className={s.card}>
         <div className={s.cardLabel}>
-          📋 기록 ({entries.length})
+          기록 ({entries.length})
           {entries.length > 0 && (
             <button className={s.clearBtn} onClick={clearAll}>전체 삭제</button>
           )}
@@ -589,7 +589,7 @@ export default function CaffeineClient() {
 
       {/* ─── 수면 영향 ─── */}
       <div className={s.sleepCard}>
-        <div className={s.cardLabel}>😴 수면 영향 예측</div>
+        <div className={s.cardLabel}>수면 영향 예측</div>
 
         <div className={s.bedtimeRow}>
           <label className={s.subLabel}>목표 취침 시각</label>
@@ -648,7 +648,7 @@ export default function CaffeineClient() {
       {/* ─── 시간별 곡선 ─── */}
       {entries.length > 0 && (
         <div className={s.chartCard}>
-          <div className={s.cardLabel}>📈 시간별 체내 카페인 (6h 전 ~ 12h 후)</div>
+          <div className={s.cardLabel}>시간별 체내 카페인 (6h 전 ~ 12h 후)</div>
           <svg viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
             {/* 그리드 */}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
@@ -711,7 +711,7 @@ export default function CaffeineClient() {
 
       {/* ─── 팁 ─── */}
       <div className={s.tipCard}>
-        <div className={s.cardLabel}>💡 카페인 잘 다루는 팁</div>
+        <div className={s.cardLabel}>카페인 잘 다루는 팁</div>
         <ul className={s.tipList}>
           <li><strong>마지막 커피는 취침 6~8시간 전</strong> — 잠들기 직전 마셔도 입면은 가능하지만 깊은 수면(N3)이 줄어 다음날 피로 ↑</li>
           <li><strong>오후 2시 이후 카페인 피하기</strong> — 일반 권장. 본인 반감기 길면 정오까지 컷</li>

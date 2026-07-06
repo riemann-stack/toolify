@@ -137,10 +137,10 @@ export default function PetClient() {
       <nav className={styles.tabs} role="tablist" aria-label="반려동물 종류">
         <button type="button" role="tab" aria-selected={tab === 'dog'}
           className={`${styles.tab}${tab === 'dog' ? ' ' + styles.tabDogActive : ''}`}
-          onClick={() => setTab('dog')}>🐶 강아지</button>
+          onClick={() => setTab('dog')}>강아지</button>
         <button type="button" role="tab" aria-selected={tab === 'cat'}
           className={`${styles.tab}${tab === 'cat' ? ' ' + styles.tabCatActive : ''}`}
-          onClick={() => setTab('cat')}>🐱 고양이</button>
+          onClick={() => setTab('cat')}>고양이</button>
       </nav>
       {tab === 'dog' ? <DogTab /> : <CatTab />}
     </div>
@@ -305,7 +305,7 @@ function DogTab() {
       </div>
 
       <button type="button" className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 복사'}
+        {copied ? '✓ 복사 완료' : '결과 복사'}
       </button>    </div>
   )
 }
@@ -528,7 +528,7 @@ function CatTab() {
       </div>
 
       <button type="button" className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 복사'}
+        {copied ? '✓ 복사 완료' : '결과 복사'}
       </button>    </div>
   )
 }

@@ -458,7 +458,7 @@ export default function CognitiveTestClient() {
 
       {/* 디바이스 안내 */}
       <div className={s.deviceNote}>
-        <strong>📱 모바일 안내:</strong> 모바일은 터치 지연으로 데스크탑보다 약 20~50ms 느릴 수 있습니다.
+        <strong>모바일 안내:</strong> 모바일은 터치 지연으로 데스크탑보다 약 20~50ms 느릴 수 있습니다.
         정확한 측정은 마우스·키보드 사용을 권장합니다.
       </div>
 
@@ -578,12 +578,12 @@ export default function CognitiveTestClient() {
                 </div>
 
                 <div className={s.compareCard}>
-                  💡 <strong>참고:</strong> F1 드라이버 약 <strong>200ms</strong> · 프로 게이머 <strong>180~220ms</strong> · 일반 성인 <strong>250ms</strong>.
+                  <strong>참고:</strong> F1 드라이버 약 <strong>200ms</strong> · 프로 게이머 <strong>180~220ms</strong> · 일반 성인 <strong>250ms</strong>.
                   실제 반응속도는 수면·피로·집중도·기기 성능에 따라 달라집니다.
                 </div>
 
                 <div className={s.actionRow}>
-                  <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetReaction}>🔄 다시 도전</button>
+                  <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetReaction}>다시 도전</button>
                   <button className={s.actionBtn} onClick={() => setTab('stroop')}>다음: 스트룹 효과 →</button>
                 </div>
               </>
@@ -685,7 +685,7 @@ export default function CognitiveTestClient() {
               </div>
 
               <div className={s.actionRow}>
-                <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetStroop}>🔄 다시 도전</button>
+                <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetStroop}>다시 도전</button>
                 <button className={s.actionBtn} onClick={() => setTab('dual')}>다음: 이중 과제 →</button>
               </div>
             </>
@@ -806,7 +806,7 @@ export default function CognitiveTestClient() {
               </div>
 
               <div className={s.actionRow}>
-                <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetDual}>🔄 다시 도전</button>
+                <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetDual}>다시 도전</button>
                 <button className={s.actionBtn} onClick={() => setTab('summary')}>결과 종합 →</button>
               </div>
             </>
@@ -877,36 +877,36 @@ export default function CognitiveTestClient() {
 
           {/* 최고 기록 */}
           <div className={s.recordCard}>
-            <p className={s.recordTitle}>🏆 내 최고 기록</p>
+            <p className={s.recordTitle}>내 최고 기록</p>
             {records.bestReaction === undefined && records.bestStroopInterference === undefined && records.bestDualInterference === undefined ? (
               <p className={s.recordEmpty}>아직 기록이 없습니다.</p>
             ) : (
               <>
                 {records.bestReaction !== undefined && (
                   <div className={s.recordRow}>
-                    <span>🚀 반응 속도 최고</span>
+                    <span>반응 속도 최고</span>
                     <strong>{records.bestReaction}ms</strong>
                   </div>
                 )}
                 {records.bestStroopInterference !== undefined && (
                   <div className={s.recordRow}>
-                    <span>🎨 스트룹 최저 간섭</span>
+                    <span>스트룹 최저 간섭</span>
                     <strong>+{records.bestStroopInterference}ms</strong>
                   </div>
                 )}
                 {records.bestDualInterference !== undefined && (
                   <div className={s.recordRow}>
-                    <span>🔄 이중 과제 최저 간섭</span>
+                    <span>이중 과제 최저 간섭</span>
                     <strong>+{records.bestDualInterference}%</strong>
                   </div>
                 )}
                 <div className={s.recordRow}>
-                  <span>📊 총 테스트 횟수</span>
+                  <span>총 테스트 횟수</span>
                   <strong>{records.totalTests}회</strong>
                 </div>
                 {records.lastTested && (
                   <div className={s.recordRow}>
-                    <span>🕐 마지막 테스트</span>
+                    <span>마지막 테스트</span>
                     <strong>{new Date(records.lastTested).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' })}</strong>
                   </div>
                 )}
@@ -944,7 +944,7 @@ export default function CognitiveTestClient() {
           {records.totalTests > 0 && (
             <div className={s.actionRow}>
               <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={() => setTab('reaction')}>다시 테스트하기</button>
-              <button className={s.actionBtn} onClick={clearRecords}>⚠️ 기록 초기화</button>
+              <button className={s.actionBtn} onClick={clearRecords}>기록 초기화</button>
             </div>
           )}
         </>

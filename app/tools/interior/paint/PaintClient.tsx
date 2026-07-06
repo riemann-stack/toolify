@@ -509,8 +509,8 @@ export default function PaintClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>공간 정보</span></div>
             <div className={styles.modeToggle}>
-              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>📐 평수로 입력</button>
-              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>📏 가로×세로(m)</button>
+              <button type="button" aria-pressed={sizeMode === 'pyung'} className={`${styles.modeBtn} ${styles.modePyung} ${sizeMode === 'pyung' ? styles.modeActive : ''}`} onClick={() => setSizeMode('pyung')}>평수로 입력</button>
+              <button type="button" aria-pressed={sizeMode === 'meter'} className={`${styles.modeBtn} ${styles.modeMeter} ${sizeMode === 'meter' ? styles.modeActive : ''}`} onClick={() => setSizeMode('meter')}>가로×세로(m)</button>
             </div>
 
             {sizeMode === 'pyung' ? (
@@ -753,7 +753,7 @@ export default function PaintClient() {
 
           {t1Cans.best && (
             <div className={styles.canRecCard}>
-              <p className={styles.canRecLabel}>📦 추천 구매 조합</p>
+              <p className={styles.canRecLabel}>추천 구매 조합</p>
               <div className={styles.canRecCombo}>
                 {(() => {
                   const c = t1Cans.best
@@ -1011,7 +1011,7 @@ export default function PaintClient() {
 
             {t2Cans.best && (
               <div className={styles.canRecCard} style={{ marginTop: 16 }}>
-                <p className={styles.canRecLabel}>📦 추천 구매 조합</p>
+                <p className={styles.canRecLabel}>추천 구매 조합</p>
                 <div className={styles.canRecCombo}>
                   {(() => {
                     const c = t2Cans.best
@@ -1134,7 +1134,7 @@ export default function PaintClient() {
                     </tr>
                   )}
                   <tr className={styles.totalRowSelf}>
-                    <td>🔧 셀프 시공 합계</td>
+                    <td>셀프 시공 합계</td>
                     <td colSpan={2}></td>
                     <td>{fmtKRW(selfTotal)}</td>
                   </tr>
@@ -1145,7 +1145,7 @@ export default function PaintClient() {
                     <td>{fmtKRW(proLaborTotal)}</td>
                   </tr>
                   <tr className={styles.totalRowPro}>
-                    <td>🏗️ 전문 시공 합계</td>
+                    <td>전문 시공 합계</td>
                     <td colSpan={2}></td>
                     <td>{fmtKRW(proTotal)}</td>
                   </tr>
@@ -1171,7 +1171,7 @@ export default function PaintClient() {
       )}
 
       <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+        {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
     </div>
   )

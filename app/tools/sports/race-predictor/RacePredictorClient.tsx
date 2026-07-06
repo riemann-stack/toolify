@@ -416,7 +416,7 @@ export default function RacePredictorClient() {
           <section className={styles.optionCard}>
             <label className={styles.checkRow}>
               <input type="checkbox" checked={envOn} onChange={(e) => setEnvOn(e.target.checked)} />
-              <span>🌡️ 대회 환경 보정</span>
+              <span>대회 환경 보정</span>
             </label>
             {envOn && (
               <div className={styles.optionBody}>
@@ -493,7 +493,7 @@ export default function RacePredictorClient() {
           <section className={styles.optionCard}>
             <label className={styles.checkRow}>
               <input type="checkbox" checked={demoOn} onChange={(e) => setDemoOn(e.target.checked)} />
-              <span>👥 연령·성별 보정 (참고)</span>
+              <span>연령·성별 보정 (참고)</span>
             </label>
             {demoOn && (
               <div className={styles.optionBody}>
@@ -594,7 +594,7 @@ export default function RacePredictorClient() {
       {tab === 'reverse' && (
         <div className={styles.panel}>
           <section>
-            <label className={styles.label}>🎯 목표 거리</label>
+            <label className={styles.label}>목표 거리</label>
             <div className={styles.distGrid}>
               {DISTS.filter((d) => d.key !== 'custom').map((d) => (
                 <button key={d.key} type="button" aria-pressed={revDist === d.key}
@@ -656,7 +656,7 @@ export default function RacePredictorClient() {
               </section>
 
               <section className={styles.optionCard}>
-                <p className={styles.gapTitle}>📊 본인 현재 기록 입력 (격차 분석 — 선택)</p>
+                <p className={styles.gapTitle}>본인 현재 기록 입력 (격차 분석 — 선택)</p>
                 <div className={styles.distGrid}>
                   {DISTS.filter((d) => d.key !== 'custom').map((d) => (
                     <button key={d.key} type="button" aria-pressed={curDist === d.key}
@@ -766,7 +766,7 @@ export default function RacePredictorClient() {
           {/* 훈련 페이스 — 간단 표시 */}
           {validBase && vdot > 0 && (
             <section className={styles.optionCard}>
-              <p className={styles.gapTitle}>⚡ 훈련 페이스 (E·M·T·I·R) — 간단</p>
+              <p className={styles.gapTitle}>훈련 페이스 (E·M·T·I·R) — 간단</p>
               <p className={styles.zoneIntro}>
                 기록 예측 탭의 입력 기준 (VDOT {vdot.toFixed(1)}) — 훈련 페이스는 <strong>결과 부산물</strong>입니다.
               </p>
@@ -792,7 +792,7 @@ export default function RacePredictorClient() {
           )}
 
           <section className={styles.koreaCard}>
-            <p className={styles.gapTitle}>📅 한국 마라톤 시즌 가이드</p>
+            <p className={styles.gapTitle}>한국 마라톤 시즌 가이드</p>
             <table className={styles.envTable}>
               <thead><tr><th scope="col">시즌</th><th scope="col">평균 기온</th><th scope="col">평가</th><th scope="col">주요 대회</th></tr></thead>
               <tbody>
@@ -851,7 +851,7 @@ export default function RacePredictorClient() {
               </section>
 
               <section className={styles.optionCard}>
-                <button className={styles.saveBtn} onClick={downloadCSV}>📊 CSV 다운로드</button>
+                <button className={styles.saveBtn} onClick={downloadCSV}>CSV 다운로드</button>
                 <button className={styles.clearBtn}
                   onClick={() => { if (confirm('모든 기록을 삭제하시겠습니까?')) setRecords([]) }}>
                   전체 기록 삭제
@@ -905,7 +905,7 @@ function RecordsChart({ records }: { records: RaceRecord[] }) {
 
   return (
     <div className={styles.chartWrap}>
-      <p className={styles.chartTitle}>📈 VDOT 추이</p>
+      <p className={styles.chartTitle}>VDOT 추이</p>
       <svg viewBox={`0 0 ${W} ${H}`} className={styles.chartSvg} preserveAspectRatio="xMidYMid meet">
         <line x1={padL} y1={yOf(maxV)} x2={W - padR} y2={yOf(maxV)} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 3" opacity="0.4" />
         <line x1={padL} y1={yOf(minV)} x2={W - padR} y2={yOf(minV)} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 3" opacity="0.4" />

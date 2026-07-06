@@ -135,7 +135,7 @@ export default function BakingRecipeClient() {
       </Disclaimer>
 
       <div className={s.diffNotice}>
-        <strong>💡 어떤 도구가 맞나요?</strong>
+        <strong>어떤 도구가 맞나요?</strong>
         <div className={s.diffRow}>
           <span>🍞 빵 (식빵·바게트·치아바타·발효 반죽) → <a href="/tools/cooking/baker-percent" className={s.diffLink}>베이커 퍼센트 계산기</a></span>
         </div>
@@ -320,7 +320,7 @@ function RecipeTab(props: RecipeTabProps) {
               return (
                 <tr key={k}>
                   <td className={`${s.rowName} ${isBase ? s.rowBase : ''}`}>
-                    {INGREDIENT_LABEL[k]}{isBase && <span className={s.baseTag}>⭐ 기준</span>}
+                    {INGREDIENT_LABEL[k]}{isBase && <span className={s.baseTag}>기준</span>}
                   </td>
                   <td>
                     <input
@@ -344,13 +344,13 @@ function RecipeTab(props: RecipeTabProps) {
           </tbody>
         </table>
         <button className={`${s.copyBtn} ${copied ? s.copyBtnDone : ''}`} onClick={copyMarkdown}>
-          {copied ? '✅ 복사됨' : '📋 마크다운 복사 (메모장·노션)'}
+          {copied ? '복사됨' : '마크다운 복사 (메모장·노션)'}
         </button>
       </div>
 
       {item.bakingTemp && (
         <div className={s.card}>
-          <span className={s.cardLabel}>🔥 굽기 가이드</span>
+          <span className={s.cardLabel}>굽기 가이드</span>
           <div className={s.bakeGrid}>
             <div className={s.bakeBox}>
               <span className={s.bakeLabel}>온도</span>
@@ -392,7 +392,7 @@ function RecipeTab(props: RecipeTabProps) {
       )}
 
       <div className={s.card}>
-        <span className={s.cardLabel}>💾 내 레시피 저장 (브라우저 로컬)</span>
+        <span className={s.cardLabel}>내 레시피 저장 (브라우저 로컬)</span>
         <div className={s.saveRow}>
           <input
             type="text"
@@ -461,7 +461,7 @@ function DiagnoseTab({ item, ratios, setRatios }: DiagnoseTabProps) {
   return (
     <>
       <div className={s.card}>
-        <span className={s.cardLabel}>🔍 {item.icon} {item.name} 비율 진단</span>
+        <span className={s.cardLabel}>{item.icon} {item.name} 비율 진단</span>
         <p className={s.diagIntro}>
           현재 입력된 비율을 분석해 식감·풍미를 예측하고, 권장 범위를 벗어난 재료에 대한 조정안을 제시합니다.
         </p>
@@ -488,7 +488,7 @@ function DiagnoseTab({ item, ratios, setRatios }: DiagnoseTabProps) {
 
       {result.predictions.length > 0 && (
         <div className={s.card}>
-          <span className={s.cardLabel}>📊 예측 식감·풍미</span>
+          <span className={s.cardLabel}>예측 식감·풍미</span>
           <div className={s.predList}>
             {result.predictions.map((p, i) => (
               <div key={i} className={s.predItem}>
@@ -507,7 +507,7 @@ function DiagnoseTab({ item, ratios, setRatios }: DiagnoseTabProps) {
 
       {result.recommendations.length > 0 && (
         <div className={s.card}>
-          <span className={s.cardLabel}>💡 추천</span>
+          <span className={s.cardLabel}>추천</span>
           <ul className={s.recList}>
             {result.recommendations.map((r, i) => (
               <li key={i}>{r}</li>
@@ -619,7 +619,7 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
       )}
 
       <div className={s.card}>
-        <span className={s.cardLabel}>📦 환산 결과</span>
+        <span className={s.cardLabel}>환산 결과</span>
         <p className={s.moldResult}>
           <strong>{mold.name}</strong>
           {mold.perPiece != null && ` × ${countNum}개`}
@@ -661,7 +661,7 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
         </table>
 
         <div className={s.moldNote}>
-          <strong>📝 참고</strong>
+          <strong>참고</strong>
           <ul>
             <li>틀이 작을수록 굽는 시간 ↓ · 클수록 ↑</li>
             <li>마카롱·머랭 같이 민감한 품목은 신중히 환산</li>
@@ -718,7 +718,7 @@ function PresetTab({ itemId, handleItemChange, setRatios, setTab }: PresetTabPro
       </div>
 
       <div className={s.card}>
-        <span className={s.cardLabel}>📚 검증된 레시피 프리셋 ({filtered.length}개)</span>
+        <span className={s.cardLabel}>검증된 레시피 프리셋 ({filtered.length}개)</span>
         <div className={s.presetGrid}>
           {filtered.map((r, i) => {
             const it = BAKING_ITEMS.find((b) => b.id === r.item)

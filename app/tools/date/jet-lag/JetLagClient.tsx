@@ -225,7 +225,7 @@ export default function JetLagClient() {
         </div>
 
         <p className={s.hintText}>
-          🛬 도착 현지 시각 자동 계산 — <strong>{formatHours(arrivalLocalH)}</strong>
+          도착 현지 시각 자동 계산 — <strong>{formatHours(arrivalLocalH)}</strong>
         </p>
       </div>
 
@@ -343,7 +343,7 @@ function PreTab({ timeDiff, direction, bedtime, waketime, absDiff, fromName, toN
         <div className={s.empty}>시차가 없어 수면 조정이 필요하지 않습니다.</div>
       ) : (
         <div className={s.card}>
-          <div className={s.cardTitle}>🛌 출국 전 수면 조정 스케줄</div>
+          <div className={s.cardTitle}>출국 전 수면 조정 스케줄</div>
           <p className={s.sub} style={{ marginTop: 0, marginBottom: 12 }}>
             {direction === 'east' ? '매일 ' + adjustPerDay + '시간씩 앞당기기' : '매일 ' + adjustPerDay + '시간씩 늦추기'} ({adjustDays}일 전부터 시작)
           </p>
@@ -377,7 +377,7 @@ function PreTab({ timeDiff, direction, bedtime, waketime, absDiff, fromName, toN
       )}
 
       <div className={s.infoCard}>
-        <div className={s.infoHead}>💊 멜라토닌 복용 타이밍</div>
+        <div className={s.infoHead}>멜라토닌 복용 타이밍</div>
         <ul>
           {direction === 'east' && <li>동쪽 이동: 도착지 기준 저녁 21~22시에 복용 권장</li>}
           {direction === 'west' && <li>서쪽 이동: 출발 며칠 전부터 도착지 취침 시간에 맞춰 복용</li>}
@@ -411,7 +411,7 @@ function DrowsyWindow({ fromName, toName, timeDiff, bedH, wakeH }: { fromName: s
 
   return (
     <div className={s.card}>
-      <div className={s.cardTitle}>⏰ 첫 2~3일 주의 시간대 ({toName} 현지 기준)</div>
+      <div className={s.cardTitle}>첫 2~3일 주의 시간대 ({toName} 현지 기준)</div>
       <p className={s.sub} style={{ marginTop: 0, marginBottom: 12 }}>
         {fromName} 기준 취침·기상 시각을 현지 시각으로 옮긴 구간입니다.
       </p>
@@ -475,7 +475,7 @@ function FlightTab({ flightHours, timeDiff, departTime, bedtime, fromName, toNam
   return (
     <>
       <div className={s.card}>
-        <div className={s.cardTitle}>🛫 기내 수면 권장 구간</div>
+        <div className={s.cardTitle}>기내 수면 권장 구간</div>
         <p className={s.sub} style={{ marginTop: 0, marginBottom: 12 }}>
           {fromName} 이륙 ({departTime}) → {toName} 도착({formatHours(arrivalLocalH)}). 시차 {timeDiff >= 0 ? '+' : ''}{timeDiff}시간 자동 반영.
         </p>
@@ -511,7 +511,7 @@ function FlightTab({ flightHours, timeDiff, departTime, bedtime, fromName, toNam
       </div>
 
       <div className={s.card}>
-        <div className={s.cardTitle}>☕ 카페인 마지막 허용 시각 (자동)</div>
+        <div className={s.cardTitle}>카페인 마지막 허용 시각 (자동)</div>
         <p className={s.sub} style={{ marginTop: 0, marginBottom: 10 }}>
           평소 취침 시각({bedtime}) − 카페인 반감기 8시간으로 자동 계산.
         </p>
@@ -664,7 +664,7 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
     <>
       {/* 첫날 전략 — 입력 없이 자동 계산 */}
       <div className={s.card}>
-        <div className={s.cardTitle}>🛬 도착 첫날 전략</div>
+        <div className={s.cardTitle}>도착 첫날 전략</div>
         <p className={s.sub} style={{ marginTop: 0, marginBottom: 12 }}>
           위 입력값으로 자동 계산. 도착 현지 <strong>{formatHours(arrivalLocalH)}</strong> 기준.
         </p>
@@ -693,7 +693,7 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
 
       {/* 낮잠 판정 — 입력 없이 도착 시각 기준 */}
       <div className={`${s.napCard} ${napDecision.status === 'ok' ? s.napOk : napDecision.status === 'warn' ? s.napWarn : s.napNo}`}>
-        <div className={s.cardTitle}>😴 낮잠 판정 (도착 직후 기준)</div>
+        <div className={s.cardTitle}>낮잠 판정 (도착 직후 기준)</div>
         <p className={s.sub} style={{ marginTop: 0, marginBottom: 10 }}>
           현지 {formatHours(arrivalLocalH)} 도착 직후 낮잠 권장 여부.
         </p>
@@ -706,7 +706,7 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
 
       {/* 햇빛 */}
       <div className={s.card}>
-        <div className={s.cardTitle}>☀️ 햇빛 노출 타이밍</div>
+        <div className={s.cardTitle}>햇빛 노출 타이밍</div>
         <p className={s.sub} style={{ marginTop: 0, marginBottom: 12 }}>
           {direction === 'east'
             ? '아침 햇빛이 생체시계를 앞당겨 동쪽 적응을 돕습니다.'
@@ -729,7 +729,7 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
 
       {/* 적응 타임라인 — 글자 겹침 방지 */}
       <div className={s.adaptCard}>
-        <div className={s.cardTitle}>📈 시차 적응 타임라인</div>
+        <div className={s.cardTitle}>시차 적응 타임라인</div>
         {adaptDays === 0 ? (
           <div className={s.empty}>시차가 없어 적응이 필요하지 않습니다.</div>
         ) : (
@@ -769,7 +769,7 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
       {/* 7일 스케줄 — 헤더 명확화 */}
       {adaptDays > 0 && (
         <div className={s.card}>
-          <div className={s.cardTitle}>📅 7일 적응 스케줄</div>
+          <div className={s.cardTitle}>7일 적응 스케줄</div>
           <p className={s.sub} style={{ marginTop: 0, marginBottom: 12 }}>
             <strong style={{ color: 'var(--accent)' }}>{scheduleHeader}</strong> · {direction === 'east' ? '동쪽 (어려움)' : direction === 'west' ? '서쪽 (상대적 쉬움)' : '시차 없음'} · 평소 취침 {bedtime} 기준
           </p>

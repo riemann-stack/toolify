@@ -418,13 +418,13 @@ export default function ChordClient() {
 
           {/* Copy */}
           <button className={s.copyBtn} onClick={handleCopy}>
-            📋 &ldquo;{chordFullStr} = {chordNotes.join(', ')}&rdquo; 복사
+            &ldquo;{chordFullStr} = {chordNotes.join(', ')}&rdquo; 복사
           </button>
 
           {/* Next chord recommendations */}
           {nextChords.length > 0 && (
             <div className={s.recCard}>
-              <div className={s.recLabel}>💡 어울리는 다음 코드</div>
+              <div className={s.recLabel}>어울리는 다음 코드</div>
               <div className={s.recChips}>
                 {nextChords.map((rc, i) => (
                   <button
@@ -648,7 +648,7 @@ export default function ChordClient() {
             </div>
 
             <Link href="/tools/art/capo" className={s.linkBtn}>
-              🎸 이 키를 카포로 연주하기 →
+              이 키를 카포로 연주하기 →
             </Link>
           </div>
         </div>

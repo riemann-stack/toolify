@@ -443,7 +443,7 @@ export default function CronClient() {
           <>
             {/* 자연어 해석 */}
             <div className={s.meaningCard} style={{ fontSize: 15, padding: '14px 18px' }}>
-              📝 <strong style={{ fontSize: 16 }}>{result.desc}</strong>
+              <strong style={{ fontSize: 16 }}>{result.desc}</strong>
             </div>
 
             {/* 필드 분해 */}

@@ -174,7 +174,7 @@ export default function HolidayTableClient() {
 
       {/* ── 명절 선택 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>📅 명절</div>
+        <div className={s.cardLabel}>명절</div>
         <div className={s.holidayRow}>
           {(Object.keys(HOLIDAYS) as HolidayId[]).map(id => {
             const h = HOLIDAYS[id]
@@ -198,7 +198,7 @@ export default function HolidayTableClient() {
 
       {/* ── 상 형식·인원 ── */}
       <div className={s.card}>
-        <div className={s.cardLabel}>🍱 상 형식 + 인원</div>
+        <div className={s.cardLabel}>상 형식 + 인원</div>
 
         <div className={s.subLabel}>상 형식</div>
         <div className={s.formatRow}>
@@ -289,7 +289,7 @@ export default function HolidayTableClient() {
       {/* ── 카테고리별 품목 ── */}
       <div className={s.card}>
         <div className={s.cardLabel}>
-          <span>🛒 품목별 수량 + 비용</span>
+          <span>품목별 수량 + 비용</span>
           {Object.keys(priceOverrides).length > 0 && (
             <button className={s.resetBtn} onClick={resetPrices}>가격 초기화</button>
           )}
@@ -349,14 +349,14 @@ export default function HolidayTableClient() {
         </div>
 
         <button type="button" className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={copyMarkdown}>
-          {copied ? '✓ 복사됨' : '📋 장보기 리스트 복사 (마크다운)'}
+          {copied ? '✓ 복사됨' : '장보기 리스트 복사 (마크다운)'}
         </button>
       </div>
 
       {/* ── 차례상 5열 배치 (formal일 때만) ── */}
       {formatId === 'formal' && (
         <div className={s.card}>
-          <div className={s.cardLabel}>📜 차례상 5열 배치 원칙</div>
+          <div className={s.cardLabel}>차례상 5열 배치 원칙</div>
           <div className={s.layoutWrap}>
             <CharyeLayoutSvg />
           </div>
@@ -380,7 +380,7 @@ export default function HolidayTableClient() {
 
       {/* ── 절약 팁 ── */}
       <div className={s.tipCard}>
-        <div className={s.cardLabel}>💡 명절 비용 절약 팁</div>
+        <div className={s.cardLabel}>명절 비용 절약 팁</div>
         <ul className={s.tipList}>
           {SAVING_TIPS.map((t, i) => (
             <li key={i}><strong>{t.tip}</strong> — {t.detail}</li>

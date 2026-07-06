@@ -160,10 +160,10 @@ export default function YamlJsonClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`}  onClick={() => setTab('convert')}>🔄 변환</button>
-        <button className={`${s.tab} ${tab === 'validate' ? s.tabActive : ''}`} onClick={() => setTab('validate')}>✅ 검증</button>
-        <button className={`${s.tab} ${tab === 'examples' ? s.tabActive : ''}`} onClick={() => setTab('examples')}>📚 예시</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>📖 가이드</button>
+        <button className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`}  onClick={() => setTab('convert')}>변환</button>
+        <button className={`${s.tab} ${tab === 'validate' ? s.tabActive : ''}`} onClick={() => setTab('validate')}>검증</button>
+        <button className={`${s.tab} ${tab === 'examples' ? s.tabActive : ''}`} onClick={() => setTab('examples')}>예시</button>
+        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {/* 토스트 */}
@@ -174,7 +174,7 @@ export default function YamlJsonClient() {
         <>
           {/* 옵션 행 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>⚙️ 옵션</span>
+            <span className={s.cardLabel}>옵션</span>
 
             <div className={s.optBlock}>
               <span className={s.optTitle}>방향</span>
@@ -229,7 +229,7 @@ export default function YamlJsonClient() {
             {/* 입력 */}
             <div className={s.paneCard}>
               <div className={s.paneHeader}>
-                <span className={s.paneLabel}>📝 입력</span>
+                <span className={s.paneLabel}>입력</span>
                 <div className={s.paneActions}>
                   <span className={s.paneStat}>{formatBytes(inputBytes)}</span>
                   <button className={s.smBtn} onClick={() => setInput('')} disabled={!input}>🗑️</button>
@@ -257,7 +257,7 @@ export default function YamlJsonClient() {
             <div className={s.paneCard}>
               <div className={s.paneHeader}>
                 <span className={s.paneLabel}>
-                  📤 결과 {convertResult?.success && actualDirection && <span className={s.formatBadge}>{actualDirection === 'y2j' ? 'JSON' : 'YAML'}</span>}
+                  결과 {convertResult?.success && actualDirection && <span className={s.formatBadge}>{actualDirection === 'y2j' ? 'JSON' : 'YAML'}</span>}
                 </span>
                 <div className={s.paneActions}>
                   {convertResult?.stats && (
@@ -315,7 +315,7 @@ export default function YamlJsonClient() {
       {tab === 'validate' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📝 YAML 또는 JSON 입력</span>
+            <span className={s.cardLabel}>YAML 또는 JSON 입력</span>
             <textarea
               value={validateInput}
               onChange={(e) => setValidateInput(e.target.value)}
@@ -368,7 +368,7 @@ export default function YamlJsonClient() {
               {/* 트리 미리보기 */}
               {validation.valid && validation.data !== undefined && (
                 <div className={s.card}>
-                  <span className={s.cardLabel}>🌳 데이터 구조 (최상위 5개)</span>
+                  <span className={s.cardLabel}>데이터 구조 (최상위 5개)</span>
                   <div className={s.treeList}>
                     {buildTreePreview(validation.data, 5).map((node, i) => (
                       <div key={i} className={s.treeNode}>
@@ -383,7 +383,7 @@ export default function YamlJsonClient() {
 
               {validation.valid && (
                 <button className={s.primaryBtn} onClick={() => { setInput(validateInput); setTab('convert') }}>
-                  🔄 변환 탭으로 보내기
+                  변환 탭으로 보내기
                 </button>
               )}
             </>
@@ -395,7 +395,7 @@ export default function YamlJsonClient() {
       {tab === 'examples' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📂 카테고리</span>
+            <span className={s.cardLabel}>카테고리</span>
             <div className={s.categoryRow}>
               {CATEGORIES.map((c) => (
                 <button
@@ -432,7 +432,7 @@ export default function YamlJsonClient() {
       {tab === 'guide' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 YAML vs JSON 차이</span>
+            <span className={s.cardLabel}>YAML vs JSON 차이</span>
             <table className={s.compareTable}>
               <thead>
                 <tr><th scope="col">항목</th><th scope="col">YAML</th><th scope="col">JSON</th></tr>
@@ -489,7 +489,7 @@ export default function YamlJsonClient() {
 
           {/* 한국 시나리오 */}
           <div className={s.tipBox}>
-            <p className={s.tipTitle}>💡 한국 개발자 자주 쓰는 변환 시나리오</p>
+            <p className={s.tipTitle}>한국 개발자 자주 쓰는 변환 시나리오</p>
             <ul className={s.warnList}>
               <li><strong>Spring application.yml → JSON</strong> — 외부 시스템 연동·설정 백업</li>
               <li><strong>K8s YAML → JSON</strong> — kubectl create/apply 일부 명령에 JSON 사용 가능</li>

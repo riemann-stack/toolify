@@ -409,7 +409,7 @@ export default function FourInsuranceClient() {
           {/* 2026년 변경 안내 */}
           {year === 2026 && (
             <div className={s.noticeCard}>
-              <span className={s.noticeBadge}>📅 2026년 적용 요율</span>
+              <span className={s.noticeBadge}>2026년 적용 요율</span>
               <div>2025년 대비 주요 변경사항:</div>
               <ul>
                 <li>국민연금 <strong>9% → 9.5%</strong> (0.5%p ↑, 1998년 이후 28년 만의 인상)</li>
@@ -604,7 +604,7 @@ export default function FourInsuranceClient() {
           {/* 두루누리 안내 */}
           {isDuruEligible && (
             <div className={s.duruCard}>
-              <span className={s.duruBadge}>💡 두루누리 지원 대상</span>
+              <span className={s.duruBadge}>두루누리 지원 대상</span>
               <p>
                 월급여 270만원 미만 ✅ · 사업장 10인 미만 ✅ — 두루누리 사회보험료 지원 대상에 해당될 수 있습니다.
               </p>

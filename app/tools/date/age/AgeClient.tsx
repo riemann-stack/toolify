@@ -254,10 +254,10 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
       <div className={s.card}>
         <label className={s.cardLabel}>기준일 변경</label>
         <div className={s.refRow}>
-          <button className={`${s.refBtn} ${refPreset === 'today'    ? s.refActive : ''}`} onClick={() => setRefPreset('today')}>📅 오늘</button>
-          <button className={`${s.refBtn} ${refPreset === 'eoy'      ? s.refActive : ''}`} onClick={() => setRefPreset('eoy')}>📅 {currentYear}-12-31</button>
-          <button className={`${s.refBtn} ${refPreset === 'eoyNext'  ? s.refActive : ''}`} onClick={() => setRefPreset('eoyNext')}>📅 {currentYear + 1}-12-31</button>
-          <button className={`${s.refBtn} ${refPreset === 'custom'   ? s.refActive : ''}`} onClick={() => setRefPreset('custom')}>📅 직접 선택</button>
+          <button className={`${s.refBtn} ${refPreset === 'today'    ? s.refActive : ''}`} onClick={() => setRefPreset('today')}>오늘</button>
+          <button className={`${s.refBtn} ${refPreset === 'eoy'      ? s.refActive : ''}`} onClick={() => setRefPreset('eoy')}>{currentYear}-12-31</button>
+          <button className={`${s.refBtn} ${refPreset === 'eoyNext'  ? s.refActive : ''}`} onClick={() => setRefPreset('eoyNext')}>{currentYear + 1}-12-31</button>
+          <button className={`${s.refBtn} ${refPreset === 'custom'   ? s.refActive : ''}`} onClick={() => setRefPreset('custom')}>직접 선택</button>
         </div>
         {refPreset === 'custom' && (
           <CustomRefDateSelect customRef={customRef} setCustomRef={setCustomRef} />

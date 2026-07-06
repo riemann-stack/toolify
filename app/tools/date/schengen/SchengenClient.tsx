@@ -296,7 +296,7 @@ export default function SchengenClient() {
             className={`${s.copyBtn} ${copied ? s.copied : ''}`}
             onClick={handleCopy}
           >
-            {copied ? '✓ 복사 완료' : '📋 결과 텍스트 복사'}
+            {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
           </button>
 
           <p className={s.note}>

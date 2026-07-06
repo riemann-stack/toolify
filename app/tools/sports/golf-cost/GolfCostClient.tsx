@@ -232,9 +232,9 @@ export default function GolfCostClient() {
       {/* 탭 네비 */}
       <div className={s.tabs3} role="tablist">
         {([
-          { id: 'main',       label: '🧮 오늘 정산' },
-          { id: 'membership', label: '🏆 회원권 손익' },
-          { id: 'courses',    label: '⛳ 내 골프장' },
+          { id: 'main',       label: '오늘 정산' },
+          { id: 'membership', label: '회원권 손익' },
+          { id: 'courses',    label: '내 골프장' },
         ] as { id: TabId; label: string }[]).map(t => (
           <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
             className={`${s.tabBtn} ${tab === t.id ? s.tabBtnActive : ''}`}
@@ -305,7 +305,7 @@ export default function GolfCostClient() {
 
       {/* 그린피 */}
       <div className={`${s.card} ${s.cardAccent}`}>
-        <span className={s.cardLabel}>⛳ 그린피</span>
+        <span className={s.cardLabel}>그린피</span>
         <div className={s.subLabel}>1인당 그린피</div>
         <div className={s.inputRow}>
           <input className={s.numInput} type="number" inputMode="decimal" aria-label="1인당 그린피" value={greenFee || ''} onChange={e => setGreenFee(parseAmount(e.target.value))} />
@@ -318,7 +318,7 @@ export default function GolfCostClient() {
 
       {/* 카트비 */}
       <div className={`${s.card} ${s.cardAccent}`}>
-        <span className={s.cardLabel}>🛺 카트비</span>
+        <span className={s.cardLabel}>카트비</span>
         <div className={s.subLabel}>부과 방식</div>
         <div className={s.toggleRow}>
           <button type="button" aria-pressed={cartMode === 'team'} className={`${s.toggleBtn} ${cartMode === 'team' ? s.toggleOn : s.toggleOff}`} onClick={() => setCartMode('team')}>팀당</button>
@@ -337,7 +337,7 @@ export default function GolfCostClient() {
       {/* 캐디 */}
       <div className={`${s.card} ${s.cardAccent}`}>
         <div className={s.toggleHeader}>
-          <span className={s.cardLabel} style={{ marginBottom: 0 }}>👤 캐디피</span>
+          <span className={s.cardLabel} style={{ marginBottom: 0 }}>캐디피</span>
           <div className={s.toggleRow} style={{ width: 200 }}>
             <button type="button" aria-pressed={caddieEnabled} className={`${s.toggleBtn} ${caddieEnabled ? s.toggleOn : s.toggleOff}`} onClick={() => setCaddieEnabled(true)}>있음</button>
             <button type="button" aria-pressed={!caddieEnabled} className={`${s.toggleBtn} ${!caddieEnabled ? s.toggleOn : s.toggleOff}`} onClick={() => setCaddieEnabled(false)}>노캐디</button>
@@ -381,7 +381,7 @@ export default function GolfCostClient() {
 
       {/* 식사·그늘집 */}
       <div className={`${s.card} ${s.cardAccent}`}>
-        <span className={s.cardLabel}>🍱 식사·그늘집</span>
+        <span className={s.cardLabel}>식사·그늘집</span>
         <div className={s.subLabel}>식사비 부과 방식</div>
         <div className={s.toggleRow}>
           <button type="button" aria-pressed={mealMode === 'each'} className={`${s.toggleBtn} ${mealMode === 'each' ? s.toggleOn : s.toggleOff}`} onClick={() => setMealMode('each')}>각자 결제</button>
@@ -407,7 +407,7 @@ export default function GolfCostClient() {
 
       {/* 교통비 */}
       <div className={`${s.card} ${s.cardAccent}`}>
-        <span className={s.cardLabel}>🚗 교통비</span>
+        <span className={s.cardLabel}>교통비</span>
         <div className={s.subLabel}>교통 수단</div>
         <div className={`${s.courseGrid} ${s.courseGrid4}`}>
           {([
@@ -492,7 +492,7 @@ export default function GolfCostClient() {
 
       {/* 기타 비용 */}
       <div className={`${s.card} ${s.cardAccent}`}>
-        <span className={s.cardLabel}>💼 기타 비용 (1인당)</span>
+        <span className={s.cardLabel}>기타 비용 (1인당)</span>
         <div className={s.twoCol}>
           <div>
             <div className={s.subLabel}>장갑/볼/티</div>
@@ -522,7 +522,7 @@ export default function GolfCostClient() {
       {/* 내기 (선택) */}
       <div className={s.card}>
         <div className={s.toggleHeader}>
-          <span className={s.cardLabel} style={{ marginBottom: 0 }}>🎯 내기 정산 (선택)</span>
+          <span className={s.cardLabel} style={{ marginBottom: 0 }}>내기 정산 (선택)</span>
           <div
             className={`${s.toggleSwitch} ${bettingOn ? s.toggleSwitchOn : ''}`}
             onClick={() => setBettingOn(!bettingOn)}
@@ -576,7 +576,7 @@ export default function GolfCostClient() {
       {/* 참여자별 정산 (선택) */}
       <div className={s.card}>
         <div className={s.toggleHeader}>
-          <span className={s.cardLabel} style={{ marginBottom: 0 }}>👥 참여자별 정산 (선택)</span>
+          <span className={s.cardLabel} style={{ marginBottom: 0 }}>참여자별 정산 (선택)</span>
           <div
             className={`${s.toggleSwitch} ${perPlayerOn ? s.toggleSwitchOn : ''}`}
             onClick={() => setPerPlayerOn(!perPlayerOn)}
@@ -641,7 +641,7 @@ export default function GolfCostClient() {
 
       {/* breakdown */}
       <div className={s.card}>
-        <span className={s.cardLabel}>📊 비용 항목 분석</span>
+        <span className={s.cardLabel}>비용 항목 분석</span>
         <table className={s.breakdownTable}>
           <thead>
             <tr>
@@ -673,7 +673,7 @@ export default function GolfCostClient() {
       {/* 캐디피 정산 안내 */}
       {caddieEnabled && caddieTotal > 0 && (
         <div className={s.infoCard}>
-          💡 <strong>캐디피 정산 안내</strong><br />
+          <strong>캐디피 정산 안내</strong><br />
           {tipAmount > 0
             ? <>캐디피 {fmt(caddieFee)} + 봉사료 {fmt(tipAmount)} = {fmt(caddieTotal)} ÷ {players}명 = <strong>{fmt(caddieTotal / players)}</strong></>
             : <>캐디피 {fmt(caddieTotal)} ÷ {players}명 = <strong>{fmt(caddieTotal / players)}</strong></>
@@ -683,7 +683,7 @@ export default function GolfCostClient() {
 
       {/* 월·연간 예상 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>📅 월·연간 비용 예상</span>
+        <span className={s.cardLabel}>월·연간 비용 예상</span>
         <div className={s.subLabel}>월 라운딩 횟수</div>
         <div className={s.sliderWrap}>
           <input
@@ -713,7 +713,7 @@ export default function GolfCostClient() {
       {/* 복사 */}
       <div className={s.actionRow}>
         <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={onCopy}>
-          {copied ? '✓ 복사됨' : '📋 결과 복사하기'}
+          {copied ? '✓ 복사됨' : '결과 복사하기'}
         </button>
       </div>
 
@@ -788,7 +788,7 @@ function CourseSaveButton({ data }: {
       <button type="button"
         className={`${s.courseSaveBtn} ${saved ? s.copied : ''}`}
         onClick={handleSave} disabled={!name.trim()}>
-        {saved ? '✓ 저장됨' : '💾 저장'}
+        {saved ? '✓ 저장됨' : '저장'}
       </button>
     </div>
   )
@@ -911,7 +911,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
       </div>
 
       <div className={s.card}>
-        <span className={s.cardLabel}>📊 회원 vs 비회원 비교 ({holdingYears}년 총)</span>
+        <span className={s.cardLabel}>회원 vs 비회원 비교 ({holdingYears}년 총)</span>
         <table className={s.breakdownTable}>
           <thead>
             <tr>
@@ -1022,7 +1022,7 @@ function CoursesTab({
   return (
     <>
       <div className={s.card}>
-        <span className={s.cardLabel}>💾 자주 가는 골프장 저장</span>
+        <span className={s.cardLabel}>자주 가는 골프장 저장</span>
         <p className={s.helperText} style={{ marginBottom: 12 }}>
           [오늘 정산] 탭에서 입력한 그린피·카트·캐디 값을 골프장 이름과 함께 저장. 다음 방문 시 한 번의 클릭으로 자동 입력됩니다.
         </p>
@@ -1038,7 +1038,7 @@ function CoursesTab({
           <button type="button"
             className={s.courseSaveBtn}
             onClick={handleSave} disabled={!name.trim()}>
-            💾 현재 값 저장
+            현재 값 저장
           </button>
         </div>
         <p className={s.helperText} style={{ marginTop: 8 }}>
@@ -1048,7 +1048,7 @@ function CoursesTab({
 
       {courses.length > 0 ? (
         <div className={s.card}>
-          <span className={s.cardLabel}>📋 저장된 골프장 ({courses.length}개)</span>
+          <span className={s.cardLabel}>저장된 골프장 ({courses.length}개)</span>
           <div className={s.courseList}>
             {courses.map(c => (
               <div key={c.id} className={s.courseItem}>
@@ -1061,7 +1061,7 @@ function CoursesTab({
                 <div className={s.courseActions}>
                   <button type="button" className={s.courseApplyBtn}
                     onClick={() => handleApply(c)}>
-                    📥 불러오기
+                    불러오기
                   </button>
                   <button type="button" className={s.courseDelBtn}
                     onClick={() => handleDelete(c.id)} aria-label="삭제">×</button>

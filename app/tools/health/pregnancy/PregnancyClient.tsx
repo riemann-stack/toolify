@@ -16,11 +16,11 @@ import {
 type Tab = 'main' | 'tests' | 'fetal' | 'checklist' | 'reverse'
 
 const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'main',      name: '주수 계산',  icon: '🤰' },
-  { id: 'tests',     name: '산전 검사',  icon: '📅' },
-  { id: 'fetal',     name: '태아 크기',   icon: '🌱' },
-  { id: 'checklist', name: '체크리스트', icon: '✅' },
-  { id: 'reverse',   name: '예정일 역산', icon: '🎯' },
+  { id: 'main',      name: '주수 계산',  icon: '' },
+  { id: 'tests',     name: '산전 검사',  icon: '' },
+  { id: 'fetal',     name: '태아 크기',   icon: '' },
+  { id: 'checklist', name: '체크리스트', icon: '' },
+  { id: 'reverse',   name: '예정일 역산', icon: '' },
 ]
 
 const TAB_ACTIVE: Record<Tab, string> = {
@@ -386,7 +386,7 @@ export default function PregnancyClient() {
                 </div>
               </div>
               <button type="button" className={styles.copyBtn} style={{ marginTop: 12 }}
-                onClick={() => setTab('fetal')}>🌱 자세히 보기</button>
+                onClick={() => setTab('fetal')}>자세히 보기</button>
             </div>
           )}
 
@@ -451,12 +451,12 @@ export default function PregnancyClient() {
           <div className={styles.resultActions}>
             <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
               onClick={() => copy(tests.map(t => `${t.test.name} (${t.test.startWeek}~${t.test.endWeek}주) — ${fmtDateKo(t.startDate)}`).join('\n'))}>
-              {copied ? '✓ 복사됨' : '📋 일정 복사'}
+              {copied ? '✓ 복사됨' : '일정 복사'}
             </button>
             <a className={styles.copyBtn} href="/tools/date/dday" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-              📅 D-day 계산기
+              D-day 계산기
             </a>
-            <button type="button" className={styles.copyBtn} onClick={() => setTab('checklist')}>✅ 체크리스트</button>
+            <button type="button" className={styles.copyBtn} onClick={() => setTab('checklist')}>체크리스트</button>
           </div>
         </>
       )}
@@ -606,12 +606,12 @@ export default function PregnancyClient() {
                   ).join('\n'),
                 ).join('\n\n'),
               )}>
-              {copied ? '✓ 복사됨' : '📋 텍스트 복사'}
+              {copied ? '✓ 복사됨' : '텍스트 복사'}
             </button>
             <button type="button" className={`${styles.copyBtn} ${saved ? styles.copied : ''}`}
-              onClick={handleSave}>{saved ? '✓ 저장됨' : '💾 저장'}</button>
+              onClick={handleSave}>{saved ? '✓ 저장됨' : '저장'}</button>
             <button type="button" className={`${styles.copyBtn}`}
-              onClick={() => { if (confirm('체크리스트를 초기화할까요?')) setChecklistProgress({}) }}>🔄 초기화</button>
+              onClick={() => { if (confirm('체크리스트를 초기화할까요?')) setChecklistProgress({}) }}>초기화</button>
           </div>
         </>
       )}
@@ -666,14 +666,14 @@ export default function PregnancyClient() {
 
               <div className={styles.resultActions}>
                 <button type="button" className={styles.copyBtn} onClick={applyReverse}>
-                  ✨ 이 정보로 산전 검사 일정 보기
+                  이 정보로 산전 검사 일정 보기
                 </button>
                 <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                   onClick={() => copy(`예정일 ${fmtDateKo(reverseResult.dueDate)} → 현재 ${reverseResult.currentWeek}주 ${reverseResult.currentDay}일 · LMP ${fmtDateKo(reverseResult.lmp)}`)}>
-                  {copied ? '✓ 복사됨' : '📋 복사'}
+                  {copied ? '✓ 복사됨' : '복사'}
                 </button>
                 <button type="button" className={styles.copyBtn} onClick={() => { applyReverse(); setTab('checklist') }}>
-                  ✅ 체크리스트 보기
+                  체크리스트 보기
                 </button>
               </div>
             </>

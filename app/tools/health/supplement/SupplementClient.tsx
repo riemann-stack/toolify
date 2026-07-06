@@ -632,7 +632,7 @@ function AnalysisTab({ sups, lifeStage }: { sups: Supplement[]; lifeStage: LifeS
       {/* ★ 오메가3 합산 카드 (NEW) */}
       {omega3 && (
         <div className={s.omega3Card}>
-          <div className={s.omega3Title}>🐟 오메가3 EPA + DHA 합산 분석</div>
+          <div className={s.omega3Title}>오메가3 EPA + DHA 합산 분석</div>
           <div className={s.omega3Row}><span>EPA</span><span>{omega3.epa.toFixed(0)} mg</span></div>
           <div className={s.omega3Row}><span>DHA</span><span>{omega3.dha.toFixed(0)} mg</span></div>
           <div className={s.omega3Total}><span>EPA + DHA 합계</span><span>{omega3.total.toFixed(0)} mg</span></div>
@@ -1101,7 +1101,7 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
   return (
     <>
       <div className={s.card}>
-        <span className={s.cardLabel}>📊 본인 영양제 기준 — 활성 조합 분석</span>
+        <span className={s.cardLabel}>본인 영양제 기준 — 활성 조합 분석</span>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
           시너지 {activeSynergy.length + activeExtraSynergy.length}건 / 주의 {activeCaution.length}건 감지.{' '}
           {ingredientSet.size === 0 && '먼저 「영양제 등록」 탭에 입력해주세요.'}

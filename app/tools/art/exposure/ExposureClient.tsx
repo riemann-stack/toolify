@@ -172,10 +172,10 @@ export default function ExposureClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'expo' ? s.tabActive : ''}`} onClick={() => setTab('expo')}>📐 노출 환산</button>
-        <button className={`${s.tab} ${tab === 'nd' ? s.tabActive : ''}`} onClick={() => setTab('nd')}>🌑 ND 필터</button>
-        <button className={`${s.tab} ${tab === 'scene' ? s.tabActive : ''}`} onClick={() => setTab('scene')}>🎬 상황 가이드</button>
-        <button className={`${s.tab} ${tab === 'tradeoff' ? s.tabActive : ''}`} onClick={() => setTab('tradeoff')}>⚖️ 트레이드오프</button>
+        <button className={`${s.tab} ${tab === 'expo' ? s.tabActive : ''}`} onClick={() => setTab('expo')}>노출 환산</button>
+        <button className={`${s.tab} ${tab === 'nd' ? s.tabActive : ''}`} onClick={() => setTab('nd')}>ND 필터</button>
+        <button className={`${s.tab} ${tab === 'scene' ? s.tabActive : ''}`} onClick={() => setTab('scene')}>상황 가이드</button>
+        <button className={`${s.tab} ${tab === 'tradeoff' ? s.tabActive : ''}`} onClick={() => setTab('tradeoff')}>트레이드오프</button>
       </div>
 
       {/* ───── 탭 1: 노출 환산 ───── */}
@@ -183,7 +183,7 @@ export default function ExposureClient() {
         <>
           {/* 슬라이더 3축 — 먼저 자유롭게 움직여 보기 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🎛️ 3축 슬라이더</span>
+            <span className={s.cardLabel}>3축 슬라이더</span>
 
             {/* 조리개 */}
             <div className={s.sliderBlock}>
@@ -268,7 +268,7 @@ export default function ExposureClient() {
           {/* 잠금 토글 (옵션) — 각 축 독립, 최대 2개 */}
           <div className={s.card}>
             <span className={s.cardLabel}>
-              🔒 축 잠금 (옵션)
+              축 잠금 (옵션)
               <span className={s.lockCounter}>{lockCount}/2</span>
             </span>
             <div className={s.lockRow}>
@@ -324,7 +324,7 @@ export default function ExposureClient() {
 
           {/* 노출 시각 미리보기 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>👁️ 노출 미리보기 (시뮬레이션)</span>
+            <span className={s.cardLabel}>노출 미리보기 (시뮬레이션)</span>
             <div className={s.previewBox}>
               <div className={s.previewScene} style={{ filter: `brightness(${previewBrightness.toFixed(2)})` }}>
                 <div className={s.previewBg} style={{ filter: `blur(${bokehBlur}px)` }}>
@@ -348,7 +348,7 @@ export default function ExposureClient() {
 
           {/* 등가 노출 5종 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🔁 등가 노출 5종 (같은 밝기 다른 효과)</span>
+            <span className={s.cardLabel}>등가 노출 5종 (같은 밝기 다른 효과)</span>
             <div className={s.equivList}>
               {equivalents.map((eq, i) => (
                 <button
@@ -383,7 +383,7 @@ export default function ExposureClient() {
       {tab === 'nd' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📷 현재 노출</span>
+            <span className={s.cardLabel}>현재 노출</span>
             <div className={s.currentRow}>
               <span><strong>{apt.label}</strong></span>
               <span>·</span>
@@ -398,7 +398,7 @@ export default function ExposureClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🌑 ND 필터 선택</span>
+            <span className={s.cardLabel}>ND 필터 선택</span>
             <div className={s.ndGrid}>
               {ND_FILTERS.map((f) => (
                 <button
@@ -415,7 +415,7 @@ export default function ExposureClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>➕ 추가 적층 (옵션)</span>
+            <span className={s.cardLabel}>추가 적층 (옵션)</span>
             <div className={s.ndGrid}>
               <button className={`${s.ndBtn} ${ndStack === 'none' ? s.ndBtnActive : ''}`} onClick={() => setNdStack('none')}>
                 <span className={s.ndLabel}>없음</span>
@@ -452,7 +452,7 @@ export default function ExposureClient() {
 
           {/* ND 사용 시나리오 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>📚 장노출 시나리오 — ND별 권장</span>
+            <span className={s.cardLabel}>장노출 시나리오 — ND별 권장</span>
             <table className={s.dataTable}>
               <thead>
                 <tr>
@@ -477,7 +477,7 @@ export default function ExposureClient() {
       {tab === 'scene' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>☀️ Sunny 16 — 8 상황별 권장 설정</span>
+            <span className={s.cardLabel}>Sunny 16 — 8 상황별 권장 설정</span>
             <div className={s.sceneGrid}>
               {SCENES.map((sc) => (
                 <button key={sc.id} className={s.sceneCard} onClick={() => { applyScene(sc); setTab('expo') }}>
@@ -487,7 +487,7 @@ export default function ExposureClient() {
                       <p className={s.sceneLabel}>{sc.label}</p>
                       <p className={s.sceneDesc}>{sc.desc}</p>
                     </div>
-                    {sc.needTripod && <span className={s.tripodBadge}>🛠️ 삼각대</span>}
+                    {sc.needTripod && <span className={s.tripodBadge}>삼각대</span>}
                   </div>
                   <div className={s.sceneSpec}>
                     <span>f/{sc.aperture}</span>
@@ -505,7 +505,7 @@ export default function ExposureClient() {
 
           {/* 별 사진 500 룰 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>⭐ 별 사진 500 룰 (점광원 한계 셔터)</span>
+            <span className={s.cardLabel}>별 사진 500 룰 (점광원 한계 셔터)</span>
             <div className={s.starInputs}>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="exposure-mm">초점거리 (mm)</label>
@@ -541,7 +541,7 @@ export default function ExposureClient() {
 
           {/* 영상 셔터 룰 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>🎥 영상 180° 셔터 룰 (자연스러운 모션 블러)</span>
+            <span className={s.cardLabel}>영상 180° 셔터 룰 (자연스러운 모션 블러)</span>
             <table className={s.dataTable}>
               <thead>
                 <tr>
@@ -571,7 +571,7 @@ export default function ExposureClient() {
       {tab === 'tradeoff' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📷 현재 설정의 효과</span>
+            <span className={s.cardLabel}>현재 설정의 효과</span>
             <div className={s.currentRow}>
               <span><strong>{apt.label}</strong></span>
               <span>·</span>
@@ -605,7 +605,7 @@ export default function ExposureClient() {
               <span className={s.tradeIcon}>{blur.emoji}</span>
               <div>
                 <p className={s.tradeAxis}>⏱️ 셔터 → 흔들림 위험 (Motion Blur)</p>
-                <p className={s.tradeLabel}>{blur.label}{blur.tripod && ' · 🛠️ 삼각대 권장'}</p>
+                <p className={s.tradeLabel}>{blur.label}{blur.tripod && ' · 삼각대 권장'}</p>
               </div>
             </div>
             <RatingBar level={6 - blur.level} max={5} color="#D97706" />
@@ -635,7 +635,7 @@ export default function ExposureClient() {
 
           {/* 종합 트레이드오프 표 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>⚖️ 노출 3축 효과 요약</span>
+            <span className={s.cardLabel}>노출 3축 효과 요약</span>
             <table className={s.dataTable}>
               <thead>
                 <tr>

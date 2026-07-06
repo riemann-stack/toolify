@@ -174,13 +174,13 @@ export default function StockDecisionClient() {
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs3}`} role="tablist" aria-label="주식 결정 도구 모드">
         <button type="button" role="tab" aria-selected={tab === 'diagnose'} className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => setTab('diagnose')}>
-          🧠 자가진단
+          자가진단
         </button>
         <button type="button" role="tab" aria-selected={tab === 'random'} className={`${s.tab} ${tab === 'random' ? s.tabActive : ''}`} onClick={() => setTab('random')}>
-          🎲 결정 보조
+          결정 보조
         </button>
         <button type="button" role="tab" aria-selected={tab === 'learn'} className={`${s.tab} ${tab === 'learn' ? s.tabActive : ''}`} onClick={() => setTab('learn')}>
-          📚 왜 지는가
+          왜 지는가
         </button>
       </div>
 
@@ -228,7 +228,7 @@ export default function StockDecisionClient() {
 
           <div className={s.card}>
             <button className={s.runBtn} onClick={runDiagnose} disabled={checked.size === 0}>
-              🧠 자가진단 결과 보기
+              자가진단 결과 보기
             </button>
             {showResult && (
               <button className={s.resetBtn} onClick={resetDiagnose}>다시 체크</button>
@@ -282,7 +282,7 @@ export default function StockDecisionClient() {
 
           {mounted && history.length > 0 && (
             <div className={s.card}>
-              <span className={s.cardLabel}>📊 자가진단 기록 (최근 {Math.min(10, history.length)}건 · 점수만 저장)</span>
+              <span className={s.cardLabel}>자가진단 기록 (최근 {Math.min(10, history.length)}건 · 점수만 저장)</span>
               <div className={s.historyList}>
                 {history.slice(0, 10).map((h) => (
                   <div key={h.id} className={`${s.historyItem} ${s[`band_${h.band}`]}`}>
@@ -365,7 +365,7 @@ export default function StockDecisionClient() {
             </div>
 
             <button className={s.runBtn} onClick={runRandom} disabled={running || options.length === 0}>
-              {running ? '⏳ 진행 중...' : `🎬 ${MODE_META[mode].label} 시작`}
+              {running ? '진행 중...' : `${MODE_META[mode].label} 시작`}
             </button>
 
             {pickedIdx !== null && !running && (
@@ -383,7 +383,7 @@ export default function StockDecisionClient() {
           {summary.total > 0 && (
             <div className={s.summaryCard}>
               <div className={s.summaryHead}>
-                <span className={s.summaryTitle}>📊 5가지 모드 종합 ({summary.total}/5)</span>
+                <span className={s.summaryTitle}>5가지 모드 종합 ({summary.total}/5)</span>
                 <button className={s.summaryReset} onClick={clearAllResults}>전체 초기화</button>
               </div>
 
@@ -409,7 +409,7 @@ export default function StockDecisionClient() {
 
               {/* 투표 집계 바 */}
               <div className={s.tallyWrap}>
-                <p className={s.tallyTitle}>🗳️ 투표 집계</p>
+                <p className={s.tallyTitle}>투표 집계</p>
                 {summary.tally.map(([opt, cnt]) => {
                   const pct = (cnt / summary.total) * 100
                   const c = colorFor(opt, 0)
@@ -429,7 +429,7 @@ export default function StockDecisionClient() {
               {/* 다수결 */}
               {summary.total >= 3 && summary.winner && (
                 <div className={s.winnerBox} style={{ borderColor: colorFor(summary.winner, 0) }}>
-                  <p className={s.winnerLabel}>📊 모드 결과 요약 ({summary.total}/5)</p>
+                  <p className={s.winnerLabel}>모드 결과 요약 ({summary.total}/5)</p>
                   <p className={s.winnerValue} style={{ color: colorFor(summary.winner, 0) }}>{summary.winner}</p>
                   {summary.total < 5 && (
                     <p className={s.winnerHint}>나머지 {5 - summary.total}개 모드도 돌려서 참고해보세요. (결정이 아닌 감정 확인용)</p>
@@ -459,7 +459,7 @@ export default function StockDecisionClient() {
       {tab === 'learn' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>📊 왜 무작위가 종종 인간을 이기나</span>
+            <span className={s.cardLabel}>왜 무작위가 종종 인간을 이기나</span>
             <p className={s.learnIntro}>
               무작위가 인간을 이기는 게 아닙니다. <strong>인간이 자기 자신(편향)을 이기지 못해서</strong>입니다.
               아래는 학계·언론에 보고된 대표 사례입니다 — 종목 추천이 아닌 <strong>의사결정 심리</strong> 교훈.
@@ -467,7 +467,7 @@ export default function StockDecisionClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🐭 5가지 사례</span>
+            <span className={s.cardLabel}>5가지 사례</span>
             <p className={s.caseDisclaimer}>⚠️ 아래는 특정 시점의 일화·연구입니다. 재현이나 투자 성과를 보장하지 않으며, 연도·조건은 각 출처 원문에서 확인하세요.</p>
             <div className={s.caseList}>
               {CASES.map((c) => (
@@ -485,14 +485,14 @@ export default function StockDecisionClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>🧠 자주 빠지는 7가지 편향</span>
+            <span className={s.cardLabel}>자주 빠지는 7가지 편향</span>
             <div className={s.biasList}>
               {BIASES.map((b) => (
                 <div key={b.key} className={s.biasItem}>
                   <p className={s.biasTitle}>{b.emoji} {b.name}</p>
                   <p className={s.biasDesc}>{b.desc}</p>
                   <p className={s.biasExample}><strong>예:</strong> {b.example}</p>
-                  <p className={s.biasTip}><strong>💡 대처:</strong> {b.tip}</p>
+                  <p className={s.biasTip}><strong>대처:</strong> {b.tip}</p>
                 </div>
               ))}
             </div>

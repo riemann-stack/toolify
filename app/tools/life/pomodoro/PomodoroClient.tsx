@@ -324,7 +324,7 @@ export default function PomodoroClient() {
           <input
             type="text"
             className={styles.taskInput}
-            placeholder="📝 지금 집중할 작업을 입력하세요 (예: 영어 단어 100개 외우기)"
+            placeholder="지금 집중할 작업을 입력하세요 (예: 영어 단어 100개 외우기)"
             value={task}
             onChange={e => setTask(e.target.value)}
             maxLength={60}
@@ -362,7 +362,7 @@ export default function PomodoroClient() {
               <div className={styles.timerTime}>{timeStr}</div>
               <div className={styles.timerCycle}>#{cycle} 사이클</div>
               {task.trim() && phase === 'focus' && (
-                <div className={styles.timerTask}>📝 {task}</div>
+                <div className={styles.timerTask}>{task}</div>
               )}
             </div>
           </div>
@@ -611,7 +611,7 @@ export default function PomodoroClient() {
                   <button type="button" className={styles.soundTest}
                     aria-label={`${t.name.replace(/[^가-힣a-zA-Z0-9 ]/g, '').trim()} 미리듣기`}
                     onClick={() => playSound(t)}>
-                    🔊 들어보기
+                    들어보기
                   </button>
                 </div>
               ))}

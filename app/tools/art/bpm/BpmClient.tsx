@@ -75,7 +75,7 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
               className={`${styles.heroCopy} ${copied === 'hero' ? styles.heroCopied : ''}`}
               onClick={() => handleCopy(String(quarterMs), 'hero')}
             >
-              {copied === 'hero' ? '✓ 복사됨' : '📋 복사'}
+              {copied === 'hero' ? '✓ 복사됨' : '복사'}
             </button>
           </div>
 

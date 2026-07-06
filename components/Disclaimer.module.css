@@ -32,7 +32,8 @@
 }
 .head::-webkit-details-marker { display: none; }
 .emoji {
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
   line-height: 1;
   flex-shrink: 0;
 }

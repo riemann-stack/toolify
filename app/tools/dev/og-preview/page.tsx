@@ -35,7 +35,7 @@ const FAQ_LD = [
               },
               {
                 q: 'og:image는 어느 크기·비율이 가장 안전한가요?',
-                a: '<strong>1200×630px (2:1)</strong>이 가장 보편적입니다. Facebook 권장 1.91:1, 카카오톡 2:1, X 2:1(summary_large_image) — 1200×630 한 장이면 모든 플랫폼에서 잘립니다 없이 표시됩니다. 파일 형식은 <strong>jpg(사진) 또는 png(텍스트·로고)</strong>, 용량은 <strong>5MB 이하</strong> 권장. 절대 URL(<code style="color: var(--text)">https://example.com/og.png</code>)을 사용해야 하며 상대 경로는 일부 플랫폼에서 표시 실패합니다.',
+                a: '<strong>1200×630px (2:1)</strong>이 가장 보편적입니다. Facebook 권장 1.91:1, 카카오톡 2:1, X 2:1(summary_large_image) — 1200×630 한 장이면 모든 플랫폼에서 잘림 없이 표시됩니다. 파일 형식은 <strong>jpg(사진) 또는 png(텍스트·로고)</strong>, 용량은 <strong>5MB 이하</strong> 권장. 절대 URL(<code style="color: var(--text)">https://example.com/og.png</code>)을 사용해야 하며 상대 경로는 일부 플랫폼에서 표시 실패합니다.',
               },
               {
                 q: 'URL 입력 모드에서 "페이지를 불러올 수 없다"고 나옵니다.',

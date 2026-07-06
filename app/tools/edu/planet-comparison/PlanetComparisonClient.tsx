@@ -420,7 +420,7 @@ export default function PlanetComparisonClient() {
 
       {/* 크기 비교 시각화 */}
       <div className={s.spaceBg}>
-        <p className={s.sizeCompareTitle}>🌌 8개 행성 크기 비교</p>
+        <p className={s.sizeCompareTitle}>8개 행성 크기 비교</p>
         <div className={s.sizeCompareWrap}>
           {sizeSvg}
         </div>
@@ -444,22 +444,22 @@ export default function PlanetComparisonClient() {
               </div>
               <div className={s.planetStats}>
                 <div className={s.planetStatItem}>
-                  💪 내 몸무게
+                  내 몸무게
                   <strong>{round(c.weightOnPlanet, 1)} kg</strong>
                   <span className={s.planetStatHint}>중력 {round(p.gravityRatio, 2)}g</span>
                 </div>
                 <div className={s.planetStatItem}>
-                  🦘 점프 높이
+                  점프 높이
                   <strong>{round(c.jumpHeight, 2)} m</strong>
                   <span className={s.planetStatHint}>지구 50cm 기준</span>
                 </div>
                 <div className={s.planetStatItem}>
-                  🎂 내 나이
+                  내 나이
                   <strong>{round(c.ageOnPlanet, 1)} 년</strong>
                   <span className={s.planetStatHint}>{p.name}년 단위</span>
                 </div>
                 <div className={s.planetStatItem}>
-                  📅 1일 길이
+                  1일 길이
                   <strong>
                     {p.id === 'mercury' || p.id === 'venus' ? `${fmt(round(c.dayLengthHours / 24, 1))}일` : `${round(c.dayLengthHours, 1)}h`}
                     {c.isRetrograde && <span className={s.retroFlag}>역행</span>}
@@ -467,18 +467,18 @@ export default function PlanetComparisonClient() {
                   <span className={s.planetStatHint}>지구 시간 기준</span>
                 </div>
                 <div className={s.planetStatItem}>
-                  🌡️ 평균 온도
+                  평균 온도
                   <strong>{p.surfaceTempC.avg}°C</strong>
                   <span className={s.planetStatHint}>지구 15°C</span>
                 </div>
                 <div className={s.planetStatItem}>
-                  📏 거리
+                  거리
                   <strong>{fmtDistance(p.distanceFromEarthAvgKm)}</strong>
                   <span className={s.planetStatHint}>빛 도달 {fmtLightTime(p.lightTimeMinutes)}</span>
                 </div>
               </div>
               <div className={s.funFact}>
-                <strong>💡 재미있는 사실:</strong> {p.funFact}
+                <strong>재미있는 사실:</strong> {p.funFact}
               </div>
             </div>
           )
@@ -525,7 +525,7 @@ export default function PlanetComparisonClient() {
       {/* 중력 낙하 시뮬레이션 */}
       <div className={s.gravitySim}>
         <div className={s.cardLabel}>
-          <span>🍎 중력 낙하 시뮬레이션</span>
+          <span>중력 낙하 시뮬레이션</span>
           <span className={s.cardLabelHint}>같은 높이에서 동시 낙하 (3초)</span>
         </div>
         <button className={s.gravityRunBtn} onClick={runGravitySim} type="button">
@@ -706,7 +706,7 @@ export default function PlanetComparisonClient() {
       </div>
 
       <div className={s.sourceCard}>
-        <strong>📚 데이터 출처:</strong> 행성 데이터는 NASA Solar System Exploration 기준입니다.
+        <strong>데이터 출처:</strong> 행성 데이터는 NASA Solar System Exploration 기준입니다.
         거리는 평균값이며 행성 위치에 따라 변동됩니다. 빛 도달 시간도 평균 거리 기준입니다.
         정확한 천문 데이터는 NASA, KASI(한국천문연구원) 등 공식 기관 자료를 참조하세요.
       </div>
