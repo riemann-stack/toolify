@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/dividend',
@@ -75,6 +76,8 @@ export default function DividendPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         매달 받고 싶은 배당액에서 거꾸로 — <strong style={{ color: 'var(--text)' }}>필요한 원금과 월 적립액</strong>, ISA·연금 절세까지.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="배당소득세 15.4%(소득세 14%+지방세 1.4%)·금융소득 종합과세 2,000만원 기준·ISA 9.9%·연금저축/IRP 5.5% 분리과세 및 16.5% 세액공제 (2026년)" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스","href":"https://hometax.go.kr"}]} />
 
       <DividendClient />
 

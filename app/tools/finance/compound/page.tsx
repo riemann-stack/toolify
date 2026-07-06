@@ -2,6 +2,7 @@ import Link from 'next/link'
 import CompoundClient from './CompoundClient'
 import CompoundChart from './CompoundChart'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
@@ -68,6 +69,8 @@ export default function CompoundPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         거치·적립·복리 주기·인플레이션까지 반영해, <strong style={{ color: 'var(--text)' }}>시간이 만드는 자산</strong>을 시나리오별로 비교.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="이자·배당소득세 15.4%(소득세 14% + 지방소득세 1.4%) 반영 · 소득세법 제129조 기준" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"국가법령정보센터(소득세법)","href":"https://www.law.go.kr/LSW/main.html"}]} />
 
       <CompoundClient />
 

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import IpoDepositClient from './IpoDepositClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
@@ -90,6 +91,8 @@ export default function IpoDepositPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         증거금 ↔ 예상 주수 양방향 + 5사6입·청약 한도 자동. <strong style={{ color: 'var(--text)' }}>청약일 D-day 메모</strong>.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="공모주 청약 제도(균등배정 50% 이상·중복청약 금지·5사6입) 기준" sources={[{"label":"DART 전자공시시스템","href":"https://dart.fss.or.kr"},{"label":"KIND 한국거래소","href":"https://kind.krx.co.kr"}]} />
 
       <IpoDepositClient />
 

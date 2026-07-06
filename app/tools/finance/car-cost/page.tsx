@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import CarCostClient from './CarCostClient'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
@@ -107,6 +108,8 @@ export default function CarCostPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         유류·보험·세금·소모품·감가까지 합한 <strong style={{ color: 'var(--text)' }}>연간 진짜 비용</strong>. 차종·전기차 손익분기 비교.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="2026년 자동차세(배기량별 cc당 80/140/200원 + 지방교육세 30%, 전기차 13만원 정액)·유류세 반영 연료비 시세 기준" sources={[{"label":"위택스(자동차세)","href":"https://www.wetax.go.kr"},{"label":"오피넷 유가정보(한국석유공사)","href":"https://www.opinet.co.kr"}]} />
 
       <CarCostClient />
 

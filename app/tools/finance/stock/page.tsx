@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock',
@@ -76,9 +77,18 @@ export default function StockPage() {
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />주식 물타기 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
         추가 매수 시 평단가가 어디까지 내려갈지 + <strong style={{ color: 'var(--text)' }}>회복까지 필요한 상승률</strong>을 즉시.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="증권거래세율 0.20%(코스피·코스닥, 2026년 금투세 폐지로 환원) · 해외주식 양도소득세 22%(연 250만원 공제) · 증권사 표준 온라인 수수료 반영"
+        sources={[
+          { label: '국세청', href: 'https://www.nts.go.kr' },
+          { label: '국가법령정보센터', href: 'https://www.law.go.kr/LSW/main.html' },
+        ]}
+      />
 
       <StockClient />
 

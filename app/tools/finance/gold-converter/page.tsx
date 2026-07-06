@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import GoldConverterClient from './GoldConverterClient'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
@@ -84,6 +85,8 @@ export default function GoldConverterPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         돈·g·트로이온스·푼·냥 9단위 + 14K/18K/24K 환산. <strong style={{ color: 'var(--text)' }}>시세를 직접 입력</strong>하면 매수·매도 실거래가까지 — 실시간 자동 시세 연동은 아닙니다.
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="무게 9단위·순도(14/18/24K) 고정 환산 + 사용자가 입력한 24K 1g 시세(KRX 금시장 기준) 기반 매수·매도가 계산. 골드바 부가세 10%·KRX 금현물 비과세·금통장 배당소득세 15.4% 등 국내 세제·거래비용(스프레드·수수료·세공비) 가정 반영. 시세는 실시간 자동 연동이 아니며 직접 입력값입니다." sources={[{"label":"한국거래소(KRX 금시장)","href":"https://www.krx.co.kr"},{"label":"국세청","href":"https://www.nts.go.kr"}]} />
 
       <GoldConverterClient />
 

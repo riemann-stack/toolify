@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import HistoricalMoneyClient from './HistoricalMoneyClient'
 import { buildMetadata } from '@/lib/seo'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
@@ -72,6 +73,8 @@ export default function HistoricalMoneyPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         圓·환·원 화폐사 + <strong style={{ color: 'var(--text)' }}>1945~2026 구매력 환산</strong>. &ldquo;1960년 짜장면 250환은 지금 얼마?&rdquo;
       </p>
+
+      <UpdatedMeta date="2026년 7월" basis="통계청 KOSIS 소비자물가지수(CPI, 2020=100) 기반 · 1965년 이후 공식 통계, 이전은 추정치 · 2026년 물가 추정(연 +1.8%)" sources={[{"label":"통계청 KOSIS","href":"https://kosis.kr"},{"label":"한국은행 경제통계시스템","href":"https://ecos.bok.or.kr"}]} />
 
       <HistoricalMoneyClient />
 
