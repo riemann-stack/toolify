@@ -1,0 +1,85 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+
+.groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
+.groupNote { font-size: 12px; color: var(--muted); line-height: 1.65; margin: 10px 0 0; }
+
+/* 단계 선택 */
+.stageGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+@media (max-width: 480px) { .stageGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stageBtn {
+  display: flex; flex-direction: column; gap: 3px; align-items: flex-start;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m);
+  padding: 10px 10px; cursor: pointer; text-align: left; font-family: inherit;
+}
+.stageBtn.stageOn { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg)); }
+.stageName { font-size: 14px; font-weight: 700; color: var(--text); }
+.stageMonths { font-size: 11px; color: var(--muted); }
+.stageRatio { font-size: 11px; color: var(--accent-ink); font-weight: 600; }
+
+/* 되기 조절 */
+.ratioRow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.ratioLabel { font-size: 12px; color: var(--muted); margin-right: 2px; }
+.ratioBtn {
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: var(--radius-pill);
+  cursor: pointer; font-family: inherit;
+}
+.ratioBtn.ratioOn { border-color: var(--accent); color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 10%, var(--bg)); }
+
+/* 재료 기준 + 양 */
+.inputRow { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; margin-top: 12px; }
+.basisGroup { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; flex: 1 1 240px; }
+.basisBtn {
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font-size: 13px; font-weight: 600; padding: 9px 4px; border-radius: var(--radius-s);
+  cursor: pointer; font-family: inherit; min-width: 0;
+}
+.basisBtn.basisOn { border-color: var(--accent); color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 10%, var(--bg)); }
+.amountBox { display: flex; align-items: center; gap: 6px; flex: 0 1 130px; }
+.amountInput {
+  width: 100%; min-width: 0; font-size: 16px; font-weight: 700; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s);
+  padding: 9px 10px; text-align: right; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+}
+.amountInput:focus { outline: none; border-color: var(--accent); }
+.amountUnit { font-size: 13px; color: var(--muted); font-weight: 600; }
+
+/* 결과 */
+.resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 20px; text-align: center; }
+.resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+.hero { font-family: Inter, "Noto Sans KR", system-ui, sans-serif; font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; color: var(--accent-ink); }
+.heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 0.1em; }
+.resultSub { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+.emptyNote { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; }
+.subGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+@media (max-width: 380px) { .subGrid { grid-template-columns: minmax(0, 1fr); } }
+.subItem { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; }
+.subLabel { font-size: 11px; color: var(--muted); }
+.subValue { font-size: 15px; font-weight: 700; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.yieldNote { font-size: 11px; color: var(--muted); margin: 10px 0 0; }
+
+/* 큐브 역산 */
+.daysRow { display: flex; gap: 6px; flex-wrap: wrap; }
+.dayBtn {
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: var(--radius-pill);
+  cursor: pointer; font-family: inherit;
+}
+.dayBtn.dayOn { border-color: var(--accent); color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 10%, var(--bg)); }
+.batchBox { margin-top: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 12px 14px; }
+.batchLine { font-size: 13px; color: var(--text); line-height: 1.8; margin: 0; }
+.batchLine strong { color: var(--accent-ink); }
+
+/* 참고표 */
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.refTable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 460px; }
+.refTable th { padding: 9px 10px; text-align: left; color: var(--muted); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.refTable td { padding: 9px 10px; color: var(--text); border-bottom: 1px solid var(--border); }
+.refTable .rowOn td { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.dim { color: var(--muted); font-size: 11px; font-weight: 400; }
+
+.convList { padding-left: 18px; margin: 0; font-size: 13px; color: var(--text); line-height: 2; }
+.convList strong { color: var(--accent-ink); }

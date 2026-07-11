@@ -1,0 +1,79 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+
+.groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
+.groupNote { font-size: 12px; color: var(--muted); line-height: 1.65; margin: 10px 0 0; }
+.miniLabel { font-size: 12px; color: var(--muted); }
+
+/* 공통 on 상태 */
+.on { border-color: var(--accent) !important; color: var(--accent-ink) !important; background: color-mix(in srgb, var(--accent) 10%, var(--bg)) !important; }
+
+/* 형태 */
+.shapeRow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+.shapeBtn {
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font-size: 13px; font-weight: 600; padding: 9px 4px; border-radius: var(--radius-s);
+  cursor: pointer; font-family: inherit;
+}
+
+/* 호수 그리드 */
+.hoGrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+@media (max-width: 480px) { .hoGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.hoBtn {
+  display: flex; flex-direction: column; gap: 1px; align-items: center;
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  padding: 8px 2px; border-radius: var(--radius-s); cursor: pointer; font-family: inherit; min-width: 0;
+}
+.hoName { font-size: 13px; font-weight: 700; }
+.hoD { font-size: 11px; color: var(--muted); }
+
+/* 직접 입력 */
+.customRow { display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.numInput {
+  width: 76px; min-width: 0; font-size: 16px; font-weight: 700; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s);
+  padding: 8px 10px; text-align: right; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+}
+.numInput:focus { outline: none; border-color: var(--accent); }
+.unit { font-size: 13px; color: var(--muted); font-weight: 600; }
+
+/* 높이 */
+.heightRow { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+.hBtn {
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font-size: 12px; font-weight: 600; padding: 7px 10px; border-radius: var(--radius-pill);
+  cursor: pointer; font-family: inherit;
+}
+.hCustomBox { display: inline-flex; align-items: center; gap: 4px; }
+
+/* 스왑 */
+.swapRow { display: flex; justify-content: center; margin: -6px 0; }
+.swapBtn {
+  border: 1px solid var(--border); background: var(--bg2); color: var(--muted);
+  font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: var(--radius-pill);
+  cursor: pointer; font-family: inherit; position: relative; z-index: 1;
+}
+@media (hover: hover) { .swapBtn:hover { border-color: var(--accent); color: var(--accent-ink); } }
+
+/* 결과 */
+.resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 20px; text-align: center; }
+.resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+.hero { font-family: Inter, "Noto Sans KR", system-ui, sans-serif; font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; color: var(--accent-ink); }
+.resultSub { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+.emptyNote { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; }
+.ingRow { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.ingOut { font-size: 18px; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.yieldNote { font-size: 11px; color: var(--muted); margin: 12px 0 0; line-height: 1.6; }
+
+/* 팁 */
+.tipList { padding-left: 18px; margin: 0; font-size: 13px; color: var(--text); line-height: 1.95; }
+.tipList strong { color: var(--accent-ink); }
+
+/* 참고표 */
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.refTable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 430px; }
+.refTable th { padding: 9px 10px; text-align: left; color: var(--muted); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.refTable td { padding: 9px 10px; color: var(--text); border-bottom: 1px solid var(--border); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.dim { color: var(--muted); }
