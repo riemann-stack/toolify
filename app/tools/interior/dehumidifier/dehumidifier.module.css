@@ -1,0 +1,103 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 16px 18px;
+}
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+
+/* ── 면적 입력 ── */
+.fieldHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 12px; }
+.fieldLabel { font-size: 14px; font-weight: 600; color: var(--text); }
+
+.unitToggle { display: inline-flex; gap: 4px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 3px; }
+.unitBtn {
+  border: none; background: transparent; color: var(--muted);
+  font-size: 13px; font-weight: 600; padding: 5px 14px; border-radius: var(--radius-pill);
+  cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.unitBtnActive { background: var(--accent-strong); color: #fff; }
+
+.inputRow { display: flex; align-items: center; gap: 10px; }
+.input {
+  flex: 1; min-width: 0;
+  font-size: 22px; font-weight: 700; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m);
+  padding: 12px 14px; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+}
+.input:focus { outline: none; border-color: var(--accent); }
+.unit { font-size: 15px; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+.subHint { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+
+/* ── 옵션 그룹 ── */
+.groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
+.groupSub { font-size: 12px; color: var(--muted); font-weight: 400; }
+
+.btnGrid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.btnGrid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+
+.optBtn {
+  display: flex; flex-direction: column; gap: 3px; text-align: left;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m);
+  padding: 10px 12px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.optBtnActive { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg2)); }
+.optName { font-size: 13px; font-weight: 700; color: var(--text); }
+.optNote { font-size: 11px; color: var(--muted); line-height: 1.4; }
+@media (hover: hover) { .optBtn:hover { border-color: var(--border-hover); } }
+
+/* ── 결과 ── */
+.resultCard {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 22px 20px;
+}
+.resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; text-align: center; }
+.hero {
+  font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1;
+  color: var(--accent-ink); text-align: center; margin: 0; letter-spacing: -0.02em;
+}
+.heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 0.15em; }
+.resultSub { font-size: 13px; color: var(--muted); text-align: center; margin: 8px 0 0; }
+
+.tierBox { margin-top: 18px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 14px 16px; }
+.tierMain { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; }
+.tierLabel { font-size: 13px; color: var(--muted); }
+.tierValue { font-size: 22px; font-weight: 800; color: var(--accent-ink); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.tierSpace { font-size: 12px; color: var(--muted); }
+.tierNote { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 8px 0 0; }
+
+.powerBox { margin-top: 12px; display: flex; flex-direction: column; gap: 2px; }
+.powerRow { display: flex; align-items: center; justify-content: space-between; padding: 8px 2px; font-size: 13px; border-bottom: 1px solid var(--border); }
+.powerRow:last-child { border-bottom: none; }
+.powerKey { color: var(--muted); }
+.powerVal { color: var(--text); font-weight: 600; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.powerRowMain .powerKey { color: var(--text); font-weight: 700; }
+.powerValMain { color: var(--accent-ink); font-weight: 800; font-size: 15px; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+
+.assumeRow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.assumeField { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.assumeLabel { font-size: 12px; color: var(--muted); }
+.assumeInputWrap { display: flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 6px 10px; }
+.assumeInput { flex: 1; min-width: 0; border: none; background: transparent; font-size: 16px; font-weight: 600; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.assumeInput:focus { outline: none; }
+.assumeUnit { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+.assumeNote { font-size: 11px; color: var(--muted); line-height: 1.6; margin: 10px 0 0; }
+.assumeNote a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+
+.emptyNote { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0; }
+
+/* ── 제품 등급 표 ── */
+.tierList { display: flex; flex-direction: column; gap: 6px; }
+.tierRow {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s);
+  padding: 10px 12px;
+}
+.tierRowActive { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg2)); }
+.tierRowL { font-size: 14px; font-weight: 800; color: var(--accent-ink); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; flex-shrink: 0; min-width: 52px; }
+.tierRowSpace { font-size: 12px; color: var(--muted); flex: 1; min-width: 0; }
+.tierRowWatt { font-size: 12px; color: var(--text); font-weight: 600; flex-shrink: 0; }
+.tierRowBadge { font-size: 11px; font-weight: 700; color: #fff; background: var(--accent-strong); border-radius: var(--radius-pill); padding: 2px 8px; flex-shrink: 0; }
