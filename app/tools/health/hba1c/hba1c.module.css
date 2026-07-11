@@ -1,0 +1,63 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+
+.modeToggle { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 14px; }
+.modeBtn {
+  border: 1px solid var(--border); background: var(--bg); color: var(--muted);
+  font-size: 13px; font-weight: 700; padding: 11px 6px; border-radius: var(--radius-s);
+  cursor: pointer; transition: all 0.15s; line-height: 1.3;
+}
+.modeBtnActive { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+
+.inputBlock { }
+.fieldLabel { display: block; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+.inputRow { display: flex; align-items: center; gap: 10px; }
+.input {
+  flex: 1; min-width: 0; font-size: 24px; font-weight: 700; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m);
+  padding: 12px 14px; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+}
+.input:focus { outline: none; border-color: var(--accent); }
+.unit { font-size: 15px; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+
+.resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 20px; }
+.resultGrid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; }
+.resItem { display: flex; flex-direction: column; align-items: center; gap: 3px; text-align: center; min-width: 0; }
+.resLabel { font-size: 12px; color: var(--muted); }
+.resValue { font-size: clamp(28px, 8vw, 40px); font-weight: 800; color: var(--accent-ink); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; line-height: 1; letter-spacing: -0.02em; }
+.resValue small { font-size: 0.4em; font-weight: 700; color: var(--muted); margin-left: 0.15em; }
+.resSub { font-size: 12px; color: var(--muted); }
+.resArrow { font-size: 20px; color: var(--muted); flex-shrink: 0; }
+
+.bandBox { margin-top: 16px; display: flex; flex-direction: column; gap: 3px; background: var(--bg); border: 1px solid var(--border); border-left-width: 4px; border-radius: var(--radius-m); padding: 12px 16px; }
+.bandLabel { font-size: 15px; font-weight: 800; }
+.bandNote { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+.caveat { margin-top: 14px; font-size: 12px; color: var(--muted); line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 12px 14px; }
+.caveat strong { color: var(--text); }
+
+.emptyNote { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0; }
+
+.groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
+.groupNote { font-size: 12px; color: var(--muted); line-height: 1.65; margin: 10px 0 0; }
+
+.bandList { display: flex; flex-direction: column; gap: 6px; }
+.bandRow {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg); border: 1px solid var(--border); border-left-width: 4px;
+  border-radius: var(--radius-s); padding: 10px 14px;
+}
+.bandRow[data-active="true"] { background: color-mix(in srgb, var(--accent) 6%, var(--bg2)); }
+.bandRowLabel { font-size: 14px; font-weight: 700; }
+.bandRowRange { font-size: 13px; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; font-weight: 600; }
+
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.refTable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 320px; }
+.refTable th { padding: 9px 12px; text-align: right; color: var(--muted); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--border); }
+.refTable th:first-child { text-align: left; }
+.refTable td { padding: 8px 12px; text-align: right; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.refTable td:first-child { text-align: left; color: var(--accent); font-weight: 700; }
+.refTable tbody tr { border-bottom: 1px solid var(--border); }
+.refTable tbody tr[data-hit="true"] { background: color-mix(in srgb, var(--accent) 10%, var(--bg2)); }

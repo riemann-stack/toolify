@@ -1,0 +1,65 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+
+.fieldLabel { display: block; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+.select {
+  width: 100%; font-size: 16px; color: var(--text); background: var(--bg);
+  border: 1px solid var(--border); border-radius: var(--radius-m); padding: 12px 14px;
+  font-family: inherit; -webkit-appearance: none; appearance: none;
+}
+.select:focus { outline: none; border-color: var(--accent); }
+
+.servRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
+.servLabel { font-size: 14px; font-weight: 600; color: var(--text); }
+.stepper { display: flex; align-items: center; gap: 4px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 4px; }
+.stepBtn { width: 34px; height: 34px; border: none; background: var(--bg2); color: var(--text); font-size: 20px; font-weight: 700; border-radius: 50%; cursor: pointer; line-height: 1; }
+.stepBtn:active { background: var(--accent-strong); color: #fff; }
+.servVal { min-width: 66px; text-align: center; font-size: 16px; font-weight: 700; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.servVal small { font-size: 11px; color: var(--muted); font-weight: 500; margin-left: 2px; }
+.servHint { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+
+.resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px; text-align: center; }
+.resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+.hero { font-family: Inter, "Noto Sans KR", system-ui, sans-serif; font-size: clamp(48px, 13vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; }
+.heroBadge { font-size: 14px; font-weight: 700; margin: 8px 0 0; }
+.resultSub { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+.addBtn {
+  margin-top: 16px; width: 100%; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg2));
+  color: var(--accent-ink); font-size: 14px; font-weight: 700; padding: 11px; border-radius: var(--radius-m); cursor: pointer;
+}
+.addBtn:active { background: var(--accent-strong); color: #fff; }
+
+.mealHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0; }
+.clearBtn { border: none; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.mealList { display: flex; flex-direction: column; gap: 6px; }
+.mealRow { display: flex; align-items: center; gap: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 9px 12px; }
+.mealName { flex: 1; min-width: 0; font-size: 13px; color: var(--text); font-weight: 600; }
+.mealName small { color: var(--muted); font-weight: 400; }
+.mealGl { font-size: 13px; color: var(--text); font-weight: 700; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; flex-shrink: 0; }
+.mealDel { border: none; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer; padding: 2px 4px; flex-shrink: 0; }
+.mealTotal { margin-top: 12px; display: flex; flex-direction: column; gap: 3px; background: var(--bg); border: 1px solid var(--border); border-left-width: 4px; border-radius: var(--radius-m); padding: 12px 16px; }
+.mealTotalLabel { font-size: 12px; color: var(--muted); }
+.mealTotalVal { font-size: 24px; font-weight: 800; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.mealTotalVal small { font-size: 0.6em; }
+.mealTotalSub { font-size: 12px; color: var(--muted); }
+
+.catRow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+.catBtn { border: 1px solid var(--border); background: var(--bg); color: var(--muted); font-size: 12px; font-weight: 700; padding: 9px 4px; border-radius: var(--radius-s); cursor: pointer; transition: all 0.15s; }
+.catBtnActive { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.giTable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 300px; }
+.giTable th { padding: 9px 10px; text-align: right; color: var(--muted); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--border); }
+.giTable th:first-child { text-align: left; }
+.giTable td { padding: 8px 10px; text-align: right; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; vertical-align: middle; }
+.giTable td:first-child { text-align: left; }
+.giTable tbody tr { border-bottom: 1px solid var(--border); }
+.giTable tbody tr[data-active="true"] { background: color-mix(in srgb, var(--accent) 10%, var(--bg2)); }
+.tName { display: block; font-size: 13px; font-weight: 600; color: var(--text); font-family: "Noto Sans KR", system-ui, sans-serif; }
+.tServ { display: block; font-size: 11px; color: var(--muted); font-family: "Noto Sans KR", system-ui, sans-serif; }
+.glChip { display: inline-block; min-width: 30px; text-align: center; font-size: 12px; font-weight: 800; border: 1px solid; border-radius: var(--radius-pill); padding: 2px 8px; }
+
+.groupNote { font-size: 12px; color: var(--muted); line-height: 1.65; margin: 10px 0 0; }
