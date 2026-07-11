@@ -1,0 +1,68 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+
+.fieldLabel { display: block; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+.inputRow { display: flex; align-items: center; gap: 10px; }
+.input {
+  flex: 1; min-width: 0; font-size: 22px; font-weight: 700; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m);
+  padding: 12px 14px; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+}
+.input:focus { outline: none; border-color: var(--accent); }
+.unit { font-size: 15px; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+
+.groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
+.btnCol { display: flex; flex-direction: column; gap: 8px; }
+.optBtn {
+  display: flex; flex-direction: column; gap: 3px; text-align: left;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m);
+  padding: 11px 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.optBtnActive { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg2)); }
+.optName { font-size: 14px; font-weight: 700; color: var(--text); }
+.optNote { font-size: 12px; color: var(--muted); line-height: 1.5; }
+@media (hover: hover) { .optBtn:hover { border-color: var(--border-hover); } }
+
+.resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 20px; }
+.resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; text-align: center; }
+.hero {
+  font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  font-size: clamp(40px, 10vw, 64px); font-weight: 800; line-height: 1;
+  color: var(--accent-ink); text-align: center; margin: 0; letter-spacing: -0.02em;
+}
+.heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 0.15em; }
+.resultSub { font-size: 12px; color: var(--muted); text-align: center; margin: 8px 0 0; }
+
+.splitBox { margin-top: 16px; display: flex; flex-direction: column; }
+.splitRow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 2px; font-size: 13px; border-bottom: 1px solid var(--border); }
+.splitRow:last-child { border-bottom: none; }
+.splitKey { color: var(--muted); min-width: 0; }
+.splitVal { color: var(--text); font-weight: 700; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; flex-shrink: 0; }
+
+.foodBox { margin-top: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 14px 16px; }
+.foodTitle { font-size: 13px; font-weight: 700; color: var(--text); margin: 0 0 4px; }
+.foodIntro { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
+.foodList { display: flex; flex-direction: column; gap: 4px; }
+.foodRow { display: grid; grid-template-columns: minmax(0, 1fr) 44px 56px; gap: 8px; align-items: center; font-size: 13px; padding: 4px 0; }
+.foodName { color: var(--text); min-width: 0; }
+.foodCarb { color: var(--muted); text-align: right; font-size: 12px; }
+.foodCount { color: var(--accent-ink); font-weight: 700; text-align: right; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.foodNote { font-size: 11px; color: var(--muted); margin: 10px 0 0; }
+
+.cautionBox { margin-top: 14px; background: color-mix(in srgb, var(--warning) 8%, var(--bg2)); border: 1px solid color-mix(in srgb, var(--warning) 30%, var(--border)); border-radius: var(--radius-m); padding: 12px 14px; font-size: 12px; color: var(--text); line-height: 1.7; }
+
+.emptyNote { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0; }
+
+.timeline { display: flex; flex-direction: column; gap: 10px; }
+.dayRow { display: flex; gap: 12px; align-items: flex-start; }
+.dayTag {
+  flex-shrink: 0; font-size: 12px; font-weight: 800; color: var(--accent-ink);
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg)); border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+  border-radius: var(--radius-pill); padding: 4px 10px; min-width: 48px; text-align: center;
+  font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+}
+.dayBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dayTitle { font-size: 13px; font-weight: 700; color: var(--text); }
+.dayDesc { font-size: 12px; color: var(--muted); line-height: 1.6; }

@@ -1,0 +1,61 @@
+.wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+
+.groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
+.subtle { font-size: 12px; color: var(--muted); font-weight: 400; }
+
+.btnCol { display: flex; flex-direction: column; gap: 8px; }
+.optBtn {
+  display: flex; flex-direction: column; gap: 3px; text-align: left;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m);
+  padding: 11px 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.optBtnActive { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg2)); }
+.optName { font-size: 14px; font-weight: 700; color: var(--text); }
+.optKm { font-size: 12px; color: var(--muted); font-weight: 500; margin-left: 4px; }
+.optNote { font-size: 12px; color: var(--muted); }
+@media (hover: hover) { .optBtn:hover { border-color: var(--border-hover); } }
+
+.dualRow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.dualField { display: flex; flex-direction: column; min-width: 0; }
+.fieldLabel { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.inputWrap { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 10px 12px; }
+.input { flex: 1; min-width: 0; border: none; background: transparent; font-size: 20px; font-weight: 700; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.input:focus { outline: none; }
+.unit { font-size: 14px; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+
+.segRow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.segBtn {
+  border: 1px solid var(--border); background: var(--bg); color: var(--muted);
+  font-size: 13px; font-weight: 600; padding: 10px 4px; border-radius: var(--radius-s);
+  cursor: pointer; transition: all 0.15s;
+}
+.segBtnActive { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+
+.checkRow { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.check { margin-top: 2px; width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--accent); }
+.checkText { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.checkText strong { color: var(--text); }
+
+.resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 20px; }
+.resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; text-align: center; }
+.hero {
+  font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1;
+  color: var(--accent-ink); text-align: center; margin: 0; letter-spacing: -0.02em;
+}
+.heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 0.15em; }
+.resultSub { font-size: 13px; color: var(--muted); text-align: center; margin: 8px 0 0; }
+
+.replaceBox { margin-top: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 14px 16px; display: flex; flex-direction: column; gap: 3px; }
+.replaceBox[data-worn="true"] { background: color-mix(in srgb, var(--danger) 8%, var(--bg2)); border-color: color-mix(in srgb, var(--danger) 30%, var(--border)); }
+.replaceLabel { font-size: 12px; color: var(--muted); }
+.replaceVal { font-size: 22px; font-weight: 800; color: var(--accent-ink); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.replaceBox[data-worn="true"] .replaceVal { color: var(--danger); }
+.replaceNote { font-size: 12px; color: var(--muted); }
+
+.signNote { margin-top: 14px; background: color-mix(in srgb, var(--warning) 8%, var(--bg2)); border: 1px solid color-mix(in srgb, var(--warning) 30%, var(--border)); border-radius: var(--radius-m); padding: 12px 14px; font-size: 12px; color: var(--text); line-height: 1.7; }
+
+.emptyNote { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0; }
