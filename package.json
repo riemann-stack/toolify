@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "gen:lastmod": "tsx scripts/gen-lastmod.mts"
+    "gen:lastmod": "tsx scripts/gen-lastmod.mts",
+    "gen:popular": "tsx scripts/gen-popular.mts"
   },
   "dependencies": {
     "js-yaml": "^4.1.1",
@@ -25,7 +26,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
+    "google-auth-library": "^10.9.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.1",
     "typescript": "^5"
   }
 }

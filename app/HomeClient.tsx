@@ -13,14 +13,31 @@ import HomeJsonLd from '@/components/HomeJsonLd'
 import CatIcon from '@/components/CatIcon'
 import ToolCatIcon from '@/components/ToolCatIcon'
 import UiIcon from '@/components/UiIcon'
+import popularManifest from './popular-tools.json'
 import styles from './page.module.css'
 
-// 인기 툴 — badge 있는 것 우선, 나머지는 카테고리별 첫 번째
-const popularTools = [
+// 인기 도구 = GA4 조회수 매니페스트(app/popular-tools.json, scripts/gen-popular.mts 생성) 순서.
+// 매칭 안 되거나 부족한 자리는 badge 기반 큐레이션으로 보충(트래픽 부족·신규 도구·GA 미설정 대비).
+const POPULAR_MAX = 10
+const toolByHrefMap = new Map(allTools.map(t => [t.href, t]))
+const badgeFallback = [
   ...allTools.filter(t => t.badge === 'hot'),
-  ...allTools.filter(t => t.badge === 'new').slice(0, 3),
-  ...allTools.filter(t => !t.badge).slice(0, 4),
-].slice(0, 9)
+  ...allTools.filter(t => t.badge === 'new'),
+  ...allTools.filter(t => !t.badge),
+]
+const popularTools: typeof allTools = (() => {
+  const seen = new Set<string>()
+  const out: typeof allTools = []
+  for (const href of popularManifest.hrefs ?? []) {
+    const t = toolByHrefMap.get(href)
+    if (t && !seen.has(href)) { seen.add(href); out.push(t) }
+  }
+  for (const t of badgeFallback) {
+    if (out.length >= POPULAR_MAX) break
+    if (!seen.has(t.href)) { seen.add(t.href); out.push(t) }
+  }
+  return out.slice(0, POPULAR_MAX)
+})()
 
 const RANDOM_PICK_COUNT = 5
 
@@ -342,7 +359,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
           <Link href="/tools" className={styles.sectionLink}>전체 보기 →</Link>
         </div>
         <div className={styles.popGrid}>
-          {popularTools.map((tool, i) => (
+          {popularTools.slice(0, 5).map((tool, i) => (
             <Link
               key={tool.href}
               href={tool.href}
