@@ -8,9 +8,21 @@
      (또는 GOOGLE_APPLICATION_CREDENTIALS 로 키 파일 경로 지정)
 
    환경변수가 없으면 매니페스트를 건드리지 않고 그대로 종료(기존 시드/커밋본 유지) — 안전 폴백. */
-import { writeFileSync } from 'node:fs'
+import { writeFileSync, readFileSync, existsSync } from 'node:fs'
 import { GoogleAuth } from 'google-auth-library'
 import { allTools } from '../lib/tools'
+
+// .env.local(우선) 또는 .env 를 있으면 로드 — 둘 다 .gitignore(.env*)로 커밋 제외됨.
+// 이미 셸에 export된 값은 덮어쓰지 않음. 무의존성 간단 파서(KEY=VALUE, 따옴표 허용).
+for (const f of ['.env.local', '.env']) {
+  if (!existsSync(f)) continue
+  for (const line of readFileSync(f, 'utf8').split('\n')) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/)
+    if (!m || m[1].startsWith('#')) continue
+    const val = m[2].replace(/^['"]|['"]$/g, '')
+    if (process.env[m[1]] === undefined) process.env[m[1]] = val
+  }
+}
 
 const PROPERTY_ID = process.env.GA4_PROPERTY_ID
 const SA_KEY = process.env.GA_SERVICE_ACCOUNT_KEY
