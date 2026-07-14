@@ -24,7 +24,7 @@ const FAQ_LD = [
               },
               {
                 q: '겨울에 전기차 전비가 떨어지는 이유?',
-                a: '리튬이온 배터리의 화학 반응이 저온에서 둔화되고, <strong>히터 가동에 5~10kWh가 추가 소모</strong>됩니다. 일반적으로 영하 10도 이하에서는 여름 대비 <strong>전비가 30~40% 감소</strong>할 수 있습니다. 가솔린차도 겨울에 5~15% 떨어지지만 EV가 훨씬 민감합니다.',
+                a: '리튬이온 배터리의 화학 반응이 저온에서 둔화되고, <strong>히터가 시간당 3~7kW 수준의 전력을 추가로 소모</strong>합니다(1시간 주행 시 3~7kWh — 소형 EV 배터리의 5~10%). 일반적으로 영하 10도 이하에서는 여름 대비 <strong>전비가 30~40% 감소</strong>할 수 있습니다. 가솔린차도 겨울에 5~15% 떨어지지만 EV가 훨씬 민감합니다.',
               },
               {
                 q: '연비 1km/L 차이가 1년에 얼마 차이?',
@@ -200,6 +200,9 @@ export default function FuelEconomyPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8, opacity: 0.8 }}>
+            기준: 2026-07 확인 · 출처: 각 제조사 공인 복합연비(제원표), 전기차는 무공해차 통합누리집 인증 전비. 연식·트림·구동 방식에 따라 수치가 다를 수 있습니다.
+          </p>
         </div>
 
         {/* ── 4-1. 연료별 100km 비용 비교 ── */}
@@ -208,7 +211,7 @@ export default function FuelEconomyPage() {
             🇰🇷 연료별 100km 주행 비용 비교
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            2026년 6월 기준 한국 평균 단가 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
+            2026년 7월 기준 한국 평균 단가 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -225,9 +228,9 @@ export default function FuelEconomyPage() {
                   { f: '⛽ 경유(디젤)',     e: '14 km/L',     p: '2,006원/L',    c: '약 14,300원' },
                   { f: '🔥 LPG',           e: '9 km/L',      p: '1,090원/L',    c: '약 12,100원' },
                   { f: '🍃 하이브리드',     e: '20 km/L',     p: '2,011원/L',    c: '약 10,100원' },
-                  { f: '🔌 전기 (완속)',    e: '5 km/kWh',    p: '294.3원/kWh',  c: '약 5,900원' },
-                  { f: '🔌 전기 (급속)',    e: '5 km/kWh',    p: '347.2원/kWh',  c: '약 6,900원' },
-                  { f: '🔌 전기 (초급속)',  e: '5 km/kWh',    p: '391.9원/kWh',  c: '약 7,800원' },
+                  { f: '🔌 전기 (완속)',    e: '5 km/kWh',    p: '295.0원/kWh',  c: '약 5,900원' },
+                  { f: '🔌 전기 (급속)',    e: '5 km/kWh',    p: '348.4원/kWh',  c: '약 7,000원' },
+                  { f: '🔌 전기 (초급속)',  e: '5 km/kWh',    p: '393.1원/kWh',  c: '약 7,900원' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.f}</td>
@@ -240,7 +243,7 @@ export default function FuelEconomyPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            기준: 2026-06 · 출처: 오피넷(휘발유·경유·LPG — 2026년 5월 전국 평균), 환경부(전기 — 공공 충전요금 5단계 개편, 2026-04-30 시행: 완속 30kW 미만 294.3원 · 급속 100~200kW 347.2원 · 초급속 200kW 이상 391.9원/kWh)
+            기준: 2026-07 · 출처: 오피넷(휘발유·경유·LPG — 2026년 5월 전국 평균), 기후에너지환경부(전기 — 공공 충전요금 5단계 개편 확정안, 2026-07-01 발표·2026-08-01 시행: 완속 30kW 미만 295.0원 · 급속 100~200kW 348.4원 · 초급속 200kW 이상 393.1원/kWh. 2026-07-31까지는 기존 2단계 요금 100kW 미만 324.4원 · 100kW 이상 347.2원 적용)
           </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
             💡 같은 거리라도 <strong style={{ color: 'var(--text)' }}>전기차(완속) vs 휘발유</strong>는 약 <strong style={{ color: 'var(--accent)' }}>2.8배</strong> 비용 차이. 단, 차량 가격·배터리 교체비·세제 혜택을 종합한 5년 TCO(총 소유비용)는 차종마다 다릅니다.
@@ -254,7 +257,7 @@ export default function FuelEconomyPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { t: '🛞 타이어 공기압', d: '권장값 +10% 유지 시 연비 ~3% 개선. 매월 점검.', impact: '+3%' },
+              { t: '🛞 타이어 공기압', d: '운전석 도어 라벨의 권장 공기압을 유지하고 월 1회 점검. 공기압 부족 시 연비가 최대 3%까지 손실됩니다(미국 DOE). 과충전은 접지력·제동에 불리하니 금물.', impact: '+3%' },
               { t: '🚀 부드러운 가속', d: '급가속·급제동 1회 = 연료 0.05L 손실. 정속 우선.', impact: '+10%' },
               { t: '❄️ 에어컨 사용',   d: '에어컨은 연비 5~15% ↓. 시속 80km↑에선 창문 열기보다 효율적.', impact: '+5%' },
               { t: '📦 짐 무게',       d: '50kg 추가 적재 → 연비 1~2% ↓. 트렁크 정리.', impact: '+2%' },
@@ -271,7 +274,7 @@ export default function FuelEconomyPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
-            ※ 누적 효과로 같은 차량에서 <strong style={{ color: 'var(--text)' }}>+15~20% 연비 개선</strong>이 가능합니다. 연 15,000km 운행 시 연 25~40만원 절약.
+            ※ 누적 효과로 같은 차량에서 <strong style={{ color: 'var(--text)' }}>+15~20% 연비 개선</strong>이 가능합니다. 평균 연비 12~15km/L 차량 기준, 연 15,000km 운행 시 연 25~40만원 절약 (연비가 좋을수록 절약액은 줄어듭니다).
           </p>
         </div>
 
@@ -284,7 +287,7 @@ export default function FuelEconomyPage() {
             {[
               { q: '30 mpg(US)는 km/L?',      a: '약 12.75 km/L', sub: '30 ÷ 2.35215 = 12.75' },
               { q: 'L/100km 7은 km/L?',      a: '약 14.3 km/L',  sub: '100 ÷ 7 = 14.29' },
-              { q: '50 MPGe는 km/kWh?',      a: '약 1.48 km/kWh', sub: '(50 × 1.60934) ÷ 33.7 = 1.48' },
+              { q: '50 MPGe는 km/kWh?',      a: '약 2.39 km/kWh', sub: '(50 × 1.60934) ÷ 33.7 = 2.39' },
               { q: '20 km/L은 L/100km?',      a: '5.0 L/100km',   sub: '100 ÷ 20 = 5.0' },
               { q: '150 Wh/km은 km/kWh?',    a: '약 6.67 km/kWh', sub: '1000 ÷ 150 = 6.67' },
               { q: '40 mpg(US) vs 40 mpg(UK)', a: '17.0 vs 14.2 km/L', sub: 'UK 갤런이 더 커서 같은 mpg면 km/L↓' },

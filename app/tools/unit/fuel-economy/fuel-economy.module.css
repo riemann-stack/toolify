@@ -195,12 +195,14 @@
 .gradeMid  { background: var(--bg2); }
 .gradeLow  { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.4); }
 .gradeBad  { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.4); }
+.gradeEmpty { background: var(--bg3); }
 
 .gradeStar .gradeTitle { color: var(--accent); }
 .gradeGood .gradeTitle { color: #059669; }
 .gradeMid  .gradeTitle { color: var(--text); }
 .gradeLow  .gradeTitle { color: #EA580C; }
 .gradeBad  .gradeTitle { color: #DC2626; }
+.gradeEmpty .gradeTitle { color: var(--muted); }
 
 .gradeTitle { font-size: 16px; font-weight: 800; }
 .gradeDesc  { font-size: 12px; color: var(--muted); line-height: 1.7; }
@@ -234,7 +236,8 @@
   border-radius: 10px; padding: 10px 12px;
 }
 .costInputLabel {
-  font-size: 10px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 4px;
+  display: block;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 4px;
 }
 .costInput {
   width: 100%; background: transparent; border: none; outline: none;
