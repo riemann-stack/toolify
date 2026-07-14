@@ -32,11 +32,11 @@ const FAQ_LD = [
               },
               {
                 q: '뒷타이어가 앞타이어보다 공기압이 높은 이유?',
-                a: '대부분의 차량은 엔진이 앞에 있어 앞이 무겁기 때문에 <strong>앞바퀴가 같은 공기압이라도 더 눌립니다.</strong> 매뉴얼에서 “승차 인원이 많거나 짐이 많을 때”는 뒷바퀴 공기압을 더 올리라고 안내합니다(보통 +3~5 psi).',
+                a: '차량마다 다릅니다. 후륜을 더 높게 지정한 차(후륜구동 세단·SUV 등)는 <strong>승객·트렁크 짐 하중이 주로 뒤 차축에 실려 하중 변동폭이 크기 때문</strong>입니다. 반대로 앞이 무거운 전륜구동 차는 앞을 같거나 더 높게 지정하기도 합니다. 결국 <strong>운전석 도어 스티커의 전/후륜 지정값이 기준</strong>이며, 만차·짐이 많을 때는 스티커의 만차(full load) 칸에 따라 보통 후륜을 +3~5 psi 올립니다.',
               },
               {
                 q: '질소 충전이 정말 효과가 있나요?',
-                a: '이론적으로 질소는 분자가 커서 누설이 약간 적고 온도 변화에 둔감합니다. 다만 <strong>일반 공기도 78%가 질소</strong>이므로 차이는 크지 않으며, 일반 운전자에게는 비용 대비 효과가 미미합니다. 항공기·F1 등 극한 환경에서 의미가 있습니다.',
+                a: '이론적으로 질소는 분자가 커서 누설이 약간 적고, 충전 질소는 수분이 없는 건조 기체라 온도에 따른 압력 변동 요인이 약간 적습니다. 다만 <strong>일반 공기도 78%가 질소</strong>이므로 차이는 크지 않으며, 일반 운전자에게는 비용 대비 효과가 미미합니다. 항공기·F1 등 극한 환경에서 의미가 있습니다.',
               },
               {
                 q: '205/55R16은 무슨 뜻인가요?',
@@ -44,7 +44,7 @@ const FAQ_LD = [
               },
               {
                 q: '인치업하면 외경은 어떻게 맞추나요?',
-                a: '휠 지름을 키우면(예 16″→17″) 편평비를 낮추고 폭을 약간 넓혀 <strong>외경을 비슷하게 유지</strong>합니다. 예: 205/55R16 → 215/50R17. 외경 차이가 커지면 속도계 오차·간섭·승차감 변화가 생기므로 <strong>±3% 이내</strong>를 권장하며, 휠 폭·옵셋(ET)·하중지수도 함께 확인해야 합니다.',
+                a: '휠 지름을 키우면(예 16″→17″) 편평비를 낮추고 폭을 약간 넓혀 <strong>외경을 비슷하게 유지</strong>합니다. 예: 205/55R16 → 225/45R17 (외경 +0.4%). 외경 차이가 커지면 속도계 오차·간섭·승차감 변화가 생기므로 <strong>±3% 이내</strong>를 권장하며, 휠 폭·옵셋(ET)·하중지수도 함께 확인해야 합니다.',
               },
               {
                 q: 'DOT 제조일자(예: 2419)는 어떻게 읽나요?',
@@ -52,7 +52,7 @@ const FAQ_LD = [
               },
               {
                 q: '트레드 깊이는 동전으로 어떻게 확인하나요?',
-                a: '한국 <strong>100원 동전</strong>을 홈에 거꾸로 꽂아 <strong>이순신 장군의 상투(감투)</strong>가 보이면 약 2.5mm 이하로 교체 시기입니다. 타이어 홈 안의 <strong>△ 마모 한계 표시(1.6mm)</strong>가 트레드 면과 같은 높이가 되면 즉시 교체해야 합니다(법정 한계 1.6mm).',
+                a: '한국 <strong>100원 동전</strong>을 홈에 거꾸로 꽂아 <strong>이순신 장군의 감투(관모)</strong>가 보이면 트레드가 마모한계에 가까워진 것으로 교체를 준비할 시기입니다. 타이어 홈 안의 <strong>△ 마모 한계 표시(1.6mm)</strong>가 트레드 면과 같은 높이가 되면 즉시 교체해야 합니다(법정 한계 1.6mm).',
               },
             ]
 
@@ -111,7 +111,7 @@ export default function TirePressurePage() {
             정확한 값은 <strong style={{ color: 'var(--text)' }}>운전석 도어 안쪽 스티커</strong>나 차량 매뉴얼이 우선입니다. 아래는 일반적인 참고 범위입니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            예를 들어 제가 타는 GV70(18인치)은 도어 스티커가 앞 33 / 뒤 36 psi입니다. 측정은 꼭 아침 첫 주행 전 <strong style={{ color: 'var(--text)' }}>냉간</strong>에서 하세요 — 주유소에서 한참 달린 뒤 재면 타이어가 데워져 5psi쯤 높게 나오고, 그 숫자에 맞추면 오히려 공기가 모자라게 됩니다.
+            예를 들어 제가 타는 GV70(18인치)은 도어 스티커가 앞 33 / 뒤 36 psi입니다. 측정은 꼭 아침 첫 주행 전 <strong style={{ color: 'var(--text)' }}>냉간</strong>에서 하세요 — 주유소에서 한참 달린 뒤 재면 타이어가 데워져 4~5psi쯤 높게 나오고, 그 숫자에 맞추면 오히려 공기가 모자라게 됩니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
@@ -162,7 +162,7 @@ export default function TirePressurePage() {
             <div style={{ background: 'rgba(234,88,12,0.08)', border: '1px solid rgba(234,88,12,0.4)', borderRadius: '12px', padding: '14px 16px' }}>
               <p style={{ fontSize: '14px', color: '#EA580C', fontWeight: 800, marginBottom: '8px' }}>🔻 공기압 부족</p>
               <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: '4px', listStyle: 'none' }}>
-                <li>• <strong style={{ color: 'var(--text)' }}>연비 약 3% 감소</strong> (10% 부족 시)</li>
+                <li>• <strong style={{ color: 'var(--text)' }}>연비 최대 약 3% 감소</strong> (10% 부족 시 — 자료별 0.7~3% 추정)</li>
                 <li>• 타이어 측면(숄더) 마모 가속</li>
                 <li>• 펑크·블로아웃(고속 파열) 위험</li>
                 <li>• 핸들 무거움, 조향 느슨함</li>
@@ -181,7 +181,9 @@ export default function TirePressurePage() {
             </div>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            📌 <strong style={{ color: 'var(--text)' }}>한국교통안전공단</strong> 자료에 따르면 부적정 공기압으로 인한 타이어 사고가 전체 고속도로 사고 원인의 상당 부분을 차지합니다. 월 1회 이상 점검을 권장합니다.
+            📌 <strong style={{ color: 'var(--text)' }}>한국교통안전공단</strong>은 부적정 공기압을 고속도로 타이어 사고의 주요 원인으로 꼽고 <strong style={{ color: 'var(--text)' }}>월 1회 이상 냉간 점검</strong>을 권장합니다(NHTSA도 동일 권고). 연비 감소 폭은 자료마다 0.7~3%로 차이가 있어 상한 기준으로 표기했습니다. 기준: 2026-07 확인 · 출처:{' '}
+            <a href="https://www.kotsa.or.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>한국교통안전공단</a>{' · '}
+            <a href="https://www.nhtsa.gov/equipment/tires" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>NHTSA Tires</a>
           </p>
         </div>
 
@@ -204,7 +206,7 @@ export default function TirePressurePage() {
               </thead>
               <tbody>
                 {[
-                  { s: '늦가을 → 초겨울', t: '20°C → 0°C', p: '약 -2 psi', a: '재충전 필수 (TPMS 경고등 점등 시즌)' },
+                  { s: '늦가을 → 초겨울', t: '20°C → 0°C', p: '약 -2~4 psi', a: '재충전 필수 (TPMS 경고등 점등 시즌)' },
                   { s: '한겨울',          t: '0°C → -10°C', p: '약 -1 psi', a: '주1회 점검' },
                   { s: '초봄 → 늦봄',     t: '5°C → 20°C',  p: '약 +1.5 psi', a: '과다 시 일부 빼기' },
                   { s: '한여름',          t: '25°C → 35°C', p: '약 +1 psi',   a: '주행 후 측정 금지(과측정)' },
@@ -220,7 +222,7 @@ export default function TirePressurePage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            ⚠️ 측정은 반드시 <strong style={{ color: 'var(--text)' }}>주행 전 “냉간(cold)” 상태</strong>에서 하세요. 주행 직후에는 마찰열로 3~5 psi 더 높게 측정됩니다. 또한 공기 대신 <strong style={{ color: 'var(--text)' }}>질소 충전</strong>은 온도에 따른 변화가 살짝 작지만, 일반 운전자에게는 큰 차이가 없습니다.
+            ⚠️ 측정은 반드시 <strong style={{ color: 'var(--text)' }}>주행 전 “냉간(cold)” 상태</strong>에서 하세요. 주행 직후에는 마찰열로 3~5 psi 더 높게 측정됩니다. 또한 공기 대신 <strong style={{ color: 'var(--text)' }}>질소 충전</strong>은 수분이 없는 건조 기체라 압력 변동 요인이 살짝 적지만, 일반 운전자에게는 큰 차이가 없습니다.
           </p>
         </div>
 
@@ -308,7 +310,7 @@ export default function TirePressurePage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '12px' }}>
             📐 <strong style={{ color: 'var(--text)' }}>외경 공식</strong>: 휠지름(mm) + 2 × (단면폭 × 편평비 ÷ 100) = 16×25.4 + 2×(205×0.55) = <strong style={{ color: 'var(--accent)' }}>약 631.9mm</strong>.
             <br />
-            🔧 <strong style={{ color: 'var(--text)' }}>인치업</strong>은 휠을 키우고 편평비를 낮춰 외경을 유지하는 것입니다(예: 205/55R16 → 215/50R17, 외경 +2.4%). 외경 차이가 크면 <strong style={{ color: 'var(--text)' }}>속도계 오차</strong>가 생기므로 <strong style={{ color: 'var(--accent)' }}>±3% 이내</strong>를 권장합니다(외경이 커지면 실제 속도가 계기판보다 빠름).
+            🔧 <strong style={{ color: 'var(--text)' }}>인치업</strong>은 휠을 키우고 편평비를 낮춰 외경을 유지하는 것입니다(예: 205/55R16 → 225/45R17, 외경 +0.4%). 외경 차이가 크면 <strong style={{ color: 'var(--text)' }}>속도계 오차</strong>가 생기므로 <strong style={{ color: 'var(--accent)' }}>±3% 이내</strong>를 권장합니다(외경이 커지면 실제 속도가 계기판보다 빠름).
           </p>
         </div>
 

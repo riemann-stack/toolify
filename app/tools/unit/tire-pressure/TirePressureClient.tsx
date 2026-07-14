@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Disclaimer from '@/components/Disclaimer'
 import styles from './tire-pressure.module.css'
 
 // ──────────────────────────────────────
@@ -25,8 +26,8 @@ const PRESETS: { label: string; value: number; unit: PressureUnit }[] = [
   { label: '30 psi',   value: 30,  unit: 'psi' },
   { label: '33 psi',   value: 33,  unit: 'psi' },
   { label: '35 psi',   value: 35,  unit: 'psi' },
-  { label: '100 kPa',  value: 100, unit: 'kPa' },
-  { label: '200 kPa',  value: 200, unit: 'kPa' },
+  { label: '220 kPa',  value: 220, unit: 'kPa' },
+  { label: '240 kPa',  value: 240, unit: 'kPa' },
   { label: '2.0 bar',  value: 2.0, unit: 'bar' },
   { label: '2.3 bar',  value: 2.3, unit: 'bar' },
 ]
@@ -84,10 +85,27 @@ export default function TirePressureClient() {
 
   return (
     <div className={styles.wrap}>
+      <Disclaimer
+        variant="default"
+        sources={[
+          { label: '한국교통안전공단', href: 'https://www.kotsa.or.kr' },
+          { label: 'NHTSA (미국 도로교통안전국)', href: 'https://www.nhtsa.gov/equipment/tires' },
+        ]}
+        related={[
+          { href: '/tools/finance/car-cost',  label: '자동차 유지비 계산기' },
+          { href: '/tools/unit/fuel-economy', label: '연비 변환기' },
+          { href: '/tools/unit/converter',    label: '단위 변환기' },
+        ]}
+      >
+        공기압·교체 판정은 일반 기준 참고치입니다. 차량별 권장값은 운전석 도어 안쪽 스티커·매뉴얼이 우선하며, 타이어 상태가 의심되면 정비 전문가 점검을 우선하세요.
+      </Disclaimer>
+
       <div className={styles.tabs}>
         {TABS.map(t => (
           <button
             key={t.id}
+            type="button"
+            aria-pressed={tab === t.id}
             className={`${styles.tab} ${tab === t.id ? styles.tabActive : ''}`}
             onClick={() => setTab(t.id)}
           >
@@ -112,7 +130,7 @@ function ConvertTab() {
   const [unit, setUnit] = useState<PressureUnit>('psi')
   const [copied, setCopied] = useState<PressureUnit | null>(null)
 
-  const numValue = parseFloat(value) || 0
+  const numValue = Math.max(0, parseFloat(value) || 0)
   const basePsi = useMemo(() => toPsi(numValue, unit), [numValue, unit])
 
   const results = useMemo(() => {
@@ -126,7 +144,7 @@ function ConvertTab() {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
       setCopied(u)
-      setTimeout(() => setCopied(null), 1200)
+      setTimeout(() => setCopied(null), 1500)
     }
   }
 
@@ -145,6 +163,7 @@ function ConvertTab() {
         <div className={styles.inputRow}>
           <input
             type="number" inputMode="decimal"
+            aria-label="공기압 입력"
             className={`${styles.input} ${value && numValue > 0 ? styles.inputFilled : ''}`}
             value={value}
             onChange={e => setValue(e.target.value)}
@@ -153,6 +172,7 @@ function ConvertTab() {
           />
           <select
             className={styles.unitSelect}
+            aria-label="공기압 단위"
             value={unit}
             onChange={e => setUnit(e.target.value as PressureUnit)}
           >
@@ -164,7 +184,7 @@ function ConvertTab() {
 
         <div className={styles.presetRow}>
           {PRESETS.map((p, i) => (
-            <button key={i} className={styles.presetBtn} onClick={() => applyPreset(p)}>
+            <button key={i} type="button" className={styles.presetBtn} onClick={() => applyPreset(p)}>
               {p.label}
             </button>
           ))}
@@ -172,7 +192,7 @@ function ConvertTab() {
       </div>
 
       {/* 결과 */}
-      <div className={styles.resultCard}>
+      <div className={styles.resultCard} role="status" aria-live="polite">
         <div className={styles.resultHeader}>
           <div className={styles.resultHeaderLabel}>입력값</div>
           <div className={styles.resultHeaderValue}>
@@ -191,6 +211,7 @@ function ConvertTab() {
                 {formatNumber(r.value)}
               </div>
               <button
+                type="button"
                 className={`${styles.copyBtn} ${copied === r.id ? styles.copyBtnDone : ''}`}
                 onClick={() => handleCopy(r.id, r.value)}
               >
@@ -216,25 +237,34 @@ const VEHICLES: { id: Vehicle; label: string; defaultPsi: number }[] = [
   { id: 'moto', label: '🏍️ 오토바이',       defaultPsi: 36 },
 ]
 
-type Status = 'ok' | 'warnLow' | 'alertLow' | 'warnHigh' | 'alertHigh'
+type Status = 'empty' | 'ok' | 'warnLow' | 'alertLow' | 'warnHigh' | 'alertHigh'
 
-function judge(diffPsi: number): { status: Status; title: string; desc: string } {
-  if (diffPsi >= -2 && diffPsi <= 2) {
-    return { status: 'ok', title: '✅ 적정 공기압', desc: '권장값 ±2 psi 이내. 그대로 운행해도 안전합니다.' }
+// 판정 밴드(psi) — 차량·오토바이·MTB는 ±2/±5, 로드바이크는 기준압(~100psi)이 높아 비례 확대(±6/±15)
+const JUDGE_BANDS: Record<Vehicle, { ok: number; alert: number }> = {
+  car:  { ok: 2, alert: 5 },
+  moto: { ok: 2, alert: 5 },
+  mtb:  { ok: 2, alert: 5 },
+  road: { ok: 6, alert: 15 },
+}
+
+function judge(diffPsi: number, band: { ok: number; alert: number }): { status: Status; title: string; desc: string } {
+  if (diffPsi >= -band.ok && diffPsi <= band.ok) {
+    return { status: 'ok', title: '✅ 적정 공기압', desc: `권장값 ±${band.ok} psi 이내 — 공기압 기준으로는 정상 범위입니다. 타이어 손상·편마모·적재 하중 조건은 별도로 확인하세요.` }
   }
-  if (diffPsi < -5) {
-    return { status: 'alertLow', title: '🚨 공기압 부족', desc: '5 psi 이상 부족. 즉시 보충 필요. 펑크·연비 저하·측면 마모 위험이 큽니다.' }
+  if (diffPsi < -band.alert) {
+    return { status: 'alertLow', title: '🚨 공기압 부족', desc: `${band.alert} psi 이상 부족. 즉시 보충 필요. 펑크·연비 저하·측면 마모 위험이 큽니다.` }
   }
   if (diffPsi < 0) {
-    return { status: 'warnLow', title: '🔶 약간 부족', desc: '권장보다 3~5 psi 낮음. 가까운 시일 내 보충하세요.' }
+    return { status: 'warnLow', title: '🔶 약간 부족', desc: `권장보다 ${band.ok}~${band.alert} psi 낮음. 가까운 시일 내 보충하세요.` }
   }
-  if (diffPsi > 5) {
-    return { status: 'alertHigh', title: '🚨 공기압 과다', desc: '5 psi 이상 초과. 빼주세요. 중앙 마모·승차감 저하·제동 거리 증가.' }
+  if (diffPsi > band.alert) {
+    return { status: 'alertHigh', title: '🚨 공기압 과다', desc: `${band.alert} psi 이상 초과. 빼주세요. 중앙 마모·승차감 저하·제동 거리 증가.` }
   }
-  return { status: 'warnHigh', title: '🔶 약간 과다', desc: '권장보다 3~5 psi 높음. 적정 수준으로 빼주는 것이 좋습니다.' }
+  return { status: 'warnHigh', title: '🔶 약간 과다', desc: `권장보다 ${band.ok}~${band.alert} psi 높음. 적정 수준으로 빼주는 것이 좋습니다.` }
 }
 
 function statusClass(s: Status): string {
+  if (s === 'empty') return styles.statusEmpty
   if (s === 'ok') return styles.statusOk
   if (s === 'warnLow' || s === 'warnHigh') return styles.statusWarn
   return styles.statusAlert
@@ -245,13 +275,16 @@ function CheckTab() {
   const [recPsi, setRecPsi] = useState<string>('33')
   const [curPsi, setCurPsi] = useState<string>('30')
 
-  const recommended = parseFloat(recPsi) || 0
-  const current = parseFloat(curPsi) || 0
-  const diffPsi = current - recommended
+  const recommended = Math.max(0, parseFloat(recPsi) || 0)
+  const current = Math.max(0, parseFloat(curPsi) || 0)
+  const hasInput = recommended > 0 && current > 0
+  const diffPsi = hasInput ? current - recommended : 0
   const diffKpaSigned = diffPsi * PSI_TO.kPa
   const diffBarSigned = diffPsi * PSI_TO.bar
 
-  const result = judge(diffPsi)
+  const result = hasInput
+    ? judge(diffPsi, JUDGE_BANDS[vehicle])
+    : { status: 'empty' as Status, title: '공기압을 입력하세요', desc: '권장 공기압과 현재 측정 공기압을 모두 입력하면(0보다 큰 값) 판정해 드립니다.' }
 
   function pickVehicle(v: Vehicle) {
     setVehicle(v)
@@ -267,6 +300,8 @@ function CheckTab() {
           {VEHICLES.map(v => (
             <button
               key={v.id}
+              type="button"
+              aria-pressed={vehicle === v.id}
               className={`${styles.vehicleBtn} ${vehicle === v.id ? styles.vehicleBtnActive : ''}`}
               onClick={() => pickVehicle(v.id)}
             >
@@ -281,6 +316,7 @@ function CheckTab() {
             <div className={styles.dualInputBox}>
               <input
                 type="number" inputMode="decimal"
+                aria-label="권장 공기압 (psi)"
                 className={styles.dualField}
                 value={recPsi}
                 onChange={e => setRecPsi(e.target.value)}
@@ -295,6 +331,7 @@ function CheckTab() {
             <div className={styles.dualInputBox}>
               <input
                 type="number" inputMode="decimal"
+                aria-label="현재 측정 공기압 (psi)"
                 className={styles.dualField}
                 value={curPsi}
                 onChange={e => setCurPsi(e.target.value)}
@@ -308,23 +345,25 @@ function CheckTab() {
       </div>
 
       {/* 판정 */}
-      <div className={`${styles.statusCard} ${statusClass(result.status)}`}>
+      <div className={`${styles.statusCard} ${statusClass(result.status)}`} role="status" aria-live="polite">
         <div className={styles.statusTitle}>{result.title}</div>
         <div className={styles.statusDesc}>{result.desc}</div>
-        <div className={styles.statusDiff}>
-          <div className={styles.statusDiffItem}>
-            <span className={styles.statusDiffLabel}>차이 (psi)</span>
-            <span className={styles.statusDiffValue}>{formatSigned(diffPsi, 1)}</span>
+        {hasInput && (
+          <div className={styles.statusDiff}>
+            <div className={styles.statusDiffItem}>
+              <span className={styles.statusDiffLabel}>차이 (psi)</span>
+              <span className={styles.statusDiffValue}>{formatSigned(diffPsi, 1)}</span>
+            </div>
+            <div className={styles.statusDiffItem}>
+              <span className={styles.statusDiffLabel}>차이 (kPa)</span>
+              <span className={styles.statusDiffValue}>{formatSigned(diffKpaSigned, 1)}</span>
+            </div>
+            <div className={styles.statusDiffItem}>
+              <span className={styles.statusDiffLabel}>차이 (bar)</span>
+              <span className={styles.statusDiffValue}>{formatSigned(diffBarSigned, 2)}</span>
+            </div>
           </div>
-          <div className={styles.statusDiffItem}>
-            <span className={styles.statusDiffLabel}>차이 (kPa)</span>
-            <span className={styles.statusDiffValue}>{formatSigned(diffKpaSigned, 1)}</span>
-          </div>
-          <div className={styles.statusDiffItem}>
-            <span className={styles.statusDiffLabel}>차이 (bar)</span>
-            <span className={styles.statusDiffValue}>{formatSigned(diffBarSigned, 2)}</span>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* 영향 안내 */}
@@ -334,7 +373,7 @@ function CheckTab() {
           <div className={styles.impactCell}>
             <p className={`${styles.impactTitle} ${styles.impactTitleLow}`}>🔻 부족 시</p>
             <ul className={styles.impactList}>
-              <li>• 연비 저하 (10% 부족 시 <strong>약 3% 감소</strong>)</li>
+              <li>• 연비 저하 (10% 부족 시 <strong>최대 약 3%</strong> — 자료별 0.7~3% 추정)</li>
               <li>• <strong>타이어 측면 마모</strong> 가속</li>
               <li>• 펑크·블로아웃(파열) 위험 증가</li>
               <li>• 핸들 무거움, 코너링 불안정</li>
@@ -403,10 +442,10 @@ function CheckTab() {
       <div className={styles.seasonBox}>
         <p className={styles.seasonTitle}>냉간·온간 & 계절별 보정 가이드</p>
         <ul className={styles.seasonList}>
-          <li>• 측정은 <strong>주행 전 “냉간(cold)” 상태</strong>에서 — 주행 후에는 마찰열로 <strong>+3~4 psi</strong> 더 높게 측정됩니다(2~3시간 주차 후 권장).</li>
+          <li>• 측정은 <strong>주행 전 “냉간(cold)” 상태</strong>에서 — 주행 후에는 마찰열로 <strong>+3~5 psi</strong> 더 높게 측정됩니다(2~3시간 주차 후 권장).</li>
           <li>• <strong>기온 10°C 변화 시 공기압 약 1~2 psi(≈ 7~14 kPa) 변동</strong></li>
-          <li>• <strong>겨울 (기온 ↓ → 공기압 ↓)</strong>: 여름→겨울(예 30°C→0°C) 약 3 psi 자연 감소 → 보충 필요</li>
-          <li>• <strong>여름 (기온 ↑ → 공기압 ↑)</strong>: 겨울→여름(예 0°C→30°C) 약 3 psi 자연 증가</li>
+          <li>• <strong>겨울 (기온 ↓ → 공기압 ↓)</strong>: 여름→겨울(예 30°C→0°C) 약 3~5 psi 자연 감소 → 보충 필요</li>
+          <li>• <strong>여름 (기온 ↑ → 공기압 ↑)</strong>: 겨울→여름(예 0°C→30°C) 약 3~5 psi 자연 증가</li>
           <li>• 한 달에 1~2번 정기 점검 권장 (자연 누설로 월 1~2 psi 감소)</li>
         </ul>
       </div>
@@ -415,7 +454,7 @@ function CheckTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>TPMS 경고등 점등 기준</span>
         <ul className={styles.seasonList}>
-          <li>• TPMS(타이어 공기압 경고장치)는 보통 <strong>권장값의 약 25% 이하(≈ −25%)</strong>로 떨어지면 점등됩니다.</li>
+          <li>• TPMS(타이어 공기압 경고장치)는 보통 <strong>권장값보다 약 25% 낮아지면(= 권장값의 약 75% 수준)</strong> 점등됩니다.</li>
           <li>• 예: 권장 33 psi → 약 <strong>25 psi</strong> 부근에서 경고등 ON</li>
           <li>• 경고등이 켜지면 안전한 곳에 정차 후 즉시 공기압 점검·보충</li>
           <li>• 보충해도 다시 켜지면 <strong>펑크·휠 림 손상·센서 고장</strong> 의심 → 정비소 점검</li>
@@ -432,7 +471,9 @@ function CheckTab() {
 interface TireSize { width: number; aspect: number; wheel: number }
 
 function parseTireSize(input: string): TireSize | null {
-  const m = input.replace(/\s/g, '').toUpperCase().match(/^(\d{3})\/(\d{2})Z?R?(\d{2}(?:\.\d)?)$/)
+  // 사이드월 실표기 허용: P/LT 접두, ZR, C(상용), 하중지수(91·91/89)·속도기호·XL 접미 — 예: P205/55R16 91V
+  const m = input.replace(/\s/g, '').toUpperCase()
+    .match(/^(?:P|LT)?(\d{3})\/(\d{2})Z?R?(\d{2}(?:\.\d)?)C?(?:\d{2,3}(?:\/\d{2,3})?[A-Z]{0,3}|[A-Z]{1,3})?$/)
   if (!m) return null
   const width = parseInt(m[1], 10)
   const aspect = parseInt(m[2], 10)
@@ -490,6 +531,7 @@ function SizeTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>타이어 규격 입력 (예: 205/55R16)</span>
         <input
+          aria-label="타이어 규격 입력"
           className={`${styles.input} ${base ? styles.inputFilled : ''}`}
           value={input}
           onChange={e => setInput(e.target.value)}
@@ -497,7 +539,7 @@ function SizeTab() {
         />
         <div className={styles.presetRow}>
           {['205/55R16', '225/45R17', '235/55R18', '195/65R15', '245/40R19'].map(p => (
-            <button key={p} className={styles.presetBtn} onClick={() => setInput(p)}>{p}</button>
+            <button key={p} type="button" className={styles.presetBtn} onClick={() => setInput(p)}>{p}</button>
           ))}
         </div>
       </div>
@@ -527,14 +569,20 @@ function SizeTab() {
           <div className={styles.card}>
             <span className={styles.cardLabel}>교체 사이즈 비교 (외경 차이 → 속도계 오차)</span>
             <input
+              aria-label="비교할 타이어 규격"
               className={`${styles.input} ${cmp ? styles.inputFilled : ''}`}
               value={compare}
               onChange={e => setCompare(e.target.value)}
-              placeholder="비교할 사이즈 (예: 215/50R17)"
+              placeholder="비교할 사이즈 (예: 225/45R17)"
             />
+            {compare.trim() !== '' && !cmp && (
+              <p style={{ fontSize: 12, color: 'var(--warning)', marginTop: 8, lineHeight: 1.6 }}>
+                ⚠️ 형식을 인식하지 못했습니다 — 예: <strong>225/45R17</strong> (P·LT 접두나 91V 같은 하중지수·속도기호는 자동 인식됩니다)
+              </p>
+            )}
             {cmp && (
               <>
-                <div className={`${styles.statusCard} ${Math.abs(diffPct) <= 3 ? styles.statusOk : styles.statusWarn}`} style={{ marginTop: 12 }}>
+                <div className={`${styles.statusCard} ${Math.abs(diffPct) <= 3 ? styles.statusOk : styles.statusWarn}`} style={{ marginTop: 12 }} role="status" aria-live="polite">
                   <div className={styles.statusTitle}>
                     외경 차이 {formatSigned(diffPct, 1)}% {Math.abs(diffPct) <= 3 ? '✅ 호환 권장 범위' : '⚠️ 3% 초과 — 비권장'}
                   </div>
@@ -618,7 +666,7 @@ function SizeTab() {
         </>
       ) : (
         <div className={styles.card}>
-          <p style={{ fontSize: 13, color: 'var(--muted)' }}>형식에 맞게 입력하세요 — 예: <strong>205/55R16</strong> (단면폭/편평비R휠인치)</p>
+          <p style={{ fontSize: 13, color: 'var(--muted)' }}>형식에 맞게 입력하세요 — 예: <strong>205/55R16</strong> (단면폭/편평비R휠인치). P205/55R16 91V처럼 접두·하중지수·속도기호가 붙어도 인식됩니다.</p>
         </div>
       )}
     </>
@@ -629,6 +677,7 @@ function SizeTab() {
 // 탭 4 — 교체·마모 (트레드 / 주행·연식 / DOT)
 // ──────────────────────────────────────
 function treadJudge(mm: number): { status: Status; title: string; desc: string } {
+  if (mm <= 0) return { status: 'empty', title: '트레드 깊이를 입력하세요', desc: '0보다 큰 깊이(mm)를 입력하면 마모 상태를 판정해 드립니다.' }
   if (mm >= 7) return { status: 'ok', title: '✅ 신품 수준', desc: '트레드가 충분합니다. 정기 점검만 유지하세요.' }
   if (mm >= 4) return { status: 'ok', title: '🟢 양호', desc: '아직 여유가 있습니다. 4mm 이하부터 빗길 제동력이 떨어지기 시작합니다.' }
   if (mm > 1.6) return { status: 'warnLow', title: '🔶 교체 준비', desc: '3mm 부근부터 교체를 준비하세요. 빗길 수막현상 위험이 커집니다.' }
@@ -641,18 +690,23 @@ function WearTab() {
   const [years, setYears] = useState('4')
   const [dot, setDot] = useState('2419')
 
-  const treadMm = parseFloat(tread) || 0
+  const treadMm = Math.max(0, parseFloat(tread) || 0)
   const tj = treadJudge(treadMm)
-  const kmN = parseFloat(km) || 0
-  const yrN = parseFloat(years) || 0
-  const nowYear = new Date().getFullYear()
+  const kmN = Math.max(0, parseFloat(km) || 0)
+  const yrN = Math.max(0, parseFloat(years) || 0)
+  const now = new Date()
+  const nowYear = now.getFullYear()
+  // 올해 경과 주차(대략) — 미래 주차 오입력 판별용, ±1주 여유
+  const nowWeek = Math.min(53, Math.ceil(((now.getTime() - new Date(nowYear, 0, 1).getTime()) / 86400000 + 1) / 7))
 
   const dotDigits = dot.replace(/\D/g, '').slice(-4)
   let dotInfo: { week: number; year: number; age: number } | null = null
   if (dotDigits.length === 4) {
     const week = parseInt(dotDigits.slice(0, 2), 10)
     const year = 2000 + parseInt(dotDigits.slice(2), 10)
-    if (week >= 1 && week <= 53) dotInfo = { week, year, age: Math.max(0, nowYear - year) }
+    // 미래 연도·올해의 미래 주차(오입력)는 판정하지 않음
+    const isFuture = year > nowYear || (year === nowYear && week > nowWeek + 1)
+    if (week >= 1 && week <= 53 && !isFuture) dotInfo = { week, year, age: nowYear - year }
   }
 
   const kmStatus = kmN >= 50000 ? '교체 권장 (5만 km 초과)' : kmN >= 30000 ? '점검 강화' : '양호'
@@ -663,18 +717,18 @@ function WearTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>트레드(홈) 깊이</span>
         <div className={styles.dualInputBox}>
-          <input type="number" inputMode="decimal" className={styles.dualField} value={tread} onChange={e => setTread(e.target.value)} step="0.5" placeholder="5" />
+          <input type="number" inputMode="decimal" aria-label="트레드 깊이 (mm)" className={styles.dualField} value={tread} onChange={e => setTread(e.target.value)} step="0.5" placeholder="5" />
           <span className={styles.dualUnit}>mm</span>
         </div>
       </div>
-      <div className={`${styles.statusCard} ${statusClass(tj.status)}`}>
+      <div className={`${styles.statusCard} ${statusClass(tj.status)}`} role="status" aria-live="polite">
         <div className={styles.statusTitle}>{tj.title}</div>
         <div className={styles.statusDesc}>{tj.desc}</div>
       </div>
       <div className={styles.seasonBox}>
         <p className={styles.seasonTitle}>트레드 깊이 간단 측정 (한국 100원 동전)</p>
         <ul className={styles.seasonList}>
-          <li>• 100원 동전을 홈에 거꾸로 꽂아 <strong>이순신 장군의 상투(감투)</strong>가 보이면 약 2.5mm 이하 — 교체 시기입니다.</li>
+          <li>• 100원 동전을 홈에 거꾸로 꽂아 <strong>이순신 장군의 감투(관모)</strong>가 보이면 트레드가 마모한계(1.6mm)에 가까워진 것 — 교체를 준비하세요.</li>
           <li>• 타이어 홈 안의 <strong>△ 마모 한계 표시(1.6mm)</strong>가 트레드 면과 같은 높이가 되면 즉시 교체.</li>
           <li>• 법정 마모한계 <strong>1.6mm</strong>(승용). 빗길 안전은 <strong>3mm</strong>부터 챙기는 것이 좋습니다.</li>
         </ul>
@@ -686,14 +740,14 @@ function WearTab() {
           <div className={styles.dualCell}>
             <div className={styles.dualLabel}>장착 후 주행거리</div>
             <div className={styles.dualInputBox}>
-              <input type="number" inputMode="decimal" className={styles.dualField} value={km} onChange={e => setKm(e.target.value)} step="1000" />
+              <input type="number" inputMode="decimal" aria-label="장착 후 주행거리 (km)" className={styles.dualField} value={km} onChange={e => setKm(e.target.value)} step="1000" />
               <span className={styles.dualUnit}>km</span>
             </div>
           </div>
           <div className={styles.dualCell}>
             <div className={styles.dualLabel}>사용 연수</div>
             <div className={styles.dualInputBox}>
-              <input type="number" inputMode="decimal" className={styles.dualField} value={years} onChange={e => setYears(e.target.value)} step="1" />
+              <input type="number" inputMode="decimal" aria-label="사용 연수 (년)" className={styles.dualField} value={years} onChange={e => setYears(e.target.value)} step="1" />
               <span className={styles.dualUnit}>년</span>
             </div>
           </div>
@@ -707,7 +761,7 @@ function WearTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>제조주차(DOT) 해석 — 끝 4자리</span>
         <div className={styles.dualInputBox}>
-          <input className={styles.dualField} value={dot} onChange={e => setDot(e.target.value)} placeholder="2419" maxLength={4} />
+          <input aria-label="DOT 제조주차 끝 4자리" className={styles.dualField} value={dot} onChange={e => setDot(e.target.value)} placeholder="2419" maxLength={4} />
           <span className={styles.dualUnit}>DOT</span>
         </div>
         {dotInfo ? (
