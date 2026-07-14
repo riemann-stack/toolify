@@ -15,29 +15,112 @@ function calcMah(wh: number, voltage: number): number {
   return (wh / voltage) * 1000
 }
 
-type FlightStatus = 'safe' | 'warning' | 'banned'
+type FlightStatus = 'empty' | 'safe' | 'warning' | 'banned'
 
-function flightStatus(wh: number): { status: FlightStatus; label: string; desc: string } {
+// 용량(Wh) 기준 반입 판정 — 100Wh·160Wh 임계값은 ICAO/IATA 공통(전 기준 동일)
+function flightStatus(wh: number): { status: FlightStatus; label: string; base: string } {
+  if (wh <= 0) {
+    return {
+      status: 'empty',
+      label: '용량을 입력하세요',
+      base: '0보다 큰 배터리 용량을 입력하면 기내 반입 가능 여부를 판정합니다.',
+    }
+  }
   if (wh <= 100) {
     return {
       status: 'safe',
       label: '✅ 휴대 반입 가능',
-      desc: '기내 휴대 반입 OK — 위탁 수하물(체크인)은 절대 금지. 한국 출발·도착 편은 2026-04-20부터 보조배터리 1인당 최대 2개까지입니다.',
+      base: '기내 휴대 반입 OK — 위탁 수하물(체크인)은 절대 금지.',
     }
   }
   if (wh <= 160) {
     return {
       status: 'warning',
       label: '🔶 사전 승인 필요',
-      desc: '항공사 사전 승인 필요. 2026-04-20부터 보조배터리는 승인을 받아도 1인당 최대 2개까지입니다. 출발 전 항공사에 직접 문의하세요.',
+      base: '항공사 사전 승인을 받아야 반입할 수 있습니다.',
     }
   }
   return {
     status: 'banned',
     label: '❌ 반입 불가',
-    desc: '일반 항공기 반입 불가. 위탁·휴대 모두 금지이며, 산업·의료용은 별도 신청이 필요합니다.',
+    base: '일반 항공기 반입 불가 — 위탁·휴대 모두 금지. 산업·의료용은 별도 신청이 필요합니다.',
   }
 }
+
+// ──────────────────────────────────────
+// 적용 기준(국가·항공사) — 용량 판정은 공통, 수량·기내 규정만 기준별로 다름
+// ──────────────────────────────────────
+type StdId = 'kr' | 'us' | 'intl'
+
+interface FlightStandard {
+  id: StdId
+  label: string   // 버튼 라벨
+  region: string  // 카드에 표시할 전체 명칭
+  qty: (status: FlightStatus) => string  // 판정별 수량·기내 규정 한 줄
+  rules: string[]
+  source: { label: string; href: string }
+}
+
+const STANDARDS: FlightStandard[] = [
+  {
+    id: 'kr',
+    label: '🇰🇷 한국·ICAO',
+    region: '한국 출발·도착 · ICAO 2026 신기준',
+    qty: (s) =>
+      s === 'safe' || s === 'warning'
+        ? '용량과 무관하게 1인당 최대 2개까지만 휴대 반입 (100Wh 이하도 개수에 포함). 기내 충전·사용 전면 금지.'
+        : '',
+    rules: [
+      '보조배터리 1인당 최대 2개 — 용량 무관, 100Wh 이하도 개수 포함 (2026-04-20 시행)',
+      '100Wh 이하: 항공사 승인 없이 휴대 / 100~160Wh: 사전 승인 (2개 한도 내)',
+      '160Wh 초과: 일반 항공기 반입 불가',
+      '기내 충전·사용 전면 금지 — 보조배터리 자체 충전·기기 충전 모두',
+      '기내 선반 보관 금지 — 몸에 소지하거나 좌석 앞주머니',
+      '위탁 수하물(체크인) 절대 금지 — 기내 휴대만 허용',
+    ],
+    source: { label: '국토교통부', href: 'https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374' },
+  },
+  {
+    id: 'us',
+    label: '🇺🇸 미국 (FAA·항공사)',
+    region: '미국 출발·도착 · FAA + 주요 항공사',
+    qty: (s) =>
+      s === 'safe'
+        ? 'FAA 연방 규정상 개수 제한 없음(개인용). 단 아메리칸·델타는 1인당 2개, 사우스웨스트는 1개로 제한.'
+        : s === 'warning'
+          ? '항공사 승인 필요 · 1인당 최대 2개.'
+          : '',
+    rules: [
+      '100Wh 이하: FAA 연방 개수 제한 없음(개인용)',
+      '아메리칸·델타: 1인당 2개 (100Wh 이하, 2026-05-01~) · 사우스웨스트: 1개',
+      '100~160Wh: 항공사 승인 + 1인당 최대 2개',
+      '160Wh 초과: 반입 불가',
+      '기내 충전 금지는 FAA 연방 규정이 아닌 항공사 정책 — 선반 보관 금지·사용 시 노출 등',
+      '위탁 수하물 절대 금지 — 기내 휴대만 허용',
+    ],
+    source: { label: 'FAA PackSafe', href: 'https://www.faa.gov/hazmat/packsafe/airline-passengers-and-batteries' },
+  },
+  {
+    id: 'intl',
+    label: '🌐 국제 기본',
+    region: '대부분 국가 · IATA/ICAO 기본',
+    qty: (s) =>
+      s === 'safe'
+        ? '개인용은 수량 제한 없음(상식적 범위). ICAO 신기준 시행국은 1인당 2개·기내 충전 금지가 적용될 수 있음.'
+        : s === 'warning'
+          ? '항공사 승인 필요 · 1인당 최대 2개.'
+          : '',
+    rules: [
+      '100Wh 이하: 항공사 승인 없이 휴대 (개인용 수량 제한 없음)',
+      '100~160Wh: 항공사 사전 승인 + 1인당 최대 2개',
+      '160Wh 초과: 반입 불가',
+      'ICAO 신기준(2026-03-27 채택): 1인당 2개·기내 충전 금지가 국가·항공사별로 도입 중',
+      '단자 절연 필수 · 파손·팽창 배터리는 반입 거부',
+      '위탁 수하물 절대 금지 — 기내 휴대만 허용',
+    ],
+    source: { label: 'IATA 리튬배터리 안내', href: 'https://www.iata.org/en/youandiata/travelers/batteries/' },
+  },
+]
 
 function formatNumber(n: number): string {
   if (!isFinite(n)) return '0'
@@ -74,9 +157,12 @@ export default function BatteryClient() {
   const [unit, setUnit] = useState<CapUnit>('mAh')
   const [voltage, setVoltage] = useState<number>(3.7)
   const [customV, setCustomV] = useState<string>('')
+  const [stdId, setStdId] = useState<StdId>('kr')
   const [copied, setCopied] = useState<string | null>(null)
 
-  const numValue = parseFloat(value) || 0
+  const std = STANDARDS.find(s => s.id === stdId) ?? STANDARDS[0]
+
+  const numValue = Math.max(0, parseFloat(value) || 0)
   const numCustom = parseFloat(customV)
   const isCustom = customV !== '' && !isNaN(numCustom) && numCustom > 0
   const effectiveV = isCustom ? numCustom : voltage
@@ -156,6 +242,7 @@ export default function BatteryClient() {
         <div className={styles.inputRow}>
           <input
             type="number" inputMode="decimal"
+            aria-label="용량 입력"
             className={`${styles.input} ${value && numValue > 0 ? styles.inputFilled : ''}`}
             value={value}
             onChange={e => setValue(e.target.value)}
@@ -164,6 +251,7 @@ export default function BatteryClient() {
           />
           <select
             className={styles.unitSelect}
+            aria-label="용량 단위"
             value={unit}
             onChange={e => setUnit(e.target.value as CapUnit)}
           >
@@ -174,7 +262,7 @@ export default function BatteryClient() {
         </div>
         <div className={styles.presetRow}>
           {MAH_PRESETS.map(m => (
-            <button key={m} className={styles.presetBtn} onClick={() => { setValue(m.toString()); setUnit('mAh') }}>
+            <button key={m} type="button" className={styles.presetBtn} onClick={() => { setValue(m.toString()); setUnit('mAh') }}>
               {m.toLocaleString()}mAh
             </button>
           ))}
@@ -188,6 +276,8 @@ export default function BatteryClient() {
           {VOLTAGE_PRESETS.map(p => (
             <button
               key={p.v}
+              type="button"
+              aria-pressed={!isCustom && voltage === p.v}
               className={`${styles.voltBtn} ${!isCustom && voltage === p.v ? styles.voltBtnActive : ''}`}
               onClick={() => { setVoltage(p.v); setCustomV('') }}
             >
@@ -198,6 +288,7 @@ export default function BatteryClient() {
         <div className={styles.voltCustomRow}>
           <input
             type="number" inputMode="decimal"
+            aria-label="직접 전압 입력(V)"
             className={styles.voltCustomInput}
             value={customV}
             onChange={e => setCustomV(e.target.value)}
@@ -206,18 +297,50 @@ export default function BatteryClient() {
           />
           <span className={styles.voltCustomLabel}>볼트(V)</span>
         </div>
+        {customV.trim() !== '' && !isCustom && (
+          <p className={styles.voltWarn}>⚠️ 0보다 큰 전압을 입력하세요 — 지금은 {formatNumber(voltage)}V(선택된 프리셋)로 계산 중입니다.</p>
+        )}
+      </div>
+
+      {/* 적용 기준(국가·항공사) 선택 — 판정 수량·기내 규정이 기준별로 달라짐 */}
+      <div className={styles.card}>
+        <span className={styles.cardLabel}>
+          적용 기준 (국가·항공사)
+          <span className={styles.cardLabelHint}>기준에 따라 수량·기내 규정이 달라져요</span>
+        </span>
+        <div className={styles.stdGrid} role="group" aria-label="적용 기준 선택">
+          {STANDARDS.map(s => (
+            <button
+              key={s.id}
+              type="button"
+              aria-pressed={stdId === s.id}
+              className={`${styles.stdBtn} ${stdId === s.id ? styles.stdBtnActive : ''}`}
+              onClick={() => setStdId(s.id)}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* 비행기 반입 판정 — 핵심 결과 */}
       <div
+        role="status"
+        aria-live="polite"
         className={`${styles.flightCard} ${
+          flight.status === 'empty' ? styles.flightEmpty :
           flight.status === 'safe' ? styles.flightSafe :
           flight.status === 'warning' ? styles.flightWarn : styles.flightBanned
         }`}
       >
-        <div className={styles.flightWh}>{formatNumber(result.wh)} Wh</div>
+        {flight.status !== 'empty' && (
+          <div className={styles.flightStdTag}>{std.region} 기준</div>
+        )}
+        <div className={styles.flightWh}>{flight.status === 'empty' ? '—' : `${formatNumber(result.wh)} Wh`}</div>
         <div className={styles.flightTitle}>{flight.label}</div>
-        <div className={styles.flightDesc}>{flight.desc}</div>
+        <div className={styles.flightDesc}>
+          {flight.base}{std.qty(flight.status) ? ' ' + std.qty(flight.status) : ''}
+        </div>
       </div>
 
       {/* 변환값 — 컴팩트 그리드 (탭하면 복사) */}
@@ -228,7 +351,7 @@ export default function BatteryClient() {
         </span>
         <div className={styles.convGrid}>
           {cells.map(c => (
-            <button key={c.key} className={styles.convCell} onClick={() => handleCopy(c.key, c.val)}>
+            <button key={c.key} type="button" className={styles.convCell} onClick={() => handleCopy(c.key, c.val)}>
               <span className={styles.convCellLabel}>{c.label}<small>{c.sub}</small></span>
               <span className={styles.convCellValue}>
                 {copied === c.key ? '✓ 복사됨' : formatNumber(c.val)}
@@ -238,9 +361,9 @@ export default function BatteryClient() {
         </div>
         {altVolts.length > 0 && (
           <div className={styles.altVolts}>
-            <span className={styles.altVoltsLabel}>다른 전압 Wh</span>
+            <span className={styles.altVoltsLabel}>같은 mAh를 다른 전압으로</span>
             {altVolts.map(a => (
-              <button key={a.v} className={styles.altChip} onClick={() => handleCopy(`alt${a.v}`, a.wh)}>
+              <button key={a.v} type="button" className={styles.altChip} onClick={() => handleCopy(`alt${a.v}`, a.wh)}>
                 {formatNumber(a.v)}V&nbsp;·&nbsp;<strong>{copied === `alt${a.v}` ? '✓' : formatNumber(a.wh)}</strong>Wh
               </button>
             ))}
@@ -257,19 +380,20 @@ export default function BatteryClient() {
         </div>
       </div>
 
-      {/* 항공 규정 안내 */}
+      {/* 항공 규정 안내 — 선택된 기준별 */}
       <div className={styles.ruleBox}>
-        <p className={styles.ruleTitle}>국제 항공 규정 (ICAO·IATA 기준, 2026-06 기준)</p>
+        <p className={styles.ruleTitle}>{std.region} — 반입 규정 (2026-06 기준)</p>
         <ul className={styles.ruleList}>
-          <li>• <strong>보조배터리는 1인당 최대 2개</strong> (160Wh 이하) — 2026-04-20 시행 ICAO 국제기준</li>
-          <li>• <strong>100Wh 이하</strong>: 항공사 승인 없이 휴대 반입 가능 (개수는 2개 제한에 포함)</li>
-          <li>• <strong>100~160Wh</strong>: 항공사 사전 승인 필요</li>
-          <li>• <strong>160Wh 초과</strong>: 일반 항공기 반입 불가</li>
-          <li>• <strong>위탁 수하물(체크인) 절대 금지</strong> — 화재 위험으로 인해 모든 보조배터리는 기내 휴대만 허용</li>
-          <li>• <strong>기내 선반 보관 금지</strong> — 몸에 소지하거나 좌석 (앞)주머니에 보관 (2025-03-01부터)</li>
-          <li>• <strong>기내 충전·사용 전면 금지</strong> — 보조배터리 자체 충전은 물론 다른 기기 충전도 금지 (대한항공·아시아나 등 국내 5개사는 2026-01-26부터)</li>
+          {std.rules.map((r, i) => (
+            <li key={i}>• {r}</li>
+          ))}
           <li>• 단자가 금속에 닿지 않도록 절연 테이프·지퍼백·전용 파우치로 1개씩 보호</li>
         </ul>
+        <p className={styles.ruleSource}>
+          출처:{' '}
+          <a href={std.source.href} target="_blank" rel="noopener noreferrer">{std.source.label}</a>
+          {' '}· 정책은 수시로 변경되니 출발 전 항공사 공식 규정을 확인하세요.
+        </p>
       </div>
 
       {/* 자주 쓰는 보조배터리 Wh 참조표 */}

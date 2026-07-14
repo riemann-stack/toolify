@@ -9,8 +9,8 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/unit/battery',
   title: '배터리 용량 변환기 mAh ↔ Wh — 비행기 반입 가능 체크',
-  description: 'mAh·Wh·Ah 변환 + 비행기 반입 가능 여부 자동 판정과 보조배터리·노트북 배터리 가이드.',
-  keywords: ['mAh Wh 변환', '보조배터리 비행기', 'mAh 계산기', '배터리용량변환', '100Wh 보조배터리', '비행기 보조배터리 반입'],
+  description: 'mAh·Wh·Ah 변환 + 비행기 반입 가능 여부 자동 판정. 한국·ICAO / 미국(FAA) / 국제 기준을 선택하면 수량·기내 규정이 기준에 맞게 바뀝니다.',
+  keywords: ['mAh Wh 변환', '보조배터리 비행기', 'mAh 계산기', '배터리용량변환', '100Wh 보조배터리', '비행기 보조배터리 반입', '미국 보조배터리 규정', 'FAA 보조배터리'],
 })
 
 const FAQ_LD = [
@@ -41,6 +41,10 @@ const FAQ_LD = [
               {
                 q: '충전 케이블·어댑터도 함께 반입할 수 있나요?',
                 a: '<strong>네, 자유롭게 반입 가능</strong>합니다. USB 케이블, 충전 어댑터, 멀티탭 등은 보조배터리와 함께 휴대 또는 위탁 모두 가능합니다. 다만 <strong>보조배터리 본체</strong>만은 반드시 기내 휴대해야 합니다.',
+              },
+              {
+                q: '출발 국가·항공사에 따라 규정이 다른가요?',
+                a: '용량 판정(100Wh 이하 휴대 / 100~160Wh 승인 / 160Wh 초과 불가)은 ICAO·IATA 공통이라 어디서나 같지만, <strong>수량과 기내 사용 규정은 기준마다 다릅니다.</strong> 위 계산기의 <strong>‘적용 기준(국가·항공사)’에서 한국·ICAO / 미국(FAA·항공사) / 국제 기본</strong>을 선택하면 판정 문구가 그에 맞게 바뀝니다. 예를 들어 <strong>한국·ICAO 신기준(2026-04-20)</strong>은 용량과 무관하게 1인당 2개·기내 충전 전면 금지지만, <strong>미국은 FAA 연방 규정상 100Wh 이하 개수 제한이 없고</strong> 아메리칸·델타(1인 2개)·사우스웨스트(1개)처럼 항공사별 정책으로 제한됩니다. 출발 전 해당 항공사 공식 규정을 확인하세요.',
               },
             ]
 
@@ -124,7 +128,7 @@ export default function BatteryPage() {
             인기 보조배터리 모델별 Wh 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            대표 브랜드의 보조배터리를 3.7V 기준으로 환산한 표입니다. 실제 제품 표기 Wh가 우선이며, 일부 모델은 다중 셀 구조로 표기 Wh가 다를 수 있습니다.
+            대표 브랜드의 보조배터리를 3.7V 기준으로 환산한 표입니다. 실제 제품 표기 Wh가 우선이며, 제조사 공식 Wh는 셀 정격전압(대개 3.6~3.65V)을 쓰기 때문에 3.7V 환산치보다 약간 낮을 수 있습니다(예: Anker 737 공식 86.4Wh). 반입 판정(100Wh·160Wh 경계)에는 영향이 없습니다. 맨 아래 EcoFlow RIVER 2는 <strong style={{ color: 'var(--text)' }}>보조배터리가 아니라 포터블 파워스테이션</strong>(LiFePO4·AC 콘센트 내장)으로, 별개 제품군이며 대부분 160Wh를 초과해 기내 반입이 불가합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
@@ -145,7 +149,7 @@ export default function BatteryPage() {
                   { n: 'RAVPower 26800',          m: '26,800', w: '99.2',  s: '✅', c: '#059669' },
                   { n: 'Anker 737 (PowerCore 24K)',m: '24,000', w: '88.8',  s: '✅', c: '#059669' },
                   { n: 'Zendure SuperTank',       m: '27,000', w: '99.9',  s: '✅ 한계', c: '#059669' },
-                  { n: 'EcoFlow RIVER 2 mini',    m: '~70,000',w: '256',   s: '❌', c: '#DC2626' },
+                  { n: 'EcoFlow RIVER 2 (파워스테이션)', m: '—', w: '256',   s: '❌', c: '#DC2626' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
@@ -191,7 +195,7 @@ export default function BatteryPage() {
             <a href="https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국토교통부 보도자료 (2026-04-08)</a>{' · '}
             <a href="https://m.flyasiana.com/C/KR/KO/customer/notice/detail?id=CM202604100002528761" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>아시아나항공 공지 (2026-04-17)</a>{' · '}
             <a href="https://news.koreanair.com/%ed%95%9c%ec%a7%84%ea%b7%b8%eb%a3%b9-%ec%86%8c%ec%86%8d-5%ea%b0%9c-%ed%95%ad%ea%b3%b5%ec%82%ac-%ec%98%a4%eb%8a%94-26%ec%9d%bc%eb%b6%80%ed%84%b0-%eb%b3%b4%ec%a1%b0%eb%b0%b0%ed%84%b0%eb%a6%ac/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>대한항공 뉴스룸 (2026-01-23)</a>
-            {' '}— 해외 항공사(델타·유나이티드·일본항공·싱가포르항공 등)는 ICAO 신기준 적용 시점이 국가·항공사별로 다를 수 있습니다.
+            {' '}— 국내 항공사(대한항공·아시아나) 정책은 공식 공지 기준이며, 해외 항공사(델타·유나이티드·일본항공·싱가포르항공) 카드는 일반 요약이라 적용 시점·세부 규정이 다를 수 있습니다. 특히 미국은 FAA 규정상 100Wh 이하 보조배터리에 연방 개수 제한이 없고(개인용) 100~160Wh만 1인당 2개이므로, 각 항공사 공식 페이지에서 최종 확인하세요.
           </p>
         </div>
 
