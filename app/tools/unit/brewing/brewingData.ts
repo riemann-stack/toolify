@@ -52,6 +52,8 @@ export function sgToBaume(sg: number): number {
 }
 export function baumeToSg(be: number): number {
   if (be <= 0) return 1
+  // be ≥ 145면 분모가 0 이하가 되어 SG가 발산/음수(쓰레기값). 물리적으로 불가능한 영역이라 NaN.
+  if (be >= 145) return NaN
   return 145 / (145 - be)
 }
 
@@ -125,7 +127,7 @@ export const ukProofToAbv = (uk: number) => uk * 0.5715
 export interface CategoryGuide {
   emoji: string
   name: string
-  ogRangeSG: [number, number]    // 발효 전 (또는 측정 시) SG 범위
+  ogRangeSG?: [number, number]   // 발효 전 (또는 측정 시) SG 범위 — SG로 규격화하지 않는 식품(김치 등)은 생략
   fgRangeSG?: [number, number]   // 발효 후 SG (있을 때)
   brix?: [number, number]
   abv?: [number, number]
@@ -152,8 +154,8 @@ export const CATEGORY_GUIDES: CategoryGuide[] = [
   },
   {
     emoji: '🍯', name: '잼·시럽',
-    ogRangeSG: [1.300, 1.355], brix: [65, 72],
-    note: '잼은 65°Bx↑이 보존성 기준점. 70°Bx↑은 결정화 위험. 굴절계 측정 필수',
+    ogRangeSG: [1.319, 1.363], brix: [65, 72],
+    note: '잼은 65°Bx↑이 보존성 기준점. 70°Bx↑은 결정화 위험. 굴절계 측정 필수(Brix↔SG 다항식 검증범위 밖이라 SG는 참고값)',
   },
   {
     emoji: '🧀', name: '치즈 (커드)',
@@ -162,8 +164,8 @@ export const CATEGORY_GUIDES: CategoryGuide[] = [
   },
   {
     emoji: '🥬', name: '김치 (한국 발효)',
-    ogRangeSG: [1.020, 1.050], ph: [4.0, 4.5], ta: '0.6~0.8%',
-    note: '갓 담근 김치 pH 5.5~6.0 → 익으면 4.0~4.5 / 군내 4.0 미만은 과발효',
+    ph: [4.0, 4.5], ta: '0.6~0.8%',
+    note: '김치는 SG(비중)가 아니라 pH·산도로 숙성을 판정합니다. 갓 담근 김치 pH 5.5~6.0 → 익으면 4.0~4.5(최적 ~4.2) / 군내 4.0 미만은 과발효',
   },
 ]
 

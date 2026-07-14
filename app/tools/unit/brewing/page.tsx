@@ -42,7 +42,7 @@ const FAQ_LD = [
               },
               {
                 q: '와인 머스트 Brix 23은 ABV 몇 %로 발효되나요?',
-                a: '대략 <strong>12.5~14% ABV</strong>로 발효됩니다(0.55~0.60 배수). 정확한 값은 효모 종류(드라이일수록 낮음)·발효 온도(높을수록 잔당 ↓ ABV ↑)·당 잔량(스위트로 만들지 드라이로 만들지)에 따라 ±1% 차이. 일반 가이드: 화이트는 22 Brix 부근, 레드는 24~26 Brix, 디저트 와인은 28~30 Brix로 시작합니다.',
+                a: '대략 <strong>12.7~13.8% ABV</strong>로 발효됩니다(23 × 0.55~0.60 배수, 계산기 기본값 기준). 정확한 값은 효모 종류(드라이일수록 낮음)·발효 온도(높을수록 잔당 ↓ ABV ↑)·당 잔량(스위트로 만들지 드라이로 만들지)에 따라 ±1% 차이. 일반 가이드: 화이트는 22 Brix 부근, 레드는 24~26 Brix, 디저트 와인은 28~30 Brix로 시작합니다.',
               },
               {
                 q: 'pH와 TA(산도)는 왜 같이 측정하나요?',
@@ -122,19 +122,19 @@ export default function BrewingPage() {
                 t: '단순 공식 (저알코올 ≤ 12%)',
                 d: '<code style="color: var(--text)">ABV% = (OG − FG) × 131.25</code>',
                 desc: '비어·사이다·일반 와인에 정확. OG가 1.090 이하 / FG 1.020 이하 범위에서 ±0.3% 오차.',
-                c: '#059669',
+                c: 'var(--success)',
               },
               {
                 t: '보정 공식 (고알코올 12%↑)',
                 d: '<code style="color: var(--text)">ABV% = (76.08 × (OG−FG) / (1.775−OG)) × (FG / 0.794)</code>',
                 desc: '디저트 와인·고알코올 IPA·미드(꿀술)에 권장. Cutaia et al. 2009 공식 — 알코올 밀도 보정 포함.',
-                c: '#0891B2',
+                c: 'var(--cat-health)',
               },
               {
                 t: '와인 머스트 Brix 기반 예측',
                 d: '<code style="color: var(--text)">ABV% ≈ Brix × 0.55 ~ 0.60</code>',
                 desc: '발효 전 머스트 Brix만 알 때 대략 예측. 효모 종류·잔당·온도에 따라 ±1% 차이.',
-                c: '#9333EA',
+                c: 'var(--cat-art)',
               },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${m.c}`, borderRadius: 10, padding: '14px 18px' }}>
@@ -151,10 +151,10 @@ export default function BrewingPage() {
           <h2 style={sectionTitle}>측정 도구 — 비중계 vs 굴절계</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '🌡️ 비중계 (Hydrometer)', d: 'SG 직접', desc: '시료 200ml+ 필요. 알코올 있어도 정확. 시간이 다소 걸림. 발효 추적의 표준.', c: '#0891B2' },
-              { t: '💎 굴절계 (Refractometer)', d: 'Brix 직접', desc: '2~3방울이면 됨. 빠름·소량. 단 알코올 있으면 보정식 필요(post-fermentation).', c: '#059669' },
-              { t: '🔬 디지털 비중계', d: 'SG·Brix·Temp', desc: 'Anton Paar Easy Dens 등. 정확도 ±0.0005 SG. 가격 30~50만원.', c: '#9333EA' },
-              { t: '⚗️ pH 미터', d: 'pH·온도', desc: '발효 산도 측정. 저가 ~3만원 / 정밀 10만원+. 보정 솔루션 필수.', c: '#DC2626' },
+              { t: '🌡️ 비중계 (Hydrometer)', d: 'SG 직접', desc: '시료 200ml+ 필요. 알코올 있어도 정확. 시간이 다소 걸림. 발효 추적의 표준.', c: 'var(--cat-health)' },
+              { t: '💎 굴절계 (Refractometer)', d: 'Brix 직접', desc: '2~3방울이면 됨. 빠름·소량. 단 알코올 있으면 보정식 필요(post-fermentation).', c: 'var(--success)' },
+              { t: '🔬 디지털 비중계', d: 'SG·Brix·Temp', desc: 'Anton Paar Easy Dens 등. 정확도 ±0.0005 SG. 가격 30~50만원.', c: 'var(--cat-art)' },
+              { t: '⚗️ pH 미터', d: 'pH·온도', desc: '발효 산도 측정. 저가 ~3만원 / 정밀 10만원+. 보정 솔루션 필수.', c: 'var(--danger)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -219,25 +219,25 @@ export default function BrewingPage() {
                 t: '① 워트 보정계수(WCF 1.04) 적용',
                 d: '<code style="color: var(--text)">12.5 ÷ 1.04 = 12.02 &nbsp;/&nbsp; 6.0 ÷ 1.04 = 5.77</code>',
                 desc: '맥아 워트는 자당 100%가 아니라서 굴절계가 약간 높게 읽음 — 발효 전·후 판독값 모두 1.04로 나눕니다.',
-                c: '#059669',
+                c: 'var(--success)',
               },
               {
                 t: '② OG 환산',
                 d: '<code style="color: var(--text)">12.02 Brix → SG 1.0485</code>',
                 desc: '보정된 발효 전 Brix를 본 도구의 5종 환산으로 SG로 바꿉니다.',
-                c: '#0891B2',
+                c: 'var(--cat-health)',
               },
               {
                 t: '③ 보정 FG — Terrill 선형식',
                 d: '<code style="color: var(--text)">FG = 1.0000 − 0.00085683×12.02 + 0.0034941×5.77 = 1.0099</code>',
                 desc: '1.0000 − 0.0103 + 0.0202 = 1.0099. 알코올이 부풀린 판독값에서 진짜 잔당 수준의 FG를 복원합니다.',
-                c: '#9333EA',
+                c: 'var(--cat-art)',
               },
               {
                 t: '④ ABV 계산',
                 d: '<code style="color: var(--text)">(1.0485 − 1.0099) × 131.25 ≈ 5.1%</code>',
                 desc: '복원한 FG를 단순 공식에 넣으면 완성. 이 값을 본 도구 OG/FG 입력에 넣어 교차 확인할 수 있습니다.',
-                c: '#DC2626',
+                c: 'var(--danger)',
               },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${m.c}`, borderRadius: 10, padding: '14px 18px' }}>
@@ -250,6 +250,22 @@ export default function BrewingPage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, margin: '12px 0 0' }}>
             보정 없이 6.0 Brix를 그대로 당도로 환산하면 FG 1.0236, ABV 3.3%가 되어 실제보다 약 1.8%p 낮게 나옵니다 — 알코올이 굴절률을 끌어올려 잔당이 많아 보이기 때문입니다. Terrill의 3차(큐빅) 식은 같은 예에서 FG 1.0109·ABV 4.9%로 선형식과 0.2%p 이내이며, 병입 시점 판단 같은 최종 확인은 여전히 비중계 SG 직접 측정이 표준입니다.
           </p>
+        </section>
+
+        {/* 5b. 공식·출처 */}
+        <section>
+          <h2 style={sectionTitle}>계산식·표준 출처</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            본 도구의 환산·계산은 아래 공개 표준·논문을 근거로 합니다. 상업 표기·규격 판정은 원문 확인이 우선입니다.
+          </p>
+          <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 2.0 }}>
+            <li><strong style={{ color: 'var(--text)' }}>당도 다항식(SG↔Brix)</strong> — ASBC(American Society of Brewing Chemists) <em>Methods of Analysis</em> / NBS 자당 밀도표. <a href="https://www.asbc.org/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>asbc.org ↗</a></li>
+            <li><strong style={{ color: 'var(--text)' }}>와인 기준(Baumé·Oechsle)</strong> — OIV <em>International Code of Oenological Practices</em>. <a href="https://www.oiv.int/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>oiv.int ↗</a></li>
+            <li><strong style={{ color: 'var(--text)' }}>고알코올 ABV 보정식</strong> — Cutaia, Reid &amp; Speers (2009), <em>Examination of the Relationships between Original, Real and Apparent Extracts, and Alcohol in Pilot Plant and Commercially Produced Beers</em>, Journal of the Institute of Brewing 115(4).</li>
+            <li><strong style={{ color: 'var(--text)' }}>굴절계 FG 보정</strong> — Sean Terrill, <em>Refractometer FG Correlation</em>(선형·큐빅식).</li>
+            <li><strong style={{ color: 'var(--text)' }}>비중계 온도 보정</strong> — Lyons(1992) 물 밀도 다항식.</li>
+            <li><strong style={{ color: 'var(--text)' }}>Proof 표기</strong> — 미국은 현행 규정상 ABV가 기본이고 Proof는 함께 쓸 수 있는 보조 표기(<a href="https://www.ecfr.gov/current/title-27/chapter-I/subchapter-A/part-5/subpart-E/section-5.65" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>27 CFR 5.65 ↗</a>).</li>
+          </ul>
         </section>
 
         {/* 6. FAQ */}
