@@ -46,6 +46,10 @@
   width: 18px; height: 18px; border-radius: var(--radius-pill);
   background: var(--accent-strong); cursor: pointer; border: 3px solid var(--bg2);
 }
+.inputWarn {
+  font-size: 11px; color: var(--warning); font-weight: 600;
+  margin-top: 6px; line-height: 1.5;
+}
 
 /* ── 프리셋 ── */
 .presetRow {
@@ -227,7 +231,7 @@
 .nightWarn { background: rgba(180,83,9,0.10); border-color: rgba(180,83,9,0.30); }
 .nightTitle { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
 .nightWarn .nightTitle { color: var(--warning); }
-.nightBox:not(.nightWarn) .nightTitle { color: var(--success); }
+.nightBox:not(.nightWarn) .nightTitle { color: var(--text); }
 .nightDesc { font-size: 12px; color: var(--muted); line-height: 1.75; }
 .nightDesc strong { color: var(--text); }
 
@@ -243,5 +247,6 @@
 @media (max-width: 600px) {
   .radioRow { grid-template-columns: 1fr; }
   .metricRow { grid-template-columns: 1fr; }
+  .posRow { grid-template-columns: repeat(2, 1fr); }
   .posTable th, .posTable td { padding: 9px 6px; font-size: 11px; }
 }
