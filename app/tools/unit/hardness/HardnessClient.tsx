@@ -5,7 +5,7 @@ import Disclaimer from '@/components/Disclaimer'
 import s from './hardness.module.css'
 import {
   SCALES, KNIFE_EXAMPLES, TOOL_EXAMPLES, MOHS_TABLE, SHORE_NOTE,
-  convertHardness, inRange,
+  convertHardness, inRange, tableRange,
   type Scale,
 } from './hardnessData'
 
@@ -15,7 +15,7 @@ const PRESETS: { label: string; scale: Scale; value: number }[] = [
   { label: 'EDC 폴딩',   scale: 'hrc', value: 60 },
   { label: '프리미엄',   scale: 'hrc', value: 62 },
   { label: 'HSS 드릴',   scale: 'hrc', value: 64 },
-  { label: '저탄소강',   scale: 'hrb', value: 90 },
+  { label: '저탄소강',   scale: 'hrb', value: 80 },
   { label: '주철',       scale: 'hb',  value: 200 },
 ]
 
@@ -29,9 +29,10 @@ export default function HardnessClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.scale) setScale(j.scale)
-      if (typeof j.input === 'string') setInput(j.input)
+      const j = JSON.parse(raw) as { scale?: unknown; input?: unknown }
+      // scale은 반드시 SCALES enum 검증 — 오염된 값이면 inRange/SCALES.find가 전부 무너져 도구가 크래시
+      if (typeof j.scale === 'string' && SCALES.some((sc) => sc.id === j.scale)) setScale(j.scale as Scale)
+      if (typeof j.input === 'string' && j.input.length <= 12) setInput(j.input)
     } catch {}
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
@@ -59,8 +60,12 @@ export default function HardnessClient() {
           { href: '/tools/interior/wire', label: '전선 굵기' },
           { href: '/tools/interior/screw', label: '나사·피스' },
         ]}
+        sources={[
+          { label: 'ASTM E140 — 금속 경도 환산 표준', href: 'https://www.astm.org/e0140-12br19e01.html' },
+          { label: 'ISO 18265 — 경도값의 인장강도 환산', href: 'https://www.iso.org/standard/53810.html' },
+        ]}
       >
-        ASTM E140 강철 환산표 기반 추정치입니다. 시편의 처리 상태(담금질·풀림 등)·표면 상태·측정 압자에 따라 ±5~15% 오차가 발생할 수 있어요. 카바이드·비철금속·고무·플라스틱(Shore)에는 적용되지 않습니다.
+        경도 상호 환산은 ASTM E140(Table 1·2), 인장강도 추정은 ISO 18265 표 A.1(비합금·저합금강) 기반 근사치입니다. ASTM은 재료별 편차가 커서 환산 오차의 신뢰한계를 일반화할 수 없다고 명시하며(합금 성분·열처리·표면 상태에 따라 편차 상이), 스테인리스 칼 강재는 Table 1 명시 재료(탄소강·합금강·공구강) 밖이라 편차가 더 클 수 있어요. 정밀 판정은 해당 스케일 실측이 원칙. 카바이드·비철금속·고무·플라스틱(Shore)에는 적용되지 않습니다.
       </Disclaimer>
 
       {/* 스케일 선택 */}
@@ -69,6 +74,7 @@ export default function HardnessClient() {
         <div className={s.scaleGrid}>
           {SCALES.map((sc) => (
             <button key={sc.id} type="button"
+              aria-pressed={scale === sc.id}
               className={`${s.scaleBtn} ${scale === sc.id ? s.scaleBtnActive : ''}`}
               onClick={() => setScale(sc.id)}>
               <span className={s.scaleName}>{sc.name}</span>
@@ -97,6 +103,7 @@ export default function HardnessClient() {
             className={s.input}
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            aria-label={`${SCALES.find(x => x.id === scale)?.fullName ?? '경도'} 값 입력`}
           />
           <span className={s.unit}>{SCALES.find(x => x.id === scale)?.name}{SCALES.find(x => x.id === scale)?.unit ? ' ' + SCALES.find(x => x.id === scale)?.unit : ''}</span>
         </div>
@@ -118,29 +125,43 @@ export default function HardnessClient() {
       </div>
 
       {/* 결과 카드 */}
-      {result && (
-        <div className={s.resultGrid}>
-          {SCALES.map((sc) => {
-            const v = result[sc.id]
-            const isInput = sc.id === scale
-            const isInScaleRange = inRange(sc.id, v)
-            return (
-              <div key={sc.id} className={`${s.resCard} ${isInput ? s.resCardInput : ''} ${v === null || !isInScaleRange ? s.resCardDim : ''}`}>
-                <div className={s.resHead}>
-                  <span className={s.resName}>{sc.name}</span>
-                  {isInput && <span className={s.inputTag}>입력</span>}
+      {result ? (
+        <div role="status">
+          {result.outOfRange && (
+            <p className={s.warn} style={{ margin: '0 0 8px' }}>
+              ⚠️ 입력값이 환산표 수록 범위({tableRange(scale)?.join('~')} {SCALES.find(x => x.id === scale)?.name})를
+              벗어나 환산할 수 없습니다. 범위 안의 값을 입력하세요.
+            </p>
+          )}
+          <div className={s.resultGrid}>
+            {SCALES.map((sc) => {
+              const v = result[sc.id]
+              const isInput = sc.id === scale
+              const isInScaleRange = inRange(sc.id, v)
+              return (
+                <div key={sc.id} className={`${s.resCard} ${isInput ? s.resCardInput : ''} ${v === null || !isInScaleRange ? s.resCardDim : ''}`}>
+                  <div className={s.resHead}>
+                    <span className={s.resName}>{sc.name}</span>
+                    {isInput && <span className={s.inputTag}>입력</span>}
+                  </div>
+                  <div className={s.resValue}>
+                    {fmt(v, sc.id)}
+                    {sc.unit && v !== null && <span className={s.resUnit}>{sc.unit}</span>}
+                  </div>
+                  <div className={s.resFull}>{sc.fullName}</div>
+                  {v !== null && !isInScaleRange && (
+                    <div className={s.resRange}>범위 외 (참고만)</div>
+                  )}
                 </div>
-                <div className={s.resValue}>
-                  {fmt(v, sc.id)}
-                  {sc.unit && v !== null && <span className={s.resUnit}>{sc.unit}</span>}
-                </div>
-                <div className={s.resFull}>{sc.fullName}</div>
-                {!isInput && v !== null && !isInScaleRange && (
-                  <div className={s.resRange}>범위 외 (참고만)</div>
-                )}
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
+        </div>
+      ) : (
+        <div className={s.card} role="status">
+          <p className={s.note} style={{ margin: 0 }}>
+            0보다 큰 경도 값을 입력하면 HRC·HV·HB·HRB·인장강도 5개 스케일로 동시 환산합니다.
+          </p>
         </div>
       )}
 
@@ -192,8 +213,9 @@ export default function HardnessClient() {
 }
 
 /* ─── 예시 행 — 현재 입력값과 매칭되는 항목 강조 ──────────── */
-function ExampleRow({ item, currentHrc }: { item: { name: string; hrcMin: number; hrcMax: number; note?: string }; currentHrc: number | null }) {
-  const matches = currentHrc !== null && currentHrc >= item.hrcMin && currentHrc <= item.hrcMax
+function ExampleRow({ item, currentHrc }: { item: { name: string; hrcMin: number; hrcMax: number; note?: string; unit?: string }; currentHrc: number | null }) {
+  // unit 지정 행(HRB 등)은 HRC 값이 아니므로 현재 값 매칭에서 제외
+  const matches = !item.unit && currentHrc !== null && currentHrc >= item.hrcMin && currentHrc <= item.hrcMax
   return (
     <div className={`${s.refRow} ${matches ? s.refRowMatch : ''}`}>
       <div className={s.refMain}>
@@ -202,7 +224,7 @@ function ExampleRow({ item, currentHrc }: { item: { name: string; hrcMin: number
       </div>
       <span className={s.refHrc}>
         <strong>{item.hrcMin === item.hrcMax ? item.hrcMin : `${item.hrcMin}~${item.hrcMax}`}</strong>
-        <small>HRC</small>
+        <small>{item.unit ?? 'HRC'}</small>
       </span>
       {matches && <span className={s.refMatchBadge}>현재 값</span>}
     </div>
