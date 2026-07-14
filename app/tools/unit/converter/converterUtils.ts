@@ -79,7 +79,7 @@ const UNITS_VOLUME: UnitDef[] = [
   { id: 'tbsp',       name: '큰술 (Tbsp, 표준)',  shortName: 'Tbsp', toBase: 15 },
   { id: 'tsp',        name: '작은술 (tsp, 표준)', shortName: 'tsp',  toBase: 5 },
   { id: 'cup_kr',     name: '컵 (한국 표준)',     shortName: '컵', toBase: 200, isKorean: true, note: '한국 계량컵 1컵 = 200ml' },
-  { id: 'cup_us',     name: '컵 (미국)',         shortName: 'cup', toBase: 240 },
+  { id: 'cup_us',     name: '컵 (미국)',         shortName: 'cup', toBase: 240, note: '미국 레시피·영양표시 기준 240ml (관습 계량컵은 236.6ml)' },
   { id: 'paper_cup',  name: '종이컵 (생활)',     shortName: '종이컵', toBase: 180, isKorean: true, note: '정수기·자판기 표준 약 180ml' },
   { id: 'soju',       name: '소주잔',            shortName: '소주잔', toBase: 50,  isKorean: true, note: '약 50ml (1샷)' },
   { id: 'beer_500',   name: '맥주 호프잔',       shortName: '호프잔', toBase: 500, isKorean: true, note: '500ml 호프잔' },
@@ -153,7 +153,7 @@ const UNITS_ENERGY: UnitDef[] = [
   { id: 'Wh',      name: '와트시',               shortName: 'Wh',    toBase: 3600 },
   { id: 'kWh',     name: '킬로와트시 (전기요금)', shortName: 'kWh',   toBase: 3600000, note: '한전 요금 단위' },
   { id: 'MWh',     name: '메가와트시',           shortName: 'MWh',   toBase: 3.6e9 },
-  { id: 'BTU',     name: 'BTU (에어컨·보일러)',  shortName: 'BTU',   toBase: 1055.06, note: '에어컨 냉방능력 표기 단위' },
+  { id: 'BTU',     name: 'BTU (에어컨·보일러)',  shortName: 'BTU',   toBase: 1055.06, note: '에너지량 단위 · 에어컨 "12,000 BTU"는 시간당(BTU/h)=냉방능력(전력)' },
   { id: 'kBTU',    name: '천 BTU',              shortName: 'kBTU',  toBase: 1055060 },
   { id: 'ftlb',    name: 'ft·lb (일·에너지)',    shortName: 'ft·lb', toBase: 1.35582 },
   { id: 'erg',     name: '에르그 (CGS)',         shortName: 'erg',   toBase: 1e-7 },
@@ -162,7 +162,7 @@ const UNITS_ENERGY: UnitDef[] = [
   { id: 'TNT_t',   name: 'TNT 톤 등가',          shortName: 't TNT', toBase: 4.184e9 },
 ]
 
-/* ─── 데이터 (base: byte, 1024 진법) ─── */
+/* ─── 데이터 (base: byte, 1000·1024 진법 병행: KB/MB=1000, KiB/MiB=1024) ─── */
 const UNITS_DATA: UnitDef[] = [
   { id: 'bit',  name: '비트',     shortName: 'bit',  toBase: 1 / 8 },
   { id: 'B',    name: '바이트',   shortName: 'B',    toBase: 1 },
@@ -295,11 +295,12 @@ export function convertAngle(value: number, from: string, to: string): number {
 
 /* ─── 포맷 ─── */
 export function formatNumber(n: number): string {
-  if (!Number.isFinite(n)) return '—'
+  if (Number.isNaN(n)) return '—'
+  if (!Number.isFinite(n)) return n > 0 ? '∞' : '-∞' // N:1·1/n이 0°(수평)일 때 무한대
   const abs = Math.abs(n)
   if (abs === 0) return '0'
   if (abs >= 1e9 || abs < 1e-4) return n.toExponential(4)
-  // 6 유효숫자 + 천단위 콤마
+  // 8 유효숫자로 부동소수 오차 제거 후, 자릿수별 소수 자리수 캡(아래) 적용 + 천단위 콤마
   const fixed = parseFloat(n.toPrecision(8))
   if (Number.isInteger(fixed) && abs < 1e9) return fixed.toLocaleString('ko-KR')
   // 소수점 처리

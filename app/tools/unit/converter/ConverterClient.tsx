@@ -74,17 +74,18 @@ export default function ConverterClient() {
       {/* 카테고리 탭 */}
       <div className={styles.tabs}>
         {CATEGORIES.map(c => (
-          <button key={c.id}
+          <button key={c.id} type="button"
             className={`${styles.tabBtn} ${categoryId === c.id ? styles.tabActive : ''}`}
+            aria-pressed={categoryId === c.id}
             onClick={() => handleCategoryChange(c.id)}>
-            <span style={{ marginRight: 4 }}>{c.icon}</span>{c.name}
+            <span aria-hidden style={{ marginRight: 4 }}>{c.icon}</span>{c.name}
           </button>
         ))}
       </div>
 
       {/* 입력 */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>
+        <div className={styles.cardLabel}>
           {category.icon} {category.name} 변환
           {category.units.some(u => u.isKorean) && (
             <label className={styles.toggleLabel}>
@@ -93,13 +94,14 @@ export default function ConverterClient() {
               한국 단위 함께 표시
             </label>
           )}
-        </label>
+        </div>
         <div className={styles.inputRow}>
           <input className={styles.numInput} type="number" inputMode="decimal"
             value={inputValue} onChange={e => setInputValue(e.target.value)}
-            placeholder="값 입력" />
+            placeholder="값 입력" aria-label="변환할 값" />
           <select className={styles.unitSelect}
             value={fromUnitId}
+            aria-label="변환 기준 단위"
             onChange={e => setFromUnitId(e.target.value)}>
             {category.units.map(u => (
               <option key={u.id} value={u.id}>
@@ -108,18 +110,28 @@ export default function ConverterClient() {
             ))}
           </select>
         </div>
+        {categoryId === 'angle' && (fromUnitId === 'ratio_n1' || fromUnitId === 'one_over_n' || fromUnitId === 'mulae') && (
+          <p className={styles.inputHint}>
+            {fromUnitId === 'mulae'
+              ? '💡 물매는 치 수만 입력하세요 (예: 4치 물매 → 4 입력).'
+              : fromUnitId === 'one_over_n'
+                ? '💡 1/n 구배는 분모 n을 입력하세요 (예: 1/100 → 100 입력, 0.01 아님).'
+                : '💡 N:1 비율은 N을 입력하세요 (예: 20:1 → 20 입력).'}
+          </p>
+        )}
       </div>
 
       {/* 결과 */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>
+        <div className={styles.cardLabel}>
           변환 결과
           <span className={styles.cardLabelHint}>{value} {fromUnit.shortName} 입력 기준</span>
-        </label>
+        </div>
         <div className={styles.resultGrid}>
           {visibleResults.map(r => (
-            <div key={r.unit.id}
+            <button key={r.unit.id} type="button"
               className={`${styles.resultRow} ${r.isSource ? styles.resultRowSource : r.unit.isKorean ? styles.resultRowKorean : ''}`}
+              aria-label={copiedId === r.unit.id ? `${r.unit.name} 복사됨` : `${r.unit.name} ${formatNumber(r.value)} ${r.unit.shortName} 복사`}
               onClick={() => copyResult(r.unit.id, r.value, r.unit.shortName)}>
               <span className={styles.resultUnit}>
                 {r.unit.name}
@@ -128,11 +140,10 @@ export default function ConverterClient() {
               <span className={styles.resultValue}>
                 {formatNumber(r.value)} <span style={{ fontSize: '0.7em', color: 'var(--muted)' }}>{r.unit.shortName}</span>
               </span>
-              <button className={styles.resultCopy}
-                onClick={e => { e.stopPropagation(); copyResult(r.unit.id, r.value, r.unit.shortName) }}>
+              <span className={styles.resultCopy} aria-hidden>
                 {copiedId === r.unit.id ? '✓' : '📋'}
-              </button>
-            </div>
+              </span>
+            </button>
           ))}
         </div>
 
@@ -154,6 +165,11 @@ export default function ConverterClient() {
       {categoryId === 'data' && (
         <div className={styles.infoBox}>
           💡 <strong>1024 vs 1000 차이</strong> — KB·MB·GB는 SI(1,000)로 정의되지만 OS·메모리는 1,024 단위를 쓰는 경우가 많습니다. 정확한 표기는 <strong>KiB·MiB·GiB</strong>(1024)이지만 마케팅·하드디스크는 KB(1000)를 사용해 차이가 발생합니다.
+        </div>
+      )}
+      {categoryId === 'energy' && (
+        <div className={styles.infoBox}>
+          ⚡ <strong>에너지(kWh) vs 전력(kW) 주의</strong> — 이 변환기는 <strong>에너지량</strong>(J·Wh·BTU)을 환산합니다. 에어컨·냉동톤의 &quot;12,000 BTU&quot;는 사실 시간당 값(BTU/h)인 <strong>냉방능력(전력)</strong>이라 kW 단위예요. <strong>12,000 BTU = 3.52 kWh</strong>(에너지)와 <strong>12,000 BTU/h = 3.52 kW</strong>(전력)는 숫자만 같고 물리량이 다릅니다(둘 다 3,600으로 나눠 값이 일치).
         </div>
       )}
       {categoryId === 'speed' && (
@@ -179,7 +195,7 @@ export default function ConverterClient() {
       {categoryId === 'concentration' && (
         <>
           <div className={styles.infoBox}>
-            🧪 <strong>농도 단위 한눈에</strong> — <strong>1% = 10,000 ppm = 10,000,000 ppb = 10 g/L = 10,000 mg/L</strong> (수용액 가정). <strong>해수 35‰</strong> · <strong>수돗물 잔류염소 0.1~0.5 ppm</strong> · <strong>비료 EC 1.5~3.0 mS/cm(약 1,000~2,000 ppm)</strong>. <a href="#mol" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>mol/L</a>은 분자량이 필요해 본 도구에서는 별도 계산 가이드를 제공합니다.
+            🧪 <strong>농도 단위 한눈에</strong> — <strong>1% = 10,000 ppm = 10,000,000 ppb = 10 g/L = 10,000 mg/L</strong> (수용액 가정). <strong>해수 35‰</strong> · <strong>수돗물 잔류염소 0.1~0.5 ppm</strong> · <strong>비료 EC 1.5~3.0 mS/cm(약 1,000~2,000 ppm)</strong>. <strong>mol/L</strong>은 분자량이 필요해 본 도구에는 없으며, 아래 FAQ에 g/L→mol/L 환산 공식을 정리했습니다.
           </div>
           <div style={{ background: 'rgba(255,138,62,0.06)', border: '1px solid rgba(255,138,62,0.40)', borderRadius: 10, padding: '11px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.75, fontFamily: "'Noto Sans KR', sans-serif" }}>
             ⚠️ <strong style={{ color: 'var(--warning)' }}>약품·소독액 안전 안내</strong> — 락스(차아염소산나트륨)·과산화수소·산성 세제 등은 농도가 낮아도 피부·호흡기 자극을 일으킬 수 있습니다. 환기·장갑·고글 착용 필수, 산성 + 염소계 혼합 절대 금지(유독가스 발생). 정확한 사용 농도·반응 시간은 제조사 표기 또는 식약처·질병청 가이드를 따르세요.

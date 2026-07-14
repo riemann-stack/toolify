@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/converter',
@@ -53,7 +54,7 @@ const FAQ_LD = [
               },
               {
                 q: '근무시간 변환은 어떻게 계산되나요?',
-                a: '한국 근로기준법 기준으로 <strong>주 40시간 = 월 209시간 = 연 2,508시간</strong>입니다 (주 40시간 + 주휴 8시간 = 주 48시간 × 4.345주 ≈ 209시간/월). 시급·연봉 환산은 <a href="/tools/finance/salary" style="color: var(--accent); text-decoration: underline">연봉 실수령액 계산기</a>의 \'체감 시급 보기\' 옵션에서 야근·출퇴근 포함 체감 시급까지 계산할 수 있습니다.',
+                a: '한국 근로기준법(제50·55조)·고용노동부 최저임금 월 환산 기준으로 <strong>주 40시간 = 월 209시간 = 연 2,508시간</strong>입니다 (주 40시간 + 주휴 8시간 = 주 48시간 × 4.345주 ≈ 209시간/월). 시급·연봉 환산은 <a href="/tools/finance/salary" style="color: var(--accent); text-decoration: underline">연봉 실수령액 계산기</a>의 \'체감 시급 보기\' 옵션에서 야근·출퇴근 포함 체감 시급까지 계산할 수 있습니다.',
               },
               {
                 q: 'kgf/cm²와 bar는 어떻게 다른가요?',
@@ -65,7 +66,7 @@ const FAQ_LD = [
               },
               {
                 q: '에어컨 12,000 BTU는 몇 kW인가요?',
-                a: 'BTU는 시간당 단위(BTU/h)로 표기되지만 본 도구는 에너지 변환이므로, <strong>12,000 BTU/h = 약 3.5 kW</strong> (= 3,517 W)로 환산됩니다. 한국에서 흔히 말하는 &quot;1RT(냉동톤)&quot;는 약 12,000 BTU/h ≈ 3.5 kW이며, 일반 가정 인버터 에어컨은 8,000~24,000 BTU/h(2.3~7 kW) 범위입니다. 자세한 평형 환산은 <a href="/tools/interior/ac-capacity" style="color: var(--accent); text-decoration: underline">에어컨 평형 계산기</a>를 활용하세요.',
+                a: '먼저 <strong>에너지(kWh)와 전력(kW)을 구분</strong>해야 합니다. 본 변환기는 <strong>에너지량(BTU)</strong>을 환산하므로 12,000 BTU = 약 12.7 MJ = <strong>3.52 kWh</strong>로 표시됩니다. 반면 에어컨·냉동톤에서 말하는 &quot;12,000 BTU&quot;는 사실 <strong>시간당 값(BTU/h)</strong>인 냉방능력(전력)이라 <strong>3.52 kW</strong>(= 3,517 W)입니다. kWh(에너지)와 kW(전력)는 숫자만 같고 물리량이 다른데, 둘 다 3,600(초)으로 나누기 때문에 값이 일치합니다. 참고로 &quot;1RT(냉동톤)&quot; ≈ 12,000 BTU/h ≈ 3.5 kW이며, 가정용 인버터 에어컨은 8,000~24,000 BTU/h(2.3~7 kW) 범위입니다. 자세한 평형 환산은 <a href="/tools/interior/ac-capacity" style="color: var(--accent); text-decoration: underline">에어컨 평형 계산기</a>를 활용하세요.',
               },
               {
                 q: '식품 라벨의 &quot;Cal&quot;와 물리 cal는 같은가요?',
@@ -124,6 +125,16 @@ export default function ConverterPage() {
         길이·면적·무게·부피·온도부터 압력·토크·당도·농도·기울기까지 <strong style={{ color: 'var(--text)' }}>14가지 분야</strong>를 한 곳에서.
         <strong style={{ color: 'var(--text)' }}> 척·치·푼·평·정보·근·돈·홉·되</strong> 같은 한국 전통 도량형도 함께 변환할 수 있어요.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="단위 환산 계수는 KS·ISO·국제단위계(SI) 기준. 근무시간·경사로·소독 농도 등 법정·안전 수치는 아래 공식 출처 기준으로 정기 검토합니다."
+        sources={[
+          { label: '국가법령정보센터', href: 'https://www.law.go.kr' },
+          { label: '식품의약품안전처', href: 'https://www.mfds.go.kr' },
+          { label: '질병관리청', href: 'https://www.kdca.go.kr' },
+        ]}
+      />
 
       <ConverterClient />
 
@@ -300,7 +311,7 @@ export default function ConverterPage() {
                   ['🚆 고속철도 구배',        '≤ 25‰ (= 1/40)', '약 1.43°'],
                   ['🚆 일반철도 구배',        '≤ 30‰ (= 1/33)', '약 1.72°'],
                   ['🌊 하수관 자연 흐름',     '1/100 ~ 1/50', '0.57° ~ 1.15°'],
-                  ['🪜 가정 계단',            '약 30~38°',  '60~78% 경사'],
+                  ['🪜 가정 계단',            '약 58~78% 경사', '약 30~38°'],
                   ['♿ 휠체어 경사로 (KS)',   '1/12 (≈ 8.3%)', '약 4.76°'],
                   ['🏛️ 한옥 지붕 물매 (낮음)', '4~6치',     '21.8° ~ 31.0°'],
                   ['🏛️ 한옥 지붕 물매 (보통)', '7~9치',     '35.0° ~ 42.0°'],
@@ -328,7 +339,7 @@ export default function ConverterPage() {
         {/* 함께 쓰면 좋은 도구 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',     desc: '아파트 평형·전용·공급면적' },
               { href: '/tools/unit/size',          icon: '🛍️', name: '사이즈 변환기', desc: '의류·신발 US·EU → 한국' },
@@ -343,7 +354,7 @@ export default function ConverterPage() {
                 borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text)', marginBottom: '3px' }}>{t.name}</div>
                   <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
                 </div>
