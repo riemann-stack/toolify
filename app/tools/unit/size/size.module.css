@@ -127,6 +127,14 @@
 .recommendMeta {
   font-size: 11px; color: var(--muted); margin-left: auto;
 }
+.recommendWarn {
+  flex-basis: 100%;
+  font-size: 11px;
+  color: var(--warning);
+  font-weight: 600;
+  line-height: 1.6;
+  margin-top: 2px;
+}
 
 /* 측정 안내 */
 .measureHint {
@@ -215,4 +223,5 @@
   .measureRow { grid-template-columns: 1fr; }
   .recommendValue { font-size: 16px; }
   .th, .td { padding: 8px 8px; font-size: 11px; }
+  .searchInput { font-size: 16px; } /* iOS Safari 포커스 시 자동 줌 방지 */
 }

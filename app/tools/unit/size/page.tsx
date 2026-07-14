@@ -20,7 +20,7 @@ const FAQ_LD = [
               { q: '아마존에서 US M 사이즈를 주문하면 한국 M이랑 같나요?',
                 a: '미국 의류 M 사이즈는 한국 L(100) 사이즈와 비슷한 경우가 많습니다. 미국 의류는 한국보다 전반적으로 여유롭게 제작되므로, 한 사이즈 작게 주문하거나 해당 상품의 실제 측정값(measurements)을 확인하는 것이 좋습니다.' },
               { q: '반지 사이즈를 모를 때 어떻게 측정하나요?',
-                a: '종이를 손가락에 감아 표시 후 자로 길이(둘레)를 측정합니다. 둘레가 50mm면 한국 11호, US 6호 정도입니다. 기존 반지의 안쪽 지름을 자로 재는 방법도 정확합니다 — 안지름 16mm = 한국 11호. 손가락이 부어 있을 수 있어 저녁 시간대 측정을 권장합니다.' },
+                a: '종이를 손가락에 감아 표시 후 자로 길이(둘레)를 측정합니다. 둘레가 50mm면 한국 11호, US 약 5.5 정도입니다(US는 내경 기준 ISO 표준). 기존 반지의 안쪽 지름을 자로 재는 방법도 정확합니다 — 안지름 16mm = 한국 11호. 손가락이 부어 있을 수 있어 저녁 시간대 측정을 권장합니다.' },
               { q: '미국 모자 사이즈 7과 7 1/4는 한국으로?',
                 a: '미국 모자 7 = 한국 56cm = 한국 M 사이즈, 7 1/4 = 한국 57cm = 한국 M/L 사이즈입니다. 미국은 인치 단위(머리 둘레 ÷ π ≈ 3.14)를 사용하기 때문에 7인치 = 약 17.8cm × π = 56cm로 환산됩니다.' },
               { q: '미국 브라 사이즈 34B는 한국 몇인가요?',
@@ -125,6 +125,9 @@ export default function SizePage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6, marginTop: '8px' }}>
+            ※ 반품 정책·치수 단위는 <strong style={{ color: 'var(--text)' }}>한국 기준·작성 시점(2026년)</strong> 참고값이며 국가·상품군·시기별로 달라질 수 있습니다. 주문 전 각 사이트의 최신 정책을 확인하세요.
+          </p>
         </div>
 
         {/* ── 3. 브랜드별 사이즈 특징 ── */}
@@ -132,6 +135,9 @@ export default function SizePage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             브랜드별 사이즈 특징 (참고)
           </h2>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '12px' }}>
+            ※ 브랜드 사이즈 성향은 <strong style={{ color: 'var(--text)' }}>일반적 경향</strong>일 뿐 제품·시즌·라인별로 다릅니다. 항상 <strong style={{ color: 'var(--text)' }}>해당 상품의 공식 실측표(measurements)</strong>를 우선 확인하세요.
+          </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div>
               <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>👟 신발 브랜드</h3>
@@ -195,6 +201,7 @@ export default function SizePage() {
                   { kr: '100 (L)',  u: 'M',   e: '48', uk: '38', c: '96-100' },
                   { kr: '105 (XL)', u: 'L',   e: '50', uk: '40', c: '100-104' },
                   { kr: '110 (XXL)',u: 'XL',  e: '52', uk: '42', c: '104-108' },
+                  { kr: '115 (XXXL)',u: 'XXL', e: '54', uk: '44', c: '108-112' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>

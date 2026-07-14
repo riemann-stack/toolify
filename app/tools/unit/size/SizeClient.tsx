@@ -98,12 +98,12 @@ const BOTTOM_F = [
 // 데이터: 브라
 // ──────────────────────────────────────
 const BRA_BAND = [
-  { kr: '65', us: '30', eu: '65', underMin: 60, underMax: 65 },
-  { kr: '70', us: '32', eu: '70', underMin: 65, underMax: 70 },
-  { kr: '75', us: '34', eu: '75', underMin: 70, underMax: 75 },
-  { kr: '80', us: '36', eu: '80', underMin: 75, underMax: 80 },
-  { kr: '85', us: '38', eu: '85', underMin: 80, underMax: 85 },
-  { kr: '90', us: '40', eu: '90', underMin: 85, underMax: 90 },
+  { kr: '65', us: '30', eu: '65', underMin: 62.5, underMax: 67.5 },
+  { kr: '70', us: '32', eu: '70', underMin: 67.5, underMax: 72.5 },
+  { kr: '75', us: '34', eu: '75', underMin: 72.5, underMax: 77.5 },
+  { kr: '80', us: '36', eu: '80', underMin: 77.5, underMax: 82.5 },
+  { kr: '85', us: '38', eu: '85', underMin: 82.5, underMax: 87.5 },
+  { kr: '90', us: '40', eu: '90', underMin: 87.5, underMax: 92.5 },
 ]
 const BRA_CUP = [
   { kr: 'AA',     us: 'AA',    eu: 'AA', uk: 'AA', diff: 10 },
@@ -120,18 +120,18 @@ const BRA_CUP = [
 // 데이터: 반지
 // ──────────────────────────────────────
 const RING_DATA = [
-  { kr: '7호',  inner: 14.5, circ: 45.5, us: '4',     uk: 'H',   eu: '46',     jp: '7' },
-  { kr: '8호',  inner: 15.0, circ: 47.0, us: '4.5',   uk: 'I',   eu: '47',     jp: '8' },
-  { kr: '9호',  inner: 15.3, circ: 48.0, us: '5',     uk: 'J',   eu: '48-49',  jp: '9' },
-  { kr: '10호', inner: 15.7, circ: 49.3, us: '5.5',   uk: 'K',   eu: '49-50',  jp: '10' },
-  { kr: '11호', inner: 16.0, circ: 50.3, us: '6',     uk: 'L',   eu: '51',     jp: '11' },
-  { kr: '12호', inner: 16.5, circ: 51.8, us: '6.5',   uk: 'L½',  eu: '52',     jp: '12' },
-  { kr: '13호', inner: 17.0, circ: 53.4, us: '7',     uk: 'N',   eu: '54',     jp: '13' },
-  { kr: '14호', inner: 17.3, circ: 54.4, us: '7.25',  uk: 'N½',  eu: '54.5',   jp: '14' },
-  { kr: '15호', inner: 17.5, circ: 55.0, us: '7.5',   uk: 'O',   eu: '55-56',  jp: '15' },
-  { kr: '16호', inner: 17.7, circ: 55.7, us: '7.75',  uk: 'O½',  eu: '55.7',   jp: '16' },
-  { kr: '17호', inner: 18.0, circ: 56.5, us: '8',     uk: 'P',   eu: '57',     jp: '17' },
-  { kr: '18호', inner: 18.2, circ: 57.2, us: '8.25',  uk: 'P½',  eu: '57.5',   jp: '18' },
+  { kr: '7호',  inner: 14.5, circ: 45.5, us: '3.5',   uk: 'H',   eu: '46',     jp: '7' },
+  { kr: '8호',  inner: 15.0, circ: 47.0, us: '4',     uk: 'I',   eu: '47',     jp: '8' },
+  { kr: '9호',  inner: 15.3, circ: 48.0, us: '4.5',   uk: 'J',   eu: '48-49',  jp: '9' },
+  { kr: '10호', inner: 15.7, circ: 49.3, us: '5',     uk: 'K',   eu: '49-50',  jp: '10' },
+  { kr: '11호', inner: 16.0, circ: 50.3, us: '5.5',   uk: 'L',   eu: '51',     jp: '11' },
+  { kr: '12호', inner: 16.5, circ: 51.8, us: '6',     uk: 'L½',  eu: '52',     jp: '12' },
+  { kr: '13호', inner: 17.0, circ: 53.4, us: '6.5',   uk: 'N',   eu: '54',     jp: '13' },
+  { kr: '14호', inner: 17.3, circ: 54.4, us: '7',     uk: 'N½',  eu: '54.5',   jp: '14' },
+  { kr: '15호', inner: 17.5, circ: 55.0, us: '7.25',  uk: 'O',   eu: '55-56',  jp: '15' },
+  { kr: '16호', inner: 17.7, circ: 55.7, us: '7.5',   uk: 'O½',  eu: '55.7',   jp: '16' },
+  { kr: '17호', inner: 18.0, circ: 56.5, us: '7.75',  uk: 'P',   eu: '57',     jp: '17' },
+  { kr: '18호', inner: 18.2, circ: 57.2, us: '8',     uk: 'P½',  eu: '57.5',   jp: '18' },
   { kr: '19호', inner: 18.5, circ: 58.1, us: '8.5',   uk: 'Q',   eu: '58',     jp: '19' },
   { kr: '20호', inner: 18.7, circ: 58.7, us: '8.75',  uk: 'Q½',  eu: '58.5',   jp: '20' },
   { kr: '21호', inner: 19.0, circ: 59.6, us: '9',     uk: 'R',   eu: '59-60',  jp: '21' },
@@ -259,6 +259,8 @@ export default function SizeClient() {
             {CLOTHING.map(c => (
               <button
                 key={c.id}
+                type="button"
+                aria-pressed={category === c.id}
                 className={`${styles.tab} ${getActiveClass(c.id)}`}
                 onClick={() => selectCategory(c.id)}
               >
@@ -273,6 +275,8 @@ export default function SizeClient() {
             {ACCESSORY.map(c => (
               <button
                 key={c.id}
+                type="button"
+                aria-pressed={category === c.id}
                 className={`${styles.tab} ${getActiveClass(c.id)}`}
                 onClick={() => selectCategory(c.id)}
               >
@@ -293,10 +297,14 @@ export default function SizeClient() {
           {hasGender && (
             <div className={styles.genderToggle} style={{ minWidth: 160 }}>
               <button
+                type="button"
+                aria-pressed={gender === 'm'}
                 className={`${styles.genderBtn} ${gender === 'm' ? styles.genderBtnActive : ''}`}
                 onClick={() => setGender('m')}
               >👨 남성</button>
               <button
+                type="button"
+                aria-pressed={gender === 'f'}
                 className={`${styles.genderBtn} ${gender === 'f' ? styles.genderBtnActive : ''}`}
                 onClick={() => setGender('f')}
               >👩 여성</button>
@@ -343,6 +351,12 @@ function num(s: string): number | null {
   return isFinite(n) && n > 0 ? n : null
 }
 
+// 입력값이 표가 다루는 범위를 벗어나면 경고 문구를 반환 (추천은 가장 가까운 경계값으로 대체됨)
+function rangeWarn(v: number | null, lo: number, hi: number, unit: string, thing = '입력값'): string | undefined {
+  if (v === null || (v >= lo && v <= hi)) return undefined
+  return `${thing} 값이 표 범위(${lo}~${hi}${unit}) 밖입니다 — 가장 가까운 값을 표시했어요. 실제 사이즈는 브랜드 실측표를 꼭 확인하세요`
+}
+
 function MeasureCard({ children }: { children: React.ReactNode }) {
   return <div className={styles.measureCard}>{children}</div>
 }
@@ -356,6 +370,7 @@ function MeasureField({ label, unit, value, onChange, placeholder }: {
       <div className={styles.measureInputWrap}>
         <input
           type="number" inputMode="decimal"
+          aria-label={`${label} (${unit})`}
           className={`${styles.measureInput} ${value ? styles.measureInputFilled : ''}`}
           value={value}
           onChange={e => onChange(e.target.value)}
@@ -369,12 +384,13 @@ function MeasureField({ label, unit, value, onChange, placeholder }: {
   )
 }
 
-function Recommend({ label, value, meta }: { label: string; value: string; meta?: string }) {
+function Recommend({ label, value, meta, warn }: { label: string; value: string; meta?: string; warn?: string }) {
   return (
-    <div className={styles.recommend}>
+    <div className={styles.recommend} role="status" aria-live="polite">
       <span className={styles.recommendLabel}>{label}</span>
       <span className={styles.recommendValue}>{value}</span>
       {meta && <span className={styles.recommendMeta}>{meta}</span>}
+      {warn && <span className={styles.recommendWarn}>⚠️ {warn}</span>}
     </div>
   )
 }
@@ -436,6 +452,7 @@ function ShoeView({ gender, mm, setMm, search, setSearch }: { gender: Gender; mm
             label="추천 사이즈"
             value={`${data[recommendIdx].kr}mm`}
             meta={`US ${data[recommendIdx].us} · UK ${data[recommendIdx].uk} · EU ${data[recommendIdx].eu}`}
+            warn={rangeWarn(mmVal, data[0].kr, data[data.length - 1].kr, 'mm', '발 길이')}
           />
         )}
       </MeasureCard>
@@ -478,8 +495,10 @@ function TopView({ gender, chest, setChest, search, setSearch }: { gender: Gende
   const recommendIdx = useMemo(() => {
     if (!chestVal) return -1
     const data = gender === 'm' ? TOP_M : TOP_F
-    const i = data.findIndex(r => chestVal >= r.chestMin && chestVal <= r.chestMax)
-    if (i >= 0) return i
+    // 경계값(예: 96cm)이 두 사이즈에 걸치면 더 여유 있는 큰 사이즈로 — 마지막 매치 선택
+    let matched = -1
+    data.forEach((r, idx) => { if (chestVal >= r.chestMin && chestVal <= r.chestMax) matched = idx })
+    if (matched >= 0) return matched
     let best = 0, diff = Infinity
     data.forEach((r, idx) => {
       const c = (r.chestMin + r.chestMax) / 2
@@ -508,6 +527,7 @@ function TopView({ gender, chest, setChest, search, setSearch }: { gender: Gende
               label="추천 사이즈"
               value={TOP_M[recommendIdx].kr}
               meta={`US ${TOP_M[recommendIdx].us} · EU ${TOP_M[recommendIdx].eu}`}
+              warn={rangeWarn(chestVal, TOP_M[0].chestMin, TOP_M[TOP_M.length - 1].chestMax, 'cm', '가슴둘레')}
             />
           )}
         </MeasureCard>
@@ -546,7 +566,7 @@ function TopView({ gender, chest, setChest, search, setSearch }: { gender: Gende
   const filteredF = TOP_F.filter(r => {
     const q = search.trim().toLowerCase()
     if (!q) return true
-    return r.kr.includes(q) || r.us.includes(q) || r.eu.includes(q) || r.uk.includes(q)
+    return r.kr.toLowerCase().includes(q) || r.us.toLowerCase().includes(q) || r.eu.includes(q) || r.uk.toLowerCase().includes(q)
   })
 
   return (
@@ -561,6 +581,7 @@ function TopView({ gender, chest, setChest, search, setSearch }: { gender: Gende
             label="추천 사이즈"
             value={TOP_F[recommendIdx].kr}
             meta={`US ${TOP_F[recommendIdx].us} · EU ${TOP_F[recommendIdx].eu} · UK ${TOP_F[recommendIdx].uk}`}
+            warn={rangeWarn(chestVal, TOP_F[0].chestMin, TOP_F[TOP_F.length - 1].chestMax, 'cm', '가슴둘레')}
           />
         )}
       </MeasureCard>
@@ -629,6 +650,7 @@ function BottomView({ gender, waist, setWaist, search, setSearch }: { gender: Ge
             label="추천 사이즈"
             value={`${data[recommendIdx].kr}${gender === 'm' ? ' (인치)' : '(여)'}`}
             meta={`US ${data[recommendIdx].us} · EU ${data[recommendIdx].eu} · 허리 ${data[recommendIdx].waist}cm`}
+            warn={rangeWarn(waistVal, data[0].waist, data[data.length - 1].waist, 'cm', '허리둘레')}
           />
         )}
       </MeasureCard>
@@ -685,17 +707,20 @@ function BraView({ underBust, setUnderBust, bust, setBust, search, setSearch }: 
 
   const cupIdx = useMemo(() => {
     if (cupDiff === null) return -1
-    let best = 0, diff = Infinity
-    BRA_CUP.forEach((r, idx) => {
-      const d = Math.abs(r.diff - cupDiff)
-      if (d < diff) { diff = d; best = idx }
-    })
-    return best
+    // BRA_CUP.diff는 각 컵 구간의 상한(cm). 컵차이가 상한 이하인 첫 컵으로 판정
+    // (예: AA=~10, A=~12.5 → 차이 11cm는 A) — 최근접 매칭은 한 컵 작게 오판정하므로 임계값 방식 사용
+    const i = BRA_CUP.findIndex(r => cupDiff <= r.diff)
+    return i >= 0 ? i : BRA_CUP.length - 1
   }, [cupDiff])
 
   const recommend = ub && cupDiff !== null && bandIdx >= 0 && cupIdx >= 0
     ? `${BRA_BAND[bandIdx].kr}${BRA_CUP[cupIdx].kr.replace(/\s.*/, '')}`
     : null
+
+  // 밑가슴 62.5~92.5cm(밴드) 또는 컵차이 7.5~27.5cm(컵) 범위를 벗어나면 경고
+  const braWarn = (ub !== null && (ub < 62.5 || ub > 92.5)) || (cupDiff !== null && (cupDiff < 7.5 || cupDiff > 27.5))
+    ? '측정값이 표 범위(밑가슴 62.5~92.5cm·컵차이 7.5~27.5cm) 밖입니다 — 가장 가까운 값을 표시했어요. 브랜드 실측표를 꼭 확인하세요'
+    : undefined
 
   const filteredBand = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -722,6 +747,7 @@ function BraView({ underBust, setUnderBust, bust, setBust, search, setSearch }: 
             label="추천 사이즈 (한국)"
             value={recommend}
             meta={`밑가슴 ${ub}cm · 컵 차이 ${cupDiff?.toFixed(1)}cm`}
+            warn={braWarn}
           />
         )}
         {ub && cupDiff !== null && (
@@ -802,7 +828,7 @@ function RingView({ mm, setMm, search, setSearch }: { mm: string; setMm: (v: str
     if (!mmVal) return -1
     let best = 0, diff = Infinity
     // mm은 둘레 또는 안지름. 안지름 추정: 14~21mm, 둘레 추정: 44~64mm
-    const isCirc = mmVal > 30
+    const isCirc = mmVal >= 30
     RING_DATA.forEach((r, i) => {
       const v = isCirc ? r.circ : r.inner
       const d = Math.abs(v - mmVal)
@@ -831,10 +857,14 @@ function RingView({ mm, setMm, search, setSearch }: { mm: string; setMm: (v: str
             label="추천 사이즈"
             value={RING_DATA[recommendIdx].kr}
             meta={`US ${RING_DATA[recommendIdx].us} · EU ${RING_DATA[recommendIdx].eu} · 일본 ${RING_DATA[recommendIdx].jp}`}
+            warn={mmVal !== null && mmVal >= 30
+              ? rangeWarn(mmVal, RING_DATA[0].circ, RING_DATA[RING_DATA.length - 1].circ, 'mm', '둘레')
+              : rangeWarn(mmVal, RING_DATA[0].inner, RING_DATA[RING_DATA.length - 1].inner, 'mm', '안지름')}
           />
         )}
         <div className={styles.infoBox} style={{ marginTop: 10 }}>
-          <strong>한국 평균:</strong> 여성 9~13호 · 남성 17~21호 · 30mm 초과 = 둘레, 30mm 이하 = 안지름으로 자동 인식
+          <strong>한국 평균:</strong> 여성 9~13호 · 남성 17~21호 · 30mm 이상 = 둘레, 30mm 미만 = 안지름으로 자동 인식<br />
+          <strong>참고:</strong> US는 내경(ISO) 기준으로 표기했고, UK·EU 사이즈는 브랜드·기준마다 편차가 있어 근사치이니 구매 전 주얼리샵에서 확인하세요.
         </div>
       </MeasureCard>
 
@@ -903,6 +933,7 @@ function HatView({ cm, setCm, search, setSearch }: { cm: string; setCm: (v: stri
             label="추천 사이즈"
             value={HAT_DATA[recommendIdx].kr}
             meta={`US ${HAT_DATA[recommendIdx].us} · ${HAT_DATA[recommendIdx].head}cm · ${HAT_DATA[recommendIdx].note}`}
+            warn={rangeWarn(cmVal, HAT_DATA[0].head, HAT_DATA[HAT_DATA.length - 1].head, 'cm', '머리 둘레')}
           />
         )}
         <div className={styles.infoBox} style={{ marginTop: 10 }}>
@@ -950,8 +981,10 @@ function GloveView({ gender, cm, setCm, search, setSearch }: { gender: Gender; c
 
   const recommendIdx = useMemo(() => {
     if (!cmVal) return -1
-    const i = data.findIndex(r => cmVal >= r.handMin && cmVal <= r.handMax)
-    if (i >= 0) return i
+    // 경계값(예: 18cm)이 두 사이즈에 걸치면 더 여유 있는 큰 사이즈로 — 마지막 매치 선택
+    let matched = -1
+    data.forEach((r, idx) => { if (cmVal >= r.handMin && cmVal <= r.handMax) matched = idx })
+    if (matched >= 0) return matched
     let best = 0, diff = Infinity
     data.forEach((r, idx) => {
       const c = (r.handMin + r.handMax) / 2
@@ -979,6 +1012,7 @@ function GloveView({ gender, cm, setCm, search, setSearch }: { gender: Gender; c
             label="추천 사이즈"
             value={data[recommendIdx].kr}
             meta={`US ${data[recommendIdx].us} · ${data[recommendIdx].handMin}–${data[recommendIdx].handMax}cm`}
+            warn={rangeWarn(cmVal, data[0].handMin, data[data.length - 1].handMax, 'cm', '손바닥 둘레')}
           />
         )}
       </MeasureCard>
@@ -1042,6 +1076,7 @@ function BeltView({ cm, setCm, search, setSearch }: { cm: string; setCm: (v: str
             label="추천 사이즈"
             value={`${BELT_DATA[recommendIdx].krIn}인치`}
             meta={`벨트 총 길이 ${cmVal + 12}~${cmVal + 15}cm 권장 · EU ${BELT_DATA[recommendIdx].eu}`}
+            warn={rangeWarn(cmVal, BELT_DATA[0].waist, BELT_DATA[BELT_DATA.length - 1].waist, 'cm', '허리 둘레')}
           />
         )}
         <div className={styles.infoBox} style={{ marginTop: 10 }}>
