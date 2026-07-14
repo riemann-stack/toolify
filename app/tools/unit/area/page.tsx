@@ -44,7 +44,7 @@ const FAQ_LD = [
               },
               {
                 q: '평(坪)은 일본식 단위인가요?',
-                a: '평(坪)은 동아시아 공통 단위입니다. 한국·일본·중국 모두 사용했지만 정의가 약간 다릅니다 — <strong>한국·일본 1평 ≈ 3.306㎡</strong>(6자×6자), 중국 1평(亩, 묘)은 약 666㎡로 완전히 다릅니다. 한국에서는 일제강점기를 거치며 일본식 정의(약 3.306㎡)가 표준화되었고 현재까지 유지되고 있습니다. 2007년부터 법정계량단위는 ㎡로 일원화되었지만 부동산 관행은 여전히 평수를 함께 씁니다.',
+                a: '평(坪)은 <strong>한국·일본·대만이 공유하는 단위로 모두 약 3.306㎡</strong>(6자×6자)로 동일합니다. 한국에는 일제강점기에 일본식 정의(약 3.306㎡)가 들어와 표준이 되었고 지금까지 유지됩니다. 다만 중국 대륙에서 넓은 토지에 쓰는 <strong>묘(亩, 약 666.7㎡)</strong>는 평(坪)과 이름·크기가 전혀 다른 <strong>별개 단위</strong>이니 혼동하지 마세요(“중국의 평”이 아닙니다). 2007년부터 한국 법정계량단위는 ㎡로 일원화되었지만 부동산 관행은 여전히 평수를 함께 씁니다.',
               },
             ]
 
@@ -121,7 +121,7 @@ export default function AreaPage() {
                 <tr><td style={cell}><strong>59㎡</strong></td><td style={cell}>약 17.8평</td><td style={cell}>24~25평형</td><td style={cell}>2~3인 가구 표준 — &lsquo;새 국민평형&rsquo;으로 불릴 만큼 선호 상승</td></tr>
                 <tr><td style={cell}><strong>74㎡</strong></td><td style={cell}>약 22.4평</td><td style={cell}>30평형</td><td style={cell}>59와 84 사이 틈새 평면</td></tr>
                 <tr><td style={{ ...cell, color: '#9333EA', fontWeight: 700 }}><strong>84㎡</strong></td><td style={cell}>약 25.4평</td><td style={cell}>33~34평형</td><td style={cell}>&lsquo;국민평형&rsquo; — 국민주택 규모(전용 85㎡ 이하)를 꽉 채우는 평면</td></tr>
-                <tr><td style={cell}><strong>101㎡</strong></td><td style={cell}>약 30.6평</td><td style={cell}>40평형</td><td style={cell}>전용 85㎡ 초과 중대형 — 청약·세제 기준이 달라짐</td></tr>
+                <tr><td style={cell}><strong>102㎡</strong></td><td style={cell}>약 30.9평</td><td style={cell}>40평형</td><td style={cell}>전용 85㎡ 초과 중대형 — 청약·세제 기준이 달라짐</td></tr>
                 <tr><td style={cell}><strong>114㎡</strong></td><td style={cell}>약 34.5평</td><td style={cell}>43~46평형</td><td style={cell}>대형 — 단지 전용률에 따라 표기 편차가 가장 큼</td></tr>
               </tbody>
             </table>
@@ -185,7 +185,7 @@ export default function AreaPage() {
         {/* 함께 쓰면 좋은 도구 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',     desc: '14개 분야 + 한국 전통 단위' },
               { href: '/tools/finance/loan',       icon: '💳', name: '대출이자 계산기',       desc: '주택담보·전세자금 대출' },
@@ -198,7 +198,7 @@ export default function AreaPage() {
                 borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text)', marginBottom: '3px' }}>{t.name}</div>
                   <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.4 }}>{t.desc}</div>
                 </div>

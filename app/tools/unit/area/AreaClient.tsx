@@ -8,12 +8,12 @@ const PYEONG_TO_SQM = 3.305785  // 1평 = 400/121 ㎡
 const QUICK_SQM = [39, 49, 59, 74, 84, 102, 114, 135]
 
 const APT_SIZES = [
-  { sqm: 39,  pyeong: 11.79, name: '11평형',  desc: '원룸·청년주택', usage: '1인 가구·신혼' },
-  { sqm: 49,  pyeong: 14.82, name: '14평형',  desc: '신혼·1인 가구', usage: '1~2인 가구' },
+  { sqm: 39,  pyeong: 11.80, name: '15평형',  desc: '원룸·청년주택 (전용 39 ≈ 분양 15)', usage: '1인 가구·신혼' },
+  { sqm: 49,  pyeong: 14.82, name: '20평형',  desc: '신혼·1인 가구 (전용 49 ≈ 분양 20)', usage: '1~2인 가구' },
   { sqm: 59,  pyeong: 17.85, name: '24평형',  desc: '소형 (전용 59 = 분양 24)', usage: '소형 가족' },
   { sqm: 74,  pyeong: 22.39, name: '29평형',  desc: '소형~중소형',   usage: '3인 가구' },
   { sqm: 84,  pyeong: 25.41, name: '34평형 ⭐', desc: '국민평형 (전용 84 = 분양 34)', usage: '4인 가구 (가장 흔함)' },
-  { sqm: 102, pyeong: 30.87, name: '40평형',  desc: '중대형',        usage: '4~5인 가구' },
+  { sqm: 102, pyeong: 30.86, name: '40평형',  desc: '중대형',        usage: '4~5인 가구' },
   { sqm: 114, pyeong: 34.49, name: '45평형',  desc: '대형',          usage: '대가족' },
   { sqm: 135, pyeong: 40.84, name: '50평형',  desc: '대형',          usage: '대가족·부유층' },
   { sqm: 158, pyeong: 47.80, name: '60평형',  desc: '초대형',        usage: '초대형 주택' },
@@ -22,11 +22,11 @@ const APT_SIZES = [
 
 type Tab = 'convert' | 'apt-table' | 'area-types' | 'room-guide'
 
-const TABS: { id: Tab; name: string; icon: string }[] = [
-  { id: 'convert',    name: '면적 변환',  icon: '' },
-  { id: 'apt-table',  name: '아파트 평형표', icon: '' },
-  { id: 'area-types', name: '전용·공급·계약', icon: '' },
-  { id: 'room-guide', name: '평형별 방 가이드', icon: '' },
+const TABS: { id: Tab; name: string }[] = [
+  { id: 'convert',    name: '면적 변환' },
+  { id: 'apt-table',  name: '아파트 평형표' },
+  { id: 'area-types', name: '전용·공급·계약' },
+  { id: 'room-guide', name: '평형별 방 가이드' },
 ]
 
 const fmt = (n: number) => {
@@ -39,7 +39,7 @@ export default function AreaClient() {
 
   // 양방향 — sqm 또는 pyeong 중 하나가 source
   const [sqm, setSqm] = useState('84')
-  const [pyeong, setPyeong] = useState('')
+  const [pyeong, setPyeong] = useState('25.41') // 초기 84㎡의 환산값 — 양쪽 입력 동기화
   const [activeInput, setActiveInput] = useState<'sqm' | 'pyeong'>('sqm')
 
   const result = useMemo(() => {
@@ -92,7 +92,7 @@ export default function AreaClient() {
         variant="default"
         related={[
           { href: '/tools/unit/converter', label: '단위 변환기' },
-          { href: '/tools/unit/area', label: '면적 단위' },
+          { href: '/tools/unit/size', label: '사이즈 변환기' },
           { href: '/tools/unit/fuel-economy', label: '연비 변환' }
         ]}
       >
@@ -101,10 +101,11 @@ export default function AreaClient() {
 
       <div className={styles.tabs}>
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button"
             className={`${styles.tabBtn} ${tab === t.id ? styles.tabActive : ''}`}
+            aria-pressed={tab === t.id}
             onClick={() => setTab(t.id)}>
-            <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
+            {t.name}
           </button>
         ))}
       </div>
@@ -131,8 +132,9 @@ export default function AreaClient() {
             <label className={styles.cardLabel}>빠른 변환 (전용면적 기준)</label>
             <div className={styles.quickRow}>
               {QUICK_SQM.map(v => (
-                <button key={v}
+                <button key={v} type="button"
                   className={`${styles.quickChip} ${parseFloat(sqm) === v ? styles.quickChipActive : ''}`}
+                  aria-pressed={parseFloat(sqm) === v}
                   onClick={() => handleSqmChange(String(v))}>
                   {v}㎡
                 </button>
@@ -156,7 +158,7 @@ export default function AreaClient() {
                 )}
               </div>
 
-              <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+              <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
                 onClick={() => copy(`${fmt(result.sqm)}㎡ = ${fmt(result.pyeong)}평`)}>
                 {copied ? '✓ 복사됨' : '복사'}
               </button>
@@ -181,14 +183,15 @@ export default function AreaClient() {
               <thead>
                 <tr>
                   <th scope="col">전용면적</th>
-                  <th scope="col">평수</th>
-                  <th scope="col">일반 호칭</th>
+                  <th scope="col">전용 평수</th>
+                  <th scope="col">통상 분양 평형</th>
                   <th scope="col">가구 유형</th>
                 </tr>
               </thead>
               <tbody>
                 {APT_SIZES.map((apt, i) => {
-                  const isCurrent = result && Math.abs(apt.sqm - result.sqm) <= 3
+                  // 히어로가 안내하는 '가장 가까운 평형'과 동일 행만 강조 (임계값 5㎡ 일치)
+                  const isCurrent = !!matchedApt && !!result && apt.sqm === matchedApt.sqm && Math.abs(matchedApt.sqm - result.sqm) <= 5
                   return (
                     <tr key={i} className={isCurrent ? styles.tableRowActive : ''}>
                       <td><strong>{apt.sqm}㎡</strong></td>
@@ -227,7 +230,7 @@ export default function AreaClient() {
               <tbody>
                 <tr>
                   <td><strong style={{ color: '#059669' }}>전용면적</strong></td>
-                  <td>거실·방·주방·화장실·발코니</td>
+                  <td>거실·방·주방·화장실 <small style={{ color: 'var(--muted)' }}>(발코니 제외)</small></td>
                   <td>약 84.96㎡ <small style={{ color: 'var(--muted)' }}>(약 25.7평)</small></td>
                 </tr>
                 <tr>
@@ -277,7 +280,7 @@ export default function AreaClient() {
       {tab === 'room-guide' && (
         <>
           <div className={styles.disclaimer}>
-            🛋️ <strong>평형별 방 크기·가구 가이드</strong> — 어떤 평수에 어떤 가구가 들어가는지 한눈에 비교.
+            🛋️ <strong>평형별 방 크기·가구 가이드</strong> — 어떤 평수에 어떤 가구가 들어가는지 한눈에 비교. <strong>실제 거주 공간인 전용면적(전용 평수) 기준</strong>이라, 분양 평형(예: 84㎡ = 분양 34평형)과는 표기가 다릅니다.
           </div>
 
           <div className={styles.tableWrap}>
@@ -294,7 +297,7 @@ export default function AreaClient() {
                 {[
                   ['11평 (39㎡)', '1', '작음', '1인 침대·소형 식탁'],
                   ['17평 (59㎡)', '2~3', '작음', '2인용 식탁·1.5인 침대'],
-                  ['24평 (84㎡)', '3', '중간', '4인 식탁·퀸 침대·소파'],
+                  ['25평 (84㎡)', '3', '중간', '4인 식탁·퀸 침대·소파'],
                   ['30평+ (102㎡)', '3~4', '큼', '6인 식탁·드레스룸 가능'],
                   ['40평+ (135㎡)', '4+', '매우 큼', '별도 서재·홈오피스 가능'],
                 ].map((row, i) => (
