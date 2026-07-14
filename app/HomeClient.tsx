@@ -359,7 +359,7 @@ export default function HomeClient({ initialFeaturedSlug }: HomeClientProps) {
           <Link href="/tools" className={styles.sectionLink}>전체 보기 →</Link>
         </div>
         <div className={styles.popGrid}>
-          {popularTools.slice(0, 5).map((tool, i) => (
+          {popularTools.slice(0, 7).map((tool, i) => (
             <Link
               key={tool.href}
               href={tool.href}

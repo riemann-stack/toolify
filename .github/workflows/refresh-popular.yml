@@ -1,0 +1,56 @@
+# 인기 도구 매니페스트 주간 자동 갱신.
+# 매주 월요일 04:00 KST(일 19:00 UTC)에 GA4 최근 28일 조회수로 app/popular-tools.json 재생성 →
+# 변경 있으면 커밋·푸시 → main 푸시가 Vercel 자동 배포 트리거.
+# 수동 실행: Actions 탭 > Refresh popular tools > Run workflow.
+#
+# [필요 GitHub Secrets] (Settings > Secrets and variables > Actions)
+#   GA4_PROPERTY_ID          : 532536469
+#   GA_SERVICE_ACCOUNT_KEY   : 서비스 계정 JSON 키 파일 내용 전체(붙여넣기)
+
+name: Refresh popular tools
+
+on:
+  schedule:
+    - cron: '0 19 * * 0' # 일 19:00 UTC = 월 04:00 KST
+  workflow_dispatch: {}
+
+# 봇이 매니페스트 커밋을 푸시할 수 있도록
+permissions:
+  contents: write
+
+# 다른 실행/배포와 겹치지 않도록 동시 실행 방지
+concurrency:
+  group: refresh-popular
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Regenerate popular manifest from GA4
+        env:
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GA_SERVICE_ACCOUNT_KEY: ${{ secrets.GA_SERVICE_ACCOUNT_KEY }}
+        run: npm run gen:popular
+
+      - name: Commit & push if changed
+        run: |
+          if git diff --quiet -- app/popular-tools.json; then
+            echo "변경 없음 — 커밋 생략."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/popular-tools.json
+          git commit -m "chore: 인기 도구 GA4 조회수 주간 갱신 [skip ci]"
+          git pull --rebase origin main
+          git push
