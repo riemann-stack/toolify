@@ -27,7 +27,10 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # fetch-depth: 0 = 전체 이력 — 데이터 변경 시 아래 pull --rebase가 shallow에서 128로 죽는 것 방지
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -52,5 +55,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add app/popular-tools.json
           git commit -m "chore: 인기 도구 GA4 조회수 주간 갱신 [skip ci]"
+          # 다른 워크스트림이 그새 push했어도 안전하게: rebase 후 detached/branch 무관하게 main으로 push
           git pull --rebase origin main
-          git push
+          git push origin HEAD:main
