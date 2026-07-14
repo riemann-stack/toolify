@@ -43,6 +43,18 @@
   margin: 10px 0 0;
 }
 .note strong { color: var(--text); }
+.warnNote {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--warning);
+  background: rgba(217,119,6,0.14);
+  border: 1px solid rgba(217,119,6,0.30);
+  border-radius: 8px;
+  line-height: 1.6;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.warnNote strong { color: var(--warning); }
 
 /* ── 스케일 선택 ── */
 .scaleGrid {
@@ -364,7 +376,7 @@
 /* ── ISO VG 매칭 ── */
 .isoMatchedCard {
   background: linear-gradient(135deg, rgba(8,145,178,0.18), rgba(16,185,129,0.14));
-  border: 1px solid #0891B2;
+  border: 1px solid var(--cat-health);
   border-radius: 12px;
   padding: 16px 18px;
   text-align: center;
@@ -374,7 +386,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 38px;
   font-weight: 800;
-  color: #0891B2;
+  color: var(--cat-health);
   letter-spacing: -1px;
 }
 .isoMatchedRange {
@@ -412,7 +424,7 @@
   font-weight: 800;
   color: var(--text);
 }
-.isoRowActive .isoVg { color: #0891B2; }
+.isoRowActive .isoVg { color: var(--cat-health); }
 .isoRange {
   font-family: 'Inter', system-ui, sans-serif;
   color: var(--muted);
@@ -457,7 +469,7 @@
 }
 .gradeBadgeIso {
   background: rgba(8,145,178,0.14);
-  color: #0891B2;
+  color: var(--cat-health);
   border-color: rgba(8,145,178,0.30);
 }
 .oilUse {
@@ -482,7 +494,7 @@
 }
 .fluidRow:last-child { border-bottom: none; }
 @media (max-width: 600px) {
-  .fluidRow { grid-template-columns: 24px 1fr 90px 60px; gap: 8px; font-size: 12px; }
+  .fluidRow { grid-template-columns: 24px minmax(0, 1fr) 90px 60px; gap: 8px; font-size: 12px; }
   .fluidNote { display: none; }
 }
 .fluidEmoji { font-size: 18px; line-height: 1; text-align: center; }

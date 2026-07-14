@@ -9,7 +9,7 @@ export const metadata = buildMetadata({
   path: '/tools/unit/viscosity',
   title: '점도(Viscosity) 변환기 — cP·cSt·SUS·SAE J300·ISO VG',
   description:
-    'cP(mPa·s)·cSt·SUS·Pa·s 점도 단위 동시 환산 + SAE J300 엔진오일 등급 (0W-20·5W-30 등) ↔ cSt 매핑 + ISO VG 산업 윤활유. 자동차 DIY·산업 정비용.',
+    'cP(mPa·s)·cSt·SUS·Pa·s 점도 단위 동시 환산 + SAE J300 고온(100°C) 등급 ↔ cSt 매칭(0W·5W 저온 등급은 별도 시험) + ISO VG 산업 윤활유. 자동차 DIY·산업 정비용.',
   keywords: [
     '점도 변환', '점도 환산', 'cP cSt 변환',
     '센티포아즈', '센티스토크', 'mPa s',
@@ -31,7 +31,7 @@ const sectionTitle: React.CSSProperties = {
 const FAQ_LD = [
               {
                 q: '0W-20과 5W-30 중 뭘 넣어야 하나요?',
-                a: '<strong>차량 매뉴얼·주유구 캡 표기 우선</strong>. 최신 한국·일본 승용차(현대·기아·도요타·혼다)는 연비 우선으로 0W-20·5W-20을 권장. 유럽차(BMW·메르세데스)는 5W-30·5W-40이 표준. 고출력 터보·고연식·고온 환경은 한 등급 위(예: 5W-30 → 5W-40)를 고려할 수 있지만, 매뉴얼을 크게 벗어나는 등급은 보증·연비 모두 손해입니다.',
+                a: '<strong>차량 매뉴얼·주유구 캡 표기 우선</strong>. 최신 한국·일본 승용차(현대·기아·도요타·혼다)는 연비 우선으로 0W-20·5W-20을 권장. 유럽차(BMW·메르세데스)는 전통적으로 5W-30·5W-40이 흔하지만, 최신 모델은 0W-20 전용 승인 규격(BMW LL-17 FE+, MB 229.71)을 지정하기도 해 승인 규격 확인이 필수. 고출력 터보·고연식·고온 환경은 한 등급 위(예: 5W-30 → 5W-40)를 고려할 수 있지만, 매뉴얼을 크게 벗어나는 등급은 보증·연비 모두 손해입니다.',
               },
               {
                 q: 'cP와 cSt 중 어느 게 더 정확한 점도 지표인가요?',
@@ -39,11 +39,11 @@ const FAQ_LD = [
               },
               {
                 q: 'SUS는 왜 다른 단위들과 정확히 변환이 어렵나요?',
-                a: 'SUS(Saybolt Universal Seconds)는 <strong>표준 컵에서 60mL의 액체가 흘러나오는 시간</strong>을 직접 측정하는 단위입니다. 컵 구조의 비선형성과 유체 흐름 특성 때문에 cSt와 단순 비례하지 않으며, 특히 32~100 SUS 영역은 보정식이 복잡합니다(ASTM D2161). 100 SUS 이상에서는 <code style="color: var(--text)">SUS ≈ 4.6347 × cSt</code>가 ±1% 안에서 잘 맞지만, 그 이하에서는 표 lookup이 더 정확해요.',
+                a: 'SUS(Saybolt Universal Seconds)는 <strong>표준 컵에서 60mL의 액체가 흘러나오는 시간</strong>을 직접 측정하는 단위입니다. 컵 구조의 비선형성 때문에 cSt와 단순 비례하지 않으며, 특히 32~100 SUS 영역은 보정이 큽니다. 본 도구는 <strong>ASTM D2161 공식 계산식</strong>(다항 보정 포함)을 전 구간에 사용해요. 점도가 높아질수록 <code style="color: var(--text)">SUS ≈ 4.632 × cSt</code> 선형 근사로 수렴하지만 ±1% 이내로 맞는 건 약 180 SUS(≈38 cSt)부터이고, D2161이 공식 선형 구간으로 규정하는 것은 75 cSt(≈348 SUS) 이상입니다. SUS 자체는 32.0초(=1.81 cSt)부터 정의되고, 현행 D2161은 SUS를 레거시 단위로 보아 mm²/s(cSt) 사용을 권장합니다.',
               },
               {
                 q: '엔진오일 점도지수(VI)가 뭔가요?',
-                a: '<strong>Viscosity Index(VI)</strong> — 온도 변화에 따른 점도 변화량을 나타내는 무차원 지수. 100이 기준이고 높을수록 온도에 둔감. 광유는 VI 80~110, 합성유는 130~180+. <strong>다등급 오일(0W-20 등)은 VI 150 이상</strong>이라야 W 등급과 100°C 등급을 동시에 만족할 수 있어요. 카탈로그에 VI가 표기되어 있다면 클수록 광범위 온도에서 안정적이라는 뜻.',
+                a: '<strong>Viscosity Index(VI)</strong> — 온도 변화에 따른 점도 변화량을 나타내는 무차원 지수. 100이 기준이고 높을수록 온도에 둔감. 광유는 VI 80~110, 합성유는 130~180+. <strong>다등급 오일은 W 등급과 고온 등급의 간격이 넓을수록 높은 VI가 필요</strong>합니다 — 간격이 좁은 15W-40 광유는 VI 130~145로도 성립하고, 0W-20처럼 간격이 넓은 합성유는 통상 VI 160 이상이에요(SAE J300 자체는 VI를 요건으로 두지 않습니다). 카탈로그에 VI가 표기되어 있다면 클수록 광범위 온도에서 안정적이라는 뜻.',
               },
               {
                 q: '엔진오일 등급을 올리면 연비가 떨어지나요?',
@@ -59,7 +59,7 @@ const FAQ_LD = [
               },
               {
                 q: '브레이크액 DOT 등급은 점도와 다른가요?',
-                a: '맞습니다. <strong>DOT 3/4/5/5.1은 비등점·습기 흡수 기준</strong>이지 점도 등급이 아닙니다. 다만 미국·유럽 표준은 점도 한도(예: -40°C에서 1800 mm²/s 이하)도 함께 명시하므로 결과적으로 모든 DOT 등급이 비슷한 점도 범위를 가져요. 브레이크액은 <strong>비등점·흡습성 우선</strong>으로 등급 선택하고, 점도는 자동으로 따라옵니다.',
+                a: '맞습니다. <strong>DOT 3/4/5/5.1은 비등점·습기 흡수 기준</strong>이지 점도 등급이 아닙니다. 다만 미국 FMVSS No. 116은 등급별 저온 점도 상한도 함께 명시합니다 — -40°C에서 DOT 3는 1,500, DOT 4는 1,800, DOT 5·5.1은 900 mm²/s 이하(100°C에서는 공통 1.5 mm²/s 이상). 등급별 상한이 최대 2배 차이 나지만 모두 같은 자릿수의 저온 한도라서, 브레이크액은 <strong>비등점·흡습성 우선</strong>으로 등급을 선택하면 점도는 규격이 함께 보증합니다.',
               },
             ]
 
@@ -87,10 +87,10 @@ export default function ViscosityPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '절대점도 μ (Dynamic)',  d: 'cP = mPa·s', desc: '두 평행판 사이 유체를 끌 때 필요한 힘. 정량적·물리적 의미가 직관적', c: '#059669' },
-              { t: '동점도 ν (Kinematic)',  d: 'cSt = mm²/s', desc: '중력에 의해 자유낙하하는 유체 거동. 오일 카탈로그·SAE/ISO 표준', c: '#0891B2' },
-              { t: '관계식',               d: 'ν = μ / ρ', desc: '밀도 1.0(물)이면 두 값이 같아지지만, 오일(ρ≈0.87)은 다름', c: '#D97706' },
-              { t: 'SI 단위',              d: 'Pa·s = 1000 cP', desc: '학술·연구용 SI. 산업 현장은 거의 안 씀', c: '#9333EA' },
+              { t: '절대점도 μ (Dynamic)',  d: 'cP = mPa·s', desc: '두 평행판 사이 유체를 끌 때 필요한 힘. 정량적·물리적 의미가 직관적', c: 'var(--success)' },
+              { t: '동점도 ν (Kinematic)',  d: 'cSt = mm²/s', desc: '중력에 의해 자유낙하하는 유체 거동. 오일 카탈로그·SAE/ISO 표준', c: 'var(--cat-health)' },
+              { t: '관계식',               d: 'ν = μ / ρ', desc: '밀도 1.0(물)이면 두 값이 같아지지만, 오일(ρ≈0.87)은 다름', c: 'var(--warning)' },
+              { t: 'SI 단위',              d: 'Pa·s = 1000 cP', desc: '학술·연구용 SI. 산업 현장은 거의 안 씀', c: 'var(--cat-art)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.t}</p>
@@ -172,7 +172,7 @@ export default function ViscosityPage() {
         {/* 5. 함께 쓰면 좋은 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px' }}>
             {[
               { href: '/tools/unit/hardness',      icon: '🛠️', name: '경도(Hardness) 변환기', desc: 'HRC·HV·HB 등 강재 경도 환산' },
               { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',          desc: '길이·면적·무게·부피 통합' },

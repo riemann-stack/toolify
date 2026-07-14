@@ -5,7 +5,8 @@
    - 절대점도(μ, dynamic): cP = mPa·s, Pa·s
    - 동점도(ν, kinematic): cSt = mm²/s
    - 관계식: ν (cSt) = μ (cP) / ρ (g/cm³)
-   - SUS(Saybolt Universal Seconds): ASTM D2161 근사식 사용
+   - SUS(Saybolt Universal Seconds): ASTM D2161 공식 계산식(100°F) + 수치 역산.
+     유효역 ν ≥ 1.81 cSt (= 32.0 SUS, Saybolt 측정 하한) — 미만은 NaN('—' 표시)
    ────────────────────────────────────────────────────── */
 
 export type Scale = 'cp' | 'cst' | 'sus' | 'pas'
@@ -41,29 +42,29 @@ export const DENSITY_PRESETS: DensityPreset[] = [
   { id: 'honey',    label: '꿀',           rho: 1.42 },
 ]
 
-// ─── SUS ↔ cSt 환산 (ASTM D2161 근사) ──────────────────────
-/** cSt → SUS, SUS > 100 영역에서는 SUS ≈ 4.6347 × cSt가 매우 정확 */
+// ─── SUS ↔ cSt 환산 (ASTM D2161) ──────────────────────
+/** cSt → SUS @100°F — ASTM D2161 공식 계산식(표 자체가 이 식으로 생성됨).
+ *  전 구간 단일 식: 고점도에서 4.6324×cSt로 수렴하며, ±1% 이내 선형 근사는
+ *  약 180 SUS(≈38 cSt)부터 성립. D2161 표 앵커 재현: 2→32.6, 5→42.4,
+ *  10→58.8, 20→97.8, 100→463.5 (±0.1 SUS).
+ *  유효역 cSt ≥ 1.81 (= 32.0 SUS 하한) — 미만은 NaN('—' 표시). */
 export function cstToSus(cSt: number): number {
-  if (cSt <= 0) return 0
-  if (cSt < 1.83) return 32   // 측정 하한 (물 정도)
-  if (cSt < 32) {
-    // 저점도 영역 — ASTM D2161 표 기반 근사 (cSt 2~32)
-    // SUS = 4.62×cSt + (a / cSt) 형태 — 작은 값 보정
-    return 4.6347 * cSt + 6 / cSt
-  }
-  // 고점도 영역 — 선형 근사
-  return 4.6347 * cSt
+  if (!isFinite(cSt) || cSt < 1.81) return NaN
+  return 4.6324 * cSt + (1 + 0.03264 * cSt) / ((3930.2 + 262.7 * cSt + 23.97 * cSt * cSt + 1.646 * cSt * cSt * cSt) * 1e-5)
 }
 
-/** SUS → cSt — ASTM D2161 역산 */
+/** SUS → cSt — 위 공식 계산식의 수치 역산(이분법, 단조증가라 안정 수렴).
+ *  왕복 변환(cSt→SUS→cSt)이 정확히 일치한다. SUS < 32.0(측정 하한)은 NaN. */
 export function susToCst(sus: number): number {
-  if (sus <= 32) return 0
-  if (sus < 100) {
-    // 0.226·SUS - 195/SUS  (저점도)
-    return 0.226 * sus - 195 / sus
+  if (!isFinite(sus) || sus < 32) return NaN
+  let lo = 1.81
+  let hi = 1e6
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2
+    if (cstToSus(mid) < sus) lo = mid
+    else hi = mid
   }
-  // 고점도 — 0.220·SUS - 135/SUS
-  return 0.220 * sus - 135 / sus
+  return (lo + hi) / 2
 }
 
 // ─── 통합 환산 ───────────────────────────────────────────
@@ -113,7 +114,8 @@ export const SAE_GRADES: SaeGrade[] = [
   { grade: 'xW-60', minCst: 21.9, maxCst: 26.1, hint: '레이싱 전용' },
 ]
 
-/** cSt @100°C → 매칭되는 SAE 등급들 (범위가 겹치므로 여러 개) */
+/** cSt @100°C → 매칭되는 SAE 등급들 (범위가 겹치므로 여러 개).
+ *  J300 규격 그대로 min 포함·max 배타(<) — ISO VG(양끝 포함)와 다른 것이 표준상 정상. */
 export function matchSae(cst100: number): SaeGrade[] {
   return SAE_GRADES.filter((g) => cst100 >= g.minCst && cst100 < g.maxCst)
 }
@@ -148,7 +150,7 @@ export const ISO_VG: IsoVg[] = [
   { vg: 1500, minCst: 1350,  maxCst: 1650,  use: '특수 고점도' },
 ]
 
-/** cSt @40°C → 매칭되는 ISO VG */
+/** cSt @40°C → 매칭되는 ISO VG. ISO 3448의 ±10% 허용역 그대로 양끝 포함(<=). */
 export function matchIsoVg(cst40: number): IsoVg | null {
   return ISO_VG.find((v) => cst40 >= v.minCst && cst40 <= v.maxCst) ?? null
 }
@@ -173,19 +175,21 @@ export const FLUID_REFS: FluidRef[] = [
   { emoji: '🍯', name: '꿀',                cp: '~10,000 cP', temp: '@20°C' },
   { emoji: '🥫', name: '케첩',              cp: '~50,000 cP', note: '비뉴턴 유체' },
   { emoji: '🥜', name: '땅콩버터',           cp: '~250,000 cP', note: '비뉴턴 유체' },
-  { emoji: '🍡', name: 'Bitumen (역청)',     cp: '~10⁸ cP', temp: '실온', note: '핏치 드롭 실험' },
+  { emoji: '🍡', name: 'Bitumen (역청)',     cp: '~10⁸ cP', temp: '실온', note: '도로 아스팔트 기준 — 피치 드롭 실험의 피치는 ~2.3×10¹¹ cP' },
 ]
 
 // ─── 자동차 오일 가이드 ────────────────────────────────────
+// grade는 배지에 그대로 표시 — 'SAE ' 접두를 코드에서 자동 부착하지 않는다
+// (ATF·DOT은 SAE 점도 등급이 아니고, 기어유 75W-90 등은 J306 체계라 J300과 별개)
 export interface OilGuide { type: string; sae: string; iso?: string; use: string }
 export const OIL_GUIDES: OilGuide[] = [
-  { type: '엔진오일',     sae: 'xW-20 / xW-30',     use: '한국 일반 승용차 (현대·기아·도요타 매뉴얼 권장)' },
-  { type: '엔진오일 (고성능)', sae: 'xW-40 / xW-50', use: 'BMW M·메르세데스 AMG 등 고출력' },
-  { type: '미션오일 (수동)', sae: '75W-90 / 80W-90', iso: 'VG 100~150', use: 'GL-4 또는 GL-5 등급 확인' },
-  { type: '미션오일 (자동, ATF)', sae: 'ATF (Dexron VI 등)', use: '제조사 지정 사용 — 호환 X 시 변속 손상' },
-  { type: '디퍼렌셜', sae: '75W-90 / 85W-140',     iso: 'VG 150~220', use: 'LSD는 별도 첨가제' },
+  { type: '엔진오일',     sae: 'SAE xW-20 / xW-30',     use: '한국 일반 승용차 (현대·기아·도요타 매뉴얼 권장)' },
+  { type: '엔진오일 (고성능)', sae: 'SAE xW-40 / xW-50', use: 'BMW M·메르세데스 AMG 등 고출력' },
+  { type: '미션오일 (수동)', sae: 'SAE J306 75W-90 / 80W-90', iso: 'VG 100~150', use: 'GL-4 또는 GL-5 등급 확인' },
+  { type: '미션오일 (자동, ATF)', sae: 'ATF (Dexron VI 등)', use: '제조사 지정 사용 — 호환 X 시 변속 손상 (SAE 점도 등급 아님)' },
+  { type: '디퍼렌셜', sae: 'SAE J306 75W-90 / 85W-140',     iso: 'VG 150~220', use: 'LSD는 별도 첨가제' },
   { type: '브레이크액',   sae: 'DOT 3/4/5.1',       use: '비등점 기준. SAE 점도 등급 아님' },
   { type: '파워스티어링', sae: 'ATF 또는 전용액',     use: '제조사 매뉴얼 확인' },
-  { type: '유압유 (산업)', sae: '—',                 iso: 'VG 32 / 46 / 68', use: '실내 32, 옥외 46, 중부하 68' },
+  { type: '유압유 (산업)', sae: '—',                 iso: 'VG 32 / 46 / 68', use: '관행: 실내 32·옥외 46·중부하 68 — 장비 제조사 지정 우선' },
   { type: '기어유 (산업)', sae: '—',                 iso: 'VG 100~680', use: 'AGMA EP 등급 확인' },
 ]
