@@ -252,7 +252,10 @@ export default function HolidayBridgePage() {
           <h2 style={h2Style}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/date/dday', icon: '📅', name: 'D-Day 계산기', desc: '연휴까지 카운트다운·영업일 계산' },
+              { href: '/tools/date/dday', icon: '📅', name: 'D-Day 계산기', desc: '고른 연휴까지 카운트다운 + 영업일·N일 후 계산' },
+              { href: '/tools/date/lunar', icon: '🌙', name: '양력 음력 변환기', desc: '설·추석은 음력이라 해마다 양력 날짜가 달라집니다' },
+              { href: '/tools/life/travel-budget', icon: '✈️', name: '해외여행 예산 계산기', desc: '길게 만든 연휴로 떠날 여행 예산 잡기' },
+              { href: '/tools/date/server-time', icon: '⏱️', name: '실시간 서버 시간', desc: '연휴 항공권·숙소 오픈런 시각 맞추기' },
             ].map((t, i) => (
               <Link
                 key={i}
