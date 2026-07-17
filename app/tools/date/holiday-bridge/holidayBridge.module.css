@@ -65,6 +65,15 @@
   padding: 4px;
   flex-wrap: wrap;
 }
+/* 5칸짜리 세그먼트(연도·분기) 전용.
+   flex + min-width:56px로는 흔한 폰 폭(375~393px)에서 4+1로 갈라지고, 남은 한 칸이
+   flex:1로 늘어나 형제의 4배가 된다(393px에서 293px vs 70px). 그리드로 칸을 균등 고정한다.
+   가장 긴 라벨('1분기'/'4분기') = 텍스트 32px + 좌우 패딩이 최소폭 — 320px에서 칸이
+   40.8px까지 좁아지므로 그 구간만 패딩을 줄여 1행을 유지한다. */
+.segment5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
 .segBtn {
   flex: 1 1 auto;
   min-width: 56px;
@@ -78,6 +87,11 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+}
+/* 그리드 칸이 내용보다 좁아질 수 있게 — min-width:56px가 칸을 밀어내지 않도록 */
+.segment5 .segBtn { min-width: 0; }
+@media (max-width: 380px) {
+  .segment5 .segBtn { padding: 8px 2px; }
 }
 @media (hover: hover) { .segBtn:hover { color: var(--text); } }
 .segBtnActive {

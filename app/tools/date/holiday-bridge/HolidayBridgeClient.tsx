@@ -164,7 +164,7 @@ export default function HolidayBridgeClient() {
         {/* 탐색 기간 */}
         <div className={s.field} style={{ marginTop: 16 }}>
           <span className={s.fieldLabel}>탐색 기간</span>
-          <div className={s.segment} role="group" aria-label="탐색 연도">
+          <div className={`${s.segment} ${s.segment5}`} role="group" aria-label="탐색 연도">
             {SELECTABLE_YEARS.map(y => (
               <button
                 type="button"
@@ -177,7 +177,7 @@ export default function HolidayBridgeClient() {
               </button>
             ))}
           </div>
-          <div className={s.segment} role="group" aria-label="분기 선택">
+          <div className={`${s.segment} ${s.segment5}`} role="group" aria-label="분기 선택">
             {([['year', '연간'], ['q1', '1분기'], ['q2', '2분기'], ['q3', '3분기'], ['q4', '4분기']] as [PeriodMode, string][]).map(([p, label]) => (
               <button
                 type="button"
