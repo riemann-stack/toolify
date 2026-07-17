@@ -13,26 +13,44 @@ interface ServiceType {
   months: number
   group: string
   cls: string
+  /** 병 계급(이병·일병·상병·병장)이 있는 복무 형태인가.
+      사회복무요원·전문연구요원·산업기능요원·대체복무요원은 계급이 없어 진급 마일스톤이 무의미하다. */
+  ranked: boolean
+  /** 신병교육(훈련소)을 거치는가 — 상근예비역은 현역병과 같이 받고, 보충역·대체복무는 별도. */
+  bootcamp: boolean
 }
 
 const SERVICE_TYPES: ServiceType[] = [
   // 18개월
-  { id: 'army',                  name: '육군',                     months: 18, group: '현역병',    cls: 'svc18' },
-  { id: 'marine',                name: '해병대',                   months: 18, group: '현역병',    cls: 'svc18' },
-  { id: 'reserve',               name: '상근예비역',               months: 18, group: '예비역',    cls: 'svc18' },
+  { id: 'army',                  name: '육군',                     months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true },
+  { id: 'marine',                name: '해병대',                   months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true },
+  { id: 'reserve',               name: '상근예비역',               months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true },
   // 20개월
-  { id: 'navy',                  name: '해군',                     months: 20, group: '현역병',    cls: 'svc20' },
+  { id: 'navy',                  name: '해군',                     months: 20, group: '현역병',    cls: 'svc20', ranked: true,  bootcamp: true },
   // 21개월
-  { id: 'airforce',              name: '공군',                     months: 21, group: '현역병',    cls: 'svc21' },
-  { id: 'social',                name: '사회복무요원',             months: 21, group: '보충역',    cls: 'svc21' },
+  { id: 'airforce',              name: '공군',                     months: 21, group: '현역병',    cls: 'svc21', ranked: true,  bootcamp: true },
+  { id: 'social',                name: '사회복무요원',             months: 21, group: '보충역',    cls: 'svc21', ranked: false, bootcamp: false },
   // 23개월
-  { id: 'industrial-supplement', name: '산업기능요원 (보충역)',     months: 23, group: '대체복무',  cls: 'svc23' },
+  { id: 'industrial-supplement', name: '산업기능요원 (보충역)',     months: 23, group: '보충역',    cls: 'svc23', ranked: false, bootcamp: false },
   // 34개월
-  { id: 'industrial-active',     name: '산업기능요원 (현역)',       months: 34, group: '대체복무',  cls: 'svc34' },
+  { id: 'industrial-active',     name: '산업기능요원 (현역)',       months: 34, group: '대체복무',  cls: 'svc34', ranked: false, bootcamp: true },
   // 36개월
-  { id: 'research',              name: '전문연구요원',             months: 36, group: '대체복무',  cls: 'svc36' },
-  { id: 'alternative',           name: '대체복무요원',             months: 36, group: '대체복무',  cls: 'svc36' },
+  { id: 'research',              name: '전문연구요원',             months: 36, group: '대체복무',  cls: 'svc36', ranked: false, bootcamp: true },
+  { id: 'alternative',           name: '대체복무요원',             months: 36, group: '대체복무',  cls: 'svc36', ranked: false, bootcamp: false },
 ]
+
+/* 병 진급 최저복무기간 — 「군인사법 시행규칙」 제32조제2항 (국방부령 제1207호, 시행 2026-03-01).
+   원문 표는 군별 구분 열 없이 3행뿐 → 육·해·공·해병대 진급 시점이 동일하다.
+     병장 = 상등병으로서 6개월 / 상등병 = 일등병으로서 6개월 / 일등병 = 이등병으로서 2개월
+   따라서 입대 기준 누적 2·8·14개월. 군별로 다른 것은 진급 시점이 아니라 '병장으로 복무하는 잔여 기간'뿐.
+   ※ 같은 조 제3항은 근무성적 우수자(총진급인원의 1/10 이내)에게 상병 4개월·병장 5개월 단축을 허용하고,
+     제2항 단서는 참모총장이 국방부장관 승인을 받아 1개월 범위에서 연장할 수 있게 한다 → 개인차 있음.
+   ※ 제32조제1항은 2024-02-29 개정으로 '진급심사를 거쳐' 진급시키도록 바뀌었다(자동 진급 아님). */
+const RANK_MONTHS = [
+  { rank: '일병', from: '이병', months: 2 },
+  { rank: '상병', from: '일병', months: 8 },
+  { rank: '병장', from: '상병', months: 14 },
+] as const
 
 const SERVICE_GROUPS = [
   { months: 18, label: '🪖 18개월',  hint: '현역병·예비역' },
@@ -48,6 +66,24 @@ const SERVICE_GROUPS = [
  * ───────────────────────────────────────────────────────── */
 function daysInMonth(year: number, month: number): number {
   return new Date(year, month, 0).getDate()
+}
+/** 입대일 + N개월의 '복무기간 만료일'(= 전역일).
+ *  「병역법 시행령」 제27조제1항이 복무기간을 입영일부터 기산(초일 산입)하도록 정할 뿐
+ *  만료일 규칙은 없어, 「민법」 제155조에 따라 민법 기간 규정이 준용된다.
+ *   - §160② 해당일이 있으면 → 그 전일이 만료일  (통념 공식의 '−1일'의 정체)
+ *   - §160③ 해당일이 없으면 → 그 달의 말일이 만료일 (여기서 −1을 또 하면 이중 차감)
+ *  ex) 1/15 +18개월 → 7/15의 전일 = 7/14 · 8/31 +18개월 → 2/31 부존재 → 2월 말일
+ *  구 코드는 setMonth 오버플로로 8/31 +18을 3/02로 계산했다(만료월이 2월인 경우만 어긋남).
+ *  ※ 실무(병무청) 확인은 공백 — 병무청 공식 계산기가 없다. 민법 규정에 따른 산정임을 본문에 명시할 것. */
+function dischargeDate(enlist: Date, months: number): Date {
+  const y = enlist.getFullYear()
+  const t = enlist.getMonth() + months
+  const day = enlist.getDate()
+  const last = new Date(y, t + 1, 0).getDate()
+  // day-1 === 0이면 Date가 전월 말일로 롤백하는데, 그것이 곧 정답이다 (1/1 +18 → 6/30)
+  const d = day > last ? new Date(y, t, last) : new Date(y, t, day - 1)
+  d.setHours(0, 0, 0, 0)
+  return d
 }
 function clamp(v: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, v))
@@ -81,7 +117,11 @@ export default function MilitaryClient() {
 
   /* 입대일 — 단일 source of truth: { y, m, d } */
   const initialEnlist = useMemo(() => {
-    const d = new Date(); d.setMonth(d.getMonth() - 6)
+    // setMonth(-6)은 월말에서 오버플로한다(3/31 → 9/31 부존재 → 10/1). 말일로 클램프.
+    const now = new Date()
+    const t = now.getMonth() - 6
+    const last = new Date(now.getFullYear(), t + 1, 0).getDate()
+    const d = new Date(now.getFullYear(), t, Math.min(now.getDate(), last))
     return { y: d.getFullYear(), m: d.getMonth() + 1, d: d.getDate() }
   }, [])
   const [enlistY, setEnlistY] = useState(initialEnlist.y)
@@ -132,14 +172,12 @@ export default function MilitaryClient() {
     setEnlistD(d.getDate())
   }
 
-  function activePresetId(): string | null {
+  /* 프리셋 7개 × 버튼 7개 = 렌더마다 49회 비교였다 → 1회로. */
+  const activePreset = useMemo(() => {
     if (!todayState) return null
     const en = startOfDay(enlistDate)
-    for (const p of presets) {
-      if (diffDays(en, p.date) === 0) return p.id
-    }
-    return null
-  }
+    return presets.find(p => diffDays(en, p.date) === 0)?.id ?? null
+  }, [todayState, enlistDate, presets])
 
   /* ─── 드롭다운 변경 핸들러 (월·년 변경 시 일 보정) ─── */
   const dimOf = daysInMonth(enlistY, enlistM)
@@ -165,48 +203,77 @@ export default function MilitaryClient() {
   const result = useMemo(() => {
     if (!referenceDate) return null
     const enlist = startOfDay(enlistDate)
-    // 전역일 = 입대일 + 복무개월 - 1일
-    const discharge = new Date(enlist)
-    discharge.setMonth(discharge.getMonth() + serviceMonths)
-    discharge.setDate(discharge.getDate() - 1)
-    const dischargeStart = startOfDay(discharge)
+    const dischargeStart = dischargeDate(enlist, serviceMonths)
 
-    const totalDays = diffDays(dischargeStart, enlist) + 1  // 포함 일수
-    const passedDays = clamp(diffDays(referenceDate, enlist), 0, totalDays)
+    /* 기준 통일: 입대일·전역일을 모두 포함하는 '복무 일수'로 센다.
+       구 코드는 분모만 포함(+1)이고 분자는 미포함이라 전역 당일이 545/546일(99.8%)이었다. */
+    const totalDays = diffDays(dischargeStart, enlist) + 1
+    const rawPassed = diffDays(referenceDate, enlist) + 1   // 입대 당일 = 1일차
+    const passedDays = clamp(rawPassed, 0, totalDays)
+    const beforeEnlist = rawPassed <= 0
     const remainingDays = clamp(diffDays(dischargeStart, referenceDate), 0, totalDays)
     const progress = totalDays > 0 ? (passedDays / totalDays) * 100 : 0
 
     const dayN = (n: number) => addDays(enlist, n)
+    /* D-N = 전역까지 N일 남은 날 = 전역일 − N. 카드 라벨(D-100/D-30)과 히어로의
+       '전역까지 D-x'(= diffDays(discharge, ref))가 같은 값이 되도록 맞춘다.
+       구 코드는 -99/-29라 D-100 마일스톤 당일에 히어로가 D-99를 표시했다. */
     const ms = {
       enlist:       enlist,
-      day100:       dayN(99),                              // 입대 100일 (포함)
-      halfway:      dayN(Math.floor(totalDays / 2) - 1),
-      threeQuarter: dayN(Math.floor(totalDays * 0.75) - 1),
-      last100:      addDays(dischargeStart, -99),          // 전역 100일 전 (D-100 포함)
-      last30:       addDays(dischargeStart, -29),
+      day100:       dayN(99),                              // 입대 100일차 (입대일=1일차)
+      halfway:      dayN(Math.ceil(totalDays / 2) - 1),
+      threeQuarter: dayN(Math.ceil(totalDays * 0.75) - 1),
+      last100:      addDays(dischargeStart, -100),
+      last30:       addDays(dischargeStart, -30),
       discharge:    dischargeStart,
     }
+    const svc = SERVICE_TYPES.find(s => s.id === serviceId)
+    const ranked = svc?.ranked ?? serviceId === 'custom'   // 직접 입력은 현역병으로 가정
+
+    /* 짧은 복무(직접 입력 1~3개월)에선 D-100·입대100일이 복무 구간 밖으로 나간다.
+       → 입대 첫날부터 '🔥 말년', 전역 뒤에 '입대 100일 D-8' 같은 표시를 막는다. */
+    const showLast100 = diffDays(ms.last100, enlist) >= 0
+    const showLast30  = diffDays(ms.last30, enlist) >= 0
+    /* 100일 면회·휴가는 신병교육을 거치는 현역병 문화다 —
+       출퇴근하는 사회복무요원·합숙하는 대체복무요원에겐 해당 없음. */
+    const showDay100  = diffDays(dischargeStart, ms.day100) >= 0 && ranked
+
+    /* 진급 마일스톤 — 계급이 있는 복무 형태에서만. 복무율에 억지로 끼우지 않고
+       입대 기준 절대 시점(2·8·14개월)으로 계산한다. 전역일을 넘는 진급은 제외
+       (예: 직접 입력 6개월이면 상병·병장 진급은 도달하지 않는다). */
+    const promotions = ranked
+      ? RANK_MONTHS
+          // 'N개월이 지난' 시점 = N개월 기간의 만료일 다음 날 (민법 §160 기준을 전역일과 동일하게 적용)
+          .map(r => ({ ...r, date: addDays(dischargeDate(enlist, r.months), 1) }))
+          .filter(r => diffDays(dischargeStart, r.date) >= 0)   // 전역 후 진급은 표시하지 않음
+      : []
 
     const reached = (d: Date) => diffDays(referenceDate, d) >= 0
     const daysUntil = (d: Date) => diffDays(d, referenceDate)
 
-    /* 오늘 마일스톤 알림 (today === referenceDate일 때만) */
+    /* 오늘 마일스톤 알림 (today === referenceDate일 때만).
+       100일은 '진급일'이 아니다 — 일병 진급 최저복무기간은 이병 2개월(약 60일)이라
+       100일차는 이미 진급 후 40일쯤이다(「군인사법 시행규칙」 제32조제2항). 문화적 기념일로만 표기. */
     let todayMilestone: { icon: string; text: string } | null = null
     if (todayState && diffDays(todayState, referenceDate) === 0) {
-      if (diffDays(referenceDate, ms.day100) === 0)         todayMilestone = { icon: '🎉', text: '오늘은 입대 100일! 이병 → 일병 진급일이에요' }
-      else if (diffDays(referenceDate, ms.halfway) === 0)   todayMilestone = { icon: '🎉', text: '오늘은 복무 절반 지점! 반환점 통과' }
-      else if (diffDays(referenceDate, ms.last100) === 0)   todayMilestone = { icon: '🎉', text: '오늘부터 말년 (D-100)' }
-      else if (diffDays(referenceDate, ms.last30) === 0)    todayMilestone = { icon: '🎉', text: '오늘부터 왕고 (D-30)' }
-      else if (diffDays(referenceDate, ms.discharge) === 0) todayMilestone = { icon: '🎖️', text: '전역 축하합니다!' }
-      else if (diffDays(referenceDate, ms.discharge) > 0)   todayMilestone = { icon: '🎖️', text: '이미 전역하셨네요. 수고하셨습니다' }
+      if (diffDays(referenceDate, ms.discharge) === 0)          todayMilestone = { icon: '🎖️', text: '전역 축하합니다!' }
+      else if (diffDays(referenceDate, ms.discharge) > 0)       todayMilestone = { icon: '🎖️', text: '이미 전역하셨네요. 수고하셨습니다' }
+      else if (showDay100 && diffDays(referenceDate, ms.day100) === 0) todayMilestone = { icon: '🎉', text: '오늘은 입대 100일! 면회·100일 휴가로 챙기는 첫 분기점이에요' }
+      else if (diffDays(referenceDate, ms.halfway) === 0)       todayMilestone = { icon: '🎉', text: '오늘은 복무 절반 지점! 반환점 통과' }
+      else if (showLast100 && diffDays(referenceDate, ms.last100) === 0) todayMilestone = { icon: '🎉', text: '오늘부터 말년 (D-100)' }
+      else if (showLast30 && diffDays(referenceDate, ms.last30) === 0)   todayMilestone = { icon: '🎉', text: '오늘부터 왕고 (D-30)' }
     }
 
     return {
       enlist, discharge: dischargeStart,
       totalDays, passedDays, remainingDays,
-      progress,
+      progress, beforeEnlist,
       milestones: ms,
+      promotions: promotions.map(p => ({ ...p, reached: reached(p.date) })),
+      bootcamp: svc?.bootcamp ?? false,
+      show: { day100: showDay100, last100: showLast100, last30: showLast30 },
       reached: {
+        enlist:       reached(ms.enlist),
         day100:       reached(ms.day100),
         halfway:      reached(ms.halfway),
         threeQuarter: reached(ms.threeQuarter),
@@ -222,7 +289,8 @@ export default function MilitaryClient() {
       },
       todayMilestone,
     }
-  }, [enlistDate, serviceMonths, referenceDate, todayState])
+    // serviceId 필수 — 공군(21)↔사회복무요원(21)처럼 개월수가 같아도 ranked/bootcamp가 달라진다.
+  }, [enlistDate, serviceMonths, serviceId, referenceDate, todayState])
 
   /* ─── 복사 ─── */
   function handleCopy() {
@@ -234,18 +302,31 @@ export default function MilitaryClient() {
       `복무율: ${result.progress.toFixed(1)}% · ${result.passedDays}/${result.totalDays}일`,
       'youtil.kr/tools/date/military',
     ].join('\n')
-    navigator.clipboard?.writeText(txt).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
-    })
+    // 비보안 컨텍스트(사내망 http://192.168.x.x 등)에선 navigator.clipboard가 undefined —
+    // 구 코드는 `?.writeText(txt).then(...)`이라 .then에서 TypeError로 죽었다.
+    navigator.clipboard?.writeText(txt).then(
+      () => { setCopied(true); window.setTimeout(() => setCopied(false), 1500) },
+      () => {},
+    )
   }
 
-  /* 년도 옵션 — 현재 ±1년, 과거 3년 */
+  /* 입대일 연도 — 내년(입영 예정)부터 4년 전(36개월 복무자가 아직 복무 중)까지 */
   const currentYear = todayState?.getFullYear() ?? new Date().getFullYear()
   const yearOptions = useMemo(() => {
     const arr: number[] = []
     for (let y = currentYear + 1; y >= currentYear - 4; y--) arr.push(y)
     return arr
   }, [currentYear])
+
+  /* 기준일 연도 — 입대 연도부터 전역 연도까지 전부 포함해야 한다.
+     구 코드는 currentYear+1 고정이라 36개월 복무자가 자기 전역일을 기준일로 고를 수 없었다. */
+  const refYearOptions = useMemo(() => {
+    const from = Math.min(enlistY, currentYear - 4)
+    const to = Math.max(currentYear + 1, result?.discharge.getFullYear() ?? currentYear + 1)
+    const arr: number[] = []
+    for (let y = to; y >= from; y--) arr.push(y)
+    return arr
+  }, [enlistY, currentYear, result])
 
   /* 첫 마운트 전(SSR) — 스켈레톤 */
   if (!todayState) {
@@ -266,7 +347,8 @@ export default function MilitaryClient() {
             <button
               key={p.id}
               type="button"
-              className={`${styles.presetBtn} ${activePresetId() === p.id ? styles.presetActive : ''}`}
+              aria-pressed={activePreset === p.id}
+              className={`${styles.presetBtn} ${activePreset === p.id ? styles.presetActive : ''}`}
               onClick={() => applyEnlistDate(p.date)}
             >
               {p.label}
@@ -283,13 +365,13 @@ export default function MilitaryClient() {
         </div>
 
         <div className={styles.dobRow}>
-          <select className={styles.dobSelect} value={enlistY} onChange={e => setYear(Number(e.target.value))}>
+          <select aria-label="입대 연도" className={styles.dobSelect} value={enlistY} onChange={e => setYear(Number(e.target.value))}>
             {yearOptions.map(y => <option key={y} value={y}>{y}년</option>)}
           </select>
-          <select className={styles.dobSelect} value={enlistM} onChange={e => setMonth(Number(e.target.value))}>
+          <select aria-label="입대 월" className={styles.dobSelect} value={enlistM} onChange={e => setMonth(Number(e.target.value))}>
             {Array.from({ length: 12 }, (_, i) => i + 1).map(m => <option key={m} value={m}>{m}월</option>)}
           </select>
-          <select className={styles.dobSelect} value={enlistD} onChange={e => setEnlistD(Number(e.target.value))}>
+          <select aria-label="입대 일" className={styles.dobSelect} value={enlistD} onChange={e => setEnlistD(Number(e.target.value))}>
             {Array.from({ length: dimOf }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}일</option>)}
           </select>
         </div>
@@ -315,6 +397,7 @@ export default function MilitaryClient() {
                   <button
                     key={t.id}
                     type="button"
+                    aria-pressed={serviceId === t.id}
                     className={`${styles.serviceBtn} ${styles[t.cls]} ${serviceId === t.id ? styles.serviceActive : ''}`}
                     onClick={() => setServiceId(t.id)}
                   >
@@ -334,6 +417,7 @@ export default function MilitaryClient() {
           <div className={styles.serviceRow}>
             <button
               type="button"
+              aria-pressed={serviceId === 'custom'}
               className={`${styles.serviceBtn} ${styles.svcCustom} ${serviceId === 'custom' ? styles.serviceActive : ''}`}
               onClick={() => setServiceId('custom')}
             >
@@ -345,6 +429,8 @@ export default function MilitaryClient() {
               <input
                 className={styles.slider}
                 type="range"
+                aria-label="복무 개월 수"
+                aria-valuetext={`${customMonths}개월`}
                 min={1}
                 max={60}
                 step={1}
@@ -353,7 +439,8 @@ export default function MilitaryClient() {
               />
               <input
                 className={styles.smallNum}
-                type="number" inputMode="decimal"
+                type="number" inputMode="numeric"
+                aria-label="복무 개월 수 직접 입력"
                 min={1}
                 max={60}
                 value={customMonths}
@@ -364,8 +451,9 @@ export default function MilitaryClient() {
         </div>
 
         <div className={styles.deprecatedNote}>
-          ⓘ 의무경찰·의무소방·해양경찰 제도는 2023년 모두 폐지되었습니다.
-          이전 복무자는 <strong style={{ color: 'var(--text)' }}>직접 입력</strong> 옵션을 사용하세요.
+          ⓘ 의무경찰·의무소방·해양경찰은 신규 선발이 종료됐습니다. 예술체육요원·승선근무예비역·공중보건의사 등
+          병무청 분류의 나머지 복무 형태도 위 목록에 없으니, 해당하면
+          <strong style={{ color: 'var(--text)' }}> 직접 입력</strong>으로 개월 수를 지정하세요.
         </div>
       </div>
 
@@ -376,20 +464,20 @@ export default function MilitaryClient() {
           <span className={styles.cardLabelHint}>휴가 복귀일·생일 기준 미리보기</span>
         </div>
         <div className={styles.refToggle}>
-          <button type="button" className={`${styles.refBtn} ${refMode === 'today' ? styles.refActive : ''}`}  onClick={() => setRefMode('today')}>오늘 기준</button>
-          <button type="button" className={`${styles.refBtn} ${refMode === 'custom' ? styles.refActive : ''}`} onClick={() => { setRefMode('custom'); setRefY(currentYear); setRefM(todayState.getMonth() + 1); setRefD(todayState.getDate()) }}>특정 날짜</button>
+          <button type="button" aria-pressed={refMode === 'today'} className={`${styles.refBtn} ${refMode === 'today' ? styles.refActive : ''}`}  onClick={() => setRefMode('today')}>오늘 기준</button>
+          <button type="button" aria-pressed={refMode === 'custom'} className={`${styles.refBtn} ${refMode === 'custom' ? styles.refActive : ''}`} onClick={() => { setRefMode('custom'); setRefY(currentYear); setRefM(todayState.getMonth() + 1); setRefD(todayState.getDate()) }}>특정 날짜</button>
         </div>
         {refMode === 'custom' && (
           <>
-            <p className={styles.subLabel}>특정 기준일</p>
+            <p className={styles.subLabel} id="refDateLabel">특정 기준일</p>
             <div className={styles.dobRow}>
-              <select className={styles.dobSelect} value={refY} onChange={e => { const y = Number(e.target.value); setRefY(y); const dim = daysInMonth(y, refM); if (refD > dim) setRefD(dim) }}>
-                {Array.from({ length: 6 }, (_, i) => currentYear + 1 - i).map(y => <option key={y} value={y}>{y}년</option>)}
+              <select aria-label="기준 연도" className={styles.dobSelect} value={refY} onChange={e => { const y = Number(e.target.value); setRefY(y); const dim = daysInMonth(y, refM); if (refD > dim) setRefD(dim) }}>
+                {refYearOptions.map(y => <option key={y} value={y}>{y}년</option>)}
               </select>
-              <select className={styles.dobSelect} value={refM} onChange={e => { const m = Number(e.target.value); setRefM(m); const dim = daysInMonth(refY, m); if (refD > dim) setRefD(dim) }}>
+              <select aria-label="기준 월" className={styles.dobSelect} value={refM} onChange={e => { const m = Number(e.target.value); setRefM(m); const dim = daysInMonth(refY, m); if (refD > dim) setRefD(dim) }}>
                 {Array.from({ length: 12 }, (_, i) => i + 1).map(m => <option key={m} value={m}>{m}월</option>)}
               </select>
-              <select className={styles.dobSelect} value={refD} onChange={e => setRefD(Number(e.target.value))}>
+              <select aria-label="기준 일" className={styles.dobSelect} value={refD} onChange={e => setRefD(Number(e.target.value))}>
                 {Array.from({ length: daysInMonth(refY, refM) }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}일</option>)}
               </select>
             </div>
@@ -401,8 +489,8 @@ export default function MilitaryClient() {
       {result && (
         <>
           {result.todayMilestone && (
-            <div className={styles.todayBanner}>
-              <span style={{ fontSize: 22 }}>{result.todayMilestone.icon}</span>
+            <div className={styles.todayBanner} role="status">
+              <span style={{ fontSize: 22 }} aria-hidden>{result.todayMilestone.icon}</span>
               <strong>{result.todayMilestone.text}</strong>
             </div>
           )}
@@ -410,11 +498,19 @@ export default function MilitaryClient() {
           {/* 히어로 — 진행바 + 핵심 정보 */}
           <div className={styles.heroWrap}>
             <div className={styles.heroProgressBlock}>
-              <div className={styles.heroProgressBarWrap}>
+              <div
+                className={styles.heroProgressBarWrap}
+                role="progressbar"
+                aria-label="복무 진행률"
+                aria-valuenow={Math.round(result.progress)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuetext={`${result.progress.toFixed(1)}% · ${result.passedDays}/${result.totalDays}일`}
+              >
                 <div className={styles.heroProgressBarFill} style={{ width: `${result.progress}%` }} />
                 {(() => {
                   const last100Pct = ((result.totalDays - 100) / result.totalDays) * 100
-                  if (last100Pct > 0 && last100Pct < 100) {
+                  if (result.show.last100 && last100Pct > 0 && last100Pct < 100) {
                     return (
                       <div className={`${styles.progressBarMarker} ${styles.markerLast100}`} style={{ left: `${last100Pct}%` }}>
                         <span className={`${styles.progressBarMarkerLabel} ${styles.last100}`}>D-100</span>
@@ -425,12 +521,12 @@ export default function MilitaryClient() {
                 })()}
                 <div className={styles.progressBarCurrent} style={{ left: `${result.progress}%` }} title={`${result.progress.toFixed(1)}%`} />
               </div>
-              <p className={styles.heroProgressStatus}>
+              <p className={styles.heroProgressStatus} role="status">
                 {result.countdown.toDischarge < 0
                   ? `전역 완료 · 전역 후 ${Math.abs(result.countdown.toDischarge)}일`
-                  : result.passedDays === 0
+                  : result.beforeEnlist
                     ? '입대 전'
-                    : <><strong>{result.progress >= 99.95 ? '100' : result.progress.toFixed(1)}%</strong> · {result.passedDays}/{result.totalDays}일</>
+                    : <><strong>{result.progress.toFixed(1)}%</strong> · {result.passedDays}/{result.totalDays}일</>
                 }
               </p>
             </div>
@@ -481,25 +577,32 @@ export default function MilitaryClient() {
               <p className={styles.dDaySub}>{fmtKR(result.milestones.halfway)}</p>
             </div>
 
-            <div className={styles.dDayCard}>
-              <p className={styles.dDayLabel}>말년 시작 (D-100)</p>
-              <p className={`${styles.dDayValue} ${result.reached.last100 ? styles.danger : ''}`}>
-                {result.reached.last100
-                  ? '🔥 말년'
-                  : `D-${result.countdown.toLast100}`}
-              </p>
-              <p className={styles.dDaySub}>{fmtKR(result.milestones.last100)}</p>
-            </div>
+            {/* 복무가 100일보다 짧으면(직접 입력 1~3개월) 말년·100일은 복무 구간 밖이라 숨긴다 */}
+            {result.show.last100 && (
+              <div className={styles.dDayCard}>
+                <p className={styles.dDayLabel}>말년 시작 (D-100)</p>
+                <p className={`${styles.dDayValue} ${result.reached.last100 ? styles.danger : ''}`}>
+                  {result.reached.last100
+                    ? '🔥 말년'
+                    : `D-${result.countdown.toLast100}`}
+                </p>
+                <p className={styles.dDaySub}>{fmtKR(result.milestones.last100)}</p>
+              </div>
+            )}
 
-            <div className={styles.dDayCard}>
-              <p className={styles.dDayLabel}>입대 100일</p>
-              <p className={`${styles.dDayValue} ${result.reached.day100 ? styles.passed : ''}`}>
-                {result.reached.day100
-                  ? `+${Math.abs(result.countdown.toDay100)}일`
-                  : `D-${result.countdown.toDay100}`}
-              </p>
-              <p className={styles.dDaySub}>{fmtKR(result.milestones.day100)}</p>
-            </div>
+            {result.show.day100 && (
+              <div className={styles.dDayCard}>
+                <p className={styles.dDayLabel}>입대 100일</p>
+                <p className={`${styles.dDayValue} ${result.reached.day100 ? styles.passed : ''}`}>
+                  {result.countdown.toDay100 === 0
+                    ? '🎉 오늘'
+                    : result.reached.day100
+                      ? `+${Math.abs(result.countdown.toDay100)}일`
+                      : `D-${result.countdown.toDay100}`}
+                </p>
+                <p className={styles.dDaySub}>{fmtKR(result.milestones.day100)}</p>
+              </div>
+            )}
           </div>
 
           {/* 마일스톤 타임라인 */}
@@ -510,18 +613,26 @@ export default function MilitaryClient() {
             </div>
             <div className={styles.milestoneTimeline}>
               {[
-                { key: 'enlist',       icon: '🎒', label: '입대일',                       sub: '신병교육 시작', date: result.milestones.enlist,       reached: true },
-                { key: 'day100',       icon: '🥇', label: '입대 100일',                   sub: '이병 → 일병 진급', date: result.milestones.day100,    reached: result.reached.day100 },
-                { key: 'halfway',      icon: '⏱️', label: '복무 50% (반환점)',           sub: '상병 진급 시점 근처', date: result.milestones.halfway, reached: result.reached.halfway },
-                { key: 'threeQuarter', icon: '🎯', label: '복무 75%',                     sub: '병장 진급 시점',     date: result.milestones.threeQuarter, reached: result.reached.threeQuarter },
-                { key: 'last100',      icon: '🔥', label: '전역 D-100 (말년 시작)',       sub: '복무 90% 통과',     date: result.milestones.last100,  reached: result.reached.last100 },
-                { key: 'last30',       icon: '👑', label: '전역 D-30 (왕고)',             sub: '말년 후반',          date: result.milestones.last30,   reached: result.reached.last30 },
-                { key: 'discharge',    icon: '🎖️', label: '전역일',                       sub: '수고하셨습니다',     date: result.milestones.discharge, reached: result.reached.discharge },
-              ].map(m => {
+                { key: 'enlist', icon: '🎒', label: result.bootcamp ? '입대일' : '복무 시작일',
+                  sub: result.bootcamp ? '신병교육 시작' : '복무 개시', date: result.milestones.enlist, reached: result.reached.enlist },
+                ...(result.show.day100 ? [{ key: 'day100', icon: '🥇', label: '입대 100일',
+                  sub: '면회·100일 휴가 (진급일 아님)', date: result.milestones.day100, reached: result.reached.day100 }] : []),
+                /* 진급은 복무율이 아니라 입대 기준 절대 시점 — 계급이 있는 복무 형태에서만 */
+                ...result.promotions.map(p => ({ key: `rank-${p.rank}`, icon: '🎖️', label: `${p.rank} 진급 가능`,
+                  sub: `${p.from}으로서 ${p.rank === '일병' ? 2 : 6}개월 (최저복무기간)`, date: p.date, reached: p.reached })),
+                { key: 'halfway', icon: '⏱️', label: '복무 50% (반환점)', sub: '절반 통과', date: result.milestones.halfway, reached: result.reached.halfway },
+                { key: 'threeQuarter', icon: '🎯', label: '복무 75%', sub: '4분의 3 통과', date: result.milestones.threeQuarter, reached: result.reached.threeQuarter },
+                ...(result.show.last100 ? [{ key: 'last100', icon: '🔥', label: '전역 D-100 (말년 시작)',
+                  sub: `복무 ${(((result.totalDays - 100) / result.totalDays) * 100).toFixed(0)}% 통과`, date: result.milestones.last100, reached: result.reached.last100 }] : []),
+                ...(result.show.last30 ? [{ key: 'last30', icon: '👑', label: '전역 D-30 (왕고)',
+                  sub: '말년 후반', date: result.milestones.last30, reached: result.reached.last30 }] : []),
+                { key: 'discharge', icon: '🎖️', label: result.bootcamp ? '전역일' : '복무 만료일',
+                  sub: '수고하셨습니다', date: result.milestones.discharge, reached: result.reached.discharge },
+              ].sort((a, b) => a.date.getTime() - b.date.getTime()).map(m => {
                 const isToday = todayState && diffDays(todayState, m.date) === 0
                 return (
                   <div key={m.key} className={`${styles.milestoneItem} ${m.reached ? styles.milestoneReached : ''} ${isToday ? styles.milestoneToday : ''}`}>
-                    <span className={`${styles.milestoneIcon} ${m.reached ? styles.reached : styles.muted}`}>{isToday ? '🎉' : m.icon}</span>
+                    <span className={`${styles.milestoneIcon} ${m.reached ? styles.reached : styles.muted}`} aria-hidden>{isToday ? '🎉' : m.icon}</span>
                     <span className={styles.milestoneTitle}>
                       {m.label}
                       <small>{m.sub}</small>
@@ -535,8 +646,9 @@ export default function MilitaryClient() {
 
           {/* 복무 형태 정보 */}
           <div className={styles.serviceInfoCard}>
-            ⓘ 선택한 복무 형태 — <strong>{serviceLabel}</strong> ({serviceMonths}개월 / 약 {result.totalDays}일).
-            포상휴가·징계·병가 등에 따라 실제 전역일은 본 계산 결과와 다를 수 있으며,
+            ⓘ 선택한 복무 형태 — <strong>{serviceLabel}</strong> ({serviceMonths}개월 / {result.totalDays}일).
+            휴가는 전역일을 바꾸지 않습니다. 전역이 밀리는 건 「병역법」 제18조제3항의
+            <strong> 형 집행일수·군기교육처분일수·복무이탈일수</strong>뿐이며, 해당 일수만큼 그대로 연기됩니다.
             정확한 전역일은 소속 부대 또는 병무청에 확인하세요.
           </div>
 
