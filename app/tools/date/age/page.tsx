@@ -24,7 +24,7 @@ const FAQ_LD = [
               },
               {
                 q: '2000년 1월 1일생의 2026년 만 나이는 몇 살인가요?',
-                a: '2026년 4월 기준으로 이미 생일(1월 1일)이 지났으므로 <strong>만 26세</strong>입니다. 만약 생일이 아직 안 지났다면 만 25세가 됩니다.',
+                a: '2026년에 생일(1월 1일)이 지난 시점 기준으로 <strong>만 26세</strong>입니다(2026 − 2000 = 26). 생일 전날까지는 만 25세이며, 위 계산기에 생년월일을 넣으면 오늘 기준 만 나이가 바로 나옵니다.',
               },
               {
                 q: '병역 의무는 만 나이 기준인가요?',
@@ -36,7 +36,7 @@ const FAQ_LD = [
               },
               {
                 q: '띠는 양력과 음력 중 어느 기준인가요?',
-                a: '정확한 띠는 <strong>음력 1월 1일(설날) 기준</strong>으로 바뀝니다. 예를 들어 2024년 양력 1월 1일~2월 9일에 태어난 사람은 양력으로 2024년이지만 음력으로는 아직 2023년이므로 토끼띠(2023년)에 해당합니다. 본 도구는 단순화를 위해 양력 연도 기준으로 표시하므로, 음력 1~2월 초 출생자는 별도 확인이 필요합니다. 음양력 변환기를 함께 활용하세요.',
+                a: '띠가 바뀌는 시점은 <strong>두 관행이 병존</strong>합니다. 민간에서는 흔히 <strong>음력 1월 1일(설날)</strong>을, 전통 사주명리학에서는 <strong>입춘(대개 양력 2월 3~4일)</strong>을 기준으로 삼습니다. 예를 들어 2024년 양력 1월 1일~2월 9일(설날 전)에 태어난 사람은 양력으로 2024년이지만 음력·입춘 기준으로는 아직 2023년이므로 토끼띠(2023년)에 해당합니다. 본 도구는 단순화를 위해 양력 연도 기준으로 표시하므로, 1~2월 초 출생자는 음양력 변환기로 별도 확인을 권장합니다.',
               },
               {
                 q: '인생 시간 통계의 심장 박동·호흡 수는 정확한가요?',
@@ -205,7 +205,7 @@ export default function AgePage() {
             ))}
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
-            ⚠️ 정확한 띠는 <strong style={{ color: 'var(--text)' }}>음력 1월 1일(설날) 기준</strong>으로 바뀝니다. 양력 1월~2월 초 출생자는 음력으로 아직 전년도일 수 있어 띠가 다를 수 있으므로, 본 도구의 결과(양력 연도 기준)를 그대로 신뢰하기보다 음양력 변환기로 별도 확인을 권장합니다.
+            ⚠️ 띠가 언제 바뀌는지는 <strong style={{ color: 'var(--text)' }}>두 관행이 병존</strong>합니다. 민간 통념은 <strong style={{ color: 'var(--text)' }}>음력 설날(음력 1월 1일)</strong>을, 전통 사주명리학은 <strong style={{ color: 'var(--text)' }}>입춘(대개 양력 2월 3~4일)</strong>을 해의 경계로 삼습니다. 어느 기준이든 양력 1월~2월 초 출생자는 양력 연도 기준 띠와 다를 수 있으므로, 본 도구의 결과(양력 연도 기준)를 그대로 신뢰하기보다 음양력 변환기로 별도 확인을 권장합니다.
           </p>
         </section>
 
@@ -215,7 +215,7 @@ export default function AgePage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             서양 12별자리는 <strong style={{ color: 'var(--text)' }}>4원소(불·흙·공기·물)</strong>로 분류됩니다. 양력 생일 기준이며, 별자리 경계일 출생자는 ±1일 차이를 인정하기도 합니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+          <div className="age-zodiac-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { e: '♈', n: '양자리',     r: '3/21~4/19',   x: '불' },
               { e: '♉', n: '황소자리',   r: '4/20~5/20',   x: '흙' },
@@ -230,13 +230,18 @@ export default function AgePage() {
               { e: '♒', n: '물병자리',   r: '1/20~2/18',   x: '공기' },
               { e: '♓', n: '물고기자리', r: '2/19~3/20',   x: '물' },
             ].map(z => (
-              <div key={z.n} style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'grid', gridTemplateColumns: '32px 1fr auto', gap: '8px', alignItems: 'center', fontSize: '13px' }}>
+              <div key={z.n} style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'grid', gridTemplateColumns: '28px 1fr auto', gap: '8px', alignItems: 'center', fontSize: '13px', minWidth: 0 }}>
                 <span style={{ fontSize: '22px' }}>{z.e}</span>
-                <span><strong style={{ color: 'var(--text)' }}>{z.n}</strong> · <span style={{ color: 'var(--muted)' }}>{z.r}</span></span>
-                <span style={{ color: '#0891B2', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 600 }}>{z.x}</span>
+                <span style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}><strong style={{ color: 'var(--text)' }}>{z.n}</strong> · <span style={{ color: 'var(--muted)' }}>{z.r}</span></span>
+                <span style={{ color: '#0891B2', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 600, flexShrink: 0 }}>{z.x}</span>
               </div>
             ))}
           </div>
+          <style dangerouslySetInnerHTML={{ __html: `
+            @media (max-width: 400px) {
+              .age-zodiac-grid { grid-template-columns: 1fr !important; }
+            }
+          ` }} />
         </section>
 
         {/* 6. 탄생석·탄생화 */}

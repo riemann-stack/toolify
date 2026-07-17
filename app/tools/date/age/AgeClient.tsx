@@ -7,7 +7,7 @@ import {
   calcAge, calcKoreanAge, calcYearAge, calcDaysAlive,
   nextBirthday, dateAfterDays, dateAtAge, ddayUntil, calcLifeStats,
   getZodiacAnimal, getWesternZodiac, getBirthGift, getGeneration,
-  formatBigKor, fmtDate, fmtDateKo,
+  formatBigKor, fmtDate, fmtDateKo, midnight,
 } from './ageUtils'
 import {
   DAY_MILESTONES, AGE_MILESTONES, KOREAN_AGE_NAMES,
@@ -59,11 +59,18 @@ export default function AgeClient() {
     if (refPreset === 'eoy')      return new Date(currentYear, 11, 31)
     if (refPreset === 'eoyNext')  return new Date(currentYear + 1, 11, 31)
     if (refPreset === 'custom' && customRef) {
-      const d = new Date(customRef)
-      if (!isNaN(d.getTime())) return d
+      // 'YYYY-MM-DD'를 분해 파싱 — new Date(문자열)은 UTC 해석이라 KST에서 날짜가 밀릴 수 있음
+      const [cy, cm, cd] = customRef.split('-').map(Number)
+      if (cy && cm && cd) {
+        const d = new Date(cy, cm - 1, cd)
+        if (!isNaN(d.getTime())) return d
+      }
     }
     return now
   }, [refPreset, customRef, now])
+
+  // 생년월일이 오늘보다 미래면 만 나이·일수·통계가 모두 음수가 됨 — 전 탭 공통 차단
+  const birthInFuture = birth !== null && midnight(birth).getTime() > midnight(now).getTime()
 
   return (
     <div className={s.wrap}>
@@ -79,7 +86,7 @@ export default function AgeClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="나이 계산기 보기 전환">
         {([
           ['age',       '만 나이·기준일'],
           ['dday',      '생일 D-day'],
@@ -96,6 +103,9 @@ export default function AgeClient() {
             s.tabActive
           return (
             <button key={key}
+              type="button"
+              role="tab"
+              aria-selected={tab === key}
               className={`${s.tabBtn} ${active}`}
               onClick={() => setTab(key)}>
               {label}
@@ -108,15 +118,15 @@ export default function AgeClient() {
       <div className={s.card}>
         <label className={s.cardLabel}>생년월일</label>
         <div className={s.dateRow}>
-          <select className={s.dateSelect} value={year} onChange={e => setYear(e.target.value)}>
+          <select className={s.dateSelect} aria-label="출생 연도" value={year} onChange={e => setYear(e.target.value)}>
             <option value="">년도</option>
             {yearsRange.map(y => <option key={y} value={y}>{y}년</option>)}
           </select>
-          <select className={s.dateSelect} value={month} onChange={e => setMonth(e.target.value)}>
+          <select className={s.dateSelect} aria-label="출생 월" value={month} onChange={e => setMonth(e.target.value)}>
             <option value="">월</option>
             {monthsRange.map(m => <option key={m} value={m}>{m}월</option>)}
           </select>
-          <select className={s.dateSelect} value={day} onChange={e => setDay(e.target.value)}>
+          <select className={s.dateSelect} aria-label="출생 일" value={day} onChange={e => setDay(e.target.value)}>
             <option value="">일</option>
             {daysRange.map(d => <option key={d} value={d}>{d}일</option>)}
           </select>
@@ -127,11 +137,18 @@ export default function AgeClient() {
         <div className={s.empty}>생년월일을 선택하면 만 나이부터 D-day, 인생 통계까지 한 번에 계산됩니다</div>
       )}
 
-      {birth && tab === 'age'       && <AgeTab       birth={birth} refDate={refDate} now={now} refPreset={refPreset} setRefPreset={setRefPreset} customRef={customRef} setCustomRef={setCustomRef} />}
-      {birth && tab === 'dday'      && <DdayTab      birth={birth} now={now} />}
-      {birth && tab === 'stats'     && <StatsTab     birth={birth} now={now} />}
-      {birth && tab === 'milestone' && <MilestoneTab birth={birth} now={now} />}
-      {birth && tab === 'culture'   && <CultureTab   birth={birth} now={now} />}
+      {/* 미래 생년월일이면 나이·일수·통계가 모두 음수가 되므로 전 탭 공통 차단 */}
+      {birth && birthInFuture && (
+        <div className={s.empty} role="alert">
+          선택한 생년월일({fmtDateKo(birth, false)})이 오늘보다 미래입니다. 태어난 날짜(과거)를 선택해 주세요.
+        </div>
+      )}
+
+      {birth && !birthInFuture && tab === 'age'       && <AgeTab       birth={birth} refDate={refDate} now={now} refPreset={refPreset} setRefPreset={setRefPreset} customRef={customRef} setCustomRef={setCustomRef} />}
+      {birth && !birthInFuture && tab === 'dday'      && <DdayTab      birth={birth} now={now} />}
+      {birth && !birthInFuture && tab === 'stats'     && <StatsTab     birth={birth} now={now} />}
+      {birth && !birthInFuture && tab === 'milestone' && <MilestoneTab birth={birth} now={now} />}
+      {birth && !birthInFuture && tab === 'culture'   && <CultureTab   birth={birth} now={now} />}
     </div>
   )
 }
@@ -143,30 +160,32 @@ function CustomRefDateSelect({ customRef, setCustomRef }: { customRef: string; s
     () => Array.from({ length: 61 }, (_, i) => currentYear + 30 - i),
     []
   )
-  const parts = customRef.split('-')
-  const y = parts[0] ?? ''
-  const m = parts[1] ? String(Number(parts[1])) : ''
-  const d = parts[2] ? String(Number(parts[2])) : ''
+  // 부분 선택도 유지해야 하므로 각 필드를 로컬 상태로 보관.
+  // (customRef만 소스로 쓰면 3개가 다 차기 전엔 저장이 안 돼 첫 선택이 무시됨)
+  const [y, setY] = useState(() => customRef.split('-')[0] ?? '')
+  const [m, setM] = useState(() => { const p = customRef.split('-')[1]; return p ? String(Number(p)) : '' })
+  const [d, setD] = useState(() => { const p = customRef.split('-')[2]; return p ? String(Number(p)) : '' })
 
   const commit = (yy: string, mm: string, dd: string) => {
     if (!yy || !mm || !dd) return
-    const isoMonth = String(mm).padStart(2, '0')
-    const isoDay = String(dd).padStart(2, '0')
-    setCustomRef(`${yy}-${isoMonth}-${isoDay}`)
+    setCustomRef(`${yy}-${String(mm).padStart(2, '0')}-${String(dd).padStart(2, '0')}`)
   }
 
   return (
     <div style={{ marginTop: 10 }}>
       <div className={s.dateRow}>
-        <select className={s.dateSelect} value={y} onChange={e => commit(e.target.value, m, d)}>
+        <select className={s.dateSelect} aria-label="기준일 연도" value={y}
+          onChange={e => { setY(e.target.value); commit(e.target.value, m, d) }}>
           <option value="">년도</option>
           {refYears.map(yy => <option key={yy} value={yy}>{yy}년</option>)}
         </select>
-        <select className={s.dateSelect} value={m} onChange={e => commit(y, e.target.value, d)}>
+        <select className={s.dateSelect} aria-label="기준일 월" value={m}
+          onChange={e => { setM(e.target.value); commit(y, e.target.value, d) }}>
           <option value="">월</option>
           {monthsRange.map(mm => <option key={mm} value={mm}>{mm}월</option>)}
         </select>
-        <select className={s.dateSelect} value={d} onChange={e => commit(y, m, e.target.value)}>
+        <select className={s.dateSelect} aria-label="기준일 일" value={d}
+          onChange={e => { setD(e.target.value); commit(y, m, e.target.value) }}>
           <option value="">일</option>
           {daysRange.map(dd => <option key={dd} value={dd}>{dd}일</option>)}
         </select>
@@ -202,7 +221,7 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
   return (
     <>
       {isBirthdayToday && (
-        <div className={s.birthdayBanner}>🎉 오늘은 생일입니다! 축하드립니다!</div>
+        <div className={s.birthdayBanner} role="status">🎉 오늘은 생일입니다! 축하드립니다!</div>
       )}
 
       {refBeforeBirth ? (
@@ -213,7 +232,7 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
       ) : (
         <>
           {/* 만 나이 히어로 */}
-          <div className={s.ageHero}>
+          <div className={s.ageHero} role="status">
             <div className={s.ageHeroLabel}>만 나이 (기준일: {refKor})</div>
             <div className={s.ageHeroNum}>
               {age}<span className={s.ageHeroUnit}>세</span>
@@ -284,6 +303,14 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
           </div>
         </div>
       )}
+
+      {/* 2월 29일 출생자 안내 — 평년에는 다음 생일을 3월 1일로 계산 */}
+      {birth.getMonth() === 1 && birth.getDate() === 29 && (
+        <p className={s.leapNote}>
+          ℹ️ 2월 29일생입니다. 본 도구는 <strong>평년(2월 29일이 없는 해)의 생일을 3월 1일로 계산</strong>합니다.
+          한국 민법상 나이는 2월 28일이 지나는 시점(3월 1일 0시)에 한 살 늘어나므로 이 기준을 따릅니다. 관습적으로 2월 28일에 생일을 챙기는 경우도 있습니다.
+        </p>
+      )}
     </>
   )
 }
@@ -291,6 +318,7 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
 /* ═════════════════════════════════════════ 탭 2 — D-day ═════════════════════════════════════════ */
 function DdayTab({ birth, now }: { birth: Date; now: Date }) {
   const next = nextBirthday(birth, now)
+  const todayAge = calcAge(birth, now)
   // 실시간 카운트다운 — milliseconds 단위
   const targetMs = next.date.getTime()
   const diffMs = Math.max(0, targetMs - now.getTime())
@@ -323,34 +351,46 @@ function DdayTab({ birth, now }: { birth: Date; now: Date }) {
 
   return (
     <>
-      {/* 메인 D-day 히어로 */}
-      <div className={s.ddayHero}>
-        <div className={s.ddayHeroLabel}>다음 생일까지</div>
-        <div className={s.ddayHeroNum}>D-{next.daysUntil}</div>
-        <div className={s.ddayHeroSub}>
-          <strong>만 {next.age}세 생일</strong> — {fmtDateKo(next.date)}
-          {next.isWeekend && <span style={{ color: '#A16207' }}> · 주말</span>}
+      {/* 메인 D-day 히어로 — 생일 당일이면 D-Day 축하로 전환 */}
+      {next.isBirthdayToday ? (
+        <div className={s.ddayHero} role="status">
+          <div className={s.ddayHeroLabel}>🎂 오늘은 생일</div>
+          <div className={s.ddayHeroNum}>D-Day</div>
+          <div className={s.ddayHeroSub}>
+            <strong>만 {todayAge}세가 되셨어요 — 축하드립니다!</strong><br />
+            다음 생일까지 D-{next.daysUntil} · {fmtDateKo(next.date)}
+            {next.isWeekend && <span style={{ color: 'var(--warning)' }}> · 주말</span>}
+          </div>
         </div>
+      ) : (
+        <div className={s.ddayHero} role="status">
+          <div className={s.ddayHeroLabel}>다음 생일까지</div>
+          <div className={s.ddayHeroNum}>D-{next.daysUntil}</div>
+          <div className={s.ddayHeroSub}>
+            <strong>만 {next.age}세 생일</strong> — {fmtDateKo(next.date)}
+            {next.isWeekend && <span style={{ color: 'var(--warning)' }}> · 주말</span>}
+          </div>
 
-        <div className={s.countdownLive}>
-          <div className={s.countdownBox}>
-            <div className={s.countdownNum}>{dDays}</div>
-            <div className={s.countdownLabel}>일</div>
-          </div>
-          <div className={s.countdownBox}>
-            <div className={s.countdownNum}>{String(dHours).padStart(2, '0')}</div>
-            <div className={s.countdownLabel}>시간</div>
-          </div>
-          <div className={s.countdownBox}>
-            <div className={s.countdownNum}>{String(dMins).padStart(2, '0')}</div>
-            <div className={s.countdownLabel}>분</div>
-          </div>
-          <div className={s.countdownBox}>
-            <div className={s.countdownNum}>{String(dSecs).padStart(2, '0')}</div>
-            <div className={s.countdownLabel}>초</div>
+          <div className={s.countdownLive}>
+            <div className={s.countdownBox}>
+              <div className={s.countdownNum}>{dDays}</div>
+              <div className={s.countdownLabel}>일</div>
+            </div>
+            <div className={s.countdownBox}>
+              <div className={s.countdownNum}>{String(dHours).padStart(2, '0')}</div>
+              <div className={s.countdownLabel}>시간</div>
+            </div>
+            <div className={s.countdownBox}>
+              <div className={s.countdownNum}>{String(dMins).padStart(2, '0')}</div>
+              <div className={s.countdownLabel}>분</div>
+            </div>
+            <div className={s.countdownBox}>
+              <div className={s.countdownNum}>{String(dSecs).padStart(2, '0')}</div>
+              <div className={s.countdownLabel}>초</div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* 가까운 마일스톤 표 */}
       <div className={s.card}>
@@ -564,6 +604,9 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
   // 60대 이상 시 강조: 현재·향후 5종 호칭 표시
   const traditionalToShow = KOREAN_AGE_NAMES.filter(n => Math.abs(n.age - currentAge) <= 20).slice(0, 6)
 
+  // 1~2월 초 출생자는 음력설 이전이면 전년도 띠 — 양력 연도 기준 표시는 다를 수 있음
+  const earlyMonth = birth.getMonth() <= 1 // 1월(0)·2월(1)
+
   return (
     <>
       {/* 띠·별자리·탄생석·세대 */}
@@ -575,6 +618,12 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
           <div className={s.cultureTraits}>
             {animal.traits.map(t => <span key={t} className={s.cultureTrait}>{t}</span>)}
           </div>
+          {earlyMonth && (
+            <div className={s.zodiacCaveat}>
+              ⚠️ 음력설·입춘 이전(1~2월 초) 출생 시 전년도 띠일 수 있어요.
+              <a href="/tools/date/lunar" className={s.zodiacCaveatLink}>음양력 변환기</a>로 확인하세요.
+            </div>
+          )}
         </div>
         <div className={s.cultureCard}>
           <div className={s.cultureEmoji}>{western.emoji}</div>

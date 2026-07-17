@@ -94,8 +94,8 @@ export const AGE_MILESTONES: AgeMilestone[] = [
   { age: 1,   name: '만 1세 (첫 돌)',          emoji: '🎂' },
   { age: 7,   name: '만 7세 (취학)',           emoji: '📚' },
   { age: 13,  name: '만 13세 (청소년)',        emoji: '🎒' },
-  { age: 18,  name: '만 18세 (선거권·공무원)',  emoji: '🗳️' },
-  { age: 19,  name: '만 19세 (성년·주류)',     emoji: '🍷' },
+  { age: 18,  name: '만 18세 (선거권·공무원 임용)',  emoji: '🗳️' },
+  { age: 19,  name: '만 19세 (성년)',          emoji: '🍷' },
   { age: 20,  name: '만 20세',                 emoji: '🎓' },
   { age: 30,  name: '만 30세',                 emoji: '✨' },
   { age: 40,  name: '만 40세',                 emoji: '🌟' },
@@ -128,12 +128,15 @@ export const KOREAN_AGE_NAMES: KoreanAgeName[] = [
 
 export type Generation = { range: [number, number]; name: string; desc: string }
 
-/** 한국 세대 분류 */
+/** 한국 세대 분류
+   — 베이비붐 경계는 통계청 정의(1차 1955~1963, 2차 1964~1974)를 따름.
+     이전 '베이비붐 1세대 1946~54'는 한국전쟁(1950~53) 중 출생 감소기라 붐이 아니어서 교정.
+   — X~베타는 McCrindle 프레임(알파·베타 명명 출처)을 유지. */
 export const GENERATIONS: Generation[] = [
-  { range: [1925, 1945], name: '산업화 세대',       desc: '한국 전쟁 전후' },
-  { range: [1946, 1954], name: '베이비붐 1세대',    desc: '한국전쟁 직후' },
-  { range: [1955, 1964], name: '베이비붐 2세대',    desc: '경제 개발기' },
-  { range: [1965, 1979], name: 'X세대',             desc: '고도성장기' },
+  { range: [1925, 1945], name: '산업화 세대',       desc: '일제강점기·광복' },
+  { range: [1946, 1954], name: '전후 세대',         desc: '광복·한국전쟁기' },
+  { range: [1955, 1963], name: '베이비붐 세대',     desc: '전후 출산 급증·압축성장 주역 (통계청 1차)' },
+  { range: [1964, 1979], name: 'X세대',             desc: '2차 베이비붐(~1974) 포함·고도성장기' },
   { range: [1980, 1994], name: '밀레니얼 세대 (Y)', desc: '디지털 전환기' },
   { range: [1995, 2009], name: 'Z세대',             desc: '디지털 네이티브' },
   { range: [2010, 2024], name: '알파 세대',         desc: 'AI·스마트폰 네이티브' },
