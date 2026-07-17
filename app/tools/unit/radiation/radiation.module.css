@@ -329,10 +329,10 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 13px;
 }
-.emfCat_sar   { border-left-color: #9333EA; }
-.emfCat_rf    { border-left-color: #0891B2; }
-.emfCat_mag   { border-left-color: #D97706; }
-.emfCat_elec  { border-left-color: #059669; }
+.emfCat_sar   { border-left-color: var(--cat-art); }
+.emfCat_rf    { border-left-color: var(--cat-health); }
+.emfCat_mag   { border-left-color: var(--cat-cooking); }
+.emfCat_elec  { border-left-color: var(--success); }
 .emfEmoji { font-size: 16px; line-height: 1; text-align: center; }
 .emfLabel { color: var(--text); font-weight: 600; }
 .emfValue {
@@ -349,8 +349,16 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 @media (max-width: 600px) {
-  .emfRow { grid-template-columns: 22px 1fr 120px; gap: 6px; font-size: 12px; }
-  .emfSource { display: none; }
+  .emfRow { grid-template-columns: 22px 1fr 120px; gap: 2px 6px; font-size: 12px; }
+  /* 출처는 숨기지 않고 라벨 아래 줄로 내려 표기 (신뢰도 정보 유지) */
+  .emfSource { grid-column: 2 / -1; text-align: left; font-size: 10px; }
+}
+
+.inputWarn {
+  font-size: 12px;
+  color: var(--warning);
+  margin: 6px 0 0;
+  line-height: 1.6;
 }
 
 .emfFoot {

@@ -94,7 +94,7 @@ export function convertRate(value: number, fromId: RateUnit): Record<RateUnit, n
 }
 
 // ─── 일상 노출 비교 (mSv 기준) ────────────────────────────
-export type ExposureCat = 'natural' | 'medical' | 'travel' | 'food' | 'occupation' | 'accident'
+export type ExposureCat = 'natural' | 'medical' | 'travel' | 'food' | 'occupation' | 'accident' | 'limit'
 
 export interface Exposure {
   emoji: string
@@ -110,21 +110,21 @@ export const EXPOSURES: Exposure[] = [
   { emoji: '🛫', label: '비행 1시간 (10km 고도)',       mSv: 0.005,  cat: 'travel' },
   { emoji: '🌍', label: '하루 자연 노출 (한국)',         mSv: 0.008,  cat: 'natural', note: '연 3 mSv ÷ 365' },
   { emoji: '🦷', label: '치과 파노라마 X-ray',           mSv: 0.014,  cat: 'medical' },
-  { emoji: '✈️', label: '인천→뉴욕 왕복 (편당 12h)',     mSv: 0.06,   cat: 'travel' },
+  { emoji: '✈️', label: '인천→뉴욕 편도 (약 12h)',       mSv: 0.08,   cat: 'travel', note: '왕복 약 0.15~0.17 (한국천문연구원)' },
   { emoji: '🫁', label: '가슴 X-ray (PA + Lat)',         mSv: 0.1,    cat: 'medical' },
-  { emoji: '🩻', label: '복부 X-ray',                    mSv: 0.7,    cat: 'medical' },
   { emoji: '🏥', label: '유방촬영술 (Mammography)',      mSv: 0.4,    cat: 'medical' },
-  { emoji: '☢️', label: '연간 인공 노출 한도 (일반인)',  mSv: 1,      cat: 'natural', note: 'ICRP·원안위 기준' },
-  { emoji: '🌋', label: '브라질 과라파리 해변 1년',      mSv: 1.5,    cat: 'natural', note: '모나자이트 모래' },
+  { emoji: '🩻', label: '복부 X-ray',                    mSv: 0.7,    cat: 'medical' },
+  { emoji: '☢️', label: '연간 인공 노출 한도 (일반인)',  mSv: 1,      cat: 'limit', note: 'ICRP·원안위 기준' },
   { emoji: '🌍', label: '연간 자연 노출 (한국 평균)',    mSv: 3.0,    cat: 'natural', note: '라돈·우주선·식이 포함' },
-  { emoji: '🇺🇸', label: '연간 자연+의료 (미국 평균)',   mSv: 6.2,    cat: 'natural' },
+  { emoji: '🌋', label: '과라파리 고배경지역 거주 1년',  mSv: 5.5,    cat: 'natural', note: '모나자이트 모래 — 해변 핫스팟은 훨씬 높음' },
+  { emoji: '🇺🇸', label: '연간 자연+의료 (미국 평균)',   mSv: 6.2,    cat: 'natural', note: 'NCRP 160' },
   { emoji: '🏥', label: 'CT 흉부',                       mSv: 7,      cat: 'medical' },
   { emoji: '🏥', label: 'CT 복부·골반',                  mSv: 10,     cat: 'medical' },
-  { emoji: '🏥', label: 'CT 관상동맥 조영',              mSv: 12,     cat: 'medical' },
-  { emoji: '☢️', label: '방사선 작업자 평균 한도',       mSv: 20,     cat: 'occupation', note: 'ICRP 5년 평균' },
+  { emoji: '🏥', label: 'CT 관상동맥 조영',              mSv: 12,     cat: 'medical', note: '저선량 프로토콜은 3~5까지' },
+  { emoji: '☢️', label: '방사선 작업자 평균 한도',       mSv: 20,     cat: 'limit', note: 'ICRP 5년 평균' },
   { emoji: '🏥', label: 'PET-CT (전신)',                 mSv: 25,     cat: 'medical' },
-  { emoji: '☢️', label: '방사선 작업자 단년 한도',       mSv: 50,     cat: 'occupation' },
-  { emoji: '🚨', label: '응급 구조 한도 (1회)',          mSv: 100,    cat: 'accident', note: 'ICRP 권고' },
+  { emoji: '☢️', label: '방사선 작업자 단년 한도',       mSv: 50,     cat: 'limit' },
+  { emoji: '🚨', label: '응급 구조 한도 (1회)',          mSv: 100,    cat: 'limit', note: 'ICRP 103·IAEA' },
   { emoji: '☠️', label: '급성 방사선 증후군 시작',        mSv: 1000,   cat: 'accident', note: '1 Sv — 일시적 증상' },
   { emoji: '💀', label: '50% 치사량 LD50/30 (의료 X)',   mSv: 4500,   cat: 'accident', note: '치료 없을 시 30일 내 50% 사망' },
 ]
@@ -133,13 +133,13 @@ export const EXPOSURES: Exposure[] = [
 export interface Limit { who: string; limit: string; mSv: number; source: string }
 
 export const LIMITS: Limit[] = [
-  { who: '일반인 (인공 노출 한도)',         limit: '1 mSv/년',         mSv: 1,    source: 'ICRP·한국 원안위' },
-  { who: '임산부 (전체 임신 기간)',         limit: '1 mSv',            mSv: 1,    source: 'ICRP 88' },
-  { who: '방사선 작업자 (5년 평균)',        limit: '20 mSv/년',        mSv: 20,   source: 'ICRP 60' },
-  { who: '방사선 작업자 (어느 단년)',       limit: '50 mSv/년',        mSv: 50,   source: '원안위 고시' },
-  { who: '응급 구조원 (1회 임무 권고)',     limit: '100 mSv',          mSv: 100,  source: 'ICRP 96' },
-  { who: '응급 생명구조 (1회 예외)',        limit: '500 mSv 미만',     mSv: 500,  source: 'ICRP 96' },
-  { who: '급성 증상 발현 (메스꺼움)',       limit: '~1,000 mSv (1 Sv)', mSv: 1000, source: '의학 자료' },
+  { who: '일반인 (인공 노출 한도)',         limit: '1 mSv/년',         mSv: 1,    source: 'ICRP 103·원자력안전법' },
+  { who: '임신 선언 후 태아 (잔여 기간)',   limit: '약 1 mSv',         mSv: 1,    source: 'ICRP 103 (한국: 하복부 표면 2 mSv)' },
+  { who: '방사선 작업자 (5년 평균)',        limit: '20 mSv/년',        mSv: 20,   source: 'ICRP 60/103' },
+  { who: '방사선 작업자 (어느 단년)',       limit: '50 mSv/년',        mSv: 50,   source: '원자력안전법 시행령' },
+  { who: '응급 구조원 (1회 임무 권고)',     limit: '100 mSv',          mSv: 100,  source: 'ICRP 103·IAEA GSR Part 7' },
+  { who: '응급 생명구조 (1회 예외)',        limit: '500 mSv 미만',     mSv: 500,  source: 'ICRP 103·IAEA GSR Part 7' },
+  { who: '급성 증상 발현 (메스꺼움)',       limit: '~1,000 mSv (1 Sv)', mSv: 1000, source: 'CDC 임상 지침' },
   { who: '50% 치사 (의료 처치 없이 30일)',  limit: '~4,500 mSv',       mSv: 4500, source: 'LD50/30' },
 ]
 
@@ -154,20 +154,19 @@ export interface EmfRef {
 
 export const EMF_REFS: EmfRef[] = [
   // SAR (Specific Absorption Rate) - 휴대폰
-  { emoji: '📱', label: '휴대폰 SAR 한도 (한국·미국)',    value: '1.6 W/kg (10g 평균)',   source: 'ICNIRP·과기정통부',     cat: 'sar' },
+  { emoji: '📱', label: '휴대폰 SAR 한도 (한국·미국)',    value: '1.6 W/kg (1g 평균)',    source: '과기정통부 고시·FCC',   cat: 'sar' },
   { emoji: '📱', label: '휴대폰 SAR 한도 (EU·국제)',      value: '2.0 W/kg (10g 평균)',   source: 'ICNIRP·EU',             cat: 'sar' },
   // RF 전계 (V/m)
-  { emoji: '📡', label: 'LTE/5G 기지국 (1m)',             value: '0.5~5 V/m',             source: '방통위·실측',           cat: 'rf' },
+  { emoji: '📡', label: 'LTE/5G 기지국 (1m)',             value: '0.5~5 V/m',             source: '과기정통부·전파연구원 실측', cat: 'rf' },
   { emoji: '📶', label: 'WiFi 라우터 (50cm)',             value: '0.1~0.5 V/m',           source: '실측 평균',             cat: 'rf' },
-  { emoji: '📞', label: '휴대폰 통화 중 (귀 옆)',         value: '4~6 V/m',               source: '실측 평균',             cat: 'rf' },
-  { emoji: '🛡️', label: 'RF 안전 한도 (일반인, 6 GHz)',  value: '61 V/m',                source: 'ICNIRP 2020',           cat: 'rf' },
+  { emoji: '🛡️', label: 'RF 안전 한도 (일반인, 2~300GHz)', value: '61 V/m',              source: 'ICNIRP 1998·과기정통부 고시', cat: 'rf' },
   // 자기장 (μT)
-  { emoji: '🔌', label: '송전선 154 kV 하부',             value: '~3 μT',                 source: '환경부 실측',           cat: 'mag' },
-  { emoji: '🔌', label: '송전선 765 kV 하부',             value: '~5~10 μT',              source: '환경부 실측',           cat: 'mag' },
-  { emoji: '🚿', label: '헤어드라이어 근접 (5cm)',         value: '~10~70 μT',             source: 'WHO',                   cat: 'mag' },
-  { emoji: '🔪', label: '전자레인지 (30cm 거리)',          value: '~1~5 μT',               source: 'WHO',                   cat: 'mag' },
-  { emoji: '🛡️', label: '자기장 한도 (일반인, 60Hz)',    value: '200 μT',                source: 'ICNIRP 2010',           cat: 'mag' },
+  { emoji: '🔌', label: '송전선 154 kV 직하',             value: '평균 ~0.7 μT (최대 5.5)', source: '한국전력 실측',        cat: 'mag' },
+  { emoji: '🔌', label: '송전선 765 kV 직하',             value: '평균 ~1.4 μT (최대 5.3)', source: '한국전력 실측',        cat: 'mag' },
+  { emoji: '🚿', label: '헤어드라이어 (3cm 근접)',         value: '6~2,000 μT',            source: 'WHO',                   cat: 'mag' },
+  { emoji: '🔪', label: '전자레인지 (30cm 거리)',          value: '4~8 μT',                source: 'WHO',                   cat: 'mag' },
+  { emoji: '🛡️', label: '자기장 한도 (일반인, 60Hz)',    value: '83.3 μT (한국) · 200 μT (ICNIRP 2010)', source: '과기정통부 고시·ICNIRP', cat: 'mag' },
   // 전계 (V/m, 저주파)
   { emoji: '⚡', label: '가전제품 평균 (0.5m)',           value: '~1~10 V/m',             source: 'WHO',                   cat: 'elec' },
-  { emoji: '🛡️', label: '전계 한도 (일반인, 60Hz)',      value: '5,000 V/m',             source: 'ICNIRP 2010',           cat: 'elec' },
+  { emoji: '🛡️', label: '전계 한도 (일반인, 60Hz)',      value: '약 4,167 V/m',          source: '과기정통부 고시 (ICNIRP 2010 50Hz는 5,000)', cat: 'elec' },
 ]
