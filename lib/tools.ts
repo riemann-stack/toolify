@@ -198,7 +198,7 @@ export const categories: Category[] = [
       { href: '/tools/date/server-time', icon: '⏱️', name: '실시간 서버 시간', desc: '수강신청·티켓팅을 위한 NTP 동기화 KST를 밀리초로. 카운트다운·알림음 포함.', badge: 'new' },
       { href: '/tools/date/age',         icon: '🎂', name: '나이 계산기', desc: '만 나이·D-day·1만일 기념·생일 카운트다운 + 인생 시간 통계까지 한 화면에.' },
       { href: '/tools/date/dday',        icon: '📅', name: 'D-Day 계산기', desc: '여러 D-day 저장 + 진행률·평일·영업일 페이스 + 반복 D-day.' },
-      { href: '/tools/date/holiday-bridge', icon: '🌉', name: '징검다리 연휴 플래너', desc: '보유 연차로 2026·2027 공휴일·대체공휴일에 맞춰 가장 길게 쉬는 연차 배치 추천 + 효율배수·공짜 연휴·미니 캘린더.', badge: 'new' },
+      { href: '/tools/date/holiday-bridge', icon: '🌉', name: '징검다리 연휴 플래너', desc: '보유 연차로 2026~2030 공휴일·대체공휴일에 맞춰 가장 길게 쉬는 연차 배치 추천 + 효율배수·공짜 연휴·미니 캘린더.', badge: 'new' },
       { href: '/tools/date/military',    icon: '🎖️', name: '군대 전역일 계산기', desc: '입대일 기준 전역일과 복무율을 시각화.' },
       { href: '/tools/date/history-era', icon: '📜', name: '연호·연대 변환기',   desc: '단기·불기·조선왕·간지·일본·중국 연호 동시 변환 + 단군~현재 통합 연표.' },
       { href: '/tools/date/lunar',       icon: '🌙', name: '양력 음력 변환기',         desc: '양력 ↔ 음력 자유 변환 + 60갑자 간지·띠 자동.' },

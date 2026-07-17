@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
   path: '/tools/date/holiday-bridge',
   title: '징검다리 연휴 플래너 — 연차 최소로 최대 연휴 만들기',
   description:
-    '보유 연차 일수를 입력하면 2026·2027 공휴일·대체공휴일에 맞춰 가장 길게 쉴 수 있는 연차 배치를 추천합니다.',
+    '보유 연차 일수를 입력하면 2026~2030 공휴일·대체공휴일에 맞춰 가장 길게 쉴 수 있는 연차 배치를 추천합니다.',
   keywords: [
     '징검다리 연휴',
     '2026 연차 언제',
@@ -47,11 +47,15 @@ const FAQ_LD = [
   },
   {
     q: '6월 3일 지방선거날 쉬는 날인가요?',
-    a: '네. 2026년 6월 3일은 <strong>제9회 전국동시지방선거일</strong>로 공직선거법상 <strong>공휴일</strong>입니다. 임기만료에 의한 전국 단위 선거일은 법정공휴일이라 관공서·학교가 휴무합니다. 다만 사업장에 따라 유급휴일 적용 여부가 다를 수 있으니 회사 인사규정을 확인하세요.',
+    a: '네. 2026년 6월 3일은 <strong>제9회 전국동시지방선거일</strong>로 공직선거법상 <strong>공휴일</strong>입니다. 임기만료에 의한 전국 단위 선거일은 법정공휴일이라 관공서·학교가 휴무합니다. <strong>상시 5명 이상 사업장</strong>이라면 근로기준법 제55조제2항·같은 법 시행령 제30조제2항에 따라 선거일도 <strong>법정 유급휴일</strong>이라 회사 규정과 무관하게 적용됩니다(5명 미만 사업장은 제외).',
   },
   {
-    q: '근로자의 날(5월 1일)도 공휴일인가요?',
-    a: '<strong>법정공휴일은 아닙니다.</strong> 근로자의 날은 "근로자의 날 제정에 관한 법률"에 따른 <strong>유급휴일</strong>로, 관공서의 공휴일에 관한 규정(대통령령)에 들어가는 빨간 날과는 근거 법이 다릅니다. 그래서 관공서·학교는 정상 운영하고 일반 기업 근로자는 쉽니다. 본 도구는 5월 1일 휴무 여부를 토글로 켜고 끌 수 있습니다.',
+    q: '노동절(5월 1일)도 공휴일인가요?',
+    a: '<strong>2026년부터 공휴일이 맞습니다.</strong> 예전에는 "근로자의 날 제정에 관한 법률"상 <strong>유급휴일</strong>이라 근로기준법을 적용받는 근로자만 쉬고 관공서·학교는 정상 운영했지만, <strong>2026년 5월 1일 시행</strong>으로 <strong>관공서의 공휴일에 관한 규정</strong>에 노동절이 신설되면서 공무원·교사도 함께 쉬게 됐습니다(제정 63년 만). 법률 제명도 「노동절 제정에 관한 법률」로 바뀌어 공식 명칭이 <strong>노동절</strong>입니다. 토·일이나 다른 공휴일과 겹치면 <strong>대체공휴일</strong>도 부여됩니다 — 2027년 5월 1일은 토요일이라 <strong>5월 3일(월)이 대체공휴일</strong>입니다. 다만 병원·교대제 등 실제로 5월 1일에 근무하는 사업장이 있어, 본 도구는 5월 1일 휴무 여부를 토글로 켜고 끌 수 있습니다.',
+  },
+  {
+    q: '제헌절(7월 17일)이 다시 공휴일이 됐나요?',
+    a: '네. <strong>2026년 5월 11일 시행</strong>으로 제헌절이 <strong>18년 만에 관공서 공휴일로 부활</strong>했습니다. 2008년부터 쉬지 않는 국경일이었지만, 「공휴일에 관한 법률」 개정(법률 제21338호)과 「관공서의 공휴일에 관한 규정」 개정(대통령령 제36290호)으로 <strong>제2조제2호</strong>가 "「국경일에 관한 법률」에 따른 국경일" 전체를 가리키게 바뀌면서 다시 빨간 날이 됐습니다. <strong>대체공휴일 적용 대상</strong>이기도 해서 토·일과 겹치면 다음 첫 비공휴일에 대체공휴일이 부여됩니다 — 2027년 7월 17일은 토요일이라 <strong>7월 19일(월)이 대체공휴일</strong>입니다. 2026년 7월 17일은 금요일이라 주말까지 <strong>연차 없이 3일 연휴</strong>입니다.',
   },
   {
     q: '토요일 근무하는 회사도 연휴 계산할 수 있나요?',
@@ -70,16 +74,17 @@ export default function HolidayBridgePage() {
         <ToolIconBadge catId="date" />징검다리 연휴 플래너
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
-        보유 연차를 입력하면 2026·2027년 공휴일·대체공휴일에 맞춰 <strong style={{ color: 'var(--text)' }}>가장 길게 쉴 수 있는 연차 배치</strong>를 찾아줍니다. 효율(연차 1개당 며칠)과 연차 0개 기준 대비 추가 획득일까지 비교합니다.
+        보유 연차를 입력하면 2026~2030년 공휴일·대체공휴일에 맞춰 <strong style={{ color: 'var(--text)' }}>가장 길게 쉴 수 있는 연차 배치</strong>를 찾아줍니다. 효율(연차 1개당 며칠)과 연차 0개 기준 대비 추가 획득일까지 비교합니다. 올해를 볼 때는 오늘 이후에 시작하는 구간만 추천합니다.
       </p>
 
       <UpdatedMeta
-        date="2026년 6월"
-        basis="2026~2027년 법정공휴일·대체공휴일 기준"
+        date="2026년 7월"
+        basis="2026~2030년 법정공휴일·대체공휴일 (제헌절·노동절 공휴일 편입 반영 — 대통령령 제36290호)"
         sources={[
-          { label: '국가법령정보센터(law.go.kr)', href: 'https://www.law.go.kr/' },
+          { label: '관공서의 공휴일에 관한 규정 — 국가법령정보센터', href: 'https://www.law.go.kr/법령/관공서의공휴일에관한규정' },
+          { label: '대통령령 제36290호 개정 이유 — 정부입법현황', href: 'https://opinion.lawmaking.go.kr/lmSts/govLm/2000000326376/detailRP' },
           { label: '인사혁신처', href: 'https://www.mpm.go.kr/' },
-          { label: '한국천문연구원', href: 'https://astro.kasi.re.kr/' },
+          { label: '한국천문연구원 음력', href: 'https://astro.kasi.re.kr/' },
         ]}
       />
 
@@ -91,7 +96,7 @@ export default function HolidayBridgePage() {
           { label: '한국천문연구원 음력', href: 'https://astro.kasi.re.kr/' },
         ]}
       >
-        본 도구의 연휴 계산은 2026~2027년 한국 법정공휴일·대체공휴일 기준 참고용 추천입니다. 임시공휴일(정부 발표)·회사별 휴무·연차 정책은 사업장마다 다르므로, 실제 휴가 신청 전 회사 인사규정과 정부 최종 공고를 확인하세요. 임시공휴일은 발표 시 반영됩니다.
+        본 도구의 연휴 계산은 2026~2030년 한국 법정공휴일·대체공휴일 기준 참고용 추천입니다. 임시공휴일(정부 발표)·회사별 휴무·연차 정책은 사업장마다 다르므로, 실제 휴가 신청 전 회사 인사규정과 정부 최종 공고를 확인하세요. 임시공휴일은 발표 시 반영됩니다. 먼 연도일수록 음력 공휴일(설·추석·부처님오신날)과 대체공휴일이 정부 최종 공고로 확정되기 전이라 바뀔 수 있습니다.
       </Disclaimer>
 
       <HolidayBridgeClient />
@@ -125,7 +130,8 @@ export default function HolidayBridgePage() {
               <tbody>
                 {[
                   ['설 연휴', '2/16(월)~2/18(수)', '2/19·2/20 연차 2개', '2/14~2/22 (9일)'],
-                  ['어린이날', '5/5(화)', '5/4(월) 연차 1개', '5/1~5/5 (5일)'],
+                  ['노동절+어린이날', '5/1(금 노동절)·5/5(화 어린이날)', '5/4(월) 연차 1개', '5/1~5/5 (5일)'],
+                  ['제헌절', '7/17(금)', '연차 0개', '7/17~7/19 (3일)'],
                   ['광복절', '8/15(토)~8/17(월 대체)', '연차 0개', '8/15~8/17 (3일)'],
                   ['추석', '9/24(목)~9/26(토)', '9/21·9/22·9/23 연차 3개', '9/19~9/27 (9일)'],
                   ['개천절', '10/3(토)~10/5(월 대체)', '연차 0개', '10/3~10/5 (3일)'],
@@ -154,6 +160,8 @@ export default function HolidayBridgePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
             {[
               { t: '설 연휴', d: '2/6~2/9 (대체 2/9 포함, 4일)' },
+              { t: '노동절', d: '5/1(토) → 5/3(월) 대체공휴일, 3일' },
+              { t: '제헌절', d: '7/17(토) → 7/19(월) 대체공휴일, 3일' },
               { t: '추석', d: '9/14(화)~9/16(목), 앞뒤 연차로 확장' },
               { t: '광복절', d: '8/15(일) → 8/16(월) 대체공휴일' },
               { t: '한글날', d: '10/9(토) → 10/11(월) 대체공휴일' },
@@ -170,7 +178,7 @@ export default function HolidayBridgePage() {
         <div>
           <h2 style={h2Style}>연차를 몰아 쓸까, 분산할까 — 효율배수로 따지기</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
-            같은 연차라도 어디에 쓰느냐에 따라 결과가 다릅니다. 판단 기준은 <strong style={{ color: 'var(--text)' }}>효율배수 = 총 연속일수 ÷ 사용 연차</strong>입니다. 추석 앞에 연차 3개를 몰면 9일(3배)이지만, 같은 연차를 짧은 징검다리 여러 곳에 흩으면 한 곳당 4~5일짜리 휴식을 여러 번 만들 수 있습니다.
+            같은 연차라도 어디에 쓰느냐에 따라 결과가 다릅니다. 판단 기준은 <strong style={{ color: 'var(--text)' }}>효율배수 = 총 연속일수 ÷ 사용 연차</strong>입니다. 추석 앞에 연차 3개를 몰면 9일(3배)이 되고, 연차가 넉넉하면 같은 예산을 서로 겹치지 않는 여러 구간에 나눠 연중 여러 번 쉴 수도 있습니다. 다만 <strong style={{ color: 'var(--text)' }}>연차가 적을 때는 한 구간에 몰아 쓰는 쪽이 더 이득</strong>인 경우가 많습니다 — 이 도구의 「골고루 분산」은 예산 안에서 나눌 수 있는 조합을 모두 따져 추가 획득일 합이 가장 큰 배치를 고르므로, 그 답이 한 구간이면 한 구간을 그대로 보여줍니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             <div style={{ ...cardBg, padding: '14px 16px' }}>
@@ -182,7 +190,7 @@ export default function HolidayBridgePage() {
             <div style={{ ...cardBg, padding: '14px 16px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>골고루 분산</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75 }}>
-                연중 여러 번 — 연차를 겹치지 않는 여러 구간에 나눠 4~5일짜리 휴식을 연중 여러 번 확보합니다. 자주 쉬고 싶을 때 적합합니다.
+                총 획득일 최대 — 서로 겹치지 않는 구간들에 연차를 나눠 <strong style={{ color: 'var(--text)' }}>추가로 쉬는 날의 합</strong>이 가장 커지는 배치를 찾습니다. 연차가 넉넉할수록 여러 구간으로 갈라집니다.
               </p>
             </div>
           </div>
@@ -193,7 +201,7 @@ export default function HolidayBridgePage() {
           <h2 style={h2Style}>토요일 근무·근로자의 날·회사 지정휴일 반영하기</h2>
           <ul style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li>· <strong style={{ color: 'var(--text)' }}>토요일 근무</strong> — 주 6일 근무라면 토글을 켜세요. 토요일이 평일로 처리되어 연휴를 끊는 날이 되고, 같은 공휴일이라도 연차가 더 필요해집니다.</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>근로자의 날(5/1)</strong> — 법정공휴일이 아닌 유급휴일입니다. 회사가 쉬면 토글을 켜고, 정상 근무면 끄세요. 5월 초 황금연휴 길이가 크게 달라집니다.</li>
+            <li>· <strong style={{ color: 'var(--text)' }}>노동절(5/1)</strong> — 2026년부터 관공서의 공휴일이자 「노동절 제정에 관한 법률」상 유급휴일입니다. 다만 병원·교대제 등 실제로 근무하는 사업장이 있어(이때는 휴일근로수당 발생), 정상 근무면 토글을 끄세요. 5월 초 황금연휴 길이가 크게 달라집니다.</li>
             <li>· <strong style={{ color: 'var(--text)' }}>회사 지정 휴일</strong> — 창립기념일·노조 창립일 등 회사만 쉬는 날을 날짜로 추가하면 그날도 휴무로 잡혀 연속 구간이 늘어납니다. 입력값은 이 브라우저에 저장됩니다.</li>
           </ul>
         </div>
@@ -202,7 +210,7 @@ export default function HolidayBridgePage() {
         <div>
           <h2 style={h2Style}>대체공휴일 규칙 한눈에</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
-            대체공휴일은 <strong style={{ color: 'var(--text)' }}>관공서의 공휴일에 관한 규정 제3조</strong>에 따라 부여됩니다. 공휴일이 주말과 겹치면 평일 하루를 대신 쉬게 하는 제도입니다.
+            대체공휴일은 <strong style={{ color: 'var(--text)' }}>관공서의 공휴일에 관한 규정 제3조</strong>에 따라 부여됩니다. 공휴일이 주말과 겹치면 평일 하루를 대신 쉬게 하는 제도이고, <strong style={{ color: 'var(--text)' }}>평일에 두 공휴일이 겹칠 때</strong>도 부여됩니다(예: 2028년 추석과 개천절이 10월 3일에 겹쳐 10월 5일이 대체공휴일). 2026년 개정(대통령령 제36290호)으로 <strong style={{ color: 'var(--text)' }}>제헌절·노동절이 대체 대상에 추가</strong>됐습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
@@ -215,9 +223,10 @@ export default function HolidayBridgePage() {
               </thead>
               <tbody>
                 {[
-                  ['삼일절·어린이날·부처님오신날', '토 또는 일과 겹치면', '다음 첫 비공휴일에 부여'],
-                  ['광복절·개천절·한글날·성탄절', '토 또는 일과 겹치면', '다음 첫 비공휴일에 부여'],
+                  ['삼일절·제헌절·광복절·개천절·한글날 (5대 국경일)', '토 또는 일과 겹치면', '다음 첫 비공휴일에 부여'],
+                  ['어린이날·부처님오신날·노동절·성탄절', '토 또는 일과 겹치면', '다음 첫 비공휴일에 부여'],
                   ['설날·추석 연휴', '일요일·다른 공휴일과 겹치면', '연휴 다음 비공휴일에 부여'],
+                  ['위 공휴일끼리 평일에 겹치면', '토·일이 아닌 날에 중복', '겹친 만큼 대체공휴일 부여'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>

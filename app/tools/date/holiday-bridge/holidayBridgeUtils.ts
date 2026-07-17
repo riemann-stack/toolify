@@ -7,7 +7,18 @@
    ※ 날짜는 항상 new Date(y, m-1, d) 분해 파싱 — new Date('YYYY-MM-DD') 금지(UTC 버그)
    ────────────────────────────────────────────────────── */
 
-import { isHolidayStr } from '@/lib/krHolidays'
+import { isHolidayStr, HOLIDAY_YEARS, HOLIDAY_YEAR_MIN, HOLIDAY_YEAR_MAX } from '@/lib/krHolidays'
+
+/** 탐색 가능한 연도 = 공휴일 데이터를 보유한 연도 (하드코딩하지 말 것 — 데이터가 늘면 자동 반영) */
+export const SELECTABLE_YEARS = HOLIDAY_YEARS
+
+/** 연도를 데이터 보유 범위로 클램프 */
+export function clampYear(y: number): number {
+  if (!Number.isFinite(y)) return HOLIDAY_YEAR_MIN
+  if (y < HOLIDAY_YEAR_MIN) return HOLIDAY_YEAR_MIN
+  if (y > HOLIDAY_YEAR_MAX) return HOLIDAY_YEAR_MAX
+  return y
+}
 
 const DOW = ['일', '월', '화', '수', '목', '금', '토'] as const
 
@@ -53,11 +64,17 @@ export interface BridgeSettings {
   laborDay: boolean         // 근로자의 날(5/1) 휴무 포함
   companyHolidays: string[] // 회사 지정 휴일 'YYYY-MM-DD'
   strategy: 'focus' | 'spread' // 집중 / 분산
+  /** 'YYYY-MM-DD'. 지정하면 이 날짜 이후 시작하는 구간만 추천·요약 대상으로 삼는다.
+     연차는 지난 날에 쓸 수 없으므로 현재 연도를 볼 때 오늘 날짜를 넣는다.
+     (SSG 프리렌더에 빌드 날짜가 박히지 않도록 클라이언트 마운트 후에만 설정할 것 — 미설정이면 기간 전체) */
+  fromDate?: string
 }
 
+/* SSG 프리렌더용 기본값 — year는 빌드 시점에 고정되므로 데이터 범위의 첫 해를 쓴다.
+   실제 기본 연도는 클라이언트 마운트 후 '올해'로 바뀐다(HolidayBridgeClient 참고). */
 export const DEFAULT_SETTINGS: BridgeSettings = {
   k: 3,
-  year: 2026,
+  year: HOLIDAY_YEAR_MIN,
   period: 'year',
   saturdayWork: false,
   laborDay: true,
@@ -77,6 +94,20 @@ export function periodRange(year: number, period: PeriodMode): [string, string] 
   }
 }
 
+/** 기간 끝을 넘어가는 연휴를 온전히 잡기 위한 여유 (달력일).
+   예: 2026-12-25 성탄 연휴 → 12/28~12/31 연차 → 2027-01-01 신정 연휴로 이어지는 구간은
+   [2026-01-01, 2026-12-31]만 훑으면 12/31에서 잘려 아예 만들어지지 않는다.
+   앞쪽은 패딩하지 않는다 — 기간 시작 전에 시작하는 연휴는 그 이전 기간의 것이다. */
+const SCAN_TAIL_DAYS = 24
+
+/** 실제로 훑을 [시작, 종료] — 기간 끝에 여유를 더한 창 */
+function scanRange(year: number, period: PeriodMode): [string, string] {
+  const [s, e] = periodRange(year, period)
+  const end = parseYmd(e)
+  end.setDate(end.getDate() + SCAN_TAIL_DAYS)
+  return [s, toYmd(end)]
+}
+
 /* ── 날짜 분류 ── */
 
 export interface DayInfo {
@@ -92,9 +123,16 @@ const LABOR_DAY_MMDD = '05-01'
 /**
  * 기간 내 모든 날짜를 분류.
  * OFF 우선순위: 공휴일 > 회사휴일 > 근로자의날 > 일요일 > 토요일(근무토글에 따라)
+ *
+ * 근로자의 날 예외: 5/1은 2026-05-01부터 관공서 공휴일이라 krHolidays에 들어 있지만,
+ * 실제 근무 여부는 사업장마다 다르다. laborDay 토글을 끄면 공휴일 판정보다 토글을 우선해
+ * 평일(연차 후보)로 본다 — 토글이 공휴일 데이터에 가려 무효가 되는 것을 막는다.
+ * 이때도 그날이 토·일이면 아래 주말 규칙이 그대로 적용된다.
  */
 export function buildDays(settings: BridgeSettings): DayInfo[] {
-  const [startStr, endStr] = periodRange(settings.year, settings.period)
+  // 기간 끝 너머까지 훑는다 — 경계를 걸친 연휴를 온전히 만들기 위해서다(scanRange 참고).
+  // 캘린더에 쓸 날짜는 computeBridge가 기간만 잘라서 넘긴다.
+  const [startStr, endStr] = scanRange(settings.year, settings.period)
   const start = parseYmd(startStr)
   const end = parseYmd(endStr)
   const company = new Set(settings.companyHolidays)
@@ -105,18 +143,20 @@ export function buildDays(settings: BridgeSettings): DayInfo[] {
     const date = toYmd(cur)
     const dow = cur.getDay()
     const holiday = isHolidayStr(date)
-    const mmdd = date.slice(5)
+    const isLaborDay = date.slice(5) === LABOR_DAY_MMDD
+    const laborDayWorked = isLaborDay && !settings.laborDay
 
     let off = false
     let label: string | null = null
 
-    if (holiday) {
+    if (holiday && !laborDayWorked) {
       off = true
       label = holiday.name
     } else if (company.has(date)) {
       off = true
       label = '회사 지정 휴일'
-    } else if (settings.laborDay && mmdd === LABOR_DAY_MMDD) {
+    } else if (isLaborDay && settings.laborDay) {
+      // krHolidays에 5/1이 없는 연도용 폴백 (2026 이전 데이터나 향후 범위 확장 대비)
       off = true
       label = '근로자의 날'
     } else if (dow === 0) {
@@ -127,6 +167,8 @@ export function buildDays(settings: BridgeSettings): DayInfo[] {
       label = '토요일'
     }
 
+    // holidayName은 토글과 무관하게 유지 — 캘린더에서 '공휴일이지만 우리 회사는 근무'를
+    // 표현할 수 있어야 한다(calHoliday만 붙고 calNatural은 안 붙는 상태).
     out.push({ date, dow, off, label, holidayName: holiday ? holiday.name : null })
     cur.setDate(cur.getDate() + 1)
   }
@@ -251,19 +293,6 @@ export function sortPlans(plans: Plan[]): Plan[] {
   })
 }
 
-/** 날짜 구간(startDate~endDate) 기준 dedup */
-function dedupByRange(plans: Plan[]): Plan[] {
-  const seen = new Set<string>()
-  const out: Plan[] = []
-  for (const p of plans) {
-    const key = `${p.startDate}~${p.endDate}`
-    if (seen.has(key)) continue
-    seen.add(key)
-    out.push(p)
-  }
-  return out
-}
-
 /**
  * 집중(최대 한 방): 예산 K 내 최장 연속일수 플랜 1개.
  * 동률이면 효율 높은(=연차 적게 쓰는) 것.
@@ -275,65 +304,91 @@ export function focusPlan(plans: Plan[], k: number): Plan | null {
 }
 
 /**
- * 추천 리스트 상위 N (연차를 1개 이상 쓰는 플랜 중, 구간 dedup).
- * 같은 길이라도 다른 시기의 플랜을 보여주기 위해 dedup 후 상위 N.
+ * 추천 리스트 상위 N — UI가 "여러 시기를 비교해 고르세요"라고 안내하므로 **서로 다른 시기**만 남긴다.
+ *
+ * 좋은 순으로 훑으면서 이미 쓴 run과 겹치는 플랜은 건너뛴다. 이렇게 하지 않으면 같은 연휴의
+ * 길이 변형(a·b를 한 칸씩 옮긴 것)이 상위를 독식해 5장이 전부 한 덩어리가 된다.
+ * (예전 dedupByRange는 startDate~endDate 기준이라 (a,b)마다 키가 달라 아무것도 못 걸렀다.)
  */
 export function topPlans(plans: Plan[], k: number, n = 5): Plan[] {
   const valid = plans.filter(p => p.cost <= k && p.cost > 0)
-  return dedupByRange(sortPlans(valid)).slice(0, n)
+  const out: Plan[] = []
+  const usedRuns = new Set<number>()
+  for (const p of sortPlans(valid)) {
+    let overlaps = false
+    for (let i = p.aRun; i <= p.bRun; i++) if (usedRuns.has(i)) { overlaps = true; break }
+    if (overlaps) continue
+    out.push(p)
+    for (let i = p.aRun; i <= p.bRun; i++) usedRuns.add(i)
+    if (out.length >= n) break
+  }
+  return out
 }
 
 /**
- * 분산(골고루): 서로 겹치지 않는 플랜들을 그리디로 골라 총 추가 획득일 최대화.
- * - 단위 예산당 획득(gained/cost)이 높은 플랜 우선, 동률이면 gained 큰 것.
- * - 선택 시 사용 run 범위(aRun..bRun)가 겹치면 제외, 남은 예산 차감.
+ * 분산(골고루): 서로 겹치지 않는 플랜들을 골라 **총 추가 획득일을 최대화**한다 (예산 K 이내).
+ *
+ * run 인덱스 구간에 대한 DP — plans는 [aRun..bRun] 구간을 차지하고 서로 겹칠 수 없으므로
+ * 예산 축을 더한 가중 구간 스케줄링이다. dp[i][b] = run i 이상만 사용하고 예산 b일 때 최대 gained.
+ *
+ * 예전 그리디(효율순 + per-window cap)는 예산을 남기거나 열등한 조합을 골랐다
+ * (예: 2027 k=11에서 +16, 최적은 +22). 규모가 작아(runs ~120, k ≤ 20) DP로 정확해를 구한다.
+ *
+ * 동점이면 구간 수가 많은 쪽 — '골고루'라는 모드 의미에 맞춘 타이브레이크.
+ * 연차가 적으면 한 구간에 몰리는 것이 최적일 수 있고, 그때는 그대로 한 구간을 반환한다(정직).
  */
 export function spreadPlans(plans: Plan[], k: number): { plans: Plan[]; usedK: number; totalGained: number } {
-  const byRatio = (p: Plan, q: Plan) => {
-    const pr = p.gained / p.cost
-    const qr = q.gained / q.cost
-    if (qr !== pr) return qr - pr
-    if (q.gained !== p.gained) return q.gained - p.gained
-    return p.cost - q.cost // 동률이면 적게 쓰는 것 우선
-  }
+  const empty = { plans: [] as Plan[], usedK: 0, totalGained: 0 }
   const pool = plans.filter(p => p.cost > 0 && p.cost <= k && p.gained > 0)
+  if (k <= 0 || pool.length === 0) return empty
 
+  const maxRun = pool.reduce((m, p) => Math.max(m, p.bRun), 0)
+  const n = maxRun + 1
+
+  // byStart[i] = run i에서 시작하는 플랜들
+  const byStart: Plan[][] = Array.from({ length: n }, () => [])
+  for (const p of pool) byStart[p.aRun].push(p)
+
+  // dp[i][b] — i는 0..n (n은 경계, 전부 0). 동점 시 windows가 큰 쪽을 택한다.
+  const gain: number[][] = Array.from({ length: n + 1 }, () => new Array(k + 1).fill(0))
+  const wins: number[][] = Array.from({ length: n + 1 }, () => new Array(k + 1).fill(0))
+  const pickAt: (Plan | null)[][] = Array.from({ length: n + 1 }, () => new Array<Plan | null>(k + 1).fill(null))
+
+  for (let i = n - 1; i >= 0; i--) {
+    for (let b = 0; b <= k; b++) {
+      // run i를 쓰지 않는 경우
+      let bestG = gain[i + 1][b]
+      let bestW = wins[i + 1][b]
+      let pick: Plan | null = null
+      for (const p of byStart[i]) {
+        if (p.cost > b) continue
+        const nextI = p.bRun + 1        // ≤ n
+        const g = p.gained + gain[nextI][b - p.cost]
+        const w = 1 + wins[nextI][b - p.cost]
+        if (g > bestG || (g === bestG && w > bestW)) { bestG = g; bestW = w; pick = p }
+      }
+      gain[i][b] = bestG
+      wins[i][b] = bestW
+      pickAt[i][b] = pick
+    }
+  }
+
+  // 역추적
   const chosen: Plan[] = []
-  const usedRuns = new Set<number>()
-  let budget = k
-
-  const conflicts = (p: Plan) => {
-    for (let i = p.aRun; i <= p.bRun; i++) if (usedRuns.has(i)) return true
-    return false
-  }
-  const take = (p: Plan) => {
-    chosen.push(p)
-    for (let i = p.aRun; i <= p.bRun; i++) usedRuns.add(i)
-    budget -= p.cost
+  let i = 0
+  let b = k
+  while (i < n) {
+    const p = pickAt[i][b]
+    if (p) { chosen.push(p); b -= p.cost; i = p.bRun + 1 }
+    else i++
   }
 
-  // 1차: 한 창이 예산을 통째로 삼키지 않도록 per-window cap 적용 → 여러 구간으로 분산 유도.
-  //      효율(gained/cost) 높은 짧은 징검다리부터 채워 분산성을 높인다.
-  const cap = Math.max(1, Math.floor(k / 3))
-  for (const p of pool.slice().sort(byRatio)) {
-    if (budget <= 0) break
-    if (p.cost > cap || p.cost > budget) continue
-    if (conflicts(p)) continue
-    take(p)
-  }
-  // 2차: 남은 예산으로 cap 무시하고 추가 획득(긴 한 방) 채움
-  for (const p of pool.slice().sort(byRatio)) {
-    if (budget <= 0) break
-    if (p.cost > budget) continue
-    if (conflicts(p)) continue
-    take(p)
-  }
-
-  // 시작일 순 정렬해 보기 좋게
   chosen.sort((p, q) => (p.startDate < q.startDate ? -1 : 1))
-  const usedK = k - budget
-  const totalGained = chosen.reduce((s, p) => s + p.gained, 0)
-  return { plans: chosen, usedK, totalGained }
+  return {
+    plans: chosen,
+    usedK: chosen.reduce((s, p) => s + p.cost, 0),
+    totalGained: chosen.reduce((s, p) => s + p.gained, 0),
+  }
 }
 
 /* ── 공짜 연휴(연차 0) 기준선 ── */
@@ -363,28 +418,51 @@ export function freeHolidays(days: DayInfo[], runs: OffRun[], minDays = 3): Free
 /* ── 종합 결과 ── */
 
 export interface BridgeResult {
+  /** 캘린더용 — 선택한 기간만 (fromDate와 무관하게 기간 전체) */
   days: DayInfo[]
+  /** 기간 안에서 시작하는 OFF-run.
+     ⚠️ startIdx/endIdx는 내부 스캔 창(기간 + 뒤쪽 여유) 기준이라 위 `days` 인덱스와 다르다.
+        날짜(startDate/endDate)로만 쓸 것. */
   runs: OffRun[]
   focus: Plan | null         // 집중 최적
   top: Plan[]                // 추천 상위
   spread: { plans: Plan[]; usedK: number; totalGained: number }
   free: FreeHoliday[]        // 공짜 연휴
   baselineMaxRun: number     // 연차 0 기준 최장 자연 연휴 길이
+  fromDate: string | null    // 과거 제외 기준일 (없으면 기간 전체)
+  droppedPast: boolean       // fromDate 때문에 실제로 빠진 구간이 있는가 (UI 고지용)
 }
 
 export function computeBridge(settings: BridgeSettings): BridgeResult {
-  const days = buildDays(settings)
-  const runs = extractRuns(days)
-  const plans = buildPlans(days, runs, settings.k)
-  const baselineMaxRun = runs.reduce((m, r) => Math.max(m, r.days), 0)
+  const [periodStart, periodEnd] = periodRange(settings.year, settings.period)
+  // scanDays는 기간 끝 너머까지 포함한다 — 경계를 걸친 연휴를 온전히 만들기 위해서다.
+  const scanDays = buildDays(settings)
+  const runs = extractRuns(scanDays)
+  const allPlans = buildPlans(scanDays, runs, settings.k)
+  const from = settings.fromDate ?? null
+
+  // 추천 대상 = 선택한 기간 안에서 **시작**하는 구간.
+  //  - 기간 밖(여유분)에서 시작하는 구간은 다음 기간의 것이므로 제외한다.
+  //  - 기간 안에서 시작해 밖으로 이어지는 구간은 남긴다(연말→신년 연휴가 여기서 살아난다).
+  const startsInPeriod = (d: string) => d >= periodStart && d <= periodEnd
+  const periodPlans = allPlans.filter(p => startsInPeriod(p.startDate))
+  const periodRuns = runs.filter(r => startsInPeriod(r.startDate))
+
+  // 연차는 지난 날에 쓸 수 없다 — fromDate가 있으면 그날 이후 시작하는 것만.
+  const plans = from ? periodPlans.filter(p => p.startDate >= from) : periodPlans
+  const liveRuns = from ? periodRuns.filter(r => r.startDate >= from) : periodRuns
+
   return {
-    days,
-    runs,
+    // 캘린더는 선택한 기간만 그린다 (여유분은 잘라낸다)
+    days: scanDays.filter(d => startsInPeriod(d.date)),
+    runs: periodRuns,
     focus: focusPlan(plans, settings.k),
     top: topPlans(plans, settings.k, 5),
     spread: spreadPlans(plans, settings.k),
-    free: freeHolidays(days, runs, 3),
-    baselineMaxRun,
+    free: freeHolidays(scanDays, liveRuns, 3),
+    baselineMaxRun: liveRuns.reduce((m, r) => Math.max(m, r.days), 0),
+    fromDate: from,
+    droppedPast: from !== null && (periodPlans.length > plans.length || periodRuns.length > liveRuns.length),
   }
 }
 
@@ -414,7 +492,8 @@ export function loadSettings(): Partial<BridgeSettings> {
     const out: Partial<BridgeSettings> = {}
 
     if (typeof obj.k === 'number' && obj.k >= 0 && obj.k <= 20) out.k = Math.floor(obj.k)
-    if (typeof obj.year === 'number' && (obj.year === 2026 || obj.year === 2027)) out.year = obj.year
+    // 데이터 보유 연도만 허용 — 범위가 늘어도 코드 수정 불필요
+    if (typeof obj.year === 'number' && SELECTABLE_YEARS.includes(obj.year)) out.year = obj.year
     if (obj.period === 'year' || obj.period === 'q1' || obj.period === 'q2' || obj.period === 'q3' || obj.period === 'q4') {
       out.period = obj.period
     }

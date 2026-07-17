@@ -200,6 +200,18 @@
   margin: 4px 0 2px;
 }
 .sectionHint { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.6; }
+
+/* 과거 구간 제외 고지 */
+.pastNote {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.pastNote strong { color: var(--text); font-weight: 700; }
 .planList { display: flex; flex-direction: column; gap: 10px; }
 .planCard {
   background: var(--bg2);

@@ -2,11 +2,12 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { todayStr } from '@/lib/date'
 import s from './holidayBridge.module.css'
 import {
   computeBridge, planSummaryText, loadSettings, saveSettings,
   shortKo, longKo, parseYmd,
-  DEFAULT_SETTINGS,
+  DEFAULT_SETTINGS, SELECTABLE_YEARS, clampYear,
   type BridgeSettings, type PeriodMode, type Plan, type DayInfo,
 } from './holidayBridgeUtils'
 
@@ -19,21 +20,33 @@ export default function HolidayBridgeClient() {
   const [loaded, setLoaded] = useState(false)
   const [companyInput, setCompanyInput] = useState('')
   const [toast, setToast] = useState<string | null>(null)
+  // 이 페이지는 SSG라 렌더 중에 오늘을 읽으면 빌드 날짜가 정적 HTML에 박힌다.
+  // 마운트 후에만 채워 하이드레이션 불일치를 피한다 (그전엔 기간 전체를 보여줌).
+  const [today, setToday] = useState<string | null>(null)
 
   // 초기 로드
   useEffect(() => {
     const saved = loadSettings()
-    setSettings(prev => ({ ...prev, ...saved }))
+    const t = todayStr()
+    // 저장값이 없으면 '올해'(데이터 보유 범위로 클램프)를 기본 연도로 — 해가 바뀌어도 따라간다.
+    // saved를 뒤에 펼쳐 사용자가 고른 연도가 우선하도록 한다.
+    setSettings(prev => ({ ...prev, year: clampYear(Number(t.slice(0, 4))), ...saved }))
     if (typeof saved.k === 'number') setKText(String(saved.k))
+    setToday(t)
     setLoaded(true)
   }, [])
 
-  // 변경 시 저장
+  // 변경 시 저장 (fromDate는 파생값이라 settings에 넣지 않는다)
   useEffect(() => {
     if (loaded) saveSettings(settings)
   }, [settings, loaded])
 
-  const result = useMemo(() => computeBridge(settings), [settings])
+  const result = useMemo(() => {
+    // 지난 연휴에는 연차를 쓸 수 없으므로 현재 연도를 볼 때만 오늘 이후로 자른다.
+    // 미래 연도는 전 구간이 유효하다.
+    const fromDate = today && settings.year === Number(today.slice(0, 4)) ? today : undefined
+    return computeBridge({ ...settings, fromDate })
+  }, [settings, today])
 
   const update = (patch: Partial<BridgeSettings>) => setSettings(prev => ({ ...prev, ...patch }))
 
@@ -152,7 +165,7 @@ export default function HolidayBridgeClient() {
         <div className={s.field} style={{ marginTop: 16 }}>
           <span className={s.fieldLabel}>탐색 기간</span>
           <div className={s.segment} role="group" aria-label="탐색 연도">
-            {([2026, 2027] as const).map(y => (
+            {SELECTABLE_YEARS.map(y => (
               <button
                 type="button"
                 key={y}
@@ -160,7 +173,7 @@ export default function HolidayBridgeClient() {
                 onClick={() => update({ year: y })}
                 aria-pressed={settings.year === y}
               >
-                {y} 전체
+                {y}
               </button>
             ))}
           </div>
@@ -208,8 +221,8 @@ export default function HolidayBridgeClient() {
           <Toggle
             on={settings.laborDay}
             onClick={() => update({ laborDay: !settings.laborDay })}
-            label="근로자의 날(5/1) 휴무 포함"
-            hint="법정공휴일 아님 · 유급휴일이라 회사별로 다름"
+            label="노동절(5/1) 휴무 포함"
+            hint="2026년부터 공휴일 · 병원·교대제 등 근무하는 곳은 끄세요"
           />
         </div>
       </div>
@@ -235,7 +248,7 @@ export default function HolidayBridgeClient() {
               <p className={s.heroNum}>
                 {result.baselineMaxRun}<span className={s.heroUnit}>일</span>
               </p>
-              <p className={s.heroEmpty}>연차를 1개 이상 입력하면 추천 플랜이 나옵니다.</p>
+              <p className={s.heroEmpty}><EmptyReason k={settings.k} year={settings.year} result={result} /></p>
             </>
           )}
         </div>
@@ -257,10 +270,17 @@ export default function HolidayBridgeClient() {
             <>
               <p className={s.heroTop}>연차 0개 기준 최장 연휴</p>
               <p className={s.heroNum}>{result.baselineMaxRun}<span className={s.heroUnit}>일</span></p>
-              <p className={s.heroEmpty}>연차를 1개 이상 입력하면 분산 플랜이 나옵니다.</p>
+              <p className={s.heroEmpty}><EmptyReason k={settings.k} year={settings.year} result={result} spread /></p>
             </>
           )}
         </div>
+      )}
+
+      {result.droppedPast && result.fromDate && (
+        <p className={s.pastNote}>
+          오늘 <strong>{longKo(result.fromDate)}</strong> 이후에 시작하는 구간만 추천합니다 — 지난 연휴에는 연차를 쓸 수 없습니다.
+          아래 캘린더는 {settings.year}년 전체를 보여줍니다.
+        </p>
       )}
 
       {/* 잔여 연차 */}
@@ -300,8 +320,13 @@ export default function HolidayBridgeClient() {
       {/* 공짜 연휴 */}
       {result.free.length > 0 && (
         <div>
-          <p className={s.sectionTitle}>공짜 연휴 (연차 0개, 3일 이상)</p>
-          <p className={s.sectionHint}>주말과 공휴일만으로 자동으로 생기는 연휴입니다.</p>
+          <p className={s.sectionTitle}>
+            {result.droppedPast ? '남은 공짜 연휴' : '공짜 연휴'} (연차 0개, 3일 이상)
+          </p>
+          <p className={s.sectionHint}>
+            주말과 공휴일만으로 자동으로 생기는 연휴입니다.
+            {result.droppedPast && ' 오늘 이후 시작하는 것만 표시합니다.'}
+          </p>
           <div className={s.freeGrid}>
             {result.free.map(f => (
               <div key={f.startDate} className={s.freeCard}>
@@ -325,6 +350,21 @@ export default function HolidayBridgeClient() {
       {toast && <div className={s.toast} role="status">{toast}</div>}
     </div>
   )
+}
+
+/* ── 결과가 없을 때 이유 안내 ── */
+function EmptyReason({ k, year, result, spread }: {
+  k: number
+  year: number
+  result: ReturnType<typeof computeBridge>
+  spread?: boolean
+}) {
+  if (k === 0) return <>연차를 1개 이상 입력하면 {spread ? '분산 ' : '추천 '}플랜이 나옵니다.</>
+  // 연차가 있는데도 플랜이 없다 = 남은 기간에 이을 만한 구간이 없다는 뜻
+  if (result.droppedPast) {
+    return <>{year}년은 오늘 이후로 남은 징검다리 구간이 없습니다. 다른 연도나 기간을 선택해 보세요.</>
+  }
+  return <>이 기간에는 연차로 이을 수 있는 구간이 없습니다. 기간을 넓혀 보세요.</>
 }
 
 /* ── 토글 ── */
