@@ -108,11 +108,11 @@ const SCENARIOS = [
 
 /* ─── 외부 사이트 프록시 측정 ─── */
 type ProxyApiResult =
-  | { ok: true; serverTimeMs: number; rttMs: number; httpStatus: number; finalUrl: string; dateHeader: string }
+  | { ok: true; serverTimeMs: number; rttMs: number; httpStatus: number; finalUrl: string; dateHeader: string; requestStartMs: number; ageSec?: number }
   | { ok: false; error: string; reason?: string }
 
 type ProxyResult =
-  | { ok: true; serverTimeMs: number; rttMs: number; httpStatus: number; finalUrl: string; dateHeader: string; measuredAt: number }
+  | { ok: true; serverTimeMs: number; rttMs: number; httpStatus: number; finalUrl: string; dateHeader: string; requestStartMs: number; ageSec?: number; measuredAt: number }
   | { ok: false; error: string; reason?: string }
 
 async function measureExternal(url: string): Promise<ProxyResult> {
@@ -128,21 +128,23 @@ async function measureExternal(url: string): Promise<ProxyResult> {
   }
 }
 
-/* 한국 인기 티켓팅·예매·신청 사이트 프리셋 */
+/* 한국 인기 티켓팅·예매·신청 사이트 프리셋
+   — 가능한 곳은 실제 예매·수강신청 서버를 직접 측정 (본사 홈페이지와 시계가 다를 수 있음)
+   — 수강신청 서버가 외부 측정을 막는 학교(연세대·서강대)만 대표 도메인 유지 */
 const SITE_PRESETS = [
   { url: 'https://ticket.interpark.com', label: '🎤 인터파크 티켓' },
   { url: 'https://ticket.yes24.com',     label: '📚 예스24 티켓' },
-  { url: 'https://www.melon.com/ticket', label: '🎵 멜론티켓' },
+  { url: 'https://ticket.melon.com',     label: '🎵 멜론티켓' },
   { url: 'https://www.ticketlink.co.kr', label: '🎟️ 티켓링크' },
   { url: 'https://www.korail.com',       label: '🚄 KTX 코레일' },
   { url: 'https://etk.srail.kr',         label: '🚅 SRT' },
   { url: 'https://dongma.club',          label: '🏃 동마클럽' },
-  { url: 'https://www.snu.ac.kr',        label: '🎓 서울대' },
+  { url: 'https://sugang.snu.ac.kr',     label: '🎓 서울대 수강신청' },
   { url: 'https://www.yonsei.ac.kr',     label: '🎓 연세대' },
-  { url: 'https://www.korea.ac.kr',      label: '🎓 고려대' },
-  { url: 'https://www.skku.edu',         label: '🎓 성균관대' },
+  { url: 'https://sugang.korea.ac.kr',   label: '🎓 고려대 수강신청' },
+  { url: 'https://sugang.skku.edu',      label: '🎓 성균관대 수강신청' },
   { url: 'https://www.sogang.ac.kr',     label: '🎓 서강대' },
-  { url: 'https://www.hanyang.ac.kr',    label: '🎓 한양대' },
+  { url: 'https://sugang.hanyang.ac.kr', label: '🎓 한양대 수강신청' },
 ] as const
 
 export default function ServerTimeClient() {
@@ -156,11 +158,16 @@ export default function ServerTimeClient() {
   const [, setTick] = useState(0)
   const rafRef = useRef<number | null>(null)
 
+  /* SSG HTML은 빌드 시점 시각으로 굳어 있어 하이드레이션 텍스트 불일치
+     → 전체 클라이언트 재렌더를 유발하므로, 마운트 전엔 플레이스홀더 표시 */
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
   /* 카운트다운 */
   const [targetTimeStr, setTargetTimeStr] = useState('14:00:00')
   const [targetMs, setTargetMs] = useState<number | null>(null)
   const [soundOn, setSoundOn] = useState(false)
-  const [alertStage, setAlertStage] = useState<AlertStage>('none')
+  const alertStageRef = useRef<AlertStage>('none') // 렌더에 안 쓰이므로 ref로만 추적
   const audioCtxRef = useRef<AudioContext | null>(null)
 
   /* 외부 사이트 트래킹 */
@@ -173,31 +180,45 @@ export default function ServerTimeClient() {
   const getServerNow = useCallback(() => Date.now() + offsetMs, [offsetMs])
 
   /* 동기화 — 5회 측정 후 최소 RTT 채택 */
+  const syncingRef = useRef(false)
   const sync = useCallback(async () => {
+    if (syncingRef.current) return // 중복 실행 방지 (탭 복귀 + 주기 타이머 겹침)
+    syncingRef.current = true
     setStatus('syncing')
-    const samples: { offsetMs: number; rttMs: number }[] = []
-    for (let i = 0; i < 5; i++) {
-      const r = await measureOffset()
-      if (r) samples.push(r)
+    try {
+      const samples: { offsetMs: number; rttMs: number }[] = []
+      for (let i = 0; i < 5; i++) {
+        const r = await measureOffset()
+        if (r) samples.push(r)
+      }
+      if (samples.length === 0) {
+        setStatus('error')
+        return
+      }
+      // 가장 작은 RTT 사용 (네트워크 지터 최소)
+      samples.sort((a, b) => a.rttMs - b.rttMs)
+      const best = samples[0]
+      setOffsetMs(best.offsetMs)
+      setRttMs(best.rttMs)
+      setLastSyncAt(Date.now())
+      setStatus('ok')
+    } finally {
+      syncingRef.current = false
     }
-    if (samples.length === 0) {
-      setStatus('error')
-      return
-    }
-    // 가장 작은 RTT 사용 (네트워크 지터 최소)
-    samples.sort((a, b) => a.rttMs - b.rttMs)
-    const best = samples[0]
-    setOffsetMs(best.offsetMs)
-    setRttMs(best.rttMs)
-    setLastSyncAt(Date.now())
-    setStatus('ok')
   }, [])
 
-  /* 초기 동기화 + 5분마다 재동기화 */
+  /* 초기 동기화 + 5분마다 재동기화 + 탭 복귀(슬립 해제) 시 즉시 재동기화 */
   useEffect(() => {
     sync()
     const id = setInterval(sync, 5 * 60 * 1000)
-    return () => clearInterval(id)
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') sync()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
   }, [sync])
 
   /* requestAnimationFrame 시계 — 60fps 갱신 */
@@ -216,9 +237,23 @@ export default function ServerTimeClient() {
   useEffect(() => {
     const ms = parseTimeInput(targetTimeStr, getServerNow())
     setTargetMs(ms)
-    setAlertStage('none')
+    alertStageRef.current = 'none'
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetTimeStr])
+
+  /* 오프셋이 1초 넘게 보정되면 오늘/내일 판정 재계산 —
+     PC 시계가 분·시간 단위로 틀어진 채 파싱된 타겟이 잘못된 날짜로 잡히는 문제 보정.
+     ms 단위 소폭 재동기화는 무시해, 이미 지난 타겟의 「경과」 표시를 지우지 않는다. */
+  const prevOffsetRef = useRef(0)
+  useEffect(() => {
+    const prev = prevOffsetRef.current
+    prevOffsetRef.current = offsetMs
+    if (Math.abs(offsetMs - prev) <= 1000) return
+    const ms = parseTimeInput(targetTimeStr, Date.now() + offsetMs)
+    setTargetMs(ms)
+    alertStageRef.current = 'none'
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offsetMs])
 
   /* 비프 */
   const getAudio = () => {
@@ -247,28 +282,44 @@ export default function ServerTimeClient() {
     osc.stop(t0 + duration + 0.02)
   }
 
-  /* 알림 트리거 */
+  /* 알림 트리거 — 임계값 "통과" 방식.
+     좁은 시간 창(예: remain 2900~3000) 매칭은 setInterval 지터·렌더 정지로
+     창을 건너뛰면 그 단계와 이후 단계(정각 포함)가 전부 침묵하므로 금지. */
   useEffect(() => {
     if (!soundOn || targetMs === null) return
     const id = setInterval(() => {
       const remain = targetMs - getServerNow()
-      if (alertStage === 'none' && remain <= 3000 && remain > 2900) {
-        beep(660); setAlertStage('3s')
-      } else if (alertStage === '3s' && remain <= 1000 && remain > 900) {
-        beep(880); setAlertStage('1s')
-      } else if (alertStage === '1s' && remain <= 0) {
-        beep(1320, 0.4); setAlertStage('fired')
+      const prev = alertStageRef.current
+      const next: AlertStage =
+        remain <= 0 ? 'fired'
+        : remain <= 1000 ? '1s'
+        : remain <= 3000 ? '3s'
+        : 'none'
+      if (next === prev) return
+      if (next === 'fired') {
+        // 목표 직후(2초 이내)에만 발화 — 이미 지난 목표에 알림음을 켰을 때 뒷북 방지
+        if (prev !== 'fired' && remain > -2000) beep(1320, 0.4)
+      } else if (next === '1s') {
+        beep(880)
+      } else if (next === '3s' && prev === 'none') {
+        beep(660)
       }
+      alertStageRef.current = next
     }, 100)
     return () => clearInterval(id)
-  }, [soundOn, targetMs, alertStage, getServerNow])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [soundOn, targetMs, getServerNow])
 
-  /* 외부 사이트 측정 */
+  /* 외부 사이트 측정 — 시퀀스 가드: 자동 재측정(5초)과 수동 측정이 겹칠 때
+     느린 옛 응답이 새 결과를 덮어쓰지 않도록 최신 요청만 반영 */
+  const extSeqRef = useRef(0)
   const runExtMeasure = useCallback(async (url: string) => {
     const target = url.trim()
     if (!target) return
+    const seq = ++extSeqRef.current
     setExtLoading(true)
     const r = await measureExternal(target)
+    if (seq !== extSeqRef.current) return
     setExtResult(r)
     setExtLoading(false)
   }, [])
@@ -304,22 +355,26 @@ export default function ServerTimeClient() {
   const serverNow = getServerNow()
   const remainMs = targetMs !== null ? targetMs - serverNow : 0
   const cd = fmtCountdown(remainMs)
-  const timeStr = fmtKstTime(serverNow, true)
-  const dateStr = fmtKstDate(serverNow)
+  const timeStr = mounted ? fmtKstTime(serverNow, true) : '--:--:--.---'
+  const dateStr = mounted ? fmtKstDate(serverNow) : ' '
   const targetDisplay = targetMs !== null
     ? `${fmtKstDate(targetMs)} ${fmtKstTime(targetMs, false)}`
     : ''
 
-  /* 외부 사이트 — 측정 시각 + 경과 시간을 더해 실시간 추정 */
+  /* 외부 사이트 — 실시간 추정.
+     Date 헤더가 찍힌 시점 ≈ 에지 시계로 requestStartMs + rtt/2.
+     클라이언트의 에지 기준 현재 시각 = Date.now() + offsetMs(자체 서버 동기화)이므로,
+     클라이언트 수신 시점(measuredAt) 기준보다 에지 처리·회신 지연이 배제돼 정확하다.
+     이때 diffVsSelf = serverTimeMs − (requestStartMs + rtt/2)로 측정마다 상수가 된다. */
   const extLive = useMemo(() => {
     if (!extResult || !extResult.ok) return null
-    const elapsed = Date.now() - extResult.measuredAt
-    const liveMs = extResult.serverTimeMs + elapsed
-    // 자체 서버와의 차이 (외부 - 자체)
+    const stampedAtEdge = extResult.requestStartMs + extResult.rttMs / 2
+    const liveMs = Number.isFinite(stampedAtEdge)
+      ? extResult.serverTimeMs + (Date.now() + offsetMs - stampedAtEdge)
+      : extResult.serverTimeMs + (Date.now() - extResult.measuredAt) // 구형 응답 폴백
     const diffVsSelf = liveMs - serverNow
     return { liveMs, diffVsSelf }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [extResult, serverNow])
+  }, [extResult, serverNow, offsetMs])
 
   const offsetDisplay = useMemo(() => {
     const abs = Math.abs(offsetMs)
@@ -341,7 +396,7 @@ export default function ServerTimeClient() {
           { href: '/tools/life/pomodoro', label: '뽀모도로 타이머' },
         ]}
       >
-        본 도구의 「서버」는 Vercel Edge (UTC NTP 동기화) 기준입니다. 한국 주요 티켓팅·신청 서버와 ±50ms 이내로 거의 일치하지만 절대 보장 X — 새로고침은 약간 여유를 두세요.
+        본 도구의 「서버」는 Vercel Edge (UTC NTP 동기화) 기준입니다. NTP 동기화된 상용 서버끼리는 보통 수십 ms 수준으로 일치하지만 사이트별 차이가 있을 수 있고 절대 보장은 아닙니다 — 목표 사이트는 아래 외부 사이트 트래킹으로 직접 확인하고, 새로고침은 약간 여유를 두세요.
       </Disclaimer>
 
       {/* ─── 큰 시계 ─── */}
@@ -349,6 +404,7 @@ export default function ServerTimeClient() {
         <div className={s.clockHeader}>
           <span className={s.clockBadge}>🇰🇷 한국 표준시 (KST)</span>
           <button
+            type="button"
             className={s.syncBtn}
             onClick={sync}
             disabled={status === 'syncing'}
@@ -363,6 +419,13 @@ export default function ServerTimeClient() {
         </div>
 
         <div className={s.clockDate}>{dateStr}</div>
+
+        {status === 'error' && (
+          <p className={s.syncErrorBanner} role="alert">
+            ⚠ 서버 동기화 실패 — 위 시각은 {lastSyncAt ? '마지막 동기화 기준으로 흘러가는' : '기기 시계 기준'} 값입니다.
+            네트워크 확인 후 「다시 동기화」를 눌러주세요.
+          </p>
+        )}
 
         <div className={s.clockMeta}>
           <div className={s.metaItem}>
@@ -400,6 +463,7 @@ export default function ServerTimeClient() {
             type="url"
             className={s.urlInput}
             placeholder="https://ticket.example.com"
+            aria-label="측정할 사이트 URL"
             value={extUrl}
             onChange={(e) => setExtUrl(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') onExtMeasure() }}
@@ -451,7 +515,10 @@ export default function ServerTimeClient() {
                   : Math.abs(extLive.diffVsSelf) < 10000 ? s.offsetWarn
                   : s.offsetDanger
                 }`}>
-                  {extLive.diffVsSelf >= 0 ? '+' : ''}{(extLive.diffVsSelf / 1000).toFixed(1)}초
+                  {/* Date 헤더는 초 단위 절사라 소수 표시는 과잉 정밀 — 초 단위로만 */}
+                  {Math.abs(extLive.diffVsSelf) < 1000
+                    ? '1초 미만'
+                    : `약 ${extLive.diffVsSelf > 0 ? '+' : ''}${Math.round(extLive.diffVsSelf / 1000)}초`}
                 </span>
               </div>
               <div className={s.metaItem}>
@@ -470,15 +537,21 @@ export default function ServerTimeClient() {
               </div>
             </div>
             <p className={s.extFinalUrl}>{extResult.finalUrl}</p>
+            {(extResult.ageSec ?? 0) > 0 && (
+              <p className={s.extWarn}>
+                🗄️ CDN 캐시 응답(Age {extResult.ageSec}초)이 감지되어 그만큼 보정했습니다.
+                캐시를 거친 측정은 오차가 커질 수 있습니다.
+              </p>
+            )}
             <p className={s.extWarn}>
-              ⚠️ 표시 시각은 마지막 측정값에 클라이언트 경과를 더한 추정치입니다.
-              네트워크 지연·서버 처리 시간으로 ±1초 오차 가능 — 새로고침은 0.5~1초 여유를 두세요.
+              ⚠️ 표시 시각은 마지막 측정값에 경과 시간을 더한 추정치입니다.
+              Date 헤더가 초 단위 절사라 실제보다 최대 1초 느리게 보일 수 있음 — 새로고침은 0.5~1초 여유를 두세요.
             </p>
           </div>
         )}
 
         {extResult && !extResult.ok && (
-          <div className={s.extErrorBox}>
+          <div className={s.extErrorBox} role="alert">
             <strong>❌ 측정 실패</strong>
             <p>{extResult.error}</p>
             {extResult.reason === 'no_date_header' && (
@@ -506,6 +579,7 @@ export default function ServerTimeClient() {
             type="text"
             className={s.targetInput}
             placeholder="14:00:00"
+            aria-label="목표 시각 (HH:MM 또는 HH:MM:SS)"
             value={targetTimeStr}
             onChange={(e) => setTargetTimeStr(e.target.value)}
           />
@@ -523,7 +597,8 @@ export default function ServerTimeClient() {
         </div>
 
         {targetMs === null ? (
-          <p className={s.targetError}>형식: HH:MM 또는 HH:MM:SS (예: 14:00 또는 14:00:00)</p>
+          // 마운트 전(SSR 포함)엔 항상 null이므로 에러를 띄우지 않음
+          mounted && <p className={s.targetError} role="alert">형식: HH:MM 또는 HH:MM:SS (예: 14:00 또는 14:00:00)</p>
         ) : (
           <>
             <p className={s.targetDisplay}>{targetDisplay}</p>
@@ -565,7 +640,7 @@ export default function ServerTimeClient() {
               className={s.presetBtn}
               onClick={() => applyScenario(sc.id)}
             >
-              <span className={s.presetIcon}>{sc.icon}</span>
+              <span className={s.presetIcon} aria-hidden="true">{sc.icon}</span>
               <div className={s.presetText}>
                 <p className={s.presetName}>{sc.name}</p>
                 <p className={s.presetDesc}>{sc.desc}</p>

@@ -38,6 +38,8 @@
   cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.15s;
+  white-space: nowrap; /* 320px에서 "동기/화" 중간 개행 방지 */
+  flex-shrink: 0;
 }
 @media (hover: hover) {
   .syncBtn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
@@ -57,9 +59,10 @@
   gap: 2px;
   font-variant-numeric: tabular-nums;
 }
-.clockTimeHMS { font-size: clamp(56px, 13vw, 96px); }
+/* 하한이 크면 320px에서 HH:MM:SS.mmm(≈5.2×font-size)가 카드 밖으로 넘침 — 13vw 주도 */
+.clockTimeHMS { font-size: clamp(34px, 13vw, 96px); }
 .clockTimeMs {
-  font-size: clamp(28px, 6vw, 44px);
+  font-size: clamp(17px, 6vw, 44px);
   color: var(--muted);
   letter-spacing: -1px;
   font-weight: 700;
@@ -71,6 +74,19 @@
   color: var(--muted);
   margin-top: 6px;
   font-variant-numeric: tabular-nums;
+}
+
+.syncErrorBanner {
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  background: rgba(220, 38, 38, 0.10);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--danger);
+  line-height: 1.6;
+  text-align: left;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .clockMeta {
@@ -104,10 +120,10 @@
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-.offsetSafe { color: #059669; }
+.offsetSafe { color: var(--success); }
 .offsetOk { color: var(--accent); }
-.offsetWarn { color: #D97706; }
-.offsetDanger { color: #DC2626; }
+.offsetWarn { color: var(--warning); }
+.offsetDanger { color: var(--danger); }
 
 /* ── 카운트다운 카드 ── */
 .countdownCard {
@@ -168,7 +184,7 @@
 }
 .targetError {
   font-size: 12px;
-  color: #EA580C;
+  color: var(--warning);
   margin: 6px 0;
 }
 
@@ -207,8 +223,8 @@
   min-width: 1.4em;
   text-align: center;
 }
-.cdUrgent .cdNum { color: #EA580C; }
-.cdNegative .cdNum { color: #059669; }
+.cdUrgent .cdNum { color: var(--warning); }
+.cdNegative .cdNum { color: var(--success); }
 .cdLabel {
   font-size: 10px;
   color: var(--muted);
@@ -239,8 +255,8 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.5px;
 }
-.cdUrgent .cdMsNum { color: #EA580C; }
-.cdNegative .cdMsNum { color: #059669; }
+.cdUrgent .cdMsNum { color: var(--warning); }
+.cdNegative .cdMsNum { color: var(--success); }
 
 .cdStatus {
   font-size: 13px;

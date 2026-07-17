@@ -9,15 +9,15 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 const FAQS = [
   {
     q: '본 도구의 서버 시간은 티켓팅 사이트와 완전히 같나요?',
-    a: '완전히 같지는 않지만 보통 <strong>±50ms 이내로 일치</strong>합니다.<br/><br/>모든 상용 서버(인터파크·예스24·멜론티켓 등)는 NTP로 동기화되어 있어 서로 ms 단위까지 일치합니다. 본 도구의 Vercel Edge 서버도 NTP 동기화되어 있으므로 같은 기준 시각을 공유합니다.<br/><br/>다만 네트워크 지연(RTT) 때문에 마지막 ms는 다를 수 있으니, <strong>새로고침은 표시 시각보다 약 0.5~1초 일찍</strong> 시작하는 것을 권장합니다.',
+    a: '완전히 같지는 않지만 보통 <strong>수십 ms 수준으로 일치</strong>합니다.<br/><br/>대부분의 상용 서버(인터파크·예스24·멜론티켓 등)는 NTP로 동기화되어 있고, 본 도구의 Vercel Edge 서버도 NTP 동기화되어 있으므로 같은 기준 시각을 공유합니다. 다만 개별 서버의 동기화 상태·CDN 구성에 따라 <strong>사이트별로 1초 안팎 차이가 나는 경우도 있으니</strong>, 중요한 티켓팅은 위의 「외부 사이트 트래킹」으로 해당 사이트를 직접 측정해 보세요.<br/><br/>네트워크 지연(RTT)도 있으니 <strong>새로고침은 표시 시각보다 약 0.5~1초 일찍</strong> 시작하는 것을 권장합니다.',
   },
   {
     q: '내 PC 시계와 서버 시간이 차이 나는 이유?',
-    a: 'OS 시계가 NTP 동기화가 안 됐거나 오래된 경우입니다.<br/><br/>· <strong>Windows 10·11</strong> — 기본은 1주일에 한 번만 동기화. 그 사이 평균 ±1~3초 드리프트<br/>· <strong>macOS</strong> — 30분마다 자동, 비교적 정확<br/>· <strong>스마트폰</strong> — 통신사 시간 동기화로 ±100ms<br/>· <strong>슬립·재부팅 직후</strong> — 일시적 오차 ↑<br/><br/>「내 PC 시계」 표시가 1초 이상 차이나면 OS 시계를 강제 동기화하세요.',
+    a: 'OS 시계가 NTP 동기화가 안 됐거나 오래된 경우입니다.<br/><br/>· <strong>Windows 10·11</strong> — 기본은 1주일에 한 번만 동기화(주기 604,800초). 그 사이 시계 품질에 따라 수 초 이상 어긋날 수 있음<br/>· <strong>macOS</strong> — timed 데몬이 수시로(적응형) 자동 동기화, 비교적 정확<br/>· <strong>스마트폰</strong> — NTP 자동 동기화(Android는 time.android.com 우선, 통신사 시각은 보조) — 보통 1초 이내<br/>· <strong>슬립·재부팅 직후</strong> — 일시적 오차 ↑<br/><br/>「내 PC 시계」 표시가 1초 이상 차이나면 OS 시계를 강제 동기화하세요.',
   },
   {
     q: 'F5 새로고침 vs URL 직접 접속, 어느 게 빠른가요?',
-    a: '거의 비슷하지만 미세하게 <strong>URL 직접 접속(주소창 엔터)이 빠릅니다</strong>.<br/><br/>· F5 — 브라우저가 캐시 재검증(304 체크) 단계 추가<br/>· Ctrl+F5 — 캐시 완전 무시, 더 느림 (CSS·JS 재다운로드)<br/>· URL 입력 후 엔터 — 일반 GET 요청, 가장 빠름<br/><br/>티켓팅 사이트가 대기열 페이지로 리다이렉트하는 경우엔 어떤 방식이든 결국 대기열에 들어가므로 차이가 미미합니다. <strong>매크로·자동화 봇은 금지</strong>(IP 차단·계정 정지 위험).',
+    a: '거의 비슷하지만 <strong>URL 직접 접속(주소창 엔터)이 미세하게 빠른 경우가 많습니다</strong> — 캐시 상태·사이트 구성에 따라 다를 수 있습니다.<br/><br/>· F5 — 브라우저가 캐시 재검증(304 체크) 단계 추가<br/>· Ctrl+F5 — 캐시 완전 무시, 보통 더 느림 (CSS·JS 재다운로드)<br/>· URL 입력 후 엔터 — 캐시를 그대로 활용하는 일반 요청<br/><br/>티켓팅 사이트가 대기열 페이지로 리다이렉트하는 경우엔 어떤 방식이든 결국 대기열에 들어가므로 차이가 미미합니다. <strong>매크로·자동화 봇은 금지</strong>(IP 차단·계정 정지 위험).',
   },
   {
     q: '카운트다운이 0이 되는 정확한 순간에 클릭하면 되나요?',
@@ -33,11 +33,11 @@ const FAQS = [
   },
   {
     q: '본 도구의 알림음이 정확한 시각에 울리나요?',
-    a: '서버 시간 기준으로 정확히 울립니다. 다만 브라우저가 백그라운드 탭에 있으면 알림음 타이밍이 부정확할 수 있으니 <strong>해당 탭을 활성화 상태로 두세요</strong>.<br/><br/>iOS Safari는 사용자 상호작용 없이는 소리가 안 나므로 알림음 체크박스를 켤 때 한 번 사용자 클릭이 필요합니다 (자동 처리됨).',
+    a: '서버 시간 기준 ±0.1초 수준으로 울립니다. 다만 브라우저가 백그라운드 탭에 있으면 타이머가 절전 모드로 느려져 알림이 늦게 울릴 수 있으니 <strong>해당 탭을 활성화 상태로 두세요</strong>.<br/><br/>iOS Safari는 사용자 상호작용 없이는 소리가 안 나므로 알림음 체크박스를 켤 때 한 번 사용자 클릭이 필요합니다 (자동 처리됨).',
   },
   {
     q: '본 도구로 매크로 만들면 되나요?',
-    a: '<strong>안 됩니다.</strong> 본 도구는 「시간 확인」 용도이며, 자동 클릭·매크로·봇은 다음 위험이 있습니다 —<br/>· 사이트 약관 위반 → 계정 영구 정지<br/>· IP 차단 (가족·회사 인터넷 전체 영향)<br/>· 정보통신망법 위반 가능성 (자동화 우회 시)<br/>· 표 사재기 처벌(공연법 개정안)<br/><br/>본 도구는 정직한 사용자가 정확한 시각을 확인해 <strong>공정한 경쟁</strong>을 하도록 돕는 게 목적입니다.',
+    a: '<strong>안 됩니다.</strong> 본 도구는 「시간 확인」 용도이며, 자동 클릭·매크로·봇은 다음 위험이 있습니다 —<br/>· 사이트 약관 위반 → 계정 영구 정지<br/>· IP 차단 (가족·회사 인터넷 전체 영향)<br/>· <strong>업무방해죄(형법 제314조)</strong> — 매크로 티켓팅·수강신청에 실제 적용되는 대표 법조 (5년 이하 징역 또는 1,500만원 이하 벌금)<br/>· 매크로 이용 입장권 부정판매 — <strong>공연법 제4조의2</strong> (2024. 3. 22. 시행, 1년 이하 징역 또는 1천만원 이하 벌금)<br/><br/>2026년 8월 28일부터는 개정 공연법에 따라 매크로 사용 여부와 관계없이 웃돈 재판매가 전면 금지되고 판매금액 최대 50배의 과징금이 부과됩니다.<br/><br/>본 도구는 정직한 사용자가 정확한 시각을 확인해 <strong>공정한 경쟁</strong>을 하도록 돕는 게 목적입니다.',
   },
 ]
 
@@ -87,10 +87,10 @@ export default function ServerTimePage() {
             수강신청·티켓팅에서는 서버 기준 시각보다 <strong style={{ color: 'var(--text)' }}>0.1초만 늦어도 매진</strong>되는 일이 흔합니다. 반대로 너무 빨리 새로고침하면 「아직 시작 안 됨」 페이지로 튕겨 다시 대기열에 밀려납니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            문제는 <strong style={{ color: 'var(--text)' }}>내 PC·스마트폰 시계가 NTP 동기화가 안 돼 있으면 평균 ±1~3초 오차</strong>가 있다는 점. Windows 10·11은 1주일에 한 번만 동기화하고, 일부 노트북은 슬립 후 시계가 어긋납니다.
+            문제는 <strong style={{ color: 'var(--text)' }}>내 PC·스마트폰 시계가 NTP 동기화가 안 돼 있으면 수 초 안팎의 오차</strong>가 생길 수 있다는 점. Windows 10·11은 기본 설정에서 1주일에 한 번만 동기화하고, 일부 노트북은 슬립 후 시계가 어긋납니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            본 도구는 <strong style={{ color: 'var(--accent) ' }}>NTP 알고리즘으로 5회 측정 → 최소 RTT 채택</strong>해 일반적으로 ±50ms 정확도의 한국 표준시(KST)를 제공합니다. 새로고침 타이밍의 기준으로 활용하세요.
+            본 도구는 <strong style={{ color: 'var(--accent-ink)' }}>NTP와 같은 원리로 5회 측정 → 최소 RTT 채택</strong>해 일반적으로 수십 ms 정확도의 한국 표준시(KST)를 제공합니다. 새로고침 타이밍의 기준으로 활용하세요.
           </p>
         </section>
 
@@ -111,14 +111,14 @@ export default function ServerTimePage() {
               </thead>
               <tbody>
                 {[
-                  { s: '🎓 학교 수강신청',   t: '09:00 정각',                p: '0.5~1초 전' },
-                  { s: '🎤 인터파크 티켓',   t: '평일 20:00·주말 14:00',     p: '0.5초 전' },
-                  { s: '🎟️ 예스24·티켓링크', t: '평일 20:00·주말 14:00',     p: '0.5초 전' },
-                  { s: '🎵 멜론티켓',        t: '평일 20:00',                p: '0.5초 전' },
-                  { s: '⚾ KBO·KBL 티켓',    t: '평일 11:00 (홈경기 7일 전)', p: '0.5~1초 전' },
+                  { s: '🎓 학교 수강신청',   t: '학교별 상이 (08:30~10:00)',  p: '0.5~1초 전' },
+                  { s: '🎤 인터파크 티켓',   t: '콘서트 20:00·뮤지컬 14:00',  p: '0.5초 전' },
+                  { s: '🎟️ 예스24·티켓링크', t: '콘서트 20:00·뮤지컬 14:00',  p: '0.5초 전' },
+                  { s: '🎵 멜론티켓',        t: '콘서트 20:00 (뮤지컬 14:00)', p: '0.5초 전' },
+                  { s: '⚾ KBO·KBL 티켓',    t: '구단별 상이 (7일 전 11:00 多)', p: '0.5~1초 전' },
                   { s: '🏃 마라톤 대회',     t: '대회별 다양 (10:00·12:00)', p: '1~2초 전' },
-                  { s: '🏛️ 정부24·복권',     t: '평일 09:00',                p: '1초 전' },
-                  { s: '🏥 진료 예약',       t: '병원별 (06:00·07:00 多)',   p: '0.5~1초 전' },
+                  { s: '🏛️ 정부·공공 신청',  t: '평일 09:00·10:00 多',       p: '1초 전' },
+                  { s: '🏥 진료 예약',       t: '병원별 (전화 08~09시·온라인 상시)', p: '0.5~1초 전' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500, whiteSpace: 'nowrap' }}>{r.s}</td>
@@ -145,8 +145,8 @@ export default function ServerTimePage() {
           </p>
 
           {/* 실사용 스토리 */}
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(13,148,136,0.35)', borderLeft: '3px solid #0D9488', borderRadius: 14, padding: '18px 20px' }}>
-            <p style={{ fontSize: '12px', color: '#0D9488', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '10px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(13,148,136,0.35)', borderLeft: '3px solid var(--cat-edu)', borderRadius: 14, padding: '18px 20px' }}>
+            <p style={{ fontSize: '12px', color: 'var(--cat-edu)', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '10px' }}>
               실사용 사례 — 2026 경주 동아마라톤 접수 성공 (2026. 05. 26. 19시)
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
@@ -156,7 +156,7 @@ export default function ServerTimePage() {
               올해 <strong style={{ color: 'var(--text)' }}>2026 경주 동아마라톤</strong>은 전략을 바꿨습니다. 접수 며칠 전부터 이 도구의 외부 사이트 트래킹에 <strong style={{ color: 'var(--text)' }}>동마클럽 서버</strong>를 등록해 두고, 내 시계와의 오차를 매일 확인했습니다. 당일엔 유선 인터넷에 연결하고, 알림음을 1초·정각으로 켠 뒤, 서버 시각 기준 <strong style={{ color: 'var(--text)' }}>약 0.7초 전</strong>에 새로고침을 눌렀습니다.
             </p>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, fontWeight: 600 }}>
-              결과 — 대기열 앞쪽에 진입해 결제까지 2분 만에 완료, 그렇게 어렵던 <strong style={{ color: '#0D9488' }}>풀코스 배번을 확보</strong>했습니다. 1초의 차이가 완주의 출발선이 됐습니다. 🏃
+              결과 — 대기열 앞쪽에 진입해 결제까지 2분 만에 완료, 그렇게 어렵던 <strong style={{ color: 'var(--cat-edu)' }}>풀코스 배번을 확보</strong>했습니다. 1초의 차이가 완주의 출발선이 됐습니다. 🏃
             </p>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
@@ -170,7 +170,7 @@ export default function ServerTimePage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { step: '1', title: '5회 측정', content: '클라이언트가 `/api/time`을 5번 호출하며 매 측정마다 RTT(왕복 시간)을 기록합니다.' },
-              { step: '2', title: '최소 RTT 채택', content: '네트워크 지터를 최소화하기 위해 5개 측정 중 가장 빠른 응답 1개만 사용합니다 (NTP 표준 방식).' },
+              { step: '2', title: '최소 RTT 채택', content: '네트워크 지터를 최소화하기 위해 5개 측정 중 가장 빠른 응답 1개만 사용합니다 (NTP의 클록 필터와 같은 원리).' },
               { step: '3', title: '오프셋 계산', content: '서버 시간 + RTT/2(단방향 지연 추정) − 클라이언트 시간 = 오프셋. 이 값을 매 프레임 현재 시간에 더해 표시합니다.' },
               { step: '4', title: '5분마다 재동기화', content: '브라우저 슬립·시계 드리프트를 보정하기 위해 자동 재측정. 「↻ 다시 동기화」 버튼으로 수동 실행도 가능.' },
             ].map((item) => (
@@ -192,31 +192,31 @@ export default function ServerTimePage() {
         <section>
           <h2 style={sectionTitle}>내 PC·스마트폰 시계 동기화하기</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-            본 도구로 오차가 ±1초 이상 나면 OS 시계를 강제 동기화하세요. 한국에서는 <strong style={{ color: 'var(--text)' }}>한국표준과학연구원(KRISS) NTP 서버</strong>가 가장 정확합니다.
+            본 도구로 오차가 ±1초 이상 나면 OS 시계를 강제 동기화하세요. 한국에서는 <strong style={{ color: 'var(--text)' }}>한국표준과학연구원(KRISS) NTP 서버 (ntp.kriss.re.kr)</strong>가 가장 정확합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0891B2', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>🪟 Windows</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cat-health)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 6 }}>🪟 Windows</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 시간 및 언어 → 날짜 및 시간 → 「지금 동기화」<br/>
                 또는 <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>w32tm /resync</code> (관리자 cmd)<br/>
-                NTP 서버: <strong style={{ color: 'var(--text)' }}>time.kriss.re.kr</strong>
+                NTP 서버: <strong style={{ color: 'var(--text)' }}>ntp.kriss.re.kr</strong> (KRISS 공식)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0EA5E9', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#0EA5E9', fontWeight: 700, marginBottom: 6 }}>🍎 macOS</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 6 }}>🍎 macOS</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 일반 → 날짜 및 시간 → 자동 ON<br/>
                 또는 <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>sudo sntp -sS time.apple.com</code><br/>
-                기본 동기화: 매 30분
+                기본: timed 데몬이 수시로 자동 동기화
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #FFD93E', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#FFD93E', fontWeight: 700, marginBottom: 6 }}>📱 Android·iPhone</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--warning)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--warning)', fontWeight: 700, marginBottom: 6 }}>📱 Android·iPhone</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 일반 → 날짜 및 시간 → 「자동 설정」 ON<br/>
-                통신사 시간 동기화 (KT·SKT·LGU+) — 보통 ±100ms 정확<br/>
-                Wi-Fi 환경에서는 NTP 자동 호출
+                NTP 자동 동기화 (Android는 time.android.com 우선,<br/>
+                통신사 시각은 보조) — 보통 1초 이내
               </p>
             </div>
           </div>
