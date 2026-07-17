@@ -8,14 +8,35 @@ import {
   calcDday, calcProgress, calcWeekdays, calcBusinessDays, calcWeekendCount,
   holidaysBetween, calcYMDDiff, addDays, calcPace, nextRecurrence,
   loadDdays, saveDdays, newId, fmtDate, fmtDateKo,
+  exportDdays, importDdays,
   type DdayItem, type AddDaysMode,
 } from './ddayUtils'
 import {
   DDAY_CATEGORIES, RECURRENCE_OPTIONS, isHoliday,
+  isHolidayDataCovered, HOLIDAY_YEAR_MIN, HOLIDAY_YEAR_MAX,
   type RecurrenceId,
 } from './koreanHolidays'
 
 type Tab = 'list' | 'quick' | 'pace' | 'diff' | 'biz'
+
+/** from~to 연도 중 공휴일 데이터가 없는 해가 있으면 고지 — 그 구간은 영업일이 평일과 같아진다 */
+function HolidayCoverageNote({ from, to }: { from: number; to: number }) {
+  const lo = Math.min(from, to)
+  const hi = Math.max(from, to)
+  if (!Number.isFinite(lo) || !Number.isFinite(hi) || hi - lo > 500) return null
+  const uncovered: number[] = []
+  for (let y = lo; y <= hi; y++) if (!isHolidayDataCovered(y)) uncovered.push(y)
+  if (uncovered.length === 0) return null
+  const listed = uncovered.length <= 4
+    ? uncovered.join('·')
+    : `${uncovered[0]}~${uncovered[uncovered.length - 1]}`
+  return (
+    <p className={s.coverageNote}>
+      ⚠️ 공휴일 데이터는 {HOLIDAY_YEAR_MIN}~{HOLIDAY_YEAR_MAX}년만 보유합니다.
+      {' '}{listed}년은 공휴일이 반영되지 않아 <strong>영업일이 평일과 같게</strong> 계산됩니다.
+    </p>
+  )
+}
 
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function DdayClient() {
@@ -41,7 +62,7 @@ export default function DdayClient() {
         D-day 데이터는 이 브라우저의 localStorage에 저장됩니다.
       </Disclaimer>
 
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="D-day 계산기 보기 전환">
         {([
           ['list',  '내 D-day'],
           ['quick', '바로 계산'],
@@ -56,7 +77,8 @@ export default function DdayClient() {
             key === 'diff'  ? s.tabActiveDiff :
             key === 'biz'   ? s.tabActiveBiz : s.tabActive
           return (
-            <button key={key} className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
+            <button key={key} type="button" role="tab" aria-selected={tab === key}
+              className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
               {label}
             </button>
           )
@@ -111,6 +133,35 @@ function ListTab({ now }: { now: Date }) {
     setItems(prev => prev.map(p => p.id === id ? { ...p, isCompleted: !p.isCompleted } : p))
   }
 
+  /* 백업 다운로드 — 현재 D-day를 JSON 파일로 저장 */
+  const handleExport = () => {
+    const blob = new Blob([exportDdays(items)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `youtil-ddays-${fmtDate(new Date())}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+  /* 복원 — JSON 파일을 읽어 기존 목록에 병합 (id 중복은 파일 값으로 대체) */
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = '' // 같은 파일 재선택 허용
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      const parsed = importDdays(String(reader.result))
+      if (!parsed || parsed.length === 0) { alert('유효한 백업 파일이 아니거나 D-day가 없습니다.'); return }
+      setItems(prev => {
+        const map = new Map(prev.map(p => [p.id, p]))
+        parsed.forEach(it => map.set(it.id, it))
+        return Array.from(map.values())
+      })
+      alert(`${parsed.length}개의 D-day를 불러왔습니다.`)
+    }
+    reader.readAsText(file)
+  }
+
   /* 정렬 — 핀 우선 + 가까운 순 (고정) */
   const sorted = useMemo(() => {
     const xs = items.slice()
@@ -128,7 +179,7 @@ function ListTab({ now }: { now: Date }) {
   return (
     <>
       {!showForm && !editingId && (
-        <button className={s.bigCta} onClick={() => setShowForm(true)}>
+        <button type="button" className={s.bigCta} onClick={() => setShowForm(true)}>
           + 새 D-day 추가
         </button>
       )}
@@ -158,6 +209,22 @@ function ListTab({ now }: { now: Date }) {
               onComplete={() => toggleComplete(it.id)}
             />
           ))}
+        </div>
+      )}
+
+      {/* 백업/복원 — 다른 기기·브라우저로 이전 (localStorage는 기기별 격리) */}
+      {loaded && (
+        <div className={s.backupRow}>
+          {items.length > 0 && (
+            <button type="button" className={s.backupBtn} onClick={handleExport}>
+              📥 백업 다운로드
+            </button>
+          )}
+          <label className={s.backupBtn}>
+            📤 백업 복원
+            <input type="file" accept="application/json,.json" onChange={handleImport}
+              style={{ display: 'none' }} aria-label="백업 JSON 파일 선택" />
+          </label>
         </div>
       )}
     </>
@@ -211,10 +278,10 @@ function DdayCard({ item, now, onPin, onEdit, onDelete, onComplete }: {
           {item.recurrence !== 'none' && <span style={{ fontSize: 10, marginLeft: 4 }}>🔁</span>}
         </span>
         <div className={s.ddayActions}>
-          <button className={s.ddayPinBtn} onClick={onPin} title="핀">📌</button>
-          <button className={s.ddayMenuBtn} onClick={onEdit} title="편집">✏️</button>
-          <button className={s.ddayMenuBtn} onClick={onComplete} title="완료">{item.isCompleted ? '↩️' : '✅'}</button>
-          <button className={s.ddayMenuBtn} onClick={onDelete} title="삭제">✕</button>
+          <button type="button" className={s.ddayPinBtn} onClick={onPin} title="핀" aria-label={item.isPinned ? '핀 해제' : '핀 고정'} aria-pressed={item.isPinned}>📌</button>
+          <button type="button" className={s.ddayMenuBtn} onClick={onEdit} title="편집" aria-label="편집">✏️</button>
+          <button type="button" className={s.ddayMenuBtn} onClick={onComplete} title="완료" aria-label={item.isCompleted ? '완료 취소' : '완료 표시'}>{item.isCompleted ? '↩️' : '✅'}</button>
+          <button type="button" className={s.ddayMenuBtn} onClick={onDelete} title="삭제" aria-label="삭제">✕</button>
         </div>
       </div>
 
@@ -265,22 +332,35 @@ function DdayEditForm({ editing, onSave, onCancel }: {
   const [emoji, setEmoji] = useState(editing?.emoji ?? '')
   const [targetDate, setTargetDate] = useState(editing?.targetDate ?? '')
   const [recurrence, setRecurrence] = useState<RecurrenceId>(editing?.recurrence ?? 'none')
+  const [category, setCategory] = useState(editing?.category ?? 'other')
+  const [startDate, setStartDate] = useState(editing?.startDate ?? '')
+  const [goalTotal, setGoalTotal] = useState(editing?.goal ? String(editing.goal.totalAmount) : '')
+  const [goalDone, setGoalDone] = useState(editing?.goal ? String(editing.goal.completedAmount) : '')
+  const [goalUnit, setGoalUnit] = useState(editing?.goal?.unit ?? '')
 
   const handleSave = () => {
     if (!title.trim()) { alert('제목을 입력해 주세요'); return }
     if (!targetDate) { alert('목표 날짜를 선택해 주세요'); return }
+    if (startDate && startDate >= targetDate) { alert('시작일은 목표 날짜보다 앞서야 합니다'); return }
+
+    // 목표량이 있어야 카드에 페이스(일일 목표)가 표시된다 — 없으면 goal 자체를 저장하지 않음
+    const totalN = Math.max(0, Number(goalTotal) || 0)
+    const doneN = Math.max(0, Number(goalDone) || 0)
+    const goal = totalN > 0
+      ? { totalAmount: totalN, completedAmount: doneN, unit: goalUnit.trim() || '개' }
+      : undefined
 
     onSave({
       id: editing?.id ?? newId(),
       title: title.trim(),
       emoji: emoji.trim() || '📌',
-      category: editing?.category ?? 'other',
+      category,
       targetDate,
-      startDate: editing?.startDate,
+      startDate: startDate || undefined,
       recurrence,
       isPinned: editing?.isPinned ?? false,
       isCompleted: editing?.isCompleted ?? false,
-      goal: editing?.goal,
+      goal,
       notes: editing?.notes,
       createdAt: editing?.createdAt ?? new Date().toISOString(),
     })
@@ -292,19 +372,33 @@ function DdayEditForm({ editing, onSave, onCancel }: {
 
       <div>
         <span className={s.inlineLabel}>제목 *</span>
-        <input className={s.textInput} type="text" placeholder="예: 한국사능력검정시험"
+        <input className={s.textInput} type="text" placeholder="예: 한국사능력검정시험" aria-label="D-day 제목"
           value={title} onChange={e => setTitle(e.target.value)} maxLength={50} />
       </div>
 
       <div className={s.fieldRow}>
         <div>
           <span className={s.inlineLabel}>목표 날짜 *</span>
-          <input className={s.dateInput} type="date" value={targetDate} onChange={e => setTargetDate(e.target.value)} />
+          <input className={s.dateInput} type="date" aria-label="목표 날짜" value={targetDate} onChange={e => setTargetDate(e.target.value)} />
         </div>
         <div>
           <span className={s.inlineLabel}>이모지 (선택)</span>
-          <input className={s.textInput} type="text" placeholder="📚" maxLength={2}
+          <input className={s.textInput} type="text" placeholder="📚" maxLength={2} aria-label="이모지"
             value={emoji} onChange={e => setEmoji(e.target.value)} />
+        </div>
+      </div>
+
+      <div>
+        <span className={s.inlineLabel}>카테고리</span>
+        <div className={s.catGrid}>
+          {DDAY_CATEGORIES.map(c => (
+            <button key={c.id} type="button" aria-pressed={category === c.id}
+              className={`${s.catBtn} ${category === c.id ? s.catActive : ''}`}
+              onClick={() => setCategory(c.id)}>
+              <small aria-hidden="true">{c.emoji}</small>
+              {c.name}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -312,7 +406,8 @@ function DdayEditForm({ editing, onSave, onCancel }: {
         <span className={s.inlineLabel}>반복</span>
         <div className={s.recurRow}>
           {RECURRENCE_OPTIONS.map(r => (
-            <button key={r.id} className={`${s.recurBtn} ${recurrence === r.id ? s.recurActive : ''}`}
+            <button key={r.id} type="button" aria-pressed={recurrence === r.id}
+              className={`${s.recurBtn} ${recurrence === r.id ? s.recurActive : ''}`}
               onClick={() => setRecurrence(r.id)}>
               {r.name}
             </button>
@@ -320,11 +415,42 @@ function DdayEditForm({ editing, onSave, onCancel }: {
         </div>
       </div>
 
+      <div>
+        <span className={s.inlineLabel}>진행률·페이스 (선택)</span>
+        <div className={s.fieldRow}>
+          <div>
+            <span className={s.subLabel}>시작일 — 넣으면 카드에 진행률 막대</span>
+            <input className={s.dateInput} type="date" aria-label="시작일 (진행률 계산용)"
+              value={startDate} onChange={e => setStartDate(e.target.value)} />
+          </div>
+        </div>
+        <div className={s.fieldRow3} style={{ marginTop: 8 }}>
+          <div>
+            <span className={s.subLabel}>전체 목표량</span>
+            <input className={s.numInput} type="number" inputMode="numeric" min={0} placeholder="예: 600"
+              aria-label="전체 목표량" value={goalTotal} onChange={e => setGoalTotal(e.target.value)} />
+          </div>
+          <div>
+            <span className={s.subLabel}>완료</span>
+            <input className={s.numInput} type="number" inputMode="numeric" min={0} placeholder="예: 200"
+              aria-label="현재까지 완료" value={goalDone} onChange={e => setGoalDone(e.target.value)} />
+          </div>
+          <div>
+            <span className={s.subLabel}>단위</span>
+            <input className={s.textInput} type="text" placeholder="페이지" maxLength={10}
+              aria-label="목표량 단위" value={goalUnit} onChange={e => setGoalUnit(e.target.value)} />
+          </div>
+        </div>
+        <p className={s.formHint}>
+          전체 목표량을 넣으면 카드에 <strong>일일 목표</strong>가 표시됩니다. 비워 두면 남은 기간만 표시됩니다.
+        </p>
+      </div>
+
       <div className={s.btnRow}>
-        <button className={s.actionBtn} onClick={handleSave}>
+        <button type="button" className={s.actionBtn} onClick={handleSave}>
           {isNew ? '저장' : '수정 완료'}
         </button>
-        <button className={s.miniBtn} onClick={onCancel}>취소</button>
+        <button type="button" className={s.miniBtn} onClick={onCancel}>취소</button>
       </div>
     </div>
   )
@@ -343,12 +469,12 @@ function QuickTab({ now }: { now: Date }) {
           <div className={s.fieldRow}>
             <div>
               <span className={s.inlineLabel}>제목 (선택)</span>
-              <input className={s.textInput} type="text" placeholder="예: 프로젝트 마감"
+              <input className={s.textInput} type="text" aria-label="제목" placeholder="예: 프로젝트 마감"
                 value={title} onChange={e => setTitle(e.target.value)} />
             </div>
             <div>
               <span className={s.inlineLabel}>목표 날짜 *</span>
-              <input className={s.dateInput} type="date" value={target} onChange={e => setTarget(e.target.value)} />
+              <input className={s.dateInput} type="date" aria-label="목표 날짜" value={target} onChange={e => setTarget(e.target.value)} />
             </div>
           </div>
         </div>
@@ -359,8 +485,13 @@ function QuickTab({ now }: { now: Date }) {
 
   const dday = calcDday(target, now)
   const targetDate = new Date(target)
+  // 카운트다운 기준을 D-day(자정 기준 정수일)와 일치시킨다.
+  //  - 미래: 목표일 00:00까지 남은 시간 (D-1이면 24시간 미만이므로 '0일 N시간'이 정상)
+  //  - 오늘(D-day): 목표일이 이미 시작됐으므로 자정까지 남은 시간
+  // 과거를 Math.abs로 양수화하면 '경과 시간'이 카운트다운처럼 보이므로 쓰지 않는다.
   const targetMs = new Date(target).setHours(0, 0, 0, 0)
-  const liveMs = Math.abs(targetMs - now.getTime())
+  const endOfTodayMs = new Date(now).setHours(24, 0, 0, 0)
+  const liveMs = Math.max(0, (dday.isToday ? endOfTodayMs : targetMs) - now.getTime())
   const liveDays  = Math.floor(liveMs / (1000 * 60 * 60 * 24))
   const liveHours = Math.floor((liveMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
   const liveMins  = Math.floor((liveMs % (1000 * 60 * 60)) / (1000 * 60))
@@ -391,28 +522,35 @@ function QuickTab({ now }: { now: Date }) {
         <div className={s.fieldRow}>
           <div>
             <span className={s.inlineLabel}>제목 (선택)</span>
-            <input className={s.textInput} type="text" placeholder="예: 프로젝트 마감"
+            <input className={s.textInput} type="text" aria-label="제목" placeholder="예: 프로젝트 마감"
               value={title} onChange={e => setTitle(e.target.value)} />
           </div>
           <div>
             <span className={s.inlineLabel}>목표 날짜 *</span>
-            <input className={s.dateInput} type="date" value={target} onChange={e => setTarget(e.target.value)} />
+            <input className={s.dateInput} type="date" aria-label="목표 날짜" value={target} onChange={e => setTarget(e.target.value)} />
           </div>
         </div>
       </div>
 
-      <div className={s.heroBig}>
+      <div className={s.heroBig} role="status">
         <div className={s.heroLabel}>{title || '카운트다운'}</div>
         <div className={heroClass}>{dday.label}</div>
         <div className={s.heroSub}>{fmtDateKo(targetDate)} · {status}</div>
 
         {!dday.isPast && (
-          <div className={s.countdown4}>
-            <div className={s.box}><div className={s.num}>{liveDays}</div><div className={s.lbl}>일</div></div>
-            <div className={s.box}><div className={s.num}>{String(liveHours).padStart(2,'0')}</div><div className={s.lbl}>시간</div></div>
-            <div className={s.box}><div className={s.num}>{String(liveMins).padStart(2,'0')}</div><div className={s.lbl}>분</div></div>
-            <div className={s.box}><div className={s.num}>{String(liveSecs).padStart(2,'0')}</div><div className={s.lbl}>초</div></div>
-          </div>
+          <>
+            <div className={s.countdown4}>
+              <div className={s.box}><div className={s.num}>{liveDays}</div><div className={s.lbl}>일</div></div>
+              <div className={s.box}><div className={s.num}>{String(liveHours).padStart(2,'0')}</div><div className={s.lbl}>시간</div></div>
+              <div className={s.box}><div className={s.num}>{String(liveMins).padStart(2,'0')}</div><div className={s.lbl}>분</div></div>
+              <div className={s.box}><div className={s.num}>{String(liveSecs).padStart(2,'0')}</div><div className={s.lbl}>초</div></div>
+            </div>
+            <p className={s.countdownNote}>
+              {dday.isToday
+                ? '오늘이 목표일입니다 — 오늘 자정까지 남은 시간'
+                : '목표일 00:00까지 남은 시간 (D-day는 자정 기준 날짜 수)'}
+            </p>
+          </>
         )}
       </div>
 
@@ -432,12 +570,12 @@ function QuickTab({ now }: { now: Date }) {
             <div className={s.statBox}>
               <div className={s.statNum}>{weekdays}</div>
               <div className={s.statLabel}>평일</div>
-              <div className={s.statSub}>월~금 (공휴일 포함)</div>
+              <div className={s.statSub}>월~금 · 오늘·목표일 포함</div>
             </div>
             <div className={s.statBox}>
               <div className={s.statNum}>{businessDays}</div>
               <div className={s.statLabel}>영업일</div>
-              <div className={s.statSub}>공휴일 {holidayList.length}개 제외</div>
+              <div className={s.statSub}>공휴일 {holidayList.length}개 제외 · 양 끝 포함</div>
             </div>
             <div className={s.statBox}>
               <div className={s.statNum}>{weekendCount}</div>
@@ -447,6 +585,17 @@ function QuickTab({ now }: { now: Date }) {
           </>
         )}
       </div>
+
+      {!dday.isPast && (
+        <>
+          <p className={s.basisNote}>
+            <strong>남은 일수</strong>는 오늘과 목표일의 <strong>차이</strong>(오늘 제외)이고,
+            <strong> 평일·영업일</strong>은 오늘과 목표일을 <strong>모두 포함</strong>해 센 값입니다.
+            그래서 목표일이 내일이면 남은 일수는 1일, 평일은 2일이 될 수 있습니다.
+          </p>
+          <HolidayCoverageNote from={now.getFullYear()} to={targetDate.getFullYear()} />
+        </>
+      )}
 
       {holidayList.length > 0 && (
         <div className={s.card}>
@@ -468,8 +617,9 @@ function PaceTab({ now }: { now: Date }) {
   const [total, setTotal] = useState('600')
   const [done, setDone] = useState('200')
 
-  const totalN = Number(total) || 0
-  const doneN  = Number(done) || 0
+  // 음수 목표량·완료량은 의미가 없으므로 0으로 클램프 (calcPace도 동일하게 방어)
+  const totalN = Math.max(0, Number(total) || 0)
+  const doneN  = Math.max(0, Number(done) || 0)
   const pace = (target && totalN > 0)
     ? calcPace(target, start || fmtDate(now), totalN, doneN, now)
     : null
@@ -484,27 +634,27 @@ function PaceTab({ now }: { now: Date }) {
         <div className={s.fieldRow}>
           <div>
             <span className={s.inlineLabel}>시작일 (선택)</span>
-            <input className={s.dateInput} type="date" value={start} onChange={e => setStart(e.target.value)} />
+            <input className={s.dateInput} type="date" aria-label="시작일" value={start} onChange={e => setStart(e.target.value)} />
           </div>
           <div>
             <span className={s.inlineLabel}>목표 날짜 *</span>
-            <input className={s.dateInput} type="date" value={target} onChange={e => setTarget(e.target.value)} />
+            <input className={s.dateInput} type="date" aria-label="목표 날짜" value={target} onChange={e => setTarget(e.target.value)} />
           </div>
         </div>
         <div className={s.fieldRow3} style={{ marginTop: 10 }}>
           <div>
             <span className={s.inlineLabel}>전체 목표량</span>
-            <input className={s.numInput} type="number" inputMode="numeric" placeholder="예: 600"
+            <input className={s.numInput} type="number" inputMode="numeric" min={0} aria-label="전체 목표량" placeholder="예: 600"
               value={total} onChange={e => setTotal(e.target.value)} />
           </div>
           <div>
             <span className={s.inlineLabel}>현재까지 완료</span>
-            <input className={s.numInput} type="number" inputMode="numeric" placeholder="예: 200"
+            <input className={s.numInput} type="number" inputMode="numeric" min={0} aria-label="현재까지 완료" placeholder="예: 200"
               value={done} onChange={e => setDone(e.target.value)} />
           </div>
           <div>
             <span className={s.inlineLabel}>단위</span>
-            <input className={s.textInput} type="text" placeholder="페이지·km·만원"
+            <input className={s.textInput} type="text" aria-label="단위" placeholder="페이지·km·만원"
               value={unit} onChange={e => setUnit(e.target.value)} maxLength={10} />
           </div>
         </div>
@@ -521,7 +671,7 @@ function PaceTab({ now }: { now: Date }) {
 
       {pace && pace.remainingDays > 0 && (
         <>
-          <div className={s.paceHero}>
+          <div className={s.paceHero} role="status">
             <div className={s.heroLabel}>일일 목표</div>
             <div className={s.paceHeroNum}>{pace.dailyTarget.toLocaleString()} {unit}</div>
             <div className={s.paceHeroSub}>
@@ -569,7 +719,7 @@ function PaceTab({ now }: { now: Date }) {
                   <span className={s.paceBarFill}
                     style={{
                       width: `${Math.min(100, totalN > 0 ? (pace.expectedFinish / totalN) * 100 : 0)}%`,
-                      background: pace.isOnTrack ? '#059669' : '#DC2626',
+                      background: pace.isOnTrack ? 'var(--success)' : 'var(--danger)',
                     }} />
                 </span>
                 <span className={s.paceBarValue}>{pace.expectedFinish.toLocaleString()}</span>
@@ -610,11 +760,11 @@ function DiffTab() {
           <div className={s.fieldRow}>
             <div>
               <span className={s.inlineLabel}>시작 날짜</span>
-              <input className={s.dateInput} type="date" value={start} onChange={e => setStart(e.target.value)} />
+              <input className={s.dateInput} type="date" aria-label="시작일" value={start} onChange={e => setStart(e.target.value)} />
             </div>
             <div>
               <span className={s.inlineLabel}>종료 날짜</span>
-              <input className={s.dateInput} type="date" value={end} onChange={e => setEnd(e.target.value)} />
+              <input className={s.dateInput} type="date" aria-label="종료 날짜" value={end} onChange={e => setEnd(e.target.value)} />
             </div>
           </div>
         </div>
@@ -645,34 +795,44 @@ function DiffTab() {
         <div className={s.fieldRow}>
           <div>
             <span className={s.inlineLabel}>시작 날짜</span>
-            <input className={s.dateInput} type="date" value={start} onChange={e => setStart(e.target.value)} />
+            <input className={s.dateInput} type="date" aria-label="시작일" value={start} onChange={e => setStart(e.target.value)} />
           </div>
           <div>
             <span className={s.inlineLabel}>종료 날짜</span>
-            <input className={s.dateInput} type="date" value={end} onChange={e => setEnd(e.target.value)} />
+            <input className={s.dateInput} type="date" aria-label="종료 날짜" value={end} onChange={e => setEnd(e.target.value)} />
           </div>
         </div>
       </div>
 
-      <div className={s.diffHero}>
+      <div className={s.diffHero} role="status">
         <div className={s.heroLabel}>두 날짜 차이</div>
         <div className={s.diffHeroNum}>{totalDays.toLocaleString()}일</div>
-        <div className={s.heroSub}>{fmtDateKo(aD, false)} → {fmtDateKo(bD, false)}{swapped && ' (반대 입력 자동 보정)'}</div>
+        <div className={s.heroSub}>
+          {fmtDateKo(aD, false)} → {fmtDateKo(bD, false)}{swapped && ' (반대 입력 자동 보정)'}
+          {' · '}양 끝 포함 {(totalDays + 1).toLocaleString()}일
+        </div>
       </div>
 
       <div className={s.card}>
         <label className={s.cardLabel}>상세 분석</label>
         <div className={s.diffTable}>
-          <div className={s.diffRow}><span>일수</span><span>{totalDays.toLocaleString()}일</span></div>
+          <div className={s.diffRow}><span>일수 (차이)</span><span>{totalDays.toLocaleString()}일</span></div>
+          <div className={s.diffRow}><span>일수 (양 끝 포함)</span><span>{(totalDays + 1).toLocaleString()}일</span></div>
           <div className={s.diffRow}><span>주</span><span>{Math.floor(totalDays / 7)}주 {totalDays % 7}일</span></div>
           <div className={s.diffRow}><span>시간</span><span>{(totalDays * 24).toLocaleString()}시간</span></div>
           <div className={s.diffRow}><span>분</span><span>{(totalDays * 24 * 60).toLocaleString()}분</span></div>
-          <div className={s.diffRow}><span>평일</span><span>{weekdays}일</span></div>
-          <div className={s.diffRow}><span>영업일</span><span>{businessDays}일</span></div>
+          <div className={s.diffRow}><span>평일 (양 끝 포함)</span><span>{weekdays}일</span></div>
+          <div className={s.diffRow}><span>영업일 (양 끝 포함)</span><span>{businessDays}일</span></div>
           <div className={s.diffRow}><span>주말 횟수</span><span>{weekends}번</span></div>
           <div className={s.diffRow}><span>한국 공휴일</span><span>{holidays.length}개</span></div>
           <div className={s.diffRow}><span>차이 (년·월·일)</span><span>{ymd.years}년 {ymd.months}월 {ymd.days}일</span></div>
         </div>
+        <p className={s.basisNote}>
+          <strong>차이</strong>는 두 날짜를 뺀 값(시작일 제외)이고, <strong>양 끝 포함</strong>은 시작일과 종료일을
+          모두 센 값입니다. 같은 날을 고르면 차이는 0일, 양 끝 포함은 1일입니다.
+          평일·영업일·주말·공휴일은 모두 양 끝 포함 기준입니다.
+        </p>
+        <HolidayCoverageNote from={aD.getFullYear()} to={bD.getFullYear()} />
         {holidays.length > 0 && (
           <p className={s.holidayList}>
             <strong style={{ color: 'var(--text)' }}>포함 공휴일:</strong> {holidays.map(h => h.name).join(' · ')}
@@ -700,11 +860,11 @@ function BizTab({ now }: { now: Date }) {
         <div className={s.fieldRow}>
           <div>
             <span className={s.inlineLabel}>시작 날짜</span>
-            <input className={s.dateInput} type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+            <input className={s.dateInput} type="date" aria-label="시작 날짜" value={startDate} onChange={e => setStartDate(e.target.value)} />
           </div>
           <div>
             <span className={s.inlineLabel}>N일 (음수 가능)</span>
-            <input className={s.numInput} type="number" inputMode="decimal" placeholder="30"
+            <input className={s.numInput} type="number" inputMode="decimal" aria-label="N일 (음수 가능)" placeholder="30"
               value={n} onChange={e => setN(e.target.value)} />
           </div>
         </div>
@@ -717,19 +877,22 @@ function BizTab({ now }: { now: Date }) {
               ['weekday',  '평일'],
               ['business', '영업일'],
             ] as [AddDaysMode, string][]).map(([k, l]) => (
-              <button key={k} className={`${s.modeBtn} ${mode === k ? s.modeActive : ''}`}
+              <button key={k} type="button" aria-pressed={mode === k} className={`${s.modeBtn} ${mode === k ? s.modeActive : ''}`}
                 onClick={() => setMode(k)}>{l}</button>
             ))}
           </div>
           <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.6 }}>
             <strong style={{ color: 'var(--text)' }}>달력일</strong>: 모든 날짜 / <strong style={{ color: 'var(--text)' }}>평일</strong>: 월~금 / <strong style={{ color: 'var(--text)' }}>영업일</strong>: 평일 + 한국 공휴일 제외
           </p>
+          {mode === 'business' && result && (
+            <HolidayCoverageNote from={new Date(startDate).getFullYear()} to={result.getFullYear()} />
+          )}
         </div>
       </div>
 
       {result && (
         <>
-          <div className={s.heroBig}>
+          <div className={s.heroBig} role="status">
             <div className={s.heroLabel}>
               {nNum > 0 ? `${nNum} ` : `${Math.abs(nNum)}일 전 `}
               {mode === 'calendar' ? '달력일' : mode === 'weekday' ? '평일' : '영업일'}

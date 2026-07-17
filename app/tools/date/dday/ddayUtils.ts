@@ -150,24 +150,32 @@ export function holidaysBetween(startStr: string, endStr: string) {
   return out
 }
 
-/** 두 날짜 사이의 (년·월·일) 분해 */
+/** (연·월·일) 조합 — 해당 월에 없는 일이면 그 달 말일로 클램프 (평년 2/29 → 2/28, 짧은 달 31일 → 말일).
+   month는 0-based이며 범위를 벗어나면 Date 생성자가 연도를 자동 이월한다. */
+function makeClamped(year: number, month: number, day: number): Date {
+  const lastDay = new Date(year, month + 1, 0).getDate()
+  const d = new Date(year, month, Math.min(day, lastDay))
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+/** start에 n개월을 더하되 월말을 초과하면 해당 월의 마지막 날로 클램프 (예: 1/31 +1월 → 2/28) */
+function addMonthsClamped(date: Date, n: number): Date {
+  return makeClamped(date.getFullYear(), date.getMonth() + n, date.getDate())
+}
+
+/** 두 날짜 사이의 (년·월·일) 분해 — 앵커 방식으로 월경계 음수일 버그 방지.
+   (구 로직은 1/31→3/1을 '1월 -2일'로 잘못 계산) */
 export function calcYMDDiff(startStr: string, endStr: string) {
   const start = new Date(startStr); start.setHours(0,0,0,0)
   const end   = new Date(endStr);   end.setHours(0,0,0,0)
   if (end < start) return { years: 0, months: 0, days: 0 }
-  let years = end.getFullYear() - start.getFullYear()
-  let months = end.getMonth() - start.getMonth()
-  let days = end.getDate() - start.getDate()
-  if (days < 0) {
-    months--
-    const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0)
-    days += prevMonth.getDate()
-  }
-  if (months < 0) {
-    years--
-    months += 12
-  }
-  return { years, months, days }
+  // 총 개월 수를 구한 뒤, start+months가 end를 넘으면 1개월 줄여 앵커를 end 이하로 맞춘다.
+  let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
+  let anchor = addMonthsClamped(start, months)
+  if (anchor > end) { months--; anchor = addMonthsClamped(start, months) }
+  const days = Math.round((end.getTime() - anchor.getTime()) / MS_PER_DAY)
+  return { years: Math.floor(months / 12), months: months % 12, days }
 }
 
 /** N일 후 (모드별) */
@@ -213,20 +221,25 @@ export function nextRecurrence(item: DdayItem, ref: Date = new Date()): Date {
   const refMid = new Date(ref); refMid.setHours(0,0,0,0)
   if (item.recurrence === 'none' || target >= refMid) return target
 
+  // 각 분기 모두 '오늘'을 유효한 발생일로 인정한다 (오늘이 기념일/해당 요일이면 D-day).
   if (item.recurrence === 'yearly') {
-    const next = new Date(refMid.getFullYear(), target.getMonth(), target.getDate())
-    if (next < refMid) next.setFullYear(next.getFullYear() + 1)
-    return next
+    // 2/29 매년 반복은 평년에 2/28로 클램프 (makeClamped) — 3/1로 밀리지 않는다.
+    const thisYear = makeClamped(refMid.getFullYear(), target.getMonth(), target.getDate())
+    return thisYear < refMid
+      ? makeClamped(refMid.getFullYear() + 1, target.getMonth(), target.getDate())
+      : thisYear
   }
   if (item.recurrence === 'monthly') {
-    const next = new Date(refMid.getFullYear(), refMid.getMonth(), target.getDate())
-    if (next < refMid) next.setMonth(next.getMonth() + 1)
-    return next
+    // 31일 매월 반복은 짧은 달에서 말일로 클램프 (2월 → 2/28) — 다음 달 초로 밀리지 않는다.
+    const thisMonth = makeClamped(refMid.getFullYear(), refMid.getMonth(), target.getDate())
+    return thisMonth < refMid
+      ? makeClamped(refMid.getFullYear(), refMid.getMonth() + 1, target.getDate())
+      : thisMonth
   }
   if (item.recurrence === 'weekly') {
     const next = new Date(refMid)
-    const dayDiff = (target.getDay() - refMid.getDay() + 7) % 7
-    next.setDate(next.getDate() + (dayDiff || 7))
+    const delta = (target.getDay() - refMid.getDay() + 7) % 7   // 오늘이 해당 요일이면 0 = 오늘
+    next.setDate(next.getDate() + delta)
     return next
   }
   return target
@@ -254,14 +267,16 @@ export function calcPace(
   ref: Date = new Date(),
 ): PaceCalc | null {
   if (totalAmount <= 0) return null
+  // 음수 완료량은 의미가 없으므로 0으로 클램프 (진행률·예상 완료량이 음수로 표시되는 것 방지)
+  const completed = Math.max(0, completedAmount)
   const target = new Date(targetStr)
   const remaining = dayDiff(target, ref)
-  const remainingAmount = Math.max(0, totalAmount - completedAmount)
+  const remainingAmount = Math.max(0, totalAmount - completed)
   const start = startStr ? new Date(startStr) : new Date(ref)
   const elapsed = Math.max(0, dayDiff(ref, start))
-  const currentPace = elapsed > 0 ? completedAmount / elapsed : 0
+  const currentPace = elapsed > 0 ? completed / elapsed : 0
   const dailyTarget = remaining > 0 ? remainingAmount / remaining : 0
-  const expectedFinish = completedAmount + currentPace * Math.max(0, remaining)
+  const expectedFinish = completed + currentPace * Math.max(0, remaining)
   const isOnTrack = expectedFinish >= totalAmount
   const deficit = Math.max(0, totalAmount - expectedFinish)
   const additionalDailyNeeded = remaining > 0 ? deficit / remaining : 0
@@ -276,7 +291,7 @@ export function calcPace(
     isOnTrack,
     deficit: Math.round(deficit * 10) / 10,
     additionalDailyNeeded: Math.ceil(additionalDailyNeeded * 100) / 100,
-    percent: totalAmount > 0 ? Math.min(100, (completedAmount / totalAmount) * 100) : 0,
+    percent: totalAmount > 0 ? Math.min(100, (completed / totalAmount) * 100) : 0,
   }
 }
 

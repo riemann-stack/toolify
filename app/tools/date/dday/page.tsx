@@ -25,7 +25,7 @@ const FAQ_LD = [
               },
               {
                 q: '영업일 계산은 어떤 공휴일이 반영되나요?',
-                a: '<strong>한국 법정 공휴일 2026~2030년</strong> 자동 반영: 신정, 설날 3일, 삼일절, 어린이날, 부처님오신날, 현충일, 광복절, 추석 3일, 개천절, 한글날, 성탄절 + 대체 공휴일. <strong>임시 공휴일·근로자의 날(5/1)</strong>은 별도이며 정부 발표 시 업데이트됩니다. 회사별 공휴일·연차는 본 도구에서 처리하지 않으니 별도 관리하세요.',
+                a: '<strong>한국 법정 공휴일 2026~2030년</strong> 자동 반영: 신정, 설날 3일, 삼일절, <strong>노동절(5/1)</strong>, 어린이날, 부처님오신날, 현충일, <strong>제헌절(7/17)</strong>, 광복절, 추석 3일, 개천절, 한글날, 성탄절 + 대체 공휴일. 2026년 개정(대통령령 제36290호)으로 <strong>노동절은 2026-05-01부터, 제헌절은 2026-05-11부터</strong> 관공서 공휴일로 편입됐고 <strong>둘 다 대체공휴일 대상</strong>입니다. <strong>임시 공휴일</strong>은 정부 발표 시 업데이트됩니다. 회사별 공휴일·연차는 본 도구에서 처리하지 않으니 별도 관리하세요.',
               },
               {
                 q: '평일과 영업일의 차이는?',
@@ -117,10 +117,10 @@ export default function DdayPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 공휴일 (2026~2030 자동 반영)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            본 도구는 영업일 계산 시 <strong style={{ color: 'var(--text)' }}>한국 법정 공휴일</strong>을 자동 반영합니다 — 신정·설날(3일)·삼일절·어린이날·부처님오신날·현충일·광복절·추석(3일)·개천절·한글날·성탄절 + 대체 공휴일.
+            본 도구는 영업일 계산 시 <strong style={{ color: 'var(--text)' }}>한국 법정 공휴일</strong>을 자동 반영합니다 — 신정·설날(3일)·삼일절·노동절(5/1, 2026~)·어린이날·부처님오신날·현충일·제헌절(7/17, 2026~)·광복절·추석(3일)·개천절·한글날·성탄절 + 대체 공휴일.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 10, padding: '12px 14px' }}>
-            ⚠️ <strong style={{ color: '#DC2626' }}>임시 공휴일</strong>(정부 발표)·근로자의 날(5/1)·회사별 공휴일은 자동 반영되지 않습니다. 정부 발표 시 별도 확인이 필요합니다.
+            ⚠️ <strong style={{ color: 'var(--danger)' }}>임시 공휴일</strong>(정부 발표)·회사별 공휴일은 자동 반영되지 않습니다. 노동절(2026-05-01 시행)과 제헌절(2026-05-11 시행)은 대통령령 제36290호로 관공서 공휴일에 편입됐고, 토·일이나 다른 공휴일과 겹치면 대체공휴일이 부여됩니다.
           </p>
         </section>
 
@@ -257,9 +257,9 @@ export default function DdayPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li><strong style={{ color: 'var(--text)' }}>관공서의 공휴일에 관한 규정</strong> — 대통령령</li>
+            <li><strong style={{ color: 'var(--text)' }}>관공서의 공휴일에 관한 규정</strong> — 대통령령 (대체공휴일 제3조·2013 개정 도입, 제헌절·노동절 편입 2026 개정 = 대통령령 제36290호)</li>
+            <li><strong style={{ color: 'var(--text)' }}>공휴일에 관한 법률</strong> — 법률 제18291호 (2021 제정·2022 시행, 대체공휴일 법제화)</li>
             <li><strong style={{ color: 'var(--text)' }}>한국천문연구원 천문력</strong> — 24절기·음력 환산</li>
-            <li><strong style={{ color: 'var(--text)' }}>대체공휴일에 관한 법률</strong> — 2014.5 시행</li>
           </ul>
         </section>
 
