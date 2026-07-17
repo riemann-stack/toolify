@@ -16,27 +16,31 @@ interface ServiceType {
   /** 병 계급(이병·일병·상병·병장)이 있는 복무 형태인가.
       사회복무요원·전문연구요원·산업기능요원·대체복무요원은 계급이 없어 진급 마일스톤이 무의미하다. */
   ranked: boolean
-  /** 신병교육(훈련소)을 거치는가 — 상근예비역은 현역병과 같이 받고, 보충역·대체복무는 별도. */
+  /** 현역 신병교육(훈련소)을 거치는가 — 상근예비역까지 true.
+      전문연구·산업기능요원은 '군사교육소집'(30일 이내, 편입 후 6개월 내 별도 실시)이지 신병교육이 아니라 false. */
   bootcamp: boolean
+  /** 복무 종료의 법정 용어 — 현역/예비역은 '전역', 사회복무·대체복무는 '소집해제', 나머지는 '복무만료'.
+      화면 전체(히어로·D-day·배너·복사 텍스트·타임라인)가 이 값 하나를 따른다. */
+  endTerm: '전역' | '소집해제' | '복무만료'
 }
 
 const SERVICE_TYPES: ServiceType[] = [
   // 18개월
-  { id: 'army',                  name: '육군',                     months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true },
-  { id: 'marine',                name: '해병대',                   months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true },
-  { id: 'reserve',               name: '상근예비역',               months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true },
+  { id: 'army',                  name: '육군',                     months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true, endTerm: '전역' },
+  { id: 'marine',                name: '해병대',                   months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true, endTerm: '전역' },
+  { id: 'reserve',               name: '상근예비역',               months: 18, group: '현역병',    cls: 'svc18', ranked: true,  bootcamp: true, endTerm: '전역' },
   // 20개월
-  { id: 'navy',                  name: '해군',                     months: 20, group: '현역병',    cls: 'svc20', ranked: true,  bootcamp: true },
+  { id: 'navy',                  name: '해군',                     months: 20, group: '현역병',    cls: 'svc20', ranked: true,  bootcamp: true, endTerm: '전역' },
   // 21개월
-  { id: 'airforce',              name: '공군',                     months: 21, group: '현역병',    cls: 'svc21', ranked: true,  bootcamp: true },
-  { id: 'social',                name: '사회복무요원',             months: 21, group: '보충역',    cls: 'svc21', ranked: false, bootcamp: false },
+  { id: 'airforce',              name: '공군',                     months: 21, group: '현역병',    cls: 'svc21', ranked: true,  bootcamp: true, endTerm: '전역' },
+  { id: 'social',                name: '사회복무요원',             months: 21, group: '보충역',    cls: 'svc21', ranked: false, bootcamp: false, endTerm: '소집해제' },
   // 23개월
-  { id: 'industrial-supplement', name: '산업기능요원 (보충역)',     months: 23, group: '보충역',    cls: 'svc23', ranked: false, bootcamp: false },
+  { id: 'industrial-supplement', name: '산업기능요원 (보충역)',     months: 23, group: '보충역',    cls: 'svc23', ranked: false, bootcamp: false, endTerm: '복무만료' },
   // 34개월
-  { id: 'industrial-active',     name: '산업기능요원 (현역)',       months: 34, group: '대체복무',  cls: 'svc34', ranked: false, bootcamp: true },
+  { id: 'industrial-active',     name: '산업기능요원 (현역)',       months: 34, group: '대체복무',  cls: 'svc34', ranked: false, bootcamp: false, endTerm: '복무만료' },
   // 36개월
-  { id: 'research',              name: '전문연구요원',             months: 36, group: '대체복무',  cls: 'svc36', ranked: false, bootcamp: true },
-  { id: 'alternative',           name: '대체복무요원',             months: 36, group: '대체복무',  cls: 'svc36', ranked: false, bootcamp: false },
+  { id: 'research',              name: '전문연구요원',             months: 36, group: '대체복무',  cls: 'svc36', ranked: false, bootcamp: false, endTerm: '복무만료' },
+  { id: 'alternative',           name: '대체복무요원',             months: 36, group: '대체복무',  cls: 'svc36', ranked: false, bootcamp: false, endTerm: '소집해제' },
 ]
 
 /* 병 진급 최저복무기간 — 「군인사법 시행규칙」 제32조제2항 (국방부령 제1207호, 시행 2026-03-01).
@@ -228,7 +232,11 @@ export default function MilitaryClient() {
       discharge:    dischargeStart,
     }
     const svc = SERVICE_TYPES.find(s => s.id === serviceId)
-    const ranked = svc?.ranked ?? serviceId === 'custom'   // 직접 입력은 현역병으로 가정
+    /* '직접 입력'은 현역병으로 가정한다 — ranked·bootcamp·endTerm 셋을 같은 가정으로 맞춰야
+       '복무 시작일'인데 '일병 진급 가능'이 뜨는 식의 불일치가 안 생긴다. */
+    const ranked   = svc?.ranked   ?? serviceId === 'custom'
+    const bootcamp = svc?.bootcamp ?? serviceId === 'custom'
+    const endTerm  = svc?.endTerm  ?? '전역'
 
     /* 짧은 복무(직접 입력 1~3개월)에선 D-100·입대100일이 복무 구간 밖으로 나간다.
        → 입대 첫날부터 '🔥 말년', 전역 뒤에 '입대 100일 D-8' 같은 표시를 막는다. */
@@ -256,8 +264,8 @@ export default function MilitaryClient() {
        100일차는 이미 진급 후 40일쯤이다(「군인사법 시행규칙」 제32조제2항). 문화적 기념일로만 표기. */
     let todayMilestone: { icon: string; text: string } | null = null
     if (todayState && diffDays(todayState, referenceDate) === 0) {
-      if (diffDays(referenceDate, ms.discharge) === 0)          todayMilestone = { icon: '🎖️', text: '전역 축하합니다!' }
-      else if (diffDays(referenceDate, ms.discharge) > 0)       todayMilestone = { icon: '🎖️', text: '이미 전역하셨네요. 수고하셨습니다' }
+      if (diffDays(referenceDate, ms.discharge) === 0)          todayMilestone = { icon: '🎖️', text: `${endTerm} 축하합니다!` }
+      else if (diffDays(referenceDate, ms.discharge) > 0)       todayMilestone = { icon: '🎖️', text: `이미 ${endTerm}하셨네요. 수고하셨습니다` }
       else if (showDay100 && diffDays(referenceDate, ms.day100) === 0) todayMilestone = { icon: '🎉', text: '오늘은 입대 100일! 면회·100일 휴가로 챙기는 첫 분기점이에요' }
       else if (diffDays(referenceDate, ms.halfway) === 0)       todayMilestone = { icon: '🎉', text: '오늘은 복무 절반 지점! 반환점 통과' }
       else if (showLast100 && diffDays(referenceDate, ms.last100) === 0) todayMilestone = { icon: '🎉', text: '오늘부터 말년 (D-100)' }
@@ -270,7 +278,7 @@ export default function MilitaryClient() {
       progress, beforeEnlist,
       milestones: ms,
       promotions: promotions.map(p => ({ ...p, reached: reached(p.date) })),
-      bootcamp: svc?.bootcamp ?? false,
+      bootcamp, endTerm,
       show: { day100: showDay100, last100: showLast100, last30: showLast30 },
       reached: {
         enlist:       reached(ms.enlist),
@@ -296,9 +304,9 @@ export default function MilitaryClient() {
   function handleCopy() {
     if (!result) return
     const txt = [
-      '🎖️ 군 복무 현황',
+      '🎖️ 병역 복무 현황',
       `입대: ${fmtISO(result.enlist)} (${serviceLabel})`,
-      `전역: ${fmtISO(result.discharge)} (D${result.countdown.toDischarge >= 0 ? '-' + result.countdown.toDischarge : '+' + Math.abs(result.countdown.toDischarge)})`,
+      `${result.endTerm}: ${fmtISO(result.discharge)} (D${result.countdown.toDischarge >= 0 ? '-' + result.countdown.toDischarge : '+' + Math.abs(result.countdown.toDischarge)})`,
       `복무율: ${result.progress.toFixed(1)}% · ${result.passedDays}/${result.totalDays}일`,
       'youtil.kr/tools/date/military',
     ].join('\n')
@@ -319,14 +327,18 @@ export default function MilitaryClient() {
   }, [currentYear])
 
   /* 기준일 연도 — 입대 연도부터 전역 연도까지 전부 포함해야 한다.
-     구 코드는 currentYear+1 고정이라 36개월 복무자가 자기 전역일을 기준일로 고를 수 없었다. */
+     구 코드는 currentYear+1 고정이라 36개월 복무자가 자기 전역일을 기준일로 고를 수 없었다.
+     ⚠️ 목록이 복무 형태에 따라 동적으로 줄어든다(36개월 → 18개월로 바꾸면 상한이 2년 당겨짐).
+        그때 refY를 클램프하지 않으면 <select value={범위밖}>가 되어 셀렉트가 빈칸으로 렌더되고
+        계산은 범위 밖 연도로 계속 돈다 → 현재 refY를 항상 목록에 포함시켜 그 상태 자체를 없앤다. */
   const refYearOptions = useMemo(() => {
-    const from = Math.min(enlistY, currentYear - 4)
-    const to = Math.max(currentYear + 1, result?.discharge.getFullYear() ?? currentYear + 1)
+    const dischargeY = result?.discharge.getFullYear() ?? currentYear + 1
+    const from = Math.min(enlistY, currentYear - 4, refY)
+    const to = Math.max(currentYear + 1, dischargeY, refY)
     const arr: number[] = []
     for (let y = to; y >= from; y--) arr.push(y)
     return arr
-  }, [enlistY, currentYear, result])
+  }, [enlistY, currentYear, result, refY])
 
   /* 첫 마운트 전(SSR) — 스켈레톤 */
   if (!todayState) {
@@ -523,7 +535,7 @@ export default function MilitaryClient() {
               </div>
               <p className={styles.heroProgressStatus} role="status">
                 {result.countdown.toDischarge < 0
-                  ? `전역 완료 · 전역 후 ${Math.abs(result.countdown.toDischarge)}일`
+                  ? `${result.endTerm} 완료 · ${result.endTerm} 후 ${Math.abs(result.countdown.toDischarge)}일`
                   : result.beforeEnlist
                     ? '입대 전'
                     : <><strong>{result.progress.toFixed(1)}%</strong> · {result.passedDays}/{result.totalDays}일</>
@@ -537,7 +549,7 @@ export default function MilitaryClient() {
                 <strong>{fmtKR(result.enlist)}</strong>
               </div>
               <div className={styles.heroInfoRow}>
-                <span>전역일</span>
+                <span>{result.endTerm === '전역' ? '전역일' : `${result.endTerm}일`}</span>
                 <strong className={styles.dischargeAccent}>{fmtKR(result.discharge)}</strong>
               </div>
               <div className={styles.heroInfoRow}>
@@ -560,9 +572,9 @@ export default function MilitaryClient() {
           {/* D-day 카드 4개 */}
           <div className={styles.dDayGrid}>
             <div className={styles.dDayCard}>
-              <p className={styles.dDayLabel}>전역까지</p>
+              <p className={styles.dDayLabel}>{result.endTerm}까지</p>
               <p className={`${styles.dDayValue} ${result.countdown.toDischarge < 0 ? styles.passed : result.countdown.toDischarge <= 100 ? styles.warn : ''}`}>
-                {result.countdown.toDischarge < 0 ? '전역 완료' : `D-${result.countdown.toDischarge}`}
+                {result.countdown.toDischarge < 0 ? `${result.endTerm} 완료` : `D-${result.countdown.toDischarge}`}
               </p>
               <p className={styles.dDaySub}>{fmtKR(result.discharge)}</p>
             </div>
@@ -622,11 +634,11 @@ export default function MilitaryClient() {
                   sub: `${p.from}으로서 ${p.rank === '일병' ? 2 : 6}개월 (최저복무기간)`, date: p.date, reached: p.reached })),
                 { key: 'halfway', icon: '⏱️', label: '복무 50% (반환점)', sub: '절반 통과', date: result.milestones.halfway, reached: result.reached.halfway },
                 { key: 'threeQuarter', icon: '🎯', label: '복무 75%', sub: '4분의 3 통과', date: result.milestones.threeQuarter, reached: result.reached.threeQuarter },
-                ...(result.show.last100 ? [{ key: 'last100', icon: '🔥', label: '전역 D-100 (말년 시작)',
+                ...(result.show.last100 ? [{ key: 'last100', icon: '🔥', label: `${result.endTerm} D-100 (말년 시작)`,
                   sub: `복무 ${(((result.totalDays - 100) / result.totalDays) * 100).toFixed(0)}% 통과`, date: result.milestones.last100, reached: result.reached.last100 }] : []),
-                ...(result.show.last30 ? [{ key: 'last30', icon: '👑', label: '전역 D-30 (왕고)',
+                ...(result.show.last30 ? [{ key: 'last30', icon: '👑', label: `${result.endTerm} D-30 (왕고)`,
                   sub: '말년 후반', date: result.milestones.last30, reached: result.reached.last30 }] : []),
-                { key: 'discharge', icon: '🎖️', label: result.bootcamp ? '전역일' : '복무 만료일',
+                { key: 'discharge', icon: '🎖️', label: result.endTerm === '전역' ? '전역일' : `${result.endTerm}일`,
                   sub: '수고하셨습니다', date: result.milestones.discharge, reached: result.reached.discharge },
               ].sort((a, b) => a.date.getTime() - b.date.getTime()).map(m => {
                 const isToday = todayState && diffDays(todayState, m.date) === 0
@@ -645,11 +657,20 @@ export default function MilitaryClient() {
           </div>
 
           {/* 복무 형태 정보 */}
+          {/* 연장 사유는 신분별로 다르다 — 「병역법」 제18조제3항은 현역병 조항이라
+              사회복무요원(공무 외 병가 30일 초과분 연장)에 그대로 쓰면 본문 FAQ와 모순된다. */}
           <div className={styles.serviceInfoCard}>
             ⓘ 선택한 복무 형태 — <strong>{serviceLabel}</strong> ({serviceMonths}개월 / {result.totalDays}일).
-            휴가는 전역일을 바꾸지 않습니다. 전역이 밀리는 건 「병역법」 제18조제3항의
-            <strong> 형 집행일수·군기교육처분일수·복무이탈일수</strong>뿐이며, 해당 일수만큼 그대로 연기됩니다.
-            정확한 전역일은 소속 부대 또는 병무청에 확인하세요.
+            {result.endTerm === '전역' ? (
+              <> 휴가는 전역일을 바꾸지 않습니다. 전역이 밀리는 건 「병역법」 제18조제3항의
+                <strong> 형 집행일수·군기교육처분일수·복무이탈일수</strong>뿐이며, 해당 일수만큼 그대로 연기됩니다.</>
+            ) : result.endTerm === '소집해제' ? (
+              <> 복무 연장 사유는 현역병과 다릅니다 — 사회복무요원은 공무 외 질병·부상 병가가
+                <strong> 통산 30일까지만 산입</strong>되고 초과분만큼 연장복무합니다.</>
+            ) : (
+              <> 복무 연장·단축 사유는 복무 형태별 규정을 따르므로 본 계산은 기본 복무기간만 반영합니다.</>
+            )}{' '}
+            정확한 {result.endTerm === '전역' ? '전역일' : `${result.endTerm}일`}은 복무기관·소속 부대 또는 병무청에 확인하세요.
           </div>
 
           <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>

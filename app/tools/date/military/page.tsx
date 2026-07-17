@@ -257,10 +257,13 @@ export default function MilitaryPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ※ 위는 <strong style={{ color: 'var(--text)' }}>최저</strong> 기간이라 실제 진급일은 더 늦을 수 있습니다.
-            같은 조 제3항은 근무성적이 우수한 병(해당 계급 진급인원의 10분의 1 이내)에게 <strong style={{ color: 'var(--text)' }}>상병 4개월·병장 5개월</strong>로 단축을 허용하고,
-            제2항 단서는 참모총장이 국방부장관 승인을 받아 <strong style={{ color: 'var(--text)' }}>1개월 범위에서 연장</strong>할 수 있게 합니다.
-            제36조에 따라 유죄판결·징계 시 진급이 제한됩니다. 정확한 진급일은 인사담당자에게 확인하세요.
+            ※ 위는 <strong style={{ color: 'var(--text)' }}>최저</strong> 기간이라 실제 진급일은 <strong style={{ color: 'var(--text)' }}>빨라질 수도 늦어질 수도</strong> 있습니다.
+            <strong style={{ color: 'var(--text)' }}> 빨라지는 쪽</strong> — 같은 조 제3항은 근무성적 우수자(해당 계급 진급인원의 10분의 1 이내)에게
+            상병 4개월·병장 5개월로 단축을 허용하고, 제4항은 그 인원을 전투부대 10분의 2·경계부대 10분의 3까지 넓힙니다(개정 2025-10-24).
+            즉 상병은 최단 6개월차, 병장은 최단 11개월차도 가능합니다. 제33조제2항은 의무복무를 마쳤는데 전역일 전일까지 상등병인 사람을
+            병장으로 진급시켜 전역하게 할 수 있습니다.
+            <strong style={{ color: 'var(--text)' }}> 늦어지는 쪽</strong> — 제2항 단서는 참모총장이 국방부장관 승인을 받아 1개월 범위에서 연장할 수 있게 하고,
+            제36조는 유죄판결·징계 시 1~3개월의 진급제한기간을 둡니다. 정확한 진급일은 인사담당자에게 확인하세요.
           </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.7 }}>
             ※ 계급은 <strong style={{ color: 'var(--text)' }}>현역병·상근예비역</strong>에만 해당합니다. 사회복무요원·산업기능요원·전문연구요원·대체복무요원은 병 계급이 없어
