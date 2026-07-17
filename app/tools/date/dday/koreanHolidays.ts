@@ -1,12 +1,15 @@
 /* 공휴일 데이터는 lib/krHolidays.ts(단일 소스)로 이관됨.
    dday는 기존 import 경로 유지를 위해 여기서 재노출하고, 아래 D-day 전용 상수만 보유. */
 
-export { KOREAN_HOLIDAYS, isHoliday, isHolidayStr, holidaysInYear } from '@/lib/krHolidays'
+export {
+  KOREAN_HOLIDAYS, isHoliday, isHolidayStr, holidaysInYear,
+  isHolidayDataCovered, HOLIDAY_YEAR_MIN, HOLIDAY_YEAR_MAX,
+} from '@/lib/krHolidays'
 export type { Holiday } from '@/lib/krHolidays'
 
 /** 한국 시즌 프리셋 — 자주 쓰는 D-day */
 export const SEASONAL_PRESETS = [
-  { name: '2026 수능',         date: '2026-11-12', emoji: '📚', category: 'exam' },
+  { name: '2026 수능',         date: '2026-11-19', emoji: '📚', category: 'exam' },
   { name: '2027 수능',         date: '2027-11-18', emoji: '📚', category: 'exam' },
   { name: '2026 설날',         date: '2026-02-17', emoji: '🎊', category: 'anniversary' },
   { name: '2026 어린이날',     date: '2026-05-05', emoji: '🧒', category: 'anniversary' },
