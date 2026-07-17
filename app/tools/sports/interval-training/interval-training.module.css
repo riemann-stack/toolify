@@ -357,7 +357,7 @@
   margin-bottom: 8px;
 }
 .distSelect:focus { border-color: #A16207; }
-.distSelect option { background: #1a1a1a; color: var(--text); }
+.distSelect option { background: var(--bg2); color: var(--text); }
 
 .recordTabs {
   display: grid;

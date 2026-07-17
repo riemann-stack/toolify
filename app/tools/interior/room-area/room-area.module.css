@@ -115,7 +115,7 @@
   box-sizing: border-box;
 }
 .pyungSelect:focus { border-color: var(--accent); }
-.pyungSelect option { background: #1a1a1a; color: var(--text); }
+.pyungSelect option { background: var(--bg2); color: var(--text); }
 
 .dimRow {
   display: grid;

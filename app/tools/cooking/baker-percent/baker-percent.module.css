@@ -256,7 +256,7 @@
   padding-right: 24px;
   box-sizing: border-box;
 }
-.catSelect option { background: #ffffff; color: var(--text); }
+.catSelect option { background: var(--bg2); color: var(--text); }
 
 /* ── 재료 행 (탭 1·2·3) ── */
 .ingredientList {

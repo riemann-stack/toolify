@@ -126,7 +126,7 @@
   box-sizing: border-box;
 }
 .pyungSelect:focus { border-color: var(--accent); }
-.pyungSelect option { background: #1a1a1a; color: var(--text); }
+.pyungSelect option { background: var(--bg2); color: var(--text); }
 
 .dimRow {
   display: grid;
@@ -589,7 +589,7 @@
   padding-right: 28px;
   box-sizing: border-box;
 }
-.roomMiniSelect option { background: #1a1a1a; color: var(--text); }
+.roomMiniSelect option { background: var(--bg2); color: var(--text); }
 
 .roomMiniResult {
   margin-top: 10px;

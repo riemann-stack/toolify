@@ -58,7 +58,7 @@
 }
 .select:focus { border-color: rgba(255,107,217,0.5); }
 .select:disabled { opacity: 0.4; cursor: not-allowed; }
-.select option { background: #1a1a1a; color: var(--text); }
+.select option { background: var(--bg2); color: var(--text); }
 .selectArrow {
   position: absolute;
   right: 12px;

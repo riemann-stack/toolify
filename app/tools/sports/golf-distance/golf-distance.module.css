@@ -110,7 +110,7 @@
   min-height: 42px;
 }
 .recordSelect { appearance: none; -webkit-appearance: none; cursor: pointer; }
-.recordSelect option { background: #1a1a1a; }
+.recordSelect option { background: var(--bg2); }
 .recordSaveBtn {
   width: 100%; margin-top: 14px;
   background: var(--accent-strong); color: #ffffff; border: none;

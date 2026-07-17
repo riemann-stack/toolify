@@ -116,7 +116,7 @@
 .smallInput::-webkit-outer-spin-button,
 .smallInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .bigInput[type=number], .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
-.selectInput option { background: #1a1a1a; color: var(--text); }
+.selectInput option { background: var(--bg2); color: var(--text); }
 
 .inputRow { display: flex; align-items: center; gap: 10px; }
 .unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
