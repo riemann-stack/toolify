@@ -353,7 +353,7 @@ export default function PlanetComparisonClient() {
         variant="default"
         related={[
           { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
-          { href: '/tools/edu/planet-comparison', label: '행성 비교' },
+          { href: '/tools/edu/sci-units', label: '과학 단위 변환' },
           { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
         ]}
       >

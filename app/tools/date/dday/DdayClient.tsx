@@ -55,7 +55,7 @@ export default function DdayClient() {
         variant="default"
         related={[
           { href: '/tools/date/age', label: '나이 계산기' },
-          { href: '/tools/date/dday', label: 'D-day 계산기' },
+          { href: '/tools/date/holiday-bridge', label: '징검다리 연휴' },
           { href: '/tools/date/jet-lag', label: '시차 계산기' }
         ]}
       >

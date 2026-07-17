@@ -228,7 +228,7 @@ export default function LoanClient() {
         variant="finance"
         related={[
           { href: '/tools/finance/salary', label: '연봉 실수령액' },
-          { href: '/tools/finance/loan', label: '대출이자 계산기' },
+          { href: '/tools/finance/dsr', label: 'DSR 계산기' },
           { href: '/tools/finance/compound', label: '복리 계산기' }
         ]}
         sources={[

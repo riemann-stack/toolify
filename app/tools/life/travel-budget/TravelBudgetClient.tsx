@@ -168,7 +168,7 @@ export default function TravelBudgetClient() {
       <Disclaimer
         variant="default"
         related={[
-          { href: '/tools/life/travel-budget', label: '여행 예산' },
+          { href: '/tools/life/travel-tip', label: '해외여행 팁' },
           { href: '/tools/life/lotto', label: '로또 번호 생성기' },
           { href: '/tools/life/dutch', label: '더치페이 계산기' }
         ]}

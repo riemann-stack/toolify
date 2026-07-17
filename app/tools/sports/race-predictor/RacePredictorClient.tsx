@@ -292,7 +292,7 @@ export default function RacePredictorClient() {
       <Disclaimer
         variant="safety"
         related={[
-          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
+          { href: '/tools/sports/race-plan', label: '레이스 플래너' },
           { href: '/tools/sports/pace', label: '러닝 페이스' },
           { href: '/tools/sports/one-rm', label: '1RM 계산기' }
         ]}

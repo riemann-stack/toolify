@@ -150,7 +150,7 @@ export default function CompoundClient() {
         related={[
           { href: '/tools/finance/salary', label: '연봉 실수령액' },
           { href: '/tools/finance/loan', label: '대출이자 계산기' },
-          { href: '/tools/finance/compound', label: '복리 계산기' }
+          { href: '/tools/finance/savings', label: '저축액 계산기' }
         ]}
         sources={[
           { label: '금융감독원 금융상품한눈에', href: 'https://finlife.fss.or.kr' },

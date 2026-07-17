@@ -237,7 +237,7 @@ export default function BmiClient() {
       <Disclaimer
         variant="medical"
         related={[
-          { href: '/tools/health/bmi', label: 'BMI 계산기' },
+          { href: '/tools/health/child-height', label: '자녀 예상 키' },
           { href: '/tools/health/bmr', label: '기초대사량' },
           { href: '/tools/health/weightloss', label: '체중감량 계산기' }
         ]}

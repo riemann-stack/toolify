@@ -490,7 +490,7 @@ export default function PaintClient() {
         variant="safety"
         related={[
           { href: '/tools/interior/wallpaper', label: '도배 소요량' },
-          { href: '/tools/interior/paint', label: '페인트 계산' },
+          { href: '/tools/interior/flooring', label: '바닥재 계산' },
           { href: '/tools/interior/room-area', label: '방 면적 계산' }
         ]}
       >

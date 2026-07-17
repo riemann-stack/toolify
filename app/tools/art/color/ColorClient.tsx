@@ -124,7 +124,7 @@ export default function ColorClient() {
       <Disclaimer
         variant="default"
         related={[
-          { href: '/tools/art/color', label: '색상 변환' },
+          { href: '/tools/art/paint-mix', label: '색상 혼합' },
           { href: '/tools/art/gradient-generator', label: '그라디언트' },
           { href: '/tools/art/golden-ratio', label: '황금 비율' }
         ]}

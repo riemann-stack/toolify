@@ -42,7 +42,7 @@ export default function RecipeClient() {
       <Disclaimer
         variant="default"
         related={[
-          { href: '/tools/cooking/recipe', label: '레시피 비율 계산기' },
+          { href: '/tools/cooking/serving', label: '1인분 분량' },
           { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
           { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
         ]}

@@ -77,7 +77,7 @@ export default function AgeClient() {
       <Disclaimer
         variant="default"
         related={[
-          { href: '/tools/date/age', label: '나이 계산기' },
+          { href: '/tools/date/lunar', label: '양력 음력 변환' },
           { href: '/tools/date/dday', label: 'D-day 계산기' },
           { href: '/tools/date/jet-lag', label: '시차 계산기' }
         ]}

@@ -194,7 +194,7 @@ export default function WeightLossClient() {
         related={[
           { href: '/tools/health/bmi', label: 'BMI 계산기' },
           { href: '/tools/health/bmr', label: '기초대사량' },
-          { href: '/tools/health/weightloss', label: '체중감량 계산기' }
+          { href: '/tools/health/glycemic-load', label: '당부하지수(GL)' }
         ]}
         sources={[
           { label: '대한비만학회', href: 'https://www.kosso.or.kr' },

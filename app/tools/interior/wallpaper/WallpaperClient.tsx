@@ -442,7 +442,7 @@ export default function WallpaperClient() {
       <Disclaimer
         variant="safety"
         related={[
-          { href: '/tools/interior/wallpaper', label: '도배 소요량' },
+          { href: '/tools/interior/molding', label: '몰딩 계산' },
           { href: '/tools/interior/paint', label: '페인트 계산' },
           { href: '/tools/interior/room-area', label: '방 면적 계산' }
         ]}
