@@ -318,13 +318,17 @@ export default function MilitaryClient() {
     )
   }
 
-  /* 입대일 연도 — 내년(입영 예정)부터 4년 전(36개월 복무자가 아직 복무 중)까지 */
+  /* 입대일 연도 — 내년(입영 예정)부터 10년 전까지.
+     직접 입력이 최대 60개월(5년)이고, 폐지 제도(의무경찰 등) 복무자도 "직접 입력"으로 초대하므로
+     -4년으로는 그 시나리오를 커버 못 한다. 현재 enlistY가 범위 밖이면 항상 포함시켜 빈칸 렌더를 막는다. */
   const currentYear = todayState?.getFullYear() ?? new Date().getFullYear()
   const yearOptions = useMemo(() => {
+    const from = Math.min(currentYear - 10, enlistY)
+    const to = Math.max(currentYear + 1, enlistY)
     const arr: number[] = []
-    for (let y = currentYear + 1; y >= currentYear - 4; y--) arr.push(y)
+    for (let y = to; y >= from; y--) arr.push(y)
     return arr
-  }, [currentYear])
+  }, [currentYear, enlistY])
 
   /* 기준일 연도 — 입대 연도부터 전역 연도까지 전부 포함해야 한다.
      구 코드는 currentYear+1 고정이라 36개월 복무자가 자기 전역일을 기준일로 고를 수 없었다.
