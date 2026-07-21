@@ -4,6 +4,8 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/date/lunar',
@@ -15,11 +17,11 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '윤달이란 무엇인가요?',
-                a: '음력은 1년이 약 354일이라 양력과 11일 차이가 납니다. 3년마다 약 33일의 오차가 생기므로 <strong>19년에 7번</strong> 한 달을 덧붙여 계절과 맞추는데, 이 달이 윤달입니다. 예를 들어 윤4월은 「4월 다음에 다시 4월」이 한 번 더 오는 셈입니다.<br/><br/><strong>전통적으로 윤달은 「공달」</strong>이라 하여 손이 없는 달로 여겨 이장·수의 제작 등 평소 미루던 일을 처리하는 시기로 쓰입니다. 반대로 결혼·이사·개업은 윤달을 피하는 가정도 많습니다.',
+                a: '음력은 1년이 약 354일이라 양력과 11일가량 차이가 납니다. 이를 보정하려고 2~3년에 한 번 한 달을 덧붙이는데, 이 달이 윤달입니다. 현행 규칙은 <strong>무중치윤법(無中置閏法)</strong> — 24절기 중 중기(中氣)가 들지 않는 달을 윤달로 삼으며, 결과적으로 약 19년에 7번꼴(메톤 주기 근사)이 됩니다. 예를 들어 윤4월은 「4월 다음에 다시 4월」이 한 번 더 오는 셈입니다.<br/><br/><strong>전통적으로 윤달은 「공달」</strong>이라 하여 손 없는 달로 여겨 이장(移葬)·수의 제작 등 평소 꺼리던 일을 하는 시기로 씁니다(한국민속대백과사전). 결혼은 이중적입니다 — 『동국세시기』 등 전통 문헌은 윤달 혼인을 좋다고 했지만, 현대에는 반대로 윤달 결혼을 피하는 속설도 퍼져 있습니다.',
               },
               {
                 q: '음력 생일은 매년 양력으로 바뀌나요?',
-                a: '네. 음력 생일은 매년 양력 날짜가 달라집니다. 예를 들어 <strong>음력 1월 1일(설날)은 2026년 2월 17일, 2027년 2월 6일</strong>입니다.<br/><br/>편차는 보통 ±11일 이내지만, 윤달이 끼면 그해는 같은 음력 날짜라도 양력 30일 이상 뒤로 밀릴 수 있습니다. 매년 본 계산기로 그해 양력 날짜를 확인해 미리 일정에 표시하는 것을 권장합니다.',
+                a: '네. 음력 생일은 매년 양력 날짜가 달라집니다. 예를 들어 <strong>음력 1월 1일(설날)은 2026년 2월 17일, 2027년 2월 7일</strong>입니다.<br/><br/>편차는 보통 ±11일 이내지만, 윤달이 끼면 그해는 같은 음력 날짜라도 양력 30일 이상 뒤로 밀릴 수 있습니다. 매년 본 계산기로 그해 양력 날짜를 확인해 미리 일정에 표시하는 것을 권장합니다.',
               },
               {
                 q: '60갑자는 어떻게 계산되나요?',
@@ -27,19 +29,19 @@ const FAQ_LD = [
               },
               {
                 q: '음력 생일을 양력으로 옮기면 띠가 달라질 수도 있나요?',
-                a: '있습니다. <strong>띠는 음력 1월 1일(설날)을 기준</strong>으로 바뀌므로, 양력 1월~2월 초 출생자는 양력으로는 올해지만 음력으로는 전년도에 속할 수 있습니다.<br/><br/>예) 2024년 2월 5일 양력 출생 → 음력으로는 2023년(계묘·토끼띠) 12월. 본 계산기로 음력 변환 후 띠를 확인하는 것이 정확합니다.',
+                a: '있습니다. <strong>띠는 음력 1월 1일(설날)을 기준</strong>으로 바뀌므로, 양력 1월~2월 초 출생자는 양력으로는 올해지만 음력으로는 전년도에 속할 수 있습니다.<br/><br/>예) 2024년 2월 5일 양력 출생 → 음력으로는 2023년(계묘·토끼띠) 12월. 본 계산기로 음력 변환 후 띠를 확인하는 것이 정확합니다.<br/><br/>참고: 설날 기준은 민속·달력 관행이며, 사주 명리에서는 <strong>입춘(2월 4일경)</strong>을 연도 경계로 삼아 결과가 다를 수 있습니다.',
               },
               {
                 q: '설날·추석 양력 날짜는 매년 어떻게 정해지나요?',
-                a: '설날 = 음력 1월 1일, 추석 = 음력 8월 15일로 음력 자체는 고정입니다. 양력 날짜는 그 해의 음력↔양력 매핑에 따라 결정되며, 한국천문연구원이 매년 공식 발표합니다.<br/><br/>· 설날 양력 범위 — 매년 <strong>1월 21일~2월 21일</strong> 사이<br/>· 추석 양력 범위 — 매년 <strong>9월 7일~10월 8일</strong> 사이',
+                a: '설날 = 음력 1월 1일, 추석 = 음력 8월 15일로 음력 자체는 고정입니다. 양력 날짜는 그 해의 음력↔양력 매핑에 따라 결정되며, 한국천문연구원이 산출하고 정부가 매년 「월력요항」으로 발표합니다.<br/><br/>1900~2049년 실측 기준 —<br/>· 설날 양력 범위 — <strong>1월 22일 ~ 2월 20일</strong><br/>· 추석 양력 범위 — <strong>9월 8일 ~ 10월 8일</strong>',
               },
               {
                 q: '이 계산기는 얼마나 정확한가요?',
-                a: '한국천문연구원의 공식 음력 데이터를 기반으로 <strong>1900~2100년 범위</strong>에서 날짜·윤달·간지 모두 정확하게 제공합니다. 한국 표준시(KST, UTC+9) 기준이며, 해외 음력(중국·베트남)과는 시차로 인해 일부 날짜가 ±1일 차이날 수 있습니다.',
+                a: '한국천문연구원(KASI) 음력 데이터와 전 구간(1900~2049년) 일치를 검증했고, 2025~2030년 국가 공휴일 발표(설날·추석·부처님오신날)와도 교차 확인했습니다. 상한이 2049년인 이유는 KASI가 확정 계산해 배포한 음양력 자료가 2050년까지이기 때문입니다.<br/><br/>주의: 흔히 쓰이는 중국력 기반 변환기와는 <strong>다른 날이 있습니다</strong>. 한국 음력은 KST(UTC+9) 합삭 기준이라 예컨대 한국 설날 2027년은 2월 7일, 중국 춘절은 2월 6일로 하루 다릅니다.',
               },
               {
                 q: '한국·중국·일본 음력이 모두 같은가요?',
-                a: '대부분 같지만 가끔 다를 수 있습니다. 음력은 「합삭(달과 태양이 일직선)」 시각을 기준으로 한 달이 시작되는데, 각국 표준시(시차) 때문에 그 시각이 자정을 넘기면 시작일이 ±1일 달라집니다.<br/>· <strong>한국·중국</strong> — 시차가 1시간이라 거의 항상 같음<br/>· <strong>일본</strong> — 메이지 유신 후 음력을 공식 폐지, 다만 일부 전통 행사는 음력 사용<br/>· <strong>베트남</strong> — 한국 음력과 거의 같으나 윤달이 다른 해가 있음(예: 2023 윤2월 vs 한국 윤2월 동일)',
+                a: '대부분 같지만 다른 해가 있습니다. 음력은 「합삭(달과 태양이 일직선)」 시각이 든 날부터 한 달이 시작되는데, 각국 표준시(시차) 때문에 그 시각이 자정을 걸치면 시작일이 하루 달라집니다.<br/>· <strong>한국·중국</strong> — 시차 1시간(KST/CST). 합삭이 한국 자정 직후에 들면 하루 갈립니다. 실제로 <strong>1988·1997·2027·2028년 설날</strong>이 중국 춘절보다 하루 늦었고(2027년 한국 2/7 vs 중국 2/6), 2012년엔 윤달 배치가 달라(한국 윤3월 vs 중국 윤4월) 음력 4월 8일이 한 달 차이 났습니다. 같은 기간 추석 차이는 없었습니다.<br/>· <strong>일본</strong> — 1873년 1월 1일 메이지 개력으로 태양력 채택·음력 공식 폐지 (일부 전통 행사는 음력 사용)<br/>· <strong>베트남</strong> — UTC+7 기준 자체 음력. 1985년엔 설(Tết)이 1월 21일로 한국·중국(2월 20일)보다 <strong>한 달</strong> 빨랐고, 2007년(2/17 vs 2/18)처럼 하루 다른 해도 있습니다.',
               },
               {
                 q: '음력 생일과 양력 생일 중 어느 쪽을 챙겨야 하나요?',
@@ -58,6 +60,15 @@ export default function LunarPage() {
         양력 ↔ 음력 자유 변환 + <strong style={{ color: 'var(--text)' }}>60갑자 간지·띠</strong> 자동.
       </p>
 
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="한국천문연구원(KASI) 음력 데이터 1900~2049 전수 일치 · 2025~2030 공휴일 발표 교차 확인"
+        sources={[
+          { label: '한국천문연구원 음양력변환', href: 'https://astro.kasi.re.kr' },
+          { label: '한국민속대백과사전', href: 'https://folkency.nfm.go.kr' },
+        ]}
+      />
+
       <LunarClient />
 
       <GuideDivider />
@@ -69,10 +80,10 @@ export default function LunarPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>양력(태양력)</strong>은 지구가 태양을 한 바퀴 도는 365.25일을 기준으로 하며 현재 세계 표준 달력입니다.
             <strong style={{ color: 'var(--text)' }}> 음력(태음력)</strong>은 달이 차고 기우는 주기 약 29.5일을 한 달로 삼아 1년이 약 354일로 양력보다 11일가량 짧습니다.
-            이 차이를 보정하기 위해 <strong style={{ color: 'var(--accent)' }}>19년에 7번</strong> 윤달을 끼워 넣어 계절과 달력을 맞춥니다(메톤 주기).
+            이 차이를 보정하기 위해 중기(中氣)가 들지 않는 달을 윤달로 삼는 <strong style={{ color: 'var(--accent)' }}>무중치윤법</strong>으로 윤달을 끼워 넣으며, 결과적으로 약 19년에 7번꼴(메톤 주기 근사)이 됩니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            한국의 공식 달력은 1896년 갑오개혁 이후 양력이지만 <strong style={{ color: 'var(--text)' }}>설날·추석·부처님오신날·단오·제사·음력 생일</strong> 등 전통 절기는 여전히 음력 기준으로 챙깁니다. 일부 가정은 음력 생일·양력 생일을 모두 챙기기도 합니다.
+            한국의 공식 달력은 을미개혁 때 음력 1895년 11월 17일을 <strong style={{ color: 'var(--text)' }}>양력 1896년 1월 1일(건양 원년)</strong>로 삼은 이후 양력이지만, <strong style={{ color: 'var(--text)' }}>설날·추석·부처님오신날·단오·제사·음력 생일</strong> 등 전통 절기는 여전히 음력 기준으로 챙깁니다. 일부 가정은 음력 생일·양력 생일을 모두 챙기기도 합니다.
           </p>
           <div style={{ overflowX: 'auto', marginTop: 14 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -80,16 +91,16 @@ export default function LunarPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--accent)', fontWeight: 700 }}>양력 (태양력)</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: '#0891B2', fontWeight: 700 }}>음력 (태음력)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--cat-health)', fontWeight: 700 }}>음력 (태음력)</th>
                 </tr>
               </thead>
               <tbody>
                 {[
                   ['기준', '지구의 태양 공전', '달의 차오름·이지러짐'],
-                  ['1년 길이', '365일 (윤년 366일)', '약 354일 (윤년 384일)'],
+                  ['1년 길이', '365일 (윤년 366일)', '약 354일 (윤달 든 해 383~385일)'],
                   ['1개월 길이', '28~31일 고정', '29일 또는 30일'],
-                  ['윤 보정', '4년마다 윤일(2/29) 추가', '19년에 7번 윤달 추가'],
-                  ['시작', '갑오개혁 (1896)', '신라·고려·조선~현재'],
+                  ['윤 보정', '4년마다 윤일(2/29) 추가', '무중치윤법 (약 19년에 7번꼴)'],
+                  ['시작', '1896년 채택 (을미개혁·건양)', '신라·고려·조선~현재'],
                   ['주 용도', '일상·법정·국제', '설·추석·제사·음력 생일'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -121,8 +132,8 @@ export default function LunarPage() {
               </thead>
               <tbody>
                 {[
-                  ['🌅 설날 (1.1)',         '1/29', '2/17', '2/6'],
-                  ['🌕 정월 대보름 (1.15)', '2/12', '3/3',  '2/20'],
+                  ['🌅 설날 (1.1)',         '1/29', '2/17', '2/7'],
+                  ['🌕 정월 대보름 (1.15)', '2/12', '3/3',  '2/21'],
                   ['🌸 부처님오신날 (4.8)', '5/5',  '5/24', '5/13'],
                   ['🌿 단오 (5.5)',         '5/31', '6/19', '6/9'],
                   ['🌾 추석 (8.15)',        '10/6', '9/25', '9/15'],
@@ -139,7 +150,8 @@ export default function LunarPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
-            ※ 한국천문연구원 공식 데이터 기반. 본 계산기로 임의 연도·임의 음력 날짜 변환 가능.
+            ※ 한국천문연구원 데이터·국가 공휴일 발표 기준. 2027년 설날(2/7)은 중국 춘절(2/6)과 하루 다른 해입니다 —
+            한국 음력은 KST 합삭 기준이라 중국력 기반 달력·앱과 차이가 날 수 있습니다.
           </p>
         </div>
 
@@ -163,7 +175,7 @@ export default function LunarPage() {
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>지지 (12) · 띠</p>
+              <p style={{ fontSize: 13, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 8 }}>지지 (12) · 띠</p>
               <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
                 子(자·쥐) · 丑(축·소) · 寅(인·범) · 卯(묘·토끼)<br/>
                 辰(진·용) · 巳(사·뱀) · 午(오·말) · 未(미·양)<br/>
@@ -205,7 +217,7 @@ export default function LunarPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { step: '1', title: '변환 방향 선택', content: '상단 토글에서 "양력 → 음력" 또는 "음력 → 양력" 을 고릅니다.' },
-              { step: '2', title: '날짜 입력', content: '년/월/일 드롭다운에서 변환할 날짜를 선택합니다. 1900년부터 2100년까지 지원됩니다.' },
+              { step: '2', title: '날짜 입력', content: '년/월/일 드롭다운에서 변환할 날짜를 선택합니다. 양력 1900년 1월 31일부터 2049년 12월 31일까지 지원됩니다 (한국천문연구원 확정 데이터 범위).' },
               { step: '3', title: '윤달 체크 (필요 시)', content: '음력 → 양력 변환 시 해당 월이 윤달이 있는 달이라면 "윤O월로 계산" 체크박스가 나타납니다.' },
               { step: '4', title: '결과 확인', content: '변환된 날짜와 해당 연도의 60갑자, 띠를 함께 확인할 수 있습니다.' },
             ].map((item) => (
@@ -224,6 +236,19 @@ export default function LunarPage() {
         <div>
           <Faq items={FAQ_LD} />
         </div>
+
+        {/* 면책·기준 고지 */}
+        <Disclaimer
+          variant="default"
+          sources={[
+            { label: '한국천문연구원 음양력변환', href: 'https://astro.kasi.re.kr' },
+          ]}
+        >
+          본 변환기는 한국천문연구원(KASI) 음력 데이터(1900~2049) 기준입니다.
+          한국 음력은 KST 합삭 시각 기준이라 중국·베트남 등 다른 나라 음력과 일부 날짜가 다를 수 있으며
+          (예: 2027년 한국 설날 2월 7일 vs 중국 춘절 2월 6일), 중국력 기반 달력·앱과 결과가 다른 해가 있습니다.
+          제사·택일 등 중요한 날짜는 그해 발표되는 공식 달력(월력요항)으로 재확인하세요.
+        </Disclaimer>
 
         {/* 6. 관련 도구 — 2열 카드 그리드 */}
         <div>
