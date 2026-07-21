@@ -10,6 +10,7 @@ const BRANCHES_KR = ['자','축','인','묘','진','사','오','미','신','유'
 const STEMS_HJ    = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸']
 const BRANCHES_HJ = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥']
 const ANIMALS     = ['쥐','소','호랑이','토끼','용','뱀','말','양','원숭이','닭','개','돼지']
+const ANIMAL_EMOJI = ['🐀','🐂','🐅','🐇','🐉','🐍','🐎','🐑','🐒','🐓','🐕','🐖']
 
 // 천문학적 연도 기준 (year 0 = 기원전 1년)
 function ganjjiOf(y: number) {
@@ -30,6 +31,11 @@ function adDisplay(y: number): string {
   return `기원전 ${1 - y}년`
 }
 
+// select 옵션 등 짧은 표기용
+function adShort(y: number): string {
+  return y > 0 ? String(y) : `기원전 ${1 - y}`
+}
+
 // ─── 연호 데이터 ─────────────────────────────────────────────────────────────
 
 interface Era {
@@ -41,7 +47,11 @@ interface Era {
 const ERAS: Era[] = [
   { id:'dangi',    name:'단기',    hanja:'檀紀', group:'korean',   baseYear:-2333, startAD:-2332 },
   { id:'bulgi',    name:'불기',    hanja:'佛紀', group:'korean',   baseYear:-544,  startAD:-543  },
-  { id:'hwanggi',  name:'황기',    hanja:'皇紀', group:'korean',   baseYear:-660,  startAD:-659  },
+  // 광무·융희: 대한제국 연호 — 개원한 해가 원년 (광무 1897·융희 1907). 융희 4년 = 1910 경술국치.
+  { id:'gwangmu',  name:'광무',    hanja:'光武', group:'korean',   baseYear:1896,  startAD:1897, endAD:1907 },
+  { id:'yunghui',  name:'융희',    hanja:'隆熙', group:'korean',   baseYear:1906,  startAD:1907, endAD:1910 },
+  // 황기(皇紀)는 일본 기년(진무천황 원년 BC 660) — §1 표 비고 "일본 초대 천황"과 일치시켜 japanese로 분류
+  { id:'hwanggi',  name:'황기',    hanja:'皇紀', group:'japanese', baseYear:-660,  startAD:-659  },
   { id:'meiji',    name:'메이지',  hanja:'明治', group:'japanese', baseYear:1867,  startAD:1868, endAD:1912 },
   { id:'taisho',   name:'다이쇼',  hanja:'大正', group:'japanese', baseYear:1911,  startAD:1912, endAD:1926 },
   { id:'showa',    name:'쇼와',    hanja:'昭和', group:'japanese', baseYear:1925,  startAD:1926, endAD:1989 },
@@ -52,8 +62,10 @@ const ERAS: Era[] = [
   { id:'kangxi',   name:'강희',    hanja:'康熙', group:'chinese',  baseYear:1661,  startAD:1662, endAD:1722 },
   { id:'qianlong', name:'건륭',    hanja:'乾隆', group:'chinese',  baseYear:1735,  startAD:1736, endAD:1795 },
   { id:'guangxu',  name:'광서',    hanja:'光緖', group:'chinese',  baseYear:1874,  startAD:1875, endAD:1908 },
-  { id:'xuantong', name:'선통',    hanja:'宣統', group:'chinese',  baseYear:1908,  startAD:1909, endAD:1912 },
-  { id:'minguo',   name:'민국',    hanja:'民國', group:'chinese',  baseYear:1911,  startAD:1912, endAD:1949 },
+  // 선통은 3년(1911)까지만 실재 — 퇴위 조서(1912-02-12)가 음력 선통 3년 12월이라 '선통 4년'은 개원된 적 없음
+  { id:'xuantong', name:'선통',    hanja:'宣統', group:'chinese',  baseYear:1908,  startAD:1909, endAD:1911 },
+  // 민국은 대만(중화민국)에서 현행 사용 (2026 = 민국 115년) — 대륙은 1949년 이후 서기만 사용
+  { id:'minguo',   name:'민국 (대만 현행)', hanja:'民國', group:'chinese', baseYear:1911, startAD:1912 },
 ]
 
 const ERAS_BY: Record<string, Era[]> = {
@@ -62,42 +74,47 @@ const ERAS_BY: Record<string, Era[]> = {
   chinese:  ERAS.filter(e => e.group === 'chinese'),
 }
 
-interface King { num: number; name: string; startAD: number; endAD: number }
+/* accAD: 즉위 연도(표시용 재위 시작) · wonAD: 실록 기년 원년(재위 1년 — 계산용) · endAD: 마지막 기년.
+   조선 실록 기년은 원칙적으로 유년칭원법(즉위 이듬해 = 원년)이라 대부분 wonAD = accAD + 1.
+   예외(즉위한 해가 곧 원년): 태조(개국)·세조·중종·인조(찬탈·반정) — 실록 연대목록에 즉위년 항목 없이 1년부터 시작.
+   순종은 실록 기년(원년 1908)과 융희 연호 기년(원년 1907)이 갈리는데, 통용 표기 '순종 4년 = 1910 경술국치'가
+   융희 기년이므로 융희(1907)를 채택하고 이름에 명시. 전 왕 sillok.history.go.kr 연대목록 대조 (2026-07). */
+interface King { num: number; name: string; accAD: number; wonAD: number; endAD: number }
 
 const JOSEON_KINGS: King[] = [
-  {num:1, name:'태조',   startAD:1392, endAD:1398},
-  {num:2, name:'정종',   startAD:1399, endAD:1400},
-  {num:3, name:'태종',   startAD:1401, endAD:1418},
-  {num:4, name:'세종',   startAD:1419, endAD:1450},
-  {num:5, name:'문종',   startAD:1451, endAD:1452},
-  {num:6, name:'단종',   startAD:1453, endAD:1455},
-  {num:7, name:'세조',   startAD:1455, endAD:1468},
-  {num:8, name:'예종',   startAD:1469, endAD:1469},
-  {num:9, name:'성종',   startAD:1469, endAD:1494},
-  {num:10,name:'연산군', startAD:1494, endAD:1506},
-  {num:11,name:'중종',   startAD:1506, endAD:1544},
-  {num:12,name:'인종',   startAD:1544, endAD:1545},
-  {num:13,name:'명종',   startAD:1545, endAD:1567},
-  {num:14,name:'선조',   startAD:1567, endAD:1608},
-  {num:15,name:'광해군', startAD:1608, endAD:1623},
-  {num:16,name:'인조',   startAD:1623, endAD:1649},
-  {num:17,name:'효종',   startAD:1649, endAD:1659},
-  {num:18,name:'현종',   startAD:1659, endAD:1674},
-  {num:19,name:'숙종',   startAD:1674, endAD:1720},
-  {num:20,name:'경종',   startAD:1720, endAD:1724},
-  {num:21,name:'영조',   startAD:1724, endAD:1776},
-  {num:22,name:'정조',   startAD:1776, endAD:1800},
-  {num:23,name:'순조',   startAD:1800, endAD:1834},
-  {num:24,name:'헌종',   startAD:1834, endAD:1849},
-  {num:25,name:'철종',   startAD:1849, endAD:1863},
-  {num:26,name:'고종',   startAD:1863, endAD:1907},
-  {num:27,name:'순종',   startAD:1907, endAD:1910},
+  {num:1, name:'태조',       accAD:1392, wonAD:1392, endAD:1398},  // 개국년칭원
+  {num:2, name:'정종',       accAD:1398, wonAD:1399, endAD:1400},
+  {num:3, name:'태종',       accAD:1400, wonAD:1401, endAD:1418},
+  {num:4, name:'세종',       accAD:1418, wonAD:1419, endAD:1450},  // 세종 28년 = 1446 훈민정음
+  {num:5, name:'문종',       accAD:1450, wonAD:1451, endAD:1452},
+  {num:6, name:'단종',       accAD:1452, wonAD:1453, endAD:1455},  // 계유정난 1453 = 단종 1년
+  {num:7, name:'세조',       accAD:1455, wonAD:1455, endAD:1468},  // 즉위년칭원
+  {num:8, name:'예종',       accAD:1468, wonAD:1469, endAD:1469},
+  {num:9, name:'성종',       accAD:1469, wonAD:1470, endAD:1494},  // 성종 16년 = 1485 경국대전
+  {num:10,name:'연산군',     accAD:1494, wonAD:1495, endAD:1506},  // 연산 10년 = 1504 갑자사화
+  {num:11,name:'중종',       accAD:1506, wonAD:1506, endAD:1544},  // 즉위년칭원(반정) — 기묘사화 1519 = 중종 14년
+  {num:12,name:'인종',       accAD:1544, wonAD:1545, endAD:1545},
+  {num:13,name:'명종',       accAD:1545, wonAD:1546, endAD:1567},  // 을사사화 1545는 '명종 즉위년' 사건
+  {num:14,name:'선조',       accAD:1567, wonAD:1568, endAD:1608},  // 선조 25년 = 1592 임진왜란
+  {num:15,name:'광해군',     accAD:1608, wonAD:1609, endAD:1623},
+  {num:16,name:'인조',       accAD:1623, wonAD:1623, endAD:1649},  // 즉위년칭원(반정) — 병자호란 1636 = 인조 14년
+  {num:17,name:'효종',       accAD:1649, wonAD:1650, endAD:1659},
+  {num:18,name:'현종',       accAD:1659, wonAD:1660, endAD:1674},
+  {num:19,name:'숙종',       accAD:1674, wonAD:1675, endAD:1720},
+  {num:20,name:'경종',       accAD:1720, wonAD:1721, endAD:1724},
+  {num:21,name:'영조',       accAD:1724, wonAD:1725, endAD:1776},  // 영조 26년 = 1750 균역법, 52년 = 1776
+  {num:22,name:'정조',       accAD:1776, wonAD:1777, endAD:1800},
+  {num:23,name:'순조',       accAD:1800, wonAD:1801, endAD:1834},  // 신유박해 1801 = 순조 1년
+  {num:24,name:'헌종',       accAD:1834, wonAD:1835, endAD:1849},
+  {num:25,name:'철종',       accAD:1849, wonAD:1850, endAD:1863},
+  {num:26,name:'고종',       accAD:1863, wonAD:1864, endAD:1907},  // 고종 13년 = 1876 강화도조약, 31년 = 1894 갑오개혁
+  {num:27,name:'순종(융희)', accAD:1907, wonAD:1907, endAD:1910},  // 융희 기년 — 융희 4년 = 1910 경술국치
 ]
 
 // 역사 이벤트: 천문학적 연도 사용 (기원전 N년 = -(N-1))
 const EVENTS: [number, string][] = [
   [-2332,'고조선 건국 (단군왕검)'],
-  [-194, '위만조선 건국'],
+  [-193, '위만조선 건국'],  // 기원전 194년 (천문학적 -193)
   [-107, '고조선 멸망·한사군 설치'],
   [-56,  '신라 건국 (박혁거세)'],
   [-36,  '고구려 건국 (주몽)'],
@@ -106,7 +123,7 @@ const EVENTS: [number, string][] = [
   [313,  '낙랑군 멸망 (고구려)'],
   [372,  '고구려 불교 전래·태학 설립'],
   [384,  '백제 불교 전래'],
-  [392,  '광개토대왕 즉위'],
+  [391,  '광개토대왕 즉위 (영락 원년)'],  // 광개토왕릉비 기준 신묘년
   [427,  '고구려 평양 천도'],
   [475,  '백제 한성 함락 (장수왕)'],
   [527,  '신라 불교 공인'],
@@ -117,7 +134,7 @@ const EVENTS: [number, string][] = [
   [668,  '고구려 멸망'],
   [676,  '신라 삼국통일'],
   [698,  '발해 건국 (대조영)'],
-  [892,  '후백제 건국 (견훤)'],
+  [900,  '후백제 건국 (견훤, 완산주)'],  // 892는 거병(무진주), 국호 선포는 900
   [901,  '후고구려 건국 (궁예)'],
   [918,  '고려 건국 (왕건)'],
   [926,  '발해 멸망'],
@@ -195,7 +212,8 @@ export default function HistoryEraClient() {
 
       <nav className={styles.tabs}>
         {TAB_LABELS.map(([t, label]) => (
-          <button key={t} className={`${styles.tab}${tab === t ? ' ' + styles.tabActive : ''}`} onClick={() => setTab(t)}>
+          <button key={t} type="button" aria-pressed={tab === t}
+            className={`${styles.tab}${tab === t ? ' ' + styles.tabActive : ''}`} onClick={() => setTab(t)}>
             {label}
           </button>
         ))}
@@ -234,31 +252,31 @@ function TodayHeroDisplay({ year }: { year: number }) {
       </div>
       <div className={styles.todayGrid}>
         <div className={styles.todayItem}>
-          <span className={styles.todayItemLabel}>🌐 서기 (AD)</span>
+          <span className={styles.todayItemLabel}><span aria-hidden="true">🌐</span> 서기 (AD)</span>
           <span className={styles.todayItemValue}>{year}년</span>
         </div>
         <div className={styles.todayItem}>
-          <span className={styles.todayItemLabel}>🇰🇷 단기</span>
+          <span className={styles.todayItemLabel}><span aria-hidden="true">🇰🇷</span> 단기</span>
           <span className={styles.todayItemValue}>{dangi}년</span>
         </div>
         <div className={styles.todayItem}>
-          <span className={styles.todayItemLabel}>☸️ 불기</span>
+          <span className={styles.todayItemLabel}><span aria-hidden="true">☸️</span> 불기</span>
           <span className={styles.todayItemValue}>{bulgi}년</span>
         </div>
         <div className={styles.todayItem}>
-          <span className={styles.todayItemLabel}>🇯🇵 황기</span>
+          <span className={styles.todayItemLabel}><span aria-hidden="true">🇯🇵</span> 황기</span>
           <span className={styles.todayItemValue}>{hwanggi}년</span>
         </div>
         <div className={styles.todayItem}>
-          <span className={styles.todayItemLabel}>🇯🇵 레이와</span>
+          <span className={styles.todayItemLabel}><span aria-hidden="true">🇯🇵</span> 레이와</span>
           <span className={styles.todayItemValue}>{reiwa > 0 ? `${reiwa}년` : '—'}</span>
         </div>
         <div className={styles.todayItem}>
-          <span className={styles.todayItemLabel}>🇨🇳 민국 (대만)</span>
+          <span className={styles.todayItemLabel}><span aria-hidden="true">🇹🇼</span> 민국 (대만)</span>
           <span className={styles.todayItemValue}>{minguo > 0 ? `${minguo}년` : '—'}</span>
         </div>
       </div>
-      <p className={styles.todayGanjji}>🐎 {ganjji}</p>
+      <p className={styles.todayGanjji}><span aria-hidden="true">{ANIMAL_EMOJI[ganjjiOf(year).b]}</span> {ganjji}</p>
     </div>
   )
 }
@@ -282,14 +300,16 @@ function EraToADTab() {
   const currentKing = JOSEON_KINGS[kingIdx]
 
   const result = useMemo<E2AResult>(() => {
-    const y = parseInt(yearStr)
-    if (!yearStr || isNaN(y) || y < 1) return null
+    // 정수만 허용 — parseInt는 '28.5'→28, '1e3'→1로 조용히 절사해 입력 에코와 결과가 어긋난다
+    if (!/^\d{1,4}$/.test(yearStr.trim())) return null
+    const y = parseInt(yearStr, 10)
+    if (y < 1) return null
 
     if (eraType === 'joseon') {
-      const reigning = currentKing.endAD - currentKing.startAD + 1
-      if (y > reigning)
-        return { error: `${currentKing.name}의 재위 기간은 ${reigning}년입니다 (${currentKing.startAD}~${currentKing.endAD})` }
-      const ad = currentKing.startAD + y - 1
+      const maxYear = currentKing.endAD - currentKing.wonAD + 1
+      if (y > maxYear)
+        return { error: `${currentKing.name}의 기년은 ${maxYear}년까지입니다 (원년 ${currentKing.wonAD}년 · 재위 ${currentKing.accAD}~${currentKing.endAD})` }
+      const ad = currentKing.wonAD + y - 1
       return { ad, ganjji: ganjjiLabel(ad) }
     }
 
@@ -311,7 +331,7 @@ function EraToADTab() {
   }
 
   const placeholder = eraType === 'joseon'
-    ? `1 ~ ${currentKing.endAD - currentKing.startAD + 1}`
+    ? `1 ~ ${currentKing.endAD - currentKing.wonAD + 1}`
     : currentEra ? `1 ~ ${currentEra.endAD ? currentEra.endAD - currentEra.baseYear : '현재'}` : ''
 
   const inputLabel = eraType === 'joseon'
@@ -335,7 +355,7 @@ function EraToADTab() {
           <select id="history-era-f1" className={styles.select} value={kingIdx}
             onChange={e => { setKingIdx(Number(e.target.value)); setYearStr('') }}>
             {JOSEON_KINGS.map((k, i) => (
-              <option key={i} value={i}>{k.num}대 {k.name} ({k.startAD}~{k.endAD})</option>
+              <option key={i} value={i}>{k.num}대 {k.name} (재위 {k.accAD}~{k.endAD})</option>
             ))}
           </select>
         </div>
@@ -346,7 +366,7 @@ function EraToADTab() {
             onChange={e => { setEraId(e.target.value); setYearStr('') }}>
             {(ERAS_BY[eraType] ?? []).map(e => (
               <option key={e.id} value={e.id}>
-                {e.name} ({e.hanja}) {e.endAD ? `${e.startAD}~${e.endAD}` : `${e.startAD}~`}
+                {e.name} ({e.hanja}) {e.endAD ? `${adShort(e.startAD)}~${e.endAD}` : `${adShort(e.startAD)}~`}
               </option>
             ))}
           </select>
@@ -354,9 +374,10 @@ function EraToADTab() {
       )}
 
       <div className={styles.fieldRow}>
-        <label className={styles.fieldLabel}>{inputLabel}</label>
+        <label className={styles.fieldLabel} htmlFor="history-era-y1">{inputLabel}</label>
         <input
-          type="number" inputMode="decimal" min={1} className={styles.numInput}
+          id="history-era-y1"
+          type="text" inputMode="numeric" maxLength={4} className={styles.numInput}
           value={yearStr} onChange={e => setYearStr(e.target.value)}
           placeholder={placeholder}
         />
@@ -364,9 +385,9 @@ function EraToADTab() {
 
       {result && (
         'error' in result ? (
-          <p className={styles.errorMsg}>{result.error}</p>
+          <p className={styles.errorMsg} role="alert">{result.error}</p>
         ) : (
-          <div className={styles.resultBox}>
+          <div className={styles.resultBox} role="status">
             <div className={styles.resultBig}>{adDisplay(result.ad)}</div>
             <div className={styles.resultSub}>{result.ganjji}</div>
             {eraType === 'joseon' && (
@@ -386,23 +407,27 @@ function ADToEraTab() {
   const [bce,     setBce]     = useState(false)
 
   const adYear = useMemo<number | null>(() => {
-    const y = parseInt(yearStr)
-    if (!yearStr || isNaN(y) || y < 1) return null
+    if (!/^\d{1,4}$/.test(yearStr.trim())) return null
+    const y = parseInt(yearStr, 10)
+    if (y < 1) return null
     return bce ? 1 - y : y
   }, [yearStr, bce])
 
-  const matches = useMemo<{ label: string; value: number; group: string }[]>(() => {
+  const matches = useMemo<{ label: string; value: string; group: string }[]>(() => {
     if (adYear === null) return []
     const y = adYear
-    const res: { label: string; value: number; group: string }[] = []
+    const res: { label: string; value: string; group: string }[] = []
     for (const era of ERAS) {
       const ey = y - era.baseYear
       if (ey >= 1 && y >= era.startAD && (era.endAD === undefined || y <= era.endAD))
-        res.push({ label: `${era.name} (${era.hanja})`, value: ey, group: era.group })
+        res.push({ label: `${era.name} (${era.hanja})`, value: `${ey}년`, group: era.group })
     }
     for (const king of JOSEON_KINGS) {
-      if (y >= king.startAD && y <= king.endAD)
-        res.push({ label: `조선 ${king.num}대 ${king.name}`, value: y - king.startAD + 1, group: 'joseon' })
+      if (y >= king.accAD && y <= king.endAD) {
+        // 즉위년칭원이 아닌 왕은 즉위한 해가 기년 0 (= 즉위년) — 이듬해부터 원년
+        const ky = y - king.wonAD + 1
+        res.push({ label: `조선 ${king.num}대 ${king.name}`, value: ky >= 1 ? `${ky}년` : '즉위년', group: 'joseon' })
+      }
     }
     return res
   }, [adYear])
@@ -411,7 +436,8 @@ function ADToEraTab() {
     <div className={styles.section}>
       <div className={styles.bceRow}>
         <input
-          type="number" inputMode="decimal" min={1} className={styles.numInputWide}
+          type="text" inputMode="numeric" maxLength={4} className={styles.numInputWide}
+          aria-label="서기 연도"
           value={yearStr} onChange={e => setYearStr(e.target.value)}
           placeholder="연도 입력 (예: 1446)"
         />
@@ -422,11 +448,11 @@ function ADToEraTab() {
       </div>
 
       {adYear !== null && (
-        <div className={styles.resultBox}>
+        <div className={styles.resultBox} role="status">
           <div className={styles.resultBig}>{adDisplay(adYear)}</div>
           <div className={styles.resultSub}>{ganjjiLabel(adYear)}</div>
           {matches.length > 0 ? (
-            <div style={{ overflowX: 'auto', marginTop: '14px' }}>
+            <div className="tableScroll" style={{ marginTop: '14px' }}>
               <table className={styles.eraTable}>
                 <thead>
                   <tr><th scope="col">연호</th><th scope="col">재위·기년</th><th scope="col">구분</th></tr>
@@ -435,7 +461,7 @@ function ADToEraTab() {
                   {matches.map((m, i) => (
                     <tr key={i}>
                       <td>{m.label}</td>
-                      <td className={styles.eraYear}>{m.value}년</td>
+                      <td className={styles.eraYear}>{m.value}</td>
                       <td className={styles.eraGroup}>{GROUP_LABELS[m.group] ?? m.group}</td>
                     </tr>
                   ))}
@@ -479,7 +505,7 @@ function GanjjiTab() {
           <p className={styles.pickerTitle}>천간 (天干)</p>
           <div className={styles.stemGrid}>
             {STEMS_KR.map((s, i) => (
-              <button key={i}
+              <button key={i} type="button" aria-pressed={stemIdx === i}
                 className={`${styles.pickerBtn}${stemIdx === i ? ' ' + styles.pickerActive : ''}`}
                 onClick={() => setStemIdx(i)}>
                 <span className={styles.pickerKr}>{s}</span>
@@ -492,7 +518,7 @@ function GanjjiTab() {
           <p className={styles.pickerTitle}>지지 (地支)</p>
           <div className={styles.branchGrid}>
             {BRANCHES_KR.map((b, i) => (
-              <button key={i}
+              <button key={i} type="button" aria-pressed={branchIdx === i}
                 className={`${styles.pickerBtn}${branchIdx === i ? ' ' + styles.pickerActive : ''}`}
                 onClick={() => setBranchIdx(i)}>
                 <span className={styles.pickerKr}>{b}</span>
@@ -505,14 +531,14 @@ function GanjjiTab() {
       </div>
 
       {!isValid && (
-        <p className={styles.errorMsg}>
+        <p className={styles.errorMsg} role="alert">
           {STEMS_KR[stemIdx]}{BRANCHES_KR[branchIdx]} ({STEMS_HJ[stemIdx]}{BRANCHES_HJ[branchIdx]})는
           유효하지 않은 간지 조합입니다. 천간과 지지는 양음이 일치해야 합니다.
         </p>
       )}
 
       {isValid && recentYears.length > 0 && (
-        <div className={styles.resultBox}>
+        <div className={styles.resultBox} role="status">
           <div className={styles.resultBig}>
             {STEMS_KR[stemIdx]}{BRANCHES_KR[branchIdx]}년 ({STEMS_HJ[stemIdx]}{BRANCHES_HJ[branchIdx]})
           </div>
@@ -541,7 +567,8 @@ function GanjjiTab() {
 
 type Period = 'all' | 'ancient' | 'medieval' | 'joseon' | 'modern'
 const PERIOD_LABELS: [Period, string][] = [
-  ['all','전체'], ['ancient','고대 (~668)'], ['medieval','삼국·고려'], ['joseon','조선'], ['modern','근현대'],
+  // medieval 필터 범위는 669~1391 — 삼국시대(~668)는 ancient에 속하므로 '남북국·고려'
+  ['all','전체'], ['ancient','고대 (~668)'], ['medieval','남북국·고려'], ['joseon','조선'], ['modern','근현대'],
 ]
 
 function TimelineTab() {
@@ -557,7 +584,7 @@ function TimelineTab() {
     if (searchStr.trim()) {
       const q = searchStr.trim()
       list = list.filter(([y, label]) => {
-        const displayY = y > 0 ? String(y) : String(1 - y)
+        const displayY = y > 0 ? String(y) : `기원전 ${1 - y}`
         return displayY.includes(q) || label.includes(q)
       })
     }
@@ -568,7 +595,7 @@ function TimelineTab() {
     <div className={styles.section}>
       <div className={styles.filterRow}>
         {PERIOD_LABELS.map(([p, label]) => (
-          <button key={p}
+          <button key={p} type="button" aria-pressed={period === p}
             className={`${styles.filterBtn}${period === p ? ' ' + styles.filterActive : ''}`}
             onClick={() => setPeriod(p)}>
             {label}
