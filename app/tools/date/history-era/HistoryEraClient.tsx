@@ -338,6 +338,13 @@ function EraToADTab() {
     ? `${currentKing.name} 재위 년도`
     : currentEra ? `${currentEra.name} (${currentEra.hanja}) 년도` : '년도'
 
+  // 개원·퇴위(즉위·전위)가 있던 해 — 연 단위 변환이라 월일에 따라 두 연호가 병존
+  const isBoundaryYear = result !== null && !('error' in result) && (
+    eraType === 'joseon'
+      ? result.ad === currentKing.accAD || result.ad === currentKing.endAD
+      : !!currentEra && (result.ad === currentEra.startAD || result.ad === currentEra.endAD)
+  )
+
   return (
     <div className={styles.section}>
       <div className={styles.radioGroup}>
@@ -393,6 +400,12 @@ function EraToADTab() {
             {eraType === 'joseon' && (
               <div className={styles.resultSub}>조선 {currentKing.num}대 {currentKing.name} {yearStr}년</div>
             )}
+            {isBoundaryYear && (
+              <p className={styles.mutedNote}>
+                이 해는 연호(기년)가 바뀐 경계 연도입니다. 변환은 연 단위이므로 실제 월일에 따라
+                이전·다음 연호가 함께 쓰였습니다.
+              </p>
+            )}
           </div>
         )
       )}
@@ -432,6 +445,12 @@ function ADToEraTab() {
     return res
   }, [adYear])
 
+  // 이 해에 개원·종료(즉위·전위)된 연호가 있으면 연 단위 변환 한계 안내
+  const isBoundaryYear = adYear !== null && (
+    ERAS.some(e => adYear === e.startAD || adYear === e.endAD) ||
+    JOSEON_KINGS.some(k => adYear === k.accAD || adYear === k.endAD)
+  )
+
   return (
     <div className={styles.section}>
       <div className={styles.bceRow}>
@@ -470,6 +489,12 @@ function ADToEraTab() {
             </div>
           ) : (
             <p className={styles.mutedNote}>해당 연도에 매핑되는 연호가 없습니다.</p>
+          )}
+          {isBoundaryYear && matches.length > 0 && (
+            <p className={styles.mutedNote}>
+              이 해에 개원·종료된 연호가 있습니다. 변환은 연 단위이므로 실제 월일에 따라
+              연호가 달라질 수 있습니다 (예: 1989년은 1월 7일까지 쇼와 64년, 1월 8일부터 헤이세이 원년).
+            </p>
           )}
         </div>
       )}
@@ -603,7 +628,7 @@ function TimelineTab() {
         ))}
       </div>
       <input
-        type="text" className={styles.searchInput}
+        type="text" className={styles.searchInput} aria-label="연도 또는 사건 검색"
         placeholder="연도 또는 사건 검색..."
         value={searchStr} onChange={e => setSearchStr(e.target.value)}
       />

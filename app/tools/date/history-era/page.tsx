@@ -369,6 +369,37 @@ export default function HistoryEraPage() {
           </div>
         </div>
 
+        {/* ── 자료 기준 및 한계 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+            📖 자료 기준 및 한계
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            본 도구의 변환 기준과, 사료·표기 방식에 따라 결과가 달라질 수 있는 지점입니다.
+          </p>
+          <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>조선 왕 기년</strong> — <a href="https://sillok.history.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>조선왕조실록</a>(국사편찬위원회)
+              연대목록의 유년칭원법 기준. 즉위한 해를 1년으로 세는 문헌과는 1년 차이가 날 수 있으며, 순종은 통용 표기에 맞춰 융희 연호 기년(원년 1907)을 씁니다.
+            </li>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>일본 연호</strong> — 개원 정령·관보 기준
+              (레이와: <a href="https://elaws.e-gov.go.jp/document?lawid=431CO0000000143" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>元号を改める政令 ↗</a>).
+              변환은 연 단위라 경계 연도(1912·1926·1989·2019)는 월일에 따라 두 연호가 병존합니다 — 1989년 1월 7일까지 쇼와 64년, 1월 8일부터 헤이세이 원년.
+              계산기 결과에도 경계 연도 안내가 표시됩니다.
+            </li>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>민국 기년</strong> — 대만(중화민국)에서 현행 공식 사용
+              (<a href="https://www.dgpa.gov.tw/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>행정원 인사행정총처 ↗</a> 달력 기준, 2026년 = 민국 115년).
+              중국 대륙은 1949년 이후 서기만 사용합니다.
+            </li>
+            <li>
+              <strong style={{ color: 'var(--text)' }}>음력 기반 사료</strong> — 조선·중국 연호는 음력 기반이라 연말~연초의 사건은
+              사료 날짜에 따라 서기 연도가 ±1년 다르게 표기될 수 있습니다. 논문·과제 등 정밀 인용에는 원사료의 월일을 확인하세요.
+            </li>
+          </ul>
+        </div>
+
         {/* ── 8. FAQ (accordion) ── */}
         <div>
           <Faq items={FAQ_LD} />
