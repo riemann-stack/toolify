@@ -9,32 +9,33 @@ import styles from './life-time.module.css'
  * 활동·격언 데이터
  * ───────────────────────────────────────────────────────── */
 const ACTIVITIES = [
-  { id: 'read',   icon: '📖', label: '독서',          proverb: '1만 시간이면 어떤 분야의 전문가가 될 수 있는 시간입니다.' },
-  { id: 'sport',  icon: '🏃', label: '운동',          proverb: '주 5회 30분 운동만으로도 평균 수명이 약 4년 늘어난다는 연구가 있습니다 (Lancet, 2017).' },
+  { id: 'read',   icon: '📖', label: '독서',          proverb: '매일 30분의 독서는 1년이면 약 180시간 — 책 20권이 넘는 독서량입니다.' },
+  { id: 'sport',  icon: '🏃', label: '운동',          proverb: '주 150분 걷기 수준의 활동만으로 기대수명이 3~4년 늘어난다는 대규모 연구가 있습니다 (PLOS Medicine, 2012).' },
   { id: 'create', icon: '🎨', label: '창작',          proverb: '매일 30분의 창작은 5년이면 한 권의 책, 한 장의 앨범이 됩니다.' },
   { id: 'family', icon: '👨‍👩‍👧', label: '가족 시간',  proverb: '함께한 시간의 양이 곧 관계의 깊이입니다.' },
   { id: 'side',   icon: '💼', label: '사이드 프로젝트', proverb: '하루 30분의 사이드 프로젝트는 5년 후 부업·이직·창업의 기반이 됩니다.' },
-  { id: 'medi',   icon: '🧘', label: '명상',          proverb: '하루 10분 명상은 스트레스 호르몬을 약 25% 줄인다는 보고가 있습니다 (Harvard, 2011).' },
-  { id: 'music',  icon: '🎵', label: '악기 연습',     proverb: '1시간씩 5년이면 오케스트라 수준 연주가 가능합니다.' },
-  { id: 'lang',   icon: '🌐', label: '외국어 학습',   proverb: '하루 30분, 2년이면 일상 회화·간단한 업무 가능 수준에 도달합니다.' },
+  { id: 'medi',   icon: '🧘', label: '명상',          proverb: '8주 명상 프로그램으로 불안·우울·스트레스 지표가 개선된다는 메타분석이 있습니다 (JAMA Internal Medicine, 2014).' },
+  { id: 'music',  icon: '🎵', label: '악기 연습',     proverb: '하루 1시간씩 5년이면 약 1,800시간 — 아마추어 합주에 참여할 실력을 기대할 수 있는 시간입니다.' },
+  { id: 'lang',   icon: '🌐', label: '외국어 학습',   proverb: '하루 30분, 2년이면 약 365시간 — 기초 회화를 탄탄히 쌓기에 충분한 시간입니다.' },
 ] as const
 type ActivityId = typeof ACTIVITIES[number]['id']
 
 const MEDITATIONS = [
   { text: '시간은 줄어드는 것이 아니라, 선택으로 채워지는 것입니다.', author: null },
-  { text: '당신이 가진 가장 비싼 자원은 시간입니다.', author: '워런 버핏' },
+  { text: '원하는 것은 거의 무엇이든 살 수 있지만, 시간은 살 수 없다.', author: '워런 버핏 (2017년 대담)' },
   { text: '메멘토 모리, 카르페 디엠 — 죽음을 기억하고, 오늘을 살아라.', author: '라틴 격언' },
-  { text: '삶이 짧은 게 아니라, 우리가 시간을 낭비할 뿐이다.', author: '세네카' },
+  { text: '삶이 짧은 게 아니라, 우리가 시간을 낭비할 뿐이다.', author: '세네카, 「인생의 짧음에 관하여」 1장' },
   { text: '시간을 누군가에게 주는 것은 가장 진심 어린 선물입니다.', author: null },
-  { text: '오늘 죽을 수 있는 것처럼 행동하라. 그러나 영원히 살 것처럼 계획하라.', author: '마르쿠스 아우렐리우스' },
-  { text: '하루를 시작할 때마다 자신에게 말하라 — 오늘은 다시 오지 않는다.', author: '에픽테토스' },
+  { text: '지금 당장이라도 삶을 떠날 수 있다. 그 사실이 네가 행하고 말하고 생각하는 것을 결정하게 하라.', author: '마르쿠스 아우렐리우스, 「명상록」 2.11' },
+  { text: '만 년을 살 것처럼 행동하지 마라. 살 수 있는 동안, 할 수 있는 동안, 선한 사람이 되라.', author: '마르쿠스 아우렐리우스, 「명상록」 4.17' },
 ]
 
 /* 기대수명 프리셋 */
+/* 남·여 = 국가데이터처(구 통계청) 2024년 생명표(2025-12 발표), 세계 = UN WPP 2024 (WHO 최신 공식치는 2021년 71.4세라 미사용) */
 const EXPECTANCY_PRESETS = [
-  { id: 'kor_m', label: '🇰🇷 한국 남성 평균', value: 80.9 },
-  { id: 'kor_f', label: '🇰🇷 한국 여성 평균', value: 86.7 },
-  { id: 'who',   label: '🌐 WHO 글로벌 평균', value: 73.4 },
+  { id: 'kor_m', label: '🇰🇷 한국 남성 평균', value: 80.8 },
+  { id: 'kor_f', label: '🇰🇷 한국 여성 평균', value: 86.6 },
+  { id: 'who',   label: '🌐 세계 평균 (UN)',   value: 73.3 },
   { id: 'cent',  label: '✨ 100세 시대',       value: 100  },
 ]
 
@@ -68,8 +69,12 @@ export default function LifeTimeClient() {
   const [mode, setMode] = useState<Mode>('growth')
   const [stage, setStage] = useState<ModeStage>('show')
 
+  /* SSG 빌드 시각이 정적 HTML에 박히는 것 방지 — 마운트 후에만 시간 의존 결과 렌더 */
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
   /* 입력: 생년월일 */
-  const today = useMemo(() => { const d = new Date(); d.setHours(0,0,0,0); return d }, [])
+  const today = useMemo(() => { const d = new Date(); d.setHours(0,0,0,0); return d }, [mounted]) // eslint-disable-line react-hooks/exhaustive-deps
   const currentYear = today.getFullYear()
   const [birthYear,  setBirthYear]  = useState(1990)
   const [birthMonth, setBirthMonth] = useState(1)
@@ -97,7 +102,10 @@ export default function LifeTimeClient() {
     : n(expectancyCustom, 1)
 
   const calc = useMemo(() => {
-    const endDate = new Date(birthDate); endDate.setFullYear(birthDate.getFullYear() + Math.round(expectancy))
+    /* 소수 기대수명(80.8세 등)을 연+일로 반영 — 반올림(81세) 시 프리셋 표기와 어긋남 */
+    const endDate = new Date(birthDate)
+    endDate.setFullYear(birthDate.getFullYear() + Math.floor(expectancy))
+    endDate.setDate(endDate.getDate() + Math.round((expectancy % 1) * 365.25))
     const totalMs = endDate.getTime() - birthDate.getTime()
     const passedMs = Math.max(0, today.getTime() - birthDate.getTime())
     const remainingMs = Math.max(0, endDate.getTime() - today.getTime())
@@ -119,6 +127,7 @@ export default function LifeTimeClient() {
       total: { days: totalDays, weeks: totalWeeks },
       progress,
       yearsRemaining,
+      beyond: passedMs > totalMs,  // 나이가 설정한 기대수명을 이미 넘어선 경우
       events: {
         birthdays:  Math.max(0, Math.floor(yearsRemaining)),
         springs:    Math.max(0, Math.floor(yearsRemaining)),
@@ -247,17 +256,17 @@ export default function LifeTimeClient() {
           <span className={styles.cardLabelHint}>편안한 분위기로 자유롭게 변경하세요</span>
         </div>
         <div className={styles.modeGrid}>
-          <button type="button" className={`${styles.modeCard} ${styles.modeGrowth} ${mode === 'growth' ? styles.modeActive : ''}`} onClick={() => selectMode('growth')}>
+          <button type="button" aria-pressed={mode === 'growth'} className={`${styles.modeCard} ${styles.modeGrowth} ${mode === 'growth' ? styles.modeActive : ''}`} onClick={() => selectMode('growth')}>
             <div className={styles.modeIcon}>🌱</div>
             <div className={styles.modeName}>성장 모드</div>
             <div className={styles.modeDesc}>지금까지의 시간 + 가능한 시간. 성취·가능성 중심.</div>
           </button>
-          <button type="button" className={`${styles.modeCard} ${styles.modeBalance} ${mode === 'balance' ? styles.modeActive : ''}`} onClick={() => selectMode('balance')}>
+          <button type="button" aria-pressed={mode === 'balance'} className={`${styles.modeCard} ${styles.modeBalance} ${mode === 'balance' ? styles.modeActive : ''}`} onClick={() => selectMode('balance')}>
             <div className={styles.modeIcon}>⏳</div>
             <div className={styles.modeName}>균형 모드</div>
             <div className={styles.modeDesc}>살아온 시간과 앞으로의 시간 균형. 진행률·만남 중심.</div>
           </button>
-          <button type="button" className={`${styles.modeCard} ${styles.modeMemento} ${mode === 'memento' ? styles.modeActive : ''}`} onClick={() => selectMode('memento')}>
+          <button type="button" aria-pressed={mode === 'memento'} className={`${styles.modeCard} ${styles.modeMemento} ${mode === 'memento' ? styles.modeActive : ''}`} onClick={() => selectMode('memento')}>
             <div className={styles.modeIcon}>📿</div>
             <div className={styles.modeName}>메멘토 모리</div>
             <div className={styles.modeDesc}>전통적 의미의 시간 인식. 진지한 톤.</div>
@@ -270,7 +279,7 @@ export default function LifeTimeClient() {
         <div className={styles.mementoConfirm}>
           <p className={styles.mementoConfirmTitle}>메멘토 모리 모드 진입 안내</p>
           <p className={styles.mementoConfirmBody}>
-            이 모드는 <strong style={{ color: '#D7B6E8' }}>시간의 유한성을 직시</strong>하기 위한 모드입니다.
+            이 모드는 <strong style={{ color: '#8E44AD' }}>시간의 유한성을 직시</strong>하기 위한 모드입니다.
             심리적으로 무겁게 느껴질 수 있어, 진입 전 안내를 드립니다.
             의학적·실제적 수명 예측이 아니며, 고대 로마 스토아 철학의 전통을 따라
             현재를 더 의식적으로 살기 위한 가이드일 뿐입니다.
@@ -283,19 +292,19 @@ export default function LifeTimeClient() {
       )}
 
       {/* 입력 카드 */}
-      {stage === 'show' && (
+      {mounted && stage === 'show' && (
         <div className={styles.card}>
           <div className={styles.cardLabel}><span>기본 정보</span></div>
 
           <p className={styles.cardLabelHint} style={{ marginBottom: 6 }}>생년월일</p>
           <div className={styles.dobRow}>
-            <select className={styles.dobSelect} value={birthYear} onChange={e => setBirthYear(Number(e.target.value))}>
+            <select className={styles.dobSelect} aria-label="출생 연도" value={birthYear} onChange={e => setBirthYear(Number(e.target.value))}>
               {yearOptions.map(y => <option key={y} value={y}>{y}년</option>)}
             </select>
-            <select className={styles.dobSelect} value={birthMonth} onChange={e => setBirthMonth(Number(e.target.value))}>
+            <select className={styles.dobSelect} aria-label="출생 월" value={birthMonth} onChange={e => setBirthMonth(Number(e.target.value))}>
               {monthOptions.map(m => <option key={m} value={m}>{m}월</option>)}
             </select>
-            <select className={styles.dobSelect} value={birthDay} onChange={e => setBirthDay(Number(e.target.value))}>
+            <select className={styles.dobSelect} aria-label="출생 일" value={birthDay} onChange={e => setBirthDay(Number(e.target.value))}>
               {dayOptions.map(d => <option key={d} value={d}>{d}일</option>)}
             </select>
           </div>
@@ -303,8 +312,8 @@ export default function LifeTimeClient() {
           <div style={{ height: 14 }} />
           <p className={styles.cardLabelHint} style={{ marginBottom: 6 }}>성별 (선택 — 기대수명 자동 추천)</p>
           <div className={styles.genderRow}>
-            <button type="button" className={`${styles.genderBtn} ${gender === 'male' ? styles.genderActive : ''}`}   onClick={() => setGender('male')}>남성</button>
-            <button type="button" className={`${styles.genderBtn} ${gender === 'female' ? styles.genderActive : ''}`} onClick={() => setGender('female')}>여성</button>
+            <button type="button" aria-pressed={gender === 'male'} className={`${styles.genderBtn} ${gender === 'male' ? styles.genderActive : ''}`}   onClick={() => setGender('male')}>남성</button>
+            <button type="button" aria-pressed={gender === 'female'} className={`${styles.genderBtn} ${gender === 'female' ? styles.genderActive : ''}`} onClick={() => setGender('female')}>여성</button>
           </div>
 
           <div style={{ height: 14 }} />
@@ -314,7 +323,7 @@ export default function LifeTimeClient() {
               <button
                 key={p.id}
                 type="button"
-                className={`${styles.expectancyBtn} ${expectancyPreset === p.id ? styles.expectancyActive : ''}`}
+                aria-pressed={expectancyPreset === p.id} className={`${styles.expectancyBtn} ${expectancyPreset === p.id ? styles.expectancyActive : ''}`}
                 onClick={() => setExpectancyPreset(p.id)}
               >
                 {p.label}
@@ -328,18 +337,22 @@ export default function LifeTimeClient() {
               type="number" inputMode="decimal"
               min={1}
               max={150}
+              aria-label="기대수명 직접 입력 (세)"
               value={expectancyCustom}
-              onChange={e => { setExpectancyCustom(n(e.target.value, 1)); setExpectancyPreset(null) }}
+              onChange={e => { setExpectancyCustom(Math.min(150, n(e.target.value, 1))); setExpectancyPreset(null) }}
             />
             <span className={styles.unit}>세 (직접 입력)</span>
           </div>
+          <p className={styles.cardLabelHint} style={{ marginTop: 10, lineHeight: 1.7 }}>
+            ※ 평균 기대수명은 <strong style={{ color: 'var(--text)' }}>출생 시 기준</strong>입니다. 현재 나이가 많을수록 실제 기대여명 기준 종점은 이보다 늦어집니다(예: 60세는 평균적으로 80대 중반 이상). 통계청 완전생명표의 나이별 기대여명을 참고해 직접 입력으로 조정해 보세요.
+          </p>
         </div>
       )}
 
       {/* ─── 결과 ─── */}
-      {stage === 'show' && mode === 'growth' && (
+      {mounted && stage === 'show' && mode === 'growth' && (
         <>
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <p className={styles.heroLabel}>지금까지</p>
             <p className={styles.heroNum}>{fmt(calc.passed.days)}<span className={styles.heroUnit}>일을 살아오셨어요</span></p>
             <p className={styles.heroSub}>약 {fmt(calc.passed.hours)}시간 · {fmt(calc.passed.minutes)}분의 시간이 함께했습니다</p>
@@ -356,16 +369,28 @@ export default function LifeTimeClient() {
           </div>
 
           <div className={styles.hero} style={{ borderColor: 'rgba(8,145,178,0.35)' }}>
-            <p className={styles.heroLabel}>앞으로 펼쳐질</p>
-            <p className={`${styles.heroNum} ${styles.heroNumSmall}`} style={{ color: '#0891B2' }}>{fmt(calc.remaining.days)}<span className={styles.heroUnit}>일이 함께할 가능 시간</span></p>
-            <p className={styles.heroSub}>“가능 시간”은 채워가는 것입니다. 어떻게 채울지는 오늘의 선택에 달려 있어요.</p>
+            {calc.beyond ? (
+              <>
+                <p className={styles.heroLabel}>평균 너머의 시간</p>
+                <p className={styles.heroSub} style={{ fontSize: 14, lineHeight: 1.8 }}>
+                  설정한 기대수명({expectancy % 1 ? expectancy.toFixed(1) : expectancy}세)은 <strong style={{ color: 'var(--text)' }}>평균일 뿐</strong>이며, 이미 그 평균을 넘어 하루하루를 더하고 계십니다.
+                  「100세 시대」 프리셋이나 직접 입력으로 목표 나이를 조정해 보세요.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className={styles.heroLabel}>앞으로 펼쳐질</p>
+                <p className={`${styles.heroNum} ${styles.heroNumSmall}`} style={{ color: 'var(--cat-health)' }}>{fmt(calc.remaining.days)}<span className={styles.heroUnit}>일이 함께할 가능 시간</span></p>
+                <p className={styles.heroSub}>“가능 시간”은 채워가는 것입니다. 어떻게 채울지는 오늘의 선택에 달려 있어요.</p>
+              </>
+            )}
           </div>
         </>
       )}
 
-      {stage === 'show' && mode === 'balance' && (
+      {mounted && stage === 'show' && mode === 'balance' && (
         <>
-          <div className={styles.hero}>
+          <div className={styles.hero} role="status">
             <div className={styles.heroDual}>
               <div>
                 <p className={styles.heroDualLabel}>살아온 시간</p>
@@ -388,7 +413,7 @@ export default function LifeTimeClient() {
               </div>
               <div className={styles.progressLabel}>
                 <span>출생</span>
-                <span>{Math.round(expectancy)}세</span>
+                <span>{expectancy % 1 ? expectancy.toFixed(1) : expectancy}세</span>
               </div>
               <p className={styles.progressPct}>{calc.progress.toFixed(1)}% 지점</p>
             </div>
@@ -399,6 +424,11 @@ export default function LifeTimeClient() {
               <span>앞으로 만날 수 있는</span>
               <span className={styles.cardLabelHint}>기대수명 기준</span>
             </div>
+            {calc.beyond && (
+              <p className={styles.cardLabelHint} style={{ marginBottom: 10, lineHeight: 1.7 }}>
+                설정한 기대수명을 이미 넘어 0으로 표시됩니다 — 평균일 뿐이니 직접 입력으로 목표 나이를 조정해 보세요.
+              </p>
+            )}
             <div className={styles.eventGrid}>
               <div className={styles.eventItem}><div className={styles.eventEmoji}>🎂</div><div className={styles.eventName}>생일</div><div className={styles.eventCount}>{calc.events.birthdays}<span className={styles.eventUnit}>번</span></div></div>
               <div className={styles.eventItem}><div className={styles.eventEmoji}>🌸</div><div className={styles.eventName}>봄</div><div className={styles.eventCount}>{calc.events.springs}<span className={styles.eventUnit}>번</span></div></div>
@@ -431,12 +461,20 @@ export default function LifeTimeClient() {
         </>
       )}
 
-      {stage === 'show' && mode === 'memento' && (
+      {mounted && stage === 'show' && mode === 'memento' && (
         <>
-          <div className={styles.hero}>
-            <p className={styles.heroLabel}>기대수명 {Math.round(expectancy)}세 기준</p>
-            <p className={`${styles.heroNum} ${styles.heroNumSmall}`}>약 {fmt(calc.remaining.days)}<span className={styles.heroUnit}>일이 남아 있습니다</span></p>
-            <p className={styles.heroSub}>약 {fmt(calc.remaining.weeks)}주 · 약 {Math.round(calc.yearsRemaining)}년의 시간</p>
+          <div className={styles.hero} role="status">
+            <p className={styles.heroLabel}>기대수명 {expectancy % 1 ? expectancy.toFixed(1) : expectancy}세 기준</p>
+            {calc.beyond ? (
+              <p className={styles.heroSub} style={{ fontSize: 14, lineHeight: 1.8 }}>
+                통계적 평균을 이미 넘어서셨습니다. 기대수명은 <strong style={{ color: 'var(--text)' }}>집단의 평균</strong>일 뿐 개인의 시간을 정하지 않습니다 — 지금의 하루하루가 평균 너머의 시간입니다. 직접 입력으로 목표 나이를 설정해 계속 살펴보세요.
+              </p>
+            ) : (
+              <>
+                <p className={`${styles.heroNum} ${styles.heroNumSmall}`}>약 {fmt(calc.remaining.days)}<span className={styles.heroUnit}>일이 남아 있습니다</span></p>
+                <p className={styles.heroSub}>약 {fmt(calc.remaining.weeks)}주 · 약 {Math.round(calc.yearsRemaining)}년의 시간</p>
+              </>
+            )}
           </div>
 
           <div className={styles.card}>
@@ -458,7 +496,7 @@ export default function LifeTimeClient() {
                     const isNow  = idx === weekGrid.passedCells
                     const x = col * (weekGrid.cellSize + weekGrid.gap)
                     const y = row * (weekGrid.cellSize + weekGrid.gap)
-                    const fill = isPast ? 'rgba(255,255,255,0.35)' : isNow ? '#0EA5E9' : 'rgba(255,255,255,0.06)'
+                    const fill = isPast ? 'rgba(15,23,42,0.4)' : isNow ? 'var(--accent)' : 'rgba(15,23,42,0.06)'
                     return (
                       <rect
                         key={`${row}-${col}`}
@@ -490,7 +528,7 @@ export default function LifeTimeClient() {
       )}
 
       {/* 행동 전환 카드 (모든 모드 공통) */}
-      {stage === 'show' && (
+      {mounted && stage === 'show' && (
         <div className={styles.card}>
           <div className={styles.cardLabel}>
             <span>하루 {actionMin}분의 가치</span>
@@ -505,8 +543,9 @@ export default function LifeTimeClient() {
                 type="number" inputMode="decimal"
                 min={1}
                 max={480}
+                aria-label="매일 투자 시간 (분)"
                 value={actionMin}
-                onChange={e => setActionMin(n(e.target.value, 1))}
+                onChange={e => setActionMin(Math.min(480, n(e.target.value, 1)))}
               />
             </div>
             <div className={styles.actionInputCell}>
@@ -522,7 +561,7 @@ export default function LifeTimeClient() {
               <button
                 key={a.id}
                 type="button"
-                className={`${styles.activityBtn} ${activityId === a.id ? styles.activityActive : ''}`}
+                aria-pressed={activityId === a.id} className={`${styles.activityBtn} ${activityId === a.id ? styles.activityActive : ''}`}
                 onClick={() => setActivityId(a.id)}
               >
                 <span>{a.icon}</span>{a.label}
@@ -556,7 +595,7 @@ export default function LifeTimeClient() {
       )}
 
       {/* 공유 */}
-      {stage === 'show' && (
+      {mounted && stage === 'show' && (
         <button type="button" className={`${styles.shareBtn} ${copied ? styles.copied : ''}`} onClick={handleShare}>
           {copied ? '✓ 복사 완료' : '공유 텍스트 복사'}
         </button>

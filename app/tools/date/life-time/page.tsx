@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/date/life-time',
@@ -25,7 +26,7 @@ const FAQ_LD = [
               },
               {
                 q: '매일 30분이 정말 큰 차이를 만드나요?',
-                a: '네. 매일 30분을 5년간 지속하면 약 <strong>912시간</strong>이 누적됩니다. 이는 한 분야의 중급자 수준에 충분한 시간이며, 매일 1시간씩 10년이면 약 3,650시간으로 한 분야의 전문가급 시간입니다. <strong>"복리의 힘"</strong>은 시간에도 적용됩니다.',
+                a: '네. 매일 30분을 5년간 지속하면 약 <strong>912시간</strong>이 누적됩니다. 어떤 분야든 기초를 훌쩍 넘어서기에 충분한 시간이며, 매일 1시간씩 10년이면 약 3,650시간이 쌓입니다. <strong>"복리의 힘"</strong>은 시간에도 적용됩니다.',
               },
               {
                 q: '기대수명을 직접 입력할 수 있나요?',
@@ -78,7 +79,7 @@ export default function LifeTimePage() {
             </p>
             <p style={{ marginTop: 10 }}>
               하루 30분의 독서가 1년이면 약 <strong>182시간</strong>, 10년이면 약 <strong>1,820시간</strong>이 됩니다.
-              이는 한 분야의 전문가가 되기에 충분한 시간입니다.
+              한 분야에서 탄탄한 실력을 쌓기에 충분한 시간입니다.
               &ldquo;시간이 없다&rdquo;는 말은 종종 &ldquo;30분이 무력하다&rdquo;고 느끼기 때문에 생깁니다 — 이 도구는 그 30분의 무게를 다시 보여줍니다.
             </p>
           </div>
@@ -99,7 +100,7 @@ export default function LifeTimePage() {
             lineHeight: 1.9,
           }}>
             <p>
-              라틴어 <strong style={{ color: '#D7B6E8' }}>&lsquo;Memento Mori&rsquo;</strong>(메멘토 모리)는 <em>&ldquo;죽음을 기억하라&rdquo;</em>는 뜻으로,
+              라틴어 <strong style={{ color: '#8E44AD' }}>&lsquo;Memento Mori&rsquo;</strong>(메멘토 모리)는 <em>&ldquo;죽음을 기억하라&rdquo;</em>는 뜻으로,
               고대 로마 시대부터 사용된 철학 개념입니다.
             </p>
             <ul style={{ paddingLeft: 20, marginTop: 10, color: 'var(--muted)' }}>
@@ -114,34 +115,41 @@ export default function LifeTimePage() {
         {/* ── 3. 한국인 기대수명 통계 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            한국인 기대수명 통계 (통계청 2024년 기준)
+            한국인 기대수명 통계 (2024년 생명표)
           </h2>
+          <UpdatedMeta
+            date="2026년 7월"
+            basis="국가데이터처(구 통계청) 2024년 생명표 (2025년 12월 발표)"
+            sources={[{ label: '국가데이터처 2024년 생명표 보도자료', href: 'https://mods.go.kr/board.es?mid=a10301010000&bid=208&act=view&list_no=439533' }]}
+          />
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['구분', '기대수명', '건강수명'].map((h, i) => (
+                  {['구분', '기대수명', '유병기간 제외 기대수명'].map((h, i) => (
                     <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { c: '남성', l: '80.9세', h: '71.3세' },
-                  { c: '여성', l: '86.7세', h: '74.7세' },
-                  { c: '평균', l: '83.6세', h: '73.0세' },
+                  { c: '남성', l: '80.8세', h: '64.6세' },
+                  { c: '여성', l: '86.6세', h: '66.4세' },
+                  { c: '남녀 전체', l: '83.7세', h: '65.5세' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.c}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
-                    <td style={{ padding: '10px 12px', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--cat-health)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ※ 건강수명: 질병이나 부상으로 활동에 제약이 없는 기간. 실제 수명은 유전·생활습관·환경에 따라 크게 달라집니다.
+            ※ 유병기간 제외 기대수명: 질병·부상으로 활동에 제약이 없는 기간(2024년 생명표 공표값). WHO의 건강수명(HALE)과는 산출 방법이 달라
+            수치 차이가 큽니다. 세계 평균 기대수명은 UN 세계인구전망(WPP 2024) 기준 약 73.3세이며, WHO 공식 최신치는 코로나 영향이 반영된
+            2021년 71.4세입니다. 실제 수명은 유전·생활습관·환경에 따라 크게 달라집니다.
           </p>
         </div>
 
@@ -179,10 +187,10 @@ export default function LifeTimePage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
-              { q: '삶이 짧은 게 아니라, 우리가 시간을 낭비할 뿐이다.', a: '세네카 (로마 철학자)' },
-              { q: '당신이 가진 가장 비싼 자원은 시간입니다.',          a: '워런 버핏' },
-              { q: '오늘 죽을 수 있는 것처럼 행동하라. 그러나 영원히 살 것처럼 계획하라.', a: '마르쿠스 아우렐리우스' },
-              { q: '하루를 시작할 때마다 자신에게 말하라 — 오늘은 다시 오지 않는다.',     a: '에픽테토스' },
+              { q: '삶이 짧은 게 아니라, 우리가 시간을 낭비할 뿐이다.', a: '세네카, 「인생의 짧음에 관하여」 1장' },
+              { q: '원하는 것은 거의 무엇이든 살 수 있지만, 시간은 살 수 없다.', a: '워런 버핏 (2017년 대담)' },
+              { q: '지금 당장이라도 삶을 떠날 수 있다. 그 사실이 네가 행하고 말하고 생각하는 것을 결정하게 하라.', a: '마르쿠스 아우렐리우스, 「명상록」 2.11' },
+              { q: '만 년을 살 것처럼 행동하지 마라. 살 수 있는 동안, 할 수 있는 동안, 선한 사람이 되라.', a: '마르쿠스 아우렐리우스, 「명상록」 4.17' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
                 <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontStyle: 'italic', marginBottom: 6 }}>“{m.q}”</p>
@@ -199,10 +207,10 @@ export default function LifeTimePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { i: '🏃', t: '주 5회 30분 운동',  e: '평균 수명 +4.2년',                 src: 'Lancet, 2017' },
-              { i: '📖', t: '매일 독서 30분',    e: '어휘력·이해력 큰 향상',             src: 'Yale, 2016' },
-              { i: '✍️', t: '매일 글쓰기 20분',  e: '정신건강 지표 개선',                src: 'UT Austin, 2005' },
-              { i: '🧘', t: '명상 10분/일',      e: '스트레스 호르몬 25% 감소',          src: 'Harvard, 2011' },
+              { i: '🏃', t: '주 150분 걷기 수준 운동', e: '기대수명 +3.4년',                    src: 'Moore 외, PLOS Medicine, 2012' },
+              { i: '📖', t: '꾸준한 책 읽기',          e: '12년 추적 사망위험 20% 감소',         src: 'Bavishi 외(예일대), Social Science & Medicine, 2016' },
+              { i: '✍️', t: '표현적 글쓰기 15~20분',   e: '정신·신체 건강 지표 개선',            src: 'Pennebaker(텍사스대 오스틴) 연구 계열' },
+              { i: '🧘', t: '8주 명상 프로그램',       e: '불안·우울·통증 완만한 개선',          src: 'Goyal 외, JAMA Internal Medicine, 2014 (메타분석)' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 22, marginBottom: 6 }}>{r.i}</p>
