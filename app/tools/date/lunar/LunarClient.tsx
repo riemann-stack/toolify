@@ -182,8 +182,10 @@ export default function LunarClient() {
   const leapForYear = useMemo(() => (dir === 'l2s' ? leapMonth(year) : 0), [dir, year])
   const canLeap = dir === 'l2s' && leapForYear !== 0 && leapForYear === month
 
-  // day 가 현재 월 일수를 초과하면 보정
-  const safeDay = Math.min(day, daysInMonth)
+  // 양력 1900년 1월은 31일(음력 1900/1/1)부터만 데이터 존재 — 1~30일은 선택지에서 제외
+  const minDay = dir === 's2l' && year === 1900 && month === 1 ? 31 : 1
+  // day 가 현재 월 범위를 벗어나면 보정
+  const safeDay = Math.min(Math.max(day, minDay), daysInMonth)
 
   const result = useMemo(() => {
     try {
@@ -261,7 +263,7 @@ export default function LunarClient() {
           </div>
           <div className={s.selectWrap}>
             <select className={s.select} aria-label="일" value={safeDay} onChange={(e) => setDay(Number(e.target.value))}>
-              {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((d) => (
+              {Array.from({ length: daysInMonth - minDay + 1 }, (_, i) => minDay + i).map((d) => (
                 <option key={d} value={d}>{d}일</option>
               ))}
             </select>

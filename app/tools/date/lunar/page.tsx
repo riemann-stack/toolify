@@ -242,6 +242,7 @@ export default function LunarPage() {
           variant="default"
           sources={[
             { label: '한국천문연구원 음양력변환', href: 'https://astro.kasi.re.kr' },
+            { label: '2027년 월력요항 (우주항공청)', href: 'https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431' },
           ]}
         >
           본 변환기는 한국천문연구원(KASI) 음력 데이터(1900~2049) 기준입니다.
