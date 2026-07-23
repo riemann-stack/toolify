@@ -85,7 +85,8 @@
   min-width: 40px;
   text-align: center;
 }
-.durBad { color: #DC2626; font-size: 11px; }
+.durBad { color: var(--danger); font-size: 11px; }
+.durOngoing { color: var(--warning); font-size: 11px; }
 .removeBtn {
   width: 30px;
   height: 30px;
@@ -97,7 +98,7 @@
   font-size: 13px;
   line-height: 1;
 }
-@media (hover: hover) { .removeBtn:hover:not(:disabled) { border-color: #DC2626; color: #DC2626; } }
+@media (hover: hover) { .removeBtn:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); } }
 .removeBtn:disabled { opacity: 0.35; cursor: not-allowed; }
 
 .addBtn {
@@ -145,7 +146,7 @@
 .usageFill { height: 100%; border-radius: 999px; transition: width 0.3s ease; }
 .overWarn {
   font-size: 13px;
-  color: #DC2626;
+  color: var(--danger);
   line-height: 1.7;
   margin: 14px 0 0;
 }
