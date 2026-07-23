@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import s from './jet-lag.module.css'
 
 type City = { name: string; tz: string; offset: number }
@@ -60,23 +61,29 @@ const CITIES: City[] = [
   { name: '멜버른', tz: 'Australia/Melbourne', offset: 10 },
 ]
 
-/** 현재 실시간 UTC 오프셋(시간, DST 반영)을 해당 tz 로부터 계산 */
-function getLiveOffset(tz: string): number {
+/** 해당 시점(at)의 UTC 오프셋(시간, DST 반영)을 tz 로부터 계산 */
+function getOffsetAt(tz: string, at: Date): number {
   try {
-    const now = new Date()
     const fmt = new Intl.DateTimeFormat('en-US', {
       timeZone: tz,
       hour12: false,
       year: 'numeric', month: '2-digit', day: '2-digit',
       hour: '2-digit', minute: '2-digit', second: '2-digit',
     })
-    const parts = fmt.formatToParts(now)
+    const parts = fmt.formatToParts(at)
     const get = (t: string) => Number(parts.find((p) => p.type === t)?.value ?? '0')
     const asUTC = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour') % 24, get('minute'), get('second'))
-    return Math.round(((asUTC - now.getTime()) / 3600000) * 2) / 2
+    return Math.round(((asUTC - at.getTime()) / 3600000) * 2) / 2
   } catch {
     return 0
   }
+}
+
+/** 출발일 'YYYY-MM-DD' → 그 날짜의 정오 UTC (양 반구 모두 해당 날짜에 속하고, 새벽 2~3시 DST 전환 이후) */
+function departRefDate(dateStr: string): Date {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr)
+  if (!m) return new Date()
+  return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12))
 }
 
 const HHMM = (h: number, m = 0) => `${String(((h % 24) + 24) % 24).padStart(2, '0')}:${String(m).padStart(2, '0')}`
@@ -123,16 +130,21 @@ export default function JetLagClient() {
   const [stayDays, setStayDays] = useState(7)
 
   // 비행 정보 (공통 입력으로 통합)
+  const [departDate, setDepartDate] = useState('')        // 출발일 — 빈 값이면 현재 시각 기준
   const [departTime, setDepartTime] = useState('10:00')   // 출발지 기준 이륙 시각
   const [flightHours, setFlightHours] = useState(14)
+
+  // SSG 빌드 시점 날짜 고정 방지 — 마운트 후 오늘 날짜 주입
+  useEffect(() => { setDepartDate(todayStr()) }, [])
 
   const from = CITIES[fromIdx]
   const to = CITIES[toIdx]
   const timeDiff = useMemo(() => {
-    const fo = getLiveOffset(from.tz)
-    const tO = getLiveOffset(to.tz)
+    const at = departRefDate(departDate)  // 서머타임을 오늘이 아닌 출발일 기준으로 반영
+    const fo = getOffsetAt(from.tz, at)
+    const tO = getOffsetAt(to.tz, at)
     return Math.round((tO - fo) * 2) / 2
-  }, [fromIdx, toIdx, from.tz, to.tz])
+  }, [departDate, from.tz, to.tz])
 
   const wallDiff = Math.abs(timeDiff)                       // 실제 시계 차이(표시용)
   const circ = useMemo(() => circadian(timeDiff), [timeDiff])
@@ -161,6 +173,11 @@ export default function JetLagClient() {
           { href: '/tools/date/timezone', label: '세계 시간 변환' },
           { href: '/tools/date/age', label: '나이 계산기' },
           { href: '/tools/health/sleep-debt', label: '수면 부채 계산기' },
+        ]}
+        sources={[
+          { label: 'CDC Yellow Book — Jet Lag Disorder', href: 'https://www.cdc.gov/yellow-book/hcp/travel-air-sea/jet-lag-disorder.html' },
+          { label: 'AASM 임상 진료지침 (SLEEP 2007)', href: 'https://aasm.org/wp-content/uploads/2017/07/PP_CircadianRhythm.pdf' },
+          { label: 'NHS — Jet lag', href: 'https://www.nhs.uk/conditions/jet-lag/' },
         ]}
       >
         시차 적응 일정·광노출·수면 권장은 일반 가이드라인이며 <strong>개인의 컨디션·나이·여행 패턴에 따라 차이</strong>가 큽니다. 수면제·멜라토닌 등 약물 복용은 의사·약사와 상담하세요.
@@ -192,22 +209,28 @@ export default function JetLagClient() {
           </div>
         </div>
 
-        {/* 이륙 시각 — 단독 전체폭 (모바일 가로 오버플로우 방지) */}
-        <div style={{ marginTop: 10 }}>
-          <label className={s.fieldLabel} htmlFor="jet-lag-time">이륙 시각 (출발지)</label>
-          <input id="jet-lag-time" className={s.input} type="time" value={departTime} onChange={(e) => setDepartTime(e.target.value)} />
+        {/* 출발일 + 이륙 시각 */}
+        <div className={s.rowDateTime} style={{ marginTop: 10 }}>
+          <div>
+            <label className={s.fieldLabel} htmlFor="jet-lag-date">출발일</label>
+            <input id="jet-lag-date" className={s.input} type="date" value={departDate} onChange={(e) => setDepartDate(e.target.value)} />
+          </div>
+          <div>
+            <label className={s.fieldLabel} htmlFor="jet-lag-time">이륙 시각 (출발지)</label>
+            <input id="jet-lag-time" className={s.input} type="time" value={departTime} onChange={(e) => setDepartTime(e.target.value)} />
+          </div>
         </div>
 
         {/* 비행 시간 + 체류 일수 — 1줄 */}
         <div className={s.row2} style={{ marginTop: 10 }}>
           <div>
-            <label className={s.fieldLabel} htmlFor="jet-lag-time-2">비행 시간 (h)</label>
+            <label className={s.fieldLabel} htmlFor="jet-lag-time-2">비행 시간 (1~30h)</label>
             <input id="jet-lag-time-2"
               className={s.input}
               type="number" inputMode="decimal"
-              min={1} max={20} step={0.5}
+              min={1} max={30} step={0.5}
               value={flightHours}
-              onChange={(e) => setFlightHours(Math.max(1, Math.min(20, Number(e.target.value) || 1)))}
+              onChange={(e) => setFlightHours(Math.max(1, Math.min(30, Number(e.target.value) || 1)))}
             />
           </div>
           <div>
@@ -245,7 +268,7 @@ export default function JetLagClient() {
         </div>
 
         <p className={s.hintText}>
-          도착 현지 시각 자동 계산 — <strong>{formatHours(arrivalLocalH)}</strong>
+          도착 현지 시각 자동 계산 — <strong>{formatHours(arrivalLocalH)}</strong> · 시차·서머타임은 출발일 기준 반영 · 경유 여행은 대기 포함 총 이동 시간 입력 가능
         </p>
       </div>
 
@@ -317,6 +340,7 @@ export default function JetLagClient() {
           adaptDays={adaptDays}
           stayDays={stayDays}
           absDiff={absDiff}
+          timeDiff={timeDiff}
           bedtime={bedtime}
           waketime={waketime}
         />
@@ -402,16 +426,16 @@ function PreTab({ timeDiff, direction, bedtime, waketime, absDiff, fromName, toN
       )}
 
       <div className={s.infoCard}>
-        <div className={s.infoHead}>멜라토닌 복용 타이밍</div>
+        <div className={s.infoHead}>멜라토닌 참고 정보 — 의사·약사 상담 후 고려</div>
         <ul>
           {direction === 'none'
             ? <li>시차가 없어 별도 복용이 필요하지 않습니다.</li>
-            : <li><strong>도착지의 목표 취침 시각 30~60분 전</strong>에 복용 (Cochrane: 5시간대 이상 이동에서 시차 감소, 도착지 밤 시각 기준)</li>}
-          <li>0.5~1mg 소량 권장 — 고용량(3~5mg)과 효과는 비슷하나 다음날 잔류 졸림 등 부작용이 적음</li>
+            : <li>복용한다면 <strong>도착지의 목표 취침 시각 30~60분 전</strong>이 기본 (Cochrane: 5시간대 이상 이동에서 시차 감소, 도착지 밤 시각 기준)</li>}
+          <li>일반적으로 0.5~1mg 저용량이 사용됩니다 — 고용량(3~5mg)과 효과는 비슷하나 다음날 잔류 졸림 등 부작용이 적음 (CDC 여행의학 지침 참고)</li>
           <li>낮에 잘못 복용하면 오히려 졸음·적응 지연 — 도착지 밤 시각에 맞추세요</li>
         </ul>
         <div className={s.warnCard} style={{ marginTop: 10 }}>
-          ⚠️ 한국에서 멜라토닌은 전문의약품(서카딘 등)으로 처방이 필요하며 임산부·청소년 등은 주의가 필요합니다. 복용 전 의사 또는 약사와 상담하세요.
+          ⚠️ 한국에서 멜라토닌은 전문의약품(서카딘 등)으로 처방이 필요합니다. 기관별 입장도 갈립니다 — 영국 NHS는 근거 부족을 이유로 시차 목적 사용을 권장하지 않습니다. 복용 전 반드시 의사·약사와 상담하고, 임산부·청소년은 특히 주의하세요.
         </div>
       </div>
 
@@ -631,13 +655,14 @@ function buildSegments(segs: Seg[]): Seg[] {
 }
 
 /* ──────────────────────── 탭 3: 도착 후 ──────────────────────── */
-function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, absDiff, bedtime, waketime }: {
+function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, absDiff, timeDiff, bedtime, waketime }: {
   arrivalLocalH: number
   flightHours: number
   direction: 'east' | 'west' | 'none'
   adaptDays: number
   stayDays: number
   absDiff: number
+  timeDiff: number
   bedtime: string
   waketime: string
 }) {
@@ -692,6 +717,18 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
 
   return (
     <>
+      {/* 단기 체류 — 히어로의 한국 시간 유지 전략과 정합 (CDC: 짧은 여행은 현지 적응 회피 가능) */}
+      {absDiff > 0 && stayDays <= 3 && (
+        <div className={s.infoCard}>
+          <div className={s.infoHead}>체류 {stayDays}일 — 한국 시간 유지 전략 추천</div>
+          <ul>
+            <li>약 3일 이하의 짧은 체류는 <strong>적응이 끝나기 전에 돌아오므로</strong>, 무리하게 현지에 맞추기보다 수면·식사를 한국 리듬에 가깝게 유지하는 편이 낫습니다 (특히 2일 이하에서 근거가 강함 — CDC·AASM 2일 이하, NHS 2~3일).</li>
+            <li>중요한 일정은 가급적 <strong>한국 기준 낮 시간대</strong>에 — 한국 09~18시는 현지 <strong>{formatHours(9 + timeDiff)}~{formatHours(18 + timeDiff)}</strong>입니다.</li>
+            <li>아래 첫날 전략·적응 스케줄은 <strong>현지 적응을 선택한 경우</strong>의 참고용입니다.</li>
+          </ul>
+        </div>
+      )}
+
       {/* 첫날 전략 — 입력 없이 자동 계산 */}
       <div className={s.card}>
         <div className={s.cardTitle}>도착 첫날 전략</div>
@@ -796,7 +833,9 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
             </div>
             {stayDays < adaptDays && (
               <div className={s.warnCard} style={{ marginTop: 12 }}>
-                체류 기간({stayDays}일)이 완전 적응 기간({adaptDays}일)보다 짧습니다. 완전 적응보다 <strong>현지 리듬 유지 전략</strong>을 추천합니다.
+                체류 기간({stayDays}일)이 완전 적응 기간({adaptDays}일)보다 짧습니다. {stayDays <= 3
+                  ? <>위의 <strong>한국 시간 유지 전략</strong>을 우선 고려하세요.</>
+                  : <>중요 일정 위주로 맞추는 <strong>부분 적응</strong>이 현실적이며, 귀국 후 역시차 적응도 함께 계획하세요.</>}
               </div>
             )}
           </>
@@ -864,7 +903,7 @@ function buildWeekSchedule(direction: 'east' | 'west' | 'none', absDiff: number,
   const tips = [
     '낮잠 30분 이내 허용 · 알람 필수',
     '햇빛 최대 노출 (아침/저녁)',
-    '멜라토닌 0.5~1mg 고려',
+    '멜라토닌은 처방·상담 후 고려',
     '오후 카페인 컷오프 엄수',
     '가벼운 운동 재개 (오후)',
     '정상 식사 리듬 회복',

@@ -42,6 +42,12 @@
   /* 짝 입력(출발/도착 · 비행/체류 · 취침/기상)은 모바일에서도 2열 한 줄로 유지 */
   .row2 { grid-template-columns: 1fr 1fr; }
 }
+/* 출발일+이륙시각 행 — 좁은 화면에선 네이티브 date/time 표시가 잘려 세로로 쌓음 */
+.rowDateTime { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rowDateTime > div { min-width: 0; }
+@media (max-width: 420px) {
+  .rowDateTime { grid-template-columns: 1fr; }
+}
 .fieldLabel {
   display: block;
   font-size: 11px;
@@ -109,6 +115,7 @@
   background: transparent;
   border: none;
   padding: 10px 12px;
+  min-height: 44px; /* 터치 타깃 최소 크기 */
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 13px;
   color: var(--muted);
@@ -415,7 +422,7 @@
 }
 .infoCard ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .infoCard li { font-size: 13px; color: var(--text); line-height: 1.7; padding-left: 16px; position: relative; }
-.infoCard li::before { content: '•'; position: absolute; left: 4px; color: #0891B2; }
+.infoCard li::before { content: '•'; position: absolute; left: 4px; color: var(--cat-health); }
 
 .warnCard {
   background: rgba(234,88,12,0.14);
