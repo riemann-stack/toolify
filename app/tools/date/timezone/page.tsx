@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/date/timezone',
   title: '시간대(타임존) 변환기 — UTC·KST·EST·PST·BST·시드니·인도',
-  description: 'UTC·KST·EST·PST·BST·시드니·인도(IST 30분)·이란(30분)·네팔(45분) 등 25개 도시 시간대 일괄 변환. DST(서머타임) 자동 적용, 회의 슬롯 추천.',
+  description: 'UTC·KST·EST·PST·BST·시드니·인도(IST 30분)·이란(30분)·네팔(45분) 등 28개 도시 시간대 일괄 변환. DST(서머타임) 자동 적용, 회의 슬롯 추천.',
   keywords: ['시간대변환기', '타임존변환', 'UTC변환', 'KST', 'EST', 'PST', 'BST', '서머타임', 'DST', '시드니시간', '인도시간', '뉴욕시간', 'LA시간', '런던시간', '국제회의시간'],
 })
 
@@ -31,7 +31,7 @@ const FAQ_LD = [
               },
               {
                 q: '베스트 슬롯 3개는 어떻게 추천되나요?',
-                a: '24시간을 15분 단위(총 96슬롯)로 나누어 각 슬롯을 🟢/🟡/🔴 평가한 뒤, <strong>연속된 같은 색 구간</strong>을 묶어 길이가 긴 순으로 정렬합니다. 🟢 구간이 있으면 🟢 우선, 없으면 🟡 구간을 보여줍니다.',
+                a: '24시간을 15분 단위(총 96슬롯)로 나누어 각 슬롯을 평가한 뒤, <strong>연속된 같은 색 구간</strong>을 묶어 길이가 긴 순으로 정렬합니다. 🟢 구간이 있으면 🟢 우선, 없으면 🟡 구간을 보여주고, 둘 다 없으면 <strong>가장 많은 도시가 근무·허용 시간대인 차선 구간(⚪)</strong>을 제시합니다. 각 후보에는 도시별 현지 시각이 함께 표시되며, LIVE 모드에서는 이미 지난 오늘 슬롯은 추천에서 제외합니다.',
               },
               {
                 q: 'UTC와 GMT의 차이가 뭔가요?',
@@ -59,7 +59,7 @@ export default function TimezonePage() {
         <ToolIconBadge catId="date" />시간대(타임존) 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        UTC·KST·EST·PST·BST·시드니·인도(+5:30)·이란(+3:30)·네팔(+5:45) 등 <strong style={{ color: 'var(--text)' }}>25개 도시 동시 변환</strong>.
+        UTC·KST·EST·PST·BST·시드니·인도(+5:30)·이란(+3:30)·네팔(+5:45) 등 <strong style={{ color: 'var(--text)' }}>28개 도시 동시 변환</strong>.
         DST(서머타임) 자동 적용 · 국제 회의 잡기용 <strong style={{ color: 'var(--text)' }}>겹치는 근무시간 슬롯 추천</strong>.
       </p>
 
@@ -71,7 +71,7 @@ export default function TimezonePage() {
         {/* 1. 사용법 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이렇게 쓰세요</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { n: '1', t: '기준 도시 선택', d: '회의를 잡고 싶은 본인 위치 (보통 🇰🇷 서울)' },
               { n: '2', t: '날짜/시각 입력', d: '"지금"으로 라이브 토글 가능 (30초마다 갱신)' },
@@ -132,9 +132,9 @@ export default function TimezonePage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>30분·45분 단위 시간대 — 인도·이란·네팔</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             대부분의 시간대는 UTC에서 1시간 단위로 차이가 나지만, 일부 국가는 <strong style={{ color: 'var(--text)' }}>30분·45분 단위</strong>의 독특한 오프셋을 사용합니다.
-            본 도구는 이 비표준 오프셋도 정확히 처리합니다.
+            본 도구는 이 비표준 오프셋도 정확히 처리하며, 아래 여섯 지역 모두 위 도시 목록(＋ 도시 추가)에서 직접 선택할 수 있습니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { flag: '🇮🇳', name: '인도 (뉴델리·뭄바이)', off: 'UTC+5:30', note: '국토 동서가 넓지만 통일된 표준시 사용. 1906년 도입된 영국 식민지 시기의 유산.' },
               { flag: '🇳🇵', name: '네팔 (카트만두)',     off: 'UTC+5:45', note: '가우리샹카르산(86°15′E) 자오선 기준, 1986년 채택. 인도와의 15분 차이는 독자성 상징으로 해석.' },
@@ -184,15 +184,15 @@ export default function TimezonePage() {
         {/* 5. 회의 잡기 팁 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>국제 회의 잡기 — 실전 팁</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
             <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '10px' }}>✅ 권장</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '한·미·유럽 회의: 한국 오후 9~10시 = 미동부 오전 8~9시 = 유럽 오후 1~2시',
-                  '한·미 서부 회의: 한국 오전 9~10시 = LA 오후 5~6시 (LA 입장 약간 불편)',
+                  '한·미 서부 회의: 한국 오전 9~10시 = LA는 전날 오후 5~6시 (LA 입장 약간 불편)',
                   '한·호주 회의: 한국 오전 8~10시 = 시드니 오전 9~11시 (가장 이상적)',
-                  '위 환산은 서머타임 시기 기준 — 겨울(11~3월)엔 미국·유럽 현지 시각이 1시간 이릅니다',
+                  '위 환산은 북반구 서머타임 시기 기준 — 겨울(11~3월)엔 미국·유럽 현지 시각이 1시간 이르고, 시드니는 남반구라 반대로 10~4월이 서머타임(+1h)입니다',
                   'DST 전환 직후 한 주는 시차 확인 한 번 더',
                 ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>• {t}</li>)}
               </ul>
@@ -219,7 +219,7 @@ export default function TimezonePage() {
         {/* 7. 관련 도구 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/date/jet-lag',     emoji: '✈️', name: '시차 적응 계산기',  desc: '여행 전·중·후 수면 일정' },
               { href: '/tools/date/server-time', emoji: '⏱️', name: '실시간 서버 시간',  desc: 'NTP 동기화 KST 밀리초' },

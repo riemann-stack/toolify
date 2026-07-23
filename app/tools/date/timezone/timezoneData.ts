@@ -20,8 +20,10 @@ export const CITIES: City[] = [
   { id: 'hk',        flag: '🇭🇰', city: '홍콩',     cityEn: 'Hong Kong',    country: '홍콩',     timeZone: 'Asia/Hong_Kong',     abbr: 'HKT',  offsetLabel: '+8:00' },
   { id: 'singapore', flag: '🇸🇬', city: '싱가포르', cityEn: 'Singapore',    country: '싱가포르', timeZone: 'Asia/Singapore',     abbr: 'SGT',  offsetLabel: '+8:00' },
   { id: 'bangkok',   flag: '🇹🇭', city: '방콕',     cityEn: 'Bangkok',      country: '태국',     timeZone: 'Asia/Bangkok',       abbr: 'ICT',  offsetLabel: '+7:00' },
+  { id: 'yangon',    flag: '🇲🇲', city: '양곤',     cityEn: 'Yangon',       country: '미얀마',   timeZone: 'Asia/Yangon',        abbr: 'MMT',  offsetLabel: '+6:30' },
   { id: 'delhi',     flag: '🇮🇳', city: '뉴델리',   cityEn: 'New Delhi',    country: '인도',     timeZone: 'Asia/Kolkata',       abbr: 'IST',  offsetLabel: '+5:30' },
   { id: 'kathmandu', flag: '🇳🇵', city: '카트만두', cityEn: 'Kathmandu',    country: '네팔',     timeZone: 'Asia/Kathmandu',     abbr: 'NPT',  offsetLabel: '+5:45' },
+  { id: 'kabul',     flag: '🇦🇫', city: '카불',     cityEn: 'Kabul',        country: '아프가니스탄', timeZone: 'Asia/Kabul',     abbr: 'AFT',  offsetLabel: '+4:30' },
   { id: 'tehran',    flag: '🇮🇷', city: '테헤란',   cityEn: 'Tehran',       country: '이란',     timeZone: 'Asia/Tehran',        abbr: 'IRST', offsetLabel: '+3:30' },
   { id: 'dubai',     flag: '🇦🇪', city: '두바이',   cityEn: 'Dubai',        country: 'UAE',      timeZone: 'Asia/Dubai',         abbr: 'GST',  offsetLabel: '+4:00' },
   { id: 'moscow',    flag: '🇷🇺', city: '모스크바', cityEn: 'Moscow',       country: '러시아',   timeZone: 'Europe/Moscow',      abbr: 'MSK',  offsetLabel: '+3:00' },
@@ -30,6 +32,7 @@ export const CITIES: City[] = [
   { id: 'london',    flag: '🇬🇧', city: '런던',     cityEn: 'London',       country: '영국',     timeZone: 'Europe/London',      abbr: 'GMT',  dstAbbr: 'BST',  offsetLabel: '+0:00' },
   { id: 'utc',       flag: '🌍', city: 'UTC',      cityEn: 'UTC',          country: '협정세계시', timeZone: 'UTC',                abbr: 'UTC',  offsetLabel: '+0:00' },
   { id: 'sao',       flag: '🇧🇷', city: '상파울루', cityEn: 'São Paulo',    country: '브라질',   timeZone: 'America/Sao_Paulo',  abbr: 'BRT',  offsetLabel: '-3:00' },
+  { id: 'stjohns',   flag: '🇨🇦', city: '세인트존스', cityEn: "St. John's", country: '캐나다 뉴펀들랜드', timeZone: 'America/St_Johns', abbr: 'NST', dstAbbr: 'NDT', offsetLabel: '-3:30' },
   { id: 'nyc',       flag: '🇺🇸', city: '뉴욕',     cityEn: 'New York',     country: '미국',     timeZone: 'America/New_York',   abbr: 'EST',  dstAbbr: 'EDT', offsetLabel: '-5:00' },
   { id: 'toronto',   flag: '🇨🇦', city: '토론토',   cityEn: 'Toronto',      country: '캐나다',   timeZone: 'America/Toronto',    abbr: 'EST',  dstAbbr: 'EDT', offsetLabel: '-5:00' },
   { id: 'chicago',   flag: '🇺🇸', city: '시카고',   cityEn: 'Chicago',      country: '미국',     timeZone: 'America/Chicago',    abbr: 'CST',  dstAbbr: 'CDT', offsetLabel: '-6:00' },
@@ -117,6 +120,29 @@ export function zonedTimeToUtc(year: number, month: number, day: number, hour: n
     guess = new Date(naive - off * 60000)
   }
   return guess
+}
+
+// DST 경계 감지형 변환 — 현지 시각은 봄 전진 때 0개(비존재), 가을 후퇴 때 2개(중복)의 UTC에 대응할 수 있음
+export type ZonedResolve = { date: Date; status: 'ok' | 'nonexistent' | 'ambiguous' }
+
+export function zonedTimeToUtcEx(year: number, month: number, day: number, hour: number, minute: number, timeZone: string): ZonedResolve {
+  const naive = Date.UTC(year, month - 1, day, hour, minute, 0)
+  // 전환 경계 양쪽의 오프셋 후보(±1일)로 역산해 정확히 왕복하는 UTC만 채택
+  const offs = new Set<number>()
+  for (const ms of [naive - 86400000, naive, naive + 86400000]) offs.add(offsetMinutes(new Date(ms), timeZone))
+  const matches: number[] = []
+  for (const off of offs) {
+    const t = naive - off * 60000
+    const p = partsInZone(new Date(t), timeZone)
+    if (p.year === year && p.month === month && p.day === day && p.hour === hour && p.minute === minute) matches.push(t)
+  }
+  if (matches.length === 0) {
+    // 존재하지 않는 시각(봄 전진) — 반복 보정이 매핑하는 인접 시각으로 대체하되 상태로 알림
+    return { date: zonedTimeToUtc(year, month, day, hour, minute, timeZone), status: 'nonexistent' }
+  }
+  matches.sort((a, b) => a - b)
+  // 두 번 존재(가을 후퇴)하면 앞선 시점(서머타임 쪽) 채택
+  return { date: new Date(matches[0]), status: matches.length > 1 ? 'ambiguous' : 'ok' }
 }
 
 // 시간대 차이 라벨 (예: "+3시간", "-13시간 30분")

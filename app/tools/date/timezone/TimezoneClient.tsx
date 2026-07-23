@@ -6,7 +6,7 @@ import styles from './timezone.module.css'
 import {
   CITIES, DEFAULT_SELECTED, City,
   partsInZone, offsetMinutes, formatOffset, isDSTActive,
-  zonedTimeToUtc, dateOffsetLabel, classifyHour, BUCKET_LABEL,
+  zonedTimeToUtc, zonedTimeToUtcEx, dateOffsetLabel, classifyHour, BUCKET_LABEL,
   findMeetingSlots, diffLabel,
 } from './timezoneData'
 
@@ -85,15 +85,17 @@ export default function TimezoneClient() {
   // 기준 도시
   const baseCity: City = CITIES.find(c => c.id === baseId) ?? CITIES[0]
 
-  // 라이브 모드일 땐 기준 시각도 'now'
-  const baseUtc: Date = useMemo(() => {
-    if (liveNow) return new Date()
-    // baseInput("YYYY-MM-DDTHH:MM")을 baseCity 기준으로 UTC 환산
+  // 라이브 모드일 땐 'now', 수동 모드는 입력 파싱 — 빈/불완전 입력이면 null(현재 시각으로 조용히 대체 금지)
+  const parsedBase = useMemo(() => {
+    if (!mounted) return null
+    if (liveNow) return { date: new Date(), status: 'ok' as const }
     const m = baseInput.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/)
-    if (!m) return new Date()
-    return zonedTimeToUtc(+m[1], +m[2], +m[3], +m[4], +m[5], baseCity.timeZone)
+    if (!m) return null
+    return zonedTimeToUtcEx(+m[1], +m[2], +m[3], +m[4], +m[5], baseCity.timeZone)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [liveNow, baseInput, baseCity.timeZone, tick])
+  }, [mounted, liveNow, baseInput, baseCity.timeZone, tick])
+  const baseUtc: Date | null = parsedBase?.date ?? null
+  const dstEdge = parsedBase?.status  // 'nonexistent' | 'ambiguous'면 DST 경계 안내
 
   // 라이브 모드일 때 baseInput을 매번 동기화
   useEffect(() => {
@@ -120,7 +122,7 @@ export default function TimezoneClient() {
   const otherIds = selected.filter(id => id !== baseId)
   const orderedIds = [baseId, ...otherIds]
 
-  const basePartsForOffset = partsInZone(baseUtc, baseCity.timeZone)
+  const basePartsForOffset = baseUtc ? partsInZone(baseUtc, baseCity.timeZone) : null
 
   function removeCity(id: string) {
     if (id === baseId) return  // 기준 도시는 제거 불가 (변경만)
@@ -130,8 +132,12 @@ export default function TimezoneClient() {
     setSelected(prev => prev.includes(id) ? prev : [...prev, id])
   }
 
+  // 근무시간 역전(시작 ≥ 종료)은 계산 불가 — 즉시 오류 표시
+  const workInvalid = workStart >= workEnd
+
   // ── 회의 슬롯: 기준 도시 기준 그 날짜의 00:00을 시작점으로
-  const baseDayStart: Date = useMemo(() => {
+  const baseDayStart: Date | null = useMemo(() => {
+    if (!baseUtc) return null
     const p = partsInZone(baseUtc, baseCity.timeZone)
     return zonedTimeToUtc(p.year, p.month, p.day, 0, 0, baseCity.timeZone)
   }, [baseUtc, baseCity.timeZone])
@@ -139,22 +145,31 @@ export default function TimezoneClient() {
   const meetingTimeZones = useMemo(() => orderedIds.map(id => CITIES.find(c => c.id === id)?.timeZone).filter(Boolean) as string[], [orderedIds])
 
   const slots = useMemo(
-    () => findMeetingSlots(baseDayStart, meetingTimeZones, workStart, workEnd),
-    [baseDayStart, meetingTimeZones, workStart, workEnd],
+    () => (baseDayStart && !workInvalid) ? findMeetingSlots(baseDayStart, meetingTimeZones, workStart, workEnd) : [],
+    [baseDayStart, meetingTimeZones, workStart, workEnd, workInvalid],
   )
 
-  // 베스트 슬롯 후보 (green/yellow 중 정수 시각만, 인접한 슬롯 합치기)
-  const bestSlots = useMemo(() => {
-    type Run = { startIdx: number, endIdx: number, quality: 'green' | 'yellow' }
+  type Run = { startIdx: number, endIdx: number, quality: 'green' | 'yellow' | 'partial' }
+
+  // 베스트 슬롯: green/yellow 연속 구간 우선, 없으면 근무·허용 도시 수 최대 구간(차선)
+  const bestSlots = useMemo<Run[]>(() => {
+    if (slots.length === 0 || !baseUtc) return []
+    // LIVE 모드에선 이미 지난 오늘 슬롯은 추천에서 제외 (바에는 그대로 표시)
+    let fromIdx = 0
+    if (liveNow) {
+      const fi = slots.findIndex(s => s.utcDate.getTime() >= baseUtc.getTime())
+      fromIdx = fi === -1 ? slots.length : fi
+    }
     const runs: Run[] = []
     let cur: Run | null = null
     slots.forEach((s, idx) => {
-      if (s.quality === 'green' || s.quality === 'yellow') {
-        if (cur && cur.quality === s.quality) {
+      const usable = idx >= fromIdx && (s.quality === 'green' || s.quality === 'yellow')
+      if (usable) {
+        if (cur && cur.quality === s.quality && cur.endIdx === idx - 1) {
           cur.endIdx = idx
         } else {
           if (cur) runs.push(cur)
-          cur = { startIdx: idx, endIdx: idx, quality: s.quality }
+          cur = { startIdx: idx, endIdx: idx, quality: s.quality as 'green' | 'yellow' }
         }
       } else {
         if (cur) runs.push(cur)
@@ -162,13 +177,37 @@ export default function TimezoneClient() {
       }
     })
     if (cur) runs.push(cur)
-    // green > yellow 정렬, 그리고 길이 긴 것 우선
-    runs.sort((a, b) => {
-      if (a.quality !== b.quality) return a.quality === 'green' ? -1 : 1
-      return (b.endIdx - b.startIdx) - (a.endIdx - a.startIdx)
-    })
-    return runs.slice(0, 3)
-  }, [slots])
+    if (runs.length > 0) {
+      // green > yellow 정렬, 같은 색이면 길이 긴 것 우선
+      runs.sort((a, b) => {
+        if (a.quality !== b.quality) return a.quality === 'green' ? -1 : 1
+        return (b.endIdx - b.startIdx) - (a.endIdx - a.startIdx)
+      })
+      return runs.slice(0, 3)
+    }
+    // 완전 겹침이 없으면 차선: 근무시간(green) 도시 수 → 허용폭(ok) 도시 수 순으로 최고점 연속 구간
+    let bestScore = 0
+    for (let i = fromIdx; i < slots.length; i++) {
+      const sc = slots[i].greenCount * 100 + slots[i].okCount
+      if (sc > bestScore) bestScore = sc
+    }
+    if (bestScore === 0) return []
+    const partials: Run[] = []
+    let p: Run | null = null
+    for (let i = fromIdx; i < slots.length; i++) {
+      const sc = slots[i].greenCount * 100 + slots[i].okCount
+      if (sc === bestScore) {
+        if (p && p.endIdx === i - 1) p.endIdx = i
+        else { if (p) partials.push(p); p = { startIdx: i, endIdx: i, quality: 'partial' } }
+      } else {
+        if (p) partials.push(p)
+        p = null
+      }
+    }
+    if (p) partials.push(p)
+    partials.sort((a, b) => (b.endIdx - b.startIdx) - (a.endIdx - a.startIdx))
+    return partials.slice(0, 3)
+  }, [slots, liveNow, baseUtc])
 
   // 도시 추가용 검색
   const filteredCities = useMemo(() => {
@@ -180,6 +219,7 @@ export default function TimezoneClient() {
         c.cityEn.toLowerCase().includes(q) ||
         c.country.toLowerCase().includes(q) ||
         c.abbr.toLowerCase().includes(q) ||
+        (c.dstAbbr ? c.dstAbbr.toLowerCase().includes(q) : false) ||
         c.timeZone.toLowerCase().includes(q)
       )
     })
@@ -187,6 +227,7 @@ export default function TimezoneClient() {
 
   // 공유 텍스트
   function shareText(): string {
+    if (!baseUtc || !basePartsForOffset) return ''
     const lines: string[] = []
     lines.push(`📅 시간대 비교`)
     orderedIds.forEach(id => {
@@ -200,8 +241,10 @@ export default function TimezoneClient() {
   }
 
   async function copyShare() {
+    const text = shareText()
+    if (!text) return
     try {
-      await navigator.clipboard.writeText(shareText())
+      await navigator.clipboard.writeText(text)
       setCopyOk(true)
       setTimeout(() => setCopyOk(false), 1500)
     } catch { /* noop */ }
@@ -254,6 +297,21 @@ export default function TimezoneClient() {
             {liveNow ? '● LIVE' : '지금'}
           </button>
         </div>
+
+        {/* 빈/불완전 입력·DST 경계 안내 */}
+        {mounted && !liveNow && !baseUtc && (
+          <p className={styles.baseNotice} role="status">기준 시각을 입력하거나 「지금」 버튼으로 현재 시각을 사용하세요.</p>
+        )}
+        {dstEdge === 'nonexistent' && baseUtc && (
+          <p className={styles.baseWarn} role="alert">
+            ⚠️ 입력한 시각은 {baseCity.city}의 서머타임 시작(시계 1시간 전진)으로 <strong>존재하지 않는 시각</strong>입니다 — {formatLocalInput(baseUtc, baseCity.timeZone).replace('T', ' ')}로 해석해 계산합니다.
+          </p>
+        )}
+        {dstEdge === 'ambiguous' && (
+          <p className={styles.baseWarn} role="alert">
+            ⚠️ 입력한 시각은 서머타임 종료(시계 1시간 후퇴)로 <strong>두 번 존재하는 시각</strong>입니다 — 앞선 시점(서머타임 적용 중)으로 계산합니다.
+          </p>
+        )}
       </div>
 
       {/* ── 도시별 변환 결과 ── */}
@@ -266,10 +324,10 @@ export default function TimezoneClient() {
           {orderedIds.map(id => {
             const c = CITIES.find(cc => cc.id === id)
             if (!c) return null
-            // 마운트 전엔 시각 의존 값을 렌더하지 않음 — SSG HTML에 빌드 시각이 박히는 것 방지
-            const p = mounted ? partsInZone(baseUtc, c.timeZone) : null
-            const dateOff = p ? dateOffsetLabel(basePartsForOffset.year, basePartsForOffset.month, basePartsForOffset.day, p.year, p.month, p.day) : ''
-            const dst = mounted && isDSTActive(baseUtc, c.timeZone)
+            // 마운트 전(SSG 빌드 시각 박제 방지)·빈 입력이면 시각 의존 값을 렌더하지 않음
+            const p = baseUtc ? partsInZone(baseUtc, c.timeZone) : null
+            const dateOff = p && basePartsForOffset ? dateOffsetLabel(basePartsForOffset.year, basePartsForOffset.month, basePartsForOffset.day, p.year, p.month, p.day) : ''
+            const dst = baseUtc ? isDSTActive(baseUtc, c.timeZone) : false
             const bucket = p ? classifyHour(p.hour) : null
             const isBase = id === baseId
             const bucketCls = bucket ? (styles[`resCardBucket${bucket.charAt(0).toUpperCase() + bucket.slice(1)}` as keyof typeof styles] || '') : ''
@@ -295,9 +353,9 @@ export default function TimezoneClient() {
                 </div>
                 <div className={styles.resMeta}>
                   <span className={styles.resAbbr}>{dst && c.dstAbbr ? c.dstAbbr : c.abbr}</span>
-                  <span>UTC{p ? formatOffset(offsetMinutes(baseUtc, c.timeZone)) : c.offsetLabel}</span>
+                  <span>UTC{baseUtc ? formatOffset(offsetMinutes(baseUtc, c.timeZone)) : c.offsetLabel}</span>
                   {dst && <span className={styles.resDst}>DST</span>}
-                  {p && !isBase && <span className={styles.resBucket}>· {diffLabel(offsetMinutes(baseUtc, baseCity.timeZone), offsetMinutes(baseUtc, c.timeZone))}</span>}
+                  {baseUtc && !isBase && <span className={styles.resBucket}>· {diffLabel(offsetMinutes(baseUtc, baseCity.timeZone), offsetMinutes(baseUtc, c.timeZone))}</span>}
                   {bucket && <span className={styles.resBucket}>· {BUCKET_LABEL[bucket]}</span>}
                 </div>
               </div>
@@ -309,7 +367,7 @@ export default function TimezoneClient() {
           <button type="button" className={styles.shareBtn} aria-expanded={showAdd} onClick={() => setShowAdd(v => !v)}>
             {showAdd ? '도시 목록 닫기' : '＋ 도시 추가'}
           </button>
-          <button type="button" className={styles.shareBtn} onClick={copyShare}>
+          <button type="button" className={styles.shareBtn} onClick={copyShare} disabled={!baseUtc}>
             {copyOk ? '✓ 복사됨' : '텍스트 복사'}
           </button>
         </div>
@@ -336,7 +394,7 @@ export default function TimezoneClient() {
                   >
                     <span className={styles.cityChipFlag}>{c.flag}</span>
                     <span className={styles.cityChipName}>{c.city}</span>
-                    <span className={styles.cityChipOff}>UTC{mounted ? formatOffset(offsetMinutes(baseUtc, c.timeZone)) : c.offsetLabel}</span>
+                    <span className={styles.cityChipOff}>UTC{baseUtc ? formatOffset(offsetMinutes(baseUtc, c.timeZone)) : c.offsetLabel}</span>
                   </button>
                 )
               })}
@@ -380,7 +438,7 @@ export default function TimezoneClient() {
                   <span>{c.city}</span>
                 </div>
                 <div className={styles.barTrack}>
-                  {mounted && slots.map((s, i) => {
+                  {baseUtc && slots.map((s, i) => {
                     const p = partsInZone(s.utcDate, c.timeZone)
                     const bucket = classifyHour(p.hour)
                     const bucketCls = styles[`barCell${bucket.charAt(0).toUpperCase() + bucket.slice(1)}` as keyof typeof styles] || ''
@@ -409,7 +467,7 @@ export default function TimezoneClient() {
               <span>전체 판정</span>
             </div>
             <div className={styles.barTrack}>
-              {mounted && slots.map((s, i) => {
+              {baseUtc && slots.map((s, i) => {
                 const isMarker = Math.abs(s.utcDate.getTime() - baseUtc.getTime()) < 7.5 * 60000
                 const cls = s.quality === 'green' ? styles.barCellQGreen : s.quality === 'yellow' ? styles.barCellQYellow : styles.barCellQRed
                 return <div key={i} className={`${styles.barCell} ${cls} ${isMarker ? styles.barCellMarker : ''}`} />
@@ -428,30 +486,59 @@ export default function TimezoneClient() {
 
         {/* 베스트 슬롯 */}
         <div className={styles.bestSlots}>
-          {!mounted ? null : bestSlots.length === 0 ? (
+          {!mounted || !baseUtc ? null : workInvalid ? (
+            <div className={styles.noSlots} role="alert">
+              근무 시작 시각({workStart}:00)이 종료 시각({workEnd}:00)보다 늦거나 같습니다.<br/>
+              시작을 종료보다 이르게 설정하세요.
+            </div>
+          ) : bestSlots.length === 0 ? (
             <div className={styles.noSlots}>
-              선택한 도시들의 근무시간이 겹치는 슬롯이 없습니다.<br/>
+              {liveNow ? '오늘 남은 시간대에 추천할 슬롯이 없습니다.' : '선택한 도시들의 근무시간이 겹치는 슬롯이 없습니다.'}<br/>
               근무 시간 폭을 늘리거나 도시를 줄여보세요.
             </div>
           ) : (
-            bestSlots.map((run, i) => {
-              const startSlot = slots[run.startIdx]
-              const endSlot = slots[run.endIdx]
-              const startP = partsInZone(startSlot.utcDate, baseCity.timeZone)
-              const endP = partsInZone(new Date(endSlot.utcDate.getTime() + 15 * 60000), baseCity.timeZone)
-              const lenMin = (run.endIdx - run.startIdx + 1) * 15
-              const cls = run.quality === 'green' ? styles.bestSlotGreen : styles.bestSlotYellow
-              return (
-                <div key={i} className={`${styles.bestSlot} ${cls}`}>
-                  <span className={styles.bestSlotRank}>#{i + 1}</span>
-                  <div className={styles.bestSlotTime}>
-                    {baseCity.city} 기준 <b>{formatTime24(startP)} ~ {formatTime24(endP)}</b>
-                    {' · '}{lenMin >= 60 ? `${Math.floor(lenMin/60)}시간 ${lenMin%60 ? lenMin%60+'분':''}` : `${lenMin}분`}
+            <>
+              {bestSlots[0].quality === 'partial' && (
+                <p className={styles.bestNote}>
+                  모든 도시가 겹치는 시간은 없어, <strong>가장 많은 도시가 근무·허용 시간대인 차선 구간</strong>을 표시합니다.
+                </p>
+              )}
+              {bestSlots.map((run, i) => {
+                const startSlot = slots[run.startIdx]
+                const endSlot = slots[run.endIdx]
+                const startP = partsInZone(startSlot.utcDate, baseCity.timeZone)
+                const endP = partsInZone(new Date(endSlot.utcDate.getTime() + 15 * 60000), baseCity.timeZone)
+                const lenMin = (run.endIdx - run.startIdx + 1) * 15
+                const cls = run.quality === 'green' ? styles.bestSlotGreen : run.quality === 'yellow' ? styles.bestSlotYellow : styles.bestSlotPartial
+                return (
+                  <div key={i} className={`${styles.bestSlot} ${cls}`}>
+                    <span className={styles.bestSlotRank}>#{i + 1}</span>
+                    <div>
+                      <div className={styles.bestSlotTime}>
+                        {baseCity.city} 기준 <b>{formatTime24(startP)} ~ {formatTime24(endP)}</b>
+                        {' · '}{lenMin >= 60 ? `${Math.floor(lenMin/60)}시간 ${lenMin%60 ? lenMin%60+'분':''}` : `${lenMin}분`}
+                      </div>
+                      {/* 시작 시각의 도시별 현지 시각 */}
+                      <div className={styles.bestSlotCities}>
+                        {orderedIds.map(id => {
+                          const c = CITIES.find(cc => cc.id === id)
+                          if (!c) return null
+                          const cp = partsInZone(startSlot.utcDate, c.timeZone)
+                          const h = cp.hour + cp.minute / 60
+                          const inWork = h >= workStart && h < workEnd
+                          return (
+                            <span key={id} className={inWork ? styles.cityTimeOk : styles.cityTimeOff}>
+                              {c.flag} {formatTime24(cp)}
+                            </span>
+                          )
+                        })}
+                      </div>
+                    </div>
+                    <div className={styles.bestSlotMeta}>{run.quality === 'green' ? '🟢' : run.quality === 'yellow' ? '🟡' : `⚪ ${startSlot.greenCount}/${orderedIds.length} 근무`}</div>
                   </div>
-                  <div className={styles.bestSlotMeta}>{run.quality === 'green' ? '🟢' : '🟡'}</div>
-                </div>
-              )
-            })
+                )
+              })}
+            </>
           )}
         </div>
       </div>
