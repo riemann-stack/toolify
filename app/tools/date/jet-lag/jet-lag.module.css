@@ -59,7 +59,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 36px 12px 14px;
-  font-size: 14px;
+  font-size: 16px;  /* iOS Safari 포커스 자동 확대 방지 (<16px) */
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   color: var(--text);
@@ -86,7 +86,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;
-  font-size: 14px;
+  font-size: 16px;  /* iOS Safari 포커스 자동 확대 방지 (<16px) */
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--text);
   box-sizing: border-box;
@@ -241,7 +241,6 @@
   overflow: hidden;
 }
 .segSleep  { background: rgba(8,145,178,0.6); }
-.segWake   { background: rgba(14,165,233,0.45); color: #ffffff; }
 .segWarn   { background: rgba(234,88,12,0.55); }
 .segLight  { background: rgba(255,213,62,0.45); color: #ffffff; }
 .nowCursor {
@@ -344,7 +343,7 @@
 /* ── 방향 설명 (히어로 내 펼쳐보기) ── */
 .dirDetails {
   margin-top: 14px;
-  background: rgba(255,255,255,0.65);
+  background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 14px;
@@ -371,32 +370,6 @@
 }
 
 /* ── 카페인 판정 ── */
-.caffeineCard {
-  background: var(--bg2);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 20px 22px;
-  text-align: center;
-}
-.caffeineOk { border-color: #059669; }
-.caffeineWarn { border-color: #EA580C; }
-.caffeineNo { border-color: #DC2626; }
-.caffeineIcon { font-size: 40px; line-height: 1; margin-bottom: 8px; }
-.caffeineVerdict {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.caffeineVerdictOk { color: #059669; }
-.caffeineVerdictWarn { color: #EA580C; }
-.caffeineVerdictNo { color: #DC2626; }
-.caffeineDetail {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.7;
-}
-.caffeineDetail strong { color: var(--text); }
 
 /* ── 낮잠 ── */
 .napCard {
@@ -461,53 +434,7 @@
   border-radius: 14px;
   padding: 20px 22px;
 }
-.progressWrap {
-  position: relative;
-  height: 30px;
-  background: var(--bg3);
-  border-radius: 999px;
-  overflow: visible;
-  margin: 20px 0 8px;
-}
-.progressFill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  background: linear-gradient(90deg, rgba(234,88,12,0.6), rgba(14,165,233,0.8));
-  border-radius: 999px;
-}
-.progressMark {
-  position: absolute;
-  top: -6px;
-  bottom: -6px;
-  width: 2px;
-  background: var(--text);
-}
-.progressMarkReturn {
-  background: #DC2626;
-  border-left: 2px dashed #DC2626;
-  background: transparent;
-}
-.progressLabel {
-  position: absolute;
-  top: -22px;
-  transform: translateX(-50%);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.progressMilestones {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 12px;
-}
-
-/* ── 새 진행바 (글자 겹침 방지) — 마커는 점만, 라벨은 별도 행 ── */
+/* ── 진행바 (글자 겹침 방지) — 마커는 점만, 라벨은 별도 행 ── */
 .progressBarBox {
   margin: 14px 0 6px;
 }

@@ -15,11 +15,11 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '시차 적응에 며칠이나 걸리나요?',
-                a: '일반적으로 <strong>시차 1시간당 1~1.5일</strong>이 필요합니다. 서울→뉴욕은 약 14시간 시차이므로 10~14일, 서울→파리는 8시간이므로 6~8일이 걸립니다. 개인차가 크며 젊을수록, 규칙적인 수면 습관을 가진 사람일수록 빠르게 적응합니다.',
+                a: '생체시계는 하루에 <strong>서쪽(늦춤) 약 1.5시간, 동쪽(앞당김) 약 1시간</strong>씩 이동합니다(CDC 기준). 즉 위상이동 크기 ÷ 이 속도가 대략적인 적응 일수입니다. 서울→파리(약 8시간 서쪽)는 6일 안팎, 서울→뉴욕(약 14시간 서쪽)은 10일 안팎이 걸립니다. 개인차가 크며 젊을수록, 규칙적인 수면 습관을 가진 사람일수록 빠르게 적응합니다.',
               },
               {
                 q: '서울→뉴욕은 동쪽으로 비행하는데 왜 「서쪽 이동」으로 분류되나요?',
-                a: '시차 적응에서 말하는 「동쪽/서쪽」은 <strong>비행 경로</strong>가 아니라 <strong>시간대(UTC 오프셋)의 변화 방향</strong>입니다.<br/><br/>· <strong>동쪽 이동</strong> = 시간이 「앞으로」 가는 것 (UTC 오프셋 ↑) — 생체시계를 앞당겨야 함 → 어려움<br/>· <strong>서쪽 이동</strong> = 시간이 「뒤로」 가는 것 (UTC 오프셋 ↓) — 생체시계를 늦춰도 됨 → 쉬움<br/><br/>예) 서울(UTC+9) → 뉴욕(UTC-5)은 비행기는 태평양을 건너 동쪽으로 날아가지만, <strong>도착지 시간이 14시간 뒤로 이동</strong>하므로 「시간대 서쪽」으로 분류됩니다. 인간 생체시계가 24.2시간으로 자연스럽게 늘어지는 특성상 「늦추는 쪽(서쪽)」이 적응이 더 쉽습니다.',
+                a: '시차 적응의 「동쪽/서쪽」은 비행 경로가 아니라 <strong>생체시계를 어느 쪽으로 옮기느냐</strong>입니다. 앞당김(동쪽)은 어렵고, 늦춤(서쪽)은 인간 내재주기(24.2시간)가 약간 길어 상대적으로 쉽습니다.<br/><br/>생체시계 오정렬의 최대치는 12시간이라 <strong>시계 차이가 12시간을 넘으면 더 짧은 반대 방향으로 적응</strong>합니다. 서울→뉴욕은 시계상 14시간 뒤지지만, 동시에 10시간 앞당김이기도 합니다. 다만 앞당김이 8시간을 넘는 대이동은 신체가 오히려 늦춤(지연)으로 재동조하는 경향이 있어 <strong>「서쪽」으로 처리</strong>합니다(Eastman & Burgess, 2009). 반면 서울→호놀룰루(시계 19시간 뒤)는 앞당김이 5시간뿐이라 <strong>「동쪽」</strong>이 더 짧습니다 — 계산기가 이를 자동 판별합니다.',
               },
               {
                 q: '동쪽과 서쪽 이동 중 어느 쪽이 더 힘드나요?',
@@ -35,7 +35,7 @@ const FAQ_LD = [
               },
               {
                 q: '멜라토닌 복용이 효과적인가요?',
-                a: '소량(0.5~1mg)의 멜라토닌은 시차 적응에 효과적이라는 연구가 다수 있습니다.<br/>· <strong>서쪽 이동</strong> — 도착 직후 도착지 취침 시각(21~22시) 30~60분 전 복용<br/>· <strong>동쪽 이동</strong> — 출발 며칠 전부터 앞당긴 취침 시각에 복용<br/><br/>한국에서 멜라토닌은 <strong>전문의약품</strong>으로 분류되어 처방이 필요합니다. 임산부·청소년·우울증·자가면역질환자는 사용 전 반드시 의사 상담 필요. 고용량(3~5mg)은 오히려 수면 질을 떨어뜨릴 수 있습니다.',
+                a: '멜라토닌은 시차 적응에 효과적이라는 연구가 다수 있습니다(Cochrane 리뷰: 5개 이상 시간대 이동에서 시차 감소). 복용 타이밍은 <strong>도착지의 목표 취침 시각 30~60분 전</strong>이 기본이며, 낮에 잘못 복용하면 오히려 졸음·적응 지연을 유발합니다.<br/><br/><strong>용량은 0.5~1mg 소량으로 충분</strong>합니다. 고용량(3~5mg)도 시차 적응 효과는 비슷하지만, 저용량이 다음날 잔류 졸림 등 부작용이 적어 권장됩니다(효과가 더 커서가 아니라 내약성 때문).<br/><br/>한국에서 멜라토닌은 <strong>전문의약품</strong>(서카딘 등)으로 분류되어 처방이 필요합니다. 임산부·청소년·우울증·자가면역질환자는 사용 전 반드시 의사와 상담하세요.',
               },
               {
                 q: '도착 첫날 낮잠은 얼마나 자도 되나요?',
@@ -43,11 +43,11 @@ const FAQ_LD = [
               },
               {
                 q: '카페인 컷오프 시각은 어떻게 정해지나요?',
-                a: '카페인은 평균적으로 <strong>5~7시간 반감기</strong>를 가지지만, 잔류 효과까지 고려하면 <strong>섭취 8시간 후</strong>에도 일부가 체내에 남아 수면을 방해할 수 있습니다. 본 계산기는 <strong>평소 취침 시각 − 8시간</strong>을 카페인 마지막 허용 시각으로 자동 계산합니다. 예) 평소 23시 취침 → 15시 이후 카페인 컷.<br/><br/>임신·고혈압·불안장애가 있다면 더 보수적으로 6시간 전(17시 컷)에 끊는 것이 안전합니다.',
+                a: '카페인 반감기는 건강한 성인 평균 <strong>약 5시간</strong>(FDA 4~6시간)입니다. 취침 6시간 전에 섭취해도 총수면시간이 1시간 이상 줄었다는 연구가 있어(Drake 2013), 본 계산기는 잔류 효과까지 고려한 보수적 버퍼로 <strong>평소 취침 시각 − 8시간</strong>을 마지막 허용 시각으로 계산합니다(8시간은 반감기가 아니라 안전 버퍼). 예) 평소 23시 취침 → 15시 이후 카페인 컷.<br/><br/>임신부(반감기 최대 15시간까지 연장)·고혈압·불안장애가 있다면 반감기가 길어 더 <strong>이른 시각</strong>(예: 취침 10시간 전, 13시경)에 끊는 것이 안전합니다.',
               },
               {
                 q: '햇빛 노출이 정말 시차 적응에 도움이 되나요?',
-                a: '네. 햇빛은 가장 강력한 <strong>생체시계 동기화 신호(zeitgeber)</strong>입니다.<br/>· <strong>아침 햇빛(6~10시)</strong> — 생체시계를 앞당김 → 동쪽 이동 적응에 도움<br/>· <strong>저녁 햇빛(15~19시)</strong> — 생체시계를 늦춤 → 서쪽 이동 적응에 도움<br/><br/>실내에서도 창가에 앉거나 야외 산책 10~30분만으로 효과가 있습니다. 흐린 날도 약 10,000 lux로 실내 조명(300~500 lux)의 30배.',
+                a: '네. 햇빛은 가장 강력한 <strong>생체시계 동기화 신호(zeitgeber)</strong>입니다.<br/>· <strong>아침 햇빛(6~10시)</strong> — 생체시계를 앞당김 → 동쪽 이동 적응에 도움<br/>· <strong>저녁 햇빛(15~19시)</strong> — 생체시계를 늦춤 → 서쪽 이동 적응에 도움<br/><br/>실내에서도 창가에 앉거나 야외 산책 10~30분만으로 효과가 있습니다. 야외는 흐린 날에도 실내 조명(300~500 lux)보다 수 배~수십 배 밝습니다(짙은 흐림 1,000~2,000 lux, 밝은 흐림 1만 lux 이상, 맑은 날 직사광 10만 lux).',
               },
               {
                 q: '7일 적응 스케줄대로 안 따르면 어떻게 되나요?',
@@ -92,21 +92,22 @@ export default function JetLagPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>목적지</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>시차</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>이동 방향</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>시계 차이</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>생체시계 방향</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>예상 적응</th>
                 </tr>
               </thead>
               <tbody>
                 {[
                   ['도쿄', '0시간', '—', '없음'],
-                  ['방콕', '-2시간', '서쪽', '1~2일'],
-                  ['두바이', '-5시간', '서쪽', '4~5일'],
-                  ['파리', '-8시간', '서쪽', '6~8일'],
-                  ['런던', '-9시간', '서쪽', '7~9일'],
-                  ['뉴욕', '-14시간', '서쪽', '10~14일'],
-                  ['LA', '-17시간', '서쪽', '12~17일'],
-                  ['시드니', '+2시간', '동쪽', '2~3일'],
+                  ['방콕', '-2시간', '서쪽 (늦춤)', '1~2일'],
+                  ['두바이', '-5시간', '서쪽 (늦춤)', '3~4일'],
+                  ['파리', '-8시간', '서쪽 (늦춤)', '5~6일'],
+                  ['런던', '-9시간', '서쪽 (늦춤)', '6일'],
+                  ['뉴욕', '-14시간', '서쪽 (늦춤)', '약 10일'],
+                  ['LA', '-17시간', '동/서 (경계)', '7~11일'],
+                  ['호놀룰루', '-19시간', '동쪽 (앞당김 5h)', '약 5일'],
+                  ['시드니', '+1시간', '동쪽 (앞당김)', '1~2일'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row[0]}</td>
@@ -119,7 +120,9 @@ export default function JetLagPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.6 }}>
-            ※ 서울(UTC+9) 기준. 서머타임이 적용되는 지역은 계절에 따라 1시간 차이.
+            ※ 서울(UTC+9) 기준. 「시계 차이」는 실제 시각 차이, 「생체시계 방향」은 실제 적응 방향입니다.
+            뉴욕·LA·호놀룰루처럼 시계 차이가 12시간을 넘으면 더 짧은 반대 방향으로 적응하며, LA는 서머타임 여부에 따라 경계(동↔서)에 걸칩니다.
+            위 계산기는 서머타임을 실시간 반영하므로 표와 1시간가량 다를 수 있습니다.
           </p>
         </div>
 
@@ -146,7 +149,7 @@ export default function JetLagPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이동 방향별 완전 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ background: 'rgba(8,145,178,0.06)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '10px' }}>← 서쪽 이동 (미주·유럽)</p>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-health)', marginBottom: '10px' }}>← 서쪽 이동 (미주·유럽)</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '출국 전: 매일 1~2시간씩 취침 늦추기',
@@ -157,7 +160,7 @@ export default function JetLagPage() {
               </ul>
             </div>
             <div style={{ background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '10px' }}>→ 동쪽 이동 (호주·하와이)</p>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-life)', marginBottom: '10px' }}>→ 동쪽 이동 (호주·하와이)</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '출국 전: 매일 1~2시간씩 취침 앞당기기',

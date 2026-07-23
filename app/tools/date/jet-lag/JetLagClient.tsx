@@ -81,12 +81,29 @@ function getLiveOffset(tz: string): number {
 
 const HHMM = (h: number, m = 0) => `${String(((h % 24) + 24) % 24).padStart(2, '0')}:${String(m).padStart(2, '0')}`
 
+/**
+ * 생체시계 적응 방향·크기 (Eastman & Burgess, Sleep Med Clin 2009).
+ * - 시계차 diff(도착지−출발지 UTC 오프셋)를 최단 위상이동 nd ∈ (−12, 12]로 정규화. + = 앞당김(동쪽).
+ * - 동쪽 앞당김이 8시간(존) 이상이면 신체는 오히려 늦춤(지연·antidromic re-entrainment)으로 적응 → 서쪽 처리.
+ *   (인간 내재주기 τ≈24.2h라 지연이 앞당김보다 쉬움 — trans-12h는 지연이 흔함)
+ * - 예) 뉴욕 −14h → 최단 +10 동쪽이지만 ≥8 → 지연 14h 서쪽 / 호놀룰루 −19h → +5 동쪽(앞당김) 유지.
+ */
+function circadian(diff: number): { dir: 'east' | 'west' | 'none'; mag: number } {
+  let nd = ((diff % 24) + 24) % 24
+  if (nd > 12) nd -= 24
+  if (nd >= 8) return { dir: 'west', mag: 24 - nd }
+  if (nd > 0) return { dir: 'east', mag: nd }
+  if (nd < 0) return { dir: 'west', mag: -nd }
+  return { dir: 'none', mag: 0 }
+}
+
 const BEDTIME_CHOICES = ['21:00', '21:30', '22:00', '22:30', '23:00', '23:30', '00:00', '00:30', '01:00', '01:30', '02:00']
 const WAKETIME_CHOICES = ['05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00']
 
 function parseHHMM(t: string): number {
-  const [h, m] = t.split(':').map(Number)
-  return h + m / 60
+  const [h, m] = (t || '').split(':').map(Number)
+  if (!Number.isFinite(h)) return 0  // 빈 time 입력(NaN) → 0시로 폴백 (NaN:NaN 전파 방지)
+  return h + (Number.isFinite(m) ? m / 60 : 0)
 }
 function formatHours(h: number): string {
   h = ((h % 24) + 24) % 24
@@ -117,12 +134,15 @@ export default function JetLagClient() {
     return Math.round((tO - fo) * 2) / 2
   }, [fromIdx, toIdx, from.tz, to.tz])
 
-  const absDiff = Math.abs(timeDiff)
-  const direction: 'east' | 'west' | 'none' = timeDiff > 0 ? 'east' : timeDiff < 0 ? 'west' : 'none'
+  const wallDiff = Math.abs(timeDiff)                       // 실제 시계 차이(표시용)
+  const circ = useMemo(() => circadian(timeDiff), [timeDiff])
+  const direction = circ.dir                                // 생체시계 적응 방향
+  const absDiff = circ.mag                                  // 생체시계 위상이동 크기(난이도·일정 기준)
 
   const adaptDays = useMemo(() => {
     if (absDiff === 0) return 0
-    return direction === 'east' ? Math.ceil(absDiff * 1.5) : Math.ceil(absDiff)
+    // CDC 적응속도: 서쪽(지연) 1.5h/일, 동쪽(앞당김) 1h/일 → 일수 = 크기 ÷ 속도. 7일표 maxDailyShift와 일치.
+    return direction === 'east' ? Math.ceil(absDiff) : Math.ceil(absDiff / 1.5)
   }, [absDiff, direction])
 
   // 도착 시각 자동 계산 (현지 기준)
@@ -158,7 +178,7 @@ export default function JetLagClient() {
               <select id="jet-lag-f1" className={s.select} value={fromIdx} onChange={(e) => setFromIdx(Number(e.target.value))}>
                 {CITIES.map((c, i) => <option key={i} value={i}>{c.name}</option>)}
               </select>
-              <span className={s.selectArrow}>▼</span>
+              <span className={s.selectArrow} aria-hidden="true">▼</span>
             </div>
           </div>
           <div>
@@ -167,7 +187,7 @@ export default function JetLagClient() {
               <select id="jet-lag-f2" className={s.select} value={toIdx} onChange={(e) => setToIdx(Number(e.target.value))}>
                 {CITIES.map((c, i) => <option key={i} value={i}>{c.name}</option>)}
               </select>
-              <span className={s.selectArrow}>▼</span>
+              <span className={s.selectArrow} aria-hidden="true">▼</span>
             </div>
           </div>
         </div>
@@ -210,7 +230,7 @@ export default function JetLagClient() {
               <select id="jet-lag-f6" className={s.select} value={bedtime} onChange={(e) => setBedtime(e.target.value)}>
                 {BEDTIME_CHOICES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
-              <span className={s.selectArrow}>▼</span>
+              <span className={s.selectArrow} aria-hidden="true">▼</span>
             </div>
           </div>
           <div>
@@ -219,7 +239,7 @@ export default function JetLagClient() {
               <select id="jet-lag-f7" className={s.select} value={waketime} onChange={(e) => setWaketime(e.target.value)}>
                 {WAKETIME_CHOICES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
-              <span className={s.selectArrow}>▼</span>
+              <span className={s.selectArrow} aria-hidden="true">▼</span>
             </div>
           </div>
         </div>
@@ -235,11 +255,19 @@ export default function JetLagClient() {
           {from.name} → {to.name}
         </p>
         <div className={s.heroValue}>
-          {absDiff}<span className={s.heroUnit}>시간</span>
+          {wallDiff}<span className={s.heroUnit}>시간</span>
         </div>
         <div className={`${s.heroDir} ${direction === 'east' ? s.dirEast : direction === 'west' ? s.dirWest : s.dirNone}`}>
-          {direction === 'east' ? '→ 시간대 동쪽 (시계 앞당김 · 어려움)' : direction === 'west' ? '← 시간대 서쪽 (시계 늦춤 · 쉬움)' : '시차 없음'}
+          {direction === 'east' ? `→ 생체시계 ${absDiff}시간 앞당김 (동쪽 · ${absDiff <= 3 ? '가벼움' : '어려움'})`
+            : direction === 'west' ? `← 생체시계 ${absDiff}시간 늦춤 (서쪽 · ${absDiff >= 8 ? '큰 지연·오래 걸림' : '상대적 쉬움'})`
+            : '시차 없음'}
         </div>
+        {/* 실제 시계 차이 ≠ 생체시계 위상이동인 경우(12시간 초과 노선) 안내 */}
+        {direction !== 'none' && wallDiff !== absDiff && (
+          <p className={s.heroDesc} style={{ marginBottom: 4 }}>
+            현지 시각은 <strong>{wallDiff}시간</strong> 차이지만, 생체시계는 더 짧은 <strong>{absDiff}시간 {direction === 'east' ? '앞당김(동쪽)' : '늦춤(서쪽)'}</strong>으로 적응합니다.
+          </p>
+        )}
         <p className={s.heroDesc}>
           {absDiff === 0
             ? <>시차가 없어 <strong>별도 적응 기간이 필요하지 않습니다.</strong></>
@@ -252,13 +280,10 @@ export default function JetLagClient() {
         {/* 방향 설명 (펼쳐보기) */}
         {direction !== 'none' && (
           <details className={s.dirDetails}>
-            <summary>「시간대 {direction === 'east' ? '동쪽' : '서쪽'}」이 무엇인가요?</summary>
+            <summary>동쪽/서쪽 · 시차가 12시간을 넘으면?</summary>
             <div className={s.dirDetailsBody}>
-              시차 적응에서 말하는 「동쪽/서쪽」은 <strong>비행 경로</strong>가 아니라 <strong>도착지의 시간대(UTC 오프셋)</strong> 기준입니다.<br/>
-              · 도착지 UTC 오프셋이 <strong>커지면(시간이 앞으로 가면) 동쪽</strong> — 생체시계를 「앞당겨야」 해 어려움<br/>
-              · 도착지 UTC 오프셋이 <strong>작아지면(시간이 뒤로 가면) 서쪽</strong> — 생체시계를 「늦춰도」 되어 상대적으로 쉬움<br/>
-              <br/>
-              예) 서울(UTC+9) → 뉴욕(UTC-5)은 비행기는 동쪽으로 날아가지만, 도착지 시간이 14시간 뒤로 가므로 <strong>「시간대 서쪽」</strong>으로 분류됩니다. 인간 생체시계는 24.2h로 자연스럽게 늘어지므로 시계를 늦추는 쪽이 적응이 더 쉽습니다.
+              시차 적응의 「동쪽(앞당김)/서쪽(늦춤)」은 비행 경로가 아니라 <strong>생체시계를 어느 쪽으로 옮기느냐</strong>입니다. 도착지 시각이 앞서면 앞당김(동쪽·어려움), 뒤지면 늦춤(서쪽·상대적 쉬움) — 인간 내재주기가 24.2h로 약간 길어 늦추기가 더 쉽습니다.<br/><br/>
+              생체시계 오정렬의 최대치는 12시간이라, <strong>시계 차이가 12시간을 넘으면 더 짧은 반대 방향으로 적응</strong>합니다. 예) 서울→호놀룰루는 시계상 19시간 뒤지지만 실제로는 <strong>5시간 앞당김(동쪽)</strong>이 더 짧습니다. 다만 서울→뉴욕(약 14시간)처럼 앞당김이 8시간을 넘는 대이동은 신체가 오히려 늦춤(지연)으로 재동조하는 경향이 있어 「서쪽」으로 처리합니다.
             </div>
           </details>
         )}
@@ -266,9 +291,9 @@ export default function JetLagClient() {
 
       {/* 탭 */}
       <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'pre' ? s.tabActive : ''}`} onClick={() => setTab('pre')}>여행 전</button>
-        <button className={`${s.tabBtn} ${tab === 'flight' ? s.tabActive : ''}`} onClick={() => setTab('flight')}>비행 중</button>
-        <button className={`${s.tabBtn} ${tab === 'post' ? s.tabActive : ''}`} onClick={() => setTab('post')}>도착 후</button>
+        <button type="button" aria-pressed={tab === 'pre'} className={`${s.tabBtn} ${tab === 'pre' ? s.tabActive : ''}`} onClick={() => setTab('pre')}>여행 전</button>
+        <button type="button" aria-pressed={tab === 'flight'} className={`${s.tabBtn} ${tab === 'flight' ? s.tabActive : ''}`} onClick={() => setTab('flight')}>비행 중</button>
+        <button type="button" aria-pressed={tab === 'post'} className={`${s.tabBtn} ${tab === 'post' ? s.tabActive : ''}`} onClick={() => setTab('post')}>도착 후</button>
       </div>
 
       {tab === 'pre' && (
@@ -379,14 +404,14 @@ function PreTab({ timeDiff, direction, bedtime, waketime, absDiff, fromName, toN
       <div className={s.infoCard}>
         <div className={s.infoHead}>멜라토닌 복용 타이밍</div>
         <ul>
-          {direction === 'east' && <li>동쪽 이동: 도착지 기준 저녁 21~22시에 복용 권장</li>}
-          {direction === 'west' && <li>서쪽 이동: 출발 며칠 전부터 도착지 취침 시간에 맞춰 복용</li>}
-          {direction === 'none' && <li>시차가 없어 별도 복용이 필요하지 않습니다.</li>}
-          <li>0.5~1mg 소량이 효과적 (고용량보다 저용량 권장)</li>
-          <li>잠들기 30~60분 전 복용</li>
+          {direction === 'none'
+            ? <li>시차가 없어 별도 복용이 필요하지 않습니다.</li>
+            : <li><strong>도착지의 목표 취침 시각 30~60분 전</strong>에 복용 (Cochrane: 5시간대 이상 이동에서 시차 감소, 도착지 밤 시각 기준)</li>}
+          <li>0.5~1mg 소량 권장 — 고용량(3~5mg)과 효과는 비슷하나 다음날 잔류 졸림 등 부작용이 적음</li>
+          <li>낮에 잘못 복용하면 오히려 졸음·적응 지연 — 도착지 밤 시각에 맞추세요</li>
         </ul>
         <div className={s.warnCard} style={{ marginTop: 10 }}>
-          ⚠️ 멜라토닌은 의약품·건강기능식품으로 분류가 다르며 임산부·청소년 등은 주의가 필요합니다. 복용 전 의사 또는 약사와 상담을 권장합니다.
+          ⚠️ 한국에서 멜라토닌은 전문의약품(서카딘 등)으로 처방이 필요하며 임산부·청소년 등은 주의가 필요합니다. 복용 전 의사 또는 약사와 상담하세요.
         </div>
       </div>
 
@@ -446,15 +471,16 @@ function FlightTab({ flightHours, timeDiff, departTime, bedtime, fromName, toNam
   // 비행 중 도착지 시각 t시간 후 = (takeoffLocalH + t) mod 24
   // 수면 권장 구간(들) 찾기
   const sleepWindows: { start: number; end: number }[] = []
-  for (let t = 0; t <= flightHours; t += 0.25) {
+  for (let t = 0; t < flightHours; t += 0.25) {  // 착륙 순간(t=flightHours) 제외 — 종료 시각이 비행시간 초과 방지
     const localH = (takeoffLocalH + t) % 24
     const inNight = localH >= NIGHT_START || localH < NIGHT_END
     if (inNight) {
+      const segEnd = Math.min(t + 0.25, flightHours)  // 마지막 조각을 착륙 시각으로 클램프
       const last = sleepWindows[sleepWindows.length - 1]
       if (last && Math.abs(last.end - t) < 0.3) {
-        last.end = t + 0.25
+        last.end = segEnd
       } else {
-        sleepWindows.push({ start: t, end: t + 0.25 })
+        sleepWindows.push({ start: t, end: segEnd })
       }
     }
   }
@@ -465,7 +491,7 @@ function FlightTab({ flightHours, timeDiff, departTime, bedtime, fromName, toNam
     return max
   }, null)
 
-  // 카페인 컷오프 — 평소 취침 시각 - 8시간 (보통 반감기)
+  // 카페인 컷오프 — 평소 취침 시각 − 8시간 (반감기 ~5h 위에 얹은 보수적 안전버퍼; Drake 2013 최소 6h)
   const bedH = parseHHMM(bedtime)
   const cutoffH = ((bedH - 8) + 24) % 24
 
@@ -500,7 +526,7 @@ function FlightTab({ flightHours, timeDiff, departTime, bedtime, fromName, toNam
             </div>
             <div className={s.flightBox}>
               <div className={s.flightBoxLabel}>총 수면 가능</div>
-              <div className={s.flightBoxValue} style={{ color: '#0891B2' }}>{(biggestSleep.end - biggestSleep.start).toFixed(1)}시간</div>
+              <div className={s.flightBoxValue} style={{ color: 'var(--cat-health)' }}>{(biggestSleep.end - biggestSleep.start).toFixed(1)}시간</div>
             </div>
           </div>
         ) : (
@@ -513,7 +539,7 @@ function FlightTab({ flightHours, timeDiff, departTime, bedtime, fromName, toNam
       <div className={s.card}>
         <div className={s.cardTitle}>카페인 마지막 허용 시각 (자동)</div>
         <p className={s.sub} style={{ marginTop: 0, marginBottom: 10 }}>
-          평소 취침 시각({bedtime}) − 카페인 반감기 8시간으로 자동 계산.
+          평소 취침 시각({bedtime}) − 8시간으로 자동 계산 (카페인 반감기는 평균 약 5시간, 8시간은 잔류를 고려한 보수적 버퍼).
         </p>
         <div className={s.flightResult}>
           <div className={s.flightBox}>
@@ -616,7 +642,10 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
   waketime: string
 }) {
   const targetBed = parseHHMM(bedtime)
-  const hoursToEndure = ((targetBed - arrivalLocalH) + 24) % 24
+  const wakeHour = parseHHMM(waketime)
+  // 밤 도착 판정: 현지 도착이 목표 취침~기상 사이면 버틸 필요 없이 바로 취침
+  const nightArrival = arrivalLocalH >= targetBed || arrivalLocalH < wakeHour
+  const hoursToEndure = nightArrival ? 0 : ((targetBed - arrivalLocalH) + 24) % 24
 
   // 비행 길이 기반 추정 수면 (대략 비행시간의 1/3, 최대 6시간)
   const estimatedFlightSleep = Math.min(6, Math.round(flightHours * 0.33 * 2) / 2)
@@ -626,10 +655,11 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
     hoursToEndure <= 5 && estimatedFlightSleep >= 3 ? 'mid' :
     hoursToEndure <= 8 && estimatedFlightSleep >= 2 ? 'high' : 'veryHigh'
 
-  // 낮잠 판정 — 도착 직후 가정
+  // 낮잠 판정 — 도착 시각 기준 (밤 도착은 낮잠이 아니라 바로 취침)
   const napH = arrivalLocalH
-  const napDecision: { status: 'ok' | 'warn' | 'no'; max: number; note: string } =
-    napH < 15 ? { status: 'ok', max: 30, note: '짧은 낮잠은 회복에 도움이 됩니다. 알람 설정 필수!' }
+  const napDecision: { status: 'ok' | 'warn' | 'no' | 'sleep'; max: number; note: string } =
+    nightArrival ? { status: 'sleep', max: 0, note: '이미 현지 밤 시간대에 도착했습니다. 낮잠 대신 바로 정상 취침하세요.' }
+    : napH < 15 ? { status: 'ok', max: 30, note: '짧은 낮잠은 회복에 도움이 됩니다. 알람 설정 필수!' }
     : napH < 17 ? { status: 'warn', max: 15, note: '15분 이내로만 짧게. 더 길게 자면 밤잠이 방해받아요.' }
     : { status: 'no', max: 0, note: '지금 낮잠은 밤잠을 망칩니다. 조금만 더 버티세요.' }
 
@@ -676,31 +706,38 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
           </div>
           <div className={s.flightBox}>
             <div className={s.flightBoxLabel}>남은 버팀 시간</div>
-            <div className={s.flightBoxValue}>{Math.floor(hoursToEndure)}시간 {Math.round((hoursToEndure % 1) * 60)}분</div>
+            <div className={s.flightBoxValue}>{nightArrival ? '바로 취침' : (() => {
+              const mins = Math.round(hoursToEndure * 60)  // 시·분 함께 반올림 → "60분" 롤오버 방지
+              return `${Math.floor(mins / 60)}시간 ${mins % 60}분`
+            })()}</div>
           </div>
           <div className={s.flightBox}>
             <div className={s.flightBoxLabel}>피로도 추정</div>
             <div className={s.flightBoxValue} style={{
-              color: fatigue === 'low' ? '#059669' : fatigue === 'mid' ? '#FFD93E' : fatigue === 'high' ? '#EA580C' : '#DC2626',
+              color: fatigue === 'low' ? 'var(--success)' : fatigue === 'mid' ? 'var(--warning)' : fatigue === 'high' ? 'var(--cat-life)' : 'var(--danger)',
             }}>
               {fatigue === 'low' ? '낮음' : fatigue === 'mid' ? '보통' : fatigue === 'high' ? '높음' : '매우 높음'}
             </div>
             <div className={s.flightBoxSub}>기내 수면 ≈{estimatedFlightSleep}h 가정</div>
           </div>
         </div>
-        <p className={s.sub} style={{ marginTop: 10 }}>오늘은 <strong style={{ color: 'var(--accent)' }}>현지 {bedtime}</strong>까지 버텨서 취침하는 것을 목표로 하세요.</p>
+        <p className={s.sub} style={{ marginTop: 10 }}>
+          {nightArrival
+            ? <>이미 현지 밤 시간대에 도착했습니다 — <strong style={{ color: 'var(--accent)' }}>지금 바로 정상 취침</strong>하세요.</>
+            : <>오늘은 <strong style={{ color: 'var(--accent)' }}>현지 {bedtime}</strong>까지 버텨서 취침하는 것을 목표로 하세요.</>}
+        </p>
       </div>
 
       {/* 낮잠 판정 — 입력 없이 도착 시각 기준 */}
-      <div className={`${s.napCard} ${napDecision.status === 'ok' ? s.napOk : napDecision.status === 'warn' ? s.napWarn : s.napNo}`}>
+      <div className={`${s.napCard} ${napDecision.status === 'ok' || napDecision.status === 'sleep' ? s.napOk : napDecision.status === 'warn' ? s.napWarn : s.napNo}`}>
         <div className={s.cardTitle}>낮잠 판정 (도착 직후 기준)</div>
         <p className={s.sub} style={{ marginTop: 0, marginBottom: 10 }}>
           현지 {formatHours(arrivalLocalH)} 도착 직후 낮잠 권장 여부.
         </p>
         <div className={s.napStatus}>
-          {napDecision.status === 'ok' ? '✅ 낮잠 OK' : napDecision.status === 'warn' ? '⚠️ 주의 — 15분 이내' : '❌ 낮잠 금지'}
+          {napDecision.status === 'sleep' ? '🌙 바로 취침' : napDecision.status === 'ok' ? '✅ 낮잠 OK' : napDecision.status === 'warn' ? '⚠️ 주의 — 15분 이내' : '❌ 낮잠 금지'}
         </div>
-        <div className={s.napBig}>{napDecision.max > 0 ? `${napDecision.max}분 이내` : '0분'}</div>
+        <div className={s.napBig}>{napDecision.status === 'sleep' ? '정상 취침' : napDecision.max > 0 ? `${napDecision.max}분 이내` : '0분'}</div>
         <div className={s.napNote}>{napDecision.note}</div>
       </div>
 
@@ -722,7 +759,7 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
           </div>
           <div className={s.flightBox}>
             <div className={s.flightBoxLabel}>피해야 할 시간</div>
-            <div className={s.flightBoxValue} style={{ fontSize: 14, color: '#EA580C' }}>{sun.avoid}</div>
+            <div className={s.flightBoxValue} style={{ fontSize: 14, color: 'var(--warning)' }}>{sun.avoid}</div>
           </div>
         </div>
       </div>
