@@ -5,7 +5,7 @@ import Disclaimer from '@/components/Disclaimer'
 import styles from './timezone.module.css'
 import {
   CITIES, DEFAULT_SELECTED, City,
-  partsInZone, offsetMinutes, formatOffset, isDSTActive, observesDST,
+  partsInZone, offsetMinutes, formatOffset, isDSTActive,
   zonedTimeToUtc, dateOffsetLabel, classifyHour, BUCKET_LABEL,
   findMeetingSlots, diffLabel,
 } from './timezoneData'
@@ -35,13 +35,17 @@ export default function TimezoneClient() {
   const [baseId, setBaseId] = useState<string>('seoul')
   const [selected, setSelected] = useState<string[]>(DEFAULT_SELECTED)
   const [liveNow, setLiveNow] = useState(true)
-  const [baseInput, setBaseInput] = useState<string>(() => formatLocalInput(new Date(), 'Asia/Seoul'))
+  // 초기값은 빈 문자열 — SSG 빌드 시각이 HTML에 박혀 하이드레이션 불일치·묵은 시계 노출되는 것 방지 (마운트 후 채움)
+  const [baseInput, setBaseInput] = useState<string>('')
   const [search, setSearch] = useState('')
   const [showAdd, setShowAdd] = useState(false)
   const [workStart, setWorkStart] = useState(9)
   const [workEnd, setWorkEnd] = useState(18)
   const [copyOk, setCopyOk] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const initRef = useRef(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   // 로컬스토리지 복원
   useEffect(() => {
@@ -54,8 +58,9 @@ export default function TimezoneClient() {
           const valid = data.selected.filter((id: string) => CITIES.find(c => c.id === id))
           if (valid.length > 0) setSelected(valid)
         }
-        if (typeof data.workStart === 'number') setWorkStart(data.workStart)
-        if (typeof data.workEnd === 'number') setWorkEnd(data.workEnd)
+        // select 옵션 범위(시작 6~18·종료 12~24) 밖 값이 저장돼 있으면 무시 — 범위 밖이면 controlled select가 빈 표시가 됨
+        if (typeof data.workStart === 'number' && Number.isInteger(data.workStart) && data.workStart >= 6 && data.workStart <= 18) setWorkStart(data.workStart)
+        if (typeof data.workEnd === 'number' && Number.isInteger(data.workEnd) && data.workEnd >= 12 && data.workEnd <= 24) setWorkEnd(data.workEnd)
       }
     } catch { /* noop */ }
     initRef.current = true
@@ -228,7 +233,7 @@ export default function TimezoneClient() {
             className={styles.dtInput}
             value={baseInput}
             onChange={e => { setBaseInput(e.target.value); setLiveNow(false) }}
-            disabled={liveNow}
+            aria-label="기준 시각"
           />
           <select
             className={styles.baseSelect}
@@ -241,7 +246,9 @@ export default function TimezoneClient() {
             ))}
           </select>
           <button
+            type="button"
             className={`${styles.nowBtn} ${liveNow ? styles.nowBtnLive : ''}`}
+            aria-pressed={liveNow}
             onClick={() => setLiveNow(v => !v)}
           >
             {liveNow ? '● LIVE' : '지금'}
@@ -259,13 +266,13 @@ export default function TimezoneClient() {
           {orderedIds.map(id => {
             const c = CITIES.find(cc => cc.id === id)
             if (!c) return null
-            const p = partsInZone(baseUtc, c.timeZone)
-            const dateOff = dateOffsetLabel(basePartsForOffset.year, basePartsForOffset.month, basePartsForOffset.day, p.year, p.month, p.day)
-            const off = offsetMinutes(baseUtc, c.timeZone)
-            const dst = observesDST(c.timeZone) && isDSTActive(baseUtc, c.timeZone)
-            const bucket = classifyHour(p.hour)
+            // 마운트 전엔 시각 의존 값을 렌더하지 않음 — SSG HTML에 빌드 시각이 박히는 것 방지
+            const p = mounted ? partsInZone(baseUtc, c.timeZone) : null
+            const dateOff = p ? dateOffsetLabel(basePartsForOffset.year, basePartsForOffset.month, basePartsForOffset.day, p.year, p.month, p.day) : ''
+            const dst = mounted && isDSTActive(baseUtc, c.timeZone)
+            const bucket = p ? classifyHour(p.hour) : null
             const isBase = id === baseId
-            const bucketCls = styles[`resCardBucket${bucket.charAt(0).toUpperCase() + bucket.slice(1)}` as keyof typeof styles] || ''
+            const bucketCls = bucket ? (styles[`resCardBucket${bucket.charAt(0).toUpperCase() + bucket.slice(1)}` as keyof typeof styles] || '') : ''
             return (
               <div key={id} className={`${styles.resCard} ${isBase ? styles.resCardBase : ''} ${bucketCls}`}>
                 <div className={styles.resHead}>
@@ -274,12 +281,12 @@ export default function TimezoneClient() {
                     <span>{c.city}</span>
                   </div>
                   {!isBase && (
-                    <button className={styles.resRemove} onClick={() => removeCity(id)} aria-label="제거">✕</button>
+                    <button type="button" className={styles.resRemove} onClick={() => removeCity(id)} aria-label={`${c.city} 제거`}>✕</button>
                   )}
                 </div>
-                <div className={styles.resTime}>{formatTime24(p)}</div>
+                <div className={styles.resTime}>{p ? formatTime24(p) : '--:--'}</div>
                 <div className={styles.resDate}>
-                  {p.month}월 {p.day}일 ({WEEKDAY_KR[p.weekday]}) · {formatTime12(p)}
+                  {p ? <>{p.month}월 {p.day}일 ({WEEKDAY_KR[p.weekday]}) · {formatTime12(p)}</> : ' '}
                   {dateOff && (
                     <span className={`${styles.resDateOffset} ${dateOff.startsWith('+') ? styles.resDateOffsetPlus : ''}`}>
                       {dateOff}
@@ -287,22 +294,22 @@ export default function TimezoneClient() {
                   )}
                 </div>
                 <div className={styles.resMeta}>
-                  <span className={styles.resAbbr}>{c.abbr}</span>
-                  <span>UTC{formatOffset(off)}</span>
+                  <span className={styles.resAbbr}>{dst && c.dstAbbr ? c.dstAbbr : c.abbr}</span>
+                  <span>UTC{p ? formatOffset(offsetMinutes(baseUtc, c.timeZone)) : c.offsetLabel}</span>
                   {dst && <span className={styles.resDst}>DST</span>}
-                  {!isBase && <span className={styles.resBucket}>· {diffLabel(offsetMinutes(baseUtc, baseCity.timeZone), off)}</span>}
-                  <span className={styles.resBucket}>· {BUCKET_LABEL[bucket]}</span>
+                  {p && !isBase && <span className={styles.resBucket}>· {diffLabel(offsetMinutes(baseUtc, baseCity.timeZone), offsetMinutes(baseUtc, c.timeZone))}</span>}
+                  {bucket && <span className={styles.resBucket}>· {BUCKET_LABEL[bucket]}</span>}
                 </div>
               </div>
             )
           })}
         </div>
 
-        <div style={{ marginTop: 12, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          <button className={styles.shareBtn} onClick={() => setShowAdd(v => !v)}>
+        <div className={styles.shareRow} style={{ marginTop: 12 }}>
+          <button type="button" className={styles.shareBtn} aria-expanded={showAdd} onClick={() => setShowAdd(v => !v)}>
             {showAdd ? '도시 목록 닫기' : '＋ 도시 추가'}
           </button>
-          <button className={styles.shareBtn} onClick={copyShare}>
+          <button type="button" className={styles.shareBtn} onClick={copyShare}>
             {copyOk ? '✓ 복사됨' : '텍스트 복사'}
           </button>
         </div>
@@ -312,23 +319,24 @@ export default function TimezoneClient() {
             <input
               className={styles.addInput}
               placeholder="도시·국가·약어 검색 (예: 뉴욕, paris, EST, KST)"
+              aria-label="도시 검색"
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
             <div className={styles.cityGrid}>
               {filteredCities.map(c => {
                 const isSel = selected.includes(c.id)
-                const off = offsetMinutes(baseUtc, c.timeZone)
                 return (
                   <button
                     key={c.id}
+                    type="button"
                     className={styles.cityChip}
                     disabled={isSel}
                     onClick={() => addCity(c.id)}
                   >
                     <span className={styles.cityChipFlag}>{c.flag}</span>
                     <span className={styles.cityChipName}>{c.city}</span>
-                    <span className={styles.cityChipOff}>UTC{formatOffset(off)}</span>
+                    <span className={styles.cityChipOff}>UTC{mounted ? formatOffset(offsetMinutes(baseUtc, c.timeZone)) : c.offsetLabel}</span>
                   </button>
                 )
               })}
@@ -346,22 +354,22 @@ export default function TimezoneClient() {
 
         <div className={styles.slotHead}>
           <div className={styles.slotLegend}><span className={`${styles.slotDot} ${styles.slotDotGreen}`}/>전원 근무시간</div>
-          <div className={styles.slotLegend}><span className={`${styles.slotDot} ${styles.slotDotYellow}`}/>일부 ±2시간</div>
+          <div className={styles.slotLegend}><span className={`${styles.slotDot} ${styles.slotDotYellow}`}/>확장 허용 (시작−1h·종료+2h)</div>
           <div className={styles.slotLegend}><span className={`${styles.slotDot} ${styles.slotDotRed}`}/>불가</div>
           <div className={styles.workInputs}>
             <span>근무시간</span>
-            <select value={workStart} onChange={e => setWorkStart(parseInt(e.target.value))}>
+            <select value={workStart} onChange={e => setWorkStart(parseInt(e.target.value))} aria-label="근무 시작 시각">
               {Array.from({ length: 13 }).map((_, i) => <option key={i} value={i + 6}>{i + 6}:00</option>)}
             </select>
             <span>~</span>
-            <select value={workEnd} onChange={e => setWorkEnd(parseInt(e.target.value))}>
+            <select value={workEnd} onChange={e => setWorkEnd(parseInt(e.target.value))} aria-label="근무 종료 시각">
               {Array.from({ length: 13 }).map((_, i) => <option key={i} value={i + 12}>{i + 12}:00</option>)}
             </select>
           </div>
         </div>
 
-        {/* 도시별 24시간 바 */}
-        <div className={styles.cityBars}>
+        {/* 도시별 24시간 바 — 시각 자료 (판독은 아래 베스트 슬롯 텍스트로 제공) */}
+        <div className={styles.cityBars} aria-hidden="true">
           {orderedIds.map(id => {
             const c = CITIES.find(cc => cc.id === id)
             if (!c) return null
@@ -372,20 +380,42 @@ export default function TimezoneClient() {
                   <span>{c.city}</span>
                 </div>
                 <div className={styles.barTrack}>
-                  {slots.map((s, i) => {
+                  {mounted && slots.map((s, i) => {
                     const p = partsInZone(s.utcDate, c.timeZone)
                     const bucket = classifyHour(p.hour)
                     const bucketCls = styles[`barCell${bucket.charAt(0).toUpperCase() + bucket.slice(1)}` as keyof typeof styles] || ''
                     // 기준 시각 마커: baseUtc와 가장 가까운 슬롯
-                    const slotMs = s.utcDate.getTime()
-                    const baseMs = baseUtc.getTime()
-                    const isMarker = Math.abs(slotMs - baseMs) < 7.5 * 60000
+                    const isMarker = Math.abs(s.utcDate.getTime() - baseUtc.getTime()) < 7.5 * 60000
                     return <div key={i} className={`${styles.barCell} ${bucketCls} ${isMarker ? styles.barCellMarker : ''}`} />
                   })}
                 </div>
               </div>
             )
           })}
+
+          {/* 도시 바 색상 안내 — 위 범례(판정 색)와 다른 체계임을 명시 */}
+          <div className={styles.bucketLegend}>
+            <div className={styles.slotLegend}><span className={`${styles.slotSq} ${styles.sqSleep}`}/>자는 시간</div>
+            <div className={styles.slotLegend}><span className={`${styles.slotSq} ${styles.sqMorning}`}/>이른 아침</div>
+            <div className={styles.slotLegend}><span className={`${styles.slotSq} ${styles.sqWork}`}/>근무</div>
+            <div className={styles.slotLegend}><span className={`${styles.slotSq} ${styles.sqEvening}`}/>저녁</div>
+            <div className={styles.slotLegend}><span className={`${styles.slotSq} ${styles.sqLate}`}/>늦은 밤</div>
+          </div>
+
+          {/* 전체 판정 바 — 상단 범례(녹/노/회)가 가리키는 행 */}
+          <div className={styles.cityBar} style={{ marginTop: 4 }}>
+            <div className={styles.cityBarLabel}>
+              <span>🎯</span>
+              <span>전체 판정</span>
+            </div>
+            <div className={styles.barTrack}>
+              {mounted && slots.map((s, i) => {
+                const isMarker = Math.abs(s.utcDate.getTime() - baseUtc.getTime()) < 7.5 * 60000
+                const cls = s.quality === 'green' ? styles.barCellQGreen : s.quality === 'yellow' ? styles.barCellQYellow : styles.barCellQRed
+                return <div key={i} className={`${styles.barCell} ${cls} ${isMarker ? styles.barCellMarker : ''}`} />
+              })}
+            </div>
+          </div>
         </div>
 
         {/* 시간 눈금 (기준 도시) */}
@@ -398,7 +428,7 @@ export default function TimezoneClient() {
 
         {/* 베스트 슬롯 */}
         <div className={styles.bestSlots}>
-          {bestSlots.length === 0 ? (
+          {!mounted ? null : bestSlots.length === 0 ? (
             <div className={styles.noSlots}>
               선택한 도시들의 근무시간이 겹치는 슬롯이 없습니다.<br/>
               근무 시간 폭을 늘리거나 도시를 줄여보세요.

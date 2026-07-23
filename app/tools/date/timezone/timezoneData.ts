@@ -8,8 +8,9 @@ export interface City {
   cityEn: string       // 영문
   country: string      // 한글 국가
   timeZone: string     // IANA tz id
-  abbr: string         // 약어 (KST, EST 등)
-  offsetLabel: string  // "+9:00" 같은 표시용 (DST 시 변동 가능)
+  abbr: string         // 표준시 약어 (KST, EST 등)
+  dstAbbr?: string     // DST 활성 시 약어 (EDT, BST 등) — 없으면 abbr 그대로
+  offsetLabel: string  // 표준시 오프셋 표시용 "+9:00" — 마운트 전 결정적 렌더에 사용
 }
 
 export const CITIES: City[] = [
@@ -24,20 +25,20 @@ export const CITIES: City[] = [
   { id: 'tehran',    flag: '🇮🇷', city: '테헤란',   cityEn: 'Tehran',       country: '이란',     timeZone: 'Asia/Tehran',        abbr: 'IRST', offsetLabel: '+3:30' },
   { id: 'dubai',     flag: '🇦🇪', city: '두바이',   cityEn: 'Dubai',        country: 'UAE',      timeZone: 'Asia/Dubai',         abbr: 'GST',  offsetLabel: '+4:00' },
   { id: 'moscow',    flag: '🇷🇺', city: '모스크바', cityEn: 'Moscow',       country: '러시아',   timeZone: 'Europe/Moscow',      abbr: 'MSK',  offsetLabel: '+3:00' },
-  { id: 'berlin',    flag: '🇩🇪', city: '베를린',   cityEn: 'Berlin',       country: '독일',     timeZone: 'Europe/Berlin',      abbr: 'CET',  offsetLabel: '+1:00' },
-  { id: 'paris',     flag: '🇫🇷', city: '파리',     cityEn: 'Paris',        country: '프랑스',   timeZone: 'Europe/Paris',       abbr: 'CET',  offsetLabel: '+1:00' },
-  { id: 'london',    flag: '🇬🇧', city: '런던',     cityEn: 'London',       country: '영국',     timeZone: 'Europe/London',      abbr: 'GMT',  offsetLabel: '+0:00' },
+  { id: 'berlin',    flag: '🇩🇪', city: '베를린',   cityEn: 'Berlin',       country: '독일',     timeZone: 'Europe/Berlin',      abbr: 'CET',  dstAbbr: 'CEST', offsetLabel: '+1:00' },
+  { id: 'paris',     flag: '🇫🇷', city: '파리',     cityEn: 'Paris',        country: '프랑스',   timeZone: 'Europe/Paris',       abbr: 'CET',  dstAbbr: 'CEST', offsetLabel: '+1:00' },
+  { id: 'london',    flag: '🇬🇧', city: '런던',     cityEn: 'London',       country: '영국',     timeZone: 'Europe/London',      abbr: 'GMT',  dstAbbr: 'BST',  offsetLabel: '+0:00' },
   { id: 'utc',       flag: '🌍', city: 'UTC',      cityEn: 'UTC',          country: '협정세계시', timeZone: 'UTC',                abbr: 'UTC',  offsetLabel: '+0:00' },
   { id: 'sao',       flag: '🇧🇷', city: '상파울루', cityEn: 'São Paulo',    country: '브라질',   timeZone: 'America/Sao_Paulo',  abbr: 'BRT',  offsetLabel: '-3:00' },
-  { id: 'nyc',       flag: '🇺🇸', city: '뉴욕',     cityEn: 'New York',     country: '미국',     timeZone: 'America/New_York',   abbr: 'EST',  offsetLabel: '-5:00' },
-  { id: 'toronto',   flag: '🇨🇦', city: '토론토',   cityEn: 'Toronto',      country: '캐나다',   timeZone: 'America/Toronto',    abbr: 'EST',  offsetLabel: '-5:00' },
-  { id: 'chicago',   flag: '🇺🇸', city: '시카고',   cityEn: 'Chicago',      country: '미국',     timeZone: 'America/Chicago',    abbr: 'CST',  offsetLabel: '-6:00' },
-  { id: 'denver',    flag: '🇺🇸', city: '덴버',     cityEn: 'Denver',       country: '미국',     timeZone: 'America/Denver',     abbr: 'MST',  offsetLabel: '-7:00' },
-  { id: 'la',        flag: '🇺🇸', city: 'LA',       cityEn: 'Los Angeles',  country: '미국',     timeZone: 'America/Los_Angeles', abbr: 'PST', offsetLabel: '-8:00' },
-  { id: 'vancouver', flag: '🇨🇦', city: '밴쿠버',   cityEn: 'Vancouver',    country: '캐나다',   timeZone: 'America/Vancouver',  abbr: 'PST',  offsetLabel: '-8:00' },
+  { id: 'nyc',       flag: '🇺🇸', city: '뉴욕',     cityEn: 'New York',     country: '미국',     timeZone: 'America/New_York',   abbr: 'EST',  dstAbbr: 'EDT', offsetLabel: '-5:00' },
+  { id: 'toronto',   flag: '🇨🇦', city: '토론토',   cityEn: 'Toronto',      country: '캐나다',   timeZone: 'America/Toronto',    abbr: 'EST',  dstAbbr: 'EDT', offsetLabel: '-5:00' },
+  { id: 'chicago',   flag: '🇺🇸', city: '시카고',   cityEn: 'Chicago',      country: '미국',     timeZone: 'America/Chicago',    abbr: 'CST',  dstAbbr: 'CDT', offsetLabel: '-6:00' },
+  { id: 'denver',    flag: '🇺🇸', city: '덴버',     cityEn: 'Denver',       country: '미국',     timeZone: 'America/Denver',     abbr: 'MST',  dstAbbr: 'MDT', offsetLabel: '-7:00' },
+  { id: 'la',        flag: '🇺🇸', city: 'LA',       cityEn: 'Los Angeles',  country: '미국',     timeZone: 'America/Los_Angeles', abbr: 'PST', dstAbbr: 'PDT', offsetLabel: '-8:00' },
+  { id: 'vancouver', flag: '🇨🇦', city: '밴쿠버',   cityEn: 'Vancouver',    country: '캐나다',   timeZone: 'America/Vancouver',  abbr: 'PST',  dstAbbr: 'PDT', offsetLabel: '-8:00' },
   { id: 'honolulu',  flag: '🇺🇸', city: '호놀룰루', cityEn: 'Honolulu',     country: '미국',     timeZone: 'Pacific/Honolulu',   abbr: 'HST',  offsetLabel: '-10:00' },
-  { id: 'sydney',    flag: '🇦🇺', city: '시드니',   cityEn: 'Sydney',       country: '호주',     timeZone: 'Australia/Sydney',   abbr: 'AEST', offsetLabel: '+10:00' },
-  { id: 'auckland',  flag: '🇳🇿', city: '오클랜드', cityEn: 'Auckland',     country: '뉴질랜드', timeZone: 'Pacific/Auckland',   abbr: 'NZST', offsetLabel: '+12:00' },
+  { id: 'sydney',    flag: '🇦🇺', city: '시드니',   cityEn: 'Sydney',       country: '호주',     timeZone: 'Australia/Sydney',   abbr: 'AEST', dstAbbr: 'AEDT', offsetLabel: '+10:00' },
+  { id: 'auckland',  flag: '🇳🇿', city: '오클랜드', cityEn: 'Auckland',     country: '뉴질랜드', timeZone: 'Pacific/Auckland',   abbr: 'NZST', dstAbbr: 'NZDT', offsetLabel: '+12:00' },
 ]
 
 export const DEFAULT_SELECTED = ['seoul', 'nyc', 'london', 'la', 'sydney']
@@ -92,25 +93,18 @@ export function formatOffset(minutes: number): string {
   return mm === 0 ? `${sign}${h}` : `${sign}${h}:${String(mm).padStart(2, '0')}`
 }
 
-// 해당 시점에 DST가 활성화되어 있는가? (1월과 7월 오프셋 비교)
+// 해당 시점에 DST가 활성화되어 있는가? — 입력 연도의 1월/7월 오프셋 비교라
+// DST 미시행 지역(jan==jul)은 자동으로 false, 과거 제도(이란 ~2022 등)도 그 해 기준으로 판정
 export function isDSTActive(date: Date, timeZone: string): boolean {
   const year = partsInZone(date, timeZone).year
   const jan = new Date(Date.UTC(year, 0, 15, 12, 0, 0))
   const jul = new Date(Date.UTC(year, 6, 15, 12, 0, 0))
   const janOff = offsetMinutes(jan, timeZone)
   const julOff = offsetMinutes(jul, timeZone)
-  if (janOff === julOff) return false  // DST 없음
+  if (janOff === julOff) return false  // 그 해 DST 없음
   const stdOff = Math.min(janOff, julOff)  // 표준시는 더 작은 값
   const nowOff = offsetMinutes(date, timeZone)
   return nowOff !== stdOff
-}
-
-// timeZone이 DST를 사용하는가?
-export function observesDST(timeZone: string): boolean {
-  const year = new Date().getUTCFullYear()
-  const jan = new Date(Date.UTC(year, 0, 15, 12, 0, 0))
-  const jul = new Date(Date.UTC(year, 6, 15, 12, 0, 0))
-  return offsetMinutes(jan, timeZone) !== offsetMinutes(jul, timeZone)
 }
 
 // 입력 폼(특정 timeZone 기준 Y/M/D H:M)을 UTC Date로 변환
@@ -165,26 +159,10 @@ export const BUCKET_LABEL: Record<TimeBucket, string> = {
   late:    '🌌 늦은 밤',
 }
 
-// 회의 슬롯 평가: 시각이 (UTC 시점) 모든 도시에서 근무시간(9~18)에 들면 'green', 일부 외(8~9, 18~20)면 'yellow', 그 외는 'red'
+// 회의 슬롯 품질: 모든 도시가 근무시간이면 green, 전원이 확장 허용폭(시작 1시간 전 ~ 종료 2시간 후)이면 yellow, 그 외 red
 export type SlotQuality = 'green' | 'yellow' | 'red'
 
-export function evaluateSlot(utcDate: Date, timeZones: string[], workStart = 9, workEnd = 18): { quality: SlotQuality; bestHour: number } {
-  let worst: SlotQuality = 'green'
-  for (const tz of timeZones) {
-    const p = partsInZone(utcDate, tz)
-    const h = p.hour + p.minute / 60
-    if (h >= workStart && h < workEnd) {
-      // green 유지
-    } else if (h >= workStart - 1 && h < workEnd + 2) {
-      if (worst === 'green') worst = 'yellow'
-    } else {
-      worst = 'red'
-    }
-  }
-  return { quality: worst, bestHour: 0 }
-}
-
-// 25시간 슬롯(15분 단위)을 만들어 회의 가능 시간대 분석
+// 24시간을 15분 단위 96슬롯으로 나눠 회의 가능 시간대 분석
 export interface MeetingSlot {
   utcDate: Date
   quality: SlotQuality

@@ -45,7 +45,7 @@
   border-radius: 10px;
   padding: 10px 12px;
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 15px;
+  font-size: 16px;  /* iOS Safari 포커스 자동 확대 방지 (<16px) */
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -59,7 +59,7 @@
   border-radius: 10px;
   padding: 10px 12px;
   font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
-  font-size: 14px;
+  font-size: 16px;  /* iOS 줌 방지 */
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -82,7 +82,7 @@
 }
 @media (hover: hover) { .nowBtn:hover { background: var(--accent-hover); } }
 .nowBtnLive {
-  background: #DC2626;
+  background: var(--danger);
   animation: pulse 1.4s ease-in-out infinite;
 }
 @media (hover: hover) { .nowBtnLive:hover { background: #B91C1C; } }
@@ -151,7 +151,7 @@
   line-height: 1;
   border-radius: 4px;
 }
-@media (hover: hover) { .resRemove:hover { color: #DC2626; background: rgba(220,38,38,0.08); } }
+@media (hover: hover) { .resRemove:hover { color: var(--danger); background: rgba(220,38,38,0.08); } }
 
 .resTime {
   font-family: 'Inter', system-ui, sans-serif;
@@ -176,13 +176,13 @@
   padding: 1px 6px;
   border-radius: 999px;
   background: rgba(220,38,38,0.10);
-  color: #DC2626;
+  color: var(--danger);
   font-weight: 700;
   font-size: 11px;
 }
 .resDateOffsetPlus {
   background: rgba(16,185,129,0.12);
-  color: #059669;
+  color: var(--success);
 }
 
 .resMeta {
@@ -201,7 +201,7 @@
 }
 .resDst {
   background: rgba(245,158,11,0.15);
-  color: #D97706;
+  color: var(--warning);
   padding: 1px 5px;
   border-radius: 4px;
   font-weight: 700;
@@ -226,7 +226,7 @@
   border-radius: 10px;
   padding: 10px 14px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14px;
+  font-size: 16px;  /* iOS 줌 방지 */
   color: var(--text);
   outline: none;
   box-sizing: border-box;
@@ -301,7 +301,7 @@
   border-radius: 6px;
   padding: 4px 7px;
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 12px;
+  font-size: 16px;  /* iOS 줌 방지 */
   color: var(--text);
   outline: none;
 }
@@ -347,10 +347,31 @@
 .barCellWork    { background: #A7F3D0; }
 .barCellEvening { background: #FCE7F3; }
 .barCellLate    { background: #DDD6FE; }
+/* 전체 판정 행 — 상단 범례(녹/노/회)와 동일 색 */
+.barCellQGreen  { background: #10B981; }
+.barCellQYellow { background: #F59E0B; }
+.barCellQRed    { background: #E5E7EB; }
 .barCellMarker {
   background: var(--accent);
   box-shadow: inset 0 0 0 1px rgba(14,165,233,0.9);
 }
+
+/* 도시 바 색상(생활 시간대) 범례 */
+.bucketLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 2px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+}
+.slotSq { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.sqSleep   { background: #E0E7FF; }
+.sqMorning { background: #FEF3C7; }
+.sqWork    { background: #A7F3D0; }
+.sqEvening { background: #FCE7F3; }
+.sqLate    { background: #DDD6FE; }
 
 /* 시간 눈금 */
 .hourScale {
