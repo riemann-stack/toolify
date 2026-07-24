@@ -142,7 +142,10 @@
   gap: 8px;
 }
 @media (max-width: 480px) {
-  .dobRow { grid-template-columns: 1fr 1fr 1fr; }
+  .dobRow { grid-template-columns: 1.35fr 1fr 1fr; }
+}
+@media (max-width: 360px) {
+  .dobSelect { padding: 12px 8px; }
 }
 .dobSelect {
   width: 100%;

@@ -39,6 +39,23 @@ const EXPECTANCY_PRESETS = [
   { id: 'cent',  label: '✨ 100세 시대',       value: 100  },
 ]
 
+/* 2024년 생명표 성·연령별 기대여명(년) — 국가데이터처 간이생명표 공표 원값 (0세 기대수명과 달리
+   해당 나이까지 생존한 사람의 잔여 기대치. 예: 80세 남 8.52년 → 종점 약 88.5세).
+   구간 사이 나이는 선형보간(근사), 100세 이상은 100+ 개방구간 값으로 클램프. */
+const EX_AGES   = [0, 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
+const EX_MALE   = [80.81, 80.02, 76.07, 71.10, 66.14, 61.22, 56.33, 51.49, 46.67, 41.88, 37.17, 32.55, 28.06, 23.72, 19.54, 15.53, 11.84, 8.52, 5.90, 3.99, 2.71, 1.89]
+const EX_FEMALE = [86.58, 85.76, 81.81, 76.84, 71.87, 66.95, 62.04, 57.15, 52.26, 47.41, 42.60, 37.82, 33.09, 28.39, 23.75, 19.21, 14.87, 10.89, 7.56, 5.07, 3.37, 2.30]
+
+function remainingEx(age: number, sex: 'm' | 'f'): number {
+  const vals = sex === 'm' ? EX_MALE : EX_FEMALE
+  if (age <= 0) return vals[0]
+  if (age >= 100) return vals[vals.length - 1]
+  let i = 0
+  while (i < EX_AGES.length - 2 && EX_AGES[i + 1] <= age) i++
+  const t = (age - EX_AGES[i]) / (EX_AGES[i + 1] - EX_AGES[i])
+  return vals[i] + (vals[i + 1] - vals[i]) * t
+}
+
 type Mode = 'growth' | 'balance' | 'memento'
 type ModeStage = 'pickMode' | 'mementoConfirm' | 'show'
 
@@ -102,10 +119,21 @@ export default function LifeTimeClient() {
     : n(expectancyCustom, 1)
 
   const calc = useMemo(() => {
-    /* 소수 기대수명(80.8세 등)을 연+일로 반영 — 반올림(81세) 시 프리셋 표기와 어긋남 */
-    const endDate = new Date(birthDate)
-    endDate.setFullYear(birthDate.getFullYear() + Math.floor(expectancy))
-    endDate.setDate(endDate.getDate() + Math.round((expectancy % 1) * 365.25))
+    const usesEx = expectancyPreset === 'kor_m' || expectancyPreset === 'kor_f'
+    let endDate: Date
+    if (usesEx && today.getTime() >= birthDate.getTime()) {
+      /* 성별 프리셋 = 현재 나이까지 생존을 반영한 잔여 기대여명으로 종점 계산 (0세 기대수명 고정 종점의 과소 추정 방지) */
+      const ageYears = (today.getTime() - birthDate.getTime()) / (365.25 * 86400000)
+      const ex = remainingEx(ageYears, expectancyPreset === 'kor_m' ? 'm' : 'f')
+      endDate = new Date(today)
+      endDate.setDate(endDate.getDate() + Math.round(ex * 365.25))
+    } else {
+      /* 직접 입력·기타 프리셋 = 입력 나이 고정 종점. 소수 기대수명을 연+일로 반영 — 반올림(81세) 시 표기와 어긋남 */
+      endDate = new Date(birthDate)
+      endDate.setFullYear(birthDate.getFullYear() + Math.floor(expectancy))
+      endDate.setDate(endDate.getDate() + Math.round((expectancy % 1) * 365.25))
+    }
+    const endAge = (endDate.getTime() - birthDate.getTime()) / (365.25 * 86400000)
     const totalMs = endDate.getTime() - birthDate.getTime()
     const passedMs = Math.max(0, today.getTime() - birthDate.getTime())
     const remainingMs = Math.max(0, endDate.getTime() - today.getTime())
@@ -121,23 +149,42 @@ export default function LifeTimeClient() {
 
     const yearsRemaining = remainingMs / (365.25 * 86400000)
 
+    /* 매년 (월, 일)이 (오늘, 종점] 사이에 실제로 몇 번 오는지 — 연수 내림이 아닌 달력 기준 */
+    const countAnnual = (month: number, day: number) => {
+      let cnt = 0
+      for (let y = today.getFullYear(); y <= endDate.getFullYear(); y++) {
+        const d = new Date(y, month - 1, day)
+        if (d.getTime() > today.getTime() && d.getTime() <= endDate.getTime()) cnt++
+      }
+      return cnt
+    }
+    /* (오늘, 종점] 사이 실제 토요일 수 */
+    const firstSat = new Date(today)
+    firstSat.setDate(firstSat.getDate() + (((6 - firstSat.getDay()) + 7) % 7 || 7))
+    const weekends = firstSat.getTime() <= endDate.getTime()
+      ? Math.floor((endDate.getTime() - firstSat.getTime()) / (7 * 86400000)) + 1
+      : 0
+
     return {
       passed: { days: passedDays, weeks: passedWeeks, hours: passedDays * 24, minutes: passedDays * 24 * 60 },
       remaining: { days: remainingDays, weeks: remainingWeeks, hours: remainingDays * 24 },
       total: { days: totalDays, weeks: totalWeeks },
       progress,
       yearsRemaining,
-      beyond: passedMs > totalMs,  // 나이가 설정한 기대수명을 이미 넘어선 경우
+      usesEx,
+      endAge,
+      beyond: passedMs > totalMs,  // 나이가 설정한 기대수명을 이미 넘어선 경우 (고정 종점 모드에서만 발생)
+      futureBirth: birthDate.getTime() > today.getTime(),
       events: {
-        birthdays:  Math.max(0, Math.floor(yearsRemaining)),
-        springs:    Math.max(0, Math.floor(yearsRemaining)),
-        newYears:   Math.max(0, Math.floor(yearsRemaining)),
-        christmas:  Math.max(0, Math.floor(yearsRemaining)),
-        weekends:   Math.max(0, Math.floor(yearsRemaining * 52)),
+        birthdays:  countAnnual(birthDate.getMonth() + 1, birthDate.getDate()),
+        springs:    countAnnual(3, 1),
+        newYears:   countAnnual(1, 1),
+        christmas:  countAnnual(12, 25),
+        weekends,
         fullMoons:  Math.max(0, Math.floor(yearsRemaining * 12.37)),
       },
     }
-  }, [birthDate, expectancy, today])
+  }, [birthDate, expectancy, expectancyPreset, today])
 
   /* 행동 누적 시간 */
   const action = useMemo(() => {
@@ -161,7 +208,7 @@ export default function LifeTimeClient() {
 
   /* 메멘토: 주 단위 격자 SVG 좌표 */
   const weekGrid = useMemo(() => {
-    const rows = Math.max(1, Math.round(expectancy))
+    const rows = Math.max(1, Math.round(calc.endAge))
     const cols = 52
     const totalCells = rows * cols
     const passedCells = Math.min(totalCells, calc.passed.weeks)
@@ -170,7 +217,7 @@ export default function LifeTimeClient() {
     const width = cols * (cellSize + gap)
     const height = rows * (cellSize + gap)
     return { rows, cols, totalCells, passedCells, cellSize, gap, width, height }
-  }, [expectancy, calc.passed.weeks])
+  }, [calc.endAge, calc.passed.weeks])
 
   /* 오늘의 명상 */
   const meditation = MEDITATIONS[todayIndex(MEDITATIONS.length)]
@@ -298,10 +345,19 @@ export default function LifeTimeClient() {
 
           <p className={styles.cardLabelHint} style={{ marginBottom: 6 }}>생년월일</p>
           <div className={styles.dobRow}>
-            <select className={styles.dobSelect} aria-label="출생 연도" value={birthYear} onChange={e => setBirthYear(Number(e.target.value))}>
+            <select className={styles.dobSelect} aria-label="출생 연도" value={birthYear} onChange={e => {
+              const y = Number(e.target.value)
+              setBirthYear(y)
+              /* 연도 변경으로 2/29 등이 사라지면 일(日)을 말일로 클램프 — 방치 시 2/31→3/3 정규화 오차 */
+              setBirthDay(d => Math.min(d, new Date(y, birthMonth, 0).getDate()))
+            }}>
               {yearOptions.map(y => <option key={y} value={y}>{y}년</option>)}
             </select>
-            <select className={styles.dobSelect} aria-label="출생 월" value={birthMonth} onChange={e => setBirthMonth(Number(e.target.value))}>
+            <select className={styles.dobSelect} aria-label="출생 월" value={birthMonth} onChange={e => {
+              const m = Number(e.target.value)
+              setBirthMonth(m)
+              setBirthDay(d => Math.min(d, new Date(birthYear, m, 0).getDate()))
+            }}>
               {monthOptions.map(m => <option key={m} value={m}>{m}월</option>)}
             </select>
             <select className={styles.dobSelect} aria-label="출생 일" value={birthDay} onChange={e => setBirthDay(Number(e.target.value))}>
@@ -344,13 +400,23 @@ export default function LifeTimeClient() {
             <span className={styles.unit}>세 (직접 입력)</span>
           </div>
           <p className={styles.cardLabelHint} style={{ marginTop: 10, lineHeight: 1.7 }}>
-            ※ 평균 기대수명은 <strong style={{ color: 'var(--text)' }}>출생 시 기준</strong>입니다. 현재 나이가 많을수록 실제 기대여명 기준 종점은 이보다 늦어집니다(예: 60세는 평균적으로 80대 중반 이상). 통계청 완전생명표의 나이별 기대여명을 참고해 직접 입력으로 조정해 보세요.
+            ※ <strong style={{ color: 'var(--text)' }}>남성·여성 평균 프리셋</strong>은 현재 나이까지 생존을 반영한 <strong style={{ color: 'var(--text)' }}>나이별 기대여명</strong>(2024년 생명표, 구간 선형보간 근사)으로 종점을 계산합니다 — 나이가 많을수록 종점이 80.8세·86.6세보다 늦어집니다(예: 60세 남성 종점 약 83.7세, 80세 남성 약 88.5세). 세계 평균·100세·직접 입력은 입력한 나이를 고정 종점으로 사용합니다.
           </p>
         </div>
       )}
 
       {/* ─── 결과 ─── */}
-      {mounted && stage === 'show' && mode === 'growth' && (
+      {/* 미래 생년월일 가드 — 올해 말일 등 오늘 이후 날짜 선택 시 결과 대신 안내 */}
+      {mounted && stage === 'show' && calc.futureBirth && (
+        <div className={styles.card} role="alert">
+          <div className={styles.cardLabel}><span>생년월일 확인</span></div>
+          <p className={styles.cardLabelHint} style={{ lineHeight: 1.8 }}>
+            선택한 생년월일이 오늘 이후입니다. 아직 오지 않은 날짜로는 살아온 시간을 계산할 수 없어요 — 생년월일을 다시 확인해 주세요.
+          </p>
+        </div>
+      )}
+
+      {mounted && stage === 'show' && !calc.futureBirth && mode === 'growth' && (
         <>
           <div className={styles.hero} role="status">
             <p className={styles.heroLabel}>지금까지</p>
@@ -388,7 +454,7 @@ export default function LifeTimeClient() {
         </>
       )}
 
-      {mounted && stage === 'show' && mode === 'balance' && (
+      {mounted && stage === 'show' && !calc.futureBirth && mode === 'balance' && (
         <>
           <div className={styles.hero} role="status">
             <div className={styles.heroDual}>
@@ -413,7 +479,7 @@ export default function LifeTimeClient() {
               </div>
               <div className={styles.progressLabel}>
                 <span>출생</span>
-                <span>{expectancy % 1 ? expectancy.toFixed(1) : expectancy}세</span>
+                <span>{calc.usesEx ? `약 ${calc.endAge.toFixed(1)}세` : `${expectancy % 1 ? expectancy.toFixed(1) : expectancy}세`}</span>
               </div>
               <p className={styles.progressPct}>{calc.progress.toFixed(1)}% 지점</p>
             </div>
@@ -461,10 +527,10 @@ export default function LifeTimeClient() {
         </>
       )}
 
-      {mounted && stage === 'show' && mode === 'memento' && (
+      {mounted && stage === 'show' && !calc.futureBirth && mode === 'memento' && (
         <>
           <div className={styles.hero} role="status">
-            <p className={styles.heroLabel}>기대수명 {expectancy % 1 ? expectancy.toFixed(1) : expectancy}세 기준</p>
+            <p className={styles.heroLabel}>{calc.usesEx ? `현재 나이 기대여명 반영 · 종점 약 ${calc.endAge.toFixed(1)}세` : `기대수명 ${expectancy % 1 ? expectancy.toFixed(1) : expectancy}세 기준`}</p>
             {calc.beyond ? (
               <p className={styles.heroSub} style={{ fontSize: 14, lineHeight: 1.8 }}>
                 통계적 평균을 이미 넘어서셨습니다. 기대수명은 <strong style={{ color: 'var(--text)' }}>집단의 평균</strong>일 뿐 개인의 시간을 정하지 않습니다 — 지금의 하루하루가 평균 너머의 시간입니다. 직접 입력으로 목표 나이를 설정해 계속 살펴보세요.
@@ -528,7 +594,7 @@ export default function LifeTimeClient() {
       )}
 
       {/* 행동 전환 카드 (모든 모드 공통) */}
-      {mounted && stage === 'show' && (
+      {mounted && stage === 'show' && !calc.futureBirth && (
         <div className={styles.card}>
           <div className={styles.cardLabel}>
             <span>하루 {actionMin}분의 가치</span>
@@ -569,6 +635,11 @@ export default function LifeTimeClient() {
             ))}
           </div>
 
+          {calc.beyond && (
+            <p className={styles.cardLabelHint} style={{ marginBottom: 10, lineHeight: 1.7 }}>
+              설정한 기대수명 기준 잔여 시간이 0이라 아래는 기간별 일반 예시입니다 — 오늘부터 1년·5년을 이어갈 때의 누적량이에요.
+            </p>
+          )}
           <div className={styles.actionResultGrid}>
             <div className={styles.actionResultCell}>
               <p className={styles.actionResultLabel}>1년 누적</p>
@@ -578,15 +649,19 @@ export default function LifeTimeClient() {
               <p className={styles.actionResultLabel}>5년 누적</p>
               <p className={styles.actionResultValue}>{fmt(action.fiveYearHours)}<span className={styles.actionResultUnit}>시간</span></p>
             </div>
-            <div className={styles.actionResultCell}>
-              <p className={styles.actionResultLabel}>가능 시간 누적</p>
-              <p className={styles.actionResultValue}>{fmt(action.totalHours)}<span className={styles.actionResultUnit}>시간</span></p>
-            </div>
+            {!calc.beyond && (
+              <div className={styles.actionResultCell}>
+                <p className={styles.actionResultLabel}>가능 시간 누적</p>
+                <p className={styles.actionResultValue}>{fmt(action.totalHours)}<span className={styles.actionResultUnit}>시간</span></p>
+              </div>
+            )}
           </div>
 
-          <div className={styles.actionEquivalent}>
-            앞으로 매일 {actionMin}분씩 {activity.label}을(를) 이어가면 약 <strong>{action.equivYears.toFixed(1)}년</strong>의 시간을 이 활동에 쌓을 수 있어요.
-          </div>
+          {!calc.beyond && (
+            <div className={styles.actionEquivalent}>
+              앞으로 매일 {actionMin}분씩 {activity.label}을(를) 이어가면 약 <strong>{action.equivYears.toFixed(1)}년</strong>의 시간을 이 활동에 쌓을 수 있어요.
+            </div>
+          )}
 
           <div className={styles.proverbCard}>
             {activity.proverb}
@@ -595,7 +670,7 @@ export default function LifeTimeClient() {
       )}
 
       {/* 공유 */}
-      {mounted && stage === 'show' && (
+      {mounted && stage === 'show' && !calc.futureBirth && (
         <button type="button" className={`${styles.shareBtn} ${copied ? styles.copied : ''}`} onClick={handleShare}>
           {copied ? '✓ 복사 완료' : '공유 텍스트 복사'}
         </button>
@@ -607,9 +682,9 @@ export default function LifeTimeClient() {
         <div className={styles.supportBody}>
           <strong>이 도구를 보고 무거운 감정이 드신다면, 혼자 견디지 마세요.</strong>
           <ul>
-            <li>자살예방상담전화 — <a href="tel:1393">1393</a> (24시간 무료)</li>
-            <li>정신건강위기상담전화 — <a href="tel:15770199">1577-0199</a></li>
-            <li>청소년 상담 — <a href="tel:1388">1388</a></li>
+            <li>자살예방 상담전화 — <a href="tel:109">109</a> (24시간 무료, 카카오톡 SNS 상담 &lsquo;마들랜&rsquo; 병행)</li>
+            <li>정신건강상담전화 — <a href="tel:15770199">1577-0199</a> (24시간)</li>
+            <li>청소년상담1388 — <a href="tel:1388">1388</a> (9~24세 청소년·보호자, 휴대전화는 지역번호+1388)</li>
           </ul>
           <p style={{ marginTop: 8, color: 'var(--muted)' }}>위기 상황이 아니어도, 일상의 부담이 많을 때 상담받으실 수 있습니다.</p>
         </div>
