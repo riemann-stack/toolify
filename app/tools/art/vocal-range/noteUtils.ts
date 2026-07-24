@@ -10,9 +10,9 @@ export interface NoteInfo {
   midi: number
   name: string          // "A4"
   noteOnly: string       // "A"
-  octave: number         // 4 (음악 정통, C4 = middle C)
-  koreanOctave: number   // 3 (한국 관행, C4 = 3옥타브 도)
-  korean: string         // "3옥타브 라"
+  octave: number         // 4 (국제 과학 표기, C4 = middle C)
+  koreanOctave: number   // 2 (한국 대중음악 관행, C4 = 2옥타브 도 · A4 = 2옥타브 라)
+  korean: string         // "2옥타브 라"
   frequency: number
 }
 
@@ -20,7 +20,9 @@ export function midiToNote(midi: number): NoteInfo {
   const rounded = Math.round(midi)
   const octave = Math.floor(rounded / 12) - 1
   const idx = ((rounded % 12) + 12) % 12
-  const koreanOctave = octave - 1  // C4 = 3옥타브
+  /* 한국 보컬 커뮤니티 관행 = 과학 옥타브 − 2 (앵커: 소찬휘 Tears 최고음 G5 = "3옥타브 솔",
+     남성 고음 기준 A4 = "2옥타브 라"). E2 등 저음은 "0옥타브 미"로 음수·0 옥타브 표기가 정상 */
+  const koreanOctave = octave - 2
   return {
     midi: rounded,
     name: `${NOTE_NAMES[idx]}${octave}`,
@@ -42,19 +44,13 @@ export function midiToFrequency(midi: number): number {
 }
 
 export function noteNameToMidi(name: string): number {
-  // "A4", "F#3" 등 파싱
+  // "A4", "F#3", "Bb2" 등 파싱 — 변화표는 자연음 MIDI ±1 (Cb4=B3, B#3=C4 옥타브 경계 자동 처리)
   const m = name.match(/^([A-G])(#|b)?(-?\d+)$/)
   if (!m) return 60
-  const noteIdx = NOTE_NAMES.indexOf(m[1] + (m[2] === '#' ? '#' : ''))
+  const natural = NOTE_NAMES.indexOf(m[1])
+  const accidental = m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0
   const octave = parseInt(m[3], 10)
-  let idx = noteIdx
-  if (m[2] === 'b') {
-    // flat → 한 칸 아래
-    idx = NOTE_NAMES.indexOf(m[1])
-    if (idx > 0) idx--
-  }
-  if (idx < 0) idx = 0
-  return (octave + 1) * 12 + idx
+  return (octave + 1) * 12 + natural + accidental
 }
 
 /* cents 차이 (-50 ~ +50): 음표 정확도 */

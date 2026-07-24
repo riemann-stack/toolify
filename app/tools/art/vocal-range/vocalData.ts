@@ -28,13 +28,13 @@ const mk = (id: string, name: string, shortName: string, low: string, high: stri
 })
 
 export const VOCAL_RANGES: VocalRange[] = [
-  mk('bass',         '베이스',     'Bass',   'E2', 'E4', '남성 가장 낮은 음역',   '이정·김광진',   '#0891B2', 'male'),
+  mk('bass',         '베이스',     'Bass',   'E2', 'E4', '남성 가장 낮은 음역',   '고우림·연광철', '#0891B2', 'male'),
   mk('baritone',     '바리톤',     'Baritone', 'G2', 'G4', '남성 중간 음역',         '성시경·박효신', '#059669', 'male'),
   mk('tenor',        '테너',       'Tenor',   'C3', 'C5', '남성 높은 음역',          '이수·휘성',     '#A16207', 'male'),
-  mk('countertenor', '카운터테너', 'Countertenor', 'E3', 'E5', '남성 매우 높은 음역', '폴 포츠',        '#EA580C', 'male'),
+  mk('countertenor', '카운터테너', 'Countertenor', 'E3', 'E5', '남성 매우 높은 음역', '이동규·최성훈',  '#EA580C', 'male'),
   mk('contralto',    '콘트랄토',   'Contralto', 'F3', 'F5', '여성 가장 낮은 음역',   '이은미',         '#9333EA', 'female'),
-  mk('alto',         '알토',       'Alto',     'G3', 'G5', '여성 중간 음역',         '아이유 (저음)',   '#DB2777', 'female'),
-  mk('mezzo',        '메조소프라노', 'Mezzo',   'A3', 'A5', '여성 중상 음역',         '백지영·태연',     '#DC2626', 'female'),
+  mk('alto',         '알토',       'Alto',     'G3', 'G5', '여성 중간 음역 (합창 파트 관행 값)', '—',  '#DB2777', 'female'),
+  mk('mezzo',        '메조소프라노', 'Mezzo',   'A3', 'A5', '여성 중상 음역',         '백지영·이하이',   '#DC2626', 'female'),
   mk('soprano',      '소프라노',   'Soprano', 'C4', 'C6', '여성 높은 음역',          '아이유·박정현',   '#FFB347', 'female'),
 ]
 
@@ -54,11 +54,11 @@ export const KOREAN_SONGS: SongData[] = [
   { title: '벚꽃엔딩',           artist: '버스커버스커',  lowest: 'D3',  highest: 'A4',  rangeText: '19반음', difficulty: '하',   genre: '발라드' },
   { title: '너의 의미',          artist: '아이유',        lowest: 'A3',  highest: 'D5',  rangeText: '17반음', difficulty: '하',   genre: '발라드' },
   { title: '봄봄봄',             artist: '로이킴',        lowest: 'B2',  highest: 'F#4', rangeText: '19반음', difficulty: '하',   genre: '발라드' },
-  { title: '소주 한 잔',          artist: '임창정',        lowest: 'A2',  highest: 'A4',  rangeText: '24반음', difficulty: '중',   genre: '발라드' },
+  { title: '소주 한 잔',          artist: '임창정',        lowest: 'F#2', highest: 'B4',  rangeText: '29반음', difficulty: '중상', genre: '발라드' },
   { title: '눈의 꽃',            artist: '박효신',        lowest: 'B2',  highest: 'A4',  rangeText: '22반음', difficulty: '중',   genre: '발라드' },
-  { title: '밤편지',             artist: '아이유',        lowest: 'F#3', highest: 'F#5', rangeText: '24반음', difficulty: '중상', genre: '발라드' },
-  { title: '좋은 날',            artist: '아이유',        lowest: 'A3',  highest: 'F5',  rangeText: '20반음', difficulty: '상',   genre: '발라드' },
-  { title: 'Lilac',              artist: '아이유',        lowest: 'F#3', highest: 'D5',  rangeText: '19반음', difficulty: '중상', genre: '발라드' },
+  { title: '밤편지',             artist: '아이유',        lowest: 'A#3', highest: 'C5',  rangeText: '14반음', difficulty: '중',   genre: '발라드' },
+  { title: '좋은 날',            artist: '아이유',        lowest: 'A3',  highest: 'F#5', rangeText: '21반음', difficulty: '상',   genre: '발라드' },
+  { title: 'Lilac',              artist: '아이유',        lowest: 'F#3', highest: 'D5',  rangeText: '20반음', difficulty: '중상', genre: '발라드' },
   { title: '야생화',             artist: '박효신',        lowest: 'B2',  highest: 'B4',  rangeText: '24반음', difficulty: '중상', genre: '발라드' },
   { title: '겨울잠',             artist: '아이유',        lowest: 'A3',  highest: 'C#5', rangeText: '16반음', difficulty: '중',   genre: '발라드' },
   { title: '서른 즈음에',        artist: '김광석',        lowest: 'A2',  highest: 'F#4', rangeText: '21반음', difficulty: '중',   genre: '발라드' },
@@ -76,20 +76,20 @@ export const KOREAN_SONGS: SongData[] = [
   { title: '서울의 달',          artist: '김건모',        lowest: 'A2',  highest: 'E4',  rangeText: '19반음', difficulty: '중',   genre: '발라드' },
   // 고난도
   { title: 'Lay Back',           artist: '이수',          lowest: 'A2',  highest: 'C5',  rangeText: '27반음', difficulty: '상',   genre: '록발라드' },
-  { title: 'Tears',              artist: '소찬휘',        lowest: 'B3',  highest: 'A5',  rangeText: '22반음', difficulty: '최상', genre: '록발라드' },
+  { title: 'Tears',              artist: '소찬휘',        lowest: 'B3',  highest: 'G5',  rangeText: '20반음', difficulty: '최상', genre: '록발라드' },
   { title: 'Lost',               artist: '박효신',        lowest: 'A2',  highest: 'A4',  rangeText: '24반음', difficulty: '중상', genre: '록발라드' },
   { title: '다시 사랑한다 말할까', artist: '김동률',        lowest: 'A2',  highest: 'F#4', rangeText: '21반음', difficulty: '중',   genre: '발라드' },
   // 트로트·그 외
   { title: '아무노래',           artist: '지코',          lowest: 'C3',  highest: 'A4',  rangeText: '21반음', difficulty: '중',   genre: '힙합' },
   { title: '강남스타일',          artist: '싸이',          lowest: 'B2',  highest: 'B4',  rangeText: '24반음', difficulty: '중',   genre: '댄스' },
-  { title: '안녕',               artist: '폴킴',          lowest: 'B2',  highest: 'G#4', rangeText: '22반음', difficulty: '중',   genre: '발라드' },
+  { title: '안녕',               artist: '폴킴',          lowest: 'B2',  highest: 'G#4', rangeText: '21반음', difficulty: '중',   genre: '발라드' },
   { title: '모든 날, 모든 순간',   artist: '폴킴',          lowest: 'C3',  highest: 'A4',  rangeText: '21반음', difficulty: '중',   genre: '발라드' },
   { title: '취중진담',            artist: '김동률',        lowest: 'A2',  highest: 'G4',  rangeText: '22반음', difficulty: '중상', genre: '발라드' },
   { title: '나는 나비',           artist: 'YB',            lowest: 'C3',  highest: 'A4',  rangeText: '21반음', difficulty: '중',   genre: '록' },
   { title: '잔소리',              artist: '아이유·임슬옹', lowest: 'A3',  highest: 'C5',  rangeText: '15반음', difficulty: '하',   genre: '발라드' },
   { title: '너에게',              artist: '서태지와아이들', lowest: 'B2', highest: 'F#4', rangeText: '19반음', difficulty: '중',   genre: '댄스' },
   { title: '예아',                artist: '윤하',          lowest: 'A3',  highest: 'D5',  rangeText: '17반음', difficulty: '중',   genre: '록' },
-  { title: '사건의 지평선',        artist: '윤하',          lowest: 'F#3', highest: 'D5',  rangeText: '19반음', difficulty: '중상', genre: '록' },
+  { title: '사건의 지평선',        artist: '윤하',          lowest: 'F#3', highest: 'D5',  rangeText: '20반음', difficulty: '중상', genre: '록' },
   { title: '잘 가요 내 사랑',      artist: '거미',          lowest: 'A3',  highest: 'F5',  rangeText: '20반음', difficulty: '상',   genre: '발라드' },
 ]
 

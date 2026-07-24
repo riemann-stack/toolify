@@ -5,6 +5,7 @@ import Disclaimer from '@/components/Disclaimer'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './vocal-range.module.css'
+import { todayStr } from '@/lib/date'
 import {
   VocalAnalyzer, PitchSample,
   detectStableNotes, calcRangeStats,
@@ -43,7 +44,17 @@ const STORAGE_KEY = 'youtil_vocal_range_v1'
 
 function loadHistory(): MeasureRecord[] {
   if (typeof window === 'undefined') return []
-  try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : [] } catch { return [] }
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    // 무검증 as T 금지 — 필드·범위 검증 통과 항목만
+    return parsed.filter((h): h is MeasureRecord =>
+      h && typeof h.id === 'string' && typeof h.date === 'string' &&
+      Number.isFinite(h.lowestMidi) && Number.isFinite(h.highestMidi) &&
+      Number.isFinite(h.rangeSemitones) && typeof h.classId === 'string')
+  } catch { return [] }
 }
 function saveHistory(items: MeasureRecord[]) {
   if (typeof window === 'undefined') return
@@ -65,6 +76,17 @@ export default function VocalRangeClient() {
   const [measuredHighMidi, setMeasuredHighMidi] = useState<number | null>(null)
   const [falsettoHighMidi, setFalsettoHighMidi] = useState<number | null>(null)
   const [measureStep, setMeasureStep] = useState<'idle' | 'low' | 'high' | 'falsetto' | 'done'>('idle')
+  /* 단계 시작 이전의 안정음(직전 단계·실시간 탭 잔향)이 즉시 기록되는 오염 방지 */
+  const stepStartTimeRef = useRef(0)
+
+  const beginStep = (step: 'low' | 'high' | 'falsetto') => {
+    if (!running) startAnalyzer()
+    stepStartTimeRef.current = Date.now()
+    if (step === 'low') setMeasuredLowMidi(null)
+    else if (step === 'high') setMeasuredHighMidi(null)
+    else setFalsettoHighMidi(null)
+    setMeasureStep(step)
+  }
 
   const [history, setHistory] = useState<MeasureRecord[]>([])
   useEffect(() => { setHistory(loadHistory()) }, [])
@@ -116,6 +138,7 @@ export default function VocalRangeClient() {
     if (!running || measureStep === 'idle' || measureStep === 'done') return
     const recent = stableNotes.slice(-1)[0]
     if (!recent) return
+    if (recent.startTime < stepStartTimeRef.current) return  // 단계 시작 전 소리 제외
 
     if (measureStep === 'low') {
       if (measuredLowMidi === null || recent.noteRoundedMidi < measuredLowMidi) {
@@ -162,7 +185,7 @@ export default function VocalRangeClient() {
     if (!stats || !classification) return
     const item: MeasureRecord = {
       id: Date.now().toString(36),
-      date: new Date().toISOString(),
+      date: todayStr(),
       lowestMidi: stats.lowestMidi,
       highestMidi: stats.highestMidi,
       rangeSemitones: stats.rangeSemitones,
@@ -240,7 +263,7 @@ export default function VocalRangeClient() {
       {/* 탭 */}
       <div className={styles.tabs}>
         {TABS.map(t => (
-          <button key={t.id}
+          <button key={t.id} type="button" aria-pressed={tab === t.id}
             className={`${styles.tabBtn} ${tab === t.id ? TAB_ACTIVE[t.id] : ''}`}
             onClick={() => setTab(t.id)}>
             <span style={{ marginRight: 4 }}>{t.icon}</span>{t.name}
@@ -250,11 +273,11 @@ export default function VocalRangeClient() {
 
       {/* 마이크 컨트롤 */}
       {!running ? (
-        <button className={styles.startBtn} onClick={startAnalyzer}>
+        <button type="button" className={styles.startBtn} onClick={startAnalyzer}>
           마이크 시작 — 권한 허용 후 음정 감지
         </button>
       ) : (
-        <button className={styles.stopBtn} onClick={stopAnalyzer}>
+        <button type="button" className={styles.stopBtn} onClick={stopAnalyzer}>
           ⏸️ 정지 — 마이크 권한 종료
         </button>
       )}
@@ -316,7 +339,7 @@ export default function VocalRangeClient() {
                     {midiToNote(Math.round(chartData.minMidi)).name}
                   </text>
                   <polyline points={chartData.points} fill="none"
-                    stroke="#9333EA" strokeWidth="2" strokeLinejoin="round" />
+                    stroke="var(--cat-art)" strokeWidth="2" strokeLinejoin="round" />
                 </svg>
               </div>
             </div>
@@ -379,16 +402,13 @@ export default function VocalRangeClient() {
             {measuredLowMidi !== null && (
               <div className={styles.stepValue}>
                 <span className={styles.stepValueLabel}>현재 최저</span>
-                <span className={styles.stepValueNote} style={{ color: '#059669' }}>
+                <span className={styles.stepValueNote} style={{ color: 'var(--success)' }}>
                   {midiToNote(measuredLowMidi).name} ({midiToNote(measuredLowMidi).korean})
                 </span>
               </div>
             )}
             <button className={styles.copyBtn}
-              onClick={() => {
-                if (!running) startAnalyzer()
-                setMeasureStep('low')
-              }}
+              onClick={() => beginStep('low')}
               disabled={measureStep === 'low'}>
               {measureStep === 'low' ? '측정 중...' : measuredLowMidi !== null ? '다시 측정' : '▶ 시작'}
             </button>
@@ -419,10 +439,7 @@ export default function VocalRangeClient() {
               </div>
             )}
             <button className={styles.copyBtn}
-              onClick={() => {
-                if (!running) startAnalyzer()
-                setMeasureStep('high')
-              }}
+              onClick={() => beginStep('high')}
               disabled={measureStep === 'high'}>
               {measureStep === 'high' ? '측정 중...' : measuredHighMidi !== null ? '다시 측정' : '▶ 시작'}
             </button>
@@ -447,17 +464,14 @@ export default function VocalRangeClient() {
             {falsettoHighMidi !== null && (
               <div className={styles.stepValue}>
                 <span className={styles.stepValueLabel}>가성 최고</span>
-                <span className={styles.stepValueNote} style={{ color: '#A16207' }}>
+                <span className={styles.stepValueNote} style={{ color: 'var(--cat-sports)' }}>
                   {midiToNote(falsettoHighMidi).name} ({midiToNote(falsettoHighMidi).korean})
                 </span>
               </div>
             )}
             <div className={styles.optionRow}>
               <button className={styles.copyBtn}
-                onClick={() => {
-                  if (!running) startAnalyzer()
-                  setMeasureStep('falsetto')
-                }}
+                onClick={() => beginStep('falsetto')}
                 disabled={measureStep === 'falsetto'}>
                 {measureStep === 'falsetto' ? '측정 중...' : '▶ 시작'}
               </button>
@@ -508,13 +522,13 @@ export default function VocalRangeClient() {
                   {lowNote.korean} ~ {highNote.korean}
                 </div>
                 {falsettoNote && (
-                  <div className={styles.heroKorean} style={{ color: '#A16207' }}>
+                  <div className={styles.heroKorean} style={{ color: 'var(--cat-sports)' }}>
                     가성 최고: {falsettoNote.name} ({falsettoNote.korean})
                   </div>
                 )}
                 <span className={styles.heroClass}
                   style={{ background: `${classification.color}22`, color: classification.color, border: `1px solid ${classification.color}66` }}>
-                  {classification.name} · {classification.examples}
+                  {classification.name}{classification.examples !== '—' && ` · ${classification.examples}`}
                 </span>
               </div>
 
@@ -559,6 +573,9 @@ export default function VocalRangeClient() {
               {/* 음역 분류 안내 */}
               <div className={styles.card}>
                 <label className={styles.cardLabel}>음역대 분류 8가지</label>
+                <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px', lineHeight: 1.7 }}>
+                  ⓘ 측정 범위의 중간점과 가장 가까운 분류를 고르는 <strong>간이 분류</strong>로, 성별·음색을 반영하지 않습니다. 참고용으로만 보세요.
+                </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   {VOCAL_RANGES.map(r => {
                     const isCurrent = r.id === classification.id
@@ -681,7 +698,7 @@ export default function VocalRangeClient() {
                         <span className={styles.historyClass} style={cls ? { color: cls.color } : {}}>
                           {cls?.name ?? h.classId}
                         </span>
-                        <button className={`${styles.miniBtn} ${styles.miniDanger}`}
+                        <button type="button" aria-label={`${h.date.slice(0, 10)} 측정 기록 삭제`} className={`${styles.miniBtn} ${styles.miniDanger}`}
                           onClick={() => removeRecord(h.id)}>×</button>
                       </div>
                     )

@@ -37,7 +37,7 @@ const FAQ_LD = [
               },
               {
                 q: '음역대를 정말 늘릴 수 있나요?',
-                a: '<strong>네, 가능합니다.</strong> 보컬 트레이닝 연구에 따르면 꾸준한 훈련으로 6개월~1년에 2~5반음 확장이 일반적입니다. 다만 — ① 유전·신체적 한계 존재, ② 무리한 훈련은 성대 손상 위험, ③ 전문 트레이너 지도가 가장 효과적. 본 도구의 [측정 기록]으로 변화를 추적하면 동기부여에 도움이 됩니다.',
+                a: '<strong>네, 넓어질 수 있습니다.</strong> 다만 "몇 개월이면 몇 반음"을 보장하는 연구는 없습니다. 훈련된 가창자와 비훈련자를 비교한 문헌에서는 <strong>고음역 쪽 차이가 크고 최저음 차이는 가장 작게</strong> 나타납니다 — 집단 간 비교일 뿐 개인의 확장 속도를 뜻하지 않습니다. ① 유전·신체적 한계 존재, ② 무리한 훈련은 성대 손상 위험, ③ 본 도구의 오차가 ±2~3반음이므로 소폭 변화는 오차와 구분되지 않습니다 — 같은 환경에서 반복 측정한 추세로만 판단하세요.',
               },
               {
                 q: '내 음성 데이터가 서버로 전송되나요?',
@@ -72,7 +72,7 @@ export default function VocalRangePage() {
             <strong style={{ color: 'var(--text)' }}>안정적으로 낼 수 있는 가장 낮은 음 ~ 가장 높은 음의 범위</strong>를 의미합니다. 보통 <strong>진성(흉성) 음역</strong>과 <strong>가성(두성) 음역</strong>으로 나뉘며, 본 도구는 둘을 분리해 측정할 수 있습니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            성인 평균 진성 음역은 약 1.5~2 옥타브(18~24반음)이며, 보컬 트레이닝을 통해 2.5~3 옥타브 이상으로 확장할 수 있습니다. 가성을 포함하면 3~4 옥타브까지 늘어나는 경우도 있습니다.
+            노래에 실제로 쓰는 음역은 흔히 1.5~2옥타브(18~24반음)로 이야기되며, 훈련받은 성악가·가수에게서는 3옥타브를 넘는 측정치도 보고됩니다. 다만 이는 훈련 집단에서 관측된 값이지 훈련하면 누구나 도달한다는 보장이 아니며, 가성 포함 여부에 따라서도 크게 달라집니다.
           </p>
         </section>
 
@@ -90,13 +90,13 @@ export default function VocalRangePage() {
               </thead>
               <tbody>
                 {[
-                  ['♂ 베이스 (Bass)',           'E2~E4',  '이정·김광진'],
+                  ['♂ 베이스 (Bass)',           'E2~E4',  '고우림·연광철'],
                   ['♂ 바리톤 (Baritone)',       'G2~G4',  '성시경·박효신'],
                   ['♂ 테너 (Tenor)',            'C3~C5',  '이수·휘성'],
-                  ['♂ 카운터테너 (Countertenor)', 'E3~E5', '폴 포츠'],
+                  ['♂ 카운터테너 (Countertenor)', 'E3~E5', '이동규·최성훈'],
                   ['♀ 콘트랄토 (Contralto)',     'F3~F5', '이은미'],
-                  ['♀ 알토 (Alto)',              'G3~G5', '아이유 (저음 위주)'],
-                  ['♀ 메조소프라노 (Mezzo)',     'A3~A5', '백지영·태연'],
+                  ['♀ 알토 (Alto)',              'G3~G5', '— (합창 파트 관행 값)'],
+                  ['♀ 메조소프라노 (Mezzo)',     'A3~A5', '백지영·이하이'],
                   ['♀ 소프라노 (Soprano)',       'C4~C6', '아이유·박정현'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -109,7 +109,7 @@ export default function VocalRangePage() {
             </table>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ 위 분류는 클래식 성악 기준이며, 대중음악(K-POP)에서는 더 유연하게 사용됩니다. 같은 가수도 곡에 따라 다른 음역을 사용하므로 단정적 분류는 어렵습니다.
+            ⓘ 위 분류는 클래식 성악 기준이며, 대중음악(K-POP)에서는 더 유연하게 사용됩니다. 가수 예시는 음색·음역 관행에 따른 참고용 추정이고(대중가수는 공인 성악 분류가 없음), 같은 가수도 곡에 따라 다른 음역을 사용합니다. 바리톤은 A2~A4로 잡는 교과서도 있는 등 범위 경계는 자료마다 조금씩 다릅니다.
           </p>
         </section>
 
@@ -122,7 +122,8 @@ export default function VocalRangePage() {
             <li>· <strong style={{ color: 'var(--text)' }}>MIDI 변환</strong> — MIDI = 69 + 12 × log₂(주파수 / 440)</li>
             <li>· <strong style={{ color: 'var(--text)' }}>품질 필터</strong> — 신뢰도 85%+ / 볼륨 임계값 통과 / 사람 목소리 범위(70~2200Hz)</li>
             <li>· <strong style={{ color: 'var(--text)' }}>안정 음 감지</strong> — 0.5초 이상 0.7반음 이내로 유지된 음만 기록</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>음역 분류</strong> — 측정값 중간점과 가장 가까운 표준 음역대 자동 매칭</li>
+            <li>· <strong style={{ color: 'var(--text)' }}>음역 분류</strong> — 측정값 중간점과 가장 가까운 표준 음역대 자동 매칭 (간이 분류, 성별 미반영)</li>
+            <li>· <strong style={{ color: 'var(--text)' }}>옥타브 표기</strong> — 한국 대중음악 관행(가온 도 C4 = 2옥타브 도, A4 = 2옥타브 라, 소찬휘 Tears 최고음 G5 = 3옥타브 솔)을 따르며, 클래식·튜너 앱의 국제 표기(C4 = 4옥타브)와는 2옥타브 차이가 납니다</li>
           </ul>
         </section>
 
@@ -165,10 +166,10 @@ export default function VocalRangePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
             {[
-              { name: '🔻 최저음 확장', desc: '복부 호흡·후두 위치 안정으로 1~3반음 확장 가능' },
-              { name: '🔺 최고음 확장', desc: '두성·믹스 보이스 훈련으로 2~5반음 확장 가능' },
+              { name: '🔻 최저음', desc: '복부 호흡·후두 안정 훈련 영역. 문헌상 훈련 여부에 따른 차이가 가장 작은 영역입니다' },
+              { name: '🔺 최고음', desc: '두성·믹스 보이스 훈련 영역. 훈련·비훈련 집단 차이가 가장 크게 관측되는 영역입니다' },
               { name: '📏 안정 음역', desc: '워밍업·발성 안정성 향상으로 흔들림 감소' },
-              { name: '🌬️ 가성 최고음', desc: '두성 발성 훈련으로 큰 폭 확장 가능' },
+              { name: '🌬️ 가성 최고음', desc: '두성 발성 훈련 영역. 변화 폭은 개인차가 커 일반적 수치를 제시하기 어렵습니다' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px' }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{m.name}</p>
