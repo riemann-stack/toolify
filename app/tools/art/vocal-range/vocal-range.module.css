@@ -385,13 +385,14 @@
 .pianoKeyBlack {
   position: absolute;
   top: 0;
-  width: 60%;
+  /* 흰 건반 폭(100%/36) 기준 62% — 이전 60%는 .piano 전체(600px) 기준이라 360px씩 겹침 */
+  width: calc(100% / 36 * 0.62);
   height: 60%;
   background: #2a2a2a;
   border: 1px solid #1a1a1a;
   border-radius: 0 0 4px 4px;
   z-index: 2;
-  transform: translateX(70%);
+  transform: translateX(-50%);
   pointer-events: none;
 }
 .pianoKeyHilite {
@@ -556,10 +557,17 @@
 .guideBox li { margin-bottom: 3px; }
 
 /* 히스토리 */
-.historyTable { display: flex; flex-direction: column; gap: 4px; }
+.historyTable {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .historyRow {
   display: grid;
   grid-template-columns: 80px 60px 60px 60px 1fr auto;
+  min-width: 400px;
   gap: 8px;
   align-items: center;
   background: var(--bg3);

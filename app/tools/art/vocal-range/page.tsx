@@ -29,7 +29,7 @@ const FAQ_LD = [
               },
               {
                 q: '진성과 가성의 차이는?',
-                a: '<strong>진성(흉성)</strong>은 성대 전체가 진동하는 발성으로 가슴에서 울림이 느껴지며 굵고 안정적인 소리가 납니다. <strong>가성(두성)</strong>은 성대 가장자리만 진동하는 발성으로 머리에서 울림이 느껴지며 가볍고 부드러운 소리가 납니다. 본 도구는 두 발성의 자동 구분이 어려우므로 <strong>측정 단계를 분리</strong>해 사용자가 직접 진성·가성 최고음을 따로 기록합니다.',
+                a: '<strong>진성(흉성)</strong>은 성대 전체가 진동하는 발성으로 가슴에서 울림이 느껴지며 굵고 안정적인 소리가 납니다. <strong>가성(falsetto)</strong>은 성대 가장자리만 진동하는 가볍고 부드러운 발성입니다. 흔히 &lsquo;두성&rsquo;과 섞어 부르지만 엄밀히는 다른 개념으로, 두성(head voice)은 진성 계열 발성이 머리 쪽 울림으로 느껴지는 상태를 가리키는 표현에 가깝습니다. 본 도구는 두 발성의 자동 구분이 어려우므로 <strong>측정 단계를 분리</strong>해 사용자가 직접 진성·가성 최고음을 따로 기록합니다.',
               },
               {
                 q: '측정 결과가 매번 다른 이유?',
@@ -69,7 +69,7 @@ export default function VocalRangePage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>보컬 음역대란?</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
-            <strong style={{ color: 'var(--text)' }}>안정적으로 낼 수 있는 가장 낮은 음 ~ 가장 높은 음의 범위</strong>를 의미합니다. 보통 <strong>진성(흉성) 음역</strong>과 <strong>가성(두성) 음역</strong>으로 나뉘며, 본 도구는 둘을 분리해 측정할 수 있습니다.
+            <strong style={{ color: 'var(--text)' }}>안정적으로 낼 수 있는 가장 낮은 음 ~ 가장 높은 음의 범위</strong>를 의미합니다. 보통 <strong>진성(흉성) 음역</strong>과 <strong>가성 음역</strong>으로 나뉘며, 본 도구는 둘을 분리해 측정할 수 있습니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
             노래에 실제로 쓰는 음역은 흔히 1.5~2옥타브(18~24반음)로 이야기되며, 훈련받은 성악가·가수에게서는 3옥타브를 넘는 측정치도 보고됩니다. 다만 이는 훈련 집단에서 관측된 값이지 훈련하면 누구나 도달한다는 보장이 아니며, 가성 포함 여부에 따라서도 크게 달라집니다.
@@ -118,7 +118,7 @@ export default function VocalRangePage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>본 도구의 작동 원리</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
             <li>· <strong style={{ color: 'var(--text)' }}>마이크 입력</strong> — Web Audio API로 PCM 데이터 수집 (sampleRate 보통 44.1kHz)</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>피치 감지</strong> — pitchy 라이브러리 (YIN 알고리즘 기반) — 약 30KB 경량 의존성</li>
+            <li>· <strong style={{ color: 'var(--text)' }}>피치 감지</strong> — pitchy 라이브러리 (McLeod Pitch Method 기반) — 약 30KB 경량 의존성</li>
             <li>· <strong style={{ color: 'var(--text)' }}>MIDI 변환</strong> — MIDI = 69 + 12 × log₂(주파수 / 440)</li>
             <li>· <strong style={{ color: 'var(--text)' }}>품질 필터</strong> — 신뢰도 85%+ / 볼륨 임계값 통과 / 사람 목소리 범위(70~2200Hz)</li>
             <li>· <strong style={{ color: 'var(--text)' }}>안정 음 감지</strong> — 0.5초 이상 0.7반음 이내로 유지된 음만 기록</li>
@@ -203,7 +203,14 @@ export default function VocalRangePage() {
 
         {/* 면책 강화 */}
         <section>
-          <Disclaimer variant="safety" open>
+          <Disclaimer
+            variant="medical"
+            open
+            sources={[
+              { label: 'NIDCD — Taking Care of Your Voice (음성 건강 지침)', href: 'https://www.nidcd.nih.gov/health/taking-care-your-voice' },
+              { label: 'pitchy — McLeod Pitch Method 구현 (피치 감지 라이브러리)', href: 'https://github.com/ianprime0509/pitchy' },
+            ]}
+          >
             본 도구는 <strong>마이크 입력 기반 추정 도구</strong>이며 정확한 음역대 측정·평가 도구가 아닙니다. 보컬 트레이너의 청각 평가·전문 장비를 권장합니다.
             <br />
             <strong>안전 주의</strong> — 무리한 고음·소리 지르기는 성대 결절·출혈 위험이 있습니다. 통증·쉰 목소리·발성 이상이 지속되면 즉시 중단하고 이비인후과 진료를 받으세요.

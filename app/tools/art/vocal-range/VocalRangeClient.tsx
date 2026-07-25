@@ -91,7 +91,13 @@ export default function VocalRangeClient() {
   const [history, setHistory] = useState<MeasureRecord[]>([])
   useEffect(() => { setHistory(loadHistory()) }, [])
 
+  const [requesting, setRequesting] = useState(false)
+  const startingRef = useRef(false)  // 상태 반영 전 더블클릭 방지 (동기 가드)
+
   const startAnalyzer = async () => {
+    if (startingRef.current) return
+    startingRef.current = true
+    setRequesting(true)
     setError(null)
     if (analyzerRef.current) analyzerRef.current.stop()
     const a = new VocalAnalyzer()
@@ -115,6 +121,9 @@ export default function VocalRangeClient() {
     } catch (e) {
       const msg = e instanceof Error ? e.message : '마이크 접근 실패'
       setError(`${msg} — 브라우저 설정에서 마이크 권한을 허용하고 다시 시도하세요.`)
+    } finally {
+      startingRef.current = false
+      setRequesting(false)
     }
   }
 
@@ -169,8 +178,9 @@ export default function VocalRangeClient() {
     return calcRangeStats(stableNotes)
   }, [measuredLowMidi, measuredHighMidi, stableNotes])
 
+  /* 5반음 미만(한두 음만 측정)이면 중간점 분류가 무의미 — 분류 보류 */
   const classification = useMemo(
-    () => stats ? classifyVocalRange(stats.lowestMidi, stats.highestMidi) : null,
+    () => stats && stats.rangeSemitones >= 5 ? classifyVocalRange(stats.lowestMidi, stats.highestMidi) : null,
     [stats],
   )
 
@@ -182,14 +192,14 @@ export default function VocalRangeClient() {
   /* 저장 */
   const [saved, setSaved] = useState(false)
   const handleSave = () => {
-    if (!stats || !classification) return
+    if (!stats) return
     const item: MeasureRecord = {
       id: Date.now().toString(36),
       date: todayStr(),
       lowestMidi: stats.lowestMidi,
       highestMidi: stats.highestMidi,
       rangeSemitones: stats.rangeSemitones,
-      classId: classification.id,
+      classId: classification?.id ?? '',
     }
     const next = [item, ...history].slice(0, 30)
     setHistory(next); saveHistory(next)
@@ -273,8 +283,8 @@ export default function VocalRangeClient() {
 
       {/* 마이크 컨트롤 */}
       {!running ? (
-        <button type="button" className={styles.startBtn} onClick={startAnalyzer}>
-          마이크 시작 — 권한 허용 후 음정 감지
+        <button type="button" className={styles.startBtn} onClick={startAnalyzer} disabled={requesting}>
+          {requesting ? '마이크 권한 요청 중...' : '마이크 시작 — 권한 허용 후 음정 감지'}
         </button>
       ) : (
         <button type="button" className={styles.stopBtn} onClick={stopAnalyzer}>
@@ -429,7 +439,7 @@ export default function VocalRangeClient() {
               </span>
             </div>
             <div className={styles.stepTitle}>진성 최고음 측정</div>
-            <div className={styles.stepDesc}>점점 높게 &lsquo;아—&rsquo;를 5번 반복. 삑사리 나기 직전 안정 가능한 가장 높은 음.</div>
+            <div className={styles.stepDesc}>점점 높게 &lsquo;아—&rsquo;를 5번 반복. 편안한 음질과 호흡을 유지할 수 있는 가장 높은 음까지만 — 억지로 쥐어짜지 마세요.</div>
             {measuredHighMidi !== null && (
               <div className={styles.stepValue}>
                 <span className={styles.stepValueLabel}>현재 최고 (진성)</span>
@@ -503,7 +513,7 @@ export default function VocalRangeClient() {
       {/* ─── 탭 3: 결과·노래 ─── */}
       {tab === 'result' && (
         <>
-          {!stats || !classification || !lowNote || !highNote ? (
+          {!stats || !lowNote || !highNote ? (
             <div className={styles.empty}>
               <div className={styles.emptyTitle}>먼저 음역 측정을 완료하세요</div>
               [실시간] 또는 [음역 측정] 탭에서 안정 음을 기록하면 결과가 표시됩니다
@@ -526,10 +536,16 @@ export default function VocalRangeClient() {
                     가성 최고: {falsettoNote.name} ({falsettoNote.korean})
                   </div>
                 )}
-                <span className={styles.heroClass}
-                  style={{ background: `${classification.color}22`, color: classification.color, border: `1px solid ${classification.color}66` }}>
-                  {classification.name}{classification.examples !== '—' && ` · ${classification.examples}`}
-                </span>
+                {classification ? (
+                  <span className={styles.heroClass}
+                    style={{ background: `${classification.color}22`, color: classification.color, border: `1px solid ${classification.color}66` }}>
+                    {classification.name}{classification.examples !== '—' && ` · ${classification.examples}`}
+                  </span>
+                ) : (
+                  <div className={styles.heroKorean} style={{ marginTop: 6 }}>
+                    측정 범위가 5반음 미만이라 성부 분류를 보류합니다 — [음역 측정] 탭에서 최저음과 최고음을 모두 측정해 보세요.
+                  </div>
+                )}
               </div>
 
               {/* 피아노 건반 */}
@@ -558,7 +574,7 @@ export default function VocalRangeClient() {
                       return (
                         <div key={k.midi}
                           className={`${styles.pianoKeyBlack} ${isCurrent ? styles.pianoKeyCurrent : inFalsetto ? styles.pianoKeyHiliteFalsetto : inRange ? styles.pianoKeyHilite : ''}`}
-                          style={{ left: `calc(${(whitesBefore / pianoKeys.filter(x => !x.isBlack).length) * 100}% - 10px)` }} />
+                          style={{ left: `${(whitesBefore / pianoKeys.filter(x => !x.isBlack).length) * 100}%` }} />
                       )
                     })}
                   </div>
@@ -571,6 +587,7 @@ export default function VocalRangeClient() {
               </div>
 
               {/* 음역 분류 안내 */}
+              {classification && (
               <div className={styles.card}>
                 <label className={styles.cardLabel}>음역대 분류 8가지</label>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px', lineHeight: 1.7 }}>
@@ -603,12 +620,13 @@ export default function VocalRangeClient() {
                   })}
                 </div>
               </div>
+              )}
 
               {/* 노래 매칭 */}
               {songMatches.length > 0 && (
                 <div className={styles.card}>
                   <label className={styles.cardLabel}>
-                    부를 수 있는 한국 노래 ({songMatches.length}곡)
+                    음역상 부를 수 있는 후보곡 ({songMatches.length}곡)
                     <span style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'none', letterSpacing: 0 }}>키 ±6 시뮬</span>
                   </label>
                   <div className={styles.songList}>
@@ -647,7 +665,7 @@ export default function VocalRangeClient() {
 
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
-                  onClick={() => copy(`내 음역대: ${lowNote.name}~${highNote.name} · ${stats.octaves}옥타브 · ${classification.name}${falsettoNote ? ` · 가성 ${falsettoNote.name}` : ''}`)}>
+                  onClick={() => copy(`내 음역대: ${lowNote.name}~${highNote.name} · ${stats.octaves}옥타브${classification ? ` · ${classification.name}` : ''}${falsettoNote ? ` · 가성 ${falsettoNote.name}` : ''}`)}>
                   {copied ? '✓ 복사됨' : '결과 복사'}
                 </button>
                 <button className={`${styles.copyBtn} ${saved ? styles.copied : ''}`}

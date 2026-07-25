@@ -1,6 +1,6 @@
 /* ──────────────────────────────────────────────────────
    music/vocal-range/pitchAnalyzer.ts
-   마이크 입력 + pitchy YIN 알고리즘
+   마이크 입력 + pitchy (McLeod Pitch Method)
    ────────────────────────────────────────────────────── */
 
 import { PitchDetector } from 'pitchy'
@@ -43,6 +43,8 @@ export class VocalAnalyzer {
   private samples: PitchSample[] = []
   private cb: AnalyzerCallbacks = {}
   private status: AnalyzerStatus = 'idle'
+  /* stop()이 getUserMedia 대기 중에 불리면, 늦게 도착한 스트림을 즉시 정리하기 위한 취소 토큰 */
+  private cancelled = false
 
   // 사람 목소리 범위 (E2 ~ C7, 약 80~2100 Hz — 가성/소프라노 포함)
   private readonly MIN_FREQ = 70
@@ -60,13 +62,21 @@ export class VocalAnalyzer {
       this.audioContext = new AC()
 
       // 마이크 권한
-      this.mediaStream = await navigator.mediaDevices.getUserMedia({
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: false,
           noiseSuppression: false,
           autoGainControl: false,
         },
       })
+      if (this.cancelled) {
+        // 대기 중 stop()됨 — 늦게 도착한 스트림을 버려 마이크 점유 잔류 방지
+        stream.getTracks().forEach(t => t.stop())
+        this.audioContext?.close().catch(() => { /* */ })
+        this.audioContext = null
+        return
+      }
+      this.mediaStream = stream
 
       const source = this.audioContext.createMediaStreamSource(this.mediaStream)
       this.analyserNode = this.audioContext.createAnalyser()
@@ -79,6 +89,15 @@ export class VocalAnalyzer {
       this.setStatus('running')
       this.tick()
     } catch (e) {
+      // 예외 경로에서도 이미 획득한 리소스 정리 (스트림·컨텍스트 잔류 방지)
+      if (this.mediaStream) {
+        this.mediaStream.getTracks().forEach(t => t.stop())
+        this.mediaStream = null
+      }
+      if (this.audioContext) {
+        this.audioContext.close().catch(() => { /* */ })
+        this.audioContext = null
+      }
       const msg = e instanceof Error ? e.message : 'unknown error'
       this.setStatus('error', msg)
       throw e
@@ -129,6 +148,7 @@ export class VocalAnalyzer {
   }
 
   stop() {
+    this.cancelled = true
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId)
       this.rafId = null
@@ -158,13 +178,17 @@ export function detectStableNotes(samples: PitchSample[]): StableNote[] {
   const stable: StableNote[] = []
   const MIN_DURATION_MS = 500
   const MIDI_TOLERANCE = 0.7  // 반음의 70% 이내 흔들림 허용
+  const MAX_GAP_MS = 250      // 무음·저신뢰 프레임은 samples에 없으므로, 시간 공백이 크면 별개 발성으로 분리
 
   let groupStart = 0
+  let groupSum = samples[0].midi  // 그룹 평균 앵커 — 인접 비교만 하면 느린 글리산도가 한 음으로 뭉침
   for (let i = 1; i <= samples.length; i++) {
     const isLast = i === samples.length
-    const diff = isLast ? Infinity : Math.abs(samples[i].midi - samples[i - 1].midi)
+    const gap = isLast ? Infinity : samples[i].timestamp - samples[i - 1].timestamp
+    const anchor = groupSum / (i - groupStart)
+    const diff = isLast ? Infinity : Math.abs(samples[i].midi - anchor)
 
-    if (diff > MIDI_TOLERANCE || isLast) {
+    if (diff > MIDI_TOLERANCE || gap > MAX_GAP_MS || isLast) {
       const group = samples.slice(groupStart, i)
       if (group.length >= 5) {
         const duration = group[group.length - 1].timestamp - group[0].timestamp
@@ -183,6 +207,9 @@ export function detectStableNotes(samples: PitchSample[]): StableNote[] {
         }
       }
       groupStart = i
+      if (!isLast) groupSum = samples[i].midi
+    } else {
+      groupSum += samples[i].midi
     }
   }
   return stable
