@@ -30,12 +30,18 @@ function computeBpmFromTaps(taps: number[]): { bpm: number | null; intervals: nu
   return { bpm: Math.round(60000 / avg), intervals }
 }
 
-function getAccuracy(intervals: number[]): number {
+// 간격 변동계수(CV = 표준편차/평균) — 템포와 무관한 상대 흔들림 지표
+function getCvPct(intervals: number[]): number {
   if (intervals.length < 2) return 0
   const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length
   const variance = intervals.reduce((a, b) => a + (b - avg) ** 2, 0) / intervals.length
-  const stdDev = Math.sqrt(variance)
-  return Math.max(0, Math.min(100, 100 - (stdDev / 100) * 100))
+  return (Math.sqrt(variance) / avg) * 100
+}
+
+// 정확도 = 100 − CV%×5 (평균 대비 1% 흔들림당 5%p 감점 — 절대 ms 기준의 템포별 불공정 제거)
+function getAccuracy(intervals: number[]): number {
+  if (intervals.length < 2) return 0
+  return Math.max(0, Math.min(100, 100 - getCvPct(intervals) * 5))
 }
 
 /* ──────────────────────── 탭 1: 탭 템포 측정기 ──────────────────────── */
@@ -51,7 +57,7 @@ function TapTempoTab({ active }: { active: boolean }) {
   const accuracy = getAccuracy(intervals)
 
   const doTap = useCallback(() => {
-    const now = Date.now()
+    const now = performance.now()
     // 3초 이상 쉬었다면 다음 탭부터 새 측정 시작 (측정 결과는 그때까지 화면에 유지)
     const isNewSession = lastTapRef.current > 0 && now - lastTapRef.current > AUTO_RESET_MS
     lastTapRef.current = now
@@ -70,7 +76,8 @@ function TapTempoTab({ active }: { active: boolean }) {
     if (!active) return
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return
+      // 버튼·링크에 포커스가 있으면 해당 요소의 기본 동작만 (리셋 Enter가 탭으로도 기록되는 충돌 방지)
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A' || tag === 'SELECT') return
       if (e.code === 'Space' || e.code === 'Enter') {
         e.preventDefault()
         doTap()
@@ -81,6 +88,10 @@ function TapTempoTab({ active }: { active: boolean }) {
   }, [doTap, active])
 
   const handleReset = () => { setTaps([]); setTapCount(0); setLocked(null); lastTapRef.current = 0 }
+  const handleUndo = () => {
+    setTaps(prev => prev.slice(0, -1))
+    setTapCount(c => Math.max(0, c - 1))
+  }
   const handleLock = () => { if (bpm) setLocked(bpm) }
 
   const displayBpm = locked ?? bpm
@@ -100,6 +111,7 @@ function TapTempoTab({ active }: { active: boolean }) {
           type="button"
           className={styles.tapButton}
           onPointerDown={doTap}
+          onKeyDown={e => { if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); doTap() } }}
           style={{ touchAction: 'manipulation' }}
           aria-label="탭하여 BPM 측정"
         >
@@ -162,6 +174,7 @@ function TapTempoTab({ active }: { active: boolean }) {
 
       {/* 컨트롤 */}
       <div className={styles.controlRow}>
+        <button type="button" className={styles.ctrlBtn} onClick={handleUndo} disabled={taps.length === 0}>⌫ 탭 취소</button>
         <button type="button" className={styles.ctrlBtn} onClick={handleReset}>↺ 리셋</button>
         <button
           type="button"
@@ -214,17 +227,17 @@ function MetronomeTab({ active }: { active: boolean }) {
   useEffect(() => { bpmRef.current = bpm }, [bpm])
   useEffect(() => { beatsRef.current = TIME_SIG_BEATS[timeSig] }, [timeSig])
 
-  const scheduleNote = useCallback((time: number, isAccent: boolean) => {
+  const scheduleNote = useCallback((time: number, accent: 'hi' | 'mid' | 'none') => {
     const ctx = audioCtxRef.current
     if (!ctx) return
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain)
     gain.connect(ctx.destination)
-    osc.frequency.value = isAccent ? 1200 : 600
+    osc.frequency.value = accent === 'hi' ? 1200 : accent === 'mid' ? 900 : 600
     osc.type = 'square'
     gain.gain.setValueAtTime(0.0001, time)
-    gain.gain.exponentialRampToValueAtTime(isAccent ? 0.35 : 0.22, time + 0.002)
+    gain.gain.exponentialRampToValueAtTime(accent === 'hi' ? 0.35 : accent === 'mid' ? 0.28 : 0.22, time + 0.002)
     gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.05)
     osc.start(time)
     osc.stop(time + 0.06)
@@ -236,8 +249,10 @@ function MetronomeTab({ active }: { active: boolean }) {
     const LOOKAHEAD = 0.1
     while (nextNoteTimeRef.current < ctx.currentTime + LOOKAHEAD) {
       const beat = currentBeatRef.current
-      const isAccent = beat === 0
-      scheduleNote(nextNoteTimeRef.current, isAccent)
+      // 6/8은 점4분 2박으로 느끼므로 1·4번째(0·3)에 강세 — 1번째 주강세, 4번째 부강세
+      const accent: 'hi' | 'mid' | 'none' =
+        beat === 0 ? 'hi' : beatsRef.current === 6 && beat === 3 ? 'mid' : 'none'
+      scheduleNote(nextNoteTimeRef.current, accent)
       // 시각 동기화: 해당 노트 시간에 박자 표시 업데이트
       const delayMs = Math.max(0, (nextNoteTimeRef.current - ctx.currentTime) * 1000)
       const displayBeat = beat
@@ -417,27 +432,24 @@ function RhythmTestTab({ active }: { active: boolean }) {
     return audioCtxRef.current
   }
 
-  const beep = (isAccent: boolean) => {
-    const ctx = getCtx()
-    if (!ctx) return
-    if (ctx.state === 'suspended') ctx.resume()
-    const t = ctx.currentTime
+  const clearPreviewTimers = () => {
+    previewTimerRef.current.forEach(id => clearTimeout(id))
+    previewTimerRef.current = []
+  }
+
+  // 특정 AudioContext 시각에 클릭 예약 (메인 스레드 지터와 무관한 샘플 단위 재생)
+  const beepAt = (ctx: AudioContext, time: number, isAccent: boolean) => {
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain)
     gain.connect(ctx.destination)
     osc.frequency.value = isAccent ? 1200 : 600
     osc.type = 'square'
-    gain.gain.setValueAtTime(0.0001, t)
-    gain.gain.exponentialRampToValueAtTime(isAccent ? 0.35 : 0.22, t + 0.002)
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.05)
-    osc.start(t)
-    osc.stop(t + 0.06)
-  }
-
-  const clearPreviewTimers = () => {
-    previewTimerRef.current.forEach(id => clearTimeout(id))
-    previewTimerRef.current = []
+    gain.gain.setValueAtTime(0.0001, time)
+    gain.gain.exponentialRampToValueAtTime(isAccent ? 0.35 : 0.22, time + 0.002)
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.05)
+    osc.start(time)
+    osc.stop(time + 0.06)
   }
 
   const startTest = () => {
@@ -447,9 +459,13 @@ function RhythmTestTab({ active }: { active: boolean }) {
     setPreviewBeat(0)
     const intervalMs = 60000 / targetBpm
     const PREVIEW_COUNT = 4
+    const ctx = getCtx()
+    if (ctx && ctx.state === 'suspended') ctx.resume()
+    const base = ctx ? ctx.currentTime + 0.12 : 0
     for (let i = 0; i < PREVIEW_COUNT; i++) {
+      // 오디오는 AudioContext 시각으로 정밀 예약, 점 표시·단계 전환만 타이머
+      if (ctx) beepAt(ctx, base + (i * intervalMs) / 1000, i === 0)
       const id = window.setTimeout(() => {
-        beep(i === 0)
         setPreviewBeat(i + 1)
         if (i === PREVIEW_COUNT - 1) {
           const endId = window.setTimeout(() => {
@@ -458,14 +474,14 @@ function RhythmTestTab({ active }: { active: boolean }) {
           }, intervalMs)
           previewTimerRef.current.push(endId)
         }
-      }, i * intervalMs)
+      }, 120 + i * intervalMs)
       previewTimerRef.current.push(id)
     }
   }
 
   const handleTap = () => {
     if (phase !== 'tap') return
-    const now = Date.now()
+    const now = performance.now()
     setTaps(prev => (prev.length >= 8 ? prev : [...prev, now]))
   }
 
@@ -488,7 +504,7 @@ function RhythmTestTab({ active }: { active: boolean }) {
     if (!active || phase !== 'tap') return
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A' || tag === 'SELECT') return
       if (e.code === 'Space' || e.code === 'Enter') {
         e.preventDefault()
         handleTap()
@@ -502,21 +518,28 @@ function RhythmTestTab({ active }: { active: boolean }) {
 
   const result = useMemo(() => {
     if (phase !== 'result' || taps.length < 2) return null
-    const { bpm: actual } = computeBpmFromTaps(taps)
+    const { bpm: actual, intervals } = computeBpmFromTaps(taps)
     if (actual == null) return null
     const errPct = Math.abs(actual - targetBpm) / targetBpm * 100
-    let stars = 0, title = '', color = 'var(--muted)'
-    if (errPct <= 1)       { stars = 3; title = '완벽! 프로 수준입니다';          color = 'var(--success)' }
-    else if (errPct <= 3)  { stars = 2; title = '훌륭해요! 리듬감이 뛰어납니다'; color = 'var(--accent-ink)' }
-    else if (errPct <= 5)  { stars = 1; title = '좋아요! 조금 더 연습하면 완벽'; color = 'var(--accent-ink)' }
-    else if (errPct <= 10) { stars = 0; title = '연습이 필요해요 💪';             color = 'var(--warning)' }
-    else                   { stars = 0; title = '메트로놈으로 연습해보세요 🎵';  color = 'var(--danger)' }
-    return { actual, errPct, stars, title, color }
+    const cvPct = getCvPct(intervals)
+    // 평균만 맞고 간격이 널뛰는 탭이 만점 받지 않도록 오차율·일관성 이중 게이트
+    const errStars = errPct <= 1 ? 3 : errPct <= 3 ? 2 : errPct <= 5 ? 1 : 0
+    const cvStars = cvPct <= 3 ? 3 : cvPct <= 6 ? 2 : cvPct <= 10 ? 1 : 0
+    const stars = Math.min(errStars, cvStars)
+    let title = '', color = 'var(--muted)'
+    if (stars === 3)      { title = '완벽! 프로 수준입니다';          color = 'var(--success)' }
+    else if (stars === 2) { title = '훌륭해요! 리듬감이 뛰어납니다'; color = 'var(--accent-ink)' }
+    else if (stars === 1) { title = '좋아요! 조금 더 연습하면 완벽'; color = 'var(--accent-ink)' }
+    else if (errPct <= 10 && cvPct <= 20) { title = '연습이 필요해요 💪'; color = 'var(--warning)' }
+    else                  { title = '메트로놈으로 연습해보세요 🎵';  color = 'var(--danger)' }
+    const hint = stars < 3 && cvStars < errStars ? '평균 템포는 정확한데 탭 간격이 흔들렸어요'
+      : stars < 3 && errStars < cvStars ? '간격은 일정한데 목표 템포와 어긋났어요' : null
+    return { actual, errPct, cvPct, stars, title, color, hint }
   }, [phase, taps, targetBpm])
 
   const handleShare = async () => {
     if (!result) return
-    const text = `나는 BPM ${targetBpm} 목표에서 ${result.actual}을 탭했습니다! (오차 ${result.errPct.toFixed(1)}%) — youtil.kr 박자감 테스트`
+    const text = `나는 BPM ${targetBpm} 목표에서 ${result.actual}을 탭했습니다! (오차 ${result.errPct.toFixed(1)}% · 간격 일관성 CV ${result.cvPct.toFixed(1)}%) — youtil.kr 박자감 테스트`
     try {
       await navigator.clipboard.writeText(text)
       setShareCopied('ok')
@@ -611,6 +634,7 @@ function RhythmTestTab({ active }: { active: boolean }) {
             type="button"
             className={styles.testTapBtn}
             onPointerDown={handleTap}
+            onKeyDown={e => { if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); handleTap() } }}
             style={{ touchAction: 'manipulation' }}
           >
             TAP
@@ -633,12 +657,12 @@ function RhythmTestTab({ active }: { active: boolean }) {
       {phase === 'result' && result && (
         <div className={styles.resultCard} role="status">
           <div className={styles.resultStars}>
-            {'⭐'.repeat(Math.max(1, result.stars))}
-            {result.stars === 0 && '💪'}
+            {result.stars > 0 ? '⭐'.repeat(result.stars) : '💪'}
           </div>
           <div className={styles.resultTitle} style={{ color: result.color }}>
             {result.title}
           </div>
+          {result.hint && <div className={styles.resultHint}>{result.hint}</div>}
           <div className={styles.resultRow}>
             <div className={styles.resultBlock}>
               <div className={styles.resultSub}>목표</div>
@@ -659,6 +683,16 @@ function RhythmTestTab({ active }: { active: boolean }) {
               />
             </div>
             <div className={styles.resultErrValue}>{result.errPct.toFixed(1)}%</div>
+          </div>
+          <div className={styles.resultErrRow}>
+            <div className={styles.resultErrLabel}>간격 일관성</div>
+            <div className={styles.resultErrBar}>
+              <div
+                className={styles.resultErrBarFill}
+                style={{ width: `${Math.min(100, result.cvPct * 5)}%`, background: result.color }}
+              />
+            </div>
+            <div className={styles.resultErrValue}>CV {result.cvPct.toFixed(1)}%</div>
           </div>
           <div className={styles.resultActions}>
             <button type="button" className={styles.ctrlBtn} onClick={reset}>↺ 다시 하기</button>

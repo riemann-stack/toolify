@@ -18,9 +18,9 @@ const FAQ_LD = [
               { q: '메트로놈에서 소리가 안 나요.',
                 a: '브라우저 자동재생 정책 때문에 <strong>▶ 시작 버튼을 누른 뒤에만</strong> 소리가 나옵니다. iOS Safari는 묵음 모드(벨 스위치)에서도 Web Audio가 재생되지 않을 수 있으니 확인하세요. 볼륨도 함께 체크하세요.' },
               { q: '박자감 테스트의 별점 기준은?',
-                a: '오차율 기준입니다. <strong>⭐⭐⭐(1% 이하) = 프로 수준 · ⭐⭐(3% 이하) = 훌륭함 · ⭐(5% 이하) = 좋음</strong> · 연습 필요(10% 이하) · 메트로놈 연습 권장(그 이상). 참고로 BPM 120 기준 1% 오차는 1.2 BPM, 즉 탭 간격 5ms 차이입니다.' },
+                a: '<strong>평균 BPM 오차율과 탭 간격 일관성(CV·변동계수)을 함께 평가</strong>하며, 둘 중 낮은 쪽이 별점이 됩니다. ⭐⭐⭐ = 오차 1% 이하 & CV 3% 이하 · ⭐⭐ = 오차 3% & CV 6% 이하 · ⭐ = 오차 5% & CV 10% 이하. 간격이 널뛰면 평균이 목표와 정확히 일치해도 만점을 받을 수 없습니다. 참고로 BPM 120 기준 1% 오차는 1.2 BPM, 즉 탭 간격 5ms 차이입니다.' },
               { q: '정확도(%)는 어떻게 계산되나요?',
-                a: '탭 간격의 <strong>표준편차(stdDev)</strong>를 기반으로, 표준편차 1ms당 정확도가 1%p씩 낮아지는 방식입니다. 간격이 완전히 일정하면 100%, 표준편차 20ms면 80%, 100ms 이상이면 0%입니다. 느린 템포일수록 같은 ms 편차라도 상대 오차는 작으므로 참고 지표로 활용하세요.' },
+                a: '탭 간격의 <strong>변동계수(CV = 표준편차 ÷ 평균 간격)</strong>를 기반으로, 평균 대비 1% 흔들릴 때마다 정확도가 5%p씩 낮아집니다. 예: 평균 500ms에서 표준편차 20ms(CV 4%)면 80%. 상대 비율 기준이라 느린 곡이든 빠른 곡이든 같은 비율로 흔들리면 같은 정확도가 나옵니다.' },
               { q: '모바일에서도 사용 가능한가요?',
                 a: '네, <strong>터치에 최적화</strong>되어 있습니다. 큰 원형 버튼을 손가락으로 탭하면 되고, 메트로놈과 박자감 테스트 모두 모바일에서 동일하게 작동합니다. 단, 배경에서 앱 전환 시 Web Audio가 일시 정지될 수 있습니다.' },
             ]
@@ -149,7 +149,7 @@ export default function TapTempoPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             장르 범위표만으로 감이 안 잡히면 이미 아는 곡을 틀어 놓고 탭한 뒤, 공개된 BPM과 비교해 보세요.
             탭 결과가 표의 값과 ±2 이내면 강박을 제대로 잡은 것이고, 절반이나 2배가 나오면 하프타임·더블타임 문제입니다.
-            아래 수치는 Tunebat·SongBPM 등 공개 BPM 데이터베이스 기준으로, 분석 소스에 따라 ±1 BPM 정도 차이가 날 수 있습니다.
+            아래 수치는 <a href="https://tunebat.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>Tunebat</a>·<a href="https://songbpm.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>SongBPM</a> 등 공개 BPM 데이터베이스 기준(2026-07 확인)으로, 분석 소스에 따라 ±1 BPM 정도 차이가 날 수 있습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
@@ -193,7 +193,7 @@ export default function TapTempoPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { n: '①', title: '8~10번 이상 탭하세요',   desc: '탭이 많을수록 평균이 안정됩니다. 최소 4회 이상 탭해야 의미 있는 값이 나옵니다.' },
-              { n: '②', title: '강박(1박)에 맞춰 탭',    desc: '매 마디의 첫 박(강박)에만 탭하는 것이 가장 정확합니다. 4박자 곡이라면 1/5/9번째 박에 탭하세요.' },
+              { n: '②', title: '박마다 탭 (마디당 1회 아님)', desc: '4분음표 박마다 탭해야 BPM이 나옵니다. 마디 첫 박에만 탭하면 4/4 곡에서 실제의 1/4로 측정됩니다. 킥·스네어 등 드럼의 박 단위에 맞추세요.' },
               { n: '③', title: '스페이스·엔터 키 활용',  desc: '클릭보다 키보드 탭이 훨씬 안정적입니다. 리듬에 집중할 수 있어 오차가 줄어듭니다.' },
               { n: '④', title: '3초 쉬면 새 측정 시작',   desc: '3초 이상 쉬면 다음 탭부터 새 측정이 시작됩니다. 측정된 BPM은 화면에 계속 유지되니 천천히 확인하세요.' },
               { n: '⑤', title: '하프타임·더블타임 주의', desc: '트랩·DnB 같은 장르는 듣는 속도(하프타임)와 실제 BPM이 2배 차이납니다. 둘 다 측정해보세요.' },

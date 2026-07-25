@@ -135,7 +135,7 @@
 
 /* ── 컨트롤 ── */
 .controlRow {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
 }
 .ctrlBtn {
   padding: 12px 14px; border-radius: 10px;
@@ -344,6 +344,9 @@
   font-size: 17px; font-weight: 700;
   text-align: center; line-height: 1.4;
 }
+.resultHint {
+  font-size: 12px; color: var(--muted); text-align: center; margin-top: -6px;
+}
 .resultRow {
   display: flex; align-items: center; gap: 16px;
   width: 100%; justify-content: center; margin-top: 8px;
@@ -401,7 +404,8 @@
 
 /* ── 모바일 ── */
 @media (max-width: 500px) {
-  .tab { font-size: 12px; padding: 10px 4px; }
+  .tab { font-size: 12px; padding: 10px 4px; min-height: 44px; }
+  .adjBtn { min-height: 44px; }
   .card, .tapCard, .pulseCard, .testStageCard, .resultCard { padding: 18px 16px; }
   .bpmInput { font-size: 26px; width: 120px; }
   .pulse { width: 120px; height: 120px; }
@@ -414,4 +418,11 @@
 }
 @media (max-width: 360px) {
   .tab { font-size: 11px; }
+}
+
+/* ── 모션 감소 설정 존중 ── */
+@media (prefers-reduced-motion: reduce) {
+  .ripple, .tempoBadge, .resultCard { animation: none; }
+  .pulse, .pulseActive { animation: none !important; }
+  .tapButton, .testTapBtn, .accBarFill, .resultErrBarFill, .chartBar { transition: none; }
 }
