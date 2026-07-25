@@ -213,7 +213,7 @@ export const categories: Category[] = [
     tools: [
       /* 🎵 음악 */
       { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기', desc: '마이크로 실시간 음정 감지로 내 최저·최고음 측정 + 한국 노래 30+곡 키 매칭.', badge: 'new' },
-      { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: 'BPM만 입력하면 딜레이·리버브 ms 값 자동. 음악 프로듀서·홈레코딩 필수.' },
+      { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: 'BPM만 입력하면 음표별 딜레이 타임(ms) 자동 계산. 프리딜레이 참고값까지.' },
       { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',    desc: 'Hz ↔ 음정 변환 + MIDI 번호와 파장 계산. 튜닝과 사운드 디자인용.' },
       { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기', desc: '원곡 키와 카포 위치로 변환된 코드 + 쉬운 코드 추천.' },
       { href: '/tools/art/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '박자에 맞춰 탭하면 BPM 자동 측정 + 메트로놈.', badge: 'hot' },
