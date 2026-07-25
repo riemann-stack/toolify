@@ -14,13 +14,13 @@ export const metadata = buildMetadata({
 
 const FAQ_LD = [
               { q: '측정한 BPM이 실제 곡과 2배 차이나요.',
-                a: '<strong>하프타임(Half-time)</strong>으로 체감되는 장르에서 흔히 발생합니다. 트랩·DnB는 드럼이 65~85로 들리지만 공식 BPM은 130~170입니다. 반대로 발라드에서 8분음표로 탭하면 실제의 2배가 측정됩니다. 곡의 강박(킥 드럼, 기타 스트로크)에 맞춰 다시 탭해보세요.' },
+                a: '<strong>하프타임(Half-time)</strong>으로 체감되는 장르에서 흔히 발생합니다. 트랩·DnB는 드럼이 65~90으로 들리지만 공식 BPM은 130~180입니다. 반대로 발라드에서 8분음표로 탭하면 실제의 2배가 측정됩니다. 곡의 강박(킥 드럼, 기타 스트로크)에 맞춰 다시 탭해보세요.' },
               { q: '메트로놈에서 소리가 안 나요.',
                 a: '브라우저 자동재생 정책 때문에 <strong>▶ 시작 버튼을 누른 뒤에만</strong> 소리가 나옵니다. iOS Safari는 묵음 모드(벨 스위치)에서도 Web Audio가 재생되지 않을 수 있으니 확인하세요. 볼륨도 함께 체크하세요.' },
               { q: '박자감 테스트의 별점 기준은?',
                 a: '오차율 기준입니다. <strong>⭐⭐⭐(1% 이하) = 프로 수준 · ⭐⭐(3% 이하) = 훌륭함 · ⭐(5% 이하) = 좋음</strong> · 연습 필요(10% 이하) · 메트로놈 연습 권장(그 이상). 참고로 BPM 120 기준 1% 오차는 1.2 BPM, 즉 탭 간격 5ms 차이입니다.' },
               { q: '정확도(%)는 어떻게 계산되나요?',
-                a: '탭 간격의 <strong>표준편차(stdDev)</strong>를 기반으로 계산합니다. 간격이 매번 일정할수록 표준편차가 작고 정확도가 100%에 가깝습니다. 표준편차 20ms 이하면 거의 100%, 100ms 이상이면 0%로 선형 환산됩니다.' },
+                a: '탭 간격의 <strong>표준편차(stdDev)</strong>를 기반으로, 표준편차 1ms당 정확도가 1%p씩 낮아지는 방식입니다. 간격이 완전히 일정하면 100%, 표준편차 20ms면 80%, 100ms 이상이면 0%입니다. 느린 템포일수록 같은 ms 편차라도 상대 오차는 작으므로 참고 지표로 활용하세요.' },
               { q: '모바일에서도 사용 가능한가요?',
                 a: '네, <strong>터치에 최적화</strong>되어 있습니다. 큰 원형 버튼을 손가락으로 탭하면 되고, 메트로놈과 박자감 테스트 모두 모바일에서 동일하게 작동합니다. 단, 배경에서 앱 전환 시 Web Audio가 일시 정지될 수 있습니다.' },
             ]
@@ -70,7 +70,9 @@ export default function TapTempoPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             클래식 악보에서 자주 보이는 템포 지시어와 해당 BPM 범위입니다.
-            실제로는 작곡가·지휘자에 따라 BPM이 유연하게 해석됩니다.
+            템포 용어에는 단일 표준이 없어 <strong style={{ color: 'var(--text)' }}>구간이 자료마다 다르고 서로 겹칩니다</strong>
+            (예: Grave와 Largo의 40~45 구간). 실제로는 작곡가·지휘자에 따라 더 유연하게 해석됩니다.
+            아래 계산기 배지는 이 표를 비겹침 경계로 단순화해 분류합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
@@ -83,9 +85,10 @@ export default function TapTempoPage() {
               </thead>
               <tbody>
                 {[
-                  { term: 'Grave',        bpm: '~59',     feel: '매우 느리고 장중하게' },
-                  { term: 'Largo',        bpm: '60~65',   feel: '크고 폭넓게' },
-                  { term: 'Adagio',       bpm: '66~75',   feel: '느리고 서정적으로' },
+                  { term: 'Grave',        bpm: '~45',     feel: '매우 느리고 장중하게' },
+                  { term: 'Largo',        bpm: '40~60',   feel: '크고 폭넓게' },
+                  { term: 'Larghetto',    bpm: '60~66',   feel: '다소 느리고 폭넓게' },
+                  { term: 'Adagio',       bpm: '66~76',   feel: '느리고 서정적으로' },
                   { term: 'Andante',      bpm: '76~107',  feel: '걷는 속도로' },
                   { term: 'Moderato',     bpm: '108~119', feel: '보통 빠르기로' },
                   { term: 'Allegro',      bpm: '120~155', feel: '빠르고 활기차게' },
@@ -115,17 +118,17 @@ export default function TapTempoPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { genre: '느린 발라드',    bpm: '60~75',    color: '#0891B2', desc: '감성 발라드, R&B 슬로잼 — 탭 간격이 1초 안팎으로 길어 8분음표를 따라가면 2배로 측정됨. 강박에만 탭' },
-              { genre: '팝 발라드',      bpm: '76~95',    color: '#0891B2', desc: '한국 발라드 표준 템포 — 보컬 멜로디 대신 드럼 강박 기준으로 탭' },
-              { genre: '댄스팝',         bpm: '96~115',   color: '#0EA5E9', desc: '미드템포 팝, K-POP 발라드 — 측정값이 범위의 2배면 8분음표를 탭한 것' },
-              { genre: '일반 팝·록',     bpm: '116~128',  color: '#0EA5E9', desc: '아이돌 댄스곡, 밴드 록 — 킥·스네어가 또렷해 측정이 쉬운 구간' },
-              { genre: 'EDM·하우스',     bpm: '122~132',  color: '#EA580C', desc: '클럽 하우스, 빅룸 EDM — 매 박마다 들어가는 킥에 맞춰 탭하면 정확' },
-              { genre: '디스코·펑크',    bpm: '110~130',  color: '#EA580C', desc: '레트로 디스코, 재즈 펑크 — 하이햇 대신 킥·기타 스트로크 기준' },
-              { genre: '힙합·트랩',      bpm: '130~170',  color: '#DB2777', desc: '트랩(하프타임 체감 65~85) — 측정값이 절반으로 나오면 2배 해서 확인' },
-              { genre: '드럼앤베이스',   bpm: '170~180',  color: '#DB2777', desc: 'DnB, 정글 빠른 비트 — 드럼이 절반 속도로 들리는 하프타임 장르' },
-              { genre: '하드스타일·스피드코어', bpm: '150~',  color: '#9333EA', desc: '하드댄스, 스피드코어 — 너무 빠르면 강박만 세어 측정 후 2배' },
+              { genre: '느린 발라드',    bpm: '60~75',    color: 'var(--cat-health)', desc: '감성 발라드, R&B 슬로잼 — 탭 간격이 1초 안팎으로 길어 8분음표를 따라가면 2배로 측정됨. 강박에만 탭' },
+              { genre: '팝 발라드',      bpm: '76~95',    color: 'var(--cat-health)', desc: '한국 발라드 표준 템포 — 보컬 멜로디 대신 드럼 강박 기준으로 탭' },
+              { genre: '댄스팝',         bpm: '96~115',   color: 'var(--accent-ink)', desc: '미드템포 팝, K-POP 발라드 — 측정값이 범위의 2배면 8분음표를 탭한 것' },
+              { genre: '일반 팝·록',     bpm: '116~128',  color: 'var(--accent-ink)', desc: '아이돌 댄스곡, 밴드 록 — 킥·스네어가 또렷해 측정이 쉬운 구간' },
+              { genre: 'EDM·하우스',     bpm: '122~132',  color: 'var(--cat-life)', desc: '클럽 하우스, 빅룸 EDM — 매 박마다 들어가는 킥에 맞춰 탭하면 정확' },
+              { genre: '디스코·펑크',    bpm: '110~130',  color: 'var(--cat-life)', desc: '레트로 디스코, 재즈 펑크 — 하이햇 대신 킥·기타 스트로크 기준' },
+              { genre: '힙합·트랩',      bpm: '130~170',  color: 'var(--cat-date)', desc: '트랩(하프타임 체감 65~85) — 측정값이 절반으로 나오면 2배 해서 확인' },
+              { genre: '드럼앤베이스',   bpm: '160~180',  color: 'var(--cat-date)', desc: 'DnB, 정글 빠른 비트 — 절반 속도(85~90)로 체감되기 쉬운 장르' },
+              { genre: '하드스타일·스피드코어', bpm: '150~',  color: 'var(--cat-art)', desc: '하드댄스, 스피드코어 — 너무 빠르면 강박만 세어 측정 후 2배' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${item.color} 27%, transparent)`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '12px', color: item.color, fontWeight: 700, letterSpacing: '0.04em', marginBottom: '4px' }}>{item.genre}</p>
                 <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', marginBottom: '4px', letterSpacing: '-0.3px' }}>{item.bpm} <span style={{ fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.08em' }}>BPM</span></p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{item.desc}</p>
@@ -133,7 +136,7 @@ export default function TapTempoPage() {
             ))}
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            측정한 BPM으로 딜레이·리버브 ms 값을 설정하려면 <Link href="/tools/art/bpm" style={{ color: 'var(--accent)', fontWeight: 600 }}>BPM 딜레이 계산기</Link>를 이용하세요 —
+            측정한 BPM으로 딜레이 타임(ms) 값을 설정하려면 <Link href="/tools/art/bpm" style={{ color: 'var(--accent)', fontWeight: 600 }}>BPM 딜레이 계산기</Link>를 이용하세요 —
             위 측정 결과의 &lsquo;🎛️ 이 BPM으로 딜레이 계산&rsquo; 버튼을 누르면 측정값이 자동으로 넘어갑니다. 장르별 4분음표·점8분음표 딜레이 ms 표도 그 페이지에 있습니다.
           </p>
         </div>
@@ -192,7 +195,7 @@ export default function TapTempoPage() {
               { n: '①', title: '8~10번 이상 탭하세요',   desc: '탭이 많을수록 평균이 안정됩니다. 최소 4회 이상 탭해야 의미 있는 값이 나옵니다.' },
               { n: '②', title: '강박(1박)에 맞춰 탭',    desc: '매 마디의 첫 박(강박)에만 탭하는 것이 가장 정확합니다. 4박자 곡이라면 1/5/9번째 박에 탭하세요.' },
               { n: '③', title: '스페이스·엔터 키 활용',  desc: '클릭보다 키보드 탭이 훨씬 안정적입니다. 리듬에 집중할 수 있어 오차가 줄어듭니다.' },
-              { n: '④', title: '3초 멈추면 자동 리셋',   desc: '잘못 탭했다면 3초 기다리면 됩니다. 또는 ↺ 리셋 버튼을 누르세요.' },
+              { n: '④', title: '3초 쉬면 새 측정 시작',   desc: '3초 이상 쉬면 다음 탭부터 새 측정이 시작됩니다. 측정된 BPM은 화면에 계속 유지되니 천천히 확인하세요.' },
               { n: '⑤', title: '하프타임·더블타임 주의', desc: '트랩·DnB 같은 장르는 듣는 속도(하프타임)와 실제 BPM이 2배 차이납니다. 둘 다 측정해보세요.' },
               { n: '⑥', title: '정확도 지표 참고',       desc: '정확도 80% 이상이면 신뢰할 만한 측정입니다. 낮다면 탭 타이밍을 다시 잡아보세요.' },
             ].map((item, i) => (
@@ -276,10 +279,10 @@ export default function TapTempoPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임',     desc: '측정한 BPM으로 딜레이·리버브 ms 계산' },
-              { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기', desc: '카포 위치별 코드 변환·편곡' },
-              { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',   desc: 'Hz ↔ 음정·MIDI·파장' },
-              { href: '/tools/life/pomodoro',   icon: '🍅', name: '뽀모도로 타이머',      desc: '연습 루틴·집중 관리' },
+              { href: '/tools/art/bpm',         icon: '🎛️', name: 'BPM 딜레이 계산기',   desc: '측정한 BPM으로 음표별 딜레이 ms 계산' },
+              { href: '/tools/art/capo',        icon: '🎸', name: '기타 카포 계산기',    desc: '카포 위치별 코드 변환·편곡' },
+              { href: '/tools/art/frequency',   icon: '🎵', name: '주파수↔음정 변환기',  desc: 'Hz ↔ 음정·MIDI·파장' },
+              { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기',       desc: '마이크로 최저·최고음 측정' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

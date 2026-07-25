@@ -9,8 +9,10 @@ const AUTO_RESET_MS = 3000
 
 type TempoInfo = { name: string; ko: string }
 function getTempoInfo(bpm: number): TempoInfo {
-  if (bpm < 60)  return { name: 'Grave',       ko: '매우 느리고 장중하게' }
-  if (bpm < 66)  return { name: 'Largo',       ko: '크고 폭넓게' }
+  // 통용 차트 기준 정렬 — 실제 용어 구간은 자료마다 다르고 겹치므로 분류용 비겹침 경계 사용
+  if (bpm < 45)  return { name: 'Grave',       ko: '매우 느리고 장중하게' }
+  if (bpm < 60)  return { name: 'Largo',       ko: '크고 폭넓게' }
+  if (bpm < 66)  return { name: 'Larghetto',   ko: '다소 느리고 폭넓게' }
   if (bpm < 76)  return { name: 'Adagio',      ko: '느리고 서정적으로' }
   if (bpm < 108) return { name: 'Andante',     ko: '걷는 속도로' }
   if (bpm < 120) return { name: 'Moderato',    ko: '보통 빠르기로' }
@@ -37,8 +39,9 @@ function getAccuracy(intervals: number[]): number {
 }
 
 /* ──────────────────────── 탭 1: 탭 템포 측정기 ──────────────────────── */
-function TapTempoTab() {
+function TapTempoTab({ active }: { active: boolean }) {
   const [taps, setTaps] = useState<number[]>([])
+  const [tapCount, setTapCount] = useState(0)
   const [locked, setLocked] = useState<number | null>(null)
   const [rippleKey, setRippleKey] = useState(0)
   const lastTapRef = useRef<number>(0)
@@ -49,32 +52,22 @@ function TapTempoTab() {
 
   const doTap = useCallback(() => {
     const now = Date.now()
+    // 3초 이상 쉬었다면 다음 탭부터 새 측정 시작 (측정 결과는 그때까지 화면에 유지)
+    const isNewSession = lastTapRef.current > 0 && now - lastTapRef.current > AUTO_RESET_MS
     lastTapRef.current = now
     setRippleKey(k => k + 1)
+    setTapCount(c => (isNewSession ? 1 : c + 1))
     setTaps(prev => {
-      // 이전 탭과 3초 이상 차이나면 리셋 후 시작
-      if (prev.length > 0 && now - prev[prev.length - 1] > AUTO_RESET_MS) {
-        return [now]
-      }
+      if (isNewSession) return [now]
       const next = [...prev, now]
       return next.length > MAX_TAPS + 1 ? next.slice(-MAX_TAPS - 1) : next
     })
     setLocked(null)
   }, [])
 
-  // 3초 후 자동 리셋
+  // 스페이스/엔터 키보드 지원 (이 탭이 보일 때만)
   useEffect(() => {
-    if (taps.length === 0) return
-    const timer = setTimeout(() => {
-      if (Date.now() - lastTapRef.current >= AUTO_RESET_MS) {
-        setTaps([])
-      }
-    }, AUTO_RESET_MS + 50)
-    return () => clearTimeout(timer)
-  }, [taps])
-
-  // 스페이스/엔터 키보드 지원
-  useEffect(() => {
+    if (!active) return
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName
       if (tag === 'INPUT' || tag === 'TEXTAREA') return
@@ -85,9 +78,9 @@ function TapTempoTab() {
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [doTap])
+  }, [doTap, active])
 
-  const handleReset = () => { setTaps([]); setLocked(null) }
+  const handleReset = () => { setTaps([]); setTapCount(0); setLocked(null); lastTapRef.current = 0 }
   const handleLock = () => { if (bpm) setLocked(bpm) }
 
   const displayBpm = locked ?? bpm
@@ -104,6 +97,7 @@ function TapTempoTab() {
       {/* 메인 탭 버튼 */}
       <div className={styles.tapCard}>
         <button
+          type="button"
           className={styles.tapButton}
           onPointerDown={doTap}
           style={{ touchAction: 'manipulation' }}
@@ -117,7 +111,7 @@ function TapTempoTab() {
             <div className={styles.tapBpmLabel}>BPM</div>
           </div>
           <div className={styles.tapCount}>
-            {taps.length > 0 ? `${taps.length}번 탭` : '여기를 탭하세요'}
+            {tapCount > 0 ? `${tapCount}번 탭` : '여기를 탭하세요'}
           </div>
         </button>
 
@@ -135,7 +129,7 @@ function TapTempoTab() {
       )}
 
       {/* 정확도 + 상태 */}
-      <div className={styles.accCard}>
+      <div className={styles.accCard} role="status">
         <div className={styles.accLabel}>{accuracyStatus.msg}</div>
         {accuracyStatus.level === 'ready' && (
           <div className={styles.accBar}>
@@ -168,8 +162,9 @@ function TapTempoTab() {
 
       {/* 컨트롤 */}
       <div className={styles.controlRow}>
-        <button className={styles.ctrlBtn} onClick={handleReset}>↺ 리셋</button>
+        <button type="button" className={styles.ctrlBtn} onClick={handleReset}>↺ 리셋</button>
         <button
+          type="button"
           className={`${styles.ctrlBtn} ${locked ? styles.ctrlBtnActive : ''}`}
           onClick={handleLock}
           disabled={bpm == null}
@@ -202,8 +197,9 @@ const BPM_PRESETS = [
   { bpm: 160, name: '힙합' },
 ]
 
-function MetronomeTab() {
+function MetronomeTab({ active }: { active: boolean }) {
   const [bpm, setBpm] = useState(120)
+  const [bpmText, setBpmText] = useState('120')
   const [timeSig, setTimeSig] = useState<TimeSig>('4/4')
   const [playing, setPlaying] = useState(false)
   const [currentBeatDisplay, setCurrentBeatDisplay] = useState(0)
@@ -285,7 +281,19 @@ function MetronomeTab() {
     if (audioCtxRef.current) audioCtxRef.current.close().catch(() => {})
   }, [])
 
+  // 다른 탭으로 이동하면 소리 정지 (BPM 등 설정은 유지)
+  useEffect(() => {
+    if (!active && playing) stop()
+  }, [active, playing, stop])
+
+  // 입력창은 원시 문자열 보관 — 백스페이스로 지우고 다시 입력 가능
+  const setBpmAll = (n: number) => {
+    const c = Math.max(40, Math.min(300, n))
+    setBpm(c)
+    setBpmText(String(c))
+  }
   const handleBpmInput = (v: string) => {
+    setBpmText(v)
     const n = parseInt(v)
     if (!isNaN(n)) setBpm(Math.max(40, Math.min(300, n)))
   }
@@ -303,8 +311,10 @@ function MetronomeTab() {
             className={styles.bpmInput}
             type="number"
             inputMode="numeric"
-            value={bpm}
+            aria-label="메트로놈 BPM"
+            value={bpmText}
             onChange={e => handleBpmInput(e.target.value)}
+            onBlur={() => setBpmText(String(bpm))}
             min={40} max={300}
           />
           <span className={styles.bpmUnit}>BPM</span>
@@ -312,14 +322,15 @@ function MetronomeTab() {
         <input
           className={styles.bpmSlider}
           type="range" min={40} max={300} step={1}
+          aria-label="메트로놈 BPM 슬라이더"
           value={bpm}
-          onChange={e => setBpm(parseInt(e.target.value))}
+          onChange={e => setBpmAll(parseInt(e.target.value))}
         />
         <div className={styles.bpmAdjustRow}>
-          <button className={styles.adjBtn} onClick={() => setBpm(b => Math.max(40, b - 10))}>-10</button>
-          <button className={styles.adjBtn} onClick={() => setBpm(b => Math.max(40, b - 1))}>-1</button>
-          <button className={styles.adjBtn} onClick={() => setBpm(b => Math.min(300, b + 1))}>+1</button>
-          <button className={styles.adjBtn} onClick={() => setBpm(b => Math.min(300, b + 10))}>+10</button>
+          <button type="button" className={styles.adjBtn} onClick={() => setBpmAll(bpm - 10)}>-10</button>
+          <button type="button" className={styles.adjBtn} onClick={() => setBpmAll(bpm - 1)}>-1</button>
+          <button type="button" className={styles.adjBtn} onClick={() => setBpmAll(bpm + 1)}>+1</button>
+          <button type="button" className={styles.adjBtn} onClick={() => setBpmAll(bpm + 10)}>+10</button>
         </div>
       </div>
 
@@ -330,6 +341,8 @@ function MetronomeTab() {
           {(['2/4','3/4','4/4','6/8'] as TimeSig[]).map(ts => (
             <button
               key={ts}
+              type="button"
+              aria-pressed={timeSig === ts}
               className={`${styles.sigBtn} ${timeSig === ts ? styles.sigBtnActive : ''}`}
               onClick={() => setTimeSig(ts)}
             >{ts}</button>
@@ -350,6 +363,7 @@ function MetronomeTab() {
           </div>
         </div>
         <button
+          type="button"
           className={`${styles.playBtn} ${playing ? styles.playBtnStop : ''}`}
           onClick={playing ? stop : start}
         >
@@ -364,8 +378,10 @@ function MetronomeTab() {
           {BPM_PRESETS.map(p => (
             <button
               key={p.bpm}
+              type="button"
+              aria-pressed={bpm === p.bpm}
               className={`${styles.presetBtn} ${bpm === p.bpm ? styles.presetBtnActive : ''}`}
-              onClick={() => setBpm(p.bpm)}
+              onClick={() => setBpmAll(p.bpm)}
             >
               <span className={styles.presetBpm}>{p.bpm}</span>
               <span className={styles.presetName}>{p.name}</span>
@@ -380,12 +396,13 @@ function MetronomeTab() {
 /* ──────────────────────── 탭 3: 박자감 테스트 ──────────────────────── */
 type TestPhase = 'idle' | 'preview' | 'tap' | 'result'
 
-function RhythmTestTab() {
+function RhythmTestTab({ active }: { active: boolean }) {
   const [targetBpm, setTargetBpm] = useState(120)
+  const [targetText, setTargetText] = useState('120')
   const [phase, setPhase] = useState<TestPhase>('idle')
   const [previewBeat, setPreviewBeat] = useState(0)
   const [taps, setTaps] = useState<number[]>([])
-  const [shareCopied, setShareCopied] = useState(false)
+  const [shareCopied, setShareCopied] = useState<'ok' | 'fail' | null>(null)
 
   const audioCtxRef = useRef<AudioContext | null>(null)
   const previewTimerRef = useRef<number[]>([])
@@ -449,17 +466,26 @@ function RhythmTestTab() {
   const handleTap = () => {
     if (phase !== 'tap') return
     const now = Date.now()
-    setTaps(prev => {
-      const next = [...prev, now]
-      if (next.length >= 8) {
-        setPhase('result')
-      }
-      return next
-    })
+    setTaps(prev => (prev.length >= 8 ? prev : [...prev, now]))
   }
 
+  // 8탭 완료 시 결과 단계로 (updater 안의 setState 부작용 제거)
   useEffect(() => {
-    if (phase !== 'tap') return
+    if (phase === 'tap' && taps.length >= 8) setPhase('result')
+  }, [phase, taps])
+
+  // 다른 탭으로 이동하면 진행 중이던 미리듣기·탭 단계 중단 (결과는 유지)
+  useEffect(() => {
+    if (!active && (phase === 'preview' || phase === 'tap')) {
+      clearPreviewTimers()
+      setPhase('idle')
+      setPreviewBeat(0)
+      setTaps([])
+    }
+  }, [active, phase])
+
+  useEffect(() => {
+    if (!active || phase !== 'tap') return
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName
       if (tag === 'INPUT' || tag === 'TEXTAREA') return
@@ -470,7 +496,7 @@ function RhythmTestTab() {
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [phase])
+  }, [phase, active])
 
   useEffect(() => () => clearPreviewTimers(), [])
 
@@ -479,12 +505,12 @@ function RhythmTestTab() {
     const { bpm: actual } = computeBpmFromTaps(taps)
     if (actual == null) return null
     const errPct = Math.abs(actual - targetBpm) / targetBpm * 100
-    let stars = 0, title = '', color = '#999'
-    if (errPct <= 1)       { stars = 3; title = '완벽! 프로 수준입니다';          color = '#A16207' }
-    else if (errPct <= 3)  { stars = 2; title = '훌륭해요! 리듬감이 뛰어납니다'; color = '#0EA5E9' }
-    else if (errPct <= 5)  { stars = 1; title = '좋아요! 조금 더 연습하면 완벽'; color = '#0EA5E9' }
-    else if (errPct <= 10) { stars = 0; title = '연습이 필요해요 💪';             color = '#EA580C' }
-    else                   { stars = 0; title = '메트로놈으로 연습해보세요 🎵';  color = '#FF4D4D' }
+    let stars = 0, title = '', color = 'var(--muted)'
+    if (errPct <= 1)       { stars = 3; title = '완벽! 프로 수준입니다';          color = 'var(--success)' }
+    else if (errPct <= 3)  { stars = 2; title = '훌륭해요! 리듬감이 뛰어납니다'; color = 'var(--accent-ink)' }
+    else if (errPct <= 5)  { stars = 1; title = '좋아요! 조금 더 연습하면 완벽'; color = 'var(--accent-ink)' }
+    else if (errPct <= 10) { stars = 0; title = '연습이 필요해요 💪';             color = 'var(--warning)' }
+    else                   { stars = 0; title = '메트로놈으로 연습해보세요 🎵';  color = 'var(--danger)' }
     return { actual, errPct, stars, title, color }
   }, [phase, taps, targetBpm])
 
@@ -493,9 +519,11 @@ function RhythmTestTab() {
     const text = `나는 BPM ${targetBpm} 목표에서 ${result.actual}을 탭했습니다! (오차 ${result.errPct.toFixed(1)}%) — youtil.kr 박자감 테스트`
     try {
       await navigator.clipboard.writeText(text)
-      setShareCopied(true)
-      setTimeout(() => setShareCopied(false), 1500)
-    } catch {}
+      setShareCopied('ok')
+    } catch {
+      setShareCopied('fail')
+    }
+    setTimeout(() => setShareCopied(null), 1500)
   }
 
   const reset = () => {
@@ -516,11 +544,14 @@ function RhythmTestTab() {
               <input
                 className={styles.bpmInput}
                 type="number" inputMode="numeric"
-                value={targetBpm}
+                aria-label="목표 BPM"
+                value={targetText}
                 onChange={e => {
+                  setTargetText(e.target.value)
                   const n = parseInt(e.target.value)
                   if (!isNaN(n)) setTargetBpm(Math.max(60, Math.min(180, n)))
                 }}
+                onBlur={() => setTargetText(String(targetBpm))}
                 min={60} max={180}
               />
               <span className={styles.bpmUnit}>BPM</span>
@@ -528,13 +559,15 @@ function RhythmTestTab() {
             <input
               className={styles.bpmSlider}
               type="range" min={60} max={180} step={1}
+              aria-label="목표 BPM 슬라이더"
               value={targetBpm}
-              onChange={e => setTargetBpm(parseInt(e.target.value))}
+              onChange={e => { setTargetBpm(parseInt(e.target.value)); setTargetText(e.target.value) }}
             />
             <div className={styles.randomRow}>
               <button
+                type="button"
                 className={styles.ctrlBtn}
-                onClick={() => setTargetBpm(Math.floor(Math.random() * 121) + 60)}
+                onClick={() => { const n = Math.floor(Math.random() * 121) + 60; setTargetBpm(n); setTargetText(String(n)) }}
               >랜덤 BPM</button>
             </div>
           </div>
@@ -545,7 +578,7 @@ function RhythmTestTab() {
               2. 소리가 멈춘 뒤 같은 속도로 <strong>8번 탭</strong>하세요<br />
               3. 탭 BPM과 목표 BPM의 오차로 점수가 계산됩니다
             </p>
-            <button className={styles.startBtn} onClick={startTest}>
+            <button type="button" className={styles.startBtn} onClick={startTest}>
               테스트 시작 — {targetBpm} BPM
             </button>
           </div>
@@ -575,6 +608,7 @@ function RhythmTestTab() {
         <div className={styles.testStageCard}>
           <div className={styles.testStageLabel}>같은 속도로 탭하세요 — {taps.length}/8</div>
           <button
+            type="button"
             className={styles.testTapBtn}
             onPointerDown={handleTap}
             style={{ touchAction: 'manipulation' }}
@@ -597,7 +631,7 @@ function RhythmTestTab() {
 
       {/* Result */}
       {phase === 'result' && result && (
-        <div className={styles.resultCard}>
+        <div className={styles.resultCard} role="status">
           <div className={styles.resultStars}>
             {'⭐'.repeat(Math.max(1, result.stars))}
             {result.stars === 0 && '💪'}
@@ -627,9 +661,9 @@ function RhythmTestTab() {
             <div className={styles.resultErrValue}>{result.errPct.toFixed(1)}%</div>
           </div>
           <div className={styles.resultActions}>
-            <button className={styles.ctrlBtn} onClick={reset}>↺ 다시 하기</button>
-            <button className={`${styles.ctrlBtn} ${shareCopied ? styles.ctrlBtnActive : ''}`} onClick={handleShare}>
-              {shareCopied ? '✓ 복사됨' : '결과 복사'}
+            <button type="button" className={styles.ctrlBtn} onClick={reset}>↺ 다시 하기</button>
+            <button type="button" className={`${styles.ctrlBtn} ${shareCopied === 'ok' ? styles.ctrlBtnActive : ''}`} onClick={handleShare}>
+              {shareCopied === 'ok' ? '✓ 복사됨' : shareCopied === 'fail' ? '✗ 복사 실패' : '결과 복사'}
             </button>
           </div>
         </div>
@@ -645,20 +679,21 @@ export default function TapTempoClient() {
   return (
     <div className={styles.wrap}>
       <div className={styles.tabs}>
-        <button className={`${styles.tab} ${tab === 'tap'       ? styles.tabActive : ''}`} onClick={() => setTab('tap')}>
+        <button type="button" aria-pressed={tab === 'tap'} className={`${styles.tab} ${tab === 'tap'       ? styles.tabActive : ''}`} onClick={() => setTab('tap')}>
           탭 템포
         </button>
-        <button className={`${styles.tab} ${tab === 'metronome' ? styles.tabActive : ''}`} onClick={() => setTab('metronome')}>
+        <button type="button" aria-pressed={tab === 'metronome'} className={`${styles.tab} ${tab === 'metronome' ? styles.tabActive : ''}`} onClick={() => setTab('metronome')}>
           메트로놈
         </button>
-        <button className={`${styles.tab} ${tab === 'test'      ? styles.tabActive : ''}`} onClick={() => setTab('test')}>
+        <button type="button" aria-pressed={tab === 'test'} className={`${styles.tab} ${tab === 'test'      ? styles.tabActive : ''}`} onClick={() => setTab('test')}>
           박자감 테스트
         </button>
       </div>
 
-      {tab === 'tap'       && <TapTempoTab />}
-      {tab === 'metronome' && <MetronomeTab />}
-      {tab === 'test'      && <RhythmTestTab />}
+      {/* 탭 전환 시 상태 보존 — 언마운트 대신 hidden (메트로놈·테스트 소리는 이탈 시 정지) */}
+      <div hidden={tab !== 'tap'}><TapTempoTab active={tab === 'tap'} /></div>
+      <div hidden={tab !== 'metronome'}><MetronomeTab active={tab === 'metronome'} /></div>
+      <div hidden={tab !== 'test'}><RhythmTestTab active={tab === 'test'} /></div>
     </div>
   )
 }
