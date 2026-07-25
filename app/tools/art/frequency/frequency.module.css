@@ -83,10 +83,11 @@
 }
 .centBarWrap {
   position: relative; height: 14px; border-radius: 7px;
+  /* 대칭 게이지: 양끝(±50센트)=danger, 중앙 ±5센트 부근=success — 샤프도 벗어남 */
   background: linear-gradient(to right,
-    #FF4444 0%, #FF8800 20%,
-    rgba(15,23,42,0.08) 42%, rgba(15,23,42,0.08) 58%,
-    #88CC44 80%, #44AA44 100%
+    var(--danger) 0%, var(--warning) 22%,
+    rgba(15,23,42,0.08) 40%, var(--success) 46%, var(--success) 54%, rgba(15,23,42,0.08) 60%,
+    var(--warning) 78%, var(--danger) 100%
   );
   border: 1px solid var(--border);
 }

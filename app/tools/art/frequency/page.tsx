@@ -294,6 +294,13 @@ export default function FrequencyPage() {
           </div>
         </div>
 
+        {/* ── 출처 ── */}
+        <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
+          출처: <a href="https://www.iso.org/standard/3601.html" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>ISO 16:1975 — 표준 조율 주파수(A4=440 Hz)</a> ·{' '}
+          <a href="https://midi.org/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>MIDI Association — MIDI 사양(노트 번호 0~127)</a> ·{' '}
+          <a href="https://en.wikipedia.org/wiki/Concert_pitch" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>Concert pitch — 연주회 피치의 역사</a>
+        </p>
+
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>

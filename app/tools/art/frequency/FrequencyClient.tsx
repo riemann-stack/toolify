@@ -43,42 +43,49 @@ const BLACK_GAPS: { ni: number; gap: number }[] = [
 ]
 
 function PianoKeyboard({ midiA, midiB }: { midiA: number | null; midiB?: number | null }) {
-  const START = 3, OCT = 2
-  const whites: { midi: number; x: number; ni: number }[] = []
-  const blacks: { midi: number; x: number; ni: number }[] = []
+  const notes = [midiA, midiB].filter((m): m is number => m != null)
+  // C 정렬 2옥타브 창을 최저음의 옥타브에 앵커 (MIDI 0~127 안으로 클램프)
+  const anchor = notes.length ? Math.min(...notes) : 60
+  const startOct = Math.max(-1, Math.min(8, Math.floor(anchor / 12) - 1))
+  const startMidi = (startOct + 1) * 12
 
-  for (let o = 0; o < OCT; o++) {
-    const oct = START + o
-    WHITE_NI.forEach((ni, wi) => whites.push({ midi: (oct + 1) * 12 + ni, x: (o * 7 + wi) * WW, ni }))
+  const whites: { midi: number; x: number }[] = []
+  const blacks: { midi: number; x: number }[] = []
+  for (let o = 0; o < 2; o++) {
+    const oct = startOct + o
+    WHITE_NI.forEach((ni, wi) => whites.push({ midi: (oct + 1) * 12 + ni, x: (o * 7 + wi) * WW }))
     BLACK_GAPS.forEach(({ ni, gap }) =>
-      blacks.push({ midi: (oct + 1) * 12 + ni, x: (o * 7 + gap) * WW - BW / 2, ni })
+      blacks.push({ midi: (oct + 1) * 12 + ni, x: (o * 7 + gap) * WW - BW / 2 })
     )
   }
 
-  const pcA = midiA !== null ? ((midiA % 12) + 12) % 12 : -1
-  const pcB = midiB != null  ? ((midiB % 12) + 12) % 12 : -1
-  const inRange = (m: number) => m >= 48 && m <= 71
-
   const fill = (midi: number, isBlack: boolean) => {
-    const exact = inRange(midiA ?? -1) ? midiA === midi : false
-    const exactB = inRange(midiB ?? -1) ? midiB === midi : false
-    const pc = ((midi % 12) + 12) % 12
-    if (exact || (!inRange(midiA ?? -1) && midiA !== null && pc === pcA)) return 'var(--accent)'
-    if (exactB || (!inRange(midiB ?? -1) && midiB != null && pc === pcB)) return 'var(--cat-health)'
+    if (midi === midiA) return 'var(--accent)'
+    if (midi === midiB) return 'var(--cat-health)'
     return isBlack ? '#1A1A1A' : '#E8E8E8'
   }
 
+  const outNotes = notes
+    .filter(m => m < startMidi || m > startMidi + 23)
+    .map(m => { const i = midiToInfo(m); return `${i.name}${i.oct}` })
+
   return (
-    <svg viewBox={`0 0 ${14 * WW} ${WH}`} width="100%" style={{ display: 'block' }} aria-hidden="true">
-      {whites.map(k => (
-        <rect key={k.midi} x={k.x + 0.5} y={0.5} width={WW - 1} height={WH - 1}
-          rx={3} fill={fill(k.midi, false)} stroke="#888" strokeWidth={0.5} />
-      ))}
-      {blacks.map(k => (
-        <rect key={k.midi} x={k.x} y={0} width={BW} height={BH}
-          rx={2} fill={fill(k.midi, true)} />
-      ))}
-    </svg>
+    <>
+      <svg viewBox={`0 0 ${14 * WW} ${WH}`} width="100%" style={{ display: 'block' }} aria-hidden="true">
+        {whites.map(k => (
+          <rect key={k.midi} x={k.x + 0.5} y={0.5} width={WW - 1} height={WH - 1}
+            rx={3} fill={fill(k.midi, false)} stroke="#888" strokeWidth={0.5} />
+        ))}
+        {blacks.map(k => (
+          <rect key={k.midi} x={k.x} y={0} width={BW} height={BH}
+            rx={2} fill={fill(k.midi, true)} />
+        ))}
+      </svg>
+      <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.72)', textAlign: 'center', marginTop: 6 }}>
+        건반 표시 범위 C{startOct}–B{startOct + 1}
+        {outNotes.length > 0 && ` · 범위 밖: ${outNotes.join(', ')}`}
+      </div>
+    </>
   )
 }
 
@@ -139,7 +146,7 @@ const HZ_PRESETS = [
   { label: 'A4 440 Hz',        hz: 440 },
   { label: 'C4 261.63 Hz',     hz: 261.63 },
   { label: 'E2 기타 6번줄',    hz: 82.41 },
-  { label: 'G2 기타 3번줄',    hz: 196.00 },
+  { label: 'G3 기타 3번줄',    hz: 196.00 },
 ]
 
 function HzToNoteTab({ a4 }: { a4: number }) {
@@ -213,7 +220,7 @@ function HzToNoteTab({ a4 }: { a4: number }) {
           <button className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy}>
             {copied ? '✓ 복사됨' : '결과 복사'}
           </button>
-          <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz 기준 · 피아노 건반은 C3–B4 표시</p>
+          <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz 기준</p>
         </div>
       ) : (
         <div className={styles.empty}>주파수(0 초과 ~ 20,000 Hz)를 입력하면 가장 가까운 음정으로 변환합니다</div>
@@ -334,8 +341,14 @@ function IntervalTab({ a4 }: { a4: number }) {
       ji   = INTERVAL_JI[semi]
     } else {
       const base = semi % 12
-      name = `${Math.floor(semi / 12)}옥타브 + ${INTERVAL_NAMES[base]}`
-      ji   = `${ratio.toFixed(4)}:1`
+      const octs = Math.floor(semi / 12)
+      name = base === 0 ? `${octs}옥타브` : `${octs}옥타브 + ${INTERVAL_NAMES[base]}`
+      // 복합음정 순정 비율 = 옥타브 환원 비율 × 2^octs (기약분수)
+      const [jp, jq] = INTERVAL_JI[base].split(':').map(Number)
+      const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a)
+      const num = jp * Math.pow(2, octs)
+      const g = gcd(num, jq)
+      ji = `${num / g}:${jq / g}`
     }
 
     return { semi, name, ji, ratio, midiA, midiB, hzA, hzB }
@@ -374,7 +387,7 @@ function IntervalTab({ a4 }: { a4: number }) {
           </div>
         </div>
 
-        <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz · 건반 초록=A, 파랑=B</p>
+        <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz · 건반 파랑=A, 청록=B</p>
       </div>
     </div>
   )
@@ -414,9 +427,10 @@ export default function FrequencyClient() {
         </button>
       </div>
 
-      {tab === 'hz2note'  && <HzToNoteTab  a4={a4} />}
-      {tab === 'note2hz'  && <NoteToHzTab  a4={a4} />}
-      {tab === 'interval' && <IntervalTab  a4={a4} />}
+      {/* 탭 전환 시 입력 상태 보존을 위해 언마운트하지 않고 hidden 처리 */}
+      <div hidden={tab !== 'hz2note'}><HzToNoteTab a4={a4} /></div>
+      <div hidden={tab !== 'note2hz'}><NoteToHzTab a4={a4} /></div>
+      <div hidden={tab !== 'interval'}><IntervalTab a4={a4} /></div>
     </div>
   )
 }
