@@ -16,7 +16,7 @@ const FAQ_LD = [
               { q: '카포를 쓰면 음질이 나빠지나요?',
                 a: '<strong>고품질 카포 사용 시 음질 차이는 거의 없습니다.</strong> 다만 카포가 너무 느슨하거나 타이트하면 음정이 틀어질 수 있습니다. 카포 장착 후 반드시 튜닝을 다시 확인하세요.' },
               { q: '카포 7프렛 이상은 왜 잘 안 쓰나요?',
-                a: '프렛이 높아질수록 현의 장력이 높아져 음정이 불안정해지고 코드 잡기도 어려워집니다. 또한 가청 음역대가 너무 높아져 기타 특유의 따뜻한 음색이 사라집니다. 일반적으로 <strong>카포 5프렛 이하를 권장</strong>합니다.' },
+                a: '카포를 높이 끼운다고 현의 장력이 눈에 띄게 커지는 것은 아닙니다. 실제 이유는 <strong>프렛 간격이 좁아지고, 진동하는 현이 짧아져 체감 텐션이 뻣뻣해지기 때문</strong>입니다. 카포 압착에 의한 미세한 샤프(음정 틀어짐)는 위치와 무관하게 생길 수 있어 장착 후 재튜닝이 필요합니다. 또한 연주 음역이 높아져 기타 특유의 따뜻한 음색이 옅어집니다. 일반적으로 <strong>카포 5프렛 이하를 권장</strong>합니다.' },
               { q: '카포 없이 전조하려면 어떻게 하나요?',
                 a: '모든 코드를 반음 단위로 이동하면 됩니다. 예를 들어 C키를 D키로 올리려면 모든 코드를 2반음 올립니다. <code>C→D, Am→Bm, F→G, G→A</code>. 이 계산기의 "전조" 탭을 활용하세요.' },
               { q: '같은 키라도 카포 위치에 따라 음색이 다른가요?',
@@ -24,7 +24,7 @@ const FAQ_LD = [
               { q: '우쿨렐레에도 카포를 쓸 수 있나요?',
                 a: '네. <strong>우쿨렐레용 카포가 별도로 있으며</strong> 기타와 같은 원리로 작동합니다. 다만 우쿨렐레는 G-C-E-A 조율이 기본이라 코드 이름이 기타와 다를 수 있습니다. 이 계산기의 반음 단위 계산 원리는 동일하게 적용됩니다.' },
               { q: '여성 키 곡을 남성 키로 바꾸려면 몇 키를 내려야 하나요?',
-                a: '정해진 표준은 없으며, <strong>통상 3~5키(반음) 범위에서 곡과 본인 음역대에 맞춰 조정</strong>하는 것이 일반적입니다. 참고로 노래방에서 말하는 \'한 키\'는 반음 1개에 해당합니다. 키를 내린 뒤에는 본문 가이드의 역산 절차대로 <code>카포 위치 = 목표 키 − 코드 모양 키</code>를 계산하면 익숙한 코드 모양을 유지할 수 있습니다.' },
+                a: '정해진 표준은 없으며, <strong>통상 3~5키(반음) 범위에서 곡과 본인 음역대에 맞춰 조정</strong>하는 것이 일반적입니다. 참고로 노래방 반주기의 키 조절 1단계(\'한 키\')는 반음 1개입니다. 키를 내린 뒤에는 본문 가이드의 역산 절차대로 <code>카포 위치 = 목표 키 − 코드 모양 키</code>를 계산하면 익숙한 코드 모양을 유지할 수 있습니다.' },
             ]
 
 export default function CapoPage() {
@@ -98,19 +98,19 @@ export default function CapoPage() {
               </thead>
               <tbody>
                 {[
-                  { fret: '없음',  chord: 'C',  key: 'C', diff: '보통 (F코드 포함)', badge: null },
-                  { fret: '1프렛', chord: 'B',  key: 'C', diff: '어려움 (바레 다수)', badge: null },
-                  { fret: '2프렛', chord: 'A♯', key: 'C', diff: '어려움',           badge: null },
-                  { fret: '3프렛', chord: 'A',  key: 'C', diff: '✨ 쉬움',          badge: 'rec' },
-                  { fret: '4프렛', chord: 'G♯', key: 'C', diff: '어려움',           badge: null },
-                  { fret: '5프렛', chord: 'G',  key: 'C', diff: '✨ 쉬움',          badge: 'rec' },
-                  { fret: '7프렛', chord: 'F',  key: 'C', diff: '어려움 (바레)',    badge: null },
+                  { fret: '없음',  chord: 'C',      key: 'C', diff: '✨ 쉬움 (바레는 F 하나)',  badge: 'rec' },
+                  { fret: '1프렛', chord: 'B',      key: 'C', diff: '어려움 (바레 다수)',       badge: null },
+                  { fret: '2프렛', chord: 'A♯(B♭)', key: 'C', diff: '어려움',                  badge: null },
+                  { fret: '3프렛', chord: 'A',      key: 'C', diff: '보통 (Bm·F♯m·C♯m 바레)',  badge: null },
+                  { fret: '4프렛', chord: 'G♯(A♭)', key: 'C', diff: '어려움',                  badge: null },
+                  { fret: '5프렛', chord: 'G',      key: 'C', diff: '✨ 쉬움 (바레는 Bm 하나)', badge: 'rec' },
+                  { fret: '7프렛', chord: 'F',      key: 'C', diff: '어려움 (바레)',            badge: null },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: row.badge === 'rec' ? 'rgba(16,185,129,0.05)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row.fret}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row.chord}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{row.key}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: row.badge === 'rec' ? '#059669' : 'var(--muted)' }}>{row.diff}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: row.badge === 'rec' ? 'var(--success)' : 'var(--muted)' }}>{row.diff}</td>
                   </tr>
                 ))}
               </tbody>
@@ -125,7 +125,7 @@ export default function CapoPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '13px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>🟢 오픈 코드 (쉬움)</p>
+              <p style={{ fontSize: '13px', color: 'var(--success)', fontWeight: 700, marginBottom: '8px' }}>🟢 오픈 코드 (쉬움)</p>
               <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
                 C · G · D · Em · Am · A · E · Dm
               </p>
@@ -135,9 +135,9 @@ export default function CapoPage() {
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '12px', padding: '16px 20px' }}>
-              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>🔴 바레 코드 (어려움)</p>
+              <p style={{ fontSize: '13px', color: 'var(--warning)', fontWeight: 700, marginBottom: '8px' }}>🟠 바레 코드 (어려움)</p>
               <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
-                F · B♭ · E♭ · A♭ · D♭ · G♭ · B
+                F · B♭ · E♭ · A♭ · D♭ · G♭ · B + Bm · Cm · F♯m · Gm 등
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 검지로 여러 현을 동시에 누르는(바레) 코드. 악력과 정확한 폼이 필요해 입문자에게 진입장벽이 높습니다.
@@ -163,19 +163,19 @@ export default function CapoPage() {
               </thead>
               <tbody>
                 {[
-                  { k: 'C',  fret: '없음 / 3프렛',  play: 'C / A',      diff: '쉬움' },
-                  { k: 'D',  fret: '2프렛',         play: 'C',          diff: '쉬움' },
-                  { k: 'E',  fret: '4프렛',         play: 'C',          diff: '쉬움' },
-                  { k: 'F',  fret: '1프렛 / 5프렛', play: 'E / C',      diff: '쉬움' },
-                  { k: 'G',  fret: '없음',          play: 'G',          diff: '쉬움' },
-                  { k: 'A',  fret: '없음 / 2프렛',  play: 'A / G',      diff: '쉬움' },
-                  { k: 'B♭', fret: '1프렛 / 3프렛', play: 'A / G',      diff: '쉬움' },
-                  { k: 'B',  fret: '2프렛 / 4프렛', play: 'A / G',      diff: '쉬움' },
+                  { k: 'C',  fret: '없음 / 5프렛',  play: 'C / G', diff: '쉬움 (바레 1개)' },
+                  { k: 'D',  fret: '2프렛 / 없음',  play: 'C / D', diff: '쉬움' },
+                  { k: 'E',  fret: '4프렛 / 2프렛', play: 'C / D', diff: '쉬움' },
+                  { k: 'F',  fret: '5프렛 / 3프렛', play: 'C / D', diff: '쉬움' },
+                  { k: 'G',  fret: '없음 / 5프렛',  play: 'G / D', diff: '쉬움 (바레 1개)' },
+                  { k: 'A',  fret: '2프렛 / 없음',  play: 'G / A', diff: '쉬움' },
+                  { k: 'B♭', fret: '3프렛 / 1프렛', play: 'G / A', diff: '쉬움' },
+                  { k: 'B',  fret: '4프렛 / 2프렛', play: 'G / A', diff: '쉬움' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: '15px' }}>{row.k}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.fret}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.play}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--success)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.play}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row.diff}</td>
                   </tr>
                 ))}
@@ -183,7 +183,8 @@ export default function CapoPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * 모든 키는 카포를 쓰면 어려운 바레 코드(F·B♭ 등)를 오픈 코드로 대체할 수 있습니다.
+            * 위 계산기의 추천 알고리즘(다이아토닉 7코드 중 쉬운 오픈 코드 최다 → 바레 최소 → 낮은 프렛 순, 0~5프렛)과 동일한 기준으로 산출한 1·2순위입니다.
+            E 모양(카포 1로 F키 등)도 통용되지만 F♯m·G♯m·B 등 바레가 4개라 순위에서 밀립니다.
           </p>
         </div>
 
@@ -194,8 +195,10 @@ export default function CapoPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             악보 사이트에서 통용되는 편곡 기준으로, 통기타로 많이 연주되는 곡들의 원곡 키와 카포 위치를 정리했습니다.
-            플랫(♭) 계열 키(B♭·E♭·A♭)의 곡은 오픈 코드 모양이 없어 카포가 사실상 필수인 반면,
-            E키인 벚꽃 엔딩처럼 오픈 코드가 가능한 키는 카포 없이 원키 연주가 통용됩니다.
+            플랫(♭) 계열 키(B♭·E♭·A♭)의 곡은 오픈 코드 모양이 없어 카포가 사실상 필수이고,
+            벚꽃 엔딩(A장조)처럼 샤프 키 곡도 실음 첫 코드가 Bm7이라 카포 2 + G키 모양으로 치는 편곡이 표준입니다.
+            모양 키는 편곡의 첫 코드가 아니라 <strong style={{ color: 'var(--text)' }}>다이아토닉 코드 세트 기준</strong>입니다 —
+            밤편지 편곡은 F로 시작하지만 F·G·Em·Am·Dm은 C키 세트라 &lsquo;C키 모양&rsquo;입니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
@@ -208,10 +211,10 @@ export default function CapoPage() {
               </thead>
               <tbody>
                 {[
-                  { song: '밤편지 — 아이유',                 key: 'A♭', capo: '3프렛', shape: 'F키 (F·G·Em·Am·Dm)' },
-                  { song: '주저하는 연인들을 위해 — 잔나비',  key: 'B♭', capo: '1프렛', shape: 'A키 (Bm·C♯m 포함)' },
-                  { song: '모든 날, 모든 순간 — 폴킴',        key: 'E♭', capo: '1프렛', shape: 'D키 (바레는 Bm 하나)' },
-                  { song: '벚꽃 엔딩 — 버스커버스커',         key: 'E',  capo: '없음',  shape: 'E키 오픈 코드' },
+                  { song: '밤편지 — 아이유',                 key: 'E♭', capo: '3프렛', shape: 'C키 모양 (F로 시작 — F·G·Em·Am·Dm)' },
+                  { song: '주저하는 연인들을 위해 — 잔나비',  key: 'B♭', capo: '3프렛', shape: 'G키 모양 (G·Bm·C·Cm)' },
+                  { song: '모든 날, 모든 순간 — 폴킴',        key: 'A♭', capo: '1프렛', shape: 'G키 모양 (사실상 바레 없음)' },
+                  { song: '벚꽃 엔딩 — 버스커버스커',         key: 'A',  capo: '2프렛', shape: 'G키 모양 (Am7로 시작)' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row.song}</td>
@@ -225,7 +228,8 @@ export default function CapoPage() {
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
             * 악보 사이트·편곡자에 따라 카포 위치는 달라질 수 있습니다. 검산은 이 계산기 공식 그대로 —
-            연주 코드 모양의 키 + 카포 반음 수 = 원곡 키 (예: F키 모양 + 3반음 = A♭).
+            연주 코드 모양의 키 + 카포 반음 수 = 원곡 키 (예: C키 모양 + 3반음 = E♭).
+            원곡 키·통용 카포 출처: 악보바다 원키 표기·ezcho 코드 자료실·Ultimate Guitar (2026-07 확인).
           </p>
         </div>
 
@@ -279,12 +283,12 @@ export default function CapoPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             같은 곡도 남성·여성 보컬의 음역이 달라 키를 옮겨 부르는 경우가 많습니다.
             몇 키를 옮길지 정해진 표준은 없으며, <strong style={{ color: 'var(--text)' }}>통상 3~5키(반음) 범위에서 곡과 본인 음역대에 맞춰 조정</strong>하는 것이 일반적입니다.
-            노래방에서 말하는 &lsquo;한 키&rsquo;는 반음 1개에 해당합니다. 키를 정한 뒤에는 아래 순서로 카포를 역산하면 익숙한 코드 모양을 그대로 쓸 수 있습니다.
+            노래방 반주기의 키 조절 1단계(&lsquo;한 키&rsquo;)는 반음 1개입니다. 키를 정한 뒤에는 아래 순서로 카포를 역산하면 익숙한 코드 모양을 그대로 쓸 수 있습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '16px' }}>
             {[
-              { n: '①', title: '목표 키 계산',     desc: '원곡 키에서 내릴 반음 수를 뺍니다. 예: A♭에서 4키(4반음) 내리면 E.' },
-              { n: '②', title: '코드 모양 선택',   desc: '카포 위치 = 목표 키 − 코드 모양 키(반음). 카포가 0~5프렛이 되는 모양을 고릅니다. E키 = E모양+카포 없음 = D모양+2프렛 = C모양+4프렛.' },
+              { n: '①', title: '목표 키 계산',     desc: '원곡 키에서 내릴 반음 수를 뺍니다. 예: E♭에서 3키(3반음) 내리면 C.' },
+              { n: '②', title: '코드 모양 선택',   desc: '카포 위치 = 목표 키 − 코드 모양 키(반음). 카포가 0~5프렛이 되는 모양을 고릅니다. C키 = C모양+카포 없음 = A모양+3프렛 = G모양+5프렛.' },
               { n: '③', title: '기존 악보 재활용', desc: '같은 코드 모양을 유지하려면 새 카포 = 기존 카포 − 내린 반음 수. 음수가 나오면 그 모양은 불가능하므로 ②에서 다른 모양을 고릅니다.' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
@@ -296,10 +300,10 @@ export default function CapoPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '20px 22px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>실전 예시 — 밤편지를 남성 키로</p>
             <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px', letterSpacing: '-0.3px' }}>
-              원곡 A♭ (카포 3 + F키 모양) → 4키 내려 E키
+              원곡 E♭ (카포 3 + C키 모양) → 3키 내려 C키
             </p>
             <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '-0.2px' }}>
-              F 모양 유지 시 카포 3 − 4 = −1프렛(불가) → 카포 없이 E 오픈 코드, 또는 카포 2 + D키 모양
+              C 모양 유지 시 새 카포 = 3 − 3 = 0 → 카포만 빼면 됩니다. 4키 내려 B키라면 3 − 4 = −1(불가) → 카포 4 + G키 모양(G+4=B)
             </p>
           </div>
         </div>
@@ -328,10 +332,10 @@ export default function CapoPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기', desc: 'Hz ↔ 음정·MIDI·파장' },
-              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 타임',   desc: '딜레이·리버브 ms 계산' },
-              { href: '/tools/life/pomodoro',   icon: '🍅', name: '뽀모도로 타이머',    desc: '연습 루틴·집중 관리' },
-              { href: '/tools/date/dday',       icon: '📅', name: 'D-day 계산기',      desc: '공연·합주 D-day 관리' },
+              { href: '/tools/art/frequency',   icon: '🎵', name: '주파수↔음정 변환기', desc: 'Hz ↔ 음정·MIDI·파장' },
+              { href: '/tools/art/bpm',         icon: '🎛️', name: 'BPM 딜레이 계산기',  desc: '음표별 딜레이 타임 ms 계산' },
+              { href: '/tools/art/tap-tempo',   icon: '🥁', name: '탭 템포',            desc: '박자에 맞춰 탭해 BPM 측정' },
+              { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기',      desc: '마이크로 최저·최고음 측정' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

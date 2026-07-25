@@ -15,13 +15,9 @@ const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11]
 const MAJOR_QUALITIES = ['', 'm', 'm', '', '', 'm', 'dim'] as const
 const ROMAN = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°']
 const FUNCTION_LABELS = ['토닉 (T)', '서브도미넌트 (SD)', '토닉 대리', '서브도미넌트 (SD)', '도미넌트 (D)', '토닉 대리', '도미넌트 대리']
-const FUNCTION_COLORS = ['#0EA5E9', '#0891B2', '#0EA5E9', '#0891B2', '#EA580C', '#0EA5E9', '#EA580C']
+const FUNCTION_COLORS = ['var(--accent-ink)', 'var(--cat-health)', 'var(--accent-ink)', 'var(--cat-health)', 'var(--warning)', 'var(--accent-ink)', 'var(--warning)']
 
 const EASY_OPEN_CHORDS = new Set(['C','G','D','Em','Am','A','E','Dm'])
-const BARRE_CHORDS = new Set([
-  'F','Bb','Eb','Ab','Db','Gb','B','F#','C#','G#','D#','A#',
-  'Bm','F#m','C#m','G#m','D#m','A#m','Fm','Bbm','Ebm',
-])
 
 function flatOf(note: Note): string { return NOTES_FLAT[note] }
 
@@ -56,16 +52,16 @@ function transposeChord(chord: string, semitones: number): string {
 }
 
 function isEasyChord(chord: string): boolean { return EASY_OPEN_CHORDS.has(chord) }
+// 내부 표기는 샤프 전용 — 오픈 코드·dim 외의 maj/min은 전부 바레(하이 포지션) 취급
 function isBarreChord(chord: string): boolean {
-  if (EASY_OPEN_CHORDS.has(chord)) return false
-  if (chord.endsWith('dim')) return false
-  return BARRE_CHORDS.has(chord)
+  return !EASY_OPEN_CHORDS.has(chord) && !chord.endsWith('dim')
 }
 
 function recommendCapos(targetKey: Note): { fret: number; easyCount: number; barreCount: number }[] {
   const targetIdx = NOTES.indexOf(targetKey)
   const scored: { fret: number; easyCount: number; barreCount: number }[] = []
-  for (let fret = 0; fret <= 7; fret++) {
+  // FAQ 권장(5프렛 이하)과 정합 — 표시 표는 7프렛까지, 추천은 0~5프렛만
+  for (let fret = 0; fret <= 5; fret++) {
     const playIdx = ((targetIdx - fret) % 12 + 12) % 12
     const playKey = NOTES[playIdx]
     const chords = getDiatonic(playKey)
@@ -92,6 +88,8 @@ function KeyGrid({ value, onChange }: { value: Note; onChange: (n: Note) => void
         return (
           <button
             key={n}
+            type="button"
+            aria-pressed={value === n}
             className={`${styles.keyBtn} ${sharp ? styles.keyBtnSharp : ''} ${value === n ? styles.keyBtnActive : ''}`}
             onClick={() => onChange(n)}
           >
@@ -138,6 +136,8 @@ function CapoTab() {
           {[0,1,2,3,4,5,6,7].map(f => (
             <button
               key={f}
+              type="button"
+              aria-pressed={fret === f}
               className={`${styles.fretBtn} ${fret === f ? styles.fretBtnActive : ''} ${recommendedFrets.has(f) ? styles.fretBtnRec : ''}`}
               onClick={() => setFret(f)}
             >
@@ -266,12 +266,12 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
 
   return (
     <div className={styles.pianoWrap}>
-      <svg viewBox={`0 0 ${width} ${height}`} className={styles.pianoSvg} preserveAspectRatio="xMidYMid meet">
+      <svg viewBox={`0 0 ${width} ${height}`} className={styles.pianoSvg} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         {/* White keys */}
         {whiteNotes.map((n, i) => {
           const fromHit = (i < 7 && n === highlightFrom) || (i === 7 && highlightFrom === 'C')
           const toHit   = (i < 7 && n === highlightTo)   || (i === 7 && highlightTo === 'C')
-          const fill = fromHit ? '#0EA5E9' : toHit ? '#0891B2' : '#E8E8E8'
+          const fill = fromHit ? 'var(--accent)' : toHit ? 'var(--cat-health)' : '#E8E8E8'
           return (
             <g key={`w-${i}`}>
               <rect
@@ -287,14 +287,14 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
                 fontSize={11}
                 fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                 fontWeight={700}
-                fill={fromHit || toHit ? '#0D0D0D' : '#555'}
+                fill={fromHit || toHit ? '#ffffff' : '#555'}
                 textAnchor="middle"
               >{n}</text>
               {fromHit && (
-                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="#0EA5E9" />
+                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="var(--accent)" />
               )}
               {toHit && !fromHit && (
-                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="#0891B2" />
+                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="var(--cat-health)" />
               )}
             </g>
           )
@@ -305,7 +305,7 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
           if (!n) return null
           const fromHit = n === highlightFrom
           const toHit   = n === highlightTo
-          const fill = fromHit ? '#0EA5E9' : toHit ? '#0891B2' : '#1a1a1a'
+          const fill = fromHit ? 'var(--accent)' : toHit ? 'var(--cat-health)' : '#1a1a1a'
           const cx = (i + 1) * whiteW - blackW / 2
           return (
             <g key={`b-${i}`}>
@@ -322,7 +322,7 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
                 fontSize={9}
                 fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                 fontWeight={700}
-                fill={fromHit || toHit ? '#0D0D0D' : '#777'}
+                fill={fromHit || toHit ? '#ffffff' : '#777'}
                 textAnchor="middle"
               >{n}</text>
             </g>
@@ -362,10 +362,12 @@ function TransposeTab() {
         <div className={styles.cardLabel}>② 이동 방향</div>
         <div className={styles.dirRow}>
           <button
+            type="button" aria-pressed={direction === 'up'}
             className={`${styles.dirBtn} ${direction === 'up' ? styles.dirBtnActive : ''}`}
             onClick={() => setDirection('up')}
           >↑ 올리기</button>
           <button
+            type="button" aria-pressed={direction === 'down'}
             className={`${styles.dirBtn} ${direction === 'down' ? styles.dirBtnActive : ''}`}
             onClick={() => setDirection('down')}
           >↓ 내리기</button>
@@ -378,6 +380,8 @@ function TransposeTab() {
           {[1,2,3,4,5,6].map(s => (
             <button
               key={s}
+              type="button"
+              aria-pressed={semitones === s}
               className={`${styles.semiBtn} ${semitones === s ? styles.semiBtnActive : ''}`}
               onClick={() => setSemitones(s)}
             >{s}반음</button>
@@ -385,7 +389,7 @@ function TransposeTab() {
         </div>
       </div>
 
-      <div className={styles.hero}>
+      <div className={styles.hero} role="status">
         <div className={styles.heroLabel}>
           {origKey} 키 {direction === 'up' ? '↑' : '↓'} {semitones}반음 전조
         </div>
@@ -442,11 +446,18 @@ function TransposeTab() {
 /* ──────────────────────── 탭 3: 다이아토닉 코드표 ──────────────────────── */
 function DegreeTab() {
   const [rootKey, setRootKey] = useState<Note>('C')
+  const [copied, setCopied] = useState<'ok' | 'fail' | null>(null)
   const diatonic = useMemo(() => getDiatonic(rootKey), [rootKey])
 
   const handleCopy = useCallback(async () => {
     const text = `${rootKey} 키 다이아토닉 코드: ` + diatonic.map((c, i) => `${ROMAN[i]}=${c}`).join(', ')
-    try { await navigator.clipboard.writeText(text) } catch {}
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied('ok')
+    } catch {
+      setCopied('fail')
+    }
+    setTimeout(() => setCopied(null), 1500)
   }, [rootKey, diatonic])
 
   return (
@@ -463,7 +474,7 @@ function DegreeTab() {
             <div
               key={i}
               className={styles.degreeCard}
-              style={{ borderColor: `${FUNCTION_COLORS[i]}44` }}
+              style={{ borderColor: `color-mix(in srgb, ${FUNCTION_COLORS[i]} 27%, transparent)` }}
             >
               <div className={styles.degreeRoman} style={{ color: FUNCTION_COLORS[i] }}>{ROMAN[i]}</div>
               <div className={styles.degreeChord}>{c}</div>
@@ -471,7 +482,9 @@ function DegreeTab() {
             </div>
           ))}
         </div>
-        <button className={styles.copyBtn} onClick={handleCopy}>코드 목록 복사</button>
+        <button type="button" className={styles.copyBtn} onClick={handleCopy}>
+          {copied === 'ok' ? '✓ 복사됨' : copied === 'fail' ? '✗ 복사 실패' : '코드 목록 복사'}
+        </button>
       </div>
 
       <div className={styles.card}>
@@ -508,20 +521,21 @@ export default function CapoClient() {
   return (
     <div className={styles.wrap}>
       <div className={styles.tabs}>
-        <button className={`${styles.tab} ${tab === 'capo' ? styles.tabActive : ''}`} onClick={() => setTab('capo')}>
+        <button type="button" aria-pressed={tab === 'capo'} className={`${styles.tab} ${tab === 'capo' ? styles.tabActive : ''}`} onClick={() => setTab('capo')}>
           카포 계산기
         </button>
-        <button className={`${styles.tab} ${tab === 'transpose' ? styles.tabActive : ''}`} onClick={() => setTab('transpose')}>
+        <button type="button" aria-pressed={tab === 'transpose'} className={`${styles.tab} ${tab === 'transpose' ? styles.tabActive : ''}`} onClick={() => setTab('transpose')}>
           전조 계산
         </button>
-        <button className={`${styles.tab} ${tab === 'degree' ? styles.tabActive : ''}`} onClick={() => setTab('degree')}>
+        <button type="button" aria-pressed={tab === 'degree'} className={`${styles.tab} ${tab === 'degree' ? styles.tabActive : ''}`} onClick={() => setTab('degree')}>
           다이아토닉
         </button>
       </div>
 
-      {tab === 'capo'      && <CapoTab />}
-      {tab === 'transpose' && <TransposeTab />}
-      {tab === 'degree'    && <DegreeTab />}
+      {/* 탭 전환 시 입력 상태 보존을 위해 언마운트하지 않고 hidden 처리 */}
+      <div hidden={tab !== 'capo'}><CapoTab /></div>
+      <div hidden={tab !== 'transpose'}><TransposeTab /></div>
+      <div hidden={tab !== 'degree'}><DegreeTab /></div>
     </div>
   )
 }
