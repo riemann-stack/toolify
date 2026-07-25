@@ -62,14 +62,16 @@
 
 /* ── 프리셋 버튼 ── */
 .presets {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   gap: 8px;
-  flex-wrap: wrap;
+}
+@media (max-width: 420px) {
+  .presets { grid-template-columns: repeat(3, 1fr); }
 }
 
 .presetBtn {
-  flex: 1;
-  min-width: 52px;
+  min-width: 0;
   padding: 9px 4px;
   background: var(--bg3);
   border: 1px solid var(--border);

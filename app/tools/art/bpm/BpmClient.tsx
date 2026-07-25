@@ -12,8 +12,13 @@ const NOTES = [
   { label: '16분음표', factor: 0.25 },
 ]
 
+/* 원값(ms, 미반올림) — 점음표·셋잇단은 반드시 이 원값에 배율을 곱한 뒤 반올림해야
+   소수 BPM에서 이중 반올림 오차(예: 128.5 BPM 점4분 701→700)가 없다 */
+function rawDelay(bpm: number, factor: number) {
+  return (60000 / bpm) * factor
+}
 function calcDelay(bpm: number, factor: number) {
-  return Math.round((60000 / bpm) * factor)
+  return Math.round(rawDelay(bpm, factor))
 }
 
 export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string } = {}) {
@@ -27,10 +32,14 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
   }, [bpm])
 
   const handleCopy = useCallback((val: string, key: string) => {
-    navigator.clipboard.writeText(val).catch(() => {})
-    setCopied(key)
-    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current)
-    copyTimerRef.current = window.setTimeout(() => setCopied(null), 1500)
+    const show = (state: string) => {
+      setCopied(state)
+      if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current)
+      copyTimerRef.current = window.setTimeout(() => setCopied(null), 1500)
+    }
+    navigator.clipboard.writeText(val)
+      .then(() => show(key))
+      .catch(() => show(`fail:${key}`))  // 권한 거부 등 실패를 성공으로 표시하지 않음
   }, [])
 
   const quarterMs = bpmNum ? calcDelay(bpmNum, 1) : null
@@ -45,6 +54,7 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
             className={styles.bpmInput}
             type="number"
             inputMode="decimal"
+            step="any"
             placeholder="120"
             value={bpm}
             onChange={e => setBpm(e.target.value)}
@@ -80,12 +90,12 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
               className={`${styles.heroCopy} ${copied === 'hero' ? styles.heroCopied : ''}`}
               onClick={() => handleCopy(String(quarterMs), 'hero')}
             >
-              {copied === 'hero' ? '✓ 복사됨' : '복사'}
+              {copied === 'hero' ? '✓ 복사됨' : copied === 'fail:hero' ? '✗ 복사 실패' : '복사'}
             </button>
           </div>
 
           {/* 딜레이 테이블 */}
-          <div className={styles.tableWrap}>
+          <div className={`${styles.tableWrap} tableScroll`}>
             <table className={styles.table}>
               <thead>
                 <tr>
@@ -97,9 +107,10 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
               </thead>
               <tbody>
                 {NOTES.map(note => {
-                  const base = calcDelay(bpmNum, note.factor)
-                  const dot  = Math.round(base * 1.5)
-                  const trip = Math.round(base * (2 / 3))
+                  const raw  = rawDelay(bpmNum, note.factor)
+                  const base = Math.round(raw)
+                  const dot  = Math.round(raw * 1.5)
+                  const trip = Math.round(raw * (2 / 3))
                   return (
                     <tr key={note.label} className={styles.tr}>
                       <td className={styles.tdLabel}>{note.label}</td>
@@ -117,7 +128,7 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
                             className={`${styles.copyBtn} ${copied === key ? styles.copyBtnDone : ''}`}
                             onClick={() => handleCopy(String(val), key)}
                           >
-                            {copied === key ? '✓' : '⎘'}
+                            {copied === key ? '✓' : copied === `fail:${key}` ? '✗' : '⎘'}
                           </button>
                         </td>
                       ))}

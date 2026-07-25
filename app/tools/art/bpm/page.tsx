@@ -8,13 +8,13 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/art/bpm',
   title: 'BPM 딜레이 계산기 — DAW 없이 딜레이/리버브 설정',
-  description: 'BPM만 입력하면 딜레이·리버브 ms 값 자동. 음악 프로듀서·홈레코딩·DJ 필수 도구.',
+  description: 'BPM만 입력하면 음표별 딜레이 타임(ms) 자동 계산 + 리버브 프리딜레이 참고값. 음악 프로듀서·홈레코딩·DJ 도구.',
   keywords: ['BPM딜레이계산기', '딜레이타임계산', '음악제작계산기', 'BPM딜레이', '딜레이ms계산', 'DAW딜레이설정', '음악템포계산기'],
 })
 
 const FAQ_LD = [
               { q: '점음표(dotted)는 왜 ×1.5인가요?',
-                a: '점음표는 원래 음표 길이에 <strong>절반을 더한 값</strong>입니다. 예를 들어 점 4분음표는 4분음표 + 8분음표 = 1.5배 길이입니다. 딜레이에서 점음표 설정은 Slapback echo나 핑퐁 딜레이에서 리듬감을 극대화할 때 많이 사용합니다.' },
+                a: '점음표는 원래 음표 길이에 <strong>절반을 더한 값</strong>입니다. 예를 들어 점 4분음표는 4분음표 + 8분음표 = 1.5배 길이입니다. 점 8분음표 딜레이는 핑퐁 딜레이 등에서 리듬감을 줄 때 널리 쓰입니다. 참고로 슬랩백 에코는 이와 달리 75~120ms 안팎의 짧은 단일 반복 효과로, 음표 동기와는 다른 개념입니다.' },
               { q: '셋잇단음표(triplet)는 ×⅔인 이유는?',
                 a: '셋잇단음표는 <strong>2박자 공간에 3개의 음을 넣는 방식</strong>으로, 1개 음의 길이가 원래 값의 2/3입니다. BPM 120의 4분음표는 500ms이지만 셋잇단 4분음표는 약 333ms입니다. 트리플렛 딜레이는 펑키하고 스윙감 있는 그루브를 만들 때 효과적입니다.' },
               { q: 'BPM이 소수(예: 128.5)여도 계산되나요?',
@@ -48,7 +48,7 @@ export default async function BpmPage({
         <ToolIconBadge catId="art" />BPM 딜레이 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
-        BPM만 입력하면 <strong style={{ color: 'var(--text)' }}>딜레이·리버브 ms 값</strong> 자동. 음악 프로듀서·홈레코딩 필수.
+        BPM만 입력하면 음표별 <strong style={{ color: 'var(--text)' }}>딜레이 타임(ms)</strong> 자동 계산. 리버브 프리딜레이의 박자 동기 참고값으로도 활용할 수 있습니다.
       </p>
 
       <BpmClient initialBpm={initialBpm} />
@@ -74,7 +74,7 @@ export default async function BpmPage({
               예시: BPM 120 → 60,000 ÷ 120 = <strong style={{ color: 'var(--accent)' }}>500ms</strong>
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px' }}>
             {[
               { label: '점음표 (Dotted)',        formula: '기본값 × 1.5',     example: '500ms → 750ms' },
               { label: '셋잇단음표 (Triplet)',   formula: '기본값 × ⅔',      example: '500ms → 333ms' },
@@ -139,7 +139,7 @@ export default async function BpmPage({
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             장르의 통상 BPM 범위를 기준으로 자주 쓰는 딜레이 타임을 미리 계산한 표입니다(60,000 ÷ BPM × 배수).
-            4분음표는 비트와 딱 맞는 기본 딜레이, 점8분음표(×0.75)는 핑퐁·슬랩백 딜레이에서 리듬감을 줄 때 많이 쓰는 설정입니다.
+            4분음표는 비트와 딱 맞는 기본 딜레이, 점8분음표(×0.75)는 핑퐁 딜레이 등에서 리듬감을 줄 때 많이 쓰는 설정입니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -184,7 +184,7 @@ export default async function BpmPage({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { icon: '⏱️', color: '#0EA5E9', title: '딜레이 타임 (Delay Time)', content: '딜레이 플러그인의 "Time" 또는 "Delay Time" 파라미터에 계산된 ms 값을 직접 입력합니다. 4분음표는 비트와 딱 맞는 리듬감을 주고, 8분음표나 셋잇단음표는 더 촘촘하고 그루비한 느낌을 만듭니다.' },
-              { icon: '🌊', color: '#0891B2', title: '리버브 프리딜레이 (Pre-Delay)', content: '리버브의 Pre-Delay는 원음과 잔향 사이의 시간차입니다. 보통 16분음표나 32분음표 값을 사용합니다. BPM 120 기준으로 16분음표(125ms)를 프리딜레이에 적용하면 자연스럽고 리드미컬한 공간감을 얻을 수 있습니다.' },
+              { icon: '🌊', color: '#0891B2', title: '리버브 프리딜레이 (Pre-Delay)', content: '리버브의 Pre-Delay는 원음과 잔향 사이의 시간차입니다. 아래 표의 통용 범위(보컬 20~80ms 등)를 출발점으로 잡고, 잔향을 박자에 맞추고 싶다면 32분음표 값(120 BPM 기준 62.5ms)부터 시도해 보세요. 16분음표(125ms)는 의도적으로 잔향을 늦게 시작시키는 특수한 연출에 가깝습니다.' },
               { icon: '🎚️', color: '#EA580C', title: '템포 싱크 vs 수동 입력', content: '대부분의 DAW(Ableton, Logic, FL Studio 등)는 딜레이 플러그인에 "Sync" 버튼이 있어 BPM에 자동 연동됩니다. 그러나 외부 하드웨어 이펙터나 빈티지 플러그인, 혹은 미묘한 timing offset이 필요한 경우에는 ms 값을 직접 입력해야 합니다.' },
             ].map((tip, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${tip.color}30`, borderRadius: '12px', padding: '16px 20px', display: 'flex', gap: '14px' }}>
@@ -232,7 +232,7 @@ export default async function BpmPage({
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-            악기별로는 보컬 20~80ms, 기타 40~100ms, 드럼 5~50ms 범위가 통용되는 것으로 알려져 있습니다(iZotope 가이드, 2026-06 확인).
+            악기별로는 보컬 20~80ms, 기타 40~100ms, 드럼 5~50ms 범위가 통용되는 것으로 알려져 있습니다(<a href="https://www.izotope.com/en/learn/reverb-pre-delay" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>iZotope 프리딜레이 가이드</a>, 2026-06 확인).
             프리딜레이를 박자에 맞추고 싶다면 위 계산기의 16분·32분음표 값을 그대로 적용해 보세요.
           </p>
         </div>
@@ -286,10 +286,10 @@ export default async function BpmPage({
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/date/dday',       icon: '📅', name: 'D-day 계산기',       desc: '앨범·프로젝트 마감일 카운트다운' },
-              { href: '/tools/art/color',       icon: '🎨', name: '색상 코드 변환기',   desc: 'DAW 커버아트·앨범 디자인 색상' },
-              { href: '/tools/art/charcount',   icon: '🔡', name: '글자수 세기',         desc: '음악 플랫폼 설명·가사 글자수 확인' },
-              { href: '/tools/unit/converter',  icon: '📐', name: '단위 변환기',         desc: '길이·무게·시간 등 14종 통합 변환' },
+              { href: '/tools/art/tap-tempo',   icon: '🥁', name: '탭 템포',             desc: '박자에 맞춰 탭해 BPM 즉시 측정' },
+              { href: '/tools/art/frequency',   icon: '🎵', name: '주파수↔음정 변환기',  desc: 'Hz ↔ 음정·MIDI 번호 변환' },
+              { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기',       desc: '마이크로 최저·최고음 측정' },
+              { href: '/tools/art/chord',       icon: '🎼', name: '코드 구성음',         desc: '코드별 구성 음정 표시' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
