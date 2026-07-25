@@ -161,12 +161,12 @@ export default function ChordPage() {
               <tbody>
                 {[
                   { roman: 'Ⅰ',  chord: 'Cmaj7',  notes: 'C, E, G, B',    func: '토닉',         color: 'var(--success)' },
-                  { roman: 'Ⅱ',  chord: 'Dm7',    notes: 'D, F, A, C',    func: '서브도미넌트', color: 'var(--cat-health)' },
-                  { roman: 'Ⅲ',  chord: 'Em7',    notes: 'E, G, B, D',    func: '토닉',         color: 'var(--success)' },
+                  { roman: 'ⅱ',  chord: 'Dm7',    notes: 'D, F, A, C',    func: '서브도미넌트', color: 'var(--cat-health)' },
+                  { roman: 'ⅲ',  chord: 'Em7',    notes: 'E, G, B, D',    func: '토닉',         color: 'var(--success)' },
                   { roman: 'Ⅳ',  chord: 'Fmaj7',  notes: 'F, A, C, E',    func: '서브도미넌트', color: 'var(--cat-health)' },
                   { roman: 'Ⅴ',  chord: 'G7',     notes: 'G, B, D, F',    func: '도미넌트',     color: 'var(--cat-life)' },
-                  { roman: 'Ⅵ',  chord: 'Am7',    notes: 'A, C, E, G',    func: '토닉',         color: 'var(--success)' },
-                  { roman: 'Ⅶ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',    func: '도미넌트',     color: 'var(--cat-life)' },
+                  { roman: 'ⅵ',  chord: 'Am7',    notes: 'A, C, E, G',    func: '토닉',         color: 'var(--success)' },
+                  { roman: 'ⅶø', chord: 'Bm7♭5',  notes: 'B, D, F, A',    func: '도미넌트',     color: 'var(--cat-life)' },
                 ].map((d, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)', borderLeft: `3px solid ${d.color}` }}>
                     <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
@@ -200,11 +200,11 @@ export default function ChordPage() {
               </thead>
               <tbody>
                 {[
-                  { roman: 'Ⅰ',  chord: 'Am7',    notes: 'A, C, E, G',   note: '토닉. 단조의 중심 코드',                    color: 'var(--success)' },
-                  { roman: 'Ⅱ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',   note: '마이너 2-5-1 진행의 Ⅱ 담당',               color: 'var(--cat-health)' },
+                  { roman: 'ⅰ',  chord: 'Am7',    notes: 'A, C, E, G',   note: '토닉. 단조의 중심 코드',                    color: 'var(--success)' },
+                  { roman: 'ⅱø', chord: 'Bm7♭5',  notes: 'B, D, F, A',   note: '마이너 2-5-1 진행의 Ⅱ 담당',               color: 'var(--cat-health)' },
                   { roman: 'Ⅲ',  chord: 'Cmaj7',  notes: 'C, E, G, B',   note: '나란한조 C 메이저의 Ⅰ과 동일',             color: 'var(--success)' },
-                  { roman: 'Ⅳ',  chord: 'Dm7',    notes: 'D, F, A, C',   note: '서브도미넌트',                             color: 'var(--cat-health)' },
-                  { roman: 'Ⅴ',  chord: 'Em7',    notes: 'E, G, B, D',   note: '이끔음이 없어 해결감 약함 → 흔히 E7로 대체', color: 'var(--cat-life)' },
+                  { roman: 'ⅳ',  chord: 'Dm7',    notes: 'D, F, A, C',   note: '서브도미넌트',                             color: 'var(--cat-health)' },
+                  { roman: 'ⅴ',  chord: 'Em7',    notes: 'E, G, B, D',   note: '이끔음이 없어 해결감 약함 → 흔히 E7로 대체', color: 'var(--cat-life)' },
                   { roman: 'Ⅵ',  chord: 'Fmaj7',  notes: 'F, A, C, E',   note: 'C 메이저의 Ⅳ와 동일',                      color: 'var(--cat-health)' },
                   { roman: 'Ⅶ',  chord: 'G7',     notes: 'G, B, D, F',   note: 'C 메이저의 Ⅴ와 동일',                      color: 'var(--cat-life)' },
                 ].map((d, i) => (
@@ -235,14 +235,14 @@ export default function ChordPage() {
             {[
               {
                 name: '1-6-4-5 진행 (올드팝·발라드)',
-                deg: 'Ⅰ → Ⅵm → Ⅳ → Ⅴ',
+                deg: 'Ⅰ → ⅵ → Ⅳ → Ⅴ',
                 ex: 'Cmaj7 → Am7 → Fmaj7 → G7',
                 desc: "수많은 팝·발라드의 기본. '팝의 왕'으로 불리는 1-5-6-4(Ⅰ→Ⅴ→Ⅵm→Ⅳ)는 같은 코드의 순서 변형",
                 color: 'var(--accent-ink)',
               },
               {
                 name: '2-5-1 진행 (재즈 기본)',
-                deg: 'Ⅱm7 → Ⅴ7 → Ⅰmaj7',
+                deg: 'ⅱ7 → Ⅴ7 → Ⅰmaj7',
                 ex: 'Dm7 → G7 → Cmaj7',
                 desc: '재즈 스탠더드 대부분에 등장. 도미넌트 모션의 기본',
                 color: 'var(--cat-health)',
@@ -256,7 +256,7 @@ export default function ChordPage() {
               },
               {
                 name: '카논 진행',
-                deg: 'Ⅰ → Ⅴ → Ⅵm → Ⅲm → Ⅳ → Ⅰ → Ⅳ → Ⅴ',
+                deg: 'Ⅰ → Ⅴ → ⅵ → ⅲ → Ⅳ → Ⅰ → Ⅳ → Ⅴ',
                 ex: 'C → G → Am → Em → F → C → F → G',
                 desc: '파헬벨 카논의 8코드 시퀀스. 발라드·OST에서 자주 사용',
                 color: 'var(--cat-sports)',
@@ -278,7 +278,7 @@ export default function ChordPage() {
             슬래시 코드(분수 코드) 읽는 법
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            C/E, G/B처럼 슬래시로 표기된 코드는 <strong style={{ color: 'var(--text)' }}>왼쪽 코드를 치되, 베이스(가장 낮은 음)만 오른쪽 음으로</strong> 연주하라는 뜻입니다. 구성음이 달라지는 게 아니라 음의 배치(전위)가 바뀌는 것으로, 코드와 코드 사이의 베이스 라인을 매끄럽게 이어줄 때 주로 씁니다.
+            C/E, G/B처럼 슬래시로 표기된 코드는 <strong style={{ color: 'var(--text)' }}>왼쪽 코드를 치되, 베이스(가장 낮은 음)만 오른쪽 음으로</strong> 연주하라는 뜻입니다. 베이스 음이 코드 구성음이면 음의 배치만 바뀌는 <strong style={{ color: 'var(--text)' }}>전위</strong>이고(C/E·G/B), 구성음이 아니면 코드 위에 새 베이스를 얹는 <strong style={{ color: 'var(--text)' }}>비화성 베이스</strong>입니다(Am/G). 어느 쪽이든 코드 사이의 베이스 라인을 매끄럽게 이어줄 때 주로 씁니다.
           </p>
           <div style={{ overflowX: 'auto', marginBottom: '14px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -294,7 +294,7 @@ export default function ChordPage() {
                   ['C/E',  '베이스 E + C, G',     'C 코드의 1전위 — 3도 음이 베이스'],
                   ['C/G',  '베이스 G + C, E',     'C 코드의 2전위 — 5도 음이 베이스'],
                   ['G/B',  '베이스 B + G, D',     'G 코드의 1전위. C↔Am 사이를 잇는 단골'],
-                  ['Am/G', '베이스 G + A, C, E',  '구성음 합치면 A·C·E·G = Am7과 동일'],
+                  ['Am/G', '베이스 G + A, C, E',  '전위가 아닌 비화성 베이스 — 합치면 Am7과 같은 소리'],
                   ['D/F♯', '베이스 F♯ + D, A',    'D 코드의 1전위. 베이스 라인 연결에 자주 사용'],
                 ].map(([chord, notes, desc], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>

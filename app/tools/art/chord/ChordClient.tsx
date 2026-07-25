@@ -18,7 +18,77 @@ function notes(notation: Notation): readonly string[] {
 function noteToIndex(note: string): number {
   const i = NOTES_SHARP.indexOf(note as typeof NOTES_SHARP[number])
   if (i >= 0) return i
-  return NOTES_FLAT.indexOf(note as typeof NOTES_FLAT[number])
+  const f = NOTES_FLAT.indexOf(note as typeof NOTES_FLAT[number])
+  if (f >= 0) return f
+  // 레터워크 철자(E#·Cb·B## 등) 파싱
+  const pc = parseSpelled(note)
+  return pc == null ? -1 : pc
+}
+
+/* ── 조성·도수 기반 레터워크 철자 ── */
+const LETTERS = ['C','D','E','F','G','A','B'] as const
+const LETTER_PC: Record<string, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }
+
+function parseSpelled(name: string): number | null {
+  const m = /^([A-G])((?:#|b|♯|♭)*)$/.exec(name)
+  if (!m) return null
+  let pc = LETTER_PC[m[1]]
+  for (const ch of m[2]) pc += ch === '#' || ch === '♯' ? 1 : -1
+  return ((pc % 12) + 12) % 12
+}
+
+const accToStr = (a: number) => (a === 0 ? '' : a === 1 ? '#' : a === -1 ? 'b' : a === 2 ? '##' : 'bb')
+
+// 코드 타입별 도수 (CHORD_INTERVALS와 병렬 — 철자용 글자 간격 결정)
+const CHORD_DEGREES: Record<string, number[]> = {
+  Major: [1,3,5], Minor: [1,3,5], aug: [1,3,5], dim: [1,3,5],
+  sus2: [1,2,5], sus4: [1,4,5],
+  maj7: [1,3,5,7], m7: [1,3,5,7], '7': [1,3,5,7], m7b5: [1,3,5,7], dim7: [1,3,5,7],
+  'maj7#5': [1,3,5,7], mM7: [1,3,5,7],
+  '9': [1,3,5,7,9], maj9: [1,3,5,7,9], m9: [1,3,5,7,9], add9: [1,3,5,9],
+  '11': [1,3,5,7,9,11], maj11: [1,3,5,7,9,11], m11: [1,3,5,7,9,11],
+  '13': [1,3,5,7,9,11,13], maj13: [1,3,5,7,9,11,13],
+  '6': [1,3,5,6], m6: [1,3,5,6], '6/9': [1,3,5,6,9],
+  '7sus4': [1,4,5,7], '7sus2': [1,2,5,7],
+  '7b5': [1,3,5,7], '7#5': [1,3,5,7], '9b5': [1,3,5,7,9], '9#5': [1,3,5,7,9],
+}
+
+// 이론 철자 생성: C#maj7 → C#,E#,G#,B# / Cdim7 7음 → Bbb(A) 병기
+function spellChordNotes(rootName: string, type: string): string[] {
+  const m = /^([A-G])([#b]?)$/.exec(rootName)
+  if (!m) return []
+  const rootLetter = m[1]
+  const rootAcc = m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0
+  const rootPc = ((LETTER_PC[rootLetter] + rootAcc) % 12 + 12) % 12
+  const Li = LETTERS.indexOf(rootLetter as typeof LETTERS[number])
+  const intervals = CHORD_INTERVALS[type] ?? []
+  const degrees = CHORD_DEGREES[type] ?? []
+  return intervals.map((semi, i) => {
+    const deg = degrees[i] ?? 1
+    const L = LETTERS[(Li + deg - 1) % 7]
+    const targetPc = ((rootPc + semi) % 12 + 12) % 12
+    const a = ((targetPc - LETTER_PC[L] + 6) % 12 + 12) % 12 - 6
+    const name = L + accToStr(a)
+    // 이중임시표는 실용 이명 병기
+    return Math.abs(a) >= 2 ? `${name}(${NOTES_SHARP[targetPc]})` : name
+  })
+}
+
+// 장·자연단음계 철자 (F#장조 → E# / Gb장조 → Cb)
+function spellScaleRoots(rootName: string, mode: 'major'|'minor'): string[] {
+  const m = /^([A-G])([#b]?)$/.exec(rootName)
+  if (!m) return []
+  const rootLetter = m[1]
+  const rootAcc = m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0
+  const rootPc = ((LETTER_PC[rootLetter] + rootAcc) % 12 + 12) % 12
+  const Li = LETTERS.indexOf(rootLetter as typeof LETTERS[number])
+  const scale = mode === 'major' ? MAJOR_SCALE : MINOR_SCALE
+  return scale.map((semi, i) => {
+    const L = LETTERS[(Li + i) % 7]
+    const targetPc = ((rootPc + semi) % 12 + 12) % 12
+    const a = ((targetPc - LETTER_PC[L] + 6) % 12 + 12) % 12 - 6
+    return L + accToStr(a)
+  })
 }
 
 /* ────────────────────────────────────────────────
@@ -110,12 +180,14 @@ function chordFullName(root: string, type: string): string {
   return root + chordSuffix(type)
 }
 
-function getChordNotes(root: string, type: string, notation: Notation): string[] {
-  const ns = notes(notation)
+function getChordNotes(root: string, type: string, _notation: Notation): string[] {
+  return spellChordNotes(root, type)
+}
+
+function getChordPCs(root: string, type: string): number[] {
   const rootIdx = noteToIndex(root)
   if (rootIdx === -1) return []
-  const intervals = CHORD_INTERVALS[type] ?? []
-  return intervals.map(iv => ns[(rootIdx + iv) % 12])
+  return (CHORD_INTERVALS[type] ?? []).map(iv => (rootIdx + iv) % 12)
 }
 
 /* ────────────────────────────────────────────────
@@ -129,7 +201,7 @@ const MINOR_SCALE = [0, 2, 3, 5, 7, 8, 10]
 const MINOR_CHORD_TYPES = ['m7', 'm7b5', 'maj7', 'm7', 'm7', 'maj7', '7']
 const MINOR_FUNCTIONS: ('tonic'|'sub'|'dom')[] = ['tonic','sub','tonic','sub','dom','sub','dom']
 
-const ROMAN_MAJOR = ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ']
+const ROMAN_MAJOR = ['Ⅰ','ⅱ','ⅲ','Ⅳ','Ⅴ','ⅵ','ⅶø']
 const ROMAN_MINOR = ['ⅰ','ⅱø','Ⅲ','ⅳ','ⅴ','Ⅵ','Ⅶ']
 
 const FUNC_LABEL: Record<'tonic'|'sub'|'dom', string> = {
@@ -139,21 +211,19 @@ const FUNC_LABEL: Record<'tonic'|'sub'|'dom', string> = {
 }
 
 function getDiatonicChords(rootKey: string, mode: 'major'|'minor', notation: Notation) {
-  const ns = notes(notation)
-  const rootIdx = noteToIndex(rootKey)
-  const scale = mode === 'major' ? MAJOR_SCALE : MINOR_SCALE
   const types = mode === 'major' ? MAJOR_CHORD_TYPES : MINOR_CHORD_TYPES
   const funcs = mode === 'major' ? MAJOR_FUNCTIONS : MINOR_FUNCTIONS
   const romans = mode === 'major' ? ROMAN_MAJOR : ROMAN_MINOR
-  return scale.map((interval, i) => {
-    const chordRoot = ns[(rootIdx + interval) % 12]
+  // 스케일 철자(레터워크) — F#장조 E#·Gb장조 Cb까지 조성에 맞는 음이름
+  const scaleRoots = spellScaleRoots(rootKey, mode)
+  return scaleRoots.map((chordRoot, i) => {
     const type = types[i]
     return {
       degree: romans[i],
       root: chordRoot,
       type,
       name: chordFullName(chordRoot, type),
-      notes: getChordNotes(chordRoot, type, notation),
+      notes: spellChordNotes(chordRoot, type),
       func: funcs[i],
     }
   })
@@ -164,16 +234,16 @@ function getDiatonicChords(rootKey: string, mode: 'major'|'minor', notation: Not
  * ──────────────────────────────────────────────── */
 type Progression = { name: string; nick: string; degrees: number[]; types?: string[] }
 const MAJOR_PROGRESSIONS: Progression[] = [
-  { name: 'Ⅰ → Ⅴ → Ⅵm → Ⅳ', nick: '1-5-6-4 (팝의 왕·Axis)', degrees: [0,4,5,3] },
-  { name: 'Ⅱ → Ⅴ → Ⅰ',       nick: '2-5-1 (재즈 기본)',     degrees: [1,4,0] },
-  { name: 'Ⅰ → Ⅵm → Ⅳ → Ⅴ', nick: '1-6-4-5 (올드팝·발라드)', degrees: [0,5,3,4] },
+  { name: 'Ⅰ → Ⅴ → ⅵ → Ⅳ', nick: '1-5-6-4 (팝의 왕·Axis)', degrees: [0,4,5,3] },
+  { name: 'ⅱ → Ⅴ → Ⅰ',       nick: '2-5-1 (재즈 기본)',     degrees: [1,4,0] },
+  { name: 'Ⅰ → ⅵ → Ⅳ → Ⅴ', nick: '1-6-4-5 (올드팝·발라드)', degrees: [0,5,3,4] },
   { name: 'Ⅰ → Ⅳ → Ⅴ',       nick: '1-4-5 (블루스·록)',     degrees: [0,3,4] },
 ]
-// 자연단음계 표기 — 실전에서 ⅴ는 도미넌트 7(화성단음계)로 대체하는 관행이 흔함
+// 자연단음계 표기 — 2-5-1의 Ⅴ만 관행대로 화성단음계 도미넌트 7 오버라이드 (본문 설명과 정합)
 const MINOR_PROGRESSIONS: Progression[] = [
   { name: 'ⅰ → Ⅵ → Ⅲ → Ⅶ', nick: '서정적 마이너 진행', degrees: [0,5,2,6] },
   { name: 'ⅰ → ⅳ → ⅴ',       nick: '마이너 1-4-5',       degrees: [0,3,4] },
-  { name: 'ⅱø → ⅴ → ⅰ',     nick: '마이너 2-5-1',       degrees: [1,4,0] },
+  { name: 'ⅱø → Ⅴ7 → ⅰ',    nick: '마이너 2-5-1',       degrees: [1,4,0], types: ['m7b5','7','m7'] },
 ]
 
 /* ────────────────────────────────────────────────
@@ -280,7 +350,8 @@ export default function ChordClient() {
   const matches = useMemo(() => {
     if (selectedNotes.length < 2) return []
     const selSet = new Set(selectedNotes)
-    const results: { name: string; type: string; root: string; chordPCs: number[]; matched: number; denom: number; pct: number }[] = []
+    type Relation = 'equal' | 'contains' | 'within' | 'partial'
+    const results: { name: string; type: string; root: string; chordPCs: number[]; matched: number; denom: number; pct: number; relation: Relation; rank: number }[] = []
 
     for (const r of ALL_ROOTS_SHARP) {
       for (const type of Object.keys(CHORD_INTERVALS)) {
@@ -295,6 +366,11 @@ export default function ChordClient() {
         const pct = matched / denom
 
         if (pct >= 0.5) {
+          // 관계 구분: 완전 일치 / 선택음 전부 포함(코드 ⊇ 선택) / 일부로 구성(코드 ⊆ 선택) / 부분 일치
+          const containsAll = selectedNotes.every(pc => pcs.includes(pc))
+          const withinSel = pcs.every(pc => selSet.has(pc))
+          const relation: Relation = containsAll && withinSel ? 'equal' : containsAll ? 'contains' : withinSel ? 'within' : 'partial'
+          const rank = relation === 'equal' ? 0 : relation === 'contains' ? 1 : relation === 'within' ? 2 : 3
           results.push({
             name: chordFullName(r, type),
             type,
@@ -303,22 +379,28 @@ export default function ChordClient() {
             matched,
             denom,
             pct,
+            relation,
+            rank,
           })
         }
       }
     }
-    // 정렬: 일치율 desc, 다음 chord size asc(단순한 코드 우선)
+    // 정렬: 관계(완전>전부 포함>구성>부분) → 일치율 → 단순한 코드 우선
     results.sort((a, b) =>
+      a.rank - b.rank ||
       b.pct - a.pct ||
       a.chordPCs.length - b.chordPCs.length ||
       a.name.localeCompare(b.name),
     )
-    // notation 기준 이름 변환
-    return results.slice(0, 12).map(r => ({
-      ...r,
-      displayName: chordFullName(notes(notation)[noteToIndex(r.root)], r.type),
-      displayNotes: r.chordPCs.map(pc => notes(notation)[pc]),
-    }))
+    // notation 기준 이름·철자 변환
+    return results.slice(0, 12).map(r => {
+      const displayRootName = notes(notation)[noteToIndex(r.root)]
+      return {
+        ...r,
+        displayName: chordFullName(displayRootName, r.type),
+        displayNotes: spellChordNotes(displayRootName, r.type),
+      }
+    })
   }, [selectedNotes, searchScope, notation])
 
   /* ── 다이아토닉 ── */
@@ -418,7 +500,7 @@ export default function ChordClient() {
             <span className={s.cardLabel}>피아노 건반</span>
             <div className={s.pianoWrap}>
               <div className={s.pianoSvgBox}>
-                <PianoKeyboard chordPCs={chordNotes.map(noteToIndex)} rootPC={noteToIndex(displayRoot)} notation={notation} />
+                <PianoKeyboard chordPCs={getChordPCs(displayRoot, chordType)} rootPC={noteToIndex(displayRoot)} notation={notation} />
               </div>
               <div className={s.pianoLegend}>
                 <span><span className={s.pianoDotRoot}></span> 근음</span>
@@ -461,7 +543,8 @@ export default function ChordClient() {
                 ))}
               </div>
               <p className={s.note}>
-                * 추천 코드는 일반적인 진행 관행에 기반합니다. 곡의 분위기·키에 따라 다른 선택도 자연스럽습니다.
+                * 선택한 코드를 해당 기능의 중심(예: 메이저 계열이면 그 키의 토닉)으로 가정한 일반적인 진행 관행입니다.
+                곡의 실제 키·분위기에 따라 다른 선택도 자연스럽습니다.
               </p>
             </div>
           )}
@@ -548,7 +631,11 @@ export default function ChordClient() {
                   </thead>
                   <tbody>
                     {matches.map((m, i) => {
-                      const full = m.pct >= 0.999
+                      const full = m.relation === 'equal'
+                      const relLabel = m.relation === 'equal' ? '완전 일치'
+                        : m.relation === 'contains' ? '선택음 전부 포함'
+                        : m.relation === 'within' ? '선택음 일부로 구성'
+                        : '부분 일치'
                       return (
                         <tr key={i} className={full ? s.matchRowFull : ''}>
                           <td>
@@ -560,9 +647,7 @@ export default function ChordClient() {
                           </td>
                           <td className={s.matchNotes}>{m.displayNotes.join(', ')}</td>
                           <td className={`${s.matchPct} ${full ? s.matchPctFull : s.matchPctPart}`}>
-                            {full
-                              ? '100% (완전 일치)'
-                              : `${m.matched}/${m.denom} (${Math.round(m.pct * 100)}%)`}
+                            {full ? '완전 일치' : `${relLabel} · ${m.matched}/${m.denom}`}
                           </td>
                         </tr>
                       )
@@ -571,7 +656,8 @@ export default function ChordClient() {
                 </table>
               </div>
               <p className={s.note}>
-                * 코드명을 클릭하면 &ldquo;코드 → 구성음&rdquo; 탭에서 상세하게 확인할 수 있습니다.
+                * &lsquo;선택음 전부 포함&rsquo;은 선택한 음을 모두 담는 더 큰 코드, &lsquo;일부로 구성&rsquo;은 선택한 음 중
+                일부만으로 이루어진 코드입니다. 코드명을 클릭하면 &ldquo;코드 → 구성음&rdquo; 탭에서 상세하게 확인할 수 있습니다.
               </p>
             </div>
           )}
@@ -645,7 +731,11 @@ export default function ChordClient() {
             <span className={s.cardLabel}>자주 쓰이는 코드 진행</span>
             <div className={s.progList}>
               {progressions.map((p, i) => {
-                const chords = p.degrees.map(d => diatonic[d])
+                const chords = p.degrees.map((d, idx) => {
+                  const base = diatonic[d]
+                  const t = p.types?.[idx]
+                  return t ? { ...base, type: t, name: chordFullName(base.root, t) } : base
+                })
                 return (
                   <div key={i} className={s.progItem}>
                     <div className={s.progHead}>
@@ -664,13 +754,18 @@ export default function ChordClient() {
 
             {diatonicMode === 'minor' && (
               <p className={s.note}>
-                * 자연 단음계 기준 표기입니다. 실전에서는 ⅴ 자리(위 표의 {diatonic[4]?.name})를 도미넌트 7
-                (화성 단음계, 예: A 마이너의 E7)로 바꿔 쓰는 경우가 많습니다.
+                * 다이아토닉 표는 자연 단음계 기준입니다. 마이너 2-5-1의 Ⅴ7은 관행대로 화성 단음계
+                도미넌트 7({chordFullName(diatonic[4]?.root ?? '', '7')})로 표기했습니다.
               </p>
             )}
 
-            <Link href="/tools/art/capo" className={s.linkBtn}>
-              이 키를 카포로 연주하기 →
+            <Link
+              href={`/tools/art/capo?key=${encodeURIComponent(
+                NOTES_SHARP[(noteToIndex(displayDiatonicKey) + (diatonicMode === 'minor' ? 3 : 0)) % 12]
+              )}`}
+              className={s.linkBtn}
+            >
+              이 키를 카포로 연주하기{diatonicMode === 'minor' ? ' (나란한 장조 기준)' : ''} →
             </Link>
           </div>
         </div>

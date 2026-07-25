@@ -126,6 +126,17 @@ function CapoTab() {
   const [targetKey, setTargetKey] = useState<Note>('C')
   const [fret, setFret] = useState(0)
 
+  // 코드 계산기 등에서 ?key=G 로 진입 시 원래 키 프리셋 (마이너는 나란한 장조로 전달됨)
+  useEffect(() => {
+    try {
+      const k = new URLSearchParams(window.location.search).get('key')
+      if (!k) return
+      const FLAT_TO_SHARP: Record<string, string> = { Db: 'C#', Eb: 'D#', Gb: 'F#', Ab: 'G#', Bb: 'A#' }
+      const norm = (FLAT_TO_SHARP[k] ?? k) as Note
+      if ((NOTES as readonly string[]).includes(norm)) setTargetKey(norm)
+    } catch { /* URL 파싱 실패 시 기본 키 유지 */ }
+  }, [])
+
   const targetPc = pcOf(targetKey)
   const playPc = ((targetPc - fret) % 12 + 12) % 12
 

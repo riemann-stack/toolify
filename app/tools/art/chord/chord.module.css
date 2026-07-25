@@ -125,7 +125,7 @@
   padding: 16px 12px; overflow-x: auto;
   display: flex; flex-direction: column; align-items: center; gap: 12px;
 }
-.pianoSvgBox { width: 100%; max-width: 540px; }
+.pianoSvgBox { width: 100%; max-width: 540px; min-width: 460px; }
 .pianoLegend {
   display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
   font-size: 11px; color: var(--muted);
@@ -306,3 +306,8 @@
   .tdChord { font-size: 16px; width: 70px; }
   .tdRoman { width: 38px; font-size: 14px; }
 }
+
+/* ── 터치 타깃 보강 ── */
+.typeBtn { min-height: 40px; }
+.notationBtn { min-height: 36px; }
+.matchChord { display: inline-block; padding: 6px 4px; margin: -6px -4px; }
