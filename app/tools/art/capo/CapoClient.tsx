@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import styles from './capo.module.css'
 
 const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'] as const
@@ -10,6 +10,16 @@ const NOTES_FLAT: Record<Note, string> = {
   'C':'C','C#':'Db','D':'D','D#':'Eb','E':'E','F':'F','F#':'Gb','G':'G','G#':'Ab','A':'A','A#':'Bb','B':'B',
 }
 const SHARP_SET = new Set<Note>(['C#','D#','F#','G#','A#'])
+
+// 조성 표시 관행: 플랫 키는 Db·Eb·Ab·Bb로, F#만 샤프 유지 (조표 6개 이하 선택)
+const KEY_DISPLAY = ['C','Db','D','Eb','E','F','F#','G','Ab','A','Bb','B'] as const
+const FLAT_NAMES  = ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'] as const
+const FLAT_PREF_PCS = new Set([1, 3, 5, 8, 10]) // Db·Eb·F·Ab·Bb 조는 플랫 표기
+const LETTERS = ['C','D','E','F','G','A','B'] as const
+const LETTER_PC: Record<string, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }
+
+const pcOf = (n: Note) => NOTES.indexOf(n)
+const keyName = (pc: number) => KEY_DISPLAY[((pc % 12) + 12) % 12]
 
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11]
 const MAJOR_QUALITIES = ['', 'm', 'm', '', '', 'm', 'dim'] as const
@@ -21,34 +31,43 @@ const EASY_OPEN_CHORDS = new Set(['C','G','D','Em','Am','A','E','Dm'])
 
 function flatOf(note: Note): string { return NOTES_FLAT[note] }
 
-function getDiatonic(rootKey: Note): string[] {
-  const rootIdx = NOTES.indexOf(rootKey)
+// 조성에 맞는 음이름 철자(레터워크): F장조 B♭, D♭장조 G♭, F♯장조 E♯dim
+function spellDiatonic(rootPc: number): string[] {
+  const rootName = keyName(rootPc)
+  const startLetter = LETTERS.indexOf(rootName[0] as typeof LETTERS[number])
   return MAJOR_INTERVALS.map((interval, i) => {
-    const idx = (rootIdx + interval) % 12
-    return NOTES[idx] + MAJOR_QUALITIES[i]
+    const letter = LETTERS[(startLetter + i) % 7]
+    const pc = (((rootPc + interval) % 12) + 12) % 12
+    const acc = ((pc - LETTER_PC[letter] + 6) % 12 + 12) % 12 - 6
+    const accStr = acc === 0 ? '' : acc === 1 ? '#' : acc === -1 ? 'b' : acc === 2 ? '##' : 'bb'
+    return letter + accStr + MAJOR_QUALITIES[i]
   })
 }
 
-function parseChord(chord: string): { rootIdx: number; quality: string } | null {
-  if (!chord) return null
-  let root = chord[0]
-  let rest = chord.slice(1)
-  if (rest.startsWith('#')) { root += '#'; rest = rest.slice(1) }
-  else if (rest.startsWith('b')) {
-    const flatToSharp: Record<string, string> = { 'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#' }
-    const key = root + 'b'
-    if (flatToSharp[key]) { root = flatToSharp[key]; rest = rest.slice(1) }
-  }
-  const idx = NOTES.indexOf(root as Note)
-  if (idx < 0) return null
-  return { rootIdx: idx, quality: rest }
+function getDiatonic(rootKey: Note): string[] {
+  return spellDiatonic(pcOf(rootKey))
 }
 
-function transposeChord(chord: string, semitones: number): string {
-  const parsed = parseChord(chord)
-  if (!parsed) return chord
-  const newIdx = ((parsed.rootIdx + semitones) % 12 + 12) % 12
-  return NOTES[newIdx] + parsed.quality
+// 코드 진행 직접 변환용 — E#·Cb 등 임시표 포함 음이름 파싱
+function parseNoteName(name: string): number | null {
+  const m = /^([A-Ga-g])([#b]{0,2})$/.exec(name)
+  if (!m) return null
+  let pc = LETTER_PC[m[1].toUpperCase()]
+  for (const ch of m[2]) pc += ch === '#' ? 1 : -1
+  return ((pc % 12) + 12) % 12
+}
+
+const CHORD_TOKEN = /^([A-G][#b]{0,2})([^/\s]*)(?:\/([A-G][#b]{0,2}))?$/
+// 서픽스·슬래시 베이스 보존, 루트·베이스만 이동 — 새 키 조표에 맞는 표기 선택
+function transposeChordSmart(token: string, semitones: number, prefer: 'sharp' | 'flat'): string {
+  const m = CHORD_TOKEN.exec(token)
+  if (!m) return token
+  const names = prefer === 'flat' ? FLAT_NAMES : NOTES
+  const shiftName = (name: string) => {
+    const pc = parseNoteName(name)
+    return pc === null ? name : names[((pc + semitones) % 12 + 12) % 12]
+  }
+  return shiftName(m[1]) + m[2] + (m[3] ? '/' + shiftName(m[3]) : '')
 }
 
 function isEasyChord(chord: string): boolean { return EASY_OPEN_CHORDS.has(chord) }
@@ -107,26 +126,39 @@ function CapoTab() {
   const [targetKey, setTargetKey] = useState<Note>('C')
   const [fret, setFret] = useState(0)
 
-  const playKey = useMemo<Note>(() => {
-    const idx = ((NOTES.indexOf(targetKey) - fret) % 12 + 12) % 12
-    return NOTES[idx]
-  }, [targetKey, fret])
+  const targetPc = pcOf(targetKey)
+  const playPc = ((targetPc - fret) % 12 + 12) % 12
 
-  const diatonicTarget = useMemo(() => getDiatonic(targetKey), [targetKey])
+  const diatonicTarget = useMemo(() => spellDiatonic(targetPc), [targetPc])
+  // 카포 열별 코드는 각 연주 키의 조표에 맞춰 철자 (F장조 B♭, A♭장조 D♭ 등)
+  const colChords = useMemo(
+    () => [0,1,2,3,4,5,6,7].map(f => spellDiatonic(((targetPc - f) % 12 + 12) % 12)),
+    [targetPc]
+  )
   const recommended = useMemo(() => recommendCapos(targetKey), [targetKey])
   const recommendedFrets = useMemo(() => new Set(recommended.map(r => r.fret)), [recommended])
 
-  const playingDiatonic = useMemo(
-    () => diatonicTarget.map(c => transposeChord(c, -fret)),
-    [diatonicTarget, fret]
-  )
+  // 모바일: 선택한 카포 열을 표 스크롤 중앙으로
+  const tableWrapRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const wrap = tableWrapRef.current
+    const el = wrap?.querySelector<HTMLElement>('[data-active-fret="1"]')
+    if (wrap && el && wrap.scrollWidth > wrap.clientWidth) {
+      // behavior:'smooth'는 일부 환경(임베디드 웹뷰)에서 무시됨 — 즉시 스크롤 사용
+      wrap.scrollLeft = el.offsetLeft - wrap.clientWidth / 2 + el.offsetWidth / 2
+    }
+  }, [fret])
 
   return (
     <div className={styles.tabContent}>
       {/* 원래 키 */}
       <div className={styles.card}>
-        <div className={styles.cardLabel}>① 원래 키 (곡의 실제 키)</div>
+        <div className={styles.cardLabel}>① 원래 키 (곡의 실제 키 · 장조 기준)</div>
         <KeyGrid value={targetKey} onChange={setTargetKey} />
+        <p className={styles.note}>
+          * 장조 기준 계산기입니다. 단조 곡은 나란한 장조로 선택하세요 (Am→C, Em→G, Bm→D) —
+          조표와 다이아토닉 코드 구성이 같아 결과가 그대로 적용됩니다.
+        </p>
       </div>
 
       {/* 카포 위치 */}
@@ -164,16 +196,16 @@ function CapoTab() {
         <div className={styles.heroRow}>
           <div className={styles.heroBlock}>
             <div className={styles.heroSub}>연주 키(코드 모양)</div>
-            <div className={styles.heroChord}>{playKey}</div>
+            <div className={styles.heroChord}>{keyName(playPc)}</div>
           </div>
           <div className={styles.heroArrow}>→</div>
           <div className={styles.heroBlock}>
             <div className={styles.heroSub}>실제 울리는 키</div>
-            <div className={styles.heroChord}>{targetKey}</div>
+            <div className={styles.heroChord}>{keyName(targetPc)}</div>
           </div>
         </div>
         <div className={styles.heroNote}>
-          {playKey} 코드 모양 + 카포 {fret}프렛 = <strong>{targetKey}</strong> 소리
+          {keyName(playPc)} 코드 모양 + 카포 {fret}프렛 = <strong>{keyName(targetPc)}</strong> 소리
         </div>
       </div>
 
@@ -186,15 +218,16 @@ function CapoTab() {
             <span className={styles.legendBarre}>● 바레 코드</span>
           </span>
         </div>
-        <div className={styles.tableWrap}>
+        <div className={styles.tableWrap} ref={tableWrapRef}>
           <table className={styles.chordTable}>
             <thead>
               <tr>
                 <th scope="col" className={styles.thDegree}>도수</th>
-                <th scope="col" className={styles.thOriginal}>원키 코드 ({targetKey})</th>
+                <th scope="col" className={styles.thOriginal}>원키 코드 ({keyName(targetPc)})</th>
                 {[0,1,2,3,4,5,6,7].map(f => (
                   <th scope="col"
                     key={f}
+                    data-active-fret={fret === f ? '1' : undefined}
                     className={`${styles.thFret} ${fret === f ? styles.thFretActive : ''} ${recommendedFrets.has(f) ? styles.thFretRec : ''}`}
                   >
                     <div className={styles.thFretNum}>{f === 0 ? '없음' : `${f}F`}</div>
@@ -209,7 +242,7 @@ function CapoTab() {
                   <td className={styles.tdDegree}>{ROMAN[i]}</td>
                   <td className={styles.tdOriginal}>{chord}</td>
                   {[0,1,2,3,4,5,6,7].map(f => {
-                    const playChord = transposeChord(chord, -f)
+                    const playChord = colChords[f][i]
                     const easy = isEasyChord(playChord)
                     const barre = isBarreChord(playChord)
                     return (
@@ -234,7 +267,7 @@ function CapoTab() {
         <div className={styles.recLabel}>쉬운 코드 추천 카포 위치</div>
         <div className={styles.recList}>
           {recommended.map((r, i) => {
-            const pk = NOTES[((NOTES.indexOf(targetKey) - r.fret) % 12 + 12) % 12]
+            const pk = keyName(((targetPc - r.fret) % 12 + 12) % 12)
             return (
               <div key={i} className={styles.recItem}>
                 <div className={styles.recItemHead}>
@@ -330,8 +363,8 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
         })}
       </svg>
       <div className={styles.pianoLegend}>
-        <span><span className={styles.pianoDotAccent} /> 원래 키 ({highlightFrom})</span>
-        <span><span className={styles.pianoDotBlue} /> 새 키 ({highlightTo})</span>
+        <span><span className={styles.pianoDotAccent} /> 원래 키 ({keyName(pcOf(highlightFrom))})</span>
+        <span><span className={styles.pianoDotBlue} /> 새 키 ({keyName(pcOf(highlightTo))})</span>
       </div>
     </div>
   )
@@ -341,15 +374,35 @@ function TransposeTab() {
   const [origKey, setOrigKey] = useState<Note>('C')
   const [direction, setDirection] = useState<'up' | 'down'>('up')
   const [semitones, setSemitones] = useState(2)
+  const [progText, setProgText] = useState('')
+  const [progCopied, setProgCopied] = useState<'ok' | 'fail' | null>(null)
 
   const shift = direction === 'up' ? semitones : -semitones
-  const newKey = useMemo<Note>(() => {
-    const idx = ((NOTES.indexOf(origKey) + shift) % 12 + 12) % 12
-    return NOTES[idx]
-  }, [origKey, shift])
+  const origPc = pcOf(origKey)
+  const newPc = ((origPc + shift) % 12 + 12) % 12
+  const newKey = NOTES[newPc]
 
-  const origDiatonic = useMemo(() => getDiatonic(origKey), [origKey])
-  const newDiatonic = useMemo(() => getDiatonic(newKey), [newKey])
+  const origDiatonic = useMemo(() => spellDiatonic(origPc), [origPc])
+  const newDiatonic = useMemo(() => spellDiatonic(newPc), [newPc])
+
+  const progResult = useMemo(() => {
+    if (!progText.trim()) return ''
+    const prefer: 'sharp' | 'flat' = FLAT_PREF_PCS.has(newPc) ? 'flat' : 'sharp'
+    return progText
+      .split(/(\s+|[|,()\u00b7\u2013\u2014-]+)/)
+      .map(tok => transposeChordSmart(tok, shift, prefer))
+      .join('')
+  }, [progText, shift, newPc])
+
+  const handleProgCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(progResult)
+      setProgCopied('ok')
+    } catch {
+      setProgCopied('fail')
+    }
+    setTimeout(() => setProgCopied(null), 1500)
+  }, [progResult])
 
   return (
     <div className={styles.tabContent}>
@@ -391,17 +444,17 @@ function TransposeTab() {
 
       <div className={styles.hero} role="status">
         <div className={styles.heroLabel}>
-          {origKey} 키 {direction === 'up' ? '↑' : '↓'} {semitones}반음 전조
+          {keyName(origPc)} 키 {direction === 'up' ? '↑' : '↓'} {semitones}반음 전조
         </div>
         <div className={styles.heroRow}>
           <div className={styles.heroBlock}>
             <div className={styles.heroSub}>원래 키</div>
-            <div className={styles.heroChord}>{origKey}</div>
+            <div className={styles.heroChord}>{keyName(origPc)}</div>
           </div>
           <div className={styles.heroArrow}>→</div>
           <div className={styles.heroBlock}>
             <div className={styles.heroSub}>전조 후 키</div>
-            <div className={styles.heroChordBlue}>{newKey}</div>
+            <div className={styles.heroChordBlue}>{keyName(newPc)}</div>
           </div>
         </div>
       </div>
@@ -416,12 +469,12 @@ function TransposeTab() {
       <div className={styles.card}>
         <div className={styles.cardLabel}>⑤ 다이아토닉 코드 변환</div>
         <div className={styles.tableWrap}>
-          <table className={styles.chordTable}>
+          <table className={`${styles.chordTable} ${styles.chordTableNarrow}`}>
             <thead>
               <tr>
                 <th scope="col" className={styles.thDegree}>도수</th>
-                <th scope="col" className={styles.thOriginal}>원키 ({origKey})</th>
-                <th scope="col" className={styles.thNewKey}>새 키 ({newKey})</th>
+                <th scope="col" className={styles.thOriginal}>원키 ({keyName(origPc)})</th>
+                <th scope="col" className={styles.thNewKey}>새 키 ({keyName(newPc)})</th>
               </tr>
             </thead>
             <tbody>
@@ -439,6 +492,31 @@ function TransposeTab() {
           전조는 곡의 모든 코드·멜로디를 같은 반음 수만큼 이동시키는 작업입니다. 보컬 음역대 조정·악기 편곡에 활용됩니다.
         </p>
       </div>
+
+      {/* 코드 진행 직접 변환 */}
+      <div className={styles.card}>
+        <div className={styles.cardLabel}>⑥ 코드 진행 직접 변환 (선택)</div>
+        <textarea
+          className={styles.progInput}
+          rows={3}
+          placeholder="예: Cadd9 G/B Am7 Fsus2 — 코드를 공백이나 | 로 구분해 입력"
+          value={progText}
+          onChange={e => setProgText(e.target.value)}
+          aria-label="변환할 코드 진행"
+        />
+        {progText.trim() !== '' && (
+          <>
+            <div className={styles.progOut} role="status">{progResult}</div>
+            <button type="button" className={styles.copyBtn} onClick={handleProgCopy}>
+              {progCopied === 'ok' ? '✓ 복사됨' : progCopied === 'fail' ? '✗ 복사 실패' : '변환 결과 복사'}
+            </button>
+          </>
+        )}
+        <p className={styles.note}>
+          서픽스(add9·sus4·m7 등)와 슬래시 베이스(G/B)는 유지하고 루트·베이스 음만 이동합니다.
+          새 키의 조표에 맞춰 샤프/플랫 표기를 자동 선택합니다. 코드 외 텍스트(가사 등)는 넣지 마세요.
+        </p>
+      </div>
     </div>
   )
 }
@@ -447,10 +525,11 @@ function TransposeTab() {
 function DegreeTab() {
   const [rootKey, setRootKey] = useState<Note>('C')
   const [copied, setCopied] = useState<'ok' | 'fail' | null>(null)
-  const diatonic = useMemo(() => getDiatonic(rootKey), [rootKey])
+  const rootPc = pcOf(rootKey)
+  const diatonic = useMemo(() => spellDiatonic(rootPc), [rootPc])
 
   const handleCopy = useCallback(async () => {
-    const text = `${rootKey} 키 다이아토닉 코드: ` + diatonic.map((c, i) => `${ROMAN[i]}=${c}`).join(', ')
+    const text = `${keyName(rootPc)} 키 다이아토닉 코드: ` + diatonic.map((c, i) => `${ROMAN[i]}=${c}`).join(', ')
     try {
       await navigator.clipboard.writeText(text)
       setCopied('ok')
@@ -458,7 +537,7 @@ function DegreeTab() {
       setCopied('fail')
     }
     setTimeout(() => setCopied(null), 1500)
-  }, [rootKey, diatonic])
+  }, [rootPc, diatonic])
 
   return (
     <div className={styles.tabContent}>
@@ -468,7 +547,7 @@ function DegreeTab() {
       </div>
 
       <div className={styles.card}>
-        <div className={styles.cardLabel}>{rootKey} 키의 다이아토닉 코드 7개</div>
+        <div className={styles.cardLabel}>{keyName(rootPc)} 키의 다이아토닉 코드 7개</div>
         <div className={styles.degreeGrid}>
           {diatonic.map((c, i) => (
             <div
@@ -488,7 +567,7 @@ function DegreeTab() {
       </div>
 
       <div className={styles.card}>
-        <div className={styles.cardLabel}>대표 코드 진행 — {rootKey} 키</div>
+        <div className={styles.cardLabel}>대표 코드 진행 — {keyName(rootPc)} 키</div>
         <div className={styles.progList}>
           {[
             { name: 'I - V - vi - IV', nick: '팝/발라드 기본', indices: [0, 4, 5, 3] },

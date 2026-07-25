@@ -23,6 +23,8 @@ const FAQ_LD = [
                 a: '네, 다릅니다. 카포가 높을수록 현의 진동 부분이 짧아져 <strong>더 밝고 날카로운 소리</strong>가 납니다. 카포 없는 낮은 포지션은 따뜻하고 풍부한 음색, 카포 5프렛 이상은 맑고 영롱한 음색입니다. 같은 C키라도 카포 없음(C코드)과 카포 3프렛(A코드)은 음색이 확실히 다릅니다.' },
               { q: '우쿨렐레에도 카포를 쓸 수 있나요?',
                 a: '네. <strong>우쿨렐레용 카포가 별도로 있으며</strong> 기타와 같은 원리로 작동합니다. 다만 우쿨렐레는 G-C-E-A 조율이 기본이라 코드 이름이 기타와 다를 수 있습니다. 이 계산기의 반음 단위 계산 원리는 동일하게 적용됩니다.' },
+              { q: '단조(마이너) 곡은 어떻게 계산하나요?',
+                a: '이 계산기는 <strong>장조 기준</strong>입니다. 단조 곡은 나란한 장조(같은 조표)로 선택하세요 — <code>Am→C, Em→G, Bm→D, Dm→F</code>. 나란조는 다이아토닉 코드 구성이 완전히 같아서 카포 추천과 코드 변환 결과가 그대로 적용됩니다.' },
               { q: '여성 키 곡을 남성 키로 바꾸려면 몇 키를 내려야 하나요?',
                 a: '정해진 표준은 없으며, <strong>통상 3~5키(반음) 범위에서 곡과 본인 음역대에 맞춰 조정</strong>하는 것이 일반적입니다. 참고로 노래방 반주기의 키 조절 1단계(\'한 키\')는 반음 1개입니다. 키를 내린 뒤에는 본문 가이드의 역산 절차대로 <code>카포 위치 = 목표 키 − 코드 모양 키</code>를 계산하면 익숙한 코드 모양을 유지할 수 있습니다.' },
             ]
@@ -141,7 +143,7 @@ export default function CapoPage() {
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 검지로 여러 현을 동시에 누르는(바레) 코드. 악력과 정확한 폼이 필요해 입문자에게 진입장벽이 높습니다.
-                카포로 대부분 오픈 코드로 대체 가능합니다.
+                카포로 상당 부분 오픈 코드로 대체할 수 있지만, 키·진행에 따라 일부 바레(Bm 등)는 남습니다.
               </p>
             </div>
           </div>
@@ -195,7 +197,7 @@ export default function CapoPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             악보 사이트에서 통용되는 편곡 기준으로, 통기타로 많이 연주되는 곡들의 원곡 키와 카포 위치를 정리했습니다.
-            플랫(♭) 계열 키(B♭·E♭·A♭)의 곡은 오픈 코드 모양이 없어 카포가 사실상 필수이고,
+            플랫(♭) 계열 키(B♭·E♭·A♭)의 곡은 오픈 코드 모양이 없어 — 바레·부분 보이싱으로 칠 수는 있지만 — 오픈 코드 위주의 통기타 편곡에서는 카포 사용이 표준이고,
             벚꽃 엔딩(A장조)처럼 샤프 키 곡도 실음 첫 코드가 Bm7이라 카포 2 + G키 모양으로 치는 편곡이 표준입니다.
             모양 키는 편곡의 첫 코드가 아니라 <strong style={{ color: 'var(--text)' }}>다이아토닉 코드 세트 기준</strong>입니다 —
             밤편지 편곡은 F로 시작하지만 F·G·Em·Am·Dm은 C키 세트라 &lsquo;C키 모양&rsquo;입니다.
@@ -332,10 +334,10 @@ export default function CapoPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
+              { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기',      desc: '내 음역대 측정 → 부르기 편한 키 결정' },
               { href: '/tools/art/frequency',   icon: '🎵', name: '주파수↔음정 변환기', desc: 'Hz ↔ 음정·MIDI·파장' },
-              { href: '/tools/art/bpm',         icon: '🎛️', name: 'BPM 딜레이 계산기',  desc: '음표별 딜레이 타임 ms 계산' },
               { href: '/tools/art/tap-tempo',   icon: '🥁', name: '탭 템포',            desc: '박자에 맞춰 탭해 BPM 측정' },
-              { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기',      desc: '마이크로 최저·최고음 측정' },
+              { href: '/tools/art/bpm',         icon: '🎛️', name: 'BPM 딜레이 계산기',  desc: '음표별 딜레이 타임 ms 계산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

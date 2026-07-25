@@ -293,3 +293,23 @@
   .chordTable { font-size: 11px; min-width: 480px; }
   .chordTable th, .chordTable td { padding: 6px 4px; }
 }
+
+/* ── 코드 진행 직접 변환 ── */
+.progInput {
+  width: 100%; box-sizing: border-box;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 14px; font-size: 16px; line-height: 1.6;
+  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif; font-weight: 600;
+  color: var(--text); resize: vertical; outline: none; transition: border-color 0.2s;
+}
+.progInput:focus { border-color: rgba(14,165,233,0.5); }
+.progInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
+.progOut {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 14px; margin: 10px 0;
+  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif; font-weight: 700; font-size: 14px;
+  color: var(--accent-ink); white-space: pre-wrap; word-break: break-word; line-height: 1.7;
+}
+
+/* 3열 전조 표는 고정 min-width 불필요 (마지막 선언이 미디어쿼리 480px보다 우선) */
+.chordTableNarrow { min-width: 0; }
