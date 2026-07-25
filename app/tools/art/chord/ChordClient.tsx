@@ -130,7 +130,7 @@ const MINOR_CHORD_TYPES = ['m7', 'm7b5', 'maj7', 'm7', 'm7', 'maj7', '7']
 const MINOR_FUNCTIONS: ('tonic'|'sub'|'dom')[] = ['tonic','sub','tonic','sub','dom','sub','dom']
 
 const ROMAN_MAJOR = ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ']
-const ROMAN_MINOR = ['ⅰ','ⅱ','Ⅲ','ⅳ','ⅴ','Ⅵ','Ⅶ']
+const ROMAN_MINOR = ['ⅰ','ⅱø','Ⅲ','ⅳ','ⅴ','Ⅵ','Ⅶ']
 
 const FUNC_LABEL: Record<'tonic'|'sub'|'dom', string> = {
   tonic: '토닉',
@@ -164,15 +164,16 @@ function getDiatonicChords(rootKey: string, mode: 'major'|'minor', notation: Not
  * ──────────────────────────────────────────────── */
 type Progression = { name: string; nick: string; degrees: number[]; types?: string[] }
 const MAJOR_PROGRESSIONS: Progression[] = [
-  { name: 'Ⅰ → Ⅴ → Ⅵm → Ⅳ', nick: '1645 진행 (팝의 왕)', degrees: [0,4,5,3] },
+  { name: 'Ⅰ → Ⅴ → Ⅵm → Ⅳ', nick: '1-5-6-4 (팝의 왕·Axis)', degrees: [0,4,5,3] },
   { name: 'Ⅱ → Ⅴ → Ⅰ',       nick: '2-5-1 (재즈 기본)',     degrees: [1,4,0] },
-  { name: 'Ⅰ → Ⅵm → Ⅳ → Ⅴ', nick: '1-6-4-5 (올드팝)',     degrees: [0,5,3,4] },
+  { name: 'Ⅰ → Ⅵm → Ⅳ → Ⅴ', nick: '1-6-4-5 (올드팝·발라드)', degrees: [0,5,3,4] },
   { name: 'Ⅰ → Ⅳ → Ⅴ',       nick: '1-4-5 (블루스·록)',     degrees: [0,3,4] },
 ]
+// 자연단음계 표기 — 실전에서 ⅴ는 도미넌트 7(화성단음계)로 대체하는 관행이 흔함
 const MINOR_PROGRESSIONS: Progression[] = [
   { name: 'ⅰ → Ⅵ → Ⅲ → Ⅶ', nick: '서정적 마이너 진행', degrees: [0,5,2,6] },
-  { name: 'ⅰ → Ⅳ → Ⅴ',       nick: '마이너 1-4-5',       degrees: [0,3,4] },
-  { name: 'ⅱ° → Ⅴ → ⅰ',     nick: '마이너 2-5-1',       degrees: [1,4,0] },
+  { name: 'ⅰ → ⅳ → ⅴ',       nick: '마이너 1-4-5',       degrees: [0,3,4] },
+  { name: 'ⅱø → ⅴ → ⅰ',     nick: '마이너 2-5-1',       degrees: [1,4,0] },
 ]
 
 /* ────────────────────────────────────────────────
@@ -279,7 +280,7 @@ export default function ChordClient() {
   const matches = useMemo(() => {
     if (selectedNotes.length < 2) return []
     const selSet = new Set(selectedNotes)
-    const results: { name: string; type: string; root: string; chordPCs: number[]; matched: number; pct: number }[] = []
+    const results: { name: string; type: string; root: string; chordPCs: number[]; matched: number; denom: number; pct: number }[] = []
 
     for (const r of ALL_ROOTS_SHARP) {
       for (const type of Object.keys(CHORD_INTERVALS)) {
@@ -300,6 +301,7 @@ export default function ChordClient() {
             root: r,
             chordPCs: pcs,
             matched,
+            denom,
             pct,
           })
         }
@@ -335,18 +337,25 @@ export default function ChordClient() {
     setChordType(type)
     setTab('find')
   }
+  const [copied, setCopied] = useState<'ok' | 'fail' | null>(null)
   const handleCopy = async () => {
     const text = `${chordFullStr} = ${chordNotes.join(', ')}`
-    try { await navigator.clipboard.writeText(text) } catch {}
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied('ok')
+    } catch {
+      setCopied('fail')
+    }
+    setTimeout(() => setCopied(null), 1500)
   }
 
   return (
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={s.tabs}>
-        <button className={`${s.tab} ${tab === 'find' ? s.tabActive : ''}`} onClick={() => setTab('find')}>코드 → 구성음</button>
-        <button className={`${s.tab} ${tab === 'reverse' ? s.tabActive : ''}`} onClick={() => setTab('reverse')}>구성음 → 코드</button>
-        <button className={`${s.tab} ${tab === 'diatonic' ? s.tabActive : ''}`} onClick={() => setTab('diatonic')}>다이아토닉</button>
+        <button type="button" aria-pressed={tab === 'find'} className={`${s.tab} ${tab === 'find' ? s.tabActive : ''}`} onClick={() => setTab('find')}>코드 → 구성음</button>
+        <button type="button" aria-pressed={tab === 'reverse'} className={`${s.tab} ${tab === 'reverse' ? s.tabActive : ''}`} onClick={() => setTab('reverse')}>구성음 → 코드</button>
+        <button type="button" aria-pressed={tab === 'diatonic'} className={`${s.tab} ${tab === 'diatonic' ? s.tabActive : ''}`} onClick={() => setTab('diatonic')}>다이아토닉</button>
       </div>
 
       {/* ── 탭 1: 코드 → 구성음 ── */}
@@ -371,6 +380,8 @@ export default function ChordClient() {
                   {group.types.map(t => (
                     <button
                       key={t}
+                      type="button"
+                      aria-pressed={chordType === t}
                       className={`${s.typeBtn} ${chordType === t ? s.typeBtnActive : ''}`}
                       onClick={() => setChordType(t)}
                     >
@@ -417,8 +428,8 @@ export default function ChordClient() {
           </div>
 
           {/* Copy */}
-          <button className={s.copyBtn} onClick={handleCopy}>
-            &ldquo;{chordFullStr} = {chordNotes.join(', ')}&rdquo; 복사
+          <button type="button" className={s.copyBtn} onClick={handleCopy}>
+            {copied === 'ok' ? '✓ 복사됨' : copied === 'fail' ? '✗ 복사 실패' : `“${chordFullStr} = ${chordNotes.join(', ')}” 복사`}
           </button>
 
           {/* Next chord recommendations */}
@@ -429,6 +440,7 @@ export default function ChordClient() {
                 {nextChords.map((rc, i) => (
                   <button
                     key={i}
+                    type="button"
                     className={s.recChip}
                     onClick={() => {
                       // 추천에서 root와 type 분리
@@ -477,6 +489,8 @@ export default function ChordClient() {
                 return (
                   <button
                     key={pc}
+                    type="button"
+                    aria-pressed={selected}
                     className={`${s.keyBtn} ${isSharp ? s.keyBtnSharp : ''} ${selected ? s.keyBtnActive : ''}`}
                     onClick={() => togglePc(pc)}
                   >
@@ -491,14 +505,15 @@ export default function ChordClient() {
             <div style={{ marginTop: 14 }}>
               <span className={s.cardLabel}>검색 범위</span>
               <div className={s.searchScopeRow}>
-                <button className={`${s.scopeBtn} ${searchScope === 'all' ? s.scopeBtnActive : ''}`} onClick={() => setSearchScope('all')}>전체</button>
-                <button className={`${s.scopeBtn} ${searchScope === 'tri' ? s.scopeBtnActive : ''}`} onClick={() => setSearchScope('tri')}>3음 코드</button>
-                <button className={`${s.scopeBtn} ${searchScope === 'tet' ? s.scopeBtnActive : ''}`} onClick={() => setSearchScope('tet')}>4음 코드</button>
+                <button type="button" aria-pressed={searchScope === 'all'} className={`${s.scopeBtn} ${searchScope === 'all' ? s.scopeBtnActive : ''}`} onClick={() => setSearchScope('all')}>전체</button>
+                <button type="button" aria-pressed={searchScope === 'tri'} className={`${s.scopeBtn} ${searchScope === 'tri' ? s.scopeBtnActive : ''}`} onClick={() => setSearchScope('tri')}>3음 코드</button>
+                <button type="button" aria-pressed={searchScope === 'tet'} className={`${s.scopeBtn} ${searchScope === 'tet' ? s.scopeBtnActive : ''}`} onClick={() => setSearchScope('tet')}>4음 코드</button>
               </div>
             </div>
 
             {selectedNotes.length > 0 && (
               <button
+                type="button"
                 className={s.copyBtn}
                 style={{ marginTop: 12 }}
                 onClick={() => setSelectedNotes([])}
@@ -521,7 +536,7 @@ export default function ChordClient() {
             </div>
           ) : (
             <div className={s.card}>
-              <span className={s.cardLabel}>매칭 결과 ({matches.length}개)</span>
+              <span className={s.cardLabel}>매칭 결과 — 일치율 상위 {matches.length}개</span>
               <div style={{ overflowX: 'auto' }}>
                 <table className={s.matchTable}>
                   <thead>
@@ -547,7 +562,7 @@ export default function ChordClient() {
                           <td className={`${s.matchPct} ${full ? s.matchPctFull : s.matchPctPart}`}>
                             {full
                               ? '100% (완전 일치)'
-                              : `${m.matched}/${m.chordPCs.length} (${Math.round(m.pct * 100)}%)`}
+                              : `${m.matched}/${m.denom} (${Math.round(m.pct * 100)}%)`}
                           </td>
                         </tr>
                       )
@@ -573,8 +588,8 @@ export default function ChordClient() {
               <NotationToggle value={notation} onChange={setNotation} />
             </div>
             <div className={s.modeRow}>
-              <button className={`${s.modeBtn} ${diatonicMode === 'major' ? s.modeBtnActive : ''}`} onClick={() => setDiatonicMode('major')}>메이저</button>
-              <button className={`${s.modeBtn} ${diatonicMode === 'minor' ? s.modeBtnActive : ''}`} onClick={() => setDiatonicMode('minor')}>마이너 (자연단음계)</button>
+              <button type="button" aria-pressed={diatonicMode === 'major'} className={`${s.modeBtn} ${diatonicMode === 'major' ? s.modeBtnActive : ''}`} onClick={() => setDiatonicMode('major')}>메이저</button>
+              <button type="button" aria-pressed={diatonicMode === 'minor'} className={`${s.modeBtn} ${diatonicMode === 'minor' ? s.modeBtnActive : ''}`} onClick={() => setDiatonicMode('minor')}>마이너 (자연단음계)</button>
             </div>
             <KeyGrid value={diatonicKey} onChange={setDiatonicKey} notation={notation} />
           </div>
@@ -647,6 +662,13 @@ export default function ChordClient() {
               })}
             </div>
 
+            {diatonicMode === 'minor' && (
+              <p className={s.note}>
+                * 자연 단음계 기준 표기입니다. 실전에서는 ⅴ 자리(위 표의 {diatonic[4]?.name})를 도미넌트 7
+                (화성 단음계, 예: A 마이너의 E7)로 바꿔 쓰는 경우가 많습니다.
+              </p>
+            )}
+
             <Link href="/tools/art/capo" className={s.linkBtn}>
               이 키를 카포로 연주하기 →
             </Link>
@@ -663,8 +685,8 @@ export default function ChordClient() {
 function NotationToggle({ value, onChange }: { value: Notation; onChange: (v: Notation) => void }) {
   return (
     <div className={s.notationToggle}>
-      <button className={`${s.notationBtn} ${value === '#' ? s.notationBtnActive : ''}`} onClick={() => onChange('#')}>♯ 샵</button>
-      <button className={`${s.notationBtn} ${value === 'b' ? s.notationBtnActive : ''}`} onClick={() => onChange('b')}>♭ 플랫</button>
+      <button type="button" aria-pressed={value === '#'} className={`${s.notationBtn} ${value === '#' ? s.notationBtnActive : ''}`} onClick={() => onChange('#')}>♯ 샵</button>
+      <button type="button" aria-pressed={value === 'b'} className={`${s.notationBtn} ${value === 'b' ? s.notationBtnActive : ''}`} onClick={() => onChange('b')}>♭ 플랫</button>
     </div>
   )
 }
@@ -683,6 +705,8 @@ function KeyGrid({ value, onChange, notation }: { value: string; onChange: (v: s
         return (
           <button
             key={pc}
+            type="button"
+            aria-pressed={active}
             className={`${s.keyBtn} ${isSharp ? s.keyBtnSharp : ''} ${active ? s.keyBtnActive : ''}`}
             onClick={() => onChange(notation === '#' ? sharpName : flatName)}
           >
@@ -714,7 +738,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
   const chordSet = new Set(chordPCs)
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} width="100%" height="auto" style={{ display: 'block' }}>
+    <svg viewBox={`0 0 ${width} ${height}`} width="100%" height="auto" style={{ display: 'block' }} aria-hidden="true">
       {/* White keys */}
       {Array.from({ length: octaves }).map((_, oct) =>
         whitePCs.map((pc, i) => {
@@ -727,7 +751,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                 x={x + 1} y={0}
                 width={whiteW - 2} height={whiteH}
                 rx={4}
-                fill={isHighlight ? '#0EA5E9' : '#E8E8E8'}
+                fill={isHighlight ? 'var(--accent)' : '#E8E8E8'}
                 stroke={isRoot ? '#0D0D0D' : '#888'}
                 strokeWidth={isRoot ? 2.5 : 1}
               />
@@ -735,7 +759,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                 x={x + whiteW / 2} y={whiteH - 8}
                 textAnchor="middle"
                 fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700"
-                fill={isHighlight ? '#0D0D0D' : '#666'}
+                fill={isHighlight ? '#ffffff' : '#666'}
               >
                 {whiteLabels[i]}
               </text>
@@ -757,7 +781,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                 x={x} y={0}
                 width={blackW} height={blackH}
                 rx={3}
-                fill={isHighlight ? '#0EA5E9' : '#1a1a1a'}
+                fill={isHighlight ? 'var(--accent)' : '#1a1a1a'}
                 stroke={isRoot ? '#0D0D0D' : '#000'}
                 strokeWidth={isRoot ? 2.5 : 1}
               />
@@ -766,7 +790,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                   x={x + blackW / 2} y={blackH - 6}
                   textAnchor="middle"
                   fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800"
-                  fill="#0D0D0D"
+                  fill="#ffffff"
                 >
                   {blackLabels[j]}
                 </text>
@@ -776,9 +800,8 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
         })
       )}
 
-      {/* Octave separator label */}
-      <text x={whiteW * whitePCs.length / 2} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>C3 옥타브</text>
-      <text x={whiteW * whitePCs.length * 1.5} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>C4 옥타브</text>
+      {/* 피치클래스 기준 표시 — 특정 옥타브 아님 */}
+      <text x={width / 2} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>옥타브와 무관하게 구성음의 음이름 위치를 표시합니다</text>
     </svg>
   )
 }

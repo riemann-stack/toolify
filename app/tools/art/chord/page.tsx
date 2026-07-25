@@ -57,7 +57,7 @@ export default function ChordPage() {
             자주 검색하는 주요 코드 구성음
           </h2>
 
-          <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>트라이어드 (3화음)</p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-health)', marginBottom: '8px' }}>트라이어드 (3화음)</p>
           <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -86,7 +86,7 @@ export default function ChordPage() {
             </table>
           </div>
 
-          <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '8px' }}>세븐스(7th) 코드</p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-life)', marginBottom: '8px' }}>세븐스(7th) 코드</p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -123,16 +123,16 @@ export default function ChordPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { sym: 'maj7',  desc: '장7도 포함. 밝고 안정적인 느낌',                  color: '#059669' },
-              { sym: 'm7',    desc: '단3도 + 단7도. 재즈에서 매우 자주 사용',           color: '#0891B2' },
-              { sym: '7',     desc: '도미넌트7. 장3도 + 단7도. 해결 욕구가 있는 긴장감', color: '#EA580C' },
-              { sym: 'sus4',  desc: '3도 대신 4도. "떠있는" 느낌, 해결 직전에 사용',     color: '#A16207' },
-              { sym: 'add9',  desc: '기존 코드에 9도(=옥타브 위 2도) 추가. 색채감',       color: '#0EA5E9' },
-              { sym: 'b5',    desc: '5도를 반음 낮춤. 긴장 또는 블루스적 색채',         color: '#DC2626' },
-              { sym: '#5',    desc: '5도를 반음 올림. aug와 같은 효과',                color: '#DC2626' },
-              { sym: 'dim',   desc: '감3화음. 단3도 두 개 쌓임. 어둡고 불안정',         color: '#DC2626' },
+              { sym: 'maj7',  desc: '장7도 포함. 밝고 안정적인 느낌',                  color: 'var(--success)' },
+              { sym: 'm7',    desc: '단3도 + 단7도. 재즈에서 매우 자주 사용',           color: 'var(--cat-health)' },
+              { sym: '7',     desc: '도미넌트7. 장3도 + 단7도. 해결 욕구가 있는 긴장감', color: 'var(--cat-life)' },
+              { sym: 'sus4',  desc: '3도 대신 4도. "떠있는" 느낌, 해결 직전에 사용',     color: 'var(--cat-sports)' },
+              { sym: 'add9',  desc: '기존 코드에 9도(=옥타브 위 2도) 추가. 색채감',       color: 'var(--accent-ink)' },
+              { sym: 'b5',    desc: '5도를 반음 낮춤. 긴장 또는 블루스적 색채',         color: 'var(--danger)' },
+              { sym: '#5',    desc: '5도를 반음 올림. aug와 같은 효과',                color: 'var(--danger)' },
+              { sym: 'dim',   desc: '감3화음. 단3도 두 개 쌓임. 어둡고 불안정',         color: 'var(--danger)' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${c.color}30`, borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${c.color} 19%, transparent)`, borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.sym}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.desc}</p>
               </div>
@@ -160,13 +160,13 @@ export default function ChordPage() {
               </thead>
               <tbody>
                 {[
-                  { roman: 'Ⅰ',  chord: 'Cmaj7',  notes: 'C, E, G, B',    func: '토닉',         color: '#059669' },
-                  { roman: 'Ⅱ',  chord: 'Dm7',    notes: 'D, F, A, C',    func: '서브도미넌트', color: '#0891B2' },
-                  { roman: 'Ⅲ',  chord: 'Em7',    notes: 'E, G, B, D',    func: '토닉',         color: '#059669' },
-                  { roman: 'Ⅳ',  chord: 'Fmaj7',  notes: 'F, A, C, E',    func: '서브도미넌트', color: '#0891B2' },
-                  { roman: 'Ⅴ',  chord: 'G7',     notes: 'G, B, D, F',    func: '도미넌트',     color: '#EA580C' },
-                  { roman: 'Ⅵ',  chord: 'Am7',    notes: 'A, C, E, G',    func: '토닉',         color: '#059669' },
-                  { roman: 'Ⅶ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',    func: '도미넌트',     color: '#EA580C' },
+                  { roman: 'Ⅰ',  chord: 'Cmaj7',  notes: 'C, E, G, B',    func: '토닉',         color: 'var(--success)' },
+                  { roman: 'Ⅱ',  chord: 'Dm7',    notes: 'D, F, A, C',    func: '서브도미넌트', color: 'var(--cat-health)' },
+                  { roman: 'Ⅲ',  chord: 'Em7',    notes: 'E, G, B, D',    func: '토닉',         color: 'var(--success)' },
+                  { roman: 'Ⅳ',  chord: 'Fmaj7',  notes: 'F, A, C, E',    func: '서브도미넌트', color: 'var(--cat-health)' },
+                  { roman: 'Ⅴ',  chord: 'G7',     notes: 'G, B, D, F',    func: '도미넌트',     color: 'var(--cat-life)' },
+                  { roman: 'Ⅵ',  chord: 'Am7',    notes: 'A, C, E, G',    func: '토닉',         color: 'var(--success)' },
+                  { roman: 'Ⅶ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',    func: '도미넌트',     color: 'var(--cat-life)' },
                 ].map((d, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)', borderLeft: `3px solid ${d.color}` }}>
                     <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
@@ -200,13 +200,13 @@ export default function ChordPage() {
               </thead>
               <tbody>
                 {[
-                  { roman: 'Ⅰ',  chord: 'Am7',    notes: 'A, C, E, G',   note: '토닉. 단조의 중심 코드',                    color: '#059669' },
-                  { roman: 'Ⅱ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',   note: '마이너 2-5-1 진행의 Ⅱ 담당',               color: '#0891B2' },
-                  { roman: 'Ⅲ',  chord: 'Cmaj7',  notes: 'C, E, G, B',   note: '나란한조 C 메이저의 Ⅰ과 동일',             color: '#059669' },
-                  { roman: 'Ⅳ',  chord: 'Dm7',    notes: 'D, F, A, C',   note: '서브도미넌트',                             color: '#0891B2' },
-                  { roman: 'Ⅴ',  chord: 'Em7',    notes: 'E, G, B, D',   note: '이끔음이 없어 해결감 약함 → 흔히 E7로 대체', color: '#EA580C' },
-                  { roman: 'Ⅵ',  chord: 'Fmaj7',  notes: 'F, A, C, E',   note: 'C 메이저의 Ⅳ와 동일',                      color: '#0891B2' },
-                  { roman: 'Ⅶ',  chord: 'G7',     notes: 'G, B, D, F',   note: 'C 메이저의 Ⅴ와 동일',                      color: '#EA580C' },
+                  { roman: 'Ⅰ',  chord: 'Am7',    notes: 'A, C, E, G',   note: '토닉. 단조의 중심 코드',                    color: 'var(--success)' },
+                  { roman: 'Ⅱ',  chord: 'Bm7♭5',  notes: 'B, D, F, A',   note: '마이너 2-5-1 진행의 Ⅱ 담당',               color: 'var(--cat-health)' },
+                  { roman: 'Ⅲ',  chord: 'Cmaj7',  notes: 'C, E, G, B',   note: '나란한조 C 메이저의 Ⅰ과 동일',             color: 'var(--success)' },
+                  { roman: 'Ⅳ',  chord: 'Dm7',    notes: 'D, F, A, C',   note: '서브도미넌트',                             color: 'var(--cat-health)' },
+                  { roman: 'Ⅴ',  chord: 'Em7',    notes: 'E, G, B, D',   note: '이끔음이 없어 해결감 약함 → 흔히 E7로 대체', color: 'var(--cat-life)' },
+                  { roman: 'Ⅵ',  chord: 'Fmaj7',  notes: 'F, A, C, E',   note: 'C 메이저의 Ⅳ와 동일',                      color: 'var(--cat-health)' },
+                  { roman: 'Ⅶ',  chord: 'G7',     notes: 'G, B, D, F',   note: 'C 메이저의 Ⅴ와 동일',                      color: 'var(--cat-life)' },
                 ].map((d, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)', borderLeft: `3px solid ${d.color}` }}>
                     <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
@@ -218,8 +218,8 @@ export default function ChordPage() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid #EA580C30', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>자연 단음계 vs 화성 단음계 — Ⅴ가 Em7이 아니라 E7이 되는 이유</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-life) 19%, transparent)', borderRadius: '12px', padding: '16px 20px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--cat-life)', marginBottom: '6px' }}>자연 단음계 vs 화성 단음계 — Ⅴ가 Em7이 아니라 E7이 되는 이유</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
               자연 단음계의 Ⅴ는 Em7(E·G·B·D)인데, 토닉 A 바로 반음 아래에서 끌어당기는 이끔음이 없어 해결감이 약합니다. 그래서 7음 G를 반음 올린 <strong style={{ color: 'var(--text)' }}>화성 단음계(A·B·C·D·E·F·G♯)</strong>를 쓰면 Ⅴ가 <strong style={{ color: 'var(--text)' }}>E7(E·G♯·B·D)</strong>로 바뀌고, G♯→A의 반음 해결이 생겨 도미넌트 기능이 강해집니다. 실제 단조 곡 대부분이 Ⅴ 자리에 Em이 아닌 E나 E7을 쓰는 이유이며, 마이너 2-5-1 진행도 Bm7♭5 → E7 → Am7으로 만듭니다.
             </p>
@@ -234,35 +234,35 @@ export default function ChordPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               {
-                name: '1645 진행 (팝의 왕)',
+                name: '1-6-4-5 진행 (올드팝·발라드)',
                 deg: 'Ⅰ → Ⅵm → Ⅳ → Ⅴ',
                 ex: 'Cmaj7 → Am7 → Fmaj7 → G7',
-                desc: '수많은 팝·발라드의 기본. 친숙하고 듣기 편한 진행',
-                color: '#0EA5E9',
+                desc: "수많은 팝·발라드의 기본. '팝의 왕'으로 불리는 1-5-6-4(Ⅰ→Ⅴ→Ⅵm→Ⅳ)는 같은 코드의 순서 변형",
+                color: 'var(--accent-ink)',
               },
               {
                 name: '2-5-1 진행 (재즈 기본)',
                 deg: 'Ⅱm7 → Ⅴ7 → Ⅰmaj7',
                 ex: 'Dm7 → G7 → Cmaj7',
                 desc: '재즈 스탠더드 대부분에 등장. 도미넌트 모션의 기본',
-                color: '#0891B2',
+                color: 'var(--cat-health)',
               },
               {
                 name: '1-4-5 진행 (블루스·록)',
                 deg: 'Ⅰ → Ⅳ → Ⅴ',
                 ex: 'C → F → G',
                 desc: '블루스·록큰롤의 뼈대. 12마디 블루스의 핵심 코드',
-                color: '#EA580C',
+                color: 'var(--cat-life)',
               },
               {
                 name: '카논 진행',
                 deg: 'Ⅰ → Ⅴ → Ⅵm → Ⅲm → Ⅳ → Ⅰ → Ⅳ → Ⅴ',
                 ex: 'C → G → Am → Em → F → C → F → G',
                 desc: '파헬벨 카논의 8코드 시퀀스. 발라드·OST에서 자주 사용',
-                color: '#A16207',
+                color: 'var(--cat-sports)',
               },
             ].map((p, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}30`, borderRadius: '12px', padding: '16px 20px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${p.color} 19%, transparent)`, borderRadius: '12px', padding: '16px 20px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: p.color, marginBottom: '6px' }}>{p.name}</p>
                 <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--muted)', marginBottom: '4px' }}>{p.deg}</p>
                 <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>{p.ex}</p>
@@ -306,8 +306,8 @@ export default function ChordPage() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid #0EA5E930', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 700, color: '#0EA5E9', marginBottom: '6px' }}>실전 예 — 하행 베이스 라인</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 19%, transparent)', borderRadius: '12px', padding: '16px 20px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent-ink)', marginBottom: '6px' }}>실전 예 — 하행 베이스 라인</p>
             <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>C → G/B → Am → Am/G → F → C/E → Dm7 → G7</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
               코드는 C·G·Am·F 정도만 오가지만 베이스는 <strong style={{ color: 'var(--text)' }}>C→B→A→G→F→E→D</strong>로 한 음씩 계단처럼 내려갑니다. C와 Am 사이를 G/B가, Am과 F 사이를 Am/G가 이어주는 구조로, 발라드 인트로나 후렴 진입부에서 자주 들리는 진행입니다. 원리를 알면 어떤 진행이든 사이에 전위 코드를 끼워 베이스 라인을 직접 설계할 수 있습니다.
@@ -342,7 +342,7 @@ export default function ChordPage() {
               { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기', desc: '코드를 다른 키로 즉시 이동' },
               { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',    desc: 'Hz ↔ 음이름 변환' },
               { href: '/tools/art/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '탭으로 BPM 측정' },
-              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: '딜레이·리버브 ms 값 계산' },
+              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: '음표별 딜레이 타임 ms 계산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
