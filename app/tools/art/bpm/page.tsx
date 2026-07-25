@@ -20,9 +20,9 @@ const FAQ_LD = [
               { q: 'BPM이 소수(예: 128.5)여도 계산되나요?',
                 a: '네, 이 계산기는 소수점 BPM도 지원합니다. 예를 들어 128.5 BPM의 4분음표 딜레이는 <code>60,000 ÷ 128.5 ≈ 467ms</code>입니다. 하드웨어 드럼머신이나 빈티지 신디사이저의 경우 정수가 아닌 BPM이 있을 수 있습니다.' },
               { q: '딜레이 피드백(Feedback)은 어떻게 설정하나요?',
-                a: '피드백은 딜레이 반복 횟수를 제어합니다. 보통 <strong>20~40% 설정이 자연스럽고</strong>, 50% 이상은 점점 쌓이는 느낌, 100% 근처는 무한 반복(셀프 오실레이션)이 됩니다. 이 계산기는 딜레이 타임(ms) 계산에 특화되어 있으며, 피드백은 DAW에서 직접 설정하세요.' },
+                a: '피드백은 딜레이 반복 횟수를 제어합니다. 보통 <strong>20~40% 설정이 자연스럽고</strong>, 50% 이상은 점점 쌓이는 느낌, 100% 근처는 무한 반복(셀프 오실레이션)이 됩니다. 단, 슬랩백 에코는 피드백 0~15%로 1회 반복이 정석입니다. 이 계산기는 딜레이 타임(ms) 계산에 특화되어 있으며, 피드백은 DAW에서 직접 설정하세요.' },
               { q: '리버브 프리딜레이와 딜레이 타임의 차이는?',
-                a: '<strong>딜레이 타임</strong>은 에코 효과처럼 원음 이후 반복 신호가 들어오는 간격입니다. <strong>리버브 프리딜레이</strong>는 리버브 잔향이 시작되기 전의 짧은 공백으로, 원음을 공간감 속에서 분리시켜 선명하게 들리게 합니다. 프리딜레이는 보통 16분음표 이하의 짧은 값(10~125ms)을 사용합니다.' },
+                a: '<strong>딜레이 타임</strong>은 에코 효과처럼 원음 이후 반복 신호가 들어오는 간격입니다. <strong>리버브 프리딜레이</strong>는 리버브 잔향이 시작되기 전의 짧은 공백으로, 원음을 공간감 속에서 분리시켜 선명하게 들리게 합니다. 프리딜레이는 보통 짧은 값(약 10~125ms — 120 BPM 기준 16분음표 이하)을 사용하며, 템포가 느리면 같은 음표값이라도 ms가 길어집니다.' },
               { q: '딜레이 ms 값을 LFO 속도(Hz)로 변환하려면?',
                 a: '주파수는 시간의 역수이므로 <code>Hz = 1,000 ÷ ms</code>로 변환합니다. 예를 들어 BPM 120의 4분음표 딜레이 500ms는 1,000 ÷ 500 = <strong>2Hz</strong>, 8분음표 250ms는 4Hz입니다. 트레몰로·오토팬·코러스처럼 LFO 속도를 Hz로 입력하는 플러그인을 박자에 맞출 때 사용합니다.' },
               { q: '한 마디(1 bar) 길이는 어떻게 계산하나요?',
@@ -39,7 +39,8 @@ export default async function BpmPage({
   const sp = (await searchParams) ?? {}
   const raw = typeof sp.bpm === 'string' ? sp.bpm : ''
   const parsed = parseFloat(raw)
-  const initialBpm = parsed > 0 && parsed <= 300 ? String(Math.round(parsed)) : '120'
+  /* 소수 1자리 보존 — FAQ가 소수 BPM 지원을 명시하고 탭 템포 연동값도 소수일 수 있음 (정수 반올림 금지) */
+  const initialBpm = parsed > 0 && parsed <= 300 ? String(Math.round(parsed * 10) / 10) : '120'
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
@@ -154,7 +155,7 @@ export default async function BpmPage({
                   ['발라드·슬로우', '60~70 BPM', '857~1000ms', '643~750ms', '429~500ms', '#0891B2'],
                   ['팝·R&B',        '80~100 BPM', '600~750ms',  '450~563ms', '300~375ms', '#059669'],
                   ['댄스·팝',       '120 BPM',    '500ms',      '375ms',     '250ms',     '#0EA5E9'],
-                  ['UK 하우스',     '128~130 BPM','461~469ms',  '346~352ms', '231~234ms', '#EA580C'],
+                  ['하우스',        '120~128 BPM','469~500ms',  '352~375ms', '234~250ms', '#EA580C'],
                   ['드럼앤베이스',  '160~180 BPM','333~375ms',  '250~281ms', '167~188ms', '#DB2777'],
                 ].map(([genre, bpmRange, q, d, e, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>

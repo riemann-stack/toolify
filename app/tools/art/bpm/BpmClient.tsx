@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef } from 'react'
 import styles from './bpm.module.css'
 
 const PRESETS = [60, 80, 100, 120, 140, 160]
@@ -19,6 +19,7 @@ function calcDelay(bpm: number, factor: number) {
 export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string } = {}) {
   const [bpm, setBpm] = useState(initialBpm)
   const [copied, setCopied] = useState<string | null>(null)
+  const copyTimerRef = useRef<number | null>(null)
 
   const bpmNum = useMemo(() => {
     const n = parseFloat(bpm)
@@ -28,7 +29,8 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
   const handleCopy = useCallback((val: string, key: string) => {
     navigator.clipboard.writeText(val).catch(() => {})
     setCopied(key)
-    setTimeout(() => setCopied(null), 1500)
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current)
+    copyTimerRef.current = window.setTimeout(() => setCopied(null), 1500)
   }, [])
 
   const quarterMs = bpmNum ? calcDelay(bpmNum, 1) : null
@@ -55,6 +57,8 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
           {PRESETS.map(p => (
             <button
               key={p}
+              type="button"
+              aria-pressed={bpmNum === p}
               className={bpmNum === p ? `${styles.presetBtn} ${styles.presetBtnActive}` : styles.presetBtn}
               onClick={() => setBpm(String(p))}
             >
@@ -72,6 +76,7 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
             <div className={styles.heroNum}>{quarterMs}</div>
             <div className={styles.heroUnit}>ms</div>
             <button
+              type="button"
               className={`${styles.heroCopy} ${copied === 'hero' ? styles.heroCopied : ''}`}
               onClick={() => handleCopy(String(quarterMs), 'hero')}
             >
@@ -99,14 +104,16 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
                     <tr key={note.label} className={styles.tr}>
                       <td className={styles.tdLabel}>{note.label}</td>
                       {[
-                        { val: base, key: `${note.label}-base` },
-                        { val: dot,  key: `${note.label}-dot`  },
-                        { val: trip, key: `${note.label}-trip` },
-                      ].map(({ val, key }) => (
+                        { val: base, kind: '기본',       key: `${note.label}-base` },
+                        { val: dot,  kind: '점음표',     key: `${note.label}-dot`  },
+                        { val: trip, kind: '셋잇단음표', key: `${note.label}-trip` },
+                      ].map(({ val, kind, key }) => (
                         <td key={key} className={styles.td}>
                           <span className={styles.ms}>{val}</span>
                           <span className={styles.msUnit}>ms</span>
                           <button
+                            type="button"
+                            aria-label={`${note.label} ${kind} ${val}ms 복사`}
                             className={`${styles.copyBtn} ${copied === key ? styles.copyBtnDone : ''}`}
                             onClick={() => handleCopy(String(val), key)}
                           >
@@ -122,7 +129,7 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
           </div>
         </>
       ) : (
-        <div className={styles.empty}>BPM을 입력하면 딜레이 타임이 계산됩니다</div>
+        <div className={styles.empty}>1~300 사이 BPM을 입력하면 딜레이 타임이 계산됩니다</div>
       )}
     </div>
   )
