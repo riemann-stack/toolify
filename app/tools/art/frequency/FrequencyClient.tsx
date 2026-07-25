@@ -64,12 +64,12 @@ function PianoKeyboard({ midiA, midiB }: { midiA: number | null; midiB?: number 
     const exactB = inRange(midiB ?? -1) ? midiB === midi : false
     const pc = ((midi % 12) + 12) % 12
     if (exact || (!inRange(midiA ?? -1) && midiA !== null && pc === pcA)) return 'var(--accent)'
-    if (exactB || (!inRange(midiB ?? -1) && midiB != null && pc === pcB)) return '#0891B2'
+    if (exactB || (!inRange(midiB ?? -1) && midiB != null && pc === pcB)) return 'var(--cat-health)'
     return isBlack ? '#1A1A1A' : '#E8E8E8'
   }
 
   return (
-    <svg viewBox={`0 0 ${14 * WW} ${WH}`} width="100%" style={{ display: 'block' }}>
+    <svg viewBox={`0 0 ${14 * WW} ${WH}`} width="100%" style={{ display: 'block' }} aria-hidden="true">
       {whites.map(k => (
         <rect key={k.midi} x={k.x + 0.5} y={0.5} width={WW - 1} height={WH - 1}
           rx={3} fill={fill(k.midi, false)} stroke="#888" strokeWidth={0.5} />
@@ -118,14 +118,14 @@ function NoteSelector({ label, ni, oct, onNi, onOct }: NoteSelectorProps) {
       <div className={styles.intervalColNote}>{NOTE_NAMES[ni]}{oct}</div>
       <div className={styles.noteGridSmall} style={{ marginBottom: 8 }}>
         {NOTE_NAMES.map((n, i) => (
-          <button key={i}
+          <button key={i} type="button" aria-pressed={ni === i}
             className={`${styles.noteBtn} ${IS_BLACK[i] ? styles.noteBtnBlack : ''} ${ni === i ? styles.noteBtnActive : ''}`}
             onClick={() => onNi(i)}>{n}</button>
         ))}
       </div>
       <div className={styles.octaveRow}>
         {[0,1,2,3,4,5,6,7,8].map(o => (
-          <button key={o} className={`${styles.octBtn} ${oct === o ? styles.octBtnActive : ''}`} onClick={() => onOct(o)}>
+          <button key={o} type="button" aria-pressed={oct === o} aria-label={`옥타브 ${o}`} className={`${styles.octBtn} ${oct === o ? styles.octBtnActive : ''}`} onClick={() => onOct(o)}>
             {o}
           </button>
         ))}
@@ -162,8 +162,10 @@ function HzToNoteTab({ a4 }: { a4: number }) {
     if (!result) return
     const h = parseFloat(hz)
     const txt = `${result.name}${result.oct} (${result.kr}) | ${h.toFixed(2)} Hz | MIDI ${result.midi} | 센트 오차 ${result.cents >= 0 ? '+' : ''}${result.cents.toFixed(1)}`
-    try { await navigator.clipboard.writeText(txt) } catch {}
-    setCopied(true); setTimeout(() => setCopied(false), 1500)
+    try {
+      await navigator.clipboard.writeText(txt)
+      setCopied(true); setTimeout(() => setCopied(false), 1500)
+    } catch { /* 권한 거부 등 실패를 성공으로 표시하지 않음 */ }
   }, [result, hz])
 
   return (
@@ -171,13 +173,13 @@ function HzToNoteTab({ a4 }: { a4: number }) {
       <div className={styles.card}>
         <div className={styles.cardLabel}>주파수 입력</div>
         <div className={styles.inputRow}>
-          <input className={styles.numInput} type="number" inputMode="decimal"
-            placeholder="440" value={hz} onChange={e => setHz(e.target.value)} />
+          <input className={styles.numInput} type="number" inputMode="decimal" step="any"
+            aria-label="주파수 (Hz)" placeholder="440" value={hz} onChange={e => setHz(e.target.value)} />
           <span className={styles.unit}>Hz</span>
         </div>
         <div className={styles.presetRow} style={{ marginTop: 10 }}>
           {HZ_PRESETS.map(p => (
-            <button key={p.label} className={styles.presetBtn} onClick={() => setHz(String(p.hz))}>
+            <button key={p.label} type="button" className={styles.presetBtn} onClick={() => setHz(String(p.hz))}>
               {p.label}
             </button>
           ))}
@@ -185,7 +187,7 @@ function HzToNoteTab({ a4 }: { a4: number }) {
       </div>
 
       {result ? (
-        <div className={styles.resultCard}>
+        <div className={styles.resultCard} role="status">
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>음정</div>
@@ -196,7 +198,9 @@ function HzToNoteTab({ a4 }: { a4: number }) {
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>MIDI 번호</div>
               <div className={styles.heroNum}>{result.midi}</div>
-              <div className={styles.heroSub}>파장 {result.wave.toFixed(1)} cm</div>
+              <div className={styles.heroSub}>
+                {result.midi < 0 || result.midi > 127 ? 'MIDI 표준(0~127) 밖 · ' : ''}파장 {result.wave.toFixed(1)} cm
+              </div>
             </div>
           </div>
 
@@ -212,7 +216,7 @@ function HzToNoteTab({ a4 }: { a4: number }) {
           <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz 기준 · 피아노 건반은 C3–B4 표시</p>
         </div>
       ) : (
-        <div className={styles.empty}>주파수(Hz)를 입력하면 가장 가까운 음정으로 변환합니다</div>
+        <div className={styles.empty}>주파수(0 초과 ~ 20,000 Hz)를 입력하면 가장 가까운 음정으로 변환합니다</div>
       )}
     </div>
   )
@@ -239,8 +243,10 @@ function NoteToHzTab({ a4 }: { a4: number }) {
 
   const handleCopy = useCallback(async () => {
     const txt = `${NOTE_NAMES[ni]}${oct} | ${result.hz.toFixed(3)} Hz | MIDI ${result.midi} | 파장 ${result.wave.toFixed(1)} cm`
-    try { await navigator.clipboard.writeText(txt) } catch {}
-    setCopied(true); setTimeout(() => setCopied(false), 1500)
+    try {
+      await navigator.clipboard.writeText(txt)
+      setCopied(true); setTimeout(() => setCopied(false), 1500)
+    } catch { /* 실패 시 무표시 */ }
   }, [ni, oct, result])
 
   return (
@@ -249,7 +255,7 @@ function NoteToHzTab({ a4 }: { a4: number }) {
         <div className={styles.cardLabel}>음이름 선택</div>
         <div className={styles.noteGrid}>
           {NOTE_NAMES.map((n, i) => (
-            <button key={i}
+            <button key={i} type="button" aria-pressed={ni === i}
               className={`${styles.noteBtn} ${IS_BLACK[i] ? styles.noteBtnBlack : ''} ${ni === i ? styles.noteBtnActive : ''}`}
               onClick={() => setNi(i)}>{n}</button>
           ))}
@@ -258,7 +264,7 @@ function NoteToHzTab({ a4 }: { a4: number }) {
           <div className={styles.cardLabel}>옥타브</div>
           <div className={styles.octaveRow}>
             {[0,1,2,3,4,5,6,7,8].map(o => (
-              <button key={o} className={`${styles.octBtn} ${oct === o ? styles.octBtnActive : ''}`} onClick={() => setOct(o)}>
+              <button key={o} type="button" aria-pressed={oct === o} aria-label={`옥타브 ${o}`} className={`${styles.octBtn} ${oct === o ? styles.octBtnActive : ''}`} onClick={() => setOct(o)}>
                 {o}
               </button>
             ))}
@@ -266,7 +272,7 @@ function NoteToHzTab({ a4 }: { a4: number }) {
         </div>
       </div>
 
-      <div className={styles.resultCard}>
+      <div className={styles.resultCard} role="status">
         <div className={styles.heroRow}>
           <div className={styles.heroBlock}>
             <div className={styles.heroLabel}>주파수</div>
@@ -344,7 +350,7 @@ function IntervalTab({ a4 }: { a4: number }) {
         </div>
       </div>
 
-      <div className={styles.resultCard}>
+      <div className={styles.resultCard} role="status">
         <div className={styles.intervalBadge}>{result.semi} 반음</div>
         <div className={styles.intervalName}>{result.name}</div>
         <div className={styles.intervalRatio}>
@@ -362,7 +368,7 @@ function IntervalTab({ a4 }: { a4: number }) {
             <div className={styles.neighborHz}>{result.hzA.toFixed(3)} Hz</div>
           </div>
           <div className={styles.neighborItem}>
-            <div className={styles.neighborLabel} style={{ color: '#0891B2' }}>● 음정 B</div>
+            <div className={styles.neighborLabel} style={{ color: 'var(--cat-health)' }}>● 음정 B</div>
             <div className={styles.neighborNote}>{NOTE_NAMES[bNi]}{bOct}</div>
             <div className={styles.neighborHz}>{result.hzB.toFixed(3)} Hz</div>
           </div>
@@ -386,7 +392,7 @@ export default function FrequencyClient() {
         <div className={styles.cardLabel}>기준음 (A4)</div>
         <div className={styles.refRow}>
           {REF_PITCHES.map(r => (
-            <button key={r.value}
+            <button key={r.value} type="button" aria-pressed={a4 === r.value}
               className={`${styles.refBtn} ${a4 === r.value ? styles.refBtnActive : ''}`}
               onClick={() => setA4(r.value)}>
               {r.label}
@@ -397,13 +403,13 @@ export default function FrequencyClient() {
 
       {/* 탭 */}
       <div className={styles.tabs}>
-        <button className={`${styles.tab} ${tab === 'hz2note'  ? styles.tabActive : ''}`} onClick={() => setTab('hz2note')}>
+        <button type="button" aria-pressed={tab === 'hz2note'} className={`${styles.tab} ${tab === 'hz2note'  ? styles.tabActive : ''}`} onClick={() => setTab('hz2note')}>
           Hz → 음정
         </button>
-        <button className={`${styles.tab} ${tab === 'note2hz'  ? styles.tabActive : ''}`} onClick={() => setTab('note2hz')}>
+        <button type="button" aria-pressed={tab === 'note2hz'} className={`${styles.tab} ${tab === 'note2hz'  ? styles.tabActive : ''}`} onClick={() => setTab('note2hz')}>
           음정 → Hz
         </button>
-        <button className={`${styles.tab} ${tab === 'interval' ? styles.tabActive : ''}`} onClick={() => setTab('interval')}>
+        <button type="button" aria-pressed={tab === 'interval'} className={`${styles.tab} ${tab === 'interval' ? styles.tabActive : ''}`} onClick={() => setTab('interval')}>
           음정 간격
         </button>
       </div>
