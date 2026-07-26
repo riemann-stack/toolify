@@ -6,9 +6,9 @@ import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './scale.module.css'
 import {
-  KEYS, SCALES, TUNINGS, CHURCH_MODES, MODE_NAMES, PROGRESSIONS,
+  KEYS, SCALES, TUNINGS, CHURCH_MODES, MODE_NAMES, PROGRESSIONS, FUNCTIONAL_SCALES,
   type Accidental, type ScaleId, type Tuning,
-  noteName, getScale, buildScale, buildScaleNames, buildDiatonicChords,
+  noteName, getScale, buildScale, buildScaleSpelling, buildDiatonicChords,
   noteFreq, intervalColor, COLORS,
 } from './scaleUtils'
 
@@ -60,6 +60,21 @@ export default function ScaleClient() {
     return audioCtxRef.current
   }
 
+  /* 예약된 오실레이터 추적 — 재생 버튼 연타 시 이전 예약을 취소해 중첩 방지 */
+  const activeNodesRef = useRef<{ osc: OscillatorNode; gain: GainNode }[]>([])
+  const playEndTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  const stopAll = () => {
+    activeNodesRef.current.forEach(({ osc, gain }) => {
+      try { osc.stop() } catch {}
+      try { osc.disconnect(); gain.disconnect() } catch {}
+    })
+    activeNodesRef.current = []
+    if (playEndTimerRef.current) { clearTimeout(playEndTimerRef.current); playEndTimerRef.current = null }
+    setIsPlaying(false)
+  }
+
   /** 한 음 재생 */
   const playNote = (freq: number, when: number, duration = 0.4, vol = 0.15) => {
     const ctx = getAudioCtx()
@@ -75,31 +90,55 @@ export default function ScaleClient() {
     gain.gain.linearRampToValueAtTime(0, when + duration)
     osc.start(when)
     osc.stop(when + duration + 0.05)
+    activeNodesRef.current.push({ osc, gain })
+    osc.onended = () => {
+      activeNodesRef.current = activeNodesRef.current.filter((n) => n.osc !== osc)
+    }
   }
 
-  /** 시퀀스 재생 (순차) */
+  /** 재생 완료 시점에 상태 리셋 예약 */
+  const markPlaying = (totalSec: number) => {
+    setIsPlaying(true)
+    if (playEndTimerRef.current) clearTimeout(playEndTimerRef.current)
+    playEndTimerRef.current = setTimeout(() => setIsPlaying(false), totalSec * 1000)
+  }
+
+  /** 시퀀스 재생 (순차) — 재호출 시 이전 예약 취소 */
   const playSequence = (freqs: number[], gap = 0.45) => {
     const ctx = getAudioCtx()
     if (!ctx) return
     if (ctx.state === 'suspended') ctx.resume()
+    stopAll()
     const start = ctx.currentTime + 0.05
     freqs.forEach((f, i) => playNote(f, start + i * gap, 0.4, 0.15))
+    markPlaying(freqs.length * gap + 0.3)
   }
 
-  /** 코드 재생 (합주) */
+  /** 코드 재생 (합주) — 재호출 시 이전 예약 취소 */
   const playChord = (freqs: number[], duration = 0.9) => {
     const ctx = getAudioCtx()
     if (!ctx) return
     if (ctx.state === 'suspended') ctx.resume()
+    stopAll()
     const start = ctx.currentTime + 0.05
     freqs.forEach((f) => playNote(f, start, duration, 0.10))
+  }
+
+  /** 건반 단음 재생 (즉시) */
+  const playKeyNote = (noteIdx: number, oct: number) => {
+    const ctx = getAudioCtx()
+    if (!ctx) return
+    if (ctx.state === 'suspended') ctx.resume()
+    playNote(noteFreq(noteIdx, oct), ctx.currentTime + 0.02)
   }
 
   /* 계산 */
   const scale = getScale(scaleId)
   const scaleNotes = useMemo(() => buildScale(rootKey, scale), [rootKey, scale])
-  const scaleNotesNames = useMemo(() => buildScaleNames(rootKey, scale, acc), [rootKey, scale, acc])
+  const spelling = useMemo(() => buildScaleSpelling(rootKey, scale, acc), [rootKey, scale, acc])
+  const scaleNotesNames = spelling.names
   const diatonics = useMemo(() => buildDiatonicChords(rootKey, scale, acc), [rootKey, scale, acc])
+  const isFunctional = FUNCTIONAL_SCALES.includes(scaleId)
 
   /* 스케일 음 + 옥타브 위 1음 (시퀀스 재생용) */
   const playFreqs = useMemo(() => {
@@ -193,7 +232,7 @@ export default function ScaleClient() {
       {tab === 'scale' && (
         <>
           <div className={s.hero} role="status">
-            <p className={s.heroLabel}>{scale.emoji} {noteName(rootKey, acc)} {scale.label}</p>
+            <p className={s.heroLabel}>{scale.emoji} {spelling.rootName} {scale.label}</p>
             <p className={s.heroValue}>
               {scaleNotesNames.join(' - ')}
             </p>
@@ -201,21 +240,28 @@ export default function ScaleClient() {
               인터벌 패턴 <strong>{scale.pattern}</strong>
               {' · '}도수 <strong>{scale.degrees.join(' · ')}</strong>
             </p>
-            <button className={s.playBtn} onClick={() => playSequence(playFreqs)} type="button">
-              ▶ 순차 재생
+            {spelling.respelled && (
+              <p className={s.heroSub}>
+                {noteName(rootKey, acc)} 표기는 이중임시표(𝄪·𝄫)가 필요한 이론적 조성이라 실용 관행대로 이명동음 <strong>{spelling.rootName}</strong>로 표기합니다.
+              </p>
+            )}
+            <button className={s.playBtn} onClick={() => isPlaying ? stopAll() : playSequence(playFreqs)} type="button">
+              {isPlaying ? '■ 정지' : '▶ 순차 재생'}
             </button>
           </div>
 
           {/* 피아노 SVG */}
           <div className={s.card}>
-            <span className={s.cardLabel}>피아노 건반 (1.5 옥타브)</span>
+            <span className={s.cardLabel}>피아노 건반 (기준 옥타브 {octave})</span>
             <PianoSVG
               scaleNotes={scaleNotes}
               scale={scale}
               rootKey={rootKey}
               acc={acc}
+              nameByPc={spelling.byPc}
+              baseOctave={octave}
               showInterval={showInterval}
-              onPlayNote={(idx, oct) => playNote(noteFreq(idx, oct), getAudioCtx()?.currentTime ?? 0)}
+              onPlayNote={playKeyNote}
             />
             <div className={s.legend}>
               <span><span className={s.legendDot} style={{ background: COLORS.root }}/>루트 (1)</span>
@@ -299,7 +345,7 @@ export default function ScaleClient() {
           </div>
 
           <div className={s.hero}>
-            <p className={s.heroLabel}>{scale.emoji} {noteName(rootKey, acc)} {scale.label}</p>
+            <p className={s.heroLabel}>{scale.emoji} {spelling.rootName} {scale.label}</p>
             <p className={s.heroValue}>{scaleNotesNames.join(' - ')}</p>
             <p className={s.heroSub}>{TUNINGS.find((t) => t.id === tuning)!.label}</p>
           </div>
@@ -310,6 +356,7 @@ export default function ScaleClient() {
               scaleNotes={scaleNotes}
               rootKey={rootKey}
               acc={acc}
+              nameByPc={spelling.byPc}
               tuning={tuning}
               showInterval={showInterval}
             />
@@ -348,7 +395,7 @@ export default function ScaleClient() {
           ) : (
             <>
               <div className={s.hero}>
-                <p className={s.heroLabel}>{noteName(rootKey, acc)} {scale.label} 다이어토닉</p>
+                <p className={s.heroLabel}>{spelling.rootName} {scale.label} 다이어토닉</p>
                 <p className={s.heroValue}>
                   {diatonics.map((d) => d.name).join(' · ')}
                 </p>
@@ -372,11 +419,17 @@ export default function ScaleClient() {
                       <p className={s.chordDegree} style={{ color: c.color }}>{c.degree}</p>
                       <p className={s.chordName}>{c.name}</p>
                       <p className={s.chordNotes}>{c.notesNames.join(' · ')}</p>
-                      <p className={s.chordFn}>{c.function}</p>
+                      <p className={s.chordFn}>{c.function ?? '모달'}</p>
                       <span className={s.chordPlay}>▶ 재생</span>
                     </button>
                   ))}
                 </div>
+                {!isFunctional && (
+                  <p className={s.helpText}>
+                    Tonic·Subdominant·Dominant 기능 분류는 장·단조 화성학 기준이라 교회 모드에는 적용하지 않습니다.
+                    모드에서는 도수·화음 품질(로마숫자)로 파악하세요.
+                  </p>
+                )}
               </div>
 
               {/* 진행 추천 */}
@@ -400,12 +453,20 @@ export default function ScaleClient() {
                         freqs.forEach((f) => playNote(f, start + ci * 1.0, 0.95, 0.10))
                       })
                     }
+                    /* 진행 이름·예시 곡은 홈 조성(장/단)에서만 그대로 통용 — 그 외 스케일은 도수 적용 예시로 표시 */
+                    const atHome = p.home === 'major'
+                      ? scaleId === 'major'
+                      : ['natminor', 'harmonic', 'melodic'].includes(scaleId)
                     return (
                       <div key={p.id} className={s.progCard}>
                         <p className={s.progTitle}>{p.emoji} {p.label}</p>
                         <p className={s.progChords}>{chords.map((c) => c.name).join(' → ')}</p>
                         <p className={s.progDesc}>{p.desc}</p>
-                        <p className={s.progEx}>예: {p.examples}</p>
+                        {atHome ? (
+                          <p className={s.progEx}>예: {p.examples}</p>
+                        ) : (
+                          <p className={s.progEx}>현재 스케일 도수 적용: {chords.map((c) => c.degree).join('-')} — 원곡 분위기와 다르게 들릴 수 있어요.</p>
+                        )}
                         <button className={s.playBtnSm} onClick={playProg} type="button">▶ 진행 재생</button>
                       </div>
                     )
@@ -421,9 +482,9 @@ export default function ScaleClient() {
       {tab === 'modes' && (
         <>
           <div className={s.hero}>
-            <p className={s.heroLabel}>같은 키 ({noteName(rootKey, acc)})에서의 7 교회 모드</p>
+            <p className={s.heroLabel}>같은 루트 ({noteName(rootKey, acc)}) 기준 7 교회 모드 — 평행 모드 비교</p>
             <p className={s.heroValue}>모드별 분위기 비교</p>
-            <p className={s.heroSub}>한 음씩 다른 모드들이 만드는 미묘한 분위기 차이</p>
+            <p className={s.heroSub}>루트를 고정하고 음 집합을 바꿔, 모드별 색채 차이를 직접 들어보는 배치입니다</p>
           </div>
 
           <div className={s.card}>
@@ -431,7 +492,7 @@ export default function ScaleClient() {
             <div className={s.modeList}>
               {CHURCH_MODES.map((mid) => {
                 const m = getScale(mid)
-                const notes = buildScaleNames(rootKey, m, acc)
+                const notes = buildScaleSpelling(rootKey, m, acc).names
                 const freqs = m.intervals.map((iv) => noteFreq((rootKey + iv) % 12, octave + Math.floor((rootKey + iv) / 12)))
                   .concat(noteFreq(rootKey, octave + 1))
                 const isCurrent = scaleId === mid
@@ -452,14 +513,13 @@ export default function ScaleClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>교회 모드 (Church Modes)</strong>
+            <strong>교회 모드 (Church Modes) — 상대 모드 vs 평행 모드</strong>
             <p>
-              교회 모드는 메이저 스케일의 음을 다른 음에서 시작한 7가지 변형입니다.<br />
-              • <strong>Ionian</strong> = Major (1도부터)<br />
-              • <strong>Dorian</strong> (2도) · <strong>Phrygian</strong> (3도)<br />
-              • <strong>Lydian</strong> (4도) · <strong>Mixolydian</strong> (5도)<br />
-              • <strong>Aeolian</strong> (6도, = Natural Minor) · <strong>Locrian</strong> (7도)<br />
-              같은 음을 사용하지만 시작점에 따라 분위기가 완전히 달라집니다 — 모달 작곡의 핵심.
+              교회 모드는 메이저 스케일을 각 음에서 시작한 7가지 변형입니다.<br />
+              • <strong>상대 모드</strong>: C Ionian · D Dorian · E Phrygian처럼 <strong>같은 음 집합</strong>을 시작음만 바꿔 쓰는 관계<br />
+              • <strong>평행 모드</strong>: C Ionian · C Dorian · C Phrygian처럼 <strong>루트를 고정</strong>하고 음 집합을 바꾸는 관계<br />
+              • Ionian (1도) · Dorian (2도) · Phrygian (3도) · Lydian (4도) · Mixolydian (5도) · Aeolian (6도, = Natural Minor) · Locrian (7도)<br />
+              위 비교표는 <strong>평행 모드</strong> 배치입니다 — 루트가 같아야 모드별 색채 차이가 귀에 직접 들리기 때문이에요.
             </p>
           </div>
         </>
@@ -481,11 +541,13 @@ interface PianoProps {
   scale: { intervals: number[]; degrees: string[] }
   rootKey: number
   acc: Accidental
+  nameByPc: Record<number, string>   // 스케일 음은 레터워크 철자로 라벨 (F♯ 장조의 F 건반 = E♯)
+  baseOctave: number                 // 첫 건반 옥타브 = 선택한 재생 옥타브
   showInterval: boolean
   onPlayNote: (noteIdx: number, octave: number) => void
 }
 
-function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }: PianoProps) {
+function PianoSVG({ scaleNotes, scale, rootKey, acc, nameByPc, baseOctave, showInterval, onPlayNote }: PianoProps) {
   // 18 흰 건반(2.5옥타브 정도 = 너무 큼) → 13 흰 건반 (약 1.85 옥타브)
   // 흰 건반 (C D E F G A B) 인덱스: 0 2 4 5 7 9 11
   const whiteIdx = [0, 2, 4, 5, 7, 9, 11]
@@ -526,9 +588,9 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
     const textColor = isInScale ? '#0D0D0D' : '#666'
 
     whiteKeys.push(
-      <g key={`w-${w}`} onClick={() => onPlayNote(noteIdx, 4 + octaveOffset)}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote(noteIdx, 4 + octaveOffset) } }}
-        role="button" aria-label={`${noteName(noteIdx, acc)} 재생`} tabIndex={0}
+      <g key={`w-${w}`} onClick={() => onPlayNote(noteIdx, baseOctave + octaveOffset)}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote(noteIdx, baseOctave + octaveOffset) } }}
+        role="button" aria-label={`${noteName(noteIdx, acc)}${baseOctave + octaveOffset} 재생`} tabIndex={0}
         style={{ cursor: 'pointer' }}>
         <rect
           x={w * whiteW}
@@ -548,7 +610,7 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
           fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
           fontWeight={isInScale ? 800 : 500}
         >
-          {showInterval && isInScale ? intervalMap[noteIdx] : noteName(noteIdx, acc)}
+          {showInterval && isInScale ? intervalMap[noteIdx] : (isInScale ? nameByPc[noteIdx] ?? noteName(noteIdx, acc) : noteName(noteIdx, acc))}
         </text>
       </g>,
     )
@@ -574,9 +636,9 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
         const octaveOffset = Math.floor(w / 7)
 
         blackKeys.push(
-          <g key={`b-${w}-${bIdx}`} onClick={() => onPlayNote(bIdx, 4 + octaveOffset)}
-            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote(bIdx, 4 + octaveOffset) } }}
-            role="button" aria-label={`${noteName(bIdx, acc)} 재생`} tabIndex={0}
+          <g key={`b-${w}-${bIdx}`} onClick={() => onPlayNote(bIdx, baseOctave + octaveOffset)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote(bIdx, baseOctave + octaveOffset) } }}
+            role="button" aria-label={`${noteName(bIdx, acc)}${baseOctave + octaveOffset} 재생`} tabIndex={0}
             style={{ cursor: 'pointer' }}>
             <rect
               x={xLeft}
@@ -596,7 +658,7 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, showInterval, onPlayNote }:
               fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
               fontWeight={isInScale ? 800 : 500}
             >
-              {showInterval && isInScale ? intervalMap[bIdx] : noteName(bIdx, acc)}
+              {showInterval && isInScale ? intervalMap[bIdx] : (isInScale ? nameByPc[bIdx] ?? noteName(bIdx, acc) : noteName(bIdx, acc))}
             </text>
           </g>,
         )
@@ -621,11 +683,12 @@ interface FretProps {
   scaleNotes: number[]
   rootKey: number
   acc: Accidental
+  nameByPc: Record<number, string>
   tuning: Tuning
   showInterval: boolean
 }
 
-function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretProps) {
+function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval }: FretProps) {
   const tuningMeta = TUNINGS.find((t) => t.id === tuning)!
   // 표준 지판 다이어그램 관행: 위 = 1번줄(높은 E, 가늘게) → 아래 = 6번줄(낮은 E, 굵게)
   const stringNotes = [...tuningMeta.strings].reverse()  // index 0 = 1번줄(높은 음)
@@ -725,7 +788,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
                   fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                   fontWeight="800"
                 >
-                  {showInterval ? intervalLabel[noteIdx] : noteName(noteIdx, acc)}
+                  {showInterval ? intervalLabel[noteIdx] : nameByPc[noteIdx] ?? noteName(noteIdx, acc)}
                 </text>
               </g>,
             )

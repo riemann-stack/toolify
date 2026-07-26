@@ -219,9 +219,69 @@ export function buildScale(rootKey: number, scale: ScaleMeta): number[] {
   return scale.intervals.map((iv) => (rootKey + iv) % 12)
 }
 
-/** 키 + 스케일 → 표기명 배열 */
+/* ─────────────────────────────────────────────
+   도수 기반 레터워크 철자 — 반음이 아니라 도수가 글자를 결정
+   (장음계 계열은 A~G 7글자를 한 번씩 사용, F♯ 장조 E♯·G♭ 장조 C♭)
+   ───────────────────────────────────────────── */
+
+const LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+const LETTER_PC: Record<string, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }
+
+function accStr(diff: number): string {
+  if (diff === 0) return ''
+  if (diff === 1) return '♯'
+  if (diff === 2) return '𝄪'
+  if (diff === -1) return '♭'
+  if (diff === -2) return '𝄫'
+  return diff > 0 ? '♯'.repeat(diff) : '♭'.repeat(-diff)
+}
+
+/** 루트 표기에서 시작해 도수 숫자만큼 글자를 걸어가며 철자 생성 (블루스 ♭5·5처럼 같은 숫자는 같은 글자) */
+function spellFromRoot(rootName: string, rootPc: number, scale: ScaleMeta): string[] {
+  const rIdx = LETTERS.indexOf(rootName[0])
+  return scale.degrees.map((d, i) => {
+    const num = parseInt(d.replace(/[^\d]/g, ''), 10)
+    const letter = LETTERS[(rIdx + num - 1) % 7]
+    const pc = (rootPc + scale.intervals[i]) % 12
+    let diff = pc - LETTER_PC[letter]
+    while (diff > 6) diff -= 12
+    while (diff < -6) diff += 12
+    return letter + accStr(diff)
+  })
+}
+
+export interface ScaleSpelling {
+  rootName: string             // 실제 표기에 쓴 루트 (이명동음 전환 시 원선택과 다름)
+  names: string[]              // 도수별 철자
+  byPc: Record<number, string> // 피아노·지판 라벨용 pc → 철자
+  respelled: boolean           // 이중임시표(𝄪·𝄫) 회피를 위해 이명동음 루트로 전환됨
+}
+
+const hasDoubleAcc = (ns: string[]) => ns.some((n) => n.includes('𝄪') || n.includes('𝄫'))
+
+export function buildScaleSpelling(rootKey: number, scale: ScaleMeta, acc: Accidental): ScaleSpelling {
+  const primary = noteName(rootKey, acc)
+  let rootName = primary
+  let names = spellFromRoot(primary, rootKey, scale)
+  let respelled = false
+  // D♯ 장조(F𝄪)처럼 이중임시표가 나오는 이론적 조성은 실용 관행대로 이명동음(E♭ 장조)으로 표기
+  const alt = noteName(rootKey, acc === 'sharp' ? 'flat' : 'sharp')
+  if (hasDoubleAcc(names) && alt !== primary) {
+    const altNames = spellFromRoot(alt, rootKey, scale)
+    if (!hasDoubleAcc(altNames)) {
+      rootName = alt
+      names = altNames
+      respelled = true
+    }
+  }
+  const byPc: Record<number, string> = {}
+  scale.intervals.forEach((iv, i) => { byPc[(rootKey + iv) % 12] = names[i] })
+  return { rootName, names, byPc, respelled }
+}
+
+/** 키 + 스케일 → 표기명 배열 (레터워크 철자) */
 export function buildScaleNames(rootKey: number, scale: ScaleMeta, acc: Accidental): string[] {
-  return buildScale(rootKey, scale).map((i) => noteName(i, acc))
+  return buildScaleSpelling(rootKey, scale, acc).names
 }
 
 /* ─────────────────────────────────────────────
@@ -236,12 +296,12 @@ export interface DiatonicChord {
   type: string           // 코드 종류 (maj7·m7·dom7·m7♭5)
   notes: number[]        // 4 음 인덱스
   notesNames: string[]
-  function: 'Tonic' | 'Subdominant' | 'Dominant'
+  function: 'Tonic' | 'Subdominant' | 'Dominant' | null   // 모달 스케일은 장·단조식 T/SD/D 분류를 보류
   color: string
 }
 
 /** 스케일 안의 i번째 음(0~6)에서 위로 3-5-7도 쌓아 7화음 생성 */
-function buildSeventhChord(scaleNotes: number[], i: number, acc: Accidental): { type: string; notes: number[]; notesNames: string[] } {
+function buildSeventhChord(scaleNotes: number[], i: number): { type: string; notes: number[] } {
   const root = scaleNotes[i]
   const third = scaleNotes[(i + 2) % scaleNotes.length]
   const fifth = scaleNotes[(i + 4) % scaleNotes.length]
@@ -264,23 +324,18 @@ function buildSeventhChord(scaleNotes: number[], i: number, acc: Accidental): { 
   else if (m3 === 4 && m5 === 8 && m7 === 11) type = 'maj7♯5'
   else type = '7'
 
-  const notes = [root, third, fifth, seventh]
-  const notesNames = notes.map((n) => noteName(n, acc))
-  return { type, notes, notesNames }
+  return { type, notes: [root, third, fifth, seventh] }
 }
 
-/** 코드 기능 분류 */
-function chordFunction(degree: number, isMajor: boolean): 'Tonic' | 'Subdominant' | 'Dominant' {
-  if (isMajor) {
-    if (degree === 0 || degree === 2 || degree === 5) return 'Tonic'
-    if (degree === 1 || degree === 3) return 'Subdominant'
-    return 'Dominant'
-  }
-  // minor 키 기능 (간략)
+/** 코드 기능 분류 — 장·단조 화성학 관행 (모달 스케일에는 적용하지 않음) */
+function chordFunction(degree: number): 'Tonic' | 'Subdominant' | 'Dominant' {
   if (degree === 0 || degree === 2 || degree === 5) return 'Tonic'
   if (degree === 1 || degree === 3) return 'Subdominant'
   return 'Dominant'
 }
+
+/** T/SD/D 분류가 통용되는 장·단조 계열 (교회 모드는 모달 화성이라 보류) */
+export const FUNCTIONAL_SCALES: ScaleId[] = ['major', 'natminor', 'harmonic', 'melodic']
 
 const FUNCTION_COLOR = {
   Tonic: 'var(--cat-edu)',
@@ -307,12 +362,15 @@ export function buildDiatonicChords(rootKey: number, scale: ScaleMeta, acc: Acci
   if (scale.intervals.length !== 7) return []
 
   const scaleNotes = buildScale(rootKey, scale)
-  const isMajorBased = ['major', 'lydian', 'mixolydian'].includes(scale.id)
+  const spelling = buildScaleSpelling(rootKey, scale, acc)
+  const functional = FUNCTIONAL_SCALES.includes(scale.id)
 
   return scaleNotes.map((rootIdx, i) => {
-    const chord = buildSeventhChord(scaleNotes, i, acc)
-    const root = noteName(rootIdx, acc)
-    const fn = chordFunction(i, isMajorBased)
+    const chord = buildSeventhChord(scaleNotes, i)
+    // 코드 루트·구성음 철자는 스케일 레터워크 철자를 그대로 사용 (F♯ 장조 ⅶø = E♯m7♭5)
+    const root = spelling.names[i]
+    const notesNames = [0, 2, 4, 6].map((k) => spelling.names[(i + k) % 7])
+    const fn = functional ? chordFunction(i) : null
     return {
       degree: degreeLabel(scale.degrees[i], chord.type),
       root,
@@ -320,9 +378,9 @@ export function buildDiatonicChords(rootKey: number, scale: ScaleMeta, acc: Acci
       name: `${root}${chord.type}`,
       type: chord.type,
       notes: chord.notes,
-      notesNames: chord.notesNames,
+      notesNames,
       function: fn,
-      color: FUNCTION_COLOR[fn],
+      color: fn ? FUNCTION_COLOR[fn] : 'var(--accent)',
     }
   })
 }
@@ -388,15 +446,16 @@ export interface Progression {
   emoji: string
   label: string
   pattern: number[]   // 도수 인덱스 (0=I, 1=ii, 2=iii, ...)
+  home: 'major' | 'minor'   // 진행 이름·예시 곡이 통용되는 조성 (그 외 스케일에선 도수 적용 예시로만 표시)
   desc: string
   examples: string
 }
 
 export const PROGRESSIONS: Progression[] = [
-  { id: 'pop',     emoji: '🎤', label: 'I-V-vi-IV (Pop)',           pattern: [0, 4, 5, 3], desc: '가장 인기 있는 진행. 수많은 팝송에 사용.', examples: 'Let It Be · Don\'t Stop Believin\'' },
-  { id: 'jazz',   emoji: '🎷', label: 'ii-V-I (Jazz)',              pattern: [1, 4, 0],    desc: '재즈의 가장 기본 진행.',                     examples: 'Autumn Leaves · 모든 재즈 스탠다드' },
-  { id: 'doowop', emoji: '🎶', label: 'I-vi-IV-V (50\'s Doo-wop)',  pattern: [0, 5, 3, 4], desc: '50년대 두왑·발라드 표준.',                  examples: 'Stand By Me · Earth Angel' },
-  { id: 'and',    emoji: '🌶️', label: 'i-VII-VI-V (Andalusian)',    pattern: [0, 6, 5, 4], desc: '스페인·플라멩코 분위기. 실전에서는 마지막 v를 장화음 V(예: A단조의 E·E7)로 바꿔 치는 관행.',              examples: 'Hit the Road Jack · Stray Cat Strut' },
+  { id: 'pop',     emoji: '🎤', label: 'I-V-vi-IV (Pop)',           pattern: [0, 4, 5, 3], home: 'major', desc: '가장 인기 있는 진행. 수많은 팝송에 사용.', examples: 'Let It Be · Don\'t Stop Believin\'' },
+  { id: 'jazz',   emoji: '🎷', label: 'ii-V-I (Jazz)',              pattern: [1, 4, 0],    home: 'major', desc: '재즈의 가장 기본 진행.',                     examples: 'Autumn Leaves · 모든 재즈 스탠다드' },
+  { id: 'doowop', emoji: '🎶', label: 'I-vi-IV-V (50\'s Doo-wop)',  pattern: [0, 5, 3, 4], home: 'major', desc: '50년대 두왑·발라드 표준.',                  examples: 'Stand By Me · Earth Angel' },
+  { id: 'and',    emoji: '🌶️', label: 'i-VII-VI-V (Andalusian)',    pattern: [0, 6, 5, 4], home: 'minor', desc: '스페인·플라멩코 분위기. 실전에서는 마지막 v를 장화음 V(예: A단조의 E·E7)로 바꿔 치는 관행.',              examples: 'Hit the Road Jack · Stray Cat Strut' },
 ]
 
 /* ─────────────────────────────────────────────

@@ -53,10 +53,10 @@ const faqAnswer: React.CSSProperties = {
 
 const FAQ_LD = [
   { "q":"Major와 Minor 스케일의 차이는?","a":"핵심 차이는 3도입니다. Major는 장3도(M3, 4반음)로 밝고, Minor는 단3도(m3, 3반음)로 슬픔. C major: C-D-E-F-G-A-B (3도 = E) C minor: C-D-E♭-F-G-A♭-B♭ (3도 = E♭) 또한 Minor는 6·7도도 ♭로 더 어두운 느낌. 같은 키라도 Major/Minor가 곡의 정서를 결정합니다." },
-  { "q":"Pentatonic 스케일은 왜 쉬운가요?","a":"4도와 7도를 제거해 5음으로 만든 스케일입니다. 제거된 4·7도가 가장 불협화음이 되기 쉬운 음정이라, 어떤 음을 쳐도 자연스럽게 들립니다. • Major Pentatonic: 1·2·3·5·6 (한국 민요·동요) • Minor Pentatonic: 1·♭3·4·5·♭7 (록·블루스 솔로 표준) 그래서 록·블루스 즉흥 연주 입문에 가장 먼저 추천됩니다 — \"틀린 음이 없는\" 스케일." },
+  { "q":"Pentatonic 스케일은 왜 쉬운가요?","a":"4도와 7도를 제거해 5음으로 만든 스케일입니다. 제거된 4·7도가 스케일 안에서 반음 관계로 충돌하기 쉬운 음이라, 상대적으로 어떤 음을 쳐도 무난하게 들립니다. • Major Pentatonic: 1·2·3·5·6 (한국 민요·동요) • Minor Pentatonic: 1·♭3·4·5·♭7 (록·블루스 솔로 표준) 그래서 록·블루스 즉흥 연주 입문에 가장 먼저 추천됩니다 — 흔히 \"틀린 음이 없는\" 스케일이라고 불려요." },
   { "q":"Blues 스케일에 ♭5가 있는 이유?","a":"Blues 스케일은 Minor Pentatonic(1·♭3·4·5·♭7)에 ♭5(블루노트)를 추가한 6음 스케일입니다. ♭5는 Major도 Minor도 아닌 \"긁히는\" 불협화음이지만, 블루스의 정서적 핵심이에요. 스쳐 지나가는 경과음으로 사용하면 즉시 블루지한 느낌이 납니다. BB King·Eric Clapton 등 블루스 마스터들이 ♭5를 절묘하게 활용해요." },
   { "q":"Dorian과 Natural Minor 차이는?","a":"한 음 차이입니다. 6도가 다릅니다. • Natural Minor: 1·2·♭3·4·5·♭6·♭7 (어두운 6도) • Dorian: 1·2·♭3·4·5·6·♭7 (밝은 6도) 이 한 음 차이로 Dorian은 더 밝고 재즈적으로 느껴집니다. 재즈·소울·록 모달 작곡에 매우 자주 쓰여요. (예: Miles Davis \"So What\", Pink Floyd 일부)" },
-  { "q":"다이어토닉 코드란 무엇인가요?","a":"스케일 안의 음만 사용해 만든 7개의 자연 7화음입니다. C major 키의 다이어토닉 코드: I (Cmaj7) - ii (Dm7) - iii (Em7) - IV (Fmaj7) - V (G7) - vi (Am7) - viiø (Bm7♭5) 모든 곡의 코드 진행은 대부분 이 7개 코드 안에서 움직입니다. 이 코드들의 기능(Tonic·Subdominant·Dominant)을 이해하면 작곡·편곡이 훨씬 쉬워져요." },
+  { "q":"다이어토닉 코드란 무엇인가요?","a":"스케일 안의 음만 사용해 만든 7개의 자연 7화음입니다. C major 키의 다이어토닉 코드: I (Cmaj7) - ii (Dm7) - iii (Em7) - IV (Fmaj7) - V (G7) - vi (Am7) - viiø (Bm7♭5) 많은 곡의 코드 진행이 이 7개 코드를 중심으로 움직입니다 (차용 화음·세컨더리 도미넌트 같은 예외도 흔해요). 이 코드들의 기능(Tonic·Subdominant·Dominant)을 이해하면 작곡·편곡이 훨씬 쉬워져요." },
   { "q":"I-V-vi-IV 진행이 인기 있는 이유?","a":"가장 자연스럽고 정서적으로 만족스러운 진행입니다. 안정(I) → 긴장(V) → 이완(vi) → 전이(IV)의 익숙한 흐름이라 듣는 사람이 편안하게 따라갑니다. C major: C - G - Am - F • Let It Be (Beatles) · Don&apos;t Stop Believin&apos; (Journey) • 4 Chord Songs라는 이름으로 유튜브에 수백 곡이 같은 진행임을 보여주는 영상도 유명. K-Pop·OST에도 가장 흔히 쓰여, \"팝의 황금 진행\"이라 불려요." },
   { "q":"기타 1박스 운지법이 뭔가요?","a":"한 손 모양으로 5프렛 범위 안의 모든 스케일 음을 외우는 운지법입니다. Minor Pentatonic은 5개 박스로 지판 전체를 커버하며, 1박스(5포지션)가 가장 인기. • A minor pentatonic 1박스: 5프렛부터 시작 (A=5프렛) • 6번줄 5·8 → 5번줄 5·7 → 4번줄 5·7 → 3번줄 5·7 → 2번줄 5·8 → 1번줄 5·8 이 박스 안에서 즉흥 연주가 록·블루스 솔로의 시작이에요. 기타 지판 탭에서 색칠된 음을 보고 패턴을 익히세요." },
   { "q":"같은 키에서 모드를 어떻게 바꾸나요?","a":"모드는 두 가지 방법으로 사용합니다: 1. 모드 차용 (Modal Borrowing): 같은 키에서 다른 모드의 코드를 빌려옴. C major 곡이 C minor의 화음(♭III·♭VI·♭VII이나 단조 iv)을 잠깐 빌려 씀 — Radiohead \"Creep\"(G장조 속 Cm), Beatles \"Hey Jude\" 코다(I–♭VII–IV). 2. 모달 작곡 (Modal Composition): 한 모드를 끝까지 유지. Dorian으로 시작하면 끝까지 Dorian 음만 사용. 재즈에서 흔함 — \"So What\". 모드 비교 탭에서 같은 키의 7 모드를 들어보면 분위기 차이를 직관적으로 느낄 수 있어요." },
@@ -106,7 +106,7 @@ export default function ScalePage() {
             { t: '😢 Natural Minor',     d: '슬픔·차분. 록·발라드·블루스 표준.',              c: 'var(--cat-health)' },
             { t: '🌌 Harmonic Minor',    d: '7도 반음 ↑. 이국적·드라마틱·메탈·플라멩코.',     c: 'var(--cat-unit)' },
             { t: '✨ Melodic Minor',     d: '6·7도 ↑(상행). 재즈·세련·복합.',                 c: 'var(--cat-cooking)' },
-            { t: '🌸 Major Pentatonic',  d: '5음. 4·7도 제거로 불협 없음. 동요·민요.',         c: 'var(--cat-life)' },
+            { t: '🌸 Major Pentatonic',  d: '5음. 4·7도 제거로 어긋나는 음이 적음. 동요·민요.', c: 'var(--cat-life)' },
             { t: '🎸 Minor Pentatonic',  d: '록·블루스 솔로 표준. 가장 쉬운 스케일.',          c: 'var(--cat-date)' },
             { t: '🎺 Blues',             d: 'Minor Pent + ♭5. 12-bar blues 표준.',           c: 'var(--cat-health)' },
             { t: '🍃 Dorian',            d: 'Minor + M6. 재즈·소울 모달.',                    c: 'var(--success)' },
@@ -128,7 +128,7 @@ export default function ScalePage() {
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
           스케일의 각 음을 루트로 3-5-7도를 쌓아 만든 7개의 자연 7화음.
-          모든 곡의 코드는 대부분 다이어토닉 코드 안에서 진행됩니다.
+          많은 대중음악의 코드 진행이 다이어토닉 코드를 중심으로 움직입니다 (차용 화음·세컨더리 도미넌트 같은 예외도 흔해요).
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12, overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 400 }}>
@@ -162,6 +162,7 @@ export default function ScalePage() {
           기능 분류: <strong style={{ color: 'var(--cat-edu)' }}>Tonic</strong>(안정) /
           <strong style={{ color: 'var(--cat-cooking)' }}> Subdominant</strong>(전이) /
           <strong style={{ color: 'var(--cat-date)' }}> Dominant</strong>(긴장 → Tonic으로 해결)
+          — 장·단조 화성학 기준이라 도리안 같은 교회 모드에는 그대로 적용하지 않습니다.
         </p>
       </div>
 
@@ -169,8 +170,10 @@ export default function ScalePage() {
       <h2 style={sectionTitle}>🌐 7 교회 모드(Modal) 입문 가이드</h2>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          교회 모드는 메이저 스케일의 음을 다른 음에서 시작한 7가지 변형입니다.
-          <strong> 같은 음을 사용</strong>하지만 <strong>시작점</strong>에 따라 분위기가 완전히 달라져요.
+          교회 모드는 메이저 스케일을 각 음에서 시작한 7가지 변형입니다.
+          C Ionian·D Dorian·E Phrygian처럼 <strong>같은 음 집합을 공유하는 관계</strong>를 상대 모드,
+          C Ionian·C Dorian처럼 <strong>루트를 고정하고 음 집합을 바꾸는 관계</strong>를 평행 모드라 불러요.
+          (이 도구의 모드 비교 탭은 색채 차이를 직접 듣기 좋은 <strong>평행 모드</strong> 배치입니다.)
         </p>
         <ul style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
           <li><strong style={{ color: 'var(--text)' }}>Ionian (1도)</strong> = Major. 가장 밝음.</li>
@@ -198,7 +201,7 @@ export default function ScalePage() {
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
           💡 처음 즉흥 연주는 <strong style={{ color: 'var(--accent)' }}>Minor Pentatonic 1박스</strong>부터 시작하세요.
-          록·블루스·팝의 90% 솔로가 이 박스 안에서 이루어집니다.
+          록·블루스·팝 솔로의 상당수가 이 박스에서 출발합니다.
         </p>
       </div>
 
@@ -220,10 +223,10 @@ export default function ScalePage() {
         <summary style={faqSummary}>Q2. Pentatonic 스케일은 왜 쉬운가요?</summary>
         <p style={faqAnswer}>
           <strong>4도와 7도를 제거</strong>해 5음으로 만든 스케일입니다.
-          제거된 4·7도가 가장 불협화음이 되기 쉬운 음정이라, 어떤 음을 쳐도 자연스럽게 들립니다.<br />
+          제거된 4·7도가 스케일 안에서 반음 관계로 충돌하기 쉬운 음이라, 상대적으로 어떤 음을 쳐도 무난하게 들립니다.<br />
           • <strong>Major Pentatonic</strong>: 1·2·3·5·6 (한국 민요·동요)<br />
           • <strong>Minor Pentatonic</strong>: 1·♭3·4·5·♭7 (록·블루스 솔로 표준)<br />
-          그래서 록·블루스 즉흥 연주 입문에 가장 먼저 추천됩니다 — &quot;틀린 음이 없는&quot; 스케일.
+          그래서 록·블루스 즉흥 연주 입문에 가장 먼저 추천됩니다 — 흔히 &quot;틀린 음이 없는&quot; 스케일이라고 불려요.
         </p>
       </details>
 
@@ -254,7 +257,7 @@ export default function ScalePage() {
           스케일 안의 음만 사용해 만든 <strong>7개의 자연 7화음</strong>입니다.
           C major 키의 다이어토닉 코드:<br />
           <strong>I (Cmaj7) - ii (Dm7) - iii (Em7) - IV (Fmaj7) - V (G7) - vi (Am7) - viiø (Bm7♭5)</strong><br />
-          모든 곡의 코드 진행은 대부분 이 7개 코드 안에서 움직입니다.
+          많은 곡의 코드 진행이 이 7개 코드를 중심으로 움직입니다 (차용 화음·세컨더리 도미넌트 같은 예외도 흔해요).
           이 코드들의 기능(Tonic·Subdominant·Dominant)을 이해하면 작곡·편곡이 훨씬 쉬워져요.
         </p>
       </details>
@@ -320,6 +323,16 @@ export default function ScalePage() {
           처음엔 어색하지만 매일 5~10분씩 반복하면 몇 주 안에 간단한 즉흥 프레이즈를 만들 수 있게 됩니다.
         </p>
       </details>
+
+      {/* 출처 */}
+      <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 32 }}>
+        <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.8 }}>
+          <strong style={{ color: 'var(--text)' }}>이론 출처</strong> ·
+          장음계 철자(음이름 A~G 한 번씩)·로마숫자 표기: <a href="https://musictheory.pugetsound.edu/mt21c/TheMajorScale.html" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>Music Theory for the 21st-Century Classroom</a> (University of Puget Sound) ·
+          모드(상대·평행): <a href="https://viva.pressbooks.pub/openmusictheory/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>Open Music Theory</a> ·
+          확인일 2026-07-26. 표기는 학파·교재에 따라 조금씩 다를 수 있습니다.
+        </p>
+      </div>
 
       {/* music 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>

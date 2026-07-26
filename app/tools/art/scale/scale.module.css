@@ -81,6 +81,12 @@
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 8px;
 }
+/* 좁은 화면: 1열 12장(~1,100px 세로) 방지 — 2열 압축 카드 */
+@media (max-width: 520px) {
+  .scaleGrid { grid-template-columns: repeat(2, 1fr); }
+  .scaleBtn { padding: 8px 10px; }
+  .scaleDesc { display: none; }
+}
 .scaleBtn {
   appearance: none;
   -webkit-appearance: none;
@@ -440,7 +446,8 @@
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #9333EA; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard > strong { display: block; color: var(--cat-art); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard p strong { color: var(--text); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* 면책 */
