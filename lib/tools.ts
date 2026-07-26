@@ -218,7 +218,7 @@ export const categories: Category[] = [
       { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기', desc: '원곡 키와 카포 위치로 변환된 코드 + 쉬운 코드 추천.' },
       { href: '/tools/art/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '박자에 맞춰 탭하면 BPM 자동 측정 + 메트로놈.', badge: 'hot' },
       { href: '/tools/art/chord',     icon: '🎹', name: '코드 구성음 계산기',     desc: 'Cmaj7·Dm7 등 코드의 구성음과 역방향 검색 + 다이아토닉 코드표.' },
-      { href: '/tools/art/scale',     icon: '🎼', name: '스케일 음계 계산기',     desc: '12키 × 12스케일 + 피아노·기타 지판 시각화 + 7 모드 비교와 MIDI 재생.', badge: 'new' },
+      { href: '/tools/art/scale',     icon: '🎼', name: '스케일 음계 계산기',     desc: '12키 × 12스케일 + 피아노·기타 지판 시각화 + 7 모드 비교와 소리 재생.', badge: 'new' },
       /* 🎨 디자인·미술 */
       { href: '/tools/art/color',     icon: '🎨', name: '색상 코드 변환기', desc: 'HEX·RGB·HSL·OKLCH 변환 + WCAG 대비비 + 팔레트·Tailwind 매칭·이미지 색 추출.', badge: 'hot' },
       { href: '/tools/art/gradient-generator', icon: '🌈', name: 'CSS 그라디언트 생성기', desc: 'Linear·Radial·Conic·Mesh 5종 × OKLCH·LAB 보간 + Tailwind/SwiftUI/Flutter 코드.', badge: 'new' },
