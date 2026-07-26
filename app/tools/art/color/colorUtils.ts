@@ -132,8 +132,13 @@ export function rgbToHwb(rgb: RGB): HWB {
 
 /* ───────── sRGB <-> linear <-> XYZ ───────── */
 const srgbToLinear = (v: number) => {
-  const c = v / 255
+  const c = Math.max(0, Math.min(255, v)) / 255 // 범위 밖 입력의 NaN 전파 방지
   return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+}
+
+const linearToSrgb = (v: number) => {
+  const c = Math.max(0, Math.min(1, v)) // 클램프는 선형 공간에서 (시뮬레이션 행렬에 음수 계수 존재)
+  return Math.round(255 * (c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055))
 }
 
 /* ───────── LAB (CIE D65) ───────── */
@@ -250,38 +255,56 @@ export function suggestPassingColor(textRgb: RGB, bgRgb: RGB, target = 4.5): RGB
   return goDark ? { r: 0, g: 0, b: 0 } : { r: 255, g: 255, b: 255 }
 }
 
-/* ───────── 색맹 시뮬레이션 ───────── */
+/* ───────── 색맹 시뮬레이션 ─────────
+ * 적용 공간: 선형 RGB (sRGB 감마 디코딩 → 행렬 → 재인코딩).
+ *   감마 값에 직접 곱하는 구식 ColorMatrix(colorjack/Coblis V1) 방식은
+ *   녹색 계열이 비정상적으로 어두워지는 알려진 오류가 있어 폐기 (daltonlens.org 리뷰).
+ * 적·녹색맹: Machado, Oliveira & Fernandes (2009) severity 1.0
+ *   https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html
+ * 청색맹: Brettel, Viénot & Mollon (1997) 이중 평면 — Machado 모델은 tritan을
+ *   근사만 제공한다고 저자가 명시하므로 Brettel 사용 (libDaltonLens 파라미터).
+ * 전색맹: 선형 Rec.709 휘도 — WCAG relative luminance와 동일 계수라
+ *   시뮬레이션 후에도 대비비가 원본과 일치 (간상체 단색시의 근사임). */
 export type ColorblindType = 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia'
 
-const CB_MATRICES: Record<ColorblindType, number[][]> = {
+const CB_MATRICES: Record<Exclude<ColorblindType, 'tritanopia'>, number[][]> = {
   protanopia: [
-    [0.567, 0.433, 0],
-    [0.558, 0.442, 0],
-    [0,     0.242, 0.758],
+    [ 0.152286,  1.052583, -0.204868],
+    [ 0.114503,  0.786281,  0.099216],
+    [-0.003882, -0.048116,  1.051998],
   ],
   deuteranopia: [
-    [0.625, 0.375, 0],
-    [0.7,   0.3,   0],
-    [0,     0.3,   0.7],
-  ],
-  tritanopia: [
-    [0.95,  0.05,  0],
-    [0,     0.433, 0.567],
-    [0,     0.475, 0.525],
+    [ 0.367322,  0.860646, -0.227968],
+    [ 0.280085,  0.672501,  0.047413],
+    [-0.011820,  0.042940,  0.968881],
   ],
   achromatopsia: [
-    [0.299, 0.587, 0.114],
-    [0.299, 0.587, 0.114],
-    [0.299, 0.587, 0.114],
+    [0.2126, 0.7152, 0.0722],
+    [0.2126, 0.7152, 0.0722],
+    [0.2126, 0.7152, 0.0722],
   ],
 }
 
+const BRETTEL_TRITAN = {
+  n:  [0.03901, -0.02788, -0.01113],
+  m1: [[ 1.01277, 0.13548, -0.14826],
+       [-0.01243, 0.86812,  0.14431],
+       [ 0.07589, 0.80500,  0.11911]],
+  m2: [[ 0.93678, 0.18979, -0.12657],
+       [ 0.06154, 0.81526,  0.12320],
+       [-0.37562, 1.12767,  0.24796]],
+}
+
 export function simulateColorblind(rgb: RGB, type: ColorblindType): RGB {
-  const m = CB_MATRICES[type]
+  const r = srgbToLinear(rgb.r), g = srgbToLinear(rgb.g), b = srgbToLinear(rgb.b)
+  const m = type === 'tritanopia'
+    ? (r * BRETTEL_TRITAN.n[0] + g * BRETTEL_TRITAN.n[1] + b * BRETTEL_TRITAN.n[2] >= 0
+        ? BRETTEL_TRITAN.m1 : BRETTEL_TRITAN.m2)
+    : CB_MATRICES[type]
   return {
-    r: Math.round(Math.max(0, Math.min(255, rgb.r * m[0][0] + rgb.g * m[0][1] + rgb.b * m[0][2]))),
-    g: Math.round(Math.max(0, Math.min(255, rgb.r * m[1][0] + rgb.g * m[1][1] + rgb.b * m[1][2]))),
-    b: Math.round(Math.max(0, Math.min(255, rgb.r * m[2][0] + rgb.g * m[2][1] + rgb.b * m[2][2]))),
+    r: linearToSrgb(r * m[0][0] + g * m[0][1] + b * m[0][2]),
+    g: linearToSrgb(r * m[1][0] + g * m[1][1] + b * m[1][2]),
+    b: linearToSrgb(r * m[2][0] + g * m[2][1] + b * m[2][2]),
   }
 }
 

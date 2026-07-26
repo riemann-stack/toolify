@@ -25,7 +25,7 @@ const FAQ_LD = [
               },
               {
                 q: 'WCAG 대비비 기준은 어떻게 정해졌나요?',
-                a: 'WCAG는 W3C가 만든 국제 표준으로, <strong>시력 20/40 (정상의 절반) 사용자도 읽을 수 있도록</strong> 설정되었습니다. AA 4.5:1은 대부분 사용자, AAA 7:1은 시력이 매우 약한 사용자도 읽을 수 있는 수준입니다. 한국 행정·공공기관 웹 접근성 인증, 미국 ADA, 유럽 EAA 모두 동일 기준을 적용하므로 <strong>처음부터 AA 이상을 목표로</strong> 디자인하는 것이 좋습니다.',
+                a: 'WCAG는 W3C가 만든 국제 표준으로, <strong>시력 20/40 (정상의 절반) 사용자도 읽을 수 있도록</strong> 설정되었습니다 (AAA 7:1은 약 20/80 기준). 한국 웹 접근성 인증(KWCAG, WCAG 기반), 미국 ADA Title II 규칙(주·지방정부, WCAG 2.1 AA), 유럽 EAA(EN 301 549→WCAG 2.1 AA) 모두 WCAG 계열 기준을 채택하므로 <strong>처음부터 AA 이상을 목표로</strong> 디자인하는 것이 좋습니다.',
               },
               {
                 q: 'OKLCH는 무엇이고 왜 채택해야 하나요?',
@@ -62,6 +62,7 @@ export default function ColorPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>색상 코드 형식 종합 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             본 도구는 12가지 색상 형식을 동시에 표시·변환합니다. 각 형식은 사용처가 명확히 다르므로, 적재적소에 맞는 표기를 선택하면 협업과 유지보수가 쉬워집니다.
+            아래 예시는 모두 같은 색 <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>#0891B2</code>를 각 형식으로 표기한 값입니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -75,15 +76,15 @@ export default function ColorPage() {
               <tbody>
                 {[
                   ['HEX',    '#0891B2',                'HTML/CSS 표준, 디자인 툴 공통'],
-                  ['HEXA',   '#0891B280',              '알파 포함 — 8자리 HEX (50% 투명)'],
-                  ['RGB',    'rgb(62, 200, 255)',      'CSS, JavaScript, 이미지 처리'],
+                  ['HEXA',   '#0891B280',              '알파 포함 — 8자리 HEX (약 50% 알파)'],
+                  ['RGB',    'rgb(8, 145, 178)',       'CSS, JavaScript, 이미지 처리'],
                   ['RGBA',   'rgba(8, 145, 178, 0.5)','반투명 색상 — 그림자·오버레이'],
-                  ['HSL',    'hsl(195, 100%, 62%)',    '색상 직관 조작 — 명도 조절 쉬움'],
-                  ['HSV',    'hsv(195, 76%, 100%)',    'Photoshop·Figma 등 디자인 툴 표준'],
-                  ['CMYK',   'cmyk(76%, 22%, 0%, 0%)', '인쇄 전용 — 명함·브로슈어'],
-                  ['HWB',    'hwb(195 24% 0%)',         '직관적 명도 — CSS Color 4'],
-                  ['LAB',    'lab(76 -28 -33)',         '인간 시각 균일 색공간'],
-                  ['OKLCH',  'oklch(80.6% 0.158 217)', 'CSS Color 4 최신 표준 — Tailwind 4 기본'],
+                  ['HSL',    'hsl(192, 91%, 36%)',     '색상 직관 조작 — 명도 조절 쉬움'],
+                  ['HSV',    'hsv(192, 96%, 70%)',     'Photoshop·Figma 등 디자인 툴 표준'],
+                  ['CMYK',   'cmyk(96%, 19%, 0%, 30%)','인쇄 참고용 — 명함·브로슈어'],
+                  ['HWB',    'hwb(192 3% 30%)',         '직관적 명도 — CSS Color 4'],
+                  ['LAB',    'lab(55.6 -20.1 -26.3)',   '인간 시각 균일 색공간'],
+                  ['OKLCH',  'oklch(60.9% 0.111 221.7)','CSS Color 4 최신 표준 — Tailwind 4 기본'],
                 ].map(([fmt, ex, use], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>{fmt}</td>
@@ -101,7 +102,7 @@ export default function ColorPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>WCAG 색상 대비비 (접근성)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             W3C가 정한 웹 접근성 표준 — 텍스트와 배경 색상의 명도 대비를 1:1 ~ 21:1 사이의 수치로 평가합니다.
-            한국 정보접근성 인증, 미국 ADA, 유럽 EAA 모두 동일 기준을 따릅니다.
+            한국 정보접근성 인증(KWCAG)·미국 ADA Title II 규칙·유럽 EAA 모두 WCAG 계열 기준을 채택합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -140,15 +141,16 @@ export default function ColorPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>색맹 시뮬레이션</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-            전 세계 인구의 약 8% 남성, 0.5% 여성이 색각 이상을 갖고 있습니다. 한국 성인 남성 약 30만 명이 영향을 받습니다.
-            본 도구는 표준 행렬 변환 기반으로 4가지 유형을 동시에 시뮬레이션합니다.
+            색각 이상은 북유럽계 기준 남성 약 8%, 여성 약 0.5%가 갖고 있습니다 (아시아·아프리카계는 이보다 낮음).
+            한국은 남성 약 5.9%, 여성 약 0.4%로 남성 100만 명 이상 규모입니다 (질병관리청 국가건강정보포털).
+            본 도구는 Machado 2009·Brettel 1997 모델(선형 RGB 적용)로 4가지 유형을 동시에 시뮬레이션합니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
             {[
-              { type: '적색맹 (Protanopia)',    pct: '남성 약 1%',           hint: 'L-cone 결손' },
-              { type: '녹색맹 (Deuteranopia)',  pct: '남성 약 1% — 가장 흔함', hint: 'M-cone 결손' },
-              { type: '청색맹 (Tritanopia)',    pct: '매우 드뭄',             hint: 'S-cone 결손' },
-              { type: '전색맹 (Achromatopsia)', pct: '극히 드뭄',             hint: '흑백만' },
+              { type: '적색맹 (Protanopia)',    pct: '남성 약 1%',  hint: 'L-cone 결손' },
+              { type: '녹색맹 (Deuteranopia)',  pct: '남성 약 1%',  hint: 'M-cone 결손' },
+              { type: '청색맹 (Tritanopia)',    pct: '매우 드뭄',   hint: 'S-cone 결손' },
+              { type: '전색맹 (Achromatopsia)', pct: '극히 드뭄',   hint: '휘도만 지각' },
             ].map((t, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '4px' }}>{t.type}</p>
@@ -157,9 +159,14 @@ export default function ColorPage() {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: '14px', background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: '10px', padding: '12px 16px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '10px' }}>
+            위 4종은 완전 이색자(색맹) 기준입니다. 실제로 가장 흔한 유형은 이보다 변화가 약한
+            <strong style={{ color: 'var(--text)' }}> 녹색약(Deuteranomaly, 남성 약 5%)</strong>으로,
+            색맹 시뮬레이션에서 구분이 어려운 조합은 녹색약 사용자에게도 부담이 됩니다.
+          </p>
+          <div style={{ marginTop: '14px', background: 'color-mix(in srgb, var(--danger) 6%, transparent)', border: '1px solid color-mix(in srgb, var(--danger) 30%, transparent)', borderRadius: '10px', padding: '12px 16px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-              <strong style={{ color: '#DC2626' }}>디자인 가이드:</strong> 색상만으로 정보 전달 X (텍스트·아이콘 병행) · 빨강·녹색 조합 주의 · 명도 차이도 함께 활용 · 흑백 변환에서도 구분 가능한지 검증.
+              <strong style={{ color: 'var(--danger)' }}>디자인 가이드:</strong> 색상만으로 정보 전달 X (텍스트·아이콘 병행) · 빨강·녹색 조합 주의 · 명도 차이도 함께 활용 · 흑백 변환에서도 구분 가능한지 검증.
             </p>
           </div>
         </section>
@@ -167,7 +174,7 @@ export default function ColorPage() {
         {/* 4. 팔레트 이론 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>팔레트 이론 (색상환 기반 8가지 조합)</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px' }}>
             {[
               { icon: '⚖️', name: '보색 (Complementary)',   desc: '180° — 강한 대비, 주의 끌기, 브랜드 강조' },
               { icon: '🌊', name: '유사색 (Analogous)',     desc: '±30° — 조화로움, 자연스러운 그라디언트' },
@@ -175,7 +182,7 @@ export default function ColorPage() {
               { icon: '🟦', name: '사각 (Tetradic)',        desc: '90° 간격 — 복잡하지만 풍부한 색감' },
               { icon: '✂️', name: '분할 보색',              desc: '보색의 인접 2색 — 강하지만 부드러움' },
               { icon: '🌗', name: '단색 (Monochromatic)',   desc: '같은 색의 명도 변화 — 미니멀 디자인' },
-              { icon: '💧', name: '음영 (Shades)',          desc: '같은 색의 채도 변화 — 차분한 분위기' },
+              { icon: '💧', name: '톤 (Tones)',             desc: '같은 색의 채도 변화 (회색 섞기) — 차분한 분위기' },
               { icon: '🎨', name: 'Tailwind 11단계',        desc: '50/100/.../900/950 — 디자인 시스템 표준' },
             ].map((p, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
@@ -196,15 +203,19 @@ export default function ColorPage() {
             현대 웹 개발의 표준 — Tailwind, shadcn/ui, MUI, Chakra 모두 동일한 패턴을 따릅니다. 본 도구는 한 색상에서 11단계 스케일과 다양한 형식의 CSS 변수를 자동 생성합니다.
           </p>
           <pre style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 16px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: 'var(--text)', overflow: 'auto', lineHeight: 1.8 }}>{`:root {
-  --color-primary-50:  #effbff;
-  --color-primary-500: #3ec8ff;  /* 기준 */
-  --color-primary-900: #06384a;
+  /* #0891B2 입력 시 실제 생성 예시 */
+  --color-primary-50:  #f4f9fb;
+  --color-primary-500: #0bc5f4;  /* 명도 정규화 단계 (L 50%) */
+  --color-primary-900: #0a4351;
 
-  /* 다중 형식 (color-mix·alpha 조작용) */
-  --color-primary:     #3ec8ff;
-  --color-primary-rgb: 62 200 255;
-  --color-primary-hsl: 195 100% 62%;
+  /* 입력한 기준색 + 다중 형식 (color-mix·alpha 조작용) */
+  --color-primary:     #0891b2;
+  --color-primary-rgb: 8 145 178;
+  --color-primary-hsl: 192 91% 36%;
 }`}</pre>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '8px' }}>
+            500 단계는 입력색이 아니라 명도를 50%로 정규화한 값입니다 — 입력한 기준색 자체는 <code style={{ fontFamily: 'JetBrains Mono, monospace' }}>--color-primary</code>로 함께 내보냅니다.
+          </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>장점:</strong> 다크 모드 쉽게(변수만 교체) · 디자인 일관성 · 유지보수 용이 · 디자인 시스템 표준
           </p>
@@ -227,7 +238,7 @@ export default function ColorPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             CSS는 3가지 그라디언트 함수를 제공합니다 — <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>linear-gradient</code> (직선 방향), <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>radial-gradient</code> (원형), <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>conic-gradient</code> (회전).
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px' }}>
             {[
               { tip: '비슷한 색상 조합', desc: '자연스럽고 부드러운 분위기' },
               { tip: '보색 조합',         desc: '강렬하고 시선을 끄는 효과' },
@@ -288,7 +299,7 @@ export default function ColorPage() {
         {/* 관련 도구 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>함께 쓰면 좋은 도구</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px' }}>
             {[
               { href: '/tools/art/lorem',         icon: '📝', name: '더미 텍스트 생성기', desc: '문단·버튼·카드·JSON 더미 데이터' },
               { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 단위 변환기',     desc: 'px·rem·clamp() 변환' },
@@ -313,10 +324,12 @@ export default function ColorPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>WCAG 2.1</strong> — w3.org/WAI/WCAG21</li>
-            <li><strong style={{ color: 'var(--text)' }}>Tailwind Colors</strong> — tailwindcss.com/docs/customizing-colors</li>
+            <li><strong style={{ color: 'var(--text)' }}>Tailwind Colors (v3)</strong> — tailwindcss.com/docs/customizing-colors</li>
             <li><strong style={{ color: 'var(--text)' }}>CSS Color Module Level 4</strong> — w3.org/TR/css-color-4</li>
             <li><strong style={{ color: 'var(--text)' }}>OKLCH 제안</strong> — bottosson.github.io/posts/oklab</li>
-            <li><strong style={{ color: 'var(--text)' }}>한국 웹 접근성 인증</strong> — wa.or.kr</li>
+            <li><strong style={{ color: 'var(--text)' }}>색맹 시뮬레이션 모델</strong> — Machado et al. 2009 (inf.ufrgs.br/~oliveira) · Brettel et al. 1997 · daltonlens.org 구현 리뷰</li>
+            <li><strong style={{ color: 'var(--text)' }}>색각 이상 유병률</strong> — 질병관리청 국가건강정보포털</li>
+            <li><strong style={{ color: 'var(--text)' }}>한국 웹 접근성 인증</strong> — wa.or.kr · 확인일 2026-07-26</li>
           </ul>
         </section>
 

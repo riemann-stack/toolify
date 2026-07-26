@@ -52,7 +52,10 @@ function loadHistory(): string[] {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
     const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr.slice(0, 24) : []
+    // 무검증 복원 금지 — HEX 형식만 통과
+    return Array.isArray(arr)
+      ? arr.filter((x): x is string => typeof x === 'string' && /^#[0-9A-F]{6}$/i.test(x)).slice(0, 24)
+      : []
   } catch {
     return []
   }
@@ -64,18 +67,28 @@ function saveHistory(items: string[]) {
   } catch {/* ignore */}
 }
 
-/* 클립보드 훅 */
+/* 클립보드 훅 — 실패 시 'fail:키'로 정직 표시 */
 function useCopy(): [string | null, (key: string, text: string) => void] {
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const copy = (key: string, text: string) => {
     if (!text) return
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedKey(key)
-      setTimeout(() => setCopiedKey(null), 1500)
-    })
+    navigator.clipboard.writeText(text).then(
+      () => {
+        setCopiedKey(key)
+        setTimeout(() => setCopiedKey(null), 1500)
+      },
+      () => {
+        setCopiedKey('fail:' + key)
+        setTimeout(() => setCopiedKey(null), 1500)
+      },
+    )
   }
   return [copiedKey, copy]
 }
+
+/** 복사 버튼 라벨 — 성공 ✓ / 실패 ✗ */
+const copyLabel = (copiedKey: string | null, key: string, idle: string, done = '✓') =>
+  copiedKey === key ? done : copiedKey === 'fail:' + key ? '✗ 실패' : idle
 
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function ColorClient() {
@@ -151,7 +164,8 @@ export default function ColorClient() {
             key === 'extract'  ? styles.tabActiveExtract :
             styles.tabActive
           return (
-            <button key={key}
+            <button key={key} type="button"
+              aria-pressed={tab === key}
               className={`${styles.tabBtn} ${activeClass}`}
               onClick={() => setTab(key)}>
               {label}
@@ -225,9 +239,9 @@ function ConvertTab(p: ConvertTabProps) {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-              <input className={styles.colorPicker} type="color"
+              <input className={styles.colorPicker} type="color" aria-label="색상 선택"
                 value={p.hex} onChange={e => p.setHex(e.target.value)} />
-              <input className={styles.hexInput} type="text"
+              <input className={styles.hexInput} type="text" aria-label="HEX 색상 코드"
                 value={p.hex.toUpperCase()}
                 onChange={e => p.setHexRaw(e.target.value)}
                 placeholder="#000000" maxLength={9} spellCheck={false} />
@@ -235,7 +249,7 @@ function ConvertTab(p: ConvertTabProps) {
             <div>
               <span className={styles.subLabel}>알파 ({p.alpha}%)</span>
               <div className={styles.alphaSliderWrap} style={{ color: formatHex(p.rgb) }}>
-                <input className={styles.alphaSlider} type="range" min={0} max={100}
+                <input className={styles.alphaSlider} type="range" min={0} max={100} aria-label="알파 (불투명도) %"
                   value={p.alpha} onChange={e => p.setAlpha(parseInt(e.target.value))} />
                 <span className={styles.alphaValue}>{p.alpha}%</span>
               </div>
@@ -255,10 +269,10 @@ function ConvertTab(p: ConvertTabProps) {
             <div key={f.key} className={styles.formatRow}>
               <span className={styles.formatLabel}>{f.label}</span>
               <span className={styles.formatValue}>{f.value}</span>
-              <button
+              <button type="button"
                 className={`${styles.miniCopyBtn} ${p.copiedKey === f.key ? styles.miniCopied : ''}`}
                 onClick={() => p.copy(f.key, f.value)}>
-                {p.copiedKey === f.key ? '✓' : '복사'}
+                {copyLabel(p.copiedKey, f.key, '복사')}
               </button>
             </div>
           ))}
@@ -295,11 +309,12 @@ function ConvertTab(p: ConvertTabProps) {
           {PRESETS.map(item => {
             const active = p.hex.toUpperCase() === item.hex.toUpperCase()
             return (
-              <button key={item.hex}
+              <button key={item.hex} type="button"
                 className={`${styles.presetItem} ${active ? styles.presetActive : ''}`}
                 style={{ background: item.hex }}
                 onClick={() => p.setHex(item.hex)}
                 title={`${item.name} (${item.hex})`}
+                aria-pressed={active}
                 aria-label={`${item.name} ${item.hex}`} />
             )
           })}
@@ -311,7 +326,7 @@ function ConvertTab(p: ConvertTabProps) {
         <label className={styles.cardLabel}>한국 브랜드 색상</label>
         <div className={styles.brandRow}>
           {BRAND_COLORS.map(b => (
-            <button key={b.hex} className={styles.brandBtn}
+            <button key={b.hex} className={styles.brandBtn} type="button"
               onClick={() => p.setHex(b.hex)}>
               <span className={styles.brandSwatch} style={{ background: b.hex }} />
               <span>{b.name}</span>
@@ -326,10 +341,10 @@ function ConvertTab(p: ConvertTabProps) {
           <label className={styles.cardLabel}>최근 사용한 색상</label>
           <div className={styles.historyRow}>
             {p.history.map(h => (
-              <button key={h} className={styles.historyChip}
+              <button key={h} className={styles.historyChip} type="button"
                 style={{ background: h }}
                 onClick={() => p.setHex(h)}
-                title={h} />
+                title={h} aria-label={`최근 색상 ${h}`} />
             ))}
           </div>
         </div>
@@ -366,18 +381,18 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
   }, [textRgb, bgRgb, grade.aa_normal])
 
   const interpretation = useMemo(() => {
-    if (ratio >= 7)   return { msg: '대비비가 매우 우수합니다. 모든 텍스트 크기와 UI에서 사용 가능합니다.', color: '#059669' }
-    if (ratio >= 4.5) return { msg: '일반 텍스트(AA)와 큰 텍스트(AAA) 기준을 통과합니다. 충분한 가독성입니다.', color: '#0EA5E9' }
-    if (ratio >= 3)   return { msg: '큰 텍스트(18pt+)나 UI 컴포넌트에는 사용 가능하지만 본문 텍스트로는 부족합니다.', color: '#A16207' }
-    return                   { msg: '대비비가 낮아 가독성이 떨어집니다. 일반 본문에는 권장하지 않습니다.', color: '#DC2626' }
+    if (ratio >= 7)   return { msg: '대비비가 매우 우수합니다. 모든 텍스트 크기와 UI에서 사용 가능합니다.', color: 'var(--success)' }
+    if (ratio >= 4.5) return { msg: '일반 텍스트(AA)와 큰 텍스트(AAA) 기준을 통과합니다. 충분한 가독성입니다.', color: 'var(--accent-ink)' }
+    if (ratio >= 3)   return { msg: '큰 텍스트(18pt+)나 UI 컴포넌트에는 사용 가능하지만 본문 텍스트로는 부족합니다.', color: 'var(--warning)' }
+    return                   { msg: '대비비가 낮아 가독성이 떨어집니다. 일반 본문에는 권장하지 않습니다.', color: 'var(--danger)' }
   }, [ratio])
 
-  // 색맹 시뮬레이션 — 두 색상 동시 변환
+  // 색맹 시뮬레이션 — 두 색상 동시 변환 (완전 이색자 기준·유병률은 백인 남성 통계)
   const cbModes: { type: ColorblindType; label: string; hint: string }[] = [
     { type: 'protanopia',    label: '적색맹 (Protanopia)',    hint: '남성 약 1%' },
-    { type: 'deuteranopia',  label: '녹색맹 (Deuteranopia)',  hint: '남성 약 1%, 가장 흔함' },
+    { type: 'deuteranopia',  label: '녹색맹 (Deuteranopia)',  hint: '남성 약 1%' },
     { type: 'tritanopia',    label: '청색맹 (Tritanopia)',    hint: '매우 드뭄' },
-    { type: 'achromatopsia', label: '전색맹 (Achromatopsia)', hint: '흑백만' },
+    { type: 'achromatopsia', label: '전색맹 (Achromatopsia)', hint: '휘도만 · 극히 드뭄' },
   ]
 
   return (
@@ -386,21 +401,21 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
       <div className={styles.card}>
         <label className={styles.cardLabel}>
           텍스트·배경 색상
-          <button className={styles.swapBtn} onClick={swap}>↔ 스왑</button>
+          <button className={styles.swapBtn} onClick={swap} type="button">↔ 스왑</button>
         </label>
         <div className={styles.a11yInputRow}>
           <div className={styles.a11yInputBox}>
-            <input className={styles.a11yPicker} type="color"
+            <input className={styles.a11yPicker} type="color" aria-label="텍스트 색상 선택"
               value={textHex} onChange={e => setTextHex(e.target.value)} />
-            <input className={styles.a11yHexInput} type="text"
+            <input className={styles.a11yHexInput} type="text" aria-label="텍스트 색상 HEX"
               value={textHex.toUpperCase()}
               onChange={e => setTextHex(e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value)}
               placeholder="텍스트 색상" maxLength={7} />
           </div>
           <div className={styles.a11yInputBox}>
-            <input className={styles.a11yPicker} type="color"
+            <input className={styles.a11yPicker} type="color" aria-label="배경 색상 선택"
               value={bgHex} onChange={e => setBgHex(e.target.value)} />
-            <input className={styles.a11yHexInput} type="text"
+            <input className={styles.a11yHexInput} type="text" aria-label="배경 색상 HEX"
               value={bgHex.toUpperCase()}
               onChange={e => setBgHex(e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value)}
               placeholder="배경 색상" maxLength={7} />
@@ -419,9 +434,9 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
       </div>
 
       {/* 대비비 결과 */}
-      <div className={styles.contrastHero}>
+      <div className={styles.contrastHero} role="status">
         <div className={styles.contrastValue}
-          style={{ color: grade.level === 'AAA' || grade.level === 'AA' ? '#059669' : grade.level === 'AA Large' ? '#A16207' : '#DC2626' }}>
+          style={{ color: grade.level === 'AAA' || grade.level === 'AA' ? 'var(--success)' : grade.level === 'AA Large' ? 'var(--warning)' : 'var(--danger)' }}>
           {ratio.toFixed(2)} : 1
         </div>
         <div className={styles.contrastLabel}>WCAG 대비비 — 등급 {grade.level}</div>
@@ -466,7 +481,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
               <span className={styles.suggestColor} style={{ background: rgbToHex(suggested) }} />
               <span className={styles.suggestHex}>{rgbToHex(suggested)}</span>
             </div>
-            <button className={styles.actionBtn}
+            <button className={styles.actionBtn} type="button"
               onClick={() => setTextHex(rgbToHex(suggested))}>
               적용
             </button>
@@ -511,14 +526,19 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
             )
           })}
         </div>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.6 }}>
+          적·녹색맹은 Machado 2009, 청색맹은 Brettel 1997 모델(선형 RGB 기준)로 완전 이색자를 시뮬레이션합니다.
+          가장 흔한 유형은 이보다 변화가 약한 <strong>녹색약(Deuteranomaly, 남성 약 5%)</strong>이에요.
+          전색맹은 휘도(WCAG 기준) 근사라 대비비가 원본과 같습니다.
+        </p>
       </div>
 
-      <button
+      <button type="button"
         className={`${styles.copyBtn} ${copiedKey === 'a11y-summary' ? styles.copied : ''}`}
         onClick={() => copy('a11y-summary',
           `텍스트: ${textHex}\n배경: ${bgHex}\n대비비: ${ratio.toFixed(2)}:1 (${grade.level})\nAA 일반: ${grade.aa_normal ? '통과' : '미달'}\nAA 큰 텍스트: ${grade.aa_large ? '통과' : '미달'}`
         )}>
-        {copiedKey === 'a11y-summary' ? '✓ 복사됨' : '분석 결과 복사'}
+        {copyLabel(copiedKey, 'a11y-summary', '분석 결과 복사', '✓ 복사됨')}
       </button>
     </>
   )
@@ -592,9 +612,9 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
           <span className={styles.cardLabelHint}>{hex.toUpperCase()}</span>
         </label>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <input className={styles.colorPicker} type="color"
+          <input className={styles.colorPicker} type="color" aria-label="기준 색상 선택"
             value={hex} onChange={e => setHex(e.target.value.toUpperCase())} />
-          <input className={styles.hexInput} type="text"
+          <input className={styles.hexInput} type="text" aria-label="기준 색상 HEX"
             value={hex.toUpperCase()}
             onChange={e => setHex(e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value)}
             maxLength={7} />
@@ -612,9 +632,10 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
             ['tetradic',        '🟦', '사각',           '90°'],
             ['splitComplement', '✂️', '분할 보색',      '+150°'],
             ['monochromatic',   '🌗', '단색 (명도)',    '5단계'],
-            ['shades',          '💧', '음영 (채도)',    '5단계'],
+            ['shades',          '💧', '톤 (채도)',      '5단계'],
           ] as [PaletteType, string, string, string][]).map(([key, icon, label, hint]) => (
-            <button key={key}
+            <button key={key} type="button"
+              aria-pressed={type === key}
               className={`${styles.paletteTypeBtn} ${type === key ? styles.paletteTypeActive : ''}`}
               onClick={() => setType(key)}>
               <small>{icon}</small>
@@ -678,7 +699,8 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
             ['scss',     'SCSS'],
             ['json',     'JSON'],
           ] as [ExportFormat, string][]).map(([key, label]) => (
-            <button key={key}
+            <button key={key} type="button"
+              aria-pressed={exportFmt === key}
               className={`${styles.exportBtn} ${exportFmt === key ? styles.exportActive : ''}`}
               onClick={() => setExportFmt(key)}>
               {label}
@@ -686,11 +708,11 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
           ))}
         </div>
         <pre className={styles.codeBlock} style={{ marginTop: 12 }}>{exportCode}</pre>
-        <button
+        <button type="button"
           className={`${styles.copyBtn} ${copiedKey === 'pal-export' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('pal-export', exportCode)}>
-          {copiedKey === 'pal-export' ? '✓ 복사됨' : '코드 복사'}
+          {copyLabel(copiedKey, 'pal-export', '코드 복사', '✓ 복사됨')}
         </button>
       </div>
     </>
@@ -784,9 +806,9 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
           <span className={styles.cardLabelHint}>{hex.toUpperCase()}</span>
         </label>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <input className={styles.colorPicker} type="color"
+          <input className={styles.colorPicker} type="color" aria-label="기준 색상 선택"
             value={hex} onChange={e => setHex(e.target.value.toUpperCase())} />
-          <input className={styles.hexInput} type="text"
+          <input className={styles.hexInput} type="text" aria-label="기준 색상 HEX"
             value={hex.toUpperCase()}
             onChange={e => setHex(e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value)}
             maxLength={7} />
@@ -797,11 +819,11 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
       <div className={styles.card}>
         <label className={styles.cardLabel}>CSS 변수 (11단계)</label>
         <pre className={styles.codeBlock}>{cssVars}</pre>
-        <button
+        <button type="button"
           className={`${styles.copyBtn} ${copiedKey === 'css-vars' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('css-vars', cssVars)}>
-          {copiedKey === 'css-vars' ? '✓ 복사됨' : 'CSS 변수 복사'}
+          {copyLabel(copiedKey, 'css-vars', 'CSS 변수 복사', '✓ 복사됨')}
         </button>
       </div>
 
@@ -809,11 +831,11 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
       <div className={styles.card}>
         <label className={styles.cardLabel}>Tailwind config</label>
         <pre className={styles.codeBlock}>{tailwindConfig}</pre>
-        <button
+        <button type="button"
           className={`${styles.copyBtn} ${copiedKey === 'tw-config' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('tw-config', tailwindConfig)}>
-          {copiedKey === 'tw-config' ? '✓ 복사됨' : 'Tailwind 설정 복사'}
+          {copyLabel(copiedKey, 'tw-config', 'Tailwind 설정 복사', '✓ 복사됨')}
         </button>
       </div>
 
@@ -857,11 +879,11 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
           ))}
         </div>
         <pre className={styles.codeBlock} style={{ marginTop: 12 }}>{uiCss}</pre>
-        <button
+        <button type="button"
           className={`${styles.copyBtn} ${copiedKey === 'ui-css' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('ui-css', uiCss)}>
-          {copiedKey === 'ui-css' ? '✓ 복사됨' : 'UI CSS 복사'}
+          {copyLabel(copiedKey, 'ui-css', 'UI CSS 복사', '✓ 복사됨')}
         </button>
       </div>
 
@@ -943,7 +965,8 @@ background: conic-gradient(from 0deg, ${stopStr});`
             ['radial', '원형'],
             ['conic',  '원뿔'],
           ] as [GradientType, string][]).map(([key, label]) => (
-            <button key={key}
+            <button key={key} type="button"
+              aria-pressed={type === key}
               className={`${styles.gradTypeBtn} ${type === key ? styles.gradTypeActive : ''}`}
               onClick={() => setType(key)}>
               {label}
@@ -974,17 +997,18 @@ background: conic-gradient(from 0deg, ${stopStr});`
         <div className={styles.gradStopList}>
           {stops.map((s, i) => (
             <div key={i} className={styles.gradStopRow}>
-              <input className={styles.gradStopPicker} type="color"
+              <input className={styles.gradStopPicker} type="color" aria-label={`정지점 ${i + 1} 색상 선택`}
                 value={s.hex} onChange={e => updateStop(i, { hex: e.target.value.toUpperCase() })} />
-              <input className={styles.gradStopHex} type="text"
+              <input className={styles.gradStopHex} type="text" aria-label={`정지점 ${i + 1} HEX`}
                 value={s.hex.toUpperCase()}
                 onChange={e => updateStop(i, { hex: e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value })}
                 maxLength={7} />
               <input type="number" inputMode="decimal" className={styles.gradStopHex} min={0} max={100}
-                style={{ textAlign: 'right' }}
-                value={s.pos} onChange={e => updateStop(i, { pos: parseInt(e.target.value) || 0 })} />
-              <button className={styles.gradStopRemove}
+                style={{ textAlign: 'right' }} aria-label={`정지점 ${i + 1} 위치 %`}
+                value={s.pos} onChange={e => updateStop(i, { pos: Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) })} />
+              <button className={styles.gradStopRemove} type="button"
                 disabled={stops.length <= 2}
+                aria-label={`정지점 ${i + 1} 삭제`}
                 onClick={() => removeStop(i)}>
                 ✕
               </button>
@@ -992,7 +1016,7 @@ background: conic-gradient(from 0deg, ${stopStr});`
           ))}
         </div>
         {stops.length < 5 && (
-          <button className={styles.gradAddBtn} onClick={addStop} style={{ marginTop: 8 }}>
+          <button className={styles.gradAddBtn} onClick={addStop} style={{ marginTop: 8 }} type="button">
             + 색상 추가
           </button>
         )}
@@ -1001,11 +1025,11 @@ background: conic-gradient(from 0deg, ${stopStr});`
       <div className={styles.card}>
         <label className={styles.cardLabel}>CSS 코드</label>
         <pre className={styles.codeBlock}>{`background: ${cssGradient};`}</pre>
-        <button
+        <button type="button"
           className={`${styles.copyBtn} ${copiedKey === 'grad-css' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('grad-css', `background: ${cssGradient};`)}>
-          {copiedKey === 'grad-css' ? '✓ 복사됨' : 'CSS 복사'}
+          {copyLabel(copiedKey, 'grad-css', 'CSS 복사', '✓ 복사됨')}
         </button>
       </div>
 
@@ -1030,11 +1054,11 @@ background: conic-gradient(from 0deg, ${stopStr});`
       <div className={styles.card}>
         <label className={styles.cardLabel}>다양한 CSS 형식</label>
         <pre className={styles.codeBlock}>{cssVariations}</pre>
-        <button
+        <button type="button"
           className={`${styles.copyBtn} ${copiedKey === 'grad-vars' ? styles.copied : ''}`}
           style={{ marginTop: 10 }}
           onClick={() => copy('grad-vars', cssVariations)}>
-          {copiedKey === 'grad-vars' ? '✓ 복사됨' : '모든 형식 복사'}
+          {copyLabel(copiedKey, 'grad-vars', '모든 형식 복사', '✓ 복사됨')}
         </button>
       </div>
 
@@ -1046,7 +1070,7 @@ background: conic-gradient(from 0deg, ${stopStr});`
             const stopStr = sorted.map(s => `${s.hex} ${s.pos}%`).join(', ')
             const bg = `linear-gradient(${p.angle}deg, ${stopStr})`
             return (
-              <button key={p.name} className={styles.gradPresetCard}
+              <button key={p.name} className={styles.gradPresetCard} type="button"
                 style={{ background: bg }}
                 onClick={() => { setStops(p.stops); setAngle(p.angle); setType('linear') }}>
                 {p.name}
@@ -1096,23 +1120,25 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
       const data = ctx.getImageData(0, 0, 100, 100).data
 
       const buckets = new Map<string, number>()
-      const total = (data.length / 4) | 0
+      let counted = 0 // 투명 픽셀 제외 분모 (전체 픽셀로 나누면 투명 이미지에서 비율 과소)
       for (let i = 0; i < data.length; i += 4) {
         const a = data[i + 3]
         if (a < 128) continue
+        counted++
         const r = Math.floor(data[i] / 24) * 24
         const g = Math.floor(data[i + 1] / 24) * 24
         const b = Math.floor(data[i + 2] / 24) * 24
         const key = `${r},${g},${b}`
         buckets.set(key, (buckets.get(key) || 0) + 1)
       }
+      if (counted === 0) { setExtracted([]); return }
       const sorted = [...buckets.entries()].sort((a, b) => b[1] - a[1]).slice(0, count)
       const result = sorted.map(([key, cnt]) => {
         const [r, g, b] = key.split(',').map(Number)
         return {
           rgb: { r, g, b } as RGB,
           hex: rgbToHex({ r, g, b }),
-          pct: Math.round((cnt / total) * 100),
+          pct: Math.round((cnt / counted) * 100),
         }
       })
       setExtracted(result)
@@ -1197,7 +1223,8 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
             <label className={styles.cardLabel}>추출 색상 수</label>
             <div className={styles.exportRow}>
               {[3, 5, 8, 10].map(n => (
-                <button key={n}
+                <button key={n} type="button"
+                  aria-pressed={count === n}
                   className={`${styles.exportBtn} ${count === n ? styles.exportActive : ''}`}
                   onClick={() => setCount(n)}>
                   {n}개
@@ -1254,11 +1281,11 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
               <div className={styles.card}>
                 <label className={styles.cardLabel}>CSS 변수로 내보내기</label>
                 <pre className={styles.codeBlock}>{exportPalette}</pre>
-                <button
+                <button type="button"
                   className={`${styles.copyBtn} ${copiedKey === 'ex-css' ? styles.copied : ''}`}
                   style={{ marginTop: 10 }}
                   onClick={() => copy('ex-css', exportPalette)}>
-                  {copiedKey === 'ex-css' ? '✓ 복사됨' : 'CSS 복사'}
+                  {copyLabel(copiedKey, 'ex-css', 'CSS 복사', '✓ 복사됨')}
                 </button>
               </div>
             </>

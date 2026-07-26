@@ -1,4 +1,5 @@
-/* Tailwind CSS 4.x 기본 팔레트 — 22 색상 × 11 단계 */
+/* Tailwind CSS v3 기본 팔레트 — 22 색상 × 11 단계
+ * (v4는 전 색상을 OKLCH로 재정의해 hex 등가값이 v3와 조금씩 다름 — 예: v4 red-500 ≈ #FB2C36) */
 
 export const TAILWIND_COLORS: Record<string, Record<string, string>> = {
   slate: {
@@ -35,7 +36,7 @@ export const TAILWIND_COLORS: Record<string, Record<string, string>> = {
   },
   yellow: {
     '50':'#FEFCE8','100':'#FEF9C3','200':'#FEF08A','300':'#FDE047','400':'#FACC15',
-    '500':'#EAB308','600':'#A16207','700':'#A16207','800':'#854D0E','900':'#713F12','950':'#422006',
+    '500':'#EAB308','600':'#CA8A04','700':'#A16207','800':'#854D0E','900':'#713F12','950':'#422006',
   },
   lime: {
     '50':'#F7FEE7','100':'#ECFCCB','200':'#D9F99D','300':'#BEF264','400':'#A3E635',
@@ -91,16 +92,18 @@ export const TAILWIND_COLORS: Record<string, Record<string, string>> = {
   },
 }
 
-/** 한국 브랜드 빠른 색상 (디자이너 자주 사용) */
+/** 한국 브랜드 빠른 색상 (디자이너 자주 사용)
+ * 카카오·네이버·토스·당근(seed-design carrot-500)·LG는 공식 가이드 값,
+ * 삼성·배민은 통용값(1차 가이드 미공개 — 배민은 2025-07 리브랜딩 이전 민트).
+ * 쿠팡은 단일 공식 hex가 공개된 바 없어 제외. */
 export const BRAND_COLORS: { name: string; hex: string }[] = [
   { name: '카카오 옐로우', hex: '#FEE500' },
   { name: '네이버 그린',  hex: '#03C75A' },
   { name: '토스 블루',    hex: '#3182F6' },
-  { name: '당근 오렌지',  hex: '#FF7E36' },
-  { name: '쿠팡 레드',    hex: '#F02C49' },
+  { name: '당근 오렌지',  hex: '#FF6F0F' },
   { name: '배민 민트',    hex: '#2AC1BC' },
   { name: '삼성 블루',    hex: '#1428A0' },
-  { name: 'LG 마젠타',    hex: '#A50034' },
+  { name: 'LG 헤리티지 레드', hex: '#A50034' },
 ]
 
 /** 그라디언트 프리셋 */
