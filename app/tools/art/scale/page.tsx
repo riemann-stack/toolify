@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/art/scale',
   title: '스케일 음계 계산기 — 12키 × 12스케일 + 피아노·기타 지판 + 다이어토닉',
-  description: '12키 × 12스케일(Major·Minor·Pentatonic·Blues·Dorian·Lydian 등) + 피아노·기타 지판 SVG·7 모드 비교·MIDI 재생.',
+  description: '12키 × 12스케일(Major·Minor·Pentatonic·Blues·Dorian·Lydian 등) + 피아노·기타 지판 SVG·7 모드 비교·소리 재생.',
   keywords: ['스케일 계산기', '음계', 'C major 스케일', '블루스 스케일', '도리안 모드', '리디안', '믹솔리디안', '다이어토닉 코드', '기타 지판', '피아노 건반', '음악 이론'],
 })
 
@@ -57,11 +57,11 @@ const FAQ_LD = [
   { "q":"Blues 스케일에 ♭5가 있는 이유?","a":"Blues 스케일은 Minor Pentatonic(1·♭3·4·5·♭7)에 ♭5(블루노트)를 추가한 6음 스케일입니다. ♭5는 Major도 Minor도 아닌 \"긁히는\" 불협화음이지만, 블루스의 정서적 핵심이에요. 스쳐 지나가는 경과음으로 사용하면 즉시 블루지한 느낌이 납니다. BB King·Eric Clapton 등 블루스 마스터들이 ♭5를 절묘하게 활용해요." },
   { "q":"Dorian과 Natural Minor 차이는?","a":"한 음 차이입니다. 6도가 다릅니다. • Natural Minor: 1·2·♭3·4·5·♭6·♭7 (어두운 6도) • Dorian: 1·2·♭3·4·5·6·♭7 (밝은 6도) 이 한 음 차이로 Dorian은 더 밝고 재즈적으로 느껴집니다. 재즈·소울·록 모달 작곡에 매우 자주 쓰여요. (예: Miles Davis \"So What\", Pink Floyd 일부)" },
   { "q":"다이어토닉 코드란 무엇인가요?","a":"스케일 안의 음만 사용해 만든 7개의 자연 7화음입니다. C major 키의 다이어토닉 코드: I (Cmaj7) - ii (Dm7) - iii (Em7) - IV (Fmaj7) - V (G7) - vi (Am7) - viiø (Bm7♭5) 모든 곡의 코드 진행은 대부분 이 7개 코드 안에서 움직입니다. 이 코드들의 기능(Tonic·Subdominant·Dominant)을 이해하면 작곡·편곡이 훨씬 쉬워져요." },
-  { "q":"I-V-vi-IV 진행이 인기 있는 이유?","a":"가장 자연스럽고 정서적으로 만족스러운 진행입니다. 안정(I) → 긴장(V) → 부드러움(vi) → 전이(IV)의 흐름이 뇌의 보상 회로를 자극해요. C major: C - G - Am - F • Let It Be (Beatles) · Don&apos;t Stop Believin&apos; (Journey) • 4 Chord Songs라는 이름으로 유튜브에 수백 곡이 같은 진행임을 보여주는 영상도 유명. K-Pop·OST에도 가장 흔히 쓰여, \"팝의 황금 진행\"이라 불려요." },
+  { "q":"I-V-vi-IV 진행이 인기 있는 이유?","a":"가장 자연스럽고 정서적으로 만족스러운 진행입니다. 안정(I) → 긴장(V) → 이완(vi) → 전이(IV)의 익숙한 흐름이라 듣는 사람이 편안하게 따라갑니다. C major: C - G - Am - F • Let It Be (Beatles) · Don&apos;t Stop Believin&apos; (Journey) • 4 Chord Songs라는 이름으로 유튜브에 수백 곡이 같은 진행임을 보여주는 영상도 유명. K-Pop·OST에도 가장 흔히 쓰여, \"팝의 황금 진행\"이라 불려요." },
   { "q":"기타 1박스 운지법이 뭔가요?","a":"한 손 모양으로 5프렛 범위 안의 모든 스케일 음을 외우는 운지법입니다. Minor Pentatonic은 5개 박스로 지판 전체를 커버하며, 1박스(5포지션)가 가장 인기. • A minor pentatonic 1박스: 5프렛부터 시작 (A=5프렛) • 6번줄 5·8 → 5번줄 5·7 → 4번줄 5·7 → 3번줄 5·7 → 2번줄 5·8 → 1번줄 5·8 이 박스 안에서 즉흥 연주가 록·블루스 솔로의 시작이에요. 기타 지판 탭에서 색칠된 음을 보고 패턴을 익히세요." },
-  { "q":"같은 키에서 모드를 어떻게 바꾸나요?","a":"모드는 두 가지 방법으로 사용합니다: 1. 모드 차용 (Modal Borrowing): 같은 키에서 다른 모드의 코드를 빌려옴. C major 곡에 C minor의 ♭III·♭VI·♭VII을 잠깐 사용 — Beatles \"Eleanor Rigby\". 2. 모달 작곡 (Modal Composition): 한 모드를 끝까지 유지. Dorian으로 시작하면 끝까지 Dorian 음만 사용. 재즈에서 흔함 — \"So What\". 모드 비교 탭에서 같은 키의 7 모드를 들어보면 분위기 차이를 직관적으로 느낄 수 있어요." },
+  { "q":"같은 키에서 모드를 어떻게 바꾸나요?","a":"모드는 두 가지 방법으로 사용합니다: 1. 모드 차용 (Modal Borrowing): 같은 키에서 다른 모드의 코드를 빌려옴. C major 곡이 C minor의 화음(♭III·♭VI·♭VII이나 단조 iv)을 잠깐 빌려 씀 — Radiohead \"Creep\"(G장조 속 Cm), Beatles \"Hey Jude\" 코다(I–♭VII–IV). 2. 모달 작곡 (Modal Composition): 한 모드를 끝까지 유지. Dorian으로 시작하면 끝까지 Dorian 음만 사용. 재즈에서 흔함 — \"So What\". 모드 비교 탭에서 같은 키의 7 모드를 들어보면 분위기 차이를 직관적으로 느낄 수 있어요." },
   { "q":"Harmonic Minor의 7도가 왜 중요?","a":"Natural Minor의 7도가 ♭7(단7도)인데, Harmonic Minor는 7(장7도)로 반음 올립니다. 이로 인해: 1. V도가 메이저 코드가 됨 (Am 키에서 Em → E) — Dominant 7th 가능 2. 리딩 톤(Leading tone)이 생겨 토닉으로 해결 강함 3. ♭6 → 7이 1.5음(증2도) 점프로 이국적 느낌 그래서 클래식·중동·메탈·플라멩코에서 자주 쓰여요. 화성적으로 가장 강력한 단음계입니다." },
-  { "q":"스케일 외운 후 즉흥 연주는 어떻게?","a":"순서대로 시도하세요: 1. Minor Pentatonic 1박스를 손에 익을 때까지 반복 2. 백킹 트랙 (YouTube에 무료 다수)에 맞춰 한 박스 안에서 자유 연주 3. 루트 음(빨강)을 강박에 두고 시작·종결 4. 3·5도를 강조해 안정감 만들기 5. ♭5 블루노트를 경과음으로 살짝 추가 6. 다른 박스로 확장해 지판 전체 커버 처음엔 어색하지만 매일 5~10분만 반복하면 1~2주 안에 즉흥 연주가 됩니다." }
+  { "q":"스케일 외운 후 즉흥 연주는 어떻게?","a":"순서대로 시도하세요: 1. Minor Pentatonic 1박스를 손에 익을 때까지 반복 2. 백킹 트랙 (YouTube에 무료 다수)에 맞춰 한 박스 안에서 자유 연주 3. 루트 음(빨강)을 강박에 두고 시작·종결 4. 3·5도를 강조해 안정감 만들기 5. ♭5 블루노트를 경과음으로 살짝 추가 6. 다른 박스로 확장해 지판 전체 커버 처음엔 어색하지만 매일 5~10분씩 반복하면 몇 주 안에 간단한 즉흥 프레이즈를 만들 수 있게 됩니다." }
 ]
 
 export default function ScalePage() {
@@ -74,7 +74,7 @@ export default function ScalePage() {
         <ToolIconBadge catId="art" />스케일 음계 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        12키 × 12스케일 + 피아노·기타 지판 시각화 + <strong style={{ color: 'var(--text)' }}>7 모드 비교와 MIDI 재생</strong>.
+        12키 × 12스케일 + 피아노·기타 지판 시각화 + <strong style={{ color: 'var(--text)' }}>7 모드 비교와 소리 재생</strong>.
       </p>
 
       <ScaleClient />
@@ -102,18 +102,18 @@ export default function ScalePage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '😊 Major (Ionian)',   d: '도-레-미-파-솔-라-시. 가장 밝음. 팝·동요·축가.', c: '#0D9488' },
-            { t: '😢 Natural Minor',     d: '슬픔·차분. 록·발라드·블루스 표준.',              c: '#0891B2' },
-            { t: '🌌 Harmonic Minor',    d: '7도 반음 ↑. 이국적·드라마틱·메탈·플라멩코.',     c: '#9B59B6' },
-            { t: '✨ Melodic Minor',     d: '6·7도 ↑(상행). 재즈·세련·복합.',                 c: '#D97706' },
-            { t: '🌸 Major Pentatonic',  d: '5음. 4·7도 제거로 불협 없음. 동요·민요.',         c: '#EA580C' },
-            { t: '🎸 Minor Pentatonic',  d: '록·블루스 솔로 표준. 가장 쉬운 스케일.',          c: '#DB2777' },
-            { t: '🎺 Blues',             d: 'Minor Pent + ♭5. 12-bar blues 표준.',           c: '#0891B2' },
-            { t: '🍃 Dorian',            d: 'Minor + M6. 재즈·소울 모달.',                    c: '#059669' },
-            { t: '🌶️ Phrygian',           d: 'Minor + ♭2. 스페인·메탈.',                       c: '#D97706' },
-            { t: '🌙 Lydian',            d: 'Major + ♯4. 꿈결·환상적·OST.',                   c: '#9333EA' },
-            { t: '🤘 Mixolydian',        d: 'Major + ♭7. 블루스·록·아일랜드.',                c: '#EA580C' },
-            { t: '😈 Locrian',           d: '♭2 + ♭5. 가장 어두움. 메탈·실험.',               c: '#DB2777' },
+            { t: '😊 Major (Ionian)',   d: '도-레-미-파-솔-라-시. 가장 밝음. 팝·동요·축가.', c: 'var(--cat-edu)' },
+            { t: '😢 Natural Minor',     d: '슬픔·차분. 록·발라드·블루스 표준.',              c: 'var(--cat-health)' },
+            { t: '🌌 Harmonic Minor',    d: '7도 반음 ↑. 이국적·드라마틱·메탈·플라멩코.',     c: 'var(--cat-unit)' },
+            { t: '✨ Melodic Minor',     d: '6·7도 ↑(상행). 재즈·세련·복합.',                 c: 'var(--cat-cooking)' },
+            { t: '🌸 Major Pentatonic',  d: '5음. 4·7도 제거로 불협 없음. 동요·민요.',         c: 'var(--cat-life)' },
+            { t: '🎸 Minor Pentatonic',  d: '록·블루스 솔로 표준. 가장 쉬운 스케일.',          c: 'var(--cat-date)' },
+            { t: '🎺 Blues',             d: 'Minor Pent + ♭5. 12-bar blues 표준.',           c: 'var(--cat-health)' },
+            { t: '🍃 Dorian',            d: 'Minor + M6. 재즈·소울 모달.',                    c: 'var(--success)' },
+            { t: '🌶️ Phrygian',           d: 'Minor + ♭2. 스페인·메탈.',                       c: 'var(--cat-cooking)' },
+            { t: '🌙 Lydian',            d: 'Major + ♯4. 꿈결·환상적·OST.',                   c: 'var(--cat-art)' },
+            { t: '🤘 Mixolydian',        d: 'Major + ♭7. 블루스·록·아일랜드.',                c: 'var(--cat-life)' },
+            { t: '😈 Locrian',           d: '♭2 + ♭5. 가장 어두움. 메탈·실험.',               c: 'var(--cat-date)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -141,13 +141,13 @@ export default function ScalePage() {
             </thead>
             <tbody>
               {[
-                ['I',    'Cmaj7',  'Tonic (안정)',          '#0D9488'],
-                ['ii',   'Dm7',    'Subdominant (전이)',     '#D97706'],
-                ['iii',  'Em7',    'Tonic',                  '#0D9488'],
-                ['IV',   'Fmaj7',  'Subdominant',            '#D97706'],
-                ['V',    'G7',     'Dominant (긴장)',         '#DB2777'],
-                ['vi',   'Am7',    'Tonic (relative minor)', '#0D9488'],
-                ['viiº', 'Bm7♭5',  'Dominant',                '#DB2777'],
+                ['I',    'Cmaj7',  'Tonic (안정)',          'var(--cat-edu)'],
+                ['ii',   'Dm7',    'Subdominant (전이)',     'var(--cat-cooking)'],
+                ['iii',  'Em7',    'Tonic',                  'var(--cat-edu)'],
+                ['IV',   'Fmaj7',  'Subdominant',            'var(--cat-cooking)'],
+                ['V',    'G7',     'Dominant (긴장)',         'var(--cat-date)'],
+                ['vi',   'Am7',    'Tonic (relative minor)', 'var(--cat-edu)'],
+                ['viiº', 'Bm7♭5',  'Dominant',                'var(--cat-date)'],
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 0', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
@@ -159,9 +159,9 @@ export default function ScalePage() {
           </table>
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          기능 분류: <strong style={{ color: '#0D9488' }}>Tonic</strong>(안정) /
-          <strong style={{ color: '#D97706' }}> Subdominant</strong>(전이) /
-          <strong style={{ color: '#DB2777' }}> Dominant</strong>(긴장 → Tonic으로 해결)
+          기능 분류: <strong style={{ color: 'var(--cat-edu)' }}>Tonic</strong>(안정) /
+          <strong style={{ color: 'var(--cat-cooking)' }}> Subdominant</strong>(전이) /
+          <strong style={{ color: 'var(--cat-date)' }}> Dominant</strong>(긴장 → Tonic으로 해결)
         </p>
       </div>
 
@@ -176,7 +176,7 @@ export default function ScalePage() {
           <li><strong style={{ color: 'var(--text)' }}>Ionian (1도)</strong> = Major. 가장 밝음.</li>
           <li><strong style={{ color: 'var(--text)' }}>Dorian (2도)</strong>: 재즈·소울 (So What — Miles Davis)</li>
           <li><strong style={{ color: 'var(--text)' }}>Phrygian (3도)</strong>: 스페인·메탈 (♭2가 핵심)</li>
-          <li><strong style={{ color: 'var(--text)' }}>Lydian (4도)</strong>: 꿈결·OST (♯4가 핵심, Star Wars)</li>
+          <li><strong style={{ color: 'var(--text)' }}>Lydian (4도)</strong>: 꿈결·OST (♯4가 핵심, The Simpsons·E.T. 비행 테마)</li>
           <li><strong style={{ color: 'var(--text)' }}>Mixolydian (5도)</strong>: 블루스·록 (Sweet Child O&apos; Mine)</li>
           <li><strong style={{ color: 'var(--text)' }}>Aeolian (6도)</strong> = Natural Minor. 가장 슬픔.</li>
           <li><strong style={{ color: 'var(--text)' }}>Locrian (7도)</strong>: 가장 어두움 (♭5 불안정)</li>
@@ -262,8 +262,8 @@ export default function ScalePage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q6. I-V-vi-IV 진행이 인기 있는 이유?</summary>
         <p style={faqAnswer}>
-          가장 자연스럽고 정서적으로 만족스러운 진행입니다. <strong>안정(I) → 긴장(V) → 부드러움(vi) → 전이(IV)</strong>의 흐름이
-          뇌의 보상 회로를 자극해요.<br />
+          가장 자연스럽고 정서적으로 만족스러운 진행입니다. <strong>안정(I) → 긴장(V) → 이완(vi) → 전이(IV)</strong>의 익숙한 흐름이라
+          듣는 사람이 편안하게 따라갑니다.<br />
           C major: C - G - Am - F<br />
           • Let It Be (Beatles) · Don&apos;t Stop Believin&apos; (Journey)<br />
           • 4 Chord Songs라는 이름으로 유튜브에 수백 곡이 같은 진행임을 보여주는 영상도 유명.<br />
@@ -288,7 +288,7 @@ export default function ScalePage() {
         <p style={faqAnswer}>
           모드는 두 가지 방법으로 사용합니다:<br />
           <strong>1. 모드 차용 (Modal Borrowing)</strong>: 같은 키에서 다른 모드의 코드를 빌려옴.
-          C major 곡에 C minor의 ♭III·♭VI·♭VII을 잠깐 사용 — Beatles &quot;Eleanor Rigby&quot;.<br />
+          C major 곡이 C minor의 화음(♭III·♭VI·♭VII이나 단조 iv)을 잠깐 빌려 씀 — Radiohead &quot;Creep&quot;(G장조 속 Cm), Beatles &quot;Hey Jude&quot; 코다(I–♭VII–IV).<br />
           <strong>2. 모달 작곡 (Modal Composition)</strong>: 한 모드를 끝까지 유지.
           Dorian으로 시작하면 끝까지 Dorian 음만 사용. 재즈에서 흔함 — &quot;So What&quot;.<br />
           모드 비교 탭에서 같은 키의 7 모드를 들어보면 분위기 차이를 직관적으로 느낄 수 있어요.
@@ -317,7 +317,7 @@ export default function ScalePage() {
           4. <strong>3·5도</strong>를 강조해 안정감 만들기<br />
           5. <strong>♭5 블루노트</strong>를 경과음으로 살짝 추가<br />
           6. <strong>다른 박스</strong>로 확장해 지판 전체 커버<br />
-          처음엔 어색하지만 매일 5~10분만 반복하면 1~2주 안에 즉흥 연주가 됩니다.
+          처음엔 어색하지만 매일 5~10분씩 반복하면 몇 주 안에 간단한 즉흥 프레이즈를 만들 수 있게 됩니다.
         </p>
       </details>
 

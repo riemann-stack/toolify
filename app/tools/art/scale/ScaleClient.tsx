@@ -35,11 +35,12 @@ export default function ScaleClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
-      if (typeof j.rootKey === 'number') setRootKey(j.rootKey)
-      if (j.scaleId) setScaleId(j.scaleId)
-      if (j.acc) setAcc(j.acc)
-      if (j.octave) setOctave(j.octave)
-      if (j.tuning) setTuning(j.tuning)
+      // 무검증 복원은 getScale(id)! 크래시로 이어짐 — enum·범위 검증 필수
+      if (Number.isInteger(j.rootKey) && j.rootKey >= 0 && j.rootKey <= 11) setRootKey(j.rootKey)
+      if (SCALES.some((sc) => sc.id === j.scaleId)) setScaleId(j.scaleId)
+      if (j.acc === 'sharp' || j.acc === 'flat') setAcc(j.acc)
+      if ([3, 4, 5].includes(j.octave)) setOctave(j.octave)
+      if (TUNINGS.some((t) => t.id === j.tuning)) setTuning(j.tuning)
     } catch {}
   }, [])
   useEffect(() => {
@@ -130,6 +131,7 @@ export default function ScaleClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            aria-pressed={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -149,6 +151,7 @@ export default function ScaleClient() {
             {KEYS.map((k) => (
               <button
                 key={k.index}
+                aria-pressed={rootKey === k.index}
                 className={`${s.keyBtn} ${rootKey === k.index ? s.keyBtnActive : ''}`}
                 onClick={() => setRootKey(k.index)}
                 type="button"
@@ -158,9 +161,9 @@ export default function ScaleClient() {
             ))}
           </div>
           <div className={s.pillRow} style={{ marginTop: 8 }}>
-            <button className={`${s.pill} ${acc === 'sharp' ? s.pillActive : ''}`} onClick={() => setAcc('sharp')} type="button">♯ 샵</button>
-            <button className={`${s.pill} ${acc === 'flat' ? s.pillActive : ''}`} onClick={() => setAcc('flat')} type="button">♭ 플랫</button>
-            <button className={`${s.pill} ${showInterval ? s.pillActive : ''}`} onClick={() => setShowInterval(!showInterval)} type="button">
+            <button aria-pressed={acc === 'sharp'} className={`${s.pill} ${acc === 'sharp' ? s.pillActive : ''}`} onClick={() => setAcc('sharp')} type="button">♯ 샵</button>
+            <button aria-pressed={acc === 'flat'} className={`${s.pill} ${acc === 'flat' ? s.pillActive : ''}`} onClick={() => setAcc('flat')} type="button">♭ 플랫</button>
+            <button aria-pressed={showInterval} className={`${s.pill} ${showInterval ? s.pillActive : ''}`} onClick={() => setShowInterval(!showInterval)} type="button">
               인터벌 표시
             </button>
           </div>
@@ -172,6 +175,7 @@ export default function ScaleClient() {
             {SCALES.map((sc) => (
               <button
                 key={sc.id}
+                aria-pressed={scaleId === sc.id}
                 className={`${s.scaleBtn} ${scaleId === sc.id ? s.scaleBtnActive : ''}`}
                 onClick={() => setScaleId(sc.id)}
                 type="button"
@@ -240,6 +244,7 @@ export default function ScaleClient() {
                 {[3, 4, 5].map((o) => (
                   <button
                     key={o}
+                    aria-pressed={octave === o}
                     className={`${s.pill} ${octave === o ? s.pillActive : ''}`}
                     onClick={() => setOctave(o)}
                     type="button"
@@ -282,6 +287,7 @@ export default function ScaleClient() {
               {TUNINGS.map((t) => (
                 <button
                   key={t.id}
+                  aria-pressed={tuning === t.id}
                   className={`${s.pill} ${tuning === t.id ? s.pillActive : ''}`}
                   onClick={() => setTuning(t.id)}
                   type="button"
@@ -376,6 +382,10 @@ export default function ScaleClient() {
               {/* 진행 추천 */}
               <div className={s.card}>
                 <span className={s.cardLabel}>추천 코드 진행 4종</span>
+                <p className={s.helpText} style={{ marginTop: 0 }}>
+                  진행 이름은 장·단조 기준 통칭이며, 현재 선택한 스케일의 다이어토닉 코드로 해당 도수를 연주합니다.
+                  모드·하모닉 계열에서는 원곡 분위기와 다르게 들릴 수 있습니다.
+                </p>
                 <div className={s.progGrid}>
                   {PROGRESSIONS.map((p) => {
                     const validIdx = p.pattern.filter((i) => i < diatonics.length)
@@ -617,8 +627,8 @@ interface FretProps {
 
 function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretProps) {
   const tuningMeta = TUNINGS.find((t) => t.id === tuning)!
-  // 6번줄(가장 굵음)이 위 → 1번줄이 아래
-  const stringNotes = [...tuningMeta.strings].reverse()  // index 0 = 6번줄(낮은 E)
+  // 표준 지판 다이어그램 관행: 위 = 1번줄(높은 E, 가늘게) → 아래 = 6번줄(낮은 E, 굵게)
+  const stringNotes = [...tuningMeta.strings].reverse()  // index 0 = 1번줄(높은 음)
   const numFrets = 15
   const fretW = 50
   const stringSpacing = 26
@@ -641,7 +651,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
 
   return (
     <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', padding: '8px 0' }}>
-      <svg width={totalW} height={totalH} viewBox={`0 0 ${totalW} ${totalH}`} style={{ minWidth: 720 }}>
+      <svg width={totalW} height={totalH} viewBox={`0 0 ${totalW} ${totalH}`} style={{ minWidth: 720 }} role="img" aria-label="기타 지판 스케일 위치 표시">
         {/* 배경 */}
         <rect x={padLeft} y={padTop - 4} width={fretW * numFrets} height={stringSpacing * 6 + 8} fill="rgba(123, 79, 44, 0.15)" />
 
@@ -689,7 +699,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, tuning, showInterval }: FretPr
               x2={padLeft + fretW * numFrets}
               y2={y}
               stroke="#ccc"
-              strokeWidth={sIdx < 3 ? 2 : 1.2}
+              strokeWidth={sIdx >= 3 ? 2 : 1.2}
             />,
           )
           // 각 프렛 마커

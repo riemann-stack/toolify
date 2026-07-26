@@ -73,7 +73,7 @@ export const SCALES: ScaleMeta[] = [
     degrees: ['1', '2', '♭3', '4', '5', '♭6', '♭7'],
     mood: '슬픔·차분·우수',
     genre: '록·발라드·블루스',
-    examples: '🎵 Hotel California · House of the Rising Sun',
+    examples: '🎵 Losing My Religion · All Along the Watchtower',
     desc: '기본 단음계. ♭3·♭6·♭7로 우울한 느낌.',
   },
   {
@@ -86,7 +86,7 @@ export const SCALES: ScaleMeta[] = [
     degrees: ['1', '2', '♭3', '4', '5', '♭6', '7'],
     mood: '이국적·드라마틱·신비',
     genre: '클래식·중동·메탈·플라멩코',
-    examples: '🎵 Misirlou · Hava Nagila',
+    examples: '🎵 Hava Nagila · 네오클래시컬 메탈 (Yngwie Malmsteen)',
     desc: '자연단음계의 7도를 반음 올림. 6→7도가 1.5음 점프.',
   },
   {
@@ -99,7 +99,7 @@ export const SCALES: ScaleMeta[] = [
     degrees: ['1', '2', '♭3', '4', '5', '6', '7'],
     mood: '재즈·세련·복합',
     genre: '재즈·보사노바·현대 클래식',
-    examples: '🎵 Yesterdays · 재즈 솔로',
+    examples: '🎵 Yesterday (Beatles) · 재즈 마이너 솔로',
     desc: '단음계의 6·7도를 반음 올림. 상행 시 사용.',
   },
   {
@@ -177,7 +177,7 @@ export const SCALES: ScaleMeta[] = [
     degrees: ['1', '2', '3', '♯4', '5', '6', '7'],
     mood: '꿈결·부유감·신비',
     genre: '영화 OST·재즈·환상적',
-    examples: '🎵 Star Wars Theme · The Simpsons',
+    examples: '🎵 The Simpsons · E.T. Flying Theme',
     desc: 'Major + ♯4. 환상적·부유하는 느낌, 영화 OST에 자주.',
   },
   {
@@ -190,7 +190,7 @@ export const SCALES: ScaleMeta[] = [
     degrees: ['1', '2', '3', '4', '5', '6', '♭7'],
     mood: '블루지·록·축제',
     genre: '블루스·록·아일랜드 민요',
-    examples: '🎵 Sweet Child O\' Mine · Norwegian Wood',
+    examples: '🎵 Sweet Child O\' Mine (인트로) · Norwegian Wood (벌스)',
     desc: 'Major + ♭7. 도미넌트 7th의 본격 모드, 록·블루스 표준.',
   },
   {
@@ -258,6 +258,7 @@ function buildSeventhChord(scaleNotes: number[], i: number, acc: Accidental): { 
   if (m3 === 4 && m5 === 7 && m7 === 11) type = 'maj7'
   else if (m3 === 4 && m5 === 7 && m7 === 10) type = '7'  // dominant 7
   else if (m3 === 3 && m5 === 7 && m7 === 10) type = 'm7'
+  else if (m3 === 3 && m5 === 7 && m7 === 11) type = 'mM7'  // 마이너-메이저7 (하모닉·멜로딕 i도)
   else if (m3 === 3 && m5 === 6 && m7 === 10) type = 'm7♭5'
   else if (m3 === 3 && m5 === 6 && m7 === 9) type = 'dim7'
   else if (m3 === 4 && m5 === 8 && m7 === 11) type = 'maj7♯5'
@@ -282,13 +283,24 @@ function chordFunction(degree: number, isMajor: boolean): 'Tonic' | 'Subdominant
 }
 
 const FUNCTION_COLOR = {
-  Tonic: '#0D9488',
-  Subdominant: '#D97706',
-  Dominant: '#DB2777',
+  Tonic: 'var(--cat-edu)',
+  Subdominant: 'var(--cat-cooking)',
+  Dominant: 'var(--cat-date)',
 }
 
-const DEGREE_LABELS_MAJOR = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'viiº']
-const DEGREE_LABELS_MINOR = ['i', 'iiº', 'III', 'iv', 'v', 'VI', 'VII']
+const ROMAN_BASE = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
+
+/** 도수 라벨 — 스케일 도수(♭·♯ 접두)와 실제 화음 품질(대소문자·ø/º/+)로 동적 생성 */
+function degreeLabel(degStr: string, chordType: string): string {
+  const accPrefix = degStr.startsWith('♭') ? '♭' : degStr.startsWith('♯') ? '♯' : ''
+  const num = parseInt(degStr.replace(/[^\d]/g, ''), 10) - 1
+  const base = ROMAN_BASE[num] ?? 'I'
+  const isMinorType = chordType === 'm7' || chordType === 'mM7'
+  const isDimType = chordType === 'm7♭5' || chordType === 'dim7'
+  const roman = isMinorType || isDimType ? base.toLowerCase() : base
+  const suffix = chordType === 'm7♭5' ? 'ø' : chordType === 'dim7' ? 'º' : chordType === 'maj7♯5' ? '+' : ''
+  return accPrefix + roman + suffix
+}
 
 export function buildDiatonicChords(rootKey: number, scale: ScaleMeta, acc: Accidental): DiatonicChord[] {
   /* 7음 스케일만 다이어토닉 코드 의미 있음 (Pentatonic·Blues는 적용 X) */
@@ -296,14 +308,13 @@ export function buildDiatonicChords(rootKey: number, scale: ScaleMeta, acc: Acci
 
   const scaleNotes = buildScale(rootKey, scale)
   const isMajorBased = ['major', 'lydian', 'mixolydian'].includes(scale.id)
-  const labels = isMajorBased ? DEGREE_LABELS_MAJOR : DEGREE_LABELS_MINOR
 
   return scaleNotes.map((rootIdx, i) => {
     const chord = buildSeventhChord(scaleNotes, i, acc)
     const root = noteName(rootIdx, acc)
     const fn = chordFunction(i, isMajorBased)
     return {
-      degree: labels[i],
+      degree: degreeLabel(scale.degrees[i], chord.type),
       root,
       rootIdx,
       name: `${root}${chord.type}`,
@@ -385,7 +396,7 @@ export const PROGRESSIONS: Progression[] = [
   { id: 'pop',     emoji: '🎤', label: 'I-V-vi-IV (Pop)',           pattern: [0, 4, 5, 3], desc: '가장 인기 있는 진행. 수많은 팝송에 사용.', examples: 'Let It Be · Don\'t Stop Believin\'' },
   { id: 'jazz',   emoji: '🎷', label: 'ii-V-I (Jazz)',              pattern: [1, 4, 0],    desc: '재즈의 가장 기본 진행.',                     examples: 'Autumn Leaves · 모든 재즈 스탠다드' },
   { id: 'doowop', emoji: '🎶', label: 'I-vi-IV-V (50\'s Doo-wop)',  pattern: [0, 5, 3, 4], desc: '50년대 두왑·발라드 표준.',                  examples: 'Stand By Me · Earth Angel' },
-  { id: 'and',    emoji: '🌶️', label: 'i-VII-VI-V (Andalusian)',    pattern: [0, 6, 5, 4], desc: '스페인·플라멩코·메탈 분위기.',              examples: 'Hit the Road Jack · Stray Cat Strut' },
+  { id: 'and',    emoji: '🌶️', label: 'i-VII-VI-V (Andalusian)',    pattern: [0, 6, 5, 4], desc: '스페인·플라멩코 분위기. 실전에서는 마지막 v를 장화음 V(예: A단조의 E·E7)로 바꿔 치는 관행.',              examples: 'Hit the Road Jack · Stray Cat Strut' },
 ]
 
 /* ─────────────────────────────────────────────
@@ -397,10 +408,10 @@ export const fmt = (n: number, digits = 1) =>
 
 /* 컬러 (피아노·기타 시각화 공통) */
 export const COLORS = {
-  root: '#DB2777',
-  third: '#D97706',
-  fifth: '#D97706',
-  other: '#0D9488',
+  root: 'var(--cat-date)',
+  third: 'var(--cat-cooking)',
+  fifth: 'var(--cat-cooking)',
+  other: 'var(--cat-edu)',
   bg: 'var(--bg3)',
 }
 
