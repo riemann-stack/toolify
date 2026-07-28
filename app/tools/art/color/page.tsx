@@ -9,7 +9,7 @@ export const metadata = buildMetadata({
   path: '/tools/art/color',
   title: '색상 코드 변환기 — HEX·RGB·HSL·OKLCH·WCAG·팔레트·Tailwind',
   description:
-    'HEX·RGB·HSL·OKLCH·알파 변환부터 WCAG 대비비, 팔레트, Tailwind 매칭, CSS 변수, 그라디언트, 이미지 추출까지.',
+    'HEX는 물론 rgb()·hsl() 문자열로도 입력해 HEX·RGB·HSL·OKLCH·알파를 변환. WCAG 대비비, 팔레트, Tailwind v4 매칭, CSS 변수, 그라디언트, 이미지 추출까지.',
   keywords: [
     '색상코드변환', 'HEX RGB HSL', '색상변환기', 'OKLCH', 'WCAG 대비비',
     '접근성 색상', '팔레트 생성', 'Tailwind 색상', 'CSS 변수', '색맹 시뮬레이션',
@@ -83,7 +83,7 @@ export default function ColorPage() {
                   ['HSV',    'hsv(192, 96%, 70%)',     'Photoshop·Figma 등 디자인 툴 표준'],
                   ['CMYK',   'cmyk(96%, 19%, 0%, 30%)','인쇄 참고용 — 명함·브로슈어'],
                   ['HWB',    'hwb(192 3% 30%)',         '직관적 명도 — CSS Color 4'],
-                  ['LAB',    'lab(55.6 -20.1 -26.3)',   '인간 시각 균일 색공간'],
+                  ['LAB',    'lab(55.1 -24.1 -27)',     '인간 시각 균일 색공간 — CSS lab() D50 기준'],
                   ['OKLCH',  'oklch(60.9% 0.111 221.7)','CSS Color 4 최신 표준 — Tailwind 4 기본'],
                 ].map(([fmt, ex, use], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -225,10 +225,10 @@ export default function ColorPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>Tailwind CSS 색상 시스템</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            Tailwind는 22개 기본 색상 × 11단계 = <strong style={{ color: 'var(--text)' }}>총 242개 색상</strong>을 제공합니다 — slate, gray, zinc, neutral, stone (회색 5종), red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose (유채색 17종).
+            Tailwind v4는 26개 기본 색상 × 11단계 = <strong style={{ color: 'var(--text)' }}>총 286개 색상</strong>을 제공합니다 — slate, gray, zinc, neutral, stone에 v4.1+에서 추가된 taupe, mauve, mist, olive까지 무채색·저채도 9종, red부터 rose까지 유채색 17종. v4부터 색이 OKLCH로 정의되고, 커스텀 색상도 <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>tailwind.config.js</code> 대신 CSS의 <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>@theme</code> 블록에 CSS 변수로 선언합니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            본 도구의 <strong style={{ color: 'var(--text)' }}>가장 가까운 Tailwind 매칭</strong> 기능은 입력한 HEX와 RGB 유클리드 거리가 가장 가까운 5개 클래스를 자동 추천합니다. 디자이너가 시안에서 정한 색을 개발자가 Tailwind 클래스로 옮길 때 매우 유용합니다.
+            본 도구의 <strong style={{ color: 'var(--text)' }}>가장 가까운 Tailwind 매칭</strong> 기능은 입력한 색과 RGB 유클리드 거리가 가장 가까운 5개 클래스를 v4 팔레트(sRGB 변환값) 기준으로 자동 추천합니다. 디자이너가 시안에서 정한 색을 개발자가 Tailwind 클래스로 옮길 때 매우 유용합니다.
           </p>
         </section>
 
@@ -323,13 +323,13 @@ export default function ColorPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li><strong style={{ color: 'var(--text)' }}>WCAG 2.1</strong> — w3.org/WAI/WCAG21</li>
-            <li><strong style={{ color: 'var(--text)' }}>Tailwind Colors (v3)</strong> — tailwindcss.com/docs/customizing-colors</li>
-            <li><strong style={{ color: 'var(--text)' }}>CSS Color Module Level 4</strong> — w3.org/TR/css-color-4</li>
-            <li><strong style={{ color: 'var(--text)' }}>OKLCH 제안</strong> — bottosson.github.io/posts/oklab</li>
-            <li><strong style={{ color: 'var(--text)' }}>색맹 시뮬레이션 모델</strong> — Machado et al. 2009 (inf.ufrgs.br/~oliveira) · Brettel et al. 1997 · daltonlens.org 구현 리뷰</li>
-            <li><strong style={{ color: 'var(--text)' }}>색각 이상 유병률</strong> — 질병관리청 국가건강정보포털</li>
-            <li><strong style={{ color: 'var(--text)' }}>한국 웹 접근성 인증</strong> — wa.or.kr · 확인일 2026-07-26</li>
+            <li><strong style={{ color: 'var(--text)' }}>WCAG 2.1</strong> — <a href="https://www.w3.org/TR/WCAG21/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>w3.org/TR/WCAG21</a></li>
+            <li><strong style={{ color: 'var(--text)' }}>Tailwind CSS v4 색상</strong> — <a href="https://tailwindcss.com/docs/colors" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>tailwindcss.com/docs/colors</a></li>
+            <li><strong style={{ color: 'var(--text)' }}>CSS Color Module Level 4</strong> — <a href="https://www.w3.org/TR/css-color-4/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>w3.org/TR/css-color-4</a></li>
+            <li><strong style={{ color: 'var(--text)' }}>OKLCH 제안</strong> — <a href="https://bottosson.github.io/posts/oklab/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>bottosson.github.io/posts/oklab</a></li>
+            <li><strong style={{ color: 'var(--text)' }}>색맹 시뮬레이션 모델</strong> — <a href="https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>Machado et al. 2009</a> · Brettel et al. 1997 · <a href="https://daltonlens.org/opensource-cvd-simulation/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>daltonlens.org 구현 리뷰</a></li>
+            <li><strong style={{ color: 'var(--text)' }}>색각 이상 유병률</strong> — <a href="https://health.kdca.go.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>질병관리청 국가건강정보포털</a></li>
+            <li><strong style={{ color: 'var(--text)' }}>한국 웹 접근성 인증</strong> — <a href="https://www.wa.or.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>wa.or.kr</a> · 확인일 2026-07-26</li>
           </ul>
         </section>
 

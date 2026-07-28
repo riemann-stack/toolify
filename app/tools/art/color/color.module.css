@@ -135,7 +135,7 @@
   outline: none;
   width: 100%;
   box-sizing: border-box;
-  text-transform: uppercase;
+  /* text-transform 제거 — rgb()/hsl() 입력이 시각적으로 왜곡되지 않도록. hex는 커밋 시 대문자 정규화 */
   letter-spacing: 0.04em;
 }
 .hexInput:focus { border-color: var(--accent); }
@@ -403,7 +403,9 @@
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   color: var(--text);
   outline: none;
-  text-transform: uppercase;
+  /* text-transform 제거 — rgb()/hsl() 입력이 시각적으로 왜곡되지 않도록. hex는 커밋 시 대문자 정규화 */
+  min-width: 0; /* grid 1fr 칸에서 intrinsic 폭 오버플로 방지 (320px) */
+  width: 100%;
 }
 
 .swapBtn {
@@ -500,6 +502,10 @@
   color: var(--text);
 }
 .suggestArrow { color: var(--muted); font-size: 18px; text-align: center; }
+@media (max-width: 480px) {
+  .suggestRow { grid-template-columns: 1fr; }
+  .suggestArrow { transform: rotate(90deg); justify-self: center; }
+}
 
 /* 색맹 시뮬레이션 */
 .cbGrid {
@@ -714,6 +720,11 @@
 .uiStateName  { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
 .uiStateSwatch { width: 36px; height: 24px; border-radius: 6px; border: 1px solid var(--border); }
 .uiStateCode  { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); }
+@media (max-width: 360px) {
+  .uiStateRow { grid-template-columns: 64px 28px minmax(0, 1fr) auto; gap: 6px; }
+  .uiStateSwatch { width: 28px; }
+  .uiStateCode { font-size: 12px; }
+}
 
 .semanticGrid {
   display: grid;
@@ -794,7 +805,8 @@
   font-family: 'JetBrains Mono', monospace;
   color: var(--text);
   outline: none;
-  text-transform: uppercase;
+  min-width: 0; /* grid 1fr 칸에서 input 기본 size 폭 오버플로 방지 (320px) */
+  width: 100%;
 }
 .gradStopPos {
   font-family: 'Inter', system-ui, sans-serif;

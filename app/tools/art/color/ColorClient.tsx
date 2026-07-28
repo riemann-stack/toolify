@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './color.module.css'
 import {
   hexToRgb, rgbToHex, rgbToHsl, hslToRgb, rgbToHsv, rgbToCmyk, rgbToHwb,
-  rgbToLab, rgbToOklch,
+  rgbToLab, rgbToOklch, parseColorInput,
   formatHex, formatHexa, formatRgb, formatRgba, formatHsl, formatHsla,
   formatHsv, formatCmyk, formatHwb, formatLab, formatOklch,
   contrastRatio, wcagGrade, suggestPassingColor,
@@ -90,7 +90,47 @@ function useCopy(): [string | null, (key: string, text: string) => void] {
 const copyLabel = (copiedKey: string | null, key: string, idle: string, done = '✓') =>
   copiedKey === key ? done : copiedKey === 'fail:' + key ? '✗ 실패' : idle
 
+/** 색 입력 필드 — 원시 문자열 유지 + 유효할 때만 커밋 (무효 입력이 대체색으로 둔갑하는 것 방지) */
+function useColorDraft(committedHex: string, commit: (hex: string, hasAlpha: boolean, alpha: number) => void) {
+  const [raw, setRaw] = useState(committedHex)
+  // 외부(피커·프리셋)에서 색이 바뀌면 동기화 — 타이핑 중(같은 색 파싱)에는 건드리지 않음
+  useEffect(() => {
+    const p = parseColorInput(raw)
+    if (!p || rgbToHex(p.rgb) !== committedHex) setRaw(committedHex)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [committedHex])
+  const valid = parseColorInput(raw) !== null
+  const onChange = (v: string) => {
+    setRaw(v)
+    const p = parseColorInput(v)
+    if (p) commit(rgbToHex(p.rgb), p.hasAlpha, Math.round((p.rgb.a ?? 1) * 100))
+  }
+  return { raw, valid, onChange }
+}
+
+const invalidStyle: React.CSSProperties = { borderColor: 'var(--danger)' }
+
+/** HEX·rgb()·hsl() 텍스트 입력 — 무효 입력은 커밋하지 않고 테두리로만 표시 (마지막 유효 색 유지) */
+function HexDraftInput({ value, onCommit, className, label, placeholder = '#0891B2' }: {
+  value: string
+  onCommit: (hex: string) => void
+  className: string
+  label: string
+  placeholder?: string
+}) {
+  const draft = useColorDraft(value, onCommit)
+  return (
+    <input className={className} type="text" aria-label={label}
+      value={draft.raw}
+      style={draft.valid ? undefined : invalidStyle}
+      onChange={e => draft.onChange(e.target.value)}
+      placeholder={placeholder} maxLength={32} spellCheck={false} />
+  )
+}
+
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
+const TAB_IDS: Tab[] = ['convert', 'a11y', 'palette', 'css', 'gradient', 'extract']
+
 export default function ColorClient() {
   const [tab, setTab] = useState<Tab>('convert')
   const [hex, setHex] = useState('#0891B2')
@@ -98,8 +138,26 @@ export default function ColorClient() {
   const [history, setHistory] = useState<string[]>([])
   const [copiedKey, copy] = useCopy()
 
+  /* ?tab= 딥링크 (SSG 유지 — window.location 직접 파싱) */
+  useEffect(() => {
+    try {
+      const t = new URLSearchParams(window.location.search).get('tab')
+      if (t && TAB_IDS.includes(t as Tab)) setTab(t as Tab)
+    } catch {}
+  }, [])
+  const selectTab = (t: Tab) => {
+    setTab(t)
+    try {
+      const u = new URL(window.location.href)
+      if (t === 'convert') u.searchParams.delete('tab')
+      else u.searchParams.set('tab', t)
+      history_replaceState(u)
+    } catch {}
+  }
+  const history_replaceState = (u: URL) => window.history.replaceState(null, '', u.toString())
+
   const rgb: RGB = useMemo(() => {
-    const r = hexToRgb(hex) ?? { r: 62, g: 200, b: 255, a: 1 }
+    const r = hexToRgb(hex) ?? { r: 8, g: 145, b: 178, a: 1 } // hex는 항상 유효 커밋 — 방어용 기본색
     return { ...r, a: alpha / 100 }
   }, [hex, alpha])
   const hsl: HSL = useMemo(() => rgbToHsl(rgb), [rgb])
@@ -123,10 +181,10 @@ export default function ColorClient() {
     })
   }, [hex])
 
-  /* 입력 핸들러 */
-  const handleHex = (v: string) => {
-    const cleaned = v.startsWith('#') ? v : '#' + v
-    setHex(cleaned)
+  /* 입력 핸들러 — 유효한 색만 커밋, HEXA/rgba/hsla는 알파도 반영 */
+  const commitColor = (newHex: string, hasAlpha: boolean, alphaPct: number) => {
+    setHex(newHex)
+    if (hasAlpha) setAlpha(alphaPct)
   }
   const handlePicker = (v: string) => setHex(v.toUpperCase())
 
@@ -167,14 +225,14 @@ export default function ColorClient() {
             <button key={key} type="button"
               aria-pressed={tab === key}
               className={`${styles.tabBtn} ${activeClass}`}
-              onClick={() => setTab(key)}>
+              onClick={() => selectTab(key)}>
               {label}
             </button>
           )
         })}
       </div>
 
-      {tab === 'convert'  && <ConvertTab hex={hex} alpha={alpha} setAlpha={setAlpha} setHex={handlePicker} setHexRaw={handleHex}
+      {tab === 'convert'  && <ConvertTab hex={hex} alpha={alpha} setAlpha={setAlpha} setHex={handlePicker} commitColor={commitColor}
                                           rgb={rgb} hsl={hsl} hsv={hsv} cmyk={cmyk} hwb={hwb} lab={lab} oklch={oklch}
                                           colorName={colorName} history={history} copiedKey={copiedKey} copy={copy} />}
       {tab === 'a11y'     && <A11yTab initialHex={hex} copiedKey={copiedKey} copy={copy} />}
@@ -192,7 +250,7 @@ type ConvertTabProps = {
   alpha: number
   setAlpha: (n: number) => void
   setHex: (v: string) => void
-  setHexRaw: (v: string) => void
+  commitColor: (hex: string, hasAlpha: boolean, alphaPct: number) => void
   rgb: RGB
   hsl: HSL
   hsv: ReturnType<typeof rgbToHsv>
@@ -206,6 +264,7 @@ type ConvertTabProps = {
   copy: (key: string, text: string) => void
 }
 function ConvertTab(p: ConvertTabProps) {
+  const draft = useColorDraft(p.hex, p.commitColor)
   const formats: { key: string; label: string; value: string }[] = [
     { key: 'hex',   label: 'HEX',   value: formatHex(p.rgb) },
     { key: 'hexa',  label: 'HEXA',  value: formatHexa(p.rgb) },
@@ -241,11 +300,17 @@ function ConvertTab(p: ConvertTabProps) {
             <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
               <input className={styles.colorPicker} type="color" aria-label="색상 선택"
                 value={p.hex} onChange={e => p.setHex(e.target.value)} />
-              <input className={styles.hexInput} type="text" aria-label="HEX 색상 코드"
-                value={p.hex.toUpperCase()}
-                onChange={e => p.setHexRaw(e.target.value)}
-                placeholder="#000000" maxLength={9} spellCheck={false} />
+              <input className={styles.hexInput} type="text" aria-label="색상 코드 (HEX·rgb·hsl)"
+                value={draft.raw}
+                style={draft.valid ? undefined : invalidStyle}
+                onChange={e => draft.onChange(e.target.value)}
+                placeholder="#0891B2 · rgb() · hsl()" maxLength={32} spellCheck={false} />
             </div>
+            {!draft.valid && (
+              <p style={{ fontSize: 12, color: 'var(--danger)', margin: 0 }}>
+                인식할 수 없는 색상입니다 — #HEX(3·4·6·8자리), rgb(), hsl(), &quot;r, g, b&quot; 형식을 지원해요. 마지막 유효한 색을 유지합니다.
+              </p>
+            )}
             <div>
               <span className={styles.subLabel}>알파 ({p.alpha}%)</span>
               <div className={styles.alphaSliderWrap} style={{ color: formatHex(p.rgb) }}>
@@ -277,6 +342,10 @@ function ConvertTab(p: ConvertTabProps) {
             </div>
           ))}
         </div>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+          CMYK는 ICC 프로파일 없는 산술 근사값이라 실제 인쇄 색과 다를 수 있어요.
+          LAB은 CSS <code>lab()</code>과 같은 D50 백색점 기준입니다.
+        </p>
       </div>
 
       {/* 색상 정보 */}
@@ -406,19 +475,15 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
         <div className={styles.a11yInputRow}>
           <div className={styles.a11yInputBox}>
             <input className={styles.a11yPicker} type="color" aria-label="텍스트 색상 선택"
-              value={textHex} onChange={e => setTextHex(e.target.value)} />
-            <input className={styles.a11yHexInput} type="text" aria-label="텍스트 색상 HEX"
-              value={textHex.toUpperCase()}
-              onChange={e => setTextHex(e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value)}
-              placeholder="텍스트 색상" maxLength={7} />
+              value={textHex} onChange={e => setTextHex(e.target.value.toUpperCase())} />
+            <HexDraftInput className={styles.a11yHexInput} label="텍스트 색상 코드"
+              value={textHex} onCommit={setTextHex} placeholder="텍스트 색상" />
           </div>
           <div className={styles.a11yInputBox}>
             <input className={styles.a11yPicker} type="color" aria-label="배경 색상 선택"
-              value={bgHex} onChange={e => setBgHex(e.target.value)} />
-            <input className={styles.a11yHexInput} type="text" aria-label="배경 색상 HEX"
-              value={bgHex.toUpperCase()}
-              onChange={e => setBgHex(e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value)}
-              placeholder="배경 색상" maxLength={7} />
+              value={bgHex} onChange={e => setBgHex(e.target.value.toUpperCase())} />
+            <HexDraftInput className={styles.a11yHexInput} label="배경 색상 코드"
+              value={bgHex} onCommit={setBgHex} placeholder="배경 색상" />
           </div>
         </div>
       </div>
@@ -487,7 +552,17 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
             </button>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-            HSL 명도 단계만 조정해 4.5:1 통과를 만족하는 가장 가까운 색상입니다.
+            색조·채도는 유지하고 명도만 밝은·어두운 양방향으로 조정해 4.5:1을 통과하는 가장 가까운 색상입니다.
+            적용 시 대비 {contrastRatio(suggested, bgRgb).toFixed(2)}:1이 됩니다.
+          </p>
+        </div>
+      )}
+      {!grade.aa_normal && !suggested && (
+        <div className={styles.card}>
+          <label className={styles.cardLabel}>AA 통과를 위한 텍스트 색상 추천</label>
+          <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
+            이 색조·채도에서는 명도 조정만으로 4.5:1에 도달할 수 없습니다.
+            배경 색상을 함께 조정하거나 채도를 낮춘 다른 색조를 선택해 보세요.
           </p>
         </div>
       )}
@@ -519,7 +594,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
                     {cbRatio.toFixed(2)} : 1
                   </span>
                   <span className={distinct ? styles.cbDistinct : styles.cbWarning}>
-                    {distinct ? '구분 가능' : '구분 어려움'}
+                    {distinct ? '대비 충분' : '대비 부족'}
                   </span>
                 </div>
               </div>
@@ -530,6 +605,8 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
           적·녹색맹은 Machado 2009, 청색맹은 Brettel 1997 모델(선형 RGB 기준)로 완전 이색자를 시뮬레이션합니다.
           가장 흔한 유형은 이보다 변화가 약한 <strong>녹색약(Deuteranomaly, 남성 약 5%)</strong>이에요.
           전색맹은 휘도(WCAG 기준) 근사라 대비비가 원본과 같습니다.
+          &lsquo;대비 충분&rsquo;은 시뮬레이션 색 기준 3:1 이상이라는 뜻으로, 실제 구분을 보장하지는 않습니다 —
+          색만으로 정보를 전달하지 않는 것(WCAG 1.4.1)이 가장 안전해요.
         </p>
       </div>
 
@@ -555,7 +632,7 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
   const [type, setType] = useState<PaletteType>('tailwind')
   const [exportFmt, setExportFmt] = useState<ExportFormat>('css')
 
-  const baseRgb = useMemo(() => hexToRgb(hex) ?? { r: 62, g: 200, b: 255 }, [hex])
+  const baseRgb = useMemo(() => hexToRgb(hex) ?? { r: 8, g: 145, b: 178 }, [hex])
   const baseHsl = useMemo(() => rgbToHsl(baseRgb), [baseRgb])
 
   /* 팔레트 계산 */
@@ -582,7 +659,7 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
         return ':root {\n' + entries.map(([s, h]) => `  --color-primary-${s}: ${h.toLowerCase()};`).join('\n') + '\n}'
       }
       if (exportFmt === 'tailwind') {
-        return `// tailwind.config.js\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        primary: {\n${entries.map(([s, h]) => `          '${s}': '${h.toLowerCase()}',`).join('\n')}\n        },\n      },\n    },\n  },\n}`
+        return `/* Tailwind v4 — CSS-first 설정 (globals.css 등에 추가) */\n@theme {\n${entries.map(([s, h]) => `  --color-primary-${s}: ${h.toLowerCase()};`).join('\n')}\n}`
       }
       if (exportFmt === 'scss') {
         return entries.map(([s, h]) => `$primary-${s}: ${h.toLowerCase()};`).join('\n')
@@ -596,7 +673,7 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
       return ':root {\n' + hexes.map((h, i) => `  --color-${i + 1}: ${h};`).join('\n') + '\n}'
     }
     if (exportFmt === 'tailwind') {
-      return `// tailwind.config.js\nmodule.exports = {\n  theme: { extend: { colors: {\n${hexes.map((h, i) => `    'color-${i + 1}': '${h}',`).join('\n')}\n  } } }\n}`
+      return `/* Tailwind v4 — CSS-first 설정 (@theme) */\n@theme {\n${hexes.map((h, i) => `  --color-palette-${i + 1}: ${h};`).join('\n')}\n}`
     }
     if (exportFmt === 'scss') {
       return hexes.map((h, i) => `$color-${i + 1}: ${h};`).join('\n')
@@ -614,10 +691,8 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <input className={styles.colorPicker} type="color" aria-label="기준 색상 선택"
             value={hex} onChange={e => setHex(e.target.value.toUpperCase())} />
-          <input className={styles.hexInput} type="text" aria-label="기준 색상 HEX"
-            value={hex.toUpperCase()}
-            onChange={e => setHex(e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value)}
-            maxLength={7} />
+          <HexDraftInput className={styles.hexInput} label="기준 색상 코드"
+            value={hex} onCommit={setHex} />
         </div>
       </div>
 
@@ -729,7 +804,7 @@ type CssTabProps = {
 function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
   const [colorName, setColorName] = useState('primary')
 
-  const baseRgb = useMemo(() => hexToRgb(hex) ?? { r: 62, g: 200, b: 255 }, [hex])
+  const baseRgb = useMemo(() => hexToRgb(hex) ?? { r: 8, g: 145, b: 178 }, [hex])
   const baseHsl = useMemo(() => rgbToHsl(baseRgb), [baseRgb])
 
   /* CSS 변수 코드 */
@@ -739,11 +814,18 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
     return `:root {\n${lines}\n\n  --color-${colorName}: ${rgbToHex(baseRgb).toLowerCase()};\n  --color-${colorName}-rgb: ${baseRgb.r} ${baseRgb.g} ${baseRgb.b};\n  --color-${colorName}-hsl: ${baseHsl.h} ${baseHsl.s}% ${baseHsl.l}%;\n}`
   }, [baseHsl, baseRgb, colorName])
 
-  /* Tailwind config 코드 */
+  /* Tailwind v4 @theme (CSS-first — 현행 커스텀 방식) */
+  const tailwindTheme = useMemo(() => {
+    const scale = tailwindScale(baseHsl)
+    const lines = scale.map(s => `  --color-${colorName}-${s.shade}: ${s.hex.toLowerCase()};`).join('\n')
+    return `/* Tailwind v4 — globals.css 등에 추가 */\n@theme {\n${lines}\n}`
+  }, [baseHsl, colorName])
+
+  /* Tailwind v3 config 코드 (구버전) */
   const tailwindConfig = useMemo(() => {
     const scale = tailwindScale(baseHsl)
     const entries = scale.map(s => `        '${s.shade}': '${s.hex.toLowerCase()}',`).join('\n')
-    return `// tailwind.config.js\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        ${colorName}: {\n${entries}\n        },\n      },\n    },\n  },\n}`
+    return `// tailwind.config.js (v3 이하)\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        ${colorName}: {\n${entries}\n        },\n      },\n    },\n  },\n}`
   }, [baseHsl, colorName])
 
   /* Tailwind 가장 가까운 색 */
@@ -773,9 +855,19 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
     ]
   }, [baseHsl])
 
+  /* 버튼 텍스트 색 — 흑/백 중 대비가 높은 쪽 + AA 미달 시 주석 경고 */
+  const btnText = useMemo(() => {
+    const cw = contrastRatio({ r: 255, g: 255, b: 255 }, baseRgb)
+    const cb = contrastRatio({ r: 0, g: 0, b: 0 }, baseRgb)
+    return cw >= cb ? { color: 'white', ratio: cw } : { color: 'black', ratio: cb }
+  }, [baseRgb])
+
   const uiCss = useMemo(() => {
-    return `.btn-${colorName} {\n  background: ${uiStates[0].hex.toLowerCase()};\n  color: white;\n}\n.btn-${colorName}:hover {\n  background: ${uiStates[1].hex.toLowerCase()};\n}\n.btn-${colorName}:active {\n  background: ${uiStates[2].hex.toLowerCase()};\n}\n.btn-${colorName}:focus-visible {\n  box-shadow: 0 0 0 3px ${uiStates[3].hex.toLowerCase()};\n}\n.btn-${colorName}:disabled {\n  background: ${uiStates[4].hex.toLowerCase()};\n  cursor: not-allowed;\n}`
-  }, [uiStates, colorName])
+    const warn = btnText.ratio < 4.5
+      ? ` /* 대비 ${btnText.ratio.toFixed(2)}:1 — AA(4.5:1) 미달, 배경·텍스트 색 조정 권장 */`
+      : ''
+    return `.btn-${colorName} {\n  background: ${uiStates[0].hex.toLowerCase()};\n  color: ${btnText.color};${warn}\n}\n.btn-${colorName}:hover {\n  background: ${uiStates[1].hex.toLowerCase()};\n}\n.btn-${colorName}:active {\n  background: ${uiStates[2].hex.toLowerCase()};\n}\n.btn-${colorName}:focus-visible {\n  box-shadow: 0 0 0 3px ${uiStates[3].hex.toLowerCase()};\n}\n.btn-${colorName}:disabled {\n  background: ${uiStates[4].hex.toLowerCase()};\n  cursor: not-allowed;\n}`
+  }, [uiStates, colorName, btnText])
 
   /* 시맨틱 색상 (베이스 색상 기준) */
   const semantic = useMemo(() => {
@@ -808,10 +900,8 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <input className={styles.colorPicker} type="color" aria-label="기준 색상 선택"
             value={hex} onChange={e => setHex(e.target.value.toUpperCase())} />
-          <input className={styles.hexInput} type="text" aria-label="기준 색상 HEX"
-            value={hex.toUpperCase()}
-            onChange={e => setHex(e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value)}
-            maxLength={7} />
+          <HexDraftInput className={styles.hexInput} label="기준 색상 코드"
+            value={hex} onCommit={setHex} />
         </div>
       </div>
 
@@ -827,9 +917,21 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
         </button>
       </div>
 
-      {/* Tailwind config */}
+      {/* Tailwind v4 @theme */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>Tailwind config</label>
+        <label className={styles.cardLabel}>Tailwind v4 <code>@theme</code></label>
+        <pre className={styles.codeBlock}>{tailwindTheme}</pre>
+        <button type="button"
+          className={`${styles.copyBtn} ${copiedKey === 'tw-theme' ? styles.copied : ''}`}
+          style={{ marginTop: 10 }}
+          onClick={() => copy('tw-theme', tailwindTheme)}>
+          {copyLabel(copiedKey, 'tw-theme', '@theme 복사', '✓ 복사됨')}
+        </button>
+      </div>
+
+      {/* Tailwind v3 config (구버전) */}
+      <div className={styles.card}>
+        <label className={styles.cardLabel}>Tailwind v3 config (구버전)</label>
         <pre className={styles.codeBlock}>{tailwindConfig}</pre>
         <button type="button"
           className={`${styles.copyBtn} ${copiedKey === 'tw-config' ? styles.copied : ''}`}
@@ -932,7 +1034,10 @@ function GradientTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: 
     const last = sorted[sorted.length - 1]
     const second = sorted[sorted.length - 2]
     const newPos = Math.round((last.pos + second.pos) / 2)
-    const newHex = rgbToHex(lerpRgb(hexToRgb(second.hex)!, hexToRgb(last.hex)!, 0.5))
+    // 상태엔 유효 hex만 커밋되지만 방어적으로 null 폴백 (구버전 크래시 클래스)
+    const a = hexToRgb(second.hex) ?? { r: 8, g: 145, b: 178 }
+    const b = hexToRgb(last.hex) ?? { r: 8, g: 145, b: 178 }
+    const newHex = rgbToHex(lerpRgb(a, b, 0.5))
     setStops([...stops, { hex: newHex, pos: newPos }])
   }
   const removeStop = (i: number) => {
@@ -999,10 +1104,8 @@ background: conic-gradient(from 0deg, ${stopStr});`
             <div key={i} className={styles.gradStopRow}>
               <input className={styles.gradStopPicker} type="color" aria-label={`정지점 ${i + 1} 색상 선택`}
                 value={s.hex} onChange={e => updateStop(i, { hex: e.target.value.toUpperCase() })} />
-              <input className={styles.gradStopHex} type="text" aria-label={`정지점 ${i + 1} HEX`}
-                value={s.hex.toUpperCase()}
-                onChange={e => updateStop(i, { hex: e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value })}
-                maxLength={7} />
+              <HexDraftInput className={styles.gradStopHex} label={`정지점 ${i + 1} 색상 코드`}
+                value={s.hex} onCommit={h => updateStop(i, { hex: h })} />
               <input type="number" inputMode="decimal" className={styles.gradStopHex} min={0} max={100}
                 style={{ textAlign: 'right' }} aria-label={`정지점 ${i + 1} 위치 %`}
                 value={s.pos} onChange={e => updateStop(i, { pos: Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) })} />
@@ -1119,27 +1222,26 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
       ctx.drawImage(img, 0, 0, 100, 100)
       const data = ctx.getImageData(0, 0, 100, 100).data
 
-      const buckets = new Map<string, number>()
+      // 버킷은 24단위 양자화로 묶되, 대표색은 버킷 내 실평균 (내림값 사용 시 체계적으로 어두워짐 — 흰색이 #F0F0F0)
+      const buckets = new Map<string, { n: number; r: number; g: number; b: number }>()
       let counted = 0 // 투명 픽셀 제외 분모 (전체 픽셀로 나누면 투명 이미지에서 비율 과소)
       for (let i = 0; i < data.length; i += 4) {
         const a = data[i + 3]
         if (a < 128) continue
         counted++
-        const r = Math.floor(data[i] / 24) * 24
-        const g = Math.floor(data[i + 1] / 24) * 24
-        const b = Math.floor(data[i + 2] / 24) * 24
-        const key = `${r},${g},${b}`
-        buckets.set(key, (buckets.get(key) || 0) + 1)
+        const key = `${Math.floor(data[i] / 24)},${Math.floor(data[i + 1] / 24)},${Math.floor(data[i + 2] / 24)}`
+        const cur = buckets.get(key)
+        if (cur) {
+          cur.n++; cur.r += data[i]; cur.g += data[i + 1]; cur.b += data[i + 2]
+        } else {
+          buckets.set(key, { n: 1, r: data[i], g: data[i + 1], b: data[i + 2] })
+        }
       }
       if (counted === 0) { setExtracted([]); return }
-      const sorted = [...buckets.entries()].sort((a, b) => b[1] - a[1]).slice(0, count)
-      const result = sorted.map(([key, cnt]) => {
-        const [r, g, b] = key.split(',').map(Number)
-        return {
-          rgb: { r, g, b } as RGB,
-          hex: rgbToHex({ r, g, b }),
-          pct: Math.round((cnt / counted) * 100),
-        }
+      const sorted = [...buckets.values()].sort((a, b) => b.n - a.n).slice(0, count)
+      const result = sorted.map(v => {
+        const rgb = { r: Math.round(v.r / v.n), g: Math.round(v.g / v.n), b: Math.round(v.b / v.n) } as RGB
+        return { rgb, hex: rgbToHex(rgb), pct: Math.round((v.n / counted) * 100) }
       })
       setExtracted(result)
     }

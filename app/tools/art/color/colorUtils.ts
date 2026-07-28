@@ -47,8 +47,61 @@ const padHex = (n: number) => Math.max(0, Math.min(255, Math.round(n))).toString
 
 export function rgbToHex(rgb: RGB, includeAlpha = false): string {
   const base = `#${padHex(rgb.r)}${padHex(rgb.g)}${padHex(rgb.b)}`
-  if (!includeAlpha || rgb.a === undefined || rgb.a >= 1) return base
-  return base + padHex(rgb.a * 255)
+  if (!includeAlpha) return base
+  // HEXA는 알파 100%도 FF로 명시 (8자리 고정)
+  return base + padHex((rgb.a ?? 1) * 255)
+}
+
+/** 색 입력 파서 — #HEX(3/4/6/8) · rgb()/rgba() · hsl()/hsla() · "r, g, b"
+ *  hasAlpha: 입력에 알파 성분이 명시돼 있었는지 (알파 슬라이더 동기화용) */
+export function parseColorInput(input: string): { rgb: RGB; hasAlpha: boolean } | null {
+  const s = input.trim()
+  if (!s) return null
+
+  // HEX
+  if (/^#?[0-9a-fA-F]{3,8}$/.test(s)) {
+    const digits = s.replace('#', '')
+    if (![3, 4, 6, 8].includes(digits.length)) return null
+    const rgb = hexToRgb(digits)
+    return rgb ? { rgb, hasAlpha: digits.length === 4 || digits.length === 8 } : null
+  }
+
+  // rgb() / rgba()
+  const rgbMatch = s.match(/^rgba?\(\s*(\d{1,3})\s*[, ]\s*(\d{1,3})\s*[, ]\s*(\d{1,3})\s*(?:[,/]\s*([\d.]+%?)\s*)?\)$/i)
+  if (rgbMatch) {
+    const [, r, g, b, a] = rgbMatch
+    const chan = (v: string) => Math.max(0, Math.min(255, parseInt(v, 10)))
+    let alpha: number | undefined
+    if (a !== undefined) {
+      alpha = a.endsWith('%') ? parseFloat(a) / 100 : parseFloat(a)
+      if (!Number.isFinite(alpha)) return null
+      alpha = Math.max(0, Math.min(1, alpha))
+    }
+    return { rgb: { r: chan(r), g: chan(g), b: chan(b), a: alpha ?? 1 }, hasAlpha: alpha !== undefined }
+  }
+
+  // hsl() / hsla()
+  const hslMatch = s.match(/^hsla?\(\s*([\d.]+)(?:deg)?\s*[, ]\s*([\d.]+)%\s*[, ]\s*([\d.]+)%\s*(?:[,/]\s*([\d.]+%?)\s*)?\)$/i)
+  if (hslMatch) {
+    const [, h, sat, l, a] = hslMatch
+    let alpha: number | undefined
+    if (a !== undefined) {
+      alpha = a.endsWith('%') ? parseFloat(a) / 100 : parseFloat(a)
+      if (!Number.isFinite(alpha)) return null
+      alpha = Math.max(0, Math.min(1, alpha))
+    }
+    const rgb = hslToRgb({ h: parseFloat(h), s: parseFloat(sat), l: parseFloat(l), a: alpha ?? 1 })
+    return { rgb, hasAlpha: alpha !== undefined }
+  }
+
+  // "r, g, b" 십진 트리플
+  const tripleMatch = s.match(/^(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$/)
+  if (tripleMatch) {
+    const chan = (v: string) => Math.max(0, Math.min(255, parseInt(v, 10)))
+    return { rgb: { r: chan(tripleMatch[1]), g: chan(tripleMatch[2]), b: chan(tripleMatch[3]), a: 1 }, hasAlpha: false }
+  }
+
+  return null
 }
 
 export function rgbToHsl(rgb: RGB): HSL {
@@ -141,20 +194,22 @@ const linearToSrgb = (v: number) => {
   return Math.round(255 * (c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055))
 }
 
-/* ───────── LAB (CIE D65) ───────── */
-function rgbToXyz(rgb: RGB): { x: number; y: number; z: number } {
+/* ───────── LAB — CSS Color 4 기준 (D50, Bradford 순응) ─────────
+ * CSS lab() 함수는 D50 백색점 기준 Lab을 기대한다.
+ * sRGB(D65)를 그대로 D65 Lab으로 계산해 lab()에 붙이면 다른 색이 되므로,
+ * CSS Color 4 스펙의 Bradford 순응 행렬(sRGB linear → XYZ D50)을 사용. */
+function rgbToXyzD50(rgb: RGB): { x: number; y: number; z: number } {
   const r = srgbToLinear(rgb.r), g = srgbToLinear(rgb.g), b = srgbToLinear(rgb.b)
-  // sRGB → XYZ (D65)
-  const x = r * 0.4124564 + g * 0.3575761 + b * 0.1804375
-  const y = r * 0.2126729 + g * 0.7151522 + b * 0.0721750
-  const z = r * 0.0193339 + g * 0.1191920 + b * 0.9503041
+  const x = r * 0.4360747 + g * 0.3850649 + b * 0.1430804
+  const y = r * 0.2225045 + g * 0.7168786 + b * 0.0606169
+  const z = r * 0.0139322 + g * 0.0971045 + b * 0.7141733
   return { x, y, z }
 }
 
 export function rgbToLab(rgb: RGB): LAB {
-  const { x, y, z } = rgbToXyz(rgb)
-  // D65 white reference
-  const Xn = 0.95047, Yn = 1.0, Zn = 1.08883
+  const { x, y, z } = rgbToXyzD50(rgb)
+  // D50 white reference
+  const Xn = 0.96422, Yn = 1.0, Zn = 0.82521
   const f = (t: number) => t > 0.008856 ? Math.cbrt(t) : (7.787 * t + 16 / 116)
   const fx = f(x / Xn), fy = f(y / Yn), fz = f(z / Zn)
   return {
@@ -237,22 +292,21 @@ export function wcagGrade(ratio: number): WCAGGrade {
   return { ratio, aaa_normal, aa_normal, aaa_large, aa_large, ui, level }
 }
 
-/** 대비비를 만족하도록 텍스트 색상의 명도(L)를 조정 */
-export function suggestPassingColor(textRgb: RGB, bgRgb: RGB, target = 4.5): RGB {
+/** 대비비를 만족하도록 텍스트 색상의 명도(L)만 조정.
+ *  양방향 탐색(배경 반대 방향 우선) — 어느 방향으로도 못 찾으면 null
+ *  (중간 명도 배경에서는 색상·채도를 유지한 채 명도 조정만으로 4.5:1이 불가능할 수 있다). */
+export function suggestPassingColor(textRgb: RGB, bgRgb: RGB, target = 4.5): RGB | null {
   const baseHsl = rgbToHsl(textRgb)
   const bgLum = relativeLuminance(bgRgb)
-  const goDark = bgLum > 0.5 // 배경이 밝으면 텍스트는 어둡게
+  const dirs = bgLum > 0.5 ? [-1, 1] : [1, -1] // 배경이 밝으면 어두운 쪽부터
 
-  const range = goDark
-    ? Array.from({ length: baseHsl.l + 1 }, (_, i) => baseHsl.l - i) // L 감소
-    : Array.from({ length: 100 - baseHsl.l + 1 }, (_, i) => baseHsl.l + i) // L 증가
-
-  for (const l of range) {
-    const candidate = hslToRgb({ h: baseHsl.h, s: baseHsl.s, l: Math.max(0, Math.min(100, l)) })
-    if (contrastRatio(candidate, bgRgb) >= target) return candidate
+  for (const dir of dirs) {
+    for (let l = baseHsl.l; l >= 0 && l <= 100; l += dir) {
+      const candidate = hslToRgb({ h: baseHsl.h, s: baseHsl.s, l })
+      if (contrastRatio(candidate, bgRgb) >= target) return candidate
+    }
   }
-  // 극단적 fallback
-  return goDark ? { r: 0, g: 0, b: 0 } : { r: 255, g: 255, b: 255 }
+  return null
 }
 
 /* ───────── 색맹 시뮬레이션 ─────────
