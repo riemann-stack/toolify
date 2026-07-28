@@ -5,9 +5,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './gradient-generator.module.css'
 import {
   type ColorSpace, type GradientType, type GradientConfig, type Stop, type FavItem,
-  makeStop, buildCss, buildMeshCss, noiseSvgUrl,
+  makeStop, buildCss, buildMeshCss, noiseSvgUrl, cycleOf,
   exportCss, exportTailwind, exportSvg, exportReact, exportSwiftUI, exportFlutter,
-  analyzeContrast, colorblindStops, autoSuggestions,
+  analyzeContrast, colorblindStops, colorblindMesh, meshAnalysisStops, autoSuggestions,
   KOREAN_PRESETS, GLOBAL_PRESETS, presetToConfig,
   loadFavs, saveFavs,
   downloadGradientPng, downloadGradientSvg, extractColorsFromImage,
@@ -49,6 +49,31 @@ const EXPORT_SIZES = [
 /* 모듈 카운터 (favs ID) */
 let _favIdCounter = 0
 const nextFavId = () => `fav-${++_favIdCounter}-${Math.floor(performance.now())}`
+
+/** hex 텍스트 입력 — 완전한 6자리일 때만 커밋 (부분 입력이 상태를 오염해 미리보기가 사라지는 것 방지) */
+function HexField({ value, onCommit, className, label }: {
+  value: string
+  onCommit: (hex: string) => void
+  className: string
+  label: string
+}) {
+  const [raw, setRaw] = useState(value)
+  useEffect(() => { setRaw(value) }, [value])
+  const valid = /^#[0-9A-Fa-f]{6}$/.test(raw)
+  return (
+    <input
+      type="text" className={className} value={raw} aria-label={label}
+      style={valid ? undefined : { borderColor: 'var(--danger)' }}
+      maxLength={7} spellCheck={false}
+      onChange={(e) => {
+        const v = (e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value).toUpperCase()
+        if (!/^#[0-9A-F]{0,6}$/.test(v)) return
+        setRaw(v)
+        if (/^#[0-9A-F]{6}$/.test(v)) onCommit(v)
+      }}
+    />
+  )
+}
 
 const DEFAULT_CONFIG = (): GradientConfig => ({
   type:  'linear',
@@ -119,15 +144,16 @@ export default function GradientGeneratorClient() {
     addStopAt(pos)
   }
 
-  /* ── 드래그 ── */
+  /* ── 드래그 (Pointer Events — 마우스·터치 공통, 모바일 우선) ── */
   const draggingId = useRef<string | null>(null)
-  const onStopMouseDown = (e: React.MouseEvent, id: string) => {
+  const onStopPointerDown = (e: React.PointerEvent, id: string) => {
     e.stopPropagation()
+    e.preventDefault()
     draggingId.current = id
     setActiveStopId(id)
   }
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
+    const onMove = (e: PointerEvent) => {
       if (!draggingId.current || !barRef.current) return
       const rect = barRef.current.getBoundingClientRect()
       const pos = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100))
@@ -138,11 +164,13 @@ export default function GradientGeneratorClient() {
       }))
     }
     const onUp = () => { draggingId.current = null }
-    window.addEventListener('mousemove', onMove)
-    window.addEventListener('mouseup', onUp)
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+    window.addEventListener('pointercancel', onUp)
     return () => {
-      window.removeEventListener('mousemove', onMove)
-      window.removeEventListener('mouseup', onUp)
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      window.removeEventListener('pointercancel', onUp)
     }
   }, [])
 
@@ -166,14 +194,25 @@ export default function GradientGeneratorClient() {
     } catch { /* 권한 거부 */ }
   }
 
-  /* ── 분석 (Tab 2) ── */
-  const contrast = useMemo(() => analyzeContrast(cfg.stops, cfg.space), [cfg.stops, cfg.space])
+  /* ── 분석 (Tab 2) — mesh는 모서리 4색 기준 (stops는 mesh 렌더에 쓰이지 않음) ── */
+  const isMesh = cfg.type === 'mesh' && !!cfg.mesh
+  const analysisStops = useMemo(
+    () => (isMesh ? meshAnalysisStops(cfg.mesh!) : cfg.stops),
+    [isMesh, cfg.mesh, cfg.stops],
+  )
+  const contrast = useMemo(() => analyzeContrast(analysisStops, cfg.space), [analysisStops, cfg.space])
 
-  const cbStops = useMemo(() => ({
-    protanopia:   colorblindStops(cfg.stops, 'protanopia'),
-    deuteranopia: colorblindStops(cfg.stops, 'deuteranopia'),
-    tritanopia:   colorblindStops(cfg.stops, 'tritanopia'),
-  }), [cfg.stops])
+  const cbBgs = useMemo(() => {
+    const build = (type: 'protanopia' | 'deuteranopia' | 'tritanopia') =>
+      isMesh
+        ? buildMeshCss(colorblindMesh(cfg.mesh!, type))
+        : buildCss({ ...cfg, stops: colorblindStops(cfg.stops, type) })
+    return {
+      protanopia:   build('protanopia'),
+      deuteranopia: build('deuteranopia'),
+      tritanopia:   build('tritanopia'),
+    }
+  }, [cfg, isMesh])
 
   /* ── 자동 추천 (1색 기준) ── */
   const [autoBase, setAutoBase] = useState('#0891B2')
@@ -202,7 +241,11 @@ export default function GradientGeneratorClient() {
     setFavs([item, ...favs])
   }
   const removeFav = (id: string) => setFavs(favs.filter((f) => f.id !== id))
-  const applyFav = (item: FavItem) => setCfg(item.config)
+  // 저장된 stop id를 그대로 쓰면 세션 카운터와 충돌(수정·삭제가 중복 타격) — 적용 시 재발급
+  const applyFav = (item: FavItem) => setCfg({
+    ...item.config,
+    stops: item.config.stops.map((s) => makeStop(s.hex, s.pos)),
+  })
 
   /* ── 이미지에서 추출 ── */
   const fileRef = useRef<HTMLInputElement>(null)
@@ -254,7 +297,7 @@ export default function GradientGeneratorClient() {
           { href: '/tools/art/golden-ratio', label: '황금 비율' }
         ]}
       >
-        사용 가이드 <strong>OKLCH</strong>는 인지적으로 가장 균등한 색공간 — UI 그라디언트에 권장 <strong>Mesh</strong>는 표준이 아니므로 export는 multi-radial-gradient로 출력 <strong>Conic</strong>은 Figma 미지원 (Linear/Radial 권장)
+        사용 가이드 <strong>OKLCH</strong>는 인지적으로 가장 균등한 색공간 — UI 그라디언트에 권장 <strong>Mesh</strong>는 표준이 아니므로 export는 multi-radial-gradient로 출력 <strong>Conic</strong>은 SVG 내보내기 시 radial로 폴백 (SVG 표준에 conic 없음)
       </Disclaimer>
 
       {/* ── 탭 ── */}
@@ -264,7 +307,7 @@ export default function GradientGeneratorClient() {
           { k: 'analyze', l: '분석·접근성' },
           { k: 'presets', l: '프리셋' },
         ] as const).map((t) => (
-          <button key={t.k} className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`} onClick={() => setTab(t.k)}>
+          <button key={t.k} type="button" aria-pressed={tab === t.k} className={`${styles.tab} ${tab === t.k ? styles.tabActive : ''}`} onClick={() => setTab(t.k)}>
             {t.l}
           </button>
         ))}
@@ -300,6 +343,8 @@ export default function GradientGeneratorClient() {
                 return (
                   <button
                     key={sp.key}
+                    type="button"
+                    aria-pressed={active}
                     className={`${styles.spaceCard} ${active ? styles.spaceCardActive : ''}`}
                     onClick={() => setCfg({ ...cfg, space: sp.key })}
                   >
@@ -319,6 +364,8 @@ export default function GradientGeneratorClient() {
               {TYPES.map((t) => (
                 <button
                   key={t.key}
+                  type="button"
+                  aria-pressed={cfg.type === t.key}
                   className={`${styles.typeBtn} ${cfg.type === t.key ? styles.typeBtnActive : ''}`}
                   onClick={() => setCfg({ ...cfg, type: t.key })}
                 >
@@ -327,7 +374,7 @@ export default function GradientGeneratorClient() {
               ))}
             </div>
             {cfg.type === 'conic' && (
-              <p className={styles.note}>⚠️ Conic gradient는 Figma에서 미지원. 디자인 툴 호환을 위해서는 Linear/Radial 권장.</p>
+              <p className={styles.note}>💡 Figma·Sketch에서는 Angular 그라디언트가 conic에 해당합니다. 단 SVG 파일 자체는 conic을 지원하지 않아 본 도구의 SVG 내보내기는 radial로 폴백돼요 — 디자인 툴로 옮길 땐 PNG 내보내기가 정확합니다.</p>
             )}
           </section>
 
@@ -346,8 +393,18 @@ export default function GradientGeneratorClient() {
             {(cfg.type === 'radial' || cfg.type === 'repeating-radial') && (
               <div className={styles.pillRow}>
                 <span className={styles.pillRowLabel}>모양</span>
-                <button className={`${styles.pill} ${cfg.shape === 'circle' ? styles.pillActive : ''}`} onClick={() => setCfg({ ...cfg, shape: 'circle' })}>Circle</button>
-                <button className={`${styles.pill} ${cfg.shape === 'ellipse' ? styles.pillActive : ''}`} onClick={() => setCfg({ ...cfg, shape: 'ellipse' })}>Ellipse</button>
+                <button type="button" aria-pressed={cfg.shape === 'circle'} className={`${styles.pill} ${cfg.shape === 'circle' ? styles.pillActive : ''}`} onClick={() => setCfg({ ...cfg, shape: 'circle' })}>Circle</button>
+                <button type="button" aria-pressed={cfg.shape === 'ellipse'} className={`${styles.pill} ${cfg.shape === 'ellipse' ? styles.pillActive : ''}`} onClick={() => setCfg({ ...cfg, shape: 'ellipse' })}>Ellipse</button>
+              </div>
+            )}
+            {(cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial') && (
+              <div className={styles.sliderRow}>
+                <label htmlFor="gradient-generator-f3">반복 주기 <strong>{cycleOf(cfg)}%</strong></label>
+                <input id="gradient-generator-f3"
+                  type="range" min={5} max={100} step={5} value={cycleOf(cfg)}
+                  onChange={(e) => setCfg({ ...cfg, cycle: +e.target.value })}
+                  className={styles.slider}
+                />
               </div>
             )}
             <div className={styles.sliderRow}>
@@ -373,15 +430,13 @@ export default function GradientGeneratorClient() {
                       value={cfg.mesh![corner]}
                       onChange={(e) => setCfg({ ...cfg, mesh: { ...cfg.mesh!, [corner]: e.target.value.toUpperCase() } })}
                       className={styles.colorPicker}
+                      aria-label={`${corner.toUpperCase()} 모서리 색상 선택`}
                     />
-                    <input
-                      type="text"
+                    <HexField
                       value={cfg.mesh![corner]}
-                      onChange={(e) => {
-                        const v = e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value
-                        if (/^#[0-9a-fA-F]{0,6}$/.test(v)) setCfg({ ...cfg, mesh: { ...cfg.mesh!, [corner]: v.toUpperCase() } })
-                      }}
+                      onCommit={(hex) => setCfg({ ...cfg, mesh: { ...cfg.mesh!, [corner]: hex } })}
                       className={styles.hexInput}
+                      label={`${corner.toUpperCase()} 모서리 HEX`}
                     />
                   </div>
                 ))}
@@ -395,7 +450,7 @@ export default function GradientGeneratorClient() {
               <div className={styles.stopsHead}>
                 <label className={styles.label}>컬러 Stops <span className={styles.labelSub}>({cfg.stops.length}/8 · 바 클릭으로 추가)</span></label>
                 {cfg.stops.length < 8 && (
-                  <button className={styles.smallBtn} onClick={() => addStopAt(50)}>+ Stop 추가</button>
+                  <button type="button" className={styles.smallBtn} onClick={() => addStopAt(50)}>+ Stop 추가</button>
                 )}
               </div>
               <div
@@ -410,7 +465,7 @@ export default function GradientGeneratorClient() {
                     key={s.id}
                     className={`${styles.stopMarker} ${activeStopId === s.id ? styles.stopMarkerActive : ''}`}
                     style={{ left: `${s.pos}%`, background: s.hex }}
-                    onMouseDown={(e) => onStopMouseDown(e, s.id)}
+                    onPointerDown={(e) => onStopPointerDown(e, s.id)}
                     onClick={(e) => { e.stopPropagation(); setActiveStopId(s.id) }}
                   />
                 ))}
@@ -425,15 +480,11 @@ export default function GradientGeneratorClient() {
                       className={styles.colorPicker}
                       aria-label="색상 선택"
                     />
-                    <input
-                      type="text"
+                    <HexField
                       value={s.hex}
-                      onChange={(e) => {
-                        const v = e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value
-                        if (/^#[0-9a-fA-F]{0,6}$/.test(v)) updateStop(s.id, { hex: v.toUpperCase() })
-                      }}
+                      onCommit={(hex) => updateStop(s.id, { hex })}
                       className={styles.hexInput}
-                      maxLength={7}
+                      label="stop HEX 색상"
                     />
                     <input
                       type="number" inputMode="decimal"
@@ -445,6 +496,7 @@ export default function GradientGeneratorClient() {
                     />
                     <span className={styles.posUnit}>%</span>
                     <button
+                      type="button"
                       className={styles.removeBtn}
                       onClick={() => removeStop(s.id)}
                       disabled={cfg.stops.length <= 2}
@@ -463,6 +515,8 @@ export default function GradientGeneratorClient() {
               {EXPORT_PREVIEWS.map((p) => (
                 <button
                   key={p.key}
+                  type="button"
+                  aria-pressed={previewKind === p.key}
                   className={`${styles.pill} ${previewKind === p.key ? styles.pillActive : ''}`}
                   onClick={() => setPreviewKind(p.key)}
                 >{p.label}</button>
@@ -511,6 +565,8 @@ export default function GradientGeneratorClient() {
               {(Object.keys(codes) as Array<keyof typeof codes>).map((k) => (
                 <button
                   key={k}
+                  type="button"
+                  aria-pressed={activeCode === k}
                   className={`${styles.codeTab} ${activeCode === k ? styles.codeTabActive : ''}`}
                   onClick={() => setActiveCode(k)}
                 >
@@ -519,7 +575,7 @@ export default function GradientGeneratorClient() {
               ))}
             </div>
             <div className={styles.codeBox}>
-              <button className={styles.copyBtn} onClick={() => copyCode(activeCode)}>
+              <button type="button" className={styles.copyBtn} onClick={() => copyCode(activeCode)}>
                 {copied === activeCode ? '✓ 복사됨' : '복사'}
               </button>
               <pre className={styles.codePre}>{codes[activeCode]}</pre>
@@ -548,9 +604,9 @@ export default function GradientGeneratorClient() {
               </label>
             </div>
             <div className={styles.exportBtns}>
-              <button className={styles.primaryBtn} onClick={handlePngDownload}>PNG 다운로드</button>
-              <button className={styles.secondaryBtn} onClick={handleSvgDownload}>SVG 다운로드</button>
-              <button className={styles.secondaryBtn} onClick={addToFavs} disabled={favs.length >= 30}>
+              <button type="button" className={styles.primaryBtn} onClick={handlePngDownload}>PNG 다운로드</button>
+              <button type="button" className={styles.secondaryBtn} onClick={handleSvgDownload}>SVG 다운로드</button>
+              <button type="button" className={styles.secondaryBtn} onClick={addToFavs} disabled={favs.length >= 30}>
                 즐겨찾기 ({favs.length}/30)
               </button>
             </div>
@@ -560,8 +616,8 @@ export default function GradientGeneratorClient() {
                   const bg = f.config.type === 'mesh' && f.config.mesh ? buildMeshCss(f.config.mesh) : buildCss(f.config)
                   return (
                     <div key={f.id} className={styles.favItem}>
-                      <button className={styles.favSwatch} style={{ backgroundImage: bg }} onClick={() => applyFav(f)} aria-label={`${f.name} 적용`} />
-                      <button className={styles.favRemove} onClick={() => removeFav(f.id)} aria-label="삭제">✕</button>
+                      <button type="button" className={styles.favSwatch} style={{ backgroundImage: bg }} onClick={() => applyFav(f)} aria-label={`${f.name} 적용`} />
+                      <button type="button" className={styles.favRemove} onClick={() => removeFav(f.id)} aria-label="삭제">✕</button>
                     </div>
                   )
                 })}
@@ -600,7 +656,8 @@ export default function GradientGeneratorClient() {
             </div>
             <p className={styles.contrastTip}>
               💡 추천 텍스트 색상: <strong>{contrast.bestText === 'white' ? '흰색' : '검정'}</strong>
-              {' · '}최난색 구간: <code style={{ background: contrast.worstSampleHex, color: contrast.bestText, padding: '2px 6px', borderRadius: 4 }}>{contrast.worstSampleHex}</code> ({contrast.worstSampleAt.toFixed(0)}%)
+              {' · '}추천색 기준 최난 구간: <code style={{ background: contrast.worstSampleHex, color: contrast.bestText, padding: '2px 6px', borderRadius: 4 }}>{contrast.worstSampleHex}</code> ({contrast.worstSampleAt.toFixed(0)}%)
+              {isMesh && ' · Mesh는 모서리 4색 기준 근사'}
             </p>
           </section>
 
@@ -608,18 +665,19 @@ export default function GradientGeneratorClient() {
           <section>
             <label className={styles.label}>색맹 시뮬레이션</label>
             <div className={styles.cbGrid}>
-              {(['protanopia', 'deuteranopia', 'tritanopia'] as const).map((type) => {
-                const simCfg = { ...cfg, stops: cbStops[type] }
-                const bg = buildCss(simCfg)
-                return (
-                  <div key={type} className={styles.cbCard}>
-                    <div className={styles.cbSwatch} style={{ backgroundImage: bg }} />
-                    <p className={styles.cbLabel}>{type === 'protanopia' ? '적색맹 (1형)' : type === 'deuteranopia' ? '녹색맹 (2형)' : '청색맹 (3형)'}</p>
-                    <p className={styles.cbDesc}>{type === 'protanopia' ? '인구 1%' : type === 'deuteranopia' ? '인구 5% (가장 흔함)' : '인구 0.01%'}</p>
-                  </div>
-                )
-              })}
+              {(['protanopia', 'deuteranopia', 'tritanopia'] as const).map((type) => (
+                <div key={type} className={styles.cbCard}>
+                  <div className={styles.cbSwatch} style={{ backgroundImage: cbBgs[type] }} />
+                  <p className={styles.cbLabel}>{type === 'protanopia' ? '적색맹 (Protanopia)' : type === 'deuteranopia' ? '녹색맹 (Deuteranopia)' : '청색맹 (Tritanopia)'}</p>
+                  <p className={styles.cbDesc}>{type === 'protanopia' ? '남성 약 1% (여성 드묾)' : type === 'deuteranopia' ? '남성 약 1% (여성 드묾)' : '매우 드묾 (성별 무관)'}</p>
+                </div>
+              ))}
             </div>
+            <p className={styles.note}>
+              위 3종은 해당 원뿔세포가 없는 완전 이색자(색맹) 기준 시뮬레이션입니다(적·녹 유병률은 북유럽계 통계).
+              실제로 가장 흔한 유형은 변화가 더 약한 녹색약(Deuteranomaly, 남성 약 5%)으로,
+              여기서 구분이 어려운 조합은 녹색약 사용자에게도 부담이 됩니다.
+            </p>
           </section>
 
           {/* 이미지에서 추출 */}
@@ -627,7 +685,7 @@ export default function GradientGeneratorClient() {
             <p className={styles.gapTitle}>이미지에서 색상 추출 → 그라디언트</p>
             <p className={styles.note}>이미지는 <strong>브라우저 내에서만 처리</strong>되며 서버로 전송되지 않습니다 (K-means 5색 추출).</p>
             <div className={styles.uploadRow}>
-              <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className={styles.fileInput} />
+              <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className={styles.fileInput} aria-label="색상 추출용 이미지 선택" />
               {extracting && <span className={styles.note}>추출 중…</span>}
             </div>
             {extractedHexes.length > 0 && (
@@ -639,7 +697,7 @@ export default function GradientGeneratorClient() {
                     </div>
                   ))}
                 </div>
-                <button className={styles.primaryBtn} onClick={applyExtracted}>이 색상으로 그라디언트 만들기</button>
+                <button type="button" className={styles.primaryBtn} onClick={applyExtracted}>이 색상으로 그라디언트 만들기</button>
               </>
             )}
           </section>
@@ -659,15 +717,11 @@ export default function GradientGeneratorClient() {
                 onChange={(e) => setAutoBase(e.target.value.toUpperCase())}
                 className={styles.colorPicker}
               />
-              <input
-                type="text"
+              <HexField
                 value={autoBase}
-                onChange={(e) => {
-                  const v = e.target.value.startsWith('#') ? e.target.value : '#' + e.target.value
-                  if (/^#[0-9a-fA-F]{0,6}$/.test(v)) setAutoBase(v.toUpperCase())
-                }}
+                onCommit={setAutoBase}
                 className={styles.hexInput}
-                maxLength={7}
+                label="베이스 HEX 색상"
               />
               <span className={styles.note}>← 베이스 색상 선택</span>
             </div>
@@ -677,6 +731,7 @@ export default function GradientGeneratorClient() {
                 return (
                   <button
                     key={s.label}
+                    type="button"
                     className={styles.suggestCard}
                     onClick={() => setCfg({ ...cfg, stops: s.stops, type: cfg.type === 'mesh' ? 'linear' : cfg.type })}
                   >
@@ -727,7 +782,7 @@ function PresetGroup({ title, subtitle, presets, onApply }: {
             {list.map((p) => {
               const bg = `linear-gradient(135deg, ${p.stops.map(([h, pos]) => `${h} ${pos}%`).join(', ')})`
               return (
-                <button key={p.id} className={styles.presetCard} onClick={() => onApply(p)}>
+                <button key={p.id} type="button" className={styles.presetCard} onClick={() => onApply(p)}>
                   <div className={styles.presetSwatch} style={{ backgroundImage: bg }} />
                   <span className={styles.presetName}>{p.name}</span>
                 </button>

@@ -47,16 +47,18 @@ const linearToSrgb = (v: number): number => {
   return Math.max(0, Math.min(255, Math.round(c * 255)))
 }
 
+/* XYZ(D50) → linear sRGB — colorUtils.rgbToLab(D50·Bradford)의 역행렬.
+   D65 역행렬을 쓰면 보간 끝점이 원색으로 복원되지 않는다 (D50/D65 혼용 금지). */
 function xyzToRgb(x: number, y: number, z: number): RGB {
-  const r = x *  3.2404542 + y * -1.5371385 + z * -0.4985314
-  const g = x * -0.9692660 + y *  1.8760108 + z *  0.0415560
-  const b = x *  0.0556434 + y * -0.2040259 + z *  1.0572252
+  const r = x *  3.1338561 + y * -1.6168667 + z * -0.4906146
+  const g = x * -0.9787684 + y *  1.9161415 + z *  0.0334540
+  const b = x *  0.0719453 + y * -0.2289914 + z *  1.4052427
   return { r: linearToSrgb(r), g: linearToSrgb(g), b: linearToSrgb(b) }
 }
 
 export function labToRgb(L: number, a: number, b: number): RGB {
-  // L: 0~100, a/b: -128~127
-  const Xn = 0.95047, Yn = 1.0, Zn = 1.08883
+  // L: 0~100, a/b: -128~127 — CSS lab()과 같은 D50 백색점
+  const Xn = 0.96422, Yn = 1.0, Zn = 0.82521
   const fy = (L + 16) / 116
   const fx = a / 500 + fy
   const fz = fy - b / 200
@@ -172,8 +174,19 @@ export function gradientColors(stops: Stop[], space: ColorSpace, count: number):
 const stopsCss = (stops: Stop[]): string =>
   [...stops].sort((a, b) => a.pos - b.pos).map((s) => `${s.hex.toUpperCase()} ${s.pos.toFixed(1)}%`).join(', ')
 
+/** repeating 유형의 1싸이클 너비(%) — 미지정 시 25 (100이면 반복이 보이지 않음) */
+export const cycleOf = (cfg: GradientConfig): number => {
+  const c = cfg.cycle
+  return typeof c === 'number' && c > 0 ? Math.min(100, c) : 25
+}
+
 /** 미리보기/내보내기용: 공백 보간 모드 native 문법 */
 export function buildCss(cfg: GradientConfig, opts: { native?: boolean } = {}): string {
+  // mesh는 어떤 경로로 들어와도 mesh로 렌더 (폴스루 시 linear로 둔갑하는 것 방지)
+  if (cfg.type === 'mesh') {
+    return cfg.mesh ? buildMeshCss(cfg.mesh) : `linear-gradient(${cfg.angle}deg, ${stopsCss(cfg.stops)})`
+  }
+
   const native = opts.native ?? false
   const inSpace =
     native && cfg.space !== 'rgb'
@@ -185,28 +198,36 @@ export function buildCss(cfg: GradientConfig, opts: { native?: boolean } = {}): 
     const list = stopsCss(cfg.stops)
     if (cfg.type === 'linear') return `linear-gradient(${inSpace}${cfg.angle}deg, ${list})`
     if (cfg.type === 'repeating-linear') {
-      const cycle = cfg.cycle ?? Math.max(...cfg.stops.map((s) => s.pos))
+      const cycle = cycleOf(cfg)
       const scaled = stopsCss(cfg.stops.map((s) => ({ ...s, pos: (s.pos / 100) * cycle })))
       return `repeating-linear-gradient(${inSpace}${cfg.angle}deg, ${scaled})`
     }
-    if (cfg.type === 'radial') return `radial-gradient(${cfg.shape} at center, ${inSpace}${list})`
-    if (cfg.type === 'repeating-radial') return `repeating-radial-gradient(${cfg.shape} at center, ${inSpace}${list})`
+    // radial: <color-interpolation-method>는 콤마 앞(모양·위치와 같은 그룹) — 스톱 리스트에 넣으면 무효 CSS
+    if (cfg.type === 'radial') return `radial-gradient(${inSpace}${cfg.shape} at center, ${list})`
+    if (cfg.type === 'repeating-radial') {
+      const cycle = cycleOf(cfg)
+      const scaled = stopsCss(cfg.stops.map((s) => ({ ...s, pos: (s.pos / 100) * cycle })))
+      return `repeating-radial-gradient(${inSpace}${cfg.shape} at center, ${scaled})`
+    }
     if (cfg.type === 'conic') return `conic-gradient(${inSpace}from ${cfg.angle}deg at center, ${list})`
-    // mesh: 별도 처리
   }
 
   // dense interpolation 모드 (RGB 외 공간을 JS로 보간 후 CSS hex stops 다수 출력)
-  if (cfg.space === 'rgb' || cfg.type === 'mesh') {
+  if (cfg.space === 'rgb') {
     // RGB는 어차피 native와 동일
     const list = stopsCss(cfg.stops)
     if (cfg.type === 'linear') return `linear-gradient(${cfg.angle}deg, ${list})`
     if (cfg.type === 'repeating-linear') {
-      const cycle = cfg.cycle ?? Math.max(...cfg.stops.map((s) => s.pos))
+      const cycle = cycleOf(cfg)
       const scaled = stopsCss(cfg.stops.map((s) => ({ ...s, pos: (s.pos / 100) * cycle })))
       return `repeating-linear-gradient(${cfg.angle}deg, ${scaled})`
     }
     if (cfg.type === 'radial') return `radial-gradient(${cfg.shape} at center, ${list})`
-    if (cfg.type === 'repeating-radial') return `repeating-radial-gradient(${cfg.shape} at center, ${list})`
+    if (cfg.type === 'repeating-radial') {
+      const cycle = cycleOf(cfg)
+      const scaled = stopsCss(cfg.stops.map((s) => ({ ...s, pos: (s.pos / 100) * cycle })))
+      return `repeating-radial-gradient(${cfg.shape} at center, ${scaled})`
+    }
     if (cfg.type === 'conic') return `conic-gradient(from ${cfg.angle}deg at center, ${list})`
   }
 
@@ -215,12 +236,16 @@ export function buildCss(cfg: GradientConfig, opts: { native?: boolean } = {}): 
   const list = dense.map((d) => `${rgbToHex(d.rgb)} ${d.pos.toFixed(1)}%`).join(', ')
   if (cfg.type === 'linear') return `linear-gradient(${cfg.angle}deg, ${list})`
   if (cfg.type === 'repeating-linear') {
-    const cycle = cfg.cycle ?? Math.max(...cfg.stops.map((s) => s.pos))
+    const cycle = cycleOf(cfg)
     const scaled = dense.map((d) => `${rgbToHex(d.rgb)} ${((d.pos / 100) * cycle).toFixed(1)}%`).join(', ')
     return `repeating-linear-gradient(${cfg.angle}deg, ${scaled})`
   }
   if (cfg.type === 'radial') return `radial-gradient(${cfg.shape} at center, ${list})`
-  if (cfg.type === 'repeating-radial') return `repeating-radial-gradient(${cfg.shape} at center, ${list})`
+  if (cfg.type === 'repeating-radial') {
+    const cycle = cycleOf(cfg)
+    const scaled = dense.map((d) => `${rgbToHex(d.rgb)} ${((d.pos / 100) * cycle).toFixed(1)}%`).join(', ')
+    return `repeating-radial-gradient(${cfg.shape} at center, ${scaled})`
+  }
   if (cfg.type === 'conic') return `conic-gradient(from ${cfg.angle}deg at center, ${list})`
   return `linear-gradient(${cfg.angle}deg, ${list})`
 }
@@ -274,11 +299,24 @@ export function exportSvg(cfg: GradientConfig, w = 400, h = 200): string {
 </svg>`
   }
 
-  // dense stops
-  const dense =
+  // dense stops (SVG는 offset 역순을 클램프하므로 반드시 정렬)
+  let dense =
     cfg.space === 'rgb'
-      ? cfg.stops.map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
+      ? [...cfg.stops].sort((a, b) => a.pos - b.pos).map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
       : gradientColors(cfg.stops, cfg.space, 16)
+
+  // repeating: 싸이클을 0~100%에 반복 배치 (SVG에는 repeating-gradient가 없음)
+  if (cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial') {
+    const cycle = cycleOf(cfg)
+    const tiled: typeof dense = []
+    for (let k = 0; k * cycle < 100; k++) {
+      for (const d of dense) {
+        const pos = k * cycle + (d.pos / 100) * cycle
+        if (pos <= 100) tiled.push({ rgb: d.rgb, pos })
+      }
+    }
+    dense = tiled
+  }
 
   const stopsXml = dense
     .map((d) => `      <stop offset="${d.pos.toFixed(1)}%" stop-color="${rgbToHex(d.rgb)}"/>`)
@@ -393,7 +431,7 @@ Stack(children: [
   decoration: BoxDecoration(
     gradient: RadialGradient(
       center: Alignment.center,
-      radius: 0.7,
+      radius: ${cfg.type === 'repeating-radial' ? (0.7 * cycleOf(cfg) / 100).toFixed(2) : '0.7'},
       colors: [
         ${colorsList}
       ],
@@ -419,12 +457,13 @@ Container(
   ),
 )`
   }
-  // linear
+  // linear — repeating은 begin/end 스팬을 싸이클 비율로 줄여야 TileMode.repeated가 실제로 타일링됨
   const angRad = ((cfg.angle - 90) * Math.PI) / 180
-  const sx = (-Math.cos(angRad)).toFixed(2)
-  const sy = (-Math.sin(angRad)).toFixed(2)
-  const ex = Math.cos(angRad).toFixed(2)
-  const ey = Math.sin(angRad).toFixed(2)
+  const scale = cfg.type === 'repeating-linear' ? cycleOf(cfg) / 100 : 1
+  const sx = (-Math.cos(angRad) * scale).toFixed(2)
+  const sy = (-Math.sin(angRad) * scale).toFixed(2)
+  const ex = (Math.cos(angRad) * scale).toFixed(2)
+  const ey = (Math.sin(angRad) * scale).toFixed(2)
   return `Container(
   decoration: BoxDecoration(
     gradient: LinearGradient(
@@ -472,30 +511,52 @@ export function analyzeContrast(stops: Stop[], space: ColorSpace, samples = 12):
   const dense = gradientColors(stops, space, samples)
   let worstWhite = Infinity
   let worstBlack = Infinity
-  let worstHex = '#000000'
-  let worstAt = 0
   const W: RGB = { r: 255, g: 255, b: 255 }
   const B: RGB = { r: 0, g: 0, b: 0 }
   for (const d of dense) {
     const w = contrastRatio(W, d.rgb)
     const b = contrastRatio(B, d.rgb)
-    const worst = Math.min(w, b)
-    if (worst < Math.min(worstWhite, worstBlack)) {
+    if (w < worstWhite) worstWhite = w
+    if (b < worstBlack) worstBlack = b
+  }
+  const bestText: 'white' | 'black' = worstWhite > worstBlack ? 'white' : 'black'
+  // 최난 지점은 추천 텍스트(bestText) 기준으로 — min(흰,검) 기준이면 추천색이 잘 보이는 지점을 가리킬 수 있음
+  let worstHex = '#000000'
+  let worstAt = 0
+  let worstRatio = Infinity
+  for (const d of dense) {
+    const r = contrastRatio(bestText === 'white' ? W : B, d.rgb)
+    if (r < worstRatio) {
+      worstRatio = r
       worstHex = rgbToHex(d.rgb)
       worstAt = d.pos
     }
-    if (w < worstWhite) worstWhite = w
-    if (b < worstBlack) worstBlack = b
   }
   return {
     whiteRatio: Math.round(worstWhite * 100) / 100,
     blackRatio: Math.round(worstBlack * 100) / 100,
     whiteGrade: wcagGrade(worstWhite),
     blackGrade: wcagGrade(worstBlack),
-    bestText: worstWhite > worstBlack ? 'white' : 'black',
+    bestText,
     worstSampleHex: worstHex,
     worstSampleAt: worstAt,
   }
+}
+
+/** Mesh 대비 분석용 유사 stops — 모서리 4색 (모서리 사이 혼합색은 근사적으로 이 범위 안) */
+export function meshAnalysisStops(mesh: MeshCorners): Stop[] {
+  return [
+    { id: 'mesh-tl', hex: mesh.tl, pos: 0 },
+    { id: 'mesh-tr', hex: mesh.tr, pos: 33 },
+    { id: 'mesh-bl', hex: mesh.bl, pos: 67 },
+    { id: 'mesh-br', hex: mesh.br, pos: 100 },
+  ]
+}
+
+/** Mesh 4 모서리를 색맹 시뮬레이션 적용 */
+export function colorblindMesh(mesh: MeshCorners, type: 'protanopia' | 'deuteranopia' | 'tritanopia'): MeshCorners {
+  const sim = (hex: string) => rgbToHex(simulateColorblind(hexToRgb(hex) ?? { r: 0, g: 0, b: 0 }, type))
+  return { tl: sim(mesh.tl), tr: sim(mesh.tr), bl: sim(mesh.bl), br: sim(mesh.br) }
 }
 
 /** 그라디언트 stops 자체를 색맹 시뮬레이션 적용 */
@@ -573,27 +634,27 @@ const P = (id: string, name: string, category: string, stops: Array<[string, num
 
 /* 한국 무드 — 직접 디자인 (특정 브랜드 컬러 그대로 차용 X) */
 export const KOREAN_PRESETS: Preset[] = [
-  // 계절 — 봄 (10)
+  // 계절 — 봄 (5)
   P('k-spring-1', '벚꽃 새벽',     '봄', [['#FFE4F1', 0], ['#F8B4D9', 50], ['#A8C5E8', 100]]),
   P('k-spring-2', '연두 들판',     '봄', [['#E8F5C8', 0], ['#C7E89F', 50], ['#7AB348', 100]]),
   P('k-spring-3', '봄비',          '봄', [['#D7E8F0', 0], ['#A8C5D8', 50], ['#7B9BB0', 100]]),
   P('k-spring-4', '복숭아꽃',      '봄', [['#FFD9C4', 0], ['#FFB6A0', 100]]),
   P('k-spring-5', '진달래',        '봄', [['#FFB7DC', 0], ['#E76FA1', 50], ['#A53A6F', 100]]),
-  // 여름 (8)
+  // 여름 (6)
   P('k-summer-1', '한강 일몰',     '여름', [['#FFC685', 0], ['#FF7B7B', 40], ['#7B4FA8', 100]]),
   P('k-summer-2', '제주 바다',     '여름', [['#7FD1E0', 0], ['#3E9DBF', 50], ['#1A4D80', 100]]),
   P('k-summer-3', '여름밤',        '여름', [['#1A2B5F', 0], ['#3D4F8C', 50], ['#7B82A8', 100]]),
   P('k-summer-4', '수박 한입',     '여름', [['#FF6B7E', 0], ['#FFB0A8', 50], ['#5BC85B', 100]]),
   P('k-summer-5', '계곡 물빛',     '여름', [['#A8E5D5', 0], ['#5FB89D', 100]]),
   P('k-summer-6', '소나기',        '여름', [['#5C7295', 0], ['#3A4B6B', 50], ['#1A2438', 100]]),
-  // 가을 (8)
+  // 가을 (6)
   P('k-fall-1',   '단풍 절정',     '가을', [['#FFE08A', 0], ['#FF8C42', 50], ['#C73838', 100]]),
   P('k-fall-2',   '가을 들판',     '가을', [['#F4D58A', 0], ['#D4A050', 50], ['#7B5230', 100]]),
   P('k-fall-3',   '은행나무',      '가을', [['#FFE066', 0], ['#FFB938', 100]]),
   P('k-fall-4',   '코스모스',      '가을', [['#FFB7DC', 0], ['#E580B7', 50], ['#A0CFE5', 100]]),
   P('k-fall-5',   '서리 새벽',     '가을', [['#E0E0E8', 0], ['#A8B0BA', 50], ['#5C6878', 100]]),
   P('k-fall-6',   '저녁 노을',     '가을', [['#FFAB7B', 0], ['#E5638F', 50], ['#5C2C7B', 100]]),
-  // 겨울 (6)
+  // 겨울 (5)
   P('k-winter-1', '겨울 새벽',     '겨울', [['#B5C8E0', 0], ['#7B96B8', 50], ['#3D5273', 100]]),
   P('k-winter-2', '눈 내리는 밤',  '겨울', [['#1A2540', 0], ['#384866', 50], ['#A8B8D5', 100]]),
   P('k-winter-3', '얼음 호수',     '겨울', [['#E5F1F5', 0], ['#A8CCD8', 50], ['#5C8BA0', 100]]),
@@ -612,7 +673,7 @@ export const KOREAN_PRESETS: Preset[] = [
   P('k-trend-3',  '로파이 무드',   '트렌드', [['#FFB78A', 0], ['#A88AC8', 50], ['#5C4A85', 100]]),
   P('k-trend-4',  '뉴진스 톤',     '트렌드', [['#A8E5FF', 0], ['#FFB7DC', 50], ['#FFE08A', 100]]),
   P('k-trend-5',  'K-인디고',      '트렌드', [['#384AAB', 0], ['#1A2466', 100]]),
-  P('k-trend_6',  '복고 라떼',     '트렌드', [['#E8D5B5', 0], ['#A88E70', 50], ['#5C4A35', 100]]),
+  P('k-trend-6',  '복고 라떼',     '트렌드', [['#E8D5B5', 0], ['#A88E70', 50], ['#5C4A35', 100]]),
   P('k-trend-7',  '청량 민트',     '트렌드', [['#A8F5D5', 0], ['#5FBFA8', 100]]),
   P('k-trend-8',  '보랏빛 새벽',   '트렌드', [['#7B82A8', 0], ['#A88AC8', 50], ['#FFB7DC', 100]]),
   P('k-trend-9',  '레트로 게임',   '트렌드', [['#DC2626', 0], ['#FFB938', 50], ['#5BC85B', 100]]),
@@ -621,13 +682,13 @@ export const KOREAN_PRESETS: Preset[] = [
 
 /* 글로벌 트렌드 — 잘 알려진 디자인 시스템 풍 (직접 해석) */
 export const GLOBAL_PRESETS: Preset[] = [
-  // 메쉬 / 부드러운 (10)
+  // 메쉬 / 부드러운 (5)
   P('g-mesh-1',  '소프트 메쉬 1',   '부드러운', [['#FFC1CC', 0], ['#A0C4FF', 50], ['#BDB2FF', 100]]),
   P('g-mesh-2',  '소프트 메쉬 2',   '부드러운', [['#FFE5D9', 0], ['#FFDDD2', 100]]),
   P('g-mesh-3',  '미스트 블루',     '부드러운', [['#E0F4FF', 0], ['#A8D5F0', 100]]),
   P('g-mesh-4',  '라일락',          '부드러운', [['#E5D4F1', 0], ['#C9B6E0', 100]]),
   P('g-mesh-5',  '베이지',          '부드러운', [['#F5E8D5', 0], ['#E5D0AB', 100]]),
-  // Vapor / Retro (8)
+  // Vapor / Retro (5)
   P('g-vapor-1', 'Vaporwave',       'Retro',   [['#FF71CE', 0], ['#01CDFE', 100]]),
   P('g-vapor-2', 'Sunset 80s',      'Retro',   [['#FF6E7F', 0], ['#BFE9FF', 100]]),
   P('g-vapor-3', 'Synthwave',       'Retro',   [['#5F4B8B', 0], ['#E11D48', 50], ['#FFB938', 100]]),
@@ -678,13 +739,41 @@ export type FavItem = {
   savedAt: number
 }
 
+/* 저장 항목 구조 검증 — 무검증 복원은 corrupt 시 렌더 크래시 (localStorage 크래시 재발 클래스) */
+const VALID_TYPES: GradientType[] = ['linear', 'radial', 'conic', 'mesh', 'repeating-linear', 'repeating-radial']
+const VALID_SPACES: ColorSpace[] = ['rgb', 'hsl', 'oklch', 'lab']
+const isHex = (v: unknown): v is string => typeof v === 'string' && /^#[0-9a-fA-F]{6}$/.test(v)
+
+function isValidFav(item: unknown): item is FavItem {
+  if (typeof item !== 'object' || item === null) return false
+  const f = item as Partial<FavItem>
+  if (typeof f.id !== 'string' || typeof f.name !== 'string') return false
+  const c = f.config as Partial<GradientConfig> | undefined
+  if (!c || typeof c !== 'object') return false
+  if (!VALID_TYPES.includes(c.type as GradientType)) return false
+  if (!VALID_SPACES.includes(c.space as ColorSpace)) return false
+  if (typeof c.angle !== 'number' || !Number.isFinite(c.angle)) return false
+  if (!Array.isArray(c.stops) || c.stops.length < 1 || c.stops.length > 8) return false
+  if (!c.stops.every((s) => s && isHex((s as Stop).hex) && typeof (s as Stop).pos === 'number' && (s as Stop).pos >= 0 && (s as Stop).pos <= 100)) return false
+  if (c.mesh !== undefined && !(c.mesh && isHex(c.mesh.tl) && isHex(c.mesh.tr) && isHex(c.mesh.bl) && isHex(c.mesh.br))) return false
+  return true
+}
+
 export function loadFavs(): FavItem[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(FAV_KEY)
     if (!raw) return []
     const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed.slice(0, 30) : []
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .filter(isValidFav)
+      .map((f) => ({
+        ...f,
+        // 구버전 필드 보정 (shape·noise 누락 시 기본값)
+        config: { ...f.config, shape: f.config.shape ?? 'circle', noise: typeof f.config.noise === 'number' ? f.config.noise : 0 },
+      }))
+      .slice(0, 30)
   } catch { return [] }
 }
 export function saveFavs(favs: FavItem[]) {
@@ -715,9 +804,21 @@ export async function downloadGradientPng(cfg: GradientConfig, w: number, h: num
     }
     ctx.globalCompositeOperation = 'source-over'
   } else {
-    const dense = cfg.space === 'rgb'
-      ? cfg.stops.map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
+    let dense = cfg.space === 'rgb'
+      ? [...cfg.stops].sort((a, b) => a.pos - b.pos).map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
       : gradientColors(cfg.stops, cfg.space, 32)
+    // repeating: canvas 그라디언트에는 반복이 없어 싸이클을 직접 타일링
+    if (cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial') {
+      const cycle = cycleOf(cfg)
+      const tiled: typeof dense = []
+      for (let k = 0; k * cycle < 100; k++) {
+        for (const d of dense) {
+          const pos = k * cycle + (d.pos / 100) * cycle
+          if (pos <= 100) tiled.push({ rgb: d.rgb, pos })
+        }
+      }
+      dense = tiled
+    }
     if (cfg.type === 'linear' || cfg.type === 'repeating-linear') {
       const rad = ((cfg.angle - 90) * Math.PI) / 180
       const cx = w / 2, cy = h / 2
@@ -742,7 +843,8 @@ export async function downloadGradientPng(cfg: GradientConfig, w: number, h: num
         type ConicCtx = { createConicGradient?: (a: number, x: number, y: number) => CanvasGradient }
         const cgFn = (ctx as unknown as ConicCtx).createConicGradient
         if (typeof cgFn === 'function') {
-          const grad = cgFn.call(ctx, (cfg.angle * Math.PI) / 180, w / 2, h / 2)
+          // canvas conic은 3시 방향 시작, CSS conic-gradient는 12시 시작 — 90° 보정
+          const grad = cgFn.call(ctx, ((cfg.angle - 90) * Math.PI) / 180, w / 2, h / 2)
           dense.forEach((d) => grad.addColorStop(Math.min(1, Math.max(0, d.pos / 100)), rgbToHex(d.rgb)))
           ctx.fillStyle = grad
           ctx.fillRect(0, 0, w, h)

@@ -271,6 +271,8 @@
   font-size: 12px;
   width: 30px;
 }
+/* 320px: 2열 카드 안에서 hex 입력이 min-width 80으로 셀을 밀어내지 않도록 */
+.meshCornerCard .hexInput { min-width: 0; }
 
 /* ── Stops 편집기 ───────────── */
 .stopsHead {
@@ -315,6 +317,7 @@
   transform: translate(-50%, -50%);
   cursor: grab;
   user-select: none;
+  touch-action: none; /* 터치 드래그 시 스크롤 대신 포인터 이벤트 유지 */
   -webkit-user-select: none;
 }
 .stopMarker:active { cursor: grabbing; }
@@ -774,6 +777,8 @@
   font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
+  max-width: 100%; /* 320px에서 intrinsic 폭(≈300px) 오버플로 방지 */
+  min-width: 0;
 }
 .extractedRow {
   display: flex;
