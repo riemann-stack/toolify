@@ -10,7 +10,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/interior/wallpaper',
   title: '도배 계산기 — 벽지 롤 수·면적·셀프 시공 비용',
-  description: '벽 면적으로 필요한 벽지 롤 수와 셀프 시공 비용 견적. 풀·도구·인건비까지 포함한 총 예산.',
+  description: '벽 면적으로 필요한 벽지 롤 수와 셀프 시공 비용 견적. 풀·도구·인건비까지 포함한 총 예산에 평수별 롤 수 참조표, 천장 포함 소요량, 실크·합지 규격 비교까지 지원합니다.',
   keywords: ['도배계산기', '벽지소요량계산', '벽지롤수계산', '셀프도배', '실크벽지', '합지벽지', '도배비용계산', '벽지견적'],
 })
 
@@ -33,7 +33,7 @@ const FAQ_LD = [
               },
               {
                 q: '도배 비용은 평당 얼마인가요?',
-                a: '2025년 기준 한국 시장 평균(바닥 평당):<br/>• 셀프 도배: <strong>평당 5,000~10,000원</strong> (재료비만)<br/>• 일반 시공 (합지): <strong>평당 8,000~12,000원</strong> (벽지 포함)<br/>• 일반 시공 (실크): <strong>평당 15,000~25,000원</strong> (벽지 포함)<br/>• 고급 시공 (수입·디자이너): 평당 25,000원 이상<br/>※ 지역·시기·시공사에 따라 차이가 크며, 견적 비교 시 참고용으로만 활용하세요.',
+                a: '2026년 기준 한국 시장 평균(바닥 평당):<br/>• 셀프 도배: <strong>평당 5,000~10,000원</strong> (재료비만)<br/>• 일반 시공 (합지): <strong>평당 8,000~12,000원</strong> (벽지 포함)<br/>• 일반 시공 (실크): <strong>평당 15,000~25,000원</strong> (벽지 포함)<br/>• 고급 시공 (수입·디자이너): 평당 25,000원 이상<br/>※ 지역·시기·시공사에 따라 차이가 크며, 견적 비교 시 참고용으로만 활용하세요.',
               },
             ]
 
@@ -41,7 +41,7 @@ export default function WallpaperPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        인테리어
+        주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />도배 계산기
@@ -350,7 +350,7 @@ export default function WallpaperPage() {
               { href: '/tools/unit/area',       icon: '🏠', name: '평수 변환기',  desc: '아파트 면적 단위 변환' },
               { href: '/tools/unit/converter',  icon: '📐', name: '단위 변환기',         desc: '길이·면적·무게 등 14종 통합 변환' },
               { href: '/tools/life/unit-price', icon: '🏷️', name: '단가 비교 계산기',    desc: '벽지 가성비 단가 비교' },
-              { href: '/tools/finance/cost-rate', icon: '🍽️', name: '음식점 원가율 계산기', desc: '재료비·수수료 원가율 (자영업)' },
+              { href: '/tools/interior/room-area', icon: '📐', name: '공간 면적 계산기', desc: '벽 면적 산출 — 도배 계산의 기본' },
             ].map((t, i) => (
               <Link
                 key={i}

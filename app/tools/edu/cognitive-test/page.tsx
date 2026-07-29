@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/edu/cognitive-test',
   title: '인지 능력 테스트 — 반응속도·스트룹·이중 과제 게임',
-  description: '반응속도·스트룹 효과·이중 과제로 집중력과 인지 처리 속도를 게임처럼 측정하는 인지 능력 자가 진단.',
+  description: '반응속도·스트룹 효과·이중 과제로 집중력과 인지 처리 속도를 게임처럼 측정하는 인지 능력 자가 테스트. 반응속도 등급표와 결과 해석 가이드 포함 — 임상 진단이 아닌 교육·게임용 참고 지표입니다.',
   keywords: ['인지능력테스트', '반응속도테스트', '스트룹효과', '이중과제', '집중력테스트', '인지심리학', '두뇌게임', 'reaction time test', 'stroop test'],
 })
 

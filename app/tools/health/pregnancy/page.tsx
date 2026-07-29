@@ -96,8 +96,8 @@ export default function PregnancyPage() {
             </div>
             <div style={{ background: 'var(--bg3)', borderRadius: '8px', padding: '12px 14px' }}>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
-                📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 마지막 생리 시작일이 <strong style={{ color: 'var(--text)' }}>2025년 10월 1일</strong>이라면<br />
-                → 10월 1일 + 7일 = 10월 8일 → 10월 − 3개월 = 7월 8일 → + 1년 = <strong style={{ color: '#DB2777' }}>2026년 7월 8일</strong>이 출산 예정일
+                📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 마지막 생리 시작일이 <strong style={{ color: 'var(--text)' }}>2026년 5월 1일</strong>이라면<br />
+                → 5월 1일 + 7일 = 5월 8일 → 5월 − 3개월 = 2월 8일 → + 1년 = <strong style={{ color: '#DB2777' }}>2027년 2월 8일</strong>이 출산 예정일
               </p>
             </div>
           </div>
@@ -188,7 +188,7 @@ export default function PregnancyPage() {
               ['20주', '🍌 바나나 (~17cm)'],
               ['24주', '🌽 옥수수 (~30cm)'],
               ['28주', '🍆 큰 가지 (~37cm)'],
-              ['32주', '🍯 큰 도자기 (~42cm)'],
+              ['32주', '🎃 호박 (~42cm)'],
               ['36주', '🍈 파파야 (~47cm)'],
               ['40주', '🍉 큰 수박 (~51cm)'],
             ].map(([w, label], i) => (

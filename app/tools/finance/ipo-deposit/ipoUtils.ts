@@ -43,13 +43,15 @@ export type FiveSixRule = 'standard' | 'guaranteed1'
 
 /**
  * 5사6입 (proportional allocation rounding).
- * - standard: 0.5 미만 → 0, 0.5 이상 → 반올림(>=0.5 → 1주, >=1.5 → 2주)
- * - guaranteed1: 0.5 미만이라도 신청자 중 추첨으로 1주 보장 가능 (단순화: 동일 결과 + 안내)
+ * - standard: 소수 첫째 자리 5 이하 → 버림, 6 이상 → 올림 (0.5주 → 0주, 0.6주 → 1주, 1.5주 → 1주)
+ * - guaranteed1: 버림으로 0주여도 신청자 중 추첨으로 1주 보장 가능 (단순화: 동일 결과 + 안내)
  */
 export function applyFiveSixRule(rawShares: number, rule: FiveSixRule = 'standard'): number {
   if (rawShares <= 0) return 0
-  // 5사6입 = 한국 회계 표준 반올림 (0.5 → 올림)
-  const rounded = Math.floor(rawShares + 0.5)
+  // 5사6입 ≠ 반올림(4사5입): 0.5는 버리고 0.6부터 올린다. FP 오차 대비 엡실론 허용.
+  const floor = Math.floor(rawShares)
+  const frac = rawShares - floor
+  const rounded = floor + (frac >= 0.6 - 1e-9 ? 1 : 0)
   if (rule === 'guaranteed1' && rounded === 0 && rawShares > 0) {
     // 단순화: 0주여도 1주 보장 추첨 가정 — 1주로 표시
     return 1

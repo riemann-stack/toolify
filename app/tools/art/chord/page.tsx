@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/art/chord',
   title: '코드 구성음 계산기 — Cmaj7·Dm7·G7 코드 음이름 확인',
-  description: 'Cmaj7·Dm7 등 코드의 구성음과 역방향 검색 + 다이아토닉 코드표. 작곡·편곡에.',
+  description: 'Cmaj7·Dm7·G7 등 코드 구성음 계산과 음이름 역방향 검색. C메이저·A마이너 다이아토닉 코드표, 슬래시(분수) 코드 읽는 법, 2-5-1·카논 등 자주 쓰는 진행까지.',
   keywords: ['코드구성음계산기', 'Cmaj7구성음', '코드음계산기', '다이아토닉코드표', '코드역방향검색', '기타코드구성음', '피아노코드계산기', '음악이론계산기'],
 })
 

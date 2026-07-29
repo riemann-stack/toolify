@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/edu/circuit-simulator',
   title: '옴의 법칙 계산기 — 직렬·병렬 회로 전압·전류·저항·전력',
-  description: '직렬·병렬 회로 전압·전류·저항·전력 시각화 + 단계별 풀이와 시험 빈출 7문제로 옴의 법칙 완전 정복.',
+  description: '직렬·병렬 회로의 전압·전류·저항·전력을 시각화하고 단계별 풀이를 보여주는 옴의 법칙 계산기. LED 색상별 전류 제한 저항표, 저항 정격(W) 초과 경고, 시험 빈출 7문제까지 한 페이지에.',
   keywords: ['옴의법칙', '전기회로계산기', '회로시뮬레이터', '직렬병렬', '키르히호프법칙', 'LED저항계산', '전기전자', '회로분석', '중3물리', '고1물리', '전력계산'],
 })
 

@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/cooking/food-storage',
   title: '식재료 보관 계산기 — 냉장·냉동 소비 기한 D-day',
-  description: '냉장·냉동 식재료가 언제까지 안전한지 + 소비 기한 알림으로 음식물 쓰레기 줄이기. 식품별 정확한 보관 기간.',
+  description: '냉장·냉동 식재료가 언제까지 안전한지 소비 기한 D-day로 관리. 식약처 소비기한 참고값을 바탕으로 닭고기·밥·국·우유·두부 등 식품별 보관 기간 가이드를 제공합니다.',
   keywords: ['식재료보관기간계산기', '닭고기냉장며칠', '익힌고기냉장며칠', '국냉장며칠', '밥냉동며칠', '다진고기냉장', '냉동보관기간', '소비기한계산기', '식재료유통기한'],
 })
 

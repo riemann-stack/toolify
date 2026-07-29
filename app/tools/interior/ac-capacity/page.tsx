@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/interior/ac-capacity',
   title: '에어컨 평형 계산기 — 거실·방 평수·BTU·W 환산',
-  description: '면적·향·층수·단열을 반영한 추천 평형 + BTU·W 환산. 인버터·정속형 에너지 효율 비교까지.',
+  description: '거실·방 면적에 향·층수·단열·인원 보정을 더해 추천 에어컨 평형을 계산합니다. BTU·W·kW 환산(1평형≈407W, KS C 9306)과 인버터 vs 정속형 전기료 비교, 권장 설정 온도 가이드까지.',
   keywords: ['에어컨평형계산기', '거실에어컨몇평형', '에어컨용량계산', '13평형에어컨', '에어컨BTU환산', 'BTU평형변환', '에어컨W환산', '인버터에어컨'],
 })
 
@@ -28,7 +28,7 @@ const FAQ_LD = [
               },
               {
                 q: '인버터 에어컨이 정말 전기료가 적게 나오나요?',
-                a: '네, 일반적으로 <strong>30~40% 절감 효과</strong>가 있습니다. 인버터는 설정 온도 도달 후 압축기를 약하게 유지하면서 미세 조정합니다. 반면 정속형은 ON/OFF만 가능해 매번 풀가동으로 시작하므로 전력 소모가 큽니다. 장시간 사용(하루 8시간 이상, 여름 내내)이라면 인버터가 압도적으로 경제적이며, <strong>초기 가격 차이는 한 시즌 만에 회수</strong>할 수 있습니다.',
+                a: '네, 일반적으로 <strong>30~40% 절감 효과</strong>가 있습니다. 인버터는 설정 온도 도달 후 압축기를 약하게 유지하면서 미세 조정합니다. 반면 정속형은 ON/OFF만 가능해 매번 풀가동으로 시작하므로 전력 소모가 큽니다. 장시간 사용(하루 8시간 이상, 여름 내내) 가구라면 인버터가 유리하며, <strong>보통 1~2시즌 내 전기료 절감으로 초기 가격 차이가 상쇄</strong>되는 경우가 많습니다.',
               },
               {
                 q: '신축 아파트와 노후 아파트는 평형 차이가 큰가요?',
@@ -40,7 +40,7 @@ export default function AcCapacityPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        인테리어
+        주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />에어컨 평형 계산기
@@ -245,7 +245,7 @@ export default function AcCapacityPage() {
                 <li>압축기 회전수 조절 → 부드러운 운전</li>
                 <li>설정 온도 도달 후 약하게 유지</li>
                 <li><strong>전기료 30~40% 절감</strong></li>
-                <li>초기 가격 5~10만원 비쌈</li>
+                <li>초기 가격은 제품군에 따라 수만~수십만원 비쌈</li>
                 <li><strong>거실·장시간 사용·여름 내내 가동</strong> 추천</li>
               </ul>
             </div>

@@ -26,7 +26,8 @@ const ORGANIZATION = {
   '@type': 'Organization',
   name: 'Youtil',
   url: BASE,
-  logo: `${BASE}/opengraph-image.png`,
+  // Google은 Organization 로고에 정사각형(최소 112×112)을 권장 — 1200×630 OG 배너 대신 앱 아이콘 사용
+  logo: `${BASE}/icon-512.png`,
 }
 
 export default function SiteJsonLd() {

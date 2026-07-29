@@ -189,7 +189,7 @@ export default function TimezonePage() {
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '10px' }}>✅ 권장</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
-                  '한·미·유럽 회의: 한국 오후 9~10시 = 미동부 오전 8~9시 = 유럽 오후 1~2시',
+                  '한·미·유럽 회의: 한국 오후 9~10시 = 미동부 오전 8~9시 = 유럽 오후 2~3시',
                   '한·미 서부 회의: 한국 오전 9~10시 = LA는 전날 오후 5~6시 (LA 입장 약간 불편)',
                   '한·호주 회의: 한국 오전 8~10시 = 시드니 오전 9~11시 (가장 이상적)',
                   '위 환산은 북반구 서머타임 시기 기준 — 겨울(11~3월)엔 미국·유럽 현지 시각이 1시간 이르고, 시드니는 남반구라 반대로 10~4월이 서머타임(+1h)입니다',

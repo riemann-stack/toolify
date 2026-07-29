@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/life/travel-tip',
   title: '해외여행 팁 계산기 — 19개국 × 9 서비스 + 만족도 + 원화 환산',
-  description: '18+ 국가 × 9 서비스(식당·택시·호텔·골프·마사지) 적정 팁 + 만족도 보정 + 봉사료 자동 안내 + 인원 분할·원화 환산.',
+  description: '19개국 × 9 서비스(식당·택시·호텔·골프·마사지) 적정 팁 + 만족도 보정 + 봉사료 자동 안내 + 인원 분할·원화 환산.',
   keywords: ['해외여행 팁', '미국 팁', '일본 팁 문화', '유럽 식당 팁', '호텔 벨보이', '골프 캐디 팁', '마사지 팁', '크루즈 팁', '봉사료 Service Charge', '여행 매너'],
 })
 
@@ -74,7 +74,7 @@ export default function TravelTipPage() {
         <ToolIconBadge catId="life" />해외여행 팁 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        18+ 국가별 식당·택시·호텔·골프·마사지 <strong style={{ color: 'var(--text)' }}>적정 팁</strong>. 만족도 보정과 인원 분할.
+        19개국 식당·택시·호텔·골프·마사지 <strong style={{ color: 'var(--text)' }}>적정 팁</strong>. 만족도 보정과 인원 분할.
       </p>
 
       <TravelTipClient />
@@ -85,10 +85,10 @@ export default function TravelTipPage() {
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
       <div style={card}>
         <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
-          <li><strong>국가 선택</strong> — 18개국 카드 (검색 가능)</li>
+          <li><strong>국가 선택</strong> — 19개국 카드 (검색 가능)</li>
           <li><strong>서비스 선택</strong> — 식당·택시·호텔·골프·마사지 등 9종</li>
           <li><strong>금액·인원·만족도</strong> 입력 → 권장 팁 + 총액 + 1인당 + 원화 환산</li>
-          <li><strong>국가별 매너 탭</strong>에서 18개국 팁 문화 한눈에 확인</li>
+          <li><strong>국가별 매너 탭</strong>에서 19개국 팁 문화 한눈에 확인</li>
           <li><strong>시나리오 탭</strong>에서 신혼여행·골프투어·크루즈 시뮬</li>
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>

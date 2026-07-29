@@ -692,7 +692,7 @@ export default function TravelBudgetClient() {
 
       {/* 크로스링크 */}
       <Link href="/tools/life/travel-tip" className={s.crossLink}>
-        해외여행 팁 계산기 → 18개국 × 9 서비스 + 만족도 + 원화 환산
+        해외여행 팁 계산기 → 19개국 × 9 서비스 + 만족도 + 원화 환산
       </Link>
     </div>
   )

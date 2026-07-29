@@ -1,13 +1,10 @@
-import { categories } from '@/lib/tools'
 import CategoryView from '@/components/CategoryView'
 import { buildMetadata } from '@/lib/seo'
 
-const cat = categories.find((c) => c.id === 'health')!
-
 export const metadata = buildMetadata({
   path: '/tools/health',
-  title: `${cat.name} 계산기 모음`,
-  description: `${cat.tools.map((t) => t.name).join(', ')} 등 ${cat.name} 무료 도구 모음.`,
+  title: "건강·웰빙 계산기 — BMI·기초대사량·임신 주수",
+  description: "BMI와 체지방, 기초대사량과 목표 칼로리, 카페인 반감기, 임신 주수, 수면 부채까지 몸 상태를 숫자로 확인하는 무료 건강 계산기 모음.",
 })
 
 export default function HealthCategoryPage() {

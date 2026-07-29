@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -165,7 +166,7 @@ export default function RentJeonsePage() {
             </table>
           </div>
           <p style={{ ...faqAnswer, marginTop: '12px', fontSize: '12px' }}>
-            ※ 한국주택금융공사·HF·은행 사이트에서 최신 금리 확인. 매년 정책 변경 가능.
+            ※ 주택도시기금(기금e든든)·한국주택금융공사(HF)·취급은행에서 최신 금리 확인. 매년 정책 변경 가능.
           </p>
         </section>
 
@@ -247,7 +248,19 @@ export default function RentJeonsePage() {
           </div>
         </section>
 
-        {/* 7. 함께 쓰면 좋은 도구 — 최신 포맷 */}
+        {/* 7. 면책 */}
+        <Disclaimer
+          variant="finance"
+          open
+          sources={[
+            { label: '국토교통부 실거래가 공개시스템', href: 'https://rt.molit.go.kr' },
+            { label: 'HUG 주택도시보증공사', href: 'https://www.khug.or.kr' },
+          ]}
+        >
+          본 계산기의 전환율 비교와 대출 금리·세액공제 수치는 시점·상품·개인 조건에 따라 달라지는 참고용 추정치입니다. 전세사기 위험 점검 항목도 참고용 체크리스트일 뿐이며, 실제 계약 판단은 등기부등본 확인·HUG 전세보증 가입 가능 여부·공인중개사 확인을 거쳐야 합니다.
+        </Disclaimer>
+
+        {/* 8. 함께 쓰면 좋은 도구 — 최신 포맷 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>

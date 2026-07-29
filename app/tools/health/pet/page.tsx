@@ -342,7 +342,7 @@ export default function PetPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연령대별 건강 관리 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '10px' }}>
             {[
-              { pet: '🐶 강아지', stage: '퍼피 (~1세)', color: '#0891B2', items: ['기본 백신 (디스템퍼·파보·홍역) 접종', '심장사상충 예방약 투여 시작', '중성화 수술 시기 상담 (6~12개월)'] },
+              { pet: '🐶 강아지', stage: '퍼피 (~1세)', color: '#0891B2', items: ['종합백신(DHPPL — 디스템퍼·전염성간염·파보 등) 접종', '심장사상충 예방약 투여 시작', '중성화 수술 시기 상담 (6~12개월)'] },
               { pet: '🐶 강아지', stage: '성견 (1~7세)', color: '#059669', items: ['연 1회 건강검진 및 혈액검사', '치석 스케일링 (1~2년마다)', '심장사상충·외부기생충 예방 지속'] },
               { pet: '🐶 강아지', stage: '노령견 (7세~)', color: '#EA580C', items: ['반기 1회 건강검진으로 빈도 증가', '관절 건강 및 관절염 모니터링', '신장·간 기능 혈액검사 주기 점검'] },
               { pet: '🐱 고양이', stage: '키튼 (~1세)', color: '#0891B2', items: ['종합백신 (FVRCP) 접종 시리즈', '중성화 수술 시기 상담 (5~7개월)', '내·외부 기생충 예방'] },

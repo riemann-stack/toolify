@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/unit/fuel-economy',
   title: '연비 변환기 km/L ↔ mpg ↔ L/100km — 전기차 전비 포함',
-  description: 'km/L·L/100km·mpg 변환 + 전기차 전비와 연료별 100km 비용 비교로 진짜 가성비 확인.',
+  description: 'km/L·L/100km·mpg(US/UK) 상호 변환 + 전기차 전비(km/kWh·MPGe)와 휘발유·경유·LPG·전기 100km 주행 비용 비교. 2026년 오피넷 유가·공공 충전요금 기준.',
   keywords: ['연비변환기', 'km/L mpg', 'L/100km 변환', '미국연비', '전기차전비', 'MPGe', 'mpg km 변환'],
 })
 

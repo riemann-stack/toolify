@@ -100,7 +100,7 @@ export default function MicrowavePage() {
       <h2 style={sectionTitle}>⚡ W 환산 공식과 보정</h2>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          전자레인지 출력(W)이 다르면 같은 음식이라도 가열 시간이 비례 반대로 달라집니다.
+          전자레인지 출력(W)이 다르면 같은 음식이라도 가열 시간이 반비례로 달라집니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
           <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, lineHeight: 2 }}>
@@ -329,7 +329,7 @@ export default function MicrowavePage() {
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🧊</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해동 시간 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            식품·두께·전자레인지 W별 4 해동
+            식품·두께·전자레인지 W별 4가지 해동법
           </p>
         </Link>
         <Link href="/tools/cooking/frying" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>

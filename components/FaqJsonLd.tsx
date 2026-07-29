@@ -12,8 +12,12 @@ function stripHtml(s: string): string {
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
+    .replace(/&quot;|&ldquo;|&rdquo;/g, '"')
     .replace(/&#39;|&rsquo;|&lsquo;/g, "'")
+    .replace(/&middot;/g, '·')
+    .replace(/&hellip;/g, '…')
+    .replace(/&mdash;|&ndash;/g, '—')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
     .replace(/\s+/g, ' ')
     .trim()
 }

@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/edu/review-interval',
   title: '복습 간격 계산기 — 에빙하우스 망각곡선·SM-2 알고리즘 학습 일정',
-  description: '에빙하우스 망각곡선·SM-2 알고리즘으로 다음 복습일 자동 계산 + 학습 항목 관리로 효율 학습법 완성.',
+  description: '에빙하우스 망각곡선·SM-2 알고리즘으로 다음 복습일을 자동 계산하는 간격 반복 학습 도구. 기억 점수(0~5)별 간격 자동 조정, 시험일 역산 학습량 계획, 학습 항목 관리와 JSON 백업까지 브라우저에서 바로.',
   keywords: ['복습간격계산기', '망각곡선', '에빙하우스', 'SM-2알고리즘', '복습주기', '학습일정', '간격반복학습', '시험공부계획', 'Spaced Repetition', 'Anki'],
 })
 
@@ -321,7 +321,7 @@ export default function ReviewIntervalPage() {
               <li><strong style={{ color: 'var(--text)' }}>Anki</strong> (무료 SRS): apps.ankiweb.net</li>
               <li><strong style={{ color: 'var(--text)' }}>Quizlet</strong> (단어장 SRS, 입문용)</li>
               <li><strong style={{ color: 'var(--text)' }}>SuperMemo</strong> (원조)</li>
-              <li>책 <em>&ldquo;어떻게 공부할 것인가&rdquo; (Make It Stick)</em> — 벤지 카퍼·헨리 뢰디거</li>
+              <li>책 <em>&ldquo;어떻게 공부할 것인가&rdquo; (Make It Stick)</em> — 피터 브라운·헨리 뢰디거·마크 맥대니얼</li>
               <li>책 <em>&ldquo;메타인지 학습법&rdquo;</em> — 학습 효율 향상에 관한 한국어 입문서</li>
             </ul>
           </div>

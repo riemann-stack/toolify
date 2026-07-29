@@ -43,7 +43,9 @@ export default function PrivacyPage() {
           </h2>
           <p style={{ marginBottom: '12px' }}>
             {SITE_NAME}은 회원가입 없이 이용 가능하며, 별도의 개인정보를 직접 수집하지 않습니다.
-            다만 서비스 운영을 위해 아래 정보가 자동으로 수집될 수 있습니다.
+            다만 이메일로 문의하시는 경우 발신 이메일 주소와 문의 내용이 답변·처리 목적으로만
+            이용되며, 처리 완료 후 별도로 보관하지 않습니다. 이 외에 서비스 운영을 위해
+            아래 정보가 자동으로 수집될 수 있습니다.
           </p>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <li>접속 IP 주소</li>
@@ -85,8 +87,8 @@ export default function PrivacyPage() {
             맞춤형 광고 제공에 활용됩니다.
           </p>
           <p style={{ marginBottom: '12px' }}>
-            Google AdSense는 <strong style={{ color: 'var(--paper-ink)' }}>DART 쿠키</strong>를 사용하여
-            이용자가 본 사이트 및 인터넷의 다른 사이트를 방문할 때 광고를 게재합니다.
+            Google을 포함한 제3자 광고 사업자는 <strong style={{ color: 'var(--paper-ink)' }}>광고 쿠키</strong>를 사용하여
+            이용자의 본 사이트 및 다른 사이트 방문 기록을 기반으로 광고를 게재합니다.
             이용자는 아래 방법으로 맞춤형 광고를 거부할 수 있습니다.
           </p>
 
@@ -117,9 +119,9 @@ export default function PrivacyPage() {
               </div>
               <div>
                 <p style={{ fontSize: '13px', color: 'var(--paper-ink)', marginBottom: '2px' }}>② 디지털 광고 연합(DAA) 옵트아웃</p>
-                <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer"
                   style={{ fontSize: '13px', color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
-                  www.aboutads.info
+                  www.aboutads.info/choices
                 </a>
                 <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', marginTop: '2px' }}>
                   타사 공급업체의 맞춤형 광고용 쿠키 사용을 차단할 수 있습니다.

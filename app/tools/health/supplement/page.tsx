@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/health/supplement',
@@ -91,7 +92,7 @@ export default function SupplementPage() {
         {/* 2. RDA/UL 표 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>주요 영양소 1일 권장량 & 상한 섭취량</h2>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '12px' }}>한국영양학회 KDRI · 성인 기준 — 2025년 개정 기준이 배포되어 일부 수치가 달라질 수 있으니 최신 기준 확인 권장</p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '12px' }}>한국인 영양소 섭취기준(2020 KDRIs) · 성인 기준 — 성별·연령에 따라 권장량이 다를 수 있습니다</p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
               <thead>
@@ -341,6 +342,22 @@ export default function SupplementPage() {
               </details>
             ))}
           </div>
+        </div>
+
+        {/* 11. 면책 */}
+        <div>
+          <Disclaimer
+            variant="medical"
+            open
+            sources={[
+              { label: '보건복지부·한국영양학회 — 한국인 영양소 섭취기준(KDRIs)', href: 'https://www.kns.or.kr' },
+              { label: 'NIH Office of Dietary Supplements', href: 'https://ods.od.nih.gov' },
+            ]}
+          >
+            본 도구는 공개된 섭취 기준(KDRIs·NIH ODS 등)을 바탕으로 <strong>성분 합산량을 정리하는 참고용</strong>이며, 영양제는 의약품이 아니고 본 도구도 처방·진단 도구가 아닙니다.
+            약물 상호작용 표는 <strong>대표적인 패턴만</strong> 담고 있어 개인의 질환·처방약 조합을 모두 반영하지 못합니다.
+            영양제 시작·중단·용량 변경 전, 특히 처방약 복용 중·임신·수유·기저질환이 있다면 반드시 의사·약사와 상담하세요.
+          </Disclaimer>
         </div>
 
         {/* 7. 관련 도구 */}

@@ -365,7 +365,7 @@ export default function ThawingPage() {
             {[
               { href: '/tools/cooking/recipe', icon: '📐', name: '레시피 비율 계산기', desc: '인분 수에 맞게 재료 자동 계산' },
               { href: '/tools/cooking/serving', icon: '🍽️', name: '1인분 분량 계산기', desc: '쌀·고기·파스타 분량' },
-              { href: '/tools/cooking/ramen', icon: '🍜', name: '라면 물양 계산기', desc: '한국 15종 라면 권장 물양' },
+              { href: '/tools/cooking/ramen', icon: '🍜', name: '라면 물양 계산기', desc: '제품별 권장 물양·조리시간' },
               { href: '/tools/cooking/nuts', icon: '🌰', name: '견과류 섭취량 계산기', desc: '견과류별 하루 권장량' },
               { href: '/tools/date/dday', icon: '📅', name: 'D-day 계산기', desc: '해동 알림·유통기한 관리' },
             ].map(t => (

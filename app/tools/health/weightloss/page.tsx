@@ -50,7 +50,7 @@ const FAQ_LD = [
               },
               {
                 q: '저체중인데 더 빼고 싶어요.',
-                a: '<strong>권장하지 않습니다.</strong><br><br>저체중(BMI 18.5 미만) 위험 — 면역력 저하 / 골밀도 감소 → 골절 위험 / 호르몬 이상(생리 불순·생식 능력↓) / 근손실 → 만성 피로 / 영양 부족 → 빈혈·탈모.<br><br>체중에 대한 강박 가능성 — 거식증(Anorexia Nervosa) / 신체 이형 장애 / 폭식증과 동반 가능.<br><br><strong>도움 받기</strong><br>· 한국 정신건강 위기상담: <strong>1577-0199</strong> (24시간)<br>· 보건복지부 자살예방상담: <strong>1393</strong> (24시간)<br>· 한국섭식장애협회<br>· 가까운 정신건강복지센터·정신과 의원<br><br>&lsquo;마름&rsquo;이 건강과 매력의 절대값이 아닙니다. 건강한 체형 + 근육 + 정신 건강이 진짜 매력입니다.',
+                a: '<strong>권장하지 않습니다.</strong><br><br>저체중(BMI 18.5 미만) 위험 — 면역력 저하 / 골밀도 감소 → 골절 위험 / 호르몬 이상(생리 불순·생식 능력↓) / 근손실 → 만성 피로 / 영양 부족 → 빈혈·탈모.<br><br>체중에 대한 강박 가능성 — 거식증(Anorexia Nervosa) / 신체 이형 장애 / 폭식증과 동반 가능.<br><br><strong>도움 받기</strong><br>· 한국 정신건강 위기상담: <strong>1577-0199</strong> (24시간)<br>· 보건복지부 자살예방상담: <strong>109</strong> (24시간)<br>· 한국섭식장애협회<br>· 가까운 정신건강복지센터·정신과 의원<br><br>&lsquo;마름&rsquo;이 건강과 매력의 절대값이 아닙니다. 건강한 체형 + 근육 + 정신 건강이 진짜 매력입니다.',
               },
               {
                 q: '다이어트 중 무엇을 매일 측정해야 하나요?',
@@ -324,7 +324,7 @@ export default function WeightLossPage() {
             <br />
             <strong>체중 강박·다이어트 강박·식이 장애 우려 시</strong>
             <br />· 한국 정신건강 위기상담: <strong>1577-0199</strong> (24시간)
-            <br />· 보건복지부 자살예방상담: <strong>1393</strong> (24시간)
+            <br />· 보건복지부 자살예방상담: <strong>109</strong> (24시간)
             <br />· 한국섭식장애협회 / 가까운 정신건강복지센터
             <br />건강한 다이어트의 핵심: <strong>&lsquo;빠르게&rsquo;가 아닌 &lsquo;꾸준히&rsquo;. &lsquo;마름&rsquo;이 아닌 &lsquo;건강함&rsquo;.</strong>
           </Disclaimer>

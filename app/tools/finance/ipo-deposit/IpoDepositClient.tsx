@@ -296,7 +296,7 @@ export default function IpoDepositClient() {
             <label className={s.fieldLabel}>5사6입 처리 (소수점 비례 배정)</label>
             <div className={s.pillRow} role="group" aria-label="5사6입 처리">
               <button type="button" aria-pressed={rule === 'standard'} className={`${s.pill} ${rule === 'standard' ? s.pillActive : ''}`}
-                onClick={() => setRule('standard')}>표준 (0.5↑ 올림)</button>
+                onClick={() => setRule('standard')}>표준 (0.6↑ 올림)</button>
               <button type="button" aria-pressed={rule === 'guaranteed1'} className={`${s.pill} ${rule === 'guaranteed1' ? s.pillActive : ''}`}
                 onClick={() => setRule('guaranteed1')}>1주 보장 추첨 가정</button>
             </div>

@@ -126,7 +126,7 @@ export default function HyroxPage() {
             </div>
           </div>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 매 스테이션 직전에 1km 달리기가 들어가므로 런은 총 8회(8km)입니다. 월 볼은 남자·여자 Pro 100회, 여자 Open 75회(2025/26 시즌 조정).
+            ※ 매 스테이션 직전에 1km 달리기가 들어가므로 런은 총 8회(8km)입니다. 월 볼은 여자 Open만 75회, 나머지 부문(남자 Open·Pro, 여자 Pro)은 100회(2025/26 시즌 조정).
           </p>
         </section>
 

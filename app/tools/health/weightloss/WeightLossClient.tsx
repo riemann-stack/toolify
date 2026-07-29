@@ -383,7 +383,7 @@ export default function WeightLossClient() {
                 {plan.safety.warnings.map((w, i) => <li key={i} style={{ marginBottom: 4 }}>{w}</li>)}
               </ul>
               <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간)
+                💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>109</strong> (24시간)
               </p>
               {(plan.safety.severity === 'danger' || plan.safety.severity === 'warning') && (
                 <button type="button" className={styles.copyBtn} style={{ marginTop: 8 }}
@@ -652,7 +652,7 @@ export default function WeightLossClient() {
                     {targetDateResult.warnings.map((w, i) => <li key={i} style={{ marginBottom: 4 }}>{w}</li>)}
                   </ul>
                   <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간) · 아래 안전 대안을 권장합니다.
+                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>109</strong> (24시간) · 아래 안전 대안을 권장합니다.
                   </p>
                 </div>
               )}
@@ -799,7 +799,7 @@ export default function WeightLossClient() {
       {/* 면책 강화 */}
       <div className={styles.warnBox}>
         💛 <strong>건강한 다이어트의 핵심은 &lsquo;빠르게&rsquo;가 아닌 &lsquo;꾸준히&rsquo;.</strong>
-        체중 강박·다이어트 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong>1577-0199</strong> · 자살예방 <strong>1393</strong> (24시간) · 한국섭식장애협회.
+        체중 강박·다이어트 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong>1577-0199</strong> · 자살예방 <strong>109</strong> (24시간) · 한국섭식장애협회.
         18세 미만·임산부·만성질환자는 본 도구를 사용하지 마세요.
       </div>
     </div>

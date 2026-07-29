@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/interior/room-area',
   title: '공간 면적 계산기 — 벽·바닥·천장·평수·부피 한 번에',
-  description: '벽·바닥·천장·평수·부피 한 번에 — 도배·페인트·에어컨 평형 계산의 기본. 평수↔㎡ 환산과 실측 가이드.',
+  description: '벽·바닥·천장·평수·부피 한 번에 — 도배·페인트·에어컨 평형 계산의 기본. 평수↔㎡ 환산표, 창문·문 차감 기준, 한국 아파트 천장 높이 표준과 ㄱ자 방·경사 천장 계산법까지.',
   keywords: ['공간면적계산기', '방면적계산', '벽면적계산기', '평수계산기', '바닥면적', '천장면적', '방크기계산', '인테리어면적'],
 })
 
@@ -52,7 +52,7 @@ export default function RoomAreaPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        인테리어
+        주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />공간 면적 계산기
@@ -198,7 +198,7 @@ export default function RoomAreaPage() {
               { i: '🎨', t: '페인트 시공',   d: '"실제 벽 면적" + 천장 도장 시 천장 추가. 칠할 횟수 × 1L당 도장 면적.', color: '#EA580C' },
               { i: '🪵', t: '바닥재 시공',   d: '"바닥 면적"으로 마루·강마루·장판. 로스율 5~10% 추가.', color: '#059669' },
               { i: '🟦', t: '타일 시공',     d: '바닥 또는 벽의 면적 ÷ 타일 1개 면적. 줄눈·로스율 반영.', color: '#0891B2' },
-              { i: '❄️', t: '에어컨 평형',  d: '"바닥 면적" 또는 "공간 부피". 1평당 약 100~150W 냉방 능력 권장.', color: '#9B59B6' },
+              { i: '❄️', t: '에어컨 평형',  d: '"바닥 면적" 기준 1㎡당 약 123W(KS C 9306) — 평당 약 400W. 에어컨 평형 계산기와 동일 기준.', color: '#9B59B6' },
               { i: '💡', t: '조명 밝기',     d: '"바닥 면적"으로 권장 루멘. 거실 300~400 lux × 면적.', color: '#A16207' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 16px' }}>
@@ -291,6 +291,7 @@ export default function RoomAreaPage() {
             {[
               { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 계산기',   desc: '벽지 롤 수·면적·셀프 시공 비용' },
               { href: '/tools/interior/paint',     icon: '🎨', name: '페인트 계산기', desc: '벽·천장 페인트 양·구매 조합' },
+              { href: '/tools/interior/ac-capacity', icon: '❄️', name: '에어컨 평형 계산기', desc: '면적 기준 냉방능력 (KS C 9306)' },
               { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',    desc: '아파트 면적 단위 변환' },
               { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',     desc: '길이·면적·무게 등 14개 분야' },
             ].map((t, i) => (

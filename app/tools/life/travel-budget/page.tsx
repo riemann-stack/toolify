@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/life/travel-budget',
@@ -77,6 +78,8 @@ export default function TravelBudgetPage() {
         18개 도시 × 배낭·중간·럭셔리 3스타일 평균 + <strong style={{ color: 'var(--text)' }}>9개 항목 자동 추천</strong>을 도넛 차트로.
       </p>
 
+      <UpdatedMeta date="2026년 7월" basis="도시별 1박 평균·항공권은 주요 OTA·항공 메타서치 관찰 평균 (대표 도시 재점검) — 시기·환율 따라 ±30% 이상 변동하는 참고치" />
+
       <TravelBudgetClient />
 
       <GuideDivider />
@@ -143,7 +146,7 @@ export default function TravelBudgetPage() {
         </div>
         <div style={{ padding: '12px 14px', borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, background: 'var(--bg3)' }}>
           ※ <strong style={{ color: 'var(--text)' }}>1박 1인 기준</strong>, 숙박+식비+교통/투어 합계, 항공권 별도.
-          2024년경 대략적 평균치(2인 1실·중급 식당 가정, 세금·팁 제외)이며 시기·환율·취향에 따라 ±30% 이상 차이.
+          2026년 7월 재점검한 대략적 평균치(2인 1실·중급 식당 가정, 세금·팁 제외)이며 시기·환율·취향에 따라 ±30% 이상 차이.
           묶음 표기 도시(도쿄·오사카, LA·뉴욕·하와이 등)는 도시 간 편차가 큽니다.
         </div>
       </div>
@@ -188,6 +191,7 @@ export default function TravelBudgetPage() {
         </div>
         <div style={{ padding: '12px 14px', borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, background: 'var(--bg3)' }}>
           ※ <strong style={{ color: 'var(--text)' }}>왕복 1인 기준</strong>, 인천 출발. 비수기 4·5·9·10·11월 / 성수기 7·8·12·1월·연휴.
+          2026년 7월 재점검한 대략적 관찰 평균이며 유류할증료·환율·예약 시점에 따라 변동 폭이 큽니다.
         </div>
       </div>
 
@@ -370,7 +374,7 @@ export default function TravelBudgetPage() {
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💵</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해외여행 팁 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            18국 × 9 서비스 + 만족도
+            19국 × 9 서비스 + 만족도
           </p>
         </Link>
         <Link href="/tools/date/jet-lag" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>

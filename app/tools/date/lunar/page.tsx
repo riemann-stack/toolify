@@ -10,7 +10,7 @@ import Disclaimer from '@/components/Disclaimer'
 export const metadata = buildMetadata({
   path: '/tools/date/lunar',
   title: '양력 음력 변환기 — 음력 생일·설날·추석 · 60갑자 간지',
-  description: '양력 ↔ 음력 자유 변환 + 60갑자 간지·띠 자동 표시. 제사·생일·기념일 음력 확인.',
+  description: '양력 ↔ 음력 자유 변환 + 60갑자 간지·띠 자동 표시. 설날·추석 등 명절 양력 날짜와 윤달 계산, 제사·생일 음력 확인까지. 한국천문연구원 데이터 기준.',
   keywords: ['양력음력변환기', '양음력변환', '음력양력변환', '음력달력', '음력생일', '윤달계산', '60갑자', '간지계산', '설날 양력', '추석 양력', '음력 생일 양력'],
 })
 
@@ -114,9 +114,9 @@ export default function LunarPage() {
           </div>
         </div>
 
-        {/* 2. 한국 명절 음력 → 양력 (2025~2027) */}
+        {/* 2. 한국 명절 음력 → 양력 (2026~2028) */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 명절 음력 → 양력 (2025~2027)</h2>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 명절 음력 → 양력 (2026~2028)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             매년 양력 날짜가 바뀝니다. 설·추석은 한국에서 가장 큰 명절(3일 연휴).
           </p>
@@ -125,24 +125,24 @@ export default function LunarPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>명절 (음력)</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2025</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>2026</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2027</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>2028</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['🌅 설날 (1.1)',         '1/29', '2/17', '2/7'],
-                  ['🌕 정월 대보름 (1.15)', '2/12', '3/3',  '2/21'],
-                  ['🌸 부처님오신날 (4.8)', '5/5',  '5/24', '5/13'],
-                  ['🌿 단오 (5.5)',         '5/31', '6/19', '6/9'],
-                  ['🌾 추석 (8.15)',        '10/6', '9/25', '9/15'],
-                  ['🎋 중양절 (9.9)',       '10/29','10/19','10/8'],
+                  ['🌅 설날 (1.1)',         '2/17', '2/7',  '1/27'],
+                  ['🌕 정월 대보름 (1.15)', '3/3',  '2/21', '2/10'],
+                  ['🌸 부처님오신날 (4.8)', '5/24', '5/13', '5/2'],
+                  ['🌿 단오 (5.5)',         '6/19', '6/9',  '5/28'],
+                  ['🌾 추석 (8.15)',        '9/25', '9/15', '10/3'],
+                  ['🎋 중양절 (9.9)',       '10/19','10/8', '10/26'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500, whiteSpace: 'nowrap' }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[2]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[3]}</td>
                   </tr>
                 ))}
@@ -150,7 +150,7 @@ export default function LunarPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
-            ※ 한국천문연구원 데이터·국가 공휴일 발표 기준. 2027년 설날(2/7)은 중국 춘절(2/6)과 하루 다른 해입니다 —
+            ※ 한국천문연구원 데이터·국가 공휴일 발표 기준. 2027년 설날(2/7)·2028년 설날(1/27)은 중국 춘절(각 2/6·1/26)과 하루 다른 해입니다 —
             한국 음력은 KST 합삭 기준이라 중국력 기반 달력·앱과 차이가 날 수 있습니다.
           </p>
         </div>

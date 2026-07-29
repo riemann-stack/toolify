@@ -157,11 +157,17 @@ linear-gradient(in oklch, yellow, blue)         /* OKLCH: 중간이 자연스러
             <div>
               <p style={faqQuestion}>Q2. Tailwind에서 mesh gradient를 쓰려면?</p>
               <div style={faqAnswer}>
-                Tailwind 4의 arbitrary value 문법으로 직접 CSS를 넣거나 <code>theme.extend.backgroundImage</code>에 등록하는 방식이 있습니다.
+                Tailwind의 arbitrary value 문법으로 직접 CSS를 넣는 방법(1회용)과, 재사용을 위해 v4는 <code>@theme</code>의 <code>--background-image-*</code> 변수, v3 이하는 <code>tailwind.config.js</code>의 <code>theme.extend.backgroundImage</code>에 등록하는 방법이 있습니다.
                 <div style={codeBlock}>{`/* 1) arbitrary value (1회용) */
 <div className="bg-[radial-gradient(circle_at_0%_0%,#E11D48_0%,transparent_70%)]" />
 
-/* 2) tailwind.config.js 등록 (재사용) */
+/* 2) v4 — CSS의 @theme 변수 등록 (재사용) */
+@theme {
+  --background-image-mesh-1: radial-gradient(circle at 0% 0%, #E11D48 0%, transparent 70%), radial-gradient(...);
+}
+/* 사용: <div className="bg-mesh-1" /> */
+
+/* 3) v3 이하 — tailwind.config.js 등록 */
 theme: {
   extend: {
     backgroundImage: {

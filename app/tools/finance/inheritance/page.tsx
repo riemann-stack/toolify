@@ -4,12 +4,13 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/inheritance',
   title: '상속·증여세 계산기 2026 — 분배·배우자공제·10년 주기 절세',
-  description: '관계별 공제·10년 합산·배우자 공제 반영한 정확한 상속·증여세. 상속인별 분배와 분산 증여 시뮬레이션으로 절세 전략까지.',
+  description: '관계별 공제·10년 합산·배우자 공제를 반영한 상속·증여세 추정. 상속인별 분배·유류분 확인과 분산 증여 시뮬레이션으로 절세 전략까지 참고할 수 있습니다.',
   keywords: [
     '상속세계산기', '증여세계산기', '상속증여비교', '증여세공제', '상속세공제',
     '분할증여계산기', '자녀증여세', '배우자상속공제', '법정상속분',
@@ -81,7 +82,7 @@ const FAQ_LD = [
           },
           {
             q: '부모님과 조부모님 모두에게 증여받으면 공제가 별도인가요?',
-            a: '부분적으로 별도, 부분적으로 합산. 부·모는 각자 다른 증여자(별도 5천만 가능)지만 직계존속 합산 5천만 기준으로 종합 검토 필요. 조부모는 직계존속 별도 5천만이지만 세대생략 30% 가산세(부모 살아 있을 때 손자녀 직접 증여 시). 며느리·사위 등 인척은 1천만 별도. 복잡한 경우 세무사 상담 필수.',
+            a: '별도가 아닙니다. 부모와 조부모는 모두 직계존속 그룹으로 묶여, 수증자 기준 10년간 합산 5천만원(미성년자 2천만원)까지만 공제됩니다. 아버지·어머니·조부모가 각자 5천만원씩 따로 공제되는 것이 아닙니다. 또한 부모가 살아 있는 상태에서 조부모가 손자녀에게 직접 증여하면 세대생략 할증으로 산출세액의 30%가 가산됩니다. 며느리·사위 등 인척은 기타 친족으로 1천만원 별도 공제. 복잡한 경우 세무사 상담 필수.',
           },
           {
             q: '사망 직전에 자녀에게 증여하면 상속세 절세되나요?',
@@ -109,7 +110,7 @@ export default function InheritancePage() {
         <ToolIconBadge catId="finance" />상속·증여세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        관계별 공제·10년 합산·배우자 공제 반영한 정확한 세액 + <strong style={{ color: 'var(--text)' }}>분산 증여 시뮬레이션</strong>.
+        관계별 공제·10년 합산·배우자 공제를 반영한 상속·증여세 추정 + <strong style={{ color: 'var(--text)' }}>분산 증여 시뮬레이션</strong>.
       </p>
 
       <UpdatedMeta date="2026년 5월" basis="2026년 상속·증여세법 기준" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스","href":"https://hometax.go.kr"}]} />
@@ -274,7 +275,7 @@ export default function InheritancePage() {
         </p>
         <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
           ⚠️ 단, 재산 변동·법령 개정·사망 시점 등 변수 다양. 장기 계획은 세무사·변호사와 상담 권장.
-          부와 모가 각자 증여하면 위 금액의 2배 가능.
+          증여 공제는 부·모·조부모를 합친 직계존속 그룹 기준 합산이므로, 부와 모가 나눠 증여해도 공제 한도가 늘어나지 않습니다.
         </p>
       </div>
 
@@ -368,7 +369,18 @@ export default function InheritancePage() {
         ))}
       </div>
 
-      {/* 12. 함께 쓰면 좋은 도구 */}
+      {/* 12. 면책 */}
+      <Disclaimer
+        variant="finance"
+        sources={[
+          { label: '국세청 상속·증여세 안내(nts.go.kr)', href: 'https://www.nts.go.kr/' },
+          { label: '국세청 홈택스', href: 'https://hometax.go.kr/' },
+        ]}
+      >
+        본 계산기는 관계별 공제·10년 합산·배우자 공제를 단순화한 모델로 상속·증여세를 추정하는 참고용 도구입니다. 사전증여 합산, 감정평가·시가 산정, 부담부증여, 가업·영농 상속공제 등 개별 사정에 따라 실제 세액은 크게 달라질 수 있으며, 본 결과는 세무 자문이나 신고 근거가 아닙니다. 실제 신고·납부 전 홈택스 모의계산 또는 세무사 상담으로 확인하세요.
+      </Disclaimer>
+
+      {/* 13. 함께 쓰면 좋은 도구 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/finance/compound" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>

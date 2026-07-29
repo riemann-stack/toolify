@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/health/glycemic-load',
@@ -71,6 +72,15 @@ export default function GlycemicLoadPage() {
         음식·섭취량으로 <strong style={{ color: 'var(--text)' }}>당부하지수(GL)를 계산</strong>하고 한 끼 총 GL 합산 + 식품별 GI 조회표.
       </p>
 
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="GL = 탄수화물(g)×GI÷100 · 판정 저 ≤10 / 중 11~19 / 고 ≥20 (1회 기준)"
+        sources={[
+          { label: '국제 GI 표 (시드니대 GI 데이터베이스)', href: 'https://glycemicindex.com' },
+          { label: 'Harvard Health — GI/GL 안내', href: 'https://www.health.harvard.edu/diseases-and-conditions/glycemic-index-and-glycemic-load-for-100-foods' },
+        ]}
+      />
+
       <GlycemicLoadClient />
 
       <GuideDivider />
@@ -125,6 +135,7 @@ export default function GlycemicLoadPage() {
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             수박·사과는 GI만 보면 오해할 수 있지만, 실제 먹는 양 기준 GL은 낮습니다. 반대로 흰쌀밥·감자는 GI도 높고 양도 많아 GL이 큽니다.
+            GI 값은 국제 GI 표(International Tables of GI/GL Values)를 참고한 대표치로, 조리법·숙성도에 따라 달라질 수 있습니다.
           </p>
         </section>
 

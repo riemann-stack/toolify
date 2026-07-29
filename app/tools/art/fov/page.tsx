@@ -62,7 +62,7 @@ const FAQ_LD = [
   { "q":"크롭 팩터(Crop Factor)는 어떻게 정해지나요?","a":"풀프레임 대각선(43.27mm) ÷ 센서 대각선으로 계산합니다. • APS-C(소니/니콘/후지): 28.4mm 대각선 → 43.27/28.4 ≈ 1.5 • APS-C(캐논): 26.8mm → ≈ 1.6 • M4/3: 21.6mm → ≈ 2.0 • 1인치: 15.9mm → ≈ 2.7 제조사 표기는 정확한 값이 약간씩 다를 수 있습니다(예: 후지 ×1.52)." },
   { "q":"APS-C에서 50mm와 풀프레임 50mm 차이는?","a":"화각(시야)이 다릅니다. APS-C(×1.5)에 50mm를 끼우면 풀프레임 75mm와 같은 화각(가운데가 잘려서 좁게 보임). 즉 풀프레임 50mm가 표준 단렌즈라면, APS-C 50mm는 인물 단렌즈처럼 작용해요. 같은 표준 화각을 원하면 APS-C에서는 약 33mm 렌즈가 필요합니다(50 / 1.5 ≈ 33). 단, 심도(보케)와 노출은 별개입니다." },
   { "q":"등가 조리개는 왜 필요한가요?","a":"심도(보케) 비교를 위해서입니다. M4/3 f/1.7로 인물을 찍으면 풀프레임 f/3.4와 같은 심도(보케 양). 풀프레임 같은 강한 보케를 원하면 작은 센서에서는 더 밝은 조리개가 필요해요. 다만 노출(빛의 양)은 등가 조리개와 무관 — M4/3 f/1.7 = 풀프레임 f/1.7과 동일한 셔터·ISO에서 같은 밝기. 혼동하지 마세요." },
-  { "q":"스마트폰 카메라의 \"24mm 환산\"이 의미하는 것?","a":"스마트폰 메인 카메라 센서는 풀프레임의 1/4~1/5 크기(크롭 팩터 ×4~×7)이지만, 사양표에는 35mm 환산 mm가 표기됩니다. 예: 아이폰 15 Pro 메인 카메라는 24mm 환산(실제 약 5.7mm). 풀프레임 24mm 광각 렌즈와 같은 화각을 의미해요. 망원 카메라는 보통 70mm 환산(실제 약 9mm), 초광각은 13mm 환산(실제 약 1.5mm)." },
+  { "q":"스마트폰 카메라의 \"24mm 환산\"이 의미하는 것?","a":"스마트폰 메인 카메라 센서는 풀프레임의 1/4~1/5 크기(크롭 팩터 ×4~×7)이지만, 사양표에는 35mm 환산 mm가 표기됩니다. 예: 아이폰 Pro 계열 메인 카메라는 보통 24mm 환산(실제 초점거리는 약 6mm 안팎). 풀프레임 24mm 광각 렌즈와 같은 화각을 의미해요. 망원 카메라는 보통 70mm 환산(실제 약 9mm), 초광각은 13mm 환산(실제 약 1.5mm)." },
   { "q":"인물 사진에 왜 85mm가 표준인가요?","a":"85mm 환산이 인물 표준이 된 이유: 1. 자연스러운 원근감 — 50mm는 코가 살짝 도드라지고, 85mm는 얼굴 비율이 가장 자연스러움 2. 적당한 압축감 — 배경이 살짝 압축되어 인물이 부각 3. 적당한 작업 거리 — 모델과 2-3m 거리에서 상반신 가능 4. 강력한 보케 — 망원 효과로 배경 흐림 ↑ 전신은 50mm 또는 35mm 환경 인물, 클로즈업은 105mm·135mm가 더 좋은 경우도 있습니다." },
   { "q":"안전 셔터 룰(Safe Shutter)은?","a":"삼각대 없이 손으로 들고 찍을 때 흔들림 방지 셔터: 1 / (35mm 환산 mm) 이상. • 풀프레임 50mm → 1/50 이상 • APS-C 50mm(=환산 75mm) → 1/75 이상 • M4/3 50mm(=환산 100mm) → 1/100 이상 현대 카메라의 손떨림 보정(IBIS)으로 5~7 stop까지 도움 받지만, 본인 손떨림·호흡을 고려해 1~2 stop 여유를 두는 게 좋습니다." },
   { "q":"별 사진 500룰은 어떻게 적용?","a":"최대 셔터(초) = 500 / 35mm 환산 mm입니다. 이 시간을 넘으면 별이 점이 아닌 선으로 흐려져요(별궤적). • 풀프레임 24mm → 500/24 ≈ 21초 • APS-C 16mm(=환산 24mm) → 약 21초 • M4/3 12mm(=환산 24mm) → 약 21초 고해상도 카메라(45MP+)는 더 엄격한 300룰(300/환산mm) 권장. 자세한 노출 계산은 사진 노출 계산기의 [상황 가이드] 탭을 활용하세요." },
@@ -154,7 +154,7 @@ export default function FovPage() {
           화각은 카메라가 한 번에 담을 수 있는 시야의 각도입니다. <strong>수평·수직·대각</strong> 세 종류가 있어요.
         </p>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>
-          공식: <strong>AOV = 2 × atan(센서변 / 2 × 초점거리)</strong>
+          공식: <strong>AOV = 2 × atan(센서변 ÷ (2 × 초점거리))</strong>
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 14 }}>
           <div style={{ background: 'var(--bg3)', borderTop: '3px solid #DB2777', borderRadius: 10, padding: '12px 14px' }}>
@@ -296,7 +296,7 @@ export default function FovPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q5. 스마트폰 카메라의 &quot;24mm 환산&quot;이 의미하는 것?</summary>
         <p style={faqAnswer}>
-          스마트폰 메인 카메라 센서는 풀프레임의 1/4~1/5 크기(크롭 팩터 ×4~×7)이지만, 사양표에는 35mm 환산 mm가 표기됩니다. 예: 아이폰 15 Pro 메인 카메라는 24mm 환산(실제 약 5.7mm). 풀프레임 24mm 광각 렌즈와 같은 화각을 의미해요. 망원 카메라는 보통 70mm 환산(실제 약 9mm), 초광각은 13mm 환산(실제 약 1.5mm).
+          스마트폰 메인 카메라 센서는 풀프레임의 1/4~1/5 크기(크롭 팩터 ×4~×7)이지만, 사양표에는 35mm 환산 mm가 표기됩니다. 예: 아이폰 Pro 계열 메인 카메라는 보통 24mm 환산(실제 초점거리는 약 6mm 안팎). 풀프레임 24mm 광각 렌즈와 같은 화각을 의미해요. 망원 카메라는 보통 70mm 환산(실제 약 9mm), 초광각은 13mm 환산(실제 약 1.5mm).
         </p>
       </details>
 
@@ -372,7 +372,7 @@ export default function FovPage() {
         </Link>
         <Link href="/tools/art/color" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🎨</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>색상 변환·디자인</p>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>색상 코드 변환기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             HEX·RGB·WCAG·팔레트
           </p>

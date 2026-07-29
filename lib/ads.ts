@@ -23,6 +23,8 @@ export const AD_EXCLUDED_PATHS: readonly string[] = [
   '/tools/life/alcohol',         // 알코올 도수
   '/tools/life/lotto',           // 로또(도박 인접)
   '/tools/health/cycle',         // 생리주기(민감 건강 정보)
+  '/tools/health/pregnancy',     // 임신 주수(민감 건강 정보 — cycle과 동일 계열)
+  '/tools/health/hba1c',         // 당화혈색소(당뇨 진단 구간 — 건강 상태 추정 가능)
 ] as const
 
 /** 해당 경로가 광고 제외 대상인지 판별. 정확 일치 또는 하위 경로 매칭. */

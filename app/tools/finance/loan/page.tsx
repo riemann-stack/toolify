@@ -328,7 +328,7 @@ export default function LoanPage() {
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>은행권 한도: <strong style={{ color: 'var(--text)' }}>40%</strong></li>
                 <li>2금융권 한도: <strong style={{ color: 'var(--text)' }}>50%</strong></li>
-                <li>스트레스 DSR (2024 적용): 가산 0.38~1.5%p</li>
+                <li>스트레스 DSR: 변동·혼합금리에 가산금리를 얹어 한도 산정 — 단계별 가산율은 <Link href="/tools/finance/dsr" style={{ color: 'var(--accent)' }}>DSR 계산기</Link> 참고</li>
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(225,29,72,0.30)', borderRadius: 12, padding: '14px 18px' }}>
@@ -369,6 +369,7 @@ export default function LoanPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
+              { href: '/tools/finance/dsr',      icon: '📊', name: 'DSR 계산기',           desc: '스트레스 DSR 반영 대출 한도 진단' },
               { href: '/tools/finance/salary',   icon: '💰', name: '연봉 실수령액 계산기', desc: '월 납입액 감당 가능한지 소득 확인' },
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',           desc: '이자 절약분 재투자 시 미래 자산' },
               { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',         desc: '사업자 대출 시 세금 계산' },

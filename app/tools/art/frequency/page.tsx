@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/art/frequency',
   title: '주파수↔음정 변환기 — Hz ↔ 음이름·MIDI·파장 계산',
-  description: 'Hz ↔ 음정 변환 + MIDI 번호·파장 계산. 튜닝과 사운드 디자인·악기 조율에.',
+  description: 'Hz ↔ 음이름·MIDI 번호·파장 상호 변환 + 센트 오차 계산. 기타·바이올린·첼로·우쿨렐레 개방현 튜닝표, 440Hz vs 432Hz, 평균율·순정률 센트 비교까지.',
   keywords: ['주파수 음정 변환기', 'Hz 음정 변환', 'MIDI 번호 계산', '튜닝 계산기', '음정 계산기'],
 })
 

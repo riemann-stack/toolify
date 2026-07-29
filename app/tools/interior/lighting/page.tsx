@@ -10,7 +10,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 export const metadata = buildMetadata({
   path: '/tools/interior/lighting',
   title: '조명 밝기 계산기 — 방 면적 루멘·조명 개수·W↔lm 환산',
-  description: '공간별 권장 루멘과 조명 개수 + W↔lm 환산·색온도 가이드로 침실·거실·주방 조명 설계 완성.',
+  description: '공간별 권장 루멘(KS A 3011 참고)과 필요 조명 개수를 면적으로 계산. W↔lm 환산표, LED·형광등·백열등 밝기 비교, 색온도(전구색·주백색·주광색) 가이드까지 침실·거실·주방 조명 설계를 돕습니다.',
   keywords: ['조명밝기계산기', '방조명루멘', '거실조명개수', 'W루멘환산', '조명개수계산', 'LED루멘', '색온도가이드', '루멘계산'],
 })
 
@@ -41,7 +41,7 @@ export default function LightingPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        인테리어
+        주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />조명 밝기 계산기
@@ -199,7 +199,7 @@ export default function LightingPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            💡 <strong style={{ color: 'var(--text)' }}>LED는 백열전구의 약 1/8 전력</strong>으로 같은 밝기 → 연간 전기료 약 85~88% 절감, 수명 25~40배 길음. <span style={{ fontSize: 11 }}>※ 백열등 효율은 와트에 따라 10~16 lm/W로 변동 — 위 표는 시장 표준 등가값, 계산기는 평균 12 lm/W 적용.</span>
+            💡 <strong style={{ color: 'var(--text)' }}>LED는 백열전구의 약 1/8 전력</strong>으로 같은 밝기 → 연간 전기료 약 85~88% 절감, 수명은 25~40배 깁니다. <span style={{ fontSize: 11 }}>※ 백열등 효율은 와트에 따라 10~16 lm/W로 변동 — 위 표는 시장 표준 등가값, 계산기는 평균 12 lm/W 적용.</span>
           </p>
         </div>
 

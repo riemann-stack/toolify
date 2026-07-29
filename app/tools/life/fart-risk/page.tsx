@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/life/fart-risk',
   title: '방귀 위험도 계산기 — 3축 점수·원인 분류·저FODMAP 대체',
-  description: '가스량·냄새·복부팽만 3축 점수로 원인 진단 + 저FODMAP 식재료 대체와 8가지 증상별 대처 가이드.',
+  description: '고구마·콩·우유 등 음식별 가스량·냄새·복부팽만 3축 점수로 원인 진단. 저FODMAP 식재료 대체, WPC·WPI 보충제 비교, 병원 방문 기준까지 8가지 증상별 대처 가이드.',
   keywords: ['방귀유발음식', '가스유발음식', '방귀계산기', '고구마방귀', '콩방귀', '탄산방귀', '방귀원인음식', 'FODMAP', '저FODMAP 대체', '복부팽만 음식', '유당불내증', '단백질 보충제 가스', '계란 방귀 냄새', '양파 가스', 'WPC WPI 차이'],
 })
 
@@ -26,7 +26,7 @@ const FAQ_LD = [
               { q: '같은 음식인데 어떤 날만 가스가 더 차요?',
                 a: '다음 변수가 영향을 줍니다 — 식사 속도(빠르면 공기 삼킴 ↑) / 식사량(과식 → 소화 지연) / 함께 먹은 음식(시너지) / 스트레스·수면(장 운동) / 생리 주기(호르몬) / 운동 후(소화 빠름) / 약물(항생제·진통제). 본인 패턴 파악은 1주일 일기(음식·증상)가 가장 효과적이며, 동일 조건 반복 시 영양사 상담 권장.' },
               { q: 'FODMAP 식단을 평생 해야 하나요?',
-                a: '아닙니다. 저FODMAP은 <strong>진단·재도입 도구</strong>입니다.<br/>• 1단계 (제거, 2~6주): 모든 고FODMAP 제거<br/>• 2단계 (재도입, 6~10주): 한 종류씩 다시 시도<br/>• 3단계 (개인화): 본인 민감 음식만 평생 제한<br/>평생 저FODMAP은 영양 결핍 위험(식이섬유·미네랄), 장내 미생물 다양성 ↓, 사회적 식사 어려움 등 부작용. 반드시 영양사 지도 하 진행. 한국 소화기학회: kgsa.or.kr.' },
+                a: '아닙니다. 저FODMAP은 <strong>진단·재도입 도구</strong>입니다.<br/>• 1단계 (제거, 2~6주): 모든 고FODMAP 제거<br/>• 2단계 (재도입, 6~10주): 한 종류씩 다시 시도<br/>• 3단계 (개인화): 본인 민감 음식만 평생 제한<br/>평생 저FODMAP은 영양 결핍 위험(식이섬유·미네랄), 장내 미생물 다양성 ↓, 사회적 식사 어려움 등 부작용. 반드시 영양사 지도 하 진행. 참고: 대한소화기학회(gastrokorea.org).' },
               { q: '방귀가 너무 많이 나오면 병원 가야 하나요?',
                 a: '횟수 자체보다 <strong>변화와 동반 증상</strong>이 기준입니다. 다음 경우 의료 상담 권장 — 평소보다 갑자기 뚜렷이 잦아지며 불편·통증 동반 / 심한 악취 + 혈변 / 갑작스러운 체중 감소 / 심한 복통(한밤중에 깨움) / 발열 동반 / 1주+ 지속 변비·설사 / 임산부.<br/>원인은 다양합니다(과민성대장증후군 · 소장세균과증식(SIBO) · 셀리악병(글루텐 자가면역 질환, 알레르기 아님) · 유당불내증 · 췌장 효소 부족 · 담즙 문제 등) — 증상만으로 단정할 수 없습니다. 상담: 소화기내과 / 보건복지상담센터 129 / 질병관리청 1339 / 응급 119.' },
               { q: '단순 일기로 본 도구를 활용할 수 있나요?',
@@ -36,7 +36,7 @@ const FAQ_LD = [
 export default function FartRiskPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활</p>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />방귀 위험도 계산기
       </h1>

@@ -1,13 +1,10 @@
-import { categories } from '@/lib/tools'
 import CategoryView from '@/components/CategoryView'
 import { buildMetadata } from '@/lib/seo'
 
-const cat = categories.find((c) => c.id === 'dev')!
-
 export const metadata = buildMetadata({
   path: '/tools/dev',
-  title: `${cat.name} 계산기 모음`,
-  description: `${cat.tools.map((t) => t.name).join(', ')} 등 ${cat.name} 무료 도구 모음.`,
+  title: "개발자 도구 — JSON·정규식·Base64·cron",
+  description: "JSON 포매터, 정규식 테스터, Base64·URL 인코딩, cron 표현식, JWT 디코더까지 개발 중 자주 찾는 유틸리티를 설치 없이 제공합니다.",
 })
 
 export default function DevCategoryPage() {

@@ -3,6 +3,8 @@ import CarbLoadingClient from './CarbLoadingClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -70,6 +72,14 @@ export default function CarbLoadingPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         마라톤 대회 전 <strong style={{ color: 'var(--text)' }}>하루 탄수화물 목표량과 날짜별 플랜</strong> + 밥·바나나·젤 음식 환산.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="ACSM·IOC 스포츠영양 권고 탄수화물 섭취 기준 (g/kg)"
+        sources={[
+          { label: 'ACSM 공동 성명 — Nutrition and Athletic Performance (2016)', href: 'https://pubmed.ncbi.nlm.nih.gov/26891166/' },
+        ]}
+      />
 
       <CarbLoadingClient />
 
@@ -145,6 +155,11 @@ export default function CarbLoadingPage() {
         <section>
           <Faq items={FAQ_LD} />
         </section>
+
+        {/* 면책 */}
+        <Disclaimer variant="medical" open>
+          본 계산기는 <strong>일반 스포츠영양 가이드</strong>이며 개인 맞춤 처방이 아닙니다. 당뇨·신장질환 등 질환이 있거나 식이 조절이 필요한 경우 반드시 전문의·임상영양사와 상담 후 적용하세요.
+        </Disclaimer>
 
         {/* 5. 관련 도구 */}
         <section>

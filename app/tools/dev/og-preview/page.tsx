@@ -32,7 +32,7 @@ const sectionTitle: React.CSSProperties = {
 const FAQ_LD = [
               {
                 q: '메타태그를 수정했는데 카카오톡 카드가 그대로예요.',
-                a: '카카오톡은 URL당 약 <strong>48시간 캐시</strong>가 적용됩니다. <a href="https://developers.kakao.com/tool/clear/og" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">카카오 개발자 도구</a>의 "공유 디버거" 또는 "캐시 삭제" 메뉴에 URL을 넣고 캐시를 갱신하세요. Facebook은 <a href="https://developers.facebook.com/tools/debug/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Sharing Debugger</a>, X는 <a href="https://cards-dev.twitter.com/validator" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Card Validator</a>(deprecated 됐으나 일부 동작), LinkedIn은 <a href="https://www.linkedin.com/post-inspector/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Post Inspector</a>를 사용합니다.',
+                a: '카카오톡은 URL당 약 <strong>48시간 캐시</strong>가 적용됩니다. <a href="https://developers.kakao.com/tool/clear/og" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">카카오 개발자 도구</a>의 "공유 디버거" 또는 "캐시 삭제" 메뉴에 URL을 넣고 캐시를 갱신하세요. Facebook은 <a href="https://developers.facebook.com/tools/debug/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Sharing Debugger</a>, X는 전용 캐시 초기화 도구가 없어 트윗 작성창에 URL을 붙여넣고 카드 미리보기로 직접 확인하며, LinkedIn은 <a href="https://www.linkedin.com/post-inspector/" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight: 600;">Post Inspector</a>를 사용합니다.',
               },
               {
                 q: 'og:image는 어느 크기·비율이 가장 안전한가요?',

@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/art/capo',
   title: '기타 카포 계산기 — 카포 위치별 코드 변환·쉬운 코드 추천',
-  description: '원곡 키와 카포 위치로 변환된 코드 + 쉬운 코드 추천. 노래 키를 바꿔 부르거나 어려운 코드를 피할 때.',
+  description: '원곡 키·카포 위치로 변환 코드와 쉬운 코드 자동 추천. 밤편지·벚꽃 엔딩 등 애창곡 실전 카포 사례, 남성 키↔여성 키 역산 3단계, 카포 종류 비교까지.',
   keywords: ['기타카포계산기', '카포위치계산', '기타전조계산기', '코드변환계산기', '카포코드표', '기타코드이동', '전조계산기'],
 })
 

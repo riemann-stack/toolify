@@ -69,7 +69,7 @@ const FAQ_LD = [
   { "q":"SRI 해시(integrity)는 어떻게 만드나요?","a":"SRI(Subresource Integrity)는 CDN에서 로드되는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다. 생성 방법: 본 도구의 [📝 텍스트] 또는 [📁 파일] 탭에서 SHA-384 + Base64 출력을 사용 (또는 SHA-256/512). HTML 사용: <script src=\"...\" integrity=\"sha384-Base64결과\" crossorigin=\"anonymous\"></script> jsDelivr·cdnjs는 자동 생성 SRI를 제공합니다. 자체 호스팅 시 본 도구로 생성 가능." },
   { "q":"Base64와 hex 형식 어떻게 선택?","a":"hex (16진): 일반적·가독성 ↑·길이 2배. 대부분 CLI·로그·검증용 표준. Base64: 짧음(약 33% 압축)·HTTP 헤더·이메일 친화. SRI integrity= 속성, JWT 등에 사용. Base64URL: +→-, /→_, 패딩(=) 제거. URL·파일명·JWT(헤더·페이로드·서명)에 안전. 용도별 권장: • 파일 체크섬·CLI 비교 → hex • SRI integrity 속성 → Base64 (또는 Base64URL) • JWT 서명 → Base64URL (RFC 7515) • API 헤더 (대부분 GitHub/Slack 등) → hex" },
   { "q":"본 도구는 입력 데이터를 서버에 보내나요?","a":"아니요. 모든 계산이 브라우저(클라이언트)에서 수행됩니다. • MD5: 순수 JavaScript로 inline 구현 (외부 라이브러리·서버 호출 없음) • SHA-1/256/512: 브라우저 Web Crypto API (네이티브) • HMAC: Web Crypto API • 파일: FileReader로 메모리 내 처리, 업로드 없음 또한 입력 텍스트·Secret Key·파일은 localStorage에도 저장하지 않습니다 (옵션값만 저장). 공용 PC 사용 후 브라우저 탭을 닫으면 모든 데이터가 즉시 사라집니다. 추가 안전을 원하면 시크릿 모드·DevTools로 메모리 정리 권장." },
-  { "q":"해시 충돌(collision)이란 무엇인가요?","a":"서로 다른 두 입력이 같은 해시값을 만드는 현상입니다. 해시 함수는 입력은 무한·출력은 유한이라 이론적으로 충돌은 항상 존재해요. 안전한 해시는 찾기가 사실상 불가능해야 합니다(비둘기 집 원리 + 출력 공간이 매우 큼). • MD5 충돌 (2004): 약 2^18 시도로 충돌 가능 → 디지털 서명 위조 가능 • SHA-1 SHAttered (2017): Google이 100시간 GPU 작업으로 같은 SHA-1 두 PDF 시연 • SHA-256: 2^128 시도 필요 → 우주 수명보다 긺 → 안전 충돌 위험이 있어도 무결성 확인(체크섬)은 OK — 우연한 손상은 충돌과 무관, 의도적 변조 위험만 문제." }
+  { "q":"해시 충돌(collision)이란 무엇인가요?","a":"서로 다른 두 입력이 같은 해시값을 만드는 현상입니다. 해시 함수는 입력은 무한·출력은 유한이라 이론적으로 충돌은 항상 존재해요. 안전한 해시는 찾기가 사실상 불가능해야 합니다(비둘기 집 원리 + 출력 공간이 매우 큼). • MD5 충돌 (2004): 약 2^18 시도로 충돌 가능 → 디지털 서명 위조 가능 • SHA-1 SHAttered (2017): Google이 단일 GPU 기준 약 110년 분량(단일 CPU 약 6,500년)의 연산으로 같은 SHA-1을 갖는 두 PDF를 시연 • SHA-256: 2^128 시도 필요 → 우주 수명보다 긺 → 안전 충돌 위험이 있어도 무결성 확인(체크섬)은 OK — 우연한 손상은 충돌과 무관, 의도적 변조 위험만 문제." }
 ]
 
 export default function HashPage() {
@@ -175,7 +175,7 @@ export default function HashPage() {
           <li><strong>비밀번호 해싱</strong> — 무지개 표(rainbow table)로 즉시 깨짐. 반드시 <strong>bcrypt·scrypt·Argon2</strong>(KDF, 서버 측)</li>
           <li><strong>디지털 서명</strong> — 충돌 공격으로 위변조 가능. SHA-256 + RSA/ECDSA</li>
           <li><strong>SSL/TLS 인증서</strong> — CA Browser Forum 표준 SHA-256 이상 (모든 브라우저 SHA-1 인증서 차단)</li>
-          <li><strong>JWT 서명</strong> — 최소 HMAC-SHA256 (HS256). HS1은 부적합</li>
+          <li><strong>JWT 서명</strong> — 최소 HMAC-SHA256 (HS256). HMAC-SHA1은 JWS 표준 알고리즘이 아니며 사용하지 않습니다</li>
           <li><strong>코드 사이닝·소프트웨어 배포</strong> — Microsoft·Apple 모두 SHA-256 이상 의무화</li>
         </ul>
         <p style={{ fontSize: 12, color: 'var(--muted)', margin: '12px 0 0', lineHeight: 1.7, fontStyle: 'italic' }}>
@@ -381,7 +381,7 @@ export default function HashPage() {
           서로 다른 두 입력이 <strong>같은 해시값</strong>을 만드는 현상입니다. 해시 함수는 입력은 무한·출력은 유한이라 이론적으로 충돌은 항상 존재해요.<br />
           <strong>안전한 해시</strong>는 <strong>찾기가 사실상 불가능</strong>해야 합니다(비둘기 집 원리 + 출력 공간이 매우 큼).<br />
           • <strong>MD5 충돌</strong> (2004): 약 2^18 시도로 충돌 가능 → 디지털 서명 위조 가능<br />
-          • <strong>SHA-1 SHAttered</strong> (2017): Google이 100시간 GPU 작업으로 같은 SHA-1 두 PDF 시연<br />
+          • <strong>SHA-1 SHAttered</strong> (2017): Google이 단일 GPU 기준 약 110년 분량(단일 CPU 약 6,500년)의 연산으로 같은 SHA-1을 갖는 두 PDF를 시연<br />
           • <strong>SHA-256</strong>: 2^128 시도 필요 → 우주 수명보다 긺 → 안전<br />
           충돌 위험이 있어도 <strong>무결성 확인(체크섬)</strong>은 OK — 우연한 손상은 충돌과 무관, 의도적 변조 위험만 문제.
         </p>

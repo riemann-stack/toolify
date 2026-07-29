@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/dev/css-converter',
   title: 'CSS 단위 변환기 — px·rem·em·clamp()·aspect-ratio 계산',
-  description: 'px·rem·em 변환 + clamp()·aspect-ratio 자동 생성. 반응형 CSS 작성 필수.',
+  description: 'px↔rem·em·vw 변환 + clamp() 유동 타이포·aspect-ratio 코드 자동 생성. 62.5% 트릭의 함정, 100vh 모바일 문제(dvh·svh), line-height unitless, Figma→CSS 치트시트까지.',
   keywords: ['CSS단위변환기', 'px rem 변환', 'clamp생성기', 'aspect-ratio계산기', 'line-height변환', 'letter-spacing변환', 'CSS계산기', 'rem변환기'],
 })
 
@@ -161,8 +161,8 @@ slope     = (maxPx - minPx) / (maxVw - minVw)
 intercept = minPx - slope × minVw
 preferred = \`\${intercept/16}rem + \${slope*100}vw\`
 
-/* 결과 예시 */
-clamp(1rem, 0.5rem + 2.22vw, 2rem)
+/* 결과 예시 — 360~1440px, 16→32px */
+clamp(1rem, 0.667rem + 1.48vw, 2rem)
   → 360px 화면:  16px  (최솟값)
   → 1440px 화면: 32px  (최댓값)
   → 그 사이:     부드럽게 변화`}

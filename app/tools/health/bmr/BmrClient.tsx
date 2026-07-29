@@ -513,7 +513,7 @@ export default function BmrClient() {
                     ))}
                   </ul>
                   <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>1393</strong> (24시간)
+                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>109</strong> (24시간)
                   </p>
                 </div>
               )}
@@ -708,7 +708,7 @@ export default function BmrClient() {
       {/* 면책 강화 */}
       <div className={styles.warnBox}>
         💛 <strong>BMR/TDEE는 추정치입니다.</strong> 의학적 진단·치료 도구가 아니며, 실제 소비량은 호르몬·근육·수면·약물·만성질환에 따라 다릅니다.
-        체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong>1577-0199</strong> · 자살예방 <strong>1393</strong> (24시간).
+        체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong>1577-0199</strong> · 자살예방 <strong>109</strong> (24시간).
       </div>
     </div>
   )

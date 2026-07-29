@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/sports/one-rm',
   title: '1RM 계산기 — 벤치·스쿼트·데드 최대 중량 + 워밍업 자동 + 성·연령 보정',
-  description: '12종 운동·4개 공식(Epley·Brzycki·Lombardi·O\'Conner)으로 진짜 최대 무게 추정 + RPE 보정·성·연령 수준·워밍업 5세트 자동·진행 그래프.',
+  description: '11종 운동(+기타 직접 입력)·4개 공식(Epley·Brzycki·Lombardi·O\'Conner)으로 진짜 최대 무게 추정 + RPE 보정·성·연령 수준·워밍업 5세트 자동·진행 그래프.',
   keywords: ['1RM계산기', '벤치프레스1RM', '스쿼트1RM', '데드리프트1RM', '워밍업계산기', 'RPE계산기', '훈련중량계산기', '헬스1RM', '1RM공식', '체중대비1RM'],
 })
 

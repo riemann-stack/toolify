@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/interior/molding',
   title: '몰딩 계산기 — 천장 몰딩·걸레받이·띠몰딩 개수',
-  description: '천장 몰딩·걸레받이·띠몰딩의 길이·개수·비용 자동 + 코너·이음새 처리 가이드.',
+  description: '천장 몰딩·걸레받이·띠몰딩·문틀 프레임의 필요 길이와 2.4m·3.6m 본 수, 재질별(PVC·MDF·우드) 자재비를 자동 계산. 45도 모서리 절단 여유분과 평수별 참조표, 셀프 시공 가이드까지 포함합니다.',
   keywords: ['몰딩계산기', '걸레받이길이', '천장몰딩개수', '몰딩소요량', 'MDF몰딩', 'PVC몰딩', '몰딩비용', '몰딩45도절단'],
 })
 
@@ -32,7 +32,7 @@ const FAQ_LD = [
               },
               {
                 q: '몰딩 가격은 보통 얼마인가요?',
-                a: '한국 시판 기준으로 <strong>스티렌 1,000원/m, PVC 1,500원/m, MDF 2,500원/m, 석고 4,000원/m, 우드 5,000~10,000원/m</strong> 정도입니다(1m당, 1본 2.4m이면 ×2.4 · 매장·등급별 편차 큼). 24평(단일 정사각형 공간 가정) 천장+걸레받이를 MDF로 시공하면 <strong>자재비 약 20만원</strong>, 전문 시공비는 m당 5,000원 추가로 <strong>약 59만원</strong> 정도입니다.',
+                a: '2026년 기준 한국 시판가로 <strong>스티렌 1,000원/m, PVC 1,500원/m, MDF 2,500원/m, 석고 4,000원/m, 우드 5,000~10,000원/m</strong> 정도입니다(1m당, 1본 2.4m이면 ×2.4 · 매장·등급별 편차 큼). 24평(단일 정사각형 공간 가정) 천장+걸레받이를 MDF로 시공하면 <strong>자재비 약 20만원</strong>, 전문 시공비는 m당 5,000원 추가로 <strong>약 59만원</strong> 정도입니다.',
               },
             ]
 
@@ -40,7 +40,7 @@ export default function MoldingPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        인테리어
+        주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />몰딩 계산기
@@ -138,6 +138,9 @@ export default function MoldingPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ※ 가격은 2026년 기준, 온라인 자재몰·시공 플랫폼 통용 범위이며 지역·브랜드·등급에 따라 달라집니다.
+          </p>
         </div>
 
         {/* ── 4. 모서리 절단 가이드 ── */}

@@ -3,6 +3,7 @@ import DehumidifierClient from './DehumidifierClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -37,7 +38,7 @@ const FAQ_LD = [
   },
   {
     q: '제습기 전기요금은 얼마나 나오나요?',
-    a: '제습기 소비전력은 용량별로 <strong>150~440W</strong> 수준입니다. 예를 들어 20L급(약 265W)을 하루 6시간, 한 달 가동하면 <strong>약 48kWh</strong>가 늘어납니다. 여기에 전기요금 단가를 곱하면 월 추가요금이 나오는데, 주택용 전기요금은 누진제라 이미 많이 쓰는 집일수록 kWh당 단가(여름 3단계 약 280원)가 올라갑니다. 계산기에서 하루 가동시간과 단가를 조절해 확인하세요.',
+    a: '제습기 소비전력은 용량별로 <strong>150~440W</strong> 수준입니다. 예를 들어 20L급(약 265W)을 하루 6시간, 한 달 가동하면 <strong>약 48kWh</strong>가 늘어납니다. 여기에 전기요금 단가를 곱하면 월 추가요금이 나오는데, 주택용 전기요금은 누진제라 이미 많이 쓰는 집일수록 kWh당 단가가 올라갑니다(하계 누진 3단계 기준 약 280원/kWh, 2026년 한전 요금표 기준). 계산기에서 하루 가동시간과 단가를 조절해 확인하세요.',
   },
   {
     q: '에어컨 제습 모드로 대체할 수 있나요?',
@@ -70,6 +71,12 @@ export default function DehumidifierPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         방·집 면적으로 <strong style={{ color: 'var(--text)' }}>적정 제습량(L/일)과 권장 제품 용량</strong> + 월 전기요금까지. 아파트·주택·지하·장마철 보정.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="한전 주택용(저압) 누진제 요금표 기준 — 소비전력은 국내 유통 제품 통상 범위"
+        sources={[{ label: '한국전력 — 전기요금표(주택용)', href: 'https://cyber.kepco.co.kr/ckepco/front/jsp/CY/E/E/CYEEHP00101.jsp' }]}
+      />
 
       <DehumidifierClient />
 

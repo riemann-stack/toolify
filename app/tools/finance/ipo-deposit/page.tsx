@@ -71,14 +71,14 @@ const faqAnswer: React.CSSProperties = {
 const FAQ_LD = [
   { "q":"비례경쟁률 500:1이면 1주 받으려면 얼마 넣어야 하나요?","a":"공식: 필요 증거금 = 목표 주수 × 경쟁률 × 공모가 × 증거금률. 예: 1주 × 500 × 20,000원 × 50% = 500만 원. 단, 청약단위(예: 100주 단위) 적용 시 올림 → 실제 필요 증거금 ↑. 본 도구는 자동 단위 적용." },
   { "q":"증거금률이 50%인지 100%인지 어떻게 아나요?","a":"종목별 증권신고서 또는 증권사 청약 안내에 명시. 일반적으로 50%가 표준이지만, 인기 IPO·일부 종목은 100% 요구. 본 도구는 50/100 빠른 입력 + 직접 입력 모두 지원." },
-  { "q":"5사6입이 뭔가요? 0.5주는 어떻게 되나요?","a":"한국 회계 반올림 규칙 — 0.5 미만 버림, 0.5 이상 올림. 비례 배정 = 청약 주수 ÷ 경쟁률 결과 적용. 예: 0.4주 → 0주(미배정), 0.5주 → 1주, 1.4주 → 1주, 1.5주 → 2주. 일부 종목은 1주 보장 추첨(0.5 미만이라도 추첨으로 1주 배정 — 본 도구의 옵션). 정확한 룰은 증권신고서 확인." },
-  { "q":"균등배정으로 무조건 1주 받을 수 있나요?","a":"아니요 — 추첨입니다. 균등배정 주수보다 청약 인원이 많으면 추첨 → 0주 가능. 인기 종목일수록 떨어질 확률 ↑. 본 도구의 &ldquo;균등 기대&rdquo; 입력은 사용자 가정값: 0주: 추첨 떨어짐 가정 (보수적) 1주: 당첨 가정 (낙관적) 실제 결과는 증권사 청약 후 확인." },
+  { "q":"5사6입이 뭔가요? 0.5주는 어떻게 되나요?","a":"소수 첫째 자리가 5 이하면 버리고 6 이상이면 올리는 규칙입니다. 반올림(4사5입)과 달리 0.5는 버림 처리되는 점이 핵심입니다. 비례 배정 = 청약 주수 ÷ 경쟁률 결과에 적용. 예: 0.4주 → 0주, 0.5주 → 0주, 0.6주 → 1주, 1.5주 → 1주, 1.6주 → 2주. 일부 종목은 1주 보장 추첨(계산 결과 0주라도 추첨으로 1주 배정 — 본 도구의 옵션)이 있습니다. 정확한 룰은 증권신고서 확인." },
+  { "q":"균등배정으로 무조건 1주 받을 수 있나요?","a":"아니요 — 추첨입니다. 균등배정 주수보다 청약 인원이 많으면 추첨 → 0주 가능. 인기 종목일수록 떨어질 확률이 높습니다. 본 도구의 균등 기대 입력은 사용자 가정값입니다. ① 0주 = 추첨 떨어짐 가정(보수적) ② 1주 = 당첨 가정(낙관적). 실제 결과는 증권사 청약 후 확인하세요." },
   { "q":"1억 넣어도 한도 때문에 다 못 쓰는 경우가 있다는데?","a":"맞습니다. 종목·증권사별 청약 한도(보통 5,000~50,000주)가 있어 큰 증거금도 한도까지만 효과. 한도 초과분은 자동 잘림. 예: 한도 5,000주 + 공모가 20,000원 + 증거금률 50% = 최대 효과 증거금 5,000만 원. 이상 넣어도 비례 배정 늘지 X. 본 도구는 한도 입력 시 자동 경고 + 시나리오 표에서 ⚠️ 표시." },
   { "q":"중복청약 금지는 가족 명의로 우회 가능한가요?","a":"비추천 — 위험. 2021년 이후 한 종목당 1 증권사 원칙. 가족 명의 차용은: 적발 시 배정 취소 + 자금 묶임 증여세·상속세 이슈 (자금 출처 추적 가능) 증권사 모니터링 강화 추세 정상적인 본인 명의 1 증권사 청약 권장." },
   { "q":"청약하면 자금이 며칠 묶이나요?","a":"일반: 청약일(D)~환불일(D+2~3) 약 2~3 영업일. 큰 금액일수록 기회비용 ↑(예: 5,000만 원 × 연 5% × 3/365 = 약 2만 원). 상장(D+7~10)까지 배정분은 계속 묶임. 본 도구의 메모 탭에서 D-day 자동 계산." },
   { "q":"청약 수수료는 얼마인가요?","a":"한국 증권사 일반 1,500~2,000원 (비대면 청약). 일부는 무료. 본 도구는 특정 증권사 추천 X. ⚠️ 작은 청약(1주만 노릴 때)은 수수료가 비례 배정 가치보다 클 수 있어 주의. 정확한 수수료는 본인 거래 증권사 안내 확인." },
-  { "q":"본 도구로 계산한 값과 실제 결과가 다를 수 있는 이유는?","a":"경쟁률 변동 — 청약 마감 1~2시간 전까지 급변 5사6입 변형 — 종목별 1주 보장 추첨 등 변형 룰 균등배정 추첨 — 인원에 따라 0~N주 변동 청약단위·한도 — 종목·증권사별 다름 우대조건 — 청약사 우수고객·신용점수 등 수수료·환불 시점 — 실수령액에 영향 본 도구는 일반 가이드 — 마감 직전 실제 경쟁률·증권사 안내 재확인." },
-  { "q":"공모주는 어디서 확인할 수 있나요?","a":"본 도구는 종목 추천 X — 공식 사이트에서 직접 확인: DART (전자공시시스템) — 증권신고서·투자설명서 KIND (한국거래소) — 상장공시 본인 거래 증권사 HTS/MTS — 청약 안내·일정 금융감독원 1332 (분쟁·민원) 금융투자협회 (kofia.or.kr) — 청약 가이드" }
+  { "q":"본 도구로 계산한 값과 실제 결과가 다를 수 있는 이유는?","a":"① 경쟁률 변동 — 청약 마감 1~2시간 전까지 급변 ② 5사6입 변형 — 종목별 1주 보장 추첨 등 변형 룰 ③ 균등배정 추첨 — 인원에 따라 0~N주 변동 ④ 청약단위·한도 — 종목·증권사별 다름 ⑤ 우대조건 — 증권사 우수고객 우대 등 ⑥ 수수료·환불 시점 — 실수령액에 영향. 본 도구는 일반 가이드이므로 마감 직전 실제 경쟁률과 증권사 안내를 재확인하세요." },
+  { "q":"공모주는 어디서 확인할 수 있나요?","a":"본 도구는 종목을 추천하지 않으며, 공식 사이트에서 직접 확인하세요. ① DART 전자공시시스템 — 증권신고서·투자설명서 ② KIND 한국거래소 — 상장공시 ③ 본인 거래 증권사 HTS/MTS — 청약 안내·일정 ④ 금융감독원 1332 — 분쟁·민원 ⑤ 금융투자협회(kofia.or.kr) — 청약 가이드" }
 ]
 
 export default function IpoDepositPage() {
@@ -155,7 +155,7 @@ export default function IpoDepositPage() {
       {/* 3. 5사6입 룰 */}
       <h2 style={sectionTitle}>🔢 5사6입 룰 — 비례 배정 소수점 처리</h2>
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        비례배정 = <strong style={{ color: 'var(--text)' }}>청약 주수 ÷ 경쟁률</strong> 결과는 정수가 아닐 수 있습니다. 한국 회계 표준 5사6입(0.5 미만 버림, 0.5 이상 올림) 적용.
+        비례배정 = <strong style={{ color: 'var(--text)' }}>청약 주수 ÷ 경쟁률</strong> 결과는 정수가 아닐 수 있습니다. 5사6입(소수 첫째 자리 5 이하 버림·6 이상 올림 — 반올림과 달리 0.5는 버림)을 적용합니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -167,17 +167,17 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>0.5 미만 → 미배정 (1주 보장 추첨 옵션 별도)</td></tr>
-            <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>0.5 이상 → 올림</td></tr>
-            <tr><td style={cell}>0.9주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>올림</td></tr>
-            <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>1.5 미만 → 1주</td></tr>
-            <tr><td style={cell}>1.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2주</td><td style={cell}>올림</td></tr>
-            <tr><td style={cell}>2.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>3주</td><td style={cell}>올림</td></tr>
+            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>4는 5 이하 → 버림 (1주 보장 추첨 옵션 별도)</td></tr>
+            <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>5는 5 이하 → 버림 (반올림과 다른 점)</td></tr>
+            <tr><td style={cell}>0.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>6은 6 이상 → 올림</td></tr>
+            <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>4는 5 이하 → 버림</td></tr>
+            <tr><td style={cell}>1.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>5는 5 이하 → 버림</td></tr>
+            <tr><td style={cell}>1.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2주</td><td style={cell}>6은 6 이상 → 올림</td></tr>
           </tbody>
         </table>
       </div>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-        💡 일부 종목은 <strong style={{ color: 'var(--text)' }}>1주 보장 추첨</strong> — 0.5 미만 신청자 중 추첨으로 1주 배정. 본 도구의 &ldquo;1주 보장&rdquo; 옵션 활용. 정확한 룰은 증권신고서 확인.
+        💡 일부 종목은 <strong style={{ color: 'var(--text)' }}>1주 보장 추첨</strong> — 계산 결과 0주인 신청자 중 추첨으로 1주 배정. 본 도구의 &ldquo;1주 보장&rdquo; 옵션 활용. 정확한 룰은 증권신고서 확인.
       </p>
 
       {/* 4. 청약 한도·중복청약 */}
@@ -271,9 +271,9 @@ export default function IpoDepositPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q3. 5사6입이 뭔가요? 0.5주는 어떻게 되나요?</summary>
         <div style={faqAnswer}>
-          한국 회계 반올림 규칙 — <strong style={{ color: 'var(--text)' }}>0.5 미만 버림, 0.5 이상 올림</strong>. 비례 배정 = 청약 주수 ÷ 경쟁률 결과 적용.
-          예: 0.4주 → 0주(미배정), 0.5주 → 1주, 1.4주 → 1주, 1.5주 → 2주.
-          일부 종목은 <strong style={{ color: 'var(--text)' }}>1주 보장 추첨</strong>(0.5 미만이라도 추첨으로 1주 배정 — 본 도구의 옵션). 정확한 룰은 증권신고서 확인.
+          소수 첫째 자리가 <strong style={{ color: 'var(--text)' }}>5 이하면 버림, 6 이상이면 올림</strong> — 반올림(4사5입)과 달리 0.5는 버림 처리되는 점이 핵심입니다. 비례 배정 = 청약 주수 ÷ 경쟁률 결과에 적용.
+          예: 0.4주 → 0주, 0.5주 → 0주, 0.6주 → 1주, 1.5주 → 1주, 1.6주 → 2주.
+          일부 종목은 <strong style={{ color: 'var(--text)' }}>1주 보장 추첨</strong>(계산 결과 0주라도 추첨으로 1주 배정 — 본 도구의 옵션). 정확한 룰은 증권신고서 확인.
         </div>
       </details>
 

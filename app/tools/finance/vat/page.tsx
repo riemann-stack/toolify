@@ -447,7 +447,7 @@ export default function VatPage() {
             <ul style={{ paddingLeft: 18, margin: '6px 0 0' }}>
               <li>정확한 부가세 신고는 홈택스 또는 세무사 권장</li>
               <li>업종별 세부 규정 (의제매입세액·면세 등) 다양</li>
-              <li>정책 변경 가능 — 본 도구는 2026년 1월 기준</li>
+              <li>정책 변경 가능 — 본 도구는 2026년 5월 부가가치세법 기준</li>
               <li>본 도구의 결과는 일반 케이스 가정이며 실제와 차이 가능</li>
             </ul>
             <p style={{ margin: '8px 0 4px' }}>세무 도움 필요 시:</p>

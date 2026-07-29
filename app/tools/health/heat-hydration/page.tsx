@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import Disclaimer from '@/components/Disclaimer'
 
 export const metadata = buildMetadata({
   path: '/tools/health/heat-hydration',
@@ -193,6 +194,14 @@ export default function HeatHydrationPage() {
         {/* 5. FAQ */}
         <section>
           <Faq items={FAQ_LD} />
+        </section>
+
+        {/* 5-1. 면책 */}
+        <section>
+          <Disclaimer variant="medical">
+            수분 권장량은 평균 통계 기반 <strong>참고용 추정치</strong>이며, 신장 질환·심부전 등으로 수분 제한이 필요하거나 이뇨제를 복용 중이라면 별도 기준이 적용되므로 주치의 지시를 따르세요.
+            어지러움·의식 저하·경련 등 온열질환 응급 증상이 보이면 즉시 <strong>119</strong>에 신고하세요.
+          </Disclaimer>
         </section>
 
         {/* 6. 관련 도구 */}

@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/date/jet-lag',
   title: '시차 적응 계산기 — 여행 전·기내·도착 후 수면 타이밍',
-  description: '여행 전·중·후 시차 적응 일정과 수면 타이밍 자동 가이드. 출장·여행 컨디션 관리에.',
+  description: '여행 전·중·후 시차 적응 일정과 수면 타이밍 자동 가이드. 기내 수면 구간부터 멜라토닌·햇빛·카페인 컷오프 시각, 단기 출장 한국 시간 유지 전략까지.',
   keywords: ['시차적응계산기', '시차극복방법', '해외여행시차', '기내수면타이밍', '시차적응기간', '제트래그', '유럽시차적응', '미국시차적응'],
 })
 
@@ -39,7 +39,7 @@ const FAQ_LD = [
               },
               {
                 q: '도착 첫날 낮잠은 얼마나 자도 되나요?',
-                a: '<strong>현지 오후 3시 이전</strong>이라면 20~30분 이내의 낮잠은 도움이 됩니다. 30분 이상 자면 깊은 수면 단계(SWS)에 들어가 오히려 피로감(sleep inertia)이 커지고 당일 밤 수면을 방해합니다. <strong>오후 5시 이후 낮잠은 절대 금지</strong>. 본 계산기는 도착 시각을 기준으로 자동 판정해 「가능/주의/금지」를 표시합니다.',
+                a: '<strong>현지 오후 3시 이전</strong>이라면 20~30분 이내의 낮잠은 도움이 됩니다. 30분 이상 자면 깊은 수면 단계(SWS)에 들어가 오히려 피로감(sleep inertia)이 커지고 당일 밤 수면을 방해합니다. <strong>오후 5시 이후 낮잠은 당일 밤 수면을 크게 해치므로 피하세요</strong>. 본 계산기는 도착 시각을 기준으로 자동 판정해 「가능/주의/금지」를 표시합니다.',
               },
               {
                 q: '카페인 컷오프 시각은 어떻게 정해지나요?',
@@ -133,7 +133,7 @@ export default function JetLagPage() {
             {[
               { title: '적응 기간 (동쪽)', formula: '시차 × 1.5일' },
               { title: '적응 기간 (서쪽)', formula: '시차 × 1.0일' },
-              { title: '카페인 컷오프', formula: '목표 취침 − 카페인 반감기(6~10h) = 마지막 허용 시각' },
+              { title: '카페인 컷오프 (반감기 약 5h + 잔류효과 고려 보수 버퍼)', formula: '평소 취침 시각 − 8시간(안전 버퍼) = 마지막 허용 시각' },
               { title: '낮잠 허용 기준', formula: '현지 오후 3시 이전 + 20~30분 이내 = 안전' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>

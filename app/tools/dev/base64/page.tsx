@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/dev/base64',
   title: 'Base64 인코더/디코더 — 텍스트·파일·JWT·이미지 Data URI',
-  description: '텍스트 ↔ Base64 즉시 변환 + URL 안전 모드. 한글·바이너리 모두 지원.',
+  description: '텍스트·파일을 Base64로 즉시 인코딩·디코딩. URL-safe 모드, JWT 디코딩과 만료(exp) 확인, 이미지 Data URI 생성, hex·바이너리 비교까지. 한글 UTF-8 처리 포함, 전부 브라우저에서 처리.',
   keywords: ['base64인코더', 'base64디코더', 'base64변환기', 'JWT디코더', '이미지base64', 'datauri생성', 'URL-safe base64', '파일base64변환', 'JWT만료확인', 'hex변환'],
 })
 

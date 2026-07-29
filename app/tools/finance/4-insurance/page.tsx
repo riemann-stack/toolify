@@ -10,7 +10,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/finance/4-insurance',
   title: '4대보험 계산기 — 국민연금·건강보험·고용보험·산재보험 (2026년)',
-  description: '국민연금·건강보험·고용·산재 — 근로자/사업주 부담을 정확히. 알바·프리랜서 비교와 2026년 최신 요율 자동 반영.',
+  description: '국민연금·건강보험·고용·산재 — 근로자/사업주 부담을 한눈에. 알바·프리랜서 3.3% 비교, 두루누리 지원 안내와 2026년 최신 요율 자동 반영.',
   keywords: ['4대보험계산기', '4대보험요율', '국민연금계산', '건강보험계산', '고용보험', '산재보험', '4대보험 사업주부담', '알바 4대보험', '프리랜서 3.3%', '두루누리'],
 })
 

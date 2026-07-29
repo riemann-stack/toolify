@@ -4,10 +4,11 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/tech-stack',
-  title: '기술 스택 추천기 — 12 시나리오 + Next.js·Remix·Astro·Supabase·Vercel·토스페이먼츠 비교 + 한국 SaaS 통합 (2026)',
+  title: '기술 스택 추천기 — 시나리오 12종 풀스택 자동 추천 + 한국 SaaS 통합 (2026)',
   description:
     '시나리오 12종 프리셋 + 8개 입력값 → Frontend·Backend·DB·Auth·Hosting·Payment 풀스택 자동 추천과 7축 점수 레이더.',
   keywords: [
@@ -68,7 +69,7 @@ const FAQ_LD = [
               },
               {
                 q: '한국 결제는 토스페이먼츠가 표준인가요?',
-                a: '<strong>2026년 신규 SaaS 80%+가 토스페이먼츠 채택.</strong> 이유 —<br/>· 개발자 문서 우수 (한국 PG 중 압도적)<br/>· SDK·콜백 깔끔<br/>· 카드·계좌·간편결제(카카오·네이버페이) 통합<br/>· 수수료 2.7~3.3% (경쟁사 대비 합리적)<br/><br/><strong>예외</strong> — 대기업·금융권은 여전히 KG이니시스 다수(관행) / 멀티 PG 필요 시 포트원(구 아임포트) / 글로벌 + 한국 동시는 Stripe + 토스 병행.',
+                a: '<strong>공식 통계는 없지만, 개발자 문서·SDK 품질 덕에 신규 SaaS·스타트업에서 채택이 두드러집니다.</strong> 이유 —<br/>· 개발자 문서 우수 (한국 PG 중 압도적)<br/>· SDK·콜백 깔끔<br/>· 카드·계좌·간편결제(카카오·네이버페이) 통합<br/>· 수수료 2.7~3.3% 수준 (요금제·업종별 상이, 공식 요금 확인)<br/><br/><strong>예외</strong> — 대기업·금융권은 여전히 KG이니시스 다수(관행) / 멀티 PG 필요 시 포트원(구 아임포트) / 글로벌 + 한국 동시는 Stripe + 토스 병행.',
               },
               {
                 q: '초보가 백엔드를 빠르게 배우려면?',
@@ -94,6 +95,15 @@ export default function TechStackPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         프로젝트 시나리오로 <strong style={{ color: 'var(--text)' }}>Frontend·Backend·DB·Auth·Hosting·Payment</strong> 풀스택 자동 추천.
       </p>
+
+      <UpdatedMeta
+        date="2026년 5월"
+        basis="스택 채점 DB·가격·수수료 기준"
+        sources={[
+          { label: '토스페이먼츠 이용요금', href: 'https://www.tosspayments.com/pricing' },
+          { label: 'Vercel Pricing', href: 'https://vercel.com/pricing' },
+        ]}
+      />
 
       <TechStackClient />
 

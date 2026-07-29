@@ -139,7 +139,7 @@ export const MODE_META: Record<RandomMode, { label: string; emoji: string; story
   chinchilla: { label: '친칠라 픽',         emoji: '🐭', story: '러시아 침팬지 Lusha(2009) 영감. 펀드 매니저 94% 이김.' },
   dart:       { label: '다트 던지기',       emoji: '🎯', story: 'Burton Malkiel "눈 가린 원숭이"(1973) 영감.' },
   cat:        { label: '고양이 발',         emoji: '🐱', story: '영국 고양이 Orlando(2012) 영감. Observer 1년 실험 1등.' },
-  roulette:   { label: '룰렛',              emoji: '🎰', story: 'Cass Business School(2013) — 1만 무작위 포트폴리오.' },
+  roulette:   { label: '룰렛',              emoji: '🎡', story: 'Cass Business School(2013) — 1만 무작위 포트폴리오.' },
 }
 
 // ── 행동경제학 편향 7개 ─────────────

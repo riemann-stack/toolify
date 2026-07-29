@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/dev/number-base',
   title: '진법 변환기 — 2진수·8진수·10진수·16진수·비트·ASCII',
-  description: '2·8·10·16진 변환 + 비트 시각화 + 2의 보수·ASCII·비트 연산. 임베디드·암호학 학습에.',
+  description: '2·8·10·16진수 변환 + 비트 시각화·2의 보수·ASCII·비트 연산. 파일 시그니처 HEX 덤프 읽기·IPv4 서브넷·IEEE 754 부동소수점까지 실무 가이드 수록.',
   keywords: ['진법변환기', '2진수', '8진수', '10진수', '16진수', '진법변환', '비트연산', 'ASCII', '2의보수', 'binary', 'hex', '진법계산', '비트마스크'],
 })
 

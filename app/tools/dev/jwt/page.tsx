@@ -154,8 +154,8 @@ export default function JwtPage() {
           <h2 style={h2}>exp·iat 시간 읽는 법</h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             시간 클레임(exp·iat·nbf)은 <strong style={{ color: 'var(--text)' }}>Unix epoch 초</strong>로 저장됩니다 —
-            1970년 1월 1일 0시(UTC)부터 흐른 초입니다. 예를 들어 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>1718248400</code>은
-            2024년 6월 13일 KST를 가리킵니다.
+            1970년 1월 1일 0시(UTC)부터 흐른 초입니다. 예를 들어 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>1767225600</code>은
+            2026년 1월 1일 오전 9시(KST)를 가리킵니다.
           </p>
           <div style={card}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>

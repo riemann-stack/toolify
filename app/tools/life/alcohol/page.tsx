@@ -9,7 +9,7 @@ export const metadata = buildMetadata({
   path: '/tools/life/alcohol',
   title: '알코올 도수 계산기 — 잔 단위·소맥·하이볼·1인당 분배·기준 도수 변환',
   description:
-    '소맥·하이볼 황금비율 + 목표 도수 희석(맥주·탄산수) + 같은 알코올량 비교·1인당 분배·기준 도수 변환.',
+    '소맥·하이볼 황금비율 + 목표 도수 희석(맥주·탄산수) + 같은 알코올량 비교·1인당 분배·기준 도수 변환. 소주 브랜드별 도수 표와 순수 알코올 g·잔 수 환산까지.',
   keywords: [
     '알코올도수계산기', '소맥도수계산기', '소맥 황금 비율', '하이볼 도수', '진토닉 도수',
     '술자리 1인당 알코올', '소주 맥주 환산', '와인 알코올량', '표준잔', '술자리 1인당 분배',
@@ -44,7 +44,7 @@ const FAQ_LD = [
               },
               {
                 q: '소주 도수가 제품마다 다른데 정확히 계산하려면?',
-                a: '본 도구 하단의 [본인 기준 도수 변환] 슬라이더에서 본인이 마신 소주 도수(14~25%)를 직접 설정하세요. 주요 도수(2025.6 기준·라벨 확인): 진로·참이슬 후레쉬 16% · 처음처럼 새로 16% · 좋은데이 15.7% · 참이슬 오리지널 16.9% · 한라산 25%. 저도주화로 자주 바뀌므로 제품 라벨이 정확합니다. 같은 1병이라도 한라산(71g) vs 16%(46g) = 알코올 약 56% 차이.',
+                a: '본 도구 하단의 [본인 기준 도수 변환] 슬라이더에서 본인이 마신 소주 도수(14~25%)를 직접 설정하세요. 주요 도수(2026.7 기준·라벨 확인): 참이슬 후레쉬·진로·처음처럼 새로·좋은데이 15.7% · 참이슬 오리지널 16.9% · 한라산 오리지날 21%. 저도주화로 자주 바뀌므로 제품 라벨이 정확합니다. 같은 1병이라도 한라산 오리지날(약 60g) vs 15.7% 소주(약 45g) = 알코올 약 34% 차이.',
               },
               {
                 q: '음주 후 운전 가능 시간은 어떻게 계산하나요?',
@@ -82,7 +82,7 @@ export default function AlcoholPage() {
             한국 표준 잔·병 단위 (ml 기준)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
-            본 도구는 한국 음주 환경에서 가장 많이 쓰이는 잔·병 규격을 기본 제공합니다. 본인이 마신 갯수만 입력하면 자동 계산됩니다.
+            본 도구는 한국 음주 환경에서 가장 많이 쓰이는 잔·병 규격을 기본 제공합니다. 본인이 마신 개수만 입력하면 자동 계산됩니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -266,12 +266,12 @@ export default function AlcoholPage() {
               </thead>
               <tbody>
                 {[
-                  ['진로(두꺼비)',       '16%',   '45.5g'],
-                  ['처음처럼 새로',       '16%',   '45.5g'],
+                  ['진로(두꺼비)',       '15.7%', '44.6g'],
+                  ['처음처럼 새로',       '15.7%', '44.6g'],
                   ['좋은데이',           '15.7%', '44.6g'],
-                  ['참이슬 후레쉬',       '16%',   '45.5g'],
+                  ['참이슬 후레쉬',       '15.7%', '44.6g'],
                   ['참이슬 오리지널',     '16.9%', '48.0g'],
-                  ['한라산',             '25%',   '71.1g'],
+                  ['한라산 오리지날',     '21%',   '59.6g'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
@@ -283,7 +283,7 @@ export default function AlcoholPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * 같은 1병이라도 한라산(25%) vs 16% 소주 = 알코올 약 56% 차이. 큰 차이입니다. (도수는 2025.6 기준·라벨 확인)
+            * 같은 1병이라도 한라산 오리지날(21%) vs 15.7% 소주 = 알코올 약 34% 차이. 큰 차이입니다. (도수는 2026.7 기준·라벨 확인)
           </p>
         </section>
 
@@ -296,7 +296,7 @@ export default function AlcoholPage() {
             &lsquo;표준잔(순수 알코올)&rsquo;의 정의는 기관마다 다릅니다 — <strong style={{ color: 'var(--text)' }}>보건복지부 절주 지침 약 7g</strong>, <strong style={{ color: 'var(--text)' }}>WHO 10g</strong>, 미국 NIAAA 14g. 본 도구는 표시 편의상 8g을 &lsquo;1잔&rsquo;으로 환산하며, 정확한 값은 순수 알코올 g으로 제공합니다. 아래는 <strong>참고용</strong> 권고이며, <strong style={{ color: '#EA580C' }}>WHO(2023)는 &ldquo;건강을 해치지 않는 안전한 음주량은 없다&rdquo;</strong>고 밝혔습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.15)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>음주 참고 기준 (기준일 2025-06)</p>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>음주 참고 기준 (기준일 2026-07)</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               {[
                 { label: '남성', value: '1일 4잔 이하', sub: '주 14잔 이하 · 8g 환산 ≈ 1일 32g' },

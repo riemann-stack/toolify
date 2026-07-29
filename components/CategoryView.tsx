@@ -63,6 +63,8 @@ export default function CategoryView({ catId, description }: CategoryViewProps) 
         {/* 카테고리 본문(가이드 + FAQ) — 링크 그리드에 실질 콘텐츠 보강 */}
         <CategoryGuide catId={catId} />
 
+        {/* 카테고리 랜딩은 isAdRestrictedPage에 걸려 현재 항상 null 렌더 —
+            표시하려면 lib/ads.ts 게이팅을 먼저 완화해야 함. */}
         <div className={s.adSlot}>
           <AdSlot position="footer" minHeight={250} />
         </div>

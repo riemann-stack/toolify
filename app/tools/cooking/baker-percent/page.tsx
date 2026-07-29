@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/cooking/baker-percent',
   title: '베이커 퍼센트 계산기 — 제빵 배합비·수분율·르방 자동 계산',
-  description: '밀가루 100% 기준 모든 재료 비율 자동 + 수분율·르방. 빵 종류별 프리셋 8종으로 제빵 배합비 계산.',
+  description: '밀가루 100% 기준 모든 재료 비율을 자동 계산하는 베이커 퍼센트 계산기. 빵 종류별 프리셋 8종, 수분율 가이드, 이스트 3종 변환, 르방·프리퍼먼트 분리 계산까지 제빵 배합비를 한 번에.',
   keywords: ['베이커퍼센트', '제빵배합비', '제빵계산기', '수분율계산', '하이드레이션', '사워도우배합', '바게트레시피', '르방계산', '제빵퍼센트'],
 })
 
@@ -244,7 +244,7 @@ export default function BakerPercentPage() {
               { n: '르방 (Levain)',   d: '천연발효종 · 수분율 100% 일반' },
               { n: '폴리쉬 (Poolish)',d: '100% 수분율 · 12~16시간 발효' },
               { n: '비가 (Biga)',     d: '50~60% 수분율 · 단단한 형태' },
-              { n: '풀리시 (Sponge)', d: '50~60% 수분율 · 짧은 발효' },
+              { n: '스펀지 (Sponge·중종)', d: '50~60% 수분율 · 짧은 발효' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>{c.n}</p>

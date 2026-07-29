@@ -306,7 +306,7 @@ export default function SalaryPage() {
             ))}
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            <strong style={{ color: 'var(--text)' }}>참고</strong> — 2026년 최저시급 10,320원 / OECD 평균 연 1,750시간 / 한국 평균 1,950시간. 왕복 출퇴근 2시간 이상 직장은 체감 시급이 최저시급 수준에 근접할 수 있습니다.
+            <strong style={{ color: 'var(--text)' }}>참고</strong> — 2026년 최저시급 10,320원 / 연간 노동시간은 최근 OECD 통계 기준 한국 1,800시간대, OECD 평균 약 1,750시간(연도별 변동). 왕복 출퇴근 2시간 이상 직장은 체감 시급이 최저시급 수준에 근접할 수 있습니다.
           </p>
         </section>
 
@@ -363,7 +363,7 @@ export default function SalaryPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
-            출처: 통계청 임금근로자 평균 / 국세청 근로소득 신고 자료. 본 도구의 <strong style={{ color: 'var(--text)' }}>[실수령액] 탭</strong>에서 본인 연봉의 분포 위치를 자동으로 표시합니다.
+            출처: 통계청 임금근로일자리 소득·국세청 귀속 근로소득 신고 자료(공표 시차가 있어 최근 공표 연도 기준 추정). 본 도구의 <strong style={{ color: 'var(--text)' }}>[실수령액] 탭</strong>에서 본인 연봉의 분포 위치를 자동으로 표시합니다.
           </p>
         </section>
 

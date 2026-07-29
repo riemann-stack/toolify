@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/radiation',
@@ -41,7 +42,7 @@ const FAQ_LD = [
               },
               {
                 q: '치과 X-ray는 안전한가요?',
-                a: '매우 안전합니다. <strong>치과 Bitewing 1장 ≈ 5 μSv (0.005 mSv)</strong>로 자연 노출 반나절치, 비행 1시간 수준. 디지털 센서가 표준화된 현재는 더 낮습니다. 임산부도 납복(lead apron) 차폐를 하면 태아 노출이 미미해 필요 시 시술 가능합니다.',
+                a: '노출량이 매우 낮습니다. <strong>치과 Bitewing 1장 ≈ 5 μSv (0.005 mSv)</strong>로 자연 노출 반나절치, 비행 1시간 수준이에요. 디지털 센서가 표준화된 현재는 더 낮습니다. 임산부도 납복(lead apron) 차폐를 하면 태아 노출이 미미해 필요 시 시술 가능합니다.',
               },
               {
                 q: '바나나에서 방사선이 나온다는 게 사실인가요?',
@@ -71,6 +72,16 @@ export default function RadiationPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         <strong style={{ color: 'var(--text)' }}>Sv·rem·Gy·rad·Bq·Ci</strong> 동시 환산 + μSv/h ↔ mSv/년 + CT·치과·항공 일상 노출 비교 + EMF 참고치.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="단위 환산은 SI·ICRP 정의 기준. 일상 노출 비교값(CT·항공·자연 노출)과 EMF 참고치는 아래 공식 출처의 발표값을 정리한 참고용 대표치입니다."
+        sources={[
+          { label: '원자력안전위원회', href: 'https://www.nssc.go.kr' },
+          { label: 'ICRP', href: 'https://www.icrp.org' },
+          { label: '한국천문연구원', href: 'https://www.kasi.re.kr' },
+        ]}
+      />
 
       <RadiationClient />
 

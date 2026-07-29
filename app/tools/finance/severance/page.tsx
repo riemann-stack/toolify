@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -302,6 +303,18 @@ export default function SeverancePage() {
           • 회사가 퇴직금을 <strong>14일 내</strong> 지급하지 않으면 미지급 + 연 20% 지연이자 발생 (근퇴법 §9).
         </p>
       </details>
+
+      {/* 면책 */}
+      <Disclaimer
+        variant="finance"
+        open
+        sources={[
+          { label: '고용노동부 퇴직금 계산기', href: 'https://www.moel.go.kr' },
+          { label: '국세청 퇴직소득세 안내', href: 'https://www.nts.go.kr' },
+        ]}
+      >
+        본 계산기는 평균임금·통상임금과 퇴직소득세 공식을 단순화한 간이 추정 도구입니다. 상여금·연차수당 산입 범위, 무급 기간, 회사 규정(DB·DC 운용 성과 등)에 따라 실제 금액은 달라질 수 있으며, 확정 금액은 고용노동부 퇴직금 계산기와 회사 정산 기준으로 확인하세요.
+      </Disclaimer>
 
       {/* finance 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>

@@ -26,8 +26,8 @@ export interface Method {
 }
 
 export const METHODS: Method[] = [
-  { id: 'linear', name: '비례 환산',    shortName: '비례',   desc: '단순 비율(현재/만점 × 4.0). 가장 관대한 결과' },
-  { id: 'wes',    name: 'WES 기준',     shortName: 'WES',    desc: 'WES(World Education Services) 표준 — 미국 대학원 다수 채택, 가장 보수적' },
+  { id: 'linear', name: '비례 환산',    shortName: '비례',   desc: '단순 비율(현재/만점 × 4.0). 구간 구분 없는 직선 환산' },
+  { id: 'wes',    name: 'WES 기준',     shortName: 'WES',    desc: 'WES(World Education Services) 표준 — 미국 대학원 다수 채택, 백분율 구간(브래킷) 매핑' },
   { id: 'korean', name: '한국 평어 기준', shortName: '평어',   desc: '백분율 → 평어(A+/A/B+ …) → 4.0 매핑. 한국 대학 성적표 직역에 가까움' },
 ]
 
@@ -79,7 +79,7 @@ function convertLinear(pct: number): ConvertResult {
   return { usGpa: round(usGpa, 2), letter, ukClass: ukClassFromPercent(pct), percent: pct }
 }
 
-/** WES 기준 — 가장 보수적 (브래킷 매핑) */
+/** WES 기준 — 백분율 브래킷 매핑 (구간별로 비례보다 낮게도 높게도 나옴) */
 function convertWES(pct: number): ConvertResult {
   let usGpa = 0, letter = 'F'
   if      (pct >= 95) { usGpa = 4.00; letter = 'A+' }

@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
   path: '/tools/sports/baseball-stats',
   title: '야구 타율 계산기 — 출루율·장타율·ERA·WHIP 계산',
   description:
-    '타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + KBO 평균 비교로 내 기록이 어느 수준인지 한눈에.',
+    '타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + KBO 평균 비교로 내 기록이 어느 수준인지 한눈에. 규정타석 기준과 세이버메트릭스 입문 가이드까지.',
   keywords: ['야구타율계산기', 'OPS계산기', '출루율계산기', '장타율계산기', 'ERA계산기', 'WHIP계산기', 'KBO기록', '야구통계계산기'],
 })
 

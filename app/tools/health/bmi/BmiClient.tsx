@@ -474,7 +474,7 @@ export default function BmiClient() {
               {showMentalHealth && (
                 <div className={styles.warnBox}>
                   💛 BMI가 매우 낮습니다. <strong>건강 우려가 있다면 의료 전문가와 상담</strong>하시고,
-                  체중 강박·거식증 신호가 있다면 도움을 받으세요 — 정신건강 위기상담 <strong>1577-0199</strong> · 자살예방상담 <strong>1393</strong> (24시간).
+                  체중 강박·거식증 신호가 있다면 도움을 받으세요 — 정신건강 위기상담 <strong>1577-0199</strong> · 자살예방상담 <strong>109</strong> (24시간).
                 </div>
               )}
 
@@ -803,7 +803,7 @@ export default function BmiClient() {
         💛 <strong>BMI는 자존감의 절대값이 아닙니다.</strong> 체중·외모 강박이 있다면 객관적 정보보다
         신체 건강·정신 건강 모두 고려가 중요합니다. 도움이 필요하면 —
         <br />· 정신건강 위기상담: <strong>1577-0199</strong> (24시간)
-        <br />· 보건복지부 자살예방상담: <strong>1393</strong> (24시간)
+        <br />· 보건복지부 자살예방상담: <strong>109</strong> (24시간)
       </div>
     </div>
   )

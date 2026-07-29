@@ -4,12 +4,13 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/savings',
   title: '저축액 계산기 — 저축률 진단 + 6 항아리 + 청년도약·ISA·연금저축',
-  description: '수입·지출 → 저축률과 한국 평균 비교 + 6 항아리 분배. 청년도약·ISA·연금저축 절세 시나리오와 목표 역산까지.',
+  description: '수입·지출 → 저축률과 한국 평균 비교 + 6 항아리 분배. 2026년 청년도약·ISA·연금저축 절세 시나리오와 1억 모으기 목표 역산까지.',
   keywords: ['저축률 계산', '월 저축 가능 금액', '한국 평균 저축률', '6 항아리 모델', '청년도약계좌', 'ISA 계좌', '연금저축', 'IRP', '재무 진단', '목표 금액 역산'],
 })
 
@@ -219,6 +220,18 @@ export default function SavingsPage() {
           ))}
         </div>
       </section>
+
+      {/* 면책 */}
+      <Disclaimer
+        variant="finance"
+        open
+        sources={[
+          { label: '서민금융진흥원 청년도약계좌', href: 'https://ylaccount.kinfa.or.kr' },
+          { label: '국세청', href: 'https://www.nts.go.kr' },
+        ]}
+      >
+        본 계산기의 저축률 진단·목표 역산은 단순 복리 모델 기반 참고용 추정치입니다. 청년도약계좌 기여금·가입 요건, ISA·연금저축 한도와 세율 등 절세 상품 조건은 연도별로 변동되므로, 가입·투자 전 서민금융진흥원·국세청과 취급 금융기관의 최신 공고를 확인하세요.
+      </Disclaimer>
 
       {/* 관련 도구 — 최신 도구들과 동일 포맷 */}
       <section style={{ marginTop: '40px' }}>

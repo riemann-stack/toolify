@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/art/tap-tempo',
   title: '탭 템포 계산기 — BPM 측정·메트로놈·박자감 테스트',
-  description: '박자에 맞춰 탭하면 BPM 자동 측정 + 메트로놈과 박자감 테스트.',
+  description: '박자에 맞춰 탭하면 BPM 자동 측정 + 메트로놈·박자감 테스트. 밤편지 79·Dynamite 114 등 K-POP 실측 BPM 앵커와 러닝 케이던스(spm) 매칭 표까지.',
   keywords: ['탭템포', 'BPM측정', '메트로놈', '박자감테스트', '템포계산기', 'BPM계산기', 'tap tempo'],
 })
 

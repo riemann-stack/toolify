@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/interior/paint',
   title: '페인트 계산기 — 벽·천장 페인트 양·구매 조합',
-  description: '벽·천장 면적과 칠할 횟수로 필요한 페인트량과 구매 조합. 페인트 종류별 도포 면적 자동.',
+  description: '벽·천장 면적과 칠할 횟수로 필요한 페인트량과 구매 조합을 자동 계산. 수성·유성·에나멜 도포 면적 비교, 한국 시판 용량 가이드, 평수별 소요량 표와 셀프 vs 전문 시공 비용까지 안내합니다.',
   keywords: ['페인트계산기', '페인트소요량', '페인트양계산', '셀프페인트', '수성페인트', '벽페인트', '천장페인트', '페인트견적'],
 })
 
@@ -40,7 +40,7 @@ export default function PaintPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        인테리어
+        주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />페인트 계산기
@@ -254,6 +254,9 @@ export default function PaintPage() {
               </ul>
             </div>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ※ 비용은 2026년 기준, 온라인 자재몰·시공 플랫폼 통용 범위이며 지역·브랜드·등급에 따라 달라집니다.
+          </p>
         </div>
 
         {/* FAQ 직후 광고 슬롯 */}

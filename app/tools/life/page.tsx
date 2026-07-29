@@ -1,13 +1,10 @@
-import { categories } from '@/lib/tools'
 import CategoryView from '@/components/CategoryView'
 import { buildMetadata } from '@/lib/seo'
 
-const cat = categories.find((c) => c.id === 'life')!
-
 export const metadata = buildMetadata({
   path: '/tools/life',
-  title: `${cat.name} 계산기 모음`,
-  description: `${cat.tools.map((t) => t.name).join(', ')} 등 ${cat.name} 무료 도구 모음.`,
+  title: "생활·재미 계산기 — 더치페이·로또·랜덤 추첨",
+  description: "더치페이 정산, 로또 번호 생성, 사다리 타기, 여행 예산, 해외직구 관세까지 일상과 모임에서 바로 쓰는 무료 생활 도구 모음.",
 })
 
 export default function LifeCategoryPage() {

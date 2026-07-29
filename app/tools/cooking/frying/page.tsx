@@ -255,7 +255,7 @@ export default function FryingPage() {
               { n: '🐔 닭고기', t: '75°C', c: '#DC2626' },
               { n: '🐖 돼지고기', t: '63°C', c: '#D97706' },
               { n: '🐟 생선', t: '63°C', c: '#0891B2' },
-              { n: '🥩 갈은 고기', t: '71°C', c: '#EA580C' },
+              { n: '🥩 간 고기(다짐육)', t: '71°C', c: '#EA580C' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{s.n} 안전 내부온도</p>

@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/interior/curtain-blind',
   title: '커튼 블라인드 계산기 — 창문 측정·주문 사이즈',
-  description: '창문 사이즈로 커튼·블라인드·롤스크린 추천 사이즈 자동. 주름배수·길이·고정 위치까지.',
+  description: '창문 사이즈로 커튼·블라인드·롤스크린 주문 사이즈를 자동 계산. 주름 배수(1.5~3배)와 길이·커튼봉 위치, 인사이드 vs 아웃사이드 마운트, 시어·암막 커튼 선택 가이드까지 안내합니다.',
   keywords: ['커튼사이즈계산', '블라인드사이즈', '커튼길이추천', '커튼주름2배', '블라인드재는법', '롤스크린사이즈', '커튼봉길이', '커튼주문사이즈'],
 })
 
@@ -40,7 +40,7 @@ export default function CurtainBlindPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        인테리어
+        주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />커튼 블라인드 계산기

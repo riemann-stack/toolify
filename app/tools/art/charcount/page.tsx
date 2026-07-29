@@ -19,6 +19,7 @@ const FAQ_LD = [
               { q: '이모지는 몇 글자로 세야 하나요?', a: '세는 기준에 따라 다릅니다. 본 도구의 총 글자수는 UTF-16 코드 유닛(JavaScript String.length) 기준이라 😀 같은 기본 이모지 1개가 <strong>2글자</strong>, 👨‍👩‍👧 같은 결합 이모지는 8글자로 집계됩니다. UTF-8 바이트로는 기본 이모지 1개가 4바이트이고, X(트위터)는 이모지를 가중치 2로 계산합니다.' },
               { q: '한글 자모(ㄱㄴㄷ)는 어떻게 세나요?', a: '본 도구는 자모(ㄱ, ㅏ 등)와 완성형 한글(가, 나)을 모두 한글로 카운트하며 별도 통계로 분리해 보여줍니다. 자모만 입력된 경우 일반적인 한글로 인식되지 않을 수 있어 입력 검증이 필요합니다.' },
               { q: 'X(트위터) 글자수가 280인데 한글로는 왜 140자인가요?', a: 'X는 영문/숫자/일부 라틴 문자를 가중치 1, 한글·중국어·일본어·이모지를 가중치 2로 계산해 <strong>총 280 가중치 한도</strong>를 적용합니다. 한글로만 글을 쓰면 약 140자가 한계입니다.' },
+              { q: '원고지 1매는 몇 자인가요?', a: '가장 널리 쓰이는 200자 원고지 기준으로 <strong>1매 = 20자 × 10행 = 200자</strong>입니다. 본 도구의 원고지 매수는 공백 포함 글자수를 200으로 나눠 올림한 값입니다. 띄어쓰기도 원고지에서 한 칸을 차지하므로 공백 포함으로 세는 것이 관례이며, 실제 원고지에 옮겨 쓰면 문단 들여쓰기·줄 바꿈 여백 때문에 계산값보다 다소 늘어날 수 있습니다.' },
             ]
 
 export default function CharCountPage() {
@@ -281,6 +282,23 @@ export default function CharCountPage() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* ── 5-2. 원고지 매수 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            원고지 매수 계산 기준
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+            국내에서 통용되는 원고지는 <strong style={{ color: 'var(--text)' }}>200자 원고지(20자 × 10행)</strong>입니다.
+            본 도구의 원고지 매수는 <strong style={{ color: 'var(--text)' }}>공백 포함 글자수 ÷ 200을 올림</strong>한 값으로,
+            띄어쓰기도 원고지에서 한 칸을 차지하기 때문에 공백 포함으로 세는 것이 관례입니다.
+          </p>
+          <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
+            <li><strong style={{ color: 'var(--text)' }}>대입 논술·논술 학원 과제</strong> — &quot;원고지 5매 내외(1,000자)&quot;처럼 분량이 원고지 매수로 제시되는 대표 사례입니다.</li>
+            <li><strong style={{ color: 'var(--text)' }}>백일장·문학 공모전</strong> — 시·수필·단편 부문에서 &quot;200자 원고지 ○매 이내&quot; 규정이 여전히 널리 쓰입니다.</li>
+            <li><strong style={{ color: 'var(--text)' }}>주의</strong> — 실제 원고지에 옮겨 쓰면 문단 첫 칸 들여쓰기, 문단이 바뀔 때 남는 칸 때문에 계산값보다 1~2매 더 나올 수 있습니다. 제출 규정이 엄격하면 여유를 두세요.</li>
+          </ul>
         </div>
 
         {/* ── 6. 묵독·발화 시간 ── */}

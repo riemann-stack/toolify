@@ -7,7 +7,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/hiking-time',
-  title: '등산 시간 계산기 — Naismith·Tobler·한국 표준 3공식 + 100대 명산 35+ 프리셋 + 턴어라운드 안전 시간',
+  title: '등산 시간 계산기 — 100대 명산 프리셋·3공식·일몰 하산 진단',
   description:
     'Naismith·Tobler·한국 코스타임 3공식 + 북한산·설악산·지리산·한라산 등 한국 100대 명산 35+ 프리셋. 일몰 전 하산 진단.',
   keywords: [

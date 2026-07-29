@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/life/drake',
   title: '드레이크 방정식 계산기 — 외계 문명 수·거리·페르미 역설',
-  description: '외계 문명은 몇 개나 존재할까. 7개 변수 시뮬과 가장 가까운 문명 거리·왕복 통신·인류 전파권·페르미 역설 가설까지.',
+  description: '외계 문명은 몇 개나 존재할까. 드레이크 방정식 7개 변수 시뮬과 가장 가까운 문명 거리·왕복 통신 시간·인류 전파권 126광년·페르미 역설 가설까지.',
   keywords: ['드레이크방정식계산기', '외계인존재확률', '드레이크방정식', '우주문명계산기', '외계생명체확률', '페르미역설', '지적생명체계산기', '대필터', '레어 어스 가설', '인류 전파권', '가장 가까운 외계'],
 })
 
@@ -217,7 +217,7 @@ export default async function DrakePage({
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.6 }}>
-            출처: NASA Exoplanet Archive · NASA Science(Europa Clipper) · Breakthrough Initiatives · SETI Institute. 거리·문명 수는 본문 모델 가정에 따른 추정입니다. <strong style={{ color: 'var(--text)' }}>최종 검토: 2025-06.</strong>
+            출처: NASA Exoplanet Archive · NASA Science(Europa Clipper) · Breakthrough Initiatives · SETI Institute. 거리·문명 수는 본문 모델 가정에 따른 추정입니다. <strong style={{ color: 'var(--text)' }}>최종 검토: 2026-07.</strong>
           </p>
         </div>
 

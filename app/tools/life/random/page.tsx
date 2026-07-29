@@ -114,7 +114,7 @@ export default function RandomPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             {[
               { title: '점심 메뉴',     desc: '못 정할 때 가장 빠른 결정' },
-              { title: '벌칙 게임',     desc: '술자리·MT·동아리 모임' },
+              { title: '벌칙 게임',     desc: '모임·MT·동아리 게임' },
               { title: '이벤트 추첨',   desc: '경품·당첨자 시각화' },
               { title: '발언 순서',     desc: '회의·스터디 발언자 룰렛' },
             ].map((c, i) => (

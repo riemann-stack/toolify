@@ -74,9 +74,9 @@ const faqAnswer: React.CSSProperties = {
 
 const FAQ_LD = [
   { "q":"어떤 방법이 가장 정확한가요?","a":"가스 분석기 실험실 측정(트레드밀 점진 부하)이 절대 기준입니다 (±2~3% 오차). 본 도구의 6가지 추정 방법 중에선: 러너: 쿠퍼 12분 또는 1.5마일 (전력 달리기 가능 시) 초보·고령: 락포트 1마일 걷기 (관절 부담 X) 실내: 퀸즈칼리지 스텝테스트 측정 자체가 어렵다면: 노르웨이 비운동 추정 (정확도 ±10~15% 오차이지만 운동 X) 안정시 심박 비율법은 가장 간단하지만 오차가 크므로 추세 추적용으로만." },
-  { "q":"VO₂max는 얼마까지 올릴 수 있나요?","a":"유전이 약 50% 영향 + 훈련이 30~40% 영향이라고 알려져 있습니다 (Bouchard 1999). 일반인 기준: 비운동인 → 운동인: 6개월~1년에 +10~20% (예: 38 → 45) 운동인 → 마라톤 입문: 추가 +5~10% (45 → 50) 아마 마스터즈 → 서브3: VO₂max 58+ 필요 엘리트: 남성 75~85, 여성 65~75 (유전·훈련 모두 상위) 킵초게(엘리우드)·잉바이·반드페이는 80~85 수준으로 추정됩니다." },
-  { "q":"나이가 들면 VO₂max는 얼마나 떨어지나요?","a":"비활동인은 10년에 약 10% 감소 (30대 45 → 60대 27). 그러나 꾸준한 유산소 운동으로 감소를 절반 이하로 늦출 수 있습니다 (10년에 4~5% 감소). 마스터즈 러너 연구에서: 50대 마라톤 러너의 VO₂max는 비활동 25세 청년과 비슷 (40~45) 70대 마스터즈 챔피언은 평균 30대 수준 유지 가능 (40+) VO₂max는 노화의 가장 강력한 지표지만 동시에 가장 통제 가능한 지표입니다." },
-  { "q":"VO₂max가 낮으면 무엇이 문제인가요?","a":"심혈관 사망률·전체 사망률의 가장 강력한 단일 예측 인자입니다. Mandsager 2018 (JAMA Cardiology) 12만 명 연구: VO₂max 하위 25% → 상위 25% 대비 사망률 약 5배 흡연·당뇨·고혈압보다 더 강한 위험 인자 VO₂max +1 mL → 사망률 약 9% ↓ VO₂max가 「매우 미흡」 단계라면 의사 상담 후 점진적 유산소 운동 시작 권장." },
+  { "q":"VO₂max는 얼마까지 올릴 수 있나요?","a":"유전이 약 50% 영향 + 훈련이 30~40% 영향이라고 알려져 있습니다 (Bouchard 1999). 일반인 기준: 비운동인 → 운동인: 6개월~1년에 +10~20% (예: 38 → 45) 운동인 → 마라톤 입문: 추가 +5~10% (45 → 50) 아마 마스터즈 → 서브3: 레이스 기반 VDOT 약 53~54 (실험실 실측 VO₂max는 이보다 높게 나오는 경우가 많음) 엘리트: 남성 75~85, 여성 65~75 (유전·훈련 모두 상위) 엘리우드 킵초게 등 정상급 마라토너들이 80대 중반 수준으로 추정됩니다." },
+  { "q":"나이가 들면 VO₂max는 얼마나 떨어지나요?","a":"비활동인은 10년에 약 10% 감소 (30대 45 → 60대 약 33). 그러나 꾸준한 유산소 운동으로 감소를 절반 이하로 늦출 수 있습니다 (10년에 4~5% 감소). 마스터즈 러너 연구에서: 50대 마라톤 러너의 VO₂max는 비활동 25세 청년과 비슷 (40~45) 70대 마스터즈 챔피언은 평균 30대 수준 유지 가능 (40+) VO₂max는 노화의 가장 강력한 지표지만 동시에 가장 통제 가능한 지표입니다." },
+  { "q":"VO₂max가 낮으면 무엇이 문제인가요?","a":"심혈관 사망률·전체 사망률의 가장 강력한 단일 예측 인자입니다. Mandsager 2018 (JAMA Network Open) 12만 명 연구: VO₂max 하위 25% → 상위 25% 대비 사망률 약 5배 흡연·당뇨·고혈압보다 더 강한 위험 인자 VO₂max +1 mL → 사망률 약 9% ↓ VO₂max가 「매우 미흡」 단계라면 의사 상담 후 점진적 유산소 운동 시작 권장." },
   { "q":"워치(가민·애플)의 VO₂max 표시는 정확한가요?","a":"가민·폴라·애플 워치의 VO₂max는 러닝 중 페이스 + 심박수 비교로 추정합니다. 일반적으로 ±5~10% 오차로 본 도구의 추정 방법과 비슷한 수준입니다. 주의: 꾸준히 달려야 갱신됨 (가민은 7일+ 데이터 필요) 업힐·다운힐·강풍 환경에선 과대/과소 평가 광학 심박 센서 오차 ±5bpm → VO₂max ±3 본 도구 + 워치 + 3~6개월 추세를 함께 보면 가장 신뢰 가능." },
   { "q":"마라톤 예상 시간은 어떻게 계산되나요?","a":"본 도구는 VO₂max ≈ Daniels VDOT 가정 + Riegel 공식으로 5km·10km·하프·풀코스 예상 기록을 간단 추정합니다 (예: VO₂max 50 → 5km 약 20분 / 풀 약 3시간 11분). 실제 기록은 젖산 역치·러닝 이코노미·글리코겐 저장량·멘탈의 영향으로 ±10~15% 변동 가능한 참고용입니다. 실제 레이스 기록 기반의 정밀 예측(3공식 평균·환경/연령 보정·목표 역산)은 마라톤 기록 계산기를 이용하세요." }
 ]
@@ -105,7 +105,7 @@ export default function VO2MaxPage() {
             심폐 체력의 <strong style={{ color: 'var(--text)' }}>객관적 단일 지표</strong>로, 러닝·사이클·수영 등 지구력 종목의 잠재력을 결정합니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            높은 VO₂max는 단순히 운동 능력뿐 아니라 <strong style={{ color: 'var(--text)' }}>심혈관 질환·당뇨·치매·전체 사망률을 낮추는 가장 강력한 단일 예측 인자</strong>로 알려져 있습니다 (Mayo Clinic 2018, JAMA Cardiology).
+            높은 VO₂max는 단순히 운동 능력뿐 아니라 <strong style={{ color: 'var(--text)' }}>심혈관 질환·당뇨·전체 사망률을 낮추는 가장 강력한 단일 예측 인자</strong>로 알려져 있으며 (Mandsager 2018, JAMA Network Open 등), 치매 위험과의 연관도 보고됩니다.
           </p>
         </section>
 
@@ -172,7 +172,7 @@ export default function VO2MaxPage() {
             </div>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            💡 <strong style={{ color: 'var(--text)' }}>가장 정확하게 측정하려면</strong> 실험실에서 가스 분석기로 트레드밀 점진 부하 검사 (Bruce 프로토콜). 대학·체육과학연구원에서 약 15~30만 원.
+            💡 <strong style={{ color: 'var(--text)' }}>가장 정확하게 측정하려면</strong> 실험실에서 가스 분석기로 트레드밀 점진 부하 검사 (Bruce 프로토콜). 대학·전문 체력측정 기관에서 약 15~30만 원.
             본 도구의 6가지 추정 방법은 <strong>참고용</strong>이며 ±10~15% 오차 가능.
           </p>
         </section>
@@ -263,7 +263,7 @@ export default function VO2MaxPage() {
           <h2 style={sectionTitle}>📈 VO₂ Max 향상 트레이닝 (검증된 방법)</h2>
           <div style={{ ...card }}>
             <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
-              <li><strong style={{ color: 'var(--text)' }}>HIIT 4×4 (Bjørn Mæhlum 프로토콜)</strong>: 4분 격렬(90~95% HRmax) + 3분 회복 × 4 세트, 주 2회 → 8주 +6~10%</li>
+              <li><strong style={{ color: 'var(--text)' }}>노르웨이 4×4 인터벌 (NTNU, Helgerud 2007)</strong>: 4분 격렬(90~95% HRmax) + 3분 회복 × 4 세트, 주 2회 → 8주 +6~10%</li>
               <li><strong style={{ color: 'var(--text)' }}>30/30 인터벌</strong>: 30초 전력 + 30초 회복 × 15~20 세트 — 시간 효율 ↑</li>
               <li><strong style={{ color: 'var(--text)' }}>Threshold 런</strong>: 20~40분 역치 페이스 (1시간 race pace) — 젖산 처리 ↑</li>
               <li><strong style={{ color: 'var(--text)' }}>Long Run</strong>: 주 1회 90~120분 E 페이스 — 미토콘드리아 발달</li>
@@ -281,7 +281,7 @@ export default function VO2MaxPage() {
         <section>
           <h2 style={sectionTitle}>🇰🇷 한국 성인 VO₂ Max 평균</h2>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
-            국민체력100·체육과학연구원(KISS) 통계상 한국 성인 평균은 다음 수준입니다:
+            국민체력100·한국스포츠정책과학원(구 체육과학연구원·KISS) 통계상 한국 성인 평균은 다음 수준입니다:
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -303,7 +303,7 @@ export default function VO2MaxPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 한국스포츠개발원 KISS 표준 + 국민체력100 데이터 기준. 개인차 ±5~10.
+            ※ 한국스포츠정책과학원(구 체육과학연구원·KISS) 표준 + 국민체력100 데이터 기준. 개인차 ±5~10.
           </p>
         </section>
 
@@ -335,17 +335,17 @@ export default function VO2MaxPage() {
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li><strong style={{ color: 'var(--text)' }}>비운동인 → 운동인</strong>: 6개월~1년에 +10~20% (예: 38 → 45)</li>
                 <li><strong style={{ color: 'var(--text)' }}>운동인 → 마라톤 입문</strong>: 추가 +5~10% (45 → 50)</li>
-                <li><strong style={{ color: 'var(--text)' }}>아마 마스터즈 → 서브3</strong>: VO₂max 58+ 필요</li>
+                <li><strong style={{ color: 'var(--text)' }}>아마 마스터즈 → 서브3</strong>: 레이스 기반 VDOT 약 53~54 (실험실 실측 VO₂max는 이보다 높게 나오는 경우가 많음)</li>
                 <li><strong style={{ color: 'var(--text)' }}>엘리트:</strong> 남성 75~85, 여성 65~75 (유전·훈련 모두 상위)</li>
               </ul>
-              킵초게(엘리우드)·잉바이·반드페이는 80~85 수준으로 추정됩니다.
+              엘리우드 킵초게 등 정상급 마라토너들이 80대 중반 수준으로 추정됩니다.
             </div>
           </details>
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q3. 나이가 들면 VO₂max는 얼마나 떨어지나요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: 'var(--text)' }}>비활동인은 10년에 약 10% 감소</strong> (30대 45 → 60대 27).
+              <strong style={{ color: 'var(--text)' }}>비활동인은 10년에 약 10% 감소</strong> (30대 45 → 60대 약 33).
               그러나 <strong style={{ color: '#059669' }}>꾸준한 유산소 운동</strong>으로 감소를 절반 이하로 늦출 수 있습니다 (10년에 4~5% 감소).
               <br /><br />
               마스터즈 러너 연구에서:
@@ -360,7 +360,7 @@ export default function VO2MaxPage() {
             <summary style={faqSummary}>Q4. VO₂max가 낮으면 무엇이 문제인가요?</summary>
             <div style={faqAnswer}>
               <strong style={{ color: '#DC2626' }}>심혈관 사망률·전체 사망률의 가장 강력한 단일 예측 인자</strong>입니다.
-              Mandsager 2018 (JAMA Cardiology) 12만 명 연구:
+              Mandsager 2018 (JAMA Network Open) 12만 명 연구:
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>VO₂max 하위 25% → 상위 25% 대비 사망률 약 5배</li>
                 <li>흡연·당뇨·고혈압보다 더 강한 위험 인자</li>

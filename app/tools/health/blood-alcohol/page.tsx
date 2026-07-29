@@ -2,7 +2,7 @@ import Link from 'next/link'
 import BloodAlcoholClient from './BloodAlcoholClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -89,8 +89,7 @@ export default function BloodAlcoholPage() {
               </thead>
               <tbody>
                 {[
-                  ['0.03~0.049%', '면허정지',   '벌점 100점, 100일 정지',                                        '#EA580C'],
-                  ['0.05~0.079%', '면허정지',   '벌점 100점, 100일 정지',                                        '#EA580C'],
+                  ['0.03~0.079%', '면허정지',   '벌점 100점, 100일 정지',                                        '#EA580C'],
                   ['0.08~0.099%', '면허취소',   '1년 결격, 1년 이하 징역 또는 500만원 이하 벌금',                '#DC2626'],
                   ['0.10~0.199%', '면허취소',   '2년 결격, 1~2년 징역 또는 500만~1000만원 벌금',                 '#DC2626'],
                   ['0.20% 이상',  '면허취소',   '3년 결격, 2~5년 징역 또는 1000만~2000만원 벌금',                '#B91C1C'],
@@ -298,22 +297,9 @@ export default function BloodAlcoholPage() {
           </p>
         </div>
 
-        {/* ── 10. FAQ (accordion - salary style) ── */}
+        {/* ── 10. FAQ (accordion) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 11. 안전 귀가 (강화) ── */}

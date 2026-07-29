@@ -172,6 +172,9 @@ export default function StockPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             정답은 <strong style={{ color: 'var(--text)' }}>본 종목의 회복 가능성</strong>에 달려 있습니다. 「손절 vs 물타기」 탭에서 시나리오별 손익을 비교할 수 있습니다.
           </p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
+            가정: 현재 −20% 손실 상태에서 기존 투자금과 동일한 금액을 물타기 또는 대안에 투입, 손익은 총투입 자본 기준.
+          </p>
 
           <div style={{ overflowX: 'auto', marginBottom: 12 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -184,10 +187,10 @@ export default function StockPage() {
               </thead>
               <tbody>
                 {[
-                  ['물타기 + 회복',  '본 종목 +20% 회복',  '+9%'],
-                  ['손절 + 대안',    '대안 7% 수익 가정',  '-2%'],
-                  ['물타기 + 추가하락', '본 종목 −20% 추가하락', '-27%'],
-                  ['손절 후 보존',   '대안 0% (현금 보유)', '-15%'],
+                  ['물타기 + 회복',  '본 종목 +20% 회복',  '+8%'],
+                  ['손절 + 대안',    '대안 7% 수익 가정',  '-4%'],
+                  ['물타기 + 추가하락', '본 종목 −20% 추가하락', '-28%'],
+                  ['손절 후 보존',   '대안 0% (현금 보유)', '-10%'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
@@ -220,7 +223,7 @@ export default function StockPage() {
             </div>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
-            ※ 회복 가능성을 솔직히 평가하세요. 같은 시간·자금이라도 결정에 따라 1년 후 결과가 +30%p까지 달라질 수 있습니다.
+            ※ 회복 가능성을 솔직히 평가하세요. 같은 시간·자금이라도 결정에 따라 1년 후 결과가 최대 약 36%p(+8% vs −28%)까지 달라질 수 있습니다.
           </p>
         </div>
 
@@ -305,7 +308,7 @@ export default function StockPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            ※ 2026년 1월 표준 온라인 수수료. 실시간·MTS·HTS 채널별 다를 수 있습니다. 코스피·코스닥 거래세 0.20% (2026년 인상, 금투세 폐지로 환원).
+            ※ 수수료 표: 2026년 1월 조사 기준 표준 온라인 수수료. 실시간·MTS·HTS 채널별 다를 수 있습니다. 코스피·코스닥 거래세 0.20% (2026년 인상, 금투세 폐지로 환원).
           </p>
         </div>
 

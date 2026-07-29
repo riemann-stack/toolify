@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/interior/flooring',
   title: '바닥재 계산기 — 마루·장판·데코타일 박스 수·비용',
-  description: '장판·강화마루·강마루·원목·데코타일 박스 수와 비용 견적. 셀프 시공 가능 여부도 안내.',
+  description: '장판·강화마루·강마루·원목마루·데코타일의 필요 박스 수와 자재비·시공비 견적 계산. 종류별 단가·내구성 비교표, 박스당 면적 가이드, 헤링본 등 시공 방식별 로스율과 셀프 시공 가능 여부까지 안내합니다.',
   keywords: ['바닥재계산기', '마루박스수', '강화마루소요량', '강마루계산', '장판소요량', '데코타일계산', '헤링본바닥재', '바닥재비용'],
 })
 
@@ -40,7 +40,7 @@ export default function FlooringPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        인테리어
+        주거·인테리어
       </p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />바닥재 계산기
@@ -91,6 +91,9 @@ export default function FlooringPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ※ 단가는 2026년 기준, 온라인 자재몰·시공 플랫폼에서 통용되는 범위이며 지역·브랜드·등급에 따라 달라집니다.
+          </p>
         </div>
 
         {/* ── 2. 한국 시판 박스 면적 ── */}

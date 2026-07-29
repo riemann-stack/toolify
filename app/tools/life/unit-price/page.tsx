@@ -40,7 +40,7 @@ const FAQ_LD = [
 export default function UnitPricePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활</p>
+      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />단가 비교 계산기
       </h1>
@@ -83,7 +83,7 @@ export default function UnitPricePage() {
             🎁 1+1·2+1 행사 — 개수만 입력하면 끝
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            본 도구는 행사 옵션을 따로 두지 않습니다. <strong style={{ color: 'var(--text)' }}>개수에 받는 갯수를 그대로 입력</strong>하면 단가가 정확히 계산됩니다 (가격은 실제 결제 금액).
+            본 도구는 행사 옵션을 따로 두지 않습니다. <strong style={{ color: 'var(--text)' }}>개수에 받는 개수를 그대로 입력</strong>하면 단가가 정확히 계산됩니다 (가격은 실제 결제 금액).
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>

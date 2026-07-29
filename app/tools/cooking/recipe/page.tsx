@@ -272,7 +272,7 @@ export default function RecipePage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li><strong style={{ color: 'var(--text)' }}>한국식품영양학회</strong> — 표준 식품 성분표</li>
+            <li><strong style={{ color: 'var(--text)' }}>농촌진흥청</strong> — 국가표준식품성분표 (koreanfood.rda.go.kr)</li>
             <li><strong style={{ color: 'var(--text)' }}>USDA FoodData Central</strong> — fdc.nal.usda.gov (재료 밀도)</li>
             <li><strong style={{ color: 'var(--text)' }}>King Arthur Baking — Ingredient Weight Chart</strong> (베이킹 표준)</li>
           </ul>

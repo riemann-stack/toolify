@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/art/lorem',
   title: '더미 텍스트 생성기 — 문단·버튼·카드·JSON 더미 데이터',
-  description: '문단·버튼·카드·리뷰·JSON 더미 데이터를 UI 목업에 바로 붙여 쓸 수 있는 종합 더미 콘텐츠 생성기.',
+  description: '한글·영문 문단, 버튼·카드·리뷰 UI 카피, 회원·상품 JSON/CSV 더미까지 9가지 톤으로 생성. truncate 길이 테스트·UX 라이팅 시나리오 포함, UI 목업에 바로 붙여 쓰는 더미 콘텐츠 생성기.',
   keywords: [
     '더미텍스트', '더미데이터', '로렘입숨', 'lorem ipsum', '한글더미', 'UI목업',
     'JSON 더미', 'mock data', 'placeholder text', '카드 목업', 'UX 라이팅',
@@ -18,8 +18,8 @@ export const metadata = buildMetadata({
 
 const FAQ_LD = [
               {
-                q: '기존 /tools/art/lorem URL을 그대로 사용해도 되나요?',
-                a: '네. 기존 URL은 그대로 유지되며, 기능만 대폭 확장되었습니다. 외부 링크나 검색 결과에서 들어오시면 새 6탭 인터페이스를 바로 사용할 수 있습니다.',
+                q: '생성한 JSON 더미를 MSW·json-server 목 서버에 어떻게 쓰나요?',
+                a: 'JSON 더미 데이터 탭에서 회원·상품·주문 등 원하는 종류를 골라 최대 50개 레코드를 생성한 뒤, 복사한 JSON 배열을 json-server의 db.json이나 MSW 핸들러의 응답 본문에 그대로 붙여 넣으면 됩니다. REST API 응답 예시·fixture 파일로도 바로 쓸 수 있고, 필요하면 JSONL·CSV·TypeScript interface 등 8가지 포맷으로 즉시 변환됩니다.',
               },
               {
                 q: '왜 단순 Lorem Ipsum이 아니라 한국어 더미가 필요한가요?',
@@ -137,7 +137,7 @@ export default function LoremPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>길이 테스트 탭이 잡아내는 버그</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-            카드·리스트·테이블 컴포넌트의 80%는 <strong style={{ color: 'var(--text)' }}>실제 데이터가 들어오면 깨집니다.</strong> 디자인 단계에서 적당한 길이의 더미 텍스트로 채우면 이상해 보이지 않지만, 실제로는 다양한 길이의 한국어 텍스트가 들어오기 때문입니다.
+            카드·리스트·테이블 컴포넌트의 상당수는 <strong style={{ color: 'var(--text)' }}>실제 데이터가 들어오면 깨집니다.</strong> 디자인 단계에서 적당한 길이의 더미 텍스트로 채우면 이상해 보이지 않지만, 실제로는 다양한 길이의 한국어 텍스트가 들어오기 때문입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             {[

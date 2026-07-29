@@ -10,7 +10,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/finance/installment',
   title: '카드 할부 계산기 — 월 납부액·총 이자·일시불 vs 무이자 비교',
-  description: '할부 개월수별 진짜 이자와 일시불·무이자 비교. 카드 선택의 기준을 숫자로 — 월 납부액·총 이자·원금 대비 이자율까지.',
+  description: '할부 개월수별 진짜 이자와 일시불·무이자 비교. 월 납부액·총 이자·원금 대비 이자율에 선결제(중도 상환) 절약 팁, 여신금융협회 수수료 공시실 확인법까지 안내.',
   keywords: ['카드할부계산기', '할부이자계산', '12개월할부', '무이자할부', '일시불할인', '카드수수료', '할부vs일시불', '신용카드할부'],
 })
 

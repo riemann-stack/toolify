@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -380,7 +381,18 @@ export default function CarTaxPage() {
           </details>
         </section>
 
-        {/* 9. 관련 도구 */}
+        {/* 9. 면책 */}
+        <Disclaimer
+          variant="finance"
+          sources={[
+            { label: '위택스 자동차세 안내', href: 'https://www.wetax.go.kr/' },
+            { label: '행정안전부 지방세', href: 'https://www.mois.go.kr/' },
+          ]}
+        >
+          본 계산기의 자동차세·연납 할인·감면 결과는 표준 세율 기준의 참고용 추정치입니다. 차종 분류·연식 경감·감면 요건은 지자체와 개별 차량 조건에 따라 달라질 수 있으므로, 실제 고지·납부 금액은 위택스 또는 관할 지자체 세무부서에서 확인하세요.
+        </Disclaimer>
+
+        {/* 10. 관련 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
