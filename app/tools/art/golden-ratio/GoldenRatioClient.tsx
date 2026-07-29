@@ -12,11 +12,12 @@ type Decimals = 0 | 1 | 2 | 3
 const UNITS: Unit[] = ['px', 'cm', 'mm', 'pt', 'inch']
 const RATIO_UNITS: RatioUnit[] = ['px', 'cm', 'mm']
 
-const PRESETS: { label: string; long: number; short: number; unit: Unit }[] = [
-  { label: '명함 (90×50mm)',        long: 90,   short: 50,  unit: 'mm' },
-  { label: 'A4 (297×210mm)',        long: 297,  short: 210, unit: 'mm' },
-  { label: '인스타 정사각 한 변 (1080px)', long: 1080, short: 1080, unit: 'px' },
-  { label: '유튜브 썸네일 (1280×720px)', long: 1280, short: 720, unit: 'px' },
+/* 규격의 긴 변만 가져와 황금 분할하는 프리셋 — 라벨도 단일 치수로 표기 (규격 전체 적용 오해 방지) */
+const PRESETS: { label: string; long: number; unit: Unit }[] = [
+  { label: '명함 가로 90mm',        long: 90,   unit: 'mm' },
+  { label: 'A4 긴 변 297mm',        long: 297,  unit: 'mm' },
+  { label: '인스타 정사각 한 변 1080px', long: 1080, unit: 'px' },
+  { label: '유튜브 썸네일 가로 1280px', long: 1280, unit: 'px' },
 ]
 
 function fmt(n: number, d: Decimals): string {
@@ -34,24 +35,24 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
   const [copied, setCopied] = useState(false)
 
   const result = useMemo(() => {
+    const raw = mode === 'A' ? a : mode === 'B' ? b : t
+    const V = parseFloat(raw)
+    if (!V || V <= 0) return null
+    // 1e12 초과·비유한 값은 합계가 Infinity로 깨지므로 안내로 대체
+    if (!Number.isFinite(V) || V > 1e12) return { outOfRange: true as const }
     if (mode === 'A') {
-      const A = parseFloat(a)
-      if (!A || A <= 0) return null
-      const B = A / PHI
-      return { A, B, total: A + B }
-    } else if (mode === 'B') {
-      const B = parseFloat(b)
-      if (!B || B <= 0) return null
-      const A = B * PHI
-      return { A, B, total: A + B }
-    } else {
-      const T = parseFloat(t)
-      if (!T || T <= 0) return null
-      const A = T / PHI
-      const B = T - A
-      return { A, B, total: T }
+      const B = V / PHI
+      return { A: V, B, total: V + B }
     }
+    if (mode === 'B') {
+      const A = V * PHI
+      return { A, B: V, total: A + V }
+    }
+    const A = V / PHI
+    return { A, B: V - A, total: V }
   }, [mode, a, b, t])
+  // 유효 결과만 (범위 밖 안내 상태 제외)
+  const ok = result && !('outOfRange' in result) ? result : null
 
   const applyPreset = useCallback((p: typeof PRESETS[0]) => {
     setUnit(p.unit)
@@ -62,14 +63,14 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
   }, [])
 
   const handleCopy = useCallback(async () => {
-    if (!result) return
-    const text = `긴 변(A): ${fmt(result.A, decimals)}${unit} · 짧은 변(B): ${fmt(result.B, decimals)}${unit} · 전체: ${fmt(result.total, decimals)}${unit}`
+    if (!ok) return
+    const text = `긴 변(A): ${fmt(ok.A, decimals)}${unit} · 짧은 변(B): ${fmt(ok.B, decimals)}${unit} · 전체: ${fmt(ok.total, decimals)}${unit}`
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
     } catch {}
-  }, [result, decimals, unit])
+  }, [ok, decimals, unit])
 
   return (
     <div className={styles.tabContent}>
@@ -100,7 +101,7 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
                 type="number"
                 inputMode="decimal"
                 placeholder="100"
-                value={mode === 'A' ? a : (result ? fmt(result.A, decimals) : '')}
+                value={mode === 'A' ? a : (ok ? fmt(ok.A, decimals) : '')}
                 onChange={e => setA(e.target.value)}
                 disabled={mode !== 'A'}
               />
@@ -115,7 +116,7 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
                 type="number"
                 inputMode="decimal"
                 placeholder="61.8"
-                value={mode === 'B' ? b : (result ? fmt(result.B, decimals) : '')}
+                value={mode === 'B' ? b : (ok ? fmt(ok.B, decimals) : '')}
                 onChange={e => setB(e.target.value)}
                 disabled={mode !== 'B'}
               />
@@ -130,7 +131,7 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
                 type="number"
                 inputMode="decimal"
                 placeholder="161.8"
-                value={mode === 'T' ? t : (result ? fmt(result.total, decimals) : '')}
+                value={mode === 'T' ? t : (ok ? fmt(ok.total, decimals) : '')}
                 onChange={e => setT(e.target.value)}
                 disabled={mode !== 'T'}
               />
@@ -150,12 +151,13 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
               >{u}</button>
             ))}
           </div>
+          <p className={styles.stdNote} style={{ textAlign: 'left' }}>* 단위는 표기용 라벨입니다 — 바꿔도 입력값은 그대로 유지되며(환산 없음), 비율 계산엔 영향이 없습니다.</p>
         </div>
       </div>
 
       {/* 프리셋 */}
       <div className={styles.card}>
-        <div className={styles.cardLabel}>프리셋 (긴 변 기준 적용)</div>
+        <div className={styles.cardLabel}>프리셋 — 규격의 긴 변을 가져와 황금 분할</div>
         <div className={styles.presetRow}>
           {PRESETS.map(p => (
             <button key={p.label} type="button" className={styles.presetBtn} onClick={() => applyPreset(p)}>
@@ -166,22 +168,26 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
       </div>
 
       {/* 결과 */}
-      {result ? (
+      {result && 'outOfRange' in result ? (
+        <div className={styles.empty} role="status">
+          입력이 너무 큽니다 — 1조(1e12) 이하 값으로 입력해 주세요
+        </div>
+      ) : ok ? (
         <div className={styles.resultCard} role="status">
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>긴 변 (A)</div>
-              <div className={styles.heroNum}>{fmt(result.A, decimals)}<span className={styles.heroUnit}>{unit}</span></div>
+              <div className={styles.heroNum}>{fmt(ok.A, decimals)}<span className={styles.heroUnit}>{unit}</span></div>
             </div>
             <div className={styles.heroDivider} />
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>짧은 변 (B)</div>
-              <div className={styles.heroNum}>{fmt(result.B, decimals)}<span className={styles.heroUnit}>{unit}</span></div>
+              <div className={styles.heroNum}>{fmt(ok.B, decimals)}<span className={styles.heroUnit}>{unit}</span></div>
             </div>
           </div>
           <div className={styles.infoGrid}>
             <div className={styles.infoItem}>
-              <div className={styles.infoNum}>{fmt(result.total, decimals)}{unit}</div>
+              <div className={styles.infoNum}>{fmt(ok.total, decimals)}{unit}</div>
               <div className={styles.infoLabel}>전체 길이 (A+B)</div>
             </div>
             <div className={styles.infoItem}>
@@ -192,7 +198,7 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
           </div>
 
           {/* 미니 황금 직사각형 시각화 */}
-          <MiniGoldenRect A={result.A} B={result.B} unit={unit} />
+          <MiniGoldenRect A={ok.A} B={ok.B} unit={unit} />
 
           <button type="button" className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy} style={{ marginTop: 10 }}>
             {copied ? '✓ 복사됨' : '결과 복사'}
@@ -246,6 +252,10 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
     const W = parseFloat(w)
     const H = parseFloat(h)
     if (!W || !H || W <= 0 || H <= 0) return null
+    // 실용 범위 밖(정수화 오버플로·0 붕괴로 단순비가 무의미)은 계산 대신 안내
+    if (!Number.isFinite(W) || !Number.isFinite(H) || W < 0.001 || H < 0.001 || W > 1e9 || H > 1e9 || W / H > 1000 || H / W > 1000) {
+      return { outOfRange: true as const }
+    }
     const ratio = W / H
     // 세로형(H>W) 입력은 세로 황금비(W:H = 1:1.618)를 기준으로 비교·제안
     const portrait = H > W
@@ -307,10 +317,15 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
               >{u}</button>
             ))}
           </div>
+          <p className={styles.stdNote} style={{ textAlign: 'left' }}>* 단위는 표기용 라벨입니다 — 바꿔도 입력값은 그대로 유지되며(환산 없음), 비율 계산엔 영향이 없습니다.</p>
         </div>
       </div>
 
-      {result ? (
+      {result && 'outOfRange' in result ? (
+        <div className={styles.empty} role="status">
+          입력 범위를 벗어났습니다 — 가로·세로는 0.001 이상 10억(1e9) 이하, 두 값의 비율은 1000:1 이내로 입력해 주세요
+        </div>
+      ) : result ? (
         <div className={styles.resultCard} role="status">
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
@@ -353,28 +368,37 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
 }
 
 /* 최대공약수로 단순비 구하기 (소수 포함 대응). 항이 100을 넘으면(예: 1.618×1 → 809:500)
-   분모 1~40 중 상대오차 0.5% 이내 최소 분모의 근사비(≈ 13:8)로 폴백 */
+   분모 1~40 중 상대오차 0.5% 이내 최소 분모의 근사비(≈ 13:8)로 폴백.
+   ×1000 정수화가 깨지는 입력(오버플로 Infinity·극소수 0)은 정확비를 건너뛰고 근사로 감 */
 function findSimpleRatio(w: number, h: number): { a: number; b: number; approx: boolean } {
+  const r = w / h
   const scale = 1000
   const W = Math.round(w * scale)
   const H = Math.round(h * scale)
-  const g = gcd(W, H)
-  const a = Math.round(W / g)
-  const b = Math.round(H / g)
-  if (Math.max(a, b) <= 100) return { a, b, approx: false }
-  const r = w / h
-  let best = { a, b, err: Infinity }
+  if (Number.isFinite(W) && Number.isFinite(H) && W > 0 && H > 0) {
+    const g = gcd(W, H)
+    const a = Math.round(W / g)
+    const b = Math.round(H / g)
+    if (Math.max(a, b) <= 100) return { a, b, approx: false }
+  }
+  let best = { a: Math.max(1, Math.round(r)), b: 1, err: Infinity }
   for (let den = 1; den <= 40; den++) {
     const num = Math.round(r * den)
-    if (num < 1) continue
+    if (num < 1 || !Number.isFinite(num)) continue
     const err = Math.abs(num / den - r) / r
     if (err <= 0.005) return { a: num, b: den, approx: true }
     if (err < best.err) best = { a: num, b: den, err }
   }
   return { a: best.a, b: best.b, approx: true }
 }
+/* 반복문 유클리드 — 재귀 금지: Infinity/NaN 인자가 섞이면 무한 재귀로 콜스택 초과(페이지 크래시) */
 function gcd(a: number, b: number): number {
-  return b === 0 ? a : gcd(b, a % b)
+  while (b !== 0) {
+    const t = a % b
+    a = b
+    b = t
+  }
+  return a
 }
 
 /* ──────────────────────── 탭 3: 황금 나선 시각화 ──────────────────────── */
@@ -422,16 +446,35 @@ function SpiralTab() {
   const squareStroke = theme === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'
   const textColor = theme === 'dark' ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.55)'
 
-  const handleDownload = useCallback(() => {
+  // width="100%" 그대로 직렬화하면 Safari·Firefox에서 래스터화가 실패/0크기가 될 수 있어
+  // 클론에 명시적 픽셀 크기를 부여하고 style(max-width)을 제거
+  const buildSvgClone = useCallback((scale: number) => {
     const svg = svgRef.current
-    if (!svg) return
-    const scale = 2
-    // width="100%" 그대로 직렬화하면 Safari·Firefox에서 래스터화가 실패/0크기가 될 수 있어
-    // 클론에 명시적 픽셀 크기를 부여하고 style(max-width)을 제거
+    if (!svg) return null
     const clone = svg.cloneNode(true) as SVGSVGElement
     clone.setAttribute('width', String(squares.vbW * scale))
     clone.setAttribute('height', String(squares.vbH * scale))
     clone.removeAttribute('style')
+    return clone
+  }, [squares.vbW, squares.vbH])
+
+  const handleSvgDownload = useCallback(() => {
+    const clone = buildSvgClone(1)
+    if (!clone) return
+    const svgStr = new XMLSerializer().serializeToString(clone)
+    const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `golden-spiral-${theme}.svg`
+    link.click()
+    URL.revokeObjectURL(url)
+  }, [buildSvgClone, theme])
+
+  const handleDownload = useCallback(() => {
+    const scale = 2
+    const clone = buildSvgClone(scale)
+    if (!clone) return
     const svgStr = new XMLSerializer().serializeToString(clone)
     const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' })
     const url = URL.createObjectURL(blob)
@@ -454,7 +497,7 @@ function SpiralTab() {
     }
     img.onerror = () => URL.revokeObjectURL(url)
     img.src = url
-  }, [bg, theme, squares.vbW, squares.vbH])
+  }, [buildSvgClone, bg, theme, squares.vbW, squares.vbH])
 
   return (
     <div className={styles.tabContent}>
@@ -474,6 +517,9 @@ function SpiralTab() {
           <div className={styles.spiralControlsRight}>
             <button type="button" className={styles.downloadBtn} onClick={handleDownload}>
               PNG 저장
+            </button>
+            <button type="button" className={styles.downloadBtn} onClick={handleSvgDownload}>
+              SVG 저장
             </button>
           </div>
         </div>
@@ -518,7 +564,8 @@ function SpiralTab() {
         </div>
 
         <p className={styles.stdNote}>
-          피보나치 수(1, 1, 2, 3, 5, 8, 13, 21)로 구성된 황금 직사각형과 나선. 각 사각형의 변 길이 비율은 φ에 수렴합니다.
+          피보나치 수(1, 1, 2, 3, 5, 8, 13, 21)의 정사각형과 사분원으로 그린 <strong>피보나치 나선</strong> — 황금 나선(1/4바퀴마다 φ배 커지는 로그 나선)의 근사입니다.
+          항이 커질수록 진짜 황금 나선과 사실상 겹치며, 각 사각형의 변 길이 비율도 φ에 수렴합니다.
         </p>
       </div>
     </div>
