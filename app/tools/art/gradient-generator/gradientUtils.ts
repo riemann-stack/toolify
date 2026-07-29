@@ -180,6 +180,22 @@ export const cycleOf = (cfg: GradientConfig): number => {
   return typeof c === 'number' && c > 0 ? Math.min(100, c) : 25
 }
 
+/** repeating용: stop 범위(min~max)를 0~cycle로 정규화.
+    pos/100*cycle 방식은 stops가 0~100을 채운다는 가정이라, 마지막 stop이 50%면
+    실주기가 cycle/2로 줄어드는 이중 스케일이 생긴다 (CSS 반복 주기 = max−min). */
+function scaleStopsToCycle(stops: Stop[], cycle: number): Stop[] {
+  const positions = stops.map((s) => s.pos)
+  const min = Math.min(...positions)
+  const span = Math.max(...positions) - min
+  if (span <= 0) return stops.map((s) => ({ ...s, pos: 0 }))
+  return stops.map((s) => ({ ...s, pos: ((s.pos - min) / span) * cycle }))
+}
+
+/** repeating dense용: stop 범위를 0~100으로 정규화 (이후 /100*cycle 스케일) */
+function normalizeStops(stops: Stop[]): Stop[] {
+  return scaleStopsToCycle(stops, 100)
+}
+
 /** 미리보기/내보내기용: 공백 보간 모드 native 문법 */
 export function buildCss(cfg: GradientConfig, opts: { native?: boolean } = {}): string {
   // mesh는 어떤 경로로 들어와도 mesh로 렌더 (폴스루 시 linear로 둔갑하는 것 방지)
@@ -198,15 +214,13 @@ export function buildCss(cfg: GradientConfig, opts: { native?: boolean } = {}): 
     const list = stopsCss(cfg.stops)
     if (cfg.type === 'linear') return `linear-gradient(${inSpace}${cfg.angle}deg, ${list})`
     if (cfg.type === 'repeating-linear') {
-      const cycle = cycleOf(cfg)
-      const scaled = stopsCss(cfg.stops.map((s) => ({ ...s, pos: (s.pos / 100) * cycle })))
+      const scaled = stopsCss(scaleStopsToCycle(cfg.stops, cycleOf(cfg)))
       return `repeating-linear-gradient(${inSpace}${cfg.angle}deg, ${scaled})`
     }
     // radial: <color-interpolation-method>는 콤마 앞(모양·위치와 같은 그룹) — 스톱 리스트에 넣으면 무효 CSS
     if (cfg.type === 'radial') return `radial-gradient(${inSpace}${cfg.shape} at center, ${list})`
     if (cfg.type === 'repeating-radial') {
-      const cycle = cycleOf(cfg)
-      const scaled = stopsCss(cfg.stops.map((s) => ({ ...s, pos: (s.pos / 100) * cycle })))
+      const scaled = stopsCss(scaleStopsToCycle(cfg.stops, cycleOf(cfg)))
       return `repeating-radial-gradient(${inSpace}${cfg.shape} at center, ${scaled})`
     }
     if (cfg.type === 'conic') return `conic-gradient(${inSpace}from ${cfg.angle}deg at center, ${list})`
@@ -218,21 +232,20 @@ export function buildCss(cfg: GradientConfig, opts: { native?: boolean } = {}): 
     const list = stopsCss(cfg.stops)
     if (cfg.type === 'linear') return `linear-gradient(${cfg.angle}deg, ${list})`
     if (cfg.type === 'repeating-linear') {
-      const cycle = cycleOf(cfg)
-      const scaled = stopsCss(cfg.stops.map((s) => ({ ...s, pos: (s.pos / 100) * cycle })))
+      const scaled = stopsCss(scaleStopsToCycle(cfg.stops, cycleOf(cfg)))
       return `repeating-linear-gradient(${cfg.angle}deg, ${scaled})`
     }
     if (cfg.type === 'radial') return `radial-gradient(${cfg.shape} at center, ${list})`
     if (cfg.type === 'repeating-radial') {
-      const cycle = cycleOf(cfg)
-      const scaled = stopsCss(cfg.stops.map((s) => ({ ...s, pos: (s.pos / 100) * cycle })))
+      const scaled = stopsCss(scaleStopsToCycle(cfg.stops, cycleOf(cfg)))
       return `repeating-radial-gradient(${cfg.shape} at center, ${scaled})`
     }
     if (cfg.type === 'conic') return `conic-gradient(from ${cfg.angle}deg at center, ${list})`
   }
 
-  // dense (HSL/OKLCH/LAB) — 16 stops
-  const dense = gradientColors(cfg.stops, cfg.space, 16)
+  // dense (HSL/OKLCH/LAB) — 16 stops (repeating은 stop 범위를 0~100으로 정규화해 플래토 없는 1주기 생성)
+  const isRepeating = cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial'
+  const dense = gradientColors(isRepeating ? normalizeStops(cfg.stops) : cfg.stops, cfg.space, 16)
   const list = dense.map((d) => `${rgbToHex(d.rgb)} ${d.pos.toFixed(1)}%`).join(', ')
   if (cfg.type === 'linear') return `linear-gradient(${cfg.angle}deg, ${list})`
   if (cfg.type === 'repeating-linear') {
@@ -250,23 +263,26 @@ export function buildCss(cfg: GradientConfig, opts: { native?: boolean } = {}): 
   return `linear-gradient(${cfg.angle}deg, ${list})`
 }
 
-/** Mesh: 4 corner radial gradient 합성 (CSS multi-background) */
+/** Mesh: 4 corner radial gradient 합성 (CSS multi-background)
+    맨 아래 tl 베이스 레이어 포함 — SVG(베이스 rect)·PNG(source-over)와 합성 모델 통일 */
 export function buildMeshCss(mesh: MeshCorners): string {
   const { tl, tr, bl, br } = mesh
-  // 각 모서리에 80% 크기 radial gradient + 베이스 그레이
   return [
     `radial-gradient(circle at 0% 0%,   ${tl} 0%, transparent 70%)`,
     `radial-gradient(circle at 100% 0%, ${tr} 0%, transparent 70%)`,
     `radial-gradient(circle at 0% 100%, ${bl} 0%, transparent 70%)`,
     `radial-gradient(circle at 100% 100%, ${br} 0%, transparent 70%)`,
+    `linear-gradient(${tl}, ${tl})`,
   ].join(', ')
 }
 
 /* ───────── 출력 포맷 ───────── */
 export function exportCss(cfg: GradientConfig): string {
+  const noise = cfg.noise > 0 ? `${noiseSvgUrl(cfg.noise)},\n  ` : ''
   if (cfg.type === 'mesh' && cfg.mesh) {
-    return `background:\n  ${buildMeshCss(cfg.mesh).split(', ').join(',\n  ')};`
+    return `background:\n  ${noise}${buildMeshCss(cfg.mesh).split(', ').join(',\n  ')};`
   }
+  if (noise) return `background:\n  ${noise}${buildCss(cfg, { native: true })};`
   return `background: ${buildCss(cfg, { native: true })};`
 }
 
@@ -280,8 +296,13 @@ export function exportTailwind(cfg: GradientConfig): string {
   return `bg-[${css}]`
 }
 
-export function exportSvg(cfg: GradientConfig, w = 400, h = 200): string {
+export function exportSvg(cfg: GradientConfig, w = 400, h = 200, opts?: { noise?: number }): string {
   const id = 'g1'
+  const meshNoiseXml = (opts?.noise ?? 0) > 0
+    ? `
+  <filter id="ng"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ${(((opts?.noise ?? 0) / 100) * 0.5).toFixed(2)} 0"/></filter>
+  <rect width="100%" height="100%" filter="url(#ng)"/>`
+    : ''
   if (cfg.type === 'mesh' && cfg.mesh) {
     const { tl, tr, bl, br } = cfg.mesh
     return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
@@ -295,18 +316,20 @@ export function exportSvg(cfg: GradientConfig, w = 400, h = 200): string {
   <rect width="100%" height="100%" fill="url(#g-tl)"/>
   <rect width="100%" height="100%" fill="url(#g-tr)"/>
   <rect width="100%" height="100%" fill="url(#g-bl)"/>
-  <rect width="100%" height="100%" fill="url(#g-br)"/>
+  <rect width="100%" height="100%" fill="url(#g-br)"/>${meshNoiseXml}
 </svg>`
   }
 
   // dense stops (SVG는 offset 역순을 클램프하므로 반드시 정렬)
+  const isRepeating = cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial'
+  const srcStops = isRepeating ? normalizeStops(cfg.stops) : cfg.stops
   let dense =
     cfg.space === 'rgb'
-      ? [...cfg.stops].sort((a, b) => a.pos - b.pos).map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
-      : gradientColors(cfg.stops, cfg.space, 16)
+      ? [...srcStops].sort((a, b) => a.pos - b.pos).map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
+      : gradientColors(srcStops, cfg.space, 16)
 
   // repeating: 싸이클을 0~100%에 반복 배치 (SVG에는 repeating-gradient가 없음)
-  if (cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial') {
+  if (isRepeating) {
     const cycle = cycleOf(cfg)
     const tiled: typeof dense = []
     for (let k = 0; k * cycle < 100; k++) {
@@ -322,6 +345,8 @@ export function exportSvg(cfg: GradientConfig, w = 400, h = 200): string {
     .map((d) => `      <stop offset="${d.pos.toFixed(1)}%" stop-color="${rgbToHex(d.rgb)}"/>`)
     .join('\n')
 
+  const noiseXml = meshNoiseXml
+
   if (cfg.type === 'linear' || cfg.type === 'repeating-linear') {
     const rad = ((cfg.angle - 90) * Math.PI) / 180
     const x1 = 50 - 50 * Math.cos(rad)
@@ -334,28 +359,36 @@ export function exportSvg(cfg: GradientConfig, w = 400, h = 200): string {
 ${stopsXml}
     </linearGradient>
   </defs>
-  <rect width="100%" height="100%" fill="url(#${id})"/>
+  <rect width="100%" height="100%" fill="url(#${id})"/>${noiseXml}
 </svg>`
   }
-  // radial / repeating-radial / conic (SVG conic은 미지원 → radial fallback)
-  return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+  // radial / repeating-radial: circle·ellipse 구분 (CSS 기본 = farthest-corner)
+  // conic: SVG 표준에 conic이 없어 radial 폴백 (도구 안내와 동일)
+  const gradAttrs =
+    cfg.type !== 'conic' && cfg.shape === 'circle'
+      ? `gradientUnits="userSpaceOnUse" cx="${(w / 2).toFixed(1)}" cy="${(h / 2).toFixed(1)}" r="${Math.hypot(w / 2, h / 2).toFixed(1)}"`
+      : `cx="50%" cy="50%" r="70.71%"` // objectBoundingBox r=1/√2 → farthest-corner 타원(rx=w/√2, ry=h/√2)
+  const conicComment = cfg.type === 'conic' ? '\n  <!-- SVG는 conic-gradient를 지원하지 않아 radial로 폴백됩니다 -->' : ''
+  return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">${conicComment}
   <defs>
-    <radialGradient id="${id}" cx="50%" cy="50%" r="70%">
+    <radialGradient id="${id}" ${gradAttrs}>
 ${stopsXml}
     </radialGradient>
   </defs>
-  <rect width="100%" height="100%" fill="url(#${id})"/>
+  <rect width="100%" height="100%" fill="url(#${id})"/>${noiseXml}
 </svg>`
 }
 
 export function exportReact(cfg: GradientConfig): string {
+  const noise = cfg.noise > 0 ? `${noiseSvgUrl(cfg.noise)}, ` : ''
   if (cfg.type === 'mesh' && cfg.mesh) {
     return `const style = {
-  background: \`${buildMeshCss(cfg.mesh)}\`,
+  background: \`${noise}${buildMeshCss(cfg.mesh)}\`,
 }`
   }
+  // 노이즈 data URI에 작은따옴표가 들어갈 수 있어 백틱으로 출력
   return `const style = {
-  background: '${buildCss(cfg, { native: true })}',
+  background: \`${noise}${buildCss(cfg, { native: true })}\`,
 }`
 }
 
@@ -423,8 +456,9 @@ Stack(children: [
   // 나머지 3 모서리도 동일 패턴...
 ])`
   }
-  const colorsList = cfg.stops.map((s) => `Color(0xFF${s.hex.replace('#', '')})`).join(',\n      ')
-  const stopsList = cfg.stops.map((s) => (s.pos / 100).toFixed(3)).join(', ')
+  const flutterStops = cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial' ? normalizeStops(cfg.stops) : cfg.stops
+  const colorsList = flutterStops.map((s) => `Color(0xFF${s.hex.replace('#', '')})`).join(',\n      ')
+  const stopsList = flutterStops.map((s) => (s.pos / 100).toFixed(3)).join(', ')
 
   if (cfg.type === 'radial' || cfg.type === 'repeating-radial') {
     return `Container(
@@ -506,9 +540,36 @@ export type ContrastReport = {
   worstSampleAt: number
 }
 
-/** 그라디언트의 색을 N개 샘플링해서 흰/검 텍스트 worst-case 대비비 계산 */
+/** 특정 위치의 보간 색 (gradientColors와 동일 규칙: 범위 밖 클램프) */
+function colorAtPos(sorted: { rgb: RGB; pos: number }[], space: ColorSpace, pos: number): RGB {
+  if (sorted.length === 0) return { r: 0, g: 0, b: 0 }
+  if (pos <= sorted[0].pos) return sorted[0].rgb
+  if (pos >= sorted[sorted.length - 1].pos) return sorted[sorted.length - 1].rgb
+  for (let j = 0; j < sorted.length - 1; j++) {
+    if (sorted[j].pos <= pos && pos <= sorted[j + 1].pos) {
+      const span = sorted[j + 1].pos - sorted[j].pos
+      const t = span === 0 ? 0 : (pos - sorted[j].pos) / span
+      return interpolate(sorted[j].rgb, sorted[j + 1].rgb, t, space)
+    }
+  }
+  return sorted[0].rgb
+}
+
+/** 그라디언트를 샘플링해서 흰/검 텍스트 worst-case 대비비 계산.
+    균일 샘플만으로는 좁은 밴드(예: stop 49·50·51·52%)를 건너뛰므로
+    모든 stop 위치 + 인접 stop 사이 세분점을 반드시 포함한다. */
 export function analyzeContrast(stops: Stop[], space: ColorSpace, samples = 12): ContrastReport {
-  const dense = gradientColors(stops, space, samples)
+  const sorted = [...stops]
+    .sort((a, b) => a.pos - b.pos)
+    .map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
+  const positions = new Set<number>([0, 100])
+  for (let i = 0; i < samples; i++) positions.add((i / (samples - 1)) * 100)
+  for (const s of sorted) positions.add(s.pos)
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const a = sorted[i].pos, b = sorted[i + 1].pos
+    for (const t of [0.25, 0.5, 0.75]) positions.add(a + (b - a) * t)
+  }
+  const dense = [...positions].sort((x, y) => x - y).map((pos) => ({ rgb: colorAtPos(sorted, space, pos), pos }))
   let worstWhite = Infinity
   let worstBlack = Infinity
   const W: RGB = { r: 255, g: 255, b: 255 }
@@ -793,8 +854,8 @@ export async function downloadGradientPng(cfg: GradientConfig, w: number, h: num
     const { tl, tr, bl, br } = cfg.mesh
     ctx.fillStyle = tl
     ctx.fillRect(0, 0, w, h)
+    // source-over 유지 — 'lighter' 가산 합성은 CSS·SVG(normal)와 다른 밝기를 만든다
     const cs: Array<[string, number, number]> = [[tl, 0, 0], [tr, w, 0], [bl, 0, h], [br, w, h]]
-    ctx.globalCompositeOperation = 'lighter'
     for (const [color, x, y] of cs) {
       const grad = ctx.createRadialGradient(x, y, 0, x, y, Math.max(w, h) * 0.7)
       grad.addColorStop(0, color)
@@ -802,13 +863,14 @@ export async function downloadGradientPng(cfg: GradientConfig, w: number, h: num
       ctx.fillStyle = grad
       ctx.fillRect(0, 0, w, h)
     }
-    ctx.globalCompositeOperation = 'source-over'
   } else {
+    const isRep = cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial'
+    const srcStops = isRep ? normalizeStops(cfg.stops) : cfg.stops
     let dense = cfg.space === 'rgb'
-      ? [...cfg.stops].sort((a, b) => a.pos - b.pos).map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
-      : gradientColors(cfg.stops, cfg.space, 32)
+      ? [...srcStops].sort((a, b) => a.pos - b.pos).map((s) => ({ rgb: hexToRgb(s.hex) ?? { r: 0, g: 0, b: 0 }, pos: s.pos }))
+      : gradientColors(srcStops, cfg.space, 32)
     // repeating: canvas 그라디언트에는 반복이 없어 싸이클을 직접 타일링
-    if (cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial') {
+    if (isRep) {
       const cycle = cycleOf(cfg)
       const tiled: typeof dense = []
       for (let k = 0; k * cycle < 100; k++) {
@@ -832,10 +894,24 @@ export async function downloadGradientPng(cfg: GradientConfig, w: number, h: num
       ctx.fillStyle = grad
       ctx.fillRect(0, 0, w, h)
     } else if (cfg.type === 'radial' || cfg.type === 'repeating-radial') {
-      const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) / 2)
-      dense.forEach((d) => grad.addColorStop(Math.min(1, Math.max(0, d.pos / 100)), rgbToHex(d.rgb)))
-      ctx.fillStyle = grad
-      ctx.fillRect(0, 0, w, h)
+      // CSS 기본 크기 = farthest-corner. circle은 대각 반경, ellipse는 rx=w/√2·ry=h/√2 (scale 변환)
+      if (cfg.shape === 'ellipse') {
+        const rx = (w / 2) * Math.SQRT2
+        const ry = (h / 2) * Math.SQRT2
+        ctx.save()
+        ctx.translate(w / 2, h / 2)
+        ctx.scale(1, ry / rx)
+        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx)
+        dense.forEach((d) => grad.addColorStop(Math.min(1, Math.max(0, d.pos / 100)), rgbToHex(d.rgb)))
+        ctx.fillStyle = grad
+        ctx.fillRect(-w / 2, (-h / 2) * (rx / ry), w, h * (rx / ry))
+        ctx.restore()
+      } else {
+        const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.hypot(w / 2, h / 2))
+        dense.forEach((d) => grad.addColorStop(Math.min(1, Math.max(0, d.pos / 100)), rgbToHex(d.rgb)))
+        ctx.fillStyle = grad
+        ctx.fillRect(0, 0, w, h)
+      }
     } else if (cfg.type === 'conic') {
       // Canvas conic은 createConicGradient (모던 브라우저)
       // 폴백: 라디얼로
@@ -888,8 +964,8 @@ export async function downloadGradientPng(cfg: GradientConfig, w: number, h: num
   })
 }
 
-export function downloadGradientSvg(cfg: GradientConfig, w: number, h: number) {
-  const svg = exportSvg(cfg, w, h)
+export function downloadGradientSvg(cfg: GradientConfig, w: number, h: number, withNoise = false) {
+  const svg = exportSvg(cfg, w, h, { noise: withNoise ? cfg.noise : 0 })
   const blob = new Blob([svg], { type: 'image/svg+xml' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')

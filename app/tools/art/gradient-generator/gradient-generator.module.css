@@ -341,6 +341,13 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 8px 10px;
+  min-width: 0;
+}
+/* 320px: hex 입력이 줄어들 수 있게 — min-width 80이 행을 카드 밖으로 밀어냄 */
+.stopItem .hexInput { min-width: 0; flex: 1 1 56px; }
+@media (max-width: 380px) {
+  .stopItem { gap: 6px; }
+  .stopItem .posInput { width: 46px; padding: 8px 6px; }
 }
 .stopItemActive { border-color: var(--accent); }
 .colorPicker {
@@ -684,7 +691,11 @@
 }@media (hover: hover) {
   .favItem:hover .favRemove { opacity: 1; }
 }@media (hover: hover) {
-  .favRemove:hover { background: #DC2626; }
+  .favRemove:hover { background: var(--danger); }
+}
+/* 터치 기기에는 hover가 없어 삭제 버튼이 영영 안 보임 — 상시 표시 */
+@media (hover: none) {
+  .favRemove { opacity: 1; }
 }
 
 /* ── 분석 (Tab 2) ───────────── */

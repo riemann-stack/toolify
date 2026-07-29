@@ -64,7 +64,7 @@ const codeBlock: React.CSSProperties = {
 const FAQ_LD = [
   { "q":"RGB와 OKLCH 보간 — 실제로 어떻게 다른가요?","a":"두 색을 단순 RGB로 보간하면 중간이 어두워지거나 채도가 떨어집니다 (특히 빨강↔파랑). OKLCH는 인지적으로 균등한 색공간이라 같은 거리만큼 떨어진 색이 사람 눈에 같은 차이로 느껴집니다. 그라디언트 보간 native syntax(in oklch)는 Chrome 111+·Safari 16.2+·Firefox 127+에서 지원되며, 본 도구는 자동으로 dense stops를 생성해 구형 브라우저 폴백을 제공합니다." },
   { "q":"Tailwind에서 mesh gradient를 쓰려면?","a":"Tailwind의 arbitrary value 문법으로 직접 CSS를 넣는 방법(1회용)과, 재사용을 위해 v4는 @theme의 --background-image-* 변수, v3 이하는 tailwind.config.js의 theme.extend.backgroundImage에 등록하는 방법이 있습니다. 본 도구의 \"Tailwind\" 코드 탭은 arbitrary value 형태로 자동 변환합니다." },
-  { "q":"그라디언트 위에 텍스트 가독성을 어떻게 보장하나요?","a":"그라디언트는 위치마다 색이 다르므로 전 구간 worst-case 대비비를 봐야 합니다. 본 도구의 \"분석·접근성\" 탭은 그라디언트를 12개 지점으로 샘플링해 흰/검 텍스트와의 최저 대비비를 표시합니다. WCAG 기준: 본문 (16px 미만): 4.5:1 이상 (AA) 큰 글자 (18pt+ 또는 14pt+ 굵게): 3:1 이상 UI 컴포넌트·아이콘: 3:1 이상 그라디언트 위에 텍스트를 올릴 때는 어두운 영역 위에 흰 텍스트, 밝은 영역 위에 검정 텍스트를 둘 수 없으므로 text-shadow나 반투명 오버레이로 보강하는 것도 흔한 접근입니다." },
+  { "q":"그라디언트 위에 텍스트 가독성을 어떻게 보장하나요?","a":"그라디언트는 위치마다 색이 다르므로 전 구간 worst-case 대비비를 봐야 합니다. 본 도구의 \"분석·접근성\" 탭은 모든 색상 stop 위치와 그 사이 구간을 포함해 그라디언트를 샘플링해 흰/검 텍스트와의 최저 대비비를 표시합니다. WCAG 기준: 본문 (16px 미만): 4.5:1 이상 (AA) 큰 글자 (18pt+ 또는 14pt+ 굵게): 3:1 이상 UI 컴포넌트·아이콘: 3:1 이상 그라디언트 위에 텍스트를 올릴 때는 어두운 영역 위에 흰 텍스트, 밝은 영역 위에 검정 텍스트를 둘 수 없으므로 text-shadow나 반투명 오버레이로 보강하는 것도 흔한 접근입니다." },
   { "q":"Figma에서 conic gradient를 어떻게 쓰나요?","a":"Figma의 Angular 그라디언트가 CSS conic-gradient에 해당합니다 — fill 종류에서 Angular를 선택하고 색상 스톱을 같은 순서로 배치하면 됩니다. Sketch도 Angular 그라디언트를 지원합니다. 주의할 점은 파일 교환입니다: SVG 포맷 자체가 conic을 지원하지 않아 본 도구의 SVG 내보내기는 radial로 폴백되고, Figma의 CSS 복사(Dev Mode)도 angular에서 값이 부정확할 수 있습니다. 디자인 툴로 정확히 옮기려면 PNG 내보내기를 쓰거나 툴 안에서 Angular로 다시 만드는 것이 안전합니다." },
   { "q":"SwiftUI / Flutter에 적용하는 방법은?","a":"본 도구의 \"Swift\", \"Flutter\" 코드 탭이 그대로 복사·사용 가능한 코드를 출력합니다. 단, 두 프레임워크 모두 mesh gradient는 표준 지원이 제한적입니다. SwiftUI: iOS 18 / macOS 15+에서 MeshGradient 지원, 그 미만은 LinearGradient 폴백 권장 Flutter: mesh 표준 위젯이 없어 RadialGradient 4개를 Stack으로 합성 Hex 색상은 SwiftUI에서는 Color(hex: \"#xxxxxx\") extension이, Flutter에서는 Color(0xFFxxxxxx)가 필요합니다." },
   { "q":"노이즈/그레인 효과는 어떻게 만드나요?","a":"요즘 디자인 트렌드인 그레인 그라디언트는 SVG feTurbulence 필터로 생성한 노이즈 패턴을 그라디언트 위에 오버레이합니다. 본 도구는 노이즈 슬라이더 (0~100%) 조절만으로 자동 생성·미리보기·PNG export까지 지원합니다." },
@@ -177,7 +177,7 @@ theme: {
             <div>
               <p style={faqQuestion}>Q3. 그라디언트 위에 텍스트 가독성을 어떻게 보장하나요?</p>
               <div style={faqAnswer}>
-                그라디언트는 위치마다 색이 다르므로 <strong>전 구간 worst-case 대비비</strong>를 봐야 합니다. 본 도구의 &quot;분석·접근성&quot; 탭은 그라디언트를 12개 지점으로 샘플링해 흰/검 텍스트와의 최저 대비비를 표시합니다. WCAG 기준:
+                그라디언트는 위치마다 색이 다르므로 <strong>전 구간 worst-case 대비비</strong>를 봐야 합니다. 본 도구의 &quot;분석·접근성&quot; 탭은 모든 색상 stop 위치와 그 사이 구간을 포함해 그라디언트를 샘플링해 흰/검 텍스트와의 최저 대비비를 표시합니다. WCAG 기준:
                 <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
                   <li>본문 (16px 미만): <strong>4.5:1 이상</strong> (AA)</li>
                   <li>큰 글자 (18pt+ 또는 14pt+ 굵게): <strong>3:1 이상</strong></li>

@@ -101,6 +101,13 @@ export default function GradientGeneratorClient() {
     return buildCss(cfg, { native: true })
   }, [cfg])
 
+  /* stop 바는 1D 위치 편집기 — 유형과 무관하게 좌→우 linear로 고정
+     (radial/conic을 그대로 그리면 마커 위치와 색이 어긋난다) */
+  const stopBarBg = useMemo(
+    () => buildCss({ ...cfg, type: 'linear', angle: 90 }, { native: true }),
+    [cfg],
+  )
+
   /* ── stops 정렬 ── */
   const sortedStops = useMemo(() => [...cfg.stops].sort((a, b) => a.pos - b.pos), [cfg.stops])
 
@@ -178,7 +185,7 @@ export default function GradientGeneratorClient() {
   const codes = useMemo(() => ({
     css:      exportCss(cfg),
     tailwind: exportTailwind(cfg),
-    svg:      exportSvg(cfg),
+    svg:      exportSvg(cfg, 400, 200, { noise: cfg.noise }),
     react:    exportReact(cfg),
     swift:    exportSwiftUI(cfg),
     flutter:  exportFlutter(cfg),
@@ -280,7 +287,7 @@ export default function GradientGeneratorClient() {
   }
   const handleSvgDownload = () => {
     const s = EXPORT_SIZES[exportSize]
-    downloadGradientSvg(cfg, s.w, s.h)
+    downloadGradientSvg(cfg, s.w, s.h, exportNoise)
   }
 
   /* ── 미리보기 컴포넌트 ── */
@@ -456,7 +463,7 @@ export default function GradientGeneratorClient() {
               <div
                 ref={barRef}
                 className={styles.stopBar}
-                style={{ backgroundImage: previewBgNative }}
+                style={{ backgroundImage: stopBarBg }}
                 onClick={handleBarClick}
                 role="presentation"
               >
@@ -600,7 +607,7 @@ export default function GradientGeneratorClient() {
               </select>
               <label className={styles.checkLabel}>
                 <input type="checkbox" checked={exportNoise} onChange={(e) => setExportNoise(e.target.checked)} />
-                <span>노이즈 포함</span>
+                <span>노이즈 포함 (PNG·SVG)</span>
               </label>
             </div>
             <div className={styles.exportBtns}>
