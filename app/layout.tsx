@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     default: 'Youtil | 자주 쓰는 계산기와 무료 온라인 도구 모음',
     template: '%s | Youtil',
   },
-  description: '금융, 건강, 생활, 날짜, 음악, 변환, 개발자 도구까지 한곳에. 자주 쓰는 무료 계산기와 실용 도구를 로그인 없이 즉시 사용.',
+  description: '금융, 건강, 생활, 날짜, 예술, 변환, 개발자 도구까지 한곳에. 자주 쓰는 무료 계산기와 실용 도구를 로그인 없이 즉시 사용.',
   applicationName: 'Youtil',
   // iOS '홈 화면에 추가' 시: 아이콘 아래 이름을 'Youtil'로, 웹앱(전체화면)으로 실행
   appleWebApp: {

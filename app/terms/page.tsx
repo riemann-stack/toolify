@@ -6,7 +6,7 @@ export const metadata = buildMetadata({
   description: 'Youtil 이용약관입니다.',
 })
 
-const LAST_UPDATED  = '2026년 5월 5일'
+const LAST_UPDATED  = '2026년 7월 29일'
 const SITE_NAME     = 'Youtil'
 const CONTACT_EMAIL = 'contact@youtil.kr'
 

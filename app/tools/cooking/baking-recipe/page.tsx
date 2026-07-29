@@ -328,7 +328,7 @@ export default function BakingRecipePage() {
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>해동 시간 계산기</div>
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>버터·계란 실온화</div>
         </Link>
-        <Link href="/tools/life/dday" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
+        <Link href="/tools/date/dday" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>📅</div>
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>D-day 계산기</div>
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>생일 케이크 일정</div>

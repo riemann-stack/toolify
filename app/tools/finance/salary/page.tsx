@@ -391,7 +391,7 @@ export default function SalaryPage() {
               { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기', desc: '급여 투자 후 평단가 관리' },
               { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',      desc: '사업소득 세금 계산' },
               { href: '/tools/life/dutch',       icon: '🍻', name: '더치페이 계산기',    desc: '회식·모임 정산' },
-              { href: '/tools/finance/car',      icon: '🚗', name: '자동차 유지비 계산기', desc: '월 차량 운영비' },
+              { href: '/tools/finance/car-cost', icon: '🚗', name: '자동차 유지비 계산기', desc: '월 차량 운영비' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

@@ -430,7 +430,7 @@ export default function CompoundPage() {
               { href: '/tools/finance/salary',   icon: '💰', name: '연봉 실수령액 계산기', desc: '매월 얼마를 투자할 수 있는지 확인' },
               { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '대출 상환 vs 투자, 어느 쪽이 유리?' },
               { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 시 평단가 시뮬레이션' },
-              { href: '/tools/finance/dutch',    icon: '🍻', name: '더치페이 계산기',     desc: '여러 명이 모은 자금 정산' },
+              { href: '/tools/life/dutch',       icon: '🍻', name: '더치페이 계산기',     desc: '여러 명이 모은 자금 정산' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

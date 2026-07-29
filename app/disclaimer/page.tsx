@@ -68,7 +68,7 @@ const DOMAINS: DomainBlock[] = [
       '혈중알코올농도(Widmark 공식) 결과는 개인차가 매우 크며, 음주 후 운전 가능 여부를 보장하지 않습니다. 음주운전은 법으로 금지됩니다.',
       '임신 주수·생리 주기 추적은 의료 진단이 아니며, 산부인과 정기 검진을 대체하지 않습니다.',
     ],
-    legal: '「의료법」 제27조의2(의료광고)·「약사법」 제68조에 따라 본 서비스는 의료 행위·의약품 권유·진단·치료를 제공하지 않습니다.',
+    legal: '「의료법」 제27조(무면허 의료행위 등 금지)·제56조(의료광고의 금지 등)·「약사법」 제68조에 따라 본 서비스는 의료 행위·의약품 권유·진단·치료를 제공하지 않습니다.',
     recommend: '👉 응급 상황은 119·1339(질병관리청 콜센터). 정기 진료는 가까운 의원·종합병원·보건소 이용.',
   },
   {
@@ -409,7 +409,7 @@ export default function DisclaimerPage() {
           <tbody>
             <tr>
               <td style={{ padding: '10px', color: 'var(--paper-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2026-05-05</td>
-              <td style={{ padding: '10px', color: 'var(--paper-ink)' }}>면책조항 페이지 신설(이용약관 제7조 보강) — 8개 분야별 강화 면책 추가</td>
+              <td style={{ padding: '10px', color: 'var(--paper-ink)' }}>면책조항 페이지 신설(이용약관 제7조 보강) — 분야별 강화 면책 추가 (현재 10개 분야)</td>
             </tr>
             <tr>
               <td style={{ padding: '10px', color: 'var(--paper-ink-soft)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>2026-04-12</td>

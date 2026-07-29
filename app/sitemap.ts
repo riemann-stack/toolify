@@ -53,7 +53,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: HIGH_PRIORITY.has(path)
       ? 1
       : categorySet.has(path) || collectionSet.has(path)
-        ? 0.8
+        ? 0.6
         : 0.7,
   }))
 }

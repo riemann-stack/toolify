@@ -159,7 +159,7 @@ export default function PrivacyPage() {
             6. 보유 및 이용 기간
           </h2>
           <p>
-            자동 수집된 접속 로그는 최대 6개월간 보관 후 파기됩니다.
+            본 서비스는 자체 서버에 접속 로그를 보관하지 않습니다. 접속 기록은 호스팅(Vercel)·분석(Google Analytics)·광고(Google AdSense) 제공자가 각사의 개인정보 처리방침과 보존 설정에 따라 보관·파기합니다.
             관련 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.
           </p>
         </section>

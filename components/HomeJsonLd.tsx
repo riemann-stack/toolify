@@ -9,7 +9,7 @@ const ITEM_LIST = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: 'Youtil 도구 카테고리',
-  description: `금융·건강·생활·날짜·변환 등 ${categories.length}개 카테고리, ${totalTools}+개의 무료 온라인 계산기·도구`,
+  description: `금융·건강·생활·날짜·변환 등 ${categories.length}개 카테고리, ${totalTools}개의 무료 온라인 계산기·도구`,
   numberOfItems: categories.length,
   itemListElement: categories.map((c, i) => ({
     '@type': 'ListItem',
