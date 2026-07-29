@@ -49,19 +49,31 @@ export default function PaintMixClient() {
   /* 색환 (탭 4) */
   const [wheelIdx, setWheelIdx] = useState<number>(0)
 
-  /* localStorage */
+  /* localStorage — 항목별 검증 필수 (오염된 slots/model이 hexToRgb·mixColors 크래시 유발) */
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
-      if (Array.isArray(j.slots) && j.slots.length >= 2) setSlots(j.slots)
-      if (j.model) setModel(j.model)
-      if (typeof j.totalAmount === 'number') setTotalAmount(j.totalAmount)
-      if (j.unit) setUnit(j.unit)
-      if (typeof j.pigmentScale === 'number') setPigmentScale(j.pigmentScale)
-      if (j.targetHex) setTargetHex(j.targetHex)
-      if (j.matchPalette) setMatchPalette(j.matchPalette)
+      const MODELS: MixModel[] = ['subtractive', 'additive', 'ryb']
+      const UNITS_OK: VolumeUnit[] = ['ml', 'g', 'tbsp', 'tsp', 'drop']
+      const PALS: PaletteId[] = ['school12', 'pro24', 'ink', 'food']
+      if (Array.isArray(j.slots)) {
+        const clean: Slot[] = (j.slots as unknown[])
+          .filter((x): x is Slot =>
+            !!x && typeof x === 'object' &&
+            typeof (x as Slot).hex === 'string' && normalizeHex((x as Slot).hex) !== null &&
+            typeof (x as Slot).weight === 'number' && isFinite((x as Slot).weight))
+          .map((x) => ({ hex: normalizeHex(x.hex) as string, weight: Math.max(0.1, Math.min(10, x.weight)) }))
+          .slice(0, 4)
+        if (clean.length >= 2) setSlots(clean)
+      }
+      if (MODELS.includes(j.model)) setModel(j.model)
+      if (typeof j.totalAmount === 'number' && isFinite(j.totalAmount) && j.totalAmount > 0) setTotalAmount(Math.min(1e6, j.totalAmount))
+      if (UNITS_OK.includes(j.unit)) setUnit(j.unit)
+      if (typeof j.pigmentScale === 'number' && j.pigmentScale >= 0.5 && j.pigmentScale <= 2) setPigmentScale(j.pigmentScale)
+      if (typeof j.targetHex === 'string' && normalizeHex(j.targetHex)) setTargetHex(normalizeHex(j.targetHex) as string)
+      if (PALS.includes(j.matchPalette)) setMatchPalette(j.matchPalette)
     } catch {}
   }, [])
   useEffect(() => {
@@ -71,6 +83,12 @@ export default function PaintMixClient() {
       }))
     } catch {}
   }, [slots, model, totalAmount, unit, pigmentScale, targetHex, matchPalette])
+
+  /* 밝은 색(티타늄 화이트 등)을 그대로 글자색으로 쓰면 흰 카드에서 안 보임 → 명도 기준 폴백 */
+  const inkFor = (hex: string): string => {
+    const { r, g, b } = hexToRgb(hex)
+    return rgbToHsl(r, g, b).l > 62 ? 'var(--text)' : hex
+  }
 
   /* ═══════════════════ 탭 1: 색 혼합 시뮬레이터 ═══════════════════ */
   const totalParts = useMemo(() => slots.reduce((sum, sl) => sum + sl.weight, 0), [slots])
@@ -110,6 +128,8 @@ export default function PaintMixClient() {
   /* ═══════════════════ 탭 3: 컬러 매칭 ═══════════════════ */
   const startMatching = () => {
     setMatching(true)
+    setWhiteAdd(0)
+    setBlackAdd(0)
     /* setTimeout으로 UI 업데이트 후 brute-force */
     setTimeout(() => {
       try {
@@ -170,10 +190,10 @@ export default function PaintMixClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'mix' ? s.tabActive : ''}`}    onClick={() => setTab('mix')}>색 혼합</button>
-        <button className={`${s.tab} ${tab === 'volume' ? s.tabActive : ''}`} onClick={() => setTab('volume')}>분량 환산</button>
-        <button className={`${s.tab} ${tab === 'match' ? s.tabActive : ''}`}  onClick={() => setTab('match')}>컬러 매칭</button>
-        <button className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => setTab('recipe')}>레시피·색환</button>
+        <button type="button" aria-pressed={tab === 'mix'} className={`${s.tab} ${tab === 'mix' ? s.tabActive : ''}`}    onClick={() => setTab('mix')}>색 혼합</button>
+        <button type="button" aria-pressed={tab === 'volume'} className={`${s.tab} ${tab === 'volume' ? s.tabActive : ''}`} onClick={() => setTab('volume')}>분량 환산</button>
+        <button type="button" aria-pressed={tab === 'match'} className={`${s.tab} ${tab === 'match' ? s.tabActive : ''}`}  onClick={() => setTab('match')}>컬러 매칭</button>
+        <button type="button" aria-pressed={tab === 'recipe'} className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => setTab('recipe')}>레시피·색환</button>
       </div>
 
       {/* ═════════════ 탭 1: 색 혼합 시뮬레이터 ═════════════ */}
@@ -189,7 +209,7 @@ export default function PaintMixClient() {
                 { id: 'ryb',         label: 'RYB (전통)' },
               ] as { id: MixModel; label: string }[]).map((m) => (
                 <button
-                  key={m.id}
+                  key={m.id} type="button" aria-pressed={model === m.id}
                   className={`${s.modelBtn} ${model === m.id ? s.modelBtnActive : ''}`}
                   onClick={() => setModel(m.id)}
                 >
@@ -204,8 +224,8 @@ export default function PaintMixClient() {
             <div className={s.slotHead}>
               <span className={s.cardLabel}>혼합할 색 ({slots.length}/4)</span>
               <div className={s.slotActions}>
-                <button className={s.smBtn} onClick={resetEqual}>균등</button>
-                <button className={s.smBtn} onClick={addSlot} disabled={slots.length >= 4}>+ 색 추가</button>
+                <button type="button" className={s.smBtn} onClick={resetEqual}>균등</button>
+                <button type="button" className={s.smBtn} onClick={addSlot} disabled={slots.length >= 4}>+ 색 추가</button>
               </div>
             </div>
 
@@ -223,13 +243,13 @@ export default function PaintMixClient() {
           </div>
 
           {/* 영웅 결과 카드 */}
-          <div className={s.heroCard}>
+          <div className={s.heroCard} role="status">
             <div className={s.previewBox} style={{ background: mixedHex }} />
             <div className={s.heroContent}>
               <p className={s.heroLabel}>혼합 결과</p>
               <p className={s.heroHex}>{mixedHex}</p>
               <p className={s.heroSub}>
-                가장 가까운 전문가 색: <strong style={{ color: closestPro.color.hex === '#FFFFFF' ? 'var(--text)' : closestPro.color.hex }}>
+                가장 가까운 전문가 색: <strong style={{ color: inkFor(closestPro.color.hex) }}>
                   {closestPro.color.name}
                 </strong> (ΔE {closestPro.deltaE.toFixed(1)})
               </p>
@@ -262,11 +282,12 @@ export default function PaintMixClient() {
                 type="number" inputMode="decimal"
                 min={0.1}
                 step={0.1}
+                aria-label="총 분량"
                 value={totalAmount}
-                onChange={(e) => setTotalAmount(Math.max(0.1, Number(e.target.value) || 0))}
+                onChange={(e) => setTotalAmount(Math.max(0.1, Math.min(1e6, Number(e.target.value) || 0)))}
                 className={s.numInput}
               />
-              <select value={unit} onChange={(e) => setUnit(e.target.value as VolumeUnit)} className={s.unitSelect}>
+              <select value={unit} aria-label="분량 단위" onChange={(e) => setUnit(e.target.value as VolumeUnit)} className={s.unitSelect}>
                 <option value="ml">ml</option>
                 <option value="g">g</option>
                 <option value="tbsp">큰술 (15ml)</option>
@@ -276,11 +297,11 @@ export default function PaintMixClient() {
             </div>
             <div className={s.quickRow}>
               {[10, 50, 100, 200, 500, 1000].map((v) => (
-                <button key={v} className={s.quickChip} onClick={() => setTotalAmount(v)}>{v}</button>
+                <button key={v} type="button" className={s.quickChip} onClick={() => setTotalAmount(v)}>{v}</button>
               ))}
-              <button className={s.quickChip} onClick={() => setTotalAmount(totalAmount * 2)}>×2</button>
-              <button className={s.quickChip} onClick={() => setTotalAmount(totalAmount * 5)}>×5</button>
-              <button className={s.quickChip} onClick={() => setTotalAmount(totalAmount * 10)}>×10</button>
+              <button type="button" className={s.quickChip} onClick={() => setTotalAmount(Math.min(1e6, totalAmount * 2))}>×2</button>
+              <button type="button" className={s.quickChip} onClick={() => setTotalAmount(Math.min(1e6, totalAmount * 5))}>×5</button>
+              <button type="button" className={s.quickChip} onClick={() => setTotalAmount(Math.min(1e6, totalAmount * 10))}>×10</button>
             </div>
           </div>
 
@@ -305,7 +326,7 @@ export default function PaintMixClient() {
           </div>
 
           {/* 분량 표 */}
-          <div className={s.heroCard}>
+          <div className={s.heroCard} role="status">
             <div className={s.previewBox} style={{ background: mixedHex }} />
             <div className={s.heroContent}>
               <p className={s.heroLabel}>총 분량</p>
@@ -313,7 +334,7 @@ export default function PaintMixClient() {
                 <span className={s.heroBig}>{(totalAmount * pigmentScale).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}</span> {UNIT_LABELS[unit]}
               </p>
               <p className={s.heroSub}>
-                혼합 결과 <strong style={{ color: mixedHex === '#FFFFFF' ? 'var(--text)' : mixedHex }}>{mixedHex}</strong> · {slots.length}색 혼합
+                혼합 결과 <strong style={{ color: inkFor(mixedHex) }}>{mixedHex}</strong> · {slots.length}색 혼합
               </p>
             </div>
           </div>
@@ -370,10 +391,11 @@ export default function PaintMixClient() {
                 <input
                   type="color"
                   value={targetHex}
-                  onChange={(e) => setTargetHex(e.target.value.toUpperCase())}
+                  aria-label="목표 색 선택"
+                  onChange={(e) => { setTargetHex(e.target.value.toUpperCase()); setMatchResult(null) }}
                   className={s.colorPicker}
                 />
-                <HexInput value={targetHex} onChange={setTargetHex} />
+                <HexInput value={targetHex} onChange={(hex) => { setTargetHex(hex); setMatchResult(null) }} />
               </div>
             </div>
           </div>
@@ -383,7 +405,7 @@ export default function PaintMixClient() {
             <div className={s.paletteRow}>
               {PALETTES.map((p) => (
                 <button
-                  key={p.id}
+                  key={p.id} type="button" aria-pressed={matchPalette === p.id}
                   className={`${s.paletteBtn} ${matchPalette === p.id ? s.paletteBtnActive : ''}`}
                   onClick={() => { setMatchPalette(p.id); setMatchResult(null) }}
                 >
@@ -392,9 +414,10 @@ export default function PaintMixClient() {
               ))}
             </div>
             <p className={s.hint}>
-              💡 팔레트가 클수록 매칭이 정확해지지만 계산 시간 ↑ (전문가 24색은 5초 이상 소요 가능).
+              💡 팔레트가 클수록 매칭이 정확해지지만 계산이 잠시 걸릴 수 있습니다. 매칭은 물감(Subtractive) 모델 기준입니다.
             </p>
             <button
+              type="button"
               className={s.primaryBtn}
               onClick={startMatching}
               disabled={matching}
@@ -441,16 +464,16 @@ export default function PaintMixClient() {
                 <div className={s.adjustBlock}>
                   <p className={s.adjustLabel}>미세 조정</p>
                   <div className={s.field}>
-                    <label className={s.fieldLabel} htmlFor="paint-mix-parts">흰색 추가 — {whiteAdd} parts</label>
-                    <input id="paint-mix-parts" type="range" min={0} max={5} step={1}
+                    <label className={s.fieldLabel} htmlFor="paint-mix-white-add">흰색 추가 — {whiteAdd} parts</label>
+                    <input id="paint-mix-white-add" type="range" min={0} max={5} step={1}
                       value={whiteAdd}
                       onChange={(e) => setWhiteAdd(Number(e.target.value))}
                       className={s.slider}
                     />
                   </div>
                   <div className={s.field}>
-                    <label className={s.fieldLabel}>검정 추가 — {blackAdd} parts</label>
-                    <input type="range" min={0} max={5} step={1}
+                    <label className={s.fieldLabel} htmlFor="paint-mix-black-add">검정 추가 — {blackAdd} parts</label>
+                    <input id="paint-mix-black-add" type="range" min={0} max={5} step={1}
                       value={blackAdd}
                       onChange={(e) => setBlackAdd(Number(e.target.value))}
                       className={s.slider}
@@ -458,7 +481,7 @@ export default function PaintMixClient() {
                   </div>
                 </div>
 
-                <button className={s.primaryBtn} onClick={applyMatchToTab1}>
+                <button type="button" className={s.primaryBtn} onClick={applyMatchToTab1}>
                   탭 1에 적용
                 </button>
               </div>
@@ -526,7 +549,7 @@ export default function PaintMixClient() {
                   'subtractive',
                 )
                 return (
-                  <button key={i} className={s.recipeCard} onClick={() => applyRecipe(r)}>
+                  <button key={i} type="button" className={s.recipeCard} onClick={() => applyRecipe(r)}>
                     <div className={s.recipePreview} style={{ background: preview }} />
                     <p className={s.recipeCardName}>{r.emoji} {r.name}</p>
                     <p className={s.recipeCardMix}>
@@ -580,6 +603,7 @@ function SlotEditor({
           <input
             type="color"
             value={slot.hex}
+            aria-label={`색 ${index + 1} 선택`}
             onChange={(e) => onChange({ hex: e.target.value.toUpperCase() })}
             className={s.colorPicker}
           />
@@ -592,11 +616,13 @@ function SlotEditor({
           <input
             type="range" min={0.1} max={10} step={0.1}
             value={slot.weight}
+            aria-label={`색 ${index + 1} 비율`}
             onChange={(e) => onChange({ weight: Number(e.target.value) })}
             className={s.slider}
           />
           <input
             type="number" inputMode="decimal" min={0.1} max={10} step={0.1}
+            aria-label={`색 ${index + 1} 비율 숫자 입력`}
             value={slot.weight}
             onChange={(e) => onChange({ weight: Math.max(0.1, Math.min(10, Number(e.target.value) || 0.1)) })}
             className={s.weightNum}
@@ -606,7 +632,7 @@ function SlotEditor({
       </div>
 
       {canRemove && (
-        <button className={s.iconBtn} onClick={onRemove} aria-label={`색 ${index + 1} 삭제`}>
+        <button type="button" className={s.iconBtn} onClick={onRemove} aria-label={`색 ${index + 1} 삭제`}>
           🗑️
         </button>
       )}
@@ -630,6 +656,7 @@ function HexInput({ value, onChange }: { value: string; onChange: (hex: string) 
   return (
     <input
       type="text"
+      aria-label="HEX 색상 코드"
       value={local}
       onChange={(e) => setLocal(e.target.value)}
       onBlur={commit}
@@ -647,6 +674,7 @@ function PresetSelect({ onPick }: { onPick: (hex: string) => void }) {
   return (
     <select
       value={v}
+      aria-label="프리셋 색 선택"
       onChange={(e) => {
         if (e.target.value) {
           onPick(e.target.value)
@@ -687,7 +715,7 @@ function DeltaEBar({ deltaE }: { deltaE: number }) {
         <div className={s.deltaBarFill} style={{ width: `${grade.pct}%`, background: grade.color }} />
       </div>
       <p className={s.hint} style={{ marginTop: 6 }}>
-        ΔE 0~1 완벽 / 1~2 매우 비슷 / 2~5 비슷 / 5~10 가능 / 10+ 다름
+        ΔE 0~1 구별 어려움 / 1~2 숙련자만 구별 / 2~3.5 일반인도 인지 / 3.5~5 뚜렷한 차이 / 5+ 다른 색
       </p>
     </div>
   )

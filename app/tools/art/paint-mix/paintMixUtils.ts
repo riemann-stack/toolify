@@ -163,19 +163,22 @@ export interface WheelColor {
   index: number
 }
 
+/* 전통 RYB(이텐) 12색환 — 한국 20색상환 관행 명칭(다홍·귤색·남색·자주).
+   구버전은 '하늘'을 청록·파랑 사이에 끼우고 남색을 빼서 보색 관계가 한 칸 밀려 있었음
+   (주황의 보색이 '하늘'로 표시 — 통설은 주황↔파랑). hue도 단조 진행하도록 재지정 */
 export const COLOR_WHEEL_12: WheelColor[] = [
-  { name: '빨강',     hex: '#E63946', index: 0 },
-  { name: '주황빨강', hex: '#E85D2A', index: 1 },
-  { name: '주황',     hex: '#F4A261', index: 2 },
-  { name: '노랑주황', hex: '#F4C145', index: 3 },
-  { name: '노랑',     hex: '#F9DC5C', index: 4 },
-  { name: '연두',     hex: '#90BE6D', index: 5 },
-  { name: '초록',     hex: '#2A9D8F', index: 6 },
-  { name: '청록',     hex: '#3A8FCD', index: 7 },
-  { name: '하늘',     hex: '#7CC6E8', index: 8 },
-  { name: '파랑',     hex: '#264E86', index: 9 },
-  { name: '보라',     hex: '#8E44AD', index: 10 },
-  { name: '자홍',     hex: '#C7325A', index: 11 },
+  { name: '빨강', hex: '#E63946', index: 0 },
+  { name: '다홍', hex: '#E85D2A', index: 1 },
+  { name: '주황', hex: '#F4A261', index: 2 },
+  { name: '귤색', hex: '#F4C145', index: 3 },
+  { name: '노랑', hex: '#F9DC5C', index: 4 },
+  { name: '연두', hex: '#90BE6D', index: 5 },
+  { name: '초록', hex: '#2FA24B', index: 6 },
+  { name: '청록', hex: '#17A2B8', index: 7 },
+  { name: '파랑', hex: '#2E6FC4', index: 8 },
+  { name: '남색', hex: '#3F51B5', index: 9 },
+  { name: '보라', hex: '#8E44AD', index: 10 },
+  { name: '자주', hex: '#C7325A', index: 11 },
 ]
 
 /** 보색 (180° 반대) */
@@ -197,12 +200,12 @@ export interface FieldGuide {
 }
 
 export const FIELD_GUIDES: FieldGuide[] = [
-  { id: 'watercolor', emoji: '💧', name: '수채화',     recommended: '울트라마린·번트 시에나·옐로우 오커·알리자린 크림슨 (4색 한정 팔레트로 거의 모든 색 가능)', tip: '물 비율 ↑ → 투명·맑음. 두 번 이상 덧칠 시 진해짐.' },
-  { id: 'acrylic',    emoji: '🖌️', name: '아크릴',     recommended: '티타늄 화이트·카본 블랙·카드뮴 옐로우/레드/블루·프탈로 그린 (6색이 기본)', tip: '건조 후 살짝 어두워짐. 미디엄으로 점도 조절.' },
-  { id: 'oil',        emoji: '🎨', name: '유화',       recommended: '울트라마린·알리자린·카드뮴 옐로우·번트 엄버·티타늄 화이트 (Zorn 팔레트)', tip: '건조에 수일 소요. 두꺼운 임파스토는 갈라짐 주의.' },
+  { id: 'watercolor', emoji: '💧', name: '수채화',     recommended: '울트라마린·번트 시에나·옐로우 오커·알리자린 크림슨 — 풍경 수채의 고전 4색 제한 팔레트 (자연색·뉴트럴 대부분 혼색 가능, 선명한 초록·마젠타는 한계)', tip: '물 비율 ↑ → 투명·맑음. 두 번 이상 덧칠 시 진해짐.' },
+  { id: 'acrylic',    emoji: '🖌️', name: '아크릴',     recommended: '티타늄 화이트·카본 블랙·카드뮴 옐로우·카드뮴 레드·울트라마린 블루·프탈로 그린 (6색이 기본)', tip: '건조 후 살짝 어두워짐. 미디엄으로 점도 조절.' },
+  { id: 'oil',        emoji: '🎨', name: '유화',       recommended: '옐로우 오커·카드뮴 레드(원전은 버밀리온)·아이보리 블랙·티타늄 화이트 (Zorn 4색 팔레트 — 파랑 없이 차가운 블랙이 파랑 역할, 인물·피부톤에 강함)', tip: '건조에 수일 소요. 두꺼운 임파스토는 갈라짐 주의.' },
   { id: 'ink',        emoji: '✒️', name: '만년필 잉크', recommended: '같은 브랜드·같은 베이스(dye/pigment) 위주 혼합. 파일럿 이로시즈쿠 시리즈 안전.', tip: '⚠️ 다른 브랜드/베이스 혼합 시 침전·만년필 막힘 위험. 별도 시린지 테스트 필수.' },
   { id: 'food',       emoji: '🧁', name: '푸드컬러',   recommended: '식약처 허가 식용 색소만 사용. 젤 타입(젤 푸드컬러)이 색이 더 진하고 반죽 묽어짐 적음.', tip: '액상은 1방울씩 추가. 발색은 30분 후 확인 (시간이 지나며 진해짐).' },
-  { id: 'resin',      emoji: '💎', name: '레진·에폭시', recommended: '전용 마이카 파우더·알코올 잉크·레진 안료. 일반 물감은 경화 방해.', tip: '⚠️ 환기·장갑·고글 필수. 안료는 레진 전체 무게의 3% 이하 권장 (초과 시 경화 불량).' },
+  { id: 'resin',      emoji: '💎', name: '레진·에폭시', recommended: '전용 마이카 파우더·알코올 잉크·레진 안료. 수성 물감은 수분이 경화 반응을 방해.', tip: '⚠️ 환기·장갑·고글 필수. 안료는 소량 원칙 — 제조사 권고(무게 0.5~3%·부피 6% 상한 등 제품별 상이)를 우선 확인.' },
 ]
 
 /* ═════════════════════════════════════════════
@@ -292,14 +295,14 @@ export function deltaE(lab1: { L: number; a: number; b: number }, lab2: { L: num
   return Math.sqrt(dL * dL + da * da + db * db)
 }
 
-/** ΔE → 등급 라벨 */
+/** ΔE → 등급 라벨 (색은 텍스트 AA 안전 시맨틱 토큰) */
 export function deltaEGrade(d: number): { label: string; pct: number; color: string } {
-  if (d < 1)  return { label: '완벽',     pct: 100, color: '#0D9488' }
-  if (d < 2)  return { label: '매우 비슷', pct: 90,  color: '#0D9488' }
-  if (d < 5)  return { label: '비슷',     pct: 75,  color: '#D97706' }
-  if (d < 10) return { label: '가능',     pct: 55,  color: '#EA580C' }
-  if (d < 20) return { label: '차이 큼',   pct: 30,  color: '#DB2777' }
-  return       { label: '매우 다름',      pct: 10,  color: '#DB2777' }
+  if (d < 1)  return { label: '완벽',     pct: 100, color: 'var(--success)' }
+  if (d < 2)  return { label: '매우 비슷', pct: 90,  color: 'var(--success)' }
+  if (d < 5)  return { label: '비슷',     pct: 75,  color: 'var(--warning)' }
+  if (d < 10) return { label: '가능',     pct: 55,  color: 'var(--warning)' }
+  if (d < 20) return { label: '차이 큼',   pct: 30,  color: 'var(--danger)' }
+  return       { label: '매우 다름',      pct: 10,  color: 'var(--danger)' }
 }
 
 /* ═════════════════════════════════════════════
@@ -383,47 +386,58 @@ function rybToRgb01(r: number, y: number, b: number): { R: number; G: number; B:
   return { R: clamp01(out[0]), G: clamp01(out[1]), B: clamp01(out[2]) }
 }
 
-/** RGB(0~1) → RYB(0~1) — 단순 역변환 (근사) */
-function rgbToRyb01(r: number, g: number, b: number): { ryR: number; ryY: number; ryB: number } {
-  /* 흰색 제거 */
-  const w = Math.min(r, g, b)
-  const R = r - w
-  const G = g - w
-  const B = b - w
-  const maxRGB = Math.max(R, G, B)
-  /* 노랑 추출 */
-  let Y = Math.min(R, G)
-  let R2 = R - Y
-  let G2 = G - Y
-  /* G·B 동시 → Cyan 보정 (RYB 모델엔 없음 → B로 합침) */
-  if (G2 > 0 && B > 0) {
-    G2 /= 2
-    Y += G2
+/** RGB(0~1) → RYB(0~1) — 큐브 수치 역산.
+    (구버전 해석식 역변환은 검정 성분을 버려 '검정+검정=흰색', '빨강+파랑=분홍'이 나오던 결함 —
+    큐브를 실제로 최소제곱 적합하면 흰색→(0,0,0)·검정→(1,1,1)이 정확히 복원되고
+    학교 12색 항등 손실이 평균 ΔE 31→6으로 준다. 격자 0.1 + 힐클라임 0.02/0.004, hex별 캐시) */
+const rybInvCache = new Map<string, [number, number, number]>()
+function rgbToRyb01(r: number, g: number, b: number): [number, number, number] {
+  const key = `${Math.round(r * 255)},${Math.round(g * 255)},${Math.round(b * 255)}`
+  const cached = rybInvCache.get(key)
+  if (cached) return cached
+  const evalD = (R: number, Y: number, B: number) => {
+    const c = rybToRgb01(R, Y, B)
+    const dr = c.R - r, dg = c.G - g, db = c.B - b
+    return dr * dr + dg * dg + db * db
   }
-  /* 검정 강도 보존 */
-  const maxRYB = Math.max(R2, Y, B)
-  if (maxRYB > 0 && maxRGB > 0) {
-    const norm = maxRGB / maxRYB
-    R2 *= norm
-    Y *= norm
+  let best: [number, number, number] = [0, 0, 0]
+  let bestD = Infinity
+  for (let R = 0; R <= 1.0001; R += 0.1)
+    for (let Y = 0; Y <= 1.0001; Y += 0.1)
+      for (let B = 0; B <= 1.0001; B += 0.1) {
+        const d = evalD(R, Y, B)
+        if (d < bestD) { bestD = d; best = [R, Y, B] }
+      }
+  for (const step of [0.02, 0.004]) {
+    let improved = true
+    while (improved) {
+      improved = false
+      for (const [dR, dY, dB] of [[step, 0, 0], [-step, 0, 0], [0, step, 0], [0, -step, 0], [0, 0, step], [0, 0, -step]]) {
+        const cand: [number, number, number] = [clamp01(best[0] + dR), clamp01(best[1] + dY), clamp01(best[2] + dB)]
+        const d = evalD(cand[0], cand[1], cand[2])
+        if (d < bestD - 1e-12) { bestD = d; best = cand; improved = true }
+      }
+    }
   }
-  const k = 1 - Math.max(r, g, b) /* black 강도 */
-  return {
-    ryR: clamp01(R2 + k * 0),
-    ryY: clamp01(Y + k * 0),
-    ryB: clamp01(B + k * 0),
-  }
-  /* (참고) 단순화 버전이라 미세한 색차 있음. 학교 RYB 직관에는 충분 */
+  rybInvCache.set(key, best)
+  return best
 }
 
-/** RYB 모델 — RYB 공간에서 가중 평균 후 RGB 변환 */
+/** RYB 모델 — RYB 공간에서 가중 평균 후 RGB 변환.
+    무채색만 섞으면(흰+검 등) 큐브 대각선이 갈색이라 subtractive로 위임해 회색 계열을 유지 */
 export function mixRYB(colors: { hex: string; weight: number }[]): string {
   const total = colors.reduce((s, c) => s + c.weight, 0)
   if (total <= 0 || colors.length === 0) return '#000000'
+  const allNeutral = colors.every((c) => {
+    const { r, g, b } = hexToRgb(c.hex)
+    const v = Math.max(r, g, b)
+    return v === 0 || (v - Math.min(r, g, b)) / v < 0.05
+  })
+  if (allNeutral) return mixSubtractive(colors)
   let R = 0, Y = 0, B = 0
   for (const c of colors) {
     const { r, g, b } = hexToRgb(c.hex)
-    const { ryR, ryY, ryB } = rgbToRyb01(r / 255, g / 255, b / 255)
+    const [ryR, ryY, ryB] = rgbToRyb01(r / 255, g / 255, b / 255)
     R += ryR * c.weight
     Y += ryY * c.weight
     B += ryB * c.weight
@@ -433,12 +447,12 @@ export function mixRYB(colors: { hex: string; weight: number }[]): string {
   return rgbToHex(rR * 255, rG * 255, rB * 255)
 }
 
-/** 모델 디스패치 */
+/** 모델 디스패치 — 미지 값(localStorage 오염 등)은 subtractive 폴백 */
 export function mixColors(colors: { hex: string; weight: number }[], model: MixModel): string {
   switch (model) {
-    case 'subtractive': return mixSubtractive(colors)
-    case 'additive':    return mixAdditive(colors)
-    case 'ryb':         return mixRYB(colors)
+    case 'additive': return mixAdditive(colors)
+    case 'ryb':      return mixRYB(colors)
+    default:         return mixSubtractive(colors)
   }
 }
 
