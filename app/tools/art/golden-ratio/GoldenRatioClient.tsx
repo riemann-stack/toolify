@@ -13,9 +13,9 @@ const UNITS: Unit[] = ['px', 'cm', 'mm', 'pt', 'inch']
 const RATIO_UNITS: RatioUnit[] = ['px', 'cm', 'mm']
 
 const PRESETS: { label: string; long: number; short: number; unit: Unit }[] = [
-  { label: '명함 (90×54mm)',        long: 90,   short: 54,  unit: 'mm' },
+  { label: '명함 (90×50mm)',        long: 90,   short: 50,  unit: 'mm' },
   { label: 'A4 (297×210mm)',        long: 297,  short: 210, unit: 'mm' },
-  { label: '인스타 (1080×1080px)',  long: 1080, short: 1080, unit: 'px' },
+  { label: '인스타 정사각 한 변 (1080px)', long: 1080, short: 1080, unit: 'px' },
   { label: '유튜브 썸네일 (1280×720px)', long: 1280, short: 720, unit: 'px' },
 ]
 
@@ -77,15 +77,15 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
       <div className={styles.card}>
         <div className={styles.cardLabel}>기준 변 선택</div>
         <div className={styles.modeTabs}>
-          <button
+          <button type="button" aria-pressed={mode === 'A'}
             className={`${styles.modeTab} ${mode === 'A' ? styles.modeTabActive : ''}`}
             onClick={() => setMode('A')}
           >긴 변(A) → B 계산</button>
-          <button
+          <button type="button" aria-pressed={mode === 'B'}
             className={`${styles.modeTab} ${mode === 'B' ? styles.modeTabActive : ''}`}
             onClick={() => setMode('B')}
           >짧은 변(B) → A 계산</button>
-          <button
+          <button type="button" aria-pressed={mode === 'T'}
             className={`${styles.modeTab} ${mode === 'T' ? styles.modeTabActive : ''}`}
             onClick={() => setMode('T')}
           >전체(T) → A·B 계산</button>
@@ -144,7 +144,7 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
           <div className={styles.selectRow}>
             {UNITS.map(u => (
               <button
-                key={u}
+                key={u} type="button" aria-pressed={unit === u}
                 className={`${styles.selectBtn} ${unit === u ? styles.selectBtnActive : ''}`}
                 onClick={() => setUnit(u)}
               >{u}</button>
@@ -158,7 +158,7 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
         <div className={styles.cardLabel}>프리셋 (긴 변 기준 적용)</div>
         <div className={styles.presetRow}>
           {PRESETS.map(p => (
-            <button key={p.label} className={styles.presetBtn} onClick={() => applyPreset(p)}>
+            <button key={p.label} type="button" className={styles.presetBtn} onClick={() => applyPreset(p)}>
               {p.label}
             </button>
           ))}
@@ -167,7 +167,7 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
 
       {/* 결과 */}
       {result ? (
-        <div className={styles.resultCard}>
+        <div className={styles.resultCard} role="status">
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>긴 변 (A)</div>
@@ -185,7 +185,8 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
               <div className={styles.infoLabel}>전체 길이 (A+B)</div>
             </div>
             <div className={styles.infoItem}>
-              <div className={styles.infoNum}>1 : {fmt(PHI, decimals)}</div>
+              {/* φ는 고정 상수 — 소수점 0~1 선택 시 "1 : 2"로 뭉개지지 않게 3자리 고정 */}
+              <div className={styles.infoNum}>1 : 1.618</div>
               <div className={styles.infoLabel}>비율 (B : A)</div>
             </div>
           </div>
@@ -193,12 +194,12 @@ function RatioTab({ decimals }: { decimals: Decimals }) {
           {/* 미니 황금 직사각형 시각화 */}
           <MiniGoldenRect A={result.A} B={result.B} unit={unit} />
 
-          <button className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy} style={{ marginTop: 10 }}>
+          <button type="button" className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`} onClick={handleCopy} style={{ marginTop: 10 }}>
             {copied ? '✓ 복사됨' : '결과 복사'}
           </button>
         </div>
       ) : (
-        <div className={styles.empty}>긴 변 또는 짧은 변 중 하나를 입력하면 나머지 변이 계산됩니다</div>
+        <div className={styles.empty}>기준 변(A·B) 또는 전체 길이(T)를 입력하면 나머지가 계산됩니다</div>
       )}
     </div>
   )
@@ -246,18 +247,22 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
     const H = parseFloat(h)
     if (!W || !H || W <= 0 || H <= 0) return null
     const ratio = W / H
-    const diffPct = ((ratio - PHI) / PHI) * 100
+    // 세로형(H>W) 입력은 세로 황금비(W:H = 1:1.618)를 기준으로 비교·제안
+    const portrait = H > W
+    const target = portrait ? 1 / PHI : PHI
+    const diffPct = ((ratio - target) / target) * 100
     // 가장 가까운 단순비 찾기
     const simple = findSimpleRatio(W, H)
-    // 황금 비율 제안
-    const suggestWKeepH = H * PHI
-    const suggestHKeepW = W / PHI
+    // 황금 비율 제안 (방향 유지)
+    const suggestWKeepH = portrait ? H / PHI : H * PHI
+    const suggestHKeepW = portrait ? W * PHI : W / PHI
     return {
       ratio,
       diffPct,
       simple,
       suggestWKeepH,
       suggestHKeepW,
+      portrait,
     }
   }, [w, h])
 
@@ -296,7 +301,7 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
           <div className={styles.selectRow}>
             {RATIO_UNITS.map(u => (
               <button
-                key={u}
+                key={u} type="button" aria-pressed={unit === u}
                 className={`${styles.selectBtn} ${unit === u ? styles.selectBtnActive : ''}`}
                 onClick={() => setUnit(u)}
               >{u}</button>
@@ -306,11 +311,11 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
       </div>
 
       {result ? (
-        <div className={styles.resultCard}>
+        <div className={styles.resultCard} role="status">
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>현재 비율 (W:H)</div>
-              <div className={styles.heroNum}>{result.simple.a}<span className={styles.heroUnit}>:</span>{result.simple.b}</div>
+              <div className={styles.heroNum}>{result.simple.approx && <span className={styles.heroUnit}>≈ </span>}{result.simple.a}<span className={styles.heroUnit}>:</span>{result.simple.b}</div>
             </div>
             <div className={styles.heroDivider} />
             <div className={styles.heroBlock}>
@@ -320,7 +325,7 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
           </div>
 
           <div className={styles.diffRow}>
-            <span className={styles.diffLabel}>황금 비율(1:1.618) 대비 차이</span>
+            <span className={styles.diffLabel}>황금 비율({result.portrait ? '세로형 1:1.618' : '가로형 1.618:1'}) 대비 차이</span>
             <span className={`${styles.diffValue} ${Math.abs(result.diffPct) < 1 ? styles.diffValueGood : ''}`}>
               {result.diffPct >= 0 ? '+' : ''}{fmt(result.diffPct, 2)}%
             </span>
@@ -336,7 +341,9 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
               <span className={styles.suggestNum}>{fmt(result.suggestHKeepW, decimals)} {unit}</span>
             </div>
           </div>
-          <p className={styles.stdNote}>* 황금 비율은 W / H ≈ 1.618. 차이 0%에 가까울수록 황금 비율에 근접합니다.</p>
+          <p className={styles.stdNote}>
+            * 가로형(W≥H)은 W/H ≈ 1.618, 세로형(H&gt;W)은 H/W ≈ 1.618(스토리·릴스 방향)을 기준으로 비교·제안합니다. 차이 0%에 가까울수록 황금 비율에 근접합니다.
+          </p>
         </div>
       ) : (
         <div className={styles.empty}>가로·세로를 입력하면 현재 비율과 황금 비율과의 차이를 계산합니다</div>
@@ -345,13 +352,26 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
   )
 }
 
-/* 최대공약수로 단순비 구하기 (소수 포함 대응) */
-function findSimpleRatio(w: number, h: number): { a: number; b: number } {
+/* 최대공약수로 단순비 구하기 (소수 포함 대응). 항이 100을 넘으면(예: 1.618×1 → 809:500)
+   분모 1~40 중 상대오차 0.5% 이내 최소 분모의 근사비(≈ 13:8)로 폴백 */
+function findSimpleRatio(w: number, h: number): { a: number; b: number; approx: boolean } {
   const scale = 1000
   const W = Math.round(w * scale)
   const H = Math.round(h * scale)
   const g = gcd(W, H)
-  return { a: Math.round(W / g), b: Math.round(H / g) }
+  const a = Math.round(W / g)
+  const b = Math.round(H / g)
+  if (Math.max(a, b) <= 100) return { a, b, approx: false }
+  const r = w / h
+  let best = { a, b, err: Infinity }
+  for (let den = 1; den <= 40; den++) {
+    const num = Math.round(r * den)
+    if (num < 1) continue
+    const err = Math.abs(num / den - r) / r
+    if (err <= 0.005) return { a: num, b: den, approx: true }
+    if (err < best.err) best = { a: num, b: den, err }
+  }
+  return { a: best.a, b: best.b, approx: true }
 }
 function gcd(a: number, b: number): number {
   return b === 0 ? a : gcd(b, a % b)
@@ -405,18 +425,23 @@ function SpiralTab() {
   const handleDownload = useCallback(() => {
     const svg = svgRef.current
     if (!svg) return
-    const serializer = new XMLSerializer()
-    const svgStr = serializer.serializeToString(svg)
+    const scale = 2
+    // width="100%" 그대로 직렬화하면 Safari·Firefox에서 래스터화가 실패/0크기가 될 수 있어
+    // 클론에 명시적 픽셀 크기를 부여하고 style(max-width)을 제거
+    const clone = svg.cloneNode(true) as SVGSVGElement
+    clone.setAttribute('width', String(squares.vbW * scale))
+    clone.setAttribute('height', String(squares.vbH * scale))
+    clone.removeAttribute('style')
+    const svgStr = new XMLSerializer().serializeToString(clone)
     const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const img = new Image()
     img.onload = () => {
-      const scale = 2
       const canvas = document.createElement('canvas')
       canvas.width = squares.vbW * scale
       canvas.height = squares.vbH * scale
       const ctx = canvas.getContext('2d')
-      if (!ctx) return
+      if (!ctx) { URL.revokeObjectURL(url); return }
       ctx.fillStyle = bg
       ctx.fillRect(0, 0, canvas.width, canvas.height)
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
@@ -427,6 +452,7 @@ function SpiralTab() {
       link.download = `golden-spiral-${theme}.png`
       link.click()
     }
+    img.onerror = () => URL.revokeObjectURL(url)
     img.src = url
   }, [bg, theme, squares.vbW, squares.vbH])
 
@@ -436,17 +462,17 @@ function SpiralTab() {
         <div className={styles.spiralControls}>
           <div className={styles.spiralControlsLeft}>
             <span className={styles.fieldLabel}>테마</span>
-            <button
+            <button type="button" aria-pressed={theme === 'dark'}
               className={`${styles.selectBtn} ${theme === 'dark' ? styles.selectBtnActive : ''}`}
               onClick={() => setTheme('dark')}
             >다크</button>
-            <button
+            <button type="button" aria-pressed={theme === 'light'}
               className={`${styles.selectBtn} ${theme === 'light' ? styles.selectBtnActive : ''}`}
               onClick={() => setTheme('light')}
             >라이트</button>
           </div>
           <div className={styles.spiralControlsRight}>
-            <button className={styles.downloadBtn} onClick={handleDownload}>
+            <button type="button" className={styles.downloadBtn} onClick={handleDownload}>
               PNG 저장
             </button>
           </div>
@@ -509,14 +535,15 @@ export default function GoldenRatioClient() {
       {/* 파이 값 표시 & 소수점 선택 */}
       <div className={styles.phiBadge}>
         <div>
-          <div className={styles.phiBadgeLabel}>φ (파이) 고정값</div>
+          <div className={styles.phiBadgeLabel}>φ (피, phi) 고정값</div>
           <div className={styles.phiBadgeValue}>1.6180339887</div>
         </div>
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           <span className={styles.fieldLabel}>소수점</span>
           {[0, 1, 2, 3].map(d => (
             <button
-              key={d}
+              key={d} type="button" aria-pressed={decimals === d}
+              aria-label={`소수점 ${d}자리`}
               className={`${styles.selectBtn} ${decimals === d ? styles.selectBtnActive : ''}`}
               onClick={() => setDecimals(d as Decimals)}
             >{d}</button>
@@ -526,13 +553,13 @@ export default function GoldenRatioClient() {
 
       {/* 탭 */}
       <div className={styles.tabs}>
-        <button className={`${styles.tab} ${tab === 'ratio'   ? styles.tabActive : ''}`} onClick={() => setTab('ratio')}>
+        <button type="button" aria-pressed={tab === 'ratio'} className={`${styles.tab} ${tab === 'ratio'   ? styles.tabActive : ''}`} onClick={() => setTab('ratio')}>
           황금 비율 계산
         </button>
-        <button className={`${styles.tab} ${tab === 'convert' ? styles.tabActive : ''}`} onClick={() => setTab('convert')}>
+        <button type="button" aria-pressed={tab === 'convert'} className={`${styles.tab} ${tab === 'convert' ? styles.tabActive : ''}`} onClick={() => setTab('convert')}>
           비율 변환
         </button>
-        <button className={`${styles.tab} ${tab === 'spiral'  ? styles.tabActive : ''}`} onClick={() => setTab('spiral')}>
+        <button type="button" aria-pressed={tab === 'spiral'} className={`${styles.tab} ${tab === 'spiral'  ? styles.tabActive : ''}`} onClick={() => setTab('spiral')}>
           황금 나선
         </button>
       </div>
@@ -548,22 +575,21 @@ export default function GoldenRatioClient() {
 }
 
 /* ──────────────────────── 비율 비교 시각화 ──────────────────────── */
-const RATIO_PRESETS = [
-  { name: '황금 비율',     ratio: 1.618, sub: 'φ — 디자인·예술',       color: '#0EA5E9' },
-  { name: '백은 비율',     ratio: 1.414, sub: '√2 — A4·B5 종이',       color: '#0891B2' },
-  { name: '16:9 (HD)',     ratio: 1.778, sub: '유튜브·TV·모니터',       color: '#A16207' },
-  { name: '4:3',           ratio: 1.333, sub: '구식 TV·아이패드',       color: '#9B59B6' },
-  { name: '21:9',          ratio: 2.333, sub: '울트라와이드·시네마',     color: '#E11D48' },
-  { name: '3:2',           ratio: 1.500, sub: '카메라 사진(35mm)',      color: '#059669' },
-  { name: '1:1',           ratio: 1.000, sub: '인스타 피드',            color: '#FFFFFF' },
-  { name: '9:16',          ratio: 0.563, sub: '스토리·릴스·틱톡(세로)', color: '#EA580C' },
+/* tint: 바 배경용 hex(알파 접미), ink: 텍스트용 AA 안전 토큰. tint=null이면 중립 바 */
+const RATIO_PRESETS: { name: string; ratio: number; sub: string; tint: string | null; ink: string }[] = [
+  { name: '황금 비율',     ratio: 1.618, sub: 'φ — 디자인·예술',       tint: '#0EA5E9', ink: 'var(--accent-ink)' },
+  { name: '백은 비율',     ratio: 1.414, sub: '√2 — A4·B5 종이',       tint: '#0891B2', ink: 'var(--cat-health)' },
+  { name: '16:9 (HD)',     ratio: 1.778, sub: '유튜브·TV·모니터',       tint: '#A16207', ink: 'var(--cat-sports)' },
+  { name: '4:3',           ratio: 1.333, sub: '구식 TV·아이패드',       tint: '#9333EA', ink: 'var(--cat-art)' },
+  { name: '21:9',          ratio: 2.333, sub: '울트라와이드·시네마',     tint: '#E11D48', ink: 'var(--danger)' },
+  { name: '3:2',           ratio: 1.500, sub: '카메라 사진(35mm)',      tint: '#059669', ink: 'var(--cat-finance)' },
+  { name: '1:1',           ratio: 1.000, sub: '인스타 정사각·앨범 커버', tint: null,      ink: 'var(--text)' },
+  { name: '9:16',          ratio: 0.563, sub: '스토리·릴스·틱톡(세로)', tint: '#EA580C', ink: 'var(--cat-life)' },
 ]
 
 function RatioCompareCard() {
-  // 같은 세로(고정 32px) 기준 가로 길이 비교
+  // 같은 세로(고정 32px) 기준 가로 길이 비교. 바 폭은 트랙 대비 % — 가장 긴 21:9(2.333)가 100%
   const fixedHeight = 32
-  // 가장 긴 가로 = 21:9 (2.333) → 최대 픽셀 폭 280
-  const maxWidth = 200
   const maxRatio = 2.333
 
   return (
@@ -574,7 +600,6 @@ function RatioCompareCard() {
       </p>
       <div className={styles.compareList}>
         {RATIO_PRESETS.map(p => {
-          const widthPx = (p.ratio / maxRatio) * maxWidth
           return (
             <div key={p.name} className={styles.compareRow}>
               <div>
@@ -584,13 +609,13 @@ function RatioCompareCard() {
               <div
                 className={styles.compareBar}
                 style={{
-                  width: `${widthPx}px`,
-                  background: p.color === '#FFFFFF' ? 'rgba(255,255,255,0.15)' : `${p.color}25`,
-                  borderColor: `${p.color}55`,
+                  width: `${(p.ratio / maxRatio) * 100}%`,
+                  background: p.tint ? `${p.tint}25` : 'var(--border)',
+                  borderColor: p.tint ? `${p.tint}55` : 'var(--border-hover)',
                   height: fixedHeight,
                 }}
               />
-              <span className={styles.compareValue} style={{ color: p.color }}>{p.ratio.toFixed(3)}</span>
+              <span className={styles.compareValue} style={{ color: p.ink }}>{p.ratio.toFixed(3)}</span>
             </div>
           )
         })}

@@ -18,9 +18,9 @@ const FAQ_LD = [
               { q: '황금 비율이 아름답게 느껴지는 이유는?',
                 a: '인간의 시지각이 자연에서 반복적으로 학습한 비율이라는 진화적 설명과, 수학적으로 자기 유사성(fractal)이 있어 시선의 흐름을 안정적으로 유도한다는 인지심리학적 설명이 공존합니다. 다만 모든 사람이 황금 비율만을 아름답다고 느끼는 것은 아니며, 실험 결과는 문화·개인차에 따라 다릅니다.' },
               { q: '유튜브 썸네일에 황금 비율을 어떻게 적용하나요?',
-                a: '유튜브 썸네일 규격은 1280×720px(16:9)로 정해져 있어 이미지 규격 자체를 바꿀 수는 없습니다. 대신 썸네일 내부 구도를 황금 비율로 설계하세요. 예를 들어 가로 1280px을 61.8% : 38.2%로 나눈 792px 지점에 주요 피사체를 배치하면 시각적으로 안정감이 생깁니다. 이 계산기 [비율 변환] 탭에서 현재 이미지 비율과 황금 비율의 차이를 확인할 수 있습니다.' },
+                a: '유튜브 썸네일은 16:9 비율이 기준이라(공식 도움말 기준 최소 너비 640px, 권장 해상도 3840×2160px — 널리 쓰는 1280×720px도 사용 가능) 이미지 비율 자체를 바꿀 수는 없습니다. 대신 썸네일 내부 구도를 황금 비율로 설계하세요. 예를 들어 가로 1280px 썸네일이라면 61.8% : 38.2%로 나눈 792px 지점에 주요 피사체를 배치하면 시각적으로 안정감이 생깁니다. 이 계산기 [비율 변환] 탭에서 현재 이미지 비율과 황금 비율의 차이를 확인할 수 있습니다.' },
               { q: '황금 비율과 백은 비율(√2:1)의 차이는?',
-                a: '백은 비율(Silver Ratio)은 √2 ≈ 1.414로, A4 용지(297×210mm)에 적용된 비율입니다. 반을 접어도 같은 비율이 유지되는 실용적 특성이 있어 종이 규격(A/B 시리즈)에 사용됩니다. 황금 비율은 미적·디자인적 비율, 백은 비율은 실용적·기능적 비율이라고 보면 구분하기 쉽습니다.' },
+                a: '디자인에서 말하는 백은 비율(白銀比)은 1:√2 ≈ 1:1.414로, A4 용지(297×210mm) 등 종이 규격(A/B 시리즈)에 적용된 비율입니다. 반을 접어도 같은 비율이 유지되는 실용적 특성이 있으며, 한국의 금강비·일본의 야마토비(大和比)와 같은 비율입니다. 황금 비율은 미적·디자인적 비율, 백은 비율은 실용적·기능적 비율이라고 보면 구분하기 쉽습니다. 참고로 수학에서 은비(Silver Ratio)의 표준 정의는 1+√2 ≈ 2.414(제2 금속비)로, 디자인 관행 용법과 병존합니다.' },
               { q: '피보나치 수열이 황금 비율과 연관된 이유는?',
                 a: '피보나치 수열의 점화식 F(n+1) = F(n) + F(n-1)을 비율 F(n+1)/F(n) = R로 정리하면 R² - R - 1 = 0이라는 이차방정식이 됩니다. 이 방정식의 양의 해가 정확히 (1+√5)/2, 즉 φ입니다. 그래서 피보나치 수열의 인접 비율은 필연적으로 φ에 수렴합니다.' },
             ]
@@ -48,7 +48,8 @@ export default function GoldenRatioPage() {
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             황금 비율(Golden Ratio)은 두 양 a, b(a &gt; b)에 대해 <strong style={{ color: 'var(--text)' }}>(a+b) : a = a : b</strong>가 성립할 때의 비율로,
-            그리스 문자 φ(파이)로 표기합니다. 자연·예술·건축에서 가장 아름답게 인식되는 비율로 알려져 있습니다.
+            그리스 문자 <strong style={{ color: 'var(--text)' }}>φ(피, phi)</strong>로 표기합니다 — 원주율 π(파이)와는 다른 문자입니다.
+            예로부터 &ldquo;가장 아름다운 비율&rdquo;로 불려 왔지만, 널리 알려진 자연·예술 사례 중 상당수는 근거가 약합니다(아래 사실·속설 정리 참고).
           </p>
 
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
@@ -68,27 +69,34 @@ export default function GoldenRatioPage() {
           </p>
         </div>
 
-        {/* ── 2. 자연과 예술 속 황금 비율 ── */}
+        {/* ── 2. 자연과 예술 속 황금 비율 — 사실과 속설 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자연과 예술 속 황금 비율
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+            자연과 예술 속 황금 비율 — 사실과 속설
           </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+            파르테논·모나리자·앵무조개 같은 유명 사례 대부분은 후대에 덧씌워진 통설로, 수학계 검증에서 반박됐습니다.
+            실제로 확인되는 사례와 구분해 정리했습니다.
+          </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
             {[
-              { cat: '건축',  title: '파르테논 신전',     desc: '기둥 간격과 지붕의 높이에 황금 비율이 사용됨' },
-              { cat: '회화',  title: '모나리자·최후의 만찬', desc: '얼굴 윤곽과 구도에 황금 분할이 적용됨' },
-              { cat: '자연',  title: '앵무조개·해바라기',   desc: '껍데기 나선과 씨앗 배열이 피보나치 나선' },
-              { cat: '로고',  title: '애플·트위터 로고',    desc: '원호의 반지름이 황금 비율로 설계됨' },
-              { cat: '인체',  title: '신체 비율',          desc: '배꼽 기준 상체 : 하체 = 1 : 1.618' },
-              { cat: '음악',  title: '바흐·모차르트',       desc: '악장 길이 구성에 황금 분할 활용' },
+              { cat: '사실 · 식물', fact: true,  title: '해바라기·솔방울 잎차례', desc: '두상화의 시계·반시계 나선 개수가 34·55처럼 인접 피보나치 수로 나타남 — 황금각 137.5°(=360°/φ²) 잎차례로 설명되는 실증 현상. 다만 시민과학 실측(해바라기 657송이)에서 약 74%가 해당, 예외도 존재' },
+              { cat: '사실 · 기하', fact: true,  title: '정오각형·펜타그램',     desc: '정오각형의 대각선과 변의 비율이 정확히 φ — 유클리드 『원론』이 다룬 수학적 사실' },
+              { cat: '속설 · 건축', fact: false, title: '파르테논 신전',         desc: '황금비 설계 기록은 없고, 실측 정면 비율도 약 9:4(=2.25)로 φ와 불일치. φ가 문헌에 정의된 것도 신전 완공보다 약 130년 뒤(유클리드)' },
+              { cat: '속설 · 회화', fact: false, title: '모나리자·최후의 만찬',   desc: '다빈치가 구도에 황금비를 썼다는 기록 없음 — 후대의 자의적 덧그리기로 평가. 다빈치는 파치올리의 황금비 책 삽화를 그렸을 뿐' },
+              { cat: '속설 · 자연', fact: false, title: '앵무조개 껍데기',       desc: '로그 나선인 것은 맞지만 실측 성장비는 1/4바퀴당 평균 약 1.31~1.33으로 황금 나선(φ=1.618)이 아님' },
+              { cat: '속설 · 기타', fact: false, title: '애플 로고·인체 배꼽 비율', desc: '애플 로고 디자이너는 "거의 프리핸드로 그렸다"며 황금비 사용을 부인했고, 배꼽 기준 1:1.618도 개인차가 커 인체 상수가 아님' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.cat}</p>
+                <p style={{ fontSize: '11px', color: item.fact ? 'var(--success)' : 'var(--warning)', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.cat}</p>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>{item.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{item.desc}</p>
               </div>
             ))}
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+            * 검증 출처: Markowsky, &ldquo;Misconceptions about the Golden Ratio&rdquo;, College Mathematics Journal (1992) · Falbo, College Mathematics Journal (2005) · Swinton 외, Royal Society Open Science (2016)
+          </p>
         </div>
 
         {/* ── 3. 디자이너를 위한 활용 팁 ── */}
@@ -100,25 +108,25 @@ export default function GoldenRatioPage() {
             {[
               {
                 title: '1. 로고 디자인 — 요소 크기 비율',
-                color: '#0EA5E9',
+                tint: '#0EA5E9', ink: 'var(--accent-ink)',
                 desc: '로고의 심볼과 텍스트, 여백 사이 관계를 황금 비율로 정하면 시각적 안정감이 생깁니다.',
                 example: '심볼 크기 100px → 텍스트 크기 61.8px, 좌우 여백 38.2px',
               },
               {
                 title: '2. 레이아웃 — 본문과 사이드바',
-                color: '#059669',
+                tint: '#059669', ink: 'var(--cat-finance)',
                 desc: '웹사이트 2단 레이아웃에서 콘텐츠와 사이드바를 61.8% : 38.2%로 나누면 황금 비율 구도가 됩니다.',
                 example: '전체 1000px → 본문 618px + 사이드바 382px',
               },
               {
                 title: '3. 타이포그래피 — 제목과 본문',
-                color: '#0891B2',
+                tint: '#0891B2', ink: 'var(--cat-health)',
                 desc: '본문 폰트 크기에 φ를 곱한 값을 제목 크기로 사용하면 자연스러운 위계가 생깁니다.',
                 example: '본문 16px × 1.618 ≈ 26px (H3), × 1.618² ≈ 42px (H1)',
               },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderRadius: '12px', padding: '16px 20px' }}>
-                <p style={{ fontSize: '14px', fontWeight: 600, color: item.color, marginBottom: '8px' }}>{item.title}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.tint}25`, borderRadius: '12px', padding: '16px 20px' }}>
+                <p style={{ fontSize: '14px', fontWeight: 600, color: item.ink, marginBottom: '8px' }}>{item.title}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '8px' }}>{item.desc}</p>
                 <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--text)' }}>
                   예: {item.example}
@@ -171,7 +179,7 @@ export default function GoldenRatioPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * 12항만 가도 소수점 4자리까지 φ와 일치합니다. 자연에서 피보나치 수열이 자주 나타나는 이유입니다.
+            * 12항만 가도 소수점 4자리까지 φ와 일치할 만큼 수렴이 빠릅니다.
           </p>
         </div>
 
@@ -194,14 +202,14 @@ export default function GoldenRatioPage() {
               </thead>
               <tbody>
                 {[
-                  { n: '황금 비율 (φ)', v: '1.618', u: '디자인·예술·자연 — 가장 미적 비율', c: '#0EA5E9' },
-                  { n: '백은 비율 (√2)', v: '1.414', u: 'A4·B5 등 종이 규격 — 반 접어도 같은 비율', c: '#0891B2' },
-                  { n: '16:9 (HD)',     v: '1.778', u: '유튜브·TV·모니터·가로 영상',           c: '#A16207' },
-                  { n: '4:3',           v: '1.333', u: '구식 TV·아이패드·일부 카메라',         c: '#9B59B6' },
-                  { n: '21:9 (시네마)', v: '2.333', u: '울트라와이드 모니터·영화관',           c: '#E11D48' },
-                  { n: '3:2',           v: '1.500', u: '35mm 카메라 사진 표준',                 c: '#059669' },
-                  { n: '1:1 (정사각)',  v: '1.000', u: '인스타 피드·앨범 커버·로고',           c: '#FFFFFF' },
-                  { n: '9:16 (세로)',   v: '0.563', u: '인스타 스토리·릴스·틱톡 (모바일 세로)', c: '#EA580C' },
+                  { n: '황금 비율 (φ)', v: '1.618', u: '디자인·예술 — 대표적 미적 비율',      c: 'var(--accent-ink)' },
+                  { n: '백은 비율 (√2)', v: '1.414', u: 'A4·B5 등 종이 규격 — 반 접어도 같은 비율', c: 'var(--cat-health)' },
+                  { n: '16:9 (HD)',     v: '1.778', u: '유튜브·TV·모니터·가로 영상',           c: 'var(--cat-sports)' },
+                  { n: '4:3',           v: '1.333', u: '구식 TV·아이패드·일부 카메라',         c: 'var(--cat-art)' },
+                  { n: '21:9 (시네마)', v: '2.333', u: '울트라와이드 모니터·영화관',           c: 'var(--danger)' },
+                  { n: '3:2',           v: '1.500', u: '35mm 카메라 사진 표준',                 c: 'var(--cat-finance)' },
+                  { n: '1:1 (정사각)',  v: '1.000', u: '인스타 정사각 게시물·앨범 커버·로고',   c: 'var(--text)' },
+                  { n: '9:16 (세로)',   v: '0.563', u: '인스타 스토리·릴스·틱톡 (모바일 세로)', c: 'var(--cat-life)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.n}</td>
