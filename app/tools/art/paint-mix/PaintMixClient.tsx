@@ -163,9 +163,15 @@ export default function PaintMixClient() {
   const applyMatchToTab1 = () => {
     if (!matchResult) return
     const newSlots: Slot[] = matchResult.colors.map((c) => ({ hex: c.color.hex, weight: c.weight }))
-    if (whiteAdd > 0 && newSlots.length < 4) newSlots.push({ hex: '#FFFFFF', weight: whiteAdd })
-    if (blackAdd > 0 && newSlots.length < 4) newSlots.push({ hex: '#000000', weight: blackAdd })
+    // 4색 제한: 추천 3색+흰+검이면 양이 큰 쪽부터 (한쪽 제외는 버튼 아래 캡션으로 안내)
+    const adds: Slot[] = []
+    if (whiteAdd > 0) adds.push({ hex: '#FFFFFF', weight: whiteAdd })
+    if (blackAdd > 0) adds.push({ hex: '#000000', weight: blackAdd })
+    adds.sort((a, b) => b.weight - a.weight)
+    for (const a of adds) if (newSlots.length < 4) newSlots.push(a)
     setSlots(newSlots.slice(0, 4))
+    // 매칭은 물감(Subtractive) 기준 — 탭 1 모델이 다르면 결과색이 달라지므로 함께 전환
+    setModel('subtractive')
     setTab('mix')
   }
 
@@ -306,9 +312,9 @@ export default function PaintMixClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>안료 농도 보정 (옵션)</span>
+            <span className={s.cardLabel}>사용량 보정 (옵션)</span>
             <div className={s.sliderHead}>
-              <span className={s.sliderLabel}>진하기 배수</span>
+              <span className={s.sliderLabel}>사용량 배수</span>
               <span className={s.sliderValue}>×{pigmentScale.toFixed(2)}</span>
             </div>
             <input
@@ -322,6 +328,7 @@ export default function PaintMixClient() {
             </div>
             <p className={s.hint}>
               💡 푸드컬러 젤·진한 잉크는 <strong>0.5×</strong>(절반만 사용), 흐린 수채화는 <strong>1.5×~2×</strong>로 보정.
+              배수는 모든 색에 동일하게 적용되므로 <strong>혼합 비율과 결과 색은 바뀌지 않고 전체 사용량만</strong> 늘거나 줍니다.
             </p>
           </div>
 
@@ -329,7 +336,7 @@ export default function PaintMixClient() {
           <div className={s.heroCard} role="status">
             <div className={s.previewBox} style={{ background: mixedHex }} />
             <div className={s.heroContent}>
-              <p className={s.heroLabel}>총 분량</p>
+              <p className={s.heroLabel}>보정 후 총 사용량</p>
               <p className={s.heroHex}>
                 <span className={s.heroBig}>{(totalAmount * pigmentScale).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}</span> {UNIT_LABELS[unit]}
               </p>
@@ -481,8 +488,17 @@ export default function PaintMixClient() {
                   </div>
                 </div>
 
+                {matchPalette === 'ink' && (
+                  <p className={s.hint}>
+                    ⚠️ 잉크 매칭은 <strong>색 시뮬레이션 전용</strong>입니다. 추천 조합에 서로 다른 브랜드·베이스가 섞일 수 있는데,
+                    실제 만년필 잉크는 브랜드·베이스가 다르면 침전·막힘 위험이 있어 실혼합은 권장하지 않습니다 (아래 FAQ 참고).
+                  </p>
+                )}
+                {matchResult.colors.length >= 3 && whiteAdd > 0 && blackAdd > 0 && (
+                  <p className={s.hint}>⚠️ 탭 1은 최대 4색이라 흰색·검정 중 양이 큰 쪽만 적용됩니다.</p>
+                )}
                 <button type="button" className={s.primaryBtn} onClick={applyMatchToTab1}>
-                  탭 1에 적용
+                  탭 1에 적용 (물감 모델 기준)
                 </button>
               </div>
             </>
@@ -708,7 +724,7 @@ function DeltaEBar({ deltaE }: { deltaE: number }) {
       <div className={s.deltaInfo}>
         <span className={s.deltaLabel}>색 차이 ΔE = <strong>{deltaE.toFixed(2)}</strong></span>
         <span className={s.deltaGrade} style={{ color: grade.color }}>
-          {grade.label} · {grade.pct}%
+          {grade.label}
         </span>
       </div>
       <div className={s.deltaBarBg}>

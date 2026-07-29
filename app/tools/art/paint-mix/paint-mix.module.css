@@ -113,11 +113,14 @@
   margin-bottom: 8px;
 }
 @media (max-width: 600px) {
+  /* 삭제 버튼까지 한 행에 두면 4색일 때 비율 슬라이더가 ~8px로 붕괴 →
+     1행: 미리보기+삭제, 2행: 입력 전폭 */
   .slotRow {
-    grid-template-columns: 60px 1fr auto;
+    grid-template-columns: 48px 1fr auto;
     gap: 8px;
     padding: 10px;
   }
+  .slotInputs { grid-column: 1 / -1; grid-row: 2; }
 }
 .slotPreview {
   width: 80px;
@@ -126,7 +129,7 @@
   border: 2px solid var(--border);
 }
 @media (max-width: 600px) {
-  .slotPreview { width: 60px; height: 60px; }
+  .slotPreview { width: 48px; height: 48px; }
 }
 .slotInputs {
   display: flex;
@@ -450,6 +453,11 @@
   gap: 16px;
   align-items: center;
 }
+@media (max-width: 600px) {
+  /* 320px에서 HEX 입력이 ~34px로 붕괴 → 미리보기를 위 행으로 */
+  .targetRow { grid-template-columns: 1fr; }
+  .targetRow > .previewBox { margin: 0 auto; }
+}
 .targetInputs {
   display: grid;
   grid-template-columns: 50px 1fr;
@@ -517,6 +525,10 @@
   margin: 0 auto 8px;
   width: 90px;
   height: 90px;
+}
+@media (max-width: 380px) {
+  .compareCell .previewBox { width: 64px; height: 64px; }
+  .compareArrow { font-size: 18px; }
 }
 .compareLabel {
   font-size: 11px;
