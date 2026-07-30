@@ -88,11 +88,11 @@ export default function RoomAreaPage() {
               </thead>
               <tbody>
                 {[
-                  { t: '벽 면적 (전체)',   c: '둘레 × 천장 높이',         u: '단열·방음 계획',          color: '#0891B2' },
+                  { t: '벽 면적 (전체)',   c: '둘레 × 천장 높이',         u: '단열·방음 계획',          color: 'var(--cat-health)' },
                   { t: '벽 면적 (실제)',   c: '전체 - 창문·문',           u: '도배·페인트',              color: 'var(--accent)' },
                   { t: '바닥 면적',        c: '가로 × 세로',               u: '장판·타일·바닥재',        color: '#0EA5E9' },
                   { t: '천장 면적',        c: '가로 × 세로 (바닥 동일)',  u: '천장 도배·조명 위치',     color: '#9B59B6' },
-                  { t: '공간 부피',        c: '가로 × 세로 × 높이',        u: '에어컨 평형·환기',        color: '#A16207' },
+                  { t: '공간 부피',        c: '가로 × 세로 × 높이',        u: '에어컨 평형·환기',        color: 'var(--cat-sports)' },
                   { t: '총 표면적',        c: '벽 + 바닥 + 천장',          u: '전체 시공 견적',           color: '#EA580C' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -106,7 +106,70 @@ export default function RoomAreaPage() {
           </div>
         </div>
 
-        {/* ── 2. 평수 ↔ ㎡ 환산 ── */}
+        {/* ── 2. 셀프 실측 가이드 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            📏 셀프 실측 가이드 — 줄자·레이저로 정확히 재는 법
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+            계산 결과는 입력값만큼만 정확합니다. 도배·바닥재 견적을 내기 전 셀프 실측은 아래 순서를 따르세요.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            {[
+              { n: '1', t: '기준점 잡기', d: '벽 마감면(벽지·석고보드 표면)을 기준으로, 걸레받이 바로 위 높이에서 잽니다. 몰딩·문틀·창틀 두께는 변 길이에 넣지 않습니다.', color: 'var(--cat-health)' },
+              { n: '2', t: '가로·세로 각 2~3지점 측정', d: '양 끝과 중간 등 2~3지점에서 재고, 값이 서로 다르면 짧은 값을 그 변의 길이로 채택합니다. 벽이 완전히 평행하지 않은 방이 많고, 자재 여유분은 로스율로 따로 얹는 것이 관행이기 때문입니다.', color: 'var(--accent)' },
+              { n: '3', t: '천장 높이', d: '바닥 마감면에서 천장 마감면까지 잽니다. 우물천장·마이너스몰딩이 있으면 가장 낮은 지점을 기준으로 하고, 우물 부분 치수는 따로 메모해 둡니다.', color: 'var(--success)' },
+              { n: '4', t: 'm 단위로 환산해 입력', d: 'cm 단위까지 기록한 뒤 m로 바꿔 입력합니다 (예: 385cm → 3.85m). 반올림은 입력 단계가 아니라 결과 단계에서 해야 오차가 누적되지 않습니다.', color: 'var(--cat-sports)' },
+            ].map((s, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 10, padding: '10px 14px' }}>
+                <p style={{ fontSize: 13, color: s.color, fontWeight: 700, marginBottom: 4 }}>{s.n}. {s.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{s.d}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ overflowX: 'auto', marginTop: 14 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['부위', '포함/제외', '판단 기준'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { t: '베란다 확장부',   j: '포함',        d: '확장 후 같은 마감이 이어지면 바닥·벽 모두 포함. 상세 탭에서 별도 방으로 입력해 합산해도 됩니다' },
+                  { t: '미확장 베란다',   j: '제외',        d: '실내 마감과 분리된 별도 공간 — 필요하면 따로 계산' },
+                  { t: '붙박이장 벽면',   j: '보통 제외',   d: '철거하지 않는 붙박이장 뒤는 도배·바닥 시공을 하지 않는 것이 일반적. 철거 예정이면 포함' },
+                  { t: '아트월·타일 벽',  j: '차감',        d: '도배·페인트 대상이 아니면 해당 벽 폭 × 높이만큼 벽 면적에서 차감' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.j}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', lineHeight: 1.6 }}>{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{
+            background: 'var(--bg2)',
+            border: '1px solid var(--border)',
+            borderRadius: 12,
+            padding: '12px 16px',
+            fontSize: 13,
+            color: 'var(--text)',
+            marginTop: 12,
+            lineHeight: 1.75,
+          }}>
+            <strong style={{ color: 'var(--accent)' }}>💡 측정 오차 줄이는 팁</strong><br />
+            • 줄자는 벽면에 붙여 수평으로 — 비스듬히 재면 실제보다 <strong>길게</strong> 나옵니다<br />
+            • 레이저 거리측정기는 벽에 최대한 수직으로 쏘고, 유리·거울 면은 오측이 잦으니 피하세요<br />
+            • 가구를 다 옮길 수 없으면 벽이 드러난 구간에서 재고, 같은 변을 반대쪽 벽에서 한 번 더 확인하세요
+          </div>
+        </div>
+
+        {/* ── 3. 평수 ↔ ㎡ 환산 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             평수 ↔ ㎡ 환산
@@ -154,17 +217,17 @@ export default function RoomAreaPage() {
           </div>
         </div>
 
-        {/* ── 3. 한국 아파트 천장 높이 ── */}
+        {/* ── 4. 한국 아파트 천장 높이 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 아파트 천장 높이 표준
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {[
-              { i: '🏢', t: '일반 아파트',         h: '2.3~2.4m', color: '#0891B2' },
+              { i: '🏢', t: '일반 아파트',         h: '2.3~2.4m', color: 'var(--cat-health)' },
               { i: '🏬', t: '신축 아파트',         h: '2.4~2.5m', color: 'var(--accent)' },
-              { i: '🏛️', t: '고급 아파트·단독',    h: '2.5~3.0m', color: '#059669' },
-              { i: '🏤', t: '상가·사무실',         h: '2.7~3.0m', color: '#A16207' },
+              { i: '🏛️', t: '고급 아파트·단독',    h: '2.5~3.0m', color: 'var(--success)' },
+              { i: '🏤', t: '상가·사무실',         h: '2.7~3.0m', color: 'var(--cat-sports)' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
                 <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{s.i} {s.t}</span>
@@ -182,12 +245,12 @@ export default function RoomAreaPage() {
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            💡 <strong style={{ color: '#E89757' }}>천장 높이 0.1m 차이가 면적에 미치는 영향</strong><br />
+            💡 <strong style={{ color: 'var(--warning)' }}>천장 높이 0.1m 차이가 면적에 미치는 영향</strong><br />
             둘레 16m × 0.1m = <strong style={{ color: 'var(--accent)' }}>1.6㎡</strong> 추가 (벽 면적 기준)
           </div>
         </div>
 
-        {/* ── 4. 시공별 활용 가이드 ── */}
+        {/* ── 5. 시공별 활용 가이드 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🛠️ 시공별 활용 가이드
@@ -196,10 +259,10 @@ export default function RoomAreaPage() {
             {[
               { i: '🧱', t: '도배 시공',     d: '"실제 벽 면적"으로 벽지 롤 수 계산. 문·창문은 도배 X 차감.', color: '#0EA5E9' },
               { i: '🎨', t: '페인트 시공',   d: '"실제 벽 면적" + 천장 도장 시 천장 추가. 칠할 횟수 × 1L당 도장 면적.', color: '#EA580C' },
-              { i: '🪵', t: '바닥재 시공',   d: '"바닥 면적"으로 마루·강마루·장판. 로스율 5~10% 추가.', color: '#059669' },
-              { i: '🟦', t: '타일 시공',     d: '바닥 또는 벽의 면적 ÷ 타일 1개 면적. 줄눈·로스율 반영.', color: '#0891B2' },
+              { i: '🪵', t: '바닥재 시공',   d: '"바닥 면적"으로 마루·강마루·장판. 로스율 5~10% 추가.', color: 'var(--success)' },
+              { i: '🟦', t: '타일 시공',     d: '바닥 또는 벽의 면적 ÷ 타일 1개 면적. 줄눈·로스율 반영.', color: 'var(--cat-health)' },
               { i: '❄️', t: '에어컨 평형',  d: '"바닥 면적" 기준 1㎡당 약 123W(KS C 9306) — 평당 약 400W. 에어컨 평형 계산기와 동일 기준.', color: '#9B59B6' },
-              { i: '💡', t: '조명 밝기',     d: '"바닥 면적"으로 권장 루멘. 거실 300~400 lux × 면적.', color: '#A16207' },
+              { i: '💡', t: '조명 밝기',     d: '"바닥 면적"으로 권장 루멘. 거실 300~400 lux × 면적.', color: 'var(--cat-sports)' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: s.color, fontWeight: 700, marginBottom: 4 }}>{s.i} {s.t}</p>
@@ -209,7 +272,7 @@ export default function RoomAreaPage() {
           </div>
         </div>
 
-        {/* ── 5. 창문·문 차감 가이드 ── */}
+        {/* ── 6. 창문·문 차감 가이드 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🪟 창문·문 일반 크기 예시 (차감 참고)
@@ -258,10 +321,63 @@ export default function RoomAreaPage() {
           </div>
         </div>
 
+        {/* ── 7. ㄱ자 방 계산 워크스루 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            📐 ㄱ자 방 계산 워크스루 — 직사각형 2개로 나누기
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+            ㄱ자(L자) 방은 꺾이는 지점에서 잘라 <strong style={{ color: 'var(--text)' }}>직사각형 2개로 나눈 뒤 더하면</strong> 됩니다. 실제 수치 예제로 따라 해보세요.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['구분', '실측 치수', '면적'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 2 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { t: '구역 A (본체)',     s: '4.2m × 3.0m', a: '12.60㎡' },
+                  { t: '구역 B (돌출부)',   s: '1.8m × 1.5m', a: '2.70㎡' },
+                  { t: '바닥 면적 합계',    s: '—',           a: '15.30㎡' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i === 2 ? 'var(--bg2)' : 'transparent' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: i === 2 ? 800 : 600 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: 12, lineHeight: 1.75 }}>
+            평 환산: 15.30㎡ ÷ 3.3058 ≈ <strong style={{ color: 'var(--accent)' }}>4.63평</strong>. [상세 계산 (방·벽별)] 탭에 구역 A·B를 방 2개로 입력하면 바닥·부피가 자동 합산됩니다.
+          </p>
+          <div style={{
+            background: 'rgba(234,88,12,0.06)',
+            border: '1px solid rgba(234,88,12,0.25)',
+            borderRadius: 12,
+            padding: '12px 16px',
+            fontSize: 13,
+            color: 'var(--text)',
+            marginTop: 12,
+            lineHeight: 1.75,
+          }}>
+            💡 <strong style={{ color: 'var(--warning)' }}>벽 면적은 내부 경계 보정 필요</strong><br />
+            두 구역이 맞닿는 안쪽 변(위 예제에서 1.8m)은 양쪽 방 모두에서 벽으로 잡힙니다. 천장 2.4m 기준 —<br />
+            • 두 방 벽 면적 합: (14.4m + 6.6m) × 2.4m = 50.40㎡<br />
+            • 실제 ㄱ자 둘레 17.4m 기준: 17.4m × 2.4m = <strong style={{ color: 'var(--accent)' }}>41.76㎡</strong><br />
+            • 보정값: 맞닿은 변 1.8m × 2.4m × 2 = <strong>8.64㎡</strong>를 빼면 일치합니다. 창문·문 차감은 보정 후 면적에서 하세요.
+          </div>
+        </div>
+
         {/* FAQ 직후 광고 슬롯 */}
         <AdSlot position="between-tools" minHeight={250} />
 
-        {/* ── 6. FAQ ── */}
+        {/* ── 8. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
@@ -282,7 +398,7 @@ export default function RoomAreaPage() {
           </div>
         </div>
 
-        {/* ── 7. 관련 도구 ── */}
+        {/* ── 9. 관련 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구

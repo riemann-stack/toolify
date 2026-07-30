@@ -9,7 +9,7 @@ export const metadata = buildMetadata({
   path: '/tools/sports/grip-size',
   title: '그립 사이즈 계산기 — 테니스·골프·배드민턴·스쿼시 한 번에',
   description:
-    '손 측정 한 번으로 테니스(L1~L5)·골프(언더/표준/미드/점보)·배드민턴(G2~G6)·스쿼시까지 4종목 그립 사이즈 동시 추천. 자/펜슬 테스트 + 오버그립 보정 + 글러브 호수 매핑 + 부상 예방 가이드.',
+    '손 측정 한 번으로 테니스(L1~L5)·골프(언더/표준/미드/점보)·배드민턴(G2~G6)·스쿼시까지 4종목 그립 사이즈 동시 추천. 자/펜슬 테스트 + 오버그립 보정 + 글러브 호수 매핑 + 그립 굵기와 부상 연구 정리.',
   keywords: [
     '그립 사이즈', '그립 굵기', '테니스 그립 사이즈', '골프 그립 사이즈',
     '배드민턴 그립', '스쿼시 그립', '테니스 L1 L2 L3', '골프 글러브 호수',
@@ -74,7 +74,7 @@ const faqAnswer: React.CSSProperties = {
 
 const FAQ_LD = [
   { "q":"그립 사이즈를 잘 모르겠으면 큰 걸로 가야 하나요, 작은 걸로 가야 하나요?","a":"의심스러우면 작은 쪽으로 가세요. 그 후 오버그립 1~2겹으로 미세 조정이 가능합니다. 반대로 너무 큰 그립을 산 경우, 손잡이를 깎거나 갈아내는 방법밖에 없어 사실상 불가능합니다. 테니스라면 L2~L3, 골프라면 표준, 배드민턴이라면 G5에서 출발하세요." },
-  { "q":"테니스에서 L1과 L2 중 고민될 때 어떻게 선택?","a":"스타일과 부상 이력으로 결정합니다. L1 추천: 손목 스냅 활용·톱스핀 위주·검지를 그립에서 떼는 동양식 그립. L2 추천: 발리·서브가 중요·테니스 엘보 이력 있음·플랫샷 위주. 잘 모르겠으면 L2로 시작 + 오버그립으로 보정이 안전합니다." },
+  { "q":"테니스에서 L1과 L2 중 고민될 때 어떻게 선택?","a":"플레이 스타일과 쥐는 느낌으로 결정합니다. L1 추천: 손목 스냅 활용·톱스핀 위주·검지를 그립에서 떼는 동양식 그립. L2 추천: 발리·서브가 중요·플랫샷 위주·손이 큰 편. 잘 모르겠으면 L2로 시작 + 오버그립으로 보정이 안전합니다. 참고로 권장 치수 ±1/4인치 범위에서는 전완 근활성 차이가 확인되지 않았다는 연구(Hatch 외, AJSM 2006)가 있어, 두 사이즈 사이에서 고민할 때는 부상 예방보다 손에 맞는 느낌을 우선해도 됩니다." },
   { "q":"골프 그립을 미드사이즈로 바꾸면 정말 슬라이스가 줄어드나요?","a":"일부 골퍼에게 효과적입니다. 미드사이즈 그립은 손목 회전을 약간 제한하여, 다운스윙에서 손목이 과하게 닫히는(closed) 골퍼의 슬라이스를 줄여줄 수 있습니다. 반대로 손목 회전이 부족해서 슬라이스가 나는 골퍼는 미드사이즈로 가면 더 악화됩니다. 티칭프로에게 스윙 진단을 받은 후 결정하는 게 안전합니다." },
   { "q":"배드민턴에서 G4 + 오버그립 2겹과 G3 단독은 동일한가요?","a":"거의 비슷하지만 미세하게 다릅니다. 오버그립 2겹은 G3와 비슷한 둘레가 되지만, 오버그립은 표면 마찰력이 높아 땀 잡기에 좋고 · G3 단독은 오각형 모서리 감이 살아 그립 위치 인식에 좋습니다 · 오버그립은 마모되면 교체해야 합니다. 한국에서는 G4 + 오버그립 조합이 압도적 다수입니다." },
   { "q":"평생 같은 그립 사이즈를 써도 되나요?","a":"일반적으로 OK이지만, 다음 경우 재측정하세요: 10대~20대 초반은 손이 아직 자라는 중이라 매년 측정 · 관절염·손목 통증이 시작되면 한 단계 굵게(압력 분산 효과) · 체중·근육의 큰 변화 시 손 크기는 거의 안 변하지만 그립 감이 달라질 수 있음 · 고령은 손가락 굴곡이 줄어 약간 굵게 권장." },
@@ -101,8 +101,9 @@ export default function GripSizePage() {
         <section>
           <h2 style={sectionTitle}>그립 사이즈가 왜 중요한가?</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            라켓·골프 클럽의 그립이 손 크기와 맞지 않으면 <strong style={{ color: 'var(--text)' }}>그립 압력이 비정상적으로 증가</strong>하면서
-            전완·손목·팔꿈치에 만성 통증이 생깁니다. 잘못된 그립 사이즈는 테니스 엘보(외측 상과염)에서 흔히 지목되는 원인 중 하나로 알려져 있습니다.
+            라켓·골프 클럽의 그립이 손 크기와 맞지 않으면 <strong style={{ color: 'var(--text)' }}>쥐는 힘의 크기와 분포가 달라져</strong>
+            컨트롤과 편안함이 떨어집니다. 잘못된 그립 사이즈는 테니스 엘보(외측 상과염)의 원인으로 흔히 지목되지만,
+            이를 뒷받침하는 연구 근거는 생각보다 제한적입니다 — 아래 &lsquo;그립 굵기와 부상&rsquo; 섹션에서 자세히 다룹니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
             반대로 너무 큰 그립은 손목 회전을 방해해 컨트롤·스핀이 떨어지고, 골프에서는 슬라이스(우측 빠짐)의 원인이 됩니다.
@@ -261,7 +262,55 @@ export default function GripSizePage() {
           </div>
         </section>
 
-        {/* 5. FAQ */}
+        {/* 5. 부상 가이드 */}
+        <section>
+          <h2 style={sectionTitle}>그립 굵기와 부상 — 통념과 연구가 말하는 것</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            &ldquo;그립이 가늘면 라켓을 더 세게 쥐게 되어 테니스 엘보가 온다&rdquo;는 이야기는 동호인 사이에서 정설처럼 통합니다.
+            그런데 이 통념을 직접 검증한 연구진조차 논문 서두에서, 부적절한 그립 굵기가 전완·팔꿈치 과사용 부상의 위험 요인으로
+            자주 지목되는 곳으로 <strong style={{ color: 'var(--text)' }}>대중 매체</strong>를 들며 시작합니다(Hatch 외, AJSM 2006).
+          </p>
+          <div style={{ ...card, marginBottom: '12px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>🔬 근전도(EMG) 검증 실험 — Hatch 외, Am J Sports Med 2006</p>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
+              무증상 대학(NCAA) 테니스 선수 16명에게 권장 치수 그립, 1/4인치(6.35mm) 가는 그립, 1/4인치 굵은 그립 3종으로
+              한손 백핸드를 치게 하고 전완 근육 5곳의 활동을 근전도로 측정한 결과,
+              <strong style={{ color: 'var(--text)' }}>세 굵기 사이에 어느 근육에서도 유의한 차이가 없었습니다</strong>.
+              1/4인치면 위 테니스 표 기준 두 단계에 해당하는 큰 차이입니다. 저자들은 학회(AOSSM 미국정형외과스포츠의학회)
+              보도자료에서 &ldquo;그런 (부상 예방 목적의 그립 사이즈) 권고에는 과학적 근거가 없다&rdquo;고 논평하며,
+              측정법은 출발점으로 쓰되 실제 선택은 가장 편하게 느껴지는 굵기로 하라고 권했습니다.
+            </p>
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            물론 한계도 분명합니다. 통증이 없는 선수들의 순간적인 근육 활동만 본 실험실 연구라서, 그립 굵기가 실제 부상
+            발생률을 바꾸는지에 대한 근거는 여전히 제한적입니다. &lsquo;가늘어도 무해하다&rsquo;는 단정도 &lsquo;가늘면 위험하다&rsquo;는
+            단정도 어렵다는 뜻입니다. 다만 분명한 것은, <strong style={{ color: 'var(--text)' }}>권장 치수 근처의 한두 단계 차이에
+            과민할 이유가 연구로는 확인되지 않는다</strong>는 점입니다.
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            참고로 본 도구의 자 측정 방식 — <strong style={{ color: 'var(--text)' }}>근위 손바닥 주름(손바닥 안쪽 큰 주름)에서 약지
+            끝까지의 거리</strong> — 는 Nirschl이 제안한 측정법으로, 라켓 제조사들이 권장 그립 사이즈를 정할 때 널리 쓰는
+            업계 표준 관행이라는 사실이 같은 논문(Hatch 2006) 본문에 명시돼 있습니다. 측정법 자체는 출처가 분명한 셈이고,
+            연구가 유보하는 것은 &lsquo;거기서 벗어나면 다친다&rsquo;는 주장 쪽입니다.
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+            실전 기준은 이렇게 정리됩니다. ① 측정값(본 도구 추천)으로 출발 ② 시타에서 쥐었을 때 편하고 스트로크 중 그립이
+            돌지 않는 굵기를 선택 ③ 애매하면 작은 쪽 + 오버그립 미세 조정(위 섹션). 그리고 팔꿈치·손목 통증이 몇 주째
+            계속된다면 그립 교체로 해결을 기대하기보다 <strong style={{ color: 'var(--text)' }}>플레이 시간·빈도를 줄이고 의료 상담을
+            받는 것이 순서</strong>입니다.
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            💡 매장 실전 팁 — 지금 쓰는 라켓의 사이즈는 <strong style={{ color: 'var(--text)' }}>손잡이 끝 버트캡</strong>에서 확인합니다.
+            테니스 라켓은 버트캡에 유럽식 번호(2 = L2)나 인치 표기가 각인·인쇄돼 있고, 배드민턴 라켓은 버트캡·콘 부근
+            스티커의 무게·그립 표기(3U G5 식)로 확인합니다. 오버그립을 이미 감아 둔 라켓은 표기 사이즈보다 실제 둘레가
+            반 단계~한 단계 굵어져 있으니, 매장 시타 때는 감긴 상태 그대로 비교하세요.
+          </p>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', marginTop: '8px' }}>
+            출처: Hatch GF 외, Am J Sports Med 2006;34(12):1977-1983 · 저자 논평: AOSSM 보도자료(2006)
+          </p>
+        </section>
+
+        {/* 6. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -279,12 +328,14 @@ export default function GripSizePage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q2. 테니스에서 L1과 L2 중 고민될 때 어떻게 선택?</summary>
             <div style={faqAnswer}>
-              <strong>스타일과 부상 이력으로 결정</strong>합니다.
+              <strong>플레이 스타일과 쥐는 느낌으로 결정</strong>합니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li><strong style={{ color: 'var(--text)' }}>L1 추천</strong>: 손목 스냅 활용·톱스핀 위주·검지를 그립에서 떼는 동양식 그립</li>
-                <li><strong style={{ color: 'var(--text)' }}>L2 추천</strong>: 발리·서브가 중요·테니스 엘보 이력 있음·플랫샷 위주</li>
+                <li><strong style={{ color: 'var(--text)' }}>L2 추천</strong>: 발리·서브가 중요·플랫샷 위주·손이 큰 편</li>
               </ul>
               잘 모르겠으면 L2로 시작 + 오버그립으로 보정이 안전합니다.
+              참고로 권장 치수 ±1/4인치 범위에서는 전완 근활성 차이가 확인되지 않았다는 연구(Hatch 외, AJSM 2006)가 있어,
+              두 사이즈 사이에서 고민할 때는 부상 예방보다 손에 맞는 느낌을 우선해도 됩니다.
             </div>
           </details>
 
@@ -339,7 +390,7 @@ export default function GripSizePage() {
           </details>
         </section>
 
-        {/* 6. 관련 도구 */}
+        {/* 7. 관련 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>

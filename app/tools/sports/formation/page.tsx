@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/formation',
@@ -91,6 +92,15 @@ export default function FormationPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         5·7·9·11인제 22+ 포메이션을 <strong style={{ color: 'var(--text)' }}>그라운드 위에 시각화</strong>. 선수 카드 클릭으로 이름·번호 편집, PNG 다운로드로 단톡·블로그 공유.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="대회 결과·전술 트렌드는 2026 FIFA 북중미 월드컵 종료(2026-07-19) 기준, 대표팀 감독 체제는 2026-07-30 기준"
+        sources={[
+          { label: 'FIFA 공식 경기 리포트', href: 'https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026' },
+          { label: 'FIFA Training Centre (기술연구그룹 분석)', href: 'https://www.fifatrainingcentre.com/' },
+        ]}
+      />
 
       <FormationClient />
 
@@ -214,9 +224,10 @@ export default function FormationPage() {
           <h2 style={sectionTitle}>🇰🇷 한국 축구의 포메이션 흐름</h2>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
             대한민국 대표팀과 K리그에서 자주 쓰이는 포메이션은 시대별로 변화해 왔습니다.
-            현재 한국 축구의 주류는 <strong style={{ color: 'var(--text)' }}>4-2-3-1·4-1-4-1</strong>이며,
-            클린스만 사임 후 황선홍·홍명보 체제에서 4-2-3-1을 표준으로 정착시켰습니다.
-            <span style={{ display: 'block', marginTop: 6, fontSize: 12 }}>※ 대표팀 감독·주류 포메이션은 2025년 기준이며 시기에 따라 달라질 수 있습니다.</span>
+            클린스만 사임 후 황선홍·홍명보 체제에서 4-2-3-1을 표준으로 삼았지만,
+            <strong style={{ color: 'var(--text)' }}>2026 북중미 월드컵 본선에서는 손흥민 원톱의 스리백 3-4-3</strong>을
+            주 시스템으로 운용했습니다(체코전·남아공전 선발 모두 스리백 — 스포츠경향·이투데이 보도).
+            <span style={{ display: 'block', marginTop: 6, fontSize: 12 }}>※ 대표팀 감독·주류 포메이션은 2026 월드컵 종료(2026-07) 기준이며 시기에 따라 달라질 수 있습니다.</span>
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -232,10 +243,44 @@ export default function FormationPage() {
                 <tr><td style={cell}>2010 남아공 월드컵</td><td style={cell}><strong>4-4-2 다이아</strong></td><td style={cell}>허정무 — 박지성 톱2.5, 박주영 원톱</td></tr>
                 <tr><td style={cell}>2018 러시아 월드컵</td><td style={cell}><strong>4-4-2 / 4-2-3-1</strong></td><td style={cell}>신태용 — 손흥민 윙·박주호 풀백</td></tr>
                 <tr><td style={cell}>2022 카타르 월드컵</td><td style={cell}><strong>4-2-3-1 / 4-4-2</strong></td><td style={cell}>벤투 — 빌드업 강화, 황희찬·이강인·조규성</td></tr>
-                <tr><td style={cell}>2024~현재</td><td style={cell}><strong>4-2-3-1 / 4-1-4-1</strong></td><td style={cell}>대표팀 표준. 김민재·이강인·손흥민·황희찬</td></tr>
+                <tr><td style={cell}>2024~2026 예선</td><td style={cell}><strong>4-2-3-1 / 4-1-4-1</strong></td><td style={cell}>대표팀 표준. 김민재·이강인·손흥민·황희찬</td></tr>
+                <tr><td style={cell}>2026 북중미 월드컵</td><td style={cell}><strong>3-4-3</strong></td><td style={cell}>홍명보 — 손흥민 원톱 스리백. 체코전 2-1 승(16년 만의 1차전 승리) 후 멕시코·남아공에 0-1 연패, 1승 2패 조 3위로 32강 진출 실패(최종 34위)</td></tr>
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.9, marginTop: 12, marginBottom: 0 }}>
+            홍명보 감독은 32강 진출 실패의 책임을 지고 2026년 6월 29일 사퇴했습니다(뉴시스).
+            대한축구협회는 7월 24일 이사회에서 후임을 감독+코칭스태프 사단 형태의 공개채용으로 뽑되,
+            11월 A매치 윈도우까지는 임시감독 체제로 치르고 2027년 1월 아시안컵 전 정식 선임을 목표로 정했습니다
+            — 2026년 7월 30일 현재 후임 미정.
+          </p>
+
+          <h3 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 16, fontWeight: 700, letterSpacing: '-0.3px', margin: '24px 0 10px' }}>
+            🌍 2026 월드컵이 보여준 세계 전술 트렌드
+          </h3>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
+            우승팀 스페인은 골든볼 수상자 <strong style={{ color: 'var(--text)' }}>로드리를 단일 피벗으로 둔 점유 기반 4-3-3</strong>으로
+            대회를 지배했고, 결승에서 같은 4-3-3의 아르헨티나를 연장 1-0(페란 토레스 106분 결승골)으로 꺾어
+            2010년 이후 16년 만에 통산 두 번째 우승을 차지했습니다(FIFA.com 공식 경기 리포트).
+            3위는 잉글랜드, 4위는 프랑스. FIFA 기술연구그룹(TSG)이 공식 분석에서 꼽은 대회 3대 트렌드는 다음과 같습니다(FIFA Training Centre).
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+            {[
+              { title: '1. 교체 자원의 영향력 확대', desc: '조별리그에서 교체 투입 선수가 43골을 기록 — 선발 11명만큼 벤치 구성이 중요해짐' },
+              { title: '2. 카운터-프레싱 확산', desc: '승리팀이 패배팀보다 평균 4초 빨리 볼을 재탈환 — 소유권을 잃은 직후의 즉각 압박이 승패를 가름' },
+              { title: '3. 골키퍼의 플레이메이커화', desc: 'GK가 골킥을 직접 처리한 비율 2018년 100% → 2022년 91% → 2026년 52% — 골키퍼의 빌드업 관여 급증' },
+            ].map((b, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.title}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.9, marginTop: 12, marginBottom: 0 }}>
+            이와 함께 빌드업 국면에서 수비형 미드나 풀백을 내려 일시적으로 백3를 만드는 <strong style={{ color: 'var(--text)' }}>가변형 백3 빌드업</strong>과
+            센터백-풀백 사이 인사이드 채널 공략도 주요 흐름으로 분석됐습니다(FIFA Training Centre 라운드 리뷰) —
+            고정 스리백의 유행이 아니라 빌드업 국면의 가변 전환이라는 점이 특징입니다.
+          </p>
         </section>
 
         {/* 6. 포메이션 선택 가이드 */}

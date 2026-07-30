@@ -260,15 +260,16 @@ export interface Percentile {
   color: string
 }
 
+/* 경계값은 국세청 2024년 귀속 근로소득 백분위(천분위) 자료 기준 — 확인된 지점만 사용한다.
+   상위 1% 진입 약 1.73억 / 상위 5% 약 1.11억 / 상위 10% 약 8,800만 / 중위 약 3,400만.
+   그 사이 구간(상위 20%·35% 등)은 공표 경계가 확인되지 않아 범위 표기로 둔다. */
 export function getSalaryPercentile(yearly: number): Percentile {
-  if (yearly >= 100_000_000) return { percentile: 95, description: '상위 5%',     color: '#A16207' }
-  if (yearly >= 80_000_000)  return { percentile: 90, description: '상위 10%',    color: '#A16207' }
-  if (yearly >= 70_000_000)  return { percentile: 80, description: '상위 20%',    color: '#059669' }
-  if (yearly >= 55_000_000)  return { percentile: 65, description: '상위 35%',    color: '#059669' }
-  if (yearly >= 45_000_000)  return { percentile: 50, description: '중위 (50%)',  color: '#0891B2' }
-  if (yearly >= 35_000_000)  return { percentile: 35, description: '하위 35%',    color: '#0891B2' }
-  if (yearly >= 25_000_000)  return { percentile: 20, description: '하위 20%',    color: '#EA580C' }
-  return                     { percentile: 10, description: '하위 10%',    color: '#EA580C' }
+  if (yearly >= 173_000_000) return { percentile: 97, description: '상위 1% 이내',      color: 'var(--cat-sports)' }
+  if (yearly >= 111_000_000) return { percentile: 93, description: '상위 5% 이내',      color: 'var(--cat-sports)' }
+  if (yearly >= 88_000_000)  return { percentile: 88, description: '상위 10% 이내',            color: 'var(--cat-sports)' }
+  if (yearly >= 34_000_000)  return { percentile: 62, description: '중위 이상 · 상위 10% 미만', color: 'var(--success)' }
+  if (yearly >= 25_000_000)  return { percentile: 32, description: '중위(약 3,400만) 미만',     color: 'var(--cat-health)' }
+  return                     { percentile: 12, description: '중위 미만 (하위권)',            color: 'var(--cat-life)' }
 }
 
 /* ─── 연봉표 생성 ─── */

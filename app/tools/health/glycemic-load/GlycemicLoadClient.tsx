@@ -155,7 +155,7 @@ export default function GlycemicLoadClient() {
           </table>
         </div>
         <p className={s.groupNote}>
-          GI·탄수화물은 대표 참고값(시드니대 GI DB·국제표·농진청)으로 품종·조리·측정에 따라 달라집니다. 판정 기준: GL 저 ≤10 · 중 11~19 · 고 ≥20.
+          GI는 국제 GI 표(2008·2021판)와 국내 인체시험(2015) 값을 우선 적용했고, 출처가 확인되지 않은 일부 항목은 통용 참고치입니다. 탄수화물·1회 섭취량은 통용 근사값이며 품종·조리·측정에 따라 달라집니다. 판정 기준: GL 저 ≤10 · 중 11~19 · 고 ≥20.
         </p>
       </div>
 
@@ -167,7 +167,7 @@ export default function GlycemicLoadClient() {
           { href: '/tools/cooking/nuts', label: '견과류 섭취량 계산기' },
         ]}
         sources={[
-          { label: 'University of Sydney — Glycemic Index', href: 'https://glycemicindex.com' },
+          { label: 'Atkinson 등 — International Tables of GI/GL (2008)', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC2584181/' },
           { label: '대한당뇨병학회', href: 'https://www.diabetes.or.kr' },
         ]}
       >

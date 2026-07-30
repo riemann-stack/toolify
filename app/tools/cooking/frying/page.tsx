@@ -23,6 +23,8 @@ const FAQ_LD = [
                 a: '에어프라이어는 기름을 거의 사용하지 않아 칼로리가 낮지만, 고온 공기 순환 방식이라 기름에 직접 튀기는 것보다 겉면의 바삭함이 약간 다를 수 있습니다. 기름 분사(에어프라이어 내부에 식용유 약간 뿌리기)를 하면 튀김에 더 가까운 식감을 낼 수 있습니다.' },
               { q: '튀기다 색이 너무 진해졌는데 꺼내야 하나요?',
                 a: '육류(치킨, 돈까스)는 겉색이 진해도 속이 안 익을 수 있습니다. 반드시 가장 두꺼운 부분을 찔러 육즙이 투명하게 나오는지 확인하세요. 채소·해산물은 색이 황금갈색이 되면 완성 신호입니다. 진갈색에 가까워지면 쓴맛이 날 수 있으니 주의하세요.' },
+              { q: '치킨 안전 내부온도가 자료마다 75°C, 74°C로 다른 이유는?',
+                a: '기관별 기준 체계가 다르기 때문입니다. 한국 식약처는 부위 구분 없이 육류·가금류는 중심온도 75°C, 어패류는 85°C에서 1분 이상 익히도록 일괄 권고합니다. 반면 미국 USDA FSIS는 부위별로 세분해 가금류 74°C(165°F), 다짐육 71°C(160°F), 통살 스테이크류 63°C(145°F)에 3분 휴지를 제시합니다. 서로 다른 체계의 숫자를 섞어 쓰면 안 되며, 가정에서는 더 보수적인 식약처 기준을 따르면 됩니다.' },
             ]
 
 export default function FryingPage() {
@@ -94,7 +96,7 @@ export default function FryingPage() {
                   { n: '🍟 감자튀김', t: '160→180°C', a: '3~4분',   b: '1~1.5분', p: '2차 필수' },
                   { n: '🍤 새우튀김', t: '170~180°C', a: '1.5~2.5분', b: '없음',   p: '빨리 꺼내기' },
                   { n: '🥩 돈까스',   t: '160~180°C', a: '4~6분',   b: '선택',   p: '내부 확인 필수' },
-                  { n: '🍗 치킨',     t: '160~175°C', a: '12~15분', b: '2~3분',  p: '75°C 확인' },
+                  { n: '🍗 치킨',     t: '160~175°C', a: '12~15분', b: '2~3분',  p: '중심 75°C 확인' },
                   { n: '🦑 오징어',   t: '175~185°C', a: '1~2분',   b: '없음',   p: '오래 튀기면 질김' },
                   { n: '🥟 만두',     t: '165~180°C', a: '4~6분',   b: '없음',   p: '과밀 금지' },
                   { n: '🍠 고구마',   t: '160~175°C', a: '3~5분',   b: '선택',   p: '당분 주의(탐)' },
@@ -164,7 +166,7 @@ export default function FryingPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '10px', padding: '12px 16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--accent)' }}>💡 온도 급락 방지 팁:</strong> 재료를 <strong>3~5개씩 나눠</strong> 넣고, 사이에 30초 이상 간격을 두세요. 용량 대비 30% 이하가 이상적.
             </p>
@@ -250,18 +252,47 @@ export default function FryingPage() {
               본 가이드는 일반적인 참고용입니다. 조리 환경, 재료 크기, 냉동/냉장 보관 상태에 따라 실제 시간이 다를 수 있습니다. 육류와 냉동 재료는 반드시 내부 익힘 상태를 확인하세요.
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            안전 내부온도는 기관마다 체계가 다릅니다. <strong style={{ color: 'var(--text)' }}>한국 식약처는 부위 구분 없이 일괄 기준</strong>을 권고하고, <strong style={{ color: 'var(--text)' }}>미국 USDA FSIS는 부위·형태별로 세분</strong>합니다. 두 체계의 숫자를 한 표에 섞으면 안 됩니다 — 예컨대 닭고기 75°C는 식약처, 74°C(165°F)는 USDA 기준입니다.
+          </p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>① 식약처 기준 — 일괄 권고 (중심온도 1분 이상 유지)</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px', marginBottom: '6px' }}>
             {[
-              { n: '🐔 닭고기', t: '75°C', c: '#DC2626' },
-              { n: '🐖 돼지고기', t: '63°C', c: '#D97706' },
-              { n: '🐟 생선', t: '63°C', c: '#0891B2' },
-              { n: '🥩 간 고기(다짐육)', t: '71°C', c: '#EA580C' },
+              { n: '🍗 육류·가금류(치킨·돈까스)', t: '75°C', c: 'var(--danger)' },
+              { n: '🐟 어패류(생선·오징어·새우)', t: '85°C', c: 'var(--cat-health)' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
-                <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{s.n} 안전 내부온도</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{s.n}</p>
                 <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, margin: 0 }}>{s.t} 이상</p>
+                <p style={{ fontSize: '11px', color: 'var(--muted)', margin: '2px 0 0' }}>중심온도 1분 이상</p>
               </div>
             ))}
+          </div>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '18px' }}>
+            출처: 식품의약품안전처 식중독 예방 6대 수칙 &lsquo;익혀먹기&rsquo;(mfds.go.kr)
+          </p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>② USDA FSIS 기준 — 부위·형태별 세분</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px', marginBottom: '6px' }}>
+            {[
+              { n: '가금류(통째·부분·분쇄)', t: '74°C', f: '165°F', c: 'var(--danger)', d: '' },
+              { n: '분쇄육(소·돼지 다짐육)', t: '71°C', f: '160°F', c: 'var(--cat-life)', d: '' },
+              { n: '통살 스테이크·찹·로스트', t: '63°C', f: '145°F', c: 'var(--warning)', d: '+ 3분 휴지 필수' },
+              { n: '생선·조개류', t: '63°C', f: '145°F', c: 'var(--cat-health)', d: '' },
+            ].map((s, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{s.n}</p>
+                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, margin: 0 }}>{s.t}</p>
+                <p style={{ fontSize: '11px', color: 'var(--muted)', margin: '2px 0 0' }}>{s.f}{s.d ? ` ${s.d}` : ''}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '14px' }}>
+            출처: USDA FSIS, Safe Minimum Internal Temperature Chart(2025년 4월 갱신). °C는 °F 원문의 환산값(반올림).
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
+              <strong style={{ color: 'var(--accent)' }}>💡 어느 기준을 따라야 하나요?</strong> 가정에서는 더 보수적인 식약처 기준(75°C·85°C, 1분 이상)을 따르는 것이 안전합니다. USDA의 낮은 온도(예: 통살 63°C)는 3분 휴지 같은 시간 조건과 한 세트라, 온도 숫자만 떼어 쓰면 기준 미달이 됩니다.
+            </p>
           </div>
         </div>
 

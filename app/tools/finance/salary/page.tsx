@@ -32,7 +32,7 @@ const RATE_ROWS = [20_000_000, 30_000_000, 40_000_000, 50_000_000, 70_000_000, 1
 
 /* §5 월 실수령 목표 → 필요 세전 연봉 — 엔진 생성(1인·비과세 0) */
 const NET_TARGETS = buildNetTargetTable(1, 0, 0)
-const NET_TARGET_NOTES = ['신입 평균', '', '중위 수준', '', '', '상위 20%', '상위 5%']
+const NET_TARGET_NOTES = ['', '중위 부근', '', '', '', '', '상위 10% 이내']
 
 const FAQ_LD = [
               {
@@ -86,7 +86,7 @@ export default function SalaryPage() {
         <strong style={{ color: 'var(--text)' }}>2026년 최신 세법 기준</strong>, 4대보험·근로소득세를 자동 반영한 실수령액 추정 계산기.
       </p>
 
-      <UpdatedMeta date="2026년 5월" basis="2026년 4대보험 요율·근로소득 간이세액표 기준" sources={[{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"}]} />
+      <UpdatedMeta date="2026년 7월" basis="2026년 4대보험 요율·근로소득 간이세액표 기준, 연봉 분포는 국세청 2024년 귀속 연말정산 국세통계(2025-12 공표) 기준" sources={[{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"},{"label":"근로소득 백분위 자료(공공데이터포털)","href":"https://www.data.go.kr/data/15082063/fileData.do"}]} />
 
       <SalaryClient />
 
@@ -343,27 +343,34 @@ export default function SalaryPage() {
         {/* ── 8. 한국 직장인 연봉 분포 ── */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            한국 직장인 연봉 분포 (2026년 기준 추정)
+            한국 직장인 연봉 분포 — 국세청 2024년 귀속 기준
           </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+            국세청이 2025년 12월 공표한 <strong style={{ color: 'var(--text)' }}>2024년 귀속 연말정산 국세통계</strong> 기준, 연말정산 신고 근로자 2,108만명의 1인당 평균 총급여는 <strong style={{ color: 'var(--text)' }}>4,475만원</strong>입니다.
+            반면 중위값은 약 3,400만원으로 평균보다 1,000만원 이상 낮습니다 — 상위 1%(21.1만명) 평균이 3억4,630만원, 최상위 0.1% 구간 평균이 9억9,937만원에 이를 만큼 상위 소득이 평균을 끌어올리는 구조라, 연봉이 &lsquo;평균 이하&rsquo;여도 전체 근로자의 절반보다 높을 수 있습니다.
+          </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginBottom: '14px' }}>
             {[
-              { name: '평균 연봉',   value: '약 4,300만원' },
-              { name: '중위소득',    value: '약 3,600만원' },
-              { name: '신입 평균',   value: '약 2,800만원' },
-              { name: '대기업 평균', value: '약 7,200만원' },
-              { name: '중견기업',    value: '약 5,200만원' },
-              { name: '중소기업',    value: '약 3,800만원' },
-              { name: '상위 10%',   value: '약 8,000만원+' },
-              { name: '상위 5%',    value: '약 1억+' },
+              { name: '평균 총급여',        value: '4,475만원',          sub: '전년 대비 +143만원' },
+              { name: '중위 총급여',        value: '약 3,400만원',       sub: '경계 3,360만~3,420만원' },
+              { name: '상위 10% 진입선',    value: '약 8,800만~9,100만', sub: '상위 10% 구간 평균 9,117만원' },
+              { name: '상위 5% 진입선',     value: '약 1.11억~1.2억',    sub: '상위 5% 구간 평균 1억1,984만원' },
+              { name: '상위 1% 평균',       value: '3억4,630만원',       sub: '21.1만명' },
+              { name: '억대 연봉(1억 초과)', value: '154만명 · 7.3%',    sub: '전년 대비 +15만명' },
+              { name: '대졸 정규직 초임 평균', value: '3,675만원',        sub: '300인 이상 5,001만원 (2023년)' },
+              { name: '대기업 vs 중소 (월)', value: '613만 vs 307만원',  sub: '격차 약 2배 (2024.12월 기준)' },
             ].map((p, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <span style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Noto Sans KR' }}>{p.name}</span>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>{p.name}</span>
                 <span style={{ fontSize: 14, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{p.value}</span>
+                <span style={{ fontSize: 11, color: 'var(--muted)' }}>{p.sub}</span>
               </div>
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
-            출처: 통계청 임금근로일자리 소득·국세청 귀속 근로소득 신고 자료(공표 시차가 있어 최근 공표 연도 기준 추정). 본 도구의 <strong style={{ color: 'var(--text)' }}>[실수령액] 탭</strong>에서 본인 연봉의 분포 위치를 자동으로 표시합니다.
+            출처 — 평균·중위·상위 진입선·억대 연봉: <strong style={{ color: 'var(--text)' }}>국세청 2024년 귀속 연말정산 국세통계(2025-12 공표)</strong> 및 공공데이터포털 &lsquo;근로소득 백분위(천분위)&rsquo; 원자료. 진입선은 인접 백분위 구간 평균 사이의 경계 범위입니다.
+            대졸 초임: 한국경영자총협회 &lsquo;우리나라 대졸 초임 분석&rsquo;(고용노동부 임금 통계 원자료, 2023년 기준·초과급여 제외) — 규모별 격차가 커서 5인 미만은 연 2,731만원(300인 이상의 54.6%)입니다.
+            대기업·중소기업: 통계청(국가데이터처) 임금근로일자리 소득(2024년 12월 기준) 월평균 소득 — 단순 연 환산 시 약 7,356만원 vs 3,684만원. 본 도구의 <strong style={{ color: 'var(--text)' }}>[실수령액] 탭</strong>에서 본인 연봉의 분포 위치를 자동으로 표시합니다.
           </p>
         </section>
 

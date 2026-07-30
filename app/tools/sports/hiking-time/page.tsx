@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/hiking-time',
@@ -91,6 +92,15 @@ export default function HikingTimePage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         한국 100대 명산 35+ 프리셋 + 체력·날씨 보정. <strong style={{ color: 'var(--text)' }}>일몰 전 하산</strong> 자동 진단.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="국립공원 입산시간지정제(공원·탐방로별 상이)·자연공원법 제86조제2항 과태료 기준"
+        sources={[
+          { label: '국립공원공단 — 입산시간지정제', href: 'https://www.knps.or.kr/portal/main/contents.do?menuNo=8000198' },
+          { label: '국민재난안전포털 — 산행안전사고 행동요령', href: 'https://www.safekorea.go.kr/safekorea-kor/acts/nacts/action-guide.do?category=mtSafetyAccident&actsHeaderTitle=%EC%82%B0%ED%96%89%EC%95%88%EC%A0%84%EC%82%AC%EA%B3%A0&menuSn=4' },
+        ]}
+      />
 
       <HikingTimeClient />
 
@@ -208,7 +218,88 @@ export default function HikingTimePage() {
           </p>
         </section>
 
-        {/* 4. FAQ */}
+        {/* 4. 일몰 전 하산 안전 체크리스트 */}
+        <section>
+          <h2 style={sectionTitle}>일몰 전 하산 안전 체크리스트</h2>
+          <p style={{ ...faqAnswer, marginBottom: '10px' }}>
+            안내판이나 지도에 적힌 코스타임이 내 실제 산행 시간과 어긋나는 것은 자연스러운 일입니다. 코스타임은 산출 기준이 통일되어 있지 않아
+            휴식·식사가 빠진 순 보행 시간인 경우가 많고, 어떤 체력의 보행자를 가정했는지도 자료마다 다릅니다. 같은 코스라도 당일 컨디션과 배낭 무게,
+            비 온 뒤 진창이나 겨울 빙판 같은 노면 상태, 성수기 좁은 구간의 정체, 사진 촬영·간식 같은 비보행 시간에 따라 결과가 크게 달라집니다.
+          </p>
+          <p style={{ ...faqAnswer, marginBottom: '16px' }}>
+            그래서 안전 계획은 &ldquo;몇 시에 출발할까&rdquo;가 아니라 <strong style={{ color: 'var(--text)' }}>일몰 시각에서 거꾸로 계산</strong>하는
+            것이 원칙입니다. 예상 시간에 여유를 더해 하산 완료 시각을 먼저 정하고, 아래 FAQ의 회귀 시간(턴어라운드) 개념으로 정상 포기 시점까지 미리
+            정해 두면 시간이 어긋나도 판단이 흔들리지 않습니다.
+          </p>
+          <p style={{ ...faqAnswer, marginBottom: '14px' }}>
+            <strong style={{ color: 'var(--text)' }}>국립공원은 입산 가능 시간이 정해져 있습니다.</strong> 국립공원공단은 산행 목적지·거리·산행시간을
+            고려해 탐방로별로 입산·통제 시간을 지정하는 <strong style={{ color: 'var(--accent)' }}>입산시간지정제</strong>를 운영합니다. 2013년 3월
+            지리산에서 처음 시행됐고, 2015년 5월 16일부터 태안해안을 제외한 전국 국립공원으로 확대됐습니다. 일부 탐방로는 &ldquo;일몰 후부터 다음 날
+            일출 2시간 전까지&rdquo; 탐방이 제한되며, 시간대는 공원·탐방로마다 다릅니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['탐방로 예시', '하절기', '동절기'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['북한산',              '04:00~17:00 (3~11월)',  '04:00~16:00 (12~2월)'],
+                  ['속리산 법주사~문장대', '04:00~15:00 (4~10월)',  '05:00~14:00 (11~3월)'],
+                ].map(([trail, summer, winter], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{trail}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{summer}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{winter}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ ...faqAnswer, margin: '12px 0 16px' }}>
+            위 표처럼 같은 &lsquo;동절기&rsquo;라도 공원마다 기간·시간이 다르므로(국립공원공단, 2026년 7월 확인) 산행 전 반드시 공단 홈페이지의
+            입산시간지정제·탐방로 통제정보에서 해당 코스를 확인하세요. 야간 산행 제한은 자연공원법 제28조제1항(출입 금지·제한)에 근거한 공원별
+            공고로 시행되며, 제한·금지된 구역에 출입하면 같은 법 제86조제2항에 따라 <strong style={{ color: 'var(--text)' }}>50만원 이하의
+            과태료</strong>(시행령 별표 3: 1차 20만·2차 30만·3차 50만원)가 부과될 수 있습니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['구분', '체크 항목'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['산행 전',        '기상 상태 확인 · 등산지도, 통신장비, 랜턴, 우의, 상비약품, 비상식량, 휴대전화 예비 배터리 준비 · 방수·통기성 좋은 등산화 착용'],
+                  ['시간 계획',      '아침 일찍 출발해 해지기 한두 시간 전에 산행 종료 · 하루 산행은 8시간 이내로'],
+                  ['페이스',         '체력의 30%는 비축 · 일행 중 약한 사람 기준으로 산행'],
+                  ['하지 말 것',     '지정 등산로 밖 산행 · 음주 산행 · 단독 산행'],
+                  ['길을 잃었을 때', '계곡을 피해 능선으로 이동'],
+                  ['조난 신고',      '등산로의 산악위치표지판·국가지점번호를 확인해 즉시 119 신고 · 표지판이 안 보이면 지도 앱이나 카카오톡 위치전송으로 위치 전달'],
+                ].map(([phase, items], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{phase}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{items}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ ...faqAnswer, marginTop: '12px', fontSize: '12px' }}>
+            ※ 체크 항목: 국민재난안전포털(소방청) 산행안전사고 행동요령 · 조난 신고 요령: 소방청 보도자료(2022-10). 산림청도 산행 안전수칙
+            &lsquo;NEED&rsquo;에서 날씨·입산통제 확인(Notice), 장비 준비(Equip), 낙석 위험 구간 회피(Escape)와 함께 체력에 맞는 코스 선택과
+            1시간 정도 이른 하산(Descent)을 권고합니다(2026년 3월).
+          </p>
+        </section>
+
+        {/* 5. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ} />
@@ -222,7 +313,7 @@ export default function HikingTimePage() {
           </div>
         </section>
 
-        {/* 5. 관련 도구 */}
+        {/* 6. 관련 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>

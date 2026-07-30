@@ -82,7 +82,47 @@ export default function DdayPage() {
           </div>
         </section>
 
-        {/* 2. 평일 vs 영업일 vs 달력일 */}
+        {/* 2. 주요 시험·이벤트 D-day (확정 일정) */}
+        <section>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>주요 시험·이벤트 D-day (확정 일정)</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            시행기관이 공고한 <strong style={{ color: 'var(--text)' }}>확정 일정</strong>만 모았습니다. 날짜를 상단 계산기의 목표 날짜에 그대로(<code>YYYY-MM-DD</code>) 입력하면 남은 달력일·평일·영업일이 즉시 계산되고, D-day로 저장하면 매일 자동 갱신됩니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['일정', '날짜 (입력용)', '시행기관', '비고'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['토익 제578회 정기시험',        '2026-09-06 (일)', '한국토익위원회',        '오전 9:20 입실'],
+                  ['제29회 주택관리사보 2차 시험',  '2026-09-19 (토)', '한국산업인력공단',      '합격자 발표 12/2'],
+                  ['한국사능력검정 제80회',        '2026-10-17 (토)', '국사편찬위원회',        '심화만 시행 · 접수 9/15~9/22'],
+                  ['제37회 공인중개사 자격시험',    '2026-10-31 (토)', '한국산업인력공단(Q-Net)', '1·2차 동시 · 합격자 발표 12/2'],
+                  ['토익 제581회 정기시험',        '2026-10-31 (토)', '한국토익위원회',        '토요일 시행 회차'],
+                  ['2027학년도 대학수학능력시험',   '2026-11-19 (목)', '교육부',               '원서접수(방문) 8/24~9/4'],
+                  ['수능 성적 통지',              '2026-12-11 (금)', '교육부',               '수능과 별도 D-day 저장 추천'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap', fontFamily: 'JetBrains Mono, monospace' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '10px' }}>
+            시행기관 공고 기준(2026-07 확인). 시험 일정은 변경될 수 있으니 응시 전 반드시 시행기관 원문 공고를 재확인하세요. 수능처럼 학습량이 걸린 시험은 남은 <strong style={{ color: 'var(--text)' }}>평일 수</strong>에 아래 페이스 계산을 결합하면 하루 학습량까지 나옵니다.
+          </p>
+        </section>
+
+        {/* 3. 평일 vs 영업일 vs 달력일 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>평일·영업일·달력일 차이</h2>
           <div style={{ overflowX: 'auto' }}>
@@ -111,9 +151,23 @@ export default function DdayPage() {
               </tbody>
             </table>
           </div>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', marginTop: '12px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>실전 예시 — &ldquo;계약 후 영업일 10일&rdquo; 기한 산정</p>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '8px' }}>
+              2026-09-21(월) 계약 체결, 다음 날부터 기산해 영업일 10일 이내 지급 조건이라면:
+            </p>
+            <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+              <li>· 9/22(화)~23(수) = <strong style={{ color: 'var(--text)' }}>2영업일</strong> → 추석 연휴(9/24~26)·일요일 건너뜀</li>
+              <li>· 9/28(월)~10/2(금) = <strong style={{ color: 'var(--text)' }}>7영업일째</strong> → 개천절(10/3)·대체공휴일(10/5) 건너뜀</li>
+              <li>· 10/6(화)~10/8(목) = 10영업일째 → 기한일 <strong style={{ color: 'var(--accent)' }}>2026-10-08(목)</strong></li>
+            </ul>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '8px' }}>
+              달력일로는 17일 — 주말 4일과 평일에 낀 공휴일 3일(추석 연휴 9/24·25, 개천절 대체 10/5)이 빠진 결과입니다. 본 도구의 영업일 계산은 이 공휴일들을 자동 제외합니다. 기산 방식(계약 당일 포함 여부)은 계약 문언에 따라 다를 수 있으니 계약서를 먼저 확인하세요.
+            </p>
+          </div>
         </section>
 
-        {/* 3. 한국 공휴일 */}
+        {/* 4. 한국 공휴일 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 공휴일 (2026~2030 자동 반영)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -124,7 +178,7 @@ export default function DdayPage() {
           </p>
         </section>
 
-        {/* 4. 진행률 계산 */}
+        {/* 5. 진행률 계산 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>진행률 계산</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
@@ -138,7 +192,7 @@ export default function DdayPage() {
           </p>
         </section>
 
-        {/* 5. 페이스 계산 */}
+        {/* 6. 페이스 계산 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>페이스 계산 — 목표 달성 도구</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -165,7 +219,7 @@ export default function DdayPage() {
           </div>
         </section>
 
-        {/* 6. 반복 D-day */}
+        {/* 7. 반복 D-day */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>반복 D-day</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -187,7 +241,7 @@ export default function DdayPage() {
           </div>
         </section>
 
-        {/* 7. D+ 활용 */}
+        {/* 8. D+ 활용 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>D+ 활용 — 지난 날짜 기록</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -209,7 +263,7 @@ export default function DdayPage() {
           </div>
         </section>
 
-        {/* 8. FAQ */}
+        {/* 9. FAQ */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
@@ -260,6 +314,8 @@ export default function DdayPage() {
             <li><strong style={{ color: 'var(--text)' }}>관공서의 공휴일에 관한 규정</strong> — 대통령령 (대체공휴일 제3조·2013 개정 도입, 제헌절·노동절 편입 2026 개정 = 대통령령 제36290호)</li>
             <li><strong style={{ color: 'var(--text)' }}>공휴일에 관한 법률</strong> — 법률 제18291호 (2021 제정·2022 시행, 대체공휴일 법제화)</li>
             <li><strong style={{ color: 'var(--text)' }}>한국천문연구원 천문력</strong> — 24절기·음력 환산</li>
+            <li><strong style={{ color: 'var(--text)' }}>2027학년도 수능 시행 기본계획</strong> — 교육부 보도자료 (시행일·성적 통지일)</li>
+            <li><strong style={{ color: 'var(--text)' }}>시험 시행계획 공고</strong> — Q-Net·한국산업인력공단(공인중개사·주택관리사보) / 한국토익위원회(토익 연간 일정) / 국사편찬위원회(한국사능력검정)</li>
           </ul>
         </section>
 
