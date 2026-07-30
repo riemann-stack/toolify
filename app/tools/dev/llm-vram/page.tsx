@@ -54,6 +54,39 @@ const FAQ_LD = [
   },
 ]
 
+/** 컨텍스트 8K · KV F16 · 표기 용량(GiB 환산) 92% 이하 기준, 각 GPU에서 통과하는 최대 양자화 (본 계산기 엔진으로 산출) */
+const MATRIX_MODELS = ['Llama 3.1 8B', 'Qwen3 14B', 'Mistral Small 3 24B', 'Qwen3 32B', 'Gemma 3 27B', 'Llama 3.3 70B']
+
+type MatrixCell = [quant: string, size: string, tight?: boolean] | null
+
+const GPU_MATRIX: { gpu: string; cells: MatrixCell[] }[] = [
+  { gpu: 'RTX 4060 (8GB)', cells: [['Q3_K_M', '7.1GB'], null, null, null, null, null] },
+  { gpu: 'RTX 4070 (12GB)', cells: [['Q8_0', '11.6GB', true], ['Q3_K_M', '10.7GB'], null, null, null, null] },
+  { gpu: 'RTX 4080 / 5080 (16GB)', cells: [['Q8_0', '11.6GB'], ['Q6_K', '15.5GB', true], ['Q3_K_M', '15.1GB'], null, ['Q2_K', '14.0GB'], null] },
+  { gpu: 'RTX 4090 / 3090 (24GB)', cells: [['F16', '19.1GB'], ['Q8_0', '19.1GB'], ['Q6_K', '22.7GB'], ['Q3_K_M', '20.5GB'], ['Q5_K_M', '22.7GB'], null] },
+  { gpu: 'RTX 5090 (32GB)', cells: [['F16', '19.1GB'], ['Q8_0', '19.1GB'], ['Q8_0', '28.4GB'], ['Q6_K', '31.1GB', true], ['Q6_K', '25.6GB'], null] },
+  { gpu: 'Mac 32GB (가용 24GB)', cells: [['F16', '19.1GB'], ['Q8_0', '19.1GB'], ['Q6_K', '22.7GB'], ['Q3_K_M', '20.5GB'], ['Q5_K_M', '22.7GB'], null] },
+  { gpu: 'Mac 64GB (가용 48GB)', cells: [['F16', '19.1GB'], ['F16', '32.9GB'], ['Q8_0', '28.4GB'], ['Q8_0', '39.0GB'], ['Q8_0', '32.3GB'], ['Q3_K_M', '39.9GB']] },
+]
+
+/** Llama 3.1 8B · Q4_K_M · KV F16 — 컨텍스트별 KV/총량 (KV 비중은 두 값의 비) */
+const CTX_ROWS = [
+  ['4K (4,096)', '0.54GB', '7.4GB', '7%'],
+  ['8K (8,192)', '1.07GB', '8.0GB', '13%'],
+  ['32K (32,768)', '4.29GB', '11.2GB', '38%'],
+  ['128K (131,072)', '17.18GB', '24.1GB', '71%'],
+]
+
+/** Q4_K_M · 컨텍스트 8K · KV F16 — 모델별 소요량 분해 */
+const Q4_ROWS = [
+  ['Llama 3.1 8B', '4.9GB', '1.07GB', '2.0GB', '8.0GB'],
+  ['Qwen3 14B', '9.1GB', '1.34GB', '2.0GB', '12.4GB'],
+  ['Mistral Small 3 24B', '14.4GB', '1.34GB', '2.0GB', '17.8GB'],
+  ['Gemma 3 27B', '16.8GB', '1.17GB', '2.0GB', '19.9GB'],
+  ['Qwen3 32B', '20.1GB', '2.15GB', '2.0GB', '24.2GB'],
+  ['Llama 3.3 70B', '43.2GB', '2.68GB', '2.0GB', '47.9GB'],
+]
+
 const RELATED = [
   { href: '/tools/dev/token-counter', icon: '🪙', name: 'AI 토큰 카운터', desc: 'GPT·Claude 토큰·비용' },
   { href: '/tools/dev/tech-stack', icon: '🛠️', name: '기술 스택 추천기', desc: '프로젝트 풀스택 추천' },
@@ -146,7 +179,132 @@ export default function LlmVramPage() {
           </p>
         </section>
 
-        {/* 3. 팁 카드 */}
+        {/* 3. GPU × 모델 매트릭스 */}
+        <section>
+          <h2 style={sectionTitle}>GPU별 돌아가는 모델 — 한눈에</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            양자화별 크기를 알아도 &lsquo;그래서 내 카드엔 뭐가 올라가나&rsquo;가 남죠. 위 계산기를 모델 6종 × GPU 7종으로 돌려,
+            각 조합에서 <strong style={{ color: 'var(--text)' }}>표기 용량(8GB=8GiB로 환산)의 92% 이하로 들어가는 가장 높은 양자화</strong>를 뽑았습니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 700 }}>
+              <caption style={{ captionSide: 'bottom', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, textAlign: 'left', paddingTop: 10 }}>
+                컨텍스트 8K · KV 캐시 F16 · GPU 표기 용량을 GiB(×2<sup>30</sup>)로 환산한 바이트의 92% 이하 사용 기준. 셀의 GB는 10진 GB라 표기 숫자끼리 나눈 비율은 이보다 커 보입니다(예: 24GB 카드의 22.7GB = 실제 88%). 본 계산기와 같은 공식으로 산출한 값 — 실측은 런타임(llama.cpp·ollama·vLLM)·OS·드라이버에 따라 다릅니다.
+              </caption>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12, minWidth: 130 }}>GPU (가용 VRAM)</th>
+                  {MATRIX_MODELS.map((m) => (
+                    <th scope="col" key={m} style={{ padding: '10px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{m}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {GPU_MATRIX.map((row, i) => (
+                  <tr key={row.gpu} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '9px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 700, fontSize: 12, fontFamily: 'Inter, sans-serif' }}>{row.gpu}</th>
+                    {row.cells.map((c, j) => (
+                      <td key={j} style={{ padding: '9px 10px', verticalAlign: 'top' }}>
+                        {c ? (
+                          <>
+                            <span style={{ color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{c[0]}{c[2] ? '†' : ''}</span>
+                            <br />
+                            <span style={{ color: 'var(--muted)', fontSize: 11 }}>{c[1]}</span>
+                          </>
+                        ) : (
+                          <span style={{ color: 'var(--muted)' }}>—</span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.75 }}>
+            ※ <strong style={{ color: 'var(--text)' }}>—</strong> 는 8K 컨텍스트에서 92% 기준을 통과하는 양자화가 하나도 없다는 뜻 — 해당 GPU 단독으로는 어렵고 멀티 GPU·CPU 오프로딩·통합메모리를 검토해야 합니다.
+            <strong style={{ color: 'var(--text)' }}> †</strong> 는 같은 GiB 환산 기준으로 90%를 넘겨 위 계산기가 <strong style={{ color: 'var(--warning)' }}>&lsquo;빠듯&rsquo;</strong>으로 판정하는 조합이에요.
+            Mac은 Metal 기본 상한(통합메모리의 약 75%)을 가용 용량으로 잡았고, 총량에는 오버헤드 2.0GB가 포함돼 있습니다(공식 수치가 아닌 커뮤니티 관행치).
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+            📌 <strong style={{ color: 'var(--text)' }}>읽는 법:</strong> <strong style={{ color: 'var(--accent-ink)' }}>24GB가 분수령</strong>입니다 — 8B는 F16 원본, 14B는 Q8_0, 24B·27B는 Q5~Q6까지 올라가요.
+            16GB에서는 24B가 Q3_K_M, 27B가 Q2_K로 내려가 품질 타협이 시작되고, 32B를 Q6_K로 쓰려면 32GB가 필요합니다.
+            70B는 Mac 64GB(가용 48GB)의 Q3_K_M이 표에서 유일한 통과 조합이에요.
+            8GB가 Q3_K_M인 것도 컨텍스트 8K를 잡았기 때문 — 4K로 줄이면 Q4_K_M(아래 표의 총 7.4GB)도 같은 기준을 통과합니다.
+          </div>
+        </section>
+
+        {/* 4. 컨텍스트 → VRAM */}
+        <section>
+          <h2 style={sectionTitle}>컨텍스트가 VRAM을 얼마나 먹나</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            KV 캐시는 컨텍스트 길이에 정비례합니다. 같은 모델·같은 양자화라도 컨텍스트를 어디까지 열어두느냐로 필요량이 <strong style={{ color: 'var(--text)' }}>3배 넘게</strong> 벌어져요.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
+              <caption style={{ captionSide: 'bottom', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, textAlign: 'left', paddingTop: 10 }}>
+                Llama 3.1 8B · Q4_K_M · KV 캐시 F16 기준. 본 계산기와 같은 공식으로 산출한 값 — 실측은 런타임·OS·드라이버에 따라 다릅니다.
+              </caption>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['컨텍스트', 'KV 캐시', '총 필요', 'KV 비중'].map((h) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {CTX_ROWS.map((r, i) => (
+                  <tr key={r[0]} style={{ borderBottom: '1px solid var(--border)', background: i === CTX_ROWS.length - 1 ? 'color-mix(in srgb, var(--warning) 8%, transparent)' : i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'Inter, sans-serif' }}>{r[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 16, fontWeight: 700, margin: '28px 0 10px' }}>
+            Q4_K_M 기준 모델별 소요량 — 가중치 + KV + 오버헤드
+          </h3>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
+              <caption style={{ captionSide: 'bottom', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, textAlign: 'left', paddingTop: 10 }}>
+                컨텍스트 8K · KV 캐시 F16 기준. 본 계산기와 같은 공식으로 산출한 값 — 실측은 런타임·OS·드라이버에 따라 다릅니다.
+                오버헤드 2.0GB는 공식 규격이 아니라 CUDA 런타임 + 컴퓨트 버퍼를 잡아둔 <strong style={{ color: 'var(--text)' }}>커뮤니티 관행치</strong>입니다.
+              </caption>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['모델', '가중치', 'KV(8K)', '오버헤드', '총 필요'].map((h) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Q4_ROWS.map((r, i) => (
+                  <tr key={r[0]} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, fontSize: 12, fontFamily: 'Inter, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'Inter, sans-serif' }}>{r[3]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{r[4]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 16, fontSize: 13, color: 'var(--muted)', lineHeight: 1.9 }}>
+            📌 <strong style={{ color: 'var(--text)' }}>실전 결론 — 128K는 가중치보다 캐시가 큰 영역:</strong> Llama 3.1 8B는 Q4_K_M 가중치가 4.9GB뿐이지만,
+            컨텍스트를 128K까지 열면 KV 캐시만 <strong style={{ color: 'var(--danger)' }}>17.18GB</strong>로 불어나 총 24.1GB — 총량의 71%가 캐시입니다.
+            즉 <strong style={{ color: 'var(--text)' }}>128K 컨텍스트는 8B 모델도 24GB급 카드가 필요</strong>합니다. 반대로 8K로 제한하면 같은 모델이 8.0GB로 끝나요.
+            긴 컨텍스트가 꼭 필요하다면 KV 정밀도를 Q8_0으로 낮춰 캐시를 절반으로 줄이는 게 첫 카드고(위 계산기의 &lsquo;KV 캐시 정밀도&rsquo;에서 바로 비교 가능),
+            32B급은 가중치 20.1GB에 KV·오버헤드가 붙어 총 24.2GB가 되기 때문에 24GB 카드에서 Q3_K_M으로 내려가게 됩니다.
+          </div>
+        </section>
+
+        {/* 5. 팁 카드 */}
         <section>
           <h2 style={sectionTitle}>VRAM이 모자랄 때 — 우선순위 3가지</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -163,12 +321,12 @@ export default function LlmVramPage() {
           </div>
         </section>
 
-        {/* 4. FAQ */}
+        {/* 6. FAQ */}
         <section>
           <Faq items={FAQ_LD} />
         </section>
 
-        {/* 5. 관련 도구 */}
+        {/* 7. 관련 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>

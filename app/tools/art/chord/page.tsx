@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/art/chord',
   title: '코드 구성음 계산기 — Cmaj7·Dm7·G7 코드 음이름 확인',
-  description: 'Cmaj7·Dm7·G7 등 코드 구성음 계산과 음이름 역방향 검색. C메이저·A마이너 다이아토닉 코드표, 슬래시(분수) 코드 읽는 법, 2-5-1·카논 등 자주 쓰는 진행까지.',
+  description: 'Cmaj7·Dm7·G7 등 코드 구성음 계산과 음이름 역방향 검색. C메이저·A마이너 다이아토닉 코드표, 슬래시(분수) 코드 읽는 법, 2-5-1·캐논(카논) 등 자주 쓰는 진행까지.',
   keywords: ['코드구성음계산기', 'Cmaj7구성음', '코드음계산기', '다이아토닉코드표', '코드역방향검색', '기타코드구성음', '피아노코드계산기', '음악이론계산기'],
 })
 
@@ -229,22 +229,43 @@ export default function ChordPage() {
         {/* ── 4. 자주 쓰이는 코드 진행 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 쓰이는 코드 진행 예시
+            자주 쓰이는 코드 진행 — 출처가 확인된 대표곡
           </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+            대표곡은 <strong style={{ color: 'var(--text)' }}>화성 분석 출처와 조성 출처를 따로 확인한 곡만</strong> 실었습니다. 흔히 도는 &ldquo;이 곡도 같은 진행&rdquo; 목록은 대부분 위키·블로그가 근거라 여기서는 뺐습니다.
+          </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               {
-                name: '1-6-4-5 진행 (올드팝·발라드)',
+                name: '1-5-6-4 진행 (Axis·팝의 왕)',
+                deg: 'Ⅰ → Ⅴ → ⅵ → Ⅳ',
+                ex: 'C → G → Am → F',
+                desc: '팝·록에서 폭넓게 쓰이는 4코드 루프. 아래 1-6-4-5와 코드는 같고 Ⅴ·ⅵ·Ⅳ의 순서만 다릅니다',
+                song: 'U2 「With or Without You」(1987) — D장조에서 D → A → Bm → G를 계속 순환합니다. 진행은 음악이론 오픈교재 Open Music Theory, 원 발표 조성(D Major)은 Musicnotes 공식 악보 표기.',
+                color: 'var(--accent-ink)',
+              },
+              {
+                name: '6-4-1-5 진행 (싱어송라이터 스키마)',
+                deg: 'ⅵ → Ⅳ → Ⅰ → Ⅴ',
+                ex: 'Am → F → C → G',
+                desc: '위 진행을 ⅵ부터 돌린 회전형이라 Open Music Theory는 둘을 한 스키마로 묶습니다. Ⅳ→Ⅰ의 변격(plagal) 방식으로 토닉에 닿는 것이 두왑(1-6-4-5)과 갈리는 청취 단서',
+                song: 'Luis Fonsi & Daddy Yankee 「Despacito」(2017) — Bm → G → D → A. 같은 교재는 이 진행이 D장조 ⅵ-Ⅳ-Ⅰ-Ⅴ로도, B단조 ⅰ-Ⅵ-Ⅲ-Ⅶ으로도 들린다고 설명합니다(조성 모호성). 위 계산기 단조 탭의 「서정적 마이너 진행」이 바로 이 단조 쪽 해석입니다.',
+                color: 'var(--cat-art)',
+              },
+              {
+                name: '1-6-4-5 진행 (올드팝·발라드 / 두왑)',
                 deg: 'Ⅰ → ⅵ → Ⅳ → Ⅴ',
                 ex: 'Cmaj7 → Am7 → Fmaj7 → G7',
-                desc: "수많은 팝·발라드의 기본. '팝의 왕'으로 불리는 1-5-6-4(Ⅰ→Ⅴ→Ⅵm→Ⅳ)는 같은 코드의 순서 변형",
-                color: 'var(--accent-ink)',
+                desc: '수많은 올드팝·발라드의 기본. 교재 명칭은 두왑(doo-wop) 스키마',
+                song: '',
+                color: 'var(--cat-edu)',
               },
               {
                 name: '2-5-1 진행 (재즈 기본)',
                 deg: 'ⅱ7 → Ⅴ7 → Ⅰmaj7',
                 ex: 'Dm7 → G7 → Cmaj7',
-                desc: '재즈 스탠더드 대부분에 등장. 도미넌트 모션의 기본',
+                desc: '재즈 스탠더드 대부분에 등장. 도미넌트 모션의 기본이고 장조 품질은 m7 → 7 → maj7',
+                song: 'Jerome Kern 「All the Things You Are」 — 종지가 ⅱ-Ⅴ-Ⅰ이며 원 발표 조성은 A♭장조(Open Music Theory·Musicnotes). John Lewis 「Afternoon in Paris」는 C장조 곡인데 A섹션에서 B♭장조 → A♭장조 → C장조로 2-5-1 덩어리를 연달아 쌓습니다.',
                 color: 'var(--cat-health)',
               },
               {
@@ -252,13 +273,15 @@ export default function ChordPage() {
                 deg: 'Ⅰ → Ⅳ → Ⅴ',
                 ex: 'C → F → G',
                 desc: '블루스·록큰롤의 뼈대. 12마디 블루스의 핵심 코드',
+                song: '',
                 color: 'var(--cat-life)',
               },
               {
-                name: '카논 진행',
+                name: '캐논(카논) 진행',
                 deg: 'Ⅰ → Ⅴ → ⅵ → ⅲ → Ⅳ → Ⅰ → Ⅳ → Ⅴ',
                 ex: 'C → G → Am → Em → F → C → F → G',
-                desc: '파헬벨 카논의 8코드 시퀀스. 발라드·OST에서 자주 사용',
+                desc: '파헬벨 캐논의 8코드 시퀀스. 발라드·OST에서 자주 사용',
+                song: '파헬벨 「Canon in D」 — 원곡은 D장조·4/4에 바이올린 3대와 통주저음 편성이고, 통주저음이 D–A–B–F♯–G–D–G–A 두 마디 패턴을 변형 없이 28회 반복합니다(퍼블릭도메인 조판 악보의 인코딩을 직접 확인, 링컨센터 실내악협회 해설이 교차 확인). 이 베이스를 화성으로 읽은 것이 D → A → Bm → F♯m → G → D → G → A이며, 로마숫자 표기는 Open Music Theory 근거입니다.',
                 color: 'var(--cat-sports)',
               },
             ].map((p, i) => (
@@ -267,8 +290,63 @@ export default function ChordPage() {
                 <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--muted)', marginBottom: '4px' }}>{p.deg}</p>
                 <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>{p.ex}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{p.desc}</p>
+                {p.song && (
+                  <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '8px', paddingTop: '8px', borderTop: '1px solid var(--border)' }}>
+                    <strong style={{ color: 'var(--text)' }}>대표곡</strong> · {p.song}
+                  </p>
+                )}
               </div>
             ))}
+          </div>
+
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-sports) 19%, transparent)', borderRadius: '12px', padding: '16px 20px', marginTop: '12px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--cat-sports)', marginBottom: '6px' }}>캐논 진행과 팝 4코드는 &lsquo;네 번째 코드&rsquo; 하나가 다르다</p>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
+              캐논 진행의 앞 네 코드는 <strong style={{ color: 'var(--text)' }}>Ⅰ → Ⅴ → ⅵ → ⅲ</strong>(C → G → Am → Em)이고, 팝의 4코드 루프는 <strong style={{ color: 'var(--text)' }}>Ⅰ → Ⅴ → ⅵ → Ⅳ</strong>(C → G → Am → F)입니다. 네 번째 자리의 ⅲ이 Ⅳ로 한 칸 바뀌었을 뿐인데, 동료심사 학술지 <em>Music Theory Online</em>(Mark Richards, 23권 3호, 2017)은 이 작은 변경이 &ldquo;훨씬 흔한 진행&rdquo;을 만들어 낸다고 지적합니다. 즉 둘은 같은 진행의 별칭이 아니라 <strong style={{ color: 'var(--text)' }}>한 코드가 다른 별개 진행</strong>이므로, 어떤 곡이 캐논 진행인지 볼 때는 네 번째 코드가 ⅲ인지 Ⅳ인지부터 확인하면 됩니다. 캐논 진행은 앞 4~5개만 쓰고 뒷부분을 새로 쓰는 축약형, 짝수 자리를 1전위로 바꾸는 변형(Ⅴ6·ⅲ6·Ⅰ6)도 흔합니다.
+            </p>
+          </div>
+        </div>
+
+        {/* ── 4-1. 마이너 2-5-1의 Ⅴ7 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            마이너 2-5-1에서 Ⅴ가 Ⅴ7이 되는 이유
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+            자연 단음계만 쓰면 Ⅴ 자리에는 단3화음 ⅴ(A 마이너의 Em7)가 놓입니다. 오픈교재 <strong style={{ color: 'var(--text)' }}>Open Music Theory</strong>는 이 지점을 이렇게 정리합니다 — <strong style={{ color: 'var(--text)' }}>단조에서 이끔음을 반음 올리면 화음의 품질이 바뀌고, 따라서 로마숫자도 바뀐다. 단3화음 ⅴ는 장3화음 Ⅴ가 되고 Ⅶ은 감3화음 ⅶ°가 된다. 그래서 단조 조성에서 Ⅴ나 ⅶ° 표기를 보면 올린 이끔음을 쓰고 있다는 뜻이다.</strong> 자연 단음계의 7음은 으뜸음과 온음 거리라 애초에 &lsquo;이끔음&rsquo;이 아니라 <strong style={{ color: 'var(--text)' }}>아래으뜸음(subtonic)</strong>으로 부르고, 그 음을 반음 올린 음계가 화성 단음계입니다.
+          </p>
+          <div style={{ overflowX: 'auto', marginBottom: '14px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>자리</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>장조 품질 (C 메이저)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>단조 품질 (A 마이너)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['ⅱ', 'm7 — Dm7', 'm7♭5(반감7) — Bm7♭5'],
+                  ['Ⅴ', '7(도미넌트7) — G7', '7(도미넌트7) — E7'],
+                  ['Ⅰ / ⅰ', 'maj7 — Cmaj7', 'm7 — Am7'],
+                ].map(([pos, maj, min], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{pos}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{maj}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{min}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+            같은 교재의 재즈 장은 마이너 2-5-1의 품질을 <strong style={{ color: 'var(--text)' }}>반감7 → 도미넌트7 → 단7(ø7-7-mi7)</strong>로 못박으면서, <strong style={{ color: 'var(--text)' }}>Ⅴ 화음은 장조든 단조든 장화음</strong>이라고 덧붙입니다. 위 계산기의 단조 다이아토닉 탭에서 마이너 2-5-1만 Ⅴ를 도미넌트7로 바꿔 표기하는 것도 이 규칙 때문입니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-edu) 19%, transparent)', borderRadius: '12px', padding: '16px 20px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--cat-edu)', marginBottom: '6px' }}>표기 주의 — 조성 이름은 언제나 자연 단음계 기준</p>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
+              Ⅴ7을 쓴다고 해서 그 곡을 &lsquo;화성 단조 곡&rsquo;이라 부르지는 않습니다. 교재는 조성 이름을 늘 자연 단음계 기준으로 A 마이너·D 마이너라 부르고, 작품이 화성·가락 단음계에 &lsquo;속한다&rsquo;고 말하지 않는다고 명시합니다. 화성·가락 단음계는 조성의 종류가 아니라 <strong style={{ color: 'var(--text)' }}>필요할 때 7음(과 6음)을 올려 쓰는 운용 방식</strong>으로 이해하는 편이 정확합니다. 한편 2-5-1은 장·단조를 가릴 것 없이 변형이 잦아서, 같은 교재는 「A Night in Tunisia」가 Ⅴ의 5음을 낮추고 「Prelude to a Kiss」가 7음은 둔 채 Ⅴ를 증화음으로 쓰며 「Misty」가 도착 코드를 maj7 대신 6화음으로 받는 예를 듭니다.
+            </p>
           </div>
         </div>
 

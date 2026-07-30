@@ -41,13 +41,17 @@ export interface FoodItem {
   carb: number
   note?: string
 }
+/* 탄수화물량은 국가표준식품성분표(농식품올바로) 100g당 값 × 제시 중량으로 산출.
+   밥 31.71 · 고구마(찐) 39.41 · 바나나(생것) 20.0 · 식빵(쇼트닝 첨가) 49.61 · 가래떡 48.8 g/100g.
+   1인 1회 분량 '밥 210g'은 보건복지부·한국영양학회 권장식단 기준.
+   에너지젤은 제조사 공식 표기(Maurten 25g · SiS 22g · GU 21~23g) 중 대표값. */
 export const FOODS: FoodItem[] = [
-  { name: '밥 1공기 (210g)', carb: 65 },
-  { name: '찐 고구마 (100g)', carb: 31 },
-  { name: '바나나 1개 (중)', carb: 27 },
-  { name: '식빵 1장 (35g)', carb: 18 },
-  { name: '스포츠음료 500mL', carb: 32 },
-  { name: '에너지젤 1개', carb: 25 },
+  { name: '밥 1공기 (210g)', carb: 67 },
+  { name: '찐 고구마 (100g)', carb: 39 },
+  { name: '가래떡 (100g)', carb: 49 },
+  { name: '바나나 (가식부 100g)', carb: 20 },
+  { name: '식빵 1장 (35g)', carb: 17 },
+  { name: '에너지젤 1개', carb: 25, note: '제품별 21~25g' },
 ]
 
 export interface CarbPlan {

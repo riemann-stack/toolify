@@ -37,6 +37,8 @@ export const POWER_ZONES: PowerZone[] = [
   { z: 'Z3', name: '템포 (Tempo)',           loPct: 76,  hiPct: 90,  desc: '약간 힘든 지속 강도' },
   { z: 'Z4', name: '역치 (Threshold)',       loPct: 91,  hiPct: 105, desc: 'FTP 근처 — 20~60분 유지' },
   { z: 'Z5', name: 'VO₂max',                 loPct: 106, hiPct: 120, desc: '3~8분 인터벌, 최대산소섭취' },
+  // Coggan 원표에서 Z6는 상한 없는 '>121%'이고 Z7은 %FTP로 정의되지 않는다(N/A).
+  // 아래 150/151 분할은 두 존을 화면에 나눠 보여주기 위한 표시용 관행값 — 공식 경계가 아니다.
   { z: 'Z6', name: '무산소 (Anaerobic)',     loPct: 121, hiPct: 150, desc: '30초~3분 고강도' },
   { z: 'Z7', name: '신경근 (Neuromuscular)', loPct: 151, hiPct: null, desc: '스프린트 — 짧고 폭발적' },
 ]
@@ -55,17 +57,21 @@ export const WKG_GRADES: WkgGrade[] = [
   { min: 0,   label: '초보 시작 단계' },
 ]
 
-/** 즈위프트 레이스 카테고리 (W/kg, 남성 기준 통용값 — 리그마다 상이) */
+/** 즈위프트 페이스 그룹 A~D — 오픈 이벤트 공식 경계(zFTP W/kg 기준).
+    출처: Zwift 공식 페이스 그룹 표. 실제 판정은 zFTP W/kg에 더해 zMAP(A 5.1·B 4.1·C 3.2 W/kg)과
+    절대 와트(A 250W·B 200W·C 150W) 조건을 함께 보며, 여성 전용 이벤트는 A만 3.88 W/kg로 다르다.
+    또 현재 대부분의 이벤트는 A~D 대신 Racing Score(0~1,000)를 쓰고, 두 체계는 서로 대응하지 않는다.
+    → 아래 값은 zFTP W/kg 기준의 참고 구간이며, 정확한 배정은 Zwift 앱에서 확인해야 한다. */
 export interface ZwiftCat {
   cat: string
   minWkg: number
   color: string
 }
 export const ZWIFT_CATS: ZwiftCat[] = [
-  { cat: 'A', minWkg: 4.0, color: 'var(--danger)' },
-  { cat: 'B', minWkg: 3.2, color: 'var(--warning)' },
-  { cat: 'C', minWkg: 2.5, color: 'var(--success)' },
-  { cat: 'D', minWkg: 0,   color: 'var(--cat-health)' },
+  { cat: 'A', minWkg: 4.2,  color: 'var(--danger)' },
+  { cat: 'B', minWkg: 3.36, color: 'var(--warning)' },
+  { cat: 'C', minWkg: 2.63, color: 'var(--success)' },
+  { cat: 'D', minWkg: 0,    color: 'var(--cat-health)' },
 ]
 
 export interface ZoneRow {

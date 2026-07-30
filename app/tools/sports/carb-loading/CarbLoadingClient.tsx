@@ -86,7 +86,7 @@ export default function CarbLoadingClient() {
           </div>
 
           <div className={s.cautionBox}>
-            ⚠️ 로딩 중 <strong>체중이 1~2kg 늘어나는 것은 정상</strong>입니다(글리코겐 1g이 물 약 3g과 함께 저장). 당뇨 등 혈당 관리가 필요한 질환이 있으면 로딩 전 반드시 주치의와 상의하세요.
+            ⚠️ 로딩 중 <strong>체중이 다소 늘어나는 것은 흔한 반응</strong>입니다(글리코겐이 저장될 때 수분을 함께 끌어들이기 때문). 당뇨 등 혈당 관리가 필요한 질환이 있으면 로딩 전 반드시 주치의와 상의하세요.
           </div>
         </div>
       ) : (

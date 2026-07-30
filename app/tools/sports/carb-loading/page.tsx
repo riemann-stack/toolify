@@ -39,7 +39,7 @@ const FAQ_LD = [
   },
   {
     q: '로딩하면 몸무게가 느는데 괜찮나요?',
-    a: '네, <strong>정상입니다.</strong> 글리코겐 1g은 물 약 3g과 함께 저장되기 때문에, 로딩을 제대로 하면 <strong>체중이 1~2kg 늘고 몸이 약간 무겁게</strong> 느껴집니다. 이 물은 경기 중 에너지를 쓰면서 함께 방출되어 오히려 탈수를 늦춰줍니다. 늘어난 체중을 걱정해 로딩을 건너뛰면 후반에 더 크게 무너질 수 있습니다.',
+    a: '흔히 나타나는 반응입니다. 글리코겐은 몸에 저장될 때 수분을 함께 끌어들이기 때문에, 로딩을 제대로 하면 <strong>체중이 늘고 몸이 약간 무겁게</strong> 느껴진다고 알려져 있습니다(자주 인용되는 &lsquo;글리코겐 1g당 물 3g·체중 1~2kg 증가&rsquo;라는 수치는 널리 퍼져 있지만 ACSM/AND/DC 2016 공동 성명 등 공식 지침에서 확인되는 값은 아니라, 여기서는 수치 없이 경향만 적습니다). 늘어난 체중을 걱정해 로딩을 건너뛰면 후반에 더 크게 무너질 수 있습니다.',
   },
   {
     q: '무엇을 먹어야 하나요?',
@@ -75,9 +75,10 @@ export default function CarbLoadingPage() {
 
       <UpdatedMeta
         date="2026년 7월"
-        basis="ACSM·IOC 스포츠영양 권고 탄수화물 섭취 기준 (g/kg)"
+        basis="ACSM/AND/DC 2016 공동 성명 Table 2 (g/kg) + 국가표준식품성분 DB 10.4(2026)"
         sources={[
-          { label: 'ACSM 공동 성명 — Nutrition and Athletic Performance (2016)', href: 'https://pubmed.ncbi.nlm.nih.gov/26891166/' },
+          { label: 'ACSM/AND/DC 공동 성명 — Nutrition and Athletic Performance (2016)', href: 'https://pubmed.ncbi.nlm.nih.gov/26891166/' },
+          { label: '농촌진흥청 농식품올바로 — 국가표준식품성분표', href: 'https://koreanfood.rda.go.kr/kfi/fct/fctFoodSrch/list' },
         ]}
       />
 
@@ -133,7 +134,114 @@ export default function CarbLoadingPage() {
           </div>
         </section>
 
-        {/* 3. 실수 */}
+        {/* 3. 공식 지침 원문 수치 */}
+        <section>
+          <h2 style={sectionTitle}>공식 지침 권장량 — ACSM/AND/DC 2016</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            미국스포츠의학회(ACSM)·미국영양학회(AND)·캐나다영양사협회(DC)가 함께 낸 공동 성명 <strong style={{ color: 'var(--text)' }}>Nutrition and Athletic Performance(2016)</strong>의 Table 2는 경기 전·중 탄수화물 섭취량을 상황별로 못 박아 두었습니다. 아래는 그 표에서 지구력 대회에 해당하는 행을 그대로 옮긴 것입니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['상황', '권장량', '조건·단서'].map((h, i) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: i === 1 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['카보로딩', '10~12 g/kg', '90분 초과 지속·간헐 고강도 경기 준비 — 36~48시간 동안 24시간당'],
+                  ['일반 연료 보충', '7~12 g/kg', '90분 미만 경기 준비 — 로딩이 아니라 평소 하루 필요량 수준으로 24시간당'],
+                  ['경기 전 식사', '1~4 g/kg', '60분 초과 운동에 한해 — 시작 1~4시간 전'],
+                  ['경기 중 45분 미만', '불필요', '따로 챙길 필요 없음'],
+                  ['경기 중 45~75분', '소량', '고강도 지속 운동 — 마우스 린스(입안 헹굼)를 포함한 소량'],
+                  ['경기 중 1~2.5시간', '30~60 g/h', '지구성 경기 + 스톱앤고 방식의 종목 포함'],
+                  ['경기 중 2.5~3시간 초과', '최대 90 g/h', '포도당:과당 같은 복합 수송 탄수화물일 때 높은 산화율 달성'],
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
+            같은 표의 하루 필요량은 훈련 강도에 따라 저강도 3~5, 중강도(약 1시간/일) 5~7, 지구성 프로그램(1~3시간/일) 6~10, 극단적 훈련량(4~5시간/일 초과) 8~12 g/kg/일입니다. 카보로딩의 10~12 g/kg는 훈련량이 가장 많은 선수의 평상시 상한과 맞먹는 양인 셈입니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>이 계산기의 값은 표의 어디에 해당하나</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>
+              &lsquo;풀코스·울트라(90분 초과)&rsquo;를 골랐을 때 나오는 <strong style={{ color: 'var(--text)' }}>10~12 g/kg</strong>는 표의 카보로딩 행 그대로입니다. 하프·10km에 쓰는 8~10·7~8 g/kg는 90분 미만 경기의 <strong style={{ color: 'var(--text)' }}>7~12 g/kg</strong> 범위 안에서 잡은 값으로, 지침상 상한은 12 g/kg입니다. 결과 카드의 &lsquo;대회 아침 체중×1~4g&rsquo;은 경기 전 식사 행(60분 초과 운동, 시작 1~4시간 전)에 해당합니다. 다만 <strong style={{ color: 'var(--text)' }}>경기 중 섭취는 이 계산기가 다루지 않으므로</strong> 위 표의 시간당 g을 따로 챙겨야 합니다 — 상한 90 g/h는 IOC 스포츠영양 합의문(2010)도 &lsquo;약 3시간을 넘는 경기&rsquo;의 목표치로 동일하게 제시하며, 장에서 흡수를 견디도록 훈련 때 미리 연습하라고 못 박습니다.
+            </p>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
+            기준 시점 — ACSM은 2026년 6월 이 성명의 개정판 집필진을 공모했고(완료 예상 24개월), 2026년 7월 현재 인용 가능한 최신 현행판은 <strong style={{ color: 'var(--text)' }}>2016년판</strong>입니다.
+          </p>
+        </section>
+
+        {/* 4. 섭취량 감 잡기 */}
+        <section>
+          <h2 style={sectionTitle}>섭취량 감 잡기 — 100 g당 탄수화물</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            &lsquo;하루 700 g&rsquo;이 얼마나 되는 양인지 감이 오지 않는다면 아래 표를 기준으로 잡으세요. 농촌진흥청 국가표준식품성분표(<strong style={{ color: 'var(--text)' }}>국가표준식품성분 DB 10.4, 2026</strong>) 수록값이며 모두 <strong style={{ color: 'var(--text)' }}>100 g 기준</strong>입니다. 면류는 삶으면 물을 머금어 100 g당 탄수화물이 크게 낮아지므로 조리 상태를 함께 봐야 합니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['식품 (100 g)', '탄수화물', '열량'].map((h, i) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['꿀', '84.83 g', '313 kcal'],
+                  ['귀리 오트밀', '64.9 g', '382 kcal'],
+                  ['백설기', '53.45 g', '245 kcal'],
+                  ['인절미(콩고물)', '49.69 g', '231 kcal'],
+                  ['식빵(쇼트닝 첨가)', '49.61 g', '267 kcal'],
+                  ['가래떡', '48.8 g', '213 kcal'],
+                  ['찐 고구마', '39.41 g', '163 kcal'],
+                  ['스파게티면(삶은 것)', '36.83 g', '197 kcal'],
+                  ['현미밥', '35.34 g', '166 kcal'],
+                  ['즉석밥(백미)', '33.59 g', '152 kcal'],
+                  ['백미밥', '31.71 g', '146 kcal'],
+                  ['소면(삶은 것)', '25.36 g', '126 kcal'],
+                  ['바나나(생것)', '20 g', '77 kcal'],
+                  ['찐 감자(수미)', '17.28 g', '75 kcal'],
+                  ['이온 음료(레몬향)', '9.16 g', '37 kcal'],
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
+            표의 &lsquo;이온 음료&rsquo;는 특정 브랜드 제품이 아니라 성분표에 실린 일반 대표값입니다(100 g당 나트륨 44 mg·칼륨 22 mg). mL 단위로 환산하려면 밀도 보정이 필요하므로 100 g 기준으로 적었고, 국내 시판 제품의 실제 값은 제품 라벨을 확인하세요. 성분표는 개정판마다 값이 조금씩 달라지므로 위 수치는 <strong style={{ color: 'var(--text)' }}>현행 DB 10.4(2026)</strong> 기준임을 함께 봐 주세요.
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
+            위 계산기 결과의 <strong style={{ color: 'var(--text)' }}>&lsquo;음식으로 환산하면&rsquo;</strong> 목록도 이 표와 같은 성분표 값에서 산출합니다(밥 1공기는 31.71 g/100 g × 210 g ≒ 67 g, 식빵 1장은 49.61 × 0.35 ≒ 17 g). 계산기 목록은 &lsquo;하루 목표를 한 가지 음식으로만 채우면 몇 인분인가&rsquo;를 가늠하는 용도이므로 정수로 반올림해 표시합니다. 에너지젤은 제조사 공식 표기가 Maurten 25 g · SiS 22 g · GU 21~23 g으로 달라 대표값 25 g을 씁니다.
+          </p>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, margin: '16px 0 0' }}>
+            보건복지부·한국영양학회의 2020 한국인 영양소 섭취기준은 곡류군 1인 1회 분량을 <strong style={{ color: 'var(--text)' }}>밥 210 g</strong>으로 잡습니다. 성분표 값으로 환산하면 밥 한 공기가 탄수화물 약 <strong style={{ color: 'var(--text)' }}>66.6 g</strong>(31.71×2.1로 계산한 값이며 성분표 수록값은 아님). 체중 70 kg이 카보로딩 하한 10 g/kg, 즉 하루 700 g을 흰밥만으로 채우려면 약 10.5공기가 필요하다는 뜻입니다. 그래서 같은 100 g에 흰밥의 약 1.5~1.7배가 들어가는 <strong style={{ color: 'var(--text)' }}>떡</strong>이나 꿀처럼 부피 대비 밀도가 높은 급원을 섞고, 끼니 사이 간식으로 나눠 넣는 것이 실전 요령입니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>에너지젤 1회분 (제조사 공식 표기)</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>
+              Maurten GEL 100 = 사셰당 <strong style={{ color: 'var(--text)' }}>25 g</strong>(과당:포도당 0.8:1, 약 100 kcal) · SiS GO Isotonic 60 mL = <strong style={{ color: 'var(--text)' }}>22 g</strong> · GU Original = <strong style={{ color: 'var(--text)' }}>21~23 g</strong>(1개 100 kcal, 맛에 따라 차이). 시간당 90 g을 젤로만 채운다면 22 g 제품 기준 약 4개가 필요하다는 계산이 나오고, SiS도 &lsquo;종목·강도에 따라 시간당 1~3개로 60~90 g 목표&rsquo;라고 안내합니다. GU는 1~2시간 운동에서 20~30분마다 1개를 수분과 함께 섭취하도록 권합니다.
+            </p>
+          </div>
+        </section>
+
+        {/* 5. 실수 */}
         <section>
           <h2 style={sectionTitle}>흔한 실수 4가지</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
@@ -151,17 +259,24 @@ export default function CarbLoadingPage() {
           </div>
         </section>
 
-        {/* 4. FAQ */}
+        {/* 6. FAQ */}
         <section>
           <Faq items={FAQ_LD} />
         </section>
 
         {/* 면책 */}
-        <Disclaimer variant="medical" open>
-          본 계산기는 <strong>일반 스포츠영양 가이드</strong>이며 개인 맞춤 처방이 아닙니다. 당뇨·신장질환 등 질환이 있거나 식이 조절이 필요한 경우 반드시 전문의·임상영양사와 상담 후 적용하세요.
+        <Disclaimer
+          variant="medical"
+          open
+          sources={[
+            { label: 'ACSM/AND/DC 공동 성명 — Nutrition and Athletic Performance (2016), Table 2', href: 'https://pubmed.ncbi.nlm.nih.gov/26891166/' },
+            { label: '농촌진흥청 농식품올바로 — 국가표준식품성분표 (DB 10.4, 2026)', href: 'https://koreanfood.rda.go.kr/kfi/fct/fctFoodSrch/list' },
+          ]}
+        >
+          본 계산기는 <strong>일반 스포츠영양 가이드</strong>이며 개인 맞춤 처방이 아닙니다. 권장량은 <strong>ACSM/AND/DC 2016 공동 성명</strong>(2026년 7월 현재 현행판, 개정 진행 중) 기준이고, 본문 음식 표는 국가표준식품성분표 100 g당 수록값(계산기의 음식 환산 목록은 1인분 기준 통용 근사값)입니다. 당뇨·신장질환 등 질환이 있거나 식이 조절이 필요한 경우 반드시 전문의·임상영양사와 상담 후 적용하세요.
         </Disclaimer>
 
-        {/* 5. 관련 도구 */}
+        {/* 7. 관련 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>

@@ -150,10 +150,11 @@ export default function Nesin5GradeClient() {
           { href: '/tools/finance/housing-score', label: '청약 가점 계산기' },
         ]}
         sources={[
+          { label: '학교생활기록 작성 및 관리지침 (교육부훈령 제555호)', href: 'https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000274694' },
           { label: '교육부 — 2028 대입·고교학점제', href: 'https://www.moe.go.kr' },
         ]}
       >
-        5등급·9등급 환산은 교육부 고시 누적 비율에 따른 참고 추정치입니다. 동점자 처리·반올림·과목 특성에 따라 실제 학생부 등급과 다를 수 있으니, 공식 등급은 학교 성적 산출(NEIS)을 따르세요.
+        5등급 환산은 「학교생활기록 작성 및 관리지침」(교육부훈령 제555호) [별표 9]의 누적 비율과 &lsquo;수강자수 × 누적비율 반올림&rsquo; 규칙을 그대로 적용한 값입니다. 다만 동점자 처리(중간석차백분율)와 과목 특성은 학교 학업성적관리규정에 따르므로, 공식 등급은 학교 성적 산출(NEIS)을 따르세요. 9등급 환산은 종전 규정 기준의 참고 비교값입니다.
       </Disclaimer>
     </div>
   )

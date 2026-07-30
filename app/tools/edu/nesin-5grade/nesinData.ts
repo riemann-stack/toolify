@@ -3,7 +3,8 @@
    고교 내신 5등급제 계산 (2025학년도 고1 도입) + 구 9등급 환산 병기
    ──────────────────────────────────────────────────────
    근거
-   - 5등급 상대평가 누적 비율(교육부 고시): 1등급 ~10% / 2등급 ~34% / 3등급 ~66% /
+   - 5등급 상대평가 누적 비율(「학교생활기록 작성 및 관리지침」 교육부훈령 제555호 [별표 9]):
+     1등급 ~10% / 2등급 ~34% / 3등급 ~66% /
      4등급 ~90% / 5등급 ~100%. (구간 비율 10·24·32·24·10%)
    - 구 9등급 누적: 1:4 / 2:11 / 3:23 / 4:40 / 5:60 / 6:77 / 7:89 / 8:96 / 9:100 (%)
    - 성취도 A~E(절대평가, 성취율): A≥90 / B≥80 / C≥70 / D≥60 / E<60.
@@ -20,6 +21,19 @@ export const GRADE9_CUM = [4, 11, 23, 40, 60, 77, 89, 96, 100]
 export function pctToGrade(pct: number, cum: number[]): number {
   for (let i = 0; i < cum.length; i++) {
     if (pct <= cum[i] + 1e-9) return i + 1
+  }
+  return cum.length
+}
+
+/** 석차 → 등급 (교육부훈령 제555호 [별표 9] 규칙).
+    별표 9는 백분율이 아니라 '수강자수 × 누적 등급비율을 반올림한 누적 인원'으로 등급을 가른다.
+    예: 재적 178명이면 1등급 누적인원 = round(178 × 0.10) = 18명 → 18등까지 1등급
+    (백분율로만 계산하면 18/178 = 10.11%라 2등급으로 갈려 학교 산출과 어긋난다). */
+export function rankToGrade(rank: number, total: number, cum: number[]): number | null {
+  if (!Number.isFinite(rank) || !Number.isFinite(total) || rank <= 0 || total <= 0 || rank > total) return null
+  for (let i = 0; i < cum.length; i++) {
+    const cumCount = Math.round((total * cum[i]) / 100)
+    if (rank <= cumCount) return i + 1
   }
   return cum.length
 }
@@ -65,8 +79,8 @@ export function computeSubject(sub: SubjectInput): SubjectResult {
     id: sub.id,
     name: sub.name,
     pct,
-    grade5: pct === null ? null : pctToGrade(pct, GRADE5_CUM),
-    grade9: pct === null ? null : pctToGrade(pct, GRADE9_CUM),
+    grade5: rankToGrade(rank, total, GRADE5_CUM),
+    grade9: rankToGrade(rank, total, GRADE9_CUM),
     units,
   }
 }

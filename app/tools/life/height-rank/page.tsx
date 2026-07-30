@@ -26,7 +26,7 @@ const sectionTitle: React.CSSProperties = {
 const FAQ_LD = [
   {
     q: '한국 남자·여자 평균 키는 몇인가요?',
-    a: '사이즈코리아 8차 한국인 인체치수조사(직접측정 2020~2021, 20~69세 6,839명) 기준 <strong>남성 172.5cm, 여성 159.6cm</strong>입니다. 연령대별로는 남성 20~39세가 174.7~175.4cm로 가장 크고 60대는 168.2cm, 여성은 20~39세 161.8~162.4cm·60대 155.5cm로 세대 차이가 뚜렷해요. 참고로 2024년 병역판정검사(2005년생 남성 약 21만 명) 평균은 174.54cm였습니다.',
+    a: '사이즈코리아 8차 한국인 인체치수조사(직접측정 2020~2021, 20~69세 6,839명) 기준 <strong>남성 172.5cm, 여성 159.6cm</strong>입니다. 연령대별로는 남성 20~39세가 174.7~175.4cm로 가장 크고 60대는 168.2cm, 여성은 20~39세 161.8~162.4cm·60대 155.5cm로 세대 차이가 뚜렷해요. 참고로 병무청 병역판정검사 평균 신장은 2024년 174.5cm입니다(수검자의 약 95%가 19세).',
   },
   {
     q: '백분위는 어떻게 계산하나요?',
@@ -142,12 +142,130 @@ export default function HeightRankPage() {
           </p>
         </section>
 
-        {/* 3. 흥미 포인트 */}
+        {/* 3. 국제 비교 */}
+        <section>
+          <h2 style={sectionTitle}>국제 비교 — 세계에서 한국인의 키는</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+            나라별 키를 견줄 때는 성장이 거의 끝나는 <strong style={{ color: 'var(--text)' }}>19세</strong> 값을 씁니다.
+            아래는 200개국 인구 기반 연구를 종합한 NCD-RisC(Lancet 2020)의 2019년 19세 평균 키예요.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['국가', '남성 19세', '여성 19세', '200개국 순위(남·여)'].map((h) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['네덜란드', '183.78cm', '170.36cm', '1위 · 1위'],
+                  ['중국', '175.66cm', '163.46cm', '65위 · 54위'],
+                  ['한국', '175.52cm', '163.23cm', '68위 · 60위'],
+                  ['일본', '172.06cm', '158.50cm', '114위 · 146위'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'Inter, sans-serif' }}>{row[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ NCD-RisC, Lancet 2020;396:1511-1524 국가별 공개 원자료(2019년·19세). 순위는 논문이 공표한 순위표가 아니라 공개 CSV를 정렬해 자체 산출한 값입니다.
+            한국은 남성 95% 신용구간 174.92~176.14cm·여성 162.58~163.84cm로, 여성은 중국과 0.2cm 차이여서 우열을 가릴 수 없어요.
+          </p>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginTop: 14 }}>
+            같은 19세끼리 견주면 한국은 일본보다 남성 3.5cm, 여성 4.7cm 큽니다(위 표의 차). 더 극적인 기록도 있어요 —
+            1896~1996년 출생 코호트를 200개국·1,860만 명 이상의 자료로 분석한 NCD-RisC의 다른 논문(eLife 2016)은
+            <strong style={{ color: 'var(--text)' }}> 지난 100년간 성인 키가 세계에서 가장 많이 자란 집단으로 한국 여성(+20.2cm, 95% 신용구간 17.5~22.7)</strong>을 꼽았습니다.
+            같은 자료에서 한국 남성도 159.75cm에서 174.92cm로 약 15.2cm 커졌고요.
+            다만 NCD-RisC의 175.52cm는 여러 연구를 합쳐 모형으로 추정한 값이라, 직접측정 표본인 사이즈코리아 20~24세 174.99cm와 소수점까지 맞아떨어지지는 않습니다.
+            국제 비교에는 NCD-RisC를, 국내 백분위 계산에는 사이즈코리아를 쓰는 이유예요.
+          </p>
+        </section>
+
+        {/* 4. 세속추세 */}
+        <section>
+          <h2 style={sectionTitle}>한국인 키는 계속 크고 있을까</h2>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+            &lsquo;아직 크는 중&rsquo;과 &lsquo;이제 안 큰다&rsquo;가 동시에 돌아다닙니다. 1차 출처를 열어보면 어느 쪽도 단정할 수 없어요 —
+            어떤 지표를 어떤 기간으로 보느냐에 따라 답이 갈리기 때문입니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--warning)', marginBottom: 8 }}>더 이상 안 큰다는 근거</p>
+              <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <li>Moon 2011(Korean J Pediatr): 20세 최종 신장이 1965년 남 168.9cm → 1997년 173.4cm → 2005년 174.3cm로 커졌지만, 2005년과 2010년 사이에는 차이가 없었다고 보고.</li>
+                <li>Ryoo 2015(Korean J Pediatr): 국민건강영양조사 II(2001)와 V(2010~2012)의 20~22세 차이는 남 0.3±0.8cm(P=0.721)·여 0.5±0.6cm(P=0.386)으로 통계적 유의성 없음.</li>
+                <li>병무청 병역판정검사 평균 신장은 2023년 174.4cm·2024년 174.5cm·2025년 174.4cm로 최근 3년 평탄. 수검자의 약 95%가 19세(2025년 211,476/222,425명)라 19세 남성 전수급 지표입니다.</li>
+              </ul>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--success)', marginBottom: 8 }}>아직 큰다는 근거</p>
+              <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <li>국가기술표준원 8차 조사 보도자료(2022. 3.)는 &lsquo;2000년대 이후로도 평균 키가 지속적으로 증가&rsquo;라고 공식 서술(1차 대비 남 +6.4cm·여 +5.3cm).</li>
+                <li>NCD-RisC 19세 한국 남성은 2010년 173.98cm → 2019년 175.52cm, 여성은 161.60cm → 163.23cm로 2010년대에도 계속 상승.</li>
+                <li>Cole &amp; Mori 2018(Am J Hum Biol)은 1990~2010년 세속추세가 멈춘 쪽은 일본이고, 한국은 1997~2005년에 소폭 증가했다고 명시.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, marginTop: 18, marginBottom: 8 }}>출생 코호트 10년당 성인(18세) 키 증가폭</p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 360 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['출생 코호트', '남성', '여성'].map((h) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['1956년생 → 1966년생', '+2.07cm', '+1.75cm'],
+                  ['1966년생 → 1976년생', '+1.80cm', '+1.39cm'],
+                  ['1976년생 → 1986년생', '+1.10cm', '+1.00cm'],
+                  ['1986년생 → 1996년생', '+0.52cm', '+0.85cm'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ NCD-RisC eLife 2016 성인(18세) 국가별 원자료의 한국 값(남 1956년생 169.43 → 1996년생 174.92cm, 여 157.35 → 162.34cm)에서 구간 차를 직접 계산했습니다.
+          </p>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginTop: 12 }}>
+            방향은 여전히 플러스인데 속도는 30년 사이 절반 아래로 떨어졌습니다. 결국
+            <strong style={{ color: 'var(--text)' }}> 어떤 지표를 보느냐에 따라 결론이 갈립니다</strong> — 전 인구 평균으로 보면 아직 증가 중이고,
+            청년의 최종 신장으로 좁히면 최근 구간은 평탄에 가깝습니다. 두 서술은 모순이 아니라 서로 다른 것을 재고 있는 셈이에요.
+          </p>
+
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>20대 174.99cm vs 전체 172.5cm — 왜 다를까</p>
+            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+              같은 8차 조사인데 숫자가 다른 건 모집단이 다르기 때문입니다. 남성 172.5cm(여성 159.6cm)는 20~69세를 모두 담은 값이라
+              평균 168.2cm인 60대까지 함께 들어가 있고, 174.99cm는 20~24세만 떼어낸 값이에요. 두 값은 공표 단위가 달라 단순 산술로 서로 환산되지 않으니
+              인용할 때 연령 범위를 함께 밝히는 편이 안전합니다(자료마다 집계 범위가 달라 표본 수 표기도 다릅니다).
+            </p>
+          </div>
+        </section>
+
+        {/* 5. 흥미 포인트 */}
         <section>
           <h2 style={sectionTitle}>키 통계, 이런 점이 흥미로워요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '📈 45년간 +6.4cm', d: '1979년 1차 조사 대비 8차에서 남성 +6.4cm, 여성 +5.3cm. 다만 최근 병역판정검사 평균은 174.5cm 부근에서 정체 추세예요.' },
+              { t: '📈 45년간 +6.4cm', d: '1979년 1차 조사 대비 8차에서 남성 +6.4cm, 여성 +5.3cm. 다만 병역판정검사 평균은 2023~2025년 174.4~174.5cm로 평탄합니다.' },
               { t: '📊 1cm의 무게', d: '중앙값 근처에서는 1cm가 백분위 약 7%p를 좌우해요. 아침(이완)과 저녁(압축)의 1~2cm 차이만으로도 순위가 꽤 달라집니다.' },
               { t: '🔭 극단은 조심', d: '정규 모델은 상·하위 0.1% 밖 극단 구간에서 오차가 커져요. 그래서 이 계산기는 극단값을 "0.1% 이내"로만 표시합니다.' },
             ].map((c, i) => (
@@ -159,12 +277,12 @@ export default function HeightRankPage() {
           </div>
         </section>
 
-        {/* 4. FAQ */}
+        {/* 6. FAQ */}
         <section>
           <Faq items={FAQ_LD} />
         </section>
 
-        {/* 5. 관련 도구 */}
+        {/* 7. 관련 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
