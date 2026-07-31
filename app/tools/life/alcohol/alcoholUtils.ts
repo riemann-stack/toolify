@@ -23,7 +23,7 @@ export type GlassPreset = {
 
 export const KOREAN_GLASS_PRESETS: GlassPreset[] = [
   // ── 잔 ──
-  { id: 'soju-glass',     name: '소주잔',         ml: 50,  abv: 16,   icon: '🍶', group: 'glass', desc: '한국 소주잔 표준 50ml' },
+  { id: 'soju-glass',     name: '소주잔',         ml: 50,  abv: 15.7, icon: '🍶', group: 'glass', desc: '한국 소주잔 표준 50ml (주요 제품 15.7% 기준)' },
   { id: 'beer-glass-300', name: '맥주잔 (작은)',  ml: 300, abv: 4.5,  icon: '🍺', group: 'glass', desc: '생맥주 300cc' },
   { id: 'beer-glass-500', name: '맥주잔 (큰)',    ml: 500, abv: 4.5,  icon: '🍺', group: 'glass', desc: '생맥주 500cc' },
   { id: 'whisky-shot',    name: '양주 샷',        ml: 30,  abv: 40,   icon: '🥃', group: 'glass', desc: '샷글래스 30ml' },
@@ -35,7 +35,7 @@ export const KOREAN_GLASS_PRESETS: GlassPreset[] = [
   { id: 'sake-cup',       name: '사케 잔',        ml: 60,  abv: 15,   icon: '🍶', group: 'glass', desc: '오쵸코 60ml' },
 
   // ── 병/캔 ──
-  { id: 'soju-bottle',      name: '소주 1병',     ml: 360, abv: 16,   icon: '🍶', group: 'bottle', desc: '하이트진로·롯데 표준' },
+  { id: 'soju-bottle',      name: '소주 1병',     ml: 360, abv: 15.7, icon: '🍶', group: 'bottle', desc: '360ml 표준 (주요 제품 15.7%)' },
   { id: 'beer-can',         name: '맥주 1캔',     ml: 500, abv: 4.5,  icon: '🥫', group: 'bottle', desc: '카스·하이트·테라' },
   { id: 'beer-bottle',      name: '맥주 1병',     ml: 500, abv: 4.5,  icon: '🍺', group: 'bottle', desc: '병맥주 500ml' },
   { id: 'makgeolli-bottle', name: '막걸리 1병',   ml: 750, abv: 6,    icon: '🍶', group: 'bottle', desc: '750ml 표준' },
@@ -97,28 +97,35 @@ export const KOREAN_COCKTAIL_PRESETS: CocktailPreset[] = [
     mixer: { ml: 200, abv: 0, label: '오렌지주스' },
     desc: '보드카 + 오렌지주스 — 약 5.2%' },
   { id: 'somaek-gold', name: '소맥 황금비율 (1:8)', emoji: '🍻',
-    base:  { ml: 50,  abv: 16,  label: '소주' },
+    base:  { ml: 50,  abv: 15.7, label: '소주' },
     mixer: { ml: 400, abv: 4.5, label: '맥주' },
-    desc: '소주 50ml + 맥주 400ml — 약 5.78%' },
+    desc: '소주 50ml + 맥주 400ml — 약 5.7%' },
   { id: 'somaek-strong', name: '소맥 진하게 (1:5)', emoji: '🍻',
-    base:  { ml: 60,  abv: 16,  label: '소주' },
+    base:  { ml: 60,  abv: 15.7, label: '소주' },
     mixer: { ml: 300, abv: 4.5, label: '맥주' },
     desc: '소주 60ml + 맥주 300ml — 약 6.4%' },
 ]
 
 // ─────────────────────────────────────────────────────────────
-// 한국 소주 도수 (제품별)
+// 한국 소주 도수 (제품별) — **이 배열이 단일 소스**
 // ─────────────────────────────────────────────────────────────
-// 브랜드 도수는 저도주화로 자주 바뀜 — 아래는 2025-06 기준 대표값일 뿐, 반드시 제품 라벨을 확인할 것.
+// page.tsx의 브랜드 표·프리셋 기본 도수가 모두 여기서 파생된다(값이 갈리지 않게).
+// 2026-07 제조사 표기 확인값. 저도주화로 자주 바뀌므로 실제 구매 제품 라벨이 우선.
+// 값을 고칠 때는 반드시 제조사 공식 표기를 확인하고 기준일(SOJU_ABV_ASOF)도 함께 갱신할 것.
+export const SOJU_ABV_ASOF = '2026년 7월'
 export const SOJU_BRANDS = [
-  { brand: '진로(두꺼비)',     abv: 16   },
-  { brand: '처음처럼 새로',     abv: 16   },
+  { brand: '진로(두꺼비)',     abv: 15.7 },
+  { brand: '처음처럼 새로',     abv: 15.7 },
   { brand: '좋은데이',         abv: 15.7 },
-  { brand: '참이슬 후레쉬',     abv: 16   },
+  { brand: '참이슬 후레쉬',     abv: 15.7 },
   { brand: '참이슬 오리지널',   abv: 16.9 },
-  { brand: '처음처럼(클래식)',  abv: 16.5 },
-  { brand: '한라산',           abv: 25   },
+  { brand: '한라산 오리지날',   abv: 21   },
 ]
+
+/** 소주 1병(360ml) 기준 순수 알코올(g) — 에탄올 밀도 0.7893 g/ml */
+export function sojuBottleAlcoholG(abv: number, ml = 360): number {
+  return Math.round(ml * (abv / 100) * 0.7893 * 10) / 10
+}
 
 export const BEER_BRANDS = [
   { brand: '카스 (4.5%)', abv: 4.5 },
@@ -184,7 +191,7 @@ export type EquivItem = {
 }
 
 export const EQUIV_TARGETS: EquivItem[] = [
-  { name: '소주',     emoji: '🍶', abv: 16,   unitMl: 50,  unitLabel: '소주잔' },
+  { name: '소주',     emoji: '🍶', abv: 15.7, unitMl: 50,  unitLabel: '소주잔' },
   { name: '맥주',     emoji: '🍺', abv: 4.5,  unitMl: 500, unitLabel: '캔(500ml)' },
   { name: '와인',     emoji: '🍷', abv: 13,   unitMl: 150, unitLabel: '와인잔' },
   { name: '위스키',   emoji: '🥃', abv: 40,   unitMl: 30,  unitLabel: '샷(30ml)' },

@@ -3,6 +3,7 @@ import AlcoholClient from './AlcoholClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
+import { SOJU_BRANDS, SOJU_ABV_ASOF, sojuBottleAlcoholG } from './alcoholUtils'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -20,11 +21,11 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '소맥 황금 비율의 도수는?',
-                a: '가장 흔한 비율은 <strong>소주 50ml(16%) + 맥주 400ml(4.5%)</strong> 조합으로 약 5.78%입니다. &quot;진하게(1:5, 6.4%)&quot;, &quot;약하게(1:10, 5.5%)&quot; 취향에 따라 본 도구의 [혼합 도수] 탭에서 자유롭게 조정 가능. 단, 도수보다 마시는 속도·안주·수분이 취기에 더 큰 영향을 줍니다.',
+                a: '가장 흔한 비율은 <strong>소주 50ml(15.7%) + 맥주 400ml(4.5%)</strong> 조합으로 약 5.7%입니다. &quot;진하게(1:5, 6.4%)&quot;, &quot;약하게(1:10, 5.5%)&quot; 취향에 따라 본 도구의 [혼합 도수] 탭에서 자유롭게 조정 가능. 단, 도수보다 마시는 속도·안주·수분이 취기에 더 큰 영향을 줍니다.',
               },
               {
                 q: '알코올 순수량(g)은 어떻게 계산하나요?',
-                a: '<strong>알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7893</strong>입니다. 0.7893은 에탄올 밀도(g/ml)로, 물(1g/ml)보다 가볍습니다. 예: 소주 1잔 50ml × 16% × 0.7893 = 약 6.3g.',
+                a: '<strong>알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7893</strong>입니다. 0.7893은 에탄올 밀도(g/ml)로, 물(1g/ml)보다 가볍습니다. 예: 소주 1잔 50ml × 15.7% × 0.7893 = 약 6.2g.',
               },
               {
                 q: '잔 단위와 병 단위 어느 게 더 정확한가요?',
@@ -52,11 +53,11 @@ const FAQ_LD = [
               },
               {
                 q: '맥주(4.5%)로 소주를 희석하면 어떻게 되나요?',
-                a: '맥주로 희석할 때는 <strong>목표 도수가 맥주(4.5%)보다 높아야</strong> 가능합니다. 예: 소주 50ml(16%)를 8%로 맞추려면 맥주 약 <strong>114ml</strong> 필요 — 계산식 50×(16−8)÷(8−4.5)≈114ml. 단, 목표가 4.5% 이하면 무한히 추가해도 도달할 수 없습니다 (수학적 한계). 본 도구의 [목표 도수 희석] 탭에 다양한 희석재료 비교표가 자동 생성됩니다.',
+                a: '맥주로 희석할 때는 <strong>목표 도수가 맥주(4.5%)보다 높아야</strong> 가능합니다. 예: 소주 50ml(15.7%)를 8%로 맞추려면 맥주 약 <strong>110ml</strong> 필요 — 계산식 50×(15.7−8)÷(8−4.5)≈110ml. 단, 목표가 4.5% 이하면 무한히 추가해도 도달할 수 없습니다 (수학적 한계). 본 도구의 [목표 도수 희석] 탭에 다양한 희석재료 비교표가 자동 생성됩니다.',
               },
               {
                 q: '음주 칼로리는 어떻게 되나요?',
-                a: '알코올 1g = 7 kcal (지방 9, 탄수화물·단백질 4보다 높음). 예: 소주 1병 360ml(16%) → 알코올 45.5g × 7 = <strong>약 318 kcal</strong> (밥 1공기 314 kcal). 맥주는 알코올 외에도 당분으로 칼로리 추가 — 1캔 약 200 kcal. 술자리에서의 안주 칼로리는 별도. 본 도구는 알코올 칼로리만 표시합니다.',
+                a: '알코올 1g = 7 kcal (지방 9, 탄수화물·단백질 4보다 높음). 예: 소주 1병 360ml(15.7%) → 알코올 44.6g × 7 = <strong>약 312 kcal</strong> (밥 1공기 314 kcal). 맥주는 알코올 외에도 당분으로 칼로리 추가 — 1캔 약 200 kcal. 술자리에서의 안주 칼로리는 별도. 본 도구는 알코올 칼로리만 표시합니다.',
               },
             ]
 
@@ -95,7 +96,7 @@ export default function AlcoholPage() {
               </thead>
               <tbody>
                 {[
-                  ['🍶 소주잔',         '50ml',    '16%',   '6.3g',   '#0EA5E9'],
+                  ['🍶 소주잔',         '50ml',    '15.7%', '6.2g',   '#0EA5E9'],
                   ['🍺 맥주잔 (작은)',  '300ml',   '4.5%',  '10.7g',  '#059669'],
                   ['🍺 맥주잔 (큰)',    '500ml',   '4.5%',  '17.8g',  '#059669'],
                   ['🥃 양주 샷',        '30ml',    '40%',   '9.5g',   '#EA580C'],
@@ -105,7 +106,7 @@ export default function AlcoholPage() {
                   ['🍶 사케 잔',        '60ml',    '15%',   '7.1g',   '#DB2777'],
                   ['🥤 종이컵',         '180ml',   '—',     '—',      '#0891B2'],
                   ['🍹 하이볼잔',       '300ml',   '~7%',   '16.6g',  '#0891B2'],
-                  ['🍶 소주 1병',       '360ml',   '16%',   '45.5g',  '#0EA5E9'],
+                  ['🍶 소주 1병',       '360ml',   '15.7%', '44.6g',  '#0EA5E9'],
                   ['🥫 맥주 1캔',       '500ml',   '4.5%',  '17.8g',  '#059669'],
                   ['🍶 막걸리 1병',     '750ml',   '6%',    '35.5g',  '#EA580C'],
                   ['🍷 와인 1병',       '750ml',   '13%',   '77.0g',  '#C83EFF'],
@@ -265,14 +266,7 @@ export default function AlcoholPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['진로(두꺼비)',       '15.7%', '44.6g'],
-                  ['처음처럼 새로',       '15.7%', '44.6g'],
-                  ['좋은데이',           '15.7%', '44.6g'],
-                  ['참이슬 후레쉬',       '15.7%', '44.6g'],
-                  ['참이슬 오리지널',     '16.9%', '48.0g'],
-                  ['한라산 오리지날',     '21%',   '59.6g'],
-                ].map((r, i) => (
+                {SOJU_BRANDS.map((b) => [b.brand, `${b.abv}%`, `${sojuBottleAlcoholG(b.abv)}g`]).map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
@@ -283,7 +277,7 @@ export default function AlcoholPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * 같은 1병이라도 한라산 오리지날(21%) vs 15.7% 소주 = 알코올 약 34% 차이. 큰 차이입니다. (도수는 2026.7 기준·라벨 확인)
+            * 같은 1병이라도 한라산 오리지날(21%) vs 15.7% 소주 = 알코올 약 34% 차이. 큰 차이입니다. (도수는 {SOJU_ABV_ASOF} 기준·라벨 확인 — 계산기 프리셋·잔 단위 표도 같은 값을 씁니다)
           </p>
         </section>
 

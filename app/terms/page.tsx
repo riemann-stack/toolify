@@ -3,7 +3,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/terms',
   title: '이용약관',
-  description: 'Youtil 이용약관입니다.',
+  description: 'Youtil 서비스 이용 조건을 안내합니다. 계산 결과의 참고용 성격과 책임 범위, 이용자가 지켜야 할 사항, 광고 게재와 개인정보처리방침의 관계, 약관 변경 절차와 문의 방법을 담고 있습니다.',
 })
 
 const LAST_UPDATED  = '2026년 7월 29일'

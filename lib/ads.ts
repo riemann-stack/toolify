@@ -3,6 +3,8 @@
 // 수동 AdSlot·자동 광고 로더가 모두 이 파일을 참조합니다.
 // ──────────────────────────────────────────────────────
 
+import { allTools } from './tools'
+
 /** AdSense 게시자 ID. */
 export const ADSENSE_CLIENT_ID = 'ca-pub-9104888603507576'
 
@@ -65,7 +67,19 @@ export function isAdRestrictedPage(pathname: string | null | undefined): boolean
   return false
 }
 
-/** 해당 경로에 광고(자동/수동)를 로드해도 되는지 — 민감 카테고리·정책/내비 페이지 모두 차단. */
+/**
+ * 광고 게재가 허용된 실제 도구 경로 화이트리스트.
+ * 경로 '패턴'으로만 판정하면 존재하지 않는 경로(/tools/aaa/bbb, /nonexistent)도 통과해
+ * **404 페이지(app/not-found.tsx)에 광고가 실린다** — Google 게시자 정책의
+ * 'Valuable Inventory: 콘텐츠 없는 화면(오류 페이지)에 광고 게재 금지' 위반.
+ * 그래서 허용 목록을 레지스트리에서 파생해 '실재하는 도구 페이지'일 때만 true로 뒤집는다.
+ */
+const AD_ALLOWED_PATHS: ReadonlySet<string> = new Set(allTools.map((t) => t.href))
+
+/** 해당 경로에 광고(자동/수동)를 로드해도 되는지 — 실재 도구 경로만 허용(404·민감·정책/내비 차단). */
 export function adsAllowed(pathname: string | null | undefined): boolean {
-  return !isAdExcluded(pathname) && !isAdRestrictedPage(pathname)
+  if (!pathname) return false
+  const p = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname
+  if (!AD_ALLOWED_PATHS.has(p)) return false // 존재하지 않는 경로 = 404 → 광고 금지
+  return !isAdExcluded(p) && !isAdRestrictedPage(p)
 }

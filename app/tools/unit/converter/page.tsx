@@ -69,7 +69,7 @@ const FAQ_LD = [
                 a: '먼저 <strong>에너지(kWh)와 전력(kW)을 구분</strong>해야 합니다. 본 변환기는 <strong>에너지량(BTU)</strong>을 환산하므로 12,000 BTU = 약 12.7 MJ = <strong>3.52 kWh</strong>로 표시됩니다. 반면 에어컨·냉동톤에서 말하는 &quot;12,000 BTU&quot;는 사실 <strong>시간당 값(BTU/h)</strong>인 냉방능력(전력)이라 <strong>3.52 kW</strong>(= 3,517 W)입니다. kWh(에너지)와 kW(전력)는 숫자만 같고 물리량이 다른데, 둘 다 3,600(초)으로 나누기 때문에 값이 일치합니다. 참고로 &quot;1RT(냉동톤)&quot; ≈ 12,000 BTU/h ≈ 3.5 kW이며, 가정용 인버터 에어컨은 8,000~24,000 BTU/h(2.3~7 kW) 범위입니다. 자세한 평형 환산은 <a href="/tools/interior/ac-capacity" style="color: var(--accent); text-decoration: underline">에어컨 평형 계산기</a>를 활용하세요.',
               },
               {
-                q: '식품 라벨의 &quot;Cal&quot;와 물리 cal는 같은가요?',
+                q: '식품 라벨의 “Cal”과 물리 cal는 같은가요?',
                 a: '다릅니다. <strong>식품 영양 라벨의 &quot;Cal&quot; (대문자)는 사실 kcal</strong>입니다. 즉 &quot;라면 500Cal&quot;는 500kcal = 500,000cal = 약 2,092 kJ. 이는 19세기 영양학 관행으로 굳어진 표기로, 정식 SI 단위로는 <strong>kJ</strong>가 권장되지만 한국·미국·일본 모두 식품 라벨은 여전히 kcal(=Cal)를 사용합니다. 1kcal = 4.184 kJ.',
               },
               {

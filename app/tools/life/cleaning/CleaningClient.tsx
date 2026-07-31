@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
-import { AGENTS, AGENT_MAP, SITUATIONS, MIX_RISKS } from './cleaningData'
+import { AGENT_MAP, SITUATIONS, MIX_RISKS } from './cleaningData'
 import s from './cleaning.module.css'
 
 function recipe(sit: (typeof SITUATIONS)[number], volumeMl: number) {
@@ -59,6 +59,9 @@ export default function CleaningClient() {
             </li>
           ))}
         </ul>
+        <p className={s.note} style={{ marginTop: 8 }}>
+          아래 가이드의 <strong>세제별 특징 표</strong>에 10종의 pH·용도·주의사항이 정리돼 있습니다.
+        </p>
       </div>
 
       {/* 응급 — 혼합 사고 시 */}
@@ -167,22 +170,8 @@ export default function CleaningClient() {
         </div>
       </div>
 
-      {/* 세제별 가이드 */}
-      <div className={s.card}>
-        <span className={s.cardLabel}>세제별 특징 한눈에</span>
-        <div className={s.agentList}>
-          {AGENTS.map((a) => (
-            <div key={a.id} className={s.agentRow}>
-              <span className={s.agentDot} style={{ background: a.color }} />
-              <div className={s.agentBody}>
-                <div className={s.agentName}>{a.name} <span className={s.agentType}>{a.type} · pH {a.ph}</span></div>
-                <div className={s.agentUse}>{a.uses}</div>
-                <div className={s.agentTip}>{a.tip}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* 세제별 특징 10종 전체 표는 아래 가이드가 담당 — 같은 페이지 중복 노출 방지.
+          여기서는 지금 고른 상황에 쓰이는 세제만 위 결과 카드에 표시된다. */}
     </div>
   )
 }

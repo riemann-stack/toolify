@@ -3,7 +3,7 @@ import { buildMetadata } from '@/lib/seo'
 export const metadata = buildMetadata({
   path: '/privacy',
   title: '개인정보처리방침',
-  description: 'Youtil 개인정보처리방침입니다.',
+  description: 'Youtil이 수집하는 정보(접속 기록·쿠키·광고 식별자)와 이용 목적, Google 애드센스·애널리틱스 등 제3자 서비스의 광고 쿠키 사용 고지, 맞춤형 광고 거부 방법, 이용자 권리와 문의처를 안내합니다.',
 })
 
 const LAST_UPDATED  = '2026년 6월 10일'
