@@ -12,6 +12,13 @@ import {
 const STORAGE_KEY = 'youtil_viscosity_v1'
 type TempRef = '40' | '100'
 
+/* 계산 중 스케일 감을 잡는 로그 사다리 5종 — 값은 FLUID_REFS 단일 소스에서 이름으로 추출.
+   전체 11종 목록은 page.tsx 가이드의 정적 표가 담당한다(같은 페이지 중복 노출 방지). */
+const ANCHOR_NAMES = ['공기', '물', '식용유 (올리브유)', '글리세린', '꿀']
+const FLUID_ANCHORS = ANCHOR_NAMES
+  .map((n) => FLUID_REFS.find((f) => f.name === n))
+  .filter((f): f is (typeof FLUID_REFS)[number] => Boolean(f))
+
 // temp 미지정 프리셋(꿀 @20°C)은 측정온도 토글을 건드리지 않는다 — 20°C 값에 @40/@100 라벨이 붙는 부정합 방지
 const PRESETS: { label: string; scale: Scale; value: number; temp?: TempRef; density?: number }[] = [
   { label: '물 @40°C',        scale: 'cp',  value: 0.65,  temp: '40',  density: 0.99 },
@@ -334,11 +341,11 @@ export default function ViscosityClient() {
         </p>
       </div>
 
-      {/* 일상 유체 참고 */}
+      {/* 스케일 감 잡기 — 전체 목록은 아래 가이드의 '일상 유체 점도 한눈에' 표로 위임(중복 노출 방지) */}
       <div className={s.card}>
-        <span className={s.cardLabel}>일상 유체 점도 (참고)</span>
+        <span className={s.cardLabel}>스케일 감 잡기</span>
         <div className={s.fluidList}>
-          {FLUID_REFS.map((f) => (
+          {FLUID_ANCHORS.map((f) => (
             <div key={f.name} className={s.fluidRow}>
               <span className={s.fluidEmoji}>{f.emoji}</span>
               <span className={s.fluidName}>{f.name}</span>
@@ -349,7 +356,7 @@ export default function ViscosityClient() {
           ))}
         </div>
         <p className={s.note}>
-          💡 케첩·땅콩버터·페인트 등은 <strong>비뉴턴 유체</strong>로, 전단속도·압력에 따라 점도가 변하며 단일 cP 값으로 정확히 표현되지 않습니다.
+          💡 공기(0.018 cP)에서 꿀(~10,000 cP)까지 약 <strong>55만 배</strong> 차이입니다. 케첩·땅콩버터처럼 전단속도에 따라 점도가 변하는 <strong>비뉴턴 유체</strong>를 포함한 전체 목록은 아래 <strong>일상 유체 점도 한눈에</strong> 표에 있습니다.
         </p>
       </div>
     </div>

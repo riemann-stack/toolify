@@ -80,6 +80,30 @@ const TONE_COLOR: Record<'low' | 'mid' | 'high', string> = {
   high: 'var(--danger)',
 }
 
+/* 한국 기능성 쌀 품종 — ⚠️ 인체시험 GI가 아니라 in vitro(시험관) 소화 실험의 '예측 GI'다.
+   출처: Lee C-M 외, Front Plant Sci 2025 Dec 11;16:1724565 (PMC12738849) Table 1(아밀로스)·Table 2(저항전분·예측 GI).
+   값·± 표기는 논문 표기 그대로. ISO 26642:2010은 in vitro 결과를 GI라 부르지 말 것을 명시하므로
+   위 GI_ROWS(인체시험·국제표)와 같은 층위로 섞거나 색 등급(TONE_COLOR)을 적용하지 말 것.
+   백진주는 논문 내 최고 예측 GI 값(신동진 아님) — 아밀로스·저항전분은 이 정리에 옮기지 않아 '—'. */
+type RiceRow =
+  | { group: string }
+  | { name: string; amylose: string; rs: string; pgi: string }
+
+const RICE_ROWS: RiceRow[] = [
+  { group: '고아밀로스 계열 (도담쌀·고아미 — 자포니카)' },
+  { name: '도담쌀', amylose: '41.83 ± 0.25', rs: '3.51 ± 0.96', pgi: '52.52 ± 0.05' },
+  { name: '고아미', amylose: '27.91 ± 0.23', rs: '0.50 ± 0.03', pgi: '57.04 ± 1.25' },
+  { name: '고아미2호', amylose: '32.64 ± 0.26', rs: '4.11 ± 0.91', pgi: '58.17 ± 1.76' },
+  { name: '고아미4호', amylose: '34.45 ± 0.23', rs: '4.30 ± 1.08', pgi: '58.98 ± 3.67' },
+  { group: '슬로미 계열 (인디카 육종 소재)' },
+  { name: '슬로미1', amylose: '25.99 ± 0.23', rs: '0.35 ± 0.05', pgi: '55.37 ± 1.94' },
+  { name: '슬로미2', amylose: '20.51 ± 0.36', rs: '0.29 ± 0.06', pgi: '59.84 ± 3.00' },
+  { name: '슬로미3', amylose: '24.70 ± 0.13', rs: '0.37 ± 0.09', pgi: '54.69 ± 3.26' },
+  { group: '비교용으로 함께 옮긴 품종' },
+  { name: '신동진', amylose: '19.43 ± 0.21', rs: '0.20 ± 0.00', pgi: '76.85 ± 2.82' },
+  { name: '백진주 ※', amylose: '—', rs: '—', pgi: '87.76 ± 8.86' },
+]
+
 const FAQ_LD = [
   {
     q: 'GI와 GL(당부하지수)의 차이가 뭔가요?',
@@ -131,11 +155,13 @@ export default function GlycemicLoadPage() {
 
       <UpdatedMeta
         date="2026년 7월"
-        basis="GL = 탄수화물(g)×GI÷100 · 판정 저 ≤10 / 중 11~19 / 고 ≥20 (1회 기준) · GI 조회표는 국제표 2008·2021판 + 한국 인체시험(2015) 원문 값"
+        basis="GL = 탄수화물(g)×GI÷100 · 판정 저 ≤10 / 중 11~19 / 고 ≥20 (1회 기준) · GI 조회표는 국제표 2008·2021판 + 한국 인체시험(2015) 원문 값 · 기능성 쌀 품종 표는 인체시험 GI가 아니라 Front Plant Sci 2025;16:1724565의 시험관 예측값(ISO 26642:2010·Atkinson 2021 기준 GI로 부를 수 없음) + 농촌진흥청 보도자료(2014·2021·2026)"
         sources={[
           { label: '국제 GI 표 2008 (Atkinson, Diabetes Care)', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC2584181/' },
           { label: '국제 GI 표 2021 (Atkinson, Am J Clin Nutr)', href: 'https://nutrition.org/ajcn-publishes-international-tables-of-glycemic-index-and-glycemic-load-values-2021-a-systematic-review/' },
           { label: '한국식품영양과학회지 44(1) 인체시험 (2015)', href: 'https://koreascience.kr/article/JAKO201506565684482.pdf' },
+          { label: '기능성 쌀 품종 예측 GI — Front Plant Sci 2025;16:1724565', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12738849/' },
+          { label: 'ISO 26642:2010 (GI 측정 표준)', href: 'https://www.iso.org/standard/43633.html' },
         ]}
       />
 
@@ -253,13 +279,125 @@ export default function GlycemicLoadPage() {
           </p>
         </section>
 
-        {/* 4. GL 낮추기 */}
+        {/* 4. 한국 기능성 쌀 품종 — in vitro 예측 GI */}
+        <section>
+          <h2 style={sectionTitle}>한국 기능성 쌀 품종 — 이건 GI가 아니라 「개발 지표」입니다</h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
+            농촌진흥청은 도담쌀을 <strong style={{ color: 'var(--text)' }}>&ldquo;저항전분이 많고 혈당지수가 낮은 쌀 품종&rdquo;</strong>이라고 설명합니다.
+            이런 국산 기능성 쌀에는 GI처럼 보이는 숫자가 붙어 다니는데, 원 논문을 열어 보면 그 값은 <strong style={{ color: 'var(--text)' }}>사람에게 먹여 잰 값이 아니라 시험관(in vitro) 소화 실험에서 나온 예측치</strong>입니다.
+            표를 보기 전에 이 구분부터 짚습니다.
+          </p>
+
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', marginBottom: 16 }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--warning)', margin: '0 0 8px' }}>
+              ⚠️ 먼저 — 아래 표의 값은 GI가 아닙니다
+            </p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+              ① GI 측정의 국제 표준인 <strong style={{ color: 'var(--text)' }}>ISO 26642:2010</strong>은 서문에서, 시험관 방법으로 소화율·가수분해 지수를 얻을 수는 있어도
+              그 결과를 <strong style={{ color: 'var(--text)' }}>&ldquo;GI 값이라고 불러서는 안 된다&rdquo;</strong>(the results should not be referred to as GI values)고 못박습니다.<br />
+              ② 같은 표준은 GI 측정 자체를 <strong style={{ color: 'var(--text)' }}>사람 지원자(human volunteers)</strong>의 혈당 반응을 재는 것으로 정의하고(2.7항),
+              건강한 피험자를 <strong style={{ color: 'var(--text)' }}>최소 10명</strong> 선발하도록 요구합니다(5.3.1항).<br />
+              ③ 또 GI는 <strong style={{ color: 'var(--text)' }}>실제로 시험한 그 식품에, 먹은 그 상태 그대로만</strong> 부여할 수 있고(only tested foods shall have a GI assigned, 4장),
+              재료별 값을 수학적으로 계산해 만들어낼 수 없습니다.<br />
+              ④ 국제 GI 표(Atkinson 2021)도 ISO 준수 데이터(약 2,100항목)를 별도 목록으로 분리했고,
+              <strong style={{ color: 'var(--text)' }}> 시험관 방법으로 GI를 추정한 연구는 수록 대상에서 아예 제외</strong>했습니다.<br />
+              → 그래서 아래 표는 위 GI 조회표(인체시험·국제표 값)와 <strong style={{ color: 'var(--text)' }}>같은 줄에 놓고 비교할 수 없습니다</strong>.
+              품종을 고르고 개량하기 위한 실험실 지표로만 읽으세요. 아래 표에 저·중·고 색을 입히지 않은 것도 같은 이유입니다.
+            </p>
+          </div>
+
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['품종', '아밀로스(%)', '저항전분(%)', '예측 GI (시험관)'].map((h, i) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {RICE_ROWS.map((r, i) => 'group' in r ? (
+                  <tr key={i} style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}>
+                    <th scope="rowgroup" colSpan={4} style={{ padding: '8px 12px', textAlign: 'left', fontSize: 12, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.04em' }}>
+                      {r.group}
+                    </th>
+                  </tr>
+                ) : (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.name}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.amylose}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.rs}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.pgi}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.8 }}>
+            전부 Lee C-M 등, <em>Front Plant Sci</em> 2025;16:1724565(2025년 12월 11일 게재)의 Table 1·Table 2 값이며 ± 는 논문의 표준편차입니다.
+            아밀로스는 비색법 측정치, 예측 GI는 시험관 가수분해 곡선의 면적을 논문의 회귀식(pGI = 0.0781 × 보정 AUC + 47.8876)에 넣어 산출한 값입니다.
+            품종별 아밀로스·저항전분 수치는 <strong style={{ color: 'var(--text)' }}>이 연구의 측정치</strong>이지 농촌진흥청이 공표한 품종 스펙이 아닙니다.
+            <br />※ 백진주는 여기에 예측 GI만 옮겼습니다. 논문이 다룬 16개 계통 가운데 예측 GI가 가장 높은 것은 신동진(76.85)이 아니라 <strong style={{ color: 'var(--text)' }}>백진주(87.76)</strong>이며, 신선찰(87.66 ± 10.36)도 신동진보다 높습니다.
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.8 }}>
+            표를 세로로 훑으면 <strong style={{ color: 'var(--text)' }}>저항전분 순위와 예측 GI 순위가 일치하지 않는다</strong>는 점이 먼저 보입니다.
+            이 논문 측정에서 저항전분이 가장 높은 것은 고아미4호(4.30%)·고아미2호(4.11%)이고 도담쌀(3.51%)은 그다음인데, 예측 GI가 가장 낮은 것은 도담쌀입니다.
+            논문은 그 이유를 저항전분 단독이 아니라 <strong style={{ color: 'var(--text)' }}>가장 높은 아밀로스 함량(41.83%)과 결합된 결과</strong>로 설명합니다.
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.8 }}>
+            논문 저자들도 선을 그었습니다 — 결론에서 이 계통들을 상업적으로 제안하기 전에 <strong style={{ color: 'var(--text)' }}>&ldquo;human clinical validation … are required&rdquo;</strong>(사람 대상 임상 검증이 필요하다)고 명시했고,
+            장기적인 혈당 이점은 인체 임상시험으로 확인해야 한다고 덧붙였습니다. 실제로 이 연구의 생체 검증은 사람이 아니라 <strong style={{ color: 'var(--text)' }}>생쥐(군당 5마리)</strong> 실험이었습니다.
+            덧붙여 ISO 26642는 저항전분처럼 소화가 잘 안 되는 탄수화물을 GI 시험용 탄수화물 50 g(또는 25 g)에 의도적으로 포함하지 않도록 하고,
+            시험 중 섭취량이 위장 불편을 일으킬 만큼 저항전분이 많은 식품은 <strong style={{ color: 'var(--text)' }}>GI 시험에 적합하지 않다</strong>고 봅니다. 고저항전분 쌀은 애초에 GI 시험 설계가 까다로운 대상입니다.
+          </p>
+
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 16 }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>도담쌀은 어떤 쌀인가</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+              농촌진흥청이 <strong style={{ color: 'var(--text)' }}>2013년 개발</strong>한 품종으로, 고아미와 고아미2호를 교배해 얻은 자포니카 계통입니다.
+              공식 설명부터가 <strong style={{ color: 'var(--text)' }}>&ldquo;일반 밥쌀과 전분구조가 달라서 주로 가공용으로 이용되는 기능성 쌀&rdquo;</strong> — 밥쌀 대체재로 소개된 품종이 아닙니다.
+              2014년 발표 당시 수치는 아밀로스 <strong style={{ color: 'var(--text)' }}>42.8%</strong>(일반 쌀의 2배), 저항전분 <strong style={{ color: 'var(--text)' }}>13.6%</strong>(일반 쌀의 10배 정도), 식이섬유 5.3%였고,
+              현행 공식 표현은 &ldquo;저항전분 <strong style={{ color: 'var(--text)' }}>10% 이상</strong>&rdquo;입니다(2026년 7월 보도자료 기준).<br />
+              여기서 정직하게 밝혀 둘 것이 있습니다. <strong style={{ color: 'var(--text)' }}>농진청의 13.6%와 위 표 논문의 3.51%는 크게 다릅니다.</strong>
+              두 수치 모두 각각의 1차 출처에서 그대로 확인되지만, 어느 쪽 자료에도 측정 조건을 맞대어 비교한 내용이 없어 <strong style={{ color: 'var(--text)' }}>차이의 원인은 확인되지 않았습니다</strong>.
+              그래서 이 글은 한쪽을 고르지 않고 두 수치를 병기합니다.<br />
+              유통은 실재합니다. 2026년 7월 기준 관련 기술이전이 70여 건(35개 업체)에 이르고 <strong style={{ color: 'var(--text)' }}>쌀과자·쌀국수·선식·즉석밥</strong>으로 상용화됐으며,
+              진천·남해 지역 농가와 40헥타르 규모 계약재배로 원료곡을 공급받고 있습니다.
+            </p>
+          </div>
+
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 10 }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>사람 대상 시험은 있습니다 — 다만 GI 측정이 아닙니다</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+              농촌진흥청은 차병원과 공동으로, 농진청 기술이 적용된 <strong style={{ color: 'var(--text)' }}>도담쌀 선식</strong>을 비만 환자에게 적용한 인체적용시험을 수행해
+              인슐린 저항성 지표인 <strong style={{ color: 'var(--text)' }}>HOMA-IR가 38.2% 감소</strong>하고 당독소(AGEs) 축적이 <strong style={{ color: 'var(--text)' }}>3% 감소</strong>했다고 발표했습니다(게재지 <em>Nutrients</em> 2023;15:2248, 농진청 보도자료 경유 확인).
+              즉 사람 대상 자료가 아예 없는 것은 아닙니다. 다만 이 시험이 본 것은 인슐린 저항성·당독소 <strong style={{ color: 'var(--text)' }}>지표</strong>이지 ISO 26642 방식의 GI 값을 산출한 것이 아닙니다.
+              &ldquo;도담쌀은 인체시험으로 GI가 낮다고 입증됐다&rdquo;고 말할 수 있는 자료는 확인되지 않습니다.
+            </p>
+          </div>
+
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.8 }}>
+            한 가지 더. <strong style={{ color: 'var(--text)' }}>슬로미1~3은 완성된 보급 품종이 아닙니다.</strong>
+            논문도 이들을 기능성 품종 개발을 위한 <strong style={{ color: 'var(--text)' }}>&ldquo;promising prototypes&rdquo;</strong>(유망한 시제 계통)로 서술하고,
+            농촌진흥청 국립식량과학원 보도자료 본문 검색(2026년 7월 31일 조회)에서 &lsquo;슬로미&rsquo;는 0건입니다 — 같은 검색에서 &lsquo;도담쌀&rsquo;은 7건, &lsquo;고아미&rsquo;는 10건이 나옵니다.
+            계통도 도담쌀·고아미(자포니카)와 달리 인디카(장립종)입니다. 표에서 보듯 저항전분도 0.29~0.37%로 비교용으로 함께 옮긴 신동진(0.20%)과 큰 차이가 없어,
+            저항전분이 3~4%대로 나온 <strong style={{ color: 'var(--text)' }}>도담쌀·고아미2호·고아미4호와 한 묶음으로 볼 수는 없습니다</strong>. 시장에서 찾을 수 있는 쌀로 생각하지 마세요.
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.8 }}>
+            출처 — Lee C-M 등, 「Evaluation of glycemic response and starch digestibility in Korean rice toward the development of low GI rice」, <em>Front Plant Sci</em> 2025;16:1724565 (Table 1·2, Discussion·Conclusion) /
+            ISO 26642:2010 <em>Food products — Determination of the glycaemic index (GI) and recommendation for food classification</em> (Introduction·2.7·4장·5.3.1) /
+            Atkinson FS 등, <em>Am J Clin Nutr</em> 2021;114:1625-1632 /
+            농촌진흥청 보도자료 2014년 8월 25일, 국립식량과학원 보도자료 2021년 8월 20일·2026년 7월 23일.
+          </p>
+        </section>
+
+        {/* 5. GL 낮추기 */}
         <section>
           <h2 style={sectionTitle}>혈당 스파이크 줄이는 실전 습관</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {[
               { t: '먹는 순서 바꾸기', d: '채소·단백질 먼저 → 밥·면 나중에. 식후 혈당 상승이 완만해집니다.' },
-              { t: '보리·콩 섞어 먹기', d: '국내 인체시험에서 보리밥 GI는 35.4로 쌀밥(69.9)의 절반 수준. 반면 현미밥·통밀빵은 흰쌀밥·흰빵과 큰 차이가 없거나 더 높게 나온 시험도 있어, &lsquo;통곡물이면 무조건 낮다&rsquo;고 보기는 어렵습니다.' },
+              { t: '보리·콩 섞어 먹기', d: "국내 인체시험에서 보리밥 GI는 35.4로 쌀밥(69.9)의 절반 수준. 반면 현미밥·통밀빵은 흰쌀밥·흰빵과 큰 차이가 없거나 더 높게 나온 시험도 있어, '통곡물이면 무조건 낮다'고 보기는 어렵습니다." },
               { t: '주스보다 생과일', d: '갈거나 즙을 내면 GI가 올라갑니다. 통째로 씹어 먹기.' },
               { t: '식후 10분 걷기', d: '가벼운 활동만으로도 식후 혈당이 낮아집니다.' },
             ].map((c, i) => (
@@ -271,12 +409,12 @@ export default function GlycemicLoadPage() {
           </div>
         </section>
 
-        {/* 5. FAQ */}
+        {/* 6. FAQ */}
         <section>
           <Faq items={FAQ_LD} />
         </section>
 
-        {/* 6. 관련 도구 */}
+        {/* 7. 관련 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
