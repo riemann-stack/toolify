@@ -17,10 +17,14 @@ const FAQ_LD = [
                 a: '3가지 조건을 모두 충족하면 안정화로 봅니다. ① 급이 후 매번 비슷한 시간에 2배 이상 팽창, ② 피크 후 규칙적으로 꺼짐, ③ 이 패턴이 2~3회 이상 반복됨. 냄새는 시큼하지만 상쾌해야 하며, 아세톤이나 구린 냄새는 없어야 합니다.' },
               { q: '왜 초반(2~3일차)에 폭발적으로 부풀다가 조용해지나요?',
                 a: '초반의 활발한 반응은 주로 류코노스톡(Leuconostoc) 같은 비효모성 세균들의 반응입니다. 이들이 산성 환경을 만들면 자연도태되고, 내산성이 강한 야생 효모와 젖산균이 자리잡으면서 일시적으로 조용해집니다. 이 "조용한 시기"가 오히려 안정화 진행 중이라는 신호입니다.' },
-              { q: '냉장 보관 중인 스타터는 얼마나 오래 살 수 있나요?',
-                a: '건강한 스타터는 냉장 보관 시 1~2주, 길게는 몇 달도 유지됩니다. 냉장에서 꺼낸 후 1~2회 급이로 활성화시키면 사용 가능합니다. 물 위에 뜨는 회색/검은 액체(후치, hooch)는 알코올로 버리고 아래 스타터만 사용하면 됩니다.' },
+              { q: '냉장 보관 중인 스타터는 어떻게 관리하나요?',
+                a: '냉장은 스타터를 죽이는 것이 아니라 급이 간격을 늘리는 방법입니다(콜로라도 주립대 익스텐션). 공식 권장은 주 1회 급이로, 일부만 남기고 스타터 : 물 : 밀가루 = 1:1:1로 먹인 뒤 거품이 올라오기 시작할 때까지 실온에 1~2시간 두었다가 냉장고로 되돌립니다. 실온에서 유지한다면 12시간마다 하루 2회 급이합니다.' },
+              { q: '냉장 스타터 급이를 며칠 걸렀는데 살릴 수 있나요?',
+                a: 'King Arthur 공식 안내에 따르면 며칠에서 몇 주를 걸러도 대부분 되살릴 수 있습니다. 먼저 1회 급이해 실온에 두고 12시간 동안 부피 변화를 관찰한 뒤, 12시간마다 급이를 반복해 6~8시간 안에 2~3배로 부풀면 구울 준비가 된 것입니다. 추가 급이가 여러 번, 며칠까지 걸릴 수 있으므로 날짜가 아니라 팽창 속도로 판단하세요. 다만 곰팡이나 분홍·주황 변색, 불쾌한 냄새 같은 오염 신호가 있으면 되살리지 말고 전량 폐기합니다.' },
+              { q: '위에 고인 검은 액체(후치)는 상한 건가요? 곰팡이와 어떻게 구분하나요?',
+                a: '후치는 야생 효모가 먹이를 먹으며 만들어낸 알코올과 물, 즉 발효 부산물이라 상한 것이 아니라 급이가 필요하다는 신호입니다. 따라 버려도 되고 다시 섞어 넣어도 되며 둘 다 공식적으로 허용됩니다. 색이 짙어지는 것은 산화 때문이라 색만으로는 판단하지 않습니다. 반면 색깔 있거나 솜털 같은 곰팡이, 분홍색·주황색 기미나 줄무늬, 불쾌한 냄새는 상했다는 신호입니다. 이때는 일부만 덜어내 살리지 말고 전량 버린 뒤 용기를 씻고 헹궈 처음부터 다시 시작하세요.' },
               { q: '통밀이나 호밀을 섞으면 왜 더 빨리 활성화되나요?',
-                a: '통밀과 호밀에는 겨(bran)가 포함되어 있어 야생 효모와 영양분이 풍부합니다. 특히 호밀은 펜토산 성분이 발효를 촉진해 백밀 단독보다 훨씬 빠르게 활성화됩니다. 처음 스타터를 만들 때 호밀 10~20%를 섞으면 안정화가 빨라집니다.' },
+                a: '통곡물에는 흰 밀가루보다 사워도우에 유익한 미생물이 훨씬 많이 들어 있습니다. 특히 호밀은 효모와 박테리아가 이용하기 쉬운 유리당이 많고 전분 분해 효소 함량이 높아 발효가 빨라집니다(King Arthur 공식 문서). 반응이 굼뜰 때 흰 밀가루 대비 10~20%를 섞어 1~2회 급이하는 단발 처방으로 쓰며, 그 정도 소량은 스타터의 풍미를 바꾸지 않습니다. 새 스타터를 처음 만들 때도 통밀·호밀이 권장됩니다.' },
               { q: '사워도우를 베이킹에 사용할 때 가장 좋은 타이밍은?',
                 a: '피크 직전~피크 직후 1시간 이내가 최적입니다. 스타터를 물에 넣었을 때 뜨는지 확인하는 플로트 테스트와 함께, 표면에 많은 기포가 보이고 전체가 둥글게 부풀어 있을 때 사용하세요. 피크를 완전히 지나 꺼지기 시작하면 활성이 떨어져 빵이 잘 부풀지 않을 수 있습니다.' },
             ]
@@ -164,7 +168,82 @@ export default function SourdoughPage() {
           </div>
         </div>
 
-        {/* ── 5. 자주 하는 실수 ── */}
+        {/* ── 5. 냉장 보관과 부활(revive) ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            냉장 보관과 부활(revive) 절차
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            매일 굽지 않는다면 냉장이 현실적입니다. 콜로라도 주립대 익스텐션은 냉장을 <strong style={{ color: 'var(--text)' }}>급이 간격을 늘리는 수단</strong>으로 설명합니다 — 규칙적으로 급이한다면 반드시 필요한 것은 아니라는 뜻입니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['상황', '절차', '판단 기준'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: '평소 유지(냉장)', a: '일부만 남기고 스타터 : 물 : 밀가루 = 1:1:1로 급이 (공식 예시는 남기는 양 50g 또는 113g 두 가지 스케일)', j: '약 주 1회' },
+                  { s: '급이 직후', a: '바로 넣지 말고 거품이 올라오기 시작할 때까지 실온에 두었다가 냉장으로 복귀', j: '실온 1~2시간' },
+                  { s: '실온 유지', a: '냉장하지 않는다면 하루 2회 급이', j: '12시간마다' },
+                  { s: '굽기 전 부활', a: '굽기 하루~이틀 전에 냉장고에서 꺼내 실온에서 두어 번 급이', j: '급이 간격 12시간' },
+                  { s: '준비 완료 판정', a: '급이 후 부푸는 속도로 판단 — 날짜가 아니라 상태가 기준', j: '6~8시간 내 2~3배' },
+                  { s: '오래 걸렀을 때', a: '먼저 1회 급이해 실온에서 12시간 관찰, 2배로 부풀 때까지 급이 반복', j: '여러 번·며칠 소요 가능' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r.j}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            ※ 급이를 며칠에서 몇 주 걸러도 대부분 되살릴 수 있다는 것이 King Arthur의 공식 입장입니다. 단, &lsquo;며칠이면 된다&rsquo;는 날짜가 아니라 <strong style={{ color: 'var(--text)' }}>6~8시간 안에 2~3배 팽창</strong>이라는 상태가 판정 기준입니다. (2026-07 확인 · King Arthur Baking 공식 가이드, Colorado State University Extension, South Dakota State University Extension)
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginTop: '14px' }}>
+            {[
+              { title: '🌾 굼뜬 스타터 부스트', desc: '반응이 느릴 때 흰 밀가루 대비 통밀·호밀 10~20%를 섞어 1~2회만 급이하는 처방입니다. 통곡물에는 사워도우에 유익한 미생물이 더 많고, 호밀은 효모·박테리아가 이용하기 쉬운 유리당이 많고 전분 분해 효소 함량이 높아 발효가 빨라집니다. 이 정도 소량은 풍미를 바꾸지 않으며 정밀 계량도 필요 없습니다. 상시 급이용 처방은 아니고, 평상시 유지에는 무표백 중력분도 충분합니다.' },
+              { title: '♻️ 폐기 스타터(discard)', desc: '급이 때 덜어내는 부분입니다. 아까워서 버리는 것이 아니라 미생물을 건강하게 유지하고 양이 불어나는 것을 막는 과정입니다. King Arthur는 와플·팬케이크·피자 도우·크래커·바나나 브레드·쿠키 등 디스카드 전용 레시피를 공식 운영하고, 굽지 않을 때는 퇴비화하거나 유산지에 얇게 펴 말려 버리는 방법도 안내합니다. 보관은 뚜껑 있는 용기에 냉장이며, 공식 표현은 "여러 주(several weeks)"로 정확한 일수를 못박지 않습니다.' },
+            ].map((c, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '6px' }}>{c.title}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{c.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 6. 후치(hooch)와 위험 신호 구분 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            후치(hooch)와 위험 신호 구분
+          </h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            스타터 위에 고이는 액체를 후치라고 부릅니다. King Arthur는 이를 <strong style={{ color: 'var(--text)' }}>야생 효모가 먹이를 먹으며 만들어낸 알코올과 물</strong>, 즉 발효 부산물로 정의합니다. 상했다는 신호가 아니라 급이가 필요하다는 신호이며, 액체 색이 짙어지는 것은 입자가 산화되기 때문이라 색만으로 판단할 수 없습니다. 처리는 <strong style={{ color: 'var(--text)' }}>따라 버리기·다시 섞어 넣기 둘 다 공식 허용</strong>입니다(King Arthur·콜로라도 주립대 익스텐션 동일). 알코올이 풍미를 더할 수 있어 섞는 쪽을 택하기도 하고, 액체가 0.5인치(약 1.3cm) 이상으로 많고 아주 어두울 때는 수분율이 달라지므로 따라내라는 안내가 함께 있습니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+            {[
+              { c: 'var(--success)', title: '✅ 급이하면 되는 상태', desc: '표면에 고인 액체(후치), 알코올 섞인 시큼한 냄새, 줄어든 팽창 폭 — 평소대로 급이하면 회복됩니다.' },
+              { c: 'var(--danger)',  title: '🚫 폐기해야 하는 신호', desc: '분홍색·주황색 기미나 줄무늬, 색깔 있거나 솜털 같은 곰팡이, 불쾌한 냄새, 초록·분홍·주황 반점. 일부만 덜어내 살리지 말고 전량 버린 뒤 용기를 깨끗이 씻고 헹궈 처음부터 다시 시작합니다.' },
+            ].map((z, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${z.c}`, borderRadius: '10px', padding: '14px 18px' }}>
+                <p style={{ fontSize: '13px', color: z.c, fontWeight: 700, marginBottom: '6px' }}>{z.title}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>{z.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            ※ 분홍·주황 줄무늬는 스타터 표면뿐 아니라 용기 벽에 말라붙은 부분에도 나타나므로 함께 살펴보세요. 이 절의 기준은 King Arthur Baking 공식 문서와 콜로라도·사우스다코타 주립대 익스텐션 자료입니다(2026-07 확인). 국내 공공기관이 배포한 가정용 사워도우 스타터 관리 지침은 확인되지 않았습니다.
+          </p>
+        </div>
+
+        {/* ── 7. 자주 하는 실수 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 하는 실수 &amp; 해결법
@@ -185,7 +264,7 @@ export default function SourdoughPage() {
           </div>
         </div>
 
-        {/* ── 6. 플로트 테스트 ── */}
+        {/* ── 8. 플로트 테스트 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             플로트 테스트(Float Test) 해석 가이드
@@ -208,7 +287,7 @@ export default function SourdoughPage() {
           </div>
         </div>
 
-        {/* ── 7. FAQ ── */}
+        {/* ── 9. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -225,7 +304,7 @@ export default function SourdoughPage() {
           </div>
         </div>
 
-        {/* ── 8. 함께 쓰면 좋은 도구 ── */}
+        {/* ── 10. 함께 쓰면 좋은 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

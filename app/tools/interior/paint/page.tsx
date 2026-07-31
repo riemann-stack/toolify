@@ -34,6 +34,10 @@ const FAQ_LD = [
                 q: '페인트 시공 시 환기는 얼마나 해야 하나요?',
                 a: '<strong>수성 페인트</strong>는 시공 중과 시공 후 24시간 환기가 권장됩니다. <strong>유성 페인트</strong>는 시너 냄새가 강해 시공 중 강제 환기 + 시공 후 48~72시간 환기가 필요합니다. 친환경 저VOC 페인트도 안전을 위해 12시간 이상 환기를 권장합니다. 특히 임산부·영유아·민감자는 친환경 페인트를 사용하고 충분히 환기 후 입실하세요.',
               },
+              {
+                q: '남은 페인트는 어떻게 버리나요?',
+                a: '남은 페인트는 환경부 <strong>「생활계 유해폐기물 관리지침」</strong>의 관리 대상이라 일반 쓰레기로 버리면 안 됩니다. 공식 경로는 관할 유역환경청의 <strong>소량 지정폐기물 수거 서비스</strong>(처리비 kg당 600원 + 방문 수거비 회당 1만원, 직접 운반 시 방문비 면제 — 2026년 7월 확인 기준)이고, 서울시는 내용물이 남은 페인트·락카 통을 특수규격마대로 배출하도록 안내합니다. 흔히 알려진 ‘굳혀서 종량제 배출’은 지자체마다 허용 여부가 달라 거주지 시·군·구 확인이 먼저 필요합니다.',
+              },
             ]
 
 export default function PaintPage() {
@@ -115,6 +119,19 @@ export default function PaintPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* ── 2b. 진한 색 커버리지·조색 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            🎨 진한 색은 더 든다 — 커버리지와 조색
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+            위 표의 1L당 면적은 흰색·연한 색 도장을 기준으로 한 평균적인 값에 가깝습니다. 업계에서 통용되는 설명으로는, 빨강·노랑 같은 원색이나 채도 높은 진한 색은 안료 특성상 <strong style={{ color: 'var(--text)' }}>은폐력(밑색을 가리는 힘)이 상대적으로 낮은</strong> 경우가 많아, 같은 면적이라도 도포 횟수가 늘어날 수 있습니다. 얼마나 더 드는지는 색상·제품마다 달라 일률적인 배수로 말하기 어렵습니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 14px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+            💡 <strong style={{ color: 'var(--text)' }}>계산기 반영법</strong> — 진한 색으로 바꾸거나 기존의 진한 색을 덮을 때는 칠할 횟수를 <strong style={{ color: 'var(--text)' }}>3회(색상 변경)</strong>로 올리고, 발색이 걱정되면 로스율을 <strong style={{ color: 'var(--text)' }}>15%</strong>로 선택해 여유를 두세요. 조색(틴팅) 페인트는 나중에 추가 구매하면 같은 색을 정확히 다시 맞추기 어려울 수 있다는 것이 통용 관행이므로, 추천 구매 조합의 여유분을 포함해 한 번에 사는 편이 안전합니다.
           </div>
         </div>
 
@@ -204,6 +221,27 @@ export default function PaintPage() {
           </p>
         </div>
 
+        {/* ── 5b. 칠하기 전 체크 — 벽지 위 도장·곰팡이 벽 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            ✅ 칠하기 전 체크 — 벽지 위 도장·곰팡이 벽
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 6 }}>🧻 벽지 위에 칠해도 되나 — 합지 vs 실크</p>
+              <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
+                LX하우시스 공식 구분으로 <strong style={{ color: 'var(--text)' }}>합지벽지는 종이 위에 종이를 붙인 종이 벽지</strong>, <strong style={{ color: 'var(--text)' }}>실크벽지는 종이 위에 PVC(염화비닐수지)를 코팅한 비닐 벽지</strong>입니다(물걸레로 닦아도 되는 쪽이 실크). 통용 시공 관행으로는 들뜸·기포 없이 밀착된 합지는 그 위에 바로 도장하는 경우가 많고, 표면이 PVC인 실크벽지는 수성 페인트가 잘 붙지 않아 부착용 프라이머(젯소)를 먼저 칠하거나 벽지를 제거한 뒤 도장하는 쪽이 권장됩니다. 1L당 면적 보정은 위 &lsquo;면 종류별 흡수율&rsquo;을 참고하세요.
+              </p>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--danger)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: 'var(--danger)', fontWeight: 700, marginBottom: 6 }}>🦠 곰팡이 벽 — 페인트로 바로 덮지 않기</p>
+              <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
+                통용 시공 원칙은 <strong style={{ color: 'var(--text)' }}>제거 → 건조 → 원인 해결 → 도장</strong> 순서입니다. 곰팡이 위에 바로 칠하면 도막 아래에서 재발하기 쉬우므로, 곰팡이를 먼저 제거하고 벽을 완전히 말린 뒤 결로·누수 같은 원인을 잡고 나서 도장하세요. 곰팡이 방지 기능성 도료를 쓰더라도 제거·건조가 선행돼야 한다는 것이 업계 공통 안내입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* ── 6. 시공 단계 가이드 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
@@ -256,6 +294,33 @@ export default function PaintPage() {
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
             ※ 비용은 2026년 기준, 온라인 자재몰·시공 플랫폼 통용 범위이며 지역·브랜드·등급에 따라 달라집니다.
+          </p>
+        </div>
+
+        {/* ── 7b. 남은 페인트 폐기 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            ♻️ 남은 페인트, 어떻게 버리나
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+            남은 페인트는 일반 쓰레기가 아니라 환경부 <strong style={{ color: 'var(--text)' }}>「생활계 유해폐기물 관리지침」</strong>이 정한 생활계 유해폐기물 관리 대상입니다(폐농약·폐의약품 등과 함께 — 2023년 12월 개정판 기준). 공식 배출 경로는 다음 두 가지가 대표적입니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--success)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: 'var(--success)', fontWeight: 700, marginBottom: 6 }}>① 유역환경청 소량 지정폐기물 수거</p>
+              <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
+                가정에서 나온 폐페인트·폐락카 등 <strong style={{ color: 'var(--text)' }}>소량 지정폐기물 7종</strong>을 전화 신청으로 방문 수거합니다. 처리비 <strong style={{ color: 'var(--text)' }}>kg당 600원</strong> + 방문 수거비 <strong style={{ color: 'var(--text)' }}>회당 1만원</strong>이며, 환경청으로 직접 가져가면 방문비가 면제됩니다(10kg 미만 직접 운반 가능, 위험성이 낮으면 20kg까지). 서울권은 한강유역환경청, 세종권은 금강유역환경청 등 관할 유역환경청에 신청합니다. (서울 중구청·세종시 안내, 2026년 7월 확인 기준)
+              </p>
+            </div>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 6 }}>② 서울시 — 특수규격마대 배출</p>
+              <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
+                서울시 분리배출 기준은 <strong style={{ color: 'var(--text)' }}>내용물이 남아 있는 페인트·락카 통</strong>을 일반 종량제봉투가 아니라 불연성 폐기물용 <strong style={{ color: 'var(--text)' }}>특수규격마대</strong>로 배출하도록 안내합니다. 폭발·화재 우려가 있는 경우에는 한강유역환경청에 수거를 신청해 별도 처리합니다.
+              </p>
+            </div>
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginTop: '12px', background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--warning)', borderRadius: 10, padding: '12px 14px' }}>
+            ⚠️ 흔히 알려진 <strong style={{ color: 'var(--text)' }}>&lsquo;신문지·흡착제에 부어 굳힌 뒤 종량제봉투로 배출&rsquo;</strong>은 민간 분리배출 안내에서 널리 퍼진 통용 관행일 뿐, 전국 공통으로 적용되는 공적 원문은 확인되지 않았고 배출 방법은 지자체 조례마다 다릅니다. 소량이라도 거주지 시·군·구(청소행정 부서) 안내를 먼저 확인하세요. 애초에 남기지 않는 것이 최선 — 위 계산기의 추천 구매 조합이 필요량 대비 여유(잉여)를 최소로 잡는 이유이기도 합니다.
           </p>
         </div>
 

@@ -16,6 +16,10 @@ export interface Midsole {
   range: [number, number]
   desc: string
 }
+/* 수명값은 제조사 공식 교체 주기(브룩스·아식스 US 300~500마일 ≈ 483~805km,
+   아식스 NZ 800~1,000km, 나이키 코리아 표기 등 — 출처별 상이, page.tsx §교체 주기 표 참조)
+   범위 안에서 잡은 본 도구의 기준값. 소재별 세분(EVA vs TPU vs PEBA)은 제조사가
+   정량 공식값을 공개하지 않아 통용 관행에 따른 근사 구분이다. */
 export const MIDSOLES: Midsole[] = [
   { id: 'eva',  name: 'EVA (일반)',      base: 500, range: [400, 600], desc: '대부분의 데일리 트레이너' },
   { id: 'tpu',  name: 'TPU (부스트 등)', base: 600, range: [500, 700], desc: '내구성 좋은 발포폼' },

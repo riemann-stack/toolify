@@ -85,11 +85,13 @@ export default function FtpZonesPage() {
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>20분 테스트</span> = 20분 평균 파워 × 0.95</div>
-            <div><span style={{ color: 'var(--muted)' }}>램프 테스트</span> = 최대 1분 파워 × 0.75</div>
-            <div><span style={{ color: 'var(--muted)' }}>8분 테스트</span> = 8분 평균 파워 × 0.90</div>
+            <div><span style={{ color: 'var(--muted)' }}>램프 테스트</span> = 최고 1분 파워 × 0.75</div>
+            <div><span style={{ color: 'var(--muted)' }}>8분 테스트</span> = 2회 중 높은 쪽 평균 × 0.90</div>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ Allen·Coggan <em>Training and Racing with a Power Meter</em> 기준. 실제 역치는 컨디션·측정 조건·무산소 능력에 따라 달라지니 추세로 판단하세요.
+            ※ 계수의 출처는 각각 다릅니다 — 20분 ×0.95는 Hunter Allen(Peaks Coaching Group)·TrainingPeaks, 램프 ×0.75는 TrainerRoad·Zwift 공식,
+            8분 ×0.90은 CTS(Carmichael Training Systems) 필드 테스트(8분 올아웃 2회, 사이 10분 회복 — 필드 테스트 파워가 실험실 역치보다
+            약 10% 높다는 CTS 관찰에 따른 실무 계수). 실제 역치는 컨디션·측정 조건·무산소 능력에 따라 달라지니 추세로 판단하세요.
           </p>
         </section>
 

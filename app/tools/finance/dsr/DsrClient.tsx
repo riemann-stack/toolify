@@ -308,7 +308,7 @@ export default function DsrClient() {
         </div>
         <p className={s.note}>
           ⓘ 적용 스트레스 금리 = 기준({fmtPct(num(baseStress))}%p) × 단계율({STRESS_PHASES.find(p => p.id === phase)?.ratio}) × 유형율({RATE_TYPE_LABEL[rateType]}) = <strong>+{fmtPct(stressAddPct)}%p</strong>.
-          기본값은 2025~2026년 일반 기준 추정이며 정책 변경 시 달라집니다.
+          기본값(DSR 40%·스트레스 1.50%p·3단계 100%)은 금융위 보도자료 기준 2026년 7월 확인값이며, 정책 변경 시 달라질 수 있어 직접 수정할 수 있습니다.
         </p>
       </details>
     </div>

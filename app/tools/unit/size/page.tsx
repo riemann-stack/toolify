@@ -247,7 +247,132 @@ export default function SizePage() {
           </div>
         </div>
 
-        {/* ── 5. 직구 실패 줄이기 팁 ── */}
+        {/* ── 5. 신발 사이즈 핵심 변환표 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            신발 사이즈 핵심 변환표
+          </h2>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+            위 변환기와 동일한 기준값입니다. 같은 mm라도 남성·여성 US 표기가 다르다는 점에 주의하세요 — 예: 240mm는 남성 US 6.5, 여성 US 7입니다.
+          </p>
+
+          <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👨 남성 신발 (240~290mm)</h3>
+          <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 400 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['한국 (mm)', 'US', 'UK', 'EU'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { kr: 240, us: '6.5',  uk: '6',    eu: '39'   },
+                  { kr: 245, us: '7',    uk: '6.5',  eu: '39.5' },
+                  { kr: 250, us: '7.5',  uk: '7',    eu: '40'   },
+                  { kr: 255, us: '8',    uk: '7.5',  eu: '41'   },
+                  { kr: 260, us: '8.5',  uk: '8',    eu: '42'   },
+                  { kr: 265, us: '9',    uk: '8.5',  eu: '42.5' },
+                  { kr: 270, us: '9.5',  uk: '9',    eu: '43'   },
+                  { kr: 275, us: '10',   uk: '9.5',  eu: '44'   },
+                  { kr: 280, us: '10.5', uk: '10',   eu: '44.5' },
+                  { kr: 285, us: '11',   uk: '10.5', eu: '45'   },
+                  { kr: 290, us: '11.5', uk: '11',   eu: '46'   },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.us}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.uk}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.eu}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👩 여성 신발 (220~255mm)</h3>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 400 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['한국 (mm)', 'US', 'UK', 'EU'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { kr: 220, us: '5',   uk: '2.5', eu: '35'   },
+                  { kr: 225, us: '5.5', uk: '3',   eu: '35.5' },
+                  { kr: 230, us: '6',   uk: '3.5', eu: '36'   },
+                  { kr: 235, us: '6.5', uk: '4',   eu: '37'   },
+                  { kr: 240, us: '7',   uk: '4.5', eu: '37.5' },
+                  { kr: 245, us: '7.5', uk: '5',   eu: '38'   },
+                  { kr: 250, us: '8',   uk: '5.5', eu: '38.5' },
+                  { kr: 255, us: '8.5', uk: '6',   eu: '39'   },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.us}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.uk}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.eu}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6, marginTop: '8px' }}>
+            ※ 위 표는 본 변환기의 기준값이며, 브랜드에 따라 0.5~1 사이즈 차이가 날 수 있습니다. 본문의 브랜드별 사이즈 특징을 함께 확인하세요.
+          </p>
+        </div>
+
+        {/* ── 6. 반지 호수 요약 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            반지 호수 요약표
+          </h2>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+            한국 호수는 손가락 둘레·내경 기준이며, US 사이즈는 내경 기준(ISO 표준)입니다. 대표 호수만 추린 요약표로, 짝수 호수와 UK·EU·일본 표기는 위 변환기에서 확인할 수 있습니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 400 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['한국 호수', '내경 (mm)', '둘레 (mm)', 'US'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { kr: '7호',  inner: '14.5', circ: '45.5', us: '3.5'   },
+                  { kr: '9호',  inner: '15.3', circ: '48.0', us: '4.5'   },
+                  { kr: '11호', inner: '16.0', circ: '50.3', us: '5.5'   },
+                  { kr: '13호', inner: '17.0', circ: '53.4', us: '6.5'   },
+                  { kr: '15호', inner: '17.5', circ: '55.0', us: '7.25'  },
+                  { kr: '17호', inner: '18.0', circ: '56.5', us: '7.75'  },
+                  { kr: '19호', inner: '18.5', circ: '58.1', us: '8.5'   },
+                  { kr: '21호', inner: '19.0', circ: '59.6', us: '9'     },
+                  { kr: '23호', inner: '19.8', circ: '62.0', us: '10'    },
+                  { kr: '25호', inner: '20.2', circ: '63.4', us: '10.5'  },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.inner}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.circ}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.us}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6, marginTop: '8px' }}>
+            ※ 손가락 둘레는 하루 중에도 변합니다. 저녁 시간대에, 관절을 통과하는 굵기까지 감안해 측정하세요.
+          </p>
+        </div>
+
+        {/* ── 7. 직구 실패 줄이기 팁 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             해외 직구 사이즈 실패 줄이는 5가지 방법
@@ -265,13 +390,49 @@ export default function SizePage() {
                   <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, color: 'var(--accent)', fontWeight: 800 }}>{s.n}</span>
                   <span style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700 }}>{s.t}</span>
                 </div>
-                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginLeft: 28, margin: 0 }}>{s.d}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0, marginLeft: 28 }}>{s.d}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── 6. FAQ ── */}
+        {/* ── 8. 직구 반품·면세 실전 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            직구 반품·면세 실전
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+            사이즈가 애매할 때 두 사이즈를 함께 주문해 하나를 반품하는 경우가 많은데, 이때 면세 한도와 반품 정책을 미리 알아두면 낭패를 줄일 수 있습니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              { n: '①', t: '면세 한도 — 150달러 (미국발 200달러)', d: '물품가격 기준 미화 150달러 이하(미국발 물품은 200달러 이하)의 자가사용물품은 관세·부가세 없이 통관됩니다 (관세법 제94조 소액물품 면세, 관세청 안내).' },
+              { n: '②', t: '한도를 넘으면 전체가 과세', d: '150달러를 초과하면 초과분만이 아니라 물품가격 전체 기준으로 세금이 부과됩니다 (관세청 안내). 예상 세액은 아래 관부가세 계산기로 미리 계산해 보세요.' },
+              { n: '③', t: '목록통관 배제 품목 혼재 주의', d: '기준 금액 이하 자가사용물품은 특송업체의 통관목록 제출만으로 수입신고가 생략되지만, 건강기능식품 등 목록통관 배제 품목이 하나라도 섞이면 그 화물 전체가 목록통관에서 배제됩니다. 이때 물품가격에는 발송 국가에서 부과된 세금·현지 운임·보험료가 포함됩니다 (「특송물품 수입통관 사무처리에 관한 고시」 제8조).' },
+              { n: '④', t: '반품 정책은 주문 전에 확인', d: '사이즈 실패로 반품·재주문할 계획이라면 위 직구 사이트별 표의 무료 반품 여부를 주문 전에 확인하세요. 반품 배송비가 물품가보다 커지는 경우도 있습니다.' },
+            ].map((s, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, color: 'var(--accent)', fontWeight: 800 }}>{s.n}</span>
+                  <span style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700 }}>{s.t}</span>
+                </div>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0, marginLeft: 28 }}>{s.d}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '12px' }}>
+            관세·부가세가 얼마나 나올지는{' '}
+            <Link href="/tools/life/customs" style={{ color: 'var(--accent-ink)', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>관부가세 계산기</Link>
+            에서 품목별로 계산할 수 있습니다.
+          </p>
+          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6, marginTop: '8px' }}>
+            ※ 2026년 7월 관세청 고객지원 FAQ 기준. 미국발 200달러 기준이 배송 경로(특송·우편)별로 어떻게 적용되는지 등 세부 조건은{' '}
+            <a href="https://www.customs.go.kr/call/ad/crmcc/selectFaqViewPage.do?mi=6822&cnslKnwlSrno=512" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>관세청 안내 ↗</a>
+            에서 직접 확인하세요.
+          </p>
+        </div>
+
+        {/* ── 9. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -289,7 +450,7 @@ export default function SizePage() {
           </div>
         </div>
 
-        {/* ── 7. 관련 도구 ── */}
+        {/* ── 10. 관련 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

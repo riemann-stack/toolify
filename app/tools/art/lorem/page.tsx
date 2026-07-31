@@ -165,6 +165,70 @@ export default function LoremPage() {
           </p>
         </section>
 
+        {/* 6b. lorem ipsum origin */}
+        <section>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>Lorem Ipsum은 어디서 왔나 — 2,000년 전 키케로</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            Lorem Ipsum은 무작위 음절 뭉치가 아니라 <strong style={{ color: 'var(--text)' }}>실제 고전 문헌의 조각</strong>입니다. 원전은 기원전 45년 키케로(Cicero)의 윤리학 저작 「De finibus bonorum et malorum」 1권 32~33절 — 원문의 &quot;neque porro quisquam est, qui <strong style={{ color: 'var(--text)' }}>dolorem ipsum</strong>, quia dolor sit, <strong style={{ color: 'var(--text)' }}>amet, consectetur, adipisci velit</strong>…&quot; 대목에서 필러 첫 문장이 나왔고, 필러 후반부의 &quot;sed ut perspiciatis&quot; &quot;at vero eos et accusamus&quot; 같은 문구도 같은 32~33절과 연속으로 대응합니다.
+          </p>
+          <div style={{ overflowX: 'auto', marginBottom: '12px' }}>
+            <table style={{ width: '100%', minWidth: '480px', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr>
+                  {['키케로 원문 (기원전 45년)', '표준 필러 텍스트', '변화'].map((h, i) => (
+                    <th key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', padding: '8px 10px', textAlign: 'left', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { src: 'dolorem ipsum', out: 'Lorem ipsum', how: '앞 음절 do- 절단' },
+                  { src: 'adipisci velit', out: 'adipiscing elit', how: '어형 변형' },
+                  { src: 'eius modi tempora incidunt', out: 'eiusmod tempor incididunt', how: '축약·변형' },
+                  { src: 'ut labore et dolore magnam aliquam', out: 'ut labore et dolore magna aliqua', how: '어미 탈락' },
+                ].map((r, i) => (
+                  <tr key={i}>
+                    <td style={{ border: '1px solid var(--border)', padding: '8px 10px', color: 'var(--muted)', fontStyle: 'italic' }}>{r.src}</td>
+                    <td style={{ border: '1px solid var(--border)', padding: '8px 10px', color: 'var(--text)' }}>{r.out}</td>
+                    <td style={{ border: '1px solid var(--border)', padding: '8px 10px', color: 'var(--muted)' }}>{r.how}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+            표준 필러 열은 본 도구의 영문 문단 탭이 생성하는 텍스트와 동일합니다(본 도구 기준값).
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            필러가 dolorem이 아니라 <strong style={{ color: 'var(--text)' }}>lorem으로 시작하는 이유</strong>에도 물증이 있습니다. 1914년 Loeb Classical Library판(라틴·영문 대역) 스캔을 보면 라틴어 텍스트 페이지가 정확히 &quot;lorem ipsum quia dolor sit amet…&quot;로 시작합니다 — &apos;dolorem&apos;의 &apos;do-&apos;가 앞 페이지 끝에 걸려 잘렸고, 필러 텍스트는 이 페이지 첫머리를 그대로 따른 것입니다.
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            이 출처를 밝혀낸 사람은 고전학자 출신으로 미국 햄든-시드니 칼리지 출판부장을 지낸 <strong style={{ color: 'var(--text)' }}>리처드 매클린톡(Richard McClintock)</strong>입니다(흔히 &apos;라틴어 교수&apos;로 소개되지만 부정확한 표기). 필러에 든 희귀 라틴어 consectetur의 고전 문헌 인용례를 역추적해 키케로 원전을 확인했고, 1990년대 디자인 잡지 Before &amp; After에 서한을 보내자 잡지가 &apos;Lorem Oopsum&apos;이라는 제목으로 정정을 실었습니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>&apos;1500년대 무명 인쇄공&apos; 통설의 반전</p>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
+              &quot;1500년대에 어느 무명 인쇄공이 활자 견본용으로 만들었다&quot;는 유명한 이야기는 매클린톡 본인의 미확인 회고가 출처였습니다. 정작 본인도 그 옛 견본집을 다시 찾지 못했고, 확실히 추적된 가장 오래된 사용은 <strong style={{ color: 'var(--text)' }}>1966년 Letraset 전사(레터링) 시트</strong>라고 인정했습니다. 통설의 진원지였던 lipsum.com조차 최근 이 서술을 공식 개정해(2026-07 확인 기준), 지금은 1966년 Letraset이 런던 세인트브라이드 인쇄도서관 사서 제임스 모즐리(James Mosley)와 함께 1914년판 키케로 번역본을 재배열해 만들었다는 설명으로 바뀌었습니다(모즐리가 직접 재배열까지 했는지 자문에 그쳤는지는 자료마다 서술이 다릅니다). 최근 재조사에서는 1966년 시트 실물을 1914년판과 대조하기도 했습니다. 한국어 웹 상당수에는 아직 옛 &apos;1500년대&apos; 서술이 그대로 남아 있습니다. 이후 1980년대 Aldus PageMaker에 더미 텍스트로 번들되면서 데스크톱 출판과 함께 업계 표준으로 굳어졌습니다.
+            </p>
+          </div>
+          <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, fontStyle: 'italic', marginBottom: '8px' }}>
+              &quot;No one rejects, dislikes or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful.&quot;
+            </p>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
+              — H. Rackham 영역(1914년 Loeb판). 자체 번역: &quot;쾌락 그 자체를 거부하거나 싫어하거나 피하는 사람은 없다. 다만 쾌락을 이성적으로 추구할 줄 모르는 이들에게 극심한 고통이라는 결과가 따르기 때문이다.&quot; 쾌락과 고통에 관한 진지한 윤리학 논증이 &apos;의미 없는 채움글&apos;의 원료가 된 셈입니다.
+            </p>
+          </div>
+        </section>
+
+        {/* 6c. why korean dummy */}
+        <section>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>한국어 더미 텍스트는 왜 따로 필요한가</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+            한글은 글자 폭과 줄바꿈 특성이 라틴 알파벳과 다릅니다. 같은 폭 안에 들어가는 글자 수, 줄이 바뀌는 위치, 단어가 끊기는 방식이 달라서 <strong style={{ color: 'var(--text)' }}>Lorem Ipsum으로 보기 좋게 맞춘 카드·버튼·제목이 한국어 실데이터를 넣는 순간 다르게 흐르는</strong> 일이 흔합니다. 그래서 실무에서는 목표 언어와 같은 문자 체계의 더미 텍스트로 조판을 확인하는 것이 통용 관행입니다. 본 도구의 문단 탭이 한글 더미를 9가지 톤으로 따로 제공하고, 길이 테스트 탭이 띄어쓰기 없는 한글·긴 URL 같은 극단 케이스를 별도로 두는 이유입니다.
+          </p>
+        </section>
+
         {/* 7. legal */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>저작권·사용 권한</h2>

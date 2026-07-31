@@ -4,6 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { AGENTS, MIX_RISKS } from './cleaningData'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
@@ -118,6 +119,92 @@ export default function CleaningPage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
             반대 성질의 오염엔 효과가 약하고, <strong style={{ color: 'var(--text)' }}>산성과 알칼리를 섞으면 서로 중화</strong>돼 둘 다 무력화됩니다. 살균·곰팡이엔 <strong style={{ color: 'var(--text)' }}>락스·과탄산</strong>이 따로 필요합니다.
           </p>
+        </div>
+
+        {/* 실전 레시피 */}
+        <div>
+          <h2 style={sectionTitle}>🧽 상황별 실전 레시피 — 대표 4가지</h2>
+          <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={headCell}>상황</th>
+                  <th scope="col" style={headCell}>세제·사용량</th>
+                  <th scope="col" style={headCell}>절차 요약</th>
+                  <th scope="col" style={headCell}>금지</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: '☕ 전기포트·가습기 물때', a: '구연산 30g/L (약 2.5큰술)', how: '포트는 물+구연산을 끓이고, 가습기는 끓이지 말고 1~2시간만 담근다 → 깨끗한 물로 2~3회 헹굼 → 포트는 맹물을 한 번 더 끓여 마무리', no: '락스' },
+                  { s: '🕳️ 배수구 냄새·기름막', a: '베이킹소다 가루 1컵 (희석 없이)', how: '거름망 찌꺼기를 먼저 제거 → 가루를 붓고 뜨거운 물을 천천히 흘림 → 5~10분 뒤 더운물로 마무리. “베이킹소다+식초 거품”은 서로 중화돼 세정력이 거의 없는 통념', no: '식초(중화·거품 압력)' },
+                  { s: '🪞 유리·거울 얼룩', a: '식초 — 물:식초 1:1 분무', how: '분무 후 극세사 천·신문지로 한 방향으로 닦고 마른 천으로 광내기. 직사광선 아래선 얼룩지니 그늘에서', no: '락스' },
+                  { s: '🍳 레인지·후드 기름때', a: '과탄산소다 20g/L (약 1.5큰술) + 따뜻한 물 40~60℃', how: '녹인 즉시 오염면에 바르고 10~20분 불린 뒤 닦기 → 물걸레 마무리. 만든 용액을 분무기에 밀폐 보관하지 말 것(산소 방출)', no: '락스' },
+                ].map((r, i) => (
+                  <tr key={i}>
+                    <td style={{ ...cell, fontWeight: 700 }}>{r.s}</td>
+                    <td style={cell}>{r.a}</td>
+                    <td style={{ ...cell, color: 'var(--muted)' }}>{r.how}</td>
+                    <td style={{ ...cell, color: 'var(--danger)', whiteSpace: 'nowrap' }}>{r.no}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            위 농도는 <strong style={{ color: 'var(--text)' }}>본 도구가 쓰는 기준값(통용 관행)</strong>입니다. 구연산·과탄산소다 같은 살림 세제의 사용 농도를 정한 국가기관 공식 기준은 확인되지 않아(2026-07 기준), <strong style={{ color: 'var(--text)' }}>제품 라벨에 사용량이 있으면 라벨이 우선</strong>합니다. 큰술 환산은 밥숟가락(약 15ml) 기준의 대략적 관행 값으로, 가루마다 무게가 다릅니다(1큰술당 구연산 약 12g·과탄산 약 13g·베이킹소다 약 14g — 본 도구 기준값).
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '8px' }}>
+            제조사 공식 안내가 있으면 그쪽을 우선하세요. 예: 테팔은 전기포트 물때에 <strong style={{ color: 'var(--text)' }}>“물 가득 + 구연산 2스푼을 끓인 뒤 5~10분 방치, 여러 번 헹굼”</strong>을, 물 경도가 높은 지역은 3개월에 한 번 세척을 안내합니다(테팔 웹진). 그리고 어떤 레시피든 위 <strong style={{ color: 'var(--text)' }}>‘절대 섞으면 안 되는 조합’이 최우선</strong>입니다.
+          </p>
+        </div>
+
+        {/* 세탁조 통세척 — 제조사 공식 */}
+        <div>
+          <h2 style={sectionTitle}>🌀 세탁조 통세척 — 제조사 공식 안내</h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+            본 도구의 세탁조 레시피(과탄산 1~2컵)를 쓰기 전에 <strong style={{ color: 'var(--text)' }}>내 세탁기 제조사의 공식 안내</strong>를 먼저 확인하세요. LG와 삼성은 권장 세제 계열부터 다릅니다.
+          </p>
+          <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={headCell}>코스</th>
+                  <th scope="col" style={headCell}>주기·알림</th>
+                  <th scope="col" style={headCell}>세제·온도</th>
+                  <th scope="col" style={headCell}>핵심 수칙</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { c: 'LG 통돌이 통세척·통살균', when: '월 1회 권장 · 전원 시 ‘tCL’ 표시가 시점 알림', what: '산소계 표백제 성분 함유 세탁조 클리너 권장', rule: '염소계·산성 클리너는 변색·부식 위험 · 6개월 이상 미사용 시 연속 3회' },
+                  { c: 'LG 드럼·워시타워 통살균', when: '코스 실행 시', what: '온수 급수 후 60℃ 유지', rule: '워시타워는 [통살균] 버튼 1초 터치 후 시작' },
+                  { c: '삼성 무세제통세척 (탑재 모델)', when: '알림이 보통 1~2개월에 한 번 표시(사용 횟수 따라 다름)', what: '세제 없이 70℃ 온수 자동 세척', rule: '온도·헹굼·탈수 변경 불가 · 세탁물 절대 투입 금지' },
+                  { c: '삼성 통세척 코스 (미탑재 모델)', when: '월 1회 권장 · 세탁 19회 후 20~25회째 알림 점등', what: '액체 염소계 표백제 150~300ml 또는 세탁조 전용세정제', rule: '염소계 과량 투입은 고장 원인 · 완료 후 문 열어 건조' },
+                ].map((r, i) => (
+                  <tr key={i}>
+                    <td style={{ ...cell, fontWeight: 700 }}>{r.c}</td>
+                    <td style={cell}>{r.when}</td>
+                    <td style={cell}>{r.what}</td>
+                    <td style={{ ...cell, color: 'var(--muted)' }}>{r.rule}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', marginBottom: '16px' }}>
+            요점: <strong style={{ color: 'var(--text)' }}>LG는 산소계(과탄산 계열) 클리너를 권장</strong>하는 반면, <strong style={{ color: 'var(--text)' }}>삼성 일반 모델의 통세척 코스는 염소계 표백제 또는 전용세정제</strong>를 안내합니다. 본 도구의 과탄산 레시피는 LG 권장 계열과 같은 방향이고, 삼성 안내대로 염소계를 쓸 때는 <strong style={{ color: 'var(--danger)' }}>식초·구연산·산소계 표백제와의 혼용 절대 금지</strong>(유해가스 — 삼성 공식 경고)가 위 ‘절대 섞으면 안 되는 조합’과 그대로 겹칩니다.
+          </p>
+          <UpdatedMeta
+            date="2026년 7월"
+            basis="LG전자·삼성전자서비스 고객지원 공식 안내 기준"
+            sources={[
+              { label: 'LG전자 통돌이 통세척', href: 'https://www.lge.co.kr/support/solutions-1430889036106' },
+              { label: 'LG전자 워시타워 통살균', href: 'https://www.lge.co.kr/support/solutions-20153936989467' },
+              { label: '삼성전자서비스 무세제통세척', href: 'https://www.samsungsvc.co.kr/solution/40255' },
+              { label: '삼성전자서비스 통세척', href: 'https://www.samsungsvc.co.kr/solution/41708' },
+            ]}
+          />
         </div>
 
         {/* 재질별 주의 */}

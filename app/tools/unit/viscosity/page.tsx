@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { FLUID_REFS } from './viscosityData'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/viscosity',
@@ -101,6 +102,27 @@ export default function ViscosityPage() {
           </div>
         </section>
 
+        {/* 1b. 자주 찾는 변환 */}
+        <section>
+          <h2 style={sectionTitle}>자주 찾는 변환 3가지</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            실무에서 반복해서 찾게 되는 관계는 대부분 이 세 가지입니다 — 전부 본 도구가 내부 계산에 쓰는 공식 그대로예요.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+            {[
+              { t: '1 cSt = 1 mm²/s', d: '1 cP = 1 mPa·s', desc: '표기만 다른 완전히 같은 값. 오일 카탈로그의 mm²/s는 그대로 cSt로, 데이터시트의 mPa·s는 그대로 cP로 읽으면 됩니다.', c: 'var(--success)' },
+              { t: 'cP ↔ cSt — 밀도가 다리', d: 'cSt = cP ÷ ρ', desc: '물(ρ 1.00)은 두 값이 같고, 엔진오일(ρ≈0.87)은 10 cSt = 8.7 cP. 밀도를 모르면 위 계산기의 밀도 프리셋을 쓰세요.', c: 'var(--cat-health)' },
+              { t: 'SI · 레거시 단위', d: '1 Pa·s = 1,000 cP', desc: 'SUS는 32.0초(= 1.81 cSt)부터만 정의됩니다(ASTM D2161 측정 하한) — 그 미만은 환산 자체가 불가.', c: 'var(--warning)' },
+            ].map((g, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.t}</p>
+                <p style={{ fontSize: 16, color: 'var(--text)', fontWeight: 800, margin: '0 0 6px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.d}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{g.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* 2. SAE J300 */}
         <section>
           <h2 style={sectionTitle}>SAE J300 — 엔진오일 등급의 의미</h2>
@@ -113,6 +135,42 @@ export default function ViscosityPage() {
             <li><strong style={{ color: 'var(--text)' }}>다등급의 이점</strong> — 저온 시동성과 고온 안정성을 동시에 확보(점도지수 향상제 첨가).</li>
             <li><strong style={{ color: 'var(--text)' }}>차량별 권장</strong> — 반드시 차량 매뉴얼·주유구 캡을 확인. 잘못된 등급은 연비·엔진 보호 모두 저하.</li>
           </ul>
+        </section>
+
+        {/* 2b. 온도 민감성 */}
+        <section>
+          <h2 style={sectionTitle}>온도가 오르면 점도는 뚝 떨어진다</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            점도는 온도에 극도로 민감한 물성입니다. 본 도구의 프리셋·참고값(문헌 통용치)을 나란히 놓기만 해도 낙차가 그대로 보입니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['유체 (본 도구 기준값)', '낮은 온도', '높은 온도', '변화 폭'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['물', '1.0 cP @20°C', '0.65 cP @40°C', '20°C 상승에 약 35% 감소'],
+                  ['엔진오일 (프리셋)', '90 cSt @40°C', '10 cSt @100°C', '60°C 상승에 1/9로 감소'],
+                  ['SAE 30 모터오일 (참고값)', '~250 cP @20°C (ρ 0.87 환산 시 약 287 cSt)', '~9.5 cSt @100°C', '동점도 기준 약 1/30'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
+            겨울 아침 시동 직후 오일이 뻑뻑한 이유가 바로 이것입니다. 정상 운전 온도(100°C)에서 10 cSt인 엔진오일이 40°C만 돼도 9배인 90 cSt — 기온이 영하로 내려가는 겨울 새벽엔 이 경향이 그대로 이어져 훨씬 되직한 상태로 시동을 걸게 됩니다. SAE J300이 100°C 동점도(뒷 숫자)와 별개로 저온 W 등급을 CCS·MRV 저온 시험으로 따로 판정하는 것도, 본 도구가 측정 온도(@40°C·@100°C) 토글을 두는 것도 같은 이유예요 — <strong style={{ color: 'var(--text)' }}>측정 온도가 다르면 같은 숫자라도 전혀 다른 유체</strong>입니다.
+          </p>
         </section>
 
         {/* 3. ISO VG */}
@@ -148,6 +206,38 @@ export default function ViscosityPage() {
               </tbody>
             </table>
           </div>
+        </section>
+
+        {/* 3b. 일상 유체 점도 표 */}
+        <section>
+          <h2 style={sectionTitle}>일상 유체 점도 한눈에</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            공기 0.018 cP에서 도로 아스팔트용 역청 ~10⁸ cP까지 — 같은 &lsquo;점도&rsquo;라는 물성이 수십억 배 스케일로 벌어집니다. 아래는 <strong style={{ color: 'var(--text)' }}>본 도구의 참고값(문헌 통용치)</strong>을 그대로 옮긴 표입니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['유체', '절대점도', '측정 온도', '비고'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {FLUID_REFS.map((f, i) => (
+                  <tr key={f.name} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{f.emoji} {f.name}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{f.cp}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{f.temp ?? '—'}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{f.note ?? ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
+            케첩·땅콩버터처럼 &lsquo;비뉴턴 유체&rsquo;로 표시된 값은 특정 전단속도에서의 통용치입니다 — 흔들거나 누르는 정도에 따라 점도 자체가 변해서 단일 값으로 못 박을 수 없어요(아래 FAQ 참고). 위 계산기에 값을 넣을 때는 측정 온도가 표와 같은 조건인지부터 확인하세요.
+          </p>
         </section>
 
         {/* 4. FAQ */}

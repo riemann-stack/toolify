@@ -34,6 +34,14 @@ const FAQ_LD = [
                 q: '몰딩 가격은 보통 얼마인가요?',
                 a: '2026년 기준 한국 시판가로 <strong>스티렌 1,000원/m, PVC 1,500원/m, MDF 2,500원/m, 석고 4,000원/m, 우드 5,000~10,000원/m</strong> 정도입니다(1m당, 1본 2.4m이면 ×2.4 · 매장·등급별 편차 큼). 24평(단일 정사각형 공간 가정) 천장+걸레받이를 MDF로 시공하면 <strong>자재비 약 20만원</strong>, 전문 시공비는 m당 5,000원 추가로 <strong>약 59만원</strong> 정도입니다.',
               },
+              {
+                q: '도배·바닥재와 몰딩은 어떤 순서로 시공하나요?',
+                a: '통용 시공 순서 기준으로 <strong>천장 몰딩·문선(목공) → 도배 → 바닥재 → 걸레받이</strong>가 일반적입니다. 천장 몰딩을 먼저 달아야 벽지를 몰딩 경계선에 맞춰 재단할 수 있고, 걸레받이는 바닥재 가장자리 틈을 덮는 역할이라 바닥 시공 후 마지막에 답니다. 다만 장판처럼 걸레받이를 먼저 대고 자재를 맞춰 재단하는 현장도 있어, 자재·현장에 따라 순서가 바뀔 수 있으니 시공사와 미리 협의하세요.',
+              },
+              {
+                q: '무몰딩으로 하려면 어떤 조건이 필요한가요?',
+                a: '몰딩이 가려주던 천장·벽 경계가 그대로 드러나므로, 통용 관행 기준 <strong>천장·벽면 평탄도와 마감 정밀도</strong>가 뒷받침되어야 합니다. 도배 마감은 경계의 벽지 들뜸·미세 크랙이 그대로 보일 수 있어 도장(페인트) 마감과 함께 가는 경우가 많고, 도배만 다시 하는 부분 공사보다 천장 마감까지 함께 손보는 공사에서 적용하기 쉽습니다. 매립형인 마이너스몰딩은 채널 목공이 선행되어야 해 신축·전면 리모델링 단계에서 계획해야 합니다. 가능 여부·비용은 현장 편차가 크니 시공사 견적으로 확인하세요. 본 계산기에서는 <strong>천장 몰딩 체크를 해제</strong>하고 걸레받이만 선택해 계산하면 됩니다.',
+              },
             ]
 
 export default function MoldingPage() {
@@ -78,7 +86,75 @@ export default function MoldingPage() {
           </div>
         </div>
 
-        {/* ── 2. 한국 표준 몰딩 길이 ── */}
+        {/* ── 2. 무몰딩·마이너스몰딩 vs 몰딩 시공 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            무몰딩·마이너스몰딩 vs 몰딩 시공
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+            천장·벽 경계를 어떻게 마감할지는 몰딩 개수 계산보다 먼저 정하는 결정입니다. 아래 비교는 <strong style={{ color: 'var(--text)' }}>통용 관행 수준의 일반론</strong>이며, 비용·가능 여부는 현장 편차가 커 시공사 견적으로 확인해야 합니다.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['구분', '몰딩 시공', '무몰딩', '마이너스몰딩'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: '마감 방식', a: '경계를 몰딩재로 덮음', b: '몰딩 없이 경계 노출', c: '경계에 홈(채널) 매립 — 음각 라인' },
+                  { k: '디자인 인상', a: '무난·클래식', b: '미니멀 — 벽·천장이 한 면처럼', c: '미니멀 + 정돈된 음영 라인' },
+                  { k: '시공 난도', a: '낮음 — 경계 오차를 몰딩이 가려줌', b: '높음 — 천장·벽 평탄도, 마감 정밀도 요구', c: '가장 높음 — 채널 매립 목공 선행' },
+                  { k: '하자 리스크', a: '낮음 — 부분 보수 쉬움', b: '경계 크랙·벽지 들뜸이 그대로 보임', c: '채널 주변 크랙 시 재목공 부담' },
+                  { k: '적용 시점', a: '도배만 하는 부분 공사에도 가능', b: '천장 마감까지 함께 손보는 공사에서 유리', c: '신축·전면 리모델링 단계에서 계획' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.b}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ※ 무몰딩·마이너스몰딩은 몰딩 자재비가 빠지는 대신 정밀 마감 공정이 늘어 총비용이 오히려 높아지는 경우가 많다는 것이 업계 통용 설명입니다 — 금액은 시공사 견적으로 확인하세요.
+            무몰딩·마이너스몰딩을 계획 중이라면 본 계산기에서 <strong style={{ color: 'var(--text)' }}>천장 몰딩 체크를 해제</strong>하고 걸레받이·출입문 프레임만 계산하면 됩니다(매립 채널 자재는 프리셋 단가와 달라 재질 &lsquo;직접 입력&rsquo; 권장).
+          </p>
+        </div>
+
+        {/* ── 3. 걸레받이 높이 선택 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            걸레받이 높이 선택 — 6·8·10cm
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+            시판 걸레받이는 대체로 <strong style={{ color: 'var(--text)' }}>높이 6~10cm</strong> 범위에서 고르게 됩니다(본 도구 가이드 기준값). 높이에 따른 인상 차이는 통용 관행 수준에서 다음과 같습니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+            {[
+              { t: '6cm 안팎 — 낮게', d: '걸레받이 존재감이 줄어 벽이 길어 보이고 미니멀한 인상. 최근 인테리어에서 선호되는 경향(통용 관행). 벽 하단 보호 범위는 좁아집니다.' },
+              { t: '8cm 안팎 — 중간', d: '낮은 높이와 클래식한 높이 사이의 절충. 기성품에서 흔히 유통되는 높이대로, 어느 쪽으로도 튀지 않는 무난한 선택입니다.' },
+              { t: '10cm 안팎 — 높게', d: '클래식하고 안정감 있는 인상. 청소기·대걸레·의자 다리가 닿는 벽 하단 보호 면적이 넓지만, 낮은 천장에서는 무거워 보일 수 있습니다.' },
+            ].map((c, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+            📌 <strong style={{ color: 'var(--text)' }}>본 계산기와의 연결:</strong> 걸레받이 필요 길이·본 수는 <strong style={{ color: 'var(--text)' }}>둘레(m) 기준</strong>이라 높이를 6cm로 하든 10cm로 하든 개수는 같습니다.
+            높이가 바꾸는 것은 공간 인상과 m당 단가 — 높이·폭이 큰 제품일수록 단가가 높은 경향(통용 관행)이니 실제 구매가는 재질 카드의 &lsquo;직접 입력&rsquo;으로 반영하세요.
+            교체 공사라면 기존보다 낮은 걸레받이는 벽지에 이전 자국·경계선이 드러날 수 있어 <strong style={{ color: 'var(--text)' }}>기존 높이 이상</strong>을 고르는 것이 통용 관행입니다.
+          </div>
+        </div>
+
+        {/* ── 4. 한국 표준 몰딩 길이 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 표준 몰딩 길이
@@ -106,7 +182,7 @@ export default function MoldingPage() {
           </div>
         </div>
 
-        {/* ── 3. 재질별 가격 비교 ── */}
+        {/* ── 5. 재질별 가격 비교 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             재질별 가격·특징 비교
@@ -143,7 +219,7 @@ export default function MoldingPage() {
           </p>
         </div>
 
-        {/* ── 4. 모서리 절단 가이드 ── */}
+        {/* ── 6. 모서리 절단 가이드 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             모서리 45도 절단 가이드
@@ -176,7 +252,7 @@ export default function MoldingPage() {
           </div>
         </div>
 
-        {/* ── 5. 평수별 빠른 참조 ── */}
+        {/* ── 7. 평수별 빠른 참조 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             평수별 몰딩 길이 빠른 참조 (천장 + 걸레받이, +10% 로스)
@@ -221,7 +297,7 @@ export default function MoldingPage() {
           </p>
         </div>
 
-        {/* ── 6. 시공 시 주의사항 ── */}
+        {/* ── 8. 시공 시 주의사항 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             시공 시 주의사항
@@ -246,7 +322,7 @@ export default function MoldingPage() {
         {/* FAQ 직후 광고 슬롯 */}
         <AdSlot position="between-tools" minHeight={250} />
 
-        {/* ── 7. FAQ ── */}
+        {/* ── 9. FAQ ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
@@ -267,7 +343,7 @@ export default function MoldingPage() {
           </div>
         </div>
 
-        {/* ── 8. 관련 도구 ── */}
+        {/* ── 10. 관련 도구 ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구

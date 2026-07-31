@@ -3,8 +3,12 @@
    FTP 추정 + Coggan 파워존 + W/kg 등급 + 즈위프트 카테고리
    ──────────────────────────────────────────────────────
    근거
-   - FTP 추정: 20분 테스트 ×0.95 / 램프(최대 1분) ×0.75 / 8분 ×0.90
-     (Allen & Coggan, Training and Racing with a Power Meter).
+   - FTP 추정 계수의 출처가 각각 다름:
+     · 20분 ×0.95 — Hunter Allen(Peaks Coaching Group) 본인 게시·TrainingPeaks 제품 규칙
+     · 램프(최고 1분) ×0.75 — TrainerRoad·Zwift 공식
+     · 8분 ×0.90 — CTS(Carmichael Training Systems) 필드 테스트: 8분 올아웃 2회(사이 10분 회복)
+       중 높은 쪽 평균 × .90. 근거는 '필드 테스트 파워가 실험실 젖산역치보다 약 10% 높다'는
+       CTS 자체 관찰(실무 계수 — 피어리뷰 논문 아님). TrainingPeaks 가이드도 동일 계수 병기.
    - Coggan Classic 7 파워존: FTP 대비 % (동일 문헌).
    - W/kg 등급·즈위프트 카테고리는 커뮤니티 통용 기준(참고용).
    ────────────────────────────────────────────────────── */
@@ -19,7 +23,7 @@ export interface TestMethod {
 export const TEST_METHODS: TestMethod[] = [
   { id: 't20', name: '20분 테스트', factor: 0.95, inputLabel: '20분 평균 파워', desc: '가장 널리 쓰임 — 20분 전력 평균 × 0.95' },
   { id: 'ramp', name: '램프 테스트', factor: 0.75, inputLabel: '최대 1분 파워', desc: '즈위프트 램프 — 탈진 직전 1분 평균 × 0.75' },
-  { id: 't8', name: '8분 테스트', factor: 0.90, inputLabel: '8분 평균 파워', desc: '8분 전력 평균 × 0.90 (2회 중 우수치)' },
+  { id: 't8', name: '8분 테스트 (CTS)', factor: 0.90, inputLabel: '8분 평균 파워', desc: 'CTS 필드 테스트 — 8분 올아웃 2회 중 높은 쪽 평균 × 0.90' },
   { id: 'direct', name: 'FTP 직접 입력', factor: 1.0, inputLabel: '내 FTP', desc: '이미 아는 FTP를 그대로 입력' },
 ]
 

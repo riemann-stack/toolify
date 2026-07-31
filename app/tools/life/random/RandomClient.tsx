@@ -281,9 +281,12 @@ function RouletteTab() {
       cum = end
       const path = describePieSlice(150, 150, r, start, end)
       const midAngle = start + sweep / 2
-      const labelX = 150 + (r * 0.6) * Math.cos(((midAngle - 90) * Math.PI) / 180)
-      const labelY = 150 + (r * 0.6) * Math.sin(((midAngle - 90) * Math.PI) / 180)
-      return { ...it, path, color: colors[i], labelX, labelY, midAngle }
+      // SSR/CSR 부동소수 최하위 자릿수 차이가 하이드레이션 미스매치를 내던 버그 —
+      // 좌표·각도를 고정 소수 자릿수로 반올림해 서버·클라이언트 문자열을 일치시킨다.
+      const round3 = (n: number) => Math.round(n * 1000) / 1000
+      const labelX = round3(150 + (r * 0.6) * Math.cos(((midAngle - 90) * Math.PI) / 180))
+      const labelY = round3(150 + (r * 0.6) * Math.sin(((midAngle - 90) * Math.PI) / 180))
+      return { ...it, path, color: colors[i], labelX, labelY, midAngle: round3(midAngle) }
     })
   }, [valid, total, colors, showWeights])
 

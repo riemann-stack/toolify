@@ -51,7 +51,8 @@ export const STRESS_PHASES: StressPhase[] = [
   { id: 3, label: '3단계 (100%)', ratio: 1.00 },
 ]
 
-/** 금리 유형별 스트레스 적용률 (변동형 기준, 참고 추정) */
+/** 금리 유형별 스트레스 적용률 — 변동 100%·혼합 60%·주기 30%는 금융위 규정 표의 대표값
+    (혼합·주기형은 만기 대비 고정기간 비율에 따라 세분되므로 여기 값은 대표 구간) */
 export const RATE_TYPE_FACTOR: Record<RateType, number> = {
   variable: 1.0,  // 변동형 — 전액 적용
   mixed: 0.6,     // 혼합형(고정기간) — 잔여 고정기간에 따라 차등(대표값)

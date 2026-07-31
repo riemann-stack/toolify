@@ -6,7 +6,7 @@
 
 /* ─── 셔플·기본 추첨 ─── */
 
-/** Fisher-Yates 무작위 셔플 (Knuth, 1969) — O(n), 균등 분포 */
+/** Fisher-Yates 무작위 셔플 (현대형: Durstenfeld 1964, CACM Algorithm 235) — O(n), 균등 분포 */
 export function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {
@@ -341,10 +341,12 @@ export function describePieSlice(cx: number, cy: number, r: number, startDeg: nu
   if (sweep >= 359.99) {
     return `M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy} Z`
   }
-  const x1 = cx + r * Math.cos(toRad(startDeg))
-  const y1 = cy + r * Math.sin(toRad(startDeg))
-  const x2 = cx + r * Math.cos(toRad(endDeg))
-  const y2 = cy + r * Math.sin(toRad(endDeg))
+  // 고정 소수 자릿수 반올림 — SSR/CSR 부동소수 차이로 인한 하이드레이션 미스매치 방지
+  const r3 = (n: number) => Math.round(n * 1000) / 1000
+  const x1 = r3(cx + r * Math.cos(toRad(startDeg)))
+  const y1 = r3(cy + r * Math.sin(toRad(startDeg)))
+  const x2 = r3(cx + r * Math.cos(toRad(endDeg)))
+  const y2 = r3(cy + r * Math.sin(toRad(endDeg)))
   const large = sweep > 180 ? 1 : 0
   return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z`
 }

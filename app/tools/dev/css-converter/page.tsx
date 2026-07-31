@@ -98,6 +98,49 @@ export default function CssConverterPage() {
           </div>
         </div>
 
+        {/* 1.5 px → rem 조견표 */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>px → rem 조견표 (root 16px)</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            아래 표는 root font-size 16px 기준의 <span style={{ fontFamily: "'Fira Code', monospace" }}>px ÷ 16</span> 산술입니다. 한 가지 주의 — <strong style={{ color: 'var(--text)' }}>16px은 CSS 표준이 정한 수치가 아닙니다</strong>. W3C 명세(CSS Values Level 4)는 rem을 &ldquo;루트 요소 font-size와 같다&rdquo;로만 정의하고 숫자를 정하지 않으며, MDN도 &ldquo;일반적인 브라우저 기본값(common browser default)이 16px이지만 사용자 설정으로 바뀔 수 있다&rdquo;고 서술합니다. rem을 쓰는 이유가 정확히 이 지점입니다 — 사용자가 브라우저 설정에서 기본 글꼴을 20px로 키우면 px로 고정한 텍스트는 그대로지만, rem으로 쓴 텍스트는 20 ÷ 16 = 1.25배로 함께 커져 사용자의 선택을 존중합니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={headCell}>px</th>
+                  <th scope="col" style={headCell}>rem</th>
+                  <th scope="col" style={headCell}>흔한 쓰임</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['4px',  '0.25rem',   '간격 스케일 최소 단위 — Tailwind 1단위와 동일'],
+                  ['8px',  '0.5rem',    '기본 간격'],
+                  ['12px', '0.75rem',   '캡션·라벨'],
+                  ['13px', '0.8125rem', '본문 보조'],
+                  ['14px', '0.875rem',  '모바일 본문'],
+                  ['16px', '1rem',      '루트 기준값 — 브라우저 관행 기본'],
+                  ['20px', '1.25rem',   '소제목·리드 문장'],
+                  ['24px', '1.5rem',    'h3·아이콘'],
+                  ['32px', '2rem',      'h2'],
+                  ['40px', '2.5rem',    '대형 제목'],
+                  ['48px', '3rem',      '히어로 타이틀'],
+                ].map((row, i, arr) => (
+                  <tr key={i}>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace", fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace" }}>{row[1]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)' }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '12px' }}>
+            13px = 0.8125rem처럼 암산이 지저분한 값도 표 그대로 쓰면 되고, 위 변환기에서 root 값을 바꾸면 즉시 재계산됩니다.
+          </p>
+        </div>
+
         {/* 2. rem vs em */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>rem vs em 완전 비교</h2>
@@ -149,6 +192,27 @@ h1   { font-size: 3.2rem; }   /* 32px ✅ */
           </p>
         </div>
 
+        {/* 3.5 Tailwind와 rem */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Tailwind와 rem — spacing scale·임의값</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            Tailwind의 spacing 유틸리티는 rem 기반입니다. v3 공식 문서의 명문은 <strong style={{ color: 'var(--text)' }}>&ldquo;spacing 1단위 = 0.25rem, 일반적인 브라우저 기본값에서 4px&rdquo;</strong> — v4는 같은 결과를 테마 변수 <span style={{ fontFamily: "'Fira Code', monospace" }}>--spacing: 0.25rem</span>에 숫자를 곱하는 방식으로 만듭니다(2026-07 v3·v4 문서 기준). 단위가 rem이므로 위에서 본 &lsquo;사용자 글꼴 설정 존중&rsquo;이 유틸리티 전체에 자동으로 적용됩니다.
+          </p>
+          <div style={codeBox}>
+{`/* spacing: 1단위 = 0.25rem (root 16px일 때 4px) */
+p-1 = 0.25rem =  4px      p-4 = 1rem   = 16px
+p-2 = 0.5rem  =  8px      p-6 = 1.5rem = 24px
+p-3 = 0.75rem = 12px      p-8 = 2rem   = 32px
+
+/* v4 내부 구현 — 테마 변수 × 숫자 */
+--spacing: 0.25rem;
+.p-4 { padding: calc(var(--spacing) * 4); }`}
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
+            스케일에 없는 값은 대괄호 <strong style={{ color: 'var(--text)' }}>임의값(arbitrary value)</strong> 문법으로 즉석 생성합니다. 공식 문서 예시는 <span style={{ fontFamily: "'Fira Code', monospace" }}>top-[117px]</span>·<span style={{ fontFamily: "'Fira Code', monospace" }}>text-[22px]</span>이고, <span style={{ fontFamily: "'Fira Code', monospace" }}>w-[13px]</span>처럼 어느 유틸리티에나 같은 문법이 통하며 <span style={{ fontFamily: "'Fira Code', monospace" }}>lg:top-[344px]</span>처럼 반응형·상태 수정자와도 결합됩니다. 다만 공식 문서가 임의값을 소개하는 맥락 자체가 &ldquo;배경 이미지를 딱 맞는 자리에 놓기 위해 top: 117px이 정말로 필요할 때&rdquo; — 즉 1회용 탈출구입니다. 같은 값이 여러 곳에서 반복된다면 임의값을 복붙하기보다 테마 변수로 등록해 일반 유틸리티처럼 쓰는 편이 유지보수에 낫습니다.
+          </p>
+        </div>
+
         {/* 4. clamp() 가이드 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>clamp() 완전 가이드</h2>
@@ -162,7 +226,7 @@ intercept = minPx - slope × minVw
 preferred = \`\${intercept/16}rem + \${slope*100}vw\`
 
 /* 결과 예시 — 360~1440px, 16→32px */
-clamp(1rem, 0.667rem + 1.48vw, 2rem)
+clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
   → 360px 화면:  16px  (최솟값)
   → 1440px 화면: 32px  (최댓값)
   → 그 사이:     부드럽게 변화`}
@@ -173,6 +237,43 @@ clamp(1rem, 0.667rem + 1.48vw, 2rem)
             <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Safari 13.1+</span>
             <span style={{ background: 'rgba(220,38,38,0.15)', color: '#DC2626', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>IE ❌</span>
           </div>
+        </div>
+
+        {/* 4.5 타이포 스케일 실전 */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>타이포 스케일 실전 — h1~캡션 clamp() 세트</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            위 선형 보간 공식을 실제 타이포 단계에 적용한 세트입니다. 뷰포트 기준은 360~1440px — 이 페이지 clamp() 생성기의 기본값과 같아서, 같은 px를 입력하면 아래와 동일한 코드가 나옵니다. MDN 정의대로 <strong style={{ color: 'var(--text)' }}>clamp(MIN, VAL, MAX)는 max(MIN, min(VAL, MAX))로 해석</strong>되므로, 선호값(가운데 vw 식)이 어떤 값이 되어도 결과는 항상 MIN~MAX 사이로 잘립니다. 이 등가식을 그대로 계산해 보면, 실수로 MIN을 MAX보다 크게 지정했을 때 바깥쪽 max()가 마지막에 적용되어 MIN이 이긴다는 것도 도출됩니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={headCell}>단계</th>
+                  <th scope="col" style={headCell}>크기 (360→1440px)</th>
+                  <th scope="col" style={headCell}>clamp() 코드</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['h1',   '28 → 42px', 'clamp(1.75rem, 1.4583rem + 1.2963vw, 2.625rem)'],
+                  ['h2',   '22 → 32px', 'clamp(1.375rem, 1.1667rem + 0.9259vw, 2rem)'],
+                  ['h3',   '18 → 24px', 'clamp(1.125rem, 1rem + 0.5556vw, 1.5rem)'],
+                  ['본문', '14 → 16px', 'clamp(0.875rem, 0.8333rem + 0.1852vw, 1rem)'],
+                  ['캡션', '12 → 13px', 'clamp(0.75rem, 0.7292rem + 0.0926vw, 0.8125rem)'],
+                ].map((row, i, arr) => (
+                  <tr key={i}>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, whiteSpace: 'nowrap' }}>{row[1]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace", fontSize: '12px', color: 'var(--muted)' }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '12px' }}>
+            단계가 내려갈수록 vw 계수(기울기)가 작아지는 점에 주목하세요 — 본문·캡션은 360→1440px 전 구간에서 각각 2px·1px만 변합니다. 변화 폭이 이 정도로 작은 단계는 clamp() 없이 고정 rem으로 두는 선택도 실용적입니다. 큰 제목일수록 유동의 이득이 크고, 작은 글자일수록 고정이 단순합니다.
+          </p>
         </div>
 
         {/* 5. 100vh 문제와 dvh·svh·lvh */}

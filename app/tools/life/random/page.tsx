@@ -47,6 +47,10 @@ const FAQ_LD = [
                 a: '본 도구는 <strong>열 수에 따라 폰트가 자동 조정</strong>됩니다 (열 2개 → 16px / 열 4개 → 14px / 열 6개 → 12px / 열 8개 이상 → 8~10px). 그래도 긴 이름은 일부 잘릴 수 있으니 셀에 마우스 올리면 툴팁으로 전체 이름을 확인할 수 있습니다.',
               },
               {
+                q: '사다리타기와 룰렛 중 어느 쪽이 더 공정한가요?',
+                a: '사다리타기는 가로줄이 적으면 <strong>출발 위치 바로 아래 근처에 도착이 몰리는</strong> 통계적 편향이 있습니다 (Physica A 2006 분석 — 가로줄이 늘수록 서서히 균등에 접근). 반면 본 도구의 순서·팀 추첨은 Fisher-Yates 균등 셔플, 룰렛은 가중치에 비례한 확률로 직접 추첨하므로 사다리 같은 구조적 편향이 없습니다. 사다리를 쓴다면 가로줄을 넉넉히 추가하고 당첨 위치를 아무도 모르게 정하세요.',
+              },
+              {
                 q: '룰렛 결과를 미리 조작할 수 있나요?',
                 a: '아닙니다. ① 가중치에 따라 결과 추첨 (Math.random), ② <strong>결과 항목이 12시 방향에 멈추도록 회전 각도 계산</strong>, ③ 4초 회전 애니메이션. 회전은 결정된 결과를 시각화한 것이며, 사용자가 결과를 조작할 수 없습니다. 룰렛 돌리기 버튼을 다시 누르면 새 결과.',
               },
@@ -220,7 +224,61 @@ export default function RandomPage() {
           </p>
         </section>
 
-        {/* 8. FAQ */}
+        {/* 8. 사다리 게임 공정성 */}
+        <section>
+          <h2 style={sectionTitle}>사다리 게임은 정말 공정할까</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            사다리타기(아미다쿠지)는 의외로 <strong style={{ color: 'var(--text)' }}>완전한 균등 추첨이 아닙니다</strong>. 통계물리 학술지 분석(Inoue, &ldquo;Statistical analysis on Amida-kuji&rdquo;, Physica A 369권 2호, 2006)에 따르면 사다리에서 도착 위치의 확률분포는 1차원 확산 과정을 따릅니다 — 가로줄 하나가 확산의 한 걸음이어서, 가로줄이 적으면 <strong style={{ color: 'var(--text)' }}>출발 위치 바로 아래 근처에 도착할 확률이 균등보다 높아집니다</strong>.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['사다리 구성', '균등이라면', '실제 계산'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['세로 3줄 · 가로 3개', '각 33.3%', '전수 8패턴 — 출발 위치별 당첨 확률 25% / 37.5% / 37.5%'],
+                  ['세로 6줄 · 가로 10개', '각 16.7%', '바로 아래 도착 37% 이상, 반대편 끝은 약 1%'],
+                  ['세로 6줄 · 가로 50개', '각 16.7%', '14.7~18.7% — 여전히 완전 균등에 못 미침'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
+            세로 3줄 전수 계산은 언론 보도에 따르면 일본 슈쿠토쿠대학 이가라시 가즈히로 특임교수가 검증한 값으로(데일리스포츠 2018), 당첨이 오른쪽 끝에 보일 때 출발 위치에 따라 당첨 확률이 갈리며 일반적으로 <strong style={{ color: 'var(--text)' }}>당첨 위치 바로 위 출발이 가장 유리</strong>합니다. 세로 6줄 수치는 전이행렬(마르코프 연쇄) 계산값입니다.
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '8px' }}>
+            정리하면 사다리의 공정성은 <strong style={{ color: 'var(--text)' }}>가로줄 수에 따라 달라집니다</strong> — 가로줄이 충분히 많아지면 균등에 접근하지만 수렴이 느립니다. 사다리를 쓴다면 가로줄을 넉넉히 추가하고 당첨 위치를 아무도 모르는 상태로 정하는 것이 좋습니다. 반면 본 도구의 순서·팀 추첨은 사다리 구조를 거치지 않고 균등 셔플로 직접 뽑고, 룰렛은 가중치에 비례한 확률로 직접 추첨하기 때문에 구조적 편향이 없습니다.
+          </p>
+        </section>
+
+        {/* 9. 난수 생성 방식 */}
+        <section>
+          <h2 style={sectionTitle}>이 도구의 난수는 어떻게 만들어지나</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            명단 섞기(팀·순서·자리)는 <strong style={{ color: 'var(--text)' }}>Fisher-Yates 셔플</strong>을 사용합니다. 배열 끝에서부터 각 자리를 아직 확정되지 않은 자리 중 하나와 무작위로 맞바꾸는 방식으로, 모든 순열이 같은 확률로 나오는 균등 셔플의 표준 알고리즘입니다(컴퓨터용 O(n) 구현 원전: Durstenfeld, CACM Algorithm 235, 1964). 가중치 추첨은 <code>Math.random()</code> 값을 가중치 합의 누적 구간에 대응시켜 뽑습니다.
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
+              <strong style={{ color: 'var(--text)' }}>MDN 공식 경고 (2026-07 기준)</strong>: <code>Math.random()</code>은 0 이상 1 미만의 의사난수를 근사 균등 분포로 반환하지만, <strong style={{ color: 'var(--text)' }}>암호학적으로 안전한 난수는 제공하지 않으므로 보안 관련 용도로 쓰지 말라</strong>고 MDN 문서가 명시합니다. 점심 메뉴·자리 배치·발표 순서 같은 일상 추첨에는 충분히 공정하지만, 경품 추첨처럼 금전·이해관계가 큰 추첨이라면 암호학적 난수(<code>crypto.getRandomValues()</code> — MDN 기준 &ldquo;암호학적으로 강한 난수&rdquo;) 기반 도구나 공증 절차를 권장합니다.
+            </p>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
+            흔한 잘못된 구현이 <code>sort(() =&gt; Math.random() - 0.5)</code>입니다. MDN sort 규격상 비교 함수는 같은 쌍에 항상 같은 결과를 줘야 하며, 어기면 동작 자체가 미정의라 편향이 생깁니다. 실제로 2010년 EU 브라우저 선택 화면(browserchoice.eu)이 이 방식을 써서 1만 회 시뮬레이션(IE 엔진)에서 Internet Explorer가 5개 중 마지막 위치에 50.34% 몰리는 편향이 확인됐고(Rob Weir 분석), Microsoft도 알고리즘 수정을 인정했습니다(The Register 2010-03-09 보도). 본 도구는 이 방식을 쓰지 않습니다.
+          </p>
+        </section>
+
+        {/* 10. FAQ */}
         <section>
           <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -266,8 +324,10 @@ export default function RandomPage() {
         <section>
           <h2 style={sectionTitle}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li><strong style={{ color: 'var(--text)' }}>Fisher-Yates 셔플 알고리즘</strong> — Knuth, 1969 (Art of Computer Programming Vol.2)</li>
-            <li><strong style={{ color: 'var(--text)' }}>Math.random() 의사난수</strong> — MDN Web Docs (구체적 알고리즘은 ECMAScript가 규정하지 않고 자바스크립트 엔진 구현에 따름)</li>
+            <li><strong style={{ color: 'var(--text)' }}>Fisher-Yates 셔플 O(n) 구현 원전</strong> — R. Durstenfeld, &ldquo;Algorithm 235: Random permutation&rdquo;, Communications of the ACM 7(7), 1964</li>
+            <li><strong style={{ color: 'var(--text)' }}>사다리(아미다쿠지) 통계 분석</strong> — Y. Inoue, &ldquo;Statistical analysis on Amida-kuji&rdquo;, Physica A 369(2), 867–876, 2006</li>
+            <li><strong style={{ color: 'var(--text)' }}>Math.random() 의사난수·보안 경고, Crypto.getRandomValues()</strong> — MDN Web Docs, 2026-07 기준 (구체적 알고리즘은 ECMAScript가 규정하지 않고 자바스크립트 엔진 구현에 따름)</li>
+            <li><strong style={{ color: 'var(--text)' }}>랜덤 비교자 셔플 편향 실사례</strong> — R. Weir, &ldquo;Doing the Microsoft Shuffle&rdquo; (2010) · The Register 보도 (2010-03-09)</li>
             <li><strong style={{ color: 'var(--text)' }}>큰 수의 법칙 (Law of Large Numbers)</strong> — 베르누이 정리</li>
           </ul>
         </section>

@@ -17,6 +17,9 @@ export interface RaceType {
   desc: string
 }
 
+/* ACSM/AND/DC 2016 공동 성명 Table 2 기준: 90분 초과 경기 10~12 g/kg/24h(36~48시간),
+   90분 미만은 단일 '7~12 g/kg/24h'로만 규정. 아래 mid(8~10)·short(7~8) 세분은
+   지침의 7~12 범위 안에서 본 도구가 나눈 실용 구분이며 지침 자체의 세분이 아니다. */
 export const RACE_TYPES: RaceType[] = [
   {
     id: 'long', name: '풀코스·울트라 (90분 초과)',
