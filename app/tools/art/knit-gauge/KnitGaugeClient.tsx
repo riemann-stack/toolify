@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import s from './knit-gauge.module.css'
 import {
-  YARN_WEIGHTS, SIZES_FEMALE, SIZES_MALE, SIZES_KIDS, BODY_PARTS,
+  YARN_WEIGHTS, SIZES_FEMALE, SIZES_MALE, SIZES_KIDS, ALL_SIZES, BODY_PARTS,
   PROJECTS, NEEDLE_TABLE, INC_DEC_GLOSSARY,
   type GaugeUnit, type YarnId, type BodyPartId, type ProjectId,
   normalizeGauge, gaugePerCm, estimateYarnWeight, needleSizeForGauge,
@@ -51,23 +51,32 @@ export default function KnitGaugeClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
-      if (typeof j.stsInput === 'number') setStsInput(j.stsInput)
-      if (typeof j.rowsInput === 'number') setRowsInput(j.rowsInput)
-      if (j.unit) setUnit(j.unit)
-      if (typeof j.patternStsGauge === 'number') setPatternStsGauge(j.patternStsGauge)
-      if (typeof j.patternRowsGauge === 'number') setPatternRowsGauge(j.patternRowsGauge)
-      if (typeof j.patternSts === 'number') setPatternSts(j.patternSts)
-      if (typeof j.patternRows === 'number') setPatternRows(j.patternRows)
-      if (j.bodyPartId) setBodyPartId(j.bodyPartId)
-      if (typeof j.widthCm === 'number') setWidthCm(j.widthCm)
-      if (typeof j.heightCm === 'number') setHeightCm(j.heightCm)
-      if (typeof j.easeUser === 'number') setEaseUser(j.easeUser)
-      if (typeof j.currentSts === 'number') setCurrentSts(j.currentSts)
-      if (typeof j.targetSts === 'number') setTargetSts(j.targetSts)
-      if (j.incDecUnit) setIncDecUnit(j.incDecUnit)
-      if (j.yarnId) setYarnId(j.yarnId)
-      if (j.projectId) setProjectId(j.projectId)
-      if (j.yarnSizeId) setYarnSizeId(j.yarnSizeId)
+      /* 오염된 저장값 방어 — 타입만 보면 NaN·Infinity·음수·미지의 enum이 그대로 통과해
+         normalizeGauge switch 폴스루(undefined)·0 나눗셈으로 계산이 전부 깨진다. */
+      const num = (v: unknown, min: number, max: number): number | null =>
+        typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max ? v : null
+      const oneOf = <T extends string>(v: unknown, allowed: readonly T[]): T | null =>
+        typeof v === 'string' && (allowed as readonly string[]).includes(v) ? (v as T) : null
+
+      const set = <T,>(val: T | null, fn: (v: T) => void) => { if (val !== null) fn(val) }
+
+      set(num(j.stsInput, 0.5, 100), setStsInput)
+      set(num(j.rowsInput, 0.5, 100), setRowsInput)
+      set(oneOf<GaugeUnit>(j.unit, ['10cm', '4inch', '1cm']), setUnit)
+      set(num(j.patternStsGauge, 1, 100), setPatternStsGauge)
+      set(num(j.patternRowsGauge, 1, 100), setPatternRowsGauge)
+      set(num(j.patternSts, 1, 5000), setPatternSts)
+      set(num(j.patternRows, 1, 5000), setPatternRows)
+      set(oneOf<BodyPartId>(j.bodyPartId, BODY_PARTS.map((b) => b.id)), setBodyPartId)
+      set(num(j.widthCm, 1, 300), setWidthCm)
+      set(num(j.heightCm, 1, 300), setHeightCm)
+      set(num(j.easeUser, -0.5, 0.5), setEaseUser)
+      set(num(j.currentSts, 1, 1000), setCurrentSts)
+      set(num(j.targetSts, 1, 1000), setTargetSts)
+      set(oneOf<'코' | '단'>(j.incDecUnit, ['코', '단']), setIncDecUnit)
+      set(oneOf<YarnId>(j.yarnId, YARN_WEIGHTS.map((y) => y.id)), setYarnId)
+      set(oneOf<ProjectId>(j.projectId, PROJECTS.map((p) => p.id)), setProjectId)
+      set(oneOf(j.yarnSizeId, ALL_SIZES.map((sz) => sz.id)), setYarnSizeId)
     } catch {}
   }, [])
   useEffect(() => {
@@ -106,9 +115,10 @@ export default function KnitGaugeClient() {
   /* ═══ 탭 3 결과 ═══ */
   const bodyPart = getBodyPart(bodyPartId)
   const ease = bodyPart.ease !== undefined ? easeUser : 0
+  const lengthEaseCm = bodyPart.lengthEaseCm ?? 0
   const sizeResult = useMemo(
-    () => sizeToCounts(widthCm, heightCm, stsPer10cm, rowsPer10cm, ease),
-    [widthCm, heightCm, stsPer10cm, rowsPer10cm, ease],
+    () => sizeToCounts(widthCm, heightCm, stsPer10cm, rowsPer10cm, ease, lengthEaseCm),
+    [widthCm, heightCm, stsPer10cm, rowsPer10cm, ease, lengthEaseCm],
   )
 
   /* 부위 변경 시 기본값 적용 */
@@ -144,10 +154,14 @@ export default function KnitGaugeClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'gauge' ? s.tabActive : ''}`}   onClick={() => setTab('gauge')}>게이지</button>
-        <button className={`${s.tab} ${tab === 'pattern' ? s.tabActive : ''}`} onClick={() => setTab('pattern')}>패턴 변환</button>
-        <button className={`${s.tab} ${tab === 'size' ? s.tabActive : ''}`}    onClick={() => setTab('size')}>사이즈별</button>
-        <button className={`${s.tab} ${tab === 'tools' ? s.tabActive : ''}`}   onClick={() => setTab('tools')}>늘림·실 양</button>
+        <button type="button" aria-pressed={tab === 'gauge'}
+                className={`${s.tab} ${tab === 'gauge' ? s.tabActive : ''}`}   onClick={() => setTab('gauge')}>게이지</button>
+        <button type="button" aria-pressed={tab === 'pattern'}
+                className={`${s.tab} ${tab === 'pattern' ? s.tabActive : ''}`} onClick={() => setTab('pattern')}>패턴 변환</button>
+        <button type="button" aria-pressed={tab === 'size'}
+                className={`${s.tab} ${tab === 'size' ? s.tabActive : ''}`}    onClick={() => setTab('size')}>사이즈별</button>
+        <button type="button" aria-pressed={tab === 'tools'}
+                className={`${s.tab} ${tab === 'tools' ? s.tabActive : ''}`}   onClick={() => setTab('tools')}>늘림·실 양</button>
       </div>
 
       {/* ═══════════════════ 탭 1: 게이지 입력 ═══════════════════ */}
@@ -157,11 +171,11 @@ export default function KnitGaugeClient() {
             <span className={s.cardLabel}>측정 단위</span>
             <div className={s.unitRow}>
               {([
-                { id: '10cm',  label: '10cm² (한국·유럽 표준)' },
-                { id: '4inch', label: '4inch² (미국)' },
-                { id: '1cm',   label: '1cm² (정밀)' },
+                { id: '10cm',  label: '10×10cm (한국·유럽 표준)' },
+                { id: '4inch', label: '4×4인치 (미국)' },
+                { id: '1cm',   label: '1×1cm (정밀)' },
               ] as { id: GaugeUnit; label: string }[]).map((u) => (
-                <button
+                <button type="button"
                   key={u.id}
                   className={`${s.unitBtn} ${unit === u.id ? s.unitBtnActive : ''}`}
                   onClick={() => setUnit(u.id)}
@@ -230,7 +244,7 @@ export default function KnitGaugeClient() {
               {YARN_WEIGHTS.map((y) => {
                 const center = Math.round((y.sts10cm[0] + y.sts10cm[1]) / 2)
                 return (
-                  <button
+                  <button type="button"
                     key={y.id}
                     className={s.quickChip}
                     onClick={() => {
@@ -256,7 +270,7 @@ export default function KnitGaugeClient() {
                 × <span className={s.heroNum}>{fmt(perCm.rowsPerCm, 2)}</span> 단
               </p>
               <p className={s.heroSub}>
-                10cm² 기준 <strong>{fmt(stsPer10cm, 1)}코 × {fmt(rowsPer10cm, 1)}단</strong>
+                10×10cm 기준 <strong>{fmt(stsPer10cm, 1)}코 × {fmt(rowsPer10cm, 1)}단</strong>
                 <br />
                 1코 = {fmt(perCm.mmPerSt, 2)}mm · 1단 = {fmt(perCm.mmPerRow, 2)}mm
               </p>
@@ -291,7 +305,7 @@ export default function KnitGaugeClient() {
               </li>
               <li>
                 <strong>물에 적신 후 펴서 말립니다 (블로킹)</strong>.<br />
-                <span className={s.muted}>실은 블로킹 후 5~15% 변하므로 필수.</span>
+                <span className={s.muted}>실은 블로킹 후 치수가 달라지므로 필수 — 패턴의 게이지는 블로킹 후 기준입니다.</span>
               </li>
               <li>
                 가운데 <strong>10×10cm를 핀으로 표시</strong>하고 그 안의 코·단 수를 셉니다.
@@ -402,7 +416,7 @@ export default function KnitGaugeClient() {
             <span className={s.cardLabel}>부위 선택</span>
             <div className={s.bodyPartRow}>
               {BODY_PARTS.map((b) => (
-                <button
+                <button type="button"
                   key={b.id}
                   className={`${s.bodyPartBtn} ${bodyPartId === b.id ? s.bodyPartBtnActive : ''}`}
                   onClick={() => applyBodyPart(b.id)}
@@ -467,7 +481,9 @@ export default function KnitGaugeClient() {
                   className={s.slider}
                 />
                 <p className={s.hint}>
-                  💡 음수 = 둘레보다 작게 떠 늘어났을 때 잘 맞음. 모자·양말은 보통 -10%.
+                  💡 음수 = 둘레보다 작게 떠 늘어났을 때 잘 맞음. 모자·양말은 보통 −10%.
+                  {' '}이 보정은 <strong>둘레(가로)에만</strong> 적용되고 높이·발 길이는 그대로 둡니다
+                  {lengthEaseCm !== 0 && `(양말 발 길이만 ${Math.abs(lengthEaseCm)}cm 짧게)`}.
                 </p>
               </div>
             )}
@@ -480,7 +496,7 @@ export default function KnitGaugeClient() {
               <p className={s.sizeChipLabel}>여성</p>
               <div className={s.sizeChipRow}>
                 {SIZES_FEMALE.map((sz) => (
-                  <button key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
+                  <button type="button" key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
                     {sz.label}
                   </button>
                 ))}
@@ -490,7 +506,7 @@ export default function KnitGaugeClient() {
               <p className={s.sizeChipLabel}>남성</p>
               <div className={s.sizeChipRow}>
                 {SIZES_MALE.map((sz) => (
-                  <button key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
+                  <button type="button" key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
                     {sz.label}
                   </button>
                 ))}
@@ -500,7 +516,7 @@ export default function KnitGaugeClient() {
               <p className={s.sizeChipLabel}>키즈</p>
               <div className={s.sizeChipRow}>
                 {SIZES_KIDS.map((sz) => (
-                  <button key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
+                  <button type="button" key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
                     {sz.label}
                   </button>
                 ))}
@@ -566,11 +582,13 @@ export default function KnitGaugeClient() {
             <div className={s.field}>
               <label className={s.fieldLabel}>분배 단위</label>
               <div className={s.unitRow}>
-                <button
+                <button type="button"
+                  aria-pressed={incDecUnit === '코'}
                   className={`${s.unitBtn} ${incDecUnit === '코' ? s.unitBtnActive : ''}`}
                   onClick={() => setIncDecUnit('코')}
                 >코 (가로 분배)</button>
-                <button
+                <button type="button"
+                  aria-pressed={incDecUnit === '단'}
                   className={`${s.unitBtn} ${incDecUnit === '단' ? s.unitBtnActive : ''}`}
                   onClick={() => setIncDecUnit('단')}
                 >단 (세로 분배)</button>
@@ -639,18 +657,28 @@ export default function KnitGaugeClient() {
               </div>
             )}
 
-            <div className={s.yarnEstResult}>
-              <div className={s.yarnEstNum}>
-                <p className={s.yarnEstLabel}>총 권장 양</p>
-                <p className={s.yarnEstBig}>{fmtInt(yarnEstimate.grams)} g</p>
-              </div>
-              <div className={s.yarnEstBalls}>
-                <p className={s.yarnEstBallText}>50g 실타래 <strong>{yarnEstimate.balls50g}타래</strong></p>
-                <p className={s.yarnEstBallText}>100g 실타래 <strong>{yarnEstimate.balls100g}타래</strong></p>
-              </div>
-            </div>
+            {yarnEstimate.grams > 0 ? (
+              <>
+                <div className={s.yarnEstResult} role="status">
+                  <div className={s.yarnEstNum}>
+                    <p className={s.yarnEstLabel}>총 권장 양</p>
+                    <p className={s.yarnEstBig}>{fmtInt(yarnEstimate.grams)} g</p>
+                  </div>
+                  <div className={s.yarnEstBalls}>
+                    <p className={s.yarnEstBallText}>50g 실타래 <strong>{yarnEstimate.balls50g}타래</strong></p>
+                    <p className={s.yarnEstBallText}>100g 실타래 <strong>{yarnEstimate.balls100g}타래</strong></p>
+                  </div>
+                </div>
+                <p className={s.hint}>
+                  💡 {yarnEstimate.note} · 평직 기준 근사값입니다. 케이블·컬러워크는 실을 더 쓰므로 여유를 두세요.
+                </p>
+              </>
+            ) : (
+              <p className={s.hint} role="status">💡 {yarnEstimate.note}</p>
+            )}
             <p className={s.hint}>
-              💡 {yarnEstimate.note} · 일반 작업 기준 평균값으로, 케이블·컬러워크는 ~30% 더 필요. 여유분 +10% 권장.
+              ※ g 추정치는 통용 관행 근사이며 공식 표준이 아닙니다. 같은 굵기라도 실마다 g당 길이가 크게 달라
+              (Lion Brand는 &ldquo;가장 정확한 기준은 야드&rdquo;라고 안내합니다) 구매 전 실 밴드의 길이 표기로 재확인하세요.
             </p>
           </div>
 
@@ -751,7 +779,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
         x={padding} y={padding}
         width={gridSize} height={gridSize}
         fill="var(--bg2)"
-        stroke="#9333EA"
+        stroke="var(--cat-art)"
         strokeWidth={2}
       />
 
@@ -765,7 +793,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
             key={`v-${i}`}
             x1={x} y1={padding}
             x2={x} y2={padding + gridSize}
-            stroke={isFifth ? '#DB2777' : 'var(--border)'}
+            stroke={isFifth ? 'var(--cat-date)' : 'var(--border)'}
             strokeWidth={isFifth ? 0.8 : 0.4}
             strokeDasharray={isFifth ? '2 2' : ''}
             opacity={isFifth ? 0.7 : 0.5}
@@ -783,7 +811,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
             key={`h-${i}`}
             x1={padding} y1={y}
             x2={padding + gridSize} y2={y}
-            stroke={isFifth ? '#DB2777' : 'var(--border)'}
+            stroke={isFifth ? 'var(--cat-date)' : 'var(--border)'}
             strokeWidth={isFifth ? 0.8 : 0.4}
             strokeDasharray={isFifth ? '2 2' : ''}
             opacity={isFifth ? 0.7 : 0.5}
@@ -804,7 +832,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
       </text>
 
       {/* 중앙 표시 — Yarn 이름 */}
-      <text x={W / 2} y={H - 8} textAnchor="middle" fill="#9333EA" fontSize={12} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+      <text x={W / 2} y={H - 8} textAnchor="middle" fill="var(--cat-art)" fontSize={12} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
         {getYarn(estimateYarnWeight(stsPer10cm).id).shortLabel} · {fmt(stsPer10cm, 0)} sts × {fmt(rowsPer10cm, 0)} rows / 10cm
       </text>
     </svg>
