@@ -15,6 +15,10 @@ export interface ApertureValue {
 
 export const APERTURES: ApertureValue[] = [
   { value: 1.0,  label: 'f/1.0',  isFull: true },
+  /* ⚠️ f/1.1이 빠져 있으면 f/1.0→f/1.4가 3칸이 아니라 2칸이 되어
+     "인덱스 1당 1/3 stop"이라는 전제가 이 구간에서만 깨진다.
+     그 결과 잠금 보정(인덱스 동일량 상쇄)이 최대 0.37 stop 어긋났다. */
+  { value: 1.1,  label: 'f/1.1',  isFull: false },
   { value: 1.2,  label: 'f/1.2',  isFull: false },
   { value: 1.4,  label: 'f/1.4',  isFull: true },
   { value: 1.6,  label: 'f/1.6',  isFull: false },
@@ -158,21 +162,31 @@ export const ISOS: IsoValue[] = [
 export interface NDFilter {
   id: string
   label: string
-  stops: number      // 빛 차단 stop 수
-  factor: number     // 셔터 시간 배수
+  stops: number       // 빛 차단 stop 수 = log2(factor). 계산에는 이 값을 쓴다.
+  stopsLabel: string  // 화면 표기 (제조사 관행대로 분수 stop)
+  factor: number      // 셔터 시간 배수 — ND 숫자의 정의 그 자체(투과율의 역수)
   use: string
 }
 
 export const ND_FILTERS: NDFilter[] = [
-  { id: 'nd2',    label: 'ND2',    stops: 1,  factor: 2,    use: '약한 빛 차단 — 인물·일반' },
-  { id: 'nd4',    label: 'ND4',    stops: 2,  factor: 4,    use: '대낮 인물 + 조리개 활짝' },
-  { id: 'nd8',    label: 'ND8',    stops: 3,  factor: 8,    use: '인물·풍경 보편 — 가장 인기' },
-  { id: 'nd16',   label: 'ND16',   stops: 4,  factor: 16,   use: '폭포 실크 효과 (1/2~2초)' },
-  { id: 'nd32',   label: 'ND32',   stops: 5,  factor: 32,   use: '계곡·폭포 (2~5초)' },
-  { id: 'nd64',   label: 'ND64',   stops: 6,  factor: 64,   use: '파도·구름 (5~15초)' },
-  { id: 'nd400',  label: 'ND400',  stops: 9,  factor: 400,  use: '장노출 — 안개 같은 파도 (15~60초)' },
-  { id: 'nd1000', label: 'ND1000', stops: 10, factor: 1000, use: '극장노출 — 일주·구름 (1~5분)' },
+  { id: 'nd2',    label: 'ND2',    stops: 1, stopsLabel: '1',  factor: 2,    use: '약한 빛 차단 — 인물·일반' },
+  { id: 'nd4',    label: 'ND4',    stops: 2, stopsLabel: '2',  factor: 4,    use: '대낮 인물 + 조리개 활짝' },
+  { id: 'nd8',    label: 'ND8',    stops: 3, stopsLabel: '3',  factor: 8,    use: '인물·풍경 보편 — 가장 인기' },
+  { id: 'nd16',   label: 'ND16',   stops: 4, stopsLabel: '4',  factor: 16,   use: '폭포 실크 효과 (1/2~2초)' },
+  { id: 'nd32',   label: 'ND32',   stops: 5, stopsLabel: '5',  factor: 32,   use: '계곡·폭포 (2~5초)' },
+  { id: 'nd64',   label: 'ND64',   stops: 6, stopsLabel: '6',  factor: 64,   use: '파도·구름 (5~15초)' },
+  /* ⚠️ ND400은 9 stop이 아니다. ND 숫자는 배율(투과율의 역수)이 정의이므로 stop은 종속값이고
+     log2(400) = 8.64 stop이다. 원조 제조사 켄코도 공식 표기가 「8 2/3段分」.
+     9 stop으로 두면 셔터가 512/400 = 1.28배(0.36 stop) 길게 계산된다. */
+  { id: 'nd400',  label: 'ND400',  stops: Math.log2(400),  stopsLabel: '약 8⅔', factor: 400,  use: '장노출 — 안개 같은 파도 (15~60초)' },
+  { id: 'nd1000', label: 'ND1000', stops: Math.log2(1000), stopsLabel: '약 10',  factor: 1000, use: '극장노출 — 일주·구름 (1~5분)' },
 ]
+
+/** ND stop 합계를 화면에 적을 때 — 소수점이 길게 찍히지 않도록 */
+export const fmtStops = (n: number): string => {
+  const r = Math.round(n * 100) / 100
+  return Number.isInteger(r) ? String(r) : r.toFixed(2).replace(/0$/, '')
+}
 
 export const getNDFilter = (id: string) => ND_FILTERS.find((f) => f.id === id) ?? ND_FILTERS[2]
 
@@ -186,12 +200,17 @@ export interface CropMeta {
   desc: string
 }
 
+/* ⚠️ '니콘 Z'는 마운트 통칭이라 Z fc·Z50II 같은 DX(APS-C) 바디까지 포함한다 —
+      같은 배열에서 Z fc를 APS-C로 분류하면서 풀프레임 예시에도 '니콘 Z'를 적어 자가모순이었다.
+   ⚠️ OM-1은 올림푸스 제품이 아니다. 올림푸스는 2021년 영상사업을 양도했고
+      카메라 브랜드는 OM SYSTEM으로 바뀌었다(OM-1은 2022년 OM SYSTEM 제품).
+   ⚠️ '1인치'는 업계 관행 명칭이고 실제 대각선은 15.86mm(약 0.62인치)다. */
 export const CROPS: CropMeta[] = [
-  { id: 'ff',         label: '풀프레임 (Full Frame)',     factor: 1.0,  desc: '소니 A7·캐논 R5·니콘 Z 등 (35mm 표준)' },
-  { id: 'apsc',       label: 'APS-C (Sony·Nikon·Fuji)',   factor: 1.5,  desc: '소니 a6700·니콘 Z fc·후지 X-T5' },
-  { id: 'apscCanon',  label: 'APS-C (Canon)',             factor: 1.6,  desc: '캐논 R7·R10·R50·R100' },
-  { id: 'm43',        label: 'M4/3 (Olympus·Panasonic)',  factor: 2.0,  desc: '오즈 OM-1·파나 GH 시리즈' },
-  { id: 'inch1',      label: '1인치',                      factor: 2.7,  desc: '소니 RX100·캐논 G7X' },
+  { id: 'ff',         label: '풀프레임 (Full Frame)',        factor: 1.0,  desc: '36×24mm — 소니 A7 시리즈·캐논 R5 Mark II·니콘 Z6III(FX)' },
+  { id: 'apsc',       label: 'APS-C (Sony·Nikon·Fuji)',      factor: 1.5,  desc: '약 23.5×15.7mm — 소니 a6700·니콘 Z50II·Z fc(DX)·후지 X-T5' },
+  { id: 'apscCanon',  label: 'APS-C (Canon)',                factor: 1.6,  desc: '약 22.3×14.9mm — 캐논 R7·R10·R50·R100' },
+  { id: 'm43',        label: 'M4/3 (OM SYSTEM·Panasonic)',   factor: 2.0,  desc: '17.3×13.0mm — OM SYSTEM OM-1·파나소닉 GH 시리즈' },
+  { id: 'inch1',      label: '1형 (1인치)',                   factor: 2.7,  desc: '13.2×8.8mm — 소니 RX100 시리즈·캐논 G7 X (실 대각선 15.86mm)' },
 ]
 
 export const getCrop = (id: CropFactor) => CROPS.find((c) => c.id === id) ?? CROPS[0]
@@ -241,16 +260,19 @@ export const SCENES: SceneGuide[] = [
     emoji: '🌅',
     label: '일몰·황혼',
     desc: '해질녘 골든 아워',
-    aperture: 2.8, shutter: 1/30, iso: 400,
-    tip: '시시각각 빛 변함 → 빠르게 촬영. ISO 살짝 ↑ 권장.',
+    /* 이전 값 f/2.8·1/30·ISO400은 EV100 5.9로, 같은 도구의 Sunny 16 표(일몰 f/4 ≈ EV 10.6)와
+       약 4.8 stop, ANSI 계열의 '일몰 직후 EV 9~11'과도 3~6 stop 어긋났다(EV 5.9는 야간 가로등 수준). */
+    aperture: 4, shutter: 1/250, iso: 200,
+    tip: '시시각각 빛 변함 → 빠르게 촬영. 해가 완전히 진 뒤에는 ISO를 올리거나 삼각대를 쓰세요.',
   },
   {
     id: 'indoor',
     emoji: '🏠',
     label: '실내 (창가)',
     desc: '낮 시간 실내 자연광',
-    aperture: 2.8, shutter: 1/60, iso: 800,
-    tip: '창가 자연광 활용. 인물이면 창 옆으로 90도 배치.',
+    /* 이전 값 f/2.8·1/60·ISO800은 EV100 5.9로, 같은 도구 EV 표의 '실내 밝음 7~9'와 어긋났다. */
+    aperture: 2.8, shutter: 1/125, iso: 400,
+    tip: '창가 자연광 활용. 인물이면 창 옆으로 90도 배치. 창에서 멀어질수록 급격히 어두워집니다.',
   },
   {
     id: 'night',
@@ -351,9 +373,24 @@ export function nearestIsoIdx(value: number): number {
   return best
 }
 
+/** 인덱스 1칸 = 1/3 stop. 세 배열 모두 이 전제를 지켜야 잠금 보정이 성립한다. */
+export const STOPS_PER_INDEX = 1 / 3
+
 /** 조리개 인덱스 단위 stop (인덱스 1당 1/3 stop) */
 export function apertureIdxToStops(idx: number): number {
-  return idx / 3
+  return idx * STOPS_PER_INDEX
+}
+
+/** 저장값 복원용 — 배열 범위 안의 정수 인덱스인지 검증. 아니면 null. */
+export function safeIdx(v: unknown, len: number): number | null {
+  return typeof v === 'number' && Number.isInteger(v) && v >= 0 && v < len ? v : null
+}
+
+/** 값(조리개 f수·셔터 초·ISO)으로 저장하면 배열이 바뀌어도 복원이 어긋나지 않는다. */
+export function idxByValue(list: { value: number }[], value: unknown, tolerance = 1e-6): number | null {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return null
+  const i = list.findIndex((x) => Math.abs(x.value - value) < tolerance)
+  return i >= 0 ? i : null
 }
 
 /** 등가 노출 — 한 축 변경 시 다른 축 보정 */
@@ -367,20 +404,34 @@ export interface EquivalentExposure {
   shutterLabel: string
   apertureLabel: string
   isoLabel: string
+  /** 기준 EV와의 차이 (공칭 f수 반올림 때문에 0이 아닐 수 있다) */
+  evDelta: number
 }
 
-/* 등가 노출 5종 추천 */
-export function generateEquivalents(currentAptIdx: number, currentShIdx: number, currentIsoIdx: number): EquivalentExposure[] {
+export interface AxisLocks {
+  aperture: boolean
+  shutter: boolean
+  iso: boolean
+}
+
+/* 등가 노출 5종 추천.
+   ⚠️ 잠긴 축은 후보 생성 단계에서 고정한다. 예전에는 잠금을 전혀 보지 않아,
+      조리개를 잠근 상태에서 목록의 다른 조리개를 클릭하면 자물쇠는 켜진 채 값만 바뀌었다. */
+export function generateEquivalents(
+  currentAptIdx: number, currentShIdx: number, currentIsoIdx: number,
+  locks: AxisLocks = { aperture: false, shutter: false, iso: false },
+): EquivalentExposure[] {
   const baseAt = APERTURES[currentAptIdx]
   const baseSh = SHUTTERS[currentShIdx]
   const baseIso = ISOS[currentIsoIdx]
   const baseEV = calcEV(baseAt.value, baseSh.value, baseIso.value)
 
   const candidates: EquivalentExposure[] = []
-  /* 다양한 (aptIdx, shIdx, isoIdx) 조합 시도 */
-  for (let dAt = -9; dAt <= 9; dAt += 3) {
-    for (let dSh = -9; dSh <= 9; dSh += 3) {
-      for (let dIso = -9; dIso <= 9; dIso += 3) {
+  const steps = (locked: boolean) => (locked ? [0] : [-9, -6, -3, 0, 3, 6, 9])
+  /* 다양한 (aptIdx, shIdx, isoIdx) 조합 시도 — 잠긴 축은 0만 허용 */
+  for (const dAt of steps(locks.aperture)) {
+    for (const dSh of steps(locks.shutter)) {
+      for (const dIso of steps(locks.iso)) {
         if (dAt === 0 && dSh === 0 && dIso === 0) continue
         const aIdx = currentAptIdx + dAt
         const sIdx = currentShIdx + dSh
@@ -397,23 +448,55 @@ export function generateEquivalents(currentAptIdx: number, currentShIdx: number,
             apertureIdx: aIdx, shutterIdx: sIdx, isoIdx: iIdx,
             aperture: a.value, shutter: s.value, iso: ii.value,
             apertureLabel: a.label, shutterLabel: s.label, isoLabel: ii.label,
+            evDelta: ev - baseEV,
           })
         }
       }
     }
   }
 
-  /* 다양성 확보: 조리개 다른 5개 */
-  const seen = new Set<number>()
-  const result: EquivalentExposure[] = []
-  candidates
-    .sort((a, b) => Math.abs(a.apertureIdx - currentAptIdx) - Math.abs(b.apertureIdx - currentAptIdx))
-    .forEach((c) => {
-      if (seen.has(c.apertureIdx)) return
-      seen.add(c.apertureIdx)
-      result.push(c)
-    })
-  return result.slice(0, 5)
+  /* 조리개별로 **가장 실용적인** 후보 하나씩 고른 뒤, 현재 조리개에 가까운 순으로 5개.
+     예전에는 정렬 기준이 조리개 거리뿐이라 순회 순서상 ISO를 6칸(2 stop)이나 내린 조합이
+     먼저 잡혔고, 그 결과 5종 중 4종이 ISO 50(대부분 카메라에서 확장 감도)으로 몰렸다.
+     같은 밝기를 얻는 데 굳이 ISO를 바꿀 이유가 없으므로 ISO 변화가 적은 쪽을 우선한다. */
+  /* 조리개가 잠겨 있으면 조리개로 다양성을 낼 수 없으므로 셔터를 기준 축으로 바꾼다. */
+  const keyOf = (x: EquivalentExposure) => (locks.aperture ? x.shutterIdx : x.apertureIdx)
+  const currentKey = locks.aperture ? currentShIdx : currentAptIdx
+  const isoPenalty = (x: EquivalentExposure) => (locks.iso ? 0 : Math.abs(x.isoIdx - currentIsoIdx))
+
+  const best = new Map<number, EquivalentExposure>()
+  for (const c of candidates) {
+    const k = keyOf(c)
+    const prev = best.get(k)
+    const score = (x: EquivalentExposure) => isoPenalty(x) * 10 + Math.abs(x.evDelta) * 3
+    if (!prev || score(c) < score(prev)) best.set(k, c)
+  }
+  return [...best.values()]
+    .sort((a, b) => Math.abs(keyOf(a) - currentKey) - Math.abs(keyOf(b) - currentKey))
+    .slice(0, 5)
+}
+
+/* ─────────────────────────────────────────────
+   안전 셔터(핸드헬드) 판정 — 1 / (초점거리 × 크롭 팩터)
+   ⚠️ 예전에는 셔터 값만 보고 '안전/위험'을 판정해, 400mm APS-C에서 1/250인데도
+      '안전 — 대부분 손떨림 정지'라고 답했다(실제로는 1/600 이상 필요).
+   이 룰은 필름 시대 관행에서 온 경험칙이고 IBIS·호흡·자세에 따라 달라진다.
+   ───────────────────────────────────────────── */
+export interface HandheldCheck {
+  requiredShutter: number
+  marginStops: number
+  verdict: '여유' | '기준 부합' | '부족'
+  equivalentFocal: number
+}
+
+export function handheldCheck(shutter: number, focalLength: number, cropFactor: number): HandheldCheck {
+  const equivalentFocal = Math.max(1, focalLength * cropFactor)
+  const requiredShutter = 1 / equivalentFocal
+  const marginStops =
+    shutter > 0 && Number.isFinite(shutter) ? Math.log2(requiredShutter / shutter) : 0
+  const verdict: HandheldCheck['verdict'] =
+    marginStops >= 0.5 ? '여유' : marginStops >= -0.15 ? '기준 부합' : '부족'
+  return { requiredShutter, marginStops, verdict, equivalentFocal }
 }
 
 /* ─────────────────────────────────────────────
@@ -470,8 +553,13 @@ export function fmtShutter(seconds: number): string {
     return s > 0 ? `${m}분 ${s}초` : `${m}분`
   }
   if (seconds >= 1) return `${seconds.toFixed(seconds < 10 ? 1 : 0)} 초`
-  /* 1초 미만 → 1/N */
+  /* 1초 미만 → 1/N.
+     단 0.8·0.6·0.4초처럼 1/N에 가깝지 않은 값을 무조건 반올림하면
+     0.8초가 "1/1", 0.4초가 "1/3"으로 찍혀 최대 0.32 stop을 속인다.
+     실제 카메라도 이 구간은 0"8 / 0"6 / 0"4로 표기하므로 소수 초로 돌려준다. */
   const denom = Math.round(1 / seconds)
+  const errStop = denom > 0 ? Math.abs(Math.log2(1 / denom / seconds)) : Infinity
+  if (errStop > 0.05) return `${seconds.toFixed(seconds >= 0.1 ? 1 : 2)} 초`
   return `1/${denom}`
 }
 

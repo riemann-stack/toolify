@@ -8,7 +8,7 @@ import {
   type CropFactor,
   calcEV, generateEquivalents, dofRating, blurRating, noiseRating,
   rule500, calcNDStackedShutter, fmtShutter, fmt, fmtStop, getCrop,
-  nearestApertureIdx, nearestShutterIdx, nearestIsoIdx,
+  nearestApertureIdx, nearestShutterIdx, nearestIsoIdx, idxByValue, fmtStops, handheldCheck,
 } from './exposureUtils'
 
 type AxisId = 'aperture' | 'shutter' | 'iso'
@@ -45,30 +45,43 @@ export default function ExposureClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
-      if (typeof j.aptIdx === 'number') setAptIdx(j.aptIdx)
-      if (typeof j.shIdx === 'number') setShIdx(j.shIdx)
-      if (typeof j.isoIdx === 'number') setIsoIdx(j.isoIdx)
+      /* ⚠️ 예전에는 `typeof === 'number'`만 보고 인덱스를 그대로 넣었다.
+         저장값이 오염되거나(배열 밖·소수·NaN) 배열 길이가 바뀌면
+         APERTURES[idx]가 undefined가 되고 바로 아래 apt.label에서 TypeError로 페이지가 죽는다.
+         그래서 (1) 인덱스가 아니라 **값**으로 저장하고 (2) 복원 시 배열에서 되찾는다.
+         값이 없거나 배열에 없는 값이면 기본값을 유지한다. */
+      const a = idxByValue(APERTURES, j.aperture)
+      const sh2 = idxByValue(SHUTTERS, j.shutter)
+      const i2 = idxByValue(ISOS, j.iso)
+      if (a !== null) setAptIdx(a)
+      if (sh2 !== null) setShIdx(sh2)
+      if (i2 !== null) setIsoIdx(i2)
       if (typeof j.aptLocked === 'boolean') setAptLocked(j.aptLocked)
       if (typeof j.shLocked === 'boolean') setShLocked(j.shLocked)
       if (typeof j.isoLocked === 'boolean') setIsoLocked(j.isoLocked)
-      if (j.crop) setCrop(j.crop)
-      if (j.ndId) setNdId(j.ndId)
+      if (CROPS.some((c) => c.id === j.crop)) setCrop(j.crop as CropFactor)
+      if (ND_FILTERS.some((f) => f.id === j.ndId)) setNdId(j.ndId)
+      if (j.ndStack === 'none' || ND_FILTERS.some((f) => f.id === j.ndStack)) setNdStack(j.ndStack)
+      if (typeof j.focalLength === 'number' && Number.isFinite(j.focalLength) &&
+          j.focalLength >= 8 && j.focalLength <= 400) setFocalLength(j.focalLength)
     } catch {}
   }, [])
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        aptIdx, shIdx, isoIdx,
+        aperture: APERTURES[aptIdx]?.value,
+        shutter: SHUTTERS[shIdx]?.value,
+        iso: ISOS[isoIdx]?.value,
         aptLocked, shLocked, isoLocked,
-        crop, ndId,
+        crop, ndId, ndStack, focalLength,
       }))
     } catch {}
-  }, [aptIdx, shIdx, isoIdx, aptLocked, shLocked, isoLocked, crop, ndId])
+  }, [aptIdx, shIdx, isoIdx, aptLocked, shLocked, isoLocked, crop, ndId, ndStack, focalLength])
 
-  /* 현재 값 */
-  const apt = APERTURES[aptIdx]
-  const sh = SHUTTERS[shIdx]
-  const iso = ISOS[isoIdx]
+  /* 현재 값 — 인덱스가 어떤 경로로든 범위를 벗어나도 렌더가 죽지 않게 최종 방어 */
+  const apt = APERTURES[aptIdx] ?? APERTURES[nearestApertureIdx(4)]
+  const sh = SHUTTERS[shIdx] ?? SHUTTERS[nearestShutterIdx(1 / 250)]
+  const iso = ISOS[isoIdx] ?? ISOS[nearestIsoIdx(200)]
   const ev = calcEV(apt.value, sh.value, iso.value)
 
   /* 베이스라인 (초기 셋팅 f/4·1/250·ISO 200) 대비 stop 변화 */
@@ -77,8 +90,13 @@ export default function ExposureClient() {
 
   /* 등가 노출 5종 */
   const equivalents = useMemo(
-    () => generateEquivalents(aptIdx, shIdx, isoIdx),
-    [aptIdx, shIdx, isoIdx]
+    () => generateEquivalents(aptIdx, shIdx, isoIdx, { aperture: aptLocked, shutter: shLocked, iso: isoLocked }),
+    [aptIdx, shIdx, isoIdx, aptLocked, shLocked, isoLocked]
+  )
+  /* 안전 셔터 — 셔터 값만 보던 판정을 초점거리·크롭과 연결 */
+  const handheld = useMemo(
+    () => handheldCheck(sh.value, focalLength, getCrop(crop).factor),
+    [sh.value, focalLength, crop]
   )
 
   /**
@@ -162,20 +180,23 @@ export default function ExposureClient() {
   const star500 = rule500(focalLength, crop)
 
   /* 씬 적용 */
+  /* 상황 프리셋은 세 축을 모두 지정하므로 잠금과 공존할 수 없다.
+     예전에는 잠금을 무시하고 값만 덮어써서 자물쇠가 켜진 채 값이 바뀌었다. */
   const applyScene = (scene: typeof SCENES[number]) => {
     setAptIdx(nearestApertureIdx(scene.aperture))
     setShIdx(nearestShutterIdx(scene.shutter))
     setIsoIdx(nearestIsoIdx(scene.iso))
+    setAptLocked(false); setShLocked(false); setIsoLocked(false)
   }
 
   return (
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'expo' ? s.tabActive : ''}`} onClick={() => setTab('expo')}>노출 환산</button>
-        <button className={`${s.tab} ${tab === 'nd' ? s.tabActive : ''}`} onClick={() => setTab('nd')}>ND 필터</button>
-        <button className={`${s.tab} ${tab === 'scene' ? s.tabActive : ''}`} onClick={() => setTab('scene')}>상황 가이드</button>
-        <button className={`${s.tab} ${tab === 'tradeoff' ? s.tabActive : ''}`} onClick={() => setTab('tradeoff')}>트레이드오프</button>
+        <button type="button" aria-pressed={tab === 'expo'} className={`${s.tab} ${tab === 'expo' ? s.tabActive : ''}`} onClick={() => setTab('expo')}>노출 환산</button>
+        <button type="button" aria-pressed={tab === 'nd'} className={`${s.tab} ${tab === 'nd' ? s.tabActive : ''}`} onClick={() => setTab('nd')}>ND 필터</button>
+        <button type="button" aria-pressed={tab === 'scene'} className={`${s.tab} ${tab === 'scene' ? s.tabActive : ''}`} onClick={() => setTab('scene')}>상황 가이드</button>
+        <button type="button" aria-pressed={tab === 'tradeoff'} className={`${s.tab} ${tab === 'tradeoff' ? s.tabActive : ''}`} onClick={() => setTab('tradeoff')}>트레이드오프</button>
       </div>
 
       {/* ───── 탭 1: 노출 환산 ───── */}
@@ -199,6 +220,7 @@ export default function ExposureClient() {
                 max={APERTURES.length - 1}
                 step={1}
                 value={aptIdx}
+                aria-label={`조리개 ${apt.label}`}
                 onChange={(e) => onApertureChange(Number(e.target.value))}
                 disabled={aptLocked}
                 className={s.slider}
@@ -224,6 +246,7 @@ export default function ExposureClient() {
                 max={SHUTTERS.length - 1}
                 step={1}
                 value={shIdx}
+                aria-label={`셔터스피드 ${sh.label}`}
                 onChange={(e) => onShutterChange(Number(e.target.value))}
                 disabled={shLocked}
                 className={s.slider}
@@ -251,6 +274,7 @@ export default function ExposureClient() {
                 max={ISOS.length - 1}
                 step={1}
                 value={isoIdx}
+                aria-label={iso.label}
                 onChange={(e) => onIsoChange(Number(e.target.value))}
                 disabled={isoLocked}
                 className={s.slider}
@@ -279,7 +303,7 @@ export default function ExposureClient() {
               ]).map((ax) => {
                 const disabled = !ax.locked && lockCount >= 2
                 return (
-                  <button
+                  <button type="button"
                     key={ax.id}
                     className={`${s.lockBtn} ${ax.locked ? s.lockBtnActive : ''}`}
                     onClick={() => toggleLock(ax.id)}
@@ -313,8 +337,15 @@ export default function ExposureClient() {
                 EV <span className={s.heroNum}>{fmt(ev, 1)}</span>
               </p>
               <p className={s.heroSub}>
-                기본값(f/4 · 1/250 · ISO 200) 대비 <strong className={stopFromBaseline >= 0 ? s.bright : s.dark}>{fmtStop(-stopFromBaseline)}</strong>
-                {stopFromBaseline >= 0 ? ' 더 어두움' : ' 더 밝음'}
+                {Math.abs(stopFromBaseline) < 0.05 ? (
+                  <>기본값(f/4 · 1/250 · ISO 200)과 <strong>동일한 밝기</strong></>
+                ) : (
+                  <>
+                    기본값(f/4 · 1/250 · ISO 200) 대비{' '}
+                    <strong className={stopFromBaseline > 0 ? s.dark : s.bright}>{fmtStop(-stopFromBaseline)}</strong>
+                    {stopFromBaseline > 0 ? ' 더 어두움' : ' 더 밝음'}
+                  </>
+                )}
               </p>
             </div>
             <div className={s.heroRight}>
@@ -349,9 +380,21 @@ export default function ExposureClient() {
           {/* 등가 노출 5종 */}
           <div className={s.card}>
             <span className={s.cardLabel}>등가 노출 5종 (같은 밝기 다른 효과)</span>
+            {lockCount > 0 && (
+              <p className={s.lockHint} style={{ marginTop: 0 }}>
+                🔒 잠긴 축({[aptLocked && '조리개', shLocked && '셔터', isoLocked && 'ISO'].filter(Boolean).join('·')})을
+                그대로 두는 조합만 보여 줍니다.
+              </p>
+            )}
+            {equivalents.length === 0 && (
+              <p className={s.warnHint} role="status">
+                두 축을 잠그면 남은 한 축만으로는 같은 EV를 만들 수 없어 등가 조합이 존재하지 않습니다.
+                잠금을 하나 풀어 보세요.
+              </p>
+            )}
             <div className={s.equivList}>
               {equivalents.map((eq, i) => (
-                <button
+                <button type="button"
                   key={i}
                   className={s.equivItem}
                   onClick={() => { setAptIdx(eq.apertureIdx); setShIdx(eq.shutterIdx); setIsoIdx(eq.isoIdx) }}
@@ -401,13 +444,14 @@ export default function ExposureClient() {
             <span className={s.cardLabel}>ND 필터 선택</span>
             <div className={s.ndGrid}>
               {ND_FILTERS.map((f) => (
-                <button
+                <button type="button"
                   key={f.id}
+                  aria-pressed={ndId === f.id}
                   className={`${s.ndBtn} ${ndId === f.id ? s.ndBtnActive : ''}`}
                   onClick={() => setNdId(f.id)}
                 >
                   <span className={s.ndLabel}>{f.label}</span>
-                  <span className={s.ndStops}>{f.stops} stop</span>
+                  <span className={s.ndStops}>{f.stopsLabel} stop</span>
                 </button>
               ))}
             </div>
@@ -417,22 +461,23 @@ export default function ExposureClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>추가 적층 (옵션)</span>
             <div className={s.ndGrid}>
-              <button className={`${s.ndBtn} ${ndStack === 'none' ? s.ndBtnActive : ''}`} onClick={() => setNdStack('none')}>
+              <button type="button" aria-pressed={ndStack === 'none'} className={`${s.ndBtn} ${ndStack === 'none' ? s.ndBtnActive : ''}`} onClick={() => setNdStack('none')}>
                 <span className={s.ndLabel}>없음</span>
                 <span className={s.ndStops}>0 stop</span>
               </button>
               {ND_FILTERS.map((f) => (
-                <button
+                <button type="button"
                   key={`stack-${f.id}`}
+                  aria-pressed={ndStack === f.id}
                   className={`${s.ndBtn} ${ndStack === f.id ? s.ndBtnActive : ''}`}
                   onClick={() => setNdStack(f.id)}
                 >
                   <span className={s.ndLabel}>+{f.label}</span>
-                  <span className={s.ndStops}>{f.stops} stop</span>
+                  <span className={s.ndStops}>+{f.stopsLabel} stop</span>
                 </button>
               ))}
             </div>
-            <p className={s.lockHint}>💡 두 ND 필터를 같이 끼우면 stop이 합산됩니다 (ND8 + ND64 = 9 stop).</p>
+            <p className={s.lockHint}>💡 두 ND 필터를 같이 끼우면 차단량이 곱해져 stop이 합산됩니다 (ND8 3 + ND64 6 = 9 stop).</p>
           </div>
 
           <div className={s.heroCard}>
@@ -442,7 +487,7 @@ export default function ExposureClient() {
                 <span className={s.heroNum}>{fmtShutter(ndShutter)}</span>
               </p>
               <p className={s.heroSub}>
-                원본 <strong>{sh.label}</strong> → ND <strong>{totalNDStops} stop</strong> 추가 → {fmtShutter(ndShutter)}
+                원본 <strong>{sh.label}</strong> → ND <strong>{fmtStops(totalNDStops)} stop</strong> 추가 → {fmtShutter(ndShutter)}
               </p>
             </div>
             <div className={s.heroRight}>
@@ -453,7 +498,7 @@ export default function ExposureClient() {
           {/* ND 사용 시나리오 */}
           <div className={s.card}>
             <span className={s.cardLabel}>장노출 시나리오 — ND별 권장</span>
-            <table className={s.dataTable}>
+            <div className={s.tableScroll}><table className={s.dataTable}>
               <thead>
                 <tr>
                   <th scope="col">효과</th>
@@ -464,11 +509,11 @@ export default function ExposureClient() {
               <tbody>
                 <tr><td>물 흐름 살짝 흐림</td><td>1/15 ~ 1/4 초</td><td>ND4 ~ ND8</td></tr>
                 <tr><td>폭포 실크 효과</td><td>1/2 ~ 2 초</td><td>ND16 ~ ND32</td></tr>
-                <tr><td>파도 안개·구름 흐름</td><td>5 ~ 15 초</td><td>ND64 ~ ND400</td></tr>
+                <tr><td>파도 안개·구름 흐름</td><td>5 ~ 15 초</td><td>ND64(6) ~ ND400(약 8⅔)</td></tr>
                 <tr><td>장노출 — 군중 사라짐</td><td>30초 ~ 2 분</td><td>ND400 ~ ND1000</td></tr>
                 <tr><td>일주·구름 streak</td><td>2 ~ 5 분</td><td>ND1000 + ND8 적층</td></tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </>
       )}
@@ -480,7 +525,7 @@ export default function ExposureClient() {
             <span className={s.cardLabel}>Sunny 16 — 8 상황별 권장 설정</span>
             <div className={s.sceneGrid}>
               {SCENES.map((sc) => (
-                <button key={sc.id} className={s.sceneCard} onClick={() => { applyScene(sc); setTab('expo') }}>
+                <button type="button" key={sc.id} className={s.sceneCard} onClick={() => { applyScene(sc); setTab('expo') }}>
                   <div className={s.sceneHead}>
                     <span className={s.sceneEmoji}>{sc.emoji}</span>
                     <div>
@@ -495,6 +540,7 @@ export default function ExposureClient() {
                     <span>{fmtShutter(sc.shutter)}</span>
                     <span>·</span>
                     <span>ISO {sc.iso}</span>
+                    <span className={s.sceneEv}>EV {fmt(calcEV(sc.aperture, sc.shutter, sc.iso), 1)}</span>
                   </div>
                   <p className={s.sceneTip}>{sc.tip}</p>
                 </button>
@@ -528,13 +574,21 @@ export default function ExposureClient() {
               </div>
             </div>
             <div className={s.starResult}>
-              <p className={s.starResultLabel}>최대 셔터스피드 (점광원 유지)</p>
+              <p className={s.starResultLabel}>500 룰 추정 — 점광원 유지 한계</p>
               <p className={s.starResultValue}>
                 <span className={s.heroNum}>{star500.toFixed(1)}</span> 초
               </p>
               <p className={s.heroSub}>
-                500 ÷ ({focalLength}mm × {getCrop(crop).factor}) = {star500.toFixed(2)} 초.
-                이 시간을 넘으면 별이 선으로 흐려집니다 (별궤적).
+                500 ÷ ({focalLength}mm × {getCrop(crop).factor}) = {star500.toFixed(2)} 초 ·
+                보수적인 <strong>300 룰</strong>로는 {(star500 * 0.6).toFixed(2)} 초.
+                이 시간을 넘으면 별이 점이 아니라 짧은 선으로 늘어납니다.
+              </p>
+              <p className={s.lockHint}>
+                ⚠️ 500 룰은 필름 시대 착란원 기준이라 최근 고화소 센서에서는 <strong>대체로 길게 나옵니다</strong> —
+                구현사인 PhotoPills도 &ldquo;노출 시간을 너무 크게 준다&rdquo;고 밝힙니다. 확대해서 별이 늘어나 보이면 300 룰(300÷환산 초점거리)이나 NPF 룰을 쓰세요.
+                {crop === 'inch1' && (
+                  <><br />⚠️ 이 계열 간이 룰은 <strong>풀프레임·APS-C·M4/3 기준</strong>으로 만들어졌습니다. 1형(1인치) 이하 소형 센서에는 적용 근거가 없습니다.</>
+                )}
               </p>
             </div>
           </div>
@@ -542,7 +596,7 @@ export default function ExposureClient() {
           {/* 영상 셔터 룰 */}
           <div className={s.card}>
             <span className={s.cardLabel}>영상 180° 셔터 룰 (자연스러운 모션 블러)</span>
-            <table className={s.dataTable}>
+            <div className={s.tableScroll}><table className={s.dataTable}>
               <thead>
                 <tr>
                   <th scope="col">프레임레이트</th>
@@ -559,7 +613,7 @@ export default function ExposureClient() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
             <p className={s.lockHint}>
               ⚠️ 셔터를 더 빠르게 하면 동작이 끊어보이고, 더 느리게 하면 흐름이 과해집니다. 자연스러운 영상은 180° 룰이 표준.
             </p>
@@ -591,7 +645,7 @@ export default function ExposureClient() {
                 <p className={s.tradeLabel}>{dof.label}</p>
               </div>
             </div>
-            <RatingBar level={dof.level} max={5} color="#0D9488" />
+            <RatingBar level={dof.level} max={5} color="var(--cat-edu)" />
             <p className={s.tradeDesc}>{dof.desc}</p>
             <p className={s.tradeNote}>
               현재 {apt.label} → 5 단계 중 <strong>{dof.level}단계</strong>.
@@ -608,12 +662,46 @@ export default function ExposureClient() {
                 <p className={s.tradeLabel}>{blur.label}{blur.tripod && ' · 삼각대 권장'}</p>
               </div>
             </div>
-            <RatingBar level={6 - blur.level} max={5} color="#D97706" />
+            <RatingBar level={blur.level} max={5} color="var(--cat-cooking)" />
+            <p className={s.muted} style={{ fontSize: 11, marginTop: -4 }}>막대가 길수록 흔들림 위험이 큽니다.</p>
             <p className={s.tradeDesc}>{blur.desc}</p>
-            <p className={s.tradeNote}>
-              📐 안전 셔터 룰: <strong>1 / (초점거리 × 크롭 팩터)</strong> 이상.
-              50mm 풀프레임 → 1/50 이상, 200mm APS-C → 1/300 이상 권장.
-            </p>
+            <div className={s.handheldBox} role="status">
+              <p className={s.tradeNote} style={{ margin: 0 }}>
+                📐 안전 셔터 룰 <strong>1 / (초점거리 × 크롭 팩터)</strong> 기준 —
+                {' '}{focalLength}mm × {getCrop(crop).factor} = 환산 <strong>{handheld.equivalentFocal.toFixed(0)}mm</strong>,
+                {' '}필요 셔터 <strong>{fmtShutter(handheld.requiredShutter)}</strong> 이상
+              </p>
+              <p className={`${s.tradeNote} ${handheld.verdict === '부족' ? s.warnHint : ''}`} style={{ marginTop: 8 }}>
+                현재 <strong>{sh.label}</strong> → {
+                  handheld.verdict === '부족'
+                    ? <>기준보다 <strong>{Math.abs(handheld.marginStops).toFixed(1)} stop 느림</strong> — 손떨림 위험</>
+                    : handheld.verdict === '여유'
+                      ? <>기준보다 <strong>{handheld.marginStops.toFixed(1)} stop 빠름</strong> — 여유 있음</>
+                      : <>기준에 <strong>거의 맞음</strong></>
+                }
+                <br />
+                <span className={s.muted}>
+                  손떨림 보정(IBIS)이 있으면 그만큼 느린 셔터도 가능합니다. 이 룰은 표준이 아니라 필름 시대 경험칙입니다.
+                </span>
+              </p>
+            </div>
+            <div className={s.starInputs} style={{ marginTop: 10 }}>
+              <div className={s.field}>
+                <label className={s.fieldLabel} htmlFor="exposure-mm-2">초점거리 (mm)</label>
+                <input id="exposure-mm-2"
+                  type="number" inputMode="numeric" step={1} min={8} max={400}
+                  value={focalLength}
+                  onChange={(e) => setFocalLength(Math.max(8, Math.min(400, Number(e.target.value) || 8)))}
+                  className={s.input}
+                />
+              </div>
+              <div className={s.field}>
+                <label className={s.fieldLabel} htmlFor="exposure-crop-2">센서 크기</label>
+                <select id="exposure-crop-2" value={crop} onChange={(e) => setCrop(e.target.value as CropFactor)} className={s.input}>
+                  {CROPS.map((c) => <option key={c.id} value={c.id}>{c.label} (×{c.factor})</option>)}
+                </select>
+              </div>
+            </div>
           </div>
 
           {/* 노이즈 (ISO) */}
@@ -625,7 +713,7 @@ export default function ExposureClient() {
                 <p className={s.tradeLabel}>{noise.label}</p>
               </div>
             </div>
-            <RatingBar level={noise.level} max={5} color="#DB2777" />
+            <RatingBar level={noise.level} max={5} color="var(--cat-date)" />
             <p className={s.tradeDesc}>{noise.desc}</p>
             <p className={s.tradeNote}>
               💡 최신 풀프레임 카메라(2020~)는 ISO 6400~12800까지 실용 가능.
@@ -636,36 +724,36 @@ export default function ExposureClient() {
           {/* 종합 트레이드오프 표 */}
           <div className={s.card}>
             <span className={s.cardLabel}>노출 3축 효과 요약</span>
-            <table className={s.dataTable}>
+            <div className={s.tableScroll}><table className={s.dataTable}>
               <thead>
                 <tr>
                   <th scope="col">축</th>
-                  <th scope="col">밝게 (값 ↓)</th>
-                  <th scope="col">어둡게 (값 ↑)</th>
+                  <th scope="col">더 밝게</th>
+                  <th scope="col">더 어둡게</th>
                   <th scope="col">부작용</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>🌀 <strong>조리개</strong></td>
-                  <td>f/1.4 (열림)</td>
-                  <td>f/22 (닫힘)</td>
+                  <td>f 수 ↓ — f/1.4 (열림)</td>
+                  <td>f 수 ↑ — f/22 (닫힘)</td>
                   <td>열기 → 심도 ↓ · 닫기 → 회절 흐림</td>
                 </tr>
                 <tr>
                   <td>⏱️ <strong>셔터</strong></td>
-                  <td>30s (느림)</td>
-                  <td>1/8000 (빠름)</td>
+                  <td>시간 ↑ — 30s (느림)</td>
+                  <td>시간 ↓ — 1/8000 (빠름)</td>
                   <td>느림 → 흔들림 · 빠름 → 광량 부족</td>
                 </tr>
                 <tr>
                   <td>📊 <strong>ISO</strong></td>
-                  <td>ISO 51200 (높음)</td>
-                  <td>ISO 50 (낮음)</td>
+                  <td>감도 ↑ — ISO 51200</td>
+                  <td>감도 ↓ — ISO 50</td>
                   <td>높음 → 노이즈 · 낮음 → 광량 부족</td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
           </div>
         </>
       )}
@@ -679,15 +767,20 @@ function clampIdx(v: number, len: number): number {
   return Math.max(0, Math.min(len - 1, v))
 }
 
+/* ANSI PH2.7 계열 EV100 사다리. 경계를 0.5 낮게 둔 이유:
+   Sunny 16 룰은 셔터 = 1/ISO이므로 ISO 100에서 1/100이 되고, 그때 f/16의 EV는 14.64로
+   공칭값 15보다 0.36 낮다. 경계를 정수에 두면 자기 프리셋이 한 칸 아래로 설명된다. */
 function describeEV(ev: number): string {
-  if (ev >= 16) return '극도 밝음 — 눈, 모래사장, 직사광 반사'
-  if (ev >= 14) return '대낮 햇빛 — Sunny 16 권장'
-  if (ev >= 12) return '약간 흐림 — 일반 야외'
-  if (ev >= 10) return '흐림 — 그늘진 야외'
-  if (ev >= 7)  return '실내 밝은 곳 — 창가·LED 조명'
-  if (ev >= 4)  return '실내 어둑함 — 백열등'
-  if (ev >= 0)  return '야경·실내 어두움 — 삼각대 권장'
-  return '극저광 — 별·달빛 (장노출 필수)'
+  if (ev >= 15.5) return '극도 밝음 — 눈·모래·물 반사'
+  if (ev >= 14.5) return '맑은 한낮 — 그림자 뚜렷 (Sunny 16)'
+  if (ev >= 13.5) return '엷은 구름 낀 해 — 그림자 부드러움'
+  if (ev >= 12.5) return '흐림 — 그림자 거의 없음'
+  if (ev >= 11.5) return '짙게 흐림 · 맑은 날 그늘'
+  if (ev >= 9.5)  return '일몰 무렵 — 해 지기 직전·직후'
+  if (ev >= 6.5)  return '실내 밝은 곳 — 창가·LED 조명'
+  if (ev >= 3.5)  return '실내 어둑함 — 백열등·무대 조명'
+  if (ev >= -0.5) return '야경·실내 어두움 — 삼각대 권장'
+  return '극저광 — 달빛·별 (장노출 필수)'
 }
 
 function describeShutter(sec: number): string {

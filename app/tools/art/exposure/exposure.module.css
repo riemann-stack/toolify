@@ -212,8 +212,11 @@
   margin: 0;
   line-height: 1.7;
 }
-.bright { color: #D97706; }
-.dark { color: #0891B2; }
+/* 노출 증감 표기.
+   ⚠️ 예전 값(#D97706 amber-600 3.04:1 / #0891B2 cyan-600 3.52:1)은 카드 배경에서
+      13px 텍스트 AA(4.5:1)에 미달했다. 텍스트는 AA 통과 토큰만 쓴다. */
+.bright { color: var(--accent-ink); }   /* 더 밝음 — sky-700 5.93:1 */
+.dark   { color: var(--warning); }      /* 더 어두움 — amber-700 5.0:1 */
 .heroRight {
   text-align: right;
   border-left: 1px solid var(--border);
@@ -357,8 +360,15 @@
 }
 
 /* 데이터 표 */
+/* 표 가로 스크롤 래퍼 — 320px에서 표가 카드를 밀지 않게 */
+.tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -2px;
+}
 .dataTable {
   width: 100%;
+  min-width: 420px;
   border-collapse: collapse;
   font-size: 13px;
 }
@@ -427,8 +437,8 @@
 }
 .tripodBadge {
   font-size: 10px;
-  background: rgba(217, 119, 6, 0.2);
-  color: #D97706;
+  background: color-mix(in srgb, var(--warning) 18%, transparent);
+  color: var(--warning);
   padding: 3px 6px;
   border-radius: 4px;
   margin-left: auto;
@@ -592,3 +602,31 @@
 }
 .previewLegend b { color: var(--text); font-weight: 700; margin-left: 4px; }
 @media (min-width: 560px) { .previewLegend { grid-template-columns: repeat(4, 1fr); } }
+
+/* 씬 카드 EV 배지 — 프리셋이 전제하는 밝기를 즉시 보이게 */
+.sceneEv {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--bg3);
+  border-radius: 5px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.handheldBox {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 8px;
+}
+.warnHint {
+  background: color-mix(in srgb, var(--warning) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
