@@ -1,7 +1,7 @@
 /* 뜨개질 게이지(코·단 수) 계산기 — 데이터·계산 유틸 */
 
 export type GaugeUnit = '10cm' | '4inch' | '1cm'
-export type YarnId = 'lace' | 'fingering' | 'sport' | 'dk' | 'worsted' | 'aran' | 'bulky' | 'super_bulky'
+export type YarnId = 'lace' | 'fingering' | 'sport' | 'dk' | 'worsted' | 'aran' | 'bulky' | 'super_bulky' | 'jumbo'
 export type SizeId = string  /* 'female_xs' | 'male_m' | 'kids_110' 등 */
 export type BodyPartId = 'sweater_body' | 'sweater_sleeve' | 'hat' | 'sock' | 'scarf' | 'blanket'
 export type ProjectId = 'sweater' | 'cardigan' | 'hat' | 'sock' | 'scarf' | 'blanket' | 'baby'
@@ -24,10 +24,16 @@ export interface YarnWeight {
   label: string
   shortLabel: string
   sts10cm: [number, number]  // 권장 코 게이지 (min, max) / 4 inches(10cm)
+  /** ⚠️ CYC 표에는 **단 게이지가 없다** — 아래 값은 실무 통용 근사(빠른 입력 칩의 출발점 용도). */
   rows10cm: [number, number]
   needleMm: [number, number] // 권장 바늘 호수 mm
   /** sts10cm·needleMm이 CYC 공식값인지 (false = 실무 통용 세부 구분) */
   official: boolean
+  /** CYC가 열린 구간으로 규정한 칸의 표시용 문구 (7번 = "6코 이하"·"12.75mm 이상") */
+  stsLabel?: string
+  needleLabel?: string
+  /** 권장 바늘 대표값을 중앙값이 아니라 하한으로 잡을지 (열린 구간이라 중앙값이 무의미) */
+  needleFromMin?: boolean
   examples: string
 }
 
@@ -40,6 +46,10 @@ export const YARN_WEIGHTS: YarnWeight[] = [
   { id: 'aran',        cyc: 4, cycName: 'Medium',      label: 'Aran (CYC 4 · Medium 내)',  shortLabel: 'Aran',     sts10cm: [16, 18], rows10cm: [20, 24], needleMm: [5.0, 6.0],   official: false, examples: '겨울 스웨터·케이블 — CYC는 Aran을 4번(Medium)의 실 종류로 분류 (예: Aran Tweed)' },
   { id: 'bulky',       cyc: 5, cycName: 'Bulky',       label: 'Bulky (CYC 5)',             shortLabel: 'Bulky',    sts10cm: [12, 15], rows10cm: [16, 20], needleMm: [5.5, 8.0],   official: true,  examples: '두꺼운 모자·블랭킷 (예: Lion Brand Wool-Ease)' },
   { id: 'super_bulky', cyc: 6, cycName: 'Super Bulky', label: 'Super Bulky (CYC 6)',       shortLabel: 'S.Bulky',  sts10cm: [7, 11],  rows10cm: [10, 15], needleMm: [8.0, 12.75], official: true,  examples: '대형 담요·러그 (예: Bernat Blanket·Wool & The Gang)' },
+  /* CYC 7은 "6 sts and fewer" / "12.75 mm and larger"로 **열린 구간**이다.
+     아래 [3,6]·[12.75,25]는 매칭·표시를 위해 이 도구가 정한 실무 범위이고,
+     화면에는 stsLabel·needleLabel('6 이하'·'12.75 이상')로 CYC 원문 표기를 그대로 쓴다. */
+  { id: 'jumbo',       cyc: 7, cycName: 'Jumbo',       label: 'Jumbo (CYC 7)',             shortLabel: 'Jumbo',    sts10cm: [3, 6],   rows10cm: [4, 9],   needleMm: [12.75, 25],  official: true,  stsLabel: '6 이하', needleLabel: '12.75 이상', needleFromMin: true, examples: '팔뚝뜨기·초대형 담요 (CYC 표기: Jumbo, Roving)' },
 ]
 
 export const getYarn = (id: YarnId) => YARN_WEIGHTS.find((y) => y.id === id) ?? YARN_WEIGHTS[3]
@@ -80,6 +90,59 @@ export const ALL_SIZES = [...SIZES_FEMALE, ...SIZES_MALE, ...SIZES_KIDS]
 export const getSize = (id: string) => ALL_SIZES.find((s) => s.id === id)
 
 /* ─────────────────────────────────────────────
+   완성 여유분(ease) — CYC 「Bust/Chest Fit and Ease Chart」
+   CYC 정의: 스웨터 사이즈 = 실제 가슴둘레 실측치 + 여유분.
+   실측보다 작으면 negative ease, 크면 positive ease.
+   ⚠️ 세 번째 구간의 CYC 정식 명칭은 'Classic fit'이다 — 'standard fit'은 CYC 문서에 없는 말.
+   ⚠️ CYC 원문: "Both the FIT and LENGTH charts are simply guidelines." (규정이 아니라 가이드)
+   ⚠️ 원문 수치를 이으면 −5~0cm, 0~+5cm 구간은 어느 등급에도 배정되지 않은 공백이다.
+      CYC가 연속 구간표가 아니라 대표값으로 제시했기 때문 — 그래서 이 도구도 슬라이더로
+      자유값을 허용하고, 칩은 CYC가 제시한 구간의 대표값만 넣는다.
+   ⚠️ CYC의 여유분 권장은 **가슴둘레에만** 있다. 소매·암홀·힙에는 CYC 여유분 규정이 없다.
+   출처: https://www.craftyarncouncil.com/standards/body-sizing
+        「Standards & Guidelines for Knitting and Crochet」(2018-11-06판) 인쇄면 13쪽
+   ───────────────────────────────────────────── */
+export interface FitPreset {
+  id: string
+  label: string
+  cycName: string
+  /** CYC가 제시한 구간 (cm). openTop이면 상한 없음 */
+  rangeCm: [number, number]
+  openTop?: boolean
+  /** 칩 클릭 시 적용할 대표값 — 구간 중앙(개방 구간은 하한) */
+  applyCm: number
+  desc: string
+}
+
+export const FIT_PRESETS: FitPreset[] = [
+  { id: 'very_close', label: '매우 밀착',  cycName: 'Very close fitting',  rangeCm: [-10, -5], applyCm: -7.5, desc: '실제 가슴둘레보다 5~10cm 작게 (마이너스 여유분)' },
+  { id: 'close',      label: '밀착',      cycName: 'Close fitting',       rangeCm: [0, 0],    applyCm: 0,    desc: '실제 가슴둘레 그대로 (여유분 0 · body skimming)' },
+  { id: 'classic',    label: '클래식',    cycName: 'Classic fit',         rangeCm: [5, 10],   applyCm: 7.5,  desc: '실제 가슴둘레보다 5~10cm 크게 (기본 권장)' },
+  { id: 'loose',      label: '루즈',      cycName: 'Loose fit',           rangeCm: [10, 15],  applyCm: 12.5, desc: '실제 가슴둘레보다 10~15cm 크게' },
+  { id: 'oversized',  label: '오버사이즈', cycName: 'Oversized',           rangeCm: [15, 30],  openTop: true, applyCm: 15, desc: '실제 가슴둘레보다 15cm 이상 크게' },
+]
+
+/** 현재 여유분 cm이 어느 CYC 구간에 드는지 (공백대는 null — 없는 등급을 지어내지 않는다) */
+export function fitPresetForEase(easeCm: number): FitPreset | null {
+  if (!Number.isFinite(easeCm)) return null
+  /* 개방 구간(오버사이즈)을 먼저 본다. 루즈가 [10,15] 닫힌 구간이라 배열 순서대로 훑으면
+     오버사이즈의 대표값 15가 루즈로 먼저 잡혀, 칩을 눌러도 옆 칩이 선택 표시되는 문제가 생긴다. */
+  for (const f of FIT_PRESETS) {
+    if (f.openTop && easeCm >= f.rangeCm[0]) return f
+  }
+  for (const f of FIT_PRESETS) {
+    if (!f.openTop && easeCm >= f.rangeCm[0] && easeCm <= f.rangeCm[1]) return f
+  }
+  return null
+}
+
+/** 여유분이 CYC 구간보다 **아래**인지 (가장 작은 구간의 하한 미만) — 안내 문구를 나누기 위해 */
+export function isBelowFitRange(easeCm: number): boolean {
+  const lowest = Math.min(...FIT_PRESETS.map((f) => f.rangeCm[0]))
+  return Number.isFinite(easeCm) && easeCm < lowest
+}
+
+/* ─────────────────────────────────────────────
    부위별 프리셋
    ───────────────────────────────────────────── */
 export interface BodyPart {
@@ -93,16 +156,33 @@ export interface BodyPart {
   lengthEaseCm?: number
   note: string          // 작업 안내
   isCircular?: boolean  // 원형 작업 여부
+  /**
+   * 가로 입력이 무엇을 뜻하는지.
+   *  'width'         — 평면 한 장의 폭 (스카프·담요)
+   *  'circumference' — 둘레 (모자·양말: 원형 작업이 사실상 표준)
+   *  'either'        — 평면/원형을 사용자가 고름 (스웨터 몸통·소매)
+   * 스웨터에서 이 구분이 없으면 "가슴둘레의 절반"으로 계산한 코 수를
+   * 원형 몸통 시작 코로 그대로 쓰게 되어 **둘레가 절반인 옷**이 나온다.
+   */
+  widthMeaning: 'width' | 'circumference' | 'either'
 }
 
 export const BODY_PARTS: BodyPart[] = [
-  { id: 'sweater_body',   emoji: '👕', name: '스웨터 몸통',   defaultW: 50, defaultH: 60, note: '앞·뒤판 동일하게 떠서 옆선 봉합 또는 원형 한 번에 작업.', isCircular: false },
-  { id: 'sweater_sleeve', emoji: '💪', name: '스웨터 소매',   defaultW: 25, defaultH: 55, note: '소매 시작은 좁게(손목), 위로 갈수록 넓어짐. 늘림 분배 활용.', isCircular: false },
-  { id: 'hat',            emoji: '🎩', name: '모자 (비니)',   defaultW: 56, defaultH: 22, ease: -0.10, note: '이즈는 머리 둘레에만 적용 — 높이(22cm 안팎)는 그대로 둡니다. 원형 작업 권장.', isCircular: true },
-  { id: 'sock',           emoji: '🧦', name: '양말 발등',     defaultW: 22, defaultH: 25, ease: -0.10, lengthEaseCm: -1, note: '둘레는 발보다 약 10% 작게, 발 길이는 약 1cm만 짧게(Kate Atherley 기준). 원형 4-DPN 또는 매직 루프.', isCircular: true },
-  { id: 'scarf',          emoji: '🧣', name: '스카프',        defaultW: 20, defaultH: 150, note: '평직 작업. 양 끝 무늬 통일이 중요.', isCircular: false },
-  { id: 'blanket',        emoji: '🛌', name: '담요',          defaultW: 100, defaultH: 130, note: '대형 작품. 색상 블록·모티브 결합 인기. 실 양 충분히 준비.', isCircular: false },
+  { id: 'sweater_body',   emoji: '👕', name: '스웨터 몸통',   defaultW: 50, defaultH: 60, widthMeaning: 'either', note: '앞·뒤판을 따로 떠서 옆선을 봉합하거나(평면), 몸통을 원형으로 한 번에 뜹니다. 아래에서 작업 방식을 고르면 시작 코 수 기준이 바뀝니다.', isCircular: false },
+  { id: 'sweater_sleeve', emoji: '💪', name: '스웨터 소매',   defaultW: 25, defaultH: 55, widthMeaning: 'either', note: '손목은 좁게 시작해 위로 갈수록 넓힙니다. 늘림 분배는 [늘림·실 양] 탭의 세로(단) 모드를 쓰세요.', isCircular: false },
+  { id: 'hat',            emoji: '🎩', name: '모자 (비니)',   defaultW: 56, defaultH: 22, ease: -0.10, widthMeaning: 'circumference', note: '가로 입력은 머리 둘레입니다. 이즈는 둘레에만 적용 — 높이(22cm 안팎)는 그대로 둡니다. 원형 작업 권장.', isCircular: true },
+  { id: 'sock',           emoji: '🧦', name: '양말 발등',     defaultW: 22, defaultH: 25, ease: -0.10, lengthEaseCm: -1, widthMeaning: 'circumference', note: '가로 입력은 발 둘레입니다. 둘레는 발보다 약 10% 작게, 발 길이는 약 1cm만 짧게(Kate Atherley 기준). 원형 4-DPN 또는 매직 루프.', isCircular: true },
+  { id: 'scarf',          emoji: '🧣', name: '스카프',        defaultW: 20, defaultH: 150, widthMeaning: 'width', note: '평직 작업. 양 끝 무늬 통일이 중요.', isCircular: false },
+  { id: 'blanket',        emoji: '🛌', name: '담요',          defaultW: 100, defaultH: 130, widthMeaning: 'width', note: '대형 작품. 색상 블록·모티브 결합 인기. 실 양 충분히 준비.', isCircular: false },
 ]
+
+/**
+ * 스웨터 완성 둘레 → 실제로 게이지를 곱할 가로 치수.
+ * 평면은 앞·뒤판 각 한 장이 완성 둘레의 절반, 원형은 완성 둘레 전체를 한 번에 잡는다.
+ */
+export function panelWidthFor(finishedCircumferenceCm: number, mode: 'flat' | 'round'): number {
+  return mode === 'flat' ? finishedCircumferenceCm / 2 : finishedCircumferenceCm
+}
 
 export const getBodyPart = (id: BodyPartId) => BODY_PARTS.find((b) => b.id === id) ?? BODY_PARTS[0]
 
@@ -118,6 +198,9 @@ export interface YarnAmountKey {
 /* 사이즈 등급 1~5 (XS=1, S=2, M=3, L=4, XL=5)
    아동·모자·양말·스카프 등은 단일값 또는 둘레로 처리 */
 
+/** 가디건 보정 — Interweave 「How Much Yarn Do I Need…」(원저 Vicki Square) "add 5% for a cardigan" */
+const CARDIGAN_UPLIFT = 1.05
+
 const YARN_AMOUNT_TABLE: Record<string, number[]> = {
   /* sweater [XS, S, M, L, XL] */
   'lace_sweater':        [250, 300, 350, 400, 450],
@@ -128,15 +211,10 @@ const YARN_AMOUNT_TABLE: Record<string, number[]> = {
   'aran_sweater':        [550, 650, 750, 850, 950],
   'bulky_sweater':       [700, 800, 1000, 1200, 1400],
   'super_bulky_sweater': [800, 950, 1100, 1300, 1500],
-  /* cardigan (10~15% 더) */
-  'lace_cardigan':        [280, 340, 400, 450, 500],
-  'fingering_cardigan':   [340, 400, 450, 500, 600],
-  'sport_cardigan':       [400, 450, 500, 600, 700],
-  'dk_cardigan':          [450, 500, 600, 700, 800],
-  'worsted_cardigan':     [550, 650, 800, 900, 1000],
-  'aran_cardigan':        [600, 700, 850, 950, 1100],
-  'bulky_cardigan':       [800, 950, 1150, 1350, 1550],
-  'super_bulky_cardigan': [950, 1100, 1300, 1500, 1700],
+  /* 가디건은 estimateYarn에서 스웨터 값 × CARDIGAN_UPLIFT로 유도한다 — 별도 표를 두지 않는다.
+     예전에는 스웨터 대비 +7.7~20%인 자체 표를 갖고 있었는데 그 대역의 근거를 찾지 못했다.
+     확인된 유일한 출판사 수치는 Interweave(원저 Vicki Square)의 "add 5% for a cardigan"이라,
+     본문 서술과 계산 결과가 어긋나지 않도록 한 곳에서만 정의한다. */
 }
 
 /* 사이즈 무관 작품 (모자·양말·스카프·담요·아기) */
@@ -194,37 +272,61 @@ export function normalizeGauge(value: number, unit: GaugeUnit): number {
   }
 }
 
-/** 1cm·1코·1단 환산 */
+/** 10cm 기준 게이지 → 표시 단위 값 (normalizeGauge의 역함수).
+    측정 단위 토글이 값을 그대로 두면 22코/10cm가 22코/1cm(=220코/10cm)로 조용히 10배가 된다. */
+export function denormalizeGauge(per10cm: number, unit: GaugeUnit): number {
+  switch (unit) {
+    case '10cm':  return per10cm
+    case '4inch': return per10cm * ((4 * 2.54) / 10)
+    case '1cm':   return per10cm / 10
+  }
+}
+
+/** 1cm·1코·1단 환산.
+    ⚠️ 1코 폭은 10cm를 코 수로 나눈 **cm**가 아니라 mm로 표시하므로 분자는 100(mm)이다.
+       (22코/10cm → 100/22 = 4.55mm. 예전 구현은 10/22 = 0.45를 mm라 표기해 10배 작았다.) */
 export function gaugePerCm(stsPer10cm: number, rowsPer10cm: number) {
   const stsPerCm = stsPer10cm / 10
   const rowsPerCm = rowsPer10cm / 10
   return {
     stsPerCm,
     rowsPerCm,
-    mmPerSt: stsPerCm > 0 ? 10 / stsPer10cm : 0,
-    mmPerRow: rowsPerCm > 0 ? 10 / rowsPer10cm : 0,
+    mmPerSt: stsPer10cm > 0 ? 100 / stsPer10cm : 0,
+    mmPerRow: rowsPer10cm > 0 ? 100 / rowsPer10cm : 0,
   }
 }
 
-/** 입력 게이지 → CYC 실 굵기 추정 (가장 가까운) */
+/**
+ * 입력 게이지 → CYC 실 굵기 추정.
+ * **범위 포함을 먼저 보고**, 어느 칸에도 안 들어갈 때만 중앙값 최근접으로 폴백한다.
+ * 중앙값 최근접만 쓰면 경계값이 옆 칸으로 새는데, 특히 6코는 CYC 7(Jumbo, 6코 이하)인데도
+ * 6번(Super Bulky, 중앙 9)이 더 가까워 잘못 분류됐다.
+ * CYC 범위는 서로 겹치므로(예: DK 21–24 ↔ Sport 23–26) 후보가 여럿이면
+ * ① 공식값(official) 우선 ② 중앙값이 가까운 쪽 순으로 고른다.
+ */
 export function estimateYarnWeight(stsPer10cm: number): YarnWeight {
-  let best = YARN_WEIGHTS[0]
-  let bestDist = Infinity
-  for (const y of YARN_WEIGHTS) {
-    const center = (y.sts10cm[0] + y.sts10cm[1]) / 2
-    const d = Math.abs(stsPer10cm - center)
-    if (d < bestDist) { bestDist = d; best = y }
+  const center = (y: YarnWeight) => (y.sts10cm[0] + y.sts10cm[1]) / 2
+  const byCenter = (a: YarnWeight, b: YarnWeight) =>
+    Math.abs(stsPer10cm - center(a)) - Math.abs(stsPer10cm - center(b))
+
+  const inRange = YARN_WEIGHTS.filter((y) => stsPer10cm >= y.sts10cm[0] && stsPer10cm <= y.sts10cm[1])
+  if (inRange.length > 0) {
+    const officialFirst = inRange.filter((y) => y.official)
+    return (officialFirst.length > 0 ? officialFirst : inRange).sort(byCenter)[0]
   }
-  return best
+  /* 어느 칸에도 안 들어가는 값(예: 15.25코 — Bulky 12–15와 Medium 16–20 사이의 공백)에서
+     비공식 구분인 Aran이 튀어나오지 않도록 폴백도 공식 등급으로만 좁힌다. */
+  return YARN_WEIGHTS.filter((y) => y.official).sort(byCenter)[0]
 }
 
-/** 게이지 → 권장 바늘 호수 (mm) */
-export function needleSizeForGauge(stsPer10cm: number): { min: number; max: number; recommended: number } {
+/** 게이지 → 권장 바늘 호수 (mm). 열린 구간(Jumbo)은 중앙값이 무의미하므로 하한을 대표값으로 쓴다. */
+export function needleSizeForGauge(stsPer10cm: number): { min: number; max: number; recommended: number; label?: string } {
   const y = estimateYarnWeight(stsPer10cm)
   return {
     min: y.needleMm[0],
     max: y.needleMm[1],
-    recommended: (y.needleMm[0] + y.needleMm[1]) / 2,
+    recommended: y.needleFromMin ? y.needleMm[0] : (y.needleMm[0] + y.needleMm[1]) / 2,
+    label: y.needleLabel,
   }
 }
 
@@ -243,6 +345,8 @@ export interface PatternConversionInput {
 export interface PatternConversionResult {
   newSts: number
   newRows: number
+  /** 게이지가 0 이하라 환산이 불가능한 상태 (0으로 나누면 Infinity가 화면에 나온다) */
+  invalid: boolean
   stsDeltaPct: number       // 패턴 대비 차이 % (음수 = 적음, 양수 = 많음)
   rowsDeltaPct: number
   needleAdvice: string      // 바늘 호수 코칭 메시지
@@ -251,6 +355,17 @@ export interface PatternConversionResult {
 
 export function convertPattern(input: PatternConversionInput): PatternConversionResult {
   const { patternStsGauge, patternRowsGauge, patternSts, patternRows, myStsGauge, myRowsGauge } = input
+
+  /* 게이지가 0이면 나눗셈이 Infinity가 되어 "Infinity 코"가 그대로 화면에 찍힌다.
+     입력 도중(지우고 다시 치는 중)에도 지나가는 상태이므로 계산을 중단하고 안내로 돌린다. */
+  if (!(patternStsGauge > 0) || !(patternRowsGauge > 0) || !(myStsGauge > 0) || !(myRowsGauge > 0)) {
+    return {
+      newSts: 0, newRows: 0, invalid: true,
+      stsDeltaPct: 0, rowsDeltaPct: 0,
+      needleAdvice: '게이지를 0보다 큰 값으로 입력하면 환산됩니다.',
+      ratioWarning: false,
+    }
+  }
 
   /* 내 게이지 기준 환산 (cm 동일하게 유지) */
   const targetWidthCm = (patternSts / patternStsGauge) * 10
@@ -272,7 +387,7 @@ export function convertPattern(input: PatternConversionInput): PatternConversion
   /* 비율 경고 — 코와 단 게이지 차이 % 격차가 큰 경우 */
   const ratioWarning = Math.abs(stsDeltaPct - rowsDeltaPct) >= 15
 
-  return { newSts, newRows, stsDeltaPct, rowsDeltaPct, needleAdvice, ratioWarning }
+  return { newSts, newRows, invalid: false, stsDeltaPct, rowsDeltaPct, needleAdvice, ratioWarning }
 }
 
 /* ─────────────────────────────────────────────
@@ -291,7 +406,7 @@ export interface SizeToCountsResult {
  * 네거티브 이즈는 **둘레(가로)에만** 적용한다.
  * 근거: 모자·양말의 이즈는 둘레 기준이라는 것이 표준 서술이고
  * (Knitty 디자이너 가이드라인 "A sock is best worn with about 10% negative ease" — 둘레),
- * 길이는 별도로 다룬다. Kate Alterley《Custom Socks》 기준 양말 발 길이는
+ * 길이는 별도로 다룬다. Kate Atherley《Custom Socks》 기준 양말 발 길이는
  * "about half an inch/1cm shorter in length" — 즉 비율(-10%)이 아니라 고정 1cm.
  * 이전 구현은 높이에도 (1+ease)를 곱해 발 길이 25cm를 22.5cm로 만들었다(2.5cm 부족).
  * @param lengthEaseCm 높이에 더할 보정(cm, 음수 = 짧게). 비율이 아니라 절대값.
@@ -327,6 +442,11 @@ export function sizeToCounts(
    - 줄임: k2tog가 2코를 소비하므로 간격은 최소 2코 → 한 번에 최대 floor(current/2)회
    이 범위를 넘으면 한 자리에서 2코 이상을 늘리거나(kfbf 등) 3코 이상 모아 줄여야(k3tog·cdd)
    하므로, 억지 라벨("매 0코마다"·"매 1코마다 줄임")을 만들지 않고 별도 안내로 분기한다.
+
+   ⚠️ 이 함수는 **한 단 안의 가로 분배 전용**이다. 세로(단) 방향 성형은 입력 자체가 다르므로
+      (성형 구간 단 수 + 총 늘릴 코 수 + 한 성형단당 코 수) distributeShaping을 쓴다.
+      예전에는 같은 함수에 unit='단'만 넘겨 코 수를 단 수인 척 재사용했는데,
+      그러면 "현재 코 60 → 목표 코 80"이 "매 3단마다 1단 늘림"이라는 뜻 없는 결과가 됐다.
    ───────────────────────────────────────────── */
 export interface IncDecResult {
   type: '늘림' | '줄임' | '변화 없음'
@@ -337,15 +457,14 @@ export interface IncDecResult {
   baseCount: number          // 기본 횟수
   remainder: number          // 끝에 남는 코
   label: string              // "매 3코마다 1코 늘림 × 8회 + 매 4코마다 1코 늘림 × 12회"
-  unit: '코' | '단'
   /** 한 단에 담을 수 있는 한계를 넘었는지 — true면 label은 분배가 아니라 안내문 */
   overRange: boolean
   /** 한 단에서 가능한 최대 변화 수 (늘림 = current, 줄임 = floor(current/2)) */
   maxPerRow: number
 }
 
-export function distributeIncDec(current: number, target: number, unit: '코' | '단' = '코'): IncDecResult {
-  const blank = { baseStep: 0, bonusStep: 0, bonusCount: 0, baseCount: 0, remainder: 0, unit, overRange: false, maxPerRow: 0 }
+export function distributeIncDec(current: number, target: number): IncDecResult {
+  const blank = { baseStep: 0, bonusStep: 0, bonusCount: 0, baseCount: 0, remainder: 0, overRange: false, maxPerRow: 0 }
   if (current === target) {
     return { ...blank, type: '변화 없음', delta: 0, label: '변화 없음 (현재 = 목표)' }
   }
@@ -356,28 +475,18 @@ export function distributeIncDec(current: number, target: number, unit: '코' | 
     return { ...blank, type, delta: Number.isFinite(delta) ? delta : 0, label: '계산 불가' }
   }
 
-  /* 한 번에 가능한 최대 변화 수.
-     '코' 모드 — 한 단 안에서 가로로 분배. 줄임은 k2tog가 2코를 소비하므로 절반이 상한.
-     '단' 모드 — 세로(단)로 분배하며 한 단에 한 번씩 성형하므로 코 물리 규칙이 적용되지 않는다
-                (여기서 k2tog·k3tog를 언급하면 존재하지 않는 지시가 된다). */
-  const isStitch = unit === '코'
-  const maxPerRow = isStitch && !isInc ? Math.floor(current / 2) : current
+  /* 한 단 안에서 가능한 최대 변화 수. 줄임은 k2tog가 2코를 소비하므로 절반이 상한. */
+  const maxPerRow = isInc ? current : Math.floor(current / 2)
 
   if (delta > maxPerRow) {
     /* 억지 라벨 대신 정확한 안내 */
     const rows = Math.ceil(delta / Math.max(1, maxPerRow))
-    if (isStitch) {
-      const extra = isInc
-        ? '한 자리에서 2코 이상 늘려야 합니다(kfbf 등).'
-        : '한 번에 3코 이상 모아 줄여야 합니다(k3tog·cdd 등).'
-      return {
-        ...blank, type, delta, overRange: true, maxPerRow,
-        label: `한 단에 몰아서 ${type}하기엔 변화량이 큽니다 — 현재 ${current}코에서는 한 단 최대 ${maxPerRow}코까지만 ${type} 가능(${extra}) 약 ${rows}단에 나눠 진행하세요.`,
-      }
-    }
+    const extra = isInc
+      ? '한 자리에서 2코 이상 늘려야 합니다(kfbf 등).'
+      : '한 번에 3코 이상 모아 줄여야 합니다(k3tog·cdd 등).'
     return {
       ...blank, type, delta, overRange: true, maxPerRow,
-      label: `${current}단 안에서 ${delta}회를 ${type}하려면 한 단에 두 번 이상 성형해야 합니다 — 성형 구간을 ${rows}배 이상 늘리거나 한 단에 좌우 2회씩 넣는 방식으로 나누세요.`,
+      label: `한 단에 몰아서 ${type}하기엔 변화량이 큽니다 — 현재 ${current}코에서는 한 단 최대 ${maxPerRow}코까지만 ${type} 가능(${extra}) 약 ${rows}단에 나눠 진행하세요.`,
     }
   }
 
@@ -392,14 +501,161 @@ export function distributeIncDec(current: number, target: number, unit: '코' | 
 
   let label = ''
   if (bonusCount === 0) {
-    label = `매 ${baseStep}${unit}마다 1${unit} ${type} × ${baseCount}회`
+    label = `매 ${baseStep}코마다 1코 ${type} × ${baseCount}회`
   } else if (baseCount === 0) {
-    label = `매 ${bonusStep}${unit}마다 1${unit} ${type} × ${bonusCount}회`
+    label = `매 ${bonusStep}코마다 1코 ${type} × ${bonusCount}회`
   } else {
-    label = `매 ${bonusStep}${unit}마다 1${unit} ${type} × ${bonusCount}회 + 매 ${baseStep}${unit}마다 1${unit} ${type} × ${baseCount}회`
+    label = `매 ${bonusStep}코마다 1코 ${type} × ${bonusCount}회 + 매 ${baseStep}코마다 1코 ${type} × ${baseCount}회`
   }
 
-  return { type, delta, baseStep, bonusStep, bonusCount, baseCount, remainder: 0, unit, label, overRange: false, maxPerRow }
+  return { type, delta, baseStep, bonusStep, bonusCount, baseCount, remainder: 0, label, overRange: false, maxPerRow }
+}
+
+/* ─────────────────────────────────────────────
+   세로(단) 방향 성형 분배 — 소매·래글런·진동
+   가로 분배와 입력이 완전히 다르다:
+     · totalRows      성형에 쓸 구간의 총 단 수
+     · current/target 그 구간 시작·끝의 코 수
+     · perEvent       한 성형단에서 늘리거나 줄이는 코 수
+                      (평면 소매 = 좌우 1코씩 2코 / 래글런 = 라인 4개 × 2코 = 8코)
+   성형 횟수 events = Δ코 ÷ perEvent 이고, 이 events를 totalRows에 Magic Formula로 흩는다.
+
+   ▸ 평면(RS 전용) 제약: 평면 뜨기는 겉면(RS) 단에서만 성형하는 것이 통상이라 간격이 짝수여야 한다.
+     이때는 기본 간격을 짝수로 내림하고 나머지도 2단 단위로 얹는다
+     (Robynn Weldon/STUDIO MIRANDA: IV = FLOOR(총단수 ÷ 성형횟수, 2), 나머지는 2단씩 배분).
+     원저도 RS 전용을 '엄밀히 필수는 아니지만 대부분이 선호하는 관행'이라고 밝히므로 강제하지 않고 선택으로 둔다.
+   ▸ 원형은 겉면/안면 교대가 없어 짝수 제약이 없다 — 발행 패턴도 19·13·9·7·5 라운드 같은 홀수 간격을 쓴다.
+
+   항등식: baseStep×baseCount + bonusStep×bonusCount + plainRows = totalRows
+           events×perEvent + leftoverSts = |Δ코|
+   ───────────────────────────────────────────── */
+export interface ShapingResult {
+  type: '늘림' | '줄임' | '변화 없음'
+  deltaSts: number       // 총 바꿔야 할 코
+  perEvent: number       // 한 성형단당 코
+  events: number         // 성형단 횟수
+  leftoverSts: number    // perEvent로 나눠떨어지지 않아 남는 코
+  baseStep: number
+  bonusStep: number
+  baseCount: number
+  bonusCount: number
+  /** 짝수 간격으로 맞추고 남아 마지막에 평평하게 뜨는 단 수 */
+  plainRows: number
+  label: string
+  /** 성형 간격이 모두 짝수단인지 */
+  evenSteps: boolean
+  /** 구간이 짧아 담을 수 없는 경우 */
+  overRange: boolean
+  minRowsNeeded: number
+  note: string
+}
+
+export function distributeShaping(
+  totalRows: number,
+  current: number,
+  target: number,
+  perEvent: number,
+  rsOnly: boolean = false,
+): ShapingResult {
+  const blank = {
+    perEvent, events: 0, leftoverSts: 0, baseStep: 0, bonusStep: 0, baseCount: 0, bonusCount: 0,
+    plainRows: 0, evenSteps: false, overRange: false, minRowsNeeded: 0, note: '',
+  }
+  const deltaSts = Math.abs(target - current)
+  if (!Number.isFinite(totalRows) || !Number.isFinite(current) || !Number.isFinite(target) ||
+      !Number.isFinite(perEvent) || totalRows < 1 || perEvent < 1) {
+    return { ...blank, type: '변화 없음', deltaSts: 0, label: '계산 불가' }
+  }
+  if (deltaSts === 0) {
+    return { ...blank, type: '변화 없음', deltaSts: 0, label: '변화 없음 (현재 = 목표) — 성형 구간 전체를 평평하게 뜹니다.' }
+  }
+  const type: '늘림' | '줄임' = target > current ? '늘림' : '줄임'
+
+  const events = Math.floor(deltaSts / perEvent)
+  const leftoverSts = deltaSts - events * perEvent
+
+  if (events === 0) {
+    return {
+      ...blank, type, deltaSts, leftoverSts,
+      label: `한 성형단당 ${perEvent}코는 총 변화량 ${deltaSts}코보다 큽니다 — 한 성형단당 코 수를 ${deltaSts}코 이하로 낮추세요.`,
+    }
+  }
+  /* RS 전용이면 최소 간격이 2단이므로 담을 수 있는 성형 횟수도 절반이 상한 */
+  const maxEvents = rsOnly ? Math.floor(totalRows / 2) : totalRows
+  if (events > maxEvents) {
+    const need = rsOnly ? events * 2 : events
+    return {
+      ...blank, type, deltaSts, events, leftoverSts, overRange: true, minRowsNeeded: need,
+      label: `성형 구간이 짧습니다 — ${deltaSts}코를 한 성형단당 ${perEvent}코씩 바꾸려면 성형단이 ${events}회 필요한데 구간이 ${totalRows}단뿐입니다${rsOnly ? '(겉면에만 성형하면 최소 2단 간격이 필요합니다)' : ''}. 구간을 ${need}단 이상으로 늘리거나 한 성형단당 코 수를 키우세요.`,
+    }
+  }
+
+  const raw = Math.floor(totalRows / events)
+  /* 평면은 짝수로 내림 — 홀수 간격은 안면(WS) 성형을 뜻해 RS 전용 관행과 어긋난다 */
+  const baseStep = rsOnly ? Math.max(2, raw - (raw % 2)) : raw
+  const remainder = totalRows - baseStep * events
+  const bumpBy = rsOnly ? 2 : 1
+  const bonusStep = baseStep + bumpBy
+  const bonusCount = Math.min(events, Math.floor(remainder / bumpBy))
+  const baseCount = events - bonusCount
+  const plainRows = remainder - bonusCount * bumpBy
+
+  const seg = (step: number, count: number) => `매 ${step}단마다 ${perEvent}코 ${type} × ${count}회`
+  const parts: string[] = []
+  if (bonusCount > 0) parts.push(seg(bonusStep, bonusCount))
+  if (baseCount > 0) parts.push(seg(baseStep, baseCount))
+  let label = parts.join(' + ')
+  if (plainRows > 0) label += ` + 마지막 ${plainRows}단은 성형 없이 평평하게`
+
+  const evenSteps = baseStep % 2 === 0 && (bonusCount === 0 || bonusStep % 2 === 0)
+  const notes: string[] = []
+  if (leftoverSts > 0) {
+    notes.push(`${perEvent}코로 나눠떨어지지 않아 ${leftoverSts}코가 남습니다 — 마지막 성형단에서 따로 처리하거나 목표 코 수를 ${leftoverSts}코 조정하세요.`)
+  }
+  if (!rsOnly && !evenSteps) {
+    notes.push('간격에 홀수 단이 섞여 있습니다. 평면 뜨기라면 [겉면에서만 성형]을 켜서 짝수 간격으로 맞추세요(원형이면 그대로 두어도 됩니다).')
+  }
+
+  return {
+    type, deltaSts, perEvent, events, leftoverSts,
+    baseStep, bonusStep, baseCount, bonusCount, plainRows,
+    label, evenSteps, overRange: false, minRowsNeeded: rsOnly ? events * 2 : events,
+    note: notes.join(' '),
+  }
+}
+
+/* ─────────────────────────────────────────────
+   무늬 반복 보정 — "multiple of X sts plus Y"
+   게이지 환산으로 나온 코 수는 대개 무늬 반복에 맞지 않는다.
+   케이블·레이스·고무단은 코 수가 반복 배수 + 가장자리 코와 맞아야 무늬가 끊기지 않는다.
+   ───────────────────────────────────────────── */
+export interface RepeatFitResult {
+  exact: boolean     // 입력 코 수가 이미 조건을 만족
+  down: number       // 조건을 만족하는 가장 가까운 작은(또는 같은) 코 수
+  up: number         // 조건을 만족하는 가장 가까운 큰(또는 같은) 코 수
+  nearest: number    // 둘 중 더 가까운 쪽
+  repeats: number    // nearest에서의 무늬 반복 횟수
+  label: string
+}
+
+export function fitToRepeat(sts: number, multiple: number, plus: number): RepeatFitResult {
+  if (!Number.isFinite(sts) || !Number.isFinite(multiple) || !Number.isFinite(plus) || multiple < 1) {
+    return { exact: true, down: sts, up: sts, nearest: sts, repeats: 0, label: '반복 단위 없음 — 환산 코 수 그대로 사용' }
+  }
+  const m = Math.round(multiple)
+  const p = Math.round(plus)
+  const nRaw = (sts - p) / m
+  const nDown = Math.max(1, Math.floor(nRaw))
+  const nUp = Math.max(1, Math.ceil(nRaw))
+  const down = m * nDown + p
+  const up = m * nUp + p
+  const exact = Number.isInteger(nRaw) && nRaw >= 1
+  const nearest = Math.abs(sts - down) <= Math.abs(up - sts) ? down : up
+  const repeats = (nearest - p) / m
+  const label = exact
+    ? `${sts}코는 이미 ${m}코 반복 + ${p}코 조건에 맞습니다 (반복 ${Math.round(nRaw)}회)`
+    : `${m}코 반복 + ${p}코 → ${down}코(반복 ${nDown}회) 또는 ${up}코(반복 ${nUp}회)`
+  return { exact, down, up, nearest, repeats, label }
 }
 
 /* ─────────────────────────────────────────────
@@ -417,8 +673,9 @@ export function estimateYarn(
   projectId: ProjectId,
   sizeId?: string,
 ): YarnEstimateResult {
-  /* 사이즈 의존 (sweater·cardigan) */
-  const sizedTable = YARN_AMOUNT_TABLE[`${yarnId}_${projectId}`]
+  /* 사이즈 의존 (sweater·cardigan). 가디건은 스웨터 표에 +5%를 얹어 유도한다. */
+  const isCardigan = projectId === 'cardigan'
+  const sizedTable = YARN_AMOUNT_TABLE[`${yarnId}_${isCardigan ? 'sweater' : projectId}`]
   if (sizedTable) {
     /* 사이즈 등급 추출 */
     const sizeIdx = sizeIdxFromId(sizeId)
@@ -429,12 +686,15 @@ export function estimateYarn(
         note: '실 양 표는 성인 XS~XL 기준입니다 — 아동용은 완성 치수 비율로 환산하거나 [아기 옷] 항목을 참고하세요.',
       }
     }
-    const grams = sizedTable[sizeIdx] ?? sizedTable[2]
+    const base = sizedTable[sizeIdx] ?? sizedTable[2]
+    /* 5g 단위로 정리 — 소수 g은 근사값에 없는 정밀도를 암시한다 */
+    const grams = isCardigan ? Math.round((base * CARDIGAN_UPLIFT) / 5) * 5 : base
     return {
       grams,
       balls50g: Math.ceil(grams / 50),
       balls100g: Math.ceil(grams / 100),
-      note: `${getYarn(yarnId).label} · ${projectLabelById(projectId)} · 사이즈 ${sizeLabel(sizeIdx)}`,
+      note: `${getYarn(yarnId).label} · ${projectLabelById(projectId)} · 사이즈 ${sizeLabel(sizeIdx)}` +
+        (isCardigan ? ` (스웨터 ${base}g + 앞단 몫 5%)` : ''),
     }
   }
 
@@ -449,8 +709,54 @@ export function estimateYarn(
     }
   }
 
-  /* 데이터 없음 */
+  /* 데이터 없음 — CYC 7(Jumbo)은 팔뚝뜨기·초대형 담요처럼 기법 편차가 커서 무게 근사표를 두지 않았다.
+     없는 값을 옆 칸에서 끌어다 쓰면 조용한 오답이 되므로 사실대로 비운다. */
+  if (yarnId === 'jumbo') {
+    return {
+      grams: 0, balls50g: 0, balls100g: 0,
+      note: 'CYC 7(Jumbo)은 기법·바늘 편차가 너무 커서 무게 근사표를 두지 않았습니다 — 실 라벨의 길이(m·yd) 표기와 패턴 표기량으로 계산하세요.',
+    }
+  }
   return { grams: 0, balls50g: 0, balls100g: 0, note: '추정 데이터 없음' }
+}
+
+/* ─────────────────────────────────────────────
+   실타래 환산 — 근사 g에서 "몇 타래"로 넘어가는 마지막 단계만이라도 실제 라벨을 쓰게 한다.
+   50g/100g 고정 표시는 내 실이 아니라 가상의 실타래를 세는 것이라 실전에서 어긋난다.
+   ───────────────────────────────────────────── */
+export interface SkeinPlanResult {
+  baseGrams: number       // 표 기반 근사
+  /** 실제로 나눗셈에 쓴 타래 무게 — 입력이 비었거나 0이면 폴백값이 들어간다.
+      화면이 입력값(0g)을 그대로 찍으면 "0g 실타래 14타래"처럼 표시와 계산 기준이 어긋난다. */
+  skeinGramsUsed: number
+  totalGrams: number      // 여유율 포함
+  skeins: number          // 필요한 타래 수 (올림)
+  neededMeters: number | null   // 라벨 길이가 있을 때 필요한 실 길이
+  buyMeters: number | null      // 타래 수로 실제 사게 되는 길이
+}
+
+export function skeinPlan(
+  baseGrams: number,
+  skeinGrams: number,
+  skeinMeters: number | null,
+  extraPct: number,
+): SkeinPlanResult {
+  const safeBase = Number.isFinite(baseGrams) && baseGrams > 0 ? baseGrams : 0
+  const safeSkeinG = Number.isFinite(skeinGrams) && skeinGrams > 0 ? skeinGrams : 50
+  const pct = Number.isFinite(extraPct) ? Math.max(0, extraPct) : 0
+  /* 500 × 1.1 = 550.0000000000001 같은 부동소수 잔여까지 올리면 1g이 부풀고 타래가 한 개 늘 수 있다.
+     유효자리 밖 잔여를 먼저 털어낸 뒤 올림한다. */
+  const totalGrams = Math.ceil(Number((safeBase * (1 + pct / 100)).toFixed(6)))
+  const skeins = totalGrams > 0 ? Math.ceil(totalGrams / safeSkeinG) : 0
+  const hasLen = skeinMeters !== null && Number.isFinite(skeinMeters) && skeinMeters > 0
+  return {
+    baseGrams: safeBase,
+    skeinGramsUsed: safeSkeinG,
+    totalGrams,
+    skeins,
+    neededMeters: hasLen ? Math.round((totalGrams / safeSkeinG) * (skeinMeters as number)) : null,
+    buyMeters: hasLen ? Math.round(skeins * (skeinMeters as number)) : null,
+  }
 }
 
 /** 사이즈 ID → 인덱스 (XS=0 ... XL=4). 성인 XS~XL 밖(키즈 등)이면 null —
@@ -528,7 +834,7 @@ export const NEEDLE_TABLE: NeedleRow[] = [
   { mm: 8.0,  usSize: '11',   ukSize: '0',  recommendedYarn: 'Bulky',        approxStsGauge: '11-14' },
   { mm: 9.0,  usSize: '13',   ukSize: '00', recommendedYarn: 'Super Bulky',  approxStsGauge: '8-12' },
   { mm: 10.0, usSize: '15',   ukSize: '000', recommendedYarn: 'Super Bulky', approxStsGauge: '7-10' },
-  { mm: 12.75, usSize: '17',  ukSize: '—',  recommendedYarn: 'Super Bulky',  approxStsGauge: '7-11' },
+  { mm: 12.75, usSize: '17',  ukSize: '—',  recommendedYarn: 'Super Bulky·Jumbo', approxStsGauge: '6-11' },
 ]
 
 /* ═════════════════════════════════════════════

@@ -5,10 +5,11 @@ import { useEffect, useMemo, useState } from 'react'
 import s from './knit-gauge.module.css'
 import {
   YARN_WEIGHTS, SIZES_FEMALE, SIZES_MALE, SIZES_KIDS, ALL_SIZES, BODY_PARTS,
-  PROJECTS, NEEDLE_TABLE, INC_DEC_GLOSSARY,
-  type GaugeUnit, type YarnId, type BodyPartId, type ProjectId,
+  PROJECTS, NEEDLE_TABLE, INC_DEC_GLOSSARY, FIT_PRESETS,
+  type GaugeUnit, type YarnId, type BodyPartId, type ProjectId, type SizeMeta,
   normalizeGauge, gaugePerCm, estimateYarnWeight, needleSizeForGauge,
-  convertPattern, sizeToCounts, distributeIncDec, estimateYarn,
+  convertPattern, sizeToCounts, distributeIncDec, distributeShaping, estimateYarn,
+  fitToRepeat, skeinPlan, fitPresetForEase, isBelowFitRange, panelWidthFor, denormalizeGauge,
   getBodyPart, getSize, getYarn,
   fmt, fmtInt, fmtSign,
 } from './knitGaugeUtils'
@@ -16,6 +17,22 @@ import {
 type Tab = 'gauge' | 'pattern' | 'size' | 'tools'
 
 const STORAGE_KEY = 'youtil_knit_gauge_v1'
+
+/**
+ * 숫자 입력 클램프.
+ * - **상한은 즉시 강제**한다. max를 두지 않으면 붙여넣은 거대값이 그대로 상태에 들어가고,
+ *   그 값이 SVG 격자 배열 길이(Array.from({length: n}))가 되면 페이지가 죽는다.
+ * - **하한은 0(또는 min이 음수면 min)까지만 막는다.** min을 즉시 강제하면
+ *   "22 → 15"로 고치려고 첫 글자 1을 치는 순간 4로 튀어 다음 글자가 45가 되어 버린다.
+ *   0 이하로 내려가도 계산 함수들이 각자 '계산 불가'·0 반환으로 방어하므로 안전하다.
+ *   여유분(ease)처럼 음수가 의미 있는 입력은 min이 음수라 그 값이 그대로 하한이 된다.
+ * - 빈 문자열·NaN은 min으로 되돌린다.
+ */
+const clampNum = (raw: string, min: number, max: number): number => {
+  const n = Number(raw)
+  if (!Number.isFinite(n)) return min
+  return Math.min(max, Math.max(Math.min(0, min), n))
+}
 
 export default function KnitGaugeClient() {
   const [tab, setTab] = useState<Tab>('gauge')
@@ -31,19 +48,37 @@ export default function KnitGaugeClient() {
   const [patternSts, setPatternSts] = useState<number>(100)
   const [patternRows, setPatternRows] = useState<number>(140)
 
+  /* 무늬 반복 — "8코 반복 + 가장자리 2코" (0 = 사용 안 함) */
+  const [repeatMultiple, setRepeatMultiple] = useState<number>(0)
+  const [repeatPlus, setRepeatPlus] = useState<number>(0)
+
   /* ═══ 탭 3: 사이즈별 ═══ */
   const [bodyPartId, setBodyPartId] = useState<BodyPartId>('sweater_body')
   const [widthCm, setWidthCm] = useState<number>(50)
   const [heightCm, setHeightCm] = useState<number>(60)
   const [easeUser, setEaseUser] = useState<number>(-0.10)
+  /* 사이즈 칩으로 고른 실제 신체 치수 (직접 입력 시 null로 풀림) */
+  const [sizeBaseId, setSizeBaseId] = useState<string | null>(null)
+  /* 완성 여유분 cm — CYC Classic fit 구간(+5~+10)의 대표값에서 시작 */
+  const [fitEaseCm, setFitEaseCm] = useState<number>(7.5)
+  const [workMode, setWorkMode] = useState<'flat' | 'round'>('flat')
 
   /* ═══ 탭 4: 늘림·줄임·실 양 ═══ */
   const [currentSts, setCurrentSts] = useState<number>(60)
   const [targetSts, setTargetSts] = useState<number>(80)
   const [incDecUnit, setIncDecUnit] = useState<'코' | '단'>('코')
+  /* 세로(단) 모드 전용 — 성형 구간 단 수 / 한 성형단당 코 수 */
+  const [shapingRows, setShapingRows] = useState<number>(60)
+  const [stsPerEvent, setStsPerEvent] = useState<number>(2)
+  /* 평면 뜨기는 겉면(RS)에서만 성형하는 것이 통상 — 켜면 간격을 짝수 단으로 맞춘다 */
+  const [rsOnly, setRsOnly] = useState<boolean>(true)
   const [yarnId, setYarnId] = useState<YarnId>('dk')
   const [projectId, setProjectId] = useState<ProjectId>('sweater')
   const [yarnSizeId, setYarnSizeId] = useState<string>('female_m')
+  /* 실타래 환산 — 가상의 50g/100g이 아니라 실제 라벨 값으로 */
+  const [skeinG, setSkeinG] = useState<number>(50)
+  const [skeinM, setSkeinM] = useState<number>(0)      // 0 = 미입력
+  const [extraPct, setExtraPct] = useState<number>(0)  // 여유율은 사용자 선택 (기본 0 — 권장치를 지어내지 않음)
 
   /* localStorage */
   useEffect(() => {
@@ -77,21 +112,34 @@ export default function KnitGaugeClient() {
       set(oneOf<YarnId>(j.yarnId, YARN_WEIGHTS.map((y) => y.id)), setYarnId)
       set(oneOf<ProjectId>(j.projectId, PROJECTS.map((p) => p.id)), setProjectId)
       set(oneOf(j.yarnSizeId, ALL_SIZES.map((sz) => sz.id)), setYarnSizeId)
+      set(num(j.repeatMultiple, 0, 60), setRepeatMultiple)
+      set(num(j.repeatPlus, 0, 60), setRepeatPlus)
+      set(num(j.fitEaseCm, -20, 40), setFitEaseCm)
+      set(oneOf<'flat' | 'round'>(j.workMode, ['flat', 'round']), setWorkMode)
+      set(num(j.shapingRows, 1, 1000), setShapingRows)
+      set(num(j.stsPerEvent, 1, 20), setStsPerEvent)
+      if (typeof j.rsOnly === 'boolean') setRsOnly(j.rsOnly)
+      set(num(j.skeinG, 1, 1000), setSkeinG)
+      set(num(j.skeinM, 0, 5000), setSkeinM)
+      set(num(j.extraPct, 0, 50), setExtraPct)
+      /* sizeBaseId는 null이 정상값이라 oneOf로 걸러 유효한 id일 때만 복원 */
+      set(oneOf(j.sizeBaseId, ALL_SIZES.map((sz) => sz.id)), setSizeBaseId)
     } catch {}
   }, [])
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         stsInput, rowsInput, unit,
-        patternStsGauge, patternRowsGauge, patternSts, patternRows,
-        bodyPartId, widthCm, heightCm, easeUser,
-        currentSts, targetSts, incDecUnit,
-        yarnId, projectId, yarnSizeId,
+        patternStsGauge, patternRowsGauge, patternSts, patternRows, repeatMultiple, repeatPlus,
+        bodyPartId, widthCm, heightCm, easeUser, sizeBaseId, fitEaseCm, workMode,
+        currentSts, targetSts, incDecUnit, shapingRows, stsPerEvent, rsOnly,
+        yarnId, projectId, yarnSizeId, skeinG, skeinM, extraPct,
       }))
     } catch {}
   }, [stsInput, rowsInput, unit, patternStsGauge, patternRowsGauge, patternSts, patternRows,
-      bodyPartId, widthCm, heightCm, easeUser, currentSts, targetSts, incDecUnit,
-      yarnId, projectId, yarnSizeId])
+      repeatMultiple, repeatPlus, bodyPartId, widthCm, heightCm, easeUser, sizeBaseId, fitEaseCm,
+      workMode, currentSts, targetSts, incDecUnit, shapingRows, stsPerEvent, rsOnly,
+      yarnId, projectId, yarnSizeId, skeinG, skeinM, extraPct])
 
   /* ═══ 정규화 — 모든 게이지를 10cm 기준으로 ═══ */
   const stsPer10cm = useMemo(() => normalizeGauge(stsInput, unit), [stsInput, unit])
@@ -99,8 +147,21 @@ export default function KnitGaugeClient() {
 
   /* 1cm·1코·1단 */
   const perCm = useMemo(() => gaugePerCm(stsPer10cm, rowsPer10cm), [stsPer10cm, rowsPer10cm])
+  /* 입력을 비우면 0이 들어온다. 0코/10cm를 그대로 추정에 넘기면 폴백이 'Jumbo · 12.75mm'라는
+     그럴듯하지만 완전히 틀린 답을 내므로, 유효 게이지가 아닐 때는 추정 자체를 보류한다. */
+  const gaugeReady = stsPer10cm > 0 && rowsPer10cm > 0
   const yarnEst = useMemo(() => estimateYarnWeight(stsPer10cm), [stsPer10cm])
   const needleEst = useMemo(() => needleSizeForGauge(stsPer10cm), [stsPer10cm])
+  /* 바늘 표에서 강조할 행 — 권장 mm에 가장 가까운 실제 호수 1개 */
+  const nearestNeedleMm = useMemo(() => {
+    let best = NEEDLE_TABLE[0].mm
+    let d = Infinity
+    for (const n of NEEDLE_TABLE) {
+      const dist = Math.abs(n.mm - needleEst.recommended)
+      if (dist < d) { d = dist; best = n.mm }
+    }
+    return best
+  }, [needleEst.recommended])
 
   /* ═══ 탭 2 결과 ═══ */
   const conversion = useMemo(
@@ -112,14 +173,43 @@ export default function KnitGaugeClient() {
     [patternStsGauge, patternRowsGauge, patternSts, patternRows, stsPer10cm, rowsPer10cm],
   )
 
+  /* 무늬 반복 보정 (0 = 사용 안 함) */
+  const repeatFit = useMemo(
+    () => (repeatMultiple >= 2 && !conversion.invalid ? fitToRepeat(conversion.newSts, repeatMultiple, repeatPlus) : null),
+    [conversion.newSts, conversion.invalid, repeatMultiple, repeatPlus],
+  )
+
   /* ═══ 탭 3 결과 ═══ */
   const bodyPart = getBodyPart(bodyPartId)
   const ease = bodyPart.ease !== undefined ? easeUser : 0
   const lengthEaseCm = bodyPart.lengthEaseCm ?? 0
+  /* 가로 입력이 '둘레'인지 '한 장의 폭'인지 — 모자·양말은 항상 둘레, 스웨터는 사용자가 선택 */
+  const canChooseMode = bodyPart.widthMeaning === 'either'
+  const effectiveMode: 'flat' | 'round' =
+    bodyPart.widthMeaning === 'circumference' ? 'round' : canChooseMode ? workMode : 'flat'
+  const widthIsCircumference = effectiveMode === 'round' || bodyPart.widthMeaning === 'circumference'
+
   const sizeResult = useMemo(
     () => sizeToCounts(widthCm, heightCm, stsPer10cm, rowsPer10cm, ease, lengthEaseCm),
     [widthCm, heightCm, stsPer10cm, rowsPer10cm, ease, lengthEaseCm],
   )
+
+  const round1 = (n: number) => Math.round(n * 10) / 10
+  const round2 = (n: number) => Math.round(n * 100) / 100
+
+  /* 측정 단위를 바꿀 때 값을 그대로 두면 22코/10cm가 22코/1cm(=220코/10cm)로 조용히 10배가 된다.
+     실제 게이지(10cm 환산값)를 유지하도록 표시값을 다시 계산한다. */
+  const changeUnit = (next: GaugeUnit) => {
+    if (next === unit) return
+    const sts10 = normalizeGauge(stsInput, unit)
+    const rows10 = normalizeGauge(rowsInput, unit)
+    setUnit(next)
+    setStsInput(round2(denormalizeGauge(sts10, next)))
+    setRowsInput(round2(denormalizeGauge(rows10, next)))
+  }
+  const baseSize = sizeBaseId ? getSize(sizeBaseId) : undefined
+  const finishedCircumference = baseSize ? baseSize.bust + fitEaseCm : null
+  const currentFit = fitPresetForEase(fitEaseCm)
 
   /* 부위 변경 시 기본값 적용 */
   const applyBodyPart = (id: BodyPartId) => {
@@ -127,27 +217,53 @@ export default function KnitGaugeClient() {
     const b = getBodyPart(id)
     setWidthCm(b.defaultW)
     setHeightCm(b.defaultH)
+    setSizeBaseId(null)
     if (b.ease !== undefined) setEaseUser(b.ease)
   }
 
-  /* 한국 사이즈 칩 적용 (가로 = 가슴/2, 세로 = length) */
+  /* 사이즈·여유분·작업 방식 중 하나라도 바뀌면 가로 치수를 다시 유도한다.
+     예전에는 칩이 무조건 '가슴/2'를 넣어서, 원형 몸통을 뜨면 둘레가 절반인 옷이 나오고
+     여유분은 아예 0(몸에 붙는 핏)으로 고정돼 있었다. */
+  const deriveWidth = (sz: SizeMeta, easeCm: number, mode: 'flat' | 'round') =>
+    round1(panelWidthFor(sz.bust + easeCm, mode))
+
+  /** 사이즈 칩은 항상 스웨터 몸통 기준이다 — 모자·양말에서 눌러도 부위를 스웨터로 옮긴다.
+      스웨터 몸통은 widthMeaning이 'either'라 유도 기준은 언제나 사용자가 고른 workMode다. */
   const applySize = (sizeId: string) => {
     const sz = getSize(sizeId)
     if (!sz) return
     setBodyPartId('sweater_body')
-    setWidthCm(sz.bust / 2)
+    setSizeBaseId(sizeId)
+    setWidthCm(deriveWidth(sz, fitEaseCm, workMode))
     setHeightCm(sz.length)
-    setEaseUser(0)
+  }
+
+  const applyFitEase = (cm: number) => {
+    setFitEaseCm(cm)
+    if (baseSize) setWidthCm(deriveWidth(baseSize, cm, effectiveMode))
+  }
+
+  const applyWorkMode = (m: 'flat' | 'round') => {
+    setWorkMode(m)
+    if (baseSize) setWidthCm(deriveWidth(baseSize, fitEaseCm, m))
   }
 
   /* ═══ 탭 4 결과 ═══ */
   const incDecResult = useMemo(
-    () => distributeIncDec(currentSts, targetSts, incDecUnit),
-    [currentSts, targetSts, incDecUnit],
+    () => distributeIncDec(currentSts, targetSts),
+    [currentSts, targetSts],
+  )
+  const shapingResult = useMemo(
+    () => distributeShaping(shapingRows, currentSts, targetSts, stsPerEvent, rsOnly),
+    [shapingRows, currentSts, targetSts, stsPerEvent, rsOnly],
   )
   const yarnEstimate = useMemo(
     () => estimateYarn(yarnId, projectId, yarnSizeId),
     [yarnId, projectId, yarnSizeId],
+  )
+  const skeins = useMemo(
+    () => skeinPlan(yarnEstimate.grams, skeinG, skeinM > 0 ? skeinM : null, extraPct),
+    [yarnEstimate.grams, skeinG, skeinM, extraPct],
   )
 
   return (
@@ -168,8 +284,8 @@ export default function KnitGaugeClient() {
       {tab === 'gauge' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>측정 단위</span>
-            <div className={s.unitRow}>
+            <span className={s.cardLabel} id="knit-gauge-unit-label">측정 단위</span>
+            <div className={s.unitRow} role="group" aria-labelledby="knit-gauge-unit-label">
               {([
                 { id: '10cm',  label: '10×10cm (한국·유럽 표준)' },
                 { id: '4inch', label: '4×4인치 (미국)' },
@@ -177,8 +293,9 @@ export default function KnitGaugeClient() {
               ] as { id: GaugeUnit; label: string }[]).map((u) => (
                 <button type="button"
                   key={u.id}
+                  aria-pressed={unit === u.id}
                   className={`${s.unitBtn} ${unit === u.id ? s.unitBtnActive : ''}`}
-                  onClick={() => setUnit(u.id)}
+                  onClick={() => changeUnit(u.id)}
                 >
                   {u.label}
                 </button>
@@ -192,24 +309,25 @@ export default function KnitGaugeClient() {
             {/* 코 게이지 */}
             <div className={s.field}>
               <div className={s.fieldHead}>
-                <label className={s.fieldLabel}>코 수 (가로) / {unit === '4inch' ? '4 inch' : unit === '1cm' ? '1 cm' : '10 cm'}</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="knit-gauge-sts">코 수 (가로) / {unit === '4inch' ? '4 inch' : unit === '1cm' ? '1 cm' : '10 cm'}</label>
+                <input id="knit-gauge-sts"
                   type="number" inputMode="decimal"
                   value={stsInput}
                   min={unit === '1cm' ? 0.5 : 4}
                   max={unit === '1cm' ? 8 : 60}
                   step={unit === '1cm' ? 0.1 : 0.5}
-                  onChange={(e) => setStsInput(Math.max(0.1, Number(e.target.value) || 0))}
+                  onChange={(e) => setStsInput(clampNum(e.target.value, unit === '1cm' ? 0.5 : 4, unit === '1cm' ? 8 : 60))}
                   className={s.numInput}
                 />
               </div>
               <input
+                aria-label="코 게이지 슬라이더"
                 type="range"
                 min={unit === '1cm' ? 0.5 : 4}
                 max={unit === '1cm' ? 8 : 60}
                 step={unit === '1cm' ? 0.1 : 0.5}
                 value={stsInput}
-                onChange={(e) => setStsInput(Number(e.target.value))}
+                onChange={(e) => setStsInput(clampNum(e.target.value, unit === '1cm' ? 0.5 : 4, unit === '1cm' ? 8 : 60))}
                 className={s.slider}
               />
             </div>
@@ -217,24 +335,25 @@ export default function KnitGaugeClient() {
             {/* 단 게이지 */}
             <div className={s.field}>
               <div className={s.fieldHead}>
-                <label className={s.fieldLabel}>단 수 (세로) / {unit === '4inch' ? '4 inch' : unit === '1cm' ? '1 cm' : '10 cm'}</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="knit-gauge-rows">단 수 (세로) / {unit === '4inch' ? '4 inch' : unit === '1cm' ? '1 cm' : '10 cm'}</label>
+                <input id="knit-gauge-rows"
                   type="number" inputMode="decimal"
                   value={rowsInput}
                   min={unit === '1cm' ? 0.5 : 4}
                   max={unit === '1cm' ? 10 : 80}
                   step={unit === '1cm' ? 0.1 : 0.5}
-                  onChange={(e) => setRowsInput(Math.max(0.1, Number(e.target.value) || 0))}
+                  onChange={(e) => setRowsInput(clampNum(e.target.value, unit === '1cm' ? 0.5 : 4, unit === '1cm' ? 10 : 80))}
                   className={s.numInput}
                 />
               </div>
               <input
+                aria-label="단 게이지 슬라이더"
                 type="range"
                 min={unit === '1cm' ? 0.5 : 4}
                 max={unit === '1cm' ? 10 : 80}
                 step={unit === '1cm' ? 0.1 : 0.5}
                 value={rowsInput}
-                onChange={(e) => setRowsInput(Number(e.target.value))}
+                onChange={(e) => setRowsInput(clampNum(e.target.value, unit === '1cm' ? 0.5 : 4, unit === '1cm' ? 10 : 80))}
                 className={s.slider}
               />
             </div>
@@ -277,11 +396,17 @@ export default function KnitGaugeClient() {
             </div>
             <div className={s.heroRight}>
               <p className={s.heroLabel}>실 굵기 추정</p>
-              <p className={s.heroEst}>{yarnEst.shortLabel}</p>
+              <p className={s.heroEst}>{gaugeReady ? yarnEst.shortLabel : '—'}</p>
               <p className={s.heroSub}>
-                CYC {yarnEst.cyc}<br />
-                권장 바늘 {fmt(needleEst.recommended, 2)}mm<br />
-                <span className={s.muted}>({needleEst.min}–{needleEst.max} mm)</span>
+                {gaugeReady ? (
+                  <>
+                    CYC {yarnEst.cyc} · {yarnEst.cycName}<br />
+                    권장 바늘 {fmt(needleEst.recommended, 2)}mm{needleEst.label ? ' 이상' : ''}<br />
+                    <span className={s.muted}>
+                      ({needleEst.label ? `${needleEst.min}mm 이상` : `${needleEst.min}–${needleEst.max} mm`})
+                    </span>
+                  </>
+                ) : '코·단 수를 입력하세요'}
               </p>
             </div>
           </div>
@@ -329,7 +454,7 @@ export default function KnitGaugeClient() {
                 <input id="knit-gauge-cm"
                   type="number" inputMode="decimal" min={4} max={60} step={0.5}
                   value={patternStsGauge}
-                  onChange={(e) => setPatternStsGauge(Math.max(1, Number(e.target.value) || 1))}
+                  onChange={(e) => setPatternStsGauge(clampNum(e.target.value, 4, 60))}
                   className={s.numInput}
                 />
               </div>
@@ -338,7 +463,7 @@ export default function KnitGaugeClient() {
                 <input id="knit-gauge-cm-2"
                   type="number" inputMode="decimal" min={4} max={80} step={0.5}
                   value={patternRowsGauge}
-                  onChange={(e) => setPatternRowsGauge(Math.max(1, Number(e.target.value) || 1))}
+                  onChange={(e) => setPatternRowsGauge(clampNum(e.target.value, 4, 80))}
                   className={s.numInput}
                 />
               </div>
@@ -347,18 +472,18 @@ export default function KnitGaugeClient() {
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="knit-gauge-start">패턴 코 수 (예: 시작 코)</label>
                 <input id="knit-gauge-start"
-                  type="number" inputMode="decimal" min={1} max={1000}
+                  type="number" inputMode="numeric" step={1} min={1} max={1000}
                   value={patternSts}
-                  onChange={(e) => setPatternSts(Math.max(1, Number(e.target.value) || 1))}
+                  onChange={(e) => setPatternSts(clampNum(e.target.value, 1, 1000))}
                   className={s.numInput}
                 />
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="knit-gauge-length">패턴 단 수 (총 길이)</label>
                 <input id="knit-gauge-length"
-                  type="number" inputMode="decimal" min={1} max={5000}
+                  type="number" inputMode="numeric" step={1} min={1} max={5000}
                   value={patternRows}
-                  onChange={(e) => setPatternRows(Math.max(1, Number(e.target.value) || 1))}
+                  onChange={(e) => setPatternRows(clampNum(e.target.value, 1, 5000))}
                   className={s.numInput}
                 />
               </div>
@@ -378,13 +503,25 @@ export default function KnitGaugeClient() {
           <div className={s.heroCard}>
             <div className={s.heroPrimary}>
               <p className={s.heroLabel}>내 게이지로 환산</p>
-              <p className={s.heroBig}>
-                <span className={s.heroNum}>{conversion.newSts}</span> 코{' '}
-                × <span className={s.heroNum}>{conversion.newRows}</span> 단
+              <p className={s.heroBig} role="status">
+                {conversion.invalid ? (
+                  <span className={s.heroNum}>—</span>
+                ) : (
+                  <>
+                    <span className={s.heroNum}>{conversion.newSts}</span> 코{' '}
+                    × <span className={s.heroNum}>{conversion.newRows}</span> 단
+                  </>
+                )}
               </p>
               <p className={s.heroSub}>
-                패턴 {patternSts}코 → <strong>{conversion.newSts}코</strong> ({fmtSign(conversion.newSts - patternSts, 0)})<br />
-                패턴 {patternRows}단 → <strong>{conversion.newRows}단</strong> ({fmtSign(conversion.newRows - patternRows, 0)})
+                {conversion.invalid ? (
+                  '게이지를 0보다 큰 값으로 입력하세요.'
+                ) : (
+                  <>
+                    패턴 {patternSts}코 → <strong>{conversion.newSts}코</strong> ({fmtSign(conversion.newSts - patternSts, 0)})<br />
+                    패턴 {patternRows}단 → <strong>{conversion.newRows}단</strong> ({fmtSign(conversion.newRows - patternRows, 0)})
+                  </>
+                )}
               </p>
             </div>
             <div className={s.heroRight}>
@@ -394,6 +531,61 @@ export default function KnitGaugeClient() {
                 단 {fmtSign(conversion.rowsDeltaPct, 1)}%
               </p>
             </div>
+          </div>
+
+          {/* 무늬 반복 보정 — 환산 코 수는 대개 무늬 배수에 맞지 않는다 */}
+          <div className={s.card}>
+            <span className={s.cardLabel}>무늬 반복 보정 (선택)</span>
+            <p className={s.hint} style={{ marginTop: 0 }}>
+              도안에 <strong>&ldquo;8코 반복 + 가장자리 2코&rdquo;</strong>(multiple of 8 sts plus 2) 같은 조건이 있으면 입력하세요.
+              케이블·레이스·고무단은 코 수가 이 조건에 맞아야 무늬가 끊기지 않습니다.
+            </p>
+            <div className={s.gridTwo}>
+              <div className={s.field}>
+                <label className={s.fieldLabel} htmlFor="knit-gauge-repeat">무늬 반복 단위 (코) — 0 = 사용 안 함</label>
+                <input id="knit-gauge-repeat"
+                  type="number" inputMode="numeric" min={0} max={60}
+                  value={repeatMultiple}
+                  onChange={(e) => setRepeatMultiple(clampNum(e.target.value, 0, 60))}
+                  className={s.numInput}
+                />
+              </div>
+              <div className={s.field}>
+                <label className={s.fieldLabel} htmlFor="knit-gauge-repeat-plus">가장자리 등 추가 코</label>
+                <input id="knit-gauge-repeat-plus"
+                  type="number" inputMode="numeric" min={0} max={60}
+                  value={repeatPlus}
+                  onChange={(e) => setRepeatPlus(clampNum(e.target.value, 0, 60))}
+                  className={s.numInput}
+                />
+              </div>
+            </div>
+
+            {repeatFit && (
+              <div className={s.resultBox} role="status">
+                {repeatFit.exact ? (
+                  <>
+                    <p className={s.resultLabel}>✓ 환산 {conversion.newSts}코 그대로 사용 가능</p>
+                    <p className={s.resultText}>{repeatFit.label}</p>
+                  </>
+                ) : (
+                  <>
+                    <p className={s.resultLabel}>
+                      {conversion.newSts}코 → <strong>{repeatFit.nearest}코</strong> 권장 (무늬 {repeatFit.repeats}회 반복)
+                    </p>
+                    <p className={s.resultText}>
+                      {repeatFit.label}<br />
+                      <span className={s.muted}>
+                        환산값 대비 폭 차이 {fmtSign(((repeatFit.nearest - conversion.newSts) / (stsPer10cm || 1)) * 10, 1)}cm
+                        {repeatFit.down < conversion.newSts && repeatFit.up > conversion.newSts
+                          ? ` — ${repeatFit.down}코는 살짝 좁고 ${repeatFit.up}코는 살짝 넓습니다.`
+                          : ` — 반복 1회분보다 코 수가 적어 ${repeatFit.nearest}코가 가능한 최소 코 수입니다.`}
+                      </span>
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           {/* 코칭 */}
@@ -413,11 +605,12 @@ export default function KnitGaugeClient() {
       {tab === 'size' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>부위 선택</span>
-            <div className={s.bodyPartRow}>
+            <span className={s.cardLabel} id="knit-gauge-part-label">부위 선택</span>
+            <div className={s.bodyPartRow} role="group" aria-labelledby="knit-gauge-part-label">
               {BODY_PARTS.map((b) => (
                 <button type="button"
                   key={b.id}
+                  aria-pressed={bodyPartId === b.id}
                   className={`${s.bodyPartBtn} ${bodyPartId === b.id ? s.bodyPartBtnActive : ''}`}
                   onClick={() => applyBodyPart(b.id)}
                 >
@@ -428,40 +621,122 @@ export default function KnitGaugeClient() {
             <p className={s.hint}>{bodyPart.note}</p>
           </div>
 
+          {/* 작업 방식 — 이 선택이 시작 코 수의 의미를 바꾼다 */}
+          {canChooseMode && (
+            <div className={s.card}>
+              <span className={s.cardLabel} id="knit-gauge-mode-label">작업 방식</span>
+              <div className={s.unitRow} role="group" aria-labelledby="knit-gauge-mode-label">
+                <button type="button"
+                  aria-pressed={workMode === 'flat'}
+                  className={`${s.unitBtn} ${workMode === 'flat' ? s.unitBtnActive : ''}`}
+                  onClick={() => applyWorkMode('flat')}
+                >{bodyPartId === 'sweater_body' ? '평면 — 앞·뒤판 따로' : '평면 — 펼쳐 뜨고 봉합'}</button>
+                <button type="button"
+                  aria-pressed={workMode === 'round'}
+                  className={`${s.unitBtn} ${workMode === 'round' ? s.unitBtnActive : ''}`}
+                  onClick={() => applyWorkMode('round')}
+                >{bodyPartId === 'sweater_body' ? '원형 — 한 번에' : '원형 — 통으로'}</button>
+              </div>
+              <p className={s.hint}>
+                💡 평면은 완성 둘레의 <strong>절반</strong>이 한 장의 폭이고, 원형은 <strong>완성 둘레 전체</strong>를
+                한 번에 잡습니다. 같은 부위라도 원형 시작 코 수가 평면 한 장의 약 2배입니다.
+                {' '}평면은 봉합에 각 조각 1코씩(이음매당 2코)이 접혀 들어가므로 도안에 따라 셀비지 코가 더해집니다.
+              </p>
+            </div>
+          )}
+
+          {/* 완성 여유분 — CYC 「Bust/Chest Fit and Ease Chart」
+              CYC의 여유분 권장은 **가슴둘레에만** 있으므로 소매에는 띄우지 않는다
+              (소매·암홀·힙에 대한 CYC 여유분 수치는 존재하지 않는다). */}
+          {bodyPartId === 'sweater_body' && (
+            <div className={s.card}>
+              <span className={s.cardLabel}>완성 여유분 (ease)</span>
+              <div className={s.quickRow}>
+                {FIT_PRESETS.map((f) => (
+                  <button type="button"
+                    key={f.id}
+                    aria-pressed={currentFit?.id === f.id}
+                    className={`${s.quickChip} ${currentFit?.id === f.id ? s.quickChipActive : ''}`}
+                    onClick={() => applyFitEase(f.applyCm)}
+                    title={f.desc}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+              <div className={s.field}>
+                <div className={s.fieldHead}>
+                  <label className={s.fieldLabel} htmlFor="knit-gauge-fit-ease">여유분 (cm)</label>
+                  <span className={s.easeValue}>{fmtSign(fitEaseCm, 1)} cm</span>
+                </div>
+                <input id="knit-gauge-fit-ease"
+                  type="range" min={-12} max={30} step={0.5}
+                  value={fitEaseCm}
+                  onChange={(e) => applyFitEase(clampNum(e.target.value, -12, 30))}
+                  className={s.slider}
+                />
+                <p className={s.hint}>
+                  {currentFit
+                    ? <>현재 <strong>{currentFit.label}</strong>({currentFit.cycName}) — {currentFit.desc}</>
+                    : isBelowFitRange(fitEaseCm)
+                      ? <>CYC가 제시한 <strong>가장 작은 구간(−10cm)보다도 작은</strong> 값입니다. 그대로 써도 되지만 CYC 구간명은 붙지 않습니다.</>
+                      : <>CYC가 대표값만 제시해 <strong>등급 사이 공백</strong>에 해당하는 값입니다(−5~0cm, 0~+5cm). 그대로 써도 되지만 CYC 구간명은 붙지 않습니다.</>}
+                  <br />
+                  CYC 「Bust/Chest Fit and Ease Chart」 기준 — 여유분은 <strong>가슴둘레에만</strong> 정해져 있고,
+                  CYC 스스로 이 표를 규정이 아니라 가이드라인이라고 밝힙니다.
+                </p>
+              </div>
+              {baseSize && finishedCircumference !== null && (
+                <p className={s.resultText}>
+                  📐 {baseSize.label} 실제 가슴 {baseSize.bust}cm {fitEaseCm >= 0 ? '+' : '−'} {fmt(Math.abs(fitEaseCm), 1)}cm
+                  {' '}= <strong>완성 둘레 {fmt(finishedCircumference, 1)}cm</strong>
+                  {' → '}
+                  {effectiveMode === 'round'
+                    ? <>원형이므로 <strong>둘레 {fmt(finishedCircumference, 1)}cm</strong> 전체를 한 번에</>
+                    : <>평면이므로 <strong>한 장 {fmt(finishedCircumference / 2, 1)}cm</strong> × 2장</>}
+                </p>
+              )}
+            </div>
+          )}
+
           <div className={s.card}>
             <span className={s.cardLabel}>치수 입력</span>
             <div className={s.gridTwo}>
               <div className={s.field}>
                 <div className={s.fieldHead}>
-                  <label className={s.fieldLabel}>가로 (cm)</label>
-                  <input
+                  <label className={s.fieldLabel} htmlFor="knit-gauge-width">
+                    {widthIsCircumference ? '둘레 (cm)' : '가로 폭 (cm)'}
+                  </label>
+                  <input id="knit-gauge-width"
                     type="number" inputMode="decimal" min={1} max={300} step={0.5}
                     value={widthCm}
-                    onChange={(e) => setWidthCm(Math.max(1, Number(e.target.value) || 1))}
+                    onChange={(e) => { setWidthCm(clampNum(e.target.value, 1, 300)); setSizeBaseId(null) }}
                     className={s.numInput}
                   />
                 </div>
                 <input
-                  type="range" min={1} max={200} step={0.5}
+                  aria-label={widthIsCircumference ? '둘레 슬라이더' : '가로 폭 슬라이더'}
+                  type="range" min={1} max={300} step={0.5}
                   value={widthCm}
-                  onChange={(e) => setWidthCm(Number(e.target.value))}
+                  onChange={(e) => { setWidthCm(clampNum(e.target.value, 1, 300)); setSizeBaseId(null) }}
                   className={s.slider}
                 />
               </div>
               <div className={s.field}>
                 <div className={s.fieldHead}>
-                  <label className={s.fieldLabel}>세로 (cm)</label>
-                  <input
+                  <label className={s.fieldLabel} htmlFor="knit-gauge-height">세로 (cm)</label>
+                  <input id="knit-gauge-height"
                     type="number" inputMode="decimal" min={1} max={300} step={0.5}
                     value={heightCm}
-                    onChange={(e) => setHeightCm(Math.max(1, Number(e.target.value) || 1))}
+                    onChange={(e) => setHeightCm(clampNum(e.target.value, 1, 300))}
                     className={s.numInput}
                   />
                 </div>
                 <input
-                  type="range" min={1} max={200} step={0.5}
+                  aria-label="세로 슬라이더"
+                  type="range" min={1} max={300} step={0.5}
                   value={heightCm}
-                  onChange={(e) => setHeightCm(Number(e.target.value))}
+                  onChange={(e) => setHeightCm(clampNum(e.target.value, 1, 300))}
                   className={s.slider}
                 />
               </div>
@@ -491,12 +766,21 @@ export default function KnitGaugeClient() {
 
           {/* 빠른 사이즈 칩 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>한국 표준 사이즈 — 클릭 시 가로(가슴/2) + 세로(길이) 자동 적용</span>
+            <span className={s.cardLabel}>
+              참고 치수 (스웨터 몸통 기준) — 클릭 시 [실제 가슴둘레 + 여유분]에서 {workMode === 'round' ? '둘레와' : '한 장 폭과'} 길이를 자동 계산
+            </span>
+            <p className={s.hint} style={{ marginTop: 0 }}>
+              표의 가슴둘레는 <strong>몸을 잰 치수</strong>입니다. 칩을 누르면 위에서 고른 여유분을 더해 완성 치수로 바꾼 뒤
+              작업 방식에 맞는 가로 치수를 넣습니다. 다른 부위를 보던 중에 누르면 <strong>스웨터 몸통으로 전환</strong>됩니다.
+            </p>
             <div className={s.sizeChipGroup}>
               <p className={s.sizeChipLabel}>여성</p>
               <div className={s.sizeChipRow}>
                 {SIZES_FEMALE.map((sz) => (
-                  <button type="button" key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
+                  <button type="button" key={sz.id}
+                    aria-pressed={sizeBaseId === sz.id}
+                    className={`${s.sizeChip} ${sizeBaseId === sz.id ? s.sizeChipActive : ''}`}
+                    onClick={() => applySize(sz.id)}>
                     {sz.label}
                   </button>
                 ))}
@@ -506,7 +790,10 @@ export default function KnitGaugeClient() {
               <p className={s.sizeChipLabel}>남성</p>
               <div className={s.sizeChipRow}>
                 {SIZES_MALE.map((sz) => (
-                  <button type="button" key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
+                  <button type="button" key={sz.id}
+                    aria-pressed={sizeBaseId === sz.id}
+                    className={`${s.sizeChip} ${sizeBaseId === sz.id ? s.sizeChipActive : ''}`}
+                    onClick={() => applySize(sz.id)}>
                     {sz.label}
                   </button>
                 ))}
@@ -516,7 +803,10 @@ export default function KnitGaugeClient() {
               <p className={s.sizeChipLabel}>키즈</p>
               <div className={s.sizeChipRow}>
                 {SIZES_KIDS.map((sz) => (
-                  <button type="button" key={sz.id} className={s.sizeChip} onClick={() => applySize(sz.id)}>
+                  <button type="button" key={sz.id}
+                    aria-pressed={sizeBaseId === sz.id}
+                    className={`${s.sizeChip} ${sizeBaseId === sz.id ? s.sizeChipActive : ''}`}
+                    onClick={() => applySize(sz.id)}>
                     {sz.label}
                   </button>
                 ))}
@@ -527,14 +817,20 @@ export default function KnitGaugeClient() {
           {/* 결과 */}
           <div className={s.heroCard}>
             <div className={s.heroPrimary}>
-              <p className={s.heroLabel}>시작 코 수 × 총 단 수</p>
-              <p className={s.heroBig}>
+              <p className={s.heroLabel}>
+                {widthIsCircumference ? '시작 코 수 (둘레 한 바퀴) × 총 단 수' : '시작 코 수 (한 장) × 총 단 수'}
+              </p>
+              <p className={s.heroBig} role="status">
                 <span className={s.heroNum}>{sizeResult.sts}</span> 코{' '}
                 × <span className={s.heroNum}>{sizeResult.rows}</span> 단
               </p>
               <p className={s.heroSub}>
-                {fmt(widthCm, 1)} × {fmt(heightCm, 1)} cm{ease !== 0 ? ` (신축 ${(ease * 100).toFixed(0)}%)` : ''}
+                {widthIsCircumference ? '둘레' : '폭'} {fmt(widthCm, 1)} × 길이 {fmt(heightCm, 1)} cm
+                {ease !== 0 ? ` (신축 ${(ease * 100).toFixed(0)}%)` : ''}
                 <br />
+                {effectiveMode === 'flat' && bodyPartId === 'sweater_body' && (
+                  <>앞·뒤판 두 장 합계 <strong>{sizeResult.sts * 2}코</strong> · 봉합 시접은 별도<br /></>
+                )}
                 실수치: {fmt(sizeResult.stsRaw, 1)}코 × {fmt(sizeResult.rowsRaw, 1)}단
               </p>
             </div>
@@ -561,46 +857,125 @@ export default function KnitGaugeClient() {
             <span className={s.cardLabel}>늘림 / 줄임 균등 분배</span>
             <div className={s.gridTwo}>
               <div className={s.field}>
-                <label className={s.fieldLabel} htmlFor="knit-gauge-current">현재 코 수</label>
+                <label className={s.fieldLabel} htmlFor="knit-gauge-current">
+                  {incDecUnit === '단' ? '구간 시작 코 수' : '현재 코 수'}
+                </label>
                 <input id="knit-gauge-current"
-                  type="number" inputMode="decimal" min={1} max={1000}
+                  type="number" inputMode="numeric" step={1} min={1} max={1000}
                   value={currentSts}
-                  onChange={(e) => setCurrentSts(Math.max(1, Number(e.target.value) || 1))}
+                  onChange={(e) => setCurrentSts(clampNum(e.target.value, 1, 1000))}
                   className={s.numInput}
                 />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel} htmlFor="knit-gauge-goal">목표 코 수</label>
+                <label className={s.fieldLabel} htmlFor="knit-gauge-goal">
+                  {incDecUnit === '단' ? '구간 끝 코 수' : '목표 코 수'}
+                </label>
                 <input id="knit-gauge-goal"
-                  type="number" inputMode="decimal" min={1} max={1000}
+                  type="number" inputMode="numeric" step={1} min={1} max={1000}
                   value={targetSts}
-                  onChange={(e) => setTargetSts(Math.max(1, Number(e.target.value) || 1))}
+                  onChange={(e) => setTargetSts(clampNum(e.target.value, 1, 1000))}
                   className={s.numInput}
                 />
               </div>
             </div>
             <div className={s.field}>
-              <label className={s.fieldLabel}>분배 단위</label>
-              <div className={s.unitRow}>
+              <span className={s.fieldLabel} id="knit-gauge-dir-label">분배 방향</span>
+              <div className={s.unitRow} role="group" aria-labelledby="knit-gauge-dir-label">
                 <button type="button"
                   aria-pressed={incDecUnit === '코'}
                   className={`${s.unitBtn} ${incDecUnit === '코' ? s.unitBtnActive : ''}`}
                   onClick={() => setIncDecUnit('코')}
-                >코 (가로 분배)</button>
+                >가로 — 한 단 안에서 (고무단→몸판)</button>
                 <button type="button"
                   aria-pressed={incDecUnit === '단'}
                   className={`${s.unitBtn} ${incDecUnit === '단' ? s.unitBtnActive : ''}`}
                   onClick={() => setIncDecUnit('단')}
-                >단 (세로 분배)</button>
+                >세로 — 여러 단에 걸쳐 (소매·래글런)</button>
               </div>
+              <p className={s.hint}>
+                {incDecUnit === '코'
+                  ? '고무단을 끝내고 몸판으로 넘어갈 때처럼 한 단 안에서 코 수를 한 번에 맞추는 경우입니다.'
+                  : '소매·래글런처럼 여러 단에 걸쳐 조금씩 성형하는 경우입니다. 아래에 성형 구간의 단 수와 한 성형단당 코 수를 넣으세요.'}
+              </p>
             </div>
 
-            <div className={s.resultBox}>
-              <p className={s.resultLabel}>
-                {incDecResult.type} {incDecResult.delta}{incDecUnit}
-              </p>
-              <p className={s.resultText}>{incDecResult.label}</p>
-            </div>
+            {/* 세로 모드 전용 입력 — 가로와 필요한 정보 자체가 다르다 */}
+            {incDecUnit === '단' && (
+              <div className={s.gridTwo}>
+                <div className={s.field}>
+                  <label className={s.fieldLabel} htmlFor="knit-gauge-shaping-rows">성형할 총 단 수</label>
+                  <input id="knit-gauge-shaping-rows"
+                    type="number" inputMode="numeric" min={1} max={1000}
+                    value={shapingRows}
+                    onChange={(e) => setShapingRows(clampNum(e.target.value, 1, 1000))}
+                    className={s.numInput}
+                  />
+                </div>
+                <div className={s.field}>
+                  <label className={s.fieldLabel} htmlFor="knit-gauge-per-event">한 성형단당 코 수</label>
+                  <input id="knit-gauge-per-event"
+                    type="number" inputMode="numeric" min={1} max={20}
+                    value={stsPerEvent}
+                    onChange={(e) => setStsPerEvent(clampNum(e.target.value, 1, 20))}
+                    className={s.numInput}
+                  />
+                  <p className={s.hint} style={{ marginTop: 4 }}>
+                    좌우 양끝에서 1코씩이면 <strong>2</strong>(소매), 래글런 라인 4개에서 각 2코면 <strong>8</strong>.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {incDecUnit === '단' && (
+              <div className={s.field}>
+                <span className={s.fieldLabel} id="knit-gauge-rs-label">성형단 위치</span>
+                <div className={s.unitRow} role="group" aria-labelledby="knit-gauge-rs-label">
+                  <button type="button"
+                    aria-pressed={rsOnly}
+                    className={`${s.unitBtn} ${rsOnly ? s.unitBtnActive : ''}`}
+                    onClick={() => setRsOnly(true)}
+                  >평면 — 겉면(RS)에서만</button>
+                  <button type="button"
+                    aria-pressed={!rsOnly}
+                    className={`${s.unitBtn} ${!rsOnly ? s.unitBtnActive : ''}`}
+                    onClick={() => setRsOnly(false)}
+                  >원형 — 제약 없음</button>
+                </div>
+                <p className={s.hint}>
+                  평면 뜨기에서 겉면 단에만 성형하면 간격이 <strong>짝수 단</strong>이어야 합니다(대부분의 니터가 쓰는 방식이며,
+                  엄밀한 규칙은 아닙니다). 원형은 겉·안면 교대가 없어 홀수 간격도 그대로 쓸 수 있습니다.
+                </p>
+              </div>
+            )}
+
+            {incDecUnit === '코' ? (
+              <div className={s.resultBox} role="status">
+                <p className={s.resultLabel}>
+                  {incDecResult.type} {incDecResult.delta}코
+                </p>
+                <p className={s.resultText}>{incDecResult.label}</p>
+              </div>
+            ) : (
+              <div className={s.resultBox} role="status">
+                <p className={s.resultLabel}>
+                  {shapingResult.type}
+                  {shapingResult.deltaSts > 0 && ` ${shapingResult.deltaSts}코`}
+                  {!shapingResult.overRange && shapingResult.events > 0 && ` · 성형단 ${shapingResult.events}회 / ${shapingRows}단`}
+                </p>
+                <p className={s.resultText}>{shapingResult.label}</p>
+                {shapingResult.note && (
+                  <p className={s.warnText} style={{ marginTop: 8 }}>⚠️ {shapingResult.note}</p>
+                )}
+                {!shapingResult.overRange && shapingResult.events > 0 && (
+                  <p className={s.muted} style={{ fontSize: 12, marginTop: 8 }}>
+                    성형단 사이는 평평하게 뜹니다. 간격 × 횟수
+                    {shapingResult.plainRows > 0 && ` + 마지막 평평 구간 ${shapingResult.plainRows}단`}
+                    을 모두 더하면 {shapingRows}단이 됩니다.
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* 약어 용어집 */}
             <details className={s.glossary}>
@@ -659,25 +1034,74 @@ export default function KnitGaugeClient() {
 
             {yarnEstimate.grams > 0 ? (
               <>
+                {/* 내가 살 실의 라벨 값으로 타래를 센다 — 가상의 50g/100g 표시는 실전과 어긋난다 */}
+                <div className={s.gridTwo}>
+                  <div className={s.field}>
+                    <label className={s.fieldLabel} htmlFor="knit-gauge-skein-g">실타래 1개 무게 (g) — 라벨</label>
+                    <input id="knit-gauge-skein-g"
+                      type="number" inputMode="numeric" min={1} max={1000}
+                      value={skeinG}
+                      onChange={(e) => setSkeinG(clampNum(e.target.value, 1, 1000))}
+                      className={s.numInput}
+                    />
+                  </div>
+                  <div className={s.field}>
+                    <label className={s.fieldLabel} htmlFor="knit-gauge-skein-m">실타래 1개 길이 (m) — 선택</label>
+                    <input id="knit-gauge-skein-m"
+                      type="number" inputMode="numeric" min={0} max={5000}
+                      value={skeinM}
+                      onChange={(e) => setSkeinM(clampNum(e.target.value, 0, 5000))}
+                      className={s.numInput}
+                    />
+                  </div>
+                </div>
+                <div className={s.field}>
+                  <div className={s.fieldHead}>
+                    <label className={s.fieldLabel} htmlFor="knit-gauge-extra">구매 여유율</label>
+                    <span className={s.easeValue}>+{extraPct}%</span>
+                  </div>
+                  <input id="knit-gauge-extra"
+                    type="range" min={0} max={40} step={5}
+                    value={extraPct}
+                    onChange={(e) => setExtraPct(clampNum(e.target.value, 0, 40))}
+                    className={s.slider}
+                  />
+                  <p className={s.hint} style={{ marginTop: 4 }}>
+                    케이블·컬러워크는 실을 더 쓰고, 같은 다이로트(dye lot)로 한 번에 사야 색이 맞습니다.
+                    표준 권장치는 없으므로 직접 정하세요.
+                  </p>
+                </div>
+
                 <div className={s.yarnEstResult} role="status">
                   <div className={s.yarnEstNum}>
-                    <p className={s.yarnEstLabel}>총 권장 양</p>
-                    <p className={s.yarnEstBig}>{fmtInt(yarnEstimate.grams)} g</p>
+                    <p className={s.yarnEstLabel}>대략 필요량 (추정)</p>
+                    <p className={s.yarnEstBig}>{fmtInt(skeins.totalGrams)} g</p>
                   </div>
                   <div className={s.yarnEstBalls}>
-                    <p className={s.yarnEstBallText}>50g 실타래 <strong>{yarnEstimate.balls50g}타래</strong></p>
-                    <p className={s.yarnEstBallText}>100g 실타래 <strong>{yarnEstimate.balls100g}타래</strong></p>
+                    <p className={s.yarnEstBallText}>{skeins.skeinGramsUsed}g 실타래 <strong>{skeins.skeins}타래</strong></p>
+                    {skeins.neededMeters !== null ? (
+                      <p className={s.yarnEstBallText}>
+                        필요 길이 약 <strong>{fmtInt(skeins.neededMeters)}m</strong>
+                        <br /><span className={s.muted}>({skeins.skeins}타래 = {fmtInt(skeins.buyMeters ?? 0)}m)</span>
+                      </p>
+                    ) : (
+                      <p className={s.yarnEstBallText}>
+                        <span className={s.muted}>타래 길이(m)를 넣으면 필요 길이도 계산됩니다</span>
+                      </p>
+                    )}
                   </div>
                 </div>
                 <p className={s.hint}>
-                  💡 {yarnEstimate.note} · 평직 기준 근사값입니다. 케이블·컬러워크는 실을 더 쓰므로 여유를 두세요.
+                  💡 {yarnEstimate.note}
+                  {extraPct > 0 && ` · 표 근사 ${fmtInt(yarnEstimate.grams)}g + 여유 ${extraPct}%`}
+                  {' '}· 평직 기준입니다.
                 </p>
               </>
             ) : (
               <p className={s.hint} role="status">💡 {yarnEstimate.note}</p>
             )}
             <p className={s.hint}>
-              ※ g 추정치는 통용 관행 근사이며 공식 표준이 아닙니다. 같은 굵기라도 실마다 g당 길이가 크게 달라
+              ※ 출발점이 되는 g 값은 통용 관행 근사이며 공식 표준이 아닙니다. 같은 굵기라도 실마다 g당 길이가 크게 달라
               (Lion Brand는 &ldquo;가장 정확한 기준은 야드&rdquo;라고 안내합니다) 구매 전 실 밴드의 길이 표기로 재확인하세요.
             </p>
           </div>
@@ -698,7 +1122,9 @@ export default function KnitGaugeClient() {
                 </thead>
                 <tbody>
                   {NEEDLE_TABLE.map((n) => {
-                    const isRecommended = Math.abs(n.mm - needleEst.recommended) < 0.3
+                    /* 임계값(0.3mm) 방식은 권장값이 표의 어느 행과도 가깝지 않으면
+                       강조 행이 0개가 되어 아래 안내문과 어긋난다 — 항상 최근접 1행을 강조한다. */
+                    const isRecommended = gaugeReady && n.mm === nearestNeedleMm
                     return (
                       <tr key={n.mm} className={isRecommended ? s.rowHighlight : ''}>
                         <td className={s.mono}>{n.mm}</td>
@@ -713,7 +1139,9 @@ export default function KnitGaugeClient() {
               </table>
             </div>
             <p className={s.hint}>
-              💡 보라색 강조 행은 현재 게이지({fmt(stsPer10cm, 1)}코/10cm)에 권장되는 바늘 호수입니다.
+              💡 강조 행은 현재 게이지({fmt(stsPer10cm, 1)}코/10cm)의 권장 바늘({fmt(needleEst.recommended, 2)}mm
+              {needleEst.label ? ' 이상' : ''})에 가장 가까운 호수입니다. CYC 7(Jumbo)은 12.75mm 이상으로 상한이 없어
+              표에 없는 더 굵은 바늘(팔뚝뜨기 포함)을 쓰기도 합니다.
             </p>
           </div>
 
@@ -738,8 +1166,8 @@ export default function KnitGaugeClient() {
                       <tr key={y.id} className={isCurrent ? s.rowHighlight : ''}>
                         <td className={s.mono}>{y.cyc}</td>
                         <td><strong>{y.shortLabel}</strong></td>
-                        <td className={s.mono}>{y.sts10cm[0]}–{y.sts10cm[1]}</td>
-                        <td className={s.mono}>{y.needleMm[0]}–{y.needleMm[1]}</td>
+                        <td className={s.mono}>{y.stsLabel ?? `${y.sts10cm[0]}–${y.sts10cm[1]}`}</td>
+                        <td className={s.mono}>{y.needleLabel ?? `${y.needleMm[0]}–${y.needleMm[1]}`}</td>
                         <td style={{ fontSize: 12 }}>{y.examples}</td>
                       </tr>
                     )
@@ -763,8 +1191,11 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
   const padding = 30
   const gridSize = W - padding * 2  /* 10cm을 픽셀로 표현 */
 
-  const stsCount = Math.max(1, Math.round(stsPer10cm))
-  const rowsCount = Math.max(1, Math.round(rowsPer10cm))
+  /* 격자 수 하드 캡 — 입력단에서도 클램프하지만, 저장값 복원·향후 배선 실수로
+     거대값이 흘러들면 Array.from({length: n})이 그대로 페이지를 죽인다. 여기서 한 번 더 막는다. */
+  const CAP = 200
+  const stsCount = Math.min(CAP, Math.max(1, Math.round(stsPer10cm) || 1))
+  const rowsCount = Math.min(CAP, Math.max(1, Math.round(rowsPer10cm) || 1))
   const stsStep = gridSize / stsCount
   const rowsStep = gridSize / rowsCount
 

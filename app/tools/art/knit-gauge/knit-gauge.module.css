@@ -177,6 +177,20 @@
 }@media (hover: hover) {
   .quickChip:hover { color: var(--cat-art); border-color: var(--cat-art); }
 }
+.sizeChipActive {
+  background: var(--cat-art);
+  border-color: var(--cat-art);
+  color: #ffffff;
+}
+
+.quickChipActive {
+  background: var(--cat-art);
+  border-color: var(--cat-art);
+  color: #ffffff;
+}
+@media (hover: hover) {
+  .quickChipActive:hover { color: #ffffff; border-color: var(--cat-art); }
+}
 
 /* 영웅 카드 */
 .heroCard {
