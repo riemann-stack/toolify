@@ -5,7 +5,7 @@ import s from './fov.module.css'
 import {
   SENSORS, POPULAR_FOCALS, USE_CASES, getSensor, getLensCategory,
   type SensorId,
-  equiv35, aov, frameSize, equivAperture, rule500, rule300,
+  equiv35, aov, frameSize, equivAperture, rule500, rule300, safeNum, geoCrop,
   fmt, fmtInt, fmtDistance, aovDescription,
 } from './fovUtils'
 
@@ -33,11 +33,13 @@ export default function FovClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
-      if (j.sensorId) setSensorId(j.sensorId)
-      if (typeof j.focalLength === 'number') setFocalLength(j.focalLength)
-      if (typeof j.aperture === 'number') setAperture(j.aperture)
-      if (typeof j.distance === 'number') setDistance(j.distance)
-      if (j.compareSensorId) setCompareSensorId(j.compareSensorId)
+      /* ⚠️ 예전에는 타입만 봤다 — focalLength가 0이면 aov가 180°, frameSize가 Infinity가 되고
+         NaN·음수도 그대로 통과했다. 범위·enum 검증 후에만 복원한다. */
+      if (SENSORS.some((x) => x.id === j.sensorId)) setSensorId(j.sensorId as SensorId)
+      if (SENSORS.some((x) => x.id === j.compareSensorId)) setCompareSensorId(j.compareSensorId as SensorId)
+      const f = safeNum(j.focalLength, 1, 2000); if (f !== null) setFocalLength(f)
+      const a = safeNum(j.aperture, 0.7, 45); if (a !== null) setAperture(a)
+      const d = safeNum(j.distance, 0.1, 1000); if (d !== null) setDistance(d)
     } catch {}
   }, [])
   useEffect(() => {
@@ -65,18 +67,18 @@ export default function FovClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'equiv' ? s.tabActive : ''}`}    onClick={() => setTab('equiv')}>35mm 환산·화각</button>
-        <button className={`${s.tab} ${tab === 'frame' ? s.tabActive : ''}`}    onClick={() => setTab('frame')}>시야 너비</button>
-        <button className={`${s.tab} ${tab === 'compare' ? s.tabActive : ''}`}  onClick={() => setTab('compare')}>화각 비교</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>용도별 가이드</button>
+        <button type="button" aria-pressed={tab === 'equiv'} className={`${s.tab} ${tab === 'equiv' ? s.tabActive : ''}`} onClick={() => setTab('equiv')}>35mm 환산·화각</button>
+        <button type="button" aria-pressed={tab === 'frame'} className={`${s.tab} ${tab === 'frame' ? s.tabActive : ''}`} onClick={() => setTab('frame')}>시야 너비</button>
+        <button type="button" aria-pressed={tab === 'compare'} className={`${s.tab} ${tab === 'compare' ? s.tabActive : ''}`} onClick={() => setTab('compare')}>화각 비교</button>
+        <button type="button" aria-pressed={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>용도별 가이드</button>
       </div>
 
       {/* ───── 탭 1: 35mm 환산·화각 ───── */}
       {tab === 'equiv' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>카메라 센서</span>
-            <select value={sensorId} onChange={(e) => setSensorId(e.target.value as SensorId)} className={s.input}>
+            <span className={s.cardLabel} id="fov-sensor-label">카메라 센서</span>
+            <select aria-labelledby="fov-sensor-label" value={sensorId} onChange={(e) => setSensorId(e.target.value as SensorId)} className={s.input}>
               {SENSORS.map((sm) => (
                 <option key={sm.id} value={sm.id}>
                   {sm.label} (×{sm.cropFactor})
@@ -84,7 +86,11 @@ export default function FovClient() {
               ))}
             </select>
             <p className={s.hint}>
-              <strong>{sensor.width} × {sensor.height} mm</strong> · 대각선 {fmt(sensor.diagonal, 2)} mm · 크롭 팩터 ×{sensor.cropFactor}<br />
+              <strong>{sensor.width} × {sensor.height} mm</strong> · 대각선 {fmt(sensor.diagonal, 2)} mm · 크롭 팩터 ×{sensor.cropFactor}
+              {Math.abs(geoCrop(sensor) - sensor.cropFactor) > 0.01 && (
+                <> <span className={s.muted}>(제조사 표기값 — 대각선으로 계산하면 ×{fmt(geoCrop(sensor), 3)})</span></>
+              )}
+              <br />
               <span className={s.muted}>예: {sensor.example}</span>
             </p>
           </div>
@@ -106,7 +112,7 @@ export default function FovClient() {
             </div>
             <div className={s.quickRow}>
               {[14, 24, 35, 50, 85, 105, 200, 300, 400, 600].map((f) => (
-                <button key={f} className={s.quickChip} onClick={() => setFocalLength(f)}>{f}mm</button>
+                <button type="button" key={f} className={s.quickChip} onClick={() => setFocalLength(f)}>{f}mm</button>
               ))}
             </div>
           </div>
@@ -118,6 +124,7 @@ export default function FovClient() {
               <span className={s.sliderValue}>f/{fmt(aperture, 1)}</span>
             </div>
             <input
+              aria-label={`조리개 f/${fmt(aperture, 1)}`}
               type="range" min={1.0} max={22} step={0.1}
               value={aperture}
               onChange={(e) => setAperture(Number(e.target.value))}
@@ -127,6 +134,14 @@ export default function FovClient() {
               <span>f/1</span><span>f/2.8</span><span>f/5.6</span><span>f/11</span><span>f/22</span>
             </div>
           </div>
+
+          {fl35 < 24 && (
+            <p className={s.warnHint}>
+              ⚠️ <strong>어안(fisheye) 렌즈에는 이 화각이 맞지 않습니다.</strong> 여기 쓰는 공식은 직선사영(rectilinear) 전용이라,
+              같은 초점거리라도 어안은 훨씬 넓습니다 — 15mm 어안은 실제 180°인데 이 공식은 약 110°를 냅니다.
+              어안은 초점거리가 아니라 <strong>사영 방식</strong>으로 구분되므로 렌즈 사양의 화각 표기를 그대로 쓰세요.
+            </p>
+          )}
 
           {/* 결과 — 35mm 환산 */}
           <div className={s.heroCard}>
@@ -188,7 +203,7 @@ export default function FovClient() {
                 <span className={s.rowVal}>{fmt(star500, 1)} 초</span>
               </div>
               <div className={s.row}>
-                <span className={s.rowKey}>고해상도 300룰 (45MP+)</span>
+                <span className={s.rowKey}>보수적 300룰</span>
                 <span className={s.rowVal}>{fmt(star300, 1)} 초</span>
               </div>
               <div className={s.row}>
@@ -197,7 +212,13 @@ export default function FovClient() {
               </div>
             </div>
             <p className={s.hint}>
-              💡 <strong>등가 조리개</strong> — 같은 35mm 환산 화각·동일 거리에서 풀프레임과 같은 심도(보케)를 만들려면 풀프레임 f/{fmt(equivAp, 1)} 정도가 필요합니다.
+              💡 <strong>등가 조리개</strong> — 지금 설정(f/{fmt(aperture, 1)})으로 찍은 사진의 <strong>배경 흐림 정도</strong>가
+              풀프레임 f/{fmt(equivAp, 1)}로 찍은 것과 비슷하다는 뜻입니다(같은 환산 화각·같은 거리·같은 출력 크기 기준).
+            </p>
+            <p className={s.warnHint}>
+              ⚠️ <strong>카메라를 f/{fmt(equivAp, 1)}로 바꾸라는 뜻이 아닙니다.</strong> 노출은 센서 크기와 무관하므로
+              그렇게 조이면 {fmt(2 * Math.log2(sensor.cropFactor), 1)} stop 어두워지기만 합니다.
+              밝기까지 같게 맞추려면 ISO도 크롭²배(×{fmt(sensor.cropFactor * sensor.cropFactor, 1)}) 해야 합니다.
             </p>
           </div>
         </>
@@ -224,22 +245,27 @@ export default function FovClient() {
                 className={s.slider} />
               <div className={s.quickRow}>
                 {[14, 24, 35, 50, 85, 105, 200, 400].map((f) => (
-                  <button key={f} className={s.quickChip} onClick={() => setFocalLength(f)}>{f}mm</button>
+                  <button type="button" key={f} className={s.quickChip} onClick={() => setFocalLength(f)}>{f}mm</button>
                 ))}
               </div>
             </div>
             <div className={s.field}>
-              <label className={s.fieldLabel}>피사체 거리 — {fmtDistance(distance)}</label>
-              <input type="range" min={0.1} max={100} step={0.1}
+              <label className={s.fieldLabel} htmlFor="fov-distance">피사체 거리 — {fmtDistance(distance)}</label>
+              <input id="fov-distance" type="range" min={0.1} max={100} step={0.1}
                 value={distance}
                 onChange={(e) => setDistance(Number(e.target.value))}
                 className={s.slider} />
               <div className={s.quickRow}>
                 {[0.5, 1, 2, 3, 5, 10, 20, 50].map((d) => (
-                  <button key={d} className={s.quickChip} onClick={() => setDistance(d)}>{d < 1 ? `${d * 100}cm` : `${d}m`}</button>
+                  <button type="button" key={d} className={s.quickChip} onClick={() => setDistance(d)}>{d < 1 ? `${d * 100}cm` : `${d}m`}</button>
                 ))}
               </div>
             </div>
+            <p className={s.hint}>
+              ⓘ 이 계산은 <strong>무한원 초점의 직선사영 근사</strong>입니다(프레임 = 거리 × 센서변 ÷ 초점거리).
+              가까울수록 실제보다 넓게 나오고, 등배(1:1) 매크로에서는 실제 화각이 절반 수준까지 좁아집니다.
+              렌즈의 <strong>최단 촬영거리</strong>보다 가까운 값을 넣으면 애초에 초점이 맞지 않습니다.
+            </p>
           </div>
 
           {/* 결과 — 시야 너비/높이 */}
@@ -264,7 +290,7 @@ export default function FovClient() {
           {/* 거리별 비교 표 */}
           <div className={s.card}>
             <span className={s.cardLabel}>같은 렌즈로 거리별 시야 너비</span>
-            <table className={s.dataTable}>
+            <div className={s.tableScroll}><table className={s.dataTable}>
               <thead>
                 <tr>
                   <th scope="col">거리</th>
@@ -293,7 +319,7 @@ export default function FovClient() {
                   )
                 })}
               </tbody>
-            </table>
+            </table></div>
             <p className={s.hint}>
               💡 시야 너비는 <strong>거리에 비례</strong>합니다. 거리 2배 → 시야 너비 2배.
             </p>
@@ -305,14 +331,16 @@ export default function FovClient() {
       {tab === 'compare' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>비교 기준 센서</span>
-            <select value={compareSensorId} onChange={(e) => setCompareSensorId(e.target.value as SensorId)} className={s.input}>
+            <span className={s.cardLabel} id="fov-compare-label">비교 기준 센서</span>
+            <select aria-labelledby="fov-compare-label" value={compareSensorId} onChange={(e) => setCompareSensorId(e.target.value as SensorId)} className={s.input}>
               {SENSORS.map((sm) => (
                 <option key={sm.id} value={sm.id}>{sm.label} (×{sm.cropFactor})</option>
               ))}
             </select>
             <p className={s.hint}>
-              ⓘ 35mm 환산 초점거리 8개를 모두 표시합니다. 선택한 센서의 실제 초점거리도 함께 보여요.
+              ⓘ 35mm 환산 초점거리 8개를 모두 표시합니다. 선택한 센서의 실제 초점거리와 화각도 함께 보여요.
+              <br />크롭 팩터는 <strong>대각 화각</strong>만 맞춥니다 — 가로세로비가 다르면(풀프레임 3:2 ↔ M4/3 4:3)
+              같은 환산 초점거리라도 수평 화각은 달라집니다.
             </p>
           </div>
 
@@ -321,12 +349,13 @@ export default function FovClient() {
             <div className={s.compareSvgWrap}>
               <CompareDiagram sensorWidth={getSensor(compareSensorId).width} />
             </div>
-            <table className={s.dataTable}>
+            <div className={s.tableScroll}><table className={s.dataTable}>
               <thead>
                 <tr>
                   <th scope="col">35mm 환산</th>
                   <th scope="col">{getSensor(compareSensorId).label} 실제</th>
                   <th scope="col">수평 화각</th>
+                  <th scope="col">대각 화각</th>
                   <th scope="col">분류</th>
                 </tr>
               </thead>
@@ -334,19 +363,24 @@ export default function FovClient() {
                 {POPULAR_FOCALS.map((p) => {
                   const sensor = getSensor(compareSensorId)
                   const actualFL = p.fl / sensor.cropFactor
-                  const aovHorz = aov(36, p.fl)  // 풀프레임 width로 계산 (35mm 환산 화각)
+                  /* ⚠️ 예전에는 항상 aov(36, p.fl) — 즉 풀프레임 폭으로 계산해, 어떤 센서를 골라도
+                     같은 수평 화각을 보여 줬다. 크롭 팩터는 **대각** 화각만 맞추고 가로세로비가
+                     다르면 수평 화각은 달라진다(M4/3 25mm = 38.2°, 풀프레임 50mm = 39.6°). */
+                  const aovHorz = aov(sensor.width, actualFL)
+                  const aovDiag = aov(sensor.diagonal, actualFL)
                   const cat = getLensCategory(p.fl)
                   return (
                     <tr key={p.fl}>
                       <td className={s.mono} style={{ color: p.color }}>{p.label}</td>
                       <td className={s.mono}>{fmt(actualFL, 1)} mm</td>
                       <td className={s.mono}>{fmt(aovHorz, 1)}°</td>
+                      <td className={s.mono}>{fmt(aovDiag, 1)}°</td>
                       <td>{cat.emoji} {cat.name}</td>
                     </tr>
                   )
                 })}
               </tbody>
-            </table>
+            </table></div>
           </div>
 
           {/* 렌즈 카테고리 가이드 */}
@@ -372,7 +406,7 @@ export default function FovClient() {
             <span className={s.cardLabel}>10 용도별 추천 — 35mm 환산</span>
             <div className={s.useCaseGrid}>
               {USE_CASES.map((u) => (
-                <button key={u.id} className={s.useCaseCard} onClick={() => {
+                <button type="button" key={u.id} className={s.useCaseCard} onClick={() => {
                   /* 첫 추천 환산값을 현재 센서의 실제 mm로 환산 적용 */
                   const sensorObj = getSensor(sensorId)
                   setFocalLength(Math.round((u.primary / sensorObj.cropFactor) * 10) / 10)
@@ -402,7 +436,7 @@ export default function FovClient() {
           {/* 환산 빠른 참고 표 */}
           <div className={s.card}>
             <span className={s.cardLabel}>35mm 환산 ↔ 실제 mm 변환표</span>
-            <table className={s.dataTable}>
+            <div className={s.tableScroll}><table className={s.dataTable}>
               <thead>
                 <tr>
                   <th scope="col">35mm 환산</th>
@@ -421,7 +455,7 @@ export default function FovClient() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
             <p className={s.hint}>
               ⓘ 표의 의미 — &quot;APS-C(×1.5)에서 35mm 환산 50mm 화각을 얻으려면 실제 33.3mm 렌즈가 필요&quot;.
             </p>

@@ -378,3 +378,20 @@
   margin: 0;
   line-height: 1.6;
 }
+
+/* 표 가로 스크롤 — 320px에서 환산표(약 347px)가 카드 밖으로 잘리던 문제 */
+.tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -2px;
+}
+.warnHint {
+  margin-top: 8px;
+  background: color-mix(in srgb, var(--warning) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.75;
+}

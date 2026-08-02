@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/art/fov',
@@ -59,14 +60,14 @@ const faqAnswer: React.CSSProperties = {
 
 const FAQ_LD = [
   { "q":"35mm 환산이 정확히 무엇인가요?","a":"모든 카메라 화각을 35mm 필름(=풀프레임 36×24mm) 기준으로 통일해 표현한 값입니다. 디지털 시대 다양한 센서 크기 때문에 같은 50mm 렌즈도 화각이 달라 비교가 어려웠어요. 35mm 환산을 쓰면 어떤 카메라든 \"환산 50mm = 표준 화각\"처럼 직관적 비교 가능. 공식: 환산 mm = 실제 mm × 크롭 팩터." },
-  { "q":"크롭 팩터(Crop Factor)는 어떻게 정해지나요?","a":"풀프레임 대각선(43.27mm) ÷ 센서 대각선으로 계산합니다. • APS-C(소니/니콘/후지): 28.4mm 대각선 → 43.27/28.4 ≈ 1.5 • APS-C(캐논): 26.8mm → ≈ 1.6 • M4/3: 21.6mm → ≈ 2.0 • 1인치: 15.9mm → ≈ 2.7 제조사 표기는 정확한 값이 약간씩 다를 수 있습니다(예: 후지 ×1.52)." },
+  { "q":"크롭 팩터(Crop Factor)는 어떻게 정해지나요?","a":"풀프레임 대각선(43.27mm) ÷ 센서 대각선으로 계산합니다. • APS-C(소니/니콘/후지): 약 28.2mm 대각선 → 43.27/28.2 ≈ 1.53이지만 제조사는 ×1.5로 표기(후지는 ×1.52) • APS-C(캐논): 26.8mm → ≈ 1.6 • M4/3: 21.6mm → ≈ 2.0 • 1인치: 15.9mm → ≈ 2.7 제조사 표기는 정확한 값이 약간씩 다를 수 있습니다(예: 후지 ×1.52)." },
   { "q":"APS-C에서 50mm와 풀프레임 50mm 차이는?","a":"화각(시야)이 다릅니다. APS-C(×1.5)에 50mm를 끼우면 풀프레임 75mm와 같은 화각(가운데가 잘려서 좁게 보임). 즉 풀프레임 50mm가 표준 단렌즈라면, APS-C 50mm는 인물 단렌즈처럼 작용해요. 같은 표준 화각을 원하면 APS-C에서는 약 33mm 렌즈가 필요합니다(50 / 1.5 ≈ 33). 단, 심도(보케)와 노출은 별개입니다." },
   { "q":"등가 조리개는 왜 필요한가요?","a":"심도(보케) 비교를 위해서입니다. M4/3 f/1.7로 인물을 찍으면 풀프레임 f/3.4와 같은 심도(보케 양). 풀프레임 같은 강한 보케를 원하면 작은 센서에서는 더 밝은 조리개가 필요해요. 다만 노출(빛의 양)은 등가 조리개와 무관 — M4/3 f/1.7 = 풀프레임 f/1.7과 동일한 셔터·ISO에서 같은 밝기. 혼동하지 마세요." },
   { "q":"스마트폰 카메라의 \"24mm 환산\"이 의미하는 것?","a":"스마트폰 메인 카메라 센서는 풀프레임의 1/4~1/5 크기(크롭 팩터 ×4~×7)이지만, 사양표에는 35mm 환산 mm가 표기됩니다. 예: 아이폰 Pro 계열 메인 카메라는 보통 24mm 환산(실제 초점거리는 약 6mm 안팎). 풀프레임 24mm 광각 렌즈와 같은 화각을 의미해요. 망원 카메라는 보통 70mm 환산(실제 약 9mm), 초광각은 13mm 환산(실제 약 1.5mm)." },
   { "q":"인물 사진에 왜 85mm가 표준인가요?","a":"85mm 환산이 인물 표준이 된 이유: 1. 자연스러운 원근감 — 50mm는 코가 살짝 도드라지고, 85mm는 얼굴 비율이 가장 자연스러움 2. 적당한 압축감 — 배경이 살짝 압축되어 인물이 부각 3. 적당한 작업 거리 — 모델과 2-3m 거리에서 상반신 가능 4. 강력한 보케 — 망원 효과로 배경 흐림 ↑ 전신은 50mm 또는 35mm 환경 인물, 클로즈업은 105mm·135mm가 더 좋은 경우도 있습니다." },
   { "q":"안전 셔터 룰(Safe Shutter)은?","a":"삼각대 없이 손으로 들고 찍을 때 흔들림 방지 셔터: 1 / (35mm 환산 mm) 이상. • 풀프레임 50mm → 1/50 이상 • APS-C 50mm(=환산 75mm) → 1/75 이상 • M4/3 50mm(=환산 100mm) → 1/100 이상 현대 카메라의 손떨림 보정(IBIS)으로 5~7 stop까지 도움 받지만, 본인 손떨림·호흡을 고려해 1~2 stop 여유를 두는 게 좋습니다." },
   { "q":"별 사진 500룰은 어떻게 적용?","a":"최대 셔터(초) = 500 / 35mm 환산 mm입니다. 이 시간을 넘으면 별이 점이 아닌 선으로 흐려져요(별궤적). • 풀프레임 24mm → 500/24 ≈ 21초 • APS-C 16mm(=환산 24mm) → 약 21초 • M4/3 12mm(=환산 24mm) → 약 21초 고해상도 카메라(45MP+)는 더 엄격한 300룰(300/환산mm) 권장. 자세한 노출 계산은 사진 노출 계산기의 [상황 가이드] 탭을 활용하세요." },
-  { "q":"줌렌즈 70-200mm는 어떻게 표기?","a":"줌렌즈 표기는 풀프레임 기준이 일반적입니다. 70-200mm 렌즈를 APS-C(×1.5) 카메라에 끼우면 환산 105-300mm가 되어 더 망원으로 작동해요. 캐논의 EF-S, 니콘의 DX, 후지 X, 소니 E 등 크롭 전용 렌즈는 표기가 다를 수 있습니다 — 후지 XF 50-140mm = 풀프레임 환산 76-213mm. 사양표에서 \"35mm 환산\" 또는 \"Equivalent focal length\" 항목을 확인하세요." },
+  { "q":"줌렌즈 70-200mm는 어떻게 표기?","a":"렌즈에 적힌 mm는 크롭 전용 렌즈든 아니든 **실제 초점거리**입니다 — 풀프레임 기준으로 바꿔 적지 않습니다. 초점거리는 렌즈의 광학적 성질이라 어느 바디에 끼우든 변하지 않고, 달라지는 것은 센서가 잘라내는 범위(=화각)뿐입니다. 그래서 70-200mm 렌즈를 APS-C(×1.5)에 끼우면 렌즈 표기는 그대로 70-200mm이고 화각만 환산 105-300mm에 해당하게 됩니다. 후지 XF 50-140mm도 실제 초점거리가 50-140mm이고, 사양서에 별도로 적히는 76-213mm가 35mm 환산값입니다. 사양표에서 \"35mm 환산\" 또는 \"Equivalent focal length\" 항목을 확인하세요." },
   { "q":"화각이 같으면 사진이 똑같나요?","a":"아닙니다. 화각이 같아도 다음이 달라요: • 심도(보케) — 작은 센서는 심도 깊음(보케 적음) • 저조도 화질 — 큰 센서가 노이즈 적음(픽셀 면적 ↑) • 왜곡 — 같은 화각이라도 광각 렌즈 설계에 따라 왜곡 정도 다름 • 색감·해상력 — 렌즈 품질 의존 35mm 환산은 화각만 통일하는 개념이며, 이미지 품질의 다른 요소들은 별도 평가가 필요합니다." }
 ]
 
@@ -83,7 +84,30 @@ export default function FovPage() {
         풀프레임~스마트폰 7종 센서 × 4-800mm 35mm 환산 + <strong style={{ color: 'var(--text)' }}>화각·시야 너비·등가 조리개</strong>.
       </p>
 
+      <UpdatedMeta
+        date="2026년 8월"
+        basis="센서 치수 = 제조사 공식 사양(소니 a6700 23.3×15.5 · 니콘 Z fc·후지 X-T5 23.5×15.7 · 캐논 R10 22.3×14.9 · OM SYSTEM 17.3×13.0 · 1형 13.2×8.8) · 크롭 팩터는 제조사 표기 관행값(소니·니콘 ×1.5, 후지 ×1.52, 캐논 ×1.6)이라 대각선 계산값과 최대 2% 차이 · 렌즈 분류 경계는 표준 규정이 아니라 제조사(캐논·리코펜탁스) 관행"
+        sources={[
+          { label: '소니 a6700 사양 (센서 치수)', href: 'https://helpguide.sony.net/ilc/2320/v1/en/contents/221h_specifications_ilc2320.html' },
+          { label: '후지필름 X-T5 사양', href: 'http://www.fujifilm-x.com/en-us/products/cameras/x-t5/specifications/' },
+          { label: 'OM SYSTEM OM-1 Mark II 사양', href: 'https://my.omsystem.com/consumer/product_specs/SPECIFICATIONS_om-1-mark-ii_EN.pdf' },
+          { label: '삼성 ISOCELL HP2 (1/1.3형)', href: 'https://news.samsungsemiconductor.com/global/introducing-isocell-hp2-experience-more-pictures-and-epic-details-on-the-galaxy-s23-ultra/' },
+        ]}
+      />
+
       <FovClient />
+
+      <div style={{ ...card, marginTop: 18 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>📐 계산 전제와 한계</p>
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
+          <li><strong>직선사영(rectilinear) 전용</strong> — 어안 렌즈에는 맞지 않습니다. 같은 15mm라도 어안은 실제 180°인데 이 공식은 약 110°를 냅니다. 어안은 초점거리가 아니라 사영 방식으로 구분됩니다.</li>
+          <li><strong>무한원 초점 근사</strong> — 시야 크기는 &quot;거리 × 센서변 ÷ 초점거리&quot;로 계산합니다. 가까울수록 실제보다 넓게 나오고, 등배(1:1) 매크로에서는 실제 화각이 절반 수준까지 좁아집니다. 렌즈의 최단 촬영거리보다 가까운 값은 애초에 초점이 맞지 않습니다.</li>
+          <li><strong>크롭 팩터는 대각 화각만 맞춥니다</strong> — 가로세로비가 다르면(풀프레임 3:2 ↔ M4/3 4:3) 같은 환산 초점거리라도 수평·수직 화각은 달라집니다.</li>
+          <li><strong>센서 치수는 기종별로 다릅니다</strong> — 같은 &quot;APS-C&quot;도 소니 23.3×15.5, 니콘·후지 23.5×15.7로 갈립니다. 프리셋은 대표값이며 ±0.2mm 차이가 있습니다.</li>
+          <li><strong>스마트폰은 편차가 가장 큽니다</strong> — 같은 기기 안에서도 초광각·메인·망원 카메라의 센서와 초점거리가 모두 다릅니다. 프리셋은 최신 플래그십 메인 카메라 기준이며, 정확히 계산하려면 제조사 사양의 &quot;35mm 환산&quot; 값을 직접 확인하세요.</li>
+          <li><strong>등가 조리개는 배경 흐림 비교용</strong>입니다 — 노출은 센서 크기와 무관하므로 카메라 설정을 바꾸라는 뜻이 아닙니다.</li>
+        </ul>
+      </div>
 
       <GuideDivider />
 
@@ -157,38 +181,38 @@ export default function FovPage() {
           공식: <strong>AOV = 2 × atan(센서변 ÷ (2 × 초점거리))</strong>
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 14 }}>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #DB2777', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 4px' }}>🌌 14mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--cat-date)', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: '0 0 4px' }}>🌌 14mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>104°</strong> · 대각 <strong>114°</strong> · 광활한 풍경, 실내 인테리어, 별 사진
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #D97706', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#D97706', fontWeight: 700, margin: '0 0 4px' }}>🚶 35mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--cat-cooking)', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: '0 0 4px' }}>🚶 35mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>54°</strong> · 대각 <strong>63°</strong> · 자연스러운 시야, 스트리트, 환경 인물
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0D9488', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, margin: '0 0 4px' }}>👤 50mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--cat-edu)', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: '0 0 4px' }}>👤 50mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>40°</strong> · 대각 <strong>47°</strong> · 사람 눈에 가장 가까운 자연스러운 화각
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0891B2', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, margin: '0 0 4px' }}>🎤 85mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--cat-health)', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: '0 0 4px' }}>🎤 85mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>23.9°</strong> · 대각 <strong>28.6°</strong> · 인물 단렌즈 표준, 압축감
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #9333EA', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, margin: '0 0 4px' }}>⚽ 200mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--cat-art)', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: '0 0 4px' }}>⚽ 200mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>10.3°</strong> · 대각 <strong>12.3°</strong> · 인물 압축, 스포츠, 이벤트
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #EA580C', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, margin: '0 0 4px' }}>🦒 600mm 풀프레임</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--cat-life)', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: '0 0 4px' }}>🦒 600mm 풀프레임</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               수평 <strong>3.4°</strong> · 대각 <strong>4.1°</strong> · 야생 동물, 달, 스포츠 사이드라인
             </p>
@@ -271,7 +295,7 @@ export default function FovPage() {
         <summary style={faqSummary}>Q2. 크롭 팩터(Crop Factor)는 어떻게 정해지나요?</summary>
         <p style={faqAnswer}>
           <strong>풀프레임 대각선(43.27mm) ÷ 센서 대각선</strong>으로 계산합니다.<br />
-          • APS-C(소니/니콘/후지): 28.4mm 대각선 → 43.27/28.4 ≈ <strong>1.5</strong><br />
+          • APS-C(소니/니콘/후지): 약 28.2mm 대각선 → 43.27/28.2 ≈ <strong>1.53</strong>이지만 제조사 표기는 <strong>×1.5</strong>(후지는 ×1.52)<br />
           • APS-C(캐논): 26.8mm → ≈ <strong>1.6</strong><br />
           • M4/3: 21.6mm → ≈ <strong>2.0</strong><br />
           • 1인치: 15.9mm → ≈ <strong>2.7</strong><br />
@@ -337,7 +361,11 @@ export default function FovPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q9. 줌렌즈 70-200mm는 어떻게 표기?</summary>
         <p style={faqAnswer}>
-          줌렌즈 표기는 <strong>풀프레임 기준</strong>이 일반적입니다. 70-200mm 렌즈를 APS-C(×1.5) 카메라에 끼우면 환산 105-300mm가 되어 더 망원으로 작동해요. 캐논의 EF-S, 니콘의 DX, 후지 X, 소니 E 등 <strong>크롭 전용 렌즈</strong>는 표기가 다를 수 있습니다 — 후지 XF 50-140mm = 풀프레임 환산 76-213mm. 사양표에서 &quot;35mm 환산&quot; 또는 &quot;Equivalent focal length&quot; 항목을 확인하세요.
+          렌즈에 적힌 mm는 크롭 전용 렌즈든 아니든 <strong>실제 초점거리</strong>입니다 — 풀프레임 기준으로 바꿔 적지 않습니다.
+          초점거리는 렌즈의 광학적 성질이라 어느 바디에 끼우든 변하지 않고, 달라지는 것은 센서가 잘라내는 범위(=화각)뿐이에요.<br />
+          그래서 70-200mm를 APS-C(×1.5)에 끼우면 <strong>렌즈 표기는 그대로 70-200mm</strong>이고 화각만 환산 105-300mm에 해당합니다.
+          후지 XF 50-140mm도 실제 초점거리가 50-140mm이고, 사양서에 <strong>별도로</strong> 적히는 76-213mm가 35mm 환산값입니다.<br />
+          사양표에서 &quot;35mm 환산&quot; 또는 &quot;Equivalent focal length&quot; 항목을 확인하세요.
         </p>
       </details>
 
