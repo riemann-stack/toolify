@@ -969,9 +969,11 @@ export default function KnitGaugeClient() {
                 )}
                 {!shapingResult.overRange && shapingResult.events > 0 && (
                   <p className={s.muted} style={{ fontSize: 12, marginTop: 8 }}>
-                    성형단 사이는 평평하게 뜹니다. 간격 × 횟수
-                    {shapingResult.plainRows > 0 && ` + 마지막 평평 구간 ${shapingResult.plainRows}단`}
-                    을 모두 더하면 {shapingRows}단이 됩니다.
+                    성형단 사이는 평평하게 뜹니다.{' '}
+                    {shapingResult.plainRows > 0
+                      ? `간격 × 횟수 + 마지막 평평 구간 ${shapingResult.plainRows}단을`
+                      : '간격 × 횟수를'}
+                    {' '}모두 더하면 {shapingRows}단이 됩니다.
                   </p>
                 )}
               </div>
