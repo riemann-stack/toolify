@@ -155,8 +155,9 @@
   display: inline-block;
   font-size: 13px;
   font-weight: 800;
-  color: #fff;
-  padding: 5px 16px;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 5px 14px;
   border-radius: 999px;
   font-family: 'Noto Sans KR', sans-serif;
   margin-bottom: 14px;
@@ -236,3 +237,46 @@
   .ucGrid { gap: 6px; }
   .ucLabel { font-size: 11px; }
 }
+
+/* 품질 배지 — 솔리드+흰 글자는 최대 2.77:1이라 AA 미달이었다. 소프트 배경 + 본문색 + 색 점. */
+.bandDot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.verdictBox {
+  margin: 12px 0 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+  text-align: left;
+}
+
+.errText {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--danger);
+  font-weight: 600;
+}
+.bleedRow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.bleedBtn {
+  appearance: none;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  min-height: 36px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.bleedActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent-strong); }
+@media (max-width: 420px) { .ucGrid { grid-template-columns: 1fr 1fr; } }

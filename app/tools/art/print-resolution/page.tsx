@@ -6,6 +6,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/art/print-resolution',
@@ -59,7 +60,7 @@ const SIZE_ROWS = [
   { name: 'A4', cm: '21.0 × 29.7', px300: '2480 × 3508', mp: '8.7MP' },
   { name: 'A3', cm: '29.7 × 42.0', px300: '3508 × 4961', mp: '17.4MP' },
   { name: 'A2 (포스터)', cm: '42.0 × 59.4', px300: '4961 × 7016', mp: '34.8MP' },
-  { name: '4×6″ (4R·L판)', cm: '10.2 × 15.2', px300: '1205 × 1795', mp: '2.2MP' },
+  { name: '4×6″ (4R·KG판)', cm: '10.2 × 15.2', px300: '1205 × 1795', mp: '2.2MP' },
   { name: '8×10″ (8R)', cm: '20.3 × 25.4', px300: '2398 × 3000', mp: '7.2MP' },
   { name: '명함 (90×50)', cm: '9.0 × 5.0', px300: '1063 × 591', mp: '0.6MP' },
 ]
@@ -74,12 +75,12 @@ const SCAN_ROWS = [
   { src: '4×6″ 인화 사진 (10.2×15.2cm)', target: '같은 크기 재인화', ratio: '1.0배', need: '300', set: '300DPI' },
   { src: '4×6″ 인화 사진', target: 'A4 (21×29.7cm)', ratio: '약 1.95배', need: '585', set: '600DPI' },
   { src: '4×6″ 인화 사진', target: 'A3 (29.7×42cm)', ratio: '약 2.8배', need: '827', set: '1200DPI' },
-  { src: '35mm 필름 (36×24mm)', target: 'A4', ratio: '약 8.3배', need: '2475', set: '2400~4800DPI' },
+  { src: '35mm 필름 (36×24mm)', target: 'A4', ratio: '약 8.3배', need: '2475', set: '2400(약간 부족)~4800' },
 ]
 
 const FAQ_LD = [
-  { q: 'DPI(PPI)가 정확히 무엇인가요?', a: 'DPI(Dots Per Inch)는 <strong>1인치(2.54cm) 안에 점이 몇 개 찍히는가</strong>를 뜻합니다. 같은 사진이라도 300DPI로 작게 뽑으면 선명하고, 100DPI로 크게 뽑으면 흐려집니다. 디지털 이미지에서는 PPI(Pixels Per Inch)와 사실상 같은 의미로 쓰입니다. 필요한 픽셀 = <strong>(인치 크기) × DPI</strong> 공식으로 계산해요.' },
-  { q: 'DPI는 무조건 높을수록 좋은가요?', a: '아닙니다. <strong>보는 거리</strong>가 핵심입니다. 손에 들고 보는 사진·명함은 300DPI가 필요하지만, 몇 m 떨어져 보는 대형 포스터나 현수막은 사람 눈이 점을 구분하지 못해 <strong>100DPI 이하로도 충분</strong>합니다. 불필요하게 높은 DPI는 파일만 무거워지고 인쇄 비용·시간이 늘 뿐 화질 체감 차이는 없습니다.' },
+  { q: 'DPI와 PPI는 어떻게 다른가요?', a: '엄밀히 말하면 다릅니다. <strong>PPI(Pixels Per Inch)</strong>는 이미지가 1인치에 픽셀을 몇 개 담는지, <strong>DPI(Dots Per Inch)</strong>는 프린터가 1인치에 잉크 점을 몇 개 찍는지를 뜻합니다. 이 계산기가 내는 값은 <strong>이미지의 PPI</strong>입니다. 잉크젯 프린터 스펙의 &quot;1440×720 dpi&quot; 같은 숫자는 잉크 분사 밀도라서, 그 값에 맞춰 이미지를 1440ppi로 저장할 필요는 전혀 없습니다 — 프린터는 한 픽셀을 여러 잉크 점으로 표현합니다. 업계에서 &quot;300 DPI로 주세요&quot;라고 할 때의 실제 의미도 300 PPI입니다. 필요한 픽셀 = <strong>(인치 크기) × PPI</strong>로 계산해요.' },
+  { q: 'DPI는 무조건 높을수록 좋은가요?', a: '아닙니다. <strong>보는 거리</strong>가 핵심입니다. 손에 들고 보는 사진·명함은 300DPI가 필요하지만, 몇 m 떨어져 보는 대형 포스터나 현수막은 사람 눈이 점을 구분하지 못해 <strong>100DPI 이하로도 충분</strong>합니다. 불필요하게 높은 해상도는 파일이 무거워지고 업로드·처리 시간이 늘어날 뿐 화질 체감 차이는 없습니다(인쇄 비용은 업체 과금 방식에 따라 다릅니다).' },
   { q: '“최소 해상도” 모드와 “품질 역산” 모드 차이가 뭔가요?', a: '<strong>① 최소 해상도</strong>는 “이 크기로 이 용도로 뽑으려면 사진이 최소 몇 픽셀이어야 하나?”를 알려줍니다(인쇄 전 점검). <strong>② 품질 역산</strong>은 “내가 가진 4000×3000 사진을 A4로 뽑으면 몇 DPI가 나오고 품질이 어떤가?”를 알려줍니다(가진 이미지로 판단). 인쇄소에 맡기기 전 두 모드로 교차 확인하면 실패를 줄일 수 있어요.' },
   { q: '내 카메라/폰 화소수로 어디까지 인쇄할 수 있나요?', a: '대략 <strong>(가로픽셀 ÷ DPI) × 2.54 = 가로 cm</strong>로 계산합니다. 예를 들어 1200만 화소(4000×3000) 사진은 300DPI 기준 약 <strong>34×25cm(A4보다 큰 크기)</strong>까지 고품질로 뽑을 수 있고, 150DPI를 허용하면 그 두 배 크기도 가능합니다. ② 품질 역산 모드에 픽셀을 넣으면 품질별 최대 크기를 표로 보여줘요.' },
   { q: 'mm·cm·인치·픽셀은 어떻게 환산되나요?', a: '1인치 = <strong>2.54cm = 25.4mm</strong>입니다. 픽셀은 DPI가 있어야 길이로 바뀝니다: <strong>픽셀 = (mm ÷ 25.4) × DPI</strong>. 예를 들어 A4 가로 210mm를 300DPI로 인쇄하려면 210 ÷ 25.4 × 300 ≈ <strong>2480픽셀</strong>이 필요합니다. 이 계산기는 크기를 고르면 자동으로 cm·픽셀·메가픽셀을 함께 보여줍니다.' },
@@ -97,7 +98,28 @@ export default function PrintResolutionPage() {
         인쇄 크기와 용도(DPI)로 <strong style={{ color: 'var(--text)' }}>필요한 최소 픽셀</strong>을 구하고, 반대로 내 이미지로 <strong style={{ color: 'var(--text)' }}>인쇄 품질을 역산</strong>합니다. 사진·A4·포스터·현수막까지.
       </p>
 
+      <UpdatedMeta
+        date="2026년 8월"
+        basis="사진 인화 규격 = 후지필름 공식 스토어 표기(L 89×127 · KG 102×152 · 2L 127×178 · 六切 203×254) · A규격 = ISO 216 · 명함 90×50(한국 관행) · 증명사진 35×45(외교부 여권 규격) · 300 PPI 기준 = 하프톤 150 lpi × 품질계수 2 · 250 PPI = Ghent Workgroup 일반 상업 인쇄 규정값"
+        sources={[
+          { label: '후지필름 프린트 사이즈 (L·KG·2L)', href: 'https://pg-ja.fujifilm.com/10001.html' },
+          { label: '외교부 여권 사진 규격', href: 'https://www.passport.go.kr/home/kor/contents.do?menuPos=32' },
+          { label: 'Adobe — 프린터 해상도와 이미지 해상도', href: 'https://helpx.adobe.com/photoshop/desktop/crop-resize-transform/resize-adjust-resolution/printer-resolution.html' },
+        ]}
+      />
+
       <PrintResolutionClient />
+
+      <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 14, padding: '18px 20px', marginTop: 16 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>📐 계산 전제</p>
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
+          <li>결과는 <strong>이미지의 PPI</strong>입니다. 프린터 스펙의 DPI(잉크 점 밀도)와 다른 값이며, 1440dpi 프린터라고 1440ppi로 저장할 필요는 없습니다.</li>
+          <li>종횡비가 다르면 <strong>채우기</strong>는 일부를 잘라내고 <strong>맞춤</strong>은 여백을 남깁니다 — 계산기에서 골라 잘림 비율과 실제 인쇄 크기를 확인하세요.</li>
+          <li>명함·전단·포스터는 <strong>도련(재단 여유)</strong>만큼 더 크게 인쇄한 뒤 자릅니다. 계산기의 도련 옵션을 켜면 실제 인쇄 크기로 계산합니다.</li>
+          <li>권장 PPI는 <strong>관람 거리</strong>에 따라 달라집니다. 절대 등급 라벨은 가까이서 보는 인쇄를 전제하므로, 멀리서 보는 인쇄물은 용도 기준 판정을 보세요.</li>
+          <li>인화 규격의 mm는 정수 반올림값(ISO 1008 표기)이라, 정확 인치로 계산한 픽셀과 최대 5px 차이가 날 수 있습니다.</li>
+        </ul>
+      </div>
 
       <GuideDivider />
 
@@ -110,7 +132,8 @@ export default function PrintResolutionPage() {
           <h2 style={sectionTitle}>📐 DPI·해상도, 핵심만 정리</h2>
           <div style={{ ...card }}>
             <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 1.95 }}>
-              <li><strong style={{ color: 'var(--text)' }}>DPI / PPI</strong> — 1인치(2.54cm)에 찍히는 점·픽셀 수. 높을수록 촘촘하고 선명.</li>
+              <li><strong style={{ color: 'var(--text)' }}>PPI</strong> — 이미지가 1인치에 담는 <strong>픽셀</strong> 수. 이 계산기가 내는 값입니다.</li>
+              <li><strong style={{ color: 'var(--text)' }}>DPI</strong> — 프린터가 1인치에 찍는 <strong>잉크 점</strong> 수. 이미지 PPI와 다른 개념이며, 프린터 스펙의 1440dpi에 맞춰 저장할 필요는 없습니다.</li>
               <li><strong style={{ color: 'var(--text)' }}>필요 픽셀 = (mm ÷ 25.4) × DPI</strong> — 크기와 DPI가 정해지면 픽셀이 자동으로 결정.</li>
               <li><strong style={{ color: 'var(--text)' }}>보는 거리가 DPI를 정한다</strong> — 가까이 보면 300, 멀리 보면 100·72로도 충분.</li>
               <li><strong style={{ color: 'var(--text)' }}>메가픽셀(MP) = 가로픽셀 × 세로픽셀 ÷ 100만</strong> — 카메라·폰 화소와 직접 비교.</li>
@@ -244,7 +267,7 @@ export default function PrintResolutionPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
-            스캐너는 300·600·1200·2400DPI처럼 단계로 동작하므로 계산값을 넘는 가장 가까운 단계를 고르세요(35mm 필름→A4는 2400DPI가 계산값 2475에 살짝 못 미치지만 체감 차이는 거의 없습니다). 확대율은 긴 변 기준이며, 4×6″(3:2)와 A4는 가로세로 비율이 달라 여백이 남거나 일부가 잘립니다. 스펙표의 ‘보간 해상도’가 아닌 광학 해상도 기준으로 판단하세요.
+            스캐너는 300·600·1200·2400처럼 단계로 동작합니다. 원칙은 <strong>계산값을 넘는 단계</strong>를 고르는 것이지만, 35mm 필름→A4는 계산값 2475와 스캐너 단계 2400 사이에 걸립니다 — 2400으로 스캔하면 A4 출력 시 약 291 PPI로 <strong>300에 조금 못 미치고</strong>, 다음 단계인 4800은 파일이 4배가 됩니다. 300 PPI를 반드시 채워야 하면 4800, 실용상 충분하면 2400을 고르세요. 확대율은 긴 변 기준이며, 4×6″(3:2)와 A4는 가로세로 비율이 달라 여백이 남거나 일부가 잘립니다. 스펙표의 ‘보간 해상도’가 아닌 광학 해상도 기준으로 판단하세요.
           </p>
         </div>
 
