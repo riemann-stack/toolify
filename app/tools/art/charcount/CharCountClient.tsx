@@ -2,6 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import s from '../../dev/dev.module.css'
+import {
+  twitterCount, reverseText, countSentences, fmtMin,
+  eucKrBytes as eucKrCount, utf8Bytes, utf16Bytes, graphemes, countFor,
+  PLATFORM_GROUPS, SOURCE_TIER_LABEL, METHOD_LABEL, TWITTER_CONFIG,
+  type PlatformLimit,
+} from './charcountUtils'
 
 const STORAGE_KEY = 'youtil_charcount_v1'
 
@@ -25,120 +31,7 @@ function isSpace(ch: string): boolean {
   return /\s/.test(ch)
 }
 
-// 플랫폼 글자수 제한 (한국 + 글로벌)
-type PlatformLimit = { name: string; limit: number; note?: string; method?: 'len' | 'twitterWeighted' | 'bytes' | 'lines' }
-const PLATFORM_GROUPS: { group: string; items: PlatformLimit[] }[] = [
-  {
-    group: '글로벌 SNS',
-    items: [
-      { name: 'X (트위터) — 한글 가중치',  limit: 280,    method: 'twitterWeighted', note: '한글 1자 = 2 weight' },
-      { name: '인스타그램 캡션',           limit: 2200,   method: 'len' },
-      { name: '인스타그램 댓글',           limit: 2200,   method: 'len' },
-      { name: '인스타그램 프로필 소개',    limit: 150,    method: 'len' },
-      { name: '페이스북 게시물',           limit: 63206,  method: 'len' },
-      { name: '페이스북 프로필 소개',      limit: 101,    method: 'len' },
-      { name: '링크드인 게시물',           limit: 3000,   method: 'len' },
-      { name: '링크드인 헤드라인',         limit: 220,    method: 'len' },
-      { name: 'Threads 게시물',            limit: 500,    method: 'len' },
-    ],
-  },
-  {
-    group: '동영상 플랫폼',
-    items: [
-      { name: '유튜브 제목',               limit: 100,    method: 'len',   note: '검색 최적화 70자 이내 권장' },
-      { name: '유튜브 설명',               limit: 5000,   method: 'len',   note: '처음 150자가 검색 결과 표시' },
-      { name: '유튜브 댓글',               limit: 10000,  method: 'len' },
-      { name: '쇼츠/릴스 제목',            limit: 100,    method: 'len' },
-      { name: 'TikTok 캡션',               limit: 4000,   method: 'len' },
-    ],
-  },
-  {
-    group: '한국 메신저·SMS',
-    items: [
-      { name: '카카오톡 메시지',           limit: 10000,  method: 'len' },
-      { name: '카카오톡 프로필 상태',      limit: 60,     method: 'len' },
-      { name: 'SMS (단문)',                limit: 90,     method: 'bytes', note: '한글 45자 / 영문 90자 (EUC-KR 기준)' },
-      { name: 'LMS (장문)',                limit: 2000,   method: 'bytes', note: '한글 약 1,000자' },
-      { name: 'MMS (멀티미디어)',          limit: 2000,   method: 'bytes' },
-    ],
-  },
-  {
-    group: '한국 블로그·커뮤니티',
-    items: [
-      { name: '네이버 블로그 제목',        limit: 100,    method: 'len' },
-      { name: '네이버 블로그 본문',        limit: 1500000,method: 'len' },
-      { name: '네이버 카페 제목',          limit: 60,     method: 'len' },
-      { name: '티스토리 제목',             limit: 200,    method: 'len' },
-      { name: '브런치 제목',               limit: 30,     method: 'len' },
-      { name: '브런치 부제',               limit: 60,     method: 'len' },
-    ],
-  },
-  {
-    group: '채용·자기소개서',
-    items: [
-      { name: '자기소개서 (단문)',         limit: 500,    method: 'len' },
-      { name: '자기소개서 (일반)',         limit: 1000,   method: 'len' },
-      { name: '자기소개서 (대기업)',       limit: 2000,   method: 'len' },
-      { name: '자기소개서 (장문)',         limit: 4000,   method: 'len' },
-      { name: '이력서 자기소개',           limit: 800,    method: 'len' },
-    ],
-  },
-  {
-    group: '쇼핑·앱스토어',
-    items: [
-      { name: 'Apple App Store 제목',      limit: 30,     method: 'len' },
-      { name: 'Apple App Store 설명',      limit: 4000,   method: 'len' },
-      { name: 'Google Play 제목',          limit: 30,     method: 'len' },
-      { name: 'Google Play 짧은 설명',     limit: 80,     method: 'len' },
-      { name: 'Google Play 자세한 설명',   limit: 4000,   method: 'len' },
-      { name: '쿠팡 상품명',               limit: 60,     method: 'len' },
-    ],
-  },
-  {
-    group: 'SEO·메타',
-    items: [
-      { name: 'HTML title (검색결과)',     limit: 60,     method: 'len',  note: '50~60자가 검색결과 표시 최적' },
-      { name: 'meta description',          limit: 160,    method: 'len',  note: '120~160자 권장' },
-      { name: '이메일 제목 (모바일)',      limit: 50,     method: 'len' },
-      { name: '이메일 제목 (데스크탑)',    limit: 78,     method: 'len' },
-    ],
-  },
-]
-
-// ─────────────────────────────────────────────
-// 유틸
-// ─────────────────────────────────────────────
 const fmt = (v: number) => v.toLocaleString('ko-KR')
-
-function utf8Bytes(text: string): number {
-  return new TextEncoder().encode(text).length
-}
-function utf16Bytes(text: string): number {
-  return text.length * 2  // BMP 가정
-}
-function eucKrBytes(text: string): number {
-  // 단순 추정: 한글 2바이트, ASCII 1바이트, 기타 2바이트
-  let bytes = 0
-  for (const ch of text) {
-    const cp = ch.codePointAt(0) ?? 0
-    if (cp < 128) bytes += 1
-    else bytes += 2
-  }
-  return bytes
-}
-
-// 트위터 가중치: 영문/숫자/일부기호 = 1, 한글/한자/이모지 = 2
-function twitterWeight(text: string): number {
-  let w = 0
-  for (const ch of text) {
-    const cp = ch.codePointAt(0) ?? 0
-    if (cp < 0x80) w += 1
-    else if (cp >= 0x80 && cp <= 0xFF) w += 1 // Latin-1
-    else if (cp >= 0x100 && cp <= 0x10FF) w += 1 // 일부 라틴 확장
-    else w += 2
-  }
-  return w
-}
 
 // ─────────────────────────────────────────────
 // 컴포넌트
@@ -153,6 +46,8 @@ export default function CharCountClient() {
   const [replaceStr, setReplaceStr] = useState('')
   const [findCaseSensitive, setFindCaseSensitive] = useState(false)
 
+  /* 자동 저장 — 자소서·이력서 전문이 브라우저에 남을 수 있어 끄는 스위치를 둔다 */
+  const [saveEnabled, setSaveEnabled] = useState(true)
   // 자동 저장 — 새로고침해도 입력·목표 글자수 유지
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => {
@@ -164,6 +59,7 @@ export default function CharCountClient() {
         const j = JSON.parse(raw)
         if (typeof j.text === 'string') setText(j.text)
         if (typeof j.targetLimit === 'string') setTargetLimit(j.targetLimit)
+        if (typeof j.saveEnabled === 'boolean') setSaveEnabled(j.saveEnabled)
       }
     } catch {}
     setHydrated(true)
@@ -171,8 +67,15 @@ export default function CharCountClient() {
   }, [])
   useEffect(() => {
     if (!hydrated) return
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ text, targetLimit })) } catch {}
-  }, [hydrated, text, targetLimit])
+    try {
+      if (saveEnabled) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ text, targetLimit, saveEnabled }))
+      } else {
+        /* 끄면 저장해 둔 본문까지 즉시 지운다 — 끄기만 하고 남아 있으면 의미가 없다 */
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ saveEnabled }))
+      }
+    } catch {}
+  }, [hydrated, text, targetLimit, saveEnabled])
 
   // ─────────────────────────────────────────────
   // 통계 계산
@@ -184,7 +87,7 @@ export default function CharCountClient() {
     const words = trimmed === '' ? 0 : trimmed.split(/\s+/).length
     const lines = text === '' ? 0 : text.split('\n').length
     const paragraphs = text === '' ? 0 : text.split(/\n\s*\n/).filter(p => p.trim() !== '').length
-    const sentences = text === '' ? 0 : (text.match(/[.!?。？！]+(\s|$)/g) || []).length || (text.trim() ? 1 : 0)
+    const sentences = countSentences(text)
 
     // 문자 종류별 카운트
     let hangulSyll = 0
@@ -211,8 +114,11 @@ export default function CharCountClient() {
     // 인코딩 바이트
     const utf8 = utf8Bytes(text)
     const utf16 = utf16Bytes(text)
-    const eucKr = eucKrBytes(text)
-    const tw = twitterWeight(text)
+    const euc = eucKrCount(text)
+    const eucKr = euc.bytes
+    const eucUnsupported = euc.unsupported
+    const twc = twitterCount(text)
+    const tw = twc.weighted
 
     // 읽기·말하기 시간 (한국어 기준 약 300자/분 묵독, 150자/분 발화)
     const readingMin = len / 300
@@ -232,30 +138,16 @@ export default function CharCountClient() {
     return {
       len, lenNoSpace, words, lines, paragraphs, sentences,
       hangul, hangulSyll, hangulJamo, latin, digit, space, special, cjk, emoji,
-      utf8, utf16, eucKr, tw,
+      utf8, utf16, eucKr, eucUnsupported, tw, twc,
+      graphemeCount: graphemes(text).length,
       readingMin, speakingMin, englishWPM, manuscript200,
       hashtags, mentions, urls, emails, numbers,
     }
   }, [text])
 
-  // 시간 포맷
-  function fmtMin(m: number): string {
-    if (m === 0) return '0초'
-    if (m < 1 / 60) return '< 1초'
-    if (m < 1) return `${Math.round(m * 60)}초`
-    const min = Math.floor(m)
-    const sec = Math.round((m - min) * 60)
-    if (sec === 0) return `${min}분`
-    if (min === 0) return `${sec}초`
-    return `${min}분 ${sec}초`
-  }
-
-  // 플랫폼별 카운트 계산
+  // 플랫폼별 카운트 — 각 플랫폼이 실제로 쓰는 계산 방식으로
   function platformCount(p: PlatformLimit): number {
-    if (p.method === 'twitterWeighted') return stats.tw
-    if (p.method === 'bytes') return stats.eucKr
-    if (p.method === 'lines') return stats.lines
-    return stats.len
+    return countFor(text, p.method)
   }
 
   // 도구 — 변환 결과
@@ -269,7 +161,7 @@ export default function CharCountClient() {
       snake: text.toLowerCase().replace(/\s+/g, '_'),
       kebab: text.toLowerCase().replace(/\s+/g, '-'),
       camel: text.toLowerCase().replace(/\s+(.)/g, (_, c) => c.toUpperCase()),
-      reverse: [...text].reverse().join(''),
+      reverse: reverseText(text),
       trim: text.trim().replace(/\s+/g, ' '),
       // 정리 도구
       removeBlankLines: lines.filter(l => l.trim() !== '').join('\n'),
@@ -314,24 +206,63 @@ export default function CharCountClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabsThree}`}>
-        <button className={`${s.tabBtn} ${tab === 'count'     ? s.tabActive : ''}`} onClick={() => setTab('count')}>실시간 통계</button>
-        <button className={`${s.tabBtn} ${tab === 'platforms' ? s.tabActive : ''}`} onClick={() => setTab('platforms')}>플랫폼별 제한</button>
-        <button className={`${s.tabBtn} ${tab === 'tools'     ? s.tabActive : ''}`} onClick={() => setTab('tools')}>변환·찾기·빈도</button>
+        <button type="button" role="tab" aria-selected={tab === 'count'} className={`${s.tabBtn} ${tab === 'count'     ? s.tabActive : ''}`} onClick={() => setTab('count')}>실시간 통계</button>
+        <button type="button" role="tab" aria-selected={tab === 'platforms'} className={`${s.tabBtn} ${tab === 'platforms' ? s.tabActive : ''}`} onClick={() => setTab('platforms')}>플랫폼별 제한</button>
+        <button type="button" role="tab" aria-selected={tab === 'tools'} className={`${s.tabBtn} ${tab === 'tools'     ? s.tabActive : ''}`} onClick={() => setTab('tools')}>변환·찾기·빈도</button>
       </div>
 
       {/* 입력 — 모든 탭 공통 */}
       <div className={s.card}>
         <div className={s.cardTop}>
-          <label className={s.cardLabel}>텍스트 입력</label>
-          {text && <button className={s.clearBtn} onClick={() => setText('')}>지우기</button>}
+          <label className={s.cardLabel} htmlFor="cc-text">텍스트 입력</label>
+          {text && <button type="button" className={s.clearBtn} onClick={() => setText('')}>지우기</button>}
         </div>
         <textarea
+          id="cc-text"
           className={s.textarea}
           placeholder="여기에 텍스트를 입력하세요..."
           value={text}
           onChange={e => setText(e.target.value)}
           rows={tab === 'count' ? 6 : 8}
         />
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginTop: 10, fontSize: 12, color: 'var(--muted)' }}>
+          <label style={{ display: 'inline-flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={saveEnabled}
+              onChange={(e) => setSaveEnabled(e.target.checked)}
+            />
+            <span>이 브라우저에 자동 저장</span>
+          </label>
+          <span>
+            — 입력한 글은 <strong>이 기기의 브라우저 저장소</strong>에만 남고 서버로 전송되지 않습니다.
+            자기소개서처럼 민감한 글을 공용 PC에서 다룬다면 저장을 끄세요(끄면 저장된 내용도 바로 지워집니다).
+          </span>
+        </div>
+
+        {stats.eucUnsupported.length > 0 && (
+          <p role="status" style={{
+            marginTop: 10, fontSize: 12, lineHeight: 1.75, color: 'var(--text)',
+            background: 'color-mix(in srgb, var(--warning) 8%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--warning) 35%, transparent)',
+            borderRadius: 8, padding: '10px 12px',
+          }}>
+            ⚠️ EUC-KR로 표현할 수 없는 문자가 <strong>{stats.eucUnsupported.length}개</strong> 있습니다
+            ({[...new Set(stats.eucUnsupported)].slice(0, 8).join(' ')}
+            {new Set(stats.eucUnsupported).size > 8 ? ' …' : ''}).
+            {' '}SMS/LMS는 EUC-KR 기반이라 이모지는 바이트 수에 포함하지 않았습니다 — 실제 발송 시 제거되거나
+            MMS로 전환될 수 있으니 문자 발송 서비스의 안내를 확인하세요.
+          </p>
+        )}
+
+        {(stats.twc.urlCount > 0 || stats.twc.emojiCount > 0) && (
+          <p style={{ marginTop: 10, fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
+            ⓘ X 가중치 {fmt(stats.tw)} / {TWITTER_CONFIG.maxWeightedTweetLength} —
+            {stats.twc.urlCount > 0 && ` URL ${stats.twc.urlCount}개는 실제 길이와 무관하게 각 ${TWITTER_CONFIG.transformedURLLength}자로 계산됩니다.`}
+            {stats.twc.emojiCount > 0 && ` 이모지 ${stats.twc.emojiCount}개는 결합 여부와 무관하게 각 2자입니다.`}
+          </p>
+        )}
 
         {/* 목표 글자수 — 실시간 카운트다운 */}
         {(() => {
@@ -342,8 +273,8 @@ export default function CharCountClient() {
           return (
             <div style={{ marginTop: 10 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 12, color: 'var(--muted)' }}>목표 글자수</span>
-                <input
+                <label htmlFor="cc-target" style={{ fontSize: 12, color: 'var(--muted)' }}>목표 글자수</label>
+                <input id="cc-target"
                   type="number" inputMode="numeric" min={0} placeholder="예: 500"
                   value={targetLimit}
                   onChange={e => setTargetLimit(e.target.value.replace(/[^\d]/g, ''))}
@@ -355,7 +286,7 @@ export default function CharCountClient() {
                 />
                 <span style={{ fontSize: 12, color: 'var(--muted)' }}>자 (공백 포함)</span>
                 {hasTarget && (
-                  <span style={{ marginLeft: 'auto', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 14, color: over ? '#DC2626' : 'var(--accent)' }}>
+                  <span style={{ marginLeft: 'auto', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 14, color: over ? 'var(--danger)' : 'var(--accent-ink)' }}>
                     {over ? `초과 ${fmt(stats.len - targetN)}자` : `남은 ${fmt(targetN - stats.len)}자`}
                     <span style={{ color: 'var(--muted)', fontWeight: 600, fontSize: 12, marginLeft: 6 }}>{fmt(stats.len)} / {fmt(targetN)}</span>
                   </span>
@@ -402,6 +333,7 @@ export default function CharCountClient() {
             <div className={s.miniStat}><p className={s.miniStatLabel}>UTF-16</p>         <p className={s.miniStatValue}>{fmt(stats.utf16)}B</p></div>
             <div className={s.miniStat}><p className={s.miniStatLabel}>EUC-KR (SMS)</p>  <p className={s.miniStatValue}>{fmt(stats.eucKr)}B</p></div>
             <div className={s.miniStat}><p className={s.miniStatLabel}>X 가중치</p>      <p className={s.miniStatValue}>{fmt(stats.tw)}</p></div>
+            <div className={s.miniStat}><p className={s.miniStatLabel}>그래핌(눈에 보이는 글자)</p><p className={s.miniStatValue}>{fmt(stats.graphemeCount)}</p></div>
           </div>
 
           {/* 문자 종류별 분석 */}
@@ -450,10 +382,25 @@ export default function CharCountClient() {
                     <div key={p.name} className={s.limitRow}>
                       <div className={s.limitMeta}>
                         <span className={s.limitName}>
-                          {p.name}{p.note && <span style={{ color: 'var(--muted)', fontSize: 11, marginLeft: 6 }}>· {p.note}</span>}
+                          {p.name}
+                          <span
+                            title={SOURCE_TIER_LABEL[p.tier]}
+                            style={{
+                              fontSize: 10, marginLeft: 6, padding: '1px 6px', borderRadius: 999,
+                              border: '1px solid var(--border)',
+                              color: p.tier === 'official' ? 'var(--success)' : 'var(--muted)',
+                              background: 'var(--bg3)', whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {p.tier === 'official' ? '공식' : p.tier === 'community' ? '통용값' : '프리셋'}
+                          </span>
+                          <span style={{ color: 'var(--muted)', fontSize: 11, marginLeft: 6 }}>
+                            · {METHOD_LABEL[p.method]}
+                          </span>
+                          {p.note && <span style={{ color: 'var(--muted)', fontSize: 11, marginLeft: 6 }}>· {p.note}</span>}
                         </span>
                         <span className={`${s.limitCount} ${over ? s.limitOver : ''}`}>
-                          {fmt(cur)} / {fmt(p.limit)}{p.method === 'bytes' ? 'B' : ''}
+                          {fmt(cur)} / {fmt(p.limit)}{p.method.endsWith('Bytes') ? 'B' : ''}
                         </span>
                       </div>
                       <div className={s.progressBar}>
@@ -465,10 +412,20 @@ export default function CharCountClient() {
               </div>
             </div>
           ))}
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, lineHeight: 1.7 }}>
-            ※ X(트위터)는 한글 1자 = 가중치 2로 계산 (실제 280 weight). SMS는 EUC-KR 바이트로 계산 (한글 2B / 영문 1B).
-            플랫폼 정책은 변동될 수 있으므로 공식 페이지에서 최신 한도를 확인하세요.
-          </p>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, lineHeight: 1.8 }}>
+            <p style={{ margin: '0 0 6px' }}>
+              <strong style={{ color: 'var(--success)' }}>공식</strong> = 플랫폼 공식 문서에 명시된 값 ·
+              {' '}<strong>통용값</strong> = 공식 문서화가 없어 널리 쓰이는 값 ·
+              {' '}<strong>프리셋</strong> = 규격이 아니라 편의용 기준
+            </p>
+            <p style={{ margin: '0 0 6px' }}>
+              계산 방식도 플랫폼마다 다릅니다 — X는 가중치(한글·이모지 2, URL은 길이 무관 23),
+              SMS는 EUC-KR 바이트, Threads는 UTF-8 바이트, 나머지는 UTF-16 길이입니다.
+            </p>
+            <p style={{ margin: 0 }}>
+              ※ 2026년 8월 확인 기준이며 플랫폼 정책은 예고 없이 바뀝니다. 중요한 게시물은 공식 페이지에서 최신 한도를 확인하세요.
+            </p>
+          </div>
         </div>
       )}
 
@@ -482,14 +439,14 @@ export default function CharCountClient() {
                 <label className={s.cardLabel}>케이스 변환 (클릭 시 입력 텍스트에 적용)</label>
               </div>
               <div className={s.subActionRow}>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.upper)}>UPPER</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.lower)}>lower</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.title)}>Title Case</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.snake)}>snake_case</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.kebab)}>kebab-case</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.camel)}>camelCase</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.reverse)}>역순</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.trim)}>공백 정리</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.upper)}>UPPER</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.lower)}>lower</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.title)}>Title Case</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.snake)}>snake_case</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.kebab)}>kebab-case</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.camel)}>camelCase</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.reverse)}>역순</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.trim)}>공백 정리</button>
               </div>
             </div>
           )}
@@ -501,10 +458,10 @@ export default function CharCountClient() {
                 <label className={s.cardLabel}>줄 정리 (클릭 시 입력 텍스트에 적용)</label>
               </div>
               <div className={s.subActionRow}>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.removeBlankLines)}>빈 줄 모두 제거</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.collapseBlankLines)}>연속 빈 줄 1개로</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.dedupeLines)}>중복 줄 제거</button>
-                <button className={s.subActionBtn} onClick={() => applyConversion(conversions.sortLines)}>줄 가나다 정렬</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.removeBlankLines)}>빈 줄 모두 제거</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.collapseBlankLines)}>연속 빈 줄 1개로</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.dedupeLines)}>중복 줄 제거</button>
+                <button type="button" className={s.subActionBtn} onClick={() => applyConversion(conversions.sortLines)}>줄 가나다 정렬</button>
               </div>
             </div>
           )}
@@ -519,7 +476,7 @@ export default function CharCountClient() {
                 </span>
               )}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 8 }}>
               <input
                 type="text"
                 placeholder="찾을 문자열"
@@ -546,7 +503,7 @@ export default function CharCountClient() {
               대소문자 구분
             </label>
             {findReplaceResult && findStr && (
-              <button
+              <button type="button"
                 className={s.subActionBtn}
                 style={{ marginTop: 10 }}
                 onClick={() => setText(findReplaceResult.replaced)}

@@ -44,6 +44,17 @@ export default function CharCountPage() {
         ]}
       />
 
+      <UpdatedMeta
+        date="2026년 8월"
+        basis="X 가중치 = 공식 twitter-text config v3(4구간·기본 가중치 2·URL 23자 고정·NFC 정규화·이모지 엔티티 1개당 2자) · 플랫폼 한도는 항목별로 공식 문서 확인값/공식 미문서화 통용값/편의 프리셋을 구분해 표시 · SMS 90바이트는 EUC-KR 기준"
+        sources={[
+          { label: 'twitter-text 공식 설정 (config/v3.json)', href: 'https://github.com/twitter/twitter-text/blob/master/config/v3.json' },
+          { label: 'X — 글자수 세는 법', href: 'https://docs.x.com/fundamentals/counting-characters' },
+          { label: 'Google — 제목 링크 가이드', href: 'https://developers.google.com/search/docs/appearance/title-link?hl=ko' },
+          { label: 'Google — 스니펫 가이드', href: 'https://developers.google.com/search/docs/appearance/snippet?hl=ko' },
+        ]}
+      />
+
       <CharCountClient />
 
       <AdSlot position="in-article" minHeight={200} />
@@ -59,9 +70,9 @@ export default function CharCountPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '글자수 (Length)',     c: 'var(--accent)', d: '문자 1개를 1로 셉니다. 한글 "안녕" = 2글자. JavaScript의 string.length와 동일.' },
-              { t: 'UTF-8 바이트',        c: '#059669',       d: '웹 표준 인코딩. 한글 1자 = 3바이트, 영문/숫자 = 1바이트, 이모지 = 4바이트.' },
-              { t: 'EUC-KR 바이트',       c: '#A16207',       d: '한국 SMS·구형 시스템. 한글 1자 = 2바이트, 영문/숫자 = 1바이트.' },
-              { t: 'X(트위터) 가중치',     c: '#0891B2',       d: '한글·이모지 1자 = 가중치 2. 280 weight 한도. 한글만으로는 약 140자.' },
+              { t: 'UTF-8 바이트',        c: 'var(--success)',       d: '웹 표준 인코딩. 한글 1자 = 3바이트, 영문/숫자 = 1바이트, 이모지 = 4바이트.' },
+              { t: 'EUC-KR 바이트',       c: 'var(--cat-sports)',       d: '한국 SMS·구형 시스템. 한글 1자 = 2바이트, 영문/숫자 = 1바이트.' },
+              { t: 'X(트위터) 가중치',     c: 'var(--cat-health)',       d: '한글·이모지 1자 = 가중치 2. 280 weight 한도. 한글만으로는 약 140자.' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
@@ -159,8 +170,8 @@ export default function CharCountPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
               { t: 'SMS (단문)',  b: '90바이트',  ko: '한글 약 45자',     en: '영문 90자',  c: 'var(--accent)' },
-              { t: 'LMS (장문)',  b: '2,000바이트', ko: '한글 약 1,000자',  en: '영문 2,000자', c: '#059669' },
-              { t: 'MMS (멀티)', b: '2,000바이트 + 이미지', ko: '본문 약 1,000자', en: '제목 30바이트', c: '#A16207' },
+              { t: 'LMS (장문)',  b: '2,000바이트', ko: '한글 약 1,000자',  en: '영문 2,000자', c: 'var(--success)' },
+              { t: 'MMS (멀티)', b: '2,000바이트 + 이미지', ko: '본문 약 1,000자', en: '제목 30바이트', c: 'var(--cat-sports)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
@@ -180,7 +191,7 @@ export default function CharCountPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#EA580C' }}>주의:</strong> 통신사 정책상 1바이트라도 초과하면 LMS·MMS로 자동 전환되어 발송 단가가 올라갑니다.
+            ⚠️ <strong style={{ color: 'var(--warning)' }}>주의:</strong> 90바이트를 넘으면 LMS로 넘어갑니다. 자동 전환 여부와 과금 방식은 문자 발송 서비스마다 다르므로 사용하는 서비스의 요금 안내를 확인하세요.
             마케팅 문자는 SMS(45자) 안에 핵심을 담으세요.
           </div>
         </div>
@@ -192,12 +203,12 @@ export default function CharCountPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: 'HTML <title>',    range: '50~60자',  c: 'var(--accent)', d: '구글 검색결과 모바일 최대 50자, 데스크탑 60자 표시. 초과 시 "..." 잘림.' },
-              { t: 'meta description',range: '120~160자', c: '#059669',       d: '검색결과 스니펫. 모바일 120자, 데스크탑 160자 표시.' },
-              { t: 'Open Graph title', range: '40~60자',  c: '#0891B2',       d: '카카오톡·페이스북 공유 카드 제목.' },
-              { t: 'Open Graph description', range: '80~120자', c: '#A16207', d: '공유 카드 설명. 너무 길면 줄임.' },
-              { t: '이메일 제목',        range: '50자 (모바일)', c: '#EA580C', d: '받은편지함에서 짤리지 않는 안전 길이. 데스크탑은 78자.' },
-              { t: 'URL slug',          range: '50~70자',  c: '#9B59B6',       d: '검색엔진과 공유 시 가독성 균형.' },
+              { t: 'HTML <title>',    range: '50~60자 (권장)',  c: 'var(--accent)', d: '구글은 고정 글자수 제한을 두지 않고 화면 폭·검색어에 따라 잘라 표시합니다. 잘림 기준은 글자 수가 아니라 픽셀 폭이라, 폭이 넓은 한글은 더 짧게 잡는 편이 안전합니다.' },
+              { t: 'meta description',range: '120~160자 (권장)', c: 'var(--success)', d: '역시 고정 제한이 없습니다. 구글이 페이지 내용으로 스니펫을 다시 쓰는 경우도 많아, 정확한 길이보다 첫 문장에 핵심을 담는 편이 낫습니다.' },
+              { t: 'Open Graph title', range: '40~60자 (권장)',  c: 'var(--cat-health)', d: '카카오톡·페이스북 공유 카드 제목.' },
+              { t: 'Open Graph description', range: '80~120자 (권장)', c: 'var(--cat-sports)', d: '공유 카드 설명. 너무 길면 줄임.' },
+              { t: '이메일 제목',        range: '50자 (모바일 권장)', c: 'var(--cat-life)', d: '받은편지함 폭에 따라 달라지는 경험칙입니다. 데스크탑은 78자 안팎.' },
+              { t: 'URL slug',          range: '50~70자 (권장)',  c: 'var(--cat-unit)', d: '검색엔진과 공유 시 가독성 균형.' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 4, fontFamily: 'var(--font-mono)' }}>{g.t}</p>
@@ -232,7 +243,7 @@ export default function CharCountPage() {
                   { s: '유튜브 동영상 설명',       l: '5,000자',    n: '고객센터 명시' },
                   { s: 'X(트위터) 게시물',         l: '280 가중치', n: '한글·이모지 = 2, 영문·숫자 = 1 → 한글만 쓰면 약 140자' },
                   { s: '인스타그램 캡션',          l: '2,200자',    n: '피드에서는 처음 125자만 보이고 이후 더 보기로 접힘' },
-                  { s: '인스타그램 프로필 소개',   l: '150자',      n: '복수 가이드 일치값' },
+                  { s: '인스타그램 프로필 소개',   l: '150자',      n: '인스타그램 고객센터 명시' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.s}</td>
@@ -332,7 +343,7 @@ export default function CharCountPage() {
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 12px' }}>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>{r.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--text)' }}>📖 묵독 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.r}</strong></p>
-                <p style={{ fontSize: 12, color: 'var(--text)' }}>🎙️ 발화 <strong style={{ color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.s}</strong></p>
+                <p style={{ fontSize: 12, color: 'var(--text)' }}>🎙️ 발화 <strong style={{ color: 'var(--cat-health)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.s}</strong></p>
               </div>
             ))}
           </div>
