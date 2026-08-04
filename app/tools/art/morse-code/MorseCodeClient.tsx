@@ -19,6 +19,9 @@ const MODES: [Mode, string][] = [['morse', '· − 모스 부호'], ['nato', '�
        3단위 무음이 들어갔다(13 WPM이면 0.277초 × 2회). 실제 조난 신호 리듬과 다르다. */
 const SOS_PROSIGN = '...---...'
 
+/** 입력 상한 — 재생은 요소 하나당 스케줄이 잡히고, 30 WPM에서도 긴 입력은 수십 분이 된다. */
+const MAX_INPUT = 2000
+
 /** 건너뛴 문자 목록을 사람이 읽을 수 있게 (중복 제거·최대 6종) */
 function fmtDropped(dropped: string[]): string {
   const uniq = [...new Set(dropped)]
@@ -62,6 +65,12 @@ export default function MorseCodeClient() {
   const unknownMsg = dir === 'decode' && dec.unknown.length > 0
     ? `부호표에 없는 신호 ${dec.unknown.length}개를 건너뛰었습니다 — ${fmtDropped(dec.unknown)}`
     : ''
+  /* 한글 모스는 음절 경계를 보내지 않아 같은 자모열이 여러 낱말로 읽힌다.
+     기본 해석 하나만 내놓으면 '오빠'가 '옵바'로 굳어 버리므로 다른 읽기도 함께 보여 준다. */
+  const altReadings = dir === 'decode' && lang === 'ko' ? dec.alternatives : []
+  /* 한글 모드에서 라틴 문자는 26자가 전부 한글 자모와 부호가 겹쳐 되돌릴 수 없다
+     (A .- = ㅗ, B -... = ㄷ …). 숫자·문장부호만 복원된다. */
+  const latinInKo = dir === 'encode' && lang === 'ko' && /[A-Za-z]/.test(input)
 
   const copy = async (text: string, key: string) => {
     if (!text) return
@@ -245,13 +254,15 @@ export default function MorseCodeClient() {
           {/* 입력 */}
           <div className={s.card}>
             <div className={s.ioHead}>
-              <span className={s.cardLabel}>{dir === 'encode' ? '텍스트 입력' : '모스 부호 입력 (· − / 공백)'}</span>
+              <label className={s.cardLabel} htmlFor="morse-input">{dir === 'encode' ? '텍스트 입력' : '모스 부호 입력 (· − / 공백)'}</label>
               <button type="button" className={s.miniBtn} onClick={swapDir}>⇅ 방향 바꾸기</button>
             </div>
             {/* ⚠️ 예전에는 디코드 입력에서 `.`/`-` 외 문자를 즉시 삭제했다. 이 페이지의 부호표는
                 ·(U+00B7)·−(U+2212)로 렌더링하므로 **표에서 복사해 붙여 넣으면 전부 사라졌다.**
                 이제 원문을 그대로 두고 해석 단계에서 정규화한다. */}
             <textarea className={s.textarea} rows={3}
+              id="morse-input"
+              maxLength={MAX_INPUT}
               value={input}
               placeholder={dir === 'encode' ? (lang === 'ko' ? '예) 안녕하세요' : '예) HELLO') : '예) .... . .-.. .-.. ---   (· − 도 됩니다)'}
               onChange={(e) => setInput(e.target.value)} />
@@ -260,16 +271,37 @@ export default function MorseCodeClient() {
           {/* 출력 */}
           <div className={s.card}>
             <div className={s.ioHead}>
-              <span className={s.cardLabel}>{dir === 'encode' ? '모스 부호' : '텍스트'}</span>
+              <label className={s.cardLabel} htmlFor="morse-output">{dir === 'encode' ? '모스 부호' : '텍스트'}</label>
               <button type="button" className={s.miniBtn} onClick={() => copy(output, 'out')} disabled={!output}>
                 {copied === 'out' ? '✓ 복사됨' : '복사'}
               </button>
             </div>
-            <div className={`${s.output} ${dir === 'encode' ? s.outMorse : ''}`}>{output || <span className={s.ph}>—</span>}</div>
+            <div id="morse-output" className={`${s.output} ${dir === 'encode' ? s.outMorse : ''}`}>{output || <span className={s.ph}>—</span>}</div>
+            {/* 결과 본문이 수천 자가 될 수 있어 통째로 라이브 영역에 넣지 않고, 짧은 요약만 알린다 */}
+            <p className={s.srOnly} role="status" aria-live="polite">
+              {output ? `${dir === 'encode' ? '모스 부호' : '텍스트'} ${output.length}자를 변환했습니다.` : ''}
+            </p>
             {wrongLang && (
               <p className={s.warn} role="status">
                 입력에 한글이 있는데 <strong>언어가 &lsquo;영문&rsquo;</strong>으로 되어 있습니다. 영문 부호표에는 한글 자모가 없어 그대로 버려집니다.{' '}
                 <button type="button" className={s.inlineBtn} onClick={() => setLang('ko')}>한글로 바꾸기</button>
+              </p>
+            )}
+            {altReadings.length > 0 && (
+              <div className={s.altBox}>
+                <p className={s.altLabel}>다르게 읽을 수도 있습니다 — 한글 모스는 음절 경계를 보내지 않습니다</p>
+                <div className={s.altChips}>
+                  {altReadings.map((a) => (
+                    <button type="button" key={a} className={s.altChip}
+                      onClick={() => { setInput(a); setDir('encode') }}
+                      title="이 해석으로 다시 부호를 만들어 봅니다">{a}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {latinInKo && (
+              <p className={s.note} role="status">
+                한글 모드에서 <strong>영문 26자는 한글 자모와 부호가 완전히 겹칩니다</strong>(A ·− = ㅗ, B −··· = ㄷ …). 부호는 만들어지지만 되돌리면 한글로 읽힙니다. 숫자·문장부호는 그대로 복원됩니다.
               </p>
             )}
             {droppedMsg && <p className={s.note} role="status">{droppedMsg}</p>}
@@ -321,8 +353,8 @@ export default function MorseCodeClient() {
         <div className={s.panel} role="tabpanel" id="morse-panel-nato" aria-labelledby="morse-tab-nato">
           {/* NATO 입력 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>철자로 읽을 텍스트 (영문·숫자)</span>
-            <textarea className={s.textarea} rows={2} value={natoInput}
+            <label className={s.cardLabel} htmlFor="nato-input">철자로 읽을 텍스트 (영문·숫자)</label>
+            <textarea className={s.textarea} rows={2} id="nato-input" maxLength={MAX_INPUT} value={natoInput}
               placeholder="예) BTS-7 / 예약번호 AB3" onChange={(e) => setNatoInput(e.target.value)} />
           </div>
 

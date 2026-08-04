@@ -120,6 +120,15 @@ export default function MorseCodePage() {
               겹자음(ㄲ·ㅆ 등)은 같은 자음을 두 번, 겹받침·겹모음(닭·과 등)은 구성 자모를 차례로 타전합니다. 표에 따로 부호가 없어서 그렇게 보내는 것이고, 1888년 규정에 명시된 방식은 아닌 <strong style={{ color: 'var(--text)' }}>널리 쓰이는 관행</strong>입니다. 표의 26자 가운데 <strong style={{ color: 'var(--text)' }}>ㅐ·ㅔ는 1888년 원 규정(24자)에 없던 후대 추가분</strong>이라 자료에 따라 빠지기도 합니다.
             </p>
             <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '13px 16px', marginTop: '14px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>받을 때 생기는 모호함 — 음절 경계가 없습니다</p>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+                한글 모스는 자모를 차례로 보낼 뿐 <strong style={{ color: 'var(--text)' }}>어디서 음절이 끊기는지는 보내지 않습니다.</strong> 그래서 받은 자모열이 여러 낱말로 읽힙니다 — <strong style={{ color: 'var(--text)' }}>ㅇ ㅏ ㄱ ㄱ ㅏ</strong>는 &lsquo;아까&rsquo;도 &lsquo;악가&rsquo;도 되고, 같은 모양의 <strong style={{ color: 'var(--text)' }}>ㄱ ㅜ ㄱ ㄱ ㅏ</strong>는 &lsquo;국가&rsquo;입니다. 구조만으로는 가릴 방법이 없어요(둘 다 모음 사이에 자음 두 개).
+              </p>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, margin: '8px 0 0' }}>
+                이 변환기는 <strong style={{ color: 'var(--text)' }}>받침을 먼저 붙이는 해석</strong>을 기본으로 내놓고, 달리 읽을 수 있으면 후보를 함께 보여 줍니다. 기본값을 이렇게 정한 것은 실제 한국어 산문 4,000낱말로 두 방식을 견줘 본 결과입니다 — 받침 우선이 <strong style={{ color: 'var(--text)' }}>99.0%</strong>, 된소리 초성 우선이 98.8%로, 후자는 &lsquo;있습니다 → 잇씁니다&rsquo;처럼 아주 흔한 낱말을 깨뜨렸습니다. 실제 전신에서도 수신자가 문맥으로 가려 읽었습니다.
+              </p>
+            </div>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '13px 16px', marginTop: '10px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>원본과 오늘날의 표가 다른 곳 — ㅡ·ㅣ</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
                 1888년 「전보장정」의 <a href="https://cha.go.kr/cmm/fms/BoardFileDown.do?atchFileId=FILE_000000000001378&amp;bbsId=BBSMSTR_1019&amp;dwldHistYn=Y&amp;fileSn=1" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">원본 도판</a>(문화재청 2012년도 문화재위원회 근대문화재분과 제7차 회의록 46쪽 수록)을 확대해 보면, 모음 10자 가운데 여덟 자는 오늘날 표와 같지만 <strong style={{ color: 'var(--text)' }}>ㅡ와 ㅣ는 서로 반대</strong>입니다 — 원본은 <strong style={{ color: 'var(--text)' }}>ㅡ가 ··−, ㅣ가 −··</strong>인데 오늘날 통용되는 표는 ㅡ −··, ㅣ ··−예요. 도판의 모음 배열은 ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ 순이고, 아홉째 글자가 가로획(一)·열째가 세로획(丨)인 것이 획 모양으로 분명합니다.

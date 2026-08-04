@@ -156,44 +156,99 @@ function composeHangul(cho: string, jung: string, jong: string): string {
   return String.fromCharCode(0xac00 + (ci * 21 + ji) * 28 + ti)
 }
 
-// 기본 자모 배열 → 한글 음절 문자열(그리디 재결합)
-function assembleHangul(jamo: string[]): string {
-  let out = ''
-  let i = 0
-  const n = jamo.length
-  while (i < n) {
-    // 초성
-    let cho = ''
-    if (KO_CONS.has(jamo[i])) {
-      if (i + 2 < n && jamo[i] === jamo[i + 1] && DOUBLE_CHO[jamo[i] + jamo[i + 1]] && isVowel(jamo[i + 2])) {
-        cho = DOUBLE_CHO[jamo[i] + jamo[i + 1]]; i += 2
-      } else { cho = jamo[i]; i += 1 }
-    } else { cho = 'ㅇ' } // 자음 없이 모음으로 시작하면 ㅇ 보정
-    // 중성
-    if (!isVowel(jamo[i])) { out += cho; continue } // 모음이 없으면 자모 그대로
-    let jung = jamo[i]; i += 1
-    if (i < n && isVowel(jamo[i]) && VOWEL_COMPOSE[jung + jamo[i]]) { jung = VOWEL_COMPOSE[jung + jamo[i]]; i += 1 }
-    // 종성: 다음 모음 전의 자음 런에서 마지막 자음은 다음 초성
-    let jong = ''
-    if (i < n && KO_CONS.has(jamo[i])) {
-      // 자음 런 수집
-      let j = i
-      while (j < n && KO_CONS.has(jamo[j])) j++
-      const hasVowelAfter = j < n && isVowel(jamo[j])
-      const runEnd = hasVowelAfter ? j - 1 : j // 다음 초성 1개 남김
-      const finals = jamo.slice(i, runEnd)
-      if (finals.length === 2 && FINAL_COMPOSE[finals[0] + finals[1]]) { jong = FINAL_COMPOSE[finals[0] + finals[1]]; i = runEnd }
-      else if (finals.length >= 1) { jong = finals[0]; i += 1 }
+/* ── 자모 배열 → 한글 음절 ──
+   한글 모스는 자모를 차례로 보낼 뿐 **음절 경계를 표시하지 않는다.** 그래서 받은 자모열은
+   원리적으로 여러 낱말로 읽힌다 — ㅇㅏㄱㄱㅏ는 '아까'도 '악가'도 되고, ㄱㅜㄱㄱㅏ는 '국가'다.
+   구조만 보면 둘을 가릴 방법이 없다(둘 다 모음 사이 자음 2개).
+
+   ⚠️ 예전 구현은 그리디로 **받침 우선** 한 가지만 내놓아서, 개음절 뒤에 된소리 초성이 오는
+      낱말이 통째로 틀렸다: 아까→악가 · 오빠→옵바 · 토끼→톡기 · 예쁘다→옙브다 ·
+      깨끗하다→깩긋하다 · 띄어쓰기→띄엇스기. 반대로 국가·받다·맞자·십분은 받침 우선이 맞다.
+      한쪽으로 규칙을 바꾸면 반대쪽이 깨지므로, **가능한 읽기를 모두 만들어 보여 준다.** */
+
+/** 모음 뒤 자음 런을 (받침, 다음 초성)으로 가르는 방법을 열거한다.
+    초성은 1자 또는 된소리 2자, 받침은 0·1자 또는 겹받침 2자만 가능하다. */
+function splitOptions(run: string[], vowelFollows: boolean): Array<[string, number]> {
+  const L = run.length
+  const out: Array<[string, number]> = []   // [받침, 소비한 자음 수]
+  if (!vowelFollows) {
+    // 뒤에 모음이 없으면 런 전체가 받침 후보
+    if (L >= 2 && FINAL_COMPOSE[run[0] + run[1]]) out.push([FINAL_COMPOSE[run[0] + run[1]], 2])
+    if (L >= 1) out.push([run[0], 1])
+    if (L === 0) out.push(['', 0])
+    return out
+  }
+  // 받침 우선(초성 1자) → 된소리 초성(초성 2자) 순서로 담는다. 첫 항목이 기본 해석.
+  for (const onsetLen of [1, 2]) {
+    const codaLen = L - onsetLen
+    if (codaLen < 0) continue
+    if (onsetLen === 2) {
+      const pair = run[L - 2] + run[L - 1]
+      if (!(run[L - 2] === run[L - 1] && DOUBLE_CHO[pair])) continue
     }
-    out += composeHangul(cho, jung, jong)
+    if (codaLen === 0) out.push(['', 0])
+    else if (codaLen === 1) out.push([run[0], 1])
+    else if (codaLen === 2 && FINAL_COMPOSE[run[0] + run[1]]) out.push([FINAL_COMPOSE[run[0] + run[1]], 2])
   }
   return out
 }
 
-/** 디코딩 결과 + 표에 없어 해석하지 못한 부호.
-    ⚠️ 예전에는 모르는 부호를 조용히 버렸다. '.-.-.-.-.- ...'를 넣으면 앞 토큰이 사라지고
-       '여'라는 **그럴듯한 오답**만 남아, 입력의 절반이 무시됐다는 사실을 알 수 없었다. */
-export interface DecodeResult { text: string; unknown: string[] }
+/** 가능한 읽기를 모두 만든다(첫 항목이 기본 해석). cap으로 폭발을 막는다. */
+export function assembleHangulAll(jamo: string[], cap = 6): string[] {
+  const out: string[] = []
+  const seen = new Set<string>()
+  const n = jamo.length
+
+  const walk = (i: number, acc: string) => {
+    if (out.length >= cap) return
+    if (i >= n) {
+      if (!seen.has(acc)) { seen.add(acc); out.push(acc) }
+      return
+    }
+    /* ── 초성.
+       ⚠️ 된소리 초성을 **먼저** 놓아야 한다. 단일 자음을 먼저 시도하면 어두 된소리에서
+          '꼬리'가 'ㄱ고리'로 갈라져 기본 해석이 망가진다.
+       그리고 단일 자음은 **뒤에 모음이 올 때만** 초성이 된다 — 그러지 않으면
+          '아까'의 대안으로 '아ㄱ가' 같은 조각이 후보에 섞인다. */
+    const choOpts: Array<[string, number]> = []
+    if (KO_CONS.has(jamo[i])) {
+      if (i + 2 < n && jamo[i] === jamo[i + 1] && DOUBLE_CHO[jamo[i] + jamo[i + 1]] && isVowel(jamo[i + 2])) {
+        choOpts.push([DOUBLE_CHO[jamo[i] + jamo[i + 1]], i + 2])
+      }
+      if (i + 1 < n && isVowel(jamo[i + 1])) choOpts.push([jamo[i], i + 1])
+      if (!choOpts.length) { walk(i + 1, acc + jamo[i]); return }   // 모음이 안 따라오는 자음은 그대로
+    } else {
+      choOpts.push(['ㅇ', i])   // 자음 없이 모음으로 시작하면 ㅇ 보정
+    }
+
+    for (const [cho, j] of choOpts) {
+      if (out.length >= cap) return
+      // ── 중성 (겹모음은 자모열이 애초에 다르므로 모호하지 않다)
+      let jung = jamo[j]
+      let k = j + 1
+      if (k < n && isVowel(jamo[k]) && VOWEL_COMPOSE[jung + jamo[k]]) { jung = VOWEL_COMPOSE[jung + jamo[k]]; k += 1 }
+      // ── 종성: 다음 모음 전까지의 자음 런
+      let m = k
+      while (m < n && KO_CONS.has(jamo[m])) m++
+      const run = jamo.slice(k, m)
+      const vowelFollows = m < n && isVowel(jamo[m])
+      for (const [jong, used] of splitOptions(run, vowelFollows)) {
+        if (out.length >= cap) return
+        walk(k + used, acc + composeHangul(cho, jung, jong))
+      }
+    }
+  }
+
+  walk(0, '')
+  return out.length ? out : ['']
+}
+
+export interface DecodeResult {
+  text: string
+  unknown: string[]
+  /** 음절 경계가 없어 달리 읽을 수 있는 후보(기본 해석 제외). 한글 모드에서만 생긴다. */
+  alternatives: string[]
+}
 
 /** 글자가 아닌 운용 신호 — 부호표에 없다고 버리면 SOS조차 '알 수 없는 부호'가 된다.
     부호가 이미 문자에 배정된 것(+ = & K)은 여기 넣지 않는다(문자 해석이 우선). */
@@ -205,13 +260,15 @@ export const PROSIGN_BY_CODE: Record<string, string> = {
   '...-.-': 'VA (교신 종료)',
 }
 
-export function decodeMorseDetailed(morse: string, lang: Lang): DecodeResult {
+export function decodeMorseDetailed(morse: string, lang: Lang, altCap = 4): DecodeResult {
   const unknown: string[] = []
+  /** 단어별 읽기 후보 — 마지막에 곱집합으로 문장 후보를 만든다 */
+  const wordCandidates: string[][] = []
   const words = morse.trim().split(/\s*\/\s*/)
   const decodedWords = words.map((w) => {
     const tokens = w.split(/\s+/).filter(Boolean)
     if (lang === 'en') {
-      return tokens.map((t) => {
+      const en = tokens.map((t) => {
         const ch = REV_EN[t]
         if (ch !== undefined) return ch
         const ps = PROSIGN_BY_CODE[t]
@@ -219,23 +276,58 @@ export function decodeMorseDetailed(morse: string, lang: Lang): DecodeResult {
         unknown.push(t)
         return ''
       }).join('')
+      wordCandidates.push([en])
+      return en
     }
     /* 한글 모드에서도 운용 신호는 언어와 무관하므로 이름으로 보여 준다.
        자모 사이에 끼면 음절 조립이 끊기므로 조각을 나눠 이어 붙인다. */
-    let acc = ''
+    /* 자모 구간과 그 밖의 조각(운용 신호·영문 폴백)을 번갈아 모아, 자모 구간마다
+       가능한 읽기를 만든 뒤 조합한다. */
+    let parts: string[][] = [['']]
     let jamo: string[] = []
-    const flush = () => { acc += assembleHangul(jamo); jamo = [] }
+    const flush = () => {
+      if (!jamo.length) return
+      const cands = assembleHangulAll(jamo, altCap)
+      parts = parts.flatMap((pre) => cands.map((c) => [...pre.slice(0, -1), pre[pre.length - 1] + c]))
+      jamo = []
+    }
+    const append = (str: string) => {
+      parts = parts.map((pre) => [...pre.slice(0, -1), pre[pre.length - 1] + str])
+    }
     for (const t of tokens) {
       const j = REV_KO[t]
       if (j !== undefined) { jamo.push(j); continue }
       const ps = PROSIGN_BY_CODE[t]
-      if (ps) { flush(); acc += `⟨${ps}⟩`; continue }
+      if (ps) { flush(); append(`⟨${ps}⟩`); continue }
+      /* ⚠️ 한글 모드에서도 인코딩은 숫자·문장부호를 국제 부호로 내보내므로, 디코딩도
+         한글 표에 없으면 영문 표로 되받는다. 예전에는 그냥 버려서 'AI 시대 2026'이
+         '오야 시대 '가 됐다(숫자가 통째로 사라짐). */
+      const en = REV_EN[t]
+      if (en !== undefined) { flush(); append(en); continue }
       unknown.push(t)
     }
     flush()
-    return acc
+    const flat = parts.map((p) => p.join(''))
+    wordCandidates.push(flat.length ? flat : [''])
+    return flat[0] ?? ''
   })
-  return { text: decodedWords.join(' '), unknown }
+  /* 단어별 후보를 곱해 문장 후보를 만든다 — 폭발을 막으려고 altCap개로 자른다 */
+  let sentences: string[] = ['']
+  for (let wi = 0; wi < wordCandidates.length; wi++) {
+    const next: string[] = []
+    for (const pre of sentences) {
+      for (const c of wordCandidates[wi]) {
+        next.push(wi === 0 ? c : `${pre} ${c}`)
+        if (next.length >= altCap * 2) break
+      }
+      if (next.length >= altCap * 2) break
+    }
+    sentences = next
+  }
+  const text = decodedWords.join(' ')
+  // 단어별 후보를 곱하면 같은 문장이 여러 번 나온다 — 중복 제거
+  const alternatives = [...new Set(sentences)].filter((x) => x !== text).slice(0, altCap)
+  return { text, unknown, alternatives }
 }
 
 export function decodeMorse(morse: string, lang: Lang): string {

@@ -33,7 +33,11 @@
 }
 
 /* ── 컨트롤(방향·언어) ── */
-.ctrlRow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+/* ⚠️ `1fr`의 최소 크기는 min-content인데 .segBtn이 nowrap이라 '텍스트 → 모스'가 82px을
+      요구했다. 320px에서 첫 트랙이 178px을 먹고 언어 그룹이 카드(오른쪽 296px) 밖 311px까지
+      밀렸다. 트랙이 줄 수 있게 minmax(0,…)을 쓰고, 아주 좁으면 세로로 쌓는다. */
+.ctrlRow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 400px) { .ctrlRow { grid-template-columns: minmax(0, 1fr); gap: 12px; } }
 .ctrlGroup { display: flex; flex-direction: column; gap: 8px; }
 .ctrlLabel { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 0.04em; }
 .segment {
@@ -122,7 +126,9 @@
 }
 .speedRow { display: flex; align-items: center; gap: 12px; }
 .speedLabel { font-size: 13px; color: var(--muted); font-weight: 700; min-width: 96px; }
-.range { flex: 1; accent-color: var(--accent); height: 4px; }
+/* ⚠️ height: 4px면 요소 자체가 4px이라 터치·클릭 표적이 사실상 트랙 두께뿐이었다.
+      트랙은 얇게 보이되 요소 높이는 손가락이 닿을 만큼 확보한다. */
+.range { flex: 1; accent-color: var(--accent); height: 28px; min-height: 28px; }
 
 /* ── NATO ── */
 .natoChips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
@@ -197,3 +203,20 @@
 }
 .lampToggle input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
 .lampRate { font-size: 11.5px; font-weight: 400; color: var(--muted); }
+
+/* 음절 경계 모호성 — 다른 읽기 후보 */
+.altBox {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.altLabel { font-size: 11.5px; color: var(--muted); margin: 0 0 8px; line-height: 1.6; }
+.altChips { display: flex; flex-wrap: wrap; gap: 6px; }
+.altChip {
+  appearance: none; -webkit-appearance: none;
+  background: var(--bg2); border: 1px solid var(--accent); border-radius: 7px;
+  padding: 7px 12px; font-size: 14px; font-weight: 700; color: var(--accent-ink);
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 34px;
+}
