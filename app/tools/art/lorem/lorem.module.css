@@ -11,7 +11,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--accent-ink); }
 
 /* ── 탭 ── */
 .tabs {
@@ -187,9 +187,9 @@
   max-height: 480px;
   overflow-y: auto;
 }
-.codeBlock .key { color: #0891B2; }
-.codeBlock .str { color: #059669; }
-.codeBlock .num { color: #A16207; }
+.codeBlock .key { color: var(--accent-ink); }
+.codeBlock .str { color: var(--success); }
+.codeBlock .num { color: var(--warning); }
 .codeBlock .comment { color: var(--muted); font-style: italic; }
 
 /* ── UI 요소 카드 그리드 ── */
@@ -263,7 +263,7 @@
   .dataTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .dataTypeBtn small { display: block; font-size: 22px; margin-bottom: 4px; }
-.dataTypeActive { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 700; }
+.dataTypeActive { background: color-mix(in srgb, var(--warning) 14%, transparent); color: var(--warning); border-color: var(--warning); font-weight: 700; }
 
 .formatRow {
   display: grid;
@@ -285,7 +285,7 @@
 }@media (hover: hover) {
   .formatBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.formatActive { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 700; }
+.formatActive { background: color-mix(in srgb, var(--warning) 14%, transparent); color: var(--warning); border-color: var(--warning); font-weight: 700; }
 
 .checkRow {
   display: flex;
@@ -328,8 +328,8 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  background: rgba(234,88,12,0.15);
-  color: #EA580C;
+  background: color-mix(in srgb, var(--warning) 15%, transparent);
+  color: var(--warning);
   font-size: 10px;
   padding: 3px 9px;
   border-radius: 999px;
@@ -363,7 +363,7 @@
   font-size: 14px;
   color: var(--accent);
 }
-.previewRating { color: #A16207; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.previewRating { color: var(--warning); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
 /* ── UX 라이팅 시나리오 ── */
 .scenarioGrid {
@@ -389,12 +389,12 @@
   .scenarioBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .scenarioBtn small { display: block; font-size: 18px; margin-bottom: 2px; }
-.scenarioActive { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
+.scenarioActive { background: color-mix(in srgb, var(--cat-art) 12%, transparent); color: var(--cat-art); border-color: var(--cat-art); font-weight: 700; }
 
 .uxResultCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-left: 3px solid #9B59B6;
+  border-left: 3px solid var(--cat-art);
   border-radius: 12px;
   padding: 16px 18px;
 }
@@ -501,11 +501,11 @@
   gap: 8px;
 }
 .btnPrimary {
-  background: var(--accent);
+  background: var(--accent-strong);
   border: none;
   border-radius: 8px;
   padding: 10px 16px;
-  color: #000;
+  color: #fff;
   font-size: 13px;
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
@@ -532,11 +532,11 @@
   cursor: pointer;
 }
 .btnDanger {
-  background: rgba(220,38,38,0.18);
-  border: 1px solid #DC2626;
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  border: 1px solid var(--danger);
   border-radius: 8px;
   padding: 10px 16px;
-  color: #DC2626;
+  color: var(--danger);
   font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -569,3 +569,16 @@
   cursor: pointer;
 }
 .toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+/* 더미 값 안전 대역 안내 */
+.safetyNote {
+  margin-top: 10px;
+  padding: 9px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.safetyNote strong { color: var(--text); font-weight: 700; }

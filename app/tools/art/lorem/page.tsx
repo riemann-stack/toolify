@@ -4,6 +4,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Link from 'next/link'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/art/lorem',
@@ -27,7 +28,11 @@ const FAQ_LD = [
               },
               {
                 q: 'JSON 데이터의 이름·이메일·전화번호는 실제 정보인가요?',
-                a: '아닙니다. 모두 사전에 정의된 <strong>가상 풀에서 무작위로 조합</strong>한 데이터입니다. 실제 인물·서비스와는 무관하며, 개인정보 이슈 없이 자유롭게 사용 가능합니다.',
+                a: '실제 정보를 가져오지 않고, 가상 풀에서 무작위로 조합합니다. 다만 형식만 그럴듯한 더미는 <strong>우연히 실존하는 값과 겹칠 수</strong> 있어, 본 도구는 처음부터 겹치지 않는 대역만 씁니다. 이메일은 RFC 2606이 문서·예시용으로 예약한 <strong>example.com·example.net·example.org</strong>만 사용하며(널 MX가 공표돼 메일 배달 자체가 불가능), 휴대전화는 「전기통신번호관리세칙」이 정한 부여 형식 010-ABYY-YYYY(A=2~9)를 벗어나는 <strong>010-0XXX·010-1XXX 대역</strong>만 생성합니다. 주소도 실재하지 않는 예시용 도로명을 씁니다.',
+              },
+              {
+                q: '더미 데이터를 실제 이메일 발송·문자 테스트에 그대로 써도 되나요?',
+                a: '발송 테스트에는 그대로 쓰지 마세요. 본 도구의 이메일은 배달이 불가능한 예약 도메인이라 <strong>전송 시 반드시 실패</strong>하고, 전화번호는 부여되지 않는 대역이라 발신되지 않습니다. 이는 의도된 안전장치입니다. 실제 발송 경로를 검증하려면 본인이 수신 가능한 주소·번호나 Mailtrap 같은 <strong>메일 캡처 서비스</strong>를 쓰세요. 반대로 UI 목업·목 서버 응답·DB 시드처럼 값이 밖으로 나가지 않는 용도에는 이 더미가 가장 안전합니다.',
               },
               {
                 q: '같은 결과를 다시 만들 수는 없나요? (시드 고정)',
@@ -49,6 +54,15 @@ export default function LoremPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         문단·버튼·카드·리뷰·JSON 더미를 <strong style={{ color: 'var(--text)' }}>UI 목업에 바로</strong> 붙여 쓸 수 있게.
       </p>
+
+      <UpdatedMeta
+        date="2026년 8월"
+        basis="더미 값 대역: RFC 2606 예약 도메인 · 전기통신번호관리세칙 미부여 대역 기준"
+        sources={[
+          { label: 'RFC 2606 (예약 최상위 도메인)', href: 'https://www.rfc-editor.org/rfc/rfc2606' },
+          { label: '전기통신번호관리세칙 (국가법령정보센터)', href: 'https://www.law.go.kr/행정규칙/전기통신번호관리세칙' },
+        ]}
+      />
 
       <LoremClient />
 
@@ -229,11 +243,55 @@ export default function LoremPage() {
           </p>
         </section>
 
+        {/* 6b. 안전한 더미 값 규칙 */}
+        <section>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>더미 이메일·전화번호는 아무 값이나 쓰면 안 됩니다</h2>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+            더미 데이터의 사고는 대부분 &lsquo;형식만 맞춘 값&rsquo;에서 납니다. 시드 데이터로 넣어 둔 주소로 스테이징 서버가 실제 안내 메일을 보내거나, 테스트 문자가 모르는 사람에게 도착하는 식입니다. <strong style={{ color: 'var(--text)' }}>실존할 수 없는 값</strong>을 쓰면 이 사고가 구조적으로 막힙니다. 본 도구가 쓰는 대역과 근거는 다음과 같습니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: '520px' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid var(--border)' }}>
+                  <th style={{ textAlign: 'left', padding: '9px 10px' }}>항목</th>
+                  <th style={{ textAlign: 'left', padding: '9px 10px' }}>본 도구가 쓰는 값</th>
+                  <th style={{ textAlign: 'left', padding: '9px 10px' }}>근거</th>
+                </tr>
+              </thead>
+              <tbody style={{ color: 'var(--muted)' }}>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>이메일</td>
+                  <td style={{ padding: '9px 10px' }}>@example.com / .net / .org</td>
+                  <td style={{ padding: '9px 10px' }}>RFC 2606 §3 — 문서·예시 전용 예약 TLD. 널 MX(RFC 7505)로 배달 불가</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>휴대전화</td>
+                  <td style={{ padding: '9px 10px' }}>010-0XXX-XXXX · 010-1XXX-XXXX</td>
+                  <td style={{ padding: '9px 10px' }}>전기통신번호관리세칙 제20조제4항제1호 — 부여 형식은 010-ABYY-YYYY(<strong style={{ color: 'var(--text)' }}>A=2~9</strong>). 0·1로 시작하는 대역은 부여되지 않음</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>우편번호</td>
+                  <td style={{ padding: '9px 10px' }}>5자리</td>
+                  <td style={{ padding: '9px 10px' }}>2015-08-01부터 국가기초구역번호 5자리 체계(옛 6자리 우편번호는 폐지)</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>주소</td>
+                  <td style={{ padding: '9px 10px' }}>예시구 샘플로 등</td>
+                  <td style={{ padding: '9px 10px' }}>실재 도로명 + 임의 번지는 실존 주소를 만들어 냄</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
+            참고로 한국에는 미국의 <strong style={{ color: 'var(--text)' }}>555-0100~0199</strong>(NANP가 드라마·예시용으로 예약)에 해당하는 <strong style={{ color: 'var(--text)' }}>공식 예약 번호대가 없습니다</strong>. 그래서 &lsquo;예약된 번호&rsquo;를 쓰는 대신 &lsquo;부여되지 않는 형식&rsquo;을 쓰는 것이 현재로선 가장 안전한 선택입니다.
+          </p>
+        </section>
+
         {/* 7. legal */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>저작권·사용 권한</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            본 도구가 생성하는 모든 텍스트와 데이터는 <strong style={{ color: 'var(--text)' }}>무작위로 조합된 가상 정보</strong>이며, 저작권이 발생하지 않습니다. 개인 프로젝트, 상업 프로젝트, 클라이언트 시안 어디에든 자유롭게 사용 가능합니다. 단, 이름·이메일·전화번호 등은 가상 데이터이므로 실제 인물을 가리키지 않습니다.
+            본 도구가 생성하는 모든 텍스트와 데이터는 <strong style={{ color: 'var(--text)' }}>무작위로 조합된 가상 정보</strong>이며, 저작권이 발생하지 않습니다. 개인 프로젝트, 상업 프로젝트, 클라이언트 시안 어디에든 자유롭게 사용 가능합니다. 이름은 흔한 성·이름을 조합한 것이라 동명이인이 실재할 수 있지만, 그 자체로는 특정 개인을 알아볼 수 없어 「개인정보 보호법」상 개인정보에 해당하지 않습니다. 다만 <strong style={{ color: 'var(--text)' }}>생성된 값을 실재하는 다른 정보와 결합해 쓰지는 마세요</strong> — 가상 이름이라도 실제 주소·계좌 등과 묶이면 식별 가능한 정보가 됩니다.
           </p>
         </section>
 
