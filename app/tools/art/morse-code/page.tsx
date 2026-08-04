@@ -119,6 +119,15 @@ export default function MorseCodePage() {
             <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '16px 0 0', lineHeight: 1.7 }}>
               겹자음(ㄲ·ㅆ 등)은 같은 자음을 두 번, 겹받침·겹모음(닭·과 등)은 구성 자모를 차례로 타전합니다. 표에 따로 부호가 없어서 그렇게 보내는 것이고, 1888년 규정에 명시된 방식은 아닌 <strong style={{ color: 'var(--text)' }}>널리 쓰이는 관행</strong>입니다. 표의 26자 가운데 <strong style={{ color: 'var(--text)' }}>ㅐ·ㅔ는 1888년 원 규정(24자)에 없던 후대 추가분</strong>이라 자료에 따라 빠지기도 합니다.
             </p>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '13px 16px', marginTop: '14px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>원본과 오늘날의 표가 다른 곳 — ㅡ·ㅣ</p>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+                1888년 「전보장정」의 <a href="https://cha.go.kr/cmm/fms/BoardFileDown.do?atchFileId=FILE_000000000001378&amp;bbsId=BBSMSTR_1019&amp;dwldHistYn=Y&amp;fileSn=1" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">원본 도판</a>(문화재청 2012년도 문화재위원회 근대문화재분과 제7차 회의록 46쪽 수록)을 확대해 보면, 모음 10자 가운데 여덟 자는 오늘날 표와 같지만 <strong style={{ color: 'var(--text)' }}>ㅡ와 ㅣ는 서로 반대</strong>입니다 — 원본은 <strong style={{ color: 'var(--text)' }}>ㅡ가 ··−, ㅣ가 −··</strong>인데 오늘날 통용되는 표는 ㅡ −··, ㅣ ··−예요. 도판의 모음 배열은 ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ 순이고, 아홉째 글자가 가로획(一)·열째가 세로획(丨)인 것이 획 모양으로 분명합니다.
+              </p>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, margin: '8px 0 0' }}>
+                언제 왜 바뀌었는지를 밝힌 자료는 찾지 못했습니다. 이 변환기는 다른 변환기·자료와 결과를 맞추기 위해 <strong style={{ color: 'var(--text)' }}>오늘날 통용되는 표</strong>를 씁니다. 한글 모스 부호가 법으로 정해진 표준이 아니라 관행으로 이어져 왔다는 점을 잘 보여 주는 대목이에요.
+              </p>
+            </div>
           </div>
         </div>
 
