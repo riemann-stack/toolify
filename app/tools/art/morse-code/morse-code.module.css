@@ -1,5 +1,7 @@
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
+/* 탭 패널 — tab의 aria-controls가 가리킬 실제 요소가 있어야 한다 */
+.panel { display: flex; flex-direction: column; gap: 14px; }
 
 /* ── 모드 토글 ── */
 .modeToggle {
@@ -67,8 +69,10 @@
 .output {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 14px; min-height: 52px; font-size: 15px; line-height: 1.7;
-  color: var(--text); word-break: break-all; white-space: pre-wrap;
+  color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere;
 }
+/* 모스 부호는 공백이 의미를 가지므로 어디서든 접히게 둔다 */
+.outMorse { word-break: break-all; }
 .outMorse {
   font-family: 'Inter', system-ui, monospace; letter-spacing: 0.06em;
   font-size: 17px; color: var(--accent); font-weight: 600;
@@ -81,10 +85,25 @@
   background: var(--bg3); border: 1px solid var(--border);
   transition: background 40ms linear, box-shadow 40ms linear;
 }
+/* 램프 점등색은 신호등(호박색)을 흉내 내는 장식 요소로, 토큰 팔레트에 대응 색이 없다.
+   텍스트가 아니므로 대비 기준 대상도 아니다 — 여기서만 쓰는 로컬 값으로 명시해 둔다. */
 .lampOn {
-  background: #FBBF24;
-  border-color: #F59E0B;
-  box-shadow: 0 0 32px 4px rgba(251,191,36,0.7), inset 0 0 20px rgba(255,255,255,0.4);
+  --lamp: #FBBF24;
+  --lamp-edge: #F59E0B;
+  background: var(--lamp);
+  border-color: var(--lamp-edge);
+  box-shadow: 0 0 32px 4px color-mix(in srgb, var(--lamp) 70%, transparent), inset 0 0 20px rgba(255,255,255,0.4);
+}
+
+/* 점멸을 원치 않는 사용자에게는 켜짐/꺼짐을 밝기 차이로만 알린다.
+   WCAG 2.3.1은 초당 3회를 넘는 번쩍임을 제한하는데, 이 도구는 30 WPM에서
+   연속 단점이면 초당 12.5회까지 점멸한다. */
+@media (prefers-reduced-motion: reduce) {
+  .lamp { transition: none; }
+  .lampOn {
+    box-shadow: none;
+    background: color-mix(in srgb, var(--lamp) 45%, var(--bg3));
+  }
 }
 .playRow { display: flex; gap: 10px; margin-bottom: 14px; }
 .playBtn {
@@ -94,11 +113,11 @@
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 50px;
 }
 .playBtn:disabled { opacity: 0.4; cursor: default; }
-.playStop { background: #DC2626; }
+.playStop { background: var(--danger); }
 .sosBtn {
   appearance: none; -webkit-appearance: none;
-  background: var(--bg3); border: 1px solid #DC2626; border-radius: 10px;
-  padding: 13px 18px; font-size: 14px; font-weight: 800; color: #DC2626;
+  background: var(--bg3); border: 1px solid var(--danger); border-radius: 10px;
+  padding: 13px 18px; font-size: 14px; font-weight: 800; color: var(--danger);
   cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 50px;
 }
 .speedRow { display: flex; align-items: center; gap: 12px; }
@@ -114,6 +133,7 @@
 }
 .natoCh { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: var(--accent); }
 .natoWord { font-size: 13px; font-weight: 700; color: var(--text); }
+.natoSay { font-size: 10.5px; color: var(--accent-ink); font-family: 'Inter', system-ui, sans-serif; font-weight: 600; letter-spacing: 0.02em; }
 .natoKo { font-size: 11px; color: var(--muted); }
 
 .refGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -123,6 +143,7 @@
   color: var(--accent); min-width: 18px; text-align: center;
 }
 .refWord { font-size: 13px; font-weight: 600; color: var(--text); display: flex; flex-direction: column; line-height: 1.3; }
+.refSay { font-size: 10.5px; color: var(--accent-ink); font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
 .refKo { font-size: 11px; color: var(--muted); font-weight: 400; }
 
 .helpText { font-size: 12px; color: var(--muted); margin: 14px 0 0; line-height: 1.7; }
@@ -133,3 +154,46 @@
   .textarea { font-size: 16px; }
   .segBtn { font-size: 12px; }
 }
+
+/* ── 변환 손실 안내 ──
+   미지원 문자·해석 못한 부호를 조용히 버리면 사용자는 그럴듯한 오답을 정답으로 받는다. */
+.note {
+  margin: 10px 0 0;
+  padding: 9px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.warn {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--warning) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warning) 42%, transparent);
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--text);
+}
+.warn strong { font-weight: 700; }
+.inlineBtn {
+  appearance: none; -webkit-appearance: none;
+  background: var(--accent-strong); border: none; border-radius: 6px;
+  padding: 5px 10px; margin-left: 2px;
+  font-size: 12px; font-weight: 700; color: #fff;
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  min-height: 28px;
+}
+
+/* 빛 재생 토글 — 광과민성 때문에 기본 꺼짐 */
+.lampToggle {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px;
+  margin-bottom: 12px; cursor: pointer;
+  font-size: 13px; font-weight: 700; color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 32px;
+}
+.lampToggle input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+.lampRate { font-size: 11.5px; font-weight: 400; color: var(--muted); }
