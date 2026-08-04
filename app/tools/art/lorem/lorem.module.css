@@ -1,5 +1,8 @@
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
+/* 탭 패널 — .wrap과 같은 세로 흐름을 유지하면서 role="tabpanel" 요소를 실제로 만든다
+   (tab의 aria-controls가 가리킬 대상이 있어야 한다) */
+.panel { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
 .disclaimer {
@@ -411,10 +414,13 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* ── 길이 테스트 ── */
+/* ── 길이 테스트 ──
+   ⚠️ `1fr`의 기본 최소 크기는 min-content이고, .lenText의 word-break 때문에
+      min-content가 한 글자 폭이 된다. 320px에서 텍스트 칸이 11.9px까지 눌려
+      '매우 길게' 한 행이 7,675px 높이가 됐다. minmax(0,1fr) + 좁은 폭 2행 배치. */
 .lenItem {
   display: grid;
-  grid-template-columns: 100px 1fr 80px 30px;
+  grid-template-columns: 100px minmax(0, 1fr) 80px 30px;
   gap: 10px;
   align-items: center;
   background: var(--bg3);
@@ -426,7 +432,19 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 @media (max-width: 600px) {
-  .lenItem { grid-template-columns: 80px 1fr 60px 28px; gap: 6px; }
+  /* 라벨·글자수·복사를 한 줄에, 본문은 아래 줄 전체 폭으로 */
+  .lenItem {
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas:
+      'label size copy'
+      'text  text text';
+    gap: 6px 8px;
+    padding: 10px 12px;
+  }
+  .lenItem .lenLabel { grid-area: label; }
+  .lenItem .lenSize  { grid-area: size; }
+  .lenItem .lenCopy  { grid-area: copy; }
+  .lenItem .lenText  { grid-area: text; }
 }
 .lenItem .lenLabel {
   font-family: 'Inter', system-ui, sans-serif;
@@ -444,12 +462,16 @@
   text-align: right;
 }
 
+/* ⚠️ `repeat(4, 1fr)`은 각 트랙의 최소 크기가 min-content라, nowrap truncate 샘플이
+      들어간 칸이 2,532px로 부풀고 옆 칸이 83px로 짜부라졌다(오른쪽 내용 잘림).
+      minmax(0, …)로 트랙이 콘텐츠보다 작아질 수 있게 한다. */
 .previewBoxRow {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 }
-@media (max-width: 600px) { .previewBoxRow { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px) { .previewBoxRow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .previewBoxRow { grid-template-columns: minmax(0, 1fr); } }
 
 .previewBox {
   background: var(--bg3);
@@ -459,7 +481,11 @@
   font-size: 12px;
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
+  min-width: 0;
 }
+/* 오버플로 테스트 칸은 '넘치는 모습'을 보여주는 것이 목적이므로 강제 줄바꿈하지 않는다.
+   대신 칸 안에서만 가로 스크롤해 레이아웃을 무너뜨리지 않게 한다. */
+.previewBoxScroll { overflow-x: auto; }
 .previewBoxLabel {
   font-size: 10px;
   color: var(--muted);
@@ -582,3 +608,38 @@
   color: var(--muted);
 }
 .safetyNote strong { color: var(--text); font-weight: 700; }
+
+/* 길이 테스트 행의 복사 버튼 — 좁은 화면 grid-area 지정용 (터치 타깃 24px 이상) */
+.lenCopy {
+  min-width: 30px;
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 스크린리더 전용 — 생성 결과 알림 */
+.srOnly {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 터치 타깃 — WCAG 2.2 SC 2.5.8(AA)의 24×24 CSS px는 이미 넘었지만,
+   Apple HIG·Material의 권장치에 맞춰 선택 칩을 키운다. */
+.toneBtn, .toggleBtn, .formatBtn { min-height: 40px; }
+.dataTypeBtn, .scenarioBtn { min-height: 56px; }
+.miniCopyBtn { min-height: 32px; }
+
+/* 기능 범위 안내(톤 적용 여부·풀 크기) — 과장된 설명을 화면에서 바로잡는다 */
+.scopeNote {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.scopeNote strong { color: var(--text); font-weight: 700; }

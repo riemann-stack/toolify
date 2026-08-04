@@ -9,7 +9,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 export const metadata = buildMetadata({
   path: '/tools/art/lorem',
   title: '더미 텍스트 생성기 — 문단·버튼·카드·JSON 더미 데이터',
-  description: '한글·영문 문단, 버튼·카드·리뷰 UI 카피, 회원·상품 JSON/CSV 더미까지 9가지 톤으로 생성. truncate 길이 테스트·UX 라이팅 시나리오 포함, UI 목업에 바로 붙여 쓰는 더미 콘텐츠 생성기.',
+  description: '한글 문단·UI 카피·카드·UX 라이팅을 9가지 톤으로, 회원·상품 JSON 더미를 8가지 포맷으로 생성. truncate 길이 테스트 포함, UI 목업에 바로 붙여 쓰는 더미 콘텐츠 생성기.',
   keywords: [
     '더미텍스트', '더미데이터', '로렘입숨', 'lorem ipsum', '한글더미', 'UI목업',
     'JSON 더미', 'mock data', 'placeholder text', '카드 목업', 'UX 라이팅',
@@ -61,6 +61,8 @@ export default function LoremPage() {
         sources={[
           { label: 'RFC 2606 (예약 최상위 도메인)', href: 'https://www.rfc-editor.org/rfc/rfc2606' },
           { label: '전기통신번호관리세칙 (국가법령정보센터)', href: 'https://www.law.go.kr/행정규칙/전기통신번호관리세칙' },
+          { label: '우편번호 안내 (우정사업본부)', href: 'https://www.koreapost.go.kr/kpost/subIndex/208.do?pSiteIdx=125' },
+          { label: '2025 저작권 상담 사례집 (한국저작권위원회)', href: 'https://www.copyright.or.kr/information-materials/publication/research-report/view.do?brdctsno=55038' },
         ]}
       />
 
@@ -85,8 +87,8 @@ export default function LoremPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>6가지 탭 활용 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '10px' }}>
             {[
-              { icon: '📝', title: '문단', desc: '한글·영문 Lorem Ipsum 5단계 길이(아주 짧게~매우 길게) × 9가지 톤. 1~20문단 슬라이더로 분량 조절.' },
-              { icon: '🎨', title: 'UI 요소', desc: '타이틀·서브타이틀·버튼·카드 제목·상품명·리뷰·댓글·알림·에러·빈 상태·온보딩·가격 플랜·FAQ 등 19종.' },
+              { icon: '📝', title: '문단', desc: '5단계 길이(아주 짧게~매우 길게) × 9가지 톤의 한글 문단. 영문은 고전 Lorem Ipsum(톤 무관). 1~20문단.' },
+              { icon: '🎨', title: 'UI 요소', desc: '타이틀·서브타이틀·버튼·카드 제목·상품명·리뷰·댓글·알림·에러·빈 상태·온보딩·가격 플랜·FAQ 질문/답변 19종.' },
               { icon: '📊', title: 'JSON 더미 데이터', desc: '회원·상품·주문·리뷰·게시글·거래·댓글·이벤트·주소·할일 10종 × JSON/JSONL/CSV/YAML/Markdown/HTML/JSX/TS 8개 포맷.' },
               { icon: '🃏', title: '카드 UI 목업', desc: '상품·아티클·프로필 3가지 스타일로 실제 카드를 시각적으로 렌더링. 그대로 스크린샷 가능.' },
               { icon: '✍️', title: 'UX 라이팅', desc: '로그인 실패·결제 실패·삭제 확인·빈 상태 등 5가지 시나리오를 톤별로 자동 작성. 제목·본문·버튼 카피 한 세트.' },
@@ -104,6 +106,9 @@ export default function LoremPage() {
         {/* 3. tone guide */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>9가지 톤이 만드는 차이</h2>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
+            톤이 적용되는 곳은 <strong style={{ color: 'var(--text)' }}>한글 문단 · UI 문구(19종 중 11종) · 카드 목업 · UX 라이팅</strong>입니다. 영문 Lorem Ipsum은 의사 라틴어라 톤 개념이 성립하지 않고, 이름·상품명·JSON 더미는 문체가 아니라 <strong style={{ color: 'var(--text)' }}>값</strong>이라 톤과 무관합니다. 각 화면에도 같은 안내를 표시합니다.
+          </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             같은 &quot;시작하기&quot; 문구도 톤에 따라 분위기가 완전히 달라집니다. 디자인 시안의 무드보드를 정한 뒤, 이에 맞는 톤을 선택해 일관된 더미 콘텐츠를 채우면 시안의 설득력이 올라갑니다.
           </p>
@@ -131,7 +136,7 @@ export default function LoremPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>JSON 더미 데이터 8가지 출력 형식</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-            &quot;회원 정보 50명&quot;을 만든다고 할 때, 어디에 붙여넣을지에 따라 필요한 형식이 다릅니다. 본 도구는 한 번 생성한 데이터를 8가지 포맷 중 어느 것으로든 즉시 변환합니다.
+            &quot;회원 정보 50명&quot;을 만든다고 할 때, 어디에 붙여넣을지에 따라 필요한 형식이 다릅니다. 본 도구는 한 번 생성한 데이터를 <strong style={{ color: 'var(--text)' }}>다시 만들지 않고</strong> 8가지 포맷 중 어느 것으로든 바꿔 보여 줍니다. 포맷 버튼을 누르면 같은 레코드가 그대로 유지된 채 표기만 바뀝니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
@@ -214,15 +219,21 @@ export default function LoremPage() {
             표준 필러 열은 본 도구의 영문 문단 탭이 생성하는 텍스트와 동일합니다(본 도구 기준값).
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            필러가 dolorem이 아니라 <strong style={{ color: 'var(--text)' }}>lorem으로 시작하는 이유</strong>에도 물증이 있습니다. 1914년 Loeb Classical Library판(라틴·영문 대역) 스캔을 보면 라틴어 텍스트 페이지가 정확히 &quot;lorem ipsum quia dolor sit amet…&quot;로 시작합니다 — &apos;dolorem&apos;의 &apos;do-&apos;가 앞 페이지 끝에 걸려 잘렸고, 필러 텍스트는 이 페이지 첫머리를 그대로 따른 것입니다.
+            필러가 dolorem이 아니라 <strong style={{ color: 'var(--text)' }}>lorem으로 시작하는 이유</strong>에도 물증이 있습니다. 1914년 Loeb Classical Library판(라틴·영문 대역) 스캔을 보면 라틴어 34면이 &quot;Neque porro quisquam est qui do-&quot;로 끊기고, 36면이 &quot;lorem ipsum quia dolor sit amet…&quot;로 시작합니다 — &apos;dolorem&apos;의 &apos;do-&apos;가 앞 페이지 끝에 걸려 잘렸고, 필러 텍스트는 이 페이지 첫머리를 그대로 따른 것입니다.
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
+            <strong style={{ color: 'var(--text)' }}>원본을 직접 확인하실 수 있습니다.</strong> 1914년판 스캔은 인터넷 아카이브에 저작권 소멸 자료로 공개돼 있습니다 — <a href="https://archive.org/details/definibusbonoru02cicegoog" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">De finibus bonorum et malorum (1914, W. Heinemann·Macmillan)</a>. 이 페이지 넘김을 문헌으로 처음 정리한 것은 프랑스 사회학자 필리프 시부아의 2012년 글입니다 — <a href="https://enseignement-latin.hypotheses.org/5449" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">Lorem ipsum: nouvel état de la question</a>. 아래 영역문은 <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Cicero/de_Finibus/1*.html" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">LacusCurtius가 재현한 Loeb판</a>과 글자까지 일치합니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            이 출처를 밝혀낸 사람은 고전학자 출신으로 미국 햄든-시드니 칼리지 출판부장을 지낸 <strong style={{ color: 'var(--text)' }}>리처드 매클린톡(Richard McClintock)</strong>입니다(흔히 &apos;라틴어 교수&apos;로 소개되지만 부정확한 표기). 필러에 든 희귀 라틴어 consectetur의 고전 문헌 인용례를 역추적해 키케로 원전을 확인했고, 1990년대 디자인 잡지 Before &amp; After에 서한을 보내자 잡지가 &apos;Lorem Oopsum&apos;이라는 제목으로 정정을 실었습니다.
+            이 출처를 밝혀낸 사람은 고전학자 출신으로 미국 <a href="https://www.hsc.edu/" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">햄든-시드니 칼리지</a> 출판부장을 지낸 <strong style={{ color: 'var(--text)' }}>리처드 매클린톡(Richard McClintock)</strong>입니다(흔히 &apos;라틴어 교수&apos;로 소개되지만 부정확한 표기). 필러에 든 희귀 라틴어 consectetur의 고전 문헌 인용례를 역추적해 키케로 원전을 확인했고, 1990년대 디자인 잡지 Before &amp; After에 서한을 보내자 잡지가 &apos;Lorem Oopsum&apos;이라는 제목으로 정정을 실었습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>&apos;1500년대 무명 인쇄공&apos; 통설의 반전</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-              &quot;1500년대에 어느 무명 인쇄공이 활자 견본용으로 만들었다&quot;는 유명한 이야기는 매클린톡 본인의 미확인 회고가 출처였습니다. 정작 본인도 그 옛 견본집을 다시 찾지 못했고, 확실히 추적된 가장 오래된 사용은 <strong style={{ color: 'var(--text)' }}>1966년 Letraset 전사(레터링) 시트</strong>라고 인정했습니다. 통설의 진원지였던 lipsum.com조차 최근 이 서술을 공식 개정해(2026-07 확인 기준), 지금은 1966년 Letraset이 런던 세인트브라이드 인쇄도서관 사서 제임스 모즐리(James Mosley)와 함께 1914년판 키케로 번역본을 재배열해 만들었다는 설명으로 바뀌었습니다(모즐리가 직접 재배열까지 했는지 자문에 그쳤는지는 자료마다 서술이 다릅니다). 최근 재조사에서는 1966년 시트 실물을 1914년판과 대조하기도 했습니다. 한국어 웹 상당수에는 아직 옛 &apos;1500년대&apos; 서술이 그대로 남아 있습니다. 이후 1980년대 Aldus PageMaker에 더미 텍스트로 번들되면서 데스크톱 출판과 함께 업계 표준으로 굳어졌습니다.
+              &quot;1500년대에 어느 무명 인쇄공이 활자 견본용으로 만들었다&quot;는 유명한 이야기는 매클린톡 본인의 미확인 회고가 출처였습니다. 정작 본인도 그 옛 견본집을 다시 찾지 못했고, 확실히 추적된 가장 오래된 사용은 <strong style={{ color: 'var(--text)' }}>1966년 Letraset 전사(레터링) 시트</strong>라고 인정했습니다. 통설의 진원지였던 lipsum.com조차 최근 이 서술을 공식 개정해(2026-07 확인 기준), 지금은 1966년 Letraset이 런던 세인트브라이드 인쇄도서관 사서 제임스 모즐리(James Mosley)와 함께 1914년판 키케로 번역본을 재배열해 만들었다는 설명으로 바뀌었습니다(모즐리가 직접 재배열까지 했는지 자문에 그쳤는지는 자료마다 서술이 다릅니다). 한국어 웹 상당수에는 아직 옛 &apos;1500년대&apos; 서술이 그대로 남아 있습니다. 이후 1980년대 후반 Aldus PageMaker에 더미 텍스트로 실리면서 데스크톱 출판과 함께 업계 표준으로 굳어졌습니다.
+            </p>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '10px', paddingTop: '10px', borderTop: '1px solid var(--border)' }}>
+              <strong style={{ color: 'var(--text)' }}>어디까지가 확인된 사실인가</strong> — 실제 Letraset 견본 시트 스캔은 <a href="https://commons.wikimedia.org/wiki/File:Letraset_Lorem_Ipsum.jpg" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">위키미디어 공용에 1점(품번 PM169)</a> 공개돼 있지만, 제작 연도가 &lsquo;1970년경(불확실)&rsquo;으로만 적혀 있어 <strong style={{ color: 'var(--text)' }}>1966년을 직접 증명하지는 못합니다</strong>. 1966년이라는 연도와 모즐리의 관여는 Letraset 초기 디자이너 데이브 페리(Dave Farey)의 회고에 기대고 있으며, 당시 사내 문서가 공개된 것은 아닙니다. PageMaker에 실린 정확한 버전·연도도 자료마다 엇갈려(1985년 초판설·1987년설·3.0/1988년설) 확정할 수 없습니다. 이 문단은 그래서 &lsquo;확인된 물증&rsquo;과 &lsquo;증언&rsquo;을 구분해 적었습니다.
             </p>
           </div>
           <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
@@ -271,8 +282,8 @@ export default function LoremPage() {
                 </tr>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>우편번호</td>
-                  <td style={{ padding: '9px 10px' }}>5자리</td>
-                  <td style={{ padding: '9px 10px' }}>2015-08-01부터 국가기초구역번호 5자리 체계(옛 6자리 우편번호는 폐지)</td>
+                  <td style={{ padding: '9px 10px' }}>64000~99998 (5자리)</td>
+                  <td style={{ padding: '9px 10px' }}>2015-08-01부터 5자리 국가기초구역번호. 부여 대역은 서울 01xxx~제주 63xxx뿐이라 <strong style={{ color: 'var(--text)' }}>64000 이상은 현재 미배정</strong>(99999는 반송 처리용이라 제외)</td>
                 </tr>
                 <tr>
                   <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>주소</td>
@@ -283,15 +294,35 @@ export default function LoremPage() {
             </table>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
-            참고로 한국에는 미국의 <strong style={{ color: 'var(--text)' }}>555-0100~0199</strong>(NANP가 드라마·예시용으로 예약)에 해당하는 <strong style={{ color: 'var(--text)' }}>공식 예약 번호대가 없습니다</strong>. 그래서 &lsquo;예약된 번호&rsquo;를 쓰는 대신 &lsquo;부여되지 않는 형식&rsquo;을 쓰는 것이 현재로선 가장 안전한 선택입니다.
+            참고로 한국에는 미국의 <strong style={{ color: 'var(--text)' }}>555-0100~0199</strong>(NANP가 드라마·예시용으로 예약)에 해당하는 <strong style={{ color: 'var(--text)' }}>공식 예약 번호대가 없습니다</strong>. 우편번호도 마찬가지로 RFC 2606의 example.com 같은 &lsquo;예시 전용 예약 대역&rsquo;이 제도적으로 존재하지 않습니다. 그래서 &lsquo;예약된 값&rsquo;을 쓰는 대신 <strong style={{ color: 'var(--text)' }}>&lsquo;현재 부여되지 않는 값&rsquo;</strong>을 쓰는 것이 현재로선 가장 안전한 선택입니다.
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '10px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
+            <strong style={{ color: 'var(--text)' }}>한 가지 유의점</strong> — 전화번호의 0·1 대역과 우편번호 64000 이상은 &lsquo;영구히 쓰지 않기로 정한 값&rsquo;이 아니라 <strong style={{ color: 'var(--text)' }}>아직 배정하지 않은 예비 대역</strong>입니다. 제도가 바뀌면 언젠가 실재하는 값이 될 수 있습니다. 이메일(RFC 2606)만이 규범으로 영구 예약된 경우입니다.
           </p>
         </section>
 
         {/* 7. legal */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>저작권·사용 권한</h2>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '14px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>이용 허락</p>
+            <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+              본 도구가 출력하는 모든 텍스트와 데이터는 <strong style={{ color: 'var(--text)' }}>용도 제한 없이 자유롭게 사용하실 수 있습니다</strong> — 개인·상업 프로젝트, 클라이언트 시안, 제품 문구 어디에든, 출처 표시나 별도 허락 없이 쓰셔도 됩니다. 재배포와 2차적 저작물 작성도 허용합니다.
+            </p>
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+            예전에는 이 자리에 &quot;무작위로 조합된 가상 정보이며 저작권이 발생하지 않는다&quot;고 적혀 있었는데, 정확하지 않아 바로잡습니다. 이유는 세 가지입니다.
+          </p>
+          <ul style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+            <li><strong style={{ color: 'var(--text)' }}>무작위인 것은 &lsquo;고르는 방식&rsquo;일 뿐입니다.</strong> 뽑히는 문장 자체는 운영자가 미리 써 둔 고정 텍스트입니다. 무작위로 골랐다는 사실이 그 문장의 성격을 바꾸지는 않습니다.</li>
+            <li><strong style={{ color: 'var(--text)' }}>짧다고 반드시 보호 밖인 것은 아닙니다.</strong> 한국저작권위원회 「2025 저작권 상담 사례집」 Q17은 아주 적은 수의 단어로 된 단문은 원칙적으로 저작물로 인정되기 어렵다고 하면서도(책·영화 제목, 흔한 광고문구 등은 부정), &quot;분량이 짧다고 하여 무조건 저작물성이 부정되는 것은 아니다&quot;라고 밝힙니다. 실제로 음반에 쓰인 문구 한 문장을 백화점이 네온사인으로 무단 사용한 사건에서 법원이 창작성을 인정한 예가 있습니다(서울중앙지법 2018. 9. 4. 선고 2017가소7712215 — 소액사건 1심). 기준은 길이가 아니라 창작적 개성의 유무이고, 인정 여부는 문안마다 달리 판단됩니다.</li>
+            <li><strong style={{ color: 'var(--text)' }}>&lsquo;저작권 없음&rsquo; 선언은 효력이 없습니다.</strong> 「저작권법」 제10조제2항은 저작권이 창작과 동시에 발생하며 어떤 절차나 형식도 필요하지 않다고 정합니다(무방식주의). 권리자가 없다고 써도 이미 생긴 권리가 사라지지 않습니다. 그래서 본 도구는 &lsquo;권리 없음&rsquo;이 아니라 같은 법 제46조의 <strong style={{ color: 'var(--text)' }}>이용허락</strong> 형식으로 안내합니다 — 이용자 입장에서 실제로 쓸 수 있는 범위는 오히려 더 분명해집니다.</li>
+          </ul>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+            참고로 CC0 같은 퍼블릭도메인 서약도 국내에서는 &lsquo;완전한 포기&rsquo;로 성립하지 않습니다. 저작인격권은 저작자 일신에 전속해(제14조제1항) 양도·포기가 불가능하기 때문입니다. CC0 약관 자체가 포기가 무효인 법역에서는 무상 라이선스로 전환되도록 설계돼 있어 실무상으로는 작동하지만, 결과는 결국 &lsquo;이용허락&rsquo;입니다.
+          </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
-            본 도구가 생성하는 모든 텍스트와 데이터는 <strong style={{ color: 'var(--text)' }}>무작위로 조합된 가상 정보</strong>이며, 저작권이 발생하지 않습니다. 개인 프로젝트, 상업 프로젝트, 클라이언트 시안 어디에든 자유롭게 사용 가능합니다. 이름은 흔한 성·이름을 조합한 것이라 동명이인이 실재할 수 있지만, 그 자체로는 특정 개인을 알아볼 수 없어 「개인정보 보호법」상 개인정보에 해당하지 않습니다. 다만 <strong style={{ color: 'var(--text)' }}>생성된 값을 실재하는 다른 정보와 결합해 쓰지는 마세요</strong> — 가상 이름이라도 실제 주소·계좌 등과 묶이면 식별 가능한 정보가 됩니다.
+            개인정보 쪽은 별개입니다. 생성되는 이름은 흔한 성·이름을 조합한 것이라 동명이인이 실재할 수 있지만, 그 자체로는 특정 개인을 알아볼 수 없어 「개인정보 보호법」상 개인정보에 해당하지 않습니다. 다만 <strong style={{ color: 'var(--text)' }}>생성된 값을 실재하는 다른 정보와 결합해 쓰지는 마세요</strong> — 가상 이름이라도 실제 주소·계좌 등과 묶이면 식별 가능한 정보가 됩니다.
           </p>
         </section>
 

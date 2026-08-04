@@ -1,10 +1,11 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import styles from './lorem.module.css'
 import {
   DATA_TYPE_OPTIONS,
+  DataItem,
   DataType,
   FORMAT_OPTIONS,
   FormatType,
@@ -20,22 +21,35 @@ import {
   SUBTITLE_POOLS,
   Scenario,
   TITLE_POOLS,
+  TONE_AWARE_ELEMENTS,
   TONE_OPTIONS,
   Tab,
   Tone,
   UIElement,
   UI_ELEMENT_OPTIONS,
+  cycled,
   formatData,
   generateMany,
   generateParagraph,
   generateParagraphs,
-  generateUIElement,
+  generateUIBatch,
+
   generateUX,
   pick,
+  poolSizeFor,
   randInt,
   randomDateISO,
 } from './loremUtils'
 
+
+const TABS: [Tab, string][] = [
+  ['paragraph', '문단'],
+  ['ui',        'UI 요소'],
+  ['json',      'JSON 데이터'],
+  ['card',      '카드 목업'],
+  ['ux',        'UX 라이팅'],
+  ['length',    '길이 테스트'],
+]
 
 /* ───────── 클립보드 ───────── */
 function useCopy(): [string | null, (key: string, text: string) => void] {
@@ -53,8 +67,24 @@ function useCopy(): [string | null, (key: string, text: string) => void] {
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function LoremClient() {
   const [tab, setTab] = useState<Tab>('paragraph')
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const onTabKeyDown = (e: React.KeyboardEvent, i: number) => {
+    const last = TABS.length - 1
+    let next = -1
+    if (e.key === 'ArrowRight') next = i === last ? 0 : i + 1
+    else if (e.key === 'ArrowLeft') next = i === 0 ? last : i - 1
+    else if (e.key === 'Home') next = 0
+    else if (e.key === 'End') next = last
+    if (next < 0) return
+    e.preventDefault()
+    setTab(TABS[next][0])
+    tabRefs.current[next]?.focus()
+  }
   const [tone, setTone] = useState<Tone>('default')
   const [copiedKey, copy] = useCopy()
+  /* 결과 본문(수천 자)을 통째로 aria-live에 넣으면 스크린리더가 전문을 다시 읽는다.
+     짧은 상태 문장만 라이브로 알리고, 본문은 일반 영역에 둔다. */
+  const [liveMsg, setLiveMsg] = useState('')
 
   /* 문단 탭 */
   const [lang, setLang] = useState<Lang>('ko')
@@ -63,24 +93,39 @@ export default function LoremClient() {
   const [pOutput, setPOutput] = useState('')
   const handleGenerateP = () => {
     setPOutput(generateParagraphs(tone, pLen, pCount, lang))
+    setLiveMsg(`문단 ${pCount}개를 생성했습니다.`)
   }
 
   /* UI 요소 탭 */
   const [uiEl, setUiEl] = useState<UIElement>('titles')
   const [uiCount, setUiCount] = useState(8)
   const [uiOutput, setUiOutput] = useState<string[]>([])
+  /* ⚠️ 예전에는 항목마다 독립적으로 pick()해서 풀이 5개일 때 8개를 뽑으면 서너 번씩 겹쳤다. */
   const handleGenerateUI = () => {
-    setUiOutput(Array.from({ length: uiCount }, () => generateUIElement(uiEl, tone)))
+    setUiOutput(generateUIBatch(uiEl, tone, uiCount))
+    setLiveMsg(`UI 문구 ${uiCount}개를 생성했습니다.`)
   }
+  const uiPoolSize = poolSizeFor(uiEl, tone)
+  const uiToneAware = TONE_AWARE_ELEMENTS.has(uiEl)
 
-  /* JSON 탭 */
+  /* JSON 탭
+     ⚠️ 예전에는 포맷된 **문자열**만 저장해서, 포맷 버튼을 눌러도 라벨만 바뀌고 본문은
+        그대로였다("같은 데이터를 8가지 형식으로 즉시 변환"이라는 설명과 반대로 재생성이
+        필요했고, 재생성하면 데이터 자체가 바뀌었다). 원본 배열을 저장하고 표시만 파생한다. */
   const [dType, setDType] = useState<DataType>('userProfile')
   const [dFormat, setDFormat] = useState<FormatType>('json')
   const [dCount, setDCount] = useState(5)
-  const [dOutput, setDOutput] = useState('')
+  const [dData, setDData] = useState<DataItem[] | null>(null)
+  /** 생성 당시의 데이터 종류 — 생성 후 종류만 바꿔도 TS 인터페이스 이름이 어긋나지 않게 */
+  const [dDataType, setDDataType] = useState<DataType>('userProfile')
+  const dOutput = useMemo(
+    () => (dData ? formatData(dData, dFormat, dDataType) : ''),
+    [dData, dFormat, dDataType],
+  )
   const handleGenerateD = () => {
-    const data = generateMany(dType, dCount)
-    setDOutput(formatData(data, dFormat, dType))
+    setDData(generateMany(dType, dCount))
+    setDDataType(dType)
+    setLiveMsg(`${dCount}개 레코드를 생성했습니다.`)
   }
 
   /* 카드 UI 미리보기 탭 */
@@ -97,13 +142,19 @@ export default function LoremClient() {
     const ICONS_ARTICLE = ['📰', '📖', '🗞️', '📓', '🧠', '✍️', '📝', '📊']
     const ICONS_PROFILE = ['😀', '🐶', '🐱', '🦊', '🦁', '🐼', '🐨', '🦄', '🐯', '🐻']
     const out: CardData[] = []
+    /* 카드 목록 안에서 같은 상품명이 반복되면 목업으로서 설득력이 떨어진다 */
+    const productTitles = cycled(PRODUCT_NAME_POOLS, cardCount)
+    const productDescs = cycled(PRODUCT_DESC_POOLS, cardCount)
+    const articleTitles = cycled(TITLE_POOLS[tone], cardCount)
+    const cardSubs = cycled(SUBTITLE_POOLS[tone], cardCount)
+    const profileNames = cycled(NAME_POOLS, cardCount)
     for (let i = 0; i < cardCount; i++) {
       if (cardStyle === 'product') {
         out.push({
           kind: 'product',
           icon: pick(ICONS_PRODUCT),
-          title: pick(PRODUCT_NAME_POOLS),
-          desc: pick(PRODUCT_DESC_POOLS),
+          title: productTitles[i],
+          desc: productDescs[i],
           price: '₩' + (randInt(5, 250) * 1000).toLocaleString(),
           rating: '★ ' + (3.5 + Math.random() * 1.5).toFixed(1),
           badge: Math.random() < 0.4 ? pick(['NEW', 'HOT', 'SALE', 'BEST']) : undefined,
@@ -112,24 +163,25 @@ export default function LoremClient() {
         out.push({
           kind: 'article',
           icon: pick(ICONS_ARTICLE),
-          title: pick(TITLE_POOLS[tone]),
-          desc: pick(SUBTITLE_POOLS[tone]),
+          title: articleTitles[i],
+          desc: cardSubs[i],
           author: pick(NAME_POOLS),
           date: randomDateISO(),
         })
       } else {
-        const name = pick(NAME_POOLS)
+        const name = profileNames[i]
         out.push({
           kind: 'profile',
           icon: pick(ICONS_PROFILE),
           title: name,
-          desc: pick(SUBTITLE_POOLS[tone]),
+          desc: cardSubs[i],
           followers: randInt(50, 50000).toLocaleString() + ' 팔로워',
           nickname: '@' + pick(NICKNAME_POOLS),
         })
       }
     }
     setCards(out)
+    setLiveMsg(`카드 ${cardCount}개를 생성했습니다.`)
   }
 
   /* UX 라이팅 탭 */
@@ -164,23 +216,28 @@ export default function LoremClient() {
         참고용 더미 콘텐츠
       </Disclaimer>
 
-      {/* 탭 */}
-      <div className={styles.tabs}>
-        {([
-          ['paragraph', '문단'],
-          ['ui',        'UI 요소'],
-          ['json',      'JSON 데이터'],
-          ['card',      '카드 목업'],
-          ['ux',        'UX 라이팅'],
-          ['length',    '길이 테스트'],
-        ] as [Tab, string][]).map(([key, label]) => (
+      {/* 탭 — role="tablist"를 붙이는 이상 WAI-ARIA APG가 요구하는 화살표키·Home/End 이동과
+          roving tabindex를 함께 구현한다. 키보드 동작 없이 role만 붙이면 스크린리더 사용자에게
+          "화살표로 이동 가능"이라고 알려 놓고 실제로는 동작하지 않는 상태가 된다. */}
+      <div className={styles.tabs} role="tablist" aria-label="더미 생성 종류">
+        {TABS.map(([key, label], i) => (
           <button type="button" key={key}
+            id={`lorem-tab-${key}`}
+            role="tab"
+            aria-selected={tab === key}
+            aria-controls={`lorem-panel-${key}`}
+            tabIndex={tab === key ? 0 : -1}
+            ref={el => { tabRefs.current[i] = el }}
             className={`${styles.tabBtn} ${tab === key ? styles.tabActive : ''}`}
+            onKeyDown={e => onTabKeyDown(e, i)}
             onClick={() => setTab(key)}>
             {label}
           </button>
         ))}
       </div>
+
+      {/* 생성 결과 알림 — 시각적으로는 숨기고 스크린리더에만 전달 */}
+      <p className={styles.srOnly} role="status" aria-live="polite">{liveMsg}</p>
 
       {/* 톤 (모든 탭 공통) */}
       <div className={styles.card}>
@@ -191,6 +248,7 @@ export default function LoremClient() {
         <div className={styles.toneRow}>
           {TONE_OPTIONS.map(t => (
             <button type="button" key={t.key}
+              aria-pressed={tone === t.key}
               className={`${styles.toneBtn} ${tone === t.key ? styles.toneActive : ''}`}
               onClick={() => setTone(t.key)}>
               {t.label}
@@ -201,13 +259,18 @@ export default function LoremClient() {
 
       {/* ─── 문단 탭 ─── */}
       {tab === 'paragraph' && (
-        <>
+        <div className={styles.panel} role="tabpanel" id="lorem-panel-paragraph" aria-labelledby="lorem-tab-paragraph">
           <div className={styles.card}>
             <label className={styles.cardLabel}>언어</label>
             <div className={styles.toggleRow}>
-              <button type="button" className={`${styles.toggleBtn} ${lang === 'ko' ? styles.toggleActive : ''}`} onClick={() => setLang('ko')}>🇰🇷 한글</button>
-              <button type="button" className={`${styles.toggleBtn} ${lang === 'en' ? styles.toggleActive : ''}`} onClick={() => setLang('en')}>🇺🇸 영문 (Lorem)</button>
+              <button type="button" aria-pressed={lang === 'ko'} className={`${styles.toggleBtn} ${lang === 'ko' ? styles.toggleActive : ''}`} onClick={() => setLang('ko')}>🇰🇷 한글</button>
+              <button type="button" aria-pressed={lang === 'en'} className={`${styles.toggleBtn} ${lang === 'en' ? styles.toggleActive : ''}`} onClick={() => setLang('en')}>🇺🇸 영문 (Lorem)</button>
             </div>
+            {lang === 'en' && (
+              <p className={styles.scopeNote}>
+                영문은 고전 Lorem Ipsum(의사 라틴어)이라 <strong>톤 구분이 적용되지 않습니다</strong>. 톤은 한글 문단에만 반영됩니다.
+              </p>
+            )}
           </div>
 
           <div className={styles.card}>
@@ -254,17 +317,18 @@ export default function LoremClient() {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
 
       {/* ─── UI 요소 탭 ─── */}
       {tab === 'ui' && (
-        <>
+        <div className={styles.panel} role="tabpanel" id="lorem-panel-ui" aria-labelledby="lorem-tab-ui">
           <div className={styles.card}>
             <label className={styles.cardLabel}>요소 종류</label>
             <div className={styles.elementGrid}>
               {UI_ELEMENT_OPTIONS.map(opt => (
                 <button type="button" key={opt.key}
+                  aria-pressed={uiEl === opt.key}
                   className={`${styles.elementCard} ${uiEl === opt.key ? styles.elementActive : ''}`}
                   onClick={() => setUiEl(opt.key)}>
                   <small>{opt.icon}</small>
@@ -283,6 +347,12 @@ export default function LoremClient() {
               <input id="lorem-count" type="range" min={1} max={30} value={uiCount} onChange={e => setUiCount(parseInt(e.target.value))} />
               <span className={styles.sliderValue}>{uiCount}</span>
             </div>
+            {/* 풀 크기를 숨기면 "왜 같은 문구가 또 나오지?"가 된다 — 미리 밝힌다 */}
+            <p className={styles.scopeNote}>
+              이 종류의 문구 풀은 <strong>{uiPoolSize}개</strong>
+              {uiToneAware ? ' (톤별로 다름)' : ' (톤과 무관한 데이터)'}입니다.
+              {uiCount > uiPoolSize && ` 요청하신 ${uiCount}개는 풀보다 많아 일부가 다시 등장합니다.`}
+            </p>
           </div>
 
           <div className={styles.btnRow}>
@@ -316,17 +386,18 @@ export default function LoremClient() {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
 
       {/* ─── JSON 데이터 탭 ─── */}
       {tab === 'json' && (
-        <>
+        <div className={styles.panel} role="tabpanel" id="lorem-panel-json" aria-labelledby="lorem-tab-json">
           <div className={styles.card}>
             <label className={styles.cardLabel}>데이터 종류</label>
             <div className={styles.dataTypeGrid}>
               {DATA_TYPE_OPTIONS.map(opt => (
                 <button type="button" key={opt.key}
+                  aria-pressed={dType === opt.key}
                   className={`${styles.dataTypeBtn} ${dType === opt.key ? styles.dataTypeActive : ''}`}
                   onClick={() => setDType(opt.key)}>
                   <small>{opt.icon}</small>
@@ -341,6 +412,7 @@ export default function LoremClient() {
             <div className={styles.formatRow}>
               {FORMAT_OPTIONS.map(opt => (
                 <button type="button" key={opt.key}
+                  aria-pressed={dFormat === opt.key}
                   className={`${styles.formatBtn} ${dFormat === opt.key ? styles.formatActive : ''}`}
                   onClick={() => setDFormat(opt.key)}>
                   {opt.label}
@@ -363,6 +435,9 @@ export default function LoremClient() {
           <div className={styles.btnRow}>
             <button type="button" className={styles.actionBtn} onClick={handleGenerateD}>데이터 생성</button>
           </div>
+          <p className={styles.scopeNote}>
+            JSON 더미는 이름·금액·날짜 같은 <strong>값</strong>이라 톤 설정의 영향을 받지 않습니다. 톤은 문단·UI 문구·카드·UX 라이팅에 적용됩니다.
+          </p>
 
           {dOutput && (
             <div className={styles.card}>
@@ -386,12 +461,12 @@ export default function LoremClient() {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
 
       {/* ─── 카드 UI 목업 탭 ─── */}
       {tab === 'card' && (
-        <>
+        <div className={styles.panel} role="tabpanel" id="lorem-panel-card" aria-labelledby="lorem-tab-card">
           <div className={styles.card}>
             <label className={styles.cardLabel}>카드 스타일</label>
             <div className={styles.optRow}>
@@ -450,17 +525,18 @@ export default function LoremClient() {
               ))}
             </div>
           )}
-        </>
+        </div>
       )}
 
       {/* ─── UX 라이팅 탭 ─── */}
       {tab === 'ux' && (
-        <>
+        <div className={styles.panel} role="tabpanel" id="lorem-panel-ux" aria-labelledby="lorem-tab-ux">
           <div className={styles.card}>
             <label className={styles.cardLabel}>시나리오</label>
             <div className={styles.scenarioGrid}>
               {SCENARIOS.map(s => (
                 <button type="button" key={s.key}
+                  aria-pressed={scenario === s.key}
                   className={`${styles.scenarioBtn} ${scenario === s.key ? styles.scenarioActive : ''}`}
                   onClick={() => setScenario(s.key)}>
                   <small>{s.icon}</small>
@@ -501,12 +577,12 @@ export default function LoremClient() {
               </button>
             </div>
           </div>
-        </>
+        </div>
       )}
 
       {/* ─── 길이 테스트 탭 ─── */}
       {tab === 'length' && (
-        <>
+        <div className={styles.panel} role="tabpanel" id="lorem-panel-length" aria-labelledby="lorem-tab-length">
           <div className={styles.card}>
             <label className={styles.cardLabel}>
               길이 샘플
@@ -519,7 +595,8 @@ export default function LoremClient() {
                   <span className={styles.lenText}>{s.text}</span>
                   <span className={styles.lenSize}>{s.len}자</span>
                   <button type="button"
-                    className={`${styles.miniCopyBtn} ${copiedKey === 'l-' + s.key ? styles.miniCopied : ''}`}
+                    className={`${styles.miniCopyBtn} ${styles.lenCopy} ${copiedKey === 'l-' + s.key ? styles.miniCopied : ''}`}
+                    aria-label={`${s.label} 샘플 복사`}
                     onClick={() => copy('l-' + s.key, s.text)}>
                     {copiedKey === 'l-' + s.key ? '✓' : '📋'}
                   </button>
@@ -535,7 +612,7 @@ export default function LoremClient() {
             </label>
             <div className={styles.previewBoxRow}>
               {OVERFLOW_TESTS.map(t => (
-                <div key={t.key} className={styles.previewBox}>
+                <div key={t.key} className={`${styles.previewBox} ${styles.previewBoxScroll}`}>
                   <div className={styles.previewBoxLabel}>{t.label}</div>
                   <div>{t.text}</div>
                 </div>
@@ -567,7 +644,7 @@ export default function LoremClient() {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
 
     </div>

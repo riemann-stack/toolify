@@ -68,6 +68,8 @@ export const SUBTITLE_POOLS: Record<Tone, string[]> = {
   game:         ['지금 바로 전장에 합류하세요', '한정 보상이 기다립니다', '친구와 함께라면 더 짜릿하게'],
 }
 
+/* 톤별 8문장 — LENGTH_PRESETS의 '매우 길게'가 8문장을 요구한다.
+   ⚠️ 예전엔 5문장뿐이라 '길게'(5)와 '매우 길게'(8)가 같은 집합이었다(순서만 달랐다). */
 export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
   default:      [
     '디자인 작업을 할 때 실제 콘텐츠 대신 더미 텍스트를 사용하면 레이아웃에 집중할 수 있습니다.',
@@ -75,6 +77,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '프로토타입 단계에서는 콘텐츠보다 구조와 흐름을 점검하는 것이 더 중요할 수 있습니다.',
     '반응형 레이아웃을 점검할 때는 다양한 길이의 텍스트로 줄바꿈과 여백을 확인해 보세요.',
     '타이포그래피는 시각 디자인의 핵심으로, 폰트 선택과 줄 높이가 가독성을 좌우합니다.',
+    '여백은 비어 있는 공간이 아니라 요소 사이의 관계를 정리하는 적극적인 장치입니다.',
+    '색과 대비는 정보의 위계를 만들지만, 색만으로 의미를 전달하면 접근성이 떨어집니다.',
+    '컴포넌트를 재사용하려면 콘텐츠 길이가 달라져도 무너지지 않는 규칙부터 정해야 합니다.',
   ],
   friendly:     [
     '안녕하세요! 처음 오신 분들도 부담 없이 둘러보실 수 있도록 준비했어요.',
@@ -82,6 +87,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '혹시 궁금한 점이 생기면 언제든 편하게 물어봐 주세요. 친절히 도와드릴게요.',
     '오늘 하루도 수고 많으셨어요. 잠깐 쉬어가는 시간이 되었으면 좋겠어요.',
     '작은 변화가 큰 차이를 만든답니다. 함께 시작해 볼까요?',
+    '처음이라 낯설어도 괜찮아요. 하나씩 눌러보면서 익혀도 충분하답니다.',
+    '저장은 자동으로 되니까 마음 편히 이것저것 바꿔 보셔도 돼요.',
+    '오늘 다 못 끝내도 괜찮아요. 다음에 오시면 이어서 하실 수 있어요.',
   ],
   professional: [
     '본 분석은 지난 12개월 간의 시장 데이터를 기반으로 진행되었으며, 통계적 유의성을 확보한 표본을 활용하였습니다.',
@@ -89,6 +97,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '운영 효율성 개선을 위해서는 프로세스 가시화와 병목 구간 분석이 선행되어야 합니다.',
     '의사결정 과정에서 데이터 기반 인사이트의 활용은 더 이상 선택이 아닌 필수 요소로 자리잡고 있습니다.',
     '구조적 변화를 추진할 때는 조직 문화와 거버넌스 측면을 함께 고려해야 합니다.',
+    '초기 가설은 검증 가능한 형태로 구체화한 뒤, 최소 단위의 실험으로 확인하는 것이 바람직합니다.',
+    '이해관계자 간 합의가 지연될 경우, 의사결정 기준과 권한 범위를 문서로 명확히 규정할 필요가 있습니다.',
+    '성과 지표는 선행 지표와 후행 지표를 구분해 관리할 때 실질적인 개선 방향을 도출할 수 있습니다.',
   ],
   commerce:     [
     '오늘만 단독 할인! 회원가 적용 시 추가 5% 즉시 할인 혜택을 누려보세요.',
@@ -96,6 +107,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '한정 수량으로 진행되는 특가 이벤트입니다. 매진되기 전에 빠르게 담아주세요.',
     '오늘 주문하시면 내일 도착! 무료배송과 무료반품으로 부담 없이 시작하세요.',
     '신상품 출시 기념 첫 구매 고객 대상 사은품 증정 이벤트가 진행 중입니다.',
+    '리뷰 이벤트에 참여하시면 다음 구매에 사용할 수 있는 적립금을 즉시 드립니다.',
+    '사이즈가 고민되신다면 실측 정보를 확인해 보세요. 첫 교환은 무료로 도와드립니다.',
+    '재입고 알림을 신청하시면 상품이 준비되는 즉시 가장 먼저 안내해 드립니다.',
   ],
   saas:         [
     '반복적인 작업은 자동화에 맡기고, 팀이 정말 중요한 일에 집중할 수 있도록 도와드립니다.',
@@ -103,6 +117,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '5분이면 시작할 수 있고, 별도 설치 없이 브라우저에서 바로 사용할 수 있습니다.',
     '팀 규모에 맞는 유연한 요금제와 엔터프라이즈급 보안을 함께 제공합니다.',
     '데이터 기반 의사결정을 위해 필요한 모든 지표를 자동으로 수집하고 시각화합니다.',
+    '권한은 역할 단위로 관리되므로, 담당자가 바뀌어도 접근 범위를 다시 설정할 필요가 없습니다.',
+    '변경 이력이 자동으로 기록되어 누가 언제 무엇을 수정했는지 언제든 되짚어 볼 수 있습니다.',
+    '기존에 쓰던 도구와 연동하면 데이터를 옮기지 않고도 한 화면에서 확인할 수 있습니다.',
   ],
   finance:      [
     '장기 자산 배분에서는 위험 자산과 안전 자산의 비중을 본인의 투자 성향에 맞게 조정하는 것이 중요합니다.',
@@ -110,6 +127,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '시장 변동성에 대응하기 위해서는 정기적인 리밸런싱과 분산 투자 전략이 필요합니다.',
     '본 자료는 정보 제공을 목적으로 하며, 투자 권유나 자문이 아닌 점을 유의해 주시기 바랍니다.',
     '리스크 허용 범위는 자산 규모뿐 아니라 본인의 심리적 감내 수준까지 고려해 결정해야 합니다.',
+    '수수료와 세금은 수익률에 직접 반영되므로, 상품을 비교할 때 함께 확인해야 합니다.',
+    '비상 자금을 먼저 확보한 뒤 투자에 나서는 편이 변동성 구간을 버티는 데 도움이 됩니다.',
+    '과거 수익률은 미래 성과를 보장하지 않으며, 원금 손실이 발생할 수 있습니다.',
   ],
   health:       [
     '하루 30분 정도의 가벼운 유산소 운동만으로도 심혈관 건강에 긍정적인 영향을 줄 수 있습니다.',
@@ -117,6 +137,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '꾸준함이 강도보다 중요합니다. 무리한 계획보다 지속 가능한 작은 습관부터 시작해 보세요.',
     '본 정보는 일반적인 건강 정보이며, 의학적 진단이나 치료를 대체할 수 없습니다.',
     '몸이 보내는 신호에 귀 기울이고, 통증이나 이상 증상이 지속되면 전문가와 상담하세요.',
+    '수분은 갈증을 느끼기 전에 조금씩 나누어 섭취하는 편이 몸에 부담이 적습니다.',
+    '근력 운동 후에는 같은 부위를 하루 이상 쉬게 해야 회복과 성장이 이루어집니다.',
+    '식사 속도를 늦추는 것만으로도 포만감을 느끼는 시점이 앞당겨질 수 있습니다.',
   ],
   education:    [
     '새로운 개념을 학습할 때는 자신의 언어로 다시 설명해 보는 것이 이해도를 높이는 데 큰 도움이 됩니다.',
@@ -124,6 +147,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '문제를 풀 때 정답보다 풀이 과정을 점검하는 습관이 사고력을 키웁니다.',
     '학습 환경을 정돈하고 알림을 차단하면, 깊이 있는 몰입을 경험할 수 있습니다.',
     '오늘 배운 내용을 자기 전 5분 동안 정리해 보면 기억 정착에 큰 도움이 됩니다.',
+    '어려운 문제를 만났을 때 바로 해설을 보기보다 5분만 더 버텨보는 편이 기억에 오래 남습니다.',
+    '배운 내용을 다른 사람에게 설명해 보면 자신이 어디를 모르는지 분명해집니다.',
+    '한 번에 오래 앉아 있기보다, 짧게 여러 번 나누어 공부하는 편이 집중이 잘 유지됩니다.',
   ],
   game:         [
     '전설의 무기를 모아 최강의 캐릭터를 완성하세요. 한정 시간 동안 강화 확률이 두 배로 증가합니다.',
@@ -131,6 +157,9 @@ export const PARAGRAPH_POOLS: Record<Tone, string[]> = {
     '친구와 파티를 결성하면 경험치 30% 추가 획득 버프가 적용됩니다.',
     '주간 던전을 클리어하고 전설 등급의 장비를 손에 넣으세요. 매주 일요일 자정 초기화됩니다.',
     '시즌 패스를 활성화하고 매일 진행되는 도전 과제를 통해 풍성한 보상을 획득하세요.',
+    '길드에 가입하면 주간 레이드와 길드 상점 전용 아이템을 이용할 수 있습니다.',
+    '적의 패턴을 파악하면 회피 타이밍이 보입니다. 무작정 공격하지 말고 관찰해 보세요.',
+    '첫 접속 보상은 7일간 누적되며, 마지막 날에는 전설 등급 소환권이 지급됩니다.',
   ],
 }
 
@@ -323,6 +352,21 @@ export function shuffled<T>(arr: T[]): T[] {
 export function picks<T>(arr: T[], n: number): T[] {
   return shuffled(arr).slice(0, Math.max(0, Math.min(n, arr.length)))
 }
+/** 풀보다 많이 필요할 때 — 셔플한 묶음을 반복하되 이음매에서 같은 항목이 붙지 않게 한다.
+    ⚠️ 예전에는 `Math.min(n, pool.length)`로 잘라 버려서 요청한 개수를 조용히 무시했다
+       ('매우 길게' 8문장이 5문장짜리 풀에서 5문장만 나와 '길게'와 같아졌다). */
+export function cycled<T>(arr: T[], n: number): T[] {
+  if (!arr.length || n <= 0) return []
+  const out: T[] = []
+  while (out.length < n) {
+    let pass = shuffled(arr)
+    if (out.length && arr.length > 1 && pass[0] === out[out.length - 1]) {
+      pass = [pass[1], pass[0], ...pass.slice(2)]
+    }
+    out.push(...pass.slice(0, n - out.length))
+  }
+  return out
+}
 export function randInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -367,6 +411,22 @@ export function randomEmail(name: string) {
    번호는 부여되지 않는다.** 한국에는 미국 555-01XX 같은 예시용 예약 대역이 없으므로,
    실제 가입자와 겹치지 않게 하려면 이 '부여되지 않는 형식'을 쓰는 것이 유일한 방법이다.
    ⚠️ 예전 구현은 첫 자리를 0~9로 뽑아 약 80%가 실제 부여 대역(A=2~9)에 떨어졌다. */
+/* 더미 우편번호.
+   우편번호는 2015-08-01부터 5자리 국가기초구역번호다(옛 6자리 체계는 폐지 — 구조가 달라
+   병행 사용 불가). 부여 대역은 서울 01xxx에서 제주 63xxx까지이고, **64000 이상과 00xxx에는
+   어느 시·도도 배정돼 있지 않다**(우정사업본부 '지역별 우편번호 앞 3자리 부여내역').
+   ⚠️ 01000~63999에서 무작위로 뽑으면 안 된다 — 그 범위 63,000칸 중 실제 부여된 것이
+      34,349개라 **절반 이상이 실존 우편번호가 된다**. 이메일·전화번호를 미부여 대역으로
+      바꿔 놓고 우편번호만 실재 대역에서 뽑는 것은 앞뒤가 맞지 않는다.
+   ⚠️ 다만 한국에는 RFC 2606(example.com)이나 전화번호 0·1 대역 같은 **예시 전용 예약 대역이
+      제도적으로 존재하지 않는다.** 64000~ 은 '영구 미사용'이 아니라 장래 배정 여지가 있는
+      예비 대역일 뿐이다. 99999는 반송 처리용 가상번호로 쓰이므로 제외한다. */
+export const DUMMY_ZIP_MIN = 64000
+export const DUMMY_ZIP_MAX = 99998
+export function dummyZipcode() {
+  return String(randInt(DUMMY_ZIP_MIN, DUMMY_ZIP_MAX))
+}
+
 export function randomPhone() {
   const a = pick([0, 1])
   return `010-${a}${randInt(100, 999)}-${String(randInt(0, 9999)).padStart(4, '0')}`
@@ -386,13 +446,10 @@ export function uuid() {
 /* ───────── 문단 생성 ───────── */
 export function generateParagraph(tone: Tone, lengthKey: LengthKey, lang: Lang): string {
   const preset = LENGTH_PRESETS.find(p => p.key === lengthKey)!
-  if (lang === 'en') {
-    return picks(EN_PARAS, Math.min(preset.sentences, EN_PARAS.length))
-      .slice(0, preset.sentences)
-      .join(' ')
-  }
-  const pool = PARAGRAPH_POOLS[tone]
-  return picks(pool, Math.min(preset.sentences, pool.length)).slice(0, preset.sentences).join(' ')
+  /* ⚠️ 영문 Lorem Ipsum은 의사(擬似) 라틴어라 톤 개념이 성립하지 않는다 —
+        톤은 한국어 문단에만 적용된다. 화면에서도 그렇게 안내한다. */
+  if (lang === 'en') return cycled(EN_PARAS, preset.sentences).join(' ')
+  return cycled(PARAGRAPH_POOLS[tone], preset.sentences).join(' ')
 }
 
 export function generateParagraphs(tone: Tone, lengthKey: LengthKey, count: number, lang: Lang): string {
@@ -419,7 +476,51 @@ export const UI_ELEMENT_OPTIONS: { key: UIElement; icon: string; label: string }
   { key: 'onboarding',          icon: '🚀', label: '온보딩' },
   { key: 'pricing',             icon: '💰', label: '가격 플랜' },
   { key: 'faqQuestions',        icon: '❓', label: 'FAQ 질문' },
+  /* ⚠️ faqAnswers는 생성 로직이 있는데도 선택지가 없어 도달 불가였다(설명은 19종). */
+  { key: 'faqAnswers',          icon: '💡', label: 'FAQ 답변' },
 ]
+
+/** 해당 UI 요소가 톤에 따라 달라지는가. 이름·닉네임·상품명 등은 톤과 무관한 데이터다. */
+export const TONE_AWARE_ELEMENTS: ReadonlySet<UIElement> = new Set<UIElement>([
+  'titles', 'subtitles', 'paragraphs', 'buttons', 'cardTitles', 'cardDescriptions',
+  'notifications', 'errors', 'emptyStates', 'onboarding', 'pricing',
+])
+
+/** 해당 UI 요소의 풀 크기 — 요청 개수가 이보다 크면 반복이 불가피하다(화면에 표시). */
+export function poolSizeFor(el: UIElement, tone: Tone): number {
+  return poolFor(el, tone).length
+}
+
+function poolFor(el: UIElement, tone: Tone): string[] {
+  switch (el) {
+    case 'titles':              return TITLE_POOLS[tone]
+    case 'subtitles':           return SUBTITLE_POOLS[tone]
+    case 'paragraphs':          return PARAGRAPH_POOLS[tone]
+    case 'buttons':             return BUTTON_POOLS[tone]
+    case 'cardTitles':          return CARD_TITLE_POOLS[tone]
+    case 'cardDescriptions':    return CARD_DESC_POOLS[tone]
+    case 'productNames':        return PRODUCT_NAME_POOLS
+    case 'productDescriptions': return PRODUCT_DESC_POOLS
+    case 'reviews':             return REVIEW_POOLS
+    case 'comments':            return COMMENT_POOLS
+    case 'names':               return NAME_POOLS
+    case 'nicknames':           return NICKNAME_POOLS
+    case 'notifications':       return NOTIFICATION_POOLS[tone]
+    case 'errors':              return ERROR_POOLS[tone]
+    case 'emptyStates':         return EMPTY_POOLS[tone]
+    case 'onboarding':          return ONBOARDING_POOLS[tone]
+    case 'pricing':             return PRICING_POOLS[tone]
+    case 'faqQuestions':        return FAQ_Q_POOLS
+    case 'faqAnswers':          return FAQ_A_POOLS
+  }
+}
+
+/** 한 번에 count개 — 풀을 소진할 때까지는 중복이 나오지 않는다.
+    ⚠️ 예전에는 매 항목을 독립적으로 pick()해서 풀이 5개일 때 8개를 뽑으면
+       같은 문구가 서너 번씩 겹쳤다. */
+export function generateUIBatch(el: UIElement, tone: Tone, count: number): string[] {
+  return cycled(poolFor(el, tone), count)
+}
 
 export function generateUIElement(el: UIElement, tone: Tone): string {
   switch (el) {
@@ -567,9 +668,7 @@ export function generateOne(type: DataType): DataItem {
     case 'address': {
       return {
         recipient: pick(NAME_POOLS),
-        /* 우편번호는 2015-08-01부터 5자리 국가기초구역번호다(옛 6자리 체계는 폐지).
-           끝 두 자리가 항상 0X로 고정되던 버그도 함께 정리. */
-        zipcode: String(randInt(1000, 63999)).padStart(5, '0'),
+        zipcode: dummyZipcode(),
         /* ⚠️ 실재 도로명 + 임의 번지는 실존 주소를 만든다('테헤란로 152' 등).
            존재하지 않는 예시용 도로명을 쓴다. */
         addr1: pick(['서울특별시 예시구 샘플로', '경기도 예시시 테스트구 더미로', '부산광역시 예시구 목업대로', '대전광역시 예시구 가상로']) + ' ' + randInt(1, 999),
@@ -662,10 +761,18 @@ export function toHTML(data: DataItem[]): string {
   const body = `<tbody>${data.map(d => `<tr>${keys.map(k => `<td>${escapeHtml(d[k])}</td>`).join('')}</tr>`).join('')}</tbody>`
   return `<table>\n  ${head}\n  ${body}\n</table>`
 }
+/** ⚠️ 예전 출력은 `.jsx` 파일에 그대로 붙이면 깨졌다:
+       · `as const`는 TypeScript 전용 문법이라 순수 JSX에서 파싱 오류
+       · `key={Math.random()}`은 렌더마다 값이 바뀌어 React가 전체를 재마운트한다
+         (React 공식 문서가 명시적으로 피하라고 하는 안티패턴)
+    id가 없는 타입은 배열 인덱스를 key로 쓴다 — 목업용 정적 배열이므로 안전하다. */
 export function toJSX(data: DataItem[]): string {
-  return `const items = ${JSON.stringify(data, null, 2)} as const\n\n` +
+  const hasId = data.length > 0 && 'id' in data[0]
+  const key = hasId ? '{String(item.id)}' : '{index}'
+  const mapArgs = hasId ? '(item)' : '(item, index)'
+  return `const items = ${JSON.stringify(data, null, 2)}\n\n` +
     `export function List() {\n` +
-    `  return (\n    <ul>\n      {items.map((item) => (\n        <li key={String(item.id ?? Math.random())}>{JSON.stringify(item)}</li>\n      ))}\n    </ul>\n  )\n}`
+    `  return (\n    <ul>\n      {items.map(${mapArgs} => (\n        <li key=${key}>{JSON.stringify(item)}</li>\n      ))}\n    </ul>\n  )\n}`
 }
 export function toTS(data: DataItem[], type: DataType): string {
   if (data.length === 0) return ''
@@ -703,48 +810,71 @@ export const SCENARIOS: { key: Scenario; icon: string; label: string }[] = [
   { key: 'empty',    icon: '🫥', label: '빈 상태' },
 ]
 
-export function generateUX(scenario: Scenario, tone: Tone): { title: string; body: string; primary: string; secondary: string } {
-  const friendly = tone === 'friendly'
-  const game = tone === 'game'
-  const pro = tone === 'professional' || tone === 'finance'
+/* ⚠️ 예전 구현은 friendly / professional+finance / game / 그 외 **4갈래**로만 분기했다.
+      톤 선택은 9종인데 default·commerce·saas·health·education이 전부 같은 문구를 냈다
+      — "9가지 톤"이라는 설명과 실제 동작이 어긋난 지점. 톤 전체를 표로 채운다. */
+export interface UXCopy { title: string; body: string; primary: string; secondary: string }
 
-  switch (scenario) {
-    case 'login':
-      return {
-        title:     friendly ? '로그인이 안 되네요!' : pro ? '로그인 실패' : game ? '입장이 거부되었습니다!' : '로그인할 수 없습니다',
-        body:      friendly ? '아이디나 비밀번호를 한 번만 더 확인해 주실래요?' : pro ? '입력하신 자격 증명이 일치하지 않습니다. 다시 시도해 주십시오.' : game ? '계정 정보를 다시 확인하고 재도전하세요!' : '아이디 또는 비밀번호가 올바르지 않습니다.',
-        primary:   friendly ? '다시 해볼래요' : '다시 시도',
-        secondary: '비밀번호 찾기',
-      }
-    case 'signup':
-      return {
-        title:     friendly ? '환영해요! 함께 시작해요' : pro ? '계정 생성 안내' : game ? '새로운 모험가의 등장!' : '회원가입을 시작합니다',
-        body:      friendly ? '몇 가지 정보만 입력하시면 곧바로 시작할 수 있어요. 1분이면 끝나요!' : pro ? '서비스 이용을 위해 계정 등록이 필요합니다. 약관 동의 후 다음 단계로 진행해 주십시오.' : game ? '닉네임을 정하고 첫 모험을 떠나보세요. 영웅의 이름이 영원히 기록됩니다.' : '간단한 정보 입력 후 바로 사용할 수 있습니다.',
-        primary:   friendly ? '시작할래요!' : pro ? '약관 동의 및 계속' : game ? '모험 시작!' : '계속',
-        secondary: '이미 계정이 있어요',
-      }
-    case 'payment':
-      return {
-        title:     friendly ? '앗, 결제가 안 됐어요' : pro ? '결제 처리 실패' : game ? '거래가 실패했습니다!' : '결제할 수 없습니다',
-        body:      friendly ? '카드 정보나 잔고를 한 번만 더 확인해 주실래요? 다시 시도하면 잘 될 거예요!' : pro ? '카드 발급사로부터 거절 응답이 수신되었습니다. 카드 한도 및 정보를 확인 후 재시도 바랍니다.' : game ? '인벤토리 골드가 부족하거나 결제 방식에 문제가 있습니다. 확인 후 다시 시도하세요.' : '카드 정보 또는 잔고를 확인해 주세요.',
-        primary:   '다시 결제',
-        secondary: '다른 방법으로',
-      }
-    case 'delete':
-      return {
-        title:     friendly ? '정말 삭제하시는 건가요?' : pro ? '삭제 작업 확인' : game ? '아이템을 폐기하시겠습니까?' : '삭제하시겠습니까?',
-        body:      friendly ? '삭제하면 되돌리기 어려워요. 한 번만 더 확인해 주세요!' : pro ? '본 작업은 복구할 수 없습니다. 진행 시 영구히 삭제되며 관련 로그만 보관됩니다.' : game ? '폐기한 아이템은 복구되지 않습니다. 정말 진행하시겠습니까?' : '삭제하면 복구할 수 없습니다.',
-        primary:   pro ? '영구 삭제' : '삭제',
-        secondary: '취소',
-      }
-    case 'empty':
-      return {
-        title:     friendly ? '아직 비어있어요!' : pro ? '데이터 없음' : game ? '인벤토리가 텅 비었네요!' : '항목이 없습니다',
-        body:      friendly ? '첫 항목을 추가해서 이곳을 채워 보세요. 어렵지 않아요!' : pro ? '표시 가능한 데이터가 존재하지 않습니다. 새 항목을 등록해 주십시오.' : game ? '필드를 탐험하고 첫 전리품을 손에 넣어 보세요!' : '첫 항목을 추가해 보세요.',
-        primary:   friendly ? '지금 추가하기' : pro ? '항목 등록' : game ? '모험 시작!' : '추가',
-        secondary: '나중에 할게요',
-      }
-  }
+export const UX_COPY: Record<Scenario, Record<Tone, UXCopy>> = {
+  login: {
+    default:      { title: '로그인할 수 없습니다', body: '아이디 또는 비밀번호가 올바르지 않습니다.', primary: '다시 시도', secondary: '비밀번호 찾기' },
+    friendly:     { title: '로그인이 안 되네요!', body: '아이디나 비밀번호를 한 번만 더 확인해 주실래요?', primary: '다시 해볼래요', secondary: '비밀번호 찾기' },
+    professional: { title: '로그인 실패', body: '입력하신 자격 증명이 일치하지 않습니다. 다시 시도해 주십시오.', primary: '다시 시도', secondary: '비밀번호 재설정' },
+    commerce:     { title: '로그인 후 혜택을 받아보세요', body: '아이디 또는 비밀번호가 일치하지 않습니다. 로그인하시면 회원 전용가가 적용됩니다.', primary: '다시 로그인', secondary: '비회원으로 주문' },
+    saas:         { title: '계정을 확인할 수 없습니다', body: '계정 정보가 일치하지 않습니다. SSO를 사용 중이라면 조직 계정으로 로그인하세요.', primary: '다시 시도', secondary: 'SSO로 로그인' },
+    finance:      { title: '로그인 실패 (인증 오류)', body: '입력 정보가 일치하지 않습니다. 5회 연속 실패 시 보안을 위해 계정이 잠깁니다.', primary: '다시 시도', secondary: '본인 인증으로 찾기' },
+    health:       { title: '로그인하지 못했어요', body: '아이디 또는 비밀번호를 다시 확인해 주세요. 기록은 그대로 보관되어 있습니다.', primary: '다시 시도', secondary: '비밀번호 찾기' },
+    education:    { title: '로그인 정보를 확인해 주세요', body: '아이디 또는 비밀번호를 다시 확인해 주세요. 학습 진도는 저장되어 있습니다.', primary: '다시 시도', secondary: '비밀번호 찾기' },
+    game:         { title: '입장이 거부되었습니다!', body: '계정 정보를 다시 확인하고 재도전하세요!', primary: '재도전', secondary: '계정 찾기' },
+  },
+  signup: {
+    default:      { title: '회원가입을 시작합니다', body: '간단한 정보 입력 후 바로 사용할 수 있습니다.', primary: '계속', secondary: '이미 계정이 있어요' },
+    friendly:     { title: '환영해요! 함께 시작해요', body: '몇 가지 정보만 입력하시면 곧바로 시작할 수 있어요. 1분이면 끝나요!', primary: '시작할래요!', secondary: '이미 계정이 있어요' },
+    professional: { title: '계정 생성 안내', body: '서비스 이용을 위해 계정 등록이 필요합니다. 약관 동의 후 다음 단계로 진행해 주십시오.', primary: '약관 동의 및 계속', secondary: '기존 계정으로 로그인' },
+    commerce:     { title: '지금 가입하고 첫 구매 할인 받기', body: '가입 즉시 사용 가능한 쿠폰이 지급됩니다. 이메일만 있으면 30초면 끝나요.', primary: '가입하고 쿠폰 받기', secondary: '다음에 할게요' },
+    saas:         { title: '워크스페이스를 만들어 보세요', body: '업무용 이메일로 가입하면 같은 도메인의 팀원을 자동으로 초대할 수 있습니다.', primary: '워크스페이스 만들기', secondary: '초대 링크로 참여' },
+    finance:      { title: '계좌 개설을 위한 본인 확인', body: '금융거래를 위해 실명 확인이 필요합니다. 신분증과 본인 명의 휴대전화를 준비해 주십시오.', primary: '본인 확인 시작', secondary: '나중에 진행' },
+    health:       { title: '건강 기록을 시작해 볼까요', body: '키와 몸무게만 입력하면 오늘부터 기록할 수 있어요. 언제든 수정할 수 있습니다.', primary: '기록 시작하기', secondary: '나중에 입력할게요' },
+    education:    { title: '학습을 시작해 봅시다', body: '관심 분야를 고르면 수준에 맞는 커리큘럼을 추천해 드립니다.', primary: '커리큘럼 추천받기', secondary: '먼저 둘러볼게요' },
+    game:         { title: '새로운 모험가의 등장!', body: '닉네임을 정하고 첫 모험을 떠나보세요. 영웅의 이름이 영원히 기록됩니다.', primary: '모험 시작!', secondary: '이미 계정이 있어요' },
+  },
+  payment: {
+    default:      { title: '결제할 수 없습니다', body: '카드 정보 또는 잔고를 확인해 주세요.', primary: '다시 결제', secondary: '다른 방법으로' },
+    friendly:     { title: '앗, 결제가 안 됐어요', body: '카드 정보나 잔고를 한 번만 더 확인해 주실래요? 다시 시도하면 잘 될 거예요!', primary: '다시 해볼래요', secondary: '다른 방법으로' },
+    professional: { title: '결제 처리 실패', body: '카드 발급사로부터 거절 응답이 수신되었습니다. 카드 한도 및 정보를 확인 후 재시도 바랍니다.', primary: '다시 결제', secondary: '다른 결제수단' },
+    commerce:     { title: '결제가 완료되지 않았어요', body: '장바구니는 그대로 있으니 걱정 마세요. 다른 카드나 간편결제로 진행해 보세요.', primary: '다시 결제하기', secondary: '다른 결제수단' },
+    saas:         { title: '구독 결제에 실패했습니다', body: '등록된 카드로 청구하지 못했습니다. 3일 내 결제되지 않으면 무료 플랜으로 전환됩니다.', primary: '결제 수단 변경', secondary: '나중에' },
+    finance:      { title: '이체가 처리되지 않았습니다', body: '출금 계좌 잔액 또는 1일 이체 한도를 확인해 주십시오. 거래 내역에는 기록되지 않습니다.', primary: '다시 이체', secondary: '한도 조회' },
+    health:       { title: '이용권 결제가 되지 않았어요', body: '카드 정보를 다시 확인해 주세요. 이용권은 결제 완료 후 바로 적용됩니다.', primary: '다시 결제', secondary: '다른 방법으로' },
+    education:    { title: '수강 결제에 실패했습니다', body: '카드 정보나 한도를 확인해 주세요. 수강 신청 내역은 24시간 동안 보관됩니다.', primary: '다시 결제', secondary: '다른 방법으로' },
+    game:         { title: '거래가 실패했습니다!', body: '인벤토리 골드가 부족하거나 결제 방식에 문제가 있습니다. 확인 후 다시 시도하세요.', primary: '재시도', secondary: '다른 방법으로' },
+  },
+  delete: {
+    default:      { title: '삭제하시겠습니까?', body: '삭제하면 복구할 수 없습니다.', primary: '삭제', secondary: '취소' },
+    friendly:     { title: '정말 삭제하시는 건가요?', body: '삭제하면 되돌리기 어려워요. 한 번만 더 확인해 주세요!', primary: '삭제할래요', secondary: '그만둘래요' },
+    professional: { title: '삭제 작업 확인', body: '본 작업은 복구할 수 없습니다. 진행 시 영구히 삭제되며 관련 로그만 보관됩니다.', primary: '영구 삭제', secondary: '취소' },
+    commerce:     { title: '장바구니에서 뺄까요?', body: '지금 삭제하면 적용된 할인 쿠폰도 함께 해제됩니다.', primary: '삭제', secondary: '유지하기' },
+    saas:         { title: '워크스페이스를 삭제하시겠습니까?', body: '멤버 전원의 접근 권한과 모든 프로젝트 데이터가 30일 후 영구 삭제됩니다.', primary: '삭제 진행', secondary: '취소' },
+    finance:      { title: '계좌 해지 확인', body: '해지 시 자동이체와 연결된 서비스가 중단됩니다. 거래 내역은 법정 보존기간 동안 보관됩니다.', primary: '해지 신청', secondary: '취소' },
+    health:       { title: '기록을 삭제할까요?', body: '삭제한 운동·식단 기록은 되돌릴 수 없어요. 통계에서도 함께 제외됩니다.', primary: '삭제', secondary: '유지하기' },
+    education:    { title: '수강 내역을 삭제할까요?', body: '삭제하면 진도율과 수료 기록이 함께 사라집니다. 복구할 수 없습니다.', primary: '삭제', secondary: '취소' },
+    game:         { title: '아이템을 폐기하시겠습니까?', body: '폐기한 아이템은 복구되지 않습니다. 정말 진행하시겠습니까?', primary: '폐기', secondary: '취소' },
+  },
+  empty: {
+    default:      { title: '항목이 없습니다', body: '첫 항목을 추가해 보세요.', primary: '추가', secondary: '나중에 할게요' },
+    friendly:     { title: '아직 비어있어요!', body: '첫 항목을 추가해서 이곳을 채워 보세요. 어렵지 않아요!', primary: '지금 추가하기', secondary: '나중에 할게요' },
+    professional: { title: '데이터 없음', body: '표시 가능한 데이터가 존재하지 않습니다. 새 항목을 등록해 주십시오.', primary: '항목 등록', secondary: '닫기' },
+    commerce:     { title: '장바구니가 비어 있어요', body: '마음에 드는 상품을 담아 보세요. 지금 인기 있는 상품을 추천해 드릴게요.', primary: '인기 상품 보기', secondary: '나중에' },
+    saas:         { title: '아직 프로젝트가 없습니다', body: '첫 프로젝트를 만들면 팀원을 초대하고 작업을 배정할 수 있습니다.', primary: '프로젝트 만들기', secondary: '템플릿 둘러보기' },
+    finance:      { title: '거래 내역이 없습니다', body: '선택하신 기간에 발생한 거래가 없습니다. 조회 기간을 변경해 보십시오.', primary: '기간 변경', secondary: '닫기' },
+    health:       { title: '오늘 기록이 아직 없어요', body: '첫 운동이나 식사를 기록하면 여기에 요약이 표시됩니다.', primary: '오늘 기록하기', secondary: '나중에' },
+    education:    { title: '수강 중인 강의가 없어요', body: '관심 분야를 고르면 맞춤 강의를 추천해 드립니다.', primary: '강의 둘러보기', secondary: '나중에' },
+    game:         { title: '인벤토리가 텅 비었네요!', body: '필드를 탐험하고 첫 전리품을 손에 넣어 보세요!', primary: '모험 시작!', secondary: '나중에' },
+  },
+}
+
+export function generateUX(scenario: Scenario, tone: Tone): UXCopy {
+  return UX_COPY[scenario]?.[tone] ?? UX_COPY[scenario].default
 }
 
 /* ───────── 길이 테스트 ───────── */
