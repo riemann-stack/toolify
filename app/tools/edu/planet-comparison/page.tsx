@@ -28,11 +28,11 @@ const FAQ_LD = [
               },
               {
                 q: '인간이 다른 행성에서 살 수 있나요?',
-                a: '<strong>현재 기술로는 어떤 행성에서도 보호 장비 없이 생존할 수 없습니다.</strong> 수성·금성은 극단적 온도(427°C, 462°C), 화성은 산소 부족·대기압 1%·평균 -65°C, 목성·토성·천왕성·해왕성은 가스 행성으로 표면이 없습니다. 가장 가능성 있는 행성은 <strong>화성</strong>으로, NASA·SpaceX 등이 화성 정착 연구 중입니다. 단, 우주복·돔·온실 등 인공 환경이 필수적입니다.',
+                a: '<strong>현재 기술로는 어떤 행성에서도 보호 장비 없이 생존할 수 없습니다.</strong> 수성·금성은 극단적 온도(427°C, 464°C), 화성은 산소 부족·대기압 1%·평균 -65°C, 목성·토성·천왕성·해왕성은 가스 행성으로 표면이 없습니다. 가장 가능성 있는 행성은 <strong>화성</strong>으로, NASA·SpaceX 등이 화성 정착 연구 중입니다. 단, 우주복·돔·온실 등 인공 환경이 필수적입니다.',
               },
               {
                 q: '빛 도달 시간이란 무엇인가요?',
-                a: '빛이 한 행성에서 다른 행성까지 가는 데 걸리는 시간입니다. 빛의 속도는 1초에 약 30만 km로 우주에서 가장 빠르지만, 행성 간 거리가 워낙 멀어 시간이 걸립니다. 화성에 메시지를 보내면 빛의 속도로 약 <strong>13분 후 도착</strong>합니다(평균 거리 기준). 이 때문에 화성 탐사선과 실시간 통신이 불가능하며, 모든 명령은 13분 이상 지연됩니다. 해왕성까지는 약 4시간, 가장 가까운 별 (프록시마 센타우리)까지는 4.2년이 걸립니다.',
+                a: '빛이 한 행성에서 다른 행성까지 가는 데 걸리는 시간입니다. 빛의 속도는 1초에 약 30만 km로 우주에서 가장 빠르지만, 행성 간 거리가 워낙 멀어 시간이 걸립니다. 화성에 메시지를 보내면 두 행성의 위치에 따라 <strong>편도 4~21분</strong>이 걸립니다(가장 가까울 때 ~ 태양 반대편일 때). 이 때문에 화성 탐사선과 실시간 조작이 불가능하고, 명령을 보내 응답을 받기까지 왕복 8~42분이 필요합니다. 해왕성까지는 약 4시간, 가장 가까운 별 (프록시마 센타우리)까지는 4.2년이 걸립니다.',
               },
             ]
 
@@ -141,7 +141,7 @@ export default function PlanetComparisonPage() {
                 <li>천왕성: 30,689일 (84년)</li>
                 <li>해왕성: 60,182일 (165년)</li>
               </ul>
-              <p style={{ fontSize: 12, color: '#0D9488', marginTop: 8, fontWeight: 700 }}>→ 해왕성에서 35년이면 지구에서 5,773년!</p>
+              <p style={{ fontSize: 12, color: '#0D9488', marginTop: 8, fontWeight: 700 }}>→ 해왕성에서 35년이면 지구에서 5,767년!</p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔄 자전주기 (1일)</p>
@@ -218,8 +218,8 @@ export default function PlanetComparisonPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ 화성 탐사선과의 통신은 평균 <strong style={{ color: '#DC2626' }}>13분 지연</strong> → 실시간 조작 불가능.
-            모든 명령은 13분 이상 지연되며 응답까지 최소 26분 소요.
+            ⚠️ 화성 탐사선과의 통신은 <strong style={{ color: 'var(--danger)' }}>편도 4~21분 지연</strong>(위치에 따라 변동) → 실시간 조작 불가능.
+            명령이 도착하기까지 편도 4~21분, 응답까지 왕복 8~42분이 걸립니다.
           </div>
         </div>
 
@@ -240,13 +240,13 @@ export default function PlanetComparisonPage() {
               <tbody>
                 {[
                   { p: '수성', c: '#A8A29E', r: '-173~427°C', avg: '167°C',  d: '극단적 변화 (대기 없음)' },
-                  { p: '금성', c: '#FFC857', r: '462°C',       avg: '462°C', d: '가장 뜨거움 — 두꺼운 CO2 대기' },
-                  { p: '지구', c: '#0891B2', r: '-88~58°C',    avg: '15°C',  d: '생명체 거주 가능' },
+                  { p: '금성', c: '#FFC857', r: '464°C',       avg: '464°C', d: '가장 뜨거움 — 두꺼운 CO2 대기' },
+                  { p: '지구', c: '#0891B2', r: '-89~56.7°C',  avg: '15°C',  d: '생명체 거주 가능' },
                   { p: '화성', c: '#DC2626', r: '-143~35°C',   avg: '-65°C', d: '추움' },
-                  { p: '목성', c: '#EA580C', r: '-145°C',       avg: '-145°C', d: '가스 행성 — 표면 없음' },
-                  { p: '토성', c: '#A16207', r: '-178°C',       avg: '-178°C', d: '가스 행성' },
-                  { p: '천왕성', c: '#0D9488', r: '-224°C',      avg: '-224°C', d: '가장 추운 행성' },
-                  { p: '해왕성', c: '#3E5BFF', r: '-218°C',      avg: '-218°C', d: '얼음 행성' },
+                  { p: '목성', c: '#EA580C', r: '-110°C',       avg: '-110°C', d: '가스 행성 — 표면 없음' },
+                  { p: '토성', c: '#A16207', r: '-140°C',       avg: '-140°C', d: '가스 행성' },
+                  { p: '천왕성', c: '#0D9488', r: '-195°C',      avg: '-195°C', d: '최저 -224°C 관측' },
+                  { p: '해왕성', c: '#3E5BFF', r: '-200°C',      avg: '-200°C', d: '평균 기온이 가장 낮음' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.p}</td>
@@ -270,8 +270,8 @@ export default function PlanetComparisonPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '수성', d: '메신저호 (2011-2015) · BepiColombo (현재 진행 중)', c: '#A8A29E' },
-              { t: '금성', d: '비너스 익스프레스 (ESA) · 아카츠키 (JAXA) 등', c: '#FFC857' },
+              { t: '수성', d: '메신저호 2011~2015년 궤도 운용 후 종료 · 베피콜롬보 순항 중, 2026년 11월 궤도 진입 예정', c: '#A8A29E' },
+              { t: '금성', d: '비너스 익스프레스 2014년 종료 · 아카츠키 2025년 9월 운용 종료 → 현재 금성 궤도에 가동 중인 탐사선 없음', c: '#FFC857' },
               { t: '화성', d: '큐리오시티·퍼서비어런스 활동 중 (인저뉴어티 헬기는 2024년 1월 72회 비행 후 임무 종료)', c: '#DC2626' },
               { t: '목성', d: '주노 (NASA, 현재 활동 중) · Europa Clipper 진행 중', c: '#EA580C' },
               { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: '#A16207' },
@@ -293,8 +293,7 @@ export default function PlanetComparisonPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🚀 다음 행성 탐사 미션은 NASA의 <strong style={{ color: '#0D9488' }}>Europa Clipper</strong>, ESA·JAXA의 <strong style={{ color: '#0D9488' }}>BepiColombo</strong>,
-            한국천문연구원(KASI) 협력 미션 등이 진행 중입니다.
+            🚀 <strong style={{ color: 'var(--cat-edu)' }}>Europa Clipper</strong>(2024년 10월 발사, 2030년 목성 도착)와 <strong style={{ color: 'var(--cat-edu)' }}>베피콜롬보</strong>(2026년 11월 수성 궤도 진입 예정)가 항행 중입니다. 둘 다 이미 발사돼 목적지로 가고 있습니다.
           </div>
         </div>
 

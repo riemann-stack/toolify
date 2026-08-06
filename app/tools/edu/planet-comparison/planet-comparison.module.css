@@ -1,3 +1,11 @@
+/* 교육 카테고리 강조색.
+   ⚠️ --cat-edu(#0D9488, teal-600)는 흰 배경 대비 3.74:1로 **일반 텍스트 AA(4.5:1) 미달**이다.
+      큰 글씨·테두리·점에는 그대로 쓰되, 작은 글씨에는 700레벨 ink를 쓴다
+      (프로젝트의 --accent-ink / --coral-ink 와 같은 패턴, 흰 위 5.47:1). */
+:root {
+  --edu: var(--cat-edu);
+  --edu-ink: #0F766E;   /* teal-700 */
+}
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
@@ -42,7 +50,7 @@
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #0D9488; }
+.disclaimer strong { color: var(--edu-ink); }
 
 /* ── 카드 ── */
 .card {
@@ -96,7 +104,7 @@
 }
 .bigInput { font-size: 18px; padding: 12px 14px; }
 .smallInput { font-size: 15px; }
-.bigInput:focus, .smallInput:focus { border-color: #0D9488; }
+.bigInput:focus, .smallInput:focus { border-color: var(--edu); }
 .bigInput::-webkit-outer-spin-button,
 .bigInput::-webkit-inner-spin-button,
 .smallInput::-webkit-outer-spin-button,
@@ -116,7 +124,7 @@
   outline: none;
   box-sizing: border-box;
 }
-.textInput:focus { border-color: #0D9488; }
+.textInput:focus { border-color: var(--edu); }
 
 .gridTwo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 480px) { .gridTwo { grid-template-columns: 1fr; } }
@@ -130,14 +138,14 @@
 }
 .sliderRow input[type=range] {
   flex: 1;
-  accent-color: #0D9488;
+  accent-color: var(--edu);
 }
 .sliderValue {
   min-width: 80px;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
-  color: #0D9488;
+  color: var(--edu-ink);
   text-align: right;
 }
 
@@ -161,7 +169,7 @@
 }@media (hover: hover) {
   .presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.presetActive { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.presetActive { background: color-mix(in srgb, var(--edu) 18%, transparent); color: var(--edu-ink); border-color: var(--edu); font-weight: 700; }
 
 /* ── 행성 선택 ── */
 .planetCheckGrid {
@@ -219,7 +227,7 @@
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   font-size: 14px;
-  color: #0D9488;
+  color: var(--edu-ink);
   margin-bottom: 8px;
   text-align: center;
 }
@@ -311,15 +319,16 @@
 
 .funFact {
   background: rgba(13,148,136,0.14);
-  border-left: 3px solid #0D9488;
+  border-left: 3px solid var(--edu);
   border-radius: 6px;
   padding: 8px 10px;
   font-size: 12px;
-  color: var(--muted);
+  /* ⚠️ 틴트 배경 위에서 --muted는 4.34:1로 AA 미달이었다(실측). 600레벨로 내린다. */
+  color: var(--muted-strong);
   line-height: 1.7;
   margin-top: 4px;
 }
-.funFact strong { color: #0D9488; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.funFact strong { color: var(--edu-ink); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 
 /* 행성별 border-top 색상 */
 .borderMercury { border-top-color: #A8A29E; }
@@ -328,7 +337,7 @@
 .borderMars    { border-top-color: #DC2626; }
 .borderJupiter { border-top-color: #EA580C; }
 .borderSaturn  { border-top-color: #A16207; }
-.borderUranus  { border-top-color: #0D9488; }
+.borderUranus  { border-top-color: var(--edu); }
 .borderNeptune { border-top-color: #3E5BFF; }
 
 /* ── 비교 표 ── */
@@ -385,19 +394,19 @@
   padding: 16px 16px 12px;
 }
 .gravityRunBtn {
-  background: rgba(13,148,136,0.18);
-  border: 1px solid #0D9488;
+  background: color-mix(in srgb, var(--edu) 18%, transparent);
+  border: 1px solid var(--edu);
   border-radius: 8px;
   padding: 8px 16px;
   font-size: 13px;
-  color: #0D9488;
+  color: var(--edu-ink);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
   margin-bottom: 12px;
 }@media (hover: hover) {
-  .gravityRunBtn:hover { background: rgba(13,148,136,0.18); }
+  .gravityRunBtn:hover { background: color-mix(in srgb, var(--edu) 18%, transparent); }
 }
 .gravityRunBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -486,8 +495,9 @@
   display: inline-block;
   font-size: 9px;
   font-weight: 800;
-  background: rgba(220,38,38,0.14);
-  color: #DC2626;
+  /* ⚠️ 9px 배지라 대형 텍스트 예외가 안 되는데 3.88:1이었다(실측). 700레벨로. */
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: #B91C1C;
   padding: 1px 5px;
   border-radius: 4px;
   margin-left: 4px;
@@ -497,10 +507,10 @@
 /* ── 공유 카드 ── */
 .shareCard {
   background:
-    radial-gradient(ellipse at 30% 20%, rgba(13,148,136,0.18), transparent 55%),
+    radial-gradient(ellipse at 30% 20%, color-mix(in srgb, var(--edu) 18%, transparent), transparent 55%),
     radial-gradient(ellipse at 70% 80%, rgba(62,91,255,0.18), transparent 60%),
     #0a0e1a;
-  border: 1px solid #0D9488;
+  border: 1px solid var(--edu);
   border-radius: 18px;
   padding: 24px 22px;
   position: relative;
@@ -523,7 +533,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 20px;
-  color: #0D9488;
+  color: var(--edu-ink);
   text-align: center;
   margin-bottom: 6px;
   letter-spacing: -0.5px;
@@ -535,7 +545,7 @@
   margin-bottom: 18px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.shareSubtitle strong { color: #0D9488; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.shareSubtitle strong { color: var(--edu-ink); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 
 .shareList {
   display: flex;
@@ -559,7 +569,7 @@
 }
 
 .shareRecommend {
-  background: rgba(13,148,136,0.18);
+  background: color-mix(in srgb, var(--edu) 18%, transparent);
   border: 1px solid rgba(13,148,136,0.30);
   border-radius: 10px;
   padding: 12px 14px;
@@ -568,7 +578,7 @@
   color: rgba(255,255,255,0.85);
   font-family: 'Noto Sans KR', sans-serif;
 }
-.shareRecommend strong { color: #0D9488; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 15px; }
+.shareRecommend strong { color: var(--edu-ink); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 15px; }
 
 .shareWatermark {
   position: absolute;
@@ -591,7 +601,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.warningCard strong { color: #DC2626; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.warningCard strong { color: var(--danger); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 .warningCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
 
 .sourceCard {
@@ -603,7 +613,7 @@
   color: var(--muted);
   line-height: 1.75;
 }
-.sourceCard strong { color: #0891B2; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.sourceCard strong { color: var(--accent-ink); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 
 /* ── 결과 복사 ── */
 .copyBtn {
@@ -619,6 +629,17 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #0D9488; color: #0D9488; }
+  .copyBtn:hover { border-color: var(--edu); color: var(--edu-ink); }
 }
-.copied { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.copied { background: color-mix(in srgb, var(--edu) 18%, transparent); color: var(--edu-ink); border-color: var(--edu); font-weight: 700; }
+
+/* 스크린리더 전용 */
+.srOnly {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

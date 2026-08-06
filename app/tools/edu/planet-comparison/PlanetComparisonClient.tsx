@@ -3,115 +3,17 @@
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './planet-comparison.module.css'
+import { PLANETS, type Planet, fmtDistance, fmtLightTime, fmt, round, earthDistance } from './planetData'
+
+/* 행성별 카드 테두리 클래스 — CSS 모듈 참조라 데이터 파일과 분리해 둔다 */
+const BORDER_CLS: Record<string, string> = {
+  mercury: s.borderMercury, venus: s.borderVenus, earth: s.borderEarth, mars: s.borderMars,
+  jupiter: s.borderJupiter, saturn: s.borderSaturn, uranus: s.borderUranus, neptune: s.borderNeptune,
+}
 
 // ─────────────────────────────────────────────
 // 유틸
 // ─────────────────────────────────────────────
-const n = (v: string | number, d = 0): number => {
-  const x = typeof v === 'string' ? parseFloat(v.replace(/,/g, '')) : v
-  return Number.isFinite(x) ? x : d
-}
-const fmt = (v: number, dp = 0): string => {
-  if (!Number.isFinite(v)) return '-'
-  return v.toLocaleString('ko-KR', { minimumFractionDigits: dp, maximumFractionDigits: dp })
-}
-const round = (v: number, dp = 1) => Math.round(v * Math.pow(10, dp)) / Math.pow(10, dp)
-
-// ─────────────────────────────────────────────
-// 행성 데이터 (NASA 기준)
-// ─────────────────────────────────────────────
-type Planet = {
-  id: string
-  name: string
-  emoji: string
-  nameEn: string
-  radiusKm: number
-  radiusRatio: number
-  gravityRatio: number
-  yearDays: number
-  dayHours: number  // 음수 = 역행
-  surfaceTempC: { min: number; max: number; avg: number }
-  distanceFromSunKm: number
-  distanceFromEarthAvgKm: number
-  lightTimeMinutes: number
-  color: string
-  borderCls: string
-  funFact: string
-}
-
-const PLANETS: Planet[] = [
-  { id: 'mercury', name: '수성',   emoji: '☿️', nameEn: 'Mercury',
-    radiusKm: 2_439.7,  radiusRatio: 0.383, gravityRatio: 0.378,
-    yearDays: 87.97,   dayHours: 4222.6,
-    surfaceTempC: { min: -173, max: 427, avg: 167 },
-    distanceFromSunKm: 57_910_000, distanceFromEarthAvgKm: 77_000_000,
-    lightTimeMinutes: 4.3, color: '#A8A29E', borderCls: s.borderMercury,
-    funFact: '태양에 가장 가깝지만 가장 뜨거운 행성은 아닙니다(금성이 더 뜨거움).' },
-  { id: 'venus', name: '금성',   emoji: '♀️', nameEn: 'Venus',
-    radiusKm: 6_051.8,  radiusRatio: 0.949, gravityRatio: 0.907,
-    yearDays: 224.7,   dayHours: -5832.5,
-    surfaceTempC: { min: 462, max: 462, avg: 462 },
-    distanceFromSunKm: 108_200_000, distanceFromEarthAvgKm: 41_400_000,
-    lightTimeMinutes: 2.3, color: '#FFC857', borderCls: s.borderVenus,
-    funFact: '하루(자전 243일)가 1년(공전 225일)보다 깁니다. 자전 방향도 거꾸로입니다.' },
-  { id: 'earth', name: '지구',   emoji: '🌍', nameEn: 'Earth',
-    radiusKm: 6_371,    radiusRatio: 1.0,   gravityRatio: 1.0,
-    yearDays: 365.25,   dayHours: 24,
-    surfaceTempC: { min: -88, max: 58, avg: 15 },
-    distanceFromSunKm: 149_600_000, distanceFromEarthAvgKm: 0,
-    lightTimeMinutes: 0, color: '#0891B2', borderCls: s.borderEarth,
-    funFact: '우리 집입니다. 표면의 71%가 물로 덮여 있습니다.' },
-  { id: 'mars', name: '화성',   emoji: '♂️', nameEn: 'Mars',
-    radiusKm: 3_389.5,  radiusRatio: 0.532, gravityRatio: 0.377,
-    yearDays: 686.97,  dayHours: 24.6,
-    surfaceTempC: { min: -143, max: 35, avg: -65 },
-    distanceFromSunKm: 227_900_000, distanceFromEarthAvgKm: 78_300_000,
-    lightTimeMinutes: 12.7, color: '#DC2626', borderCls: s.borderMars,
-    funFact: '하루 길이가 지구와 비슷합니다(24시간 37분). 최고 산은 올림푸스 산(높이 22km).' },
-  { id: 'jupiter', name: '목성', emoji: '♃', nameEn: 'Jupiter',
-    radiusKm: 69_911,   radiusRatio: 10.97, gravityRatio: 2.36,
-    yearDays: 4_332.59, dayHours: 9.93,
-    surfaceTempC: { min: -145, max: -145, avg: -145 },
-    distanceFromSunKm: 778_500_000, distanceFromEarthAvgKm: 628_700_000,
-    lightTimeMinutes: 35, color: '#EA580C', borderCls: s.borderJupiter,
-    funFact: '태양계 행성 모두를 합친 것보다 2배 무겁습니다. 대적반(거대 폭풍)은 350년 이상 지속.' },
-  { id: 'saturn', name: '토성',  emoji: '♄', nameEn: 'Saturn',
-    radiusKm: 58_232,   radiusRatio: 9.14,  gravityRatio: 0.916,
-    yearDays: 10_759.22, dayHours: 10.7,
-    surfaceTempC: { min: -178, max: -178, avg: -178 },
-    distanceFromSunKm: 1_434_000_000, distanceFromEarthAvgKm: 1_280_000_000,
-    lightTimeMinutes: 71, color: '#A16207', borderCls: s.borderSaturn,
-    funFact: '아름다운 고리는 얼음과 암석. 밀도가 매우 낮아 큰 욕조에 넣으면 둥둥 뜹니다.' },
-  { id: 'uranus', name: '천왕성', emoji: '♅', nameEn: 'Uranus',
-    radiusKm: 25_362,   radiusRatio: 3.98,  gravityRatio: 0.889,
-    yearDays: 30_688.5, dayHours: -17.24,
-    surfaceTempC: { min: -224, max: -224, avg: -224 },
-    distanceFromSunKm: 2_871_000_000, distanceFromEarthAvgKm: 2_721_000_000,
-    lightTimeMinutes: 151, color: '#0D9488', borderCls: s.borderUranus,
-    funFact: '자전축이 98° 기울어져 옆으로 굴러갑니다. 태양계에서 가장 추운 행성.' },
-  { id: 'neptune', name: '해왕성', emoji: '♆', nameEn: 'Neptune',
-    radiusKm: 24_622,   radiusRatio: 3.86,  gravityRatio: 1.12,
-    yearDays: 60_182,   dayHours: 16.11,
-    surfaceTempC: { min: -218, max: -218, avg: -218 },
-    distanceFromSunKm: 4_495_000_000, distanceFromEarthAvgKm: 4_345_000_000,
-    lightTimeMinutes: 242, color: '#3E5BFF', borderCls: s.borderNeptune,
-    funFact: '태양계에서 바람이 가장 강한 행성. 시속 2,100km의 폭풍이 분다.' },
-]
-
-// 거리 표기 헬퍼
-function fmtDistance(km: number): string {
-  if (km === 0) return '—'
-  if (km < 100_000_000) return `${fmt(round(km / 1_000_000))}만 km`
-  if (km < 1_000_000_000) return `${fmt(round(km / 100_000_000))}억 km`
-  return `${round(km / 1_000_000_000, 2)}억 km`
-}
-function fmtLightTime(min: number): string {
-  if (min < 1) return '0분'
-  if (min < 60) return `${round(min, 1)}분`
-  const h = min / 60
-  if (h < 1.5) return `${round(h, 2)}시간`
-  return `${round(h, 1)}시간`
-}
 
 // ─────────────────────────────────────────────
 // 행성 SVG 일러스트
@@ -121,8 +23,6 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
   const cx = size / 2
   const cy = size / 2
   const id = `grad-${planet.id}-${size}`
-
-  const ringId = `ring-${planet.id}-${size}`
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
@@ -227,7 +127,11 @@ export default function PlanetComparisonClient() {
       const jumpHeight = (earthJumpCm / 100) / p.gravityRatio // m
       const ageOnPlanet = (age * 365.25) / p.yearDays
       const birthdaysPerEarthYear = 365.25 / p.yearDays
-      const dayLengthHours = Math.abs(p.dayHours)
+      /* '하루'는 해가 다시 남중할 때까지인 **태양일**로 통일한다.
+         ⚠️ 예전에는 한 필드에 수성=태양일(4222.6h)·금성=항성일(5832.5h)이 섞여 있어
+            두 행성을 나란히 비교할 수 없었다. */
+      const dayLengthHours = p.solarDayHours
+      const dist = earthDistance(p)
       return {
         planet: p,
         weightOnPlanet,
@@ -235,7 +139,9 @@ export default function PlanetComparisonClient() {
         ageOnPlanet,
         birthdaysPerEarthYear,
         dayLengthHours,
-        isRetrograde: p.dayHours < 0,
+        rotationHours: p.rotationHours,
+        dist,
+        isRetrograde: p.isRetrograde,
       }
     })
   }, [weight, age])
@@ -276,14 +182,16 @@ export default function PlanetComparisonClient() {
   const sizeSvg = useMemo(() => {
     // 지구 = 6px 기준 → 목성(×10.97)이 r=66px로 캔버스에 겹치지 않게 배치
     // 실제 비율: 목성 11배, 토성 9.1배, 천왕성 4배, 해왕성 3.9배
-    const earthPx = 6
+    const earthPx = 8
     const W = 760
     const H = 220
     const gap = 12
 
-    // 각 행성의 실제 반지름 (최소 3px)
+    /* ⚠️ 예전에는 Math.max(3, …)로 바닥을 뒀는데, 수성(0.383×)만 걸려서 2.3px 대신 3px로
+       그려졌다. 라벨이 '실제 비율'이라 0.383×로 적히는데 눈에는 0.5×로 보였다.
+       기준 크기를 키워 바닥값 없이도 모두 보이게 한다. */
     const planets = PLANETS
-    const radii = planets.map(p => Math.max(3, p.radiusRatio * earthPx))
+    const radii = planets.map(p => p.radiusRatio * earthPx)
     // 토성 고리는 본체보다 1.55배 가로로 더 넓으므로 가로 점유폭에 반영
     const hExtents = planets.map((p, i) => (p.id === 'saturn' ? radii[i] * 1.55 : radii[i]))
 
@@ -368,31 +276,38 @@ export default function PlanetComparisonClient() {
         </div>
         <div className={s.gridThree}>
           <div>
-            <span className={s.subLabel}>몸무게 (kg)</span>
+            <label className={s.subLabel} htmlFor="pc-weight">몸무게 (kg)</label>
             <div className={s.sliderRow}>
-              <input type="range" min={20} max={150} step={1} value={weight} onChange={e => setWeight(Number(e.target.value))} />
+              <input id="pc-weight" type="range" min={20} max={150} step={1} value={weight} onChange={e => setWeight(Number(e.target.value))} />
               <span className={s.sliderValue}>{weight}kg</span>
             </div>
           </div>
           <div>
-            <span className={s.subLabel}>나이 (만)</span>
+            <label className={s.subLabel} htmlFor="pc-age">나이 (만)</label>
             <div className={s.sliderRow}>
-              <input type="range" min={0} max={100} step={1} value={age} onChange={e => setAge(Number(e.target.value))} />
+              <input id="pc-age" type="range" min={0} max={100} step={1} value={age} onChange={e => setAge(Number(e.target.value))} />
               <span className={s.sliderValue}>{age}세</span>
             </div>
           </div>
           <div>
-            <span className={s.subLabel}>이름 (선택, 공유 카드용)</span>
-            <input className={s.textInput} type="text" value={userName} onChange={e => setUserName(e.target.value)} placeholder="예: 홍길동" maxLength={20} />
+            <label className={s.subLabel} htmlFor="pc-name">이름 (선택, 공유 카드용)</label>
+            <input id="pc-name" className={s.textInput} type="text" value={userName} onChange={e => setUserName(e.target.value)} placeholder="예: 홍길동" maxLength={20} />
           </div>
         </div>
 
         <div className={s.presetRow} style={{ marginTop: 12 }}>
           <button className={`${s.presetBtn} ${weight === 75 && age === 35 ? s.presetActive : ''}`} onClick={() => applyPreset('maleAvg')}   type="button">평균 한국 성인 남성 (75kg, 35세)</button>
           <button className={`${s.presetBtn} ${weight === 60 && age === 35 ? s.presetActive : ''}`} onClick={() => applyPreset('femaleAvg')} type="button">평균 한국 성인 여성 (60kg, 35세)</button>
-          <button className={s.presetBtn} type="button" onClick={() => { /* keep current */ }}>내 정보 (직접 입력)</button>
+          {/* ⚠️ 예전에는 onClick이 빈 함수라 눌러도 아무 일이 없었다. 실제로 입력 칸으로 보낸다. */}
+          <button className={s.presetBtn} type="button"
+            onClick={() => { document.getElementById('pc-weight')?.focus() }}>내 정보 직접 입력 ↓</button>
         </div>
       </div>
+
+      {/* 슬라이더를 움직이면 카드 8장이 한꺼번에 바뀐다 — 전체를 읽지 않도록 요약만 알린다 */}
+      <p className={s.srOnly} role="status" aria-live="polite">
+        몸무게 {weight}kg · 나이 {age}세 기준으로 {selected.size}개 행성 값을 갱신했습니다.
+      </p>
 
       {/* 행성 선택 */}
       <div className={s.card}>
@@ -434,7 +349,7 @@ export default function PlanetComparisonClient() {
         {filteredCalcs.map(c => {
           const p = c.planet
           return (
-            <div key={p.id} className={`${s.planetCard} ${p.borderCls}`}>
+            <div key={p.id} className={`${s.planetCard} ${BORDER_CLS[p.id] ?? ''}`}>
               <div className={s.planetCardHeader}>
                 <span className={s.planetCardEmoji}>{p.emoji}</span>
                 <span className={s.planetCardName}>{p.name}<span className={s.planetCardNameEn}>{p.nameEn}</span></span>
@@ -459,12 +374,14 @@ export default function PlanetComparisonClient() {
                   <span className={s.planetStatHint}>{p.name}년 단위</span>
                 </div>
                 <div className={s.planetStatItem}>
-                  1일 길이
+                  하루 (태양일)
                   <strong>
-                    {p.id === 'mercury' || p.id === 'venus' ? `${fmt(round(c.dayLengthHours / 24, 1))}일` : `${round(c.dayLengthHours, 1)}h`}
+                    {c.dayLengthHours >= 48 ? `${fmt(round(c.dayLengthHours / 24, 1))}일` : `${round(c.dayLengthHours, 1)}h`}
                     {c.isRetrograde && <span className={s.retroFlag}>역행</span>}
                   </strong>
-                  <span className={s.planetStatHint}>지구 시간 기준</span>
+                  <span className={s.planetStatHint}>
+                    자전 {c.rotationHours >= 48 ? `${fmt(round(c.rotationHours / 24, 1))}일` : `${round(c.rotationHours, 1)}h`}
+                  </span>
                 </div>
                 <div className={s.planetStatItem}>
                   평균 온도
@@ -472,9 +389,11 @@ export default function PlanetComparisonClient() {
                   <span className={s.planetStatHint}>지구 15°C</span>
                 </div>
                 <div className={s.planetStatItem}>
-                  거리
-                  <strong>{fmtDistance(p.distanceFromEarthAvgKm)}</strong>
-                  <span className={s.planetStatHint}>빛 도달 {fmtLightTime(p.lightTimeMinutes)}</span>
+                  거리 (가장 가까울 때)
+                  <strong>{p.id === 'earth' ? '—' : fmtDistance(c.dist.minKm)}</strong>
+                  <span className={s.planetStatHint}>
+                    {p.id === 'earth' ? '여기가 기준' : `빛 ${fmtLightTime(c.dist.minLightMin)} · 가장 멀 땐 ${fmtLightTime(c.dist.maxLightMin)}`}
+                  </span>
                 </div>
               </div>
               <div className={s.funFact}>
@@ -631,15 +550,15 @@ export default function PlanetComparisonClient() {
       <div className={s.card}>
         <div className={s.cardLabel}>
           <span>거리·빛 도달 시간</span>
-          <span className={s.cardLabelHint}>지구로부터 평균</span>
+          <span className={s.cardLabelHint}>지구에서 가장 가까울 때 ~ 가장 멀 때</span>
         </div>
         <div className={s.tableScroll}>
           <table className={s.compareTable} style={{ minWidth: 460 }}>
             <thead>
               <tr>
                 <th scope="col">행성</th>
-                <th scope="col">거리 (지구로부터)</th>
-                <th scope="col">빛 도달 시간</th>
+                <th scope="col">거리 (가장 가까울 때)</th>
+                <th scope="col">빛 도달 시간 (최소~최대)</th>
               </tr>
             </thead>
             <tbody>
@@ -649,8 +568,8 @@ export default function PlanetComparisonClient() {
                     <span className={s.planetDot} style={{ background: c.planet.color }} />
                     {c.planet.name}
                   </td>
-                  <td>{fmtDistance(c.planet.distanceFromEarthAvgKm)}</td>
-                  <td>{fmtLightTime(c.planet.lightTimeMinutes)}</td>
+                  <td>{c.planet.id === 'earth' ? '—' : fmtDistance(c.dist.minKm)}</td>
+                  <td>{c.planet.id === 'earth' ? '—' : `${fmtLightTime(c.dist.minLightMin)} ~ ${fmtLightTime(c.dist.maxLightMin)}`}</td>
                 </tr>
               ))}
             </tbody>
@@ -707,7 +626,7 @@ export default function PlanetComparisonClient() {
 
       <div className={s.sourceCard}>
         <strong>데이터 출처:</strong> 행성 데이터는 NASA Solar System Exploration 기준입니다.
-        거리는 평균값이며 행성 위치에 따라 변동됩니다. 빛 도달 시간도 평균 거리 기준입니다.
+        거리는 <strong>궤도 반지름의 차·합</strong>으로 구한 값입니다(원 궤도로 단순화한 근사). 두 행성이 태양을 도는 위치에 따라 최소~최대 사이에서 계속 변합니다 — 화성은 가장 가까울 때와 멀 때가 7배 넘게 차이 납니다.
         정확한 천문 데이터는 NASA, KASI(한국천문연구원) 등 공식 기관 자료를 참조하세요.
       </div>
     </div>
