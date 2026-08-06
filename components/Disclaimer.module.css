@@ -66,11 +66,18 @@
   .head:hover .chevron { color: var(--text); }
 }
 
-.disclaimer[data-variant="default"] .title { color: var(--accent); }
-.disclaimer[data-variant="medical"] .title { color: #0891B2; }
-.disclaimer[data-variant="finance"] .title { color: #059669; }
-.disclaimer[data-variant="legal"]   .title { color: #9333EA; }
-.disclaimer[data-variant="safety"]  .title { color: #D97706; }
+/* ⚠️ 제목은 13px·700이라 대형 텍스트 예외(18.66px+)에 해당하지 않는다. 그런데 600레벨 색을
+      쓰고 있어 흰 카드(--bg2) 위에서 AA(4.5:1)를 넘지 못했다 — 실측:
+        default(--accent #0284C7) 4.10 · medical #0891B2 3.68 · finance #059669 3.77 ·
+        safety #D97706 3.19 (legal #9333EA 5.38만 통과).
+      199개 도구 페이지 중 198개에 걸리던 문제라, 프로젝트의 기존 ink 패턴
+      (--accent-ink · --coral-ink)과 같이 700레벨로 내린다. 왼쪽 테두리(비텍스트)는 600레벨 유지.
+      아래 값은 --bg2(#fff)·--bg3(#f8fafc)·--bg(#f0f7ff) 세 배경 모두에서 4.5:1을 넘는다. */
+.disclaimer[data-variant="default"] .title { color: var(--accent-ink); }              /* sky-700   5.93:1 */
+.disclaimer[data-variant="medical"] .title { color: #0E7490; }                        /* cyan-700  5.36:1 */
+.disclaimer[data-variant="finance"] .title { color: #047857; }                        /* emerald-700 5.48:1 */
+.disclaimer[data-variant="legal"]   .title { color: #9333EA; }                        /* purple-600 5.38:1 — 이미 통과 */
+.disclaimer[data-variant="safety"]  .title { color: var(--warning); }                 /* amber-700 5.02:1 */
 
 /* 열린 상태 — 본문 */
 .body {
