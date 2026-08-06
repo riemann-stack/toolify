@@ -149,25 +149,37 @@ export default function PlanetComparisonClient() {
   const filteredCalcs = planetCalcs.filter(c => selected.has(c.planet.id))
 
   // 추천 행성 (가벼운 몸 + 비슷한 하루)
+  /* ⚠️ 예전에는 선택과 무관하게 화성을 반환했다. 화성을 체크 해제해도 "가장 추천: 화성"이
+     그대로 남았다. 실제로 **선택된 행성 중에서** 사람이 지내기 나은 쪽을 고른다.
+     기준: 지구와 비슷한 중력(0.3~1.5g) · 지구와 비슷한 하루(20~30h) · 덜 극단적인 온도. */
   const recommended = useMemo(() => {
-    // 화성을 기본 추천 (가벼운 몸 + 24.6h 하루 + 인간 탐사 가능성)
-    const mars = planetCalcs.find(c => c.planet.id === 'mars')
-    return mars ?? planetCalcs[3]
-  }, [planetCalcs])
+    /* 지구는 빼고 고른다 — '어느 행성으로 가면 좋을까'라는 질문이므로 */
+    const base = filteredCalcs.length ? filteredCalcs : planetCalcs
+    const pool = base.filter(c => c.planet.id !== 'earth')
+    if (!pool.length) return base[0]
+    const score = (c: typeof planetCalcs[number]) => {
+      const g = c.planet.gravityRatio
+      const gravityPenalty = Math.abs(Math.log(g))                    // 1g에서 멀수록 벌점
+      const dayPenalty = Math.abs(Math.log(c.dayLengthHours / 24))     // 24h에서 멀수록 벌점
+      const tempPenalty = Math.abs(c.planet.surfaceTempC.avg - 15) / 100
+      const noSurface = c.planet.radiusRatio > 3 ? 2 : 0               // 기체·얼음 행성은 설 곳이 없다
+      return gravityPenalty + dayPenalty + tempPenalty + noSurface
+    }
+    return [...pool].sort((a, b) => score(a) - score(b))[0]
+  }, [filteredCalcs, planetCalcs])
 
   // 공유 텍스트
   async function copyShare() {
-    const top4 = ['mercury', 'venus', 'mars', 'jupiter']
-      .map(id => planetCalcs.find(c => c.planet.id === id))
-      .filter((c): c is NonNullable<typeof c> => !!c)
+    /* ⚠️ 예전에는 수성·금성·화성·목성으로 고정돼 있어, 화성을 체크 해제해도 공유 카드에 남았다. */
+    const shown = (filteredCalcs.length ? filteredCalcs : planetCalcs).slice(0, 4)
     const lines = [
       `🪐 우주 속의 ${userName ? userName + '님' : '나'}`,
       ``,
       `지구의 ${age}세 ${weight}kg인 ${userName ? userName + '님은' : '나는'}...`,
       ``,
-      ...top4.map(c => `🌟 ${c.planet.name}: ${round(c.ageOnPlanet, 1)}세, ${round(c.weightOnPlanet, 1)}kg`),
+      ...shown.map(c => `🌟 ${c.planet.name}: ${round(c.ageOnPlanet, 1)}세, 체중계 ${round(c.weightOnPlanet, 1)}kg`),
       ``,
-      `가장 추천: 화성 🚀 (가벼운 몸, 비슷한 하루)`,
+      `가장 추천: ${recommended.planet.name} 🚀`,
       ``,
       `youtil.kr 🌌`,
     ]
@@ -323,6 +335,7 @@ export default function PlanetComparisonClient() {
                 key={p.id}
                 className={`${s.planetCheckBtn} ${active ? s.planetCheckActive : ''}`}
                 onClick={() => togglePlanet(p.id)}
+                aria-pressed={active}
                 type="button"
               >
                 <span className={s.planetCheckDot} style={{ background: p.color }} />
@@ -359,9 +372,12 @@ export default function PlanetComparisonClient() {
               </div>
               <div className={s.planetStats}>
                 <div className={s.planetStatItem}>
-                  내 몸무게
+                  체중계 눈금
                   <strong>{round(c.weightOnPlanet, 1)} kg</strong>
-                  <span className={s.planetStatHint}>중력 {round(p.gravityRatio, 2)}g</span>
+                  {/* 질량은 어디서든 그대로다. 바뀌는 것은 저울이 읽는 값(=무게). */}
+                  <span className={s.planetStatHint}>
+                    질량 {weight}kg 그대로 · 무게 {fmt(round(weight * p.gravityRatio * 9.80665))} N
+                  </span>
                 </div>
                 <div className={s.planetStatItem}>
                   점프 높이
@@ -410,7 +426,7 @@ export default function PlanetComparisonClient() {
           <span>크기·중력 비교</span>
           <span className={s.cardLabelHint}>지구 = 1.0× 기준</span>
         </div>
-        <div className={s.tableScroll}>
+        <div className="tableScroll">
           <table className={s.compareTable} style={{ minWidth: 540 }}>
             <thead>
               <tr>
@@ -445,7 +461,7 @@ export default function PlanetComparisonClient() {
       <div className={s.gravitySim}>
         <div className={s.cardLabel}>
           <span>중력 낙하 시뮬레이션</span>
-          <span className={s.cardLabelHint}>같은 높이에서 동시 낙하 (3초)</span>
+          <span className={s.cardLabelHint}>같은 높이에서 동시 낙하 · 지구가 3초 걸리는 높이 기준</span>
         </div>
         <button className={s.gravityRunBtn} onClick={runGravitySim} type="button">
           ▶ 낙하 시작
@@ -486,7 +502,7 @@ export default function PlanetComparisonClient() {
           <span>시간 비교</span>
           <span className={s.cardLabelHint}>1년·1일·생일</span>
         </div>
-        <div className={s.tableScroll}>
+        <div className="tableScroll">
           <table className={s.compareTable} style={{ minWidth: 540 }}>
             <thead>
               <tr>
@@ -552,7 +568,7 @@ export default function PlanetComparisonClient() {
           <span>거리·빛 도달 시간</span>
           <span className={s.cardLabelHint}>지구에서 가장 가까울 때 ~ 가장 멀 때</span>
         </div>
-        <div className={s.tableScroll}>
+        <div className="tableScroll">
           <table className={s.compareTable} style={{ minWidth: 460 }}>
             <thead>
               <tr>
@@ -602,7 +618,9 @@ export default function PlanetComparisonClient() {
         <div className={s.shareRecommend}>
           가장 추천: <strong>{recommended.planet.name} 🚀</strong>
           <br />
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>가벼운 몸 ({round(recommended.weightOnPlanet, 1)}kg) · 비슷한 하루 ({round(recommended.dayLengthHours, 1)}h)</span>
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>
+            중력 {round(recommended.planet.gravityRatio, 2)}g (체중계 {round(recommended.weightOnPlanet, 1)}kg) · 하루 {recommended.dayLengthHours >= 48 ? `${round(recommended.dayLengthHours / 24, 1)}일` : `${round(recommended.dayLengthHours, 1)}h`} · 평균 {recommended.planet.surfaceTempC.avg}°C
+          </span>
         </div>
         <div className={s.shareWatermark}>youtil.kr 🌌</div>
       </div>

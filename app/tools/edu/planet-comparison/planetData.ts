@@ -58,7 +58,7 @@ export const PLANETS: Planet[] = [
     yearDays: 4_332.59, rotationHours: 9.9250, solarDayHours: 9.9259, isRetrograde: false,
     surfaceTempC: { min: -145, max: -110, avg: -110 },
     distanceFromSunKm: 778_500_000, color: '#EA580C',
-    funFact: '태양계 행성 모두를 합친 것보다 2배 무겁습니다. 대적반(거대 폭풍)은 350년 이상 지속.' },
+    funFact: '나머지 일곱 행성을 모두 합친 것보다 두 배 넘게 무겁습니다. 대적반(거대 폭풍)은 350년 이상 지속.' },
   { id: 'saturn', name: '토성',  emoji: '♄', nameEn: 'Saturn',
     radiusKm: 58_232,   radiusRatio: 9.14,  gravityRatio: 0.916,
     yearDays: 10_759.22, rotationHours: 10.656, solarDayHours: 10.656, isRetrograde: false,

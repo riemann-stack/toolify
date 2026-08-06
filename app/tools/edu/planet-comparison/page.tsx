@@ -16,7 +16,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '화성에서 내 몸무게가 더 가벼운 이유는?',
-                a: '화성의 중력은 <strong>지구의 약 38%</strong>이기 때문입니다. 화성은 지구보다 작고(반지름 53%) 가벼워서(질량 11%) 표면 중력이 약합니다. 지구에서 75kg인 사람이 화성에 가면 약 <strong>28.5kg</strong>으로 느껴집니다. 단, 질량(물질의 양) 자체는 그대로이며, 행성 중력에 따라 무게(weight)만 달라집니다.',
+                a: '화성의 중력은 <strong>지구의 약 38%</strong>이기 때문입니다. 화성은 지구보다 작고(반지름 53%) 가벼워서(질량 11%) 표면 중력이 약합니다. 지구에서 체중계가 75kg을 가리키는 사람이 화성에 체중계를 가져가면 <strong>약 28.3kg</strong>을 가리킵니다. 다만 <strong>질량 75kg 자체는 그대로</strong>이고, 달라지는 것은 중력이 당기는 힘(무게)입니다 — 지구에서 736N이던 것이 화성에서는 277N이 됩니다.',
               },
               {
                 q: '목성에서 1년이 12년이라는 게 무슨 뜻인가요?',
@@ -82,6 +82,12 @@ export default function PlanetComparisonPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             각 행성에서 몸무게 변화 원리
           </h2>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            먼저 <strong style={{ color: 'var(--text)' }}>질량과 무게는 다른 것</strong>입니다. 질량(kg)은 물질의 양이라 어느 행성에 가도 그대로이고, 무게는 중력이 그 질량을 당기는 힘이라 행성마다 달라집니다. 무게의 단위는 원래 <strong style={{ color: 'var(--text)' }}>뉴턴(N)</strong>이에요.
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+            그런데 우리가 쓰는 체중계는 힘을 재고서 <strong style={{ color: 'var(--text)' }}>지구 중력으로 나눈 값</strong>을 kg으로 보여 줍니다. 그래서 &ldquo;화성에서 28.3kg&rdquo;은 정확히 말하면 <strong style={{ color: 'var(--text)' }}>화성에 체중계를 가져가면 눈금이 28.3을 가리킨다</strong>는 뜻이지, 질량이 줄어든다는 뜻이 아닙니다. 이 도구가 &lsquo;체중계 눈금&rsquo;과 &lsquo;무게(N)&rsquo;를 나눠 보여 주는 이유입니다.
+          </p>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
@@ -92,21 +98,22 @@ export default function PlanetComparisonPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div><span style={{ color: 'var(--muted)' }}>몸무게(W)</span> = <span style={{ color: 'var(--muted)' }}>질량(m)</span> × <span style={{ color: 'var(--muted)' }}>중력 가속도(g)</span></div>
-            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 질량은 행성에 가도 변하지 않음 (질량 ≠ 몸무게)</div>
+            <div><span style={{ color: 'var(--muted)' }}>무게(W)</span> = <span style={{ color: 'var(--muted)' }}>질량(m)</span> × <span style={{ color: 'var(--muted)' }}>중력 가속도(g)</span></div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>지구에서 75kg → 무게 75 × 9.81 = <strong style={{ color: 'var(--text)' }}>736 N</strong></div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>화성에서는 75 × 3.70 = <strong style={{ color: 'var(--text)' }}>277 N</strong> → 체중계는 <strong style={{ color: 'var(--text)' }}>28.3kg</strong>을 가리킴</div>
           </div>
           <div className="tableScroll" style={{ marginTop: 12 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['행성', '중력 (g)', '75kg → 행성 몸무게'].map((h, i) => (
+                  {['행성', '표면중력 (지구=1)', '질량 75kg → 체중계 눈금'].map((h, i) => (
                     <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { p: '수성·화성',           c: '#A8A29E', g: '0.38 g', w: '28.5 kg' },
+                  { p: '수성·화성',           c: '#A8A29E', g: '0.378 · 0.377 g', w: '28.4 · 28.3 kg' },
                   { p: '금성·토성·천왕성',    c: '#FFC857', g: '0.90~0.92 g', w: '67.5~69 kg' },
                   { p: '지구',                 c: '#0891B2', g: '1.00 g', w: '75.0 kg' },
                   { p: '해왕성',               c: '#3E5BFF', g: '1.12 g', w: '84.0 kg' },
@@ -273,7 +280,7 @@ export default function PlanetComparisonPage() {
               { t: '수성', d: '메신저호 2011~2015년 궤도 운용 후 종료 · 베피콜롬보 순항 중, 2026년 11월 궤도 진입 예정', c: '#A8A29E' },
               { t: '금성', d: '비너스 익스프레스 2014년 종료 · 아카츠키 2025년 9월 운용 종료 → 현재 금성 궤도에 가동 중인 탐사선 없음', c: '#FFC857' },
               { t: '화성', d: '큐리오시티·퍼서비어런스 활동 중 (인저뉴어티 헬기는 2024년 1월 72회 비행 후 임무 종료)', c: '#DC2626' },
-              { t: '목성', d: '주노 (NASA, 현재 활동 중) · Europa Clipper 진행 중', c: '#EA580C' },
+              { t: '목성', d: '주노는 연장 임무가 2025년 9월까지로 공지돼 있고 이후 공식 종료 발표는 확인되지 않았습니다 · Europa Clipper 순항 중(2030년 도착)', c: '#EA580C' },
               { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: '#A16207' },
               { t: '천왕성·해왕성', d: '보이저 2호만 1986/1989년 근접 통과', c: '#0D9488' },
             ].map((c, i) => (
