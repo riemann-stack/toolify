@@ -3,136 +3,27 @@
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './circuit-simulator.module.css'
+import {
+  fmtV, fmtA, fmtR, fmtW,
+  type Resistor, type CircuitType, type Preset, type CalcResult,
+  PRESETS, POWER_RATINGS, VOLTAGE_QUICK, calcCircuit, EXAM_PROBLEMS,
+} from './circuitData'
 
 // ─────────────────────────────────────────────
 // 유틸
 // ─────────────────────────────────────────────
-function fmtV(v: number): string {
-  if (!Number.isFinite(v)) return '-'
-  if (Math.abs(v) >= 1000) return `${(v / 1000).toFixed(2)} kV`
-  if (Math.abs(v) < 0.001) return `${(v * 1000).toFixed(2)} mV`
-  return `${v.toFixed(2)} V`
-}
-function fmtA(a: number): string {
-  if (!Number.isFinite(a)) return '-'
-  if (Math.abs(a) >= 1) return `${a.toFixed(3)} A`
-  if (Math.abs(a) >= 0.001) return `${(a * 1000).toFixed(1)} mA`
-  return `${(a * 1e6).toFixed(1)} µA`
-}
-function fmtR(r: number): string {
-  if (!Number.isFinite(r)) return '-'
-  if (r >= 1_000_000) return `${(r / 1_000_000).toFixed(2)} MΩ`
-  if (r >= 1000) return `${(r / 1000).toFixed(2)} kΩ`
-  return `${r.toFixed(0)} Ω`
-}
-function fmtW(w: number): string {
-  if (!Number.isFinite(w)) return '-'
-  if (Math.abs(w) >= 1) return `${w.toFixed(3)} W`
-  if (Math.abs(w) >= 0.001) return `${(w * 1000).toFixed(1)} mW`
-  return `${(w * 1e6).toFixed(1)} µW`
-}
-const round = (v: number, dp = 3) => Math.round(v * Math.pow(10, dp)) / Math.pow(10, dp)
 
 // ─────────────────────────────────────────────
 // 데이터
 // ─────────────────────────────────────────────
-type Resistor = { id: string; value: number; label: string; powerRating: number }
-type CircuitType = 'series' | 'parallel'
 
 let idCounter = 0
 const newId = () => `r-${++idCounter}`
 
-type Preset = {
-  id: string
-  name: string
-  icon: string
-  desc: string
-  voltage: number
-  type: CircuitType
-  resistors: { value: number; label: string }[]
-  grade: string
-  note?: string
-}
-
-const PRESETS: Preset[] = [
-  { id: 'simple',    name: '단일 저항',   icon: '⚡',  desc: '옴의 법칙 V=IR 기본',         voltage: 12, type: 'series',   resistors: [{ value: 100, label: 'R1' }], grade: '중3 기초' },
-  { id: 'series-2',  name: '직렬 2개',    icon: '━',   desc: '전류 일정·전압 분배',          voltage: 12, type: 'series',   resistors: [{ value: 100, label: 'R1' }, { value: 200, label: 'R2' }], grade: '중3·고1' },
-  { id: 'parallel-2',name: '병렬 2개',    icon: '▥',   desc: '전압 일정·전류 분배',          voltage: 12, type: 'parallel', resistors: [{ value: 100, label: 'R1' }, { value: 200, label: 'R2' }], grade: '중3·고1' },
-  { id: 'series-3',  name: '직렬 3개',    icon: '═',   desc: '분압 회로',                  voltage: 9,  type: 'series',   resistors: [{ value: 100, label: 'R1' }, { value: 200, label: 'R2' }, { value: 300, label: 'R3' }], grade: '고1 빈출' },
-  { id: 'parallel-3',name: '병렬 3개',    icon: '⫴',   desc: '저항 3개 병렬',               voltage: 12, type: 'parallel', resistors: [{ value: 100, label: 'R1' }, { value: 200, label: 'R2' }, { value: 300, label: 'R3' }], grade: '고1' },
-  { id: 'led',       name: 'LED 회로',    icon: '💡',  desc: '5V + 220Ω + LED 전류 제한',    voltage: 5,  type: 'series',   resistors: [{ value: 220, label: 'R(전류제한)' }], grade: 'DIY 실용', note: 'LED 전압강하 약 2V 가정' },
-  { id: 'usb-led',   name: 'USB 전원 LED', icon: '🔌', desc: 'USB 5V로 LED 안전 점등',      voltage: 5,  type: 'series',   resistors: [{ value: 330, label: 'R(전류제한)' }], grade: 'DIY 실용', note: 'LED 보호용 큰 저항' },
-]
-
-// 전력 정격 옵션
-const POWER_RATINGS = [
-  { value: 0.25, label: '1/4W' },
-  { value: 0.5,  label: '1/2W' },
-  { value: 1.0,  label: '1W' },
-  { value: 2.0,  label: '2W' },
-  { value: 5.0,  label: '5W' },
-]
-
-const VOLTAGE_QUICK = [
-  { v: 1.5, l: '🔋 1.5V', n: '건전지 AA' },
-  { v: 3.0, l: '🔋 3V',   n: 'CR2032' },
-  { v: 5.0, l: '🔌 5V',   n: 'USB' },
-  { v: 9.0, l: '🔋 9V',   n: '각형 건전지' },
-  { v: 12,  l: '🚗 12V',  n: '자동차' },
-  { v: 24,  l: '⚙️ 24V',  n: '산업용' },
-]
 
 // ─────────────────────────────────────────────
 // 회로 계산
 // ─────────────────────────────────────────────
-type CalcResult = {
-  totalResistance: number
-  totalCurrent: number
-  totalVoltage: number
-  totalPower: number
-  perResistor: {
-    id: string
-    label: string
-    resistance: number
-    voltage: number
-    current: number
-    power: number
-    powerRating: number
-    powerExceeded: boolean
-  }[]
-}
-function calcCircuit(voltage: number, type: CircuitType, resistors: Resistor[]): CalcResult {
-  if (resistors.length === 0) {
-    return { totalResistance: 0, totalCurrent: 0, totalVoltage: voltage, totalPower: 0, perResistor: [] }
-  }
-  let totalR = 0
-  if (type === 'series') totalR = resistors.reduce((a, r) => a + r.value, 0)
-  else totalR = 1 / resistors.reduce((a, r) => a + 1 / r.value, 0)
-
-  const totalI = totalR > 0 ? voltage / totalR : 0
-  const totalP = voltage * totalI
-
-  const perResistor = resistors.map(r => {
-    let v = 0, i = 0, p = 0
-    if (type === 'series') {
-      i = totalI
-      v = totalI * r.value
-      p = totalI * totalI * r.value
-    } else {
-      v = voltage
-      i = voltage / r.value
-      p = (voltage * voltage) / r.value
-    }
-    return {
-      id: r.id, label: r.label,
-      resistance: r.value, voltage: v, current: i, power: p,
-      powerRating: r.powerRating,
-      powerExceeded: p > r.powerRating,
-    }
-  })
-
-  return { totalResistance: totalR, totalCurrent: totalI, totalVoltage: voltage, totalPower: totalP, perResistor }
-}
 
 // ─────────────────────────────────────────────
 // 회로 SVG
@@ -166,9 +57,9 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
           <g transform={`translate(0, ${(bottomY - wireY) / 2})`}>
             <line x1="-12" y1="-12" x2="-12" y2="12" stroke="var(--text)" strokeWidth="3" />
             <line x1="-6"  y1="-6"  x2="-6"  y2="6"  stroke="var(--text)" strokeWidth="2" />
-            <text x="-25" y="0" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
+            <text x="-25" y="0" fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
             <text x="-25" y={bottomY - wireY - 30} fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>−</text>
-            <text x="-50" y="5" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
+            <text x="-50" y="5" fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
           </g>
         </g>
 
@@ -195,7 +86,7 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
               {/* 라벨 */}
               <text x={cx} y={y - 18} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{r.label}</text>
               <text x={cx} y={y - 4}  fontSize="11" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmtR(r.resistance)}</text>
-              <text x={cx} y={y + rectH + 14} fontSize="11" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>{fmtV(r.voltage)}</text>
+              <text x={cx} y={y + rectH + 14} fontSize="11" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>{fmtV(r.voltage)}</text>
               <text x={cx} y={y + rectH + 28} fontSize="10" fill={r.powerExceeded ? '#DC2626' : 'var(--muted)'} textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                 {fmtW(r.power)}{r.powerExceeded ? ' ⚠️' : ''}
               </text>
@@ -207,7 +98,7 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
         <line x1={padX - 30} y1={bottomY} x2={W - padX + 30} y2={bottomY} stroke="var(--text)" strokeWidth="2" />
         <line x1={W - padX + 30} y1={wireY - 30} x2={W - padX + 30} y2={bottomY} stroke="var(--text)" strokeWidth="2" />
         {/* 전류 화살표 (상단) */}
-        <text x={padX + innerW / 2} y={wireY - 50} fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+        <text x={padX + innerW / 2} y={wireY - 50} fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
           → I = {fmtA(totalI)}
         </text>
       </svg>
@@ -229,9 +120,9 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
         <line x1="0" y1={-(wireYBottom - wireYTop) / 2} x2="0" y2={(wireYBottom - wireYTop) / 2} stroke="var(--text)" strokeWidth="2" />
         <line x1="-12" y1="-12" x2="-12" y2="12" stroke="var(--text)" strokeWidth="3" />
         <line x1="-6"  y1="-6"  x2="-6"  y2="6"  stroke="var(--text)" strokeWidth="2" />
-        <text x="-25" y="-20" fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
+        <text x="-25" y="-20" fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
         <text x="-25" y="28"  fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>−</text>
-        <text x="-50" y="5"   fontSize="13" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
+        <text x="-50" y="5"   fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
       </g>
 
       {/* 위 메인 라인 */}
@@ -272,7 +163,7 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
           </g>
         )
       })}
-      <text x={padX + 30} y={wireYTop - 10} fontSize="13" fill="#0D9488" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+      <text x={padX + 30} y={wireYTop - 10} fontSize="13" fill="#0F766E" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
         → I_total = {fmtA(totalI)}
       </text>
     </svg>
@@ -282,57 +173,6 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
 // ─────────────────────────────────────────────
 // 시험 빈출 문제
 // ─────────────────────────────────────────────
-const EXAM_PROBLEMS = [
-  {
-    q: '12V 전원에 R₁=100Ω, R₂=200Ω이 직렬로 연결되었다. R₂에 흐르는 전류는?',
-    choices: ['20mA', '40mA', '60mA', '120mA'],
-    correct: 1,
-    grade: '중3·고1',
-    solution: '직렬에서 전류는 모든 저항에 동일. R_total = 100+200 = 300Ω. I = V/R = 12/300 = 0.04A = <strong>40mA</strong>',
-  },
-  {
-    q: '6V 전원에 100Ω 저항 2개가 병렬로 연결되었다. 전체 전류는?',
-    choices: ['30mA', '60mA', '120mA', '240mA'],
-    correct: 2,
-    grade: '중3·고1',
-    solution: '병렬에서 합성 저항 = 100×100/(100+100) = 50Ω. I_total = 6/50 = 0.12A = <strong>120mA</strong>',
-  },
-  {
-    q: '12V를 100Ω·200Ω 직렬로 분압할 때 R₂(200Ω) 양단 전압은?',
-    choices: ['4V', '6V', '8V', '12V'],
-    correct: 2,
-    grade: '고1 빈출',
-    solution: 'I = 12/(100+200) = 40mA. V_R₂ = I × R₂ = 0.04 × 200 = <strong>8V</strong>. 분압 공식: V × R₂/(R₁+R₂) = 12 × 200/300 = 8V',
-  },
-  {
-    q: '100Ω·200Ω이 병렬로 연결되었을 때 합성 저항은?',
-    choices: ['50Ω', '66.7Ω', '150Ω', '300Ω'],
-    correct: 1,
-    grade: '고1',
-    solution: '병렬: 1/R = 1/100 + 1/200 = 3/200, R = 200/3 ≈ <strong>66.7Ω</strong>. 또는 두 저항 공식: R₁R₂/(R₁+R₂) = 20000/300 = 66.7Ω',
-  },
-  {
-    q: '5V 전원에 50Ω 저항. 이 저항이 소비하는 전력은?',
-    choices: ['0.1W', '0.25W', '0.5W', '1W'],
-    correct: 2,
-    grade: '고1',
-    solution: 'P = V²/R = 25/50 = <strong>0.5W</strong>. 또는 I = V/R = 0.1A, P = VI = 5×0.1 = 0.5W',
-  },
-  {
-    q: '5V 전원에 LED(Vf=2V, IF=20mA)를 연결할 때 필요한 저항(전류 제한)은?',
-    choices: ['100Ω', '150Ω', '220Ω', '470Ω'],
-    correct: 1,
-    grade: 'DIY 실용',
-    solution: 'R = (V_source − V_LED)/I_LED = (5−2)/0.02 = <strong>150Ω</strong>. 안전 마진을 위해 220Ω 권장.',
-  },
-  {
-    q: 'R₁(50Ω) 직렬 + (R₂=100Ω // R₃=100Ω) 병렬 회로에 12V 전원. 전체 전류는?',
-    choices: ['60mA', '80mA', '100mA', '120mA'],
-    correct: 3,
-    grade: '고1·고2 심화',
-    solution: 'R₂//R₃ = 100×100/200 = 50Ω. R_total = R₁ + 50 = 100Ω. I = 12/100 = 0.12A = <strong>120mA</strong>',
-  },
-]
 
 // ─────────────────────────────────────────────
 // 컴포넌트
@@ -348,6 +188,8 @@ export default function CircuitSimulatorClient() {
     { id: newId(), value: 200, label: 'R2', powerRating: 0.25 },
   ])
   const [activePreset, setActivePreset] = useState<string>('series-2')
+  /* LED 전압강하(직렬). 0이면 순수 저항 회로. 프리셋이 설정하고, 사용자가 조절할 수 있다. */
+  const [ledDropV, setLedDropV] = useState<number>(0)
 
   // ─ 옴의 법칙 ─
   const [ohmKnown, setOhmKnown] = useState<'V_R' | 'V_I' | 'I_R' | 'V_P'>('V_R')
@@ -368,6 +210,7 @@ export default function CircuitSimulatorClient() {
     setVoltage(p.voltage)
     setType(p.type === 'parallel' ? 'parallel' : 'series')
     setResistors(p.resistors.map(r => ({ id: newId(), value: r.value, label: r.label, powerRating: 0.25 })))
+    setLedDropV(p.ledDropV ?? 0)
   }
 
   function addResistor() {
@@ -390,16 +233,19 @@ export default function CircuitSimulatorClient() {
   }
 
   // 시뮬레이터 결과
-  const result = useMemo(() => calcCircuit(voltage, type, resistors), [voltage, type, resistors])
+  const result = useMemo(() => calcCircuit(voltage, type, resistors, { ledDropV }), [voltage, type, resistors, ledDropV])
 
   // 검증 — KVL/KCL
   const verifyText = useMemo(() => {
     if (resistors.length === 0) return null
     if (type === 'series') {
       const sumV = result.perResistor.reduce((a, r) => a + r.voltage, 0)
+      const terms = result.perResistor.map(r => `V_${r.label}`)
+      const vals = result.perResistor.map(r => r.voltage.toFixed(2))
+      if (result.ledDropV > 0) { terms.push('V_LED'); vals.push(result.ledDropV.toFixed(2)) }
       return {
         title: '키르히호프 전압 법칙 (KVL)',
-        line: `V_${result.perResistor.map(r => r.label).join(' + V_')} = ${result.perResistor.map(r => r.voltage.toFixed(2)).join(' + ')} = ${sumV.toFixed(2)}V = V_전체`,
+        line: `${terms.join(' + ')} = ${vals.join(' + ')} = ${(sumV + result.ledDropV).toFixed(2)}V = V_전원`,
       }
     }
     const sumI = result.perResistor.reduce((a, r) => a + r.current, 0)
@@ -471,7 +317,9 @@ export default function CircuitSimulatorClient() {
       num: 'STEP 3',
       title: '전체 전류 (옴의 법칙)',
       formula: 'I = V / R',
-      calc: `I = ${voltage} / ${result.totalResistance.toFixed(2)} = ${result.totalCurrent.toFixed(4)} A = ${(result.totalCurrent * 1000).toFixed(2)} mA`,
+      calc: result.ledDropV > 0
+        ? `저항망 전압 = ${voltage} − ${result.ledDropV}(LED) = ${result.resistorVoltage.toFixed(2)} V\nI = ${result.resistorVoltage.toFixed(2)} / ${result.totalResistance.toFixed(2)} = ${result.totalCurrent.toFixed(4)} A = ${(result.totalCurrent * 1000).toFixed(2)} mA`
+        : `I = ${voltage} / ${result.totalResistance.toFixed(2)} = ${result.totalCurrent.toFixed(4)} A = ${(result.totalCurrent * 1000).toFixed(2)} mA`,
     })
 
     if (type === 'series') {
@@ -542,10 +390,10 @@ export default function CircuitSimulatorClient() {
 
       {/* 탭 */}
       <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'sim'   ? s.tabActive : ''}`} onClick={() => setTab('sim')}>회로 시뮬레이터</button>
-        <button className={`${s.tabBtn} ${tab === 'ohm'   ? s.tabActive : ''}`} onClick={() => setTab('ohm')}>옴의 법칙 빠른 계산</button>
-        <button className={`${s.tabBtn} ${tab === 'learn' ? s.tabActive : ''}`} onClick={() => setTab('learn')}>학습 모드 (단계별 풀이)</button>
-        <button className={`${s.tabBtn} ${tab === 'exam'  ? s.tabActive : ''}`} onClick={() => setTab('exam')}>시험 빈출 패턴</button>
+        <button className={`${s.tabBtn} ${tab === 'sim'   ? s.tabActive : ''}`} aria-pressed={tab === 'sim'} onClick={() => setTab('sim')}>회로 시뮬레이터</button>
+        <button className={`${s.tabBtn} ${tab === 'ohm'   ? s.tabActive : ''}`} aria-pressed={tab === 'ohm'} onClick={() => setTab('ohm')}>옴의 법칙 빠른 계산</button>
+        <button className={`${s.tabBtn} ${tab === 'learn' ? s.tabActive : ''}`} aria-pressed={tab === 'learn'} onClick={() => setTab('learn')}>학습 모드 (단계별 풀이)</button>
+        <button className={`${s.tabBtn} ${tab === 'exam'  ? s.tabActive : ''}`} aria-pressed={tab === 'exam'} onClick={() => setTab('exam')}>시험 빈출 패턴</button>
       </div>
 
       {/* ─── TAB 1: 시뮬레이터 ─── */}
@@ -561,6 +409,7 @@ export default function CircuitSimulatorClient() {
               {PRESETS.map(p => (
                 <button
                   key={p.id}
+                  aria-pressed={activePreset === p.id}
                   className={`${s.presetCard} ${activePreset === p.id ? s.presetActive : ''}`}
                   onClick={() => applyPreset(p)}
                   type="button"
@@ -576,11 +425,11 @@ export default function CircuitSimulatorClient() {
           {/* 전압 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>전원 전압 (V)</span>
+              <label htmlFor="cs-voltage">전원 전압 (V)</label>
               <span className={s.cardLabelHint}>0~30V</span>
             </div>
             <div className={s.sliderRow}>
-              <input type="range" min={0.1} max={30} step={0.1} value={voltage} onChange={e => { setVoltage(parseFloat(e.target.value)); setActivePreset('') }} />
+              <input id="cs-voltage" aria-label="전원 전압" type="range" min={0.1} max={30} step={0.1} value={voltage} onChange={e => { setVoltage(parseFloat(e.target.value)); setActivePreset('') }} />
               <span className={s.sliderValue}>{voltage.toFixed(1)}V</span>
             </div>
             <div className={s.voltQuickRow} style={{ marginTop: 10 }}>
@@ -590,11 +439,36 @@ export default function CircuitSimulatorClient() {
                   className={`${s.voltQuickBtn} ${Math.abs(voltage - q.v) < 0.01 ? s.voltQuickActive : ''}`}
                   onClick={() => { setVoltage(q.v); setActivePreset('') }}
                   type="button"
+                  aria-pressed={Math.abs(voltage - q.v) < 0.01}
                 >
                   {q.l}<br /><small style={{ fontSize: 9 }}>{q.n}</small>
                 </button>
               ))}
             </div>
+
+            {/* LED 전압강하 — 직렬 회로에서 저항 앞에 LED가 있으면 그만큼 저항에 걸리는 전압이 준다 */}
+            {type === 'series' && (
+              <div className={s.ledDropRow}>
+                <label className={s.ledDropLabel} htmlFor="cs-leddrop">
+                  💡 LED 전압강하 <span className={s.ledDropHint}>직렬 LED가 있으면 입력</span>
+                </label>
+                <div className={s.sliderRow}>
+                  <input id="cs-leddrop" type="range" min={0} max={4} step={0.1} value={ledDropV}
+                    onChange={e => { setLedDropV(parseFloat(e.target.value)); setActivePreset('') }} />
+                  <span className={s.sliderValue}>{ledDropV === 0 ? '없음' : `${ledDropV.toFixed(1)}V`}</span>
+                </div>
+                {ledDropV > 0 && ledDropV < voltage && (
+                  <p className={s.ledDropNote}>
+                    저항망에는 {fmtV(voltage)} − {ledDropV.toFixed(1)}V = <strong>{fmtV(result.resistorVoltage)}</strong>가 걸립니다.
+                  </p>
+                )}
+                {ledDropV > 0 && ledDropV >= voltage && (
+                  <p className={s.ledDropWarn}>
+                    ⚠️ LED 전압강하({ledDropV.toFixed(1)}V)가 전원({fmtV(voltage)}) 이상이라 LED가 켜지지 않습니다.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* 회로 타입 */}
@@ -603,8 +477,8 @@ export default function CircuitSimulatorClient() {
               <span>회로 타입</span>
             </div>
             <div className={s.typeRow}>
-              <button className={`${s.typeBtn} ${s.typeSeries}   ${type === 'series'   ? s.typeActive : ''}`} onClick={() => { setType('series'); setActivePreset('') }}>━ 직렬 (Series)</button>
-              <button className={`${s.typeBtn} ${s.typeParallel} ${type === 'parallel' ? s.typeActive : ''}`} onClick={() => { setType('parallel'); setActivePreset('') }}>▥ 병렬 (Parallel)</button>
+              <button className={`${s.typeBtn} ${s.typeSeries}   ${type === 'series'   ? s.typeActive : ''}`} aria-pressed={type === 'series'} onClick={() => { setType('series'); setActivePreset('') }}>━ 직렬 (Series)</button>
+              <button className={`${s.typeBtn} ${s.typeParallel} ${type === 'parallel' ? s.typeActive : ''}`} aria-pressed={type === 'parallel'} onClick={() => { setType('parallel'); setActivePreset(''); setLedDropV(0) }}>▥ 병렬 (Parallel)</button>
             </div>
           </div>
 
@@ -619,7 +493,7 @@ export default function CircuitSimulatorClient() {
                 <div key={r.id} className={s.resistorRow}>
                   <span className={s.resistorLabel}>{r.label}</span>
                   <div className={s.resistorValueRow}>
-                    <input type="range" min={1} max={10000} step={1} value={r.value} onChange={e => updateResistor(r.id, { value: parseFloat(e.target.value) })} />
+                    <input aria-label={`${r.label} 저항값`} type="range" min={1} max={10000} step={1} value={r.value} onChange={e => updateResistor(r.id, { value: parseFloat(e.target.value) })} />
                     <span className={s.resistorValueDisplay}>{fmtR(r.value)}</span>
                   </div>
                   <select
@@ -646,8 +520,9 @@ export default function CircuitSimulatorClient() {
           {/* 결과 4분할 */}
           <div className={s.resultGrid}>
             <div className={`${s.resultCard} ${s.resVoltage}`}>
-              <p className={s.resultLabel}>전체 전압</p>
-              <p className={s.resultValue}>{voltage.toFixed(1)}<span className={s.resultUnit}>V</span></p>
+              <p className={s.resultLabel}>{result.ledDropV > 0 ? '저항망 전압' : '전체 전압'}</p>
+              <p className={s.resultValue}>{result.resistorVoltage.toFixed(1)}<span className={s.resultUnit}>V</span></p>
+              {result.ledDropV > 0 && <p className={s.resultSub}>전원 {voltage.toFixed(1)}V − LED {result.ledDropV.toFixed(1)}V</p>}
             </div>
             <div className={`${s.resultCard} ${s.resResistance}`}>
               <p className={s.resultLabel}>전체 저항</p>
@@ -840,9 +715,9 @@ export default function CircuitSimulatorClient() {
               <span className={s.cardLabelHint}>회로 시뮬레이터 탭에서 회로 변경 가능</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
-              회로: <strong style={{ color: '#0D9488' }}>{type === 'series' ? '직렬' : '병렬'}</strong> ·
+              회로: <strong style={{ color: '#0F766E' }}>{type === 'series' ? '직렬' : '병렬'}</strong> ·
               {' '}저항 <strong style={{ color: '#A16207' }}>{resistors.length}개</strong> ·
-              {' '}전원 <strong style={{ color: '#0D9488' }}>{fmtV(voltage)}</strong>
+              {' '}전원 <strong style={{ color: '#0F766E' }}>{fmtV(voltage)}</strong>
             </p>
           </div>
 
