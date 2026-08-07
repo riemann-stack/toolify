@@ -7,6 +7,9 @@
 //     이제 날짜는 연대에서 **파생**하므로 어긋날 수 없다.
 // ─────────────────────────────────────────────
 
+/** 소수 자리 반올림 */
+function round(v: number, dp = 1): number { return Math.round(v * 10 ** dp) / 10 ** dp }
+
 /** 우주 나이 — Planck 2018 (13.787 ± 0.020 Gyr) */
 export const COSMIC_YEAR_REAL_YEARS = 13_787_000_000
 
@@ -166,3 +169,70 @@ export function ageToCosmic(ageYears: number) {
 }
 
 export const MONTHS = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+
+// ─────────────────────────────────────────────
+// 압축 모드 표기 (24시간·1km) · 생일 시계
+//  ⚠️ 예전에는 클라이언트에서 직접 포맷해 세 가지 버그가 있었다:
+//   · 24시간 모드: 초를 정수 반올림해 23:59:60(존재 불가) 발생
+//   · 1km 모드: remaining(m)×1000 = mm 값을 'μm'라 표기해 1000배 오류
+//   · 생일 시계: 자정에서 빼야 할 카운트다운을 그대로 표시해 23:59:59.07(반대)
+// ─────────────────────────────────────────────
+
+/** 실제 연대 → 24시간 압축 시계 (빅뱅 0:00:00, 현재 24:00:00) */
+export function compress24h(realYearsAgo: number): string {
+  const seconds = ((COSMIC_YEAR_REAL_YEARS - realYearsAgo) / COSMIC_YEAR_REAL_YEARS) * 86400
+  if (seconds >= 86400 - 1e-4) return '24:00:00 (현재)'
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds - h * 3600) / 60)
+  const s = seconds - h * 3600 - m * 60
+  const pad = (n: number) => n.toString().padStart(2, '0')
+  /* 마지막 1분 안의 사건은 소수 3자리로 — 정수 반올림하면 60초가 되어 버린다.
+     그 밖에는 초 크기에 맞춰 자릿수를 줄이되, 60으로 반올림되지 않게 소수를 남긴다. */
+  let sStr: string
+  if (h === 23 && m === 59) sStr = s.toFixed(3)
+  else if (s < 1) sStr = s.toFixed(4)
+  else if (s < 10) sStr = s.toFixed(2)
+  else if (s >= 59) sStr = s.toFixed(2)          // 분 경계 직전 — 60으로 반올림 방지
+  else sStr = pad(Math.round(s))
+  // 소수 표기는 앞자리도 2자리로
+  if (sStr.includes('.')) { const [a, b] = sStr.split('.'); sStr = `${pad(Number(a))}.${b}` }
+  return `${pad(h)}:${pad(m)}:${sStr}`
+}
+
+/** 실제 연대 → 1km 산책로 위치 (빅뱅 0m, 현재 1,000m) + 끝까지 남은 거리 */
+export function compress1km(realYearsAgo: number): string {
+  const meters = ((COSMIC_YEAR_REAL_YEARS - realYearsAgo) / COSMIC_YEAR_REAL_YEARS) * 1000
+  if (meters >= 1000 - 1e-9) return '1,000m (현재)'
+  const remainingM = 1000 - meters
+  /* remaining을 읽기 쉬운 단위로. remaining(m)×1000=mm, ×1,000,000=μm. */
+  let remLabel: string
+  if (remainingM >= 1) remLabel = `${round(remainingM, 1)}m`
+  else if (remainingM >= 0.001) remLabel = `${round(remainingM * 1000, 1)}mm`   // 1mm 이상
+  else remLabel = `${round(remainingM * 1_000_000, 0)}μm`                        // 1mm 미만
+  let mStr: string
+  if (meters >= 999.9) {
+    let dp = 3
+    while (Number(meters.toFixed(dp)) >= 1000 && dp < 8) dp++   // 반올림해서 1,000이 되면 자릿수를 늘린다
+    mStr = Number(meters.toFixed(dp)).toLocaleString('ko-KR', { minimumFractionDigits: dp, maximumFractionDigits: dp })
+  } else {
+    mStr = round(meters, 1).toString()
+  }
+  return `${mStr}m (마지막 ${remLabel})`
+}
+
+/** 사용자 인생(코스믹 초)이 우주 시계에서 시작하는 지점.
+    인생은 마지막 cosmicSeconds초를 차지하고 24:00:00에 끝난다 → 시작 = 자정 − cosmicSeconds. */
+export function cosmicClockStart(cosmicSeconds: number): string {
+  if (cosmicSeconds < 1e-4) return '24:00:00'          // 인생이 사실상 자정 위 한 점
+  const start = 86400 - cosmicSeconds
+  const h = Math.floor(start / 3600)
+  const m = Math.floor((start - h * 3600) / 60)
+  const s = start - h * 3600 - m * 60
+  const pad = (n: number) => n.toString().padStart(2, '0')
+  /* ⚠️ 소수 2자리면 59.998 같은 값이 "60.00"으로 반올림된다. 3자리로 두고, 그래도 60이면
+     사실상 자정이므로 24:00:00으로 처리한다(초·분 캐리로 잘못된 시각을 만들지 않는다). */
+  const sFixed = s.toFixed(3)
+  if (Number(sFixed) >= 60) return '24:00:00'
+  const [a, b] = sFixed.split('.')
+  return `${pad(h)}:${pad(m)}:${pad(Number(a))}.${b}`
+}

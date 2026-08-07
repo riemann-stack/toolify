@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import { EVENTS, cosmicPosition, yearsAgoOf, fmtRealYears, type CatKey } from './cosmicData'
 
 /* 안내 표에 실을 사건 — 도구와 같은 데이터에서 날짜를 계산한다 */
@@ -36,7 +37,7 @@ const FAQ_LD = [
               },
               {
                 q: '인류는 코스믹 캘린더의 어디에 위치하나요?',
-                a: '현생 인류(호모 사피엔스)는 <strong>12월 31일 23시 48분경</strong> 등장했습니다. 마지막 12분에 모든 인류 역사가 압축되어 있다는 뜻입니다. 특히 문자·문명·과학·인터넷 모든 것이 마지막 14초 안에 발생했습니다. 이는 우주 138억 년 중 인류 문명이 차지하는 비율이 <strong>0.0001% 미만</strong>이라는 의미입니다.',
+                a: '현생 인류(호모 사피엔스)는 <strong>12월 31일 23시 48분경</strong> 등장했습니다. 마지막 12분에 모든 인류 역사가 압축되어 있다는 뜻입니다. 특히 문자·과학·인터넷 모든 것이 마지막 약 12초 안에 발생했습니다. 이는 우주 138억 년 중 인류 문명이 차지하는 비율이 <strong>0.0001% 미만</strong>이라는 의미입니다.',
               },
               {
                 q: '빅뱅 이후 첫 별은 언제 만들어졌나요?',
@@ -44,7 +45,7 @@ const FAQ_LD = [
               },
               {
                 q: '코스믹 캘린더의 사건 시점은 정확한가요?',
-                a: '현재 과학계의 추정치를 기반으로 하며, <strong>새로운 발견에 따라 조정될 수 있습니다</strong>. 우주 나이는 한때 100억 년으로 추정되었으나 현재는 약 137~138억 년으로 정착되었습니다. 지구 나이도 정확한 측정 기술로 45.4억 년이 정설입니다. 본 도구는 NASA, ESA(유럽 우주국), 국제 천문학 연합(IAU) 등의 공식 데이터를 참조했습니다.',
+                a: '현재 과학계의 추정치를 기반으로 하며, <strong>새로운 발견에 따라 조정될 수 있습니다</strong>. 우주 나이는 한때 100억 년으로 추정되었으나 현재는 약 137~138억 년으로 정착되었습니다. 지구 나이도 정확한 측정 기술로 45.4억 년이 정설입니다. 본 도구는 우주 나이로 Planck 위성 관측값(13.787 ± 0.020 Gyr)을 씁니다. <strong>최초의 별·은하가 정확히 언제 생겼는지는 아직 확정되지 않았고</strong>(제임스 웹 망원경이 계속 더 이른 은하를 찾고 있습니다), 생명·진화 사건의 연대도 추정 범위가 넓습니다. 따라서 분·초 단위의 코스믹 날짜는 <strong>추정 연대를 압축한 환산값</strong>이며, 정밀한 시각이 아니라 규모를 체감하기 위한 것입니다.',
               },
             ]
 
@@ -60,6 +61,16 @@ export default function CosmicCalendarPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         138억 년 우주 역사를 <strong style={{ color: 'var(--text)' }}>1년 달력으로 압축</strong>한 인터랙티브 타임라인.
       </p>
+
+      <UpdatedMeta
+        date="2026년 8월"
+        basis="우주 나이 Planck 2018(13.787 Gyr) · 사건 연대는 추정 범위이며 환산값입니다"
+        sources={[
+          { label: '우주 나이 — NASA Universe', href: 'https://science.nasa.gov/universe/overview/' },
+          { label: '최초의 별·은하 시기 — NASA (JWST)', href: 'https://science.nasa.gov/asset/webb/first-stars-timeline-of-the-universe/' },
+          { label: '칼 세이건 코스믹 캘린더 (개념)', href: 'https://en.wikipedia.org/wiki/Cosmic_Calendar' },
+        ]}
+      />
 
       <CosmicCalendarClient />
 
@@ -156,7 +167,7 @@ export default function CosmicCalendarPage() {
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li>인류는 우주 달력의 마지막 <strong style={{ color: '#DC2626' }}>1시간 36분</strong>에 등장했습니다.</li>
               <li>현생 인류(호모 사피엔스)는 마지막 <strong style={{ color: '#DC2626' }}>12분</strong>.</li>
-              <li>문자가 발명된 후 모든 인류 역사는 마지막 <strong style={{ color: '#DC2626' }}>14초</strong>.</li>
+              <li>문자가 발명된 후 모든 인류 역사는 마지막 <strong style={{ color: '#DC2626' }}>약 12초</strong>.</li>
               <li>산업혁명 이후는 <strong style={{ color: '#DC2626' }}>0.6초</strong>.</li>
               <li>인터넷 시대는 <strong style={{ color: '#DC2626' }}>0.07초</strong>.</li>
             </ul>
@@ -173,8 +184,8 @@ export default function CosmicCalendarPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '🗓️ 1년 압축',       c: '#9B59B6', items: ['인류 등장: 12월 31일 23:48', '인류 문명: 마지막 14초', '산업혁명: 마지막 0.6초'] },
-              { t: '🕐 24시간 압축',    c: '#0D9488', items: ['인류 등장: 23:59:58', '인류 문명: 마지막 0.075초', '산업혁명: 마지막 0.0016초'] },
+              { t: '🗓️ 1년 압축',       c: '#9B59B6', items: ['인류 등장(현생 인류): 23:48', '인류 문명(농업): 마지막 27.5초', '문자 이후: 마지막 약 12초'] },
+              { t: '🕐 24시간 압축',    c: '#0D9488', items: ['인류 등장(현생 인류): 23:59:58', '인류 문명(농업): 0.075초', '산업혁명: 0.0016초'] },
               { t: '📐 1km 압축',       c: '#A16207', items: ['1m = 1,380만 년', '인류 등장: 999.978m', '인류 문명: 마지막 0.9mm'] },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
@@ -231,7 +242,7 @@ export default function CosmicCalendarPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
             칼 세이건은 코스믹 캘린더를 통해 두 가지 메시지를 전했습니다:
             <ul style={{ paddingLeft: 22, margin: '8px 0 0', color: 'var(--muted)' }}>
-              <li><strong style={{ color: 'var(--text)' }}>인류의 짧음에 대한 겸손</strong> — 우주 시간에서 우리는 마지막 14초</li>
+              <li><strong style={{ color: 'var(--text)' }}>인류의 짧음에 대한 겸손</strong> — 우주 시간에서 문자 이후 모든 역사는 마지막 약 12초</li>
               <li><strong style={{ color: 'var(--text)' }}>인류의 특별함에 대한 경이</strong> — 우주가 우주를 이해하는 유일한 존재</li>
             </ul>
           </div>

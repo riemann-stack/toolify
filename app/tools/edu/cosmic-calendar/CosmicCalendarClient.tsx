@@ -5,8 +5,9 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import s from './cosmic-calendar.module.css'
 import {
   EVENTS as EVENTS_RAW, type CosmicEvent, type CatKey,
-  COSMIC_YEAR_REAL_YEARS, COSMIC_SECOND_REAL_YEARS,
+  COSMIC_SECOND_REAL_YEARS,
   cosmicPosition, yearsAgoOf, fmtRealYears, ageToCosmic, MONTHS,
+  compress24h, compress1km, cosmicClockStart,
 } from './cosmicData'
 
 // ─────────────────────────────────────────────
@@ -202,6 +203,12 @@ export default function CosmicCalendarClient() {
   const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false)
   const currentYear = mounted ? new Date().getFullYear() : FALLBACK_YEAR
   const events = useMemo(() => buildEvents(currentYear), [currentYear])
+  /* '문자 이후 모든 역사'는 문자 연대(3400 BCE)에서 파생 — 예전 "14초"는 6,000년 기준의 관용치라
+     우리 데이터(약 5,400년)와 어긋났다. 해가 바뀌면 자동으로 맞춰진다. */
+  const writingCosmicSec = useMemo(() => {
+    const w = events.find(e => e.id === 'writing')
+    return w ? Math.round(w.realYearsAgo / COSMIC_SECOND_REAL_YEARS) : 12
+  }, [events])
 
   const [tab, setTab] = useState<'year' | 'dec31' | 'search' | 'compare'>('year')
   const [zoomLevel, setZoomLevel] = useState<'24h' | 'lastHour' | 'last30s'>('24h')
@@ -209,6 +216,12 @@ export default function CosmicCalendarClient() {
 
   /* 점을 픽셀 기준으로 떼어 놓으려면 실제 트랙 폭이 필요하다 */
   const [trackPx, setTrackPx] = useState(0)
+  const [expandedMonths, setExpandedMonths] = useState<Set<number>>(new Set())
+  const toggleMonth = (m: number) => setExpandedMonths(prev => {
+    const next = new Set(prev)
+    if (next.has(m)) next.delete(m); else next.add(m)
+    return next
+  })
   const handleTrackWidth = useCallback((px: number) => { setTrackPx((prev) => (Math.abs(prev - px) > 1 ? px : prev)) }, [])
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [age, setAge] = useState<number>(30)
@@ -356,46 +369,10 @@ export default function CosmicCalendarClient() {
     }
 
     if (compressionMode === '24hours') {
-      // 138억 년 → 24시간 (86400초). 빅뱅 = 0초
-      return keyEvts.map(e => {
-        const fromStartYears = COSMIC_YEAR_REAL_YEARS - e.realYearsAgo
-        const seconds = (fromStartYears / COSMIC_YEAR_REAL_YEARS) * 86400
-        const h = Math.floor(seconds / 3600)
-        const m = Math.floor((seconds - h * 3600) / 60)
-        const sec = seconds - h * 3600 - m * 60
-        let label = ''
-        if (h === 24 || (h === 23 && m === 59 && sec >= 59.999)) {
-          label = '24:00:00 (현재)'
-        } else if (sec < 1) {
-          label = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${round(sec, 4).toFixed(4)}`
-        } else if (sec < 10) {
-          label = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${round(sec, 2).toFixed(2)}`
-        } else {
-          label = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${Math.round(sec).toString().padStart(2, '0')}`
-        }
-        return { name: e.name, real: fmtRealYears(e.realYearsAgo), compressed: label }
-      })
+      return keyEvts.map(e => ({ name: e.name, real: fmtRealYears(e.realYearsAgo), compressed: compress24h(e.realYearsAgo) }))
     }
-
     // 1km 모드
-    return keyEvts.map(e => {
-      const fromStartYears = COSMIC_YEAR_REAL_YEARS - e.realYearsAgo
-      const meters = (fromStartYears / COSMIC_YEAR_REAL_YEARS) * 1000
-      let label = ''
-      if (meters >= 999.99 && meters < 1000) {
-        const remaining = 1000 - meters
-        if (remaining < 0.001) label = `999.999m (마지막 ${round(remaining * 1000, 2)}μm)`
-        else if (remaining < 0.01) label = `${round(meters, 5)}m (마지막 ${round(remaining * 1000, 2)}mm)`
-        else label = `${round(meters, 4)}m (마지막 ${round(remaining * 1000, 1)}mm)`
-      } else if (meters >= 1000) {
-        label = '1,000m (현재)'
-      } else if (meters > 950) {
-        label = `${round(meters, 3)}m`
-      } else {
-        label = `${round(meters, 1)}m`
-      }
-      return { name: e.name, real: fmtRealYears(e.realYearsAgo), compressed: label }
-    })
+    return keyEvts.map(e => ({ name: e.name, real: fmtRealYears(e.realYearsAgo), compressed: compress1km(e.realYearsAgo) }))
   }, [compressionMode, events])
 
   // ─────────────────────────────────────────────
@@ -409,8 +386,9 @@ export default function CosmicCalendarClient() {
         `우주 1년에서 ${userName ? userName + '님의' : '나의'} 시간`,
         ``,
         `${age}년 인생 = ${round(myLife.cosmicSeconds, 3)}초 (= ${cosmicMin}분)`,
-        `인류 문명 12,000년 = 약 27.5초`,
-        `인류 등장 30만 년 = 약 11.4분`,
+        `인류 문명(농업) 12,000년 = 약 27.5초`,
+        `문자 이후 기록 역사 = 약 ${writingCosmicSec}초`,
+        `현생 인류 30만 년 = 약 11.4분`,
         `공룡 시대 1.6억 년 = 약 4.2일`,
         `우주 1년 = 138억 년`,
         ``,
@@ -528,21 +506,27 @@ export default function CosmicCalendarClient() {
                     <p className={s.monthCardCount}>
                       {events.length}<small>{empty ? '사건 없음' : '개 사건'}</small>
                     </p>
-                    {events.length > 0 && (
-                      <div className={s.monthEvents}>
-                        {events.slice(0, 4).map(e => (
-                          <div key={e.id} className={s.monthEventItem}>
-                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: CATEGORIES[e.category].color, flexShrink: 0, display: 'inline-block' }} />
-                            <span>{e.name.length > 12 ? e.name.slice(0, 12) + '…' : e.name}</span>
-                          </div>
-                        ))}
-                        {events.length > 4 && (
-                          <div className={s.monthEventItem} style={{ background: 'transparent', justifyContent: 'center', color: 'var(--muted)' }}>
-                            +{events.length - 4}개 더
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    {events.length > 0 && (() => {
+                      const isOpen = expandedMonths.has(i + 1)
+                      const shown = isOpen ? events : events.slice(0, 4)
+                      return (
+                        <div className={s.monthEvents}>
+                          {shown.map(e => (
+                            <div key={e.id} className={s.monthEventItem}>
+                              <span style={{ width: 7, height: 7, borderRadius: '50%', background: CATEGORIES[e.category].color, flexShrink: 0, display: 'inline-block' }} />
+                              <span>{e.name.length > 12 ? e.name.slice(0, 12) + '…' : e.name}</span>
+                            </div>
+                          ))}
+                          {events.length > 4 && (
+                            <button type="button" className={s.monthMoreBtn}
+                              aria-expanded={isOpen}
+                              onClick={() => toggleMonth(i + 1)}>
+                              {isOpen ? '접기 ▲' : `+${events.length - 4}개 더 ▾`}
+                            </button>
+                          )}
+                        </div>
+                      )
+                    })()}
                   </div>
                 )
               })}
@@ -617,7 +601,7 @@ export default function CosmicCalendarClient() {
           <div className={s.shockCard}>
             <p className={s.shockTitle}>한눈에 보는 충격적 사실</p>
             <div className={s.shockList}>
-              <div>· 문자 발명 이후 인류 모든 역사 = 약 <strong>14초</strong></div>
+              <div>· 문자 발명 이후 인류 모든 역사 = 약 <strong>{writingCosmicSec}초</strong></div>
               <div>· 산업혁명 이후 = 약 <strong>0.6초</strong></div>
               <div>· 인터넷 시대 = 마지막 <strong>0.07초</strong></div>
               <div>· 현생 인류는 우주 1년 중 마지막 <strong>12분</strong></div>
@@ -697,7 +681,7 @@ export default function CosmicCalendarClient() {
             <div className={s.gridTwo}>
               <div>
                 <span className={s.subLabel}>만 나이 (년)</span>
-                <input className={s.bigInput} type="number" inputMode="numeric" min="0" max="120" step="1" value={age} onChange={e => setAge(Math.max(0, parseInt(e.target.value) || 0))} />
+                <input className={s.bigInput} type="number" inputMode="numeric" min="0" max="120" step="1" value={age} onChange={e => setAge(Math.min(120, Math.max(0, parseInt(e.target.value) || 0)))} />
               </div>
               <div>
                 <span className={s.subLabel}>이름 (선택, 공유 카드용)</span>
@@ -716,7 +700,7 @@ export default function CosmicCalendarClient() {
                   <span className={s.myLifeUnit}>초</span>
                 </div>
                 <p className={s.myLifeSub}>
-                  우주 시계로는 <strong>12월 31일 23:59:59.{(myLife.cosmicSeconds / 1).toFixed(2).split('.')[1] ?? '93'}</strong> ~ <strong>24:00:00</strong> 사이
+                  우주 시계로는 <strong>12월 31일 {cosmicClockStart(myLife.cosmicSeconds)}</strong> ~ <strong>24:00:00</strong> 사이
                 </p>
               </div>
 
@@ -824,23 +808,23 @@ export default function CosmicCalendarClient() {
             <div className={s.shockList}>
               {compressionMode === '1year' && (
                 <>
-                  <div>· 인류 등장: 12월 31일 23:48 — 마지막 <strong>12분</strong></div>
-                  <div>· 인류 문명: 마지막 <strong>14초</strong></div>
-                  <div>· 산업혁명 이후: 마지막 <strong>0.6초</strong></div>
+                  <div>· 인류 등장(현생 인류): 12월 31일 23:48 — 마지막 <strong>12분</strong></div>
+                  <div>· 인류 문명(농업 이후): 마지막 <strong>27.5초</strong></div>
+                  <div>· 문자 이후 기록 역사: 마지막 <strong>{writingCosmicSec}초</strong></div>
                 </>
               )}
               {compressionMode === '24hours' && (
                 <>
-                  <div>· 인류 등장: 23:59:58 — 마지막 <strong>2초</strong></div>
-                  <div>· 인류 문명: 마지막 <strong>0.075초</strong></div>
+                  <div>· 인류 등장(현생 인류): 23:59:58 — 마지막 <strong>2초</strong></div>
+                  <div>· 인류 문명(농업 이후): 마지막 <strong>0.075초</strong></div>
                   <div>· 산업혁명: 마지막 <strong>0.0016초</strong></div>
                 </>
               )}
               {compressionMode === '1km' && (
                 <>
                   <div>· 1m = <strong>1,380만 년</strong></div>
-                  <div>· 인류 등장: 999.978m — 마지막 <strong>22mm</strong></div>
-                  <div>· 인류 문명: 마지막 <strong>0.9mm</strong></div>
+                  <div>· 인류 등장(현생 인류): 999.978m — 마지막 <strong>22mm</strong></div>
+                  <div>· 인류 문명(농업 이후): 마지막 <strong>0.9mm</strong></div>
                   <div>· 산업혁명 이후: 마지막 <strong>0.018mm</strong></div>
                 </>
               )}
