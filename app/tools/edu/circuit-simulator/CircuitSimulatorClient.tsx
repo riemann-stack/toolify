@@ -4,9 +4,9 @@ import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import s from './circuit-simulator.module.css'
 import {
-  fmtV, fmtA, fmtR, fmtW,
-  type Resistor, type CircuitType, type Preset, type CalcResult,
-  PRESETS, POWER_RATINGS, VOLTAGE_QUICK, calcCircuit, EXAM_PROBLEMS,
+  fmtV, fmtA, fmtR, fmtW, round,
+  type Resistor, type CircuitType, type Preset, type CalcResult, type OhmKnown,
+  PRESETS, POWER_RATINGS, VOLTAGE_QUICK, calcCircuit, calcOhm, ledResistor, EXAM_PROBLEMS,
 } from './circuitData'
 
 // ─────────────────────────────────────────────
@@ -20,6 +20,14 @@ import {
 let idCounter = 0
 const newId = () => `r-${++idCounter}`
 
+type TabId = 'sim' | 'ohm' | 'learn' | 'exam'
+const TAB_DEFS: { id: TabId; label: string }[] = [
+  { id: 'sim',   label: '회로 시뮬레이터' },
+  { id: 'ohm',   label: '옴의 법칙 빠른 계산' },
+  { id: 'learn', label: '학습 모드 (단계별 풀이)' },
+  { id: 'exam',  label: '시험 빈출 패턴' },
+]
+
 
 // ─────────────────────────────────────────────
 // 회로 계산
@@ -28,7 +36,7 @@ const newId = () => `r-${++idCounter}`
 // ─────────────────────────────────────────────
 // 회로 SVG
 // ─────────────────────────────────────────────
-function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type: CircuitType; perResistor: CalcResult['perResistor'] }) {
+function CircuitDiagram({ voltage, type, perResistor, ledDropV = 0 }: { voltage: number; type: CircuitType; perResistor: CalcResult['perResistor']; ledDropV?: number }) {
   const n = perResistor.length
   if (n === 0) return null
 
@@ -46,7 +54,13 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
     const rectH = 22
     const wireY = 70
     const bottomY = 130
-    const spacing = innerW / n
+    /* ⚠️ LED 전압강하를 계산에 넣고도 도면엔 저항만 그리면 전지 5V ↔ 저항 3V가 안 맞아 보인다
+       — LED가 있으면 첫 칸에 다이오드 기호를 그리고 저항들은 그 뒤에 배치한다. */
+    const hasLed = ledDropV > 0
+    const ledW = hasLed ? 84 : 0
+    const spacing = (innerW - ledW) / n
+    const ledCx = padX + ledW / 2
+    const wY = wireY - 30
 
     return (
       <svg viewBox={`0 0 ${W} ${H}`} className={s.circuitSvg} style={{ ['--flow-speed' as never]: `${flowSpeed}s` }}>
@@ -59,9 +73,10 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
             <line x1="-6"  y1="-6"  x2="-6"  y2="6"  stroke="var(--text)" strokeWidth="2" />
             <text x="-25" y="0" fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
             <text x="-25" y={bottomY - wireY - 30} fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>−</text>
-            <text x="-50" y="5" fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
           </g>
         </g>
+        {/* 전압 라벨 — 그룹 안 x=−50은 viewBox 왼쪽 밖(절대 −20)이라 보이지 않았다 */}
+        <text x={padX - 30} y={wireY - 45} fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
 
         {/* 상단 전선 */}
         <line x1={padX - 30} y1={wireY - 30} x2={padX - 30 + 30} y2={wireY - 30} stroke="var(--text)" strokeWidth="2" />
@@ -70,9 +85,22 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
         {/* 메인 가로선 */}
         <line x1={padX} y1={wireY - 30} x2={W - padX} y2={wireY - 30} stroke="var(--text)" strokeWidth="2" />
 
+        {/* LED (직렬, 전압강하 반영 시) — 삼각형 + 막대 + 발광 화살표 */}
+        {hasLed && (
+          <g>
+            <rect x={ledCx - 18} y={wY - 12} width={36} height={24} fill="var(--bg3)" />
+            <polygon points={`${ledCx - 9},${wY - 9} ${ledCx - 9},${wY + 9} ${ledCx + 7},${wY}`} fill="none" stroke="#B91C1C" strokeWidth="2" />
+            <line x1={ledCx + 7} y1={wY - 9} x2={ledCx + 7} y2={wY + 9} stroke="#B91C1C" strokeWidth="2" />
+            <line x1={ledCx + 2} y1={wY - 12} x2={ledCx + 9} y2={wY - 19} stroke="#B91C1C" strokeWidth="1.5" />
+            <line x1={ledCx + 7} y1={wY - 10} x2={ledCx + 14} y2={wY - 17} stroke="#B91C1C" strokeWidth="1.5" />
+            <text x={ledCx} y={wY - 26} fontSize="12" fill="#B91C1C" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>LED</text>
+            <text x={ledCx} y={wY + 25} fontSize="11" fill="#B91C1C" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>−{fmtV(ledDropV)}</text>
+          </g>
+        )}
+
         {/* 저항들 (지그재그) */}
         {perResistor.map((r, i) => {
-          const cx = padX + spacing * (i + 0.5)
+          const cx = padX + ledW + spacing * (i + 0.5)
           const x = cx - rectW / 2
           const y = wireY - 30 - rectH / 2
           return (
@@ -97,9 +125,10 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
         {/* 하단 전선 */}
         <line x1={padX - 30} y1={bottomY} x2={W - padX + 30} y2={bottomY} stroke="var(--text)" strokeWidth="2" />
         <line x1={W - padX + 30} y1={wireY - 30} x2={W - padX + 30} y2={bottomY} stroke="var(--text)" strokeWidth="2" />
-        {/* 전류 화살표 (상단) */}
-        <text x={padX + innerW / 2} y={wireY - 50} fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
-          → I = {fmtA(totalI)}
+        {/* 전류 라벨 — 상단(wireY−50)에 두면 홀수 개 저항의 이름·값 라벨과 겹친다.
+            하단 전선 아래는 비어 있고, 귀환 경로라 방향은 ←가 물리적으로 맞다. */}
+        <text x={padX + innerW / 2} y={bottomY + 22} fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+          ← I = {fmtA(totalI)}
         </text>
       </svg>
     )
@@ -122,8 +151,9 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
         <line x1="-6"  y1="-6"  x2="-6"  y2="6"  stroke="var(--text)" strokeWidth="2" />
         <text x="-25" y="-20" fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
         <text x="-25" y="28"  fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>−</text>
-        <text x="-50" y="5"   fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
       </g>
+      {/* 전압 라벨 — 그룹 안 x=−50은 viewBox 밖이라 보이지 않았다 */}
+      <text x={padX - 30} y={wireYTop - 25} fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
 
       {/* 위 메인 라인 */}
       <line x1={padX - 30} y1={wireYTop} x2={W - padX + 30} y2={wireYTop} stroke="var(--text)" strokeWidth="2" />
@@ -178,7 +208,7 @@ function CircuitDiagram({ voltage, type, perResistor }: { voltage: number; type:
 // 컴포넌트
 // ─────────────────────────────────────────────
 export default function CircuitSimulatorClient() {
-  const [tab, setTab] = useState<'sim' | 'ohm' | 'learn' | 'exam'>('sim')
+  const [tab, setTab] = useState<TabId>('sim')
 
   // ─ 시뮬레이터 ─
   const [voltage, setVoltage] = useState<number>(12)
@@ -192,11 +222,19 @@ export default function CircuitSimulatorClient() {
   const [ledDropV, setLedDropV] = useState<number>(0)
 
   // ─ 옴의 법칙 ─
-  const [ohmKnown, setOhmKnown] = useState<'V_R' | 'V_I' | 'I_R' | 'V_P'>('V_R')
+  const [ohmKnown, setOhmKnown] = useState<OhmKnown>('V_R')
   const [ohmV, setOhmV] = useState<string>('12')
   const [ohmI, setOhmI] = useState<string>('0.04')
   const [ohmR, setOhmR] = useState<string>('100')
   const [ohmP, setOhmP] = useState<string>('1')
+
+  // ─ LED 저항 계산 (빠른 계산 탭) ─
+  const [ledVs, setLedVs] = useState<string>('5')
+  const [ledVf, setLedVf] = useState<string>('2')
+  const [ledIf, setLedIf] = useState<string>('20')
+
+  // ─ 저항 직접 입력 임시값 (타이핑 중 문자열 보존) ─
+  const [resistorDrafts, setResistorDrafts] = useState<Record<string, string>>({})
 
   // ─ 시험 ─
   const [examReveal, setExamReveal] = useState<Record<number, number>>({})
@@ -239,6 +277,12 @@ export default function CircuitSimulatorClient() {
   const verifyText = useMemo(() => {
     if (resistors.length === 0) return null
     if (type === 'series') {
+      if (result.ledNotLit) {
+        return {
+          title: '키르히호프 전압 법칙 (KVL)',
+          line: `LED 미도통 (Vf ${result.ledDropV.toFixed(1)}V ≥ 전원 ${voltage.toFixed(1)}V) — 전류 0 A, 회로에 전류가 흐르지 않습니다`,
+        }
+      }
       const sumV = result.perResistor.reduce((a, r) => a + r.voltage, 0)
       const terms = result.perResistor.map(r => `V_${r.label}`)
       const vals = result.perResistor.map(r => r.voltage.toFixed(2))
@@ -253,35 +297,34 @@ export default function CircuitSimulatorClient() {
       title: '키르히호프 전류 법칙 (KCL)',
       line: `I_${result.perResistor.map(r => r.label).join(' + I_')} = ${result.perResistor.map(r => (r.current * 1000).toFixed(1) + 'mA').join(' + ')} = ${(sumI * 1000).toFixed(1)}mA = I_전체`,
     }
-  }, [type, result, resistors])
+  }, [type, result, resistors, voltage])
 
-  // 정격 초과 여부
+  // 정격 초과·마진 부족 여부
   const hasPowerWarning = result.perResistor.some(r => r.powerExceeded)
+  const hasMarginWarning = !hasPowerWarning && result.perResistor.some(r => r.powerMarginal)
 
   // ─────────────────────────────────────────────
   // 옴의 법칙 빠른 계산
   // ─────────────────────────────────────────────
-  const ohmCalc = useMemo(() => {
-    const V = parseFloat(ohmV) || 0
-    const I = parseFloat(ohmI) || 0
-    const R = parseFloat(ohmR) || 0
-    const P = parseFloat(ohmP) || 0
-    let Vr = V, Ir = I, Rr = R, Pr = P
-    if (ohmKnown === 'V_R') {
-      Ir = R > 0 ? V / R : 0
-      Pr = V * Ir
-    } else if (ohmKnown === 'V_I') {
-      Rr = I > 0 ? V / I : 0
-      Pr = V * I
-    } else if (ohmKnown === 'I_R') {
-      Vr = I * R
-      Pr = Vr * I
-    } else if (ohmKnown === 'V_P') {
-      Ir = V > 0 ? P / V : 0
-      Rr = Ir > 0 ? V / Ir : 0
-    }
-    return { V: Vr, I: Ir, R: Rr, P: Pr }
-  }, [ohmKnown, ohmV, ohmI, ohmR, ohmP])
+  /* 0Ω 단락·전류 0 개방·0V+P>0 모순은 0이 아니라 '계산 불가(—)'로 — circuitData.calcOhm */
+  const ohmCalc = useMemo(
+    () => calcOhm(ohmKnown, parseFloat(ohmV), parseFloat(ohmI), parseFloat(ohmR), parseFloat(ohmP)),
+    [ohmKnown, ohmV, ohmI, ohmR, ohmP],
+  )
+
+  const ledCalc = useMemo(
+    () => ledResistor(parseFloat(ledVs), parseFloat(ledVf), parseFloat(ledIf)),
+    [ledVs, ledVf, ledIf],
+  )
+
+  /* 비활성(자동 계산) 입력칸엔 이전에 타이핑한 잔존값 대신 계산값을 보여준다
+     — 기본 화면부터 I 입력 0.04 vs 결과 120mA처럼 모순돼 보이던 것 */
+  const ohmShown = {
+    V: ohmKnown === 'I_R' ? (ohmCalc.V === null ? '' : String(round(ohmCalc.V, 6))) : ohmV,
+    I: (ohmKnown === 'V_I' || ohmKnown === 'I_R') ? ohmI : (ohmCalc.I === null ? '' : String(round(ohmCalc.I, 6))),
+    R: (ohmKnown === 'V_R' || ohmKnown === 'I_R') ? ohmR : (ohmCalc.R === null ? '' : String(round(ohmCalc.R, 6))),
+    P: ohmKnown === 'V_P' ? ohmP : (ohmCalc.P === null ? '' : String(round(ohmCalc.P, 6))),
+  }
 
   // ─────────────────────────────────────────────
   // 학습 모드 (현재 시뮬레이션 회로 기준 풀이 단계)
@@ -317,9 +360,11 @@ export default function CircuitSimulatorClient() {
       num: 'STEP 3',
       title: '전체 전류 (옴의 법칙)',
       formula: 'I = V / R',
-      calc: result.ledDropV > 0
-        ? `저항망 전압 = ${voltage} − ${result.ledDropV}(LED) = ${result.resistorVoltage.toFixed(2)} V\nI = ${result.resistorVoltage.toFixed(2)} / ${result.totalResistance.toFixed(2)} = ${result.totalCurrent.toFixed(4)} A = ${(result.totalCurrent * 1000).toFixed(2)} mA`
-        : `I = ${voltage} / ${result.totalResistance.toFixed(2)} = ${result.totalCurrent.toFixed(4)} A = ${(result.totalCurrent * 1000).toFixed(2)} mA`,
+      calc: result.ledNotLit
+        ? `LED 미도통 (Vf ${result.ledDropV.toFixed(1)}V ≥ 전원 ${voltage}V) — 전류 = 0 A`
+        : result.ledDropV > 0
+          ? `저항망 전압 = ${voltage} − ${result.ledDropV}(LED) = ${result.resistorVoltage.toFixed(2)} V\nI = ${result.resistorVoltage.toFixed(2)} / ${result.totalResistance.toFixed(2)} = ${result.totalCurrent.toFixed(4)} A = ${(result.totalCurrent * 1000).toFixed(2)} mA`
+          : `I = ${voltage} / ${result.totalResistance.toFixed(2)} = ${result.totalCurrent.toFixed(4)} A = ${(result.totalCurrent * 1000).toFixed(2)} mA`,
     })
 
     if (type === 'series') {
@@ -345,6 +390,7 @@ export default function CircuitSimulatorClient() {
       title: '각 저항 전력 (P = VI = I²R = V²/R)',
       formula: 'P_n = V_n × I_n',
       calc: result.perResistor.map(r => `P_${r.label} = ${r.voltage.toFixed(2)} × ${(r.current * 1000).toFixed(2)}mA = ${(r.power * 1000).toFixed(2)} mW`).join('\n')
+        + (result.ledDropV > 0 ? `\nP_LED = ${result.ledDropV.toFixed(2)} × ${(result.totalCurrent * 1000).toFixed(2)}mA = ${(result.ledDropV * result.totalCurrent * 1000).toFixed(2)} mW` : '')
         + `\nP_total = ${(result.totalPower * 1000).toFixed(2)} mW`,
     })
 
@@ -358,6 +404,7 @@ export default function CircuitSimulatorClient() {
     const text = [
       `[옴의 법칙 계산기]`,
       `회로: ${type === 'series' ? '직렬' : '병렬'} · 저항 ${resistors.length}개 · 전원 ${fmtV(voltage)}`,
+      ...(result.ledDropV > 0 ? [`LED 전압강하: ${fmtV(result.ledDropV)} (저항망 ${fmtV(result.resistorVoltage)})`] : []),
       ``,
       `전체 저항: ${fmtR(result.totalResistance)}`,
       `전체 전류: ${fmtA(result.totalCurrent)}`,
@@ -388,17 +435,40 @@ export default function CircuitSimulatorClient() {
         교육·학습 목적 시뮬레이터
       </Disclaimer>
 
-      {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'sim'   ? s.tabActive : ''}`} aria-pressed={tab === 'sim'} onClick={() => setTab('sim')}>회로 시뮬레이터</button>
-        <button className={`${s.tabBtn} ${tab === 'ohm'   ? s.tabActive : ''}`} aria-pressed={tab === 'ohm'} onClick={() => setTab('ohm')}>옴의 법칙 빠른 계산</button>
-        <button className={`${s.tabBtn} ${tab === 'learn' ? s.tabActive : ''}`} aria-pressed={tab === 'learn'} onClick={() => setTab('learn')}>학습 모드 (단계별 풀이)</button>
-        <button className={`${s.tabBtn} ${tab === 'exam'  ? s.tabActive : ''}`} aria-pressed={tab === 'exam'} onClick={() => setTab('exam')}>시험 빈출 패턴</button>
+      {/* 탭 — tablist 패턴 (화살표 키 이동 포함) */}
+      <div className={s.tabs} role="tablist" aria-label="계산기 모드">
+        {TAB_DEFS.map(t => (
+          <button
+            key={t.id}
+            id={`cs-tab-${t.id}`}
+            role="tab"
+            aria-selected={tab === t.id}
+            aria-controls={`cs-panel-${t.id}`}
+            tabIndex={tab === t.id ? 0 : -1}
+            className={`${s.tabBtn} ${tab === t.id ? s.tabActive : ''}`}
+            onClick={() => setTab(t.id)}
+            onKeyDown={e => {
+              const i = TAB_DEFS.findIndex(x => x.id === t.id)
+              let next = -1
+              if (e.key === 'ArrowRight') next = (i + 1) % TAB_DEFS.length
+              else if (e.key === 'ArrowLeft') next = (i + TAB_DEFS.length - 1) % TAB_DEFS.length
+              else if (e.key === 'Home') next = 0
+              else if (e.key === 'End') next = TAB_DEFS.length - 1
+              if (next >= 0) {
+                e.preventDefault()
+                setTab(TAB_DEFS[next].id)
+                document.getElementById(`cs-tab-${TAB_DEFS[next].id}`)?.focus()
+              }
+            }}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
       {/* ─── TAB 1: 시뮬레이터 ─── */}
       {tab === 'sim' && (
-        <>
+        <div role="tabpanel" id="cs-panel-sim" aria-labelledby="cs-tab-sim" className={s.tabPanel}>
           {/* 프리셋 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
@@ -445,6 +515,10 @@ export default function CircuitSimulatorClient() {
                 </button>
               ))}
             </div>
+            <p className={s.voltNote}>
+              ※ 배터리 이름은 <strong>명목 전압 예시</strong>이며 계산은 이상적인 전압원 기준입니다.
+              실제 전지는 내부저항·허용 전류 한계가 있어 큰 전류를 내지 못합니다(예: 코인전지 CR2032의 공칭 방전 전류는 0.2mA 수준).
+            </p>
 
             {/* LED 전압강하 — 직렬 회로에서 저항 앞에 LED가 있으면 그만큼 저항에 걸리는 전압이 준다 */}
             {type === 'series' && (
@@ -493,11 +567,32 @@ export default function CircuitSimulatorClient() {
                 <div key={r.id} className={s.resistorRow}>
                   <span className={s.resistorLabel}>{r.label}</span>
                   <div className={s.resistorValueRow}>
-                    <input aria-label={`${r.label} 저항값`} type="range" min={1} max={10000} step={1} value={r.value} onChange={e => updateResistor(r.id, { value: parseFloat(e.target.value) })} />
-                    <span className={s.resistorValueDisplay}>{fmtR(r.value)}</span>
+                    <input aria-label={`${r.label} 저항값 슬라이더`} type="range" min={1} max={10000} step={1} value={r.value}
+                      onChange={e => {
+                        updateResistor(r.id, { value: parseFloat(e.target.value) })
+                        setResistorDrafts(prev => { const next = { ...prev }; delete next[r.id]; return next })
+                      }} />
+                    {/* 슬라이더만으론 1~10,000Ω을 1Ω 단위로 못 고른다 — 직접 입력 병행.
+                        타이핑 중엔 빈 문자열까지 draft로 보존(''를 폴백시키면 마지막 자리를 지울 수 없다),
+                        범위 밖 값은 즉시 클램프 커밋하고 blur에 표시도 커밋값으로 정리. */}
+                    <input
+                      className={s.resistorValueInput}
+                      type="text" inputMode="numeric"
+                      aria-label={`${r.label} 저항값 직접 입력 (옴)`}
+                      value={resistorDrafts[r.id] ?? String(r.value)}
+                      onChange={e => {
+                        const raw = e.target.value.replace(/[^\d]/g, '')
+                        setResistorDrafts(prev => ({ ...prev, [r.id]: raw }))
+                        const n = parseInt(raw, 10)
+                        if (Number.isFinite(n) && n >= 1) updateResistor(r.id, { value: Math.min(n, 10000) })
+                      }}
+                      onBlur={() => setResistorDrafts(prev => { const next = { ...prev }; delete next[r.id]; return next })}
+                    />
+                    <span className={s.resistorUnit}>Ω</span>
                   </div>
                   <select
                     className={s.resistorPowerSelect}
+                    aria-label={`${r.label} 전력 정격`}
                     value={r.powerRating}
                     onChange={e => updateResistor(r.id, { powerRating: parseFloat(e.target.value) })}
                   >
@@ -514,7 +609,7 @@ export default function CircuitSimulatorClient() {
 
           {/* 회로 SVG */}
           <div className={s.circuitWrap}>
-            <CircuitDiagram voltage={voltage} type={type} perResistor={result.perResistor} />
+            <CircuitDiagram voltage={voltage} type={type} perResistor={result.perResistor} ledDropV={result.ledDropV} />
           </div>
 
           {/* 결과 4분할 */}
@@ -522,7 +617,11 @@ export default function CircuitSimulatorClient() {
             <div className={`${s.resultCard} ${s.resVoltage}`}>
               <p className={s.resultLabel}>{result.ledDropV > 0 ? '저항망 전압' : '전체 전압'}</p>
               <p className={s.resultValue}>{result.resistorVoltage.toFixed(1)}<span className={s.resultUnit}>V</span></p>
-              {result.ledDropV > 0 && <p className={s.resultSub}>전원 {voltage.toFixed(1)}V − LED {result.ledDropV.toFixed(1)}V</p>}
+              {result.ledDropV > 0 && (
+                <p className={s.resultSub}>
+                  {result.ledNotLit ? '⚠️ LED 미점등 — Vf ≥ 전원' : `전원 ${voltage.toFixed(1)}V − LED ${result.ledDropV.toFixed(1)}V`}
+                </p>
+              )}
             </div>
             <div className={`${s.resultCard} ${s.resResistance}`}>
               <p className={s.resultLabel}>전체 저항</p>
@@ -535,6 +634,9 @@ export default function CircuitSimulatorClient() {
             <div className={`${s.resultCard} ${s.resPower}`}>
               <p className={s.resultLabel}>전체 전력</p>
               <p className={s.resultValue}>{fmtW(result.totalPower)}</p>
+              {result.ledDropV > 0 && !result.ledNotLit && (
+                <p className={s.resultSub}>저항 {fmtW(result.totalPower - result.ledDropV * result.totalCurrent)} + LED {fmtW(result.ledDropV * result.totalCurrent)}</p>
+              )}
             </div>
           </div>
 
@@ -562,7 +664,7 @@ export default function CircuitSimulatorClient() {
                       <td>{fmtR(r.resistance)}</td>
                       <td className={s.colVoltage}>{fmtV(r.voltage)}</td>
                       <td className={s.colCurrent}>{fmtA(r.current)}</td>
-                      <td className={`${s.colPower} ${r.powerExceeded ? s.powerWarn : ''}`}>{fmtW(r.power)}{r.powerExceeded ? ' ⚠️' : ''}</td>
+                      <td className={`${s.colPower} ${r.powerExceeded ? s.powerWarn : r.powerMarginal ? s.powerCaution : ''}`}>{fmtW(r.power)}{r.powerExceeded ? ' ⚠️' : r.powerMarginal ? ' △' : ''}</td>
                       <td>{POWER_RATINGS.find(p => p.value === r.powerRating)?.label ?? '-'}</td>
                     </tr>
                   ))}
@@ -571,11 +673,17 @@ export default function CircuitSimulatorClient() {
             </div>
           </div>
 
-          {/* 정격 초과 경고 */}
+          {/* 정격 초과·마진 부족 경고 — 본문의 "2배 이상 정격 권장"과 같은 기준 */}
           {hasPowerWarning && (
             <div className={s.warnCard}>
               <strong>⚠️ 정격 초과:</strong> 일부 저항의 전력 소비가 정격을 초과합니다.
               실제 회로에서는 발열·손상으로 이어질 수 있어 더 큰 정격(예: 1/2W, 1W)의 저항으로 교체하거나 안전 마진(2배 이상)을 두세요.
+            </div>
+          )}
+          {hasMarginWarning && (
+            <div className={s.cautionCard}>
+              <strong>△ 안전 마진 부족:</strong> 소비 전력이 정격의 절반을 넘습니다.
+              정격 초과는 아니지만 권장 기준(계산 전력의 2배 이상 정격)에는 못 미쳐, 한 단계 큰 정격을 고려하세요.
             </div>
           )}
 
@@ -593,12 +701,12 @@ export default function CircuitSimulatorClient() {
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={copyResult} type="button">
             {copied ? '✓ 복사됨' : '결과 복사하기'}
           </button>
-        </>
+        </div>
       )}
 
       {/* ─── TAB 2: 옴의 법칙 빠른 계산 ─── */}
       {tab === 'ohm' && (
-        <>
+        <div role="tabpanel" id="cs-panel-ohm" aria-labelledby="cs-tab-ohm" className={s.tabPanel}>
           <div className={s.formulaCard}>
             <p className={s.formulaTitle}>핵심 공식</p>
             <div><strong>V</strong> = I × R   (옴의 법칙)</div>
@@ -611,39 +719,42 @@ export default function CircuitSimulatorClient() {
               <span className={s.cardLabelHint}>2가지 입력 → 나머지 자동</span>
             </div>
             <div className={s.knownToggle}>
-              <button className={`${s.knownBtn} ${ohmKnown === 'V_R' ? s.knownActive : ''}`} onClick={() => setOhmKnown('V_R')}>V + R</button>
-              <button className={`${s.knownBtn} ${ohmKnown === 'V_I' ? s.knownActive : ''}`} onClick={() => setOhmKnown('V_I')}>V + I</button>
-              <button className={`${s.knownBtn} ${ohmKnown === 'I_R' ? s.knownActive : ''}`} onClick={() => setOhmKnown('I_R')}>I + R</button>
-              <button className={`${s.knownBtn} ${ohmKnown === 'V_P' ? s.knownActive : ''}`} onClick={() => setOhmKnown('V_P')}>V + P</button>
+              {(['V_R', 'V_I', 'I_R', 'V_P'] as const).map(k => (
+                <button key={k} type="button" aria-pressed={ohmKnown === k}
+                  className={`${s.knownBtn} ${ohmKnown === k ? s.knownActive : ''}`}
+                  onClick={() => setOhmKnown(k)}>
+                  {k.replace('_', ' + ')}
+                </button>
+              ))}
             </div>
           </div>
 
           <div className={s.card}>
             <div className={s.gridFour}>
               <div>
-                <span className={s.subLabel}>전압 V (V)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" step="0.1" value={ohmV}
+                <label className={s.subLabel} htmlFor="cs-ohm-v">전압 V (V)</label>
+                <input id="cs-ohm-v" className={s.bigInput} type="number" inputMode="decimal" step="0.1" value={ohmShown.V}
                   onChange={e => setOhmV(e.target.value)}
                   disabled={ohmKnown === 'I_R'}
                 />
               </div>
               <div>
-                <span className={s.subLabel}>전류 I (A)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" step="0.001" value={ohmI}
+                <label className={s.subLabel} htmlFor="cs-ohm-i">전류 I (A)</label>
+                <input id="cs-ohm-i" className={s.bigInput} type="number" inputMode="decimal" step="0.001" value={ohmShown.I}
                   onChange={e => setOhmI(e.target.value)}
                   disabled={ohmKnown !== 'V_I' && ohmKnown !== 'I_R'}
                 />
               </div>
               <div>
-                <span className={s.subLabel}>저항 R (Ω)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" step="1" value={ohmR}
+                <label className={s.subLabel} htmlFor="cs-ohm-r">저항 R (Ω)</label>
+                <input id="cs-ohm-r" className={s.bigInput} type="number" inputMode="decimal" step="1" value={ohmShown.R}
                   onChange={e => setOhmR(e.target.value)}
                   disabled={ohmKnown === 'V_I' || ohmKnown === 'V_P'}
                 />
               </div>
               <div>
-                <span className={s.subLabel}>전력 P (W)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" step="0.01" value={ohmP}
+                <label className={s.subLabel} htmlFor="cs-ohm-p">전력 P (W)</label>
+                <input id="cs-ohm-p" className={s.bigInput} type="number" inputMode="decimal" step="0.01" value={ohmShown.P}
                   onChange={e => setOhmP(e.target.value)}
                   disabled={ohmKnown !== 'V_P'}
                 />
@@ -651,25 +762,30 @@ export default function CircuitSimulatorClient() {
             </div>
           </div>
 
-          {/* 결과 */}
+          {/* 결과 — 단락·개방·모순 입력은 0이 아니라 '—'로 표시하고 이유를 적는다 */}
           <div className={s.resultGrid}>
             <div className={`${s.resultCard} ${s.resVoltage}`}>
               <p className={s.resultLabel}>전압 V</p>
-              <p className={s.resultValue}>{ohmCalc.V.toFixed(2)}<span className={s.resultUnit}>V</span></p>
+              <p className={s.resultValue}>{ohmCalc.V === null ? '—' : fmtV(ohmCalc.V)}</p>
             </div>
             <div className={`${s.resultCard} ${s.resCurrent}`}>
               <p className={s.resultLabel}>전류 I</p>
-              <p className={s.resultValue}>{fmtA(ohmCalc.I)}</p>
+              <p className={s.resultValue}>{ohmCalc.I === null ? '—' : fmtA(ohmCalc.I)}</p>
             </div>
             <div className={`${s.resultCard} ${s.resResistance}`}>
               <p className={s.resultLabel}>저항 R</p>
-              <p className={s.resultValue}>{fmtR(ohmCalc.R)}</p>
+              <p className={s.resultValue}>{ohmCalc.R === null ? '—' : fmtR(ohmCalc.R)}</p>
             </div>
             <div className={`${s.resultCard} ${s.resPower}`}>
               <p className={s.resultLabel}>전력 P</p>
-              <p className={s.resultValue}>{fmtW(ohmCalc.P)}</p>
+              <p className={s.resultValue}>{ohmCalc.P === null ? '—' : fmtW(ohmCalc.P)}</p>
             </div>
           </div>
+          {ohmCalc.warn && (
+            <div className={s.cautionCard}>
+              <strong>ℹ️ 안내:</strong> {ohmCalc.warn}
+            </div>
+          )}
 
           {/* 가이드 */}
           <div className={s.formulaCard}>
@@ -680,24 +796,65 @@ export default function CircuitSimulatorClient() {
             <div>전압 2배 → 전력 4배 (저항 일정, P = V²/R)</div>
           </div>
 
-          {/* LED 저항 빠른 계산 */}
+          {/* LED 저항 빠른 계산 — FAQ가 안내하는 "자동 계산" 실제 구현 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>LED 전류 제한 저항 빠른 계산</span>
+              <span className={s.cardLabelHint}>R = (V_source − V_f) / I</span>
             </div>
-            <div className={s.formulaCard} style={{ marginTop: 0 }}>
-              <p className={s.formulaTitle}>R = (V_source − V_LED) / I_LED</p>
-              <div>5V + 빨간 LED(Vf=2V) + 20mA → R = (5−2)/0.02 = <strong>150Ω</strong> (안전 220Ω 권장)</div>
-              <div>5V + 흰색 LED(Vf=3.2V) + 20mA → R = (5−3.2)/0.02 = <strong>90Ω</strong> (안전 100Ω 권장)</div>
-              <div>9V + 파란 LED(Vf=3.4V) + 20mA → R = (9−3.4)/0.02 = <strong>280Ω</strong> (안전 330Ω 권장)</div>
+            <div className={s.gridFour} style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+              <div>
+                <label className={s.subLabel} htmlFor="cs-led-vs">전원 (V)</label>
+                <input id="cs-led-vs" className={s.bigInput} type="number" inputMode="decimal" step="0.1" value={ledVs} onChange={e => setLedVs(e.target.value)} />
+              </div>
+              <div>
+                <label className={s.subLabel} htmlFor="cs-led-vf">LED Vf (V)</label>
+                <input id="cs-led-vf" className={s.bigInput} type="number" inputMode="decimal" step="0.1" value={ledVf} onChange={e => setLedVf(e.target.value)} />
+              </div>
+              <div>
+                <label className={s.subLabel} htmlFor="cs-led-if">목표 전류 (mA)</label>
+                <input id="cs-led-if" className={s.bigInput} type="number" inputMode="decimal" step="1" value={ledIf} onChange={e => setLedIf(e.target.value)} />
+              </div>
             </div>
+            <div className={s.voltQuickRow} style={{ marginTop: 8, gridTemplateColumns: 'repeat(5, 1fr)' }}>
+              {[
+                { c: '🔴 빨강', vf: 2.0 }, { c: '🟡 노랑', vf: 2.1 }, { c: '🟢 녹색', vf: 2.2 },
+                { c: '⚪ 흰색', vf: 3.2 }, { c: '🔵 파랑', vf: 3.4 },
+              ].map(x => (
+                <button key={x.c} type="button" className={`${s.voltQuickBtn} ${Math.abs(parseFloat(ledVf) - x.vf) < 0.001 ? s.voltQuickActive : ''}`}
+                  aria-pressed={Math.abs(parseFloat(ledVf) - x.vf) < 0.001}
+                  onClick={() => setLedVf(String(x.vf))}>
+                  {x.c}<br /><small style={{ fontSize: 9 }}>{x.vf}V</small>
+                </button>
+              ))}
+            </div>
+            {ledCalc.ok ? (
+              <div className={s.verifyCard} style={{ marginTop: 10 }}>
+                <div className={s.verifyLine}>
+                  R = ({parseFloat(ledVs)} − {parseFloat(ledVf)}) / {(parseFloat(ledIf) / 1000).toString()} = <strong>{fmtR(ledCalc.r)}</strong>
+                </div>
+                {ledCalc.std !== null && ledCalc.iStd !== null && ledCalc.pStd !== null && (
+                  <div className={s.verifyLine}>
+                    표준 저항(E12, 올림): <strong>{fmtR(ledCalc.std)}</strong> → 실제 전류 {fmtA(ledCalc.iStd)} · 저항 소비 {fmtW(ledCalc.pStd)}
+                  </div>
+                )}
+                <p className={s.voltNote} style={{ marginTop: 6 }}>
+                  ※ 계산값 이상으로 올림한 표준값이라 목표 전류를 넘지 않습니다. 여유를 더 두려면 한 단계 위 값을 쓰세요.
+                  정확한 Vf·최대 전류는 LED 데이터시트를 확인하세요.
+                </p>
+              </div>
+            ) : (
+              <div className={s.cautionCard} style={{ marginTop: 10 }}>
+                <strong>ℹ️ 안내:</strong> {ledCalc.reason}
+              </div>
+            )}
           </div>
-        </>
+        </div>
       )}
 
       {/* ─── TAB 3: 학습 모드 ─── */}
       {tab === 'learn' && (
-        <>
+        <div role="tabpanel" id="cs-panel-learn" aria-labelledby="cs-tab-learn" className={s.tabPanel}>
           <div className={s.formulaCard}>
             <p className={s.formulaTitle}>핵심 공식 모음</p>
             <div><strong>옴의 법칙:</strong> V = I × R</div>
@@ -736,16 +893,16 @@ export default function CircuitSimulatorClient() {
 
           {/* 회로 SVG (학습용 보조) */}
           <div className={s.circuitWrap}>
-            <CircuitDiagram voltage={voltage} type={type} perResistor={result.perResistor} />
+            <CircuitDiagram voltage={voltage} type={type} perResistor={result.perResistor} ledDropV={result.ledDropV} />
           </div>
-        </>
+        </div>
       )}
 
       {/* ─── TAB 4: 시험 빈출 패턴 ─── */}
       {tab === 'exam' && (
-        <>
+        <div role="tabpanel" id="cs-panel-exam" aria-labelledby="cs-tab-exam" className={s.tabPanel}>
           <div className={s.formulaCard}>
-            <p className={s.formulaTitle}>한국 중3·고1 물리 빈출 회로 7문제</p>
+            <p className={s.formulaTitle}>중학 과학·고교 물리학 빈출 회로 7문제</p>
             <div>각 문제의 정답을 클릭한 뒤 [정답·풀이 보기]로 단계별 풀이 확인</div>
           </div>
 
@@ -799,7 +956,7 @@ export default function CircuitSimulatorClient() {
               )
             })}
           </div>
-        </>
+        </div>
       )}
     </div>
   )

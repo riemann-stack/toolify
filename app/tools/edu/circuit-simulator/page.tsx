@@ -149,8 +149,8 @@ export default function CircuitSimulatorPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            💡 <strong style={{ color: '#0E7490' }}>핵심:</strong> 옴의 법칙(V=IR)과 키르히호프 법칙을 결합하면 <strong>모든 회로 풀이가 가능</strong>합니다.
-            본 시뮬레이터의 학습 모드 탭에서 단계별 적용 과정을 확인하세요.
+            💡 <strong style={{ color: '#0E7490' }}>핵심:</strong> 옴의 법칙(V=IR)과 키르히호프 법칙을 결합하면 직렬·병렬을 포함한 <strong>선형 저항 회로를 풀 수 있습니다</strong>.
+            본 계산기가 직접 다루는 범위는 <strong>순수 직렬·병렬 회로</strong>이며, 직렬-병렬 혼합 회로는 시험 빈출 패턴 탭의 풀이 과정으로 익힐 수 있습니다.
           </div>
         </div>
 
@@ -279,6 +279,7 @@ export default function CircuitSimulatorPage() {
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ I_LED = 20mA 기준. 계산값보다 <strong style={{ color: 'var(--text)' }}>한 단계 큰 표준 저항</strong>(150→220Ω, 280→330Ω 등)으로 올려 잡으면 전류가 낮아져 더 안전합니다.
+            표의 Vf는 대표값일 뿐 전류·제조사·온도에 따라 달라지므로, 실제 부품은 <strong style={{ color: 'var(--text)' }}>LED 데이터시트의 Vf·최대 전류</strong>를 기준으로 정하세요.
             <br />※ 녹색은 두 종류입니다 — 흔한 <strong style={{ color: 'var(--text)' }}>황록색(GaP, 2.0~2.2V)</strong>은 표 값대로, <strong style={{ color: 'var(--text)' }}>순수 녹색(InGaN, ~3.2V)</strong>은 파랑과 비슷하게 계산하세요.
           </p>
         </div>

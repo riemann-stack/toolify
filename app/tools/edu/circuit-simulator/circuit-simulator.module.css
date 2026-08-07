@@ -232,8 +232,12 @@
   border-radius: 10px;
   padding: 10px 12px;
 }
+/* ⚠️ 좁은 화면에서 한 행에 라벨+슬라이더+직접입력+정격+삭제를 다 넣으면
+   고정폭 합이 1fr을 밀어 슬라이더가 0px로 붕괴한다(paint-mix에서 같은 실수)
+   — 슬라이더+입력을 둘째 행으로 분리한다. */
 @media (max-width: 480px) {
-  .resistorRow { grid-template-columns: 44px minmax(0, 1fr) 80px 28px; gap: 6px; }
+  .resistorRow { grid-template-columns: 44px minmax(0, 1fr) 28px; gap: 8px 6px; }
+  .resistorValueRow { grid-column: 1 / -1; grid-row: 2; }
 }
 .resistorLabel {
   font-family: 'Inter', system-ui, sans-serif;
@@ -251,14 +255,6 @@
   flex: 1;
   min-width: 0;
   accent-color: #A16207;
-}
-.resistorValueDisplay {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  color: var(--text);
-  font-size: 13px;
-  min-width: 70px;
-  text-align: right;
 }
 .resistorPowerSelect {
   background: var(--bg2);
@@ -284,7 +280,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}@media (hover: hover) {
+  position: relative;
+}
+/* 시각 크기는 유지하고 터치 히트영역만 44px로 확장 (cosmic 점 패턴) */
+.removeBtn:not(:disabled)::before { content: ''; position: absolute; inset: -9px; }@media (hover: hover) {
   .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.40); }
 }
 .removeBtn:disabled { opacity: 0.3; cursor: not-allowed; }
@@ -658,6 +657,48 @@
   .copyBtn:hover { border-color: #0D9488; color: #0F766E; }
 }
 .copied { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
+
+/* 탭 패널 — wrap과 같은 세로 리듬 유지 */
+.tabPanel { display: flex; flex-direction: column; gap: 12px; }
+
+/* 마진 부족·계산 불가 안내 (경고보다 한 단계 낮은 톤) */
+.cautionCard {
+  background: rgba(161,98,7,0.10);
+  border: 1px solid rgba(161,98,7,0.30);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.85;
+}
+.cautionCard strong { color: #92400E; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; } /* amber-800 — 틴트 위 6.21:1 */
+.analysisTable .powerCaution { color: #92400E !important; background: rgba(161,98,7,0.10); }
+
+/* 이상적 전압원 주석 */
+.voltNote { font-size: 11.5px; color: var(--muted); line-height: 1.7; margin: 10px 0 0; }
+.voltNote strong { color: var(--text); }
+
+/* 저항 직접 입력 (슬라이더 옆) */
+.resistorValueInput {
+  width: 58px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 6px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  text-align: right;
+  outline: none;
+}
+.resistorValueInput:focus { border-color: #0D9488; }
+.resistorUnit { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+
+/* 큰 값이 카드 밖으로 밀고 나가지 않게 */
+.resultCard { min-width: 0; }
+.resultValue { overflow-wrap: anywhere; }
 
 /* LED 전압강하 입력 */
 .ledDropRow { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
