@@ -1,22 +1,17 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import s from './cosmic-calendar.module.css'
+import {
+  EVENTS as EVENTS_RAW, type CosmicEvent, type CatKey,
+  COSMIC_YEAR_REAL_YEARS, COSMIC_SECOND_REAL_YEARS,
+  cosmicPosition, yearsAgoOf, fmtRealYears, ageToCosmic, MONTHS,
+} from './cosmicData'
 
 // ─────────────────────────────────────────────
-// 상수
+// 카테고리 (색·클래스는 CSS 모듈 참조라 여기 둔다)
 // ─────────────────────────────────────────────
-const COSMIC_YEAR_REAL_YEARS = 13_800_000_000
-const COSMIC_DAY_REAL_YEARS = COSMIC_YEAR_REAL_YEARS / 365.25
-const COSMIC_HOUR_REAL_YEARS = COSMIC_DAY_REAL_YEARS / 24
-const COSMIC_MINUTE_REAL_YEARS = COSMIC_HOUR_REAL_YEARS / 60
-const COSMIC_SECOND_REAL_YEARS = COSMIC_MINUTE_REAL_YEARS / 60 // 약 437.5년
-
-// ─────────────────────────────────────────────
-// 카테고리
-// ─────────────────────────────────────────────
-type CatKey = 'cosmic' | 'solar' | 'earth' | 'life' | 'human' | 'civilization' | 'now'
 const CATEGORIES: Record<CatKey, { name: string; color: string; cls: string; borderCls: string }> = {
   cosmic:       { name: '우주 진화',  color: '#9B59B6', cls: s.catCosmic,       borderCls: s.borderCosmic },
   solar:        { name: '태양계',     color: '#A16207', cls: s.catSolar,        borderCls: s.borderSolar },
@@ -27,90 +22,38 @@ const CATEGORIES: Record<CatKey, { name: string; color: string; cls: string; bor
   now:          { name: '현재',       color: '#0D9488', cls: s.catNow,          borderCls: s.borderNow },
 }
 
-// ─────────────────────────────────────────────
-// 사건 데이터 (138억 년 = 1년)
-// ─────────────────────────────────────────────
-type Event = {
-  id: string
-  name: string
+/** 화면에서 쓰는 사건 — 달력 위치는 실제 연대에서 파생된다 */
+type Event = CosmicEvent & {
   realYearsAgo: number
   cosmicDate: string
   month: number
   day: number
-  hour?: number
-  minute?: number
-  second?: number
-  category: CatKey
-  icon: string
-  description: string
+  hour: number
+  minute: number
+  second: number
+  pct: number
 }
 
-const EVENTS: Event[] = [
-  { id: 'bigbang',       name: '빅뱅 (우주 탄생)',          realYearsAgo: 13_800_000_000,         cosmicDate: '1월 1일 00:00',       month: 1,  day: 1,  hour: 0,  minute: 0,  category: 'cosmic',       icon: '💥', description: '시공간이 시작된 순간. 모든 물질·에너지가 한 점에서 폭발적으로 팽창 시작.' },
-  { id: 'firstAtoms',    name: '최초의 원자 형성',           realYearsAgo: 13_799_620_000,         cosmicDate: '1월 1일 00:14',       month: 1,  day: 1,  hour: 0,  minute: 14, category: 'cosmic',       icon: '⚛️', description: '38만 년 후 우주가 식으면서 수소·헬륨 원자가 만들어짐.' },
-  { id: 'firstStars',    name: '최초의 별 형성',             realYearsAgo: 13_600_000_000,         cosmicDate: '1월 6일경',          month: 1,  day: 6,                                 category: 'cosmic',       icon: '⭐', description: '약 2억 년 후 첫 별들이 핵융합으로 빛나기 시작.' },
-  { id: 'firstGalaxies', name: '최초의 은하 형성',           realYearsAgo: 13_400_000_000,         cosmicDate: '1월 22일경',         month: 1,  day: 22,                                category: 'cosmic',       icon: '🌌', description: '별들이 모여 최초의 은하가 형성됨.' },
-  { id: 'milkyWay',      name: '우리 은하수 형성',           realYearsAgo: 13_500_000_000,         cosmicDate: '3월 16일경',         month: 3,  day: 16,                                category: 'cosmic',       icon: '🌠', description: '우리 태양계가 속한 우리 은하수가 형성됨.' },
-  { id: 'solarSystem',   name: '태양계 형성',                realYearsAgo: 4_600_000_000,          cosmicDate: '8월 31일경',         month: 8,  day: 31,                                category: 'solar',        icon: '☀️', description: '46억 년 전 가스·먼지 구름에서 태양과 행성들이 형성됨.' },
-  { id: 'earth',         name: '지구 형성',                  realYearsAgo: 4_540_000_000,          cosmicDate: '9월 2일경',          month: 9,  day: 2,                                 category: 'earth',        icon: '🌍', description: '약 45억 4천만 년 전 지구가 형성됨.' },
-  { id: 'moon',          name: '달 형성',                    realYearsAgo: 4_500_000_000,          cosmicDate: '9월 4일경',          month: 9,  day: 4,                                 category: 'earth',        icon: '🌙', description: '거대 충돌설: 화성 크기 천체가 지구와 충돌 → 달 형성.' },
-  { id: 'firstLife',     name: '최초의 생명체 (단세포)',      realYearsAgo: 3_800_000_000,          cosmicDate: '9월 21일경',         month: 9,  day: 21,                                category: 'life',         icon: '🦠', description: '약 38억 년 전 최초의 단세포 생명(원시 박테리아) 등장.' },
-  { id: 'photosynthesis',name: '광합성 시작',                realYearsAgo: 3_500_000_000,          cosmicDate: '10월 12일경',        month: 10, day: 12,                                category: 'life',         icon: '🌱', description: '최초의 광합성 생물이 산소를 만들기 시작.' },
-  { id: 'oxygen',        name: '대기에 산소 축적',           realYearsAgo: 2_400_000_000,          cosmicDate: '11월 9일경',         month: 11, day: 9,                                 category: 'life',         icon: '💨', description: '산소 대폭발 — 산소가 대량으로 축적되어 생물 다양성 폭발의 기반 마련.' },
-  { id: 'multicellular', name: '다세포 생물 등장',           realYearsAgo: 2_000_000_000,          cosmicDate: '11월 15일경',        month: 11, day: 15,                                category: 'life',         icon: '🧬', description: '단세포에서 다세포 생물로 진화.' },
-  { id: 'cambrian',      name: '캄브리아기 대폭발',          realYearsAgo: 540_000_000,            cosmicDate: '12월 17일경',        month: 12, day: 17,                                category: 'life',         icon: '🦑', description: '약 5억 4천만 년 전 다양한 생물 형태가 폭발적으로 등장.' },
-  { id: 'plants',        name: '육상 식물 등장',             realYearsAgo: 470_000_000,            cosmicDate: '12월 20일경',        month: 12, day: 20,                                category: 'life',         icon: '🌿', description: '식물이 바다에서 육지로 진출.' },
-  { id: 'firstAnimals',  name: '육상 동물 등장',             realYearsAgo: 400_000_000,            cosmicDate: '12월 21일경',        month: 12, day: 21,                                category: 'life',         icon: '🦎', description: '척추동물이 육지에 진출.' },
-  { id: 'dinosaurs',     name: '공룡 등장',                  realYearsAgo: 230_000_000,            cosmicDate: '12월 25일경',        month: 12, day: 25,                                category: 'life',         icon: '🦕', description: '약 2억 3천만 년 전 공룡 등장.' },
-  { id: 'mammals',       name: '포유류 등장',                realYearsAgo: 200_000_000,            cosmicDate: '12월 26일경',        month: 12, day: 26,                                category: 'life',         icon: '🐀', description: '약 2억 년 전 작은 포유류 등장 (공룡과 공존).' },
-  { id: 'flowers',       name: '꽃 식물 등장',               realYearsAgo: 130_000_000,            cosmicDate: '12월 28일경',        month: 12, day: 28,                                category: 'life',         icon: '🌸', description: '꽃을 피우는 식물(피자식물) 진화.' },
-  { id: 'dinoExtinction',name: '공룡 멸종 (K-Pg 대멸종)',    realYearsAgo: 66_000_000,             cosmicDate: '12월 30일경',        month: 12, day: 30,                                category: 'life',         icon: '☄️', description: '약 6,600만 년 전 운석 충돌로 공룡 멸종 → 포유류 시대 시작.' },
-  { id: 'primates',      name: '영장류 등장',                realYearsAgo: 55_000_000,             cosmicDate: '12월 30일경',        month: 12, day: 30,                                category: 'life',         icon: '🐒', description: '최초의 영장류 등장.' },
-  // 12월 31일
-  { id: 'humanAncestor', name: '인류 조상 (오스트랄로피테쿠스)', realYearsAgo: 4_000_000,           cosmicDate: '12월 31일 22:24',     month: 12, day: 31, hour: 22, minute: 24,        category: 'human',        icon: '🧍', description: '루시(Lucy) 같은 직립보행 영장류 등장.' },
-  { id: 'genusHomo',     name: '호모(Homo) 속 등장',         realYearsAgo: 2_500_000,              cosmicDate: '12월 31일 22:54',     month: 12, day: 31, hour: 22, minute: 54,        category: 'human',        icon: '🪨', description: '도구를 만들기 시작한 호모 하빌리스 등장.' },
-  { id: 'fire',          name: '불 사용 시작',                realYearsAgo: 1_500_000,              cosmicDate: '12월 31일 23:23',     month: 12, day: 31, hour: 23, minute: 23,        category: 'human',        icon: '🔥', description: '호모 에렉투스가 불을 통제하기 시작.' },
-  { id: 'homoSapiens',   name: '현생 인류 (호모 사피엔스) 등장', realYearsAgo: 300_000,              cosmicDate: '12월 31일 23:48',     month: 12, day: 31, hour: 23, minute: 48,        category: 'human',        icon: '👤', description: '약 30만 년 전 현생 인류 등장.' },
-  { id: 'language',      name: '언어·예술의 발달',           realYearsAgo: 50_000,                 cosmicDate: '12월 31일 23:58',     month: 12, day: 31, hour: 23, minute: 58,        category: 'civilization', icon: '🎨', description: '동굴벽화, 복잡한 언어, 상징적 사고 발달.' },
-  { id: 'agriculture',   name: '농업 혁명',                  realYearsAgo: 12_000,                 cosmicDate: '12월 31일 23:59:32',  month: 12, day: 31, hour: 23, minute: 59, second: 32,    category: 'civilization', icon: '🌾', description: '약 1만 2천 년 전 농업 시작 → 정착 생활.' },
-  { id: 'writing',       name: '문자 발명',                  realYearsAgo: 5_500,                  cosmicDate: '12월 31일 23:59:46',  month: 12, day: 31, hour: 23, minute: 59, second: 46,    category: 'civilization', icon: '📜', description: '메소포타미아 쐐기문자 등 최초의 문자.' },
-  { id: 'pyramids',      name: '이집트 피라미드 건설',        realYearsAgo: 4_500,                  cosmicDate: '12월 31일 23:59:49',  month: 12, day: 31, hour: 23, minute: 59, second: 49,    category: 'civilization', icon: '🔺', description: '기자 대피라미드 건설.' },
-  { id: 'romanEmpire',   name: '로마 제국 건국',             realYearsAgo: 2_750,                  cosmicDate: '12월 31일 23:59:54',  month: 12, day: 31, hour: 23, minute: 59, second: 54,    category: 'civilization', icon: '🏛️', description: '로마 건국 (BC 753년).' },
-  { id: 'jesus',         name: '예수 탄생 (서기 1년)',       realYearsAgo: 2_026,                  cosmicDate: '12월 31일 23:59:55',  month: 12, day: 31, hour: 23, minute: 59, second: 55,    category: 'civilization', icon: '✝️', description: '서기 1년 (현재 달력 기준점).' },
-  { id: 'goryeo',        name: '고려 건국 (한국 역사)',      realYearsAgo: 1_108,                  cosmicDate: '12월 31일 23:59:58',  month: 12, day: 31, hour: 23, minute: 59, second: 58,    category: 'civilization', icon: '🇰🇷', description: '왕건이 고려 건국 (918년).' },
-  { id: 'industrial',    name: '산업혁명',                   realYearsAgo: 250,                    cosmicDate: '12월 31일 23:59:59.4',month: 12, day: 31, hour: 23, minute: 59, second: 59.4,  category: 'civilization', icon: '⚙️', description: '18세기 후반 영국에서 시작된 산업혁명.' },
-  { id: 'electricity',   name: '전기·전구 발명',             realYearsAgo: 145,                    cosmicDate: '12월 31일 23:59:59.7',month: 12, day: 31, hour: 23, minute: 59, second: 59.7,  category: 'civilization', icon: '💡', description: '에디슨의 전구 발명 (1879년).' },
-  { id: 'moonLanding',   name: '달 착륙',                    realYearsAgo: 57,                     cosmicDate: '12월 31일 23:59:59.87',month: 12, day: 31, hour: 23, minute: 59, second: 59.87, category: 'civilization', icon: '🚀', description: '아폴로 11호 달 착륙 (1969년).' },
-  { id: 'internet',      name: '인터넷 대중화',              realYearsAgo: 30,                     cosmicDate: '12월 31일 23:59:59.93',month: 12, day: 31, hour: 23, minute: 59, second: 59.93, category: 'civilization', icon: '🌐', description: '월드와이드웹 대중화 (1990년대).' },
-  { id: 'now',           name: '현재 (2026년)',              realYearsAgo: 0,                      cosmicDate: '12월 31일 24:00:00',  month: 12, day: 31, hour: 24, minute: 0,  second: 0,    category: 'now',          icon: '⏰', description: '지금 이 순간. 우주 138억 년의 마지막 1초도 지나기 전.' },
-]
+function buildEvents(currentYear: number): Event[] {
+  return EVENTS_RAW.map((e) => {
+    const realYearsAgo = yearsAgoOf(e, currentYear)
+    const p = cosmicPosition(realYearsAgo)
+    return { ...e, realYearsAgo, cosmicDate: p.label, month: p.month, day: p.day, hour: p.hour, minute: p.minute, second: p.second, pct: p.pct }
+  })
+}
+
+/** SSR·정적 생성 시점에 쓰는 기준 연도.
+    ⚠️ 이 값이 화면에 박제되면 해가 바뀌었을 때 '몇 년 전'이 전부 틀어진다.
+       마운트 후 실제 올해로 교체한다(첫 렌더는 SSR과 같아야 하이드레이션이 깨지지 않는다). */
+const FALLBACK_YEAR = 2026
+
+/** 마운트 여부만 필요하므로 구독은 아무 일도 하지 않는다 */
+const subscribeNoop = () => () => {}
 
 // ─────────────────────────────────────────────
 // 유틸
 // ─────────────────────────────────────────────
-const fmt = (v: number, dp = 0): string => {
-  if (!Number.isFinite(v)) return '-'
-  return v.toLocaleString('ko-KR', { minimumFractionDigits: dp, maximumFractionDigits: dp })
-}
 const round = (v: number, dp = 1) => Math.round(v * Math.pow(10, dp)) / Math.pow(10, dp)
-
-function fmtRealYears(yearsAgo: number): string {
-  if (yearsAgo === 0) return '현재'
-  if (yearsAgo < 1_000) return `약 ${yearsAgo}년 전`
-  if (yearsAgo < 1_000_000) return `약 ${fmt(round(yearsAgo / 1_000))}천 년 전`
-  if (yearsAgo < 100_000_000) return `약 ${fmt(round(yearsAgo / 1_000_000))}백만 년 전`
-  if (yearsAgo < 1_000_000_000) return `약 ${round(yearsAgo / 100_000_000, 1)}억 년 전`
-  return `약 ${round(yearsAgo / 1_000_000_000, 2)}억 년 전`
-}
-
-// 사용자 나이 → 코스믹 시간
-function ageToCosmic(ageYears: number) {
-  const cosmicSeconds = ageYears / COSMIC_SECOND_REAL_YEARS
-  const cosmicMinutes = cosmicSeconds / 60
-  return { cosmicSeconds, cosmicMinutes }
-}
-
-const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
 
 // ─────────────────────────────────────────────
 // 인터랙티브 타임라인 (반응형 · 점 + 호버/탭 팝업)
@@ -118,18 +61,41 @@ const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','
 type TLPoint = { key: string; pct: number; color: string; events: Event[] }
 
 // 가까운 점들을 하나로 통합 (촘촘한 구역 → 점 하나)
-function clusterPoints(raw: { pct: number; event: Event }[], threshold: number): TLPoint[] {
+/* ⚠️ 임계값이 비율(pct) 고정이라 좁은 화면에서 점이 겹쳤다 — 320px에서 최소 간격 0px로 실측됐고,
+      겹친 점은 뒤엣것을 누를 수 없다. 트랙 폭을 받아 '픽셀 간격'으로도 환산해 묶는다. */
+function clusterPoints(raw: { pct: number; event: Event }[], threshold: number, trackPx = 0): TLPoint[] {
+  /* 점 지름 16px + 여백 → 중심 간 26px 이상 */
+  const th = Math.max(threshold, trackPx > 0 ? 26 / trackPx : 0)
   const sorted = [...raw].sort((a, b) => a.pct - b.pct)
   const groups: { events: Event[]; pcts: number[] }[] = []
-  let lastPct = -Infinity
+  let groupStart = -Infinity
   for (const it of sorted) {
     const last = groups[groups.length - 1]
-    if (last && it.pct - lastPct <= threshold) {
+    /* 그룹 '시작점'과 비교한다 — 직전 항목과만 비교하면 사슬처럼 이어져 폭이 무한정 넓어진다 */
+    if (last && it.pct - groupStart <= th) {
       last.events.push(it.event); last.pcts.push(it.pct)
     } else {
       groups.push({ events: [it.event], pcts: [it.pct] })
+      groupStart = it.pct
     }
-    lastPct = it.pct
+  }
+  /* 그룹의 표시 위치는 구성원의 평균이라 이웃 그룹끼리 다시 가까워질 수 있다.
+     표시 위치 기준으로 한 번 더 병합해 겹침을 줄인다(겹친 점은 뒤엣것을 누를 수 없다). */
+  const mean = (g: { pcts: number[] }) => g.pcts.reduce((a, b) => a + b, 0) / g.pcts.length
+  /* 한 번 병합하면 평균이 옮겨져 다른 이웃과 다시 가까워질 수 있다 — 더 병합할 게 없을 때까지 돈다 */
+  let changed = true
+  let guard = 0
+  while (changed && guard++ < 50) {
+    changed = false
+    for (let i = 1; i < groups.length; i++) {
+      if (mean(groups[i]) - mean(groups[i - 1]) < th) {
+        groups[i - 1].events.push(...groups[i].events)
+        groups[i - 1].pcts.push(...groups[i].pcts)
+        groups.splice(i, 1)
+        changed = true
+        break
+      }
+    }
   }
   return groups.map((g, i) => {
     const pct = g.pcts.reduce((a, b) => a + b, 0) / g.pcts.length
@@ -139,7 +105,7 @@ function clusterPoints(raw: { pct: number; event: Event }[], threshold: number):
 }
 
 function InteractiveTimeline({
-  points, ticks, bands = [], activeKey, onSelect, ariaLabel,
+  points, ticks, bands = [], activeKey, onSelect, ariaLabel, onTrackWidth,
 }: {
   points: TLPoint[]
   ticks: { label: string; pct: number }[]
@@ -147,10 +113,22 @@ function InteractiveTimeline({
   activeKey: string | null
   onSelect: (key: string | null) => void
   ariaLabel: string
+  /** 점을 픽셀 기준으로 떼어 놓기 위해 부모에게 트랙 폭을 알려 준다 */
+  onTrackWidth?: (px: number) => void
 }) {
+  const barRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const el = barRef.current
+    if (!el || !onTrackWidth) return
+    const report = () => onTrackWidth(el.getBoundingClientRect().width)
+    report()
+    window.addEventListener('resize', report)
+    return () => window.removeEventListener('resize', report)
+  }, [onTrackWidth])
+
   return (
     <div className={s.tl} role="group" aria-label={ariaLabel} onClick={() => onSelect(null)}>
-      <div className={s.tlBar}>
+      <div className={s.tlBar} ref={barRef}>
         {bands.map((b, i) => (
           <div
             key={i}
@@ -218,9 +196,20 @@ function InteractiveTimeline({
 // 컴포넌트
 // ─────────────────────────────────────────────
 export default function CosmicCalendarClient() {
+  /* 해가 바뀌면 '몇 년 전'이 전부 달라진다. 정적 생성 시점의 연도가 박제되지 않도록
+     마운트 게이트를 둔다 — 첫 클라이언트 렌더는 SSR과 같은 FALLBACK_YEAR로 그리고,
+     마운트된 뒤에 실제 올해로 다시 계산한다. */
+  const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false)
+  const currentYear = mounted ? new Date().getFullYear() : FALLBACK_YEAR
+  const events = useMemo(() => buildEvents(currentYear), [currentYear])
+
   const [tab, setTab] = useState<'year' | 'dec31' | 'search' | 'compare'>('year')
   const [zoomLevel, setZoomLevel] = useState<'24h' | 'lastHour' | 'last30s'>('24h')
   const [compressionMode, setCompressionMode] = useState<'1year' | '24hours' | '1km'>('1year')
+
+  /* 점을 픽셀 기준으로 떼어 놓으려면 실제 트랙 폭이 필요하다 */
+  const [trackPx, setTrackPx] = useState(0)
+  const handleTrackWidth = useCallback((px: number) => { setTrackPx((prev) => (Math.abs(prev - px) > 1 ? px : prev)) }, [])
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [age, setAge] = useState<number>(30)
   const [userName, setUserName] = useState<string>('')
@@ -231,19 +220,19 @@ export default function CosmicCalendarClient() {
   const eventsByMonth = useMemo(() => {
     const groups: Record<number, Event[]> = {}
     for (let m = 1; m <= 12; m++) groups[m] = []
-    EVENTS.forEach(e => { groups[e.month]?.push(e) })
+    events.forEach(e => { groups[e.month]?.push(e) })
     return groups
-  }, [])
+  }, [events])
 
   // 12월 31일 사건만
   const dec31Events = useMemo(() => {
-    return EVENTS.filter(e => e.month === 12 && e.day === 31)
+    return events.filter(e => e.month === 12 && e.day === 31)
       .sort((a, b) => {
         const ah = (a.hour ?? 0) * 3600 + (a.minute ?? 0) * 60 + (a.second ?? 0)
         const bh = (b.hour ?? 0) * 3600 + (b.minute ?? 0) * 60 + (b.second ?? 0)
         return ah - bh
       })
-  }, [])
+  }, [events])
 
   // 줌 레벨에 따른 12월 31일 필터링
   const dec31Filtered = useMemo(() => {
@@ -257,12 +246,12 @@ export default function CosmicCalendarClient() {
   const searchResults = useMemo(() => {
     const q = searchQuery.trim().toLowerCase()
     if (q.length < 1) return []
-    return EVENTS.filter(e =>
+    return events.filter(e =>
       e.name.toLowerCase().includes(q) ||
       e.cosmicDate.toLowerCase().includes(q) ||
       e.description.toLowerCase().includes(q)
     ).slice(0, 10)
-  }, [searchQuery])
+  }, [searchQuery, events])
 
   // 내 인생 시각화
   const myLife = useMemo(() => {
@@ -297,12 +286,14 @@ export default function CosmicCalendarClient() {
   // 연간 타임라인 — 점 데이터 (반응형)
   // ─────────────────────────────────────────────
   const yearPoints = useMemo<TLPoint[]>(() => {
-    const raw = EVENTS.map(e => ({
-      pct: e.id === 'now' ? 1 : ((e.month - 1) + (e.day - 1) / 31) / 12,
+    const raw = events.map(e => ({
+      /* ⚠️ 예전에는 ((월-1) + (일-1)/31) / 12 로 위치를 잡아, 달마다 길이가 다른데도
+         전부 31일로 나눠 점이 실제 시점에서 밀렸다. 이제 경과 비율을 그대로 쓴다. */
+      pct: e.pct,
       event: e,
     }))
-    return clusterPoints(raw, 0.02)
-  }, [])
+    return clusterPoints(raw, 0.02, trackPx)
+  }, [events, trackPx])
   const yearTicks = useMemo(() => MONTHS.map((m, i) => ({ label: m, pct: i / 12 })), [])
 
   // ─────────────────────────────────────────────
@@ -318,8 +309,8 @@ export default function CosmicCalendarClient() {
     const { startSec, endSec } = dec31Range
     const secOf = (e: Event) => (e.hour ?? 0) * 3600 + (e.minute ?? 0) * 60 + (e.second ?? 0)
     const raw = dec31Filtered.map(e => ({ pct: (secOf(e) - startSec) / (endSec - startSec), event: e }))
-    return clusterPoints(raw, 0.05)
-  }, [dec31Filtered, dec31Range])
+    return clusterPoints(raw, 0.05, trackPx)
+  }, [dec31Filtered, dec31Range, trackPx])
 
   const dec31Ticks = useMemo(() => {
     if (zoomLevel === '24h') return [0, 6, 12, 18, 24].map(h => ({ label: `${h}시`, pct: h / 24 }))
@@ -354,7 +345,7 @@ export default function CosmicCalendarClient() {
   const compressionData = useMemo(() => {
     // 주요 사건만
     const keyIds = ['bigbang', 'milkyWay', 'solarSystem', 'earth', 'firstLife', 'multicellular', 'cambrian', 'dinosaurs', 'dinoExtinction', 'homoSapiens', 'agriculture', 'industrial', 'now']
-    const keyEvts = keyIds.map(id => EVENTS.find(e => e.id === id)!).filter(Boolean)
+    const keyEvts = keyIds.map(id => events.find(e => e.id === id)!).filter(Boolean)
 
     if (compressionMode === '1year') {
       return keyEvts.map(e => ({
@@ -405,7 +396,7 @@ export default function CosmicCalendarClient() {
       }
       return { name: e.name, real: fmtRealYears(e.realYearsAgo), compressed: label }
     })
-  }, [compressionMode])
+  }, [compressionMode, events])
 
   // ─────────────────────────────────────────────
   // 복사
@@ -503,6 +494,7 @@ export default function CosmicCalendarClient() {
               activeKey={activePoint}
               onSelect={setActivePoint}
               ariaLabel="연간 코스믹 타임라인"
+              onTrackWidth={handleTrackWidth}
             />
             <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 8, lineHeight: 1.7 }}>
               왼쪽 끝: 빅뱅(1월 1일) · 오른쪽 끝: <strong style={{ color: '#0D9488' }}>현재(12월 31일 24:00)</strong>
@@ -524,7 +516,7 @@ export default function CosmicCalendarClient() {
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>월별 사건 요약</span>
-              <span className={s.cardLabelHint}>{EVENTS.length - 1}개 주요 사건</span>
+              <span className={s.cardLabelHint}>{events.length - 1}개 주요 사건</span>
             </div>
             <div className={s.monthGrid}>
               {MONTHS.map((m, i) => {
@@ -589,6 +581,7 @@ export default function CosmicCalendarClient() {
               activeKey={activePoint}
               onSelect={setActivePoint}
               ariaLabel="12월 31일 코스믹 타임라인"
+              onTrackWidth={handleTrackWidth}
             />
           </div>
 

@@ -100,6 +100,7 @@
   border: none;
   border-radius: 8px;
   padding: 10px 6px;
+  min-height: 44px;
   font-size: 13px;
   color: var(--muted);
   font-family: 'Noto Sans KR', sans-serif;
@@ -300,6 +301,17 @@
   border: 2px solid #0a0a2e;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+/* ⚠️ 보이는 점은 16px이지만 그대로는 WCAG 2.2 SC 2.5.8(AA)의 24×24 최소 크기에 미달한다.
+      모양은 그대로 두고 누를 수 있는 영역만 24px로 넓힌다. */
+.tlDot::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
 }
 .tlDot:hover { transform: scale(1.25); }
 .tlPointActive .tlDot { transform: scale(1.3); }

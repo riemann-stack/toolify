@@ -5,6 +5,18 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { EVENTS, cosmicPosition, yearsAgoOf, fmtRealYears, type CatKey } from './cosmicData'
+
+/* 안내 표에 실을 사건 — 도구와 같은 데이터에서 날짜를 계산한다 */
+const TABLE_IDS = ['bigbang', 'firstGalaxies', 'milkyWay', 'solarSystem', 'earth', 'firstLife',
+  'cambrian', 'dinosaurs', 'dinoExtinction', 'genusHomo', 'homoSapiens', 'agriculture', 'writing', 'industrial']
+/** 역사 시대 사건의 '몇 년 전'은 해마다 바뀌므로, 정적 표에서는 연도를 그대로 보여 준다.
+    이 기준 연도는 날짜 계산에만 쓰이고 표시에는 나오지 않는다(억 단위에서는 차이가 없다). */
+const TABLE_REF_YEAR = 2026
+const CAT_COLOR: Record<CatKey, string> = {
+  cosmic: '#9B59B6', solar: '#A16207', earth: '#0891B2',
+  life: '#059669', human: '#EA580C', civilization: '#DC2626', now: '#0D9488',
+}
 
 export const metadata = buildMetadata({
   path: '/tools/edu/cosmic-calendar',
@@ -101,22 +113,18 @@ export default function CosmicCalendarPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { d: '1월 1일',           e: '💥 빅뱅 (우주 탄생)',         r: '138억 년 전',  c: '#9B59B6' },
-                  { d: '1월 22일',          e: '🌌 최초의 은하 형성',         r: '134억 년 전',  c: '#9B59B6' },
-                  { d: '3월 16일',          e: '🌠 우리 은하수 형성',         r: '약 110억 년 전', c: '#9B59B6' },
-                  { d: '8월 31일',          e: '☀️ 태양계 형성',              r: '46억 년 전',   c: '#A16207' },
-                  { d: '9월 2일',           e: '🌍 지구 형성',                r: '45.4억 년 전', c: '#0891B2' },
-                  { d: '9월 21일',          e: '🦠 최초의 생명',              r: '38억 년 전',   c: '#059669' },
-                  { d: '12월 17일',         e: '🦑 캄브리아기 대폭발',        r: '5.4억 년 전',  c: '#059669' },
-                  { d: '12월 25일',         e: '🦕 공룡 등장',                r: '2.3억 년 전',  c: '#059669' },
-                  { d: '12월 30일',         e: '☄️ 공룡 멸종 / 영장류',       r: '6,600만 년 전',c: '#059669' },
-                  { d: '12월 31일 22:24',   e: '🧍 인류 조상 (호모 속)',      r: '약 250만 년 전', c: '#EA580C' },
-                  { d: '12월 31일 23:48',   e: '👤 현생 인류',                r: '30만 년 전',   c: '#EA580C' },
-                  { d: '12월 31일 23:59:32',e: '🌾 농업 혁명',                r: '12,000년 전',  c: '#DC2626' },
-                  { d: '12월 31일 23:59:46',e: '📜 문자 발명',                r: '5,500년 전',   c: '#DC2626' },
-                  { d: '12월 31일 23:59:59.4',e: '⚙️ 산업혁명',               r: '250년 전',     c: '#DC2626' },
-                ].map((r, i) => (
+                {/* ⚠️ 예전에는 이 표의 날짜를 손으로 적어 두어, 도구가 계산하는 값과 어긋났다
+                    (은하수는 66일 차). 같은 데이터 모듈에서 생성해 어긋날 수 없게 한다. */}
+                {TABLE_IDS.map((id) => {
+                  const e = EVENTS.find((x) => x.id === id)!
+                  const ry = yearsAgoOf(e, TABLE_REF_YEAR)
+                  return {
+                    d: cosmicPosition(ry).label,
+                    e: `${e.icon} ${e.name}`,
+                    r: typeof e.year === 'number' && e.year > -10_000 ? `${e.year < 0 ? `기원전 ${-e.year}` : `${e.year}`}년` : fmtRealYears(ry),
+                    c: CAT_COLOR[e.category],
+                  }
+                }).map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>
