@@ -1,5 +1,12 @@
+/* AA 잉크: teal/cyan/orange/emerald 600은 밝은 배경 위 작은 텍스트 3.5~3.8:1로 미달
+   → 텍스트는 700레벨(#0F766E·#0E7490·#C2410C·#047857), 빨강 틴트 위 빨강은 #B91C1C,
+   이중 틴트(hero+chip) 위는 800레벨. 보더·배경·큰 볼드는 600 유지.
+   ⚠️ 모듈 :root{--var}는 전역 적용 안 됨(circuit-simulator에서 확인) — 리터럴 hex. */
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* 탭 패널 — wrap과 같은 세로 리듬 */
+.tabPanel { display: flex; flex-direction: column; gap: 12px; }
 
 /* ── 면책 ── */
 .disclaimer {
@@ -41,8 +48,8 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive {
-  background: rgba(13,148,136,0.18);
-  color: #0D9488;
+  background: rgba(13,148,136,0.10);
+  color: #0F766E;
   font-weight: 700;
 }
 
@@ -106,6 +113,38 @@
 .bigInput[type=number], .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 .gridTwo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* RT60 치수·재질 3열 — 480px 이하에선 79px 칸에 옵션이 잘려 1열로 */
+.gridThree { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .gridThree { grid-template-columns: 1fr; } }
+
+/* 거리 직접 입력 행 */
+.distInputRow { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.distNumInput {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  text-align: right;
+  outline: none;
+}
+.distNumInput:focus { border-color: #0D9488; }
+.distUnitSelect {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 8px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  flex-shrink: 0;
+}
 @media (max-width: 480px) { .gridTwo { grid-template-columns: 1fr; } }
 
 /* ── 슬라이더 ── */
@@ -123,7 +162,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 16px;
-  color: #0D9488;
+  color: #0F766E;
   text-align: right;
 }
 
@@ -149,7 +188,7 @@
 }@media (hover: hover) {
   .quickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.quickActive { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.quickActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
 
 /* ── 거리 프리셋 ── */
 .distPresetGrid {
@@ -174,7 +213,7 @@
 }@media (hover: hover) {
   .distPresetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.distPresetActive { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.distPresetActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
 .distPresetEmoji { font-size: 18px; display: block; margin-bottom: 2px; }
 .distPresetMeta { font-size: 10px; color: var(--muted); display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
 
@@ -187,14 +226,9 @@
   background: var(--bg2);
   border: 1px solid;
 }
-.heroSafe      { border-color: #059669; background: rgba(16,185,129,0.14); }
-.heroLowRisk   { border-color: #A16207; background: rgba(161,98,7,0.14); }
-.heroMidRisk   { border-color: #EA580C; background: rgba(234,88,12,0.14); }
-.heroHighRisk  { border-color: #DC2626; background: rgba(220,38,38,0.14); }
-.heroExtreme   { border-color: #9B59B6; background: rgba(155,89,182,0.08); }
-.heroNeutral   { border-color: #0D9488; background: rgba(13,148,136,0.14); }
+.heroNeutral   { border-color: #0D9488; background: rgba(13,148,136,0.10); }
 
-.heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
+.heroLead { font-size: 13px; color: var(--muted-strong); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroLevel {
   display: inline-block;
   font-size: 13px;
@@ -204,12 +238,7 @@
   margin-bottom: 12px;
   font-family: 'Noto Sans KR', sans-serif;
 }
-.heroSafe      .heroLevel { background: rgba(16,185,129,0.18);  color: #059669; }
-.heroLowRisk   .heroLevel { background: rgba(161,98,7,0.18);   color: #A16207; }
-.heroMidRisk   .heroLevel { background: rgba(234,88,12,0.18);  color: #EA580C; }
-.heroHighRisk  .heroLevel { background: rgba(220,38,38,0.18); color: #DC2626; }
-.heroExtreme   .heroLevel { background: rgba(155,89,182,0.18);  color: #9333EA; }
-.heroNeutral   .heroLevel { background: rgba(13,148,136,0.15);  color: #0D9488; }
+.heroNeutral   .heroLevel { background: rgba(13,148,136,0.10);  color: #115E59; }
 
 .heroNum {
   font-family: 'Inter', system-ui, sans-serif;
@@ -217,15 +246,10 @@
   font-weight: 800;
   letter-spacing: -1.5px;
   line-height: 1;
-  color: #0D9488;
+  color: #0F766E;
 }
-.heroSafe     .heroNum { color: #059669; }
-.heroLowRisk  .heroNum { color: #A16207; }
-.heroMidRisk  .heroNum { color: #EA580C; }
-.heroHighRisk .heroNum { color: #DC2626; }
-.heroExtreme  .heroNum { color: #9333EA; }
-.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
-.heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
+.heroUnit { font-size: 18px; color: var(--muted-strong); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroSub { font-size: 13px; color: var(--muted-strong); margin-top: 12px; line-height: 1.7; }
 .heroSub strong { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
@@ -243,7 +267,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.safetyNote strong { color: #DC2626; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.safetyNote strong { color: #B91C1C; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
 
 /* ── 음파 시각화 SVG ── */
 .waveWrap {
@@ -300,15 +324,15 @@
   white-space: nowrap;
 }
 .compareTable .currentRow td {
-  background: rgba(13,148,136,0.14);
+  background: rgba(13,148,136,0.10);
 }
-.compareTable .currentRow td:first-child { color: #0D9488; }
+.compareTable .currentRow td:first-child { color: #0F766E; }
 .compareTable .machSpeed td {
-  background: rgba(13,148,136,0.18);
+  background: rgba(13,148,136,0.10);
 }
-.compareTable .machSpeed td:first-child { color: #0D9488; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
-.compareTable .superSonic td { background: rgba(220,38,38,0.14); }
-.compareTable .superSonic td:first-child { color: #DC2626; }
+.compareTable .machSpeed td:first-child { color: #0F766E; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.compareTable .superSonic td { background: rgba(220,38,38,0.10); }
+.compareTable .superSonic td:first-child { color: #B91C1C; }
 
 .tableScroll { overflow-x: auto; }
 
@@ -397,7 +421,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
-  color: #0D9488;
+  color: #0F766E;
   margin-top: 4px;
 }
 .mediumCardNote { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.6; }
@@ -427,7 +451,7 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.modeActive { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.modeActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
 
 /* ── 에코 인식 등급 ── */
 .echoLevels {
@@ -456,18 +480,18 @@
   margin-bottom: 4px;
 }
 .echoLow    { border-top-color: #059669; }
-.echoLow    strong { color: #059669; }
+.echoLow    strong { color: #047857; }
 .echoMid    { border-top-color: #A16207; }
 .echoMid    strong { color: #A16207; }
 .echoHigh   { border-top-color: #EA580C; }
-.echoHigh   strong { color: #EA580C; }
+.echoHigh   strong { color: #C2410C; }
 .echoVHigh  { border-top-color: #DC2626; }
-.echoVHigh  strong { color: #DC2626; }
+.echoVHigh  strong { color: #B91C1C; }
 .echoActive { box-shadow: 0 0 0 2px currentColor; }
 
 /* ── 잔향 시간 시각화 ── */
 .rt60Card {
-  background: rgba(8,145,178,0.14);
+  background: rgba(8,145,178,0.08);
   border: 1px solid rgba(8,145,178,0.30);
   border-radius: 12px;
   padding: 14px 18px;
@@ -475,7 +499,7 @@
 .rt60Title {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
-  color: #0891B2;
+  color: #155E75;
   font-size: 13px;
   margin-bottom: 8px;
 }
@@ -483,7 +507,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 13px;
-  color: var(--muted);
+  color: var(--muted-strong);
   padding: 4px 0;
 }
 .rt60Row strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
@@ -524,9 +548,9 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 .resCardSound  { border-top-color: #EA580C; }
-.resCardSound  .resultValue { color: #EA580C; }
+.resCardSound  .resultValue { color: #C2410C; }
 .resCardLight  { border-top-color: #0D9488; }
-.resCardLight  .resultValue { color: #0D9488; }
+.resCardLight  .resultValue { color: #0F766E; }
 .resCardDist   { border-top-color: #A16207; }
 .resCardDist   .resultValue { color: #A16207; }
 .resCardRatio  { border-top-color: #9333EA; }
@@ -546,6 +570,6 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #0D9488; color: #0D9488; }
+  .copyBtn:hover { border-color: #0D9488; color: #0F766E; }
 }
-.copied { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.copied { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }

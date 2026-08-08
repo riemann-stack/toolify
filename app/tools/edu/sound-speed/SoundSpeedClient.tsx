@@ -1,129 +1,41 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import s from './sound-speed.module.css'
+import {
+  LIGHT_SPEED, calcSoundSpeed, fmtDist, fmtTime, THUNDER_WARNING,
+  COMMON_DISTANCES, VEHICLE_SPEEDS, MACH_ROW_INDEX, MEDIUM_SPEEDS,
+  ABSORPTION, ROOM_PRESETS, calcEcho, calcRT60,
+  DIST_SLIDER_MAX, DIST_MAX_M,
+  type WallMat, type FloorMat, type CeilMat,
+} from './soundData'
 
-// ─────────────────────────────────────────────
-// 상수
-// ─────────────────────────────────────────────
-const LIGHT_SPEED = 299_792_458 // m/s
-const SOUND_AT_20C = 343        // m/s
-
-function calcSoundSpeed(tempC: number): number {
-  return 331.3 + 0.606 * tempC
-}
-
-// ─────────────────────────────────────────────
-// 데이터
-// ─────────────────────────────────────────────
-const COMMON_DISTANCES = [
-  { name: '교실 길이',         m: 10,         emoji: '🏫', meta: '10m' },
-  { name: '100m 달리기',      m: 100,        emoji: '🏃', meta: '100m' },
-  { name: '축구장 가로',       m: 105,        emoji: '⚽', meta: '105m' },
-  { name: '63빌딩 높이',      m: 250,        emoji: '🏢', meta: '250m' },
-  { name: '에펠탑 높이',      m: 330,        emoji: '🗼', meta: '330m' },
-  { name: '롯데월드타워',      m: 555,        emoji: '🏗️', meta: '555m' },
-  { name: '한강 다리',         m: 1_065,      emoji: '🌉', meta: '1.07km' },
-  { name: '한라산 높이',       m: 1_947,      emoji: '⛰️', meta: '1.95km' },
-  { name: '5km 마라톤',        m: 5_000,      emoji: '🏃‍♂️', meta: '5km' },
-  { name: '서울→부산',         m: 325_000,    emoji: '🚄', meta: '325km' },
-  { name: '한반도 남북',       m: 1_100_000,  emoji: '🗺️', meta: '1,100km' },
-  { name: '지구 둘레',         m: 40_075_000, emoji: '🌍', meta: '40,075km' },
+type TabId = 'thunder' | 'arrival' | 'vs' | 'echo'
+const TAB_DEFS: { id: TabId; label: string }[] = [
+  { id: 'thunder', label: '천둥 번개 거리' },
+  { id: 'arrival', label: '소리 도달 시간' },
+  { id: 'vs',      label: '빛 vs 소리' },
+  { id: 'echo',    label: '반향·에코' },
 ]
-
-const VEHICLE_SPEEDS = [
-  { name: '🚶 걸음',          kmh: 5,    isSuperSonic: false },
-  { name: '🚗 자동차 (시내)', kmh: 60,   isSuperSonic: false },
-  { name: '🛣️ 자동차 (고속)', kmh: 100,  isSuperSonic: false },
-  { name: '🚄 KTX',           kmh: 305,  isSuperSonic: false },
-  { name: '✈️ 여객기',         kmh: 900,  isSuperSonic: false },
-  { name: '🌬️ 음속 (1마하)',   kmh: 1235, isSuperSonic: false, isMach: true },
-  { name: '🛩️ F-16 전투기',    kmh: 2120, isSuperSonic: true },
-  { name: '🛩️ F-15 전투기',    kmh: 3000, isSuperSonic: true },
-  { name: '🛸 SR-71 정찰기',   kmh: 3530, isSuperSonic: true },
-]
-
-const MEDIUM_SPEEDS = [
-  { medium: '진공',     speed: 0,      cls: 'mediumVacuum',  note: '소리 전달 불가' },
-  { medium: '공기',     speed: 343,    cls: 'mediumAir',     note: '20°C 기준, 일반적' },
-  { medium: '물',       speed: 1_482,  cls: 'mediumWater',   note: '공기의 약 4.3배' },
-  { medium: '바닷물',   speed: 1_531,  cls: 'mediumWater',   note: '담수보다 약간 빠름' },
-  { medium: '나무',     speed: 3_300,  cls: 'mediumWood',    note: '공기의 약 9.6배' },
-  { medium: '벽돌',     speed: 3_650,  cls: 'mediumWood',    note: '공기의 약 10.6배' },
-  { medium: '구리',     speed: 4_600,  cls: 'mediumMetal',   note: '공기의 약 13배' },
-  { medium: '강철',     speed: 5_960,  cls: 'mediumMetal',   note: '공기의 약 17배' },
-  { medium: '다이아몬드', speed: 12_000, cls: 'mediumCrystal', note: '공기의 약 35배 — 가장 빠름' },
-]
-
-// 잔향 시간 — 재질별 흡음률 (단순화)
-const ABSORPTION = {
-  wall: {
-    concrete: 0.02,
-    brick:    0.03,
-    wood:     0.10,
-    gypsum:   0.15,
-    panel:    0.30,
-  },
-  floor: {
-    concrete: 0.02,
-    tile:     0.03,
-    wood:     0.07,
-    carpet:   0.30,
-  },
-  ceiling: {
-    concrete: 0.02,
-    gypsum:   0.10,
-    panel:    0.40,
-  },
-}
-const ROOM_PRESETS = [
-  { name: '작은 방',  rt: 0.4, w: 4,  d: 4,  h: 2.5 },
-  { name: '교실',     rt: 0.6, w: 8,  d: 8,  h: 3 },
-  { name: '강당',     rt: 1.2, w: 20, d: 20, h: 8 },
-  { name: '콘서트홀', rt: 1.8, w: 30, d: 30, h: 15 },
-  { name: '대성당',   rt: 4.0, w: 50, d: 50, h: 25 },
-  { name: '동굴',     rt: 8.0, w: 100, d: 100, h: 30 },
-]
-
-// ─────────────────────────────────────────────
-// 유틸
-// ─────────────────────────────────────────────
-function fmtDist(m: number): string {
-  if (!Number.isFinite(m)) return '-'
-  if (Math.abs(m) >= 1_000_000) return `${(m / 1_000_000).toFixed(2)} 백만 km`
-  if (Math.abs(m) >= 1000)      return `${(m / 1000).toFixed(2)} km`
-  return `${m.toFixed(1)} m`
-}
-function fmtTime(s: number): string {
-  if (!Number.isFinite(s)) return '-'
-  if (s < 0.001) return `${(s * 1_000_000).toFixed(2)} µs`
-  if (s < 1)     return `${(s * 1000).toFixed(2)} ms`
-  if (s < 60)    return `${s.toFixed(2)}초`
-  if (s < 3600)  return `${Math.floor(s / 60)}분 ${Math.round(s % 60)}초`
-  if (s < 86400) {
-    const h = Math.floor(s / 3600)
-    const m = Math.floor((s % 3600) / 60)
-    return `${h}시간 ${m}분`
-  }
-  const d = Math.floor(s / 86400)
-  const h = Math.floor((s % 86400) / 3600)
-  return `${d}일 ${h}시간`
-}
 
 // ─────────────────────────────────────────────
 // 컴포넌트
 // ─────────────────────────────────────────────
 export default function SoundSpeedClient() {
-  const [tab, setTab] = useState<'thunder' | 'arrival' | 'vs' | 'echo'>('thunder')
+  const [tab, setTab] = useState<TabId>('thunder')
   const [tempC, setTempC] = useState<number>(20)
   const soundSpeed = useMemo(() => calcSoundSpeed(tempC), [tempC])
+  /* SVG gradient id는 인스턴스별 고유화 */
+  const gradId = `lightning-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
 
   // 탭 1
   const [thunderSec, setThunderSec] = useState<number>(5)
 
   // 탭 2
   const [distM, setDistM] = useState<number>(100)
+  const [distDraft, setDistDraft] = useState<string | null>(null)
+  const [distUnit, setDistUnit] = useState<'m' | 'km'>('m')
 
   // 탭 4
   const [echoMode, setEchoMode] = useState<'simple' | 'rt60'>('simple')
@@ -132,68 +44,59 @@ export default function SoundSpeedClient() {
   const [roomW, setRoomW] = useState<number>(8)
   const [roomD, setRoomD] = useState<number>(8)
   const [roomH, setRoomH] = useState<number>(3)
-  const [wallMat, setWallMat] = useState<keyof typeof ABSORPTION.wall>('gypsum')
-  const [floorMat, setFloorMat] = useState<keyof typeof ABSORPTION.floor>('wood')
-  const [ceilMat, setCeilMat] = useState<keyof typeof ABSORPTION.ceiling>('gypsum')
+  const [roomDrafts, setRoomDrafts] = useState<Record<string, string>>({})
+  const [wallMat, setWallMat] = useState<WallMat>('gypsum')
+  const [floorMat, setFloorMat] = useState<FloorMat>('carpet')
+  const [ceilMat, setCeilMat] = useState<CeilMat>('panel')
+  const [activeRoom, setActiveRoom] = useState<string>('교실')
 
   const [copied, setCopied] = useState<boolean>(false)
 
   // ─────────────────────────────────────────────
-  // 탭 1 계산 — 천둥 거리
+  // 탭 1 계산 — 천둥 거리 (hero와 참조 표가 같은 등급 함수 사용)
   // ─────────────────────────────────────────────
   const thunderResult = useMemo(() => {
-    const distM = thunderSec * soundSpeed
-    let level: 'safe' | 'lowRisk' | 'midRisk' | 'highRisk' | 'extreme'
-    let levelText: string
-    if (thunderSec >= 30)      { level = 'safe';     levelText = '🟢 안전 (10km+)' }
-    else if (thunderSec >= 10) { level = 'lowRisk';  levelText = '🟡 약간 가까움 (3~10km)' }
-    else if (thunderSec >= 5)  { level = 'midRisk';  levelText = '🟠 가까움 (1.7~3km)' }
-    else if (thunderSec >= 1)  { level = 'highRisk'; levelText = '🔴 매우 가까움' }
-    else                        { level = 'extreme';  levelText = '🟣 위험 — 직격 가능성' }
-    return { distM, distKm: distM / 1000, distMile: distM / 1609.34, level, levelText }
+    const dist = thunderSec * soundSpeed
+    return { distM: dist, distKm: dist / 1000 }
   }, [thunderSec, soundSpeed])
 
   // ─────────────────────────────────────────────
   // 탭 2 — 소리 도달 시간
   // ─────────────────────────────────────────────
-  const arrivalResult = useMemo(() => {
-    const soundTime = distM / soundSpeed
-    const lightTime = distM / LIGHT_SPEED
-    return {
-      soundTime, lightTime,
-      diff: soundTime - lightTime,
-      ratio: LIGHT_SPEED / soundSpeed,
-    }
-  }, [distM, soundSpeed])
+  const arrivalResult = useMemo(() => ({
+    soundTime: distM / soundSpeed,
+    lightTime: distM / LIGHT_SPEED,
+    ratio: LIGHT_SPEED / soundSpeed,
+  }), [distM, soundSpeed])
 
   // ─────────────────────────────────────────────
   // 탭 4 — 에코·RT60
   // ─────────────────────────────────────────────
-  const echoSimple = useMemo(() => {
-    const round = wallM * 2
-    const delayS = round / soundSpeed
-    let cat: 'low' | 'mid' | 'high' | 'vhigh'
-    if (delayS < 0.05)      cat = 'low'
-    else if (delayS < 0.1)  cat = 'mid'
-    else if (delayS < 1)    cat = 'high'
-    else                    cat = 'vhigh'
-    return { delayS, delayMs: delayS * 1000, cat }
-  }, [wallM, soundSpeed])
-
-  const rt60Result = useMemo(() => {
-    const V = roomW * roomD * roomH
-    const wallArea = 2 * (roomW * roomH + roomD * roomH)
-    const floorArea = roomW * roomD
-    const ceilArea = roomW * roomD
-    const A = wallArea * ABSORPTION.wall[wallMat]
-            + floorArea * ABSORPTION.floor[floorMat]
-            + ceilArea * ABSORPTION.ceiling[ceilMat]
-    const rt60 = A > 0 ? 0.161 * V / A : 0
-    return { V, A, rt60 }
-  }, [roomW, roomD, roomH, wallMat, floorMat, ceilMat])
+  const echoSimple = useMemo(() => calcEcho(wallM, soundSpeed), [wallM, soundSpeed])
+  const rt60Result = useMemo(
+    () => calcRT60(roomW, roomD, roomH, wallMat, floorMat, ceilMat),
+    [roomW, roomD, roomH, wallMat, floorMat, ceilMat],
+  )
 
   function applyRoomPreset(p: typeof ROOM_PRESETS[0]) {
     setRoomW(p.w); setRoomD(p.d); setRoomH(p.h)
+    setWallMat(p.wall); setFloorMat(p.floor); setCeilMat(p.ceil)
+    setRoomDrafts({})
+    setActiveRoom(p.name)
+  }
+
+  /* 치수 직접 입력 — 타이핑 중 빈 문자열은 draft로 보존(`||` 폴백이면 마지막 자리를 지울 수 없다) */
+  function roomInput(key: 'w' | 'd' | 'h', value: number, setValue: (n: number) => void, max: number) {
+    return {
+      value: roomDrafts[key] ?? String(value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        const raw = e.target.value
+        setRoomDrafts(prev => ({ ...prev, [key]: raw }))
+        const n = parseFloat(raw)
+        if (Number.isFinite(n) && n >= 1) { setValue(Math.min(n, max)); setActiveRoom('') }
+      },
+      onBlur: () => setRoomDrafts(prev => { const next = { ...prev }; delete next[key]; return next }),
+    }
   }
 
   // ─────────────────────────────────────────────
@@ -206,7 +109,7 @@ export default function SoundSpeedClient() {
         `[천둥 번개 거리]`,
         `시간 차: ${thunderSec}초 · 기온: ${tempC}°C (음속 ${soundSpeed.toFixed(1)}m/s)`,
         `거리: ${fmtDist(thunderResult.distM)} (${thunderResult.distKm.toFixed(2)}km)`,
-        `등급: ${thunderResult.levelText}`,
+        `⚠️ ${THUNDER_WARNING}`,
         ``,
         `https://youtil.kr/tools/edu/sound-speed`,
       ].join('\n')
@@ -253,7 +156,7 @@ export default function SoundSpeedClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -271,61 +174,78 @@ export default function SoundSpeedClient() {
         교육·학습 목적 시뮬레이터
       </Disclaimer>
 
-      {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'thunder' ? s.tabActive : ''}`} onClick={() => setTab('thunder')}>천둥 번개 거리</button>
-        <button className={`${s.tabBtn} ${tab === 'arrival' ? s.tabActive : ''}`} onClick={() => setTab('arrival')}>소리 도달 시간</button>
-        <button className={`${s.tabBtn} ${tab === 'vs'      ? s.tabActive : ''}`} onClick={() => setTab('vs')}>빛 vs 소리</button>
-        <button className={`${s.tabBtn} ${tab === 'echo'    ? s.tabActive : ''}`} onClick={() => setTab('echo')}>반향·에코</button>
+      {/* 탭 — tablist 패턴 (화살표 키 이동 포함) */}
+      <div className={s.tabs} role="tablist" aria-label="계산기 모드">
+        {TAB_DEFS.map(t => (
+          <button
+            key={t.id}
+            id={`ss-tab-${t.id}`}
+            role="tab"
+            aria-selected={tab === t.id}
+            aria-controls={`ss-panel-${t.id}`}
+            tabIndex={tab === t.id ? 0 : -1}
+            className={`${s.tabBtn} ${tab === t.id ? s.tabActive : ''}`}
+            onClick={() => setTab(t.id)}
+            onKeyDown={e => {
+              const i = TAB_DEFS.findIndex(x => x.id === t.id)
+              let next = -1
+              if (e.key === 'ArrowRight') next = (i + 1) % TAB_DEFS.length
+              else if (e.key === 'ArrowLeft') next = (i + TAB_DEFS.length - 1) % TAB_DEFS.length
+              else if (e.key === 'Home') next = 0
+              else if (e.key === 'End') next = TAB_DEFS.length - 1
+              if (next >= 0) {
+                e.preventDefault()
+                setTab(TAB_DEFS[next].id)
+                document.getElementById(`ss-tab-${TAB_DEFS[next].id}`)?.focus()
+              }
+            }}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
       {/* 공통: 온도 슬라이더 */}
       <div className={s.card}>
         <div className={s.cardLabel}>
-          <span>외부 기온 (°C)</span>
+          <label htmlFor="ss-temp">외부 기온 (°C)</label>
           <span className={s.cardLabelHint}>음속 = 331.3 + 0.606 × T</span>
         </div>
         <div className={s.sliderRow}>
-          <input type="range" min={-20} max={40} step={1} value={tempC} onChange={e => setTempC(parseFloat(e.target.value))} />
+          <input id="ss-temp" type="range" min={-20} max={40} step={1} value={tempC} onChange={e => setTempC(parseFloat(e.target.value))} />
           <span className={s.sliderValue}>{tempC}°C</span>
         </div>
         <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7, textAlign: 'center' }}>
-          현재 음속: <strong style={{ color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{soundSpeed.toFixed(1)} m/s</strong>
-          {' '}≈ {(soundSpeed * 3.6).toFixed(0)} km/h ≈ <strong style={{ color: '#0D9488' }}>1마하</strong>
+          현재 음속: <strong style={{ color: '#0F766E', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{soundSpeed.toFixed(1)} m/s</strong>
+          {' '}≈ {(soundSpeed * 3.6).toFixed(0)} km/h = <strong style={{ color: '#0F766E' }}>1마하</strong> (이 온도 기준)
         </p>
       </div>
 
       {/* ─── TAB 1: 천둥 번개 거리 ─── */}
       {tab === 'thunder' && (
-        <>
+        <div role="tabpanel" id="ss-panel-thunder" aria-labelledby="ss-tab-thunder" className={s.tabPanel}>
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>번개 후 천둥까지 시간 (초)</span>
+              <label htmlFor="ss-thunder">번개 후 천둥까지 시간 (초)</label>
               <span className={s.cardLabelHint}>0.5~30초</span>
             </div>
             <div className={s.sliderRow}>
-              <input type="range" min={0.5} max={30} step={0.5} value={thunderSec} onChange={e => setThunderSec(parseFloat(e.target.value))} />
+              <input id="ss-thunder" type="range" min={0.5} max={30} step={0.5} value={thunderSec} onChange={e => setThunderSec(parseFloat(e.target.value))} />
               <span className={s.sliderValue}>{thunderSec.toFixed(1)}초</span>
             </div>
             <div className={s.quickRow} style={{ marginTop: 10 }}>
               {[1, 3, 5, 10, 20].map(t => (
-                <button key={t} className={`${s.quickBtn} ${Math.abs(thunderSec - t) < 0.01 ? s.quickActive : ''}`} onClick={() => setThunderSec(t)}>
+                <button key={t} type="button" aria-pressed={Math.abs(thunderSec - t) < 0.01}
+                  className={`${s.quickBtn} ${Math.abs(thunderSec - t) < 0.01 ? s.quickActive : ''}`} onClick={() => setThunderSec(t)}>
                   {t}초
                 </button>
               ))}
             </div>
           </div>
 
-          {/* HERO */}
-          <div className={`${s.hero} ${
-            thunderResult.level === 'safe'      ? s.heroSafe :
-            thunderResult.level === 'lowRisk'   ? s.heroLowRisk :
-            thunderResult.level === 'midRisk'   ? s.heroMidRisk :
-            thunderResult.level === 'highRisk'  ? s.heroHighRisk :
-            s.heroExtreme
-          }`}>
-            <p className={s.heroLead}>번개와의 거리</p>
-            <p className={s.heroLevel}>{thunderResult.levelText}</p>
+          {/* HERO — "안전 등급"은 표시하지 않는다: 천둥이 들리면 거리 무관 위험권(NWS) */}
+          <div role="status" className={`${s.hero} ${s.heroNeutral}`}>
+            <p className={s.heroLead}>번개와의 거리 (참고용)</p>
             <div>
               <span className={s.heroNum}>{thunderResult.distKm < 1 ? thunderResult.distM.toFixed(0) : thunderResult.distKm.toFixed(2)}</span>
               <span className={s.heroUnit}>{thunderResult.distKm < 1 ? 'm' : 'km'}</span>
@@ -336,10 +256,11 @@ export default function SoundSpeedClient() {
             </p>
           </div>
 
-          {/* 30-30 안전 안내 */}
+          {/* 낙뢰 안전 안내 — 거리와 무관하게 동일 */}
           <div className={s.safetyNote}>
-            ⚠️ <strong>NOAA &quot;30-30 규칙&quot;:</strong> 번개를 본 후 30초 이내 천둥이 들리면 즉시 실내로 대피.
-            마지막 천둥 후 <strong>30분간 실내 대기</strong>가 권장됩니다.
+            ⚠️ <strong>{THUNDER_WARNING}.</strong>
+            <br />NWS(미국 기상청) 권고: &quot;천둥이 들리면 실내로(When Thunder Roars, Go Indoors)&quot; —
+            마지막 천둥 후 <strong>30분간 실내 대기</strong>.
           </div>
 
           {/* 빠른 참조 표 */}
@@ -349,41 +270,42 @@ export default function SoundSpeedClient() {
               <span className={s.cardLabelHint}>{tempC}°C 기준</span>
             </div>
             <div className={s.tableScroll}>
-              <table className={s.compareTable} style={{ minWidth: 460 }}>
+              <table className={s.compareTable} style={{ minWidth: 380 }}>
                 <thead>
-                  <tr><th scope="col">시간</th><th scope="col">거리 (m)</th><th scope="col">거리 (km)</th><th scope="col">안전 등급</th></tr>
+                  <tr><th scope="col">시간</th><th scope="col">거리 (m)</th><th scope="col">거리 (km)</th></tr>
                 </thead>
                 <tbody>
                   {[1, 3, 5, 10, 15, 30].map(t => {
                     const d = t * soundSpeed
                     const isCurrent = Math.abs(thunderSec - t) < 0.01
-                    const lvl = t >= 30 ? '🟢 안전' : t >= 10 ? '🟡 약간 멀음' : t >= 5 ? '🟠 주의' : t >= 3 ? '🔴 가까움' : '🟣 위험'
                     return (
                       <tr key={t} className={isCurrent ? s.currentRow : ''}>
                         <td>{t}초</td>
                         <td>{d.toFixed(0)}m</td>
                         <td>{(d / 1000).toFixed(2)}km</td>
-                        <td>{lvl}</td>
                       </tr>
                     )
                   })}
                 </tbody>
               </table>
             </div>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
+              ※ 거리는 참고 정보입니다 — 몇 km든 천둥이 들리면 낙뢰 위험권입니다.
+            </p>
           </div>
 
-          {/* 음파 시각화 SVG — 모바일 친화 (400×240, 큰 폰트, 컴팩트 배치) */}
+          {/* 음파 시각화 SVG */}
           <div className={s.waveWrap}>
             <svg viewBox="0 0 400 240" className={s.waveSvg} preserveAspectRatio="xMidYMid meet" role="img" aria-label="번개와 천둥 음파 전파 도해">
               <defs>
-                <radialGradient id="lightning" cx="50%" cy="50%" r="50%">
+                <radialGradient id={gradId} cx="50%" cy="50%" r="50%">
                   <stop offset="0%"  stopColor="#A16207" stopOpacity="1" />
                   <stop offset="100%" stopColor="#A16207" stopOpacity="0" />
                 </radialGradient>
               </defs>
 
               {/* 번개 */}
-              <circle cx="60" cy="110" r="36" fill="url(#lightning)" opacity="0.7" />
+              <circle cx="60" cy="110" r="36" fill={`url(#${gradId})`} opacity="0.7" />
               <text x="60" y="122" fontSize="44" textAnchor="middle">⚡</text>
               <text x="60" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>번개</text>
               <text x="60" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>T = 0</text>
@@ -396,7 +318,7 @@ export default function SoundSpeedClient() {
 
               {/* 거리 표시 */}
               <line x1="100" y1="110" x2="320" y2="110" stroke="var(--muted)" strokeWidth="1.5" strokeDasharray="5 4" />
-              <text x="210" y="95" fontSize="22" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
+              <text x="210" y="95" fontSize="22" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
                 {thunderResult.distM.toFixed(0)}m
               </text>
 
@@ -410,30 +332,61 @@ export default function SoundSpeedClient() {
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={copyResult} type="button">
             {copied ? '✓ 복사됨' : '결과 복사하기'}
           </button>
-        </>
+        </div>
       )}
 
       {/* ─── TAB 2: 소리 도달 시간 ─── */}
       {tab === 'arrival' && (
-        <>
+        <div role="tabpanel" id="ss-panel-arrival" aria-labelledby="ss-tab-arrival" className={s.tabPanel}>
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>거리 (m)</span>
-              <span className={s.cardLabelHint}>1m ~ 40,000km</span>
+              <span className={s.cardLabelHint}>1m ~ 40,075km (지구 둘레)</span>
             </div>
             <div className={s.sliderRow}>
               <input
                 type="range"
+                aria-label="거리 (로그 스케일)"
                 min={0}
-                max={1000}
+                max={DIST_SLIDER_MAX}
                 step={1}
                 value={Math.log10(Math.max(1, distM)) * 100}
                 onChange={e => {
                   const v = parseFloat(e.target.value) / 100
-                  setDistM(Math.round(Math.pow(10, v)))
+                  setDistM(Math.min(DIST_MAX_M, Math.round(Math.pow(10, v))))
+                  setDistDraft(null)
                 }}
               />
               <span className={s.sliderValue}>{fmtDist(distM)}</span>
+            </div>
+            {/* 정확한 거리 직접 입력 — 프리셋에 없는 값은 슬라이더로 못 맞춘다 */}
+            <div className={s.distInputRow}>
+              <label className={s.subLabel} htmlFor="ss-dist-num" style={{ marginBottom: 0 }}>직접 입력</label>
+              <input
+                id="ss-dist-num"
+                className={s.distNumInput}
+                type="text" inputMode="decimal"
+                value={distDraft ?? String(distUnit === 'km' ? distM / 1000 : distM)}
+                onChange={e => {
+                  const raw = e.target.value.replace(/[^\d.]/g, '')
+                  setDistDraft(raw)
+                  const n = parseFloat(raw)
+                  if (Number.isFinite(n) && n > 0) {
+                    const m = distUnit === 'km' ? n * 1000 : n
+                    setDistM(Math.max(1, Math.min(DIST_MAX_M, Math.round(m))))
+                  }
+                }}
+                onBlur={() => setDistDraft(null)}
+              />
+              <select
+                aria-label="거리 단위"
+                className={s.distUnitSelect}
+                value={distUnit}
+                onChange={e => { setDistUnit(e.target.value as 'm' | 'km'); setDistDraft(null) }}
+              >
+                <option value="m">m</option>
+                <option value="km">km</option>
+              </select>
             </div>
             <div className={s.distPresetGrid} style={{ marginTop: 10 }}>
               {COMMON_DISTANCES.map(d => (
@@ -442,6 +395,7 @@ export default function SoundSpeedClient() {
                   className={`${s.distPresetBtn} ${distM === d.m ? s.distPresetActive : ''}`}
                   onClick={() => setDistM(d.m)}
                   type="button"
+                  aria-pressed={distM === d.m}
                 >
                   <span className={s.distPresetEmoji}>{d.emoji}</span>
                   {d.name}
@@ -490,8 +444,8 @@ export default function SoundSpeedClient() {
                       <tr key={d.m} className={isCurrent ? s.currentRow : ''}>
                         <td>{d.emoji} {d.name}</td>
                         <td>{d.meta}</td>
-                        <td style={{ color: '#EA580C' }}>{fmtTime(sT)}</td>
-                        <td style={{ color: '#0D9488' }}>{lT < 0.001 ? '거의 즉시' : fmtTime(lT)}</td>
+                        <td style={{ color: '#C2410C' }}>{fmtTime(sT)}</td>
+                        <td style={{ color: '#0F766E' }}>{lT < 0.001 ? '거의 즉시' : fmtTime(lT)}</td>
                       </tr>
                     )
                   })}
@@ -511,12 +465,12 @@ export default function SoundSpeedClient() {
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={copyResult} type="button">
             {copied ? '✓ 복사됨' : '결과 복사하기'}
           </button>
-        </>
+        </div>
       )}
 
       {/* ─── TAB 3: 빛 vs 소리 ─── */}
       {tab === 'vs' && (
-        <>
+        <div role="tabpanel" id="ss-panel-vs" aria-labelledby="ss-tab-vs" className={s.tabPanel}>
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>광속 vs 음속</span>
@@ -526,10 +480,10 @@ export default function SoundSpeedClient() {
               padding: '16px 18px', fontFamily: 'JetBrains Mono, Menlo, monospace',
               fontSize: 13, color: 'var(--text)', lineHeight: 2,
             }}>
-              <div>💡 <strong style={{ color: '#0D9488' }}>빛의 속도</strong>: 299,792,458 m/s ≈ 30만 km/s</div>
-              <div>🔊 <strong style={{ color: '#EA580C' }}>음속 (공기, {tempC}°C)</strong>: {soundSpeed.toFixed(1)} m/s</div>
+              <div>💡 <strong style={{ color: '#0F766E' }}>빛의 속도</strong>: 299,792,458 m/s ≈ 30만 km/s</div>
+              <div>🔊 <strong style={{ color: '#C2410C' }}>음속 (공기, {tempC}°C)</strong>: {soundSpeed.toFixed(1)} m/s</div>
               <div style={{ paddingLeft: 20, color: 'var(--muted)', fontSize: 12 }}>
-                → 빛은 소리의 약 <strong style={{ color: '#0D9488' }}>{Math.round(arrivalResult.ratio).toLocaleString()}배</strong> 빠름
+                → 빛은 소리의 약 <strong style={{ color: '#0F766E' }}>{Math.round(arrivalResult.ratio).toLocaleString()}배</strong> 빠름
               </div>
             </div>
           </div>
@@ -581,27 +535,38 @@ export default function SoundSpeedClient() {
               <span>마하 비교 (1마하 = 약 {(soundSpeed * 3.6).toFixed(0)} km/h)</span>
             </div>
             <div className={s.tableScroll}>
-              <table className={s.compareTable} style={{ minWidth: 480 }}>
+              <table className={s.compareTable} style={{ minWidth: 500 }}>
                 <thead>
-                  <tr><th scope="col">대상</th><th scope="col">속도 (km/h)</th><th scope="col">마하</th></tr>
+                  <tr><th scope="col">대상</th><th scope="col">속도 (km/h)</th><th scope="col">마하 (지상 {tempC}°C)</th><th scope="col">공인 마하*</th></tr>
                 </thead>
                 <tbody>
-                  {VEHICLE_SPEEDS.map((v, i) => {
-                    const mach = (v.kmh * 1000 / 3600) / soundSpeed
-                    const cls = v.isMach ? s.machSpeed : v.isSuperSonic ? s.superSonic : ''
-                    return (
-                      <tr key={i} className={cls}>
-                        <td>{v.name}</td>
-                        <td>{v.kmh.toLocaleString()} km/h</td>
-                        <td>{mach.toFixed(2)} 마하</td>
-                      </tr>
-                    )
-                  })}
+                  {(() => {
+                    /* 음속 행은 박제하지 않고 현재 온도로 동적 생성 — 항상 정확히 마하 1.00 */
+                    const rows: { name: string; kmh: number; isSuperSonic: boolean; isMach?: boolean; officialMach: number | null }[] =
+                      [...VEHICLE_SPEEDS]
+                    rows.splice(MACH_ROW_INDEX, 0, {
+                      name: `🌬️ 음속 (지상 ${tempC}°C)`, kmh: soundSpeed * 3.6, isSuperSonic: false, isMach: true, officialMach: null,
+                    })
+                    return rows.map((v, i) => {
+                      const mach = (v.kmh * 1000 / 3600) / soundSpeed
+                      const cls = v.isMach ? s.machSpeed : v.isSuperSonic ? s.superSonic : ''
+                      return (
+                        <tr key={i} className={cls}>
+                          <td>{v.name}</td>
+                          <td>{Math.round(v.kmh).toLocaleString()} km/h</td>
+                          <td>{mach.toFixed(2)}</td>
+                          <td>{v.officialMach !== null ? `약 ${v.officialMach}` : '—'}</td>
+                        </tr>
+                      )
+                    })
+                  })()}
                 </tbody>
               </table>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-              ⭐ 음속(1마하)은 자동차의 <strong style={{ color: '#0D9488' }}>약 12배</strong>, KTX의 <strong style={{ color: '#0D9488' }}>약 4배</strong> 빠릅니다.
+              * 마하수는 <strong style={{ color: 'var(--text)' }}>그 고도의 음속</strong> 기준입니다. 전투기·여객기의 공인 마하는
+              고고도(성층권, 음속 약 295m/s) 기준이라 지상 음속으로 나눈 값과 다릅니다.
+              <br />⭐ 음속(1마하)은 자동차의 <strong style={{ color: '#0F766E' }}>약 12배</strong>, KTX의 <strong style={{ color: '#0F766E' }}>약 4배</strong> 빠릅니다.
             </p>
           </div>
 
@@ -620,19 +585,19 @@ export default function SoundSpeedClient() {
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={copyResult} type="button">
             {copied ? '✓ 복사됨' : '결과 복사하기'}
           </button>
-        </>
+        </div>
       )}
 
       {/* ─── TAB 4: 반향·에코 ─── */}
       {tab === 'echo' && (
-        <>
+        <div role="tabpanel" id="ss-panel-echo" aria-labelledby="ss-tab-echo" className={s.tabPanel}>
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>모드 선택</span>
             </div>
             <div className={s.modeRow}>
-              <button className={`${s.modeBtn} ${echoMode === 'simple' ? s.modeActive : ''}`} onClick={() => setEchoMode('simple')}>단순 에코 (벽 반사)</button>
-              <button className={`${s.modeBtn} ${echoMode === 'rt60'   ? s.modeActive : ''}`} onClick={() => setEchoMode('rt60')}>잔향 시간 (RT60 / Sabine)</button>
+              <button type="button" aria-pressed={echoMode === 'simple'} className={`${s.modeBtn} ${echoMode === 'simple' ? s.modeActive : ''}`} onClick={() => setEchoMode('simple')}>단순 에코 (벽 반사)</button>
+              <button type="button" aria-pressed={echoMode === 'rt60'} className={`${s.modeBtn} ${echoMode === 'rt60' ? s.modeActive : ''}`} onClick={() => setEchoMode('rt60')}>잔향 시간 (RT60 / Sabine)</button>
             </div>
           </div>
 
@@ -640,16 +605,16 @@ export default function SoundSpeedClient() {
             <>
               <div className={s.card}>
                 <div className={s.cardLabel}>
-                  <span>벽까지 거리 (m)</span>
+                  <label htmlFor="ss-wall">벽까지 거리 (m)</label>
                   <span className={s.cardLabelHint}>5~200m</span>
                 </div>
                 <div className={s.sliderRow}>
-                  <input type="range" min={5} max={200} step={1} value={wallM} onChange={e => setWallM(parseFloat(e.target.value))} />
+                  <input id="ss-wall" type="range" min={5} max={200} step={1} value={wallM} onChange={e => setWallM(parseFloat(e.target.value))} />
                   <span className={s.sliderValue}>{wallM}m</span>
                 </div>
               </div>
 
-              <div className={`${s.hero} ${s.heroNeutral}`}>
+              <div role="status" className={`${s.hero} ${s.heroNeutral}`}>
                 <p className={s.heroLead}>에코 지연 시간</p>
                 <div>
                   <span className={s.heroNum}>{echoSimple.delayMs.toFixed(0)}</span>
@@ -682,11 +647,13 @@ export default function SoundSpeedClient() {
               <div className={s.card}>
                 <div className={s.cardLabel}>
                   <span>공간 프리셋</span>
-                  <span className={s.cardLabelHint}>클릭 시 자동 입력</span>
+                  <span className={s.cardLabelHint}>치수·재질 자동 입력</span>
                 </div>
                 <div className={s.distPresetGrid}>
                   {ROOM_PRESETS.map(p => (
-                    <button key={p.name} className={s.distPresetBtn} onClick={() => applyRoomPreset(p)} type="button">
+                    <button key={p.name} type="button" aria-pressed={activeRoom === p.name}
+                      className={`${s.distPresetBtn} ${activeRoom === p.name ? s.distPresetActive : ''}`}
+                      onClick={() => applyRoomPreset(p)}>
                       {p.name}<span className={s.distPresetMeta}>{p.w}×{p.d}×{p.h}m</span>
                     </button>
                   ))}
@@ -697,18 +664,18 @@ export default function SoundSpeedClient() {
                 <div className={s.cardLabel}>
                   <span>공간 크기 (m)</span>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+                <div className={s.gridThree}>
                   <div>
-                    <span className={s.subLabel}>가로 (W)</span>
-                    <input className={s.bigInput} type="number" inputMode="decimal" min="1" max="200" step="1" value={roomW} onChange={e => setRoomW(parseFloat(e.target.value) || 1)} />
+                    <label className={s.subLabel} htmlFor="ss-room-w">가로 (W)</label>
+                    <input id="ss-room-w" className={s.bigInput} type="text" inputMode="decimal" {...roomInput('w', roomW, setRoomW, 200)} />
                   </div>
                   <div>
-                    <span className={s.subLabel}>세로 (D)</span>
-                    <input className={s.bigInput} type="number" inputMode="decimal" min="1" max="200" step="1" value={roomD} onChange={e => setRoomD(parseFloat(e.target.value) || 1)} />
+                    <label className={s.subLabel} htmlFor="ss-room-d">세로 (D)</label>
+                    <input id="ss-room-d" className={s.bigInput} type="text" inputMode="decimal" {...roomInput('d', roomD, setRoomD, 200)} />
                   </div>
                   <div>
-                    <span className={s.subLabel}>높이 (H)</span>
-                    <input className={s.bigInput} type="number" inputMode="decimal" min="1" max="50" step="0.5" value={roomH} onChange={e => setRoomH(parseFloat(e.target.value) || 1)} />
+                    <label className={s.subLabel} htmlFor="ss-room-h">높이 (H)</label>
+                    <input id="ss-room-h" className={s.bigInput} type="text" inputMode="decimal" {...roomInput('h', roomH, setRoomH, 50)} />
                   </div>
                 </div>
               </div>
@@ -717,10 +684,10 @@ export default function SoundSpeedClient() {
                 <div className={s.cardLabel}>
                   <span>표면 재질 (흡음률 자동)</span>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+                <div className={s.gridThree}>
                   <div>
-                    <span className={s.subLabel}>벽</span>
-                    <select className={s.bigInput} value={wallMat} onChange={e => setWallMat(e.target.value as keyof typeof ABSORPTION.wall)}>
+                    <label className={s.subLabel} htmlFor="ss-mat-wall">벽</label>
+                    <select id="ss-mat-wall" className={s.bigInput} value={wallMat} onChange={e => { setWallMat(e.target.value as WallMat); setActiveRoom('') }}>
                       <option value="concrete">콘크리트 (0.02)</option>
                       <option value="brick">벽돌 (0.03)</option>
                       <option value="wood">나무 (0.10)</option>
@@ -729,8 +696,8 @@ export default function SoundSpeedClient() {
                     </select>
                   </div>
                   <div>
-                    <span className={s.subLabel}>바닥</span>
-                    <select className={s.bigInput} value={floorMat} onChange={e => setFloorMat(e.target.value as keyof typeof ABSORPTION.floor)}>
+                    <label className={s.subLabel} htmlFor="ss-mat-floor">바닥</label>
+                    <select id="ss-mat-floor" className={s.bigInput} value={floorMat} onChange={e => { setFloorMat(e.target.value as FloorMat); setActiveRoom('') }}>
                       <option value="concrete">콘크리트 (0.02)</option>
                       <option value="tile">타일 (0.03)</option>
                       <option value="wood">원목/마루 (0.07)</option>
@@ -738,8 +705,8 @@ export default function SoundSpeedClient() {
                     </select>
                   </div>
                   <div>
-                    <span className={s.subLabel}>천장</span>
-                    <select className={s.bigInput} value={ceilMat} onChange={e => setCeilMat(e.target.value as keyof typeof ABSORPTION.ceiling)}>
+                    <label className={s.subLabel} htmlFor="ss-mat-ceil">천장</label>
+                    <select id="ss-mat-ceil" className={s.bigInput} value={ceilMat} onChange={e => { setCeilMat(e.target.value as CeilMat); setActiveRoom('') }}>
                       <option value="concrete">콘크리트 (0.02)</option>
                       <option value="gypsum">석고 (0.10)</option>
                       <option value="panel">흡음 패널 (0.40)</option>
@@ -748,34 +715,38 @@ export default function SoundSpeedClient() {
                 </div>
               </div>
 
-              <div className={`${s.hero} ${s.heroNeutral}`}>
-                <p className={s.heroLead}>잔향 시간 RT60</p>
+              <div role="status" className={`${s.hero} ${s.heroNeutral}`}>
+                <p className={s.heroLead}>잔향 시간 RT60 (간이 추정)</p>
                 <div>
                   <span className={s.heroNum}>{rt60Result.rt60.toFixed(2)}</span>
                   <span className={s.heroUnit}>초</span>
                 </div>
                 <p className={s.heroSub}>
-                  부피 <strong>{rt60Result.V.toFixed(0)}m³</strong> · 흡음량 <strong>{rt60Result.A.toFixed(2)}m²</strong>
+                  부피 <strong>{rt60Result.V.toFixed(0)}m³</strong> · 등가 흡음면적 <strong>{rt60Result.A.toFixed(1)}m²(sabin)</strong>
                   <br />
                   Sabine 공식: <strong>RT60 = 0.161 × V / A</strong>
                 </p>
               </div>
 
               <div className={s.rt60Card}>
-                <p className={s.rt60Title}>일반 공간 RT60 비교</p>
+                <p className={s.rt60Title}>일반 공간 RT60 전형값</p>
                 {ROOM_PRESETS.map(p => (
                   <div key={p.name} className={s.rt60Row}>
                     <span>{p.name}</span>
                     <strong>{p.rt.toFixed(1)}초</strong>
                   </div>
                 ))}
+                <p style={{ fontSize: 11.5, color: 'var(--muted-strong)', marginTop: 8, lineHeight: 1.7 }}>
+                  ※ 실측 통계 기반 전형값. 이 계산기는 표면 흡음만 반영한 단순 모델이라
+                  가구·청중·공기 흡음이 있는 실제 공간과 다를 수 있습니다.
+                  프리셋의 재질은 전형 잔향을 재현하는 등가 조합입니다.
+                </p>
               </div>
 
               <div className={s.funFactCard}>
                 <p className={s.funFactTitle}>콘서트홀 설계의 비밀</p>
                 콘서트홀은 음악에 적합한 <strong>1.5~2초 RT60</strong>로 의도적 설계됩니다.
                 너무 짧으면 음악이 메마르고(드라이), 너무 길면 흐려져서 명료도가 떨어집니다.
-                예술의전당·세종문화회관 같은 한국 주요 콘서트홀은 약 1.8초로 조정되어 있습니다.
               </div>
             </>
           )}
@@ -783,7 +754,7 @@ export default function SoundSpeedClient() {
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={copyResult} type="button">
             {copied ? '✓ 복사됨' : '결과 복사하기'}
           </button>
-        </>
+        </div>
       )}
     </div>
   )

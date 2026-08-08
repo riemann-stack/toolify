@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/edu/sound-speed',
   title: '음속 계산기 — 천둥 번개 거리·소리 도달 시간·빛 vs 소리',
-  description: '번개와 천둥 사이 시간으로 낙뢰 거리를 계산하고 소리 도달 시간·반향·RT60까지 다루는 음향 물리 도구. 온도별·매질별(물·강철) 음속 비교표와 NOAA 30-30 낙뢰 안전 규칙 안내 포함.',
+  description: '번개와 천둥 사이 시간으로 낙뢰 거리를 계산하고 소리 도달 시간·반향·RT60까지 다루는 음향 물리 도구. 온도별·매질별(물·강철) 음속 비교표와 NWS 낙뢰 안전 수칙(천둥이 들리면 실내로) 안내 포함.',
   keywords: ['음속계산기', '천둥번개거리', '소리도달시간', '음속공식', '광속', '마하', '에코지연', '잔향시간', 'RT60', '소닉붐'],
 })
 
@@ -28,7 +28,7 @@ const FAQ_LD = [
               },
               {
                 q: '음속 돌파(소닉붐)란 무엇인가요?',
-                a: '비행기가 음속(약 1,235 km/h, <strong>1마하</strong>)을 넘는 속도로 비행할 때 발생하는 <strong>충격파</strong>입니다. 비행기가 만든 음파가 비행기보다 느려서 압축되며 강한 충격파를 형성하고, 이 충격파가 지상에 도달하면 큰 폭음으로 들립니다. 1947년 미국의 척 예거(Chuck Yeager)가 X-1 비행기로 인류 최초로 음속을 돌파했습니다. 현재는 F-15·F-16 같은 전투기, 일부 초음속 여객기(콩코드, 퇴역)가 음속을 넘을 수 있습니다.',
+                a: '비행기가 음속(<strong>1마하</strong> — 해수면 20°C 기준 약 1,235km/h, 고도가 높을수록 작아짐)을 넘는 속도로 비행할 때 발생하는 <strong>충격파</strong>입니다. 비행기가 만든 음파가 비행기보다 느려서 압축되며 강한 충격파를 형성하고, 이 충격파가 지상에 도달하면 큰 폭음으로 들립니다. 1947년 미국의 척 예거(Chuck Yeager)가 X-1 비행기로 인류 최초로 음속을 돌파했습니다. 현재는 F-15·F-16 같은 전투기, 일부 초음속 여객기(콩코드, 퇴역)가 음속을 넘을 수 있습니다.',
               },
               {
                 q: '왜 우주에서는 소리가 안 들리나요?',
@@ -71,13 +71,13 @@ export default function SoundSpeedPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div><span style={{ color: '#0D9488' }}>음속(m/s)</span> = 331.3 + 0.606 × 기온(°C)</div>
+            <div><span style={{ color: '#0F766E' }}>음속(m/s)</span> = 331.3 + 0.606 × 기온(°C)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 건조한 공기, 1기압 표준 조건</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 주요 온도</span></div>
-            <div>0°C  → 약 <strong style={{ color: '#0D9488' }}>331 m/s</strong></div>
-            <div>20°C → 약 <strong style={{ color: '#0D9488' }}>343 m/s</strong> (표준)</div>
-            <div>30°C → 약 <strong style={{ color: '#0D9488' }}>349 m/s</strong></div>
+            <div>0°C  → 약 <strong style={{ color: '#0F766E' }}>331 m/s</strong></div>
+            <div>20°C → 약 <strong style={{ color: '#0F766E' }}>343 m/s</strong> (표준)</div>
+            <div>30°C → 약 <strong style={{ color: '#0F766E' }}>349 m/s</strong></div>
           </div>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.85 }}>
             온도가 1°C 오르면 음속은 약 <strong style={{ color: 'var(--text)' }}>0.6 m/s 빨라집니다.</strong>
@@ -100,14 +100,14 @@ export default function SoundSpeedPage() {
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
-            <div>거리(m) = <span style={{ color: '#0D9488' }}>음속</span> × <span style={{ color: '#A16207' }}>시간(초)</span></div>
+            <div>거리(m) = <span style={{ color: '#0F766E' }}>음속</span> × <span style={{ color: '#A16207' }}>시간(초)</span></div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 빠른 추정 공식</span></div>
             <div>거리(km) ≈ 시간(초) ÷ 3</div>
             <div>거리(mile) ≈ 시간(초) ÷ 5</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 예시</span></div>
-            <div>5초 × 343 m/s = <strong style={{ color: '#0D9488' }}>1,715m (≈ 1.7km)</strong></div>
+            <div>5초 × 343 m/s = <strong style={{ color: '#0F766E' }}>1,715m (≈ 1.7km)</strong></div>
           </div>
           <div style={{
             background: 'rgba(220,38,38,0.06)',
@@ -119,9 +119,10 @@ export default function SoundSpeedPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#DC2626' }}>NOAA &quot;30-30 규칙&quot;:</strong>
-            <br />· 번개를 본 후 <strong>30초 이내</strong> 천둥이 들리면 즉시 실내로
-            <br />· 마지막 천둥 후 <strong>30분간 실내 대기</strong>
+            ⚠️ <strong style={{ color: '#DC2626' }}>낙뢰 안전 (NWS):</strong>
+            <br />· <strong>천둥이 들리면 거리와 무관하게 낙뢰 위험권</strong> — &quot;When Thunder Roars, Go Indoors&quot;
+            <br />· &quot;30-30 규칙&quot;: 번개 후 30초 이내 천둥이 들리면 즉시 실내로, 마지막 천둥 후 <strong>30분간 실내 대기</strong>
+            <br />· 이 계산기의 거리는 참고 정보이며 안전 거리 판정이 아닙니다
           </div>
         </div>
 
@@ -132,14 +133,14 @@ export default function SoundSpeedPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, marginBottom: 8 }}>💡 빛의 속도</p>
+              <p style={{ fontSize: 14, color: '#0F766E', fontWeight: 700, marginBottom: 8 }}>💡 빛의 속도</p>
               <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 4 }}>
                 299,792,458 m/s
               </p>
               <p style={{ fontSize: 13, color: 'var(--muted)' }}>≈ 30만 km/s · 1초에 지구 약 7바퀴</p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔊 음속 (공기, 20°C)</p>
+              <p style={{ fontSize: 14, color: '#C2410C', fontWeight: 700, marginBottom: 8 }}>🔊 음속 (공기, 20°C)</p>
               <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 4 }}>
                 343 m/s
               </p>
@@ -156,7 +157,7 @@ export default function SoundSpeedPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚡ <strong style={{ color: '#9333EA' }}>비율:</strong> 빛은 소리의 약 <strong style={{ color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>874,400배</strong> 빠름.
+            ⚡ <strong style={{ color: '#9333EA' }}>비율:</strong> 빛은 소리의 약 <strong style={{ color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>873,000배</strong> 빠름.
             같은 1km를 가는 데 빛은 0.0000033초, 소리는 2.9초.
             <br /><br />
             <strong style={{ color: 'var(--text)' }}>왜 번개가 먼저 보이고 천둥이 늦게 들리는가?</strong>
@@ -170,7 +171,9 @@ export default function SoundSpeedPage() {
             매질별 음속 차이
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            소리는 매질이 있어야 전달됩니다. 분자 결합이 강할수록(고체일수록) 소리가 빠릅니다.
+            소리는 매질이 있어야 전달됩니다. 음속은 매질의 <strong style={{ color: 'var(--text)' }}>탄성(단단함)과 밀도의 비</strong>로 정해지는데,
+            고체는 밀도가 커도 탄성이 훨씬 크게 앞서기 때문에 대체로 기체 → 액체 → 고체 순으로 빨라집니다.
+            아래 값은 대표 근사값으로, 나무는 결 방향·수종, 금속은 합금·파동 종류(종파 기준)에 따라 달라집니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
@@ -196,7 +199,7 @@ export default function SoundSpeedPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.m}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.s === 0 ? '0' : r.s.toLocaleString()}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0F766E', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>
                   </tr>
                 ))}
               </tbody>
@@ -221,11 +224,11 @@ export default function SoundSpeedPage() {
             color: 'var(--muted)',
             lineHeight: 1.85,
           }}>
-            <strong style={{ color: 'var(--text)' }}>1마하 = 음속 = 약 343 m/s = 1,235 km/h</strong>
+            <strong style={{ color: 'var(--text)' }}>1마하 = 그 고도의 음속</strong> — 지상 20°C에선 약 343 m/s(1,235 km/h)
             <ul style={{ paddingLeft: 22, marginTop: 8 }}>
-              <li>걷기: 0.004 마하 / 자동차: 0.08 마하 / KTX: 0.25 마하</li>
-              <li>여객기: 0.85 마하 / <strong style={{ color: '#0D9488' }}>음속 1.0 마하</strong></li>
-              <li>F-16: 1.7 마하 / F-15: 2.5 마하 / SR-71 정찰기: 3.0 마하</li>
+              <li>지상 기준: 걷기 0.004 마하 / 자동차 0.08 마하 / KTX 0.25 마하</li>
+              <li>고고도 공인(성층권, 음속 약 295m/s 기준): 여객기 순항 약 0.85 마하 / <strong style={{ color: '#0F766E' }}>음속 = 1.0 마하</strong></li>
+              <li>F-16 약 2.0 마하 / F-15 약 2.5 마하 / SR-71 정찰기 약 3.3 마하 (모두 고고도 공인)</li>
             </ul>
           </div>
           <div style={{
@@ -238,7 +241,7 @@ export default function SoundSpeedPage() {
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🚀 <strong style={{ color: '#EA580C' }}>소닉붐(Sonic Boom)</strong>: 비행기가 음속을 돌파할 때 발생하는 충격파.
+            🚀 <strong style={{ color: '#C2410C' }}>소닉붐(Sonic Boom)</strong>: 비행기가 음속을 돌파할 때 발생하는 충격파.
             비행기가 만든 음파가 비행기보다 느려서 압축되며 강한 충격파를 형성합니다.
             <strong style={{ color: 'var(--text)' }}> 1947년 척 예거(Chuck Yeager)</strong>의 X-1 비행기가 인류 최초로 음속을 돌파했습니다.
           </div>
@@ -251,7 +254,7 @@ export default function SoundSpeedPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>📢 단순 에코</p>
+              <p style={{ fontSize: 14, color: '#0E7490', fontWeight: 700, marginBottom: 8 }}>📢 단순 에코</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>
                 지연 시간 = 왕복 거리 ÷ 음속
               </p>
@@ -288,7 +291,7 @@ export default function SoundSpeedPage() {
                   { p: '거실·방',       t: '0.4초', n: '일상' },
                   { p: '교실',           t: '0.6초', n: '강의 적합' },
                   { p: '강당',           t: '1.2초', n: '명료도 균형' },
-                  { p: '콘서트홀',       t: '1.8초', n: '🎼 음악 최적 (예술의전당)' },
+                  { p: '콘서트홀',       t: '1.5~2초', n: '🎼 음악 최적 설계 범위' },
                   { p: '대성당',         t: '4초+',   n: '풍부한 잔향' },
                   { p: '큰 동굴',        t: '8초+',   n: '극단적 잔향' },
                 ].map((r, i) => (
@@ -322,6 +325,26 @@ export default function SoundSpeedPage() {
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* ── 7.5 계산 가정·참고 자료 ── */}
+        <div>
+          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+            계산 가정과 참고 자료
+          </h2>
+          <ul style={{ paddingLeft: 20, margin: '0 0 12px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.9 }}>
+            <li>공기 중 음속은 건조 공기·1기압 근사식 <strong style={{ color: 'var(--text)' }}>331.3 + 0.606×T</strong>를 사용합니다 (습도 영향 미반영).</li>
+            <li>천둥 거리 = 시간 × 음속. 거리는 참고 정보이며 <strong style={{ color: 'var(--text)' }}>안전 거리 판정이 아닙니다</strong>.</li>
+            <li>RT60은 Sabine 간이식(0.161·V/A)으로, 표면 흡음률(500Hz 부근 대표값)만 반영합니다 — 가구·청중·공기 흡음 미반영.</li>
+            <li>매질별 음속·항공기 속도는 대표 근사값입니다 (종파 기준, 조건에 따라 달라짐).</li>
+          </ul>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px', fontSize: 13, lineHeight: 1.9 }}>
+            <p style={{ color: 'var(--muted)', marginBottom: 4 }}>공식 출처:</p>
+            <ul style={{ paddingLeft: 20, margin: 0, color: 'var(--muted)' }}>
+              <li><a href="https://www.weather.gov/safety/lightning-safety" target="_blank" rel="noopener noreferrer" style={{ color: '#0E7490' }}>NWS Lightning Safety</a> — 미국 기상청 낙뢰 안전 수칙</li>
+              <li><a href="https://www.grc.nasa.gov/www/k-12/airplane/sound.html" target="_blank" rel="noopener noreferrer" style={{ color: '#0E7490' }}>NASA GRC — Speed of Sound</a> — 음속·마하 원리</li>
+            </ul>
           </div>
         </div>
 
