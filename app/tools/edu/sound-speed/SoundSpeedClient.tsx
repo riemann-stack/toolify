@@ -576,7 +576,7 @@ export default function SoundSpeedClient() {
               <li>음속을 처음 돌파한 건 <strong>1947년 척 예거</strong>의 X-1 비행기</li>
               <li>음속 돌파 시 <strong>소닉붐</strong>(충격파) 발생</li>
               <li>광속은 <strong>우주의 절대 속도 한계</strong> (특수 상대성 이론)</li>
-              <li>빛은 <strong>1초에 지구를 약 7바퀴</strong></li>
+              <li>빛은 <strong>1초에 지구를 약 7바퀴 반</strong> (299,792 ÷ 40,075 ≈ 7.5)</li>
               <li>태양빛이 지구에 닿는 데 약 <strong>8분 20초</strong></li>
               <li>달까지 빛 도달: <strong>약 1.3초</strong></li>
             </ul>

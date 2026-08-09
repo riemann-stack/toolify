@@ -94,12 +94,14 @@ export const MEDIUM_SPEEDS = [
   { medium: '진공',      speed: 0,      cls: 'mediumVacuum',  note: '소리 전달 불가' },
   { medium: '공기',      speed: 343,    cls: 'mediumAir',     note: '20°C 기준, 일반적' },
   { medium: '물',        speed: 1_482,  cls: 'mediumWater',   note: '공기의 약 4.3배' },
-  { medium: '바닷물',    speed: 1_531,  cls: 'mediumWater',   note: '담수보다 약간 빠름' },
-  { medium: '나무',      speed: 3_300,  cls: 'mediumWood',    note: '공기의 약 9.6배 (수종·결 방향 따라 큼)' },
+  { medium: '바닷물',    speed: 1_521,  cls: 'mediumWater',   note: '담수보다 약간 빠름 (20°C·염분 3.5%)' },
+  { medium: '나무',      speed: 3_300,  cls: 'mediumWood',    note: '결 방향 기준 — 수종 따라 3,300~5,000, 결 직각은 1/5~1/3' },
   { medium: '벽돌',      speed: 3_650,  cls: 'mediumWood',    note: '공기의 약 10.6배' },
   { medium: '구리',      speed: 4_600,  cls: 'mediumMetal',   note: '공기의 약 13배' },
   { medium: '강철',      speed: 5_960,  cls: 'mediumMetal',   note: '공기의 약 17배' },
-  { medium: '다이아몬드', speed: 12_000, cls: 'mediumCrystal', note: '공기의 약 35배 — 통상 물질 중 최고' },
+  /* ⚠️ 널리 인용되는 12,000 m/s는 횡파 대역 값 — 표의 다른 행은 전부 종파라 기준이 어긋난다.
+     종파는 [100] 방향 17,520 m/s (McSkimin & Andreatch 1972, 방향 따라 ~18,600). */
+  { medium: '다이아몬드', speed: 17_500, cls: 'mediumCrystal', note: '공기의 약 51배 — 통상 물질 중 최고 (종파 기준)' },
 ]
 
 // ─────────────────────────────────────────────

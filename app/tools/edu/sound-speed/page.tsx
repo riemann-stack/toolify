@@ -16,7 +16,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '천둥 번개 사이 시간으로 거리를 어떻게 계산하나요?',
-                a: '<strong>거리(km) = 시간(초) × 0.343</strong> (20°C 기준), 또는 간단히 <strong>거리(km) ≈ 시간(초) ÷ 3</strong>입니다. 예를 들어 번개를 본 후 5초 뒤 천둥이 들리면 약 <strong>1.7km 떨어진 곳</strong>입니다. 빛은 거의 즉시 도달하므로 시간 차이는 사실상 소리만의 도달 시간입니다. 30초 이상 차이가 나면 약 10km 이상 떨어져 있다는 뜻이지만, 천둥이 들리는 한 낙뢰 위험권이므로 30-30 규칙에 따라 실내에서 대기하는 것이 안전합니다.',
+                a: '<strong>거리(km) = 시간(초) × 0.343</strong> (20°C 기준), 또는 간단히 <strong>거리(km) ≈ 시간(초) ÷ 3</strong>입니다. 예를 들어 번개를 본 후 5초 뒤 천둥이 들리면 약 <strong>1.7km 떨어진 곳</strong>입니다. 빛은 거의 즉시 도달하므로 시간 차이는 사실상 소리만의 도달 시간입니다. 30초 이상 차이가 나면 약 10km 이상 떨어져 있다는 뜻이지만, 천둥이 들리는 한 거리와 무관하게 낙뢰 위험권입니다 — 즉시 실내로 대피하고 마지막 천둥 후 최소 30분간 대기하세요(NWS).',
               },
               {
                 q: '왜 번개가 먼저 보이고 천둥이 늦게 들리나요?',
@@ -81,7 +81,8 @@ export default function SoundSpeedPage() {
           </div>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.85 }}>
             온도가 1°C 오르면 음속은 약 <strong style={{ color: 'var(--text)' }}>0.6 m/s 빨라집니다.</strong>
-            여름과 겨울에 같은 거리라도 음속이 약 5% 차이 나는 셈입니다.
+            겨울 0°C와 여름 30°C를 비교하면 같은 거리라도 음속이 약 18 m/s(<strong style={{ color: 'var(--text)' }}>약 5%</strong>) 차이 나고,
+            슬라이더 양 끝(−20°C ↔ 40°C)에서는 약 11%까지 벌어집니다.
           </p>
         </div>
 
@@ -121,7 +122,7 @@ export default function SoundSpeedPage() {
           }}>
             ⚠️ <strong style={{ color: '#DC2626' }}>낙뢰 안전 (NWS):</strong>
             <br />· <strong>천둥이 들리면 거리와 무관하게 낙뢰 위험권</strong> — &quot;When Thunder Roars, Go Indoors&quot;
-            <br />· &quot;30-30 규칙&quot;: 번개 후 30초 이내 천둥이 들리면 즉시 실내로, 마지막 천둥 후 <strong>30분간 실내 대기</strong>
+            <br />· 마지막 천둥 후 <strong>최소 30분간 실내 대기</strong> — 과거 &quot;30-30 규칙&quot;의 30초 카운트는 현행 수칙에서 &quot;들리면 즉시 대피&quot;로 대체
             <br />· 이 계산기의 거리는 참고 정보이며 안전 거리 판정이 아닙니다
           </div>
         </div>
@@ -137,7 +138,7 @@ export default function SoundSpeedPage() {
               <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--text)', marginBottom: 4 }}>
                 299,792,458 m/s
               </p>
-              <p style={{ fontSize: 13, color: 'var(--muted)' }}>≈ 30만 km/s · 1초에 지구 약 7바퀴</p>
+              <p style={{ fontSize: 13, color: 'var(--muted)' }}>≈ 30만 km/s · 1초에 지구 약 7바퀴 반</p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: '#C2410C', fontWeight: 700, marginBottom: 8 }}>🔊 음속 (공기, 20°C)</p>
@@ -187,14 +188,14 @@ export default function SoundSpeedPage() {
               <tbody>
                 {[
                   { m: '진공',     s: 0,      r: '전달 X', c: 'var(--muted)' },
-                  { m: '공기',     s: 343,    r: '1배',    c: '#0D9488' },
-                  { m: '물',       s: 1_482,  r: '4.3배',  c: '#0891B2' },
-                  { m: '바닷물',   s: 1_531,  r: '4.5배',  c: '#0891B2' },
-                  { m: '나무',     s: 3_300,  r: '9.6배',  c: '#EA580C' },
-                  { m: '벽돌',     s: 3_650,  r: '10.6배', c: '#EA580C' },
+                  { m: '공기',     s: 343,    r: '1배',    c: '#0F766E' },
+                  { m: '물',       s: 1_482,  r: '4.3배',  c: '#0E7490' },
+                  { m: '바닷물',   s: 1_521,  r: '4.4배',  c: '#0E7490' },
+                  { m: '나무',     s: 3_300,  r: '9.6배',  c: '#C2410C' },
+                  { m: '벽돌',     s: 3_650,  r: '10.6배', c: '#C2410C' },
                   { m: '구리',     s: 4_600,  r: '13배',   c: '#A16207' },
                   { m: '강철',     s: 5_960,  r: '17배',   c: '#A16207' },
-                  { m: '다이아몬드', s: 12_000, r: '35배',   c: '#9333EA' },
+                  { m: '다이아몬드', s: 17_500, r: '51배',   c: '#9333EA' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.m}</td>
@@ -313,7 +314,7 @@ export default function SoundSpeedPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '🌍 빛의 1초', d: '지구를 약 7바퀴 돌 수 있는 거리 (광속 30만 km/s × 지구 둘레 4만 km)' },
+              { t: '🌍 빛의 1초', d: '지구를 약 7바퀴 반 돌 수 있는 거리 (30만 km/s ÷ 지구 둘레 4만 km ≈ 7.5)' },
               { t: '☀️ 태양빛', d: '태양에서 지구까지 빛 도달 약 8분 20초. 우리가 보는 태양은 8분 전 모습.' },
               { t: '🌙 달까지 빛', d: '약 1.3초. 아폴로 통신은 거의 즉시 도달.' },
               { t: '🌬️ 음속 돌파', d: '1947년 척 예거의 X-1. 첫 마하 1.06 달성.' },
