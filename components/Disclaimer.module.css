@@ -108,7 +108,7 @@
   color: var(--muted);
 }
 .relatedLink {
-  color: var(--accent);
+  color: var(--accent-ink); /* accent(4.10:1)는 소형 텍스트 AA 미달 — .title과 같은 처방 */
   text-decoration: none;
   font-weight: 600;
 }
@@ -133,7 +133,7 @@
   margin-right: 8px;
 }
 .sourceLink {
-  color: var(--accent);
+  color: var(--accent-ink);
   text-decoration: none;
   font-weight: 600;
 }
