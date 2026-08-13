@@ -34,18 +34,30 @@ export function classifyMode(p: number, q: number, r: number): ModeType {
   return 'oblique'
 }
 
+/** 상대 진폭(축방향=1): 접선 −3dB ≈ 0.71, 사선 −6dB = 0.5
+    (Morse & Bolt 1944 유도·Everest Master Handbook 채택 — 에너지 기준으론 1/2·1/4).
+    ⚠️ 예전 사선 0.4는 진폭(0.5)에도 에너지(0.25)에도 해당 없는 무근거 값. */
 export function modeStrength(type: ModeType): number {
   if (type === 'axial') return 1.0
   if (type === 'tangential') return 0.7
-  return 0.4
+  return 0.5
 }
 
-/* 모든 모드 추출 (각 축 maxN 차까지, 20~freqMax Hz 범위) */
-export function buildAllModes(L: number, W: number, H: number, c: number, maxN = 5, freqMax = 300): RoomMode[] {
+/* 모든 모드 추출 (20~freqMax Hz 범위).
+   ⚠️ 예전 고정 maxN=5는 6차 이상 축모드를 통째로 잘라 기본 프리셋(5m)조차 206Hz부터
+      누락됐고, 큰 방에선 Bonello 판정이 거짓 위반으로 뒤집혔다 — 축별로
+      freqMax에 필요한 차수를 계산한다(n = 2·치수·freqMax/c, 클램프 상한에서 최대 ~35). */
+export function buildAllModes(L: number, W: number, H: number, c: number, freqMax = 300, maxNOverride?: number): RoomMode[] {
+  /* 치수가 0·음수·비유한이면 빈 결과 — p=0·L=0 조합의 0/0=NaN이 범위 필터를 통과하는 것 방지 */
+  if (!(L > 0) || !(W > 0) || !(H > 0) || !(c > 0)) return []
+  const nFor = (d: number) => Math.min(60, Math.ceil((2 * d * freqMax) / c))
+  const nL = maxNOverride ?? nFor(L)
+  const nW = maxNOverride ?? nFor(W)
+  const nH = maxNOverride ?? nFor(H)
   const modes: RoomMode[] = []
-  for (let p = 0; p <= maxN; p++) {
-    for (let q = 0; q <= maxN; q++) {
-      for (let r = 0; r <= maxN; r++) {
+  for (let p = 0; p <= nL; p++) {
+    for (let q = 0; q <= nW; q++) {
+      for (let r = 0; r <= nH; r++) {
         if (p === 0 && q === 0 && r === 0) continue
         const freq = modeFreq(p, q, r, L, W, H, c)
         if (freq < 20 || freq > freqMax) continue
@@ -118,18 +130,35 @@ export interface RatioCheck {
   desc: string
 }
 
-/** Sepmeyer 황금 비율 = 1 : 1.14 : 1.39 */
+/** 권장 비율 목록 (H:W:L, 정렬 오름차순 기준).
+    ⚠️ 예전엔 Sepmeyer 1:1.14:1.39 하나와의 거리로만 등급을 매겨, Louden 1:1.4:1.9 같은
+       유명 권장 비율이 C(주의) 등급을 받았다 — 최소 거리로 판정한다. */
+export const RECOMMENDED_RATIOS: { name: string; r: [number, number, number] }[] = [
+  { name: 'Sepmeyer A', r: [1, 1.14, 1.39] },
+  { name: 'Sepmeyer B', r: [1, 1.28, 1.54] },
+  { name: 'Sepmeyer C', r: [1, 1.60, 2.33] },
+  { name: 'Louden',     r: [1, 1.4, 1.9] },
+]
+
+/** 하위 호환 표기용 (대표 비율) */
 export const GOLDEN_RATIO = { w: 1.14, l: 1.39, h: 1.0 }
 
-/** Bolt area 안전 영역 (대략) */
-export function inBoltArea(wl: number, hl: number): boolean {
-  // wl = W/H, ll = L/H
-  // 안전한 영역: 1.1 < wl < 2.5 && 1.4 < ll < 4.0 && (wl + ll) > 3
-  // 단순화한 안전 박스
-  if (wl < 1.05 || wl > 2.5) return false
-  if (hl < 1.05 || hl > 2.5) return false
-  if (wl + hl < 2.5) return false
-  return true
+/** Walker 조건식(BBC RD 1993/8) — Bolt(1946) 곡선 영역의 공인 대수 근사로
+    EBU Tech 3276 Appendix 2·ITU-R BS.1116-3 §8.2.2.3이 채택:
+      1.1·(w/h) ≤ l/h ≤ 4.5·(w/h) − 4,  l/h < 3,  w/h < 3
+    ⚠️ 예전엔 근거 없는 자작 박스 2종을 판정·차트가 따로 써서(판정 "안전"인데 점은 초록 밖),
+       W/H=2.0·L/H=1.2 같은 모순이 화면에 그대로 노출됐다. 판정과 차트가 같은 식을 쓴다. */
+export const WALKER = { lowSlope: 1.1, upSlope: 4.5, upIntercept: -4, cap: 3 }
+
+export function inBoltArea(a: number, b: number): boolean {
+  if (!(a > 0) || !(b > 0)) return false
+  /* Walker 식은 l ≥ w 전제 — 가로/세로를 바꿔 입력해도 같은 방이므로 긴 변을 L로 정규화.
+     경계는 십진 입력(1.1×1.5=1.65 등)에서 부동소수로 갈리므로 상대 epsilon 비교. */
+  const wl = Math.min(a, b)
+  const ll = Math.max(a, b)
+  if (wl >= WALKER.cap || ll >= WALKER.cap) return false
+  const eps = 1e-9 * Math.max(1, ll)
+  return ll - WALKER.lowSlope * wl >= -eps && (WALKER.upSlope * wl + WALKER.upIntercept) - ll >= -eps
 }
 
 export function diagnoseRatio(W: number, L: number, H: number): RatioCheck {
@@ -139,47 +168,63 @@ export function diagnoseRatio(W: number, L: number, H: number): RatioCheck {
   /* 정육면체 검사 */
   const isCube = Math.abs(ratio.w - ratio.l) < 0.05 && Math.abs(ratio.l - ratio.h) < 0.05
   if (isCube) {
-    return { ratio, diagnosis: 'D', label: '정육면체 위험', color: '#DB2777', desc: '모드가 한 점에 중첩 — 부밍·먹먹함 매우 심함. 가구 배치·트랩으로 보완 필수.' }
+    return { ratio, diagnosis: 'D', label: '정육면체 위험', color: '#BE185D', desc: '모드가 한 점에 중첩 — 부밍·먹먹함 매우 심함. 가구 배치·트랩으로 보완 필수.' }
   }
 
   /* 두 축이 같은 위험 */
   const twoSame = Math.abs(ratio.w - ratio.l) < 0.05 || Math.abs(ratio.l - ratio.h) < 0.05 || Math.abs(ratio.w - ratio.h) < 0.05
   if (twoSame) {
-    return { ratio, diagnosis: 'C', label: '두 축 동일', color: '#D97706', desc: '두 축이 같은 길이 — 모드 중첩 위험. 일부 주파수 부밍 가능.' }
+    return { ratio, diagnosis: 'C', label: '두 축 동일', color: '#B45309', desc: '두 축이 같은 길이 — 모드 중첩 위험. 일부 주파수 부밍 가능.' }
   }
 
-  /* 황금비 거리 (Sepmeyer 1:1.14:1.39 기준) */
+  /* 권장 비율 목록과의 최소 거리 (정렬 오름차순 비교) */
   const sortedR = [ratio.w, ratio.l, ratio.h].sort((a, b) => a - b)
-  const target = [1, 1.14, 1.39]
-  const dist = Math.sqrt(
-    (sortedR[0] - target[0]) ** 2 + (sortedR[1] - target[1]) ** 2 + (sortedR[2] - target[2]) ** 2,
-  )
+  let dist = Infinity
+  let nearest = RECOMMENDED_RATIOS[0].name
+  for (const rec of RECOMMENDED_RATIOS) {
+    const d = Math.sqrt(
+      (sortedR[0] - rec.r[0]) ** 2 + (sortedR[1] - rec.r[1]) ** 2 + (sortedR[2] - rec.r[2]) ** 2,
+    )
+    if (d < dist) { dist = d; nearest = rec.name }
+  }
 
-  if (dist < 0.10) return { ratio, diagnosis: 'S', label: '황금비 (Sepmeyer)', color: '#0D9488', desc: '이상적인 음향 비율 — 모드 분포 균일.' }
-  if (dist < 0.25) return { ratio, diagnosis: 'A', label: '우수',                  color: '#059669', desc: '권장 비율에 매우 가까움. 일반 부밍 적음.' }
-  if (dist < 0.50) return { ratio, diagnosis: 'B', label: '양호',                  color: '#0891B2', desc: '평균적인 음향. 트랩으로 부밍 보완.' }
-  if (dist < 1.00) return { ratio, diagnosis: 'C', label: '주의',                  color: '#D97706', desc: '비율이 좋지 않음. 베이스 트랩 권장.' }
-  return { ratio, diagnosis: 'D', label: '불리한 비율',                            color: '#DB2777', desc: '음향적으로 매우 불리. 트랩·EQ 보정 필수.' }
+  if (dist < 0.10) return { ratio, diagnosis: 'S', label: `권장 비율 (${nearest})`, color: '#0F766E', desc: '권장 음향 비율과 거의 일치 — 모드 분포 균일.' }
+  if (dist < 0.25) return { ratio, diagnosis: 'A', label: `우수 (${nearest} 근접)`, color: '#047857', desc: '권장 비율에 매우 가까움. 일반 부밍 적음.' }
+  if (dist < 0.50) return { ratio, diagnosis: 'B', label: '양호',                  color: '#0E7490', desc: '평균적인 음향. 트랩으로 부밍 보완.' }
+  if (dist < 1.00) return { ratio, diagnosis: 'C', label: '주의',                  color: '#B45309', desc: '비율이 좋지 않음. 베이스 트랩 권장.' }
+  return { ratio, diagnosis: 'D', label: '불리한 비율',                            color: '#BE185D', desc: '음향적으로 매우 불리. 트랩·EQ 보정 필수.' }
 }
 
 /* ─────────────────────────────────────────────
    Bonello criterion (1/3 옥타브 대역별 모드 개수)
    ───────────────────────────────────────────── */
 
+/* Bonello(1981, JAES 29(9)) 원 기준 적용 대역은 10~200Hz —
+   이 도구는 모드 하한 20Hz라 20~200Hz 11개 대역만 표시(250·315는 기준 범위 밖이라 제외). */
 export const THIRD_OCTAVE_BANDS = [
-  20, 25, 31.5, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315,
+  20, 25, 31.5, 40, 50, 63, 80, 100, 125, 160, 200,
 ]
 
-export function bonelloAnalysis(modes: RoomMode[]): { freq: number; count: number }[] {
-  const result = THIRD_OCTAVE_BANDS.map((f) => ({ freq: f, count: 0 }))
+/** Bonello 두 조건: ① 대역별 모드 수가 위 대역으로 갈수록 줄지 않아야(비감소),
+    ② 동일 주파수 중복(coincident) 모드는 그 대역 모드 수가 5개 이상일 때만 허용.
+    ⚠️ 예전엔 ②가 아예 없었고 ①도 "균등 증가"로 잘못 서술했다. */
+export function bonelloAnalysis(modes: RoomMode[]): { freq: number; count: number; coincidentViolation: boolean }[] {
+  const result = THIRD_OCTAVE_BANDS.map((f) => ({ freq: f, count: 0, coincidentViolation: false, _freqs: [] as number[] }))
   modes.forEach((m) => {
-    const fLog = Math.log2(m.freq / 1000)
-    const fIdx = Math.round((fLog + 5.66) / (1 / 3))
+    /* 20Hz 대역 기준 1/3 옥타브 인덱스. 예전 오프셋 5.66은 정확값과 어긋나
+       대역 경계(20↔25는 22.45Hz) 부근 모드가 옆 대역으로 집계됐다. */
+    const fIdx = Math.round(3 * Math.log2(m.freq / 20))
     if (fIdx >= 0 && fIdx < result.length) {
       result[fIdx].count++
+      result[fIdx]._freqs.push(m.freq)
     }
   })
-  return result
+  for (const band of result) {
+    const sorted = band._freqs.sort((a, b) => a - b)
+    const hasCoincident = sorted.some((f, i) => i > 0 && Math.abs(f - sorted[i - 1]) < 0.5)
+    band.coincidentViolation = hasCoincident && band.count < 5
+  }
+  return result.map(({ freq, count, coincidentViolation }) => ({ freq, count, coincidentViolation }))
 }
 
 /* ─────────────────────────────────────────────
@@ -189,22 +234,26 @@ export function bonelloAnalysis(modes: RoomMode[]): { freq: number; count: numbe
    x=L/2 (중앙) → 0 (노드)
    ───────────────────────────────────────────── */
 
-/** 위치 (xRel, yRel) ∈ [0,1] 의 1차 모드 음압 절대값 (0~1) */
+/** 위치 (xRel=가로 W축, yRel=세로 L축) ∈ [0,1] 의 1차 모드 음압 절대값 (0~1).
+    |cos| 합성이라 두 인자에 대칭 — 축 순서가 값에 영향 없음. */
 export function pressureAt(xRel: number, yRel: number): number {
-  const px = Math.abs(Math.cos(Math.PI * xRel))   // L 1차 모드
-  const py = Math.abs(Math.cos(Math.PI * yRel))   // W 1차 모드
+  const px = Math.abs(Math.cos(Math.PI * xRel))   // W 1차 모드
+  const py = Math.abs(Math.cos(Math.PI * yRel))   // L 1차 모드
   // 두 모드의 합성 (RMS)
   return Math.sqrt((px ** 2 + py ** 2) / 2)
 }
 
-/* 위치 점수 (0~100) — 모드 노드 영역에 가까울수록 좋음 */
+/* 위치 점수 (0~100) — 38% 룰 기준 거리 + 노드 회피.
+   ⚠️ "음압 낮을수록 좋음" 전제는 1차 모드만 그리는 이 모델에서 정중앙(1차 노드)을
+      만점으로 만들었다(노드에 앉으면 해당 저음이 소실 — 좋은 위치가 아니다).
+      게다가 예전 정규화는 (0.5,0.38)이 전역 최대라는 잘못된 전제로 RAW_MAX를 잡아
+      정중앙 포함 면적 2.4%가 일괄 100점 플래토였다.
+   새 점수: 38% 라인이 유일 최대(100), 정중앙(1차 노드)·25%(2차 노드)에 명시적 감점. */
 export function listenerScore(xRel: number, yRel: number): number {
-  const p = pressureAt(xRel, yRel)
-  // 음압이 낮을수록 좋음 (모드 골)
-  // 단, 38% 룰 위치 (L 길이 0.38)에 보너스
-  const ruleDist = Math.abs(yRel - 0.38)
-  const ruleBonus = Math.max(0, 1 - ruleDist * 3) * 20
-  return Math.round(Math.max(0, Math.min(100, (1 - p) * 80 + ruleBonus)))
+  const base = Math.max(0, 1 - 1.6 * Math.abs(yRel - 0.38)) * (1 - 0.6 * Math.abs(xRel - 0.5))
+  const centerDip = 25 * Math.exp(-(((yRel - 0.5) / 0.06) ** 2))   // 1차 모드 노드
+  const quarterDip = 15 * Math.exp(-(((yRel - 0.25) / 0.05) ** 2)) // 2차 모드 노드
+  return Math.round(Math.max(0, Math.min(100, base * 100 - centerDip - quarterDip)))
 }
 
 /* ─────────────────────────────────────────────
@@ -250,24 +299,24 @@ export const TRAPS: TrapInfo[] = [
     id: 'corner',
     emoji: '🔺',
     label: '코너 트랩 (Super Chunk)',
-    effectiveFrom: 60,
+    effectiveFrom: 80,
     thicknessMm: '300~600mm',
     position: '3 코너 우선 (앞 양쪽 + 뒤 1개)',
     diyPrice: 'DIY 5~10만원/개',
-    proPrice: '완제품 10~30만원/개',
-    desc: '가장 강력. 모든 축 모드의 압력 최대 지점이 코너에 모여 있음.',
+    proPrice: '보급 10~30·브랜드 50만원+/개',
+    desc: '가장 강력. 모든 축 모드의 압력 최대 지점이 코너에 모임. 깊을수록 더 낮은 주파수까지.',
     color: '#DB2777',
   },
   {
     id: 'wall',
     emoji: '🟧',
     label: '벽 트랩 (Acoustic Panel)',
-    effectiveFrom: 100,
+    effectiveFrom: 125,
     thicknessMm: '100~200mm',
     position: '1차 반사 지점 (스피커-청취자 사이 측벽)',
     diyPrice: 'DIY 3~7만원/개',
     proPrice: '완제품 5~15만원/개',
-    desc: '중·고음 흡수 + 일부 저음. 1차 반사음 제거에 효과.',
+    desc: '중·고음 흡수 + 일부 저음(100mm급 기준 — 200mm급·에어갭이면 ~100Hz). 1차 반사음 제거에 효과.',
     color: '#D97706',
   },
   {
@@ -275,11 +324,11 @@ export const TRAPS: TrapInfo[] = [
     emoji: '🟨',
     label: '멤브레인 트랩 (Panel Absorber)',
     effectiveFrom: 40,
-    thicknessMm: '50~100mm',
+    thicknessMm: '100~250mm',
     position: '벽면 수직 부착',
     diyPrice: 'DIY 8~15만원/개',
     proPrice: '완제품 15~40만원/개',
-    desc: '저주파 전용. 특정 주파수 대역 흡수 — 설계 정확도 중요.',
+    desc: '저주파 전용. 특정 대역 흡수 — 40Hz급은 250mm급 깊이 필요, 설계 정확도 중요.',
     color: '#0891B2',
   },
   {
@@ -291,7 +340,7 @@ export const TRAPS: TrapInfo[] = [
     position: '특정 주파수 위치',
     diyPrice: 'DIY 10~20만원/개',
     proPrice: '완제품 20~50만원/개',
-    desc: '특정 주파수만 정확히 흡수. 주파수 튜닝 가능 (병 모양 원리).',
+    desc: '특정 주파수만 정확히 흡수(무댐핑 시 ±5~10Hz 협대역). 병 모양 원리로 튜닝.',
     color: '#0D9488',
   },
 ]
@@ -303,10 +352,18 @@ export const TRAPS: TrapInfo[] = [
 export const fmt = (n: number, digits = 1) =>
   n.toLocaleString('ko-KR', { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
+/* 그래픽(차트 막대·보더)용 600레벨 — 텍스트에는 MODE_INKS를 쓴다 */
 export const MODE_COLORS = {
   axial: '#DB2777',
   tangential: '#D97706',
   oblique: '#0D9488',
+}
+
+/* 텍스트용 700레벨 잉크 (흰/연회색 배경 4.5:1 이상 — amber-600 3.19·teal-600 3.74는 미달) */
+export const MODE_INKS = {
+  axial: '#BE185D',
+  tangential: '#B45309',
+  oblique: '#0F766E',
 }
 
 export const MODE_LABELS = {

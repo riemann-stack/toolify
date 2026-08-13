@@ -9,7 +9,7 @@ export const metadata = buildMetadata({
   path: '/tools/edu/room-mode',
   title: '룸 모드 계산기 — 홈오디오·홈스튜디오 평면도·베이스 트랩 가이드',
   description: '방 가로·세로·높이 → 축방향·접선·사선 모드 30+ + 슈로더 주파수·평면도 시각화·38% 룰·베이스 트랩 가이드.',
-  keywords: ['룸 모드', '룸 모드 계산기', '베이스 트랩', '슈로더 주파수', '38% 룰', 'Bolt Area', 'Sepmeyer 황금비', '홈오디오', '홈스튜디오', '음향 측정'],
+  keywords: ['룸 모드', '룸 모드 계산기', '베이스 트랩', '슈로더 주파수', '38% 룰', 'Bolt Area', '방 비율 진단', '홈오디오', '홈스튜디오', '음향 측정'],
 })
 
 const sectionTitle: React.CSSProperties = {
@@ -53,12 +53,12 @@ const faqAnswer: React.CSSProperties = {
 
 const FAQ_LD = [
   { "q":"룸 모드는 왜 생기나요?","a":"밀폐된 방 안에서 음파가 평행 벽 사이를 왕복하며 같은 위상으로 만나면 정상파(standing wave)를 만듭니다. 이 정상파는 특정 주파수에서만 강하게 발생해 음압 분포가 불균등해져요. 예: 5m 방의 1차 축방향 모드 = 343/(2×5) = 34.3Hz. 이 주파수에서 벽 근처는 음압 최대(부풀림), 중앙은 음압 0(노드)." },
-  { "q":"가장 안 좋은 방 형태는?","a":"정육면체 (1:1:1) 또는 두 축이 같은 방 (1:1:N)이 최악입니다. 세 축의 모드가 같은 주파수에 중첩되면서 부밍이 매우 심해집니다. 예: 3×3×3m 방은 가로·세로·높이 모두 같아 1차 모드가 모두 57Hz에 몰림 → 57Hz 부밍 심각. 가장 좋은 비율은 Sepmeyer 황금비 1:1.14:1.39." },
-  { "q":"슈로더 주파수가 뭔가요?","a":"룸 모드가 지배하는 영역과 일반 음향의 경계입니다. 이 미만에서는 모드 영향이 압도적이라 EQ·이퀄라이저로 보정이 잘 안 되고, 베이스 트랩 같은 물리적 처리가 필요합니다. 공식: fs = 2000 × √(RT60 / V) — 일반 거실 약 100~200Hz. 본 도구는 RT60=0.4초 가정으로 계산합니다 (보통 거실 평균치)." },
-  { "q":"38% 룰은 무엇인가요?","a":"Wilson Audio의 청취자 위치 가이드라인. 방 길이의 38% 지점(앞 벽 기준)에 청취자를 두면 1·2차 룸 모드의 노드(음압 0 지점)가 겹치는 위치가 되어 저음이 가장 균형 잡힙니다. 예: 5m 방 → 앞 벽에서 1.9m 지점. 스피커는 청취자와 정삼각형, 측벽에서 0.8~1.2m, 뒤 벽에서 0.5~1.0m 권장. 평면도 탭에서 38% 라인이 자동 표시됩니다." },
+  { "q":"가장 안 좋은 방 형태는?","a":"정육면체 (1:1:1) 또는 두 축이 같은 방 (1:1:N)이 최악입니다. 세 축의 모드가 같은 주파수에 중첩되면서 부밍이 매우 심해집니다. 예: 3×3×3m 방은 가로·세로·높이 모두 같아 1차 모드가 모두 57Hz에 몰림 → 57Hz 부밍 심각. 권장 비율의 예: Sepmeyer 1:1.14:1.39, Louden 1:1.4:1.9 등 — 단일 최적 비율은 없습니다." },
+  { "q":"슈로더 주파수가 뭔가요?","a":"룸 모드가 지배하는 영역과 일반 음향의 경계입니다. 이 미만에서는 모드 영향이 압도적이라 EQ·이퀄라이저로 보정이 잘 안 되고, 베이스 트랩 같은 물리적 처리가 필요합니다. 공식: fs = 2000 × √(RT60 / V) — RT60 0.4초 기준 일반 거실 약 180~200Hz(잔향이 짧은 방은 더 낮아짐). 본 도구는 RT60=0.4초 가정으로 계산합니다 (보통 거실 평균치)." },
+  { "q":"38% 룰은 무엇인가요?","a":"스튜디오 디자이너 Wes Lachot이 널리 알린 청취자 위치 가이드라인. 방 길이의 38% 지점(앞 벽 기준)에 청취자를 두면 1차 모드 노드(50%)·2차 모드 노드(25%)와 벽·중앙의 음압 최대점을 모두 피해 저음 피크와 딥이 가장 절충됩니다. 예: 5m 방 → 앞 벽에서 1.9m 지점. 스피커는 청취자와 정삼각형(청취각 60°)이 표준이며, 벽 거리는 일률 수치 없이 좌우 대칭을 지키며 조정합니다. 평면도 탭에서 38% 라인이 자동 표시됩니다." },
   { "q":"본 도구의 RT60=0.4초 가정이 우리 방과 다르면?","a":"슈로더 주파수 계산에만 RT60(잔향시간)이 들어가고, 룸 모드 주파수 자체는 방 치수와 온도만으로 정해집니다. 슈로더 주파수는 RT60의 제곱근에 비례해 잔향이 긴 반사성 방(RT60 0.6초)은 약 22% 높아지고, 흡음재가 많은 방(RT60 0.25초)은 약 21% 낮아집니다. 커튼·러그·책장이 많을수록 모드 지배 영역이 좁아지며, 모드 표와 평면도 시각화는 RT60과 무관하게 그대로 유효합니다." },
   { "q":"베이스 트랩은 꼭 필요한가요?","a":"음향에 신경 쓴다면 거의 필수입니다. 특히 슈로더 주파수 미만 영역의 부밍은 EQ로 잡기 어려워요. • 홈오디오·HiFi 매니아: 코너 트랩 4개 + 벽 트랩 2~4개 • 홈스튜디오 (믹싱·녹음): 트랩 + 흡음재 + 디퓨저 종합 • 일반 시청 환경: 코너 트랩 2~4개만으로도 큰 개선 DIY로 글라스울·록울 + 천 마감 시 5~10만원/개로 가능." },
-  { "q":"황금비 1:1.14:1.39를 못 맞추면?","a":"맞추기 어려우면 가구 배치·트랩으로 보완하세요. • 책장·소파가 자연스러운 흡음·산란 역할 • 코너에 책장 배치로 모드 압력점 차단 • 러그·커튼으로 1차 반사 흡수 • 측정 마이크 + REW로 부밍 주파수 특정 후 EQ로 보정 완벽한 비율보다는 충분한 흡음재 + 정확한 청취 위치가 더 중요해요." },
+  { "q":"권장 비율(1:1.14:1.39 등)을 못 맞추면?","a":"맞추기 어려우면 가구 배치·트랩으로 보완하세요. • 책장·소파가 자연스러운 흡음·산란 역할 • 코너에 책장 배치로 모드 압력점 차단 • 러그·커튼으로 1차 반사 흡수 • 측정 마이크 + REW로 부밍 주파수 특정 후 EQ로 보정 완벽한 비율보다는 충분한 흡음재 + 정확한 청취 위치가 더 중요해요." },
   { "q":"모드와 부밍·먹먹함의 관계?","a":"• 부밍(Boomy): 특정 저주파(50~150Hz)가 부풀어 \"웅~\" 울림 — 룸 모드의 음압 최대 지점에서 발생 • 먹먹함(Muddy): 100~300Hz 대역이 답답함 — 모드 중첩 + 1차 반사음 영향 • 해결: ① 청취 위치 변경 (38% 룰) ② 베이스 트랩 (코너) ③ 1차 반사 지점 흡음 ④ 측정 후 EQ" },
   { "q":"측정 마이크 없이 어떻게 확인?","a":"정확한 측정은 어렵지만 다음 방법으로 대략 확인 가능: 1. 본 도구로 모드 주파수 예측 → 어디에 부밍이 있을지 미리 파악 2. 유튜브에서 사인파 재생 → 본 도구가 표시한 주파수(예: 60·80·100Hz) 재생하며 청취 위치 이동 3. 박수 테스트 → 박수 후 잔향 방향·시간으로 모드 감지 4. 진지하게 한다면 측정 마이크(미니DSP UMIK-1, 15만원) + REW 무료로 정확 측정 권장." },
   { "q":"가구·소파가 룸 모드에 영향?","a":"영향이 큽니다. 본 도구는 비어 있는 직사각형 방 가정이므로 실제와 차이가 있어요. • 책장·옷장: 음 산란 + 일부 흡음 (긍정적) • 큰 소파·매트리스: 저음 흡수에 도움 • 두꺼운 러그·커튼: 중·고음 흡수 • 문·창문: 음 누출 (모드 약화 효과) 가구로 자연스럽게 흡음·산란이 이뤄지면 베이스 트랩 부담이 줄어요. 반대로 모든 벽이 콘크리트·유리·반사재면 모드가 최악으로 작동합니다." }
@@ -89,11 +89,11 @@ export default function RoomModePage() {
           <li><strong>온도 조정</strong> — 음속에 영향 (20°C → 343 m/s)</li>
           <li><strong>모드 분석 탭</strong>에서 30+ 룸 모드 + 슈로더 주파수 + 부밍 위험 구간 확인</li>
           <li><strong>평면도 탭</strong>에서 스피커·청취자 위치를 드래그하며 음압 분포 시각화</li>
-          <li><strong>비율 진단 탭</strong>에서 Bolt Area·Bonello로 음향적 우수성 등급</li>
+          <li><strong>비율 진단 탭</strong>에서 Walker(Bolt) 영역·Bonello 기준으로 점검 — 참고 지표이며 통과가 좋은 저역을 보장하진 않음</li>
           <li><strong>트랩 탭</strong>에서 본인 방 크기에 맞는 베이스 트랩 권장 수량·비용 확인</li>
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 <strong style={{ color: 'var(--accent)' }}>평면도 SVG의 마커를 직접 드래그</strong>해
+          💡 <strong style={{ color: 'var(--accent-ink)' }}>평면도 SVG의 마커를 직접 드래그</strong>해
           청취자 점수 100점에 가까운 위치를 찾을 수 있어요. 38% 룰 라인이 자동으로 표시됩니다.
         </p>
       </div>
@@ -107,9 +107,9 @@ export default function RoomModePage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '🔴 축방향 (Axial)', d: '한 축의 평행 벽 2개 사이. 가장 강한 모드. 가로·세로·높이 각 5차까지.', c: '#DB2777' },
-            { t: '🟡 접선 (Tangential)', d: '4개 벽 사이. 중간 강도. 축방향의 약 70%.', c: '#D97706' },
-            { t: '🟢 사선 (Oblique)', d: '6개 벽 모두 사이. 가장 약한 모드. 축방향의 약 40%.', c: '#0D9488' },
+            { t: '🔴 축방향 (Axial)', d: '한 축의 평행 벽 2개 사이. 가장 강한 모드. 가로·세로·높이 각 5차까지.', c: '#BE185D' },
+            { t: '🟡 접선 (Tangential)', d: '4개 벽 사이. 중간 강도 — 진폭 기준 축방향의 약 70%(−3dB).', c: '#B45309' },
+            { t: '🟢 사선 (Oblique)', d: '6개 벽 모두 사이. 가장 약한 모드 — 진폭 기준 축방향의 약 50%(−6dB).', c: '#0F766E' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -119,7 +119,7 @@ export default function RoomModePage() {
         </div>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
           <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', lineHeight: 1.9 }}>
-            <strong style={{ color: 'var(--accent)' }}>Rayleigh 공식</strong>:<br />
+            <strong style={{ color: 'var(--accent-ink)' }}>Rayleigh 공식</strong>:<br />
             f(p,q,r) = (c/2) × √[(p/L)² + (q/W)² + (r/H)²]<br />
             <span style={{ fontFamily: 'Noto Sans KR, sans-serif', fontSize: 12, color: 'var(--muted)' }}>
               c = 음속 (343 m/s @ 20°C), p·q·r = 0,1,2... (모드 차수)
@@ -144,9 +144,9 @@ export default function RoomModePage() {
           </p>
         </div>
         <ul style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
-          <li><strong style={{ color: 'var(--text)' }}>일반 거실 (40~50 m³)</strong>: 슈로더 약 130~140Hz</li>
-          <li><strong style={{ color: 'var(--text)' }}>작은 방 (20~30 m³)</strong>: 슈로더 약 160~200Hz</li>
-          <li><strong style={{ color: 'var(--text)' }}>홈스튜디오 (30~40 m³)</strong>: 슈로더 약 150~180Hz</li>
+          <li><strong style={{ color: 'var(--text)' }}>일반 거실 (40~50 m³)</strong>: 슈로더 약 180~200Hz</li>
+          <li><strong style={{ color: 'var(--text)' }}>작은 방 (20~30 m³)</strong>: 슈로더 약 230~280Hz</li>
+          <li><strong style={{ color: 'var(--text)' }}>홈스튜디오 (30~40 m³)</strong>: 슈로더 약 200~230Hz</li>
           <li>이 주파수 <strong>미만</strong> 모드가 부밍의 주범</li>
         </ul>
       </div>
@@ -155,20 +155,22 @@ export default function RoomModePage() {
       <h2 style={sectionTitle}>🎯 38% 룰 — 청취자·스피커 위치</h2>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          <strong>Wilson Audio</strong>가 제안한 가장 유명한 청취자 위치 가이드라인.
-          청취자를 방 길이의 <strong>38% 위치 (앞 벽에서)</strong>에 두면 1차·2차 룸 모드의 노드가 만나는 지점이 됩니다.
+          스튜디오 디자이너 <strong>Wes Lachot</strong>이 널리 알린 청취자 위치 가이드라인.
+          청취자를 방 길이의 <strong>38% 위치 (앞 벽에서)</strong>에 두면 1차 모드 노드(50%)·2차 모드 노드(25%)와
+          벽·중앙의 음압 최대점을 모두 피해 저음 피크·딥이 가장 절충됩니다. Lachot 본인도 엄격한 룰이 아니라
+          방 정중앙(50%)을 벗어나기 위한 <strong>출발점</strong>이라고 설명합니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
           <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, lineHeight: 1.9 }}>
-            예시: 방 길이 5m → 청취자는 <strong style={{ color: 'var(--accent)' }}>앞 벽에서 1.9m 지점</strong><br />
-            스피커는 청취자와 정삼각형을 이루고, 측벽에서 <strong style={{ color: 'var(--accent)' }}>0.8~1.2m 떨어뜨림</strong>
+            예시: 방 길이 5m → 청취자는 <strong style={{ color: 'var(--accent-ink)' }}>앞 벽에서 1.9m 지점</strong><br />
+            스피커는 청취자와 <strong style={{ color: 'var(--accent-ink)' }}>정삼각형(청취각 60°)</strong>이 표준 출발점 — 벽 거리는 일률 수치가 없어 청감·측정으로 조정
           </p>
         </div>
         <ul style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
-          <li>📐 청취자 = 방 길이의 38% (앞 벽 기준)</li>
-          <li>📏 스피커 ↔ 청취자 = 정삼각형 (1.5~2.5m)</li>
-          <li>📐 스피커 측벽 = 0.8~1.2m</li>
-          <li>📐 스피커 뒤 벽 = 0.5~1.0m (가까우면 부밍, 멀면 위상 문제)</li>
+          <li>📐 청취자 = 방 길이의 38% (앞 벽 기준) — 정중앙(50%)·25% 지점 회피가 목적</li>
+          <li>📏 스피커 ↔ 청취자 = 정삼각형·청취각 60° (Genelec 등 표준)</li>
+          <li>📐 좌우 스피커의 측벽 거리는 서로 같게 (대칭이 원칙)</li>
+          <li>📐 벽에서 0.5~1m가량 띄우면 약 86~172Hz에 1/4파장 상쇄 딥 가능 — 벽에 붙이거나(60cm 이내) 충분히 띄운 뒤 조정</li>
         </ul>
       </div>
 
@@ -181,10 +183,10 @@ export default function RoomModePage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '코너 트랩', d: '가장 강력. 모든 축 모드 압력 최대 지점이 코너. 60Hz~ 효과.', c: '#DB2777' },
-            { t: '벽 트랩', d: '1차 반사 지점에 부착. 100Hz~ 중·고음 흡수.', c: '#D97706' },
-            { t: '멤브레인 트랩', d: '저주파 전용. 40Hz~ 특정 주파수 대역 흡수.', c: '#0891B2' },
-            { t: '헬름홀츠', d: '특정 주파수 정확 흡수. 30Hz~ 튜닝 가능.', c: '#0D9488' },
+            { t: '코너 트랩', d: '가장 강력. 모든 축 모드 압력 최대 지점이 코너. 80Hz~ 효과(깊을수록 더 낮게).', c: '#BE185D' },
+            { t: '벽 트랩', d: '1차 반사 지점에 부착. 125Hz~ 중·고음 흡수(200mm급이면 ~100Hz).', c: '#B45309' },
+            { t: '멤브레인 트랩', d: '저주파 전용. 40Hz~ 특정 대역 흡수(40Hz급은 250mm급 깊이).', c: '#0E7490' },
+            { t: '헬름홀츠', d: '특정 주파수 정확 흡수. 30Hz~ 튜닝 가능.', c: '#0F766E' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -216,7 +218,7 @@ export default function RoomModePage() {
           <strong>정육면체 (1:1:1) 또는 두 축이 같은 방 (1:1:N)</strong>이 최악입니다.
           세 축의 모드가 같은 주파수에 중첩되면서 부밍이 매우 심해집니다.
           예: 3×3×3m 방은 가로·세로·높이 모두 같아 1차 모드가 모두 57Hz에 몰림 → 57Hz 부밍 심각.
-          가장 좋은 비율은 <strong>Sepmeyer 황금비 1:1.14:1.39</strong>.
+          권장 비율의 예: <strong>Sepmeyer 1:1.14:1.39, Louden 1:1.4:1.9</strong> 등 — 단일 최적은 없습니다.
         </p>
       </details>
 
@@ -225,7 +227,7 @@ export default function RoomModePage() {
         <p style={faqAnswer}>
           <strong>룸 모드가 지배하는 영역과 일반 음향의 경계</strong>입니다.
           이 미만에서는 모드 영향이 압도적이라 EQ·이퀄라이저로 보정이 잘 안 되고, 베이스 트랩 같은 물리적 처리가 필요합니다.<br />
-          공식: fs = 2000 × √(RT60 / V) — 일반 거실 약 100~200Hz.<br />
+          공식: fs = 2000 × √(RT60 / V) — RT60 0.4초 기준 일반 거실 약 180~200Hz(잔향이 짧은 방은 더 낮아짐).<br />
           본 도구는 RT60=0.4초 가정으로 계산합니다 (보통 거실 평균치).
         </p>
       </details>
@@ -233,10 +235,11 @@ export default function RoomModePage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q4. 38% 룰은 무엇인가요?</summary>
         <p style={faqAnswer}>
-          <strong>Wilson Audio</strong>의 청취자 위치 가이드라인. 방 길이의 38% 지점(앞 벽 기준)에 청취자를 두면
-          1·2차 룸 모드의 노드(음압 0 지점)가 겹치는 위치가 되어 저음이 가장 균형 잡힙니다.<br />
+          스튜디오 디자이너 <strong>Wes Lachot</strong>이 널리 알린 청취자 위치 가이드라인.
+          방 길이의 38% 지점(앞 벽 기준)에 청취자를 두면 1차 모드 노드(50%)·2차 모드 노드(25%)와
+          벽·중앙의 음압 최대점을 모두 피해 저음 피크와 딥이 가장 절충됩니다.<br />
           예: 5m 방 → 앞 벽에서 1.9m 지점.<br />
-          스피커는 청취자와 정삼각형, 측벽에서 0.8~1.2m, 뒤 벽에서 0.5~1.0m 권장.
+          스피커는 청취자와 정삼각형(청취각 60°)이 표준 — 벽 거리는 일률 수치 없이 좌우 대칭을 지키며 조정.
           평면도 탭에서 38% 라인이 자동 표시됩니다.
         </p>
       </details>
@@ -264,7 +267,7 @@ export default function RoomModePage() {
       </details>
 
       <details style={faqDetails}>
-        <summary style={faqSummary}>Q7. 황금비 1:1.14:1.39를 못 맞추면?</summary>
+        <summary style={faqSummary}>Q7. 권장 비율(1:1.14:1.39 등)을 못 맞추면?</summary>
         <p style={faqAnswer}>
           맞추기 어려우면 <strong>가구 배치·트랩으로 보완</strong>하세요.<br />
           • <strong>책장·소파</strong>가 자연스러운 흡음·산란 역할<br />

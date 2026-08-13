@@ -119,6 +119,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
 }
+.pillActive { background: var(--accent-strong); border-color: var(--accent-strong); color: #ffffff; }
 
 /* 히어로 */
 .hero {
@@ -149,7 +150,7 @@
   line-height: 1.7;
 }
 .helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
-.cellAccent { color: var(--accent); }
+.cellAccent { color: var(--accent-ink); } /* accent(4.10)는 소형 텍스트 AA 미달 */
 
 /* 범례 */
 .legend {
@@ -288,7 +289,7 @@
 .trapEffective {
   margin: 4px 0 0;
   font-size: 12px;
-  color: var(--accent);
+  color: var(--accent-ink);
   font-family: 'Inter', system-ui, sans-serif;
 }
 .trapEffective strong { font-weight: 800; }
@@ -333,7 +334,7 @@
 }@media (hover: hover) {
   .crossLink:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 }
 
@@ -345,8 +346,8 @@
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
-.warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
+.warnCard strong { display: block; color: #92400E; /* amber-800 — 틴트+페이지 배경 합성 5.4 */ margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard p { margin: 0; color: var(--muted-strong); line-height: 1.7; }
 
 .warnCardStrong {
   background: rgba(219, 39, 119, 0.08);
@@ -356,7 +357,7 @@
   padding: 14px 16px;
   font-size: 13px;
 }
-.warnCardStrong strong { display: block; color: #DB2777; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCardStrong strong { display: block; color: #BE185D; /* pink-600은 자기 틴트 위 4.09 */ margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
 .warnCardStrong p { margin: 0; color: var(--text); line-height: 1.75; }
 
 /* 면책 */
@@ -371,7 +372,7 @@
 }
 .disclaimer strong {
   display: block;
-  color: #0891B2;
+  color: #0E7490; /* cyan-600은 틴트 위 3.49 */
   margin-bottom: 8px;
   font-family: 'Noto Sans KR', sans-serif;
 }
@@ -379,7 +380,7 @@
   margin: 0;
   padding-left: 18px;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--muted-strong);
   line-height: 1.85;
 }
 .disclaimer ul strong { display: inline; color: var(--text); margin: 0; }

@@ -6,13 +6,20 @@ import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './roomMode.module.css'
 import {
-  ROOM_PRESETS, TRAPS, MODE_COLORS, MODE_LABELS,
+  ROOM_PRESETS, TRAPS, MODE_COLORS, MODE_INKS, MODE_LABELS, WALKER,
   soundSpeed, buildAllModes, schroederFreq, largestGap, boomingRanges,
   diagnoseRatio, bonelloAnalysis, inBoltArea, pressureAt, listenerScore,
   fmt,
 } from './roomModeUtils'
 
 type Tab = 'modes' | 'plan' | 'ratio' | 'traps'
+
+const TAB_DEFS: { id: Tab; label: string }[] = [
+  { id: 'modes', label: '모드 분석' },
+  { id: 'plan',  label: '방 평면도' },
+  { id: 'ratio', label: '방 비율 진단' },
+  { id: 'traps', label: '트랩·튜닝' },
+]
 
 const STORAGE_KEY = 'youtil_roommode_v1'
 
@@ -37,13 +44,24 @@ export default function RoomModeClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
-      if (j.W) setW(j.W)
-      if (j.L) setL(j.L)
-      if (j.H) setH(j.H)
-      if (j.tempC) setTempC(j.tempC)
-      if (j.speakerL) setSpeakerL(j.speakerL)
-      if (j.speakerR) setSpeakerR(j.speakerR)
-      if (j.listener) setListener(j.listener)
+      /* 무검증 복원 금지 — 문자열·숫자 범위 확인 후만 반영 */
+      const numStr = (v: unknown, min: number, max: number): v is string => {
+        if (typeof v !== 'string') return false
+        const n = parseFloat(v)
+        return Number.isFinite(n) && n >= min && n <= max
+      }
+      const point = (v: unknown): v is { x: number; y: number } =>
+        typeof v === 'object' && v !== null &&
+        typeof (v as { x?: unknown }).x === 'number' && typeof (v as { y?: unknown }).y === 'number' &&
+        (v as { x: number }).x >= 0 && (v as { x: number }).x <= 1 &&
+        (v as { y: number }).y >= 0 && (v as { y: number }).y <= 1
+      if (numStr(j.W, 0.5, 20)) setW(j.W)
+      if (numStr(j.L, 0.5, 20)) setL(j.L)
+      if (numStr(j.H, 1.5, 6)) setH(j.H)
+      if (numStr(j.tempC, -10, 40)) setTempC(j.tempC)
+      if (point(j.speakerL)) setSpeakerL(j.speakerL)
+      if (point(j.speakerR)) setSpeakerR(j.speakerR)
+      if (point(j.listener)) setListener(j.listener)
     } catch {}
   }, [])
   useEffect(() => {
@@ -53,12 +71,17 @@ export default function RoomModeClient() {
   }, [W, L, H, tempC, speakerL, speakerR, listener])
 
   /* 계산 */
-  const Wn = parseFloat(W) || 1
-  const Ln = parseFloat(L) || 1
-  const Hn = parseFloat(H) || 1
-  const T = parseFloat(tempC) || 20
+  /* 음수·범위 밖 입력 클램프 — min/max 속성은 직접 타이핑을 막지 못한다 */
+  const clampNum = (v: string, min: number, max: number, fb: number) => {
+    const n = parseFloat(v)
+    return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fb
+  }
+  const Wn = clampNum(W, 0.5, 20, 3.5)
+  const Ln = clampNum(L, 0.5, 20, 5.0)
+  const Hn = clampNum(H, 1.5, 6, 2.4)
+  const T = clampNum(tempC, -10, 40, 20)
   const c = soundSpeed(T)
-  const modes = useMemo(() => buildAllModes(Ln, Wn, Hn, c, 5, 300), [Ln, Wn, Hn, c])
+  const modes = useMemo(() => buildAllModes(Ln, Wn, Hn, c, 300), [Ln, Wn, Hn, c])
   const fSchroeder = schroederFreq(Ln, Wn, Hn)
   const firstMode = modes[0]?.freq ?? 0
   const gap = largestGap(modes)
@@ -81,18 +104,30 @@ export default function RoomModeClient() {
         사용 안내 룸 모드는 <strong>직사각형 방 가정</strong> — 비대칭·복도·가구 영향 큼. 표시 주파수는 <strong>이상 모델</strong> — 실제는 ±10Hz 변동. 정확한 측정은 <strong>REW (Room EQ Wizard) + 측정 마이크</strong>를 권장합니다.
       </Disclaimer>
 
-      {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        {([
-          { id: 'modes', label: '모드 분석' },
-          { id: 'plan',  label: '방 평면도' },
-          { id: 'ratio', label: '방 비율 진단' },
-          { id: 'traps', label: '트랩·튜닝' },
-        ] as { id: Tab; label: string }[]).map((t) => (
+      {/* 탭 — tablist 패턴 (화살표 키 이동 포함) */}
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="분석 모드">
+        {TAB_DEFS.map((t) => (
           <button
             key={t.id}
+            id={`rm-tab-${t.id}`}
+            role="tab"
+            aria-selected={tab === t.id}
+            tabIndex={tab === t.id ? 0 : -1}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
+            onKeyDown={(e) => {
+              const i = TAB_DEFS.findIndex((x) => x.id === t.id)
+              let next = -1
+              if (e.key === 'ArrowRight') next = (i + 1) % TAB_DEFS.length
+              else if (e.key === 'ArrowLeft') next = (i + TAB_DEFS.length - 1) % TAB_DEFS.length
+              else if (e.key === 'Home') next = 0
+              else if (e.key === 'End') next = TAB_DEFS.length - 1
+              if (next >= 0) {
+                e.preventDefault()
+                setTab(TAB_DEFS[next].id)
+                document.getElementById(`rm-tab-${TAB_DEFS[next].id}`)?.focus()
+              }
+            }}
             type="button"
           >
             {t.label}
@@ -106,32 +141,36 @@ export default function RoomModeClient() {
         <div className={s.field}>
           <label className={s.fieldLabel}>한국 거실 프리셋</label>
           <div className={s.pillRow}>
-            {ROOM_PRESETS.map((p) => (
-              <button
-                key={p.id}
-                className={s.pill}
-                onClick={() => {
-                  setL(String(p.L)); setW(String(p.W)); setH(String(p.H))
-                }}
-                type="button"
-              >
-                {p.label}
-              </button>
-            ))}
+            {ROOM_PRESETS.map((p) => {
+              const active = Wn === p.W && Ln === p.L && Hn === p.H
+              return (
+                <button
+                  key={p.id}
+                  className={`${s.pill} ${active ? s.pillActive : ''}`}
+                  aria-pressed={active}
+                  onClick={() => {
+                    setL(String(p.L)); setW(String(p.W)); setH(String(p.H))
+                  }}
+                  type="button"
+                >
+                  {p.label}
+                </button>
+              )
+            })}
           </div>
         </div>
         <div className={s.row3}>
           <div className={s.field}>
             <label className={s.fieldLabel} htmlFor="room-mode-f1">가로 W (m)</label>
-            <input id="room-mode-f1" type="number" inputMode="decimal" className={s.input} value={W} onChange={(e) => setW(e.target.value)} min={0.5} max={20} step={0.1} />
+            <input id="room-mode-f1" type="number" inputMode="decimal" className={s.input} value={W} onChange={(e) => setW(e.target.value)} onBlur={() => setW(String(Wn))} min={0.5} max={20} step={0.1} />
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel} htmlFor="room-mode-f2">세로 L (m)</label>
-            <input id="room-mode-f2" type="number" inputMode="decimal" className={s.input} value={L} onChange={(e) => setL(e.target.value)} min={0.5} max={20} step={0.1} />
+            <input id="room-mode-f2" type="number" inputMode="decimal" className={s.input} value={L} onChange={(e) => setL(e.target.value)} onBlur={() => setL(String(Ln))} min={0.5} max={20} step={0.1} />
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel} htmlFor="room-mode-height">높이 H (m)</label>
-            <input id="room-mode-height" type="number" inputMode="decimal" className={s.input} value={H} onChange={(e) => setH(e.target.value)} min={2} max={6} step={0.05} />
+            <input id="room-mode-height" type="number" inputMode="decimal" className={s.input} value={H} onChange={(e) => setH(e.target.value)} onBlur={() => setH(String(Hn))} min={1.5} max={6} step={0.05} />
           </div>
         </div>
         <div className={s.field}>
@@ -141,7 +180,7 @@ export default function RoomModeClient() {
         <p className={s.helpText}>
           체적 <strong>{fmt(Wn * Ln * Hn, 1)} m³</strong> ·
           슈로더 주파수 <strong className={s.cellAccent}>{fmt(fSchroeder, 1)} Hz</strong>
-          {' '}(이 미만에서 룸 모드 지배)
+          {' '}(RT60 0.4초 가정 — 이 미만에서 룸 모드 지배)
         </p>
       </div>
 
@@ -170,7 +209,7 @@ export default function RoomModeClient() {
               <span><span className={s.legendDot} style={{ background: MODE_COLORS.oblique }}/>{MODE_LABELS.oblique}</span>
             </div>
             <p className={s.helpText}>
-              막대 높이 = 모드 강도 (축방향 1.0 / 접선 0.7 / 사선 0.4)<br />
+              막대 높이 = 상대 진폭 (축방향 1.0 / 접선 −3dB≈0.7 / 사선 −6dB=0.5)<br />
               점선 세로축 = 슈로더 주파수 ({fmt(fSchroeder, 1)} Hz). 이 미만에서 룸 모드가 지배.
             </p>
           </div>
@@ -203,8 +242,8 @@ export default function RoomModeClient() {
                 <tbody>
                   {modes.slice(0, 25).map((m, i) => (
                     <tr key={i}>
-                      <td className={s.cellMono} style={{ color: MODE_COLORS[m.type] }}>{fmt(m.freq, 2)} Hz</td>
-                      <td><span className={s.typeBadge} style={{ background: MODE_COLORS[m.type], color: '#0D0D0D' }}>{MODE_LABELS[m.type].split(' ')[0]}</span></td>
+                      <td className={s.cellMono} style={{ color: MODE_INKS[m.type] }}>{fmt(m.freq, 2)} Hz</td>
+                      <td><span className={s.typeBadge} style={{ background: MODE_INKS[m.type], color: '#FFFFFF' }}>{MODE_LABELS[m.type].split(' ')[0]}</span></td>
                       <td className={s.cellMono}>({m.p}, {m.q}, {m.r})</td>
                       <td className={s.cellMono}>{m.strength.toFixed(1)}</td>
                     </tr>
@@ -225,7 +264,7 @@ export default function RoomModeClient() {
             <p className={s.heroValue}>
               청취 위치 점수 <strong>{listenerScore(listener.x, listener.y)} / 100</strong>
             </p>
-            <p className={s.heroSub}>모드 노드(저음 약한 영역) + 38% 룰을 종합한 점수</p>
+            <p className={s.heroSub}>38% 라인 기준 + 정중앙(1차 노드)·25%(2차 노드) 회피를 반영한 점수</p>
           </div>
 
           <div className={s.card}>
@@ -240,14 +279,15 @@ export default function RoomModeClient() {
               onListenerChange={setListener}
             />
             <div className={s.legend}>
-              <span><span className={s.legendBox} style={{ background: 'rgba(219, 39, 119, 0.5)' }}/>음압 최대 (벽)</span>
-              <span><span className={s.legendBox} style={{ background: 'rgba(13, 148, 136, 0.4)' }}/>모드 노드 (좋음)</span>
+              <span><span className={s.legendBox} style={{ background: 'rgba(219, 39, 119, 0.5)' }}/>1차 모드 피크 (저음 부스트)</span>
+              <span><span className={s.legendBox} style={{ background: 'rgba(13, 148, 136, 0.4)' }}/>1차 모드 딥 (저음 급감)</span>
               <span>🔊 스피커</span>
               <span>🪑 청취자</span>
               <span style={{ borderTop: '1px dashed var(--accent)', paddingTop: 2 }}>38% 라인</span>
             </div>
             <p className={s.helpText}>
-              스피커·청취자 마커를 클릭/드래그해 위치를 조정. 모드 노드(연한 초록) 영역에 청취자가 있으면 저음이 균형 잡힘.
+              스피커·청취자 마커를 클릭/드래그해 위치를 조정. 피크(빨강)에선 저음이 부풀고
+              딥(초록 중심 — 1차 모드 노드)에선 해당 저음이 급감합니다. 둘 다 피한 절충 위치(38% 라인 부근)가 좋습니다.
             </p>
           </div>
 
@@ -283,11 +323,14 @@ export default function RoomModeClient() {
           </div>
 
           <div className={s.warnCard}>
-            <strong>38% 룰 (Wilson Audio)</strong>
+            <strong>38% 룰 (Wes Lachot)</strong>
             <p>
-              청취자를 방 길이의 <strong>38% 위치 (앞 벽에서)</strong>에 두는 것이 음향적으로 가장 안정.<br />
-              본인 방 기준 <strong>앞 벽에서 {fmt(Ln * 0.38, 2)}m</strong> 지점.<br />
-              스피커는 청취자와 정삼각형을 이루고, 측벽에서 0.8~1.2m 떨어뜨림 권장.
+              스튜디오 디자이너 Wes Lachot이 널리 알린 가이드라인 — 청취자를 방 길이의
+              {' '}<strong>38% 위치 (앞 벽에서)</strong>에 두면 1차 모드 노드(50%)·2차 노드(25%)와
+              벽·중앙의 음압 최대점을 모두 피하는 절충 위치가 됩니다.<br />
+              본인 방 기준 <strong>앞 벽에서 {fmt(Ln * 0.38, 2)}m</strong> 지점 (엄격한 룰이 아니라 출발점).<br />
+              스피커는 청취자와 정삼각형(청취각 60°)이 표준 출발점 — 벽과의 거리는 일률 수치가 없고
+              좌우 대칭을 지키며 청감·측정으로 조정하세요.
             </p>
           </div>
         </>
@@ -304,7 +347,7 @@ export default function RoomModeClient() {
             <p className={s.heroSub}>
               본인 비율 <strong>{fmt(ratio.ratio.h, 2)} : {fmt(ratio.ratio.w, 2)} : {fmt(ratio.ratio.l, 2)}</strong>
               {' '}(H:W:L)
-              {' · '}황금비 1 : 1.14 : 1.39
+              {' · '}권장비 예 1 : 1.14 : 1.39 (Sepmeyer)
             </p>
           </div>
 
@@ -315,22 +358,30 @@ export default function RoomModeClient() {
               <table className={s.detailTable}>
                 <tbody>
                   <tr><td>본인 방 (H:W:L)</td><td className={s.cellMono}>1 : {fmt(Wn / Hn, 2)} : {fmt(Ln / Hn, 2)}</td></tr>
-                  <tr><td>Sepmeyer 황금비</td><td className={s.cellMono}>1 : 1.14 : 1.39</td></tr>
-                  <tr><td>Bolt Area 안전 여부</td><td className={s.cellMono} style={{ color: inBoltArea(Wn / Hn, Ln / Hn) ? 'var(--accent)' : '#DB2777' }}>
-                    {inBoltArea(Wn / Hn, Ln / Hn) ? '✅ 안전 영역' : '❌ 위험 영역'}
+                  <tr><td>Sepmeyer 권장비 (A)</td><td className={s.cellMono}>1 : 1.14 : 1.39</td></tr>
+                  <tr><td>Walker 조건식 (EBU·ITU)*</td><td className={s.cellMono} style={{ color: inBoltArea(Wn / Hn, Ln / Hn) ? 'var(--accent-ink)' : '#BE185D' }}>
+                    {inBoltArea(Wn / Hn, Ln / Hn) ? '✅ 충족' : '❌ 미충족'}
                   </td></tr>
                 </tbody>
               </table>
             </div>
+            <p className={s.helpText}>
+              * 권장 비율 등급과 Walker 조건식은 서로 다른 기준입니다 — Sepmeyer A처럼 권장 비율이면서
+              Walker 영역 밖인 경우도 있습니다(아래 차트 참고).
+            </p>
           </div>
 
           {/* Bolt Area 플로팅 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>Bolt Area 플로팅 (W/H × L/H)</span>
+            <span className={s.cardLabel}>Walker 권장 영역 (W/H × L/H) — Bolt Area의 공인 근사</span>
             <BoltAreaSVG W={Wn} L={Ln} H={Hn} />
             <p className={s.helpText}>
-              Bolt가 1946년 정의한 &quot;음향적으로 안전한&quot; 비율 영역.
-              본인 방 위치(노란 점)가 안전 영역(초록) 안에 있으면 좋음.
+              Bolt(1946)가 정의한 곡선 영역의 공인 대수 근사 — Walker(BBC, 1993) 조건식
+              1.1×(W/H) ≤ L/H ≤ 4.5×(W/H)−4, 그리고 L/H·W/H &lt; 3 (EBU Tech 3276·ITU-R BS.1116 채택.
+              긴 변을 L로 평가). 본인 방 위치(노란 점)가 초록 영역 안에 있으면 저주파 모드 분포가 대체로 고른 비율.<br />
+              ※ 권장 비율과 Walker 영역은 <strong>서로 다른 기준</strong>이라 어긋날 수 있습니다 —
+              Sepmeyer A(⭐, 1:1.14:1.39)가 대표적으로 영역 밖입니다. 비율 등급이 좋으면 Walker 위반을
+              과도하게 걱정할 필요는 없습니다.
             </p>
           </div>
 
@@ -341,7 +392,8 @@ export default function RoomModeClient() {
               {bonello.map((b, i) => {
                 const w = (b.count / maxBonello) * 100
                 const isPrev = i > 0 ? bonello[i - 1].count : 0
-                const isWorse = i > 0 && b.count < isPrev   // 모드가 줄면 안 좋음
+                const isWorse = i > 0 && b.count < isPrev   // 조건 ①: 위 대역에서 줄면 위반
+                const bad = isWorse || b.coincidentViolation // 조건 ②: 중복 모드 + 대역 5개 미만
                 return (
                   <div key={b.freq} className={s.bonelloRow}>
                     <span className={s.bonelloLabel}>{b.freq}Hz</span>
@@ -350,10 +402,10 @@ export default function RoomModeClient() {
                         className={s.bonelloFill}
                         style={{
                           width: `${Math.max(w, 4)}%`,
-                          background: b.count === 0 ? '#444' : (isWorse ? '#DB2777' : '#0D9488'),
+                          background: bad ? '#BE185D' : (b.count === 0 ? '#444' : '#0F766E'),
                         }}
                       >
-                        <span className={s.bonelloVal}>{b.count}</span>
+                        <span className={s.bonelloVal}>{b.count}{b.coincidentViolation ? ' ⚠' : ''}</span>
                       </div>
                     </div>
                   </div>
@@ -361,8 +413,11 @@ export default function RoomModeClient() {
               })}
             </div>
             <p className={s.helpText}>
-              ✅ <strong style={{ color: '#0D9488' }}>균등 증가</strong>가 좋음 — 모든 대역에 모드가 분포<br />
-              ❌ <strong style={{ color: '#DB2777' }}>몰림·갭</strong>이 나쁨 — 특정 대역만 몰리면 부밍
+              Bonello(1981) 두 조건 — ✅ <strong style={{ color: '#0F766E' }}>비감소</strong>: 위 대역으로 갈수록 모드 수가 줄지 않아야
+              (급증은 정상) · ⚠ <strong style={{ color: '#BE185D' }}>중복 모드</strong>: 같은 주파수에 겹친 모드는
+              그 대역 모드 수가 5개 이상일 때만 허용<br />
+              ※ 원 기준 대역 10~200Hz 중 20Hz 이상 표시. 참고 지표 — 충족이 좋은 저역 응답을
+              보장하지는 않습니다(Welti 2009, AES 7849).
             </p>
           </div>
         </>
@@ -473,7 +528,7 @@ function ModeBarChart({ modes, schroeder }: BarProps) {
         </g>
       ))}
       {/* 강도 라벨 */}
-      {[0.4, 0.7, 1.0].map((s) => (
+      {[0.5, 0.7, 1.0].map((s) => (
         <g key={s}>
           <line x1={padL} y1={yScale(s)} x2={W - padR} y2={yScale(s)} stroke="var(--border)" strokeWidth="0.3" strokeDasharray="2,3" />
           <text x={padL - 4} y={yScale(s) + 3} fill="var(--muted)" fontSize="11" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{s}</text>
@@ -482,8 +537,8 @@ function ModeBarChart({ modes, schroeder }: BarProps) {
       {/* 슈로더 라인 */}
       {schroeder >= fMin && schroeder <= fMax && (
         <g>
-          <line x1={xScale(schroeder)} y1={padT - 4} x2={xScale(schroeder)} y2={yBase + 4} stroke="#D97706" strokeWidth="1.5" strokeDasharray="3,2" />
-          <text x={xScale(schroeder)} y={padT - 6} fill="#D97706" fontSize="12" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">슈로더</text>
+          <line x1={xScale(schroeder)} y1={padT - 4} x2={xScale(schroeder)} y2={yBase + 4} stroke="#B45309" strokeWidth="1.5" strokeDasharray="3,2" />
+          <text x={xScale(schroeder)} y={padT - 6} fill="#B45309" fontSize="12" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">슈로더</text>
         </g>
       )}
       {/* 모드 막대 */}
@@ -551,6 +606,12 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
   }
 
   /* 마우스/터치 이벤트 */
+  const startDrag = (e: React.PointerEvent, which: 'sL' | 'sR' | 'listener') => {
+    e.preventDefault()
+    /* 캡처 없으면 마커 밖으로 나가는 순간 드래그가 끊긴다 */
+    try { svgRef.current?.setPointerCapture(e.pointerId) } catch {}
+    setDrag(which)
+  }
   const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     if (!drag || !svgRef.current) return
     const rect = svgRef.current.getBoundingClientRect()
@@ -568,7 +629,7 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
         width={totalW}
         height={totalH}
         viewBox={`0 0 ${totalW} ${totalH}`}
-        style={{ touchAction: drag ? 'none' : 'auto', userSelect: 'none', maxWidth: '100%' }}
+        style={{ touchAction: drag ? 'none' : 'auto', userSelect: 'none', maxWidth: '100%', height: 'auto' }}
         onPointerMove={onPointerMove}
         onPointerUp={() => setDrag(null)}
         onPointerLeave={() => setDrag(null)}
@@ -591,7 +652,7 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
         <rect x={pad} y={pad} width={w} height={h} fill="none" stroke="var(--text)" strokeWidth="2" />
         {/* 38% 라인 */}
         <line x1={pad} y1={pad + h * 0.38} x2={pad + w} y2={pad + h * 0.38} stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6,4" />
-        <text x={pad + w + 4} y={pad + h * 0.38 + 4} fill="var(--accent)" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>38%</text>
+        <text x={pad + w + 4} y={pad + h * 0.38 + 4} fill="var(--accent-ink)" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>38%</text>
         {/* 가로/세로 치수 */}
         <text x={pad + w / 2} y={pad - 8} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmt(W, 1)}m (가로 W)</text>
         <text x={pad - 8} y={pad + h / 2} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' transform={`rotate(-90, ${pad - 8}, ${pad + h / 2})`}>
@@ -603,8 +664,8 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
 
         {/* 청취자 (드래그) */}
         <g
-          onPointerDown={(e) => { e.preventDefault(); setDrag('listener') }}
-          style={{ cursor: 'pointer' }}
+          onPointerDown={(e) => startDrag(e, 'listener')}
+          style={{ cursor: 'pointer', touchAction: 'none' }}
         >
           <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={16} fill="rgba(8, 145, 178, 0.25)" />
           <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={12} fill="#0891B2" stroke="#000" strokeWidth="1.5" />
@@ -613,8 +674,8 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
 
         {/* 좌 스피커 */}
         <g
-          onPointerDown={(e) => { e.preventDefault(); setDrag('sL') }}
-          style={{ cursor: 'pointer' }}
+          onPointerDown={(e) => startDrag(e, 'sL')}
+          style={{ cursor: 'pointer', touchAction: 'none' }}
         >
           <circle cx={pad + speakerL.x * w} cy={pad + speakerL.y * h} r={11} fill="#EA580C" stroke="#000" strokeWidth="1.5" />
           <text x={pad + speakerL.x * w} y={pad + speakerL.y * h + 4} fontSize="13" textAnchor="middle">L</text>
@@ -622,8 +683,8 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
 
         {/* 우 스피커 */}
         <g
-          onPointerDown={(e) => { e.preventDefault(); setDrag('sR') }}
-          style={{ cursor: 'pointer' }}
+          onPointerDown={(e) => startDrag(e, 'sR')}
+          style={{ cursor: 'pointer', touchAction: 'none' }}
         >
           <circle cx={pad + speakerR.x * w} cy={pad + speakerR.y * h} r={11} fill="#EA580C" stroke="#000" strokeWidth="1.5" />
           <text x={pad + speakerR.x * w} y={pad + speakerR.y * h + 4} fontSize="13" textAnchor="middle">R</text>
@@ -642,8 +703,9 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
    BoltAreaSVG — Bolt Area 플로팅
    ───────────────────────────────────────────── */
 function BoltAreaSVG({ W, L, H }: { W: number; L: number; H: number }) {
-  const wlRatio = W / H
-  const llRatio = L / H
+  /* 판정(inBoltArea)과 동일하게 긴 변을 L로 정규화 — W↔L 스왑 시 점·판정이 함께 움직인다 */
+  const wlRatio = Math.min(W, L) / H
+  const llRatio = Math.max(W, L) / H
 
   const svgW = 360
   const svgH = 280
@@ -656,13 +718,21 @@ function BoltAreaSVG({ W, L, H }: { W: number; L: number; H: number }) {
   const xScale = (v: number) => padL + ((v - xMin) / (xMax - xMin)) * (svgW - padL - padR)
   const yScale = (v: number) => svgH - padB - ((v - yMin) / (yMax - yMin)) * (svgH - padT - padB)
 
-  /* 안전 영역 폴리곤 (단순 박스) */
+  /* 안전 영역 — 판정 함수와 같은 Walker 쐐기식(EBU 3276·ITU-R BS.1116)을 차트 범위로 클리핑.
+     꼭짓점: 두 직선 교점(1.176, 1.294) → 상한선이 y=2.6에 닿는 x=(2.6−(−4))/4.5 → 하한선 y=2.6의 x=2.6/1.1 */
+  const apexX = (0 - WALKER.upIntercept) / (WALKER.upSlope - WALKER.lowSlope)
+  const apexY = WALKER.lowSlope * apexX
+  const upX = (yMax - WALKER.upIntercept) / WALKER.upSlope
+  const lowX = Math.min(yMax / WALKER.lowSlope, xMax)
   const safePoly = `
-    ${xScale(1.1)},${yScale(1.4)}
-    ${xScale(1.1)},${yScale(2.5)}
-    ${xScale(2.5)},${yScale(2.5)}
-    ${xScale(2.5)},${yScale(1.4)}
+    ${xScale(apexX)},${yScale(apexY)}
+    ${xScale(upX)},${yScale(yMax)}
+    ${xScale(lowX)},${yScale(Math.min(yMax, WALKER.lowSlope * lowX))}
   `
+  /* 점이 차트 범위 밖이면 가장자리에 클램프해 표시(숨기면 판정과 대조 불가) */
+  const dotWl = Math.min(xMax, Math.max(xMin, wlRatio))
+  const dotLl = Math.min(yMax, Math.max(yMin, llRatio))
+  const dotClamped = dotWl !== wlRatio || dotLl !== llRatio
 
   return (
     <div style={{ overflowX: 'auto', display: 'flex', justifyContent: 'center' }}>
@@ -682,19 +752,19 @@ function BoltAreaSVG({ W, L, H }: { W: number; L: number; H: number }) {
         ))}
         {/* 안전 영역 */}
         <polygon points={safePoly} fill="rgba(13, 148, 136, 0.18)" stroke="#0D9488" strokeWidth="1.5" />
-        {/* 황금비 점 (Sepmeyer) */}
+        {/* Sepmeyer 권장비 점 */}
         <circle cx={xScale(1.14)} cy={yScale(1.39)} r={6} fill="#D97706" stroke="#000" strokeWidth="0.5" />
-        <text x={xScale(1.14) + 8} y={yScale(1.39) + 4} fill="#D97706" fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>Sepmeyer ⭐</text>
+        <text x={xScale(1.14) + 8} y={yScale(1.39) + 4} fill="#B45309" fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>Sepmeyer ⭐</text>
         {/* 정육면체 (위험) */}
         <circle cx={xScale(1.0)} cy={yScale(1.0)} r={5} fill="#DB2777" stroke="#000" strokeWidth="0.5" />
-        <text x={xScale(1.0) + 7} y={yScale(1.0) + 4} fill="#DB2777" fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>정육면체 ⚠️</text>
-        {/* 본인 방 */}
-        {wlRatio >= xMin && wlRatio <= xMax && llRatio >= yMin && llRatio <= yMax && (
-          <g>
-            <circle cx={xScale(wlRatio)} cy={yScale(llRatio)} r={9} fill="var(--accent)" stroke="#000" strokeWidth="1.5" />
-            <text x={xScale(wlRatio)} y={yScale(llRatio) - 14} fill="var(--accent)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">내 방</text>
-          </g>
-        )}
+        <text x={xScale(1.0) + 7} y={yScale(1.0) + 4} fill="#BE185D" fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>정육면체 ⚠️</text>
+        {/* 본인 방 (범위 밖이면 가장자리 클램프 + 표시) */}
+        <g>
+          <circle cx={xScale(dotWl)} cy={yScale(dotLl)} r={9} fill="var(--accent)" stroke="#000" strokeWidth="1.5" />
+          <text x={xScale(dotWl)} y={yScale(dotLl) - 14 < 10 ? yScale(dotLl) + 22 : yScale(dotLl) - 14} fill="var(--accent-ink)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
+            내 방{dotClamped ? ' (차트 밖)' : ''}
+          </text>
+        </g>
         {/* 축 라벨 */}
         <text x={svgW / 2} y={svgH - 1} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>W / H (가로/높이)</text>
         <text x={padL - 28} y={svgH / 2} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' transform={`rotate(-90, ${padL - 28}, ${svgH / 2})`}>L / H (세로/높이)</text>
