@@ -9,6 +9,7 @@ import {
   ROOM_PRESETS, TRAPS, MODE_COLORS, MODE_INKS, MODE_LABELS, WALKER,
   soundSpeed, buildAllModes, schroederFreq, largestGap, boomingRanges,
   diagnoseRatio, bonelloAnalysis, inBoltArea, pressureAt, listenerScore,
+  fundamentalFreq, speakerFeedback,
   fmt,
 } from './roomModeUtils'
 
@@ -31,12 +32,14 @@ export default function RoomModeClient() {
   const [L, setL] = useState('5.0')   // 세로
   const [H, setH] = useState('2.4')   // 높이
   const [tempC, setTempC] = useState('20')
+  const [rt60, setRt60] = useState(0.4)
 
   /* 탭 2: 평면도 */
   // 정규화 좌표 (0~1) — yRel = 길이 방향 (L), xRel = 가로 방향 (W)
   const [speakerL, setSpeakerL] = useState({ x: 0.25, y: 0.10 })
   const [speakerR, setSpeakerR] = useState({ x: 0.75, y: 0.10 })
   const [listener, setListener] = useState({ x: 0.50, y: 0.38 })
+  const [posDrafts, setPosDrafts] = useState<Record<string, string>>({})
 
   /* localStorage */
   useEffect(() => {
@@ -59,6 +62,7 @@ export default function RoomModeClient() {
       if (numStr(j.L, 0.5, 20)) setL(j.L)
       if (numStr(j.H, 1.5, 6)) setH(j.H)
       if (numStr(j.tempC, -10, 40)) setTempC(j.tempC)
+      if (typeof j.rt60 === 'number' && j.rt60 >= 0.2 && j.rt60 <= 1.0) setRt60(j.rt60)
       if (point(j.speakerL)) setSpeakerL(j.speakerL)
       if (point(j.speakerR)) setSpeakerR(j.speakerR)
       if (point(j.listener)) setListener(j.listener)
@@ -66,9 +70,9 @@ export default function RoomModeClient() {
   }, [])
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ W, L, H, tempC, speakerL, speakerR, listener }))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ W, L, H, tempC, rt60, speakerL, speakerR, listener }))
     } catch {}
-  }, [W, L, H, tempC, speakerL, speakerR, listener])
+  }, [W, L, H, tempC, rt60, speakerL, speakerR, listener])
 
   /* 계산 */
   /* 음수·범위 밖 입력 클램프 — min/max 속성은 직접 타이핑을 막지 못한다 */
@@ -82,8 +86,10 @@ export default function RoomModeClient() {
   const T = clampNum(tempC, -10, 40, 20)
   const c = soundSpeed(T)
   const modes = useMemo(() => buildAllModes(Ln, Wn, Hn, c, 300), [Ln, Wn, Hn, c])
-  const fSchroeder = schroederFreq(Ln, Wn, Hn)
-  const firstMode = modes[0]?.freq ?? 0
+  const fSchroeder = schroederFreq(Ln, Wn, Hn, rt60)
+  /* R2: "1차 모드"는 20Hz 필터 뒤 첫 항목이 아니라 진짜 기본 모드로 */
+  const fFund = fundamentalFreq(Ln, Wn, Hn, c)
+  const firstShown = modes[0]?.freq ?? 0
   const gap = largestGap(modes)
   const booming = boomingRanges(modes)
   const ratio = diagnoseRatio(Wn, Ln, Hn)
@@ -177,10 +183,14 @@ export default function RoomModeClient() {
           <label className={s.fieldLabel} htmlFor="room-mode-temp">온도 ({tempC}°C → 음속 {fmt(c, 1)} m/s)</label>
           <input id="room-mode-temp" type="range" min={-10} max={40} step={1} value={tempC} onChange={(e) => setTempC(e.target.value)} className={s.slider} />
         </div>
+        <div className={s.field}>
+          <label className={s.fieldLabel} htmlFor="room-mode-rt60">RT60 잔향시간 가정 ({rt60.toFixed(2)}초 — 슈로더 주파수에만 영향)</label>
+          <input id="room-mode-rt60" type="range" min={0.2} max={1.0} step={0.05} value={rt60} onChange={(e) => setRt60(parseFloat(e.target.value))} className={s.slider} />
+        </div>
         <p className={s.helpText}>
           체적 <strong>{fmt(Wn * Ln * Hn, 1)} m³</strong> ·
           슈로더 주파수 <strong className={s.cellAccent}>{fmt(fSchroeder, 1)} Hz</strong>
-          {' '}(RT60 0.4초 가정 — 이 미만에서 룸 모드 지배)
+          {' '}(RT60 {rt60.toFixed(2)}초 가정 — 이 미만에서 룸 모드 지배)
         </p>
       </div>
 
@@ -193,7 +203,8 @@ export default function RoomModeClient() {
               총 <strong>{modes.length}개</strong> 모드 (20~300Hz)
             </p>
             <p className={s.heroSub}>
-              1차 모드 <strong>{fmt(firstMode, 1)}Hz</strong> ·
+              기본 모드 <strong>{fmt(fFund, 1)}Hz</strong>{fFund < 20 ? ' (표시 범위 20Hz~ 밖)' : ''} ·
+              20Hz 이상 첫 모드 <strong>{fmt(firstShown, 1)}Hz</strong> ·
               슈로더 <strong>{fmt(fSchroeder, 1)}Hz</strong>
               {gap.gap > 0 && ` · 최대 갭 ${fmt(gap.gap, 1)}Hz (${fmt(gap.from, 1)}→${fmt(gap.to, 1)})`}
             </p>
@@ -264,7 +275,7 @@ export default function RoomModeClient() {
             <p className={s.heroValue}>
               청취 위치 점수 <strong>{listenerScore(listener.x, listener.y)} / 100</strong>
             </p>
-            <p className={s.heroSub}>38% 라인 기준 + 정중앙(1차 노드)·25%(2차 노드) 회피를 반영한 점수</p>
+            <p className={s.heroSub}>점수는 <strong>청취자 마커</strong> 기준 (38% 라인 + 정중앙·25% 노드 회피) — 스피커 마커는 아래 배치 가이드에 반영</p>
           </div>
 
           <div className={s.card}>
@@ -291,32 +302,66 @@ export default function RoomModeClient() {
             </p>
           </div>
 
+          {(() => {
+            const fb = speakerFeedback(speakerL, speakerR, listener, Wn, Ln)
+            return (
+              <div className={s.card}>
+                <span className={s.cardLabel}>스피커 배치 가이드 (마커 드래그 반영)</span>
+                <p className={s.tipBox}>
+                  좌우 대칭 {fb.symmetric ? '✅' : '❌ (좌우 스피커의 측벽 거리·앞벽 거리를 맞추세요)'}
+                  {' · '}청취각 <strong>{fmt(fb.angleDeg, 0)}°</strong> (정삼각형 기준 60°)
+                  {' · '}정삼각형 {fb.equilateral ? '✅ (±15% 이내)' : '❌'}
+                </p>
+              </div>
+            )
+          })()}
+
           <div className={s.card}>
-            <span className={s.cardLabel}>위치 정보 (벽에서 거리, m)</span>
+            <span className={s.cardLabel}>위치 정보 (벽에서 거리, m — 직접 입력 가능)</span>
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
                 <thead>
                   <tr><th scope="col">위치</th><th scope="col">가로 (W)</th><th scope="col">세로 (L)</th><th scope="col">점수</th></tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>🔊 좌 스피커</td>
-                    <td className={s.cellMono}>{fmt(speakerL.x * Wn, 2)}m</td>
-                    <td className={s.cellMono}>{fmt(speakerL.y * Ln, 2)}m</td>
-                    <td className={s.cellMono}>—</td>
-                  </tr>
-                  <tr>
-                    <td>🔊 우 스피커</td>
-                    <td className={s.cellMono}>{fmt(speakerR.x * Wn, 2)}m</td>
-                    <td className={s.cellMono}>{fmt(speakerR.y * Ln, 2)}m</td>
-                    <td className={s.cellMono}>—</td>
-                  </tr>
-                  <tr>
-                    <td>🪑 청취자</td>
-                    <td className={s.cellMono}>{fmt(listener.x * Wn, 2)}m</td>
-                    <td className={s.cellMono}>{fmt(listener.y * Ln, 2)}m ({fmt(listener.y * 100, 0)}%)</td>
-                    <td className={`${s.cellMono} ${s.cellAccent}`}>{listenerScore(listener.x, listener.y)}/100</td>
-                  </tr>
+                  {([
+                    { key: 'sL', label: '🔊 좌 스피커', p: speakerL, set: setSpeakerL, score: null },
+                    { key: 'sR', label: '🔊 우 스피커', p: speakerR, set: setSpeakerR, score: null },
+                    { key: 'ls', label: '🪑 청취자', p: listener, set: setListener, score: listenerScore(listener.x, listener.y) },
+                  ] as const).map((row) => (
+                    <tr key={row.key}>
+                      <td>{row.label}</td>
+                      <td className={s.cellMono}>
+                        <input
+                          type="number" inputMode="decimal" step={0.05} min={0} max={Wn}
+                          className={s.posInput}
+                          aria-label={`${row.label} 가로 위치 (m)`}
+                          value={posDrafts[`${row.key}x`] ?? String(Math.round(row.p.x * Wn * 100) / 100)}
+                          onChange={(e) => {
+                            setPosDrafts((prev) => ({ ...prev, [`${row.key}x`]: e.target.value }))
+                            const n = parseFloat(e.target.value)
+                            if (Number.isFinite(n) && n >= 0 && n <= Wn) row.set({ ...row.p, x: n / Wn })
+                          }}
+                          onBlur={() => setPosDrafts((prev) => { const next = { ...prev }; delete next[`${row.key}x`]; return next })}
+                        />m
+                      </td>
+                      <td className={s.cellMono}>
+                        <input
+                          type="number" inputMode="decimal" step={0.05} min={0} max={Ln}
+                          className={s.posInput}
+                          aria-label={`${row.label} 세로 위치 (m)`}
+                          value={posDrafts[`${row.key}y`] ?? String(Math.round(row.p.y * Ln * 100) / 100)}
+                          onChange={(e) => {
+                            setPosDrafts((prev) => ({ ...prev, [`${row.key}y`]: e.target.value }))
+                            const n = parseFloat(e.target.value)
+                            if (Number.isFinite(n) && n >= 0 && n <= Ln) row.set({ ...row.p, y: n / Ln })
+                          }}
+                          onBlur={() => setPosDrafts((prev) => { const next = { ...prev }; delete next[`${row.key}y`]; return next })}
+                        />m{row.key === 'ls' ? ` (${fmt(listener.y * 100, 0)}%)` : ''}
+                      </td>
+                      <td className={`${s.cellMono} ${row.score !== null ? s.cellAccent : ''}`}>{row.score !== null ? `${row.score}/100` : '—'}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -432,7 +477,8 @@ export default function RoomModeClient() {
               슈로더 미만 모드 <strong>{modes.filter((m) => m.freq < fSchroeder).length}개</strong>
             </p>
             <p className={s.heroSub}>
-              {fmt(fSchroeder, 1)}Hz 미만 영역에 트랩 집중 권장
+              표시 범위(20~300Hz) 중 {fmt(fSchroeder, 1)}Hz 미만 — 이 영역에 트랩 집중 권장
+              {fSchroeder > 300 ? ' (슈로더가 표시 상한 300Hz를 넘어 실제 개수는 더 많음)' : ''}
             </p>
           </div>
 
@@ -606,6 +652,22 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
   }
 
   /* 마우스/터치 이벤트 */
+  const moveMarkerByKey = (e: React.KeyboardEvent, which: 'sL' | 'sR' | 'listener') => {
+    const step = e.shiftKey ? 0.005 : 0.02
+    let dx = 0, dy = 0
+    if (e.key === 'ArrowLeft') dx = -step
+    else if (e.key === 'ArrowRight') dx = step
+    else if (e.key === 'ArrowUp') dy = -step
+    else if (e.key === 'ArrowDown') dy = step
+    else return
+    e.preventDefault()
+    const cur = which === 'sL' ? speakerL : which === 'sR' ? speakerR : listener
+    const next = { x: Math.max(0, Math.min(1, cur.x + dx)), y: Math.max(0, Math.min(1, cur.y + dy)) }
+    if (which === 'sL') onSpeakerLChange(next)
+    else if (which === 'sR') onSpeakerRChange(next)
+    else onListenerChange(next)
+  }
+
   const startDrag = (e: React.PointerEvent, which: 'sL' | 'sR' | 'listener') => {
     e.preventDefault()
     /* 캡처 없으면 마커 밖으로 나가는 순간 드래그가 끊긴다 */
@@ -664,7 +726,12 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
 
         {/* 청취자 (드래그) */}
         <g
+          className={s.planMarker}
+          role="button"
+          tabIndex={0}
+          aria-label="청취자 위치 — 화살표 키로 이동 (Shift: 미세 이동)"
           onPointerDown={(e) => startDrag(e, 'listener')}
+          onKeyDown={(e) => moveMarkerByKey(e, 'listener')}
           style={{ cursor: 'pointer', touchAction: 'none' }}
         >
           <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={16} fill="rgba(8, 145, 178, 0.25)" />
@@ -674,7 +741,12 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
 
         {/* 좌 스피커 */}
         <g
+          className={s.planMarker}
+          role="button"
+          tabIndex={0}
+          aria-label="좌 스피커 위치 — 화살표 키로 이동 (Shift: 미세 이동)"
           onPointerDown={(e) => startDrag(e, 'sL')}
+          onKeyDown={(e) => moveMarkerByKey(e, 'sL')}
           style={{ cursor: 'pointer', touchAction: 'none' }}
         >
           <circle cx={pad + speakerL.x * w} cy={pad + speakerL.y * h} r={11} fill="#EA580C" stroke="#000" strokeWidth="1.5" />
@@ -683,7 +755,12 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
 
         {/* 우 스피커 */}
         <g
+          className={s.planMarker}
+          role="button"
+          tabIndex={0}
+          aria-label="우 스피커 위치 — 화살표 키로 이동 (Shift: 미세 이동)"
           onPointerDown={(e) => startDrag(e, 'sR')}
+          onKeyDown={(e) => moveMarkerByKey(e, 'sR')}
           style={{ cursor: 'pointer', touchAction: 'none' }}
         >
           <circle cx={pad + speakerR.x * w} cy={pad + speakerR.y * h} r={11} fill="#EA580C" stroke="#000" strokeWidth="1.5" />

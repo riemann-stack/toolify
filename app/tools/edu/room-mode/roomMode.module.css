@@ -389,3 +389,24 @@
 @media (max-width: 640px) {
   .input { font-size: 16px; min-height: 48px; }
 }
+
+/* 위치 직접 입력 (평면도 표) */
+.posInput {
+  width: 64px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 6px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  text-align: right;
+  outline: none;
+  margin-right: 3px;
+}
+.posInput:focus { border-color: var(--accent); }
+
+/* 평면도 마커 키보드 포커스 링 */
+.planMarker { outline: none; }
+.planMarker:focus-visible circle { stroke: var(--accent-strong); stroke-width: 3; }

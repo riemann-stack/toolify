@@ -88,13 +88,14 @@ export default function RoomModePage() {
           <li><strong>방 치수 입력</strong> — 가로 W·세로 L·높이 H (또는 한국 거실 프리셋)</li>
           <li><strong>온도 조정</strong> — 음속에 영향 (20°C → 343 m/s)</li>
           <li><strong>모드 분석 탭</strong>에서 30+ 룸 모드 + 슈로더 주파수 + 부밍 위험 구간 확인</li>
-          <li><strong>평면도 탭</strong>에서 스피커·청취자 위치를 드래그하며 음압 분포 시각화</li>
+          <li><strong>평면도 탭</strong>에서 청취자 위치 점수·스피커 배치 가이드(대칭·청취각) 확인</li>
           <li><strong>비율 진단 탭</strong>에서 Walker(Bolt) 영역·Bonello 기준으로 점검 — 참고 지표이며 통과가 좋은 저역을 보장하진 않음</li>
           <li><strong>트랩 탭</strong>에서 본인 방 크기에 맞는 베이스 트랩 권장 수량·비용 확인</li>
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 <strong style={{ color: 'var(--accent-ink)' }}>평면도 SVG의 마커를 직접 드래그</strong>해
-          청취자 점수 100점에 가까운 위치를 찾을 수 있어요. 38% 룰 라인이 자동으로 표시됩니다.
+          💡 <strong style={{ color: 'var(--accent-ink)' }}>청취자 마커를 드래그(또는 키보드·좌표 입력)</strong>해
+          점수 100점에 가까운 위치를 찾고, 스피커 마커는 <strong style={{ color: 'var(--accent-ink)' }}>좌우 대칭·청취각 60° 가이드</strong>로
+          확인할 수 있어요. 38% 룰 라인이 자동으로 표시됩니다.
         </p>
       </div>
 

@@ -69,6 +69,14 @@ export function buildAllModes(L: number, W: number, H: number, c: number, freqMa
   return modes.sort((a, b) => a.freq - b.freq)
 }
 
+/** 방의 진짜 기본(최저) 모드 = c / (2 × 최장변).
+    ⚠️ 표시 목록은 20Hz 하한 필터를 거치므로 "목록 첫 항목"을 1차 모드라 부르면
+       큰 방(최장변 > 8.6m)에서 기본 모드(<20Hz)를 놓친다. */
+export function fundamentalFreq(L: number, W: number, H: number, c: number): number {
+  const d = Math.max(L, W, H)
+  return d > 0 ? c / (2 * d) : 0
+}
+
 /* ─────────────────────────────────────────────
    슈로더 주파수
    fs = 2000 × √(RT60 / V)
@@ -254,6 +262,36 @@ export function listenerScore(xRel: number, yRel: number): number {
   const centerDip = 25 * Math.exp(-(((yRel - 0.5) / 0.06) ** 2))   // 1차 모드 노드
   const quarterDip = 15 * Math.exp(-(((yRel - 0.25) / 0.05) ** 2)) // 2차 모드 노드
   return Math.round(Math.max(0, Math.min(100, base * 100 - centerDip - quarterDip)))
+}
+
+/* ─────────────────────────────────────────────
+   스피커 배치 피드백 — 점수는 청취자 위치 기준이므로,
+   스피커 마커에는 대칭·청취각(정삼각형 60°) 가이드를 준다.
+   ⚠️ 예전엔 스피커를 드래그해도 화면 어디에도 반영이 없어
+      "드래그하며 위치 찾기" 안내와 실제 기능이 어긋났다.
+   ───────────────────────────────────────────── */
+export interface SpeakerFeedback {
+  symmetric: boolean
+  angleDeg: number      // 청취자에서 본 두 스피커 사이 각 (정삼각형 = 60°)
+  equilateral: boolean  // 세 변 길이가 ±15% 이내
+}
+
+export function speakerFeedback(
+  sL: { x: number; y: number }, sR: { x: number; y: number },
+  listener: { x: number; y: number }, W: number, L: number,
+): SpeakerFeedback {
+  const m = (p: { x: number; y: number }) => ({ x: p.x * W, y: p.y * L })
+  const a = m(sL), b = m(sR), c0 = m(listener)
+  const d = (p: { x: number; y: number }, q: { x: number; y: number }) => Math.hypot(p.x - q.x, p.y - q.y)
+  const ab = d(a, b), ac = d(a, c0), bc = d(b, c0)
+  const symmetric = Math.abs(sL.x - (1 - sR.x)) < 0.04 && Math.abs(sL.y - sR.y) < 0.04
+  let angleDeg = 0
+  if (ac > 1e-6 && bc > 1e-6) {
+    const cosT = (ac * ac + bc * bc - ab * ab) / (2 * ac * bc)
+    angleDeg = Math.acos(Math.min(1, Math.max(-1, cosT))) * 180 / Math.PI
+  }
+  const equilateral = ab > 1e-6 && Math.abs(ac - ab) / ab < 0.15 && Math.abs(bc - ab) / ab < 0.15
+  return { symmetric, angleDeg, equilateral }
 }
 
 /* ─────────────────────────────────────────────
