@@ -52,7 +52,7 @@
 /* ── 현재 우주 시간 헤더 ── */
 .cosmicNow {
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.18), transparent 60%),
+    radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.10), transparent 60%),
     var(--bg2);
   border: 1px solid #0D9488;
   border-radius: 14px;
@@ -61,7 +61,7 @@
 }
 .cosmicNowLabel {
   font-size: 11px;
-  color: #0D9488;
+  color: #0F766E;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
@@ -111,8 +111,8 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive {
-  background: rgba(13,148,136,0.18);
-  color: #0D9488;
+  background: rgba(13,148,136,0.10);
+  color: #0F766E;
   font-weight: 700;
 }
 
@@ -388,7 +388,7 @@
 }
 .tlPopMeta {
   font-size: 11px;
-  color: #0D9488;
+  color: #0F766E;
   font-weight: 600;
   margin-top: 2px;
 }
@@ -424,7 +424,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 14px;
-  color: #0D9488;
+  color: #0F766E;
   letter-spacing: -0.5px;
   margin-bottom: 6px;
 }
@@ -438,7 +438,7 @@
 .monthCardCount small {
   display: block;
   font-size: 10px;
-  color: var(--muted);
+  color: var(--muted-strong);
   font-weight: 500;
   margin-top: 4px;
   font-family: 'Noto Sans KR', sans-serif;
@@ -474,7 +474,7 @@
 .catLife         { color: #059669; }
 .catHuman        { color: #EA580C; }
 .catCivilization { color: #DC2626; }
-.catNow          { color: #0D9488; }
+.catNow          { color: #0F766E; }
 
 /* 이벤트 카드 (상세) */
 .eventCard {
@@ -503,7 +503,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
   font-size: 12px;
-  color: #0D9488;
+  color: #0F766E;
   margin-bottom: 4px;
 }
 .eventReal {
@@ -524,7 +524,7 @@
 /* ── 12월 31일 강조 카드 (탭 1 → 탭 2 안내) ── */
 .dec31Banner {
   background:
-    radial-gradient(ellipse at 80% 50%, rgba(13,148,136,0.18), transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(13,148,136,0.10), transparent 60%),
     rgba(13,148,136,0.14);
   border: 1px solid #0D9488;
   border-radius: 14px;
@@ -533,7 +533,7 @@
 .dec31BannerTitle {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 800;
-  color: #0D9488;
+  color: #0F766E;
   font-size: 15px;
   margin-bottom: 6px;
 }
@@ -543,14 +543,14 @@
   line-height: 1.85;
   margin-bottom: 10px;
 }
-.dec31BannerText strong { color: #0D9488; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.dec31BannerText strong { color: #0F766E; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
 .dec31BannerBtn {
-  background: rgba(13,148,136,0.18);
+  background: rgba(13,148,136,0.10);
   border: 1px solid #0D9488;
   border-radius: 10px;
   padding: 9px 16px;
   font-size: 13px;
-  color: #0D9488;
+  color: #0F766E;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   cursor: pointer;
@@ -593,7 +593,7 @@
 }@media (hover: hover) {
   .zoomBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.zoomActive { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.zoomActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
 
 /* ── 충격 카드 ── */
 .shockCard {
@@ -690,7 +690,7 @@
   margin-top: 8px;
   text-align: right;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--muted-strong);
   font-style: normal;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
@@ -718,7 +718,7 @@
 /* ── 내 인생 결과 (탭 3) ── */
 .myLifeHero {
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.18), transparent 60%),
+    radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.10), transparent 60%),
     var(--bg2);
   border: 1px solid #0D9488;
   border-radius: 16px;
@@ -731,7 +731,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
-  color: #0D9488;
+  color: #0F766E;
   letter-spacing: -2px;
   line-height: 1;
 }
@@ -747,7 +747,7 @@
 /* ── 공유 카드 ── */
 .shareCard {
   background:
-    radial-gradient(ellipse at 30% 20%, rgba(13,148,136,0.18), transparent 55%),
+    radial-gradient(ellipse at 30% 20%, rgba(13,148,136,0.10), transparent 55%),
     radial-gradient(ellipse at 70% 80%, rgba(155,89,182,0.18), transparent 60%),
     #0a0e1a;
   border: 1px solid #0D9488;
@@ -773,7 +773,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   font-size: 18px;
-  color: #0D9488;
+  color: #0F766E;
   text-align: center;
   margin-bottom: 6px;
   letter-spacing: -0.5px;
@@ -793,7 +793,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(44px, 11vw, 64px);
   font-weight: 800;
-  color: #0D9488;
+  color: #0F766E;
   letter-spacing: -2px;
   line-height: 1;
 }
@@ -856,7 +856,7 @@
   margin-top: 3px;
   opacity: 0.8;
 }
-.compressionActive { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.compressionActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
 
 /* 탭 4 사건 표 */
 .compressionTable {
@@ -888,7 +888,7 @@
   font-size: 12px;
 }
 .compressionTable td:last-child {
-  color: #0D9488;
+  color: #0F766E;
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;
   white-space: nowrap;
@@ -908,9 +908,9 @@
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #0D9488; color: #0D9488; }
+  .copyBtn:hover { border-color: #0D9488; color: #0F766E; }
 }
-.copied { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+.copied { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
 
 /* 월 카드 '+N개 더' 확장 버튼 */
 .monthMoreBtn {

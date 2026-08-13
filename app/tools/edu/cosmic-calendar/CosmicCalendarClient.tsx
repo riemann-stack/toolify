@@ -462,7 +462,7 @@ export default function CosmicCalendarClient() {
       {tab === 'year' && (
         <>
           <div className={s.tlStage}>
-            <p style={{ textAlign: 'center', color: '#0D9488', fontSize: 14, fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 700, marginBottom: 6 }}>
+            <p style={{ textAlign: 'center', color: '#0F766E', fontSize: 14, fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 700, marginBottom: 6 }}>
               우주 138억 년 = 1년
             </p>
             <p className={s.tlHint}>점에 마우스를 올리거나 탭하면 사건 정보가 열립니다 · 숫자는 그 구간에 모인 사건 수</p>
@@ -475,7 +475,7 @@ export default function CosmicCalendarClient() {
               onTrackWidth={handleTrackWidth}
             />
             <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 8, lineHeight: 1.7 }}>
-              왼쪽 끝: 빅뱅(1월 1일) · 오른쪽 끝: <strong style={{ color: '#0D9488' }}>현재(12월 31일 24:00)</strong>
+              왼쪽 끝: 빅뱅(1월 1일) · 오른쪽 끝: <strong style={{ color: '#0F766E' }}>현재(12월 31일 24:00)</strong>
             </p>
           </div>
 
@@ -725,7 +725,7 @@ export default function CosmicCalendarClient() {
 
               {/* 해석 카드 */}
               <div className={s.saganQuote}>
-                {userName ? userName + '님의' : '당신의'} 인생은 우주 1년에서 약 <strong style={{ color: '#0D9488', fontStyle: 'normal' }}>{round(myLife.cosmicSeconds, 3)}초</strong>입니다.
+                {userName ? userName + '님의' : '당신의'} 인생은 우주 1년에서 약 <strong style={{ color: '#0F766E', fontStyle: 'normal' }}>{round(myLife.cosmicSeconds, 3)}초</strong>입니다.
                 하지만 그 짧은 시간 동안 {userName ? userName + '님은' : '당신은'} 별을 보고, 사랑하고, 생각할 수 있습니다. 우주 138억 년 중 단 한 번뿐인 시간입니다.
                 <span className={s.saganAttribution}>— 칼 세이건의 코스믹 관점</span>
               </div>
