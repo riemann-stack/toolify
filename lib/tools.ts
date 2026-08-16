@@ -106,6 +106,7 @@ export const categories: Category[] = [
       { href: '/tools/life/ladder',        icon: '🪜', name: '사다리타기',          desc: '캐릭터 16종 + 클릭·전체·역추적 공개 + 결과 복사. 진짜 한 번에 끝나는 사다리.' },
       { href: '/tools/life/dutch',         icon: '🍻', name: '더치페이 계산기', desc: '한 명이 선결제했을 때 가장 적은 송금 횟수로 정산. 8가지 상황 프리셋 포함.' },
       { href: '/tools/life/zodiac',        icon: '🐯', name: '띠·별자리 계산기',    desc: '내 띠·별자리·60갑자·오행을 한 카드로 + 두 사람 궁합과 가족 띠 비교까지.', badge: 'hot' },
+      { href: '/tools/life/kinship',       icon: '👨‍👩‍👧‍👦', name: '가족 호칭 계산기',    desc: '아버지의 사촌은? 관계를 따라가면 호칭어·지칭어·촌수와 가계도가 자동으로. 시가·처가·사돈까지.', badge: 'new' },
       { href: '/tools/life/travel-tip',    icon: '💵', name: '해외여행 팁 계산기',   desc: '18+ 국가별 식당·택시·호텔·골프·마사지 적정 팁. 만족도 보정과 인원 분할.', badge: 'new' },
       { href: '/tools/life/travel-budget', icon: '✈️', name: '해외여행 예산 계산기', desc: '18+ 도시 × 배낭·중간·럭셔리 3스타일 평균 + 9개 항목 자동 추천을 도넛 차트로.', badge: 'new' },
       { href: '/tools/life/packing',       icon: '🧳', name: '여행 짐 계산기',     desc: '일수·기온·세탁 가능·활동량으로 카테고리별 옷 개수 + 최소·넉넉 2버전.', badge: 'new' },

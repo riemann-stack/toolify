@@ -1,0 +1,257 @@
+/* 가족 호칭 계산기.
+   AA 원칙: 텍스트 accent는 var(--accent-ink), 틴트 위 보조 텍스트는 var(--muted-strong).
+   ⚠️ 모듈 :root{--var}는 이 프로젝트에서 전역 적용 안 됨 — 리터럴/전역 토큰만 사용. */
+.wrap { display: flex; flex-direction: column; gap: 12px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+.cardLabel {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.cardLabelHint { text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+.helpText {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 10px 0 0;
+  line-height: 1.7;
+}
+
+/* 성별 토글 */
+.genderRow { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.genderBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}@media (hover: hover) {
+  .genderBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}
+.genderActive { background: var(--accent-strong); border-color: var(--accent-strong); color: #ffffff; }
+
+/* 경로 칩 */
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  min-height: 34px;
+}
+.chipMe {
+  background: var(--accent-light);
+  color: var(--accent-ink);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.chipArrow { color: var(--muted); font-weight: 400; }
+.chipUndo {
+  background: transparent;
+  border: 1px dashed var(--border-hover);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--muted-strong);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .chipUndo:hover { color: var(--text); border-color: var(--accent); }
+}
+
+/* 단계 버튼 */
+.stepGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+@media (max-width: 600px) { .stepGrid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 380px) { .stepGrid { grid-template-columns: repeat(2, 1fr); } }
+.stepBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+  min-height: 44px;
+}@media (hover: hover) {
+  .stepBtn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-ink); }
+}
+.stepBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.builderFoot {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 12px;
+}
+.resetBtn {
+  flex-shrink: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-strong);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}@media (hover: hover) {
+  .resetBtn:hover { color: var(--text); border-color: var(--border-hover); }
+}
+
+/* HERO */
+.hero {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  padding: 26px 24px;
+  text-align: center;
+}
+.heroLead { font-size: 13px; color: var(--muted-strong); margin: 0 0 8px; }
+.heroValue {
+  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-size: clamp(30px, 7vw, 44px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--accent-ink);
+  margin: 0 0 6px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.heroAge { font-size: 13px; color: var(--muted-strong); margin: 0 0 8px; }
+.heroAge strong { color: var(--text); }
+.heroMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 14px;
+  font-size: 13px;
+  color: var(--muted-strong);
+  margin-top: 10px;
+}
+.heroMeta strong { color: var(--text); }
+.groupBadge {
+  /* hero 틴트(--accent-light) 위 12px 텍스트 — 반투명 accent 합성은 대비 4.50 경계라 불투명 배경 사용 */
+  background: var(--bg2);
+  color: var(--accent-ink);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.heroNote { font-size: 12px; color: var(--muted-strong); margin: 10px 0 0; line-height: 1.7; }
+
+.heroEmpty {
+  background: var(--bg2);
+  border: 1px dashed var(--border-hover);
+  border-radius: 16px;
+  padding: 26px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* 역방향·민법 2열 */
+.twoCol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .twoCol { grid-template-columns: 1fr; } }
+.reverseText {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.legalText {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.legalBasis { font-size: 12px; font-weight: 500; color: var(--muted-strong); }
+
+/* 가계도 */
+.treeScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* 프리셋 */
+.presetGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+@media (max-width: 720px) { .presetGrid { grid-template-columns: repeat(2, 1fr); } }
+.presetBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+  min-height: 44px;
+  line-height: 1.4;
+}@media (hover: hover) {
+  .presetBtn:hover { border-color: var(--accent); color: var(--accent-ink); }
+}
+.presetHint { display: block; font-size: 11px; color: var(--muted-strong); font-weight: 500; margin-top: 2px; }
+
+/* 복사 */
+.copyBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}@media (hover: hover) {
+  .copyBtn:hover { border-color: var(--accent); color: var(--accent-ink); }
+}
+.copied { background: rgba(3, 105, 161, 0.08); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
