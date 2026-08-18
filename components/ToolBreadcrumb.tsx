@@ -43,7 +43,7 @@ export default function ToolBreadcrumb() {
     >
       <Link href="/" style={{ color: 'var(--muted)', textDecoration: 'none' }}>홈</Link>
       {sep}
-      <Link href={`/tools/${category.id}`} style={{ color: category.color, textDecoration: 'none', fontWeight: 600 }}>
+      <Link href={`/tools/${category.id}`} style={{ color: category.ink, textDecoration: 'none', fontWeight: 600 }}>
         {category.name}
       </Link>
       {sep}

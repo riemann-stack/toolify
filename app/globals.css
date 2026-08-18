@@ -42,6 +42,20 @@
   --cat-edu:      #0D9488;    /* teal-600 */
   --cat-dev:      #0284C7;    /* sky-600 */
 
+  /* category ink — 소형 텍스트용 (--accent/--accent-ink 선례). 600레벨이 흰 배경 4.5:1 미달인
+     6종만 700레벨로 올리고, 이미 통과하는 4종+sports는 동일 값 유지 (시각 변화 최소화) */
+  --cat-finance-ink:  #047857; /* emerald-700, 5.48:1 */
+  --cat-health-ink:   #0E7490; /* cyan-700, 5.36:1 */
+  --cat-cooking-ink:  #B45309; /* amber-700, 5.02:1 */
+  --cat-life-ink:     #C2410C; /* orange-700, 5.18:1 */
+  --cat-sports-ink:   #A16207; /* = --cat-sports (4.92:1 통과) */
+  --cat-interior-ink: #C2410C; /* orange-700 (life와 공유) */
+  --cat-unit-ink:     #7C3AED; /* = --cat-unit (5.70:1 통과) */
+  --cat-date-ink:     #DB2777; /* = --cat-date (4.60:1 통과) */
+  --cat-art-ink:      #9333EA; /* = --cat-art (5.38:1 통과) */
+  --cat-edu-ink:      #0F766E; /* teal-700, 5.47:1 */
+  --cat-dev-ink:      #0369A1; /* sky-700 = --accent-ink, 5.93:1 */
+
   /* semantic — 실사용 600레벨 기준 (텍스트 AA 안전값) */
   --success: #059669;         /* emerald-600, 4.5:1 */
   --warning: #B45309;         /* amber-700, 5.0:1 — 600레벨은 텍스트 AA 미달 */
