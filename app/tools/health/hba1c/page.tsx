@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
+import { A1C_BANDS, a1cToEag, bandForA1c, mgdlToMmol, roundScrub, EAG_SLOPE, MGDL_PER_MMOL } from './hba1cData'
 
 export const metadata = buildMetadata({
   path: '/tools/health/hba1c',
@@ -17,12 +18,15 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
+/* ── 환산표·구간표: hba1cData(도구와 같은 ADAG 회귀식·구간·반올림)로 빌드 시 계산 ── */
+const REF_ROWS = Array.from({ length: 16 }, (_, i) => 4.5 + i * 0.5).map(a1c => {
+  const mg = a1cToEag(a1c)
+  return { a1c, mg: roundScrub(mg), mmol: roundScrub(mgdlToMmol(mg), 1), band: bandForA1c(a1c) }
+})
+const eagAt = (a1c: number) => roundScrub(a1cToEag(a1c))
+const PRE_LO = A1C_BANDS.find(b => b.id === 'pre')!.a1cLo  // 5.7
+const DM_LO = A1C_BANDS.find(b => b.id === 'dm')!.a1cLo    // 6.5
+const PER_POINT_MMOL = roundScrub(EAG_SLOPE / MGDL_PER_MMOL, 1)
 
 const FAQ_LD = [
   {
@@ -31,7 +35,7 @@ const FAQ_LD = [
   },
   {
     q: '평균혈당(eAG)으로 어떻게 바꾸나요?',
-    a: '국제 공인 회귀식 <strong>eAG(mg/dL) = 28.7 × HbA1c − 46.7</strong>을 씁니다(ADAG 연구). 예를 들어 HbA1c 6.0%는 <strong>eAG 약 126mg/dL</strong>, 7.0%는 약 154mg/dL입니다. 이 값은 자가혈당 측정기에서 보는 mg/dL 단위와 같은 스케일이라, "내 당화혈색소가 실제 혈당으로 대략 얼마인지" 직관적으로 이해하는 데 도움이 됩니다.',
+    a: '국제 공인 회귀식 <strong>eAG(mg/dL) = 28.7 × HbA1c − 46.7</strong>을 씁니다(ADAG 연구). 예를 들어 HbA1c 6.0%는 <strong>eAG 약 126mg/dL</strong>, 7.0%는 약 154mg/dL입니다. 식이 직선이라 당화혈색소가 1%p 오르내릴 때마다 추정 평균혈당은 약 28.7mg/dL씩 움직입니다. 이 값은 자가혈당 측정기에서 보는 mg/dL 단위와 같은 스케일이라, "내 당화혈색소가 실제 혈당으로 대략 얼마인지" 직관적으로 이해하는 데 도움이 됩니다.',
   },
   {
     q: '당화혈색소 정상 수치는 얼마인가요?',
@@ -39,7 +43,7 @@ const FAQ_LD = [
   },
   {
     q: '당뇨 관리 목표는 몇 %인가요?',
-    a: '일반적으로 당뇨 환자의 목표는 <strong>당화혈색소 6.5% 미만</strong>(대한당뇨병학회)으로 제시되지만, <strong>개인별로 다릅니다.</strong> 젊고 합병증이 없으면 더 엄격하게, 고령이거나 저혈당 위험이 크면 7.0~8.0%로 완화하기도 합니다. 목표치는 반드시 담당 의료진과 상의해 개인에 맞게 정해야 합니다.',
+    a: '대한당뇨병학회 진료지침은 <strong>제2형 당뇨병 성인은 당화혈색소 6.5% 미만</strong>, <strong>제1형 당뇨병 성인은 7.0% 미만</strong>을 일반적인 혈당조절 목표로 제시하지만, <strong>개인별로 다릅니다.</strong> 젊고 합병증이 없으면 더 엄격하게, 고령이거나 저혈당 위험이 크면 7.0~8.0%로 완화하기도 합니다. 목표치는 반드시 담당 의료진과 상의해 개인에 맞게 정해야 합니다.',
   },
   {
     q: '당화혈색소가 실제와 다를 수 있나요?',
@@ -77,6 +81,7 @@ export default function Hba1cPage() {
           { label: '대한당뇨병학회', href: 'https://www.diabetes.or.kr' },
           { label: '질병관리청 국가건강정보포털 — 당뇨병', href: 'https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5305' },
           { label: 'NGSP — HbA1c and eAG', href: 'https://ngsp.org/A1ceAG.asp' },
+          { label: 'Nathan 외(2008) ADAG — Diabetes Care', href: 'https://diabetesjournals.org/care/article/31/8/1473/28589/Translating-the-A1C-Assay-Into-Estimated-Average' },
         ]}
       />
 
@@ -87,7 +92,7 @@ export default function Hba1cPage() {
 
         {/* 1. 변환식 */}
         <section>
-          <h2 style={sectionTitle}>변환 공식</h2>
+          <h2 className="g-h2">변환 공식</h2>
           <div style={{
             background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
             padding: '18px 20px', fontFamily: 'var(--font-mono)',
@@ -100,13 +105,18 @@ export default function Hba1cPage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ ADAG(A1c-Derived Average Glucose) 연구의 공인 회귀식입니다. eAG는 2~3개월 평균 혈당의 <strong style={{ color: 'var(--text)' }}>추정치</strong>로, 자가혈당 측정값과는 다를 수 있습니다.
           </p>
+          <p className="g-p" style={{ marginTop: 14 }}>
+            직선식이라 해석이 단순합니다. 당화혈색소가 <strong>1%p</strong> 바뀌면 추정 평균혈당은 <strong>{EAG_SLOPE}mg/dL(약 {PER_POINT_MMOL}mmol/L)</strong>, 0.5%p면 그 절반쯤 움직입니다.
+            예를 들어 7.5%에서 6.5%로 내려갔다면 평균혈당이 {eagAt(7.5)}mg/dL에서 {eagAt(6.5)}mg/dL로 약 {eagAt(7.5) - eagAt(6.5)}mg/dL 낮아졌다고 읽을 수 있습니다.
+            반대로 평균혈당(eAG)을 입력하면 도구는 같은 식을 거꾸로 풀어 HbA1c = (eAG + 46.7) ÷ 28.7로 계산합니다.
+          </p>
         </section>
 
         {/* 2. HbA1c ↔ eAG 환산표 */}
         <section>
-          <h2 style={sectionTitle}>당화혈색소 ↔ 평균 혈당(eAG) 환산표</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
-            ADAG 회귀식을 4.5~12.0%에 0.5%p 간격으로 적용한 값입니다. 대한당뇨병학회 2025 당뇨병 진료지침 제9판 표 4-1.1(당화혈색소와 평균혈당의 관계)에 실린 8개 행(5%→97, 6%→126, 7%→154, 8%→183, 9%→212, 10%→240, 11%→269, 12%→298mg/dL)과 mg/dL 정수 단위까지 일치합니다.
+          <h2 className="g-h2">당화혈색소 ↔ 평균 혈당(eAG) 환산표</h2>
+          <p className="g-p">
+            ADAG 회귀식을 4.5~12.0%에 0.5%p 간격으로 적용한 값입니다(도구와 같은 식·반올림으로 빌드 시 계산). 대한당뇨병학회 2025 당뇨병 진료지침 제9판 표 4-1.1(당화혈색소와 평균혈당의 관계)에 실린 8개 행(5%→97, 6%→126, 7%→154, 8%→183, 9%→212, 10%→240, 11%→269, 12%→298mg/dL)과 mg/dL 정수 단위까지 일치합니다.
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
@@ -118,29 +128,12 @@ export default function Hba1cPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['4.5%', '82', '4.6', '전단계 기준 미만', 'var(--success)'],
-                  ['5.0%', '97', '5.4', '전단계 기준 미만', 'var(--success)'],
-                  ['5.5%', '111', '6.2', '전단계 기준 미만', 'var(--success)'],
-                  ['6.0%', '126', '7.0', '당뇨병전단계', 'var(--warning)'],
-                  ['6.5%', '140', '7.8', '당뇨병 범위', 'var(--danger)'],
-                  ['7.0%', '154', '8.6', '당뇨병 범위', 'var(--danger)'],
-                  ['7.5%', '169', '9.4', '당뇨병 범위', 'var(--danger)'],
-                  ['8.0%', '183', '10.2', '당뇨병 범위', 'var(--danger)'],
-                  ['8.5%', '197', '11.0', '당뇨병 범위', 'var(--danger)'],
-                  ['9.0%', '212', '11.8', '당뇨병 범위', 'var(--danger)'],
-                  ['9.5%', '226', '12.6', '당뇨병 범위', 'var(--danger)'],
-                  ['10.0%', '240', '13.4', '당뇨병 범위', 'var(--danger)'],
-                  ['10.5%', '255', '14.1', '당뇨병 범위', 'var(--danger)'],
-                  ['11.0%', '269', '14.9', '당뇨병 범위', 'var(--danger)'],
-                  ['11.5%', '283', '15.7', '당뇨병 범위', 'var(--danger)'],
-                  ['12.0%', '298', '16.5', '당뇨병 범위', 'var(--danger)'],
-                ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[2]}</td>
-                    <td style={{ padding: '9px 12px', color: r[4], fontSize: 12, fontWeight: 600 }}>{r[3]}</td>
+                {REF_ROWS.map((r, i) => (
+                  <tr key={r.a1c} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.a1c.toFixed(1)}%</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.mg}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r.mmol.toFixed(1)}</td>
+                    <td style={{ padding: '9px 12px', color: r.band.color, fontSize: 12, fontWeight: 600 }}>{r.band.label}</td>
                   </tr>
                 ))}
               </tbody>
@@ -159,18 +152,18 @@ export default function Hba1cPage() {
 
         {/* 3. 2~3개월 반영 원리 */}
         <section>
-          <h2 style={sectionTitle}>왜 2~3개월 평균이 반영되나</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
+          <h2 className="g-h2">왜 2~3개월 평균이 반영되나</h2>
+          <p className="g-p">
             포도당이 적혈구 속 혈색소에 붙으면 그 적혈구가 수명을 마칠 때까지 남습니다. 적혈구 수명은 평균 약 120일(NGSP)이라, 당화혈색소는 검사 직전 약 120일간의 혈당 노출을 누적해 보여줍니다. 대한당뇨병학회 지침은 이를 &ldquo;적혈구 수명기간인 3개월 내외의 혈당 평균치를 반영한다&rdquo;고 설명하고, 질병관리청 국가건강정보포털도 당화혈색소가 최근 2~3개월의 평균 혈당을 반영한다고 안내합니다.
           </p>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.9, margin: 0 }}>
+          <p className="g-p">
             단, 단순 평균이 아니라 <strong style={{ color: 'var(--text)' }}>최근 혈당이 더 크게 기여하는 가중평균</strong>입니다(NGSP·ADA 2026). 그래서 검사 직전 몇 주의 관리가 수치에 비교적 빠르게 나타나고, NGSP도 임상적으로 의미 있는 변화를 확인하는 데 120일이 다 걸리지는 않는다고 설명합니다. 반대로 앞선 두 달의 혈당이 함께 섞여 나오므로, 검진 직전 며칠만 조심하는 방식으로 수치를 되돌리기는 어렵습니다.
           </p>
         </section>
 
         {/* 4. 진단 구간 표 */}
         <section>
-          <h2 style={sectionTitle}>당뇨 진단 구간</h2>
+          <h2 className="g-h2">당뇨 진단 구간</h2>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
@@ -182,9 +175,9 @@ export default function Hba1cPage() {
               </thead>
               <tbody>
                 {[
-                  ['정상', '< 5.7%', '< 117mg/dL', '< 100mg/dL', 'var(--success)'],
-                  ['당뇨 전단계', '5.7 ~ 6.4%', '117 ~ 137', '100 ~ 125', 'var(--warning)'],
-                  ['당뇨병', '≥ 6.5%', '≥ 140mg/dL', '≥ 126mg/dL', 'var(--danger)'],
+                  ['정상', `< ${PRE_LO}%`, `< ${eagAt(PRE_LO)}mg/dL`, '< 100mg/dL', 'var(--success)'],
+                  ['당뇨 전단계', `${PRE_LO} ~ ${(DM_LO - 0.1).toFixed(1)}%`, `${eagAt(PRE_LO)} ~ ${eagAt(DM_LO - 0.1)}`, '100 ~ 125', 'var(--warning)'],
+                  ['당뇨병', `≥ ${DM_LO}%`, `≥ ${eagAt(DM_LO)}mg/dL`, '≥ 126mg/dL', 'var(--danger)'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r[4], fontWeight: 700 }}>{r[0]}</td>
@@ -203,7 +196,7 @@ export default function Hba1cPage() {
 
         {/* 5. 검진 결과 구간별 다음 행동 */}
         <section>
-          <h2 style={sectionTitle}>검진 결과 구간별 다음 행동</h2>
+          <h2 className="g-h2">검진 결과 구간별 다음 행동</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
               {
@@ -235,7 +228,7 @@ export default function Hba1cPage() {
 
         {/* 6. 관리 팁 */}
         <section>
-          <h2 style={sectionTitle}>당화혈색소 낮추는 생활 습관</h2>
+          <h2 className="g-h2">당화혈색소 낮추는 생활 습관</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {[
               { t: '식후 혈당 관리', d: '정제 탄수화물·단순당 줄이고, 채소·단백질 먼저 먹기. 식후 가벼운 걷기.' },
@@ -244,7 +237,7 @@ export default function Hba1cPage() {
               { t: '꾸준한 추적', d: '진단받은 성인은 학회 지침상 2~3개월마다(혈당조절이 안정적이면 연 2회까지) 측정 — 주기는 의료진과 상의하세요.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>✅ {c.t}</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.d}</p>
               </div>
             ))}
@@ -261,7 +254,7 @@ export default function Hba1cPage() {
 
         {/* 8. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
               <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>

@@ -100,7 +100,7 @@ const TIMINGS: Timing[] = ['morningBefore', 'morningAfter', 'lunch', 'dinnerBefo
 
 const TIMING_REASONS: Record<Timing, string> = {
   morningBefore: '공복: 철분(+비타민C), 프로바이오틱스',
-  morningAfter:  '식후(지용성): 비타민A/D/E/K, 오메가3, CoQ10 — 식이지방과 흡수율 최대 50% ↑',
+  morningAfter:  '식후(지용성): 비타민A/D/E/K, 오메가3, CoQ10 — 지방이 든 식사와 함께 먹어야 흡수가 잘 됨',
   lunch:         '낮 시간대: 비타민B군(에너지 대사), 비타민C(항산화)',
   dinnerBefore:  '식전: 프로바이오틱스 (위산 낮을 때)',
   dinnerAfter:   '식후: 지용성·오메가3 남은 분량',
@@ -888,7 +888,7 @@ function GuideTab({ sups }: { sups: Supplement[] }) {
               <div key={i} className={`${s.hintCard} ${s.cautionCard}`}>
                 <div className={s.hintHead}>⚡ {c.a} + {c.b}</div>
                 <div className={s.hintBody}>
-                  <strong style={{ color: '#FFB86B' }}>{c.issue}</strong><br />
+                  <strong style={{ color: 'var(--warning)' }}>{c.issue}</strong><br />
                   💡 {c.tip}
                 </div>
               </div>
@@ -1098,7 +1098,12 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
 
   // 활성 조합
   const activeSynergy = SYNERGY.filter(syn => ingredientSet.has(syn.a) && ingredientSet.has(syn.b))
-  const activeExtraSynergy = EXTRA_SYNERGY.filter(c => ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1]))
+  // 근거 등급이 'established'인 확장 조합만 시너지로 집계 — 나머지는 중립 「근거 제한」 카드로 분리
+  const extraEstablished = EXTRA_SYNERGY.filter(c => c.evidence === 'established')
+  const extraWeak = EXTRA_SYNERGY.filter(c => c.evidence !== 'established')
+  const hasPair = (c: { ingredientNames: [string, string] }) => ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1])
+  const activeExtraSynergy = extraEstablished.filter(hasPair)
+  const activeWeak = extraWeak.filter(hasPair)
   const activeCaution = CAUTION.filter(c => ingredientSet.has(c.a) && ingredientSet.has(c.b))
 
   return (
@@ -1107,6 +1112,7 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
         <span className={s.cardLabel}>본인 영양제 기준 — 활성 조합 분석</span>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
           시너지 {activeSynergy.length + activeExtraSynergy.length}건 / 주의 {activeCaution.length}건 감지.{' '}
+          {activeWeak.length > 0 && `근거가 약한 조합 ${activeWeak.length}건은 시너지에서 제외했습니다. `}
           {ingredientSet.size === 0 && '먼저 「영양제 등록」 탭에 입력해주세요.'}
         </p>
       </div>
@@ -1119,10 +1125,10 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
             title: `${syn.a} + ${syn.b}`,
             desc: syn.effect,
             active: ingredientSet.has(syn.a) && ingredientSet.has(syn.b),
-          })), ...EXTRA_SYNERGY.map(c => ({
+          })), ...extraEstablished.map(c => ({
             title: c.title,
             desc: c.desc,
-            active: ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1]),
+            active: hasPair(c),
           }))].map((c, i) => (
             <div key={i} className={`${s.hintCard} ${s.synergyCard}`}
               style={c.active ? { background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.40)' } : { opacity: 0.6 }}>
@@ -1130,6 +1136,28 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
               <div className={s.hintBody}>{c.desc}</div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* 근거 제한·효과 확인 안 됨 — 시너지로 세지 않음 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>근거 제한·효과 확인 안 됨 (시너지로 보지 않음)</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {extraWeak.map((c, i) => {
+            const active = hasPair(c)
+            return (
+              <div key={i} className={`${s.hintCard} ${s.neutralCard}`}
+                style={active ? { borderColor: 'var(--field-line)' } : { opacity: 0.6 }}>
+                <div className={s.hintHead}>
+                  {active ? '• ' : '○ '}{c.title}{' '}
+                  <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)' }}>
+                    ({c.evidence === 'null' ? '대규모 시험서 효과 없음' : '근거 제한적'}{active ? ' · 복용 중' : ''})
+                  </span>
+                </div>
+                <div className={s.hintBody}>{c.desc}</div>
+              </div>
+            )
+          })}
         </div>
       </div>
 
@@ -1144,7 +1172,7 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
                 style={active ? { background: 'rgba(234,88,12,0.08)', borderColor: 'rgba(234,88,12,0.50)' } : { opacity: 0.6 }}>
                 <div className={s.hintHead}>{active ? '⚡' : '○'} {c.a} + {c.b}</div>
                 <div className={s.hintBody}>
-                  <strong style={{ color: '#FFB86B' }}>{c.issue}</strong><br />
+                  <strong style={{ color: 'var(--warning)' }}>{c.issue}</strong><br />
                   💡 {c.tip}
                 </div>
               </div>

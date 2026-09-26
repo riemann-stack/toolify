@@ -599,29 +599,34 @@ function SavedGamesSection({
       )}
 
       {games.length > 0 && (
-        <>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 10 }}>
-            {games.map(g => (
-              <div key={g.id} className={s.savedRow}>
-                <div className={s.savedName}>
-                  {g.name}
-                  <small>{g.participants.length}명 · {new Date(g.updatedAt).toLocaleDateString('ko-KR')}</small>
-                </div>
-                <div className={s.miniRow}>
-                  <button className={s.miniBtn} onClick={() => onApply(g)}>불러오기</button>
-                  <button className={`${s.miniBtn} ${s.miniDanger}`} onClick={() => handleDelete(g.id)}>×</button>
-                </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 10 }}>
+          {games.map(g => (
+            <div key={g.id} className={s.savedRow}>
+              <div className={s.savedName}>
+                {g.name}
+                <small>{g.participants.length}명 · {new Date(g.updatedAt).toLocaleDateString('ko-KR')}</small>
               </div>
-            ))}
-          </div>
-          <div className={s.miniRow} style={{ marginTop: 10 }}>
-            <button className={s.miniBtn} onClick={handleExport}>백업 다운로드</button>
-            <button className={s.miniBtn} onClick={() => fileRef.current?.click()}>가져오기</button>
-            <input ref={fileRef} type="file" accept=".json" hidden
-              onChange={e => { const f = e.target.files?.[0]; if (f) handleImport(f) }} />
-          </div>
-        </>
+              <div className={s.miniRow}>
+                <button className={s.miniBtn} onClick={() => onApply(g)}>불러오기</button>
+                <button className={`${s.miniBtn} ${s.miniDanger}`} onClick={() => handleDelete(g.id)}>×</button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
+      {/* 가져오기는 목록이 비어 있어도(캐시 삭제·새 기기) 복원할 수 있도록 항상 노출 */}
+      <div className={s.miniRow} style={{ marginTop: 10 }}>
+        {games.length > 0 && (
+          <button className={s.miniBtn} onClick={handleExport}>백업 다운로드</button>
+        )}
+        <button className={s.miniBtn} onClick={() => fileRef.current?.click()}>가져오기</button>
+        <input ref={fileRef} type="file" accept=".json" hidden
+          onChange={e => {
+            const f = e.target.files?.[0]
+            if (f) handleImport(f)
+            e.target.value = ''   // 같은 파일을 다시 골라도 onChange가 발생하도록
+          }} />
+      </div>
     </div>
   )
 }

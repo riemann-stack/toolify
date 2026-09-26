@@ -387,7 +387,7 @@
  "/tools/art/print-resolution": {
   "slug": "/tools/art/print-resolution",
   "reviewed": "2026-09",
-  "updated": "2026-08-03",
+  "updated": "2026-09-26",
   "basis": "사진 인화 규격 = 후지필름 공식 스토어 표기(L 89×127 · KG 102×152 · 2L 127×178 · 六切 203×254) · A규격 = ISO 216 · 명함 90×50(한국 관행) · 증명사진 35×45(외교부 여권 규격) · 300 PPI 기준 = 하프톤 150 lpi × 품질계수 2 · 250 PPI = 일반 상업 인쇄 실무 권장값 · 관람 거리 한계 = 시력 1.0(1분각, ISO 8596) 기준 계산",
   "sources": [
    {
@@ -502,7 +502,7 @@
  "/tools/cooking/baby-porridge": {
   "slug": "/tools/cooking/baby-porridge",
   "reviewed": "2026-09",
-  "updated": "2026-07-11",
+  "updated": "2026-09-26",
   "basis": "배죽 물양은 육아 서적·레시피 플랫폼 통용 관행 종합(공식 규격이 아닌 관행 수치) · 이유식 시작 시기·안전 수칙은 질병관리청(모유 6개월 이후·분유 4~6개월)·WHO 2023 보완식 지침(생후 6개월) 기준",
   "sources": [
    {
@@ -527,7 +527,7 @@
  "/tools/cooking/baker-percent": {
   "slug": "/tools/cooking/baker-percent",
   "reviewed": "2026-09",
-  "updated": "2026-07-29",
+  "updated": "2026-09-26",
   "basis": "베이커 퍼센트 정의(밀가루 = 100%)·소금 1.8~2.2%·이스트 환산(생 3 : 액티브 1.2~1.25 : 인스턴트 1)·프리퍼먼트 수분율은 King Arthur Baking 전문가 레퍼런스 기준, 계란 75%·우유 90% 수분 환산은 본 도구 기준값",
   "sources": [
    {
@@ -686,7 +686,7 @@
  "/tools/cooking/frying": {
   "slug": "/tools/cooking/frying",
   "reviewed": "2026-09",
-  "updated": "2026-07-30",
+  "updated": "2026-09-26",
   "basis": "안전 중심온도는 식약처 식중독 예방 수칙(육류 75℃·어패류 85℃, 1분 이상)과 USDA FSIS 안전 최저 내부온도표 · 재료별 온도·시간은 가정 조리 참고값",
   "sources": [
    {
@@ -876,7 +876,7 @@
  "/tools/cooking/sourdough": {
   "slug": "/tools/cooking/sourdough",
   "reviewed": "2026-07",
-  "updated": "2026-07-31",
+  "updated": "2026-09-26",
   "basis": "냉장 관리·부활 절차·후치와 폐기 신호는 King Arthur Baking 공식 가이드와 콜로라도·사우스다코타 주립대 익스텐션 자료 · 피크 시간은 도구의 경험식(24°C 기준, 10°C 낮아질 때마다 약 2배 느림)",
   "sources": [
    {
@@ -1021,7 +1021,7 @@
  "/tools/date/history-era": {
   "slug": "/tools/date/history-era",
   "reviewed": "2026-09",
-  "updated": "2026-07-29",
+  "updated": "2026-09-26",
   "basis": "조선왕조실록 기년(유년칭원법) 기준",
   "sources": [
    {
@@ -1116,7 +1116,7 @@
  "/tools/date/lunar": {
   "slug": "/tools/date/lunar",
   "reviewed": "2026-07",
-  "updated": "2026-07-29",
+  "updated": "2026-09-26",
   "basis": "한국천문연구원(KASI) 음력 데이터 1900~2049 전수 일치 · 2025~2030 공휴일 발표 교차 확인",
   "sources": [
    {
@@ -1845,6 +1845,21 @@
     "label": "오피넷 유가정보(한국석유공사)",
     "org": "",
     "href": "https://www.opinet.co.kr"
+   },
+   {
+    "label": "국가법령정보센터 지방세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법"
+   },
+   {
+    "label": "보험다모아(자동차보험 비교)",
+    "org": "",
+    "href": "https://www.e-insmarket.or.kr"
+   },
+   {
+    "label": "여신금융협회 공시",
+    "org": "",
+    "href": "https://www.crefia.or.kr"
    }
   ],
   "verified": {
@@ -2119,9 +2134,9 @@
  },
  "/tools/finance/housing-score": {
   "slug": "/tools/finance/housing-score",
-  "reviewed": "2026-05",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "2026년 주택청약 제도 기준",
+  "basis": "주택공급에 관한 규칙 별표1(가점)·별표2(예치금), 2026.6.15 개정(민영 신생아 특별공급) 반영",
   "sources": [
    {
     "label": "청약홈",
@@ -2132,6 +2147,11 @@
     "label": "국토교통부",
     "org": "",
     "href": "https://www.molit.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 주택공급에 관한 규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택공급에관한규칙"
    }
   ],
   "ymyl": true,
@@ -2218,9 +2238,9 @@
  },
  "/tools/finance/loan": {
   "slug": "/tools/finance/loan",
-  "reviewed": "2026-05",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "2026년 시중 금리 참고",
+  "basis": "2025.10.15 대출 규제(LTV·주담대 한도)·2025.1.13 중도상환수수료 개편 반영, 금리 프리셋은 참고값",
   "sources": [
    {
     "label": "은행연합회 공시",
@@ -2231,6 +2251,16 @@
     "label": "금융위원회 (중도상환수수료 개편)",
     "org": "",
     "href": "https://www.fsc.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 금융소비자보호법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/금융소비자보호에관한법률"
+   },
+   {
+    "label": "한국은행 경제통계시스템(ECOS)",
+    "org": "",
+    "href": "https://ecos.bok.or.kr"
    }
   ],
   "ymyl": true,
@@ -2613,7 +2643,7 @@
   "slug": "/tools/health/blood-alcohol",
   "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "위드마크(Widmark) 공식 — 체내분포계수 남 0.68·여 0.55, 시간당 분해율 0.010~0.020g/dL(기본 0.015) · 처벌 기준 도로교통법 제148조의2(0.03% 면허정지·0.08% 면허취소)·제82조(결격기간)",
+  "basis": "위드마크(Widmark) 공식 — 체내분포계수 남 0.68·여 0.55, 시간당 분해율 0.010~0.020g/dL(기본 0.015) · 처벌 기준 도로교통법 제44조·제93조(0.03% 면허정지·0.08% 면허취소)·제148조의2(형사처벌)·제82조(결격기간)",
   "sources": [
    {
     "label": "국가법령정보센터 — 도로교통법",
@@ -2624,6 +2654,16 @@
     "label": "도로교통공단 — 음주운전 처벌 기준",
     "org": "",
     "href": "https://www.koroad.or.kr/kp_web/drunkDriveInfo4.do"
+   },
+   {
+    "label": "NIAAA — 알코올·약물 상호작용",
+    "org": "",
+    "href": "https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/harmful-interactions-mixing-alcohol-with-medicines"
+   },
+   {
+    "label": "Brooks 외 2009 — ALDH2 결손과 식도암 (PLOS Medicine)",
+    "org": "",
+    "href": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000050"
    }
   ],
   "verified": {
@@ -2640,9 +2680,9 @@
  },
  "/tools/health/bmi": {
   "slug": "/tools/health/bmi",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "BMI = 체중(kg) ÷ 키(m)² · 비만 기준 한국(대한비만학회) BMI 25·복부비만 허리둘레 남 90/여 85cm, WHO BMI 30 · 체지방률은 미 해군(U.S. Navy) 추정식",
+  "basis": "BMI = 체중(kg) ÷ 키(m)² · 비만 기준 한국(대한비만학회) BMI 25·복부비만 허리둘레 남 90/여 85cm(갈비뼈 아래~장골능 중간 측정), WHO BMI 30 · 체지방률은 미 해군(U.S. Navy) 추정식 · 임신 중 체중 증가는 미국 IOM 2009",
   "sources": [
    {
     "label": "대한비만학회 비만 진료지침(2022)",
@@ -2650,9 +2690,19 @@
     "href": "https://general.kosso.or.kr/html/user/core/view/reaction/main/kosso/inc/data/guideline2022_vol8.pdf"
    },
    {
+    "label": "대한비만학회 — 비만 진단(허리둘레 측정법)",
+    "org": "",
+    "href": "https://general.kosso.or.kr/html/?pmode=obesityDiagnosis"
+   },
+   {
     "label": "WHO — Obesity and overweight",
     "org": "",
     "href": "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"
+   },
+   {
+    "label": "IOM(2009) 임신 중 체중 증가 지침",
+    "org": "",
+    "href": "https://www.nationalacademies.org/read/12584/chapter/2"
    }
   ],
   "ymyl": true,
@@ -2660,7 +2710,7 @@
  },
  "/tools/health/bmr": {
   "slug": "/tools/health/bmr",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
   "basis": "BMR 공식 4종 — Mifflin-St Jeor(1990)·Harris-Benedict(Roza-Shizgal 1984 개정)·Katch-McArdle·Cunningham · 활동계수 1.2~1.9",
   "sources": [
@@ -2673,6 +2723,21 @@
     "label": "Roza·Shizgal(1984) — Am J Clin Nutr",
     "org": "",
     "href": "https://pubmed.ncbi.nlm.nih.gov/6741850/"
+   },
+   {
+    "label": "Frankenfield 외(2005) — 예측식 체계적 문헌고찰",
+    "org": "",
+    "href": "https://www.jandonline.org/article/S0002-8223(05)00149-5/abstract"
+   },
+   {
+    "label": "보건복지부 — 2025 한국인 영양소 섭취기준 개정",
+    "org": "",
+    "href": "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1488441"
+   },
+   {
+    "label": "Shcherbina 외(2017) — 손목형 기기 에너지 소비 정확도",
+    "org": "",
+    "href": "https://www.mdpi.com/2075-4426/7/2/3"
    }
   ],
   "ymyl": true,
@@ -2680,7 +2745,7 @@
  },
  "/tools/health/caffeine": {
   "slug": "/tools/health/caffeine",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
   "basis": "반감기 지수감쇠 모델(기본 5시간, 3~12시간 선택) · 1일 한도 성인 400mg(FDA·식약처)·임산부 200mg(ACOG)·어린이·청소년 체중 1kg당 2.5mg(식약처)",
   "sources": [
@@ -2698,6 +2763,21 @@
     "label": "ACOG — 임신 중 카페인",
     "org": "",
     "href": "https://www.acog.org/womens-health/experts-and-stories/ask-acog/how-much-coffee-can-i-drink-while-pregnant"
+   },
+   {
+    "label": "EFSA — 카페인 안전성",
+    "org": "",
+    "href": "https://www.efsa.europa.eu/en/topics/topic/caffeine"
+   },
+   {
+    "label": "Drake 외 2013 (J Clin Sleep Med)",
+    "org": "",
+    "href": "https://jcsm.aasm.org/doi/10.5664/jcsm.3170"
+   },
+   {
+    "label": "한국소비자원",
+    "org": "",
+    "href": "https://www.kca.go.kr"
    }
   ],
   "ymyl": true,
@@ -2712,7 +2792,7 @@
    {
     "label": "Tanner MPH (PubMed)",
     "org": "",
-    "href": "https://pubmed.ncbi.nlm.nih.gov/5440182/"
+    "href": "https://pubmed.ncbi.nlm.nih.gov/5491878/"
    },
    {
     "label": "사이즈코리아 인체치수조사",
@@ -2730,9 +2810,9 @@
  },
  "/tools/health/cycle": {
   "slug": "/tools/health/cycle",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "황체기 14일 고정 모델 — 배란일 = 다음 생리 −14일, 가임기 = 배란 −5일~+1일(정자 생존 최대 5일·난자 약 24시간), 정상 주기 성인 21~35일·청소년 최대 45일",
+  "basis": "황체기 14일 고정 모델 — 배란일 = 다음 생리 −14일, 가임기 = 배란 −5일~+1일(정자 생존 최대 5일·난자 약 24시간), 정상 주기 성인 21~35일(NICHD)·청소년 최대 45일, 무월경 = 임신 아닌데 3개월 이상 생리 없음",
   "sources": [
    {
     "label": "NICHD — Menstruation",
@@ -2740,9 +2820,19 @@
     "href": "https://www.nichd.nih.gov/health/topics/menstruation/conditioninfo"
    },
    {
+    "label": "NICHD — 월경 불순(Menstrual irregularities)",
+    "org": "",
+    "href": "https://www.nichd.nih.gov/health/topics/menstruation/conditioninfo/irregularities"
+   },
+   {
     "label": "ACOG — 가임인지법(FABM)",
     "org": "",
     "href": "https://www.acog.org/womens-health/faqs/fertility-awareness-based-methods-of-family-planning"
+   },
+   {
+    "label": "Wilcox 외, BMJ 2000 — 가임창 시기 전향 연구",
+    "org": "",
+    "href": "https://pmc.ncbi.nlm.nih.gov/articles/PMC27529/"
    }
   ],
   "ymyl": true,
@@ -2803,6 +2893,11 @@
     "label": "NGSP — HbA1c and eAG",
     "org": "",
     "href": "https://ngsp.org/A1ceAG.asp"
+   },
+   {
+    "label": "Nathan 외(2008) ADAG — Diabetes Care",
+    "org": "",
+    "href": "https://diabetesjournals.org/care/article/31/8/1473/28589/Translating-the-A1C-Assay-Into-Estimated-Average"
    }
   ],
   "ymyl": true,
@@ -2828,6 +2923,21 @@
     "label": "국가법령정보센터",
     "org": "",
     "href": "https://www.law.go.kr"
+   },
+   {
+    "label": "ACSM 수분 보충 입장문 (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/17277604/"
+   },
+   {
+    "label": "NATA 수분 보충 입장문 (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/28985128/"
+   },
+   {
+    "label": "고용노동부",
+    "org": "",
+    "href": "https://www.moel.go.kr"
    }
   ],
   "ymyl": true,
@@ -2835,9 +2945,9 @@
  },
  "/tools/health/pet": {
   "slug": "/tools/health/pet",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "RER = 70 × 체중(kg)^0.75, DER = RER × 생활계수(중성화×활동 6조합 1.2~1.8·퍼피/키튼 2.0~3.0·노령 = 성견 계수 × 0.85) — 수의영양 표준",
+  "basis": "RER = 70 × 체중(kg)^0.75(Merck), DER = RER × 생활계수(도구 단순화: 중성화×활동 6조합 1.2~1.8·퍼피/키튼 2.0~3.0·노령 = 성견 계수 × 0.85 — 문헌 대표 계수는 본문 표) · 사람 나이 = AVMA 규칙(1세 15·2세 24) 기반, 이후 크기별 연 4~6세 도구 단순화 · 고양이 생애 단계 AAHA/AAFP 2021",
   "sources": [
    {
     "label": "Merck Veterinary Manual — 소동물 영양요구량",
@@ -2848,6 +2958,21 @@
     "label": "WSAVA — Global Nutrition Guidelines",
     "org": "",
     "href": "https://wsava.org/global-guidelines/global-nutrition-guidelines/"
+   },
+   {
+    "label": "Pet Nutrition Alliance — RER·MER 계수표",
+    "org": "",
+    "href": "https://petnutritionalliance.org/wp-content/uploads/2023/03/MER.RER_.PNA_.pdf"
+   },
+   {
+    "label": "AKC — 개 나이를 사람 나이로 환산하기",
+    "org": "",
+    "href": "https://www.akc.org/expert-advice/health/how-to-calculate-dog-years-to-human-years/"
+   },
+   {
+    "label": "AAHA/AAFP — 고양이 생애 단계(2021)",
+    "org": "",
+    "href": "https://www.aaha.org/resources/2021-aaha-aafp-feline-life-stage-guidelines/feline-life-stage-definitions/"
    }
   ],
   "ymyl": true,
@@ -2855,7 +2980,7 @@
  },
  "/tools/health/pregnancy": {
   "slug": "/tools/health/pregnancy",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
   "basis": "네겔레 공식 — 마지막 생리일(LMP) + 280일(40주) = 출산 예정일, 배란 LMP+14일·주기 28일 외 ±보정, GBS 검사 36~37주 일정",
   "sources": [
@@ -2868,6 +2993,21 @@
     "label": "ACOG — GBS 조기 감염 예방 지침",
     "org": "",
     "href": "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2020/02/prevention-of-group-b-streptococcal-early-onset-disease-in-newborns"
+   },
+   {
+    "label": "ACOG 위원회 의견 700 — 출산 예정일 산정법",
+    "org": "",
+    "href": "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date"
+   },
+   {
+    "label": "WHO(2016) — 산전 진료 권고",
+    "org": "",
+    "href": "https://www.ncbi.nlm.nih.gov/books/NBK409108/"
+   },
+   {
+    "label": "보건복지부 — 임신·출산 진료비 지원",
+    "org": "",
+    "href": "https://www.mohw.go.kr/menu.es?mid=a10705020100"
    }
   ],
   "ymyl": true,
@@ -2875,7 +3015,7 @@
  },
  "/tools/health/sleep-debt": {
   "slug": "/tools/health/sleep-debt",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
   "basis": "연령별 권장 수면 범위(NSF 2015, 성인 7~9시간) 기준 · 일별 부채 = 목표 − 실제 수면, 초과 수면은 회복효율 0.5 적용(단순화 가정)",
   "sources": [
@@ -2888,6 +3028,16 @@
     "label": "CDC — About Sleep (성인 7시간+)",
     "org": "",
     "href": "https://www.cdc.gov/sleep/about/index.html"
+   },
+   {
+    "label": "Van Dongen 외 2003 — 만성 수면 제한의 누적 비용(SLEEP)",
+    "org": "",
+    "href": "https://academic.oup.com/sleep/article-abstract/26/2/117/2709164"
+   },
+   {
+    "label": "질병관리청 — 청소년건강행태조사",
+    "org": "",
+    "href": "https://www.kdca.go.kr/yhs/"
    }
   ],
   "ymyl": true,
@@ -2915,6 +3065,16 @@
     "href": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
    },
    {
+    "label": "NIH ODS 셀레늄 (브라질너트 함량)",
+    "org": "",
+    "href": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+   },
+   {
+    "label": "NCCIH — 성요한초 상호작용",
+    "org": "",
+    "href": "https://www.nccih.nih.gov/health/st-johns-wort"
+   },
+   {
     "label": "NIH Office of Dietary Supplements",
     "org": "",
     "href": "https://ods.od.nih.gov"
@@ -2925,14 +3085,29 @@
  },
  "/tools/health/uv-protection": {
   "slug": "/tools/health/uv-protection",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "WHO 자외선지수 정의(1 UVI = 홍반가중 자외선 0.025W/㎡) · Fitzpatrick 피부 타입별 MED 기반 추정 · 차단제 2시간 재도포(미국 FDA 권고)",
+  "basis": "WHO 자외선지수 정의(1 UVI = 홍반가중 자외선 0.025W/㎡) · Fitzpatrick 피부 타입별 MED 기반 추정 · 반사·고도 보정 근거 WHO(눈 최대 80%·물거품 25%·모래 15%·고도 1,000m당 약 10%) · 차단제 외출 15분 전·2시간 재도포(식약처·미국 FDA) · UV 단계 기상청 5단계",
   "sources": [
    {
     "label": "WHO 자외선지수 실용 가이드",
     "org": "",
     "href": "https://www.who.int/publications/i/item/9241590076"
+   },
+   {
+    "label": "WHO — 자외선 Q&A",
+    "org": "",
+    "href": "https://www.who.int/news-room/questions-and-answers/item/radiation-ultraviolet-(uv)"
+   },
+   {
+    "label": "기상청 생활기상지수(자외선지수)",
+    "org": "",
+    "href": "https://www.weather.go.kr/w/forecast/life/life-weather-index.do"
+   },
+   {
+    "label": "정책브리핑(식약처) — 자외선차단제 올바른 사용법",
+    "org": "",
+    "href": "https://www.korea.kr/news/policyNewsView.do?newsId=148965990"
    },
    {
     "label": "FDA 자외선 차단제 안내",
@@ -2945,7 +3120,7 @@
  },
  "/tools/health/weightloss": {
   "slug": "/tools/health/weightloss",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
   "basis": "지방 1kg ≈ 7,700kcal(Wishnofsky, 1958) · 주당 체중 0.3~1.5% 감량 속도 옵션 · 운동 칼로리 METs 기준(신체활동 컴펜디엄)",
   "sources": [
@@ -2958,6 +3133,31 @@
     "label": "Compendium of Physical Activities",
     "org": "",
     "href": "https://pacompendium.com/"
+   },
+   {
+    "label": "CDC — Steps for Losing Weight",
+    "org": "",
+    "href": "https://www.cdc.gov/healthy-weight-growth/losing-weight/index.html"
+   },
+   {
+    "label": "대한비만학회 — 식사요법",
+    "org": "",
+    "href": "https://general.kosso.or.kr/html/?pmode=nutritionDiet"
+   },
+   {
+    "label": "NIDDK — Body Weight Planner(동적 모델)",
+    "org": "",
+    "href": "https://www.niddk.nih.gov/health-information/professionals/diabetes-discoveries-practice/nih-body-weight-planner"
+   },
+   {
+    "label": "Garthe 외(2011) — 감량 속도와 체성분",
+    "org": "",
+    "href": "https://journals.humankinetics.com/view/journals/ijsnem/21/2/article-p97.xml"
+   },
+   {
+    "label": "보건복지부 — 2025 한국인 영양소 섭취기준 개정",
+    "org": "",
+    "href": "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1488441"
    }
   ],
   "ymyl": true,
@@ -2965,17 +3165,41 @@
  },
  "/tools/interior/ac-capacity": {
   "slug": "/tools/interior/ac-capacity",
+  "reviewed": "2026-06",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "냉방부하 약 123 W/㎡·1평형 ≈ 407W(KS C 9306 부속서 D) 기준 — 향·층·단열·인원 보정은 관행 가정값",
+  "sources": [
+   {
+    "label": "KS C 9306 에어컨디셔너 (e-나라 표준인증)",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSC9306"
+   },
+   {
+    "label": "한국에너지공단 (에너지소비효율등급)",
+    "org": "",
+    "href": "https://www.energy.or.kr"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/interior/curtain-blind": {
   "slug": "/tools/interior/curtain-blind",
+  "reviewed": "2026-07",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "사이즈 공식은 업계 통용 관행(커튼봉 = 창 폭 + 30cm · 커튼 폭 = 봉 길이 × 주름 배수 · 블라인드 인사이드 폭 −1cm·높이 −0.5cm, 아웃사이드 +10cm) · 차광 1~3급 구간은 일본 인테리어패브릭협회(NIF, JIS L 1055 A법) 기준 · 한국은 KS K 0819 차광성 시험방법",
+  "sources": [
+   {
+    "label": "산겟츠 — 커튼 기능 가이드(NIF 차광 등급)",
+    "org": "",
+    "href": "https://www.sangetsu.co.jp/style/curtain_choose04.html"
+   },
+   {
+    "label": "e나라표준인증 — KS K 0819 커튼의 차광성 시험방법",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSK0819&tmprKsNo=KSK0819"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -2996,9 +3220,16 @@
  },
  "/tools/interior/flooring": {
   "slug": "/tools/interior/flooring",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "박스 면적은 국내 시판 대표값(강화 2.4㎡·강마루 2.6㎡·원목 2.0㎡·데코타일 3.3㎡ — 구매 전 박스 표기 확인) · 장판은 폭 1.8m 롤을 폭(줄) 단위로 배치 · 단가·시공비는 흔히 안내되는 대략적 범위(견적 시 재확인)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 실내공기질 관리법 시행규칙(바닥재·접착제 방출 기준)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/실내공기질관리법시행규칙"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -3006,12 +3237,17 @@
   "slug": "/tools/interior/lighting",
   "reviewed": "2026-07",
   "updated": "2026-09-26",
-  "basis": "KS A 3011 조도 기준 참고 · LED 평균 효율 100lm/W 기준",
+  "basis": "KS A 3011 조도 기준 참고 · LED 평균 효율 100lm/W · 형광등 평균 65lm/W 기준(FPL 램프 광속은 제조사 데이터시트 주백색 840 값)",
   "sources": [
    {
     "label": "e나라표준인증 — KS A 3011 조도기준",
     "org": "",
     "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=919&topMenuId=502&upperMenuId=503&ksNo=KSA3011&tmprKsNo=KSA3011&reformNo=09"
+   },
+   {
+    "label": "미국 에너지부 — 루멘과 밝기 표시(백열 W 환산)",
+    "org": "",
+    "href": "https://www.energy.gov/energysaver/lumens-and-lighting-facts-label"
    }
   ],
   "ymyl": false,
@@ -3019,9 +3255,16 @@
  },
  "/tools/interior/molding": {
   "slug": "/tools/interior/molding",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "필요 길이 = 둘레 × (1 + 로스율) + 모서리 4곳 × 5cm, 종류별로 1본(2.4·3.0·3.6m) 단위 올림 · 평수 입력은 정사각형 둘레(√면적 × 4) 가정 · 재질 단가는 흔히 안내되는 대략적 범위(구매 시 재확인)",
+  "sources": [
+   {
+    "label": "e나라표준인증 — KS F 3200 섬유판(MDF)",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSF3200"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -3045,6 +3288,11 @@
     "label": "서울시 재활용 비해당품목 배출기준",
     "org": "",
     "href": "https://news.seoul.go.kr/env/archives/563504"
+   },
+   {
+    "label": "기후에너지환경부 — 생활계 유해폐기물 관리지침(2023.12 개정)",
+    "org": "",
+    "href": "https://www.mcee.go.kr/m/mob/policy_data/read.do?menuId=34&condition.code=A6&seq=8220"
    }
   ],
   "ymyl": false,
@@ -3052,9 +3300,31 @@
  },
  "/tools/interior/pipe": {
   "slug": "/tools/interior/pipe",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "호칭 KS(A)·ASME B36.10(인치)·ISO 6708(DN) · 강관 KS D 3507(SPP, JIS G 3452 SGP와 같은 치수)·KS D 3562(SPPS, JIS G 3454 STPG와 같은 치수) Sch 40·80 · 동관 KS D 5301(ASTM B88 K·L·M 두께) · PVC·PB·XL·STS는 표준 일반치 · 유량 Q = π/4 × 내경² × 유속",
+  "sources": [
+   {
+    "label": "e나라표준인증 — KS D 3507 배관용 탄소 강관",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSD3507&tmprKsNo=KSD3507"
+   },
+   {
+    "label": "e나라표준인증 — KS D 5301 이음매 없는 구리 및 구리합금 관",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSD5301&tmprKsNo=KSD5301"
+   },
+   {
+    "label": "국가법령정보센터 — 수도법(수도용 자재 위생안전기준)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/수도법"
+   },
+   {
+    "label": "국가법령정보센터 — 도시가스사업법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/도시가스사업법"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -3068,6 +3338,21 @@
     "label": "한국철강협회",
     "org": "",
     "href": "https://www.kosa.or.kr"
+   },
+   {
+    "label": "KS D 3504 철근 콘크리트용 봉강 (e-나라 표준인증)",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSD3504"
+   },
+   {
+    "label": "도로교통법 시행령 (적재 길이)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/도로교통법시행령"
+   },
+   {
+    "label": "건축법 시행령 (공작물 축조신고)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축법시행령"
    }
   ],
   "ymyl": false,
@@ -3075,17 +3360,61 @@
  },
  "/tools/interior/roof": {
   "slug": "/tools/interior/roof",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "물매 = 수평 10 대비 수직 높이(tanθ × 10) · 표면적 = 처마 포함 평면 × 1/cosθ(모든 면이 같은 경사일 때) · 처마 건축면적 산입은 건축법 시행령 제119조 · 자재 단가는 흔히 안내되는 대략적 범위(견적 시 재확인)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 건축법 시행령(면적 등의 산정방법)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축법시행령"
+   },
+   {
+    "label": "국가법령정보센터 — 산업안전보건기준에 관한 규칙(지붕 위 위험 방지)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/산업안전보건기준에관한규칙"
+   },
+   {
+    "label": "국가법령정보센터 — 산업안전보건법(석면해체·제거업)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/산업안전보건법"
+   },
+   {
+    "label": "한국산업안전보건공단(KOSHA)",
+    "org": "",
+    "href": "https://www.kosha.or.kr"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/interior/room-area": {
   "slug": "/tools/interior/room-area",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "1평 = 400/121㎡ ≈ 3.3058㎡(계산기 적용값) · 벽 면적 = 둘레 × 천장 높이 − 창·문 · 바닥면적·반자높이 산정은 건축법 시행령 제119조 · 공동주택 주거전용면적은 주택법 시행규칙 제2조(외벽 내부선 기준) · 국민주택규모 전용 85㎡(주택법) · 냉방 부하 약 123W/㎡(KS C 9306)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 건축법 시행령(면적 등의 산정방법)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축법시행령"
+   },
+   {
+    "label": "국가법령정보센터 — 주택법(국민주택규모)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택법"
+   },
+   {
+    "label": "국가법령정보센터 — 주택법 시행규칙(주거전용면적 산정)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택법시행규칙"
+   },
+   {
+    "label": "e나라표준인증 — KS C 9306 에어컨디셔너",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSC9306"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -3099,9 +3428,26 @@
  },
  "/tools/interior/ventilation": {
   "slug": "/tools/interior/ventilation",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "신축 30세대 이상 공동주택 시간당 0.5회 환기(건축물의 설비기준 등에 관한 규칙)·학교 1인당 21.6㎥/h(학교보건법 시행규칙)·CO₂ 1,000ppm(실내공기질 관리법 시행규칙) — 그 외 용도별 ACH는 권장 범위",
+  "sources": [
+   {
+    "label": "건축물의 설비기준 등에 관한 규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축물의설비기준등에관한규칙"
+   },
+   {
+    "label": "학교보건법 시행규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/학교보건법시행규칙"
+   },
+   {
+    "label": "실내공기질 관리법 시행규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/실내공기질관리법시행규칙"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -3110,23 +3456,68 @@
   "reviewed": "2026-09",
   "updated": "2026-09-26",
   "basis": "국내 유통 표준 규격(실크 폭 106cm×15.6m · 광폭 합지 93cm×17.75m) 기준 — 벽지·시공 단가는 흔히 안내되는 대략적 범위(견적 시 재확인)",
-  "sources": [],
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 실내공기질 관리법 시행규칙(벽지 등 건축자재 방출 기준)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/실내공기질관리법시행규칙"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/interior/wire": {
   "slug": "/tools/interior/wire",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "한국전기설비규정(KEC) 과전류 보호 IB ≤ In ≤ Iz · 허용전류 IEC 60364-5-52 참조 부설방법 C(PVC 절연·동선·30°C) · 전압강하 KEC 수용가 설비 한도(조명 3%·기타 5%)와 계산기 설계 목표 2% · 차단기 국내 표준 정격 · 연속부하 125% 여유",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 한국전기설비규정(KEC)",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/한국전기설비규정"
+   },
+   {
+    "label": "국가법령정보센터 — 전기설비기술기준",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/전기설비기술기준"
+   },
+   {
+    "label": "국가법령정보센터 — 전기공사업법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/전기공사업법"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/life/alcohol": {
   "slug": "/tools/life/alcohol",
+  "reviewed": "2026-07",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "순수 알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7893(에탄올 밀도) · 1잔 표시 8g(표준잔 정의는 기관별 7~14g) · 소주 도수는 2026년 7월 제조사 표기",
+  "sources": [
+   {
+    "label": "WHO 유럽사무소 — 안전한 음주량은 없다(2023)",
+    "org": "",
+    "href": "https://www.who.int/europe/news/item/04-01-2023-no-level-of-alcohol-consumption-is-safe-for-our-health"
+   },
+   {
+    "label": "NIAAA — What Is a Standard Drink?",
+    "org": "",
+    "href": "https://www.niaaa.nih.gov/alcohols-effects-health/what-standard-drink"
+   },
+   {
+    "label": "질병관리청 국민건강영양조사 (고위험음주 지표)",
+    "org": "",
+    "href": "https://knhanes.kdca.go.kr/"
+   },
+   {
+    "label": "국가법령정보센터 — 청소년보호법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/청소년보호법"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -3134,8 +3525,13 @@
   "slug": "/tools/life/cleaning",
   "reviewed": "2026-07",
   "updated": "2026-09-26",
-  "basis": "LG전자·삼성전자서비스 고객지원 공식 안내 기준",
+  "basis": "락스 희석은 질병관리청 소독 안내의 표면 소독 농도(차아염소산나트륨 약 1,000ppm), 세탁조 통세척은 LG전자·삼성전자서비스 공식 안내 기준 — 구연산·과탄산·베이킹소다 농도는 공식 기준이 없어 통용 관행값",
   "sources": [
+   {
+    "label": "질병관리청 — 집단시설·다중이용시설 소독 안내",
+    "org": "",
+    "href": "https://www.kdca.go.kr"
+   },
    {
     "label": "LG전자 통돌이 통세척",
     "org": "",
@@ -3162,11 +3558,43 @@
  },
  "/tools/life/customs": {
   "slug": "/tools/life/customs",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "관세법 시행규칙 제45조 소액면세 한도($150)·특송물품 수입통관 사무처리에 관한 고시(미국발 목록통관 $200)·관세율표 기본세율·개별소비세법·주세법·부가가치세법 기준 간이 예상세액",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 관세법 시행규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/관세법시행규칙"
+   },
+   {
+    "label": "국가법령정보센터 — 수입통관 사무처리에 관한 고시",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/수입통관사무처리에관한고시"
+   },
+   {
+    "label": "국가법령정보센터 — 특송물품 수입통관 사무처리에 관한 고시",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/특송물품수입통관사무처리에관한고시"
+   },
+   {
+    "label": "국가법령정보센터 — 개별소비세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/개별소비세법"
+   },
+   {
+    "label": "관세청 — 해외직구 안내",
+    "org": "",
+    "href": "https://www.customs.go.kr"
+   },
+   {
+    "label": "관세청 UNI-PASS — 세율·주간환율 조회",
+    "org": "",
+    "href": "https://unipass.customs.go.kr"
+   }
+  ],
   "verified": {
-   "cases": 15,
+   "cases": 21,
    "scope": "관부가세 면세 한도·세액 적층",
    "full": false,
    "tests": [
@@ -3216,6 +3644,21 @@
     "label": "국가기술표준원",
     "org": "",
     "href": "https://www.kats.go.kr"
+   },
+   {
+    "label": "NCD-RisC — 국가별 키 원자료",
+    "org": "",
+    "href": "https://www.ncdrisc.org"
+   },
+   {
+    "label": "NCD-RisC (eLife 2016) — 100년간 성인 키 추세",
+    "org": "",
+    "href": "https://doi.org/10.7554/eLife.13410"
+   },
+   {
+    "label": "병무청",
+    "org": "",
+    "href": "https://www.mma.go.kr"
    }
   ],
   "ymyl": false,
@@ -3231,9 +3674,21 @@
  },
  "/tools/life/ladder": {
   "slug": "/tools/life/ladder",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "도구 알고리즘(균등 순열 선추첨 + 홀짝 교환 정렬 배치) · 위치 편향·완전순열 표는 빌드 시 도구와 같은 규칙으로 계산",
+  "sources": [
+   {
+    "label": "MDN — Math.random()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random"
+   },
+   {
+    "label": "OEIS A000166 — 완전순열 수",
+    "org": "",
+    "href": "https://oeis.org/A000166"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -3255,33 +3710,121 @@
  },
  "/tools/life/monty-hall": {
   "slug": "/tools/life/monty-hall",
+  "reviewed": "2026-09",
   "updated": "2026-07-29",
-  "basis": "",
-  "sources": [],
+  "basis": "표준 규칙(진행자가 자동차 위치를 알고 항상 고르지 않은 염소 문을 엶) 아래 조건부확률 · 변형 규칙 3종 · 시뮬레이션 표본오차 표는 빌드 시 계산",
+  "sources": [
+   {
+    "label": "Selvin (1975) — The American Statistician",
+    "org": "",
+    "href": "https://doi.org/10.1080/00031305.1975.10479121"
+   },
+   {
+    "label": "New York Times (1991) — 몬티홀 논쟁 보도",
+    "org": "",
+    "href": "https://www.nytimes.com/1991/07/21/us/behind-monty-hall-s-doors-puzzle-debate-and-answer.html"
+   },
+   {
+    "label": "Rosenthal — Monty Hall, Monty Fall, Monty Crawl",
+    "org": "",
+    "href": "https://probability.ca/jeff/writing/montyfall.pdf"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/life/packing": {
   "slug": "/tools/life/packing",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "옷 개수·무게는 계산기 계산식(본문 표는 빌드 시 같은 식으로 계산) · 보조배터리 기내 규정은 ICAO·국토교통부 기준(2026-04-20 시행)",
+  "sources": [
+   {
+    "label": "국토교통부 — 보조배터리 기내 반입 기준",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374"
+   },
+   {
+    "label": "IATA — 승객 배터리 안내",
+    "org": "",
+    "href": "https://www.iata.org/en/youandiata/travelers/batteries/"
+   },
+   {
+    "label": "FAA PackSafe — 배터리",
+    "org": "",
+    "href": "https://www.faa.gov/hazmat/packsafe/airline-passengers-and-batteries"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/life/pomodoro": {
   "slug": "/tools/life/pomodoro",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "도구 동작(타임스탬프 기준 타이머·프리셋 7종·단계 전환 규칙) 코드 기준 점검 · 표의 사이클 시간은 빌드 시 프리셋 값으로 계산",
+  "sources": [
+   {
+    "label": "MDN — setTimeout(비활성 탭 타이머 지연)",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout"
+   },
+   {
+    "label": "MDN — Notifications API",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API"
+   },
+   {
+    "label": "Lally 외(2010) 습관 형성 연구",
+    "org": "",
+    "href": "https://doi.org/10.1002/ejsp.674"
+   },
+   {
+    "label": "Mehta 외(2012) 주변 소음과 창의성",
+    "org": "",
+    "href": "https://doi.org/10.1086/665048"
+   },
+   {
+    "label": "Ericsson 외(1993) 의도적 연습",
+    "org": "",
+    "href": "https://doi.org/10.1037/0033-295X.100.3.363"
+   },
+   {
+    "label": "Francesco Cirillo — Pomodoro Technique 공식",
+    "org": "",
+    "href": "https://www.pomodorotechnique.com/"
+   }
+  ],
   "ymyl": false,
   "hasResult": false
  },
  "/tools/life/random": {
   "slug": "/tools/life/random",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "도구 알고리즘(Fisher-Yates 셔플·누적 가중치 추첨) 코드 기준 점검 · 편차·사다리 확률표는 빌드 시 계산",
+  "sources": [
+   {
+    "label": "MDN — Math.random()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random"
+   },
+   {
+    "label": "MDN — Crypto.getRandomValues()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues"
+   },
+   {
+    "label": "ECMAScript 명세 — Math.random",
+    "org": "",
+    "href": "https://tc39.es/ecma262/#sec-math.random"
+   },
+   {
+    "label": "Durstenfeld(1964) CACM Algorithm 235",
+    "org": "",
+    "href": "https://doi.org/10.1145/364520.364540"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },

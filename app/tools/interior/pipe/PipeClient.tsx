@@ -546,7 +546,7 @@ export default function PipeClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>두께 등급 가이드</span>
             <div className={s.gradeBox}>
-              <p className={s.gradeTitle}>강관 (STPG)</p>
+              <p className={s.gradeTitle}>강관 (SPPS)</p>
               <ul>
                 <li><strong>Sch 40</strong> — 일반 압력 배관 표준 (가장 흔함)</li>
                 <li><strong>Sch 80</strong> — 고압·증기·암모니아 (Sch 40보다 두껍고 무거움)</li>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './uv-protection.module.css'
+import { SKIN_TYPES, baseBurnMinutes, effectiveSpf, fmtMinutes, type SkinTypeId } from './uvProtectionUtils'
 
 // ─────────────────────────────────────────────
 // 유틸
@@ -16,25 +17,6 @@ const round = (v: number, dp = 1) => Math.round(v * Math.pow(10, dp)) / Math.pow
 // ─────────────────────────────────────────────
 // 데이터
 // ─────────────────────────────────────────────
-type SkinTypeId = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI'
-const SKIN_TYPES: {
-  id: SkinTypeId
-  name: string
-  desc: string
-  swatch: string
-  medJm2: number
-  multiplier: number
-  koreanRatio: string
-  isKoreanCommon: boolean
-}[] = [
-  { id: 'I',   name: '타입 I',   desc: '매우 흰 피부, 항상 화상',          swatch: '#FFE4D6', medJm2: 200,  multiplier: 2.5, koreanRatio: '1% 미만',        isKoreanCommon: false },
-  { id: 'II',  name: '타입 II',  desc: '흰 피부, 보통 화상',                 swatch: '#FFD4BB', medJm2: 250,  multiplier: 3,   koreanRatio: '1~5%',          isKoreanCommon: false },
-  { id: 'III', name: '타입 III', desc: '한국인 평균, 가끔 화상',              swatch: '#E8B894', medJm2: 300,  multiplier: 4,   koreanRatio: '40~50%',         isKoreanCommon: true },
-  { id: 'IV',  name: '타입 IV',  desc: '약간 어두움, 드물게 화상',            swatch: '#C8956D', medJm2: 450,  multiplier: 5,   koreanRatio: '40~50%',         isKoreanCommon: true },
-  { id: 'V',   name: '타입 V',   desc: '어두운 피부, 매우 드물게 화상',       swatch: '#8D5524', medJm2: 600,  multiplier: 8,   koreanRatio: '5% 미만',        isKoreanCommon: false },
-  { id: 'VI',  name: '타입 VI',  desc: '매우 어두움, 거의 화상 X',           swatch: '#553A29', medJm2: 1000, multiplier: 12,  koreanRatio: '1% 미만',        isKoreanCommon: false },
-]
-
 type SpfId = 'none' | 'spf15' | 'spf30' | 'spf50' | 'spf70'
 const SPF_OPTIONS: { id: SpfId; spf: number; blocks: number; name: string; cls: string }[] = [
   { id: 'none',  spf: 1,  blocks: 0,    name: '없음',     cls: s.spfNone },
@@ -94,15 +76,11 @@ function calcBurnTime(input: {
   const cloudMult = 1 - (Math.min(100, Math.max(0, input.cloudCover)) / 100) * 0.3
   const adjustedUvi = Math.max(0.1, input.uvIndex * envAltMult * cloudMult)
 
-  // 단순 공식
-  const t1 = (200 * skin.multiplier) / (3 * adjustedUvi)
-  // MED 기반
-  const irradiance = adjustedUvi * 0.025
-  const t2 = skin.medJm2 / (irradiance * 60)
-  const baseMin = Math.min(t1, t2)
+  // 단순식·MED 기반 식 중 짧은 쪽 (uvProtectionUtils — 본문 표와 같은 식)
+  const baseMin = baseBurnMinutes(adjustedUvi, skin)
 
   // SPF 적용 (도포량 50% 보수적)
-  const realSpf = 1 + 0.5 * (spf.spf - 1)
+  const realSpf = effectiveSpf(spf.spf)
   let withSpf = baseMin * realSpf
   if (input.isWaterContact && spf.spf > 1) withSpf *= 0.5
 
@@ -129,19 +107,11 @@ function calcBurnTime(input: {
   }
 }
 
-function fmtMinutes(min: number): string {
-  if (!Number.isFinite(min)) return '-'
-  if (min < 1) return '< 1분'
-  if (min < 60) return `${Math.round(min)}분`
-  const h = Math.floor(min / 60)
-  const m = Math.round(min - h * 60)
-  if (m === 0) return `${h}시간`
-  return `${h}시간 ${m}분`
-}
 function fmtRange(minVal: number, maxVal: number): string {
   if (!Number.isFinite(minVal) || !Number.isFinite(maxVal)) return '-'
-  if (maxVal < 60) return `약 ${Math.round(minVal)}~${Math.round(maxVal)}분`
-  if (minVal < 60 && maxVal >= 60) return `약 ${Math.round(minVal)}분 ~ ${fmtMinutes(maxVal)}`
+  const lo = Math.round(minVal), hi = Math.round(maxVal)
+  if (hi < 60) return `약 ${lo}~${hi}분`
+  if (lo < 60) return `약 ${lo}분 ~ ${fmtMinutes(maxVal)}`
   return `약 ${fmtMinutes(minVal)} ~ ${fmtMinutes(maxVal)}`
 }
 
@@ -344,7 +314,7 @@ export default function UvProtectionClient() {
                   <div className={s.skinSwatch} style={{ background: t.swatch }} />
                   <p className={s.skinName}>{t.name}</p>
                   <p className={s.skinDesc}>{t.desc}</p>
-                  <span className={s.skinKoreanRatio}>한국인 {t.koreanRatio}</span>
+                  {t.isKoreanCommon && <span className={s.skinKoreanRatio}>한국인에 흔함</span>}
                 </button>
               ))}
             </div>
@@ -354,7 +324,7 @@ export default function UvProtectionClient() {
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>자외선 차단제 (SPF)</span>
-              <span className={s.cardLabelHint}>SPF 50이 한국 표준</span>
+              <span className={s.cardLabelHint}>국내 표시 상한 SPF50+</span>
             </div>
             <div className={s.spfGrid} role="group" aria-label="자외선 차단제 SPF 선택">
               {SPF_OPTIONS.map(o => (
@@ -630,7 +600,7 @@ export default function UvProtectionClient() {
                   <tr><td>차단제 없음</td><td>0%</td><td>100%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>—</td></tr>
                   <tr><td>SPF 15</td><td>93.3%</td><td>6.7%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>일상 산책</td></tr>
                   <tr><td>SPF 30</td><td>96.7%</td><td>3.3%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>일반 외출</td></tr>
-                  <tr className={s.highlightRow}><td>SPF 50</td><td>98.0%</td><td>2.0%</td><td style={{ color: '#059669', fontWeight: 700 }}>한국 표준</td></tr>
+                  <tr className={s.highlightRow}><td>SPF 50</td><td>98.0%</td><td>2.0%</td><td style={{ color: 'var(--success)', fontWeight: 700 }}>국내 표시 상한(SPF50+)</td></tr>
                   <tr><td>SPF 70+</td><td>98.6%</td><td>1.4%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>야외 장시간</td></tr>
                 </tbody>
               </table>
@@ -683,7 +653,7 @@ export default function UvProtectionClient() {
                 <thead>
                   <tr>
                     <th scope="col">피부 타입</th>
-                    <th scope="col">한국인 비율</th>
+                    <th scope="col">MED (J/㎡)</th>
                     <th scope="col">무보호 시간</th>
                     <th scope="col">SPF 30 적용 (재도포 전)</th>
                   </tr>
@@ -695,7 +665,7 @@ export default function UvProtectionClient() {
                     return (
                       <tr key={t.id} className={t.isKoreanCommon ? s.highlightRow : ''}>
                         <td>{t.name}</td>
-                        <td>{t.koreanRatio}</td>
+                        <td>{t.medJm2}</td>
                         <td>{fmtMinutes(r1.base)}</td>
                         <td>{r2.fullyCapped ? `약 ${fmtMinutes(r2.reapplyMinutes)} (재도포 주기)` : fmtRange(r2.displayMin, r2.displayMax)}</td>
                       </tr>

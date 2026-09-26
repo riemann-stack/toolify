@@ -29,13 +29,13 @@ export interface BmrFormulaInfo {
 
 export const FORMULAS: BmrFormulaInfo[] = [
   { id: 'mifflin',         name: 'Mifflin-St Jeor', desc: '1990년 건강한 성인 데이터 기반, 현재 널리 권장 (일반인에 비교적 정확)',
-    needs: ['키', '체중', '나이', '성별'], accuracy: '±5~10%' },
+    needs: ['키', '체중', '나이', '성별'], accuracy: '대다수 ±10% 이내(Frankenfield 2005)' },
   { id: 'harris-benedict', name: 'Harris-Benedict', desc: '1919년 원전·1984년 개정판(Roza-Shizgal). 임상에서 널리 사용',
-    needs: ['키', '체중', '나이', '성별'], accuracy: '±10%' },
+    needs: ['키', '체중', '나이', '성별'], accuracy: '±14%(정상 영양 상태, Roza·Shizgal 1984)' },
   { id: 'katch-mcardle',   name: 'Katch-McArdle',   desc: '체지방률 입력 시 정확. 운동선수에게 권장',
-    needs: ['체중', '체지방률'], accuracy: '±3~5% (체지방률 정확 시)' },
+    needs: ['체중', '체지방률'], accuracy: '체지방률 측정 정확도에 좌우' },
   { id: 'cunningham',      name: 'Cunningham',      desc: '제지방량(LBM) 입력 시. 근육량 많은 사람에게 권장',
-    needs: ['제지방량(LBM)'], accuracy: '±3~5% (LBM 정확 시)' },
+    needs: ['제지방량(LBM)'], accuracy: '제지방량 측정 정확도에 좌우' },
 ]
 
 export function calcMifflin(input: BmrFormulaInput): number {

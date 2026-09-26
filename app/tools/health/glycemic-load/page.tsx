@@ -3,6 +3,7 @@ import GlycemicLoadClient from './GlycemicLoadClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolPage from '@/components/ToolPage'
@@ -16,13 +17,6 @@ export const metadata = buildMetadata({
     '혈당 스파이크 음식', 'GI GL 차이', '혈당지수 계산기', '식품 GI',
   ],
 })
-
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
 
 type GiRow =
   | { group: string }
@@ -170,7 +164,7 @@ export default function GlycemicLoadPage() {
 
         {/* 1. 공식 */}
         <section>
-          <h2 style={sectionTitle}>당부하지수(GL) 계산 공식</h2>
+          <h2 className="g-h2">당부하지수(GL) 계산 공식</h2>
           <div style={{
             background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
             padding: '18px 20px', fontFamily: 'var(--font-mono)',
@@ -187,7 +181,7 @@ export default function GlycemicLoadPage() {
 
         {/* 2. GI vs GL 대표 예 */}
         <section>
-          <h2 style={sectionTitle}>GI와 GL이 다르게 보이는 음식</h2>
+          <h2 className="g-h2">GI와 GL이 다르게 보이는 음식</h2>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
@@ -223,8 +217,8 @@ export default function GlycemicLoadPage() {
 
         {/* 3. 한국 상용 식품 GI 조회표 */}
         <section>
-          <h2 style={sectionTitle}>한국 상용 식품 GI 조회표</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
+          <h2 className="g-h2">한국 상용 식품 GI 조회표</h2>
+          <p className="g-p">
             국제 GI 표(2008·2021판)와 한국인을 대상으로 한 국내 인체시험 값을 <strong style={{ color: 'var(--text)' }}>출처를 나눠 그대로</strong> 실었습니다.
             국제표 2008판 부록(정상 내당능 1,879항목)과 2021판 ISO 26642 준수 표(약 2,100항목)에서 한국에서 시험된 식품 항목은 확인되지 않아,
             밥·떡·국수처럼 한국 식단 고유 항목은 국내 연구 값을 별도 행으로 병기했습니다.
@@ -260,7 +254,7 @@ export default function GlycemicLoadPage() {
             <br />출처 — 국제표: Atkinson FS 등, <em>Diabetes Care</em> 2008;31(12):2281-2283 및 온라인 부록 Table A1 / Atkinson FS 등, <em>Am J Clin Nutr</em> 2021;114(5):1625-1632 및 ISO 26642:2010 준수 Supplemental Table 1.
             한국(학회지): 김도연 등, 「탄수화물 간식류 식품 및 조리방법에 따른 혈당지수 및 혈당부하지수」, 한국식품영양과학회지 44(1):14-23(2015) — 건강 남성 60명 인체시험.
             한국(농진청): 「탄수화물 다소비 식품의 당지수 관련 분석 및 평가」(농촌진흥청 발주·경희대학교 수행, 2015) — 건강 성인 151명, 13종을 50가지 조리 형태로 측정.
-            <br />⚠️ GI는 <strong style={{ color: 'var(--text)' }}>시험 조건에 따라 변동</strong>하는 값입니다 — 품종·도정·불림·가열 시간·측정 실험실이 달라지면 같은 식품도 값이 크게 바뀌므로(국제표의 개별 백미 항목만 해도 GI 38~93 분포), 표의 값은 확정치가 아니라 대표 참고치로만 쓰세요.
+            <br />주의 — GI는 <strong style={{ color: 'var(--text)' }}>시험 조건에 따라 변동</strong>하는 값입니다 — 품종·도정·불림·가열 시간·측정 실험실이 달라지면 같은 식품도 값이 크게 바뀌므로(국제표의 개별 백미 항목만 해도 GI 38~93 분포), 표의 값은 확정치가 아니라 대표 참고치로만 쓰세요.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 12 }}>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
@@ -279,18 +273,15 @@ export default function GlycemicLoadPage() {
 
         {/* 4. 한국 기능성 쌀 품종 — in vitro 예측 GI */}
         <section>
-          <h2 style={sectionTitle}>한국 기능성 쌀 품종 — 이건 GI가 아니라 「개발 지표」입니다</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
+          <h2 className="g-h2">한국 기능성 쌀 품종 — 이건 GI가 아니라 「개발 지표」입니다</h2>
+          <p className="g-p">
             농촌진흥청은 도담쌀을 <strong style={{ color: 'var(--text)' }}>&ldquo;저항전분이 많고 혈당지수가 낮은 쌀 품종&rdquo;</strong>이라고 설명합니다.
             이런 국산 기능성 쌀에는 GI처럼 보이는 숫자가 붙어 다니는데, 원 논문을 열어 보면 그 값은 <strong style={{ color: 'var(--text)' }}>사람에게 먹여 잰 값이 아니라 시험관(in vitro) 소화 실험에서 나온 예측치</strong>입니다.
             표를 보기 전에 이 구분부터 짚습니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginBottom: 16 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--warning)', margin: '0 0 8px' }}>
-              ⚠️ 먼저 — 아래 표의 값은 GI가 아닙니다
-            </p>
-            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+          <Callout tone="warn" title="먼저 — 아래 표의 값은 GI가 아닙니다">
+            <p style={{ margin: 0 }}>
               ① GI 측정의 국제 표준인 <strong style={{ color: 'var(--text)' }}>ISO 26642:2010</strong>은 서문에서, 시험관 방법으로 소화율·가수분해 지수를 얻을 수는 있어도
               그 결과를 <strong style={{ color: 'var(--text)' }}>&ldquo;GI 값이라고 불러서는 안 된다&rdquo;</strong>(the results should not be referred to as GI values)고 못박습니다.<br />
               ② 같은 표준은 GI 측정 자체를 <strong style={{ color: 'var(--text)' }}>사람 지원자(human volunteers)</strong>의 혈당 반응을 재는 것으로 정의하고(2.7항),
@@ -302,7 +293,7 @@ export default function GlycemicLoadPage() {
               → 그래서 아래 표는 위 GI 조회표(인체시험·국제표 값)와 <strong style={{ color: 'var(--text)' }}>같은 줄에 놓고 비교할 수 없습니다</strong>.
               품종을 고르고 개량하기 위한 실험실 지표로만 읽으세요. 아래 표에 저·중·고 색을 입히지 않은 것도 같은 이유입니다.
             </p>
-          </div>
+          </Callout>
 
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
@@ -391,7 +382,7 @@ export default function GlycemicLoadPage() {
 
         {/* 5. GL 낮추기 */}
         <section>
-          <h2 style={sectionTitle}>혈당 스파이크 줄이는 실전 습관</h2>
+          <h2 className="g-h2">혈당 스파이크 줄이는 실전 습관</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {[
               { t: '먹는 순서 바꾸기', d: '채소·단백질 먼저 → 밥·면 나중에. 식후 혈당 상승이 완만해집니다.' },
@@ -400,7 +391,7 @@ export default function GlycemicLoadPage() {
               { t: '식후 10분 걷기', d: '가벼운 활동만으로도 식후 혈당이 낮아집니다.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>✅ {c.t}</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.d}</p>
               </div>
             ))}
@@ -414,7 +405,7 @@ export default function GlycemicLoadPage() {
 
         {/* 7. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
               <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>

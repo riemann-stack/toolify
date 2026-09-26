@@ -104,7 +104,7 @@ export default function CustomsClient() {
           { href: '/tools/life/dutch', label: '더치페이 계산기' }
         ]}
       >
-        사용 안내 표시 관세율은 일반 가이드 — 정확한 HS Code는 <strong>관세청 우편물 추적</strong>에서 확인. 환율은 사용자 입력 또는 <strong>관세청 주간 고시 환율</strong> 기준. 자가사용 vs 사업자 직구 면세 기준 다름 — 사업자는 면세 X.
+        사용 안내 표시 관세율은 일반 가이드 — 정확한 HS Code·세율은 <strong>관세법령정보포털(UNI-PASS) 세율 조회</strong>로 확인. 환율은 사용자 입력 또는 <strong>관세청 주간 고시 환율</strong> 기준. 자가사용 vs 사업자 직구 면세 기준 다름 — 사업자는 면세 X.
       </Disclaimer>
 
       {/* 탭 */}
@@ -252,8 +252,12 @@ export default function CustomsClient() {
                 ? <>면세 한도 <strong>${result.dutyFreeLimit}</strong>까지 여유 <strong style={{ color: 'var(--accent)' }}>${Math.max(0, result.dutyFreeLimit - result.productUsd).toFixed(2)}</strong></>
                 : usage === 'business'
                   ? <>🏢 사업자 직구 — 면세 한도 적용 <strong style={{ color: 'var(--pink-600)' }}>X</strong></>
+                  : result.liquorDutyExempt
+                    ? <>🍷 주류 1병·물품가격 ${result.dutyFreeLimit} 이하 — <strong style={{ color: 'var(--accent-ink)' }}>관세만 면제</strong>, 주세·교육세·부가세 <strong style={{ color: 'var(--pink-600)' }}>과세</strong></>
                   : item.dutyFreeExcluded
-                    ? <>🍷 소액면세 배제 품목 — 한도와 <strong style={{ color: 'var(--pink-600)' }}>무관하게 과세</strong></>
+                    ? item.liquor
+                      ? <>🍷 주류 물품가격 ${result.dutyFreeLimit} 초과 — <strong style={{ color: 'var(--pink-600)' }}>관세까지 모두 과세</strong></>
+                      : <>소액면세 배제 품목 — 한도와 <strong style={{ color: 'var(--pink-600)' }}>무관하게 과세</strong></>
                     : <>면세 한도 <strong>${result.dutyFreeLimit}</strong> 초과 <strong style={{ color: 'var(--pink-600)' }}>${(result.productUsd - result.dutyFreeLimit).toFixed(2)}</strong></>
               }
             </p>
@@ -263,7 +267,7 @@ export default function CustomsClient() {
           <div className={result.isDutyFree ? s.warnCardGood : s.warnCardStrong}>
             <strong>{result.isDutyFree ? '✅ 면세 판단' : '❌ 과세 판단'}</strong>
             <p>{result.reason}</p>
-            {result.nearLimit && !isUsd && usage === 'personal' && !item.dutyFreeExcluded && (
+            {result.nearLimit && !isUsd && usage === 'personal' && (!item.dutyFreeExcluded || item.liquor) && (
               <p>물품가격이 면세 한도 ±5% 안에 있어요. 실제 판정은 관세청이 매주 고시하는 과세환율로 하므로 결과가 바뀔 수 있습니다.</p>
             )}
           </div>
@@ -293,9 +297,9 @@ export default function CustomsClient() {
                   <tr><td>물품가격 USD (면세 기준·배송 제외)</td><td className={s.cellMono}>${result.productUsd.toFixed(2)}</td></tr>
                   <tr><td>상품+배송 → 과세가격 (CIF)</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtKrw(result.totalKrw)}</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>세금 (면세 시 0)</td></tr>
-                  <tr><td>관세 ({item.dutyRate}%)</td><td className={s.cellMono}>{result.duty > 0 ? fmtKrw(result.duty) : '0원'}</td></tr>
+                  <tr><td>관세 ({item.dutyRate}%{result.liquorDutyExempt ? ' — 1병·$150 이하 면제' : ''})</td><td className={s.cellMono}>{result.duty > 0 ? fmtKrw(result.duty) : '0원'}</td></tr>
                   {item.excise && (
-                    <tr><td>개별소비세 (200만원 초과 20%)</td><td className={s.cellMono}>{result.excise > 0 ? fmtKrw(result.excise) : '0원'}</td></tr>
+                    <tr><td>개별소비세 (1개당 {fmt(item.excise.threshold / 10000)}만원 초과분 {item.excise.rate}%)</td><td className={s.cellMono}>{result.excise > 0 ? fmtKrw(result.excise) : '0원'}</td></tr>
                   )}
                   {item.liquor && (
                     <tr><td>주세 ({item.liquor.rate}%)</td><td className={s.cellMono}>{result.liquorTax > 0 ? fmtKrw(result.liquorTax) : '0원'}</td></tr>
@@ -322,7 +326,7 @@ export default function CustomsClient() {
             <div className={s.warnCardStrong}>
               <strong>주류 직구 주의</strong>
               <p>
-                주류는 <strong>소액면세 대상이 아니며</strong> 관세·주세·교육세·부가세가 모두 부과됩니다.
+                주류는 소액면세 대상이 아니어서 <strong>주세·교육세·부가세는 금액과 관계없이</strong> 부과됩니다. 자가사용 <strong>1병(1L 이하)·물품가격 $150 이하</strong>일 때만 관세가 면제되고, 이를 넘으면 관세까지 붙습니다. 도구는 입력을 1병으로 보고 계산합니다.
                 또한 <strong>자가소비 수량 한도·식품 검역·통신판매 제한</strong> 등 별도 규정이 있어 통관이 거부될 수 있어요.
                 위 수치는 간이 추정 — 정확한 세액·요건은 관세청에서 확인하세요.
               </p>
@@ -335,7 +339,7 @@ export default function CustomsClient() {
             <p>
               <strong>같은 날, 같은 해외 판매자(쇼핑몰)</strong>에서 구매한 여러 건은 합산되어 면세 한도가 한 번만 적용됩니다.<br />
               <strong>서로 다른 날·다른 판매처</strong>에서 구매하면 같은 날 통관(입항)되어도 원칙적으로 합산하지 않습니다.<br />
-              ※ 과거의 &ldquo;같은 발송지·2일 이내 입항&rdquo; 기준은 현행과 다릅니다. 면세 한도를 노린 가족 명의·발송지 분산 등 인위적 회피는 권장하지 않으며, 명의 도용은 불법입니다.
+              <strong>한 운송장(B/L)</strong>으로 들어온 물품을 나눠 신고해도 합산됩니다. ※ 구매일이 달라도 같은 날 입항하면 합산하던 기준은 2022년 11월 고시 개정으로 삭제됐습니다. 면세 한도를 노린 가족 명의·발송지 분산 등 인위적 회피는 권장하지 않으며, 명의 도용은 불법입니다.
             </p>
           </div>
         </>
@@ -404,7 +408,7 @@ export default function CustomsClient() {
             </div>
             <p className={s.helpText} style={{ marginTop: 10 }}>
               <strong>🚫 목록통관 배제대상 (일반·간이 수입신고)</strong>: 의약품·건강기능식품·의료기기·검역대상 식품/동식물·주류·담배·통신판매 부적합 품목 등.<br />
-              배제대상도 <strong>자가사용 + 물품가격 $150 이하</strong>면 관세·부가세는 면제될 수 있으나(주류·담배 등 제외), 정식 수입신고 절차를 거칩니다. 미국 $200 한도는 목록통관 물품에만 적용돼, 영양제·식품처럼 수입신고하는 물품은 미국발도 $150이 한도예요.
+              배제대상도 <strong>자가사용 + 물품가격 $150 이하</strong>면 관세·부가세는 면제될 수 있으나(주류는 1병·$150 이하여도 관세만 면제), 정식 수입신고 절차를 거칩니다. 미국 $200 한도는 목록통관 물품에만 적용돼, 영양제·식품처럼 수입신고하는 물품은 미국발도 $150이 한도예요.
             </p>
           </div>
         </>
@@ -442,7 +446,7 @@ export default function CustomsClient() {
           <div className={s.warnCard}>
             <strong>환율 환산 기준</strong>
             <p>
-              관세청은 <strong>매주 화요일 환율 고시</strong>하여 다음 주 통관에 적용합니다.<br />
+              관세청은 수입신고일이 속한 주의 <strong>전주 월~금 기준환율(재정환율) 평균</strong>으로 과세환율을 정해 주 단위로 고시합니다(관세법 제18조).<br />
               본 도구는 <strong>USD 기준</strong>으로 면세 한도를 비교합니다. USD가 아닌 통화는 원화로 환산한 뒤 USD 환율로 나눠 계산해요.<br />
               실제 통관 시 ±5~10% 환율 변동 가능 — 안전하게 한도의 90%로 계산 권장.
             </p>

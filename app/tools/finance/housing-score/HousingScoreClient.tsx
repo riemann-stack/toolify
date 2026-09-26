@@ -428,7 +428,7 @@ export default function HousingScoreClient({ buildDate }: { buildDate?: string }
               : <strong style={{ color: '#EA580C' }}>미충족 — {rankRule.period} 가입 + {rankRule.count}회 납입 필요</strong>}
           </p>
           <p className={s.autoBoxHint} style={{ marginTop: 4 }}>
-            ※ 규제지역 = 투기과열·청약과열지역(강남3구·용산 등). 그 외 수도권 1년·12회, 비수도권 6개월·6회. 가점은 가입기간만 반영하며, 민영은 지역·평형별 예치금도 충족해야 1순위.
+            ※ 규제지역 = 투기과열지구·청약과열지역(2025.10.15 이후 서울 전역·경기 12곳 등). 그 외 수도권 1년·12회, 비수도권 6개월·6회. 가점은 가입기간만 반영하며, 민영은 지역·평형별 예치금도 충족해야 1순위.
           </p>
         </div>
       </div>

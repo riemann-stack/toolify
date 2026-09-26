@@ -5,7 +5,8 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
-import { AGENTS, MIX_RISKS } from './cleaningData'
+import Callout from '@/components/Callout'
+import { AGENTS, AGENT_MAP, MIX_RISKS, SITUATIONS } from './cleaningData'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
 
@@ -17,15 +18,47 @@ export const metadata = buildMetadata({
   keywords: ['청소세제계산기', '구연산사용법', '과탄산소다사용법', '베이킹소다청소', '락스희석', '천연세제', '청소꿀팁', '세제혼합위험', '곰팡이제거'],
 })
 
-const sectionTitle: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '18px 20px' }
 const cell: React.CSSProperties = { padding: '9px 11px', borderBottom: '1px solid var(--border)', fontSize: '13px', color: 'var(--text)', verticalAlign: 'top' }
 const headCell: React.CSSProperties = { padding: '9px 11px', textAlign: 'left', fontWeight: 700, fontSize: '11px', color: 'var(--muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg3)', whiteSpace: 'nowrap' }
+const tableBox: React.CSSProperties = { border: '1px solid var(--border)', borderRadius: 'var(--radius-card)' }
+
+/* ── 희석량 표: 도구(CleaningClient recipe)와 같은 식으로 빌드 시 계산 ─────────────
+   세제량 = 물(L) × 권장 농도(g/L 또는 ml/L), 1g·1ml 미만은 1로 올림. 큰술 = g ÷ 가루별 1큰술 무게, 0.5 단위 반올림 */
+const DOSE_VOLS = [500, 2000, 5000]
+function doseText(sit: (typeof SITUATIONS)[number], volumeMl: number): string {
+  const agent = AGENT_MAP[sit.agentId]
+  if (sit.gPerL && sit.gPerL > 0) {
+    const g = Math.max(1, Math.round((volumeMl / 1000) * sit.gPerL))
+    const tbsp = agent.gPerTbsp ? Math.round((g / agent.gPerTbsp) * 2) / 2 : null
+    return `${g.toLocaleString('ko-KR')}g${tbsp != null && tbsp >= 0.5 ? ` (약 ${tbsp}큰술)` : ''}`
+  }
+  const ml = Math.max(1, Math.round((volumeMl / 1000) * (sit.mlPerL ?? 0)))
+  return `${ml.toLocaleString('ko-KR')}ml`
+}
+const DOSE_ROWS = SITUATIONS
+  .filter((x) => (x.gPerL ?? 0) > 0 || (x.mlPerL ?? 0) > 0)
+  .map((x) => ({
+    id: x.id,
+    label: `${x.place} ${x.stain}`,
+    agent: AGENT_MAP[x.agentId].name,
+    conc: x.ratio ?? ((x.gPerL ?? 0) > 0 ? `${x.gPerL}g/L` : `${x.mlPerL}ml/L`),
+    doses: DOSE_VOLS.map((v) => doseText(x, v)),
+  }))
+const SCALE = SITUATIONS.find((x) => x.id === 'bath-scale')
+const SCALE_500 = SCALE ? doseText(SCALE, 500) : ''
+
+/* 락스 희석 농도(근사): 원액 pct%를 물 1L에 ml 넣었을 때 mg/L(ppm) — 밀도 1로 가정 */
+const MOLD = SITUATIONS.find((x) => x.id === 'bath-mold')
+const MOLD_ML = MOLD?.mlPerL ?? 25
+const KDCA_ML = 20
+const bleachPpm = (ml: number, pct: number) => Math.round((ml * pct * 10 * 1000) / (1000 + ml))
+const BLEACH_ROWS = [4, 5, 6].map((pct) => ({ pct, kdca: bleachPpm(KDCA_ML, pct), tool: bleachPpm(MOLD_ML, pct) }))
 
 const FAQ_LD = [
   { q: '베이킹소다·과탄산소다·세스퀴소다는 뭐가 다른가요?', a: '모두 알칼리성이지만 세기와 용도가 다릅니다. <strong>베이킹소다</strong>는 가장 순하고 연마·탈취에, <strong>세스퀴소다</strong>는 중간 세기로 생활 기름때·물걸레 만능 청소에, <strong>과탄산소다</strong>는 산소계 표백제라 표백·찌든때·곰팡이·삶기에 강합니다(따뜻한 물 40~60℃에서 활성화). 강한 기름때엔 더 센 <strong>소다회</strong>를 쓰기도 합니다.' },
   { q: '구연산과 식초는 같은 건가요?', a: '둘 다 산성으로 <strong>물때·석회·비누때 제거, 냄새 중화, 섬유유연제 대체</strong>에 비슷하게 쓰입니다. 구연산은 가루라 보관·농도 조절이 쉽고 냄새가 거의 없으며, 식초는 액체라 바로 쓰기 편하지만 특유의 냄새가 있습니다. <strong>둘 다 락스와 절대 섞으면 안 됩니다(염소가스).</strong>' },
-  { q: '락스는 어떻게 안전하게 쓰나요?', a: '① <strong>물로만</strong> 희석하고 다른 세제와 섞지 않습니다. ② 창문·환풍기로 <strong>환기</strong>하고 장갑·마스크를 씁니다. ③ 일반 살균·곰팡이 모두 물 1L당 락스 <strong>약 10~25ml</strong>면 충분합니다(가정용 4~6% 기준, CDC 권장 수준). 곰팡이는 표백보다 <strong>세척·건조·습기 원인 제거</strong>가 먼저입니다. ④ 사용 후 <strong>물로 충분히 헹구고</strong>, 식품이 닿는 면·금속·대리석에는 주의합니다. 색이 있는 천·줄눈은 탈색될 수 있습니다.' },
+  { q: '락스는 어떻게 안전하게 쓰나요?', a: '① <strong>물로만</strong> 희석하고 다른 세제와 섞지 않습니다. ② 창문·환풍기로 <strong>환기</strong>하고 장갑·마스크를 씁니다. ③ 질병관리청 소독 안내의 표면 소독 농도는 차아염소산나트륨 약 0.1%(1,000ppm)로, 5% 가정용 락스라면 <strong>찬물 1L에 20ml</strong> 정도이며, 이 도구의 곰팡이 레시피는 물 1L당 25ml입니다(4~5% 락스 기준 약 1,000~1,200ppm). 필요 이상으로 진하게 타면 호흡기·피부 자극과 재질 손상 위험이 함께 커집니다. 곰팡이는 표백보다 <strong>세척·건조·습기 원인 제거</strong>가 먼저입니다. ④ 사용 후 <strong>물로 충분히 헹구고</strong>, 식품이 닿는 면·금속·대리석에는 주의합니다. 색이 있는 천·줄눈은 탈색될 수 있습니다.' },
   { q: '절대 섞으면 안 되는 조합은 무엇인가요?', a: '<strong>락스 + 산성(구연산·식초)</strong> → 염소가스, <strong>락스 + 암모니아 세제</strong> → 클로라민 가스, <strong>락스 + 과탄산소다·과산화수소</strong> → 가스 발생·효과 상쇄. 모두 호흡기에 치명적일 수 있습니다. 그 외 산성+알칼리(구연산+베이킹 등)는 위험은 낮지만 서로 중화돼 세정력이 사라집니다. <strong>원칙은 “한 번에 한 가지 세제만”</strong>입니다.' },
   { q: '천연세제(구연산·과탄산 등)는 항상 더 안전한가요?', a: '“천연”이라고 무조건 순한 건 아닙니다. 과탄산소다·소다회는 알칼리성이 강해 피부·점막을 자극하고, 구연산도 농도가 높으면 자극적이며 대리석·금속을 부식시킵니다. <strong>장갑 착용·환기·테스트(눈에 안 띄는 곳 먼저)</strong>는 종류와 무관하게 권장합니다.' },
   { q: '냉장고나 식기에 락스를 써도 되나요?', a: '식품이 직접 닿는 면에는 <strong>락스보다 베이킹소다·중성세제·뜨거운 물</strong>을 권장합니다. 살균이 꼭 필요하면 묽게 희석한 뒤 <strong>반드시 물로 여러 번 헹궈</strong> 잔류를 없애세요. 냉장고 내부 냄새·세척은 베이킹소다수로 닦고 물걸레로 한 번 더 닦는 것이 안전합니다.' },
@@ -40,6 +73,17 @@ export default function CleaningPage() {
       <p className="tp-lead">
         상황만 고르면 <strong style={{ color: 'var(--text)' }}>맞는 세제·정확한 희석량·사용법</strong>을 자동으로. <strong style={{ color: 'var(--text)' }}>섞으면 위험한 조합</strong>까지 안전하게.
       </p>
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="락스 희석은 질병관리청 소독 안내의 표면 소독 농도(차아염소산나트륨 약 1,000ppm), 세탁조 통세척은 LG전자·삼성전자서비스 공식 안내 기준 — 구연산·과탄산·베이킹소다 농도는 공식 기준이 없어 통용 관행값"
+        sources={[
+          { label: '질병관리청 — 집단시설·다중이용시설 소독 안내', href: 'https://www.kdca.go.kr' },
+          { label: 'LG전자 통돌이 통세척', href: 'https://www.lge.co.kr/support/solutions-1430889036106' },
+          { label: 'LG전자 워시타워 통살균', href: 'https://www.lge.co.kr/support/solutions-20153936989467' },
+          { label: '삼성전자서비스 무세제통세척', href: 'https://www.samsungsvc.co.kr/solution/40255' },
+          { label: '삼성전자서비스 통세척', href: 'https://www.samsungsvc.co.kr/solution/41708' },
+        ]}
+      />
 
       <CleaningClient />
 
@@ -51,9 +95,9 @@ export default function CleaningPage() {
 
         {/* 혼합 위험 */}
         <div>
-          <h2 style={sectionTitle}>🚫 절대 섞으면 안 되는 조합</h2>
-          <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.3)', borderRadius: 'var(--radius-card)', padding: '8px 0', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+          <h2 className="g-h2">절대 섞으면 안 되는 조합</h2>
+          <div className="tableScroll" style={{ border: '1px solid rgba(220,38,38,0.3)', borderRadius: 'var(--radius-card)', padding: '8px 0' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: 420 }}>
               <tbody>
                 {MIX_RISKS.map((m, i) => (
                   <tr key={i} style={{ borderBottom: i < MIX_RISKS.length - 1 ? '1px solid rgba(220,38,38,0.15)' : 'none' }}>
@@ -64,15 +108,15 @@ export default function CleaningPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+          <p className="g-p" style={{ marginTop: 12 }}>
             가장 중요한 원칙은 <strong style={{ color: 'var(--text)' }}>“한 번에 한 가지 세제만”</strong>, 그리고 <strong style={{ color: 'var(--text)' }}>“락스는 물로만 희석·단독·환기”</strong>입니다.
           </p>
         </div>
 
         {/* 세제 비교 */}
         <div>
-          <h2 style={sectionTitle}>🧴 세제 10종 비교</h2>
-          <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+          <h2 className="g-h2">세제 10종 비교</h2>
+          <div className="tableScroll" style={tableBox}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 520 }}>
               <thead>
                 <tr>
@@ -98,7 +142,7 @@ export default function CleaningPage() {
 
         {/* 핵심 원리 */}
         <div>
-          <h2 style={sectionTitle}>🧪 산성 vs 알칼리 — 원리만 알면 쉬워요</h2>
+          <h2 className="g-h2">산성 vs 알칼리 — 원리만 알면 쉬워요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
             <div style={{ ...card, borderTop: '3px solid var(--orange-600)' }}>
               <p style={{ fontSize: '13px', color: 'var(--orange-600)', fontWeight: 700, marginBottom: '8px' }}>산성 (구연산·식초)</p>
@@ -113,15 +157,15 @@ export default function CleaningPage() {
               </p>
             </div>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+          <p className="g-p" style={{ marginTop: 12 }}>
             반대 성질의 오염엔 효과가 약하고, <strong style={{ color: 'var(--text)' }}>산성과 알칼리를 섞으면 서로 중화</strong>돼 둘 다 무력화됩니다. 살균·곰팡이엔 <strong style={{ color: 'var(--text)' }}>락스·과탄산</strong>이 따로 필요합니다.
           </p>
         </div>
 
         {/* 실전 레시피 */}
         <div>
-          <h2 style={sectionTitle}>🧽 상황별 실전 레시피 — 대표 4가지</h2>
-          <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+          <h2 className="g-h2">상황별 실전 레시피 — 대표 4가지</h2>
+          <div className="tableScroll" style={tableBox}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
               <thead>
                 <tr>
@@ -148,21 +192,90 @@ export default function CleaningPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+          <p className="g-note">
             위 농도는 <strong style={{ color: 'var(--text)' }}>본 도구가 쓰는 기준값(통용 관행)</strong>입니다. 구연산·과탄산소다 같은 살림 세제의 사용 농도를 정한 국가기관 공식 기준은 확인되지 않아(2026-07 기준), <strong style={{ color: 'var(--text)' }}>제품 라벨에 사용량이 있으면 라벨이 우선</strong>합니다. 큰술 환산은 밥숟가락(약 15ml) 기준의 대략적 관행 값으로, 가루마다 무게가 다릅니다(1큰술당 구연산 약 12g·과탄산 약 13g·베이킹소다 약 14g — 본 도구 기준값).
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '8px' }}>
+          <p className="g-p" style={{ marginTop: 12 }}>
             제조사 공식 안내가 있으면 그쪽을 우선하세요. 예: 테팔은 전기포트 물때에 <strong style={{ color: 'var(--text)' }}>“물 가득 + 구연산 2스푼을 끓인 뒤 5~10분 방치, 여러 번 헹굼”</strong>을, 물 경도가 높은 지역은 3개월에 한 번 세척을 안내합니다(테팔 웹진). 그리고 어떤 레시피든 위 <strong style={{ color: 'var(--text)' }}>‘절대 섞으면 안 되는 조합’이 최우선</strong>입니다.
+          </p>
+        </div>
+
+        {/* 희석량 계산 */}
+        <div>
+          <h2 className="g-h2">희석량은 이렇게 계산합니다 — 물 양별 세제량</h2>
+          <p className="g-p">
+            도구는 상황마다 정해 둔 <strong>권장 농도(물 1L당 g 또는 ml)</strong>에 입력한 물의 양을 곱해 세제량을 냅니다. 가루 세제는 그 무게를 가루별 1큰술 무게로 나눠 반 큰술 단위로 반올림해 보여 주고, 계산값이 1g보다 작으면 1g으로 올립니다. 예를 들어 화장실 물때용 구연산수를 분무기(500ml)에 만들면 구연산은 {SCALE_500}입니다. 표의 값은 도구 기준 농도라, 테팔처럼 제조사가 따로 정한 양이 있으면 그 안내를 따르세요. 아래 표는 같은 식으로 분무기(500ml)·세면대(2L)·양동이(5L) 기준 양을 미리 계산한 것입니다.
+          </p>
+          <div className="tableScroll" style={tableBox}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 600 }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={headCell}>상황</th>
+                  <th scope="col" style={headCell}>세제 · 농도</th>
+                  {DOSE_VOLS.map((v) => (
+                    <th scope="col" key={v} style={{ ...headCell, textAlign: 'right' }}>물 {v.toLocaleString('ko-KR')}ml</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {DOSE_ROWS.map((r) => (
+                  <tr key={r.id}>
+                    <th scope="row" style={{ ...cell, fontWeight: 700, textAlign: 'left' }}>{r.label}</th>
+                    <td style={cell}>{r.agent}<br /><span style={{ color: 'var(--muted)', fontSize: '12px' }}>{r.conc}</span></td>
+                    {r.doses.map((d, i) => (
+                      <td key={i} style={{ ...cell, textAlign: 'right', whiteSpace: 'nowrap' }}>{d}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            배수구·세탁조처럼 물에 타지 않고 정량(한 컵 등)을 쓰는 상황은 표에서 뺐습니다. 식초 1:1은 물과 같은 양의 식초를 섞는다는 뜻입니다.
+          </p>
+          <p className="g-p" style={{ marginTop: 12 }}>
+            자주 하는 실수는 &lsquo;진하게 타면 더 잘 닦인다&rsquo;고 생각하는 것입니다. 진하게 탈수록 헹궈 내야 할 잔여물이 늘고, 산·알칼리 모두 농도가 올라갈수록 피부 자극과 재질 손상 위험이 커집니다. 오염이 심하면 농도를 올리기보다 <strong>불리는 시간을 늘리고 한 번 더 반복</strong>하는 편이 안전합니다. 과탄산소다는 찬물에서 녹는 속도와 산소 방출이 느려, 따뜻한 물이 필요한 상황에는 결과에 온도(40~60℃) 표시가 함께 붙습니다.
+          </p>
+        </div>
+
+        {/* 락스 농도 */}
+        <div>
+          <h2 className="g-h2">락스 희석 농도 — 물 1L에 20ml와 25ml</h2>
+          <p className="g-p">
+            국내 가정용 락스는 차아염소산나트륨이 4~5% 안팎인 제품이 많습니다. 질병관리청 「코로나바이러스감염증-19 대응 집단시설·다중이용시설 소독 안내」는 표면 소독에 차아염소산나트륨 약 0.1%(1,000ppm) 희석액을 쓰도록 하는데, 5% 가정용 락스로는 <strong>찬물 1L에 20ml</strong>(약 1:50) 정도입니다. 이 도구의 화장실 곰팡이 레시피는 물 1L당 25ml입니다. 원액 농도에 따라 실제 농도가 얼마나 되는지 아래처럼 계산할 수 있습니다(원액 ml × 농도 ÷ 전체 부피, 밀도 1로 가정한 근사치).
+          </p>
+          <div className="tableScroll" style={tableBox}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 420 }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={headCell}>락스 원액 농도</th>
+                  <th scope="col" style={{ ...headCell, textAlign: 'right' }}>물 1L + {KDCA_ML}ml</th>
+                  <th scope="col" style={{ ...headCell, textAlign: 'right' }}>물 1L + {MOLD_ML}ml (도구)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {BLEACH_ROWS.map((r) => (
+                  <tr key={r.pct}>
+                    <th scope="row" style={{ ...cell, fontWeight: 700, textAlign: 'left' }}>{r.pct}%</th>
+                    <td style={{ ...cell, textAlign: 'right' }}>약 {r.kdca.toLocaleString('ko-KR')}ppm</td>
+                    <td style={{ ...cell, textAlign: 'right' }}>약 {r.tool.toLocaleString('ko-KR')}ppm</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 12 }}>
+            질병관리청 안내는 희석액을 <strong>분무하지 말고 천에 적셔 닦으라</strong>고 권합니다. 뿌리면 미세한 방울을 들이마실 위험이 커지고, 표면에 닿는 범위가 고르지 않아 소독 효과도 떨어지기 때문입니다. 뜨거운 물 대신 찬물에 희석하고, 창문을 열고 마스크·장갑을 착용한 뒤 작업하세요. 사용한 면은 마지막에 물걸레로 닦아 잔여 염소를 없애야 금속 부식과 냄새를 줄일 수 있습니다.
           </p>
         </div>
 
         {/* 세탁조 통세척 — 제조사 공식 */}
         <div>
-          <h2 style={sectionTitle}>🌀 세탁조 통세척 — 제조사 공식 안내</h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+          <h2 className="g-h2">세탁조 통세척 — 제조사 공식 안내</h2>
+          <p className="g-p">
             본 도구의 세탁조 레시피(과탄산 1~2컵)를 쓰기 전에 <strong style={{ color: 'var(--text)' }}>내 세탁기 제조사의 공식 안내</strong>를 먼저 확인하세요. LG와 삼성은 권장 세제 계열부터 다릅니다.
           </p>
-          <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+          <div className="tableScroll" style={tableBox}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
               <thead>
                 <tr>
@@ -189,7 +302,7 @@ export default function CleaningPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', marginBottom: '16px' }}>
+          <p className="g-p" style={{ marginTop: 12 }}>
             요점: <strong style={{ color: 'var(--text)' }}>LG는 산소계(과탄산 계열) 클리너를 권장</strong>하는 반면, <strong style={{ color: 'var(--text)' }}>삼성 일반 모델의 통세척 코스는 염소계 표백제 또는 전용세정제</strong>를 안내합니다. 본 도구의 과탄산 레시피는 LG 권장 계열과 같은 방향이고, 삼성 안내대로 염소계를 쓸 때는 <strong style={{ color: 'var(--danger)' }}>식초·구연산·산소계 표백제와의 혼용 절대 금지</strong>(유해가스 — 삼성 공식 경고)가 위 ‘절대 섞으면 안 되는 조합’과 그대로 겹칩니다.
           </p>
           <UpdatedMeta
@@ -206,8 +319,8 @@ export default function CleaningPage() {
 
         {/* 재질별 주의 */}
         <div>
-          <h2 style={sectionTitle}>🧱 재질별 주의 — 같은 오염이어도 세제가 다릅니다</h2>
-          <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+          <h2 className="g-h2">재질별 주의 — 같은 오염이어도 세제가 다릅니다</h2>
+          <div className="tableScroll" style={tableBox}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 460 }}>
               <thead>
                 <tr>
@@ -235,7 +348,7 @@ export default function CleaningPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+          <p className="g-p" style={{ marginTop: 12 }}>
             어떤 세제든 <strong style={{ color: 'var(--text)' }}>눈에 안 띄는 곳에 먼저 테스트</strong>하고, 재질을 모르면 가장 순한 중성세제부터 시도하세요.
           </p>
         </div>
@@ -246,16 +359,13 @@ export default function CleaningPage() {
         </section>
 
         {/* 면책 */}
-        <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 20px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-          <strong style={{ color: 'var(--red-600)' }}>⚠️ 안전 안내</strong>
-          <p style={{ margin: '8px 0 0', color: 'var(--muted)' }}>
+        <Callout tone="warn" title="안전 안내">
             본 도구의 희석량은 일반적인 권장 근사치이며 <strong style={{ color: 'var(--text)' }}>제품 라벨의 사용법·경고가 우선</strong>합니다. 어떤 세제든 <strong style={{ color: 'var(--text)' }}>환기·장갑·눈에 안 띄는 곳 먼저 테스트</strong>를 권장하고, 락스 등은 절대 다른 세제와 섞지 마세요. 어린이·반려동물 손에 닿지 않게 보관하고, 흡입·피부 이상 시 환기 후 의료기관에 문의하세요.
-          </p>
-        </div>
+        </Callout>
 
         {/* 관련 도구 */}
         <div>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/laundry-dry', icon: '🧺', name: '빨래 건조 시간 계산기', desc: '날씨·소재별 건조 시간' },

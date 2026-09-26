@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import HeightRankClient from './HeightRankClient'
+import { BANDS } from './heightRankData'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
@@ -17,12 +18,8 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
+/** 연령대별 표 — 계산기와 같은 BANDS(사이즈코리아 8차 원값)에서 생성 */
+const AGE_ROWS = BANDS.M.map((m, i) => ({ label: m.label, m, f: BANDS.F[i] }))
 
 const FAQ_LD = [
   {
@@ -76,6 +73,9 @@ export default function HeightRankPage() {
         sources={[
           { label: '사이즈코리아', href: 'https://sizekorea.kr' },
           { label: '국가기술표준원', href: 'https://www.kats.go.kr' },
+          { label: 'NCD-RisC — 국가별 키 원자료', href: 'https://www.ncdrisc.org' },
+          { label: 'NCD-RisC (eLife 2016) — 100년간 성인 키 추세', href: 'https://doi.org/10.7554/eLife.13410' },
+          { label: '병무청', href: 'https://www.mma.go.kr' },
         ]}
       />
 
@@ -86,7 +86,7 @@ export default function HeightRankPage() {
 
         {/* 1. 계산 방식 */}
         <section>
-          <h2 style={sectionTitle}>백분위 계산 방식</h2>
+          <h2 className="g-h2">백분위 계산 방식</h2>
           <div style={{
             background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
             padding: '18px 20px', fontFamily: 'var(--font-mono)',
@@ -96,7 +96,7 @@ export default function HeightRankPage() {
             <div><span style={{ color: 'var(--muted)' }}>백분위</span> = 표준정규 누적확률(z) × 100</div>
             <div><span style={{ color: 'var(--muted)' }}>상위 %</span> = 100 − 백분위</div>
           </div>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginTop: 12 }}>
+          <p className="g-p" style={{ marginTop: 16 }}>
             성인 신장은 성별·연령 집단 안에서 정규분포를 잘 따르는 대표적인 신체 지표입니다. 이 계산기의 정규 모델은
             8차 조사의 <strong style={{ color: 'var(--text)' }}>실측 백분위(p5~p95)와 최대 1cm 미만 오차</strong>로 일치함을 검증했어요.
           </p>
@@ -104,46 +104,40 @@ export default function HeightRankPage() {
 
         {/* 2. 연령대별 평균표 */}
         <section>
-          <h2 style={sectionTitle}>연령대별 평균 키 (8차 실측)</h2>
+          <h2 className="g-h2">연령대별 평균 키 (8차 실측)</h2>
           <div className="tableScroll">
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 640 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['연령대', '남성 평균', '여성 평균', '차이(남−여)'].map((h) => (
+                  {['연령대', '남성 평균 (표준편차)', '남성 실측 p5~p95', '여성 평균 (표준편차)', '여성 실측 p5~p95', '차이(남−여)'].map((h) => (
                     <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['20~24세', 174.99, 161.78],
-                  ['25~29세', 174.74, 162.07],
-                  ['30~34세', 175.18, 162.32],
-                  ['35~39세', 175.42, 162.37],
-                  ['40~44세', 174.08, 161.34],
-                  ['45~49세', 172.66, 159.92],
-                  ['50~59세', 170.49, 157.75],
-                  ['60~69세', 168.22, 155.46],
-                ].map(([label, m, f], i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{label}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{(m as number).toFixed(1)}cm</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{(f as number).toFixed(1)}cm</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{((m as number) - (f as number)).toFixed(1)}cm</td>
+                {AGE_ROWS.map(({ label, m, f }, i) => (
+                  <tr key={label} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600, textAlign: 'left' }}>{label}</th>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{m.mean.toFixed(1)}cm <span style={{ color: 'var(--muted)' }}>({m.sd.toFixed(1)})</span></td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{m.pct[0].toFixed(1)}~{m.pct[4].toFixed(1)}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{f.mean.toFixed(1)}cm <span style={{ color: 'var(--muted)' }}>({f.sd.toFixed(1)})</span></td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{f.pct[0].toFixed(1)}~{f.pct[4].toFixed(1)}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{(m.mean - f.mean).toFixed(1)}cm</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 사이즈코리아 8차 인체치수조사 인체데이터 통계(mm 원값을 cm로 환산). 남성은 35~39세, 여성은 35~39세 구간이 최고 평균 — 20대 초반보다 30대가 큰 것은 표본 변동 범위 내입니다.
+          <p className="g-note">
+            ※ 사이즈코리아 8차 인체치수조사 인체데이터 통계(mm 원값을 cm로 환산) — 계산기가 쓰는 값과 같습니다. p5~p95는 정규모델이 아닌 실측 백분위로, 가운데 90%가 들어오는 범위입니다.
+            남녀 모두 35~39세 구간이 최고 평균 — 20대 초반보다 30대가 큰 것은 표본 변동 범위 내입니다.
           </p>
         </section>
 
         {/* 3. 국제 비교 */}
         <section>
-          <h2 style={sectionTitle}>국제 비교 — 세계에서 한국인의 키는</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+          <h2 className="g-h2">국제 비교 — 세계에서 한국인의 키는</h2>
+          <p className="g-p">
             나라별 키를 견줄 때는 성장이 거의 끝나는 <strong style={{ color: 'var(--text)' }}>19세</strong> 값을 씁니다.
             아래는 200개국 인구 기반 연구를 종합한 NCD-RisC(Lancet 2020)의 2019년 19세 평균 키예요.
           </p>
@@ -173,11 +167,11 @@ export default function HeightRankPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ NCD-RisC, Lancet 2020;396:1511-1524 국가별 공개 원자료(2019년·19세). 순위는 논문이 공표한 순위표가 아니라 공개 CSV를 정렬해 자체 산출한 값입니다.
             한국은 남성 95% 신용구간 174.92~176.14cm·여성 162.58~163.84cm로, 여성은 중국과 0.2cm 차이여서 우열을 가릴 수 없어요.
           </p>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginTop: 14 }}>
+          <p className="g-p" style={{ marginTop: 16 }}>
             같은 19세끼리 견주면 한국은 일본보다 남성 3.5cm, 여성 4.7cm 큽니다(위 표의 차). 더 극적인 기록도 있어요 —
             1896~1996년 출생 코호트를 200개국·1,860만 명 이상의 자료로 분석한 NCD-RisC의 다른 논문(eLife 2016)은
             <strong style={{ color: 'var(--text)' }}> 지난 100년간 성인 키가 세계에서 가장 많이 자란 집단으로 한국 여성(+20.2cm, 95% 신용구간 17.5~22.7)</strong>을 꼽았습니다.
@@ -189,8 +183,8 @@ export default function HeightRankPage() {
 
         {/* 4. 세속추세 */}
         <section>
-          <h2 style={sectionTitle}>한국인 키는 계속 크고 있을까</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+          <h2 className="g-h2">한국인 키는 계속 크고 있을까</h2>
+          <p className="g-p">
             &lsquo;아직 크는 중&rsquo;과 &lsquo;이제 안 큰다&rsquo;가 동시에 돌아다닙니다. 1차 출처를 열어보면 어느 쪽도 단정할 수 없어요 —
             어떤 지표를 어떤 기간으로 보느냐에 따라 답이 갈리기 때문입니다.
           </p>
@@ -239,10 +233,10 @@ export default function HeightRankPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ NCD-RisC eLife 2016 성인(18세) 국가별 원자료의 한국 값(남 1956년생 169.43 → 1996년생 174.92cm, 여 157.35 → 162.34cm)에서 구간 차를 직접 계산했습니다.
           </p>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginTop: 12 }}>
+          <p className="g-p" style={{ marginTop: 16 }}>
             방향은 여전히 플러스인데 속도는 30년 사이 절반 아래로 떨어졌습니다. 결국
             <strong style={{ color: 'var(--text)' }}> 어떤 지표를 보느냐에 따라 결론이 갈립니다</strong> — 전 인구 평균으로 보면 아직 증가 중이고,
             청년의 최종 신장으로 좁히면 최근 구간은 평탄에 가깝습니다. 두 서술은 모순이 아니라 서로 다른 것을 재고 있는 셈이에요.
@@ -260,12 +254,12 @@ export default function HeightRankPage() {
 
         {/* 5. 흥미 포인트 */}
         <section>
-          <h2 style={sectionTitle}>키 통계, 이런 점이 흥미로워요</h2>
+          <h2 className="g-h2">키 통계, 이런 점이 흥미로워요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '📈 45년간 +6.4cm', d: '1979년 1차 조사 대비 8차에서 남성 +6.4cm, 여성 +5.3cm. 다만 병역판정검사 평균은 2023~2025년 174.4~174.5cm로 평탄합니다.' },
-              { t: '📊 1cm의 무게', d: '중앙값 근처에서는 1cm가 백분위 약 7~9%p를 좌우해요. 아침(이완)과 저녁(압축)의 1~2cm 차이만으로도 순위가 꽤 달라집니다.' },
-              { t: '🔭 극단은 조심', d: '정규 모델은 상·하위 0.1% 밖 극단 구간에서 오차가 커져요. 그래서 이 계산기는 극단값을 "0.1% 이내"로만 표시합니다.' },
+              { t: '40여 년간 +6.4cm', d: '1979년 1차 조사 대비 8차(2020~2021 측정)에서 남성 +6.4cm, 여성 +5.3cm. 다만 병역판정검사 평균은 2023~2025년 174.4~174.5cm로 평탄합니다.' },
+              { t: '1cm의 무게', d: '중앙값 근처에서는 1cm가 백분위 약 7~9%p를 좌우해요. 아침(이완)과 저녁(압축)의 1~2cm 차이만으로도 순위가 꽤 달라집니다.' },
+              { t: '극단은 조심', d: '정규 모델은 상·하위 0.1% 밖 극단 구간에서 오차가 커져요. 그래서 이 계산기는 극단값을 "0.1% 이내"로만 표시합니다.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{c.t}</p>
@@ -282,7 +276,7 @@ export default function HeightRankPage() {
 
         {/* 7. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
               <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>

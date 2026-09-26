@@ -169,7 +169,7 @@ export const DRUG_INTERACTIONS: DrugCategory[] = [
     name: '콜레스테롤약 (스타틴)',
     desc: '콜레스테롤 저하 약물 — CoQ10 ↓ + 나이아신 주의',
     risky: [
-      { ingredientName: '코엔자임Q10',      risk: 'low',    desc: '스타틴 → CoQ10 ↓. 보충 권장 (해롭지 않음)' },
+      { ingredientName: '코엔자임Q10',      risk: 'low',    desc: '스타틴 → CoQ10 ↓. 보충은 대체로 안전하나 근육통 개선 근거는 엇갈림' },
       { ingredientName: '비타민B3(나이아신)', risk: 'medium', desc: '고용량 (500mg+) + 스타틴 → 근육통 위험', minCanon: 500 },
     ],
   },
@@ -239,7 +239,7 @@ export const SPECIAL_MODE_ALERTS: Record<LifeStage, SpecialAlert[]> = {
     { ingredientName: '마그네슘',             type: 'recommend', desc: '부족 흔함 (수면·근육)' },
     // 천연형 400IU = 400/1.49 ≈ 268.46mg → 올림 269로 둬야 400IU 자체는 '초과'가 아니고 401IU부터 초과
     { ingredientName: '비타민E',              type: 'caution',   desc: '약 269mg(천연형 400IU) 초과 → 출혈 위험 ↑ (고령자 주의 기준)', recommendedAmount: { unit: 'mg' }, ul: Math.ceil(400 / 1.49) },
-    { ingredientName: '철분',                 type: 'caution',   desc: '결핍 진단 없으면 X. 노년 산화 스트레스 ↑' },
+    { ingredientName: '철분',                 type: 'caution',   desc: '결핍 진단 없으면 철분 함유 제품은 피하기 (철 과잉 위험)' },
   ],
   chronic: [
     { ingredientName: '비타민A(레티놀)', type: 'caution', desc: '간 손상 위험 — 베타카로틴 형태 권장' },
@@ -250,25 +250,39 @@ export const SPECIAL_MODE_ALERTS: Record<LifeStage, SpecialAlert[]> = {
 }
 
 /* ─── 시너지 조합 (확장) ─── */
+/**
+ * evidence — 화면 분류 기준.
+ *  - 'established': 작용 원리가 분명 → 시너지 카드(초록)로 표시·건수 집계
+ *  - 'limited'    : 소규모·엇갈린 연구뿐 → 중립 「근거 제한」 카드, 시너지 건수 제외
+ *  - 'null'       : 대규모 시험에서 기대 효과 확인 안 됨 → 중립 카드, 시너지 건수 제외
+ * page.tsx 「근거는 얼마나 있나」 표와 등급을 맞출 것.
+ */
+export type SynergyEvidence = 'established' | 'limited' | 'null'
+
 export interface SynergyCombo {
   ingredientNames: [string, string]
   title: string
   desc: string
+  evidence: SynergyEvidence
 }
 
 export const EXTRA_SYNERGY: SynergyCombo[] = [
   { ingredientNames: ['마그네슘', '비타민B6(피리독신)'],
     title: '마그네슘 + 비타민B6',
-    desc: 'B6가 마그네슘의 세포 흡수와 활용을 도와줍니다.' },
+    evidence: 'limited',
+    desc: '함께 먹으면 좋다는 소규모 연구가 있으나 근거는 제한적입니다. 꼭 함께 먹어야 할 이유로 보기는 어렵습니다.' },
   { ingredientNames: ['비타민E', '셀레늄'],
     title: '비타민E + 셀레늄',
-    desc: '두 항산화제 시너지로 활성산소 제거 효과 ↑.' },
+    evidence: 'null',
+    desc: '둘 다 항산화 영양소지만, 3만 5천여 명이 참여한 SELECT 시험에서 함께 먹어도 암 예방 효과는 확인되지 않았습니다.' },
   { ingredientNames: ['아연', '비타민C'],
     title: '아연 + 비타민C',
-    desc: '면역력 강화 시너지.' },
+    evidence: 'limited',
+    desc: '감기 기간 단축 연구가 있으나 결과가 엇갈립니다. 아연 고용량 장기 복용은 구리 결핍 주의.' },
   { ingredientNames: ['프로바이오틱스', '프리바이오틱스'],
     title: '프로바이오틱스 + 프리바이오틱스',
-    desc: '유산균 (프로) + 유산균 먹이 (프리) 시너지로 장 건강 효과 ↑.' },
+    evidence: 'established',
+    desc: '프리바이오틱스(이눌린·올리고당 등)는 유산균의 먹이가 되는 성분으로, 둘을 함께 담은 제품을 신바이오틱스라 부릅니다.' },
 ]
 
 /* ─── 한국 인기 영양제 프리셋 (라벨 보고 입력 보조) ─── */

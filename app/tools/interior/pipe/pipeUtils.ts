@@ -52,15 +52,15 @@ export interface MaterialMeta {
 
 export const MATERIALS: MaterialMeta[] = [
   {
-    id: 'steel', emoji: '🔩', label: '강관 (SGP/STPG)',
+    id: 'steel', emoji: '🔩', label: '강관 (SPP/SPPS)',
     std: 'KS D 3507 / D 3562',
     desc: '가장 전통적인 배관. 압력·내구성 우수. 부식 방지 위해 백관(아연도금)·코팅 사용.',
     use: '소방·산업 압력·증기·일반 배관',
     grades: [
-      { id: 'sgp_white', label: '백관 (SGP 아연도금)', note: 'KS D 3507 · 일반 배관·소방·급수' },
-      { id: 'sgp_black', label: '흑관 (SGP)',          note: 'KS D 3507 · 난방·기름·증기' },
-      { id: 'sch40',     label: 'STPG Sch 40',         note: 'KS D 3562 · 압력 배관 표준' },
-      { id: 'sch80',     label: 'STPG Sch 80',         note: 'KS D 3562 · 고압·두꺼움' },
+      { id: 'sgp_white', label: '백관 (SPP 아연도금)', note: 'KS D 3507 · 일반 배관·소방' },
+      { id: 'sgp_black', label: '흑관 (SPP)',          note: 'KS D 3507 · 난방·기름·증기' },
+      { id: 'sch40',     label: 'SPPS Sch 40',         note: 'KS D 3562 · 압력 배관 표준' },
+      { id: 'sch80',     label: 'SPPS Sch 80',         note: 'KS D 3562 · 고압·두꺼움' },
     ],
   },
   {
@@ -120,7 +120,7 @@ export interface PipeDim {
   variants?: Record<string, { od: number; id: number; t: number }>
 }
 
-/* 강관 SGP (KS D 3507) — 일반 배관용 */
+/* 강관 SPP (KS D 3507, JIS G 3452 SGP와 같은 치수) — 일반 배관용 */
 const STEEL_SGP: Record<PipeSize, PipeDim> = {
   '15A':  { od: 21.7,  id: 16.1,  t: 2.8 },
   '20A':  { od: 27.2,  id: 21.6,  t: 2.8 },
@@ -135,13 +135,13 @@ const STEEL_SGP: Record<PipeSize, PipeDim> = {
   '150A': { od: 165.2, id: 155.2, t: 5.0 },
 }
 
-/* 강관 STPG Sch 40 두께 (KS D 3562 / JIS G 3454) — 외경은 SGP와 같고 두께만 다름 */
+/* 강관 SPPS Sch 40 두께 (KS D 3562 / JIS G 3454 STPG) — 외경은 SPP와 같고 두께만 다름 */
 const STEEL_SCH40_T: Record<PipeSize, number> = {
   '15A': 2.8, '20A': 2.9, '25A': 3.4, '32A': 3.6, '40A': 3.7, '50A': 3.9,
   '65A': 5.2, '80A': 5.5, '100A': 6.0, '125A': 6.6, '150A': 7.1,
 }
 
-/* 강관 STPG Sch 80 두께 보정 (KS D 3562 / JIS G 3454) */
+/* 강관 SPPS Sch 80 두께 보정 (KS D 3562 / JIS G 3454 STPG) */
 const STEEL_SCH80_T: Record<PipeSize, number> = {
   '15A': 3.7, '20A': 3.9, '25A': 4.5, '32A': 4.9, '40A': 5.1, '50A': 5.5,
   '65A': 7.0, '80A': 7.6, '100A': 8.6, '125A': 9.5, '150A': 11.0,
@@ -247,7 +247,7 @@ export function getDim(material: Material, size: PipeSize, grade?: string): Pipe
         const t = (grade === 'sch40' ? STEEL_SCH40_T : STEEL_SCH80_T)[size]
         return { od: base.od, id: +(base.od - 2 * t).toFixed(2), t }
       }
-      // 백관·흑관(SGP)은 외경·두께 동일
+      // 백관·흑관(SPP)은 외경·두께 동일
       return base
     }
     case 'pvc': {

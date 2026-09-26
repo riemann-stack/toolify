@@ -5,6 +5,8 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import Callout from '@/components/Callout'
+import { calcWallpaper, stripsPerRollOf, TRIM_M, type CalcInput } from './wallpaperUtils'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
 
@@ -54,6 +56,43 @@ const FAQ_LD = [
               },
             ]
 
+/* ── 빌드 시 계산하는 가이드 수치 — 계산기와 같은 calcWallpaper 사용 ──
+   [간편 계산] 기본값: 천장 2.4m · 창 1개(1.5×1.5) · 문 1개(0.9×2.1) · 로스 10% · 실크(1.06m × 15.6m) */
+const PY = 3.3058
+const SILK = { wpWidth: 1.06, rollLength: 15.6 }
+const HAPJI = { wpWidth: 0.93, rollLength: 17.75 }
+const base = (side: number): CalcInput => ({
+  width: side, length: side, height: 2.4,
+  windowCount: 1, windowW: 1.5, windowH: 1.5, doorCount: 1, doorW: 0.9, doorH: 2.1,
+  ...SILK, lossPct: 10, includeCeiling: false,
+})
+const PY_ROWS = [5, 7, 10, 15, 20, 25, 30].map(p => {
+  const side = Math.sqrt(p * PY)
+  const wall = calcWallpaper(base(side))
+  const ceil = calcWallpaper({ ...base(side), includeCeiling: true })
+  return { p, area: p * PY, net: wall.netWallArea, rolls: wall.finalRolls, ceilRolls: ceil.finalRolls }
+})
+/* 4 × 4m 방 예시 — 공식 섹션 */
+const EX44 = calcWallpaper({ ...base(4), width: 4, length: 4 })
+/* 7평 — 장 수 기준이 면적 기준보다 커지는 예 */
+const EX7 = calcWallpaper(base(Math.sqrt(7 * PY)))
+/* 15평 천장 포함 */
+const EX15 = calcWallpaper(base(Math.sqrt(15 * PY)))
+const EX15C = calcWallpaper({ ...base(Math.sqrt(15 * PY)), includeCeiling: true })
+const EX25 = calcWallpaper(base(Math.sqrt(25 * PY)))
+const EX25C = calcWallpaper({ ...base(Math.sqrt(25 * PY)), includeCeiling: true })
+/* 천장 높이별 1롤당 장 수 + 4 × 4m 방 필요 롤(실크) */
+const HEIGHT_ROWS = [2.3, 2.4, 2.5, 2.6, 2.7, 2.8].map(h => {
+  const r = calcWallpaper({ ...base(4), width: 4, length: 4, height: h })
+  return { h, silk: stripsPerRollOf(SILK.rollLength, h), hapji: stripsPerRollOf(HAPJI.rollLength, h), areaRolls: r.recommendedRolls, stripRolls: r.stripsRollsNeeded, final: r.finalRolls }
+})
+const f1 = (n: number) => n.toFixed(1)
+/* 포인트 벽 예시 — 천장 2.4m, 실크 1롤에서 뽑는 장 수(민무늬 vs 리피트 64cm를 장마다 더한 보수적 커트) */
+const PT_H = 2.4
+const PT_REPEAT = 0.64
+const PT_PLAIN = stripsPerRollOf(SILK.rollLength, PT_H)
+const PT_PATTERN = stripsPerRollOf(SILK.rollLength, PT_H + PT_REPEAT)
+
 export default function WallpaperPage() {
   return (
     <ToolPage width={760} slug="/tools/interior/wallpaper">
@@ -67,6 +106,9 @@ export default function WallpaperPage() {
       <UpdatedMeta
         date="2026년 9월"
         basis="국내 유통 표준 규격(실크 폭 106cm×15.6m · 광폭 합지 93cm×17.75m) 기준 — 벽지·시공 단가는 흔히 안내되는 대략적 범위(견적 시 재확인)"
+        sources={[
+          { label: '국가법령정보센터 — 실내공기질 관리법 시행규칙(벽지 등 건축자재 방출 기준)', href: 'https://www.law.go.kr/법령/실내공기질관리법시행규칙' },
+        ]}
       />
 
       <WallpaperClient />
@@ -94,14 +136,45 @@ export default function WallpaperPage() {
           }}>
             <div><span style={{ color: 'var(--muted)' }}>시공 면적</span> = (둘레 × 천장 높이) − 창문 면적 − 문 면적</div>
             <div><span style={{ color: 'var(--muted)' }}>필요 벽지 면적</span> = 시공 면적 × (1 + 로스율 / 100)</div>
-            <div><span style={{ color: 'var(--muted)' }}>필요 롤 수</span> = 필요 벽지 면적 ÷ (벽지 폭 × 1롤 길이)</div>
+            <div><span style={{ color: 'var(--muted)' }}>면적 기준 롤 수</span> = 필요 벽지 면적 ÷ (벽지 폭 × 1롤 길이) → 올림</div>
+            <div><span style={{ color: 'var(--muted)' }}>장 수 기준 롤 수</span> = (둘레 ÷ 벽지 폭 → 올림) ÷ 1롤당 장 수 → 올림</div>
+            <div><span style={{ color: 'var(--muted)' }}>최종 롤 수</span> = 두 값 중 큰 값</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 방 4m × 4m, 천장 2.4m, 창 1.5×1.5, 문 0.9×2.1<br />
-            • 둘레 16m × 2.4 = <strong style={{ color: 'var(--text)' }}>38.4㎡</strong><br />
-            • 차감 후 시공 면적: 38.4 − 2.25 − 1.89 = <strong style={{ color: 'var(--text)' }}>34.26㎡</strong><br />
-            • 10% 로스율: <strong style={{ color: 'var(--accent)' }}>37.69㎡</strong> → 실크벽지(1롤 16.5㎡) 기준 <strong style={{ color: 'var(--accent)' }}>3롤</strong>
+          <Callout tone="note" title="예시 — 방 4m × 4m, 천장 2.4m, 창 1.5×1.5, 문 0.9×2.1">
+            둘레 16m × 2.4 = <strong>{f1(EX44.totalWallArea)}㎡</strong>에서 창·문을 빼면 시공 면적 {EX44.netWallArea.toFixed(2)}㎡, 로스 10%를 더하면 {EX44.requiredArea.toFixed(2)}㎡라 면적 기준 {EX44.recommendedRolls}롤입니다. 장 수로 따져도 16m ÷ 1.06m = {f1(EX44.perimeter / SILK.wpWidth)} → {EX44.totalStripsNeeded}장, 1롤에서 {EX44.stripsPerRoll}장이 나오므로 {EX44.stripsRollsNeeded}롤 — 최종 <strong>{EX44.finalRolls}롤</strong>입니다.
+          </Callout>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            면적만으로 나누면 롤이 모자랄 수 있어 계산기는 <strong>장(스트립) 수 기준</strong>을 함께 봅니다. 벽지는 천장에서 바닥까지 한 장씩 세로로 붙이고 위아래를 몰딩·걸레받이에 맞춰 약 5cm씩 잘라 내므로, 한 장에 천장고 + {Math.round(TRIM_M * 100)}cm가 듭니다. 롤 끝에 남는 짧은 토막은 다음 장으로 쓸 수 없으니, 1롤에서 뽑을 수 있는 장 수를 내림한 뒤 필요한 장 수를 나눠 올립니다. 창·문 위아래의 짧은 조각은 이 토막으로 메운다고 보고 장 수에서는 빼지 않습니다.
+          </p>
+          <p className="g-p">
+            예를 들어 7평 한 공간은 면적으로는 {EX7.recommendedRolls}롤이면 될 것 같지만, 둘레 {f1(EX7.perimeter)}m를 덮으려면 {EX7.totalStripsNeeded}장이 필요하고 1롤에서 {EX7.stripsPerRoll}장씩 나오므로 <strong>{EX7.finalRolls}롤</strong>을 사야 합니다. 천장이 높아지면 이 차이가 더 커집니다. 아래 표처럼 천장고가 2.6m가 되면 실크 1롤에서 나오는 장 수가 6장에서 5장으로 줄어, 같은 방이라도 롤이 하나 더 필요해질 수 있습니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['천장고', '실크 1롤당 장 수', '합지 1롤당 장 수', '4×4m 방 면적 기준', '4×4m 방 장 수 기준', '최종(실크)'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {HEIGHT_ROWS.map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.h.toFixed(1)}m</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)' }}>{r.silk}장</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)' }}>{r.hapji}장</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.areaRolls}롤</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.stripRolls}롤</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontWeight: 700 }}>{r.final}롤</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+          <p className="g-note">
+            ※ 장당 천장고 + 10cm 재단 여유, 실크 15.6m·합지 17.75m 롤 기준. 4×4m 방은 창 1개(1.5×1.5m)·문 1개(0.9×2.1m)·로스 10%·실크 기준으로 계산기와 같은 공식입니다.
+          </p>
         </div>
 
         {/* ── 2. 벽지 종류별 표준 사이즈 ── */}
@@ -125,6 +198,12 @@ export default function WallpaperPage() {
               </div>
             ))}
           </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            실크 광폭(1.06m × 15.6m)과 합지 광폭(0.93m × 17.75m)은 폭과 길이가 달라도 1롤 면적이 약 16.5㎡, 즉 <strong>1롤 ≈ 5평</strong>으로 거의 같습니다. 그래서 면적 기준 롤 수는 두 종류가 비슷하게 나오지만, 폭이 좁은 합지는 같은 벽에 더 많은 장이 필요한 대신 롤이 길어 1롤에서 나오는 장 수도 많습니다. 계산기에서 벽지 종류를 바꾸면 두 기준이 모두 다시 계산됩니다.
+          </p>
+          <p className="g-p">
+            벽지와 접착제는 「실내공기질 관리법 시행규칙」에서 폼알데하이드·톨루엔·총휘발성유기화합물 방출 기준을 정해 둔 건축자재입니다. 다중이용시설이나 새로 짓는 공동주택 등에는 기준을 넘는 자재를 쓸 수 없고, 가정 도배에 의무로 적용되지는 않지만 아이 방이나 침실용 벽지를 고를 때 기준 적합 여부와 친환경 인증 표시를 확인하는 근거가 됩니다. 도배 직후 언제부터 환기할지는 아래 FAQ를 참고하세요.
+          </p>
         </div>
 
         {/* ── 3. 평수별 빠른 참조표 ── */}
@@ -145,21 +224,13 @@ export default function WallpaperPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { p: '5평',  a: '16.5㎡', s: '35㎡', r: '3롤', c: '4롤' },
-                  { p: '7평',  a: '23㎡',   s: '42㎡', r: '4롤', c: '5롤' },
-                  { p: '10평', a: '33㎡',   s: '51㎡', r: '4롤', c: '6롤' },
-                  { p: '15평', a: '49.6㎡', s: '63㎡', r: '5롤', c: '8롤' },
-                  { p: '20평', a: '66㎡',   s: '74㎡', r: '6롤', c: '10롤' },
-                  { p: '25평', a: '82.6㎡', s: '83㎡', r: '6롤', c: '12롤' },
-                  { p: '30평', a: '99㎡',   s: '91㎡', r: '7롤', c: '13롤' },
-                ].map((r, i) => (
+                {PY_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.p}평</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{f1(r.area)}㎡</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{Math.round(r.net)}㎡</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.rolls}롤</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.ceilRolls}롤</td>
                   </tr>
                 ))}
               </tbody>
@@ -175,23 +246,12 @@ export default function WallpaperPage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.8 }}>
             직사각형 방에서 천장 면적은 가로 × 세로, 즉 <strong style={{ color: 'var(--text)' }}>바닥 면적과 같습니다</strong>. 천장까지 도배한다면 벽 시공 면적에 바닥 면적을 그대로 더하면 됩니다. 계산기 [간편 계산]의 [천장도 도배] 체크박스와 [상세 계산]의 방별 천장 옵션이 이 방식으로 계산합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📌 <strong style={{ color: 'var(--text)' }}>예시 — 15평 한 공간:</strong> 벽 시공 면적 63.5㎡ + 천장 49.6㎡ = <strong style={{ color: 'var(--text)' }}>113㎡</strong><br />
-            • 10% 로스율: <strong style={{ color: 'var(--accent)' }}>124.3㎡</strong> → 실크벽지(1롤 16.5㎡) 기준 <strong style={{ color: 'var(--accent)' }}>8롤</strong> — 벽만 도배(5롤)보다 3롤 증가<br />
-            • 벽 면적은 둘레를 따라 완만하게 늘지만 천장 면적은 평수에 정비례하므로, <strong style={{ color: 'var(--text)' }}>평수가 클수록 천장 몫이 커집니다</strong>. 25평이면 벽만 6롤 ↔ 천장 포함 12롤로 2배입니다.
-          </div>
-          <div style={{
-            background: 'rgba(234,88,12,0.06)',
-            border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: 'var(--radius-m)',
-            padding: '12px 16px',
-            fontSize: 13,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.75,
-          }}>
-            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>천장은 난이도가 다릅니다</strong> — 풀 먹인 벽지를 머리 위에서 지탱하며 붙여야 해 벽보다 시공이 훨씬 어렵고, 셀프라면 사다리(우마)와 2인 작업이 사실상 필수입니다. 전문 시공도 천장 포함 여부에 따라 견적이 달라지므로 견적 요청 시 천장 포함 여부를 반드시 명시하세요.
-          </div>
+          <p className="g-p">
+            예를 들어 15평 한 공간은 벽 시공 면적 {f1(EX15C.netWallArea)}㎡에 천장 {f1(EX15C.ceilingArea)}㎡를 더해 {f1(EX15C.totalArea)}㎡, 로스 10%를 더하면 {f1(EX15C.requiredArea)}㎡로 실크 <strong>{EX15C.finalRolls}롤</strong>입니다. 벽만 도배할 때({EX15.finalRolls}롤)보다 {EX15C.finalRolls - EX15.finalRolls}롤이 늘어납니다. 벽 면적은 둘레를 따라 완만하게 늘지만 천장 면적은 평수에 정비례하므로 <strong>평수가 클수록 천장 몫이 커집니다</strong>. 25평이면 벽만 {EX25.finalRolls}롤, 천장 포함 {EX25C.finalRolls}롤로 두 배가 됩니다.
+          </p>
+          <Callout tone="warn" title="천장은 난이도가 다릅니다">
+            풀 먹인 벽지를 머리 위에서 지탱하며 붙여야 해 벽보다 시공이 훨씬 어렵고, 셀프라면 사다리(우마)와 2인 작업이 사실상 필수입니다. 전문 시공도 천장 포함 여부에 따라 견적이 달라지므로 견적 요청 시 천장 포함 여부를 반드시 명시하세요.
+          </Callout>
         </div>
 
         {/* ── 3-2. 포인트 벽 폭 수 계산 ── */}
@@ -202,20 +262,18 @@ export default function WallpaperPage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.8 }}>
             벽 1면만 바꾸는 포인트 도배는 면적보다 <strong style={{ color: 'var(--text)' }}>폭(장) 수</strong>로 세는 편이 정확합니다. 필요한 폭 수 = 벽 너비 ÷ 벽지 폭(실크 1.06m) 올림. 계산기 [상세 계산] 탭의 [포인트 도배 (1면만)] 옵션이 같은 방식으로 계산합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📌 <strong style={{ color: 'var(--text)' }}>예시 — 너비 3.6m·천장 2.4m 벽:</strong> 3.6 ÷ 1.06 = 3.4 → <strong style={{ color: 'var(--accent)' }}>4폭</strong><br />
-            • 민무늬: 1롤(15.6m)에서 2.4m짜리 <strong style={{ color: 'var(--text)' }}>6장</strong> 재단 가능 → 4폭이면 <strong style={{ color: 'var(--accent)' }}>1롤</strong>로 충분<br />
-            • 무늬 벽지: 장마다 무늬를 맞추느라 커트 길이가 리피트(무늬 반복 길이)만큼 길어집니다. 예컨대 리피트 64cm 패턴이면 커트 약 3.0m → 1롤에서 <strong style={{ color: 'var(--text)' }}>5장</strong>. 너비 5m가 넘는 거실 아트월(5폭)은 여유가 없어지므로 로스율을 한 단계 높여 잡으세요.
-          </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.75 }}>
-            💡 <strong style={{ color: 'var(--accent)' }}>로트(lot) 번호는 반드시 통일</strong> — 같은 제품이라도 생산 차수(로트)마다 잉크 배합·인쇄 조건이 미세하게 달라 색상이 조금씩 다를 수 있습니다. 다른 로트를 나란히 붙이면 이음매에서 색 차이가 드러나므로, 여유분까지 포함한 전체 수량을 <strong style={{ color: 'var(--text)' }}>한 번에 같은 로트로</strong> 구매하고, 추가 구매 시엔 라벨의 로트 번호가 같은지 확인하세요.
-          </div>
+          <p className="g-p">
+            예를 들어 너비 3.6m·천장 2.4m 벽은 3.6 ÷ 1.06 = 3.4 → <strong>4폭</strong>입니다. 민무늬라면 한 장에 천장고 + 재단 여유 {Math.round(TRIM_M * 100)}cm = {f1(PT_H + TRIM_M)}m가 들어 1롤(15.6m)에서 {PT_PLAIN}장이 나오므로 4폭은 <strong>1롤</strong>로 충분합니다. 무늬 벽지는 옆 장과 무늬를 맞추느라 장마다 리피트(무늬 반복 길이)만큼 더 잘려 나간다고 보수적으로 잡는데, 리피트 64cm 패턴이면 커트가 약 {f1(PT_H + TRIM_M + PT_REPEAT)}m({f1(PT_H + TRIM_M)} + 0.64)로 늘어 1롤에서 {PT_PATTERN}장밖에 나오지 않습니다. 이 4폭 벽은 1롤에서 남는 장 없이 딱 맞고, 5폭 이상(너비 {(PT_PATTERN * SILK.wpWidth).toFixed(2)}m 초과)이면 2롤이 필요하니 로스율을 한 단계 높여 잡으세요.
+          </p>
+          <Callout tone="tip" title="로트(lot) 번호는 반드시 통일">
+            같은 제품이라도 생산 차수(로트)마다 잉크 배합·인쇄 조건이 미세하게 달라 색상이 조금씩 다를 수 있습니다. 다른 로트를 나란히 붙이면 이음매에서 색 차이가 드러나므로, 여유분까지 포함한 전체 수량을 <strong style={{ color: 'var(--text)' }}>한 번에 같은 로트로</strong> 구매하고, 추가 구매 시엔 라벨의 로트 번호가 같은지 확인하세요.
+          </Callout>
         </div>
 
         {/* ── 4. 로스율 가이드 ── */}
         <div>
           <h2 className="g-h2">
-            🎯 로스율(여유분) 가이드
+            로스율(여유분) 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
@@ -231,28 +289,22 @@ export default function WallpaperPage() {
               </div>
             ))}
           </div>
-          <div style={{
-            background: 'rgba(234,88,12,0.06)',
-            border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: 'var(--radius-m)',
-            padding: '12px 16px',
-            fontSize: 13,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.75,
-          }}>
-            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>무늬벽지 주의</strong> — 패턴 리피트가 클수록 무늬 맞춤 손실이 커지므로 로스율을 한 단계 높여 계산하세요.
-          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            로스율은 면적 기준 롤 수에만 곱해집니다. 장 수 기준은 이미 장마다 재단 여유와 롤 끝 토막 손실을 반영하고 있어서, 방이 작거나 천장이 높을 때는 로스율을 5%로 낮춰도 롤 수가 줄지 않는 경우가 많습니다. 결과 화면에서 두 기준 중 어느 쪽이 최종 롤 수를 정했는지 확인하면 로스율 조정이 의미가 있는지 알 수 있습니다.
+          </p>
+          <Callout tone="warn" title="무늬벽지 주의">
+            패턴 리피트가 클수록 무늬 맞춤 손실이 커지므로 로스율을 한 단계 높여 계산하세요. 계산기의 장 수 기준은 민무늬(리피트 없음)를 가정합니다.
+          </Callout>
         </div>
 
         {/* ── 5. 셀프 vs 전문 ── */}
         <div>
           <h2 className="g-h2">
-            🛠️ 셀프 도배 vs 전문 시공
+            셀프 도배 vs 전문 시공
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🔧 셀프 시공</p>
+              <p style={{ fontSize: 14, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 8 }}>셀프 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>재료비만 — 실크 기준 평당 약 1.5~3.5만원</li>
                 <li>시간 오래 걸림 (한 방 1일)</li>
@@ -261,7 +313,7 @@ export default function WallpaperPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cyan-600)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
+              <p style={{ fontSize: 14, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 8 }}>전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>실크 평당 약 5~8만원 (벽지·인건비 포함)</li>
                 <li>빠르고 깔끔 (24평 1~2일)</li>
@@ -275,7 +327,7 @@ export default function WallpaperPage() {
         {/* ── 6. 부자재 체크리스트 ── */}
         <div>
           <h2 className="g-h2">
-            📋 도배 부자재 체크리스트
+            도배 부자재 체크리스트
           </h2>
           <div style={{
             background: 'var(--bg2)',
@@ -286,7 +338,7 @@ export default function WallpaperPage() {
             color: 'var(--text)',
             lineHeight: 1.95,
           }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginBottom: 8 }}>✅ 필수</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginBottom: 8 }}>필수</p>
             <ul style={{ paddingLeft: 22, margin: 0, marginBottom: 12 }}>
               <li>도배풀 (3kg/롤, 5,000원/kg 평균)</li>
               <li>풀솔·롤러</li>
@@ -294,11 +346,11 @@ export default function WallpaperPage() {
               <li>헤라 (매끄럽게 펴는 도구)</li>
               <li>마른 걸레 (기포 제거)</li>
             </ul>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--orange-600)', marginBottom: 8 }}>🪜 천장 높이 따라</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--orange-600)', marginBottom: 8 }}>천장 높이 따라</p>
             <ul style={{ paddingLeft: 22, margin: 0, marginBottom: 12 }}>
               <li>사다리 2~5만원 (천장 도배 시 필수)</li>
             </ul>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--cyan-600)', marginBottom: 8 }}>💡 선택</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--cyan-600)', marginBottom: 8 }}>선택</p>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li>프라이머·바인더 (벽 상태 안 좋을 때)</li>
               <li>마스킹 테이프 (보호용)</li>
@@ -312,7 +364,7 @@ export default function WallpaperPage() {
         {/* ── 7. 도배 시기 ── */}
         <div>
           <h2 className="g-h2">
-            🗓️ 도배 시기 가이드
+            도배 시기 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[

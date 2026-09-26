@@ -273,7 +273,7 @@ export default function LoanClient() {
         <div className={styles.card}>
           <label className={styles.cardLabel} htmlFor="loan-rate">
             연 금리 (%)
-            <span className={styles.cardLabelHint}>한국 평균 표시</span>
+            <span className={styles.cardLabelHint}>참고 금리 표시</span>
           </label>
           <div className={styles.inputRow}>
             <input id="loan-rate" className={styles.numInput} type="number" inputMode="decimal"
@@ -285,8 +285,8 @@ export default function LoanClient() {
             const preset = LOAN_PRESETS.find(p => p.id === presetId)
             const ref = preset?.rateRefId ? KOREA_LOAN_RATES.find(k => k.id === preset.rateRefId) : null
             return ref ? (
-              <p style={{ fontSize: 12, color: '#0891B2', marginTop: 6 }}>
-                💡 {ref.name} 평균 <strong>{ref.avg}%</strong> ({ref.min}~{ref.max}%)
+              <p style={{ fontSize: 12, color: 'var(--accent-ink)', marginTop: 6 }}>
+                💡 {ref.name} 참고값 <strong>{ref.avg}%</strong> ({ref.min}~{ref.max}%)
               </p>
             ) : null
           })()}

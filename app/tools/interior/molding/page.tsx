@@ -3,7 +3,9 @@ import MoldingClient from './MoldingClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
 
@@ -54,6 +56,14 @@ export default function MoldingPage() {
       <p className="tp-lead">
         천장 몰딩·걸레받이·띠몰딩의 <strong style={{ color: 'var(--text)' }}>길이·개수·비용</strong>.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="필요 길이 = 둘레 × (1 + 로스율) + 모서리 4곳 × 5cm, 종류별로 1본(2.4·3.0·3.6m) 단위 올림 · 평수 입력은 정사각형 둘레(√면적 × 4) 가정 · 재질 단가는 흔히 안내되는 대략적 범위(구매 시 재확인)"
+        sources={[
+          { label: 'e나라표준인증 — KS F 3200 섬유판(MDF)', href: 'https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSF3200' },
+        ]}
+      />
 
       <MoldingClient />
 
@@ -145,11 +155,11 @@ export default function MoldingPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📌 <strong style={{ color: 'var(--text)' }}>본 계산기와의 연결:</strong> 걸레받이 필요 길이·본 수는 <strong style={{ color: 'var(--text)' }}>둘레(m) 기준</strong>이라 높이를 6cm로 하든 10cm로 하든 개수는 같습니다.
+          <Callout tone="note" title="본 계산기와의 연결">
+            걸레받이 필요 길이·본 수는 <strong>둘레(m) 기준</strong>이라 높이를 6cm로 하든 10cm로 하든 개수는 같습니다.
             높이가 바꾸는 것은 공간 인상과 m당 단가 — 높이·폭이 큰 제품일수록 단가가 높은 경향(통용 관행)이니 실제 구매가는 재질 카드의 &lsquo;직접 입력&rsquo;으로 반영하세요.
-            교체 공사라면 기존보다 낮은 걸레받이는 벽지에 이전 자국·경계선이 드러날 수 있어 <strong style={{ color: 'var(--text)' }}>기존 높이 이상</strong>을 고르는 것이 통용 관행입니다.
-          </div>
+            교체 공사라면 기존보다 낮은 걸레받이는 벽지에 이전 자국·경계선이 드러날 수 있어 <strong>기존 높이 이상</strong>을 고르는 것이 통용 관행입니다.
+          </Callout>
         </div>
 
         {/* ── 4. 한국 표준 몰딩 길이 ── */}
@@ -172,12 +182,15 @@ export default function MoldingPage() {
             <div><span style={{ color: 'var(--muted)' }}>몰딩 1개</span> = 3.6m (큰 사이즈, 자투리 적음)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 길이가 길수록 자투리 손실이 적지만, 운반·취급 난이도 ↑</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 24평 단일 정사각형 공간, 천장 몰딩 + 걸레받이<br />
-            • 둘레 ≈ 35.6m (√면적×4) × 2(천장·걸레받이) ≈ 71m<br />
-            • +10% 로스율 + 모서리 8개×5cm = 약 78m<br />
-            • <strong style={{ color: 'var(--accent)' }}>2.4m 34개</strong> 또는 <strong style={{ color: 'var(--accent)' }}>3.6m 22개</strong>
-          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            계산기는 몰딩 종류마다 <strong>기본 길이 × (1 + 로스율) + 모서리 4곳 × 5cm</strong>로 필요 길이를 구한 뒤, 1본 길이로 나눠 <strong>종류별로 따로 올림</strong>합니다. 천장 몰딩에서 남은 자투리를 걸레받이에 돌려 쓰지 않는다고 보는 것이라, 두 종류를 합친 길이를 한 번에 나눈 값보다 1본쯤 많게 나올 수 있습니다. 걸레받이는 문이 있는 자리에서 끊기므로 문 폭(기본 0.9m × 문 수)을 빼고, 출입문 프레임(문선)은 문마다 좌·우 높이 2.1m 두 줄과 윗변 한 줄(2 × 2.1m + 문 폭)로 계산하며 방 모서리 여유는 더하지 않습니다.
+          </p>
+          <p className="g-p">
+            전문 시공비는 로스·여유분을 뺀 <strong>실제 설치 길이 × m당 5,000원</strong>으로 따로 잡습니다. 자재는 버리는 몫까지 사야 하지만 시공비는 붙이는 길이에만 드는 셈입니다. 평수로 입력하면 한 변이 √면적인 정사각형 방으로 가정하므로, 가로·세로 비율이 1:2인 직사각형 방은 같은 면적이라도 둘레가 약 6% 길어집니다. 방이 여러 개라면 방별 둘레를 더한 값을 [둘레 직접 입력]에 넣는 편이 정확합니다.
+          </p>
+          <Callout tone="note" title="예시 — 24평 한 공간, 천장 몰딩 + 걸레받이">
+            둘레 ≈ 35.6m(√면적 × 4). 천장 몰딩 35.6 × 1.1 + 0.2 ≈ 39.4m → 2.4m 17본, 걸레받이 (35.6 − 0.9) × 1.1 + 0.2 ≈ 38.4m → 2.4m 17본으로 합계 약 78m, <strong>2.4m 34본</strong> 또는 <strong>3.6m 22본</strong>입니다.
+          </Callout>
         </div>
 
         {/* ── 5. 재질별 가격 비교 ── */}
@@ -215,6 +228,12 @@ export default function MoldingPage() {
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
             ※ 가격은 2026년 기준, 온라인 자재몰·시공 플랫폼 통용 범위이며 지역·브랜드·등급에 따라 달라집니다.
           </p>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            가격 외에 확인할 것은 <strong>폼알데하이드 방출 등급</strong>입니다. MDF는 나무 섬유를 접착제로 굳힌 섬유판이라 KS F 3200(섬유판)에 따라 방출량 등급이 표시되며, 흔히 보는 SE0·E0·E1 가운데 SE0가 가장 적고 E1으로 갈수록 많습니다. 아이 방·침실처럼 오래 머무는 공간이라면 같은 MDF 몰딩이라도 SE0·E0 표시 제품을 고르세요. 몰딩을 본드로 붙였다면 시공 직후 냄새가 빠질 때까지 환기를 충분히 합니다.
+          </p>
+          <p className="g-p">
+            욕실·다용도실처럼 물이 튀는 곳은 물을 먹으면 부푸는 MDF나 습기에 약한 석고보다 PVC가 적합하고, 도장 마감을 원하면 MDF를 시공 전에 칠해 두는 편이 깔끔합니다. 우드(원목) 몰딩은 계절에 따라 수축·팽창하므로 이음매를 45도로 겹쳐 잇는 스카프 조인트로 처리하면 틈이 덜 벌어집니다.
+          </p>
         </div>
 
         {/* ── 6. 모서리 절단 가이드 ── */}
@@ -224,10 +243,10 @@ export default function MoldingPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { t: '🔪 마이터 박스', c: 'var(--accent)', d: '저렴(만원대), 손톱+가이드. 셀프 시공 권장.' },
-              { t: '⚙️ 마이터 톱', c: 'var(--cyan-600)', d: '전동 톱, 정밀도 우수. 대량 작업·전문 시공.' },
-              { t: '📐 외각 vs 내각', c: 'var(--orange-600)', d: '외각(밖으로 튀어나온 모서리) +0.5cm, 내각(안쪽) -0.5cm 보정.' },
-              { t: '🧪 시운전', c: 'var(--amethyst)', d: '본 자재 자르기 전 자투리 자재로 각도·맞물림 시험.' },
+              { t: '마이터 박스', c: 'var(--accent)', d: '저렴(만원대), 손톱+가이드. 셀프 시공 권장.' },
+              { t: '마이터 톱', c: 'var(--cyan-600)', d: '전동 톱, 정밀도 우수. 대량 작업·전문 시공.' },
+              { t: '외각 vs 내각', c: 'var(--orange-600)', d: '내각(안쪽 모서리)은 벽 끝까지 잰 길이가 몰딩의 벽 쪽 면 길이이고, 외각(튀어나온 모서리)은 몰딩 앞면이 벽에서 튀어나온 폭만큼 더 길어집니다. 길이 표시는 벽 쪽 면 기준으로.' },
+              { t: '시운전', c: 'var(--amethyst)', d: '본 자재 자르기 전 자투리 자재로 각도·맞물림 시험.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: c.c, fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
@@ -235,19 +254,9 @@ export default function MoldingPage() {
               </div>
             ))}
           </div>
-          <div style={{
-            background: 'rgba(220,38,38,0.05)',
-            border: '1px solid rgba(220,38,38,0.25)',
-            borderRadius: 'var(--radius-m)',
-            padding: '12px 16px',
-            fontSize: 13,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.75,
-          }}>
-            ⚠️ 모서리 1개당 <strong style={{ color: 'var(--orange-600)' }}>5~10cm 여유분</strong> 권장.
-            직사각형 방은 모서리 4개 = 20~40cm. 자투리 1개를 보수용으로 남겨두세요.
-          </div>
+          <Callout tone="warn" title="모서리 여유분">
+            모서리 1개당 <strong>5~10cm 여유분</strong>을 권장합니다. 직사각형 방은 모서리 4개로 20~40cm이고, 계산기는 모서리당 5cm를 자동으로 더합니다. 기둥·벽 꺾임이 많은 방은 모서리 수가 늘어나니 로스율을 15%로 올리고, 자투리 1개는 보수용으로 남겨 두세요.
+          </Callout>
         </div>
 
         {/* ── 7. 평수별 빠른 참조 ── */}
@@ -302,12 +311,12 @@ export default function MoldingPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             {[
-              { t: '🔪 모서리 절단', d: '45도 절단(마이터 톱 또는 마이터 박스 필수). 자투리 1개당 5~10cm 여유.' },
-              { t: '🔧 본드 + 못', d: '본드 + 못 병행이 안정적. PVC는 본드만으로 가능, MDF는 못으로 보강.' },
-              { t: '🎨 도장 순서', d: 'MDF는 시공 후 도장보다 시공 전 도장이 깔끔. 끝부분만 보수 도장.' },
-              { t: '📏 실측 우선', d: '평수 기반은 정사각형 가정값. 실제 둘레는 실측 권장.' },
-              { t: '🔁 추가 여유', d: '시공 미숙·셀프 시공은 +5% 추가 권장. 보수용 1~2개 남겨두기.' },
-              { t: '🌡️ 자재 적응', d: 'PVC·MDF는 시공 24시간 전부터 시공할 방에 두기 (변형 방지).' },
+              { t: '모서리 절단', d: '45도 절단(마이터 톱 또는 마이터 박스 필수). 자투리 1개당 5~10cm 여유.' },
+              { t: '본드 + 못', d: '본드 + 못 병행이 안정적. PVC는 본드만으로 가능, MDF는 못으로 보강.' },
+              { t: '도장 순서', d: 'MDF는 시공 후 도장보다 시공 전 도장이 깔끔. 끝부분만 보수 도장.' },
+              { t: '실측 우선', d: '평수 기반은 정사각형 가정값. 실제 둘레는 실측 권장.' },
+              { t: '추가 여유', d: '시공 미숙·셀프 시공은 +5% 추가 권장. 보수용 1~2개 남겨두기.' },
+              { t: '자재 적응', d: 'PVC·MDF는 시공 24시간 전부터 시공할 방에 두기 (변형 방지).' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
@@ -322,23 +331,7 @@ export default function MoldingPage() {
 
         {/* ── 9. FAQ ── */}
         <div>
-          <h2 className="g-h2">
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 10. 관련 도구 ── */}

@@ -3,6 +3,8 @@ import AlcoholClient from './AlcoholClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import {
   SOJU_BRANDS, SOJU_ABV_ASOF, sojuBottleAlcoholG,
   KOREAN_GLASS_PRESETS, KOREAN_COCKTAIL_PRESETS, EQUIV_TARGETS,
@@ -49,6 +51,19 @@ const cocktailAbv = (id: string) => {
   return `${((c.base.ml * c.base.abv + c.mixer.ml * c.mixer.abv) / (c.base.ml + c.mixer.ml)).toFixed(1)}%`
 }
 const HIGHBALL_ABV = EQUIV_TARGETS.find(t => t.name === '하이볼')!.abv
+/** 잔·병 프리셋 표 — 도수가 정해지지 않은 하이볼잔은 환산 표와 같은 가정 도수, 종이컵은 담는 술에 따라 달라 비워 둔다 */
+const GLASS_ROWS = KOREAN_GLASS_PRESETS.map(g => {
+  const abv = g.abv ?? (g.id === 'highball-glass' ? HIGHBALL_ABV : null)
+  const r = abv === null ? null : calcAlcohol(g.ml, abv)
+  return {
+    id: g.id, name: `${g.icon} ${g.name}`, ml: g.ml,
+    abv: abv === null ? '—' : g.abv === null ? `~${abv}%` : `${abv}%`,
+    g: r ? `${r.alcoholG.toFixed(1)}g` : '—',
+    std: r ? `${r.standard.toFixed(1)}잔` : '—',
+  }
+})
+const SOJU_GLASS = presetById('soju-glass')
+const SOJU_GLASSES_PER_BOTTLE = (SOJU_BOTTLE.ml / SOJU_GLASS.ml).toFixed(1)
 
 const FAQ_LD = [
               {
@@ -60,8 +75,8 @@ const FAQ_LD = [
                 a: '<strong>알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7893</strong>입니다. 0.7893은 에탄올 밀도(g/ml)로, 물(1g/ml)보다 가볍습니다. 예: 소주 1잔 50ml × 15.7% × 0.7893 = 약 6.2g.',
               },
               {
-                q: '잔 단위와 병 단위 어느 게 더 정확한가요?',
-                a: '둘 다 정확합니다. 본인이 익숙한 단위를 선택하세요. 일반적으로 1차 술자리는 잔 단위(몇 잔 마셨나), 총량 계산은 병 단위(몇 병 마셨나)를 사용합니다. 본 도구는 둘 다 지원하며, 잔 단위가 기본입니다. 단, 정확한 ml은 라벨 확인 필수 — 소주병 360ml, 맥주병/캔 500ml, 막걸리 750ml 표준.',
+                q: '소주 1병은 몇 잔이고, 잔으로 세는 게 나은가요 병으로 세는 게 나은가요?',
+                a: `본 도구 기준 소주잔은 ${SOJU_GLASS.ml}ml라 ${SOJU_BOTTLE.ml}ml 한 병은 ${SOJU_GLASSES_PER_BOTTLE}잔 — 흔히 &quot;1병 = 7잔&quot;이라고 하는 근거입니다. 다만 술자리에서는 잔을 가득 채우지 않거나 여러 사람이 한 병을 나눠 따르기 때문에 잔 수를 정확히 세기 어렵습니다. 비운 병 수를 세서 [1인당 분배] 탭에 병 단위로 넣고 인원으로 나누는 편이 오차가 적습니다. 병·캔 용량은 제품마다 다를 수 있으니(맥주 캔 355·500ml 등) 라벨의 용량과 도수를 확인하세요.`,
               },
               {
                 q: '하이볼 만들 때 위스키 + 탄산수 비율은?',
@@ -73,7 +88,7 @@ const FAQ_LD = [
               },
               {
                 q: '4명이 소주 3병 + 맥주 6캔 마시면 1인당 얼마인가요?',
-                a: `본 도구의 [1인당 분배] 탭으로 자동 계산: 소주 3병(${SOJU_BOTTLE.abv}%, 약 ${SCN_B_SOJU_G}g) + 맥주 6캔(약 ${SCN_B_BEER_G}g) = 총 약 ${SCN_B.total}g, 4명 균등 시 <strong>1인당 약 ${SCN_B.per}g (${SCN_B.std} 표준잔)</strong>. 적정음주 참고 기준(남 32g)의 약 ${SCN_B.male.pct}%, (여 16g)의 약 ${SCN_B.femalePct}% — 기준 이내라도 안전을 뜻하지 않습니다(WHO). ⚠️ 절대 운전 X, 다음날 출근 운전도 단속 가능 (BAC 잔류). 일주일 이상 간격 권장.`,
+                a: `본 도구의 [1인당 분배] 탭으로 자동 계산: 소주 3병(${SOJU_BOTTLE.abv}%, 약 ${SCN_B_SOJU_G}g) + 맥주 6캔(약 ${SCN_B_BEER_G}g) = 총 약 ${SCN_B.total}g, 4명 균등 시 <strong>1인당 약 ${SCN_B.per}g (${SCN_B.std} 표준잔)</strong>. 적정음주 참고 기준 남성 32g의 약 ${SCN_B.male.pct}%, 여성 16g의 약 ${SCN_B.femalePct}%로 두 기준을 모두 넘습니다(기준 이내라도 안전을 뜻하지는 않습니다 — WHO). 이만큼 마신 날은 운전하지 말고, 다음날 아침에도 혈중알코올이 남아 단속에 걸릴 수 있으니 주의하세요.`,
               },
               {
                 q: '소주 도수가 제품마다 다른데 정확히 계산하려면?',
@@ -102,6 +117,16 @@ export default function AlcoholPage() {
       <p className="tp-lead">
         <strong style={{ color: 'var(--text)' }}>소맥·하이볼 황금비율</strong> + 목표 도수 희석과 같은 알코올량 비교.
       </p>
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="순수 알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7893(에탄올 밀도) · 1잔 표시 8g(표준잔 정의는 기관별 7~14g) · 소주 도수는 2026년 7월 제조사 표기"
+        sources={[
+          { label: 'WHO 유럽사무소 — 안전한 음주량은 없다(2023)', href: 'https://www.who.int/europe/news/item/04-01-2023-no-level-of-alcohol-consumption-is-safe-for-our-health' },
+          { label: 'NIAAA — What Is a Standard Drink?', href: 'https://www.niaaa.nih.gov/alcohols-effects-health/what-standard-drink' },
+          { label: '질병관리청 국민건강영양조사 (고위험음주 지표)', href: 'https://knhanes.kdca.go.kr/' },
+          { label: '국가법령정보센터 — 청소년보호법', href: 'https://www.law.go.kr/법령/청소년보호법' },
+        ]}
+      />
 
       <AlcoholClient />
 
@@ -120,41 +145,26 @@ export default function AlcoholPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['잔/병', '용량', '일반 도수', '1잔 알코올(g)'].map((h, i) => (
+                  {['잔/병', '용량', '기본 도수', '순수 알코올', '1잔(8g) 환산'].map((h, i) => (
                     <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['🍶 소주잔',         '50ml',    '15.7%', '6.2g',   'var(--sky-500)'],
-                  ['🍺 맥주잔 (작은)',  '300ml',   '4.5%',  '10.7g',  'var(--emerald-600)'],
-                  ['🍺 맥주잔 (큰)',    '500ml',   '4.5%',  '17.8g',  'var(--emerald-600)'],
-                  ['🥃 양주 샷',        '30ml',    '40%',   '9.5g',   'var(--orange-600)'],
-                  ['🥃 양주 1.5온스',   '45ml',    '40%',   '14.2g',  'var(--orange-600)'],
-                  ['🍷 와인잔',         '150ml',   '13%',   '15.4g',  '#C83EFF'],
-                  ['🥣 막걸리 사발',    '200ml',   '6%',    '9.5g',   'var(--orange-600)'],
-                  ['🍶 사케 잔',        '60ml',    '15%',   '7.1g',   'var(--pink-600)'],
-                  ['🥤 종이컵',         '180ml',   '—',     '—',      'var(--cyan-600)'],
-                  ['🍹 하이볼잔',       '300ml',   `~${HIGHBALL_ABV}%`, `${calcAlcohol(300, HIGHBALL_ABV).alcoholG}g`, 'var(--cyan-600)'],
-                  ['🍶 소주 1병',       '360ml',   '15.7%', '44.6g',  'var(--sky-500)'],
-                  ['🥫 맥주 1캔',       '500ml',   '4.5%',  '17.8g',  'var(--emerald-600)'],
-                  ['🍶 막걸리 1병',     '750ml',   '6%',    '35.5g',  'var(--orange-600)'],
-                  ['🍷 와인 1병',       '750ml',   '13%',   '77.0g',  '#C83EFF'],
-                  ['🥃 위스키 1병',     '700ml',   '40%',   '221.0g', 'var(--orange-600)'],
-                ].map(([name, vol, abv, alc, color], i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 600 }}>{name}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{vol}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{abv}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{alc}</td>
+                {GLASS_ROWS.map((r, i) => (
+                  <tr key={r.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.name}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.ml}ml</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{r.abv}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.g}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.std}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * 알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7893 (에탄올 밀도). 제품 라벨의 도수가 다르면 [기준 도수 변환] 도구로 정확 계산.
+            * 알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7893 (에탄올 밀도). 하이볼잔 도수(~{HIGHBALL_ABV}%)는 가게마다 편차가 커 음주량을 적게 잡지 않도록 보수적으로 둔 가정값이고, 종이컵은 담는 술에 따라 달라 비워 두었습니다. 제품 라벨의 도수가 다르면 [기준 도수 변환]으로 정확히 계산하세요.
           </p>
         </section>
 
@@ -204,7 +214,7 @@ export default function AlcoholPage() {
             같은 알코올량 환산 (본 도구 표시 기준 1잔 = 8g)
           </h2>
           <p className="g-p">
-            순수 알코올 8g(본 도구 표시 기준)에 해당하는 각 술의 양을 비교하면, 같은 한 잔이라도 종류별로 알코올 양이 크게 다름을 알 수 있습니다. <strong style={{ color: 'var(--text)' }}>표준잔의 공식 정의는 기관마다 달라</strong>(보건복지부 7g · WHO 10g), 본 도구는 표시 편의상 8g을 쓰되 정확한 값은 순수 알코올 g으로 확인하세요.
+            순수 알코올 8g(본 도구 표시 기준)에 해당하는 각 술의 양을 비교하면, 같은 한 잔이라도 종류별로 알코올 양이 크게 다름을 알 수 있습니다. <strong style={{ color: 'var(--text)' }}>표준잔의 공식 정의는 기관마다 달라</strong>(보건복지부 약 7g · WHO 10g · 미국 NIAAA 14g), 본 도구는 표시 편의상 8g을 쓰되 정확한 값은 순수 알코올 g으로 확인하세요.
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -313,10 +323,10 @@ export default function AlcoholPage() {
         {/* ── 6. 표준 음주량 안내 (기존 유지·확장) ── */}
         <section>
           <h2 className="g-h2">
-            📊 음주 참고 기준 & 표준잔 정의 (출처·기준일)
+            음주 참고 기준 &amp; 표준잔 정의 (출처·기준일)
           </h2>
           <p className="g-p">
-            &lsquo;표준잔(순수 알코올)&rsquo;의 정의는 기관마다 다릅니다 — <strong style={{ color: 'var(--text)' }}>보건복지부 절주 지침 약 7g</strong>, <strong style={{ color: 'var(--text)' }}>WHO 10g</strong>, 미국 NIAAA 14g. 본 도구는 표시 편의상 8g을 &lsquo;1잔&rsquo;으로 환산하며, 정확한 값은 순수 알코올 g으로 제공합니다. 아래는 <strong>참고용</strong> 권고이며, <strong style={{ color: 'var(--orange-600)' }}>WHO(2023)는 &ldquo;건강을 해치지 않는 안전한 음주량은 없다&rdquo;</strong>고 밝혔습니다.
+            &lsquo;표준잔(순수 알코올)&rsquo;의 정의는 기관마다 다릅니다 — <strong style={{ color: 'var(--text)' }}>보건복지부 약 7g</strong>, <strong style={{ color: 'var(--text)' }}>WHO 10g</strong>, 미국 NIAAA 14g. 본 도구는 표시 편의상 8g을 &lsquo;1잔&rsquo;으로 환산하며, 정확한 값은 순수 알코올 g으로 제공합니다. 아래는 <strong>참고용</strong> 권고이며, <strong style={{ color: 'var(--orange-600)' }}>WHO(2023)는 &ldquo;건강을 해치지 않는 안전한 음주량은 없다&rdquo;</strong>고 밝혔습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 15%, transparent)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>음주 참고 기준 (기준일 2026-07)</p>
@@ -344,37 +354,25 @@ export default function AlcoholPage() {
         </section>
 
         {/* ── 8. 책임 있는 음주 (강화) ── */}
-        <section style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
-          <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--red-600)', marginBottom: '12px' }}>⚠️ 책임 있는 음주 안내</p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            본 계산기는 <strong style={{ color: 'var(--text)' }}>음주를 권장하지 않으며</strong>, 본인 음주량 인지·관리 보조 도구입니다. 계산 결과는 체내 알코올 분해 속도나 취기 정도를 보장하지 않습니다.
-          </p>
-          <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '14px' }}>
-            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>미성년자(만 19세 미만)는 주류 판매·제공이 법으로 금지됩니다 (청소년보호법)</li>
-            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>임신·수유 중에는 태아알코올스펙트럼장애(FASD) 위험으로 금주가 강력히 권고됩니다 (의학적 권고)</li>
-            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>약물 복용 중 음주는 의사 상담 필수 (수면제·항우울제·진통제 위험)</li>
-            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>음주 후 운전 절대 금지 (다음날 아침 운전도 BAC 잔류 가능)</li>
-            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다&rdquo; — 가능한 적게</li>
-            <li style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>1회 7잔(남) / 5잔(여) 이상을 주 2회 이상 마시면 &lsquo;고위험 음주&rsquo;(국내 기준) — 절주·휴식 필요</li>
-          </ul>
-          <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 16px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '10px' }}>📞 도움이 필요하면 (공식 상담)</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '6px' }}>
-              {[
-                { label: '보건복지상담센터 (중독·정신건강, 24h)', tel: '129' },
-                { label: '정신건강 위기상담 (24h)',            tel: '1577-0199' },
-              ].map((c, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', fontSize: 13 }}>
-                  <span style={{ color: 'var(--muted)' }}>{c.label}</span>
-                  <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--orange-600)' }}>{c.tel}</span>
-                </div>
-              ))}
-            </div>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-              알코올 사용 문제는 가까운 <strong style={{ color: 'var(--text)' }}>중독관리통합지원센터</strong>(전국 약 50개소, 보건복지상담센터 129로 위치 안내)에서도 상담받을 수 있습니다.
-              음주 후 운전은 절대 금지 — <strong style={{ color: 'var(--text)' }}>대리운전 앱(카카오 T·티맵 등)·택시·대중교통</strong>을 이용하세요.
+        <section>
+          <Callout tone="warn" title="책임 있는 음주 안내">
+            <p>
+              본 계산기는 <strong>음주를 권장하지 않으며</strong>, 본인 음주량 인지·관리 보조 도구입니다. 계산 결과는 체내 알코올 분해 속도나 취기 정도를 보장하지 않습니다.
             </p>
-          </div>
+            <ul>
+              <li>청소년(만 19세 미만, 그해 1월 1일에 만 19세가 되는 사람은 제외)에게는 주류 판매·제공이 금지됩니다 (청소년보호법)</li>
+              <li>임신·수유 중에는 태아알코올스펙트럼장애(FASD) 위험으로 금주가 강력히 권고됩니다 (의학적 권고)</li>
+              <li>약물 복용 중 음주는 의사 상담 필수 (수면제·항우울제·진통제 위험)</li>
+              <li>음주 후 운전 절대 금지 (다음날 아침 운전도 BAC 잔류 가능)</li>
+              <li>WHO(2023): &ldquo;알코올 섭취량에 안전한 수준은 없다&rdquo; — 가능한 적게</li>
+              <li>1회 7잔(남) / 5잔(여) 이상을 주 2회 이상 마시면 &lsquo;고위험 음주&rsquo;(국민건강영양조사 지표) — 절주·휴식 필요</li>
+            </ul>
+            <p>
+              <strong>도움이 필요하면 (공식 상담)</strong> — 보건복지상담센터(중독·정신건강, 24시간) <strong>129</strong> · 정신건강 위기상담(24시간) <strong>1577-0199</strong>.
+              알코올 사용 문제는 가까운 <strong>중독관리통합지원센터</strong>(위치는 129에서 안내)에서도 상담받을 수 있습니다.
+              음주 후에는 <strong>대리운전·택시·대중교통</strong>을 이용하세요.
+            </p>
+          </Callout>
         </section>
 
         {/* ── 9. 함께 쓰면 좋은 도구 ── */}

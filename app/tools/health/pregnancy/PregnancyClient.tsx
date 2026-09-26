@@ -299,7 +299,7 @@ export default function PregnancyClient() {
         </div>
         {isMultiple && (
           <div className={styles.warnBox} style={{ marginTop: 8 }}>
-            ⚠️ <strong>쌍태아 임신은 검진 빈도가 더 잦고(2~3주 간격), 평균 분만 시기가 36~37주</strong>로 단태아와 다릅니다.
+            ⚠️ <strong>쌍태아 임신은 검진 빈도가 더 잦고(2~3주 간격), 절반 이상이 37주 전에 태어나는 등</strong> 단태아와 다릅니다.
             <strong> 본 도구의 예정일·산전 검사·마일스톤은 단태아 40주 기준 그대로 표시되며 쌍태아용으로 조정되지 않습니다</strong> — 실제 일정은 담당 산부인과 안내를 우선하세요.
           </div>
         )}

@@ -249,7 +249,7 @@ export default function CurtainBlindClient() {
           { href: '/tools/interior/room-area', label: '방 면적 계산' }
         ]}
       >
-        본 계산기는 일반적인 한국 표준 측정법 기준 참고용
+        본 계산기는 일반적인 측정 관행 기준 참고용
       </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
@@ -362,7 +362,7 @@ export default function CurtainBlindClient() {
             <div className={styles.card}>
               <div className={styles.cardLabel}>
                 <span>커튼 길이 옵션</span>
-                <span className={styles.cardLabelHint}>한국 표준은 바닥형</span>
+                <span className={styles.cardLabelHint}>가장 무난한 건 바닥형</span>
               </div>
               <div className={styles.lengthGrid}>
                 {LENGTH_OPTIONS.map(opt => {
@@ -393,7 +393,7 @@ export default function CurtainBlindClient() {
             <div className={styles.card}>
               <div className={styles.cardLabel}>
                 <span>주름 배수</span>
-                <span className={styles.cardLabelHint}>한국 표준 2배</span>
+                <span className={styles.cardLabelHint}>가장 흔한 2배</span>
               </div>
               <div className={styles.pleatRow}>
                 <input className={styles.slider} aria-label="주름 배수" aria-valuetext={`${pleatRatio.toFixed(1)}배`} type="range" min={1.5} max={3.0} step={0.5} value={pleatRatio} onChange={e => setPleatRatio(Number(e.target.value))} />
@@ -410,7 +410,7 @@ export default function CurtainBlindClient() {
                 ))}
               </div>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                <strong style={{ color: 'var(--text)' }}>1.5배</strong> 가벼운 주름 · <strong style={{ color: 'var(--text)' }}>2배</strong> 한국 표준 · <strong style={{ color: 'var(--text)' }}>2.5~3배</strong> 호텔·고급
+                <strong style={{ color: 'var(--text)' }}>1.5배</strong> 가벼운 주름 · <strong style={{ color: 'var(--text)' }}>2배</strong> 가장 흔한 기준 · <strong style={{ color: 'var(--text)' }}>2.5~3배</strong> 호텔·고급
               </p>
             </div>
           )}
@@ -776,7 +776,7 @@ export default function CurtainBlindClient() {
             </div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>4</span>
-              <span className={styles.guideStepBody}>주름 배수 — 일반적으로 <strong>2배</strong> (한국 표준)</span>
+              <span className={styles.guideStepBody}>주름 배수 — 일반적으로 <strong>2배</strong> (업계 관행)</span>
             </div>
           </div>
 

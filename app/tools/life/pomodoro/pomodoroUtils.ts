@@ -134,14 +134,14 @@ export function playSound(theme: SoundTheme) {
 // 백색소음·앰비언트 (가이드용 추천 목록)
 // ─────────────────────────────────────────────────────────────
 export const AMBIENT_SOUNDS = [
-  { id: 'rain',    emoji: '🌧️', name: '빗소리',         desc: '집중·수면에 가장 효과적인 핑크 노이즈 계열' },
-  { id: 'cafe',    emoji: '☕', name: '카페 소음',       desc: '약 70dB 백색소음. 창의적 작업에 도움' },
-  { id: 'forest',  emoji: '🌲', name: '숲·새소리',       desc: '자연음은 코르티솔(스트레스 호르몬) 감소' },
+  { id: 'rain',    emoji: '🌧️', name: '빗소리',         desc: '핑크 노이즈 계열의 고른 소리. 독서·수면용으로 인기' },
+  { id: 'cafe',    emoji: '☕', name: '카페 소음',       desc: '약 70dB 주변 소음. 창의적 과제에 도움된다는 연구 보고' },
+  { id: 'forest',  emoji: '🌲', name: '숲·새소리',       desc: '자연음. 스트레스 후 회복을 돕는다는 연구 보고' },
   { id: 'wave',    emoji: '🌊', name: '파도소리',       desc: '리듬감 있는 저주파, 명상·휴식에 적합' },
   { id: 'fire',    emoji: '🔥', name: '장작 타는 소리', desc: '겨울철 따뜻한 분위기. ASMR 효과' },
-  { id: 'fan',     emoji: '💨', name: '선풍기·환풍기',   desc: '순수 백색소음. 외부 소음 차단에 강함' },
+  { id: 'fan',     emoji: '💨', name: '선풍기·환풍기',   desc: '고른 광대역 소음. 주변 소리를 가리는 데 유용' },
   { id: 'lofi',    emoji: '🎧', name: 'Lo-Fi 비트',     desc: '가사 없는 부드러운 비트. 학습·코딩에 인기' },
-  { id: 'silence', emoji: '🤫', name: '완전한 정적',     desc: '고도 집중 시 가장 효과적. 다만 산만함 ↑ 가능' },
+  { id: 'silence', emoji: '🤫', name: '완전한 정적',     desc: '암기·고난도 과제에 무난. 작은 소리에 더 민감해질 수 있음' },
 ]
 
 // ─────────────────────────────────────────────────────────────

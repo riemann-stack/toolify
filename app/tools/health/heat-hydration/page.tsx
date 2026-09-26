@@ -7,6 +7,8 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import Disclaimer from '@/components/Disclaimer'
 import ToolPage from '@/components/ToolPage'
+import Callout from '@/components/Callout'
+import { calcHydration, ACTIVITIES, HEAT_STAGES, HOURLY_ABSORB_CAP_L, BASE_LOW_ML, BASE_HIGH_ML } from './hydrationData'
 
 export const metadata = buildMetadata({
   path: '/tools/health/heat-hydration',
@@ -18,12 +20,19 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
+/* ── 본문 표: 도구와 같은 calcHydration으로 빌드 시점에 계산 (표시 형식도 HeatHydrationClient의 fmt와 동일) ── */
+const fmt1 = (n: number) => n.toLocaleString('ko-KR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+const range = (lo: number, hi: number) => (fmt1(lo) === fmt1(hi) ? fmt1(hi) : `${fmt1(lo)}~${fmt1(hi)}`)
+const act = (id: string) => ACTIVITIES.find(a => a.id === id)!
+const stage = (id: string) => HEAT_STAGES.find(h => h.id === id)!
+const SCENARIOS = [
+  { label: '실내 일상 · 평상시', activity: act('indoor'), hours: 0, stage: stage('none') },
+  { label: '야외 활동 2시간 · 폭염주의보', activity: act('outdoor'), hours: 2, stage: stage('warn') },
+  { label: '폭염 작업 4시간 · 폭염경보', activity: act('hard'), hours: 4, stage: stage('alert') },
+]
+const WEIGHTS = [50, 60, 70, 80, 90]
+const HYD_TABLE = WEIGHTS.map(w => ({ w, cells: SCENARIOS.map(sc => calcHydration(w, sc.activity, sc.hours, sc.stage)) }))
+const EX70_HARD = calcHydration(70, act('hard'), 4, stage('alert'))
 
 const FAQ_LD = [
   {
@@ -32,7 +41,7 @@ const FAQ_LD = [
   },
   {
     q: '폭염중대경보가 뭔가요? (2026년 신설)',
-    a: '기상청이 2026년 6월 폭염특보 체계를 개편하면서 기존 <strong>폭염주의보(체감 33℃)·폭염경보(체감 35℃)</strong> 위에 <strong>폭염중대경보(체감 38℃ 또는 기온 39℃)</strong>를 새로 만들었습니다. 중대경보는 최고 단계로, 하루만 예상돼도 발령될 수 있습니다. 이 단계에서는 외출·야외작업을 최대한 중단하고 냉방 공간에 머물러야 하며, 독거·고령자 안부 확인이 중요합니다.',
+    a: '기상청이 2026년 6월 폭염특보 체계를 개편하면서 기존 <strong>폭염주의보(체감 33℃)·폭염경보(체감 35℃)</strong> 위에 <strong>폭염중대경보(체감 38℃ 또는 기온 39℃)</strong>를 새로 만들었습니다. 중대경보는 최고 단계로, 일 최고 체감온도 35℃ 이상이 이틀 이상 관측된 지역에서 체감 38℃ 이상 또는 기온 39℃ 이상이 예상되면 발령됩니다. 이 단계에서는 외출·야외작업을 최대한 중단하고 냉방 공간에 머물러야 하며, 독거·고령자 안부 확인이 중요합니다.',
   },
   {
     q: '운동할 때 물은 얼마나, 어떻게 마시나요?',
@@ -78,6 +87,9 @@ export default function HeatHydrationPage() {
           { label: '질병관리청', href: 'https://www.kdca.go.kr' },
           { label: '기상청 날씨누리', href: 'https://www.weather.go.kr' },
           { label: '국가법령정보센터', href: 'https://www.law.go.kr' },
+          { label: 'ACSM 수분 보충 입장문 (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/17277604/' },
+          { label: 'NATA 수분 보충 입장문 (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/28985128/' },
+          { label: '고용노동부', href: 'https://www.moel.go.kr' },
         ]}
       />
 
@@ -88,7 +100,7 @@ export default function HeatHydrationPage() {
 
         {/* 1. 계산 방식 */}
         <section>
-          <h2 style={sectionTitle}>수분 권장량은 어떻게 계산하나요</h2>
+          <h2 className="g-h2">수분 권장량은 어떻게 계산하나요</h2>
           <div style={{
             background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
             padding: '18px 20px', fontFamily: 'var(--font-mono)',
@@ -106,10 +118,45 @@ export default function HeatHydrationPage() {
           </p>
         </section>
 
+        {/* 1-0. 체중·활동별 목표 표 (빌드 시 계산) */}
+        <section>
+          <h2 className="g-h2">체중·상황별 하루 수분 목표 예시</h2>
+          <p className="g-p">
+            아래 표는 위 계산기와 같은 식으로 미리 계산한 하루 마실 양 목표(L)입니다. 기본 수분은 체중 1kg당 {BASE_LOW_ML}~{BASE_HIGH_ML}mL이고, 땀을 흘리는 활동은
+            「시간 × 시간당 발한율」을 더하되 시간당 {fmt1(HOURLY_ABSORB_CAP_L)}L를 넘겨 잡지 않습니다. 폭염경보 이상이면 발한율 범위의 아래쪽을 중간값으로 끌어올려 더 덥고 땀이 많은 쪽을 가정합니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>체중</th>
+                  {SCENARIOS.map(sc => (
+                    <th scope="col" key={sc.label} style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{sc.label}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {HYD_TABLE.map((row, i) => (
+                  <tr key={row.w} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 700 }}>{row.w}kg</th>
+                    {row.cells.map((r, j) => (
+                      <td key={j} style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)' }}>{range(r.totalLo, r.totalHi)}L</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+            ※ 예를 들어 70kg인 사람이 폭염경보 날 4시간 야외 작업을 하면 목표는 약 {range(EX70_HARD.totalLo, EX70_HARD.totalHi)}L이고, 그중 작업 중에는 시간당 {fmt1(EX70_HARD.hourlyHi)}L(15분마다 약 {Math.round(EX70_HARD.hourlyHi * 1000 / 4)}mL)씩 나눠 마십니다.
+            이 작업의 실제 땀은 시간당 1.8L까지 날 수 있어 작업 중에는 다 채울 수 없으므로, 끝난 뒤 줄어든 체중의 약 1.5배를 몇 시간에 걸쳐 보충합니다. 표의 값은 목표일 뿐이니 갈증·소변 색·체중 변화를 함께 확인하세요.
+          </p>
+        </section>
+
         {/* 1-1. 발한율 직접 측정 절차 */}
         <section>
-          <h2 style={sectionTitle}>내 발한율 직접 재보기 — 운동 전후 체중 측정</h2>
-          <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 12 }}>
+          <h2 className="g-h2">내 발한율 직접 재보기 — 운동 전후 체중 측정</h2>
+          <p className="g-p">
             발한율은 개인차가 커서 표준 범위(위 계산기의 0.4~1.8 L/h)만으로는 부족할 수 있습니다. 대회나 한여름 장거리 훈련을 준비한다면 스포츠의학 표준 절차(NATA 2017 공식·코네티컷대 Korey Stringer Institute 측정법)로 <strong>내 값을 직접 재는 것</strong>이 정확합니다.
           </p>
           <div className="tableScroll">
@@ -128,7 +175,7 @@ export default function HeatHydrationPage() {
                   ['③ 1시간 운동', '평소 강도·비슷한 더위에서 운동', '물을 안 마시면 계산이 가장 단순 — 마셨다면 양 기록'],
                   ['④ 운동 후 체중', '땀을 닦고 같은 체중계·같은 조건으로 재측정', '중간에 본 소변량도 기록'],
                   ['⑤ 계산', '발한량(L) = 전 체중 − 후 체중(kg) + 마신 물(L) − 소변량(L)', '체중 1kg 감소 ≈ 수분 1L 손실 · ÷운동 시간 = L/h'],
-                  ['⑥ 적용', '위 계산기 "💦 내 발한율 직접 재보기"에 입력', '다음 활동의 시간당 음용 목표로 사용'],
+                  ['⑥ 적용', '위 계산기 「내 발한율 직접 재보기」에 입력', '다음 활동의 시간당 음용 목표로 사용'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r[0]}</td>
@@ -146,7 +193,7 @@ export default function HeatHydrationPage() {
 
         {/* 2. 폭염 특보 3단계 표 */}
         <section>
-          <h2 style={sectionTitle}>폭염 특보 3단계 (기상청 2026 개편)</h2>
+          <h2 className="g-h2">폭염 특보 3단계 (기상청 2026 개편)</h2>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
@@ -178,8 +225,8 @@ export default function HeatHydrationPage() {
 
         {/* 2-1. 폭염의 법정 기준 (일터) */}
         <section>
-          <h2 style={sectionTitle}>폭염의 공식 기준 — 법·지침 (일하는 사람)</h2>
-          <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 12 }}>
+          <h2 className="g-h2">폭염의 공식 기준 — 법·지침 (일하는 사람)</h2>
+          <p className="g-p">
             2024년 10월 개정된 <strong>산업안전보건법 제39조제1항제7호</strong>(2025-06-01 시행)가 폭염에 장시간 작업할 때 생기는 건강장해를 사업주의 보건조치 의무로 명문화했고, 구체적인 조치는 <strong>2025-07-17 공포·시행</strong>된 산업안전보건기준에 관한 규칙 개정이 정했습니다. 규칙상 &quot;폭염작업&quot;은 <strong>체감온도 31℃ 이상</strong>인 작업장소에서의 장시간 작업이며, 체감온도는 바닥에서 1.2~1.5m 높이에서 측정합니다(배달 등 이동작업은 기상청 발표 체감온도로 대체 가능).
           </p>
           <div className="tableScroll">
@@ -213,10 +260,10 @@ export default function HeatHydrationPage() {
 
         {/* 3. 온열질환 응급 대응 */}
         <section>
-          <h2 style={sectionTitle}>온열질환 신호와 응급 대응</h2>
+          <h2 className="g-h2">온열질환 신호와 응급 대응</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--warning)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: 'var(--warning)', fontWeight: 700, marginBottom: 8 }}>⚠️ 열탈진 (초기)</p>
+              <p style={{ fontSize: 14, color: 'var(--warning)', fontWeight: 700, marginBottom: 8 }}>열탈진 (초기)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>많은 땀·창백·어지럼·메스꺼움</li>
                 <li>두통·근육경련·심한 피로</li>
@@ -226,7 +273,7 @@ export default function HeatHydrationPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--danger)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: 'var(--danger)', fontWeight: 700, marginBottom: 8 }}>🚨 열사병 (응급)</p>
+              <p style={{ fontSize: 14, color: 'var(--danger)', fontWeight: 700, marginBottom: 8 }}>열사병 (응급)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>땀이 안 남·피부 건조·40℃ 이상</li>
                 <li>의식 혼미·경련·쓰러짐</li>
@@ -236,8 +283,10 @@ export default function HeatHydrationPage() {
               </ul>
             </div>
           </div>
-          <div style={{ background: 'color-mix(in srgb, var(--danger) 6%, var(--bg2))', border: '1px solid color-mix(in srgb, var(--danger) 25%, var(--border))', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.75 }}>
-            🚨 의식이 없거나 경련·고열이면 <strong style={{ color: 'var(--danger)' }}>지체 없이 119</strong>. 물을 억지로 먹이면 기도로 넘어갈 수 있으니, 의식이 없으면 마시게 하지 말고 몸을 식히며 구조를 기다리세요.
+          <div style={{ marginTop: 12 }}>
+            <Callout tone="warn">
+              의식이 없거나 경련·고열이면 <strong>지체 없이 119</strong>. 물을 억지로 먹이면 기도로 넘어갈 수 있으니, 의식이 없으면 마시게 하지 말고 몸을 식히며 구조를 기다리세요.
+            </Callout>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 응급조치 기준: 질병관리청 「대상자별 온열질환 예방 매뉴얼」(2025년 7월, 대한응급의학회·대한스포츠의학회 등 감수). 수분 보충이 권장되는 것은 열탈진·열경련처럼 의식이 명료한 경우이며, 열사병은 대응이 다릅니다.
@@ -246,10 +295,10 @@ export default function HeatHydrationPage() {
 
         {/* 4. 수분 vs 전해질 */}
         <section>
-          <h2 style={sectionTitle}>물 vs 이온음료 — 언제 무엇을</h2>
+          <h2 className="g-h2">물 vs 이온음료 — 언제 무엇을</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>💧 물이면 충분</p>
+              <p style={{ fontSize: 14, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 8 }}>물이면 충분</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>일상 생활·짧은 외출</li>
                 <li>1시간 이내 가벼운 운동</li>
@@ -257,7 +306,7 @@ export default function HeatHydrationPage() {
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cat-health)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 8 }}>🧂 전해질 고려</p>
+              <p style={{ fontSize: 14, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 8 }}>전해질 고려</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>1시간 이상 다량 발한 운동·작업</li>
                 <li>마라톤·등산·한여름 야외노동</li>
@@ -268,9 +317,11 @@ export default function HeatHydrationPage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 감염성 설사 치료용 경구수액(ORS)은 조성이 달라 폭염 일상 보충용으로 권장되지 않습니다. 당뇨·신장질환이 있으면 이온음료의 당분·나트륨·칼륨도 주의가 필요하니 의료진과 상의하세요.
           </p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
-            ☕ <strong style={{ color: 'var(--text)' }}>카페인·알코올은?</strong> 질병관리청 국가건강정보포털은 폭염 시 &quot;카페인이나 알코올을 함유한 음료수는 탈수를 증가시키기 때문에 적합하지 않다&quot;고 안내하고, 온열질환 예방 매뉴얼도 심·뇌혈관질환자의 운동 전후 술·카페인 음료와 농작업 중 막걸리·맥주를 피하라고 명시합니다. 스포츠의학 지침(NATA 2017)은 운동 중 적당량(체중 1kg당 약 3mg) 카페인이 이뇨를 유발하지는 않는다고 평가하지만, 폭염 야외활동의 기본 음료는 물·이온음료입니다.
-          </p>
+          <div style={{ marginTop: 12 }}>
+            <Callout tone="note" title="카페인·알코올은?">
+              질병관리청 국가건강정보포털은 폭염 시 &quot;카페인이나 알코올을 함유한 음료수는 탈수를 증가시키기 때문에 적합하지 않다&quot;고 안내하고, 온열질환 예방 매뉴얼도 심·뇌혈관질환자의 운동 전후 술·카페인 음료와 농작업 중 막걸리·맥주를 피하라고 명시합니다. 스포츠의학 지침(NATA 2017)은 운동 중 적당량(체중 1kg당 약 3mg) 카페인이 이뇨를 유발하지는 않는다고 평가하지만, 폭염 야외활동의 기본 음료는 물·이온음료입니다.
+            </Callout>
+          </div>
         </section>
 
         {/* 5. FAQ */}
@@ -288,7 +339,7 @@ export default function HeatHydrationPage() {
 
         {/* 6. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
               <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
