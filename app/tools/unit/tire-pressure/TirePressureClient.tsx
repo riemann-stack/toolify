@@ -140,12 +140,12 @@ function ConvertTab() {
     }))
   }, [basePsi])
 
-  function handleCopy(u: PressureUnit, val: number) {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
+  async function handleCopy(u: PressureUnit, val: number) {
+    try {
+      await navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
       setCopied(u)
       setTimeout(() => setCopied(null), 1500)
-    }
+    } catch { /* 클립보드 권한 거부 등 — 복사됨 표시 안 함 */ }
   }
 
   function applyPreset(p: typeof PRESETS[number]) {
@@ -706,7 +706,8 @@ function WearTab() {
     const year = 2000 + parseInt(dotDigits.slice(2), 10)
     // 미래 연도·올해의 미래 주차(오입력)는 판정하지 않음
     const isFuture = year > nowYear || (year === nowYear && week > nowWeek + 1)
-    if (week >= 1 && week <= 53 && !isFuture) dotInfo = { week, year, age: nowYear - year }
+    // 경과연수는 주차까지 반영한 소수 연수 (연도 차이만 쓰면 최대 1년 가까이 과대·과소)
+    if (week >= 1 && week <= 53 && !isFuture) dotInfo = { week, year, age: Math.max(0, (nowYear - year) + (nowWeek - week) / 52) }
   }
 
   const kmStatus = kmN >= 50000 ? '교체 권장 (5만 km 초과)' : kmN >= 30000 ? '점검 강화' : '양호'
@@ -766,7 +767,7 @@ function WearTab() {
         </div>
         {dotInfo ? (
           <div className={`${styles.statusCard} ${dotInfo.age >= 10 ? styles.statusAlert : dotInfo.age >= 6 ? styles.statusWarn : styles.statusOk}`} style={{ marginTop: 12 }}>
-            <div className={styles.statusTitle}>{dotInfo.year}년 {dotInfo.week}주차 제조 · 약 {dotInfo.age}년 경과</div>
+            <div className={styles.statusTitle}>{dotInfo.year}년 {dotInfo.week}주차 제조 · 약 {(Math.floor(dotInfo.age * 10) / 10).toFixed(1)}년 경과</div>
             <div className={styles.statusDesc}>
               {dotInfo.age >= 10 ? '🚨 제조 10년 이상 — 마모와 무관하게 즉시 교체 권장.'
                 : dotInfo.age >= 6 ? '🔶 제조 6년 이상 — 고무 경화 진행, 교체 검토.'

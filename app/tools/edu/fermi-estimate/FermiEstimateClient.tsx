@@ -96,7 +96,7 @@ const TEMPLATES: Template[] = [
   { id: 'ev-charging', category: 'environment', icon: '🔌', title: '한국 전기차 하루 충전 전력량', description: '전체 전기차 충전량 추정', resultUnit: 'MWh/일',
     formula: 'A * B * C / 1000', expectedRange: '약 3,000 ~ 8,000 MWh',
     variables: [
-      { name: '전기차 등록 대수', value: 600_000, unit: '대', source: '2024 추정', sliderMin: 500_000, sliderMax: 1_000_000 },
+      { name: '전기차 등록 대수', value: 1_100_000, unit: '대', source: '국토교통부 2026년 6월 약 110만 대', sliderMin: 500_000, sliderMax: 1_500_000 },
       { name: '하루 평균 주행 거리 (km)', value: 35, unit: 'km', sliderMin: 20, sliderMax: 60 },
       { name: '전비 (kWh/km)', value: 0.18, unit: 'kWh/km', sliderMin: 0.15, sliderMax: 0.25 },
     ],
@@ -151,13 +151,14 @@ const TEMPLATES: Template[] = [
   { id: 'windows-korea', category: 'education', icon: '🪟', title: '한국 창문 총 개수', description: '주거+상업 시설', resultUnit: '개',
     formula: 'A * B * (1 + C/100)', expectedRange: '약 1.5억 ~ 2.5억 개',
     variables: [
-      { name: '한국 가구 수', value: 21_000_000, unit: '가구' },
+      { name: '한국 가구 수', value: 22_500_000, unit: '가구', source: '2025 인구주택총조사 일반가구 약 2,250만' },
       { name: '가구당 평균 창문 수', value: 6, unit: '개', sliderMin: 3, sliderMax: 10 },
       { name: '상업 시설 추가 비율', value: 50, unit: '%', source: '주거 외 추가', sliderMin: 30, sliderMax: 100 },
     ],
   },
   { id: 'sand-grains', category: 'education', icon: '🏖️', title: '지구 모든 해변의 모래알 개수', description: '천문학적 숫자도 추정 가능', resultUnit: '알',
-    formula: 'A * 1e10 * B * C', expectedRange: '약 7.5×10²² 개',
+    // km² → cm²(×1e10), 깊이 m → cm(×100) 후 cm³당 개수를 곱한다
+    formula: 'A * 1e10 * (B * 100) * C', expectedRange: '약 7.5×10²² 개',
     variables: [
       { name: '지구 해변 면적 (km²)', value: 500_000, unit: 'km²', sliderMin: 100_000, sliderMax: 1_000_000 },
       { name: '해변 평균 모래 깊이 (m)', value: 5, unit: 'm', sliderMin: 1, sliderMax: 20 },
@@ -228,6 +229,24 @@ type LibraryItem = {
 }
 const LIB_KEY = 'youtil-fermi-estimates-v1'
 
+function isVariable(v: unknown): v is Variable {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  const optNum = (x: unknown) => x === undefined || (typeof x === 'number' && Number.isFinite(x))
+  return typeof o.id === 'string' && typeof o.name === 'string' && typeof o.unit === 'string'
+    && typeof o.value === 'number' && Number.isFinite(o.value)
+    && optNum(o.sliderMin) && optNum(o.sliderMax)
+    && (o.source === undefined || typeof o.source === 'string')
+}
+function isLibraryItem(x: unknown): x is LibraryItem {
+  if (!x || typeof x !== 'object') return false
+  const o = x as Record<string, unknown>
+  return typeof o.id === 'string' && typeof o.title === 'string' && typeof o.question === 'string'
+    && typeof o.formula === 'string' && typeof o.resultUnit === 'string' && typeof o.savedAt === 'string'
+    && typeof o.result === 'number'
+    && Array.isArray(o.variables) && o.variables.every(isVariable)
+}
+
 // ─────────────────────────────────────────────
 // 컴포넌트
 // ─────────────────────────────────────────────
@@ -252,9 +271,12 @@ export default function FermiEstimateClient() {
 
   // localStorage 로드
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(LIB_KEY)
-      if (raw) setLibrary(JSON.parse(raw))
+      if (!raw) return
+      const parsed: unknown = JSON.parse(raw)
+      if (Array.isArray(parsed)) setLibrary(parsed.filter(isLibraryItem).slice(0, 30))
     } catch {}
   }, [])
   useEffect(() => {
@@ -293,19 +315,25 @@ export default function FermiEstimateClient() {
   }, [vars, formula])
 
   // 시나리오 (낮음/기준/높음)
+  // 변수마다 범위 양 끝값을 하나씩 넣어 보고(나머지는 기준값) 결과를 낮추는 쪽을 보수적,
+  // 높이는 쪽을 낙관적에 배정한다. 모든 변수에 최소/최대를 일괄 대입하면 나눗셈 분모(A / B의 B)
+  // 에서 보수적 > 낙관적으로 뒤집힌다.
   const scenarios = useMemo(() => {
     if (vars.length === 0 || baseResult === null) return null
-    const lowVars = vars.map(v => ({
-      ...v,
-      value: v.sliderMin !== undefined ? v.sliderMin : v.value * 0.7,
-    }))
-    const highVars = vars.map(v => ({
-      ...v,
-      value: v.sliderMax !== undefined ? v.sliderMax : v.value * 1.3,
-    }))
-    const low = safeEvaluate(formula, lowVars)
-    const high = safeEvaluate(formula, highVars)
-    return { low, base: baseResult, high }
+    const lowVars: Variable[] = []
+    const highVars: Variable[] = []
+    for (const v of vars) {
+      const lo = v.sliderMin !== undefined ? v.sliderMin : v.value * 0.7
+      const hi = v.sliderMax !== undefined ? v.sliderMax : v.value * 1.3
+      const rLo = safeEvaluate(formula, vars.map(x => x.id === v.id ? { ...x, value: lo } : x))
+      const rHi = safeEvaluate(formula, vars.map(x => x.id === v.id ? { ...x, value: hi } : x))
+      const flip = Number.isFinite(rLo) && Number.isFinite(rHi) && rLo > rHi
+      lowVars.push({ ...v, value: flip ? hi : lo })
+      highVars.push({ ...v, value: flip ? lo : hi })
+    }
+    const r1 = safeEvaluate(formula, lowVars)
+    const r2 = safeEvaluate(formula, highVars)
+    return { low: Math.min(r1, r2), base: baseResult, high: Math.max(r1, r2) }
   }, [vars, formula, baseResult])
 
   // 민감도 (각 변수 +20% 시 결과 변화율 절댓값)
@@ -357,7 +385,7 @@ export default function FermiEstimateClient() {
 
   // 시나리오 차이
   const scenarioRatio = useMemo(() => {
-    if (!scenarios || scenarios.low === 0) return null
+    if (!scenarios || !(scenarios.low > 0) || !Number.isFinite(scenarios.high)) return null
     return scenarios.high / scenarios.low
   }, [scenarios])
 
@@ -385,7 +413,7 @@ export default function FermiEstimateClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -446,6 +474,7 @@ export default function FermiEstimateClient() {
                   <input
                     className={s.varNameInput}
                     type="text"
+                    aria-label={`변수 ${letter} 이름`}
                     value={v.name}
                     onChange={e => updateVar(v.id, { name: e.target.value })}
                     placeholder="변수 이름"
@@ -458,12 +487,14 @@ export default function FermiEstimateClient() {
                     type="number"
                     inputMode="decimal"
                     step="any"
+                    aria-label={`변수 ${letter} 값`}
                     value={v.value}
                     onChange={e => updateVar(v.id, { value: parseFloat(e.target.value) || 0 })}
                   />
                   <input
                     className={s.varUnitInput}
                     type="text"
+                    aria-label={`변수 ${letter} 단위`}
                     value={v.unit}
                     onChange={e => updateVar(v.id, { unit: e.target.value })}
                     placeholder="단위"
@@ -473,6 +504,7 @@ export default function FermiEstimateClient() {
                   <div className={s.varSliderRow}>
                     <input
                       type="range"
+                      aria-label={`변수 ${letter} 조절`}
                       min={min}
                       max={max}
                       step={(max - min) / 100}
@@ -504,6 +536,7 @@ export default function FermiEstimateClient() {
         <div className={s.formulaCard}>
           <input
             type="text"
+            aria-label="공식"
             value={formula}
             onChange={e => setFormula(e.target.value)}
             placeholder="A * B * (C/100)"
@@ -533,10 +566,10 @@ export default function FermiEstimateClient() {
       </Disclaimer>
 
       <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'templates' ? s.tabActive : ''}`} onClick={() => setTab('templates')}>템플릿 시작</button>
-        <button className={`${s.tabBtn} ${tab === 'free'      ? s.tabActive : ''}`} onClick={() => setTab('free')}>자유 추정</button>
-        <button className={`${s.tabBtn} ${tab === 'scenarios' ? s.tabActive : ''}`} onClick={() => setTab('scenarios')}>시나리오 비교</button>
-        <button className={`${s.tabBtn} ${tab === 'library'   ? s.tabActive : ''}`} onClick={() => setTab('library')}>추정 라이브러리</button>
+        <button type="button" aria-pressed={tab === 'templates'} className={`${s.tabBtn} ${tab === 'templates' ? s.tabActive : ''}`} onClick={() => setTab('templates')}>템플릿 시작</button>
+        <button type="button" aria-pressed={tab === 'free'}      className={`${s.tabBtn} ${tab === 'free'      ? s.tabActive : ''}`} onClick={() => setTab('free')}>자유 추정</button>
+        <button type="button" aria-pressed={tab === 'scenarios'} className={`${s.tabBtn} ${tab === 'scenarios' ? s.tabActive : ''}`} onClick={() => setTab('scenarios')}>시나리오 비교</button>
+        <button type="button" aria-pressed={tab === 'library'}   className={`${s.tabBtn} ${tab === 'library'   ? s.tabActive : ''}`} onClick={() => setTab('library')}>추정 라이브러리</button>
       </div>
 
       {/* ─── TAB 1: 템플릿 ─── */}
@@ -602,6 +635,7 @@ export default function FermiEstimateClient() {
             <input
               className={s.questionInput}
               type="text"
+              aria-label="추정 질문"
               value={question}
               onChange={e => setQuestion(e.target.value)}
               placeholder="예: 한국 전국에 있는 자판기 개수"
@@ -614,6 +648,7 @@ export default function FermiEstimateClient() {
             <input
               className={s.varUnitInput}
               type="text"
+              aria-label="결과 단위"
               value={resultUnit}
               onChange={e => setResultUnit(e.target.value)}
               placeholder="결과 단위"
@@ -665,7 +700,7 @@ export default function FermiEstimateClient() {
                     <span className={s.scenarioValue}>약 {formatLargeNumber(scenarios.low).value}</span>
                     <span className={s.scenarioUnit}>{formatLargeNumber(scenarios.low).unit}{resultUnit && ` ${resultUnit}`}</span>
                   </div>
-                  <p className={s.scenarioDesc}>변수 최소값 적용</p>
+                  <p className={s.scenarioDesc}>결과를 낮추는 쪽 범위값</p>
                 </div>
                 <div className={`${s.scenarioCard} ${s.scenarioBase}`}>
                   <p className={s.scenarioLabel}>🟢 기준</p>
@@ -683,7 +718,7 @@ export default function FermiEstimateClient() {
                     <span className={s.scenarioValue}>약 {formatLargeNumber(scenarios.high).value}</span>
                     <span className={s.scenarioUnit}>{formatLargeNumber(scenarios.high).unit}{resultUnit && ` ${resultUnit}`}</span>
                   </div>
-                  <p className={s.scenarioDesc}>변수 최대값 적용</p>
+                  <p className={s.scenarioDesc}>결과를 높이는 쪽 범위값</p>
                 </div>
               </div>
 
@@ -767,6 +802,7 @@ export default function FermiEstimateClient() {
                   <input
                     className={s.questionInput}
                     type="text"
+                    aria-label="저장할 추정 제목"
                     value={saveTitle}
                     onChange={e => setSaveTitle(e.target.value)}
                     placeholder={question || '추정 제목'}

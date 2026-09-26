@@ -2,7 +2,8 @@ import Link from 'next/link'
 import SizeClient from './SizeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import { SHOE_M, SHOE_F } from './sizeData'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -14,15 +15,15 @@ export const metadata = buildMetadata({
 
 const FAQ_LD = [
               { q: '미국 신발 사이즈 9.5는 한국으로 몇 mm인가요?',
-                a: '미국 남성 기준 US 9.5는 한국 270mm에 해당합니다. 여성 기준은 US 9.5가 한국 265mm 정도입니다. 남성과 여성 기준이 다르므로 구매 시 성별 구분을 확인하세요.' },
+                a: '나이키 코리아 사이즈표 기준으로 남성 US 9.5는 한국 275mm, 여성 US 9.5는 265mm입니다. 같은 숫자라도 남성과 여성 기준이 달라 약 10mm 차이가 나므로 구매 시 성별 구분을 꼭 확인하세요.' },
               { q: '유럽 사이즈 EU 42는 한국 몇 mm인가요?',
-                a: '남성 기준 EU 42는 한국 260mm(US 8.5)에 해당합니다. 유럽 사이즈는 브랜드에 따라 0.5~1 사이즈 정도 차이가 있을 수 있으므로 해당 브랜드의 공식 사이즈 가이드를 함께 확인하세요.' },
+                a: '나이키 남성 기준 EU 42는 한국 265mm(US 8.5)에 해당합니다. 유럽 사이즈는 브랜드에 따라 0.5~1 사이즈 정도 차이가 있을 수 있으므로 해당 브랜드의 공식 사이즈 가이드를 함께 확인하세요.' },
               { q: '아마존에서 US M 사이즈를 주문하면 한국 M이랑 같나요?',
                 a: '미국 의류 M 사이즈는 한국 L(100) 사이즈와 비슷한 경우가 많습니다. 미국 브랜드는 한국보다 여유롭게 나오는 경향이라 한 사이즈 작게, 반대로 H&M·자라 같은 유럽 패스트패션은 작게 나오는 경향이라 한 사이즈 크게 주문하는 경우가 많습니다. 방향이 브랜드 성향에 따라 반대이므로, 본문의 브랜드별 사이즈 특징 표와 해당 상품의 실제 측정값(measurements)을 함께 확인하는 것이 가장 안전합니다.' },
               { q: '반지 사이즈를 모를 때 어떻게 측정하나요?',
                 a: '종이를 손가락에 감아 표시 후 자로 길이(둘레)를 측정합니다. 둘레가 50mm면 한국 11호, US 약 5.5 정도입니다(US는 내경 기준 ISO 표준). 기존 반지의 안쪽 지름을 자로 재는 방법도 정확합니다 — 안지름 16mm = 한국 11호. 손가락이 부어 있을 수 있어 저녁 시간대 측정을 권장합니다.' },
               { q: '미국 모자 사이즈 7과 7 1/4는 한국으로?',
-                a: '미국 모자 7 = 한국 56cm = 한국 M 사이즈, 7 1/4 = 한국 57cm = 한국 M/L 사이즈입니다. 미국은 인치 단위(머리 둘레 ÷ π ≈ 3.14)를 사용하기 때문에 7인치 = 약 17.8cm × π = 56cm로 환산됩니다.' },
+                a: '미국 모자 7은 머리 둘레 약 56cm(한국 M), 7 1/8은 약 57cm(M/L), 7 1/4는 약 58cm(L)입니다. 미국 모자 사이즈는 머리 둘레를 π(≈3.14)로 나눈 인치 값이라, 7인치 = 약 17.8cm × π ≈ 56cm로 환산됩니다.' },
               { q: '미국 브라 사이즈 34B는 한국 몇인가요?',
                 a: '미국 34B = 한국 75B입니다. 미국은 밑가슴 인치 + 컵, 한국은 밑가슴 cm + 컵으로 표기합니다. 75B = 밑가슴 75cm + B컵을 의미합니다. 컵 사이즈는 미국 DD = 한국 E처럼 일부 다르니 변환표를 확인하세요.' },
               { q: '청바지 인치 사이즈는 어떻게 변환하나요?',
@@ -143,12 +144,12 @@ export default function SizePage() {
               <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>👟 신발 브랜드</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 8 }}>
                 {[
-                  { n: '나이키',    c: '#D97706', d: 'US 표준보다 살짝 큰 편 — 0.5 작게 권장' },
-                  { n: '아디다스',  c: '#0891B2', d: 'US 표준 (정사이즈)' },
+                  { n: '나이키',    c: '#D97706', d: '위 변환표의 기준 브랜드 — 모델마다 발볼 차이가 있어 후기 확인 권장' },
+                  { n: '아디다스',  c: '#0891B2', d: 'mm·US는 나이키와 같고 UK 표기만 0.5 큰 편 (250mm = UK 6.5)' },
                   { n: '컨버스',    c: '#EA580C', d: '약 0.5 큰 편 — 0.5 작게 권장' },
-                  { n: '닥터마틴',  c: '#DC2626', d: '영국 사이즈 — 한국보다 1 작게' },
+                  { n: '닥터마틴',  c: '#DC2626', d: 'UK 사이즈 표기 — 남성 US보다 숫자가 1 작음 (US 9 = UK 8)' },
                   { n: '뉴발란스',  c: '#059669', d: 'US 표준, 와이드(EE) 모델 별도' },
-                  { n: '버켄스탁', c: '#B885DA', d: 'EU 사이즈 — 한국보다 1~2 작게 권장' },
+                  { n: '버켄스탁', c: '#B885DA', d: 'EU 사이즈 표기 — 레귤러·내로우 폭을 따로 고름' },
                 ].map((b, i) => (
                   <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.c}33`, borderLeft: `3px solid ${b.c}`, borderRadius: 8, padding: '10px 12px' }}>
                     <p style={{ fontSize: 12, color: b.c, fontWeight: 700, marginBottom: 4 }}>{b.n}</p>
@@ -253,7 +254,7 @@ export default function SizePage() {
             신발 사이즈 핵심 변환표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
-            위 변환기와 동일한 기준값입니다. 같은 mm라도 남성·여성 US 표기가 다르다는 점에 주의하세요 — 예: 240mm는 남성 US 6.5, 여성 US 7입니다.
+            위 변환기와 동일한 기준값(나이키 코리아 사이즈표)입니다. 같은 mm라도 남성·여성 US 표기가 다르다는 점에 주의하세요 — 예: 240mm는 남성 US 6, 여성 US 7입니다.
           </p>
 
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👨 남성 신발 (240~290mm)</h3>
@@ -267,19 +268,7 @@ export default function SizePage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { kr: 240, us: '6.5',  uk: '6',    eu: '39'   },
-                  { kr: 245, us: '7',    uk: '6.5',  eu: '39.5' },
-                  { kr: 250, us: '7.5',  uk: '7',    eu: '40'   },
-                  { kr: 255, us: '8',    uk: '7.5',  eu: '41'   },
-                  { kr: 260, us: '8.5',  uk: '8',    eu: '42'   },
-                  { kr: 265, us: '9',    uk: '8.5',  eu: '42.5' },
-                  { kr: 270, us: '9.5',  uk: '9',    eu: '43'   },
-                  { kr: 275, us: '10',   uk: '9.5',  eu: '44'   },
-                  { kr: 280, us: '10.5', uk: '10',   eu: '44.5' },
-                  { kr: 285, us: '11',   uk: '10.5', eu: '45'   },
-                  { kr: 290, us: '11.5', uk: '11',   eu: '46'   },
-                ].map((r, i) => (
+                {SHOE_M.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.us}</td>
@@ -291,7 +280,7 @@ export default function SizePage() {
             </table>
           </div>
 
-          <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👩 여성 신발 (220~255mm)</h3>
+          <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👩 여성 신발 (220~265mm)</h3>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 400 }}>
               <thead>
@@ -302,16 +291,7 @@ export default function SizePage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { kr: 220, us: '5',   uk: '2.5', eu: '35'   },
-                  { kr: 225, us: '5.5', uk: '3',   eu: '35.5' },
-                  { kr: 230, us: '6',   uk: '3.5', eu: '36'   },
-                  { kr: 235, us: '6.5', uk: '4',   eu: '37'   },
-                  { kr: 240, us: '7',   uk: '4.5', eu: '37.5' },
-                  { kr: 245, us: '7.5', uk: '5',   eu: '38'   },
-                  { kr: 250, us: '8',   uk: '5.5', eu: '38.5' },
-                  { kr: 255, us: '8.5', uk: '6',   eu: '39'   },
-                ].map((r, i) => (
+                {SHOE_F.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.us}</td>
@@ -434,20 +414,7 @@ export default function SizePage() {
 
         {/* ── 9. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 10. 관련 도구 ── */}

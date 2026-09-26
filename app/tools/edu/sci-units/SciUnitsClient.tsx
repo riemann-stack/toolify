@@ -57,9 +57,13 @@ function NotationTab() {
   const eng = useMemo(() => (Number.isFinite(value) ? toEngineering(value) : null), [value])
   const pre = useMemo(() => (Number.isFinite(value) ? toPrefix(value) : null), [value])
 
-  const copy = (key: string, text: string) => {
-    navigator.clipboard?.writeText(text)
-    setCopied(key); setTimeout(() => setCopied(null), 1200)
+  const copy = async (key: string, text: string) => {
+    // 복사가 실제로 성공했을 때만 ✓ 표시 (권한 거부·미지원 환경에서 거짓 성공 표시 방지)
+    try {
+      if (!navigator.clipboard) return
+      await navigator.clipboard.writeText(text)
+      setCopied(key); setTimeout(() => setCopied(null), 1500)
+    } catch {}
   }
 
   const rows = Number.isFinite(value) ? [
@@ -74,7 +78,7 @@ function NotationTab() {
       <div className={s.card}>
         <div className={s.cardLabel}><span>값 입력</span><span className={s.cardHint}>가수 × 10ⁿ (접두어)</span></div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" value={mantissaStr}
+          <input className={s.numInput} type="number" inputMode="decimal" aria-label="가수 (접두어 앞 숫자)" value={mantissaStr}
             onChange={e => setMantissaStr(e.target.value)} placeholder="1.5" />
           <select className={s.selUnit} value={prefixExp} onChange={e => setPrefixExp(Number(e.target.value))} aria-label="접두어">
             {SI_PREFIXES.map(p => (
@@ -87,9 +91,9 @@ function NotationTab() {
       {rows.length > 0 ? (
         <div className={s.card}>
           <div className={s.cardLabel}><span>변환 결과</span><span className={s.cardHint}>탭하면 복사</span></div>
-          <div className={s.resGrid}>
+          <div className={s.resGrid} role="status">
             {rows.map(r => (
-              <button key={r.key} className={s.resRow} onClick={() => copy(r.key, r.copyText)}>
+              <button key={r.key} type="button" className={s.resRow} onClick={() => copy(r.key, r.copyText)}>
                 <span className={s.resName}>{r.name}</span>
                 <span className={s.resVal}>{r.display}</span>
                 <span className={s.resCopy}>{copied === r.key ? '✓' : '복사'}</span>
@@ -136,7 +140,7 @@ function UnitsTab() {
           ))}
         </div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" value={valStr}
+          <input className={s.numInput} type="number" inputMode="decimal" aria-label="변환할 값" value={valStr}
             onChange={e => setValStr(e.target.value)} placeholder="1" />
           <select className={s.selUnit} value={fromId} onChange={e => setFromId(e.target.value)} aria-label="기준 단위">
             {group.units.map(u => (
@@ -157,7 +161,7 @@ function UnitsTab() {
               const v = baseValue / u.toBase
               const isFrom = u.id === fromUnit.id
               return (
-                <button key={u.id} className={`${s.unitCell} ${isFrom ? s.unitCellActive : ''}`}
+                <button key={u.id} type="button" className={`${s.unitCell} ${isFrom ? s.unitCellActive : ''}`}
                   onClick={() => { setFromId(u.id); setValStr(fmtSig(v)) }}>
                   <span className={s.unitCellName}>{u.symbol}<small>{u.name}</small></span>
                   <span className={s.unitCellVal}>{fmtPlain(v)}</span>

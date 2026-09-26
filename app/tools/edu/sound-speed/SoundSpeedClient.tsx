@@ -6,8 +6,9 @@ import s from './sound-speed.module.css'
 import {
   LIGHT_SPEED, calcSoundSpeed, fmtDist, fmtTime, THUNDER_WARNING,
   COMMON_DISTANCES, VEHICLE_SPEEDS, MACH_ROW_INDEX, MEDIUM_SPEEDS,
-  ABSORPTION, ROOM_PRESETS, calcEcho, calcRT60,
+  ROOM_PRESETS, calcEcho, calcRT60,
   DIST_SLIDER_MAX, DIST_MAX_M,
+  WALL_LABEL, FLOOR_LABEL, CEIL_LABEL,
   type WallMat, type FloorMat, type CeilMat,
 } from './soundData'
 
@@ -146,7 +147,7 @@ export default function SoundSpeedClient() {
         text = [
           `[잔향 시간 RT60]`,
           `공간: ${roomW} × ${roomD} × ${roomH}m (부피 ${rt60Result.V.toFixed(0)}m³)`,
-          `벽: ${wallMat} · 바닥: ${floorMat} · 천장: ${ceilMat}`,
+          `벽: ${WALL_LABEL[wallMat]} · 바닥: ${FLOOR_LABEL[floorMat]} · 천장: ${CEIL_LABEL[ceilMat]}`,
           `RT60: ${rt60Result.rt60.toFixed(2)}초`,
           ``,
           `https://youtil.kr/tools/edu/sound-speed`,
@@ -508,7 +509,7 @@ export default function SoundSpeedClient() {
               <span className={s.vsBarValue}>{fmtTime(1000 / soundSpeed)}</span>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, textAlign: 'center' }}>
-              ※ 막대는 시각화용. 실제 빛은 소리보다 약 87만 배 빠름.
+              ※ 막대는 시각화용. 실제 빛은 지금 온도의 소리보다 약 {Math.round(arrivalResult.ratio / 10_000).toLocaleString()}만 배 빠름.
             </p>
           </div>
 
@@ -736,7 +737,7 @@ export default function SoundSpeedClient() {
                     <strong>{p.rt.toFixed(1)}초</strong>
                   </div>
                 ))}
-                <p style={{ fontSize: 11.5, color: 'var(--muted-strong)', marginTop: 8, lineHeight: 1.7 }}>
+                <p style={{ fontSize: 12, color: 'var(--muted-strong)', marginTop: 8, lineHeight: 1.7 }}>
                   ※ 실측 통계 기반 전형값. 이 계산기는 표면 흡음만 반영한 단순 모델이라
                   가구·청중·공기 흡음이 있는 실제 공간과 다를 수 있습니다.
                   프리셋의 재질은 전형 잔향을 재현하는 등가 조합입니다.

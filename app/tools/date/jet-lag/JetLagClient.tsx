@@ -79,10 +79,12 @@ function getOffsetAt(tz: string, at: Date): number {
   }
 }
 
-/** 출발일 'YYYY-MM-DD' → 그 날짜의 정오 UTC (양 반구 모두 해당 날짜에 속하고, 새벽 2~3시 DST 전환 이후) */
+/** 출발일 'YYYY-MM-DD' → 그 날짜의 정오 UTC (양 반구 모두 해당 날짜에 속하고, 새벽 2~3시 DST 전환 이후).
+ *  빈 값(SSG 렌더·마운트 전)은 new Date() 대신 고정 기준일(1월 중순, 북반구 표준시)을 쓴다 —
+ *  빌드 시점과 방문 시점의 서머타임이 다르면 하이드레이션 불일치가 나므로. 마운트 후엔 오늘 날짜가 주입된다. */
 function departRefDate(dateStr: string): Date {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr)
-  if (!m) return new Date()
+  if (!m) return new Date(Date.UTC(2026, 0, 15, 12))
   return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12))
 }
 
@@ -135,6 +137,7 @@ export default function JetLagClient() {
   const [flightHours, setFlightHours] = useState(14)
 
   // SSG 빌드 시점 날짜 고정 방지 — 마운트 후 오늘 날짜 주입
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setDepartDate(todayStr()) }, [])
 
   const from = CITIES[fromIdx]
@@ -273,7 +276,7 @@ export default function JetLagClient() {
       </div>
 
       {/* ─── 시차 히어로 ─── */}
-      <div className={`${s.hero} ${direction === 'east' ? s.heroEast : direction === 'west' ? s.heroWest : s.heroNone}`}>
+      <div className={`${s.hero} ${direction === 'east' ? s.heroEast : direction === 'west' ? s.heroWest : s.heroNone}`} role="status">
         <p className={s.heroLead}>
           {from.name} → {to.name}
         </p>

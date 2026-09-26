@@ -34,7 +34,7 @@ const FAQ_LD = [
   },
   {
     q: '내신 평균은 어떻게 계산하나요?',
-    a: '과목별 등급에 <strong>이수단위(학점)를 가중치로 곱해 평균</strong>을 냅니다. 예를 들어 국어(4단위) 1등급, 수학(4단위) 3등급, 영어(3단위) 2등급이면 (1×4 + 3×4 + 2×3) ÷ (4+4+3) = 22 ÷ 11 = <strong>2.0등급</strong>입니다. 단위 수가 큰 주요 과목이 평균에 더 크게 반영됩니다. 위 계산기에 과목을 추가해 자동으로 확인할 수 있습니다.',
+    a: '과목별 등급에 <strong>이수단위(학점)를 가중치로 곱해 평균</strong>을 냅니다. 예를 들어 국어(4학점) 1등급, 수학(4학점) 3등급, 영어(3학점) 2등급이면 (1×4 + 3×4 + 2×3) ÷ (4+4+3) = 22 ÷ 11 = <strong>2.0등급</strong>입니다. 학점 수가 큰 주요 과목이 평균에 더 크게 반영됩니다. 위 계산기에 과목을 추가해 자동으로 확인할 수 있습니다.',
   },
   {
     q: '9등급으로 환산하면 몇 등급인가요?',
@@ -46,7 +46,7 @@ const FAQ_LD = [
   },
   {
     q: '2028 대입에는 어떻게 반영되나요?',
-    a: '2028학년도 대입(2025년 고1 입학생, 즉 2026년 현재 고2가 치르는 수능)부터 5등급제 내신과 통합·융합형 수능이 적용됩니다. 대학마다 <strong>내신 등급 반영 방식·과목별 가중치</strong>가 달라 아직 세부안이 확정·발표되는 중입니다. 대교협 「2028학년도 대학입학전형기본사항」에도 <strong>공통 환산 기준은 없고</strong> 학생부 활용은 “대학 자율”로만 규정돼 있습니다. 이 계산기의 가중 평균은 <strong>단위 수 기준의 일반적 산출</strong>로, 실제 대학별 환산점수와는 다를 수 있으니 지원 대학의 모집요강을 확인하세요.',
+    a: '2028학년도 대입(2025년 고1 입학생, 즉 2026년 현재 고2가 치르는 수능)부터 5등급제 내신과 통합·융합형 수능이 적용됩니다. 대학마다 <strong>내신 등급 반영 방식·과목별 가중치</strong>가 달라 아직 세부안이 확정·발표되는 중입니다. 대교협 「2028학년도 대학입학전형기본사항」에도 <strong>공통 환산 기준은 없고</strong> 학생부 활용은 “대학 자율”로만 규정돼 있습니다. 이 계산기의 가중 평균은 <strong>학점 수 기준의 일반적 산출</strong>로, 실제 대학별 환산점수와는 다를 수 있으니 지원 대학의 모집요강을 확인하세요.',
   },
 ]
 
@@ -69,7 +69,7 @@ export default function Nesin5GradePage() {
         <ToolIconBadge catId="edu" />내신 5등급제 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
-        2025 고1부터 적용되는 <strong style={{ color: 'var(--text)' }}>내신 5등급 가중 평균</strong> + 구 9등급 환산. 석차·재적수·이수단위만 입력.
+        2025 고1부터 적용되는 <strong style={{ color: 'var(--text)' }}>내신 5등급 가중 평균</strong> + 구 9등급 환산. 석차·재적수·학점(구 이수단위)만 입력.
       </p>
 
       <UpdatedMeta
@@ -96,10 +96,10 @@ export default function Nesin5GradePage() {
           }}>
             <div><span style={{ color: 'var(--muted)' }}>석차 백분율</span> = 석차 ÷ 재적수 × 100</div>
             <div><span style={{ color: 'var(--muted)' }}>등급</span> = 백분율이 속한 누적 구간</div>
-            <div><span style={{ color: 'var(--muted)' }}>평균 내신</span> = Σ(등급 × 이수단위) ÷ Σ이수단위</div>
+            <div><span style={{ color: 'var(--muted)' }}>평균 내신</span> = Σ(등급 × 학점) ÷ Σ학점</div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 국어 4단위 1등급, 수학 4단위 3등급, 영어 3단위 2등급<br />
+            📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 국어 4학점 1등급, 수학 4학점 3등급, 영어 3학점 2등급<br />
             • (1×4 + 3×4 + 2×3) ÷ (4+4+3) = 22 ÷ 11 = <strong style={{ color: 'var(--accent)' }}>2.0등급</strong>
           </div>
         </section>

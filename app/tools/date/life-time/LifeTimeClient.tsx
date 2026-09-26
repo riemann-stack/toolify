@@ -100,12 +100,15 @@ export default function LifeTimeClient() {
   /* 기대수명 */
   const [expectancyPreset, setExpectancyPreset] = useState<string | null>('kor_m')
   const [expectancyCustom, setExpectancyCustom] = useState(85)
+  /* 입력 중 문자열 — 지우는 순간 1로 강제되지 않도록 분리하고, blur 때 확정값으로 되돌린다 */
+  const [expectancyText, setExpectancyText] = useState('85')
 
   /* 성별 */
   const [gender, setGender] = useState<'male' | 'female' | null>(null)
 
   /* 행동 전환 */
   const [actionMin, setActionMin] = useState(30)
+  const [actionMinText, setActionMinText] = useState('30')
   const [activityId, setActivityId] = useState<ActivityId>('read')
 
   /* 공유 복사 피드백 */
@@ -259,9 +262,10 @@ export default function LifeTimeClient() {
 
   function handleShare() {
     const text = `${shareText()}\nyoutil.kr/tools/date/life-time`
-    navigator.clipboard?.writeText(text).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
-    })
+    navigator.clipboard?.writeText(text).then(
+      () => { setCopied(true); window.setTimeout(() => setCopied(false), 1500) },
+      () => { /* 권한 거부 등 — 미처리 rejection 방지 */ },
+    )
   }
 
   /* 년/월/일 옵션 */
@@ -394,8 +398,14 @@ export default function LifeTimeClient() {
               min={1}
               max={150}
               aria-label="기대수명 직접 입력 (세)"
-              value={expectancyCustom}
-              onChange={e => { setExpectancyCustom(Math.min(150, n(e.target.value, 1))); setExpectancyPreset(null) }}
+              value={expectancyText}
+              onChange={e => {
+                const t = e.target.value
+                setExpectancyText(t)
+                const v = Number(t)
+                if (t !== '' && Number.isFinite(v) && v >= 1) { setExpectancyCustom(Math.min(150, v)); setExpectancyPreset(null) }
+              }}
+              onBlur={() => setExpectancyText(String(expectancyCustom))}
             />
             <span className={styles.unit}>세 (직접 입력)</span>
           </div>
@@ -610,8 +620,14 @@ export default function LifeTimeClient() {
                 min={1}
                 max={480}
                 aria-label="매일 투자 시간 (분)"
-                value={actionMin}
-                onChange={e => setActionMin(Math.min(480, n(e.target.value, 1)))}
+                value={actionMinText}
+                onChange={e => {
+                  const t = e.target.value
+                  setActionMinText(t)
+                  const v = Number(t)
+                  if (t !== '' && Number.isFinite(v) && v >= 1) setActionMin(Math.min(480, v))
+                }}
+                onBlur={() => setActionMinText(String(actionMin))}
               />
             </div>
             <div className={styles.actionInputCell}>

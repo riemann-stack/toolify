@@ -4,7 +4,7 @@ import AdSlot from '@/components/AdSlot'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
@@ -27,25 +27,6 @@ const card: React.CSSProperties = {
   border: '1px solid var(--border)',
   borderRadius: '14px',
   padding: '18px 20px',
-}
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '14px',
-  fontWeight: 600,
-  color: 'var(--text)',
-}
-const faqAnswer: React.CSSProperties = {
-  marginTop: '10px',
-  fontSize: '13px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
 }
 
 const FAQ_LD = [
@@ -192,14 +173,7 @@ export default function SchengenPage() {
 
         {/* FAQ */}
         <div>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          {FAQ_LD.map((f, i) => (
-            <details key={i} style={faqDetails}>
-              <summary style={faqSummary}>Q{i + 1}. {f.q}</summary>
-              <div style={faqAnswer} dangerouslySetInnerHTML={{ __html: f.a }} />
-            </details>
-          ))}
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* 면책 */}

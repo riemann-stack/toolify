@@ -2,7 +2,7 @@ import AgeClient from './AgeClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -70,7 +70,7 @@ export default function AgePage() {
             {[
               { title: '시행일', content: '2023년 6월 28일 — 행정기본법 제7조의2, 민법 제158조 개정 시행.' },
               { title: '달라지는 것', content: '의료기관 나이 기준, 보험 계약, 법적 서류 등에서 만 나이 사용. 예) 65세 의료 혜택은 만 65세 생일이 지난 날부터 적용.' },
-              { title: '달라지지 않는 것', content: '학교 입학(3월 1일 기준 연도), 병역 의무(연 나이), 청소년 보호법(주류·담배 — 연 나이) 등 일부 특별법은 기존 방식 유지.' },
+              { title: '달라지지 않는 것', content: '초등학교 입학(만 6세가 된 해의 다음 해 3월), 병역 의무(연 나이), 청소년 보호법(주류·담배 — 연 나이) 등 일부 특별법은 기존 방식 유지.' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--accent)', marginBottom: '6px' }}>{item.title}</p>
@@ -156,7 +156,7 @@ export default function AgePage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             하루를 살면 약 <strong style={{ color: 'var(--text)' }}>24시간 = 1,440분 = 86,400초</strong>가 흐릅니다. 평균 70 BPM 기준 심장은 100,800회 뛰고, 호흡은 23,040회(16/분), 잠은 약 8시간(인생의 33%)을 차지합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -167,8 +167,8 @@ export default function AgePage() {
               </thead>
               <tbody>
                 {[
-                  ['100일',     '— ', '한국 전통 백일 잔치'],
-                  ['365일',     '만 1세', '첫 돌'],
+                  ['100일',     '— ', '백일 잔치 — 태어난 날을 1일째로 세어 100일째'],
+                  ['첫돌',      '만 1세', '첫 생일 (365일째가 아니라 1년 뒤 같은 날)'],
                   ['1,000일',   '약 만 2.7세', '연인·부부 1,000일 기념'],
                   ['10,000일',  '약 만 27.4세', '한 번뿐인 큰 마일스톤'],
                   ['12,345일',  '약 만 33.8세', '재미있는 숫자 기념'],
@@ -300,23 +300,7 @@ export default function AgePage() {
 
         {/* 8. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 관련 도구 */}

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import ServerTimeClient from './ServerTimeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 // FAQ 본문 + 구조화 데이터(FAQPage)를 함께 쓰기 위해 배열로 추출
@@ -37,7 +37,7 @@ const FAQS = [
   },
   {
     q: '본 도구로 매크로 만들면 되나요?',
-    a: '<strong>안 됩니다.</strong> 본 도구는 「시간 확인」 용도이며, 자동 클릭·매크로·봇은 다음 위험이 있습니다 —<br/>· 사이트 약관 위반 → 계정 영구 정지<br/>· IP 차단 (가족·회사 인터넷 전체 영향)<br/>· <strong>업무방해죄(형법 제314조)</strong> — 매크로 티켓팅·수강신청에 실제 적용되는 대표 법조 (5년 이하 징역 또는 1,500만원 이하 벌금)<br/>· 매크로 이용 입장권 부정판매 — <strong>공연법 제4조의2</strong> (2024. 3. 22. 시행, 1년 이하 징역 또는 1천만원 이하 벌금)<br/><br/>2026년 8월 28일부터는 개정 공연법에 따라 매크로 사용 여부와 관계없이 웃돈 재판매가 전면 금지되고 판매금액 최대 50배의 과징금이 부과됩니다.<br/><br/>본 도구는 정직한 사용자가 정확한 시각을 확인해 <strong>공정한 경쟁</strong>을 하도록 돕는 게 목적입니다.',
+    a: '<strong>안 됩니다.</strong> 본 도구는 「시간 확인」 용도이며, 자동 클릭·매크로·봇은 다음 위험이 있습니다 —<br/>· 사이트 약관 위반 → 계정 영구 정지<br/>· IP 차단 (가족·회사 인터넷 전체 영향)<br/>· <strong>업무방해죄(형법 제314조)</strong> — 매크로 티켓팅·수강신청에 실제 적용되는 대표 법조 (5년 이하 징역 또는 1,500만원 이하 벌금)<br/>· 매크로 이용 입장권 부정판매 — <strong>공연법 제4조의2</strong> (2024. 3. 22. 시행, 1년 이하 징역 또는 1천만원 이하 벌금)<br/><br/>2026년 8월 28일부터는 개정 공연법에 따라 매크로 사용 여부와 관계없이 재판매 목적의 부정구매와 상습·영업 목적의 웃돈 판매(부정판매)가 금지되고, 판매금액의 2~50배에 이르는 과징금이 부과될 수 있습니다.<br/><br/>본 도구는 정직한 사용자가 정확한 시각을 확인해 <strong>공정한 경쟁</strong>을 하도록 돕는 게 목적입니다.',
   },
 ]
 
@@ -75,7 +75,6 @@ export default function ServerTimePage() {
       </p>
 
       <ServerTimeClient />
-      <FaqJsonLd items={FAQS} />
 
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
@@ -100,7 +99,7 @@ export default function ServerTimePage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             대부분 시스템은 KST 기준 정각/30분 단위로 열립니다. 사이트별 권장 새로고침 타이밍.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -150,7 +149,7 @@ export default function ServerTimePage() {
               실사용 사례 — 2026 경주 동아마라톤 접수 성공 (2026. 05. 26. 19시)
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
-              지난해 경주 동아마라톤은 10시 정각에 「시작!」 버튼을 눌렀는데도 이미 대기열 수천 번째였고, 결국 <strong style={{ color: 'var(--text)' }}>풀코스는 눈앞에서 마감</strong>됐습니다. 분명 시계는 10시였는데 왜 늦었을까 — 알고 보니 제 노트북 시계가 서버보다 <strong style={{ color: 'var(--text)' }}>약 1.8초 빨랐던</strong> 것이었습니다.
+              지난해 경주 동아마라톤은 10시 정각에 「시작!」 버튼을 눌렀는데도 이미 대기열 수천 번째였고, 결국 <strong style={{ color: 'var(--text)' }}>풀코스는 눈앞에서 마감</strong>됐습니다. 분명 시계는 10시였는데 왜 늦었을까 — 알고 보니 제 노트북 시계가 서버보다 <strong style={{ color: 'var(--text)' }}>약 1.8초 느렸던</strong> 것이었습니다. 노트북이 10시를 가리킬 때 서버는 이미 10시 0분 1.8초였으니, 남들보다 1.8초 늦게 누른 셈이었습니다.
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
               올해 <strong style={{ color: 'var(--text)' }}>2026 경주 동아마라톤</strong>은 전략을 바꿨습니다. 접수 며칠 전부터 이 도구의 외부 사이트 트래킹에 <strong style={{ color: 'var(--text)' }}>동마클럽 서버</strong>를 등록해 두고, 내 시계와의 오차를 매일 확인했습니다. 당일엔 유선 인터넷에 연결하고, 알림음을 1초·정각으로 켠 뒤, 서버 시각 기준 <strong style={{ color: 'var(--text)' }}>약 0.7초 전</strong>에 새로고침을 눌렀습니다.
@@ -224,20 +223,7 @@ export default function ServerTimePage() {
 
         {/* 5. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQS.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQS} />
         </section>
 
         {/* 6. 관련 도구 */}

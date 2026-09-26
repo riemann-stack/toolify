@@ -150,7 +150,7 @@ export default function SigFigsPage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 이 분석의 실용적 결론: 더 좋은 저울을 사도 결과는 거의 나아지지 않습니다. 상대오차가 0.98%로 지배적인
             <strong style={{ color: 'var(--text)' }}> 부피 측정(피펫·뷰렛 사용 등)을 개선</strong>해야 최종 불확도가 줄어듭니다.
-            오차 전파는 "어느 측정에 투자할지"를 알려주는 도구이기도 합니다.
+            오차 전파는 &ldquo;어느 측정에 투자할지&rdquo;를 알려주는 도구이기도 합니다.
           </p>
         </section>
 

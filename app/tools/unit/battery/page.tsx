@@ -3,7 +3,8 @@ import BatteryClient from './BatteryClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -44,7 +45,7 @@ const FAQ_LD = [
               },
               {
                 q: '출발 국가·항공사에 따라 규정이 다른가요?',
-                a: '용량 판정(100Wh 이하 휴대 / 100~160Wh 승인 / 160Wh 초과 불가)은 ICAO·IATA 공통이라 어디서나 같지만, <strong>수량과 기내 사용 규정은 기준마다 다릅니다.</strong> 위 계산기의 <strong>‘적용 기준(국가·항공사)’에서 한국·ICAO / 미국(FAA·항공사) / 국제 기본</strong>을 선택하면 판정 문구가 그에 맞게 바뀝니다. 예를 들어 <strong>한국·ICAO 신기준(2026-04-20)</strong>은 용량과 무관하게 1인당 2개·기내 충전 전면 금지지만, <strong>미국은 FAA 연방 규정상 100Wh 이하 개수 제한이 없고</strong> 아메리칸·델타(1인 2개)·사우스웨스트(1개)처럼 항공사별 정책으로 제한됩니다. 출발 전 해당 항공사 공식 규정을 확인하세요.',
+                a: '용량 판정(100Wh 이하 휴대 / 100~160Wh 승인 / 160Wh 초과 불가)은 ICAO·IATA 공통이라 어디서나 같지만, <strong>수량과 기내 사용 규정은 기준마다 다릅니다.</strong> 위 계산기의 <strong>‘적용 기준(국가·항공사)’에서 한국·ICAO / 미국(FAA·항공사) / 국제 기본</strong>을 선택하면 판정 문구가 그에 맞게 바뀝니다. 예를 들어 <strong>한국·ICAO 신기준(2026-04-20)</strong>은 용량과 무관하게 1인당 2개·기내 충전 전면 금지지만, <strong>미국은 FAA 연방 규정상 100Wh 이하 개수 제한이 없고</strong> 아메리칸·델타(1인 2개)·사우스웨스트(1개)처럼 항공사별 정책으로 제한됩니다. 이 세 항공사는 보조배터리를 개당 100Wh 이하만 받기 때문에, 100~160Wh 보조배터리는 승인을 받더라도 가져갈 수 없습니다. 출발 전 해당 항공사 공식 규정을 확인하세요.',
               },
             ]
 
@@ -58,6 +59,16 @@ export default function BatteryPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         mAh·Wh·Ah 변환 + <strong style={{ color: 'var(--text)' }}>비행기 반입 가능 여부</strong> 자동 판정.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="ICAO·국토교통부 보조배터리 기준(2026-04-20 시행)과 미국 주요 항공사 정책(2026-05-01) 반영"
+        sources={[
+          { label: '국토교통부', href: 'https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374' },
+          { label: 'FAA PackSafe', href: 'https://www.faa.gov/hazmat/packsafe/airline-passengers-and-batteries' },
+          { label: 'IATA', href: 'https://www.iata.org/en/youandiata/travelers/batteries/' },
+        ]}
+      />
 
       <BatteryClient />
 
@@ -175,7 +186,7 @@ export default function BatteryPage() {
             {[
               { air: '🇰🇷 대한항공 (KE)',     limit: '160Wh 이하 1인당 최대 2개 (100~160Wh는 승인 필요)', note: '160Wh 초과 반입 불가. 2026-01-26부터 기내 사용·충전 금지.' },
               { air: '🇰🇷 아시아나 (OZ)',     limit: '보조배터리 최대 2개 / 교체용 배터리 100Wh 이하 5개',  note: '100~160Wh는 승인 필요·교체용과 합산 2개. 기내 사용·충전 금지, 예비 배터리는 모두 기내 휴대만 가능.' },
-              { air: '🇺🇸 델타 (DL)',         limit: '100Wh 이하 자유 / 100~160Wh 2개', note: 'Hoverboard·전동 킥보드 배터리는 전면 금지.' },
+              { air: '🇺🇸 델타 (DL)',         limit: '보조배터리 1인 2개 · 개당 100Wh 이하', note: '100~160Wh 보조배터리는 반입 불가 (2026-05-01~). Hoverboard·전동 킥보드 배터리는 전면 금지.' },
               { air: '🇺🇸 유나이티드 (UA)',   limit: '100Wh 이하 자유 / 100~160Wh 2개', note: 'FAA 규정에 따라 위탁 수하물 절대 금지.' },
               { air: '🇯🇵 일본항공 (JL)',     limit: '160Wh 이하 (160Wh 초과 불가)',    note: '훼손·부풀어 오른 배터리는 반입 거부.' },
               { air: '🇸🇬 싱가포르항공 (SQ)', limit: '100Wh 이하 자유 / 100~160Wh 2개', note: '온라인 사전 신고 권장.' },
@@ -195,7 +206,7 @@ export default function BatteryPage() {
             <a href="https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국토교통부 보도자료 (2026-04-08)</a>{' · '}
             <a href="https://m.flyasiana.com/C/KR/KO/customer/notice/detail?id=CM202604100002528761" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>아시아나항공 공지 (2026-04-17)</a>{' · '}
             <a href="https://news.koreanair.com/%ed%95%9c%ec%a7%84%ea%b7%b8%eb%a3%b9-%ec%86%8c%ec%86%8d-5%ea%b0%9c-%ed%95%ad%ea%b3%b5%ec%82%ac-%ec%98%a4%eb%8a%94-26%ec%9d%bc%eb%b6%80%ed%84%b0-%eb%b3%b4%ec%a1%b0%eb%b0%b0%ed%84%b0%eb%a6%ac/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>대한항공 뉴스룸 (2026-01-23)</a>
-            {' '}— 국내 항공사(대한항공·아시아나) 정책은 공식 공지 기준이며, 해외 항공사(델타·유나이티드·일본항공·싱가포르항공) 카드는 일반 요약이라 적용 시점·세부 규정이 다를 수 있습니다. 특히 미국은 FAA 규정상 100Wh 이하 보조배터리에 연방 개수 제한이 없고(개인용) 100~160Wh만 1인당 2개이므로, 각 항공사 공식 페이지에서 최종 확인하세요.
+            {' '}— 국내 항공사(대한항공·아시아나) 정책은 공식 공지 기준이며, 해외 항공사(델타·유나이티드·일본항공·싱가포르항공) 카드는 일반 요약이라 적용 시점·세부 규정이 다를 수 있습니다. 특히 미국은 FAA 규정상 100Wh 이하 보조배터리에 연방 개수 제한이 없고(개인용) 100~160Wh는 승인 시 1인당 2개지만, 아메리칸·델타·사우스웨스트처럼 100Wh 초과 보조배터리를 아예 받지 않는 항공사도 있으니 각 항공사 공식 페이지에서 최종 확인하세요.
           </p>
         </div>
 
@@ -265,23 +276,7 @@ export default function BatteryPage() {
 
         {/* ── 6. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* FAQ 직후 광고 슬롯 */}

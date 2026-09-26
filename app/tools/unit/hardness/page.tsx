@@ -2,7 +2,7 @@ import Link from 'next/link'
 import HardnessClient from './HardnessClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -155,21 +155,7 @@ export default function HardnessPage() {
 
         {/* 4. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 5. 함께 쓰면 좋은 도구 */}

@@ -417,7 +417,7 @@ export default function CircuitSimulatorClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -551,8 +551,8 @@ export default function CircuitSimulatorClient() {
               <span>회로 타입</span>
             </div>
             <div className={s.typeRow}>
-              <button className={`${s.typeBtn} ${s.typeSeries}   ${type === 'series'   ? s.typeActive : ''}`} aria-pressed={type === 'series'} onClick={() => { setType('series'); setActivePreset('') }}>━ 직렬 (Series)</button>
-              <button className={`${s.typeBtn} ${s.typeParallel} ${type === 'parallel' ? s.typeActive : ''}`} aria-pressed={type === 'parallel'} onClick={() => { setType('parallel'); setActivePreset(''); setLedDropV(0) }}>▥ 병렬 (Parallel)</button>
+              <button type="button" className={`${s.typeBtn} ${s.typeSeries}   ${type === 'series'   ? s.typeActive : ''}`} aria-pressed={type === 'series'} onClick={() => { setType('series'); setActivePreset('') }}>━ 직렬 (Series)</button>
+              <button type="button" className={`${s.typeBtn} ${s.typeParallel} ${type === 'parallel' ? s.typeActive : ''}`} aria-pressed={type === 'parallel'} onClick={() => { setType('parallel'); setActivePreset(''); setLedDropV(0) }}>▥ 병렬 (Parallel)</button>
             </div>
           </div>
 
@@ -627,7 +627,7 @@ export default function CircuitSimulatorClient() {
               <p className={s.resultLabel}>전체 저항</p>
               <p className={s.resultValue}>{fmtR(result.totalResistance)}</p>
             </div>
-            <div className={`${s.resultCard} ${s.resCurrent}`}>
+            <div className={`${s.resultCard} ${s.resCurrent}`} role="status">
               <p className={s.resultLabel}>전체 전류</p>
               <p className={s.resultValue}>{fmtA(result.totalCurrent)}</p>
             </div>
@@ -763,7 +763,7 @@ export default function CircuitSimulatorClient() {
           </div>
 
           {/* 결과 — 단락·개방·모순 입력은 0이 아니라 '—'로 표시하고 이유를 적는다 */}
-          <div className={s.resultGrid}>
+          <div className={s.resultGrid} role="status">
             <div className={`${s.resultCard} ${s.resVoltage}`}>
               <p className={s.resultLabel}>전압 V</p>
               <p className={s.resultValue}>{ohmCalc.V === null ? '—' : fmtV(ohmCalc.V)}</p>

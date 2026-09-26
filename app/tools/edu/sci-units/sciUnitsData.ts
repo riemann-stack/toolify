@@ -152,9 +152,11 @@ export const CONSTANTS: PhysicalConstant[] = [
 /** 일반 표기 → 과학적 표기 문자열 (가수 × 10^지수) */
 export function toScientific(n: number, sig = 6): { mantissa: number; exp: number } {
   if (n === 0 || !Number.isFinite(n)) return { mantissa: 0, exp: 0 }
-  const exp = Math.floor(Math.log10(Math.abs(n)))
-  const mantissa = n / Math.pow(10, exp)
-  return { mantissa: roundSig(mantissa, sig), exp }
+  let exp = Math.floor(Math.log10(Math.abs(n)))
+  let mantissa = roundSig(n / Math.pow(10, exp), sig)
+  // 반올림(또는 log10 오차)으로 가수가 10에 닿으면 정규화 — '10 × 10⁵' 방지
+  if (Math.abs(mantissa) >= 10) { exp += 1; mantissa = roundSig(n / Math.pow(10, exp), sig) }
+  return { mantissa, exp }
 }
 
 /** 공학적 표기 (지수가 3의 배수) */
@@ -162,8 +164,10 @@ export function toEngineering(n: number, sig = 6): { mantissa: number; exp: numb
   if (n === 0 || !Number.isFinite(n)) return { mantissa: 0, exp: 0 }
   let exp = Math.floor(Math.log10(Math.abs(n)))
   exp = Math.floor(exp / 3) * 3
-  const mantissa = n / Math.pow(10, exp)
-  return { mantissa: roundSig(mantissa, sig), exp }
+  let mantissa = roundSig(n / Math.pow(10, exp), sig)
+  // 가수가 1000에 닿으면 다음 3배수 지수로 — '1000 × 10³' 방지
+  if (Math.abs(mantissa) >= 1000) { exp += 3; mantissa = roundSig(n / Math.pow(10, exp), sig) }
+  return { mantissa, exp }
 }
 
 /** 지수를 가장 가까운(이하) SI 접두어로 — 가수 1~1000 범위 유지 */
@@ -175,19 +179,25 @@ export function toPrefix(n: number, sig = 6): { mantissa: number; prefix: SIPref
   // 3의 배수 이하 접두어 선택 (가수 1~999)
   const target = Math.floor(exp / 3) * 3
   const clamped = Math.max(-30, Math.min(30, target))
-  const prefix = SI_PREFIXES.reduce((best, p) =>
-    Math.abs(p.exp - clamped) < Math.abs(best.exp - clamped) && p.exp % 3 === 0 ? p : best,
+  const pick = (target: number) => SI_PREFIXES.reduce((best, p) =>
+    Math.abs(p.exp - target) < Math.abs(best.exp - target) && p.exp % 3 === 0 ? p : best,
     SI_PREFIXES.find(pp => pp.exp === 0)!)
-  const mantissa = n / Math.pow(10, prefix.exp)
-  return { mantissa: roundSig(mantissa, sig), prefix }
+  let prefix = pick(clamped)
+  let mantissa = roundSig(n / Math.pow(10, prefix.exp), sig)
+  // 가수가 1000에 닿으면 한 단계 큰 접두어로 — '1000 k' 방지 (최대 Q=10³⁰까지)
+  if (Math.abs(mantissa) >= 1000 && clamped + 3 <= 30) {
+    prefix = pick(clamped + 3)
+    mantissa = roundSig(n / Math.pow(10, prefix.exp), sig)
+  }
+  return { mantissa, prefix }
 }
 
+/** 유효숫자 sig자리 반올림.
+    ⚠️ 예전엔 Math.round(n·10^p)/10^p였는데, p가 음수면 10^p(예: 1e-5)가 이진수로 정확하지 않아
+       1e12가 1,000,000,000,000.0001로 나왔다 — toPrecision은 10진 반올림이라 이 오차가 없다. */
 function roundSig(n: number, sig: number): number {
-  if (n === 0) return 0
-  const d = Math.ceil(Math.log10(Math.abs(n)))
-  const power = sig - d
-  const factor = Math.pow(10, power)
-  return Math.round(n * factor) / factor
+  if (n === 0 || !Number.isFinite(n)) return n
+  return Number(n.toPrecision(Math.min(100, Math.max(1, sig))))
 }
 
 /** 숫자 → 읽기 좋은 일반 표기 문자열 */
@@ -199,8 +209,9 @@ export function fmtPlain(n: number): string {
     const { mantissa, exp } = toScientific(n)
     return `${mantissa} × 10${supExp(exp)}`
   }
-  // 천단위 콤마 + 유효숫자
-  const rounded = roundSig(n, 8)
+  // 천단위 콤마 + 유효숫자 12자리 — 8자리였을 땐 1 AU(149,597,870,700m)가 149,597,870,000으로 잘렸다.
+  // 배정밀도 연산 오차(≈10⁻¹⁶)는 12자리 반올림에서 사라진다.
+  const rounded = roundSig(n, 12)
   return rounded.toLocaleString('en-US', { maximumFractionDigits: 12 })
 }
 

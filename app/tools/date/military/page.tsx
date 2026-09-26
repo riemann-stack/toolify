@@ -3,7 +3,7 @@ import MilitaryClient from './MilitaryClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
@@ -12,7 +12,7 @@ export const metadata = buildMetadata({
   path: '/tools/date/military',
   title: '군대 전역일 계산기 — 복무율·D-day·진급·말년 (2026년 최신)',
   description:
-    '입대일과 복무 형태로 전역일·복무율·D-day를 계산합니다. 월말 입영 예외(민법 제160조)까지 반영하고, 진급 시점은 군인사법 시행규칙 제32조 기준으로 표시합니다.',
+    '입대일과 복무 형태로 전역일·복무율·D-day를 계산합니다. 월말 입영 예외(민법 제160조)까지 반영하고, 진급 시점은 군인사법 시행규칙 제32조 최저복무기간과 매월 1일 진급 기준으로 표시합니다.',
   keywords: ['군대 전역일 계산기', '복무율 계산기', '말년 시작일', '입대 100일', '사회복무요원 전역일', '일병 진급 시기', '포상휴가 전역일'],
 })
 
@@ -47,7 +47,7 @@ const FAQ_LD = [
               },
               {
                 q: '입대 100일이 일병 진급일인가요?',
-                a: '<strong>아닙니다.</strong> 「군인사법 시행규칙」 제32조제2항은 일등병 진급 최저복무기간을 <strong>「이등병으로서 2개월」</strong>로 정하므로, 일병 진급은 <strong>입대 후 약 60일</strong>에 가능해집니다. 입대 100일차는 이미 진급하고 <strong>40일쯤 지난 시점</strong>입니다. 「100일 = 일병 진급」은 이등병 기간이 3개월이던 2019년 8월 개정(2019-09-01 시행) 이전의 통념이 남은 것입니다.<br/><br/>그럼에도 100일이 의미 있는 이유는 <strong>문화</strong>입니다 — 신병교육과 자대 적응을 마치고 군 생활이 익숙해지는 첫 분기점으로 보아 가족이 <strong>100일 면회·선물·휴가</strong>를 챙기는 풍습이 정착돼 있습니다. 본 계산기는 100일을 진급일이 아닌 문화적 기념일로 표시하고, 진급은 별도 마일스톤(2·8·14개월)으로 계산합니다.',
+                a: '<strong>아닙니다.</strong> 「군인사법 시행규칙」 제32조제2항은 일등병 진급 최저복무기간을 <strong>「이등병으로서 2개월」</strong>로 정하고 병 진급은 매월 1일 자로 시행하므로, 일병 진급은 <strong>입대 후 약 60~90일</strong> 사이에 이뤄집니다(1일 입대면 약 60일, 2일 이후 입대면 2개월을 채운 뒤 돌아오는 첫 1일). 그래서 입대 100일차에는 <strong>이미 일병</strong>입니다. 「100일 = 일병 진급」은 이등병 기간이 3개월이던 2019년 8월 개정(2019-09-01 시행) 이전의 통념이 남은 것입니다.<br/><br/>그럼에도 100일이 의미 있는 이유는 <strong>문화</strong>입니다 — 신병교육과 자대 적응을 마치고 군 생활이 익숙해지는 첫 분기점으로 보아 가족이 <strong>100일 면회·선물·휴가</strong>를 챙기는 풍습이 정착돼 있습니다. 본 계산기는 100일을 진급일이 아닌 문화적 기념일로 표시하고, 진급은 별도 마일스톤(2·8·14개월)으로 계산합니다.',
               },
               {
                 q: '"말년", "왕고"는 정확히 언제부터인가요?',
@@ -270,6 +270,10 @@ export default function MilitaryPage() {
             제36조는 유죄판결·징계 시 1~3개월의 진급제한기간을 둡니다. 정확한 진급일은 인사담당자에게 확인하세요.
           </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.7 }}>
+            ※ 병 진급은 <strong style={{ color: 'var(--text)' }}>매월 1일 자로 시행</strong>합니다. 1일에 입대하지 않았다면 최저복무기간을 채운 뒤 돌아오는 첫 1일에 진급합니다.
+            예를 들어 5월 1일 입대자는 7월 1일에, 5월 2일 입대자는 8월 1일에 일병이 됩니다. 위 계산기의 진급 마일스톤도 이 기준으로 표시합니다.
+          </p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.7 }}>
             ※ 계급은 <strong style={{ color: 'var(--text)' }}>현역병·상근예비역</strong>에만 해당합니다. 사회복무요원·산업기능요원·전문연구요원·대체복무요원은 병 계급이 없어
             위 진급 마일스톤이 적용되지 않으며, 계산기도 해당 복무 형태에서는 진급 항목을 표시하지 않습니다.
           </p>
@@ -360,23 +364,7 @@ export default function MilitaryPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 8. 관련 도구 ── */}

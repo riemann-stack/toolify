@@ -45,12 +45,12 @@ export function countSigFigs(raw: string): SigInfo {
 
 /* ───────── 반올림 ───────── */
 
-/** 유효숫자 sig개로 반올림한 숫자값. */
+/** 유효숫자 sig개로 반올림한 숫자값.
+    ⚠️ 예전 Math.round(x·10ᵏ)/10ᵏ는 .5를 +∞ 방향으로 올려 음수가 비대칭이었다
+       (12.5→13인데 −12.5→−12). toPrecision은 부호를 떼고 크기 기준으로 반올림한다. */
 export function roundSig(x: number, sig: number): number {
   if (x === 0 || !Number.isFinite(x) || sig < 1) return x
-  const d = Math.floor(Math.log10(Math.abs(x)))
-  const factor = Math.pow(10, sig - 1 - d)
-  return Math.round(x * factor) / factor
+  return Number(x.toPrecision(Math.min(100, Math.round(sig))))
 }
 
 /* ───────── 표시(포맷) ───────── */
@@ -87,7 +87,9 @@ export function toSigString(x: number, sig: number): string {
   if (!Number.isFinite(x)) return '—'
   const abs = Math.abs(x)
   if (x !== 0 && (abs >= 1e6 || abs < 1e-4)) return prettyExp(x, sig)
-  return x.toPrecision(sig)
+  const str = x.toPrecision(sig)
+  // 정수부 자릿수가 sig보다 많으면 toPrecision이 '1.2e+5'를 돌려준다 → '1.2 × 10⁵'로 통일
+  return str.includes('e') ? prettyExp(x, sig) : str
 }
 
 /* ───────── 오차(불확도) 표현 ───────── */
@@ -108,16 +110,37 @@ export function formatMeasurement(value: number, error: number, errSig = 2): Mea
   if (!Number.isFinite(error) || error <= 0) {
     return { valueStr: pretty(value), errorStr: '0', relPct: '—' }
   }
-  const eExp = Math.floor(Math.log10(error))
-  const decimals = Math.min(15, Math.max(0, errSig - 1 - eExp))
+  const rel = value !== 0 ? error / Math.abs(value) : NaN
+  const relPct = Number.isFinite(rel) ? Number((rel * 100).toPrecision(3)).toString() : '—'
+  // 불확도의 마지막 유효 자리 = 10^place (errSig=2, 불확도 0.3 → place −2 → 0.30)
+  let eExp = Math.floor(Math.log10(error))
+  // 반올림으로 자릿수가 올라가면(0.0995 → 0.100) 한 자리 위에서 다시 맞춘다
+  if (roundAt(error, eExp - (errSig - 1)) >= Math.pow(10, eExp + 1)) eExp += 1
+  const place = eExp - (errSig - 1)
+  if (place > 0) {
+    // ⚠️ 예전엔 소수 자리(decimals)를 0에서 멈춰 불확도 ≥100이면 반올림이 안 됐다('42000 ± 2970').
+    //    정수 자리까지 올려 반올림한다 → '42000 ± 3000'
+    return {
+      valueStr: String(roundAt(value, place)),
+      errorStr: String(roundAt(error, place)),
+      relPct,
+    }
+  }
+  const decimals = Math.min(15, -place)
   const eR = Number(error.toFixed(decimals))
   const vR = Number(value.toFixed(decimals))
-  const rel = error / Math.abs(value)
   return {
     valueStr: vR.toFixed(decimals),
     errorStr: eR.toFixed(decimals),
-    relPct: Number((rel * 100).toPrecision(3)).toString(),
+    relPct,
   }
+}
+
+/** 10^place 자리에서 크기 기준 반올림(부호 대칭). place > 0이면 정수 자리. */
+function roundAt(x: number, place: number): number {
+  if (place <= 0) return Number(x.toFixed(Math.min(15, -place)))
+  const unit = Math.pow(10, place)
+  return Math.sign(x) * Math.round(Math.abs(x) / unit) * unit
 }
 
 /* ───────── 오차 전파 ───────── */

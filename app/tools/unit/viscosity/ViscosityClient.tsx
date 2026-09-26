@@ -36,10 +36,13 @@ export default function ViscosityClient() {
   const [tempRef, setTempRef] = useState<TempRef>('100')
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw) as { scale?: unknown; input?: unknown; density?: unknown; tempRef?: unknown }
+      const parsed: unknown = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return
+      const j = parsed as { scale?: unknown; input?: unknown; density?: unknown; tempRef?: unknown }
       // enum 검증 필수 — 오염된 scale/tempRef면 활성 버튼·단위·SAE/ISO 카드가 전부 사라지는 고장 상태
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if (typeof j.scale === 'string' && SCALES.some((sc) => sc.id === j.scale)) setScale(j.scale as Scale)
@@ -49,6 +52,7 @@ export default function ViscosityClient() {
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ scale, input, density, tempRef })) } catch {}
   }, [scale, input, density, tempRef])
 

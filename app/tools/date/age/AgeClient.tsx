@@ -4,8 +4,8 @@ import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
 import s from './age.module.css'
 import {
-  calcAge, calcKoreanAge, calcYearAge, calcDaysAlive,
-  nextBirthday, dateAfterDays, dateAtAge, ddayUntil, calcLifeStats,
+  calcAge, calcKoreanAge, calcYearAge,
+  nextBirthday, dayCountSince, nthDayDate, dateAtAge, ddayUntil, calcLifeStats,
   getZodiacAnimal, getWesternZodiac, getBirthGift, getGeneration,
   formatBigKor, fmtDate, fmtDateKo, midnight,
 } from './ageUtils'
@@ -21,6 +21,7 @@ const DDAY_CLOSE_DAYS = 30
 const DDAY_MID_DAYS = 90
 const ddayClass = (d: number) => d <= DDAY_CLOSE_DAYS ? s.ddayClose : d <= DDAY_MID_DAYS ? s.ddayMid : s.ddayFar
 
+/* 모듈 평가 시점(클라이언트) 연도. SSG HTML엔 빌드 연도가 박히므로 연도 옵션은 마운트 후에만 렌더 (하이드레이션 불일치 방지) */
 const currentYear = new Date().getFullYear()
 const yearsRange = Array.from({ length: 110 }, (_, i) => currentYear - i)
 const monthsRange = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -29,6 +30,9 @@ const daysRange = Array.from({ length: 31 }, (_, i) => i + 1)
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function AgeClient() {
   const [tab, setTab] = useState<Tab>('age')
+  const [mounted, setMounted] = useState(false)
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setMounted(true) }, [])
 
   /* 생년월일 */
   const [year, setYear] = useState('')
@@ -120,7 +124,7 @@ export default function AgeClient() {
         <div className={s.dateRow}>
           <select className={s.dateSelect} aria-label="출생 연도" value={year} onChange={e => setYear(e.target.value)}>
             <option value="">년도</option>
-            {yearsRange.map(y => <option key={y} value={y}>{y}년</option>)}
+            {mounted && yearsRange.map(y => <option key={y} value={y}>{y}년</option>)}
           </select>
           <select className={s.dateSelect} aria-label="출생 월" value={month} onChange={e => setMonth(e.target.value)}>
             <option value="">월</option>
@@ -287,7 +291,7 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
       {!refBeforeBirth && (
         <div className={s.infoGrid3}>
           <div className={s.infoCard}>
-            <div className={s.infoNum}>{calcDaysAlive(birth, refDate).toLocaleString()}</div>
+            <div className={s.infoNum}>{dayCountSince(birth, refDate).toLocaleString()}</div>
             <div className={s.infoLabel}>태어난 지</div>
             <div className={s.infoSub}>일째</div>
           </div>
@@ -327,11 +331,11 @@ function DdayTab({ birth, now }: { birth: Date; now: Date }) {
   const dMins  = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
   const dSecs  = Math.floor((diffMs % (1000 * 60)) / 1000)
 
-  // 다가오는 마일스톤 — 가까운 순 8개
-  const daysAlive = calcDaysAlive(birth, now)
+  // 다가오는 마일스톤 — 가까운 순 10개. 일수 기념일은 태어난 날 = 1일째 (백일 = 출생일 + 99일)
+  const dayNum = dayCountSince(birth, now)
   const upcomingDays = DAY_MILESTONES
-    .filter(m => m.days > daysAlive)
-    .map(m => ({ ...m, date: dateAfterDays(birth, m.days), daysUntil: m.days - daysAlive }))
+    .filter(m => m.days > dayNum)
+    .map(m => ({ ...m, date: nthDayDate(birth, m.days), daysUntil: m.days - dayNum }))
   const upcomingAges = AGE_MILESTONES
     .filter(m => m.age > calcAge(birth, now))
     .map(m => ({
@@ -450,7 +454,7 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
         <div className={s.statsGrid}>
           <div className={s.statBigCard}>
             <div className={s.statBigNum}>{stats.daysAlive.toLocaleString()}</div>
-            <div className={s.statBigLabel}>일</div>
+            <div className={s.statBigLabel}>일 지남</div>
             <div className={s.statBigSub}>{stats.weeksAlive.toLocaleString()}주 · {stats.monthsAlive.toLocaleString()}개월</div>
           </div>
           <div className={s.statBigCard}>
@@ -525,12 +529,12 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
 
 /* ═════════════════════════════════════════ 탭 4 — 마일스톤 ═════════════════════════════════════════ */
 function MilestoneTab({ birth, now }: { birth: Date; now: Date }) {
-  const daysAlive = calcDaysAlive(birth, now)
+  const dayNum = dayCountSince(birth, now)  // 태어난 날 = 1일째
   const currentAge = calcAge(birth, now)
 
   const dayItems = DAY_MILESTONES.map(m => {
-    const date = dateAfterDays(birth, m.days)
-    const daysUntil = m.days - daysAlive
+    const date = nthDayDate(birth, m.days)
+    const daysUntil = m.days - dayNum
     return { ...m, date, daysUntil, passed: daysUntil < 0 }
   })
   // 다음 1개 강조
@@ -543,7 +547,7 @@ function MilestoneTab({ birth, now }: { birth: Date; now: Date }) {
   })
   const nextAgeMs = ageItems.find(it => !it.passed)
 
-  const fmtDday = (d: number) => d < 0 ? `D+${Math.abs(d).toLocaleString()}` : `D-${d.toLocaleString()}`
+  const fmtDday = (d: number) => d === 0 ? 'D-Day' : d < 0 ? `D+${Math.abs(d).toLocaleString()}` : `D-${d.toLocaleString()}`
 
   return (
     <>
@@ -551,7 +555,7 @@ function MilestoneTab({ birth, now }: { birth: Date; now: Date }) {
       <div className={s.card}>
         <label className={s.cardLabel}>
           일수 마일스톤
-          <span className={s.cardLabelHint}>지금까지 {daysAlive.toLocaleString()}일</span>
+          <span className={s.cardLabelHint}>오늘이 {dayNum.toLocaleString()}일째 (태어난 날 = 1일째)</span>
         </label>
         <div className={s.milestoneGroup}>
           {dayItems.map((m, i) => (

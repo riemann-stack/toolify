@@ -9,7 +9,7 @@ export const metadata = buildMetadata({
   path: '/tools/unit/area',
   title: '평수 변환기 — 아파트 평형·전용·공급면적·평형별 방 가이드',
   description:
-    '아파트 평형·전용·공급·계약면적을 서로 환산하고 84㎡=34평형 같은 국민평형 조견표, 전용률·서비스면적까지 한 번에 확인합니다. 부동산 매물 비교·인테리어 면적 감 잡기용.',
+    '㎡와 평을 서로 환산하고, 84㎡=34평형 같은 국민평형 조견표로 아파트 평형이 전용·공급·계약면적 중 무엇을 기준으로 하는지 확인합니다. 전용률과 서비스면적 설명도 담았습니다.',
   keywords: [
     '평수계산기', '평수변환', '제곱미터변환', '㎡평수', '아파트평수',
     '평수㎡변환', '전용면적', '공급면적', '계약면적',
@@ -119,7 +119,7 @@ export default function AreaPage() {
               </thead>
               <tbody>
                 <tr><td style={cell}><strong>59㎡</strong></td><td style={cell}>약 17.8평</td><td style={cell}>24~25평형</td><td style={cell}>2~3인 가구 표준 — &lsquo;새 국민평형&rsquo;으로 불릴 만큼 선호 상승</td></tr>
-                <tr><td style={cell}><strong>74㎡</strong></td><td style={cell}>약 22.4평</td><td style={cell}>30평형</td><td style={cell}>59와 84 사이 틈새 평면</td></tr>
+                <tr><td style={cell}><strong>74㎡</strong></td><td style={cell}>약 22.4평</td><td style={cell}>29~30평형</td><td style={cell}>59와 84 사이 틈새 평면</td></tr>
                 <tr><td style={{ ...cell, color: '#9333EA', fontWeight: 700 }}><strong>84㎡</strong></td><td style={cell}>약 25.4평</td><td style={cell}>33~34평형</td><td style={cell}>&lsquo;국민평형&rsquo; — 국민주택 규모(전용 85㎡ 이하)를 꽉 채우는 평면</td></tr>
                 <tr><td style={cell}><strong>102㎡</strong></td><td style={cell}>약 30.9평</td><td style={cell}>40평형</td><td style={cell}>전용 85㎡ 초과 중대형 — 청약·세제 기준이 달라짐</td></tr>
                 <tr><td style={cell}><strong>114㎡</strong></td><td style={cell}>약 34.5평</td><td style={cell}>43~46평형</td><td style={cell}>대형 — 단지 전용률에 따라 표기 편차가 가장 큼</td></tr>

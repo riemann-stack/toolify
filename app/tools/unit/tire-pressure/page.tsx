@@ -3,7 +3,7 @@ import TirePressureClient from './TirePressureClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -32,7 +32,7 @@ const FAQ_LD = [
               },
               {
                 q: '뒷타이어가 앞타이어보다 공기압이 높은 이유?',
-                a: '차량마다 다릅니다. 후륜을 더 높게 지정한 차(후륜구동 세단·SUV 등)는 <strong>승객·트렁크 짐 하중이 주로 뒤 차축에 실려 하중 변동폭이 크기 때문</strong>입니다. 반대로 앞이 무거운 전륜구동 차는 앞을 같거나 더 높게 지정하기도 합니다. 결국 <strong>운전석 도어 스티커의 전/후륜 지정값이 기준</strong>이며, 만차·짐이 많을 때는 스티커의 만차(full load) 칸에 따라 보통 후륜을 +3~5 psi 올립니다.',
+                a: '차량마다 다릅니다. 후륜을 더 높게 지정한 차(후륜구동 세단·SUV 등)는 <strong>승객·트렁크 짐 하중이 주로 뒤 차축에 실려 하중 변동폭이 크기 때문</strong>입니다. 반대로 앞이 무거운 전륜구동 차는 앞을 같거나 더 높게 지정하기도 합니다. 결국 <strong>운전석 도어 스티커의 전/후륜 지정값이 기준</strong>이며, 만차·짐이 많을 때는 스티커의 만차(full load) 칸 값을 우선하고, 그 표기가 없으면 후륜 위주로 약 +2~4 psi 올립니다.',
               },
               {
                 q: '질소 충전이 정말 효과가 있나요?',
@@ -111,7 +111,7 @@ export default function TirePressurePage() {
             정확한 값은 <strong style={{ color: 'var(--text)' }}>운전석 도어 안쪽 스티커</strong>나 차량 매뉴얼이 우선입니다. 아래는 일반적인 참고 범위입니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            예를 들어 제가 타는 GV70(18인치)은 도어 스티커가 앞 33 / 뒤 36 psi입니다. 측정은 꼭 아침 첫 주행 전 <strong style={{ color: 'var(--text)' }}>냉간</strong>에서 하세요 — 주유소에서 한참 달린 뒤 재면 타이어가 데워져 4~5psi쯤 높게 나오고, 그 숫자에 맞추면 오히려 공기가 모자라게 됩니다.
+            도어 스티커에는 &lsquo;앞 33 / 뒤 36 psi&rsquo;처럼 전륜과 후륜 값이 따로 적힌 경우도 많습니다. 측정은 꼭 아침 첫 주행 전 <strong style={{ color: 'var(--text)' }}>냉간</strong>에서 하세요 — 한참 달린 뒤 주유소에서 재면 타이어가 데워져 3~5psi쯤 높게 나오고, 그 숫자에 맞추면 오히려 공기가 모자라게 됩니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
@@ -345,23 +345,7 @@ export default function TirePressurePage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* FAQ 직후 광고 슬롯 */}

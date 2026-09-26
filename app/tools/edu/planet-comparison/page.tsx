@@ -152,15 +152,15 @@ export default function PlanetComparisonPage() {
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔄 자전주기 (1일)</p>
-              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>한 바퀴 자전하는 시간</p>
+              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>별을 기준으로 한 바퀴 자전하는 시간(항성일). 해가 다시 뜨기까지의 하루(태양일)와는 다를 수 있습니다.</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>목성: 9.93h (가장 짧음)</li>
                 <li>토성: 10.7h</li>
                 <li>해왕성: 16.11h</li>
                 <li>천왕성: 17.24h <span style={{ color: '#DC2626' }}>(역행)</span></li>
                 <li>화성: 24.6h <span style={{ color: '#0891B2' }}>(지구와 비슷!)</span></li>
-                <li>지구: 24h</li>
-                <li>수성: 4,223h (176일)</li>
+                <li>지구: 23.9h (태양일 24h)</li>
+                <li>수성: 1,408h (58.6일, 태양일은 176일)</li>
                 <li>금성: 5,833h (243일, <span style={{ color: '#DC2626' }}>역행</span>)</li>
               </ul>
             </div>
@@ -202,7 +202,7 @@ export default function PlanetComparisonPage() {
             {[
               { p: '달',      t: '1.3초',  c: '#A8A29E' },
               { p: '수성·금성', t: '2~5분',   c: '#FFC857' },
-              { p: '화성',     t: '13분',    c: '#DC2626' },
+              { p: '화성',     t: '4~21분',  c: '#DC2626' },
               { p: '목성',     t: '35분',    c: '#EA580C' },
               { p: '토성',     t: '71분',    c: '#A16207' },
               { p: '천왕성',   t: '2.5시간', c: '#0D9488' },

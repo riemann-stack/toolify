@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/fermi-estimate',
@@ -28,7 +29,7 @@ const FAQ_LD = [
               },
               {
                 q: '변수가 너무 많으면 추정이 더 정확해지나요?',
-                a: '<strong>아닙니다. 변수가 많을수록 오히려 부정확해질 수 있습니다.</strong> 각 변수에 작은 오차가 곱해지면서 누적되기 때문입니다. 페르미 추정의 권장 변수 개수는 <strong>4~7개</strong>입니다. 너무 적으면(1~2개) 단순한 곱셈에 불과하고, 너무 많으면(8개+) 오차가 누적됩니다. 적절한 4~5개 변수로 핵심을 분해하는 것이 가장 효과적입니다. 본 도구의 템플릿은 모두 4~5개 변수 구조로 설계되어 있습니다.',
+                a: '<strong>아닙니다. 변수가 많을수록 오히려 부정확해질 수 있습니다.</strong> 각 변수에 작은 오차가 곱해지면서 누적되기 때문입니다. 페르미 추정의 권장 변수 개수는 <strong>4~7개</strong>입니다. 너무 적으면(1~2개) 단순한 곱셈에 불과하고, 너무 많으면(8개+) 오차가 누적됩니다. 적절한 4~5개 변수로 핵심을 분해하는 것이 가장 효과적입니다. 본 도구의 템플릿은 문제에 따라 2~4개 변수로 나뉘어 있으니, 연습할 때는 변수를 더 잘게 쪼개 보는 것도 좋습니다.',
               },
               {
                 q: '추정 결과를 어떻게 검증하나요?',
@@ -169,13 +170,13 @@ export default function FermiEstimatePage() {
             color: 'var(--muted)',
             lineHeight: 1.85,
           }}>
-            <strong style={{ color: 'var(--text)' }}>예: &quot;서울 커피 판매량&quot;</strong>
+            <strong style={{ color: 'var(--text)' }}>예: &quot;서울 하루 아메리카노 판매량&quot; 템플릿 기본값</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
-              <li>보수적: <strong style={{ color: '#0891B2' }}>94만 잔</strong></li>
-              <li>기준: <strong style={{ color: 'var(--accent)' }}>169만 잔</strong></li>
-              <li>낙관적: <strong style={{ color: '#A16207' }}>263만 잔</strong></li>
+              <li>보수적: <strong style={{ color: '#0891B2' }}>약 13.5만 잔</strong></li>
+              <li>기준: <strong style={{ color: 'var(--accent)' }}>약 203만 잔</strong></li>
+              <li>낙관적: <strong style={{ color: '#A16207' }}>약 1,440만 잔</strong></li>
             </ul>
-            → 진짜 답은 이 범위 안에 있을 가능성이 높습니다.
+            → 네 변수의 범위 끝값이 겹치면 보수적과 낙관적이 100배 가까이 벌어집니다. 범위가 이렇게 넓다면 민감도가 가장 큰 변수부터 자료를 더 찾아 좁혀 보세요.
           </div>
         </div>
 
@@ -186,10 +187,10 @@ export default function FermiEstimatePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '👥 인구', items: ['한국 인구: 약 5,100만 명', '서울 인구: 약 940만 명', '한국 가구 수: 약 2,100만 가구', '전체 취업자: 약 2,800만 명'] },
-              { t: '💰 소득·소비', items: ['1인당 GDP: 약 3,400만원/년', '가구 평균 소득: 약 6,500만원/년', '외식 비용: 가구당 월 50만원'] },
+              { t: '👥 인구', items: ['한국 인구: 약 5,100만 명', '서울 인구: 약 940만 명', '한국 가구 수: 약 2,250만 가구 (2025년 일반가구)', '전체 취업자: 약 2,800만 명'] },
+              { t: '💰 소득·소비', items: ['1인당 국민총소득: 약 5,240만원/년 (2025년)', '가구 평균 소득: 약 7,400만원/년 (2024년 소득)', '외식 비용: 가구당 월 50만원'] },
               { t: '🏢 기업·시장', items: ['한국 사업체: 약 600만 개 (99%+가 중소기업)', '카페: 약 9만 개', '편의점: 약 5만 개'] },
-              { t: '🚗 교통·환경', items: ['자동차 등록: 약 2,500만 대', '전기차: 약 80만 대', '1인 일일 음식물 쓰레기: 약 0.3kg'] },
+              { t: '🚗 교통·환경', items: ['자동차 등록: 약 2,670만 대 (2026년 6월)', '전기차: 약 110만 대 (2026년 6월)', '1인 일일 음식물 쓰레기: 약 0.3kg'] },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
@@ -200,8 +201,17 @@ export default function FermiEstimatePage() {
             ))}
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 위 통계는 2026년 기준 어림값이며, 정확한 값은 통계청·관련 기관 확인이 필요합니다.
+            ※ 괄호 안은 해당 통계의 기준 시점입니다(가구 수는 인구주택총조사, 국민총소득은 한국은행 국민계정, 가구 소득은 가계금융복지조사, 자동차는 국토교통부 등록 통계). 괄호가 없는 값은 대략적인 어림값이니 정확한 값은 해당 기관에서 확인하세요.
           </p>
+          <UpdatedMeta
+            date="2026년 9월"
+            basis="페르미 추정용 한국 통계 어림값"
+            sources={[
+              { label: 'KOSIS 국가통계포털', href: 'https://kosis.kr' },
+              { label: '한국은행 ECOS', href: 'https://ecos.bok.or.kr' },
+              { label: '국토교통 통계누리', href: 'https://stat.molit.go.kr' },
+            ]}
+          />
         </div>
 
         {/* ── 6. 컨설팅 면접 ── */}

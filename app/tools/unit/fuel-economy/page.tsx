@@ -3,8 +3,22 @@ import FuelEconomyClient from './FuelEconomyClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { FUEL_PRICE_MONTH, FUEL_PRICE_AS_OF, GASOLINE_PRICE, DIESEL_PRICE, EV_SLOW_RATE, EV_FAST_RATE, EV_ULTRA_RATE } from './fuelEconomyUtils'
+
+// 본문 수치는 fuelEconomyUtils.ts 단가에서 계산 — 단가만 갱신하면 표·FAQ·배율이 함께 바뀜
+const won = (n: number) => n.toLocaleString('ko-KR')
+const round100 = (n: number) => Math.round(n / 100) * 100
+const man = (n: number) => Math.round(n / 10000)
+const per100km = (effPerUnit: number, price: number) => 100 / effPerUnit * price
+// FAQ: 연 15,000km, 15 vs 14 km/L
+const YEARLY_GAP = (15000 / 14 - 15000 / 15) * GASOLINE_PRICE
+// 팁: 연 15,000km, 15km/L +15% ~ 12km/L +20%
+const SAVE_MIN = 15000 / 15 * (1 - 1 / 1.15) * GASOLINE_PRICE
+const SAVE_MAX = 15000 / 12 * (1 - 1 / 1.2) * GASOLINE_PRICE
+const EV_VS_GAS = per100km(12, GASOLINE_PRICE) / per100km(5, EV_SLOW_RATE)
 
 export const metadata = buildMetadata({
   path: '/tools/unit/fuel-economy',
@@ -20,7 +34,7 @@ const FAQ_LD = [
               },
               {
                 q: '복합연비, 시내연비, 고속연비는 무슨 차이?',
-                a: '제조사 카탈로그에 표기되는 <strong>복합연비</strong>는 시내(stop-and-go)와 고속(정속) 주행을 일정 비율(보통 시내 55% : 고속 45%)로 가중평균한 값입니다. 실제로는 <strong>시내연비</strong>가 가장 낮고 <strong>고속연비</strong>가 가장 높게 나옵니다. 본인 주행 패턴에 가까운 항목으로 비교하세요. 참고로 제 GV70은 카탈로그 복합연비보다 보통 5%쯤 낮게 나오는데, 가장 크게 갉아먹는 건 시내 교통체증입니다. 인증 연비는 정속에 가까운 조건에서 재기 때문에 가다 서다를 반복하는 출퇴근길과는 애초에 다릅니다. 날씨도 의외로 커서, 추운 날엔 더 떨어지고 따뜻한 날 잘 풀리면 카탈로그에 거의 붙기도 합니다.',
+                a: '제조사 카탈로그에 표기되는 <strong>복합연비</strong>는 시내(stop-and-go)와 고속(정속) 주행을 일정 비율(보통 시내 55% : 고속 45%)로 가중평균한 값입니다. 실제로는 <strong>시내연비</strong>가 가장 낮고 <strong>고속연비</strong>가 가장 높게 나옵니다. 본인 주행 패턴에 가까운 항목으로 비교하세요. 실제 주행 연비는 공인 복합연비보다 낮게 나오는 경우가 많은데, 공인 연비는 정해진 시험 주행 모드로 측정해 가다 서다를 오래 반복하는 출퇴근 정체와는 조건이 다르기 때문입니다. 기온 영향도 커서 추운 날에는 연비가 더 떨어집니다.',
               },
               {
                 q: '겨울에 전기차 전비가 떨어지는 이유?',
@@ -28,7 +42,7 @@ const FAQ_LD = [
               },
               {
                 q: '연비 1km/L 차이가 1년에 얼마 차이?',
-                a: '연 15,000km, 휘발유 약 2,011원/L(2026년 5월 말 오피넷 전국 평균) 기준으로 <strong>15 km/L vs 14 km/L</strong>는 연 약 <strong>14만원</strong> 차이입니다. (15,000÷14 - 15,000÷15) × 2,011 ≈ 143,600원. 5년이면 72만원, 10년이면 144만원입니다.',
+                a: `연 15,000km, 휘발유 약 ${won(GASOLINE_PRICE)}원/L(${FUEL_PRICE_AS_OF} 오피넷 전국 평균) 기준으로 <strong>15 km/L vs 14 km/L</strong>는 연 약 <strong>${man(YEARLY_GAP)}만원</strong> 차이입니다. (15,000÷14 - 15,000÷15) × ${won(GASOLINE_PRICE)} ≈ ${won(round100(YEARLY_GAP))}원. 5년이면 약 ${man(YEARLY_GAP * 5)}만원, 10년이면 약 ${man(YEARLY_GAP * 10)}만원입니다.`,
               },
               {
                 q: '하이브리드차는 어떤 단위로 표기하나요?',
@@ -46,6 +60,15 @@ export default function FuelEconomyPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         km/L·L/100km·mpg 변환 + 전기차 전비와 <strong style={{ color: 'var(--text)' }}>연료별 100km 비용</strong> 비교.
       </p>
+
+      <UpdatedMeta
+        date={FUEL_PRICE_MONTH}
+        basis={`휘발유·경유 단가는 오피넷 ${FUEL_PRICE_AS_OF} 전국 평균, 전기 충전요금은 공공 충전요금 5단계 개편안(2026-08-01 시행) 기준`}
+        sources={[
+          { label: '오피넷', href: 'https://www.opinet.co.kr' },
+          { label: '무공해차 통합누리집', href: 'https://ev.or.kr' },
+        ]}
+      />
 
       <FuelEconomyClient />
 
@@ -211,7 +234,7 @@ export default function FuelEconomyPage() {
             🇰🇷 연료별 100km 주행 비용 비교
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            2026년 7월 기준 한국 평균 단가 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
+            {FUEL_PRICE_MONTH} 기준 한국 평균 단가 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -224,13 +247,13 @@ export default function FuelEconomyPage() {
               </thead>
               <tbody>
                 {[
-                  { f: '⛽ 휘발유',         e: '12 km/L',     p: '2,011원/L',    c: '약 16,800원' },
-                  { f: '⛽ 경유(디젤)',     e: '14 km/L',     p: '2,006원/L',    c: '약 14,300원' },
-                  { f: '🔥 LPG',           e: '9 km/L',      p: '1,090원/L',    c: '약 12,100원' },
-                  { f: '🍃 하이브리드',     e: '20 km/L',     p: '2,011원/L',    c: '약 10,100원' },
-                  { f: '🔌 전기 (완속)',    e: '5 km/kWh',    p: '295.0원/kWh',  c: '약 5,900원' },
-                  { f: '🔌 전기 (급속)',    e: '5 km/kWh',    p: '348.4원/kWh',  c: '약 7,000원' },
-                  { f: '🔌 전기 (초급속)',  e: '5 km/kWh',    p: '393.1원/kWh',  c: '약 7,900원' },
+                  { f: '⛽ 휘발유',         e: '12 km/L',     p: `${won(GASOLINE_PRICE)}원/L`, c: `약 ${won(round100(per100km(12, GASOLINE_PRICE)))}원` },
+                  { f: '⛽ 경유(디젤)',     e: '14 km/L',     p: `${won(DIESEL_PRICE)}원/L`, c: `약 ${won(round100(per100km(14, DIESEL_PRICE)))}원` },
+                  { f: '🔥 LPG',           e: '9 km/L',      p: '약 1,100원/L', c: '약 12,200원' },
+                  { f: '🍃 하이브리드',     e: '20 km/L',     p: `${won(GASOLINE_PRICE)}원/L`, c: `약 ${won(round100(per100km(20, GASOLINE_PRICE)))}원` },
+                  { f: '🔌 전기 (완속)',    e: '5 km/kWh',    p: `${EV_SLOW_RATE.toFixed(1)}원/kWh`,  c: `약 ${won(round100(per100km(5, EV_SLOW_RATE)))}원` },
+                  { f: '🔌 전기 (급속)',    e: '5 km/kWh',    p: `${EV_FAST_RATE.toFixed(1)}원/kWh`,  c: `약 ${won(round100(per100km(5, EV_FAST_RATE)))}원` },
+                  { f: '🔌 전기 (초급속)',  e: '5 km/kWh',    p: `${EV_ULTRA_RATE.toFixed(1)}원/kWh`,  c: `약 ${won(round100(per100km(5, EV_ULTRA_RATE)))}원` },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.f}</td>
@@ -243,10 +266,10 @@ export default function FuelEconomyPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            기준: 2026-07 · 출처: 오피넷(휘발유·경유·LPG — 2026년 5월 전국 평균), 기후에너지환경부(전기 — 공공 충전요금 5단계 개편 확정안, 2026-07-01 발표·2026-08-01 시행: 완속 30kW 미만 295.0원 · 급속 100~200kW 348.4원 · 초급속 200kW 이상 393.1원/kWh. 2026-07-31까지는 기존 2단계 요금 100kW 미만 324.4원 · 100kW 이상 347.2원 적용)
+            기준: {FUEL_PRICE_MONTH} · 출처: 오피넷(휘발유·경유 — {FUEL_PRICE_AS_OF} 전국 평균, LPG는 1,100원대 어림값), 기후에너지환경부(전기 — 공공 충전요금 5단계 개편 확정안, 2026-07-01 발표·2026-08-01 시행: 완속 30kW 미만 {EV_SLOW_RATE.toFixed(1)}원 · 급속 100~200kW {EV_FAST_RATE.toFixed(1)}원 · 초급속 200kW 이상 {EV_ULTRA_RATE.toFixed(1)}원/kWh. 2026-07-31까지는 기존 2단계 요금 100kW 미만 324.4원 · 100kW 이상 347.2원 적용)
           </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
-            💡 같은 거리라도 <strong style={{ color: 'var(--text)' }}>전기차(완속) vs 휘발유</strong>는 약 <strong style={{ color: 'var(--accent)' }}>2.8배</strong> 비용 차이. 단, 차량 가격·배터리 교체비·세제 혜택을 종합한 5년 TCO(총 소유비용)는 차종마다 다릅니다.
+            💡 같은 거리라도 <strong style={{ color: 'var(--text)' }}>전기차(완속) vs 휘발유</strong>는 약 <strong style={{ color: 'var(--accent)' }}>{EV_VS_GAS.toFixed(1)}배</strong> 비용 차이. 단, 차량 가격·배터리 교체비·세제 혜택을 종합한 5년 TCO(총 소유비용)는 차종마다 다릅니다.
           </p>
         </div>
 
@@ -274,7 +297,7 @@ export default function FuelEconomyPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
-            ※ 누적 효과로 같은 차량에서 <strong style={{ color: 'var(--text)' }}>+15~20% 연비 개선</strong>이 가능합니다. 평균 연비 12~15km/L 차량 기준, 연 15,000km 운행 시 연 25~40만원 절약 (연비가 좋을수록 절약액은 줄어듭니다).
+            ※ 누적 효과로 같은 차량에서 <strong style={{ color: 'var(--text)' }}>+15~20% 연비 개선</strong>이 가능합니다. 평균 연비 12~15km/L 차량 기준, 연 15,000km 운행 시 연 약 {man(SAVE_MIN)}~{man(SAVE_MAX)}만원 절약 (연비가 좋을수록 절약액은 줄어듭니다).
           </p>
         </div>
 
@@ -303,23 +326,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 6. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* FAQ 직후 광고 슬롯 */}

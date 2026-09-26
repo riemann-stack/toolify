@@ -66,7 +66,8 @@ const UNITS_WEIGHT: UnitDef[] = [
   { id: 'lb',  name: '파운드',    shortName: 'lb',   toBase: 453.592 },
   { id: 'don', name: '돈 (錢)',    shortName: '돈',   toBase: 3.75,   isKorean: true, note: '귀금속 단위 · 1돈 = 3.75g' },
   { id: 'nyang', name: '냥 (兩)',  shortName: '냥',   toBase: 37.5,   isKorean: true, note: '10돈 · 37.5g' },
-  { id: 'geun',  name: '근 (斤)',   shortName: '근',   toBase: 600,   isKorean: true, note: '한국 시장 관행 600g · 옛날 400g · 중국 500g' },
+  { id: 'geun',  name: '근 (斤, 고기)', shortName: '근', toBase: 600,   isKorean: true, note: '정육점 기준 600g (16냥) · 중국 1근은 500g' },
+  { id: 'geun_veg', name: '근 (채소·과일)', shortName: '근(채소)', toBase: 375, isKorean: true, note: '1관의 1/10 = 375g · 시장에선 400g으로 어림' },
   { id: 'gwan',  name: '관 (貫)',   shortName: '관',   toBase: 3750,  isKorean: true, note: '100냥 · 3,750g' },
 ]
 
@@ -92,6 +93,12 @@ const UNITS_VOLUME: UnitDef[] = [
   { id: 'seom',       name: '섬 (石)',           shortName: '섬',   toBase: 180000, isKorean: true, note: '10말 · 180L' },
 ]
 
+/* ─── 근무시간 기준 (근로기준법 제50조 주 40시간 · 주휴 포함 월 209시간 = 최저임금 월 환산 기준, 고용노동부) ───
+   TODO(lib): 월 209시간은 lib/krInsuranceRates.ts 등 lib/ 단일 소스로 이전 대상 */
+export const WORK_HOURS_WEEK = 40
+export const WORK_HOURS_MONTH = 209
+export const WORK_HOURS_YEAR = WORK_HOURS_MONTH * 12 // 2,508시간
+
 /* ─── 시간 (base: s) ─── */
 const UNITS_TIME: UnitDef[] = [
   { id: 'ms',     name: '밀리초',  shortName: 'ms',   toBase: 0.001 },
@@ -102,15 +109,18 @@ const UNITS_TIME: UnitDef[] = [
   { id: 'week',   name: '주',      shortName: 'wk',   toBase: 604800 },
   { id: 'month',  name: '월 (30일)', shortName: 'mo', toBase: 2592000, note: '30일 가정' },
   { id: 'year',   name: '년 (365일)', shortName: 'yr', toBase: 31536000, note: '365일 가정' },
-  { id: 'work_h', name: '근무시간', shortName: '근무h', toBase: 3600, note: '주 40시간 / 월 209시간 / 연 2,508시간' },
+  { id: 'work_h',  name: '근무시간', shortName: '근무h', toBase: 3600, note: '1시간과 같음 · 아래 근무주·근무월·근무년 환산용' },
+  { id: 'work_wk', name: '근무주 (40시간)', shortName: '근무주', toBase: WORK_HOURS_WEEK * 3600, note: '법정 주 40시간 (주휴 미포함)' },
+  { id: 'work_mo', name: '근무월 (209시간)', shortName: '근무월', toBase: WORK_HOURS_MONTH * 3600, note: '주휴 포함 월 209시간 · 최저임금 월 환산 기준' },
+  { id: 'work_yr', name: '근무년 (2,508시간)', shortName: '근무년', toBase: WORK_HOURS_YEAR * 3600, note: '월 209시간 × 12개월' },
 ]
 
 /* ─── 속도 (base: m/s) ─── */
 const UNITS_SPEED: UnitDef[] = [
   { id: 'mps',  name: '미터/초',     shortName: 'm/s',  toBase: 1 },
-  { id: 'kmh',  name: '킬로미터/시',  shortName: 'km/h', toBase: 0.27778 },
+  { id: 'kmh',  name: '킬로미터/시',  shortName: 'km/h', toBase: 1000 / 3600 },
   { id: 'mph',  name: '마일/시',      shortName: 'mph',  toBase: 0.44704 },
-  { id: 'knot', name: '노트',         shortName: 'kn',   toBase: 0.51444 },
+  { id: 'knot', name: '노트',         shortName: 'kn',   toBase: 1852 / 3600 },
   { id: 'ftps', name: '피트/초',      shortName: 'ft/s', toBase: 0.3048 },
 ]
 
@@ -280,15 +290,17 @@ export function convertAngle(value: number, from: string, to: string): number {
   // 2) 도(°) → 출력 단위로 변환
   const rad = deg * Math.PI / 180
   const t = Math.tan(rad)
+  // 수직(±90°)이면 tan이 부동소수 오차로 1.6e16 같은 유한값이 되므로 무한대로 처리
+  const vertical = Math.abs(Math.cos(rad)) < 1e-12
   switch (to) {
     case 'deg':            return deg
     case 'rad':            return rad
     case 'grad':           return deg / 0.9
-    case 'percent_slope':  return t * 100
-    case 'permil_slope':   return t * 1000
-    case 'ratio_n1':       return Math.abs(t) < 1e-12 ? Infinity : 1 / t
-    case 'one_over_n':     return Math.abs(t) < 1e-12 ? Infinity : 1 / t
-    case 'mulae':          return t * 10
+    case 'percent_slope':  return vertical ? Math.sign(t) * Infinity : t * 100
+    case 'permil_slope':   return vertical ? Math.sign(t) * Infinity : t * 1000
+    case 'ratio_n1':       return vertical ? 0 : Math.abs(t) < 1e-12 ? Infinity : 1 / t
+    case 'one_over_n':     return vertical ? 0 : Math.abs(t) < 1e-12 ? Infinity : 1 / t
+    case 'mulae':          return vertical ? Math.sign(t) * Infinity : t * 10
     default:               return deg
   }
 }
@@ -299,7 +311,9 @@ export function formatNumber(n: number): string {
   if (!Number.isFinite(n)) return n > 0 ? '∞' : '-∞' // N:1·1/n이 0°(수평)일 때 무한대
   const abs = Math.abs(n)
   if (abs === 0) return '0'
-  if (abs >= 1e9 || abs < 1e-4) return n.toExponential(4)
+  if (abs >= 1e15 || abs < 1e-4) return n.toExponential(4)
+  // 10억 이상은 소수 자리가 의미 없으므로 정수로 반올림해 콤마 표기 (예: 1 GB = 1,000,000,000 B)
+  if (abs >= 1e9) return Math.round(n).toLocaleString('ko-KR')
   // 8 유효숫자로 부동소수 오차 제거 후, 자릿수별 소수 자리수 캡(아래) 적용 + 천단위 콤마
   const fixed = parseFloat(n.toPrecision(8))
   if (Number.isInteger(fixed) && abs < 1e9) return fixed.toLocaleString('ko-KR')

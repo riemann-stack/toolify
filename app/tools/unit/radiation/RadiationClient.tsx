@@ -45,23 +45,29 @@ export default function RadiationClient() {
   const [rateInput, setRateInput] = useState('0.12')
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
+      const parsed: unknown = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return
+      const j = parsed as Record<string, unknown>
+      // 입력 문자열은 길이 제한 — 오염된 거대 문자열이 입력칸을 깨뜨리지 않도록
+      const str = (v: unknown): v is string => typeof v === 'string' && v.length <= 16
       // 단위 id는 반드시 enum 검증 — 오염된 값이면 convert*()의 find()!가 크래시
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (DOSE_UNITS.some((u) => u.id === j.doseUnit)) setDoseUnit(j.doseUnit)
-      if (typeof j.doseInput === 'string') setDoseInput(j.doseInput)
-      if (ABSORBED_UNITS.some((u) => u.id === j.absUnit)) setAbsUnit(j.absUnit)
-      if (typeof j.absInput === 'string') setAbsInput(j.absInput)
-      if (ACTIVITY_UNITS.some((u) => u.id === j.actUnit)) setActUnit(j.actUnit)
-      if (typeof j.actInput === 'string') setActInput(j.actInput)
-      if (RATE_UNITS.some((u) => u.id === j.rateUnit)) setRateUnit(j.rateUnit)
-      if (typeof j.rateInput === 'string') setRateInput(j.rateInput)
+      if (DOSE_UNITS.some((u) => u.id === j.doseUnit)) setDoseUnit(j.doseUnit as DoseUnit)
+      if (str(j.doseInput)) setDoseInput(j.doseInput)
+      if (ABSORBED_UNITS.some((u) => u.id === j.absUnit)) setAbsUnit(j.absUnit as AbsorbedUnit)
+      if (str(j.absInput)) setAbsInput(j.absInput)
+      if (ACTIVITY_UNITS.some((u) => u.id === j.actUnit)) setActUnit(j.actUnit as ActivityUnit)
+      if (str(j.actInput)) setActInput(j.actInput)
+      if (RATE_UNITS.some((u) => u.id === j.rateUnit)) setRateUnit(j.rateUnit as RateUnit)
+      if (str(j.rateInput)) setRateInput(j.rateInput)
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ doseUnit, doseInput, absUnit, absInput, actUnit, actInput, rateUnit, rateInput }))
     } catch {}
@@ -135,7 +141,7 @@ export default function RadiationClient() {
             </button>
           ))}
         </div>
-        <div className={s.resultGrid}>
+        <div className={s.resultGrid} role="status">
           {DOSE_UNITS.map((u) => (
             <div key={u.id} className={`${s.resCard} ${doseUnit === u.id ? s.resCardInput : ''}`}>
               <div className={s.resName}>{u.name}</div>

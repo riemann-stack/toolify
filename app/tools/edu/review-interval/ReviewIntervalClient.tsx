@@ -2,6 +2,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import { useEffect, useMemo, useState } from 'react'
 import s from './review-interval.module.css'
 
@@ -30,16 +31,15 @@ const SCORE_OPTIONS = [
 // ─────────────────────────────────────────────
 // 유틸
 // ─────────────────────────────────────────────
-function toISODate(d: Date): string {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
-}
-function todayISO(): string { return toISODate(new Date()) }
+// 날짜 문자열은 lib/date todayStr(로컬 기준) 단일 소스
+const toISODate = (d: Date): string => todayStr(d)
 function parseISO(s: string): Date {
   const [y, m, d] = s.split('-').map(Number)
   return new Date(y, m - 1, d)
+}
+/** 'YYYY-MM-DD'이고 실제 날짜로 해석되는지 — 날짜 입력을 비우면 ''가 들어와 Invalid Date(NaN) 표시가 됨 */
+function isValidISO(s: unknown): s is string {
+  return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(parseISO(s).getTime())
 }
 function addDays(date: Date, days: number): Date {
   const r = new Date(date)
@@ -92,7 +92,22 @@ function sm2(input: SM2Input): SM2Output {
 // ─────────────────────────────────────────────
 // 망각곡선 SVG
 // ─────────────────────────────────────────────
-function ForgettingCurve({ reviewDays, totalDays = 30, baseStability = 2.5 }: { reviewDays: number[]; totalDays?: number; baseStability?: number }) {
+// 단순 지수 모델: R = e^(−t/S)·100, 복습마다 100% 회복 + 안정도 S ×1.6
+const CURVE_BASE_STABILITY = 2.5
+const CURVE_GROWTH = 1.6
+/** 각 복습 직전 유지율(%) — 그래프와 같은 모델 */
+function preReviewRetention(reviewDays: number[], baseStability = CURVE_BASE_STABILITY): number[] {
+  let last = 0
+  let st = baseStability
+  return [...reviewDays].sort((a, b) => a - b).map(d => {
+    const r = Math.exp(-(d - last) / st) * 100
+    last = d
+    st *= CURVE_GROWTH
+    return r
+  })
+}
+
+function ForgettingCurve({ reviewDays, totalDays = 30, baseStability = CURVE_BASE_STABILITY }: { reviewDays: number[]; totalDays?: number; baseStability?: number }) {
   const W = 720, H = 280
   const padL = 50, padR = 30, padT = 20, padB = 36
   const innerW = W - padL - padR
@@ -115,7 +130,7 @@ function ForgettingCurve({ reviewDays, totalDays = 30, baseStability = 2.5 }: { 
   for (let day = 0; day <= totalDays; day += 0.25) {
     while (reviewIdx < reviewDays.length && day >= reviewDays[reviewIdx]) {
       lastReview = reviewDays[reviewIdx]
-      stability *= 1.6
+      stability *= CURVE_GROWTH
       reviewIdx++
     }
     const r = Math.exp(-(day - lastReview) / stability) * 100
@@ -210,6 +225,22 @@ type StudyItem = {
 
 const STORAGE_KEY = 'youtil-review-interval-items-v1'
 
+const DIFFS: Difficulty[] = ['easy', 'normal', 'hard']
+const INTENSITIES: Intensity[] = ['fast', 'normal', 'relaxed']
+/** 저장값·백업 파일 항목 검증 — 필드가 빠진 항목은 history.length·localeCompare에서 크래시 */
+function isStudyItem(x: unknown): x is StudyItem {
+  if (!x || typeof x !== 'object') return false
+  const o = x as Record<string, unknown>
+  const num = (v: unknown) => typeof v === 'number' && Number.isFinite(v)
+  return typeof o.id === 'string' && typeof o.title === 'string'
+    && isValidISO(o.startDate) && isValidISO(o.nextReviewDate) && typeof o.lastReviewDate === 'string'
+    && DIFFS.includes(o.difficulty as Difficulty) && INTENSITIES.includes(o.intensity as Intensity)
+    && (o.memo === undefined || typeof o.memo === 'string')
+    && num(o.ef) && num(o.repetitions) && num(o.interval)
+    && Array.isArray(o.history)
+    && o.history.every(h => !!h && typeof h === 'object' && isValidISO((h as Record<string, unknown>).date) && num((h as Record<string, unknown>).quality))
+}
+
 // ─────────────────────────────────────────────
 // 컴포넌트
 // ─────────────────────────────────────────────
@@ -217,7 +248,9 @@ export default function ReviewIntervalClient() {
   const [tab, setTab] = useState<'simple' | 'sm2' | 'items' | 'exam'>('simple')
 
   // ─ TAB 1 ─
-  const [studyDate, setStudyDate] = useState<string>(todayISO())
+  // 날짜 초기값은 마운트 후 주입 — 정적 빌드 시점 날짜가 HTML에 박혀 하이드레이션 불일치가 나지 않도록
+  const [mounted, setMounted] = useState<boolean>(false)
+  const [studyDate, setStudyDate] = useState<string>('')
   const [examDate, setExamDate] = useState<string>('')
   const [difficulty, setDifficulty] = useState<Difficulty>('normal')
   const [intensity, setIntensity] = useState<Intensity>('normal')
@@ -227,13 +260,13 @@ export default function ReviewIntervalClient() {
   const [sm2EF, setSm2EF] = useState<string>('2.5')
   const [sm2Interval, setSm2Interval] = useState<string>('6')
   const [sm2Quality, setSm2Quality] = useState<number>(4)
-  const [sm2LastDate, setSm2LastDate] = useState<string>(todayISO())
+  const [sm2LastDate, setSm2LastDate] = useState<string>('')
 
   // ─ TAB 3 ─
   const [items, setItems] = useState<StudyItem[]>([])
   const [showAdd, setShowAdd] = useState<boolean>(false)
   const [newTitle, setNewTitle] = useState<string>('')
-  const [newDate, setNewDate] = useState<string>(todayISO())
+  const [newDate, setNewDate] = useState<string>('')
   const [newDiff, setNewDiff] = useState<Difficulty>('normal')
   const [newIntens, setNewIntens] = useState<Intensity>('normal')
   const [newMemo, setNewMemo] = useState<string>('')
@@ -248,11 +281,19 @@ export default function ReviewIntervalClient() {
   // ─ Copy ─
   const [copied, setCopied] = useState<boolean>(false)
 
-  // localStorage 로드
+  // 오늘 날짜 주입 + localStorage 로드
   useEffect(() => {
+    const t = todayStr()
+    setStudyDate(t)
+    setSm2LastDate(t)
+    setNewDate(t)
+    setMounted(true)
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) setItems(JSON.parse(raw))
+      if (!raw) return
+      const parsed: unknown = JSON.parse(raw)
+      if (Array.isArray(parsed)) setItems(parsed.filter(isStudyItem))
     } catch {}
   }, [])
   useEffect(() => {
@@ -263,11 +304,13 @@ export default function ReviewIntervalClient() {
   // ─────────────────────────────────────────────
   // TAB 1: 간단 일정
   // ─────────────────────────────────────────────
+  const studyDateValid = isValidISO(studyDate)
   const simpleSchedule = useMemo(() => {
+    if (!isValidISO(studyDate)) return []
     const start = parseISO(studyDate)
     const baseIntervals = SIMPLE_INTERVALS[difficulty]
     const mult = INTENSITY_MULT[intensity]
-    const exam = examDate ? parseISO(examDate) : null
+    const exam = isValidISO(examDate) ? parseISO(examDate) : null
 
     const items = baseIntervals.map((interval, i) => {
       const adjusted = Math.max(1, Math.round(interval * mult))
@@ -298,6 +341,10 @@ export default function ReviewIntervalClient() {
 
   // 망각곡선용 복습일들 (학습일 0 기준)
   const reviewDaysFromStart = simpleSchedule.map(s => s.interval)
+  // 해석 문구용 — 그래프와 같은 모델로 계산 (7일 무복습, 복습 직전 최저 유지율)
+  const noReview7 = Math.exp(-7 / CURVE_BASE_STABILITY) * 100
+  const preRetention = preReviewRetention(reviewDaysFromStart)
+  const minPreRetention = preRetention.length > 0 ? Math.min(...preRetention) : null
 
   // ─────────────────────────────────────────────
   // TAB 2: SM-2
@@ -311,16 +358,16 @@ export default function ReviewIntervalClient() {
       ef,
       interval,
     })
-    const lastDate = parseISO(sm2LastDate)
-    const nextDate = addDays(lastDate, result.nextInterval)
-    return { ...result, prevEF: ef, prevInterval: interval, nextDate }
+    const dateValid = isValidISO(sm2LastDate)
+    const nextDate = addDays(dateValid ? parseISO(sm2LastDate) : new Date(), result.nextInterval)
+    return { ...result, prevEF: ef, prevInterval: interval, nextDate, dateValid }
   }, [sm2Reps, sm2EF, sm2Interval, sm2Quality, sm2LastDate])
 
   // ─────────────────────────────────────────────
   // TAB 3: 학습 항목 관리
   // ─────────────────────────────────────────────
   function addItem() {
-    if (!newTitle.trim()) return
+    if (!newTitle.trim() || !isValidISO(newDate)) return
     const start = parseISO(newDate)
     const baseIntervals = SIMPLE_INTERVALS[newDiff]
     const mult = INTENSITY_MULT[newIntens]
@@ -341,7 +388,7 @@ export default function ReviewIntervalClient() {
     }
     setItems(prev => [item, ...prev])
     setShowAdd(false)
-    setNewTitle(''); setNewMemo(''); setNewDate(todayISO())
+    setNewTitle(''); setNewMemo(''); setNewDate(todayStr())
   }
 
   function deleteItem(id: string) {
@@ -378,7 +425,7 @@ export default function ReviewIntervalClient() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `youtil-review-backup-${todayISO()}.json`
+    a.download = `youtil-review-backup-${todayStr()}.json`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -388,11 +435,16 @@ export default function ReviewIntervalClient() {
     const reader = new FileReader()
     reader.onload = () => {
       try {
-        const data = JSON.parse(String(reader.result))
-        if (Array.isArray(data.items)) {
-          if (confirm(`${data.items.length}개 항목을 가져옵니다. 기존 데이터가 덮어씌워집니다. 계속할까요?`)) {
-            setItems(data.items)
-          }
+        const data: unknown = JSON.parse(String(reader.result))
+        const list = data && typeof data === 'object' ? (data as { items?: unknown }).items : undefined
+        const valid = Array.isArray(list) ? list.filter(isStudyItem) : []
+        if (valid.length === 0) {
+          alert('가져올 수 있는 학습 항목이 없습니다. 이 도구에서 내려받은 백업 파일인지 확인하세요.')
+          return
+        }
+        const skipped = (list as unknown[]).length - valid.length
+        if (confirm(`${valid.length}개 항목을 가져옵니다${skipped > 0 ? ` (형식이 맞지 않는 ${skipped}개 제외)` : ''}. 기존 데이터가 덮어씌워집니다. 계속할까요?`)) {
+          setItems(valid)
         }
       } catch {
         alert('잘못된 백업 파일입니다.')
@@ -455,6 +507,8 @@ export default function ReviewIntervalClient() {
     const dailyHrs = parseFloat(dailyHours) || 0
     const perMin = parseFloat(minPerItem) || 0
     if (total <= 0 || dailyHrs <= 0 || perMin <= 0) return null
+    // 항목 하나가 하루 시간을 넘으면 일별 계획이 '신규 0개'로 멈추므로 먼저 막는다
+    if (perMin > dailyHrs * 60) return { error: '항목당 학습 시간이 하루 공부 가능 시간보다 깁니다. 하루 시간을 늘리거나 항목을 더 잘게 나눠 주세요.' }
     const dailyMinutes = dailyHrs * 60
     const itemsPerDay = Math.max(1, Math.floor(dailyMinutes / perMin))
     // 신규 학습 일수 추정 — 매일 itemsPerDay개씩 학습 (단, 복습 시간이 점점 늘어남 고려)
@@ -465,7 +519,8 @@ export default function ReviewIntervalClient() {
     const totalReviewHours = totalLearnHours * 1.5  // 복습 = 신규의 1.5배
     const totalRequiredHours = totalLearnHours + totalReviewHours
     const totalAvailableHours = daysLeft * dailyHrs
-    const isShortage = learnDays > daysLeft - 2  // 시험 2일 전까지 학습 완료 필요
+    // 시험 2일 전까지 신규 학습 완료 + 총 필요 시간이 가능 시간 이내여야 '가능'
+    const isShortage = learnDays > daysLeft - 2 || totalRequiredHours > totalAvailableHours
     return {
       daysLeft,
       newItemsPerDay,
@@ -486,20 +541,27 @@ export default function ReviewIntervalClient() {
     const out: { date: Date; newItems: number; reviewItems: number; totalMin: number; isLast: boolean }[] = []
     const total = parseFloat(totalItems) || 0
     const perMin = parseFloat(minPerItem) || 2
-    const newPerDay = examPlan.newItemsPerDay
+    const budget = (parseFloat(dailyHours) || 0) * 60  // 하루 가능 시간(분) — 이 상한을 넘기지 않는다
+    const reviewCost = perMin * 0.7
+    const newPerDay = examPlan.newItemsPerDay         // 하루 시간의 절반 이하
     let learned = 0
     for (let i = 0; i < Math.min(examPlan.daysLeft, 30); i++) {
       const date = addDays(todayStart, i)
       const isLastDay = i === examPlan.daysLeft - 1
-      const newToday = Math.min(newPerDay, Math.max(0, total - learned))
+      // 복습 대상 추정(어제까지 익힌 항목의 약 40%, 최대 150개). 신규 학습분 시간을 먼저 떼어 두고
+      // 남은 시간 안에서만 복습을 배정 — 예전엔 상한이 없어 하루 2시간 입력에 4.5시간 계획이 나왔다
+      const newWanted = Math.max(0, Math.min(newPerDay, total - learned))
+      const reviewWanted = Math.min(learned, Math.round(Math.min(150, learned * 0.4)))
+      const reviewCap = Math.floor(Math.max(0, budget - newWanted * perMin) / reviewCost)
+      const reviewToday = Math.max(0, Math.min(reviewWanted, reviewCap))
+      const remaining = budget - reviewToday * reviewCost
+      const newToday = Math.max(0, Math.min(newWanted, Math.floor(remaining / perMin)))
       learned += newToday
-      // 복습 항목 수 추정 (간단: i * newPerDay × 0.4, 안정화)
-      const reviewToday = Math.min(learned, Math.round(Math.min(150, learned * 0.4)))
-      const totalMin = newToday * perMin + reviewToday * (perMin * 0.7)
+      const totalMin = newToday * perMin + reviewToday * reviewCost
       out.push({ date, newItems: newToday, reviewItems: reviewToday, totalMin, isLast: isLastDay })
     }
     return out
-  }, [examPlan, totalItems, minPerItem, todayStart])
+  }, [examPlan, totalItems, minPerItem, dailyHours, todayStart])
 
   // ─────────────────────────────────────────────
   // 복사
@@ -520,7 +582,7 @@ export default function ReviewIntervalClient() {
         `[SM-2 정확 계산]`,
         `이전 EF: ${sm2EF} → 다음 EF: ${sm2Result.nextEF.toFixed(2)}`,
         `이전 간격: ${sm2Interval}일 → 다음 간격: ${sm2Result.nextInterval}일`,
-        `다음 복습일: ${fmtDate(sm2Result.nextDate)}`,
+        sm2Result.dateValid ? `다음 복습일: ${fmtDate(sm2Result.nextDate)}` : '',
         ``,
         `https://youtil.kr/tools/edu/review-interval`,
       ].join('\n')
@@ -545,7 +607,7 @@ export default function ReviewIntervalClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -566,10 +628,10 @@ export default function ReviewIntervalClient() {
       </Disclaimer>
 
       <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'simple' ? s.tabActive : ''}`} onClick={() => setTab('simple')}>간단 복습 일정</button>
-        <button className={`${s.tabBtn} ${tab === 'sm2'    ? s.tabActive : ''}`} onClick={() => setTab('sm2')}>SM-2 정확 계산</button>
-        <button className={`${s.tabBtn} ${tab === 'items'  ? s.tabActive : ''}`} onClick={() => setTab('items')}>학습 항목 관리</button>
-        <button className={`${s.tabBtn} ${tab === 'exam'   ? s.tabActive : ''}`} onClick={() => setTab('exam')}>시험일 역산</button>
+        <button type="button" aria-pressed={tab === 'simple'} className={`${s.tabBtn} ${tab === 'simple' ? s.tabActive : ''}`} onClick={() => setTab('simple')}>간단 복습 일정</button>
+        <button type="button" aria-pressed={tab === 'sm2'}    className={`${s.tabBtn} ${tab === 'sm2'    ? s.tabActive : ''}`} onClick={() => setTab('sm2')}>SM-2 정확 계산</button>
+        <button type="button" aria-pressed={tab === 'items'}  className={`${s.tabBtn} ${tab === 'items'  ? s.tabActive : ''}`} onClick={() => setTab('items')}>학습 항목 관리</button>
+        <button type="button" aria-pressed={tab === 'exam'}   className={`${s.tabBtn} ${tab === 'exam'   ? s.tabActive : ''}`} onClick={() => setTab('exam')}>시험일 역산</button>
       </div>
 
       {/* ─── TAB 1 ─── */}
@@ -579,12 +641,12 @@ export default function ReviewIntervalClient() {
             <div className={s.cardLabel}><span>학습 정보</span></div>
             <div className={s.gridTwo}>
               <div>
-                <span className={s.subLabel}>학습일</span>
-                <input className={s.dateInput} type="date" value={studyDate} onChange={e => setStudyDate(e.target.value)} />
+                <label className={s.subLabel} htmlFor="ri-study-date">학습일</label>
+                <input id="ri-study-date" className={s.dateInput} type="date" value={studyDate} onChange={e => setStudyDate(e.target.value)} />
               </div>
               <div>
-                <span className={s.subLabel}>시험일·목표일 (선택)</span>
-                <input className={s.dateInput} type="date" value={examDate} onChange={e => setExamDate(e.target.value)} />
+                <label className={s.subLabel} htmlFor="ri-exam-date">시험일·목표일 (선택)</label>
+                <input id="ri-exam-date" className={s.dateInput} type="date" value={examDate} onChange={e => setExamDate(e.target.value)} />
               </div>
             </div>
 
@@ -616,6 +678,11 @@ export default function ReviewIntervalClient() {
                 <p className={s.heroSub}>
                   <strong>{dDay(simpleSchedule[0].date)}</strong> · 1차 복습 ({simpleSchedule[0].interval}일 후)
                 </p>
+              </div>
+            )}
+            {mounted && simpleSchedule.length === 0 && (
+              <div className={s.warnCard}>
+                {studyDateValid ? '시험일·목표일이 첫 복습일보다 늦어야 복습 일정을 만들 수 있습니다.' : '학습일을 선택하면 복습 일정을 계산합니다.'}
               </div>
             )}
           </div>
@@ -658,10 +725,13 @@ export default function ReviewIntervalClient() {
             <ForgettingCurve reviewDays={reviewDaysFromStart} totalDays={Math.max(30, ...reviewDaysFromStart) + 5} />
           </div>
 
-          <div className={s.interpretCard}>
-            💡 <strong>해석:</strong> 복습하지 않으면 7일 후 기억 유지율이 약 <strong>30% 이하</strong>로 떨어집니다.
-            권장 일정대로 복습하면 기억 유지율 <strong>70% 이상</strong>을 시험까지 유지할 수 있습니다.
-          </div>
+          {minPreRetention !== null && (
+            <div className={s.interpretCard}>
+              💡 <strong>해석:</strong> 위 그래프의 단순 모델에서는 복습하지 않으면 7일 뒤 유지율이 약 <strong>{Math.round(noReview7)}%</strong>까지 떨어집니다.
+              이 일정대로 복습하면 복습 직전에도 최소 약 <strong>{Math.round(minPreRetention)}%</strong>가 남습니다.
+              실제 망각 속도는 사람과 학습 내용에 따라 크게 다르니 흐름을 보는 참고용으로 활용하세요.
+            </div>
+          )}
 
           <button className={`${s.copyBtn} ${copied ? s.copied : ''}`} onClick={copyResult} type="button">
             {copied ? '✓ 복사됨' : '결과 복사하기'}
@@ -679,22 +749,22 @@ export default function ReviewIntervalClient() {
             </div>
             <div className={s.gridThree}>
               <div>
-                <span className={s.subLabel}>마지막 복습일</span>
-                <input className={s.dateInput} type="date" value={sm2LastDate} onChange={e => setSm2LastDate(e.target.value)} />
+                <label className={s.subLabel} htmlFor="ri-sm2-last">마지막 복습일</label>
+                <input id="ri-sm2-last" className={s.dateInput} type="date" value={sm2LastDate} onChange={e => setSm2LastDate(e.target.value)} />
               </div>
               <div>
-                <span className={s.subLabel}>이전 복습 횟수</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" max="20" step="1" value={sm2Reps} onChange={e => setSm2Reps(parseInt(e.target.value) || 0)} />
+                <label className={s.subLabel} htmlFor="ri-sm2-reps">이전 복습 횟수</label>
+                <input id="ri-sm2-reps" className={s.bigInput} type="number" inputMode="decimal" min="0" max="20" step="1" value={sm2Reps} onChange={e => setSm2Reps(parseInt(e.target.value) || 0)} />
               </div>
               <div>
-                <span className={s.subLabel}>이전 간격 (일)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="1" max="365" step="1" value={sm2Interval} onChange={e => setSm2Interval(e.target.value)} />
+                <label className={s.subLabel} htmlFor="ri-sm2-interval">이전 간격 (일)</label>
+                <input id="ri-sm2-interval" className={s.bigInput} type="number" inputMode="decimal" min="1" max="365" step="1" value={sm2Interval} onChange={e => setSm2Interval(e.target.value)} />
               </div>
             </div>
             <div style={{ marginTop: 14 }}>
-              <span className={s.subLabel}>현재 난이도 계수 EF: {parseFloat(sm2EF).toFixed(2)} (1.3 ~ 3.0, 기본 2.5)</span>
+              <label className={s.subLabel} htmlFor="ri-sm2-ef">현재 난이도 계수 EF: {parseFloat(sm2EF).toFixed(2)} (1.3 ~ 3.0, 기본 2.5)</label>
               <div className={s.sliderRow}>
-                <input type="range" min={1.3} max={3.0} step={0.05} value={sm2EF} onChange={e => setSm2EF(e.target.value)} />
+                <input id="ri-sm2-ef" type="range" min={1.3} max={3.0} step={0.05} value={sm2EF} onChange={e => setSm2EF(e.target.value)} />
                 <span className={s.sliderValue}>EF {parseFloat(sm2EF).toFixed(2)}</span>
               </div>
             </div>
@@ -722,13 +792,19 @@ export default function ReviewIntervalClient() {
           </div>
 
           {/* HERO */}
-          <div className={s.hero}>
-            <p className={s.heroLead}>다음 복습일</p>
-            <p className={s.heroNum}>{fmtKorean(sm2Result.nextDate)}</p>
-            <p className={s.heroSub}>
-              <strong>{dDay(sm2Result.nextDate)}</strong> ·
-              {sm2Quality < 3 ? ' 처음부터 다시 (간격 1일)' : ` 간격 ${sm2Result.nextInterval}일`}
-            </p>
+          <div role="status">
+            {!mounted ? null : sm2Result.dateValid ? (
+              <div className={s.hero}>
+                <p className={s.heroLead}>다음 복습일</p>
+                <p className={s.heroNum}>{fmtKorean(sm2Result.nextDate)}</p>
+                <p className={s.heroSub}>
+                  <strong>{dDay(sm2Result.nextDate)}</strong> ·
+                  {sm2Quality < 3 ? ' 처음부터 다시 (간격 1일)' : ` 간격 ${sm2Result.nextInterval}일`}
+                </p>
+              </div>
+            ) : (
+              <div className={s.warnCard}>마지막 복습일을 선택하면 다음 복습일을 계산합니다. (다음 간격 {sm2Result.nextInterval}일)</div>
+            )}
           </div>
 
           {/* 분석 */}
@@ -824,17 +900,17 @@ export default function ReviewIntervalClient() {
               <p className={s.itemAddTitle}>새 학습 항목</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <div>
-                  <span className={s.subLabel}>제목 *</span>
-                  <input className={s.textInput} type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="예: 일본어 단어장 1과" maxLength={50} />
+                  <label className={s.subLabel} htmlFor="ri-new-title">제목 *</label>
+                  <input id="ri-new-title" className={s.textInput} type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="예: 일본어 단어장 1과" maxLength={50} />
                 </div>
                 <div className={s.gridTwo}>
                   <div>
-                    <span className={s.subLabel}>학습일</span>
-                    <input className={s.dateInput} type="date" value={newDate} onChange={e => setNewDate(e.target.value)} />
+                    <label className={s.subLabel} htmlFor="ri-new-date">학습일</label>
+                    <input id="ri-new-date" className={s.dateInput} type="date" value={newDate} onChange={e => setNewDate(e.target.value)} />
                   </div>
                   <div>
-                    <span className={s.subLabel}>메모 (선택)</span>
-                    <input className={s.textInput} type="text" value={newMemo} onChange={e => setNewMemo(e.target.value)} placeholder="-" maxLength={100} />
+                    <label className={s.subLabel} htmlFor="ri-new-memo">메모 (선택)</label>
+                    <input id="ri-new-memo" className={s.textInput} type="text" value={newMemo} onChange={e => setNewMemo(e.target.value)} placeholder="-" maxLength={100} />
                   </div>
                 </div>
                 <div>
@@ -854,7 +930,7 @@ export default function ReviewIntervalClient() {
                   </div>
                 </div>
                 <div className={s.itemActions}>
-                  <button className={`${s.itemActionBtn} ${s.itemActionPrimary}`} onClick={addItem} type="button">저장</button>
+                  <button className={`${s.itemActionBtn} ${s.itemActionPrimary}`} onClick={addItem} disabled={!newTitle.trim() || !isValidISO(newDate)} type="button">저장</button>
                   <button className={s.itemActionBtn} onClick={() => { setShowAdd(false); setNewTitle('') }} type="button">취소</button>
                 </div>
               </div>
@@ -957,20 +1033,20 @@ export default function ReviewIntervalClient() {
             </div>
             <div className={s.gridTwo}>
               <div>
-                <span className={s.subLabel}>시험일</span>
-                <input className={s.dateInput} type="date" value={examTargetDate} onChange={e => setExamTargetDate(e.target.value)} />
+                <label className={s.subLabel} htmlFor="ri-exam-target">시험일</label>
+                <input id="ri-exam-target" className={s.dateInput} type="date" value={examTargetDate} onChange={e => setExamTargetDate(e.target.value)} />
               </div>
               <div>
-                <span className={s.subLabel}>학습 항목 수 (단어/페이지/챕터 등)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="1" step="1" value={totalItems} onChange={e => setTotalItems(e.target.value)} />
+                <label className={s.subLabel} htmlFor="ri-exam-items">학습 항목 수 (단어/페이지/챕터 등)</label>
+                <input id="ri-exam-items" className={s.bigInput} type="number" inputMode="decimal" min="1" step="1" value={totalItems} onChange={e => setTotalItems(e.target.value)} />
               </div>
               <div>
-                <span className={s.subLabel}>하루 공부 가능 시간 (시간)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0.5" max="16" step="0.5" value={dailyHours} onChange={e => setDailyHours(e.target.value)} />
+                <label className={s.subLabel} htmlFor="ri-exam-hours">하루 공부 가능 시간 (시간)</label>
+                <input id="ri-exam-hours" className={s.bigInput} type="number" inputMode="decimal" min="0.5" max="16" step="0.5" value={dailyHours} onChange={e => setDailyHours(e.target.value)} />
               </div>
               <div>
-                <span className={s.subLabel}>항목당 평균 학습 시간 (분)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0.5" max="60" step="0.5" value={minPerItem} onChange={e => setMinPerItem(e.target.value)} />
+                <label className={s.subLabel} htmlFor="ri-exam-min">항목당 평균 학습 시간 (분)</label>
+                <input id="ri-exam-min" className={s.bigInput} type="number" inputMode="decimal" min="0.5" max="60" step="0.5" value={minPerItem} onChange={e => setMinPerItem(e.target.value)} />
               </div>
             </div>
           </div>
@@ -981,7 +1057,7 @@ export default function ReviewIntervalClient() {
 
           {examPlan && !('error' in examPlan) && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLead}>일별 권장 학습량</p>
                 <p className={s.heroNum}>매일 신규 {examPlan.newItemsPerDay}개</p>
                 <p className={s.heroSub}>
@@ -991,7 +1067,7 @@ export default function ReviewIntervalClient() {
 
               {examPlan.isShortage && (
                 <div className={s.warnCard}>
-                  ⚠️ <strong>일정 부족 가능성:</strong> 현재 일정으로는 시험 전 학습 완료가 어려울 수 있습니다.
+                  ⚠️ <strong>일정 부족 가능성:</strong> 현재 일정으로는 시험 전 학습 완료가 어려울 수 있습니다{examPlan.totalRequiredHours > examPlan.totalAvailableHours ? ` (필요 약 ${examPlan.totalRequiredHours.toFixed(1)}시간 > 가능 ${examPlan.totalAvailableHours.toFixed(1)}시간)` : ''}.
                   하루 학습 시간을 늘리거나, 학습 항목 수를 줄이거나, 복습 강도를 조정(빠르게)하는 것을 검토하세요.
                 </div>
               )}

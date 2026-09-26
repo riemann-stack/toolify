@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import s from './schengen.module.css'
 
 /* ─────────────────────────────────────────────────────────
@@ -16,10 +17,6 @@ const WD = ['일', '월', '화', '수', '목', '금', '토']
 
 const STORAGE_KEY = 'youtil_schengen_v1'
 
-function todayISO(): string {
-  const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
 /** ISO(YYYY-MM-DD) → UTC 자정 기준 정수 일 번호. 2-31 같은 롤오버 날짜는 왕복 검증으로 거부 */
 function isoToDay(iso: string): number | null {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
@@ -64,10 +61,10 @@ export default function SchengenClient() {
   const [hydrated, setHydrated] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  /* localStorage 복원 + 기준일 오늘로 (하이드레이션 안전) */
+  /* localStorage 복원 + 기준일은 항상 오늘로 시작 (하이드레이션 안전).
+     저장된 기준일을 복원하면 재방문 시 '체류 중' 기록이 옛 기준일까지만 세어져 잔여일이 과대 표시된다. */
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
-    let savedRef = ''
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
@@ -81,18 +78,17 @@ export default function SchengenClient() {
             setNextId(Math.max(...cleaned.map((x) => x.id)) + 1)
           }
         }
-        if (typeof j.refDate === 'string') savedRef = j.refDate
       }
     } catch {}
-    setRefDate(savedRef || todayISO())
+    setRefDate(todayStr())
     setHydrated(true)
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
 
   useEffect(() => {
     if (!hydrated) return
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ stays, refDate })) } catch {}
-  }, [stays, refDate, hydrated])
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ stays })) } catch {}
+  }, [stays, hydrated])
 
   function addStay() {
     setStays((prev) => [...prev, { id: nextId, entry: '', exit: '' }])
@@ -182,16 +178,23 @@ export default function SchengenClient() {
         : '기준일에는 입국 불가 (90일 소진)',
       calc.nextEntry !== null ? `다음 입국 가능일: ${dayToISO(calc.nextEntry)}` : '향후 1년 내 입국 가능일 없음',
       calc.violFirst !== null && calc.violLast !== null
-        ? `⚠️ 과거 초과 체류 감지: ${dayToISO(calc.violFirst)}~${dayToISO(calc.violLast)} (최대 ${calc.violMax}일 초과)` : null,
+        ? `⚠️ ${calc.violFirst > calc.refDay ? '계획대로면 초과 체류 예정' : '초과 체류 감지'}: ${dayToISO(calc.violFirst)}~${dayToISO(calc.violLast)} (최대 ${calc.violMax}일 초과)` : null,
       calc.ongoing > 0 ? `※ 출국일 미입력 ${calc.ongoing}건은 기준일까지 체류 중으로 계산` : null,
       calc.invalid > 0 ? `※ 잘못된 기록 ${calc.invalid}건은 계산에서 제외` : null,
       'youtil.kr/tools/date/schengen',
     ].filter((x): x is string => x !== null).join('\n')
-    navigator.clipboard?.writeText(txt).then(() => {
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 1200)
-    })
+    if (!navigator.clipboard) { window.alert('이 브라우저에서는 복사를 지원하지 않습니다.'); return }
+    navigator.clipboard.writeText(txt).then(
+      () => {
+        setCopied(true)
+        window.setTimeout(() => setCopied(false), 1500)
+      },
+      () => window.alert('복사에 실패했습니다. 브라우저 권한을 확인해 주세요.'),
+    )
   }
+
+  const today = todayStr()
+  const refIsToday = refDate === today
 
   const usedPct = calc ? Math.min(100, (calc.used / LIMIT) * 100) : 0
   const over = calc ? calc.remaining < 0 : false
@@ -221,7 +224,7 @@ export default function SchengenClient() {
             onChange={(e) => setRefDate(e.target.value)}
             aria-label="기준일"
           />
-          <button type="button" className={s.todayBtn} onClick={() => setRefDate(todayISO())}>오늘</button>
+          <button type="button" className={s.todayBtn} onClick={() => setRefDate(todayStr())}>오늘</button>
         </div>
         <p className={s.hintText}>이 날짜 기준 직전 180일을 계산합니다. 미래 여행 계획 시 <strong>입국 예정일</strong>로 바꿔보세요.</p>
       </div>
@@ -235,7 +238,8 @@ export default function SchengenClient() {
             const b = isoToDay(st.exit)
             const dur = a !== null && b !== null && b >= a ? b - a + 1 : null
             const bad = (st.entry !== '' && a === null) || (st.exit !== '' && b === null) || (a !== null && b !== null && b < a)
-            const ongoing = a !== null && st.exit === ''  // 출국일 미정 → 기준일까지 체류 중으로 계산됨
+            const ongoing = a !== null && st.exit === '' && calc !== null && a <= calc.refDay  // 출국일 미정 → 기준일까지 체류 중으로 계산됨
+            const needExit = a !== null && st.exit === '' && calc !== null && a > calc.refDay  // 기준일 이후 입국 예정 → 출국 예정일이 있어야 계산
             return (
               <div key={st.id} className={s.stayRow}>
                 <div className={s.stayFields}>
@@ -249,8 +253,8 @@ export default function SchengenClient() {
                   </div>
                 </div>
                 <div className={s.staySide}>
-                  <span className={`${s.durBadge} ${bad ? s.durBad : ''} ${ongoing ? s.durOngoing : ''}`}>
-                    {bad ? '날짜 오류' : dur !== null ? `${dur}일` : ongoing ? '체류 중' : '—'}
+                  <span className={`${s.durBadge} ${bad || needExit ? s.durBad : ''} ${ongoing ? s.durOngoing : ''}`}>
+                    {bad ? '날짜 오류' : dur !== null ? `${dur}일` : ongoing ? '체류 중' : needExit ? '출국일 필요' : '—'}
                   </span>
                   <button
                     type="button"
@@ -281,6 +285,12 @@ export default function SchengenClient() {
             <p className={s.heroSub}>
               {dayToISO(calc.winStart)} ~ {dayToISO(calc.refDay)} 중 <strong>{calc.used} / 90일</strong> 사용
             </p>
+            {!refIsToday && (
+              <p className={s.invalidNote}>
+                ※ 기준일이 오늘이 아니라 <strong>{refDate}</strong>입니다. 지금 남은 일수를 보려면{' '}
+                <button type="button" className={s.todayBtn} style={{ padding: '2px 10px', fontSize: 12 }} onClick={() => setRefDate(today)}>오늘로 바꾸기</button>
+              </p>
+            )}
             <div className={s.usageBar}>
               <div className={s.usageFill} style={{ width: `${usedPct}%`, background: remainColor }} />
             </div>
@@ -289,7 +299,11 @@ export default function SchengenClient() {
             )}
             {calc.violFirst !== null && calc.violLast !== null && (
               <p className={s.overWarn} role="alert">
-                ⚠️ 기록상 <strong>{dayToISO(calc.violFirst)} ~ {dayToISO(calc.violLast)}</strong> 구간에서 90/180일 한도를 최대 <strong>{calc.violMax}일 초과</strong>했습니다. 과거 초과 체류는 EES에 기록되어 향후 입국 심사·재입국에 영향을 줄 수 있습니다.
+                {calc.violFirst > calc.refDay ? (
+                  <>⚠️ 입력한 일정대로 머물면 <strong>{dayToISO(calc.violFirst)} ~ {dayToISO(calc.violLast)}</strong> 구간에서 90/180일 한도를 최대 <strong>{calc.violMax}일 초과</strong>하게 됩니다. 출국 예정일을 앞당겨 주세요.</>
+                ) : (
+                  <>⚠️ 기록상 <strong>{dayToISO(calc.violFirst)} ~ {dayToISO(calc.violLast)}</strong> 구간에서 90/180일 한도를 최대 <strong>{calc.violMax}일 초과</strong>했습니다. 초과 체류는 EES에 기록되어 향후 입국 심사·재입국에 영향을 줄 수 있습니다.</>
+                )}
               </p>
             )}
             {calc.count === 0 && (
@@ -326,7 +340,7 @@ export default function SchengenClient() {
               {calc.nextEntry !== null ? (
                 calc.nextEntry === calc.refDay ? (
                   <>
-                    <div className={s.statValue} style={{ color: 'var(--success)' }}>오늘 가능</div>
+                    <div className={s.statValue} style={{ color: 'var(--success)' }}>{refIsToday ? '오늘 가능' : '기준일에 가능'}</div>
                     <div className={s.statSub}>기준일에 바로 입국할 수 있습니다</div>
                   </>
                 ) : (

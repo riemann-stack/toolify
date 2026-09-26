@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import s from './cosmic-calendar.module.css'
 import {
   EVENTS as EVENTS_RAW, type CosmicEvent, type CatKey,
-  COSMIC_SECOND_REAL_YEARS,
+  COSMIC_SECOND_REAL_YEARS, COSMIC_MINUTE_REAL_YEARS, COSMIC_DAY_REAL_YEARS, DAYS_IN_COSMIC_YEAR,
   cosmicPosition, yearsAgoOf, fmtRealYears, ageToCosmic, MONTHS,
   compress24h, compress1km, cosmicClockStart,
 } from './cosmicData'
@@ -229,6 +229,12 @@ export default function CosmicCalendarClient() {
   const [copied, setCopied] = useState<boolean>(false)
   const [activePoint, setActivePoint] = useState<string | null>(null)
 
+  /** 12월 31일 사건의 'HH:MM' — 배너 문구를 사건 데이터에서 파생 (예전 하드코딩 22:24는 호모 속 시각이었다) */
+  const hmOf = (id: string) => {
+    const e = events.find(ev => ev.id === id)
+    return e ? `${String(e.hour).padStart(2, '0')}:${String(e.minute).padStart(2, '0')}` : ''
+  }
+
   // 월별 사건 그룹화
   const eventsByMonth = useMemo(() => {
     const groups: Record<number, Event[]> = {}
@@ -277,14 +283,32 @@ export default function CosmicCalendarClient() {
     }
   }, [age])
 
+  /* 막대·공유 카드·복사 문구가 같은 값을 쓰도록 사건 데이터에서 파생한다
+     (예전엔 막대 '약 4.4일'(1.65억 년) · 카드와 복사 '1.6억 년 = 약 4.2일'이 한 화면에 같이 나왔다) */
+  const spans = useMemo(() => {
+    const ago = (id: string) => events.find(e => e.id === id)?.realYearsAgo ?? 0
+    const dinoYears = ago('dinosaurs') - ago('dinoExtinction')   // 공룡 등장 ~ 멸종
+    const sapiensYears = ago('homoSapiens')
+    const civYears = ago('agriculture')
+    return {
+      dinoYears, sapiensYears, civYears,
+      dinoLabel: `${round(dinoYears / 1e8, 2)}억 년`,
+      dinoDays: `약 ${round(dinoYears / COSMIC_DAY_REAL_YEARS, 1)}일`,
+      sapiensLabel: `${(sapiensYears / 1e4).toLocaleString('ko-KR')}만 년`,
+      sapiensMin: `약 ${round(sapiensYears / COSMIC_MINUTE_REAL_YEARS, 1)}분`,
+      civLabel: `${civYears.toLocaleString('ko-KR')}년`,
+      civSec: `약 ${round(civYears / COSMIC_SECOND_REAL_YEARS, 1)}초`,
+    }
+  }, [events])
+
   // 비교 데이터 (탭 3 막대)
   const compareBars = useMemo(() => {
     // 우주 1년 = 100% 기준, 로그 스케일로 시각화
     const items = [
-      { label: '우주 1년',       cosmicSec: 365.25 * 24 * 3600,                color: '#9B59B6', desc: '138억 년' },
-      { label: '공룡 시대',      cosmicSec: (165_000_000 / COSMIC_SECOND_REAL_YEARS), color: '#EA580C', desc: '약 4.4일' },
-      { label: '인류 등장',      cosmicSec: (300_000   / COSMIC_SECOND_REAL_YEARS),   color: '#A16207', desc: '약 11.4분' },
-      { label: '인류 문명',      cosmicSec: (12_000    / COSMIC_SECOND_REAL_YEARS),   color: '#059669', desc: '약 27.5초' },
+      { label: '우주 1년',       cosmicSec: DAYS_IN_COSMIC_YEAR * 24 * 3600,  color: '#9B59B6', desc: '138억 년' },
+      { label: '공룡 시대',      cosmicSec: spans.dinoYears / COSMIC_SECOND_REAL_YEARS,    color: '#EA580C', desc: spans.dinoDays },
+      { label: '인류 등장',      cosmicSec: spans.sapiensYears / COSMIC_SECOND_REAL_YEARS, color: '#A16207', desc: spans.sapiensMin },
+      { label: '인류 문명',      cosmicSec: spans.civYears / COSMIC_SECOND_REAL_YEARS,     color: '#059669', desc: spans.civSec },
       { label: '내 나이',        cosmicSec: myLife.cosmicSeconds,             color: '#0D9488', desc: `약 ${round(myLife.cosmicSeconds, 3)}초` },
     ]
     const max = items[0].cosmicSec
@@ -293,7 +317,7 @@ export default function CosmicCalendarClient() {
       // 로그 스케일 (작은 값도 보이게)
       pct: Math.max(0.5, (Math.log10(Math.max(0.01, it.cosmicSec)) / Math.log10(max)) * 100),
     }))
-  }, [myLife])
+  }, [myLife, spans])
 
   // ─────────────────────────────────────────────
   // 연간 타임라인 — 점 데이터 (반응형)
@@ -386,10 +410,10 @@ export default function CosmicCalendarClient() {
         `우주 1년에서 ${userName ? userName + '님의' : '나의'} 시간`,
         ``,
         `${age}년 인생 = ${round(myLife.cosmicSeconds, 3)}초 (= ${cosmicMin}분)`,
-        `인류 문명(농업) 12,000년 = 약 27.5초`,
+        `인류 문명(농업) ${spans.civLabel} = ${spans.civSec}`,
         `문자 이후 기록 역사 = 약 ${writingCosmicSec}초`,
-        `현생 인류 30만 년 = 약 11.4분`,
-        `공룡 시대 1.6억 년 = 약 4.2일`,
+        `현생 인류 ${spans.sapiensLabel} = ${spans.sapiensMin}`,
+        `공룡 시대 ${spans.dinoLabel} = ${spans.dinoDays}`,
         `우주 1년 = 138억 년`,
         ``,
         `당신의 ${age}년은 우주 1년에서 단 ${round(myLife.cosmicSeconds, 3)}초입니다.`,
@@ -399,15 +423,16 @@ export default function CosmicCalendarClient() {
       text = [
         `🌌 코스믹 캘린더 (138억 년 = 1년)`,
         ``,
-        `1초 ≈ 437년 · 1분 ≈ 26,200년 · 1일 ≈ 3,778만 년`,
+        `1초 ≈ ${Math.round(COSMIC_SECOND_REAL_YEARS)}년 · 1분 ≈ ${(Math.round(COSMIC_MINUTE_REAL_YEARS / 100) * 100).toLocaleString('ko-KR')}년 · 1일 ≈ ${Math.round(COSMIC_DAY_REAL_YEARS / 1e4).toLocaleString('ko-KR')}만 년`,
         ``,
-        `· 빅뱅: 1월 1일 00:00`,
-        `· 태양계: 8월 31일`,
-        `· 지구: 9월 2일`,
-        `· 공룡: 12월 25일`,
-        `· 현생 인류: 12월 31일 23:48`,
-        `· 농업 혁명: 12월 31일 23:59:32`,
-        `· 산업혁명: 12월 31일 23:59:59.4`,
+        // 날짜는 도구 표와 같은 사건 데이터에서 파생 (예전 하드코딩 '태양계 8월 31일'은 계산값 9월 2일과 달랐다)
+        ...([
+          ['bigbang', '빅뱅'], ['solarSystem', '태양계'], ['earth', '지구'], ['dinosaurs', '공룡'],
+          ['homoSapiens', '현생 인류'], ['agriculture', '농업 혁명'], ['industrial', '산업혁명'],
+        ] as const).map(([id, label]) => {
+          const e = events.find(ev => ev.id === id)
+          return e ? `· ${label}: ${e.cosmicDate}` : ''
+        }).filter(Boolean),
         ``,
         `youtil.kr 🌌`,
       ].join('\n')
@@ -415,7 +440,7 @@ export default function CosmicCalendarClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -446,16 +471,16 @@ export default function CosmicCalendarClient() {
       {/* 우주 단위 환산 */}
       <div className={s.unitCard}>
         <div><strong>1년</strong> = 138억 년</div>
-        <div><strong>1일</strong> ≈ 3,778만 년 · <strong>1시간</strong> ≈ 157만 년</div>
+        <div><strong>1일</strong> ≈ 3,777만 년 · <strong>1시간</strong> ≈ 157만 년</div>
         <div><strong>1분</strong> ≈ 26,200년 · <strong>1초</strong> ≈ 437년</div>
       </div>
 
       {/* 탭 */}
       <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'year'    ? s.tabActive : ''}`} onClick={() => changeTab('year')}>연간 타임라인</button>
-        <button className={`${s.tabBtn} ${tab === 'dec31'   ? s.tabActive : ''}`} onClick={() => changeTab('dec31')}>12월 31일</button>
-        <button className={`${s.tabBtn} ${tab === 'search'  ? s.tabActive : ''}`} onClick={() => changeTab('search')}>사건 검색·내 생일</button>
-        <button className={`${s.tabBtn} ${tab === 'compare' ? s.tabActive : ''}`} onClick={() => changeTab('compare')}>비교 모드</button>
+        <button type="button" aria-pressed={tab === 'year'}    className={`${s.tabBtn} ${tab === 'year'    ? s.tabActive : ''}`} onClick={() => changeTab('year')}>연간 타임라인</button>
+        <button type="button" aria-pressed={tab === 'dec31'}   className={`${s.tabBtn} ${tab === 'dec31'   ? s.tabActive : ''}`} onClick={() => changeTab('dec31')}>12월 31일</button>
+        <button type="button" aria-pressed={tab === 'search'}  className={`${s.tabBtn} ${tab === 'search'  ? s.tabActive : ''}`} onClick={() => changeTab('search')}>사건 검색·내 생일</button>
+        <button type="button" aria-pressed={tab === 'compare'} className={`${s.tabBtn} ${tab === 'compare' ? s.tabActive : ''}`} onClick={() => changeTab('compare')}>비교 모드</button>
       </div>
 
       {/* ──────────── TAB 1: 연간 타임라인 ──────────── */}
@@ -483,7 +508,7 @@ export default function CosmicCalendarClient() {
           <div className={s.dec31Banner}>
             <p className={s.dec31BannerTitle}>12월 31일 - 인류 등장</p>
             <p className={s.dec31BannerText}>
-              인류 조상은 <strong>22:24</strong>에 등장, 현생 인류는 <strong>23:48</strong>, 농업·문명·과학·인터넷 모두 마지막 <strong>30초</strong> 안에 일어났습니다.
+              인류 조상(오스트랄로피테쿠스)은 <strong>{hmOf('humanAncestor')}</strong>, 호모 속은 <strong>{hmOf('genusHomo')}</strong>, 현생 인류는 <strong>{hmOf('homoSapiens')}</strong>에 등장했고, 농업·문명·과학·인터넷은 모두 마지막 <strong>30초</strong> 안에 일어났습니다.
             </p>
             <button className={s.dec31BannerBtn} onClick={() => changeTab('dec31')} type="button">
               12월 31일 확대 보기 →
@@ -647,6 +672,7 @@ export default function CosmicCalendarClient() {
             <input
               className={s.textInput}
               type="text"
+              aria-label="사건 검색"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder='예: "공룡", "농업", "지구", "달"'
@@ -680,12 +706,12 @@ export default function CosmicCalendarClient() {
             </div>
             <div className={s.gridTwo}>
               <div>
-                <span className={s.subLabel}>만 나이 (년)</span>
-                <input className={s.bigInput} type="number" inputMode="numeric" min="0" max="120" step="1" value={age} onChange={e => setAge(Math.min(120, Math.max(0, parseInt(e.target.value) || 0)))} />
+                <label className={s.subLabel} htmlFor="cc-age">만 나이 (년)</label>
+                <input id="cc-age" className={s.bigInput} type="number" inputMode="numeric" min="0" max="120" step="1" value={age} onChange={e => setAge(Math.min(120, Math.max(0, parseInt(e.target.value) || 0)))} />
               </div>
               <div>
-                <span className={s.subLabel}>이름 (선택, 공유 카드용)</span>
-                <input className={s.textInput} type="text" value={userName} onChange={e => setUserName(e.target.value)} placeholder="예: 홍길동" maxLength={20} />
+                <label className={s.subLabel} htmlFor="cc-name">이름 (선택, 공유 카드용)</label>
+                <input id="cc-name" className={s.textInput} type="text" value={userName} onChange={e => setUserName(e.target.value)} placeholder="예: 홍길동" maxLength={20} />
               </div>
             </div>
           </div>
@@ -693,7 +719,7 @@ export default function CosmicCalendarClient() {
           {/* 결과 */}
           {age > 0 && (
             <>
-              <div className={s.myLifeHero}>
+              <div className={s.myLifeHero} role="status">
                 <p className={s.myLifeLead}>당신의 {age}년 인생은 우주 1년 기준</p>
                 <div>
                   <span className={s.myLifeNum}>{round(myLife.cosmicSeconds, 3)}</span>
@@ -739,9 +765,9 @@ export default function CosmicCalendarClient() {
                   <span className={s.shareBigUnit}>초</span>
                 </div>
                 <div className={s.shareList}>
-                  <div className={s.shareListItem}><span>🦕 공룡 시대</span><strong>약 4.2일</strong></div>
-                  <div className={s.shareListItem}><span>👤 인류 등장</span><strong>약 11.4분</strong></div>
-                  <div className={s.shareListItem}><span>🏛️ 인류 문명</span><strong>약 27.5초</strong></div>
+                  <div className={s.shareListItem}><span>🦕 공룡 시대</span><strong>{spans.dinoDays}</strong></div>
+                  <div className={s.shareListItem}><span>👤 인류 등장</span><strong>{spans.sapiensMin}</strong></div>
+                  <div className={s.shareListItem}><span>🏛️ 인류 문명</span><strong>{spans.civSec}</strong></div>
                   <div className={s.shareListItem}><span>⏰ 우주 1년</span><strong>= 138억 년</strong></div>
                 </div>
                 <div className={s.shareWatermark}>youtil.kr 🌌</div>

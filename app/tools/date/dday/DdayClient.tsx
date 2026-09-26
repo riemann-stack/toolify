@@ -6,8 +6,8 @@ import { useEffect, useMemo, useState } from 'react'
 import s from './dday.module.css'
 import {
   calcDday, calcProgress, calcWeekdays, calcBusinessDays, calcWeekendCount,
-  holidaysBetween, calcYMDDiff, addDays, calcPace, nextRecurrence,
-  loadDdays, saveDdays, newId, fmtDate, fmtDateKo,
+  holidaysBetween, calcYMDDiff, addDays, calcPace, effectiveTargetStr,
+  loadDdays, saveDdays, newId, fmtDate, fmtDateKo, parseYmd, isYmd, ADD_DAYS_MAX,
   exportDdays, importDdays,
   type DdayItem, type AddDaysMode,
 } from './ddayUtils'
@@ -162,14 +162,14 @@ function ListTab({ now }: { now: Date }) {
     reader.readAsText(file)
   }
 
-  /* 정렬 — 핀 우선 + 가까운 순 (고정) */
+  /* 정렬 — 핀 우선 + 가까운 순 (고정). 반복 D-day는 카드와 같은 '다음 발생일' 기준 */
   const sorted = useMemo(() => {
     const xs = items.slice()
     xs.sort((a, b) => {
       if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1
       if (a.isCompleted !== b.isCompleted) return a.isCompleted ? 1 : -1
-      const ad = calcDday(a.targetDate, now)
-      const bd = calcDday(b.targetDate, now)
+      const ad = calcDday(effectiveTargetStr(a, now), now)
+      const bd = calcDday(effectiveTargetStr(b, now), now)
       if (ad.isPast !== bd.isPast) return ad.isPast ? 1 : -1
       return ad.days - bd.days
     })
@@ -237,7 +237,7 @@ function DdayCard({ item, now, onPin, onEdit, onDelete, onComplete }: {
   onPin: () => void; onEdit: () => void; onDelete: () => void; onComplete: () => void
 }) {
   // 반복 D-day는 다음 발생일 기준
-  const effectiveTarget = item.recurrence !== 'none' ? fmtDate(nextRecurrence(item, now)) : item.targetDate
+  const effectiveTarget = effectiveTargetStr(item, now)
   const dday = calcDday(effectiveTarget, now)
   const cat = DDAY_CATEGORIES.find(c => c.id === item.category) ?? DDAY_CATEGORIES[10]
   const progress = item.startDate ? calcProgress(item.startDate, effectiveTarget, now) : null
@@ -307,7 +307,7 @@ function DdayCard({ item, now, onPin, onEdit, onDelete, onComplete }: {
       {pace && pace.remainingDays > 0 && (
         <div className={s.ddayPace}>
           <span>일일 목표</span>
-          <strong>{pace.dailyTarget} {item.goal?.unit ?? ''} {pace.isOnTrack ? '✓' : '⚠️'}</strong>
+          <strong>{pace.dailyTarget} {item.goal?.unit ?? ''}{pace.isOnTrack === null ? '' : pace.isOnTrack ? ' ✓' : ' ⚠️'}</strong>
         </div>
       )}
 
@@ -484,12 +484,12 @@ function QuickTab({ now }: { now: Date }) {
   }
 
   const dday = calcDday(target, now)
-  const targetDate = new Date(target)
+  const targetDate = parseYmd(target)
   // 카운트다운 기준을 D-day(자정 기준 정수일)와 일치시킨다.
   //  - 미래: 목표일 00:00까지 남은 시간 (D-1이면 24시간 미만이므로 '0일 N시간'이 정상)
   //  - 오늘(D-day): 목표일이 이미 시작됐으므로 자정까지 남은 시간
   // 과거를 Math.abs로 양수화하면 '경과 시간'이 카운트다운처럼 보이므로 쓰지 않는다.
-  const targetMs = new Date(target).setHours(0, 0, 0, 0)
+  const targetMs = targetDate.getTime()
   const endOfTodayMs = new Date(now).setHours(24, 0, 0, 0)
   const liveMs = Math.max(0, (dday.isToday ? endOfTodayMs : targetMs) - now.getTime())
   const liveDays  = Math.floor(liveMs / (1000 * 60 * 60 * 24))
@@ -620,8 +620,9 @@ function PaceTab({ now }: { now: Date }) {
   // 음수 목표량·완료량은 의미가 없으므로 0으로 클램프 (calcPace도 동일하게 방어)
   const totalN = Math.max(0, Number(total) || 0)
   const doneN  = Math.max(0, Number(done) || 0)
+  // 시작일이 비었으면 현재 페이스를 알 수 없음 — calcPace가 currentPace=null로 돌려주고 비교 UI를 숨긴다
   const pace = (target && totalN > 0)
-    ? calcPace(target, start || fmtDate(now), totalN, doneN, now)
+    ? calcPace(target, start, totalN, doneN, now)
     : null
 
   return (
@@ -665,7 +666,15 @@ function PaceTab({ now }: { now: Date }) {
 
       {!pace && <div className={s.empty}>목표 날짜와 전체 목표량을 입력하면 하루 목표가 계산됩니다</div>}
 
-      {pace && pace.remainingDays <= 0 && (
+      {pace && pace.remainingDays === 0 && (
+        <div className={s.empty} role="status">
+          {pace.remainingAmount > 0
+            ? <>오늘이 목표 날짜입니다. 오늘 안에 남은 <strong>{pace.remainingAmount.toLocaleString()} {unit}</strong>까지 마쳐야 합니다.</>
+            : <>오늘이 목표 날짜이고, 목표량을 모두 채웠습니다.</>}
+        </div>
+      )}
+
+      {pace && pace.remainingDays < 0 && (
         <div className={s.empty}>이미 목표 날짜가 지났습니다. 새로운 목표 날짜를 선택해 보세요.</div>
       )}
 
@@ -686,19 +695,23 @@ function PaceTab({ now }: { now: Date }) {
               <div className={s.paceRow}><span>남은 분량</span><span>{pace.remainingAmount.toLocaleString()} {unit}</span></div>
               <div className={s.paceRow}><span>일일 목표</span><span>{pace.dailyTarget.toLocaleString()} {unit}</span></div>
               <div className={s.paceRow}><span>주간 목표</span><span>{pace.weeklyTarget.toLocaleString()} {unit}</span></div>
-              <div className={s.paceRow}>
-                <span>현재 페이스</span>
-                <span className={pace.isOnTrack ? s.paceOk : s.paceWarn}>
-                  {pace.currentPace.toLocaleString()} {unit}/일
-                </span>
-              </div>
-              <div className={s.paceRow}>
-                <span>예상 완료량</span>
-                <span className={pace.isOnTrack ? s.paceOk : s.paceWarn}>
-                  {pace.expectedFinish.toLocaleString()} {unit}
-                </span>
-              </div>
-              {!pace.isOnTrack && (
+              {pace.currentPace !== null && pace.expectedFinish !== null && (
+                <>
+                  <div className={s.paceRow}>
+                    <span>현재 페이스</span>
+                    <span className={pace.isOnTrack ? s.paceOk : s.paceWarn}>
+                      {pace.currentPace.toLocaleString()} {unit}/일
+                    </span>
+                  </div>
+                  <div className={s.paceRow}>
+                    <span>예상 완료량</span>
+                    <span className={pace.isOnTrack ? s.paceOk : s.paceWarn}>
+                      {pace.expectedFinish.toLocaleString()} {unit}
+                    </span>
+                  </div>
+                </>
+              )}
+              {pace.isOnTrack === false && (
                 <>
                   <div className={s.paceRow}><span>부족분</span><span className={s.paceWarn}>{pace.deficit.toLocaleString()} {unit}</span></div>
                   <div className={s.paceRow}><span>추가 일일 목표</span><span className={s.paceWarn}>+{pace.additionalDailyNeeded.toLocaleString()} {unit}</span></div>
@@ -713,17 +726,19 @@ function PaceTab({ now }: { now: Date }) {
                 <span className={s.paceBarTrack}><span className={s.paceBarFill} style={{ width: '100%', background: 'var(--accent)' }} /></span>
                 <span className={s.paceBarValue}>{totalN.toLocaleString()}</span>
               </div>
-              <div className={s.paceBarRow}>
-                <span className={s.paceBarLabel}>현재 페이스</span>
-                <span className={s.paceBarTrack}>
-                  <span className={s.paceBarFill}
-                    style={{
-                      width: `${Math.min(100, totalN > 0 ? (pace.expectedFinish / totalN) * 100 : 0)}%`,
-                      background: pace.isOnTrack ? 'var(--success)' : 'var(--danger)',
-                    }} />
-                </span>
-                <span className={s.paceBarValue}>{pace.expectedFinish.toLocaleString()}</span>
-              </div>
+              {pace.expectedFinish !== null && (
+                <div className={s.paceBarRow}>
+                  <span className={s.paceBarLabel}>현재 페이스</span>
+                  <span className={s.paceBarTrack}>
+                    <span className={s.paceBarFill}
+                      style={{
+                        width: `${Math.min(100, totalN > 0 ? (pace.expectedFinish / totalN) * 100 : 0)}%`,
+                        background: pace.isOnTrack ? 'var(--success)' : 'var(--danger)',
+                      }} />
+                  </span>
+                  <span className={s.paceBarValue}>{pace.expectedFinish.toLocaleString()}</span>
+                </div>
+              )}
               <div className={s.paceBarRow}>
                 <span className={s.paceBarLabel}>완료한 양</span>
                 <span className={s.paceBarTrack}>
@@ -734,13 +749,21 @@ function PaceTab({ now }: { now: Date }) {
             </div>
           </div>
 
+          {pace.currentPace === null ? (
+            <div className={s.paceVerdict}>
+              {start
+                ? <>시작일이 오늘이거나 아직 오지 않아 현재 페이스를 비교할 수 없습니다. 남은 <strong>{pace.remainingDays}일 동안 매일 {pace.dailyTarget} {unit}</strong>씩 진행하면 목표를 채웁니다.</>
+                : <>남은 <strong>{pace.remainingDays}일 동안 매일 {pace.dailyTarget} {unit}</strong>씩 진행하면 목표를 채웁니다. <strong>시작일</strong>을 넣으면 지금까지의 페이스로 달성 가능성도 비교해 드립니다.</>}
+            </div>
+          ) : (
           <div className={`${s.paceVerdict} ${!pace.isOnTrack ? s.paceVerdictWarn : ''}`}>
             {pace.isOnTrack ? (
-              <>현재 페이스(<strong>{pace.currentPace} {unit}/일</strong>)로 목표 달성 가능합니다 ✓ 이대로 유지하면 예상 <strong>{pace.expectedFinish.toLocaleString()} {unit}</strong> 완료, 목표({totalN.toLocaleString()} {unit}) 달성!</>
+              <>현재 페이스(<strong>{pace.currentPace} {unit}/일</strong>)로 목표 달성 가능합니다 ✓ 이대로 유지하면 예상 <strong>{(pace.expectedFinish ?? 0).toLocaleString()} {unit}</strong> 완료, 목표({totalN.toLocaleString()} {unit}) 달성!</>
             ) : (
               <>현재 페이스(<strong>{pace.currentPace} {unit}/일</strong>)로는 목표 달성이 어렵습니다. 남은 <strong>{pace.remainingDays}일 동안 매일 {pace.dailyTarget} {unit}</strong>씩(추가 +{pace.additionalDailyNeeded} {unit}) 진행해야 목표({totalN.toLocaleString()} {unit})를 채울 수 있습니다.</>
             )}
           </div>
+          )}
         </>
       )}
     </>
@@ -773,13 +796,13 @@ function DiffTab() {
     )
   }
 
-  const startD = new Date(start); startD.setHours(0,0,0,0)
-  const endD = new Date(end); endD.setHours(0,0,0,0)
+  const startD = parseYmd(start)
+  const endD = parseYmd(end)
   const swapped = endD < startD
   const a = swapped ? end : start
   const b = swapped ? start : end
-  const aD = new Date(a); aD.setHours(0,0,0,0)
-  const bD = new Date(b); bD.setHours(0,0,0,0)
+  const aD = parseYmd(a)
+  const bD = parseYmd(b)
 
   const totalDays = Math.abs(Math.round((bD.getTime() - aD.getTime()) / (1000 * 60 * 60 * 24)))
   const ymd = calcYMDDiff(a, b)
@@ -850,8 +873,14 @@ function BizTab({ now }: { now: Date }) {
   const [n, setN] = useState('30')
   const [mode, setMode] = useState<AddDaysMode>('calendar')
 
-  const nNum = Number(n) || 0
-  const result = startDate && nNum !== 0 ? addDays(startDate, nNum, mode) : null
+  // 정수로 절삭 + ±100년 클램프 — 큰 값은 평일·영업일 루프가 UI를 멈추고, 1.5 같은 소수는 모드별로 해석이 달라진다
+  const nNum = Math.max(-ADD_DAYS_MAX, Math.min(ADD_DAYS_MAX, Math.trunc(Number(n)) || 0))
+  const nClamped = Math.abs(Math.trunc(Number(n)) || 0) > ADD_DAYS_MAX
+  // 1초 틱마다 재계산하지 않도록 메모 (영업일 모드는 N에 비례해 루프)
+  const result = useMemo(
+    () => (isYmd(startDate) && nNum !== 0 ? addDays(startDate, nNum, mode) : null),
+    [startDate, nNum, mode],
+  )
 
   return (
     <>
@@ -864,10 +893,13 @@ function BizTab({ now }: { now: Date }) {
           </div>
           <div>
             <span className={s.inlineLabel}>N일 (음수 가능)</span>
-            <input className={s.numInput} type="number" inputMode="decimal" aria-label="N일 (음수 가능)" placeholder="30"
+            <input className={s.numInput} type="number" inputMode="decimal" step={1} min={-ADD_DAYS_MAX} max={ADD_DAYS_MAX} aria-label="N일 (음수 가능)" placeholder="30"
               value={n} onChange={e => setN(e.target.value)} />
           </div>
         </div>
+        {nClamped && (
+          <p style={{ fontSize: 12, color: 'var(--warning)', marginTop: 6 }}>N은 ±{ADD_DAYS_MAX.toLocaleString()}일(약 100년)까지 계산합니다.</p>
+        )}
 
         <div style={{ marginTop: 12 }}>
           <span className={s.inlineLabel}>계산 모드</span>
@@ -885,7 +917,7 @@ function BizTab({ now }: { now: Date }) {
             <strong style={{ color: 'var(--text)' }}>달력일</strong>: 모든 날짜 / <strong style={{ color: 'var(--text)' }}>평일</strong>: 월~금 / <strong style={{ color: 'var(--text)' }}>영업일</strong>: 평일 + 한국 공휴일 제외
           </p>
           {mode === 'business' && result && (
-            <HolidayCoverageNote from={new Date(startDate).getFullYear()} to={result.getFullYear()} />
+            <HolidayCoverageNote from={parseYmd(startDate).getFullYear()} to={result.getFullYear()} />
           )}
         </div>
       </div>
@@ -919,7 +951,7 @@ function BizTab({ now }: { now: Date }) {
             </div>
             <div className={s.statBox}>
               <div className={s.statNum}>
-                {Math.abs(Math.round((result.getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)))}
+                {Math.abs(Math.round((result.getTime() - parseYmd(startDate).getTime()) / (1000 * 60 * 60 * 24)))}
               </div>
               <div className={s.statLabel}>달력일</div>
               <div className={s.statSub}>시작일~결과</div>

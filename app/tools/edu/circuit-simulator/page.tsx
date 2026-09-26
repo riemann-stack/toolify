@@ -278,7 +278,7 @@ export default function CircuitSimulatorPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ I_LED = 20mA 기준. 계산값보다 <strong style={{ color: 'var(--text)' }}>한 단계 큰 표준 저항</strong>(150→220Ω, 280→330Ω 등)으로 올려 잡으면 전류가 낮아져 더 안전합니다.
+            ※ I_LED = 20mA 기준. 계산값 이상인 <strong style={{ color: 'var(--text)' }}>E12 표준 저항</strong>으로 올려 잡으세요(280Ω → 330Ω). 계산값이 마침 표준값이면(150Ω) 한 단계 위(180Ω)를 쓰면 전류가 낮아져 더 안전합니다.
             표의 Vf는 대표값일 뿐 전류·제조사·온도에 따라 달라지므로, 실제 부품은 <strong style={{ color: 'var(--text)' }}>LED 데이터시트의 Vf·최대 전류</strong>를 기준으로 정하세요.
             <br />※ 녹색은 두 종류입니다 — 흔한 <strong style={{ color: 'var(--text)' }}>황록색(GaP, 2.0~2.2V)</strong>은 표 값대로, <strong style={{ color: 'var(--text)' }}>순수 녹색(InGaN, ~3.2V)</strong>은 파랑과 비슷하게 계산하세요.
           </p>

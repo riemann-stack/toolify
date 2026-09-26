@@ -26,10 +26,13 @@ export default function HardnessClient() {
   useEffect(() => {
     // localStorage 복원 — 마운트 후 1회, 하이드레이션 안전 패턴(의도됨)
     /* eslint-disable react-hooks/set-state-in-effect */
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw) as { scale?: unknown; input?: unknown }
+      const parsed: unknown = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return
+      const j = parsed as { scale?: unknown; input?: unknown }
       // scale은 반드시 SCALES enum 검증 — 오염된 값이면 inRange/SCALES.find가 전부 무너져 도구가 크래시
       if (typeof j.scale === 'string' && SCALES.some((sc) => sc.id === j.scale)) setScale(j.scale as Scale)
       if (typeof j.input === 'string' && j.input.length <= 12) setInput(j.input)
@@ -37,6 +40,7 @@ export default function HardnessClient() {
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ scale, input })) } catch {}
   }, [scale, input])
 

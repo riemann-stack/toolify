@@ -131,8 +131,8 @@ export default function JetLagPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>시차 적응 핵심 공식</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { title: '적응 기간 (동쪽)', formula: '시차 × 1.5일' },
-              { title: '적응 기간 (서쪽)', formula: '시차 × 1.0일' },
+              { title: '적응 기간 (동쪽·앞당김)', formula: '위상이동 시간 ÷ 1시간/일 (예: 호놀룰루 5시간 앞당김 → 약 5일)' },
+              { title: '적응 기간 (서쪽·늦춤)', formula: '위상이동 시간 ÷ 1.5시간/일 (예: 파리 8시간 늦춤 → 약 6일)' },
               { title: '카페인 컷오프 (반감기 약 5h + 잔류효과 고려 보수 버퍼)', formula: '평소 취침 시각 − 8시간(안전 버퍼) = 마지막 허용 시각' },
               { title: '낮잠 허용 기준', formula: '현지 오후 3시 이전 + 20~30분 이내 = 안전' },
             ].map((item, i) => (

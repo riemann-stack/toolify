@@ -20,6 +20,14 @@
 .colGrade { text-align: center; }
 .colDel { text-align: center; }
 .row { margin-bottom: 6px; }
+/* 좁은 화면(≤420px): 고정 숫자 열 합(248px)이 카드 내부 폭을 넘어 과목명 칸이 0px가 되던 문제 —
+   과목명을 첫 줄 전체 폭에, 숫자 칸을 둘째 줄에 배치 */
+@media (max-width: 420px) {
+  .tableHead, .row { grid-template-columns: repeat(3, minmax(0, 1fr)) 40px 28px; }
+  .row > .colName { grid-column: 1 / -1; }
+  .tableHead > .colName { display: none; }
+  .row { margin-bottom: 12px; }
+}
 .inp {
   min-width: 0; font-size: 16px; color: var(--text); background: var(--bg);
   border: 1px solid var(--border); border-radius: var(--radius-s); padding: 9px 8px;

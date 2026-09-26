@@ -34,7 +34,7 @@ export function calcYearAge(birth: Date, ref: Date = new Date()): number {
   return ref.getFullYear() - birth.getFullYear()
 }
 
-/** 태어난 지 며칠 (정수일) */
+/** 태어난 지 며칠 지났는지 (정수일, 출생 당일 = 0). 'N일째' 표기는 +1 (dayCountSince) */
 export function calcDaysAlive(birth: Date, ref: Date = new Date()): number {
   return Math.floor((midnight(ref).getTime() - midnight(birth).getTime()) / MS_PER_DAY)
 }
@@ -65,6 +65,16 @@ export function dateAfterDays(birth: Date, days: number): Date {
   const d = midnight(birth)
   d.setDate(d.getDate() + days)
   return d
+}
+
+/** 태어난 날을 1일째로 센 오늘의 일차 (한국 관행: 백일 = 100일째) */
+export function dayCountSince(birth: Date, ref: Date = new Date()): number {
+  return calcDaysAlive(birth, ref) + 1
+}
+
+/** N일째 기념일 날짜 — 태어난 날이 1일째이므로 출생일 + (N-1)일 */
+export function nthDayDate(birth: Date, n: number): Date {
+  return dateAfterDays(birth, n - 1)
 }
 
 /** 만 나이 N세가 되는 날 */

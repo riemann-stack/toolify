@@ -21,7 +21,7 @@ export const DAYS_IN_COSMIC_YEAR = 365
 export const COSMIC_DAY_REAL_YEARS = COSMIC_YEAR_REAL_YEARS / DAYS_IN_COSMIC_YEAR
 export const COSMIC_HOUR_REAL_YEARS = COSMIC_DAY_REAL_YEARS / 24
 export const COSMIC_MINUTE_REAL_YEARS = COSMIC_HOUR_REAL_YEARS / 60
-/** 약 437.5년 */
+/** 약 437.2년 (13.787 Gyr ÷ 365일 ÷ 86,400초) */
 export const COSMIC_SECOND_REAL_YEARS = COSMIC_MINUTE_REAL_YEARS / 60
 
 export type CatKey = 'cosmic' | 'solar' | 'earth' | 'life' | 'human' | 'civilization' | 'now'
@@ -110,6 +110,14 @@ export type CosmicPosition = {
 
 const MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]  // 합 365
 
+/** 초(0~60 미만)를 소수 dp자리로 — 반올림해서 60이 되면 자릿수를 늘린다(최대 8자리).
+    그래도 60이면 null(호출부에서 분으로 올림). '23:59:60' 같은 존재하지 않는 시각을 막는다. */
+function fmtSecBelow60(sec: number, dp: number): string | null {
+  let d = dp
+  while (Number(sec.toFixed(d)) >= 60 && d < 8) d++
+  return Number(sec.toFixed(d)) >= 60 ? null : sec.toFixed(d)
+}
+
 /** 실제 연대 → 달력 위치. 손으로 적던 month/day/hour를 대체한다. */
 export function cosmicPosition(realYearsAgo: number): CosmicPosition {
   const frac = Math.min(1, Math.max(0, (COSMIC_YEAR_REAL_YEARS - realYearsAgo) / COSMIC_YEAR_REAL_YEARS))
@@ -133,11 +141,23 @@ export function cosmicPosition(realYearsAgo: number): CosmicPosition {
   const minute = Math.floor((totalSec % 3600) / 60)
   const second = totalSec % 60
 
-  /* 12월 31일은 초 단위까지, 그 밖에는 날짜만 보여 준다 — 세이건 캘린더의 관례 */
+  /* 12월 31일은 초 단위까지, 그 밖에는 날짜만 보여 준다 — 세이건 캘린더의 관례.
+     ⚠️ 59초대를 소수 2자리로 고정하면 59.996이 '60'이 되어 '23:59:60'이 나왔다. */
   const isLastDay = month === 12 && day === 31
-  const label = isLastDay
-    ? `12월 31일 ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${second < 10 ? '0' : ''}${second >= 59 ? second.toFixed(2).replace(/0+$/, '').replace(/\.$/, '') : Math.floor(second)}`
-    : `${month}월 ${day}일`
+  let label = `${month}월 ${day}일`
+  if (isLastDay) {
+    const pad = (n: number) => String(n).padStart(2, '0')
+    let h = hour, m = minute
+    let secStr: string
+    if (second >= 59) {
+      const f = fmtSecBelow60(second, 2)
+      if (f === null) { secStr = '00'; m += 1; if (m === 60) { m = 0; h += 1 } }
+      else secStr = f.replace(/0+$/, '').replace(/\.$/, '')
+    } else {
+      secStr = String(Math.floor(second))
+    }
+    label = h >= 24 ? '12월 31일 24:00:00' : `12월 31일 ${pad(h)}:${pad(m)}:${secStr.split('.')[0].padStart(2, '0')}${secStr.includes('.') ? '.' + secStr.split('.')[1] : ''}`
+  }
 
   return { elapsedDays, month, day, hour, minute, second, label, pct: frac }
 }
@@ -187,15 +207,23 @@ export function compress24h(realYearsAgo: number): string {
   const s = seconds - h * 3600 - m * 60
   const pad = (n: number) => n.toString().padStart(2, '0')
   /* 마지막 1분 안의 사건은 소수 3자리로 — 정수 반올림하면 60초가 되어 버린다.
-     그 밖에는 초 크기에 맞춰 자릿수를 줄이되, 60으로 반올림되지 않게 소수를 남긴다. */
+     그 밖에는 초 크기에 맞춰 자릿수를 줄이되, 60으로 반올림되지 않게 소수를 남긴다.
+     ⚠️ 소수 3자리여도 59.9996(약 57년 전, 달 착륙)은 '60.000'이 됐다 → 60이 되면 자릿수를 늘린다. */
   let sStr: string
-  if (h === 23 && m === 59) sStr = s.toFixed(3)
-  else if (s < 1) sStr = s.toFixed(4)
-  else if (s < 10) sStr = s.toFixed(2)
-  else if (s >= 59) sStr = s.toFixed(2)          // 분 경계 직전 — 60으로 반올림 방지
-  else sStr = pad(Math.round(s))
-  // 소수 표기는 앞자리도 2자리로
-  if (sStr.includes('.')) { const [a, b] = sStr.split('.'); sStr = `${pad(Number(a))}.${b}` }
+  if (s >= 10 && s < 59 && !(h === 23 && m === 59)) {
+    sStr = pad(Math.round(s))                      // 10 ≤ s < 59 → 반올림해도 59 이하
+  } else {
+    const dp = h === 23 && m === 59 ? 3 : s < 1 ? 4 : 2
+    const f = fmtSecBelow60(s, dp)
+    if (f === null) {
+      // 60 − 5e-9초 이내 — 다음 분 00초로 올림
+      const t = h * 3600 + (m + 1) * 60
+      if (t >= 86400) return '24:00:00 (현재)'
+      return `${pad(Math.floor(t / 3600))}:${pad(Math.floor((t % 3600) / 60))}:00`
+    }
+    const [a, b] = f.split('.')
+    sStr = `${pad(Number(a))}.${b}`                 // 소수 표기는 앞자리도 2자리로
+  }
   return `${pad(h)}:${pad(m)}:${sStr}`
 }
 

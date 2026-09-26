@@ -71,10 +71,10 @@ export const BIRTH_GIFTS: Record<number, BirthGift> = {
 
 export type DayMilestone = { days: number; name: string; emoji: string }
 
-/** 일수 기준 마일스톤 */
+/** 일수 기준 마일스톤 — 한국 관행대로 태어난 날을 1일째로 센다 (백일 = 출생일 + 99일).
+   첫돌은 365일째가 아니라 첫 생일이므로 AGE_MILESTONES(만 1세)가 담당 */
 export const DAY_MILESTONES: DayMilestone[] = [
   { days: 100,    name: '백일',       emoji: '🍼' },
-  { days: 365,    name: '첫돌',       emoji: '🎂' },
   { days: 1_000,  name: '1,000일',    emoji: '✨' },
   { days: 3_000,  name: '3,000일',    emoji: '🌱' },
   { days: 5_000,  name: '5,000일',    emoji: '⭐' },
@@ -92,7 +92,7 @@ export type AgeMilestone = { age: number; name: string; emoji: string }
 /** 만 나이 마일스톤 — 법적·사회적·전통 */
 export const AGE_MILESTONES: AgeMilestone[] = [
   { age: 1,   name: '만 1세 (첫 돌)',          emoji: '🎂' },
-  { age: 7,   name: '만 7세 (취학)',           emoji: '📚' },
+  { age: 7,   name: '만 7세',                  emoji: '🎈' },
   { age: 13,  name: '만 13세 (청소년)',        emoji: '🎒' },
   { age: 18,  name: '만 18세 (선거권·공무원 임용)',  emoji: '🗳️' },
   { age: 19,  name: '만 19세 (성년)',          emoji: '🍷' },

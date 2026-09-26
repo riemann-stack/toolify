@@ -6,7 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
-import { EVENTS, cosmicPosition, yearsAgoOf, fmtRealYears, type CatKey } from './cosmicData'
+import { EVENTS, cosmicPosition, yearsAgoOf, fmtRealYears, COSMIC_SECOND_REAL_YEARS, type CatKey } from './cosmicData'
 
 /* 안내 표에 실을 사건 — 도구와 같은 데이터에서 날짜를 계산한다 */
 const TABLE_IDS = ['bigbang', 'firstGalaxies', 'milkyWay', 'solarSystem', 'earth', 'firstLife',
@@ -26,6 +26,11 @@ export const metadata = buildMetadata({
   keywords: ['코스믹캘린더', '우주달력', '우주역사', '빅뱅', '칼세이건', '우주시간', '인류역사', '우주시각화', '138억년', '우주1년'],
 })
 
+/* FAQ 수치도 도구와 같은 데이터에서 파생 — 예전 '첫 별 1월 6일경'·'1초 ≈ 437.5년'은 도구 표(1월 5일·437년)와 달랐다 */
+const FIRST_STARS_DATE = cosmicPosition(EVENTS.find(e => e.id === 'firstStars')?.realYearsAgo ?? 13_600_000_000).label
+const SEC_YEARS = Math.round(COSMIC_SECOND_REAL_YEARS)
+const CIV_SEC = Math.round((12_000 / COSMIC_SECOND_REAL_YEARS) * 10) / 10
+
 const FAQ_LD = [
               {
                 q: '코스믹 캘린더는 누가 만들었나요?',
@@ -33,7 +38,7 @@ const FAQ_LD = [
               },
               {
                 q: '코스믹 캘린더에서 1초는 실제 몇 년인가요?',
-                a: '코스믹 캘린더에서 1초는 실제 <strong>약 437.5년</strong>에 해당합니다. 따라서 인류 문명 12,000년은 코스믹 캘린더로 약 27.5초이며, 산업혁명 이후 250년은 약 0.57초, 인터넷 시대 30년은 약 0.07초에 불과합니다. <strong>당신의 30년 인생도 코스믹 캘린더로는 약 0.07초</strong>입니다.',
+                a: `코스믹 캘린더에서 1초는 실제 <strong>약 ${SEC_YEARS}년</strong>에 해당합니다. 따라서 인류 문명 12,000년은 코스믹 캘린더로 약 ${CIV_SEC}초이며, 산업혁명 이후 250년은 약 0.57초, 인터넷 시대 30년은 약 0.07초에 불과합니다. <strong>당신의 30년 인생도 코스믹 캘린더로는 약 0.07초</strong>입니다.`,
               },
               {
                 q: '인류는 코스믹 캘린더의 어디에 위치하나요?',
@@ -41,7 +46,7 @@ const FAQ_LD = [
               },
               {
                 q: '빅뱅 이후 첫 별은 언제 만들어졌나요?',
-                a: '빅뱅 이후 약 2억 년 후에 최초의 별들이 핵융합을 시작했습니다. 코스믹 캘린더로는 <strong>1월 6일경</strong>입니다. 빅뱅 후 약 38만 년까지는 우주가 뜨거운 플라스마 상태여서 빛이 자유롭게 다닐 수 없었고, 우주가 식으면서 최초의 원자(수소·헬륨)가 형성되었습니다(재결합). 그 이후 첫 별이 등장하기 전까지 빛나는 천체가 없던 기간을 "암흑 시대"라고 부르며, 물질이 중력으로 모여 첫 별들이 빛나면서 암흑 시대가 끝났습니다.',
+                a: `빅뱅 이후 약 2억 년 후에 최초의 별들이 핵융합을 시작했습니다. 코스믹 캘린더로는 <strong>${FIRST_STARS_DATE}경</strong>입니다. 빅뱅 후 약 38만 년까지는 우주가 뜨거운 플라스마 상태여서 빛이 자유롭게 다닐 수 없었고, 우주가 식으면서 최초의 원자(수소·헬륨)가 형성되었습니다(재결합). 그 이후 첫 별이 등장하기 전까지 빛나는 천체가 없던 기간을 "암흑 시대"라고 부르며, 물질이 중력으로 모여 첫 별들이 빛나면서 암흑 시대가 끝났습니다.`,
               },
               {
                 q: '코스믹 캘린더의 사건 시점은 정확한가요?',
@@ -102,7 +107,7 @@ export default function CosmicCalendarPage() {
             marginTop: 12,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>1년</span> = 138억 년</div>
-            <div><span style={{ color: 'var(--muted)' }}>1일</span> ≈ 3,778만 년</div>
+            <div><span style={{ color: 'var(--muted)' }}>1일</span> ≈ 3,777만 년</div>
             <div><span style={{ color: 'var(--muted)' }}>1시간</span> ≈ 157만 년</div>
             <div><span style={{ color: 'var(--muted)' }}>1분</span> ≈ <strong style={{ color: '#0D9488' }}>26,200년</strong></div>
             <div><span style={{ color: 'var(--muted)' }}>1초</span> ≈ <strong style={{ color: '#0D9488' }}>437년</strong></div>

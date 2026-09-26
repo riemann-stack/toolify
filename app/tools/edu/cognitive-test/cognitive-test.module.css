@@ -656,3 +656,14 @@
   .copyBtn:hover { border-color: #0D9488; color: #0D9488; }
 }
 .copied { background: rgba(13,148,136,0.18); color: #0D9488; border-color: #0D9488; font-weight: 700; }
+
+/* 유효 응답 부족 안내 */
+.warnCard {
+  background: var(--bg3);
+  border-left: 4px solid var(--warning);
+  border-radius: var(--radius-s);
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.85;
+}

@@ -16,11 +16,11 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '복습은 언제 하는 것이 가장 효과적인가요?',
-                a: '<strong>"잊을 만 할 때"</strong> 복습하는 것이 가장 효과적입니다. 너무 자주 복습하면 시간 낭비, 너무 늦으면 다시 학습해야 합니다. 에빙하우스 망각곡선에 따라 일반적으로 ① 학습 다음 날(기억 33%), ② 3일 후(20%), ③ 7일 후(15%), ④ 14일 후(10%) 이렇게 점진적으로 간격을 늘리는 것이 권장됩니다. 본 도구의 SM-2 알고리즘이 개인의 기억 점수에 따라 자동 조정해줍니다.',
+                a: '<strong>"잊을 만 할 때"</strong> 복습하는 것이 가장 효과적입니다. 너무 자주 복습하면 시간 낭비, 너무 늦으면 다시 학습해야 합니다. 일반적으로 ① 학습 다음 날, ② 3일 후, ③ 7일 후, ④ 14일 후처럼 점진적으로 간격을 늘리는 것이 권장됩니다. 에빙하우스 실험에서 같은 목록을 다시 외울 때 절약된 시간 비율(절약률)은 1일 뒤 약 33%, 6일 뒤 약 25%, 31일 뒤 약 21%로, 처음 며칠 동안 가장 빠르게 줄어듭니다. 본 도구의 SM-2 알고리즘이 개인의 기억 점수에 따라 자동 조정해줍니다.',
               },
               {
                 q: 'SM-2 알고리즘이 무엇인가요?',
-                a: '<strong>SuperMemo 2(SM-2)</strong>는 1985년 Piotr Wozniak이 만든 간격 반복 학습 알고리즘입니다. 각 학습 항목의 난이도(EF, Easiness Factor)를 사용자의 기억 점수(0~5)에 따라 자동 조정하며, 다음 복습 간격을 계산합니다. <strong>Anki·Mnemosyne</strong> 등 대부분의 SRS(Spaced Repetition System) 도구의 기반이며, 의대생·언어 학습자가 가장 많이 사용하는 검증된 알고리즘입니다.',
+                a: '<strong>SuperMemo 2(SM-2)</strong>는 1987년 Piotr Wozniak이 만든 간격 반복 학습 알고리즘입니다. 각 학습 항목의 난이도(EF, Easiness Factor)를 사용자의 기억 점수(0~5)에 따라 자동 조정하며, 다음 복습 간격을 계산합니다. <strong>Anki·Mnemosyne</strong> 등 대부분의 SRS(Spaced Repetition System) 도구의 기반이며, 의대생·언어 학습자가 가장 많이 사용하는 검증된 알고리즘입니다.',
               },
               {
                 q: '망각곡선은 정말 정확한가요?',
@@ -64,12 +64,13 @@ export default function ReviewIntervalPage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             1885년 독일 심리학자 <strong style={{ color: 'var(--text)' }}>헤르만 에빙하우스(Hermann Ebbinghaus)</strong>가 제시한 이론 —
             학습 후 시간이 지날수록 기억이 지수적으로 감소합니다.
+            아래 표의 수치는 같은 목록을 다시 외울 때 처음보다 줄어든 시간의 비율(절약률)로, &lsquo;기억하는 비율&rsquo;과는 조금 다른 지표입니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['시점', '기억 유지율 (%)'].map((h, i) => (
+                  {['시점', '재학습 절약률 (%)'].map((h, i) => (
                     <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
@@ -147,7 +148,7 @@ export default function ReviewIntervalPage() {
             SM-2 알고리즘 (SuperMemo 2)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            1985년 폴란드의 <strong style={{ color: 'var(--text)' }}>Piotr Wozniak</strong>이 만든 알고리즘.
+            1987년 폴란드의 <strong style={{ color: 'var(--text)' }}>Piotr Wozniak</strong>이 만든 알고리즘(종이 방식의 첫 버전 SM-0는 1985년).
             현재 대부분 SRS 도구의 기반입니다.
           </p>
           <div style={{

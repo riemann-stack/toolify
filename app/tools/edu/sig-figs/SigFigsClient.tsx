@@ -45,9 +45,12 @@ function SigFigTab() {
   const [sig, setSig] = useState(3)
   const [dec, setDec] = useState(2)
 
-  const info = useMemo(() => countSigFigs(raw), [raw])
-  const num = useMemo(() => parseFloat(raw), [raw])
-  const valid = Number.isFinite(num)
+  // 천 단위 콤마는 제거하고 판별·파싱 — parseFloat('12,345.6')은 12만 읽어 반올림이 1000배 틀렸다
+  const cleaned = useMemo(() => raw.replace(/,/g, '').trim(), [raw])
+  const info = useMemo(() => countSigFigs(cleaned), [cleaned])
+  const num = useMemo(() => (cleaned === '' ? NaN : Number(cleaned)), [cleaned])
+  // 숫자 형식이 아니면(유효숫자 판별 불가이고 0도 아님) 반올림 결과도 숨긴다
+  const valid = Number.isFinite(num) && !(info.count === null && !info.ambiguous)
 
   const roundedSig = valid ? toSigString(roundSig(num, sig), sig) : '—'
   const roundedDec = valid ? num.toFixed(dec) : '—'
@@ -57,7 +60,7 @@ function SigFigTab() {
     <>
       <div className={s.card}>
         <div className={s.cardLabel}><span>측정값 입력</span><span className={s.cardHint}>예: 0.004560, 1500, 1.23e4</span></div>
-        <input className={s.numInput} type="text" inputMode="decimal" value={raw}
+        <input className={s.numInput} type="text" inputMode="decimal" aria-label="측정값" value={raw}
           onChange={(e) => setRaw(e.target.value)} placeholder="0.004560" />
       </div>
 
@@ -65,12 +68,12 @@ function SigFigTab() {
         <>
           <div className={s.card}>
             <div className={s.cardLabel}><span>유효숫자 판별</span></div>
-            <div className={s.sigBig}>
+            <div className={s.sigBig} role="status">
               {info.count != null ? <><span className={s.sigNum}>{info.count}</span><span className={s.sigUnit}>개</span></> : <span className={s.sigNa}>판별 불가</span>}
             </div>
             {info.ambiguous && (
               <p className={s.warn}>
-                ⚠️ 후행 0이 모호합니다. <strong>{raw.trim()}</strong>의 끝자리 0이 유효한지 표기만으로 알 수 없어요.
+                ⚠️ 후행 0이 모호합니다. <strong>{cleaned}</strong>의 끝자리 0이 유효한지 표기만으로 알 수 없어요.
                 과학적 표기(예: {scientific})로 쓰면 명확해집니다.
               </p>
             )}
@@ -80,8 +83,8 @@ function SigFigTab() {
             <div className={s.cardLabel}><span>반올림</span><span className={s.cardHint}>자리수 선택</span></div>
 
             <div className={s.ctrlRow}>
-              <label className={s.ctrlLabel}>유효숫자</label>
-              <select className={s.sel} value={sig} onChange={(e) => setSig(Number(e.target.value))} aria-label="유효숫자 자리">
+              <label className={s.ctrlLabel} htmlFor="sig-figs-sig">유효숫자</label>
+              <select id="sig-figs-sig" className={s.sel} value={sig} onChange={(e) => setSig(Number(e.target.value))} aria-label="유효숫자 자리">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => <option key={n} value={n}>{n}자리</option>)}
               </select>
               <span className={s.eq}>→</span>
@@ -89,8 +92,8 @@ function SigFigTab() {
             </div>
 
             <div className={s.ctrlRow}>
-              <label className={s.ctrlLabel}>소수점</label>
-              <select className={s.sel} value={dec} onChange={(e) => setDec(Number(e.target.value))} aria-label="소수점 자리">
+              <label className={s.ctrlLabel} htmlFor="sig-figs-dec">소수점</label>
+              <select id="sig-figs-dec" className={s.sel} value={dec} onChange={(e) => setDec(Number(e.target.value))} aria-label="소수점 자리">
                 {[0, 1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n}자리</option>)}
               </select>
               <span className={s.eq}>→</span>
@@ -98,14 +101,14 @@ function SigFigTab() {
             </div>
 
             <div className={s.ctrlRow}>
-              <label className={s.ctrlLabel}>과학적 표기</label>
+              <span className={s.ctrlLabel}>과학적 표기</span>
               <span className={s.eq} style={{ visibility: 'hidden' }}>→</span>
               <span className={s.outVal} style={{ marginLeft: 'auto' }}>{scientific}</span>
             </div>
           </div>
         </>
       ) : (
-        <div className={s.card}><p className={s.note}>숫자를 입력하면 유효숫자 개수와 반올림 결과가 표시됩니다.</p></div>
+        <div className={s.card}><p className={s.note}>{cleaned === '' ? '숫자를 입력하면 유효숫자 개수와 반올림 결과가 표시됩니다.' : '숫자 형식을 확인하세요. 예: 0.004560, 1500, 1.23e4 (천 단위 콤마는 자동으로 무시합니다)'}</p></div>
       )}
     </>
   )
@@ -190,7 +193,7 @@ function ErrorTab() {
           {unc ? (
             <div className={s.card}>
               <div className={s.cardLabel}><span>정리된 표현</span></div>
-              <div className={s.measureBig}>{unc.fmt.valueStr} ± {unc.fmt.errorStr}</div>
+              <div className={s.measureBig} role="status">{unc.fmt.valueStr} ± {unc.fmt.errorStr}</div>
               <div className={s.resGrid} style={{ marginTop: 10 }}>
                 <Row name="상대불확도" val={pretty(unc.relPct / 100, 4)} />
                 <Row name="백분율 불확도" val={`${Number(unc.relPct.toPrecision(3))} %`} accent />
@@ -253,16 +256,16 @@ function PropagateTab() {
             <input id="sig-figs-f5" className={s.numInput} type="number" inputMode="decimal" value={a} onChange={(e) => setA(e.target.value)} placeholder="12.0" />
           </div>
           <div>
-            <label className={s.miniLabel}>δA (불확도)</label>
-            <input className={s.numInput} type="number" inputMode="decimal" value={da} onChange={(e) => setDa(e.target.value)} placeholder="0.2" />
+            <label className={s.miniLabel} htmlFor="sig-figs-da">δA (불확도)</label>
+            <input id="sig-figs-da" className={s.numInput} type="number" inputMode="decimal" value={da} onChange={(e) => setDa(e.target.value)} placeholder="0.2" />
           </div>
         </div>
       </div>
 
       {isPow ? (
         <div className={s.card}>
-          <div className={s.cardLabel}><span>지수 n</span><span className={s.cardHint}>R = Aⁿ</span></div>
-          <input className={s.numInput} type="number" inputMode="decimal" value={n} onChange={(e) => setN(e.target.value)} placeholder="2" />
+          <div className={s.cardLabel}><label htmlFor="sig-figs-n">지수 n</label><span className={s.cardHint}>R = Aⁿ</span></div>
+          <input id="sig-figs-n" className={s.numInput} type="number" inputMode="decimal" value={n} onChange={(e) => setN(e.target.value)} placeholder="2" />
         </div>
       ) : (
         <div className={s.card}>
@@ -283,10 +286,10 @@ function PropagateTab() {
       {res && fmt && fmtMax ? (
         <div className={s.card}>
           <div className={s.cardLabel}><span>전파 결과</span><span className={s.cardHint}>독립 오차 가정</span></div>
-          <div className={s.measureBig}>{fmt.valueStr} ± {fmt.errorStr}</div>
+          <div className={s.measureBig} role="status">{fmt.valueStr} ± {fmt.errorStr}</div>
           <div className={s.resGrid} style={{ marginTop: 10 }}>
             <Row name="표준 불확도 δR (제곱합)" val={pretty(res.errQuad, 3)} accent />
-            <Row name="상대 불확도" val={`${Number(res.relPctQuad.toPrecision(3))} %`} />
+            <Row name="상대 불확도" val={Number.isFinite(res.relPctQuad) ? `${Number(res.relPctQuad.toPrecision(3))} %` : '정의 불가 (결과값 0)'} />
             <Row name="최대 오차 (단순 합·상한)" val={`± ${pretty(res.errMax, 3)}`} />
           </div>
           <p className={s.formula}>{res.formula}</p>

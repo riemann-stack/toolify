@@ -118,6 +118,7 @@ export default function RoomModeClient() {
             id={`rm-tab-${t.id}`}
             role="tab"
             aria-selected={tab === t.id}
+            aria-controls={`rm-panel-${t.id}`}
             tabIndex={tab === t.id ? 0 : -1}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
@@ -196,7 +197,7 @@ export default function RoomModeClient() {
 
       {/* ════════ 탭 1: 모드 분석 ════════ */}
       {tab === 'modes' && (
-        <>
+        <div role="tabpanel" id="rm-panel-modes" aria-labelledby="rm-tab-modes" className={s.tabPanel}>
           <div className={s.hero} role="status">
             <p className={s.heroLabel}>룸 모드 분석</p>
             <p className={s.heroValue}>
@@ -264,12 +265,12 @@ export default function RoomModeClient() {
             </div>
             {modes.length > 25 && <p className={s.helpText}>※ {modes.length - 25}개 더 있음 — 차트로 전체 확인</p>}
           </div>
-        </>
+        </div>
       )}
 
       {/* ════════ 탭 2: 방 평면도 ════════ */}
       {tab === 'plan' && (
-        <>
+        <div role="tabpanel" id="rm-panel-plan" aria-labelledby="rm-tab-plan" className={s.tabPanel}>
           <div className={s.hero}>
             <p className={s.heroLabel}>{fmt(Wn, 1)}m × {fmt(Ln, 1)}m 평면도</p>
             <p className={s.heroValue}>
@@ -378,12 +379,12 @@ export default function RoomModeClient() {
               좌우 대칭을 지키며 청감·측정으로 조정하세요.
             </p>
           </div>
-        </>
+        </div>
       )}
 
       {/* ════════ 탭 3: 방 비율 진단 ════════ */}
       {tab === 'ratio' && (
-        <>
+        <div role="tabpanel" id="rm-panel-ratio" aria-labelledby="rm-tab-ratio" className={s.tabPanel}>
           <div className={s.hero}>
             <p className={s.heroLabel}>방 비율 진단</p>
             <p className={s.heroValue} style={{ color: ratio.color }}>
@@ -423,7 +424,7 @@ export default function RoomModeClient() {
             <p className={s.helpText}>
               Bolt(1946)가 정의한 곡선 영역의 공인 대수 근사 — Walker(BBC, 1993) 조건식
               1.1×(W/H) ≤ L/H ≤ 4.5×(W/H)−4, 그리고 L/H·W/H &lt; 3 (EBU Tech 3276·ITU-R BS.1116 채택.
-              긴 변을 L로 평가). 본인 방 위치(노란 점)가 초록 영역 안에 있으면 저주파 모드 분포가 대체로 고른 비율.<br />
+              긴 변을 L로 평가). 본인 방 위치(&lsquo;내 방&rsquo; 표시 점)가 초록 영역 안에 있으면 저주파 모드 분포가 대체로 고른 비율.<br />
               ※ 권장 비율과 Walker 영역은 <strong>서로 다른 기준</strong>이라 어긋날 수 있습니다 —
               Sepmeyer A(⭐, 1:1.14:1.39)가 대표적으로 영역 밖입니다. 비율 등급이 좋으면 Walker 위반을
               과도하게 걱정할 필요는 없습니다.
@@ -465,12 +466,12 @@ export default function RoomModeClient() {
               보장하지는 않습니다(Welti 2009, AES 7849).
             </p>
           </div>
-        </>
+        </div>
       )}
 
       {/* ════════ 탭 4: 트랩·튜닝 ════════ */}
       {tab === 'traps' && (
-        <>
+        <div role="tabpanel" id="rm-panel-traps" aria-labelledby="rm-tab-traps" className={s.tabPanel}>
           <div className={s.hero}>
             <p className={s.heroLabel}>베이스 트랩 권장</p>
             <p className={s.heroValue}>
@@ -527,7 +528,7 @@ export default function RoomModeClient() {
               ※ 일반 가이드 — 실제 측정으로 조정 필요
             </p>
           </div>
-        </>
+        </div>
       )}
 
       {/* 크로스링크 */}
@@ -721,8 +722,8 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
           {fmt(L, 1)}m (세로 L)
         </text>
         {/* 앞 벽 라벨 */}
-        <text x={pad + w / 2} y={pad + 14} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>앞 벽 (스피커 면)</text>
-        <text x={pad + w / 2} y={pad + h - 6} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>뒤 벽</text>
+        <text x={pad + w / 2} y={pad + 14} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>앞 벽 (스피커 면)</text>
+        <text x={pad + w / 2} y={pad + h - 6} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>뒤 벽</text>
 
         {/* 청취자 (드래그) */}
         <g

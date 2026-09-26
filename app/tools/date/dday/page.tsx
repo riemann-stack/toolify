@@ -2,7 +2,8 @@ import DdayClient from './DdayClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -56,6 +57,16 @@ export default function DdayPage() {
         여러 D-day 저장 + <strong style={{ color: 'var(--text)' }}>진행률·평일·영업일</strong> 페이스 + 반복 D-day.
       </p>
 
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="시험 일정은 시행기관 공고 기준 · 공휴일 2026~2030년 반영"
+        sources={[
+          { label: '국가법령정보센터(관공서의 공휴일에 관한 규정)', href: 'https://www.law.go.kr' },
+          { label: '한국산업인력공단 Q-Net', href: 'https://www.q-net.or.kr' },
+          { label: '한국교육과정평가원 수능', href: 'https://www.suneung.re.kr' },
+        ]}
+      />
+
       <DdayClient />
 
       <GuideDivider />
@@ -88,7 +99,7 @@ export default function DdayPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             시행기관이 공고한 <strong style={{ color: 'var(--text)' }}>확정 일정</strong>만 모았습니다. 날짜를 상단 계산기의 목표 날짜에 그대로(<code>YYYY-MM-DD</code>) 입력하면 남은 달력일·평일·영업일이 즉시 계산되고, D-day로 저장하면 매일 자동 갱신됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -99,8 +110,6 @@ export default function DdayPage() {
               </thead>
               <tbody>
                 {[
-                  ['토익 제578회 정기시험',        '2026-09-06 (일)', '한국토익위원회',        '오전 9:20 입실'],
-                  ['제29회 주택관리사보 2차 시험',  '2026-09-19 (토)', '한국산업인력공단',      '합격자 발표 12/2'],
                   ['한국사능력검정 제80회',        '2026-10-17 (토)', '국사편찬위원회',        '심화만 시행 · 접수 9/15~9/22'],
                   ['제37회 공인중개사 자격시험',    '2026-10-31 (토)', '한국산업인력공단(Q-Net)', '1·2차 동시 · 합격자 발표 12/2'],
                   ['토익 제581회 정기시험',        '2026-10-31 (토)', '한국토익위원회',        '토요일 시행 회차'],
@@ -125,7 +134,7 @@ export default function DdayPage() {
         {/* 3. 평일 vs 영업일 vs 달력일 */}
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>평일·영업일·달력일 차이</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -265,23 +274,7 @@ export default function DdayPage() {
 
         {/* 9. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 관련 도구 */}

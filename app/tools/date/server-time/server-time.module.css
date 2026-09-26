@@ -226,7 +226,7 @@
 .cdUrgent .cdNum { color: var(--warning); }
 .cdNegative .cdNum { color: var(--success); }
 .cdLabel {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   margin-top: 4px;
   letter-spacing: 0.04em;

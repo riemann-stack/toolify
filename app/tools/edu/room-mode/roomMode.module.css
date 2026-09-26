@@ -1,5 +1,6 @@
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
+.tabPanel { display: flex; flex-direction: column; gap: 14px; }
 
 .card {
   background: var(--bg2);

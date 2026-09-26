@@ -1,7 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import s from './planet-comparison.module.css'
 import { PLANETS, type Planet, fmtDistance, fmtLightTime, fmt, round, earthDistance } from './planetData'
 
@@ -22,7 +22,9 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
   const r = size / 2 - 4
   const cx = size / 2
   const cy = size / 2
-  const id = `grad-${planet.id}-${size}`
+  // 인스턴스별 고유 gradient id — 같은 행성·크기 일러스트가 두 번 렌더돼도 충돌하지 않게
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '')
+  const id = `grad-${planet.id}-${size}-${uid}`
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
@@ -170,8 +172,7 @@ export default function PlanetComparisonClient() {
 
   // 공유 텍스트
   async function copyShare() {
-    /* ⚠️ 예전에는 수성·금성·화성·목성으로 고정돼 있어, 화성을 체크 해제해도 공유 카드에 남았다. */
-    const shown = (filteredCalcs.length ? filteredCalcs : planetCalcs).slice(0, 4)
+    const shown = shareCalcs
     const lines = [
       `🪐 우주 속의 ${userName ? userName + '님' : '나'}`,
       ``,
@@ -186,7 +187,7 @@ export default function PlanetComparisonClient() {
     try {
       await navigator.clipboard.writeText(lines.join('\n'))
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -265,6 +266,13 @@ export default function PlanetComparisonClient() {
       pct: (d.logVal / maxLog) * 100,
     }))
   }, [filteredCalcs])
+
+  /* 공유 카드와 복사 텍스트가 같은 목록을 쓴다 — 선택한 행성 중 지구를 뺀 앞 4개
+     (예전엔 카드는 수성·금성·화성·목성 고정, 복사는 선택 목록이라 서로 달랐다) */
+  const shareSelected = filteredCalcs.filter(c => c.planet.id !== 'earth')
+  const shareCalcs = (shareSelected.length ? shareSelected : planetCalcs.filter(c => c.planet.id !== 'earth')).slice(0, 4)
+  const marsDist = planetCalcs.find(c => c.planet.id === 'mars')?.dist
+  const neptuneDist = planetCalcs.find(c => c.planet.id === 'neptune')?.dist
 
   return (
     <div className={s.wrap}>
@@ -479,13 +487,14 @@ export default function PlanetComparisonClient() {
                     background: c.planet.color,
                     color: c.planet.color,
                     top: gravityRunning ? 'calc(100% - 14px)' : '0',
-                    transitionDuration: `${dur}s`,
+                    // 리셋 단계는 즉시 위로 스냅 — 두 상태 모두 dur였을 때 두 번째 클릭부터 재생되지 않았다
+                    transitionDuration: gravityRunning ? `${dur}s` : '0s',
                   }}
                 />
                 <span className={s.gravityLabel}>
                   {c.planet.name}
                   <br />
-                  <span style={{ fontSize: 9, color: c.planet.color }}>{round(c.planet.gravityRatio, 2)}g</span>
+                  <span style={{ fontSize: 11, color: c.planet.color }}>{round(c.planet.gravityRatio, 2)}g</span>
                 </span>
               </div>
             )
@@ -592,7 +601,7 @@ export default function PlanetComparisonClient() {
           </table>
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-          💡 지금 화성에 메시지를 보내면 빛의 속도로 약 <strong style={{ color: '#DC2626' }}>13분</strong>이 걸립니다. 해왕성까지는 약 <strong style={{ color: '#3E5BFF' }}>4시간</strong>.
+          💡 화성에 메시지를 보내면 빛의 속도로도 가장 가까울 때 약 <strong style={{ color: '#DC2626' }}>{marsDist ? fmtLightTime(marsDist.minLightMin) : '4분'}</strong>, 가장 멀 때 약 <strong style={{ color: '#DC2626' }}>{marsDist ? fmtLightTime(marsDist.maxLightMin) : '21분'}</strong>이 걸립니다. 해왕성까지는 약 <strong style={{ color: '#3E5BFF' }}>{neptuneDist ? fmtLightTime(neptuneDist.minLightMin) : '4시간'}</strong>.
         </p>
       </div>
 
@@ -603,12 +612,7 @@ export default function PlanetComparisonClient() {
           지구의 <strong>{age}세 {weight}kg</strong>인 {userName ? userName + '님은' : '나는'}...
         </p>
         <div className={s.shareList}>
-          {[
-            planetCalcs.find(c => c.planet.id === 'mercury'),
-            planetCalcs.find(c => c.planet.id === 'venus'),
-            planetCalcs.find(c => c.planet.id === 'mars'),
-            planetCalcs.find(c => c.planet.id === 'jupiter'),
-          ].filter((c): c is NonNullable<typeof c> => !!c).map(c => (
+          {shareCalcs.map(c => (
             <div key={c.planet.id} className={s.shareListItem}>
               <span>🌟 {c.planet.name}에서</span>
               <strong>{round(c.ageOnPlanet, 1)}세, {round(c.weightOnPlanet, 1)}kg</strong>
@@ -633,7 +637,7 @@ export default function PlanetComparisonClient() {
       <div className={s.warningCard}>
         <strong>⚠️ 실제로 인간이 다른 행성에 가면...</strong>
         <ul>
-          <li><strong style={{ color: 'var(--text)' }}>수성·금성:</strong> 표면 온도가 너무 극단적이라 즉시 사망 (수성 -173~427°C, 금성 462°C)</li>
+          <li><strong style={{ color: 'var(--text)' }}>수성·금성:</strong> 표면 온도가 너무 극단적이라 즉시 사망 (수성 -173~427°C, 금성 464°C)</li>
           <li><strong style={{ color: 'var(--text)' }}>화성:</strong> 산소 X, 기압 0.01 → 우주복 필수</li>
           <li><strong style={{ color: 'var(--text)' }}>목성·토성·천왕성·해왕성:</strong> 가스 행성이라 표면이 없음</li>
         </ul>
@@ -644,7 +648,7 @@ export default function PlanetComparisonClient() {
 
       <div className={s.sourceCard}>
         <strong>데이터 출처:</strong> 행성 데이터는 NASA Solar System Exploration 기준입니다.
-        거리는 <strong>궤도 반지름의 차·합</strong>으로 구한 값입니다(원 궤도로 단순화한 근사). 두 행성이 태양을 도는 위치에 따라 최소~최대 사이에서 계속 변합니다 — 화성은 가장 가까울 때와 멀 때가 7배 넘게 차이 납니다.
+        거리는 <strong>궤도 반지름의 차·합</strong>으로 구한 값입니다(원 궤도로 단순화한 근사). 두 행성이 태양을 도는 위치에 따라 최소~최대 사이에서 계속 변합니다 — 화성은 이 근사로도 가장 가까울 때와 멀 때가 약 5배 차이 나고, 궤도 이심률까지 반영하면 실제로는 7배 넘게 벌어집니다.
         정확한 천문 데이터는 NASA, KASI(한국천문연구원) 등 공식 기관 자료를 참조하세요.
       </div>
     </div>

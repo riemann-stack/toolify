@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './size.module.css'
+import { SHOE_M, SHOE_F } from './sizeData'
 
 // ──────────────────────────────────────
 // 카테고리 정의
@@ -28,31 +29,7 @@ const HAS_GENDER: Category[] = ['shoes', 'top', 'bottom', 'glove']
 // ──────────────────────────────────────
 // 데이터: 신발
 // ──────────────────────────────────────
-const SHOE_M = [
-  { kr: 240, us: '6.5',  uk: '6',    eu: '39'   },
-  { kr: 245, us: '7',    uk: '6.5',  eu: '39.5' },
-  { kr: 250, us: '7.5',  uk: '7',    eu: '40'   },
-  { kr: 255, us: '8',    uk: '7.5',  eu: '41'   },
-  { kr: 260, us: '8.5',  uk: '8',    eu: '42'   },
-  { kr: 265, us: '9',    uk: '8.5',  eu: '42.5' },
-  { kr: 270, us: '9.5',  uk: '9',    eu: '43'   },
-  { kr: 275, us: '10',   uk: '9.5',  eu: '44'   },
-  { kr: 280, us: '10.5', uk: '10',   eu: '44.5' },
-  { kr: 285, us: '11',   uk: '10.5', eu: '45'   },
-  { kr: 290, us: '11.5', uk: '11',   eu: '46'   },
-]
-const SHOE_F = [
-  { kr: 220, us: '5',    uk: '2.5', eu: '35'   },
-  { kr: 225, us: '5.5',  uk: '3',   eu: '35.5' },
-  { kr: 230, us: '6',    uk: '3.5', eu: '36'   },
-  { kr: 235, us: '6.5',  uk: '4',   eu: '37'   },
-  { kr: 240, us: '7',    uk: '4.5', eu: '37.5' },
-  { kr: 245, us: '7.5',  uk: '5',   eu: '38'   },
-  { kr: 250, us: '8',    uk: '5.5', eu: '38.5' },
-  { kr: 255, us: '8.5',  uk: '6',   eu: '39'   },
-  { kr: 260, us: '9',    uk: '6.5', eu: '40'   },
-  { kr: 265, us: '9.5',  uk: '7',   eu: '40.5' },
-]
+// SHOE_M·SHOE_F는 page.tsx 변환표와 공유 — sizeData.ts 단일 소스
 
 // ──────────────────────────────────────
 // 데이터: 상의
@@ -105,15 +82,17 @@ const BRA_BAND = [
   { kr: '85', us: '38', eu: '85', underMin: 82.5, underMax: 87.5 },
   { kr: '90', us: '40', eu: '90', underMin: 87.5, underMax: 92.5 },
 ]
+// diff = 컵 차이(가슴 - 밑가슴) 공칭값(cm). 국내 기준 AA 7.5cm부터 2.5cm마다 한 컵, 각 컵은 공칭값 ±1.25cm
+const CUP_TOL = 1.25
 const BRA_CUP = [
-  { kr: 'AA',     us: 'AA',    eu: 'AA', uk: 'AA', diff: 10 },
-  { kr: 'A',      us: 'A',     eu: 'A',  uk: 'A',  diff: 12.5 },
-  { kr: 'B',      us: 'B',     eu: 'B',  uk: 'B',  diff: 15 },
-  { kr: 'C',      us: 'C',     eu: 'C',  uk: 'C',  diff: 17.5 },
-  { kr: 'D',      us: 'D',     eu: 'D',  uk: 'D',  diff: 20 },
-  { kr: 'E (DD)', us: 'DD',    eu: 'E',  uk: 'DD', diff: 22.5 },
-  { kr: 'F',      us: 'DDD/F', eu: 'F',  uk: 'E',  diff: 25 },
-  { kr: 'G',      us: 'G',     eu: 'G',  uk: 'F',  diff: 27.5 },
+  { kr: 'AA',     us: 'AA',    eu: 'AA', uk: 'AA', diff: 7.5 },
+  { kr: 'A',      us: 'A',     eu: 'A',  uk: 'A',  diff: 10 },
+  { kr: 'B',      us: 'B',     eu: 'B',  uk: 'B',  diff: 12.5 },
+  { kr: 'C',      us: 'C',     eu: 'C',  uk: 'C',  diff: 15 },
+  { kr: 'D',      us: 'D',     eu: 'D',  uk: 'D',  diff: 17.5 },
+  { kr: 'E (DD)', us: 'DD',    eu: 'E',  uk: 'DD', diff: 20 },
+  { kr: 'F',      us: 'DDD/F', eu: 'F',  uk: 'E',  diff: 22.5 },
+  { kr: 'G',      us: 'G',     eu: 'G',  uk: 'F',  diff: 25 },
 ]
 
 // ──────────────────────────────────────
@@ -166,12 +145,14 @@ const GLOVE_M = [
   { handMin: 24, handMax: 25, kr: 'XL',  us: '10', eu: 'XL' },
   { handMin: 26, handMax: 27, kr: 'XXL', us: '11', eu: 'XXL' },
 ]
+// 여성: US 장갑 사이즈 = 손바닥 둘레(인치) → 각 구간은 US값 ±0.25인치를 cm로 환산한 연속 구간
+// (US 6 = 15.2cm, 6.5 = 16.5, 7 = 17.8, 7.5 = 19.1, 8 = 20.3cm)
 const GLOVE_F = [
-  { handMin: 15, handMax: 16, kr: 'XS', us: '6',   eu: 'XS' },
-  { handMin: 17, handMax: 18, kr: 'S',  us: '6.5', eu: 'S' },
-  { handMin: 18, handMax: 19, kr: 'M',  us: '7',   eu: 'M' },
-  { handMin: 20, handMax: 21, kr: 'L',  us: '7.5', eu: 'L' },
-  { handMin: 22, handMax: 23, kr: 'XL', us: '8',   eu: 'XL' },
+  { handMin: 14.6, handMax: 15.9, kr: 'XS', us: '6',   eu: 'XS' },
+  { handMin: 15.9, handMax: 17.1, kr: 'S',  us: '6.5', eu: 'S' },
+  { handMin: 17.1, handMax: 18.4, kr: 'M',  us: '7',   eu: 'M' },
+  { handMin: 18.4, handMax: 19.7, kr: 'L',  us: '7.5', eu: 'L' },
+  { handMin: 19.7, handMax: 21.0, kr: 'XL', us: '8',   eu: 'XL' },
 ]
 
 // ──────────────────────────────────────
@@ -405,6 +386,7 @@ function SearchBox({ value, onChange, placeholder }: { value: string; onChange: 
         </svg>
         <input
           className={styles.searchInput}
+          aria-label="이미 아는 사이즈로 표에서 찾기"
           placeholder={placeholder}
           value={value}
           onChange={e => onChange(e.target.value)}
@@ -661,7 +643,7 @@ function BottomView({ gender, waist, setWaist, search, setSearch }: { gender: Ge
         <table className={styles.table}>
           <thead>
             <tr>
-              {['한국', 'US 인치', 'EU', '허리 (cm)'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
+              {['한국', gender === 'm' ? 'US 인치' : 'US 사이즈', 'EU', '허리 (cm)'].map(h => <th scope="col" key={h} className={styles.th}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -671,7 +653,7 @@ function BottomView({ gender, waist, setWaist, search, setSearch }: { gender: Ge
               return (
                 <tr key={r.kr} className={`${styles.tr} ${isHi ? styles.trHighlight : ''}`}>
                   <td className={`${styles.td} ${styles.tdAccent}`}>{r.kr}</td>
-                  <td className={styles.td}>{r.us}&quot;</td>
+                  <td className={styles.td}>{r.us}{gender === 'm' ? '"' : ''}</td>
                   <td className={styles.td}>{r.eu}</td>
                   <td className={styles.td}>{r.waist}cm</td>
                 </tr>
@@ -707,9 +689,9 @@ function BraView({ underBust, setUnderBust, bust, setBust, search, setSearch }: 
 
   const cupIdx = useMemo(() => {
     if (cupDiff === null) return -1
-    // BRA_CUP.diff는 각 컵 구간의 상한(cm). 컵차이가 상한 이하인 첫 컵으로 판정
-    // (예: AA=~10, A=~12.5 → 차이 11cm는 A) — 최근접 매칭은 한 컵 작게 오판정하므로 임계값 방식 사용
-    const i = BRA_CUP.findIndex(r => cupDiff <= r.diff)
+    // BRA_CUP.diff는 각 컵의 공칭값(cm). 구간은 공칭값 ±1.25cm → 상한(공칭+1.25) 미만인 첫 컵으로 판정
+    // (예: A=10 → 8.75 이상 11.25 미만, B=12.5 → 11.25 이상 13.75 미만)
+    const i = BRA_CUP.findIndex(r => cupDiff < r.diff + CUP_TOL)
     return i >= 0 ? i : BRA_CUP.length - 1
   }, [cupDiff])
 
@@ -717,9 +699,9 @@ function BraView({ underBust, setUnderBust, bust, setBust, search, setSearch }: 
     ? `${BRA_BAND[bandIdx].kr}${BRA_CUP[cupIdx].kr.replace(/\s.*/, '')}`
     : null
 
-  // 밑가슴 62.5~92.5cm(밴드) 또는 컵차이 7.5~27.5cm(컵) 범위를 벗어나면 경고
-  const braWarn = (ub !== null && (ub < 62.5 || ub > 92.5)) || (cupDiff !== null && (cupDiff < 7.5 || cupDiff > 27.5))
-    ? '측정값이 표 범위(밑가슴 62.5~92.5cm·컵차이 7.5~27.5cm) 밖입니다 — 가장 가까운 값을 표시했어요. 브랜드 실측표를 꼭 확인하세요'
+  // 밑가슴 62.5~92.5cm(밴드) 또는 컵차이 6.25~26.25cm(AA 하한~G 상한) 범위를 벗어나면 경고
+  const braWarn = (ub !== null && (ub < 62.5 || ub > 92.5)) || (cupDiff !== null && (cupDiff < 6.25 || cupDiff > 26.25))
+    ? '측정값이 표 범위(밑가슴 62.5~92.5cm·컵차이 6.25~26.25cm) 밖입니다 — 가장 가까운 값을 표시했어요. 브랜드 실측표를 꼭 확인하세요'
     : undefined
 
   const filteredBand = useMemo(() => {
@@ -807,7 +789,7 @@ function BraView({ underBust, setUnderBust, bust, setBust, search, setSearch }: 
                     <td className={styles.td}>{r.us}</td>
                     <td className={styles.td}>{r.eu}</td>
                     <td className={styles.td}>{r.uk}</td>
-                    <td className={styles.td}>~{r.diff}</td>
+                    <td className={styles.td}>{r.diff - CUP_TOL}–{r.diff + CUP_TOL}</td>
                   </tr>
                 )
               })}

@@ -66,6 +66,13 @@ export default function AreaClient() {
     }, null)
   }, [result])
 
+  // 평 입력값은 흔히 말하는 분양 평형(공급면적 기준 '34평형' 등)일 수 있음 → 평형 이름과 ±1평 이내면 전용면적을 함께 안내
+  // (단지별 공용면적 차이로 전용 84㎡가 33~34평형, 59㎡가 24~25평형으로 표기되는 점 반영)
+  const supplyMatch = useMemo(() => {
+    if (!result || activeInput !== 'pyeong') return null
+    return APT_SIZES.find(a => Math.abs(parseInt(a.name, 10) - result.pyeong) <= 1) ?? null
+  }, [result, activeInput])
+
   const handleSqmChange = (v: string) => {
     setSqm(v); setActiveInput('sqm')
     const n = parseFloat(v)
@@ -129,7 +136,7 @@ export default function AreaClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>빠른 변환 (전용면적 기준)</label>
+            <span className={styles.cardLabel}>빠른 변환 (전용면적 기준)</span>
             <div className={styles.quickRow}>
               {QUICK_SQM.map(v => (
                 <button key={v} type="button"
@@ -151,9 +158,14 @@ export default function AreaClient() {
                   <span style={{ fontSize: '0.5em', color: 'var(--muted)', margin: '0 8px' }}>=</span>
                   {fmt(result.pyeong)}<span className={styles.heroUnit}>평</span>
                 </div>
+                {supplyMatch && (
+                  <div className={styles.heroSub}>
+                    분양 평형으로 입력한 거라면 <strong>{supplyMatch.name.replace(/\s*⭐/, '')}</strong>에 해당해 전용면적은 약 <strong>{supplyMatch.sqm}㎡</strong>입니다
+                  </div>
+                )}
                 {matchedApt && Math.abs(matchedApt.sqm - result.sqm) <= 5 && (
                   <div className={styles.heroSub}>
-                    가장 가까운 한국 평형: <strong>{matchedApt.name}</strong> · {matchedApt.usage}
+                    전용 {fmt(result.sqm)}㎡로 보면 가장 가까운 평형: <strong>{matchedApt.name}</strong> · {matchedApt.usage}
                   </div>
                 )}
               </div>
@@ -175,7 +187,7 @@ export default function AreaClient() {
       {tab === 'apt-table' && (
         <>
           <div className={styles.disclaimer}>
-            🏢 <strong>한국 아파트는 전용면적 기준</strong>으로 분양됩니다. &lsquo;34평형&rsquo;은 보통 전용 84㎡ + 공용 약 26㎡ 합계로 분양면적이 약 110㎡ 수준입니다.
+            🏢 <strong>한국 아파트는 전용면적 기준</strong>으로 분양됩니다. &lsquo;34평형&rsquo;은 보통 전용 84㎡ + 주거공용 약 26㎡ 합계로 공급면적이 약 110㎡(33~34평) 수준입니다.
           </div>
 
           <div className={styles.tableWrap}>
@@ -250,7 +262,7 @@ export default function AreaClient() {
                 </tr>
                 <tr>
                   <td><strong style={{ color: '#DC2626' }}>계약면적</strong></td>
-                  <td>공급 + 기타공용 (분양가 산정)</td>
+                  <td>공급 + 기타공용 (오피스텔 분양 면적 표기)</td>
                   <td>약 160㎡ <small style={{ color: 'var(--muted)' }}>(약 48평)</small></td>
                 </tr>
               </tbody>
@@ -260,10 +272,10 @@ export default function AreaClient() {
           <div className={styles.cardGrid}>
             {[
               { name: '실거주 면적이 궁금할 때', use: '전용면적', color: '#059669' },
-              { name: '분양·매매 광고 평수', use: '공급면적', color: 'var(--accent)' },
-              { name: '분양가 비교·재산세', use: '계약면적', color: '#DC2626' },
+              { name: '분양·매매 광고 평수, 아파트 3.3㎡당 분양가', use: '공급면적 (오피스텔은 계약면적)', color: 'var(--accent)' },
+              { name: '청약·세제의 국민주택규모(85㎡) 판단', use: '전용면적', color: 'var(--success)' },
             ].map((c, i) => (
-              <div key={i} className={styles.guideCard} style={{ borderColor: `${c.color}40` }}>
+              <div key={i} className={styles.guideCard} style={{ borderColor: `color-mix(in srgb, ${c.color} 25%, transparent)` }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: c.color, marginBottom: 4 }}>{c.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)' }}>→ {c.use} 기준</p>
               </div>
@@ -271,7 +283,7 @@ export default function AreaClient() {
           </div>
 
           <div className={styles.infoBox}>
-            💡 <strong>주의</strong> — 같은 &lsquo;34평 아파트&rsquo;도 전용면적 기준이면 약 25평, 공급면적 기준이면 34평, 계약면적 기준이면 48평입니다. <strong>광고에서 보는 평수는 보통 공급면적</strong>이며, 등기부등본은 전용면적입니다.
+            💡 <strong>주의</strong> — 같은 &lsquo;34평형 아파트&rsquo;도 전용면적 기준이면 약 25평, 공급면적 기준이면 33~34평, 계약면적 기준이면 48평 안팎입니다. <strong>광고에서 보는 평수는 보통 공급면적</strong>이며, 등기부등본은 전용면적입니다.
           </div>
         </>
       )}
@@ -313,7 +325,7 @@ export default function AreaClient() {
           </div>
 
           <div className={styles.infoBox}>
-            💡 <strong>인테리어·가구 배치 팁</strong> — 24평(84㎡) 미만은 다용도 가구(소파베드·확장식 식탁) 활용 권장. 30평 이상은 가구 비례를 신중히 고려하지 않으면 공간이 빈 듯 보일 수 있습니다.
+            💡 <strong>인테리어·가구 배치 팁</strong> — 25평(전용 84㎡) 미만은 다용도 가구(소파베드·확장식 식탁) 활용 권장. 30평 이상은 가구 비례를 신중히 고려하지 않으면 공간이 빈 듯 보일 수 있습니다.
           </div>
         </>
       )}

@@ -507,7 +507,7 @@
 }
 .retroFlag {
   display: inline-block;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   /* ⚠️ 9px 배지라 대형 텍스트 예외가 안 되는데 3.88:1이었다(실측). 700레벨로. */
   background: color-mix(in srgb, var(--danger) 12%, transparent);
