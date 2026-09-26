@@ -177,8 +177,30 @@ function attrString(tag, attr) {
   }
   return v.replace(/\s+/g, ' ').trim()
 }
-/** sources={[{label, href}, …]} 또는 sources={CONST} → [{label, href}] */
-function attrSources(tag, src) {
+/** 식별자(`NAME` 또는 `OBJ.key`)를 문자열 상수로 풀기 — 같은 파일의 const, 없으면 그 파일이 import한 모듈(@/·상대 경로)의 export const.
+ *  새 도구 페이지가 href: LAW.x · date={X_REVIEWED}처럼 상수를 참조해도 출처·기준일을 읽기 위함. 풀지 못하면 null */
+function resolveIdent(src, file, expr, depth = 0) {
+  if (depth > 2) return null
+  const [name, key] = expr.split('.')
+  const esc = x => x.replace(/[$]/g, '\\$')
+  if (key) {
+    const obj = src.match(new RegExp(`const\\s+${esc(name)}\\b[^=]*=\\s*\\{([\\s\\S]*?)\\n\\s*\\}`))
+    if (obj) { const kv = obj[1].match(new RegExp(`\\b${esc(key)}\\s*:\\s*(['"\`])((?:(?!\\1).)*)\\1`)); if (kv) return kv[2] }
+  } else {
+    const c = src.match(new RegExp(`const\\s+${esc(name)}\\b[^=]*=\\s*(['"\`])((?:(?!\\1).)*)\\1`))
+    if (c && !/\$\{/.test(c[2])) return c[2]
+  }
+  const imp = [...src.matchAll(/import\s*\{([^}]*)\}\s*from\s*['"]([^'"]+)['"]/g)].find(m => m[1].split(',').some(x => x.trim().split(/\s+as\s+/).pop() === name))
+  if (!imp) return null
+  const base = imp[2].startsWith('@/') ? imp[2].slice(2) : imp[2].startsWith('.') ? join(dirname(file), imp[2]) : null
+  if (!base) return null
+  for (const ext of ['.ts', '.tsx', '/index.ts']) {
+    if (existsSync(base + ext)) return resolveIdent(readFileSync(base + ext, 'utf8'), base + ext, expr, depth + 1)
+  }
+  return null
+}
+/** sources={[{label, href}, …]} 또는 sources={CONST} → [{label, href}] (href가 상수 참조여도 resolveIdent로 푼다) */
+function attrSources(tag, src, file = '') {
   let body = null
   const lit = tag.match(/\bsources=\{\s*(\[[\s\S]*\])\s*\}/)
   if (lit) body = lit[1]
@@ -188,8 +210,12 @@ function attrSources(tag, src) {
   }
   if (!body) return []
   const out = []
-  const re = /\{\s*["']?label["']?\s*:\s*(["'`])((?:(?!\1).)*)\1\s*,\s*["']?href["']?\s*:\s*(["'`])((?:(?!\3).)*)\3/g
-  for (const m of body.matchAll(re)) if (/^https?:\/\//.test(m[4])) out.push({ label: m[2].replace(/\s*↗$/, '').trim(), href: m[4] })
+  const re = /\{\s*["']?label["']?\s*:\s*(["'`])((?:(?!\1).)*)\1\s*,\s*["']?href["']?\s*:\s*(?:(["'`])((?:(?!\3).)*)\3|([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)?))/g
+  for (const m of body.matchAll(re)) {
+    const href = m[4] ?? (m[5] ? resolveIdent(src, file, m[5]) : null)
+    const label = m[2].replace(/\s*\(?\$\{[^}]*\}\)?/g, '').replace(/\s*↗$/, '').replace(/\s{2,}/g, ' ').trim()
+    if (href && /^https?:\/\//.test(href) && label) out.push({ label, href })
+  }
   return out
 }
 /** '2026년 7월' → '2026-07' · '2026년' → '2026' · '2026.07.14'/'2026-07-14' → '2026-07-14' · 그 외 null */
@@ -288,13 +314,14 @@ for (const f of pages) {
 
   // ① UpdatedMeta · Disclaimer
   const um = extractTag(src, 'UpdatedMeta')
-  const reviewedRaw = um ? attrString(um, 'date') : null
+  const dateIdent = um && um.match(/\bdate=\{\s*([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)?)\s*\}/)
+  const reviewedRaw = um ? (attrString(um, 'date') ?? (dateIdent ? resolveIdent(src, f, dateIdent[1]) : null)) : null
   const reviewed = parseKoDate(reviewedRaw)
   if (um && reviewedRaw && !reviewed) warn.push(`${slug}: UpdatedMeta date 해석 불가 '${reviewedRaw}' → reviewed 비움`)
   const umBasis = um ? attrString(um, 'basis') : null
-  const umSources = um ? attrSources(um, src) : []
+  const umSources = um ? attrSources(um, src, f) : []
   let discSources = []
-  for (let at = 0, tag; (tag = extractTag(src, 'Disclaimer', at)); at = src.indexOf(tag, at) + tag.length) discSources.push(...attrSources(tag, src))
+  for (let at = 0, tag; (tag = extractTag(src, 'Disclaimer', at)); at = src.indexOf(tag, at) + tag.length) discSources.push(...attrSources(tag, src, f))
   const seen = new Set(); const pageSources = []
   for (const s of [...umSources, ...discSources]) if (!seen.has(s.href)) { seen.add(s.href); pageSources.push({ label: s.label, org: '', href: s.href }) }
   if (umSources.length) stat.srcUM++
