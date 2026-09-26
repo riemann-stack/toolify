@@ -111,7 +111,7 @@ export default function TirePressurePage() {
             정확한 값은 <strong style={{ color: 'var(--text)' }}>운전석 도어 안쪽 스티커</strong>나 차량 매뉴얼이 우선입니다. 아래는 일반적인 참고 범위입니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
-            도어 스티커에는 &lsquo;앞 33 / 뒤 36 psi&rsquo;처럼 전륜과 후륜 값이 따로 적힌 경우도 많습니다. 측정은 꼭 아침 첫 주행 전 <strong style={{ color: 'var(--text)' }}>냉간</strong>에서 하세요 — 한참 달린 뒤 주유소에서 재면 타이어가 데워져 3~5psi쯤 높게 나오고, 그 숫자에 맞추면 오히려 공기가 모자라게 됩니다.
+            도어 스티커에는 전륜과 후륜 값이 따로 적힌 경우도 많습니다. 예를 들어 제가 타는 GV70(18인치)은 도어 스티커가 앞 33 / 뒤 36 psi입니다. 측정은 꼭 아침 첫 주행 전 <strong style={{ color: 'var(--text)' }}>냉간</strong>에서 하세요 — 한참 달린 뒤 주유소에서 재면 타이어가 데워져 높게 나오고(제 차는 4~5psi쯤 차이 났습니다), 그 숫자에 맞추면 오히려 공기가 모자라게 됩니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
