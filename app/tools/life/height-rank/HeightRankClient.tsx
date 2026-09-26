@@ -3,7 +3,7 @@
 import { useState, useMemo, useId } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import {
-  BANDS, OVERALL_MEAN, MMA_2024_MEAN, calcHeightRank, rankAcrossBands, stdNormalCdf,
+  BANDS, OVERALL_MEAN, MMA_2024_MEAN, BAND_SAMPLE_TOTAL, calcHeightRank, rankAcrossBands, stdNormalCdf,
   type Gender,
 } from './heightRankData'
 import s from './height-rank.module.css'
@@ -205,7 +205,7 @@ export default function HeightRankClient() {
           { label: '국가기술표준원 보도자료 (2022.3.)', href: 'https://www.kats.go.kr' },
         ]}
       >
-        백분위는 사이즈코리아 8차 조사(20~69세 표본 6,839명) 통계에 정규분포 모델을 적용한 추정치입니다. 표본조사 특성상 실제 인구 분포와 다를 수 있고, 자가 측정 키(신발·자세·측정 시각)에 따라서도 결과가 달라집니다.
+        백분위는 사이즈코리아 8차 인체치수조사의 성별·연령대별 통계(20~69세 16개 구간, 구간 표본 합계 {BAND_SAMPLE_TOTAL.toLocaleString('ko-KR')}명)에 정규분포 모델을 적용한 추정치입니다. 표본조사 특성상 실제 인구 분포와 다를 수 있고, 자가 측정 키(신발·자세·측정 시각)에 따라서도 결과가 달라집니다.
       </Disclaimer>
     </div>
   )

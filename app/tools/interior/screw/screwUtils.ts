@@ -197,29 +197,34 @@ export function mmToInch(mm: number): number {
   return mm / INCH_TO_MM
 }
 
-/** "5/8" or "5/8\"" or "0.625" → 인치 숫자 */
+/** "5/8" or "5/8\"" or "0.625" or "1 1/2인치" → 인치 숫자. 형식이 맞지 않으면 null(화면에 '입력 형식 확인' 안내) */
 export function parseInchInput(s: string): number | null {
+  // 인치 기호(" ' ″ ′ ” “ ’ ‘)와 끝의 단위(인치·inch·inches·in)를 떼고,
   // 내부 공백은 단일 공백으로만 정리 — "1 1/2"(대분수) 구분자를 보존
-  const trimmed = s.trim().replace(/["'']/g, '').replace(/\s+/g, ' ')
+  const trimmed = s
+    .replace(/["'″′”“’‘]/g, '')
+    .trim()
+    .replace(/\s*(인치|inches|inch|in)$/i, '')
+    .trim()
+    .replace(/\s+/g, ' ')
   if (!trimmed) return null
-  // 대분수: "1 1/2", "1-1/2", "1_1/2"
-  const mixed = trimmed.match(/^(\d+)[\s_-](\d+)\/(\d+)$/)
+  // 대분수: "1 1/2", "1-1/2", "1_1/2", "1 1 / 2" — '/' 양옆 공백 허용
+  const mixed = trimmed.match(/^(\d+)[\s_-]+(\d+)\s*\/\s*(\d+)$/)
   if (mixed) {
     const whole = parseInt(mixed[1])
     const num = parseInt(mixed[2])
     const den = parseInt(mixed[3])
-    if (den > 0) return whole + num / den
+    return den > 0 ? whole + num / den : null
   }
-  // 단순 분수·소수는 공백 제거 후 파싱
-  const cleaned = trimmed.replace(/\s+/g, '')
-  const frac = cleaned.match(/^(\d+)\/(\d+)$/)
+  // 단순 분수: "3/4", "3 / 4" — 공백을 지우고 합치면 "1 1/2"가 "11/2"로 읽히므로 trimmed 그대로 매칭
+  const frac = trimmed.match(/^(\d+)\s*\/\s*(\d+)$/)
   if (frac) {
     const num = parseInt(frac[1])
     const den = parseInt(frac[2])
-    if (den > 0) return num / den
+    return den > 0 ? num / den : null
   }
-  const num = parseFloat(cleaned)
-  if (isFinite(num)) return num
+  // 숫자만 허용 — "12mm"·"1 2" 같은 입력을 parseFloat로 앞자리만 읽어 틀린 값을 내지 않도록
+  if (/^(\d+\.?\d*|\.\d+)$/.test(trimmed)) return parseFloat(trimmed)
   return null
 }
 

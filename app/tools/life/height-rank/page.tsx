@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import HeightRankClient from './HeightRankClient'
-import { BANDS } from './heightRankData'
+import { BANDS, BAND_SAMPLE_TOTAL, PRESS_RELEASE_SAMPLE } from './heightRankData'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
@@ -24,7 +24,7 @@ const AGE_ROWS = BANDS.M.map((m, i) => ({ label: m.label, m, f: BANDS.F[i] }))
 const FAQ_LD = [
   {
     q: '한국 남자·여자 평균 키는 몇인가요?',
-    a: '사이즈코리아 8차 한국인 인체치수조사(직접측정 2020~2021, 20~69세 6,839명) 기준 <strong>남성 172.5cm, 여성 159.6cm</strong>입니다. 연령대별로는 남성 20~39세가 174.7~175.4cm로 가장 크고 60대는 168.2cm, 여성은 20~39세 161.8~162.4cm·60대 155.5cm로 세대 차이가 뚜렷해요. 참고로 병무청 병역판정검사 평균 신장은 2024년 174.5cm입니다(수검자의 약 95%가 19세).',
+    a: `국가기술표준원이 발표한 8차 한국인 인체치수조사(직접측정 2020~2021, 20~69세 ${PRESS_RELEASE_SAMPLE.toLocaleString('ko-KR')}명) 기준 <strong>남성 172.5cm, 여성 159.6cm</strong>입니다. 사이즈코리아 인체데이터의 연령대별 통계로는 남성 20~39세가 174.7~175.4cm로 가장 크고 60대는 168.2cm, 여성은 20~39세 161.8~162.4cm·60대 155.5cm로 세대 차이가 뚜렷해요. 참고로 병무청 병역판정검사 평균 신장은 2024년 174.5cm입니다(수검자의 약 95%가 19세).`,
   },
   {
     q: '백분위는 어떻게 계산하나요?',
@@ -44,7 +44,7 @@ const FAQ_LD = [
   },
   {
     q: '데이터 출처는 어디인가요?',
-    a: '국가기술표준원 <strong>사이즈코리아 8차 한국인 인체치수조사</strong>(직접측정, 20~69세 6,839명)의 성별×연령대별 키 평균·표준편차·백분위 통계입니다. 산업 설계용 국가 표준 인체 데이터라 신뢰도가 높아요. 70세 이상은 별도 고령자 조사로 진행되어 이 계산기에는 포함하지 않았습니다. 표본조사이므로 전수 통계(병무청 병역판정검사 등)와는 수치가 약간 다를 수 있습니다.',
+    a: `국가기술표준원 <strong>사이즈코리아 8차 한국인 인체치수조사</strong>(2020~2023) 인체데이터의 성별×연령대별 키 평균·표준편차·백분위 통계입니다(20~69세 16개 구간, 구간 표본 합계 ${BAND_SAMPLE_TOTAL.toLocaleString('ko-KR')}명). 2022년 3월 보도자료의 전체 평균(남 172.5·여 159.6cm)은 직접측정 ${PRESS_RELEASE_SAMPLE.toLocaleString('ko-KR')}명 기준이라 표본 수 표기가 서로 다릅니다. 산업 설계용 국가 표준 인체 데이터라 신뢰도가 높아요. 70세 이상은 별도 고령자 조사로 진행되어 이 계산기에는 포함하지 않았습니다. 표본조사이므로 전수 통계(병무청 병역판정검사 등)와는 수치가 약간 다를 수 있습니다.`,
   },
 ]
 
@@ -69,7 +69,7 @@ export default function HeightRankPage() {
 
       <UpdatedMeta
         date="2026년 7월"
-        basis="사이즈코리아 8차 한국인 인체치수조사 (직접측정 2020~2021, 20~69세 6,839명) 성별·연령대별 실측 통계"
+        basis="사이즈코리아 8차 한국인 인체치수조사(2020~2023) 인체데이터 — 20~69세 성별·연령대별 실측 통계(평균·표준편차·백분위)"
         sources={[
           { label: '사이즈코리아', href: 'https://sizekorea.kr' },
           { label: '국가기술표준원', href: 'https://www.kats.go.kr' },
@@ -247,7 +247,8 @@ export default function HeightRankPage() {
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
               같은 8차 조사인데 숫자가 다른 건 모집단이 다르기 때문입니다. 남성 172.5cm(여성 159.6cm)는 20~69세를 모두 담은 값이라
               평균 168.2cm인 60대까지 함께 들어가 있고, 174.99cm는 20~24세만 떼어낸 값이에요. 두 값은 공표 단위가 달라 단순 산술로 서로 환산되지 않으니
-              인용할 때 연령 범위를 함께 밝히는 편이 안전합니다(자료마다 집계 범위가 달라 표본 수 표기도 다릅니다).
+              인용할 때 연령 범위를 함께 밝히는 편이 안전합니다. 표본 수 표기도 자료마다 달라, 전체 평균은 보도자료의 직접측정 {PRESS_RELEASE_SAMPLE.toLocaleString('ko-KR')}명,
+              이 계산기가 쓰는 연령대별 통계는 사이즈코리아 인체데이터의 구간 표본 합계 {BAND_SAMPLE_TOTAL.toLocaleString('ko-KR')}명 기준입니다.
             </p>
           </div>
         </section>

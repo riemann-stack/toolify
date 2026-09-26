@@ -8,6 +8,7 @@ import Callout from '@/components/Callout'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
+import { TPMS_DROP_RATIO, TPMS_MIN_KPA, TPMS_US_DROP_RATIO, TPMS_EXAMPLE_REC_PSI, tpmsWarnPsi, usTpmsWarnPsi } from '@/lib/krTpms'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/tire-pressure',
@@ -27,7 +28,7 @@ const FAQ_LD = [
               },
               {
                 q: 'TPMS 경고등이 켜졌는데 보충해도 다시 켜져요',
-                a: 'TPMS 경고 기준은 규정마다 조금 다릅니다. 미국 FMVSS 138은 <strong>권장값보다 25% 이상</strong> 낮아지면, 유엔 규정(UN R141, 유럽 등)은 <strong>20% 낮아지거나 150 kPa</strong>에 이르면 먼저 도달하는 쪽에서 경고하도록 정하고 있어, 권장 33 psi 차라면 대략 25~26 psi 부근에서 켜집니다. 경고등은 &lsquo;이미 많이 빠졌다&rsquo;는 신호이지 적정 공기압 알림이 아닙니다. 재충전 후에도 다시 켜진다면 (1) 펑크 의심, (2) 휠 림 손상으로 미세 누설, (3) TPMS 센서 자체 고장 중 하나일 가능성이 높습니다. 정비소에서 누설 점검을 받으세요.',
+                a: `TPMS 경고 기준은 규정마다 조금 다릅니다. 미국 FMVSS 138은 <strong>권장값보다 ${TPMS_US_DROP_RATIO * 100}% 이상</strong> 낮아지면, 유엔 규정(UN R141, 유럽 등)과 국내 자동차규칙 [별표 6](제88조의3)은 <strong>${TPMS_DROP_RATIO * 100}% 낮아지거나 ${TPMS_MIN_KPA} kPa</strong>에 이르면 먼저 도달하는 쪽에서 경고하도록 정하고 있어, 권장 ${TPMS_EXAMPLE_REC_PSI} psi 차라면 국내 기준으로 약 ${Math.round(tpmsWarnPsi(TPMS_EXAMPLE_REC_PSI))} psi(미국 기준은 약 ${Math.round(usTpmsWarnPsi(TPMS_EXAMPLE_REC_PSI))} psi) 부근에서 켜집니다. 경고등은 &lsquo;이미 많이 빠졌다&rsquo;는 신호이지 적정 공기압 알림이 아닙니다. 재충전 후에도 다시 켜진다면 (1) 펑크 의심, (2) 휠 림 손상으로 미세 누설, (3) TPMS 센서 자체 고장 중 하나일 가능성이 높습니다. 정비소에서 누설 점검을 받으세요.`,
               },
               {
                 q: '주유소 셀프 공기 주입기 정확도가 낮은 것 같아요',

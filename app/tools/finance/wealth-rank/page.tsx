@@ -7,7 +7,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
-import { USD_KRW, USD_KRW_ASOF, NATIONAL_MEAN, computeRank, REGIONS, AGE_GROUPS, GLOBAL, valueFromPercentile } from './wealthData'
+import { USD_KRW, USD_KRW_ASOF, NATIONAL_MEAN, computeRank, REGIONS, SIDO_COUNT, AGE_GROUPS, GLOBAL, valueFromPercentile } from './wealthData'
 import ToolPage from '@/components/ToolPage'
 
 /** 세계 상위 10%·1% 진입선(USD) — UBS 구간 분포를 계산기와 같은 로그 보간으로 구한 추정값 */
@@ -67,20 +67,28 @@ const QUINTILE_ROWS = [
   { k: '전체 평균', net: '4억 7,144만', asset: '5억 6,678만', ratio: '75.8%' },
 ]
 
+const eokLabel = (man: number) => {
+  const eok = Math.floor(man / 10_000)
+  const rest = Math.round(man - eok * 10_000)
+  if (eok === 0) return `${rest.toLocaleString('ko-KR')}만`
+  return rest ? `${eok}억 ${rest.toLocaleString('ko-KR')}만` : `${eok}억`
+}
+
+/** 시·도 평균 순자산 표 — 계산기와 같은 REGIONS(2025 조사 평균을 확인한 시·도)에서 생성 */
 const REGION_ROWS = [
-  { k: '서울', v: '7억 1,288만' },
-  { k: '세종', v: '6억 648만' },
-  { k: '경기', v: '5억 6,006만' },
-  { k: '제주', v: '4억 8,103만' },
-  { k: '전국 평균', v: '4억 7,144만' },
+  ...[...REGIONS].sort((a, b) => b.mean - a.mean).map((g) => ({ k: g.label, v: eokLabel(g.mean) })),
+  { k: '전국 평균', v: eokLabel(NATIONAL_MEAN) },
 ]
 
-const AGE_ROWS = [
-  { k: '39세 이하', v: '약 2.3억', real: false },
-  { k: '40대', v: '약 4.5억', real: false },
-  { k: '50대', v: '5억 5,161만', real: true },
-  { k: '60세 이상', v: '약 4.6억', real: false },
-]
+/** 가구주 연령대별 평균 순자산 — 계산기와 같은 AGE_GROUPS(2025 가계금융복지조사)에서 생성 */
+const AGE_ROWS = AGE_GROUPS.map((g) => ({
+  k: g.label,
+  v: g.real ? eokLabel(g.mean) : `약 ${(g.mean / 10_000).toFixed(1)}억`,
+  real: g.real,
+}))
+/** 계산기에서 고를 수 있는 시·도 목록·빠진 시·도 수 — 문구 보간용 */
+const REGION_LABELS = REGIONS.map((g) => g.label).join('·')
+const REGION_MISSING = SIDO_COUNT - REGIONS.length
 
 const WORLD_ROWS = [
   { k: '$1,000,000 이상', v: '상위 1.6%', desc: '백만장자 약 6,000만 명' },
@@ -100,19 +108,13 @@ const RANK_ROWS = EX_VALUES.map((v) => ({
   u39: computeRank('age', v, U39.id),
   world: computeRank('world', v),
 }))
-const eokLabel = (man: number) => {
-  const eok = Math.floor(man / 10_000)
-  const rest = Math.round(man - eok * 10_000)
-  if (eok === 0) return `${rest.toLocaleString('ko-KR')}만`
-  return rest ? `${eok}억 ${rest.toLocaleString('ko-KR')}만` : `${eok}억`
-}
 const EX5 = RANK_ROWS[2]
 
 const FAQ_LD = [
   { q: '순자산이 정확히 뭔가요? 무엇을 더하고 빼나요?', a: '<strong>순자산 = 총자산 − 부채</strong>입니다. 총자산에는 <strong>거주·투자용 부동산, 전월세 보증금(내가 맡긴 것), 예적금, 주식·펀드·코인, 자동차, 전세금</strong> 등 가진 모든 자산을 넣고, 부채에는 <strong>주택담보대출, 신용대출, 전세보증금(세입자에게 받은 것), 카드 미결제액</strong> 등 갚아야 할 돈을 넣습니다. 이 계산기의 “총자산 − 부채로 계산” 버튼을 누르면 둘을 입력해 자동으로 순자산을 구해줍니다.' },
   { q: '상위 10%·상위 1%에 들려면 순자산이 얼마여야 하나요?', a: '가구 순자산이 <strong>약 11억이면 상위 10%</strong>, <strong>약 33억이면 상위 1%</strong>입니다(분포는 2025 가계금융복지조사, 상위 1%·5% 컷은 상위 구간 보도치 기준). 참고로 <strong>10억 이상은 상위 11.8%</strong>, <strong>15.2억이면 상위 5%</strong>입니다. 순자산 3억 미만 가구가 전체의 57%로, 중앙값은 <strong>2억 3,860만원</strong>입니다.' },
   { q: '데이터 출처와 기준 시점은 어떻게 되나요?', a: '한국 기준은 국가데이터처(옛 통계청)·한국은행·금융감독원이 함께 발표한 <strong>「2025년 가계금융복지조사」(기준일 2025년 3월 31일, 2025년 12월 공표)</strong>와 상위 구간 보도치를 사용했습니다. 세계 기준은 <strong>UBS Global Wealth Report 2025</strong>(2024년 말, 성인 1인당)를 사용했습니다. 모두 가장 최근 공개 통계입니다.' },
-  { q: '시도·연령대 순위는 얼마나 정확한가요?', a: '시·도와 연령대 비교는 <strong>전국 순자산 분포를 해당 그룹의 평균 순자산으로 보정한 추정치</strong>입니다. <strong>서울·세종·경기·제주(2025 실측 평균)와 50대(실측 평균)</strong>는 실제 통계값을 쓰지만, 그 외 시·도와 연령대는 평균 수준을 반영한 추정이라 실제 분포와 차이가 있을 수 있습니다. 그룹 안에서의 대략적 위치를 보는 용도로 참고하세요.' },
+  { q: '시도·연령대 순위는 얼마나 정확한가요?', a: `시·도와 연령대 비교는 <strong>전국 순자산 분포를 해당 그룹의 평균 순자산으로 보정한 추정치</strong>입니다. <strong>연령대 ${AGE_GROUPS.length}구간(${AGE_GROUPS.map((g) => g.label).join('·')})과 조사 평균을 확인한 시·도(${REGION_LABELS})</strong>는 2025년 조사의 평균 순자산을 씁니다. 나머지 ${REGION_MISSING}개 시·도는 조사 원표의 값을 확인하지 못해 추정치를 만들어 넣지 않고 선택지에서 뺐으니, 해당 지역은 전국 기준 결과를 참고하세요. 분포 모양은 전국과 같다고 가정하므로 그룹 안에서의 대략적 위치를 보는 용도로 보세요.` },
   { q: '세계 순위는 어떻게 계산되나요?', a: `UBS 보고서의 <strong>성인 1인당 순자산 분포</strong>에 입력값을 1달러 = ${USD_KRW.toLocaleString('ko-KR')}원(${USD_KRW_ASOF} 근사 고정 환율)으로 환산해 대입합니다. UBS가 공개한 자산 구간별 성인 비율을 로그 척도로 이어 추정하면 세계 상위 10% 진입선은 약 <strong>${usdK(W_TOP10_USD)}(${usdToEok(W_TOP10_USD)})</strong>, 상위 1%는 약 <strong>${usdK(W_TOP1_USD)}(${usdToEok(W_TOP1_USD)})</strong> 수준입니다(보고서에 직접 실린 값이 아닌 추정). 다만 우리 조사는 <strong>가구 단위</strong>, UBS는 <strong>1인 단위</strong>라 그대로 비교하면 순위가 다소 높게 나오므로 <strong>참고용</strong>으로 봐 주세요.` },
   { q: '왜 가구 기준인가요? 개인 기준은 없나요?', a: '한국의 자산 통계인 가계금융복지조사가 <strong>가구(세대) 단위</strong>로 조사되기 때문에, 국내 순위는 가구 기준이 가장 정확합니다. 혼자 사는 1인 가구라면 입력한 순자산이 곧 개인 자산이 됩니다. 부부·가족이라면 <strong>가구 전체 합산 순자산</strong>을 넣어야 통계와 같은 기준으로 비교됩니다.' },
   { q: '통계의 부채에는 무엇이 포함되나요? 순자산이 마이너스인 가구도 있나요?', a: '가계금융복지조사의 부채는 <strong>금융부채(담보대출·신용대출·카드 관련 대출 등)와 임대보증금(내가 세입자에게 받아 둔 보증금)</strong>을 합한 값입니다. 2025년 조사의 가구 평균 부채 9,534만원은 금융부채 6,795만원 + 임대보증금 2,739만원으로 구성됩니다. 부채가 자산보다 많아 <strong>순자산이 마이너스인 가구도 전체의 3.0%</strong>(2025년 3월 말 기준)이며, 이 계산기에도 음수 순자산을 입력할 수 있습니다.' },
@@ -223,7 +225,8 @@ export default function WealthRankPage() {
             </div>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
-            50대와 서울·세종·경기·제주는 2025 실측 평균입니다. 그 외 연령대·시도는 평균 수준 추정치로, 계산기에서 17개 시·도를 모두 선택할 수 있습니다.
+            연령대는 2025년 가계금융복지조사의 가구주 연령계층별 평균 순자산(2025년 3월 말), 지역은 같은 조사의 시·도별 평균 순자산 가운데 값을 확인한 {REGION_LABELS} {REGIONS.length}곳입니다.
+            계산기의 시도 기준도 이 {REGIONS.length}곳만 고를 수 있고, 나머지 {REGION_MISSING}개 시·도는 전국 기준으로 비교하세요.
           </p>
         </div>
 
@@ -323,7 +326,7 @@ export default function WealthRankPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '12px 2px 0', lineHeight: 1.7 }}>
-            계산기와 같은 함수로 구한 값입니다. 서울은 2025 실측 평균, 39세 이하는 추정 평균으로 보정했고, 세계 순위는 1달러 = {USD_KRW.toLocaleString('ko-KR')}원 환산·가구와 개인 단위 차이 때문에 실제보다 높게 나오는 경향이 있습니다.
+            계산기와 같은 함수로 구한 값입니다. 서울과 39세 이하는 2025년 조사 평균({eokLabel(SEOUL.mean)}·{eokLabel(U39.mean)})으로 보정했고, 세계 순위는 1달러 = {USD_KRW.toLocaleString('ko-KR')}원 환산·가구와 개인 단위 차이 때문에 실제보다 높게 나오는 경향이 있습니다.
           </p>
           <p className="g-p" style={{ marginTop: 16 }}>
             같은 {eokLabel(EX5.v)}원이라도 전국 기준으로는 상위 {EX5.nation.topPercent}%({EX5.nation.decile}분위)지만, 자산 수준이 높은 서울 가구 사이에서는 상위 {EX5.seoul.topPercent}%로 내려가고, 자산이 아직 적은 39세 이하 가구 사이에서는 상위 {EX5.u39.topPercent}%로 올라갑니다. 비교 기준을 바꾸면 순위가 크게 달라지므로, 나와 생활 조건이 비슷한 집단(지역·연령)을 기준으로 보는 것이 의미 있고, 입력할 때는 부부 합산 가구 순자산을 넣어야 통계와 같은 기준이 됩니다.
