@@ -57,7 +57,7 @@ export default function PacePage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             아래 표는 일정 페이스를 끝까지 유지했을 때의 이론적 완주 시간입니다. 초반 오버페이스는 후반 급저하의 가장 큰 원인이므로, 특히 초·중급 러너는 <strong style={{ color: 'var(--text)' }}>일정 페이스</strong> 또는 <strong style={{ color: 'var(--text)' }}>네거티브 스플릿(후반을 약간 빠르게)</strong>을 권장합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -102,7 +102,7 @@ export default function PacePage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             런닝머신에는 페이스 대신 <strong style={{ color: 'var(--text)' }}>시속(km/h)</strong>이 표시됩니다. 야외 러닝 페이스와 동일하게 설정하려면 아래 표를 참고하세요. 400m 트랙 1바퀴 기준 소요 시간도 함께 확인할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -243,9 +243,9 @@ export default function PacePage() {
             🇰🇷 한국 마라톤 인기 목표 페이스
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            한국 러너들의 흔한 마라톤 목표 시간과 필요 페이스. 서브3~서브5는 위 계산기의 「빠른 입력」 칩에서 한 탭으로 적용됩니다.
+            한국 러너들의 흔한 마라톤 목표 시간과 필요 페이스. &lsquo;서브&rsquo; 목표는 끝까지 유지하면 목표 시간 안에 들어오는 페이스(초 단위 내림)입니다. 서브3~서브5는 위 계산기의 「빠른 입력」 칩에서 한 탭으로 적용됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -257,12 +257,12 @@ export default function PacePage() {
               </thead>
               <tbody>
                 {[
-                  { goal: '서브3 (3시간)',     pace: '4:16/km', kph: '14.07', lv: '엘리트' },
-                  { goal: '서브3:30',         pace: '4:59/km', kph: '12.06', lv: '상급' },
-                  { goal: '서브4 (4시간)',     pace: '5:41/km', kph: '10.55', lv: '준상급' },
-                  { goal: '서브4:30',         pace: '6:24/km', kph: '9.38',  lv: '중급' },
-                  { goal: '서브5 (5시간)',     pace: '7:07/km', kph: '8.43',  lv: '입문 완주' },
-                  { goal: '하프 서브2',       pace: '5:41/km', kph: '10.55', lv: '하프 중급' },
+                  { goal: '서브3 (3시간)',     pace: '4:15/km', kph: '14.12', lv: '엘리트' },
+                  { goal: '서브3:30',         pace: '4:58/km', kph: '12.08', lv: '상급' },
+                  { goal: '서브4 (4시간)',     pace: '5:41/km', kph: '10.56', lv: '준상급' },
+                  { goal: '서브4:30',         pace: '6:23/km', kph: '9.40',  lv: '중급' },
+                  { goal: '서브5 (5시간)',     pace: '7:06/km', kph: '8.45',  lv: '입문 완주' },
+                  { goal: '하프 서브2',       pace: '5:41/km', kph: '10.56', lv: '하프 중급' },
                   { goal: '10km 50분',        pace: '5:00/km', kph: '12.00', lv: '10km 입문' },
                   { goal: '5km 25분',         pace: '5:00/km', kph: '12.00', lv: '5km 입문' },
                 ].map((r, i) => (

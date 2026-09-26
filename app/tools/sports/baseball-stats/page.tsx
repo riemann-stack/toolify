@@ -3,7 +3,8 @@ import BaseballStatsClient from './BaseballStatsClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import { KBO_SEASON_RECORDS as REC, fmtRecord, KBO_RECORDS_CHECKED } from './kboRecords'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -52,7 +53,7 @@ export default function BaseballStatsPage() {
       </p>
 
       <UpdatedMeta
-        date="2026년 7월"
+        date="2026년 9월"
         basis="타율·출루율·OPS·ERA·WHIP 표준 공식 · 규정타석(경기수×3.1)·규정이닝(경기수×1.0) = 공식야구규칙 9.22 기준"
         sources={[
           { label: 'KBO 공식 기록실', href: 'https://www.koreabaseball.com/Record/Player/HitterBasic/Basic1.aspx' },
@@ -101,7 +102,7 @@ export default function BaseballStatsPage() {
             타석은 타자가 타격을 완료한 모든 기회이고, 타수는 거기서 볼넷·사구·희생번트·희생플라이를 뺀 값입니다.
             지표마다 분모가 달라서, 기록지의 어느 칸을 입력하느냐가 결과를 좌우합니다. 모든 항목은 타석(PA)에는 포함됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -142,7 +143,7 @@ export default function BaseballStatsPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             OPS 수준 평가 기준
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -190,7 +191,8 @@ export default function BaseballStatsPage() {
             <div><span style={{ color: 'var(--muted)' }}>WHIP (이닝당 출루)</span> = (피안타 + 볼넷) ÷ 투구이닝</div>
             <div><span style={{ color: 'var(--muted)' }}>K/9</span> = (탈삼진 × 9) ÷ 투구이닝</div>
             <div><span style={{ color: 'var(--muted)' }}>K/BB</span> = 탈삼진 ÷ 볼넷</div>
-            <div><span style={{ color: 'var(--muted)' }}>FIP (간이)</span> = (13×HR + 3×(BB+HBP) − 2×K) ÷ IP + 3.1</div>
+            <div><span style={{ color: 'var(--muted)' }}>FIP (간이)</span> = (13×HR + 3×(BB+HBP) − 2×K) ÷ IP + 리그 상수</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 상수는 리그·시즌마다 다름. 이 도구는 리그별 근사 상수 사용 (MLB·NPB 3.1, KBO 3.55)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ FIP = 수비·운 요소 제거한 투수 진짜 실력</div>
           </div>
         </div>
@@ -206,7 +208,7 @@ export default function BaseballStatsPage() {
             <strong style={{ color: 'var(--text)' }}> 규정이닝 = 팀 경기수 × 1.0</strong>으로 정하며,
             소수점이 나오면 가장 가까운 정수로 반올림합니다(예: 502.2 → 502).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -269,24 +271,24 @@ export default function BaseballStatsPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '16px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 10 }}>타자</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
-                <li>최다 안타 — <strong>서건창 201개 (2014)</strong></li>
-                <li>최다 홈런 — <strong>이승엽 56개 (2003)</strong>, 박병호 53개 (2015)</li>
-                <li>최고 타율 — <strong>백인천 0.412 (1982, 단축)</strong></li>
-                <li>최고 OPS — <strong>이승엽 1.124 (2003)</strong></li>
+                <li>최다 안타 — <strong>{fmtRecord(REC.hits)}</strong></li>
+                <li>최다 홈런 — <strong>{fmtRecord(REC.homeRuns)}</strong>, 박병호 53개 (2015)</li>
+                <li>최고 타율 — <strong>{fmtRecord(REC.avg)}</strong></li>
+                <li>최고 OPS — <strong>{fmtRecord(REC.ops)}</strong></li>
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '16px 18px' }}>
               <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 10 }}>투수</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
-                <li>최저 ERA — <strong>선동열 0.78 (1993)</strong></li>
-                <li>최다 탈삼진 — <strong>최동원 223개 (1984)</strong></li>
-                <li>최다 승 — <strong>장명부 30승 (1983)</strong></li>
-                <li>최다 세이브 — <strong>오승환 47세이브 (2006)</strong></li>
+                <li>최저 ERA — <strong>{fmtRecord(REC.era)}</strong></li>
+                <li>최다 탈삼진 — <strong>{fmtRecord(REC.strikeouts)}</strong></li>
+                <li>최다 승 — <strong>{fmtRecord(REC.wins)}</strong></li>
+                <li>최다 세이브 — <strong>{fmtRecord(REC.saves)}</strong></li>
               </ul>
             </div>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
-            ※ KBO 공식 기록실(koreabaseball.com) 기준이며, 집계 시점·출처에 따라 소폭 차이날 수 있습니다.
+            ※ {KBO_RECORDS_CHECKED} 확인 기준(KBO 공식 기록실·언론 보도)이며, 집계 시점·출처에 따라 소폭 차이날 수 있습니다. 2026 시즌 기록은 시즌 종료 후 반영합니다.
           </p>
         </div>
 
@@ -316,23 +318,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 8. 관련 도구 ── */}

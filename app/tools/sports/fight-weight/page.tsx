@@ -3,7 +3,7 @@ import FightWeightClient from './FightWeightClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '복싱과 UFC의 체급은 같은가요?',
-                a: '다릅니다. 복싱은 <strong>17체급</strong>(미니멈웨이트~헤비급)으로 매우 세분화되어 있고 UFC는 <strong>9체급</strong>(스트로급~헤비급)으로 단순합니다. 같은 70kg이라도 복싱은 슈퍼웰터급, UFC는 라이트급에 해당합니다. 체급 한계도 단체마다 0.5~2kg 차이가 납니다.',
+                a: '다릅니다. 복싱은 <strong>17체급</strong>(미니멈웨이트~헤비급)으로 매우 세분화되어 있고 UFC는 <strong>9체급</strong>(스트로급~헤비급)으로 단순합니다. 같은 69kg이라도 복싱은 슈퍼웰터급, UFC는 라이트급에 해당합니다. 체급 한계도 단체마다 0.5~2kg 차이가 납니다.',
               },
               {
                 q: '격투기 선수들은 왜 그렇게 많이 감량하나요?',
@@ -29,7 +29,7 @@ const FAQ_LD = [
               },
               {
                 q: '수분 감량은 어떻게 하나요?',
-                a: '일반적으로 시합 1주일 전부터 단계적으로 진행됩니다.<br/>• <strong>D-7~D-3</strong>: 나트륨 제한 → 체수분 자연 배출<br/>• <strong>D-3~D-1</strong>: 탄수화물 제한 → 글리코겐 저장 수분 배출<br/>• <strong>D-1</strong>: 수분 제한 + 사우나·뜨거운 욕조 → 발한<br/>단, 이 방법은 매우 위험하므로 전문 감독이 필수입니다.',
+                a: '일반적으로 시합 1주일 전부터 단계적으로 진행됩니다.<br/>• <strong>D-7~D-3</strong>: 나트륨 제한 → 체수분 자연 배출<br/>• <strong>D-3~D-1</strong>: 탄수화물 제한 → 글리코겐 저장 수분 배출<br/>• <strong>D-1</strong>: 수분 제한 + 사우나·뜨거운 욕조 → 발한<br/>이 과정은 설명을 위한 것이고 따라 할 방법이 아닙니다. 체중의 2% 정도만 탈수돼도 경기력이 떨어지고, 그 이상이면 열사병·급성 신장 손상·부정맥 위험이 커집니다. 사우나·땀복·이뇨제로 급격히 뺀 선수의 사망 사례도 있어 반드시 전문가 감독이 필요하며, 청소년·아마추어는 수분 감량 없이 계체를 통과할 수 있는 체급을 고르는 것이 안전합니다.',
               },
               {
                 q: 'ONE Championship의 체중 정책은 무엇인가요?',
@@ -104,17 +104,17 @@ export default function FightWeightPage() {
         {/* ── 2. 종목별 체급 비교 (체중 70kg 기준) ── */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            종목별 체급 비교 — 체중 70kg 기준
+            종목별 체급 비교 — 체중 69kg 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
-            같은 체중이라도 종목·단체별로 분류 체급이 다릅니다. 예시 70kg 남성:
+            같은 체중이라도 종목·단체별로 분류 체급이 다릅니다. 예시 69kg 남성:
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
               { sport: '복싱',     cls: '슈퍼웰터급', limit: '69.85kg', color: '#DC2626' },
               { sport: 'UFC',      cls: '라이트급',   limit: '70.3kg',  color: '#A16207' },
               { sport: 'ONE',      cls: '페더급',     limit: '70.3kg (수분 감량 금지)', color: '#059669' },
-              { sport: '킥복싱',   cls: '슈퍼라이트급', limit: '70.0kg', color: '#0891B2' },
+              { sport: '킥복싱(K-1)', cls: '슈퍼웰터급', limit: '70.0kg', color: '#0891B2' },
               { sport: '유도',     cls: '-73kg급',    limit: '73.0kg',  color: '#0EA5E9' },
               { sport: '태권도',   cls: '라이트급',   limit: '74.0kg',  color: '#9B59B6' },
             ].map((c, i) => (
@@ -151,7 +151,7 @@ export default function FightWeightPage() {
                 <li>나트륨 제한 (D-5)</li>
                 <li>탄수화물 제한 (D-3)</li>
                 <li>수분 제한 + 사우나 (D-1)</li>
-                <li>단기간 5~10kg 감량 가능 — 가장 위험</li>
+                <li>짧은 기간에 수 kg이 빠지지만 탈수 위험이 가장 큰 단계</li>
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
@@ -171,7 +171,7 @@ export default function FightWeightPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             종목·단체별 감량·계체 정책 비교
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -211,7 +211,7 @@ export default function FightWeightPage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
             안전 한도(주당 체중 1%) 기준으로 계산한 권장 감량 기간입니다. 80kg 선수 기준.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -352,12 +352,12 @@ export default function FightWeightPage() {
               다음은 실제 격투기 선수의 안타까운 사례입니다. 무리한 감량의 위험성을 인지하시기 바랍니다.
             </p>
             <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--text)', lineHeight: 2, margin: 0 }}>
-              <li><strong>Yang Jian Bing</strong> (2015, ONE Championship) — 21세, 감량 중 사망</li>
-              <li><strong>Leandro Souza</strong> (2013, MMA) — 26세, 감량 직후 사망</li>
-              <li><strong>Mike Bell</strong> (2014, MMA) — 32세, 사우나 감량 중 사망</li>
+              <li><strong>Yang Jian Bing</strong> (2015, ONE Championship) — 21세, 시합 전 감량 중 탈수로 사망</li>
+              <li><strong>Leandro Souza</strong> (2013, 브라질 MMA) — 계체를 앞두고 감량 중 사망</li>
+              <li><strong>Jessica Lindsay</strong> (2017, 호주 아마추어 무에타이) — 18세, 계체 직전 땀복·사우나 등으로 급격히 감량하다 쓰러져 숨짐. 검시 결과 사인은 고체온과 탈수로 인한 다발성 장기부전</li>
             </ul>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.75, fontStyle: 'italic' }}>
-              ※ 이 사고들은 ONE Championship의 수분 감량 금지 정책 도입 계기가 되었습니다.
+              ※ Yang Jian Bing의 사망은 ONE Championship이 수분 감량을 금지하는 계기가 되었습니다. 아마추어 경기에서도 같은 사고가 일어난다는 점을 기억하세요.
             </p>
           </div>
         </div>
@@ -367,23 +367,7 @@ export default function FightWeightPage() {
 
         {/* ── 6. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 7. 관련 도구 ── */}

@@ -501,13 +501,28 @@ export type SavedNumber = {
   savedAt: string
 }
 
+/* mode는 문자열이기만 하면 통과 — 없어진 모드('quick-pick' 등)로 저장한 번호도 버리지 않고
+   loadSaved에서 'random'으로 바꿔 보존 */
+function isSavedNumber(v: unknown): v is Omit<SavedNumber, 'mode'> & { mode: string } {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  return typeof o.id === 'string'
+    && Array.isArray(o.numbers) && o.numbers.length === 6
+    && o.numbers.every((n) => Number.isInteger(n) && (n as number) >= 1 && (n as number) <= 45)
+    && typeof o.mode === 'string'
+    && typeof o.savedAt === 'string'
+    && (o.memo === undefined || typeof o.memo === 'string')
+}
+const isModeId = (v: string): v is ModeId => GENERATION_MODES.some((m) => m.id === v)
+
 export function loadSaved(): SavedNumber[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    if (!Array.isArray(arr)) return []
+    return arr.filter(isSavedNumber).map((it) => ({ ...it, mode: isModeId(it.mode) ? it.mode : 'random' }))
   } catch { return [] }
 }
 export function saveSaved(items: SavedNumber[]) {

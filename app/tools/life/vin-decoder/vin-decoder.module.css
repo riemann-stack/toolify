@@ -1,5 +1,6 @@
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 14px; }
+.panel { display: flex; flex-direction: column; gap: 14px; }
 
 /* ── 카드 ── */
 .card {

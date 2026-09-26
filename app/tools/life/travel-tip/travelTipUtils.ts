@@ -32,7 +32,7 @@ export const SERVICES: ServiceMeta[] = [
   { id: 'salon',      emoji: '💇', label: '미용·이발',        shortLabel: '미용',     desc: '미용실·이발소·네일' },
 ]
 
-export const getService = (id: ServiceId) => SERVICES.find((s) => s.id === id)!
+export const getService = (id: ServiceId) => SERVICES.find((s) => s.id === id) ?? SERVICES[0]
 
 /* ─────────────────────────────────────────────
    국가 데이터 (19종)
@@ -304,7 +304,7 @@ export const COUNTRIES: CountryMeta[] = [
   },
 ]
 
-export const getCountry = (id: string) => COUNTRIES.find((c) => c.id === id)!
+export const getCountry = (id: string) => COUNTRIES.find((c) => c.id === id) ?? COUNTRIES[0]
 
 /* ─────────────────────────────────────────────
    카테고리 메타

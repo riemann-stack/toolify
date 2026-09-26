@@ -268,7 +268,7 @@ export default function RacePredictorPage() {
         <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px', paddingLeft: '18px' }}>
           <li>모든 데이터는 <strong style={{ color: 'var(--text)' }}>본 브라우저(localStorage)</strong>에만 저장 — 서버 전송 X</li>
           <li>다른 기기와 자동 동기화 X → 백업은 <strong style={{ color: 'var(--text)' }}>📊 CSV 다운로드</strong> 활용</li>
-          <li>일반적으로 VDOT 1↑ ≈ 6~12주 꾸준한 훈련, 6 VDOT 향상 ≈ 6~12개월</li>
+          <li>흔한 경험칙은 VDOT 1을 올리는 데 6~12주 꾸준한 훈련이 필요하다는 것입니다. 같은 속도라면 6을 올리는 데 36~72주(약 8~17개월)가 걸리며, 입문자는 이보다 빠르고 상급자는 더 느립니다.</li>
           <li>0인 달도 OK — 통계는 본인 발전 참고용, 부상 시 즉시 휴식</li>
         </ul>
       </div>

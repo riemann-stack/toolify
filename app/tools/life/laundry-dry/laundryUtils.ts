@@ -38,8 +38,20 @@ export const LAUNDRY_EQUIPMENT: Equipment[] = [
   { id: 'extra-spin',   name: '추가 탈수 1회',   icon: '🌪️', desc: '15~20% 단축, 짧게 사용', timeReduction: 0.18, powerW: 100, runtimeMin: 10, category: 'spin' },
 ]
 
-// 한국 평균 전기료 (2026 기준, 2단계 가정)
+// 전기료 계산 단가 — 기본요금·기후환경요금·연료비조정요금·부가세·전력기반기금까지 합쳐
+// 월 300kWh 안팎 쓰는 가구의 평균 kWh당 금액(약 190~200원)을 어림한 값. 누진 단계별 전력량요금과는 다르다.
 export const KRW_PER_KWH = 200
+
+// 한전 주택용(저압) 누진 구간별 전력량요금 (원/kWh) — 2023-05-16 조정분, 2026년 현재 적용.
+// 기본요금·기후환경요금·연료비조정요금·부가세·전력기반기금 별도. 7~8월은 구간이 300/450kWh로 확대.
+// 출처: 한국전력 주택용 전기요금표 https://home.kepco.co.kr/kepco/front/html/CY/E/E/CYEEHP00101.html
+// TODO(lib 이관): 법정·공공요금 단일 소스 원칙에 따라 lib/krElectricityRates.ts로 옮길 것
+export const KEPCO_RATES_ASOF = '2026년 9월'
+export const KEPCO_RESIDENTIAL_LOW_TIERS: { label: string; range: string; summerRange: string; krwPerKwh: number }[] = [
+  { label: '1단계', range: '200kWh 이하',   summerRange: '300kWh 이하',   krwPerKwh: 120.0 },
+  { label: '2단계', range: '201~400kWh',    summerRange: '301~450kWh',    krwPerKwh: 214.6 },
+  { label: '3단계', range: '400kWh 초과',   summerRange: '450kWh 초과',   krwPerKwh: 307.3 },
+]
 
 export type ComboResult = {
   combo: string[]

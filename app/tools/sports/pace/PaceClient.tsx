@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
+import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import { todayStr } from '@/lib/date'
 import styles from './pace.module.css'
@@ -116,13 +117,22 @@ function getSplits(distanceKm: number): SplitRow[] {
 
 // 빠른 페이스 칩
 // 한국 인기 마라톤 목표 페이스 (풀 42.195km 기준, 본문 표와 일치)
+// '서브'(미만) 목표이므로 floor(목표초 / 42.195) — 반올림하면 4:16×42.195 = 3:00:02처럼 목표를 넘는다
 const QUICK_PACES = [
-  { mm: 4, ss: 16, label: '서브3',    color: '#DC2626' },
-  { mm: 4, ss: 59, label: '서브3:30', color: '#EA580C' },
+  { mm: 4, ss: 15, label: '서브3',    color: '#DC2626' },
+  { mm: 4, ss: 58, label: '서브3:30', color: '#EA580C' },
   { mm: 5, ss: 41, label: '서브4',    color: '#A16207' },
-  { mm: 6, ss: 24, label: '서브4:30', color: '#0891B2' },
-  { mm: 7, ss: 7,  label: '서브5',    color: '#059669' },
+  { mm: 6, ss: 23, label: '서브4:30', color: '#0891B2' },
+  { mm: 7, ss: 6,  label: '서브5',    color: '#059669' },
 ]
+
+const isPresetKm = (km: number) => DISTANCES.some(d => d.km === km)
+// 직접 거리 입력 문자열 → km (0 초과만, 500 상한)
+function parseCustomKm(str: string): number | null {
+  const v = parseFloat(str)
+  return Number.isFinite(v) && v > 0 ? Math.min(500, v) : null
+}
+const cleanDecimal = (v: string) => v.replace(/[^0-9.]/g, '')
 
 const STORAGE_KEY = 'youtil-pace-record-v1'
 
@@ -133,16 +143,23 @@ export default function PaceClient() {
   const [paceMin, setPaceMin] = useState('5')
   const [paceSec, setPaceSec] = useState('30')
   const [dist, setDist] = useState(42.195)
+  // 직접 거리 — 문자열로 보관해 입력 중간값(5 → 5.5)이 프리셋으로 바뀌며 지워지지 않게
+  const [customStr, setCustomStr] = useState('')
+  const [customMode, setCustomMode] = useState(false)
 
   // 완주 시간 → 페이스
   const [tHour, setTHour] = useState('')
   const [tMin, setTMin] = useState('')
   const [tSec, setTSec] = useState('')
   const [dist2, setDist2] = useState(42.195)
+  const [customStr2, setCustomStr2] = useState('')
+  const [customMode2, setCustomMode2] = useState(false)
 
   // 트레드밀
   const [kphInput, setKphInput] = useState('')
-  const [paceInput, setPaceInput] = useState('')
+  // 페이스 입력은 분·초 두 칸 — 모바일 숫자 키패드엔 ':'가 없다
+  const [tmPaceMin, setTmPaceMin] = useState('')
+  const [tmPaceSec, setTmPaceSec] = useState('')
 
   // localStorage hydration
   const [hydrated, setHydrated] = useState(false)
@@ -150,27 +167,43 @@ export default function PaceClient() {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const data = JSON.parse(raw)
-        if (data.paceMin) setPaceMin(data.paceMin)
-        if (data.paceSec) setPaceSec(data.paceSec)
-        if (typeof data.dist === 'number') setDist(data.dist)
-        if (data.lastSaved) setLastSaved(data.lastSaved)
+        const data: unknown = JSON.parse(raw)
+        if (data && typeof data === 'object') {
+          const d = data as Record<string, unknown>
+          const intStr = (v: unknown, min: number, max: number) =>
+            typeof v === 'string' && /^\d{1,2}$/.test(v) && +v >= min && +v <= max ? v : null
+          const pm = intStr(d.paceMin, 1, 30)
+          const pss = intStr(d.paceSec, 0, 59)
+          if (pm !== null) setPaceMin(pm)
+          if (pss !== null) setPaceSec(pss)
+          if (typeof d.dist === 'number' && Number.isFinite(d.dist) && d.dist > 0 && d.dist <= 500) {
+            setDist(d.dist)
+            if (!isPresetKm(d.dist)) { setCustomMode(true); setCustomStr(String(d.dist)) }
+          }
+          if (typeof d.lastSaved === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d.lastSaved)) setLastSaved(d.lastSaved)
+        }
       }
     } catch {}
     setHydrated(true)
   }, [])
 
+  // 복원 직후 1회는 저장하지 않음 — '마지막 저장'이 이전 방문 날짜를 보여 주고, 값을 바꾸면 오늘로 갱신
+  const skipFirstSave = useRef(true)
   useEffect(() => {
     if (!hydrated) return
+    if (skipFirstSave.current) { skipFirstSave.current = false; return }
+    const saved = todayStr()
     try {
       const data = {
         paceMin, paceSec, dist,
-        lastSaved: todayStr(),
+        lastSaved: saved,
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+      setLastSaved(saved)
     } catch {}
   }, [hydrated, paceMin, paceSec, dist])
 
@@ -212,12 +245,11 @@ export default function PaceClient() {
   }, [kphInput])
 
   const treadmillFromPace = useMemo(() => {
-    const parts = paceInput.split(':')
-    if (parts.length !== 2) return null
-    const ps = paceToSec(parts[0], parts[1])
+    if (tmPaceMin === '') return null   // 분(1~30)이 있어야 계산 — 초만 입력된 중간 상태에서 120km/h 같은 값 방지
+    const ps = paceToSec(tmPaceMin, tmPaceSec)
     if (!ps || ps <= 0) return null
     return { kph: paceSecToKph(ps).toFixed(1) }
-  }, [paceInput])
+  }, [tmPaceMin, tmPaceSec])
 
   // 동적 스플릿
   const splits = useMemo(() => {
@@ -314,24 +346,29 @@ export default function PaceClient() {
               </div>
               <span className={styles.timesSign}>×</span>
               <div className={styles.distRow}>
-                {DISTANCES.map(d => (
-                  <button key={d.km} type="button" aria-pressed={dist === d.km}
-                    className={`${styles.distBtn} ${dist === d.km ? styles.distBtnActive : ''}`}
-                    onClick={() => setDist(d.km)}>{d.label}</button>
-                ))}
-                <div className={`${styles.distCustom} ${!DISTANCES.some(d => d.km === dist) ? styles.distCustomActive : ''}`}>
+                {DISTANCES.map(d => {
+                  const on = !customMode && dist === d.km
+                  return (
+                    <button key={d.km} type="button" aria-pressed={on}
+                      className={`${styles.distBtn} ${on ? styles.distBtnActive : ''}`}
+                      onClick={() => { setDist(d.km); setCustomMode(false); setCustomStr('') }}>{d.label}</button>
+                  )
+                })}
+                <div className={`${styles.distCustom} ${customMode ? styles.distCustomActive : ''}`}>
                   <input
-                    type="number"
+                    type="text"
                     inputMode="decimal"
                     className={styles.distCustomInput}
                     aria-label="직접 거리 (km)"
                     placeholder="직접"
-                    min={0.1} max={500} step={0.1}
-                    value={DISTANCES.some(d => d.km === dist) ? '' : dist}
+                    value={customStr}
                     onChange={e => {
-                      const v = parseFloat(e.target.value)
-                      if (Number.isFinite(v) && v > 0) setDist(Math.min(500, v))
+                      const str = cleanDecimal(e.target.value)
+                      setCustomStr(str)
+                      const km = parseCustomKm(str)
+                      if (km !== null) { setDist(km); setCustomMode(true) }
                     }}
+                    onBlur={() => { if (customMode && parseCustomKm(customStr) === null) setCustomStr(String(dist)) }}
                   />
                   <span className={styles.distCustomUnit}>km</span>
                 </div>
@@ -394,7 +431,7 @@ export default function PaceClient() {
               {splits.length > 0 && (
                 <div className={styles.card}>
                   <label className={styles.cardLabel}>구간 스플릿 (일정 페이스 가정)</label>
-                  <div style={{ overflowX: 'auto' }}>
+                  <div className="tableScroll">
                     <table className={styles.splitTable}>
                       <thead>
                         <tr>
@@ -482,24 +519,29 @@ export default function PaceClient() {
               </div>
               <span className={styles.timesSign}>×</span>
               <div className={styles.distRow}>
-                {DISTANCES.map(d => (
-                  <button key={d.km} type="button" aria-pressed={dist2 === d.km}
-                    className={`${styles.distBtn} ${dist2 === d.km ? styles.distBtnActive : ''}`}
-                    onClick={() => setDist2(d.km)}>{d.label}</button>
-                ))}
-                <div className={`${styles.distCustom} ${!DISTANCES.some(d => d.km === dist2) ? styles.distCustomActive : ''}`}>
+                {DISTANCES.map(d => {
+                  const on = !customMode2 && dist2 === d.km
+                  return (
+                    <button key={d.km} type="button" aria-pressed={on}
+                      className={`${styles.distBtn} ${on ? styles.distBtnActive : ''}`}
+                      onClick={() => { setDist2(d.km); setCustomMode2(false); setCustomStr2('') }}>{d.label}</button>
+                  )
+                })}
+                <div className={`${styles.distCustom} ${customMode2 ? styles.distCustomActive : ''}`}>
                   <input
-                    type="number"
+                    type="text"
                     inputMode="decimal"
                     className={styles.distCustomInput}
                     aria-label="직접 거리 (km)"
                     placeholder="직접"
-                    min={0.1} max={500} step={0.1}
-                    value={DISTANCES.some(d => d.km === dist2) ? '' : dist2}
+                    value={customStr2}
                     onChange={e => {
-                      const v = parseFloat(e.target.value)
-                      if (Number.isFinite(v) && v > 0) setDist2(Math.min(500, v))
+                      const str = cleanDecimal(e.target.value)
+                      setCustomStr2(str)
+                      const km = parseCustomKm(str)
+                      if (km !== null) { setDist2(km); setCustomMode2(true) }
                     }}
+                    onBlur={() => { if (customMode2 && parseCustomKm(customStr2) === null) setCustomStr2(String(dist2)) }}
                   />
                   <span className={styles.distCustomUnit}>km</span>
                 </div>
@@ -561,9 +603,13 @@ export default function PaceClient() {
               <div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>페이스 입력 → 시속</p>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="text" inputMode="numeric"
-                    aria-label="페이스 (분:초)" placeholder="6:40" value={paceInput}
-                    onChange={e => setPaceInput(e.target.value)} />
+                  <input className={styles.numInput} type="number" inputMode="numeric"
+                    aria-label="트레드밀 페이스 분" placeholder="6" value={tmPaceMin} min={1} max={30}
+                    onChange={e => setTmPaceMin(clampField(e.target.value, 1, 30))} />
+                  <span className={styles.unit}>:</span>
+                  <input className={styles.numInput} type="number" inputMode="numeric"
+                    aria-label="트레드밀 페이스 초" placeholder="40" value={tmPaceSec} min={0} max={59}
+                    onChange={e => setTmPaceSec(clampField(e.target.value, 0, 59))} />
                   <span className={styles.unit}>/km</span>
                 </div>
                 {treadmillFromPace && (
@@ -585,20 +631,20 @@ export default function PaceClient() {
       <div className={styles.crossToolCard}>
         <p className={styles.crossToolTitle}>다음 단계로</p>
         <div className={styles.crossToolGrid}>
-          <a href="/tools/sports/interval-training" className={styles.crossToolBtn}>
+          <Link href="/tools/sports/interval-training" className={styles.crossToolBtn}>
             <span className={styles.crossToolIcon}>🏃‍♂️</span>
             <span>
               <strong>인터벌 훈련 계산기</strong>
               <span className={styles.crossToolSub}>VDOT·인터벌 페이스·훈련 스케줄</span>
             </span>
-          </a>
-          <a href="/tools/sports/race-predictor" className={styles.crossToolBtn}>
+          </Link>
+          <Link href="/tools/sports/race-predictor" className={styles.crossToolBtn}>
             <span className={styles.crossToolIcon}>🎯</span>
             <span>
               <strong>마라톤 기록 계산기</strong>
               <span className={styles.crossToolSub}>VDOT·Riegel 공식 기록 예측</span>
             </span>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

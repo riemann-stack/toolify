@@ -43,7 +43,7 @@ export const LADDER_TEMPLATES: LadderTemplate[] = [
     id: 'gift',
     name: '선물 교환 (시크릿 산타)',
     icon: '🎁',
-    desc: '익명 모드와 함께 — 누가 누구에게 줄지',
+    desc: '자기 배정 피하기 자동 적용 — 누가 누구에게 줄지',
     participants: ['김민수', '이지은', '박서준', '최수아'],
     results: ['김민수', '이지은', '박서준', '최수아'],
     mirror: true,

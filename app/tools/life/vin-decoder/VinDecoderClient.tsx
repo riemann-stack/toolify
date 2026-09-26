@@ -6,7 +6,7 @@ import styles from './vin-decoder.module.css'
 import {
   decodeVin, sanitizeVin, wmiByCountry, WMI_DATA, YEAR_TABLE,
   yearFromCode, codeFromYear, VIN_INVALID_LETTERS,
-  type VinSection,
+  type VinSection, type VinResult,
 } from '@/lib/vinDecoder'
 
 type TabKey = 'decode' | 'makers' | 'year'
@@ -45,6 +45,26 @@ function saveRecents(r: string[]): void {
 }
 const maskVin = (v: string): string => (v.length >= 12 ? v.slice(0, 11) + '••••••' : v)
 
+// 30년 주기 후보 중 아직 나올 수 없는 미래 연식(올해+1 모델연도 초과)은 제외하고 최신 순으로.
+// 예: '5' → [2005, 2035] → [2005], 'T' → [1996, 2026] → [2026, 1996]
+// TODO(lib 이관): lib/vinDecoder.ts로 옮겨 단일 소스화
+function plausibleYears(years: number[] | null): number[] {
+  if (!years) return []
+  const maxModelYear = new Date().getFullYear() + 1
+  return years.filter((y) => y <= maxModelYear).sort((a, b) => b - a)
+}
+const futureYears = (years: number[] | null, plausible: number[]): number[] =>
+  (years ?? []).filter((y) => !plausible.includes(y))
+
+// lib regionOf는 첫 글자 '7'을 일괄 오세아니아로 보지만, 7F–7Z는 미국에 새로 할당된 대역(테슬라 텍사스 7SA 등).
+// 미국 생산이면 체크 디지트도 의무. TODO(lib 이관): regionOf·COUNTRY_HINT·calcCheckDigit.required에 반영 후 제거
+const isUsSeven = (clean: string): boolean => /^7[F-Z]/.test(clean)
+function wmiRegion(res: VinResult): { region: string; country?: string } {
+  return isUsSeven(res.clean) && !res.wmi.maker
+    ? { region: '북미', country: '미국' }
+    : { region: res.wmi.region, country: res.wmi.country }
+}
+
 export default function VinDecoderClient() {
   const [tab, setTab] = useState<TabKey>('decode')
   const [vin, setVin] = useState('')
@@ -59,6 +79,10 @@ export default function VinDecoderClient() {
 
   // ── 해석 (렌더 중 파생 — 순수·저비용) ──
   const r = decodeVin(vin)
+  const reg = wmiRegion(r)
+  const checkRequired = r.check.required || isUsSeven(r.clean)
+  const ys = plausibleYears(r.year.years)
+  const ysFuture = futureYears(r.year.years, ys)
 
   function saveCurrent() {
     if (!r.valid17) return
@@ -84,6 +108,8 @@ export default function VinDecoderClient() {
   // ── 연식 변환 ──
   const ycInput = yearCode.trim().toUpperCase().slice(0, 1)
   const ycYears = ycInput ? yearFromCode(ycInput) : null
+  const ycYs = plausibleYears(ycYears)
+  const ycFuture = futureYears(ycYears, ycYs)
   const ynInput = parseInt(yearNum.trim(), 10)
   const ynCode = Number.isFinite(ynInput) ? codeFromYear(ynInput) : null
 
@@ -93,6 +119,7 @@ export default function VinDecoderClient() {
       <div className={styles.tabs} role="tablist" aria-label="VIN 도구">
         {TABS.map((t) => (
           <button key={t.key} type="button" role="tab" aria-selected={tab === t.key}
+            id={`vin-tab-${t.key}`} aria-controls={tab === t.key ? `vin-panel-${t.key}` : undefined}
             className={`${styles.tabBtn} ${tab === t.key ? styles.tabActive : ''}`}
             onClick={() => setTab(t.key)}>
             {t.label}
@@ -102,7 +129,7 @@ export default function VinDecoderClient() {
 
       {/* ═══════════ 탭: VIN 해석 ═══════════ */}
       {tab === 'decode' && (
-        <>
+        <div className={styles.panel} role="tabpanel" id="vin-panel-decode" aria-labelledby="vin-tab-decode">
           <div className={styles.card}>
             <span className={styles.cardLabel}>차대번호(VIN) 17자리 입력</span>
             <div className={styles.vinInputRow}>
@@ -189,7 +216,7 @@ export default function VinDecoderClient() {
                       <span className={styles.resValue}>
                         {r.wmi.maker
                           ? `${r.wmi.country} · ${r.wmi.maker}`
-                          : `${r.wmi.region}${r.wmi.country ? ` · ${r.wmi.country}` : ''}`}
+                          : `${reg.region}${reg.country ? ` · ${reg.country}` : ''}`}
                       </span>
                       <span className={styles.resSub}>
                         {r.wmi.maker
@@ -211,7 +238,7 @@ export default function VinDecoderClient() {
                   </div>
                   {/* Check */}
                   <div className={styles.resRow}>
-                    <span className={styles.resIcon}>{!r.check.computable ? '➖' : r.check.valid ? '✅' : r.check.required ? '⚠️' : '➖'}</span>
+                    <span className={styles.resIcon}>{!r.check.computable ? '➖' : r.check.valid ? '✅' : checkRequired ? '⚠️' : '➖'}</span>
                     <div className={styles.resMain}>
                       <span className={styles.resLabel}>체크 디지트 (9번째)</span>
                       <span className={styles.resValue}>
@@ -220,7 +247,7 @@ export default function VinDecoderClient() {
                           <span className={`${styles.badge} ${styles.badgeNeutral}`}>계산 불가</span>
                         ) : r.check.valid ? (
                           <span className={`${styles.badge} ${styles.badgeOk}`}>계산값 일치</span>
-                        ) : r.check.required ? (
+                        ) : checkRequired ? (
                           <span className={`${styles.badge} ${styles.badgeWarn}`}>불일치 · 오타 확인 (계산값 {r.check.expected})</span>
                         ) : (
                           <span className={`${styles.badge} ${styles.badgeNeutral}`}>미적용일 수 있음 (북미식 계산값 {r.check.expected})</span>
@@ -238,12 +265,14 @@ export default function VinDecoderClient() {
                     <div className={styles.resMain}>
                       <span className={styles.resLabel}>모델 연식 (10번째 · {r.sections.year || '—'})</span>
                       <span className={styles.resValue}>
-                        {r.year.years ? `${r.year.years[1]}년 또는 ${r.year.years[0]}년` : '유효한 연식 코드 아님'}
+                        {ys.length === 0 ? '유효한 연식 코드 아님' : ys.length === 1 ? `${ys[0]}년` : `${ys[0]}년 또는 ${ys[1]}년`}
                       </span>
                       <span className={styles.resSub}>
-                        {r.year.years
-                          ? '연식 코드는 30년 주기로 중복됩니다. 최근 차량은 대부분 뒤쪽(2010~) 연도입니다.'
-                          : 'I·O·Q·U·Z·0은 연식 코드로 쓰지 않습니다.'}
+                        {ys.length === 0
+                          ? 'I·O·Q·U·Z·0은 연식 코드로 쓰지 않습니다.'
+                          : ysFuture.length > 0
+                            ? `연식 코드는 30년 주기로 중복되지만, ${ysFuture.join('·')}년은 아직 나오지 않은 연식이라 제외했습니다.`
+                            : `연식 코드는 30년 주기로 중복됩니다. 최근 차량이라면 대개 ${ys[0]}년입니다.`}
                       </span>
                     </div>
                   </div>
@@ -300,7 +329,7 @@ export default function VinDecoderClient() {
                       <button type="button" className={styles.recentBtn} onClick={() => { setVin(v); setTab('decode') }}>
                         <span className={styles.recentVin}>{maskVin(v)}</span>
                         <span className={styles.recentMeta}>
-                          {rr.wmi.maker || rr.wmi.region}{rr.year.years ? ` · ${rr.year.years[1]}년식` : ''}
+                          {rr.wmi.maker || wmiRegion(rr).region}{rr.year.years ? ` · ${plausibleYears(rr.year.years)[0]}년식` : ''}
                         </span>
                       </button>
                       <button type="button" className={styles.recentDel} aria-label={`${maskVin(v)} 삭제`} onClick={() => delRecent(v)}>×</button>
@@ -338,12 +367,12 @@ export default function VinDecoderClient() {
             차량 이력은 <a className={styles.link} href="https://www.carhistory.or.kr" target="_blank" rel="noopener noreferrer">카히스토리(보험개발원)</a>,
             압류·저당은 <a className={styles.link} href="https://www.gov.kr" target="_blank" rel="noopener noreferrer">정부24 자동차등록원부</a> 등 공식 서비스를 이용하세요.
           </div>
-        </>
+        </div>
       )}
 
       {/* ═══════════ 탭: 제조사 사전 ═══════════ */}
       {tab === 'makers' && (
-        <div className={styles.card}>
+        <div className={styles.card} role="tabpanel" id="vin-panel-makers" aria-labelledby="vin-tab-makers">
           <span className={styles.cardLabel}>WMI 제조사 코드 사전 ({WMI_DATA.length}개 · 한국·일본·독일·미국 주요)</span>
           <input
             className={styles.dirSearch}
@@ -377,7 +406,7 @@ export default function VinDecoderClient() {
 
       {/* ═══════════ 탭: 연식 코드 ═══════════ */}
       {tab === 'year' && (
-        <>
+        <div className={styles.panel} role="tabpanel" id="vin-panel-year" aria-labelledby="vin-tab-year">
           <div className={styles.card}>
             <span className={styles.cardLabel}>연식 코드 ↔ 연도 변환 (10번째 자리)</span>
             <div className={styles.convRow}>
@@ -388,10 +417,14 @@ export default function VinDecoderClient() {
                   onChange={(e) => setYearCode(e.target.value.replace(/[^A-Za-z0-9]/g, ''))} />
                 {ycInput && (
                   <div className={styles.convResult}>
-                    {ycYears ? (
+                    {ycYs.length > 0 ? (
                       <>
-                        <div className={styles.convBig}><strong>{ycYears[1]}</strong> 또는 {ycYears[0]}</div>
-                        <div className={styles.convNote}>30년 주기 중복 — 최근 차량은 대개 {ycYears[1]}년</div>
+                        <div className={styles.convBig}><strong>{ycYs[0]}</strong>{ycYs.length > 1 && <> 또는 {ycYs[1]}</>}</div>
+                        <div className={styles.convNote}>
+                          {ycFuture.length > 0
+                            ? `30년 주기 중 ${ycFuture.join('·')}년은 아직 나오지 않은 연식`
+                            : `30년 주기 중복 — 최근 차량은 대개 ${ycYs[0]}년`}
+                        </div>
                       </>
                     ) : (
                       <div className={styles.convNote}>‘{ycInput}’은(는) 연식 코드가 아닙니다 (I·O·Q·U·Z·0 제외).</div>
@@ -438,7 +471,7 @@ export default function VinDecoderClient() {
             </table>
             <p className={styles.helpText}><strong>I·O·Q·U·Z·0</strong>은 연식 코드로 쓰지 않습니다 (숫자·다른 글자와 혼동 방지).</p>
           </div>
-        </>
+        </div>
       )}
     </div>
   )

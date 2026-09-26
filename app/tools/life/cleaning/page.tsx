@@ -3,7 +3,7 @@ import CleaningClient from './CleaningClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { AGENTS, MIX_RISKS } from './cleaningData'
 import ToolIconBadge from '@/components/ToolIconBadge'
@@ -20,9 +20,6 @@ const sectionTitle: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", 
 const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '18px 20px' }
 const cell: React.CSSProperties = { padding: '9px 11px', borderBottom: '1px solid var(--border)', fontSize: '13px', color: 'var(--text)', verticalAlign: 'top' }
 const headCell: React.CSSProperties = { padding: '9px 11px', textAlign: 'left', fontWeight: 700, fontSize: '11px', color: 'var(--muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg3)', whiteSpace: 'nowrap' }
-const faqDetails: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '8px' }
-const faqSummary: React.CSSProperties = { cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }
-const faqAnswer: React.CSSProperties = { marginTop: '10px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }
 
 const FAQ_LD = [
   { q: '베이킹소다·과탄산소다·세스퀴소다는 뭐가 다른가요?', a: '모두 알칼리성이지만 세기와 용도가 다릅니다. <strong>베이킹소다</strong>는 가장 순하고 연마·탈취에, <strong>세스퀴소다</strong>는 중간 세기로 생활 기름때·물걸레 만능 청소에, <strong>과탄산소다</strong>는 산소계 표백제라 표백·찌든때·곰팡이·삶기에 강합니다(따뜻한 물 40~60℃에서 활성화). 강한 기름때엔 더 센 <strong>소다회</strong>를 쓰기도 합니다.' },
@@ -244,16 +241,9 @@ export default function CleaningPage() {
         </div>
 
         {/* FAQ */}
-        <div>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          {FAQ_LD.map((f, i) => (
-            <details key={i} style={faqDetails}>
-              <summary style={faqSummary}>Q{i + 1}. {f.q}</summary>
-              <div style={faqAnswer} dangerouslySetInnerHTML={{ __html: f.a }} />
-            </details>
-          ))}
-        </div>
+        <section>
+          <Faq items={FAQ_LD} />
+        </section>
 
         {/* 면책 */}
         <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '12px', padding: '16px 20px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>

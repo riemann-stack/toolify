@@ -325,13 +325,23 @@ export interface FamilyMember {
 
 export const FAMILY_STORAGE_KEY = 'youtil-zodiac-family'
 
+const FAMILY_RELATIONS: FamilyMember['relation'][] = ['본인', '배우자', '자녀', '부모', '형제자매', '기타']
+function isFamilyMember(v: unknown): v is FamilyMember {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  const int = (x: unknown, lo: number, hi: number) => typeof x === 'number' && Number.isInteger(x) && x >= lo && x <= hi
+  return typeof o.id === 'string' && typeof o.name === 'string'
+    && FAMILY_RELATIONS.includes(o.relation as FamilyMember['relation'])
+    && int(o.year, 1, 9999) && int(o.month, 1, 12) && int(o.day, 1, 31)
+}
+
 export function loadFamily(): FamilyMember[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = window.localStorage.getItem(FAMILY_STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isFamilyMember) : []
   } catch { return [] }
 }
 

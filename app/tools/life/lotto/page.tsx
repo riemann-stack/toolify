@@ -28,7 +28,7 @@ const FAQ_LD = [
               },
               {
                 q: '확률 시뮬레이터의 결과는 정확한가요?',
-                a: '본 도구의 시뮬레이터는 무작위 추첨을 반복한 통계적 결과입니다. 10,000회 시뮬레이션 시 <strong>5등 약 222회·4등 약 14회·3등 0~1회</strong> 예상이며, 1·2등은 거의 모든 경우 0회입니다. 이는 평균이며, 실제 구매 시 동일한 결과를 보장하지 않습니다. 시뮬레이션은 <strong>학습·재미용으로만 활용</strong>하세요.',
+                a: '본 도구의 시뮬레이터는 무작위 추첨을 반복한 통계적 결과입니다. 10,000회 시뮬레이션 시 <strong>5등 약 224회·4등 약 14회·3등 0~1회</strong> 예상이며, 1·2등은 거의 모든 경우 0회입니다. 이는 평균이며, 실제 구매 시 동일한 결과를 보장하지 않습니다. 시뮬레이션은 <strong>학습·재미용으로만 활용</strong>하세요.',
               },
               {
                 q: '로또 번호 통계가 미래 당첨 번호 예측에 도움이 되나요?',
@@ -111,7 +111,7 @@ export default function LottoPage() {
               { icon: '🔗', name: '연속 포함',  desc: '12·13 같은 연속 쌍 1개 포함 (3연속은 방지)' },
               { icon: '✂️', name: '연속 제외',  desc: '인접 번호가 없도록 — 거리 있는 조합' },
               { icon: '🎯', name: '끝수 분산',  desc: '같은 끝자리 숫자 겹침 최소화 (각 끝자리 ≤2개)' },
-              { icon: '📊', name: '균등 간격',  desc: '번호 간 간격을 7~9로 균등하게 분산' },
+              { icon: '📊', name: '균등 간격',  desc: '번호 간 간격을 6~9로 벌려 고르게 분산 (범위를 넘으면 부족분은 무작위로 채움)' },
               { icon: '🧮', name: '합 균형형',  desc: '총합이 100~170 사이가 되도록 (역대 평균 138)' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
@@ -239,7 +239,7 @@ export default function LottoPage() {
           <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: '12px', padding: '14px 18px' }}>
             <p style={{ fontSize: '14px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>📞 도움이 필요하시면</p>
             <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, listStyle: 'none', padding: 0, margin: 0, fontFamily: 'Noto Sans KR, sans-serif' }}>
-              <li>· <strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong>: <a href="tel:1336" style={{ color: '#059669', fontWeight: 700 }}>1336</a> (365일 09~22시, 무료·익명)</li>
+              <li>· <strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong>: <a href="tel:1336" style={{ color: '#059669', fontWeight: 700 }}>1336</a> (24시간·365일, 무료·익명)</li>
               <li>· 인터넷 상담: kcgp.or.kr</li>
               <li>· 단도박 모임 (GA): dandobakkorea.org</li>
             </ul>
@@ -298,7 +298,7 @@ export default function LottoPage() {
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>동행복권 공식</strong> — dhlottery.co.kr</li>
-            <li><strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong> — 1336 (365일 09~22시), kcgp.or.kr</li>
+            <li><strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong> — 헬프라인 1336 (24시간·365일 운영, 2026년 9월 확인), kcgp.or.kr</li>
             <li><strong style={{ color: 'var(--text)' }}>단도박 모임 (GA Korea)</strong> — dandobakkorea.org</li>
             <li><strong style={{ color: 'var(--text)' }}>국세청</strong> — 기타소득세·지방소득세 (당첨금 세금)</li>
           </ul>

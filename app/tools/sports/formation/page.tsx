@@ -10,11 +10,11 @@ export const metadata = buildMetadata({
   path: '/tools/sports/formation',
   title: '축구 포메이션 생성기 — 4-3-3·4-4-2·5인제 풋살까지 라인업 시각화',
   description:
-    '5·7·9·11인제 22+ 포메이션 + 커스텀(4-2-3-1 등) 라인업을 그라운드 위에 시각화. 선수 카드 클릭으로 이름·번호 편집 + PNG 다운로드와 마크다운 공유.',
+    '5·7·8·9·11인제 34개 포메이션 + 커스텀(4-2-3-1 등) 라인업을 그라운드 위에 시각화. 선수 카드 클릭으로 이름·번호 편집 + PNG 다운로드와 마크다운 공유.',
   keywords: [
     '축구 포메이션', '포메이션 만들기', '라인업 생성기', '풋살 포메이션',
     '4-3-3', '4-4-2', '4-2-3-1', '3-5-2', '3-4-3',
-    '9인제 포메이션', '7인제 축구', '5인제 풋살',
+    '8인제 포메이션', '초등 축구 포메이션', '9인제 포메이션', '7인제 축구', '5인제 풋살',
     '포메이션 그리기', '팀 라인업', '축구 명단 정리',
   ],
 })
@@ -78,7 +78,7 @@ const FAQ_LD = [
   { "q":"5인제 풋살에서 가장 많이 쓰는 포메이션은?","a":"1-2-1 다이아몬드가 가장 흔합니다. 한 명씩 사방으로 자리 잡아 공·수 균형이 좋고, 픽소(고정수)·알라(측면) 역할이 명확합니다. 1-2-1(다이아) — 표준 · 2-2(박스) — 점유·짧은 패스 · 3-1(피라미드) — 압박 · 1-3(역피라미드) — 공격적" },
   { "q":"등번호·이름은 어떻게 입력하나요?","a":"그라운드 위 선수 원 카드를 클릭하면 등번호·이름 편집 모달이 뜹니다. 하단의 「📋 선수 명단」 행을 클릭해도 같은 편집창이 열립니다. 등번호 미입력 시 자동으로 1(GK)·2·3·…·11 번호로 표시 이름은 6자 초과 시 자동 ellipsis (… 표시) 모든 변경은 자동 저장 — 새로고침해도 유지" },
   { "q":"PNG로 저장한 이미지를 단톡에 어떻게 보내나요?","a":"「🖼️ PNG 다운로드」를 누르면 1600 × 2000 고해상도 이미지가 다운로드됩니다. 파일명은 팀이름-4-3-3.png 형태. 카카오톡·디스코드·인스타·블로그에 그대로 첨부 가능. 모바일에서는 다운로드 후 갤러리에서 공유 메뉴로 보낼 수 있습니다." },
-  { "q":"한국축구협회(KFA) 9인제 규정에 맞나요?","a":"KFA U-12 9인제 표준 권장은 3-3-2입니다 (수비 3 + 미드 3 + 공격 2 + GK). 본 도구의 9인 프리셋은 KFA 표준 + 변형 5종을 제공합니다. 경기장 규격(68×47m)·경기 시간(25분 × 2)·교체는 본 도구 외 각 협회 공식 규정을 따르세요." },
+  { "q":"초등부 축구는 몇 인제인가요? 대한축구협회(KFA) 규정에 맞나요?","a":"대한축구협회는 2019년부터 초등부 경기를 8인제(골키퍼 포함 8명)로 치릅니다. KFA 「8인제 경기 규칙」 기준 경기장은 68×48m, 경기 시간은 전후반 각 20분(또는 15분)이며 교체 인원 제한이 없습니다. 본 도구의 8인 프리셋(3-3-1·2-3-2 등)으로 초등부 라인업을 짤 수 있습니다. 9인제는 해외 유소년 리그나 일부 동호회 대회에서 쓰는 형식이라 대회마다 규정이 다르니, 출전하는 대회 요강을 확인하세요." },
   { "q":"데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. ✅ youtil 서버 전송 X · 다른 사람이 볼 수 없음 ✅ 다음 방문 시 자동 복원 (명단·포메이션·등번호·팀 색상) ⚠️ 시크릿 모드·다른 기기는 자동 동기화 X — 백업 원하면 PNG 다운로드" }
 ]
 
@@ -90,7 +90,7 @@ export default function FormationPage() {
         <ToolIconBadge catId="sports" />축구 포메이션 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
-        5·7·9·11인제 22+ 포메이션을 <strong style={{ color: 'var(--text)' }}>그라운드 위에 시각화</strong>. 선수 카드 클릭으로 이름·번호 편집, PNG 다운로드로 단톡·블로그 공유.
+        5·7·8·9·11인제 34개 포메이션을 <strong style={{ color: 'var(--text)' }}>그라운드 위에 시각화</strong>. 선수 카드 클릭으로 이름·번호 편집, PNG 다운로드로 단톡·블로그 공유.
       </p>
 
       <UpdatedMeta
@@ -128,7 +128,7 @@ export default function FormationPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
               { icon: '🏆', name: '회사·동호회 축구',  desc: '주말 모임 라인업을 단톡방에 PNG로 공유. 포지션 명확히 전달' },
-              { icon: '🎓', name: '학교·청소년 클럽',  desc: 'U-12 9인제·U-15 11인제 코치진의 보드 자료' },
+              { icon: '🎓', name: '학교·청소년 클럽',  desc: '초등부 8인제·중등부 11인제 코치진의 보드 자료' },
               { icon: '🏟️', name: '풋살장 예약 팀',    desc: '5인제 다이아·박스 포메이션 사전 정리 + 멤버 확정' },
               { icon: '📺', name: '경기 분석·블로그',  desc: '관전평·전술 분석 시 시각 자료. 두 팀 라인업 동시 게재' },
               { icon: '🎮', name: 'FIFA·이풋볼 전술',  desc: '게임 전술 스쿼드 시뮬레이션' },
@@ -146,7 +146,7 @@ export default function FormationPage() {
         <section>
           <h2 style={sectionTitle}>🎯 인원별 추천 포메이션</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr>
@@ -157,7 +157,8 @@ export default function FormationPage() {
                 </thead>
                 <tbody>
                   <tr><td style={cell}><strong>11인 정규</strong></td><td style={cell}>4-3-3 · 4-2-3-1 · 4-4-2</td><td style={cell}>국제 표준. 4-2-3-1이 현대 1순위</td></tr>
-                  <tr><td style={cell}><strong>9인 청소년</strong></td><td style={cell}>3-3-2 · 2-4-2</td><td style={cell}>U-12 KFA 9인제 공식 권장</td></tr>
+                  <tr><td style={cell}><strong>9인제</strong></td><td style={cell}>3-3-2 · 2-4-2</td><td style={cell}>해외 유소년 리그·일부 동호회 대회 형식</td></tr>
+                  <tr><td style={cell}><strong>8인 초등</strong></td><td style={cell}>3-3-1 · 2-3-2</td><td style={cell}>KFA 초등부 경기 형식(2019~). 68×48m, 전후반 각 20분(또는 15분)</td></tr>
                   <tr><td style={cell}><strong>7인제</strong></td><td style={cell}>2-3-1 · 2-2-2</td><td style={cell}>동호회·사회인 축구. 공간 좁아 좌우 빠른 전환</td></tr>
                   <tr><td style={cell}><strong>5인제 풋살</strong></td><td style={cell}>1-2-1 (다이아) · 2-2 (박스)</td><td style={cell}>다이아가 가장 많이 쓰임. 박스는 점유</td></tr>
                 </tbody>
@@ -193,7 +194,7 @@ export default function FormationPage() {
         <section>
           <h2 style={sectionTitle}>📚 포지션 약어 가이드</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr>
@@ -294,7 +295,7 @@ export default function FormationPage() {
               { title: '1. 선수 풀 강점 분석', desc: '빠른 윙어가 많다 → 4-3-3 / 강한 중앙 미드 → 4-2-3-1 / 단단한 수비 + 카운터 → 5-3-2' },
               { title: '2. 경기장 크기', desc: '7인제·풋살은 공간 좁아 1-2-1 다이아·2-3-1이 유리. 11인제 정규 규격은 4-3-3·4-2-3-1' },
               { title: '3. 상대 강도', desc: '약체 상대 → 공격적(4-3-3·3-4-3) / 강팀 상대 → 수비적(5-4-1·4-5-1)' },
-              { title: '4. 체력 수준', desc: '풀백 공격 가담은 체력 소모 큼. 동호회는 4-4-2·4-2-3-1 권장 / 청소년은 3-3-2(KFA U-12 표준)' },
+              { title: '4. 체력 수준', desc: '풀백 공격 가담은 체력 소모 큼. 동호회는 4-4-2·4-2-3-1 권장 / 초등부 8인제는 3-3-1·2-3-2가 무난' },
             ].map((b, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.title}</p>
@@ -404,11 +405,12 @@ export default function FormationPage() {
           </details>
 
           <details style={faqDetails}>
-            <summary style={faqSummary}>Q5. 한국축구협회(KFA) 9인제 규정에 맞나요?</summary>
+            <summary style={faqSummary}>Q5. 초등부 축구는 몇 인제인가요? 대한축구협회(KFA) 규정에 맞나요?</summary>
             <div style={faqAnswer}>
-              KFA U-12 9인제 표준 권장은 <strong style={{ color: 'var(--text)' }}>3-3-2</strong>입니다 (수비 3 + 미드 3 + 공격 2 + GK).
-              본 도구의 9인 프리셋은 KFA 표준 + 변형 5종을 제공합니다.
-              경기장 규격(68×47m)·경기 시간(25분 × 2)·교체는 본 도구 외 각 협회 공식 규정을 따르세요.
+              대한축구협회는 2019년부터 초등부 경기를 <strong style={{ color: 'var(--text)' }}>8인제(골키퍼 포함 8명)</strong>로 치릅니다.
+              KFA <a href="https://www.kfa.or.kr/img_src/data_rule/kfa_regulationofthe8vs8game_202201.pdf" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>「8인제 경기 규칙」</a> 기준 경기장은 68×48m, 경기 시간은 전후반 각 20분(또는 15분)이며 교체 인원 제한이 없습니다.
+              본 도구의 8인 프리셋(3-3-1·2-3-2 등)으로 초등부 라인업을 짤 수 있습니다.
+              9인제는 해외 유소년 리그나 일부 동호회 대회에서 쓰는 형식이라 대회마다 규정이 다르니, 출전하는 대회 요강을 확인하세요.
             </div>
           </details>
 

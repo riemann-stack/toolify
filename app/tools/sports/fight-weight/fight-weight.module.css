@@ -129,7 +129,7 @@
 @media (max-width: 480px) {
   .inputGrid3 { gap: 4px; }
   .inputGrid3 .inputCell { padding: 8px 8px; }
-  .inputGrid3 .inputLabel { font-size: 10px; }
+  .inputGrid3 .inputLabel { font-size: 11px; }
   .inputGrid3 .bigInput { font-size: 17px; }
   .inputGrid3 .unit { font-size: 11px; }
   .inputGrid3 .genderBtn { padding: 7px 4px; font-size: 16px; }

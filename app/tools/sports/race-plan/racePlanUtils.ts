@@ -30,22 +30,29 @@ export const STRATEGY_DESC: Record<Strategy, string> = {
   positive: '초반을 더 빠르게 — 체력 분배 실패 위험',
   custom:   '구간을 직접 조정한 상태',
 }
-// 네거티브/포지티브 램프 폭(기준 페이스 대비 ±). 대칭이라 구간 평균 페이스는 기준과 동일.
+// 네거티브/포지티브 램프 폭(기준 페이스 대비 ±). 완주 시간은 균등 페이스와 같게 맞춘다(fillStrategy).
 const RAMP = 0.03
 
 // ── 시간/페이스 입력 파서 ───────────────
 /** "5:30"(분:초) 또는 "5.5"(소수 분 = 5분 30초) → 초/km. 빈/불량 입력은 0
- *  점(.)은 소수 구분자로만 해석 — "5.5"→5:30, "5.30"→5:18. 분:초는 콜론으로. */
+ *  점(.)은 소수 구분자로만 해석 — "5.5"→5:30, "5.30"→5:18. 분:초는 콜론으로.
+ *  콜론 없는 3~4자리 정수는 mss/mmss로 해석 — "530"→5:30, "1005"→10:05 (530분/km 오해석 방지). */
 export function parsePace(s: string): number {
   const t = (s || '').trim()
   const m = t.match(/^(\d{1,2})\s*:\s*(\d{1,2})$/)   // 콜론만 분:초 구분자
   if (m) return parseInt(m[1], 10) * 60 + Math.min(59, parseInt(m[2], 10))
+  const packed = t.match(/^(\d{1,2})(\d{2})$/)          // 3~4자리 숫자 = 분+초
+  if (packed) {
+    const sec = parseInt(packed[2], 10)
+    return sec < 60 ? parseInt(packed[1], 10) * 60 + sec : 0
+  }
   const n = parseFloat(t)                              // 점/정수는 소수 분 (5.5 → 330초)
   return isFinite(n) && n > 0 ? Math.round(n * 60) : 0
 }
-/** "HH:MM" → 자정 기준 분. 불량이면 null */
+/** "HH:MM" 또는 콜론 없는 "800"·"0730"(모바일 숫자 키패드) → 자정 기준 분. 불량이면 null */
 export function parseClock(s: string): number | null {
-  const m = (s || '').trim().match(/^(\d{1,2})\s*:\s*(\d{1,2})$/)
+  const t = (s || '').trim()
+  const m = t.match(/^(\d{1,2})\s*:\s*(\d{1,2})$/) ?? t.match(/^(\d{1,2})(\d{2})$/)
   if (!m) return null
   const h = parseInt(m[1], 10), min = parseInt(m[2], 10)
   if (h > 23 || min > 59) return null
@@ -77,18 +84,45 @@ export function buildSegments(totalKm: number): Segment[] {
 }
 
 // ── 전략 기반 페이스 채움 ───────────────
-/** 기준 페이스(초/km)·구간 수·전략 → 구간별 평지 페이스 배열. 대칭 램프라 단순 평균은 기준과 동일 */
-export function fillStrategy(baseSec: number, n: number, strategy: Strategy): number[] {
+/** 기준 페이스(초/km)·구간 수·전략(·구간 거리) → 구간별 평지 페이스 배열(정수 초).
+ *  램프를 구간 거리로 가중해 완주 시간이 균등 페이스(기준 × 총거리)와 같도록 보정한다.
+ *  마지막 부분 구간(0.195km 등)의 가중치가 작아 단순 대칭 램프는 완주 시간이 밀리므로(하프 5:41 네거티브 2:00:03) 스케일 보정 필요. */
+export function fillStrategy(baseSec: number, n: number, strategy: Strategy, dists?: number[]): number[] {
   if (n <= 0 || baseSec <= 0) return Array(Math.max(0, n)).fill(baseSec)
   if (strategy === 'even' || strategy === 'custom' || n === 1) return Array(n).fill(baseSec)
   const slow = baseSec * (1 + RAMP)   // 느린 끝
   const fast = baseSec * (1 - RAMP)   // 빠른 끝
-  return Array.from({ length: n }, (_, i) => {
+  const raw = Array.from({ length: n }, (_, i) => {
     const t = i / (n - 1)             // 0..1
     // negative: 느림→빠름 / positive: 빠름→느림
-    const p = strategy === 'negative' ? slow + (fast - slow) * t : fast + (slow - fast) * t
-    return Math.round(p)
+    return strategy === 'negative' ? slow + (fast - slow) * t : fast + (slow - fast) * t
   })
+  const w = raw.map((_, i) => (dists && dists[i] > 0 ? dists[i] : 1))
+  const totalDist = w.reduce((a, b) => a + b, 0)
+  const rawTime = raw.reduce((a, p, i) => a + p * w[i], 0)
+  const k = rawTime > 0 ? (baseSec * totalDist) / rawTime : 1
+  // 구간별 반올림(단조 함수라 램프 순서 유지) 후, 남은 오차를 램프 한쪽 끝의 연속 구간에 ±1초씩 몰아 준다.
+  // 앞쪽 연속 구간(prefix) 또는 뒤쪽 연속 구간(suffix)만 건드리므로 느림→빠름(또는 빠름→느림) 순서가 깨지지 않는다.
+  const out = raw.map(p => Math.max(1, Math.round(p * k)))
+  const diff = baseSec * totalDist - out.reduce((a, q, i) => a + q * w[i], 0)   // +면 느리게(+1초) 보정 필요
+  if (Math.abs(diff) <= 0.5) return out
+  // +1초는 느린 끝에서, −1초는 빠른 끝에서 시작 — negative는 느린 끝이 앞, positive는 뒤
+  const slowFirst = strategy === 'negative'
+  const fromFront = diff > 0 ? slowFirst : !slowFirst
+  const order = Array.from({ length: n }, (_, j) => (fromFront ? j : n - 1 - j))
+  const step = diff > 0 ? 1 : -1
+  // 연속 구간 길이 m을 늘려 가며 보정 후 잔여 오차가 가장 작은 m 선택 (부분 구간 가중치가 작아 m이 정수 초와 1:1이 아님)
+  let best = 0, bestErr = Math.abs(diff), cum = 0
+  for (let m = 1; m <= n; m++) {
+    const idx = order[m - 1]
+    if (step < 0 && out[idx] <= 1) break
+    cum += w[idx]
+    const err = Math.abs(diff - step * cum)
+    if (err < bestErr - 1e-9) { best = m; bestErr = err }
+    if (cum >= Math.abs(diff)) break
+  }
+  for (let m = 0; m < best; m++) out[order[m]] += step
+  return out
 }
 
 // ── 고도 경사 → 페이스 보정(추정) ───────
@@ -184,9 +218,13 @@ export function planWarnings(res: PlanResult): string[] {
   // 빈 구간(페이스 0) — 완주 시간이 실제보다 짧게 계산됨
   if (res.rows.some(r => r.paceSec <= 0))
     w.push('페이스가 비어 있는 구간이 있어 완주 시간이 실제보다 짧게 계산됩니다 — 모든 구간을 채워주세요.')
-  // 평균 페이스 비현실: 마라톤 세계기록 ≈ 2:55/km, 5K WR ≈ 2:35/km
-  if (res.avgPaceSec > 0 && res.avgPaceSec < 170)
-    w.push(`평균 ${fmtPace(res.avgPaceSec)}/km는 세계기록(약 2:55/km)보다 빠릅니다 — 페이스를 다시 확인하세요.`)
+  // 평균 페이스 비현실: 거리별 세계기록 페이스 부근(5K·10K ≈ 2:30대, 하프 ≈ 2:40대, 마라톤 ≈ 2:51/km)보다 빠르면 경고
+  const wrPace = res.totalKm <= 10 + 1e-6 ? 150 : res.totalKm <= 21.1 ? 160 : 170
+  if (res.avgPaceSec > 0 && res.avgPaceSec < wrPace)
+    w.push(`평균 ${fmtPace(res.avgPaceSec)}/km는 이 거리의 세계기록 페이스보다 빠릅니다 — 페이스를 다시 확인하세요.`)
+  // 비현실적으로 느림(20:00/km 초과) — "530"처럼 분:초 입력 실수 가능성
+  if (res.avgPaceSec > 1200)
+    w.push(`평균 ${fmtPace(res.avgPaceSec)}/km는 걷기보다 훨씬 느립니다 — 페이스는 분:초(예: 5:30) 형식으로 입력하세요.`)
   const fastest = Math.min(...res.rows.map(r => r.paceSec).filter(p => p > 0))
   if (isFinite(fastest) && fastest < 150)
     w.push(`일부 구간이 ${fmtPace(fastest)}/km로 비현실적으로 빠릅니다.`)

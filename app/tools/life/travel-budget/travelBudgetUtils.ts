@@ -169,7 +169,10 @@ export const CITIES: CityData[] = [
   },
 ]
 
-export const getCity = (id: string) => CITIES.find((c) => c.id === id)!
+export const getCity = (id: string) => CITIES.find((c) => c.id === id) ?? CITIES[0]
+
+/** 성수기 숙박비 배수 — autoFill·diagnose가 같은 값을 쓴다 */
+export const SEASON_HOTEL_MUL: Record<Season, number> = { low: 1, high: 1.3 }
 
 /* ─────────────────────────────────────────────
    항공권 평균 (왕복, 1인, 만원)
@@ -243,8 +246,8 @@ export interface ItemBreakdown {
 export function calcBudget(inp: BudgetInputs): { items: ItemBreakdown[]; subTotal: number; reserve: number; total: number; perPerson: number; perDay: number } {
   const days = Math.max(1, inp.days)
   const people = Math.max(1, inp.people)
-  // 숙박 박수 = 여행일수 − 1 (예: 5일 = 4박). 식비·교통은 매일 발생하므로 일수 그대로.
-  const nights = Math.max(1, days - 1)
+  // 숙박 박수 = 여행일수 − 1 (예: 5일 = 4박, 1일 당일치기 = 0박). 식비·교통은 매일 발생하므로 일수 그대로.
+  const nights = Math.max(0, days - 1)
 
   const items: ItemBreakdown[] = [
     { id: 'flight',    emoji: '✈️', label: '항공권',     perPerson: inp.flight,                total: inp.flight * people,                  isPerson: true,  color: '#0891B2' },
@@ -284,14 +287,15 @@ export function diagnose(inp: BudgetInputs): DiagnosisItem[] {
   const days = Math.max(1, inp.days)
 
   const items: { id: string; emoji: string; label: string; user: number; avg: number }[] = [
-    { id: 'hotel',     emoji: '🏨', label: '숙박 (1박/인)',      user: inp.hotel,         avg: sty.hotel },
+    { id: 'hotel',     emoji: '🏨', label: '숙박 (1박/인)',      user: inp.hotel,         avg: Math.round(sty.hotel * SEASON_HOTEL_MUL[inp.season] * 10) / 10 },
     { id: 'food',      emoji: '🍽️', label: '식비 (1일/인)',      user: inp.food,          avg: sty.food },
     { id: 'transport', emoji: '🚕', label: '교통+투어 (1일/인)', user: inp.transport,     avg: sty.transport },
     { id: 'flight',    emoji: '✈️', label: '항공권 (왕복/인)',   user: inp.flight,        avg: getFlight(city.region, inp.airline, inp.season) },
   ]
 
   return items.map((it) => {
-    const diff = it.avg > 0 ? ((it.user - it.avg) / it.avg) * 100 : 0
+    // 소수 1자리 반올림 — 부동소수 오차(30.000…04%)로 경계에서 판정이 뒤집히지 않게
+    const diff = it.avg > 0 ? Math.round(((it.user - it.avg) / it.avg) * 1000) / 10 : 0
     let status: DiagnosisItem['status']
     if (diff <= -30) status = 'low'
     else if (diff <= 30) status = 'normal'
@@ -313,7 +317,7 @@ export function autoFill(inp: { cityId: string; style: Style; days: number; peop
   const sty = city.styles[inp.style]
   const flight = getFlight(city.region, inp.airline, inp.season)
   // 성수기엔 항공권뿐 아니라 숙박도 오른다 (대략 +30%). 식비·교통은 변동 작아 유지.
-  const seasonHotel = inp.season === 'high' ? 1.3 : 1
+  const seasonHotel = SEASON_HOTEL_MUL[inp.season]
   return {
     flight,
     hotel: Math.round(sty.hotel * seasonHotel * 10) / 10,

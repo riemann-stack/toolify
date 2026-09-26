@@ -6,7 +6,7 @@ import Disclaimer from '@/components/Disclaimer'
 import styles from './laundry-dry.module.css'
 import {
   LAUNDRY_EQUIPMENT, recommendCombos, evaluateCombo,
-  fmtMinutes, fmtKrw, tempFactorOf, humidFactorOf,
+  fmtMinutes, fmtKrw, tempFactorOf, humidFactorOf, KRW_PER_KWH,
   type Priority,
 } from './laundryUtils'
 
@@ -161,7 +161,7 @@ export default function LaundryDryClient() {
     if (env === 'indoor' && sun !== 'none') setSun('none')
   }, [env, sun])
 
-  /* 현재 시각 (초마다 업데이트) */
+  /* 현재 시각 (1분마다 업데이트) */
   const [now, setNow] = useState<Date | null>(null)
   useEffect(() => {
     setNow(new Date())
@@ -265,20 +265,24 @@ export default function LaundryDryClient() {
     return out.slice(0, 5)
   }, [fan, result, dehumid, space, env, wind, windowOpen, items, heating, spin])
 
-  /* 완료 시각은 '지금 넌 시점'(anchor)에 고정 — 진행바와 같은 기준. 매분 밀리지 않음 */
+  /* 완료 시각은 '지금 넌 시점'(anchor)에 고정 — 진행바와 같은 기준. 매분 밀리지 않음.
+     1초 진행 커서는 TimelineCursor가 자체 타이머로 그려 루트 전체가 매초 리렌더되지 않게 한다. */
   const [anchorMs, setAnchorMs] = useState<number | null>(null)
-  const [timelineMs, setTimelineMs] = useState(0)
   useEffect(() => {
     setAnchorMs(Date.now())
-    setTimelineMs(0)
-    const start = Date.now()
-    const id = setInterval(() => setTimelineMs(Date.now() - start), 1000)
-    return () => clearInterval(id)
   }, [result.dryHours, result.surfaceDry])
   const finishAt = anchorMs != null ? addHours(new Date(anchorMs), result.dryHours) : null
   const surfaceAt = anchorMs != null ? addHours(new Date(anchorMs), result.surfaceDry) : null
-  const timelinePct = Math.min(100, (timelineMs / (result.dryHours * 3600 * 1000)) * 100)
   const surfacePct = 60
+
+  // 조합·역산 탭 useMemo 의존성이 매 렌더 새 객체로 무효화되지 않게 고정
+  const envCtx = useMemo(() => ({ temp, humidity }), [temp, humidity])
+  // 한 번 연 탭은 숨김(hidden)으로 유지 — 탭을 오가도 보유 장비·목표 시각 선택이 초기화되지 않게
+  const [visitedTabs, setVisitedTabs] = useState<TabId[]>(['main'])
+  const selectTab = (id: TabId) => {
+    setTab(id)
+    setVisitedTabs(v => (v.includes(id) ? v : [...v, id]))
+  }
 
   return (
     <div className={styles.wrap}>
@@ -303,29 +307,32 @@ export default function LaundryDryClient() {
         ] as { id: TabId; label: string }[]).map(t => (
           <button key={t.id}
             type="button" role="tab" aria-selected={tab === t.id}
+            id={`ld-tab-${t.id}`} aria-controls={visitedTabs.includes(t.id) ? `ld-panel-${t.id}` : undefined}
             className={`${styles.tabBtn} ${tab === t.id ? styles.tabBtnActive : ''}`}
-            onClick={() => setTab(t.id)}>
+            onClick={() => selectTab(t.id)}>
             {t.label}
           </button>
         ))}
       </div>
 
+      {visitedTabs.includes('combo') && (
+        <div role="tabpanel" id="ld-panel-combo" aria-labelledby="ld-tab-combo" hidden={tab !== 'combo'}>
+          <ComboTab baselineHours={result.baselineHours} env={env} envCtx={envCtx} />
+        </div>
+      )}
+      {visitedTabs.includes('target') && (
+        <div role="tabpanel" id="ld-panel-target" aria-labelledby="ld-tab-target" hidden={tab !== 'target'}>
+          <TargetTab baselineHours={result.baselineHours} now={now} envCtx={envCtx} />
+        </div>
+      )}
       {tab !== 'main' && (
-        <>
-          {tab === 'combo' && (
-            <ComboTab baselineHours={result.baselineHours} env={env} envCtx={{ temp, humidity }} />
-          )}
-          {tab === 'target' && (
-            <TargetTab baselineHours={result.baselineHours} now={now} envCtx={{ temp, humidity }} />
-          )}
-          {/* 면책 */}
+          /* 면책 */
           <p style={{ fontSize: 11, color: 'var(--muted)', padding: '12px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, lineHeight: 1.7, marginTop: 4 }}>
-            ⚠️ 본 추천은 일반 가이드입니다. 실제 건조 시간은 의류 두께·소재·빨래량·통풍·날씨에 따라 ±20% 차이 가능. 전기료는 한국 평균 200원/kWh 기준 (누진제 단계에 따라 ±50% 차이 가능). 정확한 정보는 한국전력 고객센터 <strong style={{ color: '#EA580C' }}>123</strong> 또는 기상청 빨래건조지수(weather.go.kr).
+            ⚠️ 본 추천은 일반 가이드입니다. 실제 건조 시간은 의류 두께·소재·빨래량·통풍·날씨에 따라 ±20% 차이 가능. 전기료는 기본요금·부가세 등을 포함한 가구 평균 약 {KRW_PER_KWH}원/kWh 기준이며, 누진 단계와 사용량에 따라 실제와 차이가 날 수 있습니다. 정확한 요금은 한국전력 고객센터 <strong style={{ color: '#EA580C' }}>123</strong>에서 확인하세요.
           </p>
-        </>
       )}
 
-      {tab === 'main' && (<>
+      <div role="tabpanel" id="ld-panel-main" aria-labelledby="ld-tab-main" hidden={tab !== 'main'} className={styles.panel}>
       {/* ── 섹션 1: 환경 ── */}
       <div className={styles.card}>
         <div className={styles.cardLabel}>① 건조 환경</div>
@@ -598,7 +605,7 @@ export default function LaundryDryClient() {
         <div className={styles.speedBadge} style={{ color: speed.color, borderColor: speed.color + '55' }}>
           현재 조건은 <strong>{speed.label}</strong>입니다
         </div>
-        <span aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+        <span role="status" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
           완전 건조 예상 {formatHours(result.dryHours)}{finishAt && anchorMs != null ? `, ${formatFinishTime(finishAt, new Date(anchorMs))}까지` : ''} · {speed.label}
         </span>
       </div>
@@ -618,11 +625,7 @@ export default function LaundryDryClient() {
               <div className={styles.timelineMarkerLine} />
               <div className={styles.timelineMarkerLabelBottom}>완전 건조</div>
             </div>
-            <div
-              className={styles.timelineCursor}
-              style={{ left: `${timelinePct}%` }}
-              aria-hidden
-            />
+            <TimelineCursor anchorMs={anchorMs} totalMs={result.dryHours * 3600 * 1000} />
           </div>
           <div className={styles.timelineLegend}>
             <span>지금</span>
@@ -661,9 +664,23 @@ export default function LaundryDryClient() {
           </div>
         </div>
       )}
-      </>)}
+      </div>
     </div>
   )
+}
+
+/* 진행 커서 — 자체 1초 타이머로 커서만 다시 그린다 (루트·조합 탭은 매초 리렌더되지 않음) */
+function TimelineCursor({ anchorMs, totalMs }: { anchorMs: number | null; totalMs: number }) {
+  const [elapsed, setElapsed] = useState(0)
+  useEffect(() => {
+    if (anchorMs == null) return
+    const tick = () => setElapsed(Date.now() - anchorMs)
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [anchorMs])
+  const pct = totalMs > 0 ? Math.min(100, (elapsed / totalMs) * 100) : 0
+  return <div className={styles.timelineCursor} style={{ left: `${pct}%` }} aria-hidden />
 }
 
 /* ──────────────────────── 최단 조합 추천 탭 ──────────────────────── */
@@ -777,7 +794,7 @@ function ComboTab({ baselineHours, env, envCtx }: { baselineHours: number; env: 
               <div className={styles.heroBlock}>
                 <div className={styles.heroSubAccent}>예상 전기료</div>
                 <div className={styles.heroNumMain} style={{ color: best.cost < 50 ? '#059669' : best.cost < 300 ? 'var(--accent)' : '#EA580C' }}>{fmtKrw(best.cost)}</div>
-                <div className={styles.heroRange}>{best.kwh} kWh · 200원/kWh 기준</div>
+                <div className={styles.heroRange}>{best.kwh} kWh · {KRW_PER_KWH}원/kWh 기준</div>
               </div>
             </div>
           </div>

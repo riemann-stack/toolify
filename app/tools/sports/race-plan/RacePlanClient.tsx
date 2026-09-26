@@ -55,8 +55,9 @@ export default function RacePlanClient() {
   const altStrsView = altStrs.length === n ? altStrs : resize(altStrs, n, '')
   // 계산용 숫자 (문자열 → 파싱)
   const paces = paceStrsView.map(parsePace)
-  const alts = altStrsView.map(parseAlt)
-  const startElev = parseAlt(startElevStr)
+  // 고도 입력을 끄면 입력해 둔 고도는 보관만 하고 계산(↑↓·프로파일·경사 경고)에서는 제외
+  const alts = elevOn ? altStrsView.map(parseAlt) : altStrsView.map(() => 0)
+  const startElev = elevOn ? parseAlt(startElevStr) : 0
   const grades = gradesFrom(segments, alts, startElev)
 
   const startClockMin = parseClock(startClock)
@@ -77,9 +78,9 @@ export default function RacePlanClient() {
 
   // ── 핸들러 ──
   // 전략(+선택적 고도보정)으로 구간 페이스 문자열을 다시 채움
-  const reapply = (strat: Strategy, altArr: string[], seStr: string, grade: boolean) => {
-    let flat = fillStrategy(parsePace(basePace), segments.length, strat)
-    if (grade && elevOn) flat = applyGrade(flat, gradesFrom(segments, altArr.map(parseAlt), parseAlt(seStr)))
+  const reapply = (strat: Strategy, altArr: string[], seStr: string, grade: boolean, elev: boolean = elevOn) => {
+    let flat = fillStrategy(parsePace(basePace), segments.length, strat, segments.map(sg => sg.dist))
+    if (grade && elev) flat = applyGrade(flat, gradesFrom(segments, altArr.map(parseAlt), parseAlt(seStr)))
     setPaceStrs(flat.map(fmtPace))
   }
 
@@ -91,7 +92,7 @@ export default function RacePlanClient() {
     const nextAlts = resize(altStrs, m, '')
     setAltStrs(nextAlts)
     if (strategy !== 'custom') {
-      let flat = fillStrategy(parsePace(basePace), m, strategy)
+      let flat = fillStrategy(parsePace(basePace), m, strategy, segs.map(sg => sg.dist))
       if (gradeAdjust && elevOn) flat = applyGrade(flat, gradesFrom(segs, nextAlts.map(parseAlt), startElev))
       setPaceStrs(flat.map(fmtPace))
     } else {
@@ -110,6 +111,12 @@ export default function RacePlanClient() {
   const toggleGrade = (on: boolean) => {
     setGradeAdjust(on)
     if (strategy !== 'custom') reapply(strategy, altStrsView, startElevStr, on)
+  }
+
+  // 고도 입력 on/off — 자동 보정 중이면 끌 때 평지 페이스로, 켤 때 고도 보정 페이스로 다시 채움
+  const toggleElev = (on: boolean) => {
+    setElevOn(on)
+    if (gradeAdjust && strategy !== 'custom') reapply(strategy, altStrsView, startElevStr, true, on)
   }
 
   const editPace = (i: number, v: string) => {
@@ -207,7 +214,7 @@ export default function RacePlanClient() {
                 const v = e.target.value.replace(/[^0-9:.]/g, '')
                 setBasePace(v)
                 if (strategy !== 'custom') {
-                  let flat = fillStrategy(parsePace(v), segments.length, strategy)
+                  let flat = fillStrategy(parsePace(v), segments.length, strategy, segments.map(sg => sg.dist))
                   if (gradeAdjust && elevOn) flat = applyGrade(flat, grades)
                   setPaceStrs(flat.map(fmtPace))
                 }
@@ -215,7 +222,7 @@ export default function RacePlanClient() {
           </div>
           <div className={s.field}>
             <label className={s.fieldLabel} htmlFor="rp-clock">출발 시각 (선택)</label>
-            <input id="rp-clock" className={s.input} type="text" inputMode="numeric"
+            <input id="rp-clock" className={s.input} type="text" inputMode="text"
               placeholder="예: 08:00" value={startClock}
               aria-invalid={startClock.trim() !== '' && startClockMin == null}
               onChange={e => setStartClock(e.target.value.replace(/[^0-9:]/g, ''))} />
@@ -246,7 +253,7 @@ export default function RacePlanClient() {
       <div className={s.card}>
         <label className={s.toggleRow}>
           <input type="checkbox" className={s.check} checked={elevOn}
-            onChange={e => setElevOn(e.target.checked)} />
+            onChange={e => toggleElev(e.target.checked)} />
           <span className={s.toggleLabel}>코스 고도 입력 (언덕 반영)</span>
         </label>
         {elevOn && (

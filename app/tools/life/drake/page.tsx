@@ -4,20 +4,19 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { RADIO_START_YEAR, radioRangeLy } from './drakeUtils'
+
+// 인류 전파권은 해마다 1광년씩 넓어진다 — 빌드(배포) 시점 연도로 계산해 한 곳에서 관리.
+// 정적 페이지라 새해 첫 배포 때 갱신된다.
+const RADIO_ASOF_YEAR = new Date().getFullYear()
+const RADIO_LY = radioRangeLy(RADIO_ASOF_YEAR)
 
 export const metadata = buildMetadata({
   path: '/tools/life/drake',
   title: '드레이크 방정식 계산기 — 외계 문명 수·거리·페르미 역설',
-  description: '외계 문명은 몇 개나 존재할까. 드레이크 방정식 7개 변수 시뮬과 가장 가까운 문명 거리·왕복 통신 시간·인류 전파권 126광년·페르미 역설 가설까지.',
+  description: `외계 문명은 몇 개나 존재할까. 드레이크 방정식 7개 변수 시뮬과 가장 가까운 문명 거리·왕복 통신 시간·인류 전파권 ${RADIO_LY}광년·페르미 역설 가설까지.`,
   keywords: ['드레이크방정식계산기', '외계인존재확률', '드레이크방정식', '우주문명계산기', '외계생명체확률', '페르미역설', '지적생명체계산기', '대필터', '레어 어스 가설', '인류 전파권', '가장 가까운 외계'],
 })
-
-function parseNumParam(v: string | undefined, min: number, max: number): number | undefined {
-  if (!v) return undefined
-  const n = parseFloat(v)
-  if (!isFinite(n) || n < min || n > max) return undefined
-  return n
-}
 
 const FAQ_LD = [
               { q: '드레이크 방정식은 얼마나 신뢰할 수 있나요?',
@@ -31,33 +30,17 @@ const FAQ_LD = [
               { q: '실제로 외계 신호를 받은 적 있나요?',
                 a: '1977년 &ldquo;와우! 신호(Wow! Signal)&rdquo;가 가장 유명한 사례입니다. 72초간 강력한 협대역 전파 신호가 감지됐지만 이후 재현되지 않았습니다. 2016년 러시아 RATAN-600이 HD 164595(태양과 비슷한 별, 약 95광년) 방향에서 포착한 신호도 화제였으나 단발성이었고 후속 관측에서 재현되지 않았습니다. 현재까지 외계 기원으로 공식 확인된 신호는 없습니다.' },
               { q: '가장 가까운 외계 문명까지 거리는 어떻게 계산하나요?',
-                a: '우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, <strong>평균 간격 ≈ (은하 부피 / N)<sup>1/3</sup></strong>, 가장 가까운 거리 ≈ 평균 × 0.55(Poisson 통계 근사). 예: N = 1만 → 가장 가까운 약 507광년, N = 100만 → 약 109광년(인류 전파권 126ly 안). 본 도구가 N값에 따라 자동 계산합니다. ⚠️ 균등 분포 가정으로, 실제는 나선팔에 집중 가능성.' },
+                a: `우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, <strong>평균 간격 ≈ (은하 부피 / N)<sup>1/3</sup></strong>, 가장 가까운 거리 ≈ 평균 × 0.55(Poisson 통계 근사). 예: N = 1만 → 가장 가까운 약 507광년, N = 100만 → 약 109광년(인류 전파권 ${RADIO_LY}ly 안). 본 도구가 N값에 따라 자동 계산합니다. ⚠️ 균등 분포 가정으로, 실제는 나선팔에 집중 가능성.` },
               { q: '인류 전파는 어디까지 도달했나요?',
-                a: '약 <strong>126광년</strong> (1900년 첫 라디오부터 2026년 기준). 100광년 내 별 약 14,000개를 통과했습니다. 알파 센타우리(4.37광년) 1904년, 시리우스(8.6광년) 1909년, 베가(25광년) 1925년경 도달. ⚠️ 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다.' },
+                a: `약 <strong>${RADIO_LY}광년</strong> (${RADIO_START_YEAR}년 첫 라디오부터 ${RADIO_ASOF_YEAR}년 기준). 100광년 내 별 약 14,000개를 통과했습니다. 알파 센타우리(4.37광년) 1904년, 시리우스(8.6광년) 1909년, 베가(25광년) 1925년경 도달. ⚠️ 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다.` },
               { q: 'N값에 따라 어떤 페르미 역설 가설이 유력한가요?',
                 a: '본 도구가 N값에 따라 자동으로 가장 유력한 가설 2개를 추천합니다. 대략적 경향: <br/>• N &lt; 10: 레어 어스 (지구가 특별)<br/>• N 10~10,000: 대필터·시끄러움<br/>• N 1,000~100만: 동물원·시끄러움<br/>• N 100만+: 디지털 문명·관찰 회피<br/>슬라이더로 변수를 조정하면 추천도 즉시 갱신됩니다.' },
               { q: '거리 계산이 실제 우주와 일치하나요?',
                 a: '본 도구의 거리 계산은 <strong>단순화된 모델</strong>입니다. 실제 우주는 ① 별이 나선팔에 집중(균등 분포 X) ② 은하 중심 vs 외곽 별 밀도 차이 ③ 거주 가능 영역(Galactic Habitable Zone) 제한이 있습니다. 태양 근처 별 평균 간격은 약 4광년. 본 도구는 평균 거리 직관용이며 실제 위치 예측이 아닙니다.' },
             ]
 
-export default async function DrakePage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ r?: string; fp?: string; ne?: string; fl?: string; fi?: string; fc?: string; l?: string }>
-}) {
-  const sp = (await searchParams) ?? {}
-  const initial: {
-    rStar?: number; fp?: number; ne?: number; fl?: number; fi?: number; fc?: number; L?: number
-  } = {}
-  // 범위는 슬라이더 [min,max]와 일치 — 벗어난 URL 값은 무시하고 기본값 사용
-  const rStar = parseNumParam(sp.r, 1, 10);         if (rStar !== undefined) initial.rStar = rStar
-  const fp    = parseNumParam(sp.fp, 0.1, 1);       if (fp    !== undefined) initial.fp    = fp
-  const ne    = parseNumParam(sp.ne, 0.1, 5);       if (ne    !== undefined) initial.ne    = ne
-  const fl    = parseNumParam(sp.fl, 0.001, 1);     if (fl    !== undefined) initial.fl    = fl
-  const fi    = parseNumParam(sp.fi, 0.001, 1);     if (fi    !== undefined) initial.fi    = fi
-  const fc    = parseNumParam(sp.fc, 0.001, 1);     if (fc    !== undefined) initial.fc    = fc
-  const L     = parseNumParam(sp.l,  1, 100_000_000); if (L   !== undefined) initial.L     = L
-
+// 공유 링크 파라미터(?r=&fp=…)는 Client가 마운트 후 window.location.search로 읽는다 (페이지 SSG 유지)
+export default function DrakePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
@@ -68,7 +51,7 @@ export default async function DrakePage({
         외계 문명은 몇 개나 존재할까. 7개 변수를 직접 조정하며 <strong style={{ color: 'var(--text)' }}>페르미 역설</strong>까지.
       </p>
 
-      <DrakeEquationClient initial={initial} />
+      <DrakeEquationClient radioRangeLy={RADIO_LY} />
 
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
@@ -242,11 +225,11 @@ export default async function DrakePage({
               </thead>
               <tbody>
                 {[
-                  { n: '100',       avg: '약 4,282 광년', near: '약 2,355 광년', rt: '약 4,711년',  note: '인류 전파(126ly) 미도달' },
+                  { n: '100',       avg: '약 4,282 광년', near: '약 2,355 광년', rt: '약 4,711년',  note: `인류 전파(${RADIO_LY}ly) 미도달` },
                   { n: '1,000',     avg: '약 1,988 광년', near: '약 1,093 광년', rt: '약 2,187년',  note: '균형론 · 전파권 밖' },
                   { n: '10,000',    avg: '약 923 광년',   near: '약 507 광년',   rt: '약 1,015년',  note: '드레이크 본인 추정' },
                   { n: '100,000',   avg: '약 428 광년',   near: '약 236 광년',   rt: '약 471년',     note: '전파권 밖 (근접)' },
-                  { n: '1,000,000', avg: '약 199 광년',   near: '약 109 광년',   rt: '약 219년',     note: '낙관론(칼 세이건) — 전파권 안' },
+                  { n: '1,000,000', avg: '약 199 광년',   near: '약 109 광년',   rt: '약 219년',     note: '칼 세이건 추정 수준 — 전파권 안' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>N = {r.n}</td>
@@ -270,7 +253,7 @@ export default async function DrakePage({
             📡 인류 전파권 시간선
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            인류는 1900년경 첫 라디오 방송을 시작했습니다. 2026년 기준 전파 도달 거리는 약 <strong style={{ color: 'var(--text)' }}>126광년</strong>, 100광년 내 별 약 <strong style={{ color: 'var(--text)' }}>14,000개</strong>를 통과했습니다. 가까운 별 도달 시점은 다음과 같습니다.
+            인류는 {RADIO_START_YEAR}년경 첫 라디오 송신을 시작했습니다. {RADIO_ASOF_YEAR}년 기준 전파 도달 거리는 약 <strong style={{ color: 'var(--text)' }}>{RADIO_LY}광년</strong>, 100광년 내 별 약 <strong style={{ color: 'var(--text)' }}>14,000개</strong>를 통과했습니다. 가까운 별 도달 시점은 다음과 같습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -289,7 +272,7 @@ export default async function DrakePage({
                   ['베가 (직녀성)',                    '25.0 광년',   '약 1925년'],
                   ['알타이르 (견우성)',                '16.7 광년',   '약 1917년'],
                   ['100광년 거리 별',                  '100 광년',    '약 2000년'],
-                  ['현재 전파 최외곽',                 '126 광년',    '2026년 (현재)'],
+                  ['현재 전파 최외곽',                 `${RADIO_LY} 광년`, `${RADIO_ASOF_YEAR}년 (현재)`],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>

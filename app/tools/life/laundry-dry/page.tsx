@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { KRW_PER_KWH, KEPCO_RATES_ASOF, KEPCO_RESIDENTIAL_LOW_TIERS } from './laundryUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/life/laundry-dry',
@@ -22,11 +23,11 @@ const FAQ_LD = [
               { q: '이불커버는 얼마나 걸리나요?',
                 a: '이불커버는 면 소재 기준 실외 맑은 날 6~8시간, 실내에서는 12시간 이상 걸릴 수 있습니다. 건조 중 1~2회 위치를 바꿔주면 접힌 부분도 균일하게 마릅니다. 이불 본체는 훨씬 오래 걸려 가능하면 코인세탁방 건조기 사용을 추천합니다.' },
               { q: '빨래건조지수란 무엇인가요?',
-                a: '기상청에서 제공하는 생활기상지수로, 온도·습도·풍속·일사량을 종합해 빨래 건조에 얼마나 적합한지 5단계(매우 나쁨~매우 좋음)로 나타냅니다. 본 계산기는 이와 유사한 방식으로 각 조건을 종합해 예상 건조 시간을 계산합니다.' },
+                a: '기온·습도·바람·햇빛을 종합해 빨래가 얼마나 잘 마르는 날씨인지 단계로 나타낸 생활 날씨 지표입니다. 제공처와 단계 구분은 날씨 서비스마다 다릅니다. 본 계산기는 이와 유사한 방식으로 각 조건을 종합해 예상 건조 시간을 계산합니다.' },
               { q: '보유 장비별 가장 빠른 건조 조합은?',
                 a: '본 도구의 [⚡ 최단 조합 추천] 탭에서 보유 장비별 모든 조합을 자동 계산합니다. <strong>단축률은 습도가 높을수록 제습 효과가 커져 환경에 따라 달라집니다.</strong> 장마철(습도 90%) 예시:<br/>• <strong>1순위:</strong> 제습기 + 서큘레이터 + 추가 탈수 (약 -67%)<br/>• 제습기 + 서큘레이터 (약 -60%)<br/>• 제습기가 없으면 서큘레이터 + 추가 탈수 (약 -51%, 거의 무료)<br/>• 가장 저렴: 서큘레이터만 (약 -40%)<br/>※ 에어컨 제습도 강력(-60%대)하나 전력(800W)이 큽니다. 습도가 낮은 봄·가을엔 제습 효과가 작아 서큘레이터·추가 탈수가 더 효율적, 겨울은 난방을 권장합니다. 탭 결과가 가장 정확합니다.' },
               { q: '빨래 건조에 전기료 얼마나 드나요?',
-                a: '한국 평균 5시간 사용 기준 (2026, 2단계 200원/kWh):<br/>• 선풍기: <strong>약 50원</strong><br/>• 서큘레이터: 약 30원 (★ 가장 효율적)<br/>• 제습기: 약 200원 (장마철 필수)<br/>• 에어컨 제습: 약 800원 (전기료 ↑)<br/>• 난방·라디에이터: 약 1,500원<br/>가장 저렴한 옵션은 서큘레이터만 사용. 누진제 3단계(400kWh+)면 표시 금액 ×약 1.5배.' },
+                a: `5시간 사용 기준 (기본요금·부가세 등 포함 가구 평균 약 ${KRW_PER_KWH}원/kWh):<br/>• 선풍기: <strong>약 50원</strong><br/>• 서큘레이터: 약 30원 (★ 가장 효율적)<br/>• 제습기: 약 200원 (장마철 필수)<br/>• 에어컨 제습: 약 800원 (전기료 ↑)<br/>• 난방·라디에이터: 약 1,500원<br/>가장 저렴한 옵션은 서큘레이터만 사용. 누진제 3단계(월 400kWh 초과) 가구는 추가로 쓰는 전기의 단가가 높아 실제 비용이 이보다 더 나옵니다.` },
               { q: '욕실에서 빨래 건조해도 되나요?',
                 a: '한국 가정 인기 방법, 단 주의 필요:<br/><strong>장점</strong> — 작은 공간 + 환풍기 효율 ↑ (-25%), 거실 공간 절약<br/><strong>주의</strong> — 욕실 곰팡이 ↑ 가능성 / 사용 후 24시간+ 환풍기 가동 / 1~2명분만 (이불·다수 X) / 대안으로 발코니·베란다 우선 권장.' },
               { q: '오늘 저녁 6시까지 빨래 마르나요?',
@@ -245,7 +246,7 @@ export default function LaundryDryPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            * 한국 평균 200원/kWh 기준. 같은 카테고리(예: 선풍기 + 서큘레이터) 동시 사용 시 효과가 큰 쪽만 적용됩니다. 제습기·에어컨·난방의 실제 시간 단축률은 <strong style={{ color: 'var(--text)' }}>현재 습도·온도에 따라 달라집니다</strong>(고습도일수록 제습 효과 ↑) — 위 [최단 조합 추천] 탭이 환경별로 자동 계산합니다.
+            * 가구 평균 약 {KRW_PER_KWH}원/kWh(기본요금·부가세 등 포함) 기준. 같은 카테고리(예: 선풍기 + 서큘레이터) 동시 사용 시 효과가 큰 쪽만 적용됩니다. 제습기·에어컨·난방의 실제 시간 단축률은 <strong style={{ color: 'var(--text)' }}>현재 습도·온도에 따라 달라집니다</strong>(고습도일수록 제습 효과 ↑) — 위 [최단 조합 추천] 탭이 환경별로 자동 계산합니다.
           </p>
         </div>
 
@@ -255,23 +256,23 @@ export default function LaundryDryPage() {
             한국 전기료 누진제 영향
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            본 도구는 한국 평균 약 <strong style={{ color: 'var(--text)' }}>200원/kWh</strong>(2단계) 기준으로 전기료를 추정합니다. 실제 요금은 누진제 단계에 따라 큰 차이가 납니다.
+            본 도구는 기본요금·기후환경요금·부가세 등을 모두 합친 가구 평균 약 <strong style={{ color: 'var(--text)' }}>{KRW_PER_KWH}원/kWh</strong>로 전기료를 추정합니다. 실제 요금은 누진 단계에 따라 큰 차이가 납니다. 아래는 한전 주택용(저압) 구간별 전력량요금입니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>구간 (월)</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>kWh당 요금</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>kWh당 전력량요금</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',  color: 'var(--muted)', fontWeight: 500 }}>예시 가정</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { s: '1단계 (200kWh 이하)',     p: '약 90원',   e: '1~2인 가정·절약 가구' },
-                  { s: '2단계 (201~400kWh)',     p: '약 190원',  e: '평균 가정 (본 도구 기준)' },
-                  { s: '3단계 (400kWh 초과)',    p: '약 290원',  e: '여름·겨울 에어컨/난방 가정' },
-                ].map((r, i) => (
+                {KEPCO_RESIDENTIAL_LOW_TIERS.map((t, i) => ({
+                  s: `${t.label} (${t.range})`,
+                  p: `${t.krwPerKwh.toFixed(1)}원`,
+                  e: ['1~2인 가정·절약 가구', '평균 가정', '여름·겨울 에어컨/난방 가정'][i],
+                })).map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
@@ -282,7 +283,7 @@ export default function LaundryDryPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            ⚠️ 여름·겨울 누진제 ↑ 시기에는 빨래 비용도 ↑. 정확한 요금은 한국전력 고객센터(123) 또는 한전 모바일 앱에서 확인.
+            ⚠️ 7~8월에는 구간이 {KEPCO_RESIDENTIAL_LOW_TIERS.map(t => t.summerRange).slice(0, 2).join(' / ')}로 넓어집니다. 기본요금·기후환경요금·연료비조정요금·부가세·전력기반기금은 별도라 실제 kWh당 부담은 표보다 큽니다. 기준: {KEPCO_RATES_ASOF}, <a href="https://home.kepco.co.kr/kepco/front/html/CY/E/E/CYEEHP00101.html" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>한국전력 주택용 전기요금표</a>. 정확한 요금은 한국전력 고객센터(123) 또는 한전 앱에서 확인하세요.
           </p>
         </div>
 

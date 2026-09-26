@@ -35,23 +35,31 @@ export default function PackingClient() {
 
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.days) setDays(j.days)
-      if (j.climate) setClimate(j.climate)
-      if (j.laundry) setLaundry(j.laundry)
-      if (j.activity) setActivity(j.activity)
-      if (j.photo) setPhoto(j.photo)
-      if (typeof j.needSports === 'boolean') setNeedSports(j.needSports)
-      if (typeof j.needFormal === 'boolean') setNeedFormal(j.needFormal)
-      if (typeof j.needBaby === 'boolean') setNeedBaby(j.needBaby)
-      if (j.people) setPeople(j.people)
-      if (j.checked) setChecked(j.checked)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
+      const o = j as Record<string, unknown>
+      if (typeof o.days === 'string' && o.days) setDays(o.days)
+      if (CLIMATES.some((c) => c.id === o.climate)) setClimate(o.climate as Climate)
+      if (LAUNDRIES.some((l) => l.id === o.laundry)) setLaundry(o.laundry as Laundry)
+      if (ACTIVITIES.some((a) => a.id === o.activity)) setActivity(o.activity as Activity)
+      if (PHOTOS.some((p) => p.id === o.photo)) setPhoto(o.photo as PhotoLevel)
+      if (typeof o.needSports === 'boolean') setNeedSports(o.needSports)
+      if (typeof o.needFormal === 'boolean') setNeedFormal(o.needFormal)
+      if (typeof o.needBaby === 'boolean') setNeedBaby(o.needBaby)
+      if (typeof o.people === 'string' && o.people) setPeople(o.people)
+      if (o.checked && typeof o.checked === 'object' && !Array.isArray(o.checked)) {
+        const next: Record<string, boolean> = {}
+        for (const [k, v] of Object.entries(o.checked as Record<string, unknown>)) if (typeof v === 'boolean') next[k] = v
+        setChecked(next)
+      }
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ days, climate, laundry, activity, photo, needSports, needFormal, needBaby, people, checked }))
     } catch {}
@@ -277,13 +285,13 @@ export default function PackingClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero} aria-live="polite">
+          <div className={s.hero} role="status" aria-live="polite">
             <p className={s.heroLabel}>{cliMeta.emoji} {cliMeta.label} · {days}일 ({Math.max(0, parseInt(days) - 1)}박) · {people}명</p>
             <p className={s.heroValue}>
               1인 총 무게 <strong>{fmtKg(comfortResult.totalWeight)}</strong>
             </p>
             <p className={s.heroSub}>
-              의류 {fmtKg(comfortResult.clothingWeight)} + 비의류 추정 {fmtKg(comfortResult.extrasWeight)} + 캐리어 {fmtKg(comfortResult.carrierWeight)}
+              의류 {fmtKg(comfortResult.clothingWeight)}(입고 타는 아우터·신발 {fmtKg(comfortResult.wornWeight)} 제외) + 비의류 추정 {fmtKg(comfortResult.extrasWeight)} + 캐리어 {fmtKg(comfortResult.carrierWeight)}
               {inp.people > 1 && <> · 전체 {inp.people}명 ≈ <strong style={{ color: 'var(--accent)' }}>{fmtKg(comfortResult.groupTotal)}</strong></>}
               <br />추천 캐리어 (1인당) <strong style={{ color: 'var(--accent)' }}>{comfortResult.carrier.label}</strong>
               {' · '}{comfortResult.carrier.capacity}
@@ -326,7 +334,7 @@ export default function PackingClient() {
           </div>
 
           <p className={s.helpText} style={{ textAlign: 'center', marginTop: -2 }}>
-            ※ 모든 무게는 <strong>1인 1캐리어 기준</strong> — 의류 + 비의류 추정 2.5kg(세면·화장품·전자·약·잡화) + 캐리어 자체
+            ※ 모든 무게는 <strong>1인 1캐리어 기준</strong> — 의류(입고 타는 아우터 1벌·신발 1켤레 제외) + 비의류 추정 2.5kg(세면·화장품·전자·약·잡화) + 캐리어 자체
           </p>
 
           {/* 캐리어 안내 */}
@@ -344,9 +352,9 @@ export default function PackingClient() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>🎒 기내 휴대 (20인치)</td><td className={s.cellMono}>~ 55cm</td><td className={s.cellMono}>~ 7kg</td><td>1~3박</td></tr>
-                  <tr><td>🧳 24인치 (중형)</td><td className={s.cellMono}>~ 65cm</td><td className={s.cellMono}>~ 15kg</td><td>3~7박</td></tr>
-                  <tr><td>🧳 28인치 (대형)</td><td className={s.cellMono}>~ 75cm</td><td className={s.cellMono}>~ 23kg</td><td>7박~</td></tr>
+                  <tr><td>🎒 기내 휴대 (20인치)</td><td className={s.cellMono}>~ 55cm</td><td className={s.cellMono}>~ 7~10kg</td><td>1~5박</td></tr>
+                  <tr><td>🧳 24인치 (중형)</td><td className={s.cellMono}>~ 65cm</td><td className={s.cellMono}>~ 15kg</td><td>5~14박</td></tr>
+                  <tr><td>🧳 28인치 (대형)</td><td className={s.cellMono}>~ 75cm</td><td className={s.cellMono}>~ 23kg</td><td>2주~</td></tr>
                 </tbody>
               </table>
             </div>

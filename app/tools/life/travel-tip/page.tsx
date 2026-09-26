@@ -93,7 +93,7 @@ export default function TravelTipPage() {
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
           💡 <strong style={{ color: 'var(--accent)' }}>봉사료(Service Charge) 자동 포함</strong> 국가는
-          별도 안내 카드가 표시됩니다. 미국 단체 6명+는 자동 18% 팁도 자동 적용.
+          별도 안내 카드가 표시됩니다. 미국처럼 단체(6명 이상)에 자동 팁(보통 18%)을 붙이는 업장이 많은 국가는, 식당 인원을 6명 이상으로 입력하면 영수증을 확인하라는 안내 카드가 뜹니다. 계산 금액은 선택한 만족도 기준 그대로예요.
         </p>
       </div>
 

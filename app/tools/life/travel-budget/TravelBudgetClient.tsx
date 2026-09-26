@@ -16,6 +16,9 @@ type Tab = 'calc' | 'cities' | 'diagnose' | 'compare'
 
 const STORAGE_KEY = 'youtil_travelbudget_v1'
 
+/* 9개 비용 항목 id — 저장된 dirty 복원 시 검증용 */
+const ITEM_IDS = ['flight', 'hotel', 'food', 'transport', 'shopping', 'ticket', 'comm', 'insurance', 'etc']
+
 /* 한국인이 자주 가는 주요 도시 — 계산 탭 기본 노출(나머지는 "더보기") */
 const POPULAR_CITY_IDS = ['tokyo', 'fukuoka', 'bangkok', 'danang', 'cebu', 'bali']
 
@@ -50,53 +53,90 @@ export default function TravelBudgetClient() {
   const [search, setSearch] = useState('')
   const [showAllCities, setShowAllCities] = useState(false)
 
+  /* 사용자가 직접 고친 항목 — 도시·스타일·시즌·항공사를 바꿀 때 이 항목은 다시 채우지 않음 */
+  const [dirty, setDirty] = useState<Record<string, boolean>>({})
+
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.cityId) setCityId(j.cityId)
-      if (j.style) setStyle(j.style)
-      if (j.days) setDays(j.days)
-      if (j.people) setPeople(j.people)
-      if (j.season) setSeason(j.season)
-      if (j.airline) setAirline(j.airline)
-      if (j.flight) setFlight(j.flight)
-      if (j.hotel) setHotel(j.hotel)
-      if (j.food) setFood(j.food)
-      if (j.transport) setTransport(j.transport)
-      if (j.shopping) setShopping(j.shopping)
-      if (j.ticket) setTicket(j.ticket)
-      if (j.comm) setComm(j.comm)
-      if (j.insurance) setInsurance(j.insurance)
-      if (j.etc) setEtc(j.etc)
-      if (j.reservePct) setReservePct(j.reservePct)
-      if (j.krwRate) setKrwRate(j.krwRate)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
+      const o = j as Record<string, unknown>
+      const str = (v: unknown) => (typeof v === 'string' && v !== '' ? v : null)
+      if (typeof o.cityId === 'string' && CITIES.some((c) => c.id === o.cityId)) setCityId(o.cityId)
+      if (STYLES.some((st) => st.id === o.style)) setStyle(o.style as Style)
+      if (str(o.days)) setDays(str(o.days)!)
+      if (str(o.people)) setPeople(str(o.people)!)
+      if (SEASONS.some((sn) => sn.id === o.season)) setSeason(o.season as Season)
+      if (AIRLINES.some((a) => a.id === o.airline)) setAirline(o.airline as Airline)
+      if (str(o.flight)) setFlight(str(o.flight)!)
+      if (str(o.hotel)) setHotel(str(o.hotel)!)
+      if (str(o.food)) setFood(str(o.food)!)
+      if (str(o.transport)) setTransport(str(o.transport)!)
+      if (str(o.shopping)) setShopping(str(o.shopping)!)
+      if (str(o.ticket)) setTicket(str(o.ticket)!)
+      if (str(o.comm)) setComm(str(o.comm)!)
+      if (str(o.insurance)) setInsurance(str(o.insurance)!)
+      if (str(o.etc)) setEtc(str(o.etc)!)
+      // 0%도 유효값 — falsy 체크로 버리지 않음
+      if (typeof o.reservePct === 'number' && Number.isFinite(o.reservePct) && o.reservePct >= 0 && o.reservePct <= 50) setReservePct(o.reservePct)
+      if (str(o.krwRate)) setKrwRate(str(o.krwRate)!)
+      /* 직접 고친 항목 표시 — 새로고침 뒤 선택을 바꿔도 사용자 값이 평균값으로 덮이지 않게 */
+      if (o.dirty && typeof o.dirty === 'object' && !Array.isArray(o.dirty)) {
+        setDirty(Object.fromEntries(
+          Object.entries(o.dirty as Record<string, unknown>).filter(([k, v]) => ITEM_IDS.includes(k) && v === true),
+        ) as Record<string, boolean>)
+      }
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         cityId, style, days, people, season, airline,
         flight, hotel, food, transport, shopping, ticket, comm, insurance, etc,
-        reservePct, krwRate,
+        reservePct, krwRate, dirty,
       }))
     } catch {}
-  }, [cityId, style, days, people, season, airline, flight, hotel, food, transport, shopping, ticket, comm, insurance, etc, reservePct, krwRate])
+  }, [cityId, style, days, people, season, airline, flight, hotel, food, transport, shopping, ticket, comm, insurance, etc, reservePct, krwRate, dirty])
 
-  /* 자동 채움 — overrideStyle 로 setStyle 직후의 stale state 회피 */
-  const fillAuto = (overrideStyle?: Style) => {
-    const a = autoFill({ cityId, style: overrideStyle ?? style, days: parseInt(days) || 1, people: parseInt(people) || 1, season, airline })
-    setFlight(String(a.flight))
-    setHotel(String(a.hotel))
-    setFood(String(a.food))
-    setTransport(String(a.transport))
-    setShopping(String(a.shopping))
-    setTicket(String(a.ticket))
-    setComm(String(a.comm))
-    setInsurance(String(a.insurance))
-    setEtc(String(a.etc))
+  /* 자동 채움 — override 로 setState 직후의 stale state 회피.
+     onlyClean=true면 사용자가 직접 고친(dirty) 항목은 건드리지 않음 */
+  type Sel = { cityId?: string; style?: Style; season?: Season; airline?: Airline }
+  const fillAuto = (override?: Style | Sel, onlyClean = false) => {
+    const o: Sel = typeof override === 'string' ? { style: override } : (override ?? {})
+    const a = autoFill({
+      cityId: o.cityId ?? cityId, style: o.style ?? style,
+      days: parseInt(days) || 1, people: parseInt(people) || 1,
+      season: o.season ?? season, airline: o.airline ?? airline,
+    })
+    const put = (id: string, set: (v: string) => void, v: number) => { if (!onlyClean || !dirty[id]) set(String(v)) }
+    put('flight', setFlight, a.flight)
+    put('hotel', setHotel, a.hotel)
+    put('food', setFood, a.food)
+    put('transport', setTransport, a.transport)
+    put('shopping', setShopping, a.shopping)
+    put('ticket', setTicket, a.ticket)
+    put('comm', setComm, a.comm)
+    put('insurance', setInsurance, a.insurance)
+    put('etc', setEtc, a.etc)
+    if (!onlyClean) setDirty({})
+  }
+
+  /* 도시·스타일·시즌·항공사 변경 — 직접 고치지 않은 항목은 새 조건 평균으로 다시 채움 */
+  const changeSelection = (sel: Sel) => {
+    if (sel.cityId && sel.cityId !== cityId) {
+      /* 통화가 다른 도시로 바꾸면 이전 통화 기준으로 입력한 환율을 비움 */
+      if (getCity(sel.cityId).currency !== getCity(cityId).currency) setKrwRate('')
+      setCityId(sel.cityId)
+    }
+    if (sel.style) setStyle(sel.style)
+    if (sel.season) setSeason(sel.season)
+    if (sel.airline) setAirline(sel.airline)
+    fillAuto(sel, true)
   }
 
   /* 계산 */
@@ -208,7 +248,7 @@ export default function TravelBudgetClient() {
                   key={c.id}
                   aria-pressed={cityId === c.id}
                   className={`${s.cityBtn} ${cityId === c.id ? s.cityBtnActive : ''}`}
-                  onClick={() => setCityId(c.id)}
+                  onClick={() => changeSelection({ cityId: c.id })}
                   type="button"
                 >
                   <span className={s.cityFlag} aria-hidden="true">{c.flag}</span>
@@ -237,7 +277,7 @@ export default function TravelBudgetClient() {
                     key={st.id}
                     aria-pressed={style === st.id}
                     className={`${s.pill} ${style === st.id ? s.pillActive : ''}`}
-                    onClick={() => setStyle(st.id)}
+                    onClick={() => changeSelection({ style: st.id })}
                     type="button"
                     style={{ borderColor: style === st.id ? st.color : undefined }}
                   >
@@ -255,7 +295,7 @@ export default function TravelBudgetClient() {
                       key={sn.id}
                       aria-pressed={season === sn.id}
                       className={`${s.pill} ${season === sn.id ? s.pillActive : ''}`}
-                      onClick={() => setSeason(sn.id)}
+                      onClick={() => changeSelection({ season: sn.id })}
                       type="button"
                     >
                       {sn.emoji} {sn.label.split(' ')[0]}
@@ -271,7 +311,7 @@ export default function TravelBudgetClient() {
                       key={a.id}
                       aria-pressed={airline === a.id}
                       className={`${s.pill} ${airline === a.id ? s.pillActive : ''}`}
-                      onClick={() => setAirline(a.id)}
+                      onClick={() => changeSelection({ airline: a.id })}
                       type="button"
                       title={a.desc}
                     >
@@ -354,14 +394,14 @@ export default function TravelBudgetClient() {
                     className={s.input}
                     aria-label={`${it.label} (만원)`}
                     value={it.v}
-                    onChange={(e) => it.set(e.target.value)}
+                    onChange={(e) => { it.set(e.target.value); setDirty((d) => (d[it.id] ? d : { ...d, [it.id]: true })) }}
                     min={0}
                     step={1}
                   />
                 </div>
               ))}
             </div>
-            <p className={s.helpText}>💡 숙박은 <strong style={{ color: 'var(--text)' }}>(여행일수 − 1)박</strong>으로 계산됩니다 (예: 5일 → 4박). 식비·교통은 매일 발생. 모든 항목은 <strong style={{ color: 'var(--text)' }}>1인 단위</strong> — 2인 1실·택시 분담 시 실제는 더 저렴할 수 있어요.</p>
+            <p className={s.helpText}>💡 도시·스타일·시즌·항공사를 바꾸면 직접 고치지 않은 항목은 새 조건의 평균값으로 다시 채워져요. 숙박은 <strong style={{ color: 'var(--text)' }}>(여행일수 − 1)박</strong>으로 계산됩니다 (예: 5일 → 4박, 1일 → 0박). 식비·교통은 매일 발생. 모든 항목은 <strong style={{ color: 'var(--text)' }}>1인 단위</strong> — 2인 1실·택시 분담 시 실제는 더 저렴할 수 있어요.</p>
           </div>
 
           <div className={s.card}>
@@ -401,7 +441,7 @@ export default function TravelBudgetClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero} aria-live="polite">
+          <div className={s.hero} role="status" aria-live="polite">
             <p className={s.heroLabel}>{city.flag} {city.shortName} · {STYLES.find((s) => s.id === style)!.label} · {inp.days}일 · {inp.people}명</p>
             <p className={s.heroValue}>
               총 <strong>{fmtMan(result.total)}</strong>
@@ -481,7 +521,7 @@ export default function TravelBudgetClient() {
                 key={c.id}
                 className={`${s.cityCard} ${cityId === c.id ? s.cityCardActive : ''}`}
                 onClick={() => {
-                  setCityId(c.id)
+                  changeSelection({ cityId: c.id })
                   setTab('calc')
                 }}
                 type="button"
@@ -633,7 +673,7 @@ export default function TravelBudgetClient() {
                   className={s.styleSelectBtn}
                   onClick={() => {
                     setStyle(sc.style.id)
-                    fillAuto(sc.style.id)
+                    fillAuto({ style: sc.style.id })
                     setTab('calc')
                   }}
                   type="button"

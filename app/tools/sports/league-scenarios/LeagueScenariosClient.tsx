@@ -91,8 +91,9 @@ function loadState(): SavedState | null {
         played.push({ home: mm.home, away: mm.away, result: mm.result })
       }
     }
+    // 진출 자리는 팀 수 - 1 이하 (전원 진출은 경우의 수가 무의미)
     const advance = typeof r.advance === 'number' && Number.isFinite(r.advance)
-      ? Math.max(1, Math.min(teams.length, Math.floor(r.advance))) : 2
+      ? Math.max(1, Math.min(teams.length - 1, Math.floor(r.advance))) : 2
     const focusId = typeof r.focusId === 'string' && ids.has(r.focusId) ? r.focusId : teams[0].id
     if (!COMPETITIONS.some((c) => c.id === r.presetId)) return null
     return { presetId: r.presetId, teams, remaining, played, advance, focusId }
@@ -122,6 +123,9 @@ function matchResultText(m: Match, o: Outcome, name: (id: string) => string): st
   if (o === 'away') return `${name(m.away)} 승`
   return `${name(m.home)}-${name(m.away)} 무`
 }
+
+/** 두 팀의 순서무관 키 (단판 풀리그 중복 대진 검사용) */
+const pairOf = (a: string, b: string) => (a < b ? `${a}|${b}` : `${b}|${a}`)
 
 const numFromInput = (raw: string, max: number): number => {
   const d = raw.replace(/[^0-9]/g, '').slice(0, 3)
@@ -168,12 +172,22 @@ export default function LeagueScenariosClient() {
     return (id: string) => map.get(id) ?? '?'
   }, [teams])
 
-  // 프리셋 변경: 진출 자리·기본 팀 수 반영(팀 수가 기본보다 적으면 채움). 팀명은 사용자 입력 보존.
+  // 프리셋 변경: 진출 자리·기본 팀 수 반영(팀 수가 기본보다 적으면 최대 8팀까지 채움). 팀명·성적은 사용자 입력 보존.
+  // 진출 자리는 팀 수 - 1 이하 — 4팀 상태에서 K리그(6자리)를 고르면 전원 진출(100%)이 되던 문제 방지
   const onPreset = (id: string) => {
     const c = getCompetition(id)
     setPresetId(id)
-    setAdvance(Math.max(1, Math.min(teams.length, c.advance)))
-    setAdvText(String(Math.max(1, Math.min(teams.length, c.advance))))
+    const want = Math.min(c.teams, 8)
+    let nextLen = teams.length
+    if (want > teams.length) {
+      const extra: Team[] = []
+      for (let i = teams.length; i < want; i++) extra.push(makeTeam(`팀 ${String.fromCharCode(65 + i)}`))
+      setTeams((prev) => [...prev, ...extra])
+      nextLen = want
+    }
+    const adv = Math.max(1, Math.min(nextLen - 1, c.advance))
+    setAdvance(adv)
+    setAdvText(String(adv))
   }
 
   /* ── 순위표 편집 ── */
@@ -194,9 +208,11 @@ export default function LeagueScenariosClient() {
       const next = teams.find((t) => t.id !== id)
       if (next) setFocusId(next.id)
     }
-    if (advance > teams.length - 1) {
-      setAdvance(teams.length - 1)
-      setAdvText(String(teams.length - 1))
+    // 삭제 후 팀 수(teams.length - 1)보다 진출 자리가 작아야 함
+    if (advance > teams.length - 2) {
+      const adv = Math.max(1, teams.length - 2)
+      setAdvance(adv)
+      setAdvText(String(adv))
     }
   }
 
@@ -223,7 +239,7 @@ export default function LeagueScenariosClient() {
   const onAdvChange = (raw: string) => {
     const d = raw.replace(/[^0-9]/g, '').slice(0, 2)
     setAdvText(d)
-    const n = d === '' ? 1 : Math.max(1, Math.min(teams.length, parseInt(d, 10) || 1))
+    const n = d === '' ? 1 : Math.max(1, Math.min(teams.length - 1, parseInt(d, 10) || 1))
     setAdvance(n)
   }
 
@@ -246,11 +262,18 @@ export default function LeagueScenariosClient() {
     remaining: dRemaining,
     played: dPlayed.length > 0 ? dPlayed : undefined,
     competition,
-    advance: Math.max(1, Math.min(dTeams.length, advance)),
+    advance: Math.max(1, Math.min(dTeams.length - 1, advance)),
     focusId,
   }), [dTeams, dRemaining, dPlayed, competition, advance, focusId])
 
-  const advanceLabel = advance >= teams.length ? '잔류' : `상위 ${advance}위 진출`
+  const advanceLabel = `상위 ${advance}위 진출`
+
+  // 단판 풀리그(월드컵·아시안컵 조별)에서 같은 대진이 맞대결 입력과 잔여 경기에 모두 있으면 입력 모순 가능성 안내
+  const dupPairs = useMemo(() => {
+    if (!competition.singleRoundRobin) return 0
+    const playedSet = new Set(validPlayed.map((p) => pairOf(p.home, p.away)))
+    return validRemaining.filter((m) => playedSet.has(pairOf(m.home, m.away))).length
+  }, [competition.singleRoundRobin, validPlayed, validRemaining])
 
   /* ── 공유 텍스트 ── */
   const shareText = useMemo(() => {
@@ -258,7 +281,8 @@ export default function LeagueScenariosClient() {
     const lines: string[] = []
     lines.push(`⚽ ${result.focusName} ${advanceLabel} 경우의 수 (${competition.name})`)
     lines.push(`진출 확정 ${result.advanceCount} / 전체 ${result.total}가지` +
-      (result.undeterminedCount > 0 ? ` · 갈림 ${result.undeterminedCount}가지` : ''))
+      (result.undeterminedCount > 0 ? ` · 갈림 ${result.undeterminedCount}가지` : '') +
+      (result.thirdPlaceCount > 0 ? ` · 조 ${advance + 1}위(타 조 비교) ${result.thirdPlaceCount}가지` : ''))
     lines.push(result.selfAdvancePossible ? '자력 진출 가능 ✅' : '자력 진출 불가(타 경기 결과 필요)')
     const adv = result.selfPaths.filter((p) => p.verdict === 'always_advance')
     if (adv.length > 0 && adv[0].ownMatches.length > 0) {
@@ -268,7 +292,7 @@ export default function LeagueScenariosClient() {
     }
     lines.push('— 모든 결과(승/무/패) 동일 가정·전력 미반영·베팅 아님 (youtil.kr)')
     return lines.join('\n')
-  }, [result, advanceLabel, competition.name, focusId])
+  }, [result, advanceLabel, competition.name, focusId, advance])
 
   const copyShare = () => {
     if (!shareText) return
@@ -285,11 +309,13 @@ export default function LeagueScenariosClient() {
   // 표 노출 상한
   const MAX_ROWS = 50
   const shownCombos = result.combos.slice(0, MAX_ROWS)
+  // 표는 엔진이 실제로 계산한 잔여 경기 배열로 렌더 (지연값·입력 변경 중에도 combo 인덱스와 일치)
+  const calcRemaining = result.remaining
   const ownIdxSet = useMemo(() => {
     const set = new Set<number>()
-    validRemaining.forEach((m, i) => { if (m.home === focusId || m.away === focusId) set.add(i) })
+    calcRemaining.forEach((m, i) => { if (m.home === focusId || m.away === focusId) set.add(i) })
     return set
-  }, [validRemaining, focusId])
+  }, [calcRemaining, focusId])
 
   const probPct = (result.advanceProbability * 100).toFixed(1)
 
@@ -326,6 +352,9 @@ export default function LeagueScenariosClient() {
           </div>
           {competition.needsHeadToHead && (
             <div className={s.h2hBadge}>승자승 우선 — 아래 ‘이미 치른 맞대결’ 입력 권장</div>
+          )}
+          {competition.teams > 8 && (
+            <div>이 대회는 {competition.teams}팀이지만 최대 8팀까지 입력할 수 있습니다. 순위 경쟁 중인 팀만 넣고, 진출 자리를 그 팀들 기준으로 맞춰 주세요.</div>
           )}
         </div>
       </div>
@@ -426,6 +455,11 @@ export default function LeagueScenariosClient() {
           </div>
         ))}
         <button type="button" className={s.addRowBtn} onClick={addMatch}>+ 잔여 경기 추가</button>
+        {dupPairs > 0 && (
+          <p className={`${s.matchCount} ${s.matchCountWarn}`}>
+            단판 조별리그는 같은 두 팀이 한 번만 만납니다. 이미 치른 맞대결과 잔여 경기에 같은 대진이 {dupPairs}건 있으니 입력을 확인하세요.
+          </p>
+        )}
         <p className={`${s.matchCount} ${validRemaining.length > 11 ? s.matchCountWarn : ''}`}>
           잔여 {validRemaining.length}경기 · 경우의 수 {validRemaining.length <= 11 ? Math.pow(3, validRemaining.length).toLocaleString() : '11경기 초과'}가지
           {validRemaining.length > 11 && ' — 12경기 이상은 전수 계산이 어렵습니다'}
@@ -530,7 +564,7 @@ export default function LeagueScenariosClient() {
             <div className={s.focusCard}>
               <p className={s.focusTitle}>{result.focusName} {advanceLabel} 시나리오</p>
               {result.selfPaths.map((p, i) => (
-                <SelfPathRow key={i} path={p} focusId={focusId} nameOf={nameOf} />
+                <SelfPathRow key={i} path={p} focusId={focusId} nameOf={nameOf} advance={advance} />
               ))}
             </div>
           )}
@@ -554,7 +588,15 @@ export default function LeagueScenariosClient() {
               {result.undeterminedCount > 0 && (
                 <span className={`${s.badge} ${s.badgeWarn}`}>경계서 갈림 {result.undeterminedCount}가지</span>
               )}
+              {result.thirdPlaceCount > 0 && (
+                <span className={`${s.badge} ${s.badgeWarn}`}>조 {advance + 1}위 {result.thirdPlaceCount}가지</span>
+              )}
             </div>
+            {result.thirdPlaceCount > 0 && (
+              <p className={s.heroAux}>
+                {result.thirdPlaceCount}가지는 조 {advance + 1}위로 끝나며, 다른 조 {advance + 1}위들과 성적을 비교해 진출 여부가 정해집니다(이 도구는 타 조 비교를 계산하지 않음).
+              </p>
+            )}
             {result.undeterminedCount > 0 && (
               <p className={s.heroAux}>
                 {result.undeterminedCount}가지는 승점이 같아 골득실·승자승 등 세부 기준에 따라 진출이 갈립니다.
@@ -589,10 +631,10 @@ export default function LeagueScenariosClient() {
                   </thead>
                   <tbody>
                     {shownCombos.map((c, ci) => {
-                      const own = validRemaining
+                      const own = calcRemaining
                         .map((m, mi) => (ownIdxSet.has(mi) ? matchResultText(m, c.combo[mi], nameOf) : null))
                         .filter((x): x is string => x !== null)
-                      const other = validRemaining
+                      const other = calcRemaining
                         .map((m, mi) => (!ownIdxSet.has(mi) ? matchResultText(m, c.combo[mi], nameOf) : null))
                         .filter((x): x is string => x !== null)
                       const rank = c.focusRankLo === c.focusRankHi
@@ -606,6 +648,7 @@ export default function LeagueScenariosClient() {
                           <td>
                             {c.focusStatus === 'advance' && <span className={s.statusAdv}>✅ 진출</span>}
                             {c.focusStatus === 'eliminated' && <span className={s.statusElim}>❌ 탈락</span>}
+                            {c.focusStatus === 'thirdPlace' && <span className={s.statusUnd}>🔶 {advance + 1}위 — 타 조 성적에 따라 진출 가능</span>}
                             {c.focusStatus === 'undetermined' && (
                               <span className={s.statusUnd}>
                                 🔶 {c.undeterminedBy ? `${CRITERION_LABEL[c.undeterminedBy]}에 따라 갈림` : '세부 기준에 따라 갈림'}
@@ -637,13 +680,13 @@ export default function LeagueScenariosClient() {
         </>
       )}
 
-      {toast && <div className={s.toast} role="status">{toast}</div>}
+      {toast && <div className={s.toast} aria-live="polite">{toast}</div>}
     </div>
   )
 }
 
 /* ── 자력/타력 분기 한 행 ── */
-function SelfPathRow({ path, focusId, nameOf }: { path: SelfPath; focusId: string; nameOf: (id: string) => string }) {
+function SelfPathRow({ path, focusId, nameOf, advance }: { path: SelfPath; focusId: string; nameOf: (id: string) => string; advance: number }) {
   // focus의 자기 경기 결과를 사람말로
   const condText = path.ownMatches.length === 0
     ? '자기 경기 없음'
@@ -664,9 +707,12 @@ function SelfPathRow({ path, focusId, nameOf }: { path: SelfPath; focusId: strin
     rowClass += ` ${s.pathElim}`
     icon = '❌'
     verdict = <>다른 경기 결과와 무관하게 <strong>탈락</strong></>
+  } else if (path.verdict === 'always_third') {
+    icon = '🔶'
+    verdict = <>다른 경기 결과와 무관하게 <strong>조 {advance + 1}위 확정</strong> — 다른 조 {advance + 1}위들과 성적을 비교해 진출이 정해집니다</>
   } else {
     icon = '🔶'
-    verdict = <>다른 경기 결과에 따라 갈림 — {advRatio} 조합에서 진출{path.undeterminedCount > 0 ? `, ${path.undeterminedCount}가지는 골득실·승자승서 갈림` : ''}<span className={s.depTag}>타력</span></>
+    verdict = <>다른 경기 결과에 따라 갈림 — {advRatio} 조합에서 진출{path.undeterminedCount > 0 ? `, ${path.undeterminedCount}가지는 골득실·승자승서 갈림` : ''}{path.thirdPlaceCount > 0 ? `, ${path.thirdPlaceCount}가지는 조 ${advance + 1}위(타 조 비교)` : ''}<span className={s.depTag}>타력</span></>
   }
 
   return (

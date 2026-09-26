@@ -29,7 +29,7 @@ export const ANIMATION_SPEEDS: { id: AnimSpeed; name: string; drawMs: number; st
 /* ─── 가로줄 난이도 (보통·많이) ─── */
 export type Difficulty = 'normal' | 'hard'
 export const DIFFICULTIES: { id: Difficulty; name: string; rowsMul: number; rungProb: number }[] = [
-  // 행·가로줄을 늘릴수록 섞임이 좋아져 도착 분포가 균등에 가까워진다(완전 균등은 아님).
+  // 난이도는 가로줄 개수(보이는 복잡도)만 바꾼다. 도착 확률은 generateFairLadder가 난이도와 관계없이 균등(1/n)으로 맞춘다.
   { id: 'normal', name: '보통 (권장)', rowsMul: 3.0, rungProb: 0.5 },
   { id: 'hard',   name: '많이 (복잡)', rowsMul: 5.0, rungProb: 0.6 },
 ]
@@ -54,14 +54,58 @@ export function generateLadder(participantCount: number, rows: number, rungProb 
   })
 }
 
+/** 공정한 사다리 — 도착 순열이 정확히 균등(누가 어느 결과에 닿을 확률이든 1/n).
+ *  무작위 가로줄만 쓰면 가까운 칸으로 내려갈 확률이 커서(8명·보통: 같은 칸 19.6% vs 반대 끝 5.8%)
+ *  입력 순서가 결과를 좌우한다. 그래서 ① 균등 난수 순열 π를 먼저 뽑고 ② 위·아래는 평소처럼 무작위
+ *  가로줄로 채운 뒤 ③ 가운데 n행에 홀짝 교환 정렬(odd-even transposition sort)로 가로줄을 놓아
+ *  전체 도착이 π가 되게 만든다. π가 위·아래 가로줄과 독립이므로 결과 분포는 정확히 균등하다.
+ *  행 수는 rows 그대로 (rows < n이면 n행). */
+export function generateFairLadder(participantCount: number, rows: number, rungProb = 0.45): boolean[][] {
+  const n = participantCount
+  if (n < 2) return Array.from({ length: Math.max(0, rows) }, () => [])
+  const fixRows = n                       // 홀짝 교환 정렬은 n라운드 안에 끝난다
+  const free = Math.max(0, rows - fixRows)
+  const topRows = Math.floor(free / 2)
+  const top = generateLadder(n, topRows, rungProb)
+  const bottom = generateLadder(n, free - topRows, rungProb)
+  const target = shuffleArray(Array.from({ length: n }, (_, i) => i))   // target[start] = 도착 칸
+  // 아래 구간을 지나면 칸 x → bottomDest[x]. 도착이 target[s]가 되려면 가운데 구간 끝에서 bottomInv[target[s]]에 있어야 함
+  const bottomInv = Array(n).fill(0)
+  for (let x = 0; x < n; x++) bottomInv[traceDest(bottom, x)] = x
+  // arr[col] = 지금 col에 있는 참가자가 가운데 구간 끝에서 가야 할 칸
+  const arr = Array(n).fill(0)
+  for (let st = 0; st < n; st++) arr[traceDest(top, st)] = bottomInv[target[st]]
+  const mid: boolean[][] = []
+  for (let round = 0; round < fixRows; round++) {
+    const row = Array(n - 1).fill(false)
+    for (let c = round % 2; c < n - 1; c += 2) {
+      if (arr[c] > arr[c + 1]) {
+        ;[arr[c], arr[c + 1]] = [arr[c + 1], arr[c]]
+        row[c] = true
+      }
+    }
+    mid.push(row)
+  }
+  return [...top, ...mid, ...bottom]
+}
+
+/** 저장·가져오기한 가로줄이 현재 인원·행 수와 맞는지 (행 길이 n−1, 인접 가로줄 없음) */
+export function isValidLadder(ladder: unknown, participantCount: number, rows?: number): ladder is boolean[][] {
+  if (!Array.isArray(ladder) || ladder.length === 0) return false
+  if (rows !== undefined && ladder.length !== rows) return false
+  return ladder.every((row) =>
+    Array.isArray(row) && row.length === participantCount - 1
+    && row.every((v, c) => typeof v === 'boolean' && !(v && row[c + 1] === true)))
+}
+
 /** 자기 배정 회피 사다리 — 참가자 이름이 자신의 도착 결과와 같지 않도록 재생성(시크릿 산타 등).
- *  names/results가 겹치지 않으면 첫 시도에서 통과하므로 일반 추첨에는 영향이 없다.
+ *  names/results를 넘길 때만(= '자기 배정 피하기'를 켰을 때만) 적용한다.
  *  데인지먼트가 불가능하면(중복 이름 등) maxTries 후 마지막 사다리를 반환. */
 export function generateLadderNoSelf(
   participantCount: number, rows: number, rungProb: number,
   names?: string[], results?: string[], maxTries = 200,
 ): boolean[][] {
-  let ladder = generateLadder(participantCount, rows, rungProb)
+  let ladder = generateFairLadder(participantCount, rows, rungProb)
   if (!names || !results) return ladder
   for (let t = 0; t < maxTries; t++) {
     let selfMatch = false
@@ -70,7 +114,7 @@ export function generateLadderNoSelf(
       if (n && n.trim() !== '' && n === results[traceDest(ladder, i)]) { selfMatch = true; break }
     }
     if (!selfMatch) return ladder
-    ladder = generateLadder(participantCount, rows, rungProb)
+    ladder = generateFairLadder(participantCount, rows, rungProb)
   }
   return ladder
 }
@@ -147,13 +191,35 @@ export type SavedGame = {
   updatedAt: string
 }
 
+/** 저장·가져오기 게임 검증 — 가로줄은 치수가 맞지 않으면 버리고(불러올 때 새로 생성) 게임은 살린다 */
+export function sanitizeGame(v: unknown): SavedGame | null {
+  if (!v || typeof v !== 'object') return null
+  const x = v as Record<string, unknown>
+  const strArr = (a: unknown) => Array.isArray(a) && a.every((s) => typeof s === 'string')
+  if (typeof x.id !== 'string' || typeof x.name !== 'string') return null
+  if (!strArr(x.participants) || !strArr(x.results)) return null
+  const participants = x.participants as string[]
+  if (participants.length < MIN_PARTICIPANTS || participants.length > MAX_PARTICIPANTS) return null
+  const results = (x.results as string[]).slice(0, participants.length)
+  while (results.length < participants.length) results.push('')
+  const difficulty = DIFFICULTIES.some((d) => d.id === x.difficulty) ? (x.difficulty as Difficulty) : undefined
+  const ladder = isValidLadder(x.ladder, participants.length) ? x.ladder : undefined
+  const now = new Date().toISOString()
+  return {
+    id: x.id, name: x.name, participants, results, ladder, difficulty,
+    notes: typeof x.notes === 'string' ? x.notes : undefined,
+    createdAt: typeof x.createdAt === 'string' ? x.createdAt : now,
+    updatedAt: typeof x.updatedAt === 'string' ? x.updatedAt : now,
+  }
+}
+
 export function loadGames(): SavedGame[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.map(sanitizeGame).filter((g): g is SavedGame => g !== null) : []
   } catch { return [] }
 }
 export function saveGames(items: SavedGame[]) {

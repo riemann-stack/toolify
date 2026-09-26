@@ -3,7 +3,11 @@ import AlcoholClient from './AlcoholClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
-import { SOJU_BRANDS, SOJU_ABV_ASOF, sojuBottleAlcoholG } from './alcoholUtils'
+import {
+  SOJU_BRANDS, SOJU_ABV_ASOF, sojuBottleAlcoholG,
+  KOREAN_GLASS_PRESETS, KOREAN_COCKTAIL_PRESETS, EQUIV_TARGETS,
+  ALCOHOL_DENSITY, STANDARD_DRINK_G, calcAlcohol, riskLevel,
+} from './alcoholUtils'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -14,9 +18,36 @@ export const metadata = buildMetadata({
   keywords: [
     '알코올도수계산기', '소맥도수계산기', '소맥 황금 비율', '하이볼 도수', '진토닉 도수',
     '술자리 1인당 알코올', '소주 맥주 환산', '와인 알코올량', '표준잔', '술자리 1인당 분배',
-    '소주 17.5도', '저위험 음주', '혼합주도수', '폭탄주도수', '표준음주량',
+    '소주 도수', '저위험 음주', '혼합주도수', '폭탄주도수', '표준음주량',
   ],
 })
+
+// ── 본문 수치는 계산기와 같은 프리셋·함수로 빌드 시 계산 (도수 변경 시 본문이 옛 값으로 남지 않게) ──
+const presetById = (id: string) => KOREAN_GLASS_PRESETS.find(g => g.id === id)!
+const SOJU_BOTTLE = presetById('soju-bottle')
+const BEER_CAN = presetById('beer-can')
+/** [1인당 분배] 탭과 같은 방식: 행별 알코올 g 합 → 음주자 수로 나눔 */
+function partyScenario(drinks: { ml: number; abv: number }[], people: number) {
+  const total = +drinks.reduce((sum, d) => sum + calcAlcohol(d.ml, d.abv).alcoholG, 0).toFixed(1)
+  const per = total / people
+  return {
+    total, per: per.toFixed(1), std: (per / STANDARD_DRINK_G).toFixed(1),
+    male: riskLevel(per, 'male'), femalePct: riskLevel(per, 'female').pct,
+  }
+}
+const SCN_A = partyScenario([{ ml: SOJU_BOTTLE.ml, abv: SOJU_BOTTLE.abv! }, { ml: BEER_CAN.ml * 4, abv: BEER_CAN.abv! }], 4)
+const SCN_B_SOJU_G = calcAlcohol(SOJU_BOTTLE.ml * 3, SOJU_BOTTLE.abv!).alcoholG
+const SCN_B_BEER_G = calcAlcohol(BEER_CAN.ml * 6, BEER_CAN.abv!).alcoholG
+const SCN_B = partyScenario([{ ml: SOJU_BOTTLE.ml * 3, abv: SOJU_BOTTLE.abv! }, { ml: BEER_CAN.ml * 6, abv: BEER_CAN.abv! }], 4)
+const SCN_C = partyScenario([
+  { ml: SOJU_BOTTLE.ml * 5, abv: SOJU_BOTTLE.abv! }, { ml: BEER_CAN.ml * 10, abv: BEER_CAN.abv! }, { ml: 200, abv: 40 },
+], 4)
+/** 칵테일 프리셋의 혼합 도수 (소수 1자리) */
+const cocktailAbv = (id: string) => {
+  const c = KOREAN_COCKTAIL_PRESETS.find(x => x.id === id)!
+  return `${((c.base.ml * c.base.abv + c.mixer.ml * c.mixer.abv) / (c.base.ml + c.mixer.ml)).toFixed(1)}%`
+}
+const HIGHBALL_ABV = EQUIV_TARGETS.find(t => t.name === '하이볼')!.abv
 
 const FAQ_LD = [
               {
@@ -33,7 +64,7 @@ const FAQ_LD = [
               },
               {
                 q: '하이볼 만들 때 위스키 + 탄산수 비율은?',
-                a: '일반적 황금 비율은 <strong>위스키 1 : 탄산수 9</strong> — 위스키 30ml + 탄산수 270ml로 약 4% 도수. 진하게는 1:6(약 5.7%), 약하게는 1:12(약 3.1%). 한국 술집 표준은 보통 1:7(약 5%) 수준입니다. 본 도구의 [목표 도수 희석] 탭에서 정확 계산 가능.',
+                a: '일반적 황금 비율은 <strong>위스키 1 : 탄산수 9</strong> — 위스키 30ml + 탄산수 270ml로 약 4% 도수. 진하게는 1:6(약 5.7%), 약하게는 1:12(약 3.1%). 본 도구의 [목표 도수 희석] 탭에서 정확 계산 가능.',
               },
               {
                 q: '같은 알코올량인데 술 종류에 따라 취하는 정도가 다른가요?',
@@ -41,7 +72,7 @@ const FAQ_LD = [
               },
               {
                 q: '4명이 소주 3병 + 맥주 6캔 마시면 1인당 얼마인가요?',
-                a: '본 도구의 [1인당 분배] 탭으로 자동 계산: 소주 3병(약 136g) + 맥주 6캔(약 107g) = 총 약 243g, 4명 균등 시 <strong>1인당 약 60.8g (7.6 표준잔)</strong>. 적정음주 참고 기준(남 32g)의 약 190%, (여 16g)의 약 380% — 기준 이내라도 안전을 뜻하지 않습니다(WHO). ⚠️ 절대 운전 X, 다음날 출근 운전도 단속 가능 (BAC 잔류). 일주일 이상 간격 권장.',
+                a: `본 도구의 [1인당 분배] 탭으로 자동 계산: 소주 3병(${SOJU_BOTTLE.abv}%, 약 ${SCN_B_SOJU_G}g) + 맥주 6캔(약 ${SCN_B_BEER_G}g) = 총 약 ${SCN_B.total}g, 4명 균등 시 <strong>1인당 약 ${SCN_B.per}g (${SCN_B.std} 표준잔)</strong>. 적정음주 참고 기준(남 32g)의 약 ${SCN_B.male.pct}%, (여 16g)의 약 ${SCN_B.femalePct}% — 기준 이내라도 안전을 뜻하지 않습니다(WHO). ⚠️ 절대 운전 X, 다음날 출근 운전도 단속 가능 (BAC 잔류). 일주일 이상 간격 권장.`,
               },
               {
                 q: '소주 도수가 제품마다 다른데 정확히 계산하려면?',
@@ -105,7 +136,7 @@ export default function AlcoholPage() {
                   ['🥣 막걸리 사발',    '200ml',   '6%',    '9.5g',   '#EA580C'],
                   ['🍶 사케 잔',        '60ml',    '15%',   '7.1g',   '#DB2777'],
                   ['🥤 종이컵',         '180ml',   '—',     '—',      '#0891B2'],
-                  ['🍹 하이볼잔',       '300ml',   '~7%',   '16.6g',  '#0891B2'],
+                  ['🍹 하이볼잔',       '300ml',   `~${HIGHBALL_ABV}%`, `${calcAlcohol(300, HIGHBALL_ABV).alcoholG}g`, '#0891B2'],
                   ['🍶 소주 1병',       '360ml',   '15.7%', '44.6g',  '#0EA5E9'],
                   ['🥫 맥주 1캔',       '500ml',   '4.5%',  '17.8g',  '#059669'],
                   ['🍶 막걸리 1병',     '750ml',   '6%',    '35.5g',  '#EA580C'],
@@ -146,12 +177,12 @@ export default function AlcoholPage() {
               </thead>
               <tbody>
                 {[
-                  { n: '🥃 하이볼',         r: '위스키 30ml + 탄산수 270ml (1:9)',  abv: '4.0%' },
-                  { n: '🍸 진토닉',          r: '진 45ml + 토닉워터 200ml',           abv: '7.3%' },
-                  { n: '🥃 잭콕',           r: '잭다니엘 30ml + 콜라 200ml',         abv: '5.2%' },
-                  { n: '🍊 스크류드라이버', r: '보드카 30ml + 오렌지주스 200ml',     abv: '5.2%' },
-                  { n: '🍻 소맥 황금 (1:8)', r: '소주 50ml + 맥주 400ml',           abv: '5.78%' },
-                  { n: '🍻 소맥 진하게(1:5)', r: '소주 60ml + 맥주 300ml',           abv: '6.4%' },
+                  { n: '🥃 하이볼',         r: '위스키 30ml + 탄산수 270ml (1:9)',  abv: cocktailAbv('highball') },
+                  { n: '🍸 진토닉',          r: '진 45ml + 토닉워터 200ml',           abv: cocktailAbv('gin-tonic') },
+                  { n: '🥃 잭콕',           r: '잭다니엘 30ml + 콜라 200ml',         abv: cocktailAbv('jack-coke') },
+                  { n: '🍊 스크류드라이버', r: '보드카 30ml + 오렌지주스 200ml',     abv: cocktailAbv('screw-driver') },
+                  { n: '🍻 소맥 황금 (1:8)', r: '소주 50ml + 맥주 400ml',           abv: cocktailAbv('somaek-gold') },
+                  { n: '🍻 소맥 진하게(1:5)', r: '소주 60ml + 맥주 300ml',           abv: cocktailAbv('somaek-strong') },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.n}</td>
@@ -186,14 +217,12 @@ export default function AlcoholPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['🍶 소주',     '16%',  '63ml',    '소주잔 50ml = 0.79 표준잔'],
-                  ['🍺 맥주',     '4.5%', '225ml',   '500ml 캔 = 2.22 표준잔'],
-                  ['🍷 와인',     '13%',  '78ml',    '와인잔 150ml = 1.93 표준잔'],
-                  ['🥃 위스키',   '40%',  '25ml',    '샷 30ml = 1.18 표준잔'],
-                  ['🥣 막걸리',   '6%',   '169ml',   '사발 200ml = 1.18 표준잔'],
-                  ['🍶 사케',     '15%',  '68ml',    '오쵸코 60ml = 0.89 표준잔'],
-                ].map((r, i) => (
+                {EQUIV_TARGETS.filter(t => t.name !== '하이볼').map(t => [
+                  `${t.emoji} ${t.name}`,
+                  `${t.abv}%`,
+                  `${Math.round((STANDARD_DRINK_G / ALCOHOL_DENSITY) * (100 / t.abv))}ml`,
+                  `${t.unitLabel.replace(/\(.*\)/, '')} ${t.unitMl}ml = ${calcAlcohol(t.unitMl, t.abv).standard} 표준잔`,
+                ]).map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[1]}</td>
@@ -218,27 +247,27 @@ export default function AlcoholPage() {
             {[
               {
                 title: '시나리오 A — 4명, 가벼운 술자리',
-                detail: '소주 1병 (16%) + 맥주 4캔 (500ml, 4.5%)',
-                perPerson: '1인당 약 29g (3.6 표준잔)',
-                risk: '🟡 참고 기준 남성 91% / 여성 182% (여성 크게 초과)',
-                color: '#FFD93E',
+                detail: `소주 1병 (${SOJU_BOTTLE.abv}%) + 맥주 4캔 (500ml, ${BEER_CAN.abv}%)`,
+                perPerson: `1인당 약 ${SCN_A.per}g (${SCN_A.std} 표준잔)`,
+                risk: `🟡 참고 기준 남성 ${SCN_A.male.pct}% / 여성 ${SCN_A.femalePct}% (여성 크게 초과)`,
+                color: SCN_A.male.color,
               },
               {
                 title: '시나리오 B — 4명, 보통 술자리',
                 detail: '소주 3병 + 맥주 6캔',
-                perPerson: '1인당 약 61g (7.6 표준잔)',
-                risk: '🟠 참고 기준 남성 190% / 여성 380% (크게 초과)',
-                color: '#EA580C',
+                perPerson: `1인당 약 ${SCN_B.per}g (${SCN_B.std} 표준잔)`,
+                risk: `🟠 참고 기준 남성 ${SCN_B.male.pct}% / 여성 ${SCN_B.femalePct}% (크게 초과)`,
+                color: SCN_B.male.color,
               },
               {
                 title: '시나리오 C — 4명, 회식 진한 술자리',
                 detail: '소주 5병 + 맥주 10캔 + 위스키 200ml',
-                perPerson: '1인당 약 117g (14.6 표준잔)',
+                perPerson: `1인당 약 ${SCN_C.per}g (${SCN_C.std} 표준잔)`,
                 risk: '🔴 위험 음주 — 절대 운전 X · 다음날 출근 운전도 단속 가능',
-                color: '#DC2626',
+                color: SCN_C.male.color,
               },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}25`, borderRadius: '12px', padding: '16px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${s.color} 15%, transparent)`, borderRadius: '12px', padding: '16px 18px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: s.color, marginBottom: '6px' }}>{s.title}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '6px' }}>{s.detail}</p>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>→ {s.perPerson}</p>

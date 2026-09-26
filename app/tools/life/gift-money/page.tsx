@@ -3,7 +3,7 @@ import GiftMoneyClient from './GiftMoneyClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
@@ -27,15 +27,6 @@ const card: React.CSSProperties = {
   borderRadius: '14px',
   padding: '18px 20px',
 }
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = { cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }
-const faqAnswer: React.CSSProperties = { marginTop: '10px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }
 
 const th: React.CSSProperties = {
   padding: '10px 12px', textAlign: 'left', fontSize: '11px', fontWeight: 700,
@@ -117,13 +108,13 @@ export default function GiftMoneyPage() {
         {/* 추천 기준 (산식 공개) */}
         <div>
           <h2 style={sectionTitle}>📐 이 계산기는 어떻게 추천하나요?</h2>
-          <div style={{ ...card, fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <div style={{ ...card, fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
             <p style={{ margin: '0 0 12px' }}>경조사비는 정해진 공식이 없지만, 본 계산기는 다음 <strong style={{ color: 'var(--text)' }}>4단계</strong>로 일반적 관례를 좁혀 추천합니다.</p>
             <ol style={{ margin: 0, paddingLeft: '20px', lineHeight: 1.95 }}>
               <li><strong style={{ color: 'var(--text)' }}>관계 기준액</strong> — 거래처·지인 5만원, 친구 10만원, 친한 사이·친척 20~30만원, 형제자매·직계가족 50~100만원으로 가까울수록 올라갑니다.</li>
               <li><strong style={{ color: 'var(--text)' }}>참석·조문 여부</strong> — 직접 가서 식사하면 기준액을, 마음만 전하면 한 단계 낮춰 잡습니다(“안 가면 5만, 가면 10만”).</li>
               <li><strong style={{ color: 'var(--text)' }}>동반 식대 가산</strong> — 결혼식에 배우자·자녀와 함께 가면 <strong style={{ color: 'var(--text)' }}>동반 1인당 식대(약 5만원)</strong>를 그대로 더합니다(예: 친한 친구 20만 → 부부 25만). 단, 금액이 식대를 크게 웃도는 직계가족(50만원+)은 더하지 않습니다.</li>
-              <li><strong style={{ color: 'var(--text)' }}>홀수 관례 참고</strong> — 기준액은 3·5·7·10만원 등 관례적으로 무난한 금액을 씁니다. 동반 식대를 더해 25·35만원처럼 떨어지면 “관례액 + 데려온 사람 식대”를 반영한 것이며, 부담되면 가까운 관례 금액(20·30만원)으로 맞춰도 됩니다.</li>
+              <li><strong style={{ color: 'var(--text)' }}>홀수 관례 참고</strong> — 기준액은 3·5·7·10만원 등 관례적으로 무난한 금액을 씁니다. 동반 식대를 더해 25·35만원처럼 떨어지면 “관례액 + 데려온 사람 식대”를 반영한 것이며, 부담되면 가까운 관례 금액(20·30만원)으로 맞춰도 됩니다. 합계가 40만원처럼 4로 시작하면 피하는 금액이라 50만원으로 올려 추천합니다.</li>
             </ol>
             <p style={{ margin: '14px 0 0' }}>
               <strong style={{ color: 'var(--text)' }}>언제 얼마?</strong> — 직장 동료·지인은 <strong style={{ color: 'var(--text)' }}>5만원</strong>, 보통 친구는 <strong style={{ color: 'var(--text)' }}>10만원</strong>, 친한 친구·가까운 친척은 <strong style={{ color: 'var(--text)' }}>20만원</strong> 안팎이 기준선이고, 여기에 참석·동반을 반영해 조정합니다.
@@ -174,16 +165,9 @@ export default function GiftMoneyPage() {
         </div>
 
         {/* FAQ */}
-        <div>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          {FAQ_LD.map((f, i) => (
-            <details key={i} style={faqDetails}>
-              <summary style={faqSummary}>Q{i + 1}. {f.q}</summary>
-              <div style={faqAnswer} dangerouslySetInnerHTML={{ __html: f.a }} />
-            </details>
-          ))}
-        </div>
+        <section>
+          <Faq items={FAQ_LD} />
+        </section>
 
         {/* 면책 */}
         <Disclaimer variant="default" open>

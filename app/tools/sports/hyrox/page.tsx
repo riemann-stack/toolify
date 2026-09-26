@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import HyroxClient from './HyroxClient'
+import { WALLBALL_REPS, WALLBALL_NOTE } from './hyroxData'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -32,7 +33,7 @@ const FAQ_LD = [
               },
               {
                 q: 'Open과 Pro의 차이는 무엇인가요?',
-                a: '운동 종류·순서는 같지만 <strong>중량이 다릅니다</strong>. 예) 썰매 밀기 Open 남 152kg → Pro 남 202kg, 월 볼 Open 남 6kg → Pro 남 9kg. 거리·횟수(런 8km, 월볼 100회 등)는 동일합니다. 입문이라면 Open으로 시작하는 것이 일반적입니다.',
+                a: `운동 종류·순서는 같지만 <strong>중량이 다릅니다</strong>. 예) 썰매 밀기 Open 남 152kg → Pro 남 202kg, 월 볼 Open 남 6kg → Pro 남 9kg. 런 8km와 스테이션 거리는 같고, 월 볼도 기본 ${WALLBALL_REPS}회입니다(여자 Open 횟수는 시즌에 따라 조정된 적이 있어 출전 시즌 룰북 확인 필요). 입문이라면 Open으로 시작하는 것이 일반적입니다.`,
               },
               {
                 q: '록스존(RoxZone)이 뭔가요?',
@@ -95,7 +96,7 @@ export default function HyroxPage() {
         <section>
           <h2 style={h2}>경기 진행 순서 (런 → 스테이션 8회 반복)</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -113,7 +114,7 @@ export default function HyroxPage() {
                     ['⑤ 런 ', '로잉 (Rowing)', '1,000m'],
                     ['⑥ 런 ', '파머스 캐리', '200m'],
                     ['⑦ 런 ', '샌드백 런지', '100m'],
-                    ['⑧ 런 ', '월 볼 (Wall Balls)', '100/75회'],
+                    ['⑧ 런 ', '월 볼 (Wall Balls)', `${WALLBALL_REPS}회`],
                   ].map((r, i) => (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                       <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: '#A16207', fontWeight: 700 }}>1km</span></td>
@@ -126,7 +127,7 @@ export default function HyroxPage() {
             </div>
           </div>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 매 스테이션 직전에 1km 달리기가 들어가므로 런은 총 8회(8km)입니다. 월 볼은 여자 Open만 75회, 나머지 부문(남자 Open·Pro, 여자 Pro)은 100회(2025/26 시즌 조정).
+            ※ 매 스테이션 직전에 1km 달리기가 들어가므로 런은 총 8회(8km)입니다. {WALLBALL_NOTE}
           </p>
         </section>
 
@@ -174,7 +175,7 @@ export default function HyroxPage() {
             2025년 11월에는 서울 코엑스에서 첫 서울 대회가 열렸고(참가자의 약 22%가 외국인), 2026년 5월 인천 대회는 국내 최초로 3일간 진행될 만큼 성장했습니다.
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -214,16 +215,7 @@ export default function HyroxPage() {
 
         {/* 5. FAQ */}
         <section>
-          <h2 style={h2}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ ...card, padding: '12px 16px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
-                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 6. 관련 도구 */}

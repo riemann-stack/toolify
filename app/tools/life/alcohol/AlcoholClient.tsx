@@ -34,6 +34,8 @@ function MixTab() {
   ])
   const [presetTarget, setPresetTarget] = useState<number>(1)
   const [glassMode, setGlassMode] = useState<'glass' | 'bottle'>('glass')
+  // 칵테일 프리셋(행 교체)·행 삭제로 대상 id가 사라지면 첫 행으로 폴백 — 잔 프리셋이 무반응이 되지 않게
+  const effTarget = items.some(it => it.id === presetTarget) ? presetTarget : items[0]?.id
 
   const update = useCallback((id: number, field: keyof Omit<DrinkItem, 'id'>, val: string) => {
     setItems(prev => prev.map(it => it.id === id ? { ...it, [field]: val } : it))
@@ -41,11 +43,11 @@ function MixTab() {
 
   const applyGlass = useCallback((g: GlassPreset, qty: number = 1) => {
     setItems(prev => prev.map(it =>
-      it.id === presetTarget
+      it.id === effTarget
         ? { ...it, name: g.name + (qty > 1 ? ` ×${qty}` : ''), volume: String(g.ml * qty), abv: g.abv === null ? it.abv : String(g.abv) }
         : it
     ))
-  }, [presetTarget])
+  }, [effTarget])
 
   const applyCocktail = useCallback((id: string) => {
     const c = KOREAN_COCKTAIL_PRESETS.find(x => x.id === id)
@@ -55,6 +57,13 @@ function MixTab() {
       { id: ++nextId, name: c.mixer.label, volume: String(c.mixer.ml), abv: String(c.mixer.abv) },
     ])
   }, [])
+
+  // 용량은 있는데 도수가 비었거나 0~100 밖인 행 — 조용히 빼지 않고 결과에 경고 (물·탄산수는 0% 입력)
+  const abvMissing = (it: DrinkItem) => {
+    const a = parseFloat(it.abv)
+    return parseFloat(it.volume) > 0 && !(a >= 0 && a <= 100)
+  }
+  const skippedCount = items.filter(abvMissing).length
 
   const result = useMemo(() => {
     const valid = items.filter(it => {
@@ -89,8 +98,8 @@ function MixTab() {
             {items.map(it => (
               <button key={it.id}
                 type="button"
-                aria-pressed={presetTarget === it.id}
-                className={`${styles.targetBtn} ${presetTarget === it.id ? styles.targetBtnActive : ''}`}
+                aria-pressed={effTarget === it.id}
+                className={`${styles.targetBtn} ${effTarget === it.id ? styles.targetBtnActive : ''}`}
                 onClick={() => setPresetTarget(it.id)}>
                 {it.name || `술 ${items.indexOf(it) + 1}`}
               </button>
@@ -145,9 +154,9 @@ function MixTab() {
             </div>
             <div className={styles.itemInputs} style={{ gridTemplateColumns: '1fr', gap: 8 }}>
               <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>용량</label>
+                <label className={styles.fieldLabel} htmlFor={`alc-vol-${it.id}`}>용량</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" inputMode="decimal"
+                  <input id={`alc-vol-${it.id}`} className={styles.numInput} type="number" inputMode="decimal"
                     placeholder="50" value={it.volume}
                     aria-label={`술 ${idx + 1} 용량 (ml)`}
                     onChange={e => update(it.id, 'volume', e.target.value)} />
@@ -155,10 +164,12 @@ function MixTab() {
                 </div>
               </div>
               <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>도수</label>
+                <label className={styles.fieldLabel} htmlFor={`alc-abv-${it.id}`}>도수</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" inputMode="decimal"
-                    placeholder="16" value={it.abv}
+                  <input id={`alc-abv-${it.id}`}
+                    className={`${styles.numInput} ${result && abvMissing(it) ? styles.numInputError : ''}`}
+                    type="number" inputMode="decimal"
+                    placeholder="15.7" value={it.abv}
                     aria-label={`술 ${idx + 1} 도수 (%)`}
                     onChange={e => update(it.id, 'abv', e.target.value)} />
                   <span className={styles.unit}>%</span>
@@ -178,7 +189,12 @@ function MixTab() {
 
       {/* 결과 */}
       {result ? (
-        <div className={styles.resultCard} aria-live="polite">
+        <div className={styles.resultCard} role="status">
+          {skippedCount > 0 && (
+            <p className={styles.errorMsg} style={{ marginBottom: 10 }}>
+              도수가 비어 있거나 0~100%를 벗어난 {skippedCount}개 행은 계산에서 빠졌어요. 물·탄산수라면 도수에 0을 입력하세요.
+            </p>
+          )}
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>혼합 도수</div>
@@ -297,17 +313,17 @@ function DilutionTab() {
         <label className={styles.cardLabel}>원액 정보</label>
         <div className={styles.itemInputs}>
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>용량</label>
+            <label className={styles.fieldLabel} htmlFor="alc-dil-ml">용량</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
+              <input id="alc-dil-ml" className={styles.numInput} type="number" inputMode="decimal"
                 placeholder="30" value={originalMl} aria-label="원액 용량 (ml)" onChange={e => setOriginalMl(e.target.value)} />
               <span className={styles.unit}>ml</span>
             </div>
           </div>
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>도수</label>
+            <label className={styles.fieldLabel} htmlFor="alc-dil-abv">도수</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
+              <input id="alc-dil-abv" className={styles.numInput} type="number" inputMode="decimal"
                 placeholder="40" value={originalAbv} aria-label="원액 도수 (%)" onChange={e => setOriginalAbv(e.target.value)} />
               <span className={styles.unit}>%</span>
             </div>
@@ -335,9 +351,9 @@ function DilutionTab() {
 
       {/* 목표 도수 */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>목표 도수</label>
+        <label className={styles.cardLabel} htmlFor="alc-dil-target">목표 도수</label>
         <div className={styles.inputRow}>
-          <input className={`${styles.numInput} ${invalidTarget ? styles.numInputError : ''}`}
+          <input id="alc-dil-target" className={`${styles.numInput} ${invalidTarget ? styles.numInputError : ''}`}
             type="number" inputMode="decimal"
             placeholder="7" value={targetAbv} aria-label="목표 도수 (%)" onChange={e => setTargetAbv(e.target.value)} />
           <span className={styles.unit}>%</span>
@@ -355,7 +371,7 @@ function DilutionTab() {
 
       {/* 결과 */}
       {result ? (
-        <div className={styles.resultCard} aria-live="polite">
+        <div className={styles.resultCard} role="status">
           <div className={styles.heroRow}>
             <div className={styles.heroBlock}>
               <div className={styles.heroLabel}>추가할 {dilution.name.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]\s*/u, '')}</div>
@@ -389,7 +405,7 @@ function DilutionTab() {
       {compareTable && (
         <div className={styles.card}>
           <label className={styles.cardLabel}>같은 원액 → 같은 목표 도수 만들기 비교</label>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table className={styles.compareTable}>
               <thead>
                 <tr>
@@ -453,17 +469,17 @@ function EquivTab() {
           ))}
         </div>
         <div className={styles.qtyRow}>
-          <span className={styles.qtyLabel} id="equiv-qty-label">갯수</span>
+          <span className={styles.qtyLabel} id="equiv-qty-label">개수</span>
           <div className={styles.qtyControls} role="group" aria-labelledby="equiv-qty-label">
-            <button type="button" aria-label="갯수 줄이기" className={styles.qtyBtn} onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
+            <button type="button" aria-label="개수 줄이기" className={styles.qtyBtn} onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
             <span className={styles.qtyValue} aria-live="polite">{qty}</span>
-            <button type="button" aria-label="갯수 늘리기" className={styles.qtyBtn} onClick={() => setQty(Math.min(50, qty + 1))}>+</button>
+            <button type="button" aria-label="개수 늘리기" className={styles.qtyBtn} onClick={() => setQty(Math.min(50, qty + 1))}>+</button>
           </div>
         </div>
       </div>
 
       {/* 결과 히어로 */}
-      <div className={styles.resultCard} aria-live="polite">
+      <div className={styles.resultCard} role="status">
         <div className={styles.heroBlock} style={{ marginBottom: 14 }}>
           <div className={styles.heroLabel}>{glass.icon} {glass.name} {qty}잔</div>
           <div className={styles.heroNum}>{calc.alcoholG}<span className={styles.heroUnit}>g</span></div>
@@ -473,7 +489,7 @@ function EquivTab() {
         </div>
 
         <label className={styles.cardLabel}>같은 알코올량을 다른 술로 환산</label>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table className={styles.compareTable}>
             <thead>
               <tr>
@@ -503,10 +519,10 @@ function EquivTab() {
       {/* 위험도 */}
       <div className={styles.card}>
         <label className={styles.cardLabel}>적정음주 참고 기준 대비 (1잔 8g 환산)</label>
-        <div className={styles.sexToggle} style={{ marginBottom: 12 }}>
-          <button className={`${styles.sexBtn} ${sex === 'male' ? styles.sexBtnActive : ''}`}
+        <div className={styles.sexToggle} style={{ marginBottom: 12 }} role="group" aria-label="성별 (1일 참고 기준)">
+          <button type="button" aria-pressed={sex === 'male'} className={`${styles.sexBtn} ${sex === 'male' ? styles.sexBtnActive : ''}`}
             onClick={() => setSex('male')}>남성 (32g/일)</button>
-          <button className={`${styles.sexBtn} ${sex === 'female' ? styles.sexBtnActive : ''}`}
+          <button type="button" aria-pressed={sex === 'female'} className={`${styles.sexBtn} ${sex === 'female' ? styles.sexBtnActive : ''}`}
             onClick={() => setSex('female')}>여성 (16g/일)</button>
         </div>
         <div className={styles.riskCard}>
@@ -602,10 +618,10 @@ function PartyTab() {
                   <option key={p.id} value={p.id}>{p.icon} {p.name} ({p.ml}ml, {p.abv}%)</option>
                 ))}
               </select>
-              <div className={styles.qtyControls} role="group" aria-label="갯수">
-                <button type="button" aria-label="갯수 줄이기" className={styles.qtyBtn} onClick={() => updateDrink(d.id, 'qty', Math.max(1, d.qty - 1))}>−</button>
+              <div className={styles.qtyControls} role="group" aria-label="개수">
+                <button type="button" aria-label="개수 줄이기" className={styles.qtyBtn} onClick={() => updateDrink(d.id, 'qty', Math.max(1, d.qty - 1))}>−</button>
                 <span className={styles.qtyValue} aria-live="polite">{d.qty}</span>
-                <button type="button" aria-label="갯수 늘리기" className={styles.qtyBtn} onClick={() => updateDrink(d.id, 'qty', Math.min(50, d.qty + 1))}>+</button>
+                <button type="button" aria-label="개수 늘리기" className={styles.qtyBtn} onClick={() => updateDrink(d.id, 'qty', Math.min(50, d.qty + 1))}>+</button>
               </div>
               {drinks.length > 1 && (
                 <button type="button" aria-label="이 술 삭제" className={styles.removeBtn} onClick={() => removeDrink(d.id)}>×</button>
@@ -642,7 +658,7 @@ function PartyTab() {
       {/* 결과 */}
       {totals.rows.length > 0 ? (
         <>
-          <div className={styles.resultCard} aria-live="polite">
+          <div className={styles.resultCard} role="status">
             <div className={styles.heroBlock} style={{ marginBottom: 14 }}>
               <div className={styles.heroLabel}>음주자 1인당 알코올</div>
               <div className={styles.heroNum}>{perPerson.toFixed(1)}<span className={styles.heroUnit}>g</span></div>
@@ -652,11 +668,12 @@ function PartyTab() {
             </div>
 
             <label className={styles.cardLabel}>입력 요약 (총 {totals.totalAlcG}g)</label>
+            <div className="tableScroll">
             <table className={styles.compareTable}>
               <thead>
                 <tr>
                   <th scope="col">술</th>
-                  <th scope="col">갯수</th>
+                  <th scope="col">개수</th>
                   <th scope="col" style={{ textAlign: 'right' }}>총 ml</th>
                   <th scope="col" style={{ textAlign: 'right' }}>알코올</th>
                 </tr>
@@ -672,6 +689,7 @@ function PartyTab() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* 위험도 */}
@@ -726,7 +744,7 @@ export default function AlcoholClient() {
 
   // 본인 기준 도수 변환 (혼합 탭 하단 보조 도구)
   const [convAlcG, setConvAlcG] = useState('19.2')
-  const [convSojuAbv, setConvSojuAbv] = useState(17.5)
+  const [convSojuAbv, setConvSojuAbv] = useState<number>(SOJU_BRANDS[0].abv)
 
   return (
     <div className={styles.wrap}>
@@ -739,6 +757,8 @@ export default function AlcoholClient() {
           <button key={t.id}
             role="tab"
             aria-selected={tab === t.id}
+            id={`alc-tab-${t.id}`}
+            aria-controls={tab === t.id ? 'alc-tabpanel' : undefined}
             type="button"
             className={`${styles.tab} ${tab === t.id ? styles.tabActive : ''}`}
             onClick={() => setTab(t.id)}>
@@ -747,27 +767,29 @@ export default function AlcoholClient() {
         ))}
       </div>
 
-      {tab === 'mix'    && <MixTab />}
-      {tab === 'dilute' && <DilutionTab />}
-      {tab === 'equiv'  && <EquivTab />}
-      {tab === 'party'  && <PartyTab />}
+      <div role="tabpanel" id="alc-tabpanel" aria-labelledby={`alc-tab-${tab}`}>
+        {tab === 'mix'    && <MixTab />}
+        {tab === 'dilute' && <DilutionTab />}
+        {tab === 'equiv'  && <EquivTab />}
+        {tab === 'party'  && <PartyTab />}
+      </div>
 
       {/* 본인 기준 도수 변환 (모든 탭 공통) */}
       <div className={styles.card} style={{ marginTop: 8 }}>
         <label className={styles.cardLabel}>본인 기준 도수로 변환 (알코올 g → 잔/병)</label>
         <div className={styles.itemInputs} style={{ marginBottom: 12 }}>
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>알코올 양</label>
+            <label className={styles.fieldLabel} htmlFor="alc-conv-g">알코올 양</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
+              <input id="alc-conv-g" className={styles.numInput} type="number" inputMode="decimal"
                 placeholder="19.2" value={convAlcG} aria-label="변환할 알코올 양 (g)" onChange={e => setConvAlcG(e.target.value)} />
               <span className={styles.unit}>g</span>
             </div>
           </div>
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>본인 소주 도수</label>
+            <label className={styles.fieldLabel} htmlFor="alc-conv-soju">본인 소주 도수</label>
             <div className={styles.sliderRow}>
-              <input type="range" min="14" max="25" step="0.5" value={convSojuAbv}
+              <input id="alc-conv-soju" type="range" min="14" max="25" step="0.1" value={convSojuAbv}
                 className={styles.slider}
                 aria-label="본인 소주 도수"
                 aria-valuetext={`${convSojuAbv}%`}
@@ -777,7 +799,7 @@ export default function AlcoholClient() {
           </div>
         </div>
         {parseFloat(convAlcG) > 0 && (
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table className={styles.compareTable}>
               <thead>
                 <tr>
@@ -809,17 +831,20 @@ export default function AlcoholClient() {
               </tbody>
             </table>
             <p className={styles.stdNote} style={{ marginTop: 8 }}>
-              ※ 한국 소주 도수(2026.7 기준·라벨 확인): 참이슬 후레쉬·진로·처음처럼 새로·좋은데이 15.7% · 참이슬 오리지널 16.9% · 한라산 오리지날 21%. 저도주화로 자주 바뀌니 라벨 확인 후 슬라이더 조정.
+              ※ 한국 소주 도수(2026.7 기준·라벨 확인): 참이슬 후레쉬·진로·처음처럼 새로·좋은데이 15.7% · 참이슬 오리지널 16.9% · 한라산 오리지날 21%. 저도주화로 자주 바뀌니 라벨을 확인하고 슬라이더나 아래 브랜드 버튼으로 맞추세요.
             </p>
           </div>
         )}
         <details style={{ marginTop: 10 }}>
           <summary style={{ fontSize: 12, color: 'var(--muted)', cursor: 'pointer' }}>주요 한국 소주 브랜드 도수 보기</summary>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 8 }} role="group" aria-label="브랜드 도수로 슬라이더 맞추기">
             {SOJU_BRANDS.map(b => (
-              <span key={b.brand} style={{ fontSize: 11, background: 'var(--bg3)', border: '1px solid var(--border)', padding: '3px 8px', borderRadius: 6, color: 'var(--muted)' }}>
-                {b.brand} <strong style={{ color: 'var(--accent)' }}>{b.abv}%</strong>
-              </span>
+              <button key={b.brand} type="button"
+                aria-pressed={convSojuAbv === b.abv}
+                onClick={() => setConvSojuAbv(b.abv)}
+                style={{ fontSize: 11, background: convSojuAbv === b.abv ? 'var(--bg2)' : 'var(--bg3)', border: `1px solid ${convSojuAbv === b.abv ? 'var(--accent)' : 'var(--border)'}`, padding: '3px 8px', borderRadius: 6, color: 'var(--muted)', cursor: 'pointer', fontFamily: 'inherit' }}>
+                {b.brand} <strong style={{ color: 'var(--accent-ink)' }}>{b.abv}%</strong>
+              </button>
             ))}
           </div>
         </details>

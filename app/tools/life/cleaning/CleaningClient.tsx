@@ -20,6 +20,15 @@ function recipe(sit: (typeof SITUATIONS)[number], volumeMl: number) {
   return { amount: '사용법 참고', sub: '' }
 }
 
+const VOL_MIN = 50
+const VOL_MAX = 20000
+/** 입력 문자열 → 계산용 ml (빈 값이면 null, 범위 밖은 50~20000으로 클램프) */
+function parseVolume(raw: string): number | null {
+  const n = parseFloat(raw)
+  if (!Number.isFinite(n) || n <= 0) return null
+  return Math.min(VOL_MAX, Math.max(VOL_MIN, Math.round(n)))
+}
+
 const PRESETS = [
   { label: '분무기 500ml', v: 500 },
   { label: '세면대 2L', v: 2000 },
@@ -28,12 +37,14 @@ const PRESETS = [
 
 export default function CleaningClient() {
   const [sitId, setSitId] = useState('kitchen-oil')
-  const [volume, setVolume] = useState(500)
+  // 입력 중 값은 문자열로 그대로 두고(지우기·여러 자리 입력 가능), 계산할 때만 클램프
+  const [volStr, setVolStr] = useState('500')
+  const volume = parseVolume(volStr)
 
   const sit = SITUATIONS.find((x) => x.id === sitId) ?? SITUATIONS[0]
   const agent = AGENT_MAP[sit.agentId]
   const alt = sit.altId ? AGENT_MAP[sit.altId] : null
-  const r = recipe(sit, volume)
+  const r = recipe(sit, volume ?? VOL_MIN)
   const usesVolume = !!((sit.gPerL && sit.gPerL > 0) || (sit.mlPerL && sit.mlPerL > 0))
 
   return (
@@ -103,14 +114,13 @@ export default function CleaningClient() {
         <div className={s.volRow}>
           <input
             className={s.input}
-            type="number"
+            type="text"
             inputMode="numeric"
             aria-label="만들 물 용량 (ml)"
-            min={50}
-            max={20000}
-            step={50}
-            value={volume}
-            onChange={(e) => setVolume(Math.max(50, Math.min(20000, Number(e.target.value) || 50)))}
+            placeholder="50~20000"
+            value={volStr}
+            onChange={(e) => setVolStr(e.target.value.replace(/[^0-9]/g, '').slice(0, 5))}
+            onBlur={() => { const v = parseVolume(volStr); if (v != null) setVolStr(String(v)) }}
           />
           <span className={s.unit}>ml</span>
         </div>
@@ -121,7 +131,7 @@ export default function CleaningClient() {
               type="button"
               aria-pressed={volume === p.v}
               className={`${s.preset} ${volume === p.v ? s.presetActive : ''}`}
-              onClick={() => setVolume(p.v)}
+              onClick={() => setVolStr(String(p.v))}
             >{p.label}</button>
           ))}
         </div>
@@ -135,16 +145,18 @@ export default function CleaningClient() {
           {sit.place} · {sit.stain}
         </div>
 
-        <div className={s.recipeBox} aria-live="polite">
+        <div className={s.recipeBox} role="status">
           <span className={s.agentChip} style={{ background: agent.color }}>{agent.name}</span>
           <div className={s.recipeMain}>
-            {usesVolume ? (
+            {usesVolume && volume == null ? (
+              <>위에 만들 물 용량(ml)을 입력하세요</>
+            ) : usesVolume && volume != null ? (
               <>물 <strong>{volume.toLocaleString('ko-KR')}ml</strong> + {agent.name} <strong style={{ color: agent.color }}>{r.amount}</strong></>
             ) : (
               <>{agent.name} <strong style={{ color: agent.color }}>정량 사용</strong> — 아래 사용법 참고</>
             )}
           </div>
-          {r.sub && <div className={s.recipeSub}>{r.sub}{sit.hot ? ' · 따뜻한 물(40~60℃) 사용' : ''}</div>}
+          {r.sub && !(usesVolume && volume == null) && <div className={s.recipeSub}>{r.sub}{sit.hot ? ' · 따뜻한 물(40~60℃) 사용' : ''}</div>}
           {!r.sub && sit.hot && <div className={s.recipeSub}>따뜻한 물(40~60℃) 사용</div>}
         </div>
 

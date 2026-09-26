@@ -40,19 +40,23 @@ export default function TravelTipClient() {
 
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.countryId) setCountryId(j.countryId)
-      if (j.serviceId) setServiceId(j.serviceId)
-      if (j.amount) setAmount(j.amount)
-      if (j.satisfaction) setSatisfaction(j.satisfaction)
-      if (j.people) setPeople(j.people)
-      if (j.krwRate) setKrwRate(j.krwRate)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
+      const o = j as Record<string, unknown>
+      if (typeof o.countryId === 'string' && COUNTRIES.some((c) => c.id === o.countryId)) setCountryId(o.countryId)
+      if (typeof o.serviceId === 'string' && SERVICES.some((sv) => sv.id === o.serviceId)) setServiceId(o.serviceId as ServiceId)
+      if (typeof o.amount === 'string' && o.amount) setAmount(o.amount)
+      if (typeof o.satisfaction === 'string' && SATISFACTIONS.some((sat) => sat.id === o.satisfaction)) setSatisfaction(o.satisfaction as Satisfaction)
+      if (typeof o.people === 'string' && o.people) setPeople(o.people)
+      if (typeof o.krwRate === 'string' && o.krwRate) setKrwRate(o.krwRate)
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ countryId, serviceId, amount, satisfaction, people, krwRate }))
     } catch {}
@@ -146,7 +150,11 @@ export default function TravelTipClient() {
                   key={c.id}
                   aria-pressed={countryId === c.id}
                   className={`${s.countryBtn} ${countryId === c.id ? s.countryBtnActive : ''}`}
-                  onClick={() => setCountryId(c.id)}
+                  onClick={() => {
+                    /* 통화가 다른 국가로 바꾸면 이전 통화 기준으로 입력한 환율을 비움 (EUR↔EUR 등은 유지) */
+                    if (c.currency !== country.currency) setKrwRate('')
+                    setCountryId(c.id)
+                  }}
                   type="button"
                   style={{ borderTopColor: CATEGORY_META[c.category].color }}
                 >
@@ -288,7 +296,7 @@ export default function TravelTipClient() {
           ) : (
           <>
           {/* 메인 결과 */}
-          <div className={s.hero} aria-live="polite">
+          <div className={s.hero} role="status" aria-live="polite">
             <p className={s.heroLabel}>
               {country.flag} {country.shortName} · {service.emoji} {service.shortLabel}
             </p>

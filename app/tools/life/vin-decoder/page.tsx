@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import VinDecoderClient from './VinDecoderClient'
 import AdSlot from '@/components/AdSlot'
 import Disclaimer from '@/components/Disclaimer'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import ToolIconBadge from '@/components/ToolIconBadge'
@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 
 const sectionTitle: CSSProperties = {
   fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '22px', fontWeight: 700, marginBottom: '14px', marginTop: '48px', letterSpacing: '-0.5px',
+  fontSize: '20px', fontWeight: 700, marginBottom: '14px', marginTop: '48px', letterSpacing: '-0.5px',
 }
 const card: CSSProperties = {
   background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '20px 22px', marginBottom: '14px',
@@ -26,14 +26,11 @@ const para: CSSProperties = { fontSize: '14px', color: 'var(--muted)', lineHeigh
 const cell: CSSProperties = { padding: '10px 14px', borderBottom: '1px solid var(--border)', fontSize: '13px', color: 'var(--text)', verticalAlign: 'top' }
 const headCell: CSSProperties = { padding: '10px 14px', textAlign: 'left', fontWeight: 700, fontSize: '12px', color: 'var(--muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg3)' }
 const codeCell: CSSProperties = { ...cell, fontFamily: 'Inter, ui-monospace, monospace', fontWeight: 700, letterSpacing: '0.06em', whiteSpace: 'nowrap' }
-const faqDetails: CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '8px' }
-const faqSummary: CSSProperties = { cursor: 'pointer', fontSize: '15px', fontWeight: 600, color: 'var(--text)', padding: '4px 0' }
-const faqAnswer: CSSProperties = { marginTop: '10px', paddingTop: '10px', borderTop: '1px solid var(--border)', fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }
 
 const FAQ_LD = [
   { "q": "차대번호로 사고 이력이나 주행거리를 알 수 있나요?", "a": "<strong>아니요.</strong> 본 도구는 VIN에 표준 규칙으로 인코딩된 <strong>구조 정보</strong>(제조국·제조사·연식·공장 등)만 해석합니다. 사고·주행거리·소유자·압류 같은 <strong>이력은 VIN 문자 자체에 들어 있지 않으며</strong>, 별도의 공식 데이터베이스에서만 확인됩니다. 차량 이력은 <strong>카히스토리(보험개발원, carhistory.or.kr)</strong>, 압류·저당은 <strong>정부24 자동차등록원부</strong> 등 공식 서비스를 이용하세요." },
   { "q": "차대번호 17자리는 각각 무슨 의미인가요?", "a": "1~3번째 <strong>WMI</strong>(제조국·제조사), 4~8번째 <strong>VDS</strong>(차종·차체·엔진 등 제조사별 사양), 9번째 <strong>체크 디지트</strong>(검증용), 10번째 <strong>모델 연식</strong>, 11번째 <strong>조립 공장</strong>, 12~17번째 <strong>일련번호</strong>(생산 순서)입니다. I·O·Q는 숫자 1·0과 헷갈려 쓰지 않습니다." },
-  { "q": "10번째 자리로 연식을 어떻게 아나요?", "a": "10번째 자리는 한 글자로 모델 연식을 나타냅니다. 예를 들어 <strong>T = 1996년 또는 2026년</strong>, S = 1995/2025처럼 <strong>30년 주기로 중복</strong>됩니다. 같은 코드가 30년 차이로 두 번 쓰이므로, 최근 차량은 대개 뒤쪽(2010~) 연도입니다. I·O·Q·U·Z·0은 연식 코드로 쓰지 않습니다. [연식 코드] 탭에서 코드↔연도를 바로 변환할 수 있습니다." },
+  { "q": "10번째 자리로 연식을 어떻게 아나요?", "a": "10번째 자리는 한 글자로 모델 연식을 나타냅니다. 예를 들어 <strong>T = 1996년 또는 2026년</strong>, S = 1995/2025처럼 <strong>30년 주기로 중복</strong>됩니다. 같은 코드가 30년 차이로 두 번 쓰이므로, 알파벳 코드라면 요즘 차량은 대개 뒤쪽(2010~) 연도입니다. 숫자 코드 1~9는 2001~2009년식, W·X·Y는 1998~2000년식입니다(2028~2039년식은 아직 나오지 않은 연식). I·O·Q·U·Z·0은 연식 코드로 쓰지 않습니다. [연식 코드] 탭에서 코드↔연도를 바로 변환할 수 있습니다." },
   { "q": "체크 디지트(9번째 자리)는 무엇인가요? 불일치하면 위조인가요?", "a": "9번째 자리는 나머지 16자리를 정해진 가중치로 계산해 얻는 <strong>검산용 숫자(또는 X)</strong>입니다. 입력 오류를 잡아내는 용도죠. 다만 이 방식은 <strong>북미(NHTSA) 표준</strong>이라 유럽·일부 제조사는 적용하지 않거나 규칙이 다릅니다. 따라서 <strong>불일치가 곧 위변조를 뜻하지는 않습니다</strong> — 단순 오타이거나 체크 디지트 비적용 차량일 수 있습니다. 정확한 확인은 제조사·자동차등록증을 통해야 합니다." },
   { "q": "한국 차(현대·기아·제네시스)는 차대번호가 어떻게 시작하나요?", "a": "한국 생산 차량은 첫 글자가 <strong>K</strong>입니다. 현대는 <strong>KMH</strong>(승용)·<strong>KM8</strong>(SUV·MPV), 기아는 <strong>KNA·KND</strong>, 제네시스는 <strong>KMT·KMU</strong>, KG모빌리티(쌍용)는 <strong>KP…</strong>, 르노코리아는 <strong>KNM</strong>, 한국GM(쉐보레)은 <strong>KL…</strong>로 시작합니다. 단, 미국 등 해외 공장에서 만든 현대·기아는 그 나라 코드(예: 미국 생산 = 5로 시작)를 따릅니다." },
   { "q": "차대번호와 차량번호(번호판)는 다른가요?", "a": "네, 다릅니다. <strong>차대번호(VIN)</strong>는 차량마다 부여되는 17자리 고유 식별번호로 영구 불변입니다. <strong>차량번호(번호판)</strong>는 등록 번호로, 명의 이전·이사·말소 등에 따라 바뀔 수 있습니다. 본 도구가 해석하는 것은 <strong>차대번호(VIN)</strong>입니다." },
@@ -90,8 +87,8 @@ export default function VinDecoderPage() {
           <tbody>
             <tr><td style={codeCell}>J–R</td><td style={cell}>아시아</td><td style={cell}>K 한국, J 일본, L 중국</td></tr>
             <tr><td style={codeCell}>S–Z</td><td style={cell}>유럽</td><td style={cell}>W 독일, V 프랑스·스페인, Z 이탈리아, S 영국</td></tr>
-            <tr><td style={codeCell}>1–5</td><td style={cell}>북미</td><td style={cell}>1·4·5 미국, 2 캐나다, 3 멕시코</td></tr>
-            <tr><td style={codeCell}>6–7</td><td style={cell}>오세아니아</td><td style={cell}>호주·뉴질랜드</td></tr>
+            <tr><td style={codeCell}>1–5, 7F–7Z</td><td style={cell}>북미</td><td style={cell}>1·4·5 미국, 2 캐나다, 3 멕시코, 7F~7Z 미국(신규 할당, 예: 테슬라 텍사스 7SA)</td></tr>
+            <tr><td style={codeCell}>6, 7A–7E</td><td style={cell}>오세아니아</td><td style={cell}>6 호주, 7A~7E 뉴질랜드</td></tr>
             <tr><td style={codeCell}>8–0</td><td style={cell}>남미</td><td style={cell}>9 브라질 등</td></tr>
             <tr><td style={codeCell}>A–H</td><td style={cell}>아프리카</td><td style={cell}>남아공 등</td></tr>
           </tbody>
@@ -182,14 +179,9 @@ export default function VinDecoderPage() {
         입력한 VIN은 서버로 전송·자동 저장되지 않습니다.
       </Disclaimer>
 
-      <h2 style={sectionTitle}>❓ 자주 묻는 질문</h2>
-      <FaqJsonLd items={FAQ_LD} />
-      {FAQ_LD.map((f, i) => (
-        <details key={i} style={faqDetails}>
-          <summary style={faqSummary}>Q{i + 1}. {f.q}</summary>
-          <div style={faqAnswer} dangerouslySetInnerHTML={{ __html: f.a }} />
-        </details>
-      ))}
+      <section style={{ marginTop: '48px' }}>
+        <Faq items={FAQ_LD} />
+      </section>
     </div>
   )
 }

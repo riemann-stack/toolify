@@ -99,13 +99,22 @@ export const SOUND_THEMES: SoundTheme[] = [
   { id: 'silent',   name: '🔇 무음',    desc: '소리 끄기 (브라우저 알림만)', freq: 0, type: 'sine', duration: 0, pulses: 0 },
 ]
 
+/* AudioContext는 모듈 싱글턴으로 재사용 — 알림음마다 새로 만들면 닫히지 않은 컨텍스트가 쌓인다 */
+let sharedCtx: AudioContext | null = null
+function getAudioContext(): AudioContext | null {
+  const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }
+  const Ctx = w.AudioContext || w.webkitAudioContext
+  if (!Ctx) return null
+  if (!sharedCtx || sharedCtx.state === 'closed') sharedCtx = new Ctx()
+  if (sharedCtx.state === 'suspended') sharedCtx.resume().catch(() => {})
+  return sharedCtx
+}
+
 export function playSound(theme: SoundTheme) {
   if (theme.id === 'silent' || theme.duration === 0) return
   try {
-    const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }
-    const Ctx = w.AudioContext || w.webkitAudioContext
-    if (!Ctx) return
-    const ctx = new Ctx()
+    const ctx = getAudioContext()
+    if (!ctx) return
     const pulses = Math.max(1, theme.pulses ?? 1)
     for (let i = 0; i < pulses; i++) {
       const start = ctx.currentTime + i * (theme.duration + 0.12)
@@ -155,15 +164,27 @@ export function newId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8)
 }
 
+function isSession(v: unknown): v is PomodoroSession {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  return typeof o.id === 'string'
+    && typeof o.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(o.date)
+    && typeof o.ts === 'number' && Number.isFinite(o.ts)
+    && typeof o.task === 'string'
+    && (o.phase === 'focus' || o.phase === 'short' || o.phase === 'long')
+    && typeof o.durationMin === 'number' && Number.isFinite(o.durationMin)
+    && (o.preset === undefined || typeof o.preset === 'string')
+}
+
 export function loadSessions(): PomodoroSession[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw) as PomodoroSession[]
+    const arr: unknown = JSON.parse(raw)
     if (!Array.isArray(arr)) return []
     const cutoff = Date.now() - KEEP_DAYS * 86400_000
-    return arr.filter(s => s.ts >= cutoff)
+    return arr.filter(isSession).filter(s => s.ts >= cutoff)
   } catch { return [] }
 }
 

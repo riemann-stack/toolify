@@ -27,12 +27,21 @@ export const FORMATIONS_11: Formation[] = [
 ]
 
 export const FORMATIONS_9: Formation[] = [
-  { id: '9-3-3-2',   name: '3-3-2',   lines: [3, 3, 2],   desc: '균형. 청소년 9인제 표준' },
+  { id: '9-3-3-2',   name: '3-3-2',   lines: [3, 3, 2],   desc: '9인제 균형형' },
   { id: '9-3-2-3',   name: '3-2-3',   lines: [3, 2, 3],   desc: '공격형' },
   { id: '9-2-4-2',   name: '2-4-2',   lines: [2, 4, 2],   desc: '미들 강화' },
   { id: '9-3-4-1',   name: '3-4-1',   lines: [3, 4, 1],   desc: '수비형' },
   { id: '9-2-3-3',   name: '2-3-3',   lines: [2, 3, 3],   desc: '풀공격' },
   { id: '9-3-3-1-1', name: '3-3-1-1', lines: [3, 3, 1, 1], desc: '섀도우 스트라이커' },
+]
+
+// 8인제 (GK + 7) — 대한축구협회 초등부 경기 형식(2019~)
+export const FORMATIONS_8: Formation[] = [
+  { id: '8-3-3-1', name: '3-3-1',   lines: [3, 3, 1],   desc: '균형형 (스리백 + 원톱)' },
+  { id: '8-2-3-2', name: '2-3-2',   lines: [2, 3, 2],   desc: '공격형 투톱' },
+  { id: '8-3-2-2', name: '3-2-2',   lines: [3, 2, 2],   desc: '수비 안정 + 투톱' },
+  { id: '8-2-4-1', name: '2-4-1',   lines: [2, 4, 1],   desc: '미드 강화' },
+  { id: '8-3-1-3', name: '3-1-3',   lines: [3, 1, 3],   desc: '측면 공격 (스리톱)' },
 ]
 
 export const FORMATIONS_7: Formation[] = [
@@ -53,13 +62,14 @@ export const FORMATIONS_5: Formation[] = [
 ]
 
 export const ALL_FORMATIONS: Formation[] = [
-  ...FORMATIONS_11, ...FORMATIONS_9, ...FORMATIONS_7, ...FORMATIONS_5,
+  ...FORMATIONS_11, ...FORMATIONS_9, ...FORMATIONS_8, ...FORMATIONS_7, ...FORMATIONS_5,
 ]
 
 export function getFormationsByCount(total: number): Formation[] {
   switch (total) {
     case 11: return FORMATIONS_11
     case 9:  return FORMATIONS_9
+    case 8:  return FORMATIONS_8
     case 7:  return FORMATIONS_7
     case 5:  return FORMATIONS_5
     default: return []
@@ -120,6 +130,8 @@ export function positionLabel(lines: number[], lineIdx: number, posInLine: numbe
       if (innerCount === 1) return 'CM'
       if (innerCount === 2) return ['LCM', 'RCM'][k]
       if (innerCount === 3) return ['LCM', 'CM', 'RCM'][k]
+      // 3-6-1 등 안쪽 4명 — 좌우 대칭 라벨 (이전: LM LCM CM RCM로 오른쪽 RM 누락)
+      if (innerCount === 4) return (threeBack ? ['LM', 'LCM', 'RCM', 'RM'] : ['LCM', 'LDM', 'RDM', 'RCM'])[k]
       return ['LM', 'LCM', 'CM', 'RCM', 'RM'][k] ?? 'CM'
     }
     if (lineCount === 4) return pick(['LM', 'LCM', 'RCM', 'RM'])

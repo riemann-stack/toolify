@@ -85,6 +85,7 @@ function GenerateTab() {
   const [showAnalysis, setShowAnalysis] = useState(true)
   const [games, setGames] = useState<LottoGame[]>([])
   const [saveConfirm, setSaveConfirm] = useState(false)
+  const [copiedIdx, setCopiedIdx] = useState<number | null>(null)
   const [saved, setSaved] = useState<SavedNumber[]>([])
   useEffect(() => { setSaved(loadSaved()) }, [])
   const persist = (next: SavedNumber[]) => {
@@ -124,6 +125,14 @@ function GenerateTab() {
     persist([...saved, { id: newId(), numbers: g.numbers, mode, savedAt: new Date().toISOString() }])
     setSaveConfirm(true)
     setTimeout(() => setSaveConfirm(false), 1500)
+  }
+
+  const handleCopyOne = async (i: number, g: LottoGame) => {
+    try {
+      await navigator.clipboard.writeText(g.numbers.join(', '))
+      setCopiedIdx(i)
+      setTimeout(() => setCopiedIdx((cur) => (cur === i ? null : cur)), 1500)
+    } catch { /* 클립보드 권한 거부 등 — 조용히 무시 */ }
   }
 
   const handleSaveAll = () => {
@@ -251,9 +260,9 @@ function GenerateTab() {
                     <small>{GENERATION_MODES.find(m => m.id === mode)?.name}</small>
                   </span>
                   <div className={s.miniRow}>
-                    <button className={s.miniBtn}
-                      onClick={() => navigator.clipboard.writeText(g.numbers.join(', '))}>
-                      복사
+                    <button className={s.miniBtn} type="button"
+                      onClick={() => handleCopyOne(i, g)}>
+                      {copiedIdx === i ? '✓ 복사됨' : '복사'}
                     </button>
                     <button className={s.miniBtn} onClick={() => handleSaveOne(g)}>저장</button>
                   </div>
@@ -548,7 +557,7 @@ function SimulatorTab() {
 
       {result && (
         <>
-          <div className={s.simHero}>
+          <div className={s.simHero} role="status" aria-live="polite">
             <div className={s.simHeroTitle}>{result.totalGames.toLocaleString()}회 가상 구매 결과</div>
             <div className={`${s.simHeroNum} ${result.netResult >= 0 ? s.simHeroProfit : s.simHeroLoss}`}>
               {result.netResult >= 0 ? '+' : ''}{result.netResult.toLocaleString()}원
@@ -592,7 +601,7 @@ function SimulatorTab() {
           <div className={s.warningBox}>
             <strong>⚠️ 시뮬레이션 결과 해석</strong> — 본 시뮬레이션은 무작위 추첨을 {result.totalGames.toLocaleString()}회 반복한 통계 결과이며, 실제 당첨을 예측하지 않습니다. 시뮬레이션 결과가 좋게 나와도 실제 구매 시 동일한 결과가 보장되지 않습니다. 1등 확률은 매 게임 1/8,145,060로 동일합니다.
             <br /><br />
-            로또는 오락 목적으로 즐기시고, 무리한 구매는 자제하세요. 도박 의존 우려 시 <a href="tel:1336">한국도박문제예방치유원 1336</a>(365일 09~22시, 무료) 상담받으실 수 있습니다.
+            로또는 오락 목적으로 즐기시고, 무리한 구매는 자제하세요. 도박 의존 우려 시 <a href="tel:1336">한국도박문제예방치유원 1336</a>(24시간·365일, 무료·익명)에서 상담받으실 수 있습니다.
           </div>
         </>
       )}
@@ -603,7 +612,9 @@ function SimulatorTab() {
 /* ═════════════════════════════════════════ 탭 4 — 1등 체감 ═════════════════════════════════════════ */
 function JackpotTab() {
   const [weeklyGames, setWeeklyGames] = useState(5)
-  const [startAge, setStartAge] = useState(30)
+  /* 입력칸을 비울 수 있게 문자열로 두고, 계산·blur 때 1~100으로 클램프 */
+  const [startAgeStr, setStartAgeStr] = useState('30')
+  const startAge = Math.max(1, Math.min(100, parseInt(startAgeStr, 10) || 30))
   const [result, setResult] = useState<FirstPrizeSimResult | null>(null)
   const [running, setRunning] = useState(false)
 
@@ -644,9 +655,11 @@ function JackpotTab() {
       <div className={s.card}>
         <label className={s.cardLabel}>시작 나이 (선택)</label>
         <div className={s.fieldRow}>
-          <input className={s.numberField} type="number" inputMode="decimal" min={1} max={100}
-            aria-label="시작 나이"
-            value={startAge} onChange={e => setStartAge(Math.max(1, Math.min(100, parseInt(e.target.value) || 30)))} />
+          <input className={s.numberField} type="text" inputMode="numeric"
+            aria-label="시작 나이 (1~100세)"
+            value={startAgeStr}
+            onChange={e => setStartAgeStr(e.target.value.replace(/[^\d]/g, '').slice(0, 3))}
+            onBlur={() => setStartAgeStr(String(startAge))} />
           <span style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center', fontFamily: 'Noto Sans KR, sans-serif' }}>
             결과에 &quot;{startAge + Math.round(avgYears)}세에 1등&quot; 형식으로 표시
           </span>
@@ -693,7 +706,7 @@ function JackpotTab() {
 
       {result && (
         <>
-          <div className={s.jackpotHero}>
+          <div className={s.jackpotHero} role="status" aria-live="polite">
             <div className={s.jackpotEmoji}>{result.reached ? '🎉' : '🕰️'}</div>
             <div className={s.jackpotTitle}>
               {result.reached ? '1등까지 걸린 시간' : '1000년 동안 1등 X'}
