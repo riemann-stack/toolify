@@ -773,10 +773,10 @@ export default function NumberBaseClient() {
               </div>
               <div className={s.meaningCard}>
                 결과: <strong>{learnNorm}</strong>
-                <sub style={{ fontSize: 10 }}>{learnSteps.source}</sub>
+                <sub style={{ fontSize: 11 }}>{learnSteps.source}</sub>
                 {' '}={' '}
                 <strong>{learnSteps.dec.toString()}</strong>
-                <sub style={{ fontSize: 10 }}>10</sub>
+                <sub style={{ fontSize: 11 }}>10</sub>
               </div>
             </>
           )}
@@ -817,11 +817,11 @@ export default function NumberBaseClient() {
               </div>
               <div className={s.meaningCard}>
                 결과: <strong>{learnSteps.dec.toString()}</strong>
-                <sub style={{ fontSize: 10 }}>10</sub>
+                <sub style={{ fontSize: 11 }}>10</sub>
                 {' '}={' '}
                 {learnSteps.dec < B0 && '−'}
                 <strong>{groupBinary(learnAbs.toString(2))}</strong>
-                <sub style={{ fontSize: 10 }}>2</sub>
+                <sub style={{ fontSize: 11 }}>2</sub>
               </div>
             </>
           )}

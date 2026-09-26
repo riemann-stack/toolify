@@ -31,7 +31,7 @@
 .tabActive {
   background: var(--accent-dim) !important;
   border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important;
-  color: var(--accent) !important;
+  color: var(--accent-ink) !important;
   font-weight: 600 !important;
 }
 .tabActiveBlue {
@@ -73,7 +73,7 @@
 }
 .genderBtnActive {
   background: var(--accent) !important;
-  color: #000 !important;
+  color: #fff !important;
   font-weight: 700 !important;
 }
 

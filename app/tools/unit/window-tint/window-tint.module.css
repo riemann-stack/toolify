@@ -103,7 +103,7 @@
   border-color: var(--accent) !important;
   color: var(--accent-ink) !important; font-weight: 700 !important;
 }
-.posBtn small { display: block; font-size: 10px; opacity: 0.85; margin-top: 2px; font-weight: 400; }
+.posBtn small { display: block; font-size: 11px; opacity: 0.85; margin-top: 2px; font-weight: 400; }
 
 /* ── 덧방 토글 ── */
 .toggleBox {

@@ -74,7 +74,7 @@
 .ratioActive { background: rgba(217,119,6,0.15); border-color: var(--amber-600); }
 .ratioLabel { font-size: 13px; font-weight: 700; color: var(--text); font-family: var(--font-sans); }
 .ratioActive .ratioLabel { color: var(--amber-600); }
-.ratioSub { font-size: 10px; color: var(--muted); font-family: var(--font-sans); }
+.ratioSub { font-size: 11px; color: var(--muted); font-family: var(--font-sans); }
 
 .dateInput {
   width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;

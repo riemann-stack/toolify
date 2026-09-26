@@ -36,7 +36,7 @@
 }
 .quickChipActive { border-width: 2px; box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent); }
 .quickChipSub {
-  font-family: var(--font-sans); font-size: 10px;
+  font-family: var(--font-sans); font-size: 11px;
   color: var(--muted); font-weight: 500;
 }
 
@@ -140,7 +140,7 @@
 .tab { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: var(--font-sans); transition: all 0.15s; text-align: center; }@media (hover: hover) {
   .tab:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.tabActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); font-weight: 500; }
+.tabActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent-ink); font-weight: 500; }
 
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px 22px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
@@ -176,7 +176,7 @@
 .distBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 8px 14px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: var(--font-sans); transition: all 0.15s; }@media (hover: hover) {
   .distBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.distBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); font-weight: 500; }
+.distBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent-ink); font-weight: 500; }
 
 /* 직접 입력 — 거리 km 단위 input */
 .distCustom {
@@ -206,9 +206,9 @@
   padding: 6px 0;
 }
 .distCustomInput::placeholder { font-family: var(--font-sans); font-weight: 400; color: var(--muted); font-size: 12px; }
-.distCustomActive .distCustomInput { color: var(--accent); }
+.distCustomActive .distCustomInput { color: var(--accent-ink); }
 .distCustomUnit { font-size: 12px; color: var(--muted); }
-.distCustomActive .distCustomUnit { color: var(--accent); }
+.distCustomActive .distCustomUnit { color: var(--accent-ink); }
 @media (max-width: 480px) {
   /* iOS 자동줌 방지 */
   .distCustomInput { font-size: 16px; width: 50px; }

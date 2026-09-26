@@ -190,6 +190,6 @@
   padding: 6px 0;
   list-style: none;
 }
-.advanced summary::before { content: '▶ '; font-size: 9px; display: inline-block; margin-right: 4px; transition: transform 0.15s; }
+.advanced summary::before { content: '▶ '; font-size: 11px; display: inline-block; margin-right: 4px; transition: transform 0.15s; }
 .advanced[open] summary::before { transform: rotate(90deg); }
 .advanced[open] summary { color: var(--text); margin-bottom: 8px; }

@@ -314,7 +314,7 @@
 
 /* 특수 상황(임신·고령 등) 기준 보정 표시 */
 .adjustedMark {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--cyan-600);
   white-space: nowrap;
@@ -498,7 +498,7 @@
 }@media (hover: hover) {
   .lifeStageBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.lifeStageBtnActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.lifeStageBtnActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .lifeStageBtnEmoji { font-size: 22px; display: block; margin-bottom: 4px; }
 .lifeStageBtnLabel { font-size: 12px; }
 

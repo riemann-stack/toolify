@@ -274,7 +274,7 @@
 .yearTagActive {
   background: var(--accent-dim);
   border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -325,7 +325,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive          { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 .tabActiveCompat    { background: rgba(220,38,38,0.18); color: var(--red-600); font-weight: 700; }
 .tabActiveFamily    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
 

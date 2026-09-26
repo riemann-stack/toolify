@@ -39,7 +39,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -101,7 +101,7 @@
 }
 .modePyung { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .modeMeter { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
-.modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.modePyung.modeActive { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .modeMeter.modeActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600);       border-color: var(--cyan-600);     font-weight: 700; }
 
 .pyungSelect {
@@ -199,7 +199,7 @@
 }@media (hover: hover) {
   .pill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pillActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.pillActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 /* ── 공간 용도 8개 ── */
 .spaceGrid {
@@ -231,7 +231,7 @@
 }
 .spaceBtn span.icon { font-size: 18px; margin-bottom: 2px; }
 .spaceBtn small {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   font-family: var(--font-sans);
   font-weight: 700;
@@ -245,7 +245,7 @@
 .spWorkplace { border-color: rgba(161,98,7,0.40); }
 .spShop      { border-color: rgba(161,98,7,0.40); }
 .spStudio    { border-color: rgba(16,185,129,0.40); }
-.spLiving.spActive    { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.spLiving.spActive    { background: var(--accent-dim);      color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .spBedroom.spActive,
 .spSmallRoom.spActive { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
 .spKitchen.spActive   { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
@@ -289,7 +289,7 @@
 .dirSouth.dirActive    { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
 .dirEastWest.dirActive { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .dirNorth.dirActive    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
-.dirUnknown.dirActive  { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.dirUnknown.dirActive  { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 층수 ── */
 .floorGrid {
@@ -325,7 +325,7 @@
 .flTop      { border-color: rgba(220,38,38,0.40); }
 .flBasement { border-color: rgba(155,89,182,0.40); }
 .flLow.flActive      { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
-.flMid.flActive      { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.flMid.flActive      { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .flHigh.flActive     { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .flTop.flActive      { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
 .flBasement.flActive { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
@@ -363,7 +363,7 @@
 .insExpanded { border-color: rgba(220,38,38,0.40); }
 .insGlass    { border-color: rgba(255,70,70,0.40); }
 .insNew.insActive      { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
-.insNormal.insActive   { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.insNormal.insActive   { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .insOld.insActive      { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .insExpanded.insActive { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
 .insGlass.insActive    { background: rgba(255,70,70,0.15);  color: #FF4646; border-color: #FF4646; font-weight: 700; }
@@ -430,7 +430,7 @@
 .applianceBtn small { display: block; font-family: var(--font-sans); font-weight: 700; font-size: 11px; margin-top: 2px; opacity: 0.85; }@media (hover: hover) {
   .applianceBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.applianceActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.applianceActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── HERO ── */
 .hero {
@@ -527,7 +527,7 @@
   font-weight: 700;
   margin-top: 4px;
 }
-.badgeRec { background: var(--accent-dim); color: var(--accent); }
+.badgeRec { background: var(--accent-dim); color: var(--accent-ink); }
 .badgeAlt { background: rgba(15,23,42,0.04); color: var(--muted); }
 
 /* ── 부하 분석 표 ── */
@@ -667,7 +667,7 @@
 }@media (hover: hover) {
   .convertModeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.convertModeActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.convertModeActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .convertResultGrid {
   display: grid;
@@ -809,4 +809,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

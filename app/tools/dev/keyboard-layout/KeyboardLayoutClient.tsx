@@ -385,7 +385,7 @@ export default function KeyboardLayoutClient() {
                   <div style={{ fontSize: 11, color: 'var(--muted)' }}>{key.en}</div>
                   <div style={{ fontSize: 17, color: 'var(--cat-dev)', fontWeight: 700, lineHeight: 1.3 }}>{key.ko}</div>
                   {key.shift && (
-                    <div style={{ fontSize: 10, color: 'var(--muted)' }}>⇧ {key.shift}</div>
+                    <div style={{ fontSize: 11, color: 'var(--muted)' }}>⇧ {key.shift}</div>
                   )}
                 </div>
               ))}

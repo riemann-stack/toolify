@@ -82,7 +82,7 @@
 @media (hover: hover) {
   .radioLabel:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.radioActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
+.radioActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent-ink) !important; }
 
 /* ── 폼 행 ── */
 .fieldRow { display: flex; align-items: center; gap: 10px; }
@@ -158,7 +158,7 @@
 @media (hover: hover) {
   .bceToggle:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.bceActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
+.bceActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent-ink) !important; }
 
 /* ── 연호 테이블 ── */
 .eraTable { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -187,7 +187,7 @@
 }
 .pickerActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; }
 .pickerKr { font-size: 16px; font-family: var(--font-sans); font-weight: 500; color: var(--text); line-height: 1.2; }
-.pickerActive .pickerKr { color: var(--accent); }
+.pickerActive .pickerKr { color: var(--accent-ink); }
 .pickerHj { font-size: 11px; color: var(--muted); font-family: serif; line-height: 1; }
 .pickerAnimal { font-size: 11px; color: var(--muted); line-height: 1; }
 
@@ -221,7 +221,7 @@
 }@media (hover: hover) {
   .filterBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.filterActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
+.filterActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent-ink) !important; }
 
 .searchInput {
   width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;

@@ -499,7 +499,7 @@ export default function VatClient() {
                 <button key={f.id} type="button" aria-pressed={platformId === f.id}
                   className={`${styles.optionBtn} ${platformId === f.id ? styles.optionActive : ''}`}
                   onClick={() => setPlatformId(f.id)}
-                >{f.name}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>{(f.rate * 100).toFixed(1)}%</span></button>
+                >{f.name}<br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>{(f.rate * 100).toFixed(1)}%</span></button>
               ))}
               <button type="button" aria-pressed={platformId === 'custom'} className={`${styles.optionBtn} ${platformId === 'custom' ? styles.optionActive : ''}`}
                 onClick={() => setPlatformId('custom')}>직접 입력</button>
@@ -720,7 +720,7 @@ export default function VatClient() {
                   <button key={ind.id} type="button" aria-pressed={industryId === ind.id}
                     className={`${styles.optionBtn} ${industryId === ind.id ? styles.optionActive : ''}`}
                     onClick={() => setIndustryId(ind.id)}
-                  >{ind.name}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>실효 {(ind.effective * 100).toFixed(1)}%</span></button>
+                  >{ind.name}<br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>실효 {(ind.effective * 100).toFixed(1)}%</span></button>
                 ))}
               </div>
             </div>

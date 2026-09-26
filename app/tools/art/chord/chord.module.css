@@ -56,7 +56,7 @@
   .keyBtnActive:hover { color: #ffffff !important; }
 }
 .keyBtnMain { font-size: 18px; font-weight: 700; line-height: 1; }
-.keyBtnSub { font-size: 10px; opacity: 0.7; line-height: 1; }
+.keyBtnSub { font-size: 11px; opacity: 0.7; line-height: 1; }
 .keyBtnActive .keyBtnSub { opacity: 0.8; }
 
 @media (min-width: 480px) {
@@ -67,7 +67,7 @@
 .typeSection { margin-bottom: 14px; }
 .typeSection:last-child { margin-bottom: 0; }
 .typeSectionLabel {
-  display: block; font-size: 10px; color: var(--muted);
+  display: block; font-size: 11px; color: var(--muted);
   letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px;
 }
 .typeRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -117,7 +117,7 @@
   background: var(--accent-strong); color: #ffffff;
   border-color: var(--accent);
 }
-.chipDeg { font-size: 10px; color: var(--muted); letter-spacing: 0.02em; }
+.chipDeg { font-size: 11px; color: var(--muted); letter-spacing: 0.02em; }
 
 /* ── 피아노 ── */
 .pianoWrap {
@@ -175,7 +175,7 @@
 }@media (hover: hover) {
   .scopeBtn:hover { color: var(--text); }
 }
-.scopeBtnActive { background: var(--accent-dim); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.scopeBtnActive { background: var(--accent-dim); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 
 .matchTable { width: 100%; border-collapse: collapse; font-size: 13px; }
 .matchTable th {
@@ -222,7 +222,7 @@
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modeBtnActive { background: var(--accent-dim); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.modeBtnActive { background: var(--accent-dim); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 
 .diatonicTable { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
 .diatonicTable th {

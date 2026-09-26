@@ -13,6 +13,8 @@ export interface UserNav {
 }
 
 const KEY = 'youtil:nav:v1'
+/** storage 이벤트 구독용(다른 탭에서 바뀐 경우) — 키 이름 자체는 개명 금지 */
+export const USER_NAV_STORAGE_KEY = KEY
 const MAX_RECENTS = 10
 const RECENT_TTL_MS = 7 * 24 * 60 * 60 * 1000  // 7일
 

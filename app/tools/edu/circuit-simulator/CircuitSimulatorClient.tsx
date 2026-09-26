@@ -511,7 +511,7 @@ export default function CircuitSimulatorClient() {
                   type="button"
                   aria-pressed={Math.abs(voltage - q.v) < 0.01}
                 >
-                  {q.l}<br /><small style={{ fontSize: 9 }}>{q.n}</small>
+                  {q.l}<br /><small style={{ fontSize: 11 }}>{q.n}</small>
                 </button>
               ))}
             </div>
@@ -824,7 +824,7 @@ export default function CircuitSimulatorClient() {
                 <button key={x.c} type="button" className={`${s.voltQuickBtn} ${Math.abs(parseFloat(ledVf) - x.vf) < 0.001 ? s.voltQuickActive : ''}`}
                   aria-pressed={Math.abs(parseFloat(ledVf) - x.vf) < 0.001}
                   onClick={() => setLedVf(String(x.vf))}>
-                  {x.c}<br /><small style={{ fontSize: 9 }}>{x.vf}V</small>
+                  {x.c}<br /><small style={{ fontSize: 11 }}>{x.vf}V</small>
                 </button>
               ))}
             </div>

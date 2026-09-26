@@ -143,7 +143,7 @@
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .optionBtn small { display: block; font-size: 16px; margin-bottom: 2px; }
-.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.optionActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .fillRow {
   display: grid;
@@ -197,7 +197,7 @@
   border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 14px;
-  color: #000;
+  color: #fff;
   font-family: var(--font-sans);
   font-weight: 800;
   cursor: pointer;
@@ -205,7 +205,7 @@
   text-align: center;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .bigGenerate:hover { background: #d8ff5e; }
+  .bigGenerate:hover { background: var(--accent-hover); }
 }
 .bigGenerate:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -215,7 +215,7 @@
   border-radius: 10px;
   padding: 11px 16px;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent-ink);
   font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
@@ -255,7 +255,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
 
@@ -296,7 +296,7 @@
 }@media (hover: hover) {
   .nameTag:hover { transform: translateY(-2px); }
 }
-.nameTagOn { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.nameTagOn { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-ink); }
 .nameEmoji { font-size: 22px; line-height: 1; }
 .nameLabel { font-size: 12px; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 

@@ -96,7 +96,7 @@
 @media (hover: hover) { .segBtn:hover { color: var(--text); } }
 .segBtnActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -243,7 +243,7 @@
   flex: 0 0 auto;
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-ink);
   background: var(--accent-dim);
   border-radius: var(--radius-pill);
   padding: 2px 8px;
@@ -305,7 +305,7 @@
 .calMonth { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 10px 12px; }
 .calMonthTitle { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; font-family: var(--font-sans); }
 .calGrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-.calDow { font-size: 10px; color: var(--muted); text-align: center; padding: 2px 0; font-weight: 600; }
+.calDow { font-size: 11px; color: var(--muted); text-align: center; padding: 2px 0; font-weight: 600; }
 .calCell {
   font-size: 11px;
   text-align: center;

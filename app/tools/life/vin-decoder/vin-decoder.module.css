@@ -83,7 +83,7 @@
   border-radius: 6px; border: 1px solid; font-family: var(--font-mono);
   font-size: 16px; font-weight: 800; box-sizing: border-box;
 }
-.segPos { font-size: 9px; color: var(--muted); text-align: center; font-family: var(--font-sans); }
+.segPos { font-size: 11px; color: var(--muted); text-align: center; font-family: var(--font-sans); }
 
 /* 섹션 색상 (점·문자칸 테두리) */
 .cWmi    { background: color-mix(in srgb, var(--accent) 14%, transparent);  border-color: color-mix(in srgb, var(--accent) 50%, transparent);  color: var(--accent); }

@@ -348,7 +348,7 @@ export default function CurtainBlindClient() {
                   <button key={i.id} type="button" aria-pressed={installId === i.id} className={`${styles.installBtn} ${styles[i.cls]} ${installId === i.id ? styles.installActive : ''}`} onClick={() => setInstallId(i.id)}>
                     <span style={{ fontSize: 16 }}>{i.icon}</span>
                     <span>{i.label}</span>
-                    <small style={{ fontSize: 10, color: 'var(--muted)' }}>{i.sub}</small>
+                    <small style={{ fontSize: 11, color: 'var(--muted)' }}>{i.sub}</small>
                   </button>
                 ))}
             </div>
@@ -380,7 +380,7 @@ export default function CurtainBlindClient() {
                         <line x1="2" y1="74" x2="38" y2="74" stroke="var(--muted)" strokeWidth="0.8" strokeDasharray="2 2" opacity="0.5" />
                       </svg>
                       <span>{opt.label}</span>
-                      <small style={{ fontSize: 10, color: 'var(--muted)' }}>{opt.desc}</small>
+                      <small style={{ fontSize: 11, color: 'var(--muted)' }}>{opt.desc}</small>
                     </button>
                   )
                 })}

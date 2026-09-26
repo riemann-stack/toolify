@@ -166,7 +166,7 @@
 }
 .presetIcon { font-size: 22px; }
 .presetName { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 2px; }
-.presetGrade { font-size: 10px; color: var(--muted); font-family: var(--font-sans); font-weight: 600; }
+.presetGrade { font-size: 11px; color: var(--muted); font-family: var(--font-sans); font-weight: 600; }
 .presetActive {
   background: rgba(13,148,136,0.10);
   border-color: var(--teal-600);
@@ -675,7 +675,7 @@
 .analysisTable .powerCaution { color: #92400E !important; background: rgba(161,98,7,0.10); }
 
 /* 이상적 전압원 주석 */
-.voltNote { font-size: 11.5px; color: var(--muted); line-height: 1.7; margin: 10px 0 0; }
+.voltNote { font-size: 12px; color: var(--muted); line-height: 1.7; margin: 10px 0 0; }
 .voltNote strong { color: var(--text); }
 
 /* 저항 직접 입력 (슬라이더 옆) */
@@ -703,8 +703,8 @@
 /* LED 전압강하 입력 */
 .ledDropRow { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
 .ledDropLabel { display: flex; align-items: baseline; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; font-family: var(--font-sans); }
-.ledDropHint { font-size: 10.5px; font-weight: 400; color: var(--muted); }
-.ledDropNote { font-size: 11.5px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; }
+.ledDropHint { font-size: 11px; font-weight: 400; color: var(--muted); }
+.ledDropNote { font-size: 12px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; }
 .ledDropNote strong { color: var(--teal-700); }
-.ledDropWarn { font-size: 11.5px; color: var(--danger); line-height: 1.7; margin: 8px 0 0; font-weight: 600; }
-.resultSub { font-size: 10.5px; color: var(--muted); margin: 2px 0 0; line-height: 1.4; }
+.ledDropWarn { font-size: 12px; color: var(--danger); line-height: 1.7; margin: 8px 0 0; font-weight: 600; }
+.resultSub { font-size: 11px; color: var(--muted); margin: 2px 0 0; line-height: 1.4; }

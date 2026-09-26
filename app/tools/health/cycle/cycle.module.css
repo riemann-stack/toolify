@@ -424,7 +424,7 @@
   font-family: var(--font-sans);
 }
 .guideCurrent {
-  font-size: 10px;
+  font-size: 11px;
   background: var(--accent-strong);
   color: #ffffff;
   padding: 2px 8px;

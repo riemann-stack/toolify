@@ -114,7 +114,6 @@
   outline: none;
   font-size: 15px;
   box-sizing: border-box;
-  color-scheme: dark;
 }
 .dateInput:focus { border-color: var(--teal-600); }
 
@@ -182,7 +181,7 @@
 .choiceFast    { border-color: rgba(234,88,12,0.40); }
 .choiceRelaxed { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .choiceEasy.choiceActive   { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
-.choiceNormal.choiceActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.choiceNormal.choiceActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .choiceHard.choiceActive   { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
 .choiceFast.choiceActive   { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .choiceRelaxed.choiceActive{ background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
@@ -219,7 +218,7 @@
 .score2.scoreActive { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .score3.scoreActive { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
 .score4.scoreActive { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
-.score5.scoreActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.score5.scoreActive { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── HERO ── */
 .hero {

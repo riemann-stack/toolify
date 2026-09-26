@@ -130,7 +130,7 @@
   border-color: var(--accent);
 }
 .chartLabel {
-  font-family: var(--font-sans); font-size: 10px; color: var(--muted);
+  font-family: var(--font-sans); font-size: 11px; color: var(--muted);
 }
 
 /* ── 컨트롤 ── */
@@ -260,7 +260,7 @@
   border-color: var(--accent) !important; color: var(--accent) !important;
 }
 .presetBpm { font-family: var(--font-sans); font-weight: 700; font-size: 15px; line-height: 1; }
-.presetName { font-size: 10px; letter-spacing: 0.02em; line-height: 1.2; }
+.presetName { font-size: 11px; letter-spacing: 0.02em; line-height: 1.2; }
 
 /* ── 박자감 테스트 ── */
 .randomRow { display: flex; justify-content: center; margin-top: 4px; }
@@ -413,7 +413,7 @@
   .controlRow { grid-template-columns: 1fr; }
   .ctrlBtnLink { grid-column: auto; }
   .chart { height: 100px; }
-  .chartLabel { font-size: 9px; }
+  .chartLabel { font-size: 11px; }
   .resultRow { gap: 10px; }
 }
 @media (max-width: 360px) {

@@ -169,7 +169,7 @@
   gap: 1px;
 }
 .expenseLabel strong { color: var(--text); font-weight: 600; }
-.expenseDesc { font-size: 10px; color: var(--muted); line-height: 1.4; }
+.expenseDesc { font-size: 11px; color: var(--muted); line-height: 1.4; }
 @media (max-width: 600px) { .expenseDesc { display: none; } }
 .expenseItem .input {
   padding: 7px 9px;
@@ -261,7 +261,7 @@
 .compactTable th {
   padding: 6px 8px;
   text-align: left;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   font-weight: 600;
   background: var(--bg3);

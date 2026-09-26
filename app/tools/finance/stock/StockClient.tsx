@@ -440,7 +440,7 @@ export default function StockClient() {
             <button key={b.id} type="button" aria-pressed={brokerId === b.id}
               className={`${styles.optionBtn} ${brokerId === b.id ? styles.optionActive : ''}`}
               onClick={() => setBrokerId(b.id)}
-            >{b.name}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>{b.rate}%</span></button>
+            >{b.name}<br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>{b.rate}%</span></button>
           ))}
           <button type="button" aria-pressed={brokerId === 'custom'}
             className={`${styles.optionBtn} ${brokerId === 'custom' ? styles.optionActive : ''}`}

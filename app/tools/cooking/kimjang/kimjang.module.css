@@ -372,7 +372,7 @@
   white-space: nowrap;
 }
 .ingLive {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--emerald-600);
   background: rgba(16,185,129,0.18);
   padding: 2px 6px;
@@ -502,3 +502,6 @@
   font-weight: 800;
 }
 .tipList li strong { color: var(--text); }
+
+/* overflow:hidden 컨테이너 안 버튼 — 전역 포커스 링(바깥 2px)이 잘리지 않게 안쪽으로 */
+.numCtrl :focus-visible { outline-offset: -3px; }

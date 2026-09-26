@@ -43,6 +43,8 @@
 .noResults strong { color: var(--text); }
 
 .catSection { padding-top: 48px; scroll-margin-top: calc(var(--header-h) + 88px); }
+/* 키보드 포커스로 스크롤될 때 sticky 헤더 + 검색 바(약 77px) 아래에 멈추게 */
+.toolCard, .catHeaderMore { scroll-margin-top: calc(var(--header-h) + 88px); }
 .catHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1.5px solid var(--rule); }
 .catHeaderLeft { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .catHeaderName { font-size: 22px; font-weight: 700; line-height: 1.35; letter-spacing: -0.03em; color: var(--text); }

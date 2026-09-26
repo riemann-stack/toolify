@@ -440,7 +440,7 @@ export default function BloodAlcoholClient() {
             <button key={d.id} type="button" aria-pressed={decayRateId === d.id}
               className={`${s.optionBtn} ${decayRateId === d.id ? s.optionActive : ''}`}
               onClick={() => setDecayRateId(d.id)} title={d.desc}>
-              {d.label}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>{d.rate.toFixed(3)}/h</span>
+              {d.label}<br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>{d.rate.toFixed(3)}/h</span>
             </button>
           ))}
         </div>
@@ -450,7 +450,7 @@ export default function BloodAlcoholClient() {
             <button key={f.id} type="button" aria-pressed={foodStateId === f.id}
               className={`${s.optionBtn} ${foodStateId === f.id ? s.optionActive : ''}`}
               onClick={() => setFoodStateId(f.id)} title={f.desc}>
-              {f.label}<br /><span style={{ fontSize: 10, color: 'var(--muted)' }}>×{f.multiplier.toFixed(2)}</span>
+              {f.label}<br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>×{f.multiplier.toFixed(2)}</span>
             </button>
           ))}
         </div>

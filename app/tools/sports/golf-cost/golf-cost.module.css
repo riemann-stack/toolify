@@ -224,10 +224,10 @@
 .courseCustom { border-color: var(--border); border-style: dashed; }
 
 .coursePubWeek.courseActive { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
-.coursePubEnd.courseActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.coursePubEnd.courseActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .courseSemi.courseActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
 .coursePriv.courseActive { background: rgba(161,98,7,0.18); color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
-.courseCustom.courseActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); border-style: solid; font-weight: 700; }
+.courseCustom.courseActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); border-style: solid; font-weight: 700; }
 
 /* ── 인원 pill ── */
 .playerRow {
@@ -252,7 +252,7 @@
 }
 .playerActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -279,7 +279,7 @@
 }
 .toggleOn {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -304,7 +304,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pillActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); }
+.pillActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent-ink); }
 
 /* ── HERO ── */
 .hero {
@@ -372,7 +372,7 @@
 }
 .breakdownTable tr.totalRow td {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
   border-bottom: none;
 }
@@ -513,7 +513,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.copied { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-ink); }
 
 /* 면책 */
 .disclaimer {

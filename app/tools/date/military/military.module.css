@@ -65,14 +65,14 @@
 }
 .presetBtn.presetActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
 
 .modeActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -304,12 +304,12 @@
 .svcCustom { border-color: var(--border); }
 
 .svc18.serviceActive  { background: rgba(16,185,129,0.18);  color: var(--success); border-color: var(--success); font-weight: 700; }
-.svc20.serviceActive  { background: var(--accent-dim);       color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.svc20.serviceActive  { background: var(--accent-dim);       color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .svc21.serviceActive  { background: rgba(161,98,7,0.18);   color: var(--cat-sports); border-color: var(--cat-sports); font-weight: 700; }
 .svc23.serviceActive  { background: rgba(234,88,12,0.18);  color: var(--cat-life); border-color: var(--cat-life); font-weight: 700; }
 .svc34.serviceActive  { background: rgba(220,38,38,0.18); color: var(--danger); border-color: var(--danger); font-weight: 700; }
 .svc36.serviceActive  { background: rgba(155,89,182,0.15);  color: var(--cat-art); border-color: var(--cat-art); font-weight: 700; }
-.svcCustom.serviceActive { background: var(--accent-dim);    color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.svcCustom.serviceActive { background: var(--accent-dim);    color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 직접 입력 (커스텀 복무기간) ── */
 .customMonthRow {
@@ -400,7 +400,7 @@
 }
 .refActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -586,7 +586,7 @@
   top: 100%;
   margin-top: 6px;
   transform: translateX(-50%);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   white-space: nowrap;
   font-family: var(--font-sans);
@@ -696,7 +696,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 빈 상태 ── */
 .empty {

@@ -436,7 +436,7 @@ export default function CarCostClient() {
                       onClick={() => setInsurance(a.yearly)}
                       title={a.note}>
                       {a.ageRange.split(' ')[0]}<br/>
-                      <span style={{ fontSize: 10 }}>{(a.yearly/10_000)}만</span>
+                      <span style={{ fontSize: 11 }}>{(a.yearly/10_000)}만</span>
                     </button>
                   ))}
                 </div>
@@ -454,7 +454,7 @@ export default function CarCostClient() {
                 <div className={s.optionRow6} style={{ marginTop: 6 }} role="group" aria-label="자동차세 배기량 빠른 선택">
                   {fuelType === 'ev' ? (
                     <button aria-pressed={carTax === EV_AUTO_TAX} className={`${s.optionBtn} ${carTax === EV_AUTO_TAX ? s.optionActive : ''}`}
-                      onClick={() => setCarTax(EV_AUTO_TAX)}>전기차<br/><span style={{ fontSize: 10 }}>13만</span></button>
+                      onClick={() => setCarTax(EV_AUTO_TAX)}>전기차<br/><span style={{ fontSize: 11 }}>13만</span></button>
                   ) : (
                     AUTO_TAX_BRACKETS.slice(0, 6).map(b => (
                       <button key={b.ccMax}
@@ -463,7 +463,7 @@ export default function CarCostClient() {
                         onClick={() => setCarTax(b.yearly)}
                         title={b.desc}>
                         {b.ccMax.toLocaleString()}cc<br/>
-                        <span style={{ fontSize: 10 }}>{Math.round(b.yearly / 1_000) / 10}만</span>
+                        <span style={{ fontSize: 11 }}>{Math.round(b.yearly / 1_000) / 10}만</span>
                       </button>
                     ))
                   )}

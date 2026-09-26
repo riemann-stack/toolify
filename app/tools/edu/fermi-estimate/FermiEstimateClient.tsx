@@ -589,7 +589,7 @@ export default function FermiEstimateClient() {
                   type="button"
                 >
                   {c.label}<br />
-                  <small style={{ fontSize: 10, opacity: 0.7 }}>
+                  <small style={{ fontSize: 11, opacity: 0.7 }}>
                     {TEMPLATES.filter(t => t.category === c.key).length}개
                   </small>
                 </button>

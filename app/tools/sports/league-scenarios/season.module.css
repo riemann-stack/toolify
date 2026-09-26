@@ -72,7 +72,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -269,7 +269,7 @@
 }
 .systemActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -412,7 +412,7 @@
 }
 .targetActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -677,7 +677,7 @@
   margin-bottom: 4px;
 }
 .rivalSubLabel {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   text-align: center;
   margin-bottom: 2px;
@@ -714,7 +714,7 @@
 }
 .compareTable .ourRow td {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 800;
 }
 .compareTable .ourRow td:first-child { color: var(--accent); }
@@ -804,4 +804,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

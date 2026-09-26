@@ -455,7 +455,7 @@ export default function PregnancyClient() {
                         {t.status === 'past' ? '○' : t.status === 'current' ? '🟡' : '📅'}
                         {' '}{t.test.name}
                         {t.test.importance === 'essential' && (
-                          <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--orange-600)', fontWeight: 700 }}>핵심</span>
+                          <span style={{ marginLeft: 6, fontSize: 11, color: 'var(--orange-600)', fontWeight: 700 }}>핵심</span>
                         )}
                       </div>
                       <div className={styles.testDesc}>{t.test.desc}</div>

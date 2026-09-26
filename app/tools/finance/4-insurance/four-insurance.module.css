@@ -41,7 +41,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabEmployee.tabActive  { background: var(--accent-dim);     color: var(--accent); font-weight: 700; }
+.tabEmployee.tabActive  { background: var(--accent-dim);     color: var(--accent-ink); font-weight: 700; }
 .tabEmployer.tabActive  { background: rgba(234,88,12,0.18); color: var(--orange-600);       font-weight: 700; }
 .tabPartTime.tabActive  { background: rgba(16,185,129,0.18); color: var(--emerald-600);       font-weight: 700; }
 .tabFreelance.tabActive { background: rgba(155,89,182,0.14); color: var(--purple-600);       font-weight: 700; }
@@ -164,7 +164,7 @@
 }@media (hover: hover) {
   .yearBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.yearActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.yearActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 /* ── 사업장 규모 / 업종 / 시나리오 버튼 ── */
 .choiceRow {
@@ -315,7 +315,7 @@
   font-size: 13px;
 }
 .dualTable tr.totalRow td:first-child { color: var(--text); }
-.dualTable tr.totalRow .colEmployee  { background: var(--accent-dim); color: var(--accent); }
+.dualTable tr.totalRow .colEmployee  { background: var(--accent-dim); color: var(--accent-ink); }
 .dualTable tr.totalRow .colEmployer  { background: rgba(234,88,12,0.14); color: var(--orange-600); }
 
 /* ── 안내 카드 (2026 변경, 두루누리, 위장도급) ── */
@@ -331,7 +331,7 @@
 .noticeBadge {
   display: inline-block;
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-size: 11px;
   padding: 3px 10px;
   border-radius: var(--radius-pill);
@@ -435,7 +435,7 @@
 .scenarioName {
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 14.5px;
+  font-size: 14px;
   color: var(--text);
   margin-bottom: 10px;
 }
@@ -577,4 +577,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

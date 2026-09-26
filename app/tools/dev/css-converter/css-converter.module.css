@@ -294,7 +294,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.copyBtnDone { color: #059669; border-color: #059669; }
+.copyBtnDone { color: var(--emerald-600); border-color: var(--emerald-600); }
 
 /* ── 코드 블록 ── */
 .codeBlock {
@@ -383,12 +383,12 @@
 }
 .badgeOk {
   background: rgba(16, 185, 129, 0.15);
-  color: #059669;
+  color: var(--emerald-600);
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 .badgeNo {
   background: rgba(220, 38, 38, 0.15);
-  color: #DC2626;
+  color: var(--red-600);
   border: 1px solid rgba(220, 38, 38, 0.3);
 }
 

@@ -319,7 +319,7 @@
   white-space: nowrap;
 }
 @media (max-width: 480px) {
-  .materialPriceRange { font-size: 10px; }
+  .materialPriceRange { font-size: 11px; }
 }
 
 .materialBody {

@@ -140,7 +140,7 @@
 }
 .spaceCardActive .spaceCardLabel { color: var(--accent); }
 .spaceCardTip {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   line-height: 1.4;
   word-break: keep-all;
@@ -410,7 +410,7 @@
   cursor: pointer;
   flex-shrink: 0;
 }@media (hover: hover) {
-  .removeBtn:hover:not(:disabled) { border-color: #DC2626; color: #DC2626; }
+  .removeBtn:hover:not(:disabled) { border-color: var(--red-600); color: var(--red-600); }
 }
 .removeBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -684,7 +684,7 @@
   color: #fff;
   border: none;
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 11px;
   cursor: pointer;
   opacity: 0;
   transition: opacity .15s;
@@ -735,10 +735,10 @@
   margin: 0 0 6px;
   font-family: var(--font-sans);
 }
-.contrastGrade[data-grade="aaa"] { background: rgba(16, 185, 129, 0.15); color: #059669; }
+.contrastGrade[data-grade="aaa"] { background: rgba(16, 185, 129, 0.15); color: var(--emerald-600); }
 .contrastGrade[data-grade="aa"]  { background: rgba(14, 165, 233, 0.15); color: var(--accent); }
-.contrastGrade[data-grade="aa-large"] { background: rgba(217, 119, 6, 0.15); color: #D97706; }
-.contrastGrade[data-grade="fail"] { background: rgba(220, 38, 38, 0.15); color: #DC2626; }
+.contrastGrade[data-grade="aa-large"] { background: rgba(217, 119, 6, 0.15); color: var(--amber-600); }
+.contrastGrade[data-grade="fail"] { background: rgba(220, 38, 38, 0.15); color: var(--red-600); }
 .contrastNote { font-size: 11px; color: var(--muted); margin: 0; }
 .contrastTip {
   margin-top: 12px;
@@ -807,7 +807,7 @@
   justify-content: center;
   padding: 4px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   color: rgba(255,255,255,.85);
   text-shadow: 0 1px 2px rgba(0,0,0,.6);
 }

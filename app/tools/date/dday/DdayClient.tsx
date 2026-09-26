@@ -275,7 +275,7 @@ function DdayCard({ item, now, onPin, onEdit, onDelete, onComplete }: {
         <span className={s.ddayCategory}>
           <span style={{ fontSize: 14 }}>{item.emoji || cat.emoji}</span>
           {cat.name}
-          {item.recurrence !== 'none' && <span style={{ fontSize: 10, marginLeft: 4 }}>🔁</span>}
+          {item.recurrence !== 'none' && <span style={{ fontSize: 11, marginLeft: 4 }}>🔁</span>}
         </span>
         <div className={s.ddayActions}>
           <button type="button" className={s.ddayPinBtn} onClick={onPin} title="핀" aria-label={item.isPinned ? '핀 해제' : '핀 고정'} aria-pressed={item.isPinned}>📌</button>

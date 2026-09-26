@@ -14,7 +14,7 @@
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabDogActive { background: var(--amber-600) !important; color: #000 !important; font-weight: 700 !important; }
+.tabDogActive { background: var(--amber-600) !important; color: #fff !important; font-weight: 700 !important; }
 .tabCatActive { background: #C084FC !important; color: #000 !important; font-weight: 700 !important; }
 
 /* ── 색상 변수 (강아지/고양이) ── */
@@ -63,7 +63,7 @@
 .weightInput:focus { border-color: var(--pet-border); }
 .weightUnit { font-size: 18px; color: var(--muted); font-family: var(--font-sans); font-weight: 700; flex-shrink: 0; }
 .slider { width: 100%; accent-color: var(--pet); cursor: pointer; height: 6px; display: block; margin-bottom: 6px; }
-.sliderLabels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); font-family: var(--font-sans); }
+.sliderLabels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); font-family: var(--font-sans); }
 
 /* ── 품종 크기 ── */
 .sizeGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
@@ -76,7 +76,7 @@
 }
 .sizeBtnIcon { font-size: 20px; line-height: 1; }
 .sizeBtnText { font-size: 12px; font-family: var(--font-sans); font-weight: 500; color: var(--text); }
-.sizeBtnDesc { font-size: 10px; color: var(--muted); font-family: var(--font-sans); }
+.sizeBtnDesc { font-size: 11px; color: var(--muted); font-family: var(--font-sans); }
 
 /* ── 토글 버튼 ── */
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -152,7 +152,7 @@
 .calNum { font-family: var(--font-sans); font-size: clamp(20px, 4vw, 26px); font-weight: 800; line-height: 1; color: var(--pet); }
 .calNumTreat { color: var(--orange-600) !important; }
 .calUnit { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: var(--font-sans); }
-.calSub { font-size: 10px; color: var(--muted); margin-top: 4px; line-height: 1.3; }
+.calSub { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.3; }
 
 /* ── 물 섭취 (강아지) ── */
 .waterCard {

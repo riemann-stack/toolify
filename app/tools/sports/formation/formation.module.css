@@ -419,3 +419,6 @@
   white-space: nowrap;
 }
 .rosterName em { color: var(--muted); font-style: normal; }
+
+/* overflow:hidden 컨테이너 안 버튼 — 전역 포커스 링(바깥 2px)이 잘리지 않게 안쪽으로 */
+.dirRow :focus-visible { outline-offset: -3px; }

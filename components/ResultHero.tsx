@@ -62,7 +62,7 @@ export function BreakdownTable({ caption, unit, head, rows }: { caption: string;
   return (
     <div className={styles.rhTable}>
       <div className={styles.rhTableCap}>{caption}{unit && <span>단위: {unit}</span>}</div>
-      <div className="tableScroll">
+      <div className="tableScroll" tabIndex={0} role="region" aria-label={caption}>
         <table>
           <thead><tr>{head.map(h => <th key={h} scope="col">{h}</th>)}</tr></thead>
           <tbody>

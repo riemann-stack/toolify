@@ -158,7 +158,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive         { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 .tabActiveTests    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
 .tabActiveFetal    { background: rgba(219,39,119,0.12); color: var(--pink-600); font-weight: 700; }
 .tabActiveChecklist{ background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
@@ -196,7 +196,7 @@
 }@media (hover: hover) {
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.optionActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 토글 */
 .toggleRow { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
@@ -211,7 +211,7 @@
   cursor: pointer;
   text-align: center;
 }
-.toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.toggleActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 삼분기 진행 게이지 (3단계) */
 .triBar {
@@ -396,7 +396,7 @@
   font-variant-numeric: tabular-nums;
 }
 .fetalCellEmoji { font-size: 22px; line-height: 1.1; margin: 4px 0; }
-.fetalCellSize { font-size: 10px; color: var(--muted); }
+.fetalCellSize { font-size: 11px; color: var(--muted); }
 
 /* 가이드 카드 */
 .guideGrid {
@@ -541,7 +541,7 @@
   display: inline-block;
   margin-right: 4px;
   transition: transform 0.15s;
-  font-size: 9px;
+  font-size: 11px;
 }
 .advanced[open] summary::before { transform: rotate(90deg); }
 .advanced[open] summary { color: var(--text); margin-bottom: 8px; }
@@ -567,7 +567,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .miniBtn {
   background: var(--bg3);

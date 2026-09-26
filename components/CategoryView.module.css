@@ -2,6 +2,8 @@
    → 그룹별 목록(기준 메타·N개 더 보기) → 분야 안내 본문 시트(CategoryGuide) → 다른 분야 둘러보기.
    분야색은 [data-cat] 스코프의 --c / --c-ink / --c-soft 로 칩·점·라인에만. 새 hex 없음(흰 글자 #FFFFFF만). 간격 짝수 px. */
 .cv { padding-bottom: 64px; }
+/* 키보드 포커스로 스크롤될 때 sticky 헤더 + 하위 분류 바(약 64px) 아래에 멈추게 */
+.cv :is(a, button, [tabindex]) { scroll-margin-top: calc(var(--header-h) + 72px); }
 .cvWrap { max-width: var(--w-shell); margin: 0 auto; padding: 0 24px; }
 .cvBand { background: var(--bg2); border-bottom: 1px solid var(--border); }
 

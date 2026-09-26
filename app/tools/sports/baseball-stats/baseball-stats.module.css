@@ -85,7 +85,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -257,7 +257,7 @@
   font-family: var(--font-sans);
 }
 .lvMVP    { background: rgba(161,98,7,0.15);   color: var(--yellow-700); }
-.lvAllStar{ background: var(--accent-dim);       color: var(--accent); }
+.lvAllStar{ background: var(--accent-dim);       color: var(--accent-ink); }
 .lvRegular{ background: rgba(16,185,129,0.15);  color: var(--emerald-600); }
 .lvAvg    { background: rgba(15,23,42,0.04); color: var(--muted); }
 .lvBelow  { background: rgba(234,88,12,0.15);  color: var(--orange-600); }
@@ -488,7 +488,7 @@
 }
 .legendTable .ourRow td {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 800;
 }
 .legendTable .ourRow td:first-child { color: var(--accent); }
@@ -575,4 +575,4 @@
   letter-spacing: -0.02em;
 }
 .plusDesc { font-size: 13px; color: var(--muted); line-height: 1.8; margin-top: 8px; }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

@@ -24,7 +24,7 @@
   white-space: nowrap;
   min-width: 0;
 }
-.tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 
 .card {
   background: var(--bg2);

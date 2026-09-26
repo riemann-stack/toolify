@@ -63,7 +63,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive         { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 .tabActiveActivity { background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
 .tabActiveSplit    { background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
 .tabActiveBudget   { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
@@ -136,10 +136,10 @@
   /* 모바일에서도 1줄 4열 유지 — 카드 패딩·폰트 축소로 공간 절약 */
   .fieldRow4 { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 4px; }
   .fieldRow4 .card { padding: 8px 6px; }
-  .fieldRow4 .cardLabel { font-size: 10px; letter-spacing: 0.04em; margin-bottom: 6px; justify-content: center; }
+  .fieldRow4 .cardLabel { font-size: 11px; letter-spacing: 0.04em; margin-bottom: 6px; justify-content: center; }
   .fieldRow4 .numInput { font-size: 16px; padding: 6px 4px; } /* 16px 미만이면 iOS Safari가 포커스 시 확대 */
   .fieldRow4 .inputRow { gap: 2px; }
-  .fieldRow4 .unit { font-size: 10px; }
+  .fieldRow4 .unit { font-size: 11px; }
   .fieldRow4 .toggleRow { gap: 3px; }
   .fieldRow4 .toggleBtn { padding: 6px 2px; font-size: 14px; }
 }
@@ -163,7 +163,7 @@
 }@media (hover: hover) {
   .toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.toggleActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .optionRow {
   display: grid;
@@ -199,7 +199,7 @@
 }@media (hover: hover) {
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.optionActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .optionWarning { color: var(--orange-600); }
 
 /* 활동 카드 (5단계 단순) */
@@ -220,7 +220,7 @@
 }
 .activityBtn.activityActive { background: var(--accent-dim); border-color: var(--accent); }
 .activityName { font-size: 13px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: baseline; }
-.activityActive .activityName { color: var(--accent); }
+.activityActive .activityName { color: var(--accent-ink); }
 .activityName small {
   font-family: var(--font-sans);
   font-weight: 700;
@@ -299,7 +299,7 @@
   justify-content: center;
   font-family: var(--font-sans);
   font-weight: 800;
-  color: #000;
+  color: #fff;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
@@ -416,7 +416,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .resultActions {
   display: grid;
@@ -709,7 +709,7 @@
   display: inline-block;
   margin-right: 4px;
   transition: transform 0.15s;
-  font-size: 9px;
+  font-size: 11px;
 }
 .advanced[open] summary::before { transform: rotate(90deg); }
 .advanced[open] summary { color: var(--text); margin-bottom: 8px; }

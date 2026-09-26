@@ -114,7 +114,7 @@
   flex-shrink: 0; min-width: 46px;
   font-family: var(--font-sans); font-size: 14px; font-weight: 800; color: var(--text);
 }
-.segKmUnit { font-size: 10px; font-weight: 500; color: var(--muted); margin-left: 1px; }
+.segKmUnit { font-size: 11px; font-weight: 500; color: var(--muted); margin-left: 1px; }
 .segInputWrap {
   display: inline-flex; align-items: center; gap: 3px;
   background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 0 8px;
@@ -124,7 +124,7 @@
   font-size: 16px; font-family: var(--font-sans); font-weight: 700;
   color: var(--text); text-align: right; min-height: 40px;
 }
-.segInputUnit { font-size: 10px; color: var(--muted); flex-shrink: 0; }
+.segInputUnit { font-size: 11px; color: var(--muted); flex-shrink: 0; }
 .segReadout {
   flex: 1; min-width: 110px; display: flex; align-items: center; justify-content: flex-end;
   flex-wrap: wrap; gap: 4px 8px; font-family: var(--font-sans);

@@ -164,7 +164,7 @@
 }
 @media (max-width: 380px) {
   .teaLabel { font-size: 12px; }
-  .teaDesc  { font-size: 10px; }
+  .teaDesc  { font-size: 11px; }
 }
 
 /* 히어로 */

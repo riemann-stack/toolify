@@ -14,7 +14,7 @@
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+.tabActive { background: var(--accent) !important; color: #fff !important; font-weight: 700 !important; }
 
 /* ── 카드 ── */
 .card {
@@ -68,7 +68,7 @@
 .vehicleBtnActive {
   background: var(--accent-dim) !important;
   border-color: color-mix(in srgb, var(--accent) 50%, transparent) !important;
-  color: var(--accent) !important;
+  color: var(--accent-ink) !important;
   font-weight: 700 !important;
 }
 
@@ -126,7 +126,7 @@
   font-family: var(--font-sans); font-weight: 600;
 }
 .resultLabelSub {
-  font-size: 10px; color: var(--muted);
+  font-size: 11px; color: var(--muted);
   opacity: 0.75; margin-top: 2px;
 }
 .resultValue {
@@ -200,7 +200,7 @@
 .statusDiffItem {
   display: flex; flex-direction: column;
 }
-.statusDiffLabel { font-size: 10px; color: var(--muted); }
+.statusDiffLabel { font-size: 11px; color: var(--muted); }
 .statusDiffValue {
   font-family: var(--font-sans); font-weight: 800; font-size: 16px;
   color: var(--text); letter-spacing: -0.3px;

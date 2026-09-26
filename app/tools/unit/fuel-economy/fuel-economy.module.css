@@ -14,7 +14,7 @@
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+.tabActive { background: var(--accent) !important; color: #fff !important; font-weight: 700 !important; }
 
 /* ── 카드 ── */
 .card {
@@ -84,7 +84,7 @@
 .unitBtnActive {
   background: var(--accent-dim);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 800;
 }
 @media (max-width: 480px) {

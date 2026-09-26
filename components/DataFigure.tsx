@@ -20,7 +20,8 @@ export default function DataFigure({ n, title, unit, source, children }: DataFig
         <span className={styles.dfCapT}><b>표 {n}.</b>{title}</span>
         {unit && <span className={styles.dfCapU}>{unit}</span>}
       </figcaption>
-      <div className={`tableScroll ${styles.dfBox}`}>{children}</div>
+      {/* 가로로 넘치는 표를 키보드로도 스크롤할 수 있게(Safari 등) 포커스 가능한 이름 있는 영역 */}
+      <div className={`tableScroll ${styles.dfBox}`} tabIndex={0} role="region" aria-label={`표 ${n}. ${title}`}>{children}</div>
       {source && <p className={styles.dfSrc}>{source}</p>}
     </figure>
   )

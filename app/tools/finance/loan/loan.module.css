@@ -62,7 +62,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive         { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 .tabActivePrepay   { background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
 .tabActiveRefi     { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
 .tabActiveRate     { background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
@@ -141,7 +141,7 @@
 }@media (hover: hover) {
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.optionActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 프리셋 카드 */
 .presetGrid {
@@ -165,7 +165,7 @@
 .presetCardActive { background: var(--accent-dim); border-color: var(--accent); }
 .presetCard p { margin: 0; }
 .presetCardName { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 3px; }
-.presetCardActive .presetCardName { color: var(--accent); }
+.presetCardActive .presetCardName { color: var(--accent-ink); }
 .presetCardDesc { font-size: 11px; color: var(--muted); }
 
 /* 빠른 칩 */
@@ -183,7 +183,7 @@
 }@media (hover: hover) {
   .chip:hover { color: var(--accent); border-color: var(--accent); }
 }
-.chipActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.chipActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 /* 슬라이더 — 입력 박스는 32px 터치 타깃, 트랙 시각은 pseudo로 분리 */
 .slider {
@@ -245,7 +245,7 @@
   cursor: pointer;
   text-align: center;
 }
-.toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.toggleActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ─── 비교 카드 (원리금균등 vs 원금균등) ─── */
 .compareGrid {
@@ -298,7 +298,7 @@
   border-radius: var(--radius-s);
   padding: 6px 10px;
   font-size: 12px;
-  color: var(--accent);
+  color: var(--accent-ink);
   text-align: center;
   font-weight: 700;
   font-family: var(--font-sans);
@@ -401,7 +401,7 @@
 .savingBadgeCompact {
   margin-top: 6px;
   font-size: 11px;
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
   font-family: var(--font-sans);
   padding: 3px 6px;
@@ -602,7 +602,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .resultActions {
   display: grid;

@@ -70,7 +70,7 @@
 .scaleBtnActive {
   background: var(--accent-dim);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 /* 4개 초과 시 자동 줄바꿈 — Activity 8단위 */
 @media (min-width: 541px) {
@@ -273,7 +273,7 @@
   position: absolute;
   top: -8px;
   right: 8px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--red-600);
   color: #ffffff;
@@ -351,7 +351,7 @@
 @media (max-width: 600px) {
   .emfRow { grid-template-columns: 22px 1fr 120px; gap: 2px 6px; font-size: 12px; }
   /* 출처는 숨기지 않고 라벨 아래 줄로 내려 표기 (신뢰도 정보 유지) */
-  .emfSource { grid-column: 2 / -1; text-align: left; font-size: 10px; }
+  .emfSource { grid-column: 2 / -1; text-align: left; font-size: 11px; }
 }
 
 .inputWarn {

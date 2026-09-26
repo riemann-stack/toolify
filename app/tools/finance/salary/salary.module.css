@@ -37,7 +37,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive         { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 .tabActiveReverse  { background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
 
 /* ── 카드 ── */
@@ -117,7 +117,7 @@
 }@media (hover: hover) {
   .toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.toggleActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 옵션 ── */
 .optionRow  { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
@@ -141,7 +141,7 @@
 }@media (hover: hover) {
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.optionActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 비과세 체크 */
 .checkRow {
@@ -282,7 +282,7 @@
   border-color: var(--accent);
   font-weight: 700;
 }
-.deductionRowTotal span:not(:first-child) { color: var(--accent); }
+.deductionRowTotal span:not(:first-child) { color: var(--accent-ink); }
 
 /* ── 분포 막대 ── */
 .percentileBar {
@@ -298,10 +298,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   font-family: var(--font-sans);
-  color: rgba(0,0,0,0.65);
+  color: #fff;
 }
 .percentileMarker {
   position: absolute;
@@ -443,7 +443,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .resultActions {
   display: grid;

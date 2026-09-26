@@ -118,7 +118,7 @@
 @media (max-width: 540px) {
   .convertSplit { gap: 6px; }
   .convertSplit .card { padding: 10px 12px; }
-  .convertSplit .cardLabel { font-size: 10px; }
+  .convertSplit .cardLabel { font-size: 11px; }
   .convertSplit .pill { font-size: 11px; padding: 5px 8px; }
 }
 /* 좁은 모바일에서는 2열이 넘쳐 1열로 — 인치↔mm 카드 세로 스택 */

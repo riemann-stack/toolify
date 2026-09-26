@@ -39,7 +39,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive       { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 .tabActiveQuick  { background: color-mix(in srgb, var(--cyan-600) 18%, transparent);  color: var(--cyan-600); font-weight: 700; }
 .tabActivePace   { background: rgba(161,98,7,0.18);   color: var(--yellow-700); font-weight: 700; }
 .tabActiveDiff   { background: rgba(155,89,182,0.10);  color: var(--purple-600); font-weight: 700; }
@@ -129,7 +129,7 @@
   .catBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .catBtn small { display: block; font-size: 18px; margin-bottom: 2px; }
-.catActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.catActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 반복 옵션 */
 .recurRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
@@ -146,7 +146,7 @@
 }@media (hover: hover) {
   .recurBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.recurActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.recurActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 버튼 ── */
 .actionBtn {
@@ -155,7 +155,7 @@
   border-radius: 10px;
   padding: 11px 18px;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent-ink);
   font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
@@ -170,14 +170,14 @@
   border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 14px;
-  color: #000;
+  color: #fff;
   font-family: var(--font-sans);
   font-weight: 800;
   cursor: pointer;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .bigCta:hover { background: #d8ff5e; }
+  .bigCta:hover { background: var(--accent-hover); }
 }
 
 .btnRow { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -243,7 +243,7 @@
 }@media (hover: hover) {
   .filterBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.filterActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.filterActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ─────── D-day 카드 ─────── */
 .ddayGrid {
@@ -542,7 +542,7 @@
   font-variant-numeric: tabular-nums;
 }
 .countdown4 .lbl {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
   text-transform: uppercase;

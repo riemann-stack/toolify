@@ -24,7 +24,7 @@
 .cardLabelRow { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .cardLabelRow .cardLabel { margin-bottom: 0; }
 
-.legendRow { display: flex; gap: 10px; font-size: 10px; letter-spacing: 0.03em; }
+.legendRow { display: flex; gap: 10px; font-size: 11px; letter-spacing: 0.03em; }
 .legendEasy { color: var(--success); }
 .legendBarre { color: var(--warning); }
 
@@ -52,7 +52,7 @@
   .keyBtnActive:hover { color: #ffffff !important; }
 }
 .keyBtnMain { font-size: 18px; font-weight: 700; line-height: 1; }
-.keyBtnSub { font-size: 10px; opacity: 0.7; line-height: 1; }
+.keyBtnSub { font-size: 11px; opacity: 0.7; line-height: 1; }
 .keyBtnActive .keyBtnSub { opacity: 0.8; }
 
 @media (min-width: 480px) {
@@ -81,8 +81,8 @@
 }
 .fretBtnRec:not(.fretBtnActive) { border-color: rgba(16,185,129,0.4); }
 .fretBtnNum { font-size: 14px; font-weight: 700; line-height: 1; }
-.fretBtnSub { font-size: 9px; opacity: 0.6; margin-top: 2px; letter-spacing: 0.03em; }
-.fretBtnBadge { position: absolute; top: 2px; right: 4px; font-size: 9px; }
+.fretBtnSub { font-size: 11px; opacity: 0.6; margin-top: 2px; letter-spacing: 0.03em; }
+.fretBtnBadge { position: absolute; top: 2px; right: 4px; font-size: 11px; }
 
 .fretSlider {
   width: 100%; accent-color: var(--accent);
@@ -140,7 +140,7 @@
 }
 .thFretNum { font-weight: 700; }
 .thFretBadge {
-  font-size: 9px; color: var(--success); margin-top: 2px; font-weight: 500;
+  font-size: 11px; color: var(--success); margin-top: 2px; font-weight: 500;
 }
 .thFretActive { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .thFretRec { border-top: 2px solid rgba(16,185,129,0.45); border-bottom: 2px solid rgba(16,185,129,0.45); }
@@ -171,7 +171,7 @@
 }
 .recItemHead { display: flex; gap: 10px; align-items: center; margin-bottom: 4px; }
 .recItemRank {
-  font-size: 10px; color: #ffffff; background: var(--success);
+  font-size: 11px; color: #ffffff; background: var(--success);
   border-radius: 4px; padding: 2px 6px; font-weight: 700;
 }
 .recItemFret {
@@ -189,7 +189,7 @@
 }@media (hover: hover) {
   .dirBtn:hover { color: var(--text); }
 }
-.dirBtnActive { background: var(--accent-dim); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.dirBtnActive { background: var(--accent-dim); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 
 .semiRow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
 .semiBtn {
@@ -243,7 +243,7 @@
   color: var(--text); margin-bottom: 6px; line-height: 1;
 }
 .degreeFunc {
-  font-size: 10px; color: var(--muted); letter-spacing: 0.03em;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.03em;
 }
 
 .copyBtn {

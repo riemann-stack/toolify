@@ -235,7 +235,7 @@
 }
 .sizeCompareLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   fill: var(--muted);
 }
@@ -312,7 +312,7 @@
   margin-top: 2px;
 }
 .planetStatHint {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   opacity: 0.75;
   margin-top: 1px;
@@ -457,7 +457,7 @@
   transform: translateX(-50%);
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   white-space: nowrap;
 }

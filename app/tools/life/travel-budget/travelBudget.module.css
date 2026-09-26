@@ -183,7 +183,7 @@
 .cityCardFlag { font-size: 22px; }
 .cityCardHead strong { flex: 1; font-weight: 700; }
 .cityCardRegion {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   background: var(--bg3);
   padding: 3px 8px;
@@ -214,7 +214,7 @@
 .cityCardStyleBreak {
   font-family: var(--font-sans);
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 /* 자동 채우기 버튼 */

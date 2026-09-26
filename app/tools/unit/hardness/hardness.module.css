@@ -67,7 +67,7 @@
   border-color: var(--accent);
 }
 .scaleBtnActive .scaleName,
-.scaleBtnActive .scaleFull { color: var(--accent); }
+.scaleBtnActive .scaleFull { color: var(--accent-ink); }
 .scaleDesc {
   font-size: 13px;
   color: var(--muted);
@@ -188,7 +188,7 @@
 }
 .resCardInput .resName { color: var(--accent); }
 .inputTag {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;
@@ -217,7 +217,7 @@
   font-family: var(--font-sans);
 }
 .resRange {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--warning);
   font-family: var(--font-sans);
   margin-top: 2px;
@@ -273,7 +273,7 @@
 }
 .refRowMatch .refHrc strong { color: var(--accent); }
 .refMatchBadge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;

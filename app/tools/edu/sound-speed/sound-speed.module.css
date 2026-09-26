@@ -215,7 +215,7 @@
 }
 .distPresetActive { background: rgba(13,148,136,0.10); color: var(--teal-700); border-color: var(--teal-600); font-weight: 700; }
 .distPresetEmoji { font-size: 18px; display: block; margin-bottom: 2px; }
-.distPresetMeta { font-size: 10px; color: var(--muted); display: block; font-family: var(--font-sans); font-weight: 700; }
+.distPresetMeta { font-size: 11px; color: var(--muted); display: block; font-family: var(--font-sans); font-weight: 700; }
 
 /* ── HERO ── */
 .hero {

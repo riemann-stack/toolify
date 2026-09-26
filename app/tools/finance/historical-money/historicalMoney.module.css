@@ -52,7 +52,7 @@
 .dirBtnActive {
   background: var(--accent-dim);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 /* ── 입력 그리드 ── */
@@ -165,7 +165,7 @@
 .presetBtnActive {
   background: var(--accent-dim);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 /* ── 히어로 ── */

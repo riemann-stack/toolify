@@ -539,7 +539,7 @@ export default function WeightLossClient() {
                     onClick={() => setProteinId(p.id)} title={p.desc}>
                     {p.name}
                     <br />
-                    <small style={{ fontSize: 10, opacity: 0.7 }}>{p.gPerKg}g/kg{p.recommended ? ' ★' : ''}</small>
+                    <small style={{ fontSize: 11, opacity: 0.7 }}>{p.gPerKg}g/kg{p.recommended ? ' ★' : ''}</small>
                   </button>
                 ))}
               </div>

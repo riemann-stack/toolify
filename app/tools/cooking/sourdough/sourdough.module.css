@@ -592,7 +592,7 @@
 }
 .graphAxis {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   fill: var(--muted);
 }
 .legend {

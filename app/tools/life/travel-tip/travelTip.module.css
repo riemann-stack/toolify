@@ -120,7 +120,7 @@
 }
 .countryFlag { font-size: 26px; line-height: 1; }
 .countryName { font-size: 12px; font-weight: 700; color: var(--text); }
-.countryCat { font-size: 10px; font-weight: 700; }
+.countryCat { font-size: 11px; font-weight: 700; }
 
 /* 히어로 */
 .hero {
@@ -294,7 +294,7 @@
 .mannerFlag { font-size: 22px; }
 .mannerHead strong { flex: 1; font-weight: 700; }
 .mannerBadge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   padding: 3px 8px;
   border-radius: var(--radius-pill);

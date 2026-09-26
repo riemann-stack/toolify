@@ -122,7 +122,7 @@
 .uvSliderLabels {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   margin-top: 6px;
   font-family: var(--font-sans);
@@ -230,7 +230,7 @@
 .skinDesc { font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }
 .skinKoreanRatio {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   padding: 2px 7px;
   border-radius: var(--radius-pill);
   background: var(--bg2);
@@ -302,7 +302,7 @@
 
 .spfNone.spfActive   { background: rgba(220,38,38,0.18); border-color: var(--red-600); color: var(--red-600); }
 .spf15.spfActive     { background: rgba(161,98,7,0.18);  border-color: var(--yellow-700); color: var(--yellow-700); }
-.spf30.spfActive     { background: var(--accent-dim);     border-color: var(--accent); color: var(--accent); }
+.spf30.spfActive     { background: var(--accent-dim);     border-color: var(--accent); color: var(--accent-ink); }
 .spf50.spfActive     { background: rgba(16,185,129,0.18); border-color: var(--emerald-600); color: var(--emerald-600); }
 .spf70.spfActive     { background: rgba(155,89,182,0.12); border-color: var(--amethyst); color: var(--purple-600); }
 
@@ -360,7 +360,7 @@
   align-items: center;
 }
 .advancedSummary::-webkit-details-marker { display: none; }
-.advancedSummary::after { content: '▼'; font-size: 10px; color: var(--muted); transition: transform 0.2s; }
+.advancedSummary::after { content: '▼'; font-size: 11px; color: var(--muted); transition: transform 0.2s; }
 .advancedDetails[open] .advancedSummary::after { transform: rotate(180deg); }
 .advancedBody { padding: 0 18px 16px; display: flex; flex-direction: column; gap: 12px; }
 

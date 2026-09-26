@@ -931,10 +931,10 @@ export default function BakerPercentClient() {
                 <div className={s.gaugeWrap}>
                   <div className={s.gaugeBar} style={{ position: 'relative' }}>
                     {/* 구간 라벨 — 게이지 안에 배치 */}
-                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
-                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
-                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
-                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
+                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
+                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
+                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
+                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
                     <div className={s.gaugeMarker} style={{ left: `${gaugePct(analysis1.hydration)}%` }} />
                   </div>
                   {/* 구간 경계 숫자 — 정확한 위치에 표시 */}

@@ -34,7 +34,7 @@
 .eqIcon { font-size: 22px; line-height: 1; }
 .eqName { font-size: 12px; color: var(--text); font-weight: 600; }
 .eqMeta { font-family: var(--font-sans); font-size: 11px; color: var(--accent); }
-.eqDesc { font-size: 10px; color: var(--muted); line-height: 1.4; min-height: 14px; }
+.eqDesc { font-size: 11px; color: var(--muted); line-height: 1.4; min-height: 14px; }
 
 /* 장비 칩 (히어로 안) */
 .eqChip {
@@ -91,7 +91,7 @@
 }
 .envIcon { font-size: 22px; line-height: 1; margin-bottom: 4px; }
 .envName { font-size: 13px; font-weight: 700; line-height: 1; }
-.envSub  { font-size: 10px; color: var(--muted); letter-spacing: 0.02em; }
+.envSub  { font-size: 11px; color: var(--muted); letter-spacing: 0.02em; }
 
 .envBtn_indoor  { border-color: color-mix(in srgb, var(--cyan-600) 35%, transparent); }@media (hover: hover) {
   .envBtn_indoor:hover  { background: color-mix(in srgb, var(--cyan-600) 14%, transparent); }
@@ -213,7 +213,7 @@
   position: absolute; top: 4px; right: 6px;
   width: 16px; height: 16px; border-radius: 50%;
   background: var(--accent-strong); color: #ffffff;
-  font-size: 10px; font-weight: 800;
+  font-size: 11px; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
 }
 
@@ -337,12 +337,12 @@
 }
 .timelineMarkerLabelTop {
   position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
-  font-size: 10px; color: var(--text); white-space: nowrap;
+  font-size: 11px; color: var(--text); white-space: nowrap;
   font-family: var(--font-sans); font-weight: 500;
 }
 .timelineMarkerLabelBottom {
   position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
-  font-size: 10px; color: var(--accent); white-space: nowrap;
+  font-size: 11px; color: var(--accent); white-space: nowrap;
   font-family: var(--font-sans); font-weight: 600;
 }
 .timelineCursor {
@@ -399,12 +399,12 @@
   .envRow { gap: 6px; }
   .envBtn { padding: 12px 4px; }
   .envName { font-size: 12px; }
-  .envSub { font-size: 9px; }
+  .envSub { font-size: 11px; }
   .itemGrid { grid-template-columns: repeat(2, 1fr); }
   .itemBtn { min-height: 76px; }
   .segRow5 { grid-template-columns: repeat(3, 1fr); }
   .presetRow { grid-template-columns: repeat(4, 1fr); }
-  .pBtnLabel { font-size: 10px; }
+  .pBtnLabel { font-size: 11px; }
   .pBtnVal { font-size: 11px; }
   .heroRow { grid-template-columns: 1fr; gap: 10px; }
   .heroDivider { width: 60%; height: 1px; justify-self: center; }

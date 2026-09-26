@@ -64,7 +64,7 @@
 }@media (hover: hover) {
   .selectBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.selectBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
+.selectBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent-ink) !important; }
 
 /* ── 프리셋 ── */
 .presetRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -85,7 +85,7 @@
 }@media (hover: hover) {
   .modeTab:hover { color: var(--text); }
 }
-.modeTabActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
+.modeTabActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent-ink) !important; }
 
 /* ── 결과 카드 ── */
 .resultCard {
@@ -159,7 +159,7 @@
 
 .downloadBtn {
   background: var(--accent-dim); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 10px;
-  padding: 9px 16px; font-size: 13px; color: var(--accent);
+  padding: 9px 16px; font-size: 13px; color: var(--accent-ink);
   cursor: pointer; font-family: var(--font-sans); font-weight: 500;
   transition: all 0.15s;
 }@media (hover: hover) {

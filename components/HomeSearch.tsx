@@ -15,7 +15,7 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import styles from '@/app/page.module.css'
 import UiIcon from './UiIcon'
 import CatIcon from './CatIcon'
-import { loadUserNav } from '@/lib/userNav'
+import { loadUserNav, USER_NAV_EVENT, USER_NAV_STORAGE_KEY } from '@/lib/userNav'
 import { searchTools, type SearchHit } from '@/lib/search'
 import { categories } from '@/lib/tools'
 
@@ -44,13 +44,22 @@ export default function HomeSearch({ popular, popLabel = '추천' }: { popular: 
   const [fav, setFav] = useState<HomeChip[]>([])
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
-  // localStorage는 마운트 후에만 읽는다(SSR 불일치 방지) — 의도된 1회 동기화
+  // localStorage는 마운트 후에만 읽는다(SSR 불일치 방지). 이후 즐겨찾기·최근이 바뀌면(헤더 서랍의 ★, 다른 탭) 다시 읽는다
   useEffect(() => {
-    const nav = loadUserNav()
     const toChips = (hrefs: string[]) => hrefs.map((h) => chipByHref.get(h)).filter((x): x is HomeChip => !!x).slice(0, CHIP_MAX)
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setRecent(toChips(nav.recents.map((r) => r.href)))
-    setFav(toChips(nav.favorites))
+    const sync = () => {
+      const nav = loadUserNav()
+      setRecent(toChips(nav.recents.map((r) => r.href)))
+      setFav(toChips(nav.favorites))
+    }
+    sync()
+    const onStorage = (e: StorageEvent) => { if (e.key === null || e.key === USER_NAV_STORAGE_KEY) sync() }
+    window.addEventListener(USER_NAV_EVENT, sync)
+    window.addEventListener('storage', onStorage)
+    return () => {
+      window.removeEventListener(USER_NAV_EVENT, sync)
+      window.removeEventListener('storage', onStorage)
+    }
   }, [])
 
   const query = q.trim()

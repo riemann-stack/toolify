@@ -660,7 +660,6 @@
   cursor: pointer;
   padding: 2px 2px;
   min-width: 0;
-  color-scheme: dark;
 }
 .timeColon {
   color: var(--muted);

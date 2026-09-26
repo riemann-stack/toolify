@@ -338,7 +338,7 @@ export default function BmrClient() {
                       onClick={() => setJobLevel(j.id)} title={j.desc}>
                       {j.name}
                       <br />
-                      <small style={{ fontSize: 10, opacity: 0.7 }}>{j.desc}</small>
+                      <small style={{ fontSize: 11, opacity: 0.7 }}>{j.desc}</small>
                     </button>
                   ))}
                 </div>
@@ -386,7 +386,7 @@ export default function BmrClient() {
                       onClick={() => setExerciseIntensity(e.id)}>
                       {e.name}
                       <br />
-                      <small style={{ fontSize: 10, opacity: 0.7 }}>약 {fmt(e.met * (weightN || 70))}kcal/h</small>
+                      <small style={{ fontSize: 11, opacity: 0.7 }}>약 {fmt(e.met * (weightN || 70))}kcal/h</small>
                     </button>
                   ))}
                 </div>

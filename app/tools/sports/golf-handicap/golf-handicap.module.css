@@ -118,7 +118,7 @@
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+.tabActive { background: var(--accent) !important; color: #fff !important; font-weight: 700 !important; }
 
 /* ── 공통 카드 ── */
 .section { display: flex; flex-direction: column; gap: 10px; }
@@ -181,7 +181,7 @@
   font-size: 11px; font-family: var(--font-sans); font-weight: 700;
   transition: all 0.15s;
 }
-.holeBtnActive { background: var(--accent) !important; color: #000 !important; }
+.holeBtnActive { background: var(--accent) !important; color: #fff !important; }
 
 /* ── 액션 버튼 ── */
 .actionRow { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }

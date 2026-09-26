@@ -76,7 +76,7 @@
 }@media (hover: hover) {
   .toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.toggleActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 비교 모드 토글 (전폭 스위치형 버튼) ── */
 .compareToggle {
@@ -102,7 +102,7 @@
   font-size: 12px;
   color: var(--muted);
 }
-.compareToggleActive .compareToggleState { color: var(--accent); }
+.compareToggleActive .compareToggleState { color: var(--accent-ink); }
 
 /* ── 히어로 ── */
 .hero {
@@ -313,7 +313,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 두배법 안내 박스 ── */
 .tipBox {

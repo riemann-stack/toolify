@@ -68,7 +68,7 @@
   border-color: var(--accent);
 }
 .scaleBtnActive .scaleName,
-.scaleBtnActive .scaleUnit { color: var(--accent); }
+.scaleBtnActive .scaleUnit { color: var(--accent-ink); }
 .scaleDesc {
   font-size: 13px;
   color: var(--muted);
@@ -164,7 +164,7 @@
 }
 .resCardInput .resName { color: var(--accent); }
 .inputTag {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;
@@ -373,7 +373,7 @@
 }
 .guideCardMatch .guideName { color: var(--accent); }
 .matchBadge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;

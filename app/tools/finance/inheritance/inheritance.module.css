@@ -39,7 +39,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive       { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 .tabActiveInherit { background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
 .tabActiveHeirs   { background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
 .tabActiveSplit   { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
@@ -128,11 +128,11 @@
 .relOther { border-color: var(--border); }
 
 .relSpouse.relActive { background: rgba(161,98,7,0.18); color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
-.relAdult.relActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.relAdult.relActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .relMinor.relActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
 .relParent.relActive { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .relRelative.relActive,
-.relOther.relActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.relOther.relActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 토글 버튼 (Yes/No) ── */
 .toggleRow {
@@ -157,7 +157,7 @@
 }
 .toggleActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -177,7 +177,7 @@
 }@media (hover: hover) {
   .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pillActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); }
+.pillActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent-ink); }
 
 /* ── select ── */
 .selectInput {
@@ -330,7 +330,7 @@
 .winnerBadge {
   display: inline-block;
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-radius: var(--radius-pill);
   padding: 3px 10px;
   font-size: 11px;
@@ -364,7 +364,7 @@
 }
 .compareTable tr.bestRow td {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 .compareTable tr.zeroTaxRow td.numCell {
@@ -706,7 +706,7 @@
 }@media (hover: hover) {
   .propertyToggle:hover { border-color: var(--accent); }
 }
-.propertyToggleActive { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.propertyToggleActive { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-ink); }
 
 /* ─── 메트릭 그리드 ─── */
 .metrics {
@@ -753,7 +753,7 @@
 }@media (hover: hover) {
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.optionActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .checkRow {
   display: flex;

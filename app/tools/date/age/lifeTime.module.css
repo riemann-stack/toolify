@@ -171,11 +171,11 @@
 }
 .expectancyActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
-.expectancyActive small { color: var(--accent); }
+.expectancyActive small { color: var(--accent-ink); }
 
 .customRow {
   display: flex;
@@ -224,7 +224,7 @@
 }
 .genderActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -513,7 +513,7 @@
 .activityBtn span { display: block; font-size: 18px; margin-bottom: 2px; }
 .activityActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -614,7 +614,7 @@
 }@media (hover: hover) {
   .shareBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 정신건강 안내 (하단) ── */
 .support {

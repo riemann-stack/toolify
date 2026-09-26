@@ -39,7 +39,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -146,7 +146,7 @@
 }@media (hover: hover) {
   .monthBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.monthActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.monthActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 .monthCustomRow { margin-top: 10px; }
 
 /* ── 할부 종류 (3개) ── */
@@ -158,7 +158,7 @@
 @media (max-width: 600px) {
   .typeGrid { grid-template-columns: repeat(3, 1fr); }
   .typeBtn { padding: 10px 4px; font-size: 12px; gap: 3px; }
-  .typeBadge { font-size: 9px; padding: 2px 5px; }
+  .typeBadge { font-size: 11px; padding: 2px 5px; }
 }
 .typeBtn {
   background: var(--bg3);
@@ -180,7 +180,7 @@
 }
 .typeBadge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   padding: 2px 8px;
   border-radius: var(--radius-pill);
   font-weight: 700;
@@ -366,7 +366,7 @@
   align-items: center;
 }
 .scheduleSummary::-webkit-details-marker { display: none; }
-.scheduleSummary::after { content: '▼'; font-size: 10px; color: var(--muted); transition: transform 0.2s; }
+.scheduleSummary::after { content: '▼'; font-size: 11px; color: var(--muted); transition: transform 0.2s; }
 .scheduleDetails[open] .scheduleSummary::after { transform: rotate(180deg); }
 .scheduleTableWrap { padding: 0 10px 14px; }
 .scheduleTable {
@@ -600,4 +600,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

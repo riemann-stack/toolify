@@ -70,7 +70,7 @@
   border-radius: 7px;
   padding: 4px 12px;
   font-size: 11px;
-  color: var(--accent);
+  color: var(--accent-ink);
   cursor: pointer;
   font-family: var(--font-sans);
   transition: all 0.15s;
@@ -117,7 +117,7 @@
 .modeBtnActive {
   background: var(--accent-dim);
   border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 /* ── OPTIONS ── */
@@ -316,7 +316,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -408,9 +408,9 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .fileDropzone:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  .fileDropzone:hover { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-dim); }
 }
-.fileDropzoneActive { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+.fileDropzoneActive { border-color: var(--accent); background: var(--accent-dim); color: var(--accent-ink); }
 
 /* ── 이미지 프리뷰 ── */
 .imagePreview {
@@ -567,7 +567,7 @@
   .subActionBtn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
 }
 .subActionBtn:disabled { opacity: 0.4; cursor: not-allowed; }
-.subActionBtnActive { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); font-weight: 700; }
+.subActionBtnActive { color: var(--accent-ink); border-color: var(--accent); background: var(--accent-dim); font-weight: 700; }
 
 /* JSON 에러 위치 */
 .errorPosition {
@@ -663,7 +663,7 @@
 .bitOn {
   background: var(--accent-dim);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 800;
   box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 30%, transparent);
 }
@@ -672,8 +672,8 @@
   font-weight: 600;
 }
 .bitValue { font-size: 16px; line-height: 1.2; }
-.bitPosition { font-size: 9px; color: var(--muted); margin-top: 2px; }
-.bitPlaceValue { font-size: 10px; color: var(--muted); margin-top: 1px; font-family: var(--font-sans); font-weight: 700; }
+.bitPosition { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.bitPlaceValue { font-size: 11px; color: var(--muted); margin-top: 1px; font-family: var(--font-sans); font-weight: 700; }
 
 /* 비트 폭 토글 */
 .widthToggle {
@@ -694,7 +694,7 @@
 }@media (hover: hover) {
   .widthBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.widthActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.widthActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 비트 연산 결과 */
 .opGrid {
@@ -731,7 +731,7 @@
 }
 .opBitOn {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 800;
 }
@@ -763,7 +763,7 @@
 }@media (hover: hover) {
   .opToggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.opToggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.opToggleActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 /* ASCII 표 */
 .asciiTable {
@@ -786,11 +786,11 @@
   .asciiCell:hover { border-color: var(--accent); }
 }
 .asciiControl { background: rgba(150,150,150,0.05); }
-.asciiControl .asciiChar { color: var(--muted); font-size: 10px; }
+.asciiControl .asciiChar { color: var(--muted); font-size: 11px; }
 .asciiPrintable .asciiChar { color: var(--accent); font-weight: 700; }
-.asciiNum { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.asciiNum { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
 .asciiChar { font-size: 14px; line-height: 1.2; }
-.asciiHex { font-size: 9px; color: var(--muted); margin-top: 2px; }
+.asciiHex { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 /* 입력 검증 */
 .inputInvalid { border-color: rgba(220,38,38,0.50) !important; }
@@ -806,7 +806,7 @@
 .learnStepNum {
   display: inline-block;
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-family: var(--font-sans);
   font-weight: 800;
   font-size: 11px;

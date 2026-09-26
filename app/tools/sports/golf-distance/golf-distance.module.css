@@ -128,7 +128,7 @@
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+.tabActive { background: var(--accent) !important; color: #fff !important; font-weight: 700 !important; }
 
 /* ── 공통 카드 ── */
 .section { display: flex; flex-direction: column; gap: 10px; }
@@ -172,7 +172,7 @@
   font-family: var(--font-sans); font-size: 14px; font-weight: 700;
   color: var(--text); letter-spacing: 0.04em;
 }
-.clubInputName small { display: block; font-size: 10px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+.clubInputName small { display: block; font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 2px; }
 
 .clubInputBox { position: relative; }
 .clubInput {
@@ -262,7 +262,7 @@
 .barTagWrap { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; }
 .barTag {
   display: inline-block; padding: 2px 7px; border-radius: 10px;
-  font-size: 10px; font-family: var(--font-sans); font-weight: 600;
+  font-size: 11px; font-family: var(--font-sans); font-weight: 600;
   flex-shrink: 0;
 }
 .tagActual {
@@ -332,7 +332,7 @@
   display: inline-block; padding: 2px 8px; border-radius: 10px;
   background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent);
   border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
-  font-size: 10px; font-family: var(--font-sans); font-weight: 700;
+  font-size: 11px; font-family: var(--font-sans); font-weight: 700;
   margin-bottom: 6px;
 }
 .recommendText { font-size: 13px; color: var(--text); line-height: 1.7; }

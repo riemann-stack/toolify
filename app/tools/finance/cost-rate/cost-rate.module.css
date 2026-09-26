@@ -30,7 +30,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -95,7 +95,7 @@
 }
 .channelActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -201,7 +201,7 @@
 }
 .miniActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -273,7 +273,7 @@
   border-bottom: none;
   padding-top: 9px;
 }
-.ingTotalRow td.costCell { color: var(--accent); font-size: 14px; }
+.ingTotalRow td.costCell { color: var(--accent-ink); font-size: 14px; }
 
 .addBtn {
   background: var(--bg3);
@@ -331,7 +331,7 @@
 .appBaemin.appActive    { background: rgba(16,185,129,0.18);  border-color: var(--emerald-600); color: var(--emerald-600); font-weight: 700; }
 .appCoupang.appActive   { background: rgba(220,38,38,0.18); border-color: var(--red-600); color: var(--red-600); font-weight: 700; }
 .appYogiyo.appActive    { background: rgba(161,98,7,0.18);   border-color: var(--yellow-700); color: var(--yellow-700); font-weight: 700; }
-.appOwn.appActive       { background: var(--accent-dim);      border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.appOwn.appActive       { background: var(--accent-dim);      border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
 .appBtn.appActive small { color: inherit; opacity: 0.85; }
 
 /* ── HERO (원가율 결과) ── */
@@ -400,7 +400,7 @@
   font-family: var(--font-sans);
 }
 .gradeExcellent { background: rgba(16,185,129,0.15);  color: var(--emerald-600); }
-.gradeGood      { background: var(--accent-dim);       color: var(--accent); }
+.gradeGood      { background: var(--accent-dim);       color: var(--accent-ink); }
 .gradeAverage   { background: rgba(161,98,7,0.15);   color: var(--yellow-700); }
 .gradeWarning   { background: rgba(234,88,12,0.15);  color: var(--orange-600); }
 .gradeDanger    { background: rgba(220,38,38,0.15); color: var(--red-600); }
@@ -849,4 +849,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

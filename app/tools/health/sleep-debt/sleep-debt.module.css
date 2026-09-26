@@ -98,7 +98,7 @@
 }
 .heroMetaLabel {
   display: block;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -182,7 +182,6 @@
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   outline: none;
-  color-scheme: dark;
 }
 .dateInput:focus { border-color: var(--accent); }
 .dateQuickBtns { display: flex; gap: 4px; }
@@ -259,7 +258,6 @@
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   outline: none;
-  color-scheme: dark;
 }
 .timeInput:focus { border-color: var(--accent); }
 .autoCalc {
@@ -499,7 +497,6 @@
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   outline: none;
-  color-scheme: dark;
   width: 120px;
 }
 .miniTime:focus { border-color: var(--accent); }

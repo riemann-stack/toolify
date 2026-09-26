@@ -100,7 +100,7 @@
 .catBusiness    { border-color: rgba(161,98,7,0.40); }
 .catEducation   { border-color: rgba(155,89,182,0.40); }
 .catActive { font-weight: 700; }
-.catDaily.catActive       { background: var(--accent-dim);     color: var(--accent); }
+.catDaily.catActive       { background: var(--accent-dim);     color: var(--accent-ink); }
 .catEnvironment.catActive { background: rgba(16,185,129,0.18); color: var(--emerald-600); }
 .catBusiness.catActive    { background: rgba(161,98,7,0.18);  color: var(--yellow-700); }
 .catEducation.catActive   { background: rgba(155,89,182,0.12); color: var(--purple-600); }
@@ -140,7 +140,7 @@
 .templateTitle {
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 14.5px;
+  font-size: 14px;
   color: var(--text);
   line-height: 1.4;
 }
@@ -158,7 +158,7 @@
 }
 .templateRange {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   padding: 3px 10px;
   border-radius: var(--radius-pill);
   font-family: var(--font-sans);

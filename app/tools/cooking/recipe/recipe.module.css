@@ -38,7 +38,7 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive       { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 .tabActiveConvert{ background: rgba(161,98,7,0.18);  color: var(--yellow-700); font-weight: 700; }
 .tabActiveSaved  { background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
 .tabActiveShop   { background: rgba(16,185,129,0.18); color: var(--emerald-600); font-weight: 700; }
@@ -130,7 +130,7 @@
 }@media (hover: hover) {
   .presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.presetActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.presetActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 .ratioBadge {
   margin-top: 12px;
@@ -167,7 +167,7 @@
 }@media (hover: hover) {
   .catChip:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.catActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.catActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .presetGrid {
   display: grid;
@@ -364,8 +364,8 @@
   background: var(--accent-dim);
   border-color: var(--accent);
 }
-.seasonLevelActive .seasonLevelLabel { color: var(--accent); }
-.seasonLevelActive .seasonLevelHint  { color: var(--accent); opacity: 0.85; }
+.seasonLevelActive .seasonLevelLabel { color: var(--accent-ink); }
+.seasonLevelActive .seasonLevelHint  { color: var(--accent-ink); opacity: 0.85; }
 
 /* ── 결과 카드 ── */
 .resultCard {
@@ -467,7 +467,7 @@
 }@media (hover: hover) {
   .resultBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.resultBtnDone { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.resultBtnDone { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .seasoningInterp {
   margin-top: 12px;
@@ -574,7 +574,7 @@
 }
 .savedCardTitle {
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 4px;
@@ -637,7 +637,7 @@
   border-radius: 10px;
   padding: 12px 18px;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent-ink);
   font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;

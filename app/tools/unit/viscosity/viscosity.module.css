@@ -95,7 +95,7 @@
   border-color: var(--accent);
 }
 .scaleBtnActive .scaleName,
-.scaleBtnActive .scaleType { color: var(--accent); }
+.scaleBtnActive .scaleType { color: var(--accent-ink); }
 .scaleDesc {
   font-size: 13px;
   color: var(--muted);
@@ -175,9 +175,9 @@
 .densityBtnActive {
   background: var(--accent-dim);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
-.densityBtnActive small { color: var(--accent); }
+.densityBtnActive small { color: var(--accent-ink); }
 
 /* ── 온도 토글 ── */
 .tempRow {
@@ -286,7 +286,7 @@
 }
 .resCardInput .resName { color: var(--accent); }
 .inputTag {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;
@@ -364,7 +364,7 @@
   font-weight: 800;
   color: var(--text);
 }
-.saeRowActive .saeGrade { color: var(--accent); }
+.saeRowActive .saeGrade { color: var(--accent-ink); }
 .saeRange {
   font-family: var(--font-sans);
   color: var(--muted);

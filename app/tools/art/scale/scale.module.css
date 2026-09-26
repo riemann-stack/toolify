@@ -308,14 +308,14 @@
   font-family: var(--font-sans);
 }
 .chordFn {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 .chordPlay {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--accent);
   font-weight: 700;
   font-family: var(--font-sans);

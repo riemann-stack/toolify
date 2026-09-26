@@ -338,7 +338,7 @@
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
-.barValue small { color: var(--muted); font-size: 10px; font-weight: 400; }
+.barValue small { color: var(--muted); font-size: 11px; font-weight: 400; }
 
 /* ── 커트라인 ── */
 .cutlineList { display: flex; flex-direction: column; gap: 6px; }
@@ -533,3 +533,6 @@
   line-height: 1.7;
   font-family: var(--font-sans);
 }
+
+/* overflow:hidden 컨테이너 안 버튼 — 전역 포커스 링(바깥 2px)이 잘리지 않게 안쪽으로 */
+.numRow :focus-visible { outline-offset: -3px; }

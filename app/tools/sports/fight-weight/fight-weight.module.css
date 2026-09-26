@@ -79,7 +79,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -178,7 +178,6 @@
   color: var(--text);
   outline: none;
   padding: 4px 0;
-  color-scheme: dark;
 }
 
 /* ── 성별 토글 ── */
@@ -202,7 +201,7 @@
 }
 .genderActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -445,7 +444,7 @@
 .chipFat   { background: rgba(234,88,12,0.15); color: var(--orange-600); }
 .chipWater { background: color-mix(in srgb, var(--cyan-600) 15%, transparent); color: var(--cyan-600); }
 .chipRehy  { background: rgba(16,185,129,0.15); color: var(--emerald-600); }
-.chipDday  { background: var(--accent-dim);     color: var(--accent); }
+.chipDday  { background: var(--accent-dim);     color: var(--accent-ink); }
 
 /* ── 건강 경고 ── */
 .healthWarn {
@@ -544,4 +543,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

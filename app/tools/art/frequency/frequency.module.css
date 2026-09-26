@@ -31,7 +31,7 @@
 }@media (hover: hover) {
   .refBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.refBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
+.refBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent-ink) !important; }
 
 /* ── 입력 ── */
 .inputRow { display: flex; align-items: center; gap: 8px; }
@@ -120,8 +120,8 @@
 }@media (hover: hover) {
   .noteBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.noteBtnBlack { background: var(--bg2); font-size: 10px; }
-.noteBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
+.noteBtnBlack { background: var(--bg2); font-size: 11px; }
+.noteBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent-ink) !important; }
 
 /* ── 옥타브 ── */
 .octaveRow { display: flex; gap: 4px; }
@@ -133,7 +133,7 @@
 }@media (hover: hover) {
   .octBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.octBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
+.octBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent-ink) !important; }
 
 /* ── 이웃 음정 ── */
 .neighborRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

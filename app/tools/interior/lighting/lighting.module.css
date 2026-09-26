@@ -39,7 +39,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -101,7 +101,7 @@
 }
 .modePyung { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .modeMeter { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
-.modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.modePyung.modeActive { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .modeMeter.modeActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600);       border-color: var(--cyan-600);     font-weight: 700; }
 
 .pyungSelect {
@@ -199,7 +199,7 @@
 }@media (hover: hover) {
   .pill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pillActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.pillActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 /* ── 공간 용도 12개 ── */
 .spaceGrid {
@@ -234,7 +234,7 @@
 }
 .spaceBtn span.icon { font-size: 18px; margin-bottom: 2px; }
 .spaceBtn small {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   font-family: var(--font-sans);
   font-weight: 700;
@@ -254,7 +254,7 @@
 .spCloset   { border-color: rgba(161,98,7,0.40); }
 .spBaby     { border-color: rgba(255,182,193,0.40); }
 
-.spLiving.spActive   { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.spLiving.spActive   { background: var(--accent-dim);      color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .spBedroom.spActive  { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
 .spStudy.spActive,
 .spKids.spActive,
@@ -292,7 +292,7 @@
 .intStandard  { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .intBright    { border-color: rgba(161,98,7,0.40); }
 .intDim.intActive       { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
-.intStandard.intActive  { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.intStandard.intActive  { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .intBright.intActive    { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
 
 /* ── 조명 방식 카드 ── */
@@ -328,13 +328,13 @@
 .ltDirect   { border-color: var(--accent); }
 .ltIndirect { border-color: rgba(155,89,182,0.40); }
 .ltMixed    { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
-.ltDirect.ltActive   { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.ltDirect.ltActive   { background: var(--accent-dim);      color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .ltIndirect.ltActive { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
 .ltMixed.ltActive    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
 
 .ltBadge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   padding: 1px 6px;
   border-radius: var(--radius-pill);
   margin-top: 4px;
@@ -384,7 +384,7 @@
 }
 .ledActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -553,7 +553,7 @@
 }@media (hover: hover) {
   .convertModeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.convertModeActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.convertModeActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .bulbGrid {
   display: grid;
@@ -594,7 +594,7 @@
 .bulbHalogen.bulbActive   { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .bulbFluo.bulbActive,
 .bulbCfl.bulbActive       { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
-.bulbLed.bulbActive       { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.bulbLed.bulbActive       { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .bulbLedHigh.bulbActive   { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
 
 /* 환산 결과 표 */
@@ -766,4 +766,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

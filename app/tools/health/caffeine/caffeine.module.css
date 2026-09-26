@@ -424,7 +424,6 @@
   font-family: var(--font-sans);
   outline: none;
   font-variant-numeric: tabular-nums;
-  color-scheme: dark;
 }
 .bedtimeInput:focus { border-color: var(--accent); }
 .sleepResult {

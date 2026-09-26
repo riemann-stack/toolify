@@ -737,7 +737,7 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
               onClick={() => setType(key)}>
               <small>{icon}</small>
               <div>{label}</div>
-              <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>{hint}</div>
+              <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>{hint}</div>
             </button>
           ))}
         </div>

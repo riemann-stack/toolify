@@ -99,7 +99,6 @@
   font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
-  color-scheme: dark;
   min-height: 40px;
   min-width: 0;
 }

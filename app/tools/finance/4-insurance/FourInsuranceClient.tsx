@@ -457,9 +457,9 @@ export default function FourInsuranceClient({ buildDate }: { buildDate?: string 
             <div style={{ marginTop: 12 }}>
               <span className={s.subLabel}>사업장 규모 (고용보험 사업주 추가 부담률)</span>
               <div className={s.choiceRow} role="group" aria-label="사업장 규모">
-                <button type="button" aria-pressed={companySize === 'under150'} className={`${s.choiceBtn} ${companySize === 'under150'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('under150')}>150인 미만<br /><small style={{ fontSize: 10 }}>+0.25%</small></button>
-                <button type="button" aria-pressed={companySize === 'under1000'} className={`${s.choiceBtn} ${companySize === 'under1000' ? s.choiceActive : ''}`} onClick={() => setCompanySize('under1000')}>150~999인<br /><small style={{ fontSize: 10 }}>+0.65%</small></button>
-                <button type="button" aria-pressed={companySize === 'over1000'} className={`${s.choiceBtn} ${companySize === 'over1000'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('over1000')}>1,000인+<br /><small style={{ fontSize: 10 }}>+0.85%</small></button>
+                <button type="button" aria-pressed={companySize === 'under150'} className={`${s.choiceBtn} ${companySize === 'under150'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('under150')}>150인 미만<br /><small style={{ fontSize: 11 }}>+0.25%</small></button>
+                <button type="button" aria-pressed={companySize === 'under1000'} className={`${s.choiceBtn} ${companySize === 'under1000' ? s.choiceActive : ''}`} onClick={() => setCompanySize('under1000')}>150~999인<br /><small style={{ fontSize: 11 }}>+0.65%</small></button>
+                <button type="button" aria-pressed={companySize === 'over1000'} className={`${s.choiceBtn} ${companySize === 'over1000'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('over1000')}>1,000인+<br /><small style={{ fontSize: 11 }}>+0.85%</small></button>
               </div>
             </div>
 

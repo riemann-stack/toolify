@@ -64,7 +64,7 @@
 .goalCheck {
   position: absolute; top: 6px; right: 8px;
   background: var(--accent-strong); color: #ffffff;
-  font-family: var(--font-sans); font-size: 10px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 11px; font-weight: 800;
   width: 18px; height: 18px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
 }
@@ -236,7 +236,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 /* 탭 4개 — 좁은 화면에서는 글자를 줄이고 단어 단위로만 줄바꿈 ("인터벌 / 페이스") */
@@ -423,7 +423,7 @@
 }
 .goalIcon { font-size: 18px; }
 .goalLabel { font-size: 12px; font-weight: 600; }
-.goalIntensity { font-size: 10px; color: var(--muted); font-family: var(--font-sans); font-weight: 800; letter-spacing: 0.04em; }
+.goalIntensity { font-size: 11px; color: var(--muted); font-family: var(--font-sans); font-weight: 800; letter-spacing: 0.04em; }
 
 .goalSpeed { border-color: rgba(220,38,38,0.40); }
 .goal5k    { border-color: var(--accent); }
@@ -431,7 +431,7 @@
 .goalHalf  { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .goalMar   { border-color: rgba(155,89,182,0.40); }
 .goalSpeed.goalActive { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
-.goal5k.goalActive    { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.goal5k.goalActive    { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .goal10k.goalActive   { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .goalHalf.goalActive  { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
 .goalMar.goalActive   { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
@@ -461,14 +461,14 @@
 }@media (hover: hover) {
   .distBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.distActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.distActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 .dist800 .distYassoBadge {
   position: absolute;
   top: -8px;
   right: -2px;
   background: var(--yellow-700);
   color: #000;
-  font-size: 9px;
+  font-size: 11px;
   padding: 1px 6px;
   border-radius: var(--radius-pill);
   font-family: var(--font-sans);

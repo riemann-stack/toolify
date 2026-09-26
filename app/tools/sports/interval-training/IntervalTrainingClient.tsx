@@ -1289,7 +1289,7 @@ export default function IntervalTrainingClient() {
                             {w.menu2 && <><br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>+ {w.menu2.name}</span></>}
                           </td>
                           <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
-                            {fmtMS(lapSec)}<span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 2 }}>/{distLabel}</span>
+                            {fmtMS(lapSec)}<span style={{ fontSize: 11, color: 'var(--muted)', marginLeft: 2 }}>/{distLabel}</span>
                           </td>
                           <td style={{ color: 'var(--muted)', fontSize: 12 }}>{recoveryText(w.menu1, lapSec)}</td>
                           <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>

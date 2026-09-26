@@ -45,7 +45,7 @@
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: #0EA5E9; color: #ffffff; }
+.tabActive { background: var(--accent); color: #ffffff; }
 
 /* 검색 input */
 .searchInput {
@@ -60,7 +60,7 @@
   outline: none;
   box-sizing: border-box;
 }
-.searchInput:focus { border-color: #0EA5E9; }
+.searchInput:focus { border-color: var(--accent); }
 .searchInput::placeholder { color: var(--muted); }
 
 /* 빠른 칩 */
@@ -107,12 +107,12 @@
   font-family: var(--font-sans);
   font-weight: 600;
 }@media (hover: hover) {
-  .filterChip:hover { color: var(--text); border-color: #0EA5E9; }
+  .filterChip:hover { color: var(--text); border-color: var(--accent); }
 }
 .filterChipActive {
-  background: #0EA5E9;
+  background: var(--accent);
   color: #ffffff;
-  border-color: #0EA5E9;
+  border-color: var(--accent);
 }
 
 /* 결과 그리드 */
@@ -165,7 +165,7 @@
   color: var(--muted);
   padding: 4px;
 }@media (hover: hover) {
-  .favBtn:hover { color: #D97706; }
+  .favBtn:hover { color: var(--amber-600); }
 }
 .codeName {
   font-size: 13px;
@@ -225,7 +225,7 @@
   font-weight: 600;
   min-height: 32px;
 }@media (hover: hover) {
-  .smBtn:hover { color: #0EA5E9; border-color: #0EA5E9; }
+  .smBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
 .favBtnLarge {
   appearance: none;
@@ -240,7 +240,7 @@
   font-family: var(--font-sans);
   font-weight: 600;
 }@media (hover: hover) {
-  .favBtnLarge:hover { color: #D97706; border-color: #D97706; }
+  .favBtnLarge:hover { color: var(--amber-600); border-color: var(--amber-600); }
 }
 
 .detailHero {
@@ -298,7 +298,7 @@
 }
 .badgeStandard {
   background: rgba(13, 148, 136, 0.10);
-  color: #0D9488;
+  color: var(--teal-600);
   border: 1px solid rgba(13, 148, 136, 0.40);
   font-size: 11px;
   font-weight: 700;
@@ -405,7 +405,7 @@
   font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
-  color: #0EA5E9;
+  color: var(--accent);
 }
 .jumpRow {
   display: flex;
@@ -600,7 +600,7 @@
   padding: 2px 6px;
   border-radius: 3px;
   font-size: 12px;
-  color: #0EA5E9;
+  color: var(--accent);
   font-weight: 700;
 }
 
@@ -679,7 +679,7 @@
   line-height: 1.7;
 }
 .linkList a {
-  color: #0EA5E9;
+  color: var(--accent);
   text-decoration: none;
 }@media (hover: hover) {
   .linkList a:hover { text-decoration: underline; }
