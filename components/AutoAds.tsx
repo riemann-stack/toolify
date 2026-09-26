@@ -9,12 +9,21 @@
 //   AutoAds는 루트 레이아웃에 있어 도구 페이지에서 런타임 오류가 나 error.tsx가 본문을 대체해도
 //   살아 있고, 경로도 그대로라 adsAllowed()만으로는 못 막는다. 스크립트가 이미 로드됐다면 자동 광고가
 //   오류 화면에 붙을 수 있다(정책: 오류·콘텐츠 없는 화면 광고 금지).
-//   → error.tsx에 <AdFreeScreen />을 렌더하면: ① 아직 삽입 전이면 스크립트를 넣지 않고,
-//     ② 이미 삽입·로드됐으면 AdSense 공식 API `adsbygoogle.pauseAdRequests = 1`로 신규 광고 요청을 보류,
+//   → 오류 화면이 <AdFreeScreen />을 렌더할 때에만(그 화면에 마운트된 동안에만) 효과가 있다:
+//     ① 아직 삽입 전이면 스크립트를 넣지 않는다 — 확정적(우리 코드가 삽입 자체를 안 함).
+//     ② 이미 삽입·로드됐으면 `adsbygoogle.pauseAdRequests = 1`로 신규 광고 요청 보류를 '시도'한다 — best-effort.
 //     ③ 오류 화면이 사라지면(재시도·다른 페이지 이동) 0으로 재개한다.
 //   같은 보류/재개는 SPA 이동으로 광고 비허용 페이지(홈·정책 등)에 들어갈 때도 적용된다
 //   (한 번 로드된 adsbygoogle.js는 언로드되지 않으므로).
-//   한계: 이미 화면에 붙은 광고(앵커 등)를 떼지는 못한다 — 신규 요청만 막는다.
+//
+//   ⚠ ②는 보장되지 않는다(best-effort):
+//     Google이 문서화한 pauseAdRequests 사용법은 '스크립트 로드 "전에" 1로 설정 → 동의 등 조건 충족 후 0으로 재개'
+//     뿐이다. 로드 "후에" 1로 바꿨을 때 자동 광고가 신규 요청을 멈추는지는 문서에 없다(현재 동작해도 예고 없이 바뀔 수 있음).
+//     한계: 이미 화면에 붙은 광고(앵커·전면 등)를 떼지는 못한다.
+//   ▶ 배포 후 확인: DevTools 네트워크 패널에서 'googlesyndication|doubleclick' 필터 → 광고 허용 도구 페이지에서
+//     광고가 뜬 뒤 SPA 이동으로 홈·정책 페이지(또는 오류 화면)로 가서 신규 광고 요청(googleads.g.doubleclick.net/pagead/ads 등)이 더 나가지 않는지 본다.
+//     나간다면 ②는 무효 — 이 주석·README를 고치고, 확실히 막아야 하는 화면은 전체 새로고침으로 진입하게 해
+//     ①(삽입 안 함)이 적용되도록 하는 대안을 검토할 것.
 //
 // 서버 렌더 <script async>를 쓰지 않는 이유 (next/script afterInteractive 유지):
 //   usePathname은 정적 프리렌더에서도 동작하므로 React 19의 <script async src> 호이스팅으로
@@ -55,7 +64,8 @@ export function useAdsSuppressed(): boolean {
 
 /**
  * 광고 금지 화면 표지. 오류 화면(app/error.tsx) 등 '게시자 콘텐츠가 없는 화면'에 렌더한다.
- * 마운트된 동안 자동 광고 스크립트 삽입·수동 슬롯 생성을 막고, 이미 로드된 스크립트의 신규 요청을 보류한다.
+ * 렌더된 화면에서만 효과가 있다 — 마운트된 동안 자동 광고 스크립트 삽입·수동 슬롯 생성을 막고,
+ * 이미 로드된 스크립트에는 신규 요청 보류를 시도한다(pauseAdRequests — best-effort, 위 헤더 주석 참고).
  *   사용: `import { AdFreeScreen } from '@/components/AutoAds'` → 오류 UI 안에 `<AdFreeScreen />`
  */
 export function AdFreeScreen(): null {
@@ -66,9 +76,11 @@ export function AdFreeScreen(): null {
   return null
 }
 
-/* ── 이미 로드된 스크립트의 신규 광고 요청 보류/재개 ──
+/* ── 이미 로드된 스크립트의 신규 광고 요청 보류/재개 (best-effort) ──
+   pauseAdRequests를 '로드 후에' 1로 바꾸는 것은 Google 문서 밖 사용법이라 효과가 보장되지 않는다
+   (문서화된 것은 로드 전 1 → 이후 0 재개뿐). 실패해도 부작용이 없는 범위에서만 시도한다.
    기본 경로(허용 도구 페이지 직접 진입)에서는 아무것도 건드리지 않는다:
-   우리가 1로 바꾼 적이 있을 때만 0으로 되돌린다. */
+   우리가 1로 바꾼 적이 있을 때만 0으로 되돌린다(0으로 재개는 문서화된 동작). */
 let pausedByUs = false
 
 function syncAdRequestPause(pause: boolean): void {

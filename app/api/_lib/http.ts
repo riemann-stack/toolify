@@ -2,7 +2,9 @@
 // API 응답 공통 — 보안·색인 헤더, 교차 사이트 호출 차단 (Node·Edge 공용)
 // ─────────────────────────────────────────────────────────────
 
-/** 모든 API 응답에 붙이는 헤더. robots.ts의 Disallow: /api/ 와 별개로 응답 자체에도 색인 제외 표시. */
+/** 모든 API 응답에 붙이는 헤더 — 응답 자체에 색인 제외 표시.
+ *  robots.ts는 페이지 렌더링용으로 /api/time·/api/produce-price의 '크롤(fetch)'을 허용하고 나머지 /api/는 막는다.
+ *  크롤이 허용된 두 API도 이 헤더 때문에 검색 결과에 색인되지는 않는다(렌더링 리소스로만 쓰임). */
 export const API_BASE_HEADERS: Readonly<Record<string, string>> = {
   'X-Robots-Tag': 'noindex',
   'X-Content-Type-Options': 'nosniff',

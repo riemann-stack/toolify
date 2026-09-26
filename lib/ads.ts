@@ -8,7 +8,8 @@ import { allTools } from './tools'
 declare global {
   interface Window {
     /** AdSense 큐. 스크립트 로드 전엔 배열, 로드 후엔 push를 가진 객체로 교체된다.
-     *  pauseAdRequests: 1이면 신규 광고 요청 보류, 0이면 재개 (AdSense 공식 동의·보류 API). */
+     *  pauseAdRequests: 1이면 신규 광고 요청 보류, 0이면 재개. Google이 문서화한 사용법은
+     *  '스크립트 로드 전에 1 → 이후 0으로 재개'뿐 — 로드 후에 1로 바꾸는 AutoAds의 사용은 best-effort. */
     adsbygoogle?: unknown[] & { pauseAdRequests?: 0 | 1; loaded?: boolean }
   }
 }
@@ -135,8 +136,10 @@ const AD_ALLOWED_PATHS: ReadonlySet<string> = new Set(allTools.map((t) => t.href
  * 해당 경로에 광고(자동/수동)를 로드해도 되는지 — 실재 도구 경로만 허용(404·민감·심사모드·정책/내비 차단).
  *
  * 오류 화면(app/error.tsx): 경로는 정상 도구 경로 그대로라 이 함수만으로는 못 막는다.
- * → components/AutoAds.tsx 의 <AdFreeScreen />을 오류 화면에 렌더하면
- *   AutoAds·AdSlot이 광고 생성을 멈추고, 이미 로드된 스크립트는 pauseAdRequests=1로 신규 요청을 보류한다.
+ * → components/AutoAds.tsx 의 <AdFreeScreen />을 오류 화면에 렌더하면(렌더한 화면에서만 효과)
+ *   AutoAds·AdSlot이 광고 생성을 멈춘다(확정적). 이미 로드된 스크립트에는 pauseAdRequests=1로
+ *   신규 요청 보류를 '시도'할 뿐이다 — Google 문서 밖 사용법이라 best-effort.
+ *   배포 후 DevTools 네트워크 패널에서 보류가 실제로 먹는지 확인할 것(AutoAds.tsx 헤더 주석의 절차).
  */
 export function adsAllowed(pathname: string | null | undefined): boolean {
   if (!pathname) return false

@@ -5,7 +5,7 @@ import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
 import { allTools, type Tool } from '../lib/tools'
 import { searchTools, createToolSearch, TOOL_ALIASES } from '../lib/search'
-import { CASES, MERGED_INTO, evaluateCase } from '../scripts/search-regression.mjs'
+import { CASES, MERGED_INTO, evaluateCase, type SearchCase } from '../scripts/search-regression.mjs'
 
 describe('검색 회귀 케이스 (scripts/search-regression.mts)', () => {
   test('케이스 30개 이상', () => {
@@ -29,9 +29,22 @@ describe('별칭 맵 위생', () => {
   })
 
   test('병합 소스·삭제 도구에는 별칭을 두지 않는다 (target으로 이동)', () => {
+    // 예외: 병합 전까지 기능이 소스에만 있는 도구 — 소스가 레지스트리에 있는 동안만 별칭 허용.
+    // 소스가 삭제되면 예외가 자동으로 풀려(그리고 고아 키 테스트도 걸려) 병합 단계에서 target으로 옮기게 된다.
+    const holdUntilMerge = new Set(['/tools/edu/sci-units'])
     const gone = [...Object.keys(MERGED_INTO), '/tools/dev/tech-stack', '/tools/life/fart-risk']
+      .filter(h => !(holdUntilMerge.has(h) && existing.has(h)))
     const left = gone.filter(h => h in TOOL_ALIASES)
     assert.deepEqual(left, [])
+  })
+
+  test('eV·전자볼트는 단위 변환기, 천문·원자 스케일 단위는 병합 전까지 sci-units', () => {
+    const norm = (h: string) => (TOOL_ALIASES[h] ?? []).map(a => a.toLowerCase())
+    assert.ok(norm('/tools/unit/converter').includes('ev'))
+    assert.ok(norm('/tools/unit/converter').includes('전자볼트'))
+    const scale = existing.has('/tools/edu/sci-units') ? '/tools/edu/sci-units' : '/tools/edu/sig-figs'
+    for (const w of ['광년', '옹스트롬', '파섹', '천문단위']) assert.ok(norm(scale).includes(w), `${w} → ${scale}`)
+    assert.ok(!norm('/tools/edu/sig-figs').includes('ev'))
   })
 
   test("car-tax는 일반 '취득세'·'양도세'를 소유하지 않는다", () => {
@@ -55,6 +68,26 @@ describe('searchTools 동작', () => {
 
   test('대소문자 무시', () => {
     assert.equal(searchTools('BMI')[0]?.tool.href, searchTools('bmi')[0]?.tool.href)
+  })
+
+  test('future: 신설 도구가 레지스트리에 생기면 1위가 신설 도구여야 통과', () => {
+    const F = '/tools/finance/'
+    const c: SearchCase = { q: '취득세', top1: [F + 'acquisition-tax', F + 'auction'], future: [F + 'acquisition-tax'] }
+    const fake = (first: string) => () => [{ tool: { href: first }, score: 90 }]
+    const before = new Set([F + 'auction'])
+    const after = new Set([F + 'auction', F + 'acquisition-tax'])
+    assert.ok(evaluateCase(c, fake(F + 'auction'), before).pass, '신설 전: 기존 도구 1위 허용')
+    assert.ok(!evaluateCase(c, fake(F + 'auction'), after).pass, '신설 후: 기존 도구 1위면 실패')
+    assert.ok(evaluateCase(c, fake(F + 'acquisition-tax'), after).pass, '신설 후: 신설 도구 1위면 통과')
+  })
+
+  test('병합 소스를 기대값으로 적은 케이스는 소스 삭제 후 target을 정답으로 본다', () => {
+    const c: SearchCase = { q: '광년', top1: ['/tools/edu/sci-units'] }
+    const fake = (first: string) => () => [{ tool: { href: first }, score: 90 }]
+    const merged = new Set(['/tools/edu/sig-figs'])
+    assert.ok(evaluateCase(c, fake('/tools/edu/sig-figs'), merged).pass)
+    const premerge = new Set(['/tools/edu/sig-figs', '/tools/edu/sci-units'])
+    assert.ok(!evaluateCase(c, fake('/tools/edu/sig-figs'), premerge).pass, '병합 전엔 소스만 정답')
   })
 
   test('기본 호출은 partial 결과를 섞지 않는다', () => {
@@ -121,5 +154,52 @@ describe('createToolSearch (합성 데이터)', () => {
   test('초성 검색', () => {
     assert.equal(search('ㅇㅂ')[0]?.tool.href, '/t/salary')
     assert.equal(search('ㄴㅇ')[0]?.tool.href, '/t/age')
+  })
+
+  test('공백 없이 접미사를 치다 만 상태 → 어근으로 검색 (연봉계·연봉계ㅅ·연봉계사·연봉ㄱ)', () => {
+    for (const q of ['연봉계', '연봉계ㅅ', '연봉계사', '연봉ㄱ', '연봉계산ㄱ', '나이계', '연봉 계사', '연봉 계산ㄱ']) {
+      assert.equal(search(q)[0]?.tool.href, q.startsWith('나이') ? '/t/age' : '/t/salary', q)
+    }
+  })
+
+  test('치다 만 접미사 제거는 어근이 어휘에 있는 2자 이상일 때만 (세계↛세, 인생↛인)', () => {
+    const s = createToolSearch([T('/t/tax', '세 도구'), T('/t/in', '인 도구')], { '/t/tax': ['세'], '/t/in': ['인'] })
+    assert.deepEqual(s('세계'), [])
+    assert.deepEqual(s('인생'), [])
+  })
+})
+
+describe('createToolSearch — 선택 토큰·복합어 별칭', () => {
+  const T = (href: string, name: string, desc = ''): Tool => ({ href, icon: '', name, desc })
+
+  test('선택(수치) 토큰은 평균에 넣지 않는다 — 못 맞춘 도구만 ×0.92', () => {
+    const s = createToolSearch(
+      [T('/t/pace', '러닝 페이스 계산기', '5km 10km 스플릿'), T('/t/swim', '수영 페이스 계산기', '100m 기록')],
+      { '/t/pace': ['페이스'], '/t/swim': ['페이스', '수영페이스'] },
+    )
+    const r = s('5km 페이스')
+    assert.equal(r[0]?.tool.href, '/t/pace')
+    const solo = s('페이스')
+    const at = (hits: typeof r, h: string) => hits.find(x => x.tool.href === h)?.score ?? 0
+    // 5km를 desc(낮은 점수)로 맞춘 pace도 점수가 깎이지 않는다
+    assert.equal(at(r, '/t/pace'), at(solo, '/t/pace'))
+    // 5km를 못 맞춘 swim만 감점
+    assert.ok(Math.abs(at(r, '/t/swim') - at(solo, '/t/swim') * 0.92) < 1e-9)
+  })
+
+  test('완결 단어는 "앞말 + 어휘 단어" 복합어 별칭만 낮은 점수로 확장, EXACT_ONLY는 제외', () => {
+    const s = createToolSearch(
+      [T('/t/pension', '연금 계산기'), T('/t/savings', '저축 계산기'), T('/t/url', 'URL 인코더'), T('/t/baker', '베이커 퍼센트')],
+      { '/t/pension': ['연금'], '/t/savings': ['저축', '연금저축'], '/t/url': ['인코딩', '퍼센트인코딩'], '/t/baker': ['퍼센트'] },
+    )
+    const r = s('연금')
+    assert.deepEqual(r.map(h => h.tool.href), ['/t/pension', '/t/savings'])
+    assert.ok(r[1].score < 60, '복합어 확장은 정확 일치보다 한참 낮게')
+    assert.ok(!s('퍼센트').some(h => h.tool.href === '/t/url'), '퍼센트 ↛ 퍼센트인코딩')
+  })
+
+  test('복합어 뒷말이 어휘에 없는 1글자면 확장하지 않는다 (나이 ↛ 나이프)', () => {
+    const s = createToolSearch([T('/t/age', '나이 계산기'), T('/t/hard', '경도 변환기')], { '/t/age': ['나이'], '/t/hard': ['나이프'] })
+    assert.deepEqual(s('나이').map(h => h.tool.href), ['/t/age'])
   })
 })

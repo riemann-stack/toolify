@@ -45,7 +45,8 @@ npm ci                 # 의존성 설치
 npm run dev            # 개발 서버 (http://localhost:3000)
 npm run build          # 프로덕션 빌드 (정적 생성 포함)
 npm start              # 빌드 결과 실행
-npm test               # 테스트 (tests/**/*.test.mts)
+npm test               # 테스트 (tests/**/*.test.mts) — 외부 네트워크 없이 실행
+NET_TESTS=1 npm test   # 실제 외부 연결이 필요한 케이스까지 포함 (로컬 점검용, CI에서는 생략)
 npm run lint           # ESLint
 npx tsc --noEmit       # 타입 검사 (새로 클론했다면 먼저 `npx next typegen` — next-env.d.ts 생성)
 ```
@@ -88,8 +89,16 @@ npx tsc --noEmit       # 타입 검사 (새로 클론했다면 먼저 `npx next 
 ## 광고 설정
 
 `lib/ads.ts` 한 곳에서 관리합니다. 광고는 실재하는 도구 페이지에만 붙습니다. 홈·카테고리·컬렉션·정책
-페이지와 404, 민감 주제 도구(주류·복권·민감 건강 정보)는 제외됩니다. 오류 화면에서는
-`<AdFreeScreen />`(`components/AutoAds.tsx`)이 광고 요청을 멈춥니다.
+페이지와 404, 민감 주제 도구(주류·복권·민감 건강 정보)는 제외됩니다.
+
+오류 화면처럼 경로는 도구 페이지 그대로인 '콘텐츠 없는 화면'은 `<AdFreeScreen />`
+(`components/AutoAds.tsx`)으로 막습니다. 이 표지는 **렌더된 화면에서만** 효과가 있으므로, 오류 화면이
+보호되는지는 `app/error.tsx`가 `<AdFreeScreen />`을 렌더하는지에 달려 있습니다. 렌더하는 동안에는
+광고 스크립트를 새로 넣지 않고 수동 슬롯도 만들지 않습니다. 스크립트가 이미 로드된 뒤라면
+`adsbygoogle.pauseAdRequests = 1`로 신규 요청 보류를 시도하지만, Google이 문서화한 사용법은 로드 전에
+1로 두었다가 0으로 재개하는 것뿐이라 이 보류는 best-effort입니다. 배포 후 DevTools 네트워크 패널
+(`googlesyndication|doubleclick` 필터)에서 도구 페이지 → 오류 화면·광고 제외 페이지로 SPA 이동했을 때
+신규 광고 요청이 멈추는지 확인합니다.
 
 AdSense 심사 기간에는 `AD_REVIEW_MODE = true`로 두어 타이머·게임·측정형 화면을 추가로 제외합니다.
 승인 뒤 `false`로 바꾸는 커밋은 콘텐츠 변경이 아니므로 제목에 `[skip-lastmod]`를 붙입니다.
@@ -100,5 +109,7 @@ AdSense 심사 기간에는 `AD_REVIEW_MODE = true`로 두어 타이머·게임�
 - `.github/workflows/ci.yml`: PR과 `main` 푸시마다 타입 검사, 테스트, 빌드를 실행합니다.
   lint는 기존 오류가 정리될 때까지 결과만 보고하고 실패로 처리하지 않습니다.
 - `.github/workflows/refresh-popular.yml`: 매주 월요일 04:00 KST에 인기 도구 매니페스트를 갱신해 `main`에 푸시합니다.
+  봇 커밋 제목에는 `[skip ci] [skip-lastmod]`가 붙습니다. 순위 재정렬은 콘텐츠 변경이 아니므로 홈 lastmod를 바꾸지 않습니다
+  (`gen:lastmod`도 홈 입력에서 `app/popular-tools.json`을 빼 두었습니다).
 - 배포 후 라이브 HTML은 한 줄이므로 `grep -c` 대신 `grep -o … | wc -l`로 셉니다. 자세한 내용은 CLAUDE.md를 봅니다.
 - `next.config.ts`의 301 리다이렉트는 영구 유지합니다. 옛 URL로 들어오는 외부 링크와 색인이 남아 있는 한 지우지 않습니다.

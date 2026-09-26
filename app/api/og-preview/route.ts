@@ -3,7 +3,8 @@
 //   - 외부 페이지 HTML을 받아와 og:* / twitter:* / title / canonical 메타태그 추출
 //   - 같은 출처 클라이언트(OgPreviewClient) 전용. CORS 헤더 없음 + 교차 사이트 브라우저 호출 403.
 //   - SSRF 방어: URL·리다이렉트 홉별 검증 + DNS 해석 결과 검증·핀 고정(fetchHtml.ts), 8초 예산, 본문 512KB 상한.
-//   - 5분 CDN 캐시(s-maxage) — 같은 URL 반복 조회 시 함수·대상 서버 호출 절감.
+//   - 성공 응답만 5분 CDN 캐시(s-maxage) — 같은 URL 반복 조회 시 함수·대상 서버 호출 절감.
+//     실패·400은 no-store (일시 오류가 캐시에 남아 재시도를 막지 않게).
 // 응답 계약(클라이언트): { ok, url?, fetchedUrl?, status?, tags?, error? }
 // ─────────────────────────────────────────────────────────────
 
@@ -31,8 +32,10 @@ interface MetaResponse {
   error?: string
 }
 
+/** 성공한 미리보기만 CDN 캐시 — 실패(타임아웃·일시적 네트워크 오류·400 검증 실패)를 5분간 고정하면
+ *  대상 서버가 복구돼도 같은 URL 재시도가 캐시된 실패만 돌려받는다. */
 function json(data: MetaResponse, status = 200): Response {
-  return apiJson(data, status, CACHE_OK)
+  return apiJson(data, status, data.ok ? CACHE_OK : 'no-store')
 }
 
 export async function GET(req: Request): Promise<Response> {

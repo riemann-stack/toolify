@@ -13,8 +13,17 @@ export interface TargetCheckFail {
   message: string
 }
 
-/** 허용 포트 — URL.port는 스킴 기본 포트면 ''. 비표준 포트는 공개 호스트 대상 포트 스캔 악용 방지로 차단. */
-const ALLOWED_PORTS: ReadonlySet<string> = new Set(['', '80', '443', '8080', '8443'])
+/**
+ * 허용 포트(허용 목록) — URL.port는 스킴 기본 포트면 ''. 목록 밖 포트는 공개 호스트 대상 포트 스캔
+ * (SSH 22·SMTP 25·Redis 6379·DB 3306/5432·개발 서버 3000 등 내부 서비스 탐지) 악용 방지로 전부 차단.
+ *   - 80·443: 기본, 8080·8443: 대체 HTTP(S) 관례
+ *   - 8000·8081·8888·9443: 국내 티켓팅·수강신청(대학 학사)·예약 사이트가 실제로 쓰는 웹 포트
+ *     (server-time의 서버 시각 조회 대상) — 추가 시 테스트(tests/api-ssrf.test.mts) 허용·차단 표를 함께 갱신
+ */
+const ALLOWED_PORTS: ReadonlySet<string> = new Set(['', '80', '443', '8000', '8080', '8081', '8443', '8888', '9443'])
+
+/** 오류 안내용 '80·443·8000·…' — 허용 목록에서 파생(목록과 문구가 어긋나지 않게) */
+const ALLOWED_PORTS_LABEL = Array.from(ALLOWED_PORTS).filter(Boolean).join('·')
 
 /** 사설·내부 전용 도메인 접미사 (공개 DNS에서 의미 없는 이름 → 내부 리졸버로 새는 것 방지) */
 const BLOCKED_SUFFIXES: readonly string[] = [
@@ -164,7 +173,7 @@ export function checkTargetUrl(u: URL): TargetCheckFail | null {
     return { kind: 'credentials', message: '계정 정보(user:pass@)가 포함된 URL은 지원하지 않습니다.' }
   }
   if (!ALLOWED_PORTS.has(u.port)) {
-    return { kind: 'port', message: '표준 포트(80·443·8080·8443)만 지원합니다.' }
+    return { kind: 'port', message: `웹 포트(${ALLOWED_PORTS_LABEL})만 지원합니다.` }
   }
   const host = normalizeHost(u.hostname)
   const isIpLiteral = parseIPv4(host) !== null || host.includes(':')

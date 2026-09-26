@@ -3,13 +3,17 @@
 //
 //  · 질의를 공백으로 토큰화 → "계산기/계산/변환기…" 같은 접미사·불용 토큰 제거
 //    ("퇴직금 계산" → 퇴직금, "연봉계산기" → 연봉). 남는 게 없으면 원문 그대로 검색.
-//  · 다중 토큰은 모든 토큰이 name/alias/desc/초성 어딘가에 매치(AND)해야 하고 평균 점수.
+//  · 다중 토큰은 모든 필수 토큰이 name/alias/desc/초성 어딘가에 매치(AND)해야 하고 필수 토큰 평균 점수.
 //    공백을 뺀 전체 구(phrase)도 한 토큰으로 따로 채점해 더 높은 쪽을 쓴다("양도 소득세").
-//    금액 숫자("연봉 3000")·타이핑 중 마지막 1글자는 선택 토큰. opts.partial이면 AND 0건일 때
-//    일부 토큰만 맞는 도구를 partial=true로 낮은 점수에 돌려준다("혹시 이 도구?" 용).
+//    금액 숫자("연봉 3000")·타이핑 중 마지막 토큰(1글자, "계사"처럼 접미사를 치다 만 것)은 선택 토큰:
+//    평균에 넣지 않고, 못 맞춘 도구만 개당 ×0.92 ("5km 페이스" → 페이스 점수 그대로, 5km 없는 도구만 감점).
+//    opts.partial이면 AND 0건일 때 일부 토큰만 맞는 도구를 partial=true로 낮은 점수에 돌려준다("혹시 이 도구?" 용).
+//  · 공백 없이 치다 만 접미사("연봉계", "퇴직금계사", "양도세ㄱ")는 끝부분을 접미사로 보고 어근도 함께 채점.
 //  · 별칭은 완전일치 우선. 접두·부분 확장은 "질의가 어휘에 없는 미완성 단어"일 때만
-//    (타이핑 중 "양도" → 양도세). 이미 완결된 단어면 확장하지 않는다
-//    → "나이"↛나이프(경도), "퍼센트"↛퍼센트인코딩(URL), "볼트"↛전자볼트.
+//    (타이핑 중 "양도" → 양도세). 이미 완결된 단어면 일반 접두 확장은 하지 않는다
+//    → "나이"↛나이프(경도), "볼트"↛볼트 붙은 다른 도구. 단, 별칭이 "완결 단어 + 또 하나의 단어"인
+//    복합어면 낮은 점수(50)로 잡는다("연금"→연금저축, "마라톤"→마라톤페이스). 예외: EXACT_ONLY_ALIASES
+//    ("퍼센트"↛퍼센트인코딩(URL)).
 //  · 이름 부분일치는 2자 이상만(1자는 단어 시작만) → "술"↛기술 스택.
 //  · 초성("ㅇㅂ")·초성+음절 혼합("연ㅂ", IME 조합 중)도 지원.
 //
@@ -69,7 +73,7 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/finance/cost-rate':    ['원가', '마진', '음식점', '메뉴가격', '식당', '카페'],
   '/tools/finance/installment':  ['할부', '카드할부', '무이자', '할부이자'],
   // '알바'·'주휴수당'은 알바 급여 도구(/tools/finance/hourly-pay) 신설 시 그쪽으로 이동
-  '/tools/finance/4-insurance':  ['4대보험', '국민연금', '건강보험', '고용보험', '산재', '4대보험료', '알바', '아르바이트', '주휴수당'],
+  '/tools/finance/4-insurance':  ['4대보험', '국민연금', '건강보험', '건강보험료', '고용보험', '산재', '4대보험료', '알바', '아르바이트', '주휴수당'],
   '/tools/finance/ipo-deposit':  ['공모주', '청약', '증거금', 'ipo', '균등배정'],
 
   // 건강
@@ -129,7 +133,7 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/date/military':        ['군대', '군복무', '전역', '말년'],
 
   // 단위
-  '/tools/unit/converter':       ['단위변환', '미터', '인치', '파운드', 'kg', 'lb'],
+  '/tools/unit/converter':       ['단위변환', '미터', '인치', '파운드', 'kg', 'lb', 'eV', '전자볼트'],
   '/tools/unit/area':            ['평수', '평', '제곱미터', '평계산'],
   '/tools/unit/size':            ['옷사이즈', '신발사이즈', '치수'],
   '/tools/unit/fuel-economy':    ['연비', 'mpg', 'km/l'],
@@ -157,9 +161,12 @@ export const TOOL_ALIASES: Record<string, string[]> = {
 
   // 교육
   '/tools/edu/gpa-converter':    ['학점', 'gpa', '학점환산', '4.5', '4.3', 'wes', '유학', '평점', 'a+', '평어', '백분위'],
-  // sci-units(과학 단위 변환기) 병합 대상 — 별칭 흡수
+  // sci-units(과학 단위 변환기) 병합 대상 — 표기·접두어 별칭은 흡수
   '/tools/edu/sig-figs':         ['유효숫자', '유효숫자계산', '반올림', '오차', '오차전파', '상대오차', '절대오차', '백분율오차', '불확도', '측정오차', '실험보고서', '일반물리실험', '일반화학실험', 'significant figures', 'error propagation',
-                                  '과학단위', '과학적표기', '공학적표기', 'SI접두어', '나노', '마이크로', '옹스트롬', 'angstrom', 'eV', '전자볼트', '광년', '천문단위', '파섹', '물리상수', '지수변환'],
+                                  '과학단위', '과학적표기', '공학적표기', 'SI접두어', '나노', '마이크로', '물리상수', '지수변환'],
+  // 스케일 단위 환산은 병합 전까지 sci-units에만 있다 — 병합 단계에서 sig-figs로 옮길 것.
+  // (eV·전자볼트는 단위 변환기 에너지 분야가 지원하므로 /tools/unit/converter)
+  '/tools/edu/sci-units':        ['광년', '옹스트롬', 'angstrom', '파섹', '천문단위'],
 
   // 인테리어
   '/tools/interior/wallpaper':   ['벽지', '도배', '도배지'],
@@ -208,7 +215,7 @@ export const TOOL_ALIASES: Record<string, string[]> = {
 
   // 금융 추가
   '/tools/finance/savings':      ['저축', '월저축', '저축률', '재무진단', '6항아리', '청년도약', 'isa', '연금저축'],
-  '/tools/finance/severance':    ['퇴직금', '퇴직', '평균임금'],
+  '/tools/finance/severance':    ['퇴직금', '퇴직', '평균임금', '퇴사일', '퇴직일'],
   '/tools/finance/freelance-tax':['프리랜서', '3.3', '종합소득세', '사업소득', '세금'],
   '/tools/finance/auction':      ['경매', '부동산', '부동산경매', '낙찰가', '취득세', '부동산 취득세', '주택 취득세'],
   // '/tools/finance/acquisition-tax': ['취득세', '부동산 취득세', '주택 취득세', '취득세율', '다주택 취득세', '생애최초'],
@@ -330,7 +337,13 @@ const NEEDS_LONG_STEM = new Set(['조회', '표', '방법', '생성'])
 const STOP_TOKENS = new Set([...QUERY_SUFFIXES, '얼마', '추천', '공식', '온라인', '무료'])
 
 // 별칭 뒤에 붙어도 같은 의도로 보는 꼬리 (조사·단위성 접미)
-const ALIAS_TAILS = new Set(['은', '는', '이', '가', '을', '를', '의', '에', '도', '만', '로', '으로', '에서', '까지', '일', '값', '액', '별', '얼마'])
+const ALIAS_TAILS = new Set(['은', '는', '이', '가', '을', '를', '의', '에', '도', '만', '로', '으로', '에서', '까지', '일', '값', '액', '료', '별', '얼마'])
+
+// 복합어 별칭("연금저축" = 연금 + 저축)의 뒷말로 인정하는 일반 명사 — 어휘(별칭·이름 단어)에 더해 쓴다.
+// 완결 단어 질의("연금")가 이 형태의 별칭을 가진 도구를 낮은 점수(50)로 잡게 한다.
+const COMPOUND_TAIL_WORDS = ['수익', '한도', '관리', '분배', '비교', '가격', '공제', '예측', '플랜']
+// 앞말이 수식어일 뿐이라 앞말만으로 찾으면 오탐인 복합어 별칭 (compact 형) — "퍼센트"↛URL 인코더
+const EXACT_ONLY_ALIASES = new Set(['퍼센트인코딩'])
 
 // 초성 질의 접미사 ("ㅇㅂㄱㅅㄱ" → ㅇㅂ) — 남는 부분이 2자 이상일 때만
 const INITIAL_SUFFIXES = ['ㄱㅅㄱ', 'ㅂㅎㄱ', 'ㅅㅅㄱ', 'ㄱㅅ', 'ㅂㅎ']
@@ -353,6 +366,28 @@ function stripSuffix(t: string): string {
     }
   }
   return t
+}
+
+/** 받침 무시·초성 허용 접두 비교용 — 불용 토큰 전체(접미사 + 얼마·추천…) */
+const STOP_CHARS = [...STOP_TOKENS].map(s => Array.from(s))
+const MAX_STOP_LEN = Math.max(...STOP_CHARS.map(s => s.length))
+
+/** 불용 토큰을 치다 만 상태인가 ("계", "계사", "계ㅅ", "계산ㄱ" ⊂ 계산기) */
+function isPartialStop(tail: readonly string[]): boolean {
+  return STOP_CHARS.some(s => s.length >= tail.length && patternPrefix(s.join(''), tail, true))
+}
+
+/**
+ * 공백 없이 접미사를 치다 만 토큰 → 어근 ("연봉계"·"연봉계ㅅ" → 연봉, "퇴직금계사" → 퇴직금, "양도세ㄱ" → 양도세).
+ * 어근은 2자 이상이고 어휘에 있는 완결 단어일 때만 ("세계"↛세, "인생"↛인). 없으면 ''.
+ */
+function stripPartialSuffix(t: string, words: ReadonlySet<string>): string {
+  const ch = Array.from(t)
+  for (let k = Math.min(ch.length - 2, MAX_STOP_LEN); k >= 1; k--) {
+    const stem = ch.slice(0, ch.length - k).join('')
+    if (words.has(stem) && isPartialStop(ch.slice(ch.length - k))) return stem
+  }
+  return ''
 }
 
 // 도구 이름의 "핵심어" 추출용 (나이 계산기 → 나이, 글자수 세기 → 글자수)
@@ -414,14 +449,19 @@ function scoreName(e: IndexedTool, t: string): number {
   return 0
 }
 
-/** complete = 질의 토큰이 이미 어휘(별칭·이름 단어)에 있는 완결 단어 → 접두·부분 확장 금지 */
-function scoreAlias(e: IndexedTool, t: string, complete: boolean): number {
+/**
+ * complete = 질의 토큰이 이미 어휘(별칭·이름 단어)에 있는 완결 단어 → 일반 접두·부분 확장 금지.
+ * 단 별칭이 "질의 + 또 하나의 단어(tails)"인 복합어면 50 ("연금" → 연금저축, "이자" → 이자수익).
+ */
+function scoreAlias(e: IndexedTool, t: string, complete: boolean, tails: ReadonlySet<string>): number {
   let s = 0
   for (const a of e.aliases) {
     if (a === t) return 90
     if (!complete) {
       if (a.startsWith(t)) s = Math.max(s, 72)                       // 타이핑 중: 양도 → 양도세
       else if (t.length >= 3 && a.includes(t)) s = Math.max(s, 56)   // 소득세 → 종합소득세
+    } else if (t.length >= 2 && a.length - t.length >= 2 && a.startsWith(t) && !EXACT_ONLY_ALIASES.has(a) && tails.has(a.slice(t.length))) {
+      s = Math.max(s, 50)                                            // 복합어: 마라톤 → 마라톤페이스
     }
     // 질의가 별칭 + 조사·짧은 꼬리: "퇴직금얼마", "전역일" ⊃ 전역 (전기요금 ⊅ 전기, 나이프 ⊅ 나이)
     if (a.length >= 2 && t.length > a.length && t.startsWith(a) && ALIAS_TAILS.has(t.slice(a.length))) s = Math.max(s, 60)
@@ -442,9 +482,9 @@ function scoreMeta(e: IndexedTool, t: string): number {
   return 0
 }
 
-function scoreText(e: IndexedTool, t: string, complete: boolean): number {
+function scoreText(e: IndexedTool, t: string, complete: boolean, tails: ReadonlySet<string>): number {
   const n = scoreName(e, t)
-  const a = scoreAlias(e, t, complete)
+  const a = scoreAlias(e, t, complete, tails)
   const d = scoreDesc(e, t)
   const best = Math.max(n, a, d, scoreMeta(e, t))
   if (best === 0) return 0
@@ -468,8 +508,8 @@ function scoreInitials(e: IndexedTool, q: string): number {
   return base + (alias === 84 ? 6 : 4)
 }
 
-/** 초성·음절 혼합 접두 패턴 ("연ㅂ" ⊂ 연봉). lastOpen이면 마지막 음절은 받침 무시("연보" ⊂ 연봉) */
-function patternPrefix(target: string, p: string[], lastOpen: boolean): boolean {
+/** 초성·음절 혼합 접두 패턴 ("연ㅂ" ⊂ 연봉). lastOpen이면 받침 없는 마지막 음절은 받침을 붙여 봐도 됨("연보" ⊂ 연봉) */
+function patternPrefix(target: string, p: readonly string[], lastOpen: boolean): boolean {
   const tc = Array.from(target)
   if (p.length > tc.length) return false
   for (let i = 0; i < p.length; i++) {
@@ -480,7 +520,7 @@ function patternPrefix(target: string, p: string[], lastOpen: boolean): boolean 
     if (lastOpen && i === p.length - 1) {
       const cc = c.charCodeAt(0) - 0xAC00
       const xc = x.charCodeAt(0) - 0xAC00
-      if (xc >= 0 && xc <= 11171 && Math.floor(cc / 28) === Math.floor(xc / 28)) continue
+      if (cc >= 0 && cc <= 11171 && cc % 28 === 0 && xc >= 0 && xc <= 11171 && Math.floor(cc / 28) === Math.floor(xc / 28)) continue
     }
     return false
   }
@@ -515,7 +555,7 @@ export type ToolSearchFn = (rawQuery: string, limit?: number, opts?: SearchOptio
 interface QueryTerm {
   /** 원형 + 접미사 제거형 — 채점은 둘 중 높은 쪽 */
   variants: string[]
-  /** 매치되면 반영, 안 되면 AND 조건에서 제외 (금액 숫자, 타이핑 중인 마지막 1글자) */
+  /** AND·평균에서 제외하고, 못 맞춘 도구만 ×0.92 (금액 숫자, 타이핑 중인 마지막 1글자·접미사 조각) */
   optional: boolean
 }
 
@@ -539,20 +579,34 @@ export function createToolSearch(
     for (const w of e.nameWords) vocab.add(w)
     vocab.add(e.nameCore)
   }
+  const compoundTails = new Set([...vocab, ...COMPOUND_TAIL_WORDS])
 
-  /** 어휘에 있는 단어('음주측정', '타이어계산기')는 그대로, 아니면 접미사 제거형도 함께. 수치는 단위 뗀 형도 ('3.3%' → 3.3) */
-  const variantsOf = (t: string): string[] => {
+  /**
+   * 어휘에 있는 단어('음주측정', '타이어계산기')는 그대로, 아니면 접미사 제거형도 함께. 수치는 단위 뗀 형도 ('3.3%' → 3.3).
+   * typing(질의 끝 토큰)이면 치다 만 접미사를 뗀 어근도 ('연봉계' → 연봉).
+   */
+  // 어휘 단어의 앞부분인지 — 실제 단어를 치는 중('음주측' → 음주측정)이면 끝을 접미사 조각으로 자르지 않는다
+  const vocabList = [...vocab]
+  const isVocabPrefix = (t: string): boolean => vocabList.some(w => w.length > t.length && w.startsWith(t))
+
+  const variantsOf = (t: string, typing = false): string[] => {
     if (vocab.has(t)) return [t]
     const num = NUMERIC_TOKEN.test(t) ? t.replace(/[^\d.,]+$/, '') : ''
+    const out = [t]
     const stripped = num || stripSuffix(t)
-    return stripped === t || !stripped ? [t] : [t, stripped]
+    if (stripped && stripped !== t) out.push(stripped)
+    if (typing && !num && !isVocabPrefix(t)) {
+      const stem = stripPartialSuffix(t, vocab)
+      if (stem && !out.includes(stem)) out.push(stem)
+    }
+    return out
   }
 
   const scoreToken = (e: IndexedTool, t: string): number => {
     if (isAllInitials(t)) return scoreInitials(e, t)
     if (hasInitial(t)) return scorePattern(e, t, false)
     const complete = vocab.has(t)
-    const s = scoreText(e, t, complete)
+    const s = scoreText(e, t, complete, compoundTails)
     if (s > 0 || complete || !endsWithOpenSyllable(t)) return s
     return Math.round(scorePattern(e, t, true) * 0.85)   // IME 조합 중 폴백
   }
@@ -571,9 +625,18 @@ export function createToolSearch(
     const meaningful = rawTokens.filter(t => !STOP_TOKENS.has(t))
     const base = Array.from(new Set(meaningful.length ? meaningful : rawTokens))
     const allNumeric = base.every(t => NUMERIC_TOKEN.test(t))
+    const last = base.length - 1
+    // 타이핑 중인 끝 토큰: 1글자이거나 불용 토큰을 치다 만 조각("퇴직금 계사")이면 선택.
+    // 단 어휘 단어의 앞부분이면 실제 단어를 치는 중으로 보고 필수 유지("공시" → 공시가격, ≠ 공식)
+    const typingTail = (t: string): boolean => {
+      const ch = Array.from(t)
+      if (ch.length === 1) return true
+      if (vocab.has(t) || !isPartialStop(ch)) return false
+      return !isVocabPrefix(t)
+    }
     const terms: QueryTerm[] = base.map((t, i) => ({
-      variants: variantsOf(t),
-      optional: base.length > 1 && ((!allNumeric && NUMERIC_TOKEN.test(t)) || (i === base.length - 1 && Array.from(t).length === 1)),
+      variants: variantsOf(t, i === last),
+      optional: base.length > 1 && ((!allNumeric && NUMERIC_TOKEN.test(t)) || (i === last && typingTail(t))),
     }))
     if (terms.every(t => t.optional)) for (const t of terms) t.optional = false
 
@@ -582,31 +645,31 @@ export function createToolSearch(
     if (rawTokens.length > 1) {
       const single = new Set(terms.flatMap(t => t.variants))
       for (const p of [rawTokens.join(''), base.join('')]) {
-        for (const v of variantsOf(p)) if (!single.has(v) && !phrases.includes(v)) phrases.push(v)
+        for (const v of variantsOf(p, true)) if (!single.has(v) && !phrases.includes(v)) phrases.push(v)
       }
     }
 
     const hits: SearchHit[] = []
     const partials: SearchHit[] = []
     for (const e of index) {
-      let sum = 0
-      let n = 0
+      let requiredSum = 0
       let required = 0
       let matchedRequired = 0
       let missedOptional = 0
       for (const term of terms) {
         const s = scoreVariants(e, term.variants)
-        if (!term.optional) required++
-        if (s > 0) {
-          sum += s
-          n++
-          if (!term.optional) matchedRequired++
-        } else if (term.optional) {
-          missedOptional++
+        if (term.optional) {
+          if (s === 0) missedOptional++
+        } else {
+          required++
+          if (s > 0) { requiredSum += s; matchedRequired++ }
         }
       }
+      // 평균은 필수 토큰만 — 선택 토큰의 낮은 점수(5km가 desc에만 걸림)가 평균을 끌어내리지 않게.
       // 선택 토큰을 못 맞춘 도구는 맞춘 도구보다 약간 아래로 ("3.3% 세금" → 프리랜서 > 연봉)
-      let score = matchedRequired === required && n > 0 ? (sum / n) * Math.pow(0.92, missedOptional) : 0
+      let score = required > 0 && matchedRequired === required
+        ? (requiredSum / required) * Math.pow(0.92, missedOptional)
+        : 0
       if (phrases.length) {
         const ps = scoreVariants(e, phrases)
         if (ps > 0) score = Math.max(score, ps + 4)
@@ -616,7 +679,7 @@ export function createToolSearch(
       if (score > 0) {
         hits.push({ tool: e.tool, category: e.category, score: score + badge })
       } else if (opts.partial && matchedRequired > 0) {
-        partials.push({ tool: e.tool, category: e.category, score: (sum / Math.max(required, n)) * 0.8 + badge, partial: true })
+        partials.push({ tool: e.tool, category: e.category, score: (requiredSum / required) * 0.8 + badge, partial: true })
       }
     }
 

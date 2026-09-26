@@ -86,8 +86,10 @@ function lastCommit(paths: string[]): string {
 const map: Record<string, string> = {}
 
 // 정적 페이지 — 각 페이지의 실제 소스 파일
-// 홈: 인기 도구 순위(app/popular-tools.json, 주간 GA4 갱신)도 SSR 본문에 렌더되므로 포함
-map['/'] = lastCommit(['app/page.tsx', 'app/HomeClient.tsx', 'app/popular-tools.json', 'components/HomeIntro.tsx', 'components/CollectionBanner.tsx'])
+// 홈: 인기 도구 순위(app/popular-tools.json)는 의도적으로 제외 — 주간 GA4 봇 커밋이 매주 홈 lastmod를
+//   갱신하면 '순위 재정렬'을 콘텐츠 변경으로 신고하는 셈이라 lastmod 신뢰도를 떨어뜨린다.
+//   (이중 안전장치: refresh-popular.yml 봇 커밋 제목에도 [skip-lastmod]가 붙는다.)
+map['/'] = lastCommit(['app/page.tsx', 'app/HomeClient.tsx', 'components/HomeIntro.tsx', 'components/CollectionBanner.tsx'])
 map['/tools'] = lastCommit(['app/tools/page.tsx', 'app/tools/ToolsBrowser.tsx', 'lib/tools.ts'])
 map['/collections'] = lastCommit(['app/collections/page.tsx', 'lib/collections.ts'])
 for (const s of ['about', 'contact', 'privacy', 'terms', 'disclaimer']) {
