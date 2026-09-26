@@ -19,10 +19,20 @@ export type RateSet = {
 }
 
 /* 법정 최저시급 (시간급, 원) — 고용노동부 확정·고시.
-   2026: 10,320원 (2.9% 인상, 월 209시간 기준 2,156,880원 — moel.go.kr 보도자료 news_seq=18144) */
-export const MIN_HOURLY_WAGE: Record<2025 | 2026, number> = {
+   2026: 10,320원 (2.9% 인상, 월 209시간 기준 2,156,880원 — moel.go.kr 보도자료 news_seq=18144)
+   2027: 10,700원 (3.7%·380원 인상, 월 209시간 기준 2,236,300원 — 고용노동부 2026-08-05 고시, 2027-01-01 시행) */
+export const MIN_HOURLY_WAGE: Record<2025 | 2026 | 2027, number> = {
   2025: 10_030,
   2026: 10_320,
+  2027: 10_700,
+}
+
+/** 해당 연도에 시행 중인 최저시급 — 표보다 뒤 연도는 최신 고시값, 앞 연도는 표의 첫 값 */
+export function minHourlyWageFor(year: number): number {
+  const years = (Object.keys(MIN_HOURLY_WAGE).map(Number) as (keyof typeof MIN_HOURLY_WAGE)[]).sort((a, b) => a - b)
+  let pick = years[0]
+  for (const y of years) if (y <= year) pick = y
+  return MIN_HOURLY_WAGE[pick]
 }
 
 /* 법정 근로시간 기준 — 근로기준법 §50 주 40시간(1일 8시간), 주휴(§55) 포함 월 209시간.

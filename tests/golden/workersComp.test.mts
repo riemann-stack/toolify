@@ -8,7 +8,7 @@ import assert from 'node:assert/strict'
 import { calc4Insurance } from '../../app/tools/finance/4-insurance/fourInsuranceUtils'
 import {
   WORKERS_COMP_INDUSTRIES, WORKERS_COMP_COMMUTE_PERMILLE, WAGE_CLAIM_LEVY_PERMILLE,
-  INSURANCE_RATES, MIN_HOURLY_WAGE, MONTHLY_WORK_HOURS, WORK_HOURS_WEEK, pensionBaseAt,
+  INSURANCE_RATES, MIN_HOURLY_WAGE, minHourlyWageFor, MONTHLY_WORK_HOURS, WORK_HOURS_WEEK, pensionBaseAt,
 } from '../../lib/krInsuranceRates'
 
 const JUL26 = pensionBaseAt('2026-07')
@@ -62,5 +62,12 @@ describe('법정 근로시간·최저시급 (lib/krInsuranceRates)', () => {
     // 209 = (40 + 주휴 8) × 365 / 7 / 12 ≈ 208.57 올림
     assert.equal(Math.ceil((WORK_HOURS_WEEK + 8) * 365 / 7 / 12), MONTHLY_WORK_HOURS)
     assert.equal(MIN_HOURLY_WAGE[2026] * MONTHLY_WORK_HOURS, 2_156_880)
+  })
+  test('2027 최저시급 10,700원(2026-08-05 고시) → 월 2,236,300원, 연도 조회', () => {
+    assert.equal(MIN_HOURLY_WAGE[2027] * MONTHLY_WORK_HOURS, 2_236_300)
+    assert.equal(minHourlyWageFor(2026), 10_320)
+    assert.equal(minHourlyWageFor(2027), 10_700)
+    assert.equal(minHourlyWageFor(2030), 10_700)
+    assert.equal(minHourlyWageFor(2020), 10_030)
   })
 })
