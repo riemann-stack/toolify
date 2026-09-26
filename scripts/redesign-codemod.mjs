@@ -32,7 +32,9 @@ const ALPHA_CONCAT = /\$\{[^}]+\}[0-9A-Fa-f]{2}\b|\+\s*'[0-9A-Fa-f]{2}'|#[0-9A-F
 // ② 색 자체가 데이터·결과인 도구, OG 이미지(next/og는 CSS 변수 불가), 캔버스
 const DATA_TOOLS = /app\/tools\/art\/(color|gradient|paint-mix|palette|contrast)|app\/tools\/life\/lotto|app\/tools\/dev\/(color|css)|opengraph|\/icon\./
 const CANVAS = /\b(fillStyle|strokeStyle|addColorStop|ctx\.font)\b/
-const colorExcluded = (f, s) => ALPHA_CONCAT.test(s) || DATA_TOOLS.test(f) || CANVAS.test(s)
+// ③ 토큰 정의 파일 — hex를 var(--같은 이름)으로 바꾸면 '--red-600: var(--red-600)' 순환이 되어 사이트 전체 색이 무효가 된다(a58f4f3 사고)
+const TOKEN_DEFS = /^app\/(globals\.css|styles\/)/
+const colorExcluded = (f, s) => TOKEN_DEFS.test(f) || ALPHA_CONCAT.test(s) || DATA_TOOLS.test(f) || CANVAS.test(s)
 
 const pct = a => `${Math.round(parseFloat(a) * 100)}%`
 const PRIM = { DC2626: 'red-600', '059669': 'emerald-600', EA580C: 'orange-600', '0891B2': 'cyan-600', A16207: 'yellow-700', '0D9488': 'teal-600',
