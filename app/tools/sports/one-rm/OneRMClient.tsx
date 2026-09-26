@@ -524,9 +524,9 @@ function CalcTab(props: CalcTabProps) {
               <div className={s.rpeHint}>
                 {rpe === 10 && '한 번도 더 불가능 (AMRAP)'}
                 {rpe === 9 && '1회 더 가능'}
-                {rpe === 8 && '2~3회 더 가능'}
-                {rpe === 7 && '3~4회 더 가능'}
-                {rpe === 6 && '5회 이상 가능 (워밍업)'}
+                {rpe === 8 && '2회 더 가능'}
+                {rpe === 7 && '3회 더 가능'}
+                {rpe === 6 && '4회 이상 가능 (워밍업)'}
               </div>
             </div>
           )}

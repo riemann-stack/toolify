@@ -20,7 +20,7 @@ export const PROFILE_DESC: Record<Profile, string> = {
   'linear':           '구간마다 같은 폭으로 가속 — 가장 단순·표준',
   'back-loaded':      '처음 70%는 천천히, 후반 30% 가속 — 하프·풀 준비',
   'sprint-finish':    '처음 80%는 편안, 마지막 20%만 강하게 — 가벼운 자극주',
-  'race-pace-ladder': 'E → M → HM → 10K 단계 (4구간 고정) — 레이스 적응',
+  'race-pace-ladder': 'E → M → HM → 10K 4단계 (4구간 기준 · 5구간 이상 보간 · 3구간 이하는 균등) — 레이스 적응',
 }
 
 // ── 강도 라벨 (VDOT 페이스 대비) ────────
@@ -131,8 +131,8 @@ export function paceCurve(
       return startSec + (endSec - startSec) * u
     })
   }
-  // race-pace-ladder: 4구간 고정 — 사용자 입력 startSec=E, endSec=10K
-  // 4구간 미만이면 균등 fallback
+  // race-pace-ladder: 4구간 기준 — 사용자 입력 startSec=E, endSec=10K
+  // 5구간 이상은 4단계 사이를 보간, 3구간 이하면 균등(linear) fallback
   if (N >= 4) {
     // E=startSec, R10=endSec, 중간 M·HM 보간 (E~R10 사이를 35%·65% 위치)
     const m = startSec + (endSec - startSec) * 0.35

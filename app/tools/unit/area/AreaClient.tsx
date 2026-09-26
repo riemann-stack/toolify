@@ -187,7 +187,7 @@ export default function AreaClient() {
       {tab === 'apt-table' && (
         <>
           <div className={styles.disclaimer}>
-            🏢 <strong>한국 아파트는 전용면적 기준</strong>으로 분양됩니다. &lsquo;34평형&rsquo;은 보통 전용 84㎡ + 주거공용 약 26㎡ 합계로 공급면적이 약 110㎡(33~34평) 수준입니다.
+            🏢 <strong>분양 공고의 주택형(84A 등)은 전용면적, 흔히 부르는 &lsquo;OO평형&rsquo;은 공급면적 기준</strong>입니다. &lsquo;34평형&rsquo;은 보통 전용 84㎡ + 주거공용 약 26㎡ 합계로 공급면적이 약 110㎡(33~34평) 수준입니다.
           </div>
 
           <div className={styles.tableWrap}>

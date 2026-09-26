@@ -3,6 +3,10 @@
 import { useState, useMemo } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './swim-pace.module.css'
+import {
+  STROKES, STROKE_COEF_TEXT, strokeCoef as coefOf, type StrokeKey,
+  parseDist, formatDistInput, sanitizeDecimal, parseDecimal,
+} from './swimPaceUtils'
 
 // ── 헬퍼 (페이스 단위 = 100m당 초) ──
 function toInt(v: string) {
@@ -49,14 +53,6 @@ function parseAmount(v: string) {
 // 거리별 예상기록 표
 const TABLE_DISTANCES = [50, 100, 200, 400, 800, 1500] as const
 
-// 영법별 참고 계수 (자유형 속도 = 1 기준 · verified=false · 개인차 큼)
-const STROKES = [
-  { key: 'free', name: '자유형', coef: 1.0 },
-  { key: 'back', name: '배영', coef: 0.9 },
-  { key: 'breast', name: '평영', coef: 0.78 },
-  { key: 'fly', name: '접영', coef: 0.92 },
-] as const
-
 // 빠른 페이스 칩 (100m 기준)
 const QUICK_PACES = [
   { mm: 1, ss: 30 },
@@ -72,7 +68,7 @@ export default function SwimPaceClient() {
   // 풀 길이 (단수 25 / 장수 50)
   const [poolLen, setPoolLen] = useState<25 | 50>(25)
   // 총거리(m)
-  const [distStr, setDistStr] = useState('1500')
+  const [distStr, setDistStr] = useState('1,500')
   // 100m 페이스 (분·초)
   const [paceMin, setPaceMin] = useState('1')
   const [paceSec, setPaceSec] = useState('45')
@@ -83,7 +79,7 @@ export default function SwimPaceClient() {
   // 히어로 모드
   const [heroMode, setHeroMode] = useState<HeroMode>('pace')
   // 영법 토글 (예상기록 표)
-  const [stroke, setStroke] = useState<typeof STROKES[number]['key']>('free')
+  const [stroke, setStroke] = useState<StrokeKey>('free')
 
   // SWOLF
   const [lapTimeStr, setLapTimeStr] = useState('20')
@@ -96,7 +92,7 @@ export default function SwimPaceClient() {
 
   const [copied, setCopied] = useState(false)
 
-  const distM = parseAmount(distStr)
+  const distM = parseDist(distStr)
   const laps = poolLen > 0 ? Math.round(distM / poolLen) : 0
   // 거리가 풀 길이로 나누어떨어지지 않으면 바퀴 수가 반올림됨 (안내용)
   const distNotDivisible = distM > 0 && poolLen > 0 && distM % poolLen !== 0
@@ -105,7 +101,7 @@ export default function SwimPaceClient() {
   // 거리 ↔ 바퀴 수(편도) 동기
   const setLaps = (n: number) => {
     if (!Number.isFinite(n) || n < 0) return
-    setDistStr(String(poolLen * Math.round(n)))
+    setDistStr(fmtComma(poolLen * Math.round(n)))
   }
 
   // 페이스 → 총기록 (입력 페이스 기준)
@@ -129,7 +125,7 @@ export default function SwimPaceClient() {
   }, [pace100])
 
   // 거리별 예상기록 (입력=자유형 페이스로 보고 영법 계수로 환산)
-  const strokeCoef = STROKES.find(s => s.key === stroke)!.coef
+  const strokeCoef = coefOf(stroke)
   const tableRows = useMemo(() => {
     if (pace100 <= 0) return []
     return TABLE_DISTANCES.map(d => {
@@ -141,10 +137,10 @@ export default function SwimPaceClient() {
 
   // SWOLF
   const swolf = useMemo(() => {
-    const t = parseAmount(lapTimeStr)
+    const t = parseDecimal(lapTimeStr)
     const s = parseAmount(strokeCount)
     if (t <= 0 || s <= 0) return null
-    return { score: t + s, t, s }
+    return { score: Math.round((t + s) * 10) / 10, t, s }
   }, [lapTimeStr, strokeCount])
 
   // send-off
@@ -239,10 +235,10 @@ export default function SwimPaceClient() {
           <div className={styles.field}>
             <div className={styles.inputBox}>
               <input id="swim-dist" className={styles.amountInput}
-                type="text" inputMode="numeric"
-                value={distM > 0 ? fmtComma(distM) : ''}
+                type="text" inputMode="decimal"
+                value={distStr}
                 placeholder="1,500"
-                onChange={e => setDistStr(e.target.value)} />
+                onChange={e => setDistStr(formatDistInput(e.target.value))} />
               <span className={styles.inputUnit}>m</span>
             </div>
             <span className={styles.fieldHint}>총 거리</span>
@@ -277,7 +273,7 @@ export default function SwimPaceClient() {
             <button key={q.m} type="button"
               className={`${styles.chip} ${distM === q.m ? styles.chipActive : ''}`}
               aria-pressed={distM === q.m}
-              onClick={() => setDistStr(String(q.m))}>{q.label}</button>
+              onClick={() => setDistStr(fmtComma(q.m))}>{q.label}</button>
           ))}
         </div>
       </div>
@@ -433,7 +429,7 @@ export default function SwimPaceClient() {
             </table>
           </div>
           <p className={styles.tableNote}>
-            영법 계수(자유형=1 기준 배영 0.9·평영 0.78·접영 0.92)는 통용 추정 계수일 뿐 검증된 값이 아닙니다. 실제 차이는 영자 기량과 거리에 따라 크게 달라집니다.
+            영법 계수(자유형=1 기준 {STROKE_COEF_TEXT})는 통용 추정 계수일 뿐 검증된 값이 아닙니다. 실제 차이는 영자 기량과 거리에 따라 크게 달라집니다.
           </p>
         </div>
       )}
@@ -444,10 +440,10 @@ export default function SwimPaceClient() {
         <div className={styles.swolfRow}>
           <div className={styles.field}>
             <div className={styles.inputBox}>
-              <input id="swim-swolf-time" className={styles.amountInput} type="text" inputMode="numeric"
+              <input id="swim-swolf-time" className={styles.amountInput} type="text" inputMode="decimal"
                 aria-label={`${poolLen}m 소요 시간(초)`}
                 value={lapTimeStr} placeholder="20"
-                onChange={e => setLapTimeStr(e.target.value.replace(/[^\d]/g, '').slice(0, 3))} />
+                onChange={e => setLapTimeStr(sanitizeDecimal(e.target.value))} />
               <span className={styles.inputUnit}>초</span>
             </div>
             <span className={styles.fieldHint}>{poolLen}m 소요</span>

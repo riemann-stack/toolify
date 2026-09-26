@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './lotto.module.css'
 import {
-  GENERATION_MODES, NUMBER_RANGES, ODDS_FIRST_PRIZE, PRICE_PER_GAME,
+  GENERATION_MODES, NUMBER_RANGES, ODDS_FIRST_PRIZE, PRICE_PER_GAME, AVG_PRIZES,
   generateGames, analyzeNumbers, simulateDraws, simulateUntilFirstPrize,
   loadSaved, saveSaved, newId,
   getBallColor, getBallTextColor, interpretAnalysis,
@@ -577,11 +577,11 @@ function SimulatorTab() {
             <label className={s.cardLabel}>등수별 당첨 횟수</label>
             <div className={s.simTable}>
               {[
-                { grade: 1, label: '1등', match: '6개 일치', odds: '1/8,145,060', avgPrize: 25_00_000_000 },
-                { grade: 2, label: '2등', match: '5개+보너스', odds: '1/1,357,510', avgPrize: 60_000_000 },
-                { grade: 3, label: '3등', match: '5개 일치', odds: '1/35,724', avgPrize: 1_700_000 },
-                { grade: 4, label: '4등', match: '4개 일치', odds: '1/733', avgPrize: 50_000 },
-                { grade: 5, label: '5등', match: '3개 일치', odds: '1/45', avgPrize: 5_000 },
+                { grade: 1, label: '1등', match: '6개 일치', odds: '1/8,145,060', avgPrize: AVG_PRIZES[1] },
+                { grade: 2, label: '2등', match: '5개+보너스', odds: '1/1,357,510', avgPrize: AVG_PRIZES[2] },
+                { grade: 3, label: '3등', match: '5개 일치', odds: '1/35,724', avgPrize: AVG_PRIZES[3] },
+                { grade: 4, label: '4등', match: '4개 일치', odds: '1/733', avgPrize: AVG_PRIZES[4] },
+                { grade: 5, label: '5등', match: '3개 일치', odds: '1/45', avgPrize: AVG_PRIZES[5] },
               ].map(row => {
                 const count = result.prizeCounts[row.grade] ?? 0
                 const total = count * row.avgPrize

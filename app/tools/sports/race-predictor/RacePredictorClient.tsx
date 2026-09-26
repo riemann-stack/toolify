@@ -305,12 +305,12 @@ export default function RacePredictorClient() {
       <Disclaimer
         variant="safety"
         related={[
-          { href: '/tools/sports/race-plan', label: '레이스 플래너' },
+          { href: '/tools/sports/pace?tab=plan', label: '레이스 페이스 플래너' },
           { href: '/tools/sports/pace', label: '러닝 페이스' },
           { href: '/tools/sports/one-rm', label: '1RM 계산기' }
         ]}
       >
-        본 도구는 일반 가이드입니다. 3공식 평균으로 오차를 줄였으나 5km→풀 예측은 거리차가 커 10km 이상 기록을 권장합니다. 환경·연령 보정도 평균 통계라 개인차가 큽니다(실제 ±20% 차이 가능). 25°C 이상은 열사병 위험 — 어지러움 즉시 중단·119.
+        본 도구는 일반 가이드입니다. 3공식 평균으로 오차를 줄였으나 5km→풀 예측은 거리차가 커 10km 이상 기록을 권장합니다. 환경·연령 보정은 도구 자체 근사 계수라 개인차가 큽니다(실제 ±20% 차이 가능). 25°C 이상은 열사병 위험 — 어지러움 즉시 중단·119.
       </Disclaimer>
 
       {/* ── 탭 헤더 ── */}
@@ -542,7 +542,7 @@ export default function RacePredictorClient() {
                       <span className={styles.demoFactor}>(보정 계수 {demoBaseline.factor.toFixed(2)})</span>
                     </p>
                     <p className={styles.demoNote}>
-                      💡 WMA(World Masters Athletics) 통계 평균 — 개인차 큼. 꾸준한 훈련 = 연령 극복 가능.
+                      💡 WMA 연령 계수 경향을 10년 단위로 단순화한 근사값 — 개인차 큼. 꾸준한 훈련 = 연령 극복 가능.
                     </p>
                   </div>
                 )}
@@ -827,7 +827,7 @@ export default function RacePredictorClient() {
           <section className={styles.koreaCard}>
             <p className={styles.gapTitle}>한국 마라톤 시즌 가이드</p>
             <table className={styles.envTable}>
-              <thead><tr><th scope="col">시즌</th><th scope="col">평균 기온</th><th scope="col">평가</th><th scope="col">주요 대회</th></tr></thead>
+              <thead><tr><th scope="col">시즌</th><th scope="col">월평균 기온(평년)</th><th scope="col">평가</th><th scope="col">주요 대회</th></tr></thead>
               <tbody>
                 {KOREA_SEASONS.map((s) => (
                   <tr key={s.name}>

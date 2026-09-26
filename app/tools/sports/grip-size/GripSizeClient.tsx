@@ -357,7 +357,7 @@ export default function GripSizeClient() {
           </div>
           <div className={s.resultBig}>{golf.name}</div>
           <div className={s.resultSub}>
-            지름 {golf.diameter} · {golf.delta}
+            {golf.deltaMm ? `표준 대비 외경 ${golf.delta} (${golf.deltaMm})` : '표준 굵기 (기준)'}
           </div>
           <p className={s.resultDesc}>{golf.desc}</p>
           <p className={s.resultNote}>{golf.recommendedGlove}</p>

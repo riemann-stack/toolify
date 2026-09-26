@@ -7,6 +7,7 @@ import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
+import Callout from '@/components/Callout'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/battery',
@@ -14,6 +15,20 @@ export const metadata = buildMetadata({
   description: 'mAh·Wh·Ah 변환 + 비행기 반입 가능 여부 자동 판정. 한국·ICAO / 미국(FAA) / 국제 기준을 선택하면 수량·기내 규정이 기준에 맞게 바뀝니다.',
   keywords: ['mAh Wh 변환', '보조배터리 비행기', 'mAh 계산기', '배터리용량변환', '100Wh 보조배터리', '비행기 보조배터리 반입', '미국 보조배터리 규정', 'FAA 보조배터리'],
 })
+
+/* ── 전압별 100Wh·160Wh 한도 — 계산기와 같은 식 Wh = mAh × V ÷ 1000 을 거꾸로 (빌드 시 생성) ── */
+const V_ROWS: { v: number; use: string }[] = [
+  { v: 3.6,  use: '리튬이온 단셀 정격 — 제조사 공식 Wh에 흔함' },
+  { v: 3.7,  use: '리튬이온 단셀 — 보조배터리 표기 관행' },
+  { v: 3.85, use: '최근 스마트폰 배터리(고전압 셀)' },
+  { v: 5,    use: 'USB 출력 전압 — 셀 용량에 곱하면 과대평가' },
+  { v: 7.4,  use: '2셀 직렬 — 카메라 배터리 등' },
+  { v: 11.1, use: '3셀 직렬 — 노트북' },
+  { v: 14.8, use: '4셀 직렬 — 노트북·드론' },
+]
+const mahAt = (wh: number, v: number) => Math.floor((wh * 1000) / v)
+const EX_CELL_MAH = 20000
+const EX_RATED_MAH = 12000
 
 const FAQ_LD = [
               {
@@ -100,9 +115,9 @@ export default function BatteryPage() {
               </p>
             </div>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            ✈️ <strong style={{ color: 'var(--text)' }}>국제 항공 규정(IATA)</strong>이 100Wh를 기준으로 정한 이유도 “전압과 무관한 절대 에너지량”으로 위험성을 판정하기 위해서입니다.
-          </p>
+          <Callout tone="note">
+            <strong>국제 항공 규정(ICAO·IATA)</strong>이 mAh가 아니라 100Wh·160Wh를 기준으로 삼는 이유도 전압과 무관한 에너지량으로 화재 위험을 판정하기 위해서입니다.
+          </Callout>
         </div>
 
         {/* ── 2. 핵심 공식 ── */}
@@ -138,7 +153,7 @@ export default function BatteryPage() {
           <h2 className="g-h2">
             인기 보조배터리 모델별 Wh 참조표
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+          <p className="g-p">
             대표 브랜드의 보조배터리를 3.7V 기준으로 환산한 표입니다. 실제 제품 표기 Wh가 우선이며, 제조사 공식 Wh는 셀 정격전압(대개 3.6~3.65V)을 쓰기 때문에 3.7V 환산치보다 약간 낮을 수 있습니다(예: Anker 737 공식 86.4Wh). 반입 판정(100Wh·160Wh 경계)에는 영향이 없습니다. 맨 아래 EcoFlow RIVER 2는 <strong style={{ color: 'var(--text)' }}>보조배터리가 아니라 포터블 파워스테이션</strong>(LiFePO4·AC 콘센트 내장)으로, 별개 제품군이며 대부분 160Wh를 초과해 기내 반입이 불가합니다.
           </p>
           <div className="tableScroll">
@@ -152,15 +167,15 @@ export default function BatteryPage() {
               </thead>
               <tbody>
                 {[
-                  { n: 'Anker PowerCore 10000',   m: '10,000', w: '37',    s: '✅', c: 'var(--emerald-600)' },
-                  { n: 'Anker PowerCore 20100',   m: '20,100', w: '74.4',  s: '✅', c: 'var(--emerald-600)' },
-                  { n: 'Anker PowerCore 26800',   m: '26,800', w: '99.2',  s: '✅', c: 'var(--emerald-600)' },
-                  { n: '샤오미 Mi 10000mAh',      m: '10,000', w: '37',    s: '✅', c: 'var(--emerald-600)' },
-                  { n: '샤오미 Mi 20000mAh',      m: '20,000', w: '74',    s: '✅', c: 'var(--emerald-600)' },
-                  { n: 'RAVPower 26800',          m: '26,800', w: '99.2',  s: '✅', c: 'var(--emerald-600)' },
-                  { n: 'Anker 737 (PowerCore 24K)',m: '24,000', w: '88.8',  s: '✅', c: 'var(--emerald-600)' },
-                  { n: 'Zendure SuperTank',       m: '27,000', w: '99.9',  s: '✅ 한계', c: 'var(--emerald-600)' },
-                  { n: 'EcoFlow RIVER 2 (파워스테이션)', m: '—', w: '256',   s: '❌', c: 'var(--red-600)' },
+                  { n: 'Anker PowerCore 10000',   m: '10,000', w: '37',    s: '✅', c: 'var(--success)' },
+                  { n: 'Anker PowerCore 20100',   m: '20,100', w: '74.4',  s: '✅', c: 'var(--success)' },
+                  { n: 'Anker PowerCore 26800',   m: '26,800', w: '99.2',  s: '✅', c: 'var(--success)' },
+                  { n: '샤오미 Mi 10000mAh',      m: '10,000', w: '37',    s: '✅', c: 'var(--success)' },
+                  { n: '샤오미 Mi 20000mAh',      m: '20,000', w: '74',    s: '✅', c: 'var(--success)' },
+                  { n: 'RAVPower 26800',          m: '26,800', w: '99.2',  s: '✅', c: 'var(--success)' },
+                  { n: 'Anker 737 (PowerCore 24K)',m: '24,000', w: '88.8',  s: '✅', c: 'var(--success)' },
+                  { n: 'Zendure SuperTank',       m: '27,000', w: '99.9',  s: '✅ 한계', c: 'var(--success)' },
+                  { n: 'EcoFlow RIVER 2 (파워스테이션)', m: '—', w: '256',   s: '❌', c: 'var(--danger)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
@@ -179,7 +194,7 @@ export default function BatteryPage() {
           <h2 className="g-h2">
             항공사별 보조배터리 정책
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+          <p className="g-p">
             대부분 IATA 기준을 따르지만, 100~160Wh 구간의 “사전 승인” 요건은 항공사마다 차이가 있습니다. 특히 <strong style={{ color: 'var(--text)' }}>한국 출발·도착 항공편은 2026년 4월 20일부터 ICAO 신기준(보조배터리 1인당 최대 2개·기내 사용 금지)</strong>이 적용됩니다. 정확한 규정은 출발 전 항공사 공식 홈페이지 확인이 필수입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -187,9 +202,9 @@ export default function BatteryPage() {
               { air: '🇰🇷 대한항공 (KE)',     limit: '160Wh 이하 1인당 최대 2개 (100~160Wh는 승인 필요)', note: '160Wh 초과 반입 불가. 2026-01-26부터 기내 사용·충전 금지.' },
               { air: '🇰🇷 아시아나 (OZ)',     limit: '보조배터리 최대 2개 / 교체용 배터리 100Wh 이하 5개',  note: '100~160Wh는 승인 필요·교체용과 합산 2개. 기내 사용·충전 금지, 예비 배터리는 모두 기내 휴대만 가능.' },
               { air: '🇺🇸 델타 (DL)',         limit: '보조배터리 1인 2개 · 개당 100Wh 이하', note: '100~160Wh 보조배터리는 반입 불가 (2026-05-01~). Hoverboard·전동 킥보드 배터리는 전면 금지.' },
-              { air: '🇺🇸 유나이티드 (UA)',   limit: '100Wh 이하 자유 / 100~160Wh 2개', note: 'FAA 규정에 따라 위탁 수하물 절대 금지.' },
-              { air: '🇯🇵 일본항공 (JL)',     limit: '160Wh 이하 (160Wh 초과 불가)',    note: '훼손·부풀어 오른 배터리는 반입 거부.' },
-              { air: '🇸🇬 싱가포르항공 (SQ)', limit: '100Wh 이하 자유 / 100~160Wh 2개', note: '온라인 사전 신고 권장.' },
+              { air: '🇺🇸 유나이티드 (UA)',   limit: '100Wh 이하 승인 불필요 / 100~160Wh 승인 시 2개', note: 'FAA 규정에 따라 위탁 수하물 절대 금지. 개수·기내 사용 제한은 노선·시점별 항공사 공지 확인.' },
+              { air: '🇯🇵 일본항공 (JL)',     limit: '160Wh 이하 (160Wh 초과 불가)',    note: '일본 국토교통성 방침에 따라 보조배터리는 선반이 아닌 손이 닿는 곳에 보관하도록 안내(항공사 공지 기준, 출발 전 확인). 훼손·부풀어 오른 배터리는 반입 거부.' },
+              { air: '🇸🇬 싱가포르항공 (SQ)', limit: '100Wh 이하 승인 불필요 / 100~160Wh 승인 시 2개', note: '기내에서 보조배터리 사용·충전 금지, 자회사 스쿠트도 동일(항공사 공지 기준, 출발 전 확인).' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>{c.air}</p>
@@ -198,10 +213,10 @@ export default function BatteryPage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', opacity: 0.8 }}>
-            ⚠️ 본 정보는 일반 가이드이며, 정책은 수시로 변경됩니다. 출국 전 항공사 공식 홈페이지에서 최신 규정을 반드시 재확인하세요.
-          </p>
-          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '8px', opacity: 0.8 }}>
+          <Callout tone="warn">
+            본 정보는 일반 가이드이며, 정책은 수시로 변경됩니다. 출국 전 항공사 공식 홈페이지에서 최신 규정을 반드시 재확인하세요.
+          </Callout>
+          <p className="g-note">
             기준: 2026-06 · 출처:{' '}
             <a href="https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국토교통부 보도자료 (2026-04-08)</a>{' · '}
             <a href="https://m.flyasiana.com/C/KR/KO/customer/notice/detail?id=CM202604100002528761" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>아시아나항공 공지 (2026-04-17)</a>{' · '}
@@ -243,11 +258,46 @@ export default function BatteryPage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px', opacity: 0.8 }}>
+          <p className="g-note">
             ※ 국토교통부 기준 100Wh ≈ 27,000mAh, 160Wh ≈ 43,000mAh (3.7V 환산). 홍콩·싱가포르·일본 등 일부 국가는 이미 강화된 기준을 시행하는 등 국가별로 규정이 다를 수 있어 출국 전 항공사 확인이 필요합니다. 출처:{' '}
             <a href="https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?id=95090678" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국토교통부 보도자료 (2025-02-13)</a>{' · '}
             <a href="https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>국토교통부 보도자료 (2026-04-08)</a>{' · '}
             <a href="https://news.koreanair.com/%ed%95%9c%ec%a7%84%ea%b7%b8%eb%a3%b9-%ec%86%8c%ec%86%8d-5%ea%b0%9c-%ed%95%ad%ea%b3%b5%ec%82%ac-%ec%98%a4%eb%8a%94-26%ec%9d%bc%eb%b6%80%ed%84%b0-%eb%b3%b4%ec%a1%b0%eb%b0%b0%ed%84%b0%eb%a6%ac/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>대한항공 뉴스룸 (2026-01-23)</a>
+          </p>
+        </div>
+
+        {/* ── 4-2. 전압별 한도 mAh ── */}
+        <div>
+          <h2 className="g-h2">
+            어떤 전압을 곱해야 하나 — 전압별 100Wh·160Wh 한도
+          </h2>
+          <p className="g-p">
+            같은 100Wh라도 몇 mAh에 해당하는지는 전압에 따라 크게 달라집니다. 보조배터리는 셀 전압 3.6~3.7V로 계산하는 게 원칙이고, 노트북·카메라·드론 배터리는 셀을 직렬로 묶어 전압이 높기 때문에 mAh 숫자가 작아도 Wh가 큽니다. 아래 표는 계산기와 같은 식(Wh = mAh × V ÷ 1000)을 거꾸로 풀어 기준선에 해당하는 최대 mAh를 구한 값입니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['전압', '주로 쓰이는 곳', '100Wh 이하', '160Wh 이하'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {V_ROWS.map((r, i) => (
+                  <tr key={r.v} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.v}V</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '12px' }}>{r.use}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{mahAt(100, r.v).toLocaleString('en-US')} mAh</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{mahAt(160, r.v).toLocaleString('en-US')} mAh</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <h3 className="g-h3">흔한 실수 — 라벨의 두 가지 mAh</h3>
+          <p className="g-p">
+            국내 보조배터리 라벨에는 보통 <strong>셀 용량</strong>(예: {EX_CELL_MAH.toLocaleString('en-US')}mAh, 3.7V)과 <strong>정격 용량</strong>(예: {EX_RATED_MAH.toLocaleString('en-US')}mAh, 5V 출력 기준)이 함께 적혀 있습니다. 정격 용량이 작은 건 전압이 3.7V에서 5V로 높아지는 만큼 mAh 숫자가 줄고({EX_CELL_MAH.toLocaleString('en-US')} × 3.7 ÷ 5 = {(EX_CELL_MAH * 3.7 / 5).toLocaleString('en-US')}mAh), 여기에 승압 과정의 변환 손실(대략 10~20%)이 더해지기 때문입니다. 반입 판정에 쓰는 값은 셀 쪽 에너지 {EX_CELL_MAH.toLocaleString('en-US')} × 3.7 ÷ 1000 = <strong>{(EX_CELL_MAH * 3.7 / 1000).toFixed(0)}Wh</strong>입니다. 셀 용량에 5V를 곱하면 {(EX_CELL_MAH * 5 / 1000).toFixed(0)}Wh로 부풀려져 한도에 걸리는 것처럼 보이고, 정격 용량에 3.7V를 곱하면 {(EX_RATED_MAH * 3.7 / 1000).toFixed(1)}Wh로 줄어듭니다 — 둘 다 틀린 조합입니다. 라벨에 Wh가 직접 적혀 있으면 그 숫자가 우선입니다.
           </p>
         </div>
 
@@ -261,7 +311,7 @@ export default function BatteryPage() {
               { q: '10,000mAh는 몇 Wh?',           a: '37 Wh',           sub: '10,000 × 3.7 ÷ 1000 = 37Wh — 휴대 반입 OK ✅' },
               { q: '20,000mAh 비행기 반입 가능?',   a: '74 Wh — 가능 ✅', sub: '100Wh 미만, 일반 휴대 반입 가능 (위탁은 불가)' },
               { q: '100Wh 한도는 몇 mAh?',          a: '~27,027 mAh',     sub: '3.7V 기준: 100Wh × 1000 ÷ 3.7 = 약 27,027mAh' },
-              { q: '5,000mAh × 5V는?',              a: '25 Wh',           sub: '5V USB 출력 기준 환산. 휴대폰 본체 배터리 표기에 자주 등장' },
+              { q: '5,000mAh × 5V는?',              a: '25 Wh',           sub: '계산은 맞지만 5V는 USB 출력 전압 — 셀 용량(mAh)에 곱하면 에너지를 부풀려 계산하게 됨. 반입 판정은 셀 전압(3.6~3.7V) 기준 Wh로' },
               { q: '50,000mAh 비행기 반입?',        a: '185 Wh — 불가 ❌', sub: '160Wh 초과로 일반 항공기 반입 불가' },
               { q: '27,000mAh가 한계인 이유?',      a: '99.9 Wh',         sub: '3.7V 기준 27,000mAh = 99.9Wh로 100Wh 직전. 더 큰 용량은 사전 승인 필요' },
             ].map((c, i) => (

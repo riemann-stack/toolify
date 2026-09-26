@@ -258,7 +258,9 @@ export function evalElementPair(a: Element, b: Element): CompatRelation {
   return { score: 3, type: '평범', desc: '평범한 조합 — 노력으로 좋아짐' }
 }
 
-/* ─── 탄생석·탄생화·탄생색 ─── */
+/* ─── 탄생석·탄생화·탄생색 ───
+   탄생석: 미국 보석업계 현대 목록(GIA 안내 기준 — 12월 터키석·탄자나이트·지르콘). 청금석은 1912년 목록의 12월 보석으로 현대 목록에선 빠짐.
+   탄생화: 서양 관행(3월 대퍼딜·존퀼 — 존퀼은 수선화속 '노랑수선화'이며 재스민이 아님). 탄생색은 공인 목록이 없는 관용 표기. */
 export interface BirthMonthInfo {
   month: number
   stone: string
@@ -269,7 +271,7 @@ export interface BirthMonthInfo {
 export const BIRTH_MONTHS: BirthMonthInfo[] = [
   { month: 1,  stone: '가넷 (Garnet)',           flower: '카네이션·갈란투스',  color: '진홍·검정' },
   { month: 2,  stone: '아메시스트 (Amethyst)',   flower: '제비꽃·앵초',         color: '보라' },
-  { month: 3,  stone: '아쿠아마린 (Aquamarine)', flower: '수선화·재스민',       color: '연파랑' },
+  { month: 3,  stone: '아쿠아마린 (Aquamarine)', flower: '수선화·노랑수선화(존퀼)', color: '연파랑' },
   { month: 4,  stone: '다이아몬드 (Diamond)',    flower: '데이지·스위트피',     color: '하양' },
   { month: 5,  stone: '에메랄드 (Emerald)',      flower: '은방울꽃·산사나무',   color: '진녹·옥' },
   { month: 6,  stone: '진주·문스톤 (Pearl)',     flower: '장미·인동',           color: '연분홍·하양' },
@@ -278,7 +280,7 @@ export const BIRTH_MONTHS: BirthMonthInfo[] = [
   { month: 9,  stone: '사파이어 (Sapphire)',     flower: '아스터·나팔꽃',       color: '파랑' },
   { month: 10, stone: '오팔·전기석 (Opal)',      flower: '코스모스·금잔화',     color: '무지개' },
   { month: 11, stone: '토파즈·시트린 (Topaz)',   flower: '국화',                color: '노랑·금' },
-  { month: 12, stone: '터키석·청금석 (Turquoise)', flower: '수선화·홀리',         color: '하늘·빨강' },
+  { month: 12, stone: '터키석·탄자나이트·지르콘 (Turquoise)', flower: '수선화·홀리', color: '하늘·빨강' },
 ]
 
 export function getBirthMonth(month: number): BirthMonthInfo {

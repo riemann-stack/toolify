@@ -160,7 +160,8 @@ export function envCorrection(input: EnvInput): EnvResult {
 }
 
 // ── 연령·성별 보정 ────────────────────────
-// WMA(World Masters Athletics) 평균 통계 참고
+// WMA(World Masters Athletics) 연령 계수(age-grading, 연령별 최고 기록 곡선 기반)의 경향을
+// 10년 단위로 단순화한 도구 자체 근사값 — 여성 행은 남녀 기록 격차를 반영. 공식 표 값이 아님
 export const AGE_BAND_LABEL: Record<AgeBand, string> = {
   '20-30': '20대',
   '30-40': '30대',
@@ -198,11 +199,14 @@ export function normalizeToYoungMale(timeSec: number, gender: Gender, ageBand: A
 }
 
 // ── 한국 시즌 안내 ───────────────────────
+// temp = 기상청 기후평년값(1991~2020) 전국 월평균기온 범위 (월간 기후동향 발표의 '평년' 값):
+// 3월 6.1 · 4월 12.1 · 6월 21.4 · 7월 24.6 · 8월 25.1 · 9월 20.5 · 10월 14.3 · 11월 7.6 · 12월 1.1 · 1월 -0.9 · 2월 1.2 (°C)
+// (이전 값 '봄 12~18°C'는 3월 평년 6.1°C와 맞지 않았고, 9월은 평년 20.5°C라 '최적' 시즌에서 뺐다)
 export const KOREA_SEASONS = [
-  { name: '봄 (3~4월)',     temp: '12~18°C',  rating: '⭐ 적정', races: '서울국제·동아·서울하프' },
-  { name: '가을 (9~11월)',  temp: '12~18°C',  rating: '⭐⭐ 최적', races: '춘천·JTBC' },
-  { name: '여름 (6~8월)',   temp: '25~30°C',  rating: '⚠️ 위험', races: '드물게 야간 대회' },
-  { name: '겨울 (12~2월)',  temp: '0~10°C',   rating: '⚠️ 바람·근경직', races: '드문 대회' },
+  { name: '봄 (3~4월)',     temp: '6~12°C',   rating: '⭐ 적정', races: '서울마라톤(동아마라톤)' },
+  { name: '가을 (10~11월)', temp: '8~14°C',   rating: '⭐⭐ 최적', races: '춘천·JTBC 서울' },
+  { name: '여름 (6~8월)',   temp: '21~25°C',  rating: '⚠️ 위험', races: '드물게 야간 대회' },
+  { name: '겨울 (12~2월)',  temp: '-1~1°C',   rating: '⚠️ 바람·근경직', races: '드문 대회' },
 ]
 
 // ── 빠른 입력 칩 ─────────────────────────

@@ -14,7 +14,7 @@ export interface SeasonRecord {
 export const KBO_SEASON_RECORDS = {
   hits:       { holder: '레이예스', value: '202개', year: 2024 },
   homeRuns:   { holder: '이승엽',   value: '56개',  year: 2003 },
-  avg:        { holder: '백인천',   value: '0.412', year: 1982, note: '단축' },
+  avg:        { holder: '백인천',   value: '0.412', year: 1982, note: '원년·팀당 80경기' },
   ops:        { holder: '테임즈',   value: '1.288', year: 2015 },
   era:        { holder: '선동열',   value: '0.78',  year: 1993 },
   strikeouts: { holder: '폰세',     value: '252개', year: 2025 },

@@ -129,7 +129,7 @@ export default function CarbLoadingClient() {
       <Disclaimer
         variant="default"
         related={[
-          { href: '/tools/sports/race-plan', label: '레이스 페이스 플래너' },
+          { href: '/tools/sports/pace?tab=plan', label: '레이스 페이스 플래너' },
           { href: '/tools/health/heat-hydration', label: '폭염 수분·전해질 계산기' },
           { href: '/tools/sports/race-predictor', label: '마라톤 기록 계산기' },
         ]}

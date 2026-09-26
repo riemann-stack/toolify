@@ -8,6 +8,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { FUEL_PRICE_MONTH, FUEL_PRICE_AS_OF, GASOLINE_PRICE, DIESEL_PRICE, EV_SLOW_RATE, EV_FAST_RATE, EV_ULTRA_RATE } from './fuelEconomyUtils'
 import ToolPage from '@/components/ToolPage'
+import Callout from '@/components/Callout'
 
 // 본문 수치는 fuelEconomyUtils.ts 단가에서 계산 — 단가만 갱신하면 표·FAQ·배율이 함께 바뀜
 const won = (n: number) => n.toLocaleString('ko-KR')
@@ -20,6 +21,16 @@ const YEARLY_GAP = (15000 / 14 - 15000 / 15) * GASOLINE_PRICE
 const SAVE_MIN = 15000 / 15 * (1 - 1 / 1.15) * GASOLINE_PRICE
 const SAVE_MAX = 15000 / 12 * (1 - 1 / 1.2) * GASOLINE_PRICE
 const EV_VS_GAS = per100km(12, GASOLINE_PRICE) / per100km(5, EV_SLOW_RATE)
+// 공인 복합연비 = 1 ÷ (0.55 ÷ 도심 + 0.45 ÷ 고속) — 예: 도심 12·고속 16 km/L
+const combined = (city: number, hwy: number) => 1 / (0.55 / city + 0.45 / hwy)
+const EX_COMBINED = combined(12, 16)
+const EX_ARITH = 0.55 * 12 + 0.45 * 16 // 55:45 가중 산술평균 (조화평균과 비교용)
+const EX_SIMPLE = (12 + 16) / 2 // 단순 평균
+// 에너지소비효율등급 (FuelEconomyClient.fuelGrade와 같은 경계, 복합연비 km/L)
+const GRADES: [string, number, number | null][] = [
+  ['1등급', 16.0, null], ['2등급', 13.8, 15.9], ['3등급', 11.6, 13.7], ['4등급', 9.4, 11.5], ['5등급', 0, 9.3],
+]
+const gradeOf = (kml: number) => kml >= 16 ? '1등급' : kml >= 13.8 ? '2등급' : kml >= 11.6 ? '3등급' : kml >= 9.4 ? '4등급' : '5등급'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/fuel-economy',
@@ -35,7 +46,7 @@ const FAQ_LD = [
               },
               {
                 q: '복합연비, 시내연비, 고속연비는 무슨 차이?',
-                a: '제조사 카탈로그에 표기되는 <strong>복합연비</strong>는 시내(stop-and-go)와 고속(정속) 주행을 일정 비율(보통 시내 55% : 고속 45%)로 가중평균한 값입니다. 실제로는 <strong>시내연비</strong>가 가장 낮고 <strong>고속연비</strong>가 가장 높게 나옵니다. 본인 주행 패턴에 가까운 항목으로 비교하세요. 실제 주행 연비는 공인 복합연비보다 낮게 나오는 경우가 많은데, 공인 연비는 정해진 시험 주행 모드로 측정해 가다 서다를 오래 반복하는 출퇴근 정체와는 조건이 다르기 때문입니다. 참고로 제 GV70은 카탈로그 복합연비보다 보통 5%쯤 낮게 나오는데, 가장 크게 갉아먹는 건 시내 교통체증입니다. 날씨도 의외로 커서, 추운 날엔 더 떨어지고 따뜻한 날엔 카탈로그 값에 꽤 가까워지기도 합니다.',
+                a: '제조사 카탈로그에 표기되는 <strong>복합연비</strong>는 시내(stop-and-go)와 고속(정속) 주행 연비를 시내 55% : 고속 45% 비율로 합친 값입니다. 연료 소비량 기준으로 가중하는 조화평균이라 두 값의 단순 평균보다 조금 낮게 나옵니다. 실제로는 <strong>시내연비</strong>가 가장 낮고 <strong>고속연비</strong>가 가장 높게 나옵니다. 본인 주행 패턴에 가까운 항목으로 비교하세요. 실제 주행 연비는 공인 복합연비보다 낮게 나오는 경우가 많은데, 공인 연비는 정해진 시험 주행 모드로 측정해 가다 서다를 오래 반복하는 출퇴근 정체와는 조건이 다르기 때문입니다. 참고로 제 GV70은 카탈로그 복합연비보다 보통 5%쯤 낮게 나오는데, 가장 크게 갉아먹는 건 시내 교통체증입니다. 날씨도 의외로 커서, 추운 날엔 더 떨어지고 따뜻한 날엔 카탈로그 값에 꽤 가까워지기도 합니다.',
               },
               {
                 q: '겨울에 전기차 전비가 떨어지는 이유?',
@@ -67,6 +78,8 @@ export default function FuelEconomyPage() {
         sources={[
           { label: '오피넷', href: 'https://www.opinet.co.kr' },
           { label: '무공해차 통합누리집', href: 'https://ev.or.kr' },
+          { label: '한국에너지공단', href: 'https://www.energy.or.kr' },
+          { label: '미국 DOE·EPA fueleconomy.gov', href: 'https://www.fueleconomy.gov' },
         ]}
       />
 
@@ -83,7 +96,7 @@ export default function FuelEconomyPage() {
           <h2 className="g-h2">
             국가별 연비 표기 차이
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+          <p className="g-p">
             같은 차량이라도 나라마다 표기 단위가 다릅니다. <strong style={{ color: 'var(--text)' }}>“높을수록 좋은” 단위</strong>(km/L, mpg)와 <strong style={{ color: 'var(--text)' }}>“낮을수록 좋은” 단위</strong>(L/100km)가 섞여 있어 직관적 비교가 어렵습니다.
           </p>
           {/* 컴팩트 행형 카드 — 모바일에서 세로 길이 축소 */}
@@ -116,9 +129,9 @@ export default function FuelEconomyPage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
-            💡 한국·일본·미국·영국은 <strong style={{ color: 'var(--text)' }}>거리 ÷ 연료</strong> 방식이라 숫자가 클수록 효율적입니다. 유럽·캐나다는 <strong style={{ color: 'var(--text)' }}>연료 ÷ 거리</strong> 방식이라 작을수록 효율적이라 직관 비교가 어렵습니다.
-          </p>
+          <Callout tone="tip">
+            한국·일본·미국·영국은 <strong>거리 ÷ 연료</strong> 방식이라 숫자가 클수록 효율적입니다. 유럽·캐나다는 <strong>연료 ÷ 거리</strong> 방식이라 작을수록 효율적이라 직관 비교가 어렵습니다.
+          </Callout>
         </div>
 
         {/* ── 2. mpg US vs UK ── */}
@@ -141,9 +154,9 @@ export default function FuelEconomyPage() {
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, marginTop: '4px' }}>10 km/L = <strong style={{ color: 'var(--text)' }}>28.2 mpg (UK)</strong></p>
             </div>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            ⚠️ 영국 자동차 잡지나 직구 사이트에서 mpg를 봤다면 <strong style={{ color: 'var(--text)' }}>UK 갤런 기준</strong>일 가능성이 높습니다. 미국 EPA 기준과 약 20% 차이가 발생합니다.
-          </p>
+          <Callout tone="warn">
+            영국 자동차 잡지나 직구 사이트에서 mpg를 봤다면 <strong>UK 갤런 기준</strong>일 가능성이 높습니다. 미국 EPA 기준과 약 20% 차이가 발생합니다.
+          </Callout>
         </div>
 
         {/* ── 3. L/100km이 낮을수록 좋은 이유 ── */}
@@ -180,9 +193,9 @@ export default function FuelEconomyPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            💡 유럽이 L/100km를 쓰는 이유 중 하나는 <strong style={{ color: 'var(--text)' }}>“100km 갈 때 얼마나 비용이 드는지”</strong>가 더 직관적이기 때문입니다. 연비가 5 → 4 km/L로 떨어지는 것보다, L/100km 20 → 25로 늘어나는 게 “25% 더 든다”는 게 더 명확합니다.
-          </p>
+          <Callout tone="tip">
+            유럽이 L/100km를 쓰는 이유 중 하나는 <strong>“100km 갈 때 얼마나 비용이 드는지”</strong>가 더 직관적이기 때문입니다. 연비가 5 → 4 km/L로 떨어지는 것보다, L/100km 20 → 25로 늘어나는 게 “25% 더 든다”는 게 더 명확합니다.
+          </Callout>
         </div>
 
         {/* ── 4. 인기 차종별 연비 ── */}
@@ -190,7 +203,7 @@ export default function FuelEconomyPage() {
           <h2 className="g-h2">
             인기 차종별 연비 참고표
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+          <p className="g-p">
             제조사 공인 복합연비 기준 일반적인 수치입니다. 실제 운행 환경(시내/고속, 계절, 운전 습관)에 따라 ±20% 이상 차이날 수 있습니다.
           </p>
           <div className="tableScroll">
@@ -223,17 +236,62 @@ export default function FuelEconomyPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8, opacity: 0.8 }}>
+          <p className="g-note">
             기준: 2026-07 확인 · 출처: 각 제조사 공인 복합연비(제원표), 전기차는 무공해차 통합누리집 인증 전비. 연식·트림·구동 방식에 따라 수치가 다를 수 있습니다.
+          </p>
+        </div>
+
+        {/* ── 4-0. 공인 복합연비 계산식 · 에너지소비효율등급 ── */}
+        <div>
+          <h2 className="g-h2">
+            공인 복합연비 계산식과 에너지소비효율등급
+          </h2>
+          <p className="g-p">
+            국내 공인 복합연비는 도심 모드와 고속도로 모드에서 각각 측정한 연비를 55 : 45로 합친 값인데, 단순 평균이 아니라 연료 소비량(L/km)을 가중하는
+            <strong> 조화평균</strong>입니다 — 복합 = 1 ÷ (0.55 ÷ 도심 + 0.45 ÷ 고속). 도심 12 km/L·고속 16 km/L인 차라면 복합 {EX_COMBINED.toFixed(1)} km/L로,
+            55 : 45 가중 산술평균({EX_ARITH.toFixed(1)} km/L, 단순 평균은 {EX_SIMPLE.toFixed(1)} km/L)보다 낮습니다. 같은 거리를 달리면 연비가 나쁜 구간에서 연료를 더 많이 쓰기 때문입니다. 2012년 도입된 신연비 제도부터는
+            급가속·에어컨·저온 시동 같은 실제 주행 조건을 반영하는 5-cycle 보정식을 거쳐 표시하므로, 그 이전 차량의 표시 연비와 직접 비교하면 안 됩니다.
+          </p>
+          <p className="g-p">
+            연비 변환 탭의 결과 카드에 뜨는 등급은 입력한 km/L를 아래 경계에 대입한 참고치입니다. 위 예시에서 55 : 45 가중 산술평균 {EX_ARITH.toFixed(1)}을 넣으면 {gradeOf(EX_ARITH)},
+            실제 복합연비 {EX_COMBINED.toFixed(1)}을 넣으면 {gradeOf(EX_COMBINED)}으로 등급이 갈립니다 — 도심·고속 연비를 따로 알 때는 반드시 조화평균으로 합쳐서 넣으세요.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['등급', '복합연비 (km/L)', 'L/100km 환산'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {GRADES.map(([g, lo, hi], i) => (
+                  <tr key={g} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{g}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
+                      {hi === null ? `${lo.toFixed(1)} 이상` : lo === 0 ? `${hi.toFixed(1)} 이하` : `${lo.toFixed(1)} ~ ${hi.toFixed(1)}`}
+                    </td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>
+                      {hi === null ? `${(100 / lo).toFixed(2)} 이하` : lo === 0 ? `${(100 / hi).toFixed(2)} 이상` : `${(100 / hi).toFixed(2)} ~ ${(100 / lo).toFixed(2)}`}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            휘발유·경유·LPG·하이브리드 승용차의 복합연비 기준(한국에너지공단 자동차 에너지소비효율 표시 제도). 전기차 전비(km/kWh)는 이 km/L 등급표로 판정하지 않습니다.
+            실제 등급은 공인 복합연비로 매겨져 차량에 부착된 에너지소비효율 라벨에 표시됩니다.
           </p>
         </div>
 
         {/* ── 4-1. 연료별 100km 비용 비교 ── */}
         <div>
           <h2 className="g-h2">
-            🇰🇷 연료별 100km 주행 비용 비교
+            연료별 100km 주행 비용 비교
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
+          <p className="g-p">
             {FUEL_PRICE_MONTH} 기준 한국 평균 단가 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
           </p>
           <div className="tableScroll">
@@ -265,27 +323,27 @@ export default function FuelEconomyPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+          <p className="g-note">
             기준: {FUEL_PRICE_MONTH} · 출처: 오피넷(휘발유·경유 — {FUEL_PRICE_AS_OF} 전국 평균, LPG는 1,100원대 어림값), 기후에너지환경부(전기 — 공공 충전요금 5단계 개편 확정안, 2026-07-01 발표·2026-08-01 시행: 완속 30kW 미만 {EV_SLOW_RATE.toFixed(1)}원 · 급속 100~200kW {EV_FAST_RATE.toFixed(1)}원 · 초급속 200kW 이상 {EV_ULTRA_RATE.toFixed(1)}원/kWh. 2026-07-31까지는 기존 2단계 요금 100kW 미만 324.4원 · 100kW 이상 347.2원 적용)
           </p>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
-            💡 같은 거리라도 <strong style={{ color: 'var(--text)' }}>전기차(완속) vs 휘발유</strong>는 약 <strong style={{ color: 'var(--accent)' }}>{EV_VS_GAS.toFixed(1)}배</strong> 비용 차이. 단, 차량 가격·배터리 교체비·세제 혜택을 종합한 5년 TCO(총 소유비용)는 차종마다 다릅니다.
-          </p>
+          <Callout tone="tip">
+            같은 거리라도 <strong>전기차(완속) vs 휘발유</strong>는 약 <strong>{EV_VS_GAS.toFixed(1)}배</strong> 비용 차이. 단, 차량 가격·배터리 교체비·세제 혜택을 종합한 5년 TCO(총 소유비용)는 차종마다 다릅니다.
+          </Callout>
         </div>
 
         {/* ── 4-2. 연비 향상 실전 팁 ── */}
         <div>
           <h2 className="g-h2">
-            🚗 연비 향상 실전 팁 — 같은 차로 +15~20%
+            연비 향상 실전 팁 — 같은 차로 +15~20%
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { t: '🛞 타이어 공기압', d: '운전석 도어 라벨의 권장 공기압을 유지하고 월 1회 점검. 공기압 부족 시 연비가 최대 3%까지 손실됩니다(미국 DOE). 과충전은 접지력·제동에 불리하니 금물.', impact: '+3%' },
-              { t: '🚀 부드러운 가속', d: '급가속·급제동 1회 = 연료 0.05L 손실. 정속 우선.', impact: '+10%' },
-              { t: '❄️ 에어컨 사용',   d: '에어컨은 연비 5~15% ↓. 시속 80km↑에선 창문 열기보다 효율적.', impact: '+5%' },
-              { t: '📦 짐 무게',       d: '50kg 추가 적재 → 연비 1~2% ↓. 트렁크 정리.', impact: '+2%' },
-              { t: '⛽ 풀탱크 회피',   d: '연료 50L = 약 38kg. 항상 만탱크는 +1% 손실.', impact: '+1%' },
-              { t: '🛠️ 정기 점검',    d: '엔진오일·에어필터·점화플러그 노후 시 ~10% 손실.', impact: '+5%' },
+              { t: '🚀 부드러운 가속', d: '급가속·급제동·과속 같은 공격적 운전은 고속도로에서 15~30%, 가다 서다 하는 시내에서 10~40%까지 연비를 떨어뜨립니다(미국 DOE). 정속 우선.', impact: '+10%' },
+              { t: '❄️ 에어컨 사용',   d: '무더운 날 짧은 거리에서는 에어컨이 연비를 25% 넘게 떨어뜨릴 수 있습니다(미국 DOE). 저속에선 창문 환기, 고속에선 창문을 열면 공기저항이 커지니 에어컨이 유리.', impact: '+5%' },
+              { t: '📦 짐 무게',       d: '짐 45kg(100파운드)마다 연비 약 1% ↓, 차가 작을수록 영향이 큽니다(미국 DOE). 트렁크 정리.', impact: '+1%' },
+              { t: '⛽ 만탱크 vs 반탱크', d: '휘발유 50L는 약 37kg(밀도 약 0.74). 반만 채우면 약 18kg 가벼워지지만 위 기준으로 0.4% 안팎이라, 주유소를 더 자주 들르면 오히려 손해일 수 있습니다.', impact: '+0.4%' },
+              { t: '🛠️ 정기 점검',    d: '정비 불량으로 배출가스 검사에 걸릴 정도인 차를 손보면 평균 4%, 권장 점도 엔진오일은 1~2% 개선(미국 DOE). 최신 전자제어 엔진은 에어필터 교체로 연비가 아니라 가속 성능이 좋아집니다.', impact: '+4%' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
@@ -296,7 +354,7 @@ export default function FuelEconomyPage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
+          <p className="g-note">
             ※ 누적 효과로 같은 차량에서 <strong style={{ color: 'var(--text)' }}>+15~20% 연비 개선</strong>이 가능합니다. 평균 연비 12~15km/L 차량 기준, 연 15,000km 운행 시 연 약 {man(SAVE_MIN)}~{man(SAVE_MAX)}만원 절약 (연비가 좋을수록 절약액은 줄어듭니다).
           </p>
         </div>

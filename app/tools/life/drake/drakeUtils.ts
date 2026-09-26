@@ -2,6 +2,26 @@
 // 드레이크 방정식 — 거리·전파권 모델 (page·Client 공용, 'use client' 없음)
 // ─────────────────────────────────────────────────────────────
 
+/* ──────────────────────── 변수 타입 & 프리셋 (Client 버튼·page 계산 예시 공용) ──────────────────────── */
+export type DrakeParams = {
+  rStar: number
+  fp:    number
+  ne:    number
+  fl:    number
+  fi:    number
+  fc:    number
+  L:     number
+}
+
+export type PresetId = 'optimistic' | 'realistic' | 'pessimistic' | null
+
+/** 계산기 첫 화면은 realistic — page.tsx 계산 예시도 이 값을 그대로 import */
+export const PRESETS: Record<Exclude<PresetId, null>, DrakeParams> = {
+  optimistic:  { rStar: 10, fp: 0.9, ne: 2,   fl: 0.9,   fi: 0.9,  fc: 0.9,  L: 1_000_000 },
+  realistic:   { rStar: 3,  fp: 0.5, ne: 1,   fl: 0.5,   fi: 0.5,  fc: 0.1,  L: 10_000    },
+  pessimistic: { rStar: 1,  fp: 0.2, ne: 0.5, fl: 0.001, fi: 0.01, fc: 0.01, L: 100       },
+}
+
 /** 인류 전파권 시작 — 1900년경 첫 라디오 송신. 반경(광년) = 기준 연도 − 1900 */
 export const RADIO_START_YEAR = 1900
 export function radioRangeLy(asOfYear: number): number {

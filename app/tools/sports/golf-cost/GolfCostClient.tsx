@@ -8,37 +8,19 @@ import s from './golf-cost.module.css'
 import {
   calcMembership, MEMBERSHIP_PRICE_PRESETS, ANNUAL_ROUNDS_PRESETS,
   loadCourses, saveCourses, newId, fmtKrw, COURSE_TYPE_LABEL,
-  type SavedGolfCourse,
+  COURSE_PRESETS, DEFAULT_COURSE, TODAY_DEFAULTS, MEMBERSHIP_DEFAULTS,
+  type SavedGolfCourse, type CourseType, type CartMode,
 } from './golfCostUtils'
 
 type TabId = 'main' | 'membership' | 'courses'
 
 // ───────────────────────── 타입·상수 ─────────────────────────
 
-type CourseType = 'publicWeekday' | 'publicWeekend' | 'privateWeekday' | 'privateWeekend' | 'custom'
 type PlayerCount = 2 | 3 | 4
-type CartMode = 'team' | 'perPerson'
 type MealMode = 'each' | 'team'
 type TransportMode = 'self' | 'carpool' | 'bus' | 'transit'
 
-interface CoursePreset {
-  green: number
-  cart: number
-  cartMode: CartMode
-  caddie: number
-}
-
-/* 그린피: 한국레저산업연구소 그린피 조사, 18홀 이상 평균(1,000원 단위 반올림)
-     대중형(퍼블릭) 주중 170,400·주말 214,000원(2025.5) / 170,900·213,700원(2025.10)
-       — 2026.5 대중형 평균은 확인되지 않아 2025년 값 유지
-     회원제 비회원 주중 217,100·주말 268,700원(2026.5, 『레저백서 2026』 2026.5.27 발간)
-   카트비: 대중형 팀당 평균 97,500원(2025, 2020년 84,400원) → 10만원 / 캐디피: 대중형 팀당 15만원대가 다수 → 15만원 */
-const COURSE_PRESETS: Record<Exclude<CourseType, 'custom'>, CoursePreset> = {
-  publicWeekday:  { green: 170_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
-  publicWeekend:  { green: 214_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
-  privateWeekday: { green: 217_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
-  privateWeekend: { green: 269_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
-}
+// 코스 프리셋(그린피·카트·캐디)과 출처 주석은 golfCostUtils.ts COURSE_PRESETS — page.tsx 표와 공유
 
 const COURSE_LABELS: { key: CourseType; label: string; cls: string }[] = [
   { key: 'publicWeekday',  label: '퍼블릭 주중', cls: s.coursePubWeek },
@@ -75,29 +57,29 @@ function moneyInput(n: number): string {
 
 export default function GolfCostClient() {
   const [tab, setTab] = useState<TabId>('main')
-  const [courseType, setCourseType] = useState<CourseType>('publicWeekend')
-  const [players, setPlayers] = useState<PlayerCount>(4)
+  const [courseType, setCourseType] = useState<CourseType>(DEFAULT_COURSE)
+  const [players, setPlayers] = useState<PlayerCount>(TODAY_DEFAULTS.players)
 
   // 그린피
-  const [greenFee, setGreenFee] = useState(COURSE_PRESETS.publicWeekend.green)
+  const [greenFee, setGreenFee] = useState(COURSE_PRESETS[DEFAULT_COURSE].green)
 
   // 카트비
-  const [cartFee, setCartFee] = useState(100_000)
-  const [cartMode, setCartMode] = useState<CartMode>('team')
+  const [cartFee, setCartFee] = useState(COURSE_PRESETS[DEFAULT_COURSE].cart)
+  const [cartMode, setCartMode] = useState<CartMode>(COURSE_PRESETS[DEFAULT_COURSE].cartMode)
 
   // 캐디
   const [caddieEnabled, setCaddieEnabled] = useState(true)
-  const [caddieFee, setCaddieFee] = useState(150_000)
-  const [tipAmount, setTipAmount] = useState(0)
+  const [caddieFee, setCaddieFee] = useState(COURSE_PRESETS[DEFAULT_COURSE].caddie)
+  const [tipAmount, setTipAmount] = useState<number>(TODAY_DEFAULTS.tipAmount)
 
   // 식사·그늘집
   const [mealMode, setMealMode] = useState<MealMode>('each')
-  const [mealAmount, setMealAmount] = useState(20_000) // 1인당 또는 팀당
-  const [shadeAmount, setShadeAmount] = useState(30_000) // 팀당
+  const [mealAmount, setMealAmount] = useState<number>(TODAY_DEFAULTS.mealAmount) // 1인당 또는 팀당
+  const [shadeAmount, setShadeAmount] = useState<number>(TODAY_DEFAULTS.shadeAmount) // 팀당
 
   // 교통
   const [transportMode, setTransportMode] = useState<TransportMode>('carpool')
-  const [carpoolTotal, setCarpoolTotal] = useState(80_000)
+  const [carpoolTotal, setCarpoolTotal] = useState<number>(TODAY_DEFAULTS.carpoolTotal)
   const [tripDistance, setTripDistance] = useState(120) // 왕복 km
   const [efficiency, setEfficiency] = useState(12)
   const [fuelPrice, setFuelPrice] = useState(1650)
@@ -838,13 +820,13 @@ function CourseSaveButton({ data }: {
 
 /* ──────────────────────── 회원권 손익 탭 ──────────────────────── */
 function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number }) {
-  const [membershipPrice, setMembershipPrice] = useState(500_000_000)
-  const [annualFee, setAnnualFee] = useState(2_000_000)
-  const [holdingYears, setHoldingYears] = useState(10)
-  const [nonMemberCost, setNonMemberCost] = useState(defaultNonMemberCost > 0 ? defaultNonMemberCost : 220_000)
-  const [memberRoundCost, setMemberRoundCost] = useState(80_000)
-  const [annualRounds, setAnnualRounds] = useState(24)
-  const [resaleValue, setResaleValue] = useState(300_000_000)
+  const [membershipPrice, setMembershipPrice] = useState<number>(MEMBERSHIP_DEFAULTS.membershipPrice)
+  const [annualFee, setAnnualFee] = useState<number>(MEMBERSHIP_DEFAULTS.annualFee)
+  const [holdingYears, setHoldingYears] = useState<number>(MEMBERSHIP_DEFAULTS.holdingYears)
+  const [nonMemberCost, setNonMemberCost] = useState<number>(defaultNonMemberCost > 0 ? defaultNonMemberCost : MEMBERSHIP_DEFAULTS.nonMemberFallback)
+  const [memberRoundCost, setMemberRoundCost] = useState<number>(MEMBERSHIP_DEFAULTS.memberRoundCost)
+  const [annualRounds, setAnnualRounds] = useState<number>(MEMBERSHIP_DEFAULTS.annualRounds)
+  const [resaleValue, setResaleValue] = useState<number>(MEMBERSHIP_DEFAULTS.resaleValue)
 
   const result = useMemo(() => calcMembership({
     membershipPrice, annualFee, holdingYears,

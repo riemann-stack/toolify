@@ -2,6 +2,53 @@
 // 골프 비용 계산기 — 회원권 손익 + 골프장 저장 헬퍼
 // ─────────────────────────────────────────────────────────────
 
+// ── 오늘 정산 프리셋·기본값 ──
+// GolfCostClient 초기 state와 page.tsx(빌드 시 계산하는 표·예시)가 함께 쓰는 단일 소스.
+export type CourseType = 'publicWeekday' | 'publicWeekend' | 'privateWeekday' | 'privateWeekend' | 'custom'
+export type PresetCourseType = Exclude<CourseType, 'custom'>
+export type CartMode = 'team' | 'perPerson'
+
+export interface CoursePreset {
+  green: number
+  cart: number
+  cartMode: CartMode
+  caddie: number
+}
+
+/* 그린피: 한국레저산업연구소 그린피 조사, 18홀 이상 평균(1,000원 단위 반올림)
+     대중형(퍼블릭) 주중 170,400·주말 214,000원(2025.5) / 170,900·213,700원(2025.10)
+       — 2026.5 대중형 평균은 확인되지 않아 2025년 값 유지
+     회원제 비회원 주중 217,100·주말 268,700원(2026.5, 『레저백서 2026』 2026.5.27 발간)
+   카트비: 대중형 팀당 평균 97,500원(2025, 2020년 84,400원) → 10만원 / 캐디피: 대중형 팀당 15만원대가 다수 → 15만원 */
+export const COURSE_PRESETS: Record<PresetCourseType, CoursePreset> = {
+  publicWeekday:  { green: 170_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  publicWeekend:  { green: 214_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  privateWeekday: { green: 217_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  privateWeekend: { green: 269_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+}
+
+export const DEFAULT_COURSE: PresetCourseType = 'publicWeekend'
+
+/** [오늘 정산] 탭 기본값 — 4인·캐디 동반·팁 0·식사 1인당·그늘집 팀당·자차 카풀(팀당) */
+export const TODAY_DEFAULTS = {
+  players: 4,
+  tipAmount: 0,          // 팀당
+  mealAmount: 20_000,    // 1인당 (식사 모드 'each')
+  shadeAmount: 30_000,   // 팀당
+  carpoolTotal: 80_000,  // 팀당 (교통 모드 'carpool')
+} as const
+
+/** [회원권 손익] 탭 기본값 */
+export const MEMBERSHIP_DEFAULTS = {
+  membershipPrice: 500_000_000,
+  annualFee: 2_000_000,
+  holdingYears: 10,
+  memberRoundCost: 80_000,
+  annualRounds: 24,
+  resaleValue: 300_000_000,
+  nonMemberFallback: 220_000, // 오늘 정산 결과가 없을 때
+} as const
+
 // ── 회원권 손익 시뮬 ──
 export type MembershipInput = {
   membershipPrice: number    // 회원권 가격 (원)

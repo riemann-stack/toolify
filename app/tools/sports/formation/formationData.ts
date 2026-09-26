@@ -145,7 +145,9 @@ export function positionLabel(lines: number[], lineIdx: number, posInLine: numbe
     if (lineCount === 1) return 'CDM'
     if (lineCount === 2) return pick(['LDM', 'RDM'])
     if (lineCount === 3) return pick(['LDM', 'CDM', 'RDM'])
-    return pick(['LM', 'LCM', 'RCM', 'RM'])
+    if (lineCount === 4) return pick(['LM', 'LCM', 'RCM', 'RM'])
+    // 5명(3-5-1-1 등) — 이전엔 4칸 배열이라 다섯 번째가 'P5'로 표시됐다. 스리백이면 양 끝은 윙백
+    return pick(threeBack ? ['LWB', 'LCM', 'CM', 'RCM', 'RWB'] : ['LM', 'LCM', 'CM', 'RCM', 'RM'])
   }
   if (isLastMid) {             // 공격형 미드 (4-2-3-1의 3, 크리스마스트리의 2)
     if (lineCount === 1) return 'CAM'

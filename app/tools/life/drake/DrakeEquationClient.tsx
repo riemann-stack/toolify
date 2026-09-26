@@ -2,30 +2,11 @@
 
 import { useState, useMemo, useEffect, useRef, useId } from 'react'
 import styles from './drake.module.css'
-import { calcDistance } from './drakeUtils'
+import { calcDistance, PRESETS, type DrakeParams, type PresetId } from './drakeUtils'
 
 /* prefers-reduced-motion 사용자는 트윈 생략 — 값 즉시 적용 */
 function prefersReducedMotion(): boolean {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
-
-/* ──────────────────────── 타입 & 프리셋 ──────────────────────── */
-type DrakeParams = {
-  rStar: number
-  fp:    number
-  ne:    number
-  fl:    number
-  fi:    number
-  fc:    number
-  L:     number
-}
-
-type PresetId = 'optimistic' | 'realistic' | 'pessimistic' | null
-
-const PRESETS: Record<Exclude<PresetId, null>, DrakeParams> = {
-  optimistic:  { rStar: 10, fp: 0.9, ne: 2,   fl: 0.9,   fi: 0.9,  fc: 0.9,  L: 1_000_000 },
-  realistic:   { rStar: 3,  fp: 0.5, ne: 1,   fl: 0.5,   fi: 0.5,  fc: 0.1,  L: 10_000    },
-  pessimistic: { rStar: 1,  fp: 0.2, ne: 0.5, fl: 0.001, fi: 0.01, fc: 0.01, L: 100       },
 }
 
 const MILKY_WAY_STARS = 300_000_000_000 // 3000억

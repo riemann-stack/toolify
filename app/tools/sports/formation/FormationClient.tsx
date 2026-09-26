@@ -241,7 +241,7 @@ export default function FormationClient() {
         variant="default"
         related={[
           { href: '/tools/life/random', label: '랜덤 추첨기' },
-          { href: '/tools/sports/football-points', label: '리그 승점 계산기' },
+          { href: '/tools/sports/league-scenarios?tab=season', label: '시즌 승점 예측' },
           { href: '/tools/life/ladder', label: '사다리타기' },
         ]}
       >

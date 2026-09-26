@@ -4,8 +4,9 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
-import { FLUID_REFS } from './viscosityData'
+import { FLUID_REFS, SAE_GRADES, convertAll, matchSae, matchIsoVg } from './viscosityData'
 import ToolPage from '@/components/ToolPage'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/viscosity',
@@ -23,12 +24,30 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
+// SAE J300 HTHS(150°C·10⁶ s⁻¹ 고온 고전단 점도) 최소값, mPa·s — 100°C 동점도 범위는 viscosityData.SAE_GRADES 단일 소스
+const HTHS_MIN: Record<string, string> = {
+  'xW-8': '1.7', 'xW-12': '2.0', 'xW-16': '2.3', 'xW-20': '2.6', 'xW-30': '2.9',
+  'xW-40': '3.5 (0W·5W·10W-40) / 3.7 (15W·20W·25W-40)', 'xW-50': '3.7', 'xW-60': '3.7',
 }
+// SAE J300 저온(W) 등급 요건: [등급, CCS 최대 mPa·s @온도, MRV 최대 mPa·s @온도, 100°C 동점도 최소 cSt]
+const W_GRADES: [string, string, string, string][] = [
+  ['0W', '6,200 @ −35°C', '60,000 @ −40°C', '3.8'],
+  ['5W', '6,600 @ −30°C', '60,000 @ −35°C', '3.8'],
+  ['10W', '7,000 @ −25°C', '60,000 @ −30°C', '4.1'],
+  ['15W', '7,000 @ −20°C', '60,000 @ −25°C', '5.6'],
+  ['20W', '9,500 @ −15°C', '60,000 @ −20°C', '5.6'],
+  ['25W', '13,000 @ −10°C', '60,000 @ −15°C', '9.3'],
+]
+// 계산 예시 — 도구와 같은 convertAll·matchSae·matchIsoVg로 빌드 시 계산
+const EX_OIL = convertAll('cst', 10, 0.87)
+// 0.87은 실온 밀도 — 100°C에서는 열팽창으로 약 0.82까지 낮아짐 (예시 보정용)
+const EX_OIL_HOT = convertAll('cst', 10, 0.82)
+const EX_OIL_SAE = matchSae(10).map(g => g.grade).join('·')
+const EX_VG = convertAll('cst', 46, 0.87)
+const EX_VG_MATCH = matchIsoVg(46)
+const EX_OVERLAP = matchSae(8).map(g => g.grade).join('·')
+// cP 값을 cSt 칸에 그대로 넣으면 입력값 = 실제 cSt × ρ → 실제보다 (1 − ρ)만큼 작게 잡힘
+const CP_AS_CST_ERR = Math.round((1 - 0.87) * 100)
 
 const FAQ_LD = [
               {
@@ -53,7 +72,7 @@ const FAQ_LD = [
               },
               {
                 q: 'SAE 등급과 ISO VG 등급은 직접 변환되나요?',
-                a: '<strong>정확한 1:1 변환은 불가</strong>합니다. SAE는 -35°C·100°C 두 온도, ISO VG는 40°C 단일 온도로 측정해 기준 자체가 달라요. 대략적으로 ISO VG 68 ≈ SAE 20W-20, VG 100 ≈ SAE 30, VG 150 ≈ SAE 40, VG 220 ≈ SAE 50 (단등급 비교) 정도이지만, 다등급(0W-30 등)은 단순 매핑이 어렵습니다. 본 도구의 점도 입력을 활용하면 동일 cSt에서 두 등급을 동시에 확인 가능합니다.',
+                a: '<strong>정확한 1:1 변환은 불가</strong>합니다. SAE는 W 등급별 저온(−10~−40°C)과 100°C·150°C(HTHS), ISO VG는 40°C 단일 온도로 측정해 기준 자체가 달라요. 대략적으로 ISO VG 68 ≈ SAE 20W-20, VG 100 ≈ SAE 30, VG 150 ≈ SAE 40, VG 220 ≈ SAE 50 (단등급 비교) 정도이지만, 다등급(0W-30 등)은 단순 매핑이 어렵습니다. 본 도구의 점도 입력을 활용하면 동일 cSt에서 두 등급을 동시에 확인 가능합니다.',
               },
               {
                 q: '꿀·케첩 같은 비뉴턴 유체는 왜 단일 점도 값이 안 나오나요?',
@@ -75,6 +94,16 @@ export default function ViscosityPage() {
         <strong style={{ color: 'var(--text)' }}>cP·cSt·SUS·Pa·s</strong> 동시 환산 + SAE J300 엔진오일·ISO VG 산업 윤활유 매칭. 자동차 DIY·정비용.
       </p>
 
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="cP↔cSt는 ν = μ/ρ, SUS는 ASTM D2161 계산식(100°F), 엔진오일 등급은 SAE J300, 산업 윤활유 등급은 ISO 3448(40°C 중심값 ±10%) 기준"
+        sources={[
+          { label: 'SAE J300 엔진오일 점도 분류', href: 'https://www.sae.org/standards/content/j300_202405/' },
+          { label: 'ASTM D2161 Saybolt 점도 환산', href: 'https://www.astm.org/d2161-19.html' },
+          { label: 'NIST SP 811 SI 단위 환산 지침', href: 'https://www.nist.gov/pml/special-publication-811' },
+        ]}
+      />
+
       <ViscosityClient />
 
       <GuideDivider />
@@ -82,7 +111,7 @@ export default function ViscosityPage() {
 
         {/* 1. 절대 vs 동 */}
         <section>
-          <h2 style={sectionTitle}>절대점도 vs 동점도 — 무엇이 다른가</h2>
+          <h2 className="g-h2">절대점도 vs 동점도 — 무엇이 다른가</h2>
           <p className="g-p">
             점도에는 두 종류가 있고, <strong style={{ color: 'var(--text)' }}>밀도(ρ)로 서로 변환</strong>됩니다.
           </p>
@@ -104,7 +133,7 @@ export default function ViscosityPage() {
 
         {/* 1b. 자주 찾는 변환 */}
         <section>
-          <h2 style={sectionTitle}>자주 찾는 변환 3가지</h2>
+          <h2 className="g-h2">자주 찾는 변환 3가지</h2>
           <p className="g-p">
             실무에서 반복해서 찾게 되는 관계는 대부분 이 세 가지입니다 — 전부 본 도구가 내부 계산에 쓰는 공식 그대로예요.
           </p>
@@ -125,21 +154,71 @@ export default function ViscosityPage() {
 
         {/* 2. SAE J300 */}
         <section>
-          <h2 style={sectionTitle}>SAE J300 — 엔진오일 등급의 의미</h2>
+          <h2 className="g-h2">SAE J300 — 엔진오일 등급의 의미</h2>
           <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>0W-20</strong>처럼 두 숫자로 표기되는 SAE J300 다등급(multigrade) 오일은:
           </p>
           <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
             <li><strong style={{ color: 'var(--text)' }}>앞 숫자 + W (Winter)</strong> — 저온 시동성. 숫자가 낮을수록 영하에서 잘 흐름. <code style={{ color: 'var(--text)' }}>0W &lt; 5W &lt; 10W</code>.</li>
-            <li><strong style={{ color: 'var(--text)' }}>뒷 숫자</strong> — 100°C 고온 동점도(cSt) 범위. 클수록 고온에서 더 점성 유지. <code style={{ color: 'var(--text)' }}>20 = 6.9~9.3 cSt, 30 = 9.3~12.5, 40 = 12.5~16.3, 50 = 16.3~21.9</code>.</li>
+            <li><strong style={{ color: 'var(--text)' }}>뒷 숫자</strong> — 100°C 고온 동점도(cSt) 범위와 150°C 고온 고전단 점도(HTHS) 하한. 클수록 고온에서 더 점성 유지. 범위는 아래 표 참고.</li>
             <li><strong style={{ color: 'var(--text)' }}>다등급의 이점</strong> — 저온 시동성과 고온 안정성을 동시에 확보(점도지수 향상제 첨가).</li>
             <li><strong style={{ color: 'var(--text)' }}>차량별 권장</strong> — 반드시 차량 매뉴얼·주유구 캡을 확인. 잘못된 등급은 연비·엔진 보호 모두 저하.</li>
           </ul>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['고온 등급', '100°C 동점도 (cSt)', 'HTHS 최소 (mPa·s @150°C)', '도구 표시 용도'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {SAE_GRADES.map((g, i) => (
+                  <tr key={g.grade} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{g.grade}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{g.minCst} 이상 ~ {g.maxCst} 미만</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{HTHS_MIN[g.grade]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{g.hint}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            앞의 W 숫자는 영하 온도가 아니라 <strong>저온 시험을 통과한 등급 이름</strong>입니다. 0W는 &lsquo;0°C용&rsquo;이 아니라 −35°C에서 시동 모터가 크랭크축을 돌릴 수 있는지(CCS),
+            −40°C에서 오일 펌프가 오일을 빨아올릴 수 있는지(MRV)를 통과했다는 뜻입니다. 저점도 고온 등급(8·12·16·20)은 100°C 동점도 범위가 서로 겹치기 때문에,
+            J300은 150°C 고전단 점도(HTHS) 하한으로 등급을 가릅니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['저온 등급', 'CCS 최대 (mPa·s)', 'MRV 최대 (mPa·s)', '100°C 동점도 최소 (cSt)'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {W_GRADES.map((r, i) => (
+                  <tr key={r[0]} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{r[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            SAE J300 기준. CCS는 저온 크랭킹 점도(ASTM D5293), MRV는 미니 로터리 점도(ASTM D4684)로 측정하며 항복응력이 없어야 합니다. 본 도구는 100°C 고온 등급만 판정하며 저온 등급은 판정하지 않습니다.
+          </p>
         </section>
 
         {/* 2b. 온도 민감성 */}
         <section>
-          <h2 style={sectionTitle}>온도가 오르면 점도는 뚝 떨어진다</h2>
+          <h2 className="g-h2">온도가 오르면 점도는 뚝 떨어진다</h2>
           <p className="g-p">
             점도는 온도에 극도로 민감한 물성입니다. 본 도구의 프리셋·참고값(문헌 통용치)을 나란히 놓기만 해도 낙차가 그대로 보입니다.
           </p>
@@ -168,14 +247,14 @@ export default function ViscosityPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
+          <p className="g-p" style={{ marginTop: 16 }}>
             겨울 아침 시동 직후 오일이 뻑뻑한 이유가 바로 이것입니다. 정상 운전 온도(100°C)에서 10 cSt인 엔진오일이 40°C만 돼도 9배인 90 cSt — 기온이 영하로 내려가는 겨울 새벽엔 이 경향이 그대로 이어져 훨씬 되직한 상태로 시동을 걸게 됩니다. SAE J300이 100°C 동점도(뒷 숫자)와 별개로 저온 W 등급을 CCS·MRV 저온 시험으로 따로 판정하는 것도, 본 도구가 측정 온도(@40°C·@100°C) 토글을 두는 것도 같은 이유예요 — <strong style={{ color: 'var(--text)' }}>측정 온도가 다르면 같은 숫자라도 전혀 다른 유체</strong>입니다.
           </p>
         </section>
 
         {/* 3. ISO VG */}
         <section>
-          <h2 style={sectionTitle}>ISO VG — 산업용 윤활유 등급 (ISO 3448)</h2>
+          <h2 className="g-h2">ISO VG — 산업용 윤활유 등급 (ISO 3448)</h2>
           <p className="g-p">
             산업용 윤활유(유압유·기어유·터빈유)는 <strong style={{ color: 'var(--text)' }}>ISO Viscosity Grade</strong>로 분류됩니다. VG 번호 = <strong>40°C 동점도의 중심값(cSt)</strong>이며 ±10% 허용. 예를 들어 VG 46은 41.4~50.6 cSt @40°C.
           </p>
@@ -208,9 +287,39 @@ export default function ViscosityPage() {
           </div>
         </section>
 
+        {/* 3a. 계산 예시 · 자주 하는 실수 */}
+        <section>
+          <h2 className="g-h2">계산 예시 — 도구가 실제로 내놓는 값</h2>
+          <p className="g-p">
+            도구는 어떤 단위로 입력하든 먼저 동점도(cSt)로 바꾼 뒤 나머지를 계산합니다. cP·Pa·s 입력은 밀도로 나누고(cSt = cP ÷ ρ),
+            SUS 입력은 ASTM D2161 계산식을 거꾸로 풀어 cSt를 구합니다. 그다음 측정 온도 토글이 @100°C면 SAE 고온 등급을, @40°C면 ISO VG 등급을 찾습니다.
+          </p>
+          <ul className="g-list">
+            <li>
+              <strong>기본값 10 cSt · 밀도 0.87 · @100°C</strong> — 절대점도 {EX_OIL.cp.toFixed(2)} cP({EX_OIL.pas.toFixed(4)} Pa·s)
+              (0.87은 실온 밀도 기준 — 100°C에서는 밀도가 약 0.82로 낮아 실제 절대점도는 약 {EX_OIL_HOT.cp.toFixed(1)} cP),
+              SUS 약 {Math.round(EX_OIL.sus)}초, SAE 고온 등급 {EX_OIL_SAE}. 10은 30 등급 범위(9.3 이상 12.5 미만) 안에 있습니다.
+            </li>
+            <li>
+              <strong>유압유 46 cSt · 밀도 0.87 · @40°C</strong> — {EX_VG.cp.toFixed(1)} cP, SUS 약 {Math.round(EX_VG.sus)}초,
+              ISO {EX_VG_MATCH ? `VG ${EX_VG_MATCH.vg}(${EX_VG_MATCH.minCst}~${EX_VG_MATCH.maxCst} cSt)` : '해당 없음'}.
+            </li>
+            <li>
+              <strong>8.0 cSt · @100°C</strong> — {EX_OVERLAP} 두 등급이 함께 표시됩니다. 16 등급(6.1~8.2)과 20 등급(6.9~9.3)의 범위가 겹치는 구간이라,
+              실제 등급은 제품 사양서의 HTHS 값으로 확인해야 합니다.
+            </li>
+          </ul>
+          <p className="g-p">
+            가장 흔한 실수는 <strong>데이터시트의 cP 값을 cSt 칸에 그대로 넣는 것</strong>입니다. 밀도 0.87인 엔진오일이라면 동점도가 실제보다 약 {CP_AS_CST_ERR}% 작게 잡혀
+            등급 경계 근처에서 한 등급이 틀어질 수 있습니다. 다음으로 흔한 실수는 측정 온도를 섞는 것입니다 — 40°C 값으로 SAE 등급을 찾거나 100°C 값으로 ISO VG를 찾으면
+            전혀 다른 등급이 나옵니다. 밀도 역시 온도에 따라 변하므로 cP↔cSt 환산값은 시료 온도에서의 밀도를 넣었을 때 가장 정확합니다. 정비 현장에서 오일 선택이 애매하면
+            계산값보다 차량 매뉴얼의 점도 등급과 제조사 승인 규격(API·ACEA·제조사 규격)을 우선하고, 산업 설비는 장비 제조사 윤활 지침을 따르세요.
+          </p>
+        </section>
+
         {/* 3b. 일상 유체 점도 표 */}
         <section>
-          <h2 style={sectionTitle}>일상 유체 점도 한눈에</h2>
+          <h2 className="g-h2">일상 유체 점도 한눈에</h2>
           <p className="g-p">
             공기 0.018 cP에서 도로 아스팔트용 역청 ~10⁸ cP까지 — 같은 &lsquo;점도&rsquo;라는 물성이 수십억 배 스케일로 벌어집니다. 아래는 <strong style={{ color: 'var(--text)' }}>본 도구의 참고값(문헌 통용치)</strong>을 그대로 옮긴 표입니다.
           </p>
@@ -235,7 +344,7 @@ export default function ViscosityPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
+          <p className="g-p" style={{ marginTop: 16 }}>
             케첩·땅콩버터처럼 &lsquo;비뉴턴 유체&rsquo;로 표시된 값은 특정 전단속도에서의 통용치입니다 — 흔들거나 누르는 정도에 따라 점도 자체가 변해서 단일 값으로 못 박을 수 없어요(아래 FAQ 참고). 위 계산기에 값을 넣을 때는 측정 온도가 표와 같은 조건인지부터 확인하세요.
           </p>
         </section>
@@ -247,7 +356,7 @@ export default function ViscosityPage() {
 
         {/* 5. 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '8px' }}>
             {[
               { href: '/tools/unit/hardness',      icon: '🛠️', name: '경도(Hardness) 변환기', desc: 'HRC·HV·HB 등 강재 경도 환산' },

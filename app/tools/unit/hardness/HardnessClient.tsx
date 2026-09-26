@@ -16,7 +16,7 @@ const PRESETS: { label: string; scale: Scale; value: number }[] = [
   { label: '프리미엄',   scale: 'hrc', value: 62 },
   { label: 'HSS 드릴',   scale: 'hrc', value: 64 },
   { label: '저탄소강',   scale: 'hrb', value: 80 },
-  { label: '주철',       scale: 'hb',  value: 200 },
+  { label: '중탄소강',   scale: 'hb',  value: 200 },
 ]
 
 export default function HardnessClient() {

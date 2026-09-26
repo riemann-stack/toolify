@@ -104,7 +104,7 @@ export interface SaeGrade {
 
 /** SAE J300 (2015~) — 100°C 동점도 범위만 사용. W 등급은 -tt-low-temp 별도 */
 export const SAE_GRADES: SaeGrade[] = [
-  { grade: 'xW-8',  minCst: 4.0,  maxCst: 6.1,  hint: '신형 하이브리드·전기차 보조' },
+  { grade: 'xW-8',  minCst: 4.0,  maxCst: 6.1,  hint: '최신 하이브리드·초저점도 지정 엔진' },
   { grade: 'xW-12', minCst: 5.0,  maxCst: 7.1,  hint: '연비 우선 최신 엔진' },
   { grade: 'xW-16', minCst: 6.1,  maxCst: 8.2,  hint: '연비형 (도요타·혼다 최신)' },
   { grade: 'xW-20', minCst: 6.9,  maxCst: 9.3,  hint: '현대·기아·도요타 표준' },

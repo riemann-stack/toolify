@@ -112,7 +112,7 @@ export const MOUNTAINS: MountainPreset[] = [
   { id: 'unjangsan',         name: '운장산',         region: '전라', difficulty: '중급',   distanceKm:  9.0, elevGainM:  900, elevLossM:  900, baseHours: 5.5, description: '진안 운장산 (1,126m)' },
 
   // 제주 (3)
-  { id: 'hallasan-seongpan', name: '한라산 성판악',   region: '제주', difficulty: '상급',   distanceKm: 19.2, elevGainM: 1300, elevLossM: 1300, baseHours: 9.0, description: '성판악 → 백록담 (가장 긴 코스)' },
+  { id: 'hallasan-seongpan', name: '한라산 성판악',   region: '제주', difficulty: '상급',   distanceKm: 19.2, elevGainM: 1200, elevLossM: 1200, baseHours: 9.0, description: '성판악 → 백록담 (가장 긴 코스)' },
   { id: 'hallasan-gwaneum',  name: '한라산 관음사',   region: '제주', difficulty: '상급',   distanceKm: 17.6, elevGainM: 1300, elevLossM: 1300, baseHours: 9.5, description: '관음사 → 백록담 (가파름)' },
   { id: 'hallasan-yeongsil', name: '한라산 영실',     region: '제주', difficulty: '중급',   distanceKm: 11.7, elevGainM:  650, elevLossM:  650, baseHours: 5.0, description: '영실 → 윗세오름 (백록담 X)' },
 

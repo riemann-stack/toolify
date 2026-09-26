@@ -24,6 +24,7 @@ interface Sport {
   classes: WeightClass[]
   policy: string
   weighInHours: number  // 계체 후 시합까지 시간 (재수화 시간)
+  maxRegainPct?: number // 경기 당일 재계체 상한(한도 대비 %) — 재수화 예시가 이를 넘지 않게
 }
 
 // 프로 복싱은 여자 경기도 같은 lb 체급을 쓴다(여자 전용 아톰급 102lb 추가)
@@ -177,10 +178,10 @@ const WRESTLING_FREE: WeightClass[] = [
 
 const SPORTS: Sport[] = [
   { id: 'boxing', flag: '🥊', label: '복싱',         cls: 'sportBoxing', classes: BOXING,          policy: '시합 전날 또는 당일 계체 (단체별 차이) · 재수화 시간 충분 → 큰 차이 가능', weighInHours: 24 },
-  { id: 'ufc',    flag: '🥋', label: 'UFC (MMA)',   cls: 'sportUFC',    classes: UFC,              policy: '시합 전날 오전 계체 · 약 30~36시간 재수화 자유 → 8~12kg 차이 흔함', weighInHours: 30 },
-  { id: 'one',    flag: '🌿', label: 'ONE',          cls: 'sportONE',    classes: ONE_FC,           policy: '수분 감량 금지(2015~) · 시합 3주 전 매주 체중 보고 · 매일 소변 비중 측정', weighInHours: 0 },
+  { id: 'ufc',    flag: '🥋', label: 'UFC (MMA)',   cls: 'sportUFC',    classes: UFC,              policy: '시합 전날 오전 계체 · 약 30~36시간 재수화 가능 → 계체 체중보다 무겁게 경기', weighInHours: 30 },
+  { id: 'one',    flag: '🌿', label: 'ONE',          cls: 'sportONE',    classes: ONE_FC,           policy: '수분 감량 금지(2015~) · 계체 때 소변 비중 검사로 수분 상태 확인', weighInHours: 0 },
   { id: 'kick',   flag: '🦵', label: '킥복싱(K-1)', cls: 'sportKick',   classes: KICKBOXING,       policy: '대회별 다양 · 일반적으로 시합 전날 계체', weighInHours: 18 },
-  { id: 'judo',   flag: '🥋', label: '유도',         cls: 'sportJudo',   classes: JUDO,             policy: '국제 대회는 시합 당일 새벽 계체 · 재수화 시간 짧음 (수 시간)', weighInHours: 4 },
+  { id: 'judo',   flag: '🥋', label: '유도',         cls: 'sportJudo',   classes: JUDO,             policy: '국제 대회(IJF)는 전날 저녁 공식 계체 + 당일 아침 무작위 계체(한도 +5% 이내) · 재수화 제한적', weighInHours: 12, maxRegainPct: 5 },
   { id: 'tkd',    flag: '🦿', label: '태권도',       cls: 'sportTKD',    classes: TAEKWONDO,        policy: '시합 당일 또는 전날 계체 · 대회별 차이 큼', weighInHours: 12 },
   { id: 'muay',   flag: '🥊', label: '무에타이',     cls: 'sportMuay',   classes: MUAY_THAI,        policy: '시합 전날 계체 · 재수화 일반적', weighInHours: 18 },
   { id: 'wrest',  flag: '🤼', label: '레슬링(자유)', cls: 'sportWrest',  classes: WRESTLING_FREE,   policy: '국제 대회 시합 당일 새벽 계체 · 재수화 시간 매우 짧음', weighInHours: 3 },
@@ -340,7 +341,9 @@ export default function FightWeightClient() {
   const rapidShort = needToLose > 0 && daysToWeighIn <= 7 && needToLose / weight > 0.01
   const rapidCut = rapidShort || (needToLose > 0 && waterCut && waterPct >= 2)
   // 재수화 회복 예시 — 수분 감량분을 넘지 않게 (시작 체중보다 무거워지는 표시 방지)
-  const rehydrateKg = !waterCut ? 0 : Math.min(sport.weighInHours > 12 ? 5 : sport.weighInHours > 4 ? 2.5 : 1, waterPhaseLoss)
+  // 유도처럼 당일 무작위 재계체 상한(한도 +5%)이 있으면 그 폭도 넘지 않게 한다
+  const regainCap = sport.maxRegainPct && targetClass && Number.isFinite(targetClass.limit) ? targetClass.limit * sport.maxRegainPct / 100 : Infinity
+  const rehydrateKg = !waterCut ? 0 : Math.min(sport.weighInHours > 12 ? 5 : sport.weighInHours > 4 ? 2.5 : 1, waterPhaseLoss, regainCap)
 
   // 일정표 생성
   const schedule = useMemo(() => {

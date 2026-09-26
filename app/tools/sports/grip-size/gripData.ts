@@ -46,18 +46,22 @@ export function recommendTennis(palmCm: number, overgrip: 0 | 1 | 2 = 0): { grip
 export interface GolfGrip {
   id: 'undersize' | 'standard' | 'midsize' | 'jumbo'
   name: string
-  diameter: string  // 0.580"
-  delta: string     // +1/16" 등
-  diameterMm: number
+  /** 표준 그립 대비 외경(바깥 지름) 차이 — 제조사 공칭 표기 (Golf Pride 등: 언더 −1/64" · 미드 +1/16" · 점보 +1/8") */
+  delta: string
+  /** delta의 mm 환산 (1인치 = 25.4mm) — 표준은 빈 문자열 */
+  deltaMm: string
   recommendedGlove: string
   desc: string
 }
 
+/* 예전 값(0.560"·0.580"·0.640"·0.680"을 '그립 지름'으로 표기)은 오류였다.
+   .580·.600은 그립 안쪽 구멍(코어) 지름 — 샤프트 끝(버트) 지름에 맞추는 규격이지 손에 닿는 굵기가 아니다.
+   사이즈 등급은 표준 대비 외경 차이로만 표기한다. */
 export const GOLF_GRIPS: GolfGrip[] = [
-  { id: 'undersize', name: '언더사이즈',  diameter: '0.560"', delta: '−1/64"', diameterMm: 14.22, recommendedGlove: '글러브 20~22호 (S)',   desc: '여성·청소년·작은 손' },
-  { id: 'standard',  name: '표준',        diameter: '0.580"', delta: '기본',   diameterMm: 14.73, recommendedGlove: '글러브 23~25호 (M·L)', desc: '한국 남성 약 60%가 사용' },
-  { id: 'midsize',   name: '미드사이즈',  diameter: '0.640"', delta: '+1/16"', diameterMm: 16.26, recommendedGlove: '글러브 26~27호 (XL)',  desc: '큰 손·관절염·그립 압력 ↓ 원할 때' },
-  { id: 'jumbo',     name: '점보',        diameter: '0.680"', delta: '+1/8"',  diameterMm: 17.27, recommendedGlove: '글러브 28호+ (XXL)',   desc: '아주 큰 손·관절 부담 감소·훅 경향 완화' },
+  { id: 'undersize', name: '언더사이즈',  delta: '−1/64"', deltaMm: '약 −0.4mm', recommendedGlove: '글러브 20~22호 (S)',   desc: '여성·청소년·작은 손' },
+  { id: 'standard',  name: '표준',        delta: '기준',   deltaMm: '',          recommendedGlove: '글러브 23~25호 (M·L)', desc: '대부분의 클럽에 기본 장착되는 굵기' },
+  { id: 'midsize',   name: '미드사이즈',  delta: '+1/16"', deltaMm: '약 +1.6mm', recommendedGlove: '글러브 26~27호 (XL)',  desc: '큰 손·관절염·그립 압력 ↓ 원할 때' },
+  { id: 'jumbo',     name: '점보',        delta: '+1/8"',  deltaMm: '약 +3.2mm', recommendedGlove: '글러브 28호+ (XXL)',   desc: '아주 큰 손·관절 부담 감소·훅 경향 완화' },
 ]
 
 /** 손 전체 길이(손목 주름 ~ 중지 끝) cm → 한국 글러브 호수
@@ -94,7 +98,7 @@ export const BADMINTON_GRIPS: BadmintonGrip[] = [
 
 /** 손바닥+약지 cm → 배드민턴 그립 (오버그립 권장 사용 — 거의 모두 1~2겹) */
 export function recommendBadminton(palmCm: number, overgrip: 0 | 1 | 2 = 1): BadmintonGrip {
-  // 한국 배드민턴 동호인 80%가 오버그립 1~2겹 사용 → 한 단계 작게 추천
+  // 배드민턴은 오버그립을 1~2겹 감아 쓰는 경우가 흔해 기본 1겹을 가정 — 겹당 0.20cm를 빼고 판정(= 맨 그립은 한 단계 작게)
   const target = palmCm - overgrip * 0.20
   if (target < 10.0) return BADMINTON_GRIPS[4]   // G6
   if (target < 10.7) return BADMINTON_GRIPS[3]   // G5

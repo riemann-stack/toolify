@@ -331,6 +331,11 @@ export function autoFill(inp: { cityId: string; style: Style; days: number; peop
   }
 }
 
+/** 계산기 첫 화면의 기본 선택 — Client 초기 state와 page.tsx 계산 예시가 함께 쓴다(값 불일치 방지) */
+export const DEFAULT_SELECTION: { cityId: string; style: Style; days: number; people: number; season: Season; airline: Airline } = {
+  cityId: 'tokyo', style: 'middle', days: 5, people: 2, season: 'low', airline: 'lcc',
+}
+
 /* ─────────────────────────────────────────────
    포맷
    ───────────────────────────────────────────── */

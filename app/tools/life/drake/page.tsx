@@ -3,14 +3,38 @@ import DrakeEquationClient from './DrakeEquationClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
-import { RADIO_START_YEAR, radioRangeLy } from './drakeUtils'
+import { RADIO_START_YEAR, radioRangeLy, calcDistance, GALAXY_VOLUME_LY3, PRESETS } from './drakeUtils'
 import ToolPage from '@/components/ToolPage'
 
 // 인류 전파권은 해마다 1광년씩 넓어진다 — 빌드(배포) 시점 연도로 계산해 한 곳에서 관리.
 // 정적 페이지라 새해 첫 배포 때 갱신된다.
 const RADIO_ASOF_YEAR = new Date().getFullYear()
 const RADIO_LY = radioRangeLy(RADIO_ASOF_YEAR)
+
+/* 거리 표 — 계산기와 같은 calcDistance로 빌드 시 계산 (손으로 옮겨 적지 않는다) */
+const ly = (n: number) => `약 ${Math.round(n).toLocaleString('ko-KR')} 광년`
+const yr = (n: number) => `약 ${Math.round(n).toLocaleString('ko-KR')}년`
+const DIST_ROWS = [
+  { n: 100,       note: '' },
+  { n: 1_000,     note: '그린뱅크 회의(1961) 추정 범위의 하한' },
+  { n: 10_000,    note: '드레이크가 생전에 자주 제시한 값' },
+  { n: 100_000,   note: '' },
+  { n: 1_000_000, note: '칼 세이건 추정 수준' },
+].map(r => {
+  const d = calcDistance(r.n, RADIO_LY)!
+  const inRange = d.nearestDistance <= RADIO_LY
+  return { ...r, d, note: [r.note, inRange ? `인류 전파권(${RADIO_LY}ly) 안` : `인류 전파(${RADIO_LY}ly) 미도달`].filter(Boolean).join(' · ') }
+})
+
+/* 계산 예시 — 계산기 첫 화면의 '현실론' 예시값(drakeUtils PRESETS.realistic을 그대로 사용 → 계산기와 자동 동기화) */
+const EX = PRESETS.realistic
+const EX_N = EX.rStar * EX.fp * EX.ne * EX.fl * EX.fi * EX.fc * EX.L
+const EX_D = calcDistance(EX_N, RADIO_LY)!
+const EX_PER_YEAR = EX_N / EX.L   // 해마다 새로 교신 능력을 갖추는 문명 수
+const GALAXY_VOL_TRILLION = GALAXY_VOLUME_LY3 / 1e12
 
 export const metadata = buildMetadata({
   path: '/tools/life/drake',
@@ -31,9 +55,9 @@ const FAQ_LD = [
               { q: '실제로 외계 신호를 받은 적 있나요?',
                 a: '1977년 &ldquo;와우! 신호(Wow! Signal)&rdquo;가 가장 유명한 사례입니다. 72초간 강력한 협대역 전파 신호가 감지됐지만 이후 재현되지 않았습니다. 2016년 러시아 RATAN-600이 HD 164595(태양과 비슷한 별, 약 95광년) 방향에서 포착한 신호도 화제였으나 단발성이었고 후속 관측에서 재현되지 않았습니다. 현재까지 외계 기원으로 공식 확인된 신호는 없습니다.' },
               { q: '가장 가까운 외계 문명까지 거리는 어떻게 계산하나요?',
-                a: `우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, <strong>평균 간격 ≈ (은하 부피 / N)<sup>1/3</sup></strong>, 가장 가까운 거리 ≈ 평균 × 0.55(Poisson 통계 근사). 예: N = 1만 → 가장 가까운 약 507광년, N = 100만 → 약 109광년(인류 전파권 ${RADIO_LY}ly 안). 본 도구가 N값에 따라 자동 계산합니다. ⚠️ 균등 분포 가정으로, 실제는 나선팔에 집중 가능성.` },
+                a: `우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, <strong>평균 간격 ≈ (은하 부피 / N)<sup>1/3</sup></strong>, 가장 가까운 거리 ≈ 평균 × 0.55(Poisson 통계 근사). 예: N = 1만 → 가장 가까운 약 507광년, N = 100만 → 약 109광년(인류 전파권 ${RADIO_LY}ly 안). 본 도구가 N값에 따라 자동 계산합니다. 단, 균등 분포를 가정한 값이라 실제로는 별이 몰린 나선팔에 문명이 집중돼 있을 수 있습니다.` },
               { q: '인류 전파는 어디까지 도달했나요?',
-                a: `약 <strong>${RADIO_LY}광년</strong> (${RADIO_START_YEAR}년 첫 라디오부터 ${RADIO_ASOF_YEAR}년 기준). 100광년 내 별 약 14,000개를 통과했습니다. 알파 센타우리(4.37광년) 1904년, 시리우스(8.6광년) 1909년, 베가(25광년) 1925년경 도달. ⚠️ 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다.` },
+                a: `약 <strong>${RADIO_LY}광년</strong> (${RADIO_START_YEAR}년 첫 라디오부터 ${RADIO_ASOF_YEAR}년 기준). 100광년 내 별 약 14,000개를 통과했습니다. 알파 센타우리(4.37광년) 1904년, 시리우스(8.6광년) 1909년, 베가(25광년) 1925년경 도달. 다만 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다.` },
               { q: 'N값에 따라 어떤 페르미 역설 가설이 유력한가요?',
                 a: '본 도구가 N값에 따라 자동으로 가장 유력한 가설 2개를 추천합니다. 대략적 경향: <br/>• N &lt; 10: 레어 어스 (지구가 특별)<br/>• N 10~10,000: 대필터·시끄러움<br/>• N 1,000~100만: 동물원·시끄러움<br/>• N 100만+: 디지털 문명·관찰 회피<br/>슬라이더로 변수를 조정하면 추천도 즉시 갱신됩니다.' },
               { q: '거리 계산이 실제 우주와 일치하나요?',
@@ -50,6 +74,17 @@ export default function DrakePage() {
       <p className="tp-lead">
         외계 문명은 몇 개나 존재할까. 7개 변수를 직접 조정하며 <strong style={{ color: 'var(--text)' }}>페르미 역설</strong>까지.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="드레이크 방정식(1961) 원형 · 탐사 현황은 NASA·Breakthrough Initiatives 발표 기준 · 거리는 은하 원반 균등 분포를 가정한 단순 모델"
+        sources={[
+          { label: 'SETI Institute — Drake Equation', href: 'https://www.seti.org/research/seti-101/drake-equation/' },
+          { label: 'NASA Exoplanet Archive', href: 'https://exoplanetarchive.ipac.caltech.edu/' },
+          { label: 'NASA Science — Europa Clipper', href: 'https://science.nasa.gov/mission/europa-clipper/' },
+          { label: 'Breakthrough Listen', href: 'https://breakthroughinitiatives.org/initiative/1' },
+        ]}
+      />
 
       <DrakeEquationClient radioRangeLy={RADIO_LY} />
 
@@ -101,6 +136,25 @@ export default function DrakePage() {
           </div>
         </div>
 
+        {/* ── 1-1. 계산 예시·해석 ── */}
+        <div>
+          <h2 className="g-h2">
+            계산 예시와 결과 읽는 법
+          </h2>
+          <p className="g-p">
+            계산기 첫 화면의 &lsquo;현실론&rsquo; 예시값은 R<sub>*</sub> = {EX.rStar}, f<sub>p</sub> = {EX.fp}, n<sub>e</sub> = {EX.ne}, f<sub>l</sub> = {EX.fl}, f<sub>i</sub> = {EX.fi}, f<sub>c</sub> = {EX.fc}, L = {EX.L.toLocaleString('ko-KR')}년입니다.
+            앞의 여섯 항을 곱하면 {EX_PER_YEAR.toLocaleString('ko-KR', { maximumFractionDigits: 4 })} — 우리 은하에서 <strong>해마다 새로 교신 능력을 갖추는 문명 수</strong>이고,
+            여기에 문명이 그 능력을 유지하는 기간 L을 곱하면 지금 이 순간 동시에 존재하는 문명 수 N = <strong>{Math.round(EX_N).toLocaleString('ko-KR')}</strong>가 나옵니다.
+          </p>
+          <p className="g-p">
+            이 N을 은하 원반 부피(반경 5만 광년 × 두께 1천 광년 ≈ {GALAXY_VOL_TRILLION.toFixed(2)}조 세제곱광년)에 고르게 흩어 놓으면 문명 사이 평균 간격은 {ly(EX_D.averageDistance)},
+            가장 가까운 문명까지는 {ly(EX_D.nearestDistance)}이고, 신호를 보내고 답을 받기까지 {yr(EX_D.roundTripCommYears)}이 걸립니다.
+            결과를 읽을 때 기억할 점은 세 가지입니다. 첫째, <strong>N은 모든 변수에 정비례</strong>합니다 — 어느 한 값을 10배 바꾸면 N도 정확히 10배가 되므로,
+            불확실성이 가장 큰 f<sub>l</sub>·f<sub>i</sub>·L이 결과를 좌우합니다. 둘째, <strong>N이 1보다 작다면</strong> 지금 우리 은하에서 교신 가능한 문명이 평균적으로 한 곳도 되지 않는다는 뜻으로,
+            인류가 예외적인 존재라는 해석(레어 어스)과 맞닿아 있습니다. 셋째, 거리 계산은 N에 세제곱근으로 반응하므로 <strong>N이 1,000배 늘어도 거리는 10분의 1로만 줄어듭니다</strong>.
+          </p>
+        </div>
+
         {/* ── 2. 역사 ── */}
         <div>
           <h2 className="g-h2">
@@ -134,11 +188,11 @@ export default function DrakePage() {
               </thead>
               <tbody>
                 {[
-                  { who: '칼 세이건 (낙관, 1980년대)', n: '~100만 개',  color: '#059669', note: '생명 발생·진화 확률 높게 가정' },
-                  { who: '드레이크 본인 (1961)',    n: '~10,000 개',    color: 'var(--accent)', note: '그린뱅크 회의 추정' },
-                  { who: '본 도구 "현실론" 예시',    n: '수십~수백 개',   color: 'var(--accent)', note: '중간 가정 (공식 합의값 아님)' },
-                  { who: '비관론 (레어 어스)',     n: '< 1 개',        color: '#EA580C', note: '지구 조건이 매우 특별함' },
-                  { who: '페르미 역설 관점',       n: '수백만~수억',   color: '#0891B2', note: '계산상 많지만 신호 없음' },
+                  { who: '그린뱅크 회의 (1961)',    n: '1,000 ~ 1억 개', color: 'var(--accent-ink)', note: 'N ≈ L(문명 존속 연수)로 정리 — 불확실성이 커 범위로 제시' },
+                  { who: '칼 세이건 (낙관, 1960~80년대)', n: '~100만 개',  color: 'var(--success)', note: '생명 발생·진화 확률 높게 가정' },
+                  { who: '프랭크 드레이크 (후년)',    n: '~10,000 개',    color: 'var(--accent-ink)', note: 'L ≈ 1만 년 가정 — 강연·인터뷰에서 자주 제시' },
+                  { who: `본 도구 "현실론" 예시`,    n: `${Math.round(EX_N).toLocaleString('ko-KR')} 개`,   color: 'var(--accent-ink)', note: '중간 가정 (공식 합의값 아님)' },
+                  { who: '비관론 (레어 어스)',     n: '< 1 개',        color: 'var(--warning)', note: '지구 조건이 매우 특별함' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row.who}</td>
@@ -149,9 +203,11 @@ export default function DrakePage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            ⚠️ 위 값은 가정에 따른 <strong style={{ color: 'var(--text)' }}>예시</strong>입니다. fl(생명 발생)·fi(지능 진화)·L(문명 수명)은 아직 알려진 바가 없어 <strong style={{ color: 'var(--text)' }}>공식적으로 합의된 추정치나 &lsquo;중앙값&rsquo;은 존재하지 않습니다</strong> (SETI Institute). 결과는 입력값에 따라 수십 자릿수까지 달라집니다.
-          </p>
+          <div style={{ marginTop: 12 }}>
+            <Callout tone="warn" title="합의된 정답은 없습니다">
+              위 값은 가정에 따른 <strong>예시</strong>입니다. fl(생명 발생)·fi(지능 진화)·L(문명 수명)은 아직 알려진 바가 없어 <strong>공식적으로 합의된 추정치나 &lsquo;중앙값&rsquo;은 존재하지 않습니다</strong> (SETI Institute). 결과는 입력값에 따라 수십 자릿수까지 달라집니다.
+            </Callout>
+          </div>
         </div>
 
         {/* ── 4. 페르미 역설 ── */}
@@ -187,27 +243,27 @@ export default function DrakePage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { title: '케플러 · TESS 망원경', desc: '확인된 외계행성 약 6,000개 (NASA, 2025). 거주 가능 구역(골디락스 존) 후보 행성도 다수 확인되어 fp 추정값을 크게 끌어올림.' },
+              { title: '케플러 · TESS 망원경', desc: 'NASA가 집계한 확인된 외계행성은 2025년 9월 6,000개를 넘었고, 이후에도 계속 늘고 있습니다(NASA Exoplanet Archive에서 실시간 확인). 거주 가능 구역(골디락스 존) 후보 행성도 다수 확인되어 fp 추정값을 크게 끌어올림.' },
               { title: 'Breakthrough Listen',  desc: '2015년 7월 출범한 10년·1억 달러 규모의 SETI 프로젝트(관측은 2016년부터). 가까운 별 100만 개와 100개 은하의 전파·광학 신호를 스캔.' },
               { title: '제임스 웹 우주망원경(JWST)', desc: '외계행성 대기 성분 분석 가능. 산소·메탄 등 생명 활동 지표(바이오시그니처)를 찾는 중.' },
-              { title: '엔셀라두스 · 유로파',   desc: '태양계 내 얼음 밑 바다를 가진 위성들. NASA Europa Clipper는 2024년 발사돼 목성으로 항해 중 — 2030년 유로파 도착·탐사 예정.' },
+              { title: '엔셀라두스 · 유로파',   desc: '태양계 내 얼음 밑 바다를 가진 위성들. NASA Europa Clipper는 2024년 10월 발사돼 항해 중 — 2030년 4월 목성 궤도에 진입하고, 2031년부터 유로파 근접 비행 탐사 예정.' },
               { title: '중국 톈옌(FAST) 전파망원경', desc: '세계 최대 단일 전파망원경. 2022년 보고된 후보 신호는 이후 전파 간섭(RFI)으로 외계 기원 가능성이 거의 배제됨.' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '4px' }}>🔭 {item.title}</p>
+                <p style={{ fontSize: '13px', color: 'var(--accent-ink)', fontWeight: 700, marginBottom: '4px' }}>{item.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.6 }}>
-            출처: NASA Exoplanet Archive · NASA Science(Europa Clipper) · Breakthrough Initiatives · SETI Institute. 거리·문명 수는 본문 모델 가정에 따른 추정입니다. <strong style={{ color: 'var(--text)' }}>최종 검토: 2026-07.</strong>
+            출처: NASA Exoplanet Archive · NASA Science(Europa Clipper) · Breakthrough Initiatives · SETI Institute (2026년 9월 확인). 거리·문명 수는 본문 모델 가정에 따른 추정입니다.
           </p>
         </div>
 
         {/* ── 6. 가장 가까운 외계 문명까지 거리 (NEW) ── */}
         <div>
           <h2 className="g-h2">
-            📏 가장 가까운 외계 문명까지 거리
+            가장 가까운 외계 문명까지 거리
           </h2>
           <p className="g-p">
             우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, 평균 문명 간 거리 ≈ (은하 부피 / N)<sup>1/3</sup>, 가장 가까운 문명 ≈ 평균 × 0.55 (Poisson 통계 근사). 본 도구의 결과 카드에 자동 표시됩니다.
@@ -224,18 +280,12 @@ export default function DrakePage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { n: '100',       avg: '약 4,282 광년', near: '약 2,355 광년', rt: '약 4,711년',  note: `인류 전파(${RADIO_LY}ly) 미도달` },
-                  { n: '1,000',     avg: '약 1,988 광년', near: '약 1,093 광년', rt: '약 2,187년',  note: '균형론 · 전파권 밖' },
-                  { n: '10,000',    avg: '약 923 광년',   near: '약 507 광년',   rt: '약 1,015년',  note: '드레이크 본인 추정' },
-                  { n: '100,000',   avg: '약 428 광년',   near: '약 236 광년',   rt: '약 471년',     note: '전파권 밖 (근접)' },
-                  { n: '1,000,000', avg: '약 199 광년',   near: '약 109 광년',   rt: '약 219년',     note: '칼 세이건 추정 수준 — 전파권 안' },
-                ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>N = {r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.avg}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.near}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.rt}</td>
+                {DIST_ROWS.map((r, i) => (
+                  <tr key={r.n} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>N = {r.n.toLocaleString('ko-KR')}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}>{ly(r.d.averageDistance)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--danger)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{ly(r.d.nearestDistance)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}>{yr(r.d.roundTripCommYears)}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.note}</td>
                   </tr>
                 ))}
@@ -250,7 +300,7 @@ export default function DrakePage() {
         {/* ── 7. 인류 전파권 시간선 (NEW) ── */}
         <div>
           <h2 className="g-h2">
-            📡 인류 전파권 시간선
+            인류 전파권 시간선
           </h2>
           <p className="g-p">
             인류는 {RADIO_START_YEAR}년경 첫 라디오 송신을 시작했습니다. {RADIO_ASOF_YEAR}년 기준 전파 도달 거리는 약 <strong style={{ color: 'var(--text)' }}>{RADIO_LY}광년</strong>, 100광년 내 별 약 <strong style={{ color: 'var(--text)' }}>14,000개</strong>를 통과했습니다. 가까운 별 도달 시점은 다음과 같습니다.
@@ -283,9 +333,11 @@ export default function DrakePage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            ⚠️ 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다. 또한 그들이 응답을 보내고 우리에게 도달하기까지 같은 시간이 추가로 걸립니다(왕복 통신).
-          </p>
+          <div style={{ marginTop: 12 }}>
+            <Callout tone="note" title="도달했다고 들리는 것은 아닙니다">
+              인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다. 또한 그들이 응답을 보내고 우리에게 도달하기까지 같은 시간이 추가로 걸립니다(왕복 통신).
+            </Callout>
+          </div>
         </div>
 
         {/* ── 8. FAQ (accordion) ── */}

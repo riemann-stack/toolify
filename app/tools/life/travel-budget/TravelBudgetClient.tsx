@@ -8,7 +8,7 @@ import s from './travelBudget.module.css'
 import {
   CITIES, STYLES, SEASONS, AIRLINES, REGION_LABELS,
   type Style, type Season, type Airline,
-  getCity, calcBudget, diagnose, autoFill,
+  getCity, calcBudget, diagnose, autoFill, DEFAULT_SELECTION,
   fmtMan, fmtCurrency,
 } from './travelBudgetUtils'
 
@@ -22,27 +22,31 @@ const ITEM_IDS = ['flight', 'hotel', 'food', 'transport', 'shopping', 'ticket', 
 /* 한국인이 자주 가는 주요 도시 — 계산 탭 기본 노출(나머지는 "더보기") */
 const POPULAR_CITY_IDS = ['tokyo', 'fukuoka', 'bangkok', 'danang', 'cebu', 'bali']
 
+/* 첫 화면 9개 항목 = 기본 선택의 자동 채우기 값 — 결과가 '평균 대비 0%'로 시작하고 가이드 계산 예시와 일치 */
+const D = DEFAULT_SELECTION
+const INIT = autoFill(D)
+
 export default function TravelBudgetClient() {
   const [tab, setTab] = useState<Tab>('calc')
 
   /* 공통 입력 */
-  const [cityId, setCityId] = useState('tokyo')
-  const [style, setStyle] = useState<Style>('middle')
-  const [days, setDays] = useState('5')
-  const [people, setPeople] = useState('2')
-  const [season, setSeason] = useState<Season>('low')
-  const [airline, setAirline] = useState<Airline>('lcc')
+  const [cityId, setCityId] = useState(D.cityId)
+  const [style, setStyle] = useState<Style>(D.style)
+  const [days, setDays] = useState(String(D.days))
+  const [people, setPeople] = useState(String(D.people))
+  const [season, setSeason] = useState<Season>(D.season)
+  const [airline, setAirline] = useState<Airline>(D.airline)
 
   /* 9 항목 (만원) */
-  const [flight, setFlight] = useState('40')
-  const [hotel, setHotel] = useState('12')
-  const [food, setFood] = useState('8')
-  const [transport, setTransport] = useState('18')
-  const [shopping, setShopping] = useState('50')
-  const [ticket, setTicket] = useState('30')
-  const [comm, setComm] = useState('5')
-  const [insurance, setInsurance] = useState('3')
-  const [etc, setEtc] = useState('10')
+  const [flight, setFlight] = useState(String(INIT.flight))
+  const [hotel, setHotel] = useState(String(INIT.hotel))
+  const [food, setFood] = useState(String(INIT.food))
+  const [transport, setTransport] = useState(String(INIT.transport))
+  const [shopping, setShopping] = useState(String(INIT.shopping))
+  const [ticket, setTicket] = useState(String(INIT.ticket))
+  const [comm, setComm] = useState(String(INIT.comm))
+  const [insurance, setInsurance] = useState(String(INIT.insurance))
+  const [etc, setEtc] = useState(String(INIT.etc))
 
   const [reservePct, setReservePct] = useState(10)
 

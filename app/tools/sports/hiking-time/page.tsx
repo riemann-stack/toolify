@@ -5,7 +5,9 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import Callout from '@/components/Callout'
 import ToolPage from '@/components/ToolPage'
+import { MOUNTAINS, FITNESS, SUN_AVERAGES, calculate, fmtDuration, fmtHHMM, type CalcInputs } from './hikingUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/hiking-time',
@@ -28,19 +30,40 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '22px',
-  fontWeight: 700,
-  marginBottom: '14px',
-  letterSpacing: '-0.01em',
+/* ── 표 공통 ── */
+const th: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }
+const td: React.CSSProperties = { padding: '10px 12px', color: 'var(--text)', verticalAlign: 'top' }
+const tdNum: React.CSSProperties = { ...td, textAlign: 'right', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }
+const rowBg = (i: number) => ({ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' })
+
+/* ── 가이드 수치 — 도구와 같은 hikingUtils.calculate()로 빌드 시 계산 ── */
+const BASE: CalcInputs = {
+  distanceKm: 7.0, elevGainM: 720, elevLossM: 720,
+  fitness: 'normal', terrain: 'normal', pack: 'day', group: 'solo', weather: 'normal',
+  startTime: '09:00', sunsetTime: '18:30', restMode: 'auto', manualRestMin: 0,
 }
-const faqAnswer: React.CSSProperties = {
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
-  margin: 0,
-}
+const calcFor = (over: Partial<CalcInputs>) => calculate({ ...BASE, ...over })
+
+// 인기 명산 — 프리셋 거리·표고차를 세 공식에 넣은 결과 (일반 체력·봄가을·당일 배낭·1인)
+const POPULAR_IDS = ['bukhansan-baekun', 'dobongsan', 'gwanaksan', 'seorak-ohsaek', 'jirisan-jungsanri', 'hallasan-seongpan', 'sobaeksan', 'songnisan', 'mudeungsan', 'wolchulsan']
+const POPULAR = POPULAR_IDS.map((id) => MOUNTAINS.find((m) => m.id === id)!).filter(Boolean).map((m) => {
+  const r = calcFor({ distanceKm: m.distanceKm, elevGainM: m.elevGainM, elevLossM: m.elevLossM })
+  return { m, naismith: r.formulas[0].totalMin, tobler: r.formulas[1].totalMin, korean: r.totalMin }
+})
+// 한국 코스타임 + 휴식이 프리셋 표준 소요시간과 얼마나 맞는지 (전체 프리셋 평균 절대 오차)
+const PRESET_ERR = MOUNTAINS.map((m) => {
+  const r = calcFor({ distanceKm: m.distanceKm, elevGainM: m.elevGainM, elevLossM: m.elevLossM })
+  return Math.abs(r.totalMin / 60 - m.baseHours) / m.baseHours
+})
+const PRESET_MAE = Math.round((PRESET_ERR.reduce((a, b) => a + b, 0) / PRESET_ERR.length) * 100)
+
+// 계산 예시 — 도구 기본값(7.0km · +720/−720m · 09:00 출발)과 12월 초보·겨울 조건
+const EX = calcFor({})
+const EX_K = EX.formulas[2]
+const DEC_SUNSET = SUN_AVERAGES[11].seoul.set
+const EX_WINTER = calcFor({ fitness: 'beginner', weather: 'winter', sunsetTime: DEC_SUNSET })
+const EXPERT_SPEEDUP = 1 / FITNESS.find((f) => f.id === 'expert')!.factor
+
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
@@ -51,11 +74,11 @@ const card: React.CSSProperties = {
 const FAQ: { q: string; a: string }[] = [
   {
     q: 'Naismith vs Tobler 공식 차이는?',
-    a: '<strong style="color:var(--text)">Naismith (1892)</strong>: 가장 오래된 등산 시간 공식. 평지 5km/h + 오르막 600m당 1시간. 단순하지만 내리막 보정이 없어 부정확.<br/><br/><strong style="color:var(--text)">Tobler Function (1993)</strong>: 경사도 함수 기반. 가파른 내리막에서는 오히려 속도가 느려진다는 사실 반영. 최대속도 6km/h가 약간 내리막(기울기 -5%, 약 -2.86°)에서 발생.<br/><br/>한국 산은 가파르고 등산로가 좁아 두 공식 모두 보수적 추정이 필요. 본 도구의 <strong style="color:var(--accent)">한국 코스타임</strong> 기준(100대 명산 표준 소요시간 보정)이 가장 현실적.',
+    a: '<strong style="color:var(--text)">Naismith (1892)</strong>: 가장 오래된 등산 시간 공식. 평지 5km/h + 오르막 600m당 1시간. 단순하지만 내리막 보정이 없어 부정확.<br/><br/><strong style="color:var(--text)">Tobler Function (1993)</strong>: 경사도 함수 기반. 가파른 내리막에서는 오히려 속도가 느려진다는 사실 반영. 최대속도 6km/h가 약간 내리막(기울기 -5%, 약 -2.86°)에서 발생.<br/><br/>두 공식 모두 휴식을 뺀 순수 이동 시간이고, 돌길·계단이 많은 한국 등산로에서는 실제보다 짧게 나오는 경향이 있습니다. 그래서 본 도구는 명산 프리셋의 표준 소요시간에 맞춘 <strong style="color:var(--text)">한국 코스타임</strong> 계수를 기본값으로 쓰고, 두 공식은 비교용으로 함께 보여 줍니다.',
   },
   {
     q: '한국 산에서 평균 페이스는?',
-    a: '한국 산은 가파르고 등산로가 좁아 국제 표준(평지 5km/h)보다 느립니다. 본 도구는 <strong style="color:var(--text)">100대 명산 표준 코스타임</strong>에 맞춰 보정했습니다.<ul style="padding-left:20px;margin:8px 0"><li><strong>오르막</strong>: 표고 100m당 약 16분 (≈ 시속 고도 375m)</li><li><strong>내리막</strong>: 표고 100m당 약 7분</li><li><strong>거리</strong>: 1km당 약 10분</li><li><strong>휴식</strong>: 50분 보행마다 10분 (별도 합산)</li></ul>종합하면 일반 코스 평균 약 1.5~2.5km/h(경사에 따라). 트레일러닝 수준이면 1.5배 빠름, 초보는 1.25배 느림.',
+    a: `한국 산은 가파르고 등산로가 좁아 국제 표준(평지 5km/h)보다 느립니다. 본 도구의 계수는 <strong style="color:var(--text)">도구에 넣어 둔 명산 프리셋 ${MOUNTAINS.length}곳의 표준 소요시간</strong>에 맞춘 자체 계수입니다(공식 기준 아님).<ul style="padding-left:20px;margin:8px 0"><li><strong>오르막</strong>: 표고 100m당 약 16분 (≈ 시속 고도 375m)</li><li><strong>내리막</strong>: 표고 100m당 약 7분</li><li><strong>거리</strong>: 1km당 약 10분</li><li><strong>휴식</strong>: 50분 보행마다 10분 (별도 합산)</li></ul>종합하면 휴식을 포함한 평균 속도는 가파른 코스(설악산 오색) 시속 약 1.2km부터 완만한 코스 2km 남짓까지입니다. 체력 등급 &lsquo;전문&rsquo;(×0.70)은 약 ${EXPERT_SPEEDUP.toFixed(1)}배 빠르고, &lsquo;초보&rsquo;(×1.25)는 25% 더 걸립니다.`,
   },
   {
     q: '체력 등급은 어떻게 정하나요?',
@@ -63,7 +86,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: '오르막 100m가 평지 1km보다 오래 걸리는 이유?',
-    a: '<strong style="color:var(--text)">물리적 일량(에너지)이 다르기 때문</strong>입니다. 오르막은 중력에 거슬러 올라가야 하므로 같은 거리라도 평지보다 5~10배 에너지 소모.<br/><br/>Naismith 공식: 600m 오르막 = 1시간 = 평지 5km. 즉 <strong>오르막 100m ≈ 평지 833m</strong>의 시간 가치. 한국 코스타임 기준은 더 보수적이어서 오르막 100m(약 16분) ≈ 평지 1.6km(약 16분) 수준.<br/><br/>한국에서 거리는 짧아도 표고차가 큰 코스(설악산 오색 9km/1300m 등)는 거리만 보면 안 되고 표고차가 핵심.',
+    a: '<strong style="color:var(--text)">물리적 일량(에너지)이 다르기 때문</strong>입니다. 오르막은 몸무게와 배낭을 중력에 거슬러 들어 올려야 해서, 경사가 가파를수록 같은 거리라도 평지의 몇 배 에너지가 들고 속도도 떨어집니다.<br/><br/>Naismith 공식: 600m 오르막 = 1시간 = 평지 5km. 즉 <strong>오르막 100m ≈ 평지 833m</strong>의 시간 가치. 한국 코스타임 기준은 더 보수적이어서 오르막 100m(약 16분) ≈ 평지 1.6km(약 16분) 수준.<br/><br/>한국에서 거리는 짧아도 표고차가 큰 코스(설악산 오색 9km/1300m 등)는 거리만 보면 안 되고 표고차가 핵심.',
   },
   {
     q: '야간 산행은 얼마나 더 걸리나?',
@@ -79,7 +102,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: '회귀 시간(턴어라운드)이란?',
-    a: '<strong style="color:var(--text)">“정상 도달 못 하면 하산해야 하는 시점”</strong>. 산악 등반의 핵심 안전 개념.<br/><br/>예: 일몰 18:30 → 하산 완료 목표 17:30 → 하산에 2시간 걸리는 코스(왕복 약 4시간)라면 정상 도달 마감은 15:30. 15:30까지 정상에 도달 못 하면 그 자리에서 회귀해야 일몰 전 하산 가능.<br/><br/>본 도구는 입력값 기준 자동 계산:<ul style="padding-left:20px;margin:8px 0"><li>✓ <strong style="color:var(--emerald-600)">안전</strong>: 일몰 1시간 전 도착</li><li>⚠️ <strong style="color:var(--amber-600)">주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li><li>🚨 <strong style="color:var(--red-600)">위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li></ul>',
+    a: '<strong style="color:var(--text)">“정상 도달 못 하면 하산해야 하는 시점”</strong>. 산악 등반의 핵심 안전 개념.<br/><br/>예: 일몰 18:30 → 하산 완료 목표 17:30 → 하산에 2시간 걸리는 코스(왕복 약 4시간)라면 정상 도달 마감은 15:30. 15:30까지 정상에 도달 못 하면 그 자리에서 회귀해야 일몰 전 하산 가능.<br/><br/>본 도구는 입력값 기준 자동 계산:<ul style="padding-left:20px;margin:8px 0"><li><strong style="color:var(--emerald-600)">안전</strong>: 일몰 1시간 전 도착</li><li><strong style="color:var(--amber-600)">주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li><li><strong style="color:var(--red-600)">위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li></ul>',
   },
 ]
 
@@ -99,6 +122,8 @@ export default function HikingTimePage() {
         sources={[
           { label: '국립공원공단 — 입산시간지정제', href: 'https://www.knps.or.kr/portal/main/contents.do?menuNo=8000198' },
           { label: '국민재난안전포털 — 산행안전사고 행동요령', href: 'https://www.safekorea.go.kr/safekorea-kor/acts/nacts/action-guide.do?category=mtSafetyAccident&actsHeaderTitle=%EC%82%B0%ED%96%89%EC%95%88%EC%A0%84%EC%82%AC%EA%B3%A0&menuSn=4' },
+          { label: '한국천문연구원 — 일출·일몰 시각 계산', href: 'https://astro.kasi.re.kr/life/pageView/9' },
+          { label: '산림청', href: 'https://www.forest.go.kr' },
         ]}
       />
 
@@ -109,50 +134,75 @@ export default function HikingTimePage() {
 
         {/* 1. 3공식 가이드 */}
         <section>
-          <h2 style={sectionTitle}>3개 등산 시간 공식 비교</h2>
-          <p style={{ ...faqAnswer, marginBottom: '14px' }}>
-            등산 시간 계산 공식은 130년간 발전해왔습니다. 각 공식은 다른 가정과 환경에 최적화되어 있어, 본인 산행 환경에 맞는 공식을 선택하는 것이 중요합니다.
+          <h2 className="g-h2">3개 등산 시간 공식 비교</h2>
+          <p className="g-p">
+            등산 시간 공식은 &lsquo;거리&rsquo;와 &lsquo;표고차&rsquo;를 어떻게 시간으로 바꾸느냐의 차이입니다. 계산기는 세 공식을 모두 계산해 비교표로 보여 주고,
+            결과·일정표·일몰 진단에는 한국 코스타임을 씁니다. 세 공식 모두 같은 보정 계수(체력·지형·배낭·인원·날씨)가 곱해집니다.
           </p>
           <div className="tableScroll">
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['공식', '발표', '핵심 가정', '한국 적합도', '특징'].map(h => (
-                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  {['공식', '발표', '계산 방식', '휴식', '특징'].map(h => (
+                    <th scope="col" key={h} style={th}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['Naismith Rule',     '1892',  '평지 5km/h + 600m당 +1h',          '⭐⭐⭐',    '단순·계산 쉬움. 영국 표준'],
-                  ['Tobler Function',   '1993',  '경사도 기반 속도 함수',             '⭐⭐⭐⭐',  '경사 정밀. 내리막 보정 ✓'],
-                  ['한국 코스타임',     '보정',  '거리 10분/km + 오르막 100m당 16분', '⭐⭐⭐⭐⭐', '100대 명산 표준 코스타임 보정'],
-                ].map(([name, year, assumption, fit, note], i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{name}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{year}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{assumption}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{fit}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{note}</td>
+                  ['Naismith Rule',   '1892', '평지 5km/h + 오르막 600m당 1시간', '미포함', '가장 오래된 기준. 내리막 보정이 없어 한국 산에서는 짧게 나옴'],
+                  ['Tobler 보행 함수', '1993', '속도 = 6·e^(−3.5·|경사+0.05|) km/h', '미포함', '약한 내리막(−5%)에서 최고 속도. 도구는 거리 절반씩을 오르막·내리막으로 단순화'],
+                  ['한국 코스타임',   '자체 보정', '1km당 10분 + 오르막 100m당 16분 + 내리막 100m당 7분', '50분마다 10분', `도구 기본값. 명산 프리셋 ${MOUNTAINS.length}곳 표준 시간과 평균 오차 약 ${PRESET_MAE}%`],
+                ].map(([name, year, assumption, rest, note], i) => (
+                  <tr key={i} style={rowBg(i)}>
+                    <td style={{ ...td, color: 'var(--accent-ink)', fontWeight: 700, whiteSpace: 'nowrap' }}>{name}</td>
+                    <td style={{ ...td, color: 'var(--muted)', whiteSpace: 'nowrap' }}>{year}</td>
+                    <td style={td}>{assumption}</td>
+                    <td style={{ ...td, whiteSpace: 'nowrap' }}>{rest}</td>
+                    <td style={{ ...td, color: 'var(--muted)' }}>{note}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <p className="g-note">
+            ※ 한국 코스타임 계수는 공식 기관이 정한 기준이 아니라, 도구에 넣어 둔 명산 프리셋의 표준 소요시간(일반 페이스·휴식 포함)에 맞춘 경험 계수입니다.
+          </p>
+        </section>
+
+        {/* 1-1. 계산 예시 */}
+        <section>
+          <h2 className="g-h2">계산 예시 — 기본값을 한 줄씩 풀어 보면</h2>
+          <p className="g-p">
+            계산기를 처음 열면 들어 있는 값은 왕복 {BASE.distanceKm.toFixed(1)}km · 오르막 {BASE.elevGainM}m · 내리막 {BASE.elevLossM}m · {BASE.startTime} 출발 · 일몰 {BASE.sunsetTime}입니다(북한산 백운대 프리셋과 같은 조건).
+            한국 코스타임으로 거리 {Math.round(EX_K.flatMin)}분 + 오르막 {Math.round(EX_K.ascendMin)}분 + 내리막 {Math.round(EX_K.descendMin)}분 = 이동 {fmtDuration(EX.movingMin)}이고,
+            50분 걸을 때마다 10분씩 쉰다고 보면 휴식 {EX.restMin}분이 붙어 총 <strong>{fmtDuration(EX.totalMin)}</strong>, 하산 완료는 <strong>{fmtHHMM(EX.arrivalMinutes)}</strong>입니다.
+            일몰 1시간 전({fmtHHMM(EX.turnaroundMinutes)})보다 이르므로 &lsquo;안전&rsquo;으로 판정됩니다.
+          </p>
+          <p className="g-p">
+            같은 코스를 12월(서울 평균 일몰 {DEC_SUNSET})에 &lsquo;초보(×1.25)&rsquo;·&lsquo;겨울(×1.20)&rsquo; 조건으로 가면 보정 계수가 {EX_WINTER.appliedFactor.toFixed(2)}배가 되어
+            이동 {fmtDuration(EX_WINTER.movingMin)} + 휴식 {EX_WINTER.restMin}분 = <strong>{fmtDuration(EX_WINTER.totalMin)}</strong>, 하산 완료 {fmtHHMM(EX_WINTER.arrivalMinutes)}입니다.
+            기준선({fmtHHMM(EX_WINTER.turnaroundMinutes)})까지 {Math.round(EX_WINTER.turnaroundMinutes - EX_WINTER.arrivalMinutes)}분밖에 남지 않아, 정체나 미끄러운 구간이 한 번만 있어도
+            주의 구간으로 넘어갑니다. 겨울에는 출발을 1시간 앞당기는 것이 가장 확실한 대책입니다.
+          </p>
+          <Callout tone="tip" title="보정은 곱해진다">
+            체력·지형·배낭·인원·날씨 계수는 더하지 않고 곱합니다. 초보(×1.25)가 어린이 동반(×1.30)으로 겨울(×1.20) 산행을 하면 {(1.25 * 1.3 * 1.2).toFixed(2)}배로,
+            평소 4시간 코스가 8시간 가까이 걸린다는 뜻입니다. 이 경우 코스 자체를 짧게 바꾸는 편이 안전합니다.
+          </Callout>
         </section>
 
         {/* 2. 보정 가이드 */}
         <section>
-          <h2 style={sectionTitle}>보정 계수 가이드</h2>
-          <p style={{ ...faqAnswer, marginBottom: '14px' }}>
-            기본 공식 외에 본인 상황에 맞는 5가지 보정을 적용해 정확도를 높입니다. 각 보정은 곱 연산되므로 누적 효과가 큼.
+          <h2 className="g-h2">보정 계수 가이드</h2>
+          <p className="g-p">
+            기본 공식 외에 본인 상황에 맞는 5가지 보정을 적용해 정확도를 높입니다. 각 보정은 곱 연산되므로 여러 개가 겹치면 누적 효과가 큽니다.
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['카테고리', '항목', '보정값', '설명'].map(h => (
-                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={th}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -160,15 +210,15 @@ export default function HikingTimePage() {
                 {[
                   ['체력', '초보 / 일반 / 상급 / 전문',     '×1.25 / 1.0 / 0.85 / 0.70', '월 산행 빈도 기준'],
                   ['지형', '포장·일반·계단·암릉·너덜',    '×0.85 ~ 1.40',              '한국 산은 계단·암릉 많음'],
-                  ['배낭', '당일 5kg / 1박 15kg / 장기 30kg', '×1.0 / 1.10 / 1.30',     '무게 5kg마다 ~5% 추가'],
+                  ['배낭', '당일 5kg / 1박 15kg / 장기 30kg', '×1.0 / 1.10 / 1.30',     '무거울수록 오르막에서 크게 느려짐'],
                   ['인원', '1인·2~3인·4~6인·어린이·노약자', '×1.0 ~ 1.30',              '가장 느린 사람 기준'],
-                  ['날씨', '평시·여름·겨울·우천·야간',    '×1.0 ~ 1.30',              '복합 시 추가'],
+                  ['날씨', '봄가을·여름·겨울·우천·야간',  '×1.0 ~ 1.30',              '한 가지만 선택 — 겹치면 여유를 더 둘 것'],
                 ].map(([cat, item, factor, desc], i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{cat}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{item}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{factor}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{desc}</td>
+                  <tr key={i} style={rowBg(i)}>
+                    <td style={{ ...td, color: 'var(--accent-ink)', fontWeight: 700 }}>{cat}</td>
+                    <td style={td}>{item}</td>
+                    <td style={{ ...td, color: 'var(--muted)', fontVariantNumeric: 'tabular-nums' }}>{factor}</td>
+                    <td style={{ ...td, color: 'var(--muted)' }}>{desc}</td>
                   </tr>
                 ))}
               </tbody>
@@ -176,64 +226,60 @@ export default function HikingTimePage() {
           </div>
         </section>
 
-        {/* 3. 인기 명산 시간표 */}
+        {/* 3. 인기 명산 시간표 — 프리셋을 세 공식에 넣은 결과 */}
         <section>
-          <h2 style={sectionTitle}>한국 인기 명산 시간 (일반 페이스 기준)</h2>
+          <h2 className="g-h2">한국 인기 명산 — 공식별 예상 시간</h2>
+          <p className="g-p">
+            아래는 계산기 프리셋의 왕복 거리·표고차를 세 공식에 그대로 넣은 결과입니다(일반 체력·봄가을·당일 배낭·1인). Naismith·Tobler는 휴식을 뺀 이동 시간이라
+            한국 코스타임(휴식 포함)보다 한두 시간 이상 짧게 나옵니다. 표고차가 큰 설악산·지리산일수록 그 차이가 커지는데, 가파른 돌길 내리막을 빠르게 걷는다고
+            가정하는 해외 공식의 한계가 드러나는 부분입니다.
+          </p>
           <div className="tableScroll">
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 620 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['산', '대표 코스', '거리', '표고차', '난이도', '시간'].map(h => (
-                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  {['산 · 코스', '왕복', '오르막', '난이도', 'Naismith', 'Tobler', '한국 코스타임', '프리셋 표준'].map((h, i) => (
+                    <th scope="col" key={h} style={{ ...th, textAlign: i === 0 || i === 3 ? 'left' : 'right' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['북한산',   '백운대',           '7.0km',  '720m',  '중급',   '4.5h'],
-                  ['도봉산',   '자운봉',           '7.5km',  '710m',  '중급',   '4.5h'],
-                  ['관악산',   '연주대',           '6.0km',  '500m',  '초급',   '3.5h'],
-                  ['설악산',   '대청봉 (오색)',    '9.0km',  '1300m', '상급',   '8.0h'],
-                  ['지리산',   '천왕봉 (중산리)',  '10.0km', '1400m', '상급',   '9.0h'],
-                  ['한라산',   '백록담 (성판악)',  '19.2km', '1300m', '상급',   '9.0h'],
-                  ['소백산',   '비로봉',           '8.0km',  '900m',  '중급',   '5.5h'],
-                  ['속리산',   '문장대',           '9.0km',  '830m',  '중급',   '5.5h'],
-                  ['무등산',   '천왕봉',           '10.0km', '900m',  '중급',   '5.5h'],
-                  ['월출산',   '천황봉',           '6.5km',  '650m',  '상급',   '4.5h'],
-                ].map(([mt, course, dist, elev, diff, time], i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{mt}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{course}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{dist}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{elev}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{diff}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{time}</td>
+                {POPULAR.map(({ m, naismith, tobler, korean }, i) => (
+                  <tr key={m.id} style={rowBg(i)}>
+                    <td style={{ ...td, color: 'var(--accent-ink)', fontWeight: 700 }}>{m.name}</td>
+                    <td style={tdNum}>{m.distanceKm}km</td>
+                    <td style={tdNum}>{m.elevGainM.toLocaleString()}m</td>
+                    <td style={td}>{m.difficulty}</td>
+                    <td style={{ ...tdNum, color: 'var(--muted)' }}>{fmtDuration(naismith)}</td>
+                    <td style={{ ...tdNum, color: 'var(--muted)' }}>{fmtDuration(tobler)}</td>
+                    <td style={{ ...tdNum, fontWeight: 700 }}>{fmtDuration(korean)}</td>
+                    <td style={tdNum}>{m.baseHours}시간</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ ...faqAnswer, marginTop: '12px', fontSize: '12px' }}>
-            ※ 일반 체력·평시 날씨·당일 배낭·1인 기준. 본 도구의 프리셋에서 추가 보정 적용 가능.
+          <p className="g-note">
+            ※ 프리셋 거리·표고차는 대표 들머리 기준 근삿값이라 실제 탐방로 안내판의 거리와 조금 다를 수 있습니다. 산행 전 국립공원공단·지자체 안내의 코스 거리를 확인하세요.
           </p>
         </section>
 
         {/* 4. 일몰 전 하산 안전 체크리스트 */}
         <section>
-          <h2 style={sectionTitle}>일몰 전 하산 안전 체크리스트</h2>
-          <p style={{ ...faqAnswer, marginBottom: '10px' }}>
+          <h2 className="g-h2">일몰 전 하산 안전 체크리스트</h2>
+          <p className="g-p">
             안내판이나 지도에 적힌 코스타임이 내 실제 산행 시간과 어긋나는 것은 자연스러운 일입니다. 코스타임은 산출 기준이 통일되어 있지 않아
             휴식·식사가 빠진 순 보행 시간인 경우가 많고, 어떤 체력의 보행자를 가정했는지도 자료마다 다릅니다. 같은 코스라도 당일 컨디션과 배낭 무게,
             비 온 뒤 진창이나 겨울 빙판 같은 노면 상태, 성수기 좁은 구간의 정체, 사진 촬영·간식 같은 비보행 시간에 따라 결과가 크게 달라집니다.
           </p>
-          <p style={{ ...faqAnswer, marginBottom: '16px' }}>
+          <p className="g-p">
             그래서 안전 계획은 &ldquo;몇 시에 출발할까&rdquo;가 아니라 <strong style={{ color: 'var(--text)' }}>일몰 시각에서 거꾸로 계산</strong>하는
             것이 원칙입니다. 예상 시간에 여유를 더해 하산 완료 시각을 먼저 정하고, 아래 FAQ의 회귀 시간(턴어라운드) 개념으로 정상 포기 시점까지 미리
             정해 두면 시간이 어긋나도 판단이 흔들리지 않습니다.
           </p>
-          <p style={{ ...faqAnswer, marginBottom: '14px' }}>
-            <strong style={{ color: 'var(--text)' }}>국립공원은 입산 가능 시간이 정해져 있습니다.</strong> 국립공원공단은 산행 목적지·거리·산행시간을
-            고려해 탐방로별로 입산·통제 시간을 지정하는 <strong style={{ color: 'var(--accent)' }}>입산시간지정제</strong>를 운영합니다. 2013년 3월
+          <p className="g-p">
+            <strong>국립공원은 입산 가능 시간이 정해져 있습니다.</strong> 국립공원공단은 산행 목적지·거리·산행시간을
+            고려해 탐방로별로 입산·통제 시간을 지정하는 <strong>입산시간지정제</strong>를 운영합니다. 2013년 3월
             지리산에서 처음 시행됐고, 2015년 5월 16일부터 태안해안을 제외한 전국 국립공원으로 확대됐습니다. 일부 탐방로는 &ldquo;일몰 후부터 다음 날
             일출 2시간 전까지&rdquo; 탐방이 제한되며, 시간대는 공원·탐방로마다 다릅니다.
           </p>
@@ -252,7 +298,7 @@ export default function HikingTimePage() {
                   ['속리산 법주사~문장대', '04:00~15:00 (4~10월)',  '05:00~14:00 (11~3월)'],
                 ].map(([trail, summer, winter], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{trail}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{trail}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{summer}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{winter}</td>
                   </tr>
@@ -260,7 +306,7 @@ export default function HikingTimePage() {
               </tbody>
             </table>
           </div>
-          <p style={{ ...faqAnswer, margin: '12px 0 16px' }}>
+          <p className="g-p" style={{ marginTop: 12 }}>
             위 표처럼 같은 &lsquo;동절기&rsquo;라도 공원마다 기간·시간이 다르므로(국립공원공단, 2026년 7월 확인) 산행 전 반드시 공단 홈페이지의
             입산시간지정제·탐방로 통제정보에서 해당 코스를 확인하세요. 야간 산행 제한은 자연공원법 제28조제1항(출입 금지·제한)에 근거한 공원별
             공고로 시행되며, 제한·금지된 구역에 출입하면 같은 법 제86조제2항에 따라 <strong style={{ color: 'var(--text)' }}>50만원 이하의
@@ -285,14 +331,14 @@ export default function HikingTimePage() {
                   ['조난 신고',      '등산로의 산악위치표지판·국가지점번호를 확인해 즉시 119 신고 · 표지판이 안 보이면 지도 앱이나 카카오톡 위치전송으로 위치 전달'],
                 ].map(([phase, items], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{phase}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700, whiteSpace: 'nowrap' }}>{phase}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{items}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ ...faqAnswer, marginTop: '12px', fontSize: '12px' }}>
+          <p className="g-note">
             ※ 체크 항목: 국민재난안전포털(소방청) 산행안전사고 행동요령 · 조난 신고 요령: 소방청 보도자료(2022-10). 산림청도 산행 안전수칙
             &lsquo;NEED&rsquo;에서 날씨·입산통제 확인(Notice), 장비 준비(Equip), 낙석 위험 구간 회피(Escape)와 함께 체력에 맞는 코스 선택과
             1시간 정도 이른 하산(Descent)을 권고합니다(2026년 3월).
@@ -306,7 +352,7 @@ export default function HikingTimePage() {
 
         {/* 6. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             {[
               { href: '/tools/sports/race-predictor', icon: '🏃', name: '마라톤 기록 계산기', desc: 'Riegel·VDOT 3공식' },

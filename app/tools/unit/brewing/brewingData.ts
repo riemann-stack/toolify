@@ -100,15 +100,15 @@ export function convertAll(scale: Scale, value: number): Converted {
 
 // ─── ABV 계산 ─────────────────────────────────────────────
 /** 표준 공식 — `ABV% = (OG − FG) × 131.25`
- *  단순하지만 OG ≤ 1.090 / 결과 ≤ 12% 범위에서 적정.
- *  와인·하이 알코올용은 보정식 필요.
+ *  저비중 맥주·사이다용 경험식 — OG가 높을수록 보정식보다 낮게 나옴
+ *  (OG 1.090/FG 1.000에서 약 0.8%p).
  */
 export function abvSimple(og: number, fg: number): number {
   if (og <= fg) return 0
   return (og - fg) * 131.25
 }
 
-/** 보정 공식 — 고알코올 와인 (Cutaia et al. 2009)
+/** 보정(대체) 공식 — 홈브루 계산기 통용 경험식(출처 불명확, 0.794 = 에탄올 비중)
  *  ABV% = (76.08 × (OG−FG) / (1.775−OG)) × (FG / 0.794) */
 export function abvCorrected(og: number, fg: number): number {
   if (og <= fg || og >= 1.7) return 0

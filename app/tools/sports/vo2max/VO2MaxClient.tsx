@@ -320,7 +320,7 @@ export default function VO2MaxClient() {
           <div className={s.cardLabel}>비슷한 연령대 비교 ({age}세 {sex === 'male' ? '남성' : '여성'})</div>
           <div className={s.segChart}>
             {[
-              { id: 'poor',      label: '매우 미흡', range: `~${band.below}` },
+              { id: 'poor',      label: '매우 미흡', range: `< ${band.below}` },
               { id: 'below',     label: '미흡',      range: `${band.below}~${band.average}` },
               { id: 'average',   label: '평균',      range: `${band.average}~${band.good}` },
               { id: 'good',      label: '우수',      range: `${band.good}~${band.excellent}` },
@@ -340,7 +340,7 @@ export default function VO2MaxClient() {
               )
             })}
           </div>
-          <p className={s.bandSource}>단위 mL/kg/min · 출처: ACSM · Cooper Institute Fitness Norms</p>
+          <p className={s.bandSource}>단위 mL/kg/min · 구간은 앞 값 이상·뒤 값 미만 · ACSM·Cooper Institute 규준을 참고해 단순화한 기준</p>
         </div>
       )}
 
