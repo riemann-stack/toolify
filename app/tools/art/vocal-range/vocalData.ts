@@ -145,11 +145,16 @@ export function matchSongs(userLowMidi: number, userHighMidi: number, limit: num
 }
 
 /* ─── 음역대 자동 분류 ─── */
-export function classifyVocalRange(lowMidi: number, highMidi: number): VocalRange | null {
+/* 성별을 지정하면 해당 성별 분류만 후보로 비교 — 미지정 시 남녀 분류가 섞여
+   흔한 여성 진성 음역(A3~C5 등)이 남성 분류(카운터테너)로 잡히는 문제가 있어 UI는 성별별 결과를 함께 보여줌 */
+export type VocalGender = 'male' | 'female'
+
+export function classifyVocalRange(lowMidi: number, highMidi: number, gender?: VocalGender): VocalRange | null {
   const midPoint = (lowMidi + highMidi) / 2
   let best: VocalRange | null = null
   let bestDist = Infinity
   for (const range of VOCAL_RANGES) {
+    if (gender && range.gender !== gender && range.gender !== 'any') continue
     const rangeMid = (range.midiLow + range.midiHigh) / 2
     const dist = Math.abs(rangeMid - midPoint)
     if (dist < bestDist) {

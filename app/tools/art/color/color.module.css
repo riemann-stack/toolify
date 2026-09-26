@@ -428,7 +428,7 @@
 }
 .a11yPreviewBig    { font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.4; margin-bottom: 8px; }
 .a11yPreviewBody   { font-family: 'Noto Sans KR', sans-serif; font-size: 16px; line-height: 1.6; margin-bottom: 6px; }
-.a11yPreviewSmall  { font-family: 'Noto Sans KR', sans-serif; font-size: 13px; line-height: 1.5; opacity: 0.9; }
+.a11yPreviewSmall  { font-family: 'Noto Sans KR', sans-serif; font-size: 13px; line-height: 1.5; }
 
 .contrastHero {
   background: var(--bg3);

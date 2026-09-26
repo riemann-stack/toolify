@@ -28,7 +28,8 @@ export default function BpmClient({ initialBpm = '120' }: { initialBpm?: string 
 
   const bpmNum = useMemo(() => {
     const n = parseFloat(bpm)
-    return n > 0 && n <= 300 ? n : null
+    // 안내 문구·input min과 같은 1~300 범위 (0.5 등 1 미만은 수 분짜리 딜레이가 되어 무의미)
+    return n >= 1 && n <= 300 ? n : null
   }, [bpm])
 
   const handleCopy = useCallback((val: string, key: string) => {

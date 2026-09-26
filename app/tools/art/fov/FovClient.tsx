@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import s from './fov.module.css'
 import {
-  SENSORS, POPULAR_FOCALS, USE_CASES, getSensor, getLensCategory,
-  type SensorId,
+  SENSORS, POPULAR_FOCALS, USE_CASES, LENS_CATEGORIES, getSensor, getLensCategory,
+  type SensorId, type SensorMeta,
   equiv35, aov, frameSize, equivAperture, rule500, rule300, safeNum, geoCrop,
   fmt, fmtInt, fmtDistance, aovDescription,
 } from './fovUtils'
@@ -98,11 +98,14 @@ export default function FovClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>실제 초점거리 (mm)</span>
             <div className={s.sliderHead}>
-              <span className={s.sliderLabel}>렌즈 표기 mm</span>
-              <span className={s.sliderValue}>{fmt(focalLength, 0)} mm</span>
+              <label className={s.sliderLabel} htmlFor="fov-fl-input">렌즈 표기 mm (직접 입력)</label>
+              <span className={s.sliderValue}>
+                <FocalInput id="fov-fl-input" value={focalLength} onCommit={setFocalLength} className={s.focalInput} /> mm
+              </span>
             </div>
             <input
               type="range" min={4} max={800} step={1}
+              aria-label="실제 초점거리(mm)"
               value={focalLength}
               onChange={(e) => setFocalLength(Number(e.target.value))}
               className={s.slider}
@@ -144,7 +147,7 @@ export default function FovClient() {
           )}
 
           {/* 결과 — 35mm 환산 */}
-          <div className={s.heroCard}>
+          <div className={s.heroCard} role="status">
             <div>
               <p className={s.heroLabel}>35mm 환산 초점거리</p>
               <p className={s.heroValue}>
@@ -215,11 +218,14 @@ export default function FovClient() {
               💡 <strong>등가 조리개</strong> — 지금 설정(f/{fmt(aperture, 1)})으로 찍은 사진의 <strong>배경 흐림 정도</strong>가
               풀프레임 f/{fmt(equivAp, 1)}로 찍은 것과 비슷하다는 뜻입니다(같은 환산 화각·같은 거리·같은 출력 크기 기준).
             </p>
-            <p className={s.warnHint}>
-              ⚠️ <strong>카메라를 f/{fmt(equivAp, 1)}로 바꾸라는 뜻이 아닙니다.</strong> 노출은 센서 크기와 무관하므로
-              그렇게 조이면 {fmt(2 * Math.log2(sensor.cropFactor), 1)} stop 어두워지기만 합니다.
-              밝기까지 같게 맞추려면 ISO도 크롭²배(×{fmt(sensor.cropFactor * sensor.cropFactor, 1)}) 해야 합니다.
-            </p>
+            {/* 풀프레임(×1.0)은 등가 조리개가 그대로라 '0.0 stop 어두워짐' 같은 무의미한 경고가 떴다 */}
+            {sensor.cropFactor !== 1 && (
+              <p className={s.warnHint}>
+                ⚠️ <strong>카메라를 f/{fmt(equivAp, 1)}로 바꾸라는 뜻이 아닙니다.</strong> 노출은 센서 크기와 무관하므로
+                그렇게 조이면 {fmt(2 * Math.log2(sensor.cropFactor), 1)} stop 어두워지기만 합니다.
+                밝기까지 같게 맞추려면 ISO도 크롭²배(×{fmt(sensor.cropFactor * sensor.cropFactor, 1)}) 해야 합니다.
+              </p>
+            )}
           </div>
         </>
       )}
@@ -244,6 +250,7 @@ export default function FovClient() {
                 onChange={(e) => setFocalLength(Number(e.target.value))}
                 className={s.slider} />
               <div className={s.quickRow}>
+                <FocalInput value={focalLength} onCommit={setFocalLength} className={s.focalInput} ariaLabel="실제 초점거리 직접 입력(mm)" />
                 {[14, 24, 35, 50, 85, 105, 200, 400].map((f) => (
                   <button type="button" key={f} className={s.quickChip} onClick={() => setFocalLength(f)}>{f}mm</button>
                 ))}
@@ -269,7 +276,7 @@ export default function FovClient() {
           </div>
 
           {/* 결과 — 시야 너비/높이 */}
-          <div className={s.heroCard}>
+          <div className={s.heroCard} role="status">
             <div>
               <p className={s.heroLabel}>{fmtDistance(distance)} 거리에서 프레임 크기</p>
               <p className={s.heroValue}>
@@ -347,7 +354,7 @@ export default function FovClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>35mm 환산별 화각 비교 (수평)</span>
             <div className={s.compareSvgWrap}>
-              <CompareDiagram sensorWidth={getSensor(compareSensorId).width} />
+              <CompareDiagram sensor={getSensor(compareSensorId)} />
             </div>
             <div className={s.tableScroll}><table className={s.dataTable}>
               <thead>
@@ -387,7 +394,7 @@ export default function FovClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>35mm 환산 렌즈 카테고리</span>
             <div className={s.lensCatList}>
-              {LENS_CATEGORIES_FOR_DISPLAY.map((cat, i) => (
+              {LENS_CATEGORIES.map((cat, i) => (
                 <div key={i} className={s.lensCatCard}>
                   <p className={s.lensCatName}>{cat.emoji} <strong>{cat.name}</strong> · {cat.range[0]}–{cat.range[1] === 1200 ? '∞' : cat.range[1]}mm</p>
                   <p className={s.lensCatUse}>{cat.use}</p>
@@ -501,7 +508,7 @@ function AovDiagram({ aovDegrees, color }: { aovDegrees: number; color: string }
 }
 
 /* ─── SVG 비교 도식 (여러 초점거리 겹침) ─── */
-function CompareDiagram({ sensorWidth }: { sensorWidth: number }) {
+function CompareDiagram({ sensor }: { sensor: SensorMeta }) {
   const W = 480, H = 240
   const cx = W / 2, cy = H - 24
   const R = 200
@@ -513,8 +520,9 @@ function CompareDiagram({ sensorWidth }: { sensorWidth: number }) {
         stroke="var(--bg3)" strokeWidth={1.5} fill="none"
       />
       {POPULAR_FOCALS.map((p) => {
-        // 각 35mm 환산 초점거리의 수평 화각 (풀프레임 width 36mm 기준)
-        const aovDeg = aov(36, p.fl)
+        /* 선택한 센서의 실제 초점거리·센서 폭으로 수평 화각 — 아래 표와 같은 값.
+           ⚠️ 예전에는 항상 aov(36, p.fl)(풀프레임 폭)이라 M4/3을 골라도 도식은 40°, 표는 38.2°였다. */
+        const aovDeg = aov(sensor.width, p.fl / sensor.cropFactor)
         const aovRad = aovDeg * Math.PI / 180
         const halfA = aovRad / 2
         // 화각이 클수록 호가 길어 보이도록 안에서 바깥으로 단계 적용
@@ -541,19 +549,52 @@ function CompareDiagram({ sensorWidth }: { sensorWidth: number }) {
       {/* 카메라 점 */}
       <circle cx={cx} cy={cy} r={5} fill="var(--text)" />
       <text x={cx} y={cy + 18} textAnchor="middle" fill="var(--muted)" fontSize={10} fontFamily="Noto Sans KR, sans-serif">
-        카메라 (센서 {sensorWidth}mm)
+        카메라 (센서 폭 {sensor.width}mm)
       </text>
     </svg>
   )
 }
 
-/* 카테고리 표시용 (export not from utils to keep file separation) */
-const LENS_CATEGORIES_FOR_DISPLAY = [
-  { range: [0, 16] as [number, number],     name: '초광각/어안',  emoji: '🌌', use: '실내·인테리어·드라마틱 풍경·VR',          examples: '시그마 14mm f/1.8 · 캐논 RF 11-24mm' },
-  { range: [16, 35] as [number, number],    name: '광각',         emoji: '🏞️', use: '풍경·여행·건축·환경 인물',                examples: '24-70mm f/2.8 · 시그마 24mm f/1.4' },
-  { range: [35, 60] as [number, number],    name: '준광각·표준',  emoji: '🚶', use: '스트리트·다큐·일상·환경 인물',           examples: '35mm f/1.4 · 50mm f/1.8 (인생 렌즈)' },
-  { range: [60, 105] as [number, number],   name: '단망원·인물',  emoji: '👤', use: '인물·웨딩·제품',                          examples: '85mm f/1.4 · 시그마 85mm Art' },
-  { range: [105, 200] as [number, number],  name: '중망원',       emoji: '🎤', use: '인물 압축·실내 스포츠·이벤트',           examples: '70-200mm f/2.8 · 135mm f/1.8' },
-  { range: [200, 400] as [number, number],  name: '망원',         emoji: '⚽', use: '야외 스포츠·항공·새 사진',               examples: '300mm f/4 · 100-400mm 줌' },
-  { range: [400, 1200] as [number, number], name: '초망원',       emoji: '🦒', use: '야생·달·천체 사진·스포츠 사이드라인',    examples: '600mm f/4 · 시그마 150-600mm' },
-]
+const FOCAL_MIN = 4
+const FOCAL_MAX = 800
+
+/** 초점거리 직접 입력 — 4–800mm 슬라이더는 모바일에서 1mm 단위로 멈추기 어렵다(23·56mm 등).
+    문자열로 두고 범위 안 값은 즉시, 밖이면 blur/Enter에서 4~800으로 맞춘다. */
+function FocalInput({ id, value, onCommit, className, ariaLabel }: {
+  id?: string
+  value: number
+  onCommit: (v: number) => void
+  className?: string
+  ariaLabel?: string
+}) {
+  const [text, setText] = useState(String(value))
+  const [shown, setShown] = useState(value)
+  /* 슬라이더·칩·저장값 복원으로 값이 바뀌면 표시를 맞춘다(렌더 중 동기화 패턴) */
+  if (shown !== value) {
+    setShown(value)
+    if (parseFloat(text) !== value) setText(String(value))
+  }
+  const commit = () => {
+    const v = parseFloat(text)
+    if (!Number.isFinite(v)) { setText(String(value)); return }
+    const c = Math.max(FOCAL_MIN, Math.min(FOCAL_MAX, v))
+    setText(String(c))
+    if (c !== value) onCommit(c)
+  }
+  return (
+    <input id={id}
+      type="text" inputMode="decimal"
+      aria-label={ariaLabel}
+      value={text}
+      onChange={(e) => {
+        const raw = e.target.value.replace(/[^\d.]/g, '')
+        setText(raw)
+        const v = parseFloat(raw)
+        if (Number.isFinite(v) && v >= FOCAL_MIN && v <= FOCAL_MAX) onCommit(v)
+      }}
+      onBlur={commit}
+      onKeyDown={(e) => { if (e.key === 'Enter') commit() }}
+      className={className}
+    />
+  )
+}

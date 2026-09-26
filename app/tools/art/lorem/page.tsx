@@ -107,7 +107,7 @@ export default function LoremPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>9가지 톤이 만드는 차이</h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
-            톤이 적용되는 곳은 <strong style={{ color: 'var(--text)' }}>한글 문단 · UI 문구(19종 중 11종) · 카드 목업 · UX 라이팅</strong>입니다. 영문 Lorem Ipsum은 의사 라틴어라 톤 개념이 성립하지 않고, 이름·상품명·JSON 더미는 문체가 아니라 <strong style={{ color: 'var(--text)' }}>값</strong>이라 톤과 무관합니다. 각 화면에도 같은 안내를 표시합니다.
+            톤이 적용되는 곳은 <strong style={{ color: 'var(--text)' }}>한글 문단 · UI 문구(19종 중 11종) · 카드 목업(아티클·프로필 카드) · UX 라이팅</strong>입니다. 영문 Lorem Ipsum은 의사 라틴어라 톤 개념이 성립하지 않고, 이름·상품 카드의 상품명·JSON 더미는 문체가 아니라 <strong style={{ color: 'var(--text)' }}>값</strong>이라 톤과 무관합니다. 각 화면에도 같은 안내를 표시합니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             같은 &quot;시작하기&quot; 문구도 톤에 따라 분위기가 완전히 달라집니다. 디자인 시안의 무드보드를 정한 뒤, 이에 맞는 톤을 선택해 일관된 더미 콘텐츠를 채우면 시안의 설득력이 올라갑니다.

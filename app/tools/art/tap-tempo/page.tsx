@@ -2,7 +2,7 @@ import Link from 'next/link'
 import TapTempoClient from './TapTempoClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -137,7 +137,7 @@ export default function TapTempoPage() {
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
             측정한 BPM으로 딜레이 타임(ms) 값을 설정하려면 <Link href="/tools/art/bpm" style={{ color: 'var(--accent)', fontWeight: 600 }}>BPM 딜레이 계산기</Link>를 이용하세요 —
-            위 측정 결과의 &lsquo;🎛️ 이 BPM으로 딜레이 계산&rsquo; 버튼을 누르면 측정값이 자동으로 넘어갑니다. 장르별 4분음표·점8분음표 딜레이 ms 표도 그 페이지에 있습니다.
+            위 측정 결과의 &lsquo;이 BPM으로 딜레이 계산 →&rsquo; 버튼을 누르면 측정값이 자동으로 넘어갑니다. 장르별 4분음표·점8분음표 딜레이 ms 표도 그 페이지에 있습니다.
           </p>
         </div>
 
@@ -257,21 +257,7 @@ export default function TapTempoPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 8. 함께 쓰면 좋은 도구 ── */}

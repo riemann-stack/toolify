@@ -118,7 +118,8 @@ export function rgbToHsl(rgb: RGB): HSL {
       case b: h = ((r - g) / d + 4) / 6; break
     }
   }
-  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100), a: rgb.a }
+  // 359.5° 이상은 반올림 시 360이 되므로 0으로 접음 (hsl(360, …) 표기 방지)
+  return { h: Math.round(h * 360) % 360, s: Math.round(s * 100), l: Math.round(l * 100), a: rgb.a }
 }
 
 export function hslToRgb(hsl: HSL): RGB {
@@ -160,7 +161,7 @@ export function rgbToHsv(rgb: RGB): HSV {
       case b: h = ((r - g) / d + 4) / 6; break
     }
   }
-  return { h: Math.round(h * 360), s: Math.round(s * 100), v: Math.round(v * 100) }
+  return { h: Math.round(h * 360) % 360, s: Math.round(s * 100), v: Math.round(v * 100) }
 }
 
 export function rgbToCmyk(rgb: RGB): CMYK {
@@ -247,10 +248,12 @@ export function rgbToOklch(rgb: RGB): OKLCH {
   const c = Math.sqrt(a * a + b * b)
   let h = (Math.atan2(b, a) * 180) / Math.PI
   if (h < 0) h += 360
+  // 무채색(표시 채도 0.000)은 hue가 부동소수 잡음이라 의미 없음 — 0으로 고정 (흰색 oklch(100% 0 89.9) 방지)
+  if (c < 0.0005) h = 0
   return {
     l: Math.round(L * 1000) / 10, // %로 표시
     c: Math.round(c * 1000) / 1000,
-    h: Math.round(h * 10) / 10,
+    h: (Math.round(h * 10) / 10) % 360,
   }
 }
 
@@ -268,6 +271,13 @@ export function contrastRatio(a: RGB, b: RGB): number {
   const lighter = Math.max(l1, l2)
   const darker = Math.min(l1, l2)
   return (lighter + 0.05) / (darker + 0.05)
+}
+
+/** 대비비 표시용 — 소수 둘째 자리에서 내림.
+ *  판정(wcagGrade)은 원값 기준이라 반올림 표시하면 4.4994가 "4.50 : 1"인데 AA 미달로 보이는 모순이 생김.
+ *  (판정을 표시값에 맞추면 4.495가 통과돼 WCAG 임계값을 어기므로 표시 쪽을 내림으로 맞춤) */
+export function fmtRatio(ratio: number): string {
+  return (Math.floor(ratio * 100 + 1e-9) / 100).toFixed(2)
 }
 
 export type WCAGGrade = {
@@ -489,10 +499,16 @@ export type ColorName = { name: string; tone: string; family: string; vibe: stri
 
 export function getKoreanColorName(rgb: RGB): ColorName {
   const hsl = rgbToHsl(rgb)
+  // HSL 채도는 아주 밝거나 어두운 색에서 과장됨(#FEFFFE → s 100%) — 실제 색 차이(chroma, 0~255)도 함께 봄
+  const chroma = Math.max(rgb.r, rgb.g, rgb.b) - Math.min(rgb.r, rgb.g, rgb.b)
+  // 아이보리: 매우 밝고 노란 기가 약간 도는 색 (#FFFFF0 등)
+  if (hsl.l >= 90 && chroma >= 10 && chroma <= 40 && hsl.h >= 40 && hsl.h <= 70) {
+    return { name: '아이보리', tone: '연한', family: 'Neutral', vibe: '부드러움, 따뜻함' }
+  }
   // 그레이스케일 / 흑백 처리
-  if (hsl.s < 8) {
+  if (hsl.s < 8 || chroma < 10) {
     if (hsl.l >= 95) return { name: '흰색',     tone: '순백',  family: 'Neutral', vibe: '깨끗함, 순수' }
-    if (hsl.l >= 85) return { name: '아이보리', tone: '연한',  family: 'Neutral', vibe: '부드러움, 따뜻함' }
+    if (hsl.l >= 85) return { name: '밝은 회색', tone: '연한',  family: 'Neutral', vibe: '차분함, 깔끔함' }
     if (hsl.l >= 65) return { name: '연회색',   tone: '연한',  family: 'Neutral', vibe: '차분함, 단정' }
     if (hsl.l >= 35) return { name: '회색',     tone: '중간',  family: 'Neutral', vibe: '중립, 무난함' }
     if (hsl.l >= 15) return { name: '진회색',   tone: '진한',  family: 'Neutral', vibe: '묵직함, 모던' }

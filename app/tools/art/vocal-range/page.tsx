@@ -122,7 +122,7 @@ export default function VocalRangePage() {
             <li>· <strong style={{ color: 'var(--text)' }}>MIDI 변환</strong> — MIDI = 69 + 12 × log₂(주파수 / 440)</li>
             <li>· <strong style={{ color: 'var(--text)' }}>품질 필터</strong> — 신뢰도 85%+ / 볼륨 임계값 통과 / 사람 목소리 범위(70~2200Hz)</li>
             <li>· <strong style={{ color: 'var(--text)' }}>안정 음 감지</strong> — 0.5초 이상 0.7반음 이내로 유지된 음만 기록</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>음역 분류</strong> — 측정값 중간점과 가장 가까운 표준 음역대 자동 매칭 (간이 분류, 성별 미반영)</li>
+            <li>· <strong style={{ color: 'var(--text)' }}>음역 분류</strong> — 측정값 중간점과 가장 가까운 표준 음역대 자동 매칭 (간이 분류). 성별을 고르면 해당 성별 분류로 좁히고, 고르지 않으면 남녀 기준을 함께 표시</li>
             <li>· <strong style={{ color: 'var(--text)' }}>옥타브 표기</strong> — 한국 대중음악 관행(가온 도 C4 = 2옥타브 도, A4 = 2옥타브 라, 소찬휘 Tears 최고음 G5 = 3옥타브 솔)을 따르며, 클래식·튜너 앱의 국제 표기(C4 = 4옥타브)와는 2옥타브 차이가 납니다</li>
           </ul>
         </section>

@@ -109,7 +109,7 @@
 }
 .heroChordBlue {
   font-family: 'Inter', system-ui, sans-serif; font-size: clamp(34px, 8vw, 52px);
-  font-weight: 800; color: var(--cat-health); line-height: 1; letter-spacing: -1px;
+  font-weight: 800; color: var(--cat-cooking-ink); line-height: 1; letter-spacing: -1px;
 }
 .heroArrow {
   font-family: 'Inter', system-ui, sans-serif; font-size: 24px; color: var(--muted); text-align: center;
@@ -151,8 +151,8 @@
 .tdChordEasy { color: var(--success); }
 .tdChordBarre { color: var(--warning); }
 
-.thNewKey { color: var(--cat-health); background: var(--bg3); font-size: 11px; }
-.tdNewKey { color: var(--cat-health); background: var(--bg3); }
+.thNewKey { color: var(--cat-cooking-ink); background: var(--bg3); font-size: 11px; }
+.tdNewKey { color: var(--cat-cooking-ink); background: var(--bg3); }
 
 /* ── 추천 카드 ── */
 .recCard {
@@ -221,7 +221,7 @@
   display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--accent);
 }
 .pianoDotBlue {
-  display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--cat-health);
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--cat-cooking);
 }
 
 /* ── 다이아토닉 탭 ── */

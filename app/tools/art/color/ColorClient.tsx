@@ -9,7 +9,7 @@ import {
   rgbToLab, rgbToOklch, parseColorInput,
   formatHex, formatHexa, formatRgb, formatRgba, formatHsl, formatHsla,
   formatHsv, formatCmyk, formatHwb, formatLab, formatOklch,
-  contrastRatio, wcagGrade, suggestPassingColor,
+  contrastRatio, wcagGrade, suggestPassingColor, fmtRatio,
   simulateColorblind, type ColorblindType,
   complementary, analogous, triadic, tetradic, splitComplement,
   monochromatic, shades, tailwindScale, lerpRgb, gradientSteps,
@@ -41,7 +41,7 @@ const PRESETS = [
   { name: '흰색',     hex: '#FFFFFF' },
   { name: '아이보리', hex: '#FFFFF0' },
   { name: '회색',     hex: '#737373' },
-  { name: 'Toolify',  hex: '#0891B2' },
+  { name: '시안',     hex: '#0891B2' },
 ]
 
 /* localStorage 히스토리 */
@@ -168,23 +168,35 @@ export default function ColorClient() {
   const oklch = useMemo(() => rgbToOklch(rgb), [rgb])
   const colorName = useMemo(() => getKoreanColorName(rgb), [rgb])
 
-  /* 히스토리 초기화·추가 */
+  /* 히스토리 초기화·추가 — 색이 800ms 멈춘 뒤에만 기록 (피커 드래그·HEX 타이핑 중간값으로 24칸이 도배되는 문제 방지).
+     첫 렌더의 기본색은 기록하지 않음 */
   useEffect(() => { setHistory(loadHistory()) }, [])
+  const initialHexRef = useRef(hex)
+  const historyReadyRef = useRef(false)
   useEffect(() => {
+    if (!historyReadyRef.current) {
+      if (hex === initialHexRef.current) return
+      historyReadyRef.current = true
+    }
     if (!/^#[0-9A-F]{6}$/i.test(hex)) return
     const upper = hex.toUpperCase()
-    setHistory(prev => {
-      const filtered = prev.filter(h => h.toUpperCase() !== upper)
-      const next = [upper, ...filtered].slice(0, 24)
-      saveHistory(next)
-      return next
-    })
+    const id = window.setTimeout(() => {
+      setHistory(prev => {
+        const filtered = prev.filter(h => h.toUpperCase() !== upper)
+        const next = [upper, ...filtered].slice(0, 24)
+        saveHistory(next)
+        return next
+      })
+    }, 800)
+    return () => window.clearTimeout(id)
   }, [hex])
 
   /* 입력 핸들러 — 유효한 색만 커밋, HEXA/rgba/hsla는 알파도 반영 */
   const commitColor = (newHex: string, hasAlpha: boolean, alphaPct: number) => {
     setHex(newHex)
-    if (hasAlpha) setAlpha(alphaPct)
+    // 입력한 코드가 색 전체를 정의 — 알파 없는 코드면 불투명(100%)으로.
+    // (#123456 타이핑 중 #1234가 HEXA로 해석돼 알파 27%가 남던 문제 방지)
+    setAlpha(hasAlpha ? alphaPct : 100)
   }
   const handlePicker = (v: string) => setHex(v.toUpperCase())
 
@@ -292,7 +304,7 @@ function ConvertTab(p: ConvertTabProps) {
         <div className={styles.bigPreviewWrap}>
           <div className={styles.bigPreview}>
             <div className={styles.bigPreviewInner} style={{ background: formatRgba(p.rgb) }} />
-            <div className={styles.bigPreviewHex} style={{ color: previewTextColor }}>
+            <div className={styles.bigPreviewHex} style={{ color: previewTextColor }} role="status">
               {formatHex(p.rgb)}
             </div>
           </div>
@@ -468,10 +480,10 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
     <>
       {/* 입력 */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>
+        <div className={styles.cardLabel}>
           텍스트·배경 색상
           <button className={styles.swapBtn} onClick={swap} type="button">↔ 스왑</button>
-        </label>
+        </div>
         <div className={styles.a11yInputRow}>
           <div className={styles.a11yInputBox}>
             <input className={styles.a11yPicker} type="color" aria-label="텍스트 색상 선택"
@@ -492,9 +504,9 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
       <div className={styles.card}>
         <label className={styles.cardLabel}>실제 미리보기</label>
         <div className={styles.a11yPreview} style={{ background: bgHex, color: textHex }}>
-          <div className={styles.a11yPreviewBig}>큰 제목 18pt+</div>
-          <div className={styles.a11yPreviewBody}>본문 텍스트 16pt — 가독성 확인용 한글 샘플 ABC 123 가나다 라마바</div>
-          <div className={styles.a11yPreviewSmall}>작은 텍스트 13pt — 캡션이나 부가 정보에 사용되는 작은 글씨</div>
+          <div className={styles.a11yPreviewBig}>큰 텍스트 22px 굵게</div>
+          <div className={styles.a11yPreviewBody}>본문 텍스트 16px — 가독성 확인용 한글 샘플 ABC 123 가나다 라마바</div>
+          <div className={styles.a11yPreviewSmall}>작은 텍스트 13px — 캡션이나 부가 정보에 사용되는 작은 글씨</div>
         </div>
       </div>
 
@@ -502,7 +514,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
       <div className={styles.contrastHero} role="status">
         <div className={styles.contrastValue}
           style={{ color: grade.level === 'AAA' || grade.level === 'AA' ? 'var(--success)' : grade.level === 'AA Large' ? 'var(--warning)' : 'var(--danger)' }}>
-          {ratio.toFixed(2)} : 1
+          {fmtRatio(ratio)} : 1
         </div>
         <div className={styles.contrastLabel}>WCAG 대비비 — 등급 {grade.level}</div>
         <p style={{ marginTop: 12, fontSize: 13, color: interpretation.color, lineHeight: 1.6 }}>
@@ -553,7 +565,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
             색조·채도는 유지하고 명도만 밝은·어두운 양방향으로 조정해 4.5:1을 통과하는 가장 가까운 색상입니다.
-            적용 시 대비 {contrastRatio(suggested, bgRgb).toFixed(2)}:1이 됩니다.
+            적용 시 대비 {fmtRatio(contrastRatio(suggested, bgRgb))}:1이 됩니다.
           </p>
         </div>
       )}
@@ -591,7 +603,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>
-                    {cbRatio.toFixed(2)} : 1
+                    {fmtRatio(cbRatio)} : 1
                   </span>
                   <span className={distinct ? styles.cbDistinct : styles.cbWarning}>
                     {distinct ? '대비 충분' : '대비 부족'}
@@ -613,7 +625,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
       <button type="button"
         className={`${styles.copyBtn} ${copiedKey === 'a11y-summary' ? styles.copied : ''}`}
         onClick={() => copy('a11y-summary',
-          `텍스트: ${textHex}\n배경: ${bgHex}\n대비비: ${ratio.toFixed(2)}:1 (${grade.level})\nAA 일반: ${grade.aa_normal ? '통과' : '미달'}\nAA 큰 텍스트: ${grade.aa_large ? '통과' : '미달'}`
+          `텍스트: ${textHex}\n배경: ${bgHex}\n대비비: ${fmtRatio(ratio)}:1 (${grade.level})\nAA 일반: ${grade.aa_normal ? '통과' : '미달'}\nAA 큰 텍스트: ${grade.aa_large ? '통과' : '미달'}`
         )}>
         {copyLabel(copiedKey, 'a11y-summary', '분석 결과 복사', '✓ 복사됨')}
       </button>
@@ -650,6 +662,16 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
   }, [type, baseHsl])
 
   const tailwindResult = useMemo(() => tailwindScale(baseHsl), [baseHsl])
+  // ★ 표시 — 기준색 명도(L)와 가장 가까운 단계
+  const nearestShade = useMemo(() => {
+    let best = tailwindResult[0]?.shade
+    let bestD = Infinity
+    for (const t of tailwindResult) {
+      const d = Math.abs(rgbToHsl(t.rgb).l - baseHsl.l)
+      if (d < bestD) { bestD = d; best = t.shade }
+    }
+    return best
+  }, [tailwindResult, baseHsl])
 
   /* 내보내기 코드 */
   const exportCode = useMemo(() => {
@@ -735,8 +757,9 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
                 <button key={s.shade} className={styles.tailwindSwatch}
                   style={{ background: s.hex, color: txtColor }}
                   onClick={() => copy('tw-' + s.shade, s.hex)}
-                  title={`${s.shade} · ${s.hex}`}>
-                  {s.shade}
+                  title={`${s.shade} · ${s.hex}`}
+                  aria-label={`${s.shade} ${s.hex} 복사`}>
+                  {copyLabel(copiedKey, 'tw-' + s.shade, `${s.shade === nearestShade ? '★' : ''}${s.shade}`)}
                 </button>
               )
             })}
@@ -754,8 +777,9 @@ function PaletteTab({ hex, setHex, copiedKey, copy }: PaletteTabProps) {
                 <button key={i}
                   className={styles.paletteSwatch}
                   style={{ background: hex, color: txtColor }}
-                  onClick={() => copy('p-' + i, hex)}>
-                  <span className={styles.paletteSwatchHex}>{hex.toUpperCase()}</span>
+                  onClick={() => copy('p-' + i, hex)}
+                  aria-label={`${hex.toUpperCase()} 복사`}>
+                  <span className={styles.paletteSwatchHex}>{copyLabel(copiedKey, 'p-' + i, hex.toUpperCase(), '✓ 복사됨')}</span>
                   <span className={styles.paletteSwatchShade}>{i + 1}</span>
                 </button>
               )
@@ -802,7 +826,9 @@ type CssTabProps = {
   copy: (key: string, text: string) => void
 }
 function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
-  const [colorName, setColorName] = useState('primary')
+  // 입력창은 원시 문자열 보관 — 빈 값도 허용해야 지우고 새 이름을 입력할 수 있음. 코드 생성에만 기본값 적용
+  const [colorNameRaw, setColorNameRaw] = useState('primary')
+  const colorName = colorNameRaw || 'primary'
 
   const baseRgb = useMemo(() => hexToRgb(hex) ?? { r: 8, g: 145, b: 178 }, [hex])
   const baseHsl = useMemo(() => rgbToHsl(baseRgb), [baseRgb])
@@ -864,7 +890,7 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
 
   const uiCss = useMemo(() => {
     const warn = btnText.ratio < 4.5
-      ? ` /* 대비 ${btnText.ratio.toFixed(2)}:1 — AA(4.5:1) 미달, 배경·텍스트 색 조정 권장 */`
+      ? ` /* 대비 ${fmtRatio(btnText.ratio)}:1 — AA(4.5:1) 미달, 배경·텍스트 색 조정 권장 */`
       : ''
     return `.btn-${colorName} {\n  background: ${uiStates[0].hex.toLowerCase()};\n  color: ${btnText.color};${warn}\n}\n.btn-${colorName}:hover {\n  background: ${uiStates[1].hex.toLowerCase()};\n}\n.btn-${colorName}:active {\n  background: ${uiStates[2].hex.toLowerCase()};\n}\n.btn-${colorName}:focus-visible {\n  box-shadow: 0 0 0 3px ${uiStates[3].hex.toLowerCase()};\n}\n.btn-${colorName}:disabled {\n  background: ${uiStates[4].hex.toLowerCase()};\n  cursor: not-allowed;\n}`
   }, [uiStates, colorName, btnText])
@@ -888,7 +914,7 @@ function CssTab({ hex, setHex, copiedKey, copy }: CssTabProps) {
           색상 이름 (CSS 변수 prefix)
         </label>
         <input id="color-css-prefix" className={styles.colorNameInput} type="text"
-          value={colorName} onChange={e => setColorName(e.target.value.replace(/[^a-zA-Z0-9-]/g, '') || 'primary')}
+          value={colorNameRaw} onChange={e => setColorNameRaw(e.target.value.replace(/[^a-zA-Z0-9-]/g, ''))}
           placeholder="primary" maxLength={20} />
       </div>
 
@@ -1146,8 +1172,8 @@ background: conic-gradient(from 0deg, ${stopStr});`
               <button key={i} className={styles.gradStep}
                 style={{ background: hex, color: txtColor }}
                 onClick={() => copy('step-' + i, hex)}
-                title={hex}>
-                {hex.slice(1)}
+                title={hex} aria-label={`${hex} 복사`}>
+                {copyLabel(copiedKey, 'step-' + i, hex.slice(1))}
               </button>
             )
           })}
@@ -1257,7 +1283,8 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
 
   /* 자동 분류 */
   const classification = useMemo(() => {
-    if (extracted.length === 0) return null
+    // 색이 1개뿐이면 배경·텍스트·포인트가 모두 같은 색이 되어 '대비 0.00:1' 같은 무의미한 값이 나옴 — 분류 생략
+    if (extracted.length < 2) return null
     // 비율 큰 + 채도 낮은 → 배경
     let bg = extracted[0]
     let bgScore = -Infinity
@@ -1348,8 +1375,9 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
                     return (
                       <button key={i} className={styles.extractedCard}
                         style={{ background: c.hex, color: txtColor }}
-                        onClick={() => copy('ex-' + i, c.hex)}>
-                        <span className={styles.extractedHex}>{c.hex.toUpperCase()}</span>
+                        onClick={() => copy('ex-' + i, c.hex)}
+                        aria-label={`${c.hex.toUpperCase()} 복사`}>
+                        <span className={styles.extractedHex}>{copyLabel(copiedKey, 'ex-' + i, c.hex.toUpperCase(), '✓ 복사됨')}</span>
                         <span className={styles.extractedPct}>{c.pct}%</span>
                       </button>
                     )
@@ -1374,7 +1402,7 @@ function ExtractTab({ copiedKey, copy }: { copiedKey: string | null; copy: (k: s
                     <div className={styles.classifyRow}>
                       <span className={styles.classifyLabel}>텍스트 후보</span>
                       <span className={styles.classifySwatch} style={{ background: classification.text.hex }} />
-                      <span className={styles.classifyHex}>{classification.text.hex} · 대비 {classification.contrast.toFixed(2)}:1</span>
+                      <span className={styles.classifyHex}>{classification.text.hex} · 대비 {fmtRatio(classification.contrast)}:1</span>
                     </div>
                   </div>
                 </div>

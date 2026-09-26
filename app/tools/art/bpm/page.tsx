@@ -2,7 +2,7 @@ import Link from 'next/link'
 import BpmClient from './BpmClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -40,7 +40,7 @@ export default async function BpmPage({
   const raw = typeof sp.bpm === 'string' ? sp.bpm : ''
   const parsed = parseFloat(raw)
   /* 소수 1자리 보존 — FAQ가 소수 BPM 지원을 명시하고 탭 템포 연동값도 소수일 수 있음 (정수 반올림 금지) */
-  const initialBpm = parsed > 0 && parsed <= 300 ? String(Math.round(parsed * 10) / 10) : '120'
+  const initialBpm = parsed >= 1 && parsed <= 300 ? String(Math.round(parsed * 10) / 10) : '120'
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
@@ -264,21 +264,7 @@ export default async function BpmPage({
 
         {/* ── 4. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 5. 함께 쓰면 좋은 도구 ── */}

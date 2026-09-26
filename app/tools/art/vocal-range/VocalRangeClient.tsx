@@ -7,12 +7,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './vocal-range.module.css'
 import { todayStr } from '@/lib/date'
 import {
-  VocalAnalyzer, PitchSample,
+  VocalAnalyzer, PitchSample, StableNote,
   detectStableNotes, calcRangeStats,
 } from './pitchAnalyzer'
 import { midiToNote, midiCents, NOTE_NAMES } from './noteUtils'
 import {
-  VOCAL_RANGES, classifyVocalRange, matchSongs,
+  VOCAL_RANGES, classifyVocalRange, matchSongs, type VocalGender,
 } from './vocalData'
 
 type Tab = 'live' | 'measure' | 'result' | 'log'
@@ -70,6 +70,10 @@ export default function VocalRangeClient() {
   const [currentSample, setCurrentSample] = useState<PitchSample | null>(null)
   const [volume, setVolume] = useState(0)
   const [samples, setSamples] = useState<PitchSample[]>([])
+  const samplesRef = useRef<PitchSample[]>([])
+  /* 그래프용 샘플 버퍼(최근 600프레임)에서 밀려난 구간의 안정 음 — 세션 전체 음역을 유지 */
+  const [archivedStable, setArchivedStable] = useState<StableNote[]>([])
+  const [gender, setGender] = useState<VocalGender | null>(null)
 
   // 측정 단계 — manual lowest / highest 기록
   const [measuredLowMidi, setMeasuredLowMidi] = useState<number | null>(null)
@@ -106,10 +110,23 @@ export default function VocalRangeClient() {
       await a.start({
         onSample: s => {
           setCurrentSample(s)
-          setSamples(prev => {
-            const next = [...prev, s]
-            return next.length > 600 ? next.slice(-600) : next
-          })
+          let buf = [...samplesRef.current, s]
+          if (buf.length > 600) {
+            // 무음 공백(detectStableNotes의 MAX_GAP_MS 250ms 초과) 지점에서 잘라 안정 음 그룹이 쪼개지지 않게 하고,
+            // 잘려 나가는 구간의 안정 음은 archivedStable에 보관 (최근 10초만 반영되던 문제)
+            let cut = -1
+            for (let i = buf.length - 300; i > 0; i--) {
+              if (buf[i].timestamp - buf[i - 1].timestamp > 250) { cut = i; break }
+            }
+            if (cut < 0 && buf.length > 1200) cut = buf.length - 600
+            if (cut > 0) {
+              const archived = detectStableNotes(buf.slice(0, cut))
+              if (archived.length) setArchivedStable(prev => [...prev, ...archived])
+              buf = buf.slice(cut)
+            }
+          }
+          samplesRef.current = buf
+          setSamples(buf)
         },
         onVolume: setVolume,
         onStatusChange: (status, err) => {
@@ -140,7 +157,15 @@ export default function VocalRangeClient() {
   useEffect(() => () => { if (analyzerRef.current) analyzerRef.current.stop() }, [])
 
   /* 안정 음 감지 (실시간) */
-  const stableNotes = useMemo(() => detectStableNotes(samples), [samples])
+  const stableNotes = useMemo(
+    () => [...archivedStable, ...detectStableNotes(samples)],
+    [archivedStable, samples],
+  )
+  const clearLiveNotes = () => {
+    samplesRef.current = []
+    setSamples([])
+    setArchivedStable([])
+  }
 
   /* 측정 진행 — 단계별 자동 갱신 */
   useEffect(() => {
@@ -178,11 +203,19 @@ export default function VocalRangeClient() {
     return calcRangeStats(stableNotes)
   }, [measuredLowMidi, measuredHighMidi, stableNotes])
 
-  /* 5반음 미만(한두 음만 측정)이면 중간점 분류가 무의미 — 분류 보류 */
-  const classification = useMemo(
-    () => stats && stats.rangeSemitones >= 5 ? classifyVocalRange(stats.lowestMidi, stats.highestMidi) : null,
-    [stats],
-  )
+  /* 5반음 미만(한두 음만 측정)이면 중간점 분류가 무의미 — 분류 보류.
+     성별 미선택이면 남성·여성 기준 분류를 함께 보여줌 (남녀 분류를 섞어 비교하면 여성 음역이 카운터테너로 잡힘) */
+  const classCandidates = useMemo(() => {
+    if (!stats || stats.rangeSemitones < 5) return []
+    const genders: VocalGender[] = gender ? [gender] : ['male', 'female']
+    return genders
+      .map(g => ({ gender: g, range: classifyVocalRange(stats.lowestMidi, stats.highestMidi, g) }))
+      .filter((c): c is { gender: VocalGender; range: NonNullable<typeof c.range> } => c.range !== null)
+  }, [stats, gender])
+  const classification = classCandidates.length === 1 ? classCandidates[0].range : null
+  const classLabel = classCandidates
+    .map(c => (gender ? c.range.name : `${c.gender === 'male' ? '남성' : '여성'}이면 ${c.range.name}`))
+    .join(' · ')
 
   const songMatches = useMemo(
     () => stats ? matchSongs(stats.lowestMidi, stats.highestMidi) : [],
@@ -199,7 +232,7 @@ export default function VocalRangeClient() {
       lowestMidi: stats.lowestMidi,
       highestMidi: stats.highestMidi,
       rangeSemitones: stats.rangeSemitones,
-      classId: classification?.id ?? '',
+      classId: classCandidates.map(c => c.range.id).join('/'),
     }
     const next = [item, ...history].slice(0, 30)
     setHistory(next); saveHistory(next)
@@ -262,9 +295,9 @@ export default function VocalRangeClient() {
       <Disclaimer
         variant="default"
         related={[
-          { href: '/tools/art/color', label: '색상 변환' },
-          { href: '/tools/art/gradient-generator', label: '그라디언트' },
-          { href: '/tools/art/golden-ratio', label: '황금 비율' }
+          { href: '/tools/art/frequency', label: '주파수↔음정 변환' },
+          { href: '/tools/art/capo', label: '기타 카포 계산기' },
+          { href: '/tools/art/scale', label: '스케일 음계' }
         ]}
       >
         참고용·재미용 도구
@@ -358,10 +391,11 @@ export default function VocalRangeClient() {
           {/* 안정 음 리스트 */}
           {stableNotes.length > 0 && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>
+              <div className={styles.cardLabel}>
                 안정 음 ({stableNotes.length}건)
                 <span style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'none', letterSpacing: 0 }}>0.5초+ 유지</span>
-              </label>
+                <button type="button" className={styles.miniBtn} onClick={clearLiveNotes}>기록 지우기</button>
+              </div>
               <div className={styles.stableList}>
                 {[...stableNotes].reverse().slice(0, 12).map((n, i) => {
                   const info = midiToNote(n.noteRoundedMidi)
@@ -520,6 +554,15 @@ export default function VocalRangeClient() {
             </div>
           ) : (
             <>
+              <div className={styles.optionRow} role="group" aria-label="성부 분류 기준 성별">
+                {([[null, '성별 선택 안 함'], ['female', '여성 기준'], ['male', '남성 기준']] as const).map(([g, label]) => (
+                  <button key={label} type="button" aria-pressed={gender === g}
+                    className={`${styles.optionBtn} ${gender === g ? styles.optionActive : ''}`}
+                    onClick={() => setGender(g)}>
+                    {label}
+                  </button>
+                ))}
+              </div>
               <div className={styles.hero} role="status">
                 <div className={styles.heroLabel}>당신의 음역대</div>
                 <div className={styles.heroRange}>
@@ -538,9 +581,19 @@ export default function VocalRangeClient() {
                 )}
                 {classification ? (
                   <span className={styles.heroClass}
-                    style={{ background: `${classification.color}22`, color: classification.color, border: `1px solid ${classification.color}66` }}>
+                    style={{ background: `${classification.color}22`, color: 'var(--text)', border: `1px solid ${classification.color}66` }}>
                     {classification.name}{classification.examples !== '—' && ` · ${classification.examples}`}
                   </span>
+                ) : classCandidates.length > 0 ? (
+                  <>
+                    <span className={styles.heroClass}
+                      style={{ background: 'var(--bg3)', color: 'var(--text)', border: '1px solid var(--border)' }}>
+                      {classLabel}
+                    </span>
+                    <div className={styles.heroKorean} style={{ marginTop: 6 }}>
+                      성별을 고르면 해당 성별 기준 분류 하나로 좁혀 보여줍니다.
+                    </div>
+                  </>
                 ) : (
                   <div className={styles.heroKorean} style={{ marginTop: 6 }}>
                     측정 범위가 5반음 미만이라 성부 분류를 보류합니다 — [음역 측정] 탭에서 최저음과 최고음을 모두 측정해 보세요.
@@ -587,15 +640,15 @@ export default function VocalRangeClient() {
               </div>
 
               {/* 음역 분류 안내 */}
-              {classification && (
+              {classCandidates.length > 0 && (
               <div className={styles.card}>
                 <label className={styles.cardLabel}>음역대 분류 8가지</label>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px', lineHeight: 1.7 }}>
-                  ⓘ 측정 범위의 중간점과 가장 가까운 분류를 고르는 <strong>간이 분류</strong>로, 성별·음색을 반영하지 않습니다. 참고용으로만 보세요.
+                  ⓘ 측정 범위의 중간점과 가장 가까운 분류를 고르는 <strong>간이 분류</strong>로, 음색·성구 전환점은 반영하지 않습니다. 참고용으로만 보세요.
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   {VOCAL_RANGES.map(r => {
-                    const isCurrent = r.id === classification.id
+                    const isCurrent = classCandidates.some(c => c.range.id === r.id)
                     return (
                       <div key={r.id} style={{
                         background: isCurrent ? `${r.color}15` : 'var(--bg3)',
@@ -611,7 +664,7 @@ export default function VocalRangeClient() {
                           {r.name}{isCurrent && ' ←'}
                           <small style={{ display: 'block', color: 'var(--muted)', fontSize: 11, fontWeight: 400 }}>{r.examples}</small>
                         </span>
-                        <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: 11, color: r.color }}>
+                        <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: 11, color: 'var(--text)' }}>
                           {r.low}~{r.high}
                         </span>
                         <span style={{ fontSize: 11, color: 'var(--muted)' }}>{r.gender === 'male' ? '♂' : r.gender === 'female' ? '♀' : '·'}</span>
@@ -665,7 +718,7 @@ export default function VocalRangeClient() {
 
               <div className={styles.resultActions}>
                 <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
-                  onClick={() => copy(`내 음역대: ${lowNote.name}~${highNote.name} · ${stats.octaves}옥타브${classification ? ` · ${classification.name}` : ''}${falsettoNote ? ` · 가성 ${falsettoNote.name}` : ''}`)}>
+                  onClick={() => copy(`내 음역대: ${lowNote.name}~${highNote.name} · ${stats.octaves}옥타브${classLabel ? ` · ${classLabel}` : ''}${falsettoNote ? ` · 가성 ${falsettoNote.name}` : ''}`)}>
                   {copied ? '✓ 복사됨' : '결과 복사'}
                 </button>
                 <button className={`${styles.copyBtn} ${saved ? styles.copied : ''}`}
@@ -692,10 +745,10 @@ export default function VocalRangeClient() {
           ) : (
             <>
               <div className={styles.card}>
-                <label className={styles.cardLabel}>
+                <div className={styles.cardLabel}>
                   최근 측정 ({history.length}/30)
-                  <button className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={clearHistory}>전체 삭제</button>
-                </label>
+                  <button type="button" className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={clearHistory}>전체 삭제</button>
+                </div>
                 <div className={styles.historyTable}>
                   <div className={`${styles.historyRow} ${styles.headerRow}`}>
                     <span>날짜</span>
@@ -706,15 +759,19 @@ export default function VocalRangeClient() {
                     <span></span>
                   </div>
                   {history.map(h => {
-                    const cls = VOCAL_RANGES.find(r => r.id === h.classId)
+                    const clsNames = h.classId
+                      .split('/')
+                      .filter(Boolean)
+                      .map(id => VOCAL_RANGES.find(r => r.id === id)?.name ?? id)
+                      .join(' / ')
                     return (
                       <div key={h.id} className={styles.historyRow}>
                         <span className={styles.historyDate}>{h.date.slice(0, 10)}</span>
                         <span className={styles.historyNote}>{midiToNote(h.lowestMidi).name}</span>
                         <span className={styles.historyNote}>{midiToNote(h.highestMidi).name}</span>
                         <span className={styles.historyNote}>{h.rangeSemitones}반</span>
-                        <span className={styles.historyClass} style={cls ? { color: cls.color } : {}}>
-                          {cls?.name ?? h.classId}
+                        <span className={styles.historyClass}>
+                          {clsNames}
                         </span>
                         <button type="button" aria-label={`${h.date.slice(0, 10)} 측정 기록 삭제`} className={`${styles.miniBtn} ${styles.miniDanger}`}
                           onClick={() => removeRecord(h.id)}>×</button>

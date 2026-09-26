@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   encodeMorseDetailed, decodeMorseDetailed, normalizeMorse, hasHangul,
   spellNatoDetailed, NATO, NATO_UNITS, type Lang,
@@ -42,6 +42,9 @@ export default function MorseCodeClient() {
      상한 30 WPM에서는 12.5회/초다. 기준을 통과하는 것은 약 7 WPM 이하뿐이라, 빛은 기본 꺼짐으로 두고
      사용자가 위험을 알고 켜도록 한다. 소리 재생은 그대로 동작한다. */
   const [lampEnabled, setLampEnabled] = useState(false)
+  /* 재생 중 rAF 루프는 시작 시점의 클로저를 쓰므로, 토글을 바로 반영하려면 ref로 읽는다 */
+  const lampEnabledRef = useRef(false)
+  useEffect(() => { lampEnabledRef.current = lampEnabled }, [lampEnabled])
   const [natoInput, setNatoInput] = useState('Toolify')
   const [copied, setCopied] = useState('')
 
@@ -74,8 +77,19 @@ export default function MorseCodeClient() {
 
   const copy = async (text: string, key: string) => {
     if (!text) return
-    try { await navigator.clipboard.writeText(text); setCopied(key); window.setTimeout(() => setCopied(''), 1200) } catch { /* noop */ }
+    try { await navigator.clipboard.writeText(text); setCopied(key); window.setTimeout(() => setCopied(''), 1500) } catch { /* noop */ }
   }
+
+  /* 언마운트(다른 페이지로 이동) 시 예약된 오실레이터·rAF·타이머를 정리한다.
+     ⚠️ 예전에는 정리가 없어 재생 중 이동하면 새 페이지에서도 삑 소리가 끝까지(최대 수십 분) 났다.
+     언마운트 뒤 setState를 피하려고 stop() 대신 ref만 정리한다. */
+  useEffect(() => () => {
+    timers.current.forEach((t) => window.clearTimeout(t))
+    timers.current = []
+    if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null }
+    try { ctxRef.current?.close() } catch { /* noop */ }
+    ctxRef.current = null
+  }, [])
 
   const stop = () => {
     timers.current.forEach((t) => window.clearTimeout(t))
@@ -148,7 +162,7 @@ export default function MorseCodeClient() {
       const el = ctxNow.currentTime - t0
       if (el > total + 0.05) { stop(); return }
       while (idx < tones.length && tones[idx][1] < el) idx++
-      const on = lampEnabled && idx < tones.length && el >= tones[idx][0] && el < tones[idx][1]
+      const on = lampEnabledRef.current && idx < tones.length && el >= tones[idx][0] && el < tones[idx][1]
       if (on !== lastOn) { lastOn = on; setLampOn(on) }
       rafRef.current = requestAnimationFrame(tick)
     }
@@ -199,8 +213,10 @@ export default function MorseCodeClient() {
     })
     return (u * 1.2) / wpm
   }, [morseToPlay, wpm])
+  /* 총 초를 먼저 반올림한 뒤 분·초로 나눈다 — 나머지를 반올림하면 119.6초가 '1분 60초'가 됐다 */
+  const playTotalSec = Math.round(playSeconds)
   const playLabel = playSeconds >= 60
-    ? `${Math.floor(playSeconds / 60)}분 ${Math.round(playSeconds % 60)}초`
+    ? (playTotalSec % 60 === 0 ? `${playTotalSec / 60}분` : `${Math.floor(playTotalSec / 60)}분 ${playTotalSec % 60}초`)
     : `${playSeconds.toFixed(1)}초`
 
   const nato = spellNatoDetailed(natoInput)
@@ -271,12 +287,13 @@ export default function MorseCodeClient() {
           {/* 출력 */}
           <div className={s.card}>
             <div className={s.ioHead}>
-              <label className={s.cardLabel} htmlFor="morse-output">{dir === 'encode' ? '모스 부호' : '텍스트'}</label>
+              {/* 출력은 입력칸이 아닌 div라 <label htmlFor>가 가리킬 수 없다 — 제목 span으로 이름만 붙인다 */}
+              <span className={s.cardLabel} id="morse-output-label">{dir === 'encode' ? '모스 부호' : '텍스트'}</span>
               <button type="button" className={s.miniBtn} onClick={() => copy(output, 'out')} disabled={!output}>
                 {copied === 'out' ? '✓ 복사됨' : '복사'}
               </button>
             </div>
-            <div id="morse-output" className={`${s.output} ${dir === 'encode' ? s.outMorse : ''}`}>{output || <span className={s.ph}>—</span>}</div>
+            <div id="morse-output" role="group" aria-labelledby="morse-output-label" className={`${s.output} ${dir === 'encode' ? s.outMorse : ''}`}>{output || <span className={s.ph}>—</span>}</div>
             {/* 결과 본문이 수천 자가 될 수 있어 통째로 라이브 영역에 넣지 않고, 짧은 요약만 알린다 */}
             <p className={s.srOnly} role="status" aria-live="polite">
               {output ? `${dir === 'encode' ? '모스 부호' : '텍스트'} ${output.length}자를 변환했습니다.` : ''}

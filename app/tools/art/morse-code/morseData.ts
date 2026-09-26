@@ -173,8 +173,11 @@ function splitOptions(run: string[], vowelFollows: boolean): Array<[string, numb
   const out: Array<[string, number]> = []   // [받침, 소비한 자음 수]
   if (!vowelFollows) {
     // 뒤에 모음이 없으면 런 전체가 받침 후보
-    if (L >= 2 && FINAL_COMPOSE[run[0] + run[1]]) out.push([FINAL_COMPOSE[run[0] + run[1]], 2])
-    if (L >= 1) out.push([run[0], 1])
+    const pairFinal = L >= 2 ? FINAL_COMPOSE[run[0] + run[1]] : undefined
+    if (pairFinal) out.push([pairFinal, 2])
+    /* ⚠️ 겹받침 하나로 다 받을 수 있는 2자 런을 1자로 쪼개면 남은 자음이 단독 자모로 붙어
+          '닭'의 대안에 '달ㄱ', '값'의 대안에 '갑ㅅ' 같은 조각이 떴다. */
+    if (L >= 1 && !(pairFinal && L === 2)) out.push([run[0], 1])
     if (L === 0) out.push(['', 0])
     return out
   }

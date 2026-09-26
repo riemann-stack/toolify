@@ -652,9 +652,12 @@ export function fitToRepeat(sts: number, multiple: number, plus: number): Repeat
   const exact = Number.isInteger(nRaw) && nRaw >= 1
   const nearest = Math.abs(sts - down) <= Math.abs(up - sts) ? down : up
   const repeats = (nearest - p) / m
+  /* 반복 1회분보다 코 수가 적으면 down === up이라 '10코 또는 10코'처럼 같은 값이 두 번 찍혔다 */
   const label = exact
     ? `${sts}코는 이미 ${m}코 반복 + ${p}코 조건에 맞습니다 (반복 ${Math.round(nRaw)}회)`
-    : `${m}코 반복 + ${p}코 → ${down}코(반복 ${nDown}회) 또는 ${up}코(반복 ${nUp}회)`
+    : down === up
+      ? `${m}코 반복 + ${p}코 → ${down}코(반복 ${nDown}회)`
+      : `${m}코 반복 + ${p}코 → ${down}코(반복 ${nDown}회) 또는 ${up}코(반복 ${nUp}회)`
   return { exact, down, up, nearest, repeats, label }
 }
 
@@ -677,8 +680,9 @@ export function estimateYarn(
   const isCardigan = projectId === 'cardigan'
   const sizedTable = YARN_AMOUNT_TABLE[`${yarnId}_${isCardigan ? 'sweater' : projectId}`]
   if (sizedTable) {
-    /* 사이즈 등급 추출 */
-    const sizeIdx = sizeIdxFromId(sizeId)
+    /* 사이즈 등급 추출 — 남성은 가슴둘레가 가까운 여성 칸 × 옷 면적 비율 */
+    const male = sizeId ? maleSizeScale(sizeId) : null
+    const sizeIdx = male ? male.idx : sizeIdxFromId(sizeId)
     if (sizeIdx === null) {
       /* 아동 사이즈 — 성인 표를 그대로 쓰면 과대추정이므로 값 대신 안내 */
       return {
@@ -686,14 +690,18 @@ export function estimateYarn(
         note: '실 양 표는 성인 XS~XL 기준입니다 — 아동용은 완성 치수 비율로 환산하거나 [아기 옷] 항목을 참고하세요.',
       }
     }
-    const base = sizedTable[sizeIdx] ?? sizedTable[2]
+    const tableBase = sizedTable[sizeIdx] ?? sizedTable[2]
     /* 5g 단위로 정리 — 소수 g은 근사값에 없는 정밀도를 암시한다 */
+    const base = male ? Math.round((tableBase * male.factor) / 5) * 5 : tableBase
     const grams = isCardigan ? Math.round((base * CARDIGAN_UPLIFT) / 5) * 5 : base
+    const sizeText = male
+      ? `${male.label} (가슴둘레가 가장 가까운 여성 ${sizeLabel(sizeIdx)} 기준 × 옷 면적 비율 ${male.factor.toFixed(2)})`
+      : `사이즈 ${sizeLabel(sizeIdx)}`
     return {
       grams,
       balls50g: Math.ceil(grams / 50),
       balls100g: Math.ceil(grams / 100),
-      note: `${getYarn(yarnId).label} · ${projectLabelById(projectId)} · 사이즈 ${sizeLabel(sizeIdx)}` +
+      note: `${getYarn(yarnId).label} · ${projectLabelById(projectId)} · ${sizeText}` +
         (isCardigan ? ` (스웨터 ${base}g + 앞단 몫 5%)` : ''),
     }
   }
@@ -757,6 +765,21 @@ export function skeinPlan(
     neededMeters: hasLen ? Math.round((totalGrams / safeSkeinG) * (skeinMeters as number)) : null,
     buyMeters: hasLen ? Math.round(skeins * (skeinMeters as number)) : null,
   }
+}
+
+/** 남성 사이즈 → 여성 기준 실 양 표의 칸과 배율.
+    ⚠️ 예전에는 이름 글자(_s/_m/_l)만 보고 여성 S/M/L 칸을 썼다 — 남성 S(가슴 96·길이 66·소매 60)가
+       여성 L(96/62/58)보다 큰데도 Worsted 스웨터 600g < 800g으로 더 적게 나왔다.
+    가슴둘레가 가장 가까운 여성 칸(상한 XL)을 고르고, 옷 면적 근사 가슴 × (길이 + 소매) 비율을 곱한다. */
+function maleSizeScale(sizeId: string): { idx: number; factor: number; label: string } | null {
+  const m = SIZES_MALE.find((sz) => sz.id === sizeId)
+  if (!m) return null
+  let idx = 0
+  SIZES_FEMALE.forEach((f, i) => {
+    if (Math.abs(f.bust - m.bust) < Math.abs(SIZES_FEMALE[idx].bust - m.bust)) idx = i
+  })
+  const f = SIZES_FEMALE[idx]
+  return { idx, factor: (m.bust * (m.length + m.sleeve)) / (f.bust * (f.length + f.sleeve)), label: m.label }
 }
 
 /** 사이즈 ID → 인덱스 (XS=0 ... XL=4). 성인 XS~XL 밖(키즈 등)이면 null —

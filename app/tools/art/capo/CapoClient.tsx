@@ -216,7 +216,9 @@ function CapoTab() {
           </div>
         </div>
         <div className={styles.heroNote}>
-          {keyName(playPc)} 코드 모양 + 카포 {fret}프렛 = <strong>{keyName(targetPc)}</strong> 소리
+          {fret === 0
+            ? <>카포 없이 {keyName(playPc)} 코드 모양 그대로 = <strong>{keyName(targetPc)}</strong> 소리</>
+            : <>{keyName(playPc)} 코드 모양 + 카포 {fret}프렛 = <strong>{keyName(targetPc)}</strong> 소리</>}
         </div>
       </div>
 
@@ -315,7 +317,8 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
         {whiteNotes.map((n, i) => {
           const fromHit = (i < 7 && n === highlightFrom) || (i === 7 && highlightFrom === 'C')
           const toHit   = (i < 7 && n === highlightTo)   || (i === 7 && highlightTo === 'C')
-          const fill = fromHit ? 'var(--accent)' : toHit ? 'var(--cat-health)' : '#E8E8E8'
+          // 새 키는 주황 — 청록은 원래 키(파랑)와 대비 1.1:1로 구분 불가
+          const fill = fromHit ? 'var(--accent)' : toHit ? 'var(--cat-cooking)' : '#E8E8E8'
           return (
             <g key={`w-${i}`}>
               <rect
@@ -338,7 +341,7 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
                 <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="var(--accent)" />
               )}
               {toHit && !fromHit && (
-                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="var(--cat-health)" />
+                <circle cx={i*whiteW + whiteW/2} cy={whiteH + 12} r={5} fill="var(--cat-cooking)" />
               )}
             </g>
           )
@@ -349,7 +352,7 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
           if (!n) return null
           const fromHit = n === highlightFrom
           const toHit   = n === highlightTo
-          const fill = fromHit ? 'var(--accent)' : toHit ? 'var(--cat-health)' : '#1a1a1a'
+          const fill = fromHit ? 'var(--accent)' : toHit ? 'var(--cat-cooking)' : '#1a1a1a'
           const cx = (i + 1) * whiteW - blackW / 2
           return (
             <g key={`b-${i}`}>
@@ -398,12 +401,17 @@ function TransposeTab() {
 
   const progResult = useMemo(() => {
     if (!progText.trim()) return ''
-    const prefer: 'sharp' | 'flat' = FLAT_PREF_PCS.has(newPc) ? 'flat' : 'sharp'
+    // 첫 코드가 원래 키 으뜸음의 마이너 코드(A 키에서 Am…)면 단조 곡으로 보고
+    // 나란한 장조(+3반음)의 조표로 샤프/플랫 결정 — Am F C G ↑3 → Cm Ab Eb Bb (G# 아님)
+    const firstChord = progText.trim().split(/[\s|,()\u00b7\u2013\u2014-]+/).map(t => CHORD_TOKEN.exec(t)).find(Boolean)
+    const minorKey = !!firstChord && parseNoteName(firstChord[1]) === origPc && /^m(?!aj)/.test(firstChord[2])
+    const sigPc = minorKey ? (newPc + 3) % 12 : newPc
+    const prefer: 'sharp' | 'flat' = FLAT_PREF_PCS.has(sigPc) ? 'flat' : 'sharp'
     return progText
       .split(/(\s+|[|,()\u00b7\u2013\u2014-]+)/)
       .map(tok => transposeChordSmart(tok, shift, prefer))
       .join('')
-  }, [progText, shift, newPc])
+  }, [progText, shift, newPc, origPc])
 
   const handleProgCopy = useCallback(async () => {
     try {
@@ -420,6 +428,9 @@ function TransposeTab() {
       <div className={styles.card}>
         <div className={styles.cardLabel}>① 원래 키</div>
         <KeyGrid value={origKey} onChange={setOrigKey} />
+        <p className={styles.note}>
+          * 건반과 다이아토닉 코드 변환 표는 장조 기준입니다. 단조 곡의 코드는 나란한 장조(Am→C) 표에서 찾으면 됩니다.
+        </p>
       </div>
 
       <div className={styles.card}>
@@ -525,7 +536,8 @@ function TransposeTab() {
         )}
         <p className={styles.note}>
           서픽스(add9·sus4·m7 등)와 슬래시 베이스(G/B)는 유지하고 루트·베이스 음만 이동합니다.
-          새 키의 조표에 맞춰 샤프/플랫 표기를 자동 선택합니다. 코드 외 텍스트(가사 등)는 넣지 마세요.
+          새 키의 조표에 맞춰 샤프/플랫 표기를 자동 선택합니다. 단조 곡은 ① 원래 키를 단조 으뜸음(Am이면 A)으로 고르고
+          첫 코드를 으뜸화음(Am)으로 입력하면 단조 조표 기준으로 표기합니다. 코드 외 텍스트(가사 등)는 넣지 마세요.
         </p>
       </div>
     </div>

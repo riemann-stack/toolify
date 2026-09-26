@@ -284,13 +284,12 @@ export default function PaintMixClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>총 분량</span>
             <div className={s.volRow}>
-              <input
-                type="number" inputMode="decimal"
-                min={0.1}
-                step={0.1}
-                aria-label="총 분량"
+              <DecimalInput
+                ariaLabel="총 분량"
                 value={totalAmount}
-                onChange={(e) => setTotalAmount(Math.max(0.1, Math.min(1e6, Number(e.target.value) || 0)))}
+                min={0.1}
+                max={1e6}
+                onCommit={setTotalAmount}
                 className={s.numInput}
               />
               <select value={unit} aria-label="분량 단위" onChange={(e) => setUnit(e.target.value as VolumeUnit)} className={s.unitSelect}>
@@ -319,6 +318,7 @@ export default function PaintMixClient() {
             </div>
             <input
               type="range" min={0.5} max={2.0} step={0.05}
+              aria-label="사용량 배수"
               value={pigmentScale}
               onChange={(e) => setPigmentScale(Number(e.target.value))}
               className={s.slider}
@@ -636,11 +636,12 @@ function SlotEditor({
             onChange={(e) => onChange({ weight: Number(e.target.value) })}
             className={s.slider}
           />
-          <input
-            type="number" inputMode="decimal" min={0.1} max={10} step={0.1}
-            aria-label={`색 ${index + 1} 비율 숫자 입력`}
+          <DecimalInput
+            ariaLabel={`색 ${index + 1} 비율 숫자 입력`}
             value={slot.weight}
-            onChange={(e) => onChange({ weight: Math.max(0.1, Math.min(10, Number(e.target.value) || 0.1)) })}
+            min={0.1}
+            max={10}
+            onCommit={(weight) => onChange({ weight })}
             className={s.weightNum}
           />
           <span className={s.pctTag}>{pct.toFixed(0)}%</span>
@@ -653,6 +654,49 @@ function SlotEditor({
         </button>
       )}
     </div>
+  )
+}
+
+/* ─── 소수 입력 (문자열로 두고 blur/Enter에서 범위 보정) ───
+   ⚠️ 예전에는 키 입력마다 0.1~상한으로 클램프해서, 칸을 비우거나 '0'을 치는 순간 0.1이 들어가
+      '0.5'를 치면 0.15가 되고 총량 '300'은 0.13ml가 됐다. 범위 안 값은 입력 중에도 바로 반영한다. */
+function DecimalInput({ ariaLabel, value, min, max, onCommit, className }: {
+  ariaLabel: string
+  value: number
+  min: number
+  max: number
+  onCommit: (v: number) => void
+  className?: string
+}) {
+  const [text, setText] = useState(String(value))
+  const [shown, setShown] = useState(value)
+  /* 슬라이더·빠른 버튼·저장값 복원 등 바깥에서 값이 바뀌면 표시를 맞춘다(렌더 중 동기화 패턴) */
+  if (shown !== value) {
+    setShown(value)
+    if (parseFloat(text) !== value) setText(String(value))
+  }
+  const commit = () => {
+    const v = parseFloat(text)
+    if (!Number.isFinite(v)) { setText(String(value)); return }
+    const c = Math.max(min, Math.min(max, v))
+    setText(String(c))
+    if (c !== value) onCommit(c)
+  }
+  return (
+    <input
+      type="text" inputMode="decimal"
+      aria-label={ariaLabel}
+      value={text}
+      onChange={(e) => {
+        const raw = e.target.value.replace(/[^\d.]/g, '')
+        setText(raw)
+        const v = parseFloat(raw)
+        if (Number.isFinite(v) && v >= min && v <= max) onCommit(v)
+      }}
+      onBlur={commit}
+      onKeyDown={(e) => { if (e.key === 'Enter') commit() }}
+      className={className}
+    />
   )
 }
 
@@ -737,6 +781,17 @@ function DeltaEBar({ deltaE }: { deltaE: number }) {
   )
 }
 
+/* 색환 중앙 글자색 — WCAG 상대 휘도로 흰 글자·어두운 글자 중 대비가 큰 쪽을 고른다.
+   ⚠️ 예전에는 항상 var(--bg)(흰색)라 노랑·연두 위 글자가 거의 보이지 않았다. */
+function wheelLabelInk(hex: string): string {
+  const { r, g, b } = hexToRgb(hex)
+  const lin = (v: number) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4) }
+  const L = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+  /* 흰색(1.0)과의 대비 vs 거의 검정(--text ≈ 0.013)과의 대비.
+     --gray-0/--gray-900은 새 토큰이라 없을 때를 대비해 기존 --bg2(흰 표면)/--text로 폴백한다. */
+  return (1.05 / (L + 0.05)) >= ((L + 0.05) / 0.063) ? 'var(--gray-0, var(--bg2))' : 'var(--gray-900, var(--text))'
+}
+
 /* ─── 12색환 SVG ─── */
 function ColorWheel({ selectedIdx, onSelect }: { selectedIdx: number; onSelect: (i: number) => void }) {
   const W = 300, H = 300
@@ -772,7 +827,7 @@ function ColorWheel({ selectedIdx, onSelect }: { selectedIdx: number; onSelect: 
       })}
       {/* 중앙에 선택 색 표시 */}
       <circle cx={cx} cy={cy} r={rInner - 4} fill={COLOR_WHEEL_12[selectedIdx].hex} stroke="var(--bg)" strokeWidth={2} />
-      <text x={cx} y={cy + 4} textAnchor="middle" fill="var(--bg)" fontSize={12} fontWeight={700} fontFamily="Noto Sans KR, sans-serif">
+      <text x={cx} y={cy + 4} textAnchor="middle" fill={wheelLabelInk(COLOR_WHEEL_12[selectedIdx].hex)} fontSize={12} fontWeight={700} fontFamily="Noto Sans KR, sans-serif">
         {COLOR_WHEEL_12[selectedIdx].name}
       </text>
     </svg>

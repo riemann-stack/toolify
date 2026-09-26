@@ -56,10 +56,11 @@ function useCopy(): [string | null, (key: string, text: string) => void] {
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const copy = (key: string, text: string) => {
     if (!text) return
-    navigator.clipboard.writeText(text).then(() => {
+    /* 권한 거부·비보안 컨텍스트에서는 writeText가 reject된다 — 처리하지 않으면 unhandled rejection */
+    navigator.clipboard?.writeText(text).then(() => {
       setCopiedKey(key)
       setTimeout(() => setCopiedKey(null), 1500)
-    })
+    }).catch(() => { /* 복사 실패 — 토스트를 띄우지 않는다 */ })
   }
   return [copiedKey, copy]
 }
@@ -278,6 +279,7 @@ export default function LoremClient() {
             <div className={styles.optRow}>
               {LENGTH_PRESETS.map(p => (
                 <button type="button" key={p.key}
+                  aria-pressed={pLen === p.key}
                   className={`${styles.optBtn} ${pLen === p.key ? styles.optActive : ''}`}
                   onClick={() => setPLen(p.key)}>
                   {p.label}
@@ -436,7 +438,7 @@ export default function LoremClient() {
             <button type="button" className={styles.actionBtn} onClick={handleGenerateD}>데이터 생성</button>
           </div>
           <p className={styles.scopeNote}>
-            JSON 더미는 이름·금액·날짜 같은 <strong>값</strong>이라 톤 설정의 영향을 받지 않습니다. 톤은 문단·UI 문구·카드·UX 라이팅에 적용됩니다.
+            JSON 더미는 이름·금액·날짜 같은 <strong>값</strong>이라 톤 설정의 영향을 받지 않습니다. 톤은 문단·UI 문구·카드(아티클·프로필)·UX 라이팅에 적용됩니다.
           </p>
 
           {dOutput && (
@@ -472,12 +474,18 @@ export default function LoremClient() {
             <div className={styles.optRow}>
               {([['product', '상품 카드'], ['article', '아티클 카드'], ['profile', '프로필 카드']] as [CardStyle, string][]).map(([k, l]) => (
                 <button type="button" key={k}
+                  aria-pressed={cardStyle === k}
                   className={`${styles.optBtn} ${cardStyle === k ? styles.optActive : ''}`}
                   onClick={() => setCardStyle(k)}>
                   {l}
                 </button>
               ))}
             </div>
+            {cardStyle === 'product' && (
+              <p className={styles.scopeNote}>
+                상품 카드의 상품명·설명은 문체가 아니라 <strong>값</strong>이라 톤 설정과 무관합니다. 톤은 아티클·프로필 카드의 설명 문구에 반영됩니다.
+              </p>
+            )}
           </div>
 
           <div className={styles.card}>

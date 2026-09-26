@@ -2,7 +2,7 @@ import ColorClient from './ColorClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -225,7 +225,7 @@ export default function ColorPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>Tailwind CSS 색상 시스템</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            Tailwind v4는 26개 기본 색상 × 11단계 = <strong style={{ color: 'var(--text)' }}>총 286개 색상</strong>을 제공합니다 — slate, gray, zinc, neutral, stone에 v4.1+에서 추가된 taupe, mauve, mist, olive까지 무채색·저채도 9종, red부터 rose까지 유채색 17종. v4부터 색이 OKLCH로 정의되고, 커스텀 색상도 <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>tailwind.config.js</code> 대신 CSS의 <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>@theme</code> 블록에 CSS 변수로 선언합니다.
+            Tailwind v4는 26개 기본 색상 × 11단계 = <strong style={{ color: 'var(--text)' }}>총 286개 색상</strong>을 제공합니다 — slate, gray, zinc, neutral, stone에 v4.2+에서 추가된 taupe, mauve, mist, olive까지 무채색·저채도 9종, red부터 rose까지 유채색 17종. v4부터 색이 OKLCH로 정의되고, 커스텀 색상도 <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>tailwind.config.js</code> 대신 CSS의 <code style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text)' }}>@theme</code> 블록에 CSS 변수로 선언합니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
             본 도구의 <strong style={{ color: 'var(--text)' }}>가장 가까운 Tailwind 매칭</strong> 기능은 입력한 색과 RGB 유클리드 거리가 가장 가까운 5개 클래스를 v4 팔레트(sRGB 변환값) 기준으로 자동 추천합니다. 디자이너가 시안에서 정한 색을 개발자가 Tailwind 클래스로 옮길 때 매우 유용합니다.
@@ -277,23 +277,7 @@ export default function ColorPage() {
 
         {/* FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 관련 도구 */}

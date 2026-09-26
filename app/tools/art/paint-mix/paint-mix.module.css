@@ -277,7 +277,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 6px;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   font-family: 'Inter', system-ui, sans-serif;
 }
@@ -660,7 +660,7 @@
   font-weight: 600;
 }
 .wheelInfoTextSm {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   margin: 2px 0 0;
 }
