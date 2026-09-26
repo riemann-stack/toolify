@@ -11,7 +11,7 @@ import DataFigure from '@/components/DataFigure'
 import Callout from '@/components/Callout'
 import RelatedTools from '@/components/RelatedTools'
 import {
-  calcHouseAcquisitionTax, calcAcquisitionTaxByCause, applyFirstHomeRelief, firstHomeIneligibility,
+  calcHouseAcquisitionTax, calcAcquisitionTaxByCause, applyFirstHomeRelief, firstHomeReliefBase,
   ACQ_RATE_PCT, HOUSE_STANDARD_BRACKETS, FIRST_HOME_RELIEF, LOW_VALUE_HOUSE_MAX_STD_VALUE,
   GIFT_HOUSE_HEAVY_MIN_STD_VALUE, TEMP_TWO_HOMES_DISPOSAL_YEARS, ACQ_FILING_DEADLINE, NATIONAL_HOUSING_AREA_M2,
   ACQ_REFORM_PROPOSAL_2026,
@@ -64,12 +64,12 @@ const NONHOUSE5 = byCause({ cause: 'purchase', property: 'nonHouse', value: 5 * 
 const FIVE = house(5 * E)
 const FIRST5 = applyFirstHomeRelief(FIVE, { capKind: 'general', over85: false })
 const FIRST7_85 = applyFirstHomeRelief(SEVEN85, { capKind: 'general', over85: true })
-/* 부모 주택이 있는 세대의 자녀(30세 미만 미혼) — 세대 2주택. 비조정은 표준세율이라 감면 계산, 조정은 중과라 감면 미계산 */
-const FAM_IN: AcquisitionInput = { cause: 'purchase', property: 'house', value: 5 * E, over85: false, homeCount: 2, adjusted: false }
-const FAM2 = calcAcquisitionTaxByCause(FAM_IN)
-const FAM2_OK = firstHomeIneligibility(FAM_IN, FAM2) === null
-const FAM2_FIRST = applyFirstHomeRelief(FAM2, { capKind: 'general', over85: false })
-const FAM2_ADJ = house(5 * E, { homeCount: 2, adjusted: true })
+/* 부모 주택이 있는 세대의 자녀(30세 미만 미혼)가 조정대상지역에서 처음 사는 집 — 세대 2주택.
+   감면이 없으면 §13의2 8% 중과, 생애최초 감면 대상이면 §13의2 배제·§11①8호 표준세율로 산출 후 감면 (지특법 §36의3①) */
+const FAM_IN: AcquisitionInput = { cause: 'purchase', property: 'house', value: 5 * E, over85: false, homeCount: 2, adjusted: true }
+const FAM2_ADJ = calcAcquisitionTaxByCause(FAM_IN)
+const FAM2_BASE = firstHomeReliefBase(FAM_IN)
+const FAM2_FIRST = applyFirstHomeRelief(FAM2_BASE, { capKind: 'general', over85: false })
 const EDGE_MID = house(B.low + 750_000) // 6억 75만원 — 반올림 경계
 
 /* 표 1 — 취득 원인·물건별 세율 */
@@ -133,11 +133,11 @@ const FAQ_LD = [
   },
   {
     q: '생애최초 감면을 받은 뒤 추징되는 경우가 있나요?',
-    a: `지방세특례제한법 §36의3④에 따라 ① 취득일부터 ${FH.residenceStartMonths}개월 안에 전입해 상시 거주를 시작하지 않은 경우, ② ${FH.residenceStartMonths}개월 안에 다른 주택을 추가로 취득한 경우(상속 제외), ③ 상시 거주 ${FH.residenceYears}년이 되기 전에 매각·증여하거나 다른 용도(임대 등)로 사용한 경우 감면받은 세액이 추징됩니다. 정당한 사유가 인정되는 예외는 시행령에서 정합니다.`,
+    a: `있습니다. 2026년 1월 1일 시행된 지방세특례제한법 §36의3④는 <strong>취득일부터 ${FH.clawbackYears}년 안에 그 주택을 매각·증여하거나 임대 등 다른 용도로 쓰면</strong> 감면받은 취득세를 추징합니다. 배우자에게 지분을 넘기는 경우는 제외되고, 세입자가 있는 집을 사서 임대인 지위를 이어받았는데 남은 임대차 기간이 ${FH.succeededLeaseMaxYears}년 이내라면 그 임대차가 끝난 날부터 ${FH.clawbackYears}년을 셉니다. 2025년까지 있던 전입·상시 거주 기간과 추가 주택 취득 제한 요건은 이 개정으로 빠졌습니다(개정 전에 생긴 추징사유는 종전 규정). 추징세액에는 이자상당액이 붙습니다(§178②).`,
   },
   {
     q: '부모님 집이 있는데 제가 처음 집을 사면 생애최초 감면을 받을 수 있나요?',
-    a: `받을 수 있습니다. 지방세특례제한법 §36의3의 요건은 <strong>본인과 배우자</strong>가 주택을 소유한 적이 없는 것이고, 부모 등 다른 세대원의 주택은 따지지 않습니다. 다만 취득세율은 세대 기준 주택 수로 정해지고, 30세 미만 미혼 자녀는 부모와 따로 살아도 원칙적으로 같은 세대로 봅니다(지방세법 시행령 §28의3). 부모 집이 1채 있는 세대에서 비조정지역 ${eok(5 * E)}원 주택을 사면 세대 2주택이어도 표준세율 ${pct(FAM2.acquisitionRate)}라 감면 후 ${won(FAM2_FIRST.after.total)}을 내지만, 조정대상지역이면 ${pct(FAM2_ADJ.acquisitionRate)} 중과로 ${won(FAM2_ADJ.total)}이 됩니다. 중과 산출세액에 감면이 어떻게 적용되는지는 확인하지 못해 이 계산기는 중과 취득에는 감면을 계산하지 않습니다.`,
+    a: `받을 수 있습니다. 지방세특례제한법 §36의3의 요건은 <strong>본인과 배우자</strong>가 주택을 소유한 적이 없는 것이고, 부모 등 다른 세대원의 주택은 따지지 않습니다. 취득세율은 원래 세대 기준 주택 수로 정하고 30세 미만 미혼 자녀는 부모와 따로 살아도 원칙적으로 같은 세대로 보지만(지방세법 시행령 §28의3), §36의3①은 이 감면을 적용할 때 지방세법 §13의2의 중과세율을 적용하지 않는다고 정합니다. 그래서 부모 집이 1채 있는 세대에서 조정대상지역 ${eok(5 * E)}원 주택을 처음 사도 표준세율 ${pct(FAM2_BASE.acquisitionRate)}로 계산한 뒤 감면해 <strong>${won(FAM2_FIRST.after.total)}</strong>을 냅니다. 감면이 없다면 ${pct(FAM2_ADJ.acquisitionRate)} 중과로 ${won(FAM2_ADJ.total)}이 되는 집이라, 취득일부터 ${FH.clawbackYears}년 안에 팔거나 증여·임대해 감면이 추징되면 중과세율로 다시 계산될 수 있다는 점(조세심판원 조심2022지1179)을 알고 계획하세요.`,
   },
   {
     q: '부모님께 아파트를 증여받으면 취득세는 얼마인가요?',
@@ -349,18 +349,19 @@ export default function AcquisitionTaxPage() {
       <h2 className="g-h2">생애최초 주택 구입 감면 — 최대 {man(FH.caps.general)}·{man(FH.caps.smallCapital)}, 교육세도 함께 줄어듭니다</h2>
       <p className="g-p">
         지방세특례제한법 §36의3은 <strong>본인과 배우자 모두 주택을 소유한 적이 없는 사람</strong>이 거주할 목적으로 취득당시가액 {eok(FH.maxPrice)}원 이하 주택을 유상으로 살 때 취득세를 깎아 줍니다.
-        소득 요건은 없습니다. 취득세 산출세액이 한도 이하면 전액 면제, 넘으면 한도만큼 공제하는 방식이며, 2026년 1월 1일 시행 개정으로 적용 기한이 {ymd(FH.sunset)}까지 연장됐습니다.
+        소득 요건은 없고, 미성년자와 부담부증여는 제외됩니다. 취득세 산출세액이 한도 이하면 전액 면제, 넘으면 한도만큼 공제하는 방식이며, 2026년 1월 1일 시행 개정으로 적용 기한이 {ymd(FH.sunset)}까지 연장됐습니다.
       </p>
       <p className="g-p">
         요건은 <strong>본인과 배우자</strong>만 봅니다. 부모 등 같은 세대의 다른 가족이 집을 가지고 있어도 감면 대상이 될 수 있습니다. 헷갈리는 지점은 세율입니다. 취득세율은 세대 기준 주택 수로 정하고,
-        30세 미만 미혼 자녀는 부모와 따로 살아도 원칙적으로 같은 세대로 봅니다(지방세법 시행령 §28의3). 그래서 부모 집이 1채 있는 세대에서 비조정지역 {eok(5 * E)}원 주택을 처음 사면
-        세대 2주택이어도 표준세율 {pct(FAM2.acquisitionRate)}{FAM2_OK ? <>가 적용되어 감면 후 {won(FAM2_FIRST.after.total)}을 내지만</> : <>가 적용되지만</>}, 같은 집이 조정대상지역이면 {pct(FAM2_ADJ.acquisitionRate)} 중과로 {won(FAM2_ADJ.total)}이 됩니다.
-        중과 산출세액에 감면이 어떻게 적용되는지는 확인하지 못해, 이 계산기는 중과세율이 적용되는 취득에는 생애최초 감면을 계산하지 않고 그 사실만 알려 줍니다.
+        30세 미만 미혼 자녀는 부모와 따로 살아도 원칙적으로 같은 세대로 봅니다(지방세법 시행령 §28의3). 그래서 부모 집이 1채 있는 세대에서 조정대상지역 {eok(5 * E)}원 주택을 사면 원래는 세대 2주택 {pct(FAM2_ADJ.acquisitionRate)} 중과로 {won(FAM2_ADJ.total)}입니다.
+        그런데 §36의3①은 이 감면을 적용하는 경우 &lsquo;지방세법 제13조의2의 세율을 적용하지 아니한다&rsquo;고 정하고, 한도를 빼는 기준인 산출세액도 §11①8호 표준세율로 계산한 금액으로 정합니다.
+        생애최초 감면 대상이면 중과 없이 {pct(FAM2_BASE.acquisitionRate)}로 산출한 취득세 {won(FAM2_BASE.acquisitionTax)}에서 {won(FAM2_FIRST.acquisitionRelief)}을 빼, 지방교육세까지 <strong>{won(FAM2_FIRST.after.total)}</strong>을 냅니다.
+        이 계산기도 생애최초 감면을 선택하면 주택 수와 관계없이 중과를 배제해 계산하고, 감면이 없을 때의 중과 금액을 함께 보여 줍니다.
       </p>
       <ul className="g-list">
         <li><strong>일반 한도 {man(FH.caps.general)}</strong> — 아파트를 포함한 대부분의 주택.</li>
         <li><strong>소형주택 {man(FH.caps.smallCapital)}</strong> — 전용 {FH.smallMaxAreaM2}㎡ 이하이면서 취득당시가액이 수도권 {eok(FH.smallMaxPrice.capital)}원·비수도권 {eok(FH.smallMaxPrice.nonCapital)}원 이하인 연립·다세대·다가구·도시형생활주택(아파트 제외).</li>
-        <li><strong>인구감소지역 {man(FH.caps.depopulation)}</strong> — 2026년 1월 1일 시행 개정으로 기존 {man(FH.caps.general)}에서 늘어났습니다. 수도권 인구감소지역(인천 강화·옹진, 경기 연천·가평)도 포함되는지와 가액 요건은 이 페이지에서 확인하지 못했으니 위택스·관할 세무과에 확인하세요.</li>
+        <li><strong>인구감소지역 {man(FH.caps.depopulation)}</strong> — 2026년 1월 1일 시행 개정으로 기존 {man(FH.caps.general)}에서 늘어났습니다. 조문은 &lsquo;인구감소지역에 소재하는 주택&rsquo;이라고만 정해 소형주택과 달리 면적·가액 요건({eok(FH.maxPrice)}원 상한 외)이 없고, 수도권을 빼는 규정도 없습니다. 인구감소지역은 행정안전부가 지정·고시하므로 주택 소재지가 지정 지역인지 확인하세요.</li>
       </ul>
       <p className="g-p">
         감면은 취득세에만 적용되는 것 같지만, 지방교육세도 취득세 감면율만큼 줄어듭니다(지방세법 §151①1호). {eok(5 * E)}원 주택이면 취득세 {won(FIVE.acquisitionTax)}에서 {won(FIRST5.acquisitionRelief)}이 빠지고
@@ -390,8 +391,10 @@ export default function AcquisitionTaxPage() {
         </table>
       </DataFigure>
       <p className="g-p">
-        감면은 신고할 때 신청해야 적용되고, 요건을 지키지 못하면 추징됩니다. 취득일부터 {FH.residenceStartMonths}개월 안에 전입해 상시 거주를 시작해야 하고, {FH.residenceStartMonths}개월 안에 다른 주택을 추가로 사면 안 되며(상속 제외),
-        상시 거주 {FH.residenceYears}년이 되기 전에 팔거나 증여하거나 임대 등 다른 용도로 쓰면 감면세액을 다시 냅니다(§36의3④).
+        감면은 신고할 때 신청해야 적용되고, 사후 요건을 어기면 추징됩니다. 2026년 1월 1일 시행 개정으로 추징 사유는 <strong>취득일부터 {FH.clawbackYears}년 안에 팔거나 증여하거나 임대 등 다른 용도로 쓰는 경우</strong> 하나로 정리됐고,
+        이때 감면세액을 이자상당액과 함께 다시 냅니다(§36의3④·§178②). 2025년까지 있던 전입·상시 거주 기간과 추가 주택 취득 제한은 빠졌습니다(개정 전에 생긴 추징사유는 종전 규정).
+        부모 주택 때문에 중과가 배제된 취득이라면 추징될 때 중과세율로 다시 계산될 수 있습니다(조세심판원 조심2022지1179). 위 조정대상지역 {eok(5 * E)}원 예시라면
+        이미 낸 {won(FAM2_FIRST.after.total)}과 중과 합계 {won(FAM2_ADJ.total)}의 차액 {won(FAM2_ADJ.total - FAM2_FIRST.after.total)}에 이자상당액까지 더해질 수 있습니다.
       </p>
       <Callout tone="note" title="개편안은 아직 반영하지 않았습니다">
         행정안전부는 {ymd(P.announced)} 「2026년 지방세제 개편안」에서 생애최초 감면 대상에 주거용 오피스텔을 넣고, {P.firstHomeYouthUnderAge}세 미만 청년의 한도를 {man(FH.caps.general)}에서 {man(P.firstHomeYouthCap)}으로 올리는 안을 발표했습니다.
@@ -415,9 +418,8 @@ export default function AcquisitionTaxPage() {
         <li><strong>고급주택·사치성 재산</strong>(지방세법 §13⑤)과 <strong>법인의 과밀억제권역 안 취득·신증축</strong>(§13①·②) 중과는 반영하지 않습니다.</li>
         <li><strong>농지 감면</strong> — 2년 이상 자경한 농민의 농지 취득 등 지방세특례제한법상 농지 감면은 반영하지 않습니다.</li>
         <li><strong>다른 주택 감면</strong> — 출산·양육 주택 감면(지방세특례제한법 §36의5) 등 생애최초 외 감면은 계산하지 않습니다.</li>
-        <li><strong>중과 취득의 생애최초 감면</strong> — 부모 주택 등으로 세대 주택 수가 늘어 중과세율이 적용되면 감면을 계산하지 않고 안내만 합니다.</li>
         <li><strong>주택 수 판정</strong> — 입력한 주택 수를 그대로 씁니다. 상속주택·저가주택 등 제외 대상은 빼고 입력해야 합니다.</li>
-        <li><strong>사후 추징</strong> — 일시적 2주택 미처분, 생애최초 거주 요건 위반 시의 추징세액과 가산세는 계산하지 않습니다.</li>
+        <li><strong>사후 추징</strong> — 일시적 2주택 미처분, 생애최초 감면 뒤 {FH.clawbackYears}년 안 매각·증여·임대로 생기는 추징세액(중과 배제분 포함)과 가산세·이자상당액은 계산하지 않습니다.</li>
       </ul>
 
       <Faq items={FAQ_LD} />

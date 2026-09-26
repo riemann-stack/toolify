@@ -7,7 +7,13 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
-import { calcYearEnd, type YearEndInput } from '@/lib/krYearEndTax'
+import {
+  calcYearEnd, cardDeduction, childTaxCredit, childCreditBirthYears, CHILD_CREDIT_AGE_RULES, YEAR_END_TAX_YEAR,
+  CARD_LIMIT_LOW, CARD_LIMIT_HIGH, CARD_CHILD_ADD_LOW, CARD_CHILD_ADD_HIGH, CARD_CHILD_ADD_MAX_KIDS,
+  CARD_EXTRA_LIMIT_LOW, CARD_EXTRA_LIMIT_HIGH, CARD_THRESHOLD_RATE, CARD_RATE_CREDIT, CARD_RATE_CHECK, CARD_RATE_MARKET, CARD_RATE_CULTURE,
+  CARD_LOW_GROSS_CUT, PERSONAL_DEDUCTION, MEDICAL_OTHERS_LIMIT, MEDICAL_RATE_PREMATURE, MEDICAL_RATE_INFERTILITY,
+  type ChildCreditAgeRule, type YearEndInput,
+} from '@/lib/krYearEndTax'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/year-end-tax',
@@ -61,7 +67,37 @@ const medSaved = (gross: number) => calcYearEnd(input(gross)).decidedTotal - cal
 const MED40 = medSaved(40_000_000)
 const MED70 = medSaved(70_000_000)
 
+const man = (v: number) => `${Math.round(v / 10_000).toLocaleString('ko-KR')}만`
+/** 전통시장·대중교통 추가한도 예시 — 총급여 5,000만, 신용 1,250만(문턱 25%)·체크 1,000만·전통시장·대중교통 600만 */
+const CARD_EX = { gross: 50_000_000, creditCard: 50_000_000 * CARD_THRESHOLD_RATE, checkCash: 10_000_000, marketTransit: 6_000_000 }
+const CARD_EX_DED = cardDeduction(input(CARD_EX.gross, CARD_EX))
+const CARD_EX_NO_MARKET = cardDeduction(input(CARD_EX.gross, { ...CARD_EX, marketTransit: 0 }))
+const CARD_EX_EXTRA = CARD_EX_DED - Math.min(CARD_EX_DED, CARD_LIMIT_LOW) // 기본한도를 넘어 추가한도로 인정된 금액
+
+/* 자녀세액공제 나이 단계 상향 (소득세법 §59의2, 2026.4.21 개정 부칙) — lib 표에서 문장 생성.
+   개정 내용은 귀속연도(YEAR_END_TAX_YEAR)와 무관하게 표 전체로 설명한다: 첫 키 = 개정 전, 나머지 = 단계 적용~본칙 */
+const CHILD_YEARS = childCreditBirthYears(YEAR_END_TAX_YEAR)
+const CHILD_RULES = (Object.entries(CHILD_CREDIT_AGE_RULES) as [string, ChildCreditAgeRule][])
+  .map(([y, r]) => [Number(y), r] as const)
+  .sort((a, b) => a[0] - b[0])
+const CHILD_BEFORE = CHILD_RULES[0][1]
+const CHILD_PHASE = CHILD_RULES.slice(1)
+const CHILD_PHASE_TEXT = CHILD_PHASE.map(([y, r]) => `${y}년 ${r.minAge}세`).join(', ')
+const CHILD_ONE_STEP = CHILD_PHASE.every(([, r], i) => r.minAge === (i === 0 ? CHILD_BEFORE : CHILD_PHASE[i - 1][1]).minAge + 1)
+const CHILD_FINAL = CHILD_PHASE[CHILD_PHASE.length - 1]
+const CHILD_EXCLUDED = [...new Set(CHILD_PHASE.flatMap(([, r]) => r.excludeBirthYears))]
+const CHILD_EXCLUDED_TEXT = CHILD_EXCLUDED.length
+  ? ` ${CHILD_EXCLUDED.join('·')}년생은 아동수당을 ${CHILD_FINAL[1].minAge}세 전까지 계속 받는 대신 이 단계 적용에서 빠져 ${CHILD_FINAL[1].minAge}세가 되는 ${CHILD_EXCLUDED.map((y) => y + CHILD_FINAL[1].minAge).join('·')}년부터 공제됩니다.`
+  : ''
+/* 신용카드·인적공제 문구용 (lib 값 보간) */
+const pct = (r: number) => `${Math.round(r * 100)}%`
+const CARD_CUT = `${man(CARD_LOW_GROSS_CUT)}원` // 기본·추가한도 총급여 경계
+
 const FAQ_LD = [
+  {
+    q: '자녀세액공제는 몇 살 자녀부터 받나요?',
+    a: `2026년 4월 소득세법 개정으로 자녀세액공제 나이 기준이 ${CHILD_BEFORE.minAge}세 이상에서 ${CHILD_FINAL[1].minAge}세 이상으로 올라갑니다. 한 번에 올리지 않고 ${CHILD_PHASE_TEXT} 이상으로 ${CHILD_ONE_STEP ? '1세씩' : '단계적으로'} 높입니다.${CHILD_EXCLUDED_TEXT} 그래서 ${YEAR_END_TAX_YEAR}년 귀속 연말정산(${YEAR_END_TAX_YEAR + 1}년 초)에서는 <strong>${CHILD_YEARS.from}~${CHILD_YEARS.to}년생</strong> 자녀만 1명 ${man(childTaxCredit(1))}원·2명 ${man(childTaxCredit(2))}원(3명째부터 1명당 ${man(childTaxCredit(3) - childTaxCredit(2))}원 추가)을 받습니다. 공제 대상이 아닌 어린 자녀도 기본공제(1인당 ${man(PERSONAL_DEDUCTION)}원)와 신용카드 한도 가산은 그대로 받으니 계산기의 &lsquo;그 밖의 자녀&rsquo; 칸에 넣으세요.`,
+  },
   {
     q: '연말정산 환급금은 어떻게 계산되나요?',
     a: '연말정산은 1년 동안 매월 떼인 세금(<strong>기납부세액</strong>)과 각종 공제를 반영해 확정한 진짜 세금(<strong>결정세액</strong>)을 비교하는 절차입니다. 결정세액이 기납부세액보다 적으면 그 차액을 돌려받고(환급), 많으면 더 냅니다(추가 납부). 결정세액은 총급여 → 근로소득공제 → 소득공제 → 과세표준 → 누진세율 → 세액공제 순서로 산출됩니다. 즉 공제가 많아 결정세액이 줄어들수록 환급이 커집니다.',
@@ -92,15 +128,15 @@ const FAQ_LD = [
   },
   {
     q: '이 계산기 결과가 홈택스 연말정산 미리보기와 다른 이유는?',
-    a: '이 도구는 신용카드·연금계좌·의료비·교육비·기부금·월세 등 <strong>핵심 공제만</strong> 반영한 간이 추정입니다. 난임·중증질환 의료비 가중, 중소기업 취업자 감면, 주택자금(전세·주택담보 이자)공제, 회사별 비과세 항목, 실제 원천징수 기납부세액 차이 등은 반영하지 않아 실제와 차이가 납니다. 정확한 금액은 국세청 홈택스 연말정산 간소화·모의계산 또는 세무 전문가로 확인하세요.',
+    a: `이 도구는 신용카드·연금계좌·의료비·교육비·기부금·월세 등 <strong>핵심 공제만</strong> 반영한 간이 추정입니다. 난임시술비(${pct(MEDICAL_RATE_INFERTILITY)})·미숙아·선천성이상아(${pct(MEDICAL_RATE_PREMATURE)}) 의료비의 높은 공제율, 중소기업 취업자 감면, 주택자금(전세·주택담보 이자)공제, 회사별 비과세 항목, 실제 원천징수 기납부세액 차이 등은 반영하지 않아 실제와 차이가 납니다. 정확한 금액은 국세청 홈택스 연말정산 간소화·모의계산 또는 세무 전문가로 확인하세요.`,
   },
 ]
 
-/* 공제 한도표 (정적·표시용 — 수치는 본문 가이드 설명용) */
+/* 공제 한도표 (표시용 — 신용카드·의료비 한도는 lib/krYearEndTax 값 보간) */
 const limitRows: [string, string, string][] = [
-  ['신용카드 등', '총급여 25% 초과분', '신용 15%·체크/현금 30%·전통시장·대중교통 40% (기본 300만 한도, 총급여 7천만 초과 시 250만 · 2026년 사용분부터 자녀 1인당 50만원, 7천만 초과 25만원 추가, 최대 2명)'],
+  ['신용카드 등', `총급여 ${pct(CARD_THRESHOLD_RATE)} 초과분`, `신용 ${pct(CARD_RATE_CREDIT)}·체크/현금 ${pct(CARD_RATE_CHECK)}·전통시장·대중교통 ${pct(CARD_RATE_MARKET)} (기본 ${man(CARD_LIMIT_LOW)} 한도, 총급여 ${man(CARD_LOW_GROSS_CUT)} 초과 시 ${man(CARD_LIMIT_HIGH)} · 2026년 사용분부터 자녀 1인당 ${man(CARD_CHILD_ADD_LOW)}원, ${man(CARD_LOW_GROSS_CUT)} 초과 ${man(CARD_CHILD_ADD_HIGH)}원 추가, 최대 ${CARD_CHILD_ADD_MAX_KIDS}명 · 기본한도 초과분은 전통시장·대중교통 ${pct(CARD_RATE_MARKET)}분에서 최대 ${man(CARD_EXTRA_LIMIT_LOW)}, ${man(CARD_LOW_GROSS_CUT)} 초과 ${man(CARD_EXTRA_LIMIT_HIGH)} 추가 — ${man(CARD_LOW_GROSS_CUT)} 이하는 문화체육 사용분 ${pct(CARD_RATE_CULTURE)}도 이 추가한도에 포함, 계산기 미반영)`],
   ['연금계좌(연금저축+IRP)', '900만원 (연금저축 600만)', '총급여 5,500만 이하 15% / 초과 12%'],
-  ['의료비', '총급여 3% 초과분', '공제율 15% (세액공제)'],
+  ['의료비', `총급여 3% 초과분 (본인·65세 이상·6세 이하·장애인 등 외 부양가족분은 연 ${man(MEDICAL_OTHERS_LIMIT)}원 한도)`, '공제율 15% (세액공제)'],
   ['교육비', '본인 전액·자녀 한도', '공제율 15% (세액공제)'],
   ['월세', '연 1,000만원 (총급여 8천만 이하)', '5,500만 이하 17% / 초과 15%'],
   ['기부금', '소득금액 한도', '1천만 이하 15% / 초과분 30%'],
@@ -118,7 +154,7 @@ export default function YearEndTaxPage() {
 
       <UpdatedMeta
         date="2026년"
-        basis="2026년 귀속(2027년 1~2월 정산) 종합소득세율·근로소득공제·공제 한도 기준, 신용카드 자녀 한도 가산(2026년 사용분부터) 반영"
+        basis="2026년 귀속(2027년 1~2월 정산) 종합소득세율·근로소득공제·공제 한도 기준, 신용카드 자녀 한도 가산(2026년 사용분부터)·자녀세액공제 나이 상향(2026.4.21 소득세법 개정) 반영"
         sources={[
           { label: '국세청 홈택스(hometax.go.kr)', href: 'https://hometax.go.kr' },
           { label: '국가법령정보센터 소득세법', href: 'https://www.law.go.kr/법령/소득세법' },
@@ -245,7 +281,10 @@ export default function YearEndTaxPage() {
             신용카드 등 사용액은 <strong>총급여의 25%를 넘는 분부터</strong> 공제됩니다. 총급여 5,000만원이면 1,250만원까지는 공제가 없습니다. 이 문턱은 결제수단과 무관하게 채워집니다.
           </p>
           <p className="g-p">
-            그래서 <strong>문턱(25%)까지는 혜택 큰 신용카드(공제율 15%)</strong>로 쓰고, <strong>초과분은 공제율 높은 체크카드·현금영수증(30%)이나 전통시장·대중교통(40%)</strong>으로 채우는 편이 유리합니다. 전통시장·대중교통은 추가 한도가 별도로 있어 공제가 더 늘 수 있습니다.
+            그래서 <strong>문턱(25%)까지는 혜택 큰 신용카드(공제율 15%)</strong>로 쓰고, <strong>초과분은 공제율 높은 체크카드·현금영수증(30%)이나 전통시장·대중교통(40%)</strong>으로 채우는 편이 유리합니다.
+          </p>
+          <p className="g-p">
+            공제액에는 기본한도({man(CARD_LIMIT_LOW)}원, 총급여 {CARD_CUT} 초과 {man(CARD_LIMIT_HIGH)}원, 자녀 가산 별도)가 있고, 전통시장·대중교통 공제분도 이 한도를 먼저 채웁니다. 한도를 넘친 금액은 전통시장·대중교통 사용액의 {pct(CARD_RATE_MARKET)} 범위에서 최대 {man(CARD_EXTRA_LIMIT_LOW)}원({CARD_CUT} 초과 {man(CARD_EXTRA_LIMIT_HIGH)}원)까지 추가로 공제됩니다. 총급여 {CARD_CUT} 이하라면 도서·신문·공연·박물관·미술관·영화, 수영장·체력단련장 같은 문화체육 사용분의 {pct(CARD_RATE_CULTURE)}도 이 추가한도에 함께 들어가지만, 이 계산기는 문화체육 사용액을 따로 입력받지 않아 반영하지 않습니다. 예로 총급여 {man(CARD_EX.gross)}원인 사람이 신용카드 {man(CARD_EX.creditCard)}원으로 문턱을 채우고 체크카드 {man(CARD_EX.checkCash)}원을 더 쓰면 소득공제는 {man(CARD_EX_NO_MARKET)}원입니다. 같은 사람이 전통시장·대중교통에도 {man(CARD_EX.marketTransit)}원을 썼다면 기본한도 {man(CARD_LIMIT_LOW)}원을 넘친 {man(CARD_EX_EXTRA)}원이 추가한도로 인정돼 소득공제가 {man(CARD_EX_DED)}원으로 늘어납니다.
           </p>
         </section>
 
@@ -284,7 +323,7 @@ export default function YearEndTaxPage() {
         <section>
           <h2 className="g-h2">이 계산기와 홈택스가 다른 이유</h2>
           <p className="g-p">
-            이 도구는 신용카드·연금계좌·의료비·교육비·기부금·월세 등 <strong>핵심 공제만</strong> 반영한 간이 추정입니다. 난임·중증질환 의료비 가중, 중소기업 취업자 감면, 주택자금(전세·주택담보 이자)공제, 회사별 비과세 항목, 실제 원천징수된 기납부세액 차이는 반영하지 않아 실제 결과와 차이가 납니다. 기납부세액을 비우면 의무공제만 반영한 원천징수 추정치를 쓰므로, 급여명세서의 월별 소득세를 1년치 더한 실제 기납부세액(원천징수 합계)을 입력하면 정확도가 올라갑니다. 확정 금액은 국세청 홈택스 연말정산 간소화·모의계산으로 확인하세요.
+            이 도구는 신용카드·연금계좌·의료비·교육비·기부금·월세 등 <strong>핵심 공제만</strong> 반영한 간이 추정입니다. 난임시술비({pct(MEDICAL_RATE_INFERTILITY)})·미숙아·선천성이상아({pct(MEDICAL_RATE_PREMATURE)}) 의료비의 높은 공제율, 중소기업 취업자 감면, 주택자금(전세·주택담보 이자)공제, 회사별 비과세 항목, 실제 원천징수된 기납부세액 차이는 반영하지 않아 실제 결과와 차이가 납니다. 기납부세액을 비우면 의무공제만 반영한 원천징수 추정치를 쓰므로, 급여명세서의 월별 소득세를 1년치 더한 실제 기납부세액(원천징수 합계)을 입력하면 정확도가 올라갑니다. 확정 금액은 국세청 홈택스 연말정산 간소화·모의계산으로 확인하세요.
           </p>
         </section>
 

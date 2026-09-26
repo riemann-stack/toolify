@@ -6,13 +6,17 @@
    · §151①1호: 지방교육세 = (표준세율 − 2%) × 20% / 세율 특례분은 특례 취득세 × 20%
    · 농특세법 §5①6호: 과세표준 × 0.2% (85㎡ 이하 주택 비과세, 세율 특례는 0)
    · 지특법 §36의3: 생애최초 12억 이하 — 취득세 min(산출세액, 한도 200만/300만) 감면,
-     교육세는 취득세 감면율만큼 감면(§151①1호), 85㎡ 초과는 감면분 농특세 20%(농특세법 §5①1호) */
+     교육세는 취득세 감면율만큼 감면(§151①1호), 85㎡ 초과는 감면분 농특세 20%(농특세법 §5①1호)
+     ①: "…지방세를 감면(이 경우 「지방세법」 제13조의2의 세율을 적용하지 아니한다)한다", 1·2호 산출세액 =
+     "「지방세법」 제11조제1항제8호의 세율을 적용하여 산출한 취득세액" → 세대 기준 중과 대상이어도 1~3% 표준세율로 산출 후 감면
+     (조문 대조: 지방세특례제한법 2025.12.31 개정·2026.1.1 시행 본문, legalize-kr 미러 2026-09) */
 import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
 import {
   calcInheritAcquisitionTax, calcOriginalAcquisitionTax, calcGiftNonHouseAcquisitionTax,
   calcFarmlandPurchaseAcquisitionTax, calcAcquisitionTaxByCause, calcHouseAcquisitionTax,
-  applyFirstHomeRelief, firstHomeIneligibility, FIRST_HOME_RELIEF, ACQ_RATE_PCT,
+  applyFirstHomeRelief, firstHomeIneligibility, firstHomeReliefBase, FIRST_HOME_RELIEF, FIRST_HOME_SURCHARGE_EXCLUDED_LABEL,
+  ACQ_RATE_PCT,
   type AcquisitionInput,
 } from '../../lib/krAcquisitionTax'
 import {
@@ -188,29 +192,26 @@ describe('생애최초 감면 (지특법 §36의3)', () => {
   test('자격: 12억 정확히는 가능(36,000,000 − 2,000,000 → 합계 37,400,000), 12억+1원은 불가', () => {
     const input = (value: number): AcquisitionInput => ({ cause: 'purchase', property: 'house', value, over85: false, homeCount: 1 })
     const b12 = calcAcquisitionTaxByCause(input(FIRST_HOME_RELIEF.maxPrice))
-    assert.equal(firstHomeIneligibility(input(FIRST_HOME_RELIEF.maxPrice), b12), null)
+    assert.equal(firstHomeIneligibility(input(FIRST_HOME_RELIEF.maxPrice)), null)
     // 교육세 3,600,000 × 34,000,000/36,000,000 = 3,400,000
     assert.equal(applyFirstHomeRelief(b12, { capKind: 'general', over85: false }).after.total, 37_400_000)
-    const b12p = calcAcquisitionTaxByCause(input(FIRST_HOME_RELIEF.maxPrice + 1))
-    assert.match(firstHomeIneligibility(input(FIRST_HOME_RELIEF.maxPrice + 1), b12p) ?? '', /12억/)
+    assert.match(firstHomeIneligibility(input(FIRST_HOME_RELIEF.maxPrice + 1)) ?? '', /12억/)
   })
-  test('자격: 법인·증여·주택 외, 그리고 중과(조정 2주택·비조정 3주택)는 불가', () => {
+  test('자격: 법인·증여·주택 외는 불가', () => {
     const mk = (o: Partial<AcquisitionInput>): AcquisitionInput => ({ cause: 'purchase', property: 'house', value: 5 * EOK, over85: false, homeCount: 1, ...o })
-    for (const o of [{ corporate: true }, { cause: 'gift' as const }, { property: 'nonHouse' as const },
-      { homeCount: 2, adjusted: true }, { homeCount: 3, adjusted: false }]) {
-      const i = mk(o)
-      assert.notEqual(firstHomeIneligibility(i, calcAcquisitionTaxByCause(i)), null, JSON.stringify(o))
+    for (const o of [{ corporate: true }, { cause: 'gift' as const }, { property: 'nonHouse' as const }]) {
+      assert.notEqual(firstHomeIneligibility(mk(o)), null, JSON.stringify(o))
     }
-    // 중과 차단 사유 문구
-    const heavy = mk({ homeCount: 2, adjusted: true })
-    assert.match(firstHomeIneligibility(heavy, calcAcquisitionTaxByCause(heavy)) ?? '', /중과세율/)
   })
-  test('자격: 세대 주택 수는 요건이 아님 — 비조정 2주택(부모 주택 포함 세대)·조정 일시적 2주택·저가주택 3주택은 가능', () => {
-    // 지특법 §36의3①: 본인·배우자의 주택 소유 이력만 본다. 세대 2주택이어도 비조정이면 §11①8호 표준세율(중과 아님)
+  test('자격: 세대 주택 수·중과 여부는 요건이 아님 — 조정 2·3·4주택, 비조정 2·3·4주택, 일시적 2주택, 저가주택 모두 가능', () => {
+    // 지특법 §36의3①: 본인·배우자의 주택 소유 이력만 본다. 세대 기준 중과 대상이어도 감면 대상이면 §13의2 세율 배제
     const mk = (o: Partial<AcquisitionInput>): AcquisitionInput => ({ cause: 'purchase', property: 'house', value: 5 * EOK, over85: false, homeCount: 1, ...o })
-    for (const o of [{ homeCount: 2, adjusted: false }, { homeCount: 2, adjusted: true, temporaryTwoHomes: true }, { homeCount: 3, lowValueHouse: true }]) {
-      const i = mk(o)
-      assert.equal(firstHomeIneligibility(i, calcAcquisitionTaxByCause(i)), null, JSON.stringify(o))
+    for (const o of [
+      { homeCount: 2, adjusted: false }, { homeCount: 3, adjusted: false }, { homeCount: 4, adjusted: false },
+      { homeCount: 2, adjusted: true }, { homeCount: 3, adjusted: true }, { homeCount: 4, adjusted: true },
+      { homeCount: 2, adjusted: true, temporaryTwoHomes: true }, { homeCount: 3, lowValueHouse: true },
+    ]) {
+      assert.equal(firstHomeIneligibility(mk(o)), null, JSON.stringify(o))
     }
   })
   test('소형주택 한도 + 85㎡ 초과(모순 입력) → 일반 200만 한도로 대체: 5억 수도권 4,700,000', () => {
@@ -230,6 +231,56 @@ describe('생애최초 감면 (지특법 §36의3)', () => {
     const r = applyFirstHomeRelief(one(280_000_000, true), { capKind: 'smallNonCapital', over85: true })
     assert.equal(r.capKind, 'general')
     assert.deepEqual(four(r.after), [800_000, 80_000, 960_000, 1_840_000])
+  })
+})
+
+describe('생애최초 — §13의2 중과 배제 (지특법 §36의3① 괄호, 1·2호 산출세액 = §11①8호 세율)', () => {
+  const mk = (o: Partial<AcquisitionInput>): AcquisitionInput => ({ cause: 'purchase', property: 'house', value: 5 * EOK, over85: false, homeCount: 1, ...o })
+  test('firstHomeReliefBase: 원래 표준세율이면 그 결과 그대로(문구 포함), 중과 대상이면 같은 가액 1주택 표준세율', () => {
+    const plain = mk({ homeCount: 2, adjusted: false })
+    assert.deepEqual(firstHomeReliefBase(plain), calcAcquisitionTaxByCause(plain))
+    const heavy = firstHomeReliefBase(mk({ homeCount: 3, adjusted: true }))
+    assert.equal(heavy.category, 'standard')
+    assert.equal(heavy.acquisitionRate, 1)
+    assert.equal(heavy.label, FIRST_HOME_SURCHARGE_EXCLUDED_LABEL)
+  })
+  test('7억·조정 세대 3주택: 12% 86,800,000 대신 1.67% 산출 후 감면 → 10,659,000', () => {
+    // 중과: 7억 × 12% = 84,000,000 + 교육세 0.4% 2,800,000 = 86,800,000
+    // 배제: (7 × 2/3 − 3) = 1.6666…% → 1.67% → 11,690,000 − 2,000,000 = 9,690,000
+    //       교육세 1,169,000 × 9,690,000/11,690,000 = 969,000 (1,169,000/11,690,000 = 정확히 0.1) → 합계 10,659,000
+    const r = computeAcq({ ...DEFAULT_STATE, value: '700,000,000', homeCount: 3, adjusted: true, firstHome: true })
+    assert.deepEqual([r.acquisitionTax, r.educationTax, r.ruralTax, r.total], [9_690_000, 969_000, 0, 10_659_000])
+    assert.equal(r.surchargeExcluded?.total, 86_800_000)
+    assert.equal(r.surchargeExcluded?.category, 'surcharge12')
+  })
+  test('[가정] 12억·조정 세대 2주택·85㎡ 초과: 중과 108,000,000 대신 3% 산출 후 감면 → 40,200,000', () => {
+    // 중과: 12억 × (8% + 0.4% + 농특 0.6%) = 96,000,000 + 4,800,000 + 7,200,000 = 108,000,000
+    // 배제: 3% 36,000,000 − 2,000,000 = 34,000,000 / 교육세 3,600,000 × 34/36 = 3,400,000
+    //       농특 본세분 12억 × 0.2% = 2,400,000 (lib 가정: 감면과 무관하게 유지) + 감면분 2,000,000 × 20% = 400,000 → 2,800,000
+    const r = computeAcq({ ...DEFAULT_STATE, value: '1,200,000,000', homeCount: 2, adjusted: true, over85: true, firstHome: true })
+    assert.deepEqual([r.acquisitionTax, r.educationTax, r.ruralTax, r.total], [34_000_000, 3_400_000, 2_800_000, 40_200_000])
+    assert.equal(r.surchargeExcluded?.total, 108_000_000)
+  })
+  test('2억·비조정 4주택 소형주택(비수도권 3억 이하): 12% 24,800,000 대신 1% 2,000,000 → 300만 한도 안이라 0원', () => {
+    // 중과: 2억 × 12% = 24,000,000 + 0.4% 800,000 = 24,800,000 / 배제: 2억 × 1% = 2,000,000 ≤ 3,000,000 → 면제, 교육세도 0
+    const r = computeAcq({ ...DEFAULT_STATE, value: '200,000,000', homeCount: 4, adjusted: false, firstHome: true, capKind: 'smallNonCapital' })
+    assert.equal(r.total, 0)
+    assert.equal(r.surchargeExcluded?.total, 24_800_000)
+  })
+  test('경계: 12억 + 1원 조정 2주택 → 감면 불가, 중과 그대로 100,800,000', () => {
+    // 1,200,000,001 × 8% = 96,000,000.08 → 96,000,000 / × 0.4% = 4,800,000.004 → 4,800,000
+    const r = computeAcq({ ...DEFAULT_STATE, value: '1,200,000,001', homeCount: 2, adjusted: true, firstHome: true })
+    assert.match(r.reliefBlocked ?? '', /12억/)
+    assert.equal(r.relief, null)
+    assert.equal(r.surchargeExcluded, null)
+    assert.equal(r.total, 100_800_000)
+  })
+  test('원래 표준세율인 입력(1주택·일시적 2주택·저가주택)은 중과 배제 표시 없음', () => {
+    for (const o of [{ homeCount: 1 as const }, { homeCount: 2 as const, adjusted: true, temporary: true }, { homeCount: 3 as const, lowValue: true }]) {
+      const r = computeAcq({ ...DEFAULT_STATE, value: '500,000,000', firstHome: true, ...o })
+      assert.equal(r.surchargeExcluded, null, JSON.stringify(o))
+      assert.equal(r.total, 3_300_000, JSON.stringify(o))
+    }
   })
 })
 
@@ -275,16 +326,25 @@ describe('계산기 입력 정규화 (acquisitionTaxUtils)', () => {
     assert.equal(r.total, 10_659_000)
     assert.equal(r.reliefBlocked, null)
   })
-  test('computeAcq: 비조정 세대 2주택(부모 주택) 5억 생애최초 → 적용 3,300,000 / 조정이면 중과로 미적용 42,000,000', () => {
+  test('computeAcq: 세대 2주택(부모 주택) 5억 생애최초 → 비조정·조정 모두 3,300,000 (조정은 8% 중과 배제)', () => {
     // 비조정 2주택 = 표준 1%: 5,000,000 − 2,000,000 = 3,000,000 + 교육세 500,000 × 60% = 300,000
     const ok = computeAcq({ ...DEFAULT_STATE, value: '500,000,000', homeCount: 2, adjusted: false, firstHome: true })
     assert.equal(ok.reliefBlocked, null)
     assert.equal(ok.total, 3_300_000)
-    // 조정 2주택 = 8% + 교육세 0.4% = 8.4% → 42,000,000 (감면 미계산)
-    const heavy = computeAcq({ ...DEFAULT_STATE, value: '500,000,000', homeCount: 2, adjusted: true, firstHome: true })
-    assert.ok(heavy.reliefBlocked)
-    assert.equal(heavy.relief, null)
-    assert.equal(heavy.total, 42_000_000)
+    assert.equal(ok.surchargeExcluded, null) // 원래 표준세율 — 배제할 중과 없음
+    // 조정 2주택: 감면이 없으면 8% 40,000,000 + 교육세 0.4% 2,000,000 = 42,000,000
+    // 생애최초면 §36의3① 괄호로 §13의2 배제 → 1% 산출 5,000,000 − 2,000,000 = 3,000,000 + 교육세 300,000 = 3,300,000
+    const adj = computeAcq({ ...DEFAULT_STATE, value: '500,000,000', homeCount: 2, adjusted: true, firstHome: true })
+    assert.equal(adj.reliefBlocked, null)
+    assert.deepEqual([adj.acquisitionTax, adj.educationTax, adj.ruralTax, adj.total], [3_000_000, 300_000, 0, 3_300_000])
+    assert.deepEqual(four(adj.base), [5_000_000, 500_000, 0, 5_500_000])
+    assert.equal(adj.base.label, FIRST_HOME_SURCHARGE_EXCLUDED_LABEL)
+    assert.equal(adj.surchargeExcluded?.total, 42_000_000)
+    assert.equal(adj.surchargeExcluded?.category, 'surcharge8')
+    // 생애최초를 끄면 그대로 중과 42,000,000 (다른 결과 불변)
+    const off = computeAcq({ ...DEFAULT_STATE, value: '500,000,000', homeCount: 2, adjusted: true, firstHome: false })
+    assert.equal(off.total, 42_000_000)
+    assert.equal(off.surchargeExcluded, null)
   })
   test('computeAcq: 13억 생애최초 → 미적용 사유, 합계는 감면 전', () => {
     const r = computeAcq({ ...DEFAULT_STATE, value: '1,300,000,000', firstHome: true })

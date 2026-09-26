@@ -452,11 +452,19 @@ export function calcAcquisitionTaxByCause(input: AcquisitionInput): AcqTaxBreakd
   return calcOriginalAcquisitionTax({ value, property, over85 })
 }
 
-/* ─── 생애최초 주택 구입 감면 — 지방세특례제한법 §36의3 (2026.1.1 시행분, 일몰 2028.12.31) ───
-   · 요건: 본인·배우자 모두 주택 소유 사실 없음 + 거주 목적 + 취득당시가액 12억원 이하 주택을 유상거래로 취득
-   · 감면: 취득세 100% — 산출세액 200만원 이하면 면제, 초과하면 200만원 공제
-     한도 300만원: ① 소형주택 — 전용 60㎡ 이하 + 취득당시가액 수도권 6억·비수도권 3억 이하, 아파트 제외
-                     (연립·다세대·다가구·도시형생활주택) ② 인구감소지역 소재 주택(2026.1.1 시행 개정으로 200→300만원)
+/* ─── 생애최초 주택 구입 감면 — 지방세특례제한법 §36의3 (2025.12.31 개정·2026.1.1 시행분, 일몰 2028.12.31) ───
+   · 요건(①): 취득일 현재 본인·배우자 모두 주택 소유 사실 없음 + 본인 거주 목적 + 취득당시가액 12억원 이하 주택을
+     유상거래(부담부증여 제외)로 취득. 미성년자 제외. 소득 요건 없음.
+   · 중과 배제(① 괄호): "…지방세를 감면(이 경우 「지방세법」 제13조의2의 세율을 적용하지 아니한다)한다"
+     + 1·2호의 '산출세액' = "「지방세법」 제11조제1항제8호의 세율을 적용하여 산출한 취득세액".
+     → 요건은 본인·배우자의 소유 이력뿐이라 부모 등 다른 세대원 주택 때문에 세대 주택 수로는 §13의2 중과(8·12%) 대상이어도,
+       감면 대상이면 §11①8호 표준세율(1~3%)로 산출한 뒤 한도를 뺀다 (firstHomeReliefBase). 세대 주택 수로 막지 않는다.
+   · 감면(1·2호): 산출세액이 한도 이하면 면제, 초과하면 한도만큼 공제
+     2호 일반 200만원 / 1호 300만원: 가~다목 소형주택 — 전용 60㎡ 이하 + 취득당시가액 3억원(수도권 6억원) 이하
+       공동주택(아파트 제외)·도시형생활주택·다가구(호수별 60㎡ 이하 부분) · 라목 인구감소지역에 소재하는 주택
+       (라목은 가액·면적 요건 없음 — 12억 상한만. 조문에 수도권 제외 문구 없음. 인구감소지역 = §2①5의2,
+        「지방자치분권 및 균형성장에 관한 특별법」 §2 12호 지정 지역 — 소재지가 지정 지역인지는 사용자가 확인)
+     ② 공동 취득은 주택 1채당 총 감면액이 같은 한도 — 이 lib는 1인 취득 기준
    · 지방교육세: 산출 교육세를 취득세 감면율로 감면 (지방세법 §151①1호 후단)
        → 교육세(감면 후) = 산출 교육세 × 감면 후 취득세 ÷ 산출 취득세. 1~3% 구간은 교육세 = 취득세의 10%라
          감면 효과는 최대 220만원(300만원 한도면 330만원)
@@ -464,17 +472,21 @@ export function calcAcquisitionTaxByCause(input: AcquisitionInput): AcqTaxBreakd
      [가정 — 미확인] 본세분 농특세(§5①6호, '지방세법·지특법·조특법에 따라 산출한 취득세액'을 2% 세율로 계산한 금액의 10%)는
      감면과 무관하게 과세표준 × 0.2% 그대로 둔다. 감면 후 세액 기준으로 줄이는 해석도 가능해 위택스 모의계산 대조 전까지
      페이지·결과에 '추정'으로 표시한다 (7억·85㎡ 초과: 이 가정 12,459,000 / 비례 감액 해석 약 12,219,470).
-   · 중과세율(§13의2) 산출세액에 대한 감면 적용 여부는 확인하지 못했다 → 중과 취득은 감면을 계산하지 않는다(보수적 차단).
-     요건은 '본인·배우자'의 주택 소유 이력뿐이라 부모 등 다른 세대원의 주택은 무관 — 세대 주택 수(homeCount)로 막지 않는다.
-   · 인구감소지역 300만원 한도: 수도권 인구감소지역(강화·옹진·연천·가평) 포함 여부와 가액 요건은 확인하지 못함 → 화면에 확인 안내.
-   · 추징(§36의3④): 3개월 안에 상시 거주 미개시 · 3개월 안에 추가 주택 취득(상속 제외) · 3년 상시 거주 전 매각·증여·다른 용도 사용
-   · 출처: 정책브리핑·행정안전부 「2026년부터 달라지는 지방세제」(2026-01), 국가법령정보센터 지방세특례제한법 §36의3.
+     중과가 배제된 취득도 같은 가정 — 감면분 20%는 §11①8호 기준 감면세액(한도 이내)에만 매긴다.
+   · 추징(④, 2025.12.31 개정): 취득일(임대인 지위를 승계했고 남은 임대차 기간이 1년 이내면 그 만료일)부터 3년 이내에
+     매각·증여(배우자에게 지분을 넘기는 경우 제외)하거나 다른 용도(임대 포함)로 사용하면 감면된 취득세를 추징.
+     종전 ④의 '3개월 안 상시 거주 시작·3개월 안 추가 주택 취득 금지·상시 거주 3년' 요건은 삭제됐다
+     (부칙 <제21309호, 2025.12.31> §5②: 2026.1.1 전에 발생한 종전 추징사유는 종전 규정). 추징세액에는 이자상당액 가산(§178②).
+     추징 때 중과 배제 효과도 사라져 §13의2 세율로 다시 계산한 사례: 조세심판원 조심2022지1179(3년 안 임대 → 12%로 추징,
+     검색 요약으로만 확인 — 원문 미열람). 계산기는 추징세액을 계산하지 않고 안내만 한다.
+   · 출처: 지방세특례제한법 §36의3·§178·부칙(국가법령정보센터 본문, 2026-09 legalize-kr 미러 raw.githubusercontent.com/legalize-kr/legalize-kr
+     kr/지방세특례제한법/법률.md — 공포 2026-09-08 판으로 조문 대조), 정책브리핑·행정안전부 「2026년부터 달라지는 지방세제」(2026-01).
      2026.8.26 발표 「2026년 지방세제 개편안」(주거용 오피스텔 포함, 40세 미만 청년 한도 300만원 등 — ACQ_REFORM_PROPOSAL_2026)은
      입법 전이므로 반영하지 않음 (2026-09 기준). */
 export const FIRST_HOME_RELIEF = {
   /** 취득당시가액 상한 (원, 이하) */
   maxPrice: 1_200_000_000,
-  /** depopulation: 수도권 인구감소지역 포함 여부·가액 요건 미확인 — 화면에 확인 안내 */
+  /** 1호(소형주택 가~다목·인구감소지역 라목) 300만원 / 2호 일반 200만원 */
   caps: { general: 2_000_000, smallCapital: 3_000_000, smallNonCapital: 3_000_000, depopulation: 3_000_000 },
   /** 소형주택 취득당시가액 상한 (원, 이하) */
   smallMaxPrice: { capital: 600_000_000, nonCapital: 300_000_000 },
@@ -483,23 +495,38 @@ export const FIRST_HOME_RELIEF = {
   ruralOnReliefPct: 20,
   /** 일몰 (이 날까지 취득분) */
   sunset: '2028-12-31',
-  residenceStartMonths: 3,
-  residenceYears: 3,
+  /** 추징 기간 (년) — 취득일부터 이 기간 안에 매각·증여·다른 용도(임대 포함) 사용 시 추징 (§36의3④, 2026.1.1 시행) */
+  clawbackYears: 3,
+  /** 임대인 지위를 승계한 주택은 남은 임대차 기간이 이 연수 이내면 그 만료일부터 추징 기간을 센다 (§36의3④ 괄호) */
+  succeededLeaseMaxYears: 1,
 } as const
 
 export type FirstHomeCapKind = keyof typeof FIRST_HOME_RELIEF.caps
 export const isFirstHomeCapKind = (v: unknown): v is FirstHomeCapKind =>
   typeof v === 'string' && Object.prototype.hasOwnProperty.call(FIRST_HOME_RELIEF.caps, v)
 
-/** 생애최초 감면 불가 사유 — 가능하면 null. base는 같은 입력의 감면 전 결과 */
-export function firstHomeIneligibility(input: AcquisitionInput, base: AcqTaxBreakdown): string | null {
+/** 생애최초 감면 불가 사유 — 가능하면 null.
+ *  요건은 본인·배우자의 주택 소유 이력뿐 — 세대 주택 수(부모 주택 등)로는 막지 않는다. 세대 기준 중과 대상이어도
+ *  감면 대상이면 §13의2 세율을 적용하지 않는다(§36의3① 괄호) → 산출은 firstHomeReliefBase */
+export function firstHomeIneligibility(input: AcquisitionInput): string | null {
   if (input.cause !== 'purchase') return '생애최초 감면은 유상거래(매매)로 취득하는 주택만 해당합니다'
   if (input.property !== 'house') return '생애최초 감면은 주택만 해당합니다 (오피스텔은 2026-09 현행법상 제외)'
   if (input.corporate) return '법인은 생애최초 감면 대상이 아닙니다'
   if (safeValue(input.value) > FIRST_HOME_RELIEF.maxPrice) return `취득당시가액 ${FIRST_HOME_RELIEF.maxPrice / 100_000_000}억원 초과 주택은 감면 대상이 아닙니다`
-  // 요건은 본인·배우자의 주택 소유 이력뿐 — 세대 주택 수(부모 주택 등)로는 막지 않는다. 중과 산출세액 감면은 미확인이라 보수적으로 차단
-  if (base.category !== 'standard') return '중과세율이 적용되는 취득은 이 계산기에서 생애최초 감면을 계산하지 않습니다'
   return null
+}
+
+/** 생애최초 감면으로 §13의2 중과를 배제했을 때의 적용 근거 표시 */
+export const FIRST_HOME_SURCHARGE_EXCLUDED_LABEL = '생애최초 감면 대상 — 중과 배제, 표준세율 (지특법 §36의3①)'
+
+/** 생애최초 감면의 '감면 전' 세액 — 지특법 §36의3①: §13의2 중과세율을 적용하지 않고 §11①8호 세율로 산출한 세액.
+ *  입력이 원래 표준세율이면 그 결과(적용 근거 문구 포함)를 그대로, 중과 대상이면 같은 가액의 1주택 표준세율로 다시 계산한다.
+ *  자격 판단(firstHomeIneligibility)을 통과한 매매 주택 입력에만 쓴다 */
+export function firstHomeReliefBase(input: AcquisitionInput): AcqTaxBreakdown {
+  const plain = calcAcquisitionTaxByCause(input)
+  if (plain.category === 'standard') return plain
+  const std = calcHouseAcquisitionTax({ price: safeValue(input.value), homeCount: 1, adjusted: false, over85: input.over85 })
+  return { ...std, label: FIRST_HOME_SURCHARGE_EXCLUDED_LABEL }
 }
 
 export interface FirstHomeRelief {
@@ -520,7 +547,8 @@ export interface FirstHomeRelief {
   after: { acquisitionTax: number; educationTax: number; ruralTax: number; total: number }
 }
 
-/** 생애최초 감면 적용 — 자격 판단은 firstHomeIneligibility로 먼저 한다 */
+/** 생애최초 감면 적용 — 자격 판단은 firstHomeIneligibility로 먼저 하고, base는 firstHomeReliefBase(input)
+ *  (§11①8호 세율 산출세액)를 넘긴다. 중과(§13의2) 결과를 넘기면 안 된다 */
 export function applyFirstHomeRelief(
   base: AcqTaxBreakdown,
   opts: { capKind: FirstHomeCapKind; over85: boolean },

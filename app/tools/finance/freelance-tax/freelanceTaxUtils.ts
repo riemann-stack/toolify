@@ -8,6 +8,12 @@ import {
   EXPENSE_RATES, SIMPLE_EXCESS_THRESHOLD, HUMAN_SERVICE_SIMPLE_LIMIT, HUMAN_SERVICE_BOOK_THRESHOLD,
   simpleExcessRate, type ExpenseRate,
 } from '@/lib/krExpenseRates'
+import {
+  yellowUmbrellaLimit as yellowUmbrellaLimitFor, yellowUmbrellaTiers, yellowUmbrellaTableYear,
+} from '@/lib/krYellowUmbrella'
+
+/** 계산 귀속연도 — 세율표(BRACKETS_2026)와 같은 해. 노란우산 한도처럼 연도별로 바뀌는 lib 표를 이 키로 조회한다 */
+export const FREELANCE_TAX_YEAR = 2026
 
 /* ─── 종합소득세 누진세율 (2026년 기준) — lib/krIncomeTax에서 파생 ─── */
 export interface TaxBracket {
@@ -210,7 +216,7 @@ export function computeDeductions(inputs: CalcInputs, businessIncome: number): {
   // 연금보험료공제 — 국민연금 본인 납부액 전액 (§51의3). 건강보험료는 사업소득자 소득공제 불가
   if (inputs.pensionPaid > 0) details.push({ label: '국민연금', amount: inputs.pensionPaid })
 
-  // 노란우산공제 — 사업소득금액 따라 한도 차등 (4천↓ 500만 / 4천~1억 300만 / 1억↑ 200만)
+  // 노란우산공제 — 사업소득금액 따라 한도 차등 (lib/krYellowUmbrella, 조특법 §86의3①)
   if (inputs.yellowUmbrella > 0) {
     const cappedYellow = Math.min(inputs.yellowUmbrella, yellowUmbrellaLimit(businessIncome))
     details.push({ label: '노란우산공제', amount: cappedYellow })
@@ -219,11 +225,15 @@ export function computeDeductions(inputs: CalcInputs, businessIncome: number): {
   return { total: details.reduce((s, x) => s + x.amount, 0), details }
 }
 
-/** 노란우산 소득공제 한도 (사업소득금액 기준, 2025 상향) */
+/* 노란우산(소기업·소상공인 공제부금) 소득공제 한도 — 단일 소스 lib/krYellowUmbrella.ts (조특법 §86의3①, 납입 연도 키).
+   이 도구는 FREELANCE_TAX_YEAR 납입분 표를 쓴다. */
+export const YELLOW_UMBRELLA_TIERS = yellowUmbrellaTiers(FREELANCE_TAX_YEAR)
+/** 현재 표가 적용되기 시작한 납입 연도 (안내 문구용) */
+export const YELLOW_UMBRELLA_SINCE = yellowUmbrellaTableYear(FREELANCE_TAX_YEAR)
+
+/** 노란우산 소득공제 한도 (사업소득금액 기준 — 구간 상한 '이하'), FREELANCE_TAX_YEAR 납입분 */
 export function yellowUmbrellaLimit(businessIncome: number): number {
-  if (businessIncome <= 40_000_000) return 6_000_000   // 4천만 이하 (500→600)
-  if (businessIncome <= 100_000_000) return 4_000_000  // 4천만~1억 (300→400)
-  return 2_000_000                                      // 1억 초과 (유지)
+  return yellowUmbrellaLimitFor(businessIncome, FREELANCE_TAX_YEAR)
 }
 
 /* ─── 세액공제 ─── */

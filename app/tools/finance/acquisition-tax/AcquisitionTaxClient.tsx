@@ -94,8 +94,9 @@ export default function AcquisitionTaxClient() {
   })
 
   const purchaseHouse = st.cause === 'purchase' && st.property === 'house'
-  // 화면에서 비활성(체크 해제로 보이는) 생애최초는 계산에서도 뺀다 — 12억 초과·중과 등 사유는 경고로 보여 준다.
-  // 세대 주택 수로는 막지 않는다: 요건은 본인·배우자의 소유 이력이고, 부모 등 세대원 주택은 무관(지특법 §36의3①)
+  // 화면에서 비활성(체크 해제로 보이는) 생애최초는 계산에서도 뺀다 — 12억 초과 등 사유는 경고로 보여 준다.
+  // 세대 주택 수로는 막지 않는다: 요건은 본인·배우자의 소유 이력이고, 부모 등 세대원 주택은 무관.
+  // 세대 기준 중과 대상이어도 감면 대상이면 §13의2 세율을 적용하지 않는다(지특법 §36의3① 괄호) — computeAcq가 처리
   const firstHomeOn = st.firstHome && purchaseHouse && !st.corporate
   const r = useMemo(() => computeAcq({ ...st, firstHome: firstHomeOn }), [st, firstHomeOn])
   const value = r.input.value
@@ -192,7 +193,7 @@ export default function AcquisitionTaxClient() {
               <Check checked={st.corporate} onChange={v => set('corporate', v)} title="법인이 취득" desc="주택 수·지역과 관계없이 중과" />
               <Check checked={st.firstHome} onChange={v => set('firstHome', v)} title="생애최초 주택 구입 감면"
                 disabled={st.corporate}
-                desc={`본인·배우자 모두 주택 소유 이력 없음 (부모 등 다른 세대원 주택은 무관) + 취득가액 ${FIRST_HOME_RELIEF.maxPrice / EOK}억 이하 + ${FIRST_HOME_RELIEF.residenceStartMonths}개월 안 전입·${FIRST_HOME_RELIEF.residenceYears}년 거주`} />
+                desc={`본인·배우자 모두 주택 소유 이력 없음 (부모 등 다른 세대원 주택은 무관, 세대 기준 중과도 배제) + 취득가액 ${FIRST_HOME_RELIEF.maxPrice / EOK}억 이하 + 거주 목적. ${FIRST_HOME_RELIEF.clawbackYears}년 안에 팔거나 증여·임대하면 추징`} />
             </div>
           </div>
           {firstHomeOn && (
@@ -208,7 +209,7 @@ export default function AcquisitionTaxClient() {
               </select>
               <p className="ui-helper">
                 소형주택 = 전용 {FIRST_HOME_RELIEF.smallMaxAreaM2}㎡ 이하 연립·다세대·다가구·도시형생활주택 (아파트 제외){st.over85 ? ` — ${NATIONAL_HOUSING_AREA_M2}㎡ 초과라 선택 불가` : ''}.
-                {st.capKind === 'depopulation' && ' 인구감소지역 한도는 수도권 인구감소지역(강화·옹진·연천·가평) 포함 여부를 위택스·세무과에서 확인하세요.'}
+                {st.capKind === 'depopulation' && ' 인구감소지역 한도는 가액·면적 요건 없이 인구감소지역(행정안전부 지정)에 있는 주택에 적용됩니다 — 소재지가 지정 지역인지 확인하세요.'}
               </p>
             </div>
           )}
@@ -259,6 +260,9 @@ export default function AcquisitionTaxClient() {
         <BreakdownTable caption="세목별 내역" unit="원" head={['세목', '세율', '세액']} rows={rows} />
         {r.reliefBlocked && <p className={s.warn}><UiIcon name="alert" size={16} />생애최초 감면 미적용 — {r.reliefBlocked}</p>}
         {rel?.note && <p className={s.warn}><UiIcon name="alert" size={16} />{rel.note}</p>}
+        {rel && r.surchargeExcluded && (
+          <p className={s.info}>생애최초 감면 대상이라 {r.surchargeExcluded.label}를 적용하지 않고 표준세율 {pct(b.acquisitionRate)}로 계산했습니다(지방세특례제한법 §36의3①). 감면이 없으면 합계 {won(r.surchargeExcluded.total)}입니다. 취득일부터 {FIRST_HOME_RELIEF.clawbackYears}년 안에 팔거나 증여·임대하면 감면이 추징되고, 이때 중과세율로 다시 계산될 수 있습니다.</p>
+        )}
         {rel && rel.ruralOnRelief > 0 && (
           <p className={s.info}>{NATIONAL_HOUSING_AREA_M2}㎡ 초과 감면분 농특세는 추정입니다 — 본세분 농특세(과세표준 × {pct(b.ruralRate)})는 그대로 두고 감면액의 {FIRST_HOME_RELIEF.ruralOnReliefPct}%를 더했습니다. 산정 방식은 위택스 모의계산으로 확인하세요.</p>
         )}
@@ -289,7 +293,7 @@ export default function AcquisitionTaxClient() {
               </tbody>
             </table>
           </div>
-          <p className={s.figNote}>작은 글씨 = 합계 세율 · 취득세 본세율. 조정대상지역 2주택이라도 일시적 2주택이면 1주택 줄과 같습니다.</p>
+          <p className={s.figNote}>작은 글씨 = 합계 세율 · 취득세 본세율. 조정대상지역 2주택이라도 일시적 2주택이면 1주택 줄과 같습니다. 생애최초 감면 대상이면 주택 수와 관계없이 중과하지 않습니다(감면 전 표).</p>
         </figure>
       )}
 

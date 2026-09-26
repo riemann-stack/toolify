@@ -9,7 +9,11 @@ import {
   EXPENSE_RATES, EXPENSE_RATE_YEAR, EXPENSE_RATES_BY_YEAR, EXPENSE_THRESHOLDS_BY_YEAR,
   SIMPLE_EXCESS_THRESHOLD, HUMAN_SERVICE_SIMPLE_LIMIT, HUMAN_SERVICE_BOOK_THRESHOLD, simpleExcessRate,
 } from '../../lib/krExpenseRates'
-import { calculate, simpleExpense, INDUSTRIES, type CalcInputs } from '../../app/tools/finance/freelance-tax/freelanceTaxUtils'
+import {
+  calculate, simpleExpense, yellowUmbrellaLimit, INDUSTRIES, FREELANCE_TAX_YEAR, YELLOW_UMBRELLA_TIERS, YELLOW_UMBRELLA_SINCE,
+  type CalcInputs,
+} from '../../app/tools/finance/freelance-tax/freelanceTaxUtils'
+import { yellowUmbrellaLimit as yellowUmbrellaLimitFor, yellowUmbrellaTableYear, YELLOW_UMBRELLA_TIERS_BY_YEAR } from '../../lib/krYellowUmbrella'
 
 const inputs = (revenue: number, o: Partial<CalcInputs> = {}): CalcInputs => ({
   revenue, industryId: 'other', expenseMode: 'simple', bookExpenses: 0, isNewBusiness: false,
@@ -96,5 +100,37 @@ describe('freelance-tax 기준경비율 추계', () => {
   })
   test('간편장부대상자는 기준경비율 전액', () => {
     assert.equal(calculate(inputs(50_000_000)).expenseAmount, 8_500_000)   // 5천만 × 17%
+  })
+})
+
+/* 노란우산 소득공제 한도 — lib/krYellowUmbrella.ts, 조특법 §86의3① 1~4호 (2025.3.14 법률 제20778호, 부칙 §11① 2025년 납입분부터)
+   사업소득금액 4천만 이하 600만 / 6천만 이하 500만 / 1억 이하 400만 / 1억 초과 200만.
+   개정 직전(2024년 납입분): 4천만 이하 500만 / 1억 이하 300만 / 1억 초과 200만.
+   [손계산] 수입 6천만 − 장부경비 1천만 = 사업소득금액 5천만 → 한도 500만. 납입 500만 전액 공제
+   공제 150만 + 500만 = 650만 → 과표 4,350만 × 15% − 126만 = 526.5만 + 지방세 52.65만 = 5,791,500 */
+describe('freelance-tax 노란우산 소득공제 한도', () => {
+  test('납입 연도 키 — 2024 개정 전 / 2025~ 개정 후, 도구는 2026 귀속 → 2025 표', () => {
+    const cuts = [0, 40_000_000, 40_000_001, 60_000_000, 60_000_001, 100_000_000, 100_000_001]
+    assert.deepEqual(cuts.map((b) => yellowUmbrellaLimitFor(b, 2024)),
+      [5_000_000, 5_000_000, 3_000_000, 3_000_000, 3_000_000, 3_000_000, 2_000_000])
+    assert.deepEqual(cuts.map((b) => yellowUmbrellaLimitFor(b, 2025)),
+      [6_000_000, 6_000_000, 5_000_000, 5_000_000, 4_000_000, 4_000_000, 2_000_000])
+    assert.deepEqual([2020, 2024, 2025, 2026, 2030].map(yellowUmbrellaTableYear), [2024, 2024, 2025, 2025, 2025])
+    assert.equal(FREELANCE_TAX_YEAR, 2026)
+    assert.equal(YELLOW_UMBRELLA_SINCE, 2025)
+    assert.deepEqual(YELLOW_UMBRELLA_TIERS, YELLOW_UMBRELLA_TIERS_BY_YEAR[2025])
+  })
+  test('구간 경계 (이하 기준)', () => {
+    assert.deepEqual(
+      [0, 40_000_000, 40_000_001, 60_000_000, 60_000_001, 100_000_000, 100_000_001].map(yellowUmbrellaLimit),
+      [6_000_000, 6_000_000, 5_000_000, 5_000_000, 4_000_000, 4_000_000, 2_000_000],
+    )
+  })
+  test('사업소득금액 5천만·납입 500만 → 전액 공제, 결정세액+지방세 5,791,500', () => {
+    const r = calculate(inputs(60_000_000, { expenseMode: 'book', bookExpenses: 10_000_000, yellowUmbrella: 5_000_000 }))
+    assert.equal(r.businessIncome, 50_000_000)
+    assert.equal(r.totalDeduction, 6_500_000)
+    assert.equal(r.taxableBase, 43_500_000)
+    assert.equal(r.totalTax, 5_791_500)
   })
 })

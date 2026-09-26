@@ -247,6 +247,29 @@ export function calcUnemploymentFromWages(p: {
   return { ...r, avgDaily, ordinaryDaily, ordinaryApplied: b.ordinaryApplied }
 }
 
+/** 이직일(마지막 근무일, 'YYYY-MM-DD') → 평균임금 산정기간(직전 3개월, 이직일 포함)의 달력 총일수(89~92). 형식 오류·없는 날짜면 0.
+ *  근거: 고용보험법 §45① 기초일액 = 이직 당시 근로기준법 §2①6의 평균임금 = '산정 사유 발생일 이전 3개월' 임금총액 ÷ 그 기간 총일수.
+ *  사유 발생일은 이직일 다음 날(피보험자격 상실일, 고용보험법 §14①3)이라 기간은 이직일까지 포함한다
+ *  (이직확인서 작성요령: '이직일 이전 3개월간(이직일 포함)' — 이직일 12/20 → 9/21~12/20).
+ *  역산은 민법 §157·§160 역월 기준: 월말 이직(다음 날이 1일)은 직전 3개 역월 전체(2/28 → 12/1~2/28 90일, 4/30 → 2/1~4/30 89일),
+ *  그 밖은 3개월 전 같은 날(그 달에 없으면 말일) 다음 날부터(5/15 → 2/16~5/15 89일).
+ *  퇴직금 계산기(severanceUtils.calcThreeMonthPeriod)와 같은 규칙. 이전 구현은 월말 이직을 '3개월 전 같은 날 다음 날'부터 세어
+ *  2월 말·4/30·6/30·11/30 이직의 분모가 1~2일 컸다. 로컬 날짜 분해 파싱(UTC 해석 없음). */
+export function uiPriorThreeMonthDays(iso: string): number {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
+  if (!m) return 0
+  const y = parseInt(m[1], 10)
+  const mo = parseInt(m[2], 10) - 1
+  const d = parseInt(m[3], 10)
+  const end = new Date(y, mo, d)
+  if (end.getFullYear() !== y || end.getMonth() !== mo || end.getDate() !== d) return 0 // 2026-02-30 같은 없는 날짜
+  const monthEnd = new Date(y, mo, d + 1).getDate() === 1
+  const start = monthEnd
+    ? new Date(y, mo - 2, 1) // 직전 3개 역월의 첫날 (이직월 포함 3개월)
+    : new Date(y, mo - 3, Math.min(d, new Date(y, mo - 2, 0).getDate()) + 1) // 3개월 전 같은 날(말일 클램프) + 1일
+  return Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1
+}
+
 /** 'YYYY-MM-DD' → 이직 연도 (UTC 해석 없이 문자열 분해). 형식이 아니면 NaN. */
 export function uiSeparationYear(iso: string): number {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)

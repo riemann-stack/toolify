@@ -9,11 +9,11 @@ import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import {
   EXPENSE_RATES, INDUSTRIES, SIMPLE_EXCESS_THRESHOLD, simpleExcessRate, calculate, buildScenarios, yellowUmbrellaLimit,
-  type CalcInputs,
+  YELLOW_UMBRELLA_TIERS, YELLOW_UMBRELLA_SINCE, type CalcInputs,
 } from './freelanceTaxUtils'
 import { BRACKETS_2026, progressiveTax } from '@/lib/krIncomeTax'
 import { HUMAN_SERVICE_SIMPLE_LIMIT, HUMAN_SERVICE_BOOK_THRESHOLD } from '@/lib/krExpenseRates'
-import { childTaxCredit } from '@/lib/krYearEndTax'
+import { childTaxCredit, childCreditAgeRule, childCreditBirthYears, YEAR_END_TAX_YEAR } from '@/lib/krYearEndTax'
 import ToolPage from '@/components/ToolPage'
 
 /* 경비율 표 — 계산기와 같은 단일 표(EXPENSE_RATES)에서 렌더 */
@@ -35,6 +35,20 @@ const bracketLabel = (i: number) => {
   if (!Number.isFinite(b.upTo)) return `${f(lo)} 원 초과`
   return `${f(lo)} 초과 ~ ${f(b.upTo)} 이하`
 }
+
+/* 노란우산 한도 표 — 계산기와 같은 구간표(YELLOW_UMBRELLA_TIERS)에서 행 생성 */
+const wonLabel = (n: number) => (n >= 100_000_000 ? `${n / 100_000_000}억` : `${(n / 10_000).toLocaleString('ko-KR')}만`)
+const YELLOW_ROWS = YELLOW_UMBRELLA_TIERS.map((t, i) => {
+  const lo = i === 0 ? 0 : YELLOW_UMBRELLA_TIERS[i - 1].upTo
+  const label = i === 0 ? `${wonLabel(t.upTo)} 원 이하`
+    : !Number.isFinite(t.upTo) ? `${wonLabel(lo)} 원 초과`
+    : `${wonLabel(lo)} 원 초과 ~ ${wonLabel(t.upTo)} 원 이하`
+  return [label, t.limit] as const
+})
+
+/* 자녀세액공제 대상 출생연도 — lib 나이 규칙(소득세법 §59의2, 2026.4.21 개정 부칙). 다음 5월 신고분(2026 귀속) 기준 */
+const CHILD_RULE = childCreditAgeRule(YEAR_END_TAX_YEAR)
+const CHILD_YEARS = childCreditBirthYears(YEAR_END_TAX_YEAR)
 
 /** 계산기 기본 입력값 (FreelanceTaxClient DEFAULT_INPUTS와 동일) */
 const DEF: CalcInputs = {
@@ -67,7 +81,7 @@ export const metadata = buildMetadata({
   path: '/tools/finance/freelance-tax',
   title: '프리랜서 종합소득세 계산기 — 단순경비율 자동 + 공제 시뮬 + 시나리오 비교 (2026년)',
   description:
-    '국세청 고시 업종별 단순경비율 자동 적용 + 8단계 누진세율과 노란우산·연금저축 절세 시나리오 5종 비교. 2026년 5월 신고 D-day.',
+    '국세청 고시 업종별 단순경비율 자동 적용 + 8단계 누진세율과 노란우산·연금저축 절세 시나리오 5종 비교. 다음 5월 종합소득세 신고 D-day.',
   keywords: [
     '프리랜서 종합소득세', '종소세 계산기', '종합소득세 환급',
     '3.3 원천징수', '프리랜서 세금', '프리랜서 환급',
@@ -270,7 +284,7 @@ export default function FreelanceTaxPage() {
         </table>
       </div>
 
-      <h3 className="g-h3">노란우산공제 소득공제 한도 (2025년 납입분부터)</h3>
+      <h3 className="g-h3">노란우산공제 소득공제 한도 ({YELLOW_UMBRELLA_SINCE}년 납입분부터)</h3>
       <div className="tableScroll">
         <table style={dedTable}>
           <thead>
@@ -279,11 +293,7 @@ export default function FreelanceTaxPage() {
             </tr>
           </thead>
           <tbody>
-            {[
-              ['4,000만 원 이하', yellowUmbrellaLimit(40_000_000)],
-              ['4,000만 원 초과 ~ 1억 원 이하', yellowUmbrellaLimit(100_000_000)],
-              ['1억 원 초과', yellowUmbrellaLimit(100_000_001)],
-            ].map(([label, lim], i) => (
+            {YELLOW_ROWS.map(([label, lim], i) => (
               <tr key={i} style={rowStyle(i)}>
                 <td style={td}>{label}</td>
                 <td style={{ ...td, fontWeight: 700 }}>{manInt(Number(lim))} 원</td>
@@ -313,7 +323,7 @@ export default function FreelanceTaxPage() {
               ['연금저축·IRP', '연금저축 600만 · IRP 합산 900만', '종합소득금액 4,500만 원 이하 16.5%, 초과 13.2% (지방세 포함) — 계산기는 연금저축 600만 원까지 반영'],
               ['기부금', '연말정산 사업소득자만', '15% (1천만 원 초과분 30%) — 사업소득만 있는 프리랜서는 세액공제 대신 장부 신고 시 필요경비로 처리'],
               ['표준세액공제', '7만원', '다른 특별세액공제를 받지 않는 사업소득자'],
-              ['자녀세액공제 (계산기 미반영)', '8세 이상 자녀', `1명 ${manInt(childTaxCredit(1))} / 2명 ${manInt(childTaxCredit(2))} / 3명 ${manInt(childTaxCredit(3))} (이후 1명당 ${manInt(childTaxCredit(4) - childTaxCredit(3))} 추가)`],
+              ['자녀세액공제 (계산기 미반영)', `${YEAR_END_TAX_YEAR}년 귀속 ${CHILD_YEARS.from}~${CHILD_YEARS.to}년생 자녀 (${CHILD_RULE.minAge}세 이상${CHILD_RULE.excludeBirthYears.length ? `, ${CHILD_RULE.excludeBirthYears.join('·')}년생 제외` : ''})`, `1명 ${manInt(childTaxCredit(1))} / 2명 ${manInt(childTaxCredit(2))} / 3명 ${manInt(childTaxCredit(3))} (이후 1명당 ${manInt(childTaxCredit(4) - childTaxCredit(3))} 추가)`],
             ].map(([item, lim, effect], i) => (
               <tr key={i} style={rowStyle(i)}>
                 <td style={{ ...td, fontWeight: 600 }}>{item}</td>

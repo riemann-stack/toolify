@@ -20,6 +20,7 @@ import {
   UI_LAST_YEAR,
   uiDailyFloor,
   uiMinWageYearFor,
+  uiPriorThreeMonthDays,
   uiSeparationYear,
   type CoverageBracket,
   type AgeGroup,
@@ -78,25 +79,6 @@ function parseAge(raw: string): number {
   const n = parseInt(raw.replace(/[^0-9]/g, ''), 10)
   if (!Number.isFinite(n)) return 0
   return Math.min(Math.max(n, 0), 120)
-}
-
-/* 퇴사일(YYYY-MM-DD) → 직전 3개월(퇴사 전월부터 역순 3개월)의 달력 총일수.
-   UTC 해석 피해 분해 파싱. 미입력/형식오류면 0(=호출측 90일 fallback). */
-function priorThreeMonthDays(iso: string): number {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return 0
-  const [y, m, d] = iso.split('-').map((v) => parseInt(v, 10))
-  const end = new Date(y, m - 1, d)
-  if (Number.isNaN(end.getTime())) return 0
-  // 퇴사일 직전 3개월 = 퇴사일 전날부터 90일 구간이 아니라, '사유 발생일 이전 3개월'의 달력일수.
-  // 통상 산정: 이직일 직전 3개월간의 총 일수(이직일 당일 제외, 직전 3개월 경계까지).
-  // 분해 파싱한 end에서 3개월 전 같은 날을 빼서 일수 차이로 근사.
-  // 3개월 전 달에 같은 날이 없으면(5/31 → 2/31) 그 달 말일로 클램프 — Date 롤오버(→3/3)로 일수가 줄지 않게.
-  const first = new Date(y, m - 1 - 3, 1)
-  const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate()
-  const start = new Date(first.getFullYear(), first.getMonth(), Math.min(d, lastDay))
-  const diff = Math.round((end.getTime() - start.getTime()) / 86_400_000)
-  if (diff < 80 || diff > 100) return 0 // 비정상값 방어 → fallback 90
-  return diff
 }
 
 /* 기준일(이직일 미입력 시 '오늘 이직'으로 보고 상·하한 연도를 정함).
@@ -170,8 +152,9 @@ export default function UnemploymentClient({ buildDate }: { buildDate?: string }
   }, [age, bracket, disabled, workHours, wageMode, monthly, m1, m2, m3, fixedPay, ordMonthly, leaveDate, involuntary])
 
   const ageN = parseAge(age)
+  /* 이직일 포함 직전 3개월(역월) 달력 총일수 — 미입력·형식 오류면 90일 가정 */
   const totalDays = useMemo(() => {
-    const d = priorThreeMonthDays(leaveDate)
+    const d = uiPriorThreeMonthDays(leaveDate)
     return d > 0 ? d : 90
   }, [leaveDate])
 

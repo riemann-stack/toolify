@@ -3,7 +3,7 @@
    법정 수치(세율·한도·기준 가액)는 전부 lib/krAcquisitionTax.ts 단일 소스. 여기서는 입력 정규화·조합·표 생성만 한다.
    ────────────────────────────────────────────────────── */
 import {
-  calcAcquisitionTaxByCause, calcHouseAcquisitionTax, applyFirstHomeRelief, firstHomeIneligibility,
+  calcAcquisitionTaxByCause, calcHouseAcquisitionTax, applyFirstHomeRelief, firstHomeIneligibility, firstHomeReliefBase,
   isFirstHomeCapKind, FIRST_HOME_RELIEF,
   type AcqCause, type AcqProperty, type AcqTaxBreakdown, type AcquisitionInput,
   type FirstHomeCapKind, type FirstHomeRelief,
@@ -29,7 +29,7 @@ export const CAP_KINDS: { id: FirstHomeCapKind; label: string }[] = [
   { id: 'general', label: `일반 — 한도 ${FIRST_HOME_RELIEF.caps.general / 10_000}만원` },
   { id: 'smallCapital', label: `소형주택·수도권 — ${FIRST_HOME_RELIEF.caps.smallCapital / 10_000}만원 (${FIRST_HOME_RELIEF.smallMaxPrice.capital / 100_000_000}억 이하)` },
   { id: 'smallNonCapital', label: `소형주택·비수도권 — ${FIRST_HOME_RELIEF.caps.smallNonCapital / 10_000}만원 (${FIRST_HOME_RELIEF.smallMaxPrice.nonCapital / 100_000_000}억 이하)` },
-  { id: 'depopulation', label: `인구감소지역 — ${FIRST_HOME_RELIEF.caps.depopulation / 10_000}만원 (수도권 포함 여부 확인)` },
+  { id: 'depopulation', label: `인구감소지역 — ${FIRST_HOME_RELIEF.caps.depopulation / 10_000}만원 (가액·면적 무관)` },
 ]
 
 export const isCause = (v: unknown): v is AcqCause => CAUSES.some(c => c.id === v)
@@ -161,11 +161,14 @@ export function toInput(s: AcqState): AcquisitionInput {
 
 export interface AcqResult {
   input: AcquisitionInput
+  /** 감면 전 세액 — 생애최초 감면이 적용되면 §13의2 중과를 배제한 §11①8호 표준세율 산출(firstHomeReliefBase) */
   base: AcqTaxBreakdown
   /** 생애최초 감면 (선택했고 자격이 되면) */
   relief: FirstHomeRelief | null
   /** 생애최초를 선택했지만 적용할 수 없는 사유 */
   reliefBlocked: string | null
+  /** 생애최초 감면 때문에 적용하지 않은 §13의2 중과 결과 (지특법 §36의3①) — 감면이 추징되면 이 세율로 다시 계산될 수 있다. 해당 없으면 null */
+  surchargeExcluded: AcqTaxBreakdown | null
   acquisitionTax: number
   educationTax: number
   ruralTax: number
@@ -176,16 +179,23 @@ export interface AcqResult {
 
 export function computeAcq(s: AcqState): AcqResult {
   const input = toInput(s)
-  const base = calcAcquisitionTaxByCause(input)
+  const plain = calcAcquisitionTaxByCause(input)
+  let base = plain
   let relief: FirstHomeRelief | null = null
   let reliefBlocked: string | null = null
+  let surchargeExcluded: AcqTaxBreakdown | null = null
   if (s.firstHome) {
-    reliefBlocked = firstHomeIneligibility(input, base)
-    if (!reliefBlocked) relief = applyFirstHomeRelief(base, { capKind: s.capKind, over85: input.over85 })
+    reliefBlocked = firstHomeIneligibility(input)
+    if (!reliefBlocked) {
+      // 지특법 §36의3①: 감면 대상이면 §13의2 중과세율을 적용하지 않고 §11①8호 세율로 산출한 뒤 한도를 뺀다
+      base = firstHomeReliefBase(input)
+      if (plain.category !== base.category) surchargeExcluded = plain
+      relief = applyFirstHomeRelief(base, { capKind: s.capKind, over85: input.over85 })
+    }
   }
   const t = relief ? relief.after : base
   return {
-    input, base, relief, reliefBlocked,
+    input, base, relief, reliefBlocked, surchargeExcluded,
     acquisitionTax: t.acquisitionTax, educationTax: t.educationTax, ruralTax: t.ruralTax, total: t.total,
     effectiveRate: input.value > 0 ? (t.total / input.value) * 100 : 0,
   }
@@ -237,6 +247,7 @@ export function summaryText(s: AcqState, r: AcqResult): string {
     `취득세 ${won(r.acquisitionTax)} / 지방교육세 ${won(r.educationTax)} / 농어촌특별세 ${won(r.ruralTax)}`,
   ]
   if (r.relief) lines.push(`생애최초 감면 −${won(r.relief.acquisitionRelief + r.relief.educationRelief)}${r.relief.ruralOnRelief ? ` (감면분 농특세 +${won(r.relief.ruralOnRelief)})` : ''}`)
+  if (r.surchargeExcluded) lines.push(`중과 배제: 감면이 없으면 ${r.surchargeExcluded.label} ${won(r.surchargeExcluded.total)} — ${FIRST_HOME_RELIEF.clawbackYears}년 안 매각·증여·임대로 추징되면 중과세율로 다시 계산될 수 있음`)
   lines.push(`합계 ${won(r.total)} (실효 ${pct(Math.round(r.effectiveRate * 1000) / 1000)})`)
   lines.push('youtil.kr/tools/finance/acquisition-tax — 참고용 추정치, 위택스 모의계산으로 확인')
   return lines.join('\n')

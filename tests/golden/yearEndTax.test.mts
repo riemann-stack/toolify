@@ -14,13 +14,27 @@
      5,000만·자녀 2·부양 0 입력: 부양가족을 자녀 수(2)로 올려 인적공제 450만, 자녀세액공제 55만
               과표 28,391,300 → 2,998,695 − 660,000 − 550,000 = 1,788,695 + 지방세 178,870 = 1,967,565
    · 신용카드 기본한도(조특법 §126의2, 2026 사용분~): 총급여 7천만 이하 300만 + 자녀 1인당 50만(최대 2명),
-     초과 250만 + 25만/인 → 6천만: 300/350/400만 · 8천만: 250/275/300만 */
+     초과 250만 + 25만/인 → 6천만: 300/350/400만 · 8천만: 250/275/300만
+   · 추가공제(§126의2⑪): 공제대상액(전통시장·대중교통 40%분 포함)을 기본한도까지 먼저 채우고, 넘친 금액은
+     min(초과액, 전통시장·대중교통 사용액×40%, 300만 / 7천만 초과 200만)만큼 더한다.
+     A 4천만·신용 1,000만·시장 500만: 문턱 1,000만을 신용이 소진 → 500만×40% = 200만 ≤ 기본 300만 → 200만
+     B 5천만·신용 1,250만·체크 1,000만·시장 600만: 체크 300만 + 시장 240만 = 540만 → 기본 300만 + min(240, 240, 300) = 540만
+     C 8천만·신용 2,000만·체크 1,000만·시장 1,000만: 300 + 400 = 700만 → 기본 250만 + min(450, 400, 200) = 450만
+     D 6천만·신용 1,500만·시장 2,000만: 800만 → 300만 + min(500, 800, 300) = 600만
+     F 4천만·신용 500만·시장 1,000만: 문턱 잔여 500만을 시장에서 차감 → 500만×40% = 200만 (추가 0)
+   · 의료비(소득세법 §59의4②): 그 밖의 부양가족분(1호)은 3% 초과분 연 700만 한도, 1호가 3%에 못 미치면 2호에서 뺀다.
+     총급여 6천만(문턱 180만): 본인 1,500만 → 1,320만×15% = 198만 / 부모(65세 미만) 1,500만 → 700만×15% = 105만
+     부모 100만 + 본인 300만 → 본인 300 − (180 − 100) = 220만×15% = 33만 / 부모 1,000만 + 본인 200만 → (700 + 200)×15% = 135만
+   · 자녀세액공제 나이(소득세법 §59의2①, 2026.4.21 법률 제21548호 부칙 §2②·③): 2026 귀속 9세 이상, 2017년생 제외
+     → 2006~2016년생만. 2018년생(8세)·2017년생(9세)은 'youngChildren'(기본공제·카드 가산만)
+     5천만·부양 1: 공제 대상 자녀 1명이면 25만 + 지방세 2.5만 = 27.5만 더 적다(한계세율과 무관한 세액공제) */
 import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
 import {
-  calcYearEnd, cardDeduction, effectiveDependents, childTaxCredit,
+  calcYearEnd, cardDeduction, effectiveDependents, childTaxCredit, medicalCreditBase,
+  childCreditAgeRule, isChildCreditEligible, childCreditBirthYears,
   estimateNationalPension, estimateOtherInsurance, estimatePrepaidWithholding,
-  STANDARD_TAX_CREDIT, type YearEndInput,
+  STANDARD_TAX_CREDIT, YEAR_END_TAX_YEAR, type YearEndInput,
 } from '../../lib/krYearEndTax'
 
 const input = (gross: number, o: Partial<YearEndInput> = {}): YearEndInput => ({
@@ -96,7 +110,7 @@ describe('신용카드 등 소득공제 — 자녀 수별 기본한도', () => {
   test('총급여 6천만: 자녀 0/1/2/3 → 300만/350만/400만/400만 (최대 2명)', () => {
     assert.deepEqual([0, 1, 2, 3].map(k => card(60_000_000, { children: k })), [3_000_000, 3_500_000, 4_000_000, 4_000_000])
   })
-  test('8세 미만 자녀(youngChildren)도 한도 가산 대상, 합산 최대 2명', () => {
+  test('자녀세액공제 대상이 아닌 자녀(youngChildren)도 한도 가산 대상, 합산 최대 2명', () => {
     assert.deepEqual([0, 1, 2, 3].map(k => card(60_000_000, { youngChildren: k })), [3_000_000, 3_500_000, 4_000_000, 4_000_000])
     assert.equal(card(60_000_000, { children: 1, youngChildren: 1 }), 4_000_000)
   })
@@ -104,13 +118,66 @@ describe('신용카드 등 소득공제 — 자녀 수별 기본한도', () => {
     assert.equal(card(70_000_000, { children: 2 }), 4_000_000)
     assert.deepEqual([0, 1, 2, 3].map(k => card(70_000_001, { children: k })), [2_500_000, 2_750_000, 3_000_000, 3_000_000])
   })
-  test('문턱(총급여 25%)은 신용카드부터 차감 · 체크 30% · 전통시장 40%(추가한도 100만)', () => {
+  test('문턱(총급여 25%)은 신용카드부터 차감 · 체크 30% · 전통시장·대중교통 40%', () => {
     // 4,000만 → 문턱 1,000만. 신용 1,000만은 문턱에 모두 소진, 체크 200만 × 30% = 60만
     assert.equal(cardDeduction(input(40_000_000, { creditCard: 10_000_000, checkCash: 2_000_000 })), 600_000)
     // 사용액 합계가 문턱 이하 → 0
     assert.equal(cardDeduction(input(40_000_000, { creditCard: 10_000_000 })), 0)
-    // 전통시장 500만 × 40% = 200만 → 추가한도 100만
-    assert.equal(cardDeduction(input(40_000_000, { creditCard: 10_000_000, marketTransit: 5_000_000 })), 1_000_000)
+    // A: 전통시장 500만 × 40% = 200만 — 기본한도(300만) 안이라 전액 공제 (옛 '추가한도 100만' 간이식은 100만으로 잘랐음)
+    assert.equal(cardDeduction(input(40_000_000, { creditCard: 10_000_000, marketTransit: 5_000_000 })), 2_000_000)
+    // F: 문턱 잔여 500만은 전통시장분에서 차감 → 500만 × 40%
+    assert.equal(cardDeduction(input(40_000_000, { creditCard: 5_000_000, marketTransit: 10_000_000 })), 2_000_000)
+  })
+  test('추가공제 §126의2⑪: 기본한도 초과분을 전통시장·대중교통 40%분으로 300만(7천만 초과 200만)까지', () => {
+    // B: 5천만 → 기본 300만 + 추가 240만
+    assert.equal(cardDeduction(input(50_000_000, { creditCard: 12_500_000, checkCash: 10_000_000, marketTransit: 6_000_000 })), 5_400_000)
+    // D: 추가공제는 300만 한도
+    assert.equal(cardDeduction(input(60_000_000, { creditCard: 15_000_000, marketTransit: 20_000_000 })), 6_000_000)
+    // C: 7천만 초과 → 기본 250만 + 추가 한도 200만
+    assert.equal(cardDeduction(input(80_000_000, { creditCard: 20_000_000, checkCash: 10_000_000, marketTransit: 10_000_000 })), 4_500_000)
+    // 7천만 경계: 이하 300만 + 300만 / 초과 250만 + 200만
+    const edge = { creditCard: 17_500_000, checkCash: 10_000_000, marketTransit: 10_000_000 }
+    assert.equal(cardDeduction(input(70_000_000, edge)), 6_000_000)
+    assert.equal(cardDeduction(input(70_000_001, edge)), 4_500_000)
+    // 자녀 2명 가산 기본한도 400만 + 추가 300만
+    assert.equal(cardDeduction(input(60_000_000, { creditCard: 15_000_000, checkCash: 20_000_000, marketTransit: 10_000_000, children: 2 })), 7_000_000)
+    // 전통시장·대중교통 사용이 없으면 추가공제 0
+    assert.equal(cardDeduction(input(100_000_000, { creditCard: 100_000_000 })), 2_500_000)
+  })
+  test('B 사례 결정세액 2,176,565 (옛 100만 간이식 2,407,565보다 140만 × 15% × 1.1 = 231,000원 적음)', () => {
+    // 과표 37,750,000 − 150만 − 2,375,000 − 540만 − 2,483,700 = 25,991,300 → 2,638,695 − 66만 = 1,978,695 + 지방세 197,870
+    const r = calcYearEnd(input(50_000_000, { creditCard: 12_500_000, checkCash: 10_000_000, marketTransit: 6_000_000 }))
+    assert.equal(r.cardDeduction, 5_400_000)
+    assert.equal(r.taxBase, 25_991_300)
+    assert.equal(r.decidedTotal, 2_176_565)
+  })
+})
+
+describe('자녀세액공제 나이 — 소득세법 §59의2 (2026.4.21 개정 부칙 §2)', () => {
+  test('귀속연도별 최소 나이·2017년생 제외', () => {
+    assert.equal(YEAR_END_TAX_YEAR, 2026)
+    assert.deepEqual([2024, 2025, 2026, 2027, 2028, 2029, 2030, 2035].map(y => childCreditAgeRule(y).minAge), [8, 8, 9, 10, 11, 12, 13, 13])
+    assert.deepEqual(childCreditAgeRule(2026).excludeBirthYears, [2017])
+    assert.deepEqual(childCreditAgeRule(2030).excludeBirthYears, [])
+  })
+  test('2026 귀속: 2006~2016년생만 대상 (2017년생 9세 제외, 2018년생 8세 미달, 2005년생 21세 초과)', () => {
+    assert.deepEqual(childCreditBirthYears(2026), { from: 2006, to: 2016 })
+    assert.deepEqual([2005, 2006, 2016, 2017, 2018].map(y => isChildCreditEligible(y, 2026)), [false, true, true, false, false])
+  })
+  test('연도별 대상 출생연도: 2025 2005~2017 · 2027~2029 2016년생까지 · 2030 2010~2017', () => {
+    assert.deepEqual(childCreditBirthYears(2025), { from: 2005, to: 2017 })
+    assert.deepEqual([2027, 2028, 2029].map(y => childCreditBirthYears(y)), [
+      { from: 2007, to: 2016 }, { from: 2008, to: 2016 }, { from: 2009, to: 2016 },
+    ])
+    assert.deepEqual(childCreditBirthYears(2030), { from: 2010, to: 2017 })
+  })
+  test('2018년생(youngChildren)은 자녀세액공제 0 — 대상 자녀로 넣은 경우보다 27.5만 더 냄', () => {
+    const young = calcYearEnd(input(50_000_000, { dependents: 1, youngChildren: 1 }))
+    const kid = calcYearEnd(input(50_000_000, { dependents: 1, children: 1 }))
+    assert.equal(young.childCredit, 0)
+    assert.equal(kid.childCredit, 250_000)
+    assert.equal(young.decidedTotal - kid.decidedTotal, 275_000)
+    assert.equal(young.personalDeduction, kid.personalDeduction)   // 기본공제는 동일
   })
 })
 
@@ -133,6 +200,18 @@ describe('세액공제 구성요소 경계', () => {
     assert.equal(rc(80_000_000, 6_000_000), 900_000)
     assert.equal(rc(80_000_001, 6_000_000), 0)
     assert.equal(rc(50_000_000, 6_000_000, false), 0)
+  })
+  test('의료비 §59의4②: 그 밖의 부양가족분 3% 초과 연 700만 한도, 미달분은 본인 등 의료비에서 차감', () => {
+    const med = (m: number, o: number) => calcYearEnd(input(60_000_000, { medical: m, medicalOthers: o })).specialCredit
+    assert.equal(med(15_000_000, 0), 1_980_000)            // 본인 등: 한도 없음
+    assert.equal(med(0, 15_000_000), 1_050_000)            // 그 밖: 700만 × 15%
+    assert.equal(med(0, 8_800_000), 1_050_000)             // 경계: 880만 − 180만 = 700만
+    assert.equal(med(0, 8_800_001), 1_050_000)             // 한도 초과 1원 → 여전히 700만
+    assert.equal(med(0, 8_700_000), 1_035_000)             // 한도 미만: 690만 × 15%
+    assert.equal(med(3_000_000, 1_000_000), 330_000)       // 300 − (180 − 100) = 220만
+    assert.equal(med(2_000_000, 10_000_000), 1_350_000)    // (700 + 200)만
+    assert.equal(medicalCreditBase(60_000_000, 1_000_000, 0), 0)
+    assert.equal(medicalCreditBase(60_000_000, 0, 1_800_000), 0)
   })
   test('특별세액공제: 의료비 총급여 3% 초과분 15% · 기부금 1천만 초과분 30%', () => {
     assert.equal(calcYearEnd(input(50_000_000, { medical: 2_000_000 })).specialCredit, 75_000)

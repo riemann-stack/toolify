@@ -11,7 +11,7 @@ import {
   UI_DAILY_FLOOR_2026, UI_DAILY_CAP_2026, UI_WAGE_DAILY_CAP_2026, uiDailyFloor, normWorkHours,
   uiDailyCapFor, uiWageCapFor, uiSeparationYear, UI_CAP_CONFIRMED_THROUGH,
   calcUnemployment, calcUnemploymentFromWages, avgDailyFromMonthly, avgDailyFromThreeMonths,
-  ordinaryDailyFromMonthly, uiBaseDailyWage, uiMinWageYearFor,
+  ordinaryDailyFromMonthly, uiBaseDailyWage, uiMinWageYearFor, uiPriorThreeMonthDays,
 } from '../../lib/krUnemployment'
 
 /* 계산기 간편 모드 '전부 고정급' 경로: 평균임금일액 = 월급 × 3 ÷ days, 1일 통상임금 = 월급 × 8 ÷ 209 */
@@ -254,5 +254,45 @@ describe('이직일 → 연도 (문자열 분해, UTC 해석 없음)', () => {
     assert.equal(fixedMonthly(3_000_000, 2025).dailyBenefit, 66_000)
     assert.equal(fixedMonthly(3_000_000, 2025).capped, 'upper')
     assert.equal(fixedMonthly(2_000_000, 2025).dailyBenefit, 64_192)
+  })
+})
+
+/* 평균임금 산정기간 = 이직일(마지막 근무일) 포함 직전 3개월의 달력 총일수.
+   근거: 고용보험법 §45① → 근로기준법 §2①6 '산정 사유 발생일 이전 3개월'. 사유 발생일 = 이직일 다음 날(§14①3 피보험자격 상실일),
+   역산은 민법 §157·§160 역월 기준 — 월말 이직은 직전 3개 역월 전체, 그 밖은 3개월 전 같은 날의 다음 날부터.
+   이직확인서 작성요령 예: 이직일 12/20 → 9/21~12/20. 퇴직금 계산기(calcThreeMonthPeriod)와 같은 규칙. */
+describe('평균임금 산정기간 총일수 — 이직일 포함 직전 3개월(역월)', () => {
+  test('월말 이직 = 직전 3개 역월 전체 (이전 구현은 +1~2일)', () => {
+    assert.equal(uiPriorThreeMonthDays('2026-02-28'), 90) // 12/1~2/28 = 31+31+28 (이전 92: 11/29~)
+    assert.equal(uiPriorThreeMonthDays('2028-02-29'), 91) // 윤년 12/1~2/29 = 31+31+29 (이전 92)
+    assert.equal(uiPriorThreeMonthDays('2026-04-30'), 89) // 2/1~4/30 = 28+31+30 (이전 90: 1/31~)
+    assert.equal(uiPriorThreeMonthDays('2026-06-30'), 91) // 4/1~6/30 = 30+31+30 (이전 92: 3/31~)
+    assert.equal(uiPriorThreeMonthDays('2026-11-30'), 91) // 9/1~11/30 = 30+31+30 (이전 92: 8/31~)
+    assert.equal(uiPriorThreeMonthDays('2026-09-30'), 92) // 7/1~9/30 = 31+31+30
+    assert.equal(uiPriorThreeMonthDays('2026-12-31'), 92) // 10/1~12/31 = 31+30+31
+    assert.equal(uiPriorThreeMonthDays('2026-03-31'), 90) // 1/1~3/31 = 31+28+31
+  })
+  test('월 중간 이직 = 3개월 전 같은 날의 다음 날부터 (그 달에 같은 날이 없으면 말일 다음 날)', () => {
+    assert.equal(uiPriorThreeMonthDays('2026-12-20'), 91) // 작성요령 예 9/21~12/20 = 10+31+30+20
+    assert.equal(uiPriorThreeMonthDays('2026-05-15'), 89) // 2/16~5/15 = 13+31+30+15
+    assert.equal(uiPriorThreeMonthDays('2026-05-30'), 91) // 2/30 없음 → 2/28 다음 날 3/1~5/30 = 31+30+30
+    assert.equal(uiPriorThreeMonthDays('2026-03-30'), 90) // 12/31~3/30 = 1+31+28+30
+  })
+  test('형식 오류·없는 날짜는 0 (호출측 90일 가정)', () => {
+    assert.equal(uiPriorThreeMonthDays(''), 0)
+    assert.equal(uiPriorThreeMonthDays('2026/04/30'), 0)
+    assert.equal(uiPriorThreeMonthDays('2026-02-30'), 0)
+    assert.equal(uiPriorThreeMonthDays('2026-13-01'), 0)
+  })
+  test('상·하한 사이 구간은 지급액이 달라진다 — 2026-04-30 이직, 3개월 임금 1,000만원(평균임금만)', () => {
+    // 10,000,000 ÷ 89 = 112,359.55 (상한 113,500 이하) × 60% = 67,415.7 → 67,416원 (하한 66,048 < · < 상한 68,100)
+    // (이전 분모 90이면 111,111.1 × 60% = 66,667원 — 하루 749원 적게 나왔다)
+    const r = calcUnemploymentFromWages({
+      avgDaily: avgDailyFromThreeMonths(4_000_000, 3_000_000, 3_000_000, uiPriorThreeMonthDays('2026-04-30')),
+      age: 35, disabled: false, totalMonths: 24, workHours: 8, year: 2026,
+    })
+    assert.equal(r.dailyBenefit, 67_416)
+    assert.equal(r.capped, 'none')
+    assert.equal(r.totalBenefit, 10_112_400) // 67,416 × 150일(50세 미만·1~3년)
   })
 })
