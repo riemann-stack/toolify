@@ -3,7 +3,7 @@
 // VDOT 함수는 race-predictor utils에서 재사용
 // ─────────────────────────────────────────────────────────────
 import {
-  vdotFromRace, paceFromVdot, fmtPace, fmtHMS,
+  vdotFromRace, paceFromVdot, timeFromVdot, fmtPace, fmtHMS,
 } from '../race-predictor/racePredictorUtils'
 
 export { fmtPace, fmtHMS }
@@ -34,6 +34,25 @@ export const INTENSITY_LABEL: Record<Intensity, { label: string; color: string; 
   'T': { label: 'Threshold',  color: '#FFD93E', pct: 0.88 },
   'I': { label: 'Interval',   color: '#EA580C', pct: 0.97 },
   'R': { label: 'Repetition', color: '#DC2626', pct: 1.06 },
+}
+
+// ── 프리셋 시작·끝 페이스 (VDOT 기반) ────
+// E(59%)는 Daniels E 범위(59~74%)의 가장 느린 끝이라, 여기에 +30~60초를 더하면 시작이 지나치게 느려져
+// 프리셋 대부분이 '페이스 격차 큼'(>120초/km) 경고를 받았다 → E로 끝나지 않는 프리셋은 E 범위 안쪽(65%)에서
+// 최대 +15초로 시작한다. E로 끝나는 회복형은 기존 식(E 59% + offset)을 유지.
+export const PRESET_START_PCT = 0.65
+export function presetPaces(vdot: number, startFromE: number, end: Intensity): { startSec: number; endSec: number } {
+  const endSec = paceFromVdot(vdot, INTENSITY_LABEL[end].pct)
+  const startSec = end === 'E'
+    ? paceFromVdot(vdot, INTENSITY_LABEL.E.pct) + startFromE
+    : paceFromVdot(vdot, PRESET_START_PCT) + Math.min(startFromE, 15)
+  return { startSec, endSec }
+}
+
+/** 5K 레이스 페이스(초/km) — 5K 기록을 넣었으면 그대로, 아니면 같은 VDOT의 5K 예상 기록으로 */
+export function fiveKPaceSec(vdot: number, refKm: number, refTimeSec: number): number {
+  if (refKm === 5 && refTimeSec > 0) return refTimeSec / 5
+  return timeFromVdot(5, vdot) / 5
 }
 
 // ── 시간 입력 헬퍼 ──────────────────────
@@ -320,7 +339,7 @@ export const PRESETS: Preset[] = [
     totalKm: 8, profile: 'back-loaded', splitMode: 'equal-4',
     startFromE: 0, endFromIntensity: 'T',
     fixedStartPace: '6:00', fixedEndPace: '4:50',
-    note: '후반 30%만 역치 페이스',
+    note: '마지막 2km만 역치 페이스',
     scenario: '주중 평일 자극주 — 1주 1~2회 권장',
   },
   {
@@ -350,7 +369,7 @@ export const PRESETS: Preset[] = [
     totalKm: 16, profile: 'back-loaded', splitMode: 'equal-4',
     startFromE: 30, endFromIntensity: 'T',
     fixedStartPace: '6:10', fixedEndPace: '5:00',
-    note: '후반 30%를 하프 페이스 적응',
+    note: '마지막 4km를 역치 페이스로 — 후반 지구력 적응',
     scenario: '하프 대회 2~4주 전 마지막 LSD',
   },
   {
@@ -360,7 +379,7 @@ export const PRESETS: Preset[] = [
     totalKm: 20, profile: 'back-loaded', splitMode: 'equal-4',
     startFromE: 30, endFromIntensity: 'M',
     fixedStartPace: '6:30', fixedEndPace: '5:30',
-    note: '후반 8km M 페이스 적응',
+    note: '15km 편하게 달린 뒤 마지막 5km를 M 페이스로',
     scenario: '풀 대회 4~6주 전 LSD',
   },
   {
@@ -370,7 +389,7 @@ export const PRESETS: Preset[] = [
     totalKm: 25, profile: 'back-loaded', splitMode: 'equal-5',
     startFromE: 30, endFromIntensity: 'M',
     fixedStartPace: '6:30', fixedEndPace: '5:30',
-    note: '후반 10km M 페이스 — 가장 긴 빌드업',
+    note: '4번째 구간부터 가속해 마지막 5km를 M 페이스로 — 가장 긴 빌드업',
     scenario: '풀 대회 6~8주 전 핵심 LSD',
   },
   {
@@ -380,7 +399,7 @@ export const PRESETS: Preset[] = [
     totalKm: 6, profile: 'linear', splitMode: 'equal-6',
     startFromE: 0, endFromIntensity: 'I',
     fixedStartPace: '5:30', fixedEndPace: '4:20',
-    note: '1km씩 6단계 — V̇O₂max 자극',
+    note: '1km씩 6단계 — V̇O₂max 자극 (끝이 5K 레이스 페이스 수준이라 강도 경고가 함께 뜹니다)',
     scenario: '시즌 막판·5K 대회 직전',
   },
   {
@@ -443,12 +462,26 @@ export interface BuildupRoutine {
 
 export const STORAGE_KEY = 'youtil:buildup:routines-v1'
 
+function isRoutine(x: unknown): x is BuildupRoutine {
+  if (!x || typeof x !== 'object') return false
+  const r = x as Record<string, unknown>
+  const optNum = (v: unknown) => v === undefined || (typeof v === 'number' && Number.isFinite(v))
+  const optStr = (v: unknown) => v === undefined || typeof v === 'string'
+  return typeof r.id === 'string' && typeof r.name === 'string' &&
+    typeof r.totalKm === 'number' && Number.isFinite(r.totalKm) &&
+    typeof r.startPace === 'string' && typeof r.endPace === 'string' &&
+    typeof r.profile === 'string' && r.profile in PROFILE_LABEL &&
+    typeof r.splitMode === 'string' && r.splitMode in SPLIT_LABEL &&
+    typeof r.createdAt === 'string' &&
+    optNum(r.warmupKm) && optNum(r.cooldownKm) && optStr(r.notes) && optStr(r.lastUsed)
+}
 export function loadRoutines(): BuildupRoutine[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    const arr = raw ? (JSON.parse(raw) as BuildupRoutine[]) : []
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = raw ? JSON.parse(raw) : []
+    // 요소 필드 검증 — 손상된 루틴은 버림(CSV 내보내기의 r.name.replace 크래시 방지)
+    return Array.isArray(arr) ? arr.filter(isRoutine) : []
   } catch { return [] }
 }
 export function saveRoutines(routines: BuildupRoutine[]): void {
@@ -474,7 +507,7 @@ export function routinesToCSV(routines: BuildupRoutine[]): string {
 }
 
 // ── VDOT helper export ─────────────────
-export { vdotFromRace, paceFromVdot }
+export { vdotFromRace, paceFromVdot, timeFromVdot }
 
 // ── 거리·시간 공통 ─────────────────────
 export const DIST_PRESETS_KM = [3, 5, 8, 10, 12, 15, 18, 20, 25, 30]

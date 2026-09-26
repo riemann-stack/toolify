@@ -31,7 +31,7 @@ const FAQ_LD = [
   },
   {
     q: '탄수화물을 얼마나 먹어야 하나요?',
-    a: '풀코스·울트라처럼 <strong>90분을 넘는 경기</strong>는 대회 전 1~2일간 <strong>체중 1kg당 10~12g</strong>의 탄수화물이 권장됩니다(IOC·ACSM). 65kg이면 하루 650~780g입니다. 하프나 60~90분 경기는 8~10g/kg, 10km 이하 짧은 경기는 7~8g/kg 정도로 전날 일반 충전이면 충분하고 굳이 극단적인 로딩은 필요 없습니다. 위 계산기에 체중과 대회 유형을 넣으면 하루 목표량과 음식 환산이 나옵니다.',
+    a: '풀코스·울트라처럼 <strong>90분을 넘는 경기</strong>는 대회 전 1~2일간 <strong>체중 1kg당 10~12g</strong>의 탄수화물이 권장됩니다(IOC·ACSM). 65kg이면 하루 650~780g입니다. 기준은 종목이 아니라 경기 시간이라, 하프라도 완주에 90분 넘게 걸리면(대부분의 아마추어) 같은 10~12g/kg 로딩 대상입니다. 60~90분에 끝나는 경기는 8~10g/kg, 60분 이내 짧은 경기는 7~8g/kg 정도로 전날 일반 충전이면 충분하고 굳이 극단적인 로딩은 필요 없습니다. 위 계산기에 체중과 예상 경기 시간을 넣으면 하루 목표량과 음식 환산이 나옵니다.',
   },
   {
     q: '언제부터 시작해야 하나요?',
@@ -118,9 +118,9 @@ export default function CarbLoadingPage() {
               </thead>
               <tbody>
                 {[
-                  ['풀코스·울트라', '10~12 g/kg', '대회 전 2일', '집중 로딩 효과 큼'],
-                  ['하프·장시간 훈련', '8~10 g/kg', '대회 전날', '가벼운 충전'],
-                  ['10km 이하', '7~8 g/kg', '대회 전날', '극단 로딩 불필요'],
+                  ['90분 초과 (풀코스·대부분의 하프)', '10~12 g/kg', '대회 전 2일', '집중 로딩 효과 큼'],
+                  ['60~90분 (빠른 하프 등)', '8~10 g/kg', '대회 전날', '가벼운 충전'],
+                  ['60분 이내 (10km 이하)', '7~8 g/kg', '대회 전날', '극단 로딩 불필요'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
@@ -174,7 +174,7 @@ export default function CarbLoadingPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>이 계산기의 값은 표의 어디에 해당하나</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>
-              &lsquo;풀코스·울트라(90분 초과)&rsquo;를 골랐을 때 나오는 <strong style={{ color: 'var(--text)' }}>10~12 g/kg</strong>는 표의 카보로딩 행 그대로입니다. 하프·10km에 쓰는 8~10·7~8 g/kg는 90분 미만 경기의 <strong style={{ color: 'var(--text)' }}>7~12 g/kg</strong> 범위 안에서 잡은 값으로, 지침상 상한은 12 g/kg입니다. 결과 카드의 &lsquo;대회 아침 체중×1~4g&rsquo;은 경기 전 식사 행(60분 초과 운동, 시작 1~4시간 전)에 해당합니다. 다만 <strong style={{ color: 'var(--text)' }}>경기 중 섭취는 이 계산기가 다루지 않으므로</strong> 위 표의 시간당 g을 따로 챙겨야 합니다 — 상한 90 g/h는 IOC 스포츠영양 합의문(2010)도 &lsquo;약 3시간을 넘는 경기&rsquo;의 목표치로 동일하게 제시하며, 장에서 흡수를 견디도록 훈련 때 미리 연습하라고 못 박습니다.
+              &lsquo;90분 넘게 걸리는 경기&rsquo;를 골랐을 때 나오는 <strong style={{ color: 'var(--text)' }}>10~12 g/kg</strong>는 표의 카보로딩 행 그대로입니다. 60~90분·60분 이내 경기에 쓰는 8~10·7~8 g/kg는 90분 미만 경기의 <strong style={{ color: 'var(--text)' }}>7~12 g/kg</strong> 범위 안에서 잡은 값으로, 지침상 상한은 12 g/kg입니다. 결과 카드의 &lsquo;대회 아침 체중×1~4g&rsquo;은 경기 전 식사 행(60분 초과 운동, 시작 1~4시간 전)에 해당합니다. 다만 <strong style={{ color: 'var(--text)' }}>경기 중 섭취는 이 계산기가 다루지 않으므로</strong> 위 표의 시간당 g을 따로 챙겨야 합니다 — 상한 90 g/h는 IOC 스포츠영양 합의문(2010)도 &lsquo;약 3시간을 넘는 경기&rsquo;의 목표치로 동일하게 제시하며, 장에서 흡수를 견디도록 훈련 때 미리 연습하라고 못 박습니다.
             </p>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
@@ -228,7 +228,7 @@ export default function CarbLoadingPage() {
             표의 &lsquo;이온 음료&rsquo;는 특정 브랜드 제품이 아니라 성분표에 실린 일반 대표값입니다(100 g당 나트륨 44 mg·칼륨 22 mg). mL 단위로 환산하려면 밀도 보정이 필요하므로 100 g 기준으로 적었고, 국내 시판 제품의 실제 값은 제품 라벨을 확인하세요. 성분표는 개정판마다 값이 조금씩 달라지므로 위 수치는 <strong style={{ color: 'var(--text)' }}>현행 DB 10.4(2026)</strong> 기준임을 함께 봐 주세요.
           </p>
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
-            위 계산기 결과의 <strong style={{ color: 'var(--text)' }}>&lsquo;음식으로 환산하면&rsquo;</strong> 목록도 이 표와 같은 성분표 값에서 산출합니다(밥 1공기는 31.71 g/100 g × 210 g ≒ 67 g, 식빵 1장은 49.61 × 0.35 ≒ 17 g). 계산기 목록은 &lsquo;하루 목표를 한 가지 음식으로만 채우면 몇 인분인가&rsquo;를 가늠하는 용도이므로 정수로 반올림해 표시합니다. 에너지젤은 제조사 공식 표기가 Maurten 25 g · SiS 22 g · GU 21~23 g으로 달라 대표값 25 g을 씁니다.
+            위 계산기 결과의 <strong style={{ color: 'var(--text)' }}>&lsquo;음식으로 환산하면&rsquo;</strong> 목록도 이 표와 같은 성분표 값에서 산출합니다(밥 1공기는 31.71 g/100 g × 210 g ≒ 67 g, 식빵 1장은 49.61 × 0.35 ≒ 17 g). 계산기 목록은 &lsquo;하루 목표를 한 가지 음식으로만 채우면 몇 인분인가&rsquo;를 가늠하는 용도이므로 소수 첫째 자리까지만 표시합니다. 에너지젤은 제조사 공식 표기가 Maurten 25 g · SiS 22 g · GU 21~23 g으로 달라 대표값 25 g을 씁니다.
           </p>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, margin: '16px 0 0' }}>
             보건복지부·한국영양학회의 2020 한국인 영양소 섭취기준은 곡류군 1인 1회 분량을 <strong style={{ color: 'var(--text)' }}>밥 210 g</strong>으로 잡습니다. 성분표 값으로 환산하면 밥 한 공기가 탄수화물 약 <strong style={{ color: 'var(--text)' }}>66.6 g</strong>(31.71×2.1로 계산한 값이며 성분표 수록값은 아님). 체중 70 kg이 카보로딩 하한 10 g/kg, 즉 하루 700 g을 흰밥만으로 채우려면 약 10.5공기가 필요하다는 뜻입니다. 그래서 같은 100 g에 흰밥의 약 1.5~1.7배가 들어가는 <strong style={{ color: 'var(--text)' }}>떡</strong>이나 꿀처럼 부피 대비 밀도가 높은 급원을 섞고, 끼니 사이 간식으로 나눠 넣는 것이 실전 요령입니다.

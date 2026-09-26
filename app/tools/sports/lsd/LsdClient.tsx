@@ -15,6 +15,9 @@ const DIST_PRESETS = [
 ]
 
 const pad = (n: number) => String(n).padStart(2, '0')
+// 롱런 탄수 보급 — ACSM/AND/DC 2016(Thomas et al.) 경기 중 권장 30~60 g/h(1~2.5시간)의 하한, 에너지 젤 1개 ≈ 25g
+const CARB_MIN_G_PER_H = 30
+const GEL_G = 25
 
 // Riegel 거리 환산: T2 = T1 × (D2/D1)^1.06
 function riegel(t1Sec: number, d1Km: number, d2Km: number): number {
@@ -121,10 +124,15 @@ export default function LsdClient() {
     const durMin = durSec / 60
     // 수분: 20분마다 약 150ml
     const waterMl = Math.round(durMin / 20) * 150
-    // 탄수 보급: 75분 이상부터, 약 40분 간격 (45분 시작)
+    // 탄수 보급: 75분 이상부터. 45분 시작·약 40분 간격으로 젤(≈25g)을 먹되,
+    // 총량이 ACSM 경기 중 권장 하한(시간당 30g)에 못 미치면 젤 개수를 올림해 채운다
     let gels = 0
-    if (durMin >= 75) gels = Math.floor((durMin - 45) / 40) + 1
-    const carbsG = gels * 25
+    if (durMin >= 75) {
+      const byInterval = Math.floor((durMin - 45) / 40) + 1
+      const byRate = Math.ceil((CARB_MIN_G_PER_H * durMin) / 60 / GEL_G)
+      gels = Math.max(byInterval, byRate)
+    }
+    const carbsG = gels * GEL_G
     return { durSec, km, waterMl, gels, carbsG }
   }, [pace, longMode, longKm, longMin])
 
@@ -140,8 +148,8 @@ export default function LsdClient() {
       'youtil.kr/tools/sports/lsd',
     ].filter(Boolean)
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); setTimeout(() => setCopied(false), 1800)
-    })
+      setCopied(true); setTimeout(() => setCopied(false), 1500)
+    }).catch(() => { /* 권한 차단 등 — 조용히 무시 */ })
   }
 
   return (

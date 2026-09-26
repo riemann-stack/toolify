@@ -33,7 +33,8 @@ export default function CarbLoadingClient() {
 
       {/* 대회 유형 */}
       <div className={s.card}>
-        <p className={s.groupLabel}>대회·활동 유형</p>
+        <p className={s.groupLabel}>예상 경기 시간</p>
+        <p className={s.optNote} style={{ marginBottom: 8 }}>권고량은 종목이 아니라 경기 시간으로 나뉩니다. 하프라도 완주에 90분 넘게 걸리면 첫 번째를 고르세요.</p>
         <div className={s.btnCol}>
           {RACE_TYPES.map((r) => (
             <button key={r.id} type="button"
@@ -97,7 +98,7 @@ export default function CarbLoadingClient() {
 
       {/* 날짜별 플랜 */}
       <div className={s.card}>
-        <p className={s.groupLabel}>📅 대회까지 날짜별 플랜 {race.days === 2 ? '(풀코스 기준)' : ''}</p>
+        <p className={s.groupLabel}>📅 대회까지 날짜별 플랜 {race.days === 2 ? '(90분 초과 경기 기준)' : ''}</p>
         <div className={s.timeline}>
           {race.days === 2 && (
             <div className={s.dayRow}>

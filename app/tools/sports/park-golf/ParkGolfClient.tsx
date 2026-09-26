@@ -47,7 +47,21 @@ export default function ParkGolfClient() {
   }
 
   const setPar = (hole: number, delta: number) => {
-    setPars((prev) => prev.map((p, i) => (i === hole ? Math.max(3, Math.min(5, p + delta)) : p)))
+    const nextPar = Math.max(3, Math.min(5, pars[hole] + delta))
+    setPars((prev) => prev.map((p, i) => (i === hole ? nextPar : p)))
+    // 더블파 컷이 켜져 있으면 파를 낮춘 홀의 기존 타수도 새 파×2로 맞춘다
+    if (doubleParCut) {
+      setPlayers((prev) => prev.map((p) => ({ ...p, scores: p.scores.map((sc, i) => (i === hole ? Math.min(sc, nextPar * 2) : sc)) })))
+    }
+  }
+
+  const toggleDoubleParCut = () => {
+    const next = !doubleParCut
+    setDoubleParCut(next)
+    // 켜는 순간 이미 입력된 점수에도 컷을 소급 적용
+    if (next) {
+      setPlayers((prev) => prev.map((p) => ({ ...p, scores: p.scores.map((sc, i) => Math.min(sc, pars[i] * 2)) })))
+    }
   }
 
   const setName = (pid: number, name: string) => {
@@ -102,7 +116,7 @@ export default function ParkGolfClient() {
                 className={`${s.holeBtn} ${holeCount === h ? s.on : ''}`}
                 aria-pressed={holeCount === h}
                 onClick={() => setHoleCount(h)}>
-                {h}홀 (파{h === 9 ? 33 : 66})
+                {h}홀 (파{pars.slice(0, h).reduce((a, b) => a + b, 0)})
               </button>
             ))}
           </div>
@@ -113,7 +127,7 @@ export default function ParkGolfClient() {
         <div className={s.optRow}>
           <button type="button" className={`${s.cutBtn} ${doubleParCut ? s.on : ''}`}
             aria-pressed={doubleParCut}
-            onClick={() => setDoubleParCut((v) => !v)}>
+            onClick={toggleDoubleParCut}>
             더블파 컷 (로컬룰) {doubleParCut ? 'ON' : 'OFF'}
           </button>
           <p className={s.optNote}>공식 규칙엔 최대 타수 제한이 없어요 — 진행 속도용 로컬룰 관행입니다.</p>
@@ -151,6 +165,7 @@ export default function ParkGolfClient() {
                   <span className={s.boardPar}>
                     {t.holesPlayed > 0 ? (t.toPar === 0 ? 'E' : t.toPar > 0 ? `+${t.toPar}` : t.toPar) : ''}
                     {holeCount === 18 && t.holesPlayed > 0 && <em className={s.boardSplit}> ({t.front}·{t.back})</em>}
+                    {t.holesPlayed > 0 && t.holesPlayed < holeCount && <em className={s.boardSplit}> {t.holesPlayed}/{holeCount}홀</em>}
                   </span>
                 </div>
               )
@@ -229,7 +244,7 @@ export default function ParkGolfClient() {
               const best = r.players
                 .map((p) => ({ name: p.name, t: playerTotal(p.scores, r.pars) }))
                 .filter((x) => x.t.holesPlayed > 0)
-                .sort((a, b) => a.t.total - b.t.total)[0]
+                .sort((a, b) => a.t.toPar - b.t.toPar || b.t.holesPlayed - a.t.holesPlayed)[0]
               return (
                 <li key={r.id} className={s.roundItem}>
                   <span className={s.roundDate}>{r.date}</span>

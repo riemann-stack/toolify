@@ -23,7 +23,7 @@ const FAQ_LD = [
               },
               {
                 q: '9홀 라운드도 핸디캡 계산에 사용할 수 있나요?',
-                a: '네. 9홀 스코어는 두 배로 환산하거나 동일 코스를 두 번 플레이한 것으로 간주해 18홀 디퍼런셜로 변환합니다. 단 9홀 레이팅값이 별도로 필요하며, 본 계산기는 단순 2배 환산 방식을 사용합니다 (정확도 ±5% 차이).',
+                a: '네. 다만 방식이 바뀌었습니다. WHS는 2024년 개정부터 9홀 디퍼런셜에 본인 핸디캡 지수로 계산한 &lsquo;나머지 9홀의 기대 디퍼런셜&rsquo;을 더해 18홀 디퍼런셜을 만듭니다. 본 계산기는 핸디캡 지수가 없어도 쓸 수 있도록 <strong>9홀 스코어와 9홀 코스 레이팅을 각각 두 배로 늘리는 단순 근사</strong>를 사용하므로 공식 값과 차이가 날 수 있습니다. 9홀을 고르면 CR 칸에는 <strong>9홀 레이팅(보통 30~40대)</strong>을 넣으세요. 18홀 레이팅(50 초과)을 넣으면 두 배 하지 않고 그대로 계산합니다.',
               },
               {
                 q: 'WHS도 0.96(보너스 팩터)을 곱하나요?',
@@ -31,7 +31,7 @@ const FAQ_LD = [
               },
               {
                 q: '핸디캡 지수 최대값은?',
-                a: 'WHS 기준 남성 최대 54.0, 여성 최대 54.0입니다. 이전 EGA 방식의 남성 36, 여성 54보다 상향되어 더 많은 초보 골퍼가 공식 핸디캡을 가질 수 있게 됐습니다. 54를 초과하는 디퍼런셜은 자동으로 54로 캡(cap) 처리됩니다.',
+                a: 'WHS 기준 남성 최대 54.0, 여성 최대 54.0입니다. 이전 EGA 방식의 남성 36, 여성 54보다 상향되어 더 많은 초보 골퍼가 공식 핸디캡을 가질 수 있게 됐습니다. 본 도구도 계산된 지수가 54.0을 넘으면 54.0으로 표시합니다(개별 디퍼런셜 값은 그대로 두고 최종 지수만 제한).',
               },
               {
                 q: '스태블포드와 스트로크 플레이의 차이는?',
@@ -43,7 +43,7 @@ const FAQ_LD = [
               },
               {
                 q: '라운드 데이터는 어디에 저장되나요?',
-                a: '본인 브라우저(localStorage)에만 저장됩니다.<br/>• 서버로 전송되지 않아 개인정보 걱정이 없습니다.<br/>• 다른 사이트에서 접근할 수 없습니다.<br/>• 다른 기기와 자동 동기화되지 않습니다.<br/>주의: 시크릿/방문자 모드에서는 저장되지 않고, 브라우저 데이터를 삭제하면 기록이 사라집니다. 다른 기기로 옮기려면 CSV 내보내기를 활용하고, 월 1회 CSV를 내려받아 Notion·Google Drive 등에 정기 백업하는 것을 권장합니다.',
+                a: '본인 브라우저(localStorage)에만 저장됩니다.<br/>• 서버로 전송되지 않아 개인정보 걱정이 없습니다.<br/>• 다른 사이트에서 접근할 수 없습니다.<br/>• 다른 기기와 자동 동기화되지 않습니다.<br/>주의: 시크릿/방문자 모드에서는 저장되지 않고, 브라우저 데이터를 삭제하면 기록이 사라집니다. 다른 기기로 옮기려면 CSV로 내보낸 뒤 새 기기의 [내 기록] 탭에서 &lsquo;CSV 가져오기&rsquo;로 불러오고, 월 1회 CSV를 내려받아 Notion·Google Drive 등에 정기 백업하는 것을 권장합니다.',
               },
               {
                 q: '핸디캡 지수가 자주 바뀌는데 정상인가요?',
@@ -133,7 +133,7 @@ export default function GolfHandicapPage() {
                 <span style={{ color: '#0891B2' }}>그로스 85타 쳤다면</span><br/>
                 네트 스코어 = 85 − 12 = <strong style={{ color: 'var(--accent)' }}>73 (+1)</strong>
               </div>
-              <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 미드 핸디캐퍼 등급. 플레잉 핸디캡은 코스 핸디캡 × 0.95 = 11.</p>
+              <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 미드 핸디캐퍼 등급. 플레잉 핸디캡은 반올림 전 코스 핸디캡 12.39 × 0.95 = 11.77 ≈ 12 (WHS 2024 개정 — 마지막에 한 번만 반올림).</p>
             </div>
           </div>
         </div>
@@ -220,8 +220,9 @@ export default function GolfHandicapPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
             {[
-              { range: '≤ 0',    name: '스크래치',     color: '#A16207', sub: '프로 수준' },
-              { range: '0~9',    name: '로우 핸디캐퍼',  color: '#059669', sub: '상급자' },
+              { range: '0 미만', name: '플러스 핸디캐퍼', color: '#A16207', sub: '프로·엘리트 (+로 표기)' },
+              { range: '0',      name: '스크래치',     color: '#A16207', sub: '프로 수준' },
+              { range: '0.1~9',  name: '로우 핸디캐퍼',  color: '#059669', sub: '상급자' },
               { range: '10~18',  name: '미드 핸디캐퍼',  color: '#0EA5E9', sub: '중급자' },
               { range: '19~28',  name: '하이 핸디캐퍼',  color: '#EA580C', sub: '입문~초급' },
               { range: '29~54',  name: '맥스 핸디캐퍼',  color: '#DC2626', sub: '초보자' },
@@ -259,7 +260,7 @@ export default function GolfHandicapPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            ⚠️ 시크릿/방문자 모드 사용 시 저장 X / 브라우저 데이터 삭제 시 사라짐 / 다른 기기로 옮기려면 CSV 내보내기 → 새 기기 가져오기. 월 1회 백업 권장.
+            ⚠️ 시크릿/방문자 모드 사용 시 저장 X / 브라우저 데이터 삭제 시 사라짐 / 다른 기기로 옮기려면 CSV 내보내기 → 새 기기 [내 기록] 탭의 &lsquo;CSV 가져오기&rsquo;. 월 1회 백업 권장.
           </p>
         </div>
 
@@ -346,7 +347,7 @@ export default function GolfHandicapPage() {
             🏌️ 9홀 라운드 환산
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            한국은 9홀 라운딩 비중이 높습니다. 본 도구는 9홀 → 18홀 단순 2배 환산 (편의 우선). 각 라운드에 [9홀 토글]로 적용.
+            한국은 9홀 라운딩 비중이 높습니다. 본 도구는 9홀 → 18홀 단순 2배 환산을 씁니다(편의 우선). 각 라운드에서 [9홀]을 고르면 CR 칸이 9홀 코스 레이팅으로 바뀌고, 이미 넣어 둔 18홀 CR은 절반으로 자동 환산됩니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '8px' }}>
@@ -354,8 +355,8 @@ export default function GolfHandicapPage() {
               디퍼런셜 = (9홀 그로스 × 2 − 9홀 CR × 2) × 113 ÷ 슬로프
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-              <strong style={{ color: 'var(--text)' }}>정확도</strong>: ±5% 차이 — 9홀에 좋은 컨디션이라도 18홀 후반 무너짐 변수 미반영. 정확한 핸디캡은 18홀 라운드 권장.<br/>
-              <strong style={{ color: 'var(--text)' }}>대안</strong>: 한국 일부 골프장이 9홀 별도 레이팅 제공 — 그 경우 9홀 레이팅 직접 입력.
+              <strong style={{ color: 'var(--text)' }}>공식 방식과의 차이</strong>: WHS는 2024년 개정부터 9홀 디퍼런셜에 핸디캡 지수로 산출한 &lsquo;나머지 9홀 기대 디퍼런셜&rsquo;을 더합니다. 단순 2배는 9홀의 좋고 나쁨을 그대로 두 배로 키우므로 공식 값과 차이가 날 수 있어, 정확한 핸디캡은 18홀 라운드를 권장합니다.<br/>
+              <strong style={{ color: 'var(--text)' }}>9홀 레이팅</strong>: 스코어카드에 9홀(전·후반) 레이팅이 있으면 그 값을 넣으세요. 없으면 18홀 CR의 절반이 근사치입니다.
             </p>
           </div>
         </div>

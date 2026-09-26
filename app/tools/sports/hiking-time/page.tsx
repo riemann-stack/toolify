@@ -2,7 +2,7 @@ import Link from 'next/link'
 import HikingTimeClient from './HikingTimeClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -50,7 +50,7 @@ const card: React.CSSProperties = {
 const FAQ: { q: string; a: string }[] = [
   {
     q: 'Naismith vs Tobler 공식 차이는?',
-    a: '<strong style="color:var(--text)">Naismith (1892)</strong>: 가장 오래된 등산 시간 공식. 평지 5km/h + 오르막 600m당 1시간. 단순하지만 내리막 보정이 없어 부정확.<br/><br/><strong style="color:var(--text)">Tobler Function (1993)</strong>: 경사도 함수 기반. 가파른 내리막에서는 오히려 속도가 느려진다는 사실 반영. 최대속도 6km/h가 약간 내리막(-2.86%)에서 발생.<br/><br/>한국 산은 가파르고 등산로가 좁아 두 공식 모두 보수적 추정이 필요. 본 도구의 <strong style="color:var(--accent)">한국 코스타임</strong> 기준(100대 명산 표준 소요시간 보정)이 가장 현실적.',
+    a: '<strong style="color:var(--text)">Naismith (1892)</strong>: 가장 오래된 등산 시간 공식. 평지 5km/h + 오르막 600m당 1시간. 단순하지만 내리막 보정이 없어 부정확.<br/><br/><strong style="color:var(--text)">Tobler Function (1993)</strong>: 경사도 함수 기반. 가파른 내리막에서는 오히려 속도가 느려진다는 사실 반영. 최대속도 6km/h가 약간 내리막(기울기 -5%, 약 -2.86°)에서 발생.<br/><br/>한국 산은 가파르고 등산로가 좁아 두 공식 모두 보수적 추정이 필요. 본 도구의 <strong style="color:var(--accent)">한국 코스타임</strong> 기준(100대 명산 표준 소요시간 보정)이 가장 현실적.',
   },
   {
     q: '한국 산에서 평균 페이스는?',
@@ -74,11 +74,11 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: '겨울 산행 추가 시간은?',
-    a: '<strong style="color:var(--text)">+20~30%</strong>. 변수가 많아 가장 보수적으로 잡아야 함.<ul style="padding-left:20px;margin:8px 0"><li>아이젠·스패츠 착용 필요 → 페이스 ↓</li><li>눈길 미끄럼 → 균형 잡기 시간 ↑</li><li>적설 시 발 빠짐 (러셀 필요)</li><li>방한복 + 보온병 → 배낭 무게 ↑</li><li>해 짧음 → 일몰 16:30~17:30</li></ul>겨울 산행은 일반 시간 ×1.30 + 일몰 시각 1시간 앞당김 + 동계 장비 필수. <strong style="color:#DC2626">경험 없는 초보는 동계 산행 자제 권장.</strong>',
+    a: '<strong style="color:var(--text)">+20~30%</strong>. 변수가 많아 가장 보수적으로 잡아야 함.<ul style="padding-left:20px;margin:8px 0"><li>아이젠·스패츠 착용 필요 → 페이스 ↓</li><li>눈길 미끄럼 → 균형 잡기 시간 ↑</li><li>적설 시 발 빠짐 (러셀 필요)</li><li>방한복 + 보온병 → 배낭 무게 ↑</li><li>해 짧음 → 12월 서울 일몰 약 17:15 (산속은 더 일찍 어두워짐)</li></ul>본 도구는 겨울 조건에 ×1.20을 적용합니다. 적설이 많거나 러셀이 필요하면 여유를 더 두고, 일몰 시각 1시간 앞당김 + 동계 장비 필수. <strong style="color:#DC2626">경험 없는 초보는 동계 산행 자제 권장.</strong>',
   },
   {
     q: '회귀 시간(턴어라운드)이란?',
-    a: '<strong style="color:var(--text)">“정상 도달 못 하면 하산해야 하는 시점”</strong>. 산악 등반의 핵심 안전 개념.<br/><br/>예: 일몰 18:30 → 하산 시점 17:30 → 정상 도달 시점 13:30 (왕복 4시간 가정). 13:30까지 정상에 도달 못 하면 그 자리에서 회귀해야 일몰 전 하산 가능.<br/><br/>본 도구는 입력값 기준 자동 계산:<ul style="padding-left:20px;margin:8px 0"><li>✓ <strong style="color:#059669">안전</strong>: 일몰 1시간 전 도착</li><li>⚠️ <strong style="color:#D97706">주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li><li>🚨 <strong style="color:#DC2626">위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li></ul>',
+    a: '<strong style="color:var(--text)">“정상 도달 못 하면 하산해야 하는 시점”</strong>. 산악 등반의 핵심 안전 개념.<br/><br/>예: 일몰 18:30 → 하산 완료 목표 17:30 → 하산에 2시간 걸리는 코스(왕복 약 4시간)라면 정상 도달 마감은 15:30. 15:30까지 정상에 도달 못 하면 그 자리에서 회귀해야 일몰 전 하산 가능.<br/><br/>본 도구는 입력값 기준 자동 계산:<ul style="padding-left:20px;margin:8px 0"><li>✓ <strong style="color:#059669">안전</strong>: 일몰 1시간 전 도착</li><li>⚠️ <strong style="color:#D97706">주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li><li>🚨 <strong style="color:#DC2626">위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li></ul>',
   },
 ]
 
@@ -301,16 +301,7 @@ export default function HikingTimePage() {
 
         {/* 5. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {FAQ.map((f, i) => (
-              <details key={i} style={{ ...card, padding: '12px 16px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
-                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ} />
         </section>
 
         {/* 6. 관련 도구 */}

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import LsdClient from './LsdClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -158,7 +158,7 @@ export default function LsdPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
               { t: '수분', d: '15~20분마다 한두 모금. 한 번에 많이 마시기보다 자주 나눠 마십니다. 더운 날엔 전해질(나트륨)도 함께.' },
-              { t: '탄수 보급', d: '60~75분 미만이면 물만으로 충분. 그 이상이면 30~45분마다 탄수 30~60g(젤 1개 ≈ 25g)을 미리미리 — 배고픔을 느끼기 전에.' },
+              { t: '탄수 보급', d: '60~75분 미만이면 물만으로 충분. 그 이상이면 30~45분마다 젤 1개(약 25g) 안팎으로 나눠 시간당 탄수 30~60g을 채우세요 — 배고픔을 느끼기 전에.' },
               { t: 'time on feet', d: '마라톤 준비는 거리보다 ‘발 위에서 보낸 시간’이 핵심. 같은 1시간이라도 천천히 오래가 적응에 더 유리합니다.' },
               { t: '페이싱', d: '처음 5~10분은 더 천천히 워밍업. 컨디션이 좋으면 마지막 구간만 살짝 올리는 네거티브 스플릿을 연습하세요.' },
             ].map((x, i) => (
@@ -221,16 +221,7 @@ export default function LsdPage() {
 
         {/* 6. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ ...card, padding: '12px 16px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
-                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }}>{f.a}</p>
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 6. 관련 도구 */}

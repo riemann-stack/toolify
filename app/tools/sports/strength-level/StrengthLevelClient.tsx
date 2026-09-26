@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import styles from './strength-level.module.css'
 import {
-  AGE_BAND_LABEL, AGE_FACTOR, FEMALE_FACTOR, BIG3_BASE_LEVELS,
+  AGE_BAND_LABEL, AGE_FACTOR, FEMALE_FACTOR, BIG3_BASE_LEVELS, adjustLevels,
   type AgeBand, type LevelTable,
 } from '../one-rm/oneRMUtils'
 
@@ -107,7 +107,12 @@ const round25 = (x: number) => Math.round(x / 2.5) * 2.5
 const floor25 = (x: number) => Math.floor(x / 2.5 + 1e-9) * 2.5
 function attemptSet(oneRM: number): { first: number; second: number; third: number } | null {
   if (oneRM <= 0) return null
-  return { first: floor25(oneRM * 0.90), second: round25(oneRM * 0.95), third: round25(oneRM) }
+  // 3차 = 현재 1RM 이하로 내림(반올림하면 1RM 103.75 → 105kg처럼 1RM을 넘김), 1·2차는 3차를 넘지 않게
+  const third = floor25(oneRM)
+  const first = Math.min(floor25(oneRM * 0.90), third)
+  let second = Math.min(round25(oneRM * 0.95), third)
+  if (second >= third && third - 2.5 > first) second = third - 2.5  // 2차=3차 중복 방지
+  return { first, second: Math.max(first, second), third }
 }
 
 /* 대회 원판 — IPF/IWF kg 색상, 바 20kg + 칼라 2.5kg×2 = 25kg base */
@@ -135,8 +140,20 @@ function platesFor(target: number): { side: Plate[]; loadable: boolean; actual: 
 /* 내 기록 (localStorage) */
 type Rec = { id: string; date: string; sex: Sex; bw: number; total: number; dots: number; ipfgl: number }
 const REC_KEY = 'youtil:strength-level:records-v1'
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
 function loadRecs(): Rec[] {
-  try { const r = localStorage.getItem(REC_KEY); const a = r ? JSON.parse(r) : []; return Array.isArray(a) ? a : [] }
+  if (typeof window === 'undefined') return []
+  try {
+    const r = localStorage.getItem(REC_KEY)
+    const a: unknown = r ? JSON.parse(r) : []
+    if (!Array.isArray(a)) return []
+    // 요소 필드 검증 — 손상된 항목은 버림(기록 탭 toFixed 크래시 방지)
+    return a.filter((x): x is Rec =>
+      !!x && typeof x === 'object' &&
+      typeof x.id === 'string' && typeof x.date === 'string' &&
+      (x.sex === 'male' || x.sex === 'female') &&
+      isFiniteNum(x.bw) && isFiniteNum(x.total) && isFiniteNum(x.dots) && isFiniteNum(x.ipfgl))
+  }
   catch { return [] }
 }
 function saveRecs(r: Rec[]): void {
@@ -172,7 +189,8 @@ export default function StrengthLevelClient() {
   const liftVals: Record<LiftKey, number> = { squat, bench, deadlift: dead }
   const perLift = LIFTS.map(({ key, label, emoji }) => {
     const w = liftVals[key]
-    const thresholds = BASE[key].map((t) => t * factor)
+    // 1RM 계산기와 같은 보정 임계(소수 2자리 반올림) — 경계값에서 두 도구 판정이 갈리지 않게
+    const thresholds = toThresholds(adjustLevels(BIG3_BASE_LEVELS[key], sex, age))
     const ratio = bw > 0 ? w / bw : 0
     const idx = w > 0 && bw > 0 ? levelOf(ratio, thresholds) : 0
     const nextThreshold = idx < 4 ? thresholds[idx] : null
@@ -218,7 +236,7 @@ export default function StrengthLevelClient() {
       `DOTS ${dotsScore.toFixed(1)} · Wilks ${wilksScore.toFixed(1)} · IPF GL ${ipfScore.toFixed(1)}`,
       'youtil.kr/tools/sports/strength-level',
     ].join('\n')
-    const done = () => { setCopied(true); window.setTimeout(() => setCopied(false), 1200) }
+    const done = () => { setCopied(true); window.setTimeout(() => setCopied(false), 1500) }
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(txt)
@@ -250,7 +268,7 @@ export default function StrengthLevelClient() {
     const id = `${d.getTime()}`
     const next = [{ id, date, sex, bw, total, dots: dotsScore, ipfgl: ipfScore }, ...recs].slice(0, 50)
     setRecs(next); saveRecs(next)
-    setSaved(true); window.setTimeout(() => setSaved(false), 1200)
+    setSaved(true); window.setTimeout(() => setSaved(false), 1500)
   }
   function delRecord(id: string) {
     const next = recs.filter((r) => r.id !== id)

@@ -75,7 +75,7 @@ const faqAnswer: React.CSSProperties = {
 const FAQ_LD = [
   { "q":"그립 사이즈를 잘 모르겠으면 큰 걸로 가야 하나요, 작은 걸로 가야 하나요?","a":"의심스러우면 작은 쪽으로 가세요. 그 후 오버그립 1~2겹으로 미세 조정이 가능합니다. 반대로 너무 큰 그립을 산 경우, 손잡이를 깎거나 갈아내는 방법밖에 없어 사실상 불가능합니다. 테니스라면 L2~L3, 골프라면 표준, 배드민턴이라면 G5에서 출발하세요." },
   { "q":"테니스에서 L1과 L2 중 고민될 때 어떻게 선택?","a":"플레이 스타일과 쥐는 느낌으로 결정합니다. L1 추천: 손목 스냅 활용·톱스핀 위주·검지를 그립에서 떼는 동양식 그립. L2 추천: 발리·서브가 중요·플랫샷 위주·손이 큰 편. 잘 모르겠으면 L2로 시작 + 오버그립으로 보정이 안전합니다. 참고로 권장 치수 ±1/4인치 범위에서는 전완 근활성 차이가 확인되지 않았다는 연구(Hatch 외, AJSM 2006)가 있어, 두 사이즈 사이에서 고민할 때는 부상 예방보다 손에 맞는 느낌을 우선해도 됩니다." },
-  { "q":"골프 그립을 미드사이즈로 바꾸면 정말 슬라이스가 줄어드나요?","a":"일부 골퍼에게 효과적입니다. 미드사이즈 그립은 손목 회전을 약간 제한하여, 다운스윙에서 손목이 과하게 닫히는(closed) 골퍼의 슬라이스를 줄여줄 수 있습니다. 반대로 손목 회전이 부족해서 슬라이스가 나는 골퍼는 미드사이즈로 가면 더 악화됩니다. 티칭프로에게 스윙 진단을 받은 후 결정하는 게 안전합니다." },
+  { "q":"골프 그립을 미드사이즈로 바꾸면 훅이나 슬라이스가 달라지나요?","a":"달라질 수 있습니다. 굵은 그립은 임팩트 때 손목이 돌아가는(릴리스) 동작을 줄이는 경향이 있어, 페이스가 과하게 닫혀 훅이 나는 골퍼에게는 훅을 누그러뜨리는 효과가 있을 수 있습니다. 반대로 손목 회전이 부족해 슬라이스가 나는 골퍼는 굵은 그립에서 슬라이스가 더 심해질 수 있습니다. 구질 교정이 목적이라면 티칭프로에게 스윙 진단을 받은 뒤 결정하는 게 안전합니다." },
   { "q":"배드민턴에서 G4 + 오버그립 2겹과 G3 단독은 동일한가요?","a":"거의 비슷하지만 미세하게 다릅니다. 오버그립 2겹은 G3와 비슷한 둘레가 되지만, 오버그립은 표면 마찰력이 높아 땀 잡기에 좋고 · G3 단독은 오각형 모서리 감이 살아 그립 위치 인식에 좋습니다 · 오버그립은 마모되면 교체해야 합니다. 한국에서는 G4 + 오버그립 조합이 압도적 다수입니다." },
   { "q":"평생 같은 그립 사이즈를 써도 되나요?","a":"일반적으로 OK이지만, 다음 경우 재측정하세요: 10대~20대 초반은 손이 아직 자라는 중이라 매년 측정 · 관절염·손목 통증이 시작되면 한 단계 굵게(압력 분산 효과) · 체중·근육의 큰 변화 시 손 크기는 거의 안 변하지만 그립 감이 달라질 수 있음 · 고령은 손가락 굴곡이 줄어 약간 굵게 권장." },
   { "q":"본 도구의 추천은 얼마나 정확한가요?","a":"출발점으로 충분합니다. 일반적으로 알려진 손 크기 분포를 바탕으로 한 Youtil 자체 추정 권장값(공식 통계 아님)입니다. 다만 손가락 비율·관절 두께 등 개인차가 크고 · 스타일(스핀 vs 플랫·정타 vs 손목 활용)에 따라 ±1단계 차이가 날 수 있으며 · 땀 양·기온 등도 영향을 줍니다. 매장 시타와 함께 최종 결정을 권장합니다." }
@@ -164,11 +164,11 @@ export default function GripSizePage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={cell}>4 1/8&quot;</td><td style={cell}><strong>L1</strong></td><td style={cell}>0</td><td style={cell}>여성·청소년 평균</td></tr>
-                <tr><td style={cell}>4 1/4&quot;</td><td style={cell}><strong>L2</strong></td><td style={cell}>1</td><td style={cell}>여성·체형 작은 남성</td></tr>
-                <tr><td style={cell}>4 3/8&quot;</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>L3</strong></td><td style={cell}>2</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>한국 남성 표준 (가장 흔함)</strong></td></tr>
-                <tr><td style={cell}>4 1/2&quot;</td><td style={cell}><strong>L4</strong></td><td style={cell}>3</td><td style={cell}>큰 손 남성</td></tr>
-                <tr><td style={cell}>4 5/8&quot;</td><td style={cell}><strong>L5</strong></td><td style={cell}>4</td><td style={cell}>매우 큰 손 (특주)</td></tr>
+                <tr><td style={cell}>4 1/8&quot;</td><td style={cell}><strong>L1</strong></td><td style={cell}>1</td><td style={cell}>여성·청소년 평균</td></tr>
+                <tr><td style={cell}>4 1/4&quot;</td><td style={cell}><strong>L2</strong></td><td style={cell}>2</td><td style={cell}>여성·체형 작은 남성</td></tr>
+                <tr><td style={cell}>4 3/8&quot;</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>L3</strong></td><td style={cell}>3</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>한국 남성 표준 (가장 흔함)</strong></td></tr>
+                <tr><td style={cell}>4 1/2&quot;</td><td style={cell}><strong>L4</strong></td><td style={cell}>4</td><td style={cell}>큰 손 남성</td></tr>
+                <tr><td style={cell}>4 5/8&quot;</td><td style={cell}><strong>L5</strong></td><td style={cell}>5</td><td style={cell}>매우 큰 손 (특주)</td></tr>
               </tbody>
             </table>
           </div>
@@ -188,7 +188,7 @@ export default function GripSizePage() {
                 <tr><td style={cell}><strong>언더사이즈</strong></td><td style={cell}>0.560&quot; (−1/64)</td><td style={cell}>20~22호</td><td style={cell}>여성·청소년·작은 손</td></tr>
                 <tr><td style={cell}><strong style={{ color: 'var(--accent)' }}>표준</strong></td><td style={cell}>0.580&quot;</td><td style={cell}>23~25호</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>한국 남성 표준(추정)</strong></td></tr>
                 <tr><td style={cell}><strong>미드사이즈</strong></td><td style={cell}>0.640&quot; (+1/16)</td><td style={cell}>26~27호</td><td style={cell}>큰 손·관절염</td></tr>
-                <tr><td style={cell}><strong>점보</strong></td><td style={cell}>0.680&quot; (+1/8)</td><td style={cell}>28호+</td><td style={cell}>아주 큰 손·슬라이스 교정</td></tr>
+                <tr><td style={cell}><strong>점보</strong></td><td style={cell}>0.680&quot; (+1/8)</td><td style={cell}>28호+</td><td style={cell}>아주 큰 손·관절 부담 감소·훅 경향 완화</td></tr>
               </tbody>
             </table>
           </div>
@@ -204,16 +204,17 @@ export default function GripSizePage() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={cell}><strong>G2</strong></td><td style={cell}>98mm</td><td style={cell}>아주 큰 손 (드뭄, 한국 출고 거의 없음)</td></tr>
-                <tr><td style={cell}><strong>G3</strong></td><td style={cell}>95mm</td><td style={cell}>큰 손 남성 (드뭄)</td></tr>
-                <tr><td style={cell}><strong style={{ color: 'var(--accent)' }}>G4</strong></td><td style={cell}>92mm</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>한국 남성 표준 — 라켓 기본 출고</strong></td></tr>
-                <tr><td style={cell}><strong>G5</strong></td><td style={cell}>89mm</td><td style={cell}>여성·작은 손 남성 표준</td></tr>
-                <tr><td style={cell}><strong>G6</strong></td><td style={cell}>86mm</td><td style={cell}>여성·청소년</td></tr>
+                <tr><td style={cell}><strong>G2</strong></td><td style={cell}>G4보다 두 단계 굵음</td><td style={cell}>아주 큰 손 (드뭄, 한국 출고 거의 없음)</td></tr>
+                <tr><td style={cell}><strong>G3</strong></td><td style={cell}>G4보다 한 단계 굵음</td><td style={cell}>큰 손 남성 (드뭄)</td></tr>
+                <tr><td style={cell}><strong style={{ color: 'var(--accent)' }}>G4</strong></td><td style={cell}>약 84~86mm</td><td style={cell}><strong style={{ color: 'var(--accent)' }}>한국 남성 표준 — 라켓 기본 출고</strong></td></tr>
+                <tr><td style={cell}><strong>G5</strong></td><td style={cell}>약 81~83mm</td><td style={cell}>여성·작은 손 남성 표준</td></tr>
+                <tr><td style={cell}><strong>G6</strong></td><td style={cell}>G5보다 한 단계 가늚</td><td style={cell}>여성·청소년</td></tr>
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            💡 한국 동호인 상당수가 <strong style={{ color: 'var(--text)' }}>오버그립 1~2겹</strong>을 추가로 감습니다(동호회 현장 체감 기준).
+            💡 둘레는 오버그립 없는 맨 그립 기준이며, 제조사·판매처마다 인용 수치가 1~2mm씩 다릅니다. G 숫자가 클수록 가늘어요.<br/>
+            한국 동호인 상당수가 <strong style={{ color: 'var(--text)' }}>오버그립 1~2겹</strong>을 추가로 감습니다(동호회 현장 체감 기준).
             G4 + 오버그립 1겹이 가장 흔한 조합으로 알려져 있습니다.
           </p>
 
@@ -244,7 +245,7 @@ export default function GripSizePage() {
         <section>
           <h2 style={sectionTitle}>오버그립 — 사이즈 미세 조정의 정석</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            오버그립 1겹은 약 <strong style={{ color: 'var(--text)' }}>0.5mm 두께</strong>로, 실제로 감으면 그립 둘레가 약 1.5mm(그립 약 0.5단계) 굵어집니다.
+            오버그립 1겹은 두께가 <strong style={{ color: 'var(--text)' }}>0.5mm 안팎</strong>이지만 당겨 감으면서 얇아지고 겹치는 부분도 달라, 흔히 그립이 약 1/16인치(반 사이즈) 굵어진다고 봅니다.
             테니스/배드민턴 그립 한 단계 차이의 약 절반에 해당하므로 <strong style={{ color: 'var(--text)' }}>오버그립 2겹으로 한 사이즈 키우는 효과</strong>가 있습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -340,12 +341,12 @@ export default function GripSizePage() {
           </details>
 
           <details style={faqDetails}>
-            <summary style={faqSummary}>Q3. 골프 그립을 미드사이즈로 바꾸면 정말 슬라이스가 줄어드나요?</summary>
+            <summary style={faqSummary}>Q3. 골프 그립을 미드사이즈로 바꾸면 훅이나 슬라이스가 달라지나요?</summary>
             <div style={faqAnswer}>
-              <strong>일부 골퍼에게 효과적</strong>입니다. 미드사이즈 그립은 손목 회전을 약간 제한하여,
-              <strong style={{ color: 'var(--text)' }}>다운스윙에서 손목이 과하게 닫히는(closed) 골퍼</strong>의 슬라이스를 줄여줄 수 있습니다.
-              반대로 손목 회전이 부족해서 슬라이스가 나는 골퍼는 미드사이즈로 가면 더 악화됩니다.
-              티칭프로에게 스윙 진단을 받은 후 결정하는 게 안전합니다.
+              <strong>달라질 수 있습니다</strong>. 굵은 그립은 임팩트 때 손목이 돌아가는(릴리스) 동작을 줄이는 경향이 있어,
+              <strong style={{ color: 'var(--text)' }}>페이스가 과하게 닫혀 훅이 나는 골퍼</strong>에게는 훅을 누그러뜨리는 효과가 있을 수 있습니다.
+              반대로 손목 회전이 부족해 슬라이스가 나는 골퍼는 굵은 그립에서 슬라이스가 더 심해질 수 있습니다.
+              구질 교정이 목적이라면 티칭프로에게 스윙 진단을 받은 뒤 결정하는 게 안전합니다.
             </div>
           </details>
 

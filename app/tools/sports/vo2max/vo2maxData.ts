@@ -43,12 +43,13 @@ export function calcCooper(distanceM: number): number {
 }
 
 /** 2) 1.5마일 달리기 — 시간(분) + 체중(kg) + 성별 → VO2max
- *  공식 (George 1993): VO2max = 88.02 + 3.716(남=1·여=0) − 0.0769·체중(lb) − 2.767·시간(min) */
+ *  공식 (George 1993): VO2max = 88.02 + 3.716(남=1·여=0) − 0.0753·체중(lb) − 2.767·시간(min)
+ *  (0.0753/lb = 0.1656/kg — 0.0769는 락포트 걷기 공식의 체중 계수) */
 export function calcMile15(timeMin: number, weightKg: number, sex: Sex): number {
   if (timeMin <= 0 || weightKg <= 0) return 0
   const sexN = sex === 'male' ? 1 : 0
   const weightLb = weightKg * 2.20462
-  const v = 88.02 + 3.716 * sexN - 0.0769 * weightLb - 2.767 * timeMin
+  const v = 88.02 + 3.716 * sexN - 0.0753 * weightLb - 2.767 * timeMin
   return Math.max(0, v)
 }
 
@@ -135,7 +136,7 @@ export function classifyLevel(vo2: number, age: number, sex: Sex): FitnessLevel 
 }
 
 export const LEVEL_META: Record<FitnessLevel, { label: string; color: string; desc: string }> = {
-  excellent: { label: '매우 우수',   color: '#059669', desc: '동년배 상위 10% — 엘리트 러너 수준' },
+  excellent: { label: '매우 우수',   color: '#059669', desc: '동년배 상위 10% — 지구력 운동을 꾸준히 하는 상위권' },
   good:      { label: '우수',        color: '#0891B2', desc: '동년배 상위 30% — 규칙적 유산소 운동 중' },
   average:   { label: '평균',        color: '#A16207', desc: '동년배 중간 — 일반 활동 수준' },
   below:     { label: '미흡',        color: '#EA580C', desc: '동년배 하위 30% — 운동량 ↑ 권장' },
@@ -143,7 +144,7 @@ export const LEVEL_META: Record<FitnessLevel, { label: string; color: string; de
 }
 
 /* ─── 마라톤·구간 페이스 예측 (VDOT ≈ VO2max 매핑) ─── */
-/** Riegel 공식 + Daniels VDOT 단순화 */
+/** Daniels VDOT 역산 (Riegel은 쓰지 않음) */
 export interface RacePrediction {
   fiveK: number      // 초
   tenK: number
@@ -160,6 +161,13 @@ export function predictRaces(vo2: number): RacePrediction {
     halfM: timeFromVdot(21.0975, vo2),
     fullM: timeFromVdot(42.195, vo2),
   }
+}
+
+/** 레이스 예측을 보여 줄지 — 걷기 테스트(락포트)나 VO2max 25 미만은 달리기 기록 환산 오차가 크고,
+ *  VO2 한 자릿수에서는 timeFromVdot 탐색 상한(10시간)에 걸려 풀코스가 10:00:00으로 잘린다 */
+export const RACE_PREDICT_MIN_VO2 = 25
+export function showRacePrediction(vo2: number, method: MethodId): boolean {
+  return vo2 >= RACE_PREDICT_MIN_VO2 && method !== 'rockport'
 }
 
 /** 초 → "HH:MM:SS" 또는 "MM:SS" */

@@ -25,7 +25,7 @@ const sectionTitle: React.CSSProperties = {
 const FAQ_LD = [
   {
     q: '러닝화는 몇 km에 바꿔야 하나요?',
-    a: '일반적으로 <strong>500~800km</strong>가 교체 기준으로 통용됩니다. 다만 이는 미드솔 소재·체중·주법에 따라 크게 달라집니다 — 일반 EVA 폼은 400~600km, 내구성 좋은 TPU·슈퍼폼(PEBA)은 500~700km 수준입니다. 위 계산기에 소재·체중·주간 거리를 넣으면 예상 수명과 교체 예상일이 나옵니다. 무엇보다 <strong>km는 참고치</strong>이며, 쿠션이 꺼진 느낌이나 통증이 있으면 수치와 상관없이 바꾸는 게 맞습니다.',
+    a: '일반적으로 <strong>500~800km</strong>가 교체 기준으로 통용됩니다. 다만 이는 미드솔 소재·체중·주법에 따라 크게 달라집니다 — 일반 EVA 폼은 400~600km, 내구성 좋은 TPU는 500~700km, 두툼한 슈퍼폼(PEBA) 데일리화는 450~650km 수준이고, 얇게 만든 카본 레이싱화는 300~500km로 더 짧게 봅니다. 위 계산기에 소재·체중·주간 거리를 넣으면 예상 수명과 교체 예상일이 나옵니다. 무엇보다 <strong>km는 참고치</strong>이며, 쿠션이 꺼진 느낌이나 통증이 있으면 수치와 상관없이 바꾸는 게 맞습니다.',
   },
   {
     q: '왜 미드솔이 닳으면 바꿔야 하나요?',
@@ -37,7 +37,7 @@ const FAQ_LD = [
   },
   {
     q: '카본화(슈퍼슈즈)는 왜 수명이 짧다고 하나요?',
-    a: 'PEBA 같은 <strong>슈퍼폼은 반발력이 뛰어난 대신, 레이싱용은 얇고 가볍게 만들어 반발 성능이 빨리 떨어진다</strong>는 인식이 있습니다. 실제 미드솔 내구 거리는 일반화 400~600km 수준으로 데일리화와 비슷하거나 조금 짧게 보기도 합니다. 다만 <strong>"레이스 반발감"이 필요한 대회용</strong>이라면, 내구 한계와 별개로 최고 성능이 유지되는 초반 구간에서 아껴 쓰는 사람이 많습니다. 데일리 슈퍼슈즈는 더 길게 쓸 수 있습니다.',
+    a: 'PEBA 같은 <strong>슈퍼폼은 반발력이 뛰어난 대신, 레이싱용은 얇고 가볍게 만들어 반발 성능이 빨리 떨어진다</strong>는 인식이 있습니다. 실사용 수명은 대략 300~600km로 알려져 있어, 이 계산기는 카본 레이싱화를 300~500km(기준 400km)로 데일리화보다 짧게 잡습니다. 다만 <strong>"레이스 반발감"이 필요한 대회용</strong>이라면, 내구 한계와 별개로 최고 성능이 유지되는 초반 구간에서 아껴 쓰는 사람이 많습니다. 폼을 두툼하게 쓴 데일리 슈퍼 트레이너는 이보다 길게(450~650km) 쓸 수 있습니다.',
   },
   {
     q: '체중이 무거우면 더 빨리 닳나요?',
@@ -84,10 +84,11 @@ export default function ShoeMileagePage() {
             padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
-            <div><span style={{ color: 'var(--muted)' }}>수명(km)</span> = 소재 기본 × 체중보정 × 로테이션</div>
-            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>소재: EVA 500 · TPU 600 · PEBA 600 (중앙값)</div>
+            <div><span style={{ color: 'var(--muted)' }}>수명(km)</span> = 소재 기본 × 체중보정 × 착지보정 × 로테이션</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>소재: EVA 500 · TPU 600 · PEBA 데일리 550 · 카본 레이싱 400 (중앙값)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>체중: ~60kg ×1.1 · ~75 ×1.0 · ~90 ×0.9 · 90+ ×0.8</div>
-            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>2족 로테이션 ×1.15</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>착지: 뒤꿈치 ×0.95 · 미드풋·앞발 ×1.0</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>2족 이상 로테이션 ×1.15 (주간 거리는 켤레 수로 나눔)</div>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
             ※ 소재별 기본 수명은 브랜드 가이드·러닝 문헌의 통용 범위이며, 체중·로테이션 보정은 관행 배수입니다. 실제 수명은 노면·주법·보관에 따라 달라집니다.
@@ -110,7 +111,8 @@ export default function ShoeMileagePage() {
                 {[
                   ['EVA', '400~600km', '가장 흔한 데일리 트레이너 폼'],
                   ['TPU (부스트 등)', '500~700km', '내구성·반발 좋은 발포폼'],
-                  ['PEBA (슈퍼폼)', '500~700km', '카본화·레이싱 슈퍼폼 (레이싱용은 짧게 보기도)'],
+                  ['PEBA 데일리 (슈퍼 트레이너)', '450~650km', '두툼한 슈퍼폼 데일리화'],
+                  ['카본 레이싱화 (얇은 PEBA)', '300~500km', '대회용 — 가볍게 만든 만큼 반발이 빨리 떨어짐'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
@@ -157,7 +159,7 @@ export default function ShoeMileagePage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.8 }}>
-            ※ 마일 표기는 1마일 = 1.609km로 환산한 값입니다(원문은 마일 단위). 어느 수치가 정본인지 밝힌 공식 문서가 없어 하나로 합치지 않았습니다. 위 계산기의 소재별 기본값(EVA 400~600 · TPU/PEBA 500~700km)은 이 표에서 낮은 쪽 구간에 해당합니다. 실험 근거로는 EVA 미드솔이 500km 주행 시점에 최대 족저압이 평균 100% 늘고 750km에서는 폼에 주름·구멍 같은 구조 손상이 관찰됐다는 보고가 있습니다(Verdejo &amp; Mills, Journal of Biomechanics 2004). 출처:{' '}
+            ※ 마일 표기는 1마일 = 1.609km로 환산한 값입니다(원문은 마일 단위). 어느 수치가 정본인지 밝힌 공식 문서가 없어 하나로 합치지 않았습니다. 위 계산기의 소재별 기본값(EVA 400~600km, TPU 500~700km, 카본 레이싱화는 300~500km)은 이 표에서 낮은 쪽 구간에 해당합니다. 실험 근거로는 EVA 미드솔이 500km 주행 시점에 최대 족저압이 평균 100% 늘고 750km에서는 폼에 주름·구멍 같은 구조 손상이 관찰됐다는 보고가 있습니다(Verdejo &amp; Mills, Journal of Biomechanics 2004). 출처:{' '}
             <a href="https://www.nike.com/kr/a/how-often-to-replace-running-shoes" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>나이키 코리아 러닝화 교체 주기 ↗</a>
             , 브룩스·아식스 공식 고객지원·어드바이스 페이지.
           </p>

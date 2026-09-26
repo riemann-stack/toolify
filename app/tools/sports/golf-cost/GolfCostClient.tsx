@@ -3,10 +3,11 @@
 
 import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
+import { todayStr } from '@/lib/date'
 import s from './golf-cost.module.css'
 import {
   calcMembership, MEMBERSHIP_PRICE_PRESETS, ANNUAL_ROUNDS_PRESETS,
-  loadCourses, saveCourses, newId, todayStr, fmtKrw, COURSE_TYPE_LABEL,
+  loadCourses, saveCourses, newId, fmtKrw, COURSE_TYPE_LABEL,
   type SavedGolfCourse,
 } from './golfCostUtils'
 
@@ -14,7 +15,7 @@ type TabId = 'main' | 'membership' | 'courses'
 
 // ───────────────────────── 타입·상수 ─────────────────────────
 
-type CourseType = 'publicWeekday' | 'publicWeekend' | 'semiPrivate' | 'private' | 'custom'
+type CourseType = 'publicWeekday' | 'publicWeekend' | 'privateWeekday' | 'privateWeekend' | 'custom'
 type PlayerCount = 2 | 3 | 4
 type CartMode = 'team' | 'perPerson'
 type MealMode = 'each' | 'team'
@@ -27,19 +28,24 @@ interface CoursePreset {
   caddie: number
 }
 
+/* 그린피: 한국레저산업연구소 그린피 조사, 18홀 이상 평균(1,000원 단위 반올림)
+     대중형(퍼블릭) 주중 170,400·주말 214,000원(2025.5) / 170,900·213,700원(2025.10)
+       — 2026.5 대중형 평균은 확인되지 않아 2025년 값 유지
+     회원제 비회원 주중 217,100·주말 268,700원(2026.5, 『레저백서 2026』 2026.5.27 발간)
+   카트비: 대중형 팀당 평균 97,500원(2025, 2020년 84,400원) → 10만원 / 캐디피: 대중형 팀당 15만원대가 다수 → 15만원 */
 const COURSE_PRESETS: Record<Exclude<CourseType, 'custom'>, CoursePreset> = {
-  publicWeekday: { green: 100_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
-  publicWeekend: { green: 130_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
-  semiPrivate:   { green: 160_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
-  private:       { green: 200_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  publicWeekday:  { green: 170_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  publicWeekend:  { green: 214_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  privateWeekday: { green: 217_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
+  privateWeekend: { green: 269_000, cart: 100_000, cartMode: 'team', caddie: 150_000 },
 }
 
 const COURSE_LABELS: { key: CourseType; label: string; cls: string }[] = [
-  { key: 'publicWeekday', label: '퍼블릭 주중', cls: s.coursePubWeek },
-  { key: 'publicWeekend', label: '퍼블릭 주말', cls: s.coursePubEnd },
-  { key: 'semiPrivate',   label: '세미퍼블릭',  cls: s.courseSemi },
-  { key: 'private',       label: '회원제',      cls: s.coursePriv },
-  { key: 'custom',        label: '직접 입력',   cls: s.courseCustom },
+  { key: 'publicWeekday',  label: '퍼블릭 주중', cls: s.coursePubWeek },
+  { key: 'publicWeekend',  label: '퍼블릭 주말', cls: s.coursePubEnd },
+  { key: 'privateWeekday', label: '회원제 주중', cls: s.courseSemi },
+  { key: 'privateWeekend', label: '회원제 주말', cls: s.coursePriv },
+  { key: 'custom',         label: '직접 입력',   cls: s.courseCustom },
 ]
 
 // ───────────────────────── 포맷터 ─────────────────────────
@@ -52,11 +58,17 @@ function fmtNum(n: number): string {
   if (!isFinite(n) || isNaN(n)) return '0'
   return Math.round(n).toLocaleString('ko-KR')
 }
+/** 금액 입력 상한 (오타로 자릿수가 폭주해도 계산이 깨지지 않게) — 회원권 10억대까지 여유 */
+const AMOUNT_MAX = 10_000_000_000
 function parseAmount(input: string): number {
   const cleaned = input.replace(/[^0-9.]/g, '')
   if (!cleaned) return 0
   const n = parseFloat(cleaned)
-  return isNaN(n) ? 0 : n
+  return isNaN(n) ? 0 : Math.min(n, AMOUNT_MAX)
+}
+/** 금액 입력칸 표시값 — 실시간 콤마 */
+function moneyInput(n: number): string {
+  return n ? Math.round(n).toLocaleString('ko-KR') : ''
 }
 
 // ───────────────────────── 메인 ─────────────────────────
@@ -67,7 +79,7 @@ export default function GolfCostClient() {
   const [players, setPlayers] = useState<PlayerCount>(4)
 
   // 그린피
-  const [greenFee, setGreenFee] = useState(130_000)
+  const [greenFee, setGreenFee] = useState(COURSE_PRESETS.publicWeekend.green)
 
   // 카트비
   const [cartFee, setCartFee] = useState(100_000)
@@ -99,20 +111,21 @@ export default function GolfCostClient() {
 
   // 내기 (선택)
   const [bettingOn, setBettingOn] = useState(false)
-  const [betPlayers, setBetPlayers] = useState<{ name: string; amount: number }[]>([
-    { name: '', amount: 0 },
-    { name: '', amount: 0 },
-    { name: '', amount: 0 },
-    { name: '', amount: 0 },
+  // neg: 부호 토글 상태 — iOS 숫자 키패드엔 '−'가 없어 부호는 버튼으로 고른다
+  const [betPlayers, setBetPlayers] = useState<{ name: string; amount: number; neg: boolean }[]>([
+    { name: '', amount: 0, neg: false },
+    { name: '', amount: 0, neg: false },
+    { name: '', amount: 0, neg: false },
+    { name: '', amount: 0, neg: false },
   ])
 
   // 참여자별 정산 (선택)
   const [perPlayerOn, setPerPlayerOn] = useState(false)
-  const [playerData, setPlayerData] = useState<{ name: string; adjustment: number }[]>([
-    { name: '', adjustment: 0 },
-    { name: '', adjustment: 0 },
-    { name: '', adjustment: 0 },
-    { name: '', adjustment: 0 },
+  const [playerData, setPlayerData] = useState<{ name: string; adjustment: number; neg: boolean }[]>([
+    { name: '', adjustment: 0, neg: false },
+    { name: '', adjustment: 0, neg: false },
+    { name: '', adjustment: 0, neg: false },
+    { name: '', adjustment: 0, neg: false },
   ])
 
   // 월간 라운딩
@@ -211,7 +224,7 @@ export default function GolfCostClient() {
     try {
       await navigator.clipboard.writeText(copyText)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1800)
+      setTimeout(() => setCopied(false), 1500)
     } catch {/* noop */}
   }
 
@@ -286,7 +299,7 @@ export default function GolfCostClient() {
           ))}
         </div>
         <div className={s.helperText}>
-          프리셋 선택 시 그린피·카트비·캐디피 기본값이 자동 입력됩니다 (수정 가능).
+          프리셋을 고르면 한국레저산업연구소가 조사한 평균 그린피(퍼블릭은 2025년, 회원제는 2026년 5월 비회원 기준)와 팀당 카트비 10만·캐디피 15만원이 들어갑니다. 실제 요금으로 고쳐 쓰세요.
         </div>
 
         <div className={`${s.subLabel} ${s.subLabelTop}`}>인원 수</div>
@@ -308,7 +321,7 @@ export default function GolfCostClient() {
         <span className={s.cardLabel}>그린피</span>
         <div className={s.subLabel}>1인당 그린피</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" aria-label="1인당 그린피" value={greenFee || ''} onChange={e => setGreenFee(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="text" inputMode="numeric" aria-label="1인당 그린피" value={moneyInput(greenFee)} onChange={e => setGreenFee(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -326,7 +339,7 @@ export default function GolfCostClient() {
         </div>
         <div className={`${s.subLabel} ${s.subLabelTop}`}>{cartMode === 'team' ? '팀당 카트비' : '1인당 카트비'}</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" aria-label="카트비 금액" value={cartFee || ''} onChange={e => setCartFee(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="text" inputMode="numeric" aria-label="카트비 금액" value={moneyInput(cartFee)} onChange={e => setCartFee(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -348,7 +361,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel}>팀당 캐디피</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" aria-label="팀당 캐디피" value={caddieFee || ''} onChange={e => setCaddieFee(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="팀당 캐디피" value={moneyInput(caddieFee)} onChange={e => setCaddieFee(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
 
@@ -361,7 +374,7 @@ export default function GolfCostClient() {
               ))}
             </div>
             <div className={s.inputRow} style={{ marginTop: 8 }}>
-              <input className={s.numInput} type="number" inputMode="decimal" aria-label="캐디 봉사료(팁)" value={tipAmount || ''} onChange={e => setTipAmount(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="캐디 봉사료(팁)" value={moneyInput(tipAmount)} onChange={e => setTipAmount(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
 
@@ -390,13 +403,13 @@ export default function GolfCostClient() {
 
         <div className={`${s.subLabel} ${s.subLabelTop}`}>{mealMode === 'each' ? '1인당 식사비' : '팀 식사비 총액'}</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" aria-label="식사비" value={mealAmount || ''} onChange={e => setMealAmount(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="text" inputMode="numeric" aria-label="식사비" value={moneyInput(mealAmount)} onChange={e => setMealAmount(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
 
         <div className={`${s.subLabel} ${s.subLabelTop}`}>그늘집 비용 (팀당)</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" aria-label="그늘집 비용(팀당)" value={shadeAmount || ''} onChange={e => setShadeAmount(parseAmount(e.target.value))} />
+          <input className={s.numInput} type="text" inputMode="numeric" aria-label="그늘집 비용(팀당)" value={moneyInput(shadeAmount)} onChange={e => setShadeAmount(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
 
@@ -448,7 +461,7 @@ export default function GolfCostClient() {
             <div style={{ marginTop: 10 }}>
               <div className={s.subLabel}>유가</div>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" aria-label="유가(원/L)" value={fuelPrice || ''} onChange={e => setFuelPrice(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+                <input className={s.numInput} type="text" inputMode="numeric" aria-label="유가(원/L)" value={moneyInput(fuelPrice)} onChange={e => setFuelPrice(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
                 <span className={s.unit}>원/L</span>
               </div>
             </div>
@@ -460,7 +473,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>총 교통비 (유류비·통행료 합산)</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" aria-label="총 교통비(유류비·통행료)" value={carpoolTotal || ''} onChange={e => setCarpoolTotal(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="총 교통비(유류비·통행료)" value={moneyInput(carpoolTotal)} onChange={e => setCarpoolTotal(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>{players}명이 나누면 1인당 {fmt(carpoolTotal / players)}</div>
@@ -471,7 +484,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>1인당 버스·셔틀 요금</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" aria-label="1인당 버스·셔틀 요금" value={busPerPerson || ''} onChange={e => setBusPerPerson(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="1인당 버스·셔틀 요금" value={moneyInput(busPerPerson)} onChange={e => setBusPerPerson(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>팀 합계 {fmt(busPerPerson * players)}</div>
@@ -482,7 +495,7 @@ export default function GolfCostClient() {
           <>
             <div className={s.subLabel} style={{ marginTop: 12 }}>1인당 대중교통비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" aria-label="1인당 대중교통비" value={transitPerPerson || ''} onChange={e => setTransitPerPerson(parseAmount(e.target.value))} />
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="1인당 대중교통비" value={moneyInput(transitPerPerson)} onChange={e => setTransitPerPerson(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div className={s.liveHint}>팀 합계 {fmt(transitPerPerson * players)}</div>
@@ -497,21 +510,21 @@ export default function GolfCostClient() {
           <div>
             <div className={s.subLabel}>장갑/볼/티</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" aria-label="장갑·볼·티(1인당)" value={glovesCost || ''} onChange={e => setGlovesCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="장갑·볼·티(1인당)" value={moneyInput(glovesCost)} onChange={e => setGlovesCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
           </div>
           <div>
             <div className={s.subLabel}>로커비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" aria-label="로커비(1인당)" value={lockerFee || ''} onChange={e => setLockerFee(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="로커비(1인당)" value={moneyInput(lockerFee)} onChange={e => setLockerFee(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원</span>
             </div>
           </div>
         </div>
         <div className={`${s.subLabel} ${s.subLabelTop}`}>기타</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal" aria-label="기타 비용(1인당)" value={otherCost || ''} onChange={e => setOtherCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+          <input className={s.numInput} type="text" inputMode="numeric" aria-label="기타 비용(1인당)" value={moneyInput(otherCost)} onChange={e => setOtherCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.liveHint}>
@@ -536,12 +549,13 @@ export default function GolfCostClient() {
         {bettingOn && (
           <>
             <div className={s.bettingHelper}>
-              각자의 내기 손익을 입력하세요. 양수(+) = 받을 돈, 음수(−) = 낼 돈. 합계가 0원이 되어야 정산이 맞습니다.
+              각자의 내기 금액을 넣고 오른쪽 버튼으로 받을 돈(+)·낼 돈(−)을 고르세요. 합계가 0원이 되어야 정산이 맞습니다.
             </div>
             {Array.from({ length: players }).map((_, i) => (
               <div key={i} className={s.bettingRow}>
                 <input
                   className={s.smallText}
+                  aria-label={`내기 참여자 ${i + 1} 이름`}
                   placeholder={`참여자 ${i + 1} 이름 (선택)`}
                   value={betPlayers[i]?.name || ''}
                   onChange={e => {
@@ -552,17 +566,28 @@ export default function GolfCostClient() {
                 />
                 <input
                   className={s.smallNum}
-                  type="number" inputMode="decimal"
-                  placeholder="손익(+ / −)"
-                  value={betPlayers[i]?.amount || ''}
+                  type="text" inputMode="numeric"
+                  aria-label={`내기 참여자 ${i + 1} 금액(원)`}
+                  placeholder="금액(원)"
+                  value={moneyInput(Math.abs(betPlayers[i]?.amount ?? 0))}
                   onChange={e => {
                     const next = [...betPlayers]
-                    const v = parseFloat(e.target.value.replace(/[^0-9.\-]/g, ''))
-                    next[i] = { ...next[i], amount: isNaN(v) ? 0 : v }
+                    const abs = parseAmount(e.target.value)
+                    next[i] = { ...next[i], amount: next[i].neg ? -abs : abs }
                     setBetPlayers(next)
                   }}
                 />
-                <div style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'right' }}>원</div>
+                <button type="button"
+                  className={`${s.pill} ${betPlayers[i]?.neg ? s.pillActive : ''}`}
+                  style={{ marginTop: 0 }}
+                  aria-label={`내기 참여자 ${i + 1} ${betPlayers[i]?.neg ? '낼 돈 — 눌러서 받을 돈으로' : '받을 돈 — 눌러서 낼 돈으로'}`}
+                  onClick={() => {
+                    const next = [...betPlayers]
+                    next[i] = { ...next[i], neg: !next[i].neg, amount: -next[i].amount }
+                    setBetPlayers(next)
+                  }}>
+                  {betPlayers[i]?.neg ? '− 낼 돈' : '+ 받을 돈'}
+                </button>
               </div>
             ))}
             <div className={`${s.bettingSum} ${bettingSum === 0 ? s.bettingSumOk : s.bettingSumWarn}`}>
@@ -590,12 +615,13 @@ export default function GolfCostClient() {
         {perPlayerOn && (
           <>
             <div className={s.bettingHelper}>
-              개인별 조정 금액(+/−)을 입력하세요. 예: 카풀 운전자에게 -10,000원 차감, 늦게 합류한 참여자 +5,000원 가산.
+              개인별 조정 금액을 넣고 가산(+)·차감(−)을 고르세요. 예: 카풀 운전자는 10,000원 차감, 늦게 합류한 참여자는 5,000원 가산.
             </div>
             {Array.from({ length: players }).map((_, i) => (
               <div key={i} className={s.playerListRow}>
                 <input
                   className={s.smallText}
+                  aria-label={`참여자 ${i + 1} 이름`}
                   placeholder={`참여자 ${i + 1}`}
                   value={playerData[i]?.name || ''}
                   onChange={e => {
@@ -604,19 +630,32 @@ export default function GolfCostClient() {
                     setPlayerData(next)
                   }}
                 />
-                <input
-                  className={s.smallNum}
-                  type="number" inputMode="decimal"
-                  placeholder="조정 (+/−)"
-                  value={playerData[i]?.adjustment || ''}
-                  onChange={e => {
-                    const next = [...playerData]
-                    const raw = e.target.value
-                    const v = parseFloat(raw.replace(/[^0-9.\-]/g, ''))
-                    next[i] = { ...next[i], adjustment: isNaN(v) ? 0 : v }
-                    setPlayerData(next)
-                  }}
-                />
+                <div style={{ display: 'flex', gap: 4, minWidth: 0, alignItems: 'center' }}>
+                  <button type="button"
+                    className={`${s.pill} ${playerData[i]?.neg ? s.pillActive : ''}`}
+                    style={{ marginTop: 0, flexShrink: 0, padding: '6px 8px' }}
+                    aria-label={`참여자 ${i + 1} ${playerData[i]?.neg ? '차감 — 눌러서 가산으로' : '가산 — 눌러서 차감으로'}`}
+                    onClick={() => {
+                      const next = [...playerData]
+                      next[i] = { ...next[i], neg: !next[i].neg, adjustment: -next[i].adjustment }
+                      setPlayerData(next)
+                    }}>
+                    {playerData[i]?.neg ? '− 차감' : '+ 가산'}
+                  </button>
+                  <input
+                    className={s.smallNum}
+                    type="text" inputMode="numeric"
+                    aria-label={`참여자 ${i + 1} 조정 금액(원)`}
+                    placeholder="조정(원)"
+                    value={moneyInput(Math.abs(playerData[i]?.adjustment ?? 0))}
+                    onChange={e => {
+                      const next = [...playerData]
+                      const abs = parseAmount(e.target.value)
+                      next[i] = { ...next[i], adjustment: next[i].neg ? -abs : abs }
+                      setPlayerData(next)
+                    }}
+                  />
+                </div>
                 <div className={s.playerFinal}>
                   최종 {fmt(playerSettlements[i]?.base ?? 0)}
                 </div>
@@ -688,6 +727,7 @@ export default function GolfCostClient() {
         <div className={s.sliderWrap}>
           <input
             type="range"
+            aria-label="월 라운딩 횟수"
             min={1}
             max={8}
             value={monthlyRounds}
@@ -720,13 +760,14 @@ export default function GolfCostClient() {
       {/* 더치페이 도구 자동 연결 + 골프장 저장 */}
       {teamTotal > 0 && (
         <div className={s.crossLinkCard}>
+          {/* 쿼리(total·people)는 더치페이 도구가 아직 읽지 않음 — 문구는 '열기'로 두고 금액은 직접 입력 안내 */}
           <a
             href={`/tools/life/dutch?total=${Math.round(teamTotal)}&people=${players}&context=골프`}
             className={s.crossLinkBtn}>
             <span className={s.crossLinkIcon}>🍻</span>
             <span>
-              <strong>카톡방에서 N빵 정산 →</strong>
-              <span className={s.crossLinkSub}>더치페이 도구로 자동 입력 (총 {fmtKrw(teamTotal)} / {players}명)</span>
+              <strong>더치페이 도구 열기 →</strong>
+              <span className={s.crossLinkSub}>총 {fmt(teamTotal)} · {players}명을 넣어 카톡방 정산 문구 만들기</span>
             </span>
           </a>
           <CourseSaveButton
@@ -780,6 +821,7 @@ function CourseSaveButton({ data }: {
       <input
         type="text"
         className={s.courseSaveInput}
+        aria-label="저장할 골프장 이름"
         placeholder="골프장 이름 (예: 스카이힐 청주)"
         value={name}
         onChange={e => setName(e.target.value)}
@@ -815,14 +857,14 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
         <span className={s.cardLabel}>① 회원권 정보</span>
         <div className={s.subLabel}>회원권 가격</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal"
-            value={membershipPrice || ''}
+          <input className={s.numInput} type="text" inputMode="numeric" aria-label="회원권 가격(원)"
+            value={moneyInput(membershipPrice)}
             onChange={e => setMembershipPrice(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
         <div className={s.pills} style={{ marginTop: 6 }}>
           {MEMBERSHIP_PRICE_PRESETS.map(p => (
-            <button key={p.value}
+            <button key={p.value} type="button" aria-pressed={membershipPrice === p.value}
               className={`${s.pill} ${membershipPrice === p.value ? s.pillActive : ''}`}
               onClick={() => setMembershipPrice(p.value)}>
               {p.label}
@@ -833,8 +875,8 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
           <div>
             <div className={s.subLabel}>연회비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal"
-                value={annualFee || ''}
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="연회비(원)"
+                value={moneyInput(annualFee)}
                 onChange={e => setAnnualFee(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
@@ -842,7 +884,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
           <div>
             <div className={s.subLabel}>보유 기간</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal"
+              <input className={s.numInput} type="number" inputMode="decimal" aria-label="보유 기간(년)"
                 value={holdingYears || ''}
                 onChange={e => setHoldingYears(parseAmount(e.target.value))} />
               <span className={s.unit}>년</span>
@@ -851,12 +893,12 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
         </div>
         <div className={s.subLabel} style={{ marginTop: 14 }}>매각 시 잔존가치 (예상)</div>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="number" inputMode="decimal"
-            value={resaleValue || ''}
+          <input className={s.numInput} type="text" inputMode="numeric" aria-label="매각 시 잔존가치(원)"
+            value={moneyInput(resaleValue)}
             onChange={e => setResaleValue(parseAmount(e.target.value))} />
           <span className={s.unit}>원</span>
         </div>
-        <p className={s.helperText}>회원권 가격의 50~60% 일반 (시세 변동 ±30%)</p>
+        <p className={s.helperText}>회원권 시세는 골프장·경기에 따라 크게 오르내리니, 회원권 거래소 시세를 보고 보수적으로 잡으세요.</p>
       </div>
 
       <div className={s.card}>
@@ -865,8 +907,8 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
           <div>
             <div className={s.subLabel}>비회원 1인당 비용</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal"
-                value={nonMemberCost || ''}
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="비회원 1인당 라운딩 비용(원)"
+                value={moneyInput(nonMemberCost)}
                 onChange={e => setNonMemberCost(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
@@ -877,8 +919,8 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
           <div>
             <div className={s.subLabel}>회원 1인당 비용</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal"
-                value={memberRoundCost || ''}
+              <input className={s.numInput} type="text" inputMode="numeric" aria-label="회원 1인당 라운딩 비용(원)"
+                value={moneyInput(memberRoundCost)}
                 onChange={e => setMemberRoundCost(parseAmount(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
@@ -888,7 +930,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
         <div className={s.subLabel} style={{ marginTop: 14 }}>연 라운딩 횟수</div>
         <div className={s.pills}>
           {ANNUAL_ROUNDS_PRESETS.map(p => (
-            <button key={p.value}
+            <button key={p.value} type="button" aria-pressed={annualRounds === p.value}
               className={`${s.pill} ${annualRounds === p.value ? s.pillActive : ''}`}
               onClick={() => setAnnualRounds(p.value)}>
               {p.label}
@@ -898,7 +940,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
       </div>
 
       {/* 결과 */}
-      <div className={s.hero} style={{ borderColor: result.recoColor + 'aa' }}>
+      <div className={s.hero} role="status" style={{ borderColor: `color-mix(in srgb, ${result.recoColor} 67%, transparent)` }}>
         <div className={s.heroLead}>
           <span style={{ color: result.recoColor, fontWeight: 700 }}>{result.recoLabel}</span>
         </div>
@@ -938,7 +980,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
             </tr>
             <tr>
               <td>매각 잔존가치</td>
-              <td className={s.numCell} style={{ color: '#059669' }}>−{fmtKrw(resaleValue)}</td>
+              <td className={s.numCell} style={{ color: 'var(--success)' }}>−{fmtKrw(resaleValue)}</td>
               <td className={s.numCell}>—</td>
             </tr>
             <tr className={s.totalRow}>
@@ -960,7 +1002,7 @@ function MembershipTab({ defaultNonMemberCost }: { defaultNonMemberCost: number 
         <p className={s.warnTitle}>⚠️ 회원권 구매 전 체크리스트</p>
         <ul className={s.warnList}>
           <li>골프장 재무 안정성 확인 (공시·뉴스)</li>
-          <li>회원권 시세 (한국증권업협회·증권사)</li>
+          <li>회원권 시세 (에이스·동아 등 회원권 거래소 시세)</li>
           <li>부도 시 보호 X (대부분) — 매각 어려움 ↑</li>
           <li>본인 라운딩 빈도 변화 가능 (이직·건강·은퇴)</li>
           <li>변호사·회계사 상담 권장</li>
@@ -1030,6 +1072,7 @@ function CoursesTab({
           <input
             type="text"
             className={s.courseSaveInput}
+            aria-label="저장할 골프장 이름"
             placeholder="골프장 이름 (예: 스카이힐 청주)"
             value={name}
             onChange={e => setName(e.target.value)}
@@ -1055,7 +1098,7 @@ function CoursesTab({
                 <div className={s.courseInfo}>
                   <div className={s.courseName}>{c.name}</div>
                   <div className={s.courseMeta}>
-                    {COURSE_TYPE_LABEL[c.type] ?? c.type} · 그린피 {fmtKrw(c.greenFee)} · 마지막 {c.lastUsed}
+                    {COURSE_TYPE_LABEL[c.type] ?? c.type} · 그린피 {fmtKrw(c.greenFee)}{c.lastUsed ? ` · 마지막 ${c.lastUsed}` : ''}
                   </div>
                 </div>
                 <div className={s.courseActions}>
@@ -1064,7 +1107,7 @@ function CoursesTab({
                     불러오기
                   </button>
                   <button type="button" className={s.courseDelBtn}
-                    onClick={() => handleDelete(c.id)} aria-label="삭제">×</button>
+                    onClick={() => handleDelete(c.id)} aria-label={`${c.name} 삭제`}>×</button>
                 </div>
               </div>
             ))}

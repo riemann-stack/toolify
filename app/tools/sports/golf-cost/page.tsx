@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-cost',
@@ -15,7 +16,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '그린피에 카트비·캐디피가 포함되어 있나요?',
-                a: '일반적으로 포함되지 않습니다. 그린피는 코스 사용료만 의미하며, 카트비(팀당 8~12만)와 캐디피(팀당 12~16만)는 별도로 지불합니다. 일부 골프장은 &ldquo;그린피 + 카트 패키지&rdquo; 형태로 묶어 판매하기도 하므로, 예약 시 명세를 반드시 확인하세요.',
+                a: '일반적으로 포함되지 않습니다. 그린피는 코스 사용료만 의미하며, 카트비(팀당 10만원 안팎)와 캐디피(팀당 14~15만원)는 별도로 지불합니다. 일부 골프장은 &ldquo;그린피 + 카트 패키지&rdquo; 형태로 묶어 판매하기도 하므로, 예약 시 명세를 반드시 확인하세요.',
               },
               {
                 q: '카트비는 왜 팀 부담과 1인 부담이 다른가요?',
@@ -23,7 +24,7 @@ const FAQ_LD = [
               },
               {
                 q: '캐디 없이 라운드해도 되나요?',
-                a: '퍼블릭과 일부 세미퍼블릭은 노캐디 라운드를 허용하지만, 회원제 골프장은 대부분 캐디 동반이 의무입니다. 노캐디는 캐디피·팁 16~20만원을 절약할 수 있지만, 진행 속도와 룰 적용에 책임을 본인이 져야 합니다.',
+                a: '퍼블릭과 일부 세미퍼블릭은 노캐디 라운드를 허용하지만, 회원제 골프장은 대부분 캐디 동반이 의무입니다. 노캐디는 팀당 캐디피 15만원 안팎(팁 별도)을 아낄 수 있지만, 진행 속도와 룰 적용에 책임을 본인이 져야 합니다.',
               },
               {
                 q: '내기 골프 정산은 어떻게 하나요?',
@@ -31,7 +32,7 @@ const FAQ_LD = [
               },
               {
                 q: '월·연간 골프 비용은 어떻게 잡으면 적당한가요?',
-                a: '월 1~2회 라운드 시 한국 평균 기준 월 30~60만원, 연 400~700만원 수준이 일반적입니다. 회원권을 보유하면 그린피가 절감되지만 회원권 자체 가격(수천만~수억)과 연회비를 별도 고려해야 합니다. 본 계산기의 월·연간 슬라이더로 자신의 예상 라운드 횟수에 맞춰 시뮬레이션해보세요.',
+                a: '본 계산기 기본값(2025년 대중형 평균 그린피·카트·캐디·식사·카풀)으로 계산하면 1회 1인당 28~32만원 안팎이라, 월 1~2회면 월 30~65만원 정도가 됩니다. 회원권을 보유하면 그린피가 절감되지만 회원권 자체 가격(수천만~수억)과 연회비를 별도 고려해야 합니다. 본 계산기의 월·연간 슬라이더로 자신의 예상 라운드 횟수에 맞춰 시뮬레이션해보세요.',
               },
               {
                 q: '회원권을 사는 게 이득인지 어떻게 판단하나요?',
@@ -39,19 +40,19 @@ const FAQ_LD = [
               },
               {
                 q: '시즌·요일별 그린피 차이는 얼마나 되나요?',
-                a: '한국 평균 변동 (퍼블릭 기준):<br/>• 평일: 8~12만 / 주말: 12~16만 (+50%) / 공휴일: 14~18만 (+70%)<br/>• 봄·가을 (성수기): +10% / 여름: -10% / 겨울: -20~30%<br/>• 추석·설: 큰 폭 ↑ (예약 어려움)<br/>• 평일 새벽(6~7시) 또는 늦은 오후(이브닝): -20~30%<br/>가성비 ★★★ — 평일 새벽·늦은 오후 + 비수기(여름·겨울) + 퍼블릭·세미퍼블릭.',
+                a: '한국레저산업연구소 그린피 조사(2025년 5월·10월)에서 18홀 이상 <strong>대중형(퍼블릭) 평균 그린피는 주중 약 17만원, 주말 약 21만원</strong>으로 주말이 25% 안팎 비쌌습니다. 회원제 비회원 평균은 『레저백서 2026』 기준 주중 약 22만원, 주말 약 27만원입니다(2026년 5월).<br/>봄·가을 성수기와 명절 연휴는 더 비싸고 예약도 어려운 반면, 한여름·겨울 비수기나 평일 새벽·늦은 오후(이브닝) 티타임은 할인하는 골프장이 많습니다. 할인 폭은 골프장마다 달라 예약 앱에서 직접 비교하는 편이 정확합니다.',
               },
               {
                 q: '캐디피 정산은 카드로 가능한가요?',
-                a: '거의 불가능. 한국 골프장 캐디피는 <strong>현금 직접 지급이 표준</strong>이며 카드 결제 X·현금 영수증 X (대부분). 정산 방법:<br/>1. 한 명이 캐디에게 현금 지급<br/>2. 다른 사람들이 카카오페이·이체로 정산<br/>3. 본 도구 결과 → [🍻 더치페이 도구 자동 연결] 활용<br/>⚠️ 일부 골프장 변화 — 카드 결제 가능(소수) / 캐디피 그린피 통합(포함) / 사전 결제(예약 시).',
+                a: '거의 불가능. 한국 골프장 캐디피는 <strong>현금 직접 지급이 표준</strong>이며 카드 결제 X·현금 영수증 X (대부분). 정산 방법:<br/>1. 한 명이 캐디에게 현금 지급<br/>2. 다른 사람들이 카카오페이·이체로 정산<br/>3. 본 도구 결과의 팀 총액을 [🍻 더치페이 도구]에 넣어 정산 문구 만들기<br/>⚠️ 일부 골프장 변화 — 카드 결제 가능(소수) / 캐디피 그린피 통합(포함) / 사전 결제(예약 시).',
               },
               {
                 q: '라운딩 후 1인당 정산을 카톡방에 어떻게 공유하나요?',
-                a: '본 도구의 결과 → [📋 결과 복사하기]로 마크다운 형식 정산 내역 복사 → 카톡방 붙여넣기. 또는 [🍻 카톡방에서 N빵 정산]을 통해 더치페이 도구로 자동 입력 (총액·인원·맥락 자동 전달). 차 안에서 핸드폰으로 5분 안에 정산 완료.',
+                a: '본 도구의 결과 → [📋 결과 복사하기]로 마크다운 형식 정산 내역 복사 → 카톡방 붙여넣기. 또는 [🍻 더치페이 도구 열기]로 이동해 팀 총액과 인원을 넣으면 카톡방용 정산 문구를 만들 수 있습니다. 차 안에서 핸드폰으로 5분 안에 정산 완료.',
               },
               {
                 q: '동남아 골프 패키지가 정말 한국보다 저렴한가요?',
-                a: '단순 비교 — 한국 1인당 ~22만 / 베트남 4박 5일 (4라운딩 + 항공 + 숙박) ~200만 = 1라운딩 환산 ~50만. 단, 항공·숙박·식사·관광 포함이라 단순 비교 X. <strong>가성비</strong>: 베트남(라운딩 7~10만) / 태국(8~12만) / 필리핀(6~10만) / 일본(15~20만, 한국 비슷). <strong>단점</strong>: 항공·시간 비용 / 캐디 관행 다름 / 현지 정책·환율 변동 / 시즌별 가격 큰 변동. ⚠️ 정확한 패키지 가격은 여행사·예약 사이트 직접 확인.',
+                a: '단순 비교 — 한국 1인당 ~32만(대중형 주말·4인 기준) / 베트남 4박 5일 (4라운딩 + 항공 + 숙박) ~200만 = 1라운딩 환산 ~50만. 단, 항공·숙박·식사·관광 포함이라 단순 비교 X. <strong>가성비</strong>: 베트남(라운딩 7~10만) / 태국(8~12만) / 필리핀(6~10만) / 일본(15~20만, 한국 비슷). <strong>단점</strong>: 항공·시간 비용 / 캐디 관행 다름 / 현지 정책·환율 변동 / 시즌별 가격 큰 변동. ⚠️ 정확한 패키지 가격은 여행사·예약 사이트 직접 확인.',
               },
             ]
 
@@ -66,6 +67,14 @@ export default function GolfCostPage() {
         그린피·카트·캐디·식사·교통 <strong style={{ color: 'var(--text)' }}>1인당 정산</strong> + 회원권 손익 분기점.
       </p>
 
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="한국레저산업연구소 그린피 조사 — 대중형 2025년 5월·10월, 회원제(비회원) 2026년 5월(레저백서 2026) 평균"
+        sources={[
+          { label: '한국레저산업연구소 — 레저백서', href: 'https://www.kole.kr/book' },
+        ]}
+      />
+
       <GolfCostClient />
 
       <GuideDivider />
@@ -77,7 +86,7 @@ export default function GolfCostPage() {
             골프장 타입별 평균 비용 (참고)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            한국 주요 골프장의 공개 요금·운영자 경험을 바탕으로 한 <strong style={{ color: 'var(--text)' }}>일반 평균 추정(2026년 기준)</strong>이며 공식 고시가가 아닙니다. 실제 비용은 시즌·요일·지역·평일/주말에 따라 ±20~30% 변동하니 예약 시 명세를 확인하세요.
+            그린피는 한국레저산업연구소 그린피 조사의 <strong style={{ color: 'var(--text)' }}>18홀 이상 골프장 평균</strong>을 반올림한 값입니다. 대중형은 2025년 5월·10월 조사, 회원제 비회원은 『레저백서 2026』에 실린 2026년 5월 조사 기준입니다. 카트비·캐디피는 같은 연구소가 발표한 팀당 평균(2025년 대중형 카트비 약 9.75만원, 대중형 캐디피는 15만원대가 다수)을 바탕으로 한 근사치입니다. 평균일 뿐이라 지역·시즌·티타임에 따라 차이가 크니 예약 시 명세를 확인하세요.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -91,10 +100,10 @@ export default function GolfCostPage() {
               </thead>
               <tbody>
                 {[
-                  { type: '퍼블릭 주중',  color: '#059669', green: '8~12만',   cart: '8~10만',  caddie: '12~14만' },
-                  { type: '퍼블릭 주말',  color: '#0EA5E9', green: '12~16만',  cart: '8~10만',  caddie: '12~14만' },
-                  { type: '세미퍼블릭',   color: '#0891B2', green: '14~20만',  cart: '10~12만', caddie: '13~15만' },
-                  { type: '회원제(비회원)', color: '#A16207', green: '20~30만',  cart: '10~12만', caddie: '14~16만' },
+                  { type: '퍼블릭(대중형) 주중',  color: '#059669', green: '약 17만',  cart: '약 10만', caddie: '14~15만' },
+                  { type: '퍼블릭(대중형) 주말',  color: '#0EA5E9', green: '약 21만',  cart: '약 10만', caddie: '14~15만' },
+                  { type: '회원제(비회원) 주중', color: '#0891B2', green: '약 22만',  cart: '약 10만', caddie: '14~15만' },
+                  { type: '회원제(비회원) 주말', color: '#A16207', green: '약 27만',  cart: '약 10만', caddie: '14~15만' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', fontWeight: 600, color: row.color }}>{row.type}</td>
@@ -121,33 +130,33 @@ export default function GolfCostPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#0EA5E9', marginBottom: '8px' }}>예시 1 — 퍼블릭 주말 4인 (캐디 동반)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
-                그린피 13만(인당) · 카트비 10만(팀) · 캐디피 12만(팀) · 식사 1.5만(인당) · 자차 카풀
+                그린피 21만(인당) · 카트비 10만(팀) · 캐디피 15만(팀) · 식사 1.5만(인당) · 자차 카풀
               </p>
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
-                그린피 13만 × 4 = 52만<br/>
+                그린피 21만 × 4 = 84만<br/>
                 카트비 10만 (팀 부담)<br/>
-                캐디피 12만 + 팁 4만 = 16만 (팀 부담)<br/>
+                캐디피 15만 + 팁 4만 = 19만 (팀 부담)<br/>
                 식사 1.5만 × 4 = 6만<br/>
                 교통비 8만 (자차 카풀, 팀 분담)<br/>
-                <span style={{ color: '#0EA5E9' }}>팀 합계 = 92만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 23만원</strong>
+                <span style={{ color: '#0EA5E9' }}>팀 합계 = 127만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 32만원</strong>
               </div>
-              <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 한국 평균 주말 라운딩의 표준 가격대입니다.</p>
+              <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 2025년 대중형 평균 주말 그린피를 넣은 경우입니다.</p>
             </div>
 
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>예시 2 — 세미퍼블릭 주중 4인 (노캐디)</p>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>예시 2 — 퍼블릭 주중 4인 (노캐디)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
-                그린피 16만(인당) · 카트비 10만(팀) · 캐디 미사용 · 식사 1.5만(인당) · KTX 이동
+                그린피 17만(인당) · 카트비 10만(팀) · 캐디 미사용 · 식사 1.5만(인당) · KTX 이동
               </p>
               <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
-                그린피 16만 × 4 = 64만<br/>
+                그린피 17만 × 4 = 68만<br/>
                 카트비 10만 (팀)<br/>
                 캐디피 0 (노캐디)<br/>
                 식사 1.5만 × 4 = 6만<br/>
                 교통비 4만 × 4 = 16만 (KTX 왕복 인당)<br/>
-                <span style={{ color: '#0891B2' }}>팀 합계 = 96만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 24만원</strong>
+                <span style={{ color: '#0891B2' }}>팀 합계 = 100만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 25만원</strong>
               </div>
-              <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 노캐디로 캐디피 16만을 아꼈지만, 그린피 차이로 비용이 비슷해질 수 있습니다.</p>
+              <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 노캐디로 팀당 캐디피 15만원(1인 약 3.8만원)을 아꼈지만, KTX 이동비가 붙어 절약분이 상당 부분 상쇄됩니다.</p>
             </div>
 
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
@@ -178,7 +187,7 @@ export default function GolfCostPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
             <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>1. 캐디피는 보통 &ldquo;팀 부담&rdquo;</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-              한국 골프장의 캐디피는 1팀(보통 4인) 기준 12~16만원이 표준입니다. 골프장에 직접 지불하는 것이 아니라 라운드 종료 후
+              한국 골프장의 캐디피는 1팀(보통 4인) 기준 14~15만원이 일반적입니다(대중형은 15만원대가 다수, 한국레저산업연구소). 골프장에 직접 지불하는 것이 아니라 라운드 종료 후
               <strong style={{ color: 'var(--text)' }}> 캐디에게 현금으로 직접 전달</strong>합니다. 카드 결제 불가, 현금 영수증·세금계산서 발행 안 됨이 일반적입니다.
             </p>
           </div>
@@ -186,7 +195,7 @@ export default function GolfCostPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
             <p style={{ fontSize: '14px', fontWeight: 600, color: '#059669', marginBottom: '10px' }}>2. N빵 vs 한 명이 선결제</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-              4인 1팀이면 캐디피 12만 ÷ 4 = <strong style={{ color: 'var(--text)' }}>1인당 3만원</strong>씩 N빵하는 것이 일반적입니다.
+              4인 1팀이면 캐디피 15만 ÷ 4 = <strong style={{ color: 'var(--text)' }}>1인당 3만 7,500원</strong>씩 N빵하는 것이 일반적입니다.
               한 명이 먼저 캐디에게 지불하고 나머지는 그 사람에게 카카오페이·이체로 정산합니다. 더치페이 계산기를 활용하면 식사·카트비까지 한 번에 정리할 수 있습니다.
             </p>
           </div>
@@ -215,7 +224,7 @@ export default function GolfCostPage() {
             🏆 회원권 손익분기 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            아래는 <strong style={{ color: 'var(--text)' }}>[🏆 회원권 손익] 탭 기본값과 동일한 가정</strong> — 5억 회원권·연회비 200만·매각 잔존 3억·10년 보유, 비회원 1라운드 24만·회원 8만. 탭에서 본인 값으로 바로 시뮬레이션할 수 있습니다.
+            아래는 <strong style={{ color: 'var(--text)' }}>[🏆 회원권 손익] 탭 기본값과 동일한 가정</strong> — 5억 회원권·연회비 200만·매각 잔존 3억·10년 보유, 비회원 1라운드 32.4만(오늘 정산 기본값)·회원 8만. 탭에서 본인 값으로 바로 시뮬레이션할 수 있습니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -229,10 +238,10 @@ export default function GolfCostPage() {
               </thead>
               <tbody>
                 {[
-                  { r: '월 1회 (12회)', m: '약 2.30억', n: '약 2,880만', v: '🔴 비회원' },
-                  { r: '월 2회 (24회)', m: '약 2.39억', n: '약 5,760만', v: '🔴 비회원' },
-                  { r: '월 3회 (36회)', m: '약 2.49억', n: '약 8,640만', v: '🔴 비회원' },
-                  { r: '주 1회 (48회)', m: '약 2.58억', n: '약 1.15억', v: '🔴 비회원' },
+                  { r: '월 1회 (12회)', m: '약 2억 2,960만', n: '약 3,890만', v: '🔴 비회원' },
+                  { r: '월 2회 (24회)', m: '약 2억 3,920만', n: '약 7,780만', v: '🔴 비회원' },
+                  { r: '월 3회 (36회)', m: '약 2억 4,880만', n: '약 1억 1,660만', v: '🔴 비회원' },
+                  { r: '주 1회 (48회)', m: '약 2억 5,840만', n: '약 1억 5,550만', v: '🔴 비회원' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.r}</td>
@@ -293,10 +302,9 @@ export default function GolfCostPage() {
               </thead>
               <tbody>
                 {[
-                  { t: '🟢 퍼블릭',           f: '저렴·접근성 ↑·예약 쉬움',                     c: '평일 13만 / 주말 18만' },
-                  { t: '🔵 세미퍼블릭',       f: '균형·코스 품질 ↑·평일 가성비',                  c: '평일 18만 / 주말 24만' },
-                  { t: '🟡 회원제 (회원 동반)', f: '회원 그린피 할인·최고 코스·동반자 1~3명',     c: '평일 12만 / 주말 18만' },
-                  { t: '🔴 회원제 (비회원 동반)', f: '가장 비쌈·접근 어려움·예약 회원만',        c: '평일 25만 / 주말 35만' },
+                  { t: '🟢 퍼블릭(대중형)',       f: '저렴·접근성 ↑·예약 쉬움',                     c: '평일 28만 / 주말 32만' },
+                  { t: '🟡 회원제 (회원 동반)', f: '회원 그린피 할인·최고 코스·동반자 1~3명',     c: '회원 그린피에 따라 다름' },
+                  { t: '🔴 회원제 (비회원 동반)', f: '가장 비쌈·접근 어려움·예약 회원만',        c: '평일 32만 / 주말 38만' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.t}</td>
@@ -307,6 +315,9 @@ export default function GolfCostPage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
+            * 1인당 금액은 위 평균 그린피에 계산기 기본값(카트 10만·캐디 15만·그늘집 3만·카풀 8만은 팀당, 식사 2만은 1인당)을 더해 4인으로 나눈 값입니다.
+          </p>
         </div>
 
         {/* ── 7. 동남아 골프 가이드 (NEW, 참고만) ── */}
@@ -315,7 +326,7 @@ export default function GolfCostPage() {
             ✈️ 동남아 골프 패키지 평균 (참고)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            한국 라운딩 1인당 ~22만 vs 동남아 패키지 (항공·숙박 포함). 정확한 가격은 여행사·예약 사이트 직접 확인 필수.
+            한국 라운딩 1인당 ~32만(대중형 주말·4인) vs 동남아 패키지 (항공·숙박 포함). 정확한 가격은 여행사·예약 사이트 직접 확인 필수.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[

@@ -36,7 +36,7 @@ const FAQ_LD = [
               },
               {
                 q: '16주 훈련 스케줄에서 매주 페이스가 다른 이유는?',
-                a: '점진적 강도 증가 + 회복주 + 피크 + 테이퍼 구조입니다.<br/>• <strong>1~4주</strong>: 적응 (낮은 강도, 자주)<br/>• <strong>5~8주</strong>: 발전 (페이스 ↑)<br/>• <strong>9~12주</strong>: 피크 (최고 강도)<br/>• <strong>13~16주</strong>: 테이퍼 (회복·대회 준비)<br/>본 도구의 [훈련 스케줄] 표는 각 주 정확한 페이스·회복·총 거리를 표시합니다. 매주 같은 강도는 정체·부상 위험.',
+                a: '점진적 강도 증가 + 회복주 + 피크 + 테이퍼 구조입니다. 16주 기준으로는 다음과 같습니다.<br/>• <strong>1~2주</strong>: 적응 (낮은 강도로 폼 익히기)<br/>• <strong>3~11주</strong>: 발전 (메뉴·거리를 단계적으로 늘림)<br/>• <strong>13~14주</strong>: 피크 (최고 강도)<br/>• <strong>15~16주</strong>: 테이퍼 (강도를 낮추고 대회 준비)<br/>그 사이 4·8·12주차는 강도를 낮춘 회복주입니다. 기간을 줄여도 적응 2주와 마지막 2주 테이퍼는 유지되고, 발전·피크 구간이 짧아집니다. 본 도구의 [훈련 스케줄] 표는 각 주의 페이스·회복·총 거리를 표시합니다. 매주 같은 강도는 정체·부상 위험.',
               },
               {
                 q: '1바퀴(400m) 페이스가 왜 중요한가요?',
@@ -52,7 +52,7 @@ const FAQ_LD = [
               },
               {
                 q: '한국 인기 대회 시즌에 맞춰 훈련하려면?',
-                a: '본 도구의 [훈련 스케줄] 탭 상단에 <strong>한국 인기 대회 빠른 선택</strong>이 있습니다. 대회 클릭 시 D-day와 종목이 자동 입력됩니다.<br/>• <strong>봄 대회</strong> (3~5월): 서울마라톤(동아일보 주최, 3월) / 대구(4월) / 서울하프(5월) → 12월부터 16주 시작<br/>• <strong>가을 대회</strong> (10~11월): 춘천(10월) / JTBC(11월) → 6~7월부터 16주 시작<br/>본 도구의 풀 스케줄 + 대회 직전 테이퍼(13~16주차)로 시즌 준비.',
+                a: '본 도구의 [훈련 스케줄] 탭 상단에 <strong>한국 인기 대회 빠른 선택</strong>이 있습니다. 대회 클릭 시 D-day와 종목이 자동 입력됩니다.<br/>• <strong>봄 대회</strong> (2~4월): 대구마라톤(2월) / 서울마라톤(동아마라톤, 3월) / 서울하프(4월) → 대회에 따라 11월~1월 사이에 16주 시작<br/>• <strong>가을 대회</strong> (10~11월): 춘천(10월) / JTBC(11월) → 7월 초부터 16주 시작<br/>본 도구의 16주 스케줄은 마지막 2주(15~16주차)를 테이퍼로 잡습니다. 개최일은 해마다 달라지니 공식 공지를 확인하세요.',
               },
             ]
 
@@ -85,7 +85,7 @@ export default function IntervalTrainingPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '18px' }}>
             미국 러닝 코치 <strong style={{ color: 'var(--text)' }}>잭 다니엘스(Jack Daniels)</strong>는 모든 러닝 훈련을 <strong style={{ color: 'var(--text)' }}>딱 5가지 강도</strong>로 나눴습니다.
             느린 것부터 빠른 순서로 <strong style={{ color: 'var(--text)' }}>E → M → T → I → R</strong>이며, 강도마다 키워지는 능력이 다릅니다.
-            아래 표의 페이스는 <strong style={{ color: 'var(--text)' }}>마라톤 5시간 / 5km 30분 수준</strong>의 러너를 예시로 든 것으로, 본인 기록을 입력하면 위 계산기가 VDOT 공식으로 페이스를 계산해 줍니다.
+            아래 카드는 강도마다 키우는 능력과 체감을 정리한 것이고, 본인 기록을 입력하면 위 계산기가 VDOT 공식으로 <strong style={{ color: 'var(--text)' }}>강도별 페이스</strong>를 계산해 줍니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
@@ -244,12 +244,12 @@ export default function IntervalTrainingPage() {
               </thead>
               <tbody>
                 {[
-                  { t: '25:00', v: 38, i: '4:49', r: '1:44' },
-                  { t: '22:00', v: 45, i: '4:15', r: '1:31' },
-                  { t: '20:00', v: 50, i: '3:56', r: '1:24' },
-                  { t: '18:00', v: 56, i: '3:37', r: '1:17' },
-                  { t: '17:00', v: 60, i: '3:27', r: '1:13' },
-                  { t: '16:00', v: 65, i: '3:16', r: '1:10' },
+                  { t: '25:00', v: 38.3, i: '4:53', r: '1:49' },
+                  { t: '22:00', v: 44.5, i: '4:19', r: '1:36' },
+                  { t: '20:00', v: 49.8, i: '3:57', r: '1:28' },
+                  { t: '18:00', v: 56.3, i: '3:34', r: '1:20' },
+                  { t: '17:00', v: 60.2, i: '3:23', r: '1:16' },
+                  { t: '16:00', v: 64.6, i: '3:12', r: '1:11' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
@@ -262,7 +262,7 @@ export default function IntervalTrainingPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            💡 좁은 화면에서는 표를 좌우로 스크롤할 수 있습니다. ※ 페이스는 잭 다니엘스(Jack Daniels)의 VDOT 공식 기반이며, 계산기는 VDOT 35~70 구간을 5단위로 보간하고 그 범위를 벗어나면 근사 처리합니다. 출처·러너 컨디션에 따라 실제 최적 페이스는 다소 차이날 수 있습니다.
+            💡 좁은 화면에서는 표를 좌우로 스크롤할 수 있습니다. ※ 페이스는 잭 다니엘스(Jack Daniels)의 VDOT 공식(I = VO₂max의 97%, R = 106%)으로 계산했고 위 계산기와 같은 값입니다. 계산기는 VDOT 20~85 범위에서 페이스를 보여 주며, 러너 컨디션에 따라 실제 최적 페이스는 다소 차이날 수 있습니다.
           </p>
         </div>
 
@@ -351,10 +351,10 @@ export default function IntervalTrainingPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[
-              { p: '1~4주', n: '🟢 적응', d: '기초 체력 + 인터벌 폼 익히기. 낮은 강도 자주.' },
-              { p: '5~8주', n: '🟡 발전', d: '페이스 ↑ + 거리 ↑. 야소 800 등 메뉴 다양화.' },
-              { p: '9~12주', n: '🔴 피크', d: '최고 강도 + 대회 시뮬. 주 2회 가능.' },
-              { p: '13~16주', n: '🟠 테이퍼', d: '강도 ↓ + 회복. 대회 직전 1~2주 집중 회복.' },
+              { p: '1~2주', n: '🟢 적응', d: '인터벌 폼 익히기. 짧은 거리·적은 횟수로 시작.' },
+              { p: '3~11주', n: '🟡 발전', d: '페이스 ↑ + 거리 ↑. 야소 800 등 메뉴 다양화.' },
+              { p: '13~14주', n: '🔴 피크', d: '최고 강도 + 대회 시뮬. 주 2회 가능.' },
+              { p: '15~16주', n: '🟠 테이퍼', d: '강도 ↓ + 회복. 대회 직전 2주 집중 회복.' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
                 <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '14px', fontWeight: 800, color: 'var(--accent)', marginBottom: '4px' }}>{m.p}</p>
@@ -364,7 +364,7 @@ export default function IntervalTrainingPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            💡 4주마다 회복주 자동 삽입 (강도 ↓·회복). 매 주차 페이스·회복·총 거리는 [훈련 스케줄] 탭의 6컬럼 표 자동 생성.
+            💡 4주마다(4·8·12주차) 회복주 자동 삽입 (강도 ↓·회복). 기간을 줄이면 적응 2주·테이퍼 2주는 그대로 두고 발전·피크 구간이 짧아집니다. 매 주차 페이스·회복·총 거리는 [훈련 스케줄] 탭의 6컬럼 표 자동 생성.
           </p>
         </div>
 
@@ -451,12 +451,12 @@ export default function IntervalTrainingPage() {
             🏃 한국 인기 마라톤 대회 시즌
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            본 도구의 [훈련 스케줄] 탭에서 <strong style={{ color: 'var(--text)' }}>대회 빠른 선택</strong>으로 D-day 자동 입력. 봄(3~5월)·가을(9~11월)이 한국 마라톤 시즌입니다.
+            본 도구의 [훈련 스케줄] 탭에서 <strong style={{ color: 'var(--text)' }}>대회 빠른 선택</strong>으로 D-day 자동 입력. 봄(2~4월)과 가을(10~11월)에 큰 대회가 몰립니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { s: '🌸 봄 시즌 (3~5월)', races: '서울마라톤(동아일보, 3월)·대구국제(4월)·서울하프(5월)', plan: '12월부터 16주 시작' },
-              { s: '🍁 가을 시즌 (10~11월)', races: '춘천(10월)·JTBC(11월)', plan: '6~7월부터 16주 시작' },
+              { s: '🌸 봄 시즌 (2~4월)', races: '대구마라톤(2월)·서울마라톤(동아마라톤, 3월)·서울하프(4월)', plan: '대회에 따라 11월~1월 사이 16주 시작' },
+              { s: '🍁 가을 시즌 (10~11월)', races: '춘천(10월)·JTBC(11월)', plan: '7월 초부터 16주 시작' },
               { s: '🏃 단기 (10km·하프)', races: '연중 자주 개최', plan: '8~12주 단축 스케줄 가능' },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
@@ -467,7 +467,7 @@ export default function IntervalTrainingPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            💡 본 도구의 풀 스케줄 + 대회 직전 테이퍼(13~16주차) 활용. 봄 대회 → 12월부터 / 가을 대회 → 6~7월부터 시작 권장.
+            💡 본 도구의 16주 스케줄은 마지막 2주(15~16주차)를 테이퍼로 잡습니다. 봄 대회는 11월~1월, 가을 대회는 7월 초에 시작하면 16주를 채울 수 있습니다. 개최일은 해마다 달라지니 공식 공지를 확인하세요.
           </p>
         </div>
 

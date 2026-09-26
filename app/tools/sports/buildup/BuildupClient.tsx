@@ -11,7 +11,7 @@ import {
   SPLIT_LABEL, DIST_PRESETS_KM, PRESETS,
   parsePace, fmtPace, fmtHMS,
   segmentsFromMode, calcBuildup, safetyCheck,
-  vdotFromRace, paceFromVdot,
+  vdotFromRace, paceFromVdot, presetPaces, fiveKPaceSec,
   loadRoutines, saveRoutines, routinesToCSV,
   type Profile, type SplitMode, type Intensity,
   type BuildupRoutine, type Preset,
@@ -157,10 +157,10 @@ export default function BuildupClient() {
 
   const user5kPaceSec = useMemo(() => {
     if (!vdot) return null
-    // 5K race pace ≈ T + a bit (보통 T~I 사이)
-    // 단순화: VDOT 기반 5K 페이스 = T 페이스에서 약 -8초 (대략)
-    return paceFromVdot(vdot, INTENSITY_LABEL.T.pct + 0.04)
-  }, [vdot])
+    // 5K 기록을 넣었으면 그 페이스, 아니면 같은 VDOT의 5K 예상 기록 페이스
+    // (예전 VO2max 92% 근사는 5K 페이스를 5~15초/km 느리게 잡아 T 빌드업에 '5K 수준' 경고를 냈음)
+    return fiveKPaceSec(vdot, refKm, refTimeSec)
+  }, [vdot, refKm, refTimeSec])
 
   // ── 구간 + 결과 ────────────────────────
   const segments = useMemo(
@@ -231,12 +231,9 @@ export default function BuildupClient() {
     setProfile(p.profile)
     setSplitMode(p.splitMode)
     if (vdot && p.startFromE !== undefined && p.endFromIntensity) {
-      const ePace = paceFromVdot(vdot, INTENSITY_LABEL.E.pct)
-      const startS = round5(ePace + p.startFromE)
-      const endIntensity = p.endFromIntensity
-      const endS = round5(paceFromVdot(vdot, INTENSITY_LABEL[endIntensity].pct))
-      setStartPace(fmtPace(startS))
-      setEndPace(fmtPace(endS))
+      const pp = presetPaces(vdot, p.startFromE, p.endFromIntensity)
+      setStartPace(fmtPace(round5(pp.startSec)))
+      setEndPace(fmtPace(round5(pp.endSec)))
     } else {
       setStartPace(p.fixedStartPace ?? '6:00')
       setEndPace(p.fixedEndPace ?? '5:00')
@@ -305,11 +302,11 @@ export default function BuildupClient() {
       </Disclaimer>
 
       {/* ── 탭 ── */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'design' ? s.tabActive : ''}`} onClick={() => setTab('design')}>📈 빌드업 설계</button>
-        <button className={`${s.tab} ${tab === 'race' ? s.tabActive : ''}`} onClick={() => setTab('race')}>🏅 레이스 기반</button>
-        <button className={`${s.tab} ${tab === 'preset' ? s.tabActive : ''}`} onClick={() => setTab('preset')}>📋 프리셋</button>
-        <button className={`${s.tab} ${tab === 'routines' ? s.tabActive : ''}`} onClick={() => setTab('routines')}>💾 내 루틴</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="빌드업 기능">
+        <button type="button" role="tab" aria-selected={tab === 'design'} className={`${s.tab} ${tab === 'design' ? s.tabActive : ''}`} onClick={() => setTab('design')}>📈 빌드업 설계</button>
+        <button type="button" role="tab" aria-selected={tab === 'race'} className={`${s.tab} ${tab === 'race' ? s.tabActive : ''}`} onClick={() => setTab('race')}>🏅 레이스 기반</button>
+        <button type="button" role="tab" aria-selected={tab === 'preset'} className={`${s.tab} ${tab === 'preset' ? s.tabActive : ''}`} onClick={() => setTab('preset')}>📋 프리셋</button>
+        <button type="button" role="tab" aria-selected={tab === 'routines'} className={`${s.tab} ${tab === 'routines' ? s.tabActive : ''}`} onClick={() => setTab('routines')}>💾 내 루틴</button>
       </div>
 
       {/* ══════════ TAB 1: 설계 ══════════ */}
@@ -496,7 +493,7 @@ export default function BuildupClient() {
                             <td className={s.cellCum}>{fmtHMS(warmSec + seg.cumTime)}</td>
                             <td>
                               {meta ? (
-                                <span className={s.intensityChip} style={{ background: `${meta.color}22`, color: meta.color, borderColor: `${meta.color}66` }}>
+                                <span className={s.intensityChip} style={{ background: `${meta.color}22`, color: 'var(--text)', borderColor: `${meta.color}66` }}>
                                   {seg.intensity} · {meta.label}
                                 </span>
                               ) : (
@@ -618,7 +615,7 @@ export default function BuildupClient() {
                       return (
                         <tr key={k}>
                           <td>
-                            <span className={s.intensityChip} style={{ background: `${meta.color}22`, color: meta.color, borderColor: `${meta.color}66` }}>
+                            <span className={s.intensityChip} style={{ background: `${meta.color}22`, color: 'var(--text)', borderColor: `${meta.color}66` }}>
                               {k} · {meta.label}
                             </span>
                           </td>
@@ -641,8 +638,9 @@ export default function BuildupClient() {
                     { name: '🏃 하프 대비', km: 14, profile: 'race-pace-ladder' as Profile, sM: 'equal-4' as SplitMode, end: 'T' as Intensity, eOff: 0 },
                     { name: '💪 풀 대비', km: 20, profile: 'back-loaded' as Profile, sM: 'equal-4' as SplitMode, end: 'M' as Intensity, eOff: 30 },
                   ].map((r, i) => {
-                    const startS = round5(paceFromVdot(vdot, INTENSITY_LABEL.E.pct) + r.eOff)
-                    const endS = round5(paceFromVdot(vdot, INTENSITY_LABEL[r.end].pct))
+                    const pp = presetPaces(vdot, r.eOff, r.end)
+                    const startS = round5(pp.startSec)
+                    const endS = round5(pp.endSec)
                     const apply = () => {
                       setTotalKm(String(r.km))
                       setProfile(r.profile)

@@ -76,7 +76,7 @@ const FAQ_LD = [
   { "q":"워밍업은 정말 5세트나 필요한가요? 시간이 너무 오래 걸려요.","a":"본 세트가 80% 이상이면 5세트가 표준입니다. 60% 미만이면 2~3세트로 충분하고, 본 도구는 본 세트 강도에 따라 자동으로 워밍업 세트 수를 조절합니다. 워밍업을 줄이고 부상으로 한 달 쉬는 것보다, 매 세션 5분 더 투자하는 게 훨씬 효율적입니다." },
   { "q":"컨디션에 따라 1RM이 왜 이렇게 차이가 나죠?","a":"1RM은 수면·영양·스트레스·카페인에 민감하게 반응합니다. 10~15% 일일 편차는 정상이며, 주간 평균을 보는 것이 더 정확합니다. 디로드 주간 뒤에는 일시적으로 5~10% 떨어질 수 있어요. 본 도구의 &ldquo;내 기록&rdquo; 탭에 누적하면 추세선으로 변동성을 흡수할 수 있습니다." },
   { "q":"1RM을 얼마나 자주 갱신해야 하나요?","a":"초보자는 4~6주, 중급 이상은 8~12주마다 재측정이 적절합니다. 프로그램 전환·디로드 후가 좋은 타이밍입니다. 매주 갱신은 오히려 변동성 노이즈에 흔들려 장기 추세를 놓치기 쉬워요." },
-  { "q":"풀업·딥스 같은 맨몸 운동의 1RM은 어떻게 계산하나요?","a":"도구에는 체중을 뺀 추가 중량(벨트·조끼)만 입력하세요. 예: 풀업에서 20kg 벨트를 찼다면 20kg만 입력합니다. 입력칸에도 &ldquo;추가 중량&rdquo;으로 표시됩니다. 수준 표의 &ldquo;+0.3×&rdquo;는 체중 70kg이면 +21kg 추가가 중급이라는 뜻입니다." },
+  { "q":"풀업·딥스 같은 맨몸 운동의 1RM은 어떻게 계산하나요?","a":"중량 칸에는 체중을 뺀 추가 중량(벨트·조끼)을, 체중 칸에는 본인 체중을 입력하세요. 예: 체중 75kg이 20kg 벨트를 차고 8회를 했다면 20kg과 75kg을 넣습니다. 맨몸으로만 했다면 추가 중량은 0입니다. 반복 공식은 실제로 들어 올린 전체 부하(체중+추가 중량)에 적용하고, 결과는 체중을 뺀 추가 중량으로 보여 줍니다. 수준 표의 &ldquo;+0.3×&rdquo;는 체중 70kg이면 +21kg 추가가 중급이라는 뜻입니다." },
   { "q":"기록은 어디에 저장되나요? 데이터가 사라질 수 있나요?","a":"모든 기록은 이 브라우저(localStorage)에만 저장됩니다. 서버로 전송되지 않으며, 브라우저 데이터를 지우거나 시크릿 모드로 접속하면 사라집니다. 다른 기기에서는 보이지 않으니 중요한 기록은 별도로 메모해두세요." }
 ]
 
@@ -228,7 +228,7 @@ export default function OneRMPage() {
         </table>
       </div>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-        예) 50대 여성이 벤치프레스 체중의 0.7배를 들면 → <strong style={{ color: 'var(--text)' }}>중급</strong> 평가 (남성 20대 기준의 1.0×에 해당). 같은 무게라도 연령·성별에 따라 평가가 한 단계씩 올라갈 수 있습니다.
+        예) 50대 여성이 벤치프레스 체중의 0.7배를 들면 → <strong style={{ color: 'var(--text)' }}>상급</strong> 평가 (남성 20대 기준 약 1.33×에 해당). 같은 무게라도 연령·성별에 따라 평가가 한 단계씩 올라갈 수 있습니다.
       </p>
 
       {/* 4. 워밍업 5세트 — 부상 예방의 핵심 (NEW) */}
@@ -342,12 +342,12 @@ export default function OneRMPage() {
           </thead>
           <tbody>
             <tr><td style={cell}><strong style={{ color: '#DC2626' }}>95~100%</strong></td><td style={cell}>1~2회</td><td style={cell}>최대 근력 테스트</td><td style={cell}>3~5분</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#DC2626' }}>90%</strong></td><td style={cell}>3~4회</td><td style={cell}>최대 근력</td><td style={cell}>3~5분</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#D97706' }}>85%</strong></td><td style={cell}>5~6회</td><td style={cell}>근력·근비대</td><td style={cell}>2~3분</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#D97706' }}>80%</strong></td><td style={cell}>8회</td><td style={cell}>근비대 (최적)</td><td style={cell}>90초~2분</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#0EA5E9' }}>75%</strong></td><td style={cell}>10회</td><td style={cell}>근비대</td><td style={cell}>90초</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#059669' }}>70%</strong></td><td style={cell}>12회</td><td style={cell}>근비대·지구력</td><td style={cell}>60~90초</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#059669' }}>65%</strong></td><td style={cell}>15회</td><td style={cell}>근지구력</td><td style={cell}>60초</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#DC2626' }}>90%</strong></td><td style={cell}>2~3회</td><td style={cell}>최대 근력</td><td style={cell}>3~5분</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#D97706' }}>85%</strong></td><td style={cell}>3~5회</td><td style={cell}>근력·근비대</td><td style={cell}>2~3분</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#D97706' }}>80%</strong></td><td style={cell}>6~8회</td><td style={cell}>근비대 (최적)</td><td style={cell}>90초~2분</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#0EA5E9' }}>75%</strong></td><td style={cell}>8~10회</td><td style={cell}>근비대</td><td style={cell}>90초</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#059669' }}>70%</strong></td><td style={cell}>10~12회</td><td style={cell}>근비대·지구력</td><td style={cell}>60~90초</td></tr>
+            <tr><td style={cell}><strong style={{ color: '#059669' }}>65%</strong></td><td style={cell}>12~15회</td><td style={cell}>근지구력</td><td style={cell}>60초</td></tr>
             <tr><td style={cell}><strong style={{ color: '#059669' }}>60%</strong></td><td style={cell}>15회+</td><td style={cell}>워밍업·회복</td><td style={cell}>30~60초</td></tr>
           </tbody>
         </table>
@@ -519,7 +519,7 @@ export default function OneRMPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q9. 풀업·딥스 같은 맨몸 운동의 1RM은 어떻게 계산하나요?</summary>
         <div style={faqAnswer}>
-          도구에는 <strong style={{ color: 'var(--text)' }}>체중을 뺀 추가 중량(벨트·조끼)만</strong> 입력하세요. 예: 풀업에서 20kg 벨트를 찼다면 20kg만 입력합니다. 입력칸에도 &ldquo;추가 중량&rdquo;으로 표시됩니다. 수준 표의 &ldquo;+0.3×&rdquo;는 체중 70kg이면 +21kg 추가가 중급이라는 뜻입니다.
+          중량 칸에는 <strong style={{ color: 'var(--text)' }}>체중을 뺀 추가 중량(벨트·조끼)</strong>을, 체중 칸에는 본인 체중을 입력하세요. 예: 체중 75kg이 20kg 벨트를 차고 8회를 했다면 20kg과 75kg을 넣습니다. 맨몸으로만 했다면 추가 중량은 0입니다. 반복 공식은 실제로 들어 올린 <strong style={{ color: 'var(--text)' }}>전체 부하(체중+추가 중량)</strong>에 적용하고, 결과는 체중을 뺀 추가 중량으로 보여 줍니다. 수준 표의 &ldquo;+0.3×&rdquo;는 체중 70kg이면 +21kg 추가가 중급이라는 뜻입니다.
         </div>
       </details>
 

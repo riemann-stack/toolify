@@ -70,10 +70,10 @@ const faqAnswer: React.CSSProperties = {
 
 const FAQ_LD = [
   { "q":"빌드업 vs 인터벌 vs 템포런 차이는?","a":"빌드업은 점진적 가속(E→T), 인터벌은 고강도+회복 반복, 템포런은 일정 페이스로 20~40분. 빌드업 = 페이스 조절·후반 지구력 / 인터벌 = V̇O₂max / 템포 = 젖산 역치 향상. 본 도구는 빌드업 전용. 인터벌은 인터벌 훈련 계산기." },
-  { "q":"시작 페이스는 어떻게 정하나요?","a":"본인 E(Easy) 페이스에 +30초/km 정도 여유 두는 게 표준. E 페이스는 회복일·LSD 페이스(약간 숨차지만 대화 가능). 레이스 기반 탭에 5K/10K/하프 기록 입력 시 VDOT 기반 E·M·T·I 페이스 자동 표시." },
+  { "q":"시작 페이스는 어떻게 정하나요?","a":"본인 E(이지) 페이스 범위 안에서, 대화가 편한 속도로 시작하는 게 표준입니다. E 페이스는 회복일·LSD 페이스(약간 숨차지만 대화 가능). 레이스 기반 탭에 5K/10K/하프 기록을 넣으면 VDOT 기준 E·M·T·I 페이스가 표시되고, 프리셋과 추천 빌드업의 시작 페이스도 E 범위 안쪽으로 맞춰집니다. 끝까지 E로 달리는 회복형 프리셋만 E보다 느린 페이스로 시작합니다." },
   { "q":"끝 페이스는 5K 페이스보다 빨라도 되나요?","a":"비추천. 5K 페이스 이하는 인터벌(I·R) 영역으로 빌드업 정의를 벗어남. 표준은 T(역치) 페이스 ~ 10K 페이스까지가 안전. 본 도구의 안전성 체크가 자동 경고합니다." },
   { "q":"5km 빌드업은 어떻게 짜야 하나요?","a":"짧은 거리는 적응 시간 부족 → 마지막 자극(sprint finish) 프로파일 추천. 1~4km는 E 페이스(편안), 마지막 1km는 M 또는 T 페이스. 본 도구의 🌱 회복 후 5km 가벼운 자극 프리셋을 활용하세요." },
-  { "q":"풀 마라톤 대비 빌드업은 며칠 전에 하나요?","a":"일반 가이드: 6~8주 전 25km 빌드업(후반 10km M 페이스 적응) · 4~6주 전 20km 빌드업(후반 8km M 페이스) · 1~2주 전 12km 빌드업(페이스 점검·자신감). 본 도구의 💪 풀 대비 20km/25km·🔥 풀 직전 12km 점검 프리셋 활용. 정확한 일정은 본인 컨디션·코치와 상담." },
+  { "q":"풀 마라톤 대비 빌드업은 며칠 전에 하나요?","a":"일반 가이드: 6~8주 전 25km 빌드업(후반 가속 후 마지막 5km M 페이스) · 4~6주 전 20km 빌드업(15km 편하게 + 마지막 5km M 페이스) · 1~2주 전 12km 빌드업(페이스 점검·자신감). 본 도구의 💪 풀 대비 20km/25km·🔥 풀 직전 12km 점검 프리셋 활용. 정확한 일정은 본인 컨디션·코치와 상담." },
   { "q":"트레드밀에서도 빌드업 가능한가요?","a":"가능합니다. 트레드밀은 속도(km/h)로 입력: 5:00/km = 12.0 km/h · 5:30/km = 10.9 km/h · 6:00/km = 10.0 km/h. 본 도구는 페이스(mm:ss/km) 표시 — 본인이 환산. 트레드밀은 외부 변수(바람·지형) 없어 페이스 안정적이지만, 1% 경사 추가 권장(실외 환산)." },
   { "q":"본 도구의 워치 포맷은 어떤 워치에서 작동하나요?","a":"본 도구는 단순 텍스트 포맷(예: &ldquo;2.0km @ 5:30/km&rdquo;)을 제공합니다. 가민·코로스·애플워치 등 워치별 직접 가져오기 형식이 다르므로: 가민 Connect → 워크아웃 수동 생성(구간별 거리·페이스 입력) · 코로스 → COROS App 워크아웃 빌더 · 애플워치 → 운동 앱 직접 입력. 본 도구의 텍스트는 입력 참고용. 자동 import는 워치 앱 자체 워크아웃 빌더 활용." },
   { "q":"안전성 체크가 빨강(🔴)이면 절대 하면 안 되나요?","a":"절대 금지가 아니라 강력 보류 권장. 본 도구는 일반 가이드 — 본인 한계 보장 X. 🔴가 나오면: 설계를 조정(페이스·거리·구간) · 프리셋(📋 탭)에서 본인 수준에 맞는 것 선택 · VDOT(레이스 기록) 입력으로 정확도 ↑. 그래도 진행한다면 본인 책임. 통증·이상 시 즉시 중단." },
@@ -127,8 +127,8 @@ export default function BuildupPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
         {[
           { name: '🟢 균등 (Linear)', color: '#0D9488', curve: '6:00 → 5:45 → 5:30 → 5:15 → 5:00', use: '가장 단순·표준. 모든 거리에 적합.' },
-          { name: '🟡 후반 집중 (Back-loaded)', color: '#059669', curve: '6:00 → 6:00 → 5:50 → 5:30 → 5:00', use: '하프·풀 준비. 후반 30%에 가속.' },
-          { name: '🟠 마지막 자극 (Sprint Finish)', color: '#FFD93E', curve: '6:00 → 6:00 → 6:00 → 5:40 → 4:50', use: '회복 후 가벼운 자극·평일 짧은 훈련.' },
+          { name: '🟡 후반 집중 (Back-loaded)', color: '#059669', curve: '6:00 → 6:00 → 6:00 → 5:50 → 5:00', use: '하프·풀 준비. 후반 30%에 가속.' },
+          { name: '🟠 마지막 자극 (Sprint Finish)', color: '#FFD93E', curve: '6:00 → 6:00 → 6:00 → 6:00 → 4:50', use: '회복 후 가벼운 자극·평일 짧은 훈련.' },
           { name: '🔴 레이스 페이스 단계 (Race-pace Ladder)', color: '#EA580C', curve: 'E → M → HM → 10K (4구간 고정)', use: '레이스 페이스 적응·하프 대비.' },
         ].map((p, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
@@ -168,7 +168,7 @@ export default function BuildupPage() {
       <h2 style={sectionTitle}>🚫 안전한 빌드업 — 자주 하는 실수 5가지</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {[
-          { title: '1. 시작이 너무 빠름', err: 'E 페이스보다 빠르게 출발 → 후반 가속 여력 X', fix: '시작은 본인 E 페이스(회복일 페이스)에 +30초 정도 여유' },
+          { title: '1. 시작이 너무 빠름', err: 'E 페이스보다 빠르게 출발 → 후반 가속 여력 X', fix: '시작은 본인 E(이지) 페이스 범위 안에서, 대화가 편한 속도로' },
           { title: '2. 끝이 너무 빠름 (5K 페이스 이하)', err: '빌드업 ≠ 레이스. 5K 페이스 이하는 인터벌 영역.', fix: '끝은 T(역치) 페이스 또는 10K 페이스까지가 표준' },
           { title: '3. 격차가 너무 큼 (>120초/km)', err: '시작 6:30 → 끝 4:00 같은 극단 가속은 적응 어려움', fix: '90초/km 이내 권장. 큰 격차는 거리·구간 늘리기' },
           { title: '4. 고강도 구간이 너무 많음 (>50%)', err: '후반 절반 이상이 T·I 강도 → 누적 피로로 부상 위험', fix: '고강도는 마지막 20~30% 권장' },
@@ -213,8 +213,8 @@ export default function BuildupPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q2. 시작 페이스는 어떻게 정하나요?</summary>
         <div style={faqAnswer}>
-          본인 <strong style={{ color: 'var(--text)' }}>E(Easy) 페이스</strong>에 +30초/km 정도 여유 두는 게 표준. E 페이스는 회복일·LSD 페이스(약간 숨차지만 대화 가능).
-          <strong style={{ color: 'var(--text)' }}>레이스 기반 탭</strong>에 5K/10K/하프 기록 입력 시 VDOT 기반 E·M·T·I 페이스 자동 표시.
+          본인 <strong style={{ color: 'var(--text)' }}>E(이지) 페이스</strong> 범위 안에서, 대화가 편한 속도로 시작하는 게 표준입니다. E 페이스는 회복일·LSD 페이스(약간 숨차지만 대화 가능).
+          <strong style={{ color: 'var(--text)' }}>레이스 기반 탭</strong>에 5K/10K/하프 기록을 넣으면 VDOT 기준 E·M·T·I 페이스가 표시되고, 프리셋과 추천 빌드업의 시작 페이스도 E 범위 안쪽으로 맞춰집니다. 끝까지 E로 달리는 회복형 프리셋만 E보다 느린 페이스로 시작합니다.
         </div>
       </details>
 
@@ -243,8 +243,8 @@ export default function BuildupPage() {
         <div style={faqAnswer}>
           일반 가이드:
           <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li><strong style={{ color: 'var(--text)' }}>6~8주 전</strong>: 25km 빌드업 (후반 10km M 페이스 적응)</li>
-            <li><strong style={{ color: 'var(--text)' }}>4~6주 전</strong>: 20km 빌드업 (후반 8km M 페이스)</li>
+            <li><strong style={{ color: 'var(--text)' }}>6~8주 전</strong>: 25km 빌드업 (후반 가속 후 마지막 5km M 페이스)</li>
+            <li><strong style={{ color: 'var(--text)' }}>4~6주 전</strong>: 20km 빌드업 (15km 편하게 + 마지막 5km M 페이스)</li>
             <li><strong style={{ color: 'var(--text)' }}>1~2주 전</strong>: 12km 빌드업 (페이스 점검·자신감)</li>
           </ul>
           본 도구의 <strong>💪 풀 대비 20km/25km</strong>·<strong>🔥 풀 직전 12km 점검</strong> 프리셋 활용. 정확한 일정은 본인 컨디션·코치와 상담.

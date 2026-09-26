@@ -69,13 +69,15 @@ export const WKG_GRADES: WkgGrade[] = [
 export interface ZwiftCat {
   cat: string
   minWkg: number
+  /** 절대 와트 하한(zFTP W) — W/kg와 함께 둘 다 넘어야 해당 그룹 */
+  minWatt: number
   color: string
 }
 export const ZWIFT_CATS: ZwiftCat[] = [
-  { cat: 'A', minWkg: 4.2,  color: 'var(--danger)' },
-  { cat: 'B', minWkg: 3.36, color: 'var(--warning)' },
-  { cat: 'C', minWkg: 2.63, color: 'var(--success)' },
-  { cat: 'D', minWkg: 0,    color: 'var(--cat-health)' },
+  { cat: 'A', minWkg: 4.2,  minWatt: 250, color: 'var(--danger)' },
+  { cat: 'B', minWkg: 3.36, minWatt: 200, color: 'var(--warning)' },
+  { cat: 'C', minWkg: 2.63, minWatt: 150, color: 'var(--success)' },
+  { cat: 'D', minWkg: 0,    minWatt: 0,   color: 'var(--cat-health)' },
 ]
 
 export interface ZoneRow {
@@ -101,15 +103,24 @@ export function calcFtp(inputWatt: number, method: TestMethod, weightKg: number)
   const grade = wkg !== null
     ? (WKG_GRADES.find((g) => wkg >= g.min)?.label ?? WKG_GRADES[WKG_GRADES.length - 1].label)
     : '체중 입력 시 표시'
-  const zwift = wkg !== null ? (ZWIFT_CATS.find((c) => wkg >= c.minWkg) ?? null) : null
+  // W/kg와 절대 와트 하한을 모두 만족하는 가장 높은 그룹
+  const zwift = wkg !== null ? (ZWIFT_CATS.find((c) => wkg >= c.minWkg && ftp >= c.minWatt) ?? null) : null
 
-  const zones: ZoneRow[] = POWER_ZONES.map((zn) => ({
-    z: zn.z,
-    name: zn.name,
-    loW: Math.round((ftp * zn.loPct) / 100),
-    hiW: zn.hiPct !== null ? Math.round((ftp * zn.hiPct) / 100) : null,
-    desc: zn.desc,
-  }))
+  // 존 경계를 각각 반올림하면 55%→56% 사이 등에서 어느 존에도 속하지 않는 와트가 생기므로
+  // 각 존의 하한은 '이전 존 상한 + 1W'로 이어 붙인다.
+  const zones: ZoneRow[] = []
+  let prevHi: number | null = null
+  for (const zn of POWER_ZONES) {
+    const loW: number = prevHi === null ? Math.round((ftp * zn.loPct) / 100) : prevHi + 1
+    const hiW: number | null = zn.hiPct !== null ? Math.max(loW, Math.round((ftp * zn.hiPct) / 100)) : null
+    zones.push({ z: zn.z, name: zn.name, loW, hiW, desc: zn.desc })
+    prevHi = hiW
+  }
 
   return { ftp, wkg, grade, zwift, zones }
+}
+
+/** W/kg 표시값 — 판정(원값 ≥ 경계)과 어긋나지 않도록 소수 2자리에서 내림 */
+export function fmtWkg(wkg: number): string {
+  return (Math.floor(wkg * 100 + 1e-9) / 100).toFixed(2)
 }

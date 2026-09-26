@@ -135,7 +135,7 @@ export default function SwimPaceClient() {
     return TABLE_DISTANCES.map(d => {
       const free = pace100 * (d / 100)
       const adj = free / strokeCoef
-      return { d, time: secToMmss(adj), pace100m: secToMmss((adj / d) * 100) }
+      return { d, time: secToHms(adj), pace100m: secToMmss((adj / d) * 100) }
     })
   }, [pace100, strokeCoef])
 
@@ -284,9 +284,9 @@ export default function SwimPaceClient() {
 
       {/* ── 100m 페이스 입력 + 칩 ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>100m 페이스</label>
+        <label className={styles.cardLabel} htmlFor="swim-pace-min">100m 페이스</label>
         <div className={styles.paceRow}>
-          <input className={styles.paceInput} type="text" inputMode="numeric"
+          <input id="swim-pace-min" className={styles.paceInput} type="text" inputMode="numeric"
             aria-label="100m 페이스 분"
             value={paceMin} placeholder="1"
             onChange={e => setPaceMin(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
@@ -349,11 +349,11 @@ export default function SwimPaceClient() {
 
       {/* ── 총기록 → 페이스 역산 ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>총기록으로 페이스 역산</label>
+        <label className={styles.cardLabel} htmlFor="swim-t-hour">총기록으로 페이스 역산</label>
         <p className={styles.cardDesc}>실제 기록을 입력하면 {fmtComma(distM || 0)}m 기준 100m 페이스를 거꾸로 계산합니다.</p>
         <div className={styles.timeRow}>
           <div className={styles.timeField}>
-            <input className={styles.timeInput} type="text" inputMode="numeric"
+            <input id="swim-t-hour" className={styles.timeInput} type="text" inputMode="numeric"
               aria-label="총기록 시"
               value={tHour} placeholder="0"
               onChange={e => setTHour(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}
@@ -403,7 +403,7 @@ export default function SwimPaceClient() {
       {/* ── 거리별 예상기록 표 ── */}
       {tableRows.length > 0 && (
         <div className={styles.card}>
-          <label className={styles.cardLabel}>거리별 예상기록 (자유형 페이스 기준·영법 환산)</label>
+          <span className={styles.cardLabel}>거리별 예상기록 (자유형 페이스 기준·영법 환산)</span>
           <div className={styles.strokeRow}>
             {STROKES.map(s => (
               <button key={s.key} type="button"
@@ -440,11 +440,11 @@ export default function SwimPaceClient() {
 
       {/* ── SWOLF ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>SWOLF ({poolLen}m 1바퀴)</label>
+        <label className={styles.cardLabel} htmlFor="swim-swolf-time">SWOLF ({poolLen}m 1바퀴)</label>
         <div className={styles.swolfRow}>
           <div className={styles.field}>
             <div className={styles.inputBox}>
-              <input className={styles.amountInput} type="text" inputMode="numeric"
+              <input id="swim-swolf-time" className={styles.amountInput} type="text" inputMode="numeric"
                 aria-label={`${poolLen}m 소요 시간(초)`}
                 value={lapTimeStr} placeholder="20"
                 onChange={e => setLapTimeStr(e.target.value.replace(/[^\d]/g, '').slice(0, 3))} />
@@ -474,12 +474,12 @@ export default function SwimPaceClient() {
 
       {/* ── 인터벌 send-off ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>인터벌 보내기시간 (send-off)</label>
+        <label className={styles.cardLabel} htmlFor="swim-so-min">인터벌 보내기시간 (send-off)</label>
         <p className={styles.cardDesc}>목표 구간기록 + 휴식 시간 = 다음 출발까지 간격.</p>
         <div className={styles.soRow}>
           <div className={styles.field}>
             <div className={styles.paceRowSm}>
-              <input className={styles.paceInputSm} type="text" inputMode="numeric"
+              <input id="swim-so-min" className={styles.paceInputSm} type="text" inputMode="numeric"
                 aria-label="목표 구간기록 분"
                 value={soMin} placeholder="1"
                 onChange={e => setSoMin(e.target.value.replace(/[^\d]/g, '').slice(0, 2))}

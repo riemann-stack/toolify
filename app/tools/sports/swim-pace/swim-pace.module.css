@@ -40,7 +40,7 @@
 .fieldHint { font-size: 11px; color: var(--muted); }
 .eqSign {
   font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
-  color: var(--accent); padding-bottom: 14px;
+  color: var(--accent-ink); padding-bottom: 14px;
 }
 .inputBox {
   display: flex; align-items: center; gap: 6px;
@@ -117,7 +117,7 @@
 .heroNum {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(44px, 11vw, 72px); font-weight: 800;
-  color: var(--accent); letter-spacing: -2px;
+  color: var(--accent-ink); letter-spacing: -2px;
 }
 .heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 6px; letter-spacing: 0; }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
@@ -141,7 +141,7 @@
 .revealLabel { font-size: 12px; color: var(--muted); }
 .revealVal {
   font-family: 'Inter', system-ui, sans-serif; font-size: 24px; font-weight: 800;
-  color: var(--accent); letter-spacing: -1px;
+  color: var(--accent-ink); letter-spacing: -1px;
 }
 .revealUnit { font-size: 13px; color: var(--muted); font-weight: 600; margin-left: 4px; }
 .applyBtn {
@@ -175,7 +175,7 @@
 .tdLabel { color: var(--text); font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
 .tdVal {
   text-align: right; font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 800; color: var(--accent); font-size: 15px;
+  font-weight: 800; color: var(--accent-ink); font-size: 15px;
 }
 .tdSub { text-align: right; font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 13px; }
 .tableNote { font-size: 11px; color: var(--muted); line-height: 1.7; margin: 12px 0 0; }
@@ -185,7 +185,7 @@
   display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
   margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border);
 }
-.swolfScore { font-family: 'Inter', system-ui, sans-serif; font-size: 36px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+.swolfScore { font-family: 'Inter', system-ui, sans-serif; font-size: 36px; font-weight: 800; color: var(--accent-ink); letter-spacing: -1px; }
 .swolfDesc { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
 /* ── send-off ── */
@@ -206,7 +206,7 @@
   margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border);
 }
 .soLabel { font-size: 12px; color: var(--muted); }
-.soVal { font-family: 'Inter', system-ui, sans-serif; font-size: 32px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+.soVal { font-family: 'Inter', system-ui, sans-serif; font-size: 32px; font-weight: 800; color: var(--accent-ink); letter-spacing: -1px; }
 .soSub { font-size: 12px; color: var(--muted); }
 
 /* ── 복사 ── */
