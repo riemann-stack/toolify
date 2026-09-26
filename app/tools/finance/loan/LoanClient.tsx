@@ -38,7 +38,7 @@ const TAB_ACTIVE: Record<Tab, string> = {
   compare: styles.tabActiveCompare,
 }
 
-const PERIOD_PRESETS = [12, 24, 36, 60, 120, 240]   // 30년 제거
+const PERIOD_PRESETS = [12, 24, 36, 60, 120, 240, 360]   // 기본값 360개월(30년)에 맞는 칩 포함
 const GRACE_PRESETS = [0, 12, 24, 36, 60]
 
 export default function LoanClient() {
@@ -96,18 +96,23 @@ export default function LoanClient() {
   const [prepaymentMonth, setPrepaymentMonth] = useState(24)
   const [prepaymentMode, setPrepaymentMode] = useState<PrepaymentMode>('reduce-period')
   const [prepaymentFeeRate, setPrepaymentFeeRate] = useState(1.2)
+  // 엔진과 같은 규칙으로 시점을 보정 — 기간을 줄였을 때 라벨·슬라이더·계산 시점이 어긋나지 않게
+  const prepayAvailable = monthsNum >= 2
+  const effPrepayMonth = Math.max(1, Math.min(monthsNum - 1, prepaymentMonth))
+  const prepaySliderMin = Math.min(6, Math.max(1, monthsNum - 1))
+  const prepaySliderStep = monthsNum <= 24 ? 1 : 6
 
   const prepayResult = useMemo(() => {
-    if (!inputValid) return null
+    if (!inputValid || !prepayAvailable) return null
     const amount = parseAmount(prepaymentAmount) * 10_000
     if (amount <= 0) return null
     return simulatePrepayment({
       principal: principalWon, annualRate: rateNum, months: monthsNum, graceMonths,
       method: 'equal-payment',
-      prepaymentMonth, prepaymentAmount: amount, prepaymentMode, prepaymentFeeRate,
+      prepaymentMonth: effPrepayMonth, prepaymentAmount: amount, prepaymentMode, prepaymentFeeRate,
     })
-  }, [inputValid, principalWon, rateNum, monthsNum, graceMonths,
-      prepaymentAmount, prepaymentMonth, prepaymentMode, prepaymentFeeRate])
+  }, [inputValid, prepayAvailable, principalWon, rateNum, monthsNum, graceMonths,
+      prepaymentAmount, effPrepayMonth, prepaymentMode, prepaymentFeeRate])
 
   /* ─── 탭 3: 갈아타기 ─── */
   const [refiCurrentRate, setRefiCurrentRate] = useState('5.0')
@@ -333,7 +338,7 @@ export default function LoanClient() {
       {tab === 'main' && ep && epr && intOnly && (
         <>
           {/* 3가지 상환 방식 — 컴팩트 카드 */}
-          <div className={styles.compareGrid3}>
+          <div className={styles.compareGrid3} role="status">
             <div className={styles.compareCardCompact}>
               <div className={styles.compareTitle}>원리금균등</div>
               <div className={styles.compareMain}>{won(ep.monthlyPayment)}</div>
@@ -399,7 +404,12 @@ export default function LoanClient() {
 
           <div className={styles.resultActions}>
             <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
-              onClick={() => copy(`대출 ${formatEok(principalWon)} / ${rateNum}% / ${monthsNum}개월 / 원리금균등 → 월 ${won(ep.monthlyPayment)} · 총 이자 ${formatEok(ep.totalInterest)}`)}>
+              onClick={() => {
+                const r = activeResult ?? ep
+                const label = method === 'equal-principal' ? '원금균등' : method === 'interest-only' ? '만기일시' : '원리금균등'
+                const pay = method === 'equal-principal' ? `첫달 ${won(r.firstPayment)}` : `월 ${won(r.monthlyPayment)}`
+                copy(`대출 ${formatEok(principalWon)} / ${rateNum}% / ${monthsNum}개월 / ${label} → ${pay} · 총 이자 ${formatEok(r.totalInterest)}`)
+              }}>
               {copied ? '✓ 복사됨' : '복사'}
             </button>
           </div>
@@ -410,7 +420,7 @@ export default function LoanClient() {
       {tab === 'prepay' && ep && (
         <>
           <div className={styles.disclaimer}>
-            💰 <strong>중도상환 시뮬</strong> — 잔여 원금을 일부 갚으면 총 이자를 줄일 수 있습니다. 중도상환수수료(주담대 3년 이내 1.0~1.5%)와 비교해 순절감액을 계산하세요. <strong>※ 원리금균등 상환 기준</strong>입니다.
+            💰 <strong>중도상환 시뮬</strong> — 잔여 원금을 일부 갚으면 총 이자를 줄일 수 있습니다. 중도상환수수료와 비교해 순절감액을 계산하세요. 수수료는 대출 후 3년 동안 남은 기간에 비례해 줄어드는 방식(3년 경과 시 면제)으로 계산합니다. <strong>※ 원리금균등 상환 기준</strong>입니다.
           </div>
 
           <div className={styles.threeCol}>
@@ -423,23 +433,29 @@ export default function LoanClient() {
               </div>
             </div>
             <div className={styles.card}>
-              <label className={styles.cardLabel}>중도상환 시점 — {prepaymentMonth}개월차 ({(prepaymentMonth / 12).toFixed(1)}년)</label>
-              <input className={styles.slider} type="range" min="6" max={monthsNum - 1} step="6"
-                aria-label={`중도상환 시점 (개월차)`}
-                aria-valuetext={`${prepaymentMonth}개월차`}
-                value={prepaymentMonth} onChange={e => setPrepaymentMonth(parseInt(e.target.value, 10))} />
+              <label className={styles.cardLabel} htmlFor="loan-prepay-month">중도상환 시점 — {effPrepayMonth}개월차 ({(effPrepayMonth / 12).toFixed(1)}년)</label>
+              <input id="loan-prepay-month" className={styles.slider} type="range"
+                min={prepaySliderMin} max={Math.max(prepaySliderMin, monthsNum - 1)} step={prepaySliderStep}
+                disabled={!prepayAvailable}
+                aria-valuetext={`${effPrepayMonth}개월차`}
+                value={effPrepayMonth} onChange={e => setPrepaymentMonth(parseInt(e.target.value, 10))} />
+              {!prepayAvailable && (
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>대출 기간이 2개월 이상이어야 중도상환을 계산할 수 있습니다.</p>
+              )}
             </div>
             <div className={styles.card}>
               <label className={styles.cardLabel}>수수료율 — {prepaymentFeeRate}%</label>
               <div className={styles.optionRow4} role="group" aria-label="중도상환 수수료율">
-                {[0, 0.8, 1.2, 1.5].map(r => (
+                {[0, 0.6, 1.2, 1.5].map(r => (
                   <button key={r} type="button" aria-pressed={prepaymentFeeRate === r}
+                    title={r === 0.6 ? '2025.1.13 이후 신규 주담대 수준' : r >= 1.2 ? '2025.1.12 이전 약정 수준' : undefined}
                     className={`${styles.optionBtn} ${prepaymentFeeRate === r ? styles.optionActive : ''}`}
                     onClick={() => setPrepaymentFeeRate(r)}>
                     {r === 0 ? '면제' : `${r}%`}
                   </button>
                 ))}
               </div>
+              <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>0.6%는 2025년 1월 13일 이후 신규 주담대, 1.2~1.5%는 그 이전 약정 수준입니다.</p>
             </div>
           </div>
 
@@ -461,7 +477,7 @@ export default function LoanClient() {
 
           {prepayResult && (
             <>
-              <div className={styles.hero}
+              <div className={styles.hero} role="status"
                 style={{ borderColor: 'rgba(161,98,7,0.40)', background: 'rgba(161,98,7,0.06)' }}>
                 <div className={styles.heroLabel}>순절감액</div>
                 <div className={styles.heroNum}
@@ -469,7 +485,7 @@ export default function LoanClient() {
                   {prepayResult.netSaving > 0 ? '−' : '+'}{formatEok(Math.abs(prepayResult.netSaving))}
                 </div>
                 <div className={styles.heroSub}>
-                  중도상환 {formatEok(parseAmount(prepaymentAmount) * 10_000)} · {prepaymentMonth}개월차 시점 ·
+                  중도상환 {formatEok(parseAmount(prepaymentAmount) * 10_000)} · {effPrepayMonth}개월차 시점 ·
                   {' '}{prepaymentMode === 'reduce-period' ? `${prepayResult.monthsShortened}개월 단축` : `월 상환액 ${won(prepayResult.newMonthlyPayment)}`}
                 </div>
               </div>
@@ -492,7 +508,7 @@ export default function LoanClient() {
               </div>
 
               <div className={styles.warnBox}>
-                ⚠️ <strong>중도상환수수료는 은행·상품마다 다릅니다.</strong> 일반적으로 — 주담대 3년 이내 1.0~1.5%, 이후 0% / 신용대출 0.5~1.0% / 정책 대출 면제 또는 매우 낮음. 정확한 수수료는 본인 대출 약정서를 확인하세요.
+                ⚠️ <strong>중도상환수수료는 은행·상품마다 다릅니다.</strong> 2025년 1월 13일 이후 신규 약정은 실비용 기준으로 낮아져 주담대 0.6% 안팎, 신용대출 0.1% 안팎이고, 그 이전 약정은 주담대 1.2~1.5% 수준이 많습니다. 보통 대출 후 3년이 지나면 면제되고 정책 대출은 면제되거나 매우 낮습니다. 정확한 수수료는 본인 대출 약정서를 확인하세요.
               </div>
             </>
           )}
@@ -510,23 +526,23 @@ export default function LoanClient() {
             <label className={styles.cardLabel}>기존 대출</label>
             <div className={styles.threeCol}>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>잔액 (만원)</span>
+                <label htmlFor="loan-refi-remaining" style={{ fontSize: 11, color: 'var(--muted)' }}>잔액 (만원)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="text" inputMode="numeric" value={refiRemaining} onChange={e => setRefiRemaining(comma(e.target.value))} />
+                  <input id="loan-refi-remaining" className={styles.numInput} type="text" inputMode="numeric" value={refiRemaining} onChange={e => setRefiRemaining(comma(e.target.value))} />
                   <span className={styles.unit}>만</span>
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>현재 금리 (%)</span>
+                <label htmlFor="loan-refi-rate" style={{ fontSize: 11, color: 'var(--muted)' }}>현재 금리 (%)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={refiCurrentRate} onChange={e => setRefiCurrentRate(e.target.value)} />
+                  <input id="loan-refi-rate" className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={refiCurrentRate} onChange={e => setRefiCurrentRate(e.target.value)} />
                   <span className={styles.unit}>%</span>
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>남은 기간 (개월)</span>
+                <label htmlFor="loan-refi-months" style={{ fontSize: 11, color: 'var(--muted)' }}>남은 기간 (개월)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" value={refiRemainMonths} onChange={e => setRefiRemainMonths(e.target.value)} />
+                  <input id="loan-refi-months" className={styles.numInput} type="number" inputMode="numeric" value={refiRemainMonths} onChange={e => setRefiRemainMonths(e.target.value)} />
                   <span className={styles.unit}>개월</span>
                 </div>
               </div>
@@ -537,16 +553,16 @@ export default function LoanClient() {
             <label className={styles.cardLabel}>새 대출</label>
             <div className={styles.twoCol}>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>새 금리 (%)</span>
+                <label htmlFor="loan-refi-new-rate" style={{ fontSize: 11, color: 'var(--muted)' }}>새 금리 (%)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={refiNewRate} onChange={e => setRefiNewRate(e.target.value)} />
+                  <input id="loan-refi-new-rate" className={styles.numInput} type="number" inputMode="decimal" step="0.05" value={refiNewRate} onChange={e => setRefiNewRate(e.target.value)} />
                   <span className={styles.unit}>%</span>
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>새 기간 (개월)</span>
+                <label htmlFor="loan-refi-new-months" style={{ fontSize: 11, color: 'var(--muted)' }}>새 기간 (개월)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" value={refiNewMonths} onChange={e => setRefiNewMonths(e.target.value)} />
+                  <input id="loan-refi-new-months" className={styles.numInput} type="number" inputMode="numeric" value={refiNewMonths} onChange={e => setRefiNewMonths(e.target.value)} />
                   <span className={styles.unit}>개월</span>
                 </div>
               </div>
@@ -557,23 +573,23 @@ export default function LoanClient() {
             <label className={styles.cardLabel}>부대비용 (만원)</label>
             <div className={styles.threeCol}>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>중도상환수수료</span>
-                <input className={styles.numInput} type="text" inputMode="numeric" value={refiPrepayFee} onChange={e => setRefiPrepayFee(comma(e.target.value))} />
+                <label htmlFor="loan-refi-prepay-fee" style={{ fontSize: 11, color: 'var(--muted)' }}>중도상환수수료</label>
+                <input id="loan-refi-prepay-fee" className={styles.numInput} type="text" inputMode="numeric" value={refiPrepayFee} onChange={e => setRefiPrepayFee(comma(e.target.value))} />
               </div>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>취급수수료</span>
-                <input className={styles.numInput} type="text" inputMode="numeric" value={refiOriginFee} onChange={e => setRefiOriginFee(comma(e.target.value))} />
+                <label htmlFor="loan-refi-origin-fee" style={{ fontSize: 11, color: 'var(--muted)' }}>취급수수료</label>
+                <input id="loan-refi-origin-fee" className={styles.numInput} type="text" inputMode="numeric" value={refiOriginFee} onChange={e => setRefiOriginFee(comma(e.target.value))} />
               </div>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>인지·등록세</span>
-                <input className={styles.numInput} type="text" inputMode="numeric" value={refiOtherFees} onChange={e => setRefiOtherFees(comma(e.target.value))} />
+                <label htmlFor="loan-refi-other-fees" style={{ fontSize: 11, color: 'var(--muted)' }}>인지·등록세</label>
+                <input id="loan-refi-other-fees" className={styles.numInput} type="text" inputMode="numeric" value={refiOtherFees} onChange={e => setRefiOtherFees(comma(e.target.value))} />
               </div>
             </div>
           </div>
 
           {refiResult && (
             <>
-              <div className={styles.hero}
+              <div className={styles.hero} role="status"
                 style={{
                   borderColor: refiResult.isWorthwhile ? 'rgba(16,185,129,0.40)' : 'rgba(220,38,38,0.40)',
                   background: refiResult.isWorthwhile ? 'rgba(16,185,129,0.06)' : 'rgba(220,38,38,0.06)',
@@ -694,7 +710,7 @@ export default function LoanClient() {
           </div>
 
           {reverseResult && (
-            <div className={styles.hero}
+            <div className={styles.hero} role="status"
               style={{ borderColor: 'rgba(155,89,182,0.40)', background: 'rgba(155,89,182,0.06)' }}>
               <div className={styles.heroLabel}>감당 가능 대출 원금</div>
               <div className={styles.heroNum} style={{ color: '#9333EA' }}>
@@ -713,16 +729,16 @@ export default function LoanClient() {
             <label className={styles.cardLabel}>DSR 참고 — 연소득과 기타 대출 입력</label>
             <div className={styles.twoCol}>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>연소득 (만원)</span>
+                <label htmlFor="loan-rev-income" style={{ fontSize: 11, color: 'var(--muted)' }}>연소득 (만원)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="text" inputMode="numeric" value={revIncome} onChange={e => setRevIncome(comma(e.target.value))} />
+                  <input id="loan-rev-income" className={styles.numInput} type="text" inputMode="numeric" value={revIncome} onChange={e => setRevIncome(comma(e.target.value))} />
                   <span className={styles.unit}>만</span>
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>기타 대출 월 상환 (만원)</span>
+                <label htmlFor="loan-rev-other-debt" style={{ fontSize: 11, color: 'var(--muted)' }}>기타 대출 월 상환 (만원)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="text" inputMode="numeric" value={revOtherDebt} onChange={e => setRevOtherDebt(comma(e.target.value))} />
+                  <input id="loan-rev-other-debt" className={styles.numInput} type="text" inputMode="numeric" value={revOtherDebt} onChange={e => setRevOtherDebt(comma(e.target.value))} />
                   <span className={styles.unit}>만</span>
                 </div>
               </div>

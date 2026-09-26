@@ -1,7 +1,9 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useSyncExternalStore } from 'react'
+import { todayStr } from '@/lib/date'
+import { pensionBaseAt } from '@/lib/krInsuranceRates'
 import styles from './salary.module.css'
 import {
   NON_TAXABLE_ITEMS, MIN_HOURLY_WAGE_2026,
@@ -18,6 +20,14 @@ const wn = (n: number) => Math.round(n).toLocaleString('ko-KR')
 const comma = (v: string): string => {
   const n = v.replace(/[^\d]/g, '')
   return n ? parseInt(n, 10).toLocaleString('ko-KR') : ''
+}
+
+/* 기준일 — 국민연금 기준소득월액 상·하한(매년 7월 개정) 구간 선택용.
+   SSG와 hydration 첫 렌더는 page.tsx가 넘긴 빌드일을 같이 쓰고(불일치 없음), 직후 기기 날짜로 재평가
+   (4-insurance · national-pension과 같은 패턴) */
+const noopSubscribe = () => () => {}
+function useAsOfDate(buildDate: string): string {
+  return useSyncExternalStore(noopSubscribe, todayStr, () => buildDate)
 }
 
 type Tab = 'main' | 'reverse'
@@ -38,8 +48,10 @@ const PRESETS = [
   { label: '1.5억',   value: 150_000_000 },
 ]
 
-export default function SalaryClient() {
+export default function SalaryClient({ buildDate }: { buildDate?: string }) {
   const [tab, setTab] = useState<Tab>('main')
+  const asOf = useAsOfDate(buildDate ?? todayStr())
+  const pensionBase = useMemo(() => pensionBaseAt(asOf), [asOf])
 
   /* 공통 입력 */
   const [annualMan, setAnnualMan] = useState('5,000')
@@ -72,9 +84,9 @@ export default function SalaryClient() {
     if (!valid) return null
     return calcSalary({
       grossYearly: annualGross, dependents, childrenCount,
-      nonTaxableMonthly, isInsured: true,
+      nonTaxableMonthly, isInsured: true, pensionBase,
     })
-  }, [valid, annualGross, dependents, childrenCount, nonTaxableMonthly])
+  }, [valid, annualGross, dependents, childrenCount, nonTaxableMonthly, pensionBase])
 
   const percentile = useMemo(() => getSalaryPercentile(annualGross), [annualGross])
 
@@ -84,13 +96,13 @@ export default function SalaryClient() {
   const reverseResult = useMemo(() => {
     if (targetNetMonthly < 500_000) return null
     return reverseCalcSalary({
-      targetNetMonthly, dependents, childrenCount, nonTaxableMonthly,
+      targetNetMonthly, dependents, childrenCount, nonTaxableMonthly, pensionBase,
     })
-  }, [targetNetMonthly, dependents, childrenCount, nonTaxableMonthly])
+  }, [targetNetMonthly, dependents, childrenCount, nonTaxableMonthly, pensionBase])
 
   const targetTable = useMemo(
-    () => buildNetTargetTable(dependents, childrenCount, nonTaxableMonthly),
-    [dependents, childrenCount, nonTaxableMonthly],
+    () => buildNetTargetTable(dependents, childrenCount, nonTaxableMonthly, pensionBase),
+    [dependents, childrenCount, nonTaxableMonthly, pensionBase],
   )
 
   /* 실수령액 탭 — 체감 시급 옵션 (통합) */
@@ -114,7 +126,7 @@ export default function SalaryClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
+      setTimeout(() => setCopied(false), 1500)
     } catch { /* */ }
   }
 
@@ -264,7 +276,7 @@ export default function SalaryClient() {
             기타 비과세 직접 입력
           </summary>
           <div className={styles.inputRow} style={{ marginTop: 8 }}>
-            <input className={styles.numInput} type="text" inputMode="numeric"
+            <input id="salary-extra-nontax" aria-label="기타 비과세 금액 (원/월)" className={styles.numInput} type="text" inputMode="numeric"
               placeholder="0" value={extraNonTaxable} onChange={e => setExtraNonTaxable(comma(e.target.value))} />
             <span className={styles.unit}>원/월</span>
           </div>
@@ -289,7 +301,7 @@ export default function SalaryClient() {
       {/* ─────────── 탭 1: 실수령액 ─────────── */}
       {tab === 'main' && result && (
         <>
-          <div className={styles.hero}
+          <div className={styles.hero} role="status"
             style={{ borderColor: 'rgba(14,165,233,0.30)', background: 'rgba(14,165,233,0.06)' }}>
             <div className={styles.heroLabel}>월 실수령액</div>
             <div className={styles.heroNum} style={{ color: 'var(--accent)' }}>
@@ -491,8 +503,8 @@ export default function SalaryClient() {
                 <label className={styles.cardLabel}>4가지 시급 비교</label>
                 <div className={styles.hourlyTable}>
                   {[
-                    { name: '세전 시급',          desc: '연봉 ÷ (12 × 209시간)', val: hourly.baseHourlyGross,    color: 'var(--muted)',  ratio: 1 },
-                    { name: '세후 시급',          desc: '실수령 ÷ 209시간',       val: hourly.baseHourlyNet,      color: 'var(--accent)', ratio: hourly.baseHourlyNet / hourly.baseHourlyGross },
+                    { name: '세전 시급',          desc: `연봉 ÷ (12 × ${hourly.baseMonthlyHours.toLocaleString('ko-KR')}시간)`, val: hourly.baseHourlyGross,    color: 'var(--muted)',  ratio: 1 },
+                    { name: '세후 시급',          desc: `실수령 ÷ ${hourly.baseMonthlyHours.toLocaleString('ko-KR')}시간`,       val: hourly.baseHourlyNet,      color: 'var(--accent)', ratio: hourly.baseHourlyNet / hourly.baseHourlyGross },
                     { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: '#A16207',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
                     { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 시간',       val: hourly.perceivedHourlyNet, color: '#EA580C',       ratio: hourly.perceivedHourlyNet / hourly.baseHourlyGross },
                   ].map((row, i) => (
@@ -517,7 +529,7 @@ export default function SalaryClient() {
               )}
 
               <div className={styles.infoBox}>
-                💡 <strong>참고</strong> — 2026년 최저시급 {won(MIN_HOURLY_WAGE_2026)} · OECD 평균 연 1,750시간 / 한국 평균 약 1,950시간. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 체감 시급이 약 8% 차이날 수 있습니다.
+                💡 <strong>참고</strong> — 2026년 최저시급 {won(MIN_HOURLY_WAGE_2026)} · 연간 노동시간은 최근 OECD 통계 기준 한국 1,800시간대로 OECD 평균(약 1,750시간)보다 깁니다. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 체감 시급이 약 8% 차이날 수 있습니다.
               </div>
             </>
           )}

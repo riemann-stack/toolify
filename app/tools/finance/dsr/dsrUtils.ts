@@ -72,7 +72,17 @@ export function appliedStressRate(baseStressPct: number, phaseRatio: number, rat
   return baseStressPct * phaseRatio * RATE_TYPE_FACTOR[rateType]
 }
 
+/** 수도권·규제지역 주택구입 목적 주담대 — 주택가격별 최대 한도(만원). 2025.10.15 가계부채 관리 강화 방안
+    (시가 15억 이하 6억 / 15억 초과~25억 이하 4억 / 25억 초과 2억). 정책 변경 시 이 함수만 고치면 된다. */
+export function priceCapLoan(homePrice: number): number {
+  if (homePrice <= 150_000) return 60_000
+  if (homePrice <= 250_000) return 40_000
+  return 20_000
+}
+
 // ─── 결과 ───
+export type DsrBinding = 'LTV' | 'DSR' | 'CAP' | '-'
+
 export interface DsrResult {
   newAnnual: number          // 신규 대출 연 원리금 (만원)
   dsr: number                // 기본 DSR (%)
@@ -83,8 +93,9 @@ export interface DsrResult {
   ltvMaxLoan: number         // LTV 기준 최대 대출 (만원)
   dsrCapacityAnnual: number  // DSR 한도 내 신규 대출에 쓸 수 있는 연 상환여력
   stressMaxLoan: number      // 스트레스 DSR 기준 최대 대출 (만원)
-  finalMaxLoan: number       // 최종 한도 = min(LTV, 스트레스DSR)
-  binding: 'LTV' | 'DSR' | '-' // 제약 요인
+  priceCapMaxLoan: number | null // 주택가격별 한도 (만원, 미적용이면 null)
+  finalMaxLoan: number       // 최종 한도 = min(LTV, 스트레스DSR, 가격별 한도). 주택가격 0이면 0
+  binding: DsrBinding        // 제약 요인 (CAP = 주택가격별 한도)
 }
 
 export interface DsrInput {
@@ -100,6 +111,7 @@ export interface DsrInput {
   ltvLimitPct: number        // LTV 한도 (% · 기본 70)
   baseStressPct: number      // 기준 스트레스 금리 (%p)
   phaseRatio: number         // 스트레스 단계율
+  priceCapEnabled?: boolean  // 수도권·규제지역 주택구입 목적 주담대 → 주택가격별 한도 적용
 }
 
 export function calcDsr(inp: DsrInput): DsrResult {
@@ -120,13 +132,19 @@ export function calcDsr(inp: DsrInput): DsrResult {
   // 스트레스 금리로 역산 (보수적 한도)
   const stressMaxLoan = principalFromAnnual(dsrCapacityAnnual, stressedRate, inp.years, inp.method)
 
-  const finalMaxLoan = Math.max(0, Math.min(ltvMaxLoan, stressMaxLoan))
-  const binding: 'LTV' | 'DSR' | '-' =
-    finalMaxLoan <= 0 ? '-' : ltvMaxLoan < stressMaxLoan ? 'LTV' : 'DSR'
+  // 주담대 기준 계산 — 주택가격이 없으면 LTV 한도가 0이라 최종 한도도 0(미산정, 화면에서 입력 안내)
+  const priceCapMaxLoan = inp.homePrice > 0 && inp.priceCapEnabled ? priceCapLoan(inp.homePrice) : null
+  const candidates: [DsrBinding, number][] = [['DSR', stressMaxLoan], ['LTV', ltvMaxLoan]]
+  if (priceCapMaxLoan != null) candidates.push(['CAP', priceCapMaxLoan])
+  // 동률이면 DSR 표시 (기존 동작: LTV < DSR일 때만 LTV)
+  let [binding, minVal] = candidates[0]
+  for (const [k, v] of candidates.slice(1)) if (v < minVal) { binding = k; minVal = v }
+  const finalMaxLoan = Math.max(0, minVal)
+  if (finalMaxLoan <= 0) binding = '-'
 
   return {
     newAnnual, dsr, stressNewAnnual, stressDsr, ltv,
-    ltvMaxLoan, dsrCapacityAnnual, stressMaxLoan, finalMaxLoan, binding,
+    ltvMaxLoan, dsrCapacityAnnual, stressMaxLoan, priceCapMaxLoan, finalMaxLoan, binding,
   }
 }
 

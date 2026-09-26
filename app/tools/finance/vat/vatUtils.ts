@@ -12,6 +12,7 @@ export interface SimplifiedRate {
   rate: number       // 부가가치율
   effective: number  // 실효세율 (= rate × 0.10)
   desc?: string
+  threshold?: number // 간이과세 적용 기준(연 공급대가, 이 금액 미만) — 생략 시 SIMPLIFIED_THRESHOLD
 }
 
 // 2021.7.1~ 현행 업종별 부가가치율 (부가가치세법 시행령 §111)
@@ -20,11 +21,15 @@ export const SIMPLIFIED_VAT_RATES: SimplifiedRate[] = [
   { id: 'manuf',     name: '제조·농업·임업·어업',           rate: 0.20, effective: 0.020 },
   { id: 'lodging',   name: '숙박업',                       rate: 0.25, effective: 0.025 },
   { id: 'construct', name: '건설·운수·정보통신·기타서비스', rate: 0.30, effective: 0.030 },
-  { id: 'service',   name: '금융보험·전문·부동산임대',      rate: 0.40, effective: 0.040 },
+  { id: 'service',   name: '금융보험·전문서비스',            rate: 0.40, effective: 0.040 },
+  // 부동산임대업은 간이과세 기준이 4,800만원 미만으로 따로 정해져 있음 (부가가치세법 시행령 §109① 단서 — 과세유흥장소도 동일)
+  { id: 'rental',    name: '부동산임대',                   rate: 0.40, effective: 0.040, threshold: 48_000_000 },
 ]
 
-export const SIMPLIFIED_THRESHOLD = 104_000_000           // 간이과세 한도 (1억 400만)
+export const SIMPLIFIED_THRESHOLD = 104_000_000           // 간이과세 기준 (연 공급대가 1억 400만 미만)
 export const SIMPLIFIED_INVOICE_THRESHOLD = 48_000_000    // 간이 세금계산서 발급 의무 (4,800만)
+/** 간이과세자 납부의무 면제 — 해당 과세기간 공급대가 4,800만원 미만 (부가가치세법 §69①). 신고는 해야 함 */
+export const SIMPLIFIED_EXEMPT_THRESHOLD = 48_000_000
 
 /* ─── 프리랜서 원천세 ─── */
 export const FREELANCER_TAX = {
@@ -74,7 +79,8 @@ export interface VATResult {
 function roundDown(v: number, u: RoundUnit): number {
   if (u === 'none') return Math.round(v)
   const unit = parseInt(u, 10)
-  return Math.floor(v / unit) * unit
+  // +1e-9: 99999.99999999999처럼 부동소수 오차로 한 단위 아래로 떨어지는 것 방지
+  return Math.floor(v / unit + 1e-9) * unit
 }
 
 export function calcVAT(input: VATInput): VATResult {
@@ -83,9 +89,14 @@ export function calcVAT(input: VATInput): VATResult {
 
   if (mode === 'remove') {
     if (rate <= 0) return { supplyAmount: Math.round(amount), vat: 0, total: Math.round(amount) }  // 면세 — 절사로 인한 가짜 부가세 방지
-    const supply = roundDown(amount / (1 + rate), rounding)
-    const vat = amount - supply
-    return { supplyAmount: supply, vat, total: amount }
+    if (rounding === 'none') {
+      const supply = Math.round(amount / (1 + rate))
+      return { supplyAmount: supply, vat: amount - supply, total: amount }
+    }
+    // 절사 대상은 '부가세' — 부가세 = 합계 × rate/(1+rate) 를 단위 절사, 공급가액 = 합계 − 부가세
+    // (기존: 공급가액을 절사해 부가세가 나머지를 떠안아 단위가 맞지 않았고, 110,000/1.1의 부동소수 오차로 한 단위 틀어짐)
+    const vat = roundDown(amount * rate / (1 + rate), rounding)
+    return { supplyAmount: amount - vat, vat, total: amount }
   }
   // add / calc 동일
   const supply = Math.round(amount)
@@ -230,6 +241,8 @@ export interface CompareGSResult {
   }
   simplified: {
     available: boolean
+    threshold: number     // 이 업종의 간이과세 기준 (연 공급대가, 미만)
+    exempt: boolean       // 연 공급대가 4,800만 미만 → 납부의무 면제 (신고는 필요)
     effectiveRate: number
     vatPayable: number
     industry: SimplifiedRate
@@ -242,8 +255,9 @@ export interface CompareGSResult {
 export function compareGeneralVsSimplified(input: CompareGSInput): CompareGSResult {
   const industry = SIMPLIFIED_VAT_RATES.find(i => i.id === input.industryId) ?? SIMPLIFIED_VAT_RATES[0]
 
-  // 일반과세
-  const vatOutput = input.annualRevenue * 0.10
+  // 입력 연 매출 = 공급대가(부가세 포함 매출). 간이과세 기준·면제 기준이 모두 공급대가 기준이라 하나로 통일
+  // 일반과세: 매출세액 = 공급대가 × 10/110
+  const vatOutput = input.annualRevenue * 0.10 / 1.10
   const generalPayable = Math.max(0, vatOutput - input.vatPurchase)
 
   // 간이과세
@@ -252,19 +266,27 @@ export function compareGeneralVsSimplified(input: CompareGSInput): CompareGSResu
   const simplifiedOutput = input.annualRevenue * industry.effective
   const purchaseGross = input.purchaseAmount + input.vatPurchase  // 공급대가(VAT 포함)
   const simplifiedInputCredit = purchaseGross * 0.005
-  const simplifiedPayable = Math.max(0, simplifiedOutput - simplifiedInputCredit)
+  // 연 공급대가 4,800만 미만이면 납부의무 면제 (부가가치세법 §69①)
+  const exempt = input.annualRevenue < SIMPLIFIED_EXEMPT_THRESHOLD
+  const simplifiedPayable = exempt ? 0 : Math.max(0, simplifiedOutput - simplifiedInputCredit)
 
-  const available = input.annualRevenue <= SIMPLIFIED_THRESHOLD
+  const threshold = industry.threshold ?? SIMPLIFIED_THRESHOLD
+  const available = input.annualRevenue < threshold
   const difference = available ? generalPayable - simplifiedPayable : 0
+  const thresholdLabel = threshold >= 100_000_000
+    ? `${Math.floor(threshold / 100_000_000)}억 ${((threshold % 100_000_000) / 10_000).toLocaleString()}만`
+    : `${(threshold / 10_000).toLocaleString()}만`
 
   let recommendation = ''
   let tone: CompareGSResult['tone']
   if (!available) {
     tone = 'unavailable'
-    recommendation = '연 매출 1억 400만 초과 — 간이과세 자격 없음. 일반과세만 가능합니다.'
+    recommendation = `연 매출 ${thresholdLabel} 이상 — ${industry.threshold ? `${industry.name}업은 ` : ''}간이과세 자격 없음. 일반과세만 가능합니다.`
   } else if (difference > 100_000) {
     tone = 'simplified'
-    recommendation = `간이과세가 약 ${Math.round(difference / 10_000).toLocaleString()}만원 유리합니다.`
+    recommendation = exempt
+      ? `간이과세가 약 ${Math.round(difference / 10_000).toLocaleString()}만원 유리합니다 (연 매출 4,800만 미만 — 납부 면제).`
+      : `간이과세가 약 ${Math.round(difference / 10_000).toLocaleString()}만원 유리합니다.`
   } else if (difference < -100_000) {
     tone = 'general'
     recommendation = `일반과세가 약 ${Math.round(Math.abs(difference) / 10_000).toLocaleString()}만원 유리합니다 (매입이 많은 업종).`
@@ -281,6 +303,8 @@ export function compareGeneralVsSimplified(input: CompareGSInput): CompareGSResu
     },
     simplified: {
       available,
+      threshold,
+      exempt,
       effectiveRate: industry.effective,
       vatPayable: Math.round(simplifiedPayable),
       industry,

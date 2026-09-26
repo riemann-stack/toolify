@@ -6,6 +6,9 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { autoTaxYearlyForCC } from './carCostUtils'
+
+const taxWon = (cc: number) => `${autoTaxYearlyForCC(cc).toLocaleString('ko-KR')}원`
 
 export const metadata = buildMetadata({
   path: '/tools/finance/car-cost',
@@ -122,7 +125,7 @@ export default function CarCostPage() {
         <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px', color: 'var(--text)' }}>🏛️ 고정비 (매달 동일)</h3>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--muted)' }}>
           <li><strong style={{ color: 'var(--text)' }}>자동차 보험</strong> — 연 평균 60~150만원 (연령·차종·경력별)</li>
-          <li><strong style={{ color: 'var(--text)' }}>자동차세</strong> — 배기량 기준 약 10만~104만원/년 (지방교육세 30% 포함) · 전기차 13만/년 정액</li>
+          <li><strong style={{ color: 'var(--text)' }}>자동차세</strong> — 배기량 기준 1,000cc 약 10만원, 2,000cc 52만원, 3,500cc 91만원 수준 (지방교육세 30% 포함) · 전기차 13만/년 정액</li>
           <li><strong style={{ color: 'var(--text)' }}>할부금</strong> — 남은 기간만 가산 (할부 종료 후 0)</li>
           <li><strong style={{ color: 'var(--text)' }}>월 주차비</strong> — 지역별 0~20만원</li>
         </ul>
@@ -197,19 +200,19 @@ export default function CarCostPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>1,000cc 이하</td><td style={cell}><strong>104,000원</strong></td><td style={cell}>경차 (모닝·캐스퍼)</td></tr>
-            <tr><td style={cell}>1,500cc 이하</td><td style={cell}><strong>260,000원</strong></td><td style={cell}>소형 (베뉴·1,500cc급)</td></tr>
-            <tr><td style={cell}>2,000cc 이하</td><td style={cell}><strong>520,000원</strong></td><td style={cell}>준중형·중형 (쏘나타·K5)</td></tr>
-            <tr><td style={cell}>2,500cc 이하</td><td style={cell}><strong>650,000원</strong></td><td style={cell}>중형~대형</td></tr>
-            <tr><td style={cell}>3,000cc 이하</td><td style={cell}><strong>780,000원</strong></td><td style={cell}>대형 (그랜저 3.0)</td></tr>
-            <tr><td style={cell}>3,000cc 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>1,040,000원+</strong></td><td style={cell}>대형 SUV (팰리세이드)</td></tr>
+            <tr><td style={cell}>1,000cc</td><td style={cell}><strong>{taxWon(1000)}</strong></td><td style={cell}>경차 (모닝·캐스퍼)</td></tr>
+            <tr><td style={cell}>1,600cc</td><td style={cell}><strong>{taxWon(1600)}</strong></td><td style={cell}>소형·준중형 1.6 (아반떼·코나 등, 1,598cc면 {taxWon(1598)})</td></tr>
+            <tr><td style={cell}>2,000cc</td><td style={cell}><strong>{taxWon(2000)}</strong></td><td style={cell}>중형 2.0 (쏘나타·K5)</td></tr>
+            <tr><td style={cell}>2,500cc</td><td style={cell}><strong>{taxWon(2500)}</strong></td><td style={cell}>중형~대형 2.5</td></tr>
+            <tr><td style={cell}>3,000cc</td><td style={cell}><strong>{taxWon(3000)}</strong></td><td style={cell}>대형 3.0</td></tr>
+            <tr><td style={cell}>3,500cc</td><td style={cell}><strong style={{ color: '#DC2626' }}>{taxWon(3500)}</strong></td><td style={cell}>대형 SUV 3.5 (배기량이 클수록 cc당 200원씩 증가)</td></tr>
             <tr><td style={cell}><strong style={{ color: '#0891B2' }}>전기차</strong></td><td style={cell}><strong style={{ color: '#0891B2' }}>130,000원 정액</strong></td><td style={cell}>아이오닉5·EV6 등</td></tr>
           </tbody>
         </table>
       </div>
       <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-        ※ 위 금액은 지방교육세 30% 포함 실납부 기준 (비영업용 승용 = cc × 80/140/200원 + 교육세 30%, 1,600cc 기준 세율 구간 변동).
-        6월·12월 분납. 1월 일시납 시 약 10% 공제. 차령 5년 초과 시 단계별 인하(최대 50%).
+        ※ 위 금액은 표의 배기량 기준, 지방교육세 30% 포함 실납부액입니다 (비영업용 승용 = cc × 80원(1,000cc 이하)·140원(1,600cc 이하)·200원(초과) + 교육세 30%).
+        6월·12월 분납. 1월 연납 시 공제율 5%(1월 신청 기준 실질 약 4.6%). 차령 3년차부터 매년 5%씩 경감(12년 이상 최대 50%).
       </p>
 
       {/* 4. 5년 vs 10년 보유 비교 (NEW) */}

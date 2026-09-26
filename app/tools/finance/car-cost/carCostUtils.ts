@@ -78,20 +78,33 @@ export interface AutoTaxBracket {
   desc: string
 }
 
-// 비영업용 승용차 자동차세 = cc × (80/140/200원) + 지방교육세 30%. 아래는 교육세 포함 실납부 기준.
+/* 비영업용 승용차 자동차세 — 지방세법 §127①: cc당 1,000cc 이하 80원 / 1,600cc 이하 140원 / 1,600cc 초과 200원,
+   + 지방교육세 30% (지방세법 §151). finance/car-tax(carTaxData.annualTaxByCC)와 같은 규칙 — lib 이관 대상.
+   (기존 표는 구간 경계를 1,500cc로 잘못 나눠 1.6L 차량을 52만원 구간으로 안내했음) */
+export const CAR_TAX_PER_CC = { upTo1000: 80, upTo1600: 140, over1600: 200 } as const
+export const CAR_TAX_EDU_RATE = 0.30
+
+/** 배기량(cc) → 연 자동차세(지방교육세 포함, 차령 경감 전) */
+export function autoTaxYearlyForCC(cc: number): number {
+  const c = Math.max(0, cc)
+  const perCc = c <= 1000 ? CAR_TAX_PER_CC.upTo1000 : c <= 1600 ? CAR_TAX_PER_CC.upTo1600 : CAR_TAX_PER_CC.over1600
+  return Math.round(c * perCc * (1 + CAR_TAX_EDU_RATE))
+}
+
+// 빠른 선택 칩 — 구간 상한 배기량 기준 세액 (1,598cc 등 실제 배기량은 직접 입력하면 더 정확)
 export const AUTO_TAX_BRACKETS: AutoTaxBracket[] = [
-  { ccMax: 1000,     yearly:  104_000, desc: '경차 (1,000cc 이하)' },
-  { ccMax: 1500,     yearly:  260_000, desc: '소형 (1,500cc 이하)' },
-  { ccMax: 2000,     yearly:  520_000, desc: '준중형·중형 (2,000cc 이하)' },
-  { ccMax: 2500,     yearly:  650_000, desc: '중형~대형 (2,500cc 이하)' },
-  { ccMax: 3000,     yearly:  780_000, desc: '대형 (3,000cc 이하)' },
-  { ccMax: Infinity, yearly: 1_040_000, desc: '대형 SUV (3,000cc 초과)' },
+  { ccMax: 1000, yearly: autoTaxYearlyForCC(1000), desc: '경차 (1,000cc)' },              // 104,000
+  { ccMax: 1600, yearly: autoTaxYearlyForCC(1600), desc: '소형·준중형 1.6L (1,600cc)' },  // 291,200
+  { ccMax: 2000, yearly: autoTaxYearlyForCC(2000), desc: '중형 2.0L (2,000cc)' },          // 520,000
+  { ccMax: 2500, yearly: autoTaxYearlyForCC(2500), desc: '중대형 2.5L (2,500cc)' },        // 650,000
+  { ccMax: 3000, yearly: autoTaxYearlyForCC(3000), desc: '대형 3.0L (3,000cc)' },          // 780,000
+  { ccMax: 3500, yearly: autoTaxYearlyForCC(3500), desc: '대형 SUV 3.5L (3,500cc)' },      // 910,000
 ]
 
 export const EV_AUTO_TAX = 130_000   // 전기차 정액 (10만 + 교육세 3만)
 
 export function autoTaxByCC(cc: number): number {
-  return AUTO_TAX_BRACKETS.find(b => cc <= b.ccMax)?.yearly ?? 800_000
+  return autoTaxYearlyForCC(cc)
 }
 
 /* ─── 연료 데이터 (2026년 5월 기준) ─── */

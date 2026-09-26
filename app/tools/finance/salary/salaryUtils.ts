@@ -112,7 +112,8 @@ export interface SalaryResult {
 
 export function calcSalary(input: SalaryInput): SalaryResult {
   const grossMonthly = Math.floor(input.grossYearly / 12)
-  const nonTaxable = Math.max(0, input.nonTaxableMonthly)
+  // 비과세는 월급을 넘을 수 없다 (넘으면 도넛·공제표에 월급보다 큰 비과세가 그려짐)
+  const nonTaxable = Math.min(grossMonthly, Math.max(0, input.nonTaxableMonthly))
   const taxableMonthly = Math.max(0, grossMonthly - nonTaxable)
 
   // 4대보험 (과세 급여 기준). 국민연금은 기준소득월액 상·하한 클램프 (국민연금법 시행령 §5)
@@ -165,6 +166,8 @@ export interface ReverseInput {
   dependents: number
   childrenCount: number
   nonTaxableMonthly: number
+  /** 국민연금 기준소득월액 상·하한 (생략 시 SALARY_PENSION_BASE) */
+  pensionBase?: Pick<PensionBasePeriod, 'min' | 'max'>
 }
 
 export interface ReverseResult {
@@ -191,15 +194,18 @@ export function reverseCalcSalary(input: ReverseInput): ReverseResult | null {
       childrenCount: input.childrenCount,
       nonTaxableMonthly: input.nonTaxableMonthly,
       isInsured: true,
+      pensionBase: input.pensionBase,
     })
     if (r.netMonthly < input.targetNetMonthly) low = mid
     else high = mid
   }
-  const grossYearly = Math.round(high / 100_000) * 100_000  // 10만원 단위
+  // 10만원 단위 올림 — 반올림하면 목표 실수령에 몇백~몇천 원 못 미치는 연봉이 나올 수 있음
+  const grossYearly = Math.ceil(high / 100_000) * 100_000
   const result = calcSalary({
     grossYearly, dependents: input.dependents,
     childrenCount: input.childrenCount,
     nonTaxableMonthly: input.nonTaxableMonthly, isInsured: true,
+    pensionBase: input.pensionBase,
   })
   return {
     grossYearly,
@@ -223,6 +229,8 @@ export interface HourlyInput {
 }
 
 export interface HourlyResult {
+  /** 세전·세후 시급의 분모가 되는 월 기준시간 (주 40시간 이상 = 209시간, 미만이면 비례) */
+  baseMonthlyHours: number
   baseHourlyGross: number
   baseHourlyNet: number
   realHourlyNet: number
@@ -234,8 +242,12 @@ export function calcHourlyWage(input: HourlyInput): HourlyResult {
   const weeksPerYear = 52
   const workingDays = Math.max(1, 5 * weeksPerYear - input.vacationDays)
 
-  // 공식(법정) 시급 — 주 40시간 + 주휴 = 월 209시간 기준
-  const baseAnnualHours = 209 * 12  // 2,508h
+  // 공식(법정) 시급 — 주 40시간 + 주휴 = 월 209시간 기준.
+  // 주 40시간 미만(단시간)은 소정근로·주휴가 근로시간에 비례하므로 기준시간도 비례 축소
+  // (주 20시간이면 월 약 104.5시간). 슬라이더 하한이 20시간이라 주휴 요건(주 15시간 이상)은 항상 충족.
+  const contractWeekly = Math.min(40, Math.max(1, input.weeklyHours))
+  const baseMonthlyHours = 209 * contractWeekly / 40
+  const baseAnnualHours = baseMonthlyHours * 12  // 주 40시간이면 2,508h
   const baseHourlyGross = input.yearly / baseAnnualHours
   const baseHourlyNet = input.netYearly / baseAnnualHours
 
@@ -251,6 +263,7 @@ export function calcHourlyWage(input: HourlyInput): HourlyResult {
   const perceivedHourlyNet = input.netYearly / perceivedAnnualHours
 
   return {
+    baseMonthlyHours: Math.round(baseMonthlyHours * 10) / 10,
     baseHourlyGross: Math.round(baseHourlyGross),
     baseHourlyNet: Math.round(baseHourlyNet),
     realHourlyNet: Math.round(realHourlyNet),
@@ -326,11 +339,12 @@ export interface NetTargetRow {
 
 export function buildNetTargetTable(
   dependents: number, childrenCount: number, nonTaxableMonthly: number,
+  pensionBase?: Pick<PensionBasePeriod, 'min' | 'max'>,
 ): NetTargetRow[] {
   const targets = [2_000_000, 2_500_000, 3_000_000, 3_500_000, 4_000_000, 5_000_000, 7_000_000]
   return targets.map(t => {
     const r = reverseCalcSalary({
-      targetNetMonthly: t, dependents, childrenCount, nonTaxableMonthly,
+      targetNetMonthly: t, dependents, childrenCount, nonTaxableMonthly, pensionBase,
     })
     return {
       targetNetMonthly: t,
@@ -353,7 +367,10 @@ export function formatEok(n: number): string {
     return man > 0 ? `${sign}${eok}억 ${man.toLocaleString()}만원` : `${sign}${eok}억원`
   }
   if (Math.abs(n) >= 10_000) {
-    return `${Math.round(n / 10_000).toLocaleString('ko-KR')}만원`
+    const man = Math.round(n / 10_000)
+    // 99,995,000처럼 반올림하면 1억이 되는 값은 '10,000만원' 대신 '1억원'
+    if (Math.abs(man) >= 10_000) return `${n < 0 ? '-' : ''}1억원`
+    return `${man.toLocaleString('ko-KR')}만원`
   }
   return won(n)
 }

@@ -2,6 +2,7 @@
 
 import Disclaimer from '@/components/Disclaimer'
 import { useState, useMemo, useEffect } from 'react'
+import { todayStr } from '@/lib/date'
 import styles from './vat.module.css'
 import {
   SIMPLIFIED_VAT_RATES,
@@ -37,7 +38,7 @@ export default function VatClient() {
   const [quoteItems, setQuoteItems] = useState<QuoteItem[]>([
     { name: '디자인 용역', quantity: 1, unitPrice: 1_000_000, isTaxable: true,  discount: 0 },
     { name: '인쇄 비용',   quantity: 1, unitPrice:   200_000, isTaxable: true,  discount: 0 },
-    { name: '배송비 (면세)', quantity: 1, unitPrice:    5_000, isTaxable: false, discount: 0 },
+    { name: '도서 (면세)',   quantity: 1, unitPrice:   20_000, isTaxable: false, discount: 0 },
   ])
   const [exclVsInclAmount, setExclVsInclAmount] = useState('1000000')
 
@@ -50,9 +51,9 @@ export default function VatClient() {
   /* ── 탭4 세금계산서 — SSR/Client 일치 위해 빈 값으로 시작 ── */
   const [invoiceDate,    setInvoiceDate]    = useState('')
   useEffect(() => {
-    // 한국시간(KST, UTC+9) 기준 오늘 날짜 — UTC 자정 직후 하루 전으로 잡히는 문제 방지
+    // 기기 로컬 기준 오늘 날짜 (lib/date todayStr — toISOString은 KST 00~09시에 어제가 됨)
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setInvoiceDate(new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10))
+    setInvoiceDate(todayStr())
   }, [])
   const [invoiceClient,  setInvoiceClient]  = useState('')
   const [invoiceProvider, setInvoiceProvider] = useState('')
@@ -145,12 +146,13 @@ export default function VatClient() {
 
   /* ── 복사 ── */
   const [copied, setCopied] = useState<string | null>(null)
-  const copy = (text: string, key: string) => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(text)
+  const copy = async (text: string, key: string) => {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) return
+    try {
+      await navigator.clipboard.writeText(text)  // 권한 거부 시 토스트를 띄우지 않음
       setCopied(key)
       setTimeout(() => setCopied(null), 1500)
-    }
+    } catch { /* 복사 실패 */ }
   }
 
   /* ──────────── RENDER ──────────── */
@@ -211,9 +213,9 @@ export default function VatClient() {
 
           <div className={styles.inputDuo}>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>{mode === 'remove' ? '공급대가 (합계)' : '공급가액'}</div>
+              <label className={styles.cardLabel} htmlFor="vat-amount">{mode === 'remove' ? '공급대가 (합계)' : '공급가액'}</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="vat-amount" className={styles.numInput} type="number" inputMode="numeric"
                   placeholder="100000" value={amount}
                   onChange={e => setAmount(e.target.value)} />
                 <span className={styles.unit}>원</span>
@@ -221,9 +223,9 @@ export default function VatClient() {
             </div>
 
             <div className={styles.card}>
-              <div className={styles.cardLabel}>부가세율</div>
+              <label className={styles.cardLabel} htmlFor="vat-rate">부가세율</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal" step={0.1}
+                <input id="vat-rate" className={styles.numInput} type="number" inputMode="decimal" step={0.1}
                   placeholder="10" value={rate}
                   onChange={e => setRate(e.target.value)} />
                 <span className={styles.unit}>%</span>
@@ -264,7 +266,7 @@ export default function VatClient() {
 
           {mainResult ? (
             <>
-              <div className={`${styles.hero} ${styles.heroAccent}`}>
+              <div className={`${styles.hero} ${styles.heroAccent}`} role="status">
                 <div className={styles.heroLabel}>합계 금액 (공급대가)</div>
                 <div className={`${styles.heroNum} ${styles.heroNumAccent}`}>{formatKRW(mainResult.total)}원</div>
                 <div className={styles.resultBreakdown}>
@@ -282,12 +284,25 @@ export default function VatClient() {
               {mode === 'remove' && (
                 <div className={styles.formulaBox}>
                   <p className={styles.formulaTitle}>역산 공식</p>
-                  <p className={styles.formulaLine}>
-                    공급가액 = {formatKRW(mainResult.total)} ÷ {(1 + parseFloat(rate)/100).toFixed(2)} = <strong>{formatKRW(mainResult.supplyAmount)}원</strong>
-                  </p>
-                  <p className={styles.formulaLine}>
-                    부가세 = {formatKRW(mainResult.total)} − {formatKRW(mainResult.supplyAmount)} = <strong>{formatKRW(mainResult.vat)}원</strong>
-                  </p>
+                  {trunc === 'none' ? (
+                    <>
+                      <p className={styles.formulaLine}>
+                        공급가액 = {formatKRW(mainResult.total)} ÷ {(1 + parseFloat(rate)/100).toFixed(2)} = <strong>{formatKRW(mainResult.supplyAmount)}원</strong>
+                      </p>
+                      <p className={styles.formulaLine}>
+                        부가세 = {formatKRW(mainResult.total)} − {formatKRW(mainResult.supplyAmount)} = <strong>{formatKRW(mainResult.vat)}원</strong>
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className={styles.formulaLine}>
+                        부가세 = {formatKRW(mainResult.total)} × {rate}/{100 + (parseFloat(rate) || 0)} → {formatKRW(parseInt(trunc, 10))}원 단위 절사 = <strong>{formatKRW(mainResult.vat)}원</strong>
+                      </p>
+                      <p className={styles.formulaLine}>
+                        공급가액 = {formatKRW(mainResult.total)} − {formatKRW(mainResult.vat)} = <strong>{formatKRW(mainResult.supplyAmount)}원</strong>
+                      </p>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -312,19 +327,19 @@ export default function VatClient() {
             <div className={styles.cardLabel}>품목 목록 ({quoteItems.length})</div>
             {quoteItems.map((item, idx) => (
               <div key={idx} className={styles.quoteItemRow}>
-                <input className={styles.textInput} type="text" placeholder="품목명"
+                <input className={styles.textInput} type="text" placeholder="품목명" aria-label={`${idx + 1}번 품목명`}
                   value={item.name} onChange={e => updateQuoteItem(idx, { name: e.target.value })} />
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input className={styles.numInput} type="number" inputMode="numeric" aria-label={`${idx + 1}번 수량`}
                   placeholder="수량" value={item.quantity || ''}
                   onChange={e => updateQuoteItem(idx, { quantity: parseAmount(e.target.value) })} />
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input className={styles.numInput} type="number" inputMode="numeric" aria-label={`${idx + 1}번 단가 (원)`}
                   placeholder="단가 (원)" value={item.unitPrice || ''}
                   onChange={e => updateQuoteItem(idx, { unitPrice: parseAmount(e.target.value) })} />
                 <button
                   className={`${styles.quoteItemTaxBtn} ${item.isTaxable ? styles.quoteItemTaxBtnTaxable : styles.quoteItemTaxBtnExempt}`}
                   onClick={() => updateQuoteItem(idx, { isTaxable: !item.isTaxable })}
                 >{item.isTaxable ? '과세' : '면세'}</button>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input className={styles.numInput} type="number" inputMode="numeric" aria-label={`${idx + 1}번 할인 (원)`}
                   placeholder="할인" value={item.discount || ''}
                   onChange={e => updateQuoteItem(idx, { discount: parseAmount(e.target.value) })} />
                 <button className={styles.quoteItemRowDelete}
@@ -389,9 +404,9 @@ export default function VatClient() {
 
           {/* 부가세 별도 vs 포함 비교 */}
           <div className={styles.card}>
-            <div className={styles.cardLabel}>부가세 별도 vs 포함 — 계약 시 차이</div>
+            <label className={styles.cardLabel} htmlFor="vat-excl-incl">부가세 별도 vs 포함 — 계약 시 차이</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="numeric"
+              <input id="vat-excl-incl" className={styles.numInput} type="number" inputMode="numeric"
                 placeholder="비교할 금액 (원)" value={exclVsInclAmount}
                 onChange={e => setExclVsInclAmount(e.target.value)} />
               <span className={styles.unit}>원</span>
@@ -449,9 +464,9 @@ export default function VatClient() {
       {tab === 'net' && (
         <>
           <div className={styles.card}>
-            <div className={styles.cardLabel}>받고 싶은 실입금</div>
+            <label className={styles.cardLabel} htmlFor="vat-target-net">받고 싶은 실입금</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="numeric"
+              <input id="vat-target-net" className={styles.numInput} type="number" inputMode="numeric"
                 value={targetNetMan} onChange={e => setTargetNetMan(e.target.value)} />
               <span className={styles.unit}>만원</span>
             </div>
@@ -491,7 +506,7 @@ export default function VatClient() {
             </div>
             {platformId === 'custom' && (
               <div className={styles.inputRow} style={{ marginTop: 10 }}>
-                <input className={styles.numInput} type="number" inputMode="decimal" step={0.1}
+                <input className={styles.numInput} type="number" inputMode="decimal" step={0.1} aria-label="플랫폼 수수료율 직접 입력 (%)"
                   value={customPlatformFee} onChange={e => setCustomPlatformFee(e.target.value)} />
                 <span className={styles.unit}>%</span>
               </div>
@@ -575,18 +590,18 @@ export default function VatClient() {
         <>
           <div className={styles.threeCol}>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>작성일자</div>
-              <input className={`${styles.textInput} ${styles.dateInput}`} type="date"
+              <label className={styles.cardLabel} htmlFor="vat-invoice-date">작성일자</label>
+              <input id="vat-invoice-date" className={`${styles.textInput} ${styles.dateInput}`} type="date"
                 value={invoiceDate} onChange={e => setInvoiceDate(e.target.value)} />
             </div>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>공급자 (본인)</div>
-              <input className={styles.textInput} type="text" placeholder="상호 / 대표자"
+              <label className={styles.cardLabel} htmlFor="vat-invoice-provider">공급자 (본인)</label>
+              <input id="vat-invoice-provider" className={styles.textInput} type="text" placeholder="상호 / 대표자"
                 value={invoiceProvider} onChange={e => setInvoiceProvider(e.target.value)} />
             </div>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>공급받는자 (거래처)</div>
-              <input className={styles.textInput} type="text" placeholder="거래처명"
+              <label className={styles.cardLabel} htmlFor="vat-invoice-client">공급받는자 (거래처)</label>
+              <input id="vat-invoice-client" className={styles.textInput} type="text" placeholder="거래처명"
                 value={invoiceClient} onChange={e => setInvoiceClient(e.target.value)} />
             </div>
           </div>
@@ -683,9 +698,9 @@ export default function VatClient() {
         <>
           <div className={styles.twoCol}>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>연 매출</div>
+              <label className={styles.cardLabel} htmlFor="vat-gs-revenue">연 매출 (부가세 포함 공급대가)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="vat-gs-revenue" className={styles.numInput} type="number" inputMode="numeric"
                   value={annualRevenueMan} onChange={e => setAnnualRevenueMan(e.target.value)} />
                 <span className={styles.unit}>만원</span>
               </div>
@@ -713,17 +728,17 @@ export default function VatClient() {
 
           <div className={styles.twoCol}>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>연 매입 비용</div>
+              <label className={styles.cardLabel} htmlFor="vat-gs-purchase">연 매입 비용</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="vat-gs-purchase" className={styles.numInput} type="number" inputMode="numeric"
                   value={purchaseAmountMan} onChange={e => setPurchaseAmountMan(e.target.value)} />
                 <span className={styles.unit}>만원</span>
               </div>
             </div>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>매입 부가세 (세금계산서 받은 분)</div>
+              <label className={styles.cardLabel} htmlFor="vat-gs-vat-purchase">매입 부가세 (세금계산서 받은 분)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="vat-gs-vat-purchase" className={styles.numInput} type="number" inputMode="numeric"
                   value={vatPurchaseMan} onChange={e => setVatPurchaseMan(e.target.value)} />
                 <span className={styles.unit}>만원</span>
               </div>
@@ -735,7 +750,7 @@ export default function VatClient() {
 
           {gsResult && (
             <>
-              <div className={`${styles.hero} ${styles.heroPurple}`}>
+              <div className={`${styles.hero} ${styles.heroPurple}`} role="status">
                 <div className={styles.heroLabel}>결과</div>
                 <div className={`${styles.heroNum} ${styles.heroNumPurple}`} style={{ fontSize: 'clamp(20px, 4vw, 28px)', lineHeight: 1.3 }}>
                   {gsResult.recommendation}
@@ -758,7 +773,7 @@ export default function VatClient() {
                   </p>
                   <p className={styles.compareCardLabel}>연간 납부세액</p>
                   <div className={styles.compareCardDivider} />
-                  <div className={styles.compareCardRow}><span>매출세액 (10%)</span><span>{formatKRW(gsResult.general.vatOutput)}원</span></div>
+                  <div className={styles.compareCardRow}><span>매출세액 (공급대가 × 10/110)</span><span>{formatKRW(gsResult.general.vatOutput)}원</span></div>
                   <div className={styles.compareCardRow}><span>매입세액 공제</span><span>−{formatKRW(gsResult.general.vatInput)}원</span></div>
                   <div className={styles.compareCardRow}><span>세금계산서</span><span>발급 의무</span></div>
                   <div className={styles.compareCardRow}><span>신고 횟수</span><span>연 2회</span></div>
@@ -771,7 +786,11 @@ export default function VatClient() {
                   <p className={styles.compareCardMain} style={{ color: gsResult.tone === 'unavailable' ? 'var(--muted)' : '#9333EA' }}>
                     {gsResult.simplified.available ? `${formatKRW(gsResult.simplified.vatPayable)}원` : '자격 없음'}
                   </p>
-                  <p className={styles.compareCardLabel}>{gsResult.simplified.available ? '연간 납부세액' : '연 매출 1억 400만 초과'}</p>
+                  <p className={styles.compareCardLabel}>
+                    {!gsResult.simplified.available
+                      ? `연 매출 ${formatEok(gsResult.simplified.threshold)} 이상`
+                      : gsResult.simplified.exempt ? '연 매출 4,800만 미만 — 납부 면제 (신고는 필요)' : '연간 납부세액'}
+                  </p>
                   <div className={styles.compareCardDivider} />
                   <div className={styles.compareCardRow}><span>매출세액</span><span>{formatKRW(gsResult.simplified.industry.effective * parseAmount(annualRevenueMan) * 10_000)}원</span></div>
                   <div className={styles.compareCardRow}><span>매입세액 공제</span><span>부분 공제</span></div>
@@ -784,7 +803,8 @@ export default function VatClient() {
                 <div className={styles.cardLabel}>자동 추천 가이드</div>
                 <div className={styles.guideTable}>
                   {[
-                    ['연 매출 1억 400만 초과', '일반과세 (자격 X)'],
+                    ['연 매출 1억 400만 이상 (부동산임대업 4,800만 이상)', '일반과세 (자격 X)'],
+                    ['연 매출 4,800만 미만', '간이과세면 납부 면제 (신고는 필요)'],
                     ['매입 많음 (40%+) + B2B', '일반과세 (매입세액 공제 큼)'],
                     ['매입 적음 + B2C', '간이과세 (실효세율 낮음)'],
                     ['거래처 세금계산서 요구', '일반과세'],

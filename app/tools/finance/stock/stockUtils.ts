@@ -432,7 +432,10 @@ export function formatEok(n: number): string {
     return man > 0 ? `${sign}${eok}억 ${man.toLocaleString()}만원` : `${sign}${eok}억원`
   }
   if (abs >= 10_000) {
-    return `${sign}${Math.round(abs / 10_000).toLocaleString('ko-KR')}만원`
+    const man = Math.round(abs / 10_000)
+    // 99,995,000처럼 반올림하면 1억이 되는 값은 '10,000만원' 대신 '1억원'
+    if (man >= 10_000) return `${sign}1억원`
+    return `${sign}${man.toLocaleString('ko-KR')}만원`
   }
   return won(n)
 }

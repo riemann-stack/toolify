@@ -192,7 +192,18 @@ export interface PrepaymentInput extends LoanInput {
   prepaymentMonth: number     // 중도상환 시점 (1-base)
   prepaymentAmount: number    // 중도상환 금액 (원)
   prepaymentMode: PrepaymentMode
-  prepaymentFeeRate: number   // 수수료율 (%)
+  prepaymentFeeRate: number   // 수수료율 (%) — 약정 기준율. 실제 부과는 잔존기간 비례(아래 PREPAY_FEE_WINDOW)
+}
+
+/** 중도상환수수료 부과 기간(개월) — 은행 표준: 수수료율 × 상환액 × (3년 − 경과기간) ÷ 3년, 3년 경과 시 면제.
+ *  대출기간이 3년보다 짧으면 대출기간을 분모로 쓴다. */
+export const PREPAY_FEE_WINDOW = 36
+
+/** 중도상환수수료 (슬라이딩) — 경과 개월 elapsed 시점 상환 */
+export function prepaymentFeeAt(amount: number, feeRatePct: number, elapsed: number, totalMonths: number): number {
+  const window = Math.max(1, Math.min(PREPAY_FEE_WINDOW, totalMonths))
+  const factor = Math.max(0, (window - elapsed) / window)
+  return Math.round(Math.max(0, amount) * (Math.max(0, feeRatePct) / 100) * factor)
 }
 
 export interface PrepaymentResult {
@@ -213,9 +224,11 @@ export function simulatePrepayment(input: PrepaymentInput): PrepaymentResult {
 
   const prepayMonth = Math.max(1, Math.min(input.months - 1, input.prepaymentMonth))
   const balanceAtPrepayment = original.schedule[prepayMonth - 1]?.balance ?? 0
+  // 거치기간 — calcEqualPayment와 같은 방식으로 클램프. 거치 중 상환해도 남은 거치는 유지(이자만 납부)
+  const grace = Math.min(Math.max(0, input.graceMonths ?? 0), Math.max(0, input.months - 1))
 
-  // 수수료 (원금에 대해)
-  const prepaymentFee = Math.round(input.prepaymentAmount * (input.prepaymentFeeRate / 100))
+  // 수수료 (상환 원금 × 수수료율 × 잔존기간 비례 — 3년 경과 시 0). 잔액보다 많이 넣어도 실제 상환 원금은 잔액까지
+  const prepaymentFee = prepaymentFeeAt(Math.min(input.prepaymentAmount, balanceAtPrepayment), input.prepaymentFeeRate, prepayMonth, input.months)
 
   if (input.prepaymentAmount >= balanceAtPrepayment) {
     // 완납
@@ -251,10 +264,26 @@ export function simulatePrepayment(input: PrepaymentInput): PrepaymentResult {
   let cumP = newSchedule.reduce((s, x) => s + x.principal, 0)
   let balance = newBalance
 
+  // 남은 거치기간: 이자만 납부 (원금 상환 시작은 원래 일정대로 grace + 1개월차)
+  for (let m = prepayMonth + 1; m <= grace; m++) {
+    const interest = balance * r
+    cumI += interest
+    newSchedule.push({
+      month: m,
+      principal: 0,
+      interest: Math.round(interest),
+      payment: Math.round(interest),
+      balance: Math.round(balance),
+      cumulativeInterest: Math.round(cumI),
+      cumulativePrincipal: Math.round(cumP),
+    })
+  }
+  const repayStart = Math.max(prepayMonth, grace) + 1
+
   if (input.prepaymentMode === 'reduce-period') {
     // 기간 단축: 월 상환액 동일, 잔액 감소까지 반복
     const monthlyPayment = original.monthlyPayment
-    let m = prepayMonth + 1
+    let m = repayStart
     const safety = input.months + 12
     while (balance > 0.5 && m <= safety) {
       const interest = balance * r
@@ -287,13 +316,13 @@ export function simulatePrepayment(input: PrepaymentInput): PrepaymentResult {
       newSchedule,
     }
   } else {
-    // 월 상환액 감소: 기간 동일, 새 월 상환액 계산
-    const remainingMonths = input.months - prepayMonth
+    // 월 상환액 감소: 기간 동일, 새 월 상환액 계산 (거치 중 상환이면 거치 종료 후 남은 기간으로 재분할)
+    const remainingMonths = Math.max(1, input.months - (repayStart - 1))
     const newMonthly = r === 0
       ? newBalance / remainingMonths
       : newBalance * (r * Math.pow(1 + r, remainingMonths)) / (Math.pow(1 + r, remainingMonths) - 1)
 
-    for (let m = prepayMonth + 1; m <= input.months; m++) {
+    for (let m = repayStart; m <= input.months; m++) {
       const interest = balance * r
       let principal = newMonthly - interest
       if (m === input.months || principal > balance) principal = balance
@@ -541,7 +570,10 @@ export function formatEok(n: number): string {
     return man > 0 ? `${sign}${eok}억 ${man.toLocaleString()}만원` : `${sign}${eok}억원`
   }
   if (Math.abs(n) >= 10_000) {
-    return `${Math.round(n / 10_000).toLocaleString('ko-KR')}만원`
+    const man = Math.round(n / 10_000)
+    // 99,995,000처럼 반올림하면 1억이 되는 값은 '10,000만원' 대신 '1억원'
+    if (Math.abs(man) >= 10_000) return `${n < 0 ? '-' : ''}1억원`
+    return `${man.toLocaleString('ko-KR')}만원`
   }
   return won(n)
 }

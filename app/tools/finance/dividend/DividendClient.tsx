@@ -167,7 +167,9 @@ export default function DividendClient() {
 
   /* 환율 영향 — 미국 자산만 */
   const usAssets = assets.filter(a => Math.abs(a.taxRate - 15.0) < 0.1)
-  const usAnnualUSD = usAssets.reduce((s, a) => s + (a.amount * a.yieldPct / 100), 0) / 1300  // 가정 환율 1,300
+  const [fxBase, setFxBase] = useState('1380')  // 기준 환율 (원/$) — 사용자 입력
+  const fxBaseNum = Math.min(5000, Math.max(1, parseFloat(fxBase.replace(/,/g, '')) || 1380))
+  const usAnnualUSD = usAssets.reduce((s, a) => s + (a.amount * a.yieldPct / 100), 0) / fxBaseNum
 
   /* ── 탭 5: 절세 계좌 ── */
   const [savingsYears, setSavingsYears] = useState('30')
@@ -355,7 +357,7 @@ export default function DividendClient() {
 
           {valid && isFinite(required) && (
             <>
-              <div className={`${styles.hero} ${styles.heroAccent}`}>
+              <div className={`${styles.hero} ${styles.heroAccent}`} role="status">
                 <div className={styles.heroLead}>
                   월 <strong style={{ color: 'var(--text)' }}>{formatKRW(monthlyV)}</strong>의 배당금을 받으려면
                 </div>
@@ -496,7 +498,7 @@ export default function DividendClient() {
 
           {reverseResult && (
             <>
-              <div className={`${styles.hero} ${styles.heroGold}`}>
+              <div className={`${styles.hero} ${styles.heroGold}`} role="status">
                 <div className={styles.heroLead}>
                   월배당 <strong style={{ color: 'var(--text)' }}>{formatKRW(monthlyV)}</strong> · {revYears}년 목표
                 </div>
@@ -606,7 +608,7 @@ export default function DividendClient() {
             </div>
           </div>
 
-          <div className={`${styles.hero} ${
+          <div role="status" className={`${styles.hero} ${
             compTaxResult.level === 'over' ? styles.heroRed :
             compTaxResult.level === 'near' ? styles.heroOrange :
             compTaxResult.level === 'caution' ? styles.heroGold : styles.heroAccent
@@ -660,7 +662,7 @@ export default function DividendClient() {
               ))}
             </div>
             <p className={styles.cardLabelHint} style={{ marginTop: 10 }}>
-              ※ 「안전 한도」는 종합과세 한도의 80% 도달 지점 (여유 200만 추가 자산 가능).
+              ※ 「안전 한도」는 종합과세 한도의 80% 도달 지점입니다 (연 금융소득 1,600만원 — 한도까지 400만원 여유).
             </p>
           </div>
 
@@ -671,16 +673,16 @@ export default function DividendClient() {
               <table className={styles.compareTable} style={{ minWidth: 420 }}>
                 <thead>
                   <tr>
-                    <th scope="col">금융소득 구간</th>
+                    <th scope="col">종합소득 과세표준</th>
                     <th scope="col">세율</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {/* 구간은 금융소득 합계가 아니라 근로·사업소득 등을 합친 종합소득 과세표준으로 정해지므로 특정 행을 강조하지 않음 */}
                   {PROGRESSIVE_BRACKETS.slice(0, 8).map((b, i) => {
-                    const isActive = compTaxResult.bracket && b.min === compTaxResult.bracket.min
                     return (
-                      <tr key={i} className={isActive ? styles.bestRow : ''}>
-                        <td>{b.label.split('(')[0].trim()}{isActive && ' ⭐'}</td>
+                      <tr key={i}>
+                        <td>{b.label.split('(')[0].trim()}</td>
                         <td style={{ color: b.rate > 0.3 ? '#DC2626' : b.rate > 0.2 ? '#EA580C' : 'var(--text)' }}>
                           {(b.rate * 100).toFixed(1)}%
                         </td>
@@ -690,6 +692,9 @@ export default function DividendClient() {
                 </tbody>
               </table>
             </div>
+            <p className={styles.cardLabelHint} style={{ marginTop: 10 }}>
+              ※ 금융소득 중 2,000만원까지는 14%(지방세 포함 15.4%)가 유지되고, 초과분만 근로·사업소득 등과 합산해 위 세율이 적용됩니다. 다른 소득이 없으면 비교과세 때문에 실제 부담은 대체로 15.4% 근처에 머뭅니다.
+            </p>
           </div>
 
           <div className={styles.infoBox}>
@@ -697,6 +702,7 @@ export default function DividendClient() {
             <strong style={{ color: '#0891B2' }}>① ISA 계좌</strong> — 200~400만 비과세 + 9.9% 분리과세, <strong>종합과세 비포함</strong> · 연 2,000만 한도 / 총 1억<br />
             <strong style={{ color: '#0891B2' }}>② 연금저축·IRP</strong> — 5.5% 분리과세 (55세 이후) + 16.5% 세액공제<br />
             <strong style={{ color: '#0891B2' }}>③ 자산 분산</strong> — 부부 명의 분산, 자녀 명의(증여세 별도), 시점 분산<br />
+            <strong style={{ color: '#0891B2' }}>④ 고배당기업 배당 분리과세</strong> — 2026~2028년 요건을 갖춘 국내 상장사 배당은 종합과세 대신 14~30% 분리과세 선택 가능 (해외주식·ETF·리츠 제외)<br />
             본 도구의 「절세 계좌」 탭에서 정량 비교 가능합니다.
           </div>
         </>
@@ -754,7 +760,7 @@ export default function DividendClient() {
           </div>
 
           {/* 종합 결과 */}
-          <div className={`${styles.hero} ${styles.heroCyan}`}>
+          <div className={`${styles.hero} ${styles.heroCyan}`} role="status">
             <div className={styles.heroLead}>
               총 자산 {formatEok(portfolioResult.totalAmount)} · 가중평균 {portfolioResult.weightedYieldPretax.toFixed(2)}% (세전)
             </div>
@@ -838,12 +844,17 @@ export default function DividendClient() {
           {/* 환율 변동 영향 */}
           {usAssets.length > 0 && usAnnualUSD > 0 && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>환율 변동 영향 — 미국 ETF (가정 1,300원/$)</label>
+              <label className={styles.cardLabel} htmlFor="dividend-fx-base">환율 변동 영향 — 미국 ETF (기준 환율 {fxBaseNum.toLocaleString()}원/$)</label>
+              <div className={styles.inputRow} style={{ marginBottom: 10 }}>
+                <input id="dividend-fx-base" className={styles.numInput} type="text" inputMode="decimal"
+                  value={fxBase} onChange={e => setFxBase(e.target.value.replace(/[^\d.]/g, ''))} />
+                <span className={styles.unit}>원/$</span>
+              </div>
               <div className={styles.fxTable}>
                 <div className={`${styles.fxRow} ${styles.headerRow}`}>
                   <span>변동</span><span>환율</span><span>원화 배당 (세전)</span>
                 </div>
-                {calcCurrencyImpact(usAnnualUSD, 1300, [-15, -10, -5, 0, 5, 10, 15]).map(row => (
+                {calcCurrencyImpact(usAnnualUSD, fxBaseNum, [-15, -10, -5, 0, 5, 10, 15]).map(row => (
                   <div key={row.deltaPct} className={`${styles.fxRow} ${row.deltaPct === 0 ? styles.fxRowBase : ''}`}>
                     <span className={`${styles.fxDelta} ${row.deltaPct > 0 ? styles.fxDeltaPos : row.deltaPct < 0 ? styles.fxDeltaNeg : styles.fxDeltaZero}`}>
                       {row.deltaPct > 0 ? `+${row.deltaPct}%` : `${row.deltaPct}%`}
@@ -894,7 +905,7 @@ export default function DividendClient() {
 
           {savingsCompare && bestSavings && (
             <>
-              <div className={`${styles.hero} ${styles.heroPurple}`}>
+              <div className={`${styles.hero} ${styles.heroPurple}`} role="status">
                 <div className={styles.heroLead}>
                   연 배당 {formatEok(annualDividendVal)} · {savingsYears}년 절세 비교
                 </div>

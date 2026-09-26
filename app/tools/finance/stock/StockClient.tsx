@@ -84,12 +84,23 @@ export default function StockClient() {
 
   const validBase = cAvg > 0 && cShares > 0 && cPrice > 0
 
+  /* ── 통화 — 미국 주식이면 주가·평단·손익은 달러, 매수 금액 입력(만원)은 현재 환율로 달러 환산 ── */
+  const fx = isUsStock ? curER : 1  // 원 ÷ 주가 통화 1단위
+  const px = (n: number) => isUsStock
+    ? n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : formatKRW(n)
+  const fmtPrice = (n: number) => isUsStock ? `$${px(n)}` : `${px(n)}원`
+  const fmtMoney = (n: number) => isUsStock
+    ? `${n < 0 ? '-' : ''}$${Math.abs(n).toLocaleString('en-US', { maximumFractionDigits: 0 })}`
+    : formatEok(n)
+  const roundPx = (v: number) => isUsStock ? Math.round(v * 100) / 100 : Math.round(v)
+
   /* ── 메인: 추가 매수 입력 모드별 수량 결정 ── */
   const slidMaxWon = useMemo(() => {
-    // 슬라이더 최대값: 현재 보유 투자액의 2배 또는 최소 1000만 (원 단위)
-    const baseInvestment = cAvg * cShares
+    // 슬라이더 최대값: 현재 보유 투자액(원화 환산)의 2배 또는 최소 1000만 (원 단위)
+    const baseInvestment = cAvg * cShares * (isUsStock ? buyER : 1)
     return Math.max(baseInvestment * 2, 10_000_000)
-  }, [cAvg, cShares])
+  }, [cAvg, cShares, isUsStock, buyER])
 
   const sliderAmountWon = sliderAmount * 10_000  // 만원 → 원
   const addPriceNum = parseAmount(addPrice) || cPrice
@@ -98,11 +109,11 @@ export default function StockClient() {
     if (inputMode === 'shares') return parseAmount(addShares)
     if (inputMode === 'amount') {
       const won = parseAmount(addAmount) * 10_000
-      return Math.floor(won / addPriceNum)
+      return Math.floor(won / (addPriceNum * fx))
     }
     // slider
-    return Math.floor(sliderAmountWon / cPrice)
-  }, [inputMode, addShares, addAmount, addPriceNum, sliderAmountWon, cPrice])
+    return Math.floor(sliderAmountWon / (cPrice * fx))
+  }, [inputMode, addShares, addAmount, addPriceNum, sliderAmountWon, cPrice, fx])
 
   const finalAddPrice = inputMode === 'shares' || inputMode === 'amount' ? addPriceNum : cPrice
 
@@ -122,7 +133,7 @@ export default function StockClient() {
   /* ── 종목 비중 ── */
   const concentration = useMemo(() => {
     if (!mainResult || totalAssetsWon <= 0) return null
-    const pct = (mainResult.totalInvestment / totalAssetsWon) * 100
+    const pct = ((mainResult.krwTotalInvestment ?? mainResult.totalInvestment) / totalAssetsWon) * 100
     return { pct, level: getConcentrationLevel(pct) }
   }, [mainResult, totalAssetsWon])
 
@@ -159,11 +170,11 @@ export default function StockClient() {
   const dcaResult = useMemo(() => {
     if (!validBase) return []
     const ts = tranches
-      .map(t => ({ price: parseAmount(t.price), amount: parseAmount(t.amount) * 10_000 }))
+      .map(t => ({ price: parseAmount(t.price), amount: parseAmount(t.amount) * 10_000 / fx }))
       .filter(t => t.price > 0 && t.amount > 0)
     if (ts.length === 0) return []
     return simulateDCA({ avg: cAvg, shares: cShares }, ts, feeRate)
-  }, [validBase, cAvg, cShares, tranches, feeRate])
+  }, [validBase, cAvg, cShares, tranches, feeRate, fx])
 
   const dcaFinal = dcaResult[dcaResult.length - 1]
 
@@ -198,22 +209,22 @@ export default function StockClient() {
     if (!validBase) return null
     return compareCutVsAvgDown({
       currentAvg: cAvg, currentShares: cShares, currentPrice: cPrice,
-      additionalCash: parseAmount(additionalCash) * 10_000,
+      additionalCash: parseAmount(additionalCash) * 10_000 / fx,  // 미국 주식이면 현재 환율로 달러 환산
       alternativeReturn: parseAmount(alternativeReturn),
       recoveryAssumption: parseAmount(recoveryAssumption),
       feeRate,
       isUsStock,
     })
-  }, [validBase, cAvg, cShares, cPrice, additionalCash, alternativeReturn, recoveryAssumption, feeRate, isUsStock])
+  }, [validBase, cAvg, cShares, cPrice, additionalCash, alternativeReturn, recoveryAssumption, feeRate, isUsStock, fx])
 
   /* ── 슬라이더 곡선 (탭1) ── */
   const sliderCurve = useMemo(() => {
     if (!validBase) return []
     return buildSliderCurve(
       { currentAvg: cAvg, currentShares: cShares, currentPrice: cPrice, feeRate },
-      slidMaxWon, 50,
+      slidMaxWon / fx, 50,  // 곡선의 매수 금액 축은 주가 통화 기준
     )
-  }, [validBase, cAvg, cShares, cPrice, feeRate, slidMaxWon])
+  }, [validBase, cAvg, cShares, cPrice, feeRate, slidMaxWon, fx])
 
   /* ── 차트: 추가 매수 금액별 평단가 변화 ── */
   const renderSliderChart = useCallback(() => {
@@ -249,7 +260,7 @@ export default function StockClient() {
             <circle cx={xs(curIdx)} cy={ys(curPoint.newAvg)} r="6" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2" />
             <text x={xs(curIdx)} y={ys(curPoint.newAvg) - 12} textAnchor="middle" fill="var(--accent)"
               fontSize="11" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
-              {formatKRW(curPoint.newAvg)}원
+              {fmtPrice(curPoint.newAvg)}
             </text>
           </>
         )}
@@ -263,7 +274,8 @@ export default function StockClient() {
         </text>
       </svg>
     )
-  }, [sliderCurve, sliderAmountWon, slidMaxWon, cPrice])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sliderCurve, sliderAmountWon, slidMaxWon, cPrice, isUsStock])
 
   /* ── 차트: 분할 매수 차수별 평단 변화 ── */
   const renderDCAChart = useCallback(() => {
@@ -339,7 +351,9 @@ export default function StockClient() {
     )
   }, [recoveryRows])
 
-  const sellAllFee = `매수 ${feeRate}% + 매도 ${feeRate}% + 거래세 ${KR_TRANSACTION_TAX_RATE * 100}%`
+  const sellAllFee = isUsStock
+    ? `매수 ${feeRate}% + 매도 ${feeRate}%`
+    : `매수 ${feeRate}% + 매도 ${feeRate}% + 거래세 ${KR_TRANSACTION_TAX_RATE * 100}%`
 
   /* ──────────── RENDER ──────────── */
   return (
@@ -379,25 +393,25 @@ export default function StockClient() {
       {/* 공통 기본 입력 */}
       <div className={styles.threeCol}>
         <div className={styles.card}>
-          <div className={styles.cardLabel}>기존 평단가</div>
+          <label className={styles.cardLabel} htmlFor="stock-avg">기존 평단가</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="stock-avg" className={styles.numInput} type="number" step="any" inputMode={isUsStock ? 'decimal' : 'numeric'}
               value={currentAvg} onChange={e => setCurrentAvg(e.target.value)} />
             <span className={styles.unit}>{isUsStock ? '$' : '원'}</span>
           </div>
         </div>
         <div className={styles.card}>
-          <div className={styles.cardLabel}>보유 수량</div>
+          <label className={styles.cardLabel} htmlFor="stock-shares">보유 수량</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="stock-shares" className={styles.numInput} type="number" inputMode="numeric"
               value={currentShares} onChange={e => setCurrentShares(e.target.value)} />
             <span className={styles.unit}>주</span>
           </div>
         </div>
         <div className={styles.card}>
-          <div className={styles.cardLabel}>현재 주가</div>
+          <label className={styles.cardLabel} htmlFor="stock-price">현재 주가</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="stock-price" className={styles.numInput} type="number" step="any" inputMode={isUsStock ? 'decimal' : 'numeric'}
               value={currentPrice} onChange={e => setCurrentPrice(e.target.value)} />
             <span className={styles.unit}>{isUsStock ? '$' : '원'}</span>
           </div>
@@ -436,7 +450,7 @@ export default function StockClient() {
         </div>
         {brokerId === 'custom' && (
           <div className={styles.inputRow} style={{ marginTop: 10 }}>
-            <input className={styles.numInput} type="number" inputMode="decimal" step={0.001}
+            <input id="stock-custom-fee" aria-label="매수 수수료율 직접 입력 (%)" className={styles.numInput} type="number" inputMode="decimal" step={0.001}
               value={customFee} onChange={e => setCustomFee(e.target.value)} />
             <span className={styles.unit}>%</span>
           </div>
@@ -454,17 +468,17 @@ export default function StockClient() {
         {isUsStock && (
           <div className={styles.twoCol} style={{ marginTop: 10 }}>
             <div>
-              <div className={styles.cardLabel}>매수 시 환율</div>
+              <label className={styles.cardLabel} htmlFor="stock-buy-fx">매수 시 환율</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="stock-buy-fx" className={styles.numInput} type="number" inputMode="numeric"
                   value={buyExchangeRate} onChange={e => setBuyExchangeRate(e.target.value)} />
                 <span className={styles.unit}>원/$</span>
               </div>
             </div>
             <div>
-              <div className={styles.cardLabel}>현재 환율</div>
+              <label className={styles.cardLabel} htmlFor="stock-cur-fx">현재 환율</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="stock-cur-fx" className={styles.numInput} type="number" inputMode="numeric"
                   value={curExchangeRate} onChange={e => setCurExchangeRate(e.target.value)} />
                 <span className={styles.unit}>원/$</span>
               </div>
@@ -491,7 +505,7 @@ export default function StockClient() {
             {inputMode === 'slider' && validBase && (
               <div style={{ marginTop: 14 }}>
                 <div className={styles.sliderRow}>
-                  <input type="range" className={styles.slider}
+                  <input type="range" className={styles.slider} aria-label="추가 매수 금액 (만원)"
                     min={0} max={Math.round(slidMaxWon / 10_000)} step={10}
                     value={sliderAmount} onChange={e => setSliderAmount(parseInt(e.target.value))} />
                   <span className={styles.sliderVal}>{formatEok(sliderAmount * 10_000)}</span>
@@ -505,18 +519,18 @@ export default function StockClient() {
             {inputMode === 'shares' && (
               <div className={styles.twoCol} style={{ marginTop: 14 }}>
                 <div>
-                  <div className={styles.cardLabel}>추가 매수가</div>
+                  <label className={styles.cardLabel} htmlFor="stock-add-price">추가 매수가</label>
                   <div className={styles.inputRow}>
-                    <input className={styles.numInput} type="number" inputMode="numeric"
+                    <input id="stock-add-price" className={styles.numInput} type="number" step="any" inputMode={isUsStock ? 'decimal' : 'numeric'}
                       placeholder={String(cPrice)}
                       value={addPrice} onChange={e => setAddPrice(e.target.value)} />
                     <span className={styles.unit}>{isUsStock ? '$' : '원'}</span>
                   </div>
                 </div>
                 <div>
-                  <div className={styles.cardLabel}>추가 매수 수량</div>
+                  <label className={styles.cardLabel} htmlFor="stock-add-shares">추가 매수 수량</label>
                   <div className={styles.inputRow}>
-                    <input className={styles.numInput} type="number" inputMode="numeric"
+                    <input id="stock-add-shares" className={styles.numInput} type="number" inputMode="numeric"
                       value={addShares} onChange={e => setAddShares(e.target.value)} />
                     <span className={styles.unit}>주</span>
                   </div>
@@ -527,25 +541,25 @@ export default function StockClient() {
             {inputMode === 'amount' && (
               <div className={styles.twoCol} style={{ marginTop: 14 }}>
                 <div>
-                  <div className={styles.cardLabel}>추가 매수가</div>
+                  <label className={styles.cardLabel} htmlFor="stock-add-price-2">추가 매수가</label>
                   <div className={styles.inputRow}>
-                    <input className={styles.numInput} type="number" inputMode="numeric"
+                    <input id="stock-add-price-2" className={styles.numInput} type="number" step="any" inputMode={isUsStock ? 'decimal' : 'numeric'}
                       placeholder={String(cPrice)}
                       value={addPrice} onChange={e => setAddPrice(e.target.value)} />
                     <span className={styles.unit}>{isUsStock ? '$' : '원'}</span>
                   </div>
                 </div>
                 <div>
-                  <div className={styles.cardLabel}>매수 금액 (만원)</div>
+                  <label className={styles.cardLabel} htmlFor="stock-add-amount">매수 금액 (만원)</label>
                   <div className={styles.inputRow}>
-                    <input className={styles.numInput} type="number" inputMode="numeric"
+                    <input id="stock-add-amount" className={styles.numInput} type="number" inputMode="numeric"
                       value={addAmount} onChange={e => setAddAmount(e.target.value)} />
                     <span className={styles.unit}>만원</span>
                   </div>
                 </div>
                 {validBase && finalAddShares > 0 && (
                   <div className={styles.cardLabelHint} style={{ gridColumn: '1 / -1', textAlign: 'right' }}>
-                    매수 가능: {finalAddShares.toLocaleString()}주 · 잔액 {formatKRW(parseAmount(addAmount) * 10_000 - finalAddShares * addPriceNum)}원
+                    매수 가능: {finalAddShares.toLocaleString()}주 · 잔액 {formatKRW(parseAmount(addAmount) * 10_000 - finalAddShares * addPriceNum * fx)}원
                   </div>
                 )}
               </div>
@@ -556,13 +570,14 @@ export default function StockClient() {
           {mainResult && finalAddShares > 0 ? (
             <>
               {/* 히어로 */}
-              <div className={`${styles.hero} ${styles.heroAccent}`}>
+              <div className={`${styles.hero} ${styles.heroAccent}`} role="status">
                 <div className={styles.heroLabel}>물타기 후 새 평단가</div>
                 <div className={`${styles.heroNum} ${styles.heroNumAccent}`}>
-                  {formatKRW(mainResult.newAvg)}{isUsStock ? '$' : '원'}
+                  {fmtPrice(mainResult.newAvg)}
                 </div>
                 <div className={styles.heroSub}>
-                  보유 {mainResult.newShares.toLocaleString()}주 · 총 투자 {formatEok(mainResult.totalInvestment)}
+                  보유 {mainResult.newShares.toLocaleString()}주 · 총 투자 {fmtMoney(mainResult.totalInvestment)}
+                  {isUsStock && mainResult.krwTotalInvestment !== undefined && <> (원화 약 {formatEok(mainResult.krwTotalInvestment)})</>}
                 </div>
                 <div className={styles.rateBadge}>
                   본전까지 {formatPct(mainResult.breakEvenRise)} 상승 필요
@@ -573,7 +588,7 @@ export default function StockClient() {
               <div className={styles.statGrid}>
                 <div className={styles.statCard}>
                   <div className={styles.statLabel}>새 평단가</div>
-                  <div className={`${styles.statValue} ${styles.statValueAccent}`}>{formatKRW(mainResult.newAvg)}</div>
+                  <div className={`${styles.statValue} ${styles.statValueAccent}`}>{px(mainResult.newAvg)}</div>
                 </div>
                 <div className={styles.statCard}>
                   <div className={styles.statLabel}>본전 상승률</div>
@@ -583,7 +598,7 @@ export default function StockClient() {
                 </div>
                 <div className={styles.statCard}>
                   <div className={styles.statLabel}>총 투자금</div>
-                  <div className={styles.statValue}>{formatEok(mainResult.totalInvestment)}</div>
+                  <div className={styles.statValue}>{fmtMoney(mainResult.totalInvestment)}</div>
                 </div>
                 <div className={styles.statCard}>
                   <div className={styles.statLabel}>현재 손실률</div>
@@ -601,13 +616,13 @@ export default function StockClient() {
                     <span>항목</span><span>물타기 전</span><span>물타기 후</span>
                   </div>
                   {[
-                    ['평균단가', `${formatKRW(cAvg)}${isUsStock ? '$' : '원'}`, `${formatKRW(mainResult.newAvg)}${isUsStock ? '$' : '원'}`, false],
+                    ['평균단가', fmtPrice(cAvg), fmtPrice(mainResult.newAvg), false],
                     ['보유 수량', `${cShares.toLocaleString()}주`, `${mainResult.newShares.toLocaleString()}주`, false],
-                    ['총 투자금', formatEok(cAvg * cShares * (1 + feeRate / 100)), formatEok(mainResult.totalInvestment), false],
-                    ['평가액',   formatEok(cPrice * cShares),   formatEok(mainResult.currentValue), false],
-                    ['미실현 손익', formatEok(cPrice * cShares - cAvg * cShares * (1 + feeRate / 100)), formatEok(mainResult.unrealizedPL), true],
+                    ['총 투자금', fmtMoney(cAvg * cShares * (1 + feeRate / 100)), fmtMoney(mainResult.totalInvestment), false],
+                    ['평가액',   fmtMoney(cPrice * cShares),   fmtMoney(mainResult.currentValue), false],
+                    ['미실현 손익', fmtMoney(cPrice * cShares - cAvg * cShares * (1 + feeRate / 100)), fmtMoney(mainResult.unrealizedPL), true],
                     ['손익률', formatPct(mainResult.beforeROI), formatPct(mainResult.unrealizedROI), false],
-                    ['본전 가격', `${formatKRW(cAvg / (1 - (feeRate/100 + (isUsStock ? 0 : KR_TRANSACTION_TAX_RATE))))}${isUsStock ? '$' : '원'}`, `${formatKRW(mainResult.breakEvenPrice)}${isUsStock ? '$' : '원'}`, false],
+                    ['본전 가격', fmtPrice(cAvg / (1 - (feeRate/100 + (isUsStock ? 0 : KR_TRANSACTION_TAX_RATE)))), fmtPrice(mainResult.breakEvenPrice), false],
                     ['본전 필요 상승', formatPct(((cAvg / (1 - (feeRate/100 + (isUsStock ? 0 : KR_TRANSACTION_TAX_RATE)))) / cPrice - 1) * 100), formatPct(mainResult.breakEvenRise), true],
                   ].map(([label, before, after, key], i) => (
                     <div key={i} className={`${styles.compareTableRow} ${key ? styles.compareRowKey : ''}`}>
@@ -663,9 +678,9 @@ export default function StockClient() {
 
               {/* 종목 비중 */}
               <div className={styles.card}>
-                <div className={styles.cardLabel}>종목 비중 점검 (선택)</div>
+                <label className={styles.cardLabel} htmlFor="stock-total-assets">종목 비중 점검 (선택)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" inputMode="numeric"
+                  <input id="stock-total-assets" className={styles.numInput} type="number" inputMode="numeric"
                     placeholder="총 자산 (만원)" value={totalAssets}
                     onChange={e => setTotalAssets(e.target.value)} />
                   <span className={styles.unit}>만원</span>
@@ -730,15 +745,15 @@ export default function StockClient() {
       {tab === 'reverse' && (
         <>
           <div className={styles.card}>
-            <div className={styles.cardLabel}>목표 평단가</div>
+            <label className={styles.cardLabel} htmlFor="stock-target-avg">목표 평단가</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="numeric"
+              <input id="stock-target-avg" className={styles.numInput} type="number" step="any" inputMode={isUsStock ? 'decimal' : 'numeric'}
                 value={targetAvg} onChange={e => setTargetAvg(e.target.value)} />
               <span className={styles.unit}>{isUsStock ? '$' : '원'}</span>
             </div>
             <div className={styles.chips}>
               {[-2, -4, -6, -8, -10, -15, -20].map(d => {
-                const v = Math.round(cAvg * (1 + d / 100))
+                const v = roundPx(cAvg * (1 + d / 100))
                 return (
                   <button key={d} type="button" aria-pressed={parseAmount(targetAvg) === v}
                     className={`${styles.chip} ${parseAmount(targetAvg) === v ? styles.chipActive : ''}`}
@@ -750,13 +765,14 @@ export default function StockClient() {
           </div>
 
           {reverseResult && reverseResult.reasonable && reverseResult.requiredShares !== null && (
-            <div className={`${styles.hero} ${styles.heroGold}`}>
-              <div className={styles.heroLabel}>평단 {formatKRW(parseAmount(targetAvg))}원 만들려면</div>
+            <div className={`${styles.hero} ${styles.heroGold}`} role="status">
+              <div className={styles.heroLabel}>평단 {fmtPrice(parseAmount(targetAvg))} 만들려면</div>
               <div className={`${styles.heroNum} ${styles.heroNumGold}`}>
                 {reverseResult.requiredShares.toLocaleString()}주 추가
               </div>
               <div className={styles.heroSub}>
-                필요 자금 약 {formatEok(reverseResult.requiredAmount ?? 0)}
+                필요 자금 약 {fmtMoney(reverseResult.requiredAmount ?? 0)}
+                {isUsStock && <> (원화 약 {formatEok((reverseResult.requiredAmount ?? 0) * fx)})</>}
               </div>
               <div className={styles.rateBadge} style={{ background: 'rgba(161,98,7,0.10)', color: '#A16207', borderColor: 'rgba(161,98,7,0.40)' }}>
                 추가 후 본전까지 {formatPct(reverseResult.breakEvenRiseAfter ?? 0)} 상승 필요
@@ -776,14 +792,14 @@ export default function StockClient() {
                   <span>항목</span><span></span><span>값</span>
                 </div>
                 {[
-                  ['현재 평단가', '', `${formatKRW(cAvg)}${isUsStock ? '$' : '원'}`],
+                  ['현재 평단가', '', fmtPrice(cAvg)],
                   ['보유 수량', '', `${cShares.toLocaleString()}주`],
-                  ['현재 주가', '', `${formatKRW(cPrice)}${isUsStock ? '$' : '원'}`],
-                  ['목표 평단가', '', `${formatKRW(parseAmount(targetAvg))}${isUsStock ? '$' : '원'}`],
+                  ['현재 주가', '', fmtPrice(cPrice)],
+                  ['목표 평단가', '', fmtPrice(parseAmount(targetAvg))],
                   ['필요 추가 수량', '', `${reverseResult.requiredShares.toLocaleString()}주`],
-                  ['필요 추가 금액', '', formatEok(reverseResult.requiredAmount ?? 0)],
+                  ['필요 추가 금액', '', fmtMoney(reverseResult.requiredAmount ?? 0)],
                   ['추가 후 총 수량', '', `${(reverseResult.totalSharesAfter ?? 0).toLocaleString()}주`],
-                  ['추가 후 총 투자금', '', formatEok(reverseResult.totalInvestmentAfter ?? 0)],
+                  ['추가 후 총 투자금', '', fmtMoney(reverseResult.totalInvestmentAfter ?? 0)],
                 ].map((row, i) => (
                   <div key={i} className={styles.compareTableRow}>
                     <span>{row[0]}</span><span>{row[1]}</span><span>{row[2]}</span>
@@ -802,12 +818,12 @@ export default function StockClient() {
                   <span>목표 평단</span><span>필요 수량</span><span>필요 금액</span>
                 </div>
                 {reverseScenarios.map((s, i) => {
-                  const isCurrent = Math.abs(s.target - parseAmount(targetAvg)) < 100
+                  const isCurrent = Math.abs(s.target - parseAmount(targetAvg)) < (isUsStock ? 0.05 : 100)
                   return (
                     <div key={i} className={`${styles.compareTableRow} ${isCurrent ? styles.compareRowKey : ''}`}>
-                      <span>{formatKRW(s.target)}원 ({s.deltaPct}%){isCurrent && ' ⭐'}</span>
+                      <span>{fmtPrice(s.target)} ({s.deltaPct}%){isCurrent && ' ⭐'}</span>
                       <span>{s.reasonable && s.requiredShares !== null ? `${s.requiredShares.toLocaleString()}주` : '—'}</span>
-                      <span>{s.reasonable && s.requiredAmount !== null ? formatEok(s.requiredAmount) : '—'}</span>
+                      <span>{s.reasonable && s.requiredAmount !== null ? fmtMoney(s.requiredAmount) : '—'}</span>
                     </div>
                   )
                 })}
@@ -834,15 +850,17 @@ export default function StockClient() {
               <div key={i} className={styles.trancheRow}>
                 <span className={styles.trancheLabel}>{i + 1}차</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="number" inputMode="numeric"
+                  <input className={styles.numInput} type="number" step="any" inputMode={isUsStock ? 'decimal' : 'numeric'}
+                    aria-label={`${i + 1}차 매수가 (${isUsStock ? '달러' : '원'})`}
                     placeholder="매수가" value={t.price}
                     onChange={e => {
                       const next = [...tranches]; next[i] = { ...next[i], price: e.target.value }; setTranches(next)
                     }} />
-                  <span className={styles.unit}>원</span>
+                  <span className={styles.unit}>{isUsStock ? '$' : '원'}</span>
                 </div>
                 <div className={styles.inputRow}>
                   <input className={styles.numInput} type="number" inputMode="numeric"
+                    aria-label={`${i + 1}차 매수 금액 (만원)`}
                     placeholder="금액 (만원)" value={t.amount}
                     onChange={e => {
                       const next = [...tranches]; next[i] = { ...next[i], amount: e.target.value }; setTranches(next)
@@ -861,8 +879,8 @@ export default function StockClient() {
                 const n = dcaReco.tranches
                 const next: Tranche[] = []
                 for (let k = 1; k <= Math.max(2, Math.min(n, 5)); k++) {
-                  const p = Math.round(cPrice * (1 - 0.1 * k))
-                  next.push({ price: String(Math.max(p, 1000)), amount: '100' })
+                  const p = roundPx(cPrice * (1 - 0.1 * k))
+                  next.push({ price: String(isUsStock ? Math.max(p, 0.01) : Math.max(p, 1000)), amount: '100' })
                 }
                 setTranches(next)
               }}>자동 입력 ({dcaReco.tranches}차)</button>
@@ -871,16 +889,16 @@ export default function StockClient() {
 
           {dcaResult.length > 1 && dcaFinal && (
             <>
-              <div className={`${styles.hero} ${styles.heroCyan}`}>
+              <div className={`${styles.hero} ${styles.heroCyan}`} role="status">
                 <div className={styles.heroLabel}>{dcaResult.length - 1}차 분할 매수 후</div>
                 <div className={`${styles.heroNum} ${styles.heroNumCyan}`}>
-                  {formatKRW(dcaFinal.cumulativeAvg)}원
+                  {fmtPrice(dcaFinal.cumulativeAvg)}
                 </div>
                 <div className={styles.heroSub}>
-                  총 {dcaFinal.cumulativeShares.toLocaleString()}주 · 투자 {formatEok(dcaFinal.cumulativeInvestment)}
+                  총 {dcaFinal.cumulativeShares.toLocaleString()}주 · 투자 {fmtMoney(dcaFinal.cumulativeInvestment)}
                 </div>
                 <div className={styles.rateBadge} style={{ background: 'rgba(8,145,178,0.10)', color: '#0891B2', borderColor: 'rgba(8,145,178,0.40)' }}>
-                  평단 {formatKRW(cAvg)} → {formatKRW(dcaFinal.cumulativeAvg)} ({formatPct((dcaFinal.cumulativeAvg / cAvg - 1) * 100)})
+                  평단 {px(cAvg)} → {px(dcaFinal.cumulativeAvg)} ({formatPct((dcaFinal.cumulativeAvg / cAvg - 1) * 100)})
                 </div>
               </div>
 
@@ -904,11 +922,11 @@ export default function StockClient() {
                   {dcaResult.map(d => (
                     <div key={d.tranche} className={styles.scheduleRow}>
                       <span>{d.tranche === 0 ? '초기' : `${d.tranche}차`}</span>
-                      <span>{formatKRW(d.price)}</span>
-                      <span>{formatEok(d.amount)}</span>
+                      <span>{px(d.price)}</span>
+                      <span>{fmtMoney(d.amount)}</span>
                       <span>{d.shares.toLocaleString()}</span>
                       <span>{d.cumulativeShares.toLocaleString()}</span>
-                      <span style={{ color: 'var(--accent)' }}>{formatKRW(d.cumulativeAvg)}</span>
+                      <span style={{ color: 'var(--accent)' }}>{px(d.cumulativeAvg)}</span>
                       <span style={{ color: d.unrealizedROI >= 0 ? '#059669' : '#DC2626' }}>{formatPct(d.unrealizedROI)}</span>
                     </div>
                   ))}
@@ -926,10 +944,10 @@ export default function StockClient() {
                       <span className={`${styles.recoveryDelta} ${r.delta > 0 ? styles.deltaPos : (r.delta < 0 ? styles.deltaNeg : styles.deltaZero)}`}>
                         {r.delta > 0 ? `+${r.delta}%` : `${r.delta}%`}
                       </span>
-                      <span>{formatKRW(r.price)}</span>
+                      <span>{px(r.price)}</span>
                       <span style={{ color: r.roi >= 0 ? '#059669' : '#DC2626' }}>{formatPct(r.roi)}</span>
-                      <span>{formatEok(r.value)}</span>
-                      <span style={{ color: r.pl >= 0 ? '#059669' : '#DC2626' }}>{formatEok(r.pl)}</span>
+                      <span>{fmtMoney(r.value)}</span>
+                      <span style={{ color: r.pl >= 0 ? '#059669' : '#DC2626' }}>{fmtMoney(r.pl)}</span>
                     </div>
                   ))}
                 </div>
@@ -948,13 +966,13 @@ export default function StockClient() {
       {/* ──────────── TAB 4: 회복 시나리오 ──────────── */}
       {tab === 'recovery' && mainResult && (
         <>
-          <div className={`${styles.hero} ${styles.heroOrange}`}>
+          <div className={`${styles.hero} ${styles.heroOrange}`} role="status">
             <div className={styles.heroLabel}>본전까지 필요 상승</div>
             <div className={`${styles.heroNum} ${styles.heroNumOrange}`}>
               {formatPct(mainResult.breakEvenRise)}
             </div>
             <div className={styles.heroSub}>
-              새 평단 {formatKRW(mainResult.newAvg)}원 · 본전 가격 {formatKRW(mainResult.breakEvenPrice)}원
+              새 평단 {fmtPrice(mainResult.newAvg)} · 본전 가격 {fmtPrice(mainResult.breakEvenPrice)}
             </div>
             <div className={styles.heroDesc}>
               {sellAllFee} 모두 회수해야 진짜 본전
@@ -987,10 +1005,10 @@ export default function StockClient() {
                     <span className={`${styles.recoveryDelta} ${r.delta > 0 ? styles.deltaPos : (r.delta < 0 ? styles.deltaNeg : styles.deltaZero)}`}>
                       {r.delta > 0 ? `+${r.delta}%` : `${r.delta}%`}
                     </span>
-                    <span>{formatKRW(r.price)}</span>
+                    <span>{px(r.price)}</span>
                     <span style={{ color: r.roi >= 0 ? '#059669' : '#DC2626' }}>{formatPct(r.roi)}</span>
-                    <span>{formatEok(r.value)}</span>
-                    <span style={{ color: r.pl >= 0 ? '#059669' : '#DC2626' }}>{formatEok(r.pl)}</span>
+                    <span>{fmtMoney(r.value)}</span>
+                    <span style={{ color: r.pl >= 0 ? '#059669' : '#DC2626' }}>{fmtMoney(r.pl)}</span>
                   </div>
                 )
               })}
@@ -998,9 +1016,9 @@ export default function StockClient() {
           </div>
 
           <div className={styles.card}>
-            <div className={styles.cardLabel}>직접 목표 주가 입력</div>
+            <label className={styles.cardLabel} htmlFor="stock-target-price">직접 목표 주가 입력</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="numeric"
+              <input id="stock-target-price" className={styles.numInput} type="number" step="any" inputMode={isUsStock ? 'decimal' : 'numeric'}
                 placeholder="목표 주가" value={targetRecoveryPrice}
                 onChange={e => setTargetRecoveryPrice(e.target.value)} />
               <span className={styles.unit}>{isUsStock ? '$' : '원'}</span>
@@ -1009,12 +1027,12 @@ export default function StockClient() {
               <div className={styles.statGrid} style={{ marginTop: 12 }}>
                 <div className={styles.statCard}>
                   <div className={styles.statLabel}>평가액</div>
-                  <div className={`${styles.statValue} ${styles.statValueAccent}`}>{formatEok(targetRecoveryRow.value)}</div>
+                  <div className={`${styles.statValue} ${styles.statValueAccent}`}>{fmtMoney(targetRecoveryRow.value)}</div>
                 </div>
                 <div className={styles.statCard}>
                   <div className={styles.statLabel}>손익</div>
                   <div className={`${styles.statValue} ${targetRecoveryRow.pl >= 0 ? styles.statValueGreen : styles.statValueRed}`}>
-                    {formatEok(targetRecoveryRow.pl)}
+                    {fmtMoney(targetRecoveryRow.pl)}
                   </div>
                 </div>
                 <div className={styles.statCard}>
@@ -1051,22 +1069,22 @@ export default function StockClient() {
         <>
           {isUsStock && (
             <div className={styles.infoBox}>
-              ※ 미국 주식 모드 — 이 비교는 <strong>거래세 0 기준</strong>이며 양도세·환율은 미반영입니다. 원화 손익은 「물타기 계산」 탭을 참고하세요.
+              ※ 미국 주식 모드 — 추가 가능 현금(만원)은 현재 환율로 달러 환산해 비교하며, <strong>거래세 0 기준</strong>이고 양도세·환율 변동은 미반영입니다. 원화 손익은 「물타기 계산」 탭을 참고하세요.
             </div>
           )}
           <div className={styles.threeCol}>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>추가 가능 현금</div>
+              <label className={styles.cardLabel} htmlFor="stock-cash">추가 가능 현금</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="stock-cash" className={styles.numInput} type="number" inputMode="numeric"
                   value={additionalCash} onChange={e => setAdditionalCash(e.target.value)} />
                 <span className={styles.unit}>만원</span>
               </div>
             </div>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>대안 투자 예상 수익률 (1년)</div>
+              <label className={styles.cardLabel} htmlFor="stock-alt-return">대안 투자 예상 수익률 (1년)</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="decimal" step={0.5}
+                <input id="stock-alt-return" className={styles.numInput} type="number" inputMode="decimal" step={0.5}
                   value={alternativeReturn} onChange={e => setAlternativeReturn(e.target.value)} />
                 <span className={styles.unit}>%</span>
               </div>
@@ -1080,15 +1098,15 @@ export default function StockClient() {
               </div>
             </div>
             <div className={styles.card}>
-              <div className={styles.cardLabel}>본 종목 회복 가정 가격</div>
+              <label className={styles.cardLabel} htmlFor="stock-recovery-price">본 종목 회복 가정 가격</label>
               <div className={styles.inputRow}>
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input id="stock-recovery-price" className={styles.numInput} type="number" step="any" inputMode={isUsStock ? 'decimal' : 'numeric'}
                   value={recoveryAssumption} onChange={e => setRecoveryAssumption(e.target.value)} />
                 <span className={styles.unit}>{isUsStock ? '$' : '원'}</span>
               </div>
               <div className={styles.chips}>
                 {RECOVERY_PRESETS.map(d => {
-                  const v = Math.round(cPrice * (1 + d / 100))
+                  const v = roundPx(cPrice * (1 + d / 100))
                   return (
                     <button key={d} type="button" aria-pressed={parseAmount(recoveryAssumption) === v}
                       className={`${styles.chip} ${parseAmount(recoveryAssumption) === v ? styles.chipActive : ''}`}
@@ -1108,14 +1126,14 @@ export default function StockClient() {
                   <p className={styles.compareCardTitle}>A. 물타기 (추가 매수)</p>
                   <p className={styles.compareCardDesc}>본 종목 회복 가정 시</p>
                   <p className={styles.compareCardMain} style={{ color: compareResult.avgDown.profit >= 0 ? '#059669' : '#DC2626' }}>
-                    {compareResult.avgDown.profit >= 0 ? '+' : ''}{formatEok(compareResult.avgDown.profit)}
+                    {compareResult.avgDown.profit >= 0 ? '+' : ''}{fmtMoney(compareResult.avgDown.profit)}
                   </p>
                   <p className={styles.compareCardLabel}>{formatPct(compareResult.avgDown.profitPct)} · 회복 가정 매도 시</p>
                   <div className={styles.compareCardDivider} />
-                  <div className={styles.compareCardRow}><span>새 평단가</span><span>{formatKRW(compareResult.avgDown.newAvg)}원</span></div>
+                  <div className={styles.compareCardRow}><span>새 평단가</span><span>{fmtPrice(compareResult.avgDown.newAvg)}</span></div>
                   <div className={styles.compareCardRow}><span>총 보유</span><span>{compareResult.avgDown.newShares.toLocaleString()}주</span></div>
-                  <div className={styles.compareCardRow}><span>총 투자금</span><span>{formatEok(compareResult.avgDown.totalInvested)}</span></div>
-                  <div className={styles.compareCardRow}><span>매도 평가액</span><span>{formatEok(compareResult.avgDown.finalValue)}</span></div>
+                  <div className={styles.compareCardRow}><span>총 투자금</span><span>{fmtMoney(compareResult.avgDown.totalInvested)}</span></div>
+                  <div className={styles.compareCardRow}><span>매도 평가액</span><span>{fmtMoney(compareResult.avgDown.finalValue)}</span></div>
                 </div>
 
                 <div className={`${styles.compareCard} ${!compareResult.avgDownIsBetter ? styles.compareCardWinner : styles.compareCardLoser}`}>
@@ -1123,18 +1141,18 @@ export default function StockClient() {
                   <p className={styles.compareCardTitle}>B. 손절 + 대안 투자</p>
                   <p className={styles.compareCardDesc}>대안 {alternativeReturn}% 수익 가정</p>
                   <p className={styles.compareCardMain} style={{ color: compareResult.cutLoss.netProfit >= 0 ? '#059669' : '#DC2626' }}>
-                    {compareResult.cutLoss.netProfit >= 0 ? '+' : ''}{formatEok(compareResult.cutLoss.netProfit)}
+                    {compareResult.cutLoss.netProfit >= 0 ? '+' : ''}{fmtMoney(compareResult.cutLoss.netProfit)}
                   </p>
                   <p className={styles.compareCardLabel}>{formatPct(compareResult.cutLoss.netProfitPct)} · 1년 후</p>
                   <div className={styles.compareCardDivider} />
-                  <div className={styles.compareCardRow}><span>실현 손익</span><span style={{ color: '#DC2626' }}>{formatEok(compareResult.cutLoss.realizedLoss)}</span></div>
-                  <div className={styles.compareCardRow}><span>총 투자금</span><span>{formatEok(compareResult.cutLoss.totalInvested)}</span></div>
-                  <div className={styles.compareCardRow}><span>1년 후 평가액</span><span>{formatEok(compareResult.cutLoss.finalValue)}</span></div>
+                  <div className={styles.compareCardRow}><span>실현 손익</span><span style={{ color: '#DC2626' }}>{fmtMoney(compareResult.cutLoss.realizedLoss)}</span></div>
+                  <div className={styles.compareCardRow}><span>총 투자금</span><span>{fmtMoney(compareResult.cutLoss.totalInvested)}</span></div>
+                  <div className={styles.compareCardRow}><span>1년 후 평가액</span><span>{fmtMoney(compareResult.cutLoss.finalValue)}</span></div>
                 </div>
               </div>
 
               <div className={styles.infoBox}>
-                <strong>차이:</strong> 두 시나리오 차이는 약 {formatEok(compareResult.differenceAbs)}.
+                <strong>차이:</strong> 두 시나리오 차이는 약 {fmtMoney(compareResult.differenceAbs)}.
                 본 종목이 회복할 가능성이 높다면 <strong>물타기</strong>가 유리하고, 회복 못할 가능성이 높다면 <strong>손절 + 대안</strong>이 유리합니다.
                 회복 가능성을 솔직히 평가하세요.
               </div>

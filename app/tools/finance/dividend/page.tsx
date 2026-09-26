@@ -54,7 +54,7 @@ const FAQ_LD = [
               },
               {
                 q: 'ISA·연금저축 같은 절세 계좌가 진짜 효과 있나요?',
-                a: '네, 장기일수록 효과 큼. 같은 30년 / 4.5% / 월 적립 30만 가정 — 일반(15.4%): 누적 세금 약 2,772만, ISA(9.9%): 약 1,584만, 연금저축·IRP(5.5%): 약 990만 + 세액공제 30년 누적 약 4,500만. 특히 연금저축·IRP는 매년 16.5% 세액공제(총급여 5,500만 이하), 연 600만 한도 → 연 99만 환급, 30년 누적 환급액 약 3,000~4,500만. ⚠️ ISA·연금저축은 의무 기간이 있으므로 본인 자금 흐름 고려 후 선택.',
+                a: '네, 장기일수록 효과 큼. 같은 30년 / 4.5% / 월 적립 30만 가정 — 일반(15.4%): 누적 세금 약 2,772만, ISA(9.9%): 약 1,584만, 연금저축·IRP(5.5%): 약 990만 + 세액공제 30년 누적 약 1,780만(연 360만 × 16.5%). 연금저축·IRP는 매년 납입액의 16.5%를 세액공제(총급여 5,500만 이하)받아, 연금저축 한도 600만원을 채우면 연 99만원, 30년이면 약 2,970만원을 돌려받습니다. ⚠️ ISA·연금저축은 의무 기간이 있으므로 본인 자금 흐름 고려 후 선택.',
               },
               {
                 q: '미국 배당 ETF는 환율 변동을 어떻게 고려해야 하나요?',
@@ -77,7 +77,7 @@ export default function DividendPage() {
         매달 받고 싶은 배당액에서 거꾸로 — <strong style={{ color: 'var(--text)' }}>필요한 원금과 월 적립액</strong>, ISA·연금 절세까지.
       </p>
 
-      <UpdatedMeta date="2026년 7월" basis="배당소득세 15.4%(소득세 14%+지방세 1.4%)·금융소득 종합과세 2,000만원 기준·ISA 9.9%·연금저축/IRP 5.5% 분리과세 및 16.5% 세액공제 (2026년)" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스","href":"https://hometax.go.kr"}]} />
+      <UpdatedMeta date="2026년 9월" basis="배당소득세 15.4%(소득세 14%+지방세 1.4%)·금융소득 종합과세 2,000만원 기준·ISA 9.9%·연금저축/IRP 5.5% 분리과세 및 16.5% 세액공제·고배당기업 배당소득 분리과세(2026~2028년 지급분) 반영 (2026년)" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"기획재정부 (2025년 세법개정)","href":"https://www.moef.go.kr"}]} />
 
       <DividendClient />
 
@@ -171,17 +171,16 @@ export default function DividendPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['금융소득 구간', '세율', '비고'].map((h, i) => (
+                  {['구분', '세율', '비고'].map((h, i) => (
                     <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { r: '2,000만원 이하',       t: '15.4%',    n: '분리과세' },
-                  { r: '2,000만 ~ 5,000만원',  t: '26.4%',    n: '종합과세 (과표 구간별)' },
-                  { r: '5,000만원 초과',        t: '38.5%~',   n: '다른 소득과 합산' },
-                  { r: '과표 10억원 초과',      t: '49.5%',    n: '최고 세율' },
+                  { r: '금융소득 2,000만원 이하',   t: '15.4%',      n: '분리과세 (원천징수로 종결)' },
+                  { r: '금융소득 2,000만원 초과분', t: '6.6~49.5%', n: '근로·사업소득 등과 합산해 종합소득 과세표준 구간 세율 적용 (2,000만원까지는 14% 유지, 비교과세)' },
+                  { r: '종합소득 과세표준 10억원 초과', t: '49.5%', n: '최고 세율' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.r}</td>
@@ -194,7 +193,18 @@ export default function DividendPage() {
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
             * 배당수익률 4.5% 기준, 투자 원금 <strong style={{ color: 'var(--text)' }}>약 4억 4,444만원 이상</strong>이면 종합과세 구간 진입을 검토해야 합니다. ISA·연금저축 등 절세 계좌 활용 권장 — 본 도구의 「절세 계좌」 탭 참고.
+            세율은 금융소득 금액만으로 정해지지 않습니다. 다른 소득이 없으면 비교과세 때문에 실제 부담이 15.4% 근처에 머무는 경우가 많고, 근로소득이 크면 초과분이 높은 구간에 얹힙니다.
           </p>
+
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', marginTop: '14px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>2026~2028년 고배당기업 배당소득 분리과세</p>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+              2026년 1월부터 2028년 말까지 지급되는 배당 가운데 요건을 갖춘 국내 상장사의 배당은 금융소득 종합과세에 합산하지 않고 따로 과세받을 수 있습니다.
+              대상은 배당성향 40% 이상이거나, 배당성향 25% 이상이면서 배당을 일정 비율 이상 늘린 상장사처럼 법에서 정한 요건을 갖춘 기업이며, 세부 요건은 국세청 안내로 확인하세요.
+              세율은 해당 배당소득 과세표준 2,000만원 이하 14%, 3억원 이하 20%, 50억원 이하 25%, 50억원 초과 30%이고 지방소득세 10%가 별도로 붙습니다.
+              국내 고배당주를 직접 보유한 경우에만 해당하며 해외주식·ETF·리츠 분배금과 이자는 대상이 아니라서, 이런 자산은 위 종합과세 기준이 그대로 적용됩니다.
+            </p>
+          </div>
         </div>
 
         {/* ── 4. 고배당 함정 (기존 SEO 보존) ── */}

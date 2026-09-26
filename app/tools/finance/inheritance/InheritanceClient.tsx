@@ -46,7 +46,8 @@ export default function InheritanceClient() {
   const [propertyValueStr, setPropertyValueStr] = useState('500000000')
   const [propertyShareStr, setPropertyShareStr] = useState('100')
   const [isAdjustedZone, setIsAdjustedZone] = useState(false)
-  const [isMultiHomeReceiver, setIsMultiHomeReceiver] = useState(false)
+  const [donorMultiHome, setDonorMultiHome] = useState(false)   // 증여자 1세대 2주택 이상
+  const [stdOver3eok, setStdOver3eok] = useState(true)          // 시가표준액 3억 이상
   const [debtAssumedStr, setDebtAssumedStr] = useState('200000000')
 
   // ── 상속 ──
@@ -109,7 +110,8 @@ export default function InheritanceClient() {
         propertyValueStr={propertyValueStr} setPropertyValueStr={setPropertyValueStr}
         propertyShareStr={propertyShareStr} setPropertyShareStr={setPropertyShareStr}
         isAdjustedZone={isAdjustedZone} setIsAdjustedZone={setIsAdjustedZone}
-        isMultiHomeReceiver={isMultiHomeReceiver} setIsMultiHomeReceiver={setIsMultiHomeReceiver}
+        donorMultiHome={donorMultiHome} setDonorMultiHome={setDonorMultiHome}
+        stdOver3eok={stdOver3eok} setStdOver3eok={setStdOver3eok}
         debtAssumedStr={debtAssumedStr} setDebtAssumedStr={setDebtAssumedStr}
       />}
 
@@ -124,6 +126,7 @@ export default function InheritanceClient() {
         spouseActualStr={spouseActualStr} setSpouseActualStr={setSpouseActualStr}
         financialAssetStr={financialAssetStr} setFinancialAssetStr={setFinancialAssetStr}
         cohabitHomeStr={cohabitHomeStr} setCohabitHomeStr={setCohabitHomeStr}
+        parentsAlive={parentsAlive} setParentsAlive={setParentsAlive}
       />}
 
       {tab === 'heirs' && <HeirsTab
@@ -148,6 +151,7 @@ export default function InheritanceClient() {
         prevGift={parseAmount(prevGiftStr)}
         hasSpouse={hasSpouse}
         childCount={childCount}
+        parentsAlive={parentsAlive}
       />}
     </div>
   )
@@ -171,8 +175,10 @@ interface GiftTabProps {
   setPropertyShareStr: (v: string) => void
   isAdjustedZone: boolean
   setIsAdjustedZone: (b: boolean) => void
-  isMultiHomeReceiver: boolean
-  setIsMultiHomeReceiver: (b: boolean) => void
+  donorMultiHome: boolean
+  setDonorMultiHome: (b: boolean) => void
+  stdOver3eok: boolean
+  setStdOver3eok: (b: boolean) => void
   debtAssumedStr: string
   setDebtAssumedStr: (v: string) => void
 }
@@ -191,11 +197,12 @@ function GiftTab(p: GiftTabProps) {
       parseAmount(p.propertyValueStr),
       parseFloat(p.propertyShareStr) || 100,
       p.isAdjustedZone,
-      p.isMultiHomeReceiver,
+      p.donorMultiHome,
+      p.stdOver3eok,
       p.relation,
       prev,
     )
-  }, [p.propertyMode, p.propertyValueStr, p.propertyShareStr, p.isAdjustedZone, p.isMultiHomeReceiver, p.relation, prev])
+  }, [p.propertyMode, p.propertyValueStr, p.propertyShareStr, p.isAdjustedZone, p.donorMultiHome, p.stdOver3eok, p.relation, prev])
 
   // 부담부증여 단순 분리
   const burdenedEst = useMemo(() => {
@@ -212,9 +219,9 @@ function GiftTab(p: GiftTabProps) {
     <>
       {/* 증여 금액 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>증여 금액</span>
+        <label className={s.cardLabel} htmlFor="inh-gift-amount">증여 금액</label>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="text" inputMode="numeric"
+          <input id="inh-gift-amount" className={s.numInput} type="text" inputMode="numeric"
             value={commaInput(amount)}
             onChange={e => p.setAmountStr(parseAmount(e.target.value).toString())}
             placeholder="100,000,000" />
@@ -256,9 +263,9 @@ function GiftTab(p: GiftTabProps) {
 
       {/* 10년 내 기존 증여액 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>10년 내 동일인 기존 증여액</span>
+        <label className={s.cardLabel} htmlFor="inh-gift-prev">10년 내 동일인 기존 증여액</label>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="text" inputMode="numeric"
+          <input id="inh-gift-prev" className={s.numInput} type="text" inputMode="numeric"
             value={commaInput(prev)}
             onChange={e => p.setPrevStr(parseAmount(e.target.value).toString())}
             placeholder="없으면 0" />
@@ -320,34 +327,39 @@ function GiftTab(p: GiftTabProps) {
           <div style={{ marginTop: 12 }}>
             <div className={s.twoCol}>
               <div>
-                <span className={s.cardLabel}>부동산 평가액</span>
+                <label className={s.cardLabel} htmlFor="inh-prop-value">부동산 평가액</label>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="text" inputMode="numeric"
+                  <input id="inh-prop-value" className={s.numInput} type="text" inputMode="numeric"
                     value={commaInput(parseAmount(p.propertyValueStr))}
                     onChange={e => p.setPropertyValueStr(parseAmount(e.target.value).toString())} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
               <div>
-                <span className={s.cardLabel}>증여 지분 (%)</span>
+                <label className={s.cardLabel} htmlFor="inh-prop-share">증여 지분 (%)</label>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" inputMode="numeric"
+                  <input id="inh-prop-share" className={s.numInput} type="number" inputMode="numeric"
                     value={p.propertyShareStr}
                     onChange={e => p.setPropertyShareStr(e.target.value)} />
                   <span className={s.unit}>%</span>
                 </div>
               </div>
             </div>
-            <div className={s.checkRow}>
+            <label className={s.checkRow}>
               <input type="checkbox" checked={p.isAdjustedZone}
                 onChange={e => p.setIsAdjustedZone(e.target.checked)} />
-              조정대상지역
-            </div>
-            <div className={s.checkRow}>
-              <input type="checkbox" checked={p.isMultiHomeReceiver}
-                onChange={e => p.setIsMultiHomeReceiver(e.target.checked)} />
-              수증자 다주택자
-            </div>
+              조정대상지역 주택
+            </label>
+            <label className={s.checkRow}>
+              <input type="checkbox" checked={p.stdOver3eok}
+                onChange={e => p.setStdOver3eok(e.target.checked)} />
+              시가표준액(공시가격) 3억원 이상
+            </label>
+            <label className={s.checkRow}>
+              <input type="checkbox" checked={p.donorMultiHome}
+                onChange={e => p.setDonorMultiHome(e.target.checked)} />
+              증여자(부모 등)가 1세대 2주택 이상
+            </label>
 
             {propertyEst && (
               <div style={{ marginTop: 14 }}>
@@ -385,18 +397,18 @@ function GiftTab(p: GiftTabProps) {
           <div style={{ marginTop: 12 }}>
             <div className={s.twoCol}>
               <div>
-                <span className={s.cardLabel}>부동산 평가액</span>
+                <label className={s.cardLabel} htmlFor="inh-burden-value">부동산 평가액</label>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="text" inputMode="numeric"
+                  <input id="inh-burden-value" className={s.numInput} type="text" inputMode="numeric"
                     value={commaInput(parseAmount(p.propertyValueStr))}
                     onChange={e => p.setPropertyValueStr(parseAmount(e.target.value).toString())} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
               <div>
-                <span className={s.cardLabel}>인수 채무 (전세 + 대출)</span>
+                <label className={s.cardLabel} htmlFor="inh-burden-debt">인수 채무 (전세 + 대출)</label>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="text" inputMode="numeric"
+                  <input id="inh-burden-debt" className={s.numInput} type="text" inputMode="numeric"
                     value={commaInput(parseAmount(p.debtAssumedStr))}
                     onChange={e => p.setDebtAssumedStr(parseAmount(e.target.value).toString())} />
                   <span className={s.unit}>원</span>
@@ -469,6 +481,8 @@ interface InheritTabProps {
   setFinancialAssetStr: (v: string) => void
   cohabitHomeStr: string
   setCohabitHomeStr: (v: string) => void
+  parentsAlive: number
+  setParentsAlive: (n: number) => void
 }
 
 function InheritTab(p: InheritTabProps) {
@@ -480,26 +494,27 @@ function InheritTab(p: InheritTabProps) {
   const financialAsset = parseAmount(p.financialAssetStr)
   const cohabitHome = parseAmount(p.cohabitHomeStr)
 
+  const parents = p.childCount === 0 ? p.parentsAlive : 0
   const result = useMemo(() => calcInheritanceTax({
     totalAsset, priorGift, funeral, debt,
-    hasSpouse: p.hasSpouse, childCount: p.childCount,
+    hasSpouse: p.hasSpouse, childCount: p.childCount, parentsAlive: parents,
     spouseActualShare: spouseActual > 0 ? spouseActual : undefined,
     financialAsset: financialAsset > 0 ? financialAsset : undefined,
     cohabitHomeValue: cohabitHome > 0 ? cohabitHome : undefined,
-  }), [totalAsset, priorGift, funeral, debt, p.hasSpouse, p.childCount, spouseActual, financialAsset, cohabitHome])
+  }), [totalAsset, priorGift, funeral, debt, p.hasSpouse, p.childCount, parents, spouseActual, financialAsset, cohabitHome])
 
   // 배우자 시뮬 표
   const spouseSim = useMemo(() => {
     if (!p.hasSpouse || totalAsset <= 0) return []
-    return simulateSpouseDeduction(totalAsset, p.childCount, debt, funeral, financialAsset)
-  }, [p.hasSpouse, totalAsset, p.childCount, debt, funeral, financialAsset])
+    return simulateSpouseDeduction(totalAsset, p.childCount, debt, funeral, financialAsset, parents)
+  }, [p.hasSpouse, totalAsset, p.childCount, debt, funeral, financialAsset, parents])
 
   return (
     <>
       <div className={s.card}>
-        <span className={s.cardLabel}>상속 예상 총재산</span>
+        <label className={s.cardLabel} htmlFor="inh-total">상속 예상 총재산</label>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="text" inputMode="numeric"
+          <input id="inh-total" className={s.numInput} type="text" inputMode="numeric"
             value={commaInput(totalAsset)}
             onChange={e => p.setTotalAssetStr(parseAmount(e.target.value).toString())}
             placeholder="5,000,000,000" />
@@ -527,12 +542,21 @@ function InheritTab(p: InheritTabProps) {
         </div>
 
         <div style={{ marginTop: 12 }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>자녀 수</div>
-          <select className={s.selectInput} value={p.childCount}
+          <label htmlFor="inh-children" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>자녀 수</label>
+          <select id="inh-children" className={s.selectInput} value={p.childCount}
             onChange={e => p.setChildCount(parseInt(e.target.value, 10))}>
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n} value={n}>{n}명</option>)}
           </select>
         </div>
+        {p.hasSpouse && p.childCount === 0 && (
+          <div style={{ marginTop: 12 }}>
+            <label htmlFor="inh-parents" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>부모(직계존속) 생존 수 — 자녀가 없을 때 공동상속인</label>
+            <select id="inh-parents" className={s.selectInput} value={p.parentsAlive}
+              onChange={e => p.setParentsAlive(parseInt(e.target.value, 10))}>
+              {[0, 1, 2].map(n => <option key={n} value={n}>{n}명</option>)}
+            </select>
+          </div>
+        )}
       </div>
 
       {/* 강화된 공제 입력 (NEW) */}
@@ -541,9 +565,9 @@ function InheritTab(p: InheritTabProps) {
         <div className={s.twoCol}>
           {p.hasSpouse && (
             <div>
-              <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>배우자 실제 상속분 (선택)</div>
+              <label htmlFor="inh-spouse-actual" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>배우자 실제 상속분 (선택)</label>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
+                <input id="inh-spouse-actual" className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
                   value={commaInput(spouseActual)}
                   onChange={e => p.setSpouseActualStr(parseAmount(e.target.value).toString())}
                   placeholder="비우면 법정한도 자동" />
@@ -552,9 +576,9 @@ function InheritTab(p: InheritTabProps) {
             </div>
           )}
           <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>금융재산 (2천만↓ 전액·1억↓ 2천만·초과 20%, 최대 2억)</div>
+            <label htmlFor="inh-financial" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>금융재산 (2천만↓ 전액·1억↓ 2천만·초과 20%, 최대 2억)</label>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
+              <input id="inh-financial" className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
                 value={commaInput(financialAsset)}
                 onChange={e => p.setFinancialAssetStr(parseAmount(e.target.value).toString())}
                 placeholder="0" />
@@ -564,9 +588,9 @@ function InheritTab(p: InheritTabProps) {
         </div>
         <div className={s.twoCol} style={{ marginTop: 12 }}>
           <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>동거주택 가액 (10년 동거 + 1주택 등 조건 충족 시)</div>
+            <label htmlFor="inh-cohabit" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>동거주택 가액 (10년 동거 + 1주택 등 조건 충족 시)</label>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
+              <input id="inh-cohabit" className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
                 value={commaInput(cohabitHome)}
                 onChange={e => p.setCohabitHomeStr(parseAmount(e.target.value).toString())}
                 placeholder="0 (조건 미충족 시)" />
@@ -577,9 +601,9 @@ function InheritTab(p: InheritTabProps) {
       </div>
 
       <div className={s.card}>
-        <span className={s.cardLabel}>10년 내 사전 증여 합산 (상속인 대상)</span>
+        <label className={s.cardLabel} htmlFor="inh-prior-gift">10년 내 사전 증여 합산 (상속인 대상)</label>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="text" inputMode="numeric"
+          <input id="inh-prior-gift" className={s.numInput} type="text" inputMode="numeric"
             value={commaInput(priorGift)}
             onChange={e => p.setPriorGiftStr(parseAmount(e.target.value).toString())}
             placeholder="없으면 0" />
@@ -595,18 +619,18 @@ function InheritTab(p: InheritTabProps) {
         <span className={s.cardLabel}>채무·공과금 차감</span>
         <div className={s.twoCol}>
           <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>장례비용</div>
+            <label htmlFor="inh-funeral" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>장례비용 (증빙 없어도 500만원 공제)</label>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
+              <input id="inh-funeral" className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
                 value={commaInput(funeral)}
                 onChange={e => p.setFuneralStr(parseAmount(e.target.value).toString())} />
               <span className={s.unit}>원</span>
             </div>
           </div>
           <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>채무액</div>
+            <label htmlFor="inh-debt" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>채무액</label>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
+              <input id="inh-debt" className={s.numInput} type="text" inputMode="numeric" style={{ fontSize: 16 }}
                 value={commaInput(debt)}
                 onChange={e => p.setDebtStr(parseAmount(e.target.value).toString())} />
               <span className={s.unit}>원</span>
@@ -615,12 +639,15 @@ function InheritTab(p: InheritTabProps) {
         </div>
       </div>
 
-      <div className={s.hero}>
+      <div className={s.hero} role="status">
         <div className={s.heroLead}>예상 상속세 총액 (신고 세액공제 3% 반영)</div>
         <div className={s.heroNum}>{formatShortKRW(result.finalTax)}</div>
         <div className={s.heroSub}>= {formatKRW(result.finalTax)}</div>
         {result.finalTax === 0 && (
           <div className={s.heroSubAccent} style={{ color: '#059669' }}>✅ 공제 한도 내 — 상속세 부담 없음</div>
+        )}
+        {result.spouseSole && (
+          <div className={s.heroSub}>배우자 단독상속 — 일괄공제 5억 대신 기초공제 2억 적용 (상증법 §21②)</div>
         )}
       </div>
 
@@ -673,11 +700,11 @@ function InheritTab(p: InheritTabProps) {
           <div className={s.detailRow}><span>상속 총재산</span><span>{formatKRW(totalAsset)}</span></div>
           <div className={s.detailRow}><span>사전 증여 합산</span><span>+ {formatKRW(priorGift)}</span></div>
           <div className={s.detailRow}><span>채무</span><span>− {formatKRW(debt)}</span></div>
-          <div className={s.detailRow}><span>장례비 (한도 1,500만)</span><span>− {formatKRW(Math.min(funeral, 15_000_000))}</span></div>
+          <div className={s.detailRow}><span>장례비 (최소 500만 · 한도 1,500만)</span><span>− {formatKRW(result.funeralDeduction)}</span></div>
           <hr className={s.detailDivider} />
           <div className={s.detailRow}><span>과세가액</span><span>{formatKRW(result.taxableValue)}</span></div>
           {p.hasSpouse && <div className={s.detailRow}><span>배우자 공제</span><span>− {formatKRW(result.spouseDeduction)}</span></div>}
-          <div className={s.detailRow}><span>일괄/인적공제</span><span>− {formatKRW(result.appliedDeduction)}</span></div>
+          <div className={s.detailRow}><span>{result.spouseSole ? '기초공제 (배우자 단독상속)' : '일괄/인적공제'}</span><span>− {formatKRW(result.appliedDeduction)}</span></div>
           {result.financialDeduction > 0 && (
             <div className={s.detailRow}><span>금융재산공제 (순금융재산, 최대 2억)</span><span>− {formatKRW(result.financialDeduction)}</span></div>
           )}
@@ -699,6 +726,7 @@ function InheritTab(p: InheritTabProps) {
         priorGift > 0 && '🔔 사전 증여액 10년 합산 적용.',
         totalAsset >= 10_000_000_000 && '🔔 30억 초과분은 50% 최고세율 구간.',
         totalAsset <= 500_000_000 && !p.hasSpouse && '🔔 일괄공제(5억) 범위 내로 상속세 0 가능성.',
+        p.hasSpouse && p.childCount === 0 && p.parentsAlive > 0 && `🔔 자녀가 없어 부모 ${p.parentsAlive}명이 배우자와 공동상속인 — 배우자 법정상속분이 ${p.parentsAlive === 2 ? '3/7' : '3/5'}로 줄어 배우자공제 한도도 줄어듭니다.`,
         '🔔 본 도구는 단순 참고용 — 실제는 부동산 평가·기타 공제·신고 시점에 따라 차이.',
       ].filter(Boolean) as string[]} />
     </>
@@ -730,11 +758,17 @@ function HeirsTab(p: HeirsTabProps) {
   const debt = parseAmount(p.debtStr)
   const funeral = parseAmount(p.funeralStr)
 
-  // 상속세 (탭2와 같은 입력 사용)
+  // 상속세 (탭2와 같은 입력 + 이 탭의 부모 수·협의분할 배우자 몫 반영)
+  const spouseRatio = p.customRatios.spouse
   const taxResult = useMemo(() => calcInheritanceTax({
     totalAsset, priorGift, funeral, debt,
     hasSpouse: p.hasSpouse, childCount: p.childCount,
-  }), [totalAsset, priorGift, funeral, debt, p.hasSpouse, p.childCount])
+    parentsAlive: p.childCount === 0 ? p.parentsAlive : 0,
+    spouseActualShare: p.hasSpouse && spouseRatio !== undefined ? spouseRatio * totalAsset : undefined,
+  }), [totalAsset, priorGift, funeral, debt, p.hasSpouse, p.childCount, p.parentsAlive, spouseRatio])
+
+  // 협의 분할 비율 입력 — 타이핑 중 문자열을 따로 보관 (toFixed 강제 포맷으로 두 자리 입력·지우기가 막히던 문제)
+  const [ratioDraft, setRatioDraft] = useState<Record<string, string>>({})
 
   const distribution = useMemo(() => calcInheritanceDistribution({
     totalEstate: totalAsset,
@@ -756,9 +790,9 @@ function HeirsTab(p: HeirsTabProps) {
 
       {/* 입력 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>상속 총재산</span>
+        <label className={s.cardLabel} htmlFor="inh-heirs-total">상속 총재산</label>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="text" inputMode="numeric"
+          <input id="inh-heirs-total" className={s.numInput} type="text" inputMode="numeric"
             value={commaInput(totalAsset)}
             onChange={e => p.setTotalAssetStr(parseAmount(e.target.value).toString())} />
           <span className={s.unit}>원</span>
@@ -776,23 +810,23 @@ function HeirsTab(p: HeirsTabProps) {
 
         <div className={s.threeCol} style={{ marginTop: 12 }}>
           <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>자녀 수</div>
-            <select className={s.selectInput} value={p.childCount}
+            <label htmlFor="inh-heirs-children" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>자녀 수</label>
+            <select id="inh-heirs-children" className={s.selectInput} value={p.childCount}
               onChange={e => p.setChildCount(parseInt(e.target.value, 10))}>
               {[0, 1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}명</option>)}
             </select>
           </div>
           <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>부모 생존 (자녀 0일 때)</div>
-            <select className={s.selectInput} value={p.parentsAlive}
+            <label htmlFor="inh-heirs-parents" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>부모 생존 (자녀 0일 때)</label>
+            <select id="inh-heirs-parents" className={s.selectInput} value={p.parentsAlive}
               onChange={e => p.setParentsAlive(parseInt(e.target.value, 10))}
               disabled={p.childCount > 0}>
               {[0, 1, 2].map(n => <option key={n} value={n}>{n}명</option>)}
             </select>
           </div>
           <div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>형제자매 (배·자·부 모두 X)</div>
-            <select className={s.selectInput} value={p.siblingsCount}
+            <label htmlFor="inh-heirs-siblings" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>형제자매 (배·자·부 모두 X)</label>
+            <select id="inh-heirs-siblings" className={s.selectInput} value={p.siblingsCount}
               onChange={e => p.setSiblingsCount(parseInt(e.target.value, 10))}
               disabled={p.hasSpouse || p.childCount > 0 || p.parentsAlive > 0}>
               {[0, 1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}명</option>)}
@@ -822,7 +856,7 @@ function HeirsTab(p: HeirsTabProps) {
         </div>
       ) : distribution.heirs.length > 0 && totalAsset > 0 && (
         <>
-          <div className={`${s.hero} ${s.heroGold}`}>
+          <div className={`${s.hero} ${s.heroGold}`} role="status">
             <div className={s.heroLead}>법정상속분 자동 분배 (협의 분할 가능)</div>
             <div className={`${s.heroNum} ${s.heroNumGold}`} style={{ fontSize: 'clamp(20px, 4vw, 30px)' }}>
               상속인 {distribution.heirs.length}명
@@ -856,12 +890,20 @@ function HeirsTab(p: HeirsTabProps) {
                       <td>{(h.legalShare * 100).toFixed(1)}%</td>
                       <td>{formatShortKRW(h.legalShareAmount)}</td>
                       <td>
-                        <input className={s.heirRatioInput} type="number" inputMode="decimal" step="1" min={0} max={100}
-                          value={(h.actualRatio * 100).toFixed(1)}
+                        <input className={s.heirRatioInput} type="text" inputMode="decimal"
+                          aria-label={`${h.name} 실제 비율 (%)`}
+                          value={ratioDraft[h.id] ?? (h.actualRatio * 100).toFixed(1)}
                           onChange={e => {
-                            const v = Math.max(0, Math.min(100, parseFloat(e.target.value) || 0))
+                            const raw = e.target.value.replace(/[^\d.]/g, '')
+                            setRatioDraft(d => ({ ...d, [h.id]: raw }))
+                            const v = Math.max(0, Math.min(100, parseFloat(raw) || 0))
                             p.setCustomRatios({ ...p.customRatios, [h.id]: v / 100 })
-                          }} />%
+                          }}
+                          onBlur={() => setRatioDraft(d => {
+                            const next = { ...d }
+                            delete next[h.id]
+                            return next
+                          })} />%
                       </td>
                       <td style={{ color: 'var(--accent)' }}>{formatShortKRW(h.actualAmount)}</td>
                       <td style={{ color: '#DC2626' }}>−{formatShortKRW(h.taxBurden)}</td>
@@ -990,9 +1032,9 @@ function SplitTab(p: SplitTabProps) {
       </div>
 
       <div className={s.card}>
-        <span className={s.cardLabel}>총 이전 금액</span>
+        <label className={s.cardLabel} htmlFor="inh-split-total">총 이전 금액</label>
         <div className={s.inputRow}>
-          <input className={s.numInput} type="text" inputMode="numeric"
+          <input id="inh-split-total" className={s.numInput} type="text" inputMode="numeric"
             value={commaInput(total)}
             onChange={e => p.setTotalStr(parseAmount(e.target.value).toString())}
             placeholder="200,000,000" />
@@ -1012,8 +1054,8 @@ function SplitTab(p: SplitTabProps) {
 
       <div className={s.twoCol}>
         <div className={s.card}>
-          <span className={s.cardLabel}>대상 자녀 수</span>
-          <select className={s.selectInput} value={p.childCount}
+          <label className={s.cardLabel} htmlFor="inh-split-children">대상 자녀 수</label>
+          <select id="inh-split-children" className={s.selectInput} value={p.childCount}
             onChange={e => p.setChildCount(parseInt(e.target.value, 10))}>
             {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}명</option>)}
           </select>
@@ -1063,7 +1105,7 @@ function SplitTab(p: SplitTabProps) {
           </table>
         </div>
         <div className={s.helperText} style={{ marginTop: 10 }}>
-          💡 10년마다 성인 자녀 1인당 5천만원까지 비과세 증여 가능. 부와 모가 각자 증여하면 합산 1억까지 가능.
+          💡 10년마다 성인 자녀 1인당 5천만원까지 비과세 증여 가능. 부와 모가 각자 증여해도 합산해 과세하므로 공제는 두 사람을 합쳐 5천만원입니다.
         </div>
       </div>
 
@@ -1075,10 +1117,10 @@ function SplitTab(p: SplitTabProps) {
           <div className={s.timelineNodes}>
             {[
               { year: '2026', label: '미성년 증여', amount: '2,000만' },
-              { year: '2034', label: '추가 증여', amount: '+2,000만' },
-              { year: '2044', label: '성인 후', amount: '+5,000만' },
-              { year: '2054', label: '+10년', amount: '+5,000만' },
-              { year: '2064', label: '+10년', amount: '+5,000만' },
+              { year: '2036', label: '+10년 (미성년)', amount: '+2,000만' },
+              { year: '2046', label: '성인 후', amount: '+5,000만' },
+              { year: '2056', label: '+10년', amount: '+5,000만' },
+              { year: '2066', label: '+10년', amount: '+5,000만' },
             ].map((node, i) => (
               <div key={i} className={s.timelineNode}>
                 <div className={s.timelineYear}>{node.year}</div>
@@ -1090,7 +1132,7 @@ function SplitTab(p: SplitTabProps) {
           </div>
         </div>
         <div className={s.helperText}>
-          ※ 자녀 1명 기준. 30년+ 활용 시 총 <strong style={{ color: 'var(--text)' }}>1억 9,000만</strong> 비과세 증여 가능.
+          ※ 자녀 1명·출생 직후 시작 기준. 10년 간격으로 5회(40년) 활용하면 총 <strong style={{ color: 'var(--text)' }}>1억 9,000만</strong> 비과세 증여 가능 (10년 안에 다시 주면 앞선 증여와 합산).
           재산 변동·법령 개정·사망 시점 등 변수 다양하므로 장기 계획은 세무사 상담 권장.
         </div>
       </div>
@@ -1099,7 +1141,7 @@ function SplitTab(p: SplitTabProps) {
         <strong>⚠️ 주의 — 분산 증여 핵심 규칙:</strong>
         <ul>
           <li>같은 직계존속(부·모·조부모)은 합산 5,000만 한도 (10년 단위)</li>
-          <li>부와 모가 각자 증여 시 합산 1억 가능 (별도 증여자)</li>
+          <li>부와 모가 각자 증여해도 합산 과세 — 공제 합계 5,000만 (상증법 §47②)</li>
           <li>조부모 → 손자녀 직접 증여는 30% 가산세 (세대생략)</li>
           <li>사망 10년 이내 상속인 증여는 상속세에 자동 합산</li>
           <li>10년 주기는 「수증자 기준」 (받는 사람 기준)</li>
@@ -1116,6 +1158,7 @@ interface CompareTabProps {
   prevGift: number
   hasSpouse: boolean
   childCount: number
+  parentsAlive: number
 }
 
 function CompareTab(p: CompareTabProps) {
@@ -1126,9 +1169,9 @@ function CompareTab(p: CompareTabProps) {
   const inheritResult = useMemo(
     () => calcInheritanceTax({
       totalAsset: p.giftAmount, priorGift: 0, funeral: 0, debt: 0,
-      hasSpouse: p.hasSpouse, childCount: p.childCount,
+      hasSpouse: p.hasSpouse, childCount: p.childCount, parentsAlive: p.parentsAlive,
     }),
-    [p.giftAmount, p.hasSpouse, p.childCount],
+    [p.giftAmount, p.hasSpouse, p.childCount, p.parentsAlive],
   )
 
   const giftAfter = p.giftAmount - giftResult.finalTax
@@ -1148,7 +1191,7 @@ function CompareTab(p: CompareTabProps) {
         </div>
       </div>
 
-      <div className={`${s.hero} ${s.heroPurple}`}>
+      <div className={`${s.hero} ${s.heroPurple}`} role="status">
         <div className={s.heroLead}>현재 입력값 기준</div>
         <div className={`${s.heroNum} ${s.heroNumPurple}`} style={{ fontSize: 'clamp(22px, 4vw, 38px)' }}>
           {giftBetter ? '증여' : inheritResult.finalTax === giftResult.finalTax ? '동일' : '상속'}

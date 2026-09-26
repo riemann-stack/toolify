@@ -212,9 +212,8 @@ export interface ComprehensiveResult {
   level: 'safe' | 'caution' | 'near' | 'over'
   levelLabel: string
   levelColor: string
-  appliedRate: number             // 종합과세 적용 시 평균세율
-  bracket?: ProgressiveBracket
-  taxIfComprehensive: number
+  // (삭제) bracket·appliedRate·taxIfComprehensive — 금융소득 합계만으로 누진 구간을 찾아 세액을 과대 추정했음.
+  // 종합과세 세액은 종합소득 과세표준·비교과세·배당가산이 필요해 금융소득만으로 계산할 수 없다.
 }
 
 export function evaluateComprehensiveTax(
@@ -238,18 +237,12 @@ export function evaluateComprehensiveTax(
     level = 'over'; levelLabel = '🔴 종합과세 진입'; levelColor = '#DC2626'
   }
 
-  const bracket = PROGRESSIVE_BRACKETS.find(b => total >= b.min && total < b.max)
-  const appliedRate = bracket ? bracket.rate : 0.154
-  const taxIfComprehensive = total > threshold ? total * appliedRate : total * 0.154
-
   return {
     totalFinancialIncome: Math.round(total),
     threshold,
     remainder: Math.round(remainder),
     pctOfThreshold: Math.round(pct * 10) / 10,
     level, levelLabel, levelColor,
-    appliedRate, bracket,
-    taxIfComprehensive: Math.round(taxIfComprehensive),
   }
 }
 

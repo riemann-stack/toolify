@@ -4,10 +4,11 @@ import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import { buildSalaryTable, buildNetTargetTable, calcSalary, formatEok, SALARY_PENSION_BASE } from './salaryUtils'
-import { INSURANCE_RATES, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
+import { INSURANCE_RATES, MIN_HOURLY_WAGE, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { todayStr } from '@/lib/date'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/salary',
@@ -97,7 +98,8 @@ export default function SalaryPage() {
 
       <UpdatedMeta date="2026년 9월" basis={`2026년 4대보험 요율·국민연금 기준소득월액 상·하한(${PB_LABEL})·근로소득 간이세액표 기준, 연봉 분포는 국세청 2024년 귀속 연말정산 국세통계(2025-12 공표) 기준`} sources={[{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"},{"label":"근로소득 백분위 자료(공공데이터포털)","href":"https://www.data.go.kr/data/15082063/fileData.do"}]} />
 
-      <SalaryClient />
+      {/* buildDate: SSG와 hydration이 같은 기준일(국민연금 상·하한 구간)을 쓰도록 빌드 시점 날짜 전달 */}
+      <SalaryClient buildDate={todayStr()} />
 
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
@@ -149,7 +151,7 @@ export default function SalaryPage() {
             근로자 4대보험 요율 및 변경사항 총정리
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
-            2026년에는 국민연금 보험료율이 27년 만에 인상되고 건강보험·장기요양보험 요율도 조정되었습니다.
+            2026년에는 국민연금 보험료율이 1998년 이후 28년 만에 인상되고 건강보험·장기요양보험 요율도 조정되었습니다.
           </p>
           <div style={{ overflowX: 'auto', marginBottom: '8px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -185,9 +187,9 @@ export default function SalaryPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '6px' }}>💡 2026년 국민연금 인상 배경</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
-              정부는 국민연금 기금 고갈 문제를 해결하기 위해 2026년부터 보험료율을 기존 9%(근로자 4.5%)에서
-              9.5%(근로자 4.75%)로 인상했습니다. 이는 1998년 이후 27년 만의 인상으로,
-              2033년까지 단계적으로 13%까지 올릴 계획입니다.
+              정부는 국민연금 기금 고갈 문제를 해결하기 위해 2026년부터 보험료율을 기존 {R25.pension.total}%(근로자 {R25.pension.employee}%)에서{' '}
+              {R26.pension.total}%(근로자 {R26.pension.employee}%)로 인상했습니다. 이는 1998년 이후 28년 만의 인상으로,
+              2033년까지 매년 0.5%p씩 올려 13%에 도달합니다.
             </p>
           </div>
         </section>
@@ -205,7 +207,7 @@ export default function SalaryPage() {
               { title: '자가운전보조금', limit: '월 20만원 이내',  desc: '본인 차량으로 업무 사용 시' },
               { title: '출산·보육수당', limit: '월 20만원 이내',  desc: '6세 이하 자녀 양육' },
               { title: '연구보조비',     limit: '월 20만원 이내',  desc: '연구 전담 직원 한정' },
-              { title: '생산직 야간수당', limit: '연 240만원 이내', desc: '월정액급여 210만원 이하' },
+              { title: '생산직 야간수당', limit: '연 240만원 이내', desc: '월정액급여 260만원 이하 · 직전 연도 총급여 3,700만원 이하 (2026년 개정)' },
               { title: '취재수당',       limit: '월 20만원 이내',  desc: '기자 등 취재 업무 직원' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -315,7 +317,7 @@ export default function SalaryPage() {
             ))}
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            <strong style={{ color: 'var(--text)' }}>참고</strong> — 2026년 최저시급 10,320원 / 연간 노동시간은 최근 OECD 통계 기준 한국 1,800시간대, OECD 평균 약 1,750시간(연도별 변동). 왕복 출퇴근 2시간 이상 직장은 체감 시급이 최저시급 수준에 근접할 수 있습니다.
+            <strong style={{ color: 'var(--text)' }}>참고</strong> — 2026년 최저시급 {MIN_HOURLY_WAGE[2026].toLocaleString('ko-KR')}원 / 연간 노동시간은 최근 OECD 통계 기준 한국 1,800시간대, OECD 평균 약 1,750시간(연도별 변동). 왕복 출퇴근 2시간 이상 직장은 체감 시급이 최저시급 수준에 근접할 수 있습니다.
           </p>
         </section>
 
