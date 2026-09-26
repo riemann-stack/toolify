@@ -54,13 +54,13 @@ export default function IpoDepositClient() {
   // 자동 단위 — 비례 모드는 이론 청약 주수 기준, 역산은 가능 주수 기준
   // 한도가 이론 청약보다 작으면 한도 기준으로 단위 선택 (단위가 한도보다 커져 0주로 잘리는 것 방지)
   const autoUnitForDeposit = useMemo(() => {
-    if (!unitAuto) return parseFloat(unit) || 10
+    if (!unitAuto) return Math.max(1, parseFloat(unit) || 10) // 음수 단위('-' 입력) 방지
     const theoretical = numTarget * numComp
     const eff = (numLimit !== undefined && numLimit > 0 && numLimit < theoretical) ? numLimit : theoretical
     return recommendedUnit(eff)
   }, [unitAuto, unit, numTarget, numComp, numLimit])
   const autoUnitForShares = useMemo(() => {
-    if (!unitAuto) return parseFloat(unit) || 10
+    if (!unitAuto) return Math.max(1, parseFloat(unit) || 10) // 음수 단위('-' 입력) 방지
     const possible = numRatio > 0 && numPrice > 0 ? numDeposit / numRatio / numPrice : 0
     const eff = (numLimit !== undefined && numLimit > 0 && numLimit < possible) ? numLimit : possible
     return recommendedUnit(eff)
@@ -236,11 +236,11 @@ export default function IpoDepositClient() {
           </div>
 
           <div className={s.field}>
-            <label className={s.fieldLabel}>증거금률 (%)</label>
+            <label className={s.fieldLabel} htmlFor="ipo-deposit-ratio">증거금률 (%)</label>
             <div className={s.pillRow} role="group" aria-label="증거금률">
               <button type="button" aria-pressed={depositRatioPct === '50'} className={`${s.pill} ${depositRatioPct === '50' ? s.pillActive : ''}`} onClick={() => setDepositRatioPct('50')}>50%</button>
               <button type="button" aria-pressed={depositRatioPct === '100'} className={`${s.pill} ${depositRatioPct === '100' ? s.pillActive : ''}`} onClick={() => setDepositRatioPct('100')}>100%</button>
-              <input type="number" inputMode="numeric" min={0} max={100}
+              <input id="ipo-deposit-ratio" type="number" inputMode="numeric" min={0} max={100}
                 className={s.miniInput}
                 value={depositRatioPct}
                 onChange={(e) => setDepositRatioPct(e.target.value)} /> <span className={s.unitText}>%</span>
@@ -259,7 +259,7 @@ export default function IpoDepositClient() {
                   <button key={v} type="button" aria-pressed={unit === String(v)} className={`${s.pill} ${unit === String(v) ? s.pillActive : ''}`}
                     onClick={() => setUnit(String(v))}>{v}주</button>
                 ))}
-                <input type="number" inputMode="numeric" min={1}
+                <input type="number" inputMode="numeric" min={1} aria-label="청약단위 직접 입력 (주)"
                   className={s.miniInput} value={unit}
                   onChange={(e) => setUnit(e.target.value)} />
               </div>
@@ -272,20 +272,20 @@ export default function IpoDepositClient() {
               청약 한도 (증권사·종목별 보통 5,000~50,000주)
             </label>
             {useLimit && (
-              <input type="number" inputMode="numeric" min={0}
+              <input type="number" inputMode="numeric" min={0} aria-label="청약 한도 (주)"
                 className={s.input} style={{ marginTop: 6 }}
                 value={limit} onChange={(e) => setLimit(e.target.value)} />
             )}
           </div>
 
           <div className={s.field}>
-            <label className={s.fieldLabel}>균등 기대 (주) — 추첨 보장 X</label>
+            <label className={s.fieldLabel} htmlFor="ipo-deposit-even">균등 기대 (주) — 추첨 보장 X</label>
             <div className={s.pillRow} role="group" aria-label="균등 기대 주수">
               {['0', '0.5', '1', '2'].map((v) => (
                 <button key={v} type="button" aria-pressed={evenExpected === v} className={`${s.pill} ${evenExpected === v ? s.pillActive : ''}`}
                   onClick={() => setEvenExpected(v)}>{v}주</button>
               ))}
-              <input type="number" inputMode="numeric" min={0} step={0.5}
+              <input id="ipo-deposit-even" type="number" inputMode="numeric" min={0} step={0.5}
                 className={s.miniInput} value={evenExpected}
                 onChange={(e) => setEvenExpected(e.target.value)} />
             </div>
@@ -310,8 +310,8 @@ export default function IpoDepositClient() {
       {tab === 'deposit' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>목표 비례 배정 주수</span>
-            <input type="number" inputMode="numeric" min={0} className={s.input}
+            <label className={s.cardLabel} htmlFor="ipo-deposit-target">목표 비례 배정 주수</label>
+            <input id="ipo-deposit-target" type="number" inputMode="numeric" min={0} className={s.input}
               value={targetShares} onChange={(e) => setTargetShares(e.target.value)} />
             <div className={s.quickRow}>
               {TARGET_QUICK.map((v) => (
@@ -391,8 +391,8 @@ export default function IpoDepositClient() {
       {tab === 'shares' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>내 증거금 (원)</span>
-            <input type="number" inputMode="numeric" min={0} className={s.input}
+            <label className={s.cardLabel} htmlFor="ipo-deposit-my-deposit">내 증거금 (원)</label>
+            <input id="ipo-deposit-my-deposit" type="number" inputMode="numeric" min={0} className={s.input}
               value={myDeposit} onChange={(e) => setMyDeposit(e.target.value)} />
             <div className={s.quickRow}>
               {DEPOSIT_QUICK_KRW.map((v) => (
@@ -458,8 +458,8 @@ export default function IpoDepositClient() {
       {tab === 'scenario' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>목표 비례 배정 주수 (시나리오 기준)</span>
-            <input type="number" inputMode="numeric" min={0} className={s.input}
+            <label className={s.cardLabel} htmlFor="ipo-deposit-target-2">목표 비례 배정 주수 (시나리오 기준)</label>
+            <input id="ipo-deposit-target-2" type="number" inputMode="numeric" min={0} className={s.input}
               value={targetShares} onChange={(e) => setTargetShares(e.target.value)} />
             <div className={s.quickRow}>
               {TARGET_QUICK.map((v) => (

@@ -48,6 +48,8 @@ function sanitizePrice(raw: unknown): PriceInputs {
     const v = o[k]
     if (typeof v === 'number' && Number.isFinite(v) && v >= 0) out[k] = v
   }
+  out.spreadPercent = Math.min(MAX_SPREAD, out.spreadPercent)
+  out.feePercent = Math.min(MAX_FEE, out.feePercent)
   if (isGoldProduct(o.productType)) out.productType = o.productType
   if (typeof o.vatIncluded === 'boolean') out.vatIncluded = o.vatIncluded
   return out
@@ -64,6 +66,10 @@ const TABS = [
 ] as const
 
 const SPREAD_PRESETS = [3, 5, 7, 10]
+/* type=number의 min/max는 '-' 타이핑을 막지 못하므로 입력칸 범위로 클램프 (음수 수수료 → '+-4만원' 표시 방지) */
+const MAX_SPREAD = 20
+const MAX_FEE = 10
+const pctIn = (v: string, max: number): number => Math.min(max, Math.max(0, parseFloat(v) || 0))
 
 export default function GoldConverterClient() {
   const [tab, setTab] = useState<TabKey>('convert')
@@ -420,11 +426,11 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
               </button>
             ))}
             <input
-              type="number" inputMode="decimal" step={0.1} min={0} max={20}
+              type="number" inputMode="decimal" step={0.1} min={0} max={MAX_SPREAD}
               aria-label="매수-매도 스프레드 직접 입력 (%)"
               className={styles.smallNumber}
               value={price.spreadPercent}
-              onChange={(e) => updatePrice('spreadPercent', +e.target.value || 0)}
+              onChange={(e) => updatePrice('spreadPercent', pctIn(e.target.value, MAX_SPREAD))}
             />
             <span>%</span>
           </div>
@@ -433,10 +439,10 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
           <label htmlFor="gold-converter-f1">거래 수수료</label>
           <div className={styles.presetRow}>
             <input id="gold-converter-f1"
-              type="number" inputMode="decimal" step={0.1} min={0} max={10}
+              type="number" inputMode="decimal" step={0.1} min={0} max={MAX_FEE}
               className={styles.smallNumber}
               value={price.feePercent}
-              onChange={(e) => updatePrice('feePercent', +e.target.value || 0)}
+              onChange={(e) => updatePrice('feePercent', pctIn(e.target.value, MAX_FEE))}
             />
             <span>%</span>
           </div>

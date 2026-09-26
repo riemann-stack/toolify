@@ -80,16 +80,16 @@ export default function CompoundClient() {
   // 상한 100년 — 극단 입력의 Infinity 표시·역산 이진탐색 프리즈 방지
   const yearsNum        = Math.min(100, parseInt(years) || 0)
   const goalNum         = manToWon(goal)
-  const inflationNum    = parseFloat(inflationRate) || 0
+  // 물가상승률 −10~30% — −100%에 가까우면 실질가치 분모가 0이 돼 Infinity가 표시된다
+  const inflationNum    = Math.min(30, Math.max(-10, parseFloat(inflationRate) || 0))
 
   // 월 수익률 → 실효 연 수익률 환산 (calcCompound에는 rateIsEffective로 전달 — 명목으로 다시 쪼개면 복리 이중 적용)
   const rateIsEffective = rateType === 'monthly'
+  // 상한 연 100%(월 수익률은 실효 연 환산 뒤) — 그 이상은 (1+r)^n이 넘쳐 'Infinity억원'이 표시됐다. 음수는 0(결과 숨김)
   const annualRateNum = useMemo(() => {
-    const v = parseFloat(rateInput) || 0
-    if (rateType === 'monthly') {
-      return (Math.pow(1 + v / 100, 12) - 1) * 100
-    }
-    return v
+    const v = Math.max(0, parseFloat(rateInput) || 0)
+    const annual = rateType === 'monthly' ? (Math.pow(1 + v / 100, 12) - 1) * 100 : v
+    return Math.min(100, annual)
   }, [rateInput, rateType])
 
   /* ─── 메인 계산 ─── */

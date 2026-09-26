@@ -483,7 +483,10 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
     multipleHouseholds: false,
   })
 
-  const jeonsePriceRatio = (inputs.jeonseDeposit / Math.max(1, inputs.marketPrice)) * 100
+  // 시세 미입력(0)이면 전세가율 null(미판정) — 0으로 두면 '80% 이하 확인됨'이라는 거짓 안전 판정이 되고,
+  // Math.max(1, 시세)는 보증금×100%라는 거짓 비율을 냈다. 미판정은 다른 미확인 항목처럼 점수에 가산한다.
+  const hasMarketPrice = inputs.marketPrice > 0
+  const jeonsePriceRatio = hasMarketPrice ? (inputs.jeonseDeposit / inputs.marketPrice) * 100 : null
   const assessment = useMemo(() => assessRisk({
     jeonsePriceRatio,
     ...risk,
@@ -509,7 +512,7 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
           <p className={styles.riskScoreLevel} style={{ color: levelColor[assessment.level] }}>
             {levelText[assessment.level]}
           </p>
-          <p className={styles.note}>전세가율 {jeonsePriceRatio.toFixed(0)}% (시세 대비) · 확인한 항목에 체크하면 점수가 내려갑니다</p>
+          <p className={styles.note}>{jeonsePriceRatio !== null ? `전세가율 ${jeonsePriceRatio.toFixed(0)}% (시세 대비)` : '매물 시세를 입력하면 전세가율을 자동 판정합니다'} · 확인한 항목에 체크하면 점수가 내려갑니다</p>
         </div>
 
         <div className={styles.riskFactorsList}>

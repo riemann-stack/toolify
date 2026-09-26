@@ -38,6 +38,13 @@ const TAB_ACTIVE: Record<Tab, string> = {
   compare: styles.tabActiveCompare,
 }
 
+/* type=number의 min/max는 '-'·큰 값 타이핑을 막지 못한다 — 계산 전에 범위로 클램프.
+   개월 상한 600(50년): 스케줄 배열·역산 이분법 반복이 입력값에 비례해 커지므로 프리즈 방지(갈아타기·역산 포함).
+   금리 상한 100%: 그 이상은 (1+r)^n이 Infinity가 돼 NaN이 표시된다. */
+const MAX_MONTHS = 600
+const monthsIn = (v: string): number => Math.min(MAX_MONTHS, Math.max(0, parseInt(v, 10) || 0))
+const rateIn = (v: string): number => Math.min(100, Math.max(0, parseFloat(v) || 0))
+
 const PERIOD_PRESETS = [12, 24, 36, 60, 120, 240, 360]   // 기본값 360개월(30년)에 맞는 칩 포함
 const GRACE_PRESETS = [0, 12, 24, 36, 60]
 
@@ -54,12 +61,12 @@ export default function LoanClient() {
   const principalWon = parseAmount(principal) * 10_000
   const rateNum = parseFloat(rate) || 0
   // 상한 600개월(50년) — 극단 입력의 스케줄 배열 비대·프리즈 방지
-  const monthsNum = Math.min(600, parseInt(months, 10) || 0)
+  const monthsNum = monthsIn(months)
   // 프리셋 제거됨 — 주담대 기본 금리 참조만 유지
   const presetId = 'mortgage'
 
   // 금리 0%(무이자 할부 등)도 허용 — 엔진은 r===0 분기를 지원. 단 금리 칸은 비어있지 않아야 함
-  const inputValid = principalWon > 0 && rate.trim() !== '' && rateNum >= 0 && monthsNum > 0
+  const inputValid = principalWon > 0 && rate.trim() !== '' && rateNum >= 0 && rateNum <= 100 && monthsNum > 0
 
   /* 메인 계산 (3가지 동시) */
   const ep = useMemo(() => inputValid ? calcEqualPayment({
@@ -126,16 +133,16 @@ export default function LoanClient() {
 
   const refiResult = useMemo(() => {
     const remaining = parseAmount(refiRemaining) * 10_000
-    const remainingMonths = parseInt(refiRemainMonths, 10) || 0
-    const newMonths = parseInt(refiNewMonths, 10) || 0
+    const remainingMonths = monthsIn(refiRemainMonths)
+    const newMonths = monthsIn(refiNewMonths)
     // 잔여/신규 개월 0이면 비현실적인 월상환액이 표시됨 — 개월 > 0일 때만 계산
     if (remaining <= 0 || remainingMonths <= 0 || newMonths <= 0) return null
     return simulateRefinance({
       remainingPrincipal: remaining,
-      currentRate: parseFloat(refiCurrentRate) || 0,
+      currentRate: rateIn(refiCurrentRate),
       remainingMonths,
       currentPrepaymentFee: parseAmount(refiPrepayFee) * 10_000,
-      newRate: parseFloat(refiNewRate) || 0,
+      newRate: rateIn(refiNewRate),
       newMonths,
       newOriginationFee: parseAmount(refiOriginFee) * 10_000,
       newOtherFees: parseAmount(refiOtherFees) * 10_000,
@@ -155,15 +162,17 @@ export default function LoanClient() {
   const [revIncome, setRevIncome] = useState('5,000')      // 만원
   const [revOtherDebt, setRevOtherDebt] = useState('0')  // 만원
 
+  const revRateNum = rateIn(revRate)
+  const revMonthsNum = monthsIn(revMonths)
   const reverseResult = useMemo(() => {
     const monthly = parseAmount(revMonthly) * 10_000
-    if (monthly <= 0) return null
+    if (monthly <= 0 || revMonthsNum <= 0) return null
     return calcAffordableLoan({
       monthlyPayment: monthly,
-      annualRate: parseFloat(revRate) || 0,
-      months: parseInt(revMonths, 10) || 0,
+      annualRate: revRateNum,
+      months: revMonthsNum,
     })
-  }, [revMonthly, revRate, revMonths])
+  }, [revMonthly, revRateNum, revMonthsNum])
 
   const dsrResult = useMemo(() => {
     const monthly = parseAmount(revMonthly) * 10_000
@@ -180,23 +189,23 @@ export default function LoanClient() {
   /* 다른 금리·기간 비교 (역산용) */
   const reverseRateTable = useMemo(() => {
     const monthly = parseAmount(revMonthly) * 10_000
-    const m = parseInt(revMonths, 10) || 0
+    const m = revMonthsNum
     if (monthly <= 0 || m <= 0) return []
     return [3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0].map(r => ({
       rate: r,
       result: calcAffordableLoan({ monthlyPayment: monthly, annualRate: r, months: m }),
     }))
-  }, [revMonthly, revMonths])
+  }, [revMonthly, revMonthsNum])
 
   const reverseTermTable = useMemo(() => {
     const monthly = parseAmount(revMonthly) * 10_000
-    const r = parseFloat(revRate) || 0
+    const r = revRateNum
     if (monthly <= 0 || r <= 0) return []
     return [120, 180, 240, 300, 360].map(m => ({
       months: m,
       result: calcAffordableLoan({ monthlyPayment: monthly, annualRate: r, months: m }),
     }))
-  }, [revMonthly, revRate])
+  }, [revMonthly, revRateNum])
 
   /* ─── 탭 6: 비교표 ─── */
   const compareTermTable = useMemo(() => {
@@ -313,7 +322,7 @@ export default function LoanClient() {
           <div className={styles.inputRow}>
             <input id="loan-grace" className={styles.numInput} type="number" inputMode="numeric"
               placeholder="0" value={graceMonths || ''}
-              onChange={e => setGraceMonths(parseInt(e.target.value) || 0)} />
+              onChange={e => setGraceMonths(Math.min(MAX_MONTHS, Math.max(0, parseInt(e.target.value, 10) || 0)))} />
             <span className={styles.unit}>개월</span>
           </div>
           <div className={styles.chips}>
@@ -330,7 +339,7 @@ export default function LoanClient() {
 
       {!inputValid && (
         <div className={styles.empty}>
-          <div className={styles.emptyTitle}>대출 원금·금리·기간을 입력하세요</div>
+          <div className={styles.emptyTitle}>{rate.trim() !== '' && (rateNum < 0 || rateNum > 100) ? '금리는 연 0~100% 범위로 입력하세요' : '대출 원금·금리·기간을 입력하세요'}</div>
         </div>
       )}
 
@@ -717,7 +726,7 @@ export default function LoanClient() {
                 {formatEok(reverseResult.principal)}
               </div>
               <div className={styles.heroSub}>
-                월 {won(parseAmount(revMonthly) * 10_000)} · {parseFloat(revRate)}% · {parseInt(revMonths, 10)}개월 ({(parseInt(revMonths, 10) / 12).toFixed(0)}년)
+                월 {won(parseAmount(revMonthly) * 10_000)} · {revRateNum}% · {revMonthsNum}개월 ({(revMonthsNum / 12).toFixed(0)}년)
               </div>
               <div className={styles.heroDesc}>
                 총 이자 {formatEok(reverseResult.totalInterest)} · 총 상환액 {formatEok(reverseResult.totalPayment)}
@@ -767,7 +776,7 @@ export default function LoanClient() {
 
           {reverseRateTable.length > 0 && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>금리별 가능 원금 (월 {revMonthly}만원 · {revMonths}개월)</label>
+              <label className={styles.cardLabel}>금리별 가능 원금 (월 {revMonthly}만원 · {revMonthsNum}개월)</label>
               <div className={styles.scenarioTable}>
                 <div className={`${styles.scenarioRow} ${styles.headerRow}`}>
                   <span>금리</span>
@@ -873,7 +882,7 @@ export default function LoanClient() {
       {/* 탭 5 — 역산에서 사용 (reverseTermTable 표시) */}
       {tab === 'reverse' && reverseTermTable.length > 0 && (
         <div className={styles.card}>
-          <label className={styles.cardLabel}>기간별 가능 원금 (월 {revMonthly}만원 · {revRate}%)</label>
+          <label className={styles.cardLabel}>기간별 가능 원금 (월 {revMonthly}만원 · {revRateNum}%)</label>
           <div className={styles.scenarioTable}>
             <div className={`${styles.scenarioRow} ${styles.headerRow}`}>
               <span>기간</span>

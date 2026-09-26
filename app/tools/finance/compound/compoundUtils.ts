@@ -273,7 +273,12 @@ export function won(n: number): string {
   return Math.round(n).toLocaleString('ko-KR') + '원'
 }
 
+/** 이 이상(1해 원 = 1조억 원)은 숫자 대신 '표시 범위 초과'. 연 100%·수십 년 같은 극단 입력에서만 닿는다 —
+ *  double 간격이 1만 원을 넘어 '만원' 자리가 부동소수 잡음이 되고, 더 커지면 억 부분이 '1.2e+29억'처럼 지수 표기로 샌다 */
+export const FORMAT_EOK_MAX = 1e20
+
 export function formatEok(n: number): string {
+  if (!Number.isFinite(n) || Math.abs(n) >= FORMAT_EOK_MAX) return '표시 범위 초과'
   if (Math.abs(n) >= 100_000_000) {
     const eok = Math.floor(Math.abs(n) / 100_000_000)
     const man = Math.floor((Math.abs(n) % 100_000_000) / 10_000)

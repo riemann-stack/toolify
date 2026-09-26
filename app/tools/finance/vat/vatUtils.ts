@@ -367,9 +367,11 @@ export function formatKRW(n: number): string {
   return Math.round(n).toLocaleString('ko-KR')
 }
 
+/** 입력 문자열 → 0 이상 숫자. 금액·수량·수수료율 입력 전용이라 음수('-' 타이핑 — type=number min이 막지 못함)는 0으로 본다
+ *  (음수가 흘러들면 '매입세액 공제 −-50,000원' 같은 이중 부호·음수 세액이 표시됐다). */
 export function parseAmount(s: string): number {
   if (!s) return 0
   const cleaned = s.replace(/[^\d.\-]/g, '')
   const n = parseFloat(cleaned)
-  return Number.isFinite(n) ? n : 0
+  return Number.isFinite(n) && n > 0 ? n : 0
 }

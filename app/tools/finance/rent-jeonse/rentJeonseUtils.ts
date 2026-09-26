@@ -150,7 +150,8 @@ export function calculateJeonse(inputs: CalcInputs): OptionResult {
   if (loanAmount > 0) riskFactors.push('전세대출 금리 인상 위험')
   riskFactors.push('보증금 미반환 위험 (전세사기·깡통전세)')
   if (!inputs.hugInsurance) riskFactors.push('HUG 보증보험 미가입 → 사고 시 보증금 손실 가능')
-  if (inputs.jeonseDeposit / inputs.marketPrice > 0.8) riskFactors.push(`전세가율 ${(inputs.jeonseDeposit/inputs.marketPrice*100).toFixed(0)}% (>80% 깡통전세 경계)`)
+  // 시세 미입력(0)이면 전세가율을 판정하지 않는다 — 0으로 나눠 'Infinity%'·거짓 깡통전세 경고가 뜨던 문제
+  if (inputs.marketPrice > 0 && inputs.jeonseDeposit / inputs.marketPrice > 0.8) riskFactors.push(`전세가율 ${(inputs.jeonseDeposit/inputs.marketPrice*100).toFixed(0)}% (>80% 깡통전세 경계)`)
 
   return {
     option: 'jeonse',
@@ -379,7 +380,7 @@ export interface RiskAssessment {
 }
 
 export function assessRisk(opts: {
-  jeonsePriceRatio: number     // 전세가율 (0~100)
+  jeonsePriceRatio: number | null  // 전세가율(%) — 매물 시세 미입력이면 null(미판정 → 위험 가산, 안전으로 보지 않음)
   hugInsured: boolean
   registered: boolean          // 확정일자/전입신고
   registryChecked: boolean     // 등기부등본 확인
@@ -388,7 +389,11 @@ export function assessRisk(opts: {
   multipleHouseholds: boolean  // 다가구·다세대 (선순위 위험)
 }): RiskAssessment {
   const factors: RiskFactor[] = [
-    { id: 'high_ratio', label: '전세가율 80% 초과 (깡통전세 경계)',  safeLabel: '전세가율 80% 이하 (시세·보증금으로 자동 판정)', weight: 30, applied: opts.jeonsePriceRatio > 80 },
+    {
+      id: 'high_ratio', label: '전세가율 80% 초과 (깡통전세 경계)',
+      safeLabel: opts.jeonsePriceRatio === null ? '전세가율 미판정 — 매물 시세 입력 필요' : '전세가율 80% 이하 (시세·보증금으로 자동 판정)',
+      weight: 30, applied: opts.jeonsePriceRatio === null || opts.jeonsePriceRatio > 80,
+    },
     { id: 'hug',        label: 'HUG 전세보증보험 미가입',                safeLabel: 'HUG 전세보증보험 가입',                    weight: 20, applied: !opts.hugInsured },
     { id: 'register',   label: '확정일자·전입신고 미완료',               safeLabel: '확정일자·전입신고 완료',                   weight: 20, applied: !opts.registered },
     { id: 'registry',   label: '등기부등본 미확인 (근저당·신탁 위험)',    safeLabel: '등기부등본 확인 (근저당·신탁·압류)',         weight: 15, applied: !opts.registryChecked },
@@ -406,7 +411,8 @@ export function assessRisk(opts: {
   else if (totalScore >= 20) level = 'medium'
 
   const recommendations: string[] = []
-  if (opts.jeonsePriceRatio > 80) recommendations.push('전세가율 80% 초과 — 보증금 회수 위험. 시세 재확인 또는 다른 매물 검토')
+  if (opts.jeonsePriceRatio === null) recommendations.push('매물 시세를 입력해 전세가율(80% 이하)을 확인')
+  else if (opts.jeonsePriceRatio > 80) recommendations.push('전세가율 80% 초과 — 보증금 회수 위험. 시세 재확인 또는 다른 매물 검토')
   if (!opts.hugInsured) recommendations.push('HUG 전세보증보험 가입 (보증 한도·약관 범위 내 보증금 반환 보장)')
   if (!opts.registered) recommendations.push('계약 당일 확정일자 + 전입신고 (우선변제권 확보)')
   if (!opts.registryChecked) recommendations.push('등기부등본 확인 — 근저당·신탁·압류 여부')

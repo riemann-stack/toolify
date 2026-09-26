@@ -46,10 +46,11 @@ function n(v: string | number, min = 0): number {
 function fmt(v: number): string {
   return Math.round(v).toLocaleString('ko-KR')
 }
+/** 금액 입력 → 0 이상 (판매가·재료비·고정비 모두 음수가 의미 없음 — '-' 타이핑이 음수 원가율로 흐르지 않게) */
 function parseComma(s: string): number {
-  const cleaned = s.replace(/[^0-9.-]/g, '')
+  const cleaned = s.replace(/[^0-9.]/g, '')
   const v = Number(cleaned)
-  return Number.isFinite(v) ? v : 0
+  return Number.isFinite(v) && v > 0 ? v : 0
 }
 function fmtKRW(amount: number): string {
   const v = Math.round(amount)
@@ -674,7 +675,8 @@ export default function CostRateClient() {
                 </div>
                 {(() => {
                   const exact = reverseResult.exact
-                  const round100 = Math.round(exact / 100) * 100
+                  // 하한 100원 — 필요 판매가가 50원 미만이면 반올림이 0원이 돼 원가율이 'Infinity%'로 나왔다
+                  const round100 = Math.max(100, Math.round(exact / 100) * 100)
                   const round1k = Math.ceil(exact / 1000) * 1000
                   const psychological = round1k - 100  // ex: 12,000 → 11,900
                   const items = [

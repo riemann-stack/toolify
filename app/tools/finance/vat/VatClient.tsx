@@ -66,12 +66,15 @@ export default function VatClient() {
   const [vatPurchaseMan, setVatPurchaseMan] = useState('400')        // 만원
 
   /* ── 탭1 결과 ── */
+  /* 세율 0~100% 클램프 — '-' 입력이 음수 부가세로 흘러들지 않게. 빈칸·형식 오류는 NaN(결과 숨김) */
+  const rateRaw = parseFloat(rate)
+  const rateN = Number.isNaN(rateRaw) ? Number.NaN : Math.min(100, Math.max(0, rateRaw))
   const mainResult = useMemo(() => {
     const a = parseAmount(amount)
-    const r = parseFloat(rate) / 100
+    const r = rateN / 100
     if (!a || a <= 0 || isNaN(r)) return null
     return calcVAT({ amount: a, mode, rate: r, rounding: trunc })
-  }, [amount, mode, rate, trunc])
+  }, [amount, mode, rateN, trunc])
 
   /* ── 탭2 결과 ── */
   const quoteResult = useMemo(() => calcQuote(quoteItems, 0.10), [quoteItems])
@@ -275,7 +278,7 @@ export default function VatClient() {
                     <span>{formatKRW(mainResult.supplyAmount)}원</span>
                   </div>
                   <div className={styles.breakdownRow}>
-                    <span>부가세 ({rate}%)</span>
+                    <span>부가세 ({rateN}%)</span>
                     <span className={styles.vatValue}>{formatKRW(mainResult.vat)}원</span>
                   </div>
                 </div>
@@ -287,7 +290,7 @@ export default function VatClient() {
                   {trunc === 'none' ? (
                     <>
                       <p className={styles.formulaLine}>
-                        공급가액 = {formatKRW(mainResult.total)} ÷ {(1 + parseFloat(rate)/100).toFixed(2)} = <strong>{formatKRW(mainResult.supplyAmount)}원</strong>
+                        공급가액 = {formatKRW(mainResult.total)} ÷ {(1 + rateN / 100).toFixed(2)} = <strong>{formatKRW(mainResult.supplyAmount)}원</strong>
                       </p>
                       <p className={styles.formulaLine}>
                         부가세 = {formatKRW(mainResult.total)} − {formatKRW(mainResult.supplyAmount)} = <strong>{formatKRW(mainResult.vat)}원</strong>
@@ -296,7 +299,7 @@ export default function VatClient() {
                   ) : (
                     <>
                       <p className={styles.formulaLine}>
-                        부가세 = {formatKRW(mainResult.total)} × {rate}/{100 + (parseFloat(rate) || 0)} → {formatKRW(parseInt(trunc, 10))}원 단위 절사 = <strong>{formatKRW(mainResult.vat)}원</strong>
+                        부가세 = {formatKRW(mainResult.total)} × {rateN}/{100 + rateN} → {formatKRW(parseInt(trunc, 10))}원 단위 절사 = <strong>{formatKRW(mainResult.vat)}원</strong>
                       </p>
                       <p className={styles.formulaLine}>
                         공급가액 = {formatKRW(mainResult.total)} − {formatKRW(mainResult.vat)} = <strong>{formatKRW(mainResult.supplyAmount)}원</strong>
@@ -308,7 +311,7 @@ export default function VatClient() {
 
               <button className={`${styles.copyBtn} ${copied === 'main' ? styles.copied : ''}`}
                 onClick={() => copy(
-                  `공급가액: ${formatKRW(mainResult.supplyAmount)}원\n부가세 (${rate}%): ${formatKRW(mainResult.vat)}원\n합계: ${formatKRW(mainResult.total)}원`,
+                  `공급가액: ${formatKRW(mainResult.supplyAmount)}원\n부가세 (${rateN}%): ${formatKRW(mainResult.vat)}원\n합계: ${formatKRW(mainResult.total)}원`,
                   'main',
                 )}>
                 {copied === 'main' ? '✓ 복사 완료' : '결과 복사'}
@@ -523,7 +526,7 @@ export default function VatClient() {
                 <div className={styles.heroSub}>
                   실입금 {formatEok(parseAmount(targetNetMan) * 10_000)} ·{' '}
                   {bizType === 'biz-exc' ? '부가세 별도' : bizType === 'biz-inc' ? '부가세 포함' : '프리랜서 3.3%'}{' '}
-                  · {platformFee.name}{platformId === 'custom' ? ` (${customPlatformFee}%)` : ''}
+                  · {platformFee.name}{platformId === 'custom' ? ` (${platformRate}%)` : ''}
                 </div>
               </div>
 

@@ -84,20 +84,24 @@ export default function DividendClient() {
   const [revYears, setRevYears] = useState('10')
   const [capGain, setCapGain] = useState('3')
   const [reinvest, setReinvest] = useState(true)
+  /* 기간 0~100년 — 기간×12가 이분법(최대 60회) 안 시뮬레이션 반복 횟수라 큰 값은 탭을 멈추게 했다.
+     시세 차익 −50~50%/년 — 범위 밖은 월 성장률이 −100%를 넘어 잔액 부호가 뒤집힌다 */
+  const revYearsN = Math.min(100, Math.max(0, parseAmount(revYears)))
+  const capGainN = Math.min(50, Math.max(-50, parseFloat(capGain) || 0)) // 하락 시나리오(음수) 허용
 
   const reverseResult = useMemo(() => {
     if (tab !== 'reverse' || !valid) return null
     return reverseCalcMonthlyContribution({
       targetMonthly: monthlyV,
-      targetYears: parseAmount(revYears),
+      targetYears: revYearsN,
       currentCapital: currentV,
       dividendYield: rateV,
-      capitalGainRate: parseAmount(capGain),
+      capitalGainRate: capGainN,
       reinvestDividends: reinvest,
       taxRate: taxV / 100,
       safety: safety / 100,
     })
-  }, [tab, valid, monthlyV, revYears, currentV, rateV, capGain, reinvest, taxV, safety])
+  }, [tab, valid, monthlyV, revYearsN, currentV, rateV, capGainN, reinvest, taxV, safety])
 
   /* 다양한 기간·수익률 조합 표 (NEW) */
   const reverseScenarioTable = useMemo(() => {
@@ -112,7 +116,7 @@ export default function DividendClient() {
           targetYears: yr,
           currentCapital: currentV,
           dividendYield: r,
-          capitalGainRate: parseAmount(capGain),
+          capitalGainRate: capGainN,
           reinvestDividends: reinvest,
           taxRate: taxV / 100,
           safety: safety / 100,
@@ -122,7 +126,7 @@ export default function DividendClient() {
       matrix.push({ yr, row })
     }
     return { years, rates, matrix }
-  }, [tab, valid, monthlyV, currentV, capGain, reinvest, taxV, safety])
+  }, [tab, valid, monthlyV, currentV, capGainN, reinvest, taxV, safety])
 
   /* ── 탭 3: 종합과세 ── */
   const [annualDividend, setAnnualDividend] = useState('')   // 자동 또는 수동
@@ -184,16 +188,17 @@ export default function DividendClient() {
   const [savingsAnnualContribution, setSavingsAnnualContribution] = useState('360')   // 만원
   const [totalIncomeMan, setTotalIncomeMan] = useState('5000')   // 만원
 
+  const savingsYearsN = Math.min(100, parseAmount(savingsYears)) // 0~100년 (표시·계산 같은 값)
   const savingsCompare = useMemo(() => {
     if (!valid) return null
     return compareTaxAccounts({
       annualDividend: annualDividendVal,
-      years: parseAmount(savingsYears),
+      years: savingsYearsN,
       annualContribution: parseAmount(savingsAnnualContribution) * 10_000,
       totalIncome: parseAmount(totalIncomeMan) * 10_000,
       dividendYield: rateV,
     })
-  }, [valid, annualDividendVal, savingsYears, savingsAnnualContribution, totalIncomeMan, rateV])
+  }, [valid, annualDividendVal, savingsYearsN, savingsAnnualContribution, totalIncomeMan, rateV])
 
   const bestSavings = useMemo(() => {
     if (!savingsCompare) return null
@@ -508,7 +513,7 @@ export default function DividendClient() {
             <>
               <div className={`${styles.hero} ${styles.heroGold}`} role="status">
                 <div className={styles.heroLead}>
-                  월배당 <strong style={{ color: 'var(--text)' }}>{formatKRW(monthlyV)}</strong> · {revYears}년 목표
+                  월배당 <strong style={{ color: 'var(--text)' }}>{formatKRW(monthlyV)}</strong> · {revYearsN}년 목표
                 </div>
                 <div className={`${styles.heroNum} ${styles.heroNumGold}`}>
                   월 {formatEok(reverseResult.requiredMonthly)} 적립
@@ -721,21 +726,21 @@ export default function DividendClient() {
         <>
           <div className={styles.card}>
             <label className={styles.cardLabel}>자산 목록 ({assets.length}개)</label>
-            {assets.map(a => (
+            {assets.map((a, idx) => (
               <div key={a.id} className={styles.assetRow}>
-                <input className={styles.textInput} type="text" placeholder="자산명"
+                <input className={styles.textInput} type="text" placeholder="자산명" aria-label={`${idx + 1}번 자산명`}
                   value={a.name} onChange={e => updateAsset(a.id, { name: e.target.value })} />
-                <input className={styles.numInput} type="number" inputMode="numeric"
+                <input className={styles.numInput} type="number" inputMode="numeric" aria-label={`${idx + 1}번 투자금 (원)`}
                   placeholder="투자금" value={a.amount || ''}
                   onChange={e => updateAsset(a.id, { amount: parseAmount(e.target.value) })} />
-                <input className={styles.numInput} type="number" inputMode="decimal" step={0.1}
+                <input className={styles.numInput} type="number" inputMode="decimal" step={0.1} aria-label={`${idx + 1}번 배당수익률 (%)`}
                   placeholder="%" value={a.yieldPct || ''}
                   onChange={e => updateAsset(a.id, { yieldPct: parseAmount(e.target.value) })} />
-                <select className={styles.assetSelect} value={a.frequency}
+                <select className={styles.assetSelect} value={a.frequency} aria-label={`${idx + 1}번 배당 주기`}
                   onChange={e => updateAsset(a.id, { frequency: e.target.value as Frequency })}>
                   {FREQUENCY_INFO.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
                 </select>
-                <select className={styles.assetSelect} value={a.taxRate}
+                <select className={styles.assetSelect} value={a.taxRate} aria-label={`${idx + 1}번 배당 세율`}
                   onChange={e => updateAsset(a.id, { taxRate: parseFloat(e.target.value) })}>
                   <option value={GEN_PCT}>국내 {GEN_PCT}%</option>
                   <option value={15.0}>해외 15.0%</option>
@@ -915,7 +920,7 @@ export default function DividendClient() {
             <>
               <div className={`${styles.hero} ${styles.heroPurple}`} role="status">
                 <div className={styles.heroLead}>
-                  연 배당 {formatEok(annualDividendVal)} · {savingsYears}년 절세 비교
+                  연 배당 {formatEok(annualDividendVal)} · {savingsYearsN}년 절세 비교
                 </div>
                 <div className={`${styles.heroNum} ${styles.heroNumPurple}`}>
                   {bestSavings.account.name}
@@ -931,8 +936,8 @@ export default function DividendClient() {
                     <tr>
                       <th scope="col">계좌</th>
                       <th scope="col">연 세금</th>
-                      <th scope="col">{savingsYears}년 누적 세금</th>
-                      <th scope="col">{savingsYears}년 세액공제</th>
+                      <th scope="col">{savingsYearsN}년 누적 세금</th>
+                      <th scope="col">{savingsYearsN}년 세액공제</th>
                       <th scope="col">일반 대비 이득</th>
                     </tr>
                   </thead>
@@ -975,7 +980,7 @@ export default function DividendClient() {
                       <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#059669' : 'var(--muted)' }}>
                         {row.netBenefit > 0 ? `+${formatEok(row.netBenefit)}` : '기준'}
                       </div>
-                      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{savingsYears}년 누적 이득</p>
+                      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{savingsYearsN}년 누적 이득</p>
                       <div style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
                         ✅ {acc.pros}<br />
                         ⚠️ {acc.cons}

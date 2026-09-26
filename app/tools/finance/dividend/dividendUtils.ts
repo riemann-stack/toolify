@@ -423,11 +423,12 @@ export function formatKRW(n: number): string {
   return Math.round(n).toLocaleString('ko-KR')
 }
 
+/** 금액·비율·기간 입력 → 0 이상 숫자 ('-' 타이핑 — type=number min이 막지 못함 — 이 음수 배당·세액으로 흐르지 않게) */
 export function parseAmount(s: string): number {
   if (!s) return 0
   const cleaned = s.replace(/[^\d.\-]/g, '')
   const n = parseFloat(cleaned)
-  return Number.isFinite(n) ? n : 0
+  return Number.isFinite(n) && n > 0 ? n : 0
 }
 
 export function fmtNumInput(s: string): string {

@@ -20,6 +20,13 @@ const num = (v: string): number => {
   const x = parseFloat(v.replace(/,/g, ''))
   return Number.isFinite(x) ? x : 0
 }
+/* 비율·기간 칸은 '-'·소수 입력이 가능해(inputMode만 지정) 계산 전에 범위로 클램프.
+   금리·만기가 너무 크면 (1+r)^n이 Infinity가 돼 'NaN만원'이 표시된다. */
+const clampIn = (v: string, max: number): number => Math.min(max, Math.max(0, num(v)))
+const MAX_RATE = 100      // 대출 금리 (연 %)
+const MAX_YEARS = 50      // 만기 (년) — 주담대 최장 50년
+const MAX_LIMIT = 100     // DSR·LTV 한도 (%)
+const MAX_STRESS = 10     // 기준 스트레스 금리 (%p)
 const comma = (v: string): string => {
   const n = v.replace(/[^\d]/g, '')
   return n ? parseInt(n, 10).toLocaleString('ko-KR') : ''
@@ -79,25 +86,29 @@ export default function DsrClient() {
     } catch {}
   }, [hydrated, income, existing, homePrice, loan, rate, years, method, rateType, dsrLimit, ltvLimit, baseStress, phase, priceCap])
 
+  // 입력 문자열을 한 번만 클램프해 memo 의존성으로 쓴다 (memo 안에서 다시 계산하면 React Compiler가 수동 메모이제이션을 보존하지 못함)
+  const rateN = clampIn(rate, MAX_RATE)
+  const yearsN = clampIn(years, MAX_YEARS)
+  const dsrLimitN = clampIn(dsrLimit, MAX_LIMIT)
+  const ltvLimitN = clampIn(ltvLimit, MAX_LIMIT)
+  const baseStressN = clampIn(baseStress, MAX_STRESS)
   const r = useMemo(() => calcDsr({
     annualIncome: num(income),
     existingAnnual: num(existing),
     homePrice: num(homePrice),
     loanAmount: num(loan),
-    ratePct: num(rate),
-    years: num(years),
+    ratePct: rateN,
+    years: yearsN,
     method,
     rateType,
-    dsrLimitPct: num(dsrLimit),
-    ltvLimitPct: num(ltvLimit),
-    baseStressPct: num(baseStress),
+    dsrLimitPct: dsrLimitN,
+    ltvLimitPct: ltvLimitN,
+    baseStressPct: baseStressN,
     phaseRatio: STRESS_PHASES.find(p => p.id === phase)?.ratio ?? 1,
     priceCapEnabled: priceCap,
-  }), [income, existing, homePrice, loan, rate, years, method, rateType, dsrLimit, ltvLimit, baseStress, phase, priceCap])
+  }), [income, existing, homePrice, loan, rateN, yearsN, method, rateType, dsrLimitN, ltvLimitN, baseStressN, phase, priceCap])
 
-  const dsrLimitN = num(dsrLimit)
-  const ltvLimitN = num(ltvLimit)
-  const stressAddPct = num(baseStress) * (STRESS_PHASES.find(p => p.id === phase)?.ratio ?? 1) * ({ variable: 1, mixed: 0.6, periodic: 0.3, fixed: 0 }[rateType])
+  const stressAddPct = baseStressN * (STRESS_PHASES.find(p => p.id === phase)?.ratio ?? 1) * ({ variable: 1, mixed: 0.6, periodic: 0.3, fixed: 0 }[rateType])
 
   const dsrStatus = (v: number) => v <= dsrLimitN ? s.statusOk : v <= dsrLimitN + 5 ? s.statusWarn : s.statusOver
   const ltvStatus = r.ltv <= ltvLimitN ? s.statusOk : s.statusOver
@@ -245,7 +256,7 @@ export default function DsrClient() {
             <span className={s.resVal}>{fmtManwon(r.newAnnual)}</span>
           </div>
           <div className={s.resRow}>
-            <span className={s.resName}>스트레스 적용 연 원리금<small>금리 {fmtPct(num(rate))}% → {fmtPct(num(rate) + stressAddPct)}% 가정</small></span>
+            <span className={s.resName}>스트레스 적용 연 원리금<small>금리 {fmtPct(rateN)}% → {fmtPct(rateN + stressAddPct)}% 가정</small></span>
             <span className={s.resVal}>{fmtManwon(r.stressNewAnnual)}</span>
           </div>
           <div className={s.resRow}>
@@ -326,7 +337,7 @@ export default function DsrClient() {
           </div>
         </div>
         <p className={s.note}>
-          ⓘ 적용 스트레스 금리 = 기준({fmtPct(num(baseStress))}%p) × 단계율({STRESS_PHASES.find(p => p.id === phase)?.ratio}) × 유형율({RATE_TYPE_LABEL[rateType]}) = <strong>+{fmtPct(stressAddPct)}%p</strong>.
+          ⓘ 적용 스트레스 금리 = 기준({fmtPct(baseStressN)}%p) × 단계율({STRESS_PHASES.find(p => p.id === phase)?.ratio}) × 유형율({RATE_TYPE_LABEL[rateType]}) = <strong>+{fmtPct(stressAddPct)}%p</strong>.
           기본값(DSR 40%·스트레스 1.50%p·3단계 100%)은 금융위 보도자료 기준 2026년 7월 확인값이며, 정책 변경 시 달라질 수 있어 직접 수정할 수 있습니다.
         </p>
       </details>
