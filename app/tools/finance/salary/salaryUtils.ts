@@ -4,7 +4,7 @@
    요율·세율표 단일 소스: lib/krInsuranceRates.ts · lib/krIncomeTax.ts
    ────────────────────────────────────────────────────── */
 
-import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit } from '@/lib/krIncomeTax'
+import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit, LOCAL_INCOME_TAX_RATIO } from '@/lib/krIncomeTax'
 import {
   INSURANCE_RATES, MIN_HOURLY_WAGE,
   PENSION_BASE_CURRENT, clampPensionBase, type PensionBasePeriod,
@@ -79,6 +79,18 @@ function getMonthlyIncomeTax(
   return Math.floor(decidedAnnual / 12 / 10) * 10
 }
 
+/** 월 원천징수 소득세 + 지방소득세(소득세의 10%, 10원 미만 절사) — calcSalary와 같은 계산.
+    국민연금 요율이 다른 해를 추정할 때처럼 공제액만 바꿔 세금을 다시 구할 때 쓴다(가이드 G2).
+    pensionMonthly·otherInsMonthly = 국민연금·(건강+장기요양+고용보험) 본인부담 월액 */
+export function monthlyWithholding(
+  taxableMonthly: number, dependents: number, childrenCount: number,
+  pensionMonthly: number, otherInsMonthly: number,
+): { incomeTax: number; localTax: number; totalTax: number } {
+  const incomeTax = getMonthlyIncomeTax(taxableMonthly, dependents, childrenCount, pensionMonthly * 12, otherInsMonthly * 12)
+  const localTax = Math.floor(incomeTax * LOCAL_INCOME_TAX_RATIO / 10) * 10
+  return { incomeTax, localTax, totalTax: incomeTax + localTax }
+}
+
 /* ─── 메인 입력·결과 ─── */
 export interface SalaryInput {
   grossYearly: number
@@ -132,12 +144,10 @@ export function calcSalary(input: SalaryInput): SalaryResult {
     : 0
   const totalInsurance = pension + health + longTermCare + employment
 
-  const incomeTax = getMonthlyIncomeTax(
+  const { incomeTax, localTax, totalTax } = monthlyWithholding(
     taxableMonthly, input.dependents, input.childrenCount,
-    pension * 12, (health + longTermCare + employment) * 12,
+    pension, health + longTermCare + employment,
   )
-  const localTax = Math.floor(incomeTax * 0.1 / 10) * 10
-  const totalTax = incomeTax + localTax
 
   const totalDeduction = totalInsurance + totalTax
   const netMonthly = grossMonthly - totalDeduction

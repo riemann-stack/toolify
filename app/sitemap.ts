@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { categories } from '@/lib/tools'
 import { COLLECTIONS } from '@/lib/collections'
+import { GUIDES, guideHref } from '@/lib/guides'
 // 페이지별 실제 마지막 변경일(git 이력 기반) — scripts/gen-lastmod.mts가 생성.
 // 콘텐츠 변경 커밋 후 `npm run gen:lastmod` 재실행. 표현만 바꾼 기계적 커밋은
 // 제목에 [skip-lastmod]를 넣거나 .lastmod-ignore에 해시를 등록해 lastmod가 리셋되지 않게 한다.
@@ -12,7 +13,7 @@ const LASTMOD: Readonly<Record<string, string>> = lastmodMap
 // priority·changefreq는 출력하지 않는다 — Google·Bing 모두 무시하는 값이고,
 // 가정값(인기 도구 1.0, 전부 weekly)은 실측과 어긋나 오히려 신호를 흐린다. lastmod만 정확하게 유지.
 
-const STATIC_PATHS = ['/', '/tools', '/collections', '/about', '/contact', '/privacy', '/terms', '/disclaimer']
+const STATIC_PATHS = ['/', '/tools', '/collections', '/about', '/editorial-policy', '/updates', '/contact', '/privacy', '/terms', '/disclaimer']
 
 /** YYYY-MM-DD 형식만 인정 (매니페스트 오염 방지). */
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
@@ -28,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 정적 + 카테고리 + 컬렉션 + 전체 도구 (중복 제거, 순서 유지)
   const allPaths = Array.from(new Set([...STATIC_PATHS, ...categoryPaths, ...collectionPaths, ...toolPaths]))
 
-  return allPaths.map((path) => {
+  const entries: MetadataRoute.Sitemap = allPaths.map((path) => {
     const lastmod = LASTMOD[path]
     return {
       url: path === '/' ? BASE : `${BASE}${path}`,
@@ -37,4 +38,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ...(lastmod && DATE_RE.test(lastmod) ? { lastModified: lastmod } : {}),
     }
   })
+
+  // 계산 해설(lib/guides) — lastmod = 글의 dateModified(레지스트리 updated, 내용이 바뀐 날만 갱신).
+  // 허브(/guides)는 글이 1편 이상일 때만, lastmod = 가장 최근 글의 updated.
+  const guideDates = GUIDES.map((g) => g.updated).filter((d) => DATE_RE.test(d)).sort()
+  if (GUIDES.length > 0) {
+    const hubMod = guideDates[guideDates.length - 1]
+    entries.push({ url: `${BASE}/guides`, ...(hubMod ? { lastModified: hubMod } : {}) })
+    for (const g of GUIDES) {
+      entries.push({ url: `${BASE}${guideHref(g.slug)}`, ...(DATE_RE.test(g.updated) ? { lastModified: g.updated } : {}) })
+    }
+  }
+  return entries
 }

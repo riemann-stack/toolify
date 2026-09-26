@@ -4,6 +4,7 @@
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import { calcHouseAcquisitionTax, calcNonHouseAcquisitionTax } from '@/lib/krAcquisitionTax'
+import { calcBrokerageFee, ppmToPct, OFFICETEL_FEE, OTHER_PROPERTY_FEE, type BrokerageProperty } from '@/lib/krBrokerageFee'
 import styles from './real-estate.module.css'
 
 /* ─────────────────────────────────────────────────────────
@@ -54,16 +55,23 @@ const HOME_COUNT_OPTIONS: { n: number; label: string }[] = [
 ]
 const pctText = (v: number) => `${v.toLocaleString('ko-KR', { maximumFractionDigits: 3 })}%`
 
-/* 한국 주택 매매 중개보수 상한요율 (2021.10 개정 기준) */
-function calcBrokerFee(price: number): number {
-  if (price <= 0) return 0
-  if (price < 50_000_000)    return Math.min(price * 0.006, 250_000)  // 5천만 미만 0.6%(한도 25만)
-  if (price < 200_000_000)   return Math.min(price * 0.005, 800_000)  // 5천만~2억 0.5%(한도 80만)
-  if (price < 900_000_000)   return price * 0.004                      // 2억~9억 0.4%
-  if (price < 1_200_000_000) return price * 0.005                      // 9억~12억 0.5%
-  if (price < 1_500_000_000) return price * 0.006                      // 12억~15억 0.6%
-  return price * 0.007                                                  // 15억 이상 0.7%
+/* 매매 중개보수 상한 (한쪽, 부가세 별도) — 단일 소스 lib/krBrokerageFee.ts
+ * 주택: 공인중개사법 시행규칙 §20① 별표 1 / 주거용 오피스텔(전용 85㎡ 이하·전용 부엌·화장실·목욕시설): §20④1호 별표 2 /
+ * 상가·토지·주거용 요건 미충족 오피스텔: §20④2호 0.9% 이내 협의의 상한.
+ * 취득세의 '비주거'(오피스텔 전부 포함)와 중개보수 분류가 달라 중개 대상은 따로 고른다.
+ * 옛 하드코딩(주택 요율만)과 주택은 원 미만까지 같다(원 미만 버림) — tests/golden/brokerageFee.test.mts */
+function calcBrokerFee(price: number, property: BrokerageProperty): number {
+  return calcBrokerageFee({ deal: 'sale', property, amount: price }).maxFee
 }
+const BROKER_PROPERTY_OPTIONS: { id: BrokerageProperty; label: string }[] = [
+  { id: 'house', label: '주택' },
+  { id: 'officetel', label: '주거용 오피스텔' },
+  { id: 'other', label: '상가·토지 등' },
+]
+const brokerPropertyHint = (p: BrokerageProperty): string =>
+  p === 'house' ? '주택 상한요율'
+    : p === 'officetel' ? `주거용 오피스텔 ${ppmToPct(OFFICETEL_FEE.saleRatePpm)}% 상한`
+      : `상가·토지 등 ${ppmToPct(OTHER_PROPERTY_FEE.ratePpm)}% 상한`
 
 /* ─────────────────────────────────────────────────────────
  * 메인 컴포넌트
@@ -95,6 +103,7 @@ export default function RealEstateClient() {
 
   /* ── 중개수수료 ── */
   const [brokerMode, setBrokerMode] = useState<'auto' | 'manual'>('auto')
+  const [brokerProp, setBrokerProp] = useState<BrokerageProperty>('house') // 취득 대상 토글과 연동하되 따로 바꿀 수 있음
   const [brokerBuyStr,  setBrokerBuyStr]  = useState('0')
   const [brokerSellStr, setBrokerSellStr] = useState('0')
 
@@ -140,8 +149,8 @@ export default function RealEstateClient() {
       })
   const acqTaxAuto = acqBreakdown.total   // 취득세 + 지방교육세 + 농어촌특별세
   const acqTax    = acqMode === 'auto' ? acqTaxAuto : parseNum(acqStr)
-  const brokerBuyAuto  = calcBrokerFee(price)
-  const brokerSellAuto = calcBrokerFee(salePrice)
+  const brokerBuyAuto  = calcBrokerFee(price, brokerProp)
+  const brokerSellAuto = calcBrokerFee(salePrice, brokerProp)
   const brokerBuy  = brokerMode === 'auto' ? brokerBuyAuto  : parseNum(brokerBuyStr)
   const brokerSell = brokerMode === 'auto' ? brokerSellAuto : parseNum(brokerSellStr)
 
@@ -207,7 +216,7 @@ export default function RealEstateClient() {
   /* ─── 매도 시나리오 ─── */
   const scenarios = useMemo(() => {
     const buildScenario = (sp: number) => {
-      const bSell = brokerMode === 'auto' ? calcBrokerFee(sp) : brokerSell
+      const bSell = brokerMode === 'auto' ? calcBrokerFee(sp, brokerProp) : brokerSell
       const cost  = upfrontCost + totalInterest + bSell + earlyFee + otherCosts
       const profit = (sp - price) + rentalIncome - cost
       const roe_ = equityPositive ? (profit / initialInvestment) * 100 : NaN
@@ -218,7 +227,7 @@ export default function RealEstateClient() {
       base:         buildScenario(salePrice),
       optimistic:   buildScenario(salePrice * 1.1),
     }
-  }, [salePrice, price, brokerMode, brokerSell, upfrontCost, totalInterest, earlyFee, otherCosts, rentalIncome, initialInvestment, equityPositive])
+  }, [salePrice, price, brokerMode, brokerSell, brokerProp, upfrontCost, totalInterest, earlyFee, otherCosts, rentalIncome, initialInvestment, equityPositive])
 
   /* ─── 전액 현금 매수 시 비교 ─── */
   const allCashCompare = useMemo(() => {
@@ -500,7 +509,11 @@ export default function RealEstateClient() {
                     type="button"
                     aria-pressed={acqTarget === o.id}
                     className={`${styles.toggleBtn} ${acqTarget === o.id ? styles.toggleActive : ''}`}
-                    onClick={() => setAcqTarget(o.id)}
+                    onClick={() => {
+                      setAcqTarget(o.id)
+                      // 중개 대상 연동: 주택 → 주택, 비주거 → (주택이었다면) 상가·토지 등. 주거용 오피스텔 선택은 유지
+                      setBrokerProp(p => (o.id === 'house' ? 'house' : p === 'house' ? 'other' : p))
+                    }}
                   >
                     {o.label}
                   </button>
@@ -627,7 +640,7 @@ export default function RealEstateClient() {
       <div className={styles.card}>
         <div className={styles.cardLabel}>
           <span>중개수수료</span>
-          <span className={styles.cardLabelHint}>매수·매도 별도</span>
+          <span className={styles.cardLabelHint}>{brokerMode === 'auto' ? `${brokerPropertyHint(brokerProp)} · ` : ''}매수·매도 별도</span>
         </div>
 
         <div className={styles.miniToggle} role="group" aria-label="중개수수료 입력 방식">
@@ -637,6 +650,27 @@ export default function RealEstateClient() {
 
         {brokerMode === 'auto' ? (
           <>
+            <div className={styles.acqGroup}>
+              <span className={styles.subLabel}>중개 대상</span>
+              <div className={styles.toggleGrid3} role="group" aria-label="중개 대상">
+                {BROKER_PROPERTY_OPTIONS.map(o => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    aria-pressed={brokerProp === o.id}
+                    className={`${styles.toggleBtn} ${brokerProp === o.id ? styles.toggleActive : ''}`}
+                    onClick={() => setBrokerProp(o.id)}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+              {brokerProp === 'officetel' && (
+                <p className={styles.acqDetail}>
+                  전용 {OFFICETEL_FEE.maxAreaM2}㎡ 이하이고 전용 입식 부엌·수세식 화장실·목욕시설을 모두 갖춘 오피스텔만 해당합니다. 하나라도 빠지면 &lsquo;상가·토지 등&rsquo;을 고르세요.
+                </p>
+              )}
+            </div>
             <div className={styles.autoResult} style={{ marginBottom: 8 }}>
               <span>매수 중개수수료</span>
               <strong>{fmtKRW(brokerBuyAuto)}</strong>

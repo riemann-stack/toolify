@@ -19,7 +19,8 @@ import { getFeaturedSlug } from '@/lib/collections'
 import { INSURANCE_RATES } from '@/lib/krInsuranceRates'
 import { holidaysInYear } from '@/lib/krHolidays'
 import { POPULAR, POPULAR_IS_MEASURED, LEGAL_UPDATED } from '@/lib/toolSignals'
-import { GUIDES, showGuides } from '@/lib/guides'
+import { GUIDES, GUIDES_HUB, guideHref, showGuides } from '@/lib/guides'
+import { AUTHOR } from '@/lib/toolMeta'
 import { kstShifted, kstTodayStr, todayInfo } from '@/lib/todayInfo'
 import { calcSalary } from '@/app/tools/finance/salary/salaryUtils'
 
@@ -244,20 +245,21 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* 계산 해설 — 게시 글 3편 이상일 때만(빈 지면 = 얇은 사이트 신호). 현재 0편 → 렌더 안 함 */}
+        {/* 계산 해설 — lib/guides 게시 글이 GUIDES_MIN_TO_SHOW편 이상일 때만(빈 지면 = 얇은 사이트 신호) */}
         {showGuides() && (
           <section className={styles.hmSec} aria-labelledby="art-h">
             <div className={styles.hmSecH}>
-              <div><h2 id="art-h">계산 해설</h2><p>숫자 뒤의 기준을 풀어 쓴 글입니다.</p></div>
+              <div><h2 id="art-h">{GUIDES_HUB.label}</h2><p>숫자 뒤의 기준을 풀어 쓴 글입니다.</p></div>
+              <Link className={styles.hmMore} href={GUIDES_HUB.href}>전체 보기<UiIcon name="chev-r" size={16} /></Link>
             </div>
             <div className={styles.hmArts}>
               {GUIDES.slice(0, 3).map((g) => (
-                <Link key={g.slug} className={styles.hmArt} data-cat={g.catId} href={`/guides/${g.slug}`}>
+                <Link key={g.slug} className={styles.hmArt} data-cat={g.catId} href={guideHref(g.slug)}>
                   <span className={styles.hmArtK}>{categories.find((c) => c.id === g.catId)?.name ?? '해설'}</span>
                   <h3>{g.title}</h3>
                   <p>{g.summary}</p>
                   {g.figure && <span className={styles.hmArtFig}><b>{g.figure.value}</b><span>{g.figure.caption}</span></span>}
-                  <span className={styles.hmArtM}>리만 · {dot(g.published)} · 읽는 시간 {g.readMinutes}분</span>
+                  <span className={styles.hmArtM}>{AUTHOR.name} · {dot(g.published)} · 읽는 시간 {g.readMinutes}분</span>
                 </Link>
               ))}
             </div>

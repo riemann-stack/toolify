@@ -47,3 +47,16 @@ describe('marginalRate', () => {
     assert.equal(marginalRate(2_000_000_000, { localTax: true }), 0.495)
   })
 })
+
+/* 원천징수 부가 규칙 — 지방세법 §103의13①(소득세의 100분의 10) · 소득세법 시행령 §194①(100분의 80·120 선택) */
+describe('원천징수 비율 상수', async () => {
+  const { LOCAL_INCOME_TAX_RATIO, WITHHOLDING_RATIO_OPTIONS } = await import('../../lib/krIncomeTax')
+  const { LOCAL_TAX_RATE } = await import('../../lib/krYearEndTax')
+  test('지방소득세 = 소득세의 10%, 연말정산 lib과 같은 값', () => {
+    assert.equal(LOCAL_INCOME_TAX_RATIO, 0.1)
+    assert.equal(LOCAL_TAX_RATE, LOCAL_INCOME_TAX_RATIO)
+  })
+  test('원천징수 비율 선택지 80·100·120%', () => {
+    assert.deepEqual([...WITHHOLDING_RATIO_OPTIONS], [0.8, 1, 1.2])
+  })
+})

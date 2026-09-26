@@ -49,6 +49,23 @@ const YMYL = new Set(['finance', 'health'])
    넣지 않은 테스트: energyPrices(단가 상수·재수출 동일성 — 계산 검산이 아님), running의 buildup·lsd(계수 동일성만 확인),
                     incomeTax의 rent-jeonse(세액 절감은 부가 계산)·salary(salaryInsurance가 이미 전체 검산). */
 const GOLDEN = [
+  // 신규 도구 5종(2026-09-26) — 도구 전용 골든 테스트라 계산 전체(full)
+  { slug: '/tools/finance/deposit-interest', file: 'tests/golden/depositInterest.test.mts', suite: /./,
+    scope: '예·적금 세후 이자·만기 수령액', full: true },
+  { slug: '/tools/finance/acquisition-tax', file: 'tests/golden/acquisitionTaxCauses.test.mts', suite: /./,
+    scope: '취득 원인별 취득세·지방교육세·농특세', full: true },
+  { slug: '/tools/finance/acquisition-tax', file: 'tests/golden/acquisitionTax.test.mts', suite: /^(?!.*(경매|auction))/,
+    scope: '유상 주택 표준세율·중과', full: true },
+  { slug: '/tools/finance/brokerage-fee', file: 'tests/golden/brokerageFee.test.mts', suite: /./,
+    scope: '중개보수 상한요율·한도액', full: true },
+  { slug: '/tools/finance/real-estate', file: 'tests/golden/brokerageFee.test.mts', suite: /./,
+    scope: '매매 중개보수', full: false },
+  { slug: '/tools/finance/annual-leave', file: 'tests/golden/annualLeave.test.mts', suite: /./,
+    scope: '연차 발생·잔여·연차수당', full: true },
+  { slug: '/tools/finance/hourly-pay', file: 'tests/golden/hourlyPay.test.mts', suite: /./,
+    scope: '주휴수당·가산수당·월 환산', full: true },
+  { slug: '/tools/finance/dividend', file: 'tests/golden/dividendTax.test.mts', suite: /./,
+    scope: '배당소득세 15.4%·종합과세 기준', full: false },
   { slug: '/tools/finance/salary', file: 'tests/golden/salaryInsurance.test.mts', suite: /^salary\b/,
     scope: '4대보험·근로소득세 공제 후 실수령액', full: true },
   { slug: '/tools/finance/4-insurance', file: 'tests/golden/salaryInsurance.test.mts', suite: /^4-insurance\b/,

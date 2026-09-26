@@ -61,6 +61,36 @@ export const INSURANCE_RATES: Record<2025 | 2026, RateSet> = {
 }
 
 /* ──────────────────────────────────────────────────────
+   국민연금 연금보험료율 법정 단계 인상 — 국민연금법 제88조·2025년 개정 부칙 (2026-01-01 시행)
+   사업장가입자 요율은 1998년부터 9%였고, 2026년 9.5%를 시작으로 매년 0.5%p씩 올라 2033년 13%에서 멈춘다.
+   근로자·사용자가 절반씩 부담(§88). 확인: 대한민국 정책브리핑 「국가가 연금 지급 보장 법제화…내년부터 달라지는
+   국민연금」(2025.12, newsId=148957270). 기준일 2026-09.
+   INSURANCE_RATES에 있는 연도는 그 값을 그대로 쓰고, 그 뒤 연도만 아래 인상폭으로 늘린다(요율 값 중복 없음).
+   ────────────────────────────────────────────────────── */
+export const PENSION_RATE_LAW = {
+  /** 인상 전 요율(9%)이 적용되기 시작한 해 — 사업장가입자 기준 */
+  flatSinceYear: 1998,
+  /** 해마다 오르는 폭 (%p, 근로자+사용자 합계) */
+  stepTotal: 0.5,
+  /** 단계 인상이 끝나는 해와 그 해의 최종 요율 (%) */
+  finalYear: 2033,
+  finalTotal: 13,
+} as const
+
+/** 그 해 1월부터 적용되는 사업장가입자 국민연금 요율 (전체 %, 근로자·사용자 각 절반) */
+export function pensionTotalRateFor(year: number): number {
+  const years = (Object.keys(INSURANCE_RATES).map(Number) as (keyof typeof INSURANCE_RATES)[]).sort((a, b) => a - b)
+  const last = years[years.length - 1]
+  if (year <= last) {
+    let pick = years[0]
+    for (const y of years) if (y <= year) pick = y
+    return INSURANCE_RATES[pick].pension.total
+  }
+  const raised = INSURANCE_RATES[last].pension.total + PENSION_RATE_LAW.stepTotal * (year - last)
+  return Math.min(PENSION_RATE_LAW.finalTotal, Math.round(raised * 1e4) / 1e4)
+}
+
+/* ──────────────────────────────────────────────────────
    산재보험 사업종류별 보험료율 — 천분율(‰). 화면 %로 쓸 때는 ÷10.
    근거: 고용노동부 고시 「2026년도 사업종류별 산재보험료율」(moel.go.kr 훈령·예규·고시 bbs_seq=20251201757),
          「2025년도 사업종류별 산재보험료율」(bbs_seq=20241201937) — 아래 대표 업종은 두 해 요율이 같다.
@@ -94,6 +124,26 @@ export const WORKERS_COMP_INDUSTRIES: Record<2025 | 2026, readonly WorkersCompIn
 export const WORKERS_COMP_COMMUTE_PERMILLE = 0.6
 /** 임금채권부담금 비율 (‰, 사업주 부담) */
 export const WAGE_CLAIM_LEVY_PERMILLE = 0.6
+
+/* ──────────────────────────────────────────────────────
+   고용보험 월 중간 입사자의 월별보험료 산정 시작 — 보험료징수법 §16의4 개정 이력 (기준일 2026-09)
+   · 2021.1.26~2023.12: 일수에 비례해 계산(일할)
+   · 2024년 1월 보험료분부터: 월 중간 입사 → '해당 월의 다음 달부터' 산정, 매월 1일 입사는 그 달부터
+       — 법률 제19209호(2022.12.31 공포) 부칙 §1 2호(§16의4 개정규정 2024.1.1 시행)·§2(2024년 1월 보험료분부터 적용)
+   · 2027.1.1 시행: '그 사유가 발생한 날부터' 산정(실제 지급 월 보수 기준 부과 개편과 함께)
+       — 법률 제21472호(2026.3.17 공포) 부칙 §1
+   확인: 국가법령정보센터 원문·부칙(legalize-kr 법령 저장소 미러의 개정 이력으로 대조).
+   국민연금·건강보험의 '다음 달부터'(국민연금법 §17①, 국민건강보험법 §69②)와 달리 고용보험은 2027년에 다시 바뀐다.
+   ────────────────────────────────────────────────────── */
+export const EI_MID_MONTH_HIRE = {
+  /** 월 중간 입사자의 고용보험을 '다음 달부터' 매기기 시작한 보험료 귀속월 'YYYY-MM' */
+  nextMonthSince: '2024-01',
+  /** 월 중간 입사자도 '입사한 날부터' 매기는 개정 규정의 시행월 'YYYY-MM' */
+  fromHireDateSince: '2027-01',
+  /** 근거 법률 번호·공포일 (출처 표기용) */
+  nextMonthAct: { no: 19209, promulgated: '2022-12-31' },
+  fromHireDateAct: { no: 21472, promulgated: '2026-03-17' },
+} as const
 
 /* ──────────────────────────────────────────────────────
    국민연금 기준소득월액 상·하한 — 기간(월) 스케줄

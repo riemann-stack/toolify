@@ -2,7 +2,7 @@
    재사용: lib/krIncomeTax(progressiveTax·earnedIncomeDeduction·earnedTaxCredit), lib/krInsuranceRates(추정용).
    ※ 핵심 공제만 반영한 추정 — 난임 의료비·중기감면·주택자금·부녀자/한부모 등 미반영(면책). 단위: 원. */
 
-import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit } from './krIncomeTax'
+import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit, LOCAL_INCOME_TAX_RATIO } from './krIncomeTax'
 import { INSURANCE_RATES, clampPensionBase, pensionBaseAt } from './krInsuranceRates'
 
 export const PERSONAL_DEDUCTION = 1_500_000 // 기본공제 1인당 150만
@@ -38,7 +38,7 @@ export const RENT_GROSS_CAP = 80_000_000 // 월세 세액공제 총급여 상한
 export const PENSION_CREDIT_GROSS_CUT = 55_000_000 // 연금/월세 고율 적용 총급여 경계
 export const PENSION_CREDIT_RATE_HIGH = 0.15 // 총급여 5,500만↓ 연금계좌 세액공제율
 export const PENSION_CREDIT_RATE_LOW = 0.12 // 총급여 5,500만↑
-export const LOCAL_TAX_RATE = 0.1 // 지방소득세 10%
+export const LOCAL_TAX_RATE = LOCAL_INCOME_TAX_RATIO // 지방소득세 10% — lib/krIncomeTax 단일 소스(지방세법 §103의13)
 
 /** 자녀세액공제(8~20세): 1명 25만·2명 55만·3명↑ 55만+40만/추가 */
 export function childTaxCredit(children: number): number {

@@ -86,7 +86,7 @@ function shortcutLabel(): string {
 
 /** 신규 지면 공개 스위치 — 페이지가 실제로 생기기 전에는 링크하지 않는다(깨진 링크·빈 지면 = 얇은 사이트 신호).
  *  GUIDES_LIVE: /guides 에 글 3편 이상 발행 후 true (Footer.tsx 의 같은 스위치와 함께). STANDARDS_LIVE: /standards-2026 생성 후 true. */
-const GUIDES_LIVE = false
+const GUIDES_LIVE = true
 const STANDARDS_LIVE = false
 
 interface MenuItem { href: string; label: string; icon: string; exact?: boolean }

@@ -14,6 +14,7 @@
 .dfBox td { padding: 12px 14px; border-top: 1px solid var(--divider); color: var(--text-body); white-space: nowrap; }
 .dfBox td:first-child, .dfBox tbody th { color: var(--text); font-weight: 500; }
 .dfBox tbody th { padding: 12px 14px; border-top: 1px solid var(--divider); background: transparent; font-size: 14px; text-align: left; white-space: nowrap; }
+.dfBox tbody th small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--muted); white-space: normal; } /* 행 머리의 보조 설명(예: 조문·조건)을 제목과 붙지 않게 다음 줄로 */
 .dfBox td small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--muted); white-space: normal; }
 .dfBox :global(.r) { text-align: right; }
 .dfBox :global(.em) { color: var(--accent-ink); font-weight: 700; }

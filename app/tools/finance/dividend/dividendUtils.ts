@@ -6,6 +6,21 @@
    ────────────────────────────────────────────────────── */
 
 import { BRACKETS_2026, marginalRate } from '@/lib/krIncomeTax'
+import {
+  GENERAL_DIVIDEND_TAX_RATE, DIVIDEND_WITHHOLDING_RATE, LOCAL_INCOME_TAX_RATIO, ratePct,
+  COMPREHENSIVE_TAX_THRESHOLD as FIN_COMPREHENSIVE_THRESHOLD,
+} from '@/lib/krFinancialIncomeTax'
+
+/* 배당소득 일반과세 15.4% = 소득세 14%(소득세법 §129①2호) + 지방소득세 1.4%(지방세법 §103의13) — lib 단일 소스.
+   화면 문구(page·Client)도 이 값들을 보간해 쓴다 */
+export const GEN_PCT = ratePct(GENERAL_DIVIDEND_TAX_RATE)
+export const WH_PCT = ratePct(DIVIDEND_WITHHOLDING_RATE)
+export const LOCAL_PCT = ratePct(DIVIDEND_WITHHOLDING_RATE * LOCAL_INCOME_TAX_RATIO)
+/** 금융소득종합과세 기준 표기 '2,000만' (소득세법 §14③6호) */
+export const THRESHOLD_MAN = `${(FIN_COMPREHENSIVE_THRESHOLD / 10_000).toLocaleString('ko-KR')}만`
+/** 종합소득세 최저·최고 한계세율(지방세 포함, %) — lib/krIncomeTax 누진세율표 양 끝 (6.6 · 49.5) */
+export const BOTTOM_BRACKET_PCT = ratePct(marginalRate(0, { localTax: true }))
+export const TOP_BRACKET_PCT = ratePct(marginalRate(Infinity, { localTax: true }))
 
 /* ─── 한국 배당 세제 (2026년 기준) ─── */
 export interface TaxAccount {
@@ -24,9 +39,9 @@ export interface TaxAccount {
 
 export const TAX_ACCOUNTS: TaxAccount[] = [
   { id: 'general',        name: '일반 계좌',
-    taxRate: 0.154, annualLimit: Infinity, comprehensive: true,
-    desc: '배당소득세 15.4% (소득세 14% + 지방소득세 1.4%)',
-    pros: '제한 없음 · 자유 인출', cons: '연 2,000만↑ 종합과세 (최대 49.5%)' },
+    taxRate: GENERAL_DIVIDEND_TAX_RATE, annualLimit: Infinity, comprehensive: true,
+    desc: `배당소득세 ${GEN_PCT}% (소득세 ${WH_PCT}% + 지방소득세 ${LOCAL_PCT}%)`,
+    pros: '제한 없음 · 자유 인출', cons: `연 ${THRESHOLD_MAN}↑ 종합과세 (최대 ${TOP_BRACKET_PCT}%)` },
   { id: 'isa-saving',     name: 'ISA (서민형)',
     taxRate: 0.099, nonTaxableLimit: 4_000_000,
     annualLimit: 20_000_000, totalLimit: 100_000_000, comprehensive: false,
@@ -47,8 +62,8 @@ export const TAX_ACCOUNTS: TaxAccount[] = [
     pros: '추가 300만 세액공제', cons: '55세 이후 수령 · 중도해지 페널티' },
 ]
 
-/* ─── 종합과세 한도 ─── */
-export const COMPREHENSIVE_TAX_THRESHOLD = 20_000_000   // 연 2,000만
+/* ─── 종합과세 한도 (소득세법 §14③6호 — lib 단일 소스) ─── */
+export const COMPREHENSIVE_TAX_THRESHOLD = FIN_COMPREHENSIVE_THRESHOLD   // 연 2,000만
 
 /* ─── 종합과세 누진세율 (지방세 포함) — lib/krIncomeTax에서 파생 ─── */
 export interface ProgressiveBracket {
@@ -109,7 +124,7 @@ export interface ReverseInput {
   dividendYield: number           // % (배당수익률)
   capitalGainRate: number         // % (시세 차익 CAGR)
   reinvestDividends: boolean
-  taxRate: number                 // 0.154
+  taxRate: number                 // 소수 (일반 GENERAL_DIVIDEND_TAX_RATE = 0.154)
   safety: number                  // 1.0~1.3
 }
 
@@ -253,7 +268,7 @@ export interface PortfolioAsset {
   amount: number          // 투자금 (원)
   yieldPct: number        // 배당수익률 (%)
   frequency: Frequency
-  taxRate: number         // % (일반 15.4 / 해외 15.0)
+  taxRate: number         // % (일반 GENERAL_DIVIDEND_TAX_RATE×100 = 15.4 / 해외 15.0)
 }
 
 export interface PortfolioResult {
@@ -328,7 +343,7 @@ export interface TaxAccountCompareRow {
 }
 
 export function compareTaxAccounts(input: TaxAccountCompareInput): TaxAccountCompareRow[] {
-  const generalTaxAnnual = input.annualDividend * 0.154
+  const generalTaxAnnual = input.annualDividend * GENERAL_DIVIDEND_TAX_RATE
   const generalTaxTotal = generalTaxAnnual * input.years
   const yieldFrac = (input.dividendYield ?? 0) / 100
 
@@ -336,12 +351,12 @@ export function compareTaxAccounts(input: TaxAccountCompareInput): TaxAccountCom
     let annualTax = 0
     let overLimitDividend = 0
     if (acc.id === 'isa-saving' || acc.id === 'isa-general') {
-      // ISA 총 납입 한도(1억)로 담을 수 있는 최대 배당 — 초과분은 일반 15.4% 과세
+      // ISA 총 납입 한도(1억)로 담을 수 있는 최대 배당 — 초과분은 일반과세(15.4%)
       const maxShelter = acc.totalLimit && yieldFrac > 0 ? acc.totalLimit * yieldFrac : input.annualDividend
       const sheltered = Math.min(input.annualDividend, maxShelter)
       overLimitDividend = input.annualDividend - sheltered
       const taxableDiv = Math.max(0, sheltered - (acc.nonTaxableLimit ?? 0))
-      annualTax = taxableDiv * acc.taxRate + overLimitDividend * 0.154
+      annualTax = taxableDiv * acc.taxRate + overLimitDividend * GENERAL_DIVIDEND_TAX_RATE
     } else if (acc.id === 'pension-saving' || acc.id === 'irp') {
       // 단순화: 5.5% 분리과세 (수령 시점). 한도는 적립액 기준이라 별도 안내로 표기.
       annualTax = input.annualDividend * acc.taxRate

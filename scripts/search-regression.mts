@@ -103,8 +103,8 @@ export const CASES: SearchCase[] = [
   { q: '부동산 취득세', top1: [F + 'acquisition-tax', F + 'auction', F + 'real-estate'], future: [F + 'acquisition-tax'] },
   { q: '자동차 취득세', top1: [F + 'car-tax'] },
   { q: '자동차세', top1: [F + 'car-tax'] },
-  { q: '적금', top1: [F + 'deposit-savings', F + 'compound'], future: [F + 'deposit-savings'] },
-  { q: '적금 이자', top1: [F + 'deposit-savings', F + 'compound'], future: [F + 'deposit-savings'] },
+  { q: '적금', top1: [F + 'deposit-interest', F + 'compound'], future: [F + 'deposit-interest'] },
+  { q: '적금 이자', top1: [F + 'deposit-interest', F + 'compound'], future: [F + 'deposit-interest'] },
 
   // ── 짧은 별칭 오탐 방지 ──
   { q: '나이', top1: ['/tools/date/age'], absent: ['/tools/unit/hardness'] },
@@ -205,6 +205,20 @@ export const CASES: SearchCase[] = [
   { q: '레시피', top1: ['/tools/cooking/recipe'] },
   { q: '유산소', top1: ['/tools/sports/vo2max'] },
   { q: '축구', top1: ['/tools/sports/formation'], present: ['/tools/sports/league-scenarios'] },
+  // 신규 도구 5종(2026-09-26) — 전용 도구가 1위, 기존 도구의 핵심 질의는 그대로
+  { q: '연차', top1: [F + 'annual-leave'] },
+  { q: '연차수당', top1: [F + 'annual-leave'] },
+  { q: '연차 붙이기', top1: ['/tools/date/holiday-bridge'] },
+  { q: '복비', top1: [F + 'brokerage-fee'] },
+  { q: '중개수수료', top1: [F + 'brokerage-fee'] },
+  { q: '예금 이자', top1: [F + 'deposit-interest'] },
+  { q: '정기적금', top1: [F + 'deposit-interest'] },
+  { q: '복리', top1: [F + 'compound'] },
+  { q: '주휴수당 계산', top1: [F + 'hourly-pay'] },
+  { q: '최저시급', top1: [F + 'hourly-pay'] },
+  { q: '4대보험', top1: [F + '4-insurance'] },
+  { q: '생애최초 취득세', top1: [F + 'acquisition-tax'] },
+  { q: '자동차 취득세', top1: [F + 'car-tax'] },
 ]
 
 export interface CaseResult {

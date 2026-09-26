@@ -1,0 +1,148 @@
+/* app/guides/_components/guide.module.css — 계산 해설(허브 /guides · 글 /guides/<slug>) 공용 스타일
+   신뢰 페이지(app/_trust Trust Ledger) 문법을 따른다: 경로 → 아이브로우·H1·리드·바이라인 → 흰 본문 시트(.prose, h2 자동 번호 01…)
+   → 면책 → 관련 계산기. 본문 폭 760(--w-content), 장문 줄 길이는 --w-read.
+   ─ 토큰만(새 hex 금지) · 짝수 간격 · 하프픽셀 폰트 없음 · hover는 (hover: hover)에서만
+   ─ :where(.prose) 조판은 특이도 0 → 아래 모듈 클래스가 항상 이긴다 */
+
+/* ── 페이지 틀 ─────────────────────────────────────────── */
+.page { max-width: calc(var(--w-content) + 48px); margin: 0 auto; padding: 20px 24px 64px; }
+
+/* 경로 — ToolBreadcrumb 시각 문법(13px · chevron 장식색 · 현재 항목 aria-current) */
+.crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted); word-break: keep-all; }
+.crumb a { display: inline-flex; align-items: center; min-height: 24px; color: var(--muted); text-decoration: none; border-radius: var(--radius-xs); }
+@media (hover: hover) { .crumb a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; } }
+.crumb svg { flex-shrink: 0; color: var(--gray-400); }
+.crumb [aria-current] { min-width: 0; color: var(--muted-strong); font-weight: 500; }
+
+/* ── 머리 ─────────────────────────────────────────────── */
+.head { padding: 20px 0 28px; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 0; font-size: 14px; font-weight: 700; color: var(--accent-ink); }
+.eyebrow > span { display: inline-flex; align-items: center; gap: 6px; }
+.cat { color: var(--c-ink, var(--muted-strong)); }
+.cat::before { content: ''; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--c, var(--gray-400)); }
+.title { margin: 10px 0 12px; font-size: clamp(28px, 6vw, 36px); font-weight: 700; line-height: 1.3; letter-spacing: -0.035em; color: var(--text); word-break: keep-all; overflow-wrap: break-word; }
+.lead { max-width: var(--w-read); margin: 0; font-size: 16px; line-height: 1.7; color: var(--muted-strong); font-variant-numeric: normal; word-break: keep-all; }
+.lead strong { color: var(--text); font-weight: 600; }
+.lead a { color: var(--accent-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+.byline { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; background: var(--text); color: var(--gray-0); font-size: 13px; font-weight: 700; }
+.byText { margin: 0; font-size: 13px; line-height: 1.6; color: var(--muted); font-variant-numeric: tabular-nums; word-break: keep-all; }
+.byText b { color: var(--text); font-weight: 600; }
+.byText a { color: var(--accent-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--accent-line); }
+.byText time { white-space: nowrap; }
+.basis { display: flex; align-items: flex-start; gap: 6px; max-width: var(--w-read); margin: 12px 0 0; font-size: 13px; line-height: 1.6; color: var(--muted); word-break: keep-all; }
+.basis svg { flex-shrink: 0; margin-top: 3px; }
+.basis b { flex-shrink: 0; color: var(--muted-strong); font-weight: 600; }
+
+/* ── 본문 시트 ─────────────────────────────────────────── */
+.sheet { padding: 40px 48px 44px; border-radius: var(--radius-lg); background: var(--bg2); border: 1px solid var(--border); }
+.sheet > :first-child { margin-top: 0; }
+.sheet > :last-child { margin-bottom: 0; }
+.sheet h3[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
+
+/* 한눈에 보기 — 본문 첫머리 요약(3~5줄). 제목은 data-nonum h2(번호·목차 제외) */
+.glance { margin: 0 0 24px; padding: 20px; border-radius: var(--radius-m); background: var(--accent-soft); }
+.glanceH { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; font-size: 14px; font-weight: 700; line-height: 1.5; letter-spacing: 0; color: var(--accent-ink); }
+.glance ul { margin: 0; padding-left: 20px; max-width: none; }
+.glance li { margin: 0 0 6px; font-size: 16px; line-height: 1.7; color: var(--text-body); font-variant-numeric: normal; }
+.glance li:last-child { margin-bottom: 0; }
+.glance strong { color: var(--text); font-weight: 600; }
+
+/* 목차 — 본문 h2(id)에서 서버 렌더(높이 고정 → CLS 0). 번호 = .prose h2 counter와 같은 순서 */
+.toc { margin: 0 0 8px; padding: 16px 18px; border-radius: var(--radius-m); background: var(--bg3); }
+.toc > b { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 700; color: var(--muted-strong); }
+.toc ol { list-style: none; counter-reset: t; display: grid; gap: 2px; margin: 0; padding: 0; max-width: none; }
+.toc li { margin: 0; font-size: 14px; line-height: 1.5; }
+.toc a { display: flex; align-items: center; gap: 10px; min-height: 32px; color: var(--text-body); text-decoration: none; }
+.toc a::before { counter-increment: t; content: counter(t, decimal-leading-zero); flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+@media (hover: hover) { .toc a:hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; } }
+@media (pointer: coarse) { .toc ol { gap: 0; } .toc a { min-height: 44px; } }
+@media (min-width: 720px) { .tocCols ol { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 24px; } }
+
+/* 번호 단계 (GuideSteps) — 신뢰 페이지 .steps와 같은 괘선 목록 */
+.steps { list-style: none; counter-reset: st; margin: 20px 0 16px; padding: 0; max-width: none; border-top: 1.5px solid var(--rule); }
+.steps > li { counter-increment: st; display: grid; grid-template-columns: 36px minmax(0, 1fr); column-gap: 12px; margin: 0; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; line-height: 1.7; color: var(--text-body); font-variant-numeric: normal; word-break: keep-all; }
+.steps > li::before { content: counter(st, decimal-leading-zero); grid-row: 1 / span 2; padding-top: 2px; font-size: 13px; font-weight: 700; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.steps b { display: block; font-size: 16px; font-weight: 700; color: var(--text); }
+.steps span { display: block; font-size: 14px; line-height: 1.7; color: var(--muted-strong); }
+.steps a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* 체크리스트 (GuideChecklist) — 원형 체크 표시는 장식 */
+.check { list-style: none; margin: 16px 0; padding: 0; max-width: var(--w-read); }
+.check > li { position: relative; margin: 0; padding: 12px 0 12px 32px; border-bottom: 1px solid var(--divider); font-size: 16px; line-height: 1.7; color: var(--text-body); font-variant-numeric: normal; word-break: keep-all; }
+.check > li:first-child { border-top: 1px solid var(--divider); }
+.check > li::before { content: ''; position: absolute; left: 2px; top: 17px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--accent); box-sizing: border-box; }
+.check > li::after { content: ''; position: absolute; left: 8px; top: 21px; width: 5px; height: 8px; border: solid var(--accent-ink); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.check strong { color: var(--text); font-weight: 600; }
+.check a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* 참고 자료 — SourceNotes와 같은 괘선 목록. 번호 = 본문 <Ref n> (#src-n) */
+.refs { list-style: none; counter-reset: s; margin: 0; padding: 0; max-width: none; border-top: 1.5px solid var(--rule); }
+.refs li { counter-increment: s; display: grid; grid-template-columns: 32px minmax(0, 1fr); margin: 0; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.6; color: var(--text-body); word-break: keep-all; overflow-wrap: anywhere; scroll-margin-top: calc(var(--header-h) + 16px); }
+.refs li::before { content: '[' counter(s) ']'; font-size: 13px; font-weight: 700; color: var(--accent-ink); }
+.refs a { color: var(--text); font-weight: 600; text-decoration: underline; text-decoration-color: var(--border-hover); text-underline-offset: 3px; }
+.refs small { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
+
+/* 이 글을 쓴 사람 — 작성·계산 방식·오류 제보 */
+.about { margin-top: 32px; padding: 20px; border-radius: var(--radius-card); background: var(--bg3); }
+.aboutWho { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--border); }
+.aboutAvatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; background: var(--text); color: var(--gray-0); font-size: 16px; font-weight: 700; }
+.aboutWho > div { flex: 1; min-width: 0; }
+.aboutWho b { display: block; font-size: 16px; color: var(--text); }
+.aboutWho span { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
+.aboutWho a { flex-shrink: 0; display: inline-flex; align-items: center; gap: 2px; min-height: 32px; font-size: 13px; font-weight: 600; color: var(--accent-ink); white-space: nowrap; }
+.about dl { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 10px 16px; margin: 0; }
+.about dt { font-size: 13px; font-weight: 700; line-height: 1.8; color: var(--muted-strong); }
+.about dd { min-width: 0; margin: 0; font-size: 14px; line-height: 1.7; color: var(--text-body); font-variant-numeric: normal; word-break: keep-all; overflow-wrap: break-word; }
+.about dd a { color: var(--accent-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+
+/* 시트 아래 — 면책·관련 계산기·허브로 돌아가기 */
+.after { margin-top: 8px; }
+.back { margin: 32px 0 0; font-size: 14px; }
+.back a { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-weight: 600; color: var(--accent-ink); text-decoration: none; }
+@media (hover: hover) { .back a:hover { text-decoration: underline; text-underline-offset: 3px; } }
+
+/* ── 허브 (/guides) 카드 목록 ──────────────────────────── */
+.listSec { margin-top: 40px; }
+.listH { margin: 0 0 4px; font-size: 20px; font-weight: 700; line-height: 1.4; letter-spacing: -0.03em; color: var(--text); }
+.listP { margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.list { list-style: none; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin: 0; padding: 0; }
+.list > li { margin: 0; min-width: 0; }
+.card { display: flex; flex-direction: column; height: 100%; padding: 20px; border-radius: var(--radius-card); background: var(--bg2); border: 1px solid var(--border); color: inherit; text-decoration: none; transition: border-color .15s, box-shadow .15s; }
+@media (hover: hover) { .card:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); } }
+.cardK { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--c-ink, var(--muted-strong)); }
+.cardK::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--c, var(--gray-400)); }
+.cardT { margin: 10px 0 0; font-size: 18px; font-weight: 700; line-height: 1.45; letter-spacing: -0.025em; color: var(--text); word-break: keep-all; }
+.cardS { flex: 1; margin: 6px 0 0; font-size: 14px; line-height: 1.65; color: var(--muted-strong); font-variant-numeric: normal; word-break: keep-all; }
+.cardFig { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--divider); }
+.cardFig b { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.cardFig span { font-size: 13px; color: var(--muted); }
+.cardM { margin-top: 10px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.empty { margin: 0; padding: 20px; border-radius: var(--radius-card); background: var(--bg3); font-size: 14px; line-height: 1.7; color: var(--muted-strong); }
+
+@media (min-width: 720px) { .list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ── 반응형 ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page { padding: 16px 16px 48px; }
+  .head { padding: 16px 0 20px; }
+  .sheet { margin: 0 -16px; padding: 28px 20px 32px; border-radius: 0; border-left: 0; border-right: 0; }
+  .glance { padding: 16px; }
+  .toc { padding: 14px 16px; }
+  .about { padding: 16px; }
+  .aboutWho { flex-wrap: wrap; row-gap: 4px; }
+  .aboutWho > div { flex: 1 1 calc(100% - 56px); }
+  .aboutWho a { margin-left: 56px; }
+  .about dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .about dd { margin-bottom: 10px; }
+  .card { padding: 18px; }
+}
+
+/* DataFigure 행 머리(tbody th) 안 보조 줄 — DataFigure는 td small만 꾸미므로 글 시트 안에서 같은 모양을 맞춘다 */
+.sheet tbody th small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--muted); white-space: normal; }
+/* 숫자 열이 3개인 4열 표(예: 연봉 3개 비교)는 좁은 화면에서 셀 좌우 여백·글자(14→13px)를 줄여 360px(본문 320px)에 스크롤 없이 들어가게 한다.
+   페이지 마크업: <table className="tight"> — DataFigure(.dfBox th/td)보다 구체도가 높다 */
+@media (max-width: 640px) {
+  .sheet :global(table.tight) th, .sheet :global(table.tight) td { padding-left: 6px; padding-right: 6px; font-size: 13px; }
+}

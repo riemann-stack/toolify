@@ -19,19 +19,27 @@ import {
   formatEok,
   parseAmount,
   fmtNumInput,
+  GEN_PCT,
+  WH_PCT,
+  THRESHOLD_MAN,
+  TOP_BRACKET_PCT,
   type Frequency,
   type PortfolioAsset,
 } from './dividendUtils'
+import { ratePct } from '@/lib/krFinancialIncomeTax'
+
+/* 종합과세 예시 세율 — 과표 5,000만~8,800만 구간(지방세 포함). lib/krIncomeTax 누진세율표에서 파생 (26.4) */
+const MID_BRACKET_PCT = ratePct(PROGRESSIVE_BRACKETS[2].rate)
 
 type TabId = 'goal' | 'reverse' | 'comprehensive' | 'portfolio' | 'savings'
 
 const MONTHLY_PRESETS = [500_000, 1_000_000, 2_000_000, 3_000_000, 5_000_000]
 const RATE_PRESETS = [3, 4, 4.5, 5, 6, 7]
 const TAX_PRESETS = [
-  { label: '국내주식', v: 15.4 },
+  { label: '국내주식', v: GEN_PCT },
   { label: '해외ETF', v: 15.0 },
-  { label: '종합과세 (24.2%)', v: 24.2 },
-  { label: '종합과세 (49.5%)', v: 49.5, warn: true },
+  { label: `종합과세 (${MID_BRACKET_PCT}%)`, v: MID_BRACKET_PCT },
+  { label: `종합과세 (${TOP_BRACKET_PCT}%)`, v: TOP_BRACKET_PCT, warn: true },
 ]
 const SAFETY_PRESETS = [
   { label: '100% 딱 맞게', v: 100 },
@@ -48,7 +56,7 @@ export default function DividendClient() {
   /* ── 공통: 탭1 → 다른 탭 자동 연동용 ── */
   const [monthly, setMonthly] = useState('1,000,000')
   const [rate, setRate]       = useState('4.5')
-  const [tax, setTax]         = useState('15.4')
+  const [tax, setTax]         = useState(String(GEN_PCT))
   const [safety, setSafety]   = useState(100)
   const [current, setCurrent] = useState('')
 
@@ -143,10 +151,10 @@ export default function DividendClient() {
 
   /* ── 탭 4: 포트폴리오 ── */
   const [assets, setAssets] = useState<PortfolioAsset[]>([
-    { id: '1', name: '국내 배당주',         amount: 50_000_000, yieldPct: 4.0, frequency: 'quarterly', taxRate: 15.4 },
+    { id: '1', name: '국내 배당주',         amount: 50_000_000, yieldPct: 4.0, frequency: 'quarterly', taxRate: GEN_PCT },
     { id: '2', name: '미국 ETF (SCHD)',     amount: 50_000_000, yieldPct: 3.5, frequency: 'quarterly', taxRate: 15.0 },
     { id: '3', name: '월배당 ETF (JEPI)',   amount: 30_000_000, yieldPct: 7.0, frequency: 'monthly',   taxRate: 15.0 },
-    { id: '4', name: '한국 리츠',           amount: 20_000_000, yieldPct: 6.0, frequency: 'quarterly', taxRate: 15.4 },
+    { id: '4', name: '한국 리츠',           amount: 20_000_000, yieldPct: 6.0, frequency: 'quarterly', taxRate: GEN_PCT },
   ])
 
   const updateAsset = (id: string, patch: Partial<PortfolioAsset>) => {
@@ -155,7 +163,7 @@ export default function DividendClient() {
   const removeAsset = (id: string) => setAssets(assets.filter(a => a.id !== id))
   const addAsset = () => {
     const id = String(Date.now())
-    setAssets([...assets, { id, name: '', amount: 10_000_000, yieldPct: 4, frequency: 'quarterly', taxRate: 15.4 }])
+    setAssets([...assets, { id, name: '', amount: 10_000_000, yieldPct: 4, frequency: 'quarterly', taxRate: GEN_PCT }])
   }
 
   const portfolioResult = useMemo(() => calcPortfolio(assets), [assets])
@@ -311,7 +319,7 @@ export default function DividendClient() {
           <label className={styles.cardLabel} htmlFor="dividend-income">배당소득세율</label>
           <div className={styles.inputRow}>
             <input id="dividend-income" className={styles.numInput} type="number" inputMode="decimal"
-              placeholder="15.4" step={0.1} min={0} max={99}
+              placeholder={String(GEN_PCT)} step={0.1} min={0} max={99}
               value={tax} onChange={e => setTax(e.target.value)} />
             <span className={styles.unit}>%</span>
           </div>
@@ -693,7 +701,7 @@ export default function DividendClient() {
               </table>
             </div>
             <p className={styles.cardLabelHint} style={{ marginTop: 10 }}>
-              ※ 금융소득 중 2,000만원까지는 14%(지방세 포함 15.4%)가 유지되고, 초과분만 근로·사업소득 등과 합산해 위 세율이 적용됩니다. 다른 소득이 없으면 비교과세 때문에 실제 부담은 대체로 15.4% 근처에 머뭅니다.
+              ※ 금융소득 중 {formatEok(COMPREHENSIVE_TAX_THRESHOLD)}까지는 {WH_PCT}%(지방세 포함 {GEN_PCT}%)가 유지되고, 초과분만 근로·사업소득 등과 합산해 위 세율이 적용됩니다. 다른 소득이 없으면 비교과세 때문에 실제 부담은 대체로 {GEN_PCT}% 근처에 머뭅니다.
             </p>
           </div>
 
@@ -729,7 +737,7 @@ export default function DividendClient() {
                 </select>
                 <select className={styles.assetSelect} value={a.taxRate}
                   onChange={e => updateAsset(a.id, { taxRate: parseFloat(e.target.value) })}>
-                  <option value={15.4}>국내 15.4%</option>
+                  <option value={GEN_PCT}>국내 {GEN_PCT}%</option>
                   <option value={15.0}>해외 15.0%</option>
                 </select>
                 <button className={styles.deleteBtn}
@@ -834,9 +842,9 @@ export default function DividendClient() {
           </div>
 
           {/* 종합과세 자동 경고 */}
-          {portfolioResult.annualPretax >= 18_000_000 && (
+          {portfolioResult.annualPretax >= COMPREHENSIVE_TAX_THRESHOLD * 0.9 && (
             <div className={styles.warnBox}>
-              <strong>⚠️ 연 배당 {formatEok(portfolioResult.annualPretax)} — 종합과세 한도(2,000만) 임박:</strong>
+              <strong>⚠️ 연 배당 {formatEok(portfolioResult.annualPretax)} — 종합과세 한도({THRESHOLD_MAN}) 임박:</strong>
               ISA·연금저축·IRP 절세 계좌 활용 권장. 「절세 계좌」 탭에서 비교.
             </div>
           )}
@@ -950,7 +958,7 @@ export default function DividendClient() {
               </div>
 
               <p className={styles.cardDesc} style={{ marginTop: 4 }}>
-                ※ ISA는 총 납입 한도(1억)·연금저축 연 600만·IRP 연 900만 등 <strong>납입 한도</strong>가 있어 큰 배당 흐름 전액을 절세 계좌에 담지 못합니다. 위 비교에서 ISA 한도(약 {formatEok(100_000_000 * rateV / 100)}/년) 초과분은 일반 15.4% 과세로 반영했습니다. 연금·IRP는 적립 한도 기준이라 별도 분산이 필요합니다.
+                ※ ISA는 총 납입 한도(1억)·연금저축 연 600만·IRP 연 900만 등 <strong>납입 한도</strong>가 있어 큰 배당 흐름 전액을 절세 계좌에 담지 못합니다. 위 비교에서 ISA 한도(약 {formatEok(100_000_000 * rateV / 100)}/년) 초과분은 일반 {GEN_PCT}% 과세로 반영했습니다. 연금·IRP는 적립 한도 기준이라 별도 분산이 필요합니다.
               </p>
 
               {/* 계좌별 상세 카드 */}

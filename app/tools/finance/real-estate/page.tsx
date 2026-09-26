@@ -8,6 +8,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { calcHouseAcquisitionTax, calcNonHouseAcquisitionTax } from '@/lib/krAcquisitionTax'
+import { CURRENT_HOUSE_FEE_SCHEDULE, OFFICETEL_FEE, OTHER_PROPERTY_FEE, bracketLabel, ppmToPct } from '@/lib/krBrokerageFee'
 import ToolPage from '@/components/ToolPage'
 
 /* 취득세 예시표 — lib/krAcquisitionTax 단일 소스로 빌드 시 생성 (취득세+지방교육세+농특세 합계) */
@@ -84,13 +85,10 @@ const FAQ_LD = [
 export default function RealEstatePage() {
   return (
     <ToolPage width={760} slug="/tools/finance/real-estate">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        금융·재테크
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />부동산 수익률 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         매매가·임대·대출 레버리지를 반영한 <strong style={{ color: 'var(--text)' }}>자기자본 수익률</strong>. 진짜 남는 돈을 확인.
       </p>
 
@@ -219,14 +217,12 @@ export default function RealEstatePage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { range: '5천만 미만',     rate: '0.6%', cap: '25만원' },
-                  { range: '5천만 ~ 2억',    rate: '0.5%', cap: '80만원' },
-                  { range: '2억 ~ 9억',      rate: '0.4%', cap: '없음' },
-                  { range: '9억 ~ 12억',     rate: '0.5%', cap: '없음' },
-                  { range: '12억 ~ 15억',    rate: '0.6%', cap: '없음' },
-                  { range: '15억 이상',      rate: '0.7%', cap: '없음' },
-                ].map((r, i) => (
+                {/* lib/krBrokerageFee 단일 소스 (공인중개사법 시행규칙 별표 1) */}
+                {CURRENT_HOUSE_FEE_SCHEDULE.sale.map(b => ({
+                  range: bracketLabel(b),
+                  rate: `${ppmToPct(b.ratePpm)}%`,
+                  cap: b.cap === null ? '없음' : manLabel(b.cap),
+                })).map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.range}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.rate}</td>
@@ -237,7 +233,9 @@ export default function RealEstatePage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ※ 2021.10 개정 상한요율(이 이내에서 협의 가능)이며, 매수·매도 양쪽 모두 별도로 부담합니다. 임대차(전·월세)는 별도 요율표가 적용되며 본 계산기는 매매 기준 상한으로 자동 산정합니다.
+            ※ 2021.10 개정 상한요율(이 이내에서 협의 가능, 부가세 별도)이며, 매수·매도 양쪽 모두 별도로 부담합니다. 계산기의 &lsquo;중개 대상&rsquo;에서 주거용 오피스텔(전용 {OFFICETEL_FEE.maxAreaM2}㎡ 이하·전용 부엌·화장실·목욕시설)을 고르면 매매 {ppmToPct(OFFICETEL_FEE.saleRatePpm)}%,
+            상가·토지와 주거용 요건을 못 갖춘 오피스텔을 고르면 {ppmToPct(OTHER_PROPERTY_FEE.ratePpm)}% 이내 협의의 상한으로 자동 산정합니다. 오피스텔은 취득세로는 모두 비주거지만 중개보수는 주거용 요건에 따라 갈립니다.
+            전·월세 요율과 부가세 포함액은 <Link href="/tools/finance/brokerage-fee" style={{ color: 'var(--accent-ink)' }}>중개보수 계산기</Link>에서 확인하세요.
           </p>
         </div>
 

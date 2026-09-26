@@ -7,6 +7,22 @@ import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolPage from '@/components/ToolPage'
+import {
+  GEN_PCT, WH_PCT, LOCAL_PCT, THRESHOLD_MAN, BOTTOM_BRACKET_PCT, TOP_BRACKET_PCT,
+  requiredPrincipal, formatEok,
+} from './dividendUtils'
+
+/* 배당소득세·종합과세 기준 문구는 lib 단일 소스(lib/krFinancialIncomeTax·krIncomeTax)에서 보간 */
+const GEN_KEEP = 1 - GEN_PCT / 100                                  // 세후 비율 0.846
+const EX_YIELD = 4.5                                                // 예시 배당수익률 (%)
+const EX_NET_YIELD = Math.round(EX_YIELD * GEN_KEEP * 1000) / 1000  // 3.807
+const FAQ_NET_5 = Math.round(5 * GEN_KEEP * 100) / 100              // 세전 5% → 세후 4.23
+const EXTRA_PRINCIPAL_PCT = Math.round((1 / GEN_KEEP - 1) * 100)    // 원금 약 18% 더
+/* 목표 월배당별 필요 원금 — requiredPrincipal(목표, 4.5%, 일반과세, 안전계수 100%)로 빌드 시 계산 */
+const PRINCIPAL_ROWS = [300_000, 500_000, 1_000_000, 2_000_000, 3_000_000, 5_000_000].map(m => ({
+  m: `월 ${formatEok(m)}`, a: formatEok(m * 12), p: `약 ${formatEok(requiredPrincipal(m, EX_YIELD, GEN_PCT, 100))}`,
+}))
+const EX_PRINCIPAL_100 = formatEok(requiredPrincipal(1_000_000, EX_YIELD, GEN_PCT, 100))
 
 export const metadata = buildMetadata({
   path: '/tools/finance/dividend',
@@ -23,7 +39,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '세후 배당수익률과 세전의 차이는 얼마나 되나요?',
-                a: '국내주식 배당소득세 15.4% 기준으로, 세전 5% 배당은 세후 4.23%가 됩니다. 즉 세후 기준으로 원금이 약 18% 더 필요합니다. 실제 수령액 기반으로 목표를 세우려면 반드시 세후 수익률로 계산해야 합니다.',
+                a: `국내주식 배당소득세 ${GEN_PCT}% 기준으로, 세전 5% 배당은 세후 ${FAQ_NET_5}%가 됩니다. 즉 세후 기준으로 원금이 약 ${EXTRA_PRINCIPAL_PCT}% 더 필요합니다. 실제 수령액 기반으로 목표를 세우려면 반드시 세후 수익률로 계산해야 합니다.`,
               },
               {
                 q: '안전계수는 얼마로 설정하는 게 좋나요?',
@@ -35,7 +51,7 @@ const FAQ_LD = [
               },
               {
                 q: '금융소득 종합과세는 언제부터 해당되나요?',
-                a: '이자소득과 배당소득의 합계가 연간 2,000만원을 초과하면 종합과세 대상이 됩니다. 배당수익률 4.5% 기준으로는 약 4억 4,000만원 이상 투자 시 해당될 수 있습니다. 이 경우 세율이 최대 49.5%까지 올라가므로 ISA 계좌, 연금저축 등 절세 계좌를 활용해야 합니다. 본 도구의 「종합과세 경계」 탭에서 한도 진행률을 확인할 수 있습니다.',
+                a: `이자소득과 배당소득의 합계가 연간 ${THRESHOLD_MAN}원을 초과하면 종합과세 대상이 됩니다. 배당수익률 4.5% 기준으로는 약 4억 4,000만원 이상 투자 시 해당될 수 있습니다. 이 경우 세율이 최대 ${TOP_BRACKET_PCT}%까지 올라가므로 ISA 계좌, 연금저축 등 절세 계좌를 활용해야 합니다. 본 도구의 「종합과세 경계」 탭에서 한도 진행률을 확인할 수 있습니다.`,
               },
               {
                 q: '배당주 투자와 채권 이자 중 어느 게 더 유리한가요?',
@@ -47,7 +63,7 @@ const FAQ_LD = [
               },
               {
                 q: '종합과세에 진입하지 않는 안전한 투자 원금은 얼마인가요?',
-                a: '배당수익률에 따라 다름 — 4%: 약 5억까지, 4.5%: 약 4.4억, 5%: 약 4억, 6%: 약 3.3억, 7%: 약 2.9억 (모두 연 2,000만 도달 기준). 초과 시 ISA·연금저축·IRP로 분산 권장. 특히 ISA는 종합과세 비포함이므로 「한도 외」 효과가 있습니다.',
+                a: `배당수익률에 따라 다름 — 4%: 약 5억까지, 4.5%: 약 4.4억, 5%: 약 4억, 6%: 약 3.3억, 7%: 약 2.9억 (모두 연 ${THRESHOLD_MAN} 도달 기준). 초과 시 ISA·연금저축·IRP로 분산 권장. 특히 ISA는 종합과세 비포함이므로 「한도 외」 효과가 있습니다.`,
               },
               {
                 q: '분기 배당주만 투자하면 월별 현금흐름이 들쭉날쭉한가요?',
@@ -55,7 +71,7 @@ const FAQ_LD = [
               },
               {
                 q: 'ISA·연금저축 같은 절세 계좌가 진짜 효과 있나요?',
-                a: '네, 장기일수록 효과 큼. 같은 30년 / 4.5% / 월 적립 30만 가정 — 일반(15.4%): 누적 세금 약 2,772만, ISA(9.9%): 약 1,584만, 연금저축·IRP(5.5%): 약 990만 + 세액공제 30년 누적 약 1,780만(연 360만 × 16.5%). 연금저축·IRP는 매년 납입액의 16.5%를 세액공제(총급여 5,500만 이하)받아, 연금저축 한도 600만원을 채우면 연 99만원, 30년이면 약 2,970만원을 돌려받습니다. ⚠️ ISA·연금저축은 의무 기간이 있으므로 본인 자금 흐름 고려 후 선택.',
+                a: `네, 장기일수록 효과 큼. 같은 30년 / 4.5% / 월 적립 30만 가정 — 일반(${GEN_PCT}%): 누적 세금 약 2,772만, ISA(9.9%): 약 1,584만, 연금저축·IRP(5.5%): 약 990만 + 세액공제 30년 누적 약 1,780만(연 360만 × 16.5%). 연금저축·IRP는 매년 납입액의 16.5%를 세액공제(총급여 5,500만 이하)받아, 연금저축 한도 600만원을 채우면 연 99만원, 30년이면 약 2,970만원을 돌려받습니다. ⚠️ ISA·연금저축은 의무 기간이 있으므로 본인 자금 흐름 고려 후 선택.`,
               },
               {
                 q: '미국 배당 ETF는 환율 변동을 어떻게 고려해야 하나요?',
@@ -70,15 +86,14 @@ const FAQ_LD = [
 export default function DividendPage() {
   return (
     <ToolPage width={760} slug="/tools/finance/dividend">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />월배당 목표 자산 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         매달 받고 싶은 배당액에서 거꾸로 — <strong style={{ color: 'var(--text)' }}>필요한 원금과 월 적립액</strong>, ISA·연금 절세까지.
       </p>
 
-      <UpdatedMeta date="2026년 9월" basis="배당소득세 15.4%(소득세 14%+지방세 1.4%)·금융소득 종합과세 2,000만원 기준·ISA 9.9%·연금저축/IRP 5.5% 분리과세 및 16.5% 세액공제·고배당기업 배당소득 분리과세(2026~2028년 지급분) 반영 (2026년)" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"기획재정부 (2025년 세법개정)","href":"https://www.moef.go.kr"}]} />
+      <UpdatedMeta date="2026년 9월" basis={`배당소득세 ${GEN_PCT}%(소득세 ${WH_PCT}%+지방세 ${LOCAL_PCT}%)·금융소득 종합과세 ${THRESHOLD_MAN}원 기준·ISA 9.9%·연금저축/IRP 5.5% 분리과세 및 16.5% 세액공제·고배당기업 배당소득 분리과세(2026~2028년 지급분) 반영 (2026년)`} sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"기획재정부 (2025년 세법개정)","href":"https://www.moef.go.kr"}]} />
 
       <DividendClient />
 
@@ -104,10 +119,10 @@ export default function DividendPage() {
             ))}
           </div>
           <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '10px', padding: '14px 18px' }}>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '8px' }}>예시: 월 100만원, 연 4.5%, 세율 15.4%</p>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '8px' }}>예시: 월 100만원, 연 {EX_YIELD}%, 세율 {GEN_PCT}%</p>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, margin: 0, fontFamily: 'var(--font-sans)' }}>
-              → 세후수익률 = 4.5% × (1−0.154) = <strong style={{ color: 'var(--accent)' }}>3.807%</strong><br />
-              → 필요원금 = 1,200만원 ÷ 0.03807 = <strong style={{ color: 'var(--accent)' }}>약 3억 1,523만원</strong>
+              → 세후수익률 = {EX_YIELD}% × (1−{GEN_PCT / 100}) = <strong style={{ color: 'var(--accent)' }}>{EX_NET_YIELD}%</strong><br />
+              → 필요원금 = 1,200만원 ÷ {EX_NET_YIELD / 100} = <strong style={{ color: 'var(--accent)' }}>약 {EX_PRINCIPAL_100}</strong>
             </p>
           </div>
         </div>
@@ -118,7 +133,7 @@ export default function DividendPage() {
             목표 월배당금별 필요 원금
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '10px' }}>
-            * 세율 15.4%, 연 4.5% 배당수익률 기준
+            * 세율 {GEN_PCT}%, 연 {EX_YIELD}% 배당수익률 기준 (필요 원금 = 연 배당 ÷ 세후수익률, 빌드 시 계산)
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
@@ -130,14 +145,7 @@ export default function DividendPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { m: '월 30만원',  a: '360만원',   p: '약 9,457만원' },
-                  { m: '월 50만원',  a: '600만원',   p: '약 1억 5,761만원' },
-                  { m: '월 100만원', a: '1,200만원', p: '약 3억 1,523만원' },
-                  { m: '월 200만원', a: '2,400만원', p: '약 6억 3,046만원' },
-                  { m: '월 300만원', a: '3,600만원', p: '약 9억 4,569만원' },
-                  { m: '월 500만원', a: '6,000만원', p: '약 15억 7,614만원' },
-                ].map((r, i) => (
+                {PRINCIPAL_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.m}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.a}</td>
@@ -156,9 +164,9 @@ export default function DividendPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '16px' }}>
             {[
-              { t: '🇰🇷 국내 주식', c: '#0EA5E9', r: '15.4%', d: '배당소득세 14% + 지방소득세 1.4%. 증권사가 원천징수 후 입금.' },
-              { t: '🇺🇸 해외 ETF', c: '#0891B2', r: '15.0%', d: '미국 배당의 경우 조세조약으로 현지 원천징수. 추가 국내 과세 없음(2,000만원 이하).' },
-              { t: '📊 종합과세', c: '#EA580C', r: '6.6~49.5%', d: '연간 금융소득 2,000만원 초과 시 다른 소득과 합산. 과표 구간별 누진세율.' },
+              { t: '🇰🇷 국내 주식', c: '#0EA5E9', r: `${GEN_PCT}%`, d: `배당소득세 ${WH_PCT}% + 지방소득세 ${LOCAL_PCT}%. 증권사가 원천징수 후 입금.` },
+              { t: '🇺🇸 해외 ETF', c: '#0891B2', r: '15.0%', d: `미국 배당의 경우 조세조약으로 현지 원천징수. 추가 국내 과세 없음(${THRESHOLD_MAN}원 이하).` },
+              { t: '📊 종합과세', c: '#EA580C', r: `${BOTTOM_BRACKET_PCT}~${TOP_BRACKET_PCT}%`, d: `연간 금융소득 ${THRESHOLD_MAN}원 초과 시 다른 소득과 합산. 과표 구간별 누진세율.` },
             ].map((z, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${z.c}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: z.c, fontWeight: 700, marginBottom: '4px' }}>{z.t}</p>
@@ -179,9 +187,9 @@ export default function DividendPage() {
               </thead>
               <tbody>
                 {[
-                  { r: '금융소득 2,000만원 이하',   t: '15.4%',      n: '분리과세 (원천징수로 종결)' },
-                  { r: '금융소득 2,000만원 초과분', t: '6.6~49.5%', n: '근로·사업소득 등과 합산해 종합소득 과세표준 구간 세율 적용 (2,000만원까지는 14% 유지, 비교과세)' },
-                  { r: '종합소득 과세표준 10억원 초과', t: '49.5%', n: '최고 세율' },
+                  { r: `금융소득 ${THRESHOLD_MAN}원 이하`,   t: `${GEN_PCT}%`,      n: '분리과세 (원천징수로 종결)' },
+                  { r: `금융소득 ${THRESHOLD_MAN}원 초과분`, t: `${BOTTOM_BRACKET_PCT}~${TOP_BRACKET_PCT}%`, n: `근로·사업소득 등과 합산해 종합소득 과세표준 구간 세율 적용 (${THRESHOLD_MAN}원까지는 ${WH_PCT}% 유지, 비교과세)` },
+                  { r: '종합소득 과세표준 10억원 초과', t: `${TOP_BRACKET_PCT}%`, n: '최고 세율' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.r}</td>
@@ -194,7 +202,7 @@ export default function DividendPage() {
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
             * 배당수익률 4.5% 기준, 투자 원금 <strong style={{ color: 'var(--text)' }}>약 4억 4,444만원 이상</strong>이면 종합과세 구간 진입을 검토해야 합니다. ISA·연금저축 등 절세 계좌 활용 권장 — 본 도구의 「절세 계좌」 탭 참고.
-            세율은 금융소득 금액만으로 정해지지 않습니다. 다른 소득이 없으면 비교과세 때문에 실제 부담이 15.4% 근처에 머무는 경우가 많고, 근로소득이 크면 초과분이 높은 구간에 얹힙니다.
+            세율은 금융소득 금액만으로 정해지지 않습니다. 다른 소득이 없으면 비교과세 때문에 실제 부담이 {GEN_PCT}% 근처에 머무는 경우가 많고, 근로소득이 크면 초과분이 높은 구간에 얹힙니다.
           </p>
 
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: '14px' }}>
@@ -406,7 +414,7 @@ export default function DividendPage() {
             🛡️ 금융소득 종합과세 회피 전략
           </h2>
           <p className="g-p">
-            금융소득(이자+배당) 합계가 연 <strong style={{ color: 'var(--text)' }}>2,000만원 초과</strong> 시 종합과세 누진세 (최대 49.5%)로 전환됩니다.
+            금융소득(이자+배당) 합계가 연 <strong style={{ color: 'var(--text)' }}>{THRESHOLD_MAN}원 초과</strong> 시 종합과세 누진세 (최대 {TOP_BRACKET_PCT}%)로 전환됩니다.
             본 도구의 「종합과세 경계」 탭에서 한도 진행률·세율 적용을 시각화합니다.
           </p>
 

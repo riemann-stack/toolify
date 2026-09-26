@@ -670,6 +670,11 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 6px;
 }
+.toggleGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
 .acqCheck {
   display: flex;
   align-items: flex-start;

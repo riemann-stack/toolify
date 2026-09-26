@@ -9,7 +9,7 @@ import styles from './Footer.module.css'
 
 /** '계산 해설'(/guides) 공개 스위치 — 글 3편 이상이 실제로 발행된 뒤 true (스펙 §10.18·§10.20: 빈 지면 = 얇은 사이트 신호).
  *  Nav.tsx 의 GUIDES_LIVE 와 함께 바꿀 것. */
-const GUIDES_LIVE = false
+const GUIDES_LIVE = true
 
 export default function Footer() {
   return (
