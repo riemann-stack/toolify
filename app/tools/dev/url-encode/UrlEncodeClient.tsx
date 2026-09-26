@@ -216,11 +216,11 @@ export default function UrlEncodeClient() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'encode' ? s.tabActive : ''}`} onClick={() => setTab('encode')}>인코드/디코드</button>
-        <button className={`${s.tab} ${tab === 'parse' ? s.tabActive : ''}`}  onClick={() => setTab('parse')}>URL 분해·편집</button>
-        <button className={`${s.tab} ${tab === 'clean' ? s.tabActive : ''}`}  onClick={() => setTab('clean')}>추적 정리</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}  onClick={() => setTab('guide')}>가이드</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="URL 도구 모드">
+        <button type="button" role="tab" aria-selected={tab === 'encode'} className={`${s.tab} ${tab === 'encode' ? s.tabActive : ''}`} onClick={() => setTab('encode')}>인코드/디코드</button>
+        <button type="button" role="tab" aria-selected={tab === 'parse'} className={`${s.tab} ${tab === 'parse' ? s.tabActive : ''}`}  onClick={() => setTab('parse')}>URL 분해·편집</button>
+        <button type="button" role="tab" aria-selected={tab === 'clean'} className={`${s.tab} ${tab === 'clean' ? s.tabActive : ''}`}  onClick={() => setTab('clean')}>추적 정리</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}  onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {toast && <div className={s.toast}>{toast}</div>}
@@ -234,9 +234,9 @@ export default function UrlEncodeClient() {
             <div className={s.optBlock}>
               <span className={s.optTitle}>모드</span>
               <div className={s.optBtnRow}>
-                <button className={`${s.optBtn} ${encMode === 'auto' ? s.optBtnActive : ''}`} onClick={() => setEncMode('auto')}>자동 감지</button>
-                <button className={`${s.optBtn} ${encMode === 'encode' ? s.optBtnActive : ''}`} onClick={() => setEncMode('encode')}>인코드</button>
-                <button className={`${s.optBtn} ${encMode === 'decode' ? s.optBtnActive : ''}`} onClick={() => setEncMode('decode')}>디코드</button>
+                <button type="button" aria-pressed={encMode === 'auto'} className={`${s.optBtn} ${encMode === 'auto' ? s.optBtnActive : ''}`} onClick={() => setEncMode('auto')}>자동 감지</button>
+                <button type="button" aria-pressed={encMode === 'encode'} className={`${s.optBtn} ${encMode === 'encode' ? s.optBtnActive : ''}`} onClick={() => setEncMode('encode')}>인코드</button>
+                <button type="button" aria-pressed={encMode === 'decode'} className={`${s.optBtn} ${encMode === 'decode' ? s.optBtnActive : ''}`} onClick={() => setEncMode('decode')}>디코드</button>
               </div>
             </div>
 
@@ -244,10 +244,10 @@ export default function UrlEncodeClient() {
               <div className={s.optBlock}>
                 <span className={s.optTitle}>인코드 함수</span>
                 <div className={s.optBtnRow}>
-                  <button className={`${s.optBtn} ${encFunc === 'component' ? s.optBtnActive : ''}`} onClick={() => setEncFunc('component')}>
+                  <button type="button" aria-pressed={encFunc === 'component'} className={`${s.optBtn} ${encFunc === 'component' ? s.optBtnActive : ''}`} onClick={() => setEncFunc('component')}>
                     encodeURIComponent (권장)
                   </button>
-                  <button className={`${s.optBtn} ${encFunc === 'uri' ? s.optBtnActive : ''}`} onClick={() => setEncFunc('uri')}>
+                  <button type="button" aria-pressed={encFunc === 'uri'} className={`${s.optBtn} ${encFunc === 'uri' ? s.optBtnActive : ''}`} onClick={() => setEncFunc('uri')}>
                     encodeURI (예약 문자 보존)
                   </button>
                 </div>
@@ -410,8 +410,8 @@ export default function UrlEncodeClient() {
 
                 <div className={s.optBlock} style={{ marginTop: 12 }}>
                   <div className={s.optBtnRow}>
-                    <button className={`${s.optBtn} ${sortMode === 'order' ? s.optBtnActive : ''}`} onClick={() => setSortMode('order')}>입력 순서</button>
-                    <button className={`${s.optBtn} ${sortMode === 'alpha' ? s.optBtnActive : ''}`} onClick={() => setSortMode('alpha')}>키 알파벳</button>
+                    <button type="button" aria-pressed={sortMode === 'order'} className={`${s.optBtn} ${sortMode === 'order' ? s.optBtnActive : ''}`} onClick={() => setSortMode('order')}>입력 순서</button>
+                    <button type="button" aria-pressed={sortMode === 'alpha'} className={`${s.optBtn} ${sortMode === 'alpha' ? s.optBtnActive : ''}`} onClick={() => setSortMode('alpha')}>키 알파벳</button>
                   </div>
                 </div>
 

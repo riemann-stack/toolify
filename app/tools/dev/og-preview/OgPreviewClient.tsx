@@ -116,11 +116,13 @@ export default function OgPreviewClient() {
         <div className={s.modeRow}>
           <button
             type="button"
+            aria-pressed={mode === 'url'}
             className={`${s.modeBtn} ${mode === 'url' ? s.modeBtnActive : ''}`}
             onClick={() => setMode('url')}
           >URL 입력</button>
           <button
             type="button"
+            aria-pressed={mode === 'html'}
             className={`${s.modeBtn} ${mode === 'html' ? s.modeBtnActive : ''}`}
             onClick={() => setMode('html')}
           >HTML 붙여넣기</button>

@@ -125,39 +125,46 @@
 @media (max-width: 480px) { .resultsGrid { grid-template-columns: 1fr; } }
 
 .codeCard {
-  appearance: none;
-  -webkit-appearance: none;
+  position: relative;
+  display: flex;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius-m);
-  padding: 14px 16px;
-  text-align: left;
-  cursor: pointer;
-  font-family: var(--font-sans);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }@media (hover: hover) {
   .codeCard:hover {
   background: var(--bg3);
   transform: translateY(-1px);
 }
 }
-.codeCardHead {
+/* 상세 열기 버튼 — 카드 전체를 채운다. 즐겨찾기(.favBtn)는 형제 버튼으로 오른쪽 위에 겹쳐 둔다 */
+.codeCardMain {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: inherit;
+  text-align: left;
+  line-height: inherit;
+  font-family: var(--font-sans);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
+  flex-direction: column;
+  gap: 4px;
 }
 .codeBig {
   font-family: var(--font-sans);
   font-weight: 800;
   font-size: 32px;
   letter-spacing: -1px;
+  margin-bottom: 4px;
 }
 .favBtn {
   appearance: none;
   -webkit-appearance: none;
+  position: absolute;
+  /* 코드 숫자 줄 가운데 = 패딩 14 + 줄높이(32px×1.6=51.2)/2 ≈ 40 — 버튼 높이(터치 기기 min-height 44)와 무관하게 중심 정렬 */
+  top: 40px;
+  transform: translateY(-50%);
+  right: 16px;
   background: transparent;
   border: none;
   font-size: 18px;

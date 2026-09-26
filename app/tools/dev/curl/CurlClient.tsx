@@ -140,11 +140,11 @@ export default function CurlClient() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`}  onClick={() => setTab('convert')}>변환</button>
-        <button className={`${s.tab} ${tab === 'analyze' ? s.tabActive : ''}`}  onClick={() => setTab('analyze')}>요청 구조</button>
-        <button className={`${s.tab} ${tab === 'examples' ? s.tabActive : ''}`} onClick={() => setTab('examples')}>예시</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>가이드</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="cURL 변환기 모드">
+        <button type="button" role="tab" aria-selected={tab === 'convert'} className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`}  onClick={() => setTab('convert')}>변환</button>
+        <button type="button" role="tab" aria-selected={tab === 'analyze'} className={`${s.tab} ${tab === 'analyze' ? s.tabActive : ''}`}  onClick={() => setTab('analyze')}>요청 구조</button>
+        <button type="button" role="tab" aria-selected={tab === 'examples'} className={`${s.tab} ${tab === 'examples' ? s.tabActive : ''}`} onClick={() => setTab('examples')}>예시</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}    onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {toast && <div className={s.toast}>{toast}</div>}
@@ -212,8 +212,8 @@ export default function CurlClient() {
             <div className={s.optBlock}>
               <span className={s.optTitle}>비동기 스타일 (JS)</span>
               <div className={s.optBtnRow}>
-                <button className={`${s.optBtn} ${opts.async ? s.optBtnActive : ''}`} onClick={() => setOpts((o) => ({ ...o, async: true }))}>async / await</button>
-                <button className={`${s.optBtn} ${!opts.async ? s.optBtnActive : ''}`} onClick={() => setOpts((o) => ({ ...o, async: false }))}>Promise then</button>
+                <button type="button" aria-pressed={opts.async} className={`${s.optBtn} ${opts.async ? s.optBtnActive : ''}`} onClick={() => setOpts((o) => ({ ...o, async: true }))}>async / await</button>
+                <button type="button" aria-pressed={!opts.async} className={`${s.optBtn} ${!opts.async ? s.optBtnActive : ''}`} onClick={() => setOpts((o) => ({ ...o, async: false }))}>Promise then</button>
               </div>
             </div>
             <label className={s.checkLabel}>
@@ -426,6 +426,8 @@ export default function CurlClient() {
               {CATEGORIES.map((c) => (
                 <button
                   key={c.id}
+                  type="button"
+                  aria-pressed={filter === c.id}
                   className={`${s.categoryBtn} ${filter === c.id ? s.categoryBtnActive : ''}`}
                   onClick={() => setFilter(c.id as CategoryId | 'all')}
                 >

@@ -270,6 +270,7 @@ export default function KeyboardLayoutClient() {
         <div className={s.modeRow}>
           <button
             type="button"
+            aria-pressed={effectiveDir === 'enToKo'}
             className={`${s.modeBtn} ${effectiveDir === 'enToKo' ? s.modeBtnActive : ''}`}
             onClick={() => { setAuto(false); setDir('enToKo') }}
           >
@@ -277,6 +278,7 @@ export default function KeyboardLayoutClient() {
           </button>
           <button
             type="button"
+            aria-pressed={effectiveDir === 'koToEn'}
             className={`${s.modeBtn} ${effectiveDir === 'koToEn' ? s.modeBtnActive : ''}`}
             onClick={() => { setAuto(false); setDir('koToEn') }}
           >

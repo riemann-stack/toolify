@@ -152,11 +152,11 @@ export default function RegexClient() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'match' ? s.tabActive : ''}`}      onClick={() => setTab('match')}>매칭</button>
-        <button className={`${s.tab} ${tab === 'replace' ? s.tabActive : ''}`}    onClick={() => setTab('replace')}>치환·분할</button>
-        <button className={`${s.tab} ${tab === 'library' ? s.tabActive : ''}`}    onClick={() => setTab('library')}>패턴 라이브러리</button>
-        <button className={`${s.tab} ${tab === 'cheatsheet' ? s.tabActive : ''}`} onClick={() => setTab('cheatsheet')}>치트시트</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="정규식 도구 모드">
+        <button type="button" role="tab" aria-selected={tab === 'match'} className={`${s.tab} ${tab === 'match' ? s.tabActive : ''}`}      onClick={() => setTab('match')}>매칭</button>
+        <button type="button" role="tab" aria-selected={tab === 'replace'} className={`${s.tab} ${tab === 'replace' ? s.tabActive : ''}`}    onClick={() => setTab('replace')}>치환·분할</button>
+        <button type="button" role="tab" aria-selected={tab === 'library'} className={`${s.tab} ${tab === 'library' ? s.tabActive : ''}`}    onClick={() => setTab('library')}>패턴 라이브러리</button>
+        <button type="button" role="tab" aria-selected={tab === 'cheatsheet'} className={`${s.tab} ${tab === 'cheatsheet' ? s.tabActive : ''}`} onClick={() => setTab('cheatsheet')}>치트시트</button>
       </div>
 
       {/* ═════════════ 공통: 정규식 + flags + 테스트 문자열 (탭 1·2 공유) ═════════════ */}
@@ -320,8 +320,8 @@ export default function RegexClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>모드</span>
             <div className={s.unitRow}>
-              <button className={`${s.unitBtn} ${mode === 'replace' ? s.unitBtnActive : ''}`} onClick={() => setMode('replace')}>치환</button>
-              <button className={`${s.unitBtn} ${mode === 'split' ? s.unitBtnActive : ''}`} onClick={() => setMode('split')}>분할</button>
+              <button type="button" aria-pressed={mode === 'replace'} className={`${s.unitBtn} ${mode === 'replace' ? s.unitBtnActive : ''}`} onClick={() => setMode('replace')}>치환</button>
+              <button type="button" aria-pressed={mode === 'split'} className={`${s.unitBtn} ${mode === 'split' ? s.unitBtnActive : ''}`} onClick={() => setMode('split')}>분할</button>
             </div>
           </div>
 
@@ -399,6 +399,8 @@ export default function RegexClient() {
               {CATEGORIES.map((c) => (
                 <button
                   key={c.id}
+                  type="button"
+                  aria-pressed={filter === c.id}
                   className={`${s.categoryBtn} ${filter === c.id ? s.categoryBtnActive : ''}`}
                   onClick={() => setFilter(c.id as PatternCategory | 'all')}
                 >
@@ -515,6 +517,8 @@ function CodeSnippetBox({ pattern, flags, mode, replacement }: {
         {(['js', 'python', 'java', 'php'] as LangId[]).map((l) => (
           <button
             key={l}
+            type="button"
+            aria-pressed={lang === l}
             className={`${s.langBtn} ${lang === l ? s.langBtnActive : ''}`}
             onClick={() => setLang(l)}
           >

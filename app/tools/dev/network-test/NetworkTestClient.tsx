@@ -262,12 +262,14 @@ export default function NetworkTestClient() {
           <div className={s.sizeBtns}>
             <button
               type="button"
+              aria-pressed={downloadSize === 1}
               className={`${s.sizeBtn} ${downloadSize === 1 ? s.sizeBtnActive : ''}`}
               onClick={() => setDownloadSize(1)}
               disabled={isRunning}
             >1MB (빠른 측정)</button>
             <button
               type="button"
+              aria-pressed={downloadSize === 5}
               className={`${s.sizeBtn} ${downloadSize === 5 ? s.sizeBtnActive : ''}`}
               onClick={() => setDownloadSize(5)}
               disabled={isRunning}

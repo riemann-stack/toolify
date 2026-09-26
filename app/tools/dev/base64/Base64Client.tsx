@@ -228,19 +228,19 @@ export default function Base64Client() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabsFour}`}>
-        <button className={`${s.tabBtn} ${tab === 'text'  ? s.tabActive : ''}`} onClick={() => setTab('text')}>텍스트</button>
-        <button className={`${s.tabBtn} ${tab === 'file'  ? s.tabActive : ''}`} onClick={() => setTab('file')}>파일·이미지</button>
-        <button className={`${s.tabBtn} ${tab === 'jwt'   ? s.tabActive : ''}`} onClick={() => setTab('jwt')}>JWT 디코더</button>
-        <button className={`${s.tabBtn} ${tab === 'multi' ? s.tabActive : ''}`} onClick={() => setTab('multi')}>다중 변환</button>
+      <div className={`${s.tabs} ${s.tabsFour}`} role="tablist" aria-label="Base64 변환 모드">
+        <button type="button" role="tab" aria-selected={tab === 'text'} className={`${s.tabBtn} ${tab === 'text'  ? s.tabActive : ''}`} onClick={() => setTab('text')}>텍스트</button>
+        <button type="button" role="tab" aria-selected={tab === 'file'} className={`${s.tabBtn} ${tab === 'file'  ? s.tabActive : ''}`} onClick={() => setTab('file')}>파일·이미지</button>
+        <button type="button" role="tab" aria-selected={tab === 'jwt'} className={`${s.tabBtn} ${tab === 'jwt'   ? s.tabActive : ''}`} onClick={() => setTab('jwt')}>JWT 디코더</button>
+        <button type="button" role="tab" aria-selected={tab === 'multi'} className={`${s.tabBtn} ${tab === 'multi' ? s.tabActive : ''}`} onClick={() => setTab('multi')}>다중 변환</button>
       </div>
 
       {/* ─── TAB 1: 텍스트 ─── */}
       {tab === 'text' && (
         <>
           <div className={s.modeRow}>
-            <button className={`${s.modeBtn} ${mode === 'encode' ? s.modeBtnActive : ''}`} onClick={() => setMode('encode')}>인코딩 (텍스트 → Base64)</button>
-            <button className={`${s.modeBtn} ${mode === 'decode' ? s.modeBtnActive : ''}`} onClick={() => setMode('decode')}>디코딩 (Base64 → 텍스트)</button>
+            <button type="button" aria-pressed={mode === 'encode'} className={`${s.modeBtn} ${mode === 'encode' ? s.modeBtnActive : ''}`} onClick={() => setMode('encode')}>인코딩 (텍스트 → Base64)</button>
+            <button type="button" aria-pressed={mode === 'decode'} className={`${s.modeBtn} ${mode === 'decode' ? s.modeBtnActive : ''}`} onClick={() => setMode('decode')}>디코딩 (Base64 → 텍스트)</button>
           </div>
 
           <div className={s.optionRow}>

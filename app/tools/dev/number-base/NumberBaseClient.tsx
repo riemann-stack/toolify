@@ -276,11 +276,11 @@ export default function NumberBaseClient() {
       </div>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabsFour}`}>
-        <button className={`${s.tabBtn} ${tab === 'convert' ? s.tabActive : ''}`} onClick={() => setTab('convert')}>진법 변환</button>
-        <button className={`${s.tabBtn} ${tab === 'bit'     ? s.tabActive : ''}`} onClick={() => setTab('bit')}>비트 표현·연산</button>
-        <button className={`${s.tabBtn} ${tab === 'ascii'   ? s.tabActive : ''}`} onClick={() => setTab('ascii')}>ASCII·문자</button>
-        <button className={`${s.tabBtn} ${tab === 'learn'   ? s.tabActive : ''}`} onClick={() => setTab('learn')}>계산 과정 학습</button>
+      <div className={`${s.tabs} ${s.tabsFour}`} role="tablist" aria-label="진법 변환기 모드">
+        <button type="button" role="tab" aria-selected={tab === 'convert'} className={`${s.tabBtn} ${tab === 'convert' ? s.tabActive : ''}`} onClick={() => setTab('convert')}>진법 변환</button>
+        <button type="button" role="tab" aria-selected={tab === 'bit'} className={`${s.tabBtn} ${tab === 'bit'     ? s.tabActive : ''}`} onClick={() => setTab('bit')}>비트 표현·연산</button>
+        <button type="button" role="tab" aria-selected={tab === 'ascii'} className={`${s.tabBtn} ${tab === 'ascii'   ? s.tabActive : ''}`} onClick={() => setTab('ascii')}>ASCII·문자</button>
+        <button type="button" role="tab" aria-selected={tab === 'learn'} className={`${s.tabBtn} ${tab === 'learn'   ? s.tabActive : ''}`} onClick={() => setTab('learn')}>계산 과정 학습</button>
       </div>
 
       {/* ─── TAB 1: 진법 변환 ─── */}
@@ -298,7 +298,7 @@ export default function NumberBaseClient() {
                 { b: 10, label: '10진수 (Decimal)', hint: '0~9' },
                 { b: 16, label: '16진수 (Hex)', hint: '0~9,A~F' },
               ] as { b: Base; label: string; hint: string }[]).map(o => (
-                <button key={o.b} className={`${s.modeBtn} ${fromBase === o.b ? s.modeBtnActive : ''}`} onClick={() => setFromBase(o.b)} type="button">
+                <button key={o.b} aria-pressed={fromBase === o.b} className={`${s.modeBtn} ${fromBase === o.b ? s.modeBtnActive : ''}`} onClick={() => setFromBase(o.b)} type="button">
                   {o.label}
                 </button>
               ))}
@@ -456,7 +456,7 @@ export default function NumberBaseClient() {
             </div>
             <div className={s.widthToggle}>
               {([8, 16, 32, 64] as BitWidth[]).map(w => (
-                <button key={w} className={`${s.widthBtn} ${bitWidth === w ? s.widthActive : ''}`} onClick={() => setBitWidth(w)} type="button">
+                <button key={w} aria-pressed={bitWidth === w} className={`${s.widthBtn} ${bitWidth === w ? s.widthActive : ''}`} onClick={() => setBitWidth(w)} type="button">
                   {w}-bit
                 </button>
               ))}
@@ -549,7 +549,7 @@ export default function NumberBaseClient() {
             </div>
             <div className={s.opToggle}>
               {(['AND', 'OR', 'XOR', 'NOT', 'LSHIFT', 'RSHIFT'] as BitOp[]).map(o => (
-                <button key={o} className={`${s.opToggleBtn} ${op === o ? s.opToggleActive : ''}`} onClick={() => setOp(o)} type="button">{o}</button>
+                <button key={o} aria-pressed={op === o} className={`${s.opToggleBtn} ${op === o ? s.opToggleActive : ''}`} onClick={() => setOp(o)} type="button">{o}</button>
               ))}
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
@@ -663,7 +663,7 @@ export default function NumberBaseClient() {
             </div>
             <div className={s.modeRow}>
               {([10, 16, 8, 2] as Base[]).map(b => (
-                <button key={b} className={`${s.modeBtn} ${codeBase === b ? s.modeBtnActive : ''}`} onClick={() => setCodeBase(b)} type="button">{b}진수</button>
+                <button key={b} aria-pressed={codeBase === b} className={`${s.modeBtn} ${codeBase === b ? s.modeBtnActive : ''}`} onClick={() => setCodeBase(b)} type="button">{b}진수</button>
               ))}
             </div>
             <input
@@ -722,7 +722,7 @@ export default function NumberBaseClient() {
                 { b: 10 as Base, label: '10진수 → 2진수' },
                 { b: 8 as Base, label: '8진수 → 10진수' },
               ]).map(o => (
-                <button key={o.b} className={`${s.modeBtn} ${learnFrom === o.b ? s.modeBtnActive : ''}`} onClick={() => setLearnFrom(o.b)} type="button">
+                <button key={o.b} aria-pressed={learnFrom === o.b} className={`${s.modeBtn} ${learnFrom === o.b ? s.modeBtnActive : ''}`} onClick={() => setLearnFrom(o.b)} type="button">
                   {o.label}
                 </button>
               ))}

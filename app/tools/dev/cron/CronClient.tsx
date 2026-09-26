@@ -388,11 +388,11 @@ export default function CronClient() {
   return (
     <div className={s.wrap}>
       {/* 모드 탭 */}
-      <div className={`${s.tabs}`} style={{ gridTemplateColumns: '1fr 1fr' }}>
-        <button className={`${s.tabBtn} ${mode === 'parse' ? s.tabActive : ''}`} onClick={() => setMode('parse')} type="button">
+      <div className={`${s.tabs}`} style={{ gridTemplateColumns: '1fr 1fr' }} role="tablist" aria-label="크론 표현식 모드">
+        <button role="tab" aria-selected={mode === 'parse'} className={`${s.tabBtn} ${mode === 'parse' ? s.tabActive : ''}`} onClick={() => setMode('parse')} type="button">
           표현식 해석
         </button>
-        <button className={`${s.tabBtn} ${mode === 'build' ? s.tabActive : ''}`} onClick={enterBuilder} type="button">
+        <button role="tab" aria-selected={mode === 'build'} className={`${s.tabBtn} ${mode === 'build' ? s.tabActive : ''}`} onClick={enterBuilder} type="button">
           빌더로 만들기
         </button>
       </div>
@@ -559,6 +559,7 @@ export default function CronClient() {
                   {[5, 10].map(n => (
                     <button
                       key={n}
+                      aria-pressed={count === n}
                       className={`${s.subActionBtn} ${count === n ? s.subActionBtnActive : ''}`}
                       onClick={() => setCount(n)}
                       type="button"

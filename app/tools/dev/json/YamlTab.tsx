@@ -219,13 +219,13 @@ export default function YamlTab({ seedInput, onSeedApplied }: YamlTabProps = {})
             <div className={s.optBlock}>
               <span className={s.optTitle}>방향</span>
               <div className={s.optBtnRow}>
-                <button className={`${s.optBtn} ${direction === 'auto' ? s.optBtnActive : ''}`} onClick={() => setDirection('auto')}>
+                <button type="button" aria-pressed={direction === 'auto'} className={`${s.optBtn} ${direction === 'auto' ? s.optBtnActive : ''}`} onClick={() => setDirection('auto')}>
                   자동 감지
                 </button>
-                <button className={`${s.optBtn} ${direction === 'y2j' ? s.optBtnActive : ''}`} onClick={() => setDirection('y2j')}>
+                <button type="button" aria-pressed={direction === 'y2j'} className={`${s.optBtn} ${direction === 'y2j' ? s.optBtnActive : ''}`} onClick={() => setDirection('y2j')}>
                   YAML → JSON
                 </button>
-                <button className={`${s.optBtn} ${direction === 'j2y' ? s.optBtnActive : ''}`} onClick={() => setDirection('j2y')}>
+                <button type="button" aria-pressed={direction === 'j2y'} className={`${s.optBtn} ${direction === 'j2y' ? s.optBtnActive : ''}`} onClick={() => setDirection('j2y')}>
                   JSON → YAML
                 </button>
               </div>
@@ -237,6 +237,8 @@ export default function YamlTab({ seedInput, onSeedApplied }: YamlTabProps = {})
                 {INDENT_OPTIONS.map((o) => (
                   <button
                     key={o.id}
+                    type="button"
+                    aria-pressed={indent === o.id}
                     className={`${s.optBtn} ${indent === o.id ? s.optBtnActive : ''}`}
                     onClick={() => setIndent(o.id)}
                   >
@@ -249,10 +251,10 @@ export default function YamlTab({ seedInput, onSeedApplied }: YamlTabProps = {})
             <div className={s.optBlock}>
               <span className={s.optTitle}>JSON 출력</span>
               <div className={s.optBtnRow}>
-                <button className={`${s.optBtn} ${!jsonCompact ? s.optBtnActive : ''}`} onClick={() => setJsonCompact(false)}>
+                <button type="button" aria-pressed={!jsonCompact} className={`${s.optBtn} ${!jsonCompact ? s.optBtnActive : ''}`} onClick={() => setJsonCompact(false)}>
                   Pretty (들여쓰기)
                 </button>
-                <button className={`${s.optBtn} ${jsonCompact ? s.optBtnActive : ''}`} onClick={() => setJsonCompact(true)}>
+                <button type="button" aria-pressed={jsonCompact} className={`${s.optBtn} ${jsonCompact ? s.optBtnActive : ''}`} onClick={() => setJsonCompact(true)}>
                   Compact (한 줄)
                 </button>
               </div>
@@ -450,6 +452,8 @@ export default function YamlTab({ seedInput, onSeedApplied }: YamlTabProps = {})
               {CATEGORIES.map((c) => (
                 <button
                   key={c.id}
+                  type="button"
+                  aria-pressed={filter === c.id}
                   className={`${s.categoryBtn} ${filter === c.id ? s.categoryBtnActive : ''}`}
                   onClick={() => setFilter(c.id as CategoryId | 'all')}
                 >

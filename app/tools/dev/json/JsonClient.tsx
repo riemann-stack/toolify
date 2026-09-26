@@ -263,11 +263,11 @@ export default function JsonClient() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabsFour}`}>
-        <button className={`${s.tabBtn} ${tab === 'format'     ? s.tabActive : ''}`} onClick={() => setTab('format')}>정렬·압축·검증</button>
-        <button className={`${s.tabBtn} ${tab === 'tree'       ? s.tabActive : ''}`} onClick={() => setTab('tree')}>트리 뷰어</button>
-        <button className={`${s.tabBtn} ${tab === 'transform'  ? s.tabActive : ''}`} onClick={() => setTab('transform')}>변환 (TS·YAML·CSV)</button>
-        <button className={`${s.tabBtn} ${tab === 'yaml'       ? s.tabActive : ''}`} onClick={() => setTab('yaml')}>YAML ↔ JSON</button>
+      <div className={`${s.tabs} ${s.tabsFour}`} role="tablist" aria-label="JSON 도구 모드">
+        <button type="button" role="tab" aria-selected={tab === 'format'} className={`${s.tabBtn} ${tab === 'format'     ? s.tabActive : ''}`} onClick={() => setTab('format')}>정렬·압축·검증</button>
+        <button type="button" role="tab" aria-selected={tab === 'tree'} className={`${s.tabBtn} ${tab === 'tree'       ? s.tabActive : ''}`} onClick={() => setTab('tree')}>트리 뷰어</button>
+        <button type="button" role="tab" aria-selected={tab === 'transform'} className={`${s.tabBtn} ${tab === 'transform'  ? s.tabActive : ''}`} onClick={() => setTab('transform')}>변환 (TS·YAML·CSV)</button>
+        <button type="button" role="tab" aria-selected={tab === 'yaml'} className={`${s.tabBtn} ${tab === 'yaml'       ? s.tabActive : ''}`} onClick={() => setTab('yaml')}>YAML ↔ JSON</button>
       </div>
 
       {/* 공통 입력 — YAML ↔ JSON 탭은 자체 입력·검증을 쓰므로 숨김 (role=status 중복 방지) */}
@@ -343,6 +343,8 @@ export default function JsonClient() {
               {([2, 4] as (2 | 4)[]).map(n => (
                 <button
                   key={n}
+                  type="button"
+                  aria-pressed={indent === n}
                   className={`${s.subActionBtn} ${indent === n ? s.subActionBtnActive : ''}`}
                   onClick={() => setIndent(n)}
                 >
@@ -409,6 +411,8 @@ export default function JsonClient() {
             ].map(o => (
               <button
                 key={o.k}
+                type="button"
+                aria-pressed={transformMode === o.k}
                 className={`${s.subActionBtn} ${transformMode === o.k ? s.subActionBtnActive : ''}`}
                 onClick={() => setTransformMode(o.k as typeof transformMode)}
                 disabled={!parsed.ok}

@@ -40,10 +40,13 @@ export default function CssConverterClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="CSS 변환 종류">
         {TABS.map((t) => (
           <button
             key={t.key}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.key}
             className={`${s.tab} ${tab === t.key ? s.tabActive : ''}`}
             onClick={() => setTab(t.key)}
           >
@@ -132,6 +135,8 @@ function LengthTab() {
             {LEN_UNITS.map((u) => (
               <button
                 key={u}
+                type="button"
+                aria-pressed={fromUnit === u}
                 className={`${s.unitBtn} ${fromUnit === u ? s.unitBtnActive : ''}`}
                 onClick={() => setFromUnit(u)}
               >
@@ -346,6 +351,8 @@ function LineHeightTab() {
             {LH_UNITS.map((u) => (
               <button
                 key={u}
+                type="button"
+                aria-pressed={unit === u}
                 className={`${s.unitBtn} ${unit === u ? s.unitBtnActive : ''}`}
                 onClick={() => setUnit(u)}
               >
@@ -465,7 +472,7 @@ function LetterSpacingTab() {
           <label className={s.fieldLabel}>현재 단위</label>
           <div className={s.unitRow}>
             {LS_UNITS.map((u) => (
-              <button key={u} className={`${s.unitBtn} ${unit === u ? s.unitBtnActive : ''}`} onClick={() => setUnit(u)}>{u}</button>
+              <button key={u} type="button" aria-pressed={unit === u} className={`${s.unitBtn} ${unit === u ? s.unitBtnActive : ''}`} onClick={() => setUnit(u)}>{u}</button>
             ))}
           </div>
         </div>
@@ -593,8 +600,8 @@ function AspectTab() {
     <>
       <div className={s.card}>
         <div className={s.toggleRow}>
-          <button className={`${s.toggleBtn} ${mode === 'ratio' ? s.toggleBtnActive : ''}`} onClick={() => setMode('ratio')}>비율 문자열</button>
-          <button className={`${s.toggleBtn} ${mode === 'wh' ? s.toggleBtnActive : ''}`} onClick={() => setMode('wh')}>width × height</button>
+          <button type="button" aria-pressed={mode === 'ratio'} className={`${s.toggleBtn} ${mode === 'ratio' ? s.toggleBtnActive : ''}`} onClick={() => setMode('ratio')}>비율 문자열</button>
+          <button type="button" aria-pressed={mode === 'wh'} className={`${s.toggleBtn} ${mode === 'wh' ? s.toggleBtnActive : ''}`} onClick={() => setMode('wh')}>width × height</button>
         </div>
 
         {mode === 'ratio' ? (
@@ -835,8 +842,8 @@ function ClampTab() {
           <div className={s.field} style={{ margin: 0 }}>
             <label className={s.fieldLabel}>출력 단위</label>
             <div className={s.unitRow}>
-              <button className={`${s.unitBtn} ${outUnit === 'rem' ? s.unitBtnActive : ''}`} onClick={() => setOutUnit('rem')}>rem</button>
-              <button className={`${s.unitBtn} ${outUnit === 'px' ? s.unitBtnActive : ''}`} onClick={() => setOutUnit('px')}>px</button>
+              <button type="button" aria-pressed={outUnit === 'rem'} className={`${s.unitBtn} ${outUnit === 'rem' ? s.unitBtnActive : ''}`} onClick={() => setOutUnit('rem')}>rem</button>
+              <button type="button" aria-pressed={outUnit === 'px'} className={`${s.unitBtn} ${outUnit === 'px' ? s.unitBtnActive : ''}`} onClick={() => setOutUnit('px')}>px</button>
             </div>
           </div>
           <div className={s.field} style={{ margin: 0, minWidth: 160 }}>
@@ -987,7 +994,7 @@ function TimeAngleTab() {
           <label className={s.fieldLabel}>단위</label>
           <div className={s.unitRow}>
             {(['ms', 's'] as TimeUnit[]).map((u) => (
-              <button key={u} className={`${s.unitBtn} ${tUnit === u ? s.unitBtnActive : ''}`} onClick={() => setTUnit(u)}>{u}</button>
+              <button key={u} type="button" aria-pressed={tUnit === u} className={`${s.unitBtn} ${tUnit === u ? s.unitBtnActive : ''}`} onClick={() => setTUnit(u)}>{u}</button>
             ))}
           </div>
         </div>
@@ -1052,7 +1059,7 @@ function TimeAngleTab() {
           <label className={s.fieldLabel}>단위</label>
           <div className={s.unitRow}>
             {(['deg', 'rad', 'turn', 'grad'] as AngUnit[]).map((u) => (
-              <button key={u} className={`${s.unitBtn} ${aUnit === u ? s.unitBtnActive : ''}`} onClick={() => setAUnit(u)}>{u}</button>
+              <button key={u} type="button" aria-pressed={aUnit === u} className={`${s.unitBtn} ${aUnit === u ? s.unitBtnActive : ''}`} onClick={() => setAUnit(u)}>{u}</button>
             ))}
           </div>
         </div>

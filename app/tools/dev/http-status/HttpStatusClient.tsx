@@ -132,11 +132,11 @@ export default function HttpStatusClient() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'search' ? s.tabActive : ''}`}     onClick={() => setTab('search')}>검색</button>
-        <button className={`${s.tab} ${tab === 'categories' ? s.tabActive : ''}`} onClick={() => setTab('categories')}>카테고리</button>
-        <button className={`${s.tab} ${tab === 'debug' ? s.tabActive : ''}`}      onClick={() => setTab('debug')}>디버깅</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}      onClick={() => setTab('guide')}>가이드</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="HTTP 상태 코드 보기 방식">
+        <button type="button" role="tab" aria-selected={tab === 'search'} className={`${s.tab} ${tab === 'search' ? s.tabActive : ''}`}     onClick={() => setTab('search')}>검색</button>
+        <button type="button" role="tab" aria-selected={tab === 'categories'} className={`${s.tab} ${tab === 'categories' ? s.tabActive : ''}`} onClick={() => setTab('categories')}>카테고리</button>
+        <button type="button" role="tab" aria-selected={tab === 'debug'} className={`${s.tab} ${tab === 'debug' ? s.tabActive : ''}`}      onClick={() => setTab('debug')}>디버깅</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`}      onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {/* ═════════════ 탭 1: 검색 ═════════════ */}
@@ -170,6 +170,8 @@ export default function HttpStatusClient() {
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
+                  type="button"
+                  aria-pressed={filter === cat.id}
                   className={`${s.filterChip} ${filter === cat.id ? s.filterChipActive : ''}`}
                   onClick={() => { setFilter(cat.id); setSelectedCode(null) }}
                 >
@@ -208,7 +210,7 @@ export default function HttpStatusClient() {
                   color={catColor(c.category)}
                   isFav={favorites.includes(c.code)}
                   onClick={() => setSelectedCode(c.code)}
-                  onToggleFav={(e) => { e.stopPropagation(); toggleFav(c.code) }}
+                  onToggleFav={() => toggleFav(c.code)}
                 />
               ))}
               {results.length > 60 && (
@@ -277,6 +279,8 @@ export default function HttpStatusClient() {
               {DEBUG_FILTERS.map((f) => (
                 <button
                   key={f.id}
+                  type="button"
+                  aria-pressed={debugFilter === f.id}
                   className={`${s.filterChip} ${debugFilter === f.id ? s.filterChipActive : ''}`}
                   onClick={() => setDebugFilter(f.id)}
                 >
@@ -431,31 +435,22 @@ export default function HttpStatusClient() {
    서브 컴포넌트
    ═════════════════════════════════════════════ */
 
+/* 카드 본문(상세 열기)과 즐겨찾기는 형제 버튼 — role=button 안에 버튼을 중첩하면
+   즐겨찾기가 보조기기에서 사라진다(axe nested-interactive). 본문 버튼이 카드 전체를 채운다. */
 function CodeCard({ code, color, isFav, onClick, onToggleFav }: {
-  code: StatusCode; color: string; isFav: boolean; onClick: () => void; onToggleFav: (e: React.MouseEvent) => void
+  code: StatusCode; color: string; isFav: boolean; onClick: () => void; onToggleFav: () => void
 }) {
   return (
-    <div
-      className={s.codeCard}
-      onClick={onClick}
-      onKeyDown={(e) => {
-        // 안쪽 즐겨찾기 버튼에서 올라온 키 입력은 무시 — 버튼 자체 동작(토글)이 실행되게
-        if (e.target !== e.currentTarget) return
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() }
-      }}
-      role="button"
-      tabIndex={0}
-      style={{ borderColor: color + '40' }}
-    >
-      <div className={s.codeCardHead}>
+    <div className={s.codeCard} style={{ borderColor: color + '40' }}>
+      <button type="button" className={s.codeCardMain} onClick={onClick}>
         <span className={s.codeBig} style={{ color }}>{code.code}</span>
-        <button type="button" className={s.favBtn} onClick={onToggleFav} aria-label={isFav ? '즐겨찾기 해제' : '즐겨찾기 추가'} aria-pressed={isFav}>
-          {isFav ? '⭐' : '☆'}
-        </button>
-      </div>
-      <p className={s.codeName}>{code.emoji} {code.name}</p>
-      <p className={s.codeNameKr}>{code.nameKr}</p>
-      <p className={s.codeShort}>{code.shortDesc}</p>
+        <span className={s.codeName}>{code.emoji} {code.name}</span>
+        <span className={s.codeNameKr}>{code.nameKr}</span>
+        <span className={s.codeShort}>{code.shortDesc}</span>
+      </button>
+      <button type="button" className={s.favBtn} onClick={onToggleFav} aria-label={`${code.code} 즐겨찾기`} aria-pressed={isFav}>
+        {isFav ? '⭐' : '☆'}
+      </button>
     </div>
   )
 }

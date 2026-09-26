@@ -196,11 +196,11 @@ export default function HashClient() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
-        <button className={`${s.tab} ${tab === 'text' ? s.tabActive : ''}`}  onClick={() => setTab('text')}>텍스트</button>
-        <button className={`${s.tab} ${tab === 'file' ? s.tabActive : ''}`}  onClick={() => setTab('file')}>파일</button>
-        <button className={`${s.tab} ${tab === 'hmac' ? s.tabActive : ''}`}  onClick={() => setTab('hmac')}>HMAC</button>
-        <button className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>가이드</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="해시 생성 모드">
+        <button type="button" role="tab" aria-selected={tab === 'text'} className={`${s.tab} ${tab === 'text' ? s.tabActive : ''}`}  onClick={() => setTab('text')}>텍스트</button>
+        <button type="button" role="tab" aria-selected={tab === 'file'} className={`${s.tab} ${tab === 'file' ? s.tabActive : ''}`}  onClick={() => setTab('file')}>파일</button>
+        <button type="button" role="tab" aria-selected={tab === 'hmac'} className={`${s.tab} ${tab === 'hmac' ? s.tabActive : ''}`}  onClick={() => setTab('hmac')}>HMAC</button>
+        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>가이드</button>
       </div>
 
       {/* ═════════════ 탭 1: 텍스트 해시 ═════════════ */}
@@ -229,18 +229,18 @@ export default function HashClient() {
             <div className={s.optRow}>
               <div className={s.optGroup}>
                 <span className={s.optLabel}>인코딩</span>
-                <button className={`${s.optBtn} ${textEncoding === 'utf8' ? s.optBtnActive : ''}`} onClick={() => setTextEncoding('utf8')}>UTF-8</button>
-                <button className={`${s.optBtn} ${textEncoding === 'ascii' ? s.optBtnActive : ''}`} onClick={() => setTextEncoding('ascii')}>ASCII</button>
+                <button type="button" aria-pressed={textEncoding === 'utf8'} className={`${s.optBtn} ${textEncoding === 'utf8' ? s.optBtnActive : ''}`} onClick={() => setTextEncoding('utf8')}>UTF-8</button>
+                <button type="button" aria-pressed={textEncoding === 'ascii'} className={`${s.optBtn} ${textEncoding === 'ascii' ? s.optBtnActive : ''}`} onClick={() => setTextEncoding('ascii')}>ASCII</button>
               </div>
               {textEncoding === 'ascii' && hasNonAscii(textInput) && (
                 <p className={s.warnText} role="status">⚠️ ASCII 모드에서는 한글·이모지 등 ASCII 밖 문자가 모두 ?(0x3F)로 바뀐 뒤 해시됩니다. 원문 그대로의 해시가 필요하면 UTF-8을 쓰세요.</p>
               )}
               <div className={s.optGroup}>
                 <span className={s.optLabel}>출력</span>
-                <button className={`${s.optBtn} ${textFormat === 'hex_lower' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('hex_lower')}>hex</button>
-                <button className={`${s.optBtn} ${textFormat === 'hex_upper' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('hex_upper')}>HEX</button>
-                <button className={`${s.optBtn} ${textFormat === 'base64' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('base64')}>Base64</button>
-                <button className={`${s.optBtn} ${textFormat === 'base64url' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('base64url')}>Base64URL</button>
+                <button type="button" aria-pressed={textFormat === 'hex_lower'} className={`${s.optBtn} ${textFormat === 'hex_lower' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('hex_lower')}>hex</button>
+                <button type="button" aria-pressed={textFormat === 'hex_upper'} className={`${s.optBtn} ${textFormat === 'hex_upper' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('hex_upper')}>HEX</button>
+                <button type="button" aria-pressed={textFormat === 'base64'} className={`${s.optBtn} ${textFormat === 'base64' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('base64')}>Base64</button>
+                <button type="button" aria-pressed={textFormat === 'base64url'} className={`${s.optBtn} ${textFormat === 'base64url' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('base64url')}>Base64URL</button>
               </div>
             </div>
           </div>
@@ -415,6 +415,8 @@ export default function HashClient() {
               {HMAC_ALGORITHMS.map((alg) => (
                 <button
                   key={alg.id}
+                  type="button"
+                  aria-pressed={hmacAlg === alg.id}
                   className={`${s.algBtn} ${hmacAlg === alg.id ? s.algBtnActive : ''}`}
                   onClick={() => setHmacAlg(alg.id as HmacAlgorithmId)}
                 >
@@ -429,9 +431,9 @@ export default function HashClient() {
             <label className={s.cardLabel} htmlFor="hash-hmac-key">Secret Key</label>
             <div className={s.optGroup} style={{ marginBottom: 10 }}>
               <span className={s.optLabel}>형식</span>
-              <button className={`${s.optBtn} ${hmacKeyFormat === 'text' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('text')}>Text</button>
-              <button className={`${s.optBtn} ${hmacKeyFormat === 'base64' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('base64')}>Base64</button>
-              <button className={`${s.optBtn} ${hmacKeyFormat === 'hex' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('hex')}>Hex</button>
+              <button type="button" aria-pressed={hmacKeyFormat === 'text'} className={`${s.optBtn} ${hmacKeyFormat === 'text' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('text')}>Text</button>
+              <button type="button" aria-pressed={hmacKeyFormat === 'base64'} className={`${s.optBtn} ${hmacKeyFormat === 'base64' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('base64')}>Base64</button>
+              <button type="button" aria-pressed={hmacKeyFormat === 'hex'} className={`${s.optBtn} ${hmacKeyFormat === 'hex' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('hex')}>Hex</button>
             </div>
             <input
               id="hash-hmac-key"
@@ -458,10 +460,10 @@ export default function HashClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>출력 형식</span>
             <div className={s.optGroup}>
-              <button className={`${s.optBtn} ${hmacFormat === 'hex_lower' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('hex_lower')}>hex</button>
-              <button className={`${s.optBtn} ${hmacFormat === 'hex_upper' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('hex_upper')}>HEX</button>
-              <button className={`${s.optBtn} ${hmacFormat === 'base64' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('base64')}>Base64</button>
-              <button className={`${s.optBtn} ${hmacFormat === 'base64url' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('base64url')}>Base64URL (JWT)</button>
+              <button type="button" aria-pressed={hmacFormat === 'hex_lower'} className={`${s.optBtn} ${hmacFormat === 'hex_lower' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('hex_lower')}>hex</button>
+              <button type="button" aria-pressed={hmacFormat === 'hex_upper'} className={`${s.optBtn} ${hmacFormat === 'hex_upper' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('hex_upper')}>HEX</button>
+              <button type="button" aria-pressed={hmacFormat === 'base64'} className={`${s.optBtn} ${hmacFormat === 'base64' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('base64')}>Base64</button>
+              <button type="button" aria-pressed={hmacFormat === 'base64url'} className={`${s.optBtn} ${hmacFormat === 'base64url' ? s.optBtnActive : ''}`} onClick={() => setHmacFormat('base64url')}>Base64URL (JWT)</button>
             </div>
             <button className={s.primaryBtn} onClick={runHmac}>서명 생성</button>
             {hmacError && <p className={s.warnText}>⚠️ {hmacError}</p>}
