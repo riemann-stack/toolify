@@ -568,7 +568,7 @@ export default function CostRateClient() {
                   <p className={styles.donutCenterValue}>{fmt(price)}</p>
                 </div>
               </div>
-              <table className={styles.breakdownTable}>
+              <div className="tableScroll"><table className={styles.breakdownTable}>
                 <tbody>
                   {breakdown.filter(b => b.value > 0 && !b.isMargin).map((b, i) => (
                     <tr key={i}>
@@ -583,7 +583,7 @@ export default function CostRateClient() {
                     <td>{Math.max(0, marginRate).toFixed(1)}%</td>
                   </tr>
                 </tbody>
-              </table>
+              </table></div>
             </div>
           </div>
 

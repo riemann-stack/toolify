@@ -175,7 +175,7 @@ export default function RegexPage() {
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
           그룹은 <strong>괄호 ()</strong>로 감싸 만듭니다. 매치된 부분을 따로 추출하거나 치환에 참조할 수 있어요.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10, marginTop: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 10, marginTop: 14, overflowWrap: 'anywhere' }}>
           <div style={{ background: 'var(--bg3)', borderLeft: '3px solid var(--sky-500)', borderRadius: 'var(--radius-s)', padding: '12px 16px' }}>
             <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: 'var(--sky-500)' }}>1. 인덱스 캡처 그룹 (...)</p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>

@@ -233,7 +233,7 @@ function LengthTab() {
 
         <div role="status">
         {valid ? (
-          <table className={s.resultTable}>
+          <div className="tableScroll"><table className={s.resultTable}>
             <thead>
               <tr>
                 <th scope="col">단위</th>
@@ -264,7 +264,7 @@ function LengthTab() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         ) : (
           <p style={{ fontSize: 13, color: 'var(--muted)' }}>{negBlocked ? `${prop} 속성은 음수를 쓸 수 없습니다. 음수는 margin에서만 유효합니다.` : '값을 입력하세요.'}</p>
         )}
@@ -360,7 +360,7 @@ function LineHeightTab() {
         <span className={s.cardLabel}>변환 결과</span>
         {valid ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <thead>
                 <tr>
                   <th scope="col">형식</th>
@@ -390,7 +390,7 @@ function LineHeightTab() {
                   )
                 })}
               </tbody>
-            </table>
+            </table></div>
 
             <div className={s.sectionDivider} />
             <p className={s.sectionTitle}>추천 코드</p>
@@ -475,7 +475,7 @@ function LetterSpacingTab() {
         <span className={s.cardLabel}>변환 결과</span>
         {valid ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <thead>
                 <tr>
                   <th scope="col">형식</th>
@@ -511,7 +511,7 @@ function LetterSpacingTab() {
                   )
                 })}
               </tbody>
-            </table>
+            </table></div>
 
             <div className={`${s.hintCard} ${s.hintRecommend}`}>
               ✅ <strong>em 단위 권장</strong> — font-size 변경 시 자간이 자동으로 비례 조정됩니다.
@@ -624,7 +624,7 @@ function AspectTab() {
         <span className={s.cardLabel}>변환 결과</span>
         {pair ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <tbody>
                 <tr>
                   <td className={s.unitCell}>aspect-ratio</td>
@@ -650,7 +650,7 @@ function AspectTab() {
                   <td></td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
 
             <div className={s.previewWrap}>
               <div className={s.previewBox} style={{ height: `${previewHeight}px`, ...(previewWidth ? { width: `${previewWidth}px` } : {}) }}>
@@ -1000,7 +1000,7 @@ function TimeAngleTab() {
 
         {tValid ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <thead>
                 <tr><th scope="col">단위</th><th scope="col">값</th><th scope="col"></th></tr>
               </thead>
@@ -1020,7 +1020,7 @@ function TimeAngleTab() {
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
 
             <div className={s.propSelectRow} style={{ marginTop: 12 }}>
               <label className={s.propSelectLabel} htmlFor="css-converter-time-prop">CSS 속성</label>
@@ -1065,7 +1065,7 @@ function TimeAngleTab() {
 
         {aValid ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <thead>
                 <tr><th scope="col">단위</th><th scope="col">값</th><th scope="col"></th></tr>
               </thead>
@@ -1082,7 +1082,7 @@ function TimeAngleTab() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
 
             <div className={s.propSelectRow} style={{ marginTop: 12 }}>
               <label className={s.propSelectLabel} htmlFor="css-converter-angle-prop">CSS 속성</label>
