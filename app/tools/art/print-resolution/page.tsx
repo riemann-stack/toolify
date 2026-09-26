@@ -91,11 +91,10 @@ const FAQ_LD = [
 export default function PrintResolutionPage() {
   return (
     <ToolPage width={760} slug="/tools/art/print-resolution">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />인쇄 해상도 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         인쇄 크기와 용도(DPI)로 <strong style={{ color: 'var(--text)' }}>필요한 최소 픽셀</strong>을 구하고, 반대로 내 이미지로 <strong style={{ color: 'var(--text)' }}>인쇄 품질을 역산</strong>합니다. 사진·A4·포스터·현수막까지.
       </p>
 

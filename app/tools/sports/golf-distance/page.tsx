@@ -59,11 +59,10 @@ const FAQ_LD = [
 export default function GolfDistancePage() {
   return (
     <ToolPage width={760} slug="/tools/sports/golf-distance">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />골프 비거리 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         드라이버·7번 기록으로 <strong style={{ color: 'var(--text)' }}>전체 클럽 비거리 추정</strong> + 바람·고도·기온 보정.
       </p>
 

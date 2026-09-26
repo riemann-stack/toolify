@@ -55,11 +55,10 @@ const FAQ_LD = [
 export default function TimezonePage() {
   return (
     <ToolPage width={760} slug="/tools/date/timezone">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="date" />시간대(타임존) 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         UTC·KST·EST·PST·BST·시드니·인도(+5:30)·이란(+3:30)·네팔(+5:45) 등 <strong style={{ color: 'var(--text)' }}>28개 도시 동시 변환</strong>.
         DST(서머타임) 자동 적용 · 국제 회의 잡기용 <strong style={{ color: 'var(--text)' }}>겹치는 근무시간 슬롯 추천</strong>.
       </p>

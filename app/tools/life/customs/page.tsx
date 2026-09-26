@@ -68,13 +68,10 @@ const FAQ_LD = [
 export default function CustomsPage() {
   return (
     <ToolPage width={880} slug="/tools/life/customs">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        생활·재미
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />관부가세 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         미국·중국·유럽·일본 직구 면세 한도(물품가격 기준) + 29개 품목 관세율·부가세·개소세·주세. <strong style={{ color: 'var(--text)' }}>간이 예상세액</strong> (HS·원산지·FTA 미반영).
       </p>
 

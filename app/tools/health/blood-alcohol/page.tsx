@@ -97,11 +97,10 @@ const FAQ_LD = [
 export default function BloodAlcoholPage() {
   return (
     <ToolPage width={760} slug="/tools/health/blood-alcohol">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />혈중알코올 잔존량 추정기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         마신 술의 양과 체중으로 체내 알코올이 얼마나 남아 있고 언제쯤 분해될지 Widmark 공식으로 <strong style={{ color: 'var(--text)' }}>대략 추정</strong>합니다. 개인차가 커서 <strong style={{ color: 'var(--text)' }}>운전해도 되는지 판단하는 데는 쓸 수 없습니다</strong>.
       </p>
 

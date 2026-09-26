@@ -55,11 +55,10 @@ const FAQ_LD = [
 export default function PetPage() {
   return (
     <ToolPage width={760} slug="/tools/health/pet">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />반려동물 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         강아지·고양이 사람 나이와 사료량·체중 평가·<strong style={{ color: 'var(--text)' }}>수명 진행률</strong>을 한눈에.
       </p>
 

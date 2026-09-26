@@ -86,11 +86,10 @@ const FAQ_LD = [
 export default function StrengthLevelPage() {
   return (
     <ToolPage width={880} slug="/tools/sports/strength-level">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />파워리프팅 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         3대(스쿼트·벤치·데드) 합과 <strong style={{ color: 'var(--text)' }}>Wilks·DOTS·IPF GL 점수</strong>·레벨에 더해, 대회 <strong style={{ color: 'var(--text)' }}>1·2·3차 시도 전략</strong>·IPF 색상 원판·기록 추이까지.
       </p>
 

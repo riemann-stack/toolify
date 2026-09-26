@@ -33,11 +33,10 @@ const FAQ_LD = [
 export default function SourdoughPage() {
   return (
     <ToolPage width={760} slug="/tools/cooking/sourdough">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />사워도우 스타터 &amp; 르방 피크 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         스타터 안정화 진단 + 피크 시간 예측 + <strong style={{ color: 'var(--text)' }}>급이 일정 자동 스케줄러</strong>.
       </p>
 

@@ -84,11 +84,10 @@ const FAQ_LD = [
 export default function LoanPage() {
   return (
     <ToolPage width={760} slug="/tools/finance/loan">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />대출이자 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지 — <strong style={{ color: 'var(--text)' }}>매달 얼마 나갈지</strong> 정확하게.
       </p>
 

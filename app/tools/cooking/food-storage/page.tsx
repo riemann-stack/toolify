@@ -61,11 +61,10 @@ const faqAnswer: React.CSSProperties = {
 export default function FoodStoragePage() {
   return (
     <ToolPage width={760} slug="/tools/cooking/food-storage">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />식재료 보관 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+      <p className="tp-lead">
         냉장·냉동 식재료가 <strong style={{ color: 'var(--text)' }}>언제까지 안전한지</strong> + 소비 기한 알림으로 음식물 쓰레기 줄이기.
       </p>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>

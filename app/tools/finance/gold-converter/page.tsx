@@ -79,11 +79,10 @@ const FAQ_LD = [
 export default function GoldConverterPage() {
   return (
     <ToolPage width={880} slug="/tools/finance/gold-converter">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />금 단위·가격 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         돈·g·트로이온스·푼·냥 9단위 + 14K/18K/24K 환산. <strong style={{ color: 'var(--text)' }}>시세를 직접 입력</strong>하면 매수·매도 실거래가까지 — 실시간 자동 시세 연동은 아닙니다.
       </p>
 

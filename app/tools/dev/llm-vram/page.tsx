@@ -100,13 +100,10 @@ const RELATED = [
 export default function LlmVramPage() {
   return (
     <ToolPage width={760} slug="/tools/dev/llm-vram">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        개발자
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />로컬 LLM VRAM 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         이 모델, 내 GPU에 돌아갈까? — <strong style={{ color: 'var(--text)' }}>양자화별 가중치 + KV 캐시 + 오버헤드</strong>를 llama.cpp 실측 기준으로.
       </p>
 

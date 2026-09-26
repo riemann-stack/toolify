@@ -70,11 +70,10 @@ const h2Style = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 
 export default function HolidayBridgePage() {
   return (
     <ToolPage width={880} slug="/tools/date/holiday-bridge">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="date" />징검다리 연휴 플래너
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         보유 연차를 입력하면 2026~2030년 공휴일·대체공휴일에 맞춰 <strong style={{ color: 'var(--text)' }}>가장 길게 쉴 수 있는 연차 배치</strong>를 찾아줍니다. 효율(연차 1개당 며칠)과 연차 0개 기준 대비 추가 획득일까지 비교합니다. 올해를 볼 때는 오늘 이후에 시작하는 구간만 추천합니다.
       </p>
 

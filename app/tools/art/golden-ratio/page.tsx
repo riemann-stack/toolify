@@ -29,11 +29,10 @@ const FAQ_LD = [
 export default function GoldenRatioPage() {
   return (
     <ToolPage width={760} slug="/tools/art/golden-ratio">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />황금 비율 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         φ = 1.618 가로·세로 + 황금 직사각형·나선 시각화 + <strong style={{ color: 'var(--text)' }}>16:9·A4·인스타·유튜브 비교</strong>.
       </p>
 

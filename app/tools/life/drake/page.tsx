@@ -44,11 +44,10 @@ const FAQ_LD = [
 export default function DrakePage() {
   return (
     <ToolPage width={760} slug="/tools/life/drake">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />드레이크 방정식 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         외계 문명은 몇 개나 존재할까. 7개 변수를 직접 조정하며 <strong style={{ color: 'var(--text)' }}>페르미 역설</strong>까지.
       </p>
 

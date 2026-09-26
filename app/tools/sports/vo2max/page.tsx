@@ -85,11 +85,10 @@ const FAQ_LD = [
 export default function VO2MaxPage() {
   return (
     <ToolPage width={880} slug="/tools/sports/vo2max">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />VO₂ Max 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         쿠퍼·1.5마일·락포트·노르웨이 등 <strong style={{ color: 'var(--text)' }}>6가지 방법</strong>으로 심폐 체력(VO₂max) 추정 + 동년배 5단계 등급 + 마라톤 예상 시간 + 강도별 트레이닝 페이스.
       </p>
 

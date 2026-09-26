@@ -55,13 +55,10 @@ const FAQ_LD = [
 export default function ScalePage() {
   return (
     <ToolPage width={880} slug="/tools/art/scale">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        음악
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />스케일 음계 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         12키 × 12스케일 + 피아노·기타 지판 시각화 + <strong style={{ color: 'var(--text)' }}>7 모드 비교와 소리 재생</strong>.
       </p>
 

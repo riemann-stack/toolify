@@ -88,11 +88,10 @@ const FAQ_LD = [
 export default function HousingScorePage() {
   return (
     <ToolPage width={880} slug="/tools/finance/housing-score">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />청약 가점 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         생년월일·결혼일·자녀 수만 입력하면 <strong style={{ color: 'var(--text)' }}>84점 만점 자동 계산</strong> + 최근 인기 단지 커트라인 비교 + 가점 향상 시뮬 + 5가지 특별공급 자격·조건 안내.
       </p>
 

@@ -51,11 +51,10 @@ const FAQ_LD = [
 export default function LadderPage() {
   return (
     <ToolPage width={880} slug="/tools/life/ladder">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />사다리타기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         캐릭터 16종 + 클릭·전체·역추적 공개 + <strong style={{ color: 'var(--text)' }}>결과 텍스트 복사</strong>. 진짜 한 번에 끝나는 사다리.
       </p>
 

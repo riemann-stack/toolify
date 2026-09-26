@@ -63,13 +63,10 @@ const RELATED = [
 export default function BabyPorridgePage() {
   return (
     <ToolPage width={760} slug="/tools/cooking/baby-porridge">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        요리·식품
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />이유식 배죽 물양 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         10배죽부터 진밥까지 — <strong style={{ color: 'var(--text)' }}>불린쌀·생쌀·쌀가루·밥</strong> 어떤 기준이든 물양을 자동 계산. 큐브 소분 역산까지.
       </p>
 

@@ -118,11 +118,10 @@ const FAQ_LD = [
 export default function ConverterPage() {
   return (
     <ToolPage width={760} slug="/tools/unit/converter">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="unit" />단위 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         길이·면적·무게·부피·온도부터 압력·토크·당도·농도·기울기까지 <strong style={{ color: 'var(--text)' }}>14가지 분야</strong>를 한 곳에서.
         <strong style={{ color: 'var(--text)' }}> 척·치·푼·평·정보·근·돈·홉·되</strong> 같은 한국 전통 도량형도 함께 변환할 수 있어요.
       </p>

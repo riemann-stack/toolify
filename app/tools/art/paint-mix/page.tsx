@@ -53,13 +53,10 @@ const FAQ_LD = [
 export default function PaintMixPage() {
   return (
     <ToolPage width={880} slug="/tools/art/paint-mix">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        예술·창작 · 디자인·미술
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />색상 혼합 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p className="tp-lead">
         수채·아크릴·유화·잉크 안료 혼합 시뮬 + ml/g 환산 + <strong style={{ color: 'var(--text)' }}>ΔE 매칭과 30+ 인기 레시피</strong>.
       </p>
 

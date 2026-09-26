@@ -106,11 +106,10 @@ const FAQ_LD = [
 export default function InheritancePage() {
   return (
     <ToolPage width={880} slug="/tools/finance/inheritance">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />상속·증여세 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p className="tp-lead">
         관계별 공제·10년 합산·배우자 공제를 반영한 상속·증여세 추정 + <strong style={{ color: 'var(--text)' }}>분산 증여 시뮬레이션</strong>.
       </p>
 

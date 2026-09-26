@@ -65,11 +65,10 @@ const FAQ_LD = [
 export default function FruitSyrupPage() {
   return (
     <ToolPage width={760} slug="/tools/cooking/fruit-syrup">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />과일청 담그기 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         매실청·레몬청·유자청·생강청까지 — <strong style={{ color: 'var(--text)' }}>설탕 비율·필요한 유리병 크기·숙성 일정</strong>을 한 번에.
       </p>
 

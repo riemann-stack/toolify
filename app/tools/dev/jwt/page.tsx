@@ -59,13 +59,10 @@ const card: React.CSSProperties = {
 export default function JwtPage() {
   return (
     <ToolPage width={760} slug="/tools/dev/jwt">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        개발자
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />JWT 디코더
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         JWT를 붙여넣으면 header·payload를 풀어 <strong style={{ color: 'var(--text)' }}>클레임을 표로</strong> 보여주고,
         exp·iat·nbf를 <strong style={{ color: 'var(--text)' }}>한국 시각으로 환산</strong>해 만료 여부까지 확인합니다. 서명은 검증하지 않습니다.
       </p>

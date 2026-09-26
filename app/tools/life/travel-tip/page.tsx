@@ -68,13 +68,10 @@ const FAQ_LD = [
 export default function TravelTipPage() {
   return (
     <ToolPage width={880} slug="/tools/life/travel-tip">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        생활·재미
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />해외여행 팁 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         19개국 식당·택시·호텔·골프·마사지 <strong style={{ color: 'var(--text)' }}>적정 팁</strong>. 만족도 보정과 인원 분할.
       </p>
 

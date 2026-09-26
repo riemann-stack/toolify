@@ -48,11 +48,10 @@ const FAQ_LD = [
 export default function LottoPage() {
   return (
     <ToolPage width={880} slug="/tools/life/lotto">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />로또 번호 생성기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p className="tp-lead">
         8가지 생성 모드 + 번호 통계 분석 + 가상 추첨으로 <strong style={{ color: 'var(--text)' }}>1등 체감</strong>까지.
       </p>
 

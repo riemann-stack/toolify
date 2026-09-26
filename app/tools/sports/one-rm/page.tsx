@@ -84,11 +84,10 @@ const FAQ_LD = [
 export default function OneRMPage() {
   return (
     <ToolPage width={880} slug="/tools/sports/one-rm">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />1RM &amp; 훈련 중량 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         5RM·8RM 기록으로 <strong style={{ color: 'var(--text)' }}>진짜 최대 무게</strong> 추정 + RPE 보정과 워밍업 5세트 자동.
       </p>
 

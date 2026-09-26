@@ -69,13 +69,10 @@ const FAQ_LD = [
 export default function RebarPage() {
   return (
     <ToolPage width={880} slug="/tools/interior/rebar">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        주거·인테리어
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="interior" />철근 중량 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '20px' }}>
+      <p className="tp-lead">
         KS D 3504 12규격 + 길이별 본수·중량·톤·단가 + <strong style={{ color: 'var(--text)' }}>트럭 적재 매칭</strong>.
       </p>
 

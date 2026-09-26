@@ -53,11 +53,10 @@ const FAQ_LD = [
 export default function DsrPage() {
   return (
     <ToolPage width={760} slug="/tools/finance/dsr">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />DSR·LTV·스트레스DSR 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         연소득·기존 대출·집값·금리를 <strong style={{ color: 'var(--text)' }}>한 번만 입력</strong>하면 DSR·LTV·스트레스 DSR을 동시에 계산하고,
         세 기준 중 가장 빡빡한 쪽으로 <strong style={{ color: 'var(--text)' }}>예상 최대 대출 한도</strong>를 알려드려요.
         <br /><span style={{ fontSize: '13px' }}>※ 혼합·주기형의 스트레스 적용률은 고정기간 비중에 따라 달라져 본 계산기는 <strong style={{ color: 'var(--text)' }}>대표값(60%/30%)</strong>을 씁니다. 수도권·규제지역 주담대는 기준 스트레스 금리가 3.0%p로 다르니 [규제 기준값 수정]에서 직접 바꿔 보세요.</span>

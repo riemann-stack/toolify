@@ -53,11 +53,10 @@ const FAQ_LD = [
 export default function SupplementPage() {
   return (
     <ToolPage width={880} slug="/tools/health/supplement">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />영양제 중복 체크 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p className="tp-lead">
         복용 중인 영양제 50종 자동 합산 → <strong style={{ color: 'var(--text)' }}>상한 초과·약물 상호작용</strong> 경고.
       </p>
 

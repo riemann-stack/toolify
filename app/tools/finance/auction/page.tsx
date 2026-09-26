@@ -69,13 +69,10 @@ const FAQ_LD = [
 export default function AuctionPage() {
   return (
     <ToolPage width={880} slug="/tools/finance/auction">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        금융·재테크
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />경매 비용 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         낙찰가 + 취득세·명도·체납·수리·대출까지 <strong style={{ color: 'var(--text)' }}>진짜 들어가는 비용</strong>을 시나리오별로.
       </p>
 

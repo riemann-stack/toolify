@@ -62,11 +62,10 @@ const FAQ_LD = [
 export default function GiftMoneyPage() {
   return (
     <ToolPage width={760} slug="/tools/life/gift-money">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />축의금·부의금 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         결혼식 <strong style={{ color: 'var(--text)' }}>축의금</strong>, 장례식 <strong style={{ color: 'var(--text)' }}>부의금</strong>을 관계·참석 여부로 추천. 요즘 시세와 봉투·신권 매너까지 한 번에.
       </p>
 

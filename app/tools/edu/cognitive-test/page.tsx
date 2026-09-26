@@ -40,13 +40,10 @@ const FAQ_LD = [
 export default function CognitiveTestPage() {
   return (
     <ToolPage width={760} slug="/tools/edu/cognitive-test">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        교육·학습
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="edu" />인지 능력 테스트
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         반응속도·스트룹·이중 과제로 <strong style={{ color: 'var(--text)' }}>집중력과 인지 처리 속도</strong>를 게임처럼 측정.
       </p>
 

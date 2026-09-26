@@ -94,11 +94,10 @@ const FAQ_LD = [
 export default function HistoryEraPage() {
   return (
     <ToolPage width={760} slug="/tools/date/history-era">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="date" />연호·연대 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         단기·불기·조선왕·간지·일본·중국 연호 동시 변환 + <strong style={{ color: 'var(--text)' }}>단군~현재 통합 연표</strong>.
       </p>
 

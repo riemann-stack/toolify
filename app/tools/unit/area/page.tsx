@@ -69,11 +69,10 @@ const headCell: React.CSSProperties = {
 export default function AreaPage() {
   return (
     <ToolPage width={760} slug="/tools/unit/area">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="unit" />평수 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         아파트 평형·전용·공급·계약면적 환산 + <strong style={{ color: 'var(--text)' }}>평형별 방 크기</strong> 가이드.
       </p>
 

@@ -69,11 +69,10 @@ const FAQ_LD = [
 export default function TokenCounterPage() {
   return (
     <ToolPage width={880} slug="/tools/dev/token-counter">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />AI 프롬프트 토큰 카운터
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         GPT·Claude·Gemini 토큰 수와 컨텍스트 사용량을 한 화면에. <strong style={{ color: 'var(--text)' }}>한국어 비효율과 API 비용</strong>까지 동시 추정.
       </p>
       <UpdatedMeta

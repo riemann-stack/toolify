@@ -83,11 +83,10 @@ const FAQ_LD = [
 export default function NutsPage() {
   return (
     <ToolPage width={880} slug="/tools/cooking/nuts">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />견과류 섭취량 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         12종 견과류 일일 권장 알 수·칼로리·영양소. 알레르기 필터와 <strong style={{ color: 'var(--text)' }}>셀레늄 자동 경고</strong>.
       </p>
 

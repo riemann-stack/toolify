@@ -41,13 +41,10 @@ const FAQ_LD = [
 export default function FermiEstimatePage() {
   return (
     <ToolPage width={760} slug="/tools/edu/fermi-estimate">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        교육·학습
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="edu" />페르미 추정 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         막막한 문제를 변수로 쪼개고 시나리오로 비교해 <strong style={{ color: 'var(--text)' }}>대략 답을 추정</strong>하는 사고력 훈련.
       </p>
 

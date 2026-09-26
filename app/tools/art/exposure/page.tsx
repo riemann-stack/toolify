@@ -69,13 +69,10 @@ const FAQ_LD = [
 export default function ExposurePage() {
   return (
     <ToolPage width={880} slug="/tools/art/exposure">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        예술·창작 · 사진
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />사진 노출 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         조리개·셔터·ISO 3축을 자유롭게 + <strong style={{ color: 'var(--text)' }}>옵션 잠금으로 등가 노출</strong> 시뮬. ND·Sunny 16 포함.
       </p>
 

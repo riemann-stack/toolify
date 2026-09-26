@@ -60,11 +60,10 @@ const FAQ_LD = [
 export default function TirePressurePage() {
   return (
     <ToolPage width={760} slug="/tools/unit/tire-pressure">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="unit" />타이어 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         공기압(psi·kPa·bar) 변환·체크 + <strong style={{ color: 'var(--text)' }}>규격 해석·인치업</strong>·트레드 마모·DOT 제조주차까지 한 번에.
       </p>
 

@@ -48,13 +48,10 @@ const CODE = { background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fo
 export default function CronPage() {
   return (
     <ToolPage width={760} slug="/tools/dev/cron">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        개발자
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />Cron 표현식 생성기·해석기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         크론 표현식을 입력하면 <strong style={{ color: 'var(--text)' }}>한국어 한 줄 해석</strong>과 다음 실행 시각을 보여줍니다.
         반대로 빌더에서 분·시·일·월·요일을 골라 표현식을 만들 수도 있습니다.
       </p>

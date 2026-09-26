@@ -63,13 +63,10 @@ const RELATED = [
 export default function HeightRankPage() {
   return (
     <ToolPage width={760} slug="/tools/life/height-rank">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        생활·재미
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />키 백분위 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         내 키, 한국에서 <strong style={{ color: 'var(--text)' }}>상위 몇 %</strong>일까? 사이즈코리아 8차 실측 통계로 100명 중 몇 번째인지 확인.
       </p>
 

@@ -65,11 +65,10 @@ const FAQ_LD = [
 export default function GpaConverterPage() {
   return (
     <ToolPage width={880} slug="/tools/edu/gpa-converter">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="edu" />학점(GPA) 환산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         한국 4.5·4.3 ↔ 미국 4.0 ↔ 영국 학위 등급. <strong style={{ color: 'var(--text)' }}>WES·비례·평어 3방식</strong> 동시 비교 + 한국 대학별 만점.
       </p>
 

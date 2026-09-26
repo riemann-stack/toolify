@@ -68,13 +68,10 @@ const FAQ_LD = [
 export default function MicrowavePage() {
   return (
     <ToolPage width={880} slug="/tools/cooking/microwave">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        요리·식품
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />전자레인지 출력 환산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         600W 레시피를 <strong style={{ color: 'var(--text)' }}>우리집 800W에선 몇 분?</strong> 한국 식품 12종 프리셋 + 카운트다운 타이머.
       </p>
 

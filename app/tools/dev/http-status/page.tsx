@@ -84,13 +84,10 @@ const FAQ_LD = [
 export default function HttpStatusPage() {
   return (
     <ToolPage width={880} slug="/tools/dev/http-status">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        개발자
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />HTTP 상태 코드 검색기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p className="tp-lead">
         HTTP 65+ 상태 코드 한국어 설명·발생 시기·해결 힌트. <strong style={{ color: 'var(--text)' }}>CORS·JWT·Lambda 시나리오</strong>.
       </p>
 

@@ -65,11 +65,10 @@ const FAQ_LD = [
 export default function PomodoroPage() {
   return (
     <ToolPage width={760} slug="/tools/life/pomodoro">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />뽀모도로 타이머
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         25/5분부터 딥워크·수능까지 <strong style={{ color: 'var(--text)' }}>7가지 프리셋</strong>. 일일·주간 통계와 연속일수 추적.
       </p>
 

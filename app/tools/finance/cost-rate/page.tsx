@@ -54,13 +54,10 @@ const FAQ_LD = [
 export default function CostRatePage() {
   return (
     <ToolPage width={760} slug="/tools/finance/cost-rate">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        금융·재테크
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />음식점 원가율 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         재료비·배달 수수료·포장재까지 반영한 <strong style={{ color: 'var(--text)' }}>실질 원가율과 마진</strong>. 메뉴 가격 결정에 바로.
       </p>
 

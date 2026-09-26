@@ -93,13 +93,10 @@ const FAQ_LD = [
 export default function CapitalGainsTaxPage() {
   return (
     <ToolPage width={880} slug="/tools/finance/capital-gains-tax">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        금융·재테크
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />1주택 양도소득세 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         1세대 1주택 양도세를 <strong style={strong}>2026년 국세청 기준</strong>으로 단계별로 추정합니다. 12억 비과세·고가주택 안분, 장기보유특별공제(최대 80%), 단기 중과세율까지 한 번에 계산합니다.
       </p>
 

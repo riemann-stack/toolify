@@ -63,11 +63,10 @@ const FAQ_LD = [
 export default function CompoundPage() {
   return (
     <ToolPage width={760} slug="/tools/finance/compound">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />복리 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         거치·적립·복리 주기·인플레이션까지 반영해, <strong style={{ color: 'var(--text)' }}>시간이 만드는 자산</strong>을 시나리오별로 비교.
       </p>
 

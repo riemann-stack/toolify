@@ -53,11 +53,10 @@ const FAQ_LD = [
 export default function VocalRangePage() {
   return (
     <ToolPage width={760} slug="/tools/art/vocal-range">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />음역대 측정기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         마이크로 실시간 음정 감지로 내 <strong style={{ color: 'var(--text)' }}>최저·최고음 측정</strong> + 한국 노래 30+곡 키 매칭.
       </p>
 

@@ -144,13 +144,10 @@ const RELATED = [
 export default function GlycemicLoadPage() {
   return (
     <ToolPage width={760} slug="/tools/health/glycemic-load">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        건강·웰빙
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />당부하지수(GL) 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         음식·섭취량으로 <strong style={{ color: 'var(--text)' }}>당부하지수(GL)를 계산</strong>하고 한 끼 총 GL 합산 + 식품별 GI 조회표.
       </p>
 

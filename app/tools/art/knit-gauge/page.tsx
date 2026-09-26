@@ -78,13 +78,10 @@ const FAQ_LD = [
 export default function KnitGaugePage() {
   return (
     <ToolPage width={880} slug="/tools/art/knit-gauge">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        예술·창작 · 디자인·미술
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />뜨개질 게이지 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p className="tp-lead">
         10×10cm 게이지로 패턴 코·단수 변환 + 한국 사이즈별 코 계산·<strong style={{ color: 'var(--text)' }}>늘림 균등 분배</strong>.
       </p>
 

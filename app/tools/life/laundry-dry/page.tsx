@@ -40,11 +40,10 @@ const FAQ_LD = [
 export default function LaundryDryPage() {
   return (
     <ToolPage width={760} slug="/tools/life/laundry-dry">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />빨래 건조 시간 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         온도·습도·소재별 <strong style={{ color: 'var(--text)' }}>가장 빠른 건조 조합</strong> + 전기료 비교까지.
       </p>
 

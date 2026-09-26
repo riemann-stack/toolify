@@ -76,13 +76,10 @@ const FAQ_LD = [
 export default function HashPage() {
   return (
     <ToolPage width={880} slug="/tools/dev/hash">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        개발자
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />해시 생성기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p className="tp-lead">
         MD5·SHA-1·SHA-256·SHA-512 동시 + HMAC 서명·파일 무결성·SRI 해시. <strong style={{ color: 'var(--text)' }}>전부 브라우저 처리</strong>.
       </p>
 

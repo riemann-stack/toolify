@@ -34,11 +34,10 @@ const FAQ_LD = [
 export default function ThawingPage() {
   return (
     <ToolPage width={760} slug="/tools/cooking/thawing">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />해동 시간 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+      <p className="tp-lead">
         냉장·전자레인지·찬물·실온 <strong style={{ color: 'var(--text)' }}>4가지 해동법 비교</strong> + 식품별 위험도와 시작·완료 시각.
       </p>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>

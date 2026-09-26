@@ -96,11 +96,10 @@ const FAQ_LD = [
 export default function AlcoholPage() {
   return (
     <ToolPage width={760} slug="/tools/life/alcohol">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />알코올 도수 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         <strong style={{ color: 'var(--text)' }}>소맥·하이볼 황금비율</strong> + 목표 도수 희석과 같은 알코올량 비교.
       </p>
 

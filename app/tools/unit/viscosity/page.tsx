@@ -68,11 +68,10 @@ const FAQ_LD = [
 export default function ViscosityPage() {
   return (
     <ToolPage width={880} slug="/tools/unit/viscosity">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="unit" />점도(Viscosity) 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         <strong style={{ color: 'var(--text)' }}>cP·cSt·SUS·Pa·s</strong> 동시 환산 + SAE J300 엔진오일·ISO VG 산업 윤활유 매칭. 자동차 DIY·정비용.
       </p>
 

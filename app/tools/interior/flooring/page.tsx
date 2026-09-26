@@ -40,13 +40,10 @@ const FAQ_LD = [
 export default function FlooringPage() {
   return (
     <ToolPage width={760} slug="/tools/interior/flooring">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        주거·인테리어
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="interior" />바닥재 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         장판·강화마루·강마루·원목·데코타일 <strong style={{ color: 'var(--text)' }}>박스 수와 비용</strong> 견적.
       </p>
 

@@ -72,13 +72,10 @@ const FAQ_LD = [
 export default function SavingsPage() {
   return (
     <ToolPage width={880} slug="/tools/finance/savings">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        금융·재테크
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />저축액 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         수입·지출 → 저축률과 권장 수준 비교 + <strong style={{ color: 'var(--text)' }}>6 항아리 분배</strong>. 청년미래적금·ISA 절세 비교.
       </p>
 

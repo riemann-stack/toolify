@@ -67,11 +67,10 @@ const FAQ_LD = [
 export default function HardnessPage() {
   return (
     <ToolPage width={880} slug="/tools/unit/hardness">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="unit" />경도(Hardness) 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         <strong style={{ color: 'var(--text)' }}>HRC·HRB·HV·HB·인장강도</strong> 동시 환산. ASTM E140 강철 표 기반. 칼덕·메이커·금속 가공용.
       </p>
 

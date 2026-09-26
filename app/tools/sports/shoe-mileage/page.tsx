@@ -62,13 +62,10 @@ const RELATED = [
 export default function ShoeMileagePage() {
   return (
     <ToolPage width={760} slug="/tools/sports/shoe-mileage">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        스포츠
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />러닝화 수명 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         주간 거리·체중·소재로 <strong style={{ color: 'var(--text)' }}>러닝화 예상 수명(km)과 교체 예상일</strong> + 로테이션 연장 효과.
       </p>
 

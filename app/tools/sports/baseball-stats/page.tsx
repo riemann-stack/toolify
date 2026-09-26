@@ -43,13 +43,10 @@ const FAQ_LD = [
 export default function BaseballStatsPage() {
   return (
     <ToolPage width={760} slug="/tools/sports/baseball-stats">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        스포츠
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />야구 타율 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + <strong style={{ color: 'var(--text)' }}>KBO 평균 비교</strong>.
       </p>
 

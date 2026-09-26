@@ -66,11 +66,10 @@ const FAQ_LD = [
 export default function BrewingPage() {
   return (
     <ToolPage width={880} slug="/tools/unit/brewing">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="unit" />양조 도수·당도 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         <strong style={{ color: 'var(--text)' }}>Brix·Plato·SG·Baumé·Oechsle</strong> 동시 환산 + ABV·Proof 계산. 자가양조·잼·과실주·치즈 메이커용.
       </p>
 

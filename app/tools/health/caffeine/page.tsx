@@ -65,11 +65,10 @@ const FAQ_LD = [
 export default function CaffeinePage() {
   return (
     <ToolPage width={880} slug="/tools/health/caffeine">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />카페인 잔존량 트래커
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         지금 체내 카페인 mg과 <strong style={{ color: 'var(--text)' }}>취침 시 잔존량</strong>을 반감기 5h로 실시간 추적. 24+ 한국 음료 프리셋.
       </p>
 

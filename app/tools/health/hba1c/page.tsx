@@ -63,13 +63,10 @@ const RELATED = [
 export default function Hba1cPage() {
   return (
     <ToolPage width={760} slug="/tools/health/hba1c">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        건강·웰빙
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />당화혈색소 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         건강검진 <strong style={{ color: 'var(--text)' }}>당화혈색소(HbA1c)를 추정 평균혈당(eAG)</strong>으로 양방향 변환 + 진단 구간·환산표.
       </p>
 

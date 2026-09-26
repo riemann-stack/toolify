@@ -60,11 +60,10 @@ const FAQ_LD = [
 export default function GolfCostPage() {
   return (
     <ToolPage width={760} slug="/tools/sports/golf-cost">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />골프 비용 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         그린피·카트·캐디·식사·교통 <strong style={{ color: 'var(--text)' }}>1인당 정산</strong> + 회원권 손익 분기점.
       </p>
 

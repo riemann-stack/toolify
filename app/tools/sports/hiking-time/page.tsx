@@ -86,11 +86,10 @@ const FAQ: { q: string; a: string }[] = [
 export default function HikingTimePage() {
   return (
     <ToolPage width={880} slug="/tools/sports/hiking-time">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />등산 시간 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         한국 100대 명산 35+ 프리셋 + 체력·날씨 보정. <strong style={{ color: 'var(--text)' }}>일몰 전 하산</strong> 자동 진단.
       </p>
 

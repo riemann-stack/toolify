@@ -57,13 +57,10 @@ const relatedTools = [
 export default function KeyboardLayoutPage() {
   return (
     <ToolPage width={760} slug="/tools/dev/keyboard-layout">
-      <p style={{ fontSize: '12px', color: 'var(--cat-dev)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 700 }}>
-        개발자
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />한영타 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         한/영 전환을 깜빡하고 친 글자를 원래 의도한 글자로 되돌립니다. <code style={{ background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>dkssud</code> → <strong style={{ color: 'var(--text)' }}>안녕</strong>, <code style={{ background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>ㅗ디ㅣㅐ</code> → <strong style={{ color: 'var(--text)' }}>hello</strong>처럼 양방향으로 변환합니다.
       </p>
 

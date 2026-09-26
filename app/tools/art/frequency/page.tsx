@@ -30,11 +30,10 @@ const FAQ_LD = [
 export default function FrequencyPage() {
   return (
     <ToolPage width={760} slug="/tools/art/frequency">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />주파수↔음정 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
+      <p className="tp-lead">
         Hz ↔ 음정 변환 + <strong style={{ color: 'var(--text)' }}>MIDI 번호와 파장</strong> 계산. 튜닝과 사운드 디자인용.
       </p>
 

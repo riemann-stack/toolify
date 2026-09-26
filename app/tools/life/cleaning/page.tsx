@@ -34,11 +34,10 @@ const FAQ_LD = [
 export default function CleaningPage() {
   return (
     <ToolPage width={760} slug="/tools/life/cleaning">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />상황별 청소 세제 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         상황만 고르면 <strong style={{ color: 'var(--text)' }}>맞는 세제·정확한 희석량·사용법</strong>을 자동으로. <strong style={{ color: 'var(--text)' }}>섞으면 위험한 조합</strong>까지 안전하게.
       </p>
 

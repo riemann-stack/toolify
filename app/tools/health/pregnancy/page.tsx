@@ -37,11 +37,10 @@ export const metadata = buildMetadata({
 export default function PregnancyPage() {
   return (
     <ToolPage width={760} slug="/tools/health/pregnancy">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />임신 주수 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         지금 임신 몇 주차인지 + 산전 검사·태아 크기·출산 준비를 <strong style={{ color: 'var(--text)' }}>자동 타임라인</strong>으로.
       </p>
 

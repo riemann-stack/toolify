@@ -84,11 +84,10 @@ const FAQ_LD = [
 export default function KimjangPage() {
   return (
     <ToolPage width={880} slug="/tools/cooking/kimjang">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />김장 양 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         가족 수·소비·기간만 알려주면 배추 포기·양념·비용 자동. 주요 농산물은 <strong style={{ color: 'var(--text)' }}>KAMIS 실시간 시세</strong> 연동.
       </p>
 

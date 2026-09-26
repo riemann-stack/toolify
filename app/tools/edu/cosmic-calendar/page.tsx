@@ -58,13 +58,10 @@ const FAQ_LD = [
 export default function CosmicCalendarPage() {
   return (
     <ToolPage width={760} slug="/tools/edu/cosmic-calendar">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        교육·학습
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="edu" />코스믹 캘린더
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         138억 년 우주 역사를 <strong style={{ color: 'var(--text)' }}>1년 달력으로 압축</strong>한 인터랙티브 타임라인.
       </p>
 

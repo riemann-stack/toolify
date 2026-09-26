@@ -34,11 +34,10 @@ const lead = { fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginB
 export default function SwimPacePage() {
   return (
     <ToolPage width={760} slug="/tools/sports/swim-pace">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />수영 페이스·SWOLF 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         100m 페이스 ↔ 총기록을 양방향으로 환산하고, <strong style={{ color: 'var(--text)' }}>25m·50m 풀 바퀴 수</strong>·SWOLF·인터벌 send-off를 한 화면에서 확인합니다.
       </p>
 

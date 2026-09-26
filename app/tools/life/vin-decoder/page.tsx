@@ -41,11 +41,10 @@ const FAQ_LD = [
 export default function VinDecoderPage() {
   return (
     <ToolPage width={880} slug="/tools/life/vin-decoder">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />차대번호(VIN) 해석기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         17자리 차대번호를 자리별로 분해해 <strong style={{ color: 'var(--text)' }}>제조국·제조사·연식·공장</strong>을 해석합니다.
         차종 코드(VDS)는 구간만 분리하고, 체크 디지트 검증까지. <strong style={{ color: 'var(--text)' }}>(사고·이력 조회 아님 — 구조 해석 도구)</strong>
       </p>

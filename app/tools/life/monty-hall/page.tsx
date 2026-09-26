@@ -39,11 +39,10 @@ const FAQ_LD = [
 export default function MontyHallPage() {
   return (
     <ToolPage width={760} slug="/tools/life/monty-hall">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />몬티홀 시뮬레이터
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         바꿔야 유리한 진짜 이유. 3·10·100·1000문 시뮬과 <strong style={{ color: 'var(--text)' }}>베이즈 추론</strong>으로 직관을 깨다.
       </p>
 

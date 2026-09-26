@@ -84,11 +84,10 @@ const FAQ_LD = [
 export default function RoofPage() {
   return (
     <ToolPage width={880} slug="/tools/interior/roof">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="interior" />지붕 면적 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         박공(맞배)·모임·팔작·외쪽·평지붕 5가지 + 물매·처마·로스율 → <strong style={{ color: 'var(--text)' }}>자재 면적과 단가</strong>.
       </p>
 

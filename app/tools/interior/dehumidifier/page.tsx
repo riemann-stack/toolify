@@ -64,13 +64,10 @@ const RELATED = [
 export default function DehumidifierPage() {
   return (
     <ToolPage width={760} slug="/tools/interior/dehumidifier">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        주거·인테리어
-      </p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="interior" />제습기 용량 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         방·집 면적으로 <strong style={{ color: 'var(--text)' }}>적정 제습량(L/일)과 권장 제품 용량</strong> + 월 전기요금까지. 아파트·주택·지하·장마철 보정.
       </p>
 

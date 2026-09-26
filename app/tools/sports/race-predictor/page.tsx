@@ -82,11 +82,10 @@ const FAQ_LD = [
 export default function RacePredictorPage() {
   return (
     <ToolPage width={880} slug="/tools/sports/race-predictor">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />마라톤 기록 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         5km·10km·하프 기록으로 <strong style={{ color: 'var(--text)' }}>풀코스 예상 시간</strong> + 기온·고도·연령 자동 보정.
       </p>
 

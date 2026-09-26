@@ -67,11 +67,10 @@ const FAQ_LD = [
 export default function MilitaryPage() {
   return (
     <ToolPage width={760} slug="/tools/date/military">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="date" />군대 전역일 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         입대일 기준 <strong style={{ color: 'var(--text)' }}>전역일과 복무율</strong>을 시각화.
       </p>
 
