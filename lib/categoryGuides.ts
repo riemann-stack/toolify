@@ -304,7 +304,7 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
       {
         h: '어떤 상황에 무엇을 쓰나요',
         body:
-          '이공계 학습에서는 과학 단위 변환·유효숫자 계산기로 실험값을 정리하고, 천문에서는 우주 달력·행성 비교 도구로 거대한 시간과 거리를 체감합니다. 회로 시뮬레이터·인지 테스트처럼 직접 조작하며 배우는 도구도 함께 제공합니다.',
+          '이공계 학습에서는 유효숫자·과학적 표기 계산기로 실험값과 단위를 정리하고, 천문에서는 우주 달력·행성 비교 도구로 거대한 시간과 거리를 체감합니다. 회로 시뮬레이터·인지 테스트처럼 직접 조작하며 배우는 도구도 함께 제공합니다.',
       },
       {
         h: '교육 보조 도구로서',
@@ -397,7 +397,7 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
       { name: '급여·4대보험', blurb: '받는 돈을 확인할 때 — 월급, 4대보험, 퇴직금, 실업급여, 연금', hrefs: t('finance', 'salary', '4-insurance', 'severance', 'unemployment-benefit', 'national-pension') },
       { name: '세금', blurb: '신고 전에 미리 가늠하는 세금 — 연말정산, 종합소득세, 부가세, 양도·보유·상속세', hrefs: t('finance', 'year-end-tax', 'freelance-tax', 'vat', 'capital-gains-tax', 'property-holding-tax', 'inheritance', 'car-tax') },
       { name: '대출·부동산', blurb: '빌리고 사는 결정 — 대출 한도와 상환액, 전월세 비교, 청약, 경매', hrefs: t('finance', 'loan', 'dsr', 'rent-jeonse', 'housing-score', 'real-estate', 'auction') },
-      { name: '투자·저축', blurb: '돈을 불리는 계산 — 복리, 적금, 배당, 주식, 공모주, 금', hrefs: t('finance', 'compound', 'savings', 'dividend', 'stock', 'ipo-deposit', 'installment', 'gold-converter', 'stock-decision', 'wealth-rank', 'historical-money') },
+      { name: '투자·저축', blurb: '돈을 불리는 계산 — 복리, 적금, 배당, 주식, 공모주, 금', hrefs: t('finance', 'compound', 'savings', 'dividend', 'stock', 'ipo-deposit', 'installment', 'gold-converter', 'wealth-rank', 'historical-money') },
       { name: '자동차·가게', blurb: '생활 속 사업·유지비 — 자동차 1년 비용, 음식점 원가율', hrefs: t('finance', 'car-cost', 'cost-rate') },
     ],
     picks: t('finance', 'salary', 'loan', 'severance'),
@@ -433,7 +433,7 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
     guideTitle: '요리 계산기, 이렇게 쓰세요',
     groups: [
       { name: '매일 요리', blurb: '양과 시간 맞추기 — 레시피 배율, 해동, 전자레인지, 계란, 라면', hrefs: t('cooking', 'recipe', 'serving', 'substitute', 'thawing', 'microwave', 'egg-timer', 'frying', 'ramen') },
-      { name: '베이킹', blurb: '빵과 과자 — 베이커 퍼센트, 제빵 일정, 사워도우, 팬 호수', hrefs: t('cooking', 'baker-percent', 'baking-schedule', 'baking-recipe', 'sourdough', 'cake-pan') },
+      { name: '베이킹', blurb: '빵과 과자 — 베이커 퍼센트, 제빵 일정, 사워도우, 팬 호수', hrefs: t('cooking', 'baker-percent', 'baking-schedule', 'baking-recipe', 'sourdough') },
       { name: '커피·차', blurb: '추출 비율·온도·시간', hrefs: t('cooking', 'brew', 'tea') },
       { name: '보관·제철·명절', blurb: '식재료 보관 기한, 과일청, 김장, 차례상, 견과류', hrefs: t('cooking', 'food-storage', 'fruit-syrup', 'kimjang', 'holiday-table', 'nuts') },
       { name: '이유식', blurb: '배죽 물양과 한 끼 양', hrefs: t('cooking', 'baby-porridge') },
@@ -455,7 +455,7 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
       { name: '여행·쇼핑', blurb: '여행 예산·팁·짐, 직구 관부가세, 단가 비교, 배상액', hrefs: t('life', 'travel-budget', 'travel-tip', 'packing', 'customs', 'unit-price', 'residual-value') },
       { name: '살림·생활', blurb: '빨래 건조, 청소 세제 희석, 집중 타이머, 차대번호', hrefs: t('life', 'laundry-dry', 'cleaning', 'pomodoro', 'vin-decoder') },
       { name: '뽑기·운세', blurb: '추첨과 재미 — 로또 번호, 랜덤 추첨, 사다리, 띠·별자리', hrefs: t('life', 'lotto', 'random', 'ladder', 'zodiac') },
-      { name: '재미·교양', blurb: '술 도수, 키 백분위, 확률·과학 실험', hrefs: t('life', 'alcohol', 'height-rank', 'monty-hall', 'drake', 'fart-risk') },
+      { name: '재미·교양', blurb: '술 도수, 키 백분위, 확률·과학 실험', hrefs: t('life', 'alcohol', 'height-rank', 'monty-hall', 'drake') },
     ],
     picks: t('life', 'dutch', 'unit-price', 'gift-money'),
     situations: [
@@ -470,19 +470,19 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
     h1: '스포츠 계산기',
     guideTitle: '운동 계산기, 이렇게 쓰세요',
     groups: [
-      { name: '러닝·마라톤', blurb: '페이스, 기록 예측, 훈련 강도, 보급', hrefs: t('sports', 'pace', 'race-predictor', 'race-plan', 'interval-training', 'lsd', 'buildup', 'vo2max', 'carb-loading', 'shoe-mileage') },
+      { name: '러닝·마라톤', blurb: '페이스, 기록 예측, 훈련 강도, 보급', hrefs: t('sports', 'pace', 'race-predictor', 'interval-training', 'buildup', 'vo2max', 'carb-loading', 'shoe-mileage') },
       { name: '헬스·근력', blurb: '최대 중량, 파워리프팅 점수, 하이록스, 체급 감량', hrefs: t('sports', 'one-rm', 'strength-level', 'hyrox', 'fight-weight') },
       { name: '골프', blurb: '핸디캡, 비용, 비거리, 파크골프, 그립', hrefs: t('sports', 'golf-handicap', 'golf-cost', 'golf-distance', 'park-golf', 'grip-size') },
-      { name: '구기·리그', blurb: '타율·OPS, 승점과 순위 경우의 수, 포메이션', hrefs: t('sports', 'baseball-stats', 'football-points', 'league-scenarios', 'formation') },
+      { name: '구기·리그', blurb: '타율·OPS, 승점과 순위 경우의 수, 포메이션', hrefs: t('sports', 'baseball-stats', 'league-scenarios', 'formation') },
       { name: '아웃도어·수영·사이클', blurb: '등산 시간, 클라이밍 등급, 수영 페이스, 파워존', hrefs: t('sports', 'hiking-time', 'climbing-grade', 'swim-pace', 'ftp-zones') },
     ],
     picks: t('sports', 'pace', 'one-rm', 'golf-handicap'),
     situations: [
-      { when: '첫 마라톤 준비', first: t('sports', 'race-predictor'), next: t('sports', 'pace', 'lsd', 'carb-loading') },
+      { when: '첫 마라톤 준비', first: t('sports', 'race-predictor'), next: t('sports', 'pace', 'interval-training', 'carb-loading') },
       { when: '웨이트 트레이닝', first: t('sports', 'one-rm'), next: t('sports', 'strength-level') },
       { when: '골프 라운드', first: t('sports', 'golf-handicap'), next: t('sports', 'golf-cost', 'golf-distance') },
       { when: '주말 산행', first: t('sports', 'hiking-time') },
-      { when: '리그 막바지 순위 싸움', first: t('sports', 'league-scenarios'), next: t('sports', 'football-points') },
+      { when: '리그 막바지 순위 싸움', first: t('sports', 'league-scenarios') },
     ],
   },
   interior: {
@@ -491,14 +491,14 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
     groups: [
       { name: '인테리어 자재', blurb: '면적 실측과 자재 물량 — 도배, 페인트, 바닥재, 몰딩, 커튼, 지붕', hrefs: t('interior', 'room-area', 'wallpaper', 'paint', 'flooring', 'molding', 'curtain-blind', 'roof') },
       { name: '냉난방·공기·조명', blurb: '에어컨 평형, 제습기 용량, 환기량, 조명 밝기', hrefs: t('interior', 'ac-capacity', 'dehumidifier', 'ventilation', 'lighting') },
-      { name: '공구·자재·전기', blurb: '나사·볼트 규격, 배관, 전선 굵기, 철근 중량', hrefs: t('interior', 'screw', 'bolt-wrench', 'pipe', 'wire', 'rebar') },
+      { name: '공구·자재·전기', blurb: '나사·볼트 규격, 배관, 전선 굵기, 철근 중량', hrefs: t('interior', 'screw', 'pipe', 'wire', 'rebar') },
     ],
     picks: t('interior', 'room-area', 'wallpaper', 'ac-capacity'),
     situations: [
       { when: '이사 전 셀프 시공', first: t('interior', 'room-area'), next: t('interior', 'wallpaper', 'paint', 'flooring') },
       { when: '여름 냉방·장마', first: t('interior', 'ac-capacity'), next: t('interior', 'dehumidifier') },
       { when: '조명 교체', first: t('interior', 'lighting'), next: t('interior', 'wire') },
-      { when: '가구 조립·수리', first: t('interior', 'screw'), next: t('interior', 'bolt-wrench') },
+      { when: '가구 조립·수리', first: t('interior', 'screw') },
     ],
   },
   unit: {
@@ -521,7 +521,7 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
     h1: '날짜·시간 계산기',
     guideTitle: '날짜 계산기, 이렇게 쓰세요',
     groups: [
-      { name: '날짜 계산', blurb: '만 나이, D-day, 전역일, 생애 시간', hrefs: t('date', 'age', 'dday', 'military', 'life-time') },
+      { name: '날짜 계산', blurb: '만 나이·기대수명, D-day, 전역일', hrefs: t('date', 'age', 'dday', 'military') },
       { name: '달력·연휴', blurb: '연차 붙이기, 양력·음력, 연호', hrefs: t('date', 'holiday-bridge', 'lunar', 'history-era') },
       { name: '시간·시차', blurb: '서버 시간, 세계 시간대, 시차 적응, 쉥겐 체류일', hrefs: t('date', 'server-time', 'timezone', 'jet-lag', 'schengen') },
     ],
@@ -537,7 +537,7 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
     h1: '예술·창작 도구',
     guideTitle: '창작 도구, 이렇게 쓰세요',
     groups: [
-      { name: '음악', blurb: '음역대, 카포, 코드, 스케일, 템포, 주파수', hrefs: t('art', 'vocal-range', 'capo', 'chord', 'scale', 'bpm', 'tap-tempo', 'frequency') },
+      { name: '음악', blurb: '음역대, 카포, 코드, 스케일, 템포, 주파수', hrefs: t('art', 'vocal-range', 'capo', 'chord', 'scale', 'tap-tempo', 'frequency') },
       { name: '디자인·색', blurb: '색상 코드, 그라디언트, 황금 비율, 물감 혼합', hrefs: t('art', 'color', 'gradient-generator', 'golden-ratio', 'paint-mix') },
       { name: '사진·인쇄', blurb: '노출, 화각, 인쇄 해상도', hrefs: t('art', 'exposure', 'fov', 'print-resolution') },
       { name: '글쓰기·공예', blurb: '글자수, 더미 텍스트, 모스 부호, 뜨개 게이지', hrefs: t('art', 'charcount', 'lorem', 'morse-code', 'knit-gauge') },
@@ -556,7 +556,7 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
     guideTitle: '학습 도구, 이렇게 쓰세요',
     groups: [
       { name: '시험·공부', blurb: '내신 5등급, 학점 환산, 복습 간격, 인지 테스트', hrefs: t('edu', 'nesin-5grade', 'gpa-converter', 'review-interval', 'cognitive-test') },
-      { name: '과학 실험', blurb: '유효숫자, 과학 단위, 회로, 음속, 룸 모드', hrefs: t('edu', 'sig-figs', 'sci-units', 'circuit-simulator', 'sound-speed', 'room-mode') },
+      { name: '과학 실험', blurb: '유효숫자, 과학 단위, 회로, 음속, 룸 모드', hrefs: t('edu', 'sig-figs', 'circuit-simulator', 'sound-speed', 'room-mode') },
       { name: '우주·사고력', blurb: '행성 비교, 코스믹 캘린더, 페르미 추정', hrefs: t('edu', 'planet-comparison', 'cosmic-calendar', 'fermi-estimate') },
     ],
     picks: t('edu', 'nesin-5grade', 'gpa-converter', 'review-interval'),
@@ -564,7 +564,7 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
       { when: '내신 성적 계산', first: t('edu', 'nesin-5grade') },
       { when: '유학·편입 서류', first: t('edu', 'gpa-converter') },
       { when: '시험 공부 계획', first: t('edu', 'review-interval') },
-      { when: '실험 보고서', first: t('edu', 'sig-figs'), next: t('edu', 'sci-units') },
+      { when: '실험 보고서', first: t('edu', 'sig-figs') },
       { when: '과학 수업 자료', first: t('edu', 'planet-comparison'), next: t('edu', 'cosmic-calendar') },
     ],
   },
@@ -572,10 +572,10 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
     h1: '개발자 도구',
     guideTitle: '개발자 도구, 이렇게 쓰세요',
     groups: [
-      { name: '데이터 포맷·인코딩', blurb: 'JSON·YAML, Base64, URL 인코딩, 진법, CSS 단위', hrefs: t('dev', 'json', 'yaml-json', 'base64', 'url-encode', 'number-base', 'css-converter') },
+      { name: '데이터 포맷·인코딩', blurb: 'JSON·YAML, Base64, URL 인코딩, 진법, CSS 단위', hrefs: t('dev', 'json', 'base64', 'url-encode', 'number-base', 'css-converter') },
       { name: '텍스트·보안', blurb: '정규식, 해시, JWT, 한영타 복원', hrefs: t('dev', 'regex', 'hash', 'jwt', 'keyboard-layout') },
       { name: '웹·API', blurb: 'cURL 변환, HTTP 상태 코드, 크론, OG 미리보기, 회선 진단', hrefs: t('dev', 'curl', 'http-status', 'cron', 'og-preview', 'network-test') },
-      { name: 'AI·설계', blurb: 'LLM 토큰·VRAM, 기술 스택 추천', hrefs: t('dev', 'token-counter', 'llm-vram', 'tech-stack') },
+      { name: 'AI·LLM', blurb: 'LLM 토큰·API 비용, 로컬 실행 VRAM', hrefs: t('dev', 'token-counter', 'llm-vram') },
     ],
     picks: t('dev', 'json', 'regex', 'base64'),
     situations: [

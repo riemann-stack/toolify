@@ -1,5 +1,24 @@
-/* 축구 순위 경우의 수 계산기 — 스타일. 토큰만 사용, 신규 hex 금지. */
+/* 축구 순위·승점 경우의 수 계산기 — 스타일(순위 경우의 수 탭 + 모드 탭). 시즌 승점 탭은 season.module.css. 토큰만 사용, 신규 hex 금지. */
 .wrap { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+
+/* ── 모드 탭 (순위 경우의 수 / 시즌 승점) ── */
+.modeTabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 4px;
+}
+.modeTab {
+  min-width: 0; background: transparent; border: none; border-radius: var(--radius-s);
+  padding: 10px 8px; font-size: 14px; font-weight: 700; color: var(--muted); line-height: 1.35;
+  font-family: var(--font-sans); text-align: center; cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.modeTab small { display: block; margin-top: 2px; font-size: 11px; font-weight: 500; }
+@media (hover: hover) {
+  .modeTab:not(.modeTabActive):hover { color: var(--text); }
+}
+.modeTabActive { background: var(--accent-strong); color: #fff; }
+/* 탭 패널 — hidden 속성이 display:flex에 덮이지 않게 */
+.panel { display: flex; flex-direction: column; gap: 12px; }
+.panel[hidden] { display: none; }
 
 /* ── 카드 ── */
 .card {
@@ -49,7 +68,9 @@
 }
 
 /* ── 순위표 입력 ── */
-.tableScroll { border-radius: 10px; }
+/* position: relative — 표 안 시각 숨김 라벨(.srOnly, absolute)의 기준을 스크롤 래퍼로 가둔다.
+   없으면 라벨이 초기 컨테이닝 블록 기준으로 배치돼 360px 폭에서 페이지 가로 스크롤(scrollWidth 366)이 생겼다 */
+.tableScroll { border-radius: 10px; position: relative; }
 .standTable { width: 100%; border-collapse: collapse; font-size: 13px; }
 .standTable th {
   padding: 8px 6px; text-align: center; color: var(--muted);

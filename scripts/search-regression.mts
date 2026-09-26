@@ -17,7 +17,8 @@ import { resolve } from 'node:path'
 import { allTools } from '../lib/tools'
 import { searchTools as defaultSearch } from '../lib/search'
 
-/** 결정된 포트폴리오 병합: source → target (소스는 곧 레지스트리에서 삭제) */
+/** 포트폴리오 통합(2026-09-26 반영): source → target. 소스는 레지스트리에서 삭제됐고 next.config.ts가 301로 보낸다
+ *  (tests/redirects.test.mts가 이 맵과 301 목적지가 일치하는지 검사). 옛 기대값이 소스를 적어도 target을 정답으로 본다. */
 export const MERGED_INTO: Record<string, string> = {
   '/tools/sports/race-plan': '/tools/sports/pace',
   '/tools/sports/lsd': '/tools/sports/interval-training',
@@ -108,9 +109,9 @@ export const CASES: SearchCase[] = [
   // ── 짧은 별칭 오탐 방지 ──
   { q: '나이', top1: ['/tools/date/age'], absent: ['/tools/unit/hardness'] },
   { q: '만나이 계산기', top1: ['/tools/date/age'] },
-  { q: '술', top3All: ['/tools/life/alcohol', '/tools/health/blood-alcohol'], absent: ['/tools/dev/tech-stack'] },
+  { q: '술', top3All: ['/tools/life/alcohol', '/tools/health/blood-alcohol'], note: "'술'↛'기술' 부분일치는 tests/search.test.mts 합성 데이터로 고정 (dev/tech-stack 폐지)" },
   { q: '퍼센트', top1: ['/tools/life/percent', '/tools/cooking/baker-percent'], future: ['/tools/life/percent'], absent: ['/tools/dev/url-encode'] },
-  { q: '볼트', top1: ['/tools/interior/screw'], absent: ['/tools/edu/sig-figs', '/tools/edu/sci-units'] },
+  { q: '볼트', top1: ['/tools/interior/screw'], absent: ['/tools/edu/sig-figs'] },
 
   // ── 복합어 별칭: 완결 단어 + 또 하나의 단어 ("연금" → 연금저축) — 낮은 점수라도 결과에 나와야 ──
   { q: '연금', top3: [F + 'national-pension'], present: [F + 'savings'] },
@@ -124,12 +125,13 @@ export const CASES: SearchCase[] = [
   { q: '시간', present: ['/tools/life/pomodoro'], within: 20, note: "'시간'은 이름 일치 도구가 많아 모바일 Nav 범위(20)로 확인" },
   { q: '비용', present: ['/tools/life/dutch'] },
 
-  // ── 과학 단위: eV는 단위 변환기, 천문·원자 스케일은 병합 전까지 sci-units ──
+  // ── 과학 단위: eV는 단위 변환기, 천문·원자 스케일은 sig-figs [과학적 표기] 탭(구 sci-units) ──
   { q: 'eV', top1: ['/tools/unit/converter'] },
   { q: '전자볼트', top1: ['/tools/unit/converter'] },
-  { q: '광년', top1: ['/tools/edu/sci-units'] },
-  { q: '옹스트롬', top1: ['/tools/edu/sci-units'] },
-  { q: '파섹', top1: ['/tools/edu/sci-units'] },
+  { q: '광년', top1: ['/tools/edu/sig-figs'] },
+  { q: '옹스트롬', top1: ['/tools/edu/sig-figs'] },
+  { q: '파섹', top1: ['/tools/edu/sig-figs'] },
+  { q: '천문단위', top1: ['/tools/edu/sig-figs'] },
 
   // ── 대표 도구 ──
   { q: '평수', top1: ['/tools/unit/area'], top3: ['/tools/interior/room-area'] },
@@ -167,6 +169,42 @@ export const CASES: SearchCase[] = [
   { q: '팔까 살까', top1: [F + 'stock'] },
   { q: '과학적 표기', top1: ['/tools/edu/sig-figs'] },
   { q: '스패너', top1: ['/tools/interior/screw'] },
+  // 2026-09-26 통합 때 옮기거나 더한 별칭 (소스 도구 이름·기능어)
+  { q: '레이스 플래너', top1: ['/tools/sports/pace'], strict: true },
+  { q: '코스 고도', top1: ['/tools/sports/pace'], strict: true },
+  { q: '존2 심박', top1: ['/tools/sports/interval-training'], strict: true },
+  { q: '정크 마일', top1: ['/tools/sports/interval-training'], strict: true },
+  { q: 'EPL 승점', top1: ['/tools/sports/league-scenarios'], strict: true },
+  { q: '와셔', top1: ['/tools/interior/screw'], strict: true },
+  { q: '볼트 토크', top1: ['/tools/interior/screw'], strict: true },
+  { q: '케이크 1호', top1: ['/tools/cooking/baking-recipe'], strict: true },
+  { q: '프리딜레이', top1: ['/tools/art/tap-tempo'], strict: true },
+  { q: 'k8s', top1: ['/tools/dev/json'], strict: true },
+  { q: 'yaml to json', top1: ['/tools/dev/json'], strict: true },
+  { q: '생명표', top1: ['/tools/date/age'], strict: true },
+  { q: '메멘토모리', top1: ['/tools/date/age'], strict: true },
+  { q: '매몰비용', top1: [F + 'stock'], strict: true },
+  // 소스 도구 이름·설명에만 있던 말 — 삭제 뒤 0건이 되지 않게 (리뷰 회귀)
+  { q: '월드컵 경우의 수', top1: ['/tools/sports/league-scenarios'], strict: true },
+  { q: '챔스', top1: ['/tools/sports/league-scenarios'], strict: true },
+  { q: '타이브레이커', top1: ['/tools/sports/league-scenarios'], strict: true },
+  { q: '목표 승점', top1: ['/tools/sports/league-scenarios'], strict: true },
+  { q: '순위', top1: ['/tools/sports/league-scenarios'], present: [F + 'wealth-rank'], strict: true, note: "이름에서 '순위'가 빠져도 1위 유지 (자산 순위는 '자산 순위'로)" },
+  { q: '자산 순위', top1: [F + 'wealth-rank'] },
+  { q: '언덕', top1: ['/tools/sports/pace'], strict: true },
+  { q: '매도', top1: [F + 'stock'], strict: true },
+  { q: '과학적 표기법', top1: ['/tools/edu/sig-figs'], strict: true },
+  { q: '지수 표기', top1: ['/tools/edu/sig-figs'], strict: true },
+  // '고도 보정'은 대회 개최지 고도 보정(race-predictor) — pace의 코스 언덕 보정은 '코스 고도'·'언덕 보정'
+  { q: '고도 보정', top1: ['/tools/sports/race-predictor'], strict: true },
+  { q: '언덕 보정', top1: ['/tools/sports/pace'], strict: true },
+  { q: '토크', top1: ['/tools/unit/converter'], absent: ['/tools/dev/token-counter'], strict: true, note: "'토크' 단독은 단위 변환기 토크 분야 — 볼트 체결 토크는 '체결 토크'" },
+  { q: '체결 토크', top1: ['/tools/interior/screw'], strict: true },
+  // 옮긴 별칭이 다른 도구의 질의를 뺏지 않는지 (케이크인치 ↛ 인치, 레시피 배율은 recipe 몫이라 미등록)
+  { q: '인치', top1: ['/tools/unit/converter'] },
+  { q: '레시피', top1: ['/tools/cooking/recipe'] },
+  { q: '유산소', top1: ['/tools/sports/vo2max'] },
+  { q: '축구', top1: ['/tools/sports/formation'], present: ['/tools/sports/league-scenarios'] },
 ]
 
 export interface CaseResult {

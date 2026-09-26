@@ -1,9 +1,11 @@
 'use client'
 
-import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import Disclaimer from '@/components/Disclaimer'
-import { useState, useMemo } from 'react'
+import { useInitialTab } from '@/components/useInitialTab'
+import { useState, useMemo, useRef } from 'react'
 import s from './screw.module.css'
+import type { BoltPreset } from './BoltTab'
 import {
   SYSTEMS, MATERIALS, ENGAGEMENT_LABEL,
   METRIC_SCREWS, METRIC_QUICK,
@@ -15,10 +17,32 @@ import {
   type ScrewSystem, type Material, type Engagement,
 } from './screwUtils'
 
-type TabKey = 'calc' | 'convert' | 'tables'
+type TabKey = 'calc' | 'convert' | 'tables' | 'bolt'
+// ?tab= 딥링크 허용 목록 — 'bolt'는 구 /tools/interior/bolt-wrench 301 목적지
+const TABS: readonly TabKey[] = ['bolt', 'calc', 'convert', 'tables']
+
+// 볼트·스패너 탭(구 bolt-wrench) — 지연 로드로 기본 탭(탭드릴 계산) 번들 유지
+const BoltTab = dynamic(() => import('./BoltTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
 export default function ScrewClient() {
   const [tab, setTab] = useState<TabKey>('calc')
+  // 볼트·스패너 탭은 처음 열 때 마운트하고, 이후 다른 탭으로 가도 숨김만 해 입력(역검색·너트·와셔 선택)을 유지
+  const [boltMounted, setBoltMounted] = useState(false)
+  const [boltPreset, setBoltPreset] = useState<BoltPreset | null>(null)
+  const tabsRef = useRef<HTMLDivElement>(null)
+  const selectTab = (t: TabKey) => {
+    setTab(t)
+    if (t === 'bolt') setBoltMounted(true)
+  }
+  useInitialTab(TABS, selectTab)
+  // 탭드릴 결과의 「볼트·스패너 탭」 → 같은 호칭경으로 사이즈 찾기 열기 + 탭 줄로 스크롤
+  const openBolt = (d: number) => {
+    setBoltPreset((p) => ({ d, n: (p?.n ?? 0) + 1 }))
+    selectTab('bolt')
+    tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   // ── 탭드릴 계산 입력 ────────────────
   const [system, setSystem] = useState<ScrewSystem>('metric')
@@ -122,10 +146,11 @@ export default function ScrewClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs3}`} role="tablist" aria-label="나사 규격 도구 모드">
-        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => setTab('calc')}>탭드릴 계산</button>
-        <button type="button" role="tab" aria-selected={tab === 'convert'} className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`} onClick={() => setTab('convert')}>인치 ↔ mm</button>
-        <button type="button" role="tab" aria-selected={tab === 'tables'} className={`${s.tab} ${tab === 'tables' ? s.tabActive : ''}`} onClick={() => setTab('tables')}>사이즈 표</button>
+      <div ref={tabsRef} className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="나사 규격 도구 모드">
+        <button type="button" role="tab" aria-selected={tab === 'calc'} className={`${s.tab} ${tab === 'calc' ? s.tabActive : ''}`} onClick={() => selectTab('calc')}>탭드릴 계산</button>
+        <button type="button" role="tab" aria-selected={tab === 'convert'} className={`${s.tab} ${tab === 'convert' ? s.tabActive : ''}`} onClick={() => selectTab('convert')}>인치 ↔ mm</button>
+        <button type="button" role="tab" aria-selected={tab === 'tables'} className={`${s.tab} ${tab === 'tables' ? s.tabActive : ''}`} onClick={() => selectTab('tables')}>사이즈 표</button>
+        <button type="button" role="tab" aria-selected={tab === 'bolt'} className={`${s.tab} ${tab === 'bolt' ? s.tabActive : ''}`} onClick={() => selectTab('bolt')}>볼트·스패너</button>
       </div>
 
       {/* ══════════ TAB 1: 탭드릴 계산 ══════════ */}
@@ -390,7 +415,7 @@ export default function ScrewClient() {
                 )}
                 <p className={s.noteSmall}>
                   🔧 스패너 치수는 구 DIN·KS 부속서 기준이며, 현행 ISO 볼트는 M10·M12·M14가 한 치수 작습니다. 규격별 머리 크기 차이, 머리 모양별 알렌 사이즈, 강도등급별 토크는{' '}
-                  <Link href="/tools/interior/bolt-wrench" style={{ color: 'var(--accent)', fontWeight: 600 }}>볼트 스패너 계산기</Link>에서 자세히 확인하세요.
+                  <button type="button" className={s.inlineLink} onClick={() => openBolt(metricDiameter)}>볼트·스패너 탭</button>에서 자세히 확인하세요.
                 </p>
               </div>
             </>
@@ -766,6 +791,13 @@ export default function ScrewClient() {
             </p>
           </div>
         </>
+      )}
+
+      {/* ══════════ TAB 4: 볼트·스패너 (구 bolt-wrench) — 한 번 연 뒤엔 숨김만 해서 입력 유지 ══════════ */}
+      {boltMounted && (
+        <div hidden={tab !== 'bolt'}>
+          <BoltTab preset={boltPreset} />
+        </div>
       )}
 
     </div>

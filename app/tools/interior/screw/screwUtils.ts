@@ -269,11 +269,13 @@ export const STD_MM_SIZES = [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 25, 32]
 
 // ── 일반 토크 가이드 (참고만, 8.8 등급 기준) ──
 export function generalTorque(diameter: number): { min: number; max: number } | null {
-  // N·m 일반 범위 — 8.8 등급 기준 참고값
+  // N·m 일반 범위 — 8.8 등급 기준 참고값.
+  // 상단은 볼트·스패너 탭의 ISO 16047 참고치(boltWrenchUtils BOLT_DATA.torque8_8, μ=0.14)를 포함해야 한다 —
+  // M6 이상은 원래 포함, M3~M5는 상한이 그 값보다 낮아 한 화면에 두 값이 어긋나던 것을 상한만 올려 맞춤(2026-09-26)
   const map: Record<number, [number, number]> = {
-    3:  [0.6, 1.0],
-    4:  [1.6, 2.5],
-    5:  [3.5, 5.0],
+    3:  [0.6, 1.3],
+    4:  [1.6, 3.0],
+    5:  [3.5, 6.0],
     6:  [6.0, 10.0],
     8:  [15, 25],
     10: [30, 50],

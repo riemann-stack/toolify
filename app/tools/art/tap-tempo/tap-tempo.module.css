@@ -3,7 +3,7 @@
 
 /* ── 탭 ── */
 .tabs {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; /* 탭 템포·메트로놈·박자감 테스트·딜레이 계산 */
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: var(--radius-card); padding: 6px;
 }

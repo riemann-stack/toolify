@@ -1,12 +1,13 @@
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
-/* 탭 */
+/* 탭 — 4탭(과학적 표기 추가): 넓은 화면 1줄, 좁은 화면은 2×2 */
 .tabs {
-  display: flex; gap: 4px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: var(--radius-m); padding: 4px;
 }
+@media (max-width: 560px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
 .tabBtn {
   flex: 1 1 0; background: transparent; border: none; border-radius: 9px;
   padding: 10px 6px; font-family: var(--font-sans);

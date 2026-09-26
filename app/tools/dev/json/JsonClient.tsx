@@ -1,10 +1,31 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties } from 'react'
+import dynamic from 'next/dynamic'
 import s from '../dev.module.css'
 import { jsonToInterfaces, unescapeJson } from './jsonUtils'
+import { useInitialTab } from '@/components/useInitialTab'
 
 type YamlDump = typeof import('js-yaml').dump
+
+// YAML ↔ JSON 탭 (구 /tools/dev/yaml-json) — 탭을 열 때만 청크 로드 (기본 탭 번들 유지)
+const YamlTab = dynamic(() => import('./YamlTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
+
+type Tab = 'format' | 'tree' | 'transform' | 'yaml'
+const TABS: Tab[] = ['yaml', 'format', 'tree', 'transform']
+
+/** JSON 파싱에 실패한 입력이 YAML처럼 보이는지 — '{'·'['로 시작하지 않고 'key:'·'- 항목'·'---' 줄이 있으면 */
+function looksLikeYaml(text: string): boolean {
+  return !/^\s*[[{]/.test(text) && /^(---|\s*[A-Za-z_][\w.-]*:(\s|$)|\s*-\s)/m.test(text)
+}
+
+/** 본문 속 링크 모양 버튼 — 전역 터치 44px(button)로 줄 높이가 벌어지지 않게 minHeight 0 */
+const inlineLinkBtn: CSSProperties = {
+  background: 'none', border: 'none', padding: 0, minHeight: 0, font: 'inherit',
+  color: 'var(--accent-ink)', fontWeight: 700, textDecoration: 'underline', cursor: 'pointer',
+}
 
 // ─────────────────────────────────────────────
 // JSON 통계
@@ -150,8 +171,11 @@ const SAMPLE_JSON = `{
 }`
 
 export default function JsonClient() {
-  const [tab, setTab] = useState<'format' | 'tree' | 'transform'>('format')
+  const [tab, setTab] = useState<Tab>('format')
+  useInitialTab(TABS, setTab) // ?tab=yaml 딥링크 (구 /tools/dev/yaml-json 301 목적지)
   const [input, setInput] = useState('')
+  // 'YAML처럼 보입니다' 안내로 YAML ↔ JSON 탭을 열 때 넘길 입력 — YamlTab이 받아 넣으면 비운다
+  const [yamlSeed, setYamlSeed] = useState<string | null>(null)
   const [indent, setIndent] = useState<2 | 4>(2)
   const [transformMode, setTransformMode] = useState<'sortKeys' | 'escape' | 'unescape' | 'yaml' | 'ts' | 'csvFlat'>('ts')
   const [copied, setCopied] = useState<string>('')
@@ -276,61 +300,75 @@ export default function JsonClient() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabsThree}`}>
+      <div className={`${s.tabs} ${s.tabsFour}`}>
         <button className={`${s.tabBtn} ${tab === 'format'     ? s.tabActive : ''}`} onClick={() => setTab('format')}>정렬·압축·검증</button>
         <button className={`${s.tabBtn} ${tab === 'tree'       ? s.tabActive : ''}`} onClick={() => setTab('tree')}>트리 뷰어</button>
         <button className={`${s.tabBtn} ${tab === 'transform'  ? s.tabActive : ''}`} onClick={() => setTab('transform')}>변환 (TS·YAML·CSV)</button>
+        <button className={`${s.tabBtn} ${tab === 'yaml'       ? s.tabActive : ''}`} onClick={() => setTab('yaml')}>YAML ↔ JSON</button>
       </div>
 
-      {/* 공통 입력 */}
-      <div className={s.card}>
-        <div className={s.cardTop}>
-          <label className={s.cardLabel} htmlFor="json-input">JSON 입력</label>
-          <div style={{ display: 'flex', gap: 6 }}>
-            {!input && <button className={s.clearBtn} onClick={handleSample}>샘플</button>}
-            {input && <button className={s.clearBtn} onClick={handleClear}>지우기</button>}
-          </div>
-        </div>
-        <textarea
-          id="json-input"
-          className={s.textarea}
-          placeholder={'{\n  "key": "value"\n}'}
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          rows={tab === 'tree' ? 6 : 10}
-          spellCheck={false}
-        />
-        {/* 검증 상태 */}
-        {input.trim() && parsed.ok && (
-          <p role="status" style={{ fontSize: 12, color: 'var(--emerald-600)', marginTop: 8, fontWeight: 600 }}>✓ 유효한 JSON</p>
-        )}
-        {input.trim() && !parsed.ok && (
-          <>
-            <div className={s.errorBox} style={{ marginTop: 8 }} role="status">
-              <strong>⚠️ JSON 파싱 오류</strong>
-              <p>{parsed.error}</p>
-            </div>
-            {errPos && (
-              <div className={s.errorPosition}>
-                <div style={{ color: 'var(--muted)', fontSize: 11, marginBottom: 4 }}>
-                  Line {errPos.line}, Column {errPos.col}
-                </div>
-                <div>{errPos.lineText}</div>
-                <div className={s.errMarker}>{' '.repeat(Math.max(0, errPos.col - 1))}^</div>
+      {/* 공통 입력 — YAML ↔ JSON 탭은 자체 입력·검증을 쓰므로 숨김 (role=status 중복 방지) */}
+      {tab !== 'yaml' && (
+        <>
+          <div className={s.card}>
+            <div className={s.cardTop}>
+              <label className={s.cardLabel} htmlFor="json-input">JSON 입력</label>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {!input && <button className={s.clearBtn} onClick={handleSample}>샘플</button>}
+                {input && <button className={s.clearBtn} onClick={handleClear}>지우기</button>}
               </div>
+            </div>
+            <textarea
+              id="json-input"
+              className={s.textarea}
+              placeholder={'{\n  "key": "value"\n}'}
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              rows={tab === 'tree' ? 6 : 10}
+              spellCheck={false}
+            />
+            {/* 검증 상태 */}
+            {input.trim() && parsed.ok && (
+              <p role="status" style={{ fontSize: 12, color: 'var(--emerald-600)', marginTop: 8, fontWeight: 600 }}>✓ 유효한 JSON</p>
             )}
-          </>
-        )}
-      </div>
+            {input.trim() && !parsed.ok && (
+              <>
+                <div className={s.errorBox} style={{ marginTop: 8 }} role="status">
+                  <strong>⚠️ JSON 파싱 오류</strong>
+                  <p>{parsed.error}</p>
+                </div>
+                {/* YAML을 JSON 칸에 붙여 넣은 경우 — YAML ↔ JSON 탭으로 안내 ({·[로 시작하지 않고 'key:'·'- '·'---' 줄이 있으면) */}
+                {looksLikeYaml(input) && (
+                  <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.6, margin: '8px 0 0' }}>
+                    YAML처럼 보입니다 —{' '}
+                    <button type="button" onClick={() => { setYamlSeed(input); setTab('yaml') }} style={inlineLinkBtn}>
+                      이 입력을 YAML ↔ JSON 탭에서 변환하기 →
+                    </button>
+                  </p>
+                )}
+                {errPos && (
+                  <div className={s.errorPosition}>
+                    <div style={{ color: 'var(--muted)', fontSize: 11, marginBottom: 4 }}>
+                      Line {errPos.line}, Column {errPos.col}
+                    </div>
+                    <div>{errPos.lineText}</div>
+                    <div className={s.errMarker}>{' '.repeat(Math.max(0, errPos.col - 1))}^</div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
-      {/* 통계 (모든 탭 공통) */}
-      {parsed.ok && stats && sizes && (
-        <div className={s.jsonStatGrid}>
-          <div className={s.miniStat}><p className={s.miniStatLabel}>키 개수</p>     <p className={s.miniStatValue}>{stats.keys.toLocaleString()}</p></div>
-          <div className={s.miniStat}><p className={s.miniStatLabel}>객체 / 배열</p> <p className={s.miniStatValue}>{stats.objects} / {stats.arrays}</p></div>
-          <div className={s.miniStat}><p className={s.miniStatLabel}>최대 깊이</p>   <p className={s.miniStatValue}>{stats.depth}</p></div>
-          <div className={s.miniStat}><p className={s.miniStatLabel}>크기</p>       <p className={s.miniStatValue}>{fmtBytes(sizes.origBytes)}</p></div>
-        </div>
+          {/* 통계 (JSON 탭 3개 공통) */}
+          {parsed.ok && stats && sizes && (
+            <div className={s.jsonStatGrid}>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>키 개수</p>     <p className={s.miniStatValue}>{stats.keys.toLocaleString()}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>객체 / 배열</p> <p className={s.miniStatValue}>{stats.objects} / {stats.arrays}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>최대 깊이</p>   <p className={s.miniStatValue}>{stats.depth}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>크기</p>       <p className={s.miniStatValue}>{fmtBytes(sizes.origBytes)}</p></div>
+            </div>
+          )}
+        </>
       )}
 
       {/* ─── TAB 1: 정렬·압축·검증 ─── */}
@@ -455,10 +493,23 @@ export default function JsonClient() {
                 Kubernetes·GitHub Actions·Docker Compose·Ansible 등에서 사용됩니다.
                 JSON 대비 가독성이 좋고 주석 작성이 가능합니다.
               </p>
+              <p className={s.seoCardText} style={{ marginTop: 6 }}>
+                YAML을 JSON으로 되돌리거나 YAML 문법을 검증하려면{' '}
+                <button
+                  type="button"
+                  onClick={() => setTab('yaml')}
+                  style={inlineLinkBtn}
+                >
+                  YAML ↔ JSON 탭 →
+                </button>
+              </p>
             </div>
           )}
         </>
       )}
+
+      {/* ─── TAB 4: YAML ↔ JSON (양방향 변환·검증·예시 12개) ─── */}
+      {tab === 'yaml' && <YamlTab seedInput={yamlSeed ?? undefined} onSeedApplied={() => setYamlSeed(null)} />}
     </div>
   )
 }

@@ -8,9 +8,10 @@ import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/pace',
-  title: '러닝 페이스 계산기 — 마라톤 완주 시간·트레드밀·구간 스플릿',
-  description: '페이스 ↔ 완주 시간 양방향 변환 + 트레드밀 시속 환산과 400m 트랙 랩타임, 5km·10km·하프·풀 구간 스플릿 자동 계산. 서브3~서브5 목표 페이스 기준표까지.',
-  keywords: ['러닝페이스계산기', '마라톤페이스계산기', '트레드밀시속변환', '달리기페이스', '마라톤완주시간', '400m트랙페이스', '러닝스플릿', '서브3 페이스', '서브4 페이스', '구간 스플릿', '네거티브 스플릿'],
+  title: '러닝 페이스 계산기 — 마라톤 완주 시간·트레드밀·구간 스플릿·레이스 플랜',
+  description: '페이스 ↔ 완주 시간 양방향 변환 + 트레드밀 시속 환산과 400m 트랙 랩타임, 5km·10km·하프·풀 구간 스플릿 자동 계산. 레이스 플랜 탭에서 구간별 페이스 분배·코스 고도 보정·지점별 통과 예상 시각까지.',
+  keywords: ['러닝페이스계산기', '마라톤페이스계산기', '트레드밀시속변환', '달리기페이스', '마라톤완주시간', '400m트랙페이스', '러닝스플릿', '서브3 페이스', '서브4 페이스', '구간 스플릿', '네거티브 스플릿',
+    '레이스 페이스 플래너', '마라톤 페이스 분배', '구간별 페이스', '코스 고도 페이스', '오르막 페이스', '통과 예상 시각', 'GAP 페이스', '페이스 밴드'],
 })
 
 const FAQ_LD = [
@@ -22,26 +23,31 @@ const FAQ_LD = [
                 a: '400m 트랙은 인터벌 훈련의 기본 단위입니다. &ldquo;400m 인터벌 6회&rdquo;처럼 트랙 훈련 프로그램은 바퀴당 목표 시간으로 구성됩니다. 예를 들어 킬로미터 페이스 5:00(km/h 12)이라면 400m 1바퀴에 2:00이 목표 시간이 됩니다. 자세한 인터벌 훈련은 인터벌 훈련 계산기(관련 도구에서 이동)를 참고하세요.' },
               { q: '마라톤 서브4(4시간 이내 완주)를 위한 페이스는?',
                 a: '마라톤 서브4를 달성하려면 평균 페이스 5분 41초/km(시속 약 10.5km/h)를 유지해야 합니다. 실제 레이스에서는 초반 흥분으로 오버페이스하지 않도록 전반부를 조금 여유 있게, 후반부에 페이스를 유지하는 네거티브 스플릿 전략을 권장합니다.' },
-              { q: '5km·10km·하프·풀 거리는 정확히 몇 km인가요?',
-                a: '국제 표준 거리:<br/>• <strong>5km</strong>: 5.000km<br/>• <strong>10km</strong>: 10.000km<br/>• <strong>하프 마라톤</strong>: 21.0975km (정확히 풀 마라톤의 절반)<br/>• <strong>풀 마라톤</strong>: 42.195km<br/>본 도구는 정확한 거리로 계산합니다 — 하프 + 풀의 끝부분 195m·95m도 반영.' },
-              { q: '네거티브 스플릿이 무엇인가요?',
-                a: '<strong>후반을 전반보다 약간 빠르게</strong> 달리는 전략. 본 도구의 하프·풀 결과 카드에 자동 표시됩니다.<br/>예: 마라톤 5:30/km 목표 → 전반 5:33/km(1.5초 느슨) + 후반 5:27/km(1.5초 빠르게) = 총 시간 동일.<br/>장점: 초반 오버페이스 ↓, 후반 무너짐 ↓, 심리적 자신감 ↑. ⚠️ 단, 충분히 훈련된 러너만 가능. 초보는 일정 페이스부터 익히기.' },
+              { q: '5km·10km·하프·풀 거리는 정확히 몇 km이고, 풀코스는 왜 42.195km인가요?',
+                a: '국제 표준 거리:<br/>• <strong>5km</strong>: 5.000km<br/>• <strong>10km</strong>: 10.000km<br/>• <strong>하프 마라톤</strong>: 21.0975km (정확히 풀 마라톤의 절반)<br/>• <strong>풀 마라톤</strong>: 42.195km<br/>풀코스 거리는 1908년 런던 올림픽에서 왕실 관람을 위해 코스를 늘린 거리가 표준이 되었습니다.<br/>본 도구는 정확한 거리로 계산합니다 — 하프·풀의 끝부분(97.5m·195m)도 반영. [레이스 플랜] 탭도 마지막 0.195km(하프는 0.0975km)를 별도 구간으로 계산합니다.' },
+              { q: '네거티브 스플릿이 무엇이고, 왜 권장하나요?',
+                a: '<strong>후반을 전반보다 약간 빠르게</strong> 달리는 전략. 본 도구의 하프·풀 결과 카드에 자동 표시됩니다.<br/>예: 마라톤 5:30/km 목표 → 전반 5:33/km(1.5초 느슨) + 후반 5:27/km(1.5초 빠르게) = 총 시간 동일.<br/>대부분의 개인 최고기록이 후반을 더 빠르게 뛴 네거티브 스플릿에서 나옵니다. 초반 과속은 글리코겐 조기 고갈·후반 급감속(벽)의 가장 흔한 원인입니다. [레이스 플랜] 탭의 네거티브 전략은 기준 페이스보다 앞을 살짝 느리게(약 +3%), 뒤를 빠르게(약 −3%) 구간마다 점진적으로 나누고, 완주 시간은 기준 페이스로 고르게 달렸을 때와 같아지도록 맞춥니다.<br/>장점: 초반 오버페이스 ↓, 후반 무너짐 ↓, 심리적 자신감 ↑. ⚠️ 단, 충분히 훈련된 러너만 가능. 초보는 일정 페이스부터 익히기.' },
               { q: '페이스 ↔ 시속 변환 공식은?',
                 a: '<strong>시속 = 60 ÷ 페이스(분/km)</strong><br/>• 5:00/km → 12.0 km/h<br/>• 5:30/km → 10.9 km/h<br/>• 6:00/km → 10.0 km/h<br/><strong>400m 트랙 1바퀴 = 페이스 × 0.4</strong><br/>• 5:00/km → 2:00 (400m)<br/>• 5:30/km → 2:12<br/>• 6:00/km → 2:24<br/>본 도구의 자동 변환을 활용하세요.' },
               { q: '본 도구와 인터벌 훈련 계산기·기록 예측 계산기 차이는?',
-                a: '각 도구는 다른 영역을 다룹니다.<br/>📊 <strong>본 도구 (러닝 페이스 계산기)</strong> — 단순 페이스↔시간 변환 / 트레드밀 시속 / 구간 스플릿(페이스 분배)<br/>🏃 <strong>인터벌 훈련 계산기</strong> — VDOT 기반 인터벌 페이스 / 야소 800 / 4~16주 훈련 스케줄 / I·R·T 페이스<br/>🎯 <strong>마라톤 기록 계산기</strong> — VDOT·Riegel 공식 / 5km → 풀코스 기록 예측<br/>본 도구는 <strong>페이스 변환 기본 도구</strong>. 훈련은 인터벌 도구, 예측은 기록 예측 도구를 함께 활용.' },
+                a: '각 도구는 다른 영역을 다룹니다.<br/>📊 <strong>본 도구 (러닝 페이스 계산기)</strong> — 단순 페이스↔시간 변환 / 트레드밀 시속 / 구간 스플릿(페이스 분배) / [레이스 플랜] 탭(구간별 전략·코스 고도·통과 예상 시각)<br/>🏃 <strong>인터벌 훈련 계산기</strong> — VDOT 기반 인터벌 페이스 / 야소 800 / 4~16주 훈련 스케줄 / I·R·T 페이스<br/>🎯 <strong>마라톤 기록 계산기</strong> — VDOT·Riegel 공식 / 5km → 풀코스 기록 예측<br/>본 도구는 <strong>페이스 변환 기본 도구</strong>. 훈련은 인터벌 도구, 예측은 기록 예측 도구를 함께 활용.' },
               { q: '본인 페이스가 매번 다른데 어떻게 사용하나요?',
                 a: '<strong>평균 페이스</strong> 또는 <strong>목표 페이스</strong> 입력 권장. 일반 가이드:<br/>• 평소 조깅: 6:00~6:30/km<br/>• 약간 빠르게: 5:30~6:00/km<br/>• 5km 페이스: 5:00~5:30/km<br/>• 10km 페이스: 5:15~5:45/km<br/>• 하프 페이스: 5:30~6:00/km<br/>• 풀코스 목표: 본 도구의 빠른 페이스 칩 활용.<br/>본 도구는 마지막 입력을 자동 저장 — 재방문 시 빠른 사용 가능.' },
+              { q: '[레이스 플랜] 탭에서 구간 페이스만 넣으면 완주 시간이 정확한가요?',
+                a: '입력한 페이스를 그대로 유지한다는 가정의 계산값입니다(페이스 × 거리 합산). 실제로는 누적 피로·기온·습도·노면·보급에 따라 후반이 느려지는 경향(positive drift)이 있어 참고용으로 보세요. 코스 고도를 입력하면 언덕에 의한 차이를 어느 정도 반영할 수 있습니다.' },
+              { q: '코스 고도는 어떻게 입력하고, 언덕 보정은 얼마나 정확한가요?',
+                a: '[레이스 플랜] 탭에서 [코스 고도 입력]을 켜고 각 km 지점의 고도(해발 m)를 넣으면, 직전 지점과의 차이로 구간 경사(%)·총 상승/하강이 자동 계산됩니다. 대회 코스맵의 고도 프로파일에서 km 단위 고도를 읽어 입력하면 됩니다. [고도로 페이스 자동 보정]을 켜고 전략 버튼을 누르면 언덕이 페이스에 반영됩니다.<br/>보정값은 추정치입니다. 흔한 코칭 경험칙과 Strava GAP·Minetti의 경사 에너지 곡선을 단순화해 <strong>오르막 1%당 약 +12초/km, 내리막 1%당 약 −6초/km</strong>로 가감합니다. 실제 손실/이득은 경사 길이·노면·개인 능력·피로도에 따라 크게 다르므로, 자동 보정으로 채운 뒤 구간을 직접 조정하는 것을 권장합니다.' },
+              { q: '통과 예상 시각은 어디에 쓰나요?',
+                a: '[레이스 플랜] 탭에서 [출발 시각]을 넣으면 5K·10K·하프·완주 지점을 몇 시 몇 분에 통과하는지 시계 시각으로 보여줍니다(구간 목록에도 km마다 통과 시각이 함께 표시). 가족·페이서가 응원 지점에서 기다리거나 미팅을 잡을 때 유용합니다.' },
             ]
 
 export default function PacePage() {
   return (
     <ToolPage width={760} slug="/tools/sports/pace">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />러닝 페이스 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         페이스 ↔ 완주 시간 1줄 입력 + 트레드밀 시속과 <strong style={{ color: 'var(--text)' }}>5km·10km·하프·풀 스플릿</strong>.
       </p>
 
@@ -208,7 +214,7 @@ export default function PacePage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            💡 본 도구의 [📋 결과 + 스플릿 복사] 버튼으로 각 km별 누적 시간을 메모장에 저장 가능. 손목시계에 미리 입력해두면 레이스 중 실시간 페이스 점검이 편합니다.
+            💡 본 도구의 [📋 결과 + 스플릿 복사] 버튼으로 각 km별 누적 시간을 메모장에 저장 가능. 손목시계에 미리 입력해두면 레이스 중 실시간 페이스 점검이 편합니다. 위 전략처럼 구간마다 페이스를 다르게 짜거나 코스 고도를 반영하려면 계산기의 <strong style={{ color: 'var(--text)' }}>[레이스 플랜]</strong> 탭에서 1km 구간 페이스를 직접 조정하세요.
           </p>
         </div>
 
@@ -236,6 +242,107 @@ export default function PacePage() {
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
             예: 마라톤 5:30/km 목표 → 전반 5:33/km(1.5초 느슨) + 후반 5:27/km(1.5초 빠르게) → 총 시간 동일.
           </p>
+
+          <h3 className="g-h3">균등·네거티브·포지티브 — 레이스 플랜 탭의 페이스 분배</h3>
+          <p className="g-p">
+            계산기의 [레이스 플랜] 탭에서 전략 버튼을 누르면 기준 페이스가 1km 구간마다 자동으로 채워집니다. 네거티브·포지티브는 앞뒤 끝을 기준 페이스 대비 약 ±3%로 점진적으로 나누되, 완주 시간은 기준 페이스로 고르게 달렸을 때와 같도록 맞춥니다.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+            {[
+              { t: '균등 (Even)', c: 'var(--data-4)', d: '처음부터 끝까지 같은 페이스. 가장 단순하고 에너지 분배가 안정적. 평지 코스·입문자에게 무난.' },
+              { t: '네거티브 (권장)', c: 'var(--success)', d: '후반을 앞보다 빠르게. 초반을 아껴 후반 가속 — 대부분의 PB가 이 방식. 기록 도전에 가장 유리.' },
+              { t: '포지티브', c: 'var(--warning)', d: '초반을 빠르게. 컨디션이 좋거나 내리막 시작 코스에 한정. 후반 급감속(벽) 위험이 커 일반적으로 비권장.' },
+            ].map((x, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${x.c} 33%, transparent)`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: '14px', fontWeight: 700, color: x.c, marginBottom: '6px' }}>{x.t}</p>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 4-1. 레이스 플랜 탭 사용법 (구 race-plan 흡수) ── */}
+        <div>
+          <h2 className="g-h2">
+            🏁 레이스 플랜 탭 3단계 사용법
+          </h2>
+          <p className="g-p">
+            [레이스 플랜] 탭은 1km 구간마다 목표 페이스를 따로 정해 예상 완주 시간과 5K·10K·하프·완주 지점 통과 시간을 계산합니다. 직접 거리는 최대 100km까지 입력할 수 있습니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              { n: '①', t: '거리·기준 페이스 선택', d: '5K·10K·하프·풀 또는 직접 거리를 고르고, 목표 평균 페이스(분:초/km)를 입력합니다.' },
+              { n: '②', t: '전략으로 자동 분배', d: '균등·네거티브·포지티브 중 하나를 누르면 구간별 페이스가 자동으로 채워집니다. 이후 특정 구간만 직접 조정 가능.' },
+              { n: '③', t: '(선택) 코스 고도 입력', d: '언덕이 있는 코스라면 각 km 고도를 넣어 경사·상승/하강을 반영하고, 자동 보정으로 언덕 페이스를 추정합니다.' },
+            ].map((x, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{x.n}</span>
+                <div>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{x.t}</p>
+                  <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 4-2. 코스 고도와 페이스 (구 race-plan 흡수) ── */}
+        <div>
+          <h2 className="g-h2">
+            ⛰️ 코스 고도와 페이스
+          </h2>
+          <p className="g-p">
+            언덕은 페이스에 직접적인 영향을 줍니다. [레이스 플랜] 탭은 각 구간의 경사를 추정해 페이스를 가감합니다 — <strong style={{ color: 'var(--text)' }}>오르막 1%당 약 +12초/km, 내리막 1%당 약 −6초/km</strong>(흔한 코칭 경험칙 + Strava GAP·Minetti 경사 비용 곡선을 단순화한 추정치).
+          </p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--warning) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
+              ⚠️ <strong>추정의 한계</strong> — 실제 언덕 손실/이득은 경사가 이어지는 길이, 노면(트레일·아스팔트), 개인 능력, 누적 피로에 따라 크게 달라집니다. 가파른 내리막은 오히려 근육 손상으로 이득이 줄거나 손해가 되기도 합니다. <strong>자동 보정은 출발점일 뿐</strong>, 코스를 잘 안다면 구간을 직접 조정하세요.
+            </p>
+          </div>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: '10px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>실전 예 — 춘천마라톤 코스 고도 읽기</p>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+              춘천마라톤 공식 홈페이지에 게시된 코스도·고저도를 판독하면 출발·골인 지점이 약 78~80m, 최고점이 약 29km 지점(춘천댐 인근) 약 115m로 전체 고도 변동 폭은 약 40m 이내이며, 약 34km부터는 약 80m대 평탄 구간입니다(2026년 7월 확인 · 수치 라벨이 없는 공식 코스도 판독 기준 근사치 — 참가 연도의 공식 코스 안내로 확인 필요). 이런 코스의 km별 고도를 [코스 고도 입력]에 넣으면 최고점으로 이어지는 오르막 구간의 페이스는 자동으로 늦춰지고 후반 평탄 구간에서 기준 페이스로 회복하는 계획이 만들어집니다 — 예컨대 1km 동안 고도가 10m 오르면 경사 +1%로 인식되어 그 구간에 약 +12초/km가 더해지는 식입니다.
+            </p>
+          </div>
+        </div>
+
+        {/* ── 4-3. GAP (구 race-plan 흡수) ── */}
+        <div>
+          <h2 className="g-h2">
+            GAP(경사 보정 페이스)란?
+          </h2>
+          <p className="g-p">
+            <strong style={{ color: 'var(--text)' }}>GAP(Grade Adjusted Pace)</strong>은 달린 지형의 경사를 반영해 &lsquo;평지였다면 이에 상응했을 페이스&rsquo;를 추정한 지표입니다(Strava 서포트 공식 문서). 오르막에서는 같은 페이스라도 더 많은 일이 필요하므로 GAP이 실제 페이스보다 <strong style={{ color: 'var(--text)' }}>빠르게</strong>, 내리막에서는 반대로 실제보다 <strong style={{ color: 'var(--text)' }}>느리게</strong> 표기됩니다. 같은 문서에 따르면 내리막 보정은 약 −10% 경사에서 최대가 되고 그보다 가파르면 소폭 완화되며, 지형의 기술적 난도나 노면 상태는 반영하지 않는 한계가 있습니다.
+          </p>
+          <p className="g-p">
+            GAP이 이미 달린 기록을 평지 기준으로 <strong style={{ color: 'var(--text)' }}>사후 환산</strong>하는 지표라면, [레이스 플랜] 탭의 고도 보정은 그 반대 방향입니다 — 평지 기준 목표 페이스를 경사 구간에서 실제로 뛸 페이스로 <strong style={{ color: 'var(--text)' }}>미리 환산</strong>해 레이스 계획에 반영합니다.
+          </p>
+        </div>
+
+        {/* ── 4-4. 페이스 밴드 (구 race-plan 흡수) ── */}
+        <div>
+          <h2 className="g-h2">
+            페이스 밴드 만드는 법
+          </h2>
+          <p className="g-p">
+            페이스 밴드는 구간 통과 목표 시간을 적어 손목에 두르는 종이 띠입니다. 해외 전문 서비스 FindMyMarathon은 GPS 시계도 레이스 당일 항상 완벽하지는 않다는 점을 들어 밴드를 단순하고 믿을 수 있는 페이싱 기준물로 소개하며, 코스 고저까지 반영한 밴드를 서비스할 정도로 러너들 사이에 정착된 방법입니다. [레이스 플랜] 탭의 결과로 직접 만들 수 있습니다.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              { n: '①', t: '스플릿 확정 후 [플랜 복사]', d: '전략·고도 보정까지 반영한 구간표를 확정하고 결과의 [플랜 복사]를 누르면 예상 완주·평균 페이스와 5K·10K·하프·완주 통과 타임(출발 시각을 넣었다면 시계 시각 포함)이 텍스트로 복사됩니다.' },
+              { n: '②', t: '종이 띠에 옮겨 적고 손목에 고정', d: '복사한 통과 타임을 손목 둘레 길이의 종이 띠에 크게 옮겨 적고 테이프로 감아 고정합니다. 비 예보가 있으면 투명 테이프로 전체를 덮어 번짐을 막으세요.' },
+              { n: '③', t: 'GPS 시계 랩 알림과 병행', d: '시계에 1km 자동 랩과 목표 페이스 범위 알림을 함께 설정하고, 구간마다 페이스가 다른 전략이라면 밴드의 누적 통과 타임과 시계 랩을 교차 확인하는 방식이 안전합니다.' },
+            ].map((x, i) => (
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{x.n}</span>
+                <div>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{x.t}</p>
+                  <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ── 5. 한국 인기 페이스 가이드 (NEW) ── */}
@@ -277,6 +384,9 @@ export default function PacePage() {
               </tbody>
             </table>
           </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+            ※ 하프는 풀의 정확히 절반 거리라, 균등 페이스 기준 하프 1:30 = 풀 3:00, 1:45 = 3:30, 2:00 = 4:00, 2:15 = 4:30, 2:30 = 5:00과 같은 페이스입니다(예: 3:00·1:30 모두 약 4:16/km — &lsquo;서브&rsquo; 기준 내림 4:15). 하지만 실제로는 거리가 길수록 페이스가 느려지는 게 정상입니다. 과거 기록으로 거리별 예상 시간을 보려면 <Link href="/tools/sports/race-predictor" style={{ color: 'var(--accent-ink)' }}>마라톤 기록 계산기</Link>를 함께 쓰세요.
+          </p>
         </div>
 
         {/* ── 6. 트레드밀 vs 야외 (NEW) ── */}

@@ -46,6 +46,32 @@
 .tabActiveMilestone { background: rgba(161,98,7,0.18);    color: var(--yellow-700); font-weight: 700; }
 .tabActiveCulture   { background: color-mix(in srgb, var(--cyan-600) 18%, transparent);   color: var(--cyan-600); font-weight: 700; }
 
+/* ── 인생 통계 탭 내부 보기 전환 (시간 통계 / 기대수명·남은 시간) ── */
+.subTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: var(--bg3);
+  border-radius: var(--radius-m);
+  padding: 4px;
+}
+.subTabBtn {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-s);
+  padding: 10px 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}@media (hover: hover) {
+  .subTabBtn:hover { color: var(--text); }
+}
+.subTabActive { background: var(--bg2); color: var(--accent-ink); font-weight: 700; box-shadow: var(--shadow-pop); }
+
 /* ── 카드 ── */
 .card {
   background: var(--bg2);

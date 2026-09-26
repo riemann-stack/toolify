@@ -3,8 +3,10 @@
 
 import Disclaimer from '@/components/Disclaimer'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { useState, useMemo, useEffect } from 'react'
 import { todayStr } from '@/lib/date'
+import { useInitialTab } from '@/components/useInitialTab'
 import s from './baking-recipe.module.css'
 import {
   BAKING_ITEMS, PRESET_RECIPES, MOLD_PRESETS,
@@ -16,7 +18,14 @@ import {
   TEXTURE_ADJUSTS,
 } from './bakingUtils'
 
-type TabKey = 'recipe' | 'diagnose' | 'mold' | 'preset'
+type TabKey = 'recipe' | 'diagnose' | 'mold' | 'preset' | 'pan'
+// ?tab= 딥링크 허용 목록 — 'pan'은 구 /tools/cooking/cake-pan 301 목적지
+const TABS: readonly TabKey[] = ['pan', 'recipe', 'diagnose', 'mold', 'preset']
+
+// 케이크 팬 탭(구 cake-pan) — 지연 로드로 기본 '레시피' 탭 번들 유지
+const CakePanTab = dynamic(() => import('./CakePanTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
 interface SavedRecipe {
   id: string
@@ -76,6 +85,13 @@ function getDefaultRatios(item: BakingItem): Partial<Record<IngredientKey, numbe
 
 export default function BakingRecipeClient() {
   const [tab, setTab] = useState<TabKey>('recipe')
+  // 케이크 팬 탭은 처음 열 때 마운트하고, 이후 다른 탭으로 가도 숨김만 해 입력(팬 호수·치수)을 유지
+  const [panMounted, setPanMounted] = useState(false)
+  const selectTab = (t: TabKey) => {
+    setTab(t)
+    if (t === 'pan') setPanMounted(true)
+  }
+  useInitialTab(TABS, selectTab)
   const [itemId, setItemId] = useState<string>('madeleine')
   const item = BAKING_ITEMS.find((i) => i.id === itemId) ?? BAKING_ITEMS[0]
 
@@ -158,8 +174,12 @@ export default function BakingRecipeClient() {
           { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
           { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
         ]}
+        sources={[
+          { label: '카우2004 — 케이크 팬 판매 규격', href: 'https://www.cow2004.com' },
+          { label: '웰베이킹 — 케이크 팬 판매 규격', href: 'https://wellbaking.co.kr' },
+        ]}
       >
-        본 도구는 일반 가이드입니다 레시피 비율은 출발점·정확한 결과는 본인 테스트 필요 오븐별 온도·시간 편차 큼 (가정용 ±20°C·±3분) 재료 (특히 버터·밀가루) 브랜드별 차이 있음
+        본 도구는 일반 가이드입니다 레시피 비율은 출발점·정확한 결과는 본인 테스트 필요 오븐별 온도·시간 편차 큼 (가정용 ±20°C·±3분) 재료 (특히 버터·밀가루) 브랜드별 차이 있음. 케이크 팬 탭의 배율은 팬 부피 비율 기준 산술값이며, 호수 규격(1호 15cm·호당 +3cm·높은팬 7cm)은 베이킹 자재상 판매 규격을 교차 확인한 값입니다(2026년 7월 점검). 사각팬·파운드(오란다)팬은 표준 규격이 없어 실측 치수를 입력하세요.
       </Disclaimer>
 
       <div className={s.diffNotice}>
@@ -173,10 +193,11 @@ export default function BakingRecipeClient() {
       </div>
 
       <div className={s.tabs} role="tablist" aria-label="제과 레시피 계산기 메뉴">
-        <button role="tab" aria-selected={tab === 'recipe'} className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => setTab('recipe')}>레시피</button>
-        <button role="tab" aria-selected={tab === 'diagnose'} className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => setTab('diagnose')}>비율 진단</button>
-        <button role="tab" aria-selected={tab === 'mold'} className={`${s.tab} ${tab === 'mold' ? s.tabActive : ''}`} onClick={() => setTab('mold')}>분량 변환</button>
-        <button role="tab" aria-selected={tab === 'preset'} className={`${s.tab} ${tab === 'preset' ? s.tabActive : ''}`} onClick={() => setTab('preset')}>인기 레시피</button>
+        <button role="tab" aria-selected={tab === 'recipe'} className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => selectTab('recipe')}>레시피</button>
+        <button role="tab" aria-selected={tab === 'diagnose'} className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => selectTab('diagnose')}>비율 진단</button>
+        <button role="tab" aria-selected={tab === 'mold'} className={`${s.tab} ${tab === 'mold' ? s.tabActive : ''}`} onClick={() => selectTab('mold')}>분량 변환</button>
+        <button role="tab" aria-selected={tab === 'preset'} className={`${s.tab} ${tab === 'preset' ? s.tabActive : ''}`} onClick={() => selectTab('preset')}>인기 레시피</button>
+        <button type="button" role="tab" aria-selected={tab === 'pan'} className={`${s.tab} ${tab === 'pan' ? s.tabActive : ''}`} onClick={() => selectTab('pan')}>케이크 팬</button>
       </div>
 
       {tab === 'recipe' && (
@@ -218,6 +239,7 @@ export default function BakingRecipeClient() {
           baseKey={baseKey}
           totalG={totalG}
           weights={weights}
+          onOpenPan={() => selectTab('pan')}
         />
       )}
 
@@ -226,8 +248,15 @@ export default function BakingRecipeClient() {
           itemId={itemId}
           handleItemChange={handleItemChange}
           setRatios={setRatios}
-          setTab={setTab}
+          setTab={selectTab}
         />
+      )}
+
+      {/* 탭 5 — 케이크 팬 (호수·부피비 배율·굽기 보정) — 한 번 연 뒤엔 숨김만 해서 입력 유지 */}
+      {panMounted && (
+        <div hidden={tab !== 'pan'}>
+          <CakePanTab onOpenMold={() => selectTab('mold')} />
+        </div>
       )}
 
     </div>
@@ -574,9 +603,11 @@ interface MoldTabProps {
   baseKey: IngredientKey
   totalG: number
   weights: Partial<Record<IngredientKey, number>>
+  /** 원형 케이크틀·무스링·사각팬 → '케이크 팬' 탭으로 전환 */
+  onOpenPan: () => void
 }
 
-function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
+function MoldTab({ item, ratios, baseKey, totalG, weights, onOpenPan }: MoldTabProps) {
   const moldList = MOLD_PRESETS[item.id] ?? []
   const isPiece = moldList[0]?.perPiece != null
 
@@ -597,13 +628,13 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
   }
   const scaledTotal = totalG * factor
 
-  // 원형 케이크틀은 호수·높이별 부피 환산이 필요해 전용 도구로 안내
+  // 원형 케이크틀은 호수·높이별 부피 환산이 필요해 '케이크 팬' 탭으로 안내
   if (!mold) {
     return (
       <div className={s.card}>
         <span className={s.cardLabel}>틀 종류</span>
         <p className={s.moldHint}>
-          {item.name}은 전용 틀 데이터가 없습니다. 원형 케이크틀(1~3호)은 <Link href="/tools/cooking/cake-pan" className={s.diffLink}>케이크 틀 환산 계산기</Link>에서 부피 기준으로 환산하세요.
+          {item.name}은 전용 틀 데이터가 없습니다. 원형 케이크틀(미니~5호)·무스링·사각팬은 <button type="button" className={s.linkBtn} onClick={onOpenPan}>케이크 팬 탭</button>에서 부피 기준으로 환산하세요.
         </p>
       </div>
     )
@@ -638,7 +669,7 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
         {!isPiece && (item.id === 'poundcake' || item.id === 'castella') && (
           <p className={s.moldHint}>※ 틀 부피 ÷ 비용적({item.id === 'poundcake' ? '파운드 2.4' : '카스테라 약 3.5'}cm³/g)으로 구한 적정 반죽량입니다. 부풀 공간을 남기고 틀 높이의 절반~60% 정도만 채우는 양이에요.</p>
         )}
-        <p className={s.moldHint}>※ 원형 케이크틀(1~3호) 환산은 <Link href="/tools/cooking/cake-pan" className={s.diffLink}>케이크 틀 환산 계산기</Link>를 쓰세요.</p>
+        <p className={s.moldHint}>※ 원형 케이크틀(미니~5호)·무스링·사각팬의 호수·치수 간 환산은 <button type="button" className={s.linkBtn} onClick={onOpenPan}>케이크 팬 탭</button>을 쓰세요.</p>
       </div>
 
       {isPiece && (

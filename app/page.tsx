@@ -60,7 +60,7 @@ const chipOf = (href: string): HomeChip | null => {
 /* 놀이형 도구 — 홈 순위에서만 제외(분야 허브 TOP3에는 그대로). 실제로 빠진 도구가 있을 때만 섹션 설명에 제외 사실을 적는다 */
 const PLAY_TOOLS = new Set([
   '/tools/life/lotto', '/tools/life/random', '/tools/life/ladder', '/tools/life/zodiac',
-  '/tools/life/drake', '/tools/life/monty-hall', '/tools/life/fart-risk',
+  '/tools/life/drake', '/tools/life/monty-hall',
   '/tools/edu/cognitive-test', '/tools/edu/planet-comparison', '/tools/edu/cosmic-calendar',
 ])
 

@@ -2,7 +2,7 @@
    lib/running.ts
    러닝 공식 단일 소스 — Daniels/Gilbert VDOT · 훈련 강도 계수(%VO2max) · Riegel 거리 환산
    사용처: sports/race-predictor (racePredictorUtils.ts가 재수출) · sports/buildup · sports/vo2max
-           · sports/interval-training · sports/lsd(Riegel)
+           · sports/interval-training(이지·LSD 탭 = Riegel, 구 sports/lsd)
    기준일: 2026-09 (공식 자체는 연도와 무관)
    출처: Daniels J. & Gilbert J. 「Oxygen Power: Performance Tables for Distance Runners」(1979) — 산소 비용·지속 가능
          %VO2max 회귀식, Daniels J. 「Daniels' Running Formula」(3rd ed., 2014) — E/M/T/I/R 훈련 강도,

@@ -11,12 +11,13 @@ import ToolPage from '@/components/ToolPage'
 export const metadata = buildMetadata({
   path: '/tools/finance/stock',
   title: '주식 물타기 계산기 — 평단·역산·분할매수·회복·손절 비교',
-  description: '추가 매수 시 평단가가 어디까지 내려갈지 + 회복까지 필요한 상승률 즉시 계산. 단일·분할 매수, 손절 vs 물타기, 미국 주식 환율 반영 원화 손익까지 (양도세는 참고 가이드).',
+  description: '추가 매수 시 평단가가 어디까지 내려갈지 + 회복까지 필요한 상승률 즉시 계산. 단일·분할 매수, 손절 vs 물타기, 미국 주식 환율 반영 원화 손익(양도세는 참고 가이드)에 매매 전 투자 심리 7대 편향 점검 가이드까지.',
   keywords: [
     '주식물타기계산기', '평단가계산기', '평단가역산', '분할매수계산기',
     '본전상승률', '주식손절', '코스트에버리지', '미국주식환율계산',
     '서학개미양도세', '종목비중', '주식회복시나리오', '손절vs물타기',
     '추가매수계산기', '주식수수료계산기', '코스피거래세', '나스닥계산기',
+    '투자심리편향', '행동경제학투자', '손실회피', '매몰비용',
   ],
 })
 
@@ -51,11 +52,11 @@ const FAQ_LD = [
               },
               {
                 q: '손절 vs 물타기 어느 게 유리한가요?',
-                a: '본 종목 회복 가능성에 따라 다릅니다. 본 도구의 「손절 vs 물타기」 탭에서 시나리오 비교 가능. 물타기 신호: 펀더멘털 안정, 일시적 시장 조정, 한 종목 10% 이하, 충분한 현금. 손절 신호: 실적 악화·구조적 위기, -50%+ 큰 손실, 한 종목 30%+ 비중. 손절은 손실 인정의 어려움이 있지만, 더 큰 손실 방지·기회 비용 회수의 의미가 있습니다.',
+                a: '본 종목 회복 가능성에 따라 다릅니다. 본 도구의 「손절 vs 물타기」 탭에서 시나리오 비교 가능. 물타기 신호: 펀더멘털 안정, 일시적 시장 조정, 한 종목 10% 이하, 충분한 현금. 손절 신호: 실적 악화·구조적 위기, -50%+ 큰 손실, 한 종목 30%+ 비중. 손절은 손실 인정의 어려움이 있지만, 더 큰 손실 방지·기회 비용 회수의 의미가 있습니다. 결정 전에는 매몰 비용("본전만 오면 팔 텐데")·앵커링(매수가 집착)·손실 회피 같은 심리 편향이 끼어들지 않았는지도 점검하세요 — 본 페이지 「투자자가 빠지는 7대 편향」 가이드 참고.',
               },
               {
                 q: '미국 주식 물타기 시 환율도 고려해야 하나요?',
-                a: '네, 매수 환율·현재 환율·양도세 모두 영향. 예: 매수 환율 1,300원에 $100 매수 (13만원), 현재 환율 1,400원에 $90 (12.6만원) → 달러 -10%지만 원화 -3% 손실. 본 도구의 「🇺🇸 미국 주식」 토글은 매수·현재 환율을 반영한 원화 평가액·손익을 계산합니다. 다만 <strong>매도 시 양도세 22%(연 250만 공제)는 계산기에 미반영</strong>이므로 별도로 고려하세요.',
+                a: '네, 매수 환율·현재 환율·양도세 모두 영향. 예: 매수 환율 1,300원에 $100 매수 (13만원), 현재 환율 1,400원에 $90 (12.6만원) → 달러 -10%지만 원화 -3% 손실. 본 도구의 「🇺🇸 미국 주식」 토글은 매수·현재 환율을 반영한 원화 평가액·손익을 계산합니다. 다만 매도 시 양도세 22%(연 250만 공제)는 계산기에 미반영이므로 별도로 고려하세요.',
               },
               {
                 q: '한 종목에 자산을 얼마나 투자해도 될까요?',
@@ -71,14 +72,45 @@ const FAQ_LD = [
               },
             ]
 
+// 행동경제학 편향 7개 — 구 /tools/finance/stock-decision 「왜 지는가」 탭에서 이관 (교육용 · 투자 권유 아님)
+const BIASES: { name: string; emoji: string; desc: string; example: string; tip: string }[] = [
+  { name: 'FOMO (놓침의 두려움)', emoji: '😰',
+    desc: '남이 다 사는데 나만 안 사면 손해라는 두려움. 고점 매수로 이어지기 쉬움.',
+    example: '"○○ 코인 10배 갔대" → 다음날 매수 → 고점 폭락',
+    tip: '오르는 종목보다 "왜 오르는지 설명 가능한가"를 먼저 자문' },
+  { name: '손실 회피', emoji: '🛡️',
+    desc: '같은 크기의 이익보다 손실이 약 2배 더 아프게 느껴짐 (Kahneman·Tversky).',
+    example: '+10%엔 무덤덤, -10%엔 잠 못 잠 → 너무 빨리 매도',
+    tip: '매수 전 "-30% 견딜 수 있는 금액인가" 사전 점검' },
+  { name: '매몰 비용', emoji: '🪨',
+    desc: '이미 들어간 비용이 아까워서 손절 못함. "본전만 오면 팔 텐데"의 함정.',
+    example: '-50%인데 "이미 잃었으니 버텨야지" → -80%까지 버팀',
+    tip: '"오늘 처음 보는 종목이라면 살까?" 자문 → 답이 No면 보유 이유부터 재점검' },
+  { name: '확증 편향', emoji: '🔍',
+    desc: '내가 산 종목의 호재만 찾고 악재는 무시함.',
+    example: '관련 유튜브 긍정 채널만 구독, 부정 분석은 "안티"로 치부',
+    tip: '주 1회 일부러 부정적 분석을 찾아 읽기' },
+  { name: '과신', emoji: '💪',
+    desc: '운으로 1~2번 맞춘 후 "내가 잘한다"고 확신.',
+    example: '단타 3회 성공 → 신용·미수까지 → 한 번에 큰 손실',
+    tip: '월별 수익률 기록 → 1년 평균이 코스피보다 나은가 자문' },
+  { name: '앵커링', emoji: '⚓',
+    desc: '처음 본 가격(매수가·52주 고점)에 집착해 객관적 판단 X.',
+    example: '"10만 원에 샀으니 9만 원에 팔면 손해야"',
+    tip: '본인 매수가 모른 척 + 지금 처음 보는 종목으로 판단' },
+  { name: '군중 심리', emoji: '👥',
+    desc: '대중이 사면 안전, 팔면 위험하다고 느낌.',
+    example: '"개미 90%가 매수" 뉴스 → 대형 매도 시작 신호일 수 있음',
+    tip: '시장이 한 방향으로 쏠릴 때 본인 결정을 한 번 더 점검' },
+]
+
 export default function StockPage() {
   return (
     <ToolPage width={760} slug="/tools/finance/stock">
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />주식 물타기 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         추가 매수 시 평단가가 어디까지 내려갈지 + <strong style={{ color: 'var(--text)' }}>회복까지 필요한 상승률</strong>을 즉시.
       </p>
 
@@ -377,7 +409,38 @@ export default function StockPage() {
           </div>
         </div>
 
-        {/* ── 7. FAQ — accordion ── */}
+        {/* ── 7. 투자자 7대 편향 (구 stock-decision 가이드 이관) ── */}
+        <div>
+          <h2 className="g-h2">
+            🧠 투자자가 빠지는 7대 편향 — 물타기·손절 전 심리 점검
+          </h2>
+          <p className="g-p">
+            물타기·손절 결정은 계산보다 <strong>감정</strong>에 먼저 흔들리기 쉽습니다.
+            행동경제학에서 다루는 대표적인 편향 7가지의 전형적 증상과 스스로 던져 볼 점검 질문을 정리했습니다.
+            계산 결과를 보기 전에 아래 항목이 내 판단에 끼어들지 않았는지 확인해 보세요.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
+            {BIASES.map((b) => (
+              <div key={b.name} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', lineHeight: 1.5, margin: '0 0 6px' }}>
+                  <span aria-hidden="true">{b.emoji}</span> {b.name}
+                </h3>
+                <p style={{ fontSize: 13, color: 'var(--text-body)', lineHeight: 1.7, margin: '0 0 6px' }}>{b.desc}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '0 0 4px' }}>
+                  <strong style={{ color: 'var(--text)' }}>예:</strong> {b.example}
+                </p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+                  <strong style={{ color: 'var(--accent-ink)' }}>점검:</strong> {b.tip}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="g-note">
+            ※ 편향 설명은 의사결정 심리 교육용이며 특정 종목의 매수·매도·보유를 권유하지 않습니다. 편향을 피한다고 수익이 보장되지는 않습니다.
+          </p>
+        </div>
+
+        {/* ── 8. FAQ — accordion ── */}
         <div>
           <h2 className="g-h2">자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -395,8 +458,15 @@ export default function StockPage() {
           </div>
         </div>
 
-        {/* ── 8. 면책 ── */}
-        <Disclaimer variant="finance" open>
+        {/* ── 9. 면책 ── */}
+        <Disclaimer
+          variant="finance"
+          open
+          sources={[
+            { label: 'DART 전자공시', href: 'https://dart.fss.or.kr' },
+            { label: 'KIND 공시', href: 'https://kind.krx.co.kr' },
+          ]}
+        >
           본 주식 물타기 계산기는 <strong>수학적 시뮬레이션 도구</strong>이며, 투자 자문·매수 권유 도구가 아닙니다.
           <ul style={{ paddingLeft: 18, margin: '6px 0 0' }}>
             <li>물타기는 항상 유리한 전략이 아닙니다</li>
@@ -414,7 +484,7 @@ export default function StockPage() {
           </ul>
         </Disclaimer>
 
-        {/* ── 9. 함께 쓰면 좋은 도구 ── */}
+        {/* ── 10. 함께 쓰면 좋은 도구 ── */}
         <div>
           <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>

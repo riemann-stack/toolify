@@ -60,8 +60,9 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   // '적금'·'예금'은 단리 예·적금 전용 도구(/tools/finance/deposit-savings) 신설 시 그쪽으로 이동.
   // compound는 월복리 투자 계산기라 은행 적금(단리)보다 이자를 크게 잡는다.
   '/tools/finance/compound':     ['복리', '적금', '적립', '예금', '재테크', '이자수익', '투자수익', '적금이자', '예금이자'],
-  // stock-decision(주식 매도·매수 심리 진단) 병합 대상 — 별칭 흡수
-  '/tools/finance/stock':        ['물타기', '평단', '평균단가', '주식', '추가매수', '손절', '익절', '주식매수', '주식매도', '팔까살까', '투자심리', '결정장애', '행동경제학'],
+  // 구 stock-decision(주식 매도·매수 심리 진단) 통합(2026-09-26) — 투자 심리 7대 편향 가이드
+  '/tools/finance/stock':        ['물타기', '평단', '평균단가', '주식', '추가매수', '손절', '익절', '주식매수', '주식매도', '팔까살까', '투자심리', '결정장애', '행동경제학',
+                                  '투자편향', 'fomo', '손실회피', '매몰비용', '확증편향', '앵커링', '주식고민', '매도'],
   '/tools/finance/vat':          ['vat', '부가세', '매입세', '매출세', '세금계산서', '사업자', '간이과세'],
   '/tools/finance/dividend':     ['배당', '배당주', '월배당', 'isa', '연금', '인컴'],
   '/tools/finance/inheritance':  ['상속', '증여', '상속세', '증여세', '상속공제', '세대생략'],
@@ -91,12 +92,15 @@ export const TOOL_ALIASES: Record<string, string[]> = {
 
   // 운동
   '/tools/sports/vo2max':        ['vo2max', '최대산소', '유산소', '체력', '쿠퍼', '락포트'],
-  // race-plan(레이스 페이스 플래너) 병합 대상 — 별칭 흡수
-  '/tools/sports/pace':          ['페이스', '러닝페이스', '마라톤페이스', '페이스플랜', '레이스플랜', '레이스페이스', '페이스플래너', '스플릿', '네거티브스플릿'],
+  // 구 race-plan(레이스 페이스 플래너) 통합(2026-09-26) — [레이스 플랜] 탭(?tab=plan)
+  '/tools/sports/pace':          ['페이스', '러닝페이스', '마라톤페이스', '페이스플랜', '레이스플랜', '레이스페이스', '페이스플래너', '스플릿', '네거티브스플릿',
+                                  '레이스플래너', '레이스페이스플래너', '페이스분배', '구간별페이스', '코스고도', '코스고도보정', '언덕', '언덕보정', '언덕페이스', '오르막페이스', 'gap', '통과시각', '페이스밴드'],
   '/tools/sports/buildup':       ['빌드업', '러닝', '인터벌', '러닝빌드업'],
-  '/tools/sports/race-predictor':['vdot', '레이스예측', '마라톤', '풀코스', '하프'],
-  // lsd(LSD·이지런 페이스) 병합 대상 — 별칭 흡수
-  '/tools/sports/interval-training': ['인터벌', '인터벌트레이닝', '스피드', 'lsd', '이지런', '존2', 'zone2', '롱런', '조깅'],
+  // '고도보정'은 대회 개최지 고도(고지대) 보정 — pace의 코스 언덕 보정은 '코스고도보정'·'언덕보정'
+  '/tools/sports/race-predictor':['vdot', '레이스예측', '마라톤', '풀코스', '하프', '고도보정', '고지대'],
+  // 구 lsd(LSD·이지런 페이스) 통합(2026-09-26) — [이지·LSD] 탭(?tab=easy)
+  '/tools/sports/interval-training': ['인터벌', '인터벌트레이닝', '스피드', 'lsd', '이지런', '존2', 'zone2', '롱런', '조깅',
+                                  '이지페이스', '롱슬로디스턴스', '정크마일', '회색지대', '존2심박', '롱런보급', '8020러닝', '대화가능페이스'],
   '/tools/sports/hyrox':         ['하이록스', 'HYROX', '하이룩스', '완주시간', '월볼', '썰매밀기', '스키에르그', '크로스핏레이스'],
   '/tools/sports/one-rm':        ['1rm', '원알엠', '근력', '벤치프레스', '데드리프트', '스쿼트'],
   '/tools/sports/formation':     ['포메이션', '축구', '442', '433'],
@@ -123,8 +127,9 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/life/unit-price':      ['단위가격', '용량비교', '가성비'],
 
   // 날짜
-  // life-time(생애 시간 계산기) 병합 대상 — 별칭 흡수
-  '/tools/date/age':             ['나이', '만나이', '연나이', '수명', '기대수명', '인생시간', '생애시간', '남은시간'],
+  // 구 life-time(생애 시간 계산기) 통합(2026-09-26) — 인생 통계 탭 › 기대수명 보기(?tab=life)
+  '/tools/date/age':             ['나이', '만나이', '연나이', '수명', '기대수명', '인생시간', '생애시간', '남은시간',
+                                  '기대여명', '생명표', '메멘토모리', '인생진행률', '인생시계', '하루의가치', '1만시간'],
   '/tools/date/dday':            ['디데이', 'd-day', '날짜계산', '며칠'],
   '/tools/date/server-time':     ['서버시간', '네이비즘', '한국시간', 'ntp', '티켓팅'],
   '/tools/date/lunar':           ['음력', '양력', '음력변환'],
@@ -133,7 +138,8 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/date/military':        ['군대', '군복무', '전역', '말년'],
 
   // 단위
-  '/tools/unit/converter':       ['단위변환', '미터', '인치', '파운드', 'kg', 'lb', 'eV', '전자볼트'],
+  // '토크' 단독·N·m·kgf·m은 토크 분야 몫 (볼트 체결 토크는 screw의 '체결토크')
+  '/tools/unit/converter':       ['단위변환', '미터', '인치', '파운드', 'kg', 'lb', 'eV', '전자볼트', '토크', 'n·m', 'kgf·m', 'lbf·ft'],
   '/tools/unit/area':            ['평수', '평', '제곱미터', '평계산'],
   '/tools/unit/size':            ['옷사이즈', '신발사이즈', '치수'],
   '/tools/unit/fuel-economy':    ['연비', 'mpg', 'km/l'],
@@ -146,8 +152,9 @@ export const TOOL_ALIASES: Record<string, string[]> = {
 
   // 개발자
   '/tools/dev/base64':           ['base64', '인코딩', '디코딩'],
-  // yaml-json(YAML ↔ JSON 변환기) 병합 대상 — 별칭 흡수
-  '/tools/dev/json':             ['json', '포맷터', 'json포맷', 'yaml', 'yml', 'json변환', 'yaml변환'],
+  // 구 yaml-json(YAML ↔ JSON 변환기) 통합(2026-09-26) — [YAML ↔ JSON] 탭(?tab=yaml)
+  '/tools/dev/json':             ['json', '포맷터', 'json포맷', 'yaml', 'yml', 'json변환', 'yaml변환',
+                                  'yaml to json', 'json to yaml', 'yaml검증', 'k8s', 'kubernetes', 'kubectl', 'docker compose', 'github actions', 'helm', 'openapi', 'swagger'],
   '/tools/dev/regex':            ['정규식', 'regex', 'regexp'],
   '/tools/dev/hash':             ['해시', 'md5', 'sha', 'sha256', 'hmac'],
   '/tools/dev/url-encode':       ['url인코딩', 'urlencode', '퍼센트인코딩', '인코딩', '디코딩'],
@@ -161,19 +168,20 @@ export const TOOL_ALIASES: Record<string, string[]> = {
 
   // 교육
   '/tools/edu/gpa-converter':    ['학점', 'gpa', '학점환산', '4.5', '4.3', 'wes', '유학', '평점', 'a+', '평어', '백분위'],
-  // sci-units(과학 단위 변환기) 병합 대상 — 표기·접두어 별칭은 흡수
-  '/tools/edu/sig-figs':         ['유효숫자', '유효숫자계산', '반올림', '오차', '오차전파', '상대오차', '절대오차', '백분율오차', '불확도', '측정오차', '실험보고서', '일반물리실험', '일반화학실험', 'significant figures', 'error propagation',
-                                  '과학단위', '과학적표기', '공학적표기', 'SI접두어', '나노', '마이크로', '물리상수', '지수변환'],
-  // 스케일 단위 환산은 병합 전까지 sci-units에만 있다 — 병합 단계에서 sig-figs로 옮길 것.
+  // 구 sci-units(과학 단위 변환기) 통합(2026-09-26) — [과학적 표기] 탭(?tab=notation): 표기·접두어·스케일 단위·물리 상수
   // (eV·전자볼트는 단위 변환기 에너지 분야가 지원하므로 /tools/unit/converter)
-  '/tools/edu/sci-units':        ['광년', '옹스트롬', 'angstrom', '파섹', '천문단위'],
+  '/tools/edu/sig-figs':         ['유효숫자', '유효숫자계산', '반올림', '오차', '오차전파', '상대오차', '절대오차', '백분율오차', '불확도', '측정오차', '실험보고서', '일반물리실험', '일반화학실험', 'significant figures', 'error propagation',
+                                  '과학단위', '과학적표기', '공학적표기', 'SI접두어', '나노', '마이크로', '물리상수', '지수변환',
+                                  '광년', '옹스트롬', 'angstrom', '파섹', '천문단위', '과학적표기법', '지수표기', '지수표기법'],
 
   // 인테리어
   '/tools/interior/wallpaper':   ['벽지', '도배', '도배지'],
   '/tools/interior/paint':       ['페인트', '도장'],
   '/tools/interior/wire':        ['전선', '굵기', 'sq', '전기'],
-  // bolt-wrench(볼트 스패너 계산기) 병합 대상 — 별칭 흡수
-  '/tools/interior/screw':       ['나사', '피스', '앵커', '볼트', '렌치', '스패너', '알렌렌치', '볼트규격'],
+  // 구 bolt-wrench(볼트 스패너 계산기) 통합(2026-09-26) — [볼트·스패너] 탭(?tab=bolt)
+  // '토크' 단독은 넣지 않는다 — 단위 변환기(/tools/unit/converter)의 토크(N·m↔kgf·m) 분야 몫. 볼트 토크는 '체결토크'·'볼트 토크'로
+  '/tools/interior/screw':       ['나사', '피스', '앵커', '볼트', '렌치', '스패너', '알렌렌치', '볼트규격',
+                                  '볼트스패너', '스패너사이즈', '소켓사이즈', '육각렌치', '알렌렌치사이즈', '와셔', '너트', '체결토크', '강도등급', '공구세트'],
   '/tools/interior/flooring':    ['바닥재', '마루', '장판', '강마루'],
   '/tools/interior/ventilation': ['환기', '환풍'],
   '/tools/interior/room-area':   ['방크기', '면적', '평수'],
@@ -189,8 +197,10 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/cooking/kimjang':      ['김장', '배추', '김치', '겉절이'],
   '/tools/cooking/holiday-table':['명절', '차례상', '제사상', '상차림'],
   '/tools/cooking/recipe':       ['레시피', '인분', '레시피변환'],
-  // cake-pan(케이크 팬 호수 변환) 병합 대상 — 별칭 흡수
-  '/tools/cooking/baking-recipe':['베이킹', '제빵', '베이커퍼센트', '케이크', '케이크팬', '케이크틀', '케이크 호수', '호수', '원형틀', '무스링'],
+  // 구 cake-pan(케이크 팬 호수 변환) 통합(2026-09-26) — [케이크 팬] 탭(?tab=pan)
+  // '레시피 배율'은 넣지 않는다 — 인분 배율은 /tools/cooking/recipe(레시피 비율 계산기) 몫
+  '/tools/cooking/baking-recipe':['베이킹', '제빵', '베이커퍼센트', '케이크', '케이크팬', '케이크틀', '케이크 호수', '호수', '원형틀', '무스링',
+                                  '케이크팬호수', '호수변환', '케이크1호', '1호케이크', '케이크인치', '무스링사이즈', '제누와즈틀', '베이킹틀'],
   '/tools/cooking/baker-percent':['베이커퍼센트', '제빵비율', '제빵'],
   '/tools/cooking/egg-timer':    ['계란', '반숙', '완숙', '삶기'],
   '/tools/cooking/ramen':        ['라면', '라면물'],
@@ -199,8 +209,9 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/cooking/thawing':      ['해동', '냉동', '냉장해동'],
 
   // 음악/예술
-  // bpm(BPM 딜레이 계산기) 병합 대상 — 별칭 흡수
-  '/tools/art/tap-tempo':        ['탭템포', 'bpm측정', 'bpm', '템포', '비트', '메트로놈', '딜레이', '딜레이타임', 'bpm딜레이'],
+  // 구 bpm(BPM 딜레이 계산기) 통합(2026-09-26) — [딜레이 계산] 탭(?tab=delay)
+  '/tools/art/tap-tempo':        ['탭템포', 'bpm측정', 'bpm', '템포', '비트', '메트로놈', '딜레이', '딜레이타임', 'bpm딜레이',
+                                  '딜레이ms', '프리딜레이', '리버브', '점음표', '셋잇단', 'daw딜레이'],
   '/tools/art/chord':            ['코드', '화성', '기타', '기타코드', '피아노코드'],
   '/tools/art/capo':             ['카포', '기타'],
   '/tools/art/scale':            ['스케일', '음계', '조'],
@@ -256,8 +267,10 @@ export const TOOL_ALIASES: Record<string, string[]> = {
   '/tools/life/vin-decoder': ['차대번호', 'vin', '차량식별번호', '연식조회'],
 
   // 스포츠
-  // football-points(축구 승점 계산기) 병합 대상 — 별칭 흡수
-  '/tools/sports/league-scenarios': ['경우의수', '순위경우의수', '승자승', '골득실', '조별리그', '16강', '승점', '리그순위', '축구승점'],
+  // 구 football-points(축구 승점 계산기) 통합(2026-09-26) — [시즌 승점] 탭(?tab=season)
+  '/tools/sports/league-scenarios': ['경우의수', '순위경우의수', '승자승', '골득실', '조별리그', '16강', '승점', '리그순위', '축구승점',
+                                  '시즌승점', 'k리그승점', 'epl승점', '우승가능성', '강등승점', '잔류승점', 'ppg', '라이벌추격',
+                                  '순위', '월드컵', '월드컵경우의수', '챔스', '챔피언스리그', '타이브레이커', '목표승점'],
   '/tools/sports/swim-pace': ['수영', '수영페이스', 'swolf', '스울프', '자유형', '접영'],
   '/tools/sports/climbing-grade': ['클라이밍', '볼더링', '암벽', 'v등급', '난이도'],
   '/tools/sports/strength-level': ['3대', '3대500', '파워리프팅', '윌크스', 'wilks', 'dots'],

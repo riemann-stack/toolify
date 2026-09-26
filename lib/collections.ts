@@ -130,7 +130,7 @@ export const COLLECTIONS: Collection[] = [
     steps: [
       { title: '내 몸 기준 알기', note: '기초대사량과 BMI로 현재 상태와 하루 권장 열량을 먼저 파악하세요.', toolHrefs: ['/tools/health/bmr', '/tools/health/bmi'] },
       { title: '근력 운동', note: '1RM(최대 중량)을 추정해 무게와 반복수를 안전하게 설계하고, 3대 측정으로 내 근력 레벨이 어디쯤인지 확인하세요.', toolHrefs: ['/tools/sports/one-rm', '/tools/sports/strength-level'] },
-      { title: '러닝·유산소', note: '이지 페이스(LSD)로 토대를 쌓고, 빌드업·인터벌로 강도를 올리고, 목표 기록과 심폐능력(VO2max)을 예측하세요. 수영이라면 100m 페이스와 SWOLF로 효율을 점검하세요.', toolHrefs: ['/tools/sports/pace', '/tools/sports/lsd', '/tools/sports/buildup', '/tools/sports/interval-training', '/tools/sports/race-predictor', '/tools/sports/vo2max', '/tools/sports/swim-pace'] },
+      { title: '러닝·유산소', note: '이지 페이스(LSD)로 토대를 쌓고, 빌드업·인터벌로 강도를 올리고, 목표 기록과 심폐능력(VO2max)을 예측하세요. 수영이라면 100m 페이스와 SWOLF로 효율을 점검하세요.', toolHrefs: ['/tools/sports/pace', '/tools/sports/buildup', '/tools/sports/interval-training', '/tools/sports/race-predictor', '/tools/sports/vo2max', '/tools/sports/swim-pace'] },
       { title: '회복·컨디셔닝', note: '운동만큼 회복도 실력입니다. 쌓인 수면 부채를 확인하고, 카페인은 취침을 방해하지 않게 섭취 타이밍을 조절하세요.', toolHrefs: ['/tools/health/sleep-debt', '/tools/health/caffeine'] },
     ],
   },
@@ -200,10 +200,10 @@ export const COLLECTIONS: Collection[] = [
     color: 'var(--sky-500)',
     steps: [
       { title: '인코딩·해시', note: '텍스트·URL·진법을 변환하고, MD5·SHA 해시와 HMAC 서명·파일 무결성을 확인하세요.', toolHrefs: ['/tools/dev/base64', '/tools/dev/url-encode', '/tools/dev/number-base', '/tools/dev/hash'] },
-      { title: '데이터·포맷', note: 'JSON·YAML을 정렬·검증·상호 변환하고, CSS 단위를 바꾸고, 정규식을 실시간으로 테스트하세요.', toolHrefs: ['/tools/dev/json', '/tools/dev/yaml-json', '/tools/dev/css-converter', '/tools/dev/regex'] },
+      { title: '데이터·포맷', note: 'JSON·YAML을 정렬·검증·상호 변환하고, CSS 단위를 바꾸고, 정규식을 실시간으로 테스트하세요.', toolHrefs: ['/tools/dev/json', '/tools/dev/css-converter', '/tools/dev/regex'] },
       { title: '토큰·스케줄·입력', note: 'JWT 클레임과 만료 시각을 확인하고, 크론 표현식을 한국어로 해석하고, 한영키 오타를 복원하세요.', toolHrefs: ['/tools/dev/jwt', '/tools/dev/cron', '/tools/dev/keyboard-layout'] },
       { title: 'API·네트워크', note: 'cURL을 fetch·axios·Python 코드로 바꾸고, HTTP 상태 코드를 해석하고, 회선 품질을 진단하세요.', toolHrefs: ['/tools/dev/curl', '/tools/dev/http-status', '/tools/dev/network-test'] },
-      { title: '웹·AI 개발', note: '공유 카드(OG)를 미리 확인하고, AI 토큰 수·API 비용을 추정하고, 프로젝트 기술 스택을 추천받으세요.', toolHrefs: ['/tools/dev/og-preview', '/tools/dev/token-counter', '/tools/dev/tech-stack'] },
+      { title: '웹·AI 개발', note: '공유 카드(OG)를 미리 확인하고, AI 토큰 수·API 비용을 추정하고, 로컬 LLM에 필요한 GPU 메모리를 가늠하세요.', toolHrefs: ['/tools/dev/og-preview', '/tools/dev/token-counter', '/tools/dev/llm-vram'] },
     ],
   },
   {
@@ -231,7 +231,7 @@ export const COLLECTIONS: Collection[] = [
     steps: [
       { title: '전기·소리·음향', note: '옴의 법칙으로 직렬·병렬 회로를, 음속으로 천둥 거리를, 룸 모드로 방의 음향 특성을 계산하세요.', toolHrefs: ['/tools/edu/circuit-simulator', '/tools/edu/sound-speed', '/tools/edu/room-mode'] },
       { title: '우주·스케일', note: '다른 행성에서의 내 몸무게와 나이, 138억 년을 1년으로 압축한 코스믹 캘린더로 스케일 감각을 키우세요.', toolHrefs: ['/tools/edu/planet-comparison', '/tools/edu/cosmic-calendar'] },
-      { title: '측정·계산·추정', note: '과학 단위를 변환하고, 유효숫자·오차를 다루고, 막막한 문제를 페르미 추정으로 쪼개 보세요.', toolHrefs: ['/tools/edu/sci-units', '/tools/edu/sig-figs', '/tools/edu/fermi-estimate'] },
+      { title: '측정·계산·추정', note: '과학 단위를 변환하고, 유효숫자·오차를 다루고, 막막한 문제를 페르미 추정으로 쪼개 보세요.', toolHrefs: ['/tools/edu/sig-figs', '/tools/edu/fermi-estimate'] },
       { title: '사고 실험', note: '외계 문명의 수를 변수로 추정하고, 몬티홀 문제로 직관을 뒤엎는 확률을 체험하세요.', toolHrefs: ['/tools/life/drake', '/tools/life/monty-hall'] },
     ],
   },
@@ -271,7 +271,7 @@ export const COLLECTIONS: Collection[] = [
     emoji: '🔧',
     color: '#B45309',
     steps: [
-      { title: '나사·볼트·공구', note: '나사 규격과 탭드릴·관통홀, 볼트별 스패너·렌치 사이즈, 금속 경도(HRC·HV)까지 확인하세요.', toolHrefs: ['/tools/interior/screw', '/tools/interior/bolt-wrench', '/tools/unit/hardness'] },
+      { title: '나사·볼트·공구', note: '나사 규격과 탭드릴·관통홀, 볼트별 스패너·렌치 사이즈, 금속 경도(HRC·HV)까지 확인하세요.', toolHrefs: ['/tools/interior/screw', '/tools/unit/hardness'] },
       { title: '배관·전기', note: '배관 호칭(A·인치·DN)과 재질별 실제 안지름, 사용 가전 W에 맞는 전선 굵기와 차단기 용량을 맞추세요.', toolHrefs: ['/tools/interior/pipe', '/tools/interior/wire'] },
       { title: '마감·구조 자재', note: '몰딩·걸레받이 길이, 지붕 면적, 철근 중량·본수까지 — 시공 전 자재 물량을 산출하세요.', toolHrefs: ['/tools/interior/molding', '/tools/interior/roof', '/tools/interior/rebar'] },
     ],
@@ -285,7 +285,7 @@ export const COLLECTIONS: Collection[] = [
     emoji: '🎬',
     color: '#C026D3',
     steps: [
-      { title: '영상·음악 편집', note: 'BPM으로 딜레이·리버브 ms를, 탭 템포로 곡의 박자를, 주파수↔음정으로 사운드를 잡으세요.', toolHrefs: ['/tools/art/bpm', '/tools/art/tap-tempo', '/tools/art/frequency'] },
+      { title: '영상·음악 편집', note: 'BPM으로 딜레이·리버브 ms를, 탭 템포로 곡의 박자를, 주파수↔음정으로 사운드를 잡으세요.', toolHrefs: ['/tools/art/tap-tempo', '/tools/art/frequency'] },
       { title: '썸네일·그래픽', note: '색상 코드와 그라디언트, 황금비 구도, 인쇄·고해상 출력에 필요한 해상도까지 디자인을 다듬으세요.', toolHrefs: ['/tools/art/color', '/tools/art/gradient-generator', '/tools/art/golden-ratio', '/tools/art/print-resolution'] },
       { title: '제목·배포', note: '제목·자막 글자 수를 맞추고, 더미 텍스트로 레이아웃을 잡고, 카톡·X에 공유될 카드를 미리 확인하세요.', toolHrefs: ['/tools/art/charcount', '/tools/art/lorem', '/tools/dev/og-preview'] },
     ],
@@ -343,7 +343,7 @@ export const COLLECTIONS: Collection[] = [
     steps: [
       { title: '음정·음역', note: '마이크로 내 최저·최고음을 측정하고, 주파수와 음정·MIDI 번호를 상호 변환하세요.', toolHrefs: ['/tools/art/vocal-range', '/tools/art/frequency'] },
       { title: '코드·스케일', note: '코드 구성음과 역방향 검색, 12키 × 스케일 지판, 원곡 키에 맞는 카포 위치를 확인하세요.', toolHrefs: ['/tools/art/chord', '/tools/art/scale', '/tools/art/capo'] },
-      { title: '박자·템포', note: 'BPM으로 딜레이·리버브 ms를 잡고, 박자에 맞춰 탭하면 곡의 템포를 측정합니다.', toolHrefs: ['/tools/art/bpm', '/tools/art/tap-tempo'] },
+      { title: '박자·템포', note: 'BPM으로 딜레이·리버브 ms를 잡고, 박자에 맞춰 탭하면 곡의 템포를 측정합니다.', toolHrefs: ['/tools/art/tap-tempo'] },
     ],
   },
   {
@@ -356,7 +356,7 @@ export const COLLECTIONS: Collection[] = [
     color: '#16A34A',
     steps: [
       { title: '자산 굴리기', note: '복리 효과를 시나리오별로 비교하고, 매달 받고 싶은 배당액에서 필요한 원금을 역산하세요.', toolHrefs: ['/tools/finance/compound', '/tools/finance/dividend'] },
-      { title: '매매·종목', note: '물타기 시 평단가와 회복 상승률을 계산하고, 매매 전 행동경제학 편향을 점검하고, 공모주 증거금을 확인하세요.', toolHrefs: ['/tools/finance/stock', '/tools/finance/stock-decision', '/tools/finance/ipo-deposit'] },
+      { title: '매매·종목', note: '물타기 시 평단가와 회복 상승률을 계산하고, 매매 전 행동경제학 편향을 점검하고, 공모주 증거금을 확인하세요.', toolHrefs: ['/tools/finance/stock', '/tools/finance/ipo-deposit'] },
       { title: '실물·기타', note: '돈·g·트로이온스 단위와 14K/18K/24K 금 시세를 환산하세요.', toolHrefs: ['/tools/finance/gold-converter'] },
     ],
   },

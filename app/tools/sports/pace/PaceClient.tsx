@@ -3,11 +3,20 @@
 
 import { useEffect, useRef, useState, useMemo } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import Disclaimer from '@/components/Disclaimer'
+import { useInitialTab } from '@/components/useInitialTab'
 import { todayStr } from '@/lib/date'
 import styles from './pace.module.css'
 
-type Mode = 'pace-to-time' | 'time-to-pace' | 'treadmill'
+type Mode = 'pace-to-time' | 'time-to-pace' | 'treadmill' | 'plan'
+// ?tab= 딥링크 허용 목록 — 'plan'은 구 /tools/sports/race-plan 301 목적지
+const MODES: readonly Mode[] = ['plan', 'pace-to-time', 'time-to-pace', 'treadmill']
+
+// 레이스 플랜 탭(구 race-plan) — 지연 로드로 기본 탭 번들 유지
+const RacePlanTab = dynamic(() => import('./RacePlanTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
 // ── 헬퍼 ──
 function paceToSec(mm: string, ss: string) {
@@ -138,6 +147,13 @@ const STORAGE_KEY = 'youtil-pace-record-v1'
 
 export default function PaceClient() {
   const [mode, setMode] = useState<Mode>('pace-to-time')
+  // 레이스 플랜 탭은 처음 열 때 마운트하고, 이후 다른 탭으로 가도 숨김만 해 입력(구간·고도)을 유지
+  const [planMounted, setPlanMounted] = useState(false)
+  const selectMode = (m: Mode) => {
+    setMode(m)
+    if (m === 'plan') setPlanMounted(true)
+  }
+  useInitialTab(MODES, selectMode)
 
   // 페이스 → 완주 시간
   const [paceMin, setPaceMin] = useState('5')
@@ -309,17 +325,19 @@ export default function PaceClient() {
           { href: '/tools/sports/one-rm', label: '1RM 계산기' }
         ]}
       >
-        페이스·기록은 입력값 기준 <strong>참고용 추정</strong>이며 컨디션·날씨·코스·고도에 따라 달라집니다. 무리한 페이스는 부상·탈수 위험이 있으니 본인 체력에 맞게 조정하고, 더위(25°C↑)·어지러움 시 즉시 중단하세요.
+        페이스·기록은 입력값 기준 <strong>참고용 추정</strong>이며 컨디션·날씨·코스·고도에 따라 달라집니다. 무리한 페이스는 부상·탈수 위험이 있으니 본인 체력에 맞게 조정하고, 더위(25°C↑)·어지러움 시 즉시 중단하세요. 레이스 플랜 탭의 고도 보정은 단순화한 추정 모델입니다.
       </Disclaimer>
 
       {/* 모드 탭 */}
       <div className={styles.tabs} role="tablist">
         <button type="button" role="tab" aria-selected={mode === 'pace-to-time'} className={`${styles.tab} ${mode === 'pace-to-time' ? styles.tabActive : ''}`}
-          onClick={() => setMode('pace-to-time')}>페이스 → 완주 시간</button>
+          onClick={() => selectMode('pace-to-time')}>페이스 → 완주 시간</button>
         <button type="button" role="tab" aria-selected={mode === 'time-to-pace'} className={`${styles.tab} ${mode === 'time-to-pace' ? styles.tabActive : ''}`}
-          onClick={() => setMode('time-to-pace')}>완주 시간 → 페이스</button>
+          onClick={() => selectMode('time-to-pace')}>완주 시간 → 페이스</button>
         <button type="button" role="tab" aria-selected={mode === 'treadmill'} className={`${styles.tab} ${mode === 'treadmill' ? styles.tabActive : ''}`}
-          onClick={() => setMode('treadmill')}>트레드밀 변환</button>
+          onClick={() => selectMode('treadmill')}>트레드밀 변환</button>
+        <button type="button" role="tab" aria-selected={mode === 'plan'} className={`${styles.tab} ${mode === 'plan' ? styles.tabActive : ''}`}
+          onClick={() => selectMode('plan')}>레이스 플랜</button>
       </div>
 
       {/* ── 모드 1: 페이스 → 완주 시간 ── */}
@@ -625,6 +643,13 @@ export default function PaceClient() {
             </p>
           </div>
         </>
+      )}
+
+      {/* ── 모드 4: 레이스 플랜 (구간별 페이스·코스 고도·통과 시각) — 한 번 연 뒤엔 숨김만 해서 입력 유지 ── */}
+      {planMounted && (
+        <div hidden={mode !== 'plan'}>
+          <RacePlanTab />
+        </div>
       )}
 
       {/* 다른 러닝 도구 안내 (영역 침범 X) */}

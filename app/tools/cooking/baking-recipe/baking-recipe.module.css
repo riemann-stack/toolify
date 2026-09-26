@@ -38,19 +38,34 @@
 .diffLink { color: var(--accent); text-decoration: none; }@media (hover: hover) {
   .diffLink:hover { text-decoration: underline; }
 }
+/* 탭 전환 링크(분량 변환 → 케이크 팬) — 버튼이지만 본문 링크처럼 */
+.linkBtn {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: var(--accent-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  min-height: 0; /* 본문 속 인라인 버튼 — 전역 터치 44px(button)로 줄 높이가 벌어지지 않게 */
+}
 
 /* ── 탭 ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius-m);
   padding: 6px;
 }
-@media (max-width: 480px) {
-  .tabs { grid-template-columns: repeat(2, 1fr); }
+/* 5탭(케이크 팬 추가) — 모바일은 3열 2줄(기존 2열 2줄과 같은 높이) */
+@media (max-width: 560px) {
+  .tabs { grid-template-columns: repeat(3, 1fr); }
 }
 .tab {
   background: transparent;

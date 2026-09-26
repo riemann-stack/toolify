@@ -213,7 +213,7 @@
 /* ── 탭 ── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4번째 [이지·LSD] 탭 (구 sports/lsd 흡수) */
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -238,6 +238,11 @@
   background: var(--accent-dim);
   color: var(--accent);
   font-weight: 700;
+}
+/* 탭 4개 — 좁은 화면에서는 글자를 줄이고 단어 단위로만 줄바꿈 ("인터벌 / 페이스") */
+.tabBtn { word-break: keep-all; line-height: 1.3; }
+@media (max-width: 480px) {
+  .tabBtn { font-size: 12px; padding: 8px 2px; }
 }
 
 /* ── 카드 ── */

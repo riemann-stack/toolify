@@ -1,12 +1,4 @@
 {
- "/tools/art/bpm": {
-  "slug": "/tools/art/bpm",
-  "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
-  "ymyl": false,
-  "hasResult": true
- },
  "/tools/art/capo": {
   "slug": "/tools/art/capo",
   "updated": "2026-09-26",
@@ -270,9 +262,16 @@
  },
  "/tools/art/tap-tempo": {
   "slug": "/tools/art/tap-tempo",
+  "reviewed": "2026-06",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "리버브 프리딜레이 통용 범위 — 해외 오디오 엔지니어링 가이드(iZotope·Loopmasters·eMastered) 교차 확인",
+  "sources": [
+   {
+    "label": "iZotope — Reverb pre-delay 가이드",
+    "org": "",
+    "href": "https://www.izotope.com/en/learn/reverb-pre-delay"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -320,9 +319,21 @@
  },
  "/tools/cooking/baking-recipe": {
   "slug": "/tools/cooking/baking-recipe",
+  "reviewed": "2026-07",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "케이크 팬 호수 규격 — 베이킹 자재상 판매 규격(1호 15cm·호당 +3cm·높은팬 7cm) 교차 확인",
+  "sources": [
+   {
+    "label": "카우2004 — 케이크 팬 판매 규격",
+    "org": "",
+    "href": "https://www.cow2004.com"
+   },
+   {
+    "label": "웰베이킹 — 케이크 팬 판매 규격",
+    "org": "",
+    "href": "https://wellbaking.co.kr"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -339,26 +350,6 @@
   "updated": "2026-09-26",
   "basis": "",
   "sources": [],
-  "ymyl": false,
-  "hasResult": true
- },
- "/tools/cooking/cake-pan": {
-  "slug": "/tools/cooking/cake-pan",
-  "reviewed": "2026-07",
-  "updated": "2026-07-11",
-  "basis": "베이킹 자재상 판매 규격(1호 15cm·호당 +3cm·높은팬 7cm) 교차 확인",
-  "sources": [
-   {
-    "label": "카우2004",
-    "org": "",
-    "href": "https://www.cow2004.com"
-   },
-   {
-    "label": "웰베이킹",
-    "org": "",
-    "href": "https://wellbaking.co.kr"
-   }
-  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -514,9 +505,16 @@
  },
  "/tools/date/age": {
   "slug": "/tools/date/age",
+  "reviewed": "2026-07",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "국가데이터처(구 통계청) 2024년 생명표 (2025년 12월 발표)",
+  "sources": [
+   {
+    "label": "국가데이터처 2024년 생명표 보도자료",
+    "org": "",
+    "href": "https://mods.go.kr/board.es?mid=a10301010000&bid=208&act=view&list_no=439533"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -610,21 +608,6 @@
   "updated": "2026-09-26",
   "basis": "",
   "sources": [],
-  "ymyl": false,
-  "hasResult": true
- },
- "/tools/date/life-time": {
-  "slug": "/tools/date/life-time",
-  "reviewed": "2026-07",
-  "updated": "2026-09-26",
-  "basis": "국가데이터처(구 통계청) 2024년 생명표 (2025년 12월 발표)",
-  "sources": [
-   {
-    "label": "국가데이터처 2024년 생명표 보도자료",
-    "org": "",
-    "href": "https://mods.go.kr/board.es?mid=a10301010000&bid=208&act=view&list_no=439533"
-   }
-  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -877,26 +860,6 @@
   "ymyl": false,
   "hasResult": true
  },
- "/tools/dev/tech-stack": {
-  "slug": "/tools/dev/tech-stack",
-  "reviewed": "2026-05",
-  "updated": "2026-07-29",
-  "basis": "스택 채점 DB·가격·수수료 기준",
-  "sources": [
-   {
-    "label": "토스페이먼츠 이용요금",
-    "org": "",
-    "href": "https://www.tosspayments.com/pricing"
-   },
-   {
-    "label": "Vercel Pricing",
-    "org": "",
-    "href": "https://vercel.com/pricing"
-   }
-  ],
-  "ymyl": false,
-  "hasResult": false
- },
  "/tools/dev/token-counter": {
   "slug": "/tools/dev/token-counter",
   "updated": "2026-09-26",
@@ -923,14 +886,6 @@
  },
  "/tools/dev/url-encode": {
   "slug": "/tools/dev/url-encode",
-  "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
-  "ymyl": false,
-  "hasResult": true
- },
- "/tools/dev/yaml-json": {
-  "slug": "/tools/dev/yaml-json",
   "updated": "2026-09-26",
   "basis": "",
   "sources": [],
@@ -1055,11 +1010,11 @@
   "ymyl": false,
   "hasResult": true
  },
- "/tools/edu/sci-units": {
-  "slug": "/tools/edu/sci-units",
+ "/tools/edu/sig-figs": {
+  "slug": "/tools/edu/sig-figs",
   "reviewed": "2026-06",
   "updated": "2026-09-26",
-  "basis": "물리 상수 CODATA 2022 권장값 · AU·파섹은 IAU 정의 기준",
+  "basis": "과학적 표기 탭 — 물리 상수 CODATA 2022 권장값 · AU·파섹은 IAU 정의 기준",
   "sources": [
    {
     "label": "NIST CODATA",
@@ -1072,14 +1027,6 @@
     "href": "https://iauarchive.eso.org/public/themes/measuring/"
    }
   ],
-  "ymyl": false,
-  "hasResult": true
- },
- "/tools/edu/sig-figs": {
-  "slug": "/tools/edu/sig-figs",
-  "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
   "ymyl": false,
   "hasResult": true
  },
@@ -1792,25 +1739,6 @@
   "ymyl": true,
   "hasResult": true
  },
- "/tools/finance/stock-decision": {
-  "slug": "/tools/finance/stock-decision",
-  "updated": "2026-09-26",
-  "basis": "",
-  "sources": [
-   {
-    "label": "DART 증권신고서",
-    "org": "",
-    "href": "https://dart.fss.or.kr"
-   },
-   {
-    "label": "KIND 공시",
-    "org": "",
-    "href": "https://kind.krx.co.kr"
-   }
-  ],
-  "ymyl": true,
-  "hasResult": false
- },
  "/tools/finance/stock": {
   "slug": "/tools/finance/stock",
   "reviewed": "2026-07",
@@ -1826,6 +1754,16 @@
     "label": "국가법령정보센터",
     "org": "",
     "href": "https://www.law.go.kr/LSW/main.html"
+   },
+   {
+    "label": "DART 전자공시",
+    "org": "",
+    "href": "https://dart.fss.or.kr"
+   },
+   {
+    "label": "KIND 공시",
+    "org": "",
+    "href": "https://kind.krx.co.kr"
    }
   ],
   "ymyl": true,
@@ -2305,14 +2243,6 @@
   "ymyl": false,
   "hasResult": true
  },
- "/tools/interior/bolt-wrench": {
-  "slug": "/tools/interior/bolt-wrench",
-  "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
-  "ymyl": false,
-  "hasResult": true
- },
  "/tools/interior/curtain-blind": {
   "slug": "/tools/interior/curtain-blind",
   "updated": "2026-09-26",
@@ -2530,14 +2460,6 @@
  "/tools/life/dutch": {
   "slug": "/tools/life/dutch",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
-  "ymyl": false,
-  "hasResult": true
- },
- "/tools/life/fart-risk": {
-  "slug": "/tools/life/fart-risk",
-  "updated": "2026-07-29",
   "basis": "",
   "sources": [],
   "ymyl": false,
@@ -2788,26 +2710,6 @@
   "ymyl": false,
   "hasResult": true
  },
- "/tools/sports/football-points": {
-  "slug": "/tools/sports/football-points",
-  "reviewed": "2026-07",
-  "updated": "2026-09-26",
-  "basis": "EPL 2016-17~2025-26 · K리그1 2016~2025 최종 순위표 실측 승점",
-  "sources": [
-   {
-    "label": "Premier League 공식 순위표",
-    "org": "",
-    "href": "https://www.premierleague.com/en/tables"
-   },
-   {
-    "label": "K리그 공식 기록",
-    "org": "",
-    "href": "https://www.kleague.com/record/team.do"
-   }
-  ],
-  "ymyl": false,
-  "hasResult": true
- },
  "/tools/sports/formation": {
   "slug": "/tools/sports/formation",
   "reviewed": "2026-07",
@@ -2922,17 +2824,21 @@
  },
  "/tools/sports/league-scenarios": {
   "slug": "/tools/sports/league-scenarios",
+  "reviewed": "2026-07",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
-  "ymyl": false,
-  "hasResult": true
- },
- "/tools/sports/lsd": {
-  "slug": "/tools/sports/lsd",
-  "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "EPL 2016-17~2025-26·K리그1 2016~2025 최종 순위표 실측 승점 · 대회별 타이브레이커 2026년 6월 확인 기준",
+  "sources": [
+   {
+    "label": "Premier League 공식 순위표",
+    "org": "",
+    "href": "https://www.premierleague.com/en/tables"
+   },
+   {
+    "label": "K리그 공식 기록",
+    "org": "",
+    "href": "https://www.kleague.com/record/team.do"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -2964,14 +2870,6 @@
     "href": "https://www.kpga7330.com"
    }
   ],
-  "ymyl": false,
-  "hasResult": true
- },
- "/tools/sports/race-plan": {
-  "slug": "/tools/sports/race-plan",
-  "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
   "ymyl": false,
   "hasResult": true
  },

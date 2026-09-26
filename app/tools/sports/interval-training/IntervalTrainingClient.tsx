@@ -2,7 +2,9 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import { useInitialTab } from '@/components/useInitialTab'
 import { todayStr } from '@/lib/date'
+import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
 import s from './interval-training.module.css'
 import {
@@ -13,6 +15,14 @@ import { paceFromVdot } from '@/lib/running'
 
 // localStorage 키 (VDOT 자동 저장) — 기존 키 유지(개명 시 데이터 유실)
 const STORAGE_KEY = 'youtil-interval-record-v1'
+
+// [이지·LSD] 탭 (구 /tools/sports/lsd) — 탭을 열 때만 불러와 기본 탭 번들을 키우지 않는다
+const EasyTab = dynamic(() => import('./EasyTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
+
+type TabId = 'pace' | 'yasso' | 'schedule' | 'easy'
+const TAB_IDS: readonly TabId[] = ['easy', 'pace', 'yasso', 'schedule']
 
 // ─────────────────────────────────────────────
 // 유틸
@@ -64,7 +74,13 @@ const STANDARD_DISTANCES = new Set([400, 800, 1000])
 // 컴포넌트
 // ─────────────────────────────────────────────
 export default function IntervalTrainingClient() {
-  const [tab, setTab] = useState<'pace' | 'yasso' | 'schedule'>('pace')
+  const [tab, setTab] = useState<TabId>('pace')
+  // ?tab=easy 등 딥링크(구 /tools/sports/lsd 301 목적지) — 마운트 1회만 읽는다
+  useInitialTab(TAB_IDS, setTab)
+  // [이지·LSD] 탭은 처음 열 때 불러온 뒤 계속 마운트해 둔다 — 다른 탭을 다녀와도 입력값 유지
+  // (다른 탭 상태가 이 컴포넌트에 있어 전환 후에도 남는 것과 동작을 맞춤)
+  const [easyVisited, setEasyVisited] = useState(false)
+  if (tab === 'easy' && !easyVisited) setEasyVisited(true)
 
   // ── TAB 1 STATE ─────────────────────────────
   const [inputMode, setInputMode] = useState<'record' | 'target'>('record')
@@ -494,6 +510,9 @@ export default function IntervalTrainingClient() {
         </button>
         <button type="button" role="tab" aria-selected={tab === 'schedule'} className={`${s.tabBtn} ${tab === 'schedule' ? s.tabActive : ''}`} onClick={() => setTab('schedule')}>
           훈련 스케줄
+        </button>
+        <button type="button" role="tab" aria-selected={tab === 'easy'} className={`${s.tabBtn} ${tab === 'easy' ? s.tabActive : ''}`} onClick={() => setTab('easy')}>
+          이지·LSD
         </button>
       </div>
 
@@ -1346,6 +1365,14 @@ export default function IntervalTrainingClient() {
             {resultCopied ? '✓ 복사됨' : '결과 복사하기'}
           </button>
         </>
+      )}
+
+      {/* ──────────── TAB 4: 이지·LSD (구 /tools/sports/lsd) ──────────── */}
+      {/* 비활성 시 hidden(display:none) → 접근성 트리에서도 빠져 role="status"는 활성 탭 1개만 노출 */}
+      {easyVisited && (
+        <div hidden={tab !== 'easy'}>
+          <EasyTab />
+        </div>
       )}
     </div>
   )

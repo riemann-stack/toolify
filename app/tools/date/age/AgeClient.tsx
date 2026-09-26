@@ -1,6 +1,8 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import { useInitialTab } from '@/components/useInitialTab'
+import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
 import s from './age.module.css'
 import {
@@ -15,6 +17,17 @@ import {
 
 type Tab = 'age' | 'dday' | 'stats' | 'milestone' | 'culture'
 type RefPreset = 'today' | 'eoy' | 'eoyNext' | 'custom'
+/* 인생 통계 탭 내부 보기 — 'time' = 기존 시간 통계(기본), 'life' = 기대수명·남은 시간(구 /tools/date/life-time) */
+type StatsView = 'time' | 'life'
+
+/* ?tab= 딥링크 허용 목록 — 'life'는 구 /tools/date/life-time 301 목적지(= 인생 통계 탭 › 기대수명 보기 별칭) */
+const DEEP_LINK_TABS = ['life', 'age', 'dday', 'stats', 'milestone', 'culture'] as const
+type DeepLinkTab = typeof DEEP_LINK_TABS[number]
+
+/* 기대수명·남은 시간 보기(구 life-time) — 지연 로드로 기본 탭 번들 유지 */
+const LifeTimePanel = dynamic(() => import('./LifeTimePanel'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
 /* D-day 색 등급 — 전 탭 공통 기준: ≤30일 빨강 / ≤90일 노랑 / 그 외 */
 const DDAY_CLOSE_DAYS = 30
@@ -30,6 +43,11 @@ const daysRange = Array.from({ length: 31 }, (_, i) => i + 1)
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function AgeClient() {
   const [tab, setTab] = useState<Tab>('age')
+  const [statsView, setStatsView] = useState<StatsView>('time')
+  useInitialTab<DeepLinkTab>(DEEP_LINK_TABS, t => {
+    if (t === 'life') { setTab('stats'); setStatsView('life') }
+    else setTab(t)
+  })
   const [mounted, setMounted] = useState(false)
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMounted(true) }, [])
@@ -85,8 +103,11 @@ export default function AgeClient() {
           { href: '/tools/date/dday', label: 'D-day 계산기' },
           { href: '/tools/date/jet-lag', label: '시차 계산기' }
         ]}
+        sources={[
+          { label: '국가데이터처(구 통계청) 2024년 생명표', href: 'https://mods.go.kr/board.es?mid=a10301010000&bid=208&act=view&list_no=439533' },
+        ]}
       >
-        참고용 인생 통계·문화 정보 도구
+        참고용 인생 통계·문화 정보 도구입니다. 인생 통계 탭의 기대수명·남은 시간은 2024년 생명표 평균을 바탕으로 한 <strong>참고용 추정</strong>이며, 실제 수명을 예측하지 않습니다.
       </Disclaimer>
 
       {/* 탭 */}
@@ -138,7 +159,11 @@ export default function AgeClient() {
       </div>
 
       {!birth && (
-        <div className={s.empty}>생년월일을 선택하면 만 나이부터 D-day, 인생 통계까지 한 번에 계산됩니다</div>
+        <div className={s.empty}>
+          {tab === 'stats' && statsView === 'life'
+            ? '생년월일을 선택하면 기대수명(2024년 생명표) 기준 남은 시간과 하루 습관의 가치가 계산됩니다'
+            : '생년월일을 선택하면 만 나이부터 D-day, 인생 통계까지 한 번에 계산됩니다'}
+        </div>
       )}
 
       {/* 미래 생년월일이면 나이·일수·통계가 모두 음수가 되므로 전 탭 공통 차단 */}
@@ -150,7 +175,7 @@ export default function AgeClient() {
 
       {birth && !birthInFuture && tab === 'age'       && <AgeTab       birth={birth} refDate={refDate} now={now} refPreset={refPreset} setRefPreset={setRefPreset} customRef={customRef} setCustomRef={setCustomRef} />}
       {birth && !birthInFuture && tab === 'dday'      && <DdayTab      birth={birth} now={now} />}
-      {birth && !birthInFuture && tab === 'stats'     && <StatsTab     birth={birth} now={now} />}
+      {birth && !birthInFuture && tab === 'stats'     && <StatsTab     birth={birth} now={now} view={statsView} setView={setStatsView} />}
       {birth && !birthInFuture && tab === 'milestone' && <MilestoneTab birth={birth} now={now} />}
       {birth && !birthInFuture && tab === 'culture'   && <CultureTab   birth={birth} now={now} />}
     </div>
@@ -420,7 +445,33 @@ function DdayTab({ birth, now }: { birth: Date; now: Date }) {
 }
 
 /* ═════════════════════════════════════════ 탭 3 — 인생 통계 ═════════════════════════════════════════ */
-function StatsTab({ birth, now }: { birth: Date; now: Date }) {
+type StatsTabProps = { birth: Date; now: Date; view: StatsView; setView: (v: StatsView) => void }
+function StatsTab({ birth, now, view, setView }: StatsTabProps) {
+  return (
+    <>
+      {/* 보기 전환 — 시간 통계(기본) / 기대수명·남은 시간(구 life-time, 지연 로드) */}
+      <div className={s.subTabs} role="group" aria-label="인생 통계 보기 전환">
+        {([
+          ['time', '⏱️ 시간 통계'],
+          ['life', '⏳ 기대수명·남은 시간'],
+        ] as [StatsView, string][]).map(([key, label]) => (
+          <button key={key}
+            type="button"
+            aria-pressed={view === key}
+            className={`${s.subTabBtn} ${view === key ? s.subTabActive : ''}`}
+            onClick={() => setView(key)}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {view === 'life' ? <LifeTimePanel birth={birth} /> : <TimeStats birth={birth} now={now} />}
+    </>
+  )
+}
+
+/* 인생 통계 › 시간 통계 (기존 인생 통계 탭 내용 그대로) */
+function TimeStats({ birth, now }: { birth: Date; now: Date }) {
   const stats = calcLifeStats(birth, now)
 
   // 코스믹 비교 — 로그 스케일 (모두 가시화)

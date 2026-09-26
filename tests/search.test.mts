@@ -28,23 +28,27 @@ describe('별칭 맵 위생', () => {
     assert.deepEqual(orphans, [], `lib/search.ts TOOL_ALIASES 고아 키: ${orphans.join(', ')} — 대상 도구로 옮기거나 삭제`)
   })
 
-  test('병합 소스·삭제 도구에는 별칭을 두지 않는다 (target으로 이동)', () => {
-    // 예외: 병합 전까지 기능이 소스에만 있는 도구 — 소스가 레지스트리에 있는 동안만 별칭 허용.
-    // 소스가 삭제되면 예외가 자동으로 풀려(그리고 고아 키 테스트도 걸려) 병합 단계에서 target으로 옮기게 된다.
-    const holdUntilMerge = new Set(['/tools/edu/sci-units'])
+  test('통합 소스·폐지 도구는 레지스트리에도 별칭 맵에도 없다 (별칭은 target으로 이동)', () => {
     const gone = [...Object.keys(MERGED_INTO), '/tools/dev/tech-stack', '/tools/life/fart-risk']
-      .filter(h => !(holdUntilMerge.has(h) && existing.has(h)))
-    const left = gone.filter(h => h in TOOL_ALIASES)
-    assert.deepEqual(left, [])
+    assert.deepEqual(gone.filter(h => existing.has(h)), [], '레지스트리에 남은 통합 소스·폐지 도구')
+    assert.deepEqual(gone.filter(h => h in TOOL_ALIASES), [], '별칭 맵에 남은 통합 소스·폐지 도구')
+    for (const dst of Object.values(MERGED_INTO)) assert.ok(existing.has(dst), `통합 대상 ${dst} 가 레지스트리에 없음`)
   })
 
-  test('eV·전자볼트는 단위 변환기, 천문·원자 스케일 단위는 병합 전까지 sci-units', () => {
+  test('eV·전자볼트는 단위 변환기, 천문·원자 스케일 단위는 sig-figs(구 sci-units 통합)', () => {
     const norm = (h: string) => (TOOL_ALIASES[h] ?? []).map(a => a.toLowerCase())
     assert.ok(norm('/tools/unit/converter').includes('ev'))
     assert.ok(norm('/tools/unit/converter').includes('전자볼트'))
-    const scale = existing.has('/tools/edu/sci-units') ? '/tools/edu/sci-units' : '/tools/edu/sig-figs'
-    for (const w of ['광년', '옹스트롬', '파섹', '천문단위']) assert.ok(norm(scale).includes(w), `${w} → ${scale}`)
+    for (const w of ['광년', '옹스트롬', '파섹', '천문단위']) assert.ok(norm('/tools/edu/sig-figs').includes(w), `${w} → sig-figs`)
     assert.ok(!norm('/tools/edu/sig-figs').includes('ev'))
+  })
+
+  test("'토크' 단독은 단위 변환기(토크 분야 N·m↔kgf·m) — screw는 '체결토크'만", () => {
+    const screw = (TOOL_ALIASES['/tools/interior/screw'] ?? []).map(a => a.replace(/\s+/g, ''))
+    assert.ok(!screw.includes('토크'))
+    assert.ok(screw.includes('체결토크'))
+    assert.equal(searchTools('토크')[0]?.tool.href, '/tools/unit/converter')
+    assert.equal(searchTools('체결 토크')[0]?.tool.href, '/tools/interior/screw')
   })
 
   test("car-tax는 일반 '취득세'·'양도세'를 소유하지 않는다", () => {
