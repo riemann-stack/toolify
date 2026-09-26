@@ -1,0 +1,16 @@
+/* components/Callout.module.css — 이모지 💡(360)·⚠️(837) 대체. tone: tip | warn | note. 섹션당 1개 이하
+   제목은 <strong>, 본문은 <div> — 본문 시트의 `.ar p` 규칙보다 특이도가 높도록 `.co .coBody p` 형태 사용 */
+.co { display: flex; gap: 12px; margin: 24px 0; padding: 18px 20px; border-radius: var(--radius-m); background: var(--accent-soft); max-width: var(--w-read); }
+.co > svg { flex-shrink: 0; margin-top: 2px; color: var(--accent-ink); }
+.coMain { flex: 1; min-width: 0; word-break: keep-all; overflow-wrap: break-word; }
+.co .coTitle { display: block; margin-bottom: 4px; font-size: 15px; font-weight: 700; line-height: 1.6; color: var(--text); }
+.co .coBody, .co .coBody p, .co .coBody li { margin: 0; font-size: 15px; line-height: 1.7; color: var(--text-body); }
+.co .coBody ul, .co .coBody ol { margin: 4px 0 0; padding-left: 18px; max-width: none; }
+.co .coBody p + p { margin-top: 8px; }
+.co .coBody strong { color: var(--text); font-weight: 600; }
+.co .coBody a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+.coWarn { background: var(--warning-soft); }
+.coWarn > svg { color: var(--warning); }
+.coNote { background: var(--bg3); }
+.coNote > svg { color: var(--muted-strong); }
+@media (max-width: 640px) { .co { padding: 16px; gap: 10px; } }

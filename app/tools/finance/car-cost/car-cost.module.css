@@ -777,7 +777,7 @@
     top: auto;
     left: 16px;
     right: 16px;
-    bottom: 24px;
+    bottom: calc(var(--bottom-nav-h, 0px) + 24px);
     transform: none;
     width: auto;
     max-width: none;

@@ -1,76 +1,16 @@
-/* @hover-wrapped */
-.banner {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* 피처드(시즌 추천) 카드 — 따뜻한 틴트는 인라인(컬렉션 색), 떠 있는 표면감만 토큰으로 */
-.featured {
-  box-shadow: var(--shadow-rest);
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
-}
-@media (hover: hover) {
-  .featured:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
-}
-
-/* 나머지 컬렉션 — 데스크탑: 그리드 / 모바일: 가로 스크롤 선반 */
-.others {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-}
-
-.otherCard {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  background: var(--paper-card);
-  border: 1px solid var(--paper-line);
-  border-radius: var(--radius-card);
-  padding: 14px 16px;
-  min-width: 0;
-  box-shadow: var(--shadow-rest);
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
-}
-@media (hover: hover) {
-  .otherCard:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
-}
-
-/* 데스크톱: 카드 12개로 cap — 나머지는 /collections 인덱스('전체 보기')에 위임 */
-.otherCard:nth-child(n + 13) { display: none; }
-
-.otherIcon { display: inline-flex; align-items: center; flex-shrink: 0; }
-.otherBody { min-width: 0; }
-.otherTitle {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--paper-ink);
-  margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.otherCount { font-size: 12px; color: var(--paper-ink-faint); }
-
-/* 모바일: 가로 스크롤 선반 — 카드 1.3개 정도 보여 스크롤 가능함을 암시 */
-@media (max-width: 600px) {
-  .others {
-    display: flex;
-    grid-template-columns: none;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity;
-    /* 콘텐츠 좌우 여백(24px) 안에서 스크롤 — 배너·카테고리 등 다른 섹션과 정렬 일관 */
-    padding-bottom: 8px;
-    scrollbar-width: none;
-  }
-  .others::-webkit-scrollbar { display: none; }
-  .otherCard {
-    flex: 0 0 76%;
-    scroll-snap-align: start;
-  }
-  /* 모바일 가로 스크롤 선반은 cap 없이 전체 노출 — 기존 동작 불변 */
-  .otherCard:nth-child(n + 13) { display: flex; }
-}
+/* components/CollectionBanner.module.css — 홈 '상황별 가이드' 3카드 (스펙 §10.20 .hmCols 문법)
+   흰 카드 + 분야 칩(data-cat → --c/--c-soft) + 단계 번호 목록. 색 면 채우기·컬렉션 raw hex 없음 */
+.cbCols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cbCol { display: flex; flex-direction: column; padding: 22px; border-radius: var(--radius-card); background: var(--bg2); border: 1px solid var(--border); transition: border-color .15s, box-shadow .15s; }
+.cbCol:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); }
+.cbCol:hover h3 { color: var(--accent-ink); }
+.cbTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cbTop > span:last-child { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 4px 8px; text-align: right; }
+.cbPick { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: var(--radius-pill); background: var(--accent-soft); font-style: normal; font-size: 12px; font-weight: 700; color: var(--accent-ink); }
+.cbCol h3 { margin-top: 14px; font-size: 17px; font-weight: 700; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); }
+.cbCol ol { list-style: none; counter-reset: st; display: grid; gap: 8px; flex: 1; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--divider); }
+.cbCol li { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--text-body); }
+.cbCol li::before { counter-increment: st; content: counter(st); width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; background: var(--bg3); display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--muted-strong); font-variant-numeric: tabular-nums; }
+.cbGo { margin-top: 16px; display: inline-flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 600; color: var(--accent-ink); }
+@media (max-width: 900px) { .cbCols { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) { .cbCol { padding: 20px; } }

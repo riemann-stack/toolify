@@ -1,749 +1,623 @@
 /* @hover-wrapped */
-/* ── NAV — 페이퍼·잉크 톤 (홈 벤토 리디자인 정합).
-   홈(--paper)과 도구 페이지(--bg) 양쪽 캔버스 위에서 성립하도록
-   크롬은 잉크·페이퍼 중성 토큰만, 컬러는 카테고리 신호로만 사용. ── */
+/* ── components/Nav.module.css — 글로벌 헤더(데스크톱 64 / 모바일 56, sticky) + 검색 패널 + 모바일 드로어 (스펙 §10.16)
+   도구·허브 페이지에서는 루트 data-cat 으로 하단 3px 분야 라인(길찾기 신호 — --accent 불변).
+   z-index 층위(기존 유지 — 도구별 fixed/sticky UI와의 겹침 순서 보존):
+     헤더 300 > 검색 패널 290 > 드로어 250 > 하단 탭바 200 ── */
+
+/* ═════════ 헤더 ═════════ */
 .nav {
   position: sticky;
   top: 0;
   z-index: 300;
+  background: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  backdrop-filter: saturate(180%) blur(12px);
+  box-shadow: inset 0 -1px 0 var(--border);
+  word-break: keep-all;
+}
+.nav[data-cat] { box-shadow: inset 0 -3px 0 var(--c, var(--border)); }
+
+.navIn {
+  max-width: var(--w-shell, 1156px);
+  margin: 0 auto;
+  height: var(--header-h, 64px);
+  padding: 0 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 48px;
-  height: 60px;
-  border-bottom: 1px solid var(--paper-line);
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  gap: 28px;
 }
 
-.logo {
+.navLogo {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Inter', 'Noto Sans KR', sans-serif;
-  font-weight: 800;
+  min-height: 44px;
   font-size: 20px;
-  letter-spacing: -0.02em;
-  color: var(--paper-ink);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
   text-decoration: none;
   flex-shrink: 0;
-}
-.logoMark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  background: var(--paper-ink);
-  color: #ffffff;
-  flex-shrink: 0;
-}
-
-/* ── 데스크탑 카테고리 ── */
-.links {
-  display: flex;
-  gap: 0;
-  list-style: none;
-  align-items: center;
-  height: 100%;
-}
-
-.catItem {
-  position: relative;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.catLink {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0 14px;
-  height: 100%;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
-  color: var(--paper-ink-soft);
-  text-decoration: none;
-  letter-spacing: 0.01em;
-  transition: color 0.15s;
   white-space: nowrap;
-  /* button 트리거 리셋 */
-  background: none;
-  border: none;
-  cursor: pointer;
-}@media (hover: hover) {
-  .catLink:hover { color: var(--paper-ink); }
 }
-.catLinkActive { color: var(--paper-ink) !important; }
-
-.chevron {
-  opacity: 0.4;
-  transition: transform 0.2s;
-}@media (hover: hover) {
-  .catItem:hover .chevron {
-  transform: rotate(180deg);
-  opacity: 0.8;
-}
-}
-
-/* ── 메가 메뉴 (3컬럼 그리드) ── */
-.megaMenu {
-  position: absolute;
-  top: calc(100% + 1px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--paper-card);
-  border: 1px solid var(--paper-line);
-  border-radius: var(--radius-lg);
-  padding: 12px;
-  width: 600px;
-  max-width: calc(100vw - 32px);
-  box-shadow: var(--shadow-lift);
-  z-index: 400;
-  animation: megaIn 0.15s ease;
-}
-/* 위치는 JS가 viewport 클램프로 동적 보정 — opacity만 fade-in */
-@keyframes megaIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-.megaHead {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 4px 8px 10px;
-  border-bottom: 1px solid var(--paper-line);
-  margin-bottom: 8px;
-}
-.megaCatLabel {
+.navLogoMark { width: 28px; height: 28px; display: block; flex-shrink: 0; color: var(--accent); }
+.navLogo small {
+  margin-left: 4px;
+  padding-left: 10px;
+  border-left: 1px solid var(--border-hover);
   font-size: 13px;
-  color: var(--paper-ink);
-  font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.navMenu { display: flex; gap: 2px; flex-shrink: 0; }
+.navMenu a {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-}
-.megaAllLink {
-  font-size: 11px;
-  color: var(--paper-ink-soft);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  opacity: 0.85;
-  transition: opacity 0.15s;
-  font-family: 'Inter', sans-serif;
-}@media (hover: hover) {
-  .megaAllLink:hover { opacity: 1; }
-}
-
-/* ── 메가 메뉴: 카테고리 그리드 (단일 메뉴) ── */
-.megaCatGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 4px;
-}
-.megaCatItem {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 11px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  border-left: 3px solid color-mix(in srgb, var(--cat, var(--paper-ink)) 55%, var(--paper-line));
+  height: 40px;
+  padding: 0 12px;
+  border-radius: var(--radius-s);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted-strong);
   text-decoration: none;
-  transition: background 0.12s, border-left-color 0.12s;
+  white-space: nowrap;
 }
+.navMenu a[aria-current] { color: var(--text); }
 @media (hover: hover) {
-  .megaCatItem:hover { background: var(--paper-dim); border-left-color: var(--cat, var(--paper-ink)); }
+  .navMenu a:hover { background: var(--bg3); color: var(--text); }
 }
-.megaCatItemIcon { display: flex; align-items: center; flex-shrink: 0; }
-.megaCatItemBody { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.megaCatItemName { font-size: 13px; font-weight: 600; color: var(--paper-ink); font-family: 'Noto Sans KR', sans-serif; }
-.megaCatItemCount { font-size: 11px; color: var(--paper-ink-faint); font-variant-numeric: tabular-nums; }
 
-/* 즐겨찾기 별 (메가 메뉴·검색 결과 공통) */
-.megaItemFav {
-  flex-shrink: 0;
-  background: transparent;
-  border: none;
-  color: var(--paper-ink-faint);
-  font-size: 16px;
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 4px;
-  opacity: 0;
-  transition: opacity 0.15s, color 0.15s, background 0.15s;
-  font-family: inherit;
-  line-height: 1;
-}
-/* 터치 기기 — 투명한 채 탭 가능한 유령 버튼 방지: 상시 표시 */
-@media (hover: none) {
-  .megaItemFav { opacity: 1; }
-}
-@media (hover: hover) {
-  .searchResultItem:hover .megaItemFav,
-  .searchResultItemActive .megaItemFav {
-    opacity: 1;
-  }
-  .megaItemFav:hover { background: var(--paper-dim); color: var(--paper-ink); }
-}
-.megaItemFav:focus-visible { opacity: 1; }
-.megaItemFavActive { color: #A16207; opacity: 1; }
-
-/* ── 오른쪽 액션 버튼 영역 ── */
-.actions {
+/* 검색 필 — 누르면 아래 검색 패널이 열린다 (⌘K · Ctrl+K — '/' 단일 키는 WCAG 2.1.4로 제외) */
+.navSearch {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 300px;
+  min-width: 180px;
+  flex-shrink: 1;
+  height: 40px;
+  padding: 0 10px 0 14px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--bg3);
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: text;
+}
+.navSearch[aria-expanded='true'] { background: var(--bg2); box-shadow: inset 0 0 0 1px var(--accent); color: var(--muted-strong); }
+.navSearch > svg { flex-shrink: 0; }
+.navSearch span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (hover: hover) {
+  .navSearch:hover { background: var(--gray-150, var(--border)); }
+  .navSearch[aria-expanded='true']:hover { background: var(--bg2); }
+}
+.navKbd {
   flex-shrink: 0;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-xs, 6px);
+  padding: 0 6px;
+  line-height: 20px;
+  background: var(--bg2);
 }
 
-/* 전체 도구 CTA — 잉크 솔리드 */
-.allToolsBtn {
+/* 모바일 아이콘 2개 (검색 · 메뉴) — 44px 탭 타깃 */
+.navIcons { display: none; margin-left: auto; gap: 4px; }
+.navIconBtn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  cursor: pointer;
+}
+.navIconBtn[aria-expanded='true'] { background: var(--bg3); }
+@media (hover: hover) {
+  .navIconBtn:hover { background: var(--bg3); }
+}
+
+@media (max-width: 1080px) {
+  .navLogo small { display: none; }
+  .navIn { gap: 20px; }
+  .navMenu a { padding: 0 8px; }
+}
+@media (max-width: 900px) {
+  .navMenu, .navSearch { display: none; }
+  .navIcons { display: flex; }
+  .navIn { padding: 0 6px 0 16px; }
+}
+
+/* ═════════ 공용 조각 ═════════ */
+/* 분야 아이콘 칩 — soft 배경 + 분야색 아이콘 (스펙 §12). data-cat → --c / --c-soft */
+.chip {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  padding: 4px;
+  border-radius: var(--radius-xs, 6px);
+  background: var(--c-soft, var(--bg3));
+  color: var(--c, var(--muted));
+}
+.chip svg { display: block; }
+
+/* 즐겨찾기 토글 — 항상 보임(유령 버튼 금지), 눌림 = 채운 별 + accent */
+.favBtn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  cursor: pointer;
+}
+.favBtn[aria-pressed='true'] { color: var(--accent-ink); }
+.favBtn[aria-pressed='true'] svg { fill: currentColor; }
+@media (hover: hover) {
+  .favBtn:hover { background: var(--bg3); color: var(--text); }
+  .favBtn[aria-pressed='true']:hover { color: var(--accent-ink); }
+}
+
+/* 검색 입력 필드 (패널·드로어 공용) — 흰 입력 + --field-line 경계(1.4.11), 포커스 링은 필드에 */
+.searchField {
   display: flex;
   align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 14px;
-  background: var(--paper-ink);
-  color: #ffffff;
-  border: 1px solid var(--paper-ink);
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
-  text-decoration: none;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 4px 0 14px;
+  background: var(--bg2);
+  border: 1px solid var(--field-line, var(--border-hover));
+  border-radius: var(--radius-m);
+}
+.searchField:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring, 0 0 0 4px var(--accent-dim));
+}
+.searchFieldIcon { display: inline-flex; flex-shrink: 0; color: var(--muted); }
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  /* iOS Safari가 16px 미만 input에 자동 줌 인하므로 16px 유지 */
+  font-size: 16px;
+  color: var(--text);
+}
+/* 포커스 표시는 .searchField 링이 맡는다(전역 *:focus-visible 이중 테두리 방지) */
+.searchInput:focus-visible { outline: none !important; }
+.searchInput::placeholder { color: var(--muted); opacity: 1; }
+.searchClear {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
   cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-}@media (hover: hover) {
-  .allToolsBtn:hover {
-  background: var(--paper-ink-soft);
-  border-color: var(--paper-ink-soft);
-  transform: translateY(-1px);
 }
+@media (hover: hover) {
+  .searchClear:hover { background: var(--bg3); color: var(--text); }
 }
-.allToolsBtnActive {
-  background: var(--paper-ink-soft);
-  border-color: var(--paper-ink-soft);
-}
-@media (max-width: 1100px) {
-  .allToolsBtn span { display: none; }
-  .allToolsBtn { padding: 0 10px; width: 36px; justify-content: center; }
-}
+.searchNote { margin: 4px 4px 8px; font-size: 13px; line-height: 1.6; color: var(--muted); }
 
-/* 검색 버튼 */
-.searchBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: var(--paper-dim);
-  border: 1px solid var(--paper-line);
-  border-radius: 8px;
-  color: var(--paper-ink-soft);
-  cursor: pointer;
-  transition: all 0.15s;
-}@media (hover: hover) {
-  .searchBtn:hover { border-color: var(--paper-ink-faint); color: var(--paper-ink); }
-}
-.searchBtnActive {
-  background: var(--paper-ink);
-  border-color: var(--paper-ink);
-  color: #ffffff;
-}
-
-/* 공유 버튼 — 검색 버튼과 동일 스타일 */
-.shareBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: var(--paper-dim);
-  border: 1px solid var(--paper-line);
-  border-radius: 8px;
-  color: var(--paper-ink-soft);
-  cursor: pointer;
-  transition: all 0.15s;
-}@media (hover: hover) {
-  .shareBtn:hover { border-color: var(--paper-ink-faint); color: var(--paper-ink); }
-}
-.shareBtnCopied {
-  background: rgba(16, 185, 129, 0.12);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #059669;
-}
-
-/* ── 검색 슬라이드다운 바 ── */
+/* ═════════ 검색 패널 (슬라이드다운) ═════════ */
 .searchBar {
   position: sticky;
-  top: 60px;
+  top: var(--header-h, 64px);
   z-index: 290;
-  background: var(--paper-card);
-  border-bottom: 1px solid var(--paper-line);
-  padding: 12px 48px 0;
+  max-height: calc(100dvh - var(--header-h, 64px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-lift);
   animation: slideDown 0.2s ease;
+  word-break: keep-all;
 }
-
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-.searchBarInner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--paper-dim);
-  border: 1px solid var(--paper-line);
-  border-radius: 10px;
-  padding: 10px 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+@media (prefers-reduced-motion: reduce) {
+  .searchBar, .drawer { animation: none; }
 }
-.searchBarInner:focus-within {
-  border-color: var(--paper-ink-soft);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--paper-ink) 8%, transparent);
+.searchBarIn {
+  max-width: var(--w-shell, 1156px);
+  margin: 0 auto;
+  padding: 16px 24px 8px;
 }
-.searchBarIcon { color: var(--paper-ink-faint); flex-shrink: 0; }
-.searchBarInput {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  /* iOS Safari가 16px 미만 input에 자동 줌 인하므로 모바일은 16px 유지 */
-  font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
-  color: var(--paper-ink);
-}
-.searchBarInput::placeholder { color: var(--paper-ink-faint); }
-.searchClear {
-  background: transparent;
-  border: none;
-  color: var(--paper-ink-faint);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 2px;
-  border-radius: 4px;
-  transition: color 0.15s;
-}@media (hover: hover) {
-  .searchClear:hover { color: var(--paper-ink); }
+.searchKbd {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs, 6px);
+  background: var(--bg2);
+  white-space: nowrap;
 }
 
-/* 검색 결과 */
-.searchResults {
-  padding: 8px 0;
-  max-height: 300px;
-  overflow-y: auto;
-}
-.searchResultItem {
+.searchResults { padding: 8px 0 12px; }
+.searchItem {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 8px;
-  border-radius: 8px;
-  transition: background 0.12s;
+  gap: 4px;
+  border-radius: var(--radius-m);
 }
 /* 화살표 키 하이라이트 — 호버 불가 기기에서도 보여야 하므로 미디어쿼리 밖 */
-.searchResultItemActive { background: var(--paper-dim); }
+.searchItemActive { background: var(--bg3); }
 @media (hover: hover) {
-  .searchResultItem:hover { background: var(--paper-dim); }
+  .searchItem:hover { background: var(--bg3); }
 }
 /* 행 = div 래퍼, 링크는 내부 (a 안 button 중첩 해소) */
-.searchResultLink {
+.searchItemLink {
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 12px;
-  flex: 1;
-  min-width: 0;
+  min-height: 52px;
+  padding: 6px 8px;
+  border-radius: var(--radius-m);
+  color: var(--text);
   text-decoration: none;
 }
-.searchResultLink:focus-visible { outline-offset: -2px; }
-.searchResultBody {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-.searchResultName {
-  font-size: 14px;
-  color: var(--paper-ink);
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.searchResultCat {
-  font-size: 11px;
-  color: var(--paper-ink-faint);
-  letter-spacing: 0.04em;
-}
-
-/* 키보드 단축 힌트 */
-.searchKbd {
-  font-size: 10px;
-  color: var(--paper-ink-faint);
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 0.06em;
-  padding: 2px 6px;
-  border: 1px solid var(--paper-line);
-  border-radius: 4px;
-  background: var(--paper-card);
+.searchItemLink:focus-visible { outline-offset: -2px; }
+.searchItemBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.searchItemName {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  flex-shrink: 0;
 }
-@media (max-width: 480px) {
-  .searchKbd { display: none; }
-}
+.searchItemCat { font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--c-ink, var(--muted)); }
+.searchEmpty { margin: 0; padding: 12px 4px; font-size: 14px; line-height: 1.6; color: var(--muted-strong); }
+.searchEmpty a { color: var(--accent-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
-.searchEmpty {
-  padding: 16px 4px;
-  font-size: 14px;
-  color: var(--paper-ink-soft);
-}
-
-/* 빠른 접근 */
-.searchQuick { padding: 12px 0; }
+/* 빠른 접근 (검색어 없을 때) */
+.searchQuick { padding: 16px 0 8px; }
 .searchQuickLabel {
-  font-size: 11px;
-  color: var(--paper-ink-faint);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-bottom: 8px;
-}
-.searchQuickList {
-  display: flex;
-  flex-wrap: wrap;
   gap: 6px;
-  padding-bottom: 12px;
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
 }
+.searchQuickList { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 16px; }
 .searchQuickItem {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: var(--paper-dim);
-  border: 1px solid var(--paper-line);
-  border-radius: 999px;
-  padding: 5px 12px;
-  font-size: 13px;
-  color: var(--paper-ink-soft);
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px 0 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg2);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
   text-decoration: none;
-  transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
-}@media (hover: hover) {
-  .searchQuickItem:hover { border-color: var(--paper-ink); color: var(--paper-ink); }
+}
+@media (hover: hover) {
+  .searchQuickItem:hover { border-color: var(--border-hover); background: var(--bg3); }
 }
 
-/* ── 햄버거 ── */
-.burger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 36px;
-  height: 36px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-.burgerLine {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--paper-ink);
-  border-radius: 2px;
-  transition: transform 0.25s, opacity 0.25s;
-  transform-origin: center;
-}
-.burgerLineTop { transform: translateY(7px) rotate(45deg); }
-.burgerLineMid { opacity: 0; }
-.burgerLineBot { transform: translateY(-7px) rotate(-45deg); }
-
-/* ── 모바일 드로어 ── */
-/* (overlay 제거 — 드로어가 전면 패널이고 nav가 그 위라 오버레이는 보이지도 탭되지도 않는 데드 코드였음) */
-
+/* ═════════ 모바일 드로어 ═════════ */
 .drawer {
   position: fixed;
-  top: 60px;
+  top: var(--header-h, 64px);
   left: 0;
   right: 0;
   bottom: 0;
   /* iOS Safari 주소창에 따라 변하는 실제 보이는 영역. 미지원 시 bottom:0로 폴백 */
-  height: calc(100dvh - 60px);
-  max-height: calc(100dvh - 60px);
+  height: calc(100dvh - var(--header-h, 64px));
+  max-height: calc(100dvh - var(--header-h, 64px));
   z-index: 250;
   /* 드로어 자체가 스크롤 컨테이너 — flex 높이 계산 의존 제거(모바일 안정) */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background: var(--paper-card);
-  border-bottom: 1px solid var(--paper-line);
   overscroll-behavior: contain;
+  background: var(--bg);
   animation: slideDown 0.2s ease;
+  word-break: keep-all;
 }
 
-/* ── 1) 상단 고정 검색 ── */
-.drawerSearchSticky {
+/* 상단 고정: 검색 + [메뉴 | 최근·즐겨찾기] 탭 */
+.drawerTop {
   position: sticky;
   top: 0;
   z-index: 5;
-  background: var(--paper-card);
-  border-bottom: 1px solid var(--paper-line);
   padding: 12px 16px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+/* 검색 필드 + '닫기' (aria-modal 대화상자 안의 닫기 — 헤더 X는 스크린리더가 닿지 않는다) */
+.drawerSearchRow { display: flex; align-items: center; gap: 8px; }
+.drawerSearchRow > .searchField { flex: 1; min-width: 0; }
+.drawerClose {
   flex-shrink: 0;
-}
-.drawerSearchInner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--paper-dim);
-  border: 1px solid var(--paper-line);
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-.drawerSearchInner:focus-within {
-  border-color: var(--paper-ink-soft);
-  background: #ffffff;
-}
-.drawerSearchInner > svg { color: var(--paper-ink-faint); flex-shrink: 0; }
-.drawerSearchInput {
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  color: var(--paper-ink);
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.drawerSearchInput::placeholder { color: var(--paper-ink-faint); }
-.drawerSearchClear {
-  background: transparent;
-  border: none;
-  color: var(--paper-ink-faint);
-  font-size: 18px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  font: inherit;
+  font-size: 15px;
   font-weight: 600;
+  color: var(--text);
   cursor: pointer;
-  padding: 0 4px;
-  line-height: 1;
-  font-family: 'Inter', system-ui, sans-serif;
-}
-@media (hover: hover) { .drawerSearchClear:hover { color: var(--paper-ink); } }
-
-/* ── 검색 결과 ── */
-.drawerSearchResults {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.drawerSearchItem {
-  display: grid;
-  grid-template-columns: 32px 1fr;
-  gap: 10px;
-  align-items: center;
-  padding: 10px 12px;
-  background: var(--paper-dim);
-  border: 1px solid var(--paper-line);
-  border-radius: 10px;
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: 4px;
+  white-space: nowrap;
 }
 @media (hover: hover) {
-  .drawerSearchItem:hover { border-color: var(--paper-ink); background: var(--paper-card); }
-}
-.drawerSearchIcon { display: flex; align-items: center; justify-content: center; }
-.drawerSearchBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.drawerSearchName {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--paper-ink);
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.drawerSearchCat {
-  font-size: 12px;
-  font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.drawerSearchDesc {
-  font-size: 12px;
-  color: var(--paper-ink-soft);
-  line-height: 1.45;
-  font-family: 'Noto Sans KR', sans-serif;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  .drawerClose:hover { background: var(--bg3); }
 }
 
-/* ── 검색 결과 없음 ── */
-.drawerSearchEmpty {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.drawerTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 4px;
+  background: var(--bg3);
+  border-radius: var(--radius-m);
 }
-.drawerEmptyTitle {
-  font-size: 15px;
-  color: var(--paper-ink);
-  font-family: 'Noto Sans KR', sans-serif;
-  margin: 16px 0 0;
-  text-align: center;
-}
-.drawerEmptyTitle strong {
-  color: var(--paper-ink);
-  font-weight: 700;
-}
-.drawerEmptySub {
-  font-size: 13px;
-  color: var(--paper-ink-soft);
-  text-align: center;
-  margin: 0 0 6px;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-
-/* ── 본문 — 드로어가 스크롤하므로 일반 블록 흐름 ── */
-.drawerInner {
-  padding: 12px 16px 40px;
-  display: flex;
-  flex-direction: column;
+.drawerTab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted-strong);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.drawerTab[aria-selected='true'] {
+  background: var(--bg2);
+  border-color: var(--border);
+  color: var(--text);
+  box-shadow: var(--shadow-pop, none);
+}
+.drawerTabCount {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg2);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  color: var(--muted-strong);
+  font-variant-numeric: tabular-nums;
 }
 
-/* 드로어 상단 바로가기 (상황별 가이드) — 홈 가이드 타일과 동일한 코랄 신호 */
-.drawerNavLink {
+.drawerInner { padding: 16px 16px 40px; }
+
+.drawerSecH {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 13px 14px;
-  background: var(--coral-soft);
-  border: 1px solid color-mix(in srgb, var(--accent-coral) 45%, transparent);
-  border-radius: 12px;
-  text-decoration: none;
-  margin-bottom: 2px;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--muted-strong);
 }
-.drawerNavLinkIcon { display: flex; align-items: center; color: var(--coral-ink); flex-shrink: 0; }
-.drawerNavLinkText { flex: 1; font-size: 14px; font-weight: 700; color: var(--coral-ink); font-family: 'Noto Sans KR', sans-serif; }
-.drawerNavLinkArrow { color: var(--coral-ink); font-weight: 700; flex-shrink: 0; }
+* + .drawerSecH { margin-top: 24px; }
+.drawerSecCount { font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
 
-/* ── 3) 아코디언 — details/summary ── */
+/* 메뉴 링크 목록 */
+.drawerMenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card, 16px);
+  overflow: hidden;
+}
+.drawerMenu li + li { border-top: 1px solid var(--divider, var(--border)); }
+.drawerMenuLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+}
+.drawerMenuLink span { flex: 1; min-width: 0; }
+.drawerMenuLink > svg:first-child { flex-shrink: 0; color: var(--muted-strong); }
+.drawerMenuLink > svg:last-child { flex-shrink: 0; color: var(--muted); }
+.drawerMenuLink[aria-current] { color: var(--accent-ink); }
+.drawerMenuLink[aria-current] > svg:first-child { color: var(--accent-ink); }
+.drawerMenuLink:focus-visible { outline-offset: -2px; }
+
+/* 분야 아코디언 — details/summary */
+.drawerAcc { display: grid; gap: 8px; }
 .drawerAccItem {
-  background: var(--paper-dim);
-  border: 1px solid var(--paper-line);
-  border-radius: 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
   overflow: hidden;
   scroll-margin-top: 8px;
-  transition: border-color 0.15s;
 }
-.drawerAccItem[open] {
-  border-color: var(--paper-ink-faint);
-}
+.drawerAccItem[open] { border-color: var(--border-hover); }
 .drawerAccSummary {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 12px;
   cursor: pointer;
   list-style: none;
-  font-family: 'Noto Sans KR', sans-serif;
   user-select: none;
 }
 .drawerAccSummary::-webkit-details-marker { display: none; }
-.drawerAccIcon { display: flex; align-items: center; color: var(--paper-ink-soft); flex-shrink: 0; }
-.drawerAccTitle {
-  flex: 1;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--paper-ink);
+.drawerAccSummary:focus-visible { outline-offset: -2px; }
+.drawerAccTitle { flex: 1; min-width: 0; font-size: 15px; font-weight: 700; color: var(--text); }
+.drawerAccCount { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.drawerAccChev { display: inline-flex; color: var(--muted); transition: transform 0.2s ease; }
+.drawerAccItem[open] .drawerAccChev { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) {
+  .drawerAccChev { transition: none; }
 }
-.drawerAccCount {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--paper-ink-soft);
-  background: var(--paper-card);
-  padding: 2px 8px;
-  border-radius: 999px;
-  flex-shrink: 0;
-}
-.drawerAccSummary::after {
-  content: '⌄';
-  color: var(--paper-ink-faint);
-  font-size: 14px;
-  font-weight: 700;
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-}
-.drawerAccItem[open] .drawerAccSummary::after {
-  transform: rotate(180deg);
-}
-
-.drawerCatAllLink {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 10px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--paper-ink-soft);
-  text-decoration: none;
-  font-family: 'Noto Sans KR', sans-serif;
-  grid-column: 1 / -1;
-}
-
 .drawerTools {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2px;
-  padding: 4px 8px 10px;
-  background: var(--paper-card);
-  border-top: 1px solid var(--paper-line);
+  padding: 4px 8px 8px;
+  border-top: 1px solid var(--divider, var(--border));
 }
-
+.drawerCatAllLink {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  min-height: 44px;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  text-decoration: none;
+}
 .drawerToolItem {
   display: flex;
   align-items: center;
-  gap: 8px;
+  min-width: 0;
   min-height: 44px;
-  padding: 9px 10px;
-  font-size: 13px;
-  color: var(--paper-ink);
+  padding: 8px;
+  border-radius: var(--radius-s);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text);
   text-decoration: none;
-  border-radius: 6px;
-  transition: all 0.12s;
-  font-family: 'Noto Sans KR', sans-serif;
-  min-width: 0;
 }
-.drawerToolItem > span:last-child {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-}
+.drawerToolItem[aria-current] { background: var(--accent-soft, var(--bg3)); color: var(--accent-ink); font-weight: 600; }
 @media (hover: hover) {
-  .drawerToolItem:hover { background: var(--paper-dim); color: var(--paper-ink); }
+  .drawerToolItem:hover { background: var(--bg3); }
+  .drawerToolItem[aria-current]:hover { background: var(--accent-soft, var(--bg3)); }
 }
 
-/* ── 반응형 ── */
-/* 1280px↓ — 카테고리 패딩 축소로 11개 모두 표시 시도 */
-@media (max-width: 1280px) {
-  .nav { padding: 0 32px; }
-  .searchBar { padding-left: 32px; padding-right: 32px; }
-  .catLink { padding: 0 10px; font-size: 12px; }
+/* 도구 행 목록 (검색 결과 · 즐겨찾기 · 최근) */
+.drawerList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+}
+.drawerRow { display: flex; align-items: center; gap: 4px; padding-right: 4px; }
+.drawerRow + .drawerRow { border-top: 1px solid var(--divider, var(--border)); }
+.drawerRowLink {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 12px;
+  color: var(--text);
+  text-decoration: none;
+}
+.drawerRowLink:focus-visible { outline-offset: -2px; }
+.drawerRowBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.drawerRowName { font-size: 15px; font-weight: 600; line-height: 1.4; color: var(--text); }
+.drawerRowCat { font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--c-ink, var(--muted)); }
+@media (hover: hover) {
+  .drawerRowLink:hover .drawerRowName { text-decoration: underline; text-underline-offset: 3px; }
 }
 
-/* 1100px↓ — 햄버거 전환 (가로 오버플로우 차단) */
-@media (max-width: 1100px) {
-  .nav { padding: 0 24px; }
-  .searchBar { padding-left: 24px; padding-right: 24px; }
-  .links  { display: none; }
-  .burger { display: flex; }
+.drawerHint {
+  margin: 0;
+  padding: 16px;
+  background: var(--bg2);
+  border: 1px dashed var(--border-hover);
+  border-radius: var(--radius-m);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.drawerRecentFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.drawerTextBtn {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* 검색 결과 없음 */
+.drawerEmpty { display: flex; flex-direction: column; gap: 8px; }
+.drawerEmptyTitle { margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: var(--text); text-align: center; }
+.drawerEmptyTitle strong { font-weight: 700; }
+.drawerEmptySub { margin: 0 0 8px; font-size: 13px; line-height: 1.6; color: var(--muted); text-align: center; }
+
+/* ═════════ 반응형 ═════════ */
+@media (max-width: 640px) {
+  .searchBarIn { padding: 12px 16px 8px; }
+  .searchKbd { display: none; }
 }

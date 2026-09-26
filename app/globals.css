@@ -1,107 +1,180 @@
 /* @hover-wrapped */
-/* 폰트는 app/layout.tsx <head>의 <link rel="stylesheet">로 로드 — CSS @import 체인(번들 CSS 파싱 후 발견)보다 한 단계 빠름 */
+/* ═══════════════════════════════════════════════════════════════════
+   youtil.kr — 전역 스타일 · Trust Ledger (FINAL_SPEC §4 · §7 · §8)
+   순서: ① UI 키트 import ② :root 토큰 ③ [data-cat] 스코프 ④ 기본 요소·유틸 ⑤ 레거시 호환
+   - 폰트는 app/layout.tsx <head>의 비차단 <link>로 로드 (next/font 금지 — 인라인 fontFamily 실명 참조와 비호환).
+     Pretendard Variable 은 전역, JetBrains Mono 는 app/tools/dev/layout.tsx 에서만.
+   - 레거시 토큰 이름은 전부 유지하고 값만 교체(개명 금지). 신규 토큰은 NEW 표기.
+   - 대비값은 이 파일의 :root 를 파싱하는 contrast 스크립트로 재계산 (WCAG 2.x 상대휘도, 신규 실패 0).
+     현재는 작업용 scratchpad 스크립트 — scripts/contrast.mjs 로 이관 예정. 레거시 알려진 미달 1쌍은 아래 --accent-dim 주석 참조.
+   ═══════════════════════════════════════════════════════════════════ */
 
+/* ① UI 키트 (§9, 전역 `ui-` 접두) — layout.tsx 를 건드리지 않고 전역 번들에 포함.
+   @import 는 규칙보다 앞에 와야 한다. ui.css 는 전부 클래스 선택자라 아래 요소 규칙과의 선후가 결과를 바꾸지 않는다. */
+@import './styles/ui.css';
+
+/* ② 토큰 ─────────────────────────────────────────────────────────── */
 :root {
-  /* ── Ocean Blue Light Theme ────────────────────────── */
-  --bg:  #f0f7ff;             /* page background — soft sky tint */
-  --bg2: #ffffff;             /* card surface */
-  --bg3: #f8fafc;             /* secondary surface (inputs, dim cards) */
+  /* ── Neutral: cool gray (NEW) ─────────────────────────────── */
+  --gray-0:   #FFFFFF;
+  --gray-50:  #F6F7F9;   /* = --bg */
+  --gray-100: #F2F4F6;   /* = --bg3 */
+  --gray-150: #EAEDF1;   /* hover 표면 */
+  --gray-200: #E5E8EC;   /* = --border */
+  --gray-300: #D1D6DC;   /* = --border-hover */
+  --gray-400: #B0B8C1;   /* 장식 전용(구분점·비활성 chevron) */
+  --gray-500: #858F9B;   /* 비텍스트 UI 3:1 (흰 3.28) */
+  --gray-550: #7D8793;   /* = --field-line (흰 3.65) */
+  --gray-600: #555F6D;   /* = --muted */
+  --gray-700: #434D5B;   /* = --muted-strong */
+  --gray-800: #333D4B;   /* = --text-body */
+  --gray-900: #191F28;   /* = --text */
 
-  --border:        #e2e8f0;   /* slate-200 — standard divider */
-  --border-hover:  #cbd5e1;   /* slate-300 — hover/focus */
+  /* ── Surface · Text (레거시 이름 · 값 교체) ──────────────── */
+  --bg:  #F6F7F9;          /* 페이지 캔버스 (구 #f0f7ff 하늘 틴트 → 중립 근백색) */
+  --bg2: #FFFFFF;          /* 카드·본문 시트 표면 */
+  --bg3: #F2F4F6;          /* 흐린 표면: 세그먼트 트랙·표 머리·면책 박스 */
+  --border:       #E5E8EC; /* 카드 헤어라인 */
+  --border-hover: #D1D6DC;
+  --divider:      #EEF0F3; /* NEW 카드 안 행 구분선 */
+  --field-line:   #7D8793; /* NEW 입력 경계 — 흰 위 3.65 (WCAG 1.4.11) */
+  --rule:         #191F28; /* NEW 편집 괘선(FAQ·출처·섹션 머리 1.5px) */
+  --text:         #191F28; /* 흰 16.56 · bg 15.45 */
+  --text-body:    #333D4B; /* NEW 장문 본문 — 흰 11.00 · bg 10.26 */
+  --muted:        #555F6D; /* 흰 6.47 · bg 6.04 · bg3 5.87 */
+  --muted-strong: #434D5B; /* 흰 8.57 · bg 7.99 */
+  --ink-faint:    #858F9B; /* 비텍스트 전용 (아이콘·자리표시) */
 
-  --text:          #0f172a;   /* slate-900 — primary text */
-  --muted:         #5f6f85;   /* secondary text — --bg 위 대비 4.74:1 (AA) */
-  --muted-strong:  #475569;   /* slate-600 — small text needing contrast */
+  /* ── Brand: Youtil Blue 1색 (탭 가능한 색은 사이트 전체에서 이것 하나) ── */
+  --accent:        #1F5EF0; /* 흰 5.36 · bg 5.00 */
+  --accent-hover:  #1A4FD1; /* 흰 6.81 */
+  --accent-ink:    #1A4FD1; /* 링크·소형 텍스트 — 흰 6.81 · soft 6.13 */
+  --accent-strong: #1F5EF0; /* 솔리드 버튼 배경 — 흰 글자 5.36 */
+  --accent-dim:    rgba(31, 94, 240, 0.14); /* 반투명 틴트 (구 sky rgba .18 대체, 반투명 유지).
+                      ⚠ 레거시 알려진 미달: 이 배경 위 color:var(--accent) 글자 = 흰 위 4.37 · bg 4.12 · bg3 4.00 (AA 4.5 미달, 구 3.25보다는 개선).
+                      alpha 로는 못 고침(0.08 도 bg 위 4.48) → 이 배경 위 글자는 --accent-ink(흰 5.56 · bg 5.24 · bg3 5.08). 기존 사용처는 코드모드로 치환 */
+  --accent-light:  #EEF3FE;
+  --accent-soft:   #EEF3FE; /* NEW 선택 칩·팁 콜아웃·입력값 행 */
+  --accent-line:   #C7D6FB; /* NEW 선택 칩 테두리 */
+  --focus-ring:    0 0 0 4px rgba(31, 94, 240, 0.22); /* NEW */
 
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+  --brand:      var(--accent);      /* 구 홈 전용 blue → 단일 브랜드로 흡수 */
+  --brand-ink:  var(--accent-ink);
+  --brand-soft: var(--accent-soft);
+  --brand-line: var(--accent-line);
 
-  /* radius 스케일 — 신규·수정 코드는 토큰 사용 (기존값 분포: 카드 14, 내부 박스 10~12, 버튼·입력 8~10, 필 999) */
-  --radius-s:    8px;
-  --radius-m:    12px;
-  --radius-card: 14px;
+  /* ── Semantic ─────────────────────────────────────────────── */
+  --success: #097A51; --success-soft: #EAF7F1; /* 흰 5.37 · soft 4.87 */
+  --warning: #A94F00; --warning-soft: #FFF6E8; /* 흰 5.52 · soft 5.15 */
+  --danger:  #C9302C; --danger-soft:  #FFF1F0; /* 흰 5.33 · soft 4.84 */
+  --info:    var(--accent-ink); --info-soft: var(--accent-soft);
+
+  /* 구 홈 신호색 → 의미색 별칭 (사용처 1~8곳, 개명 금지 원칙상 유지) */
+  --accent-mint:  var(--success); --mint-soft:  var(--success-soft);
+  --accent-lime:  var(--success);
+  --accent-coral: var(--danger);  --coral-ink:  var(--danger); --coral-soft: var(--danger-soft);
+
+  /* ── Category: 신호 전용 (아이콘 칩·아이브로우·분야 라인·점). --accent 재매핑 금지 ──
+     base = 흰·bg 위 텍스트/아이콘 AA · ink = 소형·soft 위 텍스트 · soft = 칩 배경
+     (lib/tools.ts 의 color·ink 가 이 변수를 참조 — 단일 소스) */
+  --cat-finance:  #0A7D57; --cat-finance-ink:  #086949; --cat-finance-soft:  #E9F3F0;
+  --cat-health:   #0E7490; --cat-health-ink:   #0C6179; --cat-health-soft:   #E9F2F5;
+  --cat-cooking:  #B45309; --cat-cooking-ink:  #974608; --cat-cooking-soft:  #FAF2EC;
+  --cat-life:     #C2410C; --cat-life-ink:     #A3370A; --cat-life-soft:     #FAEEE9;
+  --cat-sports:   #8A6200; --cat-sports-ink:   #745200; --cat-sports-soft:   #F4F1E8;
+  --cat-interior: #9A5B34; --cat-interior-ink: #814C2C; --cat-interior-soft: #F6F0ED;
+  --cat-unit:     #6D3AD9; --cat-unit-ink:     #5C31B6; --cat-unit-soft:     #F2EDFC;
+  --cat-date:     #C0266D; --cat-date-ink:     #A1205C; --cat-date-soft:     #F9EBF2;
+  --cat-art:      #A21CAF; --cat-art-ink:      #881893; --cat-art-soft:      #F7EBF8;
+  --cat-edu:      #4338CA; --cat-edu-ink:      #382FAA; --cat-edu-soft:      #EEEDFA;
+  --cat-dev:      #475569; --cat-dev-ink:      #3C4758; --cat-dev-soft:      #EEF0F2;
+
+  /* ── Data viz (NEW) — 결과 구성 막대·범례·차트 ─────────── */
+  --data-1: var(--accent);
+  --data-2: #8FB0F8;
+  --data-3: #C9D0DA;
+  --data-4: #0E7490;
+
+  /* ── Legacy palette primitives (NEW) — 하드코딩 hex 코드모드(§13 R-H) 1단계용.
+     1단계: 값 = 기존 hex 그대로(시각 변화 0) → 2단계: 아래 주석 값으로 재조정(AA).
+     신규 코드는 쓰지 말 것 — 의미 토큰(--danger 등)·--data-* 사용 ── */
+  --red-600:     #DC2626; /* → #C9302C  흰 4.83 → 5.33 */
+  --emerald-600: #059669; /* → #047857  3.77 → 5.48 */
+  --orange-600:  #EA580C; /* → #C2410C  3.56 → 5.18 */
+  --cyan-600:    #0891B2; /* → #0E7490  3.68 → 5.36 */
+  --yellow-700:  #A16207; /* → #8A6200  4.92 → 5.49 */
+  --teal-600:    #0D9488; /* → #0F766E  3.74 → 5.47 */
+  --amber-600:   #D97706; /* → #B45309  3.19 → 5.02 */
+  --sky-500:     #0EA5E9; /* → var(--accent) 2.77 → 5.36 */
+  --purple-600:  #9333EA; /* 유지 5.38 */
+  --pink-600:    #DB2777; /* → #BE185D  4.60 → 6.04 */
+  --amethyst:    #9B59B6; /* → #8E44AD  4.67 → 5.87 */
+  --teal-700:    #0F766E; /* 유지 5.47 */
+
+  /* ── Paper(구 홈 벤토) → 중립으로 흡수 (이름 유지, 별칭) ─── */
+  --paper:           var(--bg);
+  --paper-card:      var(--bg2);
+  --paper-dim:       var(--bg3);
+  --paper-line:      var(--border);
+  --paper-ink:       var(--text);
+  --paper-ink-soft:  var(--muted-strong);
+  --paper-ink-faint: var(--muted);
+
+  /* ── Type (§6.1) — 인라인 fontFamily 실명 대신 이 변수를 쓴다 ─── */
+  --font-sans:    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif; /* NEW */
+  --font-display: var(--font-sans); /* NEW — 제목·강조 (현재는 sans와 동일, 추후 분리 여지) */
+  --font-num:     var(--font-sans); /* NEW — 숫자 맥락 (tnum과 함께). 구 'Inter','SF Mono' 숫자 표시 대체 — 모노로 바뀌지 않게 */
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'D2Coding', monospace; /* JetBrains 는 /tools/dev 에서만 로드 — 그 밖은 시스템 모노 */
+
+  /* ── Radius (§7) ──────────────────────────────────────────── */
+  --radius-xs:   6px;   /* NEW 배지·kbd */
+  --radius-s:    8px;   /* 유지: 작은 버튼·세그먼트 안쪽·숫자 그리드 */
+  --radius-m:    12px;  /* 유지: 입력·콜아웃·표 컨테이너 */
+  --radius-card: 16px;  /* 14 → 16: 카드 */
+  --radius-lg:   20px;  /* 16 → 20: 본문 시트·홈 미리보기 */
   --radius-pill: 999px;
 
-  --accent:        #0284C7;   /* sky-600 — primary brand (흰 배경 4.10:1, 대형 텍스트 AA) */
-  --accent-hover:  #0369A1;   /* sky-700 — hover state */
-  --accent-ink:    #0369A1;   /* sky-700 — 캡션급(≤14px) accent 텍스트용 (5.93:1) */
-  --accent-strong: #0369A1;   /* sky-700 — 솔리드 버튼 배경 (흰 글자 5.93:1) */
-  --accent-dim:    rgba(2,132,199,0.18);  /* dim accent background */
-  --accent-light:  #e0f2fe;   /* sky-100 — soft background tint */
+  /* ── Elevation — 카드는 1px --border + 0 1px 2px 만. 그 밖의 그림자 금지 ── */
+  --shadow-rest: 0 0 0 1px rgba(25, 31, 40, 0.04), 0 1px 2px rgba(25, 31, 40, 0.04);
+  --shadow-pop:  0 1px 3px rgba(25, 31, 40, 0.10), 0 1px 1px rgba(25, 31, 40, 0.04); /* NEW 세그먼트 선택 */
+  --shadow-lift: 0 10px 30px rgba(25, 31, 40, 0.08), 0 2px 6px rgba(25, 31, 40, 0.04);
 
-  /* category accent colors — 600-level for AA contrast on white (전 11종, lib/tools.ts와 단일 소스) */
-  --cat-finance:  #059669;    /* emerald-600 */
-  --cat-health:   #0891B2;    /* cyan-600 */
-  --cat-cooking:  #D97706;    /* amber-600 */
-  --cat-life:     #EA580C;    /* orange-600 */
-  --cat-sports:   #A16207;    /* yellow-700 — 600(#A16207)은 2.94:1 AA 미달이라 700 사용 */
-  --cat-interior: #EA580C;    /* orange-600 (life와 공유) */
-  --cat-unit:     #7C3AED;    /* violet-600 */
-  --cat-date:     #DB2777;    /* pink-600 */
-  --cat-art:      #9333EA;    /* purple-600 */
-  --cat-edu:      #0D9488;    /* teal-600 */
-  --cat-dev:      #0284C7;    /* sky-600 */
+  /* ── Layout (NEW) ─────────────────────────────────────────── */
+  --w-content: 760px;   /* 기본 본문 폭 (유지) */
+  --w-wide:    880px;   /* 표·에디터형 (유지) */
+  --w-read:    680px;   /* 장문 가독 폭 */
+  --w-shell:   1156px;  /* 헤더·홈·허브 (패딩 24×2 포함 → 콘텐츠 1108 = 760 + 48 + 300) */
+  --w-rail:    300px;
+  --header-h:  64px;    /* ≤900: 56 (아래 미디어쿼리) — sticky 오프셋은 반드시 이 변수로 */
+  --tabbar-h:  60px;
 
-  /* category ink — 소형 텍스트용 (--accent/--accent-ink 선례). 600레벨이 흰 배경 4.5:1 미달인
-     6종만 700레벨로 올리고, 이미 통과하는 4종+sports는 동일 값 유지 (시각 변화 최소화) */
-  --cat-finance-ink:  #047857; /* emerald-700, 5.48:1 */
-  --cat-health-ink:   #0E7490; /* cyan-700, 5.36:1 */
-  --cat-cooking-ink:  #B45309; /* amber-700, 5.02:1 */
-  --cat-life-ink:     #C2410C; /* orange-700, 5.18:1 */
-  --cat-sports-ink:   #A16207; /* = --cat-sports (4.92:1 통과) */
-  --cat-interior-ink: #C2410C; /* orange-700 (life와 공유) */
-  --cat-unit-ink:     #7C3AED; /* = --cat-unit (5.70:1 통과) */
-  --cat-date-ink:     #DB2777; /* = --cat-date (4.60:1 통과) */
-  --cat-art-ink:      #9333EA; /* = --cat-art (5.38:1 통과) */
-  --cat-edu-ink:      #0F766E; /* teal-700, 5.47:1 */
-  --cat-dev-ink:      #0369A1; /* sky-700 = --accent-ink, 5.93:1 */
-
-  /* semantic — 실사용 600레벨 기준 (텍스트 AA 안전값) */
-  --success: #059669;         /* emerald-600, 4.5:1 */
-  --warning: #B45309;         /* amber-700, 5.0:1 — 600레벨은 텍스트 AA 미달 */
-  --danger:  #DC2626;         /* red-600, 4.5:1 */
-  --danger-soft: #fef2f2;
-
-  /* ── 홈 "커맨드 센터" 토큰 ─────────────────────────────
-     홈·공통 컴포넌트(Hero·카드·검색) 전용 추가분. 기존 토큰(--accent·--bg·--text 등)은
-     185개 도구 페이지가 의존하므로 미변경. 액센트는 신호로만(태그·배지·점·hover), 면적 칠 금지. */
-  --brand:        #2563EB;   /* blue-600 — 홈 주 액션·포커스 신호 (UI/대형 ≥3:1) */
-  --brand-ink:    #1D4ED8;   /* blue-700 — 소형 링크/텍스트용 (흰 위 ~6.3:1 AA) */
-  --brand-soft:   #EFF4FF;   /* 브랜드 배경 틴트 */
-  --brand-line:   #D6E2FF;   /* 브랜드 헤어라인 보더 */
-  --accent-mint:  #10B981;   /* 신호(건강·성공 계열) */
-  --mint-soft:    #ECFDF5;
-  --accent-lime:  #65A30D;   /* 신호(절제) */
-  --accent-coral: #FB7185;   /* HOT 신호(점·보더) */
-  --coral-ink:    #BE123C;   /* rose-700 — 코랄 텍스트 AA: 흰 위 6.1:1, --coral-soft 위 5.5:1 (rose-600은 soft 위 4.28 미달) */
-  --coral-soft:   #FFF1F2;
-  --ink-faint:    #94A3B8;   /* 캡션·메타(대형/비텍스트 한정) */
-  --radius-lg:    16px;      /* 홈 카드 */
-  /* 그림자 2단계 — 쿨톤·저확산. resting은 헤어라인 보더 겸용 */
-  --shadow-rest:  0 1px 2px rgba(15,23,41,.04), 0 0 0 1px rgba(15,23,41,.05);
-  --shadow-lift:  0 6px 20px rgba(15,23,41,.08);
-
-  /* ── 홈 "벤토" 토큰 (컬러 블록 리디자인) ─────────────────────
-     홈 한정 웜 페이퍼 캔버스 + 솔리드 카테고리 타일. 도구 페이지가 의존하는
-     기존 토큰(--bg·--accent 등)은 미변경. 타일 배경은 --cat-*를
-     color-mix(76% + --paper-ink)로 ~700레벨까지 내려 흰 글자 AA 확보. */
-  --paper:           #F5F4EF;  /* 홈 캔버스 — 웜 페이퍼 */
-  --paper-card:      #FFFFFF;  /* 타일·카드 표면 */
-  --paper-dim:       #F2F1EC;  /* 인풋·세그먼트 배경 */
-  --paper-line:      #E5E3DC;  /* 헤어라인 */
-  --paper-ink:       #1C1B18;  /* 제목·다크 타일 배경 */
-  --paper-ink-soft:  #55524A;  /* 보조 텍스트 (흰 위 7.0:1) */
-  --paper-ink-faint: #67645B;  /* 캡션 — 흰 위 5.8:1, --paper-dim 위 5.2:1 (이전 #706D64는 dim 위 4.57 경계) */
+  /* ── Spacing (NEW, 짝수 px) ───────────────────────────────── */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-14: 56px; --space-16: 64px;
 }
+@media (max-width: 900px) { :root { --header-h: 56px; } }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ③ 분야 스코프 — 크롬(아이브로우·아이콘 칩·분야 라인·점)에만 쓰는 --c* 3종.
+   ToolPage·CategoryView·Nav·RelatedTools 카드 등에 data-cat="finance" 를 단다. --accent 는 절대 바꾸지 않는다. */
+[data-cat='finance']  { --c: var(--cat-finance);  --c-ink: var(--cat-finance-ink);  --c-soft: var(--cat-finance-soft); }
+[data-cat='health']   { --c: var(--cat-health);   --c-ink: var(--cat-health-ink);   --c-soft: var(--cat-health-soft); }
+[data-cat='cooking']  { --c: var(--cat-cooking);  --c-ink: var(--cat-cooking-ink);  --c-soft: var(--cat-cooking-soft); }
+[data-cat='life']     { --c: var(--cat-life);     --c-ink: var(--cat-life-ink);     --c-soft: var(--cat-life-soft); }
+[data-cat='sports']   { --c: var(--cat-sports);   --c-ink: var(--cat-sports-ink);   --c-soft: var(--cat-sports-soft); }
+[data-cat='interior'] { --c: var(--cat-interior); --c-ink: var(--cat-interior-ink); --c-soft: var(--cat-interior-soft); }
+[data-cat='unit']     { --c: var(--cat-unit);     --c-ink: var(--cat-unit-ink);     --c-soft: var(--cat-unit-soft); }
+[data-cat='date']     { --c: var(--cat-date);     --c-ink: var(--cat-date-ink);     --c-soft: var(--cat-date-soft); }
+[data-cat='art']      { --c: var(--cat-art);      --c-ink: var(--cat-art-ink);      --c-soft: var(--cat-art-soft); }
+[data-cat='edu']      { --c: var(--cat-edu);      --c-ink: var(--cat-edu-ink);      --c-soft: var(--cat-edu-soft); }
+[data-cat='dev']      { --c: var(--cat-dev);      --c-ink: var(--cat-dev-ink);      --c-soft: var(--cat-dev-soft); }
+
+/* ④ 기본 요소·유틸 (§8) ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
+  -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px); /* 앵커 이동 시 sticky 헤더에 가리지 않게 */
   /* clip은 스크롤 컨테이너를 만들지 않아 sticky 자손이 안전 — 미지원 브라우저는 hidden 폴백 */
   overflow-x: hidden;
   overflow-x: clip;
@@ -110,64 +183,114 @@ html {
 body {
   background: var(--bg);
   color: var(--text);
-  /* Windows ClearType + macOS subpixel 모두에서 또렷한 가독성 */
-  font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 16px;
   font-weight: 400;
   line-height: 1.6;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;                  /* 13px 이하 한글은 0 — 음수 자간은 18px 이상 제목에만 */
+  word-break: keep-all;               /* 어절 단위 줄바꿈 */
+  overflow-wrap: break-word;          /* 긴 URL·숫자열 안전장치 */
+  /* 숫자 정책 과도기(§6.4, Phase 0~1): body tnum 유지 — 레거시 결과 레이아웃의 숫자 폭 보존.
+     Phase 2(ToolPage가 도구 영역을 .tpTool[tnum]로 감싸는 PR)와 **같은 PR**에서 normal 로 전환한다. */
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
   overflow-x: clip;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
-a { text-decoration: none; color: inherit; }
+/* 제목 — 인라인 style이 있는 레거시 제목은 인라인이 이긴다(안전).
+   color 는 여기서 지정하지 않는다: body 가 이미 --text 라 기본 결과는 같고, 어두운/컬러 컨테이너 안의
+   레거시 제목(색 상속 의존)이 --text 로 뒤집히는 회귀를 막는다. 본문 시트 제목은 아래 .prose/.g-h* 가 --text 를 명시.
+   자간: §8 코드(h1~h4 −0.025em)와 §6.4("음수 자간은 18px 이상 제목에만")가 충돌 → §6.4 우선.
+   음수는 h1·h2 에만(레거시 인라인 h2 827곳 전부 18px 이상, 18 미만 0곳). h3·h4 는 18px 미만 레거시 소제목·라벨
+   (인라인 28곳 + 모듈 소형 h4)이 있어 자간을 지정하지 않고 상속(body 0)한다 — 51a509f 처럼 컨테이너 자간도 그대로 상속.
+   18px 제목 h3 는 .g-h3 · :where(.prose) h3 · 컴포넌트가 −0.02em 을 직접 지정 */
+h1, h2, h3, h4 { font-weight: 700; line-height: 1.35; font-variant-numeric: normal; }
+h1, h2 { letter-spacing: -0.025em; }
+h1 { line-height: 1.3; letter-spacing: -0.035em; }
 
-/* ── 모바일 입력·터치 기본기 ───────────────────────────── */
-/* iOS Safari는 16px 미만 input/select 포커스 시 화면을 자동 확대함 — 모바일에서 일괄 16px 보장 */
+a { color: inherit; text-decoration: none; }
+/* 버튼·입력 리셋 — 신규 컴포넌트·ui.css 는 이 리셋을 전제로 한다. 레거시 모듈은 대부분 background·border·font-size 를 명시.
+   §8 의 `font: inherit` 에서 두 가지를 UA 기본값으로 되돌린다(스펙과 다른 부분):
+   - line-height: normal — font 단축 속성이 body 1.6 까지 상속시켜, 높이·line-height 미지정 레거시 버튼 2,006/2,172 · 입력 1,010/1,032 가
+     커진다(padding 10px 16px·14px 버튼 40→44.4px 반픽셀, 무스타일 ✕ 19→25.6px). ui.css·신규 컴포넌트는 높이/행간을 명시 — 목업 3종×390/1280 재측정 변화 0.
+   - font-weight: 400 — 굵은 조상(h*, th, 굵은 클래스) 안 레거시 컨트롤 18개가 굵어지는 것 방지(51a509f 는 UA 기본 400).
+     신규 컴포넌트는 굵기를 명시 — 목업·components/ AST 스캔 영향 0. 굵기 상속이 필요하면 해당 클래스에 font-weight: inherit */
+button { font: inherit; font-weight: 400; line-height: normal; color: inherit; background: none; border: 0; cursor: pointer; touch-action: manipulation; }
+input, select, textarea { font: inherit; font-weight: 400; line-height: normal; color: inherit; }
+table { border-collapse: collapse; }
+img, video { max-width: 100%; height: auto; }
+::selection { background: var(--accent-line); color: var(--text); }
+
+/* 키보드 포커스 (WCAG 2.4.7) — 모듈의 outline:none 162곳을 이기기 위해 !important 유지 */
+*:focus-visible { outline: 2px solid var(--accent) !important; outline-offset: 2px; }
+
+/* 숫자 정책 — 문장은 비례폭, 수치 맥락은 고정폭(tnum).
+   과도기: Phase 0~1 동안은 body에 tabular-nums를 유지하고(위), ToolPage(도구 영역 = .tpTool 에 tnum)가 들어오는 Phase 2 PR에서 body를 normal로 바꾼다 */
+.num, input, output, table, [role='status'] { font-variant-numeric: tabular-nums; }
+.pnum { font-variant-numeric: normal; }
+
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* 아이콘 (UiIcon 공통) */
+svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+svg.i.s14 { width: 14px; height: 14px; } svg.i.s16 { width: 16px; height: 16px; } svg.i.s18 { width: 18px; height: 18px; }
+svg.i.s24 { width: 24px; height: 24px; } svg.i.s28 { width: 28px; height: 28px; }
+
+/* 모바일 입력 16px (iOS Safari는 16px 미만 input/select 포커스 시 화면을 자동 확대) — 기존 규칙 유지 */
 @media (max-width: 640px) {
   input:not([type='checkbox']):not([type='radio']):not([type='range']),
   select:not([multiple]):not([size]),
-  textarea:not([data-allow-small]) {
-    font-size: 16px;
-  }
+  textarea:not([data-allow-small]) { font-size: 16px; }
 }
+/* 터치 최소 높이 44 (Apple HIG) — 칩·숫자 그리드는 컴포넌트에서 min-height:0 + ::after 히트 영역으로 대체 */
+@media (pointer: coarse) { button { min-height: 44px; } }
 
-/* 더블탭 줌·300ms 탭 지연 제거 — 연타 도구(탭 템포·반응속도)에 필수, 전 버튼 무해 */
-button { touch-action: manipulation; }
-
-/* 키보드 포커스 가시화 (WCAG 2.4.7) — 모듈의 outline:none 162곳을 이기기 위해 !important */
-*:focus-visible {
-  outline: 2px solid var(--accent) !important;
-  outline-offset: 2px;
-}
-
-/* 계산 결과 숫자 정렬 — Inter·JetBrains Mono 모두 tnum 지원, 한글 무영향 */
-body { font-variant-numeric: tabular-nums; }
-
-/* 터치 기기에서 버튼 최소 높이 확보 (Apple HIG 44px) */
-@media (pointer: coarse) {
-  button { min-height: 44px; }
-}
-
-/* 가로 스크롤 표 래퍼 — 잘린 열이 있음을 가장자리 그림자로 암시 (스크롤 끝에 닿으면 사라짐) */
+/* 가로 스크롤 표 래퍼 — 기존 클래스명 유지(187곳), 색만 쿨톤.
+   가림막(local)의 불투명 구간 14px > 그림자(scroll) 12px → 스크롤할 필요 없는 표에서 그림자가 비치던 누수 수정.
+   래퍼 배경이 흰색이 아닐 때는 --ts-bg 로 가림막 색을 맞춘다 (예: style={{ '--ts-bg': 'var(--bg3)' }}) */
 .tableScroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   background:
-    linear-gradient(to right, var(--bg2), transparent 20px) left / 28px 100% no-repeat local,
-    linear-gradient(to left, var(--bg2), transparent 20px) right / 28px 100% no-repeat local,
-    linear-gradient(to right, rgba(15, 23, 42, 0.12), transparent) left / 14px 100% no-repeat scroll,
-    linear-gradient(to left, rgba(15, 23, 42, 0.12), transparent) right / 14px 100% no-repeat scroll;
+    linear-gradient(to right, var(--ts-bg, var(--bg2)) 14px, transparent 28px) left / 28px 100% no-repeat local,
+    linear-gradient(to left,  var(--ts-bg, var(--bg2)) 14px, transparent 28px) right / 28px 100% no-repeat local,
+    linear-gradient(to right, rgba(25, 31, 40, 0.10), transparent) left / 12px 100% no-repeat scroll,
+    linear-gradient(to left,  rgba(25, 31, 40, 0.10), transparent) right / 12px 100% no-repeat scroll;
 }
 
+/* 가이드 코드모드 타깃 (인라인 → 클래스, §13 R-G). 본문 시트(.article) 밖에서도 같은 조판 */
+.g-h2 { font-size: 22px; font-weight: 700; line-height: 1.4; letter-spacing: -0.03em; color: var(--text); margin: 44px 0 12px; scroll-margin-top: calc(var(--header-h) + 16px); }
+.g-h3 { font-size: 18px; font-weight: 700; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); margin: 28px 0 8px; }
+.g-p  { font-size: 16px; line-height: 1.8; color: var(--text-body); margin: 0 0 16px; font-variant-numeric: normal; max-width: var(--w-read); }
+.g-p strong, .g-list strong { color: var(--text); font-weight: 600; }
+.g-p a, .g-list a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.g-list { margin: 0 0 16px; padding-left: 22px; max-width: var(--w-read); }
+.g-list li { font-size: 16px; line-height: 1.8; color: var(--text-body); margin-bottom: 4px; font-variant-numeric: normal; }
+.g-note { margin-top: 8px; font-size: 13px; line-height: 1.6; color: var(--muted); }
+@media (max-width: 640px) { .g-h2 { font-size: 20px; margin-top: 40px; } }
+
+/* 장문 조판 — 본문 시트(ArticleSheet)·허브 안내·정책 페이지 공통. :where()로 특이도 0 → 컴포넌트 클래스가 항상 우선 */
+.prose { counter-reset: sec; }
+:where(.prose) h2 { margin: 48px 0 14px; font-size: 22px; font-weight: 700; line-height: 1.4; letter-spacing: -0.03em; color: var(--text); scroll-margin-top: calc(var(--header-h) + 16px); }
+:where(.prose) h2:not([data-nonum])::before { counter-increment: sec; content: counter(sec, decimal-leading-zero); display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; letter-spacing: 0; color: var(--accent-ink); }
+:where(.prose) h3 { margin: 28px 0 8px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+:where(.prose) p { max-width: var(--w-read); margin: 0 0 16px; font-size: 16px; line-height: 1.8; color: var(--text-body); font-variant-numeric: normal; }
+:where(.prose) :is(p, li) strong { color: var(--text); font-weight: 600; }
+:where(.prose) :is(p, li) a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+:where(.prose) :is(ul, ol) { max-width: var(--w-read); margin: 0 0 16px; padding-left: 22px; }
+:where(.prose) li { margin-bottom: 4px; font-size: 16px; line-height: 1.8; color: var(--text-body); font-variant-numeric: normal; }
+@media (max-width: 640px) { :where(.prose) h2 { margin-top: 40px; font-size: 20px; } }
+
+/* 스크롤바 (토큰) */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
 
+/* ⑤ 레거시 호환 — 전역 keyframes (app/page.module.css 의 `animation: pulse`, 모듈·인라인의 fadeUp 참조). 이름 변경 금지 */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -181,9 +304,5 @@ body { font-variant-numeric: tabular-nums; }
 /* 모션 축소 설정 사용자 — smooth 스크롤·등장 애니메이션 비활성 */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

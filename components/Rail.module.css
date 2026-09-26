@@ -1,0 +1,29 @@
+/* components/Rail.module.css — 데스크톱 레일(≥1200): BasisCard(비고정) → [RailResult · Toc · 광고] sticky */
+.rlCard { padding: 18px 20px; border-radius: var(--radius-card); background: var(--bg2); border: 1px solid var(--border); }
+.rlTitle { display: flex; align-items: center; gap: 6px; margin: 0 0 12px; font-size: 13px; font-weight: 700; line-height: 1.5; letter-spacing: 0; color: var(--muted-strong); }
+/* 이 계산기의 기준 */
+.rlBasis dl { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px 12px; font-size: 13px; line-height: 1.55; }
+.rlBasis dt { color: var(--muted); }
+.rlBasis dd { min-width: 0; color: var(--text); font-weight: 600; word-break: keep-all; overflow-wrap: break-word; font-variant-numeric: tabular-nums; }
+.rlBasis dd small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); }
+.rlBasis .rlOk { color: var(--success); }
+.rlBasis .rlClamp { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.rlBasis dd a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+.rlReport { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--divider); font-size: 13px; color: var(--muted); }
+.rlReport a { margin-left: auto; display: inline-flex; align-items: center; gap: 2px; font-weight: 600; color: var(--accent-ink); white-space: nowrap; }
+/* 미니 결과 — 페이지의 [role=status]를 미러링(도구별 수정 없이 200개에 적용). aria-hidden */
+.rlResult { display: block; padding: 16px 20px; border-radius: var(--radius-card); background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--text); }
+@media (hover: hover) { .rlResult:hover { border-color: var(--accent); } }
+.rlResultL { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; color: var(--muted-strong); }
+.rlResultL span { display: inline-flex; align-items: center; gap: 2px; color: var(--accent-ink); }
+.rlResultN { display: block; margin-top: 4px; font-size: 28px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rlResultN small { margin-left: 2px; font-size: 15px; font-weight: 600; letter-spacing: 0; color: var(--muted-strong); }
+.rlResultE { display: block; margin-top: 6px; font-size: 13px; font-weight: 500; line-height: 1.55; letter-spacing: 0; color: var(--muted); white-space: normal; word-break: keep-all; } /* .rlResultN의 nowrap을 끊는다 */
+/* 목차 */
+.rlToc { padding: 16px 12px 12px 20px; }
+.rlToc ol { list-style: none; counter-reset: toc; margin: 0; padding: 0; max-height: max(160px, calc(100vh - var(--header-h) - 420px)); overflow-y: auto; overscroll-behavior: contain; }
+.rlToc a { display: flex; gap: 10px; padding: 6px 12px; border-left: 2px solid var(--border); font-size: 14px; line-height: 1.5; color: var(--muted); }
+.rlToc a::before { counter-increment: toc; content: counter(toc, decimal-leading-zero); flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--muted); padding-top: 2px; }
+@media (hover: hover) { .rlToc a:hover { color: var(--text); } }
+.rlToc a[aria-current='true'] { border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.rlToc a[aria-current='true']::before { color: var(--accent-ink); }

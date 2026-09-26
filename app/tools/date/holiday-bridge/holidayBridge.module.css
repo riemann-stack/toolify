@@ -328,7 +328,7 @@
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 28px;
+  bottom: calc(var(--bottom-nav-h, 0px) + 28px);
   transform: translateX(-50%);
   background: var(--text);
   color: var(--bg);

@@ -1,0 +1,3198 @@
+{
+ "/tools/art/bpm": {
+  "slug": "/tools/art/bpm",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/capo": {
+  "slug": "/tools/art/capo",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/charcount": {
+  "slug": "/tools/art/charcount",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "총 글자수 = UTF-16 코드 유닛(String.length) 기준 · 플랫폼 한도는 공식 문서 확인값",
+  "sources": [
+   {
+    "label": "유튜브 고객센터",
+    "org": "",
+    "href": "https://support.google.com/youtube/answer/57404?hl=ko"
+   },
+   {
+    "label": "X twitter-text 공식 설정",
+    "org": "",
+    "href": "https://github.com/twitter/twitter-text/blob/master/config/v3.json"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/chord": {
+  "slug": "/tools/art/chord",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/color": {
+  "slug": "/tools/art/color",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/exposure": {
+  "slug": "/tools/art/exposure",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "조리개 1/3 stop 계열 = ISO 517(표준 f수 계열, 공비 2^(1/6)) · EV↔조명 대응 = ANSI PH2.7-1973/1986 계열 노출 가이드(직사광 행은 일출 2시간 후~일몰 2시간 전·정면광 기준) · ND 배율↔stop = 제조사 공식 표기 · IBIS stop = CIPA 규격 기준 제조사 발표값",
+  "sources": [
+   {
+    "label": "ISO 517 (f수 표준 계열)",
+    "org": "",
+    "href": "https://www.iso.org/standard/50089.html"
+   },
+   {
+    "label": "PhotoPills — 별 사진 셔터 룰(500·NPF)",
+    "org": "",
+    "href": "https://www.photopills.com/articles/how-photograph-milky-way"
+   },
+   {
+    "label": "EV↔조명 대응표 (ANSI PH2.7 인용)",
+    "org": "",
+    "href": "https://en.wikipedia.org/wiki/Exposure_value"
+   },
+   {
+    "label": "Sunny 16 룰",
+    "org": "",
+    "href": "https://en.wikipedia.org/wiki/Sunny_16_rule"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/fov": {
+  "slug": "/tools/art/fov",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "센서 치수 = 제조사 공식 사양(소니 a6700 23.3×15.5 · 니콘 Z fc·후지 X-T5 23.5×15.7 · 캐논 R10 22.3×14.9 · OM SYSTEM 17.3×13.0 · 1형 13.2×8.8) · 크롭 팩터는 제조사 표기 관행값(소니·니콘 ×1.5, 후지 ×1.52, 캐논 ×1.6)이라 대각선 계산값과 최대 2% 차이 · 렌즈 분류 경계는 표준 규정이 아니라 제조사(캐논·리코펜탁스) 관행",
+  "sources": [
+   {
+    "label": "소니 a6700 사양 (센서 치수)",
+    "org": "",
+    "href": "https://helpguide.sony.net/ilc/2320/v1/en/contents/221h_specifications_ilc2320.html"
+   },
+   {
+    "label": "후지필름 X-T5 사양",
+    "org": "",
+    "href": "http://www.fujifilm-x.com/en-us/products/cameras/x-t5/specifications/"
+   },
+   {
+    "label": "OM SYSTEM OM-1 Mark II 사양",
+    "org": "",
+    "href": "https://my.omsystem.com/consumer/product_specs/SPECIFICATIONS_om-1-mark-ii_EN.pdf"
+   },
+   {
+    "label": "삼성 ISOCELL HP2 (1/1.3형)",
+    "org": "",
+    "href": "https://news.samsungsemiconductor.com/global/introducing-isocell-hp2-experience-more-pictures-and-epic-details-on-the-galaxy-s23-ultra/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/frequency": {
+  "slug": "/tools/art/frequency",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "ISO 16:1975(2022년 재확인) 기준 조율 주파수 · ISO 226:2023 등청감곡선",
+  "sources": [
+   {
+    "label": "ISO 16:1975",
+    "org": "",
+    "href": "https://www.iso.org/standard/3601.html"
+   },
+   {
+    "label": "ISO 226:2023",
+    "org": "",
+    "href": "https://www.iso.org/standard/83117.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/golden-ratio": {
+  "slug": "/tools/art/golden-ratio",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/gradient-generator": {
+  "slug": "/tools/art/gradient-generator",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/knit-gauge": {
+  "slug": "/tools/art/knit-gauge",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "CYC 표준 실 굵기 시스템(0~7, 4 inches / 10 cm, GUIDELINES ONLY) · CYC 「Bust/Chest Fit and Ease Chart」(2018-11-06판) · KS 의류 치수 표준의 호칭 체계(2025-09-17 개정판) 참고 — 표의 수치는 KS 호칭표가 아닌 뜨개 패턴용 참고 치수",
+  "sources": [
+   {
+    "label": "CYC 실 굵기 표준",
+    "org": "",
+    "href": "https://www.craftyarncouncil.com/standards/yarn-weight-system"
+   },
+   {
+    "label": "CYC 바늘·코바늘 규격",
+    "org": "",
+    "href": "https://www.craftyarncouncil.com/standards/hooks-and-needles"
+   },
+   {
+    "label": "CYC 신체 치수·여유분",
+    "org": "",
+    "href": "https://www.craftyarncouncil.com/standards/body-sizing"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/lorem": {
+  "slug": "/tools/art/lorem",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "더미 값 대역: RFC 2606 예약 도메인 · 전기통신번호관리세칙 미부여 대역 기준",
+  "sources": [
+   {
+    "label": "RFC 2606 (예약 최상위 도메인)",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc2606"
+   },
+   {
+    "label": "전기통신번호관리세칙 (국가법령정보센터)",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/전기통신번호관리세칙"
+   },
+   {
+    "label": "우편번호 안내 (우정사업본부)",
+    "org": "",
+    "href": "https://www.koreapost.go.kr/kpost/subIndex/208.do?pSiteIdx=125"
+   },
+   {
+    "label": "2025 저작권 상담 사례집 (한국저작권위원회)",
+    "org": "",
+    "href": "https://www.copyright.or.kr/information-materials/publication/research-report/view.do?brdctsno=55038"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/morse-code": {
+  "slug": "/tools/art/morse-code",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "ITU-R M.1677-1(모스 부호)·M.1172(약어)·ICAO Annex 10 Vol II(음성 문자) 기준",
+  "sources": [
+   {
+    "label": "ITU-R M.1677-1 국제 모스 부호",
+    "org": "",
+    "href": "https://www.itu.int/rec/R-REC-M.1677/en"
+   },
+   {
+    "label": "ITU-R M.1172 약어·신호",
+    "org": "",
+    "href": "https://www.itu.int/rec/R-REC-M.1172/en"
+   },
+   {
+    "label": "국가등록문화재 「전보장정」 해설",
+    "org": "",
+    "href": "https://www.heritage.go.kr/heri/cul/culSelectDetail.do?ccbaKdcd=79&ccbaAsno=05290000&ccbaCtcd=11"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/paint-mix": {
+  "slug": "/tools/art/paint-mix",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/print-resolution": {
+  "slug": "/tools/art/print-resolution",
+  "reviewed": "2026-08",
+  "updated": "2026-08-03",
+  "basis": "사진 인화 규격 = 후지필름 공식 스토어 표기(L 89×127 · KG 102×152 · 2L 127×178 · 六切 203×254) · A규격 = ISO 216 · 명함 90×50(한국 관행) · 증명사진 35×45(외교부 여권 규격) · 300 PPI 기준 = 하프톤 150 lpi × 품질계수 2 · 250 PPI = Ghent Workgroup 일반 상업 인쇄 규정값",
+  "sources": [
+   {
+    "label": "후지필름 프린트 사이즈 (L·KG·2L)",
+    "org": "",
+    "href": "https://pg-ja.fujifilm.com/10001.html"
+   },
+   {
+    "label": "외교부 여권 사진 규격",
+    "org": "",
+    "href": "https://www.passport.go.kr/home/kor/contents.do?menuPos=32"
+   },
+   {
+    "label": "Adobe — 프린터 해상도와 이미지 해상도",
+    "org": "",
+    "href": "https://helpx.adobe.com/photoshop/desktop/crop-resize-transform/resize-adjust-resolution/printer-resolution.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/scale": {
+  "slug": "/tools/art/scale",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/tap-tempo": {
+  "slug": "/tools/art/tap-tempo",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/vocal-range": {
+  "slug": "/tools/art/vocal-range",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [
+   {
+    "label": "NIDCD — Taking Care of Your Voice (음성 건강 지침)",
+    "org": "",
+    "href": "https://www.nidcd.nih.gov/health/taking-care-your-voice"
+   },
+   {
+    "label": "pitchy — McLeod Pitch Method 구현 (피치 감지 라이브러리)",
+    "org": "",
+    "href": "https://github.com/ianprime0509/pitchy"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/baby-porridge": {
+  "slug": "/tools/cooking/baby-porridge",
+  "reviewed": "2026-07",
+  "updated": "2026-07-11",
+  "basis": "육아 서적·레시피 플랫폼 통용 관행 종합 (배죽은 공식 규격이 아닌 관행 수치)",
+  "sources": [
+   {
+    "label": "질병관리청 국가건강정보포털",
+    "org": "",
+    "href": "https://health.kdca.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/baker-percent": {
+  "slug": "/tools/cooking/baker-percent",
+  "updated": "2026-07-29",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/baking-recipe": {
+  "slug": "/tools/cooking/baking-recipe",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/baking-schedule": {
+  "slug": "/tools/cooking/baking-schedule",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/brew": {
+  "slug": "/tools/cooking/brew",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/cake-pan": {
+  "slug": "/tools/cooking/cake-pan",
+  "reviewed": "2026-07",
+  "updated": "2026-07-11",
+  "basis": "베이킹 자재상 판매 규격(1호 15cm·호당 +3cm·높은팬 7cm) 교차 확인",
+  "sources": [
+   {
+    "label": "카우2004",
+    "org": "",
+    "href": "https://www.cow2004.com"
+   },
+   {
+    "label": "웰베이킹",
+    "org": "",
+    "href": "https://wellbaking.co.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/egg-timer": {
+  "slug": "/tools/cooking/egg-timer",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/food-storage": {
+  "slug": "/tools/cooking/food-storage",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [
+   {
+    "label": "식약처 「식품유형별 소비기한 설정 보고서」 — 식품안전나라 소비기한 자료실",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/portal/board/board.do?menu_grp=MENU_NEW01&menu_no=4612"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/fruit-syrup": {
+  "slug": "/tools/cooking/fruit-syrup",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "식약처 「안전한 매실청 담그는 방법」(2026.5.27) 안내 반영",
+  "sources": [
+   {
+    "label": "식약처 보도자료(2026.5.27)",
+    "org": "",
+    "href": "https://www.mfds.go.kr/brd/m_99/view.do?seq=50018"
+   },
+   {
+    "label": "식약처 카드뉴스",
+    "org": "",
+    "href": "https://mfds.go.kr/brd/m_580/view.do?seq=166"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/frying": {
+  "slug": "/tools/cooking/frying",
+  "updated": "2026-07-30",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/holiday-table": {
+  "slug": "/tools/cooking/holiday-table",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "aT 차례상 비용 조사(2026년 설 2.6·추석 9.18)·KAMIS 일별 시세 기준",
+  "sources": [
+   {
+    "label": "aT 한국농수산식품유통공사",
+    "org": "",
+    "href": "https://www.at.or.kr"
+   },
+   {
+    "label": "KAMIS 농산물유통정보",
+    "org": "",
+    "href": "https://www.kamis.or.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/kimjang": {
+  "slug": "/tools/cooking/kimjang",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/microwave": {
+  "slug": "/tools/cooking/microwave",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/nuts": {
+  "slug": "/tools/cooking/nuts",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/ramen": {
+  "slug": "/tools/cooking/ramen",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/recipe": {
+  "slug": "/tools/cooking/recipe",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/serving": {
+  "slug": "/tools/cooking/serving",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/cooking/sourdough": {
+  "slug": "/tools/cooking/sourdough",
+  "updated": "2026-07-31",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/substitute": {
+  "slug": "/tools/cooking/substitute",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/cooking/tea": {
+  "slug": "/tools/cooking/tea",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/thawing": {
+  "slug": "/tools/cooking/thawing",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/age": {
+  "slug": "/tools/date/age",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/dday": {
+  "slug": "/tools/date/dday",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "시험 일정은 시행기관 공고 기준 · 공휴일 2026~2030년 반영",
+  "sources": [
+   {
+    "label": "국가법령정보센터(관공서의 공휴일에 관한 규정)",
+    "org": "",
+    "href": "https://www.law.go.kr"
+   },
+   {
+    "label": "한국산업인력공단 Q-Net",
+    "org": "",
+    "href": "https://www.q-net.or.kr"
+   },
+   {
+    "label": "한국교육과정평가원 수능",
+    "org": "",
+    "href": "https://www.suneung.re.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/history-era": {
+  "slug": "/tools/date/history-era",
+  "reviewed": "2026-07",
+  "updated": "2026-07-29",
+  "basis": "조선왕조실록 기년(유년칭원법) 기준",
+  "sources": [
+   {
+    "label": "조선왕조실록",
+    "org": "",
+    "href": "https://sillok.history.go.kr"
+   },
+   {
+    "label": "한국사데이터베이스",
+    "org": "",
+    "href": "https://db.history.go.kr"
+   },
+   {
+    "label": "우리역사넷",
+    "org": "",
+    "href": "http://contents.history.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/holiday-bridge": {
+  "slug": "/tools/date/holiday-bridge",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "2026~2030년 법정공휴일·대체공휴일 (제헌절·노동절 공휴일 편입 반영 — 대통령령 제36290호)",
+  "sources": [
+   {
+    "label": "관공서의 공휴일에 관한 규정 — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/관공서의공휴일에관한규정"
+   },
+   {
+    "label": "대통령령 제36290호 개정 이유 — 정부입법현황",
+    "org": "",
+    "href": "https://opinion.lawmaking.go.kr/lmSts/govLm/2000000326376/detailRP"
+   },
+   {
+    "label": "인사혁신처",
+    "org": "",
+    "href": "https://www.mpm.go.kr/"
+   },
+   {
+    "label": "한국천문연구원 음력",
+    "org": "",
+    "href": "https://astro.kasi.re.kr/"
+   },
+   {
+    "label": "관공서의 공휴일에 관한 규정 — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/jet-lag": {
+  "slug": "/tools/date/jet-lag",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/life-time": {
+  "slug": "/tools/date/life-time",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "국가데이터처(구 통계청) 2024년 생명표 (2025년 12월 발표)",
+  "sources": [
+   {
+    "label": "국가데이터처 2024년 생명표 보도자료",
+    "org": "",
+    "href": "https://mods.go.kr/board.es?mid=a10301010000&bid=208&act=view&list_no=439533"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/lunar": {
+  "slug": "/tools/date/lunar",
+  "reviewed": "2026-07",
+  "updated": "2026-07-29",
+  "basis": "한국천문연구원(KASI) 음력 데이터 1900~2049 전수 일치 · 2025~2030 공휴일 발표 교차 확인",
+  "sources": [
+   {
+    "label": "한국천문연구원 음양력변환",
+    "org": "",
+    "href": "https://astro.kasi.re.kr"
+   },
+   {
+    "label": "한국민속대백과사전",
+    "org": "",
+    "href": "https://folkency.nfm.go.kr"
+   },
+   {
+    "label": "2027년 월력요항 (우주항공청)",
+    "org": "",
+    "href": "https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/military": {
+  "slug": "/tools/date/military",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "복무기간 = 병무청 병역이행안내 / 전역일 산정 = 「병역법」 제18조·시행령 제27조 + 「민법」 제160조 / 진급 = 「군인사법 시행규칙」 제32조 (국방부령 제1207호, 시행 2026-03-01)",
+  "sources": [
+   {
+    "label": "병역법 제18조(현역의 복무) — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/병역법/제18조"
+   },
+   {
+    "label": "군인사법 시행규칙 제32조(병의 진급 등) — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/군인사법시행규칙/제32조"
+   },
+   {
+    "label": "민법 제160조(역에 의한 계산) — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/민법/제160조"
+   },
+   {
+    "label": "병무청 병역이행안내",
+    "org": "",
+    "href": "https://www.mma.go.kr/contents.do?mc=usr0000041"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/schengen": {
+  "slug": "/tools/date/schengen",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "쉥겐 29개 회원국 · EES 전면 시행(2026-04-10) 반영",
+  "sources": [
+   {
+    "label": "EU 공식 쉥겐 계산기",
+    "org": "",
+    "href": "https://ec.europa.eu/assets/home/visa-calculator/calculator.htm"
+   },
+   {
+    "label": "EU EES·ETIAS 안내",
+    "org": "",
+    "href": "https://travel-europe.europa.eu/ees_en"
+   },
+   {
+    "label": "외교부 해외안전여행",
+    "org": "",
+    "href": "https://0404.go.kr/bbs/contsPst/MST0000000000117/17/detail"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/server-time": {
+  "slug": "/tools/date/server-time",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/date/timezone": {
+  "slug": "/tools/date/timezone",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/base64": {
+  "slug": "/tools/dev/base64",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/cron": {
+  "slug": "/tools/dev/cron",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/css-converter": {
+  "slug": "/tools/dev/css-converter",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/curl": {
+  "slug": "/tools/dev/curl",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/dev/hash": {
+  "slug": "/tools/dev/hash",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/http-status": {
+  "slug": "/tools/dev/http-status",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/dev/json": {
+  "slug": "/tools/dev/json",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/jwt": {
+  "slug": "/tools/dev/jwt",
+  "updated": "2026-07-29",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/keyboard-layout": {
+  "slug": "/tools/dev/keyboard-layout",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/llm-vram": {
+  "slug": "/tools/dev/llm-vram",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "llama.cpp quantize README 실측 bpw · HuggingFace 공식 config.json (Llama·Qwen·Gemma·EXAONE 등 13종)",
+  "sources": [
+   {
+    "label": "llama.cpp",
+    "org": "",
+    "href": "https://github.com/ggml-org/llama.cpp"
+   },
+   {
+    "label": "HuggingFace",
+    "org": "",
+    "href": "https://huggingface.co"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/network-test": {
+  "slug": "/tools/dev/network-test",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "LTE·5G 평균: 과기정통부·NIA 2025 통신서비스 품질평가 (2025.12.30 발표)",
+  "sources": [
+   {
+    "label": "과기정통부 보도자료(정책브리핑)",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156737428"
+   },
+   {
+    "label": "KDI 경제정보센터 게시본",
+    "org": "",
+    "href": "https://eiec.kdi.re.kr/policy/materialView.do?num=275568"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/number-base": {
+  "slug": "/tools/dev/number-base",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/og-preview": {
+  "slug": "/tools/dev/og-preview",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "태그 해석·검증 규칙 = Open Graph 프로토콜 + 플랫폼 공식 개발자 문서 기준",
+  "sources": [
+   {
+    "label": "Open Graph 프로토콜",
+    "org": "",
+    "href": "https://ogp.me/"
+   },
+   {
+    "label": "Meta 공유 이미지 가이드",
+    "org": "",
+    "href": "https://developers.facebook.com/docs/sharing/webmasters/images/"
+   },
+   {
+    "label": "카카오 공유 디버거",
+    "org": "",
+    "href": "https://developers.kakao.com/tool/clear/og"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/regex": {
+  "slug": "/tools/dev/regex",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/tech-stack": {
+  "slug": "/tools/dev/tech-stack",
+  "reviewed": "2026-05",
+  "updated": "2026-07-29",
+  "basis": "스택 채점 DB·가격·수수료 기준",
+  "sources": [
+   {
+    "label": "토스페이먼츠 이용요금",
+    "org": "",
+    "href": "https://www.tosspayments.com/pricing"
+   },
+   {
+    "label": "Vercel Pricing",
+    "org": "",
+    "href": "https://vercel.com/pricing"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/dev/token-counter": {
+  "slug": "/tools/dev/token-counter",
+  "updated": "2026-09-26",
+  "basis": "각 사 공개 API 표준 단가(대표 모델, 배치·캐시 할인 제외)",
+  "sources": [
+   {
+    "label": "Anthropic 가격",
+    "org": "",
+    "href": "https://platform.claude.com/docs/en/about-claude/pricing"
+   },
+   {
+    "label": "OpenAI 가격",
+    "org": "",
+    "href": "https://openai.com/api/pricing/"
+   },
+   {
+    "label": "Gemini API 가격",
+    "org": "",
+    "href": "https://ai.google.dev/gemini-api/docs/pricing"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/url-encode": {
+  "slug": "/tools/dev/url-encode",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/yaml-json": {
+  "slug": "/tools/dev/yaml-json",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/circuit-simulator": {
+  "slug": "/tools/edu/circuit-simulator",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/cognitive-test": {
+  "slug": "/tools/edu/cognitive-test",
+  "updated": "2026-07-29",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/cosmic-calendar": {
+  "slug": "/tools/edu/cosmic-calendar",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "우주 나이 Planck 2018(13.787 Gyr) · 사건 연대는 추정 범위이며 환산값입니다",
+  "sources": [
+   {
+    "label": "우주 나이 — NASA Universe",
+    "org": "",
+    "href": "https://science.nasa.gov/universe/overview/"
+   },
+   {
+    "label": "최초의 별·은하 시기 — NASA (JWST)",
+    "org": "",
+    "href": "https://science.nasa.gov/asset/webb/first-stars-timeline-of-the-universe/"
+   },
+   {
+    "label": "칼 세이건 코스믹 캘린더 (개념)",
+    "org": "",
+    "href": "https://en.wikipedia.org/wiki/Cosmic_Calendar"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/fermi-estimate": {
+  "slug": "/tools/edu/fermi-estimate",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "페르미 추정용 한국 통계 어림값",
+  "sources": [
+   {
+    "label": "KOSIS 국가통계포털",
+    "org": "",
+    "href": "https://kosis.kr"
+   },
+   {
+    "label": "한국은행 ECOS",
+    "org": "",
+    "href": "https://ecos.bok.or.kr"
+   },
+   {
+    "label": "국토교통 통계누리",
+    "org": "",
+    "href": "https://stat.molit.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/gpa-converter": {
+  "slug": "/tools/edu/gpa-converter",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/nesin-5grade": {
+  "slug": "/tools/edu/nesin-5grade",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "교육부훈령 제555호(시행 2026-03-01) [별표 9] 석차등급·성취도 기준 / 2028 대입제도 개편",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 학교생활기록 작성 및 관리지침(훈령 제555호)",
+    "org": "",
+    "href": "https://www.law.go.kr/LSW/admRulInfoP.do?admRulSeq=2100000274694"
+   },
+   {
+    "label": "교육부",
+    "org": "",
+    "href": "https://www.moe.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/planet-comparison": {
+  "slug": "/tools/edu/planet-comparison",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/review-interval": {
+  "slug": "/tools/edu/review-interval",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/room-mode": {
+  "slug": "/tools/edu/room-mode",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/sci-units": {
+  "slug": "/tools/edu/sci-units",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "물리 상수 CODATA 2022 권장값 · AU·파섹은 IAU 정의 기준",
+  "sources": [
+   {
+    "label": "NIST CODATA",
+    "org": "",
+    "href": "https://physics.nist.gov/cuu/Constants/"
+   },
+   {
+    "label": "IAU Measuring the Universe",
+    "org": "",
+    "href": "https://iauarchive.eso.org/public/themes/measuring/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/sig-figs": {
+  "slug": "/tools/edu/sig-figs",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/sound-speed": {
+  "slug": "/tools/edu/sound-speed",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/finance/4-insurance": {
+  "slug": "/tools/finance/4-insurance",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 4대보험 요율·국민연금 기준소득월액 상·하한 기준",
+  "sources": [
+   {
+    "label": "4대 사회보험 정보연계센터",
+    "org": "",
+    "href": "https://www.4insure.or.kr"
+   },
+   {
+    "label": "국민연금공단",
+    "org": "",
+    "href": "https://www.nps.or.kr"
+   }
+  ],
+  "verified": {
+   "cases": 31,
+   "scope": "근로자·사업주 4대보험료",
+   "full": true,
+   "tests": [
+    "tests/golden/salaryInsurance.test.mts",
+    "tests/golden/pensionBase.test.mts",
+    "tests/golden/workersComp.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/auction": {
+  "slug": "/tools/finance/auction",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 지방세법 기준 (취득세율 제11조·중과 제13조의2) · 대출 규제는 2025.10.16 시행 10·15 대책 기준",
+  "sources": [
+   {
+    "label": "위택스",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "행정안전부",
+    "org": "",
+    "href": "https://www.mois.go.kr"
+   },
+   {
+    "label": "금융위원회 (대출 규제)",
+    "org": "",
+    "href": "https://www.fsc.go.kr"
+   },
+   {
+    "label": "위택스 취득세 안내",
+    "org": "",
+    "href": "https://www.wetax.go.kr/"
+   },
+   {
+    "label": "행정안전부 지방세",
+    "org": "",
+    "href": "https://www.mois.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 16,
+   "scope": "취득세·지방교육세·농특세 · 경락대출 LTV·DSR 한도",
+   "full": false,
+   "tests": [
+    "tests/golden/acquisitionTax.test.mts",
+    "tests/golden/loanRules.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/capital-gains-tax": {
+  "slug": "/tools/finance/capital-gains-tax",
+  "reviewed": "2026",
+  "updated": "2026-09-26",
+  "basis": "2026년 국세청 양도소득세 기준 · 12억 비과세·장기보유특별공제·단기 중과세율 반영",
+  "sources": [
+   {
+    "label": "국세청 양도소득세(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   },
+   {
+    "label": "국세청 홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr/"
+   },
+   {
+    "label": "법제처 소득세법",
+    "org": "",
+    "href": "https://www.law.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 12,
+   "scope": "소득세 기본세율 구간",
+   "full": false,
+   "tests": [
+    "tests/golden/incomeTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/car-cost": {
+  "slug": "/tools/finance/car-cost",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 자동차세(배기량별 cc당 80/140/200원 + 지방교육세 30%, 전기차 13만원 정액)·유류세 반영 연료비 시세 기준",
+  "sources": [
+   {
+    "label": "위택스(자동차세)",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "오피넷 유가정보(한국석유공사)",
+    "org": "",
+    "href": "https://www.opinet.co.kr"
+   }
+  ],
+  "verified": {
+   "cases": 3,
+   "scope": "자동차세",
+   "full": false,
+   "tests": [
+    "tests/golden/vehicleTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/car-tax": {
+  "slug": "/tools/finance/car-tax",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 자동차세·취득세 감면 기준",
+  "sources": [
+   {
+    "label": "위택스",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "행정안전부",
+    "org": "",
+    "href": "https://www.mois.go.kr"
+   },
+   {
+    "label": "위택스 자동차세 안내",
+    "org": "",
+    "href": "https://www.wetax.go.kr/"
+   },
+   {
+    "label": "행정안전부 지방세",
+    "org": "",
+    "href": "https://www.mois.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 20,
+   "scope": "자동차 취득세·자동차세",
+   "full": false,
+   "tests": [
+    "tests/golden/vehicleTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/compound": {
+  "slug": "/tools/finance/compound",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "이자·배당소득세 15.4%(소득세 14% + 지방소득세 1.4%) 반영 · 소득세법 제129조 기준",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "국가법령정보센터(소득세법)",
+    "org": "",
+    "href": "https://www.law.go.kr/LSW/main.html"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/cost-rate": {
+  "slug": "/tools/finance/cost-rate",
+  "reviewed": "2026-06",
+  "updated": "2026-07-29",
+  "basis": "2025년 시행 배달앱 차등수수료(상생요금제 2.0~7.8%, 3년 한시) 기준",
+  "sources": [
+   {
+    "label": "대한민국 정책브리핑(상생협의체)",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156660502"
+   },
+   {
+    "label": "요기요 사장님포털",
+    "org": "",
+    "href": "https://ceo.yogiyo.co.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/dividend": {
+  "slug": "/tools/finance/dividend",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "배당소득세 15.4%(소득세 14%+지방세 1.4%)·금융소득 종합과세 2,000만원 기준·ISA 9.9%·연금저축/IRP 5.5% 분리과세 및 16.5% 세액공제·고배당기업 배당소득 분리과세(2026~2028년 지급분) 반영 (2026년)",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "기획재정부 (2025년 세법개정)",
+    "org": "",
+    "href": "https://www.moef.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 12,
+   "scope": "소득세 기본세율 구간",
+   "full": false,
+   "tests": [
+    "tests/golden/incomeTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/dsr": {
+  "slug": "/tools/finance/dsr",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "스트레스 DSR 3단계(2025-07-01 시행)·금융위 6.27 및 10.15 대책 반영 · 대출 종류별 부채산정방식은 은행업감독업무시행세칙 [별표18] 「표 3」(개정 2024.3.7, 현행 세칙 시행 2026.6.30)",
+  "sources": [
+   {
+    "label": "금융위원회 — 3단계 스트레스 DSR 시행방안(2025.5)",
+    "org": "",
+    "href": "https://www.fsc.go.kr/no010101/84617"
+   },
+   {
+    "label": "금융위원회 — 가계부채 관리 강화 방안(2025.6.27)",
+    "org": "",
+    "href": "https://www.fsc.go.kr/no010101/84824"
+   },
+   {
+    "label": "금융위원회 — 대출수요 관리 방안(2025.10.15)",
+    "org": "",
+    "href": "https://www.fsc.go.kr/po010101/85432"
+   },
+   {
+    "label": "국가법령정보센터 — 은행업감독업무시행세칙 [별표18] 「표 3」(현행)",
+    "org": "",
+    "href": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2200000108789"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/freelance-tax": {
+  "slug": "/tools/finance/freelance-tax",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 종합소득세율 · 국세청 2024년 귀속 경비율 고시 기준",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "홈택스 기준(단순)경비율 조회",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "국세청 종합소득세 안내(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   },
+   {
+    "label": "국세청 홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 19,
+   "scope": "경비율·단순경비율 적용 한도 · 소득세 기본세율 구간",
+   "full": false,
+   "tests": [
+    "tests/golden/expenseRates.test.mts",
+    "tests/golden/incomeTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/gold-converter": {
+  "slug": "/tools/finance/gold-converter",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "무게 9단위·순도(14/18/24K) 고정 환산 + 사용자가 입력한 24K 1g 시세(KRX 금시장 기준) 기반 매수·매도가 계산. 골드바 부가세 10%·KRX 금현물 비과세·금통장 배당소득세 15.4% 등 국내 세제·거래비용(스프레드·수수료·세공비) 가정 반영. 시세는 실시간 자동 연동이 아니며 직접 입력값입니다.",
+  "sources": [
+   {
+    "label": "한국거래소(KRX 금시장)",
+    "org": "",
+    "href": "https://www.krx.co.kr"
+   },
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/historical-money": {
+  "slug": "/tools/finance/historical-money",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "통계청 소비자물가지수(CPI, 2020=100) 기반 · 1965~2025년 연도별 공식 통계, 이전은 추정치 · 2026년 물가 추정(전년 대비 +2%)",
+  "sources": [
+   {
+    "label": "통계청 KOSIS",
+    "org": "",
+    "href": "https://kosis.kr"
+   },
+   {
+    "label": "한국은행 경제통계시스템",
+    "org": "",
+    "href": "https://ecos.bok.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/housing-score": {
+  "slug": "/tools/finance/housing-score",
+  "reviewed": "2026-05",
+  "updated": "2026-09-26",
+  "basis": "2026년 주택청약 제도 기준",
+  "sources": [
+   {
+    "label": "청약홈",
+    "org": "",
+    "href": "https://www.applyhome.co.kr"
+   },
+   {
+    "label": "국토교통부",
+    "org": "",
+    "href": "https://www.molit.go.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/inheritance": {
+  "slug": "/tools/finance/inheritance",
+  "reviewed": "2026-05",
+  "updated": "2026-09-26",
+  "basis": "2026년 상속·증여세법 기준",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "국세청 상속·증여세 안내(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   },
+   {
+    "label": "국세청 홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 17,
+   "scope": "상속세·증여세 세율·공제",
+   "full": false,
+   "tests": [
+    "tests/golden/inheritanceTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/installment": {
+  "slug": "/tools/finance/installment",
+  "reviewed": "2026-05",
+  "updated": "2026-09-26",
+  "basis": "2026년 할부 금리 참고",
+  "sources": [
+   {
+    "label": "금융감독원",
+    "org": "",
+    "href": "https://www.fss.or.kr"
+   },
+   {
+    "label": "여신금융협회",
+    "org": "",
+    "href": "https://www.crefia.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/ipo-deposit": {
+  "slug": "/tools/finance/ipo-deposit",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "공모주 청약 제도(균등배정 50% 이상·중복청약 금지·5사6입) 기준",
+  "sources": [
+   {
+    "label": "DART 전자공시시스템",
+    "org": "",
+    "href": "https://dart.fss.or.kr"
+   },
+   {
+    "label": "KIND 한국거래소",
+    "org": "",
+    "href": "https://kind.krx.co.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/loan": {
+  "slug": "/tools/finance/loan",
+  "reviewed": "2026-05",
+  "updated": "2026-09-26",
+  "basis": "2026년 시중 금리 참고",
+  "sources": [
+   {
+    "label": "은행연합회 공시",
+    "org": "",
+    "href": "https://portal.kfb.or.kr"
+   },
+   {
+    "label": "금융위원회 (중도상환수수료 개편)",
+    "org": "",
+    "href": "https://www.fsc.go.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/national-pension": {
+  "slug": "/tools/finance/national-pension",
+  "reviewed": "2026-01",
+  "updated": "2026-09-26",
+  "basis": "A값 적용기간 2025.12~2026.11 기준",
+  "sources": [
+   {
+    "label": "국민연금공단(nps.or.kr)",
+    "org": "",
+    "href": "https://www.nps.or.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 4,
+   "scope": "기준소득월액 상·하한",
+   "full": false,
+   "tests": [
+    "tests/golden/salaryInsurance.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/property-holding-tax": {
+  "slug": "/tools/finance/property-holding-tax",
+  "reviewed": "2026",
+  "updated": "2026-09-26",
+  "basis": "2026년 재산세·종합부동산세 기준 · 개편 진행 시 변동 가능",
+  "sources": [
+   {
+    "label": "위택스(wetax.go.kr)",
+    "org": "",
+    "href": "https://www.wetax.go.kr/"
+   },
+   {
+    "label": "국세청(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   },
+   {
+    "label": "행안부 지방세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법"
+   },
+   {
+    "label": "법제처 종합부동산세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/종합부동산세법"
+   }
+  ],
+  "verified": {
+   "cases": 13,
+   "scope": "재산세·종합부동산세",
+   "full": false,
+   "tests": [
+    "tests/golden/propertyTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/real-estate": {
+  "slug": "/tools/finance/real-estate",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "취득세: 지방세법 §11·§13의2·§151·농어촌특별세법(2026년 시행) · 양도세·중개보수: 2026년 6월 기준 참고",
+  "sources": [
+   {
+    "label": "위택스(취득세)",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 지방세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법"
+   },
+   {
+    "label": "국토교통부",
+    "org": "",
+    "href": "https://www.molit.go.kr"
+   },
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 26,
+   "scope": "취득세·지방교육세·농특세",
+   "full": false,
+   "tests": [
+    "tests/golden/acquisitionTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/rent-jeonse": {
+  "slug": "/tools/finance/rent-jeonse",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 전월세·금리 참고 · 버팀목 대출은 주택도시기금 기준",
+  "sources": [
+   {
+    "label": "국토부 실거래가",
+    "org": "",
+    "href": "https://rt.molit.go.kr"
+   },
+   {
+    "label": "한국부동산원",
+    "org": "",
+    "href": "https://www.reb.or.kr"
+   },
+   {
+    "label": "주택도시기금",
+    "org": "",
+    "href": "https://nhuf.molit.go.kr"
+   },
+   {
+    "label": "HUG 주택도시보증공사",
+    "org": "",
+    "href": "https://www.khug.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/salary": {
+  "slug": "/tools/finance/salary",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 4대보험 요율·국민연금 기준소득월액 상·하한·근로소득 간이세액표 기준, 연봉 분포는 국세청 2024년 귀속 연말정산 국세통계(2025-12 공표) 기준",
+  "sources": [
+   {
+    "label": "홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "4대 사회보험 정보연계센터",
+    "org": "",
+    "href": "https://www.4insure.or.kr"
+   },
+   {
+    "label": "근로소득 백분위 자료(공공데이터포털)",
+    "org": "",
+    "href": "https://www.data.go.kr/data/15082063/fileData.do"
+   }
+  ],
+  "verified": {
+   "cases": 9,
+   "scope": "4대보험·근로소득세 공제 후 실수령액",
+   "full": true,
+   "tests": [
+    "tests/golden/salaryInsurance.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/savings": {
+  "slug": "/tools/finance/savings",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 절세 상품 기준 · 1인 가구 소비지출은 2024년 가계동향조사(168.9만원)",
+  "sources": [
+   {
+    "label": "국가데이터처 KOSIS",
+    "org": "",
+    "href": "https://kosis.kr"
+   },
+   {
+    "label": "금융위원회 (청년미래적금)",
+    "org": "",
+    "href": "https://www.fsc.go.kr"
+   },
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/severance": {
+  "slug": "/tools/finance/severance",
+  "reviewed": "2026-05",
+  "updated": "2026-09-26",
+  "basis": "근로기준법·퇴직급여보장법 기준",
+  "sources": [
+   {
+    "label": "고용노동부",
+    "org": "",
+    "href": "https://www.moel.go.kr"
+   },
+   {
+    "label": "국세청 퇴직소득세 안내",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 12,
+   "scope": "소득세 기본세율 구간",
+   "full": false,
+   "tests": [
+    "tests/golden/incomeTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/stock-decision": {
+  "slug": "/tools/finance/stock-decision",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [
+   {
+    "label": "DART 증권신고서",
+    "org": "",
+    "href": "https://dart.fss.or.kr"
+   },
+   {
+    "label": "KIND 공시",
+    "org": "",
+    "href": "https://kind.krx.co.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": false
+ },
+ "/tools/finance/stock": {
+  "slug": "/tools/finance/stock",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "증권거래세율 0.20%(코스피·코스닥, 2026년 금투세 폐지로 환원) · 해외주식 양도소득세 22%(연 250만원 공제) · 증권사 표준 온라인 수수료 반영",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/LSW/main.html"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/unemployment-benefit": {
+  "slug": "/tools/finance/unemployment-benefit",
+  "reviewed": "2026-01",
+  "updated": "2026-09-26",
+  "basis": "2026년 구직급여 상한 원·하한 원 기준",
+  "sources": [
+   {
+    "label": "고용노동부(moel.go.kr)",
+    "org": "",
+    "href": "https://www.moel.go.kr/"
+   },
+   {
+    "label": "고용보험(ei.go.kr)",
+    "org": "",
+    "href": "https://www.ei.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 7,
+   "scope": "구직급여 1일액 상·하한",
+   "full": false,
+   "tests": [
+    "tests/golden/unemployment.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/vat": {
+  "slug": "/tools/finance/vat",
+  "reviewed": "2026-05",
+  "updated": "2026-09-26",
+  "basis": "2026년 부가가치세법 기준",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 7,
+   "scope": "부가세 역산·가산 반올림",
+   "full": false,
+   "tests": [
+    "tests/golden/vatReverse.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/wealth-rank": {
+  "slug": "/tools/finance/wealth-rank",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "2025 가계금융복지조사 분포·상위 구간 보도치 + UBS GWR 2025",
+  "sources": [
+   {
+    "label": "국가데이터처 가계금융복지조사",
+    "org": "",
+    "href": "https://kostat.go.kr"
+   },
+   {
+    "label": "한국은행 보도자료",
+    "org": "",
+    "href": "https://www.bok.or.kr"
+   },
+   {
+    "label": "UBS Global Wealth Report",
+    "org": "",
+    "href": "https://www.ubs.com"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/year-end-tax": {
+  "slug": "/tools/finance/year-end-tax",
+  "reviewed": "2026",
+  "updated": "2026-09-26",
+  "basis": "2026년 귀속(2027년 1~2월 정산) 종합소득세율·근로소득공제·공제 한도 기준, 신용카드 자녀 한도 가산(2026년 사용분부터) 반영",
+  "sources": [
+   {
+    "label": "국세청 홈택스(hometax.go.kr)",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "국세청 홈택스(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 17,
+   "scope": "세액공제·소득공제 구성요소",
+   "full": false,
+   "tests": [
+    "tests/golden/yearEndTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/blood-alcohol": {
+  "slug": "/tools/health/blood-alcohol",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "위드마크(Widmark) 공식 — 체내분포계수 남 0.68·여 0.55, 시간당 분해율 0.010~0.020g/dL(기본 0.015) · 처벌 기준 도로교통법 제148조의2(0.03% 면허정지·0.08% 면허취소)·제82조(결격기간)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 도로교통법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/도로교통법"
+   },
+   {
+    "label": "도로교통공단 — 음주운전 처벌 기준",
+    "org": "",
+    "href": "https://www.koroad.or.kr/kp_web/drunkDriveInfo4.do"
+   }
+  ],
+  "verified": {
+   "cases": 11,
+   "scope": "음주운전 처벌 기준",
+   "full": false,
+   "tests": [
+    "tests/golden/drunkDriving.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/bmi": {
+  "slug": "/tools/health/bmi",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "BMI = 체중(kg) ÷ 키(m)² · 비만 기준 한국(대한비만학회) BMI 25·복부비만 허리둘레 남 90/여 85cm, WHO BMI 30 · 체지방률은 미 해군(U.S. Navy) 추정식",
+  "sources": [
+   {
+    "label": "대한비만학회 비만 진료지침(2022)",
+    "org": "",
+    "href": "https://general.kosso.or.kr/html/user/core/view/reaction/main/kosso/inc/data/guideline2022_vol8.pdf"
+   },
+   {
+    "label": "WHO — Obesity and overweight",
+    "org": "",
+    "href": "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/bmr": {
+  "slug": "/tools/health/bmr",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "BMR 공식 4종 — Mifflin-St Jeor(1990)·Harris-Benedict(Roza-Shizgal 1984 개정)·Katch-McArdle·Cunningham · 활동계수 1.2~1.9",
+  "sources": [
+   {
+    "label": "Mifflin 외(1990) — Am J Clin Nutr",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/2305711/"
+   },
+   {
+    "label": "Roza·Shizgal(1984) — Am J Clin Nutr",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/6741850/"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/caffeine": {
+  "slug": "/tools/health/caffeine",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "반감기 지수감쇠 모델(기본 5시간, 3~12시간 선택) · 1일 한도 성인 400mg(FDA·식약처)·임산부 200mg(ACOG)·어린이·청소년 체중 1kg당 2.5mg(식약처)",
+  "sources": [
+   {
+    "label": "FDA — 카페인 섭취 안내",
+    "org": "",
+    "href": "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much"
+   },
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "ACOG — 임신 중 카페인",
+    "org": "",
+    "href": "https://www.acog.org/womens-health/experts-and-stories/ask-acog/how-much-coffee-can-i-drink-while-pregnant"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/child-height": {
+  "slug": "/tools/health/child-height",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "Tanner 중간부모키(MPH) 공식 · 한국 평균 비교는 8차 사이즈코리아 20~24세 평균(남 175.0·여 161.8cm)",
+  "sources": [
+   {
+    "label": "Tanner MPH (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/5440182/"
+   },
+   {
+    "label": "사이즈코리아 인체치수조사",
+    "org": "",
+    "href": "https://sizekorea.kr"
+   },
+   {
+    "label": "질병관리청 소아청소년 성장도표",
+    "org": "",
+    "href": "https://knhanes.kdca.go.kr/"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/cycle": {
+  "slug": "/tools/health/cycle",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "황체기 14일 고정 모델 — 배란일 = 다음 생리 −14일, 가임기 = 배란 −5일~+1일(정자 생존 최대 5일·난자 약 24시간), 정상 주기 성인 21~35일·청소년 최대 45일",
+  "sources": [
+   {
+    "label": "NICHD — Menstruation",
+    "org": "",
+    "href": "https://www.nichd.nih.gov/health/topics/menstruation/conditioninfo"
+   },
+   {
+    "label": "ACOG — 가임인지법(FABM)",
+    "org": "",
+    "href": "https://www.acog.org/womens-health/faqs/fertility-awareness-based-methods-of-family-planning"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/glycemic-load": {
+  "slug": "/tools/health/glycemic-load",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "GL = 탄수화물(g)×GI÷100 · 판정 저 ≤10 / 중 11~19 / 고 ≥20 (1회 기준) · GI 조회표는 국제표 2008·2021판 + 한국 인체시험(2015) 원문 값 · 기능성 쌀 품종 표는 인체시험 GI가 아니라 Front Plant Sci 2025;16:1724565의 시험관 예측값(ISO 26642:2010·Atkinson 2021 기준 GI로 부를 수 없음) + 농촌진흥청 보도자료(2014·2021·2026)",
+  "sources": [
+   {
+    "label": "국제 GI 표 2008 (Atkinson, Diabetes Care)",
+    "org": "",
+    "href": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2584181/"
+   },
+   {
+    "label": "국제 GI 표 2021 (Atkinson, Am J Clin Nutr)",
+    "org": "",
+    "href": "https://nutrition.org/ajcn-publishes-international-tables-of-glycemic-index-and-glycemic-load-values-2021-a-systematic-review/"
+   },
+   {
+    "label": "한국식품영양과학회지 44(1) 인체시험 (2015)",
+    "org": "",
+    "href": "https://koreascience.kr/article/JAKO201506565684482.pdf"
+   },
+   {
+    "label": "기능성 쌀 품종 예측 GI — Front Plant Sci 2025;16:1724565",
+    "org": "",
+    "href": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12738849/"
+   },
+   {
+    "label": "ISO 26642:2010 (GI 측정 표준)",
+    "org": "",
+    "href": "https://www.iso.org/standard/43633.html"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/hba1c": {
+  "slug": "/tools/health/hba1c",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "대한당뇨병학회 2025 당뇨병 진료지침 제9판(진단기준·표 4-1.1)·ADAG 회귀식(Nathan 2008)·NGSP 기준",
+  "sources": [
+   {
+    "label": "대한당뇨병학회",
+    "org": "",
+    "href": "https://www.diabetes.or.kr"
+   },
+   {
+    "label": "질병관리청 국가건강정보포털 — 당뇨병",
+    "org": "",
+    "href": "https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5305"
+   },
+   {
+    "label": "NGSP — HbA1c and eAG",
+    "org": "",
+    "href": "https://ngsp.org/A1ceAG.asp"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/heat-hydration": {
+  "slug": "/tools/health/heat-hydration",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "기상청 폭염특보 3단계(2026 개편)·산업안전보건규칙 폭염 조항(2025-07-17 시행)·ACSM/NATA 수분 보충 지침·미 육군 TB MED 507(하루 음용 상한) 기준",
+  "sources": [
+   {
+    "label": "질병관리청",
+    "org": "",
+    "href": "https://www.kdca.go.kr"
+   },
+   {
+    "label": "기상청 날씨누리",
+    "org": "",
+    "href": "https://www.weather.go.kr"
+   },
+   {
+    "label": "국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/pet": {
+  "slug": "/tools/health/pet",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "RER = 70 × 체중(kg)^0.75, DER = RER × 생활계수(중성화×활동 6조합 1.2~1.8·퍼피/키튼 2.0~3.0·노령 = 성견 계수 × 0.85) — 수의영양 표준",
+  "sources": [
+   {
+    "label": "Merck Veterinary Manual — 소동물 영양요구량",
+    "org": "",
+    "href": "https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/nutritional-requirements-of-small-animals"
+   },
+   {
+    "label": "WSAVA — Global Nutrition Guidelines",
+    "org": "",
+    "href": "https://wsava.org/global-guidelines/global-nutrition-guidelines/"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/pregnancy": {
+  "slug": "/tools/health/pregnancy",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "네겔레 공식 — 마지막 생리일(LMP) + 280일(40주) = 출산 예정일, 배란 LMP+14일·주기 28일 외 ±보정, GBS 검사 36~37주 일정",
+  "sources": [
+   {
+    "label": "NCBI Bookshelf — Estimated Date of Delivery",
+    "org": "",
+    "href": "https://www.ncbi.nlm.nih.gov/books/NBK536986/"
+   },
+   {
+    "label": "ACOG — GBS 조기 감염 예방 지침",
+    "org": "",
+    "href": "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2020/02/prevention-of-group-b-streptococcal-early-onset-disease-in-newborns"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/sleep-debt": {
+  "slug": "/tools/health/sleep-debt",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "연령별 권장 수면 범위(NSF 2015, 성인 7~9시간) 기준 · 일별 부채 = 목표 − 실제 수면, 초과 수면은 회복효율 0.5 적용(단순화 가정)",
+  "sources": [
+   {
+    "label": "NSF 2015 — 권장 수면 시간(최종 보고)",
+    "org": "",
+    "href": "https://www.sleephealthjournal.org/article/S2352-7218(15)00160-6/abstract"
+   },
+   {
+    "label": "CDC — About Sleep (성인 7시간+)",
+    "org": "",
+    "href": "https://www.cdc.gov/sleep/about/index.html"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/supplement": {
+  "slug": "/tools/health/supplement",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "영양소 권장량·상한량(미국 NIH 영양소 섭취기준 중심의 성인 대표값 — 비타민C·B6·칼슘 등 일부 권장량은 한국인 영양소 섭취기준 값) · 오메가3 EPA+DHA 합산 250~500mg 목표·보충제 2,000mg(식품 포함 총 3,000mg) 한도(미국 FDA 권고)",
+  "sources": [
+   {
+    "label": "NIH ODS 영양소 섭취기준(DRI)",
+    "org": "",
+    "href": "https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx"
+   },
+   {
+    "label": "보건복지부·한국영양학회 (KDRIs)",
+    "org": "",
+    "href": "https://www.kns.or.kr"
+   },
+   {
+    "label": "NIH ODS 오메가3",
+    "org": "",
+    "href": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+   },
+   {
+    "label": "NIH Office of Dietary Supplements",
+    "org": "",
+    "href": "https://ods.od.nih.gov"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": false
+ },
+ "/tools/health/uv-protection": {
+  "slug": "/tools/health/uv-protection",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "WHO 자외선지수 정의(1 UVI = 홍반가중 자외선 0.025W/㎡) · Fitzpatrick 피부 타입별 MED 기반 추정 · 차단제 2시간 재도포(미국 FDA 권고)",
+  "sources": [
+   {
+    "label": "WHO 자외선지수 실용 가이드",
+    "org": "",
+    "href": "https://www.who.int/publications/i/item/9241590076"
+   },
+   {
+    "label": "FDA 자외선 차단제 안내",
+    "org": "",
+    "href": "https://www.fda.gov/drugs/understanding-over-counter-medicines/sunscreen-how-help-protect-your-skin-sun"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/weightloss": {
+  "slug": "/tools/health/weightloss",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "지방 1kg ≈ 7,700kcal(Wishnofsky, 1958) · 주당 체중 0.3~1.5% 감량 속도 옵션 · 운동 칼로리 METs 기준(신체활동 컴펜디엄)",
+  "sources": [
+   {
+    "label": "Wishnofsky(1958) 원 논문 (DOI)",
+    "org": "",
+    "href": "https://doi.org/10.1093/ajcn/6.5.542"
+   },
+   {
+    "label": "Compendium of Physical Activities",
+    "org": "",
+    "href": "https://pacompendium.com/"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/interior/ac-capacity": {
+  "slug": "/tools/interior/ac-capacity",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/bolt-wrench": {
+  "slug": "/tools/interior/bolt-wrench",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/curtain-blind": {
+  "slug": "/tools/interior/curtain-blind",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/dehumidifier": {
+  "slug": "/tools/interior/dehumidifier",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "한전 주택용(저압) 누진제 요금표 기준 — 소비전력은 국내 유통 제품 통상 범위",
+  "sources": [
+   {
+    "label": "한국전력 — 전기요금표(주택용)",
+    "org": "",
+    "href": "https://cyber.kepco.co.kr/ckepco/front/jsp/CY/E/E/CYEEHP00101.jsp"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/flooring": {
+  "slug": "/tools/interior/flooring",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/lighting": {
+  "slug": "/tools/interior/lighting",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "KS A 3011 조도 기준 참고 · LED 평균 효율 100lm/W 기준",
+  "sources": [
+   {
+    "label": "e나라표준인증 — KS A 3011 조도기준",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=919&topMenuId=502&upperMenuId=503&ksNo=KSA3011&tmprKsNo=KSA3011&reformNo=09"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/molding": {
+  "slug": "/tools/interior/molding",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/paint": {
+  "slug": "/tools/interior/paint",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "수성 1L당 약 10㎡(1회 도장) 기준 — 페인트·시공 단가는 시장 통용 범위, 폐페인트 처리비는 유역환경청·지자체 안내 기준",
+  "sources": [
+   {
+    "label": "서울 중구청 소량 지정폐기물 처리 서비스",
+    "org": "",
+    "href": "https://www.junggu.seoul.kr/content.do?cmsid=15486"
+   },
+   {
+    "label": "인천시 소량 유해폐기물 처리 서비스 안내",
+    "org": "",
+    "href": "https://incheon.go.kr/IC010101/view?curPage=&nttNo=2042396&srchKey=&srchSiteRealmCode=&srchWord="
+   },
+   {
+    "label": "서울시 재활용 비해당품목 배출기준",
+    "org": "",
+    "href": "https://news.seoul.go.kr/env/archives/563504"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/pipe": {
+  "slug": "/tools/interior/pipe",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/rebar": {
+  "slug": "/tools/interior/rebar",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "단위중량 KS D 3504 · 결속선 건설공사 표준품셈 기준 — 가격·고철 시세는 변동치(발주 시 재확인)",
+  "sources": [
+   {
+    "label": "한국철강협회",
+    "org": "",
+    "href": "https://www.kosa.or.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/roof": {
+  "slug": "/tools/interior/roof",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/room-area": {
+  "slug": "/tools/interior/room-area",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/screw": {
+  "slug": "/tools/interior/screw",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/ventilation": {
+  "slug": "/tools/interior/ventilation",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/wallpaper": {
+  "slug": "/tools/interior/wallpaper",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "국내 유통 표준 규격(실크 폭 106cm×15.6m · 광폭 합지 93cm×17.75m) 기준 — 벽지·시공 단가는 흔히 안내되는 대략적 범위(견적 시 재확인)",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/wire": {
+  "slug": "/tools/interior/wire",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/alcohol": {
+  "slug": "/tools/life/alcohol",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/cleaning": {
+  "slug": "/tools/life/cleaning",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "LG전자·삼성전자서비스 고객지원 공식 안내 기준",
+  "sources": [
+   {
+    "label": "LG전자 통돌이 통세척",
+    "org": "",
+    "href": "https://www.lge.co.kr/support/solutions-1430889036106"
+   },
+   {
+    "label": "LG전자 워시타워 통살균",
+    "org": "",
+    "href": "https://www.lge.co.kr/support/solutions-20153936989467"
+   },
+   {
+    "label": "삼성전자서비스 무세제통세척",
+    "org": "",
+    "href": "https://www.samsungsvc.co.kr/solution/40255"
+   },
+   {
+    "label": "삼성전자서비스 통세척",
+    "org": "",
+    "href": "https://www.samsungsvc.co.kr/solution/41708"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/customs": {
+  "slug": "/tools/life/customs",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "verified": {
+   "cases": 15,
+   "scope": "관부가세 면세 한도·세액 적층",
+   "full": false,
+   "tests": [
+    "tests/golden/customs.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/drake": {
+  "slug": "/tools/life/drake",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/dutch": {
+  "slug": "/tools/life/dutch",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/fart-risk": {
+  "slug": "/tools/life/fart-risk",
+  "updated": "2026-07-29",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/gift-money": {
+  "slug": "/tools/life/gift-money",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/height-rank": {
+  "slug": "/tools/life/height-rank",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "사이즈코리아 8차 한국인 인체치수조사 (직접측정 2020~2021, 20~69세 6,839명) 성별·연령대별 실측 통계",
+  "sources": [
+   {
+    "label": "사이즈코리아",
+    "org": "",
+    "href": "https://sizekorea.kr"
+   },
+   {
+    "label": "국가기술표준원",
+    "org": "",
+    "href": "https://www.kats.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/kinship": {
+  "slug": "/tools/life/kinship",
+  "updated": "2026-08-16",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/ladder": {
+  "slug": "/tools/life/ladder",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/laundry-dry": {
+  "slug": "/tools/life/laundry-dry",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/lotto": {
+  "slug": "/tools/life/lotto",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/monty-hall": {
+  "slug": "/tools/life/monty-hall",
+  "updated": "2026-07-29",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/packing": {
+  "slug": "/tools/life/packing",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/pomodoro": {
+  "slug": "/tools/life/pomodoro",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/life/random": {
+  "slug": "/tools/life/random",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/residual-value": {
+  "slug": "/tools/life/residual-value",
+  "reviewed": "2026-07",
+  "updated": "2026-07-11",
+  "basis": "소비자분쟁해결기준 — 공정거래위원회고시 제2025-14호 (2025.12.18. 시행) 별표Ⅱ·Ⅲ·Ⅳ 원문",
+  "sources": [
+   {
+    "label": "국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/소비자분쟁해결기준"
+   },
+   {
+    "label": "한국소비자원",
+    "org": "",
+    "href": "https://www.kca.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/travel-budget": {
+  "slug": "/tools/life/travel-budget",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "도시별 1박 평균·항공권은 주요 OTA·항공 메타서치 관찰 평균 (대표 도시 재점검) — 시기·환율 따라 ±30% 이상 변동하는 참고치",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/travel-tip": {
+  "slug": "/tools/life/travel-tip",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/unit-price": {
+  "slug": "/tools/life/unit-price",
+  "updated": "2026-07-29",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/vin-decoder": {
+  "slug": "/tools/life/vin-decoder",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [
+   {
+    "label": "카히스토리(보험개발원) — 차량 이력",
+    "org": "",
+    "href": "https://www.carhistory.or.kr"
+   },
+   {
+    "label": "자동차365(국토교통부) — 등록·제원",
+    "org": "",
+    "href": "https://www.car365.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/life/zodiac": {
+  "slug": "/tools/life/zodiac",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/baseball-stats": {
+  "slug": "/tools/sports/baseball-stats",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "타율·출루율·OPS·ERA·WHIP 표준 공식 · 규정타석(경기수×3.1)·규정이닝(경기수×1.0) = 공식야구규칙 9.22 기준",
+  "sources": [
+   {
+    "label": "KBO 공식 기록실",
+    "org": "",
+    "href": "https://www.koreabaseball.com/Record/Player/HitterBasic/Basic1.aspx"
+   },
+   {
+    "label": "MLB 공식 용어집(Rate Stats Qualifiers)",
+    "org": "",
+    "href": "https://www.mlb.com/glossary/standard-stats/rate-stats-qualifiers"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/buildup": {
+  "slug": "/tools/sports/buildup",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/carb-loading": {
+  "slug": "/tools/sports/carb-loading",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "ACSM/AND/DC 2016 공동 성명 Table 2 (g/kg) + 국가표준식품성분 DB 10.4(2026)",
+  "sources": [
+   {
+    "label": "ACSM/AND/DC 공동 성명 — Nutrition and Athletic Performance (2016)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/26891166/"
+   },
+   {
+    "label": "농촌진흥청 농식품올바로 — 국가표준식품성분표",
+    "org": "",
+    "href": "https://koreanfood.rda.go.kr/kfi/fct/fctFoodSrch/list"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/climbing-grade": {
+  "slug": "/tools/sports/climbing-grade",
+  "reviewed": "2026-06",
+  "updated": "2026-07-03",
+  "basis": "통용 등급 환산표 기준 (근사 변환 · 공인 단일 표준 없음)",
+  "sources": [
+   {
+    "label": "Wikipedia — Grade (climbing)",
+    "org": "",
+    "href": "https://en.wikipedia.org/wiki/Grade_(climbing)"
+   },
+   {
+    "label": "99Boulders",
+    "org": "",
+    "href": "https://www.99boulders.com/bouldering-grades"
+   },
+   {
+    "label": "Guide Dolomiti — Rock climbing grades",
+    "org": "",
+    "href": "https://www.guidedolomiti.com/en/rock-climbing-grades/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/fight-weight": {
+  "slug": "/tools/sports/fight-weight",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/football-points": {
+  "slug": "/tools/sports/football-points",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "EPL 2016-17~2025-26 · K리그1 2016~2025 최종 순위표 실측 승점",
+  "sources": [
+   {
+    "label": "Premier League 공식 순위표",
+    "org": "",
+    "href": "https://www.premierleague.com/en/tables"
+   },
+   {
+    "label": "K리그 공식 기록",
+    "org": "",
+    "href": "https://www.kleague.com/record/team.do"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/formation": {
+  "slug": "/tools/sports/formation",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "대회 결과·전술 트렌드는 2026 FIFA 북중미 월드컵 종료(2026-07-19) 기준, 대표팀 감독 체제는 2026-07-30 기준",
+  "sources": [
+   {
+    "label": "FIFA 공식 경기 리포트",
+    "org": "",
+    "href": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026"
+   },
+   {
+    "label": "FIFA Training Centre (기술연구그룹 분석)",
+    "org": "",
+    "href": "https://www.fifatrainingcentre.com/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/sports/ftp-zones": {
+  "slug": "/tools/sports/ftp-zones",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/golf-cost": {
+  "slug": "/tools/sports/golf-cost",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "한국레저산업연구소 그린피 조사 — 대중형 2025년 5월·10월, 회원제(비회원) 2026년 5월(레저백서 2026) 평균",
+  "sources": [
+   {
+    "label": "한국레저산업연구소 — 레저백서",
+    "org": "",
+    "href": "https://www.kole.kr/book"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/golf-distance": {
+  "slug": "/tools/sports/golf-distance",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/golf-handicap": {
+  "slug": "/tools/sports/golf-handicap",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/grip-size": {
+  "slug": "/tools/sports/grip-size",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/hiking-time": {
+  "slug": "/tools/sports/hiking-time",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "국립공원 입산시간지정제(공원·탐방로별 상이)·자연공원법 제86조제2항 과태료 기준",
+  "sources": [
+   {
+    "label": "국립공원공단 — 입산시간지정제",
+    "org": "",
+    "href": "https://www.knps.or.kr/portal/main/contents.do?menuNo=8000198"
+   },
+   {
+    "label": "국민재난안전포털 — 산행안전사고 행동요령",
+    "org": "",
+    "href": "https://www.safekorea.go.kr/safekorea-kor/acts/nacts/action-guide.do?category=mtSafetyAccident&actsHeaderTitle=%EC%82%B0%ED%96%89%EC%95%88%EC%A0%84%EC%82%AC%EA%B3%A0&menuSn=4"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/hyrox": {
+  "slug": "/tools/sports/hyrox",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/interval-training": {
+  "slug": "/tools/sports/interval-training",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "verified": {
+   "cases": 5,
+   "scope": "VDOT 훈련 페이스",
+   "full": false,
+   "tests": [
+    "tests/golden/running.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/league-scenarios": {
+  "slug": "/tools/sports/league-scenarios",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/lsd": {
+  "slug": "/tools/sports/lsd",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/one-rm": {
+  "slug": "/tools/sports/one-rm",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/pace": {
+  "slug": "/tools/sports/pace",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/park-golf": {
+  "slug": "/tools/sports/park-golf",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "대한파크골프협회 경기규칙 (파 구성·OB 2벌타·조 편성) + IPGA 코스 기준",
+  "sources": [
+   {
+    "label": "대한파크골프협회",
+    "org": "",
+    "href": "https://www.kpga7330.com"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/race-plan": {
+  "slug": "/tools/sports/race-plan",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/race-predictor": {
+  "slug": "/tools/sports/race-predictor",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "verified": {
+   "cases": 7,
+   "scope": "VDOT·Riegel 기록 예측식",
+   "full": false,
+   "tests": [
+    "tests/golden/running.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/shoe-mileage": {
+  "slug": "/tools/sports/shoe-mileage",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/strength-level": {
+  "slug": "/tools/sports/strength-level",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/swim-pace": {
+  "slug": "/tools/sports/swim-pace",
+  "updated": "2026-07-03",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/vo2max": {
+  "slug": "/tools/sports/vo2max",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "verified": {
+   "cases": 8,
+   "scope": "VDOT 훈련 페이스",
+   "full": false,
+   "tests": [
+    "tests/golden/running.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/area": {
+  "slug": "/tools/unit/area",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/battery": {
+  "slug": "/tools/unit/battery",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "ICAO·국토교통부 보조배터리 기준(2026-04-20 시행)과 미국 주요 항공사 정책(2026-05-01) 반영",
+  "sources": [
+   {
+    "label": "국토교통부",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374"
+   },
+   {
+    "label": "FAA PackSafe",
+    "org": "",
+    "href": "https://www.faa.gov/hazmat/packsafe/airline-passengers-and-batteries"
+   },
+   {
+    "label": "IATA",
+    "org": "",
+    "href": "https://www.iata.org/en/youandiata/travelers/batteries/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/brewing": {
+  "slug": "/tools/unit/brewing",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/converter": {
+  "slug": "/tools/unit/converter",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "단위 환산 계수는 KS·ISO·국제단위계(SI) 기준. 근무시간·경사로·소독 농도 등 법정·안전 수치는 아래 공식 출처 기준으로 정기 검토합니다.",
+  "sources": [
+   {
+    "label": "국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr"
+   },
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "질병관리청",
+    "org": "",
+    "href": "https://www.kdca.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/fuel-economy": {
+  "slug": "/tools/unit/fuel-economy",
+  "updated": "2026-09-26",
+  "basis": "휘발유·경유 단가는 오피넷 전국 평균, 전기 충전요금은 공공 충전요금 5단계 개편안(2026-08-01 시행) 기준",
+  "sources": [
+   {
+    "label": "오피넷",
+    "org": "",
+    "href": "https://www.opinet.co.kr"
+   },
+   {
+    "label": "무공해차 통합누리집",
+    "org": "",
+    "href": "https://ev.or.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/hardness": {
+  "slug": "/tools/unit/hardness",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/radiation": {
+  "slug": "/tools/unit/radiation",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "단위 환산은 SI·ICRP 정의 기준. 일상 노출 비교값(CT·항공·자연 노출)과 EMF 참고치는 아래 공식 출처의 발표값을 정리한 참고용 대표치입니다.",
+  "sources": [
+   {
+    "label": "원자력안전위원회",
+    "org": "",
+    "href": "https://www.nssc.go.kr"
+   },
+   {
+    "label": "ICRP",
+    "org": "",
+    "href": "https://www.icrp.org"
+   },
+   {
+    "label": "한국천문연구원",
+    "org": "",
+    "href": "https://www.kasi.re.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/size": {
+  "slug": "/tools/unit/size",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/tire-pressure": {
+  "slug": "/tools/unit/tire-pressure",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/viscosity": {
+  "slug": "/tools/unit/viscosity",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/window-tint": {
+  "slug": "/tools/unit/window-tint",
+  "reviewed": "2026-07",
+  "updated": "2026-07-14",
+  "basis": "도로교통법 시행령 제28조 기준",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 도로교통법 시행령 제28조",
+    "org": "",
+    "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EB%8F%84%EB%A1%9C%EA%B5%90%ED%86%B5%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C28%EC%A1%B0"
+   },
+   {
+    "label": "국가법령정보센터 — 도로교통법 시행령",
+    "org": "",
+    "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EB%8F%84%EB%A1%9C%EA%B5%90%ED%86%B5%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ }
+}

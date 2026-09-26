@@ -1,0 +1,132 @@
+/* @hover-wrapped */
+/* ═══ app/styles/ui.css — 계산기 UI 키트 (전역, `ui-` 접두 · FINAL_SPEC §9) ═══
+   200개 *Client.tsx가 자기 module.css 대신 점진 채택하는 공용 부품. 전역 클래스라 문자열 className 으로 쓴다.
+   로드: app/globals.css 맨 위 `@import './styles/ui.css'` (layout.tsx 에서 따로 import 하지 말 것 — 중복 번들).
+   새 hex 금지·토큰만. 흰 글자는 var(--gray-0).
+   :hover 규칙은 레포 관례(scripts/wrap-hover-media.mjs)대로 제자리에서 @media (hover: hover) 로 감쌌다 —
+   터치 기기에서 hover 잔존이 선택 상태를 덮지 않게. 선택·비활성 규칙이 hover 뒤에 오는 원본 순서를 유지해야 한다. */
+
+/* ── 카드 ───────────────────────────────────────────── */
+.ui-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 24px; box-shadow: 0 1px 2px rgba(25, 31, 40, 0.04); }
+@media (max-width: 640px) { .ui-card { padding: 20px; } }
+
+/* ── 세그먼트 탭 (role=tablist / tab / aria-selected) ── */
+.ui-seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; padding: 4px; background: var(--bg3); border-radius: var(--radius-m); }
+.ui-seg > button { height: 40px; min-height: 0; border-radius: var(--radius-s); font-size: 15px; font-weight: 600; color: var(--muted); transition: background .15s, color .15s; }
+@media (hover: hover) { .ui-seg > button:hover { color: var(--text); } }
+.ui-seg > button[aria-selected='true'] { background: var(--bg2); color: var(--text); box-shadow: var(--shadow-pop); }
+
+/* ── 필드 ───────────────────────────────────────────── */
+.ui-field { margin-top: 24px; min-width: 0; }
+.ui-label { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--text); }
+.ui-hint { font-size: 13px; font-weight: 400; color: var(--muted); }
+.ui-hint b { color: var(--text); font-weight: 600; }
+.ui-fieldset { border: 0; min-width: 0; }
+.ui-fieldset > legend { width: 100%; padding: 0; }
+/* 입력: 흰 표면 + 1px --field-line(흰 위 3.65:1, WCAG 1.4.11) → 포커스 시 accent 2px + 4px 링 */
+.ui-input { display: flex; align-items: center; gap: 8px; height: 56px; padding: 0 16px; border-radius: var(--radius-m); background: var(--bg2); border: 1px solid var(--field-line); transition: border-color .15s, box-shadow .15s; }
+@media (hover: hover) { .ui-input:hover { border-color: var(--muted); } }
+.ui-input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--focus-ring); }
+.ui-input > input { flex: 1; min-width: 0; width: 100%; height: 100%; border: 0; outline: none; background: transparent; text-align: right; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); font-variant-numeric: tabular-nums; }
+.ui-input > input:focus-visible { outline: none !important; } /* 포커스 표시는 래퍼가 담당 */
+.ui-input > input::placeholder { color: var(--muted); font-weight: 400; }
+.ui-input > .ui-unit { font-size: 16px; font-weight: 600; color: var(--muted-strong); white-space: nowrap; }
+.ui-input.ui-text > input { text-align: left; font-size: 16px; font-weight: 500; letter-spacing: 0; }
+.ui-input.ui-sm { height: 48px; } .ui-input.ui-sm > input { font-size: 18px; }
+/* ≤640: globals.css 의 iOS 확대 방지 규칙 `input:not(…)×3`(특이도 0,3,1)이 위 규칙(0,1,1 · 0,2,1)을 이겨 입력값이 16px 로 눌린다.
+   같은 :not() 체인을 붙여 특이도를 올려 §6.3 크기(24 · text 16 · sm 18)를 복구 — 모두 16px 이상이라 확대 방지 조건은 그대로 충족.
+   순서는 위 데스크톱 규칙과 같게(text → sm): 두 클래스를 함께 쓰면 sm 18 이 이긴다 */
+@media (max-width: 640px) {
+  .ui-input > input:not([type='checkbox']):not([type='radio']):not([type='range']) { font-size: 24px; }
+  .ui-input.ui-text > input:not([type='checkbox']):not([type='radio']):not([type='range']) { font-size: 16px; }
+  .ui-input.ui-sm > input:not([type='checkbox']):not([type='radio']):not([type='range']) { font-size: 18px; }
+}
+.ui-input:has(input[aria-invalid='true']) { border-color: var(--danger); box-shadow: 0 0 0 1px var(--danger); }
+.ui-helper { margin-top: 8px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+.ui-helper strong { color: var(--text-body); font-weight: 600; }
+.ui-helper.ui-err { color: var(--danger); }
+.ui-row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 480px) { .ui-row2 { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+
+/* ── 칩·프리셋 (aria-pressed) — 선택 시 체크 아이콘 = 색 외 단서 ── */
+.ui-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.ui-chip { position: relative; display: inline-flex; align-items: center; gap: 4px; height: 40px; min-height: 0; padding: 0 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hover); background: var(--bg2); font-size: 14px; font-weight: 500; color: var(--muted-strong); white-space: nowrap; transition: border-color .15s, background .15s; }
+.ui-chip::after { content: ''; position: absolute; inset: -2px -2px; } /* 히트 영역 44 확보 */
+@media (hover: hover) { .ui-chip:hover { border-color: var(--muted); color: var(--text); } }
+.ui-chip[aria-pressed='true'] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; box-shadow: inset 0 0 0 1px var(--accent); }
+.ui-chip[aria-pressed='true']::before { content: ''; width: 14px; height: 14px; margin-left: -2px; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5l10 -10'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5l10 -10'/%3E%3C/svg%3E") center / contain no-repeat; }
+@media (max-width: 640px) {
+  .ui-chips.ui-scroll { flex-wrap: nowrap; overflow-x: auto; margin: 12px -20px 0; padding: 2px 20px; scrollbar-width: none; }
+  .ui-chips.ui-scroll::-webkit-scrollbar { display: none; }
+  .ui-chips.ui-scroll > .ui-chip { flex-shrink: 0; }
+}
+
+/* ── 숫자 그리드: 작은 정수 1탭 입력 (role=radiogroup, 버튼 role=radio aria-checked) ── */
+.ui-numgrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.ui-numgrid > button { height: 44px; min-height: 0; border-radius: var(--radius-s); border: 1px solid var(--border-hover); background: var(--bg2); font-size: 15px; font-weight: 600; color: var(--muted-strong); }
+@media (hover: hover) { .ui-numgrid > button:hover { border-color: var(--muted); color: var(--text); } }
+.ui-numgrid > button[aria-checked='true'] { background: var(--text); border-color: var(--text); color: var(--gray-0); font-weight: 700; }
+
+/* ── 체크 리스트: 금액 병기 (비과세 항목 등) ── */
+.ui-checks { border: 1px solid var(--border-hover); border-radius: var(--radius-m); overflow: hidden; background: var(--bg2); }
+.ui-check { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 10px 14px; cursor: pointer; }
+.ui-check + .ui-check { border-top: 1px solid var(--divider); }
+.ui-check > input { width: 20px; height: 20px; flex-shrink: 0; accent-color: var(--accent); }
+.ui-check > span { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; color: var(--text); }
+.ui-check > span small { display: block; margin-top: 2px; font-size: 13px; font-weight: 400; color: var(--muted); }
+.ui-check > b { font-size: 14px; font-weight: 600; color: var(--muted-strong); white-space: nowrap; }
+.ui-check:has(input:checked) { background: var(--accent-soft); }
+.ui-check:has(input:checked) > b { color: var(--accent-ink); }
+
+/* ── 상세 조건 (점진적 공개) — 요약행에 현재값 노출, 기본값과 다르면 open 유지 ── */
+.ui-opts { margin-top: 20px; border-radius: var(--radius-m); border: 1px solid var(--border); background: var(--bg2); }
+.ui-opts > summary { list-style: none; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 12px 8px 16px; cursor: pointer; }
+.ui-opts > summary::-webkit-details-marker { display: none; }
+.ui-optsL { flex-shrink: 0; font-size: 14px; font-weight: 600; color: var(--text); }
+.ui-optsV { flex: 1; min-width: 0; font-size: 14px; color: var(--muted); }
+.ui-optsV b { color: var(--text-body); font-weight: 600; }
+.ui-optsBtn { display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; height: 32px; padding: 0 10px; border-radius: var(--radius-s); background: var(--bg3); font-size: 13px; font-weight: 600; color: var(--muted-strong); }
+.ui-opts[open] .ui-optsBtn svg { transform: rotate(180deg); }
+.ui-optsBody { padding: 0 16px 20px; border-top: 1px solid var(--divider); }
+@media (max-width: 640px) {
+  .ui-opts > summary { flex-wrap: wrap; row-gap: 2px; padding: 12px 12px 12px 14px; }
+  .ui-optsV { order: 3; flex-basis: 100%; font-size: 13px; }
+  .ui-optsBtn { margin-left: auto; }
+  .ui-optsBody { padding: 0 14px 18px; }
+}
+
+/* ── 버튼 ───────────────────────────────────────────── */
+.ui-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 52px; padding: 0 20px; border-radius: var(--radius-m); font-size: 16px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; transition: background .15s, border-color .15s; }
+.ui-btn-primary { background: var(--accent-strong); color: var(--gray-0); }          /* 흰 5.36 · 카드당 1개 */
+@media (hover: hover) { .ui-btn-primary:hover { background: var(--accent-hover); } }                     /* 흰 6.81 */
+.ui-btn-secondary { background: var(--bg3); color: var(--text); }
+@media (hover: hover) { .ui-btn-secondary:hover { background: var(--gray-150); } }
+.ui-btn-outline { background: var(--bg2); color: var(--text); border: 1px solid var(--border-hover); }
+@media (hover: hover) { .ui-btn-outline:hover { border-color: var(--muted); } }
+.ui-btn-ghost { height: 40px; padding: 0 8px; color: var(--accent-ink); }
+.ui-btn-sm { height: 40px; padding: 0 14px; font-size: 14px; border-radius: var(--radius-s); }
+.ui-btn-block { width: 100%; }
+.ui-btn:disabled { background: var(--bg3); color: var(--muted); border-color: transparent; cursor: not-allowed; }
+.ui-btnRow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 8px; margin-top: 20px; }
+
+/* 실시간 계산이 아닌 도구: 계산기 카드 하단 액션 바 — 주 버튼이 엄지 영역에 */
+.ui-actionbar { display: flex; gap: 8px; margin: 24px -24px -24px; padding: 16px 24px; background: var(--bg3); border-top: 1px solid var(--border); border-radius: 0 0 var(--radius-card) var(--radius-card); }
+.ui-actionbar > .ui-btn-primary { flex: 1; }
+@media (max-width: 640px) { .ui-actionbar { margin: 20px -20px -20px; padding: 12px 20px; } }
+
+/* 개인정보 한 줄 */
+.ui-calcFoot { display: flex; align-items: center; gap: 6px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--divider); font-size: 13px; color: var(--muted); }
+.ui-calcFoot svg { color: var(--success); }
+
+/* ── 배지·필·분야 아이콘 칩 ─────────────────────────── */
+.ui-badge { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: var(--radius-xs); font-size: 11px; font-weight: 700; vertical-align: middle; white-space: nowrap; }
+.ui-badge-hot { background: var(--danger-soft); color: var(--danger); }
+.ui-badge-new { background: var(--accent-soft); color: var(--accent-ink); }
+.ui-badge-rev { background: var(--success-soft); color: var(--success); } /* '2026 개정' */
+.ui-pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--accent-ink); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.ui-pill-gray { background: var(--bg3); color: var(--muted-strong); }
+.ui-chipIc { width: 40px; height: 40px; border-radius: var(--radius-m); display: grid; place-items: center; flex-shrink: 0; color: var(--c, var(--accent)); background: var(--c-soft, var(--accent-soft)); }
+.ui-chipIc.ui-sm { width: 28px; height: 28px; border-radius: var(--radius-s); } .ui-chipIc.ui-sm svg { width: 16px; height: 16px; }
+.ui-chipIc.ui-lg { width: 56px; height: 56px; border-radius: var(--radius-card); } .ui-chipIc.ui-lg svg { width: 28px; height: 28px; }

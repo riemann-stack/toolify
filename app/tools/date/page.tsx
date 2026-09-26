@@ -11,7 +11,7 @@ export default function DateCategoryPage() {
   return (
     <CategoryView
       catId="date"
-      description="만 나이·D-day부터 음력·시차·연호까지 — 시간과 날짜에 관한 모든 계산."
+      description="만 나이·D-day, 연차와 공휴일, 시차와 체류일처럼 손으로 세다 틀리기 쉬운 날짜 계산을 대신합니다."
     />
   )
 }

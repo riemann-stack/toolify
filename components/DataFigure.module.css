@@ -1,0 +1,27 @@
+/* components/DataFigure.module.css — 데이터 표 래퍼: '표 N.' 캡션 + 스크롤 컨테이너 + 자료 줄
+   표 안 보조 클래스 r(우측 정렬)·em(강조 열)·wrap(줄바꿈 허용)·here(입력값 행)는 페이지 마크업이 쓰는 전역 이름 → :global()
+   390px에서 4열까지 스크롤 없이(셀 패딩 10, 긴 기준값은 <small> 2행). 5열 이상은 .tableScroll 스크롤 */
+.df { margin: 24px 0; counter-increment: fig; }
+.dfCap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin-bottom: 10px; }
+.dfCapT { font-size: 14px; line-height: 1.5; word-break: keep-all; font-weight: 700; color: var(--text); }
+.dfCapT b { margin-right: 6px; color: var(--accent-ink); }
+.dfCapU { font-size: 12px; font-weight: 500; color: var(--muted); }
+.dfBox { border: 1px solid var(--border); border-radius: var(--radius-m); }
+.dfBox table { width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+.dfBox thead th { padding: 12px 14px; background: var(--bg3); font-size: 13px; font-weight: 600; color: var(--muted-strong); text-align: left; white-space: nowrap; }
+.dfBox thead th:first-child { border-top-left-radius: 11px; }
+.dfBox thead th:last-child { border-top-right-radius: 11px; }
+.dfBox td { padding: 12px 14px; border-top: 1px solid var(--divider); color: var(--text-body); white-space: nowrap; }
+.dfBox td:first-child, .dfBox tbody th { color: var(--text); font-weight: 500; }
+.dfBox tbody th { padding: 12px 14px; border-top: 1px solid var(--divider); background: transparent; font-size: 14px; text-align: left; white-space: nowrap; }
+.dfBox td small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--muted); white-space: normal; }
+.dfBox :global(.r) { text-align: right; }
+.dfBox :global(.em) { color: var(--accent-ink); font-weight: 700; }
+.dfBox :global(.wrap) { white-space: normal; min-width: 96px; }
+.dfBox tr:global(.here) > * { background: var(--accent-soft); color: var(--text); }        /* 사용자 입력과 같은 행 */
+.dfBox tr:global(.here) > :first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.dfBox tr:global(.here) > :first-child::after { content: '입력값'; display: block; width: max-content; margin-top: 2px; padding: 0 6px; border-radius: var(--radius-xs); background: var(--accent-strong); color: var(--gray-0); font-size: 11px; font-weight: 700; line-height: 18px; } /* 색 외 단서(1.4.1). 폭을 늘리지 않게 2행 */
+.dfSrc { margin: 10px 0 0; max-width: none; font-size: 12px; line-height: 1.7; color: var(--muted); font-variant-numeric: normal; }
+.dfSrc a { color: var(--muted-strong); text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 640px) { .dfBox th, .dfBox td { padding: 12px 10px; } .dfBox thead th { font-size: 12px; } }
+@media (max-width: 380px) { .dfBox th, .dfBox td { padding: 12px 8px; } }

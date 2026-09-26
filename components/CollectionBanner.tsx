@@ -1,98 +1,74 @@
-'use client'
-
+/* components/CollectionBanner.tsx (server) — 홈 '상황별 가이드' 3카드 (스펙 §10.20 .hmCols)
+   · 첫 카드 = 오늘(KST)의 시즌 추천(getFeaturedSlug, app/page.tsx가 계산해 prop으로) → 첫 페인트부터 정합, 클라이언트 JS 0
+   · 나머지 2장 = 레지스트리 순서에서 추천 다음 2개(날마다 함께 회전) — 무작위 없음(SSR=CSR)
+   · 색: 컬렉션 raw hex 대신 '가장 많이 쓰는 분야'의 data-cat 토큰(--c/--c-soft, AA 보장)으로 칩만 칠한다 */
 import Link from 'next/link'
-import { useState } from 'react'
-import { COLLECTIONS, collectionToolCount } from '@/lib/collections'
+import { COLLECTIONS, resolveTools, type Collection } from '@/lib/collections'
+import { categories } from '@/lib/tools'
 import CollectionIcon from './CollectionIcon'
+import UiIcon from './UiIcon'
 import s from './CollectionBanner.module.css'
 
-interface CollectionBannerProps {
-  /** 서버에서 계산한 오늘의 시즌 추천 slug — 첫 페인트부터 정확 표시되도록.
-   *  생략 시 첫 컬렉션을 fallback으로 사용. */
-  initialSlug?: string
+const CAT_BY_HREF = new Map<string, string>()
+for (const c of categories) for (const t of c.tools) CAT_BY_HREF.set(t.href, c.id)
+
+/** 컬렉션에서 도구를 가장 많이 가진 분야 id (동률이면 먼저 나온 분야) — 칩 색(data-cat)용 */
+export function collectionCatId(c: Collection): string | undefined {
+  const count = new Map<string, number>()
+  for (const step of c.steps) for (const h of step.toolHrefs) {
+    const id = CAT_BY_HREF.get(h)
+    if (id) count.set(id, (count.get(id) ?? 0) + 1)
+  }
+  let best: string | undefined
+  let max = 0
+  for (const [id, n] of count) if (n > max) { best = id; max = n }
+  return best
 }
 
-export default function CollectionBanner({ initialSlug }: CollectionBannerProps = {}) {
-  // 서버에서 받은 initialSlug를 useState 초기값으로 사용 → 마운트 후 swap 없음(CLS 제거).
-  // initialSlug가 없거나 unknown slug면 첫 컬렉션을 안전한 fallback으로 쓴다.
-  const [featuredSlug] = useState(() => {
-    if (initialSlug && COLLECTIONS.some((c) => c.slug === initialSlug)) return initialSlug
-    return COLLECTIONS[0].slug
-  })
+/** 레지스트리에 실제로 있는 도구만 남긴 단계(빈 단계 제외). 목록·상세·배너의 '도구 N개 · M단계'와 화면 목록이 같은 데이터를 쓰게 한다
+    (lib/collections collectionToolCount는 해석 전 href 수라, 통폐합으로 도구가 빠지면 화면보다 커진다) */
+export function liveSteps(c: Collection) {
+  return c.steps.map((st) => ({ ...st, tools: resolveTools(st.toolHrefs) })).filter((st) => st.tools.length > 0)
+}
 
-  const featured = COLLECTIONS.find((c) => c.slug === featuredSlug) ?? COLLECTIONS[0]
-  const others = COLLECTIONS.filter((c) => c.slug !== featured.slug)
+/** '도구 N개 · M단계' — liveSteps 기준 */
+export function collectionStats(c: Collection): { tools: number; steps: number } {
+  const steps = liveSteps(c)
+  return { tools: steps.reduce((n, st) => n + st.tools.length, 0), steps: steps.length }
+}
+
+interface CollectionBannerProps {
+  /** 서버에서 계산한 오늘의 시즌 추천 slug. 모르는 slug면 첫 컬렉션 */
+  featuredSlug?: string
+  /** 현재 월(1-12, KST) — 추천 카드 라벨('이번 달 추천' / '오늘의 추천') 결정 */
+  month?: number
+  count?: number
+}
+
+export default function CollectionBanner({ featuredSlug, month, count = 3 }: CollectionBannerProps) {
+  const start = Math.max(0, COLLECTIONS.findIndex((c) => c.slug === featuredSlug))
+  const picks = Array.from({ length: Math.min(count, COLLECTIONS.length) }, (_, i) => COLLECTIONS[(start + i) % COLLECTIONS.length])
 
   return (
-    <section className={s.banner}>
-      {/* 대표(시즌 추천) 카드 */}
-      <Link
-        href={`/collections/${featured.slug}`}
-        className={s.featured}
-        style={{
-          display: 'block', textDecoration: 'none',
-          borderRadius: 'var(--radius-lg)', padding: '22px 24px',
-          // 벤토 문법 — 그라디언트 대신 플랫 틴트 + 페이퍼 카드
-          background: `color-mix(in srgb, ${featured.color} 9%, var(--paper-card))`,
-          border: `1px solid color-mix(in srgb, ${featured.color} 30%, transparent)`,
-        }}
-      >
-        <span
-          style={{
-            display: 'inline-block', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em',
-            // 원색 소형 텍스트는 AA 미달 — 잉크 믹스 다크닝 (QA 표준)
-            color: `color-mix(in srgb, ${featured.color} 70%, var(--paper-ink))`,
-            background: `color-mix(in srgb, ${featured.color} 12%, transparent)`,
-            borderRadius: 999, padding: '4px 10px', marginBottom: 12,
-          }}
-        >
-          이런 상황이라면
-        </span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span
-            aria-hidden
-            style={{
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-              background: `color-mix(in srgb, ${featured.color} 14%, var(--paper-card))`,
-              color: featured.color,
-            }}
-          >
-            <CollectionIcon slug={featured.slug} size={24} />
-          </span>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: 'clamp(18px, 4vw, 22px)', fontWeight: 800, color: 'var(--paper-ink)', letterSpacing: '-0.02em' }}>
-              {featured.title}
-            </div>
-            <div style={{ fontSize: 13, color: 'var(--paper-ink-soft)', marginTop: 4, lineHeight: 1.6 }}>
-              {featured.lead}
-            </div>
-          </div>
-        </div>
-        <div style={{ marginTop: 14, fontSize: 13, fontWeight: 700, color: `color-mix(in srgb, ${featured.color} 70%, var(--paper-ink))` }}>
-          도구 {collectionToolCount(featured)}개 모아보기 →
-        </div>
-      </Link>
-
-      {/* 나머지 컬렉션 — 데스크탑 그리드 / 모바일 가로 스크롤 선반 */}
-      <div className={s.others}>
-        {others.map((c) => (
-          <Link
-            key={c.slug}
-            href={`/collections/${c.slug}`}
-            className={s.otherCard}
-            style={{ borderLeft: `3px solid ${c.color}` }}
-          >
-            <span className={s.otherIcon} style={{ color: c.color }} aria-hidden>
-              <CollectionIcon slug={c.slug} size={18} />
+    <div className={s.cbCols}>
+      {picks.map((c, i) => {
+        const seasonal = i === 0 && !!month && !!c.seasonMonths?.includes(month)
+        const steps = liveSteps(c)
+        const toolCount = steps.reduce((n, st) => n + st.tools.length, 0)
+        return (
+          <Link key={c.slug} className={s.cbCol} data-cat={collectionCatId(c)} href={`/collections/${c.slug}`}>
+            <span className={s.cbTop}>
+              <span className="ui-chipIc" aria-hidden="true"><CollectionIcon slug={c.slug} size={20} /></span>
+              <span>{i === 0 && <em className={s.cbPick}>{seasonal ? '이번 달 추천' : '오늘의 추천'}</em>}도구 {toolCount}개 · {steps.length}단계</span>
             </span>
-            <div className={s.otherBody}>
-              <div className={s.otherTitle}>{c.short}</div>
-              <div className={s.otherCount}>도구 {collectionToolCount(c)}개</div>
-            </div>
+            <h3>{c.title}</h3>
+            <ol>
+              {steps.map((st) => <li key={st.title}>{st.title}</li>)}
+            </ol>
+            <span className={s.cbGo}>가이드 보기<UiIcon name="chev-r" size={16} /></span>
           </Link>
-        ))}
-      </div>
-    </section>
+        )
+      })}
+    </div>
   )
 }

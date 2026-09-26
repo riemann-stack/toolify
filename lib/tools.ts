@@ -1,9 +1,18 @@
 export interface Tool {
   href:  string
+  /** 이모지 — OG·레거시 호환용으로만 남김(스펙 §12). 화면 크롬엔 UiIcon/CatIcon */
   icon:  string
   name:  string
   desc:  string
+  /** @deprecated 수기 라벨(NEW 105/200 인플레). 화면 표시는 lib/toolSignals.ts `toolBadge()`가 결정한다:
+   *  HOT = app/popular-tools.json(GA4 최근 28일 상위), NEW = 공개일(addedAt) 기준 NEW_BADGE_DAYS 이내.
+   *  새 코드는 이 필드를 읽지 말 것 — 통폐합 단계에서 일괄 제거 예정 */
   badge?: 'hot' | 'new'
+  /** 공개일 'YYYY-MM-DD' — 생략하면 lib/siteDates.json(git 첫 커밋, scripts/gen-site-dates.mjs 생성)을 쓴다.
+   *  아직 커밋 전인 새 도구에만 적는다(지어낸 날짜 금지) */
+  addedAt?: string
+  /** 허브 하위 분류 이름 — 생략하면 lib/categoryGuides.ts의 그룹 정의(hrefs)를 따른다. 어느 쪽에도 없으면 '그 밖의 도구' */
+  group?: string
 }
 
 export interface Category {

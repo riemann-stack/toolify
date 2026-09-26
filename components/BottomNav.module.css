@@ -1,60 +1,94 @@
 /* @hover-wrapped */
-/* ── 모바일 하단 탭바 — 640px 이하 전용. 상단 Nav와 같은 중성 크롬(반투명 화이트+블러) ── */
-.bar {
-  display: none;
-}
-.spacer {
-  display: none;
-}
+/* ── 모바일(≤640) 하단 5탭: 홈 · 분야 · 검색 · 가이드 · 최근 — 스펙 §10.17
+   '분야' 탭에는 현재 분야색 점(도구·허브, data-cat → --c). 앵커 광고 OFF 전제 유지.
+   z-index 층위(기존 유지): 헤더 300 > 검색 패널 290 > 드로어 250 > 탭바 200 — 드로어가 열리면 탭바를 덮는다. ── */
+
+/* <html>에 다는 클래스 (app/layout.tsx) — 고정 UI가 탭바를 피할 수 있게 높이를 변수로 공개하고,
+   문서 흐름 끝(푸터)이 탭바에 가리지 않게 body 하단 패딩을 준다(구 spacer div 대체).
+   html(스크롤 컨테이너)에 있어야 scroll-padding-bottom 이 이 변수를 쓸 수 있다 → Tab 포커스·앵커 이동 대상이
+   탭바 밑으로 숨지 않는다(WCAG 2.4.11 Focus Not Obscured). 위쪽은 globals 의 scroll-padding-top(헤더)이 맡는다. */
+.withTabBar { --bottom-nav-h: 0px; }
+
+.tabBar { display: none; }
 
 @media (max-width: 640px) {
-  .bar {
+  .withTabBar {
+    --bottom-nav-h: calc(var(--tabbar-h, 60px) + env(safe-area-inset-bottom));
+    scroll-padding-bottom: calc(var(--bottom-nav-h) + 16px);
+  }
+  .withTabBar > body { padding-bottom: var(--bottom-nav-h); }
+
+  .tabBar {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
-    /* 드로어(250)·상단 Nav(300)보다 아래 — 드로어가 열리면 탭바를 덮는다 */
     z-index: 200;
-    display: flex;
-    align-items: stretch;
-    /* 0.97 — 다크 콘텐츠(잉크 푸터·타일)가 뒤를 지나도 라벨 대비 4.9:1+ 유지 */
-    background: rgba(255, 255, 255, 0.97);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-top: 1px solid var(--paper-line);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    height: calc(var(--tabbar-h, 60px) + env(safe-area-inset-bottom));
     padding-bottom: env(safe-area-inset-bottom);
-  }
-  .spacer {
-    display: block;
-    height: calc(56px + env(safe-area-inset-bottom));
+    /* 0.96 — 어두운 콘텐츠가 뒤를 지나도 라벨 대비 유지 */
+    background: rgba(255, 255, 255, 0.96);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
   }
 }
 
 .tab {
-  flex: 1;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  height: 56px;
-  color: var(--paper-ink-faint);
-  text-decoration: none;
+  gap: 4px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0;
   /* button 리셋 */
   background: none;
   border: none;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
-  transition: color 0.15s;
+  font: inherit;
+  color: var(--muted);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.tabActive {
-  color: var(--paper-ink);
-}
+.tab svg { width: 24px; height: 24px; flex-shrink: 0; }
 .tabLabel {
   font-size: 11px;
   font-weight: 600;
   line-height: 1;
+  white-space: nowrap;
 }
-.tabActive .tabLabel {
-  font-weight: 700;
+.tab[aria-current] { color: var(--accent-ink); }
+.tab[aria-current] .tabLabel { font-weight: 700; }
+.tab[aria-current]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 24px;
+  height: 2px;
+  margin-left: -12px;
+  border-radius: 0 0 2px 2px;
+  background: var(--accent);
+}
+.tab:focus-visible { outline-offset: -4px; }
+@media (hover: hover) {
+  .tab:hover { color: var(--text); }
+  .tab[aria-current]:hover { color: var(--accent-ink); }
+}
+
+/* 현재 분야 점 — 흰 링으로 아이콘과 분리 */
+.tabDot {
+  position: absolute;
+  top: 8px;
+  left: calc(50% + 8px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c, var(--accent));
+  box-shadow: 0 0 0 2px var(--bg2);
 }

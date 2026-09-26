@@ -1,298 +1,99 @@
-/* @hover-wrapped */
-/* ── 전체 도구 브라우저 — 페이퍼·잉크 톤 (홈 벤토 정합) ── */
-/* ── 상단 고정 검색창 ── */
-.searchBar {
-  position: sticky;
-  top: 60px;
-  z-index: 12;
-  padding: 12px 0 14px;
-  margin-bottom: 18px;
-  background: rgba(245, 244, 239, 0.92);
-  backdrop-filter: saturate(150%) blur(8px);
-  -webkit-backdrop-filter: saturate(150%) blur(8px);
-  border-bottom: 1px solid var(--paper-line);
-}
-.searchInner {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  background: var(--paper-card);
-  border: 1px solid var(--paper-line);
-  border-radius: 12px;
-  padding: 11px 14px;
-}
-.searchInner:focus-within { border-color: var(--paper-ink-soft); }
-.searchInner > svg { color: var(--paper-ink-faint); flex-shrink: 0; }
-.searchInput {
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  color: var(--paper-ink);
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.searchInput::placeholder { color: var(--paper-ink-faint); }
+/* app/tools/tools.module.css — 전체 도구 목록 (/tools) · Trust Ledger
+   흰 히어로 → sticky 검색(top: var(--header-h)) → 분야 칩 → 분야 › 하위 분류 › 컴팩트 행(이름 + 한 줄 설명)
+   → 분야별로 둘러보기 → FAQ. 분야색은 [data-cat] → --c/--c-ink/--c-soft(칩·점)만. 새 hex 없음, 간격 짝수 px */
+.tl { padding-bottom: 64px; }
+.tlWrap { max-width: var(--w-shell); margin: 0 auto; padding: 0 24px; }
+.tlBand { background: var(--bg2); border-bottom: 1px solid var(--border); }
+.tlCrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding-top: 20px; font-size: 13px; color: var(--muted); }
+.tlCrumb a { position: relative; display: inline-flex; align-items: center; min-height: 24px; color: var(--muted); }
+.tlCrumb a::after { content: ''; position: absolute; inset: -10px 0; } /* 히트 영역 44 */
+.tlCrumb a:hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+.tlCrumb svg { color: var(--gray-400); }
+.tlCrumb [aria-current='page'] { font-weight: 600; color: var(--text); }
+.tlHero { max-width: 760px; padding: 16px 0 32px; }
+.tlH1 { font-size: clamp(28px, 6vw, 40px); font-weight: 800; line-height: 1.25; letter-spacing: -0.04em; color: var(--text); }
+.tlLead { margin-top: 10px; font-size: 17px; line-height: 1.7; color: var(--muted-strong); font-variant-numeric: normal; }
+
+/* sticky 검색 — 헤더 바로 아래(모바일 56 / 데스크톱 64). z는 헤더보다 낮게 */
+.searchBar { position: sticky; top: var(--header-h); z-index: 20; padding: 12px 0; background: rgba(246, 247, 249, 0.94); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.searchInner { display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 6px 0 16px; border-radius: var(--radius-m); background: var(--bg2); border: 1px solid var(--field-line); transition: border-color .15s, box-shadow .15s; }
+.searchInner:hover { border-color: var(--muted); }
+.searchInner:focus-within { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--focus-ring); }
+.searchInner > svg { flex-shrink: 0; color: var(--muted-strong); }
+.searchInput { flex: 1; min-width: 0; height: 100%; border: 0; outline: none; background: transparent; font-size: 16px; font-weight: 500; color: var(--text); font-variant-numeric: normal; }
+.searchInput:focus-visible { outline: none !important; } /* 포커스 표시는 래퍼(focus-within)가 담당 */
+.searchInput::placeholder { color: var(--muted); font-weight: 400; }
 .searchInput::-webkit-search-cancel-button { -webkit-appearance: none; }
-.searchClear {
-  background: transparent;
-  border: none;
-  color: var(--paper-ink-faint);
-  font-size: 16px;
-  cursor: pointer;
-  padding: 0 4px;
-  line-height: 1;
-  font-family: 'Inter', system-ui, sans-serif;
-}
-@media (hover: hover) { .searchClear:hover { color: var(--paper-ink); } }
+.searchClear { flex-shrink: 0; display: grid; place-items: center; width: 40px; height: 40px; min-height: 0; border-radius: var(--radius-s); color: var(--muted); }
+.searchClear:hover { background: var(--bg3); color: var(--text); }
 
-.searchCount {
-  font-size: 13px;
-  color: var(--paper-ink-soft);
-  font-weight: 600;
-  margin: 0 0 12px;
-}
-.noResults {
-  background: var(--paper-card);
-  border: 1px dashed var(--paper-line);
-  border-radius: 12px;
-  padding: 28px 20px;
-  text-align: center;
-  font-size: 13px;
-  color: var(--paper-ink-soft);
-  line-height: 1.8;
-}
-.noResults strong { color: var(--paper-ink); }
+/* 분야 칩 (앵커) — 가로 스크롤 */
+.catNav { display: flex; gap: 8px; margin: 8px -4px 0; padding: 4px; overflow-x: auto; scrollbar-width: none; } /* 4 = 포커스 링 여백 */
+.catNav::-webkit-scrollbar { display: none; }
+.catChip { position: relative; flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hover); background: var(--bg2); font-size: 14px; font-weight: 600; color: var(--muted-strong); white-space: nowrap; transition: border-color .15s, color .15s; }
+.catChip::after { content: ''; position: absolute; inset: -2px 0; } /* 히트 영역 44 (행 패딩 4 안) */
+.catChip:hover { border-color: var(--muted); color: var(--text); }
+.catChip i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
 
-/* ── 카테고리 점프 네비게이션 ── */
-.catNav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 0 4px;
-  margin: 0 -4px 28px;
-}
-@media (max-width: 600px) {
-  .catNav {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    margin-bottom: 16px;
-  }
-  .catNav::-webkit-scrollbar { display: none; }
-}
+/* 결과·목록 */
+.results { padding-top: 24px; }
+.searchCount { margin-bottom: 12px; font-size: 13px; font-weight: 600; color: var(--muted-strong); }
+.searchNote { margin-bottom: 12px; font-size: 14px; color: var(--muted); }
+.noResults { padding: 28px 20px; border-radius: var(--radius-card); border: 1px dashed var(--border-hover); background: var(--bg2); font-size: 15px; line-height: 1.7; color: var(--muted-strong); text-align: center; }
+.noResults strong { color: var(--text); }
 
-.catChip {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background: var(--paper-card);
-  border: 1px solid var(--paper-line);
-  border-radius: var(--radius-pill);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--paper-ink);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: border-color 0.15s, background 0.15s;
-  min-height: 36px;
-  font-family: 'Noto Sans KR', sans-serif;
-}@media (hover: hover) {
-  .catChip:hover {
-  border-color: var(--chip-color, var(--paper-ink));
-  background: color-mix(in srgb, var(--chip-color, var(--paper-ink)) 8%, var(--paper-card));
-}
-}
-.catChipIcon { display: inline-flex; align-items: center; }
-/* 원색(600) 소형 텍스트는 AA 미달(QA 검산) — 잉크 믹스 다크닝 */
-.catChipName { color: color-mix(in srgb, var(--chip-color, var(--paper-ink)) 70%, var(--paper-ink)); }
-.catChipCount {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11px;
-  color: var(--paper-ink-faint);
-  font-weight: 700;
-}
+.catSection { padding-top: 48px; scroll-margin-top: calc(var(--header-h) + 88px); }
+.catHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1.5px solid var(--rule); }
+.catHeaderLeft { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.catHeaderName { font-size: 22px; font-weight: 700; line-height: 1.35; letter-spacing: -0.03em; color: var(--text); }
+.catHeaderTag { display: block; margin-top: 2px; font-size: 13px; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+.catHeaderMore { position: relative; flex-shrink: 0; display: inline-flex; align-items: center; gap: 2px; min-height: 32px; font-size: 14px; font-weight: 600; color: var(--accent-ink); white-space: nowrap; }
+.catHeaderMore::after { content: ''; position: absolute; inset: -6px 0; } /* 히트 영역 44 */
+.catHeaderMore:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-/* ── 카테고리 섹션 ── */
-.catList {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-.catSection {
-  min-width: 0;
-  /* sticky nav 아래로 anchor jump 시 가려지지 않도록 */
-  scroll-margin-top: 120px;
-}
-@media (max-width: 600px) {
-  .catList { gap: 32px; }
-  .catSection { scroll-margin-top: 130px; }
-}
+.group { margin-top: 20px; }
+.groupH { display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: var(--muted-strong); }
+.groupH small { font-size: 12px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
 
-.catHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.catHeaderLeft {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-.catHeaderIcon { display: inline-flex; align-items: center; flex-shrink: 0; }
-.catHeaderName {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-}
-.catHeaderCount {
-  font-size: 12px;
-  color: var(--paper-ink-faint);
-  flex-shrink: 0;
-}
-.catHeaderMore {
-  font-size: 12px;
-  color: var(--paper-ink-soft);
-  text-decoration: none;
-  flex-shrink: 0;
-  white-space: nowrap;
-}@media (hover: hover) {
-  .catHeaderMore:hover { color: var(--paper-ink); }
-}
+.toolGrid { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.toolCard { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 12px 14px; border-radius: var(--radius-m); background: var(--bg2); border: 1px solid var(--border); transition: border-color .15s, box-shadow .15s; }
+.toolCard:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); }
+.toolCard:hover .toolName { color: var(--accent-ink); }
+.toolInfo { flex: 1; min-width: 0; }
+.toolName { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); }
+.toolDesc { display: block; margin-top: 2px; font-size: 13px; line-height: 1.5; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toolCat { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--c-ink); }
+.toolCat::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
+.toolCard > svg { flex-shrink: 0; color: var(--gray-400); }
 
-.toolGrid {
-  display: grid;
-  /* minmax(0, 1fr)로 콘텐츠 최소 크기 무시하고 0까지 축소 가능 → 가로 오버플로우 방지 */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
 
-.toolCard {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: var(--paper-card);
-  border: 1px solid var(--paper-line);
-  border-radius: 12px;
-  padding: 14px 16px;
-  text-decoration: none;
-  transition: border-color 0.15s, transform 0.15s;
-  /* 카드도 콘텐츠 이하로 축소 가능 + 내부 overflow 방지 */
-  min-width: 0;
-  overflow: hidden;
-  position: relative;
-}@media (hover: hover) {
-  .toolCard:hover {
-  border-color: var(--paper-ink-faint);
-  transform: translateY(-2px);
-}
-}
+/* 분야별로 둘러보기 */
+.hubs { padding-top: 56px; }
+.secH { padding-top: 14px; margin-bottom: 16px; border-top: 1.5px solid var(--rule); font-size: 22px; font-weight: 700; line-height: 1.35; letter-spacing: -0.03em; color: var(--text); }
+.hubGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.hubCard { display: flex; gap: 14px; padding: 18px 20px; border-radius: var(--radius-card); background: var(--bg2); border: 1px solid var(--border); transition: border-color .15s, box-shadow .15s; }
+.hubCard:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); }
+.hubCard b { display: block; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+.hubCard span span { display: block; margin-top: 4px; font-size: 13px; line-height: 1.6; color: var(--muted); }
 
-.toolIcon {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
+.faq { padding-top: 56px; max-width: var(--w-content); }
 
-.toolInfo {
-  min-width: 0;
-  flex: 1;
-}
-
-.toolName {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--paper-ink);
-  margin-bottom: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.toolDesc {
-  font-size: 11px;
-  color: var(--paper-ink-soft);
-  line-height: 1.4;
-  /* 2줄 후 ellipsis — 긴 desc도 카드 높이 폭주 방지 */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  word-break: keep-all;
-}
-
-/* 배지 — 카드 우상단 (홈과 동일 문법) */
-.badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 9px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.04em;
-  line-height: 1.4;
-  border: 1px solid;
-}
-.badgeHot {
-  background: var(--coral-soft);
-  color: var(--coral-ink);
-  border-color: color-mix(in srgb, var(--accent-coral) 45%, transparent);
-}
-.badgeNew {
-  background: var(--brand-soft);
-  color: var(--brand-ink);
-  border-color: var(--brand-line);
-}
-
-/* 검색 결과 카테고리 태그 */
-.toolCatTag {
-  flex-shrink: 0;
-  align-self: center;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
-  white-space: nowrap;
-}
-
-/* 반응형 — 더 넉넉한 breakpoint */
 @media (max-width: 900px) {
-  .toolGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .toolGrid { grid-template-columns: minmax(0, 1fr); }
+  .hubGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 600px) {
-  /* 모바일: 1열 컴팩트 리스트형 — 아이콘 왼쪽 + 이름, 카드 높이 최소화 */
-  .toolGrid { grid-template-columns: 1fr; gap: 6px; }
-  .toolCard {
-    flex-direction: row;
-    align-items: center;
-    padding: 11px 14px;
-    gap: 11px;
-  }
-  .toolIcon { margin-top: 0; }
-  .toolName {
-    font-size: 13px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0;
-  }
-  /* 모바일에서는 설명 숨김 — 이름만으로 빠른 스캔 */
-  .toolDesc { display: none; }
-  .toolCatTag { font-size: 11px; }
-  .badge {
-    position: static;
-    flex-shrink: 0;
-    font-size: 9px;
-    padding: 2px 5px;
-  }
+@media (max-width: 640px) {
+  .tl { padding-bottom: 48px; }
+  .tlWrap { padding: 0 16px; }
+  .tlCrumb { padding-top: 16px; }
+  .tlHero { padding: 12px 0 24px; }
+  .tlLead { font-size: 16px; }
+  .searchInner { height: 48px; }
+  .catNav { margin: 8px -16px 0; padding: 4px 16px; }
+  .catSection { padding-top: 40px; }
+  .catHeaderName, .secH { font-size: 20px; }
+  .toolCard { min-height: 60px; padding: 10px 12px; }
+  .toolCat { display: none; }
+  .hubGrid { grid-template-columns: minmax(0, 1fr); }
+  .hubCard { padding: 16px; }
 }

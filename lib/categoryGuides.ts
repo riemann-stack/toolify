@@ -38,7 +38,7 @@ const MOBILE_FAQ: CategoryFaq = {
 export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
   finance: {
     intro:
-      '월급·대출·세금·투자·부동산까지, 돈과 관련된 결정을 막연한 어림짐작이 아니라 숫자로 점검하는 도구 모음입니다. 한국의 세제와 2026년 시중 금리·요율을 반영하도록 설계해, 실제 고지서나 통장에 가까운 값을 로그인 없이 즉시 확인할 수 있습니다.',
+      '월급·대출·세금·투자·부동산까지, 돈과 관련된 결정을 막연한 어림짐작이 아니라 숫자로 점검하는 도구 모음입니다. 한국 세제와 2026년 세율·4대보험 요율을 반영해, 고지서나 통장에 찍힐 값을 로그인 없이 미리 가늠할 수 있습니다.',
     sections: [
       {
         h: '어떤 상황에 무엇을 쓰나요',
@@ -46,9 +46,9 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
           '받을 돈을 확인할 때는 연봉 실수령액 계산기로 세금·4대보험을 뗀 세후 월급을, 퇴직금 계산기로 퇴직소득세까지 반영한 실수령액을 봅니다. 빌리는 돈은 대출이자 계산기로 매달 상환액과 갈아타기 손익을, DSR·LTV 계산기로 내 한도를 가늠합니다. 세금 신고철에는 종합소득세·부가세·상속증여세 계산기가, 자산을 불릴 때는 복리·월배당·저축액 계산기가, 내 집 마련에는 청약 가점·경매 비용·부동산 수익률 계산기가 길잡이가 됩니다.',
       },
       {
-        h: '믿을 수 있는 이유',
+        h: '숫자의 근거',
         body:
-          '세율·공제 한도·요율은 국세청, 금융위원회, 한국은행 등이 공개한 자료를 근거로 하고, 각 도구 본문에 적용 기준 연도(2026년)와 출처를 함께 표기합니다. 계산식과 한계(추정 범위, 예외)도 숨기지 않고 안내합니다. 다만 본 도구는 참고용이며 개인 맞춤 세무·투자 자문이 아니므로, 실제 신고·거래 전에는 홈택스나 금융기관에서 최종 확인하시길 권합니다.',
+          '세율·공제 한도·요율은 국세청·고용노동부·국민연금공단·금융위원회 등이 공개한 고시와 법령을 근거로 하고, 법정 수치를 쓰는 도구에는 적용 기준과 출처를 적습니다. 연봉 실수령액·4대보험처럼 법정 수치로 계산하는 핵심 도구는 기준값 테스트로 검산하며, 계산식과 한계(추정 범위, 예외)도 숨기지 않고 안내합니다. 다만 본 도구는 참고용이며 개인 맞춤 세무·투자 자문이 아니므로, 실제 신고·거래 전에는 홈택스나 금융기관에서 최종 확인하시길 권합니다.',
       },
     ],
     faqs: [
@@ -58,7 +58,7 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
       },
       {
         q: '어떤 연도 기준으로 계산하나요?',
-        a: '2026년 기준 세율·요율을 반영하는 것을 원칙으로 하며, 도구마다 본문에 적용 기준과 최종 업데이트 시점을 표기합니다. 세법·금리는 자주 바뀌므로 표기된 기준 연도를 함께 확인해 주세요.',
+        a: '2026년 기준 세율·요율을 반영하는 것을 원칙으로 하며, 법정 수치를 쓰는 도구에는 적용 기준을 함께 표기합니다. 세법·금리는 자주 바뀌므로 표기된 기준 연도를 함께 확인해 주세요.',
       },
       { ...PRIVACY_FAQ, a: '아니요. 연봉·자산 같은 민감한 숫자도 브라우저 안에서만 계산되며 서버로 전송·저장되지 않습니다. 회원가입·로그인 없이 바로 사용할 수 있습니다.' },
       MOBILE_FAQ,
@@ -212,7 +212,7 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
 
   unit: {
     intro:
-      '길이·넓이·무게·온도·데이터·속도 등 단위 사이 변환을 빠르고 정확하게 처리하는 도구 모음입니다. 국제 표준 단위는 물론, 한국에서 자주 쓰는 평·돈·근 같은 전통 단위까지 함께 다룹니다.',
+      '길이·넓이·무게·온도·데이터·속도 등 단위 사이 변환을 표준 환산 계수로 처리하는 도구 모음입니다. 국제 표준 단위는 물론, 한국에서 자주 쓰는 평·돈·근 같은 전통 단위까지 함께 다룹니다.',
     sections: [
       {
         h: '어떤 상황에 무엇을 쓰나요',
@@ -241,7 +241,7 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
 
   date: {
     intro:
-      'D-day, 만 나이, 영업일, 쉥겐 체류 한도처럼 날짜와 기간 계산을 정확하게 처리하는 도구 모음입니다. 윤년·공휴일·시차까지 반영해 손으로 세다 틀리기 쉬운 계산을 대신합니다.',
+      'D-day, 만 나이, 영업일, 쉥겐 체류 한도처럼 날짜와 기간을 세는 도구 모음입니다. 윤년·공휴일·시차까지 반영해 손으로 세다 틀리기 쉬운 계산을 대신합니다.',
     sections: [
       {
         h: '어떤 상황에 무엇을 쓰나요',
@@ -328,7 +328,7 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
 
   dev: {
     intro:
-      '진법 변환, 인코딩, 정규식, 타임스탬프처럼 개발 중 자주 찾는 변환·검사 도구 모음입니다. 모든 처리가 브라우저 안에서 이뤄져 코드나 데이터가 외부 서버로 나가지 않는 것이 가장 큰 특징입니다.',
+      '진법 변환, 인코딩, 정규식, 타임스탬프처럼 개발 중 자주 찾는 변환·검사 도구 모음입니다. 변환·검사 도구는 브라우저 안에서만 처리해 코드나 데이터가 외부 서버로 나가지 않습니다. 외부 조회가 본질인 OG 미리보기·인터넷 회선 진단만 예외입니다.',
     sections: [
       {
         h: '어떤 상황에 무엇을 쓰나요',
@@ -338,13 +338,13 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
       {
         h: '데이터는 기기 밖으로 나가지 않습니다',
         body:
-          '입력한 문자열·코드·데이터는 클라이언트(브라우저)에서만 처리되며 서버로 전송·저장되지 않습니다. 그래서 토큰·로그처럼 민감한 데이터도 비교적 안전하게 다룰 수 있습니다. 다만 공용 PC에서는 화면·클립보드에 남은 값에 유의하세요.',
+          'JSON·Base64·해시·JWT·정규식 같은 변환·검사 도구에 입력한 문자열과 코드는 브라우저에서만 처리되며 서버로 전송·저장되지 않습니다. 그래서 토큰·로그처럼 민감한 데이터도 비교적 안전하게 다룰 수 있습니다. 예외는 두 가지입니다. OG 미리보기는 입력한 공개 URL의 메타 태그를 서버가 대신 가져오고, 인터넷 회선 진단은 측정용 요청을 외부로 보냅니다. 공용 PC에서는 화면·클립보드에 남은 값에도 유의하세요.',
       },
     ],
     faqs: [
       {
         q: '입력한 코드나 데이터가 서버로 전송되나요?',
-        a: '아니요. 변환·검사는 전적으로 브라우저 안에서 수행되며 입력값은 외부로 전송·저장되지 않습니다. 민감한 문자열도 비교적 안심하고 처리할 수 있습니다.',
+        a: '변환·검사 도구는 전적으로 브라우저 안에서 수행되며 입력값은 외부로 전송·저장되지 않습니다. 다만 OG 미리보기는 입력한 공개 URL을 서버가 대신 조회하고, 인터넷 회선 진단은 측정용 요청을 외부 사이트로 보냅니다. 자세한 내용은 개인정보처리방침에 있습니다.',
       },
       {
         q: '표준 알고리즘을 따르나요?',
@@ -354,4 +354,270 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
       MOBILE_FAQ,
     ],
   },
+}
+
+// ──────────────────────────────────────────────────────
+// 허브(분야 페이지) 구조 데이터 — CategoryView가 사용 (스펙 §10.19 · UX 감사 §5-3 Phase A, URL 변경 0)
+//   h1 / guideTitle : 허브 H1 · 본문 시트 제목
+//   groups          : 하위 분류(섹션 + sticky 칩). 여기 없는 도구는 Tool.group → 그래도 없으면 '그 밖의 도구'로 자동 수용
+//                     (통폐합·신규 도구가 생겨도 허브에서 링크가 빠지지 않게)
+//   picks           : 편집 선정 대표 도구 — 조회 순위(GA)가 3개 미만인 분야의 TOP3 보충용. 라벨로 구분 표기
+//   situations      : 본문 시트 '이런 상황이라면 이 계산기' 표 (first = 먼저 볼 도구, next = 이어서)
+// ──────────────────────────────────────────────────────
+
+export interface CategoryGroupDef {
+  name: string
+  /** 한 줄 설명 (섹션 제목 아래) */
+  blurb: string
+  hrefs: string[]
+}
+
+export interface CategorySituation {
+  when: string
+  first: string[]
+  next?: string[]
+}
+
+export interface CategoryHub {
+  h1: string
+  guideTitle: string
+  groups: CategoryGroupDef[]
+  picks: string[]
+  situations: CategorySituation[]
+}
+
+/** 'finance', 'salary', 'loan' → ['/tools/finance/salary', '/tools/finance/loan'] */
+const t = (cat: string, ...slugs: string[]) => slugs.map((s) => `/tools/${cat}/${s}`)
+
+export const CATEGORY_HUBS: Record<string, CategoryHub> = {
+  finance: {
+    h1: '금융·재테크 계산기',
+    guideTitle: '금융 계산기, 이렇게 고르세요',
+    groups: [
+      { name: '급여·4대보험', blurb: '받는 돈을 확인할 때 — 월급, 4대보험, 퇴직금, 실업급여, 연금', hrefs: t('finance', 'salary', '4-insurance', 'severance', 'unemployment-benefit', 'national-pension') },
+      { name: '세금', blurb: '신고 전에 미리 가늠하는 세금 — 연말정산, 종합소득세, 부가세, 양도·보유·상속세', hrefs: t('finance', 'year-end-tax', 'freelance-tax', 'vat', 'capital-gains-tax', 'property-holding-tax', 'inheritance', 'car-tax') },
+      { name: '대출·부동산', blurb: '빌리고 사는 결정 — 대출 한도와 상환액, 전월세 비교, 청약, 경매', hrefs: t('finance', 'loan', 'dsr', 'rent-jeonse', 'housing-score', 'real-estate', 'auction') },
+      { name: '투자·저축', blurb: '돈을 불리는 계산 — 복리, 적금, 배당, 주식, 공모주, 금', hrefs: t('finance', 'compound', 'savings', 'dividend', 'stock', 'ipo-deposit', 'installment', 'gold-converter', 'stock-decision', 'wealth-rank', 'historical-money') },
+      { name: '자동차·가게', blurb: '생활 속 사업·유지비 — 자동차 1년 비용, 음식점 원가율', hrefs: t('finance', 'car-cost', 'cost-rate') },
+    ],
+    picks: t('finance', 'salary', 'loan', 'severance'),
+    situations: [
+      { when: '이직·연봉 협상', first: t('finance', 'salary'), next: t('finance', '4-insurance') },
+      { when: '퇴사', first: t('finance', 'severance'), next: t('finance', 'unemployment-benefit') },
+      { when: '내 집 마련', first: t('finance', 'dsr'), next: t('finance', 'loan', 'housing-score') },
+      { when: '연초 세금 정리', first: t('finance', 'year-end-tax'), next: t('finance', 'freelance-tax') },
+      { when: '목돈 모으기', first: t('finance', 'compound'), next: t('finance', 'savings', 'dividend') },
+    ],
+  },
+  health: {
+    h1: '건강·웰빙 계산기',
+    guideTitle: '건강 계산기, 이렇게 쓰세요',
+    groups: [
+      { name: '체중·영양', blurb: '체형 점검과 식단 계획 — 비만도, 기초대사량, 감량 기간, 영양제', hrefs: t('health', 'bmi', 'bmr', 'weightloss', 'supplement') },
+      { name: '혈당·검진', blurb: '검진 결과지를 읽을 때 — 당화혈색소, 식품 당부하', hrefs: t('health', 'hba1c', 'glycemic-load') },
+      { name: '여성·임신·자녀', blurb: '주기와 임신, 아이 성장 — 배란일, 임신 주수, 예상 키', hrefs: t('health', 'cycle', 'pregnancy', 'child-height') },
+      { name: '생활 건강', blurb: '매일의 컨디션 — 알코올 분해, 카페인, 수면 부채, 자외선, 폭염 수분', hrefs: t('health', 'blood-alcohol', 'caffeine', 'sleep-debt', 'uv-protection', 'heat-hydration') },
+      { name: '반려동물', blurb: '강아지·고양이 나이와 사료량', hrefs: t('health', 'pet') },
+    ],
+    picks: t('health', 'bmi', 'bmr', 'pregnancy'),
+    situations: [
+      { when: '다이어트 시작', first: t('health', 'bmi'), next: t('health', 'bmr', 'weightloss') },
+      { when: '임신 준비·임신 중', first: t('health', 'cycle'), next: t('health', 'pregnancy') },
+      { when: '건강검진 결과 확인', first: t('health', 'hba1c'), next: t('health', 'glycemic-load') },
+      { when: '술자리 다음 날', first: t('health', 'blood-alcohol'), next: t('health', 'sleep-debt') },
+      { when: '폭염 속 야외 활동', first: t('health', 'heat-hydration'), next: t('health', 'uv-protection') },
+    ],
+  },
+  cooking: {
+    h1: '요리·식품 계산기',
+    guideTitle: '요리 계산기, 이렇게 쓰세요',
+    groups: [
+      { name: '매일 요리', blurb: '양과 시간 맞추기 — 레시피 배율, 해동, 전자레인지, 계란, 라면', hrefs: t('cooking', 'recipe', 'serving', 'substitute', 'thawing', 'microwave', 'egg-timer', 'frying', 'ramen') },
+      { name: '베이킹', blurb: '빵과 과자 — 베이커 퍼센트, 제빵 일정, 사워도우, 팬 호수', hrefs: t('cooking', 'baker-percent', 'baking-schedule', 'baking-recipe', 'sourdough', 'cake-pan') },
+      { name: '커피·차', blurb: '추출 비율·온도·시간', hrefs: t('cooking', 'brew', 'tea') },
+      { name: '보관·제철·명절', blurb: '식재료 보관 기한, 과일청, 김장, 차례상, 견과류', hrefs: t('cooking', 'food-storage', 'fruit-syrup', 'kimjang', 'holiday-table', 'nuts') },
+      { name: '이유식', blurb: '배죽 물양과 한 끼 양', hrefs: t('cooking', 'baby-porridge') },
+    ],
+    picks: t('cooking', 'recipe', 'baker-percent', 'microwave'),
+    situations: [
+      { when: '레시피 양 바꾸기', first: t('cooking', 'recipe'), next: t('cooking', 'serving', 'substitute') },
+      { when: '홈베이킹', first: t('cooking', 'baker-percent'), next: t('cooking', 'baking-schedule', 'sourdough') },
+      { when: '냉동 식재료 쓰기', first: t('cooking', 'thawing'), next: t('cooking', 'food-storage', 'microwave') },
+      { when: '명절·김장 준비', first: t('cooking', 'holiday-table'), next: t('cooking', 'kimjang') },
+      { when: '집에서 커피·차', first: t('cooking', 'brew'), next: t('cooking', 'tea') },
+    ],
+  },
+  life: {
+    h1: '생활 계산기',
+    guideTitle: '생활 계산기, 이렇게 쓰세요',
+    groups: [
+      { name: '정산·경조사', blurb: '모임 비용 나누기, 축의금·부의금, 가족 호칭', hrefs: t('life', 'dutch', 'gift-money', 'kinship') },
+      { name: '여행·쇼핑', blurb: '여행 예산·팁·짐, 직구 관부가세, 단가 비교, 배상액', hrefs: t('life', 'travel-budget', 'travel-tip', 'packing', 'customs', 'unit-price', 'residual-value') },
+      { name: '살림·생활', blurb: '빨래 건조, 청소 세제 희석, 집중 타이머, 차대번호', hrefs: t('life', 'laundry-dry', 'cleaning', 'pomodoro', 'vin-decoder') },
+      { name: '뽑기·운세', blurb: '추첨과 재미 — 로또 번호, 랜덤 추첨, 사다리, 띠·별자리', hrefs: t('life', 'lotto', 'random', 'ladder', 'zodiac') },
+      { name: '재미·교양', blurb: '술 도수, 키 백분위, 확률·과학 실험', hrefs: t('life', 'alcohol', 'height-rank', 'monty-hall', 'drake', 'fart-risk') },
+    ],
+    picks: t('life', 'dutch', 'unit-price', 'gift-money'),
+    situations: [
+      { when: '모임·회식 정산', first: t('life', 'dutch'), next: t('life', 'alcohol') },
+      { when: '결혼식·장례식', first: t('life', 'gift-money'), next: t('life', 'kinship') },
+      { when: '해외여행 준비', first: t('life', 'travel-budget'), next: t('life', 'packing', 'travel-tip') },
+      { when: '장보기·해외 직구', first: t('life', 'unit-price'), next: t('life', 'customs') },
+      { when: '대청소', first: t('life', 'cleaning'), next: t('life', 'laundry-dry') },
+    ],
+  },
+  sports: {
+    h1: '스포츠 계산기',
+    guideTitle: '운동 계산기, 이렇게 쓰세요',
+    groups: [
+      { name: '러닝·마라톤', blurb: '페이스, 기록 예측, 훈련 강도, 보급', hrefs: t('sports', 'pace', 'race-predictor', 'race-plan', 'interval-training', 'lsd', 'buildup', 'vo2max', 'carb-loading', 'shoe-mileage') },
+      { name: '헬스·근력', blurb: '최대 중량, 파워리프팅 점수, 하이록스, 체급 감량', hrefs: t('sports', 'one-rm', 'strength-level', 'hyrox', 'fight-weight') },
+      { name: '골프', blurb: '핸디캡, 비용, 비거리, 파크골프, 그립', hrefs: t('sports', 'golf-handicap', 'golf-cost', 'golf-distance', 'park-golf', 'grip-size') },
+      { name: '구기·리그', blurb: '타율·OPS, 승점과 순위 경우의 수, 포메이션', hrefs: t('sports', 'baseball-stats', 'football-points', 'league-scenarios', 'formation') },
+      { name: '아웃도어·수영·사이클', blurb: '등산 시간, 클라이밍 등급, 수영 페이스, 파워존', hrefs: t('sports', 'hiking-time', 'climbing-grade', 'swim-pace', 'ftp-zones') },
+    ],
+    picks: t('sports', 'pace', 'one-rm', 'golf-handicap'),
+    situations: [
+      { when: '첫 마라톤 준비', first: t('sports', 'race-predictor'), next: t('sports', 'pace', 'lsd', 'carb-loading') },
+      { when: '웨이트 트레이닝', first: t('sports', 'one-rm'), next: t('sports', 'strength-level') },
+      { when: '골프 라운드', first: t('sports', 'golf-handicap'), next: t('sports', 'golf-cost', 'golf-distance') },
+      { when: '주말 산행', first: t('sports', 'hiking-time') },
+      { when: '리그 막바지 순위 싸움', first: t('sports', 'league-scenarios'), next: t('sports', 'football-points') },
+    ],
+  },
+  interior: {
+    h1: '주거·인테리어 계산기',
+    guideTitle: '주거·인테리어 계산기, 이렇게 쓰세요',
+    groups: [
+      { name: '인테리어 자재', blurb: '면적 실측과 자재 물량 — 도배, 페인트, 바닥재, 몰딩, 커튼, 지붕', hrefs: t('interior', 'room-area', 'wallpaper', 'paint', 'flooring', 'molding', 'curtain-blind', 'roof') },
+      { name: '냉난방·공기·조명', blurb: '에어컨 평형, 제습기 용량, 환기량, 조명 밝기', hrefs: t('interior', 'ac-capacity', 'dehumidifier', 'ventilation', 'lighting') },
+      { name: '공구·자재·전기', blurb: '나사·볼트 규격, 배관, 전선 굵기, 철근 중량', hrefs: t('interior', 'screw', 'bolt-wrench', 'pipe', 'wire', 'rebar') },
+    ],
+    picks: t('interior', 'room-area', 'wallpaper', 'ac-capacity'),
+    situations: [
+      { when: '이사 전 셀프 시공', first: t('interior', 'room-area'), next: t('interior', 'wallpaper', 'paint', 'flooring') },
+      { when: '여름 냉방·장마', first: t('interior', 'ac-capacity'), next: t('interior', 'dehumidifier') },
+      { when: '조명 교체', first: t('interior', 'lighting'), next: t('interior', 'wire') },
+      { when: '가구 조립·수리', first: t('interior', 'screw'), next: t('interior', 'bolt-wrench') },
+    ],
+  },
+  unit: {
+    h1: '단위 변환기',
+    guideTitle: '단위 변환기, 이렇게 쓰세요',
+    groups: [
+      { name: '일상 변환', blurb: '길이·무게·온도, 평수, 옷·신발 사이즈, 배터리 용량', hrefs: t('unit', 'converter', 'area', 'size', 'battery') },
+      { name: '자동차', blurb: '연비, 타이어 공기압·규격, 썬팅 투과율', hrefs: t('unit', 'fuel-economy', 'tire-pressure', 'window-tint') },
+      { name: '공학·과학', blurb: '경도, 점도, 방사선, 양조 도수·당도', hrefs: t('unit', 'hardness', 'viscosity', 'radiation', 'brewing') },
+    ],
+    picks: t('unit', 'area', 'converter', 'size'),
+    situations: [
+      { when: '아파트 면적 확인', first: t('unit', 'area') },
+      { when: '해외 직구 사이즈', first: t('unit', 'size') },
+      { when: '차량 점검', first: t('unit', 'tire-pressure'), next: t('unit', 'fuel-economy', 'window-tint') },
+      { when: '비행기 보조배터리', first: t('unit', 'battery') },
+    ],
+  },
+  date: {
+    h1: '날짜·시간 계산기',
+    guideTitle: '날짜 계산기, 이렇게 쓰세요',
+    groups: [
+      { name: '날짜 계산', blurb: '만 나이, D-day, 전역일, 생애 시간', hrefs: t('date', 'age', 'dday', 'military', 'life-time') },
+      { name: '달력·연휴', blurb: '연차 붙이기, 양력·음력, 연호', hrefs: t('date', 'holiday-bridge', 'lunar', 'history-era') },
+      { name: '시간·시차', blurb: '서버 시간, 세계 시간대, 시차 적응, 쉥겐 체류일', hrefs: t('date', 'server-time', 'timezone', 'jet-lag', 'schengen') },
+    ],
+    picks: t('date', 'age', 'dday', 'holiday-bridge'),
+    situations: [
+      { when: '연차 계획', first: t('date', 'holiday-bridge') },
+      { when: '기념일·시험 준비', first: t('date', 'dday'), next: t('date', 'age') },
+      { when: '해외 출장·여행', first: t('date', 'timezone'), next: t('date', 'jet-lag', 'schengen') },
+      { when: '티켓팅·수강신청', first: t('date', 'server-time') },
+    ],
+  },
+  art: {
+    h1: '예술·창작 도구',
+    guideTitle: '창작 도구, 이렇게 쓰세요',
+    groups: [
+      { name: '음악', blurb: '음역대, 카포, 코드, 스케일, 템포, 주파수', hrefs: t('art', 'vocal-range', 'capo', 'chord', 'scale', 'bpm', 'tap-tempo', 'frequency') },
+      { name: '디자인·색', blurb: '색상 코드, 그라디언트, 황금 비율, 물감 혼합', hrefs: t('art', 'color', 'gradient-generator', 'golden-ratio', 'paint-mix') },
+      { name: '사진·인쇄', blurb: '노출, 화각, 인쇄 해상도', hrefs: t('art', 'exposure', 'fov', 'print-resolution') },
+      { name: '글쓰기·공예', blurb: '글자수, 더미 텍스트, 모스 부호, 뜨개 게이지', hrefs: t('art', 'charcount', 'lorem', 'morse-code', 'knit-gauge') },
+    ],
+    picks: t('art', 'charcount', 'color', 'chord'),
+    situations: [
+      { when: '노래 키 맞추기', first: t('art', 'vocal-range'), next: t('art', 'capo', 'chord') },
+      { when: '디자인 색 정하기', first: t('art', 'color'), next: t('art', 'gradient-generator') },
+      { when: '자기소개서·원고', first: t('art', 'charcount') },
+      { when: '사진 촬영', first: t('art', 'exposure'), next: t('art', 'fov') },
+      { when: '사진 인화·인쇄', first: t('art', 'print-resolution') },
+    ],
+  },
+  edu: {
+    h1: '교육·학습 도구',
+    guideTitle: '학습 도구, 이렇게 쓰세요',
+    groups: [
+      { name: '시험·공부', blurb: '내신 5등급, 학점 환산, 복습 간격, 인지 테스트', hrefs: t('edu', 'nesin-5grade', 'gpa-converter', 'review-interval', 'cognitive-test') },
+      { name: '과학 실험', blurb: '유효숫자, 과학 단위, 회로, 음속, 룸 모드', hrefs: t('edu', 'sig-figs', 'sci-units', 'circuit-simulator', 'sound-speed', 'room-mode') },
+      { name: '우주·사고력', blurb: '행성 비교, 코스믹 캘린더, 페르미 추정', hrefs: t('edu', 'planet-comparison', 'cosmic-calendar', 'fermi-estimate') },
+    ],
+    picks: t('edu', 'nesin-5grade', 'gpa-converter', 'review-interval'),
+    situations: [
+      { when: '내신 성적 계산', first: t('edu', 'nesin-5grade') },
+      { when: '유학·편입 서류', first: t('edu', 'gpa-converter') },
+      { when: '시험 공부 계획', first: t('edu', 'review-interval') },
+      { when: '실험 보고서', first: t('edu', 'sig-figs'), next: t('edu', 'sci-units') },
+      { when: '과학 수업 자료', first: t('edu', 'planet-comparison'), next: t('edu', 'cosmic-calendar') },
+    ],
+  },
+  dev: {
+    h1: '개발자 도구',
+    guideTitle: '개발자 도구, 이렇게 쓰세요',
+    groups: [
+      { name: '데이터 포맷·인코딩', blurb: 'JSON·YAML, Base64, URL 인코딩, 진법, CSS 단위', hrefs: t('dev', 'json', 'yaml-json', 'base64', 'url-encode', 'number-base', 'css-converter') },
+      { name: '텍스트·보안', blurb: '정규식, 해시, JWT, 한영타 복원', hrefs: t('dev', 'regex', 'hash', 'jwt', 'keyboard-layout') },
+      { name: '웹·API', blurb: 'cURL 변환, HTTP 상태 코드, 크론, OG 미리보기, 회선 진단', hrefs: t('dev', 'curl', 'http-status', 'cron', 'og-preview', 'network-test') },
+      { name: 'AI·설계', blurb: 'LLM 토큰·VRAM, 기술 스택 추천', hrefs: t('dev', 'token-counter', 'llm-vram', 'tech-stack') },
+    ],
+    picks: t('dev', 'json', 'regex', 'base64'),
+    situations: [
+      { when: 'API 디버깅', first: t('dev', 'curl'), next: t('dev', 'http-status', 'json') },
+      { when: '인증 토큰 확인', first: t('dev', 'jwt'), next: t('dev', 'base64') },
+      { when: '배치 작업 예약', first: t('dev', 'cron') },
+      { when: 'LLM 비용·사양 검토', first: t('dev', 'token-counter'), next: t('dev', 'llm-vram') },
+      { when: '공유 카드 점검', first: t('dev', 'og-preview') },
+    ],
+  },
+}
+
+/** 하위 분류를 못 찾은 도구가 모이는 그룹 이름 */
+export const OTHER_GROUP = '그 밖의 도구'
+
+export interface ResolvedGroup<T extends { href: string; group?: string }> {
+  id: string
+  name: string
+  blurb: string
+  tools: T[]
+}
+
+/** 분야 도구를 하위 분류로 나눈다. 우선순위: Tool.group(레지스트리) > CATEGORY_HUBS 그룹 hrefs > '그 밖의 도구'.
+ *  그룹 안 순서는 hrefs 순서(편집 순), 그다음 레지스트리 순. 빈 그룹은 버린다 → 통폐합으로 도구가 빠져도 안전 */
+export function resolveGroups<T extends { href: string; group?: string }>(catId: string, tools: readonly T[]): ResolvedGroup<T>[] {
+  const hub = CATEGORY_HUBS[catId]
+  const defs = hub?.groups ?? []
+  const byName = new Map<string, ResolvedGroup<T>>()
+  defs.forEach((g, i) => byName.set(g.name, { id: `g${i + 1}`, name: g.name, blurb: g.blurb, tools: [] }))
+  const order = new Map<string, number>()
+  defs.forEach((g) => g.hrefs.forEach((h, i) => { if (!order.has(h)) order.set(h, i) }))
+  const other: ResolvedGroup<T> = { id: `g${defs.length + 1}`, name: OTHER_GROUP, blurb: '아직 하위 분류를 정하지 않은 도구', tools: [] }
+  for (const tool of tools) {
+    const named = tool.group ?? defs.find((g) => g.hrefs.includes(tool.href))?.name
+    let target = named ? byName.get(named) : undefined
+    if (!target && named) { // 레지스트리에만 있는 새 그룹 이름
+      target = { id: `g${byName.size + 2}`, name: named, blurb: '', tools: [] }
+      byName.set(named, target)
+    }
+    ;(target ?? other).tools.push(tool)
+  }
+  const out = [...byName.values(), other].filter((g) => g.tools.length > 0)
+  for (const g of out) g.tools.sort((a, b) => (order.get(a.href) ?? 999) - (order.get(b.href) ?? 999))
+  return out.map((g, i) => ({ ...g, id: `g${i + 1}` }))
 }

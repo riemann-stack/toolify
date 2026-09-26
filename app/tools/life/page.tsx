@@ -11,7 +11,7 @@ export default function LifeCategoryPage() {
   return (
     <CategoryView
       catId="life"
-      description="추첨·더치페이·여행 예산·외계 문명까지 — 일상의 선택과 호기심을 위한 실용 도구."
+      description="모임 정산과 경조사, 여행·직구 준비, 살림처럼 일상의 작은 결정을 돕는 도구입니다. 추첨·운세 도구는 재미로만 쓰세요."
     />
   )
 }

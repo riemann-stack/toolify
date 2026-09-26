@@ -11,7 +11,7 @@ export default function ArtCategoryPage() {
   return (
     <CategoryView
       catId="art"
-      description="음악·디자인·사진·글쓰기 — 크리에이터의 일상 작업을 가볍게 만드는 창작 도구 모음."
+      description="노래 키와 코드, 색상 코드, 사진 노출, 글자수처럼 창작 작업 중에 필요한 변환과 계산을 모았습니다."
     />
   )
 }
