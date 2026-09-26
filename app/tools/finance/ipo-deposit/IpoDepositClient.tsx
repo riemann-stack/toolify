@@ -129,13 +129,15 @@ export default function IpoDepositClient() {
 
   const downloadCSV = () => {
     const csv = memosToCSV(memos)
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    // UTF-8 BOM — Windows Excel에서 한글(종목명·메모)이 깨지지 않도록
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
     a.download = `youtil-ipo-memo-${todayKST()}.csv`
     a.click()
-    URL.revokeObjectURL(url)
+    // 즉시 revoke하면 일부 브라우저에서 다운로드가 시작되기 전에 URL이 무효화됨
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
   // ── 마크다운 카드 (현재 비례 모드 결과) ─
@@ -324,7 +326,7 @@ export default function IpoDepositClient() {
 
           {depositResult && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLabel}>비례 {numTarget}주를 받으려면</p>
                 <p className={s.heroValue}>약 <strong>{fmtKrwShort(depositResult.depositRequired)}</strong></p>
                 <p className={s.heroSub}>
@@ -407,7 +409,7 @@ export default function IpoDepositClient() {
 
           {sharesResult && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLabel}>{fmtKrwShort(numDeposit)} 증거금</p>
                 <p className={s.heroValue}>비례 약 <strong>{sharesResult.proportionalAlloc}주</strong></p>
                 <p className={s.heroSub}>+ 균등 기대 {numEven}주 = 총 {sharesResult.totalAlloc}주 (예상)</p>

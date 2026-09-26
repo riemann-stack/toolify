@@ -17,20 +17,41 @@ type Direction = 'past_to_now' | 'now_to_past'
 const PRESET_YEARS = [1950, 1960, 1970, 1980, 1990]
 const PRESET_AMOUNTS = [1000, 10000, 100000, 1000000, 10000000]
 
+/** 누적 배수 표기 — 10배 미만은 소수 둘째 자리(×1.23), 이상은 정수 */
+const fmtFactor = (f: number): string => (f < 10 ? f.toFixed(2) : Math.round(f).toLocaleString('ko-KR'))
+
 export default function HistoricalMoneyClient() {
   const [direction, setDirection] = useState<Direction>('past_to_now')
   const [pastYear, setPastYear] = useState(1970)
+  // 연도 직접 입력칸은 문자열로 따로 둔다 — 매 키 입력마다 클램프하면 '1985'를 칠 수 없음(첫 '1'에서 1945로 튐)
+  const [yearStr, setYearStr] = useState('1970')
   const [amount, setAmount] = useState('10000')
+
+  const selectYear = (y: number) => {
+    setPastYear(y)
+    setYearStr(String(y))
+  }
+  const commitYearStr = () => {
+    const n = parseInt(yearStr, 10)
+    if (!Number.isFinite(n)) { setYearStr(String(pastYear)); return }
+    selectYear(Math.max(YEAR_MIN, Math.min(YEAR_MAX - 1, n)))
+  }
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (j.direction) setDirection(j.direction)
-      if (typeof j.pastYear === 'number') setPastYear(j.pastYear)
-      if (typeof j.amount === 'string') setAmount(j.amount)
+      const parsed: unknown = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return
+      const j = parsed as Record<string, unknown>
+      /* eslint-disable react-hooks/set-state-in-effect */
+      if (j.direction === 'past_to_now' || j.direction === 'now_to_past') setDirection(j.direction)
+      if (typeof j.pastYear === 'number' && Number.isInteger(j.pastYear) && j.pastYear >= YEAR_MIN && j.pastYear <= YEAR_MAX - 1) {
+        setPastYear(j.pastYear)
+        setYearStr(String(j.pastYear))
+      }
+      if (typeof j.amount === 'string' && /^\d{0,15}(\.\d*)?$/.test(j.amount)) setAmount(j.amount)
+      /* eslint-enable react-hooks/set-state-in-effect */
     } catch {}
   }, [])
   useEffect(() => {
@@ -114,7 +135,7 @@ export default function HistoricalMoneyClient() {
         </span>
         <div className={s.inputGrid}>
           <div className={s.inputField}>
-            <label className={s.fieldLabel}>
+            <label className={s.fieldLabel} htmlFor="hm-year">
               {direction === 'past_to_now' ? '과거 연도' : '비교할 과거 연도'}
               <span className={s.fieldHint}>{pastEra.label} ({pastEra.startYear}~{pastEra.endYear === 2100 ? '' : pastEra.endYear})</span>
             </label>
@@ -124,18 +145,24 @@ export default function HistoricalMoneyClient() {
               max={YEAR_MAX - 1}
               step={1}
               value={pastYear}
-              onChange={(e) => setPastYear(+e.target.value)}
+              onChange={(e) => selectYear(+e.target.value)}
               className={s.slider}
               aria-label="과거 연도"
               aria-valuetext={`${pastYear}년`}
             />
             <div className={s.sliderHead}>
               <input
-                type="number" inputMode="decimal"
-                min={YEAR_MIN}
-                max={YEAR_MAX - 1}
-                value={pastYear}
-                onChange={(e) => setPastYear(Math.max(YEAR_MIN, Math.min(YEAR_MAX - 1, +e.target.value || 1970)))}
+                id="hm-year"
+                type="text" inputMode="numeric" maxLength={4}
+                value={yearStr}
+                onChange={(e) => {
+                  const v = e.target.value.replace(/\D/g, '').slice(0, 4)
+                  setYearStr(v)
+                  const n = Number(v)
+                  if (v.length === 4 && n >= YEAR_MIN && n <= YEAR_MAX - 1) setPastYear(n)
+                }}
+                onBlur={commitYearStr}
+                onKeyDown={(e) => { if (e.key === 'Enter') commitYearStr() }}
                 className={s.yearInput}
               />
               <span>년</span>
@@ -145,7 +172,7 @@ export default function HistoricalMoneyClient() {
                 <button key={y} type="button"
                   aria-pressed={pastYear === y}
                   className={`${s.presetBtn} ${pastYear === y ? s.presetBtnActive : ''}`}
-                  onClick={() => setPastYear(y)}>
+                  onClick={() => selectYear(y)}>
                   {y}
                 </button>
               ))}
@@ -214,11 +241,11 @@ export default function HistoricalMoneyClient() {
             </div>
             {direction === 'past_to_now' && result.inflationFactor > 1 && (
               <div className={s.heroNote}>
-                누적 인플레 <strong className={s.factorAccent}>×{result.inflationFactor.toFixed(0)}</strong>
+                누적 인플레 <strong className={s.factorAccent}>×{fmtFactor(result.inflationFactor)}</strong>
               </div>
             )}
             <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.4 }}>
-              ※ {CURRENT_YEAR}년 물가는 확정 전 추정치 (연 +1.8% 가정)
+              ※ {CURRENT_YEAR}년 물가는 확정 전 추정치 (전년 대비 +2% 가정)
             </div>
           </div>
         </div>

@@ -15,7 +15,7 @@ export type RateSet = {
   health:     { total: number; employee: number; employer: number }                                    // %
   ltc:        { rateOfSalary: number; employee: number; employer: number }                             // 보수월액 대비 %
   unemp:      { employee: number; employer: number; extra: { under150: number; under1000: number; over1000: number } } // %
-  workersCompAvg: number  // 산재 전 업종 평균 %
+  workersCompAvg: number  // 산재 전 업종 평균 % (고용노동부 발표 평균 요율)
 }
 
 /* 법정 최저시급 (시간급, 원) — 고용노동부 확정·고시.
@@ -31,16 +31,51 @@ export const INSURANCE_RATES: Record<2025 | 2026, RateSet> = {
     health:  { total: 7.09, employee: 3.545,  employer: 3.545 },
     ltc:     { rateOfSalary: 0.9182, employee: 0.4591,  employer: 0.4591 },
     unemp:   { employee: 0.9, employer: 0.9, extra: { under150: 0.25, under1000: 0.65, over1000: 0.85 } },
-    workersCompAvg: 1.43,
+    workersCompAvg: 1.47,
   },
   2026: {
     pension: { total: 9.5,  employee: 4.75,   employer: 4.75 },
     health:  { total: 7.19, employee: 3.595,  employer: 3.595 },
     ltc:     { rateOfSalary: 0.9448, employee: 0.4724,  employer: 0.4724 },
     unemp:   { employee: 0.9, employer: 0.9, extra: { under150: 0.25, under1000: 0.65, over1000: 0.85 } },
-    workersCompAvg: 1.43,
+    workersCompAvg: 1.47,  // 고용노동부 '2026년 평균 산재보험료율 1.47% 유지'(2025.12)
   },
 }
+
+/* ──────────────────────────────────────────────────────
+   산재보험 사업종류별 보험료율 — 천분율(‰). 화면 %로 쓸 때는 ÷10.
+   근거: 고용노동부 고시 「2026년도 사업종류별 산재보험료율」(moel.go.kr 훈령·예규·고시 bbs_seq=20251201757),
+         「2025년도 사업종류별 산재보험료율」(bbs_seq=20241201937) — 아래 대표 업종은 두 해 요율이 같다.
+   · 출퇴근재해 요율 0.6‰은 전 업종 공통 별도 가산 (WORKERS_COMP_COMMUTE_PERMILLE)
+   · 임금채권부담금 0.6‰은 산재보험료와 함께 사업주가 납부 (WAGE_CLAIM_LEVY_PERMILLE)
+   대표 업종만 싣는다 — 사업장의 실제 사업종류·요율은 근로복지공단 고지 기준.
+   ────────────────────────────────────────────────────── */
+export interface WorkersCompIndustry {
+  readonly key: string
+  readonly name: string
+  /** 사업종류별 산재보험료율 (‰, 출퇴근재해분 제외) */
+  readonly permille: number
+}
+
+const WORKERS_COMP_INDUSTRIES_BASE: readonly WorkersCompIndustry[] = [
+  { key: 'finance',      name: '금융·보험업',                       permille: 5 },
+  { key: 'service',      name: '전문·보건·교육·여가 서비스업',       permille: 6 },
+  { key: 'electronics',  name: '전기기계·정밀기구·전자제품 제조업',   permille: 6 },
+  { key: 'retail',       name: '도소매·음식·숙박업',                 permille: 8 },
+  { key: 'food',         name: '식료품 제조업',                      permille: 16 },
+  { key: 'transport',    name: '육상·수상운수업',                    permille: 18 },
+  { key: 'construction', name: '건설업',                             permille: 35 },
+]
+
+export const WORKERS_COMP_INDUSTRIES: Record<2025 | 2026, readonly WorkersCompIndustry[]> = {
+  2025: WORKERS_COMP_INDUSTRIES_BASE,
+  2026: WORKERS_COMP_INDUSTRIES_BASE,
+}
+
+/** 출퇴근재해 산재보험료율 (‰, 전 업종 공통) */
+export const WORKERS_COMP_COMMUTE_PERMILLE = 0.6
+/** 임금채권부담금 비율 (‰, 사업주 부담) */
+export const WAGE_CLAIM_LEVY_PERMILLE = 0.6
 
 /* ──────────────────────────────────────────────────────
    국민연금 기준소득월액 상·하한 — 기간(월) 스케줄
@@ -48,7 +83,7 @@ export const INSURANCE_RATES: Record<2025 | 2026, RateSet> = {
          보건복지부 장관 고시로 **매년 7월 1일 ~ 다음 해 6월 30일** 적용.
    · 2024.7~2025.6: 39만 ~ 617만
    · 2025.7~2026.6: 40만 ~ 637만
-   · 2026.7~2027.6: 41만 ~ 659만 (저장소 기존 값 — NPS 고시로 재확인 권장)
+   · 2026.7~2027.6: 41만 ~ 659만 (국민연금공단 '2026년도 기준소득월액 상·하한액 조정' 안내로 확인)
    새 고시가 나오면 배열 끝에 { from: 'YYYY-07', ... }를 추가만 하면 된다(from 오름차순 유지).
    ────────────────────────────────────────────────────── */
 

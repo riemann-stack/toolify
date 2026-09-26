@@ -7,9 +7,19 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { todayStr } from '@/lib/date'
-import { INSURANCE_RATES, PENSION_BASE_CURRENT, previousPensionBase, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
+import {
+  INSURANCE_RATES, PENSION_BASE_CURRENT, previousPensionBase, pensionBasePeriodLabel,
+  WORKERS_COMP_INDUSTRIES, WORKERS_COMP_COMMUTE_PERMILLE, WAGE_CLAIM_LEVY_PERMILLE,
+} from '@/lib/krInsuranceRates'
 
 const R26 = INSURANCE_RATES[2026]
+
+/* 산재보험 — lib 고시 요율(‰)에서 파생. 예시표는 금융·보험업(최저 요율 업종) 기준 */
+const WC26 = WORKERS_COMP_INDUSTRIES[2026]
+const WC_MIN = Math.min(...WC26.map(i => i.permille)) / 10          // %
+const WC_MAX = Math.max(...WC26.map(i => i.permille)) / 10          // %
+const WC_EXTRA = (WORKERS_COMP_COMMUTE_PERMILLE + WAGE_CLAIM_LEVY_PERMILLE) / 10 // 0.12%
+const WC_FIN = (WC26.find(i => i.key === 'finance')?.permille ?? 5) / 10          // 0.5%
 
 /* 국민연금 기준소득월액 상·하한 — lib 스케줄에서 빌드 시점 구간을 보간 (매년 7월 개정) */
 const PB = PENSION_BASE_CURRENT
@@ -31,7 +41,7 @@ const FAQ_LD = [
               },
               {
                 q: '직원 1명 채용 시 회사가 실제 부담하는 금액은 얼마인가요?',
-                a: '월급 300만원 직원 채용 시 회사는 <strong>월 약 30만원의 4대보험을 추가 부담</strong>합니다. 세부 내역은 국민연금 14만 2천원, 건강보험 10만 8천원, 장기요양 1만 4천원, 고용보험(실업급여+사업주 추가) 약 3만 4천원, 산재보험은 업종별 변동입니다. 따라서 회사 총 인건비는 월 약 330만원이며, 연간으로는 약 3,960만원 수준입니다. 추가로 퇴직금·연차·상여 등이 별도로 발생합니다.',
+                a: '월급 300만원 직원 채용 시 회사는 <strong>월 약 30만원의 4대보험을 추가 부담</strong>합니다. 세부 내역은 국민연금 14만 2천원, 건강보험 10만 8천원, 장기요양 1만 4천원, 고용보험(실업급여+사업주 추가) 약 3만 4천원이고, 여기에 업종별 산재보험료가 더해집니다(금융·보험업이면 출퇴근재해·임금채권부담금 포함 0.62%로 약 1만 9천원, 건설업이면 약 11만원). 금융·보험업 기준 회사 총 인건비는 월 약 332만원, 연간 약 3,980만원 수준입니다. 추가로 퇴직금·연차·상여 등이 별도로 발생합니다.',
               },
               {
                 q: '알바도 4대보험에 의무 가입해야 하나요?',
@@ -92,11 +102,11 @@ export default function FourInsurancePage() {
                   { n: '장기요양보험*',     c: '#EA580C', t: `${R26.ltc.rateOfSalary}%`, e: `${R26.ltc.employee}%`, r: `${R26.ltc.employer}%` },
                   { n: '고용보험 (실업급여)', c: '#0891B2', t: `${Math.round((R26.unemp.employee + R26.unemp.employer) * 1e4) / 1e4}%`,  e: `${R26.unemp.employee}%`,  r: `${R26.unemp.employer}%` },
                   { n: '고용보험 (사업주 추가)', c: '#0891B2', t: `${R26.unemp.extra.under150}~${R26.unemp.extra.over1000}%`, e: '0%', r: `${R26.unemp.extra.under150}~${R26.unemp.extra.over1000}%` },
-                  { n: '산재보험',          c: '#A16207', t: '업종별 0.07~3.6%', e: '0%', r: '100%' },
+                  { n: '산재보험',          c: '#A16207', t: `업종별 ${WC_MIN}~${WC_MAX}% 등`, e: '0%', r: '100%' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, boxShadow: `inset 3px 0 0 0 ${r.c}`, paddingLeft: 16 }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.e}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
                   </tr>
@@ -105,7 +115,8 @@ export default function FourInsurancePage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            * 장기요양보험은 보수월액 기준 0.9448% (건강보험료의 약 13.14%로 환산)
+            * 장기요양보험은 보수월액 기준 0.9448% (건강보험료의 약 13.14%로 환산)<br />
+            * 산재보험은 사업종류별 고시 요율(예: 금융·보험업 {WC_FIN}%, 건설업 {WC_MAX}%)에 출퇴근재해 0.06%가 더해지고, 임금채권부담금 0.06%도 사업주가 함께 냅니다. 광업·임업 등 고위험 업종은 요율이 더 높습니다.
           </p>
         </div>
 
@@ -124,13 +135,13 @@ export default function FourInsurancePage() {
             lineHeight: 1.95,
           }}>
             <ul style={{ paddingLeft: 20, margin: 0 }}>
-              <li>국민연금 <strong style={{ color: 'var(--accent)' }}>9% → 9.5%</strong> (0.5%p ↑) — 1998년 이후 28년 만의 인상</li>
-              <li>건강보험 <strong style={{ color: 'var(--accent)' }}>7.09% → 7.19%</strong> (0.1%p ↑)</li>
-              <li>장기요양 <strong style={{ color: 'var(--accent)' }}>0.9182% → 0.9448%</strong> (2.9% ↑)</li>
+              <li>국민연금 <strong style={{ color: 'var(--accent-ink)' }}>9% → 9.5%</strong> (0.5%p ↑) — 1998년 이후 28년 만의 인상</li>
+              <li>건강보험 <strong style={{ color: 'var(--accent-ink)' }}>7.09% → 7.19%</strong> (0.1%p ↑)</li>
+              <li>장기요양 <strong style={{ color: 'var(--accent-ink)' }}>0.9182% → 0.9448%</strong> (2.9% ↑)</li>
               <li>고용보험 <strong>1.8% 동결</strong></li>
               <li>산재보험 — 업종별 변동 (12월 말 고시)</li>
-              <li>국민연금 기준소득월액 상한 <strong style={{ color: 'var(--accent)' }}>{PB_PREV ? `${man(PB_PREV.max)} → ` : ''}{man(PB.max)}원</strong> ({PB_LABEL} 적용 · 매년 7월 조정)</li>
-              <li>국민연금 기준소득월액 하한 <strong style={{ color: 'var(--accent)' }}>{PB_PREV ? `${man(PB_PREV.min)} → ` : ''}{man(PB.min)}원</strong></li>
+              <li>국민연금 기준소득월액 상한 <strong style={{ color: 'var(--accent-ink)' }}>{PB_PREV ? `${man(PB_PREV.max)} → ` : ''}{man(PB.max)}원</strong> ({PB_LABEL} 적용 · 매년 7월 조정)</li>
+              <li>국민연금 기준소득월액 하한 <strong style={{ color: 'var(--accent-ink)' }}>{PB_PREV ? `${man(PB_PREV.min)} → ` : ''}{man(PB.min)}원</strong></li>
             </ul>
           </div>
         </div>
@@ -162,7 +173,7 @@ export default function FourInsurancePage() {
             직원 1명 채용 시 회사 실제 부담
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.6 }}>
-            월급 300만원 · 150인 미만 · 사무직 기준
+            월급 300만원 · 150인 미만 · 금융·보험업 기준 (비과세 없음)
           </p>
           <div>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -179,13 +190,13 @@ export default function FourInsurancePage() {
                   { i: '건강보험 사업주 (3.595%)',     v: '107,850원',       a: false },
                   { i: '장기요양 사업주 (0.4724%)',    v: '14,170원',        a: false },
                   { i: '고용보험 사업주 (실업+추가)',  v: '34,500원',        a: false },
-                  { i: '산재보험 사업주 (0.07%+0.12%)', v: '약 5,700원', a: false },
-                  { i: '회사 월 총 부담',              v: '약 3,304,720원', a: true },
-                  { i: '회사 연 총 부담',              v: '약 39,656,640원', a: true },
+                  { i: `산재보험 사업주 (${WC_FIN}%+${WC_EXTRA}%)`, v: '18,600원', a: false },
+                  { i: '회사 월 총 부담',              v: '약 3,317,620원', a: true },
+                  { i: '회사 연 총 부담',              v: '약 39,811,440원', a: true },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: r.a ? 'var(--accent-dim)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
-                    <td style={{ padding: '10px 12px', color: r.a ? 'var(--accent)' : 'var(--text)', fontWeight: r.a ? 800 : 600 }}>{r.i}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.a ? 'var(--accent)' : 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: r.a ? 800 : 700, fontSize: r.a ? 14 : 13 }}>{r.v}</td>
+                    <td style={{ padding: '10px 12px', color: r.a ? 'var(--accent-ink)' : 'var(--text)', fontWeight: r.a ? 800 : 600 }}>{r.i}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.a ? 'var(--accent-ink)' : 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: r.a ? 800 : 700, fontSize: r.a ? 14 : 13 }}>{r.v}</td>
                   </tr>
                 ))}
               </tbody>

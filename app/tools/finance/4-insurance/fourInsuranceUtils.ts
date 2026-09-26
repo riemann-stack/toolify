@@ -4,7 +4,7 @@
    ────────────────────────────────────────────────────── */
 
 import {
-  INSURANCE_RATES, pensionBaseAt, toYearMonth,
+  INSURANCE_RATES, pensionBaseAt, pensionBaseUntil, toYearMonth,
   type PensionBasePeriod, type RateSet,
 } from '@/lib/krInsuranceRates'
 
@@ -20,6 +20,17 @@ export function pensionBaseForYear(year: number, asOf: string): PensionBasePerio
   const asOfYm = toYearMonth(asOf)
   const yearEnd = toYearMonth({ year, month: 12 })
   return pensionBaseAt(asOfYm < yearEnd ? asOfYm : yearEnd)
+}
+
+/** 선택 연도 화면용 적용기간 표기. 요율(INSURANCE_RATES)은 연도 단위로 바뀌므로
+ *  상·하한 구간(7월~익년 6월)을 그 해 안으로 잘라 보여준다.
+ *  예: 2025 + 2025.7~2026.6 구간 → '2025년 7~12월' (2026년 1월부터는 요율 9.5%) */
+export function yearViewLabel(year: number, p: PensionBasePeriod): string {
+  const [fy, fm] = p.from.split('-').map(Number)
+  const [ty, tm] = pensionBaseUntil(p).split('-').map(Number)
+  const startM = fy < year ? 1 : fm
+  const endM = ty > year ? 12 : tm
+  return startM === endM ? `${year}년 ${startM}월` : `${year}년 ${startM}~${endM}월`
 }
 
 export type CalcInput = {

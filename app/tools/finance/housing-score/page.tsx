@@ -5,6 +5,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { todayStr } from '@/lib/date'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/housing-score',
@@ -76,8 +77,8 @@ const faqAnswer: React.CSSProperties = {
 const FAQ_LD = [
   { "q":"청약 가점은 어디서 공식 확인하나요?","a":"한국부동산원 청약홈(applyhome.co.kr)에서 본인 인증 후 공식 가점을 조회할 수 있습니다. 청약 신청 시 청약홈에서 자동 계산되며, 본 도구의 결과와 약간 다를 수 있습니다(특수 케이스). 청약 신청 직전 반드시 청약홈에서 재확인하세요." },
   { "q":"만 30세 이전에 결혼하면 가점이 얼마나 유리한가요?","a":"매우 유리합니다. 예: 만 27세 결혼 시 결혼일부터 무주택 기간 카운트 → 만 42세 시점에 15년 누적 = 무주택 32점 만점. 반면 미혼이라면 만 30세부터 카운트 → 만 45세에야 만점. 3년 차이 = 무주택 6점 차이로 인기 단지 당락을 가를 수 있습니다." },
-  { "q":"1주택자도 청약 가능한가요?","a":"가능하지만 가점은 0점 (무주택 영역)입니다. ① 1주택 + 처분서약: 무주택자로 간주되어 가점 회복, 단 입주 전 매도 완료 필수. ② 1주택 + 미서약: 추첨제로만 청약 가능 (민영 분양 한정). ③ 다주택: 가점제 불가, 추첨제 우선순위도 후순위. 처분 미이행 시 분양 취소 + 10년 청약 제한이 따르므로 신중히 결정하세요." },
-  { "q":"부모님을 부양가족으로 인정받으려면?","a":"다음 4가지를 모두 충족해야 합니다. ① 만 60세 이상 (모두 만 60세 이상이어야 인정) ② 3년 이상 동일 세대 등록 (주민등록상 동거) ③ 본인이 세대주 + 부모가 세대원 ④ 부모도 무주택 (주택 소유 시 부양가족 제외). 주의: 위장전입 적발 시 분양 취소 + 형사처벌. 실거주·생활비 지원 증빙 필수." },
+  { "q":"1주택자도 청약 가능한가요?","a":"가능하지만 무주택 기간 가점은 0점입니다. 입주자모집공고일 현재 주택을 가진 세대는 처분 조건을 걸어도 무주택 기간 점수를 받지 못하며, 처분 조건은 주로 민영주택 추첨제 청약 자격과 관련된 제도입니다. 다주택자는 가점제 불가, 추첨제에서도 후순위입니다. 처분 조건으로 당첨된 뒤 기한 내 처분하지 않으면 공급계약 취소 등 불이익이 따르므로 신중히 결정하세요. 이미 집을 팔았다면 그 처분일부터 무주택 기간을 다시 셉니다." },
+  { "q":"부모님을 부양가족으로 인정받으려면?","a":"다음 3가지를 모두 충족해야 합니다. ① 신청자 본인이 세대주 ② 부모(직계존속)가 최근 3년 이상 계속 같은 주민등록표에 등재 ③ 부모와 그 배우자 모두 무주택(한 명이라도 주택을 가지면 부양가족 제외). 나이 요건은 없습니다(만 60세 기준은 무주택 판정 특례, 만 65세는 노부모부양 특별공급 요건이라 별개입니다). 주의: 위장전입 적발 시 분양 취소 + 형사처벌. 실거주·생활비 지원 증빙 필수." },
   { "q":"가점이 부족한데 어떻게 해야 하나요?","a":"세 가지 전략을 병행하세요. ① 특별공급 자격 확인 — 신혼부부·생애최초·다자녀 자격 있으면 가점 무관 또는 별도 가점제로 경쟁. ② 추첨제 단지 노리기 — 민영 분양 중 추첨제 비율이 큰 단지 (강남 등은 추첨제 비율 높음). ③ 가점 누적 후 도전 — 통장 유지 + 무주택 유지로 5~10년 후 만점 도전. 가점이 부족한 30대는 특별공급 + 추첨제 비중 큰 단지를 우선 검토하세요." },
   { "q":"청약통장은 언제 만들어야 하나요?","a":"지금 당장이 정답입니다. 가점은 가입기간만 보므로, 매달 2만 원이라도 자동이체로 일찍 만드는 게 유리합니다. ① 월 10만 원: 1순위 납입 충족 + 연말정산 소득공제(무주택 세대주·총급여 7천만 원 이하, 연 납입 300만 원 한도의 40% 공제 — 2024년 상향). ② 월 25만 원: 소득공제 한도(연 300만 원)까지 채워 절세 극대화. ③ 월 50만 원: 가능한 빨리 예치금 충족 → 큰 평수 청약 가능. 청약통장 가입 후 15년이면 17점 만점 — 결혼·자녀와 무관한 안정적 가점원입니다." },
   { "q":"본 도구의 정확도는?","a":"일반적인 케이스는 청약홈 공식 계산과 같은 규칙(주택공급에 관한 규칙 별표1)으로 계산하지만, 다음 특수 케이스는 반드시 청약홈에서 재확인하세요. ① 이혼·재혼·사별 ② 1주택 처분 후 무주택 전환 (처분 시점 산정) ③ 해외 거주 기간이 있는 경우 ④ 군 복무로 인한 세대 분리 ⑤ 특수관계인 (장애인 직계존속 동거 등). 본 도구는 예상 가점과 전략 수립용으로 활용하시고, 청약 직전엔 청약홈 공식 조회가 필수입니다." }
@@ -96,7 +97,8 @@ export default function HousingScorePage() {
 
       <UpdatedMeta date="2026년 5월" basis="2026년 주택청약 제도 기준" sources={[{"label":"청약홈","href":"https://www.applyhome.co.kr"},{"label":"국토교통부","href":"https://www.molit.go.kr"}]} />
 
-      <HousingScoreClient />
+      {/* buildDate: SSG와 hydration이 같은 기준일을 쓰도록 빌드 시점 날짜 전달 (useToday 참고) */}
+      <HousingScoreClient buildDate={todayStr()} />
 
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
@@ -152,8 +154,8 @@ export default function HousingScorePage() {
               <li><strong style={{ color: 'var(--text)' }}>만 30세 이상 + 미혼</strong>: 만 30세 생일부터</li>
               <li><strong style={{ color: 'var(--text)' }}>30세 이전 결혼</strong>: 혼인 신고일부터 (가장 유리)</li>
               <li><strong style={{ color: 'var(--text)' }}>30세 이후 결혼·이혼</strong>: 만 30세 생일부터 (결혼일과 무관)</li>
-              <li><strong style={{ color: 'var(--text)' }}>만 30세 미만 + 미혼</strong>: <strong style={{ color: '#DC2626' }}>0년 (불리)</strong></li>
-              <li><strong style={{ color: 'var(--text)' }}>1주택 처분서약</strong>: 매도일 또는 처분 동의일부터 카운트 재시작</li>
+              <li><strong style={{ color: 'var(--text)' }}>만 30세 미만 + 미혼</strong>: <strong style={{ color: '#DC2626' }}>산정 전 — 0점 (불리)</strong></li>
+              <li><strong style={{ color: 'var(--text)' }}>주택 소유 중 (처분 조건 포함)</strong>: 0점 — 처분해 무주택이 된 날부터 다시 카운트</li>
             </ul>
           </div>
           <div style={{ ...card, padding: 0, overflow: 'hidden', marginTop: 12 }}>
@@ -190,11 +192,11 @@ export default function HousingScorePage() {
             {[
               { name: '✅ 배우자', desc: '혼인 신고 후 동일 세대 등록' },
               { name: '✅ 자녀 (미성년)', desc: '만 19세 미만 — 전원 인정' },
-              { name: '✅ 자녀 (성인 미혼)', desc: '만 30세 미만 미혼 + 동일 세대' },
-              { name: '✅ 직계존속 (부모)', desc: '만 60세 이상 + 동일 세대 3년 이상' },
-              { name: '✅ 조부모·외조부모', desc: '직계존속 포함 — 만 60세↑ + 동거 3년↑' },
+              { name: '✅ 자녀 (성인 미혼)', desc: '미혼 + 동일 세대 (만 30세 이상은 최근 1년 이상 같은 등본)' },
+              { name: '✅ 직계존속 (부모)', desc: '본인이 세대주 + 최근 3년 이상 같은 등본 + 부모 부부 모두 무주택' },
+              { name: '✅ 조부모·외조부모', desc: '직계존속 포함 — 부모와 같은 요건 (나이 요건 없음)' },
               { name: '❌ 형제·자매', desc: '방계 — 부양가족 X (절대 인정 X)' },
-              { name: '❌ 만 30세 이상 자녀', desc: '미혼이어도 분리 — 부양가족 X' },
+              { name: '❌ 만 30세 이상 미혼 자녀 (1년 미만)', desc: '같은 등본 1년 미만이면 부양가족 X' },
               { name: '❌ 기혼 자녀', desc: '나이 무관 — 분리 세대' },
             ].map((b, i) => {
               const ok = b.name.startsWith('✅')
@@ -322,7 +324,7 @@ export default function HousingScorePage() {
                   <tr>
                     <td style={cell}><strong>💑 신혼부부</strong></td>
                     <td style={cell}>민영 20% / 공공 30%</td>
-                    <td style={cell}>혼인 7년 이내, 무주택, 소득 130% (맞벌이 140%)</td>
+                    <td style={cell}>혼인 7년 이내, 무주택, 소득·자산 기준 (2024년 맞벌이 기준 완화 — 청약홈 확인)</td>
                   </tr>
                   <tr>
                     <td style={cell}><strong>🆕 생애최초</strong></td>
@@ -378,24 +380,24 @@ export default function HousingScorePage() {
             <div style={faqAnswer}>
               <strong style={{ color: 'var(--text)' }}>가능하지만 가점은 0점 (무주택 영역)</strong>입니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li><strong>1주택 + 처분서약</strong>: 무주택자로 간주되어 가점 회복. 단 입주 전 매도 완료 필수.</li>
+                <li><strong>1주택 + 처분 조건</strong>: 무주택 기간은 여전히 0점. 처분 조건은 주로 추첨제 자격과 관련되며, 당첨 후 기한 내 처분해야 합니다.</li>
                 <li><strong>1주택 + 미서약</strong>: 추첨제로만 청약 가능 (민영 분양 한정).</li>
                 <li><strong>다주택</strong>: 가점제 X, 추첨제 우선순위도 후순위.</li>
               </ul>
-              처분 미이행 시 분양 취소 + 10년 청약 제한이 따르므로 신중히 결정.
+              처분 조건으로 당첨된 뒤 기한 내 처분하지 않으면 공급계약 취소 등 불이익이 따르므로 신중히 결정하세요.
             </div>
           </details>
 
           <details style={faqDetails}>
             <summary style={faqSummary}>Q4. 부모님을 부양가족으로 인정받으려면?</summary>
             <div style={faqAnswer}>
-              다음 4가지 모두 충족해야 합니다:
+              다음 3가지를 모두 충족해야 합니다. 나이 요건은 없습니다.
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li><strong>만 60세 이상</strong> (모두 만 60세 이상이어야 인정)</li>
-                <li><strong>3년 이상 동일 세대</strong> 등록 (주민등록상 동거)</li>
-                <li><strong>본인이 세대주</strong> + 부모가 세대원</li>
-                <li><strong>부모도 무주택</strong> (주택 소유 시 부양가족 X)</li>
+                <li><strong>본인이 세대주</strong></li>
+                <li>부모가 <strong>최근 3년 이상 계속 같은 주민등록표</strong>에 등재</li>
+                <li><strong>부모와 그 배우자 모두 무주택</strong> (한 명이라도 주택 소유 시 부양가족 X)</li>
               </ul>
+              만 60세 기준은 무주택 판정 특례, 만 65세는 노부모부양 특별공급 요건이라 부양가족 가점 요건과 다릅니다.<br />
               <strong style={{ color: '#DC2626' }}>주의</strong>: 위장전입 적발 시 분양 취소 + 형사처벌. 실거주·생활비 지원 증빙 필수.
             </div>
           </details>

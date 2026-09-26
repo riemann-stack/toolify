@@ -127,6 +127,23 @@
 }
 .miniBtnActive { background: var(--accent-strong); color: #ffffff; }
 
+/* 다주택 주택별 입력 — 추가/삭제 버튼 */
+.houseBtn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  min-height: 40px;
+  flex-shrink: 0;
+}
+.houseBtn:hover { border-color: var(--accent); color: var(--accent-ink); }
+
 /* ── 히어로 (주 결과) — clamp(44px,11vw,72px) ── */
 .hero {
   background: linear-gradient(135deg, rgba(8, 145, 178, 0.10) 0%, rgba(13, 148, 136, 0.06) 100%);
