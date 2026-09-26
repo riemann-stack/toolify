@@ -48,6 +48,10 @@ export default function UrlEncodeClient() {
   const [copiedKey, setCopiedKey] = useState<string>('')
   const [toast, setToast] = useState<string>('')
 
+  /* 처리 시간(performance.now) 표시는 서버·클라이언트 값이 달라 하이드레이션 불일치를 만든다 → 마운트 뒤에만 표시 */
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
   /* localStorage */
   useEffect(() => {
     try {
@@ -291,7 +295,7 @@ export default function UrlEncodeClient() {
               <div className={s.paneHeader}>
                 <label className={s.paneLabel} htmlFor="url-encode-output">결과</label>
                 <div className={s.paneActions}>
-                  {encResult && <span className={s.paneStat}>{fmtMs(encResult.ms)}</span>}
+                  {encResult && mounted && <span className={s.paneStat}>{fmtMs(encResult.ms)}</span>}
                   <button className={s.smBtn} onClick={() => copy('enc-result', encResult?.result || '')} disabled={!encResult?.result} aria-label="결과 복사">
                     {copiedKey === 'enc-result' ? '✓' : '📋'}
                   </button>
