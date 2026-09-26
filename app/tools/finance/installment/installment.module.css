@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,17 +20,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -39,7 +39,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -47,7 +47,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -76,7 +76,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 입력 ── */
@@ -87,7 +87,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -106,7 +106,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -118,7 +118,7 @@
 .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 .inputRow { display: flex; align-items: center; gap: 10px; }
-.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: var(--font-sans); }
 
 /* ── 개월수 그리드 ── */
 .monthsGrid {
@@ -135,18 +135,18 @@
 .monthBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .monthBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.monthActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.monthActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 .monthCustomRow { margin-top: 10px; }
 
 /* ── 할부 종류 (3개) ── */
@@ -158,16 +158,16 @@
 @media (max-width: 600px) {
   .typeGrid { grid-template-columns: repeat(3, 1fr); }
   .typeBtn { padding: 10px 4px; font-size: 12px; gap: 3px; }
-  .typeBadge { font-size: 9px; padding: 2px 5px; }
+  .typeBadge { font-size: 11px; padding: 2px 5px; }
 }
 .typeBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -180,21 +180,21 @@
 }
 .typeBadge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-weight: 700;
   margin-top: 4px;
 }
 .typeFree    { border-color: rgba(16,185,129,0.40); }
 .typePartial { border-color: rgba(161,98,7,0.40); }
 .typePaid    { border-color: rgba(220,38,38,0.40); }
-.typeFree.typeActive    { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
-.typePartial.typeActive { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
-.typePaid.typeActive    { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
-.typeFree    .typeBadge { background: rgba(16,185,129,0.18);  color: #059669; }
-.typePartial .typeBadge { background: rgba(161,98,7,0.18);   color: #A16207; }
-.typePaid    .typeBadge { background: rgba(220,38,38,0.18); color: #DC2626; }
+.typeFree.typeActive    { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
+.typePartial.typeActive { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
+.typePaid.typeActive    { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
+.typeFree    .typeBadge { background: rgba(16,185,129,0.18);  color: var(--emerald-600); }
+.typePartial .typeBadge { background: rgba(161,98,7,0.18);   color: var(--yellow-700); }
+.typePaid    .typeBadge { background: rgba(220,38,38,0.18); color: var(--red-600); }
 
 .rateRow {
   margin-top: 12px;
@@ -204,39 +204,39 @@
   color: var(--muted);
   line-height: 1.65;
   margin: 8px 0 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
   border: 1px solid var(--accent);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: var(--font-sans); }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: var(--font-sans); color: var(--text); font-weight: 700; }
 .heroInterest {
   margin-top: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 24px;
-  color: #DC2626;
+  color: var(--red-600);
 }
 .heroInterest small {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--muted);
   display: block;
@@ -262,7 +262,7 @@
 .analysisTable td:first-child { color: var(--muted); }
 .analysisTable td:last-child {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -270,7 +270,7 @@
 .analysisTable .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
 }
 .analysisTable .totalRow td:first-child { color: var(--accent); }
@@ -279,8 +279,8 @@
   background: rgba(220,38,38,0.14);
   border-bottom: none;
 }
-.analysisTable .interestRow td:first-child { color: #DC2626; }
-.analysisTable .interestRow td:last-child  { color: #DC2626; font-size: 14px; }
+.analysisTable .interestRow td:first-child { color: var(--red-600); }
+.analysisTable .interestRow td:last-child  { color: var(--red-600); font-size: 14px; }
 
 /* ── 비교 막대 그래프 ── */
 .barCompare {
@@ -297,7 +297,7 @@
 .barLabel {
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   width: 80px;
   flex-shrink: 0;
@@ -316,12 +316,12 @@
   transition: width 0.3s ease;
 }
 .barFillCash    { background: var(--accent); }
-.barFillFree    { background: #059669; }
+.barFillFree    { background: var(--emerald-600); }
 .barFillPaid    {
-  background: linear-gradient(90deg, var(--accent) 0%, var(--accent) calc(var(--principal-pct, 50%) * 1%), #DC2626 calc(var(--principal-pct, 50%) * 1%), #DC2626 100%);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent) calc(var(--principal-pct, 50%) * 1%), var(--red-600) calc(var(--principal-pct, 50%) * 1%), var(--red-600) 100%);
 }
 .barValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   color: var(--text);
@@ -335,13 +335,13 @@
 .interpretCard {
   background: var(--bg3);
   border-left: 4px solid var(--accent);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.interpretCard strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.interpretCard strong { color: var(--accent); font-family: var(--font-sans); font-weight: 700; }
 .interpretCard ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); }
 .interpretCard li { padding: 2px 0; }
 
@@ -349,7 +349,7 @@
 .scheduleDetails {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 0;
   overflow: hidden;
 }
@@ -359,14 +359,14 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   list-style: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .scheduleSummary::-webkit-details-marker { display: none; }
-.scheduleSummary::after { content: '▼'; font-size: 10px; color: var(--muted); transition: transform 0.2s; }
+.scheduleSummary::after { content: '▼'; font-size: 11px; color: var(--muted); transition: transform 0.2s; }
 .scheduleDetails[open] .scheduleSummary::after { transform: rotate(180deg); }
 .scheduleTableWrap { padding: 0 10px 14px; }
 .scheduleTable {
@@ -387,11 +387,11 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.scheduleTable td:first-child { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.scheduleTable .colPay      { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.scheduleTable .colPrincipal{ color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.scheduleTable .colInterest { color: #DC2626; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.scheduleTable .colBalance  { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.scheduleTable td:first-child { color: var(--muted); font-family: var(--font-sans); font-weight: 700; }
+.scheduleTable .colPay      { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
+.scheduleTable .colPrincipal{ color: var(--accent); font-family: var(--font-sans); font-weight: 700; }
+.scheduleTable .colInterest { color: var(--red-600); font-family: var(--font-sans); font-weight: 700; }
+.scheduleTable .colBalance  { color: var(--muted); font-family: var(--font-sans); }
 
 /* ── 비교 카드 (탭 2) — 3개 가로 ── */
 .compare3Grid {
@@ -405,15 +405,15 @@
 .compareCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 16px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
-.compareCard.cmpCash    { border-color: var(--accent);   background: rgba(14,165,233,0.14); }
-.compareCard.cmpFree    { border-color: #059669;         background: rgba(16,185,129,0.14); }
-.compareCard.cmpPaid    { border-color: #DC2626;         background: rgba(220,38,38,0.14); }
+.compareCard.cmpCash    { border-color: var(--accent);   background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.compareCard.cmpFree    { border-color: var(--emerald-600);         background: rgba(16,185,129,0.14); }
+.compareCard.cmpPaid    { border-color: var(--red-600);         background: rgba(220,38,38,0.14); }
 .compareTitle {
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -423,38 +423,38 @@
   margin-bottom: 4px;
 }
 .compareCard.cmpCash .compareTitle { color: var(--accent); }
-.compareCard.cmpFree .compareTitle { color: #059669; }
-.compareCard.cmpPaid .compareTitle { color: #DC2626; }
+.compareCard.cmpFree .compareTitle { color: var(--emerald-600); }
+.compareCard.cmpPaid .compareTitle { color: var(--red-600); }
 .compareScenarioName {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   color: var(--text);
 }
 .compareTotalLabel { font-size: 11px; color: var(--muted); margin-top: 4px; }
 .compareTotalValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 22px;
   color: var(--text);
   letter-spacing: -1px;
 }
 .compareCard.cmpCash .compareTotalValue { color: var(--accent); }
-.compareCard.cmpFree .compareTotalValue { color: #059669; }
-.compareCard.cmpPaid .compareTotalValue { color: #DC2626; }
+.compareCard.cmpFree .compareTotalValue { color: var(--emerald-600); }
+.compareCard.cmpPaid .compareTotalValue { color: var(--red-600); }
 .compareDetail {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
   margin-top: 4px;
 }
-.compareDetail strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.compareDetail strong { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 
 /* ── 차이 분석 카드 ── */
 .diffCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
 }
 .diffRow {
@@ -466,22 +466,22 @@
   color: var(--text);
 }
 .diffRow:last-child { border-bottom: none; }
-.diffRow strong { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.diffPositive { color: #059669; }
-.diffNegative { color: #DC2626; }
+.diffRow strong { font-family: var(--font-sans); font-weight: 700; }
+.diffPositive { color: var(--emerald-600); }
+.diffNegative { color: var(--red-600); }
 
 /* ── 기회비용 카드 ── */
 .opportunityCard {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.25);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .opportunityTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
-  color: #0891B2;
+  color: var(--cyan-600);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -494,7 +494,7 @@
   color: var(--muted);
   padding: 5px 0;
 }
-.opportunityRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.opportunityRow strong { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 .opportunityResult {
   margin-top: 12px;
   padding: 12px 14px;
@@ -504,7 +504,7 @@
   color: var(--text);
   line-height: 1.85;
 }
-.opportunityResult strong { color: #0891B2; }
+.opportunityResult strong { color: var(--cyan-600); }
 
 /* ── 개월수별 비교 표 (탭 3) ── */
 .compareTable {
@@ -527,11 +527,11 @@
 }
 .compareTable td:first-child {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .compareTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -539,13 +539,13 @@
 .rowSafe   { background: rgba(16,185,129,0.14); }
 .rowMid    { background: rgba(234,88,12,0.14); }
 .rowDanger { background: rgba(220,38,38,0.14); }
-.rowDanger td { color: #DC2626 !important; }
-.rowDanger td:first-child { color: #DC2626 !important; }
+.rowDanger td { color: var(--red-600) !important; }
+.rowDanger td:first-child { color: var(--red-600) !important; }
 
 /* ── 그래프 (탭 3) ── */
 .graphWrap {
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 18px;
   display: flex;
   justify-content: center;
@@ -556,11 +556,11 @@
 .recoCard {
   background: var(--accent-dim);
   border: 1px solid var(--accent);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
 }
 .recoTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   color: var(--accent);
@@ -571,28 +571,28 @@
   color: var(--text);
   line-height: 1.85;
 }
-.recoText strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.recoText strong { color: var(--accent); font-family: var(--font-sans); font-weight: 800; }
 
 .warnCard {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.warnCard strong { color: #DC2626; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.warnCard strong { color: var(--red-600); font-family: var(--font-sans); font-weight: 700; }
 
 /* ── 결과 복사 ── */
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
@@ -600,4 +600,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

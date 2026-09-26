@@ -110,42 +110,75 @@ export default function ExposureClient() {
    *  - shutter  인덱스 +1 = 1 stop 어두워짐 (빠른 셔터)
    *  - iso      인덱스 +1 = 1 stop 밝아짐
    */
-  /* 세 축 모두 1/3 stop 단계 → 보정은 동일 인덱스 양만큼 정확히 상쇄 (반올림·배수 불필요) */
+  /* 세 축 모두 1/3 stop 단계 → 보정은 동일 인덱스 양만큼 정확히 상쇄 (반올림·배수 불필요).
+     ⚠️ 예전에는 보정 축이 끝(예: 셔터 30s)에 닿아도 원래 축은 요청만큼 움직여 EV가 조용히 바뀌었다 —
+        화면은 '같은 EV가 유지됩니다'라고 안내하는 채로. 이제 보정할 수 있는 만큼만 움직이고 안내를 띄운다. */
+  const [compLimit, setCompLimit] = useState<string | null>(null)
+
+  /** 보정 축을 sign×d만큼 옮길 때 실제로 옮길 수 있는 d(부호 포함). */
+  const reachable = (d: number, sign: 1 | -1, idx: number, len: number) =>
+    sign * (clampIdx(idx + sign * d, len) - idx)
+
   const onApertureChange = (newIdx: number) => {
     if (aptLocked || newIdx === aptIdx) return
-    const d = newIdx - aptIdx  // +d = 어두워짐
-    setAptIdx(newIdx)
+    let d = newIdx - aptIdx  // +d = 어두워짐
+    let limit: string | null = null
     if (shLocked && !isoLocked) {
-      setIsoIdx(clampIdx(isoIdx + d, ISOS.length))      // 어두워지면 ISO ↑
+      const r = reachable(d, 1, isoIdx, ISOS.length)                // 어두워지면 ISO ↑
+      if (r !== d) limit = 'ISO'
+      d = r
+      setIsoIdx(isoIdx + d)
     } else if (isoLocked && !shLocked) {
-      setShIdx(clampIdx(shIdx - d, SHUTTERS.length))    // 어두워지면 셔터 느리게(↓)
+      const r = reachable(d, -1, shIdx, SHUTTERS.length)            // 어두워지면 셔터 느리게(↓)
+      if (r !== d) limit = '셔터'
+      d = r
+      setShIdx(shIdx - d)
     }
+    setCompLimit(limit)
+    setAptIdx(aptIdx + d)
   }
 
   const onShutterChange = (newIdx: number) => {
     if (shLocked || newIdx === shIdx) return
-    const d = newIdx - shIdx  // 인덱스 ↑ = 빠름 = 어두워짐
-    setShIdx(newIdx)
+    let d = newIdx - shIdx  // 인덱스 ↑ = 빠름 = 어두워짐
+    let limit: string | null = null
     if (aptLocked && !isoLocked) {
-      setIsoIdx(clampIdx(isoIdx + d, ISOS.length))      // 어두워지면 ISO ↑
+      const r = reachable(d, 1, isoIdx, ISOS.length)                // 어두워지면 ISO ↑
+      if (r !== d) limit = 'ISO'
+      d = r
+      setIsoIdx(isoIdx + d)
     } else if (isoLocked && !aptLocked) {
-      setAptIdx(clampIdx(aptIdx - d, APERTURES.length)) // 어두워지면 조리개 열기(↓)
+      const r = reachable(d, -1, aptIdx, APERTURES.length)          // 어두워지면 조리개 열기(↓)
+      if (r !== d) limit = '조리개'
+      d = r
+      setAptIdx(aptIdx - d)
     }
+    setCompLimit(limit)
+    setShIdx(shIdx + d)
   }
 
   const onIsoChange = (newIdx: number) => {
     if (isoLocked || newIdx === isoIdx) return
-    const d = newIdx - isoIdx  // 인덱스 ↑ = ISO ↑ = 밝아짐
-    setIsoIdx(newIdx)
+    let d = newIdx - isoIdx  // 인덱스 ↑ = ISO ↑ = 밝아짐
+    let limit: string | null = null
     if (aptLocked && !shLocked) {
-      setShIdx(clampIdx(shIdx + d, SHUTTERS.length))    // 밝아지면 셔터 빠르게(↑)
+      const r = reachable(d, 1, shIdx, SHUTTERS.length)             // 밝아지면 셔터 빠르게(↑)
+      if (r !== d) limit = '셔터'
+      d = r
+      setShIdx(shIdx + d)
     } else if (shLocked && !aptLocked) {
-      setAptIdx(clampIdx(aptIdx + d, APERTURES.length)) // 밝아지면 조리개 닫기(↑)
+      const r = reachable(d, 1, aptIdx, APERTURES.length)           // 밝아지면 조리개 닫기(↑)
+      if (r !== d) limit = '조리개'
+      d = r
+      setAptIdx(aptIdx + d)
     }
+    setCompLimit(limit)
+    setIsoIdx(isoIdx + d)
   }
 
   /** 잠금 토글 — 이미 잠겨있으면 해제, 아니면 잠금. 단 잠금 갯수 ≥ 2일 때 새로 잠그는 건 거부. */
   const toggleLock = (axis: AxisId) => {
+    setCompLimit(null)
     const isLocked =
       axis === 'aperture' ? aptLocked :
       axis === 'shutter'  ? shLocked :
@@ -187,6 +220,7 @@ export default function ExposureClient() {
     setShIdx(nearestShutterIdx(scene.shutter))
     setIsoIdx(nearestIsoIdx(scene.iso))
     setAptLocked(false); setShLocked(false); setIsoLocked(false)
+    setCompLimit(null)
   }
 
   return (
@@ -323,6 +357,12 @@ export default function ExposureClient() {
               {lockCount === 1 && (
                 <>🔁 <strong>등가 노출 모드</strong> — 잠긴 축은 고정. 나머지 두 축 중 하나를 움직이면 다른 하나가 자동 보정되어 같은 EV가 유지됩니다.</>
               )}
+              {lockCount === 1 && compLimit && (
+                <span role="status" className={s.warnHint} style={{ display: 'block', marginTop: 6 }}>
+                  보정할 {compLimit} 값이 범위 끝에 닿아 더 움직일 수 없습니다 — 같은 EV를 지키려고 여기서 멈췄습니다.
+                  더 바꾸려면 잠금을 풀거나 다른 축을 잠가 보세요.
+                </span>
+              )}
               {lockCount === 2 && (
                 <>🎯 <strong>1축 자유 모드</strong> — 두 축이 고정됐으므로 남은 한 축을 움직이면 EV가 바뀝니다(노출이 달라짐).</>
               )}
@@ -330,7 +370,7 @@ export default function ExposureClient() {
           </div>
 
           {/* EV 결과 */}
-          <div className={s.heroCard}>
+          <div className={s.heroCard} role="status">
             <div>
               <p className={s.heroLabel}>현재 EV (ISO 100 기준 환산)</p>
               <p className={s.heroValue}>
@@ -397,7 +437,7 @@ export default function ExposureClient() {
                 <button type="button"
                   key={i}
                   className={s.equivItem}
-                  onClick={() => { setAptIdx(eq.apertureIdx); setShIdx(eq.shutterIdx); setIsoIdx(eq.isoIdx) }}
+                  onClick={() => { setAptIdx(eq.apertureIdx); setShIdx(eq.shutterIdx); setIsoIdx(eq.isoIdx); setCompLimit(null) }}
                 >
                   <span className={s.equivAxis}>
                     <span className={s.equivLabel}>🌀</span>
@@ -480,7 +520,7 @@ export default function ExposureClient() {
             <p className={s.lockHint}>💡 두 ND 필터를 같이 끼우면 차단량이 곱해져 stop이 합산됩니다 (ND8 3 + ND64 6 = 9 stop).</p>
           </div>
 
-          <div className={s.heroCard}>
+          <div className={s.heroCard} role="status">
             <div>
               <p className={s.heroLabel}>ND 적용 셔터스피드</p>
               <p className={s.heroValue}>
@@ -555,14 +595,7 @@ export default function ExposureClient() {
             <div className={s.starInputs}>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="exposure-mm">초점거리 (mm)</label>
-                <input id="exposure-mm"
-                  type="number" inputMode="decimal"
-                  min={8}
-                  max={400}
-                  value={focalLength}
-                  onChange={(e) => setFocalLength(Math.max(8, Math.min(400, Number(e.target.value) || 0)))}
-                  className={s.input}
-                />
+                <FocalInput id="exposure-mm" value={focalLength} onCommit={setFocalLength} className={s.input} />
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="exposure-f2">센서 크기</label>
@@ -688,12 +721,7 @@ export default function ExposureClient() {
             <div className={s.starInputs} style={{ marginTop: 10 }}>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="exposure-mm-2">초점거리 (mm)</label>
-                <input id="exposure-mm-2"
-                  type="number" inputMode="numeric" step={1} min={8} max={400}
-                  value={focalLength}
-                  onChange={(e) => setFocalLength(Math.max(8, Math.min(400, Number(e.target.value) || 8)))}
-                  className={s.input}
-                />
+                <FocalInput id="exposure-mm-2" value={focalLength} onCommit={setFocalLength} className={s.input} />
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel} htmlFor="exposure-crop-2">센서 크기</label>
@@ -765,6 +793,48 @@ export default function ExposureClient() {
 
 function clampIdx(v: number, len: number): number {
   return Math.max(0, Math.min(len - 1, v))
+}
+
+const FOCAL_MIN = 8
+const FOCAL_MAX = 400
+
+/** 초점거리 입력 — 문자열로 두고 범위 안일 때만 즉시 반영, 벗어나면 blur/Enter에서 8~400으로 맞춘다.
+    ⚠️ 예전에는 키 입력마다 8~400으로 클램프해서 '35'를 치면 '3'이 곧바로 8이 되어 85mm가 됐다. */
+function FocalInput({ id, value, onCommit, className }: {
+  id: string
+  value: number
+  onCommit: (v: number) => void
+  className?: string
+}) {
+  const [text, setText] = useState(String(value))
+  const [shown, setShown] = useState(value)
+  /* 다른 입력칸·저장값 복원으로 값이 바뀌면 표시 문자열을 맞춘다(렌더 중 동기화 패턴) */
+  if (shown !== value) {
+    setShown(value)
+    if (parseFloat(text) !== value) setText(String(value))
+  }
+  const commit = () => {
+    const v = parseFloat(text)
+    if (!Number.isFinite(v)) { setText(String(value)); return }
+    const c = Math.max(FOCAL_MIN, Math.min(FOCAL_MAX, v))
+    setText(String(c))
+    if (c !== value) onCommit(c)
+  }
+  return (
+    <input id={id}
+      type="text" inputMode="decimal"
+      value={text}
+      onChange={(e) => {
+        const raw = e.target.value.replace(/[^\d.]/g, '')
+        setText(raw)
+        const v = parseFloat(raw)
+        if (Number.isFinite(v) && v >= FOCAL_MIN && v <= FOCAL_MAX) onCommit(v)
+      }}
+      onBlur={commit}
+      onKeyDown={(e) => { if (e.key === 'Enter') commit() }}
+      className={className}
+    />
+  )
 }
 
 /* ANSI PH2.7 계열 EV100 사다리. 경계를 0.5 낮게 둔 이유:

@@ -2,8 +2,11 @@ import Link from 'next/link'
 import ChordClient from './ChordClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import Callout from '@/components/Callout'
 
 export const metadata = buildMetadata({
   path: '/tools/art/chord',
@@ -33,18 +36,35 @@ const FAQ_LD = [
                 q: '텐션(Tension)이 포함된 코드는 어렵게 느껴지는데 어떻게 이해하나요?',
                 a: '9th, 11th, 13th는 7th 코드에 색채를 더하는 음들입니다. <strong>9 = 옥타브 위의 2도, 11 = 옥타브 위의 4도, 13 = 옥타브 위의 6도</strong>입니다. 처음에는 maj7(4음)만 익히고, 익숙해지면 9th를 추가하는 방식으로 단계적으로 접근하면 어렵지 않습니다.',
               },
+              {
+                q: '역방향 검색에서 C·E·G·A를 고르면 C6와 Am7이 둘 다 완전 일치로 나오는 이유는?',
+                a: '두 코드의 구성음이 <strong>음이름 집합으로는 똑같기</strong> 때문입니다. <code>C6 = C, E, G, A</code>이고 <code>Am7 = A, C, E, G</code>입니다. 역방향 검색은 옥타브와 쌓는 순서를 보지 않고 어떤 음이름이 들어 있는지만 비교하므로 둘을 구분할 수 없습니다. 실제 곡에서는 <strong>가장 낮은 음(베이스)</strong>이 C면 C6, A면 Am7으로 읽는 것이 보통이고, 앞뒤 코드 진행(예: Dm7 → G7 다음이면 C 계열)도 판단 근거가 됩니다.',
+              },
+              {
+                q: 'C♯maj7 구성음이 왜 F·C가 아니라 E♯·B♯으로 나오나요?',
+                a: '코드 음이름은 반음 수뿐 아니라 <strong>도수(글자)</strong>도 맞춰 적는 것이 이론 표기이기 때문입니다. 3도 음은 근음에서 세 번째 글자, 7도 음은 일곱 번째 글자여야 하므로 C♯에서 장3도(4반음)는 F가 아니라 <strong>E♯</strong>, 장7도(11반음)는 C가 아니라 <strong>B♯</strong>입니다. 건반에서 누르는 자리는 F·C와 같습니다. 이중 임시표가 필요한 경우(Cdim7의 7음 B𝄫 등)에는 계산기가 <code>Bbb(A)</code>처럼 실제 건반음을 괄호로 함께 보여 줍니다.',
+              },
             ]
 
 export default function ChordPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/art/chord">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="art" />코드 구성음 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         Cmaj7·Dm7 등 코드의 <strong style={{ color: 'var(--text)' }}>구성음과 역방향 검색</strong> + 다이아토닉 코드표.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="구성음 = 근음 + 코드 종류별 반음 간격(12평균율, 31종) · 도수에 맞춘 이론 철자 · 로마숫자와 단조 Ⅴ7 표기는 Open Music Theory 기준"
+        sources={[
+          { label: 'Open Music Theory — Roman Numerals', href: 'https://viva.pressbooks.pub/openmusictheory/chapter/roman-numerals/' },
+          { label: 'Open Music Theory — ii–V–I', href: 'https://viva.pressbooks.pub/openmusictheory/chapter/ii-v-i/' },
+          { label: 'Music Theory Online 23.3 — Richards, Axis Progressions', href: 'https://mtosmt.org/issues/mto.17.23.3/mto.17.23.3.richards.html' },
+        ]}
+      />
 
       <ChordClient />
 
@@ -53,12 +73,12 @@ export default function ChordPage() {
 
         {/* ── 1. 주요 코드 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 검색하는 주요 코드 구성음
           </h2>
 
           <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-health)', marginBottom: '8px' }}>트라이어드 (3화음)</p>
-          <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
+          <div className="tableScroll" style={{ marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -77,8 +97,8 @@ export default function ChordPage() {
                   ['Csus4','C, F, G',     '근음, 완전4도, 완전5도'],
                 ].map(([chord, notes, interval], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{notes}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{notes}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{interval}</td>
                   </tr>
                 ))}
@@ -87,7 +107,7 @@ export default function ChordPage() {
           </div>
 
           <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-life)', marginBottom: '8px' }}>세븐스(7th) 코드</p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -106,8 +126,8 @@ export default function ChordPage() {
                   ['CmM7',   'C, E♭, G, B',    '미스터리·필름누아르 분위기'],
                 ].map(([chord, notes, feature], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{notes}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{notes}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{feature}</td>
                   </tr>
                 ))}
@@ -118,7 +138,7 @@ export default function ChordPage() {
 
         {/* ── 2. 코드 기호 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             코드 기호 읽는 법 완전 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -132,23 +152,123 @@ export default function ChordPage() {
               { sym: '#5',    desc: '5도를 반음 올림. aug와 같은 효과',                color: 'var(--danger)' },
               { sym: 'dim',   desc: '감3화음. 단3도 두 개 쌓임. 어둡고 불안정',         color: 'var(--danger)' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${c.color} 19%, transparent)`, borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.sym}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${c.color} 19%, transparent)`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 800, color: c.color, marginBottom: '6px' }}>{c.sym}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
+        {/* ── 2-1. 구성음 계산 원리 ── */}
+        <div>
+          <h2 className="g-h2">
+            구성음 계산 원리 — 근음에서 몇 반음 떨어졌나
+          </h2>
+          <p className="g-p">
+            계산기는 코드 이름을 <strong>근음</strong>(C, F♯ 등)과 <strong>코드 종류</strong>(maj7, m7♭5 등)로 나눈 뒤, 코드 종류마다 정해진 반음 간격을 근음에 더해 구성음을 만듭니다.
+            피아노 건반의 이웃한 두 건반(흰 건반·검은 건반 구분 없이) 사이가 1반음이고, 한 옥타브는 12반음입니다. 그래서 12를 넘는 간격인 9도(14반음)·11도(17반음)·13도(21반음)는 한 옥타브 위의 2도·4도·6도와 같은 음이름이 됩니다.
+            예를 들어 <strong>Cmaj7</strong>은 C에 0·4·7·11반음을 더해 C·E·G·B, <strong>G7</strong>은 G에 0·4·7·10반음을 더해 G·B·D·F입니다. 계산기는 3화음부터 13th까지 31종의 코드 종류를 이 방식으로 계산합니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>음정 (근음 기준)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>반음 수</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>C가 근음일 때</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>이 음정이 들어가는 코드 기호</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['장2도',  '2',  'D',  'sus2, 7sus2'],
+                  ['단3도',  '3',  'E♭', 'm, m7, m7♭5, dim, dim7'],
+                  ['장3도',  '4',  'E',  '장3화음, 7, maj7, aug, 6'],
+                  ['완전4도', '5',  'F',  'sus4, 7sus4'],
+                  ['감5도',  '6',  'G♭', 'dim, m7♭5, 7♭5, 9♭5'],
+                  ['완전5도', '7',  'G',  '대부분의 코드'],
+                  ['증5도',  '8',  'G♯', 'aug, 7♯5, maj7♯5'],
+                  ['장6도',  '9',  'A',  '6, m6, 6/9 (dim7의 감7도 B𝄫도 같은 9반음)'],
+                  ['단7도',  '10', 'B♭', '7, m7, m7♭5, 9, 11, 13'],
+                  ['장7도',  '11', 'B',  'maj7, mM7, maj9, maj13'],
+                  ['9도',    '14', 'D',  '9, maj9, m9, add9, 6/9'],
+                  ['11도',   '17', 'F',  '11, maj11, m11'],
+                  ['13도',   '21', 'A',  '13, maj13'],
+                ].map(([iv, semi, note, used], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', fontWeight: 700, color: 'var(--text)' }}>{iv}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent-ink)' }}>{semi}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{note}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{used}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            음이름은 반음 수만 맞춘다고 끝나지 않습니다. 3도 음은 근음에서 세 번째 글자, 7도 음은 일곱 번째 글자로 적는 것이 이론 표기라서, 계산기는 <strong>C♯maj7을 C♯·E♯·G♯·B♯</strong>으로 보여 줍니다(건반 위치는 F·C와 같음).
+            Cdim7의 7음은 이론상 B𝄫(B 더블플랫)이어서 <strong>Bbb(A)</strong>처럼 실제 건반음을 괄호로 함께 적습니다. 다이아토닉 탭도 같은 원리라 F♯ 장조에는 E♯, G♭ 장조에는 C♭이 나오고, A♯ 장조처럼 음계 자체에 겹올림표가 필요한 조는 실용 표기인 B♭ 장조로 바꿔 보여 줍니다.
+          </p>
+          <Callout tone="note" title="텐션 코드는 계산된 음을 전부 누르지 않는 경우가 많습니다">
+            계산기는 C11을 C·E·G·B♭·D·F, C13을 7개 음 전부로 쌓아 보여 줍니다. 이론상 구성음을 확인하는 용도로는 맞지만, 실제 연주에서는 손가락 수와 음이 부딪치는 문제 때문에 일부를 빼는 것이 관행입니다.
+            도미넌트 11 코드는 11음(F)이 3음(E)과 반음으로 부딪쳐 <strong>3음을 빼거나</strong> 슬래시 코드(B♭/C 등)로 대신 적는 경우가 많고, 13 코드는 보통 <strong>11음을 뺀 채</strong> 근음·3음·7음·13음을 중심으로 누릅니다. 5음은 코드 성격에 영향이 적어 가장 먼저 생략되는 음입니다.
+          </Callout>
+        </div>
+
+        {/* ── 2-2. 역방향 검색 원리 ── */}
+        <div>
+          <h2 className="g-h2">
+            역방향 검색 결과 읽는 법 — 일치율과 네 가지 관계
+          </h2>
+          <p className="g-p">
+            건반에서 음을 2개 이상 고르면 계산기는 12개 근음 × 31개 코드 종류, 모두 372개 조합을 하나씩 대조합니다.
+            <strong>일치율 = 겹치는 음 수 ÷ (코드 음 수와 선택한 음 수 중 큰 값)</strong>이고, 50% 이상인 코드만 남깁니다.
+            그다음 관계에 따라 <strong>완전 일치 → 선택음 전부 포함(선택보다 큰 코드) → 선택음 일부로 구성(선택보다 작은 코드) → 부분 일치</strong> 순으로 정렬하고, 같은 단계 안에서는 일치율이 높고 음 수가 적은 코드를 먼저 보여 줍니다. 화면에는 상위 12개까지 나옵니다.
+          </p>
+          <p className="g-p">
+            옥타브와 쌓는 순서는 보지 않고 <strong>어떤 음이름이 들어 있는지</strong>만 비교하므로, 전위(C/E, C/G)는 원래 코드와 같은 결과가 나오고, 구성음 집합이 같은 두 코드는 함께 완전 일치로 나옵니다. 아래는 실제 검색 결과의 윗부분입니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>선택한 음</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>상위 결과</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>표시되는 관계</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['C · E · G',     'C',                          '완전 일치'],
+                  ['C · E · G',     'Am7, C6, C7, Cadd9, Cmaj7, G#maj7#5',  '선택음 전부 포함 · 3/4'],
+                  ['C · E · G · A', 'Am7, C6',                    '완전 일치 (구성음 집합이 같음)'],
+                  ['C · E · G · A', 'Am9, C6/9, Fmaj9',           '선택음 전부 포함 · 4/5'],
+                ].map(([sel, top, rel], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{sel}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent-ink)' }}>{top}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{rel}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            완전 일치가 여러 개일 때는 <strong>가장 낮은 음(베이스)</strong>으로 이름을 정하는 것이 일반적입니다. C·E·G·A에서 베이스가 C면 C6, A면 Am7으로 읽고, 베이스가 다른 음이면 슬래시 코드(예: Am7/G)로 적습니다.
+            C·E·G 검색에 끼어 있는 G#maj7#5는 A♭·C·E·G로, 샵(#) 표기가 기본이라 이렇게 보일 뿐 플랫(♭) 표기로 바꾸면 Abmaj7#5로 나옵니다. 또 귀로 딴 음이 2~3개뿐이면 &lsquo;선택음 전부 포함&rsquo; 후보가 많이 나오는데, 이때는 앞뒤 코드와 곡의 조성을 보고 다이아토닉 표 안에 있는 후보부터 고르면 틀릴 확률이 줄어듭니다.
+          </p>
+        </div>
+
         {/* ── 3. C 메이저 다이아토닉 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             C 메이저 다이아토닉 코드 완전표
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+          <p className="g-p">
             C 메이저 스케일(C·D·E·F·G·A·B) 안의 음들로만 만든 7개 코드. 한 곡의 키가 C 메이저라면 이 코드들을 조합해 진행을 만듭니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -169,9 +289,9 @@ export default function ChordPage() {
                   { roman: 'ⅶø', chord: 'Bm7♭5',  notes: 'B, D, F, A',    func: '도미넌트',     color: 'var(--cat-life)' },
                 ].map((d, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)', borderLeft: `3px solid ${d.color}` }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--text)' }}>{d.chord}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{d.notes}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--text)' }}>{d.chord}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{d.notes}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: d.color, fontSize: 12, fontWeight: 600 }}>{d.func}</td>
                   </tr>
                 ))}
@@ -182,13 +302,13 @@ export default function ChordPage() {
 
         {/* ── 3-2. A 마이너 다이아토닉 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             A 마이너 다이아토닉 코드표 — 자연 단음계 기준
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            가장 많이 쓰이는 단조 키인 A 마이너의 다이아토닉 코드입니다. A 자연 단음계(A·B·C·D·E·F·G)는 C 메이저와 같은 7개 음을 쓰는 <strong style={{ color: 'var(--text)' }}>나란한조</strong>라서 코드 자체는 위 표와 겹치지만, 중심음이 A로 바뀌면서 각 코드의 순서와 역할이 달라집니다.
+          <p className="g-p">
+            가장 많이 쓰이는 단조 키인 A 마이너의 다이아토닉 코드입니다. A 자연 단음계(A·B·C·D·E·F·G)는 C 메이저와 같은 7개 음을 쓰는 <strong>나란한조</strong>라서 코드 자체는 위 표와 겹치지만, 중심음이 A로 바뀌면서 각 코드의 순서와 역할이 달라집니다.
           </p>
-          <div style={{ overflowX: 'auto', marginBottom: '14px' }}>
+          <div className="tableScroll" style={{ marginBottom: '14px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -209,30 +329,27 @@ export default function ChordPage() {
                   { roman: 'Ⅶ',  chord: 'G7',     notes: 'G, B, D, F',   note: 'C 메이저의 Ⅴ와 동일',                      color: 'var(--cat-life)' },
                 ].map((d, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)', borderLeft: `3px solid ${d.color}` }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--text)' }}>{d.chord}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{d.notes}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{d.roman}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--text)' }}>{d.chord}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{d.notes}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{d.note}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-life) 19%, transparent)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--cat-life)', marginBottom: '6px' }}>자연 단음계 vs 화성 단음계 — Ⅴ가 Em7이 아니라 E7이 되는 이유</p>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
-              자연 단음계의 Ⅴ는 Em7(E·G·B·D)인데, 토닉 A 바로 반음 아래에서 끌어당기는 이끔음이 없어 해결감이 약합니다. 그래서 7음 G를 반음 올린 <strong style={{ color: 'var(--text)' }}>화성 단음계(A·B·C·D·E·F·G♯)</strong>를 쓰면 Ⅴ가 <strong style={{ color: 'var(--text)' }}>E7(E·G♯·B·D)</strong>로 바뀌고, G♯→A의 반음 해결이 생겨 도미넌트 기능이 강해집니다. 실제 단조 곡 대부분이 Ⅴ 자리에 Em이 아닌 E나 E7을 쓰는 이유이며, 마이너 2-5-1 진행도 Bm7♭5 → E7 → Am7으로 만듭니다.
-            </p>
-          </div>
+          <Callout tone="note" title="자연 단음계 vs 화성 단음계 — Ⅴ가 Em7이 아니라 E7이 되는 이유">
+            자연 단음계의 Ⅴ는 Em7(E·G·B·D)인데, 토닉 A 바로 반음 아래에서 끌어당기는 이끔음이 없어 해결감이 약합니다. 그래서 7음 G를 반음 올린 <strong>화성 단음계(A·B·C·D·E·F·G♯)</strong>를 쓰면 Ⅴ가 <strong>E7(E·G♯·B·D)</strong>로 바뀌고, G♯→A의 반음 해결이 생겨 도미넌트 기능이 강해집니다. 실제 단조 곡 대부분이 Ⅴ 자리에 Em이 아닌 E나 E7을 쓰는 이유이며, 마이너 2-5-1 진행도 Bm7♭5 → E7 → Am7으로 만듭니다.
+          </Callout>
         </div>
 
         {/* ── 4. 자주 쓰이는 코드 진행 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 쓰이는 코드 진행 — 출처가 확인된 대표곡
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            대표곡은 <strong style={{ color: 'var(--text)' }}>화성 분석 출처와 조성 출처를 따로 확인한 곡만</strong> 실었습니다. 흔히 도는 &ldquo;이 곡도 같은 진행&rdquo; 목록은 대부분 위키·블로그가 근거라 여기서는 뺐습니다.
+          <p className="g-p">
+            대표곡은 <strong>화성 분석 출처와 조성 출처를 따로 확인한 곡만</strong> 실었습니다. 흔히 도는 &ldquo;이 곡도 같은 진행&rdquo; 목록은 대부분 위키·블로그가 근거라 여기서는 뺐습니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
@@ -285,10 +402,10 @@ export default function ChordPage() {
                 color: 'var(--cat-sports)',
               },
             ].map((p, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${p.color} 19%, transparent)`, borderRadius: '12px', padding: '16px 20px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${p.color} 19%, transparent)`, borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: p.color, marginBottom: '6px' }}>{p.name}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--muted)', marginBottom: '4px' }}>{p.deg}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>{p.ex}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--muted)', marginBottom: '4px' }}>{p.deg}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>{p.ex}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{p.desc}</p>
                 {p.song && (
                   <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '8px', paddingTop: '8px', borderTop: '1px solid var(--border)' }}>
@@ -299,23 +416,20 @@ export default function ChordPage() {
             ))}
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-sports) 19%, transparent)', borderRadius: '12px', padding: '16px 20px', marginTop: '12px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--cat-sports)', marginBottom: '6px' }}>캐논 진행과 팝 4코드는 &lsquo;네 번째 코드&rsquo; 하나가 다르다</p>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
-              캐논 진행의 앞 네 코드는 <strong style={{ color: 'var(--text)' }}>Ⅰ → Ⅴ → ⅵ → ⅲ</strong>(C → G → Am → Em)이고, 팝의 4코드 루프는 <strong style={{ color: 'var(--text)' }}>Ⅰ → Ⅴ → ⅵ → Ⅳ</strong>(C → G → Am → F)입니다. 네 번째 자리의 ⅲ이 Ⅳ로 한 칸 바뀌었을 뿐인데, 동료심사 학술지 <em>Music Theory Online</em>(Mark Richards, 23권 3호, 2017)은 이 작은 변경이 &ldquo;훨씬 흔한 진행&rdquo;을 만들어 낸다고 지적합니다. 즉 둘은 같은 진행의 별칭이 아니라 <strong style={{ color: 'var(--text)' }}>한 코드가 다른 별개 진행</strong>이므로, 어떤 곡이 캐논 진행인지 볼 때는 네 번째 코드가 ⅲ인지 Ⅳ인지부터 확인하면 됩니다. 캐논 진행은 앞 4~5개만 쓰고 뒷부분을 새로 쓰는 축약형, 짝수 자리를 1전위로 바꾸는 변형(Ⅴ6·ⅲ6·Ⅰ6)도 흔합니다.
-            </p>
-          </div>
+          <Callout tone="note" title="캐논 진행과 팝 4코드는 ‘네 번째 코드’ 하나가 다르다">
+            캐논 진행의 앞 네 코드는 <strong>Ⅰ → Ⅴ → ⅵ → ⅲ</strong>(C → G → Am → Em)이고, 팝의 4코드 루프는 <strong>Ⅰ → Ⅴ → ⅵ → Ⅳ</strong>(C → G → Am → F)입니다. 네 번째 자리의 ⅲ이 Ⅳ로 한 칸 바뀌었을 뿐인데, 동료심사 학술지 <em>Music Theory Online</em>(Mark Richards, 23권 3호, 2017)은 이 작은 변경이 &ldquo;훨씬 흔한 진행&rdquo;을 만들어 낸다고 지적합니다. 즉 둘은 같은 진행의 별칭이 아니라 <strong>한 코드가 다른 별개 진행</strong>이므로, 어떤 곡이 캐논 진행인지 볼 때는 네 번째 코드가 ⅲ인지 Ⅳ인지부터 확인하면 됩니다. 캐논 진행은 앞 4~5개만 쓰고 뒷부분을 새로 쓰는 축약형, 짝수 자리를 1전위로 바꾸는 변형(Ⅴ6·ⅲ6·Ⅰ6)도 흔합니다.
+          </Callout>
         </div>
 
         {/* ── 4-1. 마이너 2-5-1의 Ⅴ7 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             마이너 2-5-1에서 Ⅴ가 Ⅴ7이 되는 이유
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            자연 단음계만 쓰면 Ⅴ 자리에는 단3화음 ⅴ(A 마이너의 Em7)가 놓입니다. 오픈교재 <strong style={{ color: 'var(--text)' }}>Open Music Theory</strong>는 이 지점을 이렇게 정리합니다 — <strong style={{ color: 'var(--text)' }}>단조에서 이끔음을 반음 올리면 화음의 품질이 바뀌고, 따라서 로마숫자도 바뀐다. 단3화음 ⅴ는 장3화음 Ⅴ가 되고 Ⅶ은 감3화음 ⅶ°가 된다. 그래서 단조 조성에서 Ⅴ나 ⅶ° 표기를 보면 올린 이끔음을 쓰고 있다는 뜻이다.</strong> 자연 단음계의 7음은 으뜸음과 온음 거리라 애초에 &lsquo;이끔음&rsquo;이 아니라 <strong style={{ color: 'var(--text)' }}>아래으뜸음(subtonic)</strong>으로 부르고, 그 음을 반음 올린 음계가 화성 단음계입니다.
+          <p className="g-p">
+            자연 단음계만 쓰면 Ⅴ 자리에는 단3화음 ⅴ(A 마이너의 Em7)가 놓입니다. 오픈교재 <strong>Open Music Theory</strong>는 이 지점을 이렇게 정리합니다 — <strong>단조에서 이끔음을 반음 올리면 화음의 품질이 바뀌고, 따라서 로마숫자도 바뀐다. 단3화음 ⅴ는 장3화음 Ⅴ가 되고 Ⅶ은 감3화음 ⅶ°가 된다. 그래서 단조 조성에서 Ⅴ나 ⅶ° 표기를 보면 올린 이끔음을 쓰고 있다는 뜻이다.</strong> 자연 단음계의 7음은 으뜸음과 온음 거리라 애초에 &lsquo;이끔음&rsquo;이 아니라 <strong>아래으뜸음(subtonic)</strong>으로 부르고, 그 음을 반음 올린 음계가 화성 단음계입니다.
           </p>
-          <div style={{ overflowX: 'auto', marginBottom: '14px' }}>
+          <div className="tableScroll" style={{ marginBottom: '14px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -331,34 +445,31 @@ export default function ChordPage() {
                   ['Ⅰ / ⅰ', 'maj7 — Cmaj7', 'm7 — Am7'],
                 ].map(([pos, maj, min], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{pos}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{maj}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{min}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{pos}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{maj}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{min}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            같은 교재의 재즈 장은 마이너 2-5-1의 품질을 <strong style={{ color: 'var(--text)' }}>반감7 → 도미넌트7 → 단7(ø7-7-mi7)</strong>로 못박으면서, <strong style={{ color: 'var(--text)' }}>Ⅴ 화음은 장조든 단조든 장화음</strong>이라고 덧붙입니다. 위 계산기의 단조 다이아토닉 탭에서 마이너 2-5-1만 Ⅴ를 도미넌트7로 바꿔 표기하는 것도 이 규칙 때문입니다.
+          <p className="g-p" style={{ marginTop: 16 }}>
+            같은 교재의 재즈 장은 마이너 2-5-1의 품질을 <strong>반감7 → 도미넌트7 → 단7(ø7-7-mi7)</strong>로 못박으면서, <strong>Ⅴ 화음은 장조든 단조든 장화음</strong>이라고 덧붙입니다. 위 계산기의 단조 다이아토닉 탭에서 마이너 2-5-1만 Ⅴ를 도미넌트7로 바꿔 표기하는 것도 이 규칙 때문입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-edu) 19%, transparent)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--cat-edu)', marginBottom: '6px' }}>표기 주의 — 조성 이름은 언제나 자연 단음계 기준</p>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
-              Ⅴ7을 쓴다고 해서 그 곡을 &lsquo;화성 단조 곡&rsquo;이라 부르지는 않습니다. 교재는 조성 이름을 늘 자연 단음계 기준으로 A 마이너·D 마이너라 부르고, 작품이 화성·가락 단음계에 &lsquo;속한다&rsquo;고 말하지 않는다고 명시합니다. 화성·가락 단음계는 조성의 종류가 아니라 <strong style={{ color: 'var(--text)' }}>필요할 때 7음(과 6음)을 올려 쓰는 운용 방식</strong>으로 이해하는 편이 정확합니다. 한편 2-5-1은 장·단조를 가릴 것 없이 변형이 잦아서, 같은 교재는 「A Night in Tunisia」가 Ⅴ의 5음을 낮추고 「Prelude to a Kiss」가 7음은 둔 채 Ⅴ를 증화음으로 쓰며 「Misty」가 도착 코드를 maj7 대신 6화음으로 받는 예를 듭니다.
-            </p>
-          </div>
+          <Callout tone="note" title="표기 주의 — 조성 이름은 언제나 자연 단음계 기준">
+            Ⅴ7을 쓴다고 해서 그 곡을 &lsquo;화성 단조 곡&rsquo;이라 부르지는 않습니다. 교재는 조성 이름을 늘 자연 단음계 기준으로 A 마이너·D 마이너라 부르고, 작품이 화성·가락 단음계에 &lsquo;속한다&rsquo;고 말하지 않는다고 명시합니다. 화성·가락 단음계는 조성의 종류가 아니라 <strong>필요할 때 7음(과 6음)을 올려 쓰는 운용 방식</strong>으로 이해하는 편이 정확합니다. 한편 2-5-1은 장·단조를 가릴 것 없이 변형이 잦아서, 같은 교재는 「A Night in Tunisia」가 Ⅴ의 5음을 낮추고 「Prelude to a Kiss」가 7음은 둔 채 Ⅴ를 증화음으로 쓰며 「Misty」가 도착 코드를 maj7 대신 6화음으로 받는 예를 듭니다.
+          </Callout>
         </div>
 
         {/* ── 4-2. 슬래시 코드 읽는 법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             슬래시 코드(분수 코드) 읽는 법
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
-            C/E, G/B처럼 슬래시로 표기된 코드는 <strong style={{ color: 'var(--text)' }}>왼쪽 코드를 치되, 베이스(가장 낮은 음)만 오른쪽 음으로</strong> 연주하라는 뜻입니다. 베이스 음이 코드 구성음이면 음의 배치만 바뀌는 <strong style={{ color: 'var(--text)' }}>전위</strong>이고(C/E·G/B), 구성음이 아니면 코드 위에 새 베이스를 얹는 <strong style={{ color: 'var(--text)' }}>비화성 베이스</strong>입니다(Am/G). 어느 쪽이든 코드 사이의 베이스 라인을 매끄럽게 이어줄 때 주로 씁니다.
+          <p className="g-p">
+            C/E, G/B처럼 슬래시로 표기된 코드는 <strong>왼쪽 코드를 치되, 베이스(가장 낮은 음)만 오른쪽 음으로</strong> 연주하라는 뜻입니다. 베이스 음이 코드 구성음이면 음의 배치만 바뀌는 <strong>전위</strong>이고(C/E·G/B), 구성음이 아니면 코드 위에 새 베이스를 얹는 <strong>비화성 베이스</strong>입니다(Am/G). 어느 쪽이든 코드 사이의 베이스 라인을 매끄럽게 이어줄 때 주로 씁니다.
           </p>
-          <div style={{ overflowX: 'auto', marginBottom: '14px' }}>
+          <div className="tableScroll" style={{ marginBottom: '14px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -376,56 +487,38 @@ export default function ChordPage() {
                   ['D/F♯', '베이스 F♯ + D, A',    'D 코드의 1전위. 베이스 라인 연결에 자주 사용'],
                 ].map(([chord, notes, desc], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{notes}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{chord}</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{notes}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{desc}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 19%, transparent)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent-ink)', marginBottom: '6px' }}>실전 예 — 하행 베이스 라인</p>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>C → G/B → Am → Am/G → F → C/E → Dm7 → G7</p>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
-              코드는 C·G·Am·F 정도만 오가지만 베이스는 <strong style={{ color: 'var(--text)' }}>C→B→A→G→F→E→D</strong>로 한 음씩 계단처럼 내려갑니다. C와 Am 사이를 G/B가, Am과 F 사이를 Am/G가 이어주는 구조로, 발라드 인트로나 후렴 진입부에서 자주 들리는 진행입니다. 원리를 알면 어떤 진행이든 사이에 전위 코드를 끼워 베이스 라인을 직접 설계할 수 있습니다.
-            </p>
-          </div>
+          <Callout tone="tip" title="실전 예 — 하행 베이스 라인: C → G/B → Am → Am/G → F → C/E → Dm7 → G7">
+            코드는 C·G·Am·F 정도만 오가지만 베이스는 <strong>C→B→A→G→F→E→D</strong>로 한 음씩 계단처럼 내려갑니다. C와 Am 사이를 G/B가, Am과 F 사이를 Am/G가 이어주는 구조로, 발라드 인트로나 후렴 진입부에서 자주 들리는 진행입니다. 원리를 알면 어떤 진행이든 사이에 전위 코드를 끼워 베이스 라인을 직접 설계할 수 있습니다.
+          </Callout>
         </div>
 
         {/* ── 5. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 6. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기', desc: '코드를 다른 키로 즉시 이동' },
               { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',    desc: 'Hz ↔ 음이름 변환' },
               { href: '/tools/art/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '탭으로 BPM 측정' },
-              { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: '음표별 딜레이 타임 ms 계산' },
+              { href: '/tools/art/scale',     icon: '🎼', name: '스케일 음계 계산기', desc: '12키 × 12스케일 + 모드 비교' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>
@@ -438,6 +531,6 @@ export default function ChordPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

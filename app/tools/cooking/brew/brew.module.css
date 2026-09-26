@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -23,7 +23,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -33,13 +33,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -56,11 +56,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -104,13 +104,13 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -135,7 +135,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
 }@media (hover: hover) {
   .methodBtn:hover { border-color: var(--accent); }
@@ -147,19 +147,19 @@
 }
 .methodEmoji { font-size: 20px; }
 .methodLabel { font-size: 13px; font-weight: 700; color: var(--text); }
-.methodDesc { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: 'Inter', system-ui, sans-serif; }
+.methodDesc { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: var(--font-sans); }
 
 /* 히어로 */
 .hero {
   background: linear-gradient(135deg, rgba(232, 151, 87, 0.12) 0%, rgba(123, 79, 44, 0.08) 100%);
   border: 1px solid rgba(232, 151, 87, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
@@ -190,7 +190,7 @@
   letter-spacing: 0.04em;
 }
 .heroBlockValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(20px, 4.5vw, 28px);
   font-weight: 800;
   color: var(--accent);
@@ -205,12 +205,12 @@
 }
 .detailTable td:nth-child(2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; }
+.cellMono { font-family: var(--font-sans); }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -219,7 +219,7 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.cellSubtitle td { text-align: left !important; font-family: 'Noto Sans KR', sans-serif !important; }
+.cellSubtitle td { text-align: left !important; font-family: var(--font-sans); }
 
 .tableScroll {
   overflow-x: auto;
@@ -239,7 +239,7 @@
 
 .tipBox {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   margin-top: 12px;
   font-size: 12px;
@@ -271,12 +271,12 @@
   margin: 0;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .stepEmoji { font-size: 18px; }
 .stepHead strong { flex: 1; font-weight: 700; }
 .stepTime {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--muted);
   font-weight: 600;
@@ -285,7 +285,7 @@
   margin: 0;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .stepWater strong { font-weight: 800; }
 .stepDesc {
@@ -293,7 +293,7 @@
   font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 강도 영역 리스트 */
@@ -316,7 +316,7 @@
   margin: 0 0 2px;
   font-size: 13px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .zoneDesc {
   margin: 0;
@@ -330,7 +330,7 @@
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;
@@ -348,18 +348,18 @@
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* 면책 */
 .disclaimer {
   background: rgba(232, 151, 87, 0.06);
   border: 1px solid rgba(232, 151, 87, 0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -369,7 +369,7 @@
   display: block;
   color: var(--accent);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

@@ -149,25 +149,25 @@ export function getVisibleFaces(box: ProjectedBox): VisibleFace[] {
     {
       id: 'floor',
       points: [box.flf, box.frf, box.frb, box.flb],
-      fill: 'rgba(14,165,233,0.18)', stroke: '#0EA5E9',
+      fill: 'color-mix(in srgb, var(--accent) 18%, transparent)', stroke: 'var(--sky-500)',
     },
     // 2. 정면 벽 (사용자가 들어오는 쪽)
     {
       id: 'front',
       points: [box.flf, box.frf, box.crf, box.clf],
-      fill: 'rgba(234,88,12,0.18)', stroke: '#EA580C',
+      fill: 'rgba(234,88,12,0.18)', stroke: 'var(--orange-600)',
     },
     // 3. 우측 벽 — 버그 수정 핵심: frf와 frb의 x좌표가 다름!
     {
       id: 'right',
       points: [box.frf, box.frb, box.crb, box.crf],
-      fill: 'rgba(234,88,12,0.14)', stroke: '#EA580C',
+      fill: 'rgba(234,88,12,0.14)', stroke: 'var(--orange-600)',
     },
     // 4. 천장 (위에서 살짝 보임)
     {
       id: 'ceiling',
       points: [box.clf, box.crf, box.crb, box.clb],
-      fill: 'rgba(155,89,182,0.18)', stroke: '#9B59B6',
+      fill: 'rgba(155,89,182,0.18)', stroke: 'var(--amethyst)',
     },
   ]
 }

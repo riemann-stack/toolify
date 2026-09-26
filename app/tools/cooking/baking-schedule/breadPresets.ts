@@ -41,6 +41,10 @@ export type BreadPreset = {
   hasLevain?: boolean
   /** 발효종 표시 이름 (DDT 패널 라벨용) — 사워도우 '르방', 치아바타 '비가' 등 */
   prefermentName?: string
+  /** 일정에 실제로 반영되는 발효 방식 (없으면 4가지 모두). 지원하지 않는 방식은 UI에서 비활성화 */
+  supportedModes?: FermentationMode[]
+  /** 지원하지 않는 방식이 있을 때 사유 안내 */
+  modeNote?: string
 }
 
 export const BREAD_PRESETS: BreadPreset[] = [
@@ -143,6 +147,8 @@ export const BREAD_PRESETS: BreadPreset[] = [
     waterRatio: 80,
     notes: '높은 수분율로 다루기 어려움. 손 적시고 작업.',
     ddtTargetC: 24, hasLevain: true, prefermentName: '비가',
+    supportedModes: ['cold-final', 'cold-bulk', 'cold-bulk-final'],
+    modeNote: '치아바타는 전날 만들어 두는 비가(발효종)가 필요해 당일 발효 일정은 만들 수 없습니다.',
   },
   {
     id: 'whitebread',
@@ -279,6 +285,8 @@ export const BREAD_PRESETS: BreadPreset[] = [
     waterRatio: 50,
     notes: '버터 온도 관리가 핵심. 18~22℃ 작업실 권장.',
     ddtTargetC: 22,
+    supportedModes: ['cold-final'],
+    modeNote: '크루아상은 버터 층을 유지하려면 냉장 휴지가 꼭 필요해 발효 방식을 바꿀 수 없습니다.',
   },
 ]
 

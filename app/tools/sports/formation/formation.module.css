@@ -6,7 +6,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .cardLabel {
@@ -23,14 +23,14 @@
   color: var(--muted);
   font-weight: 600;
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   display: block;
 }
 
 /* ── 인원 ── */
 .countRow {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px;
 }
 .countBtn {
@@ -40,7 +40,7 @@
   padding: 12px 6px;
   text-align: center;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,7 +54,7 @@
   .countBtn:hover { border-color: var(--accent); }
 }
 .countActive {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -78,7 +78,7 @@
   padding: 10px 12px;
   text-align: left;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
   min-width: 0;
 }
@@ -86,11 +86,11 @@
   .formBtn:hover { border-color: var(--accent); }
 }
 .formActive {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: var(--accent);
 }
 .formName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 800;
   color: var(--text);
@@ -101,7 +101,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-top: 2px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -120,11 +120,11 @@
   min-width: 100px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 16px;       /* iOS 줌 방지 */
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   outline: none;
 }
@@ -141,7 +141,7 @@
   font-size: 12px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) {
   .miniBtn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
@@ -154,7 +154,7 @@
   color: var(--accent);
   cursor: pointer;
   font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-decoration: underline;
   padding: 2px 6px;
 }
@@ -163,7 +163,7 @@
 .optCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 10px 12px;
 }
 .optGrid {
@@ -186,11 +186,11 @@
   flex: 1;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 10px;
   font-size: 16px;       /* iOS 줌 방지 */
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   min-width: 0;
   height: 38px;
@@ -201,7 +201,7 @@
   width: 36px;
   height: 36px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background: var(--bg3);
   cursor: pointer;
   padding: 2px;
@@ -211,7 +211,7 @@
   display: flex;
   gap: 2px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   overflow: hidden;
   height: 36px;
 }
@@ -222,29 +222,29 @@
   font-size: 16px;
   font-weight: 800;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }
-.dirActive { background: rgba(14,165,233,0.15); color: var(--accent); }
+.dirActive { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
 .labelToggleBtn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   padding: 0 10px;
   height: 36px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   white-space: nowrap;
 }
 .labelToggleBtn input { accent-color: var(--accent); width: 14px; height: 14px; cursor: pointer; }
 .labelToggleBtn:has(input:checked) {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -253,7 +253,7 @@
 .pitchCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 14px;
 }
 .pitchHeader {
@@ -264,13 +264,13 @@
   padding: 0 4px;
 }
 .pitchTeam {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 800;
   color: var(--text);
 }
 .pitchFormation {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--accent);
   font-weight: 700;
@@ -303,7 +303,7 @@
   padding: 11px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   font-weight: 600;
   transition: all 0.15s;
@@ -312,7 +312,7 @@
   .copyBtn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 }
 .copyBtn:disabled { opacity: 0.5; cursor: wait; }
-.copied { background: rgba(14,165,233,0.18); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.copied { background: color-mix(in srgb, var(--accent) 18%, transparent); border-color: var(--accent); color: var(--accent); font-weight: 700; }
 
 /* ── 모달 (선수 편집) — 모바일 컴팩트 ── */
 .modalBackdrop {
@@ -328,7 +328,7 @@
 .modal {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 14px 16px;
   width: 100%;
   max-width: 320px;
@@ -345,7 +345,7 @@
   align-items: center;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -372,7 +372,7 @@
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 명단 표 ── */
@@ -388,24 +388,24 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   cursor: pointer;
   text-align: left;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) {
   .rosterItem:hover { border-color: var(--accent); }
 }
 .rosterPos {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--accent);
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 .rosterNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--text);
   font-weight: 800;
@@ -419,3 +419,6 @@
   white-space: nowrap;
 }
 .rosterName em { color: var(--muted); font-style: normal; }
+
+/* overflow:hidden 컨테이너 안 버튼 — 전역 포커스 링(바깥 2px)이 잘리지 않게 안쪽으로 */
+.dirRow :focus-visible { outline-offset: -3px; }

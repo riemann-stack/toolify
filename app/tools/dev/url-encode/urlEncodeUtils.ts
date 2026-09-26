@@ -16,7 +16,10 @@ export interface TrackingGroup {
   emoji: string
   label: string
   desc: string
-  keys: string[]   /* 'utm_*' 같은 와일드카드 지원 */
+  keys: string[]   /* 'utm_*' 같은 와일드카드 지원 — 어느 사이트에서든 추적용 */
+  /* src·pid처럼 다른 사이트에선 상품 ID·파일 경로 같은 기능용으로도 쓰는 범용 키 —
+     해당 플랫폼 도메인(서브도메인 포함)일 때만 추적으로 분류 */
+  domainKeys?: { domains: string[]; keys: string[] }
 }
 
 export const TRACKING_GROUPS: TrackingGroup[] = [
@@ -44,24 +47,28 @@ export const TRACKING_GROUPS: TrackingGroup[] = [
   {
     id: 'kakao', emoji: '💬', label: '카카오·다음',
     desc: '카카오톡·카카오 모먼트·다음 추적',
-    keys: ['kakao_share_id', 'kakao_chat_id', '_branch_match_id',
-           'kakao_ref', 'kakao_referer', 'taid', 'pid'],
+    keys: ['kakao_share_id', 'kakao_chat_id', 'kakao_ref', 'kakao_referer'],
+    domainKeys: { domains: ['kakao.com', 'daum.net', 'kakaocorp.com'], keys: ['taid', 'pid'] },
   },
   {
     id: 'coupang', emoji: '🛍️', label: '쿠팡',
     desc: '쿠팡 파트너스·검색·광고 추적',
-    keys: ['_xts_', 'src', 'spec', 'addtag', 'ctag', 'lptag', 'srcid',
-           'wPcid', 'wRef', 'itime', 'pageType', 'pageValue'],
+    keys: ['_xts_', 'wPcid', 'wRef'],
+    domainKeys: {
+      domains: ['coupang.com'],
+      keys: ['src', 'spec', 'addtag', 'ctag', 'lptag', 'srcid', 'itime', 'pageType', 'pageValue'],
+    },
   },
   {
     id: 'microsoft', emoji: '🟦', label: 'Microsoft·Bing',
-    desc: 'Bing 광고·MailChimp·Microsoft 추적',
-    keys: ['msclkid', 'mc_eid', 'mc_cid', 'mkt_tok'],
+    desc: 'Bing·Microsoft 광고 클릭 추적',
+    keys: ['msclkid'],
   },
   {
     id: 'other', emoji: '📊', label: '기타 마케팅',
-    desc: 'Twitter·LinkedIn·Yandex·기타 추적 도구',
+    desc: 'X·LinkedIn·Yandex·Mailchimp·Marketo·HubSpot·Branch 등 기타 추적 도구',
     keys: ['igshid', 'twclid', 'li_fat_id', 'yclid', 'piwik_*',
+           'mc_eid', 'mc_cid', 'mkt_tok', '_branch_match_id',
            'oly_anon_id', 'oly_enc_id', 'rb_clickid', 'ttclid',
            'ScCid', 'ICID', 'WT.mc_id', 'epik', '_kx',
            '_hsenc', '_hsmi', 'hsa_*'],
@@ -77,10 +84,17 @@ export function matchesTrackingPattern(key: string, pattern: string): boolean {
   return key === pattern
 }
 
-/* 키가 어떤 그룹에 속하는지 찾기 */
-export function findTrackingGroup(key: string): TrackingGroup | null {
+function hostMatches(host: string, domain: string): boolean {
+  const h = host.toLowerCase()
+  return h === domain || h.endsWith('.' + domain)
+}
+
+/* 키가 어떤 그룹에 속하는지 찾기 — host를 모르면 범용 키(domainKeys)는 추적으로 보지 않음 */
+export function findTrackingGroup(key: string, host: string = ''): TrackingGroup | null {
   for (const g of TRACKING_GROUPS) {
     if (g.keys.some((p) => matchesTrackingPattern(key, p))) return g
+    if (g.domainKeys && host && g.domainKeys.domains.some((d) => hostMatches(host, d))
+      && g.domainKeys.keys.some((p) => matchesTrackingPattern(key, p))) return g
   }
   return null
 }
@@ -126,14 +140,15 @@ export interface DecodeResult {
   error?: string
 }
 
-export function decodeUrl(text: string, repeat: boolean): DecodeResult {
+export function decodeUrl(text: string, repeat: boolean, plusAsSpace: boolean = false): DecodeResult {
   const t0 = performance.now()
   if (!text) return { result: '', iterations: 0, ms: 0 }
   try {
-    let current = text
+    /* 폼 인코딩(application/x-www-form-urlencoded)·검색 URL의 + 는 공백 — %2B(실제 +)는 디코드 후에도 + 로 남음 */
+    let current = plusAsSpace ? text.replace(/\+/g, ' ') : text
     let iterations = 0
     if (!repeat) {
-      current = decodeURIComponent(text)
+      current = decodeURIComponent(current)
       iterations = 1
     } else {
       /* 반복 디코드 — 더 이상 변경 없을 때까지, 최대 5회 */
@@ -206,6 +221,9 @@ export function parseUrl(input: string): ParsedUrl | ParseError {
   if (!input.trim()) return { error: '빈 입력' }
   try {
     const u = new URL(input)
+    /* 한글 도메인(IDN)은 URL이 punycode(xn--)로 바꾸므로, 사용자가 입력한 표기를 그대로 보존 */
+    const typedHost = /^[a-z][a-z0-9+.-]*:\/\/(?:[^@/?#]*@)?(\[[^\]]*\]|[^:/?#]*)/i.exec(input.trim())?.[1]
+    const host = typedHost && u.hostname.includes('xn--') && !typedHost.toLowerCase().includes('xn--') ? typedHost : u.hostname
     const params: Array<{ key: string; value: string; rawValue: string }> = []
     /* URLSearchParams 는 자동 디코드 — 원본은 따로 추출 */
     const rawSearch = u.search.replace(/^\?/, '')
@@ -223,7 +241,7 @@ export function parseUrl(input: string): ParsedUrl | ParseError {
       scheme: u.protocol.replace(/:$/, ''),
       user: u.username || undefined,
       password: u.password || undefined,
-      host: u.hostname,
+      host,
       port: u.port || undefined,
       path: u.pathname,
       query: decodeQueryFriendly(rawSearch),
@@ -288,7 +306,7 @@ export function detectTrackingParams(url: string): TrackingMatch[] {
   if ('error' in parsed) return []
   const matches: TrackingMatch[] = []
   for (const p of parsed.params) {
-    const group = findTrackingGroup(p.key)
+    const group = findTrackingGroup(p.key, parsed.host)
     if (group) {
       matches.push({
         groupId: group.id,
@@ -313,7 +331,7 @@ export function groupTrackingMatches(url: string): TrackingByGroup[] {
   if ('error' in parsed) return []
   const grouped = new Map<string, TrackingByGroup>()
   for (const p of parsed.params) {
-    const group = findTrackingGroup(p.key)
+    const group = findTrackingGroup(p.key, parsed.host)
     if (!group) continue
     if (!grouped.has(group.id)) {
       grouped.set(group.id, { group, items: [] })

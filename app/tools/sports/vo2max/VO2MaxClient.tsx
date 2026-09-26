@@ -7,7 +7,7 @@ import s from './vo2max.module.css'
 import {
   METHODS, calcCooper, calcMile15, calcRockport, calcQueens, calcNorway, calcHRR,
   classifyLevel, LEVEL_META, getNormBand,
-  predictRaces, fmtTime, fmtPace, trainingPaces,
+  predictRaces, fmtTime, fmtPace, trainingPaces, showRacePrediction, RACE_PREDICT_MIN_VO2,
   IMPROVE_TIPS, calcPAIndex,
   PA_FREQ_LABELS, PA_INTENSITY_LABELS, PA_DURATION_LABELS,
   type MethodId, type Sex,
@@ -320,7 +320,7 @@ export default function VO2MaxClient() {
           <div className={s.cardLabel}>비슷한 연령대 비교 ({age}세 {sex === 'male' ? '남성' : '여성'})</div>
           <div className={s.segChart}>
             {[
-              { id: 'poor',      label: '매우 미흡', range: `~${band.below}` },
+              { id: 'poor',      label: '매우 미흡', range: `< ${band.below}` },
               { id: 'below',     label: '미흡',      range: `${band.below}~${band.average}` },
               { id: 'average',   label: '평균',      range: `${band.average}~${band.good}` },
               { id: 'good',      label: '우수',      range: `${band.good}~${band.excellent}` },
@@ -340,12 +340,23 @@ export default function VO2MaxClient() {
               )
             })}
           </div>
-          <p className={s.bandSource}>단위 mL/kg/min · 출처: ACSM · Cooper Institute Fitness Norms</p>
+          <p className={s.bandSource}>단위 mL/kg/min · 구간은 앞 값 이상·뒤 값 미만 · ACSM·Cooper Institute 규준을 참고해 단순화한 기준</p>
         </div>
       )}
 
       {/* ── 6. 마라톤·구간 예측 ── */}
-      {vo2 > 0 && (
+      {vo2 > 0 && !showRacePrediction(vo2, methodId) && (
+        <div className={s.card}>
+          <div className={s.cardLabel}>마라톤·구간 예상 시간</div>
+          <p className={s.fieldHint}>
+            {methodId === 'rockport'
+              ? '걷기 테스트 결과는 달리기 기록으로 환산하면 오차가 커서 예상 기록을 표시하지 않습니다.'
+              : `VO₂max ${RACE_PREDICT_MIN_VO2} 미만에서는 달리기 기록 환산 오차가 커서 예상 기록을 표시하지 않습니다.`}
+            {' '}걷기·가벼운 조깅으로 체력을 먼저 올린 뒤 달리기 테스트로 다시 측정해 보세요.
+          </p>
+        </div>
+      )}
+      {showRacePrediction(vo2, methodId) && (
         <div className={s.card}>
           <div className={s.cardLabel}>마라톤·구간 예상 시간 (Daniels VDOT 기반)</div>
           <div className={s.raceGrid}>
@@ -371,7 +382,7 @@ export default function VO2MaxClient() {
             </div>
           </div>
           <p className={s.fieldHint}>
-            ⚠️ Riegel·Daniels 공식 기반 추정 — 실제 페이스는 훈련량·환경·전략에 따라 달라집니다.
+            ⚠️ Daniels VDOT 공식 기반 추정 — 실제 페이스는 훈련량·환경·전략에 따라 달라집니다.
             실제 레이스 기록 기반 정밀 예측(3공식 평균·환경/연령 보정·목표 역산)은{' '}
             <Link href="/tools/sports/race-predictor" style={{ color: 'var(--accent)' }}>마라톤 기록 계산기</Link>에서 확인하세요.
           </p>

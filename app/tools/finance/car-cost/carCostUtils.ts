@@ -4,6 +4,9 @@
    ※ 본 도구는 일반 정보 제공이며 정확한 견적은 캐피탈·보험·정비 전문가 상담 권장.
    ────────────────────────────────────────────────────── */
 
+import { annualTaxByCC, EV_ANNUAL_TAX, EDU_TAX_RATE } from '@/lib/krVehicleTax'
+import { GASOLINE_PRICE, DIESEL_PRICE } from '@/lib/krFuelPrices'
+
 /* ─── 포맷 (★ "0억" 표기 버그 픽스) ─── */
 export function formatKoreanCurrency(amount: number): string {
   if (!isFinite(amount) || isNaN(amount) || amount === 0) return '0원'
@@ -78,20 +81,30 @@ export interface AutoTaxBracket {
   desc: string
 }
 
-// 비영업용 승용차 자동차세 = cc × (80/140/200원) + 지방교육세 30%. 아래는 교육세 포함 실납부 기준.
+/* 비영업용 승용차 자동차세 — cc당 세액(1,000cc 이하 80원 / 1,600cc 이하 140원 / 1,600cc 초과 200원)과
+   지방교육세 30%는 lib/krVehicleTax.ts 단일 소스(finance/car-tax와 공유).
+   (기존 표는 구간 경계를 1,500cc로 잘못 나눠 1.6L 차량을 52만원 구간으로 안내했음) */
+
+/** 배기량(cc) → 연 자동차세(지방교육세 포함, 차령 경감 전) */
+export function autoTaxYearlyForCC(cc: number): number {
+  const c = Math.max(0, cc)
+  return Math.round(annualTaxByCC(c, false) * (1 + EDU_TAX_RATE))
+}
+
+// 빠른 선택 칩 — 구간 상한 배기량 기준 세액 (1,598cc 등 실제 배기량은 직접 입력하면 더 정확)
 export const AUTO_TAX_BRACKETS: AutoTaxBracket[] = [
-  { ccMax: 1000,     yearly:  104_000, desc: '경차 (1,000cc 이하)' },
-  { ccMax: 1500,     yearly:  260_000, desc: '소형 (1,500cc 이하)' },
-  { ccMax: 2000,     yearly:  520_000, desc: '준중형·중형 (2,000cc 이하)' },
-  { ccMax: 2500,     yearly:  650_000, desc: '중형~대형 (2,500cc 이하)' },
-  { ccMax: 3000,     yearly:  780_000, desc: '대형 (3,000cc 이하)' },
-  { ccMax: Infinity, yearly: 1_040_000, desc: '대형 SUV (3,000cc 초과)' },
+  { ccMax: 1000, yearly: autoTaxYearlyForCC(1000), desc: '경차 (1,000cc)' },              // 104,000
+  { ccMax: 1600, yearly: autoTaxYearlyForCC(1600), desc: '소형·준중형 1.6L (1,600cc)' },  // 291,200
+  { ccMax: 2000, yearly: autoTaxYearlyForCC(2000), desc: '중형 2.0L (2,000cc)' },          // 520,000
+  { ccMax: 2500, yearly: autoTaxYearlyForCC(2500), desc: '중대형 2.5L (2,500cc)' },        // 650,000
+  { ccMax: 3000, yearly: autoTaxYearlyForCC(3000), desc: '대형 3.0L (3,000cc)' },          // 780,000
+  { ccMax: 3500, yearly: autoTaxYearlyForCC(3500), desc: '대형 SUV 3.5L (3,500cc)' },      // 910,000
 ]
 
-export const EV_AUTO_TAX = 130_000   // 전기차 정액 (10만 + 교육세 3만)
+export const EV_AUTO_TAX = Math.round(EV_ANNUAL_TAX * (1 + EDU_TAX_RATE))   // 전기차 정액 (10만 + 교육세 3만 = 130,000)
 
 export function autoTaxByCC(cc: number): number {
-  return AUTO_TAX_BRACKETS.find(b => cc <= b.ccMax)?.yearly ?? 800_000
+  return autoTaxYearlyForCC(cc)
 }
 
 /* ─── 연료 데이터 (2026년 5월 기준) ─── */
@@ -104,10 +117,10 @@ export interface FuelData {
 }
 
 export const FUEL_DATA_2026: FuelData[] = [
-  { id: 'gasoline',     name: '가솔린',          pricePerUnit: 1650, unit: 'L',   avgEfficiency: 12 },
-  { id: 'diesel',       name: '경유',            pricePerUnit: 1500, unit: 'L',   avgEfficiency: 14 },
+  { id: 'gasoline',     name: '가솔린',          pricePerUnit: GASOLINE_PRICE, unit: 'L',   avgEfficiency: 12 },
+  { id: 'diesel',       name: '경유',            pricePerUnit: DIESEL_PRICE, unit: 'L',   avgEfficiency: 14 },
   { id: 'lpg',          name: 'LPG',             pricePerUnit: 1000, unit: 'L',   avgEfficiency: 9 },
-  { id: 'hybrid',       name: '하이브리드',      pricePerUnit: 1650, unit: 'L',   avgEfficiency: 18 },
+  { id: 'hybrid',       name: '하이브리드',      pricePerUnit: GASOLINE_PRICE, unit: 'L',   avgEfficiency: 18 },
   { id: 'electric',     name: '전기 (가정 충전)', pricePerUnit:  200, unit: 'kWh', avgEfficiency: 5 },
   { id: 'electricFast', name: '전기 (급속)',     pricePerUnit:  350, unit: 'kWh', avgEfficiency: 5 },
 ]
@@ -166,7 +179,7 @@ export function calcMaintenance(input: MaintenanceInput): MaintenanceResult {
   // 연료비
   const fuelMonthly = input.fuelType === 'ev'
     ? (input.monthlyKm / Math.max(0.1, input.evEfficiency ?? 5)) * (input.chargePrice ?? 200)
-    : (input.monthlyKm / Math.max(0.1, input.efficiency ?? 12)) * (input.fuelPrice ?? 1650)
+    : (input.monthlyKm / Math.max(0.1, input.efficiency ?? 12)) * (input.fuelPrice ?? GASOLINE_PRICE)
 
   const insuranceMonthly = input.insuranceYearly / 12
   const carTaxMonthly = input.carTaxYearly / 12
@@ -194,15 +207,15 @@ export function calcMaintenance(input: MaintenanceInput): MaintenanceResult {
   const perKm = input.monthlyKm > 0 ? monthlyInclDepr / input.monthlyKm : 0
 
   const breakdown = [
-    { key: 'fuel', label: input.fuelType === 'ev' ? '충전비' : '유류비', icon: input.fuelType === 'ev' ? '🔌' : '🛢️', value: fuelMonthly, color: '#EA580C' },
-    { key: 'ins',  label: '보험료',     icon: '🛡️', value: insuranceMonthly, color: '#0891B2' },
-    { key: 'tax',  label: '자동차세',   icon: '🏛️', value: carTaxMonthly,    color: '#A16207' },
-    { key: 'park', label: '주차비',     icon: '🅿️', value: input.parkingMonthly, color: '#9B59B6' },
-    { key: 'loan', label: '할부금',     icon: '💳', value: input.loanMonthly, color: '#0EA5E9' },
-    { key: 'var',  label: '소모품·정비', icon: '🔧', value: variableMonthly,  color: '#059669' },
+    { key: 'fuel', label: input.fuelType === 'ev' ? '충전비' : '유류비', icon: input.fuelType === 'ev' ? '🔌' : '🛢️', value: fuelMonthly, color: 'var(--orange-600)' },
+    { key: 'ins',  label: '보험료',     icon: '🛡️', value: insuranceMonthly, color: 'var(--cyan-600)' },
+    { key: 'tax',  label: '자동차세',   icon: '🏛️', value: carTaxMonthly,    color: 'var(--yellow-700)' },
+    { key: 'park', label: '주차비',     icon: '🅿️', value: input.parkingMonthly, color: 'var(--amethyst)' },
+    { key: 'loan', label: '할부금',     icon: '💳', value: input.loanMonthly, color: 'var(--sky-500)' },
+    { key: 'var',  label: '소모품·정비', icon: '🔧', value: variableMonthly,  color: 'var(--emerald-600)' },
   ]
   if (input.depreciationOn) {
-    breakdown.push({ key: 'depr', label: '감가상각', icon: '📉', value: input.depreciationMonthly, color: '#DC2626' })
+    breakdown.push({ key: 'depr', label: '감가상각', icon: '📉', value: input.depreciationMonthly, color: 'var(--red-600)' })
   }
 
   return {

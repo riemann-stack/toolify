@@ -6,9 +6,9 @@ import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './customs.module.css'
 import {
-  COUNTRIES, ITEMS, LISTED_CATEGORIES, SCENARIOS,
+  COUNTRIES, ITEMS, LISTED_CATEGORIES, SCENARIOS, DEFAULT_USD_KRW,
   type CountryId, type UsageType,
-  getCountry, getItem, calcCustoms,
+  getCountry, getItem, calcCustoms, isCountryId,
   fmt, fmtKrw, fmtCurrency,
 } from './customsUtils'
 
@@ -25,33 +25,50 @@ export default function CustomsClient() {
   const [productPrice, setProductPrice] = useState('999')
   const [shippingFee, setShippingFee] = useState('25')
   const [exchangeRate, setExchangeRate] = useState('')
+  /* 비USD 국가의 면세 판정용 USD 환율 (선택 입력) */
+  const [usdRate, setUsdRate] = useState('')
   const [usage, setUsage] = useState<UsageType>('personal')
 
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.countryId) setCountryId(j.countryId)
-      if (j.itemId) setItemId(j.itemId)
-      if (j.productPrice) setProductPrice(j.productPrice)
-      if (j.shippingFee) setShippingFee(j.shippingFee)
-      if (j.exchangeRate) setExchangeRate(j.exchangeRate)
-      if (j.usage) setUsage(j.usage)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
+      const o = j as Record<string, unknown>
+      const str = (v: unknown) => (typeof v === 'string' ? v : null)
+      if (isCountryId(o.countryId)) setCountryId(o.countryId)
+      if (typeof o.itemId === 'string' && ITEMS.some((it) => it.id === o.itemId)) setItemId(o.itemId)
+      if (str(o.productPrice)) setProductPrice(str(o.productPrice)!)
+      if (str(o.shippingFee)) setShippingFee(str(o.shippingFee)!)
+      if (str(o.exchangeRate)) setExchangeRate(str(o.exchangeRate)!)
+      if (str(o.usdRate)) setUsdRate(str(o.usdRate)!)
+      if (o.usage === 'personal' || o.usage === 'business') setUsage(o.usage)
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ countryId, itemId, productPrice, shippingFee, exchangeRate, usage }))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ countryId, itemId, productPrice, shippingFee, exchangeRate, usdRate, usage }))
     } catch {}
-  }, [countryId, itemId, productPrice, shippingFee, exchangeRate, usage])
+  }, [countryId, itemId, productPrice, shippingFee, exchangeRate, usdRate, usage])
+
+  /* 국가 변경 — 통화가 바뀌면 이전 통화 기준으로 입력한 환율을 비움 */
+  const changeCountry = (id: CountryId) => {
+    if (getCountry(id).currency !== getCountry(countryId).currency) setExchangeRate('')
+    setCountryId(id)
+  }
 
   /* 계산 */
   const country = getCountry(countryId)
   const item = getItem(itemId)
   const rateBase = country.defaultRateBase ?? 1
   const rateValue = parseFloat(exchangeRate) || country.defaultRate
+  const isUsd = country.currency === 'USD'
+  /* 면세 판정 USD 환율: USD 국가는 입력 환율 그대로, 그 외는 USD 환율 입력값(없으면 기본값) */
+  const usdKrw = isUsd ? rateValue : (parseFloat(usdRate) || DEFAULT_USD_KRW)
   const result = useMemo(() => calcCustoms({
     countryId,
     itemId,
@@ -60,14 +77,15 @@ export default function CustomsClient() {
     exchangeRate: rateValue,
     rateBase,
     toUsdRate: country.toUsdRate,
+    usdKrw,
     usage,
-  }), [countryId, itemId, productPrice, shippingFee, rateValue, rateBase, country.toUsdRate, usage])
+  }), [countryId, itemId, productPrice, shippingFee, rateValue, rateBase, country.toUsdRate, usdKrw, usage])
 
   /* 시나리오 적용 */
   const applyScenario = (id: string) => {
     const sc = SCENARIOS.find((s) => s.id === id)
     if (!sc) return
-    setCountryId(sc.countryId)
+    changeCountry(sc.countryId)
     setItemId(sc.itemId)
     setProductPrice(String(sc.productPrice))
     setShippingFee(String(sc.shippingFee))
@@ -86,7 +104,7 @@ export default function CustomsClient() {
           { href: '/tools/life/dutch', label: '더치페이 계산기' }
         ]}
       >
-        사용 안내 표시 관세율은 일반 가이드 — 정확한 HS Code는 <strong>관세청 우편물 추적</strong>에서 확인. 환율은 사용자 입력 또는 <strong>관세청 주간 고시 환율</strong> 기준. 자가사용 vs 사업자 직구 면세 기준 다름 — 사업자는 면세 X.
+        사용 안내 표시 관세율은 일반 가이드 — 정확한 HS Code·세율은 <strong>관세법령정보포털(UNI-PASS) 세율 조회</strong>로 확인. 환율은 사용자 입력 또는 <strong>관세청 주간 고시 환율</strong> 기준. 자가사용 vs 사업자 직구 면세 기준 다름 — 사업자는 면세 X.
       </Disclaimer>
 
       {/* 탭 */}
@@ -123,7 +141,7 @@ export default function CustomsClient() {
                   aria-pressed={countryId === c.id}
                   aria-label={`${c.shortName} (면세 한도 $${c.dutyFreeUsd})`}
                   className={`${s.countryBtn} ${countryId === c.id ? s.countryBtnActive : ''}`}
-                  onClick={() => setCountryId(c.id)}
+                  onClick={() => changeCountry(c.id)}
                   type="button"
                 >
                   <span className={s.countryFlag} aria-hidden="true">{c.flag}</span>
@@ -149,7 +167,7 @@ export default function CustomsClient() {
                 >
                   <span className={s.itemEmoji} aria-hidden="true">{it.emoji}</span>
                   <span className={s.itemLabel}>{it.shortLabel}</span>
-                  <span className={s.itemRate} style={{ color: it.dutyRate === 0 ? '#0D9488' : 'var(--accent)' }}>
+                  <span className={s.itemRate} style={{ color: it.dutyRate === 0 ? 'var(--teal-600)' : 'var(--accent)' }}>
                     {it.dutyRate}%{it.dutyRate === 0 && ' ⭐'}
                   </span>
                 </button>
@@ -162,19 +180,20 @@ export default function CustomsClient() {
             <span className={s.cardLabel}>가격 · 환율 · 자가사용</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>상품 가격 ({country.currencyUnit} {country.currency})</label>
-                <input type="number" className={s.input} value={productPrice} onChange={(e) => setProductPrice(e.target.value)} min={0} step={1} aria-label={`상품 가격 (${country.currency}, 면세 한도 판정 기준)`} inputMode="decimal" />
+                <label className={s.fieldLabel} htmlFor="customs-price">상품 가격 ({country.currencyUnit} {country.currency})</label>
+                <input id="customs-price" type="number" className={s.input} value={productPrice} onChange={(e) => setProductPrice(e.target.value)} min={0} step={1} aria-label={`상품 가격 (${country.currency}, 면세 한도 판정 기준)`} inputMode="decimal" />
               </div>
               <div className={s.field}>
-                <label className={s.fieldLabel}>국제 배송비 ({country.currencyUnit} {country.currency})</label>
-                <input type="number" className={s.input} value={shippingFee} onChange={(e) => setShippingFee(e.target.value)} min={0} step={1} aria-label={`국제 배송비 (${country.currency}, 과세가격엔 포함·면세 한도엔 미포함)`} inputMode="decimal" />
+                <label className={s.fieldLabel} htmlFor="customs-ship">국제 배송비 ({country.currencyUnit} {country.currency})</label>
+                <input id="customs-ship" type="number" className={s.input} value={shippingFee} onChange={(e) => setShippingFee(e.target.value)} min={0} step={1} aria-label={`국제 배송비 (${country.currency}, 과세가격엔 포함·면세 한도엔 미포함)`} inputMode="decimal" />
               </div>
             </div>
             <p className={s.helpText}>※ 면세 한도는 <strong>상품 가격(물품가격)</strong>만으로 판정합니다. 국제 배송비는 과세 시 <strong>과세가격(CIF)</strong>에만 더해집니다. 별도 표기 안 된 운임·현지(국내) 배송비는 기준이 달라질 수 있어요.</p>
             <div className={s.row2}>
               <div className={s.field}>
-                <label className={s.fieldLabel}>환율 (1{country.currencyUnit}{rateBase > 1 ? `(${rateBase})` : ''} = ? 원)</label>
+                <label className={s.fieldLabel} htmlFor="customs-rate">환율 (1{country.currencyUnit}{rateBase > 1 ? `(${rateBase})` : ''} = ? 원)</label>
                 <input
+                  id="customs-rate"
                   type="number"
                   className={s.input}
                   value={exchangeRate}
@@ -184,7 +203,23 @@ export default function CustomsClient() {
                   aria-label={`환율 (1${country.currencyUnit}${rateBase > 1 ? ` ${rateBase}단위` : ''} 당 원, 기본 ${country.defaultRate}원)`}
                   inputMode="decimal"
                 />
-                <p className={s.helpText}>기본값 {country.defaultRate}원 · 관세청 주간 고시 환율 권장</p>
+                <p className={s.helpText}>기본값 {country.defaultRate}원(2026년 9월 시세 근사) · 관세청 주간 고시 환율 권장</p>
+                {!isUsd && (
+                  <>
+                    <label className={s.fieldLabel} htmlFor="customs-usd-rate" style={{ marginTop: 8 }}>USD 환율 (1$ = ? 원, 면세 판정용)</label>
+                    <input
+                      id="customs-usd-rate"
+                      type="number"
+                      className={s.input}
+                      value={usdRate}
+                      onChange={(e) => setUsdRate(e.target.value)}
+                      placeholder={String(DEFAULT_USD_KRW)}
+                      min={0}
+                      inputMode="decimal"
+                    />
+                    <p className={s.helpText}>면세 한도는 달러 기준이라, 위 환율로 원화 환산한 금액을 이 USD 환율로 나눠 판정해요. 기본값 {DEFAULT_USD_KRW}원</p>
+                  </>
+                )}
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel}>사용 목적</label>
@@ -202,11 +237,11 @@ export default function CustomsClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero} aria-live="polite" style={{ borderColor: result.isDutyFree ? 'rgba(13, 148, 136, 0.4)' : 'rgba(219, 39, 119, 0.4)' }}>
+          <div className={s.hero} role="status" aria-live="polite" style={{ borderColor: result.isDutyFree ? 'rgba(13, 148, 136, 0.4)' : 'rgba(219, 39, 119, 0.4)' }}>
             <p className={s.heroLabel}>
               {country.flag} {country.shortName} · {item.emoji} {item.label}
             </p>
-            <p className={s.heroValue} style={{ color: result.isDutyFree ? '#0D9488' : '#DB2777' }}>
+            <p className={s.heroValue} style={{ color: result.isDutyFree ? 'var(--teal-600)' : 'var(--pink-600)' }}>
               {result.isDutyFree ? '✅ 면세' : '❌ 과세'}
             </p>
             <p className={s.heroSub}>
@@ -216,10 +251,14 @@ export default function CustomsClient() {
               {result.isDutyFree
                 ? <>면세 한도 <strong>${result.dutyFreeLimit}</strong>까지 여유 <strong style={{ color: 'var(--accent)' }}>${Math.max(0, result.dutyFreeLimit - result.productUsd).toFixed(2)}</strong></>
                 : usage === 'business'
-                  ? <>🏢 사업자 직구 — 면세 한도 적용 <strong style={{ color: '#DB2777' }}>X</strong></>
+                  ? <>🏢 사업자 직구 — 면세 한도 적용 <strong style={{ color: 'var(--pink-600)' }}>X</strong></>
+                  : result.liquorDutyExempt
+                    ? <>🍷 주류 1병·물품가격 ${result.dutyFreeLimit} 이하 — <strong style={{ color: 'var(--accent-ink)' }}>관세만 면제</strong>, 주세·교육세·부가세 <strong style={{ color: 'var(--pink-600)' }}>과세</strong></>
                   : item.dutyFreeExcluded
-                    ? <>🍷 소액면세 배제 품목 — 한도와 <strong style={{ color: '#DB2777' }}>무관하게 과세</strong></>
-                    : <>면세 한도 <strong>${result.dutyFreeLimit}</strong> 초과 <strong style={{ color: '#DB2777' }}>${(result.productUsd - result.dutyFreeLimit).toFixed(2)}</strong></>
+                    ? item.liquor
+                      ? <>🍷 주류 물품가격 ${result.dutyFreeLimit} 초과 — <strong style={{ color: 'var(--pink-600)' }}>관세까지 모두 과세</strong></>
+                      : <>소액면세 배제 품목 — 한도와 <strong style={{ color: 'var(--pink-600)' }}>무관하게 과세</strong></>
+                    : <>면세 한도 <strong>${result.dutyFreeLimit}</strong> 초과 <strong style={{ color: 'var(--pink-600)' }}>${(result.productUsd - result.dutyFreeLimit).toFixed(2)}</strong></>
               }
             </p>
           </div>
@@ -228,6 +267,9 @@ export default function CustomsClient() {
           <div className={result.isDutyFree ? s.warnCardGood : s.warnCardStrong}>
             <strong>{result.isDutyFree ? '✅ 면세 판단' : '❌ 과세 판단'}</strong>
             <p>{result.reason}</p>
+            {result.nearLimit && !isUsd && usage === 'personal' && (!item.dutyFreeExcluded || item.liquor) && (
+              <p>물품가격이 면세 한도 ±5% 안에 있어요. 실제 판정은 관세청이 매주 고시하는 과세환율로 하므로 결과가 바뀔 수 있습니다.</p>
+            )}
           </div>
 
           {/* 최종 가격 */}
@@ -237,7 +279,7 @@ export default function CustomsClient() {
               <strong>{fmtKrw(result.finalKrw)}</strong>
             </p>
             <p className={s.heroSub}>
-              간이 예상세액 <strong style={{ color: result.totalTax > 0 ? '#DB2777' : 'var(--accent)' }}>
+              간이 예상세액 <strong style={{ color: result.totalTax > 0 ? 'var(--pink-600)' : 'var(--accent)' }}>
                 {result.totalTax > 0 ? `+${fmtKrw(result.totalTax)}` : '0원'}
               </strong>
               <br /><span style={{ fontSize: 12 }}>※ HS코드·원산지·FTA·개별 규정 미반영 <strong>간이 예상치</strong>입니다. 통관 수수료·국내 판매가 비교는 품목·브랜드 편차가 커 제공하지 않아요. 정확한 세액은 <strong>관세청 예상세액 조회</strong>로 확인하세요.</span>
@@ -255,9 +297,9 @@ export default function CustomsClient() {
                   <tr><td>물품가격 USD (면세 기준·배송 제외)</td><td className={s.cellMono}>${result.productUsd.toFixed(2)}</td></tr>
                   <tr><td>상품+배송 → 과세가격 (CIF)</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtKrw(result.totalKrw)}</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>세금 (면세 시 0)</td></tr>
-                  <tr><td>관세 ({item.dutyRate}%)</td><td className={s.cellMono}>{result.duty > 0 ? fmtKrw(result.duty) : '0원'}</td></tr>
+                  <tr><td>관세 ({item.dutyRate}%{result.liquorDutyExempt ? ' — 1병·$150 이하 면제' : ''})</td><td className={s.cellMono}>{result.duty > 0 ? fmtKrw(result.duty) : '0원'}</td></tr>
                   {item.excise && (
-                    <tr><td>개별소비세 (200만원 초과 20%)</td><td className={s.cellMono}>{result.excise > 0 ? fmtKrw(result.excise) : '0원'}</td></tr>
+                    <tr><td>개별소비세 (1개당 {fmt(item.excise.threshold / 10000)}만원 초과분 {item.excise.rate}%)</td><td className={s.cellMono}>{result.excise > 0 ? fmtKrw(result.excise) : '0원'}</td></tr>
                   )}
                   {item.liquor && (
                     <tr><td>주세 ({item.liquor.rate}%)</td><td className={s.cellMono}>{result.liquorTax > 0 ? fmtKrw(result.liquorTax) : '0원'}</td></tr>
@@ -284,7 +326,7 @@ export default function CustomsClient() {
             <div className={s.warnCardStrong}>
               <strong>주류 직구 주의</strong>
               <p>
-                주류는 <strong>소액면세 대상이 아니며</strong> 관세·주세·교육세·부가세가 모두 부과됩니다.
+                주류는 소액면세 대상이 아니어서 <strong>주세·교육세·부가세는 금액과 관계없이</strong> 부과됩니다. 자가사용 <strong>1병(1L 이하)·물품가격 $150 이하</strong>일 때만 관세가 면제되고, 이를 넘으면 관세까지 붙습니다. 도구는 입력을 1병으로 보고 계산합니다.
                 또한 <strong>자가소비 수량 한도·식품 검역·통신판매 제한</strong> 등 별도 규정이 있어 통관이 거부될 수 있어요.
                 위 수치는 간이 추정 — 정확한 세액·요건은 관세청에서 확인하세요.
               </p>
@@ -297,7 +339,7 @@ export default function CustomsClient() {
             <p>
               <strong>같은 날, 같은 해외 판매자(쇼핑몰)</strong>에서 구매한 여러 건은 합산되어 면세 한도가 한 번만 적용됩니다.<br />
               <strong>서로 다른 날·다른 판매처</strong>에서 구매하면 같은 날 통관(입항)되어도 원칙적으로 합산하지 않습니다.<br />
-              ※ 과거의 &ldquo;같은 발송지·2일 이내 입항&rdquo; 기준은 현행과 다릅니다. 면세 한도를 노린 가족 명의·발송지 분산 등 인위적 회피는 권장하지 않으며, 명의 도용은 불법입니다.
+              <strong>한 운송장(B/L)</strong>으로 들어온 물품을 나눠 신고해도 합산됩니다. ※ 구매일이 달라도 같은 날 입항하면 합산하던 기준은 2022년 11월 고시 개정으로 삭제됐습니다. 면세 한도를 노린 가족 명의·발송지 분산 등 인위적 회피는 권장하지 않으며, 명의 도용은 불법입니다.
             </p>
           </div>
         </>
@@ -336,7 +378,7 @@ export default function CustomsClient() {
                       style={{ cursor: 'pointer' }}
                     >
                       <td>{it.emoji} {it.label}</td>
-                      <td className={s.cellMono} style={{ color: it.dutyRate === 0 ? '#0D9488' : it.dutyRate >= 15 ? '#DB2777' : 'var(--accent)' }}>
+                      <td className={s.cellMono} style={{ color: it.dutyRate === 0 ? 'var(--teal-600)' : it.dutyRate >= 15 ? 'var(--pink-600)' : 'var(--accent)' }}>
                         {it.dutyRate}%{it.dutyRate === 0 && ' ⭐'}
                       </td>
                       <td className={s.cellMono}>{it.isListed ? '✅' : '❌'}</td>
@@ -348,7 +390,7 @@ export default function CustomsClient() {
             </div>
             <p className={s.helpText} style={{ marginTop: 10 }}>
               👆 품목 클릭 시 계산 탭으로 자동 이동.<br />
-              ⭐ 무관세 품목 (노트북·핸드폰·도서) — 부가세만 10% 부담.
+              ⭐ 무관세 품목 (노트북·핸드폰·키보드·모니터·디지털카메라·게임기·도서) — 부가세만 10% 부담(도서는 부가세도 면제).
             </p>
           </div>
 
@@ -366,7 +408,7 @@ export default function CustomsClient() {
             </div>
             <p className={s.helpText} style={{ marginTop: 10 }}>
               <strong>🚫 목록통관 배제대상 (일반·간이 수입신고)</strong>: 의약품·건강기능식품·의료기기·검역대상 식품/동식물·주류·담배·통신판매 부적합 품목 등.<br />
-              배제대상도 <strong>자가사용 + 물품가격 한도 이하</strong>면 관세·부가세는 면제될 수 있으나(주류·담배 등 제외), 정식 수입신고 절차를 거칩니다.
+              배제대상도 <strong>자가사용 + 물품가격 $150 이하</strong>면 관세·부가세는 면제될 수 있으나(주류는 1병·$150 이하여도 관세만 면제), 정식 수입신고 절차를 거칩니다. 미국 $200 한도는 목록통관 물품에만 적용돼, 영양제·식품처럼 수입신고하는 물품은 미국발도 $150이 한도예요.
             </p>
           </div>
         </>
@@ -386,7 +428,7 @@ export default function CustomsClient() {
               <button
                 key={c.id}
                 className={`${s.countryGuideCard} ${countryId === c.id ? s.countryGuideActive : ''}`}
-                onClick={() => { setCountryId(c.id); setTab('calc') }}
+                onClick={() => { changeCountry(c.id); setTab('calc') }}
                 type="button"
               >
                 <p className={s.countryGuideHead}>
@@ -404,8 +446,8 @@ export default function CustomsClient() {
           <div className={s.warnCard}>
             <strong>환율 환산 기준</strong>
             <p>
-              관세청은 <strong>매주 화요일 환율 고시</strong>하여 다음 주 통관에 적용합니다.<br />
-              본 도구는 <strong>USD 기준</strong>으로 면세 한도를 비교 (USD가 아니어도 USD로 환산).<br />
+              관세청은 수입신고일이 속한 주의 <strong>전주 월~금 기준환율(재정환율) 평균</strong>으로 과세환율을 정해 주 단위로 고시합니다(관세법 제18조).<br />
+              본 도구는 <strong>USD 기준</strong>으로 면세 한도를 비교합니다. USD가 아닌 통화는 원화로 환산한 뒤 USD 환율로 나눠 계산해요.<br />
               실제 통관 시 ±5~10% 환율 변동 가능 — 안전하게 한도의 90%로 계산 권장.
             </p>
           </div>
@@ -429,6 +471,7 @@ export default function CustomsClient() {
                 countryId: sc.countryId, itemId: sc.itemId,
                 productPrice: sc.productPrice, shippingFee: sc.shippingFee,
                 exchangeRate: country.defaultRate, rateBase: country.defaultRateBase ?? 1, toUsdRate: country.toUsdRate,
+                usdKrw: DEFAULT_USD_KRW,
                 usage: 'personal',
               })
               return (
@@ -443,7 +486,7 @@ export default function CustomsClient() {
                     <span>{item.emoji} {item.shortLabel}</span>
                     <span>{fmtCurrency(sc.productPrice + sc.shippingFee, country.currencyUnit, 0)}</span>
                   </div>
-                  <p className={s.scenarioResult} style={{ color: r.isDutyFree ? '#0D9488' : '#DB2777' }}>
+                  <p className={s.scenarioResult} style={{ color: r.isDutyFree ? 'var(--teal-600)' : 'var(--pink-600)' }}>
                     {r.isDutyFree ? '✅ 면세' : `❌ 과세 +${fmtKrw(r.totalTax)}`} → {fmtKrw(r.finalKrw)}
                   </p>
                   <div className={s.scenarioNotes}>

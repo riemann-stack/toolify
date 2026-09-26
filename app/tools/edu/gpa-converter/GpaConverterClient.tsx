@@ -23,13 +23,18 @@ export default function GpaConverterClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
+      const o = j as Record<string, unknown>
+      // 저장값 enum 검증 — 잘못된 scale/method가 들어오면 SCALES.find(...)!가 undefined가 되어 크래시
+      const isScale = (v: unknown): v is ScaleId => typeof v === 'string' && SCALES.some(x => x.id === v)
+      const isMethod = (v: unknown): v is MethodId => typeof v === 'string' && METHODS.some(x => x.id === v)
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (j.scale) setScale(j.scale)
-      if (typeof j.input === 'string') setInput(j.input)
-      if (j.activeMethod) setActiveMethod(j.activeMethod)
-      if (typeof j.reverseUs === 'string') setReverseUs(j.reverseUs)
-      if (j.reverseScale) setReverseScale(j.reverseScale)
+      if (isScale(o.scale)) setScale(o.scale)
+      if (typeof o.input === 'string') setInput(o.input)
+      if (isMethod(o.activeMethod)) setActiveMethod(o.activeMethod)
+      if (typeof o.reverseUs === 'string') setReverseUs(o.reverseUs)
+      if (isScale(o.reverseScale)) setReverseScale(o.reverseScale)
     } catch {}
   }, [])
   useEffect(() => {
@@ -39,7 +44,7 @@ export default function GpaConverterClient() {
   }, [scale, input, activeMethod, reverseUs, reverseScale])
 
   const gpa = parseFloat(input) || 0
-  const scaleObj = SCALES.find(x => x.id === scale)!
+  const scaleObj = SCALES.find(x => x.id === scale) ?? SCALES[0]
   const valid = gpa > 0 && gpa <= scaleObj.max
 
   const results = useMemo(() => ({
@@ -74,7 +79,7 @@ export default function GpaConverterClient() {
         <span className={s.cardLabel}>1. 한국 학점 입력</span>
         <div className={s.scaleRow}>
           {SCALES.map((sc) => (
-            <button key={sc.id}
+            <button key={sc.id} type="button" aria-pressed={scale === sc.id}
               className={`${s.scaleBtn} ${scale === sc.id ? s.scaleBtnActive : ''}`}
               onClick={() => {
                 setScale(sc.id)
@@ -91,6 +96,8 @@ export default function GpaConverterClient() {
         </div>
         <div className={s.inputRow}>
           <input
+            id="gpa-converter-kr-gpa"
+            aria-label={`한국 학점 (${scaleObj.label})`}
             type="number"
             inputMode="decimal"
             step={scale === '100' ? 0.1 : 0.01}
@@ -142,7 +149,7 @@ export default function GpaConverterClient() {
         <span className={s.cardLabel}>2. 환산 방식 선택</span>
         <div className={s.methodRow}>
           {METHODS.map((m) => (
-            <button key={m.id}
+            <button key={m.id} type="button" aria-pressed={activeMethod === m.id}
               className={`${s.methodBtn} ${activeMethod === m.id ? s.methodBtnActive : ''}`}
               onClick={() => setActiveMethod(m.id)}>
               <span className={s.methodName}>{m.name}</span>
@@ -175,6 +182,12 @@ export default function GpaConverterClient() {
         </div>
       )}
       </div>
+      {valid && (
+        <p className={s.note}>
+          영국 등급은 4.5 만점 First≈3.5·2:1≈3.0, 4.3 만점 First≈3.3·2:1≈2.8 기준의 대략값입니다. 영국 대학마다 국가별 동등표가 다르니 지원 학교 기준을 확인하세요.
+          {scale === '5.0' && ' 5.0 만점의 WES·평어 결과는 4.5 만점으로 비례 환산한 뒤 평어를 매핑한 근사값입니다.'}
+        </p>
+      )}
 
       {/* 3-방식 비교 */}
       {valid && (
@@ -280,7 +293,7 @@ export default function GpaConverterClient() {
                 <tr key={row.letter}>
                   <td className={s.letterCell}>{row.letter}</td>
                   <td>{row.percent}</td>
-                  <td>{row.kr45.toFixed(1)}</td>
+                  <td>{row.kr45 === null ? '—' : row.kr45.toFixed(1)}</td>
                   <td>{row.kr43.toFixed(1)}</td>
                   <td>{row.us40.toFixed(1)}</td>
                 </tr>
@@ -288,7 +301,7 @@ export default function GpaConverterClient() {
             </tbody>
           </table>
         </div>
-        <p className={s.note}>매핑은 학교마다 다를 수 있으며, 일부 대학은 A0/B0 같은 중간 등급을 추가로 사용합니다.</p>
+        <p className={s.note}>4.5 만점은 A+·A0처럼 +/0 두 단계(A-·B- 없음), 4.3 만점은 +/0/- 세 단계를 씁니다. 백분율 열은 이 도구의 100점 입력 구간이며, 실제 매핑은 학교마다 다를 수 있습니다.</p>
       </div>
     </div>
   )

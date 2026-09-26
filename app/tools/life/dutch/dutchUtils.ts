@@ -44,8 +44,8 @@ export type RemainderId = 'common-fund' | 'to-payer' | 'first-person' | 'random'
 export const REMAINDER_OPTIONS: { id: RemainderId; name: string; desc: string }[] = [
   { id: 'common-fund',  name: '공금으로 (다음 모임)', desc: '잔돈을 모아서 다음 회식·모임에 사용' },
   { id: 'to-payer',     name: '결제자가 받기',         desc: '대표 결제자가 잔돈을 가짐' },
-  { id: 'first-person', name: '첫 번째 사람이 부담',   desc: '리스트 첫 사람이 차액 부담' },
-  { id: 'random',       name: '무작위 1명이 부담',     desc: '난수로 한 명 뽑아 차액 부담' },
+  { id: 'first-person', name: '첫 번째 사람이 부담',   desc: '첫 번째 사람이 나머지 사람과의 차액을 조정 (올림이면 덜 내고, 내림이면 더 냄)' },
+  { id: 'random',       name: '무작위 1명이 부담',     desc: '무작위로 뽑은 한 명이 차액을 조정' },
   { id: 'split-1won',   name: '균등 분배 (1원 단위)',  desc: '잔돈도 정확히 1원 단위로 나눔' },
 ]
 
@@ -72,6 +72,8 @@ export type SimpleSplitInput = {
   peopleCount: number
   rounding: RoundingId
   remainder: RemainderId
+  /** random 옵션에서 차액을 맡을 사람(0부터). 없으면 Math.random으로 뽑음 */
+  randomIndex?: number
 }
 
 export type SimpleSplitResult = {
@@ -82,6 +84,12 @@ export type SimpleSplitResult = {
   /** 잔여 처리 후 각자 부담 금액 (대부분 모두 같음. split-1won 일 때만 첫 N명에 +1원) */
   individualAmounts: number[]
   payerLabel?: string  // first-person·random 일 때 "그 사람이 차액"
+  /** first-person·random 에서 차액을 맡은 사람 인덱스 */
+  designatedIndex?: number
+  /** 올림 등으로 지정자 몫이 0원 이하가 돼 내림 기준으로 다시 계산했는지 */
+  adjustedToFloor?: boolean
+  /** 선택한 단위로는 나머지 사람 몫이 0원이 돼 더 작은 단위(100원·1원)로 내려 계산했을 때 그 단위 */
+  steppedDownUnit?: number
 }
 
 export function calcSimpleSplit(input: SimpleSplitInput): SimpleSplitResult {
@@ -93,9 +101,32 @@ export function calcSimpleSplit(input: SimpleSplitInput): SimpleSplitResult {
     }
   }
   const exact = totalAmount / peopleCount
-  const per = applyRounding(exact, rounding)
-  const collected = per * peopleCount
-  const diff = collected - totalAmount   // + 잉여, - 부족
+  let per = applyRounding(exact, rounding)
+  let diff = per * peopleCount - totalAmount   // + 잉여, - 부족
+  let designatedIndex: number | undefined
+  let adjustedToFloor = false
+  let steppedDownUnit: number | undefined
+
+  /* first-person·random: 나머지는 절삭 금액(per), 지정자는 total − per×(n−1).
+     올림으로 지정자 몫이 0원 이하가 되면(예: 10,000원·7명·1,000원 올림 → −2,000원)
+     같은 단위의 내림 금액으로 다시 계산해 지정자가 더 내도록 한다 */
+  if ((remainder === 'first-person' || remainder === 'random') && peopleCount > 1 && diff !== 0) {
+    const d0 = (ROUNDING_OPTIONS.find(o => o.id === rounding) ?? ROUNDING_OPTIONS[0]).divisor
+    if (totalAmount - per * (peopleCount - 1) <= 0) {
+      per = Math.floor(exact / d0) * d0
+      adjustedToFloor = true
+    }
+    /* 그 단위로 내리면 나머지 사람 몫이 0원인 소액(예: 5,000원·7명·1,000원 단위)은
+       100원 → 1원 단위로 한 단계씩 낮춰 내림 — 지정자 혼자 전액을 내지 않도록 */
+    if (per <= 0) {
+      for (const d of [100, 1]) {
+        if (d >= d0) continue
+        const p = Math.floor(exact / d) * d
+        if (p > 0) { per = p; steppedDownUnit = d; break }
+      }
+    }
+    diff = per * peopleCount - totalAmount
+  }
 
   const amounts: number[] = Array(peopleCount).fill(per)
 
@@ -109,11 +140,16 @@ export function calcSimpleSplit(input: SimpleSplitInput): SimpleSplitResult {
       if (leftover > 0) leftover--
     }
   } else if (remainder === 'first-person' && diff !== 0) {
-    // 첫 사람이 차액 부담
+    // 첫 사람이 차액 조정 = total − per×(n−1)
+    designatedIndex = 0
     amounts[0] = per - diff
   } else if (remainder === 'random' && diff !== 0) {
-    // 무작위 한 명에게 차액
-    const idx = Math.floor(Math.random() * peopleCount)
+    // 지정된(또는 무작위) 한 명이 차액 조정
+    const ri = input.randomIndex
+    const idx = ri !== undefined && Number.isInteger(ri) && ri >= 0
+      ? ri % peopleCount
+      : Math.floor(Math.random() * peopleCount)
+    designatedIndex = idx
     amounts[idx] = per - diff
   }
   // common-fund / to-payer: amounts 그대로 (모두 같은 금액)
@@ -124,6 +160,9 @@ export function calcSimpleSplit(input: SimpleSplitInput): SimpleSplitResult {
     totalCollected: amounts.reduce((s, x) => s + x, 0),
     remainder: diff,
     individualAmounts: amounts,
+    designatedIndex,
+    adjustedToFloor,
+    steppedDownUnit,
   }
 }
 
@@ -373,13 +412,25 @@ export type SavedSplit = {
 
 const STORAGE_KEY = 'youtil-dutch-history-v1'
 
+const SAVED_TYPES: SavedSplit['type'][] = ['simple', 'drink', 'per-person', 'prepaid']
+function isSavedSplit(v: unknown): v is SavedSplit {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  return typeof o.id === 'string' && typeof o.title === 'string'
+    && typeof o.total === 'number' && Number.isFinite(o.total)
+    && typeof o.people === 'number' && Number.isFinite(o.people)
+    && typeof o.perPerson === 'number' && Number.isFinite(o.perPerson)
+    && typeof o.createdAt === 'string'
+    && SAVED_TYPES.includes(o.type as SavedSplit['type'])
+}
+
 export function loadHistory(): SavedSplit[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isSavedSplit) : []
   } catch { return [] }
 }
 export function saveHistory(items: SavedSplit[]) {
@@ -392,7 +443,9 @@ export function newId(): string {
 
 /* ─── 카카오톡 공유 텍스트 ─── */
 export type ShareInput =
-  | { kind: 'simple'; title: string; total: number; people: number; perPerson: number; remainder: number; payerName?: string; payerAccount?: string }
+  | { kind: 'simple'; title: string; total: number; people: number; perPerson: number; remainder: number; payerName?: string; payerAccount?: string
+      /** 선택한 잔여 처리 방식·개인별 금액 — 주면 화면과 같은 문구로 안내 */
+      remainderId?: RemainderId; individualAmounts?: number[]; designatedIndex?: number }
   | { kind: 'drink'; title: string; total: number; nonDrinkers: number; drinkers: number; nonDrinkerAmount: number; drinkerAmount: number; payerName?: string; payerAccount?: string }
   | { kind: 'per-person'; title: string; rows: { name: string; total: number }[]; payerName?: string; payerAccount?: string }
   | { kind: 'prepaid'; title: string; transfers: Transfer[]; payerName?: string; payerAccount?: string }
@@ -409,10 +462,29 @@ export function generateShareMessage(input: ShareInput): string {
       sep,
       `총 금액: ${fmt(input.total)}`,
       `인원: ${input.people}명`,
-      `💰 1인당: ${fmt(input.perPerson)}`,
     ]
-    if (input.remainder > 0) lines.push(`* 잔돈 ${fmt(input.remainder)} 공금으로`)
-    else if (input.remainder < 0) lines.push(`* 부족 ${fmt(Math.abs(input.remainder))} (결제자 추가 부담)`)
+    const amts = input.individualAmounts ?? []
+    const rid = input.remainderId
+    if (rid === 'split-1won' && amts.length > 0) {
+      const mn = Math.min(...amts), mx = Math.max(...amts)
+      if (mn === mx) lines.push(`💰 1인당: ${fmt(mx)}`)
+      else {
+        const plus = amts.filter(a => a === mx).length
+        lines.push(`💰 1인당: ${fmt(mx)} ${plus}명 · ${fmt(mn)} ${amts.length - plus}명`)
+      }
+    } else if ((rid === 'first-person' || rid === 'random') && input.designatedIndex !== undefined && amts[input.designatedIndex] !== undefined) {
+      const who = rid === 'first-person' ? '첫 번째 사람' : `무작위로 뽑힌 ${input.designatedIndex + 1}번째 사람`
+      lines.push(`💰 1인당: ${fmt(input.perPerson)}`, `* ${who}만 ${fmt(amts[input.designatedIndex])}`)
+    } else {
+      lines.push(`💰 1인당: ${fmt(input.perPerson)}`)
+      if (rid === 'to-payer') {
+        if (input.remainder > 0) lines.push(`* 잔돈 ${fmt(input.remainder)}은 결제자가 받음`)
+        else if (input.remainder < 0) lines.push(`* 부족 ${fmt(Math.abs(input.remainder))} (결제자 추가 부담)`)
+      } else {
+        if (input.remainder > 0) lines.push(`* 잔돈 ${fmt(input.remainder)} 공금으로`)
+        else if (input.remainder < 0) lines.push(`* 부족 ${fmt(Math.abs(input.remainder))} (결제자 추가 부담)`)
+      }
+    }
     if (input.payerName) {
       lines.push('', '💸 입금 안내', `받을 사람: ${input.payerName}`)
       if (input.payerAccount) lines.push(input.payerAccount)

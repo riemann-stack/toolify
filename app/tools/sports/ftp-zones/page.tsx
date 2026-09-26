@@ -3,7 +3,10 @@ import FtpZonesClient from './FtpZonesClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { TEST_METHODS, WKG_GRADES, calcFtp, fmtWkg } from './ftpZonesData'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/ftp-zones',
@@ -15,12 +18,18 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
+/* ── 예시 — 계산기 기본값(20분 평균 250W · 70kg)을 같은 함수(calcFtp)로 빌드 시 계산 ── */
+const EX_WATT = 250
+const EX_KG = 70
+const EX = calcFtp(EX_WATT, TEST_METHODS[0], EX_KG)
+const EX_BY_METHOD = TEST_METHODS.filter((m) => m.id !== 'direct').map((m) => ({ m, ftp: calcFtp(EX_WATT, m, EX_KG).ftp }))
+/* W/kg 등급 → 체중별 FTP 하한(W) */
+const WKG_BW = [55, 70, 85]
+const WKG_ROWS = WKG_GRADES.map((g, i) => ({ ...g, hi: i === 0 ? null : WKG_GRADES[i - 1].min }))
+
+const TH: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }
+const TD: React.CSSProperties = { padding: '9px 12px', color: 'var(--text)' }
+const ROW = (i: number): React.CSSProperties => ({ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' })
 
 const FAQ_LD = [
   {
@@ -41,7 +50,7 @@ const FAQ_LD = [
   },
   {
     q: '즈위프트 카테고리는 어떻게 정해지나요?',
-    a: '즈위프트 공식 페이스 그룹 표(오픈 이벤트)는 <strong>zFTP W/kg</strong>을 기준으로 A 4.2 이상 · B 3.36 이상 · C 2.63 이상 · D 2.63 미만으로 나눕니다. 다만 실제 배정은 zFTP만 보는 것이 아니라 <strong>zMAP</strong>(A 5.1 · B 4.1 · C 3.2 W/kg)과 <strong>절대 와트</strong>(A 250W · B 200W · C 150W)를 함께 보며, 여성 전용 이벤트는 A 기준이 3.88 W/kg으로 다릅니다. 또 현재는 대부분의 이벤트가 A~D 대신 <strong>레이싱 스코어(0~1,000점)</strong>로 배정되고, 즈위프트는 두 체계가 서로 대응하지 않는다고 명시합니다. 이 계산기의 카테고리는 <strong>zFTP W/kg 기준의 참고 구간</strong>이며, 실제 배정은 즈위프트 앱에서 확인하세요.',
+    a: '즈위프트 공식 페이스 그룹 표(오픈 이벤트)는 <strong>zFTP W/kg</strong>을 기준으로 A 4.2 이상 · B 3.36 이상 · C 2.63 이상 · D 2.63 미만으로 나눕니다. 다만 실제 배정은 zFTP만 보는 것이 아니라 <strong>zMAP</strong>(A 5.1 · B 4.1 · C 3.2 W/kg)과 <strong>절대 와트</strong>(A 250W · B 200W · C 150W)를 함께 보며, 여성 전용 이벤트는 A 기준이 3.88 W/kg으로 다릅니다. 또 현재는 대부분의 이벤트가 A~D 대신 <strong>레이싱 스코어(0~1,000점)</strong>로 배정되고, 즈위프트는 두 체계가 서로 대응하지 않는다고 명시합니다. 이 계산기는 <strong>zFTP W/kg과 절대 와트 하한</strong>을 함께 적용한 참고 구간(zMAP은 반영하지 않음)을 보여 주므로, 실제 배정은 즈위프트 앱에서 확인하세요.',
   },
   {
     q: 'FTP는 얼마나 자주 다시 재나요?',
@@ -60,16 +69,22 @@ const RELATED = [
 
 export default function FtpZonesPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        스포츠
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/sports/ftp-zones">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />FTP·파워존 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         20분·램프 테스트로 <strong style={{ color: 'var(--text)' }}>FTP와 7단계 파워존(W)</strong> + W/kg 등급·즈위프트 카테고리.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="Coggan 7단계 파워존(%FTP) · FTP 추정 계수 20분 ×0.95·램프 ×0.75·8분 ×0.90 · W/kg 등급은 커뮤니티 통용 참고값"
+        sources={[
+          { label: 'TrainingPeaks — Coggan 7단계 파워존', href: 'https://www.trainingpeaks.com/blog/power-training-levels/' },
+          { label: 'Tramontin 외, Int J Sports Med 2022 (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/34749416/' },
+          { label: 'Zwift — Category Enforcement 페이스 그룹', href: 'https://support.zwift.com/en_us/category-enforcement-pace-groups-rkhtvQuqT' },
+        ]}
+      />
 
       <FtpZonesClient />
 
@@ -78,30 +93,68 @@ export default function FtpZonesPage() {
 
         {/* 1. FTP 추정식 */}
         <section>
-          <h2 style={sectionTitle}>FTP 추정 방법</h2>
+          <h2 className="g-h2">FTP 추정 방법</h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>20분 테스트</span> = 20분 평균 파워 × 0.95</div>
             <div><span style={{ color: 'var(--muted)' }}>램프 테스트</span> = 최고 1분 파워 × 0.75</div>
             <div><span style={{ color: 'var(--muted)' }}>8분 테스트</span> = 2회 중 높은 쪽 평균 × 0.90</div>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 계수의 출처는 각각 다릅니다 — 20분 ×0.95는 Hunter Allen(Peaks Coaching Group)·TrainingPeaks, 램프 ×0.75는 TrainerRoad·Zwift 공식,
+          <p className="g-note">
+            계수의 출처는 각각 다릅니다 — 20분 ×0.95는 Hunter Allen(Peaks Coaching Group)·TrainingPeaks, 램프 ×0.75는 TrainerRoad·Zwift 공식,
             8분 ×0.90은 CTS(Carmichael Training Systems) 필드 테스트(8분 올아웃 2회, 사이 10분 회복 — 필드 테스트 파워가 실험실 역치보다
             약 10% 높다는 CTS 관찰에 따른 실무 계수). 실제 역치는 컨디션·측정 조건·무산소 능력에 따라 달라지니 추세로 판단하세요.
           </p>
         </section>
 
+        {/* 1-1. 계산 예시 */}
+        <section>
+          <h2 className="g-h2">계산 예시 — 20분 평균 {EX_WATT}W, 체중 {EX_KG}kg</h2>
+          <p className="g-p">
+            계산기 기본값으로 따라가 보겠습니다. 20분 테스트 평균이 {EX_WATT}W라면 FTP는 {EX_WATT} × 0.95 = {(EX_WATT * 0.95).toFixed(1)}W를 반올림한
+            <strong> {EX.ftp}W</strong>입니다. 체중 {EX_KG}kg으로 나누면 <strong>{fmtWkg(EX.wkg ?? 0)} W/kg</strong>으로 &lsquo;{EX.grade}&rsquo; 구간이고,
+            {EX.zwift ? <> 즈위프트 기준으로는 W/kg과 절대 와트 하한을 모두 넘는 가장 높은 그룹인 <strong>{EX.zwift.cat}</strong>에 해당합니다.</> : null}
+          </p>
+          <p className="g-p">
+            같은 {EX_WATT}W라도 <strong>어떤 테스트의 값이냐</strong>에 따라 결과가 크게 달라집니다.
+            {' '}{EX_BY_METHOD.map((r) => `${r.m.name} ${r.ftp}W`).join(' · ')} — 램프 테스트의 최고 1분 파워를 20분 평균 칸에 넣으면 FTP가 {EX_BY_METHOD[0].ftp - EX_BY_METHOD[1].ftp}W나 과대평가되니, 측정 방법 버튼을 먼저 맞추세요.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={TH}>존</th>
+                  <th scope="col" style={TH}>이름</th>
+                  <th scope="col" style={{ ...TH, textAlign: 'right' }}>FTP {EX.ftp}W 기준</th>
+                </tr>
+              </thead>
+              <tbody>
+                {EX.zones.map((z, i) => (
+                  <tr key={z.z} style={ROW(i)}>
+                    <td style={{ ...TD, color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{z.z}</td>
+                    <td style={{ ...TD, fontWeight: 600 }}>{z.name}</td>
+                    <td style={{ ...TD, textAlign: 'right', fontFamily: 'var(--font-sans)' }}>{z.hiW !== null ? `${z.loW}~${z.hiW}W` : `${z.loW}W 이상`}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            계산기와 같은 함수로 계산한 값입니다. 각 존의 상한은 FTP × 상한%를 반올림하고, 다음 존의 하한은 &lsquo;이전 존 상한 + 1W&rsquo;로 이어 붙여 어느 존에도 속하지 않는 와트가 생기지 않게 했습니다.
+            그래서 %로 계산한 하한과 1W 정도 차이가 날 수 있습니다.
+          </p>
+        </section>
+
         {/* 1-2. 20분 테스트 실제 절차 */}
         <section>
-          <h2 style={sectionTitle}>20분 FTP 테스트 — 실제 진행 절차</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
+          <h2 className="g-h2">20분 FTP 테스트 — 실제 진행 절차</h2>
+          <p className="g-p">
             20분 테스트는 <strong style={{ color: 'var(--text)' }}>&ldquo;20분만 전력으로 타는 것&rdquo;이 아닙니다</strong>. 프로토콜을 공개한 Hunter Allen(<em>Training and Racing with a Power Meter</em> 공저자·WKO 공동 개발자)의 순서를 보면 본 측정 앞에 45분가량의 준비 구간이 붙고, 그 안에 <strong style={{ color: 'var(--text)' }}>5분 올아웃</strong>이 반드시 들어갑니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -122,7 +175,7 @@ export default function FtpZonesPage() {
                   ['8', '마무리', '10~15분', '이지 페달링'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[3]}</td>
@@ -131,11 +184,11 @@ export default function FtpZonesPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 출처: Peaks Coaching Group — Hunter Allen, &ldquo;So you&rsquo;re ready for your first FTP test?!?&rdquo;(2019-02-04 게시)의 원문 순서. 재측정할 때도 <strong>같은 워밍업</strong>을 쓰는 것이 비교의 전제입니다.
+          <p className="g-note">
+            출처: Peaks Coaching Group — Hunter Allen, &ldquo;So you&rsquo;re ready for your first FTP test?!?&rdquo;(2019-02-04 게시)의 원문 순서. 재측정할 때도 <strong>같은 워밍업</strong>을 쓰는 것이 비교의 전제입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', marginTop: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginTop: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>5분 올아웃을 20분 TT 앞에 두는 세 가지 이유</p>
             {[
               ['다리를 연다', '본 측정 전에 다리를 깨워, 20분 구간 초반부터 제 파워가 나오게 합니다.'],
@@ -150,11 +203,11 @@ export default function FtpZonesPage() {
               그래서 이 5분을 빼면 20분 평균이 올라갑니다. 훈련된 사이클리스트 21명에게 워밍업만 4가지로 바꿔 같은 20분 TT를 시킨 연구에서, 5분 TT가 포함된 45분 워밍업 뒤의 20분 파워는 256±30W·257±30W였지만, 고회전 위주 25분·자율 선택 10분 워밍업 뒤에는 270±30W로 <strong style={{ color: 'var(--text)' }}>약 14W(≈5%) 높았습니다</strong>. 준비 구간을 건너뛴 20분 평균에 그대로 ×0.95를 적용하면 그만큼 FTP가 과대추정됩니다.
             </p>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 워밍업 비교 연구: Borszcz FK 외, &ldquo;Functional Threshold Power Estimated from a 20-minute Time-trial Test is Warm-up-dependent&rdquo;, <em>Int J Sports Med</em> 2022;43(5):411-417 (PMID 34749416).
+          <p className="g-note">
+            워밍업 비교 연구: Tramontin AF, Borszcz FK, Costa VP, &ldquo;Functional Threshold Power Estimated from a 20-minute Time-trial Test is Warm-up-dependent&rdquo;, <em>Int J Sports Med</em> 2022;43(5):411-417 (PMID 34749416).
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', marginTop: 14 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginTop: 14 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>×0.95의 근거와 한계</p>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
               Allen의 설명은 단순합니다 — 20분 노력에는 무산소 능력이 더 섞여 60분 노력보다 파워가 약 5% 부풀려지므로, 20분 <strong style={{ color: 'var(--text)' }}>전체 평균 파워</strong>(정규화 파워가 아님)에서 5%를 뺍니다. 원문 예시는 평균 300W → 15W 차감 → FTP 285W입니다. TrainingPeaks도 &lsquo;최근 최고 20분 평균 파워의 95%가 현재 설정된 역치보다 크면 역치 상향을 제안한다&rsquo;는 규칙을 제품에 그대로 구현해 두었습니다(헬프센터 2025-05-21 갱신 기준).
@@ -167,8 +220,8 @@ export default function FtpZonesPage() {
 
         {/* 2. Coggan 7존 표 */}
         <section>
-          <h2 style={sectionTitle}>Coggan 파워존 (FTP 대비 %)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">Coggan 파워존 (FTP 대비 %)</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -188,7 +241,7 @@ export default function FtpZonesPage() {
                   ['Z7', '신경근', '%FTP 미정의', '스프린트'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[3]}</td>
@@ -197,18 +250,18 @@ export default function FtpZonesPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 채택 판본: Andrew Coggan 본인 명의의 TrainingPeaks 게시글 &ldquo;Cycling Power Zones Explained: Coggan&rsquo;s 7-Level System&rdquo;의 표(%FTP 열) — 55% 미만 / 56~75 / 76~90 / 91~105 / 106~120 / 121% 초과 / Z7은 N/A. 원표에서 <strong>Z6는 상한이 없고 Z7은 %FTP로 정의되지 않습니다</strong>. 위 계산기가 Z6를 150%에서 끊고 Z7을 그 위로 잡는 것은 표시용 관행값입니다. TrainingPeaks의 공식 Zones Calculator도 같은 이유로 존 7을 빼고 6존만 제공하며, 필요하면 15~20초 스프린트 테스트 결과를 Z6·Z7 경계로 직접 입력하라고 안내합니다. 한편 같은 TrainingPeaks의 Joe Friel 글이 책 판본을 인용한 표는 55~74 / 75~89 / 90~104 / 105~120 / 120% 초과로 경계가 1%p씩 다릅니다 — 판본 차이이므로 다른 사이트와 값이 어긋나도 오류가 아닙니다.
+          <p className="g-note">
+            채택 판본: Andrew Coggan 본인 명의의 TrainingPeaks 게시글 &ldquo;Cycling Power Zones Explained: Coggan&rsquo;s 7-Level System&rdquo;의 표(%FTP 열) — 55% 미만 / 56~75 / 76~90 / 91~105 / 106~120 / 121% 초과 / Z7은 N/A. 원표에서 <strong>Z6는 상한이 없고 Z7은 %FTP로 정의되지 않습니다</strong>. 위 계산기가 Z6를 150%에서 끊고 Z7을 그 위로 잡는 것은 표시용 관행값입니다. TrainingPeaks의 공식 Zones Calculator도 같은 이유로 존 7을 빼고 6존만 제공하며, 필요하면 15~20초 스프린트 테스트 결과를 Z6·Z7 경계로 직접 입력하라고 안내합니다. 한편 같은 TrainingPeaks의 Joe Friel 글이 책 판본을 인용한 표는 55~74 / 75~89 / 90~104 / 105~120 / 120% 초과로 경계가 1%p씩 다릅니다 — 판본 차이이므로 다른 사이트와 값이 어긋나도 오류가 아닙니다.
           </p>
         </section>
 
         {/* 2-2. 존별 대표 세션 */}
         <section>
-          <h2 style={sectionTitle}>존별 대표 훈련 세션</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
+          <h2 className="g-h2">존별 대표 훈련 세션</h2>
+          <p className="g-p">
             존 경계만 안다고 훈련이 되지는 않습니다. Coggan은 각 존이 실제로 어떤 <strong style={{ color: 'var(--text)' }}>지속 시간의 인터벌</strong>로 수행되는지도 함께 적어 두었습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -225,7 +278,7 @@ export default function FtpZonesPage() {
                   ['Z6 무산소', '30초~3분 고강도 인터벌', '회복 구간을 충분히 — 총량보다 한 번의 질'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
@@ -233,12 +286,12 @@ export default function FtpZonesPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 출처: 위와 같은 Coggan 원문의 존별 서술. 참고로 이 7단계 체계에는 <strong>&lsquo;스윗스팟&rsquo;이 없습니다</strong>(템포가 76~90%). 용어를 만든 Frank Overton(FasCat Coaching, 2005년 1월 명명)은 84~97% FTP로, TrainerRoad는 88~94% FTP로 정의해 서로 다르므로 단일 표준처럼 쓰지 마세요.
+          <p className="g-note">
+            출처: 위와 같은 Coggan 원문의 존별 서술. 참고로 이 7단계 체계에는 <strong>&lsquo;스윗스팟&rsquo;이 없습니다</strong>(템포가 76~90%). 용어를 만든 Frank Overton(FasCat Coaching, 2005년 1월 명명)은 84~97% FTP로, TrainerRoad는 88~94% FTP로 정의해 서로 다르므로 단일 표준처럼 쓰지 마세요.
           </p>
 
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginTop: 20, marginBottom: 10 }}>파워미터가 없다면 — 심박(%LTHR)·RPE로</p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -258,7 +311,7 @@ export default function FtpZonesPage() {
                   ['Z7 신경근', '해당 없음', '최대'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
@@ -266,34 +319,48 @@ export default function FtpZonesPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 여기서 %는 <strong>최대심박이 아니라 LTHR(젖산역치 심박)</strong> 기준입니다. LTHR은 혼자서(대회·동료 없이) 30분 타임트라이얼을 하고 10분 지점에서 랩을 끊어 <strong>마지막 20분의 평균 심박</strong>을 보면 근사치가 나옵니다(Joe Friel, TrainingPeaks). Friel은 최대심박을 &lsquo;220 − 나이&rsquo;로 구하지 말라고 못 박습니다 — 맞을 확률과 틀릴 확률이 비슷하다는 이유입니다.
+          <p className="g-note">
+            여기서 %는 <strong>최대심박이 아니라 LTHR(젖산역치 심박)</strong> 기준입니다. LTHR은 혼자서(대회·동료 없이) 30분 타임트라이얼을 하고 10분 지점에서 랩을 끊어 <strong>마지막 20분의 평균 심박</strong>을 보면 근사치가 나옵니다(Joe Friel, TrainingPeaks). Friel은 최대심박을 &lsquo;220 − 나이&rsquo;로 구하지 말라고 못 박습니다 — 맞을 확률과 틀릴 확률이 비슷하다는 이유입니다.
           </p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
-            ※ 파워존과 심박존은 1:1로 대응하지 않습니다. TrainingPeaks 공식 문서도 자사 Zones Calculator의 Coggan 심박존이 파워존에 &lsquo;대략 대응하도록(approximately correspond)&rsquo; 만들어진 것이라고 밝힙니다(헬프센터 2025-04-24 갱신 기준). Coggan 원표에도 Z4 심박은 훈련 초반에 기준까지 오르지 않을 수 있고, Z5는 심박 반응 지연과 최대심박 상한 때문에 평균 심박이 기준에 못 미칠 수 있다는 단서가 달려 있습니다.
+          <p className="g-note">
+            파워존과 심박존은 1:1로 대응하지 않습니다. TrainingPeaks 공식 문서도 자사 Zones Calculator의 Coggan 심박존이 파워존에 &lsquo;대략 대응하도록(approximately correspond)&rsquo; 만들어진 것이라고 밝힙니다(헬프센터 2025-04-24 갱신 기준). Coggan 원표에도 Z4 심박은 훈련 초반에 기준까지 오르지 않을 수 있고, Z5는 심박 반응 지연과 최대심박 상한 때문에 평균 심박이 기준에 못 미칠 수 있다는 단서가 달려 있습니다.
           </p>
         </section>
 
         {/* 3. W/kg 등급 */}
         <section>
-          <h2 style={sectionTitle}>W/kg 등급 참고표</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
-            {[
-              ['5.0 W/kg 이상', '엘리트/프로급'],
-              ['4.0~5.0', '매우 우수 (레이서)'],
-              ['3.2~4.0', '우수 (숙련 동호인)'],
-              ['2.5~3.2', '보통 (중급)'],
-              ['1.8~2.5', '입문 (초급)'],
-              ['1.8 미만', '초보 시작 단계'],
-            ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</span>
-                <span style={{ fontSize: 12, color: 'var(--muted)' }}>{r[1]}</span>
-              </div>
-            ))}
+          <h2 className="g-h2">W/kg 등급 참고표</h2>
+          <p className="g-p">
+            등급 경계를 체중별 FTP로 바꿔 보면 목표가 구체적으로 보입니다. 같은 &lsquo;우수&rsquo; 구간이라도 55kg 라이더는 {Math.round(3.2 * 55)}W, 85kg 라이더는 {Math.round(3.2 * 85)}W가 필요합니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={TH}>등급</th>
+                  <th scope="col" style={TH}>W/kg</th>
+                  {WKG_BW.map((bw) => <th scope="col" key={bw} style={{ ...TH, textAlign: 'right' }}>{bw}kg이면</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {WKG_ROWS.map((g, i) => (
+                  <tr key={g.label} style={ROW(i)}>
+                    <td style={{ ...TD, fontWeight: 600 }}>{g.label}</td>
+                    <td style={{ ...TD, color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>
+                      {g.min === 0 ? `${WKG_GRADES[WKG_GRADES.length - 2].min} 미만` : g.hi === null ? `${g.min.toFixed(1)} 이상` : `${g.min.toFixed(1)}~${g.hi.toFixed(1)}`}
+                    </td>
+                    {WKG_BW.map((bw) => (
+                      <td key={bw} style={{ ...TD, textAlign: 'right', fontFamily: 'var(--font-sans)' }}>
+                        {g.min === 0 ? `${Math.round(WKG_GRADES[WKG_GRADES.length - 2].min * bw)}W 미만` : `${Math.round(g.min * bw)}W~`}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 커뮤니티 통용 참고값(남성 20분 FTP 기준). 성별·연령·종목에 따라 다르며 절대 기준이 아닙니다.
+          <p className="g-note">
+            커뮤니티 통용 참고값(남성 20분 FTP 기준). 성별·연령·종목에 따라 다르며 절대 기준이 아닙니다.
           </p>
         </section>
 
@@ -304,10 +371,10 @@ export default function FtpZonesPage() {
 
         {/* 5. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>
@@ -317,6 +384,6 @@ export default function FtpZonesPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

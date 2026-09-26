@@ -1,0 +1,40 @@
+/* 중개보수(복비) 계산기 — 토큰만 사용 (신규 hex 없음) */
+.wrap { display: flex; flex-direction: column; gap: 24px; }
+
+/* 네이티브 라디오 세그먼트 */
+.fs { margin-top: 24px; }
+.fs:first-child { margin-top: 0; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; padding: 4px; background: var(--bg3); border-radius: var(--radius-m); }
+.segOpt { position: relative; display: flex; min-width: 0; }
+.segOpt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.segOpt span { flex: 1; display: grid; place-items: center; min-height: 40px; padding: 4px 8px; border-radius: var(--radius-s); font-size: 14px; font-weight: 600; line-height: 1.3; text-align: center; color: var(--muted); word-break: keep-all; transition: background .15s, color .15s; }
+@media (hover: hover) { .segOpt input:hover + span { color: var(--text); } }
+.segOpt input:checked + span { background: var(--bg2); color: var(--text); box-shadow: var(--shadow-pop); }
+.segOpt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.propNote { margin-top: 8px; font-size: 13px; line-height: 1.6; color: var(--muted); word-break: keep-all; }
+.propNote b { color: var(--text-body); font-weight: 600; }
+
+/* 결과 카드 보조 줄 */
+.warn, .info { display: flex; align-items: flex-start; gap: 6px; margin-top: 12px; padding: 10px 12px; border-radius: var(--radius-s); font-size: 13px; line-height: 1.6; }
+.warn { background: var(--warning-soft); color: var(--warning); }
+.warn svg, .info svg { flex-shrink: 0; margin-top: 2px; }
+.info { background: var(--bg3); color: var(--muted-strong); }
+.info b { color: var(--text); font-weight: 600; }
+
+/* 구간표 */
+.fig { margin: 0; }
+.figCap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin-bottom: 10px; font-size: 14px; font-weight: 700; line-height: 1.5; color: var(--text); }
+.figCap span { font-size: 12px; font-weight: 500; color: var(--muted); }
+.box { border: 1px solid var(--border); border-radius: var(--radius-m); }
+.box table { width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+.box th, .box td { padding: 12px 14px; border-top: 1px solid var(--divider); text-align: right; white-space: nowrap; color: var(--text-body); }
+.box thead th { border-top: 0; background: var(--bg3); font-size: 13px; font-weight: 600; color: var(--muted-strong); }
+.box thead th:first-child, .box tbody th { text-align: left; }
+.box tbody th { font-weight: 600; color: var(--text); }
+.box small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--muted); }
+.here > * { background: var(--accent-soft); color: var(--text); }
+.here > th:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.here > th small { color: var(--accent-ink); font-weight: 700; }
+.figNote { margin-top: 8px; font-size: 12px; line-height: 1.7; color: var(--muted); }
+@media (max-width: 640px) { .box th, .box td { padding: 12px 10px; } }

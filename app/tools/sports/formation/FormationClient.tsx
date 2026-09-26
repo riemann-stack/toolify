@@ -1,7 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import s from './formation.module.css'
 import {
   getFormationsByCount,
@@ -11,6 +11,9 @@ import {
 } from './formationData'
 
 const STORAGE_KEY = 'youtil_formation_v1'
+type Total = 5 | 7 | 8 | 9 | 11
+const TOTALS: readonly Total[] = [5, 7, 8, 9, 11]
+const TOTAL_SUB: Record<Total, string> = { 11: '정규', 9: '9인제', 8: '초등', 7: '7인제', 5: '풋살' }
 
 interface PlayerData {
   name: string
@@ -19,10 +22,11 @@ interface PlayerData {
 
 /* ─── 메인 ─── */
 export default function FormationClient() {
-  const [total, setTotal] = useState<5 | 7 | 9 | 11>(11)
+  const [total, setTotal] = useState<Total>(11)
   const [formationId, setFormationId] = useState<string>('4-3-3')
   const [customLines, setCustomLines] = useState<number[] | null>(null)
   const [customInput, setCustomInput] = useState('')
+  const [customError, setCustomError] = useState('')
   const [direction, setDirection] = useState<'up' | 'down'>('up')
   const [showLabels, setShowLabels] = useState(true)
   const [teamColor, setTeamColor] = useState('#0891B2')
@@ -34,6 +38,43 @@ export default function FormationClient() {
   const [downloading, setDownloading] = useState(false)
 
   const svgRef = useRef<SVGSVGElement | null>(null)
+  // SVG pattern id 인스턴스별 고유화
+  const grassId = `grass${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
+  const [actionError, setActionError] = useState('')
+
+  // 편집 모달 — 연 요소(피치 선수·명단 버튼)를 기억해 닫을 때 포커스를 되돌린다
+  const modalRef = useRef<HTMLDivElement | null>(null)
+  const openerRef = useRef<HTMLElement | SVGElement | null>(null)
+  const openEdit = (idx: number, opener: HTMLElement | SVGElement) => {
+    openerRef.current = opener
+    setEditingIdx(idx)
+  }
+  // 편집 모달 — Esc로 닫기 + Tab 포커스 가두기(aria-modal인데 Tab이 뒤쪽 명단으로 빠지던 문제)
+  useEffect(() => {
+    if (editingIdx === null) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { setEditingIdx(null); return }
+      if (e.key !== 'Tab') return
+      const modal = modalRef.current
+      if (!modal) return
+      const f = Array.from(modal.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled])'))
+      if (f.length === 0) return
+      const first = f[0], last = f[f.length - 1]
+      const active = document.activeElement
+      if (!active || !modal.contains(active)) { e.preventDefault(); (e.shiftKey ? last : first).focus() }
+      else if (e.shiftKey && active === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [editingIdx])
+  // 모달이 닫히면(Esc·배경·×·완료 모두) 연 요소로 포커스 복귀 — 그대로 두면 <body>로 떨어짐
+  useEffect(() => {
+    if (editingIdx !== null) return
+    const el = openerRef.current
+    openerRef.current = null
+    if (el && el.isConnected) el.focus()
+  }, [editingIdx])
 
   /* localStorage 복원 */
   useEffect(() => {
@@ -42,7 +83,7 @@ export default function FormationClient() {
       if (!raw) return
       const j = JSON.parse(raw)
       // 저장값 검증 후 사용 (enum·shape·타입) — 변조/구버전 데이터 방어
-      if (j.total === 5 || j.total === 7 || j.total === 9 || j.total === 11) setTotal(j.total)
+      if (TOTALS.includes(j.total)) setTotal(j.total as Total)
       if (typeof j.formationId === 'string') setFormationId(j.formationId)
       if (Array.isArray(j.customLines) && j.customLines.every((n: unknown) => typeof n === 'number' && Number.isFinite(n) && n > 0)) setCustomLines(j.customLines)
       if (typeof j.customInput === 'string') setCustomInput(j.customInput)
@@ -97,14 +138,15 @@ export default function FormationClient() {
   const applyCustom = () => {
     const parsed = parseFormation(customInput)
     if (!parsed) {
-      alert('형식: "4-3-3" 또는 "4-2-3-1" (라인별 인원, 합계 = 총원 - 1)')
+      setCustomError('형식: "4-3-3" 또는 "4-2-3-1" (라인별 인원, 합계 = 총원 - 1)')
       return
     }
     const sum = parsed.reduce((a, b) => a + b, 0)
     if (sum !== total - 1) {
-      alert(`라인 합계 ${sum}이 골키퍼 제외 인원 ${total - 1}과 일치하지 않습니다.`)
+      setCustomError(`라인 합계 ${sum}이 골키퍼 제외 인원 ${total - 1}과 일치하지 않습니다.`)
       return
     }
+    setCustomError('')
     setCustomLines(parsed)
     setFormationId('custom')
   }
@@ -166,15 +208,17 @@ export default function FormationClient() {
     })
     try {
       await navigator.clipboard.writeText(lines.join('\n'))
+      setActionError('')
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
-    } catch { alert('복사 실패') }
+    } catch { setActionError('복사에 실패했습니다. 브라우저의 클립보드 권한을 확인하세요.') }
   }
 
   /* PNG 다운로드 */
   const downloadPng = useCallback(async () => {
     if (!svgRef.current) return
     setDownloading(true)
+    setActionError('')
     try {
       const svg = svgRef.current
       const clone = svg.cloneNode(true) as SVGSVGElement
@@ -206,7 +250,7 @@ export default function FormationClient() {
         setTimeout(() => URL.revokeObjectURL(dl), 1000)
       }, 'image/png')
     } catch {
-      alert('이미지 생성 실패')
+      setActionError('이미지 생성에 실패했습니다. 잠시 후 다시 시도하세요.')
     } finally {
       setDownloading(false)
     }
@@ -223,7 +267,7 @@ export default function FormationClient() {
         variant="default"
         related={[
           { href: '/tools/life/random', label: '랜덤 추첨기' },
-          { href: '/tools/sports/football-points', label: '리그 승점 계산기' },
+          { href: '/tools/sports/league-scenarios?tab=season', label: '시즌 승점 예측' },
           { href: '/tools/life/ladder', label: '사다리타기' },
         ]}
       >
@@ -234,18 +278,16 @@ export default function FormationClient() {
       <div className={s.card}>
         <div className={s.cardLabel}>인원 수</div>
         <div className={s.countRow}>
-          {([5, 7, 9, 11] as const).map(n => (
+          {TOTALS.map(n => (
             <button
               key={n}
               type="button"
               aria-pressed={total === n}
               className={`${s.countBtn} ${total === n ? s.countActive : ''}`}
-              onClick={() => { setTotal(n); setCustomLines(null) }}
+              onClick={() => { setTotal(n); setCustomLines(null); setCustomError('') }}
             >
               {n}인
-              <span className={s.countSub}>
-                {n === 11 ? '정규' : n === 9 ? '청소년' : n === 7 ? '7인제' : '풋살'}
-              </span>
+              <span className={s.countSub}>{TOTAL_SUB[n]}</span>
             </button>
           ))}
         </div>
@@ -278,18 +320,22 @@ export default function FormationClient() {
             className={s.customInput}
             aria-label="커스텀 포메이션 (예: 4-2-3-1)"
             value={customInput}
-            onChange={e => setCustomInput(e.target.value)}
+            onChange={e => { setCustomInput(e.target.value); if (customError) setCustomError('') }}
+            aria-invalid={customError !== ''}
             placeholder="예: 4-2-3-1"
             onKeyDown={e => { if (e.key === 'Enter') applyCustom() }}
           />
           <button type="button" className={s.miniBtn} onClick={applyCustom}>적용</button>
           {customLines && (
             <button type="button" className={s.miniBtn}
-              onClick={() => { setCustomLines(null); setCustomInput('') }}>
+              onClick={() => { setCustomLines(null); setCustomInput(''); setCustomError('') }}>
               ✕ 해제
             </button>
           )}
         </div>
+        {customError && (
+          <p role="alert" style={{ fontSize: 12, color: 'var(--danger)', margin: '6px 0 0' }}>{customError}</p>
+        )}
       </div>
 
       {/* ── 옵션 (컴팩트) ── */}
@@ -304,7 +350,7 @@ export default function FormationClient() {
               maxLength={30} />
             <input type="color" className={s.colorInput}
               value={teamColor} onChange={e => setTeamColor(e.target.value)}
-              title="팀 컬러" />
+              title="팀 컬러" aria-label="팀 컬러" />
           </div>
 
           {/* 공격 방향 토글 */}
@@ -342,17 +388,19 @@ export default function FormationClient() {
           className={s.pitchSvg}
           preserveAspectRatio="xMidYMid meet"
           xmlns="http://www.w3.org/2000/svg"
-          role="img"
-          aria-label="축구 포메이션 배치도"
+          role="group"
+          aria-label={`축구 포메이션 배치도 — 공격 방향 ${direction === 'up' ? '위' : '아래'}`}
         >
           {/* 잔디 그라데이션 (세로 스트라이프) */}
           <defs>
-            <pattern id="grass" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <pattern id={grassId} x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
               <rect width="100" height="100" fill="#2a7a3a" />
               <rect x="50" width="50" height="100" fill="#338944" />
             </pattern>
           </defs>
-          <rect width="800" height="1000" fill="url(#grass)" />
+          {/* 잔디·라인은 장식 — role=group 안에서 보조기기에 노출하지 않음 (선수 버튼만 노출) */}
+          <g aria-hidden="true">
+          <rect width="800" height="1000" fill={`url(#${grassId})`} />
 
           {/* 외곽선 */}
           <rect x="30" y="30" width="740" height="940"
@@ -395,6 +443,7 @@ export default function FormationClient() {
               />
             )
           })}
+          </g>
 
           {/* 선수 카드 — 큰 폰트로 가독성 ↑ */}
           {positions.map((pos) => {
@@ -406,16 +455,21 @@ export default function FormationClient() {
             const nameMax = cardW < 124 ? 4 : 6
             const nameFont = cardW < 124 ? 21 : 26
             const dispName = p.name.length > nameMax ? p.name.slice(0, nameMax) + '…' : p.name
+            // 이름 카드가 viewBox(1000) 아래로 잘리지 않게 — 공격 방향 '위'의 GK(y=920)는 카드를 조금 올린다
+            const cardY = Math.min(pos.y + 54, 1000 - 4 - 40)
             return (
               <g key={pos.idx} className={s.playerGroup}
-                onClick={() => setEditingIdx(pos.idx)}
+                onClick={e => openEdit(pos.idx, e.currentTarget)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEdit(pos.idx, e.currentTarget) } }}
+                role="button" tabIndex={0}
+                aria-label={`${pos.label} ${p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}번 ${p.name || '이름 미입력'} 편집`}
                 style={{ cursor: 'pointer' }}
               >
                 <circle cx={pos.x} cy={pos.y} r={48}
                   fill={teamColor} stroke="#fff" strokeWidth="4"
                   opacity="0.95" />
                 <text x={pos.x} y={pos.y + 14} textAnchor="middle"
-                  fill="#fff" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
+                  fill="#fff"
                   fontSize="42" fontWeight="800"
                   style={{ pointerEvents: 'none' }}>
                   {p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}
@@ -424,12 +478,12 @@ export default function FormationClient() {
                 {p.name && (
                   <g style={{ pointerEvents: 'none' }}>
                     <rect
-                      x={pos.x - cardW / 2} y={pos.y + 54}
+                      x={pos.x - cardW / 2} y={cardY}
                       width={cardW} height="40" rx="10"
                       fill="rgba(0,0,0,0.78)"
                     />
-                    <text x={pos.x} y={pos.y + 80} textAnchor="middle"
-                      fill="#fff" fontFamily="Noto Sans KR, sans-serif"
+                    <text x={pos.x} y={cardY + 26} textAnchor="middle"
+                      fill="#fff"
                       fontSize={nameFont} fontWeight="700">
                       {dispName}
                     </text>
@@ -438,7 +492,7 @@ export default function FormationClient() {
                 {/* 포지션 라벨 */}
                 {showLabels && (
                   <text x={pos.x} y={pos.y - 58} textAnchor="middle"
-                    fill="#fff" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
+                    fill="#fff"
                     fontSize="22" fontWeight="800"
                     opacity="0.92"
                     style={{ pointerEvents: 'none' }}>
@@ -466,8 +520,8 @@ export default function FormationClient() {
             const tipDx = 14
             const tipDy = isUp ? 24 : -24
             return (
-              <g>
-                {/* 본체 (굵은 라인) */}
+              <g aria-hidden="true">
+                {/* 본체 (굵은 라인) — 방향은 svg aria-label로 전달 */}
                 <line x1={arrowX} y1={tailY} x2={arrowX} y2={tipY}
                   stroke="#fff" strokeWidth="8" strokeLinecap="round" opacity="0.85" />
                 {/* 화살촉 */}
@@ -475,7 +529,7 @@ export default function FormationClient() {
                   stroke="#fff" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.85" />
                 {/* 텍스트 */}
                 <text x={arrowX} y={labelY} fill="#fff" fontSize="28" fontWeight="800"
-                  textAnchor="middle" fontFamily="Noto Sans KR, sans-serif"
+                  textAnchor="middle"
                   style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.5)', strokeWidth: 3 } as React.CSSProperties}>
                   공격
                 </text>
@@ -484,6 +538,9 @@ export default function FormationClient() {
           })()}
         </svg>
 
+        {actionError && (
+          <p role="alert" style={{ fontSize: 12, color: 'var(--danger)', margin: '8px 0 0' }}>{actionError}</p>
+        )}
         <div className={s.pitchActions}>
           <button type="button" className={`${s.copyBtn} ${copied ? s.copied : ''}`}
             onClick={copyMarkdown}>
@@ -498,15 +555,15 @@ export default function FormationClient() {
       {/* ── 선수 편집 모달 ── */}
       {editingIdx !== null && players[editingIdx] && (
         <div className={s.modalBackdrop} onClick={() => setEditingIdx(null)}>
-          <div className={s.modal} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="선수 편집">
+          <div ref={modalRef} className={s.modal} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="선수 편집">
             <div className={s.modalHeader}>
               <span>{positions.find(p => p.idx === editingIdx)?.label ?? ''} 편집</span>
-              <button type="button" className={s.modalClose}
+              <button type="button" className={s.modalClose} aria-label="닫기"
                 onClick={() => setEditingIdx(null)}>×</button>
             </div>
             <div className={s.modalRow}>
-              <span className={s.subLabel}>등번호</span>
-              <input type="text" className={s.textInput}
+              <label htmlFor="fm-edit-number" className={s.subLabel}>등번호</label>
+              <input id="fm-edit-number" type="text" className={s.textInput}
                 value={players[editingIdx].number}
                 onChange={e => updatePlayer(editingIdx, { number: e.target.value.replace(/\D/g, '').slice(0, 3) })}
                 inputMode="numeric"
@@ -515,8 +572,8 @@ export default function FormationClient() {
               />
             </div>
             <div className={s.modalRow}>
-              <span className={s.subLabel}>이름</span>
-              <input type="text" className={s.textInput}
+              <label htmlFor="fm-edit-name" className={s.subLabel}>이름</label>
+              <input id="fm-edit-name" type="text" className={s.textInput}
                 value={players[editingIdx].name}
                 onChange={e => updatePlayer(editingIdx, { name: e.target.value })}
                 placeholder="선수 이름"
@@ -539,7 +596,7 @@ export default function FormationClient() {
             return (
               <button key={pos.idx} type="button"
                 className={s.rosterItem}
-                onClick={() => setEditingIdx(pos.idx)}>
+                onClick={e => openEdit(pos.idx, e.currentTarget)}>
                 <span className={s.rosterPos}>{pos.label}</span>
                 <span className={s.rosterNum}>#{p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}</span>
                 <span className={s.rosterName}>{p.name || <em>미입력</em>}</span>

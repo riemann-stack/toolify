@@ -1,7 +1,7 @@
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 
 .groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
 .groupNote { font-size: 12px; color: var(--muted); line-height: 1.65; margin: 10px 0 0; }
@@ -42,7 +42,7 @@
 .amountInput {
   width: 100%; min-width: 0; font-size: 16px; font-weight: 700; color: var(--text);
   background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s);
-  padding: 9px 10px; text-align: right; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  padding: 9px 10px; text-align: right; font-family: var(--font-sans);
 }
 .amountInput:focus { outline: none; border-color: var(--accent); }
 .amountUnit { font-size: 13px; color: var(--muted); font-weight: 600; }
@@ -50,7 +50,7 @@
 /* 결과 */
 .resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 20px; text-align: center; }
 .resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
-.hero { font-family: Inter, "Noto Sans KR", system-ui, sans-serif; font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; color: var(--accent-ink); }
+.hero { font-family: var(--font-sans); font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; color: var(--accent-ink); }
 .heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 0.1em; }
 .resultSub { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 .emptyNote { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; }
@@ -58,7 +58,7 @@
 @media (max-width: 380px) { .subGrid { grid-template-columns: minmax(0, 1fr); } }
 .subItem { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; }
 .subLabel { font-size: 11px; color: var(--muted); }
-.subValue { font-size: 15px; font-weight: 700; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.subValue { font-size: 15px; font-weight: 700; color: var(--text); font-family: var(--font-sans); }
 .yieldNote { font-size: 11px; color: var(--muted); margin: 10px 0 0; }
 
 /* 큐브 역산 */
@@ -83,3 +83,4 @@
 
 .convList { padding-left: 18px; margin: 0; font-size: 13px; color: var(--text); line-height: 2; }
 .convList strong { color: var(--accent-ink); }
+.ratioBtn:disabled { opacity: 0.45; cursor: not-allowed; }

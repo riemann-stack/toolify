@@ -1,6 +1,9 @@
 // ─────────────────────────────────────────────────────────────
 // 마라톤 레이스 기록 예측 — 계산·환경 보정·연령/성별·기록 저장
 // ─────────────────────────────────────────────────────────────
+import {
+  vo2FromV, vFromVo2, pctVO2max, vdotFromRace, timeFromVdot, paceFromVdot, riegelTime,
+} from '@/lib/running'
 
 export type DistKey = '5k' | '10k' | 'half' | 'full' | 'custom'
 export type TargetKey = '3k' | '5k' | '10k' | '15k' | 'half' | '30k' | 'full'
@@ -58,44 +61,11 @@ export function secToHMS(totalSec: number): { h: number; m: number; s: number } 
   return { h: Math.floor(t / 3600), m: Math.floor((t % 3600) / 60), s: t % 60 }
 }
 
-// ── VDOT (Jack Daniels) ──────────────────
-export function vo2FromV(v: number): number {
-  return -4.60 + 0.182258 * v + 0.000104 * v * v
-}
-export function vFromVo2(vo2: number): number {
-  const a = 0.000104, b = 0.182258, c = -(4.60 + vo2)
-  return (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a)
-}
-export function pctVO2max(tMin: number): number {
-  return 0.8 + 0.1894393 * Math.exp(-0.012778 * tMin) + 0.2989558 * Math.exp(-0.1932605 * tMin)
-}
-export function vdotFromRace(distKm: number, timeSec: number): number {
-  const tMin = timeSec / 60
-  const v = (distKm * 1000) / tMin
-  return vo2FromV(v) / pctVO2max(tMin)
-}
-export function timeFromVdot(distKm: number, vdot: number): number {
-  let lo = 1, hi = 60 * 60 * 10
-  for (let i = 0; i < 80; i++) {
-    const mid = (lo + hi) / 2
-    const tMin = mid / 60
-    const v = (distKm * 1000) / tMin
-    const estVdot = vo2FromV(v) / pctVO2max(tMin)
-    if (estVdot > vdot) lo = mid
-    else hi = mid
-  }
-  return (lo + hi) / 2
-}
-export function paceFromVdot(vdot: number, intensity: number): number {
-  const vo2 = vdot * intensity
-  const v = vFromVo2(vo2)
-  return 60000 / v
-}
+// ── VDOT (Jack Daniels) · Riegel — 단일 소스 lib/running.ts ──
+// 기존 import 경로(RacePredictorClient 등)와의 호환을 위해 그대로 재수출한다.
+export { vo2FromV, vFromVo2, pctVO2max, vdotFromRace, timeFromVdot, paceFromVdot, riegelTime }
 
-// ── Riegel / Cameron ─────────────────────
-export function riegelTime(d1: number, t1: number, d2: number): number {
-  return t1 * Math.pow(d2 / d1, 1.06)
-}
+// ── Cameron ──────────────────────────────
 export function cameronA(dMi: number): number {
   return 13.49681 - 0.048865 * dMi + 2.438936 / Math.pow(dMi, 0.7905)
 }
@@ -190,7 +160,8 @@ export function envCorrection(input: EnvInput): EnvResult {
 }
 
 // ── 연령·성별 보정 ────────────────────────
-// WMA(World Masters Athletics) 평균 통계 참고
+// WMA(World Masters Athletics) 연령 계수(age-grading, 연령별 최고 기록 곡선 기반)의 경향을
+// 10년 단위로 단순화한 도구 자체 근사값 — 여성 행은 남녀 기록 격차를 반영. 공식 표 값이 아님
 export const AGE_BAND_LABEL: Record<AgeBand, string> = {
   '20-30': '20대',
   '30-40': '30대',
@@ -228,11 +199,14 @@ export function normalizeToYoungMale(timeSec: number, gender: Gender, ageBand: A
 }
 
 // ── 한국 시즌 안내 ───────────────────────
+// temp = 기상청 기후평년값(1991~2020) 전국 월평균기온 범위 (월간 기후동향 발표의 '평년' 값):
+// 3월 6.1 · 4월 12.1 · 6월 21.4 · 7월 24.6 · 8월 25.1 · 9월 20.5 · 10월 14.3 · 11월 7.6 · 12월 1.1 · 1월 -0.9 · 2월 1.2 (°C)
+// (이전 값 '봄 12~18°C'는 3월 평년 6.1°C와 맞지 않았고, 9월은 평년 20.5°C라 '최적' 시즌에서 뺐다)
 export const KOREA_SEASONS = [
-  { name: '봄 (3~4월)',     temp: '12~18°C',  rating: '⭐ 적정', races: '서울국제·동아·서울하프' },
-  { name: '가을 (9~11월)',  temp: '12~18°C',  rating: '⭐⭐ 최적', races: '춘천·JTBC' },
-  { name: '여름 (6~8월)',   temp: '25~30°C',  rating: '⚠️ 위험', races: '드물게 야간 대회' },
-  { name: '겨울 (12~2월)',  temp: '0~10°C',   rating: '⚠️ 바람·근경직', races: '드문 대회' },
+  { name: '봄 (3~4월)',     temp: '6~12°C',   rating: '⭐ 적정', races: '서울마라톤(동아마라톤)' },
+  { name: '가을 (10~11월)', temp: '8~14°C',   rating: '⭐⭐ 최적', races: '춘천·JTBC 서울' },
+  { name: '여름 (6~8월)',   temp: '21~25°C',  rating: '⚠️ 위험', races: '드물게 야간 대회' },
+  { name: '겨울 (12~2월)',  temp: '-1~1°C',   rating: '⚠️ 바람·근경직', races: '드문 대회' },
 ]
 
 // ── 빠른 입력 칩 ─────────────────────────
@@ -333,9 +307,9 @@ export function recordsToCSV(records: RaceRecord[]): string {
 
 // ── VDOT 레벨 분류 ───────────────────────
 export function vdotLevel(vdot: number): { tag: string; color: string } {
-  if (vdot < 30) return { tag: '입문', color: '#0891B2' }
-  if (vdot < 40) return { tag: '중급', color: '#0EA5E9' }
-  if (vdot < 50) return { tag: '상급', color: '#A16207' }
-  if (vdot < 60) return { tag: '엘리트 준비', color: '#EA580C' }
-  return { tag: '엘리트', color: '#DC2626' }
+  if (vdot < 30) return { tag: '입문', color: 'var(--cyan-600)' }
+  if (vdot < 40) return { tag: '중급', color: 'var(--sky-500)' }
+  if (vdot < 50) return { tag: '상급', color: 'var(--yellow-700)' }
+  if (vdot < 60) return { tag: '엘리트 준비', color: 'var(--orange-600)' }
+  return { tag: '엘리트', color: 'var(--red-600)' }
 }

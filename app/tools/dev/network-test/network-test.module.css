@@ -7,7 +7,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .cardLabel {
@@ -24,7 +24,7 @@
   color: var(--muted);
   background: var(--bg3);
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   margin: 0 0 12px;
   line-height: 1.7;
 }
@@ -32,14 +32,14 @@
 
 /* ── 시작 카드 ── */
 .startCard {
-  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 16px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   text-align: center;
 }
 .startTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -66,16 +66,16 @@
 .sizeBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .sizeBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 .sizeBtnActive {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -85,12 +85,12 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 32px;
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   letter-spacing: 0.02em;
   transition: opacity 0.15s;
 }
@@ -102,7 +102,7 @@
 .progress {
   margin-top: 14px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   height: 8px;
   overflow: hidden;
   position: relative;
@@ -124,7 +124,7 @@
 .overallCard {
   background: var(--bg2);
   border: 1px solid var(--accent);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   display: grid;
   grid-template-columns: auto 1fr;
@@ -137,12 +137,12 @@
 .overallScore {
   text-align: center;
   padding: 10px 18px;
-  background: rgba(14,165,233,0.14);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-radius: var(--radius-card);
   min-width: 120px;
 }
 .scoreNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 56px;
   font-weight: 800;
   color: var(--accent);
@@ -168,8 +168,8 @@
   font-weight: 700;
   padding: 5px 10px;
   border: 1px solid;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
 .recList {
   list-style: none;
@@ -207,7 +207,7 @@
   margin-bottom: 4px;
 }
 .statNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -247,16 +247,16 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .siteUrl {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .siteRight { text-align: right; }
 .siteRtt {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
@@ -265,12 +265,12 @@
   display: block;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .siteError {
   font-size: 11px;
-  color: #DC2626;
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--red-600);
+  font-family: var(--font-sans);
 }
 
 /* ── 다운로드 ── */
@@ -279,12 +279,12 @@
   align-items: center;
   gap: 16px;
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 18px;
   flex-wrap: wrap;
 }
 .dlNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 48px;
   font-weight: 800;
   letter-spacing: -2px;
@@ -299,20 +299,20 @@
   font-weight: 700;
   padding: 4px 10px;
   border: 1px solid;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
   margin-bottom: 4px;
 }
 .dlDesc {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .dlMeta {
   font-size: 11px;
   color: var(--muted);
   margin-top: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
 }
 .dlBenchmark {
@@ -329,7 +329,7 @@
   padding: 4px 6px;
 }
 .benchRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
 }
@@ -338,7 +338,7 @@
 .guideCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .guideList {

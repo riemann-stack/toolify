@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './tire-pressure.module.css'
+import { TPMS_DROP_RATIO, TPMS_MIN_KPA, TPMS_MIN_PSI, TPMS_US_DROP_RATIO, TPMS_EXAMPLE_REC_PSI, tpmsWarnPsi } from '@/lib/krTpms'
 
 // ──────────────────────────────────────
 // 변환 상수 (1 psi 기준)
@@ -140,12 +141,12 @@ function ConvertTab() {
     }))
   }, [basePsi])
 
-  function handleCopy(u: PressureUnit, val: number) {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
+  async function handleCopy(u: PressureUnit, val: number) {
+    try {
+      await navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
       setCopied(u)
       setTimeout(() => setCopied(null), 1500)
-    }
+    } catch { /* 클립보드 권한 거부 등 — 복사됨 표시 안 함 */ }
   }
 
   function applyPreset(p: typeof PRESETS[number]) {
@@ -281,6 +282,11 @@ function CheckTab() {
   const diffPsi = hasInput ? current - recommended : 0
   const diffKpaSigned = diffPsi * PSI_TO.kPa
   const diffBarSigned = diffPsi * PSI_TO.bar
+  // TPMS 점등 예시(기준은 ./tpms — 자동차규칙 [별표 6]). 장착 의무(제12조의2)는 승용·3.5톤 이하 차량뿐이라
+  // 자동차를 고른 경우에만 입력 권장값으로 계산하고, 권장값이 최소압력(150 kPa ≈ 21.8 psi) 이하면
+  // 경고값이 권장값 이상으로 뒤집히므로 대표값으로 예시한다.
+  const tpmsRecPsi = vehicle === 'car' && recommended > TPMS_MIN_PSI ? recommended : TPMS_EXAMPLE_REC_PSI
+  const tpmsWarnAt = tpmsWarnPsi(tpmsRecPsi)
 
   const result = hasInput
     ? judge(diffPsi, JUDGE_BANDS[vehicle])
@@ -454,8 +460,12 @@ function CheckTab() {
       <div className={styles.card}>
         <span className={styles.cardLabel}>TPMS 경고등 점등 기준</span>
         <ul className={styles.seasonList}>
-          <li>• TPMS(타이어 공기압 경고장치)는 보통 <strong>권장값보다 약 25% 낮아지면(= 권장값의 약 75% 수준)</strong> 점등됩니다.</li>
-          <li>• 예: 권장 33 psi → 약 <strong>25 psi</strong> 부근에서 경고등 ON</li>
+          <li>• 국내 기준(자동차규칙 [별표 6] — UN R141과 같음)은 공기압이 <strong>권장값보다 {TPMS_DROP_RATIO * 100}% 낮아진 값과 {TPMS_MIN_KPA} kPa 중 높은 값</strong>에 이르면 10분 주행 안에 경고등을 켜도록 정합니다(미국 FMVSS 138은 {TPMS_US_DROP_RATIO * 100}%).</li>
+          {vehicle === 'car' ? (
+            <li>• 예: 권장 {formatNumber(tpmsRecPsi, 1)} psi → 약 <strong>{formatNumber(tpmsWarnAt, 1)} psi</strong> 부근에서 경고등 ON</li>
+          ) : (
+            <li>• 자전거·오토바이는 TPMS 장착 의무 대상이 아닙니다(자동차규칙 제12조의2 — 승용차와 3.5톤 이하 승합·화물·특수차). 위 기준은 자동차용입니다.</li>
+          )}
           <li>• 경고등이 켜지면 안전한 곳에 정차 후 즉시 공기압 점검·보충</li>
           <li>• 보충해도 다시 켜지면 <strong>펑크·휠 림 손상·센서 고장</strong> 의심 → 정비소 점검</li>
           <li>• 겨울철 기온 급강하 시 일시 점등될 수 있음(적정값 보충하면 해제)</li>
@@ -706,7 +716,8 @@ function WearTab() {
     const year = 2000 + parseInt(dotDigits.slice(2), 10)
     // 미래 연도·올해의 미래 주차(오입력)는 판정하지 않음
     const isFuture = year > nowYear || (year === nowYear && week > nowWeek + 1)
-    if (week >= 1 && week <= 53 && !isFuture) dotInfo = { week, year, age: nowYear - year }
+    // 경과연수는 주차까지 반영한 소수 연수 (연도 차이만 쓰면 최대 1년 가까이 과대·과소)
+    if (week >= 1 && week <= 53 && !isFuture) dotInfo = { week, year, age: Math.max(0, (nowYear - year) + (nowWeek - week) / 52) }
   }
 
   const kmStatus = kmN >= 50000 ? '교체 권장 (5만 km 초과)' : kmN >= 30000 ? '점검 강화' : '양호'
@@ -766,7 +777,7 @@ function WearTab() {
         </div>
         {dotInfo ? (
           <div className={`${styles.statusCard} ${dotInfo.age >= 10 ? styles.statusAlert : dotInfo.age >= 6 ? styles.statusWarn : styles.statusOk}`} style={{ marginTop: 12 }}>
-            <div className={styles.statusTitle}>{dotInfo.year}년 {dotInfo.week}주차 제조 · 약 {dotInfo.age}년 경과</div>
+            <div className={styles.statusTitle}>{dotInfo.year}년 {dotInfo.week}주차 제조 · 약 {(Math.floor(dotInfo.age * 10) / 10).toFixed(1)}년 경과</div>
             <div className={styles.statusDesc}>
               {dotInfo.age >= 10 ? '🚨 제조 10년 이상 — 마모와 무관하게 즉시 교체 권장.'
                 : dotInfo.age >= 6 ? '🔶 제조 6년 이상 — 고무 경화 진행, 교체 검토.'

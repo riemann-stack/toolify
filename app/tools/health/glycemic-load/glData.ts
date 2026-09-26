@@ -84,9 +84,15 @@ export function calcGl(food: Food, servings: number): number {
   return (food.carb * s * food.gi) / 100
 }
 
+/**
+ * 1회 섭취 GL 판정 (저 ≤10 / 중 11~19 / 고 ≥20 — 정수 구간).
+ * 화면에 정수로 반올림해 보여주므로 판정도 같은 정수 값으로 한다(10.4 → '10' 표시인데 '보통' 판정되는 모순 방지).
+ * 한 끼·하루 합계에는 공인 판정 기준이 없으므로 쓰지 않는다.
+ */
 export function glLevel(gl: number): GlLevel {
-  if (gl <= 10) return 'low'
-  if (gl < 20) return 'mid'
+  const v = Math.round(gl)
+  if (v <= 10) return 'low'
+  if (v < 20) return 'mid'
   return 'high'
 }
 

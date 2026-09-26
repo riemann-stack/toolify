@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,17 +20,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -39,7 +39,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -47,7 +47,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -76,7 +76,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 모드 토글 (평수 / m 직접) ── */
@@ -93,16 +93,16 @@
   padding: 10px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modePyung { border-color: rgba(14,165,233,0.40); }
-.modeMeter { border-color: rgba(8,145,178,0.40); }
-.modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.modeMeter.modeActive { background: rgba(8,145,178,0.18); color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
+.modePyung { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.modeMeter { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
+.modePyung.modeActive { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.modeMeter.modeActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600);       border-color: var(--cyan-600);     font-weight: 700; }
 
 /* ── 평수 드롭다운 ── */
 .pyungSelect {
@@ -112,7 +112,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -135,7 +135,7 @@
   gap: 8px;
   align-items: center;
 }
-.dimSep { color: var(--muted); font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.dimSep { color: var(--muted); font-size: 18px; font-family: var(--font-sans); font-weight: 700; }
 
 .bigInput {
   width: 100%;
@@ -144,7 +144,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -163,7 +163,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;       /* iOS 줌 방지 */
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -182,7 +182,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   outline: none;
@@ -191,13 +191,13 @@
 .textInput:focus { border-color: var(--accent); }
 
 .inputRow { display: flex; align-items: center; gap: 10px; }
-.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: var(--font-sans); }
 
 .areaShow {
   font-size: 13px;
   color: var(--accent);
   margin-top: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -206,18 +206,18 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 12px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   transition: all 0.15s;
 }@media (hover: hover) {
   .pill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pillActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.pillActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 /* ── 창문·문 프리셋 ── */
 .presetGrid {
@@ -236,7 +236,7 @@
   padding: 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -245,7 +245,7 @@
 }
 .presetActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -270,24 +270,24 @@
 .wallpaperCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   cursor: pointer;
   transition: all 0.15s;
   text-align: left;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   position: relative;
 }@media (hover: hover) {
   .wallpaperCard:hover { border-color: var(--border-hover); }
 }
-.wpSilk   { border-color: rgba(14,165,233,0.40); }
+.wpSilk   { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .wpSturdy { border-color: rgba(16,185,129,0.40); }
-.wpPvc    { border-color: rgba(8,145,178,0.40); }
+.wpPvc    { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .wpCustom { border-color: var(--border); }
-.wpSilk.wpActive   { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent); }
-.wpSturdy.wpActive { background: rgba(16,185,129,0.18);  border-color: #059669;       color: #059669; }
-.wpPvc.wpActive    { background: rgba(8,145,178,0.18);  border-color: #0891B2;       color: #0891B2; }
-.wpCustom.wpActive { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent); }
+.wpSilk.wpActive   { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent-ink); }
+.wpSturdy.wpActive { background: rgba(16,185,129,0.18);  border-color: var(--emerald-600);       color: var(--emerald-600); }
+.wpPvc.wpActive    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent);  border-color: var(--cyan-600);       color: var(--cyan-600); }
+.wpCustom.wpActive { background: var(--accent-dim);       border-color: var(--accent); color: var(--accent-ink); }
 .wpName {
   font-size: 14px;
   font-weight: 700;
@@ -298,22 +298,22 @@
 .wpSpec {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   margin-bottom: 2px;
 }
 .wpUsage {
   display: inline-block;
   font-size: 11px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-top: 6px;
 }
-.wpSilkBadge   { background: rgba(14,165,233,0.15); color: var(--accent); }
-.wpSturdyBadge { background: rgba(16,185,129,0.15); color: #059669; }
-.wpPvcBadge    { background: rgba(8,145,178,0.15); color: #0891B2; }
+.wpSilkBadge   { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
+.wpSturdyBadge { background: rgba(16,185,129,0.15); color: var(--emerald-600); }
+.wpPvcBadge    { background: color-mix(in srgb, var(--cyan-600) 15%, transparent); color: var(--cyan-600); }
 
 /* 직접 입력 시 입력 필드 */
 .customWpRow {
@@ -339,7 +339,7 @@
   padding: 12px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -349,20 +349,20 @@
 }
 .lossBtn small {
   display: block;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
   margin-bottom: 2px;
 }
 .lossSafe   { border-color: rgba(16,185,129,0.40); }
-.lossStd    { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.lossStd    { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .lossWarn   { border-color: rgba(234,88,12,0.40); }
 .lossDanger { border-color: rgba(220,38,38,0.40); }
 
-.lossSafe.lossActive   { background: rgba(16,185,129,0.18);  color: #059669;       border-color: #059669; font-weight: 700; }
-.lossStd.lossActive    { background: var(--accent-dim);       color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.lossWarn.lossActive   { background: rgba(234,88,12,0.18);  color: #EA580C;       border-color: #EA580C; font-weight: 700; }
-.lossDanger.lossActive { background: rgba(220,38,38,0.18); color: #DC2626;       border-color: #DC2626; font-weight: 700; }
+.lossSafe.lossActive   { background: rgba(16,185,129,0.18);  color: var(--emerald-600);       border-color: var(--emerald-600); font-weight: 700; }
+.lossStd.lossActive    { background: var(--accent-dim);       color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.lossWarn.lossActive   { background: rgba(234,88,12,0.18);  color: var(--orange-600);       border-color: var(--orange-600); font-weight: 700; }
+.lossDanger.lossActive { background: rgba(220,38,38,0.18); color: var(--red-600);       border-color: var(--red-600); font-weight: 700; }
 
 /* ── 천장 도배 토글 ── */
 .toggleRow {
@@ -371,7 +371,7 @@
   align-items: center;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 12px;
   cursor: pointer;
 }
@@ -381,21 +381,21 @@
 .hero {
   background: var(--bg2);
   border: 1px solid rgba(234,88,12,0.40);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(44px, 11vw, 72px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: var(--font-sans); }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
 
 @keyframes fadeUp {
@@ -416,17 +416,17 @@
 .breakdownTable td:first-child { color: var(--muted); }
 .breakdownTable td:last-child {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
 }
-.subRow td:last-child { color: #DC2626; }
-.addRow td:last-child { color: #0891B2; }
+.subRow td:last-child { color: var(--red-600); }
+.addRow td:last-child { color: var(--cyan-600); }
 .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
 }
 .totalRow td:first-child { color: var(--accent); }
@@ -434,9 +434,9 @@
 
 /* ── 롤 카드 ── */
 .rollCard {
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .rollGrid {
@@ -451,7 +451,7 @@
 .rollCell { text-align: center; }
 .rollLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .rollValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -464,7 +464,7 @@
   display: flex;
   justify-content: center;
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 18px;
 }
 .floorPlanSvg {
@@ -477,7 +477,7 @@
 .roomBlock {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   margin-bottom: 10px;
 }
@@ -492,7 +492,7 @@
   background: transparent;
   border: none;
   font-size: 16px;       /* iOS 줌 방지 */
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -504,7 +504,7 @@
 .wallSubBlock {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   margin-top: 8px;
 }
@@ -542,11 +542,11 @@
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 11px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
-.openingWindow { color: #0891B2; border-color: rgba(8,145,178,0.4); }
-.openingDoor   { color: #EA580C; border-color: rgba(234,88,12,0.4); }
+.openingWindow { color: var(--cyan-600); border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
+.openingDoor   { color: var(--orange-600); border-color: rgba(234,88,12,0.4); }
 
 .iconBtn {
   background: var(--bg3);
@@ -559,17 +559,17 @@
 }@media (hover: hover) {
   .iconBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }@media (hover: hover) {
-  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
+  .removeBtn:hover { color: var(--red-600); border-color: rgba(220,38,38,0.4); }
 }
 
 .addBtn {
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   margin-top: 8px;
@@ -581,13 +581,13 @@
 .removeRoomBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 10px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .removeRoomBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
+  .removeRoomBtn:hover { color: var(--red-600); border-color: rgba(220,38,38,0.4); }
 }
 
 /* ── 합계 표 (탭 2) ── */
@@ -610,18 +610,18 @@
   font-weight: 600;
 }
 .summaryTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
 .summaryTotal td {
   background: var(--accent-dim);
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
   font-weight: 800;
 }
-.summaryTotal td:first-child { color: var(--accent); }
-.summaryTotal td:last-child  { color: var(--accent); }
+.summaryTotal td:first-child { color: var(--accent-ink); }
+.summaryTotal td:last-child  { color: var(--accent-ink); }
 
 /* ── 견적 표 (탭 3) ── */
 .quoteTable {
@@ -643,29 +643,29 @@
   font-weight: 600;
 }
 .quoteTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
 }
-.selfRow td  { background: rgba(14,165,233,0.14); }
-.proRow td   { background: rgba(8,145,178,0.14); }
+.selfRow td  { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.proRow td   { background: color-mix(in srgb, var(--cyan-600) 14%, transparent); }
 .totalRowSelf td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
 }
 .totalRowSelf td:first-child { color: var(--accent); }
 .totalRowSelf td:last-child  { color: var(--accent); font-size: 15px; }
 .totalRowPro td {
-  background: rgba(8,145,178,0.18);
+  background: color-mix(in srgb, var(--cyan-600) 18%, transparent);
   font-weight: 800;
-  border-top: 2px solid rgba(8,145,178,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-bottom: none;
 }
-.totalRowPro td:first-child { color: #0891B2; }
-.totalRowPro td:last-child  { color: #0891B2; font-size: 15px; }
+.totalRowPro td:first-child { color: var(--cyan-600); }
+.totalRowPro td:last-child  { color: var(--cyan-600); font-size: 15px; }
 
 /* ── 가격 프리셋 ── */
 .priceTierGrid {
@@ -684,14 +684,14 @@
   padding: 8px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }
 .priceTierBtn small {
   display: block;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 13px;
   color: var(--accent);
@@ -699,30 +699,30 @@
 }@media (hover: hover) {
   .priceTierBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.priceTierActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.priceTierActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 평당 비교 ── */
 .compareLine {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
   margin-top: 12px;
 }
-.compareLine strong { color: #EA580C; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.compareLine strong { color: var(--orange-600); font-family: var(--font-sans); font-weight: 800; }
 
 /* ── 결과 복사 ── */
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
@@ -730,4 +730,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

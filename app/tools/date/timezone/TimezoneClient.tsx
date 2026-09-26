@@ -328,7 +328,7 @@ export default function TimezoneClient() {
             const p = baseUtc ? partsInZone(baseUtc, c.timeZone) : null
             const dateOff = p && basePartsForOffset ? dateOffsetLabel(basePartsForOffset.year, basePartsForOffset.month, basePartsForOffset.day, p.year, p.month, p.day) : ''
             const dst = baseUtc ? isDSTActive(baseUtc, c.timeZone) : false
-            const bucket = p ? classifyHour(p.hour) : null
+            const bucket = p ? classifyHour(p.hour + p.minute / 60, workStart, workEnd) : null
             const isBase = id === baseId
             const bucketCls = bucket ? (styles[`resCardBucket${bucket.charAt(0).toUpperCase() + bucket.slice(1)}` as keyof typeof styles] || '') : ''
             return (
@@ -440,7 +440,7 @@ export default function TimezoneClient() {
                 <div className={styles.barTrack}>
                   {baseUtc && slots.map((s, i) => {
                     const p = partsInZone(s.utcDate, c.timeZone)
-                    const bucket = classifyHour(p.hour)
+                    const bucket = classifyHour(p.hour + p.minute / 60, workStart, workEnd)
                     const bucketCls = styles[`barCell${bucket.charAt(0).toUpperCase() + bucket.slice(1)}` as keyof typeof styles] || ''
                     // 기준 시각 마커: baseUtc와 가장 가까운 슬롯
                     const isMarker = Math.abs(s.utcDate.getTime() - baseUtc.getTime()) < 7.5 * 60000

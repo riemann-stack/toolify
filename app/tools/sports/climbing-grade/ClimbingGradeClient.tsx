@@ -19,8 +19,26 @@ export default function ClimbingGradeClient() {
   const systems = SYSTEMS[mode]
   const sys = systems.find((x) => x.id === systemId) ?? systems[0]
   const idx = Math.min(rowIdx, rows.length - 1)
-  const row = rows[idx]
-  const band = BANDS[row.band]
+
+  // 선택 체계에서 같은 라벨이 연속으로 여러 행에 걸치면(예: UIAA VII+ = 5.10d·5.11a) 옵션 하나로 묶는다
+  const groups: { label: string; idxs: number[] }[] = []
+  rows.forEach((r, i) => {
+    const l = cell(r, sys.key)
+    const last = groups[groups.length - 1]
+    if (last && last.label === l) last.idxs.push(i)
+    else groups.push({ label: l, idxs: [i] })
+  })
+  const groupIdx = Math.max(0, groups.findIndex((g) => g.idxs.includes(idx)))
+  const span = groups[groupIdx].idxs.map((i) => rows[i])
+  // 여러 행에 걸치면 다른 체계 값·난이도를 범위로 표시
+  const rangeOf = (key: string): string => {
+    const vals = span.map((r) => cell(r, key)).filter((v, i, a) => a.indexOf(v) === i)
+    return vals.length > 1 ? `${vals[0]}~${vals[vals.length - 1]}` : vals[0]
+  }
+  const bandLo = BANDS[span[0].band]
+  const bandHi = BANDS[span[span.length - 1].band]
+  const band = bandLo
+  const bandLabel = bandLo === bandHi ? bandLo.label : `${bandLo.label}~${bandHi.label}`
 
   function switchMode(m: Mode) {
     if (m === mode) return
@@ -74,11 +92,11 @@ export default function ClimbingGradeClient() {
             <select
               className={s.select}
               aria-label={`${sys.label} 등급 선택`}
-              value={idx}
-              onChange={(e) => setRowIdx(Number(e.target.value))}
+              value={groupIdx}
+              onChange={(e) => setRowIdx(groups[Number(e.target.value)]?.idxs[0] ?? 0)}
             >
-              {rows.map((r, i) => (
-                <option key={i} value={i}>{cell(r, sys.key)}</option>
+              {groups.map((g, gi) => (
+                <option key={gi} value={gi}>{g.label}</option>
               ))}
             </select>
             <span className={s.selectArrow}>▼</span>
@@ -88,12 +106,12 @@ export default function ClimbingGradeClient() {
 
       {/* 결과 */}
       <div className={s.hero} role="status">
-        <span className={s.bandBadge} style={{ background: band.color }}>{band.label}</span>
+        <span className={s.bandBadge} style={{ background: band.color }}>{bandLabel}</span>
         <div className={s.systemGrid} style={{ gridTemplateColumns: `repeat(${systems.length}, 1fr)` }}>
           {systems.map((x) => (
             <div key={x.id} className={`${s.systemChip} ${x.id === systemId ? s.systemChipActive : ''}`}>
               <span className={s.systemName}>{x.label}</span>
-              <span className={s.systemValue}>{cell(row, x.key)}</span>
+              <span className={s.systemValue}>{rangeOf(x.key)}</span>
             </div>
           ))}
         </div>
@@ -115,16 +133,23 @@ export default function ClimbingGradeClient() {
               {rows.map((r, i) => (
                 <tr
                   key={i}
-                  role="button"
-                  tabIndex={0}
-                  aria-current={i === idx ? 'true' : undefined}
-                  aria-label={`${systems.map((x) => `${x.label} ${cell(r, x.key)}`).join(', ')} · ${BANDS[r.band].label}`}
-                  className={i === idx ? s.rowActive : ''}
+                  aria-current={groups[groupIdx].idxs.includes(i) ? 'true' : undefined}
+                  className={groups[groupIdx].idxs.includes(i) ? s.rowActive : ''}
                   onClick={() => setRowIdx(i)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setRowIdx(i) } }}
                 >
-                  {systems.map((x) => (
-                    <td key={x.id} className={x.id === systemId ? s.cellPrimary : ''}>{cell(r, x.key)}</td>
+                  {systems.map((x, xi) => (
+                    <td key={x.id} className={x.id === systemId ? s.cellPrimary : ''}>
+                      {xi === 0 ? (
+                        // 표 시맨틱은 유지하고, 행 선택은 첫 칸의 버튼으로 (키보드·스크린리더)
+                        <button
+                          type="button"
+                          className={s.rowBtn}
+                          aria-pressed={groups[groupIdx].idxs.includes(i)}
+                          aria-label={`${systems.map((y) => `${y.label} ${cell(r, y.key)}`).join(', ')} · ${BANDS[r.band].label} 선택`}
+                          onClick={(e) => { e.stopPropagation(); setRowIdx(i) }}
+                        >{cell(r, x.key)}</button>
+                      ) : cell(r, x.key)}
+                    </td>
                   ))}
                   <td>
                     <span className={s.bandDot} style={{ background: BANDS[r.band].color }} />

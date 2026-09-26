@@ -2,7 +2,7 @@
 // 지붕 면적 계산 — 5가지 형태 + 물매·경사각 + 처마·로스율
 // ─────────────────────────────────────────────────────────────
 
-export type RoofType = 'gable' | 'hip' | 'shed' | 'flat' | 'maetbae'
+export type RoofType = 'gable' | 'hip' | 'shed' | 'flat' | 'paljak'
 
 export interface RoofMeta {
   key: RoofType
@@ -12,11 +12,11 @@ export interface RoofMeta {
 }
 
 export const ROOF_TYPES: RoofMeta[] = [
-  { key: 'gable',   label: '박공지붕', emoji: '🔺', desc: '두 사면 — 가장 흔함 (단독주택)' },
+  { key: 'gable',   label: '박공지붕', emoji: '🔺', desc: '두 사면(맞배) — 가장 흔함 (단독주택)' },
   { key: 'hip',     label: '모임지붕', emoji: '🏔️', desc: '4사면 — 전원주택·풍압 강함' },
   { key: 'shed',    label: '외쪽지붕', emoji: '📐', desc: '한 사면 — 창고·증축' },
   { key: 'flat',    label: '평지붕',   emoji: '🟦', desc: '거의 평면 — 옥상·방수' },
-  { key: 'maetbae', label: '맞배지붕', emoji: '🏯', desc: '한옥 표준 — 처마 길어 그늘 ↑' },
+  { key: 'paljak',  label: '팔작지붕', emoji: '🏯', desc: '한옥 — 모임지붕 위에 박공면, 처마 깊음' },
 ]
 
 // ── 단위 변환 ──────────────────────────
@@ -96,7 +96,7 @@ export function calcRoof(input: RoofInput): RoofResult {
   const W_total = W + eaves.front + eaves.back
 
   const planArea = L_total * W_total
-  // 모든 형태가 동일 공식: 평면 × 경사 배율 (모임/박공/맞배 4사면 근사)
+  // 모든 형태가 동일 공식: 평면 × 경사 배율 (박공·모임·팔작 — 사면 경사가 같을 때 성립)
   // 평지붕은 pitchFactor=1
   const surfaceArea = planArea * pitchFactor
   const materialArea = surfaceArea * (1 + lossRate)
@@ -152,8 +152,8 @@ export const ROOF_MATERIALS: RoofMaterial[] = [
 
 // ── 검증 ─────────────────────────────
 export function validateRoofInput(input: Partial<RoofInput>): string | null {
-  if (!input.L || input.L <= 0 || input.L > 100) return '가로는 1~100m 범위.'
-  if (!input.W || input.W <= 0 || input.W > 100) return '세로는 1~100m 범위.'
+  if (!input.L || input.L <= 0 || input.L > 100) return '가로는 0 초과 100m 이하로 입력하세요.'
+  if (!input.W || input.W <= 0 || input.W > 100) return '세로는 0 초과 100m 이하로 입력하세요.'
   if (input.pitchDeg !== undefined && (input.pitchDeg < 0 || input.pitchDeg > 60)) {
     return '경사각은 0~60° 범위.'
   }
@@ -179,6 +179,7 @@ export function fmtKrwShort(n: number): string {
     const v = (n / 100_000_000).toFixed(2).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '')
     return `${v}억`
   }
-  if (n >= 10_000) return `${Math.round(n / 10_000).toLocaleString()}만 원`
+  // 만 원 단위는 소수 1자리까지 — 25,000원이 '3만 원'으로 부풀지 않게 (2.5만 원)
+  if (n >= 10_000) return `${(Math.round(n / 1_000) / 10).toLocaleString('ko-KR')}만 원`
   return `${Math.round(n).toLocaleString()}원`
 }

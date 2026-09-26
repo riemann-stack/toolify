@@ -1,5 +1,10 @@
 /* 경매 비용 계산기 — 데이터·계산 유틸 */
 
+import {
+  calcHouseAcquisitionTax, calcNonHouseAcquisitionTax, type AcqTaxBreakdown,
+} from '@/lib/krAcquisitionTax'
+import * as loanRules from '@/lib/krLoanRules'
+
 export type PropertyType = 'apt' | 'villa' | 'house' | 'office' | 'shop' | 'land'
 export type OwnerType = 'live1' | 'own1' | 'multi2' | 'multi3' | 'corp'
 export type Region = 'normal' | 'adjusted' | 'speculative'
@@ -24,6 +29,12 @@ export const PROPERTIES: PropertyMeta[] = [
 
 export const getProperty = (id: PropertyType) => PROPERTIES.find((p) => p.id === id)!
 
+/** 주택 여부 — 잘못된 id(손상된 localStorage 등)에도 크래시 없이 false */
+export const isHouseType = (id: PropertyType): boolean => PROPERTIES.find((p) => p.id === id)?.isHouse ?? false
+
+/* enum 가드 — localStorage 복원 검증용 (CLAUDE.md: 무검증 as T 금지) */
+export const isPropertyType = (v: unknown): v is PropertyType => PROPERTIES.some((p) => p.id === v)
+
 /* 명의 유형 */
 export interface OwnerMeta {
   id: OwnerType
@@ -32,98 +43,83 @@ export interface OwnerMeta {
   desc: string
 }
 
+/* 라벨은 모두 '이번 낙찰로 몇 번째 주택이 되는가(취득 후 주택 수)' 기준 — 보유 수로 읽혀 한 단계 낮게 고르는 오류 방지 */
 export const OWNERS: OwnerMeta[] = [
-  { id: 'live1',   label: '실거주 1주택',          shortLabel: '실거주 1주택', desc: '본인 실거주, 무주택 → 1주택' },
-  { id: 'own1',    label: '1주택 보유 → 2주택',     shortLabel: '2주택',        desc: '기존 1주택 보유 + 추가 매수' },
-  { id: 'multi2',  label: '다주택 (2~3주택)',       shortLabel: '다주택',       desc: '기존 2주택 → 3주택+' },
-  { id: 'multi3',  label: '다주택 (4주택+)',        shortLabel: '4주택+',       desc: '4주택 이상 보유' },
-  { id: 'corp',    label: '법인 명의',              shortLabel: '법인',         desc: '법인 단일 세율' },
+  { id: 'live1',   label: '무주택 → 1주택',             shortLabel: '1주택',     desc: '지금 집이 없고 이번 낙찰로 첫 주택 취득' },
+  { id: 'own1',    label: '1주택 보유 → 2주택째',       shortLabel: '2주택째',   desc: '지금 1채 보유, 이번 낙찰로 2주택' },
+  { id: 'multi2',  label: '2주택 보유 → 3주택째',       shortLabel: '3주택째',   desc: '지금 2채 보유, 이번 낙찰로 3주택' },
+  { id: 'multi3',  label: '3주택 이상 보유 → 4주택째+', shortLabel: '4주택째+',  desc: '지금 3채 이상 보유, 이번 낙찰로 4주택 이상' },
+  { id: 'corp',    label: '법인 명의',                  shortLabel: '법인',      desc: '법인 취득 — 주택 수와 무관하게 중과' },
 ]
 
 export const getOwner = (id: OwnerType) => OWNERS.find((o) => o.id === id)!
+export const isOwnerType = (v: unknown): v is OwnerType => OWNERS.some((o) => o.id === v)
 
 /* 지역 */
 export interface RegionMeta {
   id: Region
   label: string
-  surcharge: number   // 다주택 가산세 (조정대상 +4%, 투기과열 +4%)
 }
 
+/* 취득세 중과 판단에는 '조정대상지역' 여부만 쓰인다 (지방세법 §13의2). 투기과열지구는 조정대상지역으로 함께 지정됨 */
 export const REGIONS: RegionMeta[] = [
-  { id: 'normal',     label: '비규제지역',     surcharge: 0  },
-  { id: 'adjusted',   label: '조정대상지역',    surcharge: 4  },
-  { id: 'speculative', label: '투기과열지구',   surcharge: 4  },
+  { id: 'normal',     label: '비규제지역' },
+  { id: 'adjusted',   label: '조정대상지역' },
+  { id: 'speculative', label: '투기과열지구' },
 ]
+export const isRegion = (v: unknown): v is Region => REGIONS.some((r) => r.id === v)
 
 /* ─────────────────────────────────────────────
-   취득세 계산 (2025~2026 일반 가이드)
-   세율 = 취득세 + 지방교육세 통합 (전용 85㎡ 이하 기준, 농특세 제외)
-   ※ 85㎡ 초과 주택은 농어촌특별세 추가: 1주택 +0.2%p,
-     중과 8%대 +0.6%p, 12%대 +1.0%p — 본 도구는 ≤85㎡ 기준
+   취득세 — 단일 소스 lib/krAcquisitionTax.ts (지방세법 §11·§13의2, 지방교육세 §151, 농특세)
+   이 도구는 전용면적을 묻지 않으므로 **전용 85㎡ 이하**(농어촌특별세 비과세)로 계산한다.
+   · 1주택: 1~3% + 지방교육세(취득세율의 10%) → 1.1~3.3% (6~9억은 0.01%p 단위 반올림 세율)
+   · 1주택 보유 → 2주택: 비조정 표준세율 / 조정·투기과열 8% + 0.4% (일시적 2주택 특례는 미반영 — 해당 시 '실거주 1주택'과 같음)
+   · 2주택 → 3주택: 비조정 8.4% / 조정 12.4%   · 4주택+·법인: 12.4%
+   · 오피스텔·상가·토지(비주택): 4% + 교육세 0.4% + 농특세 0.2% = 4.6%
+   · 저가주택 중과 제외(지방세법 시행령 §28의2 1호): 시가표준액(공시가격) 1억 이하(2025.1.2 이후 비수도권은 2억 이하,
+     정비구역 등 제외) 주택은 다주택·법인이어도 표준세율 — 사용자가 체크(lowValue)하면 lib lowValueHouse로 전달
    ───────────────────────────────────────────── */
 
-/**
- * 취득세 자동 계산 (만원 단위 입력 → 세액 만원 반환)
- * 1주택 (실거주):
- *  - 6억 이하: 1.1%
- *  - 6~9억:   1.1~3.3% (선형)
- *  - 9억 초과: 3.3%
- * 2주택: 8.4% (조정 +4 = 12.4%) — 취득세 8% + 지방교육세 0.4%
- * 3주택+: 12.4% (조정 무관) — 취득세 12% + 지방교육세 0.4%
- * 법인: 12.4% (전 지역)
- * 오피스텔·상가·토지: 4.6%
- */
-/** 1주택 통합 취득세율(지방교육세 포함, 소수). 6~9억은 선형 1.1~3.3% */
-function oneHouseRate(priceEok: number): number {
-  if (priceEok <= 6) return 0.011
-  // 6~9억: 취득세율 = 가액(억)×2/3 − 3 (1~3%) → 지방교육세 포함 ×1.1
-  if (priceEok <= 9) return ((priceEok * 2) / 3 - 3) * 1.1 / 100
-  return 0.033
+const OWNER_HOME_COUNT: Record<Exclude<OwnerType, 'corp'>, number> = {
+  live1: 1, own1: 2, multi2: 3, multi3: 4,
 }
 
+/** 취득세 세목별 내역 (만원 입력 → 원 단위 내역)
+ *  lowValue: 시가표준액(공시가격) 1억 이하·비수도권 2억 이하 주택 → 중과 제외(표준세율) */
+export function acquisitionTaxBreakdown(
+  priceMan: number,
+  property: PropertyType,
+  owner: OwnerType,
+  region: Region,
+  lowValue = false,
+): AcqTaxBreakdown {
+  const priceWon = Math.max(0, priceMan) * 10_000
+  if (!isHouseType(property)) return calcNonHouseAcquisitionTax(priceWon)
+  // lowValue 라벨('시가표준액 1억(비수도권 2억) 이하 — …')은 lib가 제공
+  return calcHouseAcquisitionTax({
+    price: priceWon,
+    homeCount: owner === 'corp' ? 1 : (OWNER_HOME_COUNT[owner] ?? 1),
+    corporate: owner === 'corp',
+    adjusted: region !== 'normal',   // 투기과열지구는 조정대상지역과 함께 지정됨
+    over85: false,
+    lowValueHouse: lowValue,
+  })
+}
+
+/** 취득세 + 지방교육세 (+ 비주택 농특세) 합계 — 만원 */
 export function calcAcquisitionTax(
   priceMan: number,
   property: PropertyType,
   owner: OwnerType,
   region: Region,
+  lowValue = false,
 ): number {
-  const meta = getProperty(property)
-  const priceEok = priceMan / 10000 // 억원 단위
-
-  /* 비주택은 단일 세율 4.6% */
-  if (!meta.isHouse) {
-    return priceMan * 0.046
-  }
-
-  /* 법인은 12.4% (취득세 12% + 지방교육세 0.4%) */
-  if (owner === 'corp') {
-    return priceMan * 0.124
-  }
-
-  /* 다주택 가산 (지방교육세 0.4%p 포함) */
-  const regionMeta = REGIONS.find((r) => r.id === region)!
-  if (owner === 'multi3') {
-    return priceMan * 0.124  // 4주택+ 조정 무관 12% + 지방교육세 0.4%
-  }
-  if (owner === 'multi2') {
-    const baseRate = 8 + regionMeta.surcharge + 0.4  // 비조정 8.4 / 조정 12.4
-    return priceMan * (baseRate / 100)
-  }
-  if (owner === 'own1') {
-    /* 1주택 → 2주택: 조정대상이면 8.4%, 비규제면 일반 1주택 세율 */
-    if (region === 'normal') {
-      return priceMan * oneHouseRate(priceEok)
-    }
-    return priceMan * 0.084
-  }
-
-  /* 실거주 1주택 (live1) */
-  return priceMan * oneHouseRate(priceEok)
+  return acquisitionTaxBreakdown(priceMan, property, owner, region, lowValue).total / 10_000
 }
 
 /** 취득세율 % 조회 (UI 표시용) */
-export function getAcquisitionRate(priceMan: number, property: PropertyType, owner: OwnerType, region: Region): number {
-  const tax = calcAcquisitionTax(priceMan, property, owner, region)
+export function getAcquisitionRate(priceMan: number, property: PropertyType, owner: OwnerType, region: Region, lowValue = false): number {
+  const tax = calcAcquisitionTax(priceMan, property, owner, region, lowValue)
   return priceMan > 0 ? (tax / priceMan) * 100 : 0
 }
 
@@ -148,10 +144,9 @@ export function calcStampTax(priceMan: number): number {
 
 /** 국민주택채권: 낙찰가 × 약 2% (시가표준 기반), 즉시 매도 시 약 0.5% 손실 */
 export function calcHousingBond(priceMan: number, property: PropertyType): number {
-  const meta = getProperty(property)
   /* 주택은 1.3~3.1% 누진, 평균 2% */
   /* 비주택은 2~5% 더 높음 */
-  const rate = meta.isHouse ? 0.005 : 0.012  // 즉시 매도 시 실제 손실액 기준
+  const rate = isHouseType(property) ? 0.005 : 0.012  // 즉시 매도 시 실제 손실액 기준
   return priceMan * rate
 }
 
@@ -201,12 +196,52 @@ export const MANUAL_ITEMS = COST_ITEMS.filter((c) => !c.isAuto)
 
 export interface LoanResult {
   ltvLimit: number       // LTV 한도 만원
-  dsrLimit: number       // DSR 한도 만원
-  loanAmount: number     // 실제 가능 대출 (둘 중 작은 값)
-  monthlyPayment: number // 월 원리금 만원
+  dsrLimit: number       // DSR 한도 만원 (스트레스 금리 가산 역산)
+  capLimit: number       // 주담대 금액 상한 만원 (없으면 Infinity)
+  loanAmount: number     // 실제 가능 대출 (셋 중 가장 작은 값)
+  monthlyPayment: number // 월 원리금 만원 (실제 금리 기준)
   ownEquity: number      // 자기자본 필요 만원
   shortage: number       // 현금 부족액 (음수면 충분)
-  capacityType: 'ltv' | 'dsr'
+  capacityType: 'ltv' | 'dsr' | 'cap'
+}
+
+/* ─────────────────────────────────────────────
+   주택담보대출 규제 — 단일 소스 lib/krLoanRules.ts (2025.10.16 시행 10·15 대책 기준, 경락잔금대출 동일 적용)
+   LTV·스트레스 금리·주담대 금액 상한·DSR 한도 수치와 근거·출처는 lib에서 관리하고,
+   여기서는 이 도구의 지역(Region)·명의(OwnerType) 선택지를 lib 규칙 입력으로 바꾸기만 한다.
+   · 규제지역 생애최초 구입자(LTV 70%)는 명의 선택지로 구분하지 않아 사용자가 조정한다.
+   · 수도권 비규제지역 다주택자 추가 구입 금지(6·27 대책)는 도구가 수도권 여부를 받지 않아 안내문으로만 알리고 사용자가 조정한다.
+   ───────────────────────────────────────────── */
+export {
+  LTV_NON_REGULATED, LTV_NON_REGULATED_MULTI, LTV_REGULATED_NO_HOME, LTV_REGULATED_HAS_HOME,
+  STRESS_RATE_REGULATED, STRESS_RATE_DEFAULT,
+} from '@/lib/krLoanRules'
+
+/** 명의 → 취득 전 보유 주택 수 (live1 무주택 · own1 1채 · multi2 2채 · multi3 3채 이상). 법인은 사업자로 따로 판정 */
+const OWNER_HOMES_OWNED: Record<Exclude<OwnerType, 'corp'>, number> = {
+  live1: 0, own1: 1, multi2: 2, multi3: 3,
+}
+
+/** 투기과열지구는 조정대상지역과 함께 지정되므로 둘 다 규제지역 */
+const isRegulated = (region: Region): boolean => region !== 'normal'
+
+/** 지역·명의 기준 LTV 기본값(%) — 규제지역: 무주택 40 / 유주택·법인 0, 비규제: 70 (다주택·법인 60) */
+export function recommendLtv(region: Region, owner: OwnerType): number {
+  return loanRules.recommendLtv({
+    regulated: isRegulated(region),
+    homesOwned: owner === 'corp' ? 0 : (OWNER_HOMES_OWNED[owner] ?? 1),   // 알 수 없는 값은 유주택으로(보수적)
+    business: owner === 'corp',
+  })
+}
+
+/** 지역 기준 스트레스 금리 가산(%p) 기본값 */
+export function recommendStressRate(region: Region): number {
+  return loanRules.recommendStressRate(isRegulated(region))
+}
+
+/** 규제지역 주담대 금액 상한 (만원) — 담보가(낙찰가) 15억 이하 6억 / 15~25억 4억 / 25억 초과 2억. 비규제는 상한 없음 */
+export function mortgageCapMan(priceMan: number, region: Region): number {
+  return loanRules.mortgageCapMan(priceMan, isRegulated(region))
 }
 
 /**
@@ -221,11 +256,11 @@ export function monthlyPayment(principalMan: number, annualRatePct: number, year
 }
 
 /**
- * 가능 대출 = min(LTV 한도, DSR 한도)
+ * 가능 대출 = min(LTV 한도, DSR 한도, 주담대 금액 상한)
  * LTV 한도 = 낙찰가(담보가치) × LTV%  ← 부대비용이 아닌 담보가 기준
  * DSR = (월 신규 + 기존) × 12 / 연소득 ≤ 0.40
  *  → 가능 월 상환액 = 연소득 × 0.40 / 12 - 기존 월 상환
- *  → DSR 가능 원금 = monthlyPayment 역산
+ *  → DSR 가능 원금 = monthlyPayment 역산 — 스트레스 DSR: 역산 금리에 stressPct 가산 (실제 월 상환은 원래 금리)
  */
 export function calcLoan(
   priceMan: number,        // 낙찰가 = 담보가치 (LTV 기준)
@@ -235,13 +270,15 @@ export function calcLoan(
   years: number,
   annualIncomeMan: number,
   existingMonthlyMan: number,
+  capMan: number = Infinity, // 주담대 금액 상한 (mortgageCapMan)
+  stressPct = 0,             // 스트레스 금리 가산 (%p)
 ): LoanResult {
   const ltvLimit = priceMan * (ltvPct / 100)
 
   /* DSR 가능 월 상환 */
-  const maxMonthlyDsr = Math.max(0, (annualIncomeMan * 0.40 / 12) - existingMonthlyMan)
-  /* DSR 한도 원금 (역산: monthlyPayment의 역공식) */
-  const r = ratePct / 100 / 12
+  const maxMonthlyDsr = Math.max(0, (annualIncomeMan * loanRules.DSR_LIMIT_RATIO / 12) - existingMonthlyMan)
+  /* DSR 한도 원금 (역산: monthlyPayment의 역공식, 스트레스 금리 적용) */
+  const r = (ratePct + Math.max(0, stressPct)) / 100 / 12
   const n = years * 12
   let dsrLimit: number
   if (r === 0) {
@@ -250,8 +287,10 @@ export function calcLoan(
     dsrLimit = (maxMonthlyDsr * (1 - Math.pow(1 + r, -n))) / r
   }
 
-  const loanAmount = Math.min(ltvLimit, dsrLimit)
-  const capacityType: 'ltv' | 'dsr' = ltvLimit <= dsrLimit ? 'ltv' : 'dsr'
+  const capLimit = capMan > 0 ? capMan : 0
+  const loanAmount = Math.min(ltvLimit, dsrLimit, capLimit)
+  const capacityType: 'ltv' | 'dsr' | 'cap' =
+    loanAmount === ltvLimit ? 'ltv' : loanAmount === capLimit ? 'cap' : 'dsr'
   const monthly = monthlyPayment(loanAmount, ratePct, years)
   const ownEquity = Math.max(0, totalCostMan - loanAmount)
   const shortage = ownEquity  // 사용자 보유 현금은 별도 입력으로 처리
@@ -259,6 +298,7 @@ export function calcLoan(
   return {
     ltvLimit,
     dsrLimit: Math.max(0, dsrLimit),
+    capLimit,
     loanAmount: Math.max(0, loanAmount),
     monthlyPayment: monthly,
     ownEquity,

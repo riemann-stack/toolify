@@ -48,6 +48,10 @@ export interface Competition {
   /** 승자승이 전체 골득실보다 앞 → 맞대결(이미 치른) 결과 입력을 권장 */
   needsHeadToHead: boolean
   note: string
+  /** 단판 풀리그(같은 두 팀이 한 번만 만남) — 맞대결 입력과 잔여 경기에 같은 대진이 있으면 경고 */
+  singleRoundRobin?: boolean
+  /** 기본 진출 자리 바로 아래 순위(조 3위)도 타 조와 비교해 일부 진출 — 이 도구는 타 조 비교를 계산하지 않음 */
+  thirdPlaceMayAdvance?: boolean
 }
 
 export const COMPETITIONS: Competition[] = [
@@ -55,22 +59,22 @@ export const COMPETITIONS: Competition[] = [
     id: 'worldcup2026',
     name: '월드컵 2026 (승자승 우선)',
     order: ['points', 'headToHeadPoints', 'headToHeadGoalDiff', 'headToHeadGoals', 'goalDifference', 'goalsScored', 'fairPlay'],
-    teams: 4, advance: 2, needsHeadToHead: true,
-    note: '2026 대회부터 승자승(맞대결)을 전체 골득실보다 먼저 봅니다(2022년과 반대). 최종 동률 시 페어플레이→FIFA 랭킹.',
+    teams: 4, advance: 2, needsHeadToHead: true, singleRoundRobin: true, thirdPlaceMayAdvance: true,
+    note: '48팀·12개 조 방식: 조 1·2위와 조 3위 중 상위 8팀이 32강에 오릅니다. 이 도구는 다른 조 3위와의 비교를 계산하지 않아 조 3위는 ‘타 조 성적에 따라 32강 가능’으로 따로 표시합니다. 2026 대회부터 승자승(맞대결)을 전체 골득실보다 먼저 봅니다(2022년과 반대). 최종 동률 시 페어플레이→FIFA 랭킹.',
   },
   {
     id: 'worldcup2022',
     name: '월드컵 2022 방식 (골득실 우선)',
     order: ['points', 'goalDifference', 'goalsScored', 'headToHeadPoints', 'headToHeadGoalDiff', 'headToHeadGoals', 'fairPlay', 'drawing'],
-    teams: 4, advance: 2, needsHeadToHead: false,
-    note: '2022 카타르까지의 방식: 전체 골득실 → 다득점 → 승자승 순. 과거 대회 분석용.',
+    teams: 4, advance: 2, needsHeadToHead: false, singleRoundRobin: true,
+    note: '2022 카타르까지의 방식(32팀·상위 2팀 16강): 전체 골득실 → 다득점 → 승자승 순. 과거 대회 분석용.',
   },
   {
     id: 'asiancup',
     name: '아시안컵 (승자승 우선)',
     order: ['points', 'headToHeadPoints', 'headToHeadGoalDiff', 'headToHeadGoals', 'goalDifference', 'goalsScored', 'fairPlay', 'drawing'],
-    teams: 4, advance: 2, needsHeadToHead: true,
-    note: 'AFC는 승자승(맞대결)을 전체 골득실보다 먼저 적용합니다. 3위 일부 진출 등 본선 규정은 별도.',
+    teams: 4, advance: 2, needsHeadToHead: true, singleRoundRobin: true, thirdPlaceMayAdvance: true,
+    note: 'AFC는 승자승(맞대결)을 전체 골득실보다 먼저 적용합니다. 조 3위 일부가 다른 조 3위와 비교해 진출하므로, 조 3위는 ‘타 조 성적에 따라 진출 가능’으로 따로 표시합니다.',
   },
   {
     id: 'ucl_group',

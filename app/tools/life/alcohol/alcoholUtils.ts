@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────
 
 export const ALCOHOL_DENSITY = 0.7893  // 에탄올 밀도 g/ml (정밀)
-// 표준잔(순수 알코올)의 정의는 기관마다 다름: 보건복지부 절주 지침 7g · WHO 10g · 미국 NIAAA 14g.
+// 표준잔(순수 알코올)의 정의는 기관마다 다름: 보건복지부 약 7g · WHO 10g · 미국 NIAAA 14g.
 // 본 도구는 표시 편의상 8g을 '1잔'으로 환산하되, 정확한 값은 순수 알코올 g을 함께 제공한다.
 export const STANDARD_DRINK_G = 8      // 표시용 환산 기준(공식 단일 기준 아님)
 export const KCAL_PER_G_ALCOHOL = 7    // 알코올 1g = 7 kcal
@@ -197,6 +197,8 @@ export const EQUIV_TARGETS: EquivItem[] = [
   { name: '위스키',   emoji: '🥃', abv: 40,   unitMl: 30,  unitLabel: '샷(30ml)' },
   { name: '막걸리',   emoji: '🥣', abv: 6,    unitMl: 200, unitLabel: '사발' },
   { name: '사케',     emoji: '🍶', abv: 15,   unitMl: 60,  unitLabel: '오쵸코' },
+  // 하이볼 7%는 가정값(공식 기준·출처 없음). 가게·제품마다 도수 편차가 커서 음주량을 적게 안내하지 않도록 보수적으로 잡음.
+  // page 잔 단위 표(하이볼잔 300ml)도 이 값을 그대로 씀
   { name: '하이볼',   emoji: '🍹', abv: 7,    unitMl: 300, unitLabel: '하이볼잔' },
 ]
 
@@ -227,10 +229,11 @@ export function riskLevel(alcoholG: number, sex: 'male' | 'female'): {
 } {
   const limit = sex === 'male' ? KOREAN_DAILY_LOW_RISK_G.male : KOREAN_DAILY_LOW_RISK_G.female
   const pct = Math.round((alcoholG / limit) * 100)
-  if (pct <= 50)  return { level: 'safe',      pct, label: '🟢 참고 기준 이내', color: '#059669' }
-  if (pct <= 100) return { level: 'caution',   pct, label: '🟡 기준 근접',      color: '#FFD93E' }
-  if (pct <= 200) return { level: 'high',      pct, label: '🟠 기준 초과',      color: '#EA580C' }
-  return                  { level: 'very-high', pct, label: '🔴 고위험 수준',    color: '#DC2626' }
+  // color는 텍스트에도 쓰이므로 AA 대비 토큰 사용 (노랑 #FFD93E는 흰 배경 1.4:1이라 판독 불가)
+  if (pct <= 50)  return { level: 'safe',      pct, label: '🟢 참고 기준 이내', color: 'var(--success)' }
+  if (pct <= 100) return { level: 'caution',   pct, label: '🟡 기준 근접',      color: 'var(--warning)' }
+  if (pct <= 200) return { level: 'high',      pct, label: '🟠 기준 초과',      color: 'var(--orange-600)' }
+  return                  { level: 'very-high', pct, label: '🔴 고위험 수준',    color: 'var(--danger)' }
 }
 
 // ─────────────────────────────────────────────────────────────

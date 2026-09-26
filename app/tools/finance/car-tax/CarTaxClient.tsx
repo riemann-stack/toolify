@@ -6,12 +6,23 @@ import s from './car-tax.module.css'
 import {
   calcCarTax, REGIONS, CAR_TYPE_LABEL, FUEL_LABEL, EXEMPTION_LABEL,
   TAX_TABLE_NON_BUSINESS, TRANSFER_NOTE, SAVING_TIPS,
-  type CarType, type FuelType, type RegionId,
+  EXEMPTION_KEYS, CAR_TYPES, FUEL_TYPES, TAX_BASE_YEAR, LIGHT_TAX_CAP,
+  bondRateFor, carAgeFromYears, annualTaxAgeDiscount, dieselEnvFeeApplies, ACQUISITION_TAX_RATES,
+  type CarType, type FuelType, type RegionId, type Exemption,
 } from './carTaxData'
 
-const STORAGE_KEY = 'youtil_car_tax_v1'
+const STORAGE_KEY = 'youtil_car_tax_v1' // 규칙 외 키지만 개명 금지(저장값 유실)
 
-type Exemption = keyof typeof EXEMPTION_LABEL
+/* 연비 입력 범위 (km/L) — 범위 밖·빈칸이면 유류세를 계산하지 않고 안내 */
+const EFF_MIN = 3
+const EFF_MAX = 40
+const EFF_RE = /^\d+(\.\d+)?$/
+
+const isOneOf = <T extends string>(list: readonly T[], v: unknown): v is T =>
+  typeof v === 'string' && (list as readonly string[]).includes(v)
+const REGION_IDS = REGIONS.map(r => r.id)
+const finiteIn = (v: unknown, min: number, max: number): v is number =>
+  typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max
 
 export default function CarTaxClient() {
   /* 차량 정보 */
@@ -26,7 +37,9 @@ export default function CarTaxClient() {
   const [monthlyKm, setMonthlyKm] = useState(1500)
   const [effStr, setEffStr] = useState('12')  // 연비 — 자유 입력(빈칸 허용)
   const effNum = parseFloat(effStr)
-  const efficiencyKmL = Number.isFinite(effNum) && effNum > 0 ? effNum : 1
+  const effValid = Number.isFinite(effNum) && effNum >= EFF_MIN
+  // 빈칸·범위 미만이면 0 → calcCarTax가 유류세를 0으로 두고 화면에 입력 안내 (1km/L로 폭증하던 문제 방지)
+  const efficiencyKmL = effValid ? Math.min(EFF_MAX, effNum) : 0
 
   /* 옵션 */
   const [prepay, setPrepay] = useState(true)
@@ -45,6 +58,11 @@ export default function CarTaxClient() {
       setFuelType('hybrid')
     }
     if (carType === 'light' && cc > 1000) setCc(998)
+    // 전기·수소에서 다른 차종으로 돌아오면(또는 저장값이 모순이면) 연료·배기량 복원 — 0cc·전기로 남아 자동차세 0원이 되던 문제
+    if (carType !== 'ev' && fuelType === 'electric') {
+      setFuelType(carType === 'hybrid' ? 'hybrid' : 'gasoline')
+      if (cc === 0) setCc(carType === 'light' ? 998 : 1999)
+    }
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [carType, fuelType, cc])
 
@@ -54,18 +72,22 @@ export default function CarTaxClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (typeof j.carPrice === 'number') setCarPrice(j.carPrice)
-      if (j.carType) setCarType(j.carType)
-      if (j.fuelType) setFuelType(j.fuelType)
-      if (typeof j.cc === 'number') setCc(j.cc)
-      if (typeof j.yearsSinceReg === 'number') setYearsSinceReg(j.yearsSinceReg)
-      if (j.regionId) setRegionId(j.regionId)
-      if (typeof j.monthlyKm === 'number') setMonthlyKm(j.monthlyKm)
-      if (typeof j.efficiencyKmL === 'number') setEffStr(String(j.efficiencyKmL))
-      if (typeof j.prepay === 'boolean') setPrepay(j.prepay)
-      if (j.exemption) setExemption(j.exemption)
-      if (typeof j.yearsToHold === 'number') setYearsToHold(j.yearsToHold)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object' || Array.isArray(j)) return
+      const o = j as Record<string, unknown>
+      if (finiteIn(o.carPrice, 0, 10_000_000_000)) setCarPrice(Math.round(o.carPrice))
+      if (isOneOf(CAR_TYPES, o.carType)) setCarType(o.carType)
+      if (isOneOf(FUEL_TYPES, o.fuelType)) setFuelType(o.fuelType)
+      if (finiteIn(o.cc, 0, 10_000)) setCc(Math.round(o.cc))
+      if (finiteIn(o.yearsSinceReg, 0, 20)) setYearsSinceReg(Math.round(o.yearsSinceReg))
+      if (isOneOf(REGION_IDS, o.regionId)) setRegionId(o.regionId)
+      if (finiteIn(o.monthlyKm, 0, 10_000)) setMonthlyKm(Math.round(o.monthlyKm))
+      // 연비: 원문 문자열(effStr) 우선, 구버전 숫자(efficiencyKmL) 호환 — 1(구버전 빈칸 폴백값)은 버린다
+      if (typeof o.effStr === 'string' && (o.effStr === '' || EFF_RE.test(o.effStr))) setEffStr(o.effStr)
+      else if (finiteIn(o.efficiencyKmL, EFF_MIN, EFF_MAX)) setEffStr(String(o.efficiencyKmL))
+      if (typeof o.prepay === 'boolean') setPrepay(o.prepay)
+      if (isOneOf(EXEMPTION_KEYS, o.exemption)) setExemption(o.exemption)
+      if (isOneOf(['1', '3', '5', '7', '10'] as const, String(o.yearsToHold))) setYearsToHold(Number(o.yearsToHold))
     } catch {}
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
@@ -73,11 +95,11 @@ export default function CarTaxClient() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         carPrice, carType, fuelType, cc, yearsSinceReg, regionId,
-        monthlyKm, efficiencyKmL, prepay, exemption, yearsToHold,
+        monthlyKm, effStr, prepay, exemption, yearsToHold,
       }))
     } catch {}
   }, [carPrice, carType, fuelType, cc, yearsSinceReg, regionId,
-      monthlyKm, efficiencyKmL, prepay, exemption, yearsToHold])
+      monthlyKm, effStr, prepay, exemption, yearsToHold])
 
   /* 계산 */
   const result = useMemo(() => calcCarTax({
@@ -88,6 +110,12 @@ export default function CarTaxClient() {
 
   const fmt = (n: number) => n.toLocaleString('ko-KR')
   const fmtMan = (n: number) => `${Math.round(n / 10000).toLocaleString('ko-KR')}만 원`
+
+  const carAgeNow = carAgeFromYears(yearsSinceReg)               // 올해 차령 (등록한 해 = 1)
+  const ageDiscountPct = Math.round(annualTaxAgeDiscount(carAgeNow) * 100)
+  const regYear = TAX_BASE_YEAR - yearsSinceReg
+  const bondRate = bondRateFor(regionId, cc, carType)
+  const showEffHint = fuelType !== 'electric' && !effValid
 
   return (
     <div className={s.wrap}>
@@ -143,11 +171,11 @@ export default function CarTaxClient() {
             <label htmlFor="car-tax-f2">연료</label>
             <select id="car-tax-f2" className={s.select}
               value={fuelType}
-              onChange={e => setFuelType(e.target.value as FuelType)}
+              onChange={e => { if (isOneOf(FUEL_TYPES, e.target.value)) setFuelType(e.target.value) }}
               disabled={carType === 'ev'}
             >
-              {(Object.keys(FUEL_LABEL) as FuelType[]).map(f => (
-                <option key={f} value={f}>{FUEL_LABEL[f]}</option>
+              {FUEL_TYPES.map(f => (
+                <option key={f} value={f} disabled={f === 'electric' && carType !== 'ev'}>{FUEL_LABEL[f]}</option>
               ))}
             </select>
           </div>
@@ -164,24 +192,23 @@ export default function CarTaxClient() {
 
         <div className={s.grid2} style={{ marginTop: 14 }}>
           <div className={s.field}>
-            <label htmlFor="car-tax-f4">경과 년수</label>
+            <label htmlFor="car-tax-f4">경과 년수 (올해 − 최초 등록연도)</label>
             <input id="car-tax-f4" type="number" inputMode="numeric"
               className={s.numInput}
               value={yearsSinceReg} min={0} max={20} step={1}
-              onChange={e => setYearsSinceReg(parseInt(e.target.value) || 0)} />
+              onChange={e => setYearsSinceReg(Math.min(20, Math.max(0, parseInt(e.target.value) || 0)))} />
             <div className={s.fieldHint}>
-              {yearsSinceReg < 3 ? '자동차세 감면 없음' :
-                `자동차세 ${Math.min(50, (yearsSinceReg - 2) * 5)}% 감면`}
+              {regYear}년 등록 · 올해 차령 {carAgeNow}년 → {ageDiscountPct === 0 ? '자동차세 경감 없음' : `자동차세 ${ageDiscountPct}% 경감`}
             </div>
           </div>
           <div className={s.field}>
             <label htmlFor="car-tax-f5">거주 지역</label>
             <select id="car-tax-f5" className={s.select}
               value={regionId}
-              onChange={e => setRegionId(e.target.value as RegionId)}>
+              onChange={e => { if (isOneOf(REGION_IDS, e.target.value)) setRegionId(e.target.value) }}>
               {REGIONS.map(r => (
                 <option key={r.id} value={r.id}>
-                  {r.name} (공채 {(r.bondRate * 100).toFixed(0)}%)
+                  {r.name} (공채 {(bondRateFor(r.id, cc, carType) * 100).toFixed(0)}%)
                 </option>
               ))}
             </select>
@@ -211,6 +238,9 @@ export default function CarTaxClient() {
               value={fuelType === 'electric' ? '' : effStr}
               disabled={fuelType === 'electric'}
               onChange={e => setEffStr(e.target.value.replace(/[^\d.]/g, ''))} />
+            {showEffHint && (
+              <div className={s.fieldHint}>연비를 {EFF_MIN}~{EFF_MAX}km/L로 입력하면 유류세가 추정됩니다.</div>
+            )}
           </div>
         </div>
         <p className={s.fieldHint}>
@@ -261,7 +291,7 @@ export default function CarTaxClient() {
       </div>
 
       {/* ── 메인 히어로 ── */}
-      <div className={s.heroCard}>
+      <div className={s.heroCard} role="status">
         <div className={s.heroLabel}>
           {yearsToHold}년 보유 시 총 세금
           {exemption !== 'none' && result.exemptionSaved > 0 &&
@@ -285,9 +315,10 @@ export default function CarTaxClient() {
             <div>
               <strong>취득세</strong>
               <span className={s.taxSub}>
-                {(ACQUISITION_TAX_RATES_DISPLAY[carType] * 100).toFixed(0)}%
+                {(ACQUISITION_TAX_RATES[carType] * 100).toFixed(0)}%
                 {carType === 'ev' && ' (140만원 한도 면제)'}
-                {exemption !== 'none' && exemption !== 'multi_child' && ' (감면 자격)'}
+                {carType === 'light' && ` (${LIGHT_TAX_CAP / 10_000}만원 한도 면제)`}
+                {exemption !== 'none' && ' (감면 자격 · 중복 시 큰 감면 하나만)'}
               </span>
             </div>
             <span className={s.taxVal}>{fmt(result.acquisitionTax)}원</span>
@@ -296,7 +327,9 @@ export default function CarTaxClient() {
             <div>
               <strong>공채 매입 실비</strong>
               <span className={s.taxSub}>
-                {REGIONS.find(r => r.id === regionId)?.name} {((REGIONS.find(r => r.id === regionId)?.bondRate ?? 0) * 100).toFixed(0)}% 매입 후 즉시 매도 (할인율 12%)
+                {bondRate === 0
+                  ? (carType === 'light' ? '경차 — 공채 매입 면제' : '1,000cc 미만 — 공채 매입 면제')
+                  : `${REGIONS.find(r => r.id === regionId)?.name} ${(bondRate * 100).toFixed(0)}% 매입 후 즉시 매도 (할인율 12%)${carType === 'ev' || carType === 'hybrid' ? ' · 친환경차 채권 감면 미반영' : ''}`}
               </span>
             </div>
             <span className={s.taxVal}>{fmt(result.bondCost)}원</span>
@@ -324,11 +357,11 @@ export default function CarTaxClient() {
               <strong>자동차세 본세</strong>
               <span className={s.taxSub}>
                 {exemption === 'disabled' || exemption === 'merit'
-                  ? '장애인·국가유공자 — 자동차세 면제'
+                  ? '장애인·상이 국가유공자 — 자동차세 면제'
                   : carType === 'ev' ? '전기차 정액 10만원 (본세)'
                   : carType === 'business' ? `${cc}cc × ${cc > 2500 ? '24' : cc > 1600 ? '19' : '18'}원/cc (영업용)`
                   : `${cc}cc × ${cc > 1600 ? '200' : cc > 1000 ? '140' : '80'}원/cc`}
-                {exemption !== 'disabled' && exemption !== 'merit' && carType !== 'ev' && yearsSinceReg >= 3 && ` · 연식 ${Math.min(50, (yearsSinceReg - 2) * 5)}% 감면`}
+                {exemption !== 'disabled' && exemption !== 'merit' && carType !== 'ev' && ageDiscountPct > 0 && ` · 차령 ${carAgeNow}년 ${ageDiscountPct}% 경감`}
                 {exemption !== 'disabled' && exemption !== 'merit' && prepay && ' · 연납 약 4.6% 추가 할인'}
               </span>
             </div>
@@ -345,9 +378,18 @@ export default function CarTaxClient() {
             <li className={s.taxItem}>
               <div>
                 <strong>환경개선부담금</strong>
-                <span className={s.taxSub}>경유차 · 배기량별 정액 (연 2회 부과 합산)</span>
+                <span className={s.taxSub}>유로4 이하 경유차({regYear}년 등록) · 배기량별 추정액 (연 2회 부과 합산)</span>
               </div>
               <span className={s.taxVal}>{fmt(result.annualEnvFee)}원</span>
+            </li>
+          )}
+          {fuelType === 'diesel' && !dieselEnvFeeApplies(fuelType, regYear) && (
+            <li className={s.taxItem}>
+              <div>
+                <strong>환경개선부담금</strong>
+                <span className={s.taxSub}>2012년 이후 등록 경유차(유로5·6 추정)는 부과 대상이 아닙니다</span>
+              </div>
+              <span className={s.taxVal}>0원</span>
             </li>
           )}
           {result.annualFuelTax > 0 && (
@@ -419,7 +461,7 @@ export default function CarTaxClient() {
             </li>
           ))}
           <li><strong>전기·수소차</strong> — 본세 100,000원 + 교육세 = 13만원/년 (배기량 무관·차령 경감 없음)</li>
-          <li><strong>연식 감면</strong> — 3년차 5% · 4년차 10% · … · 12년차 이후 50% 최대 (내연기관만)</li>
+          <li><strong>차령 경감</strong> — 차령(등록한 해 = 1년) 3년 5% · 4년 10% · … · 12년 이상 50% 최대 (내연기관만)</li>
           <li><strong>연납 할인</strong> — 1월 일괄 납부 시 약 4.6% 추가 할인 (2026년 공제율 5%)</li>
         </ul>
       </div>
@@ -443,9 +485,4 @@ export default function CarTaxClient() {
       </div>
     </div>
   )
-}
-
-// 차종별 취득세율 (display용)
-const ACQUISITION_TAX_RATES_DISPLAY: Record<CarType, number> = {
-  normal: 0.07, light: 0.04, business: 0.04, ev: 0.07, hybrid: 0.07,
 }

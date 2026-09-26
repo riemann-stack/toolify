@@ -66,18 +66,23 @@ export default function PrintResolutionClient() {
   const ff = fitFill(iw, ih, sizeMM.w, sizeMM.h)
   const effDpi = sizeInvalid ? 0 : (fitMode === 'fill' ? ff.fillPpi : ff.fitPpi)
   const band = bandFor(effDpi)
-  /* 용도 목표 대비 판정 — 절대 밴드만 쓰면 원거리 인쇄물을 부당하게 '부적합'이라 답한다 */
-  const verdict = judgeForUse(effDpi, dpi, uc.label)
+  /* 용도 목표 대비 판정 — 절대 밴드만 쓰면 원거리 인쇄물을 부당하게 '부적합'이라 답한다.
+     ⚠️ 역산 모드에는 직접 DPI 입력칸과 '화면·웹' 버튼이 없다. 예전에는 정방향에서 넣은 DPI(예: 200)나
+        '화면·웹' 선택이 보이지 않는 채 판정 기준으로 새어, 용도 버튼이 모두 꺼진 상태로 판정이 나왔다.
+        역산은 화면에 보이는 용도 버튼만 기준으로 삼는다('화면·웹'이면 첫 인쇄 용도로 대신한다). */
+  const reverseUc = uc.id === 'screen' ? (USE_CASES.find((u) => u.id !== 'screen') ?? uc) : uc
+  const verdict = judgeForUse(effDpi, reverseUc.dpi, reverseUc.label)
   const imgMp = (iw * ih) / 1_000_000
 
   return (
     <div className={s.wrap}>
       {/* 모드 토글 */}
-      <div className={s.modeToggle} role="tablist" aria-label="계산 방향">
-        <button type="button" role="tab" aria-selected={mode === 'forward'}
+      {/* 탭 키보드 이동(화살표·tabpanel)을 갖추지 않았으므로 tablist 대신 토글 버튼 그룹으로 알린다 */}
+      <div className={s.modeToggle} role="group" aria-label="계산 방향">
+        <button type="button" aria-pressed={mode === 'forward'}
           className={`${s.modeBtn} ${mode === 'forward' ? s.modeActive : ''}`}
           onClick={() => setMode('forward')}>① 최소 해상도</button>
-        <button type="button" role="tab" aria-selected={mode === 'reverse'}
+        <button type="button" aria-pressed={mode === 'reverse'}
           className={`${s.modeBtn} ${mode === 'reverse' ? s.modeActive : ''}`}
           onClick={() => setMode('reverse')}>② 인쇄 품질 역산</button>
       </div>
@@ -189,12 +194,12 @@ export default function PrintResolutionClient() {
             <span className={s.cardLabel}>내 이미지 해상도 (픽셀)</span>
             <div className={s.row2}>
               <div className={s.field}>
-                <span className={s.fieldLabel}>가로 (px)</span>
-                <input className={s.input} type="text" inputMode="numeric" value={imgW} onChange={(e) => setImgW(e.target.value.replace(/[^0-9]/g, ''))} />
+                <label className={s.fieldLabel} htmlFor="pr-img-w">가로 (px)</label>
+                <input id="pr-img-w" className={s.input} type="text" inputMode="numeric" value={imgW} onChange={(e) => setImgW(e.target.value.replace(/[^0-9]/g, ''))} />
               </div>
               <div className={s.field}>
-                <span className={s.fieldLabel}>세로 (px)</span>
-                <input className={s.input} type="text" inputMode="numeric" value={imgH} onChange={(e) => setImgH(e.target.value.replace(/[^0-9]/g, ''))} />
+                <label className={s.fieldLabel} htmlFor="pr-img-h">세로 (px)</label>
+                <input id="pr-img-h" className={s.input} type="text" inputMode="numeric" value={imgH} onChange={(e) => setImgH(e.target.value.replace(/[^0-9]/g, ''))} />
               </div>
             </div>
             {imgMp > 0 && <p className={s.dim}>약 {imgMp.toFixed(1)} 메가픽셀</p>}
@@ -228,8 +233,8 @@ export default function PrintResolutionClient() {
             <div className={s.ucGrid}>
               {USE_CASES.filter((u) => u.id !== 'screen').map((u) => (
                 <button key={u.id} type="button"
-                  aria-pressed={ucId === u.id && !dpiStr.trim()}
-                  className={`${s.ucBtn} ${ucId === u.id && !dpiStr.trim() ? s.ucActive : ''}`}
+                  aria-pressed={reverseUc.id === u.id}
+                  className={`${s.ucBtn} ${reverseUc.id === u.id ? s.ucActive : ''}`}
                   onClick={() => { setUcId(u.id); setDpiStr('') }}>
                   <span className={s.ucLabel}>{u.label}</span>
                   <span className={s.ucDpi}>{u.dpi} DPI</span>
@@ -239,15 +244,24 @@ export default function PrintResolutionClient() {
           </div>
 
           {/* 결과 — 선택 크기 품질 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status">
+            {sizeInvalid ? (
+              <>
+                <p className={s.heroValue}>—</p>
+                <p className={s.heroSub}>인쇄 크기를 0보다 큰 값으로 입력하세요.</p>
+              </>
+            ) : (
+            <>
             <span className={s.bandBadge} style={{ background: `color-mix(in srgb, ${band.tint} 16%, transparent)`, borderColor: band.tint }}>
               <span className={s.bandDot} style={{ background: band.tint }} />{band.label}
             </span>
             <p className={s.heroValue} style={{ color: band.ink }}>{Math.round(effDpi)} PPI</p>
             <p className={s.heroSub}>{SIZE_MAP[sizeId]?.name ?? '직접 입력'} 크기로 인쇄 시 · {band.desc}</p>
             <p className={s.verdictBox}>
-              <strong>{uc.label} 기준 {verdict.verdict}</strong> — {verdict.message}
+              <strong>{reverseUc.label} 기준 {verdict.verdict}</strong> — {verdict.message}
             </p>
+            </>
+            )}
           </div>
 
           {/* 품질별 최대 인쇄 크기 */}

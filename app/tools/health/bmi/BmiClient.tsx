@@ -1,12 +1,12 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './bmi.module.css'
 import {
   Standard, Gender,
   BMI_CATEGORIES, BODY_FAT_RANGES,
-  calcBMI, calcRichResult,
+  calcBMI, calcRichResult, classifyBMI, roundBMI,
   calcWaistHeightRatio, classifyAbdominal, combinedJudgment,
   estimateBodyFat, classifyBodyFat,
   simulateWeightChange,
@@ -59,13 +59,14 @@ export default function BmiClient() {
     return calcRichResult(heightCm, weightKg, standard)
   }, [heightCm, weightKg, standard])
 
-  /* ── 게이지 ── */
-  const gaugeMaxBmi = 40
+  /* ── 게이지 ── (WHO 비만 3단계가 40부터라 축 끝을 45로 — 모든 구간이 폭을 갖도록) */
+  const gaugeMaxBmi = 45
   const gaugeSegs = useMemo(() => {
     const list = BMI_CATEGORIES[standard]
     return list.map((c, i) => {
       const min = c.min
-      const max = c.max >= 999 ? gaugeMaxBmi : c.max
+      const isLast = c.max >= 999
+      const max = isLast ? Math.max(gaugeMaxBmi, min + 5) : c.max
       const span = Math.max(0, max - min)
       return {
         id: c.id,
@@ -74,6 +75,7 @@ export default function BmiClient() {
         flex: span,
         min,
         max,
+        isLast,
         range: i === list.length - 1 ? `${min}+` : `${min}~${max}`,
       }
     }).filter(s => s.flex > 0)
@@ -121,8 +123,7 @@ export default function BmiClient() {
   )
   const simCat = useMemo(() => {
     if (!simBmi) return null
-    const list = BMI_CATEGORIES[standard]
-    return list.find(c => simBmi >= c.min && simBmi < c.max) ?? list[list.length - 1]
+    return classifyBMI(roundBMI(simBmi), standard)
   }, [simBmi, standard])
 
   const simSteps = useMemo(
@@ -188,11 +189,14 @@ export default function BmiClient() {
 
   /* ─────── 복사 / 저장 ─────── */
   const [copied, setCopied] = useState(false)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (copyTimer.current) clearTimeout(copyTimer.current) }, [])
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+      copyTimer.current = setTimeout(() => setCopied(false), 1500)
     } catch { /* */ }
   }
 
@@ -340,7 +344,7 @@ export default function BmiClient() {
         <>
           {rich ? (
             <>
-              <div className={styles.hero}
+              <div className={styles.hero} role="status"
                 style={{ borderColor: `${rich.category.color}50`, background: `${rich.category.color}0F` }}>
                 <div className={styles.heroLabel}>BMI 체질량지수</div>
                 <div className={styles.heroNum} style={{ color: rich.category.color }}>
@@ -378,12 +382,12 @@ export default function BmiClient() {
                     </div>
                   </div>
                   <div className={styles.gaugeAxis}>
-                    {(standard === 'KOREA' ? [0, 18.5, 23, 25, 40] : [0, 18.5, 25, 30, 40]).map((v, i, arr) => {
+                    {(standard === 'KOREA' ? [0, 18.5, 23, 25, 35, gaugeMaxBmi] : [0, 18.5, 25, 30, 40, gaugeMaxBmi]).map((v, i, arr) => {
                       const pct = (v / gaugeMaxBmi) * 100
                       const tx = i === 0 ? '0' : i === arr.length - 1 ? '-100%' : '-50%'
                       return (
                         <span key={v} style={{ left: `${pct}%`, transform: `translateX(${tx})` }}>
-                          {v === 40 ? '40+' : v}
+                          {v === gaugeMaxBmi ? `${v}+` : v}
                         </span>
                       )
                     })}
@@ -394,7 +398,7 @@ export default function BmiClient() {
                       const isCurrent = s.id === rich.category.id
                       const rangeText =
                         s.min === 0 ? `~${s.max}` :
-                        s.max >= gaugeMaxBmi ? `${s.min}+` :
+                        s.isLast ? `${s.min}+` :
                         `${s.min}~${s.max}`
                       return (
                         <div key={s.id} className={`${styles.gaugeLegendItem} ${isCurrent ? styles.gaugeLegendItemActive : ''}`}>
@@ -438,7 +442,7 @@ export default function BmiClient() {
               <div className={styles.detailGrid3}>
                 <div className={styles.detailItem}>
                   <small>정상 범위 ({standard === 'KOREA' ? '한국' : 'WHO'})</small>
-                  <div>{rich.normalMin}<span style={{ fontSize: 14, opacity: 0.7, margin: '0 2px', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 600 }}>~</span>{rich.normalMax}</div>
+                  <div>{rich.normalMin}<span style={{ fontSize: 14, opacity: 0.7, margin: '0 2px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>~</span>{rich.normalMax}</div>
                   <p>kg</p>
                 </div>
                 <div className={styles.detailItem}>
@@ -542,7 +546,7 @@ export default function BmiClient() {
           )}
 
           <div className={styles.infoBox}>
-            <strong>측정법</strong> — 허리: 배꼽 위 약 2cm(장골 능선)를 호흡 후 평행하게. 목: 후두 결절 아래. 엉덩이: 가장 두꺼운 부분. 두꺼운 옷 위 측정 X.
+            <strong>측정법</strong> — 허리: 갈비뼈 맨 아래와 골반뼈(장골능) 맨 위의 중간을, 숨을 편히 내쉰 상태에서 수평으로. 목: 후두 결절 아래. 엉덩이: 가장 두꺼운 부분. 두꺼운 옷 위 측정 X.
           </div>
 
           {/* 허리둘레 판정 */}
@@ -791,7 +795,7 @@ export default function BmiClient() {
                   <small>· {new Date(h.date).toLocaleDateString('ko-KR')}{h.waist ? ` · 허리 ${h.waist}cm` : ''}{h.bodyFat !== undefined ? ` · 체지방 ${h.bodyFat}%` : ''}</small>
                 </span>
                 <span className={styles.historyVal}>BMI {h.bmi}</span>
-                <button type="button" className={styles.miniBtn} onClick={() => removeHistory(h.id)}>×</button>
+                <button type="button" className={styles.miniBtn} onClick={() => removeHistory(h.id)} aria-label="기록 삭제">×</button>
               </div>
             ))}
           </div>

@@ -4,11 +4,11 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   box-sizing: border-box;
 }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 .cardLabel {
   display: block;
   font-size: 11px;
@@ -19,7 +19,7 @@
   margin-bottom: 12px;
 }
 .accent { color: var(--accent); }
-.accentVal { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.accentVal { color: var(--accent); font-family: var(--font-sans); font-weight: 800; }
 .note {
   font-size: 12px;
   color: var(--muted);
@@ -49,11 +49,11 @@
   gap: 1px;
   min-width: 0;
   transition: all 0.12s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) { .scaleBtn:hover { border-color: var(--border-hover); } }
 .scaleName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
   color: var(--text);
@@ -68,7 +68,7 @@
   border-color: var(--accent);
 }
 .scaleBtnActive .scaleName,
-.scaleBtnActive .scaleUnit { color: var(--accent); }
+.scaleBtnActive .scaleUnit { color: var(--accent-ink); }
 .scaleDesc {
   font-size: 13px;
   color: var(--muted);
@@ -90,7 +90,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -104,7 +104,7 @@
 .unit {
   font-size: 14px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -118,12 +118,12 @@
 .presetBtn {
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 11px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) { .presetBtn:hover { color: var(--accent); border-color: var(--accent); border-style: solid; } }
 
@@ -138,7 +138,7 @@
 .resCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 12px;
   display: flex;
   flex-direction: column;
@@ -147,7 +147,7 @@
   text-align: center;
 }
 .resCardInput {
-  background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(14,165,233,0.05));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), color-mix(in srgb, var(--accent) 5%, transparent));
   border-color: var(--accent);
 }
 .resHead {
@@ -157,23 +157,23 @@
   gap: 6px;
 }
 .resName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 800;
   color: var(--muted);
 }
 .resCardInput .resName { color: var(--accent); }
 .inputTag {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;
   padding: 1px 6px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
 .resValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(20px, 4.5vw, 28px);
   font-weight: 800;
   color: var(--text);
@@ -184,7 +184,7 @@
 .resUnit {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -192,14 +192,14 @@
 .tipCard {
   background: linear-gradient(135deg, rgba(147,51,234,0.06), rgba(220,38,38,0.04));
   border: 1px solid rgba(147,51,234,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .tipCard strong:first-child {
   display: block;
   font-size: 13px;
-  color: #9333EA;
+  color: var(--purple-600);
   margin-bottom: 6px;
 }
 .tipCard p {
@@ -226,23 +226,23 @@
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .miniHint {
   font-size: 11px;
   color: var(--muted);
   margin: 4px 0 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .warn {
   margin: 12px 0 0;
   padding: 8px 12px;
   font-size: 12px;
-  color: #D97706;
+  color: var(--amber-600);
   background: rgba(217,119,6,0.06);
   border: 1px solid rgba(217,119,6,0.25);
-  border-radius: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
 }
 
 /* ── ABV 결과 ── */
@@ -266,11 +266,11 @@
 .abvLabel {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .abvValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 26px;
   font-weight: 800;
   color: var(--accent);
@@ -285,7 +285,7 @@
 .abvSub {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── Proof 토글 ── */
@@ -293,7 +293,7 @@
   display: flex;
   gap: 4px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 3px;
   border: 1px solid var(--border);
 }
@@ -301,16 +301,16 @@
   flex: 1;
   background: transparent;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 7px 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   cursor: pointer;
 }
 .proofBtn small {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   margin-left: 4px;
   color: var(--muted);
@@ -327,7 +327,7 @@
   justify-content: center;
   gap: 12px;
   margin-top: 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -342,7 +342,7 @@
 /* ── 카테고리 가이드 ── */
 .guideList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 10px;
 }
 .guideCard {
@@ -353,7 +353,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .guideCardMatch {
   background: var(--accent-dim);
@@ -373,12 +373,12 @@
 }
 .guideCardMatch .guideName { color: var(--accent); }
 .matchBadge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;
   padding: 2px 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 .guideSpecs {
   display: flex;
@@ -391,7 +391,7 @@
   background: var(--bg2);
   border-radius: 6px;
   padding: 2px 7px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
 }
 .guideSpecs b {
@@ -421,7 +421,7 @@
   gap: 10px;
   padding: 7px 4px;
   border-bottom: 1px dashed var(--border);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
 }
 .phRow:last-child { border-bottom: none; }
@@ -430,7 +430,7 @@
   .phNote { grid-column: 1 / -1; padding-left: 0; color: var(--muted); font-size: 12px; }
 }
 .phRange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--accent);
   font-weight: 800;
   font-variant-numeric: tabular-nums;

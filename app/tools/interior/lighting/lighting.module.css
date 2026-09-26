@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,17 +20,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -39,7 +39,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -47,7 +47,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -76,7 +76,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 모드 토글 ── */
@@ -93,16 +93,16 @@
   padding: 10px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modePyung { border-color: rgba(14,165,233,0.40); }
-.modeMeter { border-color: rgba(8,145,178,0.40); }
-.modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.modeMeter.modeActive { background: rgba(8,145,178,0.18); color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
+.modePyung { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.modeMeter { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
+.modePyung.modeActive { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.modeMeter.modeActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600);       border-color: var(--cyan-600);     font-weight: 700; }
 
 .pyungSelect {
   width: 100%;
@@ -111,7 +111,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -134,7 +134,7 @@
   gap: 8px;
   align-items: center;
 }
-.dimSep { color: var(--muted); font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: center; }
+.dimSep { color: var(--muted); font-size: 18px; font-family: var(--font-sans); font-weight: 700; text-align: center; }
 
 .bigInput {
   width: 100%;
@@ -143,7 +143,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -162,7 +162,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -174,13 +174,13 @@
 .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 .inputRow { display: flex; align-items: center; gap: 10px; }
-.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: var(--font-sans); }
 
 .areaShow {
   font-size: 13px;
   color: var(--accent);
   margin-top: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -188,18 +188,18 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 12px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   transition: all 0.15s;
 }@media (hover: hover) {
   .pill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pillActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.pillActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 /* ── 공간 용도 12개 ── */
 .spaceGrid {
@@ -220,7 +220,7 @@
   padding: 10px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -234,37 +234,37 @@
 }
 .spaceBtn span.icon { font-size: 18px; margin-bottom: 2px; }
 .spaceBtn small {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-top: 2px;
 }
 /* 공간별 색상 */
-.spLiving   { border-color: rgba(14,165,233,0.40); }
+.spLiving   { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .spBedroom  { border-color: rgba(155,89,182,0.40); }
-.spStudy    { border-color: rgba(8,145,178,0.40); }
-.spKids     { border-color: rgba(8,145,178,0.40); }
+.spStudy    { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
+.spKids     { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .spKitchen  { border-color: rgba(234,88,12,0.40); }
 .spDining   { border-color: rgba(234,88,12,0.40); }
 .spBath     { border-color: rgba(16,185,129,0.40); }
 .spHallway  { border-color: rgba(15,23,42,0.12); }
-.spOffice   { border-color: rgba(8,145,178,0.40); }
+.spOffice   { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .spWorkshop { border-color: rgba(220,38,38,0.40); }
 .spCloset   { border-color: rgba(161,98,7,0.40); }
 .spBaby     { border-color: rgba(255,182,193,0.40); }
 
-.spLiving.spActive   { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.spBedroom.spActive  { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
+.spLiving.spActive   { background: var(--accent-dim);      color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.spBedroom.spActive  { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
 .spStudy.spActive,
 .spKids.spActive,
-.spOffice.spActive   { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.spOffice.spActive   { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
 .spKitchen.spActive,
-.spDining.spActive   { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
-.spBath.spActive     { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.spDining.spActive   { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
+.spBath.spActive     { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
 .spHallway.spActive  { background: rgba(15,23,42,0.04); color: var(--text); border-color: var(--text); font-weight: 700; }
-.spWorkshop.spActive { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
-.spCloset.spActive   { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
+.spWorkshop.spActive { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
+.spCloset.spActive   { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
 .spBaby.spActive     { background: rgba(255,182,193,0.12); color: #FFB6C1; border-color: #FFB6C1; font-weight: 700; }
 
 /* ── 강도 토글 ── */
@@ -280,20 +280,20 @@
   padding: 10px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }
-.intensityBtn small { display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 11px; margin-top: 2px; opacity: 0.85; }@media (hover: hover) {
+.intensityBtn small { display: block; font-family: var(--font-sans); font-weight: 700; font-size: 11px; margin-top: 2px; opacity: 0.85; }@media (hover: hover) {
   .intensityBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .intDim       { border-color: rgba(155,89,182,0.40); }
-.intStandard  { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.intStandard  { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .intBright    { border-color: rgba(161,98,7,0.40); }
-.intDim.intActive       { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
-.intStandard.intActive  { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.intBright.intActive    { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
+.intDim.intActive       { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
+.intStandard.intActive  { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.intBright.intActive    { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
 
 /* ── 조명 방식 카드 ── */
 .lightTypeGrid {
@@ -311,7 +311,7 @@
   padding: 12px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -327,18 +327,18 @@
 }
 .ltDirect   { border-color: var(--accent); }
 .ltIndirect { border-color: rgba(155,89,182,0.40); }
-.ltMixed    { border-color: rgba(8,145,178,0.40); }
-.ltDirect.ltActive   { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.ltIndirect.ltActive { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
-.ltMixed.ltActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.ltMixed    { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
+.ltDirect.ltActive   { background: var(--accent-dim);      color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.ltIndirect.ltActive { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
+.ltMixed.ltActive    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
 
 .ltBadge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   padding: 1px 6px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-top: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -359,7 +359,7 @@
   padding: 10px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: left;
@@ -370,7 +370,7 @@
   .ledBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .ledBtn small {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   font-size: 12px;
@@ -384,7 +384,7 @@
 }
 .ledActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -393,23 +393,23 @@
 .hero {
   background: var(--bg2);
   border: 1px solid rgba(234,88,12,0.40);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: var(--font-sans); }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: var(--font-sans); color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -429,7 +429,7 @@
 .analysisTable td:first-child { color: var(--muted); }
 .analysisTable td:last-child {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -437,7 +437,7 @@
 .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
 }
 .totalRow td:first-child { color: var(--accent); }
@@ -453,20 +453,20 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 10px;
 }
-.recOption:nth-child(2) { border-left-color: #0891B2; }
-.recOption:nth-child(3) { border-left-color: #9B59B6; }
+.recOption:nth-child(2) { border-left-color: var(--cyan-600); }
+.recOption:nth-child(3) { border-left-color: var(--amethyst); }
 .recOptionTitle {
   font-size: 13px;
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .recOptionDesc {
   font-size: 12px;
@@ -474,7 +474,7 @@
   margin-top: 2px;
 }
 .recOptionLm {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);
@@ -484,13 +484,13 @@
 .colorTempCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .colorTempBar {
   position: relative;
   height: 32px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: linear-gradient(90deg, #FFB870 0%, #FFE0B0 25%, #FFFFE0 50%, #E0F0FF 75%, #B0D8FF 100%);
   margin: 18px 0 6px;
 }
@@ -508,7 +508,7 @@
   justify-content: space-between;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .colorTempInfo {
@@ -517,14 +517,14 @@
   color: var(--text);
   line-height: 1.85;
 }
-.colorTempInfo strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.colorTempInfo strong { color: var(--accent); font-family: var(--font-sans); font-weight: 700; }
 
 /* ── 조명 배치 평면도 SVG ── */
 .layoutWrap {
   display: flex;
   justify-content: center;
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 18px;
 }
 .layoutSvg {
@@ -547,13 +547,13 @@
   padding: 11px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .convertModeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.convertModeActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.convertModeActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .bulbGrid {
   display: grid;
@@ -570,14 +570,14 @@
   padding: 10px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }
 .bulbBtn small {
   display: block;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 12px;
   margin-top: 2px;
@@ -588,14 +588,14 @@
 .bulbHalogen   { border-color: rgba(234,88,12,0.40); }
 .bulbFluo      { border-color: rgba(161,98,7,0.40); }
 .bulbCfl       { border-color: rgba(161,98,7,0.30); }
-.bulbLed       { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.bulbLed       { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .bulbLedHigh   { border-color: rgba(16,185,129,0.40); }
-.bulbInc.bulbActive       { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
-.bulbHalogen.bulbActive   { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.bulbInc.bulbActive       { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
+.bulbHalogen.bulbActive   { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 .bulbFluo.bulbActive,
-.bulbCfl.bulbActive       { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
-.bulbLed.bulbActive       { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.bulbLedHigh.bulbActive   { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.bulbCfl.bulbActive       { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
+.bulbLed.bulbActive       { background: var(--accent-dim);     color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.bulbLedHigh.bulbActive   { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
 
 /* 환산 결과 표 */
 .convertTable {
@@ -617,23 +617,23 @@
   font-weight: 600;
 }
 .convertTable td:first-child { color: var(--text); font-weight: 600; }
-.convertTable td:not(:first-child) { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.rowInc       { color: #DC2626; }
-.rowHalogen   { color: #EA580C; }
-.rowFluo      { color: #A16207; }
-.rowCfl       { color: #A16207; }
+.convertTable td:not(:first-child) { font-family: var(--font-sans); font-weight: 700; }
+.rowInc       { color: var(--red-600); }
+.rowHalogen   { color: var(--orange-600); }
+.rowFluo      { color: var(--yellow-700); }
+.rowCfl       { color: var(--yellow-700); }
 .rowLed       { color: var(--accent); }
-.rowLedHigh   { color: #059669; }
+.rowLedHigh   { color: var(--emerald-600); }
 
 .convertTable td:nth-child(2) { color: inherit; }
-.convertTable .rowLed td      { background: rgba(14,165,233,0.14); font-weight: 800; }
+.convertTable .rowLed td      { background: color-mix(in srgb, var(--accent) 14%, transparent); font-weight: 800; }
 .convertTable .rowLedHigh td  { background: rgba(16,185,129,0.14); }
 
 /* 전기료 비교 카드 */
 .savingCard {
   background: rgba(16,185,129,0.14);
   border: 1px solid rgba(16,185,129,0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .savingLead { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
@@ -651,23 +651,23 @@
 }
 .savingBarName {
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .savingBarTrack {
   height: 16px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
   position: relative;
 }
 .savingBarFill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
-.savingBarFillInc { background: #DC2626; }
+.savingBarFillInc { background: var(--red-600); }
 .savingBarFillLed { background: var(--accent); }
 .savingBarVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
   font-size: 13px;
@@ -678,12 +678,12 @@
   text-align: center;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.7;
 }
 .savingDelta strong {
-  color: #059669;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--emerald-600);
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
 }
@@ -708,7 +708,7 @@
 }
 .guideTable td:first-child { color: var(--text); font-weight: 700; }
 .guideTable td:nth-child(2) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   text-align: center;
@@ -727,12 +727,12 @@
 .lightingKindCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
 .lkMain    { border-left: 3px solid var(--accent); }
-.lkSub     { border-left: 3px solid #0891B2; }
-.lkMood    { border-left: 3px solid #9B59B6; }
+.lkSub     { border-left: 3px solid var(--cyan-600); }
+.lkMood    { border-left: 3px solid var(--amethyst); }
 
 .lkTitle {
   font-size: 14px;
@@ -740,8 +740,8 @@
   margin-bottom: 6px;
 }
 .lkMain    .lkTitle { color: var(--accent); }
-.lkSub     .lkTitle { color: #0891B2; }
-.lkMood    .lkTitle { color: #9333EA; }
+.lkSub     .lkTitle { color: var(--cyan-600); }
+.lkMood    .lkTitle { color: var(--purple-600); }
 
 .lkBody {
   font-size: 13px;
@@ -754,11 +754,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
@@ -766,4 +766,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './fuel-economy.module.css'
+import { FUEL_PRICE_AS_OF, GASOLINE_PRICE, DIESEL_PRICE, EV_SLOW_RATE, EV_FAST_RATE } from './fuelEconomyUtils'
 
 // ──────────────────────────────────────
 // 핵심 변환 로직 (가솔린/디젤)
@@ -53,14 +54,13 @@ export default function FuelEconomyClient() {
   // 입력 상태를 부모에 유지 — 탭 전환 시 입력값 보존
   const [fuelValue, setFuelValue] = useState<string>('15')
   const [fuelUnit, setFuelUnit] = useState<FuelUnit>('kml')
-  // 기본 연료 단가: 오피넷 2026년 5월 전국 평균 휘발유 2,011원/L
-  const [fuelPrice, setFuelPrice] = useState<string>('2011')
+  // 기본 연료 단가: 오피넷 전국 평균 휘발유 (fuelEconomyUtils.ts 기준일 참고)
+  const [fuelPrice, setFuelPrice] = useState<string>(String(GASOLINE_PRICE))
   const [evValue, setEvValue] = useState<string>('5')
   const [evUnit, setEvUnit] = useState<EvUnit>('kmkwh')
-  // 기본 단가: 기후에너지환경부 공공 충전요금 5단계 개편 확정안(2026-07-01 발표, 2026-08-01 시행)
-  // 완속(30kW 미만) 295.0원 · 급속(100~200kW) 348.4원/kWh — 2026-07-31까지는 기존 완속 324.4·급속 347.2원
-  const [slowRate, setSlowRate] = useState<string>('295.0')
-  const [fastRate, setFastRate] = useState<string>('348.4')
+  // 기본 단가: 공공 충전요금 5단계 개편 확정안 (fuelEconomyUtils.ts 출처·기준일 참고)
+  const [slowRate, setSlowRate] = useState<string>(EV_SLOW_RATE.toFixed(1))
+  const [fastRate, setFastRate] = useState<string>(EV_FAST_RATE.toFixed(1))
 
   return (
     <div className={styles.wrap}>
@@ -167,12 +167,12 @@ function FuelTab({ value, setValue, unit, setUnit, fuelPrice, setFuelPrice }: {
   const literPer100km = baseKml > 0 ? 100 / baseKml : 0
   const fuelCost = literPer100km * price
 
-  function handleCopy(u: FuelUnit, val: number) {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
+  async function handleCopy(u: FuelUnit, val: number) {
+    try {
+      await navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
       setCopied(u)
-      setTimeout(() => setCopied(null), 1200)
-    }
+      setTimeout(() => setCopied(null), 1500)
+    } catch { /* 클립보드 권한 거부 등 — 복사됨 표시 안 함 */ }
   }
 
   const currentLabel = FUEL_UNIT_META.find(m => m.id === unit)?.label ?? ''
@@ -268,7 +268,7 @@ function FuelTab({ value, setValue, unit, setUnit, fuelPrice, setFuelPrice }: {
               className={styles.costInput}
               value={fuelPrice}
               onChange={e => setFuelPrice(e.target.value)}
-              placeholder="2011"
+              placeholder={String(GASOLINE_PRICE)}
               step="10"
             />
           </div>
@@ -282,7 +282,7 @@ function FuelTab({ value, setValue, unit, setUnit, fuelPrice, setFuelPrice }: {
         </div>
 
         <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, marginTop: 10, marginBottom: 0 }}>
-          기본 단가: 오피넷 2026년 5월 전국 평균 휘발유 2,011원/L (경유 2,006원 · LPG 1,090원). 주유 영수증의 단가로 바꿔 계산해 보세요.
+          기본 단가: 오피넷 {FUEL_PRICE_AS_OF} 전국 평균 휘발유 {GASOLINE_PRICE.toLocaleString('ko-KR')}원/L (경유 {DIESEL_PRICE.toLocaleString('ko-KR')}원, LPG는 1,100원대). 주유 영수증의 단가로 바꿔 계산해 보세요.
         </p>
       </div>
     </>
@@ -351,12 +351,12 @@ function EvTab({ value, setValue, unit, setUnit, slowRate, setSlowRate, fastRate
 
   const grade = evGrade(baseKmkwh)
 
-  function handleCopy(u: EvUnit, val: number) {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
+  async function handleCopy(u: EvUnit, val: number) {
+    try {
+      await navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
       setCopied(u)
-      setTimeout(() => setCopied(null), 1200)
-    }
+      setTimeout(() => setCopied(null), 1500)
+    } catch { /* 클립보드 권한 거부 등 — 복사됨 표시 안 함 */ }
   }
 
   const currentLabel = EV_UNIT_META.find(m => m.id === unit)?.label ?? ''
@@ -449,7 +449,7 @@ function EvTab({ value, setValue, unit, setUnit, slowRate, setSlowRate, fastRate
               className={styles.costInput}
               value={slowRate}
               onChange={e => setSlowRate(e.target.value)}
-              placeholder="295.0"
+              placeholder={EV_SLOW_RATE.toFixed(1)}
               step="10"
             />
           </div>
@@ -461,7 +461,7 @@ function EvTab({ value, setValue, unit, setUnit, slowRate, setSlowRate, fastRate
               className={styles.costInput}
               value={fastRate}
               onChange={e => setFastRate(e.target.value)}
-              placeholder="348.4"
+              placeholder={EV_FAST_RATE.toFixed(1)}
               step="10"
             />
           </div>
@@ -485,7 +485,7 @@ function EvTab({ value, setValue, unit, setUnit, slowRate, setSlowRate, fastRate
         </div>
 
         <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, marginTop: 10, marginBottom: 0 }}>
-          기본 단가: 기후에너지환경부 공공 충전요금 5단계 개편 확정안(2026-07-01 발표, 2026-08-01 시행) — 완속(30kW 미만) 295.0원 · 급속(100~200kW) 348.4원/kWh. 2026-07-31까지는 기존 2단계 요금(100kW 미만 324.4원 · 100kW 이상 347.2원)이 적용되며, 사업자·시간대에 따라 다를 수 있습니다.
+          기본 단가: 기후에너지환경부 공공 충전요금 5단계 개편 확정안(2026-07-01 발표, 2026-08-01 시행) — 완속(30kW 미만) {EV_SLOW_RATE.toFixed(1)}원 · 급속(100~200kW) {EV_FAST_RATE.toFixed(1)}원/kWh. 2026-07-31까지는 기존 2단계 요금(100kW 미만 324.4원 · 100kW 이상 347.2원)이 적용되며, 사업자·시간대에 따라 다를 수 있습니다.
         </p>
       </div>
     </>

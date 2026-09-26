@@ -1,6 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import Link from 'next/link'
 import { useState, useMemo } from 'react'
 import styles from './ramen.module.css'
 import {
@@ -10,6 +11,7 @@ import {
   NOODLE_TEXTURE,
   TOPPINGS,
   WHO_DAILY_SODIUM,
+  KR_DAILY_VALUE,
   calcRamen,
   formatTime,
   formatWater,
@@ -217,13 +219,18 @@ export default function RamenClient() {
                 )
               })}
             </div>
+            {isCup && toppings.length > 0 && (
+              <p className={styles.cardLabelHint} style={{ marginTop: 8 }}>
+                컵라면은 물선까지 붓기 때문에 토핑을 넣어도 물양은 그대로예요. 떡·만두처럼 익혀야 하는 재료는 미리 익혀서 얹으세요.
+              </p>
+            )}
           </div>
 
           {/* 결과 */}
           {result && (
             <>
               {/* 히어로 */}
-              <div className={`${styles.hero} ${styles.heroAccent}`}>
+              <div className={`${styles.hero} ${styles.heroAccent}`} role="status">
                 <div className={styles.heroLabel}>권장 물양</div>
                 <div className={styles.heroNum}>{formatWater(result.recommendedWater)}</div>
                 <div className={styles.heroSub}>
@@ -399,12 +406,12 @@ export default function RamenClient() {
                   {TOPPINGS.map(t => (
                     <tr key={t.id} style={toppings.includes(t.id) ? { background: 'rgba(14,165,233,0.06)' } : {}}>
                       <td>{t.emoji} {t.name}</td>
-                      <td style={{ color: t.waterDelta > 0 ? '#EA580C' : t.waterDelta < 0 ? '#0891B2' : 'var(--muted)' }}>
+                      <td style={{ color: t.waterDelta > 0 ? 'var(--warning)' : t.waterDelta < 0 ? 'var(--cat-health)' : 'var(--muted)' }}>
                         {t.waterDelta === 0 ? '0' : t.waterDelta > 0 ? `+${t.waterDelta}` : t.waterDelta}ml
                       </td>
-                      <td style={{ color: '#EA580C' }}>+{t.kcal}</td>
+                      <td style={{ color: 'var(--warning)' }}>+{t.kcal}</td>
                       <td>{t.protein ?? 0}g</td>
-                      <td style={{ color: '#EA580C' }}>+{t.sodium ?? 0}mg</td>
+                      <td style={{ color: 'var(--warning)' }}>+{t.sodium ?? 0}mg</td>
                       <td style={{ textAlign: 'left', color: 'var(--muted)', fontSize: 12 }}>{t.timeAt}</td>
                     </tr>
                   ))}
@@ -488,9 +495,9 @@ export default function RamenClient() {
           <div className={styles.adviceBox}>
             <strong>짜장·볶음·비빔면 조리법 (일반 라면과 다름):</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18, fontSize: 12, color: 'var(--muted)' }}>
-              <li><strong style={{ color: '#A16207' }}>짜파게티</strong>: 600ml로 끓인 후 물 8큰술(120ml) 남기고 따라낸 뒤 분말스프 + 올리브유 비빔</li>
-              <li><strong style={{ color: '#A16207' }}>불닭볶음면</strong>: 600ml로 끓인 후 물 8큰술 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비빔</li>
-              <li><strong style={{ color: '#A16207' }}>비빔면</strong>: 600ml로 면만 익힌 뒤 물 전부 따라내고 찬물 헹굼 → 비빔장 비빔</li>
+              <li><strong style={{ color: 'var(--cat-cooking-ink)' }}>짜파게티</strong>: 600ml로 끓인 후 물 8큰술(120ml) 남기고 따라낸 뒤 분말스프 + 올리브유 비빔</li>
+              <li><strong style={{ color: 'var(--cat-cooking-ink)' }}>불닭볶음면</strong>: 600ml로 끓인 후 물 8큰술 남기고 따라낸 뒤 액상소스 + 후레이크 + 김 비빔</li>
+              <li><strong style={{ color: 'var(--cat-cooking-ink)' }}>비빔면</strong>: 600ml로 면만 익힌 뒤 물 전부 따라내고 찬물 헹굼 → 비빔장 비빔</li>
             </ul>
           </div>
         </>
@@ -525,47 +532,48 @@ export default function RamenClient() {
                     <th scope="col">항목</th>
                     <th scope="col">1봉</th>
                     <th scope="col">합계 ({count}개{toppings.length > 0 ? '+토핑' : ''})</th>
-                    <th scope="col">WHO/권장 대비</th>
+                    <th scope="col">1일 기준치 대비</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>🔥 칼로리</td>
                     <td>{result.ramenInfo.kcal} kcal</td>
-                    <td style={result.totalKcal > 1500 ? { color: '#DC2626' } : {}}>{result.totalKcal.toLocaleString()} kcal</td>
-                    <td>{Math.round(result.totalKcal / 2000 * 100)}% (성인)</td>
+                    <td style={result.totalKcal > 1500 ? { color: 'var(--danger)' } : {}}>{result.totalKcal.toLocaleString()} kcal</td>
+                    <td>{Math.round(result.totalKcal / KR_DAILY_VALUE.kcal * 100)}% (성인)</td>
                   </tr>
                   <tr>
                     <td>🧂 나트륨</td>
                     <td>{result.ramenInfo.sodium.toLocaleString()} mg</td>
                     <td className={styles.warnCell}>{result.totalSodium.toLocaleString()} mg</td>
-                    <td style={result.totalSodium > WHO_DAILY_SODIUM ? { color: '#DC2626' } : { color: '#EA580C' }}>
-                      {Math.round(result.totalSodium / WHO_DAILY_SODIUM * 100)}% ⚠️
+                    <td style={result.totalSodium > KR_DAILY_VALUE.sodium ? { color: 'var(--danger)' } : { color: 'var(--warning)' }}>
+                      {Math.round(result.totalSodium / KR_DAILY_VALUE.sodium * 100)}% ⚠️
                     </td>
                   </tr>
                   <tr>
                     <td>💪 단백질</td>
                     <td>{result.ramenInfo.protein} g</td>
                     <td>{result.totalProtein} g</td>
-                    <td>{Math.round(result.totalProtein / 50 * 100)}%</td>
+                    <td>{Math.round(result.totalProtein / KR_DAILY_VALUE.protein * 100)}%</td>
                   </tr>
                   <tr>
                     <td>🍳 지방</td>
                     <td>{result.ramenInfo.fat} g</td>
                     <td>{result.totalFat} g</td>
-                    <td>{Math.round(result.totalFat / 65 * 100)}%</td>
+                    <td>{Math.round(result.totalFat / KR_DAILY_VALUE.fat * 100)}%</td>
                   </tr>
                   <tr>
                     <td>🍞 탄수화물</td>
                     <td>{result.ramenInfo.carb} g</td>
                     <td>{result.totalCarb} g</td>
-                    <td>{Math.round(result.totalCarb / 300 * 100)}%</td>
+                    <td>{Math.round(result.totalCarb / KR_DAILY_VALUE.carb * 100)}%</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <div className={styles.cardLabelHint} style={{ marginTop: 6 }}>
               ※ 합계는 라면 제품 표기값 + 토핑 영양(<strong>일반 평균 추정치</strong> — 제품·분량 차이 큼)입니다. 국물을 남기면 실제 나트륨 섭취량은 더 줄어듭니다.
+              % 는 식약처 1일 영양성분 기준치(열량 {KR_DAILY_VALUE.kcal.toLocaleString()}kcal · 나트륨 {KR_DAILY_VALUE.sodium.toLocaleString()}mg · 단백질 {KR_DAILY_VALUE.protein}g · 지방 {KR_DAILY_VALUE.fat}g · 탄수화물 {KR_DAILY_VALUE.carb}g) 대비입니다.
             </div>
           </div>
 
@@ -593,9 +601,9 @@ export default function RamenClient() {
           </div>
 
           <div className={styles.actionGrid}>
-            <a href="/tools/health/bmr" className={styles.actionBtn}>💪 BMR 계산기 (1일 권장 칼로리)</a>
-            <a href="/tools/health/bmi" className={styles.actionBtn}>📊 BMI 계산기</a>
-            <a href="/tools/cooking/serving" className={styles.actionBtn}>🍽️ 1인분 분량 계산기</a>
+            <Link href="/tools/health/bmr" className={styles.actionBtn}>💪 BMR 계산기 (1일 권장 칼로리)</Link>
+            <Link href="/tools/health/bmi" className={styles.actionBtn}>📊 BMI 계산기</Link>
+            <Link href="/tools/cooking/serving" className={styles.actionBtn}>🍽️ 1인분 분량 계산기</Link>
           </div>
 
           <div className={styles.warnBox}>

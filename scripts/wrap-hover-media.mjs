@@ -8,8 +8,10 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 
-const ROOT = '/Users/riemann/toolify'
+// 저장소 루트 = 이 스크립트(scripts/)의 상위 — 어느 머신·어느 cwd에서 실행해도 동작
+const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/\/+$/, '')
 const HOVER_MARKER = '/* @hover-wrapped */'
 
 function listCssFiles() {

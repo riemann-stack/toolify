@@ -1,0 +1,32 @@
+/* finance/deposit-interest — 결과 카드 안 환산 박스 · 월별 누적 표(접힘). 토큰만 사용 */
+
+.equiv { margin-top: 20px; padding: 16px; border-radius: var(--radius-m); background: var(--accent-soft); }
+.equivTitle { display: flex; align-items: center; gap: 6px; margin: 0 0 6px; font-size: 14px; font-weight: 700; color: var(--accent-ink); }
+.equivBody { margin: 0; font-size: 14px; line-height: 1.7; color: var(--text-body); word-break: keep-all; }
+.equivBody b, .equivNote b { color: var(--text); font-weight: 700; }
+.equivNote { margin: 8px 0 0; font-size: 13px; color: var(--muted-strong); }
+
+.months { margin-top: 16px; border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--bg2); }
+.months > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 8px 16px; cursor: pointer; font-size: 15px; font-weight: 600; color: var(--text); }
+.months > summary::-webkit-details-marker { display: none; }
+.monthsMeta { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; color: var(--muted); }
+.months[open] .monthsMeta svg { transform: rotate(180deg); }
+.months > :global(.tableScroll) { max-height: 420px; overflow-y: auto; border-top: 1px solid var(--divider); }
+
+.monthsTable { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.monthsTable thead th { position: sticky; top: 0; padding: 10px 14px; background: var(--bg3); font-size: 12px; font-weight: 600; color: var(--muted-strong); text-align: right; white-space: nowrap; }
+.monthsTable thead th:first-child { text-align: left; }
+.monthsTable tbody th { padding: 10px 14px; font-weight: 500; color: var(--text); text-align: left; border-top: 1px solid var(--divider); }
+.monthsTable td { padding: 10px 14px; text-align: right; color: var(--text-body); border-top: 1px solid var(--divider); white-space: nowrap; }
+.monthsTable tbody tr:last-child > * { font-weight: 700; color: var(--text); }
+
+.monthsNote { margin: 0; padding: 12px 16px 16px; font-size: 13px; line-height: 1.6; color: var(--muted); border-top: 1px solid var(--divider); }
+.monthsNote strong { color: var(--text-body); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .months > summary { padding: 8px 14px; }
+  .monthsTable thead th, .monthsTable tbody th, .monthsTable td { padding: 10px; }
+}
+
+/* 과세 유형 칩 아래 조건 안내 (조합 예탁금 가입 연도·소득) */
+.taxNote { margin: 8px 0 0; padding: 10px 12px; border-radius: var(--radius-s); border-left: 4px solid var(--warning); background: var(--warning-soft); font-size: 13px; line-height: 1.6; color: var(--text-body); word-break: keep-all; }

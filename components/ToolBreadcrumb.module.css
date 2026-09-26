@@ -1,0 +1,117 @@
+/* components/ToolBreadcrumb.module.css — 스펙 §10.15
+   13px, chevron 구분자(--gray-400 장식), 현재 항목 aria-current. JSON-LD BreadcrumbList 병행(AutoToolJsonLd 유지)
+   행 = [경로(nav) ··· 링크 공유 버튼]. 버튼은 음수 세로 여백으로 44px 탭 타깃을 유지하면서 행 높이(≈20px)는 그대로 둔다. */
+.bc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 20px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  word-break: keep-all;
+}
+.trail {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.trail a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: var(--radius-xs, 6px);
+}
+@media (hover: hover) {
+  .trail a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+}
+.trail svg { flex-shrink: 0; color: var(--gray-400, var(--border-hover)); }
+.trail [aria-current] { color: var(--muted-strong); font-weight: 500; }
+
+/* 과도기 '링크 공유' — secondary 텍스트 버튼(유령 버튼 아님: 아이콘+라벨 항상 보임). 오른쪽 -12px로 라벨 끝을 본문 칼럼 끝에 맞춘다
+   (부모 거터 24/16px 안이라 가로 넘침 없음) */
+.share {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin: -12px -12px -12px auto;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted-strong);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.share svg { flex-shrink: 0; }
+.share[data-copied] { color: var(--success); }
+@media (hover: hover) {
+  .share:hover { background: var(--bg3); color: var(--text); }
+  .share[data-copied]:hover { color: var(--success); }
+}
+
+/* 즐겨찾기 별표 — 아이콘 전용 44px 탭 타깃. 공유 버튼이 뒤따르면 공유 쪽 auto 여백을 별표가 가져간다 */
+.fav {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -12px 0 -12px auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: none;
+  color: var(--muted-strong);
+  cursor: pointer;
+}
+.fav:last-child { margin-right: -12px; }
+.fav + .share { margin-left: 0; }
+.fav[aria-pressed='true'] { color: var(--accent-ink); }
+.fav[aria-pressed='true'] svg { fill: currentColor; }
+@media (hover: hover) {
+  .fav:hover { background: var(--bg3); color: var(--text); }
+  .fav[aria-pressed='true']:hover { color: var(--accent-ink); }
+}
+
+/* ① 과도기 배치 — app/tools/layout.tsx 가 <main> 바로 아래에 렌더할 때만 자체 셸을 가진다.
+   폭은 뒤따르는 페이지 래퍼(인라인 maxWidth 760/880, React 직렬화 'max-width:760px')에 맞춘다.
+   :has 미지원 브라우저는 기존과 같은 880 셸로 폴백. ToolPage(.tpMain) 안에서는 이 규칙이 적용되지 않는다. */
+main > .bc {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 20px 24px 0;
+}
+/* SSR 직렬화는 'max-width:760px'(공백 없음), 클라이언트 내비게이션으로 만든 DOM은 'max-width: 760px' — 둘 다 */
+main > .bc:has(~ [style*="max-width:760px"]),
+main > .bc:has(~ [style*="max-width: 760px"]) { max-width: 760px; }
+/* 이중 렌더 방지 — 페이지가 ToolPage(루트 data-tool-page, .tpMain 안에 자체 breadcrumb)로 바뀌었는데
+   app/tools/layout.tsx 의 과도기 breadcrumb 가 아직 남아 있으면 layout 쪽(①)을 숨긴다. 작업 순서와 무관하게 안전.
+   (:has 미지원 브라우저 — 2023년 이전 엔진 — 에서는 두 줄이 보일 수 있으나 기능 손실은 없음) */
+main:has([data-tool-page]) > .bc { display: none; }
+
+@media (max-width: 640px) {
+  .bc { padding-top: 16px; }
+  /* 레거시 페이지 래퍼는 모바일에서도 좌우 24px(인라인) — 거터를 맞춘다 */
+  main > .bc { padding-top: 16px; }
+  /* 좁은 화면: 별표가 추가돼 경로가 두 줄로 밀리지 않게 공유 버튼을 아이콘 전용 44px로(라벨은 화면 밖에 남겨 버튼 이름 유지) */
+  .share { width: 44px; padding: 0; justify-content: center; }
+  .share > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

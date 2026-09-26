@@ -79,10 +79,12 @@ function getOffsetAt(tz: string, at: Date): number {
   }
 }
 
-/** 출발일 'YYYY-MM-DD' → 그 날짜의 정오 UTC (양 반구 모두 해당 날짜에 속하고, 새벽 2~3시 DST 전환 이후) */
+/** 출발일 'YYYY-MM-DD' → 그 날짜의 정오 UTC (양 반구 모두 해당 날짜에 속하고, 새벽 2~3시 DST 전환 이후).
+ *  빈 값(SSG 렌더·마운트 전)은 new Date() 대신 고정 기준일(1월 중순, 북반구 표준시)을 쓴다 —
+ *  빌드 시점과 방문 시점의 서머타임이 다르면 하이드레이션 불일치가 나므로. 마운트 후엔 오늘 날짜가 주입된다. */
 function departRefDate(dateStr: string): Date {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr)
-  if (!m) return new Date()
+  if (!m) return new Date(Date.UTC(2026, 0, 15, 12))
   return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12))
 }
 
@@ -135,6 +137,7 @@ export default function JetLagClient() {
   const [flightHours, setFlightHours] = useState(14)
 
   // SSG 빌드 시점 날짜 고정 방지 — 마운트 후 오늘 날짜 주입
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setDepartDate(todayStr()) }, [])
 
   const from = CITIES[fromIdx]
@@ -273,7 +276,7 @@ export default function JetLagClient() {
       </div>
 
       {/* ─── 시차 히어로 ─── */}
-      <div className={`${s.hero} ${direction === 'east' ? s.heroEast : direction === 'west' ? s.heroWest : s.heroNone}`}>
+      <div className={`${s.hero} ${direction === 'east' ? s.heroEast : direction === 'west' ? s.heroWest : s.heroNone}`} role="status">
         <p className={s.heroLead}>
           {from.name} → {to.name}
         </p>
@@ -595,7 +598,7 @@ function FlightTimelineV2({ flightHours, takeoffLocalH, sleepWindows }: {
     <div>
       <div className={s.timeline}>
         {/* 비행 중 깨어있기(기본 색) */}
-        <div className={s.timelineSeg} style={{ left: '0%', width: '100%', background: 'rgba(14,165,233,0.18)' }} />
+        <div className={s.timelineSeg} style={{ left: '0%', width: '100%', background: 'color-mix(in srgb, var(--accent) 18%, transparent)' }} />
         {/* 수면 권장 구간 */}
         {sleepWindows.map((w, i) => {
           const left = (w.start / flightHours) * 100
@@ -611,8 +614,8 @@ function FlightTimelineV2({ flightHours, takeoffLocalH, sleepWindows }: {
         <span>도착<br/><small>{formatHours((takeoffLocalH + flightHours) % 24)}</small></span>
       </div>
       <div className={s.legendRow}>
-        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(8,145,178,0.6)' }} />수면 권장 (현지 22~06시)</div>
-        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(14,165,233,0.45)' }} />깨어있기</div>
+        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'color-mix(in srgb, var(--cyan-600) 60%, transparent)' }} />수면 권장 (현지 22~06시)</div>
+        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'color-mix(in srgb, var(--accent) 45%, transparent)' }} />깨어있기</div>
       </div>
     </div>
   )
@@ -668,8 +671,11 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
 }) {
   const targetBed = parseHHMM(bedtime)
   const wakeHour = parseHHMM(waketime)
-  // 밤 도착 판정: 현지 도착이 목표 취침~기상 사이면 버틸 필요 없이 바로 취침
-  const nightArrival = arrivalLocalH >= targetBed || arrivalLocalH < wakeHour
+  // 밤 도착 판정: 현지 도착이 목표 취침~기상 사이면 버틸 필요 없이 바로 취침.
+  // 취침이 자정 이후(00:00~02:00 선택지)면 취침 < 기상이라 구간이 자정을 넘지 않는다 → AND로 판정.
+  const nightArrival = targetBed > wakeHour
+    ? (arrivalLocalH >= targetBed || arrivalLocalH < wakeHour)
+    : (arrivalLocalH >= targetBed && arrivalLocalH < wakeHour)
   const hoursToEndure = nightArrival ? 0 : ((targetBed - arrivalLocalH) + 24) % 24
 
   // 비행 길이 기반 추정 수면 (대략 비행시간의 1/3, 최대 6시간)
@@ -681,7 +687,8 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
     hoursToEndure <= 8 && estimatedFlightSleep >= 2 ? 'high' : 'veryHigh'
 
   // 낮잠 판정 — 도착 시각 기준 (밤 도착은 낮잠이 아니라 바로 취침)
-  const napH = arrivalLocalH
+  // 자정 이후~늦은 취침 사이 도착(예: 01:00 취침, 00:30 도착)은 '17시 이후'와 같은 저녁 구간 → +24로 금지 쪽에 둔다
+  const napH = arrivalLocalH < wakeHour ? arrivalLocalH + 24 : arrivalLocalH
   const napDecision: { status: 'ok' | 'warn' | 'no' | 'sleep'; max: number; note: string } =
     nightArrival ? { status: 'sleep', max: 0, note: '이미 현지 밤 시간대에 도착했습니다. 낮잠 대신 바로 정상 취침하세요.' }
     : napH < 15 ? { status: 'ok', max: 30, note: '짧은 낮잠은 회복에 도움이 됩니다. 알람 설정 필수!' }

@@ -1,46 +1,34 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
+import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import Disclaimer from '@/components/Disclaimer'
+import { useInitialTab } from '@/components/useInitialTab'
 import { todayStr } from '@/lib/date'
 import styles from './pace.module.css'
+import {
+  secToPace, secToPaceTenth, secToTime, secToHms, paceSecToKph, kphToPaceSec,
+  subGoalPaceSec, negativeSplit as calcNegativeSplit, MARATHON_GOALS, FULL_KM, MILE_KM, TRACK_LAP_KM,
+} from './paceUtils'
 
-type Mode = 'pace-to-time' | 'time-to-pace' | 'treadmill'
+type Mode = 'pace-to-time' | 'time-to-pace' | 'treadmill' | 'plan'
+// ?tab= 딥링크 허용 목록 — 'plan'은 구 /tools/sports/race-plan 301 목적지
+const MODES: readonly Mode[] = ['plan', 'pace-to-time', 'time-to-pace', 'treadmill']
+
+// 레이스 플랜 탭(구 race-plan) — 지연 로드로 기본 탭 번들 유지
+const RacePlanTab = dynamic(() => import('./RacePlanTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
 // ── 헬퍼 ──
 function paceToSec(mm: string, ss: string) {
   return parseInt(mm || '0') * 60 + parseInt(ss || '0')
 }
-function secToPace(sec: number) {
-  const t = Math.round(sec)          // 먼저 정수 초로 반올림 → "5:60" 같은 표기 방지
-  const m = Math.floor(t / 60)
-  const s = t % 60
-  return `${m}:${String(s).padStart(2, '0')}`
-}
 function timeToSec(hh: string, mm: string, ss: string) {
   return parseInt(hh || '0') * 3600 + parseInt(mm || '0') * 60 + parseInt(ss || '0')
 }
-function secToTime(sec: number) {
-  const t = Math.round(sec)
-  const h = Math.floor(t / 3600)
-  const m = Math.floor((t % 3600) / 60)
-  const s = t % 60
-  return h > 0
-    ? `${h}시간 ${m}분 ${String(s).padStart(2, '0')}초`
-    : `${m}분 ${String(s).padStart(2, '0')}초`
-}
-function secToHms(sec: number) {
-  const t = Math.round(sec)
-  const h = Math.floor(t / 3600)
-  const m = Math.floor((t % 3600) / 60)
-  const s = t % 60
-  return h > 0
-    ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-    : `${m}:${String(s).padStart(2, '0')}`
-}
-function paceSecToKph(paceSec: number) { return 3600 / paceSec }
-function kphToPaceSec(kph: number) { return 3600 / kph }
 // 입력 정수 클램프 (빈칸 허용) — 초 0~59, 분 비현실값·소수 차단
 function clampField(v: string, min: number, max: number) {
   if (v === '') return ''
@@ -114,35 +102,55 @@ function getSplits(distanceKm: number): SplitRow[] {
   return rows
 }
 
-// 빠른 페이스 칩
-// 한국 인기 마라톤 목표 페이스 (풀 42.195km 기준, 본문 표와 일치)
-const QUICK_PACES = [
-  { mm: 4, ss: 16, label: '서브3',    color: '#DC2626' },
-  { mm: 4, ss: 59, label: '서브3:30', color: '#EA580C' },
-  { mm: 5, ss: 41, label: '서브4',    color: '#A16207' },
-  { mm: 6, ss: 24, label: '서브4:30', color: '#0891B2' },
-  { mm: 7, ss: 7,  label: '서브5',    color: '#059669' },
-]
+// 빠른 페이스 칩 — 풀코스 인기 목표(paceUtils.MARATHON_GOALS, 본문 표와 같은 목록)
+// '서브'(미만) 목표이므로 subGoalPaceSec = 내림 — 반올림하면 4:16×42.195 = 3:00:02처럼 목표를 넘는다
+const CHIP_COLORS = ['var(--red-600)', 'var(--orange-600)', 'var(--yellow-700)', 'var(--cyan-600)', 'var(--emerald-600)']
+const QUICK_PACES = MARATHON_GOALS.map((g, i) => {
+  const sec = subGoalPaceSec(g.goalSec, FULL_KM)
+  return { mm: Math.floor(sec / 60), ss: sec % 60, label: g.label, color: CHIP_COLORS[i % CHIP_COLORS.length] }
+})
+
+const isPresetKm = (km: number) => DISTANCES.some(d => d.km === km)
+// 직접 거리 입력 문자열 → km (0 초과만, 500 상한)
+function parseCustomKm(str: string): number | null {
+  const v = parseFloat(str)
+  return Number.isFinite(v) && v > 0 ? Math.min(500, v) : null
+}
+const cleanDecimal = (v: string) => v.replace(/[^0-9.]/g, '')
 
 const STORAGE_KEY = 'youtil-pace-record-v1'
 
 export default function PaceClient() {
   const [mode, setMode] = useState<Mode>('pace-to-time')
+  // 레이스 플랜 탭은 처음 열 때 마운트하고, 이후 다른 탭으로 가도 숨김만 해 입력(구간·고도)을 유지
+  const [planMounted, setPlanMounted] = useState(false)
+  const selectMode = (m: Mode) => {
+    setMode(m)
+    if (m === 'plan') setPlanMounted(true)
+  }
+  useInitialTab(MODES, selectMode)
 
   // 페이스 → 완주 시간
   const [paceMin, setPaceMin] = useState('5')
   const [paceSec, setPaceSec] = useState('30')
   const [dist, setDist] = useState(42.195)
+  // 직접 거리 — 문자열로 보관해 입력 중간값(5 → 5.5)이 프리셋으로 바뀌며 지워지지 않게
+  const [customStr, setCustomStr] = useState('')
+  const [customMode, setCustomMode] = useState(false)
 
   // 완주 시간 → 페이스
   const [tHour, setTHour] = useState('')
   const [tMin, setTMin] = useState('')
   const [tSec, setTSec] = useState('')
   const [dist2, setDist2] = useState(42.195)
+  const [customStr2, setCustomStr2] = useState('')
+  const [customMode2, setCustomMode2] = useState(false)
 
   // 트레드밀
   const [kphInput, setKphInput] = useState('')
-  const [paceInput, setPaceInput] = useState('')
+  // 페이스 입력은 분·초 두 칸 — 모바일 숫자 키패드엔 ':'가 없다
+  const [tmPaceMin, setTmPaceMin] = useState('')
+  const [tmPaceSec, setTmPaceSec] = useState('')
 
   // localStorage hydration
   const [hydrated, setHydrated] = useState(false)
@@ -150,27 +158,43 @@ export default function PaceClient() {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const data = JSON.parse(raw)
-        if (data.paceMin) setPaceMin(data.paceMin)
-        if (data.paceSec) setPaceSec(data.paceSec)
-        if (typeof data.dist === 'number') setDist(data.dist)
-        if (data.lastSaved) setLastSaved(data.lastSaved)
+        const data: unknown = JSON.parse(raw)
+        if (data && typeof data === 'object') {
+          const d = data as Record<string, unknown>
+          const intStr = (v: unknown, min: number, max: number) =>
+            typeof v === 'string' && /^\d{1,2}$/.test(v) && +v >= min && +v <= max ? v : null
+          const pm = intStr(d.paceMin, 1, 30)
+          const pss = intStr(d.paceSec, 0, 59)
+          if (pm !== null) setPaceMin(pm)
+          if (pss !== null) setPaceSec(pss)
+          if (typeof d.dist === 'number' && Number.isFinite(d.dist) && d.dist > 0 && d.dist <= 500) {
+            setDist(d.dist)
+            if (!isPresetKm(d.dist)) { setCustomMode(true); setCustomStr(String(d.dist)) }
+          }
+          if (typeof d.lastSaved === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d.lastSaved)) setLastSaved(d.lastSaved)
+        }
       }
     } catch {}
     setHydrated(true)
   }, [])
 
+  // 복원 직후 1회는 저장하지 않음 — '마지막 저장'이 이전 방문 날짜를 보여 주고, 값을 바꾸면 오늘로 갱신
+  const skipFirstSave = useRef(true)
   useEffect(() => {
     if (!hydrated) return
+    if (skipFirstSave.current) { skipFirstSave.current = false; return }
+    const saved = todayStr()
     try {
       const data = {
         paceMin, paceSec, dist,
-        lastSaved: todayStr(),
+        lastSaved: saved,
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+      setLastSaved(saved)
     } catch {}
   }, [hydrated, paceMin, paceSec, dist])
 
@@ -180,8 +204,8 @@ export default function PaceClient() {
     if (!ps || ps <= 0) return null
     const totalSec = ps * dist
     const kph = paceSecToKph(ps)
-    const track400 = ps * 0.4
-    const milePace = ps * 1.609344
+    const track400 = ps * TRACK_LAP_KM
+    const milePace = ps * MILE_KM
     return {
       totalSec,
       time: secToTime(totalSec),
@@ -199,7 +223,7 @@ export default function PaceClient() {
     if (!ts || ts <= 0 || !dist2) return null
     const ps = ts / dist2
     const kph = paceSecToKph(ps)
-    const track400 = ps * 0.4
+    const track400 = ps * TRACK_LAP_KM
     return { pace: secToPace(ps), kph: kph.toFixed(1), track400: secToPace(track400), paceSec: ps }
   }, [tHour, tMin, tSec, dist2])
 
@@ -208,16 +232,15 @@ export default function PaceClient() {
     const k = parseFloat(kphInput)
     if (!k || k <= 0) return null
     const ps = kphToPaceSec(k)
-    return { pace: secToPace(ps), track400: secToPace(ps * 0.4) }
+    return { pace: secToPace(ps), track400: secToPace(ps * TRACK_LAP_KM) }
   }, [kphInput])
 
   const treadmillFromPace = useMemo(() => {
-    const parts = paceInput.split(':')
-    if (parts.length !== 2) return null
-    const ps = paceToSec(parts[0], parts[1])
+    if (tmPaceMin === '') return null   // 분(1~30)이 있어야 계산 — 초만 입력된 중간 상태에서 120km/h 같은 값 방지
+    const ps = paceToSec(tmPaceMin, tmPaceSec)
     if (!ps || ps <= 0) return null
     return { kph: paceSecToKph(ps).toFixed(1) }
-  }, [paceInput])
+  }, [tmPaceMin, tmPaceSec])
 
   // 동적 스플릿
   const splits = useMemo(() => {
@@ -227,16 +250,12 @@ export default function PaceClient() {
     return rows.map(r => ({ ...r, time: secToHms(ps * r.distanceKm) }))
   }, [paceMin, paceSec, dist])
 
-  // 네거티브 스플릿 (전반 +1.5초, 후반 -1.5초/km · 마라톤·하프 한정)
+  // 네거티브 스플릿 (전반 +1.5초, 후반 -1.5초/km · 21km 이상 한정)
+  // 반 초까지 표기 — 정수 반올림하면 5:30 기준 전반 5:32·후반 5:29처럼 둘 다 올라가 평균이 목표와 어긋나 보인다
   const negativeSplit = useMemo(() => {
-    const ps = paceToSec(paceMin, paceSec)
-    if (!ps || ps <= 0 || dist < 21) return null
-    const halfKm = dist / 2
-    return {
-      front: secToPace(ps + 1.5),
-      back: secToPace(ps - 1.5),
-      halfKm,
-    }
+    const ns = calcNegativeSplit(paceToSec(paceMin, paceSec), dist)
+    if (!ns) return null
+    return { front: secToPaceTenth(ns.frontSec), back: secToPaceTenth(ns.backSec), halfKm: ns.halfKm }
   }, [paceMin, paceSec, dist])
 
   const setQuickPace = (mm: number, ss: number) => {
@@ -277,17 +296,19 @@ export default function PaceClient() {
           { href: '/tools/sports/one-rm', label: '1RM 계산기' }
         ]}
       >
-        페이스·기록은 입력값 기준 <strong>참고용 추정</strong>이며 컨디션·날씨·코스·고도에 따라 달라집니다. 무리한 페이스는 부상·탈수 위험이 있으니 본인 체력에 맞게 조정하고, 더위(25°C↑)·어지러움 시 즉시 중단하세요.
+        페이스·기록은 입력값 기준 <strong>참고용 추정</strong>이며 컨디션·날씨·코스·고도에 따라 달라집니다. 무리한 페이스는 부상·탈수 위험이 있으니 본인 체력에 맞게 조정하고, 더위(25°C↑)·어지러움 시 즉시 중단하세요. 레이스 플랜 탭의 고도 보정은 단순화한 추정 모델입니다.
       </Disclaimer>
 
       {/* 모드 탭 */}
       <div className={styles.tabs} role="tablist">
         <button type="button" role="tab" aria-selected={mode === 'pace-to-time'} className={`${styles.tab} ${mode === 'pace-to-time' ? styles.tabActive : ''}`}
-          onClick={() => setMode('pace-to-time')}>페이스 → 완주 시간</button>
+          onClick={() => selectMode('pace-to-time')}>페이스 → 완주 시간</button>
         <button type="button" role="tab" aria-selected={mode === 'time-to-pace'} className={`${styles.tab} ${mode === 'time-to-pace' ? styles.tabActive : ''}`}
-          onClick={() => setMode('time-to-pace')}>완주 시간 → 페이스</button>
+          onClick={() => selectMode('time-to-pace')}>완주 시간 → 페이스</button>
         <button type="button" role="tab" aria-selected={mode === 'treadmill'} className={`${styles.tab} ${mode === 'treadmill' ? styles.tabActive : ''}`}
-          onClick={() => setMode('treadmill')}>트레드밀 변환</button>
+          onClick={() => selectMode('treadmill')}>트레드밀 변환</button>
+        <button type="button" role="tab" aria-selected={mode === 'plan'} className={`${styles.tab} ${mode === 'plan' ? styles.tabActive : ''}`}
+          onClick={() => selectMode('plan')}>레이스 플랜</button>
       </div>
 
       {/* ── 모드 1: 페이스 → 완주 시간 ── */}
@@ -314,24 +335,29 @@ export default function PaceClient() {
               </div>
               <span className={styles.timesSign}>×</span>
               <div className={styles.distRow}>
-                {DISTANCES.map(d => (
-                  <button key={d.km} type="button" aria-pressed={dist === d.km}
-                    className={`${styles.distBtn} ${dist === d.km ? styles.distBtnActive : ''}`}
-                    onClick={() => setDist(d.km)}>{d.label}</button>
-                ))}
-                <div className={`${styles.distCustom} ${!DISTANCES.some(d => d.km === dist) ? styles.distCustomActive : ''}`}>
+                {DISTANCES.map(d => {
+                  const on = !customMode && dist === d.km
+                  return (
+                    <button key={d.km} type="button" aria-pressed={on}
+                      className={`${styles.distBtn} ${on ? styles.distBtnActive : ''}`}
+                      onClick={() => { setDist(d.km); setCustomMode(false); setCustomStr('') }}>{d.label}</button>
+                  )
+                })}
+                <div className={`${styles.distCustom} ${customMode ? styles.distCustomActive : ''}`}>
                   <input
-                    type="number"
+                    type="text"
                     inputMode="decimal"
                     className={styles.distCustomInput}
                     aria-label="직접 거리 (km)"
                     placeholder="직접"
-                    min={0.1} max={500} step={0.1}
-                    value={DISTANCES.some(d => d.km === dist) ? '' : dist}
+                    value={customStr}
                     onChange={e => {
-                      const v = parseFloat(e.target.value)
-                      if (Number.isFinite(v) && v > 0) setDist(Math.min(500, v))
+                      const str = cleanDecimal(e.target.value)
+                      setCustomStr(str)
+                      const km = parseCustomKm(str)
+                      if (km !== null) { setDist(km); setCustomMode(true) }
                     }}
+                    onBlur={() => { if (customMode && parseCustomKm(customStr) === null) setCustomStr(String(dist)) }}
                   />
                   <span className={styles.distCustomUnit}>km</span>
                 </div>
@@ -394,7 +420,7 @@ export default function PaceClient() {
               {splits.length > 0 && (
                 <div className={styles.card}>
                   <label className={styles.cardLabel}>구간 스플릿 (일정 페이스 가정)</label>
-                  <div style={{ overflowX: 'auto' }}>
+                  <div className="tableScroll">
                     <table className={styles.splitTable}>
                       <thead>
                         <tr>
@@ -427,12 +453,12 @@ export default function PaceClient() {
                   <div className={styles.negGrid}>
                     <div className={styles.negBox}>
                       <span className={styles.negBoxLabel}>전반 (0~{negativeSplit.halfKm.toFixed(1)}km)</span>
-                      <span className={styles.negBoxVal} style={{ color: '#0891B2' }}>{negativeSplit.front}/km</span>
+                      <span className={styles.negBoxVal} style={{ color: 'var(--cyan-600)' }}>{negativeSplit.front}/km</span>
                       <span className={styles.negBoxSub}>1.5초 느슨하게</span>
                     </div>
                     <div className={styles.negBox}>
                       <span className={styles.negBoxLabel}>후반 ({negativeSplit.halfKm.toFixed(1)}~{dist}km)</span>
-                      <span className={styles.negBoxVal} style={{ color: '#EA580C' }}>{negativeSplit.back}/km</span>
+                      <span className={styles.negBoxVal} style={{ color: 'var(--orange-600)' }}>{negativeSplit.back}/km</span>
                       <span className={styles.negBoxSub}>1.5초 빠르게</span>
                     </div>
                   </div>
@@ -482,24 +508,29 @@ export default function PaceClient() {
               </div>
               <span className={styles.timesSign}>×</span>
               <div className={styles.distRow}>
-                {DISTANCES.map(d => (
-                  <button key={d.km} type="button" aria-pressed={dist2 === d.km}
-                    className={`${styles.distBtn} ${dist2 === d.km ? styles.distBtnActive : ''}`}
-                    onClick={() => setDist2(d.km)}>{d.label}</button>
-                ))}
-                <div className={`${styles.distCustom} ${!DISTANCES.some(d => d.km === dist2) ? styles.distCustomActive : ''}`}>
+                {DISTANCES.map(d => {
+                  const on = !customMode2 && dist2 === d.km
+                  return (
+                    <button key={d.km} type="button" aria-pressed={on}
+                      className={`${styles.distBtn} ${on ? styles.distBtnActive : ''}`}
+                      onClick={() => { setDist2(d.km); setCustomMode2(false); setCustomStr2('') }}>{d.label}</button>
+                  )
+                })}
+                <div className={`${styles.distCustom} ${customMode2 ? styles.distCustomActive : ''}`}>
                   <input
-                    type="number"
+                    type="text"
                     inputMode="decimal"
                     className={styles.distCustomInput}
                     aria-label="직접 거리 (km)"
                     placeholder="직접"
-                    min={0.1} max={500} step={0.1}
-                    value={DISTANCES.some(d => d.km === dist2) ? '' : dist2}
+                    value={customStr2}
                     onChange={e => {
-                      const v = parseFloat(e.target.value)
-                      if (Number.isFinite(v) && v > 0) setDist2(Math.min(500, v))
+                      const str = cleanDecimal(e.target.value)
+                      setCustomStr2(str)
+                      const km = parseCustomKm(str)
+                      if (km !== null) { setDist2(km); setCustomMode2(true) }
                     }}
+                    onBlur={() => { if (customMode2 && parseCustomKm(customStr2) === null) setCustomStr2(String(dist2)) }}
                   />
                   <span className={styles.distCustomUnit}>km</span>
                 </div>
@@ -524,7 +555,7 @@ export default function PaceClient() {
                 </div>
                 <div className={styles.infoCard}>
                   <div className={styles.infoLabel}>1마일 페이스</div>
-                  <div className={styles.infoVal}>{secToPace(result2.paceSec * 1.609344)}<span className={styles.infoUnit}>/mi</span></div>
+                  <div className={styles.infoVal}>{secToPace(result2.paceSec * MILE_KM)}<span className={styles.infoUnit}>/mi</span></div>
                 </div>
               </div>
             </>
@@ -561,9 +592,13 @@ export default function PaceClient() {
               <div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>페이스 입력 → 시속</p>
                 <div className={styles.inputRow}>
-                  <input className={styles.numInput} type="text" inputMode="numeric"
-                    aria-label="페이스 (분:초)" placeholder="6:40" value={paceInput}
-                    onChange={e => setPaceInput(e.target.value)} />
+                  <input className={styles.numInput} type="number" inputMode="numeric"
+                    aria-label="트레드밀 페이스 분" placeholder="6" value={tmPaceMin} min={1} max={30}
+                    onChange={e => setTmPaceMin(clampField(e.target.value, 1, 30))} />
+                  <span className={styles.unit}>:</span>
+                  <input className={styles.numInput} type="number" inputMode="numeric"
+                    aria-label="트레드밀 페이스 초" placeholder="40" value={tmPaceSec} min={0} max={59}
+                    onChange={e => setTmPaceSec(clampField(e.target.value, 0, 59))} />
                   <span className={styles.unit}>/km</span>
                 </div>
                 {treadmillFromPace && (
@@ -581,24 +616,31 @@ export default function PaceClient() {
         </>
       )}
 
+      {/* ── 모드 4: 레이스 플랜 (구간별 페이스·코스 고도·통과 시각) — 한 번 연 뒤엔 숨김만 해서 입력 유지 ── */}
+      {planMounted && (
+        <div hidden={mode !== 'plan'}>
+          <RacePlanTab />
+        </div>
+      )}
+
       {/* 다른 러닝 도구 안내 (영역 침범 X) */}
       <div className={styles.crossToolCard}>
         <p className={styles.crossToolTitle}>다음 단계로</p>
         <div className={styles.crossToolGrid}>
-          <a href="/tools/sports/interval-training" className={styles.crossToolBtn}>
+          <Link href="/tools/sports/interval-training" className={styles.crossToolBtn}>
             <span className={styles.crossToolIcon}>🏃‍♂️</span>
             <span>
               <strong>인터벌 훈련 계산기</strong>
               <span className={styles.crossToolSub}>VDOT·인터벌 페이스·훈련 스케줄</span>
             </span>
-          </a>
-          <a href="/tools/sports/race-predictor" className={styles.crossToolBtn}>
+          </Link>
+          <Link href="/tools/sports/race-predictor" className={styles.crossToolBtn}>
             <span className={styles.crossToolIcon}>🎯</span>
             <span>
               <strong>마라톤 기록 계산기</strong>
               <span className={styles.crossToolSub}>VDOT·Riegel 공식 기록 예측</span>
             </span>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

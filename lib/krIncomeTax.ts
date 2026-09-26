@@ -22,6 +22,14 @@ export const BRACKETS_2026: IncomeTaxBracket[] = [
   { upTo:      Infinity, rate: 0.45, deduction: 65_940_000 },
 ]
 
+/** 개인지방소득세 = 원천징수 소득세의 100분의 10 — 지방세법 §103의13①(특별징수의무). 기준일 2026-09.
+ *  lib/krYearEndTax LOCAL_TAX_RATE는 이 값의 별칭 */
+export const LOCAL_INCOME_TAX_RATIO = 0.1
+
+/** 근로소득 원천징수 비율 선택지 — 소득세법 시행령 §194①(근로소득 간이세액표의 적용):
+ *  간이세액표 해당란 세액(1)을 기준으로, 근로자가 신청하면 100분의 80 또는 100분의 120. 기준일 2026-09 */
+export const WITHHOLDING_RATIO_OPTIONS = [0.8, 1, 1.2] as const
+
 function bracketOf(taxBase: number): IncomeTaxBracket {
   return BRACKETS_2026.find(b => taxBase <= b.upTo) ?? BRACKETS_2026[BRACKETS_2026.length - 1]
 }
@@ -37,7 +45,7 @@ export function progressiveTax(taxBase: number): number {
  *  localTax: true → 지방소득세 10% 포함 (예: 0.15 → 0.165 · 부동소수 오차 제거를 위해 소수 4자리 반올림) */
 export function marginalRate(taxBase: number, opts?: { localTax?: boolean }): number {
   const b = bracketOf(Math.max(0, taxBase))
-  return opts?.localTax ? Math.round(b.rate * 1.1 * 10_000) / 10_000 : b.rate
+  return opts?.localTax ? Math.round(b.rate * (1 + LOCAL_INCOME_TAX_RATIO) * 10_000) / 10_000 : b.rate
 }
 
 /* ── 근로소득 (salary·year-end-tax 공유 단일소스, 2024~2026 동일) ── */

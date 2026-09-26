@@ -13,49 +13,52 @@ export function rer(weightKg: number): number {
   return 70 * Math.pow(weightKg, 0.75)
 }
 
-/* ─── 강아지 품종 → 크기 매핑 (드롭다운용, 이모지 없음) ─── */
-export interface DogBreed { id: string; name: string; size: DogSize }
+/* ─── 강아지 품종 → 크기 매핑 (드롭다운용, 이모지 없음) ───
+   ideal: 성견 표준 체중(암수 통합, kg) — AKC·FCI 견종 표준을 반올림한 참고 범위.
+   크기 밴드(4단계)만으로는 잭 러셀·시바(저체중 오판), 그레이트 데인(비만 오판) 등이 틀려
+   품종이 명확하면 품종 범위를 우선 사용하고, '기타·믹스'만 크기 밴드를 쓴다. */
+export interface DogBreed { id: string; name: string; size: DogSize; ideal?: { min: number; max: number } }
 
 export const DOG_BREEDS: DogBreed[] = [
   // 초소형 (~5kg)
-  { id: 'chihuahua',  name: '치와와',                       size: 'tiny' },
-  { id: 'pomeranian', name: '포메라니안',                   size: 'tiny' },
-  { id: 'toypoodle',  name: '토이푸들',                     size: 'tiny' },
-  { id: 'maltese',    name: '말티즈',                       size: 'tiny' },
-  { id: 'yorkshire',  name: '요크셔테리어',                 size: 'tiny' },
-  { id: 'minipin',    name: '미니어처 핀셔',                size: 'tiny' },
+  { id: 'chihuahua',  name: '치와와',                       size: 'tiny',   ideal: { min: 1.5, max: 3 } },
+  { id: 'pomeranian', name: '포메라니안',                   size: 'tiny',   ideal: { min: 1.4, max: 3.5 } },
+  { id: 'toypoodle',  name: '토이푸들',                     size: 'tiny',   ideal: { min: 2, max: 4 } },
+  { id: 'maltese',    name: '말티즈',                       size: 'tiny',   ideal: { min: 2, max: 4 } },
+  { id: 'yorkshire',  name: '요크셔테리어',                 size: 'tiny',   ideal: { min: 2, max: 3.5 } },
+  { id: 'minipin',    name: '미니어처 핀셔',                size: 'tiny',   ideal: { min: 3.5, max: 5 } },
+  { id: 'papillon',   name: '파피용',                       size: 'tiny',   ideal: { min: 2, max: 4.5 } },
   { id: 'etc_tiny',   name: '기타·믹스 (초소형, ~5kg)',     size: 'tiny' },
   // 소형 (5~10kg)
-  { id: 'shihtzu',    name: '시츄',                         size: 'small' },
-  { id: 'dachshund',  name: '닥스훈트',                     size: 'small' },
-  { id: 'bichon',     name: '비숑 프리제',                  size: 'small' },
-  { id: 'pug',        name: '퍼그',                         size: 'small' },
-  { id: 'schnauzer',  name: '미니어처 슈나우저',            size: 'small' },
-  { id: 'cavalier',   name: '카발리에 킹 찰스 스패니얼',    size: 'small' },
-  { id: 'papillon',   name: '파피용',                       size: 'small' },
-  { id: 'boston',     name: '보스턴 테리어',                size: 'small' },
+  { id: 'shihtzu',    name: '시츄',                         size: 'small',  ideal: { min: 4, max: 7.5 } },
+  { id: 'dachshund',  name: '닥스훈트',                     size: 'small',  ideal: { min: 4, max: 12 } },
+  { id: 'bichon',     name: '비숑 프리제',                  size: 'small',  ideal: { min: 5, max: 8 } },
+  { id: 'pug',        name: '퍼그',                         size: 'small',  ideal: { min: 6, max: 9 } },
+  { id: 'schnauzer',  name: '미니어처 슈나우저',            size: 'small',  ideal: { min: 5, max: 9 } },
+  { id: 'cavalier',   name: '카발리에 킹 찰스 스패니얼',    size: 'small',  ideal: { min: 5.5, max: 8.5 } },
+  { id: 'boston',     name: '보스턴 테리어',                size: 'small',  ideal: { min: 5, max: 11 } },
+  { id: 'jackrussell',name: '잭 러셀 테리어',               size: 'small',  ideal: { min: 5, max: 8 } },
   { id: 'etc_small',  name: '기타·믹스 (소형, 5~10kg)',     size: 'small' },
   // 중형 (10~25kg)
-  { id: 'beagle',     name: '비글',                         size: 'medium' },
-  { id: 'cocker',     name: '코커 스패니얼',                size: 'medium' },
-  { id: 'border',     name: '보더 콜리',                    size: 'medium' },
-  { id: 'shiba',      name: '시바견',                       size: 'medium' },
-  { id: 'jindo',      name: '진돗개',                       size: 'medium' },
-  { id: 'corgi',      name: '웰시 코기',                    size: 'medium' },
-  { id: 'stdpoodle',  name: '스탠더드 푸들',                size: 'medium' },
-  { id: 'bulldog',    name: '불독',                         size: 'medium' },
-  { id: 'jackrussell',name: '잭 러셀 테리어',               size: 'medium' },
+  { id: 'beagle',     name: '비글',                         size: 'medium', ideal: { min: 9, max: 14 } },
+  { id: 'cocker',     name: '코커 스패니얼',                size: 'medium', ideal: { min: 9, max: 15 } },
+  { id: 'border',     name: '보더 콜리',                    size: 'medium', ideal: { min: 12, max: 20 } },
+  { id: 'shiba',      name: '시바견',                       size: 'medium', ideal: { min: 7, max: 11 } },
+  { id: 'jindo',      name: '진돗개',                       size: 'medium', ideal: { min: 15, max: 23 } },
+  { id: 'corgi',      name: '웰시 코기',                    size: 'medium', ideal: { min: 10, max: 14 } },
+  { id: 'stdpoodle',  name: '스탠더드 푸들',                size: 'medium', ideal: { min: 18, max: 32 } },
+  { id: 'bulldog',    name: '불독',                         size: 'medium', ideal: { min: 18, max: 25 } },
   { id: 'etc_medium', name: '기타·믹스 (중형, 10~25kg)',    size: 'medium' },
   // 대형 (25kg~)
-  { id: 'golden',     name: '골든 리트리버',                size: 'large' },
-  { id: 'labrador',   name: '래브라도 리트리버',            size: 'large' },
-  { id: 'shepherd',   name: '저먼 셰퍼드',                  size: 'large' },
-  { id: 'husky',      name: '시베리안 허스키',              size: 'large' },
-  { id: 'doberman',   name: '도베르만',                     size: 'large' },
-  { id: 'rottweiler', name: '로트와일러',                   size: 'large' },
-  { id: 'samoyed',    name: '사모예드',                     size: 'large' },
-  { id: 'malamute',   name: '알래스칸 말라뮤트',            size: 'large' },
-  { id: 'greatdane',  name: '그레이트 데인',                size: 'large' },
+  { id: 'golden',     name: '골든 리트리버',                size: 'large',  ideal: { min: 25, max: 34 } },
+  { id: 'labrador',   name: '래브라도 리트리버',            size: 'large',  ideal: { min: 25, max: 36 } },
+  { id: 'shepherd',   name: '저먼 셰퍼드',                  size: 'large',  ideal: { min: 22, max: 40 } },
+  { id: 'husky',      name: '시베리안 허스키',              size: 'large',  ideal: { min: 16, max: 27 } },
+  { id: 'doberman',   name: '도베르만',                     size: 'large',  ideal: { min: 27, max: 45 } },
+  { id: 'rottweiler', name: '로트와일러',                   size: 'large',  ideal: { min: 35, max: 60 } },
+  { id: 'samoyed',    name: '사모예드',                     size: 'large',  ideal: { min: 16, max: 30 } },
+  { id: 'malamute',   name: '알래스칸 말라뮤트',            size: 'large',  ideal: { min: 32, max: 45 } },
+  { id: 'greatdane',  name: '그레이트 데인',                size: 'large',  ideal: { min: 45, max: 80 } },
   { id: 'etc_large',  name: '기타·믹스 (대형, 25kg~)',      size: 'large' },
 ]
 
@@ -133,6 +136,9 @@ const CAT_ADULT_FACTORS: Record<AdultKey, DerEntry> = {
   intact_high:     { factor: 1.8, label: '미중성화 · 활동 높음 (실외 포함)' },
 }
 
+/** 노령 DER = 성견 계수 × 0.85 (성견 대비 약 15% 감량) */
+export const SENIOR_FACTOR_RATIO = 0.85
+
 export interface DerResult {
   factor: number
   label: string
@@ -174,27 +180,26 @@ export function getDerFactor(
   } else {
     isSenior = ageYears >= 11
   }
+  // 3. 성견·성묘 — 명시적 키 조회 (조건문 X)
+  const key: AdultKey = `${isNeutered ? 'neutered' : 'intact'}_${activity}`
+  const table = species === 'dog' ? DOG_ADULT_FACTORS : CAT_ADULT_FACTORS
+  const entry = table[key] ?? { factor: 1.4, label: '기본' }   // 안전 장치 — 이론상 도달 불가
+
+  // 노령: 성견 조합(중성화·활동)을 유지한 채 15% 감량 — 노령 진입 한 달 사이
+  // 칼로리가 최대 39% 급감하던 고정 1.1 대신, 일반 권고(성견 대비 10~20% 감량)에 맞춤
   if (isSenior) {
     return {
-      factor: 1.1,
-      label: species === 'dog' ? '노령견' : '슈퍼시니어 고양이',
+      factor: Math.round(entry.factor * SENIOR_FACTOR_RATIO * 100) / 100,
+      label: `${species === 'dog' ? '노령견' : '슈퍼시니어 고양이'} · ${entry.label} × ${SENIOR_FACTOR_RATIO}`,
       stage: 'senior',
     }
   }
 
-  // 3. 성견·성묘 — 명시적 키 조회 (조건문 X)
-  const key: AdultKey = `${isNeutered ? 'neutered' : 'intact'}_${activity}`
-  const table = species === 'dog' ? DOG_ADULT_FACTORS : CAT_ADULT_FACTORS
-  const entry = table[key]
-  if (!entry) {
-    // 안전 장치 — 이론상 도달 불가
-    return { factor: 1.4, label: '기본', stage: 'adult' }
-  }
   return { ...entry, stage: 'adult' }
 }
 
 /* ─── 체중 평가 (BCS, Body Condition Score 추정) ─── */
-export type BodyStatus = 'underweight' | 'ideal' | 'overweight' | 'obese'
+export type BodyStatus = 'underweight' | 'ideal' | 'overweight' | 'obese' | 'growing'
 
 export interface BodyEvaluation {
   status: BodyStatus
@@ -211,36 +216,49 @@ const DOG_IDEAL_WEIGHT: Record<DogSize, { min: number; max: number; name: string
   large:  { min: 25,  max: 45,  name: '대형' },
 }
 
-export function evaluateBody(species: Species, weight: number, size: DogSize): BodyEvaluation {
+export function evaluateBody(
+  species: Species, weight: number, size: DogSize, ageYears = Infinity, breedId?: string,
+): BodyEvaluation {
+  // 성장기(1세 미만, 대형견은 18개월 미만)는 성견·성묘 체중 범위를 적용하지 않는다
+  const growthEnd = species === 'dog' && size === 'large' ? 1.5 : 1
+  if (ageYears < growthEnd) {
+    return { status: 'growing', label: '성장기', color: 'var(--cyan-600)',
+      message: `성장기에는 ${species === 'dog' ? '성견' : '성묘'} 체중 기준을 적용하지 않습니다. 월령별 성장 곡선과 체형(BCS)은 수의사와 함께 확인하세요.` }
+  }
+
   if (species === 'cat') {
-    if (weight < 3.0)  return { status: 'underweight', label: '저체중', color: '#0891B2',
+    if (weight < 3.0)  return { status: 'underweight', label: '저체중', color: 'var(--cyan-600)',
       message: '평균보다 가벼운 편입니다. 식욕·활동·치아 점검을 권장합니다.' }
-    if (weight <= 5.5) return { status: 'ideal',       label: '적정 체중', color: '#059669',
+    if (weight <= 5.5) return { status: 'ideal',       label: '적정 체중', color: 'var(--emerald-600)',
       message: '일반적인 고양이 정상 체중 범위입니다 (3.0~5.5kg).',
       range: { min: 3.0, max: 5.5, sizeName: '고양이' } }
-    if (weight <= 7.0) return { status: 'overweight',  label: '과체중', color: '#A16207',
+    if (weight <= 7.0) return { status: 'overweight',  label: '과체중', color: 'var(--yellow-700)',
       message: '관절·심장 부담이 늘어납니다. 사료량 10~15% 감량 + 놀이 시간 ↑ 권장.' }
-    return                     { status: 'obese',       label: '비만', color: '#DC2626',
+    return                     { status: 'obese',       label: '비만', color: 'var(--red-600)',
       message: '비만은 당뇨·관절염 위험이 큽니다. 수의사 상담 후 감량 계획을 권장합니다.' }
   }
 
-  // 강아지 — 품종 크기별 정상 범위(밴드 [min,max]) 기준
-  const range = DOG_IDEAL_WEIGHT[size]
-  const r = { ...range, sizeName: range.name }
+  // 강아지 — 품종 표준 체중이 있으면 우선, 없으면(기타·믹스) 크기 밴드 [min,max]
+  const breed = breedId ? DOG_BREEDS.find(b => b.id === breedId) : undefined
+  const band = DOG_IDEAL_WEIGHT[size]
+  const range = breed?.ideal
+    ? { min: breed.ideal.min, max: breed.ideal.max, name: breed.name }
+    : { min: band.min, max: band.max, name: `${band.name}견` }
+  const r = { min: range.min, max: range.max, sizeName: range.name }
 
   if (weight < range.min)
-    return { status: 'underweight', label: '저체중', color: '#0891B2',
-      message: `${range.name}견 정상 범위(${range.min}~${range.max}kg)보다 가볍습니다. 영양·기생충·치아 점검을 권장합니다.`,
+    return { status: 'underweight', label: '저체중', color: 'var(--cyan-600)',
+      message: `${range.name} 정상 범위(${range.min}~${range.max}kg)보다 가볍습니다. 영양·기생충·치아 점검을 권장합니다.`,
       range: r }
   if (weight <= range.max)
-    return { status: 'ideal', label: '적정 체중', color: '#059669',
-      message: `${range.name}견 정상 체중 범위입니다 (${range.min}~${range.max}kg).`,
+    return { status: 'ideal', label: '적정 체중', color: 'var(--emerald-600)',
+      message: `${range.name} 정상 체중 범위입니다 (${range.min}~${range.max}kg).`,
       range: r }
   if (weight <= range.max * 1.25)
-    return { status: 'overweight', label: '과체중', color: '#A16207',
-      message: `${range.name}견 정상 범위(${range.min}~${range.max}kg)를 초과했습니다. 사료량 10~15% 감량을 권장합니다.`,
+    return { status: 'overweight', label: '과체중', color: 'var(--yellow-700)',
+      message: `${range.name} 정상 범위(${range.min}~${range.max}kg)를 초과했습니다. 사료량 10~15% 감량을 권장합니다.`,
       range: r }
-  return     { status: 'obese', label: '비만', color: '#DC2626',
+  return     { status: 'obese', label: '비만', color: 'var(--red-600)',
       message: '비만견은 수명 1.5~2년 단축 보고가 있습니다. 수의사 감량 계획을 권장합니다.',
       range: r }
 }
@@ -315,6 +333,7 @@ export interface PetCalcInput {
   mos: number
   weight: number
   size: DogSize       // 고양이는 size='small' 같은 값 무시
+  breedId?: string    // 강아지 품종 — 품종 표준 체중 평가용
   isNeutered: boolean
   activity: Activity
   catOutdoor?: boolean   // 고양이 실외 여부(수명 계산용) — 강아지는 무시
@@ -347,7 +366,7 @@ export function calculateAll(input: PetCalcInput): PetCalcResult {
   const der = Math.round(rerVal * derInfo.factor)
   const treatKcal = Math.round(der * 0.1)
   const waterMl = Math.round(input.weight * 55)
-  const body = evaluateBody(input.species, input.weight, input.size)
+  const body = evaluateBody(input.species, input.weight, input.size, input.yrs + input.mos / 12, input.breedId)
   const life = calcLifeProgress(input.species, input.yrs, input.mos, input.size, input.catOutdoor ?? false)
 
   return {

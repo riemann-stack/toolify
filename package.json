@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "gen:lastmod": "tsx scripts/gen-lastmod.mts",
-    "gen:popular": "tsx scripts/gen-popular.mts"
+    "gen:popular": "tsx scripts/gen-popular.mts",
+    "test": "tsx --test \"tests/**/*.test.mts\""
   },
   "dependencies": {
     "js-yaml": "^4.1.1",

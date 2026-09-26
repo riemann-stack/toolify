@@ -196,7 +196,7 @@ export function diagnoseRatio(W: number, L: number, H: number): RatioCheck {
     if (d < dist) { dist = d; nearest = rec.name }
   }
 
-  if (dist < 0.10) return { ratio, diagnosis: 'S', label: `권장 비율 (${nearest})`, color: '#0F766E', desc: '권장 음향 비율과 거의 일치 — 모드 분포 균일.' }
+  if (dist < 0.10) return { ratio, diagnosis: 'S', label: `권장 비율 (${nearest})`, color: 'var(--teal-700)', desc: '권장 음향 비율과 거의 일치 — 모드 분포 균일.' }
   if (dist < 0.25) return { ratio, diagnosis: 'A', label: `우수 (${nearest} 근접)`, color: '#047857', desc: '권장 비율에 매우 가까움. 일반 부밍 적음.' }
   if (dist < 0.50) return { ratio, diagnosis: 'B', label: '양호',                  color: '#0E7490', desc: '평균적인 음향. 트랩으로 부밍 보완.' }
   if (dist < 1.00) return { ratio, diagnosis: 'C', label: '주의',                  color: '#B45309', desc: '비율이 좋지 않음. 베이스 트랩 권장.' }
@@ -343,7 +343,7 @@ export const TRAPS: TrapInfo[] = [
     diyPrice: 'DIY 5~10만원/개',
     proPrice: '보급 10~30·브랜드 50만원+/개',
     desc: '가장 강력. 모든 축 모드의 압력 최대 지점이 코너에 모임. 깊을수록 더 낮은 주파수까지.',
-    color: '#DB2777',
+    color: 'var(--pink-600)',
   },
   {
     id: 'wall',
@@ -355,7 +355,7 @@ export const TRAPS: TrapInfo[] = [
     diyPrice: 'DIY 3~7만원/개',
     proPrice: '완제품 5~15만원/개',
     desc: '중·고음 흡수 + 일부 저음(100mm급 기준 — 200mm급·에어갭이면 ~100Hz). 1차 반사음 제거에 효과.',
-    color: '#D97706',
+    color: 'var(--amber-600)',
   },
   {
     id: 'membrane',
@@ -367,7 +367,7 @@ export const TRAPS: TrapInfo[] = [
     diyPrice: 'DIY 8~15만원/개',
     proPrice: '완제품 15~40만원/개',
     desc: '저주파 전용. 특정 대역 흡수 — 40Hz급은 250mm급 깊이 필요, 설계 정확도 중요.',
-    color: '#0891B2',
+    color: 'var(--cyan-600)',
   },
   {
     id: 'helmholtz',
@@ -379,7 +379,7 @@ export const TRAPS: TrapInfo[] = [
     diyPrice: 'DIY 10~20만원/개',
     proPrice: '완제품 20~50만원/개',
     desc: '특정 주파수만 정확히 흡수(무댐핑 시 ±5~10Hz 협대역). 병 모양 원리로 튜닝.',
-    color: '#0D9488',
+    color: 'var(--teal-600)',
   },
 ]
 
@@ -392,16 +392,16 @@ export const fmt = (n: number, digits = 1) =>
 
 /* 그래픽(차트 막대·보더)용 600레벨 — 텍스트에는 MODE_INKS를 쓴다 */
 export const MODE_COLORS = {
-  axial: '#DB2777',
-  tangential: '#D97706',
-  oblique: '#0D9488',
+  axial: 'var(--pink-600)',
+  tangential: 'var(--amber-600)',
+  oblique: 'var(--teal-600)',
 }
 
 /* 텍스트용 700레벨 잉크 (흰/연회색 배경 4.5:1 이상 — amber-600 3.19·teal-600 3.74는 미달) */
 export const MODE_INKS = {
   axial: '#BE185D',
   tangential: '#B45309',
-  oblique: '#0F766E',
+  oblique: 'var(--teal-700)',
 }
 
 export const MODE_LABELS = {

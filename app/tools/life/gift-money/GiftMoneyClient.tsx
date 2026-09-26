@@ -29,12 +29,12 @@ export default function GiftMoneyClient() {
   return (
     <div className={s.wrap}>
       {/* 모드 토글 */}
-      <div className={s.modeToggle} role="tablist" aria-label="경조사 종류">
-        <button type="button" role="tab" aria-selected={isWedding}
+      <div className={s.modeToggle} role="group" aria-label="경조사 종류">
+        <button type="button" aria-pressed={isWedding}
           className={`${s.modeBtn} ${isWedding ? s.modeActive : ''}`}
           style={isWedding ? { background: accent, color: '#fff' } : undefined}
           onClick={() => setMode('wedding')}>축의금</button>
-        <button type="button" role="tab" aria-selected={!isWedding}
+        <button type="button" aria-pressed={!isWedding}
           className={`${s.modeBtn} ${!isWedding ? s.modeActive : ''}`}
           style={!isWedding ? { background: accent, color: '#fff' } : undefined}
           onClick={() => setMode('funeral')}>부의금</button>
@@ -92,7 +92,7 @@ export default function GiftMoneyClient() {
         <p className={s.heroSub}>
           일반적으로 <strong>{res.low === res.high ? `${res.high}만원` : `${res.low}만 ~ ${res.high}만원`}</strong> 선
           {res.mealAdd > 0
-            ? ` · 기본 ${res.base}만 + 동반 식대 ${res.mealAdd}만 (1인 ${MEAL_COST}만 기준)`
+            ? ` · 기본 ${res.base}만 + 동반 식대 ${res.mealAdd}만 (1인 ${MEAL_COST}만 기준)${res.roundedUp ? ` → ${res.base + res.mealAdd}만원은 4로 시작해 피하는 금액이라 ${res.recommend}만원으로 올림` : ''}`
             : (res.attendBased ? ` · ${attend
                 ? (isWedding ? '식사하므로 식대 고려' : '직접 조문 기준')
                 : (isWedding ? '참석 안 해 한 단계 낮게' : '조문 못 해 한 단계 낮게')}` : '')}

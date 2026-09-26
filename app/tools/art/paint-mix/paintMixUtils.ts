@@ -220,10 +220,14 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } {
   return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 }
 }
 
+/** 0~255 실수 → 정수 바이트 (반올림 + 클램프) */
+function toByte(n: number): number {
+  return Math.max(0, Math.min(255, Math.round(n)))
+}
+
 /** RGB → HEX */
 export function rgbToHex(r: number, g: number, b: number): string {
-  const c = (n: number) =>
-    Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0')
+  const c = (n: number) => toByte(n).toString(16).padStart(2, '0')
   return `#${c(r)}${c(g)}${c(b)}`.toUpperCase()
 }
 
@@ -297,12 +301,14 @@ export function deltaE(lab1: { L: number; a: number; b: number }, lab2: { L: num
 
 /** ΔE → 등급 라벨 (색은 텍스트 AA 안전 시맨틱 토큰) */
 export function deltaEGrade(d: number): { label: string; pct: number; color: string } {
-  if (d < 1)  return { label: '완벽',     pct: 100, color: 'var(--success)' }
-  if (d < 2)  return { label: '매우 비슷', pct: 90,  color: 'var(--success)' }
-  if (d < 5)  return { label: '비슷',     pct: 75,  color: 'var(--warning)' }
-  if (d < 10) return { label: '가능',     pct: 55,  color: 'var(--warning)' }
-  if (d < 20) return { label: '차이 큼',   pct: 30,  color: 'var(--danger)' }
-  return       { label: '매우 다름',      pct: 10,  color: 'var(--danger)' }
+  /* 경계는 화면 안내문(0~1 / 1~2 / 2~3.5 / 3.5~5 / 5+)과 같게 둔다.
+     ⚠️ 예전엔 5~10을 '가능'으로 표시해 바로 아래 '5+ 다른 색' 안내와 모순이었다. */
+  if (d < 1)   return { label: '완벽',        pct: 100, color: 'var(--success)' }
+  if (d < 2)   return { label: '매우 비슷',    pct: 90,  color: 'var(--success)' }
+  if (d < 3.5) return { label: '비슷',        pct: 75,  color: 'var(--warning)' }
+  if (d < 5)   return { label: '차이 뚜렷',    pct: 55,  color: 'var(--warning)' }
+  if (d < 10)  return { label: '다른 색',      pct: 30,  color: 'var(--danger)' }
+  return        { label: '매우 다름',         pct: 10,  color: 'var(--danger)' }
 }
 
 /* ═════════════════════════════════════════════
@@ -311,42 +317,58 @@ export function deltaEGrade(d: number): { label: string; pct: number; color: str
 
 const GAMMA = 2.2
 
-/** Subtractive (물감 기본) — CMY 가중 평균 + 감마 보정 */
+/** Subtractive 성분 — 1 - color (CMY 변환) + 감마 적용 */
+function subComps(hex: string): [number, number, number] {
+  const { r, g, b } = hexToRgb(hex)
+  return [Math.pow(1 - r / 255, GAMMA), Math.pow(1 - g / 255, GAMMA), Math.pow(1 - b / 255, GAMMA)]
+}
+/** Subtractive 평균 성분 → RGB(0~255 실수) — 역감마 + RGB 복원 */
+function subToRgb(cAcc: number, mAcc: number, yAcc: number): [number, number, number] {
+  return [
+    (1 - Math.pow(cAcc, 1 / GAMMA)) * 255,
+    (1 - Math.pow(mAcc, 1 / GAMMA)) * 255,
+    (1 - Math.pow(yAcc, 1 / GAMMA)) * 255,
+  ]
+}
+
+/** Subtractive (물감 기본) — CMY 가중 평균 + 감마 보정.
+    섞는 비율의 '평균색'을 근사하는 모델이라 CMY 3원색을 같은 양 섞으면 검정이 아니라
+    어두운 회색(#646464)이 나온다 — 실제 물감도 완전한 검정 대신 짙은 갈색·회색에 가깝다. */
 export function mixSubtractive(colors: { hex: string; weight: number }[]): string {
   const total = colors.reduce((s, c) => s + c.weight, 0)
   if (total <= 0 || colors.length === 0) return '#000000'
   let cAcc = 0, mAcc = 0, yAcc = 0
   for (const c of colors) {
-    const { r, g, b } = hexToRgb(c.hex)
-    /* 1 - color (CMY 변환) + 감마 적용 */
-    const cn = Math.pow(1 - r / 255, GAMMA)
-    const mn = Math.pow(1 - g / 255, GAMMA)
-    const yn = Math.pow(1 - b / 255, GAMMA)
+    const [cn, mn, yn] = subComps(c.hex)
     cAcc += cn * c.weight
     mAcc += mn * c.weight
     yAcc += yn * c.weight
   }
   cAcc /= total; mAcc /= total; yAcc /= total
-  /* 역감마 + RGB 복원 */
-  const r = (1 - Math.pow(cAcc, 1 / GAMMA)) * 255
-  const g = (1 - Math.pow(mAcc, 1 / GAMMA)) * 255
-  const b = (1 - Math.pow(yAcc, 1 / GAMMA)) * 255
+  const [r, g, b] = subToRgb(cAcc, mAcc, yAcc)
   return rgbToHex(r, g, b)
 }
 
-/** Additive (빛) — RGB 가중 평균 (감마 보정 포함) */
+/** Additive (빛) — 선형광 합산.
+    비율이 가장 큰 빛을 원래 밝기(1)로 두고 나머지를 비율만큼 더한다. 합이 1을 넘는 채널이 생기면
+    세 채널을 같은 배율로 낮춰 색조를 유지한다(가장 밝은 채널 = 255).
+    ⚠️ 예전에는 가중 '평균'이라 빨강+초록이 노랑(#FFFF00)이 아니라 #BABA00, RGB 3원색이
+       흰색이 아니라 회색(#9B9B9B)이 나와 본문의 '모두 합치면 흰색' 설명과 모순이었다. */
 export function mixAdditive(colors: { hex: string; weight: number }[]): string {
   const total = colors.reduce((s, c) => s + c.weight, 0)
   if (total <= 0 || colors.length === 0) return '#000000'
+  const maxW = colors.reduce((m, c) => Math.max(m, c.weight), 0)
   let rAcc = 0, gAcc = 0, bAcc = 0
   for (const c of colors) {
     const { r, g, b } = hexToRgb(c.hex)
-    /* 감마 공간(linear)에서 평균 */
-    rAcc += Math.pow(r / 255, GAMMA) * c.weight
-    gAcc += Math.pow(g / 255, GAMMA) * c.weight
-    bAcc += Math.pow(b / 255, GAMMA) * c.weight
+    const w = c.weight / maxW
+    /* 감마를 풀어(linear) 빛의 양으로 더한다 */
+    rAcc += Math.pow(r / 255, GAMMA) * w
+    gAcc += Math.pow(g / 255, GAMMA) * w
+    bAcc += Math.pow(b / 255, GAMMA) * w
   }
-  rAcc /= total; gAcc /= total; bAcc /= total
+  const peak = Math.max(1, rAcc, gAcc, bAcc)
+  rAcc /= peak; gAcc /= peak; bAcc /= peak
   return rgbToHex(
     Math.pow(rAcc, 1 / GAMMA) * 255,
     Math.pow(gAcc, 1 / GAMMA) * 255,
@@ -501,12 +523,54 @@ export function suggestRecipe(
   const weightSteps = [1, 2, 3, 4, 5]   /* 5단계 */
   const n = palette.length
 
+  /* ⚠️ 전문가 24색 3색 조합은 25만 회 넘게 섞어 메인 스레드를 0.5초 이상 막았다.
+     결과는 그대로 두고 비용만 줄인다:
+     (1) 비례 조합(2:2:2 = 1:1:1 등)은 같은 색이라 건너뛴다 — 작은 조합이 먼저 나오고 비교가 '<'라 결과 불변.
+     (2) subtractive는 팔레트 성분을 미리 계산하고, 결과 RGB → Lab 변환을 캐시한다(같은 산식·같은 반올림). */
+  const gcd = (a: number, c: number): number => (c === 0 ? a : gcd(c, a % c))
+  const labCache = new Map<number, { L: number; a: number; b: number }>()
+  const fast = model === 'subtractive'
+  const comps = fast ? palette.map((c) => subComps(c.hex)) : []
+  const inv = 1 / GAMMA
+  /** 조합 하나의 ΔE — fast면 hex 문자열을 거치지 않는다.
+      mixSubtractive와 같은 순서로 더하고 같은 식으로 복원·반올림한다(결과 비트 단위 동일). */
+  const evalMix = (idx: number[], ws: number[]): number => {
+    if (!fast) {
+      const mix = mixColors(idx.map((i, t) => ({ hex: palette[i].hex, weight: ws[t] })), model)
+      const { r: r2, g: g2, b: b2 } = hexToRgb(mix)
+      return deltaE(targetLab, rgbToLab(r2, g2, b2))
+    }
+    let total = 0
+    let cAcc = 0, mAcc = 0, yAcc = 0
+    for (let t = 0; t < idx.length; t++) {
+      const cc = comps[idx[t]]
+      const w = ws[t]
+      total += w
+      cAcc += cc[0] * w
+      mAcc += cc[1] * w
+      yAcc += cc[2] * w
+    }
+    cAcc /= total; mAcc /= total; yAcc /= total
+    const rb = toByte((1 - Math.pow(cAcc, inv)) * 255)
+    const gb = toByte((1 - Math.pow(mAcc, inv)) * 255)
+    const bb = toByte((1 - Math.pow(yAcc, inv)) * 255)
+    const key = (rb << 16) | (gb << 8) | bb
+    let lab = labCache.get(key)
+    if (!lab) { lab = rgbToLab(rb, gb, bb); labCache.set(key, lab) }
+    return deltaE(targetLab, lab)
+  }
+  const record = (idx: number[], ws: number[], d: number) => {
+    best = {
+      colors: idx.map((i, t) => ({ color: palette[i], weight: ws[t] })),
+      resultHex: mixColors(idx.map((i, t) => ({ hex: palette[i].hex, weight: ws[t] })), model),
+      deltaE: d,
+    }
+  }
+
   /* 1색 시도 */
   for (let i = 0; i < n; i++) {
-    const mix = mixColors([{ hex: palette[i].hex, weight: 1 }], model)
-    const { r: r2, g: g2, b: b2 } = hexToRgb(mix)
-    const d = deltaE(targetLab, rgbToLab(r2, g2, b2))
-    if (d < best.deltaE) best = { colors: [{ color: palette[i], weight: 1 }], resultHex: mix, deltaE: d }
+    const d = evalMix([i], [1])
+    if (d < best.deltaE) record([i], [1], d)
   }
 
   /* 2색 조합 */
@@ -514,22 +578,9 @@ export function suggestRecipe(
     for (let j = i + 1; j < n; j++) {
       for (const wi of weightSteps) {
         for (const wj of weightSteps) {
-          const mix = mixColors(
-            [{ hex: palette[i].hex, weight: wi }, { hex: palette[j].hex, weight: wj }],
-            model,
-          )
-          const { r: r2, g: g2, b: b2 } = hexToRgb(mix)
-          const d = deltaE(targetLab, rgbToLab(r2, g2, b2))
-          if (d < best.deltaE) {
-            best = {
-              colors: [
-                { color: palette[i], weight: wi },
-                { color: palette[j], weight: wj },
-              ],
-              resultHex: mix,
-              deltaE: d,
-            }
-          }
+          if (gcd(wi, wj) > 1) continue
+          const d = evalMix([i, j], [wi, wj])
+          if (d < best.deltaE) record([i, j], [wi, wj], d)
         }
       }
     }
@@ -537,33 +588,19 @@ export function suggestRecipe(
 
   /* 3색 조합 (maxColors >= 3 일 때만) */
   if (maxColors >= 3) {
+    const idx3 = [0, 0, 0]
+    const ws3 = [0, 0, 0]
     for (let i = 0; i < n; i++) {
       for (let j = i + 1; j < n; j++) {
         for (let k = j + 1; k < n; k++) {
           for (const wi of weightSteps) {
             for (const wj of weightSteps) {
               for (const wk of weightSteps) {
-                const mix = mixColors(
-                  [
-                    { hex: palette[i].hex, weight: wi },
-                    { hex: palette[j].hex, weight: wj },
-                    { hex: palette[k].hex, weight: wk },
-                  ],
-                  model,
-                )
-                const { r: r2, g: g2, b: b2 } = hexToRgb(mix)
-                const d = deltaE(targetLab, rgbToLab(r2, g2, b2))
-                if (d < best.deltaE) {
-                  best = {
-                    colors: [
-                      { color: palette[i], weight: wi },
-                      { color: palette[j], weight: wj },
-                      { color: palette[k], weight: wk },
-                    ],
-                    resultHex: mix,
-                    deltaE: d,
-                  }
-                }
+                if (gcd(gcd(wi, wj), wk) > 1) continue
+                idx3[0] = i; idx3[1] = j; idx3[2] = k
+                ws3[0] = wi; ws3[1] = wj; ws3[2] = wk
+                const d = evalMix(idx3, ws3)
+                if (d < best.deltaE) record([i, j, k], [wi, wj, wk], d)
               }
             }
           }

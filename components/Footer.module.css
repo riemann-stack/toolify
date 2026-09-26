@@ -1,131 +1,121 @@
 /* @hover-wrapped */
-/* ── 면책 밴드 — 중성 화이트 (페이퍼/쿨톤 캔버스 어디서든 성립) ── */
-.disclaimer {
-  border-top: 1px solid var(--paper-line);
-  background: var(--paper-card);
-  padding: 16px 48px;
-  font-size: 12px;
-  color: var(--paper-ink-soft);
-  line-height: 1.75;
-  text-align: center;
+/* components/Footer.module.css — 스펙 §10.18. 흰 4열 푸터: 운영자·문의·광고 고지 / 분야 / Youtil / 정책 + 사이트 공통 면책.
+   (구 잉크 다크 블록·면책 밴드 폐기 — 면책은 하단 .ftLegal 한 문단) */
+.ft {
+  margin-top: 80px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
-.disclaimer p {
-  max-width: 960px;
+.ftIn {
+  max-width: var(--w-shell, 1156px);
   margin: 0 auto;
+  padding: 48px 24px 32px;
 }
-.disclaimer strong {
-  color: var(--paper-ink);
-  font-weight: 600;
-}
-.disclaimerIcon {
-  display: inline-flex;
-  vertical-align: -2px;
-  margin-right: 4px;
-  color: var(--warning);
-}
-.disclaimerLink {
-  color: var(--paper-ink);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}@media (hover: hover) {
-  .disclaimerLink:hover {
-  color: var(--paper-ink-soft);
-}
+.ftGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1.2fr 0.8fr 0.8fr;
+  gap: 40px;
 }
 
-/* ── 푸터 — 잉크 다크 블록 ── */
-.footer {
-  background: var(--paper-ink);
-  padding: 28px 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.left {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-  color: #ffffff;
-}
-.logoMark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.16);
-  color: #ffffff;
-  flex-shrink: 0;
-}
-
-.copy {
-  font-size: 12px;
-  color: color-mix(in srgb, var(--paper) 68%, transparent);
+/* ── ① 브랜드 · 운영자 ── */
+.ftLogo {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
-}
-.version {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--paper);
-  background: rgba(255, 255, 255, 0.14);
-  padding: 1px 7px;
-  border-radius: var(--radius-pill);
-  letter-spacing: 0.02em;
-}
-
-.links {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.link {
-  font-size: 12px;
-  color: color-mix(in srgb, var(--paper) 78%, transparent);
+  min-height: 32px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
   text-decoration: none;
-  transition: color 0.15s;
-  /* 시각 레이아웃 유지하며 터치 영역만 확장 (WCAG 2.5.8) */
-  display: inline-block;
-  padding: 8px 4px;
-  margin: -8px -4px;
-}@media (hover: hover) {
-  .link:hover { color: #ffffff; }
+}
+.ftLogoMark { width: 28px; height: 28px; display: block; flex-shrink: 0; color: var(--accent); }
+.ftBrand p {
+  margin: 12px 0 0;
+  max-width: 320px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+  font-variant-numeric: normal;
+}
+.ftOp {
+  margin-top: 16px;
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.ftOp > span { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 8px; }
+.ftOp b { color: var(--text); font-weight: 700; }
+.ftOp a {
+  color: var(--accent-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent-line, currentColor);
 }
 
-@media (max-width: 600px) {
-  .disclaimer {
-    padding: 14px 20px;
-    font-size: 11px;
-  }
-  .footer {
-    padding: 24px;
-    flex-direction: column;
-    align-items: center;   /* ← 가운데 정렬 */
-    text-align: center;
-  }
-  .left {
-    align-items: center;   /* ← 로고·카피도 가운데 */
-  }
-  .links {
-    justify-content: center; /* ← 링크 가운데 */
-    gap: 16px;
-  }
+/* ── ②③④ 링크 열 ── */
+.ftH {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--text);
+  letter-spacing: 0;
+}
+.ftList { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.ftList a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  font-size: 14px;
+  color: var(--muted-strong);
+  text-decoration: none;
+}
+.ftList strong { font-weight: 700; color: var(--text); }
+@media (hover: hover) {
+  .ftList a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+}
+.ftCats { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+.ftCats a::before {
+  content: '';
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c, var(--gray-400, var(--border-hover)));
+}
+
+/* ── 사이트 공통 면책 ── */
+.ftLegal {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--divider, var(--border));
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted);
+  font-variant-numeric: normal;
+}
+.ftLegal p { margin: 0; }
+.ftLegal p + p { margin-top: 8px; }
+.ftLegal strong { color: var(--muted-strong); font-weight: 600; }
+.ftLegal a { color: var(--muted-strong); text-decoration: underline; text-underline-offset: 2px; }
+
+@media (max-width: 900px) {
+  .ftGrid { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+  .ftBrand, .ftCatsCol { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .ft { margin-top: 56px; }
+  .ftIn { padding: 40px 16px 24px; }
+  .ftCats { grid-template-columns: 1fr 1fr 1fr; column-gap: 12px; }
+  .ftCats a { font-size: 13px; gap: 6px; }
+}
+@media (max-width: 360px) {
+  .ftCats { grid-template-columns: 1fr 1fr; }
 }

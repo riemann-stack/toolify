@@ -5,12 +5,12 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   box-sizing: border-box;
 }
 @media (max-width: 600px) {
-  .card { padding: 14px 14px; border-radius: 12px; }
+  .card { padding: 14px 14px; border-radius: var(--radius-m); }
 }
 .cardLabel {
   display: flex;
@@ -38,18 +38,18 @@
 .sampleBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 11px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.12s;
 }
 @media (hover: hover) {
   .sampleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.clearBtn { color: #DC2626; }
+.clearBtn { color: var(--red-600); }
 
 /* ── 텍스트 영역 ── */
 .textarea {
@@ -59,7 +59,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 14px;
-  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-family: var(--font-mono);
   color: var(--text);
   line-height: 1.6;
   resize: vertical;
@@ -81,11 +81,11 @@
   margin-top: 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .metaRow strong {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -93,9 +93,9 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 14px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   text-align: center;
 }
@@ -105,10 +105,10 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 11vw, 64px);
   font-weight: 800;
   color: var(--accent);
@@ -121,27 +121,27 @@
   font-size: 13px;
   color: var(--muted);
   margin-top: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .heroSub strong {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
 /* ── 인사이트 ── */
 .insightCard {
-  background: rgba(8, 145, 178, 0.06);
-  border: 1px solid rgba(8, 145, 178, 0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 14px 18px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .insightCard strong:first-child {
   display: block;
   font-size: 13px;
-  color: #0891B2;
+  color: var(--cyan-600);
   margin-bottom: 6px;
 }
 .insightCard p {
@@ -150,8 +150,8 @@
   color: var(--text);
   line-height: 1.75;
 }
-.savingAmt { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
-.savingPct { color: #059669; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.savingAmt { color: var(--accent); font-family: var(--font-sans); }
+.savingPct { color: var(--emerald-600); font-family: var(--font-sans); font-weight: 800; }
 
 /* ── 옵션 ── */
 .optRow {
@@ -167,7 +167,7 @@
   color: var(--muted);
   font-weight: 600;
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .optHint {
   font-size: 11px;
@@ -185,12 +185,12 @@
   min-width: 0;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 6px;
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   transition: all 0.12s;
   display: flex;
@@ -200,7 +200,7 @@
 }
 .toggleBtn small {
   font-size: 11px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--muted);
   opacity: 0.8;
 }
@@ -210,18 +210,18 @@
 .toggleActive {
   background: var(--accent-dim);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
-.toggleActive small { color: var(--accent); opacity: 1; }
+.toggleActive small { color: var(--accent-ink); opacity: 1; }
 
 .bulkInput {
   width: 100%;
   margin-top: 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -246,7 +246,7 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-top-width: 3px;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
@@ -263,35 +263,35 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .modelName {
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   margin-top: 2px;
 }
 .badge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--muted);
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 2px 7px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 .tokenRow {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .tokenLabel { font-size: 12px; color: var(--muted); }
 .tokenVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -303,18 +303,18 @@
   width: 100%;
   height: 6px;
   background: var(--bg2);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 .ctxBarFill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   transition: width 0.2s;
 }
 .ctxLabel {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
 }
 
@@ -331,11 +331,11 @@
   align-items: baseline;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .priceRow strong {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -366,7 +366,7 @@
   grid-template-columns: 140px 1fr 60px;
   align-items: center;
   gap: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (max-width: 480px) { .ctxRow { grid-template-columns: 110px 1fr 55px; gap: 8px; } }
 .ctxName {
@@ -392,16 +392,16 @@
   width: 100%;
   height: 8px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 .ctxMeterFill {
   display: block;
   height: 100%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 .ctxNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 700;
   color: var(--text);

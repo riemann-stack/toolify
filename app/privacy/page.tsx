@@ -1,4 +1,10 @@
+/* app/privacy/page.tsx (server) — 개인정보처리방침 (Trust Ledger 텍스트 페이지로 재조판)
+   ─ 법정 기재 사항(개인정보 보호책임자 성명 등)은 그대로 둔다 — 실명을 더하거나 빼지 않는다.
+   ─ 2026-09-26 변경: URL 파라미터 문구를 실제 동작에 맞게 구체화(선택 탭·공유 링크의 비민감 설정값), 자물쇠 이모지 → 텍스트, 조판.
+   ─ 변경 이력 표 = git log -- app/privacy/page.tsx 의 실질 변경(0806e2c·e816cfd/fea1197·a012852·3462ed8·70000a7/d7f9a2a·0da84fc·ebde75d/899ed3e). 새 실질 변경은 맨 위에 추가. */
 import { buildMetadata } from '@/lib/seo'
+import TrustPage from '../_trust/TrustPage'
+import s from '../_trust/trust.module.css'
 
 export const metadata = buildMetadata({
   path: '/privacy',
@@ -6,316 +12,229 @@ export const metadata = buildMetadata({
   description: 'Youtil이 수집하는 정보(접속 기록·쿠키·광고 식별자)와 이용 목적, Google 애드센스·애널리틱스 등 제3자 서비스의 광고 쿠키 사용 고지, 맞춤형 광고 거부 방법, 이용자 권리와 문의처를 안내합니다.',
 })
 
-const LAST_UPDATED  = '2026년 6월 10일'
-const SITE_NAME     = 'Youtil'
-const SITE_URL      = 'https://youtil.kr'
-const CONTACT_EMAIL = 'contact@youtil.kr'
+const LAST_UPDATED     = '2026년 9월 26일'
+const LAST_UPDATED_ISO = '2026-09-26'
+const SITE_NAME        = 'Youtil'
+const SITE_URL         = 'https://youtil.kr'
+const CONTACT_EMAIL    = 'contact@youtil.kr'
+
+const TOC = [
+  { id: 'general', label: '1. 총칙' },
+  { id: 'collect', label: '2. 수집하는 개인정보' },
+  { id: 'purpose', label: '3. 개인정보 수집 목적' },
+  { id: 'cookies', label: '4. 쿠키(Cookie) 정책' },
+  { id: 'third-party', label: '5. 제3자 광고 서비스 이용' },
+  { id: 'retention', label: '6. 보유 및 이용 기간' },
+  { id: 'rights', label: '7. 이용자의 권리' },
+  { id: 'officer', label: '8. 개인정보 보호책임자' },
+  { id: 'changes', label: '9. 방침 변경 안내' },
+  { id: 'security', label: '10. 개인정보 보호를 위한 노력' },
+  { id: 'inputs', label: '11. 계산기 입력값 처리' },
+]
 
 export default function PrivacyPage() {
   return (
-    <div style={{ background: 'var(--paper)' }}>
-    <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px', color: 'var(--paper-ink)' }}>
-        개인정보처리방침
-      </h1>
-      <p style={{ fontSize: '13px', color: 'var(--paper-ink-soft)', marginBottom: '48px' }}>
-        최종 업데이트: {LAST_UPDATED}
+    <TrustPage
+      path="/privacy"
+      eyebrow="정책"
+      icon="lock"
+      title="개인정보처리방침"
+      lead={<>{SITE_NAME}은 회원가입 없이 쓰는 서비스입니다. 어떤 정보가 자동으로 수집되는지, 광고·분석 쿠키를 어떻게 거부할 수 있는지, 계산기에 넣은 값이 어떻게 처리되는지 안내합니다.</>}
+      meta={[<>최종 업데이트 <time dateTime={LAST_UPDATED_ISO}>{LAST_UPDATED}</time></>]}
+      toc={TOC}
+      tocNumbered={false}
+    >
+      <h2 id="general" data-nonum="">1. 총칙</h2>
+      <p>
+        {SITE_NAME}(이하 「서비스」)은 이용자의 개인정보를 중요하게 생각하며,
+        「개인정보 보호법」 및 관련 법령을 준수합니다.
+        본 방침은 {SITE_URL} 에서 제공하는 모든 서비스에 적용됩니다.
       </p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', fontSize: '14px', lineHeight: '1.9', color: 'var(--paper-ink-soft)' }}>
+      <h2 id="collect" data-nonum="">2. 수집하는 개인정보</h2>
+      <p>
+        {SITE_NAME}은 회원가입 없이 이용 가능하며, 별도의 개인정보를 직접 수집하지 않습니다.
+        다만 이메일로 문의하시는 경우 발신 이메일 주소와 문의 내용이 답변·처리 목적으로만
+        이용되며, 처리 완료 후 별도로 보관하지 않습니다. 이 외에 서비스 운영을 위해
+        아래 정보가 자동으로 수집될 수 있습니다.
+      </p>
+      <ul>
+        <li>접속 IP 주소</li>
+        <li>접속 일시 및 서비스 이용 기록</li>
+        <li>브라우저 종류 및 OS 정보</li>
+        <li>쿠키(Cookie) 및 방문 기록 (Google Analytics, Google AdSense)</li>
+        <li>웹 비콘(Web Beacon)·픽셀 태그 등 추적 기술</li>
+        <li>광고 식별자 및 기타 기기 식별자</li>
+      </ul>
+      <p>
+        위 정보는 Google Analytics·Google AdSense 등 제3자 서비스가 쿠키, 웹 비콘, IP 주소,
+        기타 식별자를 통해 자동으로 수집·처리할 수 있습니다. {SITE_NAME}은 이러한 정보를
+        이용자 개인을 직접 식별하는 용도로 수집하지 않습니다.
+      </p>
 
-        {/* 1 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            1. 총칙
-          </h2>
-          <p>
-            {SITE_NAME}(이하 「서비스」)은 이용자의 개인정보를 중요하게 생각하며,
-            「개인정보 보호법」 및 관련 법령을 준수합니다.
-            본 방침은 {SITE_URL} 에서 제공하는 모든 서비스에 적용됩니다.
-          </p>
-        </section>
+      <h2 id="purpose" data-nonum="">3. 개인정보 수집 목적</h2>
+      <ul>
+        <li>서비스 이용 통계 분석 및 품질 개선</li>
+        <li>부정 이용 방지 및 보안 유지</li>
+        <li>맞춤형 광고 서비스 제공 (Google AdSense)</li>
+      </ul>
 
-        {/* 2 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            2. 수집하는 개인정보
-          </h2>
-          <p style={{ marginBottom: '12px' }}>
-            {SITE_NAME}은 회원가입 없이 이용 가능하며, 별도의 개인정보를 직접 수집하지 않습니다.
-            다만 이메일로 문의하시는 경우 발신 이메일 주소와 문의 내용이 답변·처리 목적으로만
-            이용되며, 처리 완료 후 별도로 보관하지 않습니다. 이 외에 서비스 운영을 위해
-            아래 정보가 자동으로 수집될 수 있습니다.
-          </p>
-          <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <li>접속 IP 주소</li>
-            <li>접속 일시 및 서비스 이용 기록</li>
-            <li>브라우저 종류 및 OS 정보</li>
-            <li>쿠키(Cookie) 및 방문 기록 (Google Analytics, Google AdSense)</li>
-            <li>웹 비콘(Web Beacon)·픽셀 태그 등 추적 기술</li>
-            <li>광고 식별자 및 기타 기기 식별자</li>
-          </ul>
-          <p style={{ marginTop: '12px' }}>
-            위 정보는 Google Analytics·Google AdSense 등 제3자 서비스가 쿠키, 웹 비콘, IP 주소,
-            기타 식별자를 통해 자동으로 수집·처리할 수 있습니다. {SITE_NAME}은 이러한 정보를
-            이용자 개인을 직접 식별하는 용도로 수집하지 않습니다.
-          </p>
-        </section>
+      <h2 id="cookies" data-nonum="">4. 쿠키(Cookie) 정책</h2>
+      <p>
+        {SITE_NAME}은 Google Analytics 및 Google AdSense를 통해 쿠키와 더불어
+        <strong> 웹 비콘(Web Beacon)·픽셀 태그·IP 주소·광고 식별자 등 기타 식별자</strong>를
+        사용할 수 있습니다. 쿠키는 이용자의 브라우저에 저장되는 소량의 데이터이며, 웹 비콘은
+        페이지·광고의 열람 여부를 측정하는 기술입니다. 이들은 서비스 이용 패턴 분석 및
+        맞춤형 광고 제공에 활용됩니다.
+      </p>
+      <p>
+        Google을 포함한 제3자 광고 사업자는 <strong>광고 쿠키</strong>를 사용하여
+        이용자의 본 사이트 및 다른 사이트 방문 기록을 기반으로 광고를 게재합니다.
+        이용자는 아래 방법으로 맞춤형 광고를 거부할 수 있습니다.
+      </p>
+      <h3>맞춤형 광고 거부 방법</h3>
+      <dl className={s.facts}>
+        <dt>Google 광고 설정</dt>
+        <dd>
+          <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">https://www.google.com/settings/ads<span className="srOnly">(새 창)</span></a>
+          <small>구글 계정의 광고 설정을 방문하여 맞춤형 광고를 게재하지 않도록 설정할 수 있습니다.</small>
+        </dd>
+        <dt>DAA 옵트아웃</dt>
+        <dd>
+          <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer">www.aboutads.info/choices<span className="srOnly">(새 창)</span></a>
+          <small>디지털 광고 연합(DAA) 페이지에서 타사 공급업체의 맞춤형 광고용 쿠키 사용을 차단할 수 있습니다.</small>
+        </dd>
+      </dl>
+      <p>
+        브라우저 설정에서 쿠키를 거부할 수 있으나, 일부 서비스 이용이 제한될 수 있습니다.
+        Google의 개인정보 처리에 대한 자세한 내용은{' '}
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google 개인정보처리방침<span className="srOnly">(새 창)</span></a>을 참고하세요.
+      </p>
 
-        {/* 3 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            3. 개인정보 수집 목적
-          </h2>
-          <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <li>서비스 이용 통계 분석 및 품질 개선</li>
-            <li>부정 이용 방지 및 보안 유지</li>
-            <li>맞춤형 광고 서비스 제공 (Google AdSense)</li>
-          </ul>
-        </section>
+      <h2 id="third-party" data-nonum="">5. 제3자 광고 서비스 이용</h2>
+      <p>
+        {SITE_NAME}은 사이트 방문 시 광고를 게재하기 위해 제3자 광고 회사(Google)를 이용합니다.
+        이들 회사는 귀하가 본 서비스 및 다른 웹사이트를 방문한 기록
+        (성명, 주소, 이메일 주소, 전화번호 제외)을 사용하여
+        귀하에게 적합한 상품 및 서비스에 대한 광고를 제공할 수 있습니다.
+      </p>
+      <p>
+        {SITE_NAME}은 이용자의 개인정보를 광고 목적 외의 이유로 제3자에게 판매하거나
+        제공하지 않습니다. 광고 관련 데이터 처리는 전적으로 Google의 개인정보처리방침을 따릅니다.
+      </p>
 
-        {/* 4 — 보강된 쿠키 정책 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            4. 쿠키(Cookie) 정책
-          </h2>
-          <p style={{ marginBottom: '12px' }}>
-            {SITE_NAME}은 Google Analytics 및 Google AdSense를 통해 쿠키와 더불어
-            <strong style={{ color: 'var(--paper-ink)' }}> 웹 비콘(Web Beacon)·픽셀 태그·IP 주소·광고 식별자 등 기타 식별자</strong>를
-            사용할 수 있습니다. 쿠키는 이용자의 브라우저에 저장되는 소량의 데이터이며, 웹 비콘은
-            페이지·광고의 열람 여부를 측정하는 기술입니다. 이들은 서비스 이용 패턴 분석 및
-            맞춤형 광고 제공에 활용됩니다.
-          </p>
-          <p style={{ marginBottom: '12px' }}>
-            Google을 포함한 제3자 광고 사업자는 <strong style={{ color: 'var(--paper-ink)' }}>광고 쿠키</strong>를 사용하여
-            이용자의 본 사이트 및 다른 사이트 방문 기록을 기반으로 광고를 게재합니다.
-            이용자는 아래 방법으로 맞춤형 광고를 거부할 수 있습니다.
-          </p>
+      <h2 id="retention" data-nonum="">6. 보유 및 이용 기간</h2>
+      <p>
+        본 서비스는 자체 서버에 접속 로그를 보관하지 않습니다. 접속 기록은 호스팅(Vercel)·분석(Google Analytics)·광고(Google AdSense) 제공자가 각사의 개인정보 처리방침과 보존 설정에 따라 보관·파기합니다.
+        관련 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.
+      </p>
 
-          {/* 맞춤형 광고 거부 안내 박스 */}
-          <div style={{
-            background: 'var(--paper-card)',
-            border: '1px solid var(--paper-line)',
-            borderRadius: '12px',
-            padding: '16px 20px',
-            marginBottom: '12px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-          }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--paper-ink-soft)', marginBottom: '4px' }}>
-              맞춤형 광고 거부 방법
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div>
-                <p style={{ fontSize: '13px', color: 'var(--paper-ink)', marginBottom: '2px' }}>① Google 광고 설정 페이지</p>
-                <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: '13px', color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px', wordBreak: 'break-all' }}>
-                  https://www.google.com/settings/ads
-                </a>
-                <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', marginTop: '2px' }}>
-                  구글 계정의 광고 설정을 방문하여 맞춤형 광고를 게재하지 않도록 설정할 수 있습니다.
-                </p>
-              </div>
-              <div>
-                <p style={{ fontSize: '13px', color: 'var(--paper-ink)', marginBottom: '2px' }}>② 디지털 광고 연합(DAA) 옵트아웃</p>
-                <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: '13px', color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
-                  www.aboutads.info/choices
-                </a>
-                <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', marginTop: '2px' }}>
-                  타사 공급업체의 맞춤형 광고용 쿠키 사용을 차단할 수 있습니다.
-                </p>
-              </div>
-            </div>
-          </div>
+      <h2 id="rights" data-nonum="">7. 이용자의 권리</h2>
+      <p>
+        이용자는 언제든지 개인정보 열람, 정정, 삭제를 요청할 수 있습니다.
+        요청은 아래 이메일로 연락해 주시면 신속히 처리하겠습니다.
+      </p>
 
-          <p>
-            브라우저 설정에서 쿠키를 거부할 수 있으나, 일부 서비스 이용이 제한될 수 있습니다.
-            Google의 개인정보 처리에 대한 자세한 내용은{' '}
-            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
-              style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>Google 개인정보처리방침</a>을 참고하세요.
-          </p>
-        </section>
+      <h2 id="officer" data-nonum="">8. 개인정보 보호책임자</h2>
+      <dl className={s.facts}>
+        <dt>서비스명</dt><dd>{SITE_NAME}</dd>
+        <dt>개인정보 보호책임자</dt><dd>이주훈</dd>
+        <dt>이메일</dt><dd><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></dd>
+      </dl>
 
-        {/* 5 — 구체화된 제3자 제공 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            5. 제3자 광고 서비스 이용
-          </h2>
-          <p style={{ marginBottom: '12px' }}>
-            {SITE_NAME}은 사이트 방문 시 광고를 게재하기 위해 제3자 광고 회사(Google)를 이용합니다.
-            이들 회사는 귀하가 본 서비스 및 다른 웹사이트를 방문한 기록
-            (성명, 주소, 이메일 주소, 전화번호 제외)을 사용하여
-            귀하에게 적합한 상품 및 서비스에 대한 광고를 제공할 수 있습니다.
-          </p>
-          <p>
-            {SITE_NAME}은 이용자의 개인정보를 광고 목적 외의 이유로 제3자에게 판매하거나
-            제공하지 않습니다. 광고 관련 데이터 처리는 전적으로 Google의 개인정보처리방침을 따릅니다.
-          </p>
-        </section>
-
-        {/* 6 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            6. 보유 및 이용 기간
-          </h2>
-          <p>
-            본 서비스는 자체 서버에 접속 로그를 보관하지 않습니다. 접속 기록은 호스팅(Vercel)·분석(Google Analytics)·광고(Google AdSense) 제공자가 각사의 개인정보 처리방침과 보존 설정에 따라 보관·파기합니다.
-            관련 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.
-          </p>
-        </section>
-
-        {/* 7 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            7. 이용자의 권리
-          </h2>
-          <p>
-            이용자는 언제든지 개인정보 열람, 정정, 삭제를 요청할 수 있습니다.
-            요청은 아래 이메일로 연락해 주시면 신속히 처리하겠습니다.
-          </p>
-        </section>
-
-        {/* 8 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            8. 개인정보 보호책임자
-          </h2>
-          <div style={{ background: 'var(--paper-card)', border: '1px solid var(--paper-line)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p>서비스명: {SITE_NAME}</p>
-            <p style={{ marginTop: '6px' }}>개인정보 보호책임자: 이주훈</p>
-            <p style={{ marginTop: '6px' }}>
-              이메일:{' '}
-              <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
-                {CONTACT_EMAIL}
-              </a>
-            </p>
-          </div>
-        </section>
-
-        {/* 9 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            9. 방침 변경 안내
-          </h2>
-          <p>
-            본 개인정보처리방침은 법령 또는 서비스 변경에 따라 수정될 수 있으며,
-            변경 시 본 페이지를 통해 공지합니다.
-            중요한 변경이 있을 경우 상단의 「최종 업데이트」 일자를 통해 확인할 수 있습니다.
-          </p>
-        </section>
-
-        {/* 10 — 신규: SSL 보안 조치 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            10. 개인정보 보호를 위한 노력
-          </h2>
-          <p style={{ marginBottom: '12px' }}>
-            {SITE_NAME}은 이용자의 보안을 위해 전체 사이트에{' '}
-            <strong style={{ color: 'var(--paper-ink)' }}>SSL(Secure Sockets Layer) 암호화</strong>를 적용하여
-            데이터 전송 시 안전을 기하고 있습니다.
-            브라우저 주소창의 자물쇠(🔒) 아이콘을 통해 암호화된 연결을 확인하실 수 있습니다.
-          </p>
-          <p>
-            {SITE_NAME}은 별도의 서버에 개인정보를 저장하지 않으며, <strong style={{ color: 'var(--paper-ink)' }}>건강·재무 등 민감한
-            계산 입력값은 이용자의 브라우저 내에서만 처리</strong>됩니다. 다만 일부 도구는 기능 제공을 위해
-            이용자가 직접 입력·선택한 <strong style={{ color: 'var(--paper-ink)' }}>공개 정보</strong>(예: 확인할 웹사이트 주소,
-            조회할 농산물 품목)를 본 사이트 서버 또는 외부 공개 서비스로 전송해 결과(서버 시간·시세 등)를
-            받아옵니다. 이 과정에도 건강·재무·신체정보와 같은 개인 식별·민감 정보는 포함되지 않습니다
-            (자세한 내용은 아래 11조 참고).
-          </p>
-
-          {/* 보안 포인트 3개 */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginTop: '16px' }}>
-            {[
-              { title: 'HTTPS 적용',   desc: '전체 사이트 SSL 암호화' },
-              { title: '서버 미저장',   desc: '계산 입력값은 브라우저 내에서 처리' },
-              { title: '비회원 서비스', desc: '개인정보 수집 없음' },
-            ].map(item => (
-              <div key={item.title} style={{
-                background: 'var(--paper-card)',
-                border: '1px solid var(--paper-line)',
-                borderRadius: '10px',
-                padding: '14px 12px',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--paper-ink)', marginBottom: '4px' }}>{item.title}</div>
-                <div style={{ fontSize: '11px', color: 'var(--paper-ink-soft)', lineHeight: 1.5 }}>{item.desc}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 11 — 신규: 입력값(건강·재무 등 민감정보) 처리 */}
-        <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--paper-ink)', marginBottom: '12px' }}>
-            11. 계산기 입력값(건강·재무 등 민감정보) 처리
-          </h2>
-          <p style={{ marginBottom: '12px' }}>
-            {SITE_NAME}의 계산기·도구에 입력하시는 값(예: 체중·키·생리주기 등 건강 정보,
-            소득·대출·자산 등 재무 정보)은 <strong style={{ color: 'var(--paper-ink)' }}>민감한 정보로 취급</strong>되며,
-            아래 원칙에 따라 처리됩니다.
-          </p>
-          <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <li>
-              <strong style={{ color: 'var(--paper-ink)' }}>건강·재무 입력값은 브라우저 내에서만 처리됩니다.</strong>{' '}
-              체중·소득·대출 등 민감한 수치를 다루는 계산은 이용자의 브라우저(클라이언트)에서 이루어지며,
-              {SITE_NAME}의 서버나 외부로 전송·저장되지 않습니다. 단, 아래 마지막 항목과 같이 공개 정보를
-              조회해 결과를 받아오는 일부 도구는 예외이며, 해당 도구에서도 민감 정보 자체는 외부로
-              전송되지 않습니다.
-            </li>
-            <li>
-              <strong style={{ color: 'var(--paper-ink)' }}>Google Analytics 등 분석 이벤트에 입력값이 포함되지 않습니다.</strong>{' '}
-              방문·이용 통계만 수집하며, 이용자가 입력한 구체적 수치는 분석 이벤트에 담기지 않습니다.
-            </li>
-            <li>
-              <strong style={{ color: 'var(--paper-ink)' }}>URL 주소(파라미터)에 입력값을 저장하지 않습니다.</strong>{' '}
-              입력값이 주소창에 노출되거나 링크 공유를 통해 외부로 새어 나가지 않습니다.
-            </li>
-            <li>
-              <strong style={{ color: 'var(--paper-ink)' }}>광고 타기팅에 입력값을 사용하지 않습니다.</strong>{' '}
-              건강·재무 입력값은 Google AdSense를 포함한 어떤 광고의 타기팅·맞춤화에도 활용되지 않습니다.
-            </li>
-            <li>
-              <strong style={{ color: 'var(--paper-ink)' }}>일부 도구는 편의를 위해 입력값을 본인 브라우저에만 저장</strong>합니다.{' '}
-              (예: 생리주기 기록 등은 브라우저의 로컬 저장소(localStorage)에 저장되며, 다른 기기와
-              동기화되지 않고 서버로 전송되지 않습니다.)
-            </li>
-            <li>
-              <strong style={{ color: 'var(--paper-ink)' }}>일부 도구는 기능 제공을 위해 공개 정보를 외부로 조회합니다.</strong>{' '}
-              예를 들어 서버 시간 동기화·외부 사이트 시각 확인(/api/proxy-time), 링크 미리보기 OG 태그 조회
-              (/api/og-preview), 농산물 시세(KAMIS) 조회(/api/produce-price) 기능은 이용자가 입력·선택한
-              <strong style={{ color: 'var(--paper-ink)' }}> 공개 정보(웹사이트 주소·조회 품목 등)</strong>를 본 사이트 서버
-              또는 해당 외부 서비스로 전송해 결과(서버 시간·메타 정보·시세 등)를 받아옵니다. 이 과정에
-              건강·재무·신체정보와 같은 개인 식별·민감 정보는 포함되지 않으며, 조회 요청 자체는 일반적인
-              웹 서버 접속 로그(IP·시각 등) 수준으로만 기록될 수 있습니다.
-            </li>
-          </ul>
-
-          <div style={{
-            background: 'var(--paper-card)',
-            border: '1px solid var(--paper-line)',
-            borderRadius: '12px',
-            padding: '16px 20px',
-            marginTop: '16px',
-          }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--paper-ink-soft)', marginBottom: '8px' }}>
-              브라우저에 저장된 데이터 삭제 방법
-            </p>
-            <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
-              <li>각 도구 내 「전체 삭제」·「초기화」 버튼이 있는 경우 클릭하면 즉시 삭제됩니다.</li>
-              <li>
-                브라우저 설정에서 직접 삭제할 수도 있습니다 —{' '}
-                <span style={{ color: 'var(--paper-ink)' }}>설정 → 개인정보 및 보안 → 인터넷 사용 기록(쿠키·사이트 데이터) 삭제</span>.
-              </li>
-              <li>해당 사이트 데이터만 지우려면 주소창의 자물쇠(🔒) 아이콘 → 사이트 설정 → 데이터 삭제를 이용하세요.</li>
-            </ul>
-          </div>
-        </section>
-
+      <h2 id="changes" data-nonum="">9. 방침 변경 안내</h2>
+      <p>
+        본 개인정보처리방침은 법령 또는 서비스 변경에 따라 수정될 수 있으며,
+        변경 시 본 페이지를 통해 공지합니다.
+        중요한 변경이 있을 경우 상단의 「최종 업데이트」 일자를 통해 확인할 수 있습니다.
+      </p>
+      <div className={`tableScroll ${s.tableWrap}`}>
+        <table className={s.table}>
+          <caption>변경 이력 (문구 다듬기와 화면 디자인만 바꾼 수정은 생략)</caption>
+          <thead><tr><th scope="col">날짜</th><th scope="col">내용</th></tr></thead>
+          <tbody>
+            <tr><td><time dateTime="2026-09-26">2026-09-26</time></td><td>11조의 주소(URL) 관련 문구를 실제 동작에 맞게 구체화(선택한 탭·공유 링크에 담기는 값의 범위), 문서 디자인 변경</td></tr>
+            <tr><td><time dateTime="2026-07-29">2026-07-29</time></td><td>2조 문의 메일 처리 문구 추가, 4조 광고 쿠키 설명과 DAA 옵트아웃 주소 갱신, 6조 보유 기간을 실제 운영에 맞게 정정(자체 서버에 접속 로그 미보관 — 이전 문구는 &lsquo;접속 로그 최대 6개월 보관 후 파기&rsquo;)</td></tr>
+            <tr><td><time dateTime="2026-06-10">2026-06-10</time></td><td>개인정보 보호책임자 성명 기재</td></tr>
+            <tr><td><time dateTime="2026-05-26">2026-05-26</time></td><td>10·11조에 공개 정보를 조회하는 일부 도구(서버 시간 확인·링크 미리보기·농산물 시세)의 예외 명시(5월 28일 문구 보강)</td></tr>
+            <tr><td><time dateTime="2026-05-24">2026-05-24</time></td><td>수집 항목에 웹 비콘·광고 식별자 추가, 11조(계산기 입력값·민감정보 처리) 신설</td></tr>
+            <tr><td><time dateTime="2026-04-12">2026-04-12</time></td><td>4조에 맞춤형 광고 거부 방법 추가, 5조를 &lsquo;제3자 제공&rsquo;에서 &lsquo;제3자 광고 서비스 이용&rsquo;으로 개편, 10조(개인정보 보호를 위한 노력) 신설</td></tr>
+            <tr><td><time dateTime="2026-04-10">2026-04-10</time></td><td>서비스명(Toolify → Youtil)과 적용 주소(youtil.kr) 변경</td></tr>
+            <tr><td><time dateTime="2026-04-09">2026-04-09</time></td><td>최초 게시</td></tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-    </div>
+
+      <h2 id="security" data-nonum="">10. 개인정보 보호를 위한 노력</h2>
+      <p>
+        {SITE_NAME}은 이용자의 보안을 위해 전체 사이트에{' '}
+        <strong>SSL(Secure Sockets Layer) 암호화</strong>를 적용하여
+        데이터 전송 시 안전을 기하고 있습니다.
+        브라우저 주소창의 자물쇠 아이콘을 통해 암호화된 연결을 확인하실 수 있습니다.
+      </p>
+      <p>
+        {SITE_NAME}은 별도의 서버에 개인정보를 저장하지 않으며, <strong>건강·재무 등 민감한
+        계산 입력값은 이용자의 브라우저 내에서만 처리</strong>됩니다. 다만 일부 도구는 기능 제공을 위해
+        이용자가 직접 입력·선택한 <strong>공개 정보</strong>(예: 확인할 웹사이트 주소,
+        조회할 농산물 품목)를 본 사이트 서버 또는 외부 공개 서비스로 전송해 결과(서버 시간·시세 등)를
+        받아옵니다. 이 과정에도 건강·재무·신체정보와 같은 개인 식별·민감 정보는 포함되지 않습니다
+        (자세한 내용은 아래 11조 참고).
+      </p>
+      <ul className={s.items}>
+        <li><span className={s.itemHead}>HTTPS 적용</span><p>전체 사이트 SSL 암호화</p></li>
+        <li><span className={s.itemHead}>서버 미저장</span><p>계산 입력값은 브라우저 내에서 처리</p></li>
+        <li><span className={s.itemHead}>비회원 서비스</span><p>회원가입 없이 이용, 개인정보 수집 없음</p></li>
+      </ul>
+
+      <h2 id="inputs" data-nonum="">11. 계산기 입력값(건강·재무 등 민감정보) 처리</h2>
+      <p>
+        {SITE_NAME}의 계산기·도구에 입력하시는 값(예: 체중·키·생리주기 등 건강 정보,
+        소득·대출·자산 등 재무 정보)은 <strong>민감한 정보로 취급</strong>되며,
+        아래 원칙에 따라 처리됩니다.
+      </p>
+      <ul>
+        <li>
+          <strong>건강·재무 입력값은 브라우저 내에서만 처리됩니다.</strong>{' '}
+          체중·소득·대출 등 민감한 수치를 다루는 계산은 이용자의 브라우저(클라이언트)에서 이루어지며,
+          {SITE_NAME}의 서버나 외부로 전송·저장되지 않습니다. 단, 아래 마지막 항목과 같이 공개 정보를
+          조회해 결과를 받아오는 일부 도구는 예외이며, 해당 도구에서도 민감 정보 자체는 외부로
+          전송되지 않습니다.
+        </li>
+        <li>
+          <strong>Google Analytics 등 분석 이벤트에 입력값이 포함되지 않습니다.</strong>{' '}
+          방문·이용 통계만 수집하며, 이용자가 입력한 구체적 수치는 분석 이벤트에 담기지 않습니다.
+        </li>
+        <li>
+          <strong>건강·재무 입력값을 URL 주소(파라미터)에 저장하지 않습니다.</strong>{' '}
+          건강·재무 입력값이 주소창에 노출되거나 링크 공유를 통해 외부로 새어 나가지 않습니다.
+          다만 일부 도구는 선택한 탭이나 이용자가 직접 만든 공유 링크의 설정값(예: 드레이크 방정식의 변수값)처럼
+          민감하지 않은 값을 주소에 담을 수 있습니다.
+        </li>
+        <li>
+          <strong>광고 타기팅에 입력값을 사용하지 않습니다.</strong>{' '}
+          건강·재무 입력값은 Google AdSense를 포함한 어떤 광고의 타기팅·맞춤화에도 활용되지 않습니다.
+        </li>
+        <li>
+          <strong>일부 도구는 편의를 위해 입력값을 본인 브라우저에만 저장</strong>합니다.{' '}
+          (예: 생리주기 기록 등은 브라우저의 로컬 저장소(localStorage)에 저장되며, 다른 기기와
+          동기화되지 않고 서버로 전송되지 않습니다.)
+        </li>
+        <li>
+          <strong>일부 도구는 기능 제공을 위해 공개 정보를 외부로 조회합니다.</strong>{' '}
+          예를 들어 서버 시간 동기화·외부 사이트 시각 확인(/api/proxy-time), 링크 미리보기 OG 태그 조회
+          (/api/og-preview), 농산물 시세(KAMIS) 조회(/api/produce-price) 기능은 이용자가 입력·선택한
+          <strong> 공개 정보(웹사이트 주소·조회 품목 등)</strong>를 본 사이트 서버
+          또는 해당 외부 서비스로 전송해 결과(서버 시간·메타 정보·시세 등)를 받아옵니다. 이 과정에
+          건강·재무·신체정보와 같은 개인 식별·민감 정보는 포함되지 않으며, 조회 요청 자체는 일반적인
+          웹 서버 접속 로그(IP·시각 등) 수준으로만 기록될 수 있습니다.
+        </li>
+      </ul>
+      <h3>브라우저에 저장된 데이터 삭제 방법</h3>
+      <ul>
+        <li>각 도구 내 「전체 삭제」·「초기화」 버튼이 있는 경우 클릭하면 즉시 삭제됩니다.</li>
+        <li>브라우저 설정에서 직접 삭제할 수도 있습니다 — 설정 → 개인정보 및 보안 → 인터넷 사용 기록(쿠키·사이트 데이터) 삭제.</li>
+        <li>해당 사이트 데이터만 지우려면 주소창의 자물쇠 아이콘 → 사이트 설정 → 데이터 삭제를 이용하세요.</li>
+      </ul>
+    </TrustPage>
   )
 }

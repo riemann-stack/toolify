@@ -3,15 +3,11 @@
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './ac-capacity.module.css'
-
-/* ─────────────────────────────────────────────────────────
- * 상수
- * ───────────────────────────────────────────────────────── */
-const PYUNG_TO_M2 = 3.3058
-const LOAD_W_PER_SQM = 123          // KS C 9306 부속서 D — 거주공간 냉방부하 약 123 W/㎡ (8,100W 이하)
-const W_PER_PYEONG = 407            // 1평형 정격 냉방능력 ≈ 123 W/㎡ × 3.3058 ≈ 407W (KS·실측 기준)
-const BTU_PER_PYEONG = 1389         // 1평형 ≈ 0.407kW ≈ 1,389 BTU/h (= 407 × 3.412)
-const STANDARD_PYEONG = [6, 9, 11, 13, 15, 18, 22, 25, 30, 36]
+import {
+  PYUNG_TO_M2, LOAD_W_PER_SQM, W_PER_PYEONG, BTU_PER_PYEONG, STANDARD_PYEONG,
+  KEPCO_TIER1_KRW_PER_KWH, SIMPLE_KRW_PER_KWH,
+  parseClamp, convertCapacity, neighborPyeong,
+} from './acCapacityUtils'
 
 /* 공간 용도 */
 const SPACE_TYPES = [
@@ -80,10 +76,11 @@ export default function AcCapacityClient() {
   /* 공간 정보 */
   const [sizeMode, setSizeMode] = useState<SizeMode>('pyung')
   const [pyung, setPyung] = useState(15)
-  const [pyungCustom, setPyungCustom] = useState<number | null>(null)
+  const [pyungCustom, setPyungCustom] = useState<string | null>(null)
   const [widthM, setWidthM]   = useState('5.0')
   const [lengthM, setLengthM] = useState('4.0')
-  const [heightM, setHeightM] = useState(2.4)
+  const [heightStr, setHeightStr] = useState('2.4')
+  const heightM = parseClamp(heightStr, 1.5, 5, 2.4)
 
   const [spaceId, setSpaceId] = useState('living')
   const [directionId, setDirectionId] = useState('south')
@@ -94,16 +91,17 @@ export default function AcCapacityClient() {
 
   /* 탭 2 환산기 */
   const [convertMode, setConvertMode] = useState<'pyeong' | 'btu' | 'w' | 'kw'>('pyeong')
-  const [pyeongInput, setPyeongInput] = useState(13)
-  const [btuInput, setBtuInput] = useState(18057)
-  const [wInput, setWInput] = useState(5291)
-  const [kwInput, setKwInput] = useState(5.29)
+  /* 입력은 문자열로 보관하고 계산 단계에서만 클램프 — onChange 클램프는 첫 타자를 최솟값으로 치환해 입력을 막는다 */
+  const [pyeongInput, setPyeongInput] = useState('13')
+  const [btuInput, setBtuInput] = useState('18057')
+  const [wInput, setWInput] = useState('5291')
+  const [kwInput, setKwInput] = useState('5.29')
 
   /* 복사 */
   const [copied, setCopied] = useState(false)
 
   /* 면적 계산 */
-  const effectivePyung = pyungCustom ?? pyung
+  const effectivePyung = pyungCustom !== null ? parseClamp(pyungCustom, 1, 300) : pyung
   const dims = useMemo(() => {
     if (sizeMode === 'pyung') {
       const m2 = effectivePyung * PYUNG_TO_M2
@@ -140,9 +138,8 @@ export default function AcCapacityClient() {
     const maxStd = STANDARD_PYEONG[STANDARD_PYEONG.length - 1]
     const exactPyeong = totalLoadW / W_PER_PYEONG
     const matched = valid ? (STANDARD_PYEONG.find(p => p >= exactPyeong) ?? maxStd) : 0
-    const matchedIdx = STANDARD_PYEONG.indexOf(matched)
-    const conservative = matched === 0 ? 0 : matchedIdx > 0 ? STANDARD_PYEONG[matchedIdx - 1] : matched
-    const bigger = matched === 0 ? 0 : matchedIdx < STANDARD_PYEONG.length - 1 ? STANDARD_PYEONG[matchedIdx + 1] : matched
+    // 최소(6)·최대(36) 평형에서는 한 단계 아래·위가 없으므로 0(해당 없음) — 권장과 같은 값을 중복 표시하지 않음
+    const { smaller: conservative, bigger } = neighborPyeong(matched)
     const overCapacity = valid && exactPyeong > maxStd   // 시판 최대 평형 초과
 
     return {
@@ -185,18 +182,11 @@ export default function AcCapacityClient() {
 
   /* 환산기 계산 (탭 2) */
   const convertResult = useMemo(() => {
-    let basePyeong = 0
-    if (convertMode === 'pyeong') basePyeong = pyeongInput
-    else if (convertMode === 'btu') basePyeong = btuInput / BTU_PER_PYEONG
-    else if (convertMode === 'w') basePyeong = wInput / W_PER_PYEONG
-    else basePyeong = (kwInput * 1000) / W_PER_PYEONG
-
-    return {
-      pyeong: basePyeong,
-      btu: basePyeong * BTU_PER_PYEONG,
-      w: basePyeong * W_PER_PYEONG,
-      kw: (basePyeong * W_PER_PYEONG) / 1000,
-    }
+    const raw = convertMode === 'pyeong' ? pyeongInput
+      : convertMode === 'btu' ? btuInput
+      : convertMode === 'w' ? wInput
+      : kwInput
+    return convertCapacity(convertMode, raw)
   }, [convertMode, pyeongInput, btuInput, wInput, kwInput])
 
   /* 전기료 비교 (탭 1 결과 기준, 1일 8시간 30일 사용) */
@@ -211,8 +201,8 @@ export default function AcCapacityClient() {
     const wattFixed    = ratedPowerW * 0.6
     const kwhInverter = (wattInverter * dailyHours * days) / 1000
     const kwhFixed    = (wattFixed * dailyHours * days) / 1000
-    // 누진 1단계 단순 가정 130원/kWh
-    const KRW_PER_KWH = 130
+    // 누진제 1단계 전력량요금(120원/kWh)에 부가 요금 일부를 얹은 단순 가정 130원/kWh
+    const KRW_PER_KWH = SIMPLE_KRW_PER_KWH
     return {
       inverterCost: kwhInverter * KRW_PER_KWH,
       fixedCost: kwhFixed * KRW_PER_KWH,
@@ -239,7 +229,7 @@ export default function AcCapacityClient() {
     }
     lines.push('youtil.kr/tools/interior/ac-capacity')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -249,7 +239,7 @@ export default function AcCapacityClient() {
     <div className={styles.wrap}>
 
       <Disclaimer
-        variant="safety"
+        variant="default"
         sources={[
           { label: 'KS C 9306 에어컨디셔너 (e-나라 표준인증)', href: 'https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSC9306' },
         ]}
@@ -281,7 +271,7 @@ export default function AcCapacityClient() {
             {sizeMode === 'pyung' ? (
               <>
                 <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
-                  if (e.target.value === 'custom') { setPyungCustom(15) }
+                  if (e.target.value === 'custom') { setPyungCustom('15') }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
                   {pyungOptions.map(p => <option key={p} value={p}>{p}평</option>)}
@@ -291,7 +281,7 @@ export default function AcCapacityClient() {
                   <div style={{ marginTop: 8 }}>
                     <input className={styles.smallInput} aria-label="평수 직접 입력" type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
-                      onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
+                      onChange={e => setPyungCustom(e.target.value)} />
                   </div>
                 )}
                 <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (정사각형 가정)</p>
@@ -312,12 +302,12 @@ export default function AcCapacityClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightStr} onChange={e => setHeightStr(e.target.value)} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightStr(String(h))}>{h}m</button>
               ))}
             </div>
           </div>
@@ -436,9 +426,18 @@ export default function AcCapacityClient() {
             <div className={styles.optionGrid}>
               <div className={`${styles.optionCard} ${styles.optConservative}`}>
                 <p className={styles.optionLabel}>보수적</p>
-                <p className={styles.optionPyeong}>{calc.conservative}<span className={styles.optionPyeongUnit}>평형</span></p>
-                <p className={styles.optionDesc}>한 단계 작게. 매우 더운 날 부족할 수 있음. 풀가동으로 전기료 ↑</p>
-                <span className={`${styles.optionBadge} ${styles.badgeAlt}`}>비추천</span>
+                {calc.conservative > 0 ? (
+                  <>
+                    <p className={styles.optionPyeong}>{calc.conservative}<span className={styles.optionPyeongUnit}>평형</span></p>
+                    <p className={styles.optionDesc}>한 단계 작게. 매우 더운 날 부족할 수 있음. 풀가동으로 전기료 ↑</p>
+                    <span className={`${styles.optionBadge} ${styles.badgeAlt}`}>비추천</span>
+                  </>
+                ) : (
+                  <>
+                    <p className={styles.optionPyeong}>—</p>
+                    <p className={styles.optionDesc}>{calc.valid ? '권장 평형이 시판 최소 등급이라 더 작은 선택지가 없습니다.' : '면적을 입력하면 표시됩니다.'}</p>
+                  </>
+                )}
               </div>
               <div className={`${styles.optionCard} ${styles.optRecommended}`}>
                 <p className={styles.optionLabel}>권장</p>
@@ -448,9 +447,18 @@ export default function AcCapacityClient() {
               </div>
               <div className={`${styles.optionCard} ${styles.optBigger}`}>
                 <p className={styles.optionLabel}>여유</p>
-                <p className={styles.optionPyeong}>{calc.bigger}<span className={styles.optionPyeongUnit}>평형</span></p>
-                <p className={styles.optionDesc}>한 단계 크게. 가격 +10~15%. 너무 크면 자주 꺼져 습도 조절 ❌</p>
-                <span className={`${styles.optionBadge} ${styles.badgeAlt}`}>여유 시</span>
+                {calc.bigger > 0 ? (
+                  <>
+                    <p className={styles.optionPyeong}>{calc.bigger}<span className={styles.optionPyeongUnit}>평형</span></p>
+                    <p className={styles.optionDesc}>한 단계 크게. 가격 +10~15%. 너무 크면 자주 꺼져 습도 조절 ❌</p>
+                    <span className={`${styles.optionBadge} ${styles.badgeAlt}`}>여유 시</span>
+                  </>
+                ) : (
+                  <>
+                    <p className={styles.optionPyeong}>—</p>
+                    <p className={styles.optionDesc}>{calc.valid ? '권장 평형이 가정용 최대 등급이라 더 큰 선택지가 없습니다. 2대 분산 설치를 검토하세요.' : '면적을 입력하면 표시됩니다.'}</p>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -554,7 +562,7 @@ export default function AcCapacityClient() {
               </div>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7, textAlign: 'center' }}>
-              ※ 한국 누진세 1단계(130원/kWh) 단순 가정. 다른 가전 사용량·누진 단계에 따라 차이 있음.
+              ※ 주택용 누진제 1단계 전력량요금({KEPCO_TIER1_KRW_PER_KWH}원/kWh)에 부가 요금 일부를 더한 약 {SIMPLE_KRW_PER_KWH}원/kWh로 단순 가정했습니다. 다른 가전 사용량이 많아 누진 단계가 올라가면 kWh당 단가가 크게 오릅니다.
             </p>
           </div>
         </>
@@ -579,7 +587,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>평형 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} aria-label="평형 입력" type="number" inputMode="decimal" min={1} step={1} value={pyeongInput} onChange={e => setPyeongInput(n(e.target.value, 1))} />
+                  <input className={styles.bigInput} aria-label="평형 입력" type="number" inputMode="decimal" min={1} step={1} value={pyeongInput} onChange={e => setPyeongInput(e.target.value)} />
                   <span className={styles.unit}>평형</span>
                 </div>
               </>
@@ -588,7 +596,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>BTU/h 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} aria-label="BTU/h 입력" type="number" inputMode="decimal" min={1000} step={500} value={btuInput} onChange={e => setBtuInput(n(e.target.value, 1000))} />
+                  <input className={styles.bigInput} aria-label="BTU/h 입력" type="number" inputMode="decimal" min={1000} step={500} value={btuInput} onChange={e => setBtuInput(e.target.value)} />
                   <span className={styles.unit}>BTU/h</span>
                 </div>
               </>
@@ -597,7 +605,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>W 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} aria-label="W 입력" type="number" inputMode="decimal" min={100} step={100} value={wInput} onChange={e => setWInput(n(e.target.value, 100))} />
+                  <input className={styles.bigInput} aria-label="W 입력" type="number" inputMode="decimal" min={100} step={100} value={wInput} onChange={e => setWInput(e.target.value)} />
                   <span className={styles.unit}>W</span>
                 </div>
               </>
@@ -606,7 +614,7 @@ export default function AcCapacityClient() {
               <>
                 <span className={styles.subLabel}>kW 입력</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} aria-label="kW 입력" type="number" inputMode="decimal" min={0.1} step={0.1} value={kwInput} onChange={e => setKwInput(n(e.target.value, 0.1))} />
+                  <input className={styles.bigInput} aria-label="kW 입력" type="number" inputMode="decimal" min={0.1} step={0.1} value={kwInput} onChange={e => setKwInput(e.target.value)} />
                   <span className={styles.unit}>kW</span>
                 </div>
               </>
@@ -733,7 +741,7 @@ export default function AcCapacityClient() {
           </div>
 
           <div className={styles.infoCard}>
-            ☀️ <strong>남향·통유리·고층</strong> 시 일반 추천보다 <strong style={{ color: '#EA580C' }}>+1단계 큰 평형</strong> 권장.
+            ☀️ <strong>남향·통유리·고층</strong> 시 일반 추천보다 <strong style={{ color: 'var(--orange-600)' }}>+1단계 큰 평형</strong> 권장.
             예: 일반 15평형 → 남향·고층 18평형
           </div>
 

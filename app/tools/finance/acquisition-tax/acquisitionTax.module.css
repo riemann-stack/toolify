@@ -1,0 +1,54 @@
+/* 부동산 취득세 계산기 — 토큰만 사용 (신규 hex 없음) */
+.wrap { display: flex; flex-direction: column; gap: 24px; }
+
+/* 네이티브 라디오 세그먼트 */
+.fs { margin-top: 24px; }
+.fs:first-child { margin-top: 0; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; padding: 4px; background: var(--bg3); border-radius: var(--radius-m); }
+.segOpt { position: relative; display: flex; min-width: 0; }
+.segOpt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.segOpt input:disabled { cursor: not-allowed; }
+.segOpt span { flex: 1; display: grid; place-items: center; min-height: 40px; padding: 4px 8px; border-radius: var(--radius-s); font-size: 14px; font-weight: 600; line-height: 1.3; text-align: center; color: var(--muted); word-break: keep-all; transition: background .15s, color .15s; }
+@media (hover: hover) { .segOpt input:not(:disabled):hover + span { color: var(--text); } }
+.segOpt input:checked + span { background: var(--bg2); color: var(--text); box-shadow: var(--shadow-pop); }
+.segOpt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.segOpt input:disabled + span { opacity: 0.45; }
+@media (max-width: 480px) {
+  .seg4 { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.checkOff { opacity: 0.55; cursor: not-allowed; }
+
+.select { width: 100%; height: 48px; padding: 0 12px; border: 1px solid var(--field-line); border-radius: var(--radius-m); background: var(--bg2); font-size: 16px; color: var(--text); }
+.select:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--focus-ring); }
+
+/* 결과 카드 보조 줄 */
+.warn, .info { display: flex; align-items: flex-start; gap: 6px; margin-top: 12px; padding: 10px 12px; border-radius: var(--radius-s); font-size: 13px; line-height: 1.6; }
+.warn { background: var(--warning-soft); color: var(--warning); }
+.warn svg { flex-shrink: 0; margin-top: 2px; }
+.info { background: var(--bg3); color: var(--muted-strong); }
+
+/* 비교표 */
+.fig { margin: 0; }
+.figCap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin-bottom: 10px; font-size: 14px; font-weight: 700; line-height: 1.5; color: var(--text); }
+.figCap span { font-size: 12px; font-weight: 500; color: var(--muted); }
+.box { border: 1px solid var(--border); border-radius: var(--radius-m); }
+.box table { width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+.box th, .box td { padding: 12px 14px; border-top: 1px solid var(--divider); text-align: right; white-space: nowrap; color: var(--text-body); }
+.box thead th { border-top: 0; background: var(--bg3); font-size: 13px; font-weight: 600; color: var(--muted-strong); }
+.box thead th:first-child, .box tbody th { text-align: left; }
+.box tbody th { font-weight: 600; color: var(--text); }
+.box small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--muted); }
+.em { font-weight: 700; color: var(--accent-ink) !important; }
+.here > * { background: var(--accent-soft); color: var(--text); }
+.here > th:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.here > th small { color: var(--accent-ink); font-weight: 700; }
+.figNote { margin-top: 8px; font-size: 12px; line-height: 1.7; color: var(--muted); }
+@media (max-width: 640px) { .box th, .box td { padding: 12px 10px; } }
+
+.wetax { display: flex; align-items: flex-start; gap: 6px; font-size: 13px; line-height: 1.6; color: var(--muted); }
+.wetax svg { flex-shrink: 0; margin-top: 2px; }
+.wetax a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
+
+/* 페이지 표 1 행 머리의 보조 설명 — DataFigure는 td small만 스타일하므로 th용을 여기서 (2행, 줄바꿈 허용) */
+.thSub { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--muted); white-space: normal; }

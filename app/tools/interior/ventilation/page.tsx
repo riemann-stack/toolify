@@ -5,6 +5,24 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import { SPACE_STANDARDS, CO2_BY_ACTIVITY, estimateCO2Risk } from './ventilationUtils'
+
+/* ── 가이드 표·예시 — 빌드 시 ventilationUtils의 기준표·CO₂ 모델로 생성 (손으로 옮겨 적지 않는다) ── */
+const nf = (v: number, d = 0) => v.toLocaleString('ko-KR', { minimumFractionDigits: d, maximumFractionDigits: d })
+const OUTDOOR_PPM = 420   // ventilationUtils estimateCO2Risk의 외기 농도와 같음
+const LIMIT_PPM = 1000
+/* 정상상태 질량수지: 1인당 외기량(㎥/h) = CO₂ 발생량(㎥/h) ÷ (허용 농도 − 외기 농도) */
+const PER_PERSON_ROWS = CO2_BY_ACTIVITY.map(a => ({
+  ...a,
+  airPerPerson: (a.co2LperHour / 1000) / ((LIMIT_PPM - OUTDOOR_PPM) / 1_000_000),
+}))
+/* 예시: 5평(16.5㎡) 침실 · 천장 2.4m · 2명 취침 */
+const BED_VOL = 16.5 * 2.4
+const BED_CLOSED = estimateCO2Risk({ volume: BED_VOL, occupants: 2, durationMinutes: 480, airflowM3PerHour: 0, activityId: 'rest' })!
+const BED_05 = estimateCO2Risk({ volume: BED_VOL, occupants: 2, durationMinutes: 480, airflowM3PerHour: BED_VOL * 0.5, activityId: 'rest' })!
+const BED_NEED = 2 * PER_PERSON_ROWS.find(r => r.id === 'rest')!.airPerPerson
 
 export const metadata = buildMetadata({
   path: '/tools/interior/ventilation',
@@ -25,15 +43,15 @@ const FAQ_LD = [
               },
               {
                 q: '우리 집 환기 횟수가 얼마나 되는지 어떻게 알 수 있나요?',
-                a: '다음 방법으로 확인 — ① <strong>환풍기·전열교환기 사양</strong>(㎥/h 표시) ÷ 공간 부피 = ACH / ② <strong>공기청정기 CADR</strong> 확인 (실내 순환량) / ③ <strong>창문 환기는 본 도구의 [창문 환기] 탭</strong> 활용. 신축 공동주택은 법정 최소 0.5 ACH 환기 의무이므로 대부분 자동 환기 시스템(전열교환기)이 설치되어 있습니다.',
+                a: '다음 방법으로 확인 — ① <strong>환풍기·전열교환기 사양</strong>(㎥/h 표시) ÷ 공간 부피 = ACH / ② <strong>공기청정기 CADR</strong> 확인 (실내 순환량) / ③ <strong>창문 환기는 본 도구의 [창문 환기] 탭</strong> 활용. 30세대 이상 신축 공동주택은 「건축물의 설비기준 등에 관한 규칙」에 따라 시간당 0.5회 이상 환기할 수 있는 설비를 갖춰야 해서, 최근 아파트는 대부분 기계 환기 설비(전열교환기)가 설치되어 있습니다.',
               },
               {
                 q: 'CADR 100 vs 표시면적 30㎡, 어느 게 큰가요?',
-                a: '<strong>표시면적 30㎡ 쪽이 약 2배 이상 큽니다.</strong> 대략적 환산 — 표시면적 (㎡) × 7~8 ≈ CADR (㎥/h). 즉 <strong>표시면적 30㎡ ≈ CADR 약 210~240㎥/h</strong>이고, <strong>CADR 100 ≈ 표시면적 13~14㎡</strong>에 해당합니다 (50㎡ ≈ CADR 약 350~400). 한국 공기청정기는 보수적 환산을 사용하므로 실제 CADR이 약 1.4배 높을 수 있습니다.',
+                a: '<strong>표시면적 30㎡ 쪽이 약 2배 이상 큽니다.</strong> 대략적 환산 — 표시면적 (㎡) × 7~8 ≈ CADR (㎥/h). 즉 <strong>표시면적 30㎡ ≈ CADR 약 210~240㎥/h</strong>이고, <strong>CADR 100 ≈ 표시면적 13~14㎡</strong>에 해당합니다 (50㎡ ≈ CADR 약 350~400). 사양표에 청정화능력이 ㎥/min으로 적혀 있으면 60을 곱해 ㎥/h로 바꾼 뒤 비교하면 표시면적 환산보다 정확합니다.',
               },
               {
                 q: 'CO₂ 1,000 ppm이 정말 위험한가요?',
-                a: '<strong>의학적 &quot;위험&quot; 수준은 아니지만 다음 영향 가능</strong> — 1,000~1,500 ppm: 집중력 저하·졸음(학습·업무 효율↓) / 1,500~2,500 ppm: 두통·피로 / 2,500~5,000 ppm: 호흡 부담(드문 경우). 한국·국제 학교보건·사무실 기준은 1,000 ppm 이하 권장. CO₂ 자체보다 &quot;환기 부족&quot;의 지표로 보는 것이 더 정확합니다.',
+                a: '<strong>의학적 &quot;위험&quot; 수준은 아니지만 다음 영향 가능</strong> — 1,000~1,500 ppm: 집중력 저하·졸음(학습·업무 효율↓) / 1,500~2,500 ppm: 두통·피로 / 2,500~5,000 ppm: 호흡 부담(드문 경우). 국내 다중이용시설·사무실·학교 교실의 유지기준은 1,000 ppm 이하(환기설비로 주로 환기하는 교실은 1,500 ppm). CO₂ 자체보다 &quot;환기 부족&quot;의 지표로 보는 것이 더 정확합니다.',
               },
               {
                 q: '미세먼지 나쁜 날에는 환기를 안 하는 게 좋나요?',
@@ -55,14 +73,23 @@ const FAQ_LD = [
 
 export default function VentilationPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/interior/ventilation">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="interior" />환기량 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         공간 부피·인원으로 필요 환기량 + <strong style={{ color: 'var(--text)' }}>공기청정기 CADR 매칭</strong>과 창문 환기 시간.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="신축 30세대 이상 공동주택 시간당 0.5회 환기(건축물의 설비기준 등에 관한 규칙)·학교 1인당 21.6㎥/h(학교보건법 시행규칙)·CO₂ 1,000ppm(실내공기질 관리법 시행규칙) — 그 외 용도별 ACH는 권장 범위"
+        sources={[
+          { label: '건축물의 설비기준 등에 관한 규칙', href: 'https://www.law.go.kr/법령/건축물의설비기준등에관한규칙' },
+          { label: '학교보건법 시행규칙', href: 'https://www.law.go.kr/법령/학교보건법시행규칙' },
+          { label: '실내공기질 관리법 시행규칙', href: 'https://www.law.go.kr/법령/실내공기질관리법시행규칙' },
+        ]}
+      />
 
       <VentilationClient />
 
@@ -71,12 +98,12 @@ export default function VentilationPage() {
 
         {/* 1. ACH란 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>ACH (시간당 환기 횟수)란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">ACH (시간당 환기 횟수)란?</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>ACH (Air Changes per Hour)</strong> = 환기량(㎥/h) ÷ 공간 부피(㎥). 1 ACH는 1시간에 공간 공기를 1번 완전 교체한다는 의미입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.20)', borderRadius: 12, padding: '16px 20px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#E89757', marginBottom: 6 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--orange-600) 20%, transparent)', borderRadius: 'var(--radius-m)', padding: '16px 20px', textAlign: 'center' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 18, fontWeight: 800, color: 'var(--orange-600)', marginBottom: 6 }}>
               ACH = 환기량(㎥/h) ÷ 공간 부피(㎥)
             </p>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>
@@ -87,62 +114,50 @@ export default function VentilationPage() {
 
         {/* 2. 공간 용도별 권장 ACH */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>공간 용도별 한국 권장 ACH</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">공간 용도별 한국 권장 ACH</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>공간</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#E89757', fontWeight: 700 }}>권장 ACH</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--orange-600)', fontWeight: 700 }}>권장 ACH</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>출처·비고</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['🛏️ 침실',          '0.5~1',  '국토교통부 (신축 공동주택 0.5 ACH 의무)'],
-                  ['🛋️ 거실',          '0.5~1',  '국토교통부 (신축 공동주택 0.5 ACH)'],
-                  ['📚 공부방·서재',   '2~4',    'ASHRAE 권장 환기율·ACH 환산 (집중·CO₂)'],
-                  ['💼 사무실',        '2~6',    'ASHRAE 권장 환기율 (ACH 환산)'],
-                  ['👥 회의실',        '6~10',   'ASHRAE 권장 환기율·ACH 환산 (인원 밀집)'],
-                  ['🎒 교실',          '4~6',    '교육부 학교보건법 1인당 21.6㎥/h (ACH 환산)'],
-                  ['☕ 카페·식당',     '8~12',   'KOSHA (냄새·습기·인원 밀집)'],
-                  ['🏋️ 헬스장',        '6~10',   'KOSHA (운동·CO₂ 빠른 누적)'],
-                  ['🍳 주방',          '10~15',  '국토교통부 (조리 시 후드 사용)'],
-                  ['🚽 화장실',        '5~8',    '국토교통부 (강제배기) · 5~8 ACH 권장'],
-                  ['🏥 의료시설',      '6~12',   '의료법 시행규칙 · 병실 기준 (수술실·격리실 별도)'],
-                ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#E89757', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
+                {SPACE_STANDARDS.map((sp, i) => (
+                  <tr key={sp.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, textAlign: 'left' }}>{sp.name}</th>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--orange-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{sp.achMin}~{sp.achMax}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{sp.standard}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ 위 ACH는 표준의 1인당·면적당 외기량(L/s·인, L/s·㎡)을 일반 천장고로 <strong style={{ color: 'var(--text)' }}>ACH로 환산</strong>한 실무 권장값입니다. 0.5 ACH 의무(국토교통부)와 학교 1인당 21.6㎥/h(교육부)는 법령 수치이며, 그 외 범위는 권장 가이드입니다. 정확한 설계는 아래 참고 자료의 원문(판본·조항)을 확인하세요.
+          <p className="g-note">
+            * 위 ACH는 표준의 1인당·면적당 외기량(L/s·인, L/s·㎡)을 일반 천장고로 <strong style={{ color: 'var(--text)' }}>ACH로 환산</strong>한 실무 권장값입니다. 30세대 이상 신축 공동주택의 시간당 0.5회 환기(국토교통부)와 학교 1인당 21.6㎥/h(교육부)는 법령 수치이며, 그 외 범위는 권장 가이드입니다. 정확한 설계는 아래 참고 자료의 원문(판본·조항)을 확인하세요.
           </p>
         </section>
 
         {/* 3. CADR vs 한국 표시면적 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>CADR vs 한국 표시면적 — 공기청정기 비교</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">CADR vs 한국 표시면적 — 공기청정기 비교</h2>
+          <p className="g-p">
             한국 공기청정기는 <strong style={{ color: 'var(--text)' }}>표시면적(㎡)</strong>으로 표기되지만, 미국·국제 표준은 <strong style={{ color: 'var(--text)' }}>CADR(㎥/h)</strong>입니다. 환산 공식 —
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px', textAlign: 'center', marginBottom: 12 }}>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 16, fontWeight: 800, color: '#0891B2' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 18px', textAlign: 'center', marginBottom: 12 }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 16, fontWeight: 800, color: 'var(--cyan-600)' }}>
               CADR (㎥/h) ≈ 한국 표시면적 (㎡) × 7~8
             </p>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>본 계산기는 보수적으로 7.5를 적용합니다.</p>
           </div>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>한국 표시면적</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#0891B2', fontWeight: 700 }}>대략 CADR</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--cyan-600)', fontWeight: 700 }}>대략 CADR</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>적합 공간 (라벨 최소)</th>
                 </tr>
               </thead>
@@ -154,59 +169,62 @@ export default function VentilationPage() {
                   ['60㎡+',   '450 ㎥/h+',      '대형 공간 또는 다중 사용'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ 위 &apos;적합 공간&apos;은 제조사 표시면적 라벨 기준의 <strong style={{ color: 'var(--text)' }}>최소 적용 부피</strong>입니다. 본 계산기 [공기청정기] 탭은 더 빠른 청정(4~5 ACH)을 기준으로 <strong style={{ color: 'var(--text)' }}>실사용 면적의 약 1.5배</strong> 표시면적을 권장하므로, 같은 방이라도 표보다 큰 제품을 제시할 수 있습니다. 민감군·미세먼지 잦은 지역은 큰 쪽을 권장합니다.
+          <p className="g-note">
+            * 위 &apos;적합 공간&apos;은 제조사 표시면적 라벨 기준의 <strong style={{ color: 'var(--text)' }}>최소 적용 부피</strong>입니다. 본 계산기 [공기청정기] 탭은 더 빠른 청정(4~5 ACH)을 기준으로 <strong style={{ color: 'var(--text)' }}>실사용 면적의 약 1.5배</strong> 표시면적을 권장하므로, 같은 방이라도 표보다 큰 제품을 제시할 수 있습니다. 민감군·미세먼지 잦은 지역은 큰 쪽을 권장합니다.
           </p>
         </section>
 
         {/* 4. 공기청정기 ≠ 환기 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>공기청정기 ≠ 환기 (중요)</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>🌀 공기청정기</p>
-              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
-                <li>✅ 미세먼지·꽃가루 제거</li>
-                <li>✅ 일부 입자·VOC</li>
-                <li>❌ CO₂ 제거 X</li>
-                <li>❌ 산소 보충 X</li>
-                <li>❌ 냄새(장기) X</li>
-                <li>❌ 습기·곰팡이 X</li>
-              </ul>
-            </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#E89757', marginBottom: '6px' }}>💨 환기 (외부 공기 도입)</p>
-              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
-                <li>✅ CO₂ 배출</li>
-                <li>✅ 신선한 산소 보충</li>
-                <li>✅ 냄새·습기 배출</li>
-                <li>⚠️ 미세먼지 나쁜 날 짧게만</li>
-                <li>⚠️ 냉난방 에너지 손실</li>
-              </ul>
-            </div>
+          <h2 className="g-h2">공기청정기 ≠ 환기 (중요)</h2>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>오염 요소</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--cyan-600)', fontWeight: 700 }}>공기청정기</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--orange-600)', fontWeight: 700 }}>환기 (외부 공기 도입)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['미세먼지·꽃가루', '제거 (필터 등급·CADR에 비례)', '바깥이 나쁘면 오히려 유입 — 짧게'],
+                  ['CO₂', '제거 못 함', '배출 — 유일한 해결책'],
+                  ['냄새·VOC', '일부 (탈취 필터 종류에 따라)', '배출'],
+                  ['습기·곰팡이', '제거 못 함', '배출 (외기가 더 건조할 때)'],
+                  ['냉난방 에너지', '손실 없음', '손실 있음 — 짧고 강하게'],
+                ].map((row, i) => (
+                  <tr key={row[0]} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, textAlign: 'left' }}>{row[0]}</th>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '12px' }}>
-            <strong style={{ color: 'var(--text)' }}>결론</strong> — 미세먼지 나쁜 날에도 짧게(5분) 환기 후 즉시 공기청정기를 가동하는 것이 가장 균형 잡힌 방식입니다. 두 도구는 보완 관계이며 어느 하나만으로는 부족합니다.
+          <p className="g-p" style={{ marginTop: 16 }}>
+            <strong>결론</strong> — 미세먼지 나쁜 날에도 짧게(5분) 환기 후 즉시 공기청정기를 가동하는 것이 가장 균형 잡힌 방식입니다. 두 도구는 보완 관계이며 어느 하나만으로는 부족합니다.
           </p>
         </section>
 
         {/* 5. 창문 환기 효율 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>창문 환기 효율 (한국 가정 기준)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">창문 환기 효율 (한국 가정 기준)</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>방식</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#059669', fontWeight: 700 }}>ACH 범위</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--emerald-600)', fontWeight: 700 }}>ACH 범위</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>비고</th>
                 </tr>
               </thead>
@@ -214,27 +232,27 @@ export default function VentilationPage() {
                 {[
                   ['한쪽 창 조금',     '0.5~1.5', '환기 효율 낮음 — 가능하면 피하기'],
                   ['한쪽 창 크게',     '1~4',     '차선책'],
-                  ['맞통풍 (양쪽)',     '3~15',    '⭐ 가장 효율적 — 5~10분 짧게'],
+                  ['맞통풍 (양쪽)',     '3~15',    '가장 효율적 — 5~10분 짧게'],
                   ['환풍기 + 창문',    '2~6',     '욕실·주방에 적합'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'center', color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--emerald-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ 자연환기량은 창문 크기·바람 세기·실내외 온도차에 따라 ±300% 변동 가능합니다. 본 표는 일반 가정 표준 창문(1.5×1.5m) 기준 추정값입니다.
+          <p className="g-note">
+            * 자연환기량은 창문 크기·바람 세기·실내외 온도차에 따라 ±300% 변동 가능합니다. 본 표는 일반 가정 표준 창문(1.5×1.5m) 기준 추정값입니다.
           </p>
         </section>
 
         {/* 6. CO₂ 농도와 영향 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>CO₂ 농도와 영향</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">CO₂ 농도와 영향</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -245,46 +263,67 @@ export default function VentilationPage() {
               </thead>
               <tbody>
                 {[
-                  ['400~600',   '🟢 쾌적',     '실외 신선 공기 수준', '#059669'],
-                  ['600~800',   '🔵 양호',     '일반 거주 환경', '#0891B2'],
-                  ['800~1,000', '🟡 보통',     '환기 권장', '#A16207'],
-                  ['1,000~1,500', '🟠 미흡',  '집중력 저하·졸음 가능', '#EA580C'],
-                  ['1,500~2,500', '🔴 나쁨',  '두통·피로 가능', '#DC2626'],
-                  ['2,500+',     '⛔ 매우 나쁨', '즉시 환기 필요', '#CC4444'],
+                  ['400~600',   '쾌적',     '실외 신선 공기 수준', 'var(--emerald-600)'],
+                  ['600~800',   '양호',     '일반 거주 환경', 'var(--cyan-600)'],
+                  ['800~1,000', '보통',     '환기 권장', 'var(--yellow-700)'],
+                  ['1,000~1,500', '미흡',  '집중력 저하·졸음 가능', 'var(--orange-600)'],
+                  ['1,500~2,500', '나쁨',  '두통·피로 가능', 'var(--red-600)'],
+                  ['2,500+',     '매우 나쁨', '즉시 환기 필요', 'var(--danger)'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: row[3] as string, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: row[3] as string, fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ <strong style={{ color: 'var(--text)' }}>한국 학교보건법 / KOSHA 사무실 기준 1,000 ppm 이하 권장</strong>. CO₂ 자체보다 &quot;환기 부족&quot;의 지표로 보는 것이 정확합니다.
+          <p className="g-note">
+            * 학교(학교보건법 시행규칙)·다중이용시설(실내공기질 관리법 시행규칙)·사무실(고용노동부 사무실 공기관리 지침)의 CO₂ 유지기준은 <strong style={{ color: 'var(--text)' }}>1,000 ppm</strong>입니다(학교 중 환기설비로 주로 환기하는 교실은 1,500 ppm). 등급 구분(쾌적~매우 나쁨)은 이 계산기의 안내용 구간이며, CO₂ 자체보다 &quot;환기 부족&quot;의 지표로 보는 것이 정확합니다.
+          </p>
+        </section>
+
+        {/* 6b. 1인당 필요 외기량 */}
+        <section>
+          <h2 className="g-h2">CO₂ 1,000ppm을 지키려면 1인당 외기가 얼마나 필요할까</h2>
+          <p className="g-p">
+            환기를 계속하면 실내 CO₂는 &lsquo;사람이 내뿜는 양 = 환기가 빼내는 양&rsquo;이 되는 농도에서 멈춥니다. 이 균형식을 거꾸로 풀면 목표 농도를 지키는 데 필요한 외기량이 나옵니다 — <strong>1인당 외기량(㎥/h) = 1인 CO₂ 발생량 ÷ (1,000 − 외기 {OUTDOOR_PPM}) ppm</strong>. 아래 표는 이 계산기의 활동별 CO₂ 발생량으로 계산한 값입니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>활동</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>1인 CO₂ 발생량</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>1,000ppm 유지 외기량</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PER_PERSON_ROWS.map((r, i) => (
+                  <tr key={r.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, textAlign: 'left' }}>{r.name}</th>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r.co2LperHour} L/h</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontWeight: 700 }}>약 {nf(r.airPerPerson, 0)} ㎥/h·인</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            학교보건법 시행규칙의 1인당 21.6㎥/h는 휴식에 가까운 활동량에서 1,000ppm 안팎을 유지하는 수준이라, 대화·업무처럼 활동량이 늘면 그보다 많은 외기가 필요하다는 것을 알 수 있습니다. 예를 들어 5평(16.5㎡, 천장 2.4m → {nf(BED_VOL, 1)}㎥) 침실에서 틈새 환기를 0으로 보는 이 계산기 모델로는 2명이 창을 닫고 자면 약 <strong>{BED_CLOSED.recommendVentilateMinutes}분</strong> 만에 1,000ppm을 넘고(실제로는 틈새 환기만큼 더 늦어짐), 공동주택 법정 최소인 시간당 0.5회({nf(BED_VOL * 0.5, 1)}㎥/h)로 계속 환기해도 결국 약 <strong>{nf(BED_05.steadyStatePpm ?? 0)}ppm</strong>에서 균형을 이룹니다. 두 사람이 밤새 1,000ppm 아래에 머물려면 약 {nf(BED_NEED, 0)}㎥/h, 이 방 기준 시간당 {nf(BED_NEED / BED_VOL, 1)}회 정도의 환기가 필요합니다. 침실 문을 조금 열어 두거나 전열교환기를 켜 두는 것이 도움이 되는 이유입니다.
           </p>
         </section>
 
         {/* 7. 냉난방 손실 줄이기 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>환기 시 냉난방 손실 줄이기</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {[
-              { icon: '✅', title: '짧고 강한 맞통풍 (5~10분)', desc: '에너지 손실 최소 + 빠른 공기 교체 — 가장 권장' },
-              { icon: '❌', title: '오래 조금 열어두기', desc: '에너지 손실 큼 + 환기 효율 낮음' },
-              { icon: '🌫️', title: '미세먼지 나쁜 날', desc: '5분 짧은 환기 + 즉시 공기청정기 가동' },
-              { icon: '🏢', title: '신축 아파트 전열교환기', desc: '50~70% 에너지 회수 가능 (24시간 가동 권장)' },
-            ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px', display: 'grid', gridTemplateColumns: '32px 1fr', gap: 10 }}>
-                <span style={{ fontSize: 22 }}>{m.icon}</span>
-                <div>
-                  <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 3 }}>{m.title}</p>
-                  <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{m.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h2 className="g-h2">환기 시 냉난방 손실 줄이기</h2>
+          <ul className="g-list">
+            <li><strong>짧고 강한 맞통풍 (5~10분)</strong> — 에너지 손실 최소 + 빠른 공기 교체. 가장 권장하는 방식입니다. 벽·가구에 저장된 열은 그대로 남아 창을 닫으면 온도가 빨리 돌아옵니다.</li>
+            <li><strong>오래 조금 열어두기는 피하기</strong> — 한쪽 창을 조금 연 채 오래 두면 환기 효율은 낮고 벽·창틀이 식어 에너지 손실과 결로 위험이 커집니다.</li>
+            <li><strong>미세먼지 나쁜 날</strong> — 5분 짧은 환기 후 즉시 공기청정기를 가동합니다.</li>
+            <li><strong>전열교환기가 있는 집</strong> — 배기 공기의 열·습기를 50~70% 회수하므로 24시간 약하게 켜 두는 편이 창문 환기보다 손실이 적습니다. 필터는 제조사 안내 주기에 맞춰 청소·교체하세요.</li>
+          </ul>
         </section>
 
         {/* 8. FAQ */}
@@ -305,7 +344,7 @@ export default function VentilationPage() {
 
         {/* 참고 자료 */}
         <section>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>참고 자료</p>
             <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {[
@@ -317,7 +356,7 @@ export default function VentilationPage() {
                 { label: 'AHAM CADR / 한국 표준사용면적 (공기청정기 표준)', href: 'https://www.ahamverifide.org' },
               ].map((s, i) => (
                 <li key={i} style={{ fontSize: '12px', color: 'var(--muted)' }}>
-                  <a href={s.href} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>{s.label}</a>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }}>{s.label}</a>
                 </li>
               ))}
             </ul>
@@ -329,10 +368,10 @@ export default function VentilationPage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
-              { href: '/tools/interior/room-area', icon: '📐', name: '공간 면적 계산기',     desc: '벽·바닥·천장·평수·부피 (입력값 자동 호환)' },
+              { href: '/tools/interior/room-area', icon: '📐', name: '공간 면적 계산기',     desc: '벽·바닥·천장·평수·부피' },
               { href: '/tools/interior/wallpaper', icon: '🧱', name: '도배 계산기',   desc: '벽지 롤 수·면적·셀프 시공 비용' },
               { href: '/tools/interior/paint',     icon: '🎨', name: '페인트 계산기', desc: '벽·천장 페인트 양' },
               { href: '/tools/health/uv-protection', icon: '☀️', name: '자외선 노출 가이드',   desc: '실내·실외 자외선' },
@@ -342,7 +381,7 @@ export default function VentilationPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>
@@ -355,6 +394,6 @@ export default function VentilationPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

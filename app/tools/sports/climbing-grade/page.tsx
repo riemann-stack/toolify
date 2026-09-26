@@ -3,11 +3,12 @@ import ClimbingGradeClient from './ClimbingGradeClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
 import { BANDS, BOULDER_ROWS, ROUTE_ROWS } from './climbingData'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/climbing-grade',
@@ -17,31 +18,15 @@ export const metadata = buildMetadata({
   keywords: ['클라이밍등급변환', '볼더링V등급', '폰테인블로등급', 'YDS난이도', '클라이밍난이도표', 'V등급폰환산', '클라이밍등급표', '실내클라이밍등급'],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '18px 20px',
 }
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = { cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }
-const faqAnswer: React.CSSProperties = { marginTop: '10px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }
 const th: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }
 const td: React.CSSProperties = { padding: '10px 12px', color: 'var(--text)' }
 const bandDot: React.CSSProperties = { display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', marginRight: '7px', verticalAlign: 'middle' }
-const tableNote: React.CSSProperties = { fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.75 }
 
 const FAQ_LD = [
   { q: 'V등급과 Font(폰테인블로)는 어떻게 다른가요?', a: '둘 다 <strong>볼더링(짧고 강한 문제)</strong> 난이도 체계입니다. V등급(V-scale)은 미국 텍사스 휴코탱크스에서 시작된 미국식, Font는 프랑스 퐁텐블로에서 유래한 유럽식입니다. 예를 들어 <strong>V4 ≈ Font 6B/6B+</strong>입니다. 한국 실내 클라이밍장은 대부분 V등급(또는 자체 색깔)을 쓰고, 유럽·아웃도어 자료는 Font가 많습니다.' },
@@ -50,19 +35,18 @@ const FAQ_LD = [
   { q: '실내 클라이밍장 색깔 난이도는 왜 체육관마다 다른가요?', a: '색깔 난이도(빨강·파랑 등)는 <strong>각 체육관이 자체적으로 정한 것</strong>이라 표준이 없습니다. 같은 “파랑”이라도 A체육관과 B체육관의 V등급이 다를 수 있어요. 그래서 본 변환기는 색깔이 아니라 <strong>국제 표준 체계(V·Font·YDS 등)</strong> 기준으로 환산합니다. 다니는 체육관의 색깔 ↔ V등급 표를 한번 확인해 두면 비교가 쉽습니다.' },
   { q: '볼더링 등급과 루트 등급을 직접 비교할 수 있나요?', a: '직접 1:1 비교는 어렵습니다. 볼더링(V·Font)은 <strong>짧고 폭발적인 힘</strong>, 루트(YDS·French)는 <strong>지구력과 긴 시퀀스</strong>를 보기 때문에 측정하는 능력이 다릅니다. 대략 V등급에 한 동작의 어려움이, YDS에 전체 루트의 지속적 난이도가 반영된다고 이해하면 됩니다. 본 도구는 모드(볼더링/루트)를 나눠 각 체계 안에서만 환산합니다.' },
   { q: '처음 시작하면 어느 등급부터 도전하나요?', a: '실내 볼더링이라면 <strong>V0~V1(Font 4~5)</strong>부터 시작해 기본 무브와 발 쓰기를 익힙니다. 몇 달 꾸준히 다니면 V2(초급)~V3, 1년 안팎이면 V4~V5(중급)에 도전하는 경우가 많습니다. 다만 진도는 개인차·체형·훈련량에 따라 크게 다르니 등급보다 <strong>꾸준함과 부상 없는 등반</strong>에 집중하세요.' },
-  { q: 'Font 6A(볼더링)와 French 6a(루트)는 같은 난이도인가요?', a: '아닙니다. 표기는 비슷하지만 <strong>완전히 다른 체계</strong>입니다. 관례상 볼더링 Font 등급은 대문자(6A·7B+), 루트 French 등급은 소문자(6a·7b+)로 구분해 적습니다. 같은 숫자·알파벳이라도 볼더링 쪽이 훨씬 어려워, Font 6C+의 무브 난이도는 French 7c 루트에 가깝다고 알려져 있습니다. 통용 환산으로 <strong>Font 6A ≈ V3</strong>(볼더링), <strong>French 6a ≈ 5.10a</strong>(루트) 수준입니다.' },
-  { q: '현재 세계에서 가장 어려운 클라이밍 등급은 무엇인가요?', a: '2026년 6월 기준 볼더링 최고 통용 등급은 <strong>V17(Font 9A)</strong>입니다. 2016년 날레 후카타이발이 핀란드의 ‘버든 오브 드림스(Burden of Dreams)’를 초등하며 처음 제안했고, 이후 여러 클라이머가 반복 완등했습니다 — 2025년 5월에는 한국의 <strong>이성수</strong>가 완등해 화제가 됐고, 2026년에도 추가 완등이 이어졌습니다. 루트(리드) 최고 등급은 <strong>9c(5.15d)</strong>로, 2017년 아담 온드라가 노르웨이의 ‘사일런스(Silence)’를 초등한 것이 세계 최초의 9c입니다.' },
+  { q: 'Font 6A(볼더링)와 French 6a(루트)는 같은 난이도인가요?', a: '아닙니다. 표기는 비슷하지만 <strong>완전히 다른 체계</strong>입니다. 관례상 볼더링 Font 등급은 대문자(6A·7B+), 루트 French 등급은 소문자(6a·7b+)로 구분해 적고, 헷갈리지 않게 앞에 F·f를 붙이기도 합니다. 볼더 등급은 짧은 문제 안의 가장 어려운 동작을, 루트 등급은 긴 벽 전체의 지속 난이도를 매기므로 같은 표기라도 볼더 쪽 한 동작이 훨씬 어렵습니다. 통용 환산으로 <strong>Font 6A ≈ V3</strong>(볼더링), <strong>French 6a ≈ 5.10a</strong>(루트) 수준입니다.' },
+  { q: '현재 세계에서 가장 어려운 클라이밍 등급은 무엇인가요?', a: '2026년 6월 기준 볼더링 최고 통용 등급은 <strong>V17(Font 9A)</strong>입니다. 2016년 날레 후카타이발이 핀란드의 ‘버든 오브 드림스(Burden of Dreams)’를 초등하며 처음 제안했고, 2023년 윌 보시가 두 번째로 오른 뒤 반복 완등이 이어졌습니다 — 2025년 5월에는 한국의 <strong>이성수</strong>가 다섯 번째로 완등해 화제가 됐습니다. 루트(리드) 최고 등급은 <strong>9c(5.15d)</strong>로, 2017년 아담 온드라가 노르웨이의 ‘사일런스(Silence)’를 초등한 것이 세계 최초의 9c입니다.' },
   { q: 'UIAA 등급은 어디에서 쓰이나요?', a: 'UIAA(국제산악연맹) 등급은 로마숫자(IV·VII+ 등)를 쓰며, 주로 <strong>독일·오스트리아·스위스 등 중부 유럽</strong>과 알파인(전통) 등반 자료에서 사용됩니다. 스포츠 클라이밍 가이드북은 대부분 French를 쓰기 때문에, UIAA는 알파인 루트나 유럽 가이드북을 볼 때 환산 용도로 알아두면 좋습니다. French·YDS와의 환산은 출처에 따라 반 단계~한 단계 차이가 날 수 있습니다.' },
 ]
 
 export default function ClimbingGradePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/sports/climbing-grade">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />클라이밍 등급 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         볼더링 <strong style={{ color: 'var(--text)' }}>V등급 ↔ Font</strong>, 루트 <strong style={{ color: 'var(--text)' }}>YDS ↔ French ↔ UIAA</strong> 난이도를 한 번에 환산.
       </p>
 
@@ -73,6 +57,7 @@ export default function ClimbingGradePage() {
           { label: 'Wikipedia — Grade (climbing)', href: 'https://en.wikipedia.org/wiki/Grade_(climbing)' },
           { label: '99Boulders', href: 'https://www.99boulders.com/bouldering-grades' },
           { label: 'Guide Dolomiti — Rock climbing grades', href: 'https://www.guidedolomiti.com/en/rock-climbing-grades/' },
+          { label: 'UKClimbing — 이성수 Burden of Dreams(9A) 완등', href: 'https://www.ukclimbing.com/news/2025/05/lee_sungsu_climbs_burden_of_dreams_9a_twice-73979' },
         ]}
       />
 
@@ -86,7 +71,7 @@ export default function ClimbingGradePage() {
 
         {/* 체계 설명 */}
         <div>
-          <h2 style={sectionTitle}>🪢 클라이밍 등급 체계 한눈에</h2>
+          <h2 className="g-h2">클라이밍 등급 체계 한눈에</h2>
           <div style={{ ...card }}>
             <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 1.95 }}>
               <li><strong style={{ color: 'var(--text)' }}>V등급 (V-scale)</strong> — 미국식 <strong>볼더링</strong> 등급. V0~V17. 한국 실내 클라이밍장 다수가 사용.</li>
@@ -100,9 +85,9 @@ export default function ClimbingGradePage() {
 
         {/* 볼더링 변환표 (서버 렌더) */}
         <div>
-          <h2 style={sectionTitle}>📋 볼더링 등급 변환표 — V등급 ↔ Font</h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
-            V-scale과 Font 사이에는 공인된 단일 표준이 없으며, 아래는 널리 쓰이는 <strong style={{ color: 'var(--text)' }}>통용 근사 변환</strong>입니다. (위 변환기와 동일한 데이터)
+          <h2 className="g-h2">볼더링 등급 변환표 — V등급 ↔ Font</h2>
+          <p className="g-p">
+            V-scale과 Font 사이에는 공인된 단일 표준이 없으며, 아래는 널리 쓰이는 <strong>통용 근사 변환</strong>입니다. (위 변환기와 동일한 데이터)
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -117,7 +102,7 @@ export default function ClimbingGradePage() {
                 {BOULDER_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.v}</td>
-                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.font}</td>
+                    <td style={{ ...td, color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.font}</td>
                     <td style={td}>
                       <span style={{ ...bandDot, background: BANDS[r.band].color }} />
                       {BANDS[r.band].label}
@@ -127,16 +112,16 @@ export default function ClimbingGradePage() {
               </tbody>
             </table>
           </div>
-          <p style={tableNote}>
-            ※ Font 등급은 구간이 겹쳐 V3 ≈ 6A/6A+처럼 묶어 표기했습니다. 출처에 따라 한 단계 차이날 수 있습니다. (2026년 6월 확인, Wikipedia 등급 비교표 기준)
+          <p className="g-note">
+            Font 등급은 구간이 겹쳐 V3 ≈ 6A/6A+처럼 묶어 표기했습니다. 출처에 따라 한 단계 차이날 수 있습니다. (2026년 6월 확인, Wikipedia 등급 비교표 기준)
           </p>
         </div>
 
         {/* 루트 변환표 (서버 렌더) */}
         <div>
-          <h2 style={sectionTitle}>📋 루트(리드) 등급 변환표 — YDS ↔ French ↔ UIAA</h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
-            미국 YDS, 유럽 French(스포츠 표준), 중부 유럽 UIAA의 <strong style={{ color: 'var(--text)' }}>통용 근사 변환</strong>입니다. UIAA는 특히 근사적입니다. (위 변환기와 동일한 데이터)
+          <h2 className="g-h2">루트(리드) 등급 변환표 — YDS ↔ French ↔ UIAA</h2>
+          <p className="g-p">
+            미국 YDS, 유럽 French(스포츠 표준), 중부 유럽 UIAA의 <strong>통용 근사 변환</strong>입니다. UIAA는 특히 근사적입니다. (위 변환기와 동일한 데이터)
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
@@ -152,8 +137,8 @@ export default function ClimbingGradePage() {
                 {ROUTE_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.yds}</td>
-                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.french}</td>
-                    <td style={{ ...td, color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.uiaa}</td>
+                    <td style={{ ...td, color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.french}</td>
+                    <td style={{ ...td, color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.uiaa}</td>
                     <td style={td}>
                       <span style={{ ...bandDot, background: BANDS[r.band].color }} />
                       {BANDS[r.band].label}
@@ -163,36 +148,36 @@ export default function ClimbingGradePage() {
               </tbody>
             </table>
           </div>
-          <p style={tableNote}>
-            ※ 특히 5.11~5.12(6c~7c) 구간은 출처마다 환산이 반 단계~한 단계씩 다릅니다. 본 표는 통용 환산표 중 하나일 뿐, 절대 기준이 아닙니다. (2026년 6월 확인, Wikipedia·Guide Dolomiti 등급 비교표 교차 참고)
+          <p className="g-note">
+            특히 5.11~5.12(6c~7c) 구간은 출처마다 환산이 반 단계~한 단계씩 다릅니다. 본 표는 6c+ 이후 French 한 단계를 YDS 한 글자에 1:1로 대응시키는 계열이라, French 7a를 5.11d · 7b를 5.12b · 7c를 5.12d로 잡는 미국식 환산표(다수의 온라인 변환기)와 비교하면 같은 French 등급에 YDS가 한 글자 낮게 나옵니다. 두 계열 모두 5.13b = 8a에서 다시 만납니다. 본 표는 통용 환산표 중 하나일 뿐, 절대 기준이 아닙니다. (2026년 6월 확인, Wikipedia·Guide Dolomiti 등급 비교표 교차 참고, 5.11b~5.13a 구간은 출처별 편차 큼)
           </p>
         </div>
 
         {/* 난이도 밴드별 가이드 */}
         <div>
-          <h2 style={sectionTitle}>🎯 볼더링 난이도 밴드별 가이드 — 나는 어디쯤?</h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
+          <h2 className="g-h2">볼더링 난이도 밴드별 가이드 — 나는 어디쯤?</h2>
+          <p className="g-p">
             클라이밍 미디어(99Boulders 등)에서 통용되는 분류입니다. 분류 기준은 출처마다 조금씩 다르며, 진도는 개인차가 큽니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
-            <div style={{ ...card, borderTop: '3px solid #94A3B8' }}>
-              <p style={{ fontSize: '13px', color: '#64748B', fontWeight: 700, marginBottom: '8px' }}>입문·초급 · V0~V2 (Font 4~5+)</p>
+            <div style={{ ...card, borderTop: `3px solid ${BANDS[0].color}` }}>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', fontWeight: 700, marginBottom: '8px' }}>입문·초급 · V0~V2 (Font 4~5+)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>클라이밍을 막 시작한 단계</li>
                 <li>기본 무브·발 쓰기·홀드 잡기 학습</li>
                 <li>이 구간에서는 진도가 빠른 편</li>
               </ul>
             </div>
-            <div style={{ ...card, borderTop: '3px solid #0EA5E9' }}>
-              <p style={{ fontSize: '13px', color: '#0EA5E9', fontWeight: 700, marginBottom: '8px' }}>중급 · V3~V5 (Font 6A~6C+)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--sky-500)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--sky-500)', fontWeight: 700, marginBottom: '8px' }}>중급 · V3~V5 (Font 6A~6C+)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>어느 정도 꾸준히 다닌 동호인</li>
                 <li>근력이 붙고 쉬운 문제는 플래시(첫 시도 완등)</li>
                 <li>다양한 무브 레퍼토리가 생기는 시기</li>
               </ul>
             </div>
-            <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
-              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>상급 · V6+ (Font 7A~)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--orange-600)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--orange-600)', fontWeight: 700, marginBottom: '8px' }}>상급 · V6+ (Font 7A~)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>수년간 등반한 상위권 동호인 (V6~V8)</li>
                 <li>V9~V12는 전문 훈련 영역, 체육관 최상위권</li>
@@ -204,10 +189,10 @@ export default function ClimbingGradePage() {
 
         {/* 볼더링 vs 루트 */}
         <div>
-          <h2 style={sectionTitle}>🧗 볼더링 vs 루트 — 무엇이 다른가요?</h2>
+          <h2 className="g-h2">볼더링 vs 루트 — 무엇이 다른가요?</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-            <div style={{ ...card, borderTop: '3px solid #A16207' }}>
-              <p style={{ fontSize: '13px', color: '#A16207', fontWeight: 700, marginBottom: '8px' }}>볼더링 (V · Font)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--yellow-700)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--yellow-700)', fontWeight: 700, marginBottom: '8px' }}>볼더링 (V · Font)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>짧고 강한 문제(보통 4~12동작)</li>
                 <li>로프 없이 매트 위에서</li>
@@ -215,8 +200,8 @@ export default function ClimbingGradePage() {
                 <li>실내 클라이밍 입문에 흔함</li>
               </ul>
             </div>
-            <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
-              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>루트/리드 (YDS · French)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--orange-600)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--orange-600)', fontWeight: 700, marginBottom: '8px' }}>루트/리드 (YDS · French)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>길고 지속적인 벽(수 m~수십 m)</li>
                 <li>로프·확보 장비 사용</li>
@@ -229,7 +214,7 @@ export default function ClimbingGradePage() {
 
         {/* 한국 맥락 */}
         <div>
-          <h2 style={sectionTitle}>🇰🇷 한국 실내 클라이밍 팁</h2>
+          <h2 className="g-h2">한국 실내 클라이밍 팁</h2>
           <div style={{ ...card, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
             <p style={{ margin: 0 }}>
               한국 실내 클라이밍장은 대부분 <strong style={{ color: 'var(--text)' }}>V등급 또는 자체 색깔 난이도</strong>를 씁니다. 색깔은 표준이 없어 체육관마다 달라서, 다른 체육관·아웃도어와 비교하려면 V·Font·YDS 같은 국제 체계로 환산하는 게 정확합니다. 다니는 체육관의 <strong style={{ color: 'var(--text)' }}>색깔 ↔ V등급</strong> 표를 한번 받아두면 위 변환기와 함께 어디서든 내 수준을 가늠할 수 있어요.
@@ -239,14 +224,7 @@ export default function ClimbingGradePage() {
 
         {/* FAQ */}
         <div>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          {FAQ_LD.map((f, i) => (
-            <details key={i} style={faqDetails}>
-              <summary style={faqSummary}>Q{i + 1}. {f.q}</summary>
-              <div style={faqAnswer} dangerouslySetInnerHTML={{ __html: f.a }} />
-            </details>
-          ))}
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* 면책 */}
@@ -256,7 +234,7 @@ export default function ClimbingGradePage() {
 
         {/* 관련 도구 */}
         <div>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/strength-level', icon: '💪', name: '스트렝스 레벨 계산기', desc: '근력 수준·윌크스 점수' },
@@ -274,6 +252,6 @@ export default function ClimbingGradePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

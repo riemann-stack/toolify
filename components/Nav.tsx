@@ -1,18 +1,28 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+/* ──────────────────────────────────────────────────────
+   components/Nav.tsx — 글로벌 헤더 + 검색 패널 + 모바일 드로어 (스펙 §10.16)
+   ─ 헤더: 루트에 data-cat(도구·허브 경로) → 하단 3px 분야 라인 · 메뉴 · 검색 필(⌘K / Ctrl+K) · 모바일 아이콘 2개(검색·메뉴)
+   ─ 스펙의 '/' 단일 문자 단축키는 넣지 않는다: WCAG 2.1.4(문자 키 단축키, Level A)는 끄기·재지정·포커스 시에만
+     동작 중 하나를 요구 — 수정 키 조합(⌘K·Ctrl+K, 기존 동작)만 둔다.
+   ─ 검색 로직은 lib/search.ts(searchTools) 그대로 — 0건이면 partial 추천('혹시 이 도구?')
+   ─ 최근·즐겨찾기: localStorage youtil:nav:v1 (lib/userNav) — 키 개명 금지. 다른 탭의 변경은 storage 이벤트로 다시 읽는다.
+     드로어에 [메뉴 | 최근·즐겨찾기] 탭. 하단 탭바 '최근' → OPEN_RECENT_EVENT, '검색' → OPEN_SEARCH_EVENT
+   ─ 헤더의 '공유' 버튼은 제거(스펙 ⑤). 과도기 공유 버튼은 ToolBreadcrumb 행 오른쪽 끝(도구 페이지)에 있다.
+   ────────────────────────────────────────────────────── */
+
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import styles from './Nav.module.css'
 import { categories, allTools, type Tool } from '@/lib/tools'
 import CatIcon from './CatIcon'
-import ToolCatIcon from './ToolCatIcon'
 import UiIcon from './UiIcon'
-import { OPEN_SEARCH_EVENT } from './BottomNav'
-import { searchTools } from '@/lib/search'
+import { OPEN_SEARCH_EVENT, OPEN_RECENT_EVENT } from './BottomNav'
+import { searchTools, categoryOf } from '@/lib/search'
 import {
-  loadUserNav, saveUserNav, recordVisit, toggleFavorite, isToolPath,
+  loadUserNav, saveUserNav, recordVisit, toggleFavorite, isToolPath, USER_NAV_EVENT,
   type UserNav,
 } from '@/lib/userNav'
 
@@ -49,118 +59,92 @@ function useBodyScrollLock(isLocked: boolean) {
   }, [isLocked])
 }
 
-// Mac 판별 — userAgentData 우선, navigator.platform 폴백 (mounted 후 호출, HomeClient와 동일 분기)
-function isMacPlatform(): boolean {
-  if (typeof navigator === 'undefined') return false
-  const nav = navigator as Navigator & { userAgentData?: { platform?: string } }
-  return /mac/i.test(nav.userAgentData?.platform ?? nav.platform ?? '')
+/** 화면에 실제로 보이는 첫 요소 (display:none 이면 offsetParent === null) — 포커스 복귀용 */
+function firstVisible(...els: Array<HTMLElement | null>): HTMLElement | null {
+  return els.find(el => el !== null && el.offsetParent !== null) ?? null
 }
 
-const POPULAR_TOOLS: Array<Pick<Tool, 'href' | 'name'>> = [
+/** 추천 도구 — 운영자가 직접 고른 목록(방문 통계 순위가 아님 → '인기' 라벨 금지, not-found·HomeSearch와 같은 '추천').
+ *  놀이형 도구(로또 등)는 넣지 않는다(스펙 §1.3 #12). */
+const PICKED_TOOLS: Array<Pick<Tool, 'href' | 'name'>> = [
   { name: '연봉 실수령액', href: '/tools/finance/salary' },
+  { name: '대출이자',      href: '/tools/finance/loan' },
   { name: '나이 계산기',   href: '/tools/date/age' },
   { name: 'BMI 계산기',    href: '/tools/health/bmi' },
-  { name: '로또 생성기',   href: '/tools/life/lotto' },
   { name: '더치페이',      href: '/tools/life/dutch' },
   { name: '군대 전역일',   href: '/tools/date/military' },
 ]
 
-/* ─── 공유 버튼 ─── */
-function ShareButton() {
-  const [state, setState] = useState<'idle' | 'copied'>('idle')
+/** lib/userNav.ts 의 KEY 와 같은 값 — 다른 탭의 변경(storage 이벤트) 감지용. 키 개명 금지. */
+const USER_NAV_KEY = 'youtil:nav:v1'
 
-  const handleShare = useCallback(async () => {
-    if (typeof window === 'undefined') return
-    const url = window.location.href
+/** 검색 단축키 표시 — 수정 키 조합만(WCAG 2.1.4). 플랫폼 판별은 마운트 후(SSR 불일치 방지) */
+function shortcutLabel(): string {
+  const ua = typeof navigator === 'undefined' ? '' : navigator.userAgent
+  return /Mac|iPhone|iPad|iPod/.test(ua) ? '⌘K' : 'Ctrl K'
+}
 
-    // document.title에는 이미 브랜드가 들어 있음 — 도구 페이지는 템플릿('%s | Youtil')으로 끝에,
-    // 홈·소개 페이지는 제목 자체에 'Youtil…'이 앞에 포함됨. 그대로 다시 ' | Youtil'을 붙이면 중복된다.
-    // ① 끝의 ' | Youtil' 접미사 제거 → ② 맨 앞에 브랜드가 없을 때만 한 번 붙여 브랜드가 정확히 1회만 나오게.
-    const SITE = 'Youtil'
-    const SUFFIX = ` | ${SITE}`
-    let base = document.title
-    if (base.endsWith(SUFFIX)) base = base.slice(0, -SUFFIX.length)
-    const headline = base.startsWith(SITE) ? base : `${SITE} | ${base}`
+/** 신규 지면 공개 스위치 — 페이지가 실제로 생기기 전에는 링크하지 않는다(깨진 링크·빈 지면 = 얇은 사이트 신호).
+ *  GUIDES_LIVE: /guides 에 글 3편 이상 발행 후 true (Footer.tsx 의 같은 스위치와 함께). STANDARDS_LIVE: /standards-2026 생성 후 true. */
+const GUIDES_LIVE = true
+const STANDARDS_LIVE = false
 
-    // 카카오톡 등 링크 미리보기 카드는 url 필드(+ 페이지 OG 태그)로 만들어지므로 url을 반드시 함께 넘긴다.
-    // text에는 브랜드가 1회만 든 headline을 담아 'Youtil' 중복을 없앤다(이전 버그: text 뒤에 또 '| Youtil').
-    // 주의: url 필드를 넘기면 OS가 붙여넣기 시 'text 공백 url'로 이어 붙이므로, url 앞 구분자는 공백이 된다.
-    //       (구분자에 '|'를 강제하려면 url을 text에 직접 넣어야 하는데, 그러면 카드가 사라지거나 url이 중복됨)
-    type NavWithShare = Navigator & { share?: (data: { title?: string; text?: string; url?: string }) => Promise<void> }
-    const nav = navigator as NavWithShare
-    if (typeof nav.share === 'function') {
-      try {
-        await nav.share({ title: headline, text: headline, url })
-        return
-      } catch {
-        // 사용자 취소 시 무시 → 클립보드 폴백 안 함
-        return
-      }
-    }
-    // 데스크탑 등 Web Share 미지원 → 클립보드에는 구분자를 직접 제어할 수 있으므로 'Youtil | 제목 | URL' 형태로 복사
-    const clipText = `${headline} | ${url}`
-    try {
-      await navigator.clipboard.writeText(clipText)
-      setState('copied')
-      setTimeout(() => setState('idle'), 1500)
-    } catch {
-      // 마지막 폴백: 사용자에게 전체 문구 표시
-      window.prompt('이 페이지 링크를 복사하세요:', clipText)
-    }
-  }, [])
+interface MenuItem { href: string; label: string; icon: string; exact?: boolean }
+const MENU: MenuItem[] = [
+  { href: '/tools', label: '전체 도구', icon: 'grid', exact: true },
+  { href: '/collections', label: '상황별 가이드', icon: 'compass' },
+  ...(GUIDES_LIVE ? [{ href: '/guides', label: '계산 해설', icon: 'book' }] : []),
+  ...(STANDARDS_LIVE ? [{ href: '/standards-2026', label: '2026 기준표', icon: 'file' }] : []),
+]
 
+const CAT_IDS = new Set(categories.map(c => c.id))
+const toolByHref = new Map(allTools.map(t => [t.href, t] as const))
+
+type DrawerTab = 'menu' | 'recent'
+
+/** 도구 아이콘 칩 — 분야 soft 배경 + 분야색 아이콘 (스펙 §12: CatIcon은 항상 칩 안) */
+function ToolChip({ href, size = 16 }: { href: string; size?: number }) {
+  const cat = categoryOf(href)
+  if (!cat) return null
   return (
-    <button
-      className={`${styles.shareBtn} ${state === 'copied' ? styles.shareBtnCopied : ''}`}
-      onClick={handleShare}
-      aria-label="이 페이지 공유"
-      title={state === 'copied' ? '링크 복사됨' : '이 페이지 공유'}
-    >
-      {state === 'copied' ? (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20 6L9 17l-5-5" />
-        </svg>
-      ) : (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="18" cy="5" r="3" />
-          <circle cx="6" cy="12" r="3" />
-          <circle cx="18" cy="19" r="3" />
-          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-        </svg>
-      )}
-    </button>
+    <span className={styles.chip} data-cat={cat.id} aria-hidden="true">
+      <CatIcon id={cat.id} size={size} />
+    </span>
   )
 }
 
 export default function Nav() {
-  const [mobileOpen,  setMobileOpen]  = useState(false)
-  const [mobileQuery, setMobileQuery] = useState('')
-  const [searchOpen,  setSearchOpen]  = useState(false)
-  const [query,       setQuery]       = useState('')
-  const [activecat,   setActivecat]   = useState<string | null>(null)
+  const [mobileOpen,   setMobileOpen]   = useState(false)
+  const [drawerTab,    setDrawerTab]    = useState<DrawerTab>('menu')
+  const [mobileQuery,  setMobileQuery]  = useState('')
+  const [searchOpen,   setSearchOpen]   = useState(false)
+  const [query,        setQuery]        = useState('')
   const [highlightIdx, setHighlightIdx] = useState(0)
-  const [userNav,     setUserNav]     = useState<UserNav>({ recents: [], favorites: [] })
-  const [mounted,     setMounted]     = useState(false)
-  // SSR/첫 페인트 기본값 → mounted 후 실제 플랫폼으로 분기 (hydration 안전)
-  const [isMac,       setIsMac]       = useState(true)
-  const pathname  = usePathname()
+  const [userNav,      setUserNav]      = useState<UserNav>({ recents: [], favorites: [] })
+  const [mounted,      setMounted]      = useState(false)
+  const [kbdLabel,     setKbdLabel]     = useState('')
+  const pathname  = usePathname() ?? '/'
   const router    = useRouter()
   const searchRef = useRef<HTMLInputElement>(null)
   const mobileSearchRef = useRef<HTMLInputElement>(null)
-  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const megaRef = useRef<HTMLDivElement | null>(null)
-  // ESC로 오버레이를 닫을 때 포커스를 트리거로 복귀시키기 위한 참조 (APG dialog/menu 패턴)
-  const searchBtnRef = useRef<HTMLButtonElement>(null)
-  const burgerRef = useRef<HTMLButtonElement>(null)
-  const catBtnRef = useRef<HTMLButtonElement>(null)
+  // ESC로 오버레이를 닫을 때 포커스를 트리거로 복귀시키기 위한 참조 (APG dialog 패턴)
+  const searchPillRef = useRef<HTMLButtonElement>(null)
+  const searchIconRef = useRef<HTMLButtonElement>(null)
+  const menuBtnRef    = useRef<HTMLButtonElement>(null)
+  const recentTabRef  = useRef<HTMLButtonElement>(null)
+  const menuTabRef    = useRef<HTMLButtonElement>(null)
+  const drawerReturnRef = useRef<HTMLElement | null>(null)
+
+  // 도구·허브 경로의 분야 id (알려진 분야만 — 모르는 값이면 --c 가 비어 라인이 사라지므로 제외)
+  const segs = pathname.split('/').filter(Boolean)
+  const cat = segs[0] === 'tools' && segs[1] && CAT_IDS.has(segs[1]) ? segs[1] : undefined
 
   useBodyScrollLock(mobileOpen)
 
-  // 드로어 열림 = 모달 — 가려진 본문·푸터·하단 탭바를 포커스/AT 트리에서 제외
+  // 드로어 열림 = 모달 — 가려진 본문·섹션 바·푸터·하단 탭바를 포커스/AT 트리에서 제외
   useEffect(() => {
     if (!mobileOpen) return
-    const els = Array.from(document.querySelectorAll<HTMLElement>('main, footer, nav[aria-label="하단 메뉴"]'))
+    const els = Array.from(document.querySelectorAll<HTMLElement>('main, footer, nav[aria-label="하단 메뉴"], nav[aria-label="분야"]'))
     els.forEach(el => el.setAttribute('inert', ''))
     return () => els.forEach(el => el.removeAttribute('inert'))
   }, [mobileOpen])
@@ -168,8 +152,24 @@ export default function Nav() {
   // localStorage 초기 로드
   useEffect(() => {
     setUserNav(loadUserNav())
-    setIsMac(isMacPlatform())
+    setKbdLabel(shortcutLabel())
     setMounted(true)
+  }, [])
+
+  // 다른 탭에서 바뀐 최근·즐겨찾기를 다시 읽는다 — 안 하면 이 탭의 메모리 상태가 다음 저장 때 덮어써 즐겨찾기가 사라진다.
+  // 같은 값을 다시 저장하면 storage 이벤트가 나지 않으므로 탭 간 핑퐁은 생기지 않는다. key === null 은 localStorage.clear()
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === USER_NAV_KEY || e.key === null) setUserNav(loadUserNav())
+    }
+    // 같은 탭의 도구 페이지 별표 버튼이 바꾼 값 — saveUserNav 가 내용이 같으면 이벤트를 안 쏘므로 다시 저장해도 멈춘다
+    const onLocal = () => setUserNav(loadUserNav())
+    window.addEventListener('storage', onStorage)
+    window.addEventListener(USER_NAV_EVENT, onLocal)
+    return () => {
+      window.removeEventListener('storage', onStorage)
+      window.removeEventListener(USER_NAV_EVENT, onLocal)
+    }
   }, [])
 
   // userNav 변경 시 저장
@@ -180,35 +180,17 @@ export default function Nav() {
 
   // 도구 페이지 진입 시 자동 기록
   useEffect(() => {
-    if (!mounted || !pathname || !isToolPath(pathname)) return
+    if (!mounted || !isToolPath(pathname)) return
     setUserNav((prev) => recordVisit(prev, pathname))
   }, [pathname, mounted])
 
-  // 검색창 열리면 포커스
+  // 검색 패널 열리면 포커스
   useEffect(() => {
     if (searchOpen) {
       setTimeout(() => searchRef.current?.focus(), 50)
       setHighlightIdx(0)
     }
   }, [searchOpen])
-
-  // 메가 메뉴 viewport 클램프 — 좌우 오버플로우 동적 보정
-  useEffect(() => {
-    if (!activecat) return
-    const id = requestAnimationFrame(() => {
-      const el = megaRef.current
-      if (!el) return
-      // 일단 기본(중앙) 정렬로 측정
-      el.style.transform = 'translateX(-50%)'
-      const rect = el.getBoundingClientRect()
-      const pad = 12
-      let dx = 0
-      if (rect.left < pad) dx = pad - rect.left
-      else if (rect.right > window.innerWidth - pad) dx = window.innerWidth - pad - rect.right
-      if (dx !== 0) el.style.transform = `translateX(calc(-50% + ${dx}px))`
-    })
-    return () => cancelAnimationFrame(id)
-  }, [activecat])
 
   // 페이지 이동 시 닫기
   useEffect(() => {
@@ -221,60 +203,99 @@ export default function Nav() {
     return () => clearTimeout(id)
   }, [pathname])
 
-  // 드로어 열리면 검색창 자동 포커스
+  // 드로어 닫히면 검색어 초기화
   useEffect(() => {
-    if (mobileOpen) setTimeout(() => mobileSearchRef.current?.focus(), 50)
-    else setMobileQuery('')
+    if (!mobileOpen) setMobileQuery('')
   }, [mobileOpen])
 
-  // 모바일 하단 탭바 '검색' → 드로어 열기 (검색창 자동 포커스는 mobileOpen 효과가 처리)
-  useEffect(() => {
-    const onOpenSearch = () => setMobileOpen(true)
-    window.addEventListener(OPEN_SEARCH_EVENT, onOpenSearch)
-    return () => window.removeEventListener(OPEN_SEARCH_EVENT, onOpenSearch)
+  /** 드로어 열기 — 'menu'는 검색창, 'recent'는 탭 버튼에 포커스(모바일 키보드가 불필요하게 뜨지 않게) */
+  const openDrawer = useCallback((tab: DrawerTab) => {
+    drawerReturnRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    setDrawerTab(tab)
+    setSearchOpen(false)
+    setMobileOpen(true)
+    window.setTimeout(() => {
+      if (tab === 'recent') recentTabRef.current?.focus()
+      else mobileSearchRef.current?.focus()
+    }, 50)
   }, [])
 
-  // Cmd+K / Ctrl+K + 전역 ESC
+  const closeDrawer = useCallback((restoreFocus: boolean) => {
+    setMobileOpen(false)
+    if (!restoreFocus) return
+    const back = drawerReturnRef.current
+    // 드로어 언마운트·inert 해제 뒤에 복귀. 되돌아갈 요소가 사라졌거나 가려졌으면 헤더 메뉴 버튼으로
+    window.setTimeout(() => {
+      if (back && back.isConnected && back.offsetParent !== null && !back.closest('[inert]')) back.focus()
+      else menuBtnRef.current?.focus()
+    }, 50)
+  }, [])
+
+  // 모바일 하단 탭바 '검색'·'최근' → 드로어 열기
+  useEffect(() => {
+    const onOpenSearch = () => openDrawer('menu')
+    const onOpenRecent = () => openDrawer('recent')
+    window.addEventListener(OPEN_SEARCH_EVENT, onOpenSearch)
+    window.addEventListener(OPEN_RECENT_EVENT, onOpenRecent)
+    return () => {
+      window.removeEventListener(OPEN_SEARCH_EVENT, onOpenSearch)
+      window.removeEventListener(OPEN_RECENT_EVENT, onOpenRecent)
+    }
+  }, [openDrawer])
+
+  const closeSearch = useCallback((restoreFocus: boolean) => {
+    setSearchOpen(false)
+    setQuery('')
+    if (restoreFocus) firstVisible(searchPillRef.current, searchIconRef.current)?.focus()
+  }, [])
+
+  // Cmd+K / Ctrl+K + 전역 ESC ('/' 단일 문자 단축키는 WCAG 2.1.4 때문에 두지 않는다 — 머리 주석)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      // 크롬 자동완성은 key 없는 keydown을 쏜다 — 문자열일 때만 처리
+      const key = typeof e.key === 'string' ? e.key : ''
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && key.toLowerCase() === 'k') {
         e.preventDefault()
         setSearchOpen((o) => !o)
         setMobileOpen(false)
+        return
       }
-      if (e.key === 'Escape') {
+      if (key === 'Escape') {
         // 닫을 때 포커스를 연 트리거로 복귀 — 미복귀 시 포커스가 body로 유실됨
-        if (searchOpen) { setSearchOpen(false); setQuery(''); searchBtnRef.current?.focus() }
-        if (mobileOpen) { setMobileOpen(false); burgerRef.current?.focus() }
-        if (activecat) { setActivecat(null); catBtnRef.current?.focus() }
+        if (searchOpen) closeSearch(true)
+        if (mobileOpen) closeDrawer(true)
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [searchOpen, mobileOpen, activecat])
+  }, [searchOpen, mobileOpen, closeSearch, closeDrawer])
 
-  const searchResults: Tool[] = (() => {
-    if (!query.trim()) return []
-    return searchTools(query, 8).map(h => h.tool)
-  })()
+  // ── 데스크톱 검색 패널 결과 (0건이면 일부 단어만 맞는 추천) ──
+  const q = query.trim()
+  const { searchResults, isPartial } = useMemo(() => {
+    if (!q) return { searchResults: [] as Tool[], isPartial: false }
+    const exact = searchTools(q, 8)
+    if (exact.length > 0) return { searchResults: exact.map(h => h.tool), isPartial: false }
+    const partial = searchTools(q, 5, { partial: true })
+    return { searchResults: partial.map(h => h.tool), isPartial: partial.length > 0 }
+  }, [q])
+
+  // ── 드로어 검색 결과 ──
+  const mq = mobileQuery.trim()
+  const drawerHits = useMemo(() => {
+    if (!mq) return { hits: [] as Tool[], isPartial: false }
+    const exact = searchTools(mq, 20)
+    if (exact.length > 0) return { hits: exact.map(h => h.tool), isPartial: false }
+    const partial = searchTools(mq, 5, { partial: true })
+    return { hits: partial.map(h => h.tool), isPartial: partial.length > 0 }
+  }, [mq])
 
   useEffect(() => {
     setHighlightIdx(0)
   }, [query])
 
-  const handleCatEnter = (href: string) => {
-    if (leaveTimer.current) clearTimeout(leaveTimer.current)
-    setActivecat(href)
-  }
-  const handleCatLeave = () => {
-    leaveTimer.current = setTimeout(() => setActivecat(null), 150)
-  }
-  const handleDropdownEnter = () => {
-    if (leaveTimer.current) clearTimeout(leaveTimer.current)
-  }
-
   const handleSearchKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') { setSearchOpen(false); setQuery(''); searchBtnRef.current?.focus() }
+    if (e.key === 'Escape') { e.stopPropagation(); closeSearch(true) }
     else if (e.key === 'ArrowDown') {
       e.preventDefault()
       setHighlightIdx((i) => Math.min(searchResults.length - 1, i + 1))
@@ -283,19 +304,12 @@ export default function Nav() {
       e.preventDefault()
       setHighlightIdx((i) => Math.max(0, i - 1))
     }
-    else if (e.key === 'Enter' && searchResults.length > 0) {
+    else if (e.key === 'Enter' && !e.nativeEvent.isComposing && searchResults.length > 0) {
       const target = searchResults[Math.min(highlightIdx, searchResults.length - 1)]
       router.push(target.href)
-      setSearchOpen(false); setQuery('')
+      closeSearch(false)
     }
   }
-
-  const categoryNameByHref = (href: string): string => {
-    const c = categories.find((cat) => href.startsWith(`/tools/${cat.id}`))
-    return c?.name ?? ''
-  }
-
-  const toolByHref = (href: string): Tool | undefined => allTools.find((t) => t.href === href)
 
   const handleToggleFav = useCallback((e: React.MouseEvent, href: string) => {
     e.preventDefault()
@@ -303,447 +317,421 @@ export default function Nav() {
     setUserNav((prev) => toggleFavorite(prev, href))
   }, [])
 
+  const clearRecents = useCallback(() => {
+    setUserNav((prev) => ({ ...prev, recents: [] }))
+  }, [])
+
   const isFav = (href: string): boolean => userNav.favorites.includes(href)
 
-  // 즐겨찾기 / 최근 사용 도구 리스트 (mounted 이후에만)
+  // 즐겨찾기 / 최근 사용 도구 리스트 (mounted 이후에만 — SSR/하이드레이션 일치)
   const favoriteTools: Tool[] = mounted
-    ? userNav.favorites.map(toolByHref).filter((t): t is Tool => !!t)
+    ? userNav.favorites.map(h => toolByHref.get(h)).filter((t): t is Tool => !!t)
     : []
   const recentTools: Tool[] = mounted
-    ? userNav.recents.map((r) => toolByHref(r.href)).filter((t): t is Tool => !!t).slice(0, 6)
+    ? userNav.recents.map((r) => toolByHref.get(r.href)).filter((t): t is Tool => !!t)
     : []
+  const recentCount = favoriteTools.length + recentTools.length
+
+  const onDrawerTabKey = (e: React.KeyboardEvent) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return
+    e.preventDefault()
+    const next: DrawerTab = e.key === 'Home' ? 'menu' : e.key === 'End' ? 'recent' : drawerTab === 'menu' ? 'recent' : 'menu'
+    setDrawerTab(next)
+    ;(next === 'menu' ? menuTabRef : recentTabRef).current?.focus()
+  }
+
+  const menuCurrent = (m: MenuItem): 'page' | 'true' | undefined => {
+    if (pathname === m.href) return 'page'
+    if (!m.exact && pathname.startsWith(`${m.href}/`)) return 'true'
+    return undefined
+  }
+
+  /** 드로어 도구 행 — 링크 + 즐겨찾기 토글(형제: a 안 button 중첩 금지) */
+  const drawerToolRow = (t: Tool) => {
+    const fav = isFav(t.href)
+    const c = categoryOf(t.href)
+    return (
+      <li key={t.href} className={styles.drawerRow}>
+        <Link href={t.href} className={styles.drawerRowLink} onClick={() => setMobileOpen(false)}>
+          <ToolChip href={t.href} />
+          <span className={styles.drawerRowBody}>
+            <span className={styles.drawerRowName}>{t.name}</span>
+            {c && <span className={styles.drawerRowCat} data-cat={c.id}>{c.name}</span>}
+          </span>
+        </Link>
+        <button
+          type="button"
+          className={styles.favBtn}
+          aria-pressed={fav}
+          aria-label={`즐겨찾기: ${t.name}`}
+          onClick={(e) => handleToggleFav(e, t.href)}
+        >
+          <UiIcon name="star" size={18} />
+        </button>
+      </li>
+    )
+  }
 
   return (
     <>
-      <nav className={styles.nav} aria-label="주 메뉴">
-        {/* 로고 — 잉크 마크 + 워드마크 (벤토 리디자인 정합) */}
-        <Link href="/" className={styles.logo}>
-          <span className={styles.logoMark} aria-hidden="true">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 3m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
-              <path d="M8 7m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v1a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z" />
-              <path d="M8 14l0 .01" /><path d="M12 14l0 .01" /><path d="M16 14l0 .01" />
-              <path d="M8 17l0 .01" /><path d="M12 17l0 .01" /><path d="M16 17l0 .01" />
+      <header className={styles.nav} data-cat={cat}>
+        <div className={styles.navIn}>
+          <Link className={styles.navLogo} href="/" aria-label="Youtil 홈">
+            <svg className={styles.navLogoMark} viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+              <rect width="28" height="28" rx="8" fill="currentColor" />
+              <rect x="7.5" y="9.5" width="13" height="3" rx="1.5" fill="#fff" />
+              <rect x="7.5" y="15.5" width="8.5" height="3" rx="1.5" fill="#fff" />
             </svg>
-          </span>
-          Youtil
-        </Link>
+            Youtil<small>생활 계산 레퍼런스</small>
+          </Link>
 
-        {/* 데스크탑 — 카테고리 단일 메가메뉴 + 상황별 가이드 (11개 직접 노출 폐지) */}
-        <ul className={styles.links}>
-          <li className={styles.catItem}
-            onMouseEnter={() => handleCatEnter('all')}
-            onMouseLeave={handleCatLeave}>
+          <nav className={styles.navMenu} aria-label="주 메뉴">
+            {MENU.map(m => (
+              <Link key={m.href} href={m.href} aria-current={menuCurrent(m)}>{m.label}</Link>
+            ))}
+          </nav>
+
+          <button
+            ref={searchPillRef}
+            type="button"
+            className={styles.navSearch}
+            onClick={() => (searchOpen ? closeSearch(false) : setSearchOpen(true))}
+            aria-label="계산기 검색"
+            aria-keyshortcuts="Control+K Meta+K"
+            aria-expanded={searchOpen}
+            aria-controls="nav-search-panel"
+          >
+            <UiIcon name="search" size={18} />
+            <span>계산기 검색 · 연봉, 평수, 만 나이</span>
+            {kbdLabel && <kbd className={styles.navKbd} aria-hidden="true">{kbdLabel}</kbd>}
+          </button>
+
+          <div className={styles.navIcons}>
             <button
-              ref={catBtnRef}
+              ref={searchIconRef}
               type="button"
-              className={`${styles.catLink} ${activecat === 'all' ? styles.catLinkActive : ''}`}
-              aria-haspopup="true"
-              aria-expanded={activecat === 'all'}
-              onClick={() => setActivecat((c) => (c === 'all' ? null : 'all'))}
+              className={styles.navIconBtn}
+              onClick={() => { if (searchOpen) closeSearch(false); else { setMobileOpen(false); setSearchOpen(true) } }}
+              aria-label="검색"
+              aria-expanded={searchOpen}
+              aria-controls="nav-search-panel"
             >
-              카테고리
-              <svg className={styles.chevron} width="10" height="10" viewBox="0 0 10 10" fill="none">
-                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
+              <UiIcon name={searchOpen ? 'x' : 'search'} size={24} />
             </button>
+            <button
+              ref={menuBtnRef}
+              type="button"
+              className={styles.navIconBtn}
+              onClick={() => (mobileOpen ? closeDrawer(false) : openDrawer('menu'))}
+              aria-label="메뉴"
+              aria-haspopup="dialog"
+              aria-expanded={mobileOpen}
+            >
+              <UiIcon name={mobileOpen ? 'x' : 'menu'} size={24} />
+            </button>
+          </div>
+        </div>
+      </header>
 
-            {/* 메가 메뉴 — 11개 카테고리 그리드 */}
-            {activecat === 'all' && (
-              <div
-                ref={megaRef}
-                className={styles.megaMenu}
-                onMouseEnter={handleDropdownEnter}
-                onMouseLeave={handleCatLeave}
-              >
-                <div className={styles.megaHead}>
-                  <span className={styles.megaCatLabel}>전체 카테고리</span>
-                  <Link href="/tools" className={styles.megaAllLink} onClick={() => setActivecat(null)}>
-                    전체 도구 →
-                  </Link>
-                </div>
-                <div className={styles.megaCatGrid}>
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat.id}
-                      href={`/tools/${cat.id}`}
-                      className={styles.megaCatItem}
-                      style={{ ['--cat' as string]: cat.color }}
-                      onClick={() => setActivecat(null)}
-                    >
-                      <span className={styles.megaCatItemIcon} style={{ color: cat.color }}>
-                        <CatIcon id={cat.id} size={18} />
-                      </span>
-                      <span className={styles.megaCatItemBody}>
-                        <span className={styles.megaCatItemName}>{cat.name}</span>
-                        <span className={styles.megaCatItemCount}>{cat.tools.length}개 도구</span>
-                      </span>
+      {/* ── 검색 패널 (슬라이드다운, 전 폭) ── */}
+      {searchOpen && (
+        <div className={styles.searchBar} id="nav-search-panel" role="search">
+          <div className={styles.searchBarIn}>
+            <div className={styles.searchField}>
+              <span className={styles.searchFieldIcon}><UiIcon name="search" size={18} /></span>
+              <input
+                ref={searchRef}
+                className={styles.searchInput}
+                type="text"
+                enterKeyHint="go"
+                placeholder="필요한 계산기를 검색하세요 (예: 연봉, 평수, 만 나이)"
+                aria-label="계산기 검색"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleSearchKey}
+                // 콤보박스 — 화살표 하이라이트를 AT에 통지 (aria-activedescendant)
+                role="combobox"
+                aria-expanded={searchResults.length > 0}
+                aria-controls="nav-search-results"
+                aria-autocomplete="list"
+                aria-activedescendant={
+                  q && searchResults.length > 0
+                    ? `nav-search-opt-${Math.min(highlightIdx, searchResults.length - 1)}`
+                    : undefined
+                }
+              />
+              <kbd className={styles.searchKbd} aria-hidden="true">↑↓ Enter · ESC</kbd>
+              {query && (
+                <button type="button" className={styles.searchClear} onClick={() => { setQuery(''); searchRef.current?.focus() }} aria-label="검색어 지우기">
+                  <UiIcon name="x" size={16} />
+                </button>
+              )}
+            </div>
+
+            {/* 검색 결과 — 행 = div(option), 링크·즐겨찾기 버튼은 형제 (a 안 button 중첩 금지) */}
+            {q && (
+              <div className={styles.searchResults}>
+                {isPartial && <p className={styles.searchNote}>정확히 맞는 계산기가 없어, 일부 단어가 맞는 계산기를 보여 드려요.</p>}
+                {searchResults.length > 0 ? (
+                  <div role="listbox" id="nav-search-results" aria-label="검색 결과">
+                    {searchResults.map((tool, idx) => {
+                      const c = categoryOf(tool.href)
+                      const fav = isFav(tool.href)
+                      return (
+                        <div
+                          key={tool.href}
+                          id={`nav-search-opt-${idx}`}
+                          role="option"
+                          aria-selected={idx === highlightIdx}
+                          className={`${styles.searchItem} ${idx === highlightIdx ? styles.searchItemActive : ''}`}
+                          onMouseEnter={() => setHighlightIdx(idx)}
+                        >
+                          <Link
+                            href={tool.href}
+                            className={styles.searchItemLink}
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => { setTimeout(() => closeSearch(false), 0) }}
+                          >
+                            <ToolChip href={tool.href} size={18} />
+                            <span className={styles.searchItemBody}>
+                              <span className={styles.searchItemName}>{tool.name}</span>
+                              {c && <span className={styles.searchItemCat} data-cat={c.id}>{c.name}</span>}
+                            </span>
+                          </Link>
+                          <button
+                            type="button"
+                            className={styles.favBtn}
+                            onClick={(e) => handleToggleFav(e, tool.href)}
+                            aria-pressed={fav}
+                            aria-label={`즐겨찾기: ${tool.name}`}
+                          >
+                            <UiIcon name="star" size={18} />
+                          </button>
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <p className={styles.searchEmpty}>
+                    &lsquo;{q}&rsquo;에 맞는 계산기를 찾지 못했어요. 다른 낱말로 검색하거나 <Link href="/tools" onClick={() => closeSearch(false)}>전체 도구</Link>에서 찾아보세요.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* 빠른 접근 — 검색어 없을 때 */}
+            {!q && (
+              <div className={styles.searchQuick}>
+                {favoriteTools.length > 0 && (
+                  <>
+                    <span className={styles.searchQuickLabel}><UiIcon name="star" size={14} /> 즐겨찾기</span>
+                    <div className={styles.searchQuickList}>
+                      {favoriteTools.map((t) => (
+                        <Link key={t.href} href={t.href} className={styles.searchQuickItem}
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => { setTimeout(() => closeSearch(false), 0) }}>
+                          <ToolChip href={t.href} size={14} />
+                          <span>{t.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {recentTools.length > 0 && (
+                  <>
+                    <span className={styles.searchQuickLabel}><UiIcon name="history" size={14} /> 최근 사용</span>
+                    <div className={styles.searchQuickList}>
+                      {recentTools.slice(0, 6).map((t) => (
+                        <Link key={t.href} href={t.href} className={styles.searchQuickItem}
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => { setTimeout(() => closeSearch(false), 0) }}>
+                          <ToolChip href={t.href} size={14} />
+                          <span>{t.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                <span className={styles.searchQuickLabel}><UiIcon name="bulb" size={14} /> 추천 도구</span>
+                <div className={styles.searchQuickList}>
+                  {PICKED_TOOLS.map((t) => (
+                    <Link key={t.href} href={t.href} className={styles.searchQuickItem}
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => { setTimeout(() => closeSearch(false), 0) }}>
+                      <ToolChip href={t.href} size={14} />
+                      <span>{t.name}</span>
                     </Link>
                   ))}
                 </div>
               </div>
             )}
-          </li>
-
-          <li className={styles.catItem}>
-            <Link
-              href="/collections"
-              className={`${styles.catLink} ${pathname.startsWith('/collections') ? styles.catLinkActive : ''}`}
-              aria-current={pathname.startsWith('/collections') ? 'page' : undefined}
-            >
-              상황별 가이드
-            </Link>
-          </li>
-        </ul>
-
-        {/* 오른쪽 버튼 영역 */}
-        <div className={styles.actions}>
-          <Link
-            href="/tools"
-            className={`${styles.allToolsBtn} ${pathname === '/tools' ? styles.allToolsBtnActive : ''}`}
-            aria-label="전체 도구 보기"
-            title="전체 도구 보기"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="7" height="7" rx="1"/>
-              <rect x="14" y="3" width="7" height="7" rx="1"/>
-              <rect x="3" y="14" width="7" height="7" rx="1"/>
-              <rect x="14" y="14" width="7" height="7" rx="1"/>
-            </svg>
-            <span>전체 도구</span>
-          </Link>
-
-          <ShareButton />
-
-          <button
-            ref={searchBtnRef}
-            className={`${styles.searchBtn} ${searchOpen ? styles.searchBtnActive : ''}`}
-            onClick={() => setSearchOpen((o) => !o)}
-            aria-label={isMac ? '검색 (⌘K)' : '검색 (Ctrl K)'}
-            aria-expanded={searchOpen}
-            aria-controls="nav-search-panel"
-            title={isMac ? '검색 (⌘K)' : '검색 (Ctrl K)'}>
-            {searchOpen ? (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            ) : (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-            )}
-          </button>
-
-          <button ref={burgerRef} className={styles.burger} onClick={() => setMobileOpen((o) => !o)} aria-label="메뉴" aria-expanded={mobileOpen}>
-            <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineTop : ''}`} />
-            <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineMid : ''}`} />
-            <span className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLineBot : ''}`} />
-          </button>
-        </div>
-      </nav>
-
-      {/* 검색창 슬라이드다운 */}
-      {searchOpen && (
-        <div className={styles.searchBar} id="nav-search-panel">
-          <div className={styles.searchBarInner}>
-            <svg className={styles.searchBarIcon} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
-            <input
-              ref={searchRef}
-              className={styles.searchBarInput}
-              type="text"
-              placeholder="필요한 도구를 검색하세요."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={handleSearchKey}
-              // 콤보박스 — 화살표 하이라이트를 AT에 통지 (aria-activedescendant)
-              role="combobox"
-              aria-expanded={!!query.trim()}
-              aria-controls="nav-search-results"
-              aria-autocomplete="list"
-              aria-activedescendant={
-                query.trim() && searchResults.length > 0
-                  ? `nav-search-opt-${Math.min(highlightIdx, searchResults.length - 1)}`
-                  : undefined
-              }
-            />
-            <kbd className={styles.searchKbd}>↑↓ Enter · ESC</kbd>
-            {query && (
-              <button className={styles.searchClear} onClick={() => setQuery('')}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
-              </button>
-            )}
           </div>
-
-          {/* 검색 결과 — 행 = div(option), 링크·즐겨찾기 버튼은 형제 (a 안 button 중첩 금지) */}
-          {query.trim() && (
-            <div className={styles.searchResults} role="listbox" id="nav-search-results" aria-label="검색 결과">
-              {searchResults.length > 0 ? (
-                searchResults.map((tool, idx) => (
-                  <div
-                    key={tool.href}
-                    id={`nav-search-opt-${idx}`}
-                    role="option"
-                    aria-selected={idx === highlightIdx}
-                    className={`${styles.searchResultItem} ${idx === highlightIdx ? styles.searchResultItemActive : ''}`}
-                    onMouseEnter={() => setHighlightIdx(idx)}
-                  >
-                    <Link href={tool.href}
-                      className={styles.searchResultLink}
-                      onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                      <ToolCatIcon href={tool.href} size={18} />
-                      <span className={styles.searchResultBody}>
-                        <span className={styles.searchResultName}>{tool.name}</span>
-                        <span className={styles.searchResultCat}>{categoryNameByHref(tool.href)}</span>
-                      </span>
-                    </Link>
-                    <button
-                      className={`${styles.megaItemFav} ${isFav(tool.href) ? styles.megaItemFavActive : ''}`}
-                      onClick={(e) => handleToggleFav(e, tool.href)}
-                      aria-label={isFav(tool.href) ? '즐겨찾기 제거' : '즐겨찾기 추가'}
-                    >{isFav(tool.href) ? '★' : '☆'}</button>
-                  </div>
-                ))
-              ) : (
-                <div className={styles.searchEmpty}>
-                  <span>검색 결과가 없습니다</span>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* 빠른 접근 — 검색어 없을 때 */}
-          {!query.trim() && (
-            <div className={styles.searchQuick}>
-              {favoriteTools.length > 0 && (
-                <>
-                  <span className={styles.searchQuickLabel}><UiIcon name="star" size={12} /> 즐겨찾기</span>
-                  <div className={styles.searchQuickList}>
-                    {favoriteTools.map((t) => (
-                      <Link key={t.href} href={t.href} className={styles.searchQuickItem}
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                        <ToolCatIcon href={t.href} size={14} />
-                        <span>{t.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {recentTools.length > 0 && (
-                <>
-                  <span className={styles.searchQuickLabel}><UiIcon name="clock" size={12} /> 최근 사용</span>
-                  <div className={styles.searchQuickList}>
-                    {recentTools.map((t) => (
-                      <Link key={t.href} href={t.href} className={styles.searchQuickItem}
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                        <ToolCatIcon href={t.href} size={14} />
-                        <span>{t.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              <span className={styles.searchQuickLabel}><UiIcon name="flame" size={12} /> 인기 도구</span>
-              <div className={styles.searchQuickList}>
-                {POPULAR_TOOLS.map((t) => (
-                  <Link key={t.href} href={t.href} className={styles.searchQuickItem}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => { setTimeout(() => { setSearchOpen(false); setQuery('') }, 0) }}>
-                    <ToolCatIcon href={t.href} size={14} />
-                    <span>{t.name}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       )}
 
-      {/* ── 모바일 드로어 ── 검색·카테고리 탭·아코디언 3단 구조 */}
+      {/* ── 모바일 드로어 ── 상단 고정 검색 + [메뉴 | 최근·즐겨찾기] 탭 */}
       {mobileOpen && (
-        <>
-          <div className={styles.drawer} role="dialog" aria-modal="true" aria-label="메뉴">
-            {/* 1) 상단 고정 검색 */}
-            <div className={styles.drawerSearchSticky}>
-              <div className={styles.drawerSearchInner}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
+        <div className={styles.drawer} role="dialog" aria-modal="true" aria-label="메뉴">
+          <div className={styles.drawerTop}>
+            {/* 검색 + 닫기 — aria-modal 이라 스크린리더(VoiceOver iOS 등)는 헤더의 메뉴(X) 버튼에 갈 수 없다 → 대화상자 안에 닫기 */}
+            <div className={styles.drawerSearchRow}>
+              <div className={styles.searchField}>
+                <span className={styles.searchFieldIcon}><UiIcon name="search" size={18} /></span>
                 <input
                   ref={mobileSearchRef}
                   type="text"
-                  className={styles.drawerSearchInput}
-                  placeholder="필요한 도구를 검색하세요."
+                  enterKeyHint="search"
+                  className={styles.searchInput}
+                  placeholder="필요한 계산기를 검색하세요"
+                  aria-label="계산기 검색"
                   value={mobileQuery}
                   onChange={(e) => setMobileQuery(e.target.value)}
                 />
                 {mobileQuery && (
                   <button
                     type="button"
-                    className={styles.drawerSearchClear}
+                    className={styles.searchClear}
                     onClick={() => { setMobileQuery(''); mobileSearchRef.current?.focus() }}
-                    aria-label="지우기"
-                  >×</button>
+                    aria-label="검색어 지우기"
+                  ><UiIcon name="x" size={16} /></button>
                 )}
               </div>
+              <button type="button" className={styles.drawerClose} onClick={() => closeDrawer(true)}>
+                닫기
+              </button>
             </div>
 
-            <div className={styles.drawerInner}>
-              {mobileQuery.trim() ? (
-                /* ── 검색 모드 ── */
-                (() => {
-                  const hits = searchTools(mobileQuery, 20)
-                  if (hits.length > 0) {
-                    return (
-                      <div className={styles.drawerSearchResults}>
-                        {hits.map(({ tool, category }) => (
-                          <Link
-                            key={tool.href}
-                            href={tool.href}
-                            className={styles.drawerSearchItem}
-                            onClick={() => { setTimeout(() => setMobileOpen(false), 0) }}
-                          >
-                            <span className={styles.drawerSearchIcon}><ToolCatIcon href={tool.href} size={18} /></span>
-                            <span className={styles.drawerSearchBody}>
-                              <span className={styles.drawerSearchName}>{tool.name}</span>
-                              {category && (
-                                <span className={styles.drawerSearchCat} style={{ color: `color-mix(in srgb, ${category.color} 70%, var(--paper-ink))` }}>
-                                  {category.name}
-                                </span>
-                              )}
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-                    )
-                  }
-                  // 검색 결과 없을 때 — 추천 5개 (badge: hot 우선 + new)
-                  const suggestions = [
-                    ...allTools.filter((t) => t.badge === 'hot'),
-                    ...allTools.filter((t) => t.badge === 'new'),
-                  ].slice(0, 5)
-                  return (
-                    <div className={styles.drawerSearchEmpty}>
-                      <p className={styles.drawerEmptyTitle}>
-                        <strong>&quot;{mobileQuery}&quot;</strong>을(를) 찾지 못했어요.
-                      </p>
-                      <p className={styles.drawerEmptySub}>
-                        다른 키워드로 검색하거나 아래 도구도 사용해보세요.
-                      </p>
-                      <div className={styles.drawerSearchResults}>
-                        {suggestions.map((tool) => (
-                          <Link
-                            key={tool.href}
-                            href={tool.href}
-                            className={styles.drawerSearchItem}
-                            onClick={() => { setTimeout(() => setMobileOpen(false), 0) }}
-                          >
-                            <span className={styles.drawerSearchIcon}><ToolCatIcon href={tool.href} size={18} /></span>
-                            <span className={styles.drawerSearchBody}>
-                              <span className={styles.drawerSearchName}>{tool.name}</span>
-                              <span className={styles.drawerSearchDesc}>{tool.desc}</span>
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                })()
-              ) : (
-                <>
-                  {/* 상황별 가이드 — 드로어 상단 바로가기 */}
-                  <Link href="/collections" className={styles.drawerNavLink}
-                    onClick={() => setMobileOpen(false)}>
-                    <span className={styles.drawerNavLinkIcon}><UiIcon name="compass" size={18} /></span>
-                    <span className={styles.drawerNavLinkText}>상황별 가이드</span>
-                    <span className={styles.drawerNavLinkArrow}>→</span>
-                  </Link>
-
-                  {/* 즐겨찾기·최근 사용 (있을 때만, 축약 노출) */}
-                  {favoriteTools.length > 0 && (
-                    <details className={styles.drawerAccItem} open>
-                      <summary className={styles.drawerAccSummary}>
-                        <span className={styles.drawerAccIcon}><UiIcon name="star" size={16} /></span>
-                        <span className={styles.drawerAccTitle}>즐겨찾기</span>
-                        <span className={styles.drawerAccCount}>{favoriteTools.length}</span>
-                      </summary>
-                      <div className={styles.drawerTools}>
-                        {favoriteTools.map((t) => (
-                          <Link key={t.href} href={t.href} className={styles.drawerToolItem}
-                            onClick={() => setMobileOpen(false)}>
-                            <ToolCatIcon href={t.href} size={14} />
-                            <span>{t.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </details>
-                  )}
-
-                  {recentTools.length > 0 && (
-                    <details className={styles.drawerAccItem}>
-                      <summary className={styles.drawerAccSummary}>
-                        <span className={styles.drawerAccIcon}><UiIcon name="clock" size={16} /></span>
-                        <span className={styles.drawerAccTitle}>최근 사용</span>
-                        <span className={styles.drawerAccCount}>{recentTools.length}</span>
-                      </summary>
-                      <div className={styles.drawerTools}>
-                        {recentTools.map((t) => (
-                          <Link key={t.href} href={t.href} className={styles.drawerToolItem}
-                            onClick={() => setMobileOpen(false)}>
-                            <ToolCatIcon href={t.href} size={14} />
-                            <span>{t.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </details>
-                  )}
-
-                  {/* 3) 아코디언 — 전체 카테고리 */}
-                  {categories.map((cat) => (
-                    <details
-                      key={cat.id}
-                      id={`drawer-cat-${cat.id}`}
-                      className={styles.drawerAccItem}
-                    >
-                      <summary className={styles.drawerAccSummary}>
-                        <span className={styles.drawerAccIcon} style={{ color: cat.color }}>
-                          <CatIcon id={cat.id} size={16} />
-                        </span>
-                        <span className={styles.drawerAccTitle} style={{ color: `color-mix(in srgb, ${cat.color} 70%, var(--paper-ink))` }}>{cat.name}</span>
-                        <span className={styles.drawerAccCount}>{cat.tools.length}</span>
-                      </summary>
-                      <div className={styles.drawerTools}>
-                        <Link
-                          href={`/tools/${cat.id}`}
-                          className={styles.drawerCatAllLink}
-                          onClick={() => setMobileOpen(false)}
-                        >
-                          전체 보기 →
-                        </Link>
-                        {cat.tools.map((tool) => (
-                          <Link key={tool.href} href={tool.href} className={styles.drawerToolItem}
-                            onClick={() => setMobileOpen(false)}>
-                            <ToolCatIcon href={tool.href} size={14} />
-                            <span>{tool.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </details>
-                  ))}
-                </>
-              )}
-            </div>
+            {!mq && (
+              <div className={styles.drawerTabs} role="tablist" aria-label="드로어 보기">
+                <button
+                  ref={menuTabRef}
+                  type="button"
+                  role="tab"
+                  id="drawer-tab-menu"
+                  aria-selected={drawerTab === 'menu'}
+                  aria-controls="drawer-panel"
+                  tabIndex={drawerTab === 'menu' ? 0 : -1}
+                  className={styles.drawerTab}
+                  onClick={() => setDrawerTab('menu')}
+                  onKeyDown={onDrawerTabKey}
+                >
+                  <UiIcon name="menu" size={16} />메뉴
+                </button>
+                <button
+                  ref={recentTabRef}
+                  type="button"
+                  role="tab"
+                  id="drawer-tab-recent"
+                  aria-selected={drawerTab === 'recent'}
+                  aria-controls="drawer-panel"
+                  tabIndex={drawerTab === 'recent' ? 0 : -1}
+                  className={styles.drawerTab}
+                  onClick={() => setDrawerTab('recent')}
+                  onKeyDown={onDrawerTabKey}
+                >
+                  <UiIcon name="history" size={16} />최근·즐겨찾기
+                  {recentCount > 0 && <span className={styles.drawerTabCount}>{recentCount}</span>}
+                </button>
+              </div>
+            )}
           </div>
-        </>
+
+          <div className={styles.drawerInner}>
+            {mq ? (
+              /* ── 검색 모드 ── */
+              drawerHits.hits.length > 0 ? (
+                <>
+                  {drawerHits.isPartial && <p className={styles.searchNote}>정확히 맞는 계산기가 없어, 일부 단어가 맞는 계산기를 보여 드려요.</p>}
+                  <ul className={styles.drawerList} aria-label="검색 결과">
+                    {drawerHits.hits.map(drawerToolRow)}
+                  </ul>
+                </>
+              ) : (
+                <div className={styles.drawerEmpty}>
+                  <p className={styles.drawerEmptyTitle}><strong>&lsquo;{mq}&rsquo;</strong>에 맞는 계산기를 찾지 못했어요.</p>
+                  <p className={styles.drawerEmptySub}>다른 낱말로 검색하거나 아래 추천 계산기를 둘러보세요.</p>
+                  <ul className={styles.drawerList} aria-label="추천 계산기">
+                    {PICKED_TOOLS.map(p => toolByHref.get(p.href)).filter((t): t is Tool => !!t).map(drawerToolRow)}
+                  </ul>
+                </div>
+              )
+            ) : (
+              <div role="tabpanel" id="drawer-panel" aria-labelledby={drawerTab === 'menu' ? 'drawer-tab-menu' : 'drawer-tab-recent'}>
+                {drawerTab === 'menu' ? (
+                  <>
+                    <ul className={styles.drawerMenu}>
+                      {MENU.map(m => (
+                        <li key={m.href}>
+                          <Link href={m.href} className={styles.drawerMenuLink} aria-current={menuCurrent(m)} onClick={() => setMobileOpen(false)}>
+                            <UiIcon name={m.icon} size={20} />
+                            <span>{m.label}</span>
+                            <UiIcon name="chev-r" size={16} />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <h2 className={styles.drawerSecH}>분야별 도구</h2>
+                    <div className={styles.drawerAcc}>
+                      {categories.map((c) => (
+                        <details key={c.id} id={`drawer-cat-${c.id}`} className={styles.drawerAccItem} open={c.id === cat ? true : undefined}>
+                          <summary className={styles.drawerAccSummary}>
+                            <span className={styles.chip} data-cat={c.id} aria-hidden="true"><CatIcon id={c.id} size={16} /></span>
+                            <span className={styles.drawerAccTitle}>{c.name}</span>
+                            <span className={styles.drawerAccCount}>{c.tools.length}</span>
+                            <span className={styles.drawerAccChev} aria-hidden="true"><UiIcon name="chev-d" size={16} /></span>
+                          </summary>
+                          <div className={styles.drawerTools}>
+                            <Link href={`/tools/${c.id}`} className={styles.drawerCatAllLink} onClick={() => setMobileOpen(false)}>
+                              {c.name} 전체 보기<UiIcon name="chev-r" size={14} />
+                            </Link>
+                            {c.tools.map((t) => (
+                              <Link key={t.href} href={t.href} className={styles.drawerToolItem}
+                                aria-current={pathname === t.href ? 'page' : undefined}
+                                onClick={() => setMobileOpen(false)}>
+                                <span>{t.name}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h2 className={styles.drawerSecH}>
+                      <UiIcon name="star" size={16} />즐겨찾기
+                      {favoriteTools.length > 0 && <span className={styles.drawerSecCount}>{favoriteTools.length}</span>}
+                    </h2>
+                    {favoriteTools.length > 0 ? (
+                      <ul className={styles.drawerList}>{favoriteTools.map(drawerToolRow)}</ul>
+                    ) : (
+                      <p className={styles.drawerHint}>자주 쓰는 계산기는 검색 결과나 아래 최근 목록의 별 버튼으로 고정할 수 있어요.</p>
+                    )}
+
+                    <h2 className={styles.drawerSecH}>
+                      <UiIcon name="history" size={16} />최근 사용
+                      {recentTools.length > 0 && <span className={styles.drawerSecCount}>{recentTools.length}</span>}
+                    </h2>
+                    {recentTools.length > 0 ? (
+                      <>
+                        <ul className={styles.drawerList}>{recentTools.map(drawerToolRow)}</ul>
+                        <div className={styles.drawerRecentFoot}>
+                          <span>최근 7일 기록 · 이 브라우저에만 저장됩니다</span>
+                          <button type="button" className={styles.drawerTextBtn} onClick={clearRecents}>최근 기록 지우기</button>
+                        </div>
+                      </>
+                    ) : (
+                      <p className={styles.drawerHint}>아직 연 계산기가 없어요. 계산기를 열면 최근 7일 기록이 이 브라우저에만 저장됩니다.</p>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </>
   )

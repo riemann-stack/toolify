@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -23,7 +23,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -33,13 +33,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -56,11 +56,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -75,13 +75,13 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -106,7 +106,7 @@
   border-radius: 10px;
   padding: 12px 8px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: center;
 }@media (hover: hover) {
   .countryBtn:hover { border-color: var(--accent); }
@@ -118,7 +118,7 @@
 }
 .countryFlag { font-size: 26px; line-height: 1; }
 .countryName { font-size: 12px; font-weight: 700; color: var(--text); }
-.countryLimit { font-size: 11px; color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.countryLimit { font-size: 11px; color: var(--accent); font-family: var(--font-sans); font-weight: 700; }
 
 /* 품목 그리드 */
 .itemGrid {
@@ -138,7 +138,7 @@
   border-radius: 10px;
   padding: 10px 6px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: center;
 }@media (hover: hover) {
   .itemBtn:hover { border-color: var(--accent); }
@@ -150,20 +150,20 @@
 }
 .itemEmoji { font-size: 22px; line-height: 1; }
 .itemLabel { font-size: 11px; font-weight: 700; color: var(--text); line-height: 1.3; }
-.itemRate { font-size: 11px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.itemRate { font-size: 11px; font-family: var(--font-sans); font-weight: 700; }
 
 /* 히어로 */
 .hero {
   background: linear-gradient(135deg, rgba(232, 151, 87, 0.10) 0%, rgba(217, 119, 6, 0.06) 100%);
   border: 1px solid rgba(232, 151, 87, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
   transition: border-color 0.2s;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -177,12 +177,12 @@
 .heroFinal {
   background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(232, 151, 87, 0.06) 100%);
   border: 1px solid rgba(13, 148, 136, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroValueLarge {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(32px, 7vw, 44px);
   font-weight: 800;
   color: var(--text);
@@ -202,7 +202,7 @@
 
 .tipBox {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   margin-top: 12px;
   font-size: 13px;
@@ -230,11 +230,11 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.cellMono { font-family: var(--font-sans); font-weight: 600; }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -243,7 +243,7 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.cellSubtitle td { text-align: left !important; font-family: 'Noto Sans KR', sans-serif !important; }
+.cellSubtitle td { text-align: left !important; font-family: var(--font-sans); }
 .cellTotal td {
   background: rgba(13, 148, 136, 0.06);
   font-weight: 700;
@@ -261,12 +261,12 @@
 .listedChip {
   background: var(--bg3);
   border: 1px solid var(--accent);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 국가별 가이드 */
@@ -280,10 +280,10 @@
   -webkit-appearance: none;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -309,7 +309,7 @@
 .countryGuideLimit {
   margin: 0;
   font-size: 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
@@ -339,7 +339,7 @@
 .scenarioCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -352,7 +352,7 @@
   margin: 0;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .scenarioEmoji { font-size: 22px; }
 .scenarioHead strong { font-weight: 700; }
@@ -373,14 +373,14 @@
   border-radius: 6px;
   padding: 4px 8px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .scenarioResult {
   margin: 4px 0 0;
   font-size: 13px;
   font-weight: 800;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .scenarioNotes {
   display: flex;
@@ -397,15 +397,15 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 4px;
 }@media (hover: hover) {
-  .scenarioApply:hover { background: #D97706; }
+  .scenarioApply:hover { background: var(--amber-600); }
 }
 
 /* 크로스링크 */
@@ -413,7 +413,7 @@
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;
@@ -431,40 +431,40 @@
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 .warnCardStrong {
   background: rgba(219, 39, 119, 0.08);
   border: 1px solid rgba(219, 39, 119, 0.4);
-  border-left: 4px solid #DB2777;
-  border-radius: 12px;
+  border-left: 4px solid var(--pink-600);
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
 }
-.warnCardStrong strong { display: block; color: #DB2777; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCardStrong strong { display: block; color: var(--pink-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCardStrong p { margin: 0; color: var(--text); line-height: 1.75; }
 
 .warnCardGood {
   background: rgba(13, 148, 136, 0.08);
   border: 1px solid rgba(13, 148, 136, 0.4);
-  border-left: 4px solid #0D9488;
-  border-radius: 12px;
+  border-left: 4px solid var(--teal-600);
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
 }
-.warnCardGood strong { display: block; color: #0D9488; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCardGood strong { display: block; color: var(--teal-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCardGood p { margin: 0; color: var(--text); line-height: 1.75; }
 
 /* 면책 */
 .disclaimer {
   background: rgba(232, 151, 87, 0.05);
   border: 1px solid rgba(232, 151, 87, 0.2);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -474,7 +474,7 @@
   display: block;
   color: var(--accent);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

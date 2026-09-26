@@ -40,18 +40,18 @@ export default function Nesin5GradeClient() {
     <div className={s.wrap}>
       {/* 결과 히어로 */}
       <div className={s.resultCard} role="status">
-        <p className={s.resultLabel}>이수단위 가중 평균 내신</p>
+        <p className={s.resultLabel}>학점(구 이수단위) 가중 평균 내신</p>
         {avg.avg5 !== null ? (
           <>
             <p className={s.hero} style={{ color: gradeColor(Math.round(avg.avg5)) }}>
               {fmt2(avg.avg5)}<span className={s.heroUnit}>등급</span>
             </p>
             <p className={s.resultSub}>
-              5등급제 · 총 {avg.totalUnits}단위 · 구 9등급 환산 <strong>{avg.avg9 !== null ? fmt2(avg.avg9) : '—'}등급</strong>
+              5등급제 · 총 {avg.totalUnits}학점 · 구 9등급 환산 <strong>{avg.avg9 !== null ? fmt2(avg.avg9) : '—'}등급</strong>
             </p>
           </>
         ) : (
-          <p className={s.emptyNote}>과목별 석차·재적수·이수단위를 입력하면 5등급 가중 평균과 9등급 환산을 계산합니다.</p>
+          <p className={s.emptyNote}>과목별 석차·재적수·학점(구 이수단위)을 입력하면 5등급 가중 평균과 9등급 환산을 계산합니다.</p>
         )}
       </div>
 
@@ -61,7 +61,7 @@ export default function Nesin5GradeClient() {
           <span className={`${s.colName}`}>과목</span>
           <span className={s.colNum}>석차</span>
           <span className={s.colNum}>재적</span>
-          <span className={s.colNum}>단위</span>
+          <span className={s.colNum}>학점</span>
           <span className={s.colGrade}>등급</span>
           <span className={s.colDel} aria-hidden />
         </div>
@@ -76,7 +76,7 @@ export default function Nesin5GradeClient() {
               <input className={`${s.inp} ${s.colNum}`} type="number" inputMode="numeric" min={1} value={sub.total}
                 onChange={(e) => update(sub.id, 'total', e.target.value)} aria-label={`${i + 1}번 재적수`} />
               <input className={`${s.inp} ${s.colNum}`} type="number" inputMode="decimal" min={0} value={sub.units}
-                onChange={(e) => update(sub.id, 'units', e.target.value)} aria-label={`${i + 1}번 이수단위`} />
+                onChange={(e) => update(sub.id, 'units', e.target.value)} aria-label={`${i + 1}번 학점(이수단위)`} />
               <span className={s.colGrade}>
                 <span className={s.gradeBadge} style={{ color: gradeColor(r.grade5), borderColor: gradeColor(r.grade5) }}>
                   {r.grade5 ?? '—'}

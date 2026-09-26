@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -23,7 +23,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -33,13 +33,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -56,17 +56,17 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
 .input::-webkit-outer-spin-button,
 .input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.input[type="date"] { font-family: 'Noto Sans KR', sans-serif; }
+.input[type="date"] { font-family: var(--font-sans); }
 
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
@@ -105,13 +105,13 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -128,7 +128,7 @@
   line-height: 1.85;
 }
 .periodBox p { margin: 0; }
-.periodBox strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.periodBox strong { color: var(--accent); font-family: var(--font-sans); }
 
 /* 월별 카드 */
 .monthGrid {
@@ -150,7 +150,7 @@
   font-size: 12px;
   color: var(--accent);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .monthCard .input {
   padding: 8px 10px;
@@ -159,15 +159,15 @@
 
 /* 히어로 */
 .hero {
-  background: linear-gradient(135deg, rgba(8, 145, 178, 0.10) 0%, rgba(13, 148, 136, 0.06) 100%);
-  border: 1px solid rgba(8, 145, 178, 0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan-600) 10%, transparent) 0%, rgba(13, 148, 136, 0.06) 100%);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(26px, 5.5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -185,12 +185,12 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.helpText strong { color: var(--text); font-family: var(--font-sans); }
 .cellAccent { color: var(--accent); }
 
 .tipBox {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   margin-top: 12px;
   font-size: 13px;
@@ -209,7 +209,7 @@
 .compareCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 18px 18px;
   display: flex;
   flex-direction: column;
@@ -225,11 +225,11 @@
   font-size: 14px;
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .compareValue {
   margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 800;
   color: var(--accent);
@@ -267,16 +267,16 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.cellMono { font-family: var(--font-sans); font-weight: 600; }
 .cellTotal td {
   background: rgba(13, 148, 136, 0.06);
   font-weight: 700;
 }
-.rowActive { background: rgba(8, 145, 178, 0.06); }
+.rowActive { background: color-mix(in srgb, var(--cyan-600) 6%, transparent); }
 
 .tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tableScroll table { min-width: 360px; }
@@ -296,7 +296,7 @@
 }
 .milestoneYear {
   margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);
@@ -310,7 +310,7 @@
   margin: 0;
   font-size: 11px;
   font-weight: 700;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 크로스링크 */
@@ -318,7 +318,7 @@
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;
@@ -336,29 +336,29 @@
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 .warnCardStrong {
   background: rgba(219, 39, 119, 0.08);
   border: 1px solid rgba(219, 39, 119, 0.4);
-  border-left: 4px solid #DB2777;
-  border-radius: 12px;
+  border-left: 4px solid var(--pink-600);
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
 }
-.warnCardStrong strong { display: block; color: #DB2777; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCardStrong strong { display: block; color: var(--pink-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCardStrong p { margin: 0; color: var(--text); line-height: 1.75; }
 
 /* 면책 */
 .disclaimer {
-  background: rgba(8, 145, 178, 0.05);
-  border: 1px solid rgba(8, 145, 178, 0.2);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent);
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -366,9 +366,9 @@
 }
 .disclaimer strong {
   display: block;
-  color: #0891B2;
+  color: var(--cyan-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;
@@ -387,8 +387,8 @@
   padding: 36px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 
 /* iOS zoom 방지 */

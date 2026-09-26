@@ -1,0 +1,21 @@
+/* components/ToolPage.module.css — 도구 페이지 래퍼 (스펙 §10.1 — 200/200 인라인 래퍼를 코드모드 W로 교체)
+   ≥1200: 본문(≤760) + 48 + 레일 300 = 1108(셸 1156) · <1200: 단일 열
+   width={880}(와이드)은 컨테이너 1276, ≥1320에서만 레일 */
+.tp { max-width: var(--w-shell); margin: 0 auto; padding: 0 24px 64px; display: grid; grid-template-columns: minmax(0, var(--w-content)) var(--w-rail); gap: 48px; justify-content: center; align-items: start; }
+.tpWide { max-width: calc(var(--w-wide) + 48px + var(--w-rail) + 48px); grid-template-columns: minmax(0, var(--w-wide)) var(--w-rail); } /* 1276 */
+.tpMain { min-width: 0; }
+/* 레거시 머리(p·h1·리드) 뒤에 ToolPage가 붙이는 메타 한 줄 — 리드의 marginBottom(24~40)만큼 당긴다(최소 6px 간격) */
+.tpMain > .tpByline { margin: -12px 0 24px; }
+/* 도구 영역(머리 아래 ~ GuideDivider 전) — 레거시 결과 레이아웃의 숫자 폭 흔들림 방지(tnum). 스펙 §6.4 숫자 정책 */
+.tpTool { font-variant-numeric: tabular-nums; }
+.tpRail { min-width: 0; padding-top: 20px; display: flex; flex-direction: column; gap: 16px; align-self: stretch; }
+.tpSticky { position: sticky; top: calc(var(--header-h) + 16px); display: flex; flex-direction: column; gap: 16px; }
+@media (max-width: 1199px) {
+  .tp { grid-template-columns: minmax(0, var(--w-content)); }
+  .tpRail { display: none; }
+}
+@media (max-width: 1319px) {
+  .tpWide { grid-template-columns: minmax(0, var(--w-wide)); }
+  .tpWide .tpRail { display: none; }
+}
+@media (max-width: 640px) { .tp { padding: 0 16px 48px; } }

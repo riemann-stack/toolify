@@ -1,13 +1,12 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import Link from 'next/link'
 import {
   calcPension,
   pensionStartAge,
   NP_A_VALUE_2026,
   NP_PROPORTION_CONSTANT,
-  NP_INCOME_FLOOR,
-  NP_INCOME_CAP,
   NP_MIN_COVERAGE_MONTHS,
   NP_DEPENDENT_SPOUSE_YEAR,
   NP_DEPENDENT_OTHER_YEAR,
@@ -20,6 +19,8 @@ import {
   adjustPct,
   calcBreakEven,
 } from './nationalPensionUtils'
+import { pensionBaseAt, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
+import { todayStr } from '@/lib/date'
 import s from './nationalPension.module.css'
 
 const STORAGE_KEY = 'youtil:national-pension:inputs-v1'
@@ -30,10 +31,11 @@ const MODES: { id: PensionMode; label: string }[] = [
   { id: 'defer', label: '연기연금' },
 ]
 
-/* 입력 상한 — lib이 최종 클램프하지만 입력단에서도 상식 범위 (월 41만~659만은 lib, 표시는 0~2천만) */
+/* 입력 상한 — lib이 기준소득월액 상·하한(매년 7월 개정, lib/krInsuranceRates 스케줄)으로 최종 클램프, 입력단은 0~2천만 */
 const INCOME_INPUT_MAX = 20_000_000
 const MAX_YEARS = 50
 const CURRENT_YEAR = 2026
+const MIN_BIRTH_YEAR = 1920
 
 interface Stored {
   birthYear?: unknown
@@ -50,7 +52,16 @@ function isMode(v: unknown): v is PensionMode {
   return v === 'normal' || v === 'early' || v === 'defer'
 }
 
-export default function NationalPensionClient() {
+/* 기준일 — 기준소득월액 상·하한 구간 선택용. SSG와 hydration 첫 렌더는 page.tsx가 빌드 때 넘긴 날짜를
+   함께 쓰고(불일치 없음), hydration 직후 기기 날짜(todayStr)로 다시 렌더한다. */
+const noopSubscribe = () => () => {}
+function useAsOfDate(buildDate: string): string {
+  return useSyncExternalStore(noopSubscribe, todayStr, () => buildDate)
+}
+
+export default function NationalPensionClient({ buildDate }: { buildDate?: string }) {
+  const asOf = useAsOfDate(buildDate ?? todayStr())
+  const incomeBase = pensionBaseAt(asOf)
   const [birthYear, setBirthYear] = useState('1985')
   const [years, setYears] = useState('20')
   const [months, setMonths] = useState('0')
@@ -94,8 +105,11 @@ export default function NationalPensionClient() {
   const birthYearN = useMemo(() => {
     const y = parseInt(birthYear, 10)
     if (!Number.isFinite(y)) return CURRENT_YEAR - 40
-    return Math.min(CURRENT_YEAR, Math.max(1920, y))
+    return Math.min(CURRENT_YEAR, Math.max(MIN_BIRTH_YEAR, y))
   }, [birthYear])
+  /* 4자리·범위 안 연도일 때만 개시연령 관련 표시 (입력 중 '198' → 1920 클램프가 히어로에 새지 않게) */
+  const birthValid =
+    /^\d{4}$/.test(birthYear) && birthYearN === parseInt(birthYear, 10)
 
   const yearsN = Math.min(MAX_YEARS, Math.max(0, parseInt(years, 10) || 0))
   const monthsN = Math.min(11, Math.max(0, parseInt(months, 10) || 0))
@@ -116,8 +130,9 @@ export default function NationalPensionClient() {
         adjustYears: adjustYearsN,
         spouse,
         dependents: dependentsN,
+        incomeBase,
       }),
-    [totalMonths, incomeN, mode, adjustYearsN, spouse, dependentsN],
+    [totalMonths, incomeN, mode, adjustYearsN, spouse, dependentsN, incomeBase],
   )
 
   /* 비교용 정상수령 결과 (보정 없는 기준선) — 통계 재계산 금지, lib 재호출 */
@@ -130,13 +145,14 @@ export default function NationalPensionClient() {
         adjustYears: 0,
         spouse,
         dependents: dependentsN,
+        incomeBase,
       }),
-    [totalMonths, incomeN, spouse, dependentsN],
+    [totalMonths, incomeN, spouse, dependentsN, incomeBase],
   )
 
   /* 손익분기 — UI 단순 누적 교차 (보정·통계 미재계산, result.monthly만 사용) */
   const breakEven = useMemo(() => {
-    if (mode === 'normal' || !result.eligible || incomeN <= 0 || adjustYearsN <= 0) return null
+    if (mode === 'normal' || !result.eligible || incomeN <= 0 || adjustYearsN <= 0 || !birthValid) return null
     return calcBreakEven(
       normalResult.monthly,
       result.monthly,
@@ -144,7 +160,7 @@ export default function NationalPensionClient() {
       adjustYearsN,
       mode,
     )
-  }, [mode, result.eligible, result.monthly, normalResult.monthly, startAge, adjustYearsN, incomeN])
+  }, [mode, result.eligible, result.monthly, normalResult.monthly, startAge, adjustYearsN, incomeN, birthValid])
 
   const monthlyDiff = result.monthly - normalResult.monthly // 정상 대비 월액 차
 
@@ -159,10 +175,10 @@ export default function NationalPensionClient() {
       `월 ${fmtWon(result.monthly)}원 (연 ${fmtWon(result.annual)}원, 세전)\n` +
       `· 가입 ${yearsN}년 ${monthsN}개월 · 평균소득월액 ${fmtWon(result.B)}원\n` +
       `· 수급 방식 ${modeLabel}${adjustYearsN > 0 ? ` ${adjustYearsN}년 (${adjustPct(result.adjustFactor)})` : ''}\n` +
-      `· ${birthYearN}년생 만 ${startAge}세부터\n` +
+      (birthValid ? `· ${birthYearN}년생 만 ${startAge}세부터\n` : '') +
       `※ 공단 간단계산 산식 기반 추정 · youtil.kr`
     )
-  }, [result, yearsN, monthsN, mode, adjustYearsN, birthYearN, startAge])
+  }, [result, yearsN, monthsN, mode, adjustYearsN, birthYearN, startAge, birthValid])
 
   const onCopy = async () => {
     try {
@@ -173,7 +189,7 @@ export default function NationalPensionClient() {
   }
 
   const hasIncome = incomeN > 0 // 소득 입력 전에는 결과를 숨겨 '빈칸→숫자' 오해 방지
-  const incomeClamped = incomeN > 0 && incomeN !== result.B // lib이 41만~659만으로 클램프했는지 (빈칸은 제외)
+  const incomeClamped = incomeN > 0 && incomeN !== result.B // lib이 상·하한으로 클램프했는지 (빈칸은 제외)
 
   return (
     <div className={s.wrap}>
@@ -193,10 +209,12 @@ export default function NationalPensionClient() {
               placeholder="1985"
             />
             <p className={s.helpText}>
-              {birthYear.length === 4 ? (
+              {birthValid ? (
                 <>
                   <strong>{birthYearN}년생</strong>은 만 <strong className={s.cellAccent}>{startAge}세</strong>부터 노령연금 수급
                 </>
+              ) : birthYear.length === 4 ? (
+                `${MIN_BIRTH_YEAR}~${CURRENT_YEAR}년 사이 연도를 입력하세요`
               ) : (
                 '4자리 연도 입력 (예: 1985) → 수급개시연령 표시'
               )}
@@ -218,7 +236,7 @@ export default function NationalPensionClient() {
               {incomeClamped && (
                 <>
                   {' · '}
-                  <span className={s.cellAccent}>{fmtWon(result.B)}원으로 적용</span> (상·하한 {fmtWon(NP_INCOME_FLOOR)}~{fmtWon(NP_INCOME_CAP)}원)
+                  <span className={s.cellAccent}>{fmtWon(result.B)}원으로 적용</span> (상·하한 {fmtWon(incomeBase.min)}~{fmtWon(incomeBase.max)}원 · {pensionBasePeriodLabel(incomeBase)})
                 </>
               )}
             </p>
@@ -358,7 +376,7 @@ export default function NationalPensionClient() {
           </p>
           <div className={s.subline}>
             <span>연 환산 <strong>{fmtWon(result.annual)}원</strong></span>
-            <span>{birthYearN}년생은 만 <strong>{startAge}세</strong>부터</span>
+            {birthValid && <span>{birthYearN}년생은 만 <strong>{startAge}세</strong>부터</span>}
           </div>
           <button type="button" className={s.copyBtn} onClick={onCopy}>
             {copied ? '복사됨' : '결과 요약 복사'}
@@ -437,12 +455,14 @@ export default function NationalPensionClient() {
           <span className={s.cardLabel}>정상수령과 비교 (참고)</span>
           <div className={s.compareCard}>
             <div className={s.compareRow}>
-              <span className="label">정상수령 (만 {startAge}세 개시)</span>
+              <span className="label">{birthValid ? `정상수령 (만 ${startAge}세 개시)` : '정상수령'}</span>
               <span className={s.val}>{fmtWon(normalResult.monthly)}원/월</span>
             </div>
             <div className={s.compareRow}>
               <span className="label">
-                {mode === 'early' ? `조기수령 (만 ${startAge - adjustYearsN}세 개시)` : `연기연금 (만 ${startAge + adjustYearsN}세 개시)`}
+                {!birthValid
+                  ? (mode === 'early' ? `조기수령 (${adjustYearsN}년 일찍)` : `연기연금 (${adjustYearsN}년 늦게)`)
+                  : mode === 'early' ? `조기수령 (만 ${startAge - adjustYearsN}세 개시)` : `연기연금 (만 ${startAge + adjustYearsN}세 개시)`}
               </span>
               <span className={`${s.val} ${s.valAccent}`}>{fmtWon(result.monthly)}원/월</span>
             </div>
@@ -462,6 +482,8 @@ export default function NationalPensionClient() {
                 ? ' — 이 나이를 넘겨 오래 받을수록 정상수령이 누적상 유리해집니다.'
                 : ' — 이 나이를 넘겨 오래 받을수록 연기연금이 누적상 유리해집니다.'}
             </div>
+          ) : !birthValid ? (
+            <div className={s.tipBox}>💡 출생연도(4자리)를 입력하면 단순 손익분기 연령을 계산합니다.</div>
           ) : (
             <div className={s.tipBox}>💡 입력 조건에서는 단순 누적 손익분기 교차가 발생하지 않습니다.</div>
           )}
@@ -471,12 +493,12 @@ export default function NationalPensionClient() {
         </div>
       )}
 
-      <a
+      <Link
         href="/tools/finance/4-insurance"
         className={s.crossLink}
       >
         4대보험 계산기 → 매달 내는 국민연금 보험료부터 확인
-      </a>
+      </Link>
     </div>
   )
 }

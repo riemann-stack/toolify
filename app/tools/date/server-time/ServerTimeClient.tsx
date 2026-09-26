@@ -255,6 +255,12 @@ export default function ServerTimeClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offsetMs])
 
+  /* 언마운트(사이트 안 다른 페이지로 이동) 시 첫 비프 때 만든 AudioContext를 닫는다 — 방문마다 컨텍스트가 쌓이는 누수 방지 */
+  useEffect(() => () => {
+    try { audioCtxRef.current?.close().catch(() => {}) } catch {}
+    audioCtxRef.current = null
+  }, [])
+
   /* 비프 */
   const getAudio = () => {
     if (!audioCtxRef.current && typeof window !== 'undefined') {
@@ -443,7 +449,7 @@ export default function ServerTimeClient() {
           <div className={s.metaItem}>
             <span className={s.metaLabel}>마지막 동기화</span>
             <span className={s.metaValue}>
-              {lastSyncAt ? new Date(lastSyncAt).toLocaleTimeString('ko-KR') : '—'}
+              {lastSyncAt ? fmtKstTime(lastSyncAt + offsetMs, false) : '—'}
             </span>
           </div>
         </div>
@@ -528,7 +534,7 @@ export default function ServerTimeClient() {
               <div className={s.metaItem}>
                 <span className={s.metaLabel}>마지막 측정</span>
                 <span className={s.metaValue}>
-                  {new Date(extResult.measuredAt).toLocaleTimeString('ko-KR')}
+                  {fmtKstTime(extResult.measuredAt + offsetMs, false)}
                 </span>
               </div>
               <div className={s.metaItem}>

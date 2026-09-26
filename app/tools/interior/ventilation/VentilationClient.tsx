@@ -173,10 +173,10 @@ export default function VentilationClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.cardLabel}>
+        <span className={styles.cardLabel} id="ventilation-space-label">
           공간 용도 <span className={styles.cardLabelHint}>선택 시 권장 ACH 자동 적용</span>
-        </label>
-        <div className={styles.spaceGrid}>
+        </span>
+        <div className={styles.spaceGrid} role="group" aria-labelledby="ventilation-space-label">
           {SPACE_STANDARDS.map(s => (
             <button key={s.id}
               type="button" aria-pressed={spaceTypeId === s.id}
@@ -229,7 +229,7 @@ export default function VentilationClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>상세</label>
+            <span className={styles.cardLabel}>상세</span>
             <div className={styles.detailTable}>
               <div className={styles.detailRow}><span>공간 부피</span><span>{fmt(main.volume, 1)} ㎥</span></div>
               <div className={styles.detailRow}><span>목표 ACH</span><span>{targetAch.toFixed(1)} 회/h</span></div>
@@ -254,7 +254,7 @@ export default function VentilationClient() {
             </div>
           )}
 
-          {occupants > 0 && main.perPersonAirflow < 15 && (
+          {occupants > 0 && main.perPersonAirflow < 21.6 && (
             <div className={main.perPersonAirflow < 8 ? styles.warnBox : styles.infoBox}>
               {main.perPersonAirflow < 8 ? '⚠️' : '💡'} <strong>인원 대비 1인당 환기량 {fmt(main.perPersonAirflow)}㎥/h</strong> — 권장 최소 외기 약 21.6㎥/h·인(학교보건법)보다 낮습니다.
               {main.perPersonAirflow < 8
@@ -294,7 +294,7 @@ export default function VentilationClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>CADR 등급별 권장</label>
+            <span className={styles.cardLabel}>CADR 등급별 권장</span>
             <div className={styles.detailTable}>
               <div className={styles.detailRow}><span>최소 (4 ACH 기준)</span><span>{fmt(cadr.minCadr)} ㎥/h</span></div>
               <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>이상 (5 ACH, 빠른 제거)</span><span>{fmt(cadr.idealCadr)} ㎥/h</span></div>
@@ -341,7 +341,9 @@ export default function VentilationClient() {
               {perf.currentAch.toFixed(2)}<span className={styles.heroNumUnit}>회/h</span>
             </div>
             <div className={styles.heroSub}>
-              공기 1회 교체: 약 {fmt(perf.oneCycleMinutes)}분 · 목표 {targetAch.toFixed(1)} ACH 대비
+              {perf.currentAch > 0
+                ? <>공기 1회 교체: 약 {fmt(perf.oneCycleMinutes)}분</>
+                : <>풍량이 0이라 공기가 교체되지 않습니다</>} · 목표 {targetAch.toFixed(1)} ACH 대비
             </div>
             <div className={styles.heroCategory}
               style={{ background: `${perf.efficiencyColor}22`, color: perf.efficiencyColor, border: `1px solid ${perf.efficiencyColor}66` }}>
@@ -374,8 +376,8 @@ export default function VentilationClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>창문 개방 방식</label>
-            <div className={styles.optionRow}>
+            <span className={styles.cardLabel} id="ventilation-window-mode-label">창문 개방 방식</span>
+            <div className={styles.optionRow} role="group" aria-labelledby="ventilation-window-mode-label">
               {WINDOW_MODES.map(m => (
                 <button key={m.id}
                   type="button" aria-pressed={windowMode === m.id}
@@ -383,15 +385,15 @@ export default function VentilationClient() {
                   onClick={() => setWindowMode(m.id)}>
                   {m.name}
                   <br />
-                  <small style={{ fontSize: 10, opacity: 0.7 }}>{m.achMin}~{m.achMax} ACH</small>
+                  <small style={{ fontSize: 11, opacity: 0.7 }}>{m.achMin}~{m.achMax} ACH</small>
                 </button>
               ))}
             </div>
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>바람 세기</label>
-            <div className={styles.optionRow4}>
+            <span className={styles.cardLabel} id="ventilation-wind-label">바람 세기</span>
+            <div className={styles.optionRow4} role="group" aria-labelledby="ventilation-wind-label">
               {WIND_SPEEDS.map(w => (
                 <button key={w.id}
                   type="button" aria-pressed={windSpeed === w.id}
@@ -399,15 +401,15 @@ export default function VentilationClient() {
                   onClick={() => setWindSpeed(w.id)}>
                   {w.name}
                   <br />
-                  <small style={{ fontSize: 10, opacity: 0.7 }}>×{w.factor}</small>
+                  <small style={{ fontSize: 11, opacity: 0.7 }}>×{w.factor}</small>
                 </button>
               ))}
             </div>
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>목표 교체 횟수 — {cycles}회</label>
-            <div className={styles.optionRow4}>
+            <span className={styles.cardLabel} id="ventilation-cycles-label">목표 교체 횟수 — {cycles}회</span>
+            <div className={styles.optionRow4} role="group" aria-labelledby="ventilation-cycles-label">
               {[1, 2, 3, 5].map(n => (
                 <button key={n}
                   type="button" aria-pressed={cycles === n}
@@ -443,8 +445,8 @@ export default function VentilationClient() {
           )}
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>오늘의 미세먼지 등급</label>
-            <div className={styles.dustGrid}>
+            <span className={styles.cardLabel} id="ventilation-dust-label">오늘의 미세먼지 등급</span>
+            <div className={styles.dustGrid} role="group" aria-labelledby="ventilation-dust-label">
               {DUST_LEVELS.map(d => (
                 <button key={d.id}
                   type="button" aria-pressed={dustLevel === d.id}
@@ -486,8 +488,8 @@ export default function VentilationClient() {
           </div>
 
           <div className={styles.card}>
-            <label className={styles.cardLabel}>활동 수준</label>
-            <div className={styles.optionRow5}>
+            <span className={styles.cardLabel} id="ventilation-activity-label">활동 수준</span>
+            <div className={styles.optionRow5} role="group" aria-labelledby="ventilation-activity-label">
               {CO2_BY_ACTIVITY.map(a => (
                 <button key={a.id}
                   type="button" aria-pressed={co2Activity === a.id}
@@ -495,7 +497,7 @@ export default function VentilationClient() {
                   onClick={() => setCo2Activity(a.id)}>
                   {a.name}
                   <br />
-                  <small style={{ fontSize: 10, opacity: 0.7 }}>{a.co2LperHour}L/h</small>
+                  <small style={{ fontSize: 11, opacity: 0.7 }}>{a.co2LperHour}L/h</small>
                 </button>
               ))}
             </div>
@@ -522,7 +524,7 @@ export default function VentilationClient() {
               </div>
 
               <div className={styles.card}>
-                <label className={styles.cardLabel}>CO₂ 농도별 영향</label>
+                <span className={styles.cardLabel}>CO₂ 농도별 영향</span>
                 <div className={styles.co2Table}>
                   {CO2_THRESHOLDS.slice(0, -1).map((t, i) => {
                     const prevMax = i === 0 ? 400 : CO2_THRESHOLDS[i - 1].max
@@ -533,7 +535,7 @@ export default function VentilationClient() {
                         style={{ borderLeftColor: t.color, ...(isCurrent ? { borderTopColor: t.color, borderRightColor: t.color, borderBottomColor: t.color, background: `${t.color}15` } : {}) }}>
                         <span className={styles.co2Range} style={{ color: t.color }}>
                           {prevMax === 400 ? '~' + t.max : `${prevMax}~${t.max}`}
-                          <small style={{ display: 'block', color: 'var(--muted)', fontSize: 9.5 }}>ppm</small>
+                          <small style={{ display: 'block', color: 'var(--muted)', fontSize: 11 }}>ppm</small>
                         </span>
                         <span className={styles.co2Label}>
                           <strong style={{ color: t.color }}>{t.label}</strong>

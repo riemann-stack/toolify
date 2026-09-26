@@ -9,6 +9,7 @@ import {
   CG_LOCAL_TAX_RATE,
   CG_SHORT_UNDER1_RATE,
   CG_SHORT_UNDER2_RATE,
+  CG_PRESALE_RATE,
   type PropertyType,
 } from './capitalGainsUtils'
 import { todayStr } from '@/lib/date'
@@ -84,7 +85,8 @@ export default function CapitalGainsClient() {
   const [acquirePrice, setAcquirePrice] = useState('1,000,000,000')
   const [expenses, setExpenses] = useState('')
   const [acquireDate, setAcquireDate] = useState('2016-06-01')
-  const [saleDate, setSaleDate] = useState(todayStr())
+  // 양도일 기본값(오늘)은 마운트 후 설정 — SSG 빌드일과 방문일이 달라도 hydration 불일치가 없도록
+  const [saleDate, setSaleDate] = useState('')
   const [oneHouse, setOneHouse] = useState(true)
   const [liveReqMet, setLiveReqMet] = useState(true)
   const [liveYears, setLiveYears] = useState('10')
@@ -94,6 +96,7 @@ export default function CapitalGainsClient() {
   /* localStorage 복원 — 무검증 as 금지: 타입·형식·enum 검증 */
   useEffect(() => {
     if (typeof window === 'undefined') return
+    let restoredSale: string | null = null
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
@@ -102,12 +105,14 @@ export default function CapitalGainsClient() {
       if (typeof j.acquirePrice === 'string') setAcquirePrice(commafy(j.acquirePrice))
       if (typeof j.expenses === 'string') setExpenses(commafy(j.expenses))
       if (typeof j.acquireDate === 'string' && isValidIso(j.acquireDate)) setAcquireDate(j.acquireDate)
-      if (typeof j.saleDate === 'string' && isValidIso(j.saleDate)) setSaleDate(j.saleDate)
+      if (typeof j.saleDate === 'string' && isValidIso(j.saleDate)) restoredSale = j.saleDate
       if (typeof j.oneHouse === 'boolean') setOneHouse(j.oneHouse)
       if (typeof j.liveReqMet === 'boolean') setLiveReqMet(j.liveReqMet)
       if (typeof j.liveYears === 'string' && /^\d{1,2}$/.test(j.liveYears)) setLiveYears(j.liveYears)
       if (isPropertyType(j.propertyType)) setPropertyType(j.propertyType)
-    } catch {}
+    } catch {} finally {
+      setSaleDate(restoredSale ?? todayStr())
+    }
   }, [])
 
   /* 저장 */
@@ -135,7 +140,9 @@ export default function CapitalGainsClient() {
   /* 1세대1주택·거주는 주택일 때만 의미 — 분양권이면 강제 false 전달 */
   const effOneHouse = !isPresale && oneHouse
   const effLiveReqMet = !isPresale && liveReqMet
-  const effLiveYears = effOneHouse ? liveYearsN : 0
+  // 표2 거주기간은 '보유기간 중 거주'만 인정 (소득세법 §95④) — 보유 만 연수로 제한
+  const liveCapped = effOneHouse && liveYearsN > holdYears
+  const effLiveYears = effOneHouse ? Math.min(liveYearsN, holdYears) : 0
 
   const result = useMemo(
     () =>
@@ -156,13 +163,15 @@ export default function CapitalGainsClient() {
   const hasInputs = saleN > 0 && acquireN > 0 && datesValid
   const noGain = hasInputs && result.totalGain <= 0
 
-  /* 적용세율 표기: 단기면 70/60%(리터럴), 2년 이상이면 한계세율(과표 구간) */
+  /* 적용세율 표기: 단기·분양권이면 70/60%(리터럴), 2년 이상 주택이면 한계세율(과표 구간) */
   const displayRate = marginalRate(result.taxBase)
   const rateLabel = result.shortTerm === 'under1'
     ? `${fmtPct(CG_SHORT_UNDER1_RATE)} (1년 미만 단기 중과)`
     : result.shortTerm === 'under2'
       ? `${fmtPct(CG_SHORT_UNDER2_RATE)} (2년 미만 단기 중과)`
-      : `${fmtPct(displayRate)} (한계세율)`
+      : result.shortTerm === 'presale'
+        ? `${fmtPct(CG_PRESALE_RATE)} (분양권 1년 이상 단일세율)`
+        : `${fmtPct(displayRate)} (한계세율)`
 
   const holdYearsLabel = period.years > 0 || period.months > 0 ? `만 ${period.years}년 ${period.months}개월` : '—'
 
@@ -272,11 +281,13 @@ export default function CapitalGainsClient() {
         <p className={s.holdInfo}>
           {datesValid ? (
             <>보유기간 <strong>{holdYearsLabel}</strong> (취득일·양도일로 자동 산출 · 달력 만 연수 기준)
-              {holdYears < 2 && <> · <span style={{ color: 'var(--danger)' }}>만 2년 미만 → 단기 중과세율 적용</span></>}
+              {isPresale
+                ? <> · <span style={{ color: 'var(--danger)' }}>분양권 → {holdYears < 1 ? '1년 미만 70%' : '1년 이상 60%'} 단일세율 적용</span></>
+                : holdYears < 2 && <> · <span style={{ color: 'var(--danger)' }}>만 2년 미만 → 단기 중과세율 적용</span></>}
             </>
-          ) : (
+          ) : saleDate ? (
             <span style={{ color: 'var(--warning)' }}>양도일이 취득일보다 늦어야 합니다.</span>
-          )}
+          ) : null}
         </p>
 
         {effOneHouse && (
@@ -294,8 +305,13 @@ export default function CapitalGainsClient() {
               <span className={s.unitSuffix}>년</span>
             </div>
             <p className={s.helpText}>
-              실제 거주한 기간. 보유·거주 각각 공제율이 더해져 <strong>최대 80%</strong>(보유10년+거주10년)까지 공제됩니다.
+              보유기간 중 실제 거주한 기간만 인정됩니다(취득 전 전세·월세 거주 제외). 보유·거주 각각 공제율이 더해져 <strong>최대 80%</strong>(보유10년+거주10년)까지 공제됩니다.
             </p>
+            {liveCapped && datesValid && (
+              <p className={s.helpText} style={{ color: 'var(--warning)' }}>
+                거주기간이 보유기간보다 길어 보유기간(만 {holdYears}년)으로 제한해 계산합니다.
+              </p>
+            )}
           </div>
         )}
       </div>
@@ -318,7 +334,7 @@ export default function CapitalGainsClient() {
           ))}
         </div>
         <p className={s.helpText}>
-          분양권은 1세대1주택 비과세·장기보유특별공제가 적용되지 않고 단기 중과세율 위주로 과세됩니다.
+          분양권은 1세대1주택 비과세·장기보유특별공제가 적용되지 않습니다. 보유 1년 미만이면 70%, 1년 이상이면 기간과 관계없이 60% 단일세율로 과세됩니다.
         </p>
 
         {!isPresale && (
@@ -395,7 +411,7 @@ export default function CapitalGainsClient() {
             )}
             {result.shortTerm && (
               <span className={`${s.badge} ${s.badgeShort}`}>
-                {result.shortTerm === 'under1' ? '1년 미만 단기 70%' : '2년 미만 단기 60%'}
+                {result.shortTerm === 'under1' ? '1년 미만 단기 70%' : result.shortTerm === 'presale' ? '분양권 60%' : '2년 미만 단기 60%'}
               </span>
             )}
           </div>
@@ -476,7 +492,7 @@ export default function CapitalGainsClient() {
               {result.ltsdTable > 0 && <> <strong>{fmtPct(result.ltsdRate)}</strong></>}
             </span>
             <span className={s.basisChip}>
-              {result.shortTerm ? '단기 중과' : '기본 누진세율'}
+              {result.shortTerm === 'presale' ? '분양권 단일세율' : result.shortTerm ? '단기 중과' : '기본 누진세율'}
             </span>
             {result.highPriceApportioned && <span className={s.basisChip}>12억 초과 안분</span>}
           </div>

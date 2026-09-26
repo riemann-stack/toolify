@@ -5,26 +5,26 @@
 .tabs {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tab {
   padding: 12px 6px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+.tabActive { background: var(--accent) !important; color: #fff !important; font-weight: 700 !important; }
 
 /* ── 카드 공통 ── */
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px 20px; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
 
 /* ── 검색 ── */
 .searchBox {
   position: relative;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
 }
 .searchInputWrap { position: relative; }
 .searchIcon {
@@ -35,9 +35,9 @@
   width: 100%; box-sizing: border-box;
   padding: 14px 16px 14px 42px;
   background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   font-size: 16px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none; transition: border 0.15s;
 }
 .searchInput:focus { border-color: var(--accent); }
@@ -46,12 +46,12 @@
 .suggestions {
   position: absolute; left: 0; right: 0; top: calc(100% + 4px);
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 6px;
+  border-radius: var(--radius-m); padding: 6px;
   max-height: 280px; overflow-y: auto; z-index: 20;
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 .suggestionItem {
-  padding: 10px 12px; border-radius: 8px; cursor: pointer;
+  padding: 10px 12px; border-radius: var(--radius-s); cursor: pointer;
   display: flex; align-items: center; gap: 10px;
   font-size: 14px; color: var(--text); transition: background 0.12s;
 }@media (hover: hover) {
@@ -75,7 +75,7 @@
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px;
   font-size: 14px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none; transition: border 0.15s;
   appearance: none;
 }
@@ -83,7 +83,7 @@
 .selectWrap { position: relative; }
 .selectArrow {
   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  font-size: 10px; color: var(--muted); pointer-events: none;
+  font-size: 11px; color: var(--muted); pointer-events: none;
 }
 .input:focus, .select:focus { border-color: var(--accent); }
 .inputFilled { border-color: var(--accent) !important; }
@@ -109,14 +109,14 @@
 /* 목적 칩 */
 .purposeRow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
 .purposeChip {
-  padding: 7px 12px; border-radius: 999px;
+  padding: 7px 12px; border-radius: var(--radius-pill);
   background: var(--bg3); border: 1px solid var(--border);
   font-size: 12px; color: var(--muted); cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .purposeChip:hover { color: var(--text); }
 }
 .purposeChipActive {
-  background: rgba(14,165,233,0.1) !important;
+  background: color-mix(in srgb, var(--accent) 10%, transparent) !important;
   border-color: var(--accent) !important;
   color: var(--accent) !important;
   font-weight: 600;
@@ -125,7 +125,7 @@
 /* ── 원재료 정보 카드 ── */
 .originalCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px 20px;
+  border-radius: var(--radius-card); padding: 16px 20px;
   display: flex; align-items: center; gap: 14px;
 }
 .originalEmoji { font-size: 32px; }
@@ -134,7 +134,7 @@
   font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 2px;
 }
 .originalAmount {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 22px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.5px;
 }
 .originalCategory { font-size: 11px; color: var(--muted); margin-top: 2px; }
@@ -144,15 +144,15 @@
 
 .optionCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
   position: relative;
   border-left-width: 4px;
   animation: subFadeUp 0.25s ease;
 }
-.optionCardPerfect { border-left-color: #059669; }
+.optionCardPerfect { border-left-color: var(--emerald-600); }
 .optionCardGood    { border-left-color: var(--accent); }
-.optionCardOkay    { border-left-color: #EA580C; }
-.optionCardCaution { border-left-color: #DC2626; }
+.optionCardOkay    { border-left-color: var(--orange-600); }
+.optionCardCaution { border-left-color: var(--red-600); }
 
 .optionHeader {
   display: flex; align-items: flex-start; justify-content: space-between;
@@ -165,14 +165,14 @@
 
 .gradeBadge {
   display: inline-flex; align-items: center; gap: 4px;
-  padding: 4px 10px; border-radius: 999px;
+  padding: 4px 10px; border-radius: var(--radius-pill);
   font-size: 11px; font-weight: 700;
   flex-shrink: 0;
 }
-.gradePerfect { background: rgba(16,185,129,0.18); color: #059669; border: 1px solid rgba(16,185,129,0.3); }
-.gradeGood    { background: rgba(14,165,233,0.1);  color: var(--accent); border: 1px solid rgba(14,165,233,0.3); }
-.gradeOkay    { background: rgba(234,88,12,0.1);  color: #EA580C; border: 1px solid rgba(234,88,12,0.3); }
-.gradeCaution { background: rgba(220,38,38,0.1); color: #DC2626; border: 1px solid rgba(220,38,38,0.3); }
+.gradePerfect { background: rgba(16,185,129,0.18); color: var(--emerald-600); border: 1px solid rgba(16,185,129,0.3); }
+.gradeGood    { background: color-mix(in srgb, var(--accent) 10%, transparent);  color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+.gradeOkay    { background: rgba(234,88,12,0.1);  color: var(--orange-600); border: 1px solid rgba(234,88,12,0.3); }
+.gradeCaution { background: rgba(220,38,38,0.1); color: var(--red-600); border: 1px solid rgba(220,38,38,0.3); }
 
 /* 양 환산 */
 .conversion {
@@ -183,15 +183,15 @@
   margin-bottom: 10px;
 }
 .convFrom {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text);
+  font-family: var(--font-sans); font-weight: 700; color: var(--text);
 }
 .convArrow { color: var(--muted); font-size: 16px; }
 .convTo {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: var(--accent); font-size: 16px;
+  font-family: var(--font-sans); font-weight: 800; color: var(--accent); font-size: 16px;
 }
 .convRatio {
   font-size: 11px; color: var(--muted); margin-left: auto;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .optionMeta { display: flex; flex-direction: column; gap: 6px; }
@@ -207,7 +207,7 @@
   display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;
 }
 .useForChip {
-  padding: 3px 9px; border-radius: 999px;
+  padding: 3px 9px; border-radius: var(--radius-pill);
   background: var(--bg3); font-size: 11px; color: var(--muted);
 }
 
@@ -215,18 +215,18 @@
 .warningBox {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.2);
-  border-radius: 8px; padding: 8px 12px;
+  border-radius: var(--radius-s); padding: 8px 12px;
   display: flex; gap: 8px;
   font-size: 12px; color: var(--muted); line-height: 1.6;
   margin-top: 8px;
 }
-.warningBox strong { color: #DC2626; }
+.warningBox strong { color: var(--red-600); }
 
 /* 추가 재료 박스 */
 .combinedBox {
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 8px; padding: 8px 12px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-s); padding: 8px 12px;
   display: flex; gap: 8px;
   font-size: 12px; color: var(--muted); line-height: 1.6;
   margin-top: 8px;
@@ -236,7 +236,7 @@
 /* ── 빈 상태 ── */
 .emptyState {
   background: var(--bg2); border: 1px dashed var(--border);
-  border-radius: 14px; padding: 36px 20px; text-align: center;
+  border-radius: var(--radius-card); padding: 36px 20px; text-align: center;
 }
 .emptyEmoji { font-size: 36px; margin-bottom: 8px; }
 .emptyTitle { font-size: 14px; color: var(--text); margin-bottom: 4px; font-weight: 600; }
@@ -245,7 +245,7 @@
 /* ── 카테고리 둘러보기 (탭2) ── */
 .browseSection {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; overflow: hidden;
+  border-radius: var(--radius-card); overflow: hidden;
 }
 .browseHeader {
   width: 100%; padding: 14px 18px;
@@ -280,7 +280,7 @@
 .browseItemDetailLink {
   margin-left: auto;
   background: transparent; border: 1px solid var(--border);
-  border-radius: 8px; padding: 5px 10px;
+  border-radius: var(--radius-s); padding: 5px 10px;
   font-size: 11px; color: var(--muted); cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -291,17 +291,17 @@
 .browseOptions { display: flex; flex-direction: column; gap: 6px; }
 .browseOption {
   display: flex; align-items: center; gap: 8px;
-  padding: 6px 10px; background: var(--bg2); border-radius: 8px;
+  padding: 6px 10px; background: var(--bg2); border-radius: var(--radius-s);
   font-size: 12px; flex-wrap: wrap;
 }
 .browseOptionDot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.browseOptionDotPerfect { background: #059669; }
+.browseOptionDotPerfect { background: var(--emerald-600); }
 .browseOptionDotGood { background: var(--accent); }
-.browseOptionDotOkay { background: #EA580C; }
-.browseOptionDotCaution { background: #DC2626; }
+.browseOptionDotOkay { background: var(--orange-600); }
+.browseOptionDotCaution { background: var(--red-600); }
 .browseOptionName { color: var(--text); }
 .browseOptionRatio {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  font-family: var(--font-sans); font-weight: 700;
   color: var(--accent); font-size: 12px;
   margin-left: auto;
 }

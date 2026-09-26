@@ -3,8 +3,11 @@ import KinshipClient from './KinshipClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { PRESETS, resolvePath, pick, isLegalRelative } from './kinshipData'
 
 export const metadata = buildMetadata({
   path: '/tools/life/kinship',
@@ -25,18 +28,49 @@ const FAQ_LD = [
   { q: '처형의 남편, 처제의 남편은 뭐라고 부르나요?', a: '둘 다 나와 <strong>동서</strong> 관계입니다. 처형의 남편이 나보다 연상이면 <strong>형님</strong>, 처제의 남편은 <strong>동서</strong> 또는 「○ 서방」으로 부르는 것이 표준 언어 예절의 안내입니다. 아내 쪽 동서 사이 서열은 나이 기준이라는 점이 남편 쪽(남편 형제 서열 기준)과 다릅니다.' },
 ]
 
+/* 계산기와 같은 함수(resolvePath·pick·isLegalRelative)로 빌드 시 계산 — 표와 도구 결과가 어긋나지 않게 */
+const PRESET_ROWS = PRESETS.map((p) => {
+  const g = p.gender ?? 'male'
+  const node = resolvePath(p.steps, g).node
+  if (!node) return null
+  return {
+    label: p.label,
+    speaker: p.gender === 'female' ? '여성' : p.gender === 'male' ? '남성' : '남성(기본)',
+    call: pick(node.call, g),
+    ref: node.ref ?? '—',
+    chon: node.chon === null ? (node.kind === 'spouse' ? '무촌' : '—') : `${node.chon}촌`,
+    legal: isLegalRelative(node).basis,
+  }
+}).filter((r): r is NonNullable<typeof r> => r !== null)
+
+/* 민법 조문(국가법령정보센터 현행) — 촌수·친족 범위가 실제로 쓰이는 곳 */
+const LAW_ROWS = [
+  { k: '친족의 범위', v: '8촌 이내 혈족 · 4촌 이내 인척 · 배우자', law: '제777조' },
+  { k: '인척이란', v: '혈족의 배우자 · 배우자의 혈족 · 배우자의 혈족의 배우자', law: '제769조' },
+  { k: '혼인 금지', v: '8촌 이내 혈족(친양자 입양 전 혈족 포함) / 6촌 이내 혈족의 배우자, 배우자의 6촌 이내 혈족, 배우자의 4촌 이내 혈족의 배우자인 인척(이었던 사람 포함)', law: '제809조' },
+  { k: '상속 순위', v: '① 직계비속 ② 직계존속 ③ 형제자매 ④ 4촌 이내 방계혈족 — 배우자는 ①·②와 같은 순위로 공동상속, 없으면 단독상속', law: '제1000조 · 제1003조' },
+  { k: '부양 의무', v: '직계혈족 및 그 배우자 사이 · 생계를 같이하는 그 밖의 친족 사이', law: '제974조' },
+]
+
 export default function KinshipPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        생활·일상
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/life/kinship">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />가족 호칭 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         관계를 따라가면 <strong style={{ color: 'var(--text)' }}>호칭어·지칭어·촌수와 가계도</strong>가 자동으로. 시가·처가·사돈까지.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="국립국어원 『표준 언어 예절』(2011) 가정에서의 호칭·지칭 + 『우리, 뭐라고 부를까요?』(2020) 안내 · 촌수·친족 범위는 민법 제767~777조(현행)"
+        sources={[
+          { label: '국립국어원 표준 언어 예절(2011) — 가정에서의 호칭, 지칭', href: 'https://www.korean.go.kr/front/reportData/reportDataView.do?mn_id=207&report_seq=772' },
+          { label: '국립국어원 우리, 뭐라고 부를까요?(2020)', href: 'https://www.korean.go.kr/front/etcData/etcDataView.do?mn_id=208&etc_seq=648' },
+          { label: '민법 제777조(친족의 범위)', href: 'https://www.law.go.kr/법령/민법/제777조' },
+          { label: '민법 제1000조(상속의 순위)', href: 'https://www.law.go.kr/법령/민법/제1000조' },
+        ]}
+      />
 
       <KinshipClient />
 
@@ -47,12 +81,12 @@ export default function KinshipPage() {
 
         {/* ── 1. 호칭어 vs 지칭어 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             호칭어와 지칭어 — 부를 때와 말할 때
           </h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            한국어 가족 표현은 <strong style={{ color: 'var(--text)' }}>호칭어</strong>(그 사람을 직접 부를 때)와
-            {' '}<strong style={{ color: 'var(--text)' }}>지칭어</strong>(남에게 그 사람을 말할 때)가 다른 경우가 많습니다.
+          <p className="g-p">
+            한국어 가족 표현은 <strong>호칭어</strong>(그 사람을 직접 부를 때)와
+            {' '}<strong>지칭어</strong>(남에게 그 사람을 말할 때)가 다른 경우가 많습니다.
             이 도구는 두 가지를 구분해 보여줍니다.
           </p>
           <div className="tableScroll">
@@ -83,14 +117,53 @@ export default function KinshipPage() {
           </div>
         </div>
 
+        {/* ── 1-2. 결과 읽는 법 (계산기 함수로 빌드 시 계산한 예시) ── */}
+        <div>
+          <h2 className="g-h2">계산기 결과 읽는 법 — 경로·촌수·친족 여부</h2>
+          <p className="g-p">
+            먼저 나의 성별을 고른 뒤 아버지·어머니·형제·자녀·배우자 버튼을 눌러 <strong>나에서 출발해 한 사람씩</strong> 관계를 따라갑니다.
+            「아버지의 사촌」이라면 아버지 → 아버지 → 형 → 아들 순서로 할아버지를 거쳐 내려오는 식이며, 경로는 최대 5단계까지 이어 붙일 수 있습니다.
+            국립국어원 자료에 표준 호칭이 정해져 있지 않은 경로는 버튼이 비활성으로 바뀌어, 근거 없는 호칭을 지어내지 않습니다.
+            남편은 여성 화자, 아내는 남성 화자로 시작할 때만 누를 수 있고, 형·오빠나 누나·언니는 바로 앞 사람의 성별에 맞춰 자동으로 바뀝니다.
+          </p>
+          <p className="g-p">
+            결과 카드에는 부를 때 쓰는 <strong>호칭어</strong>, 남에게 말할 때의 <strong>지칭어</strong>, 촌수, 그 사람이 나를 부르는 말,
+            그리고 민법 제777조 기준 친족인지가 함께 나옵니다. 처남·사촌처럼 나이에 따라 부르는 말이 갈리는 관계는 연상·연하를 나눠 보여 줍니다.
+            아래 표는 자주 찾는 관계를 계산기와 같은 데이터로 미리 풀어 둔 것입니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 600 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['관계 경로', '화자', '호칭어', '지칭어', '촌수', '민법상 친족'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {PRESET_ROWS.map((row, i) => (
+                  <tr key={row.label} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row.label}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted-strong)' }}>{row.speaker}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{row.call}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted-strong)' }}>{row.ref}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, whiteSpace: 'nowrap' }}>{row.chon}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted-strong)', fontSize: 12 }}>{row.legal}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {/* ── 2. 촌수 계산법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             촌수 계산법 — 민법 제770조
           </h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px',
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: '13px', color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div>부모 ↔ 자식 = <strong style={{ color: 'var(--accent-ink)' }}>1촌</strong></div>
@@ -102,15 +175,50 @@ export default function KinshipPage() {
             </div>
             <div style={{ marginTop: 6 }}>배우자 = <strong style={{ color: 'var(--accent-ink)' }}>무촌</strong>(관용) · 인척 = 배우자의 혈족은 <strong style={{ color: 'var(--accent-ink)' }}>배우자의 촌수</strong>, 혈족의 배우자는 <strong style={{ color: 'var(--accent-ink)' }}>그 혈족의 촌수</strong> (제771조)</div>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.85 }}>
-            민법 제777조의 친족 범위는 <strong style={{ color: 'var(--text)' }}>8촌 이내 혈족 · 4촌 이내 인척 · 배우자</strong>이고,
-            8촌 이내 혈족 사이의 혼인은 금지됩니다(제809조 제1항). 사돈은 이 범위 밖이라 민법상 친족이 아닙니다.
+          <p className="g-p" style={{ marginTop: 12 }}>
+            직계는 세대 수가 곧 촌수라서 할아버지는 2촌, 증조할아버지는 3촌입니다. 방계는 공통 조상을 찾는 것이 핵심인데,
+            외사촌·이종사촌도 공통 조상이 외조부모일 뿐 계산은 같아 친사촌과 똑같이 4촌입니다.
+            흔한 착각은 「사촌의 자녀는 육촌」이라는 것인데, 사촌의 자녀는 한 세대만 더 내려가므로 5촌(당질)이고, 육촌은 당숙의 자녀(재종형제)입니다.
+          </p>
+        </div>
+
+        {/* ── 2-2. 촌수가 법적으로 쓰이는 곳 ── */}
+        <div>
+          <h2 className="g-h2">촌수가 법적으로 쓰이는 곳 — 친족·혼인·상속·부양</h2>
+          <p className="g-p">
+            촌수는 명절 호칭에만 쓰이는 말이 아니라 민법이 친족의 범위와 권리·의무를 가르는 기준입니다.
+            다만 조문마다 범위가 달라서 「몇 촌까지 친족」이라는 한 가지 숫자로 모든 문제를 판단할 수는 없습니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['구분', '범위', '민법'].map((h, i) => (
+                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {LAW_ROWS.map((row, i) => (
+                  <tr key={row.k} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.k}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted-strong)', lineHeight: 1.6 }}>{row.v}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>{row.law}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 12 }}>
+            예를 들어 조카·삼촌·고모·이모(3촌)와 사촌(4촌)은 앞 순위 상속인이 없을 때 4순위 상속인이 될 수 있지만,
+            당숙(5촌)이나 육촌은 민법상 친족이면서도 상속인은 되지 않습니다. 사돈(자녀 배우자의 부모)은 1990년 개정으로 「혈족의 배우자의 혈족」이 인척에서 빠지면서 지금은 혈족도 인척도 아니므로 민법상 친족이 아닙니다.
+            상속 포기, 부양료 청구, 혼인 가능 여부처럼 실제 권리가 걸린 문제는 이 표만으로 결론 내리지 말고 가정법원 절차 안내나 변호사·법무사 상담으로 확인하세요.
           </p>
         </div>
 
         {/* ── 3. 친가·외가 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             친가·외가 호칭 한눈에
           </h2>
           <div className="tableScroll">
@@ -141,7 +249,7 @@ export default function KinshipPage() {
                     <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{row.r}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{row.c}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted-strong)' }}>{row.h}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.n}</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row.n}</td>
                   </tr>
                 ))}
               </tbody>
@@ -151,11 +259,11 @@ export default function KinshipPage() {
 
         {/* ── 4. 시가·처가 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             시가·처가 호칭 한눈에
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 8 }}>시가 (아내 → 남편 가족)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
                 <li>남편의 부모 → <strong>아버님 · 어머님</strong></li>
@@ -165,7 +273,7 @@ export default function KinshipPage() {
                 <li>남편 형의 아내 → <strong>형님</strong> · 동생의 아내 → <strong>동서</strong></li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 8 }}>처가 (남편 → 아내 가족)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
                 <li>아내의 부모 → <strong>장인어른 · 장모님</strong> (아버님·어머님)</li>
@@ -184,15 +292,15 @@ export default function KinshipPage() {
 
         {/* ── 5. 2011 표준과 2020 안내 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             표준 언어 예절(2011)과 2020 안내서
           </h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            이 도구의 기본 호칭은 국립국어원 <strong style={{ color: 'var(--text)' }}>『표준 언어 예절』(2011)</strong>의 전통 호칭을 따르고,
-            2020년 발간된 <strong style={{ color: 'var(--text)' }}>『우리, 뭐라고 부를까요?』</strong>의 완화 안내를 병기합니다.
-            주의할 점은 <strong style={{ color: 'var(--text)' }}>두 자료 모두 어문 규범이 아니라 국립국어원의 지침·안내서</strong>라는 것입니다
+          <p className="g-p">
+            이 도구의 기본 호칭은 국립국어원 <strong>『표준 언어 예절』(2011)</strong>의 전통 호칭을 따르고,
+            2020년 발간된 <strong>『우리, 뭐라고 부를까요?』</strong>의 완화 안내를 병기합니다.
+            주의할 점은 <strong>두 자료 모두 어문 규범이 아니라 국립국어원의 지침·안내서</strong>라는 것입니다
             — 호칭·지칭어는 규범으로 정해져 있지 않으며, 국립국어원은 이후의 언어 변화를 반영한 2020 안내서 참고를 권합니다(온라인가나다 답변).
-            2020 안내서는 국민 4,000명 실태 조사를 바탕으로 도련님·아가씨 같은 호칭 대신 <strong style={{ color: 'var(--text)' }}>가족이 합의한
+            2020 안내서는 2017년부터 진행한 실태 조사와 정책 연구를 바탕으로, 도련님·아가씨 같은 호칭 대신 <strong>가족이 합의한
             호칭(이름+씨 등)도 쓸 수 있다</strong>는 방향을 담고 있습니다. 전통 호칭과 달라 고민되는 자리라면
             가족끼리 미리 합의하는 것이 가장 좋습니다.
           </p>
@@ -202,28 +310,12 @@ export default function KinshipPage() {
 
         {/* ── FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -240,7 +332,7 @@ export default function KinshipPage() {
                 href={t.href}
                 style={{
                   display: 'block', padding: '14px 16px', background: 'var(--bg2)',
-                  border: '1px solid var(--border)', borderRadius: '12px',
+                  border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
                   textDecoration: 'none', transition: 'border-color 0.15s',
                 }}
               >
@@ -253,6 +345,6 @@ export default function KinshipPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

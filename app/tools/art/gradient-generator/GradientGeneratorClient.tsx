@@ -75,6 +75,32 @@ function HexField({ value, onCommit, className, label }: {
   )
 }
 
+/** stop 위치(%) 입력 — 편집 중엔 원시 문자열 유지(비우고 다시 입력 가능), 유효한 숫자만 0~100 클램프 커밋 */
+function PosField({ value, onCommit, className, label }: {
+  value: number
+  onCommit: (pos: number) => void
+  className: string
+  label: string
+}) {
+  const [raw, setRaw] = useState(String(value))
+  const [editing, setEditing] = useState(false)
+  return (
+    <input
+      type="number" inputMode="decimal" min={0} max={100} step={1}
+      className={className} aria-label={label}
+      value={editing ? raw : String(value)}
+      onFocus={() => { setRaw(String(value)); setEditing(true) }}
+      onBlur={() => setEditing(false)}
+      onChange={(e) => {
+        const v = e.target.value
+        setRaw(v)
+        const n = parseFloat(v)
+        if (v.trim() !== '' && Number.isFinite(n)) onCommit(Math.max(0, Math.min(100, n)))
+      }}
+    />
+  )
+}
+
 const DEFAULT_CONFIG = (): GradientConfig => ({
   type:  'linear',
   space: 'oklch',
@@ -272,8 +298,10 @@ export default function GradientGeneratorClient() {
   }
   const applyExtracted = () => {
     if (extractedHexes.length === 0) return
-    const stops = extractedHexes.map((hex, i) =>
-      makeStop(hex, Math.round((i / Math.max(1, extractedHexes.length - 1)) * 100)),
+    // 단색 이미지는 중복 제거 후 1색만 남음 → 최소 2 stop 불변식 유지를 위해 복제
+    const hexes = extractedHexes.length === 1 ? [extractedHexes[0], extractedHexes[0]] : extractedHexes
+    const stops = hexes.map((hex, i) =>
+      makeStop(hex, Math.round((i / (hexes.length - 1)) * 100)),
     )
     setCfg({ ...cfg, stops })
   }
@@ -493,13 +521,11 @@ export default function GradientGeneratorClient() {
                       className={styles.hexInput}
                       label="stop HEX 색상"
                     />
-                    <input
-                      type="number" inputMode="decimal"
-                      min={0} max={100} step={1}
+                    <PosField
                       value={s.pos}
-                      onChange={(e) => updateStop(s.id, { pos: Math.max(0, Math.min(100, +e.target.value || 0)) })}
+                      onCommit={(pos) => updateStop(s.id, { pos })}
                       className={styles.posInput}
-                      aria-label="위치 %"
+                      label="위치 %"
                     />
                     <span className={styles.posUnit}>%</span>
                     <button
@@ -588,7 +614,7 @@ export default function GradientGeneratorClient() {
               <pre className={styles.codePre}>{codes[activeCode]}</pre>
             </div>
             {activeCode === 'tailwind' && (
-              <p className={styles.note}>💡 Tailwind 4+ arbitrary value · 운영 코드는 <code>theme.extend.backgroundImage</code>에 등록 권장.</p>
+              <p className={styles.note}>💡 Tailwind 4+ arbitrary value · 여러 곳에 재사용하면 v4는 <code>@theme</code>의 <code>--background-image-*</code> 변수(v3 이하는 <code>theme.extend.backgroundImage</code>)로 등록 권장.</p>
             )}
             {activeCode === 'swift' && cfg.type === 'mesh' && (
               <p className={styles.note}>⚠️ MeshGradient는 iOS 18+ / macOS 15+. 미만 버전은 LinearGradient로 폴백 필요.</p>
@@ -602,7 +628,7 @@ export default function GradientGeneratorClient() {
           <section className={styles.optionCard}>
             <p className={styles.gapTitle}>이미지 내보내기 + 즐겨찾기</p>
             <div className={styles.exportRow}>
-              <select className={styles.select} value={exportSize} onChange={(e) => setExportSize(+e.target.value)}>
+              <select className={styles.select} value={exportSize} onChange={(e) => setExportSize(+e.target.value)} aria-label="내보내기 크기">
                 {EXPORT_SIZES.map((s, i) => <option key={i} value={i}>{s.label}</option>)}
               </select>
               <label className={styles.checkLabel}>
@@ -647,7 +673,7 @@ export default function GradientGeneratorClient() {
           {/* WCAG */}
           <section>
             <label className={styles.label}>WCAG 대비비 <span className={styles.labelSub}>(전 구간 worst-case)</span></label>
-            <div className={styles.contrastGrid}>
+            <div className={styles.contrastGrid} role="status">
               <div className={styles.contrastCard}>
                 <p className={styles.contrastLabel}>흰 텍스트</p>
                 <p className={styles.contrastRatio}>{contrast.whiteRatio.toFixed(2)} : 1</p>
@@ -690,7 +716,7 @@ export default function GradientGeneratorClient() {
           {/* 이미지에서 추출 */}
           <section className={styles.optionCard}>
             <p className={styles.gapTitle}>이미지에서 색상 추출 → 그라디언트</p>
-            <p className={styles.note}>이미지는 <strong>브라우저 내에서만 처리</strong>되며 서버로 전송되지 않습니다 (K-means 5색 추출).</p>
+            <p className={styles.note}>이미지는 <strong>브라우저 내에서만 처리</strong>되며 서버로 전송되지 않습니다 (K-means 최대 5색 추출).</p>
             <div className={styles.uploadRow}>
               <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className={styles.fileInput} aria-label="색상 추출용 이미지 선택" />
               {extracting && <span className={styles.note}>추출 중…</span>}
@@ -698,8 +724,8 @@ export default function GradientGeneratorClient() {
             {extractedHexes.length > 0 && (
               <>
                 <div className={styles.extractedRow}>
-                  {extractedHexes.map((hex) => (
-                    <div key={hex} className={styles.extractedSwatch} style={{ background: hex }}>
+                  {extractedHexes.map((hex, i) => (
+                    <div key={`${i}-${hex}`} className={styles.extractedSwatch} style={{ background: hex }}>
                       <span>{hex}</span>
                     </div>
                   ))}
@@ -723,6 +749,7 @@ export default function GradientGeneratorClient() {
                 value={autoBase}
                 onChange={(e) => setAutoBase(e.target.value.toUpperCase())}
                 className={styles.colorPicker}
+                aria-label="베이스 색상 선택"
               />
               <HexField
                 value={autoBase}

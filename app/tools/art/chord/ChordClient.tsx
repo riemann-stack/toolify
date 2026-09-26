@@ -39,6 +39,11 @@ function parseSpelled(name: string): number | null {
 
 const accToStr = (a: number) => (a === 0 ? '' : a === 1 ? '#' : a === -1 ? 'b' : a === 2 ? '##' : 'bb')
 
+// 루트 철자 파싱 — 이중임시표(F##·Bbb) 루트까지 허용
+const ROOT_RE = /^([A-G])(##|bb|#|b)?$/
+const rootAccOf = (acc: string | undefined) =>
+  acc === '##' ? 2 : acc === 'bb' ? -2 : acc === '#' ? 1 : acc === 'b' ? -1 : 0
+
 // 코드 타입별 도수 (CHORD_INTERVALS와 병렬 — 철자용 글자 간격 결정)
 const CHORD_DEGREES: Record<string, number[]> = {
   Major: [1,3,5], Minor: [1,3,5], aug: [1,3,5], dim: [1,3,5],
@@ -55,10 +60,10 @@ const CHORD_DEGREES: Record<string, number[]> = {
 
 // 이론 철자 생성: C#maj7 → C#,E#,G#,B# / Cdim7 7음 → Bbb(A) 병기
 function spellChordNotes(rootName: string, type: string): string[] {
-  const m = /^([A-G])([#b]?)$/.exec(rootName)
+  const m = ROOT_RE.exec(rootName)
   if (!m) return []
   const rootLetter = m[1]
-  const rootAcc = m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0
+  const rootAcc = rootAccOf(m[2])
   const rootPc = ((LETTER_PC[rootLetter] + rootAcc) % 12 + 12) % 12
   const Li = LETTERS.indexOf(rootLetter as typeof LETTERS[number])
   const intervals = CHORD_INTERVALS[type] ?? []
@@ -68,6 +73,8 @@ function spellChordNotes(rootName: string, type: string): string[] {
     const L = LETTERS[(Li + deg - 1) % 7]
     const targetPc = ((rootPc + semi) % 12 + 12) % 12
     const a = ((targetPc - LETTER_PC[L] + 6) % 12 + 12) % 12 - 6
+    // 삼중임시표(E# 루트 등에서 드물게 발생)는 철자 대신 실용 이명만 표기
+    if (Math.abs(a) >= 3) return (a > 0 ? NOTES_SHARP : NOTES_FLAT)[targetPc]
     const name = L + accToStr(a)
     // 이중임시표는 실용 이명 병기
     return Math.abs(a) >= 2 ? `${name}(${NOTES_SHARP[targetPc]})` : name
@@ -76,10 +83,10 @@ function spellChordNotes(rootName: string, type: string): string[] {
 
 // 장·자연단음계 철자 (F#장조 → E# / Gb장조 → Cb)
 function spellScaleRoots(rootName: string, mode: 'major'|'minor'): string[] {
-  const m = /^([A-G])([#b]?)$/.exec(rootName)
+  const m = ROOT_RE.exec(rootName)
   if (!m) return []
   const rootLetter = m[1]
-  const rootAcc = m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0
+  const rootAcc = rootAccOf(m[2])
   const rootPc = ((LETTER_PC[rootLetter] + rootAcc) % 12 + 12) % 12
   const Li = LETTERS.indexOf(rootLetter as typeof LETTERS[number])
   const scale = mode === 'major' ? MAJOR_SCALE : MINOR_SCALE
@@ -210,13 +217,28 @@ const FUNC_LABEL: Record<'tonic'|'sub'|'dom', string> = {
   dom: '도미넌트',
 }
 
-function getDiatonicChords(rootKey: string, mode: 'major'|'minor', notation: Notation) {
+const hasDoubleAcc = (ns: string[]) => ns.some(n => /##|bb/.test(n))
+
+function getDiatonicChords(rootKey: string, mode: 'major'|'minor') {
   const types = mode === 'major' ? MAJOR_CHORD_TYPES : MINOR_CHORD_TYPES
   const funcs = mode === 'major' ? MAJOR_FUNCTIONS : MINOR_FUNCTIONS
   const romans = mode === 'major' ? ROMAN_MAJOR : ROMAN_MINOR
   // 스케일 철자(레터워크) — F#장조 E#·Gb장조 Cb까지 조성에 맞는 음이름
-  const scaleRoots = spellScaleRoots(rootKey, mode)
-  return scaleRoots.map((chordRoot, i) => {
+  let keyName = rootKey
+  let scaleRoots = spellScaleRoots(rootKey, mode)
+  let respelled = false
+  // A#장조(C##·F##·G##)처럼 이중임시표가 필요한 이론 조성은 실용 관행대로 이명동음(Bb장조)으로 표기
+  if (hasDoubleAcc(scaleRoots)) {
+    const pc = noteToIndex(rootKey)
+    const alt = rootKey.includes('#') ? NOTES_FLAT[pc] : NOTES_SHARP[pc]
+    const altRoots = alt && alt !== rootKey ? spellScaleRoots(alt, mode) : []
+    if (altRoots.length && !hasDoubleAcc(altRoots)) {
+      keyName = alt
+      scaleRoots = altRoots
+      respelled = true
+    }
+  }
+  const chords = scaleRoots.map((chordRoot, i) => {
     const type = types[i]
     return {
       degree: romans[i],
@@ -227,6 +249,7 @@ function getDiatonicChords(rootKey: string, mode: 'major'|'minor', notation: Not
       func: funcs[i],
     }
   })
+  return { keyName, respelled, chords }
 }
 
 /* ────────────────────────────────────────────────
@@ -315,6 +338,8 @@ export default function ChordClient() {
   const [tab, setTab] = useState<Tab>('find')
   const [notation, setNotation] = useState<Notation>('#')
   const [root, setRoot] = useState<string>('C')
+  // 다이아토닉 표에서 넘어온 조성 철자(E#·Cb 등) — 표와 상세 탭 철자를 맞추기 위해 유지
+  const [rootSpelling, setRootSpelling] = useState<string | null>(null)
   const [chordType, setChordType] = useState<string>('maj7')
 
   // 역방향 검색
@@ -328,8 +353,9 @@ export default function ChordClient() {
   // 표시할 root/key 텍스트 (notation에 맞게 변환)
   const displayRoot = useMemo(() => {
     const idx = noteToIndex(root)
+    if (rootSpelling && noteToIndex(rootSpelling) === idx) return rootSpelling
     return notes(notation)[idx] ?? root
-  }, [root, notation])
+  }, [root, notation, rootSpelling])
   const displayDiatonicKey = useMemo(() => {
     const idx = noteToIndex(diatonicKey)
     return notes(notation)[idx] ?? diatonicKey
@@ -404,9 +430,10 @@ export default function ChordClient() {
   }, [selectedNotes, searchScope, notation])
 
   /* ── 다이아토닉 ── */
-  const diatonic = useMemo(() =>
-    getDiatonicChords(displayDiatonicKey, diatonicMode, notation),
-  [displayDiatonicKey, diatonicMode, notation])
+  const diatonicInfo = useMemo(() =>
+    getDiatonicChords(displayDiatonicKey, diatonicMode),
+  [displayDiatonicKey, diatonicMode])
+  const diatonic = diatonicInfo.chords
 
   const progressions = diatonicMode === 'major' ? MAJOR_PROGRESSIONS : MINOR_PROGRESSIONS
 
@@ -414,8 +441,17 @@ export default function ChordClient() {
   const togglePc = (pc: number) => {
     setSelectedNotes(prev => prev.includes(pc) ? prev.filter(p => p !== pc) : [...prev, pc].sort((a,b)=>a-b))
   }
-  const goToFind = (r: string, type: string) => {
+  const pickRoot = (r: string) => {
     setRoot(r)
+    setRootSpelling(null)
+  }
+  const changeNotation = (v: Notation) => {
+    setNotation(v)
+    setRootSpelling(null)
+  }
+  const goToFind = (r: string, type: string, keepSpelling = false) => {
+    setRoot(r)
+    setRootSpelling(keepSpelling ? r : null)
     setChordType(type)
     setTab('find')
   }
@@ -447,9 +483,9 @@ export default function ChordClient() {
           <div className={s.card}>
             <div className={s.cardLabelRow}>
               <span className={s.cardLabel}>근음 (Root) 선택</span>
-              <NotationToggle value={notation} onChange={setNotation} />
+              <NotationToggle value={notation} onChange={changeNotation} />
             </div>
-            <KeyGrid value={root} onChange={setRoot} notation={notation} />
+            <KeyGrid value={root} onChange={pickRoot} notation={notation} />
           </div>
 
           {/* Chord type */}
@@ -531,7 +567,7 @@ export default function ChordClient() {
                         const reverse = NOTES_SHARP[noteToIndex(m[1])] ?? m[1]
                         const t = m[2] || 'Major'
                         if (CHORD_INTERVALS[t]) {
-                          setRoot(reverse)
+                          pickRoot(reverse)
                           setChordType(t)
                         }
                       }
@@ -557,7 +593,7 @@ export default function ChordClient() {
           <div className={s.card}>
             <div className={s.cardLabelRow}>
               <span className={s.cardLabel}>포함된 음 선택 (복수)</span>
-              <NotationToggle value={notation} onChange={setNotation} />
+              <NotationToggle value={notation} onChange={changeNotation} />
             </div>
 
             {/* Note selection grid */}
@@ -620,7 +656,7 @@ export default function ChordClient() {
           ) : (
             <div className={s.card}>
               <span className={s.cardLabel}>매칭 결과 — 일치율 상위 {matches.length}개</span>
-              <div style={{ overflowX: 'auto' }}>
+              <div className="tableScroll">
                 <table className={s.matchTable}>
                   <thead>
                     <tr>
@@ -671,7 +707,7 @@ export default function ChordClient() {
           <div className={s.card}>
             <div className={s.cardLabelRow}>
               <span className={s.cardLabel}>키 선택</span>
-              <NotationToggle value={notation} onChange={setNotation} />
+              <NotationToggle value={notation} onChange={changeNotation} />
             </div>
             <div className={s.modeRow}>
               <button type="button" aria-pressed={diatonicMode === 'major'} className={`${s.modeBtn} ${diatonicMode === 'major' ? s.modeBtnActive : ''}`} onClick={() => setDiatonicMode('major')}>메이저</button>
@@ -682,8 +718,8 @@ export default function ChordClient() {
 
           {/* Diatonic table */}
           <div className={s.card}>
-            <span className={s.cardLabel}>{displayDiatonicKey} {diatonicMode === 'major' ? '메이저' : '마이너'} 다이아토닉 코드</span>
-            <div style={{ overflowX: 'auto' }}>
+            <span className={s.cardLabel}>{diatonicInfo.keyName} {diatonicMode === 'major' ? '메이저' : '마이너'} 다이아토닉 코드</span>
+            <div className="tableScroll">
               <table className={s.diatonicTable}>
                 <thead>
                   <tr>
@@ -707,8 +743,8 @@ export default function ChordClient() {
                       <tr
                         key={i}
                         className={`${s.diatonicRow} ${rowCls}`}
-                        onClick={() => goToFind(d.root, d.type)}
-                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToFind(d.root, d.type) } }}
+                        onClick={() => goToFind(d.root, d.type, true)}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToFind(d.root, d.type, true) } }}
                         role="button" aria-label={`${d.name} 상세 보기`} tabIndex={0}
                       >
                         <td className={s.tdRoman}>{d.degree}</td>
@@ -721,6 +757,12 @@ export default function ChordClient() {
                 </tbody>
               </table>
             </div>
+            {diatonicInfo.respelled && (
+              <p className={s.note}>
+                * {displayDiatonicKey} {diatonicMode === 'major' ? '메이저' : '마이너'}는 이론상 겹임시표(##·bb)가 붙는 음이 생겨,
+                실무 관행대로 같은 소리의 {diatonicInfo.keyName} {diatonicMode === 'major' ? '메이저' : '마이너'}로 표기했습니다.
+              </p>
+            )}
             <p className={s.note}>
               * 행을 클릭하면 &ldquo;코드 → 구성음&rdquo; 탭에서 해당 코드를 자세히 볼 수 있습니다.
             </p>
@@ -833,7 +875,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
   const chordSet = new Set(chordPCs)
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} width="100%" height="auto" style={{ display: 'block' }} aria-hidden="true">
+    <svg viewBox={`0 0 ${width} ${height}`} width="100%" style={{ display: 'block', height: 'auto' }} aria-hidden="true">
       {/* White keys */}
       {Array.from({ length: octaves }).map((_, oct) =>
         whitePCs.map((pc, i) => {
@@ -853,7 +895,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
               <text
                 x={x + whiteW / 2} y={whiteH - 8}
                 textAnchor="middle"
-                fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700"
+                fontSize="10" fontWeight="700"
                 fill={isHighlight ? '#ffffff' : '#666'}
               >
                 {whiteLabels[i]}
@@ -884,7 +926,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                 <text
                   x={x + blackW / 2} y={blackH - 6}
                   textAnchor="middle"
-                  fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800"
+                  fontSize="9" fontWeight="800"
                   fill="#ffffff"
                 >
                   {blackLabels[j]}
@@ -896,7 +938,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
       )}
 
       {/* 피치클래스 기준 표시 — 특정 옥타브 아님 */}
-      <text x={width / 2} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>옥타브와 무관하게 구성음의 음이름 위치를 표시합니다</text>
+      <text x={width / 2} y={height - 4} textAnchor="middle" fontSize="9" fill="#777">옥타브와 무관하게 구성음의 음이름 위치를 표시합니다</text>
     </svg>
   )
 }

@@ -1,0 +1,21 @@
+/* components/RelatedTools.module.css — 6개(같은 분야 4~5 + 다른 분야 1~2). 각 카드는 그 도구의 data-cat 색 (스펙 §10.10)
+   분야 라벨은 --c-ink(흰 위 ≥6.57 AA). 아이콘 칩은 전역 .ui-chipIc(--c · --c-soft). 탭 가능한 색은 카드 전체(링크) 하나 */
+.rtSec { margin-top: 48px; }
+.rtH { margin: 0 0 16px; font-size: 22px; font-weight: 700; line-height: 1.4; letter-spacing: -0.03em; color: var(--text); }
+.rt { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.rtItem { display: flex; flex-direction: column; gap: 12px; padding: 18px; border-radius: var(--radius-m); background: var(--bg2); border: 1px solid var(--border); color: var(--text); text-decoration: none; transition: border-color .15s, box-shadow .15s; }
+@media (hover: hover) { .rtItem:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); } }
+.rtBody { display: block; min-width: 0; word-break: keep-all; overflow-wrap: break-word; }
+.rtCat { display: block; font-size: 12px; font-weight: 700; line-height: 1.5; color: var(--c-ink, var(--muted-strong)); }
+.rtName { display: block; margin-top: 2px; font-size: 15px; font-weight: 700; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); }
+.rtDesc { display: -webkit-box; margin-top: 2px; font-size: 13px; line-height: 1.55; color: var(--muted); -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.rtChev { display: none; }
+@media (max-width: 760px) {
+  .rt { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 4px 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); }
+  .rtItem { flex-direction: row; align-items: center; gap: 12px; min-height: 64px; padding: 14px 0; border: 0; border-radius: 0; border-bottom: 1px solid var(--divider); box-shadow: none !important; }
+  .rtItem:last-child { border-bottom: 0; }
+  .rtBody { flex: 1; }
+  .rtChev { display: block; flex-shrink: 0; color: var(--gray-500); }
+  .rtDesc { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+@media (max-width: 640px) { .rtSec { margin-top: 40px; } .rtH { font-size: 20px; } }

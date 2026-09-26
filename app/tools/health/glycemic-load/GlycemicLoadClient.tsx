@@ -21,7 +21,6 @@ export default function GlycemicLoadClient() {
 
   const mealTotal = useMemo(() => meal.reduce((sum, m) => sum + calcGl(m.food, m.servings), 0), [meal])
   const mealCarb = useMemo(() => meal.reduce((sum, m) => sum + m.food.carb * m.servings, 0), [meal])
-  const mealLevel = glLevel(mealTotal)
 
   const addToMeal = () => {
     if (servings <= 0) return
@@ -51,7 +50,7 @@ export default function GlycemicLoadClient() {
           {GL_CATS.map((c) => (
             <optgroup key={c.id} label={c.name}>
               {FOODS.filter((f) => f.cat === c.id).map((f) => (
-                <option key={f.id} value={f.id}>{f.name} ({f.serving})</option>
+                <option key={f.id} value={f.id}>{f.name} · {f.serving}</option>
               ))}
             </optgroup>
           ))}
@@ -98,12 +97,10 @@ export default function GlycemicLoadClient() {
               </div>
             ))}
           </div>
-          <div className={s.mealTotal} style={{ borderColor: GL_LEVEL_META[mealLevel].color }}>
+          <div className={s.mealTotal}>
             <span className={s.mealTotalLabel}>한 끼 총 GL</span>
-            <strong className={s.mealTotalVal} style={{ color: GL_LEVEL_META[mealLevel].color }}>
-              {fmt0(mealTotal)} <small>({GL_LEVEL_META[mealLevel].label})</small>
-            </strong>
-            <span className={s.mealTotalSub}>총 탄수화물 {fmt0(mealCarb)}g</span>
+            <strong className={s.mealTotalVal}>{fmt0(mealTotal)}</strong>
+            <span className={s.mealTotalSub}>총 탄수화물 {fmt0(mealCarb)}g · 낮음·보통·높음 판정은 식품 1회분 기준이라 한 끼 합계에는 적용하지 않습니다</span>
           </div>
         </div>
       )}

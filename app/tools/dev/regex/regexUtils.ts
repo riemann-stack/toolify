@@ -47,7 +47,7 @@ export const PATTERNS: PatternDef[] = [
   /* ─── 한국 데이터 (10) ─── */
   { id: 'ko-mobile', category: 'korean', name: '한국 휴대폰', pattern: '^010-?\\d{3,4}-?\\d{4}$', flags: '', desc: '010-1234-5678 또는 01012345678', example: '010-1234-5678' },
   { id: 'ko-tel',    category: 'korean', name: '한국 일반전화', pattern: '^0\\d{1,2}-?\\d{3,4}-?\\d{4}$', flags: '', desc: '02·031·051 등 지역번호 + 본번호', example: '02-1234-5678' },
-  { id: 'ko-rrn',    category: 'korean', name: '주민등록번호 (앞-뒤)', pattern: '^\\d{6}-[1-4]\\d{6}$', flags: '', desc: '내국인 주민번호 형식 검증 (체크섬 X)', example: '901231-1234567', warning: '⚠️ 개인정보 — KISA·OWASP 가이드 + 체크섬 검증 별도' },
+  { id: 'ko-rrn',    category: 'korean', name: '주민등록번호 (앞-뒤)', pattern: '^\\d{6}-[1-4]\\d{6}$', flags: '', desc: '내국인 주민번호 형식 검증 (체크섬 X)', example: '901231-1234567', warning: '⚠️ 개인정보 — 2020년 10월 이후 부여 번호는 끝자리가 검증번호가 아니므로 체크섬으로 거르지 말 것' },
   { id: 'ko-frn',    category: 'korean', name: '외국인등록번호', pattern: '^\\d{6}-[5-8]\\d{6}$', flags: '', desc: '외국인 등록번호 형식 검증', example: '901231-5234567', warning: '⚠️ 개인정보 — 보안 절차 필수' },
   { id: 'ko-biz',    category: 'korean', name: '사업자등록번호', pattern: '^\\d{3}-?\\d{2}-?\\d{5}$', flags: '', desc: '123-45-67890 또는 1234567890', example: '123-45-67890' },
   { id: 'ko-corp',   category: 'korean', name: '법인등록번호', pattern: '^\\d{6}-?\\d{7}$', flags: '', desc: '110111-1234567 형식', example: '110111-1234567' },
@@ -61,9 +61,9 @@ export const PATTERNS: PatternDef[] = [
   { id: 'gen-url',   category: 'general', name: 'URL (http/https)', pattern: '^https?:\\/\\/[^\\s/$.?#].[^\\s]*$', flags: '', desc: '기본적인 HTTP/HTTPS URL', example: 'https://youtil.kr/tools' },
   { id: 'gen-ipv4',  category: 'general', name: 'IPv4 주소', pattern: '^(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d{1,2})\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d{1,2})$', flags: '', desc: '0.0.0.0 ~ 255.255.255.255', example: '192.168.0.1' },
   { id: 'gen-ipv6',  category: 'general', name: 'IPv6 주소 (단순화)', pattern: '^(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}$', flags: '', desc: '8개 16진수 그룹 (압축 표기 제외)', example: '2001:0db8:85a3:0000:0000:8a2e:0370:7334' },
-  { id: 'gen-hex',   category: 'general', name: '16진 색상 (#RGB·#RRGGBB)', pattern: '^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$', flags: '', desc: 'CSS HEX 색상 코드', example: '#0891B2' },
+  { id: 'gen-hex',   category: 'general', name: '16진 색상 (#RGB·#RRGGBB)', pattern: '^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$', flags: '', desc: 'CSS HEX 색상 코드', example: '#1A2B3C' },
   { id: 'gen-pwd',   category: 'general', name: '강한 비밀번호 (8+, 영숫특)', pattern: '^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}$', flags: '', desc: '영문·숫자·특수문자 각 1개+ & 8자 이상', example: 'Hello123!' },
-  { id: 'gen-uuid',  category: 'general', name: 'UUID v4', pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', flags: 'i', desc: 'RFC 4122 v4 UUID', example: '550e8400-e29b-41d4-a716-446655440000' },
+  { id: 'gen-uuid',  category: 'general', name: 'UUID v4', pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', flags: 'i', desc: 'RFC 9562(구 RFC 4122) v4 UUID', example: '550e8400-e29b-41d4-a716-446655440000' },
   { id: 'gen-slug',  category: 'general', name: 'URL 슬러그', pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$', flags: '', desc: '소문자·숫자·하이픈만 (블로그 URL용)', example: 'hello-world-2026' },
 
   /* ─── 웹/HTML (6) ─── */
@@ -79,7 +79,7 @@ export const PATTERNS: PatternDef[] = [
   { id: 'txt-koalnu',  category: 'text', name: '한글+영문+숫자', pattern: '^[가-힣a-zA-Z0-9]+$', flags: '', desc: '한글·영문·숫자만 (공백/특수문자 X)', example: 'hello한글123' },
   { id: 'txt-jamo',    category: 'text', name: '한글 자모 (분리)', pattern: '[ㄱ-ㅎㅏ-ㅣ]', flags: 'g', desc: '초성·중성 자모 분리 검출', example: 'ㅋㅋㅋㅎㅎ' },
   { id: 'txt-hanja',   category: 'text', name: '한자 (CJK)', pattern: '[\\u4e00-\\u9fff]', flags: 'g', desc: 'CJK 통합 한자 영역', example: '韓國語' },
-  { id: 'txt-emoji',   category: 'text', name: '이모지 (u flag 필수)', pattern: '\\p{Emoji}', flags: 'gu', desc: '유니코드 Emoji 속성 — u flag 필수', example: '😀🎨🚀' },
+  { id: 'txt-emoji',   category: 'text', name: '이모지 (u flag 필수)', pattern: '\\p{Regional_Indicator}{2}|\\p{Extended_Pictographic}(?:\\uFE0F|\\p{Emoji_Modifier})?(?:\\u200D\\p{Extended_Pictographic}(?:\\uFE0F|\\p{Emoji_Modifier})?)*', flags: 'gu', desc: '국기·피부톤·ZWJ 조합까지 한 덩어리로 매치. \\p{Emoji}는 숫자·#·*도 포함하니 주의', example: '😀🇰🇷👍🏽' },
   { id: 'txt-word',    category: 'text', name: '영문 단어', pattern: '\\b[a-zA-Z]+\\b', flags: 'g', desc: '단어 경계로 영문 단어 추출', example: 'hello world 2026' },
   { id: 'txt-num',     category: 'text', name: '숫자 (정수·소수·음수)', pattern: '-?\\d+(?:\\.\\d+)?', flags: 'g', desc: '음수·소수 모두 매치', example: '-3.14, 42, 0.5' },
   { id: 'txt-price',   category: 'text', name: '가격 (천단위 콤마)', pattern: '^\\d{1,3}(?:,\\d{3})*(?:\\.\\d+)?$', flags: '', desc: '1,234,567.89 형식', example: '1,234,567' },
@@ -161,7 +161,63 @@ export const CHEATSHEET: { title: string; emoji: string; rows: CheatRow[] }[] = 
 
 /* ─────────────────────────────────────────────
    언어별 코드 스니펫 템플릿
+   JS 정규식·치환 문법을 각 언어 문법으로 옮긴다 (g 없음 = 첫 매치만 치환 포함)
    ───────────────────────────────────────────── */
+
+/** JS 리터럴 /.../ 안의 '/'만 이스케이프 — 이미 \/ 로 이스케이프된 것은 그대로 */
+export function escapeRegexSlash(pattern: string): string {
+  return pattern.replace(/\\[\s\S]|\//g, (m) => (m === '/' ? '\\/' : m))
+}
+
+/** JS 치환 문자열의 $ 토큰을 언어별 표기로 변환. literal은 일반 글자 처리 함수 */
+function convertReplacement(
+  rep: string,
+  map: { whole: string; group: (n: string) => string; named: (name: string) => string; dollar: string },
+  literal: (text: string) => string,
+): string {
+  let out = ''
+  let last = 0
+  const re = /\$(\$|&|\d{1,2}|<([^>]+)>)/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(rep)) !== null) {
+    out += literal(rep.slice(last, m.index))
+    const t = m[1]
+    if (t === '$') out += map.dollar
+    else if (t === '&') out += map.whole
+    else if (m[2] !== undefined) out += map.named(m[2])
+    else out += map.group(t)
+    last = m.index + m[0].length
+  }
+  return out + literal(rep.slice(last))
+}
+
+/** 이름 캡처 그룹 → 번호 (PHP 치환 문자열은 이름 참조를 지원하지 않음) */
+export function namedGroupNumbers(pattern: string): Record<string, number> {
+  const out: Record<string, number> = {}
+  let n = 0
+  let inClass = false
+  for (let i = 0; i < pattern.length; i++) {
+    const c = pattern[i]
+    if (c === '\\') { i++; continue }
+    if (inClass) { if (c === ']') inClass = false; continue }
+    if (c === '[') { inClass = true; continue }
+    if (c !== '(') continue
+    if (pattern[i + 1] !== '?') { n++; continue }
+    const m = /^\(\?<([A-Za-z_$][\w$]*)>/.exec(pattern.slice(i))
+    if (m) { n++; out[m[1]] = n }
+  }
+  return out
+}
+
+/** Python 문자열 리터럴 — 가능하면 raw string */
+function pyStr(v: string): string {
+  if (!v.endsWith('\\') && !v.includes('\n')) {
+    if (!v.includes("'")) return `r'${v}'`
+    if (!v.includes('"')) return `r"${v}"`
+  }
+  return JSON.stringify(v)
+}
+
 export function formatLangSnippet(
   lang: LangId,
   pattern: string,
@@ -169,33 +225,59 @@ export function formatLangSnippet(
   mode: Mode,
   replacement: string = '',
 ): string {
-  const escapeSlash = pattern.replace(/\//g, '\\/')
+  const global = flags.includes('g')
   switch (lang) {
-    case 'js':
-      if (mode === 'split') return `text.split(/${escapeSlash}/${flags})`
-      return `text.replace(/${escapeSlash}/${flags}, ${JSON.stringify(replacement)})`
+    case 'js': {
+      const lit = `/${escapeRegexSlash(pattern)}/${flags}`
+      if (mode === 'split') return `text.split(${lit})`
+      return `text.replace(${lit}, ${JSON.stringify(replacement)})`
+    }
     case 'python': {
       const pyFlags: string[] = []
       if (flags.includes('i')) pyFlags.push('re.IGNORECASE')
       if (flags.includes('m')) pyFlags.push('re.MULTILINE')
       if (flags.includes('s')) pyFlags.push('re.DOTALL')
       const fStr = pyFlags.length > 0 ? `, flags=${pyFlags.join(' | ')}` : ''
-      const pyRepl = replacement.replace(/\$(\d)/g, '\\\\$1').replace(/\$&/g, '\\\\g<0>')
-      if (mode === 'split') return `re.split(r'${pattern}', text${fStr})`
-      return `re.sub(r'${pattern}', '${pyRepl}', text${fStr})`
+      /* 이름 그룹: (?<name>…) → (?P<name>…), \k<name> → (?P=name) */
+      const pyPattern = pattern.replace(/\(\?<(?![=!])/g, '(?P<').replace(/\\k<([^>]+)>/g, '(?P=$1)')
+      if (mode === 'split') return `re.split(${pyStr(pyPattern)}, text${fStr})`
+      const pyRepl = convertReplacement(
+        replacement,
+        { whole: '\\g<0>', group: (n) => `\\g<${n}>`, named: (n) => `\\g<${n}>`, dollar: '$' },
+        (t) => t.replace(/\\/g, '\\\\'),
+      )
+      const count = global ? '' : ', count=1'
+      return `re.sub(${pyStr(pyPattern)}, ${pyStr(pyRepl)}, text${count}${fStr})`
     }
     case 'java': {
-      const jPattern = pattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-      const jRepl = replacement.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-      if (mode === 'split') return `text.split("${jPattern}")`
-      return `text.replaceAll("${jPattern}", "${jRepl}")`
+      /* Java는 flag 인자 대신 인라인 (?ims). JS의 i는 유니코드 대소문자도 무시하므로 u 추가 */
+      let inline = ''
+      if (flags.includes('i')) inline += 'iu'
+      if (flags.includes('m')) inline += 'm'
+      if (flags.includes('s')) inline += 's'
+      const javaStr = (v: string) => v.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+      const jPattern = javaStr((inline ? `(?${inline})` : '') + pattern)
+      if (mode === 'split') return `text.split("${jPattern}", -1)`
+      const jRepl = javaStr(convertReplacement(
+        replacement,
+        { whole: '$0', group: (n) => `$${n}`, named: (n) => `\${${n}}`, dollar: '\\$' },
+        (t) => t.replace(/\\/g, '\\\\').replace(/\$/g, '\\$'),
+      ))
+      return `text.${global ? 'replaceAll' : 'replaceFirst'}("${jPattern}", "${jRepl}")`
     }
     case 'php': {
-      /* PHP는 'g' flag가 없음 (자동 전체 매치) */
+      /* PHP(PCRE)는 g flag가 없음 — 기본이 전체 치환, 첫 매치만이면 limit 1 */
       const phpFlags = flags.replace(/[gy]/g, '')
-      const phpRepl = replacement.replace(/\$/g, '\\$')
-      if (mode === 'split') return `preg_split("/${escapeSlash}/${phpFlags}", $text)`
-      return `preg_replace("/${escapeSlash}/${phpFlags}", "${phpRepl}", $text)`
+      const phpStr = (v: string) => `'${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
+      const phpPattern = phpStr(`/${escapeRegexSlash(pattern)}/${phpFlags}`)
+      if (mode === 'split') return `preg_split(${phpPattern}, $text)`
+      const groupNo = namedGroupNumbers(pattern)
+      const phpRepl = convertReplacement(
+        replacement,
+        { whole: '$0', group: (n) => `\${${n}}`, named: (n) => (groupNo[n] ? `\${${groupNo[n]}}` : `$<${n}>`), dollar: '$' },
+        (t) => t.replace(/\\/g, '\\\\'),
+      )
+      return `preg_replace(${phpPattern}, ${phpStr(phpRepl)}, $text${global ? '' : ', 1'})`
     }
   }
 }
@@ -243,9 +325,12 @@ export function runMatches(
   const matches: MatchResult[] = []
   let truncated = false
 
-  /* g/y flag 없으면 첫 매치만 */
-  if (!regex.global && !regex.sticky) {
+  /* g flag 없으면 첫 매치만 (y 단독도 여기 — matchAll은 g 없는 정규식에 TypeError).
+     같은 RegExp 객체를 치환·분할과 공유하므로 lastIndex를 0으로 되돌린 뒤 실행 */
+  regex.lastIndex = 0
+  if (!regex.global) {
     const m = regex.exec(text)
+    regex.lastIndex = 0
     if (m) {
       matches.push(toMatchResult(m))
     }
@@ -289,7 +374,9 @@ export function runReplace(regex: RegExp, text: string, replacement: string): Ru
   const t0 = performance.now()
   let result = text
   try {
+    regex.lastIndex = 0  /* sticky(y) 정규식은 lastIndex에 따라 결과가 달라짐 */
     result = text.replace(regex, replacement)
+    regex.lastIndex = 0
   } catch {
     /* 잘못된 replacement 패턴 */
   }
@@ -305,6 +392,7 @@ export function runSplit(regex: RegExp, text: string): RunSplitResult {
   const t0 = performance.now()
   let parts: string[] = []
   try {
+    regex.lastIndex = 0
     parts = text.split(regex)
   } catch {}
   return { parts, executionMs: performance.now() - t0 }
@@ -346,7 +434,7 @@ export function tokenizeForHighlight(text: string, matches: MatchResult[]): Toke
 }
 
 /* 5색 로테이션 */
-export const HIGHLIGHT_COLORS = ['#0EA5E9', '#0D9488', '#0891B2', '#D97706', '#EA580C']
+export const HIGHLIGHT_COLORS = ['var(--sky-500)', 'var(--teal-600)', 'var(--cyan-600)', 'var(--amber-600)', 'var(--orange-600)']
 export const colorForMatch = (idx: number) => HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length]
 
 /* ─────────────────────────────────────────────

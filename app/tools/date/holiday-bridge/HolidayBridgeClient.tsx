@@ -28,9 +28,11 @@ export default function HolidayBridgeClient() {
   useEffect(() => {
     const saved = loadSettings()
     const t = todayStr()
+    const cy = Number(t.slice(0, 4))
     // 저장값이 없으면 '올해'(데이터 보유 범위로 클램프)를 기본 연도로 — 해가 바뀌어도 따라간다.
-    // saved를 뒤에 펼쳐 사용자가 고른 연도가 우선하도록 한다.
-    setSettings(prev => ({ ...prev, year: clampYear(Number(t.slice(0, 4))), ...saved }))
+    // 사용자가 고른 연도는 유지하되, 이미 지난 연도로 저장돼 있으면(작년에 방문) 올해로 되돌린다.
+    const savedYear = typeof saved.year === 'number' && saved.year >= cy ? saved.year : undefined
+    setSettings(prev => ({ ...prev, ...saved, year: savedYear ?? clampYear(cy) }))
     if (typeof saved.k === 'number') setKText(String(saved.k))
     setToday(t)
     setLoaded(true)
@@ -42,9 +44,9 @@ export default function HolidayBridgeClient() {
   }, [settings, loaded])
 
   const result = useMemo(() => {
-    // 지난 연휴에는 연차를 쓸 수 없으므로 현재 연도를 볼 때만 오늘 이후로 자른다.
-    // 미래 연도는 전 구간이 유효하다.
-    const fromDate = today && settings.year === Number(today.slice(0, 4)) ? today : undefined
+    // 지난 연휴에는 연차를 쓸 수 없으므로 현재·지난 연도를 볼 때는 오늘 이후로 자른다
+    // (지난 연도면 추천이 모두 비고 '지난 연도' 안내가 뜬다). 미래 연도는 전 구간이 유효하다.
+    const fromDate = today && settings.year <= Number(today.slice(0, 4)) ? today : undefined
     return computeBridge({ ...settings, fromDate })
   }, [settings, today])
 
@@ -101,6 +103,9 @@ export default function HolidayBridgeClient() {
   }, [isFocus, heroPlan, result.spread.plans])
 
   const remaining = settings.k - (isFocus ? focusUsedK : spreadUsedK)
+
+  const curYear = today ? Number(today.slice(0, 4)) : null
+  const isPastYear = curYear !== null && settings.year < curYear
 
   // 선택 연도에 해당하는 회사 휴일만 노출 (다른 해 날짜는 계산에 안 잡혀 칩만 남는 혼선 방지)
   const yearCompany = settings.companyHolidays.filter(d => d.startsWith(`${settings.year}-`))
@@ -172,6 +177,8 @@ export default function HolidayBridgeClient() {
                 className={`${s.segBtn} ${settings.year === y ? s.segBtnActive : ''}`}
                 onClick={() => update({ year: y })}
                 aria-pressed={settings.year === y}
+                disabled={curYear !== null && y < curYear && settings.year !== y}
+                title={curYear !== null && y < curYear ? '지난 연도' : undefined}
               >
                 {y}
               </button>
@@ -248,7 +255,7 @@ export default function HolidayBridgeClient() {
               <p className={s.heroNum}>
                 {result.baselineMaxRun}<span className={s.heroUnit}>일</span>
               </p>
-              <p className={s.heroEmpty}><EmptyReason k={settings.k} year={settings.year} result={result} /></p>
+              <p className={s.heroEmpty}><EmptyReason k={settings.k} year={settings.year} result={result} pastYear={isPastYear} /></p>
             </>
           )}
         </div>
@@ -270,13 +277,19 @@ export default function HolidayBridgeClient() {
             <>
               <p className={s.heroTop}>연차 0개 기준 최장 연휴</p>
               <p className={s.heroNum}>{result.baselineMaxRun}<span className={s.heroUnit}>일</span></p>
-              <p className={s.heroEmpty}><EmptyReason k={settings.k} year={settings.year} result={result} spread /></p>
+              <p className={s.heroEmpty}><EmptyReason k={settings.k} year={settings.year} result={result} pastYear={isPastYear} spread /></p>
             </>
           )}
         </div>
       )}
 
-      {result.droppedPast && result.fromDate && (
+      {result.tailUncoveredYear !== null && (
+        <p className={s.pastNote}>
+          {result.tailUncoveredYear}년 공휴일 데이터가 아직 없어, 연말에서 이어지는 연휴는 <strong>신정(1/1)</strong>까지만 반영합니다.
+        </p>
+      )}
+
+      {result.droppedPast && result.fromDate && !isPastYear && (
         <p className={s.pastNote}>
           오늘 <strong>{longKo(result.fromDate)}</strong> 이후에 시작하는 구간만 추천합니다 — 지난 연휴에는 연차를 쓸 수 없습니다.
           아래 캘린더는 {settings.year}년 전체를 보여줍니다.
@@ -353,12 +366,14 @@ export default function HolidayBridgeClient() {
 }
 
 /* ── 결과가 없을 때 이유 안내 ── */
-function EmptyReason({ k, year, result, spread }: {
+function EmptyReason({ k, year, result, spread, pastYear }: {
   k: number
   year: number
   result: ReturnType<typeof computeBridge>
   spread?: boolean
+  pastYear?: boolean
 }) {
+  if (pastYear) return <>{year}년은 이미 지난 연도입니다. 올해 이후 연도를 선택해 보세요.</>
   if (k === 0) return <>연차를 1개 이상 입력하면 {spread ? '분산 ' : '추천 '}플랜이 나옵니다.</>
   // 연차가 있는데도 플랜이 없다 = 남은 기간에 이을 만한 구간이 없다는 뜻
   if (result.droppedPast) {

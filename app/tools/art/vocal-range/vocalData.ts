@@ -28,13 +28,13 @@ const mk = (id: string, name: string, shortName: string, low: string, high: stri
 })
 
 export const VOCAL_RANGES: VocalRange[] = [
-  mk('bass',         '베이스',     'Bass',   'E2', 'E4', '남성 가장 낮은 음역',   '고우림·연광철', '#0891B2', 'male'),
-  mk('baritone',     '바리톤',     'Baritone', 'G2', 'G4', '남성 중간 음역',         '성시경·박효신', '#059669', 'male'),
-  mk('tenor',        '테너',       'Tenor',   'C3', 'C5', '남성 높은 음역',          '이수·휘성',     '#A16207', 'male'),
-  mk('countertenor', '카운터테너', 'Countertenor', 'E3', 'E5', '남성 매우 높은 음역', '이동규·최성훈',  '#EA580C', 'male'),
-  mk('contralto',    '콘트랄토',   'Contralto', 'F3', 'F5', '여성 가장 낮은 음역',   '이은미',         '#9333EA', 'female'),
-  mk('alto',         '알토',       'Alto',     'G3', 'G5', '여성 중간 음역 (합창 파트 관행 값)', '—',  '#DB2777', 'female'),
-  mk('mezzo',        '메조소프라노', 'Mezzo',   'A3', 'A5', '여성 중상 음역',         '백지영·이하이',   '#DC2626', 'female'),
+  mk('bass',         '베이스',     'Bass',   'E2', 'E4', '남성 가장 낮은 음역',   '고우림·연광철', 'var(--cyan-600)', 'male'),
+  mk('baritone',     '바리톤',     'Baritone', 'G2', 'G4', '남성 중간 음역',         '성시경·박효신', 'var(--emerald-600)', 'male'),
+  mk('tenor',        '테너',       'Tenor',   'C3', 'C5', '남성 높은 음역',          '이수·휘성',     'var(--yellow-700)', 'male'),
+  mk('countertenor', '카운터테너', 'Countertenor', 'E3', 'E5', '남성 매우 높은 음역', '이동규·최성훈',  'var(--orange-600)', 'male'),
+  mk('contralto',    '콘트랄토',   'Contralto', 'F3', 'F5', '여성 가장 낮은 음역',   '이은미',         'var(--purple-600)', 'female'),
+  mk('alto',         '알토',       'Alto',     'G3', 'G5', '여성 중간 음역 (합창 파트 관행 값)', '—',  'var(--pink-600)', 'female'),
+  mk('mezzo',        '메조소프라노', 'Mezzo',   'A3', 'A5', '여성 중상 음역',         '백지영·이하이',   'var(--red-600)', 'female'),
   mk('soprano',      '소프라노',   'Soprano', 'C4', 'C6', '여성 높은 음역',          '아이유·박정현',   '#FFB347', 'female'),
 ]
 
@@ -145,11 +145,16 @@ export function matchSongs(userLowMidi: number, userHighMidi: number, limit: num
 }
 
 /* ─── 음역대 자동 분류 ─── */
-export function classifyVocalRange(lowMidi: number, highMidi: number): VocalRange | null {
+/* 성별을 지정하면 해당 성별 분류만 후보로 비교 — 미지정 시 남녀 분류가 섞여
+   흔한 여성 진성 음역(A3~C5 등)이 남성 분류(카운터테너)로 잡히는 문제가 있어 UI는 성별별 결과를 함께 보여줌 */
+export type VocalGender = 'male' | 'female'
+
+export function classifyVocalRange(lowMidi: number, highMidi: number, gender?: VocalGender): VocalRange | null {
   const midPoint = (lowMidi + highMidi) / 2
   let best: VocalRange | null = null
   let bestDist = Infinity
   for (const range of VOCAL_RANGES) {
+    if (gender && range.gender !== gender && range.gender !== 'any') continue
     const rangeMid = (range.midiLow + range.midiHigh) / 2
     const dist = Math.abs(rangeMid - midPoint)
     if (dist < bestDist) {

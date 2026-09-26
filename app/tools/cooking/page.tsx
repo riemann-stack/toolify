@@ -11,7 +11,7 @@ export default function CookingCategoryPage() {
   return (
     <CategoryView
       catId="cooking"
-      description="인분 환산부터 김장·해동·제빵 타임라인까지 — 주방의 모든 계산을 한 곳에서."
+      description="인분 환산, 해동·전자레인지 시간, 베이킹 비율과 발효 일정처럼 주방에서 자주 막히는 계산을 돕습니다."
     />
   )
 }

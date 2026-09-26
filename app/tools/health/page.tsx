@@ -11,7 +11,7 @@ export default function HealthCategoryPage() {
   return (
     <CategoryView
       catId="health"
-      description="BMI부터 카페인·수면 부채까지 — 매일 챙기는 건강 지표를 정확한 숫자로 시각화."
+      description="체중·영양, 임신·주기, 카페인·수면처럼 몸 상태를 숫자로 가늠하는 계산기입니다. 결과는 널리 쓰는 공식에 따른 추정이며 진단을 대신하지 않습니다."
     />
   )
 }

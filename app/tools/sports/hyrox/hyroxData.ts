@@ -23,6 +23,12 @@ export interface Station {
   spec: string      // 규격(거리/횟수)
 }
 
+// 월 볼 횟수 — 페이지·표·안내문이 모두 이 상수를 쓴다(단일 소스).
+// 여자 Open은 2025/26 시즌에 75회로 줄었고, 2026/27 시즌 룰북에서 100회로 돌아왔다는 안내가 있다.
+// 공식 룰북 원문(hyrox.com)을 직접 확인하지 못해 시즌별 확인 문구를 함께 노출한다.
+export const WALLBALL_REPS = 100
+export const WALLBALL_NOTE = `월 볼은 전 부문 ${WALLBALL_REPS}회가 기본입니다. 여자 Open은 2025/26 시즌에 75회로 줄었다가 2026/27 시즌에 다시 ${WALLBALL_REPS}회로 돌아왔다는 안내가 있으니, 출전하는 시즌의 공식 룰북에서 확인하세요.`
+
 export const STATIONS: Station[] = [
   { id: 'ski',     name: '스키에르그',       nameEn: 'SkiErg',            spec: '1,000m' },
   { id: 'sledpush',name: '썰매 밀기',         nameEn: 'Sled Push',         spec: '50m' },
@@ -31,7 +37,7 @@ export const STATIONS: Station[] = [
   { id: 'row',     name: '로잉',             nameEn: 'Rowing',            spec: '1,000m' },
   { id: 'farmers', name: '파머스 캐리',       nameEn: 'Farmers Carry',     spec: '200m' },
   { id: 'lunge',   name: '샌드백 런지',       nameEn: 'Sandbag Lunges',    spec: '100m' },
-  { id: 'wallball',name: '월 볼',            nameEn: 'Wall Balls',        spec: '100/75회' },
+  { id: 'wallball',name: '월 볼',            nameEn: 'Wall Balls',        spec: `${WALLBALL_REPS}회` },
 ]
 
 export const RUN_COUNT = 8
@@ -77,7 +83,7 @@ export const WEIGHT_TABLE: StationSpec[] = [
   { station: '썰매 끌기 (Sled Pull)',   open_m: '103kg', open_f: '78kg',  pro_m: '153kg', pro_f: '103kg' },
   { station: '파머스 캐리 (Farmers)',   open_m: '2×24kg', open_f: '2×16kg', pro_m: '2×32kg', pro_f: '2×24kg' },
   { station: '샌드백 런지 (Lunges)',    open_m: '20kg',  open_f: '10kg',  pro_m: '30kg',  pro_f: '20kg' },
-  { station: '월 볼 (Wall Balls)',     open_m: '6kg·100회', open_f: '4kg·75회', pro_m: '9kg·100회', pro_f: '6kg·100회' },
+  { station: '월 볼 (Wall Balls)',     open_m: `6kg·${WALLBALL_REPS}회`, open_f: `4kg·${WALLBALL_REPS}회*`, pro_m: `9kg·${WALLBALL_REPS}회`, pro_f: `6kg·${WALLBALL_REPS}회` },
 ]
 
 // 무게 무관 종목(거리/횟수 동일)
@@ -88,7 +94,7 @@ export const FIXED_SPECS: { station: string; spec: string }[] = [
   { station: '런 (Run)',           spec: '1km × 8회 = 8km' },
 ]
 
-export const DIVISION_NOTE = '월 볼 횟수: 남자·여자 Pro 100회, 여자 Open 75회(2025/26 시즌 조정). 목표 높이: 남자 3.0m · 여자 2.7m. 썰매 중량은 썰매 자체 무게 포함값입니다. Doubles(2인)는 작업을 분담, Relay(4인)는 4명이 코스를 나눠 진행합니다.'
+export const DIVISION_NOTE = `* ${WALLBALL_NOTE} 목표 높이: 남자 3.0m · 여자 2.7m. 썰매 중량은 썰매 자체 무게 포함값입니다. Doubles(2인)는 작업을 분담, Relay(4인)는 4명이 코스를 나눠 진행합니다.`
 
 // ─── 계산 ───
 export interface PredictInput {

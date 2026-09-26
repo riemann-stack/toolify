@@ -280,10 +280,16 @@ export function buildMeshCss(mesh: MeshCorners): string {
 export function exportCss(cfg: GradientConfig): string {
   const noise = cfg.noise > 0 ? `${noiseSvgUrl(cfg.noise)},\n  ` : ''
   if (cfg.type === 'mesh' && cfg.mesh) {
-    return `background:\n  ${noise}${buildMeshCss(cfg.mesh).split(', ').join(',\n  ')};`
+    // 레이어 경계('), ')에서만 줄바꿈 — ', '로 나누면 radial-gradient 인자 중간이 쪼개진다
+    return `background:\n  ${noise}${buildMeshCss(cfg.mesh).replace(/\s{2,}/g, ' ').split('), ').join('),\n  ')};`
   }
-  if (noise) return `background:\n  ${noise}${buildCss(cfg, { native: true })};`
-  return `background: ${buildCss(cfg, { native: true })};`
+  // RGB 외 보간(in oklch 등)은 Safari 16.1·Firefox 126 이하에서 선언 전체가 무효 —
+  // dense stop 선언을 먼저 두고 native 선언으로 덮어쓰는 캐스케이드 폴백
+  const fallback = cfg.space !== 'rgb'
+    ? `/* 구형 브라우저 폴백 (보간색을 16개 stop으로 풀어 쓴 선언) */\nbackground:${noise ? `\n  ${noise}` : ' '}${buildCss(cfg)};\n`
+    : ''
+  if (noise) return `${fallback}background:\n  ${noise}${buildCss(cfg, { native: true })};`
+  return `${fallback}background: ${buildCss(cfg, { native: true })};`
 }
 
 export function exportTailwind(cfg: GradientConfig): string {
@@ -305,12 +311,15 @@ export function exportSvg(cfg: GradientConfig, w = 400, h = 200, opts?: { noise?
     : ''
   if (cfg.type === 'mesh' && cfg.mesh) {
     const { tl, tr, bl, br } = cfg.mesh
+    // CSS mesh(circle at 모서리, farthest-corner의 70%)와 같은 원형 반경 = 0.7 × 대각선 — PNG와 동일
+    const mr = (Math.hypot(w, h) * 0.7).toFixed(1)
+    const mu = `gradientUnits="userSpaceOnUse" r="${mr}"`
     return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="g-tl" cx="0" cy="0" r="0.7"><stop offset="0%" stop-color="${tl}"/><stop offset="100%" stop-color="${tl}" stop-opacity="0"/></radialGradient>
-    <radialGradient id="g-tr" cx="1" cy="0" r="0.7"><stop offset="0%" stop-color="${tr}"/><stop offset="100%" stop-color="${tr}" stop-opacity="0"/></radialGradient>
-    <radialGradient id="g-bl" cx="0" cy="1" r="0.7"><stop offset="0%" stop-color="${bl}"/><stop offset="100%" stop-color="${bl}" stop-opacity="0"/></radialGradient>
-    <radialGradient id="g-br" cx="1" cy="1" r="0.7"><stop offset="0%" stop-color="${br}"/><stop offset="100%" stop-color="${br}" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g-tl" ${mu} cx="0" cy="0"><stop offset="0%" stop-color="${tl}"/><stop offset="100%" stop-color="${tl}" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g-tr" ${mu} cx="${w}" cy="0"><stop offset="0%" stop-color="${tr}"/><stop offset="100%" stop-color="${tr}" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g-bl" ${mu} cx="0" cy="${h}"><stop offset="0%" stop-color="${bl}"/><stop offset="100%" stop-color="${bl}" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g-br" ${mu} cx="${w}" cy="${h}"><stop offset="0%" stop-color="${br}"/><stop offset="100%" stop-color="${br}" stop-opacity="0"/></radialGradient>
   </defs>
   <rect width="100%" height="100%" fill="${tl}"/>
   <rect width="100%" height="100%" fill="url(#g-tl)"/>
@@ -348,14 +357,17 @@ export function exportSvg(cfg: GradientConfig, w = 400, h = 200, opts?: { noise?
   const noiseXml = meshNoiseXml
 
   if (cfg.type === 'linear' || cfg.type === 'repeating-linear') {
+    // CSS 그라디언트 라인 규칙(길이 = |sinθ|·w + |cosθ|·h)을 픽셀 좌표로 — PNG 내보내기와 동일.
+    // objectBoundingBox 50±50% 좌표는 비정사각형에서 방향이 틀어지고 대각 각도에서 모서리에 못 미침
     const rad = ((cfg.angle - 90) * Math.PI) / 180
-    const x1 = 50 - 50 * Math.cos(rad)
-    const y1 = 50 - 50 * Math.sin(rad)
-    const x2 = 50 + 50 * Math.cos(rad)
-    const y2 = 50 + 50 * Math.sin(rad)
+    const len = Math.abs(Math.cos(rad)) * w / 2 + Math.abs(Math.sin(rad)) * h / 2
+    const x1 = w / 2 - Math.cos(rad) * len
+    const y1 = h / 2 - Math.sin(rad) * len
+    const x2 = w / 2 + Math.cos(rad) * len
+    const y2 = h / 2 + Math.sin(rad) * len
     return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="${id}" x1="${x1.toFixed(1)}%" y1="${y1.toFixed(1)}%" x2="${x2.toFixed(1)}%" y2="${y2.toFixed(1)}%">
+    <linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}">
 ${stopsXml}
     </linearGradient>
   </defs>
@@ -406,8 +418,9 @@ let gradient = MeshGradient(width: 2, height: 2, points: [
   Color(hex: "${cfg.mesh?.bl}"), Color(hex: "${cfg.mesh?.br}"),
 ])`
   }
-  const colors = cfg.stops.map((s) => `Color(hex: "${s.hex}")`).join(',\n    ')
-  const stops = cfg.stops
+  // stop 배열은 추가·드래그 순서라 위치순이 아닐 수 있음 — 반드시 정렬 (CSS·SVG·PNG와 동일)
+  const sortedStops = [...cfg.stops].sort((a, b) => a.pos - b.pos)
+  const stops = sortedStops
     .map((s) => `Gradient.Stop(color: Color(hex: "${s.hex}"), location: ${(s.pos / 100).toFixed(2)})`)
     .join(',\n    ')
 
@@ -422,12 +435,13 @@ let gradient = MeshGradient(width: 2, height: 2, points: [
 )`
   }
   if (cfg.type === 'conic') {
+    // SwiftUI 각도 0°는 3시 방향, CSS conic은 12시 시작 — Flutter·PNG와 같은 −90° 보정. stop 위치도 유지
     return `AngularGradient(
-  gradient: Gradient(colors: [
-    ${colors}
+  gradient: Gradient(stops: [
+    ${stops}
   ]),
   center: .center,
-  angle: .degrees(${cfg.angle})
+  angle: .degrees(${cfg.angle - 90})
 )`
   }
   // linear (repeating은 SwiftUI 미지원 — 일반 Linear로)
@@ -456,7 +470,9 @@ Stack(children: [
   // 나머지 3 모서리도 동일 패턴...
 ])`
   }
-  const flutterStops = cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial' ? normalizeStops(cfg.stops) : cfg.stops
+  // Flutter stops는 오름차순이어야 함 (앞보다 작은 값은 앞 값으로 취급돼 미리보기와 다른 렌더) — 정렬 후 출력
+  const sortedStops = [...cfg.stops].sort((a, b) => a.pos - b.pos)
+  const flutterStops = cfg.type === 'repeating-linear' || cfg.type === 'repeating-radial' ? normalizeStops(sortedStops) : sortedStops
   const colorsList = flutterStops.map((s) => `Color(0xFF${s.hex.replace('#', '')})`).join(',\n      ')
   const stopsList = flutterStops.map((s) => (s.pos / 100).toFixed(3)).join(', ')
 
@@ -594,8 +610,9 @@ export function analyzeContrast(stops: Stop[], space: ColorSpace, samples = 12):
     }
   }
   return {
-    whiteRatio: Math.round(worstWhite * 100) / 100,
-    blackRatio: Math.round(worstBlack * 100) / 100,
+    // 표시값은 내림 — 반올림하면 4.495~4.4999가 '4.50'인데 판정(원값)은 AA 미달로 모순 (color 도구 fmtRatio와 동일 규칙)
+    whiteRatio: Math.floor(worstWhite * 100 + 1e-9) / 100,
+    blackRatio: Math.floor(worstBlack * 100 + 1e-9) / 100,
     whiteGrade: wcagGrade(worstWhite),
     blackGrade: wcagGrade(worstBlack),
     bestText,
@@ -857,7 +874,8 @@ export async function downloadGradientPng(cfg: GradientConfig, w: number, h: num
     // source-over 유지 — 'lighter' 가산 합성은 CSS·SVG(normal)와 다른 밝기를 만든다
     const cs: Array<[string, number, number]> = [[tl, 0, 0], [tr, w, 0], [bl, 0, h], [br, w, h]]
     for (const [color, x, y] of cs) {
-      const grad = ctx.createRadialGradient(x, y, 0, x, y, Math.max(w, h) * 0.7)
+      // CSS 'circle at 모서리 … transparent 70%'(farthest-corner = 대각선)와 같은 반경
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, Math.hypot(w, h) * 0.7)
       grad.addColorStop(0, color)
       grad.addColorStop(1, 'rgba(0,0,0,0)')
       ctx.fillStyle = grad
@@ -1029,8 +1047,10 @@ export async function extractColorsFromImage(file: File, k = 5): Promise<string[
       }
     }
   }
-  // 명도순 정렬
-  return centroids
-    .sort((a, b) => (a.r + a.g + a.b) - (b.r + b.g + b.b))
-    .map((rgb) => rgbToHex(rgb))
+  // 명도순 정렬 + 중복 제거 (색 수가 k보다 적은 이미지는 같은 중심이 여러 개 남음 → 같은 색 stop·React key 중복 방지)
+  return [...new Set(
+    centroids
+      .sort((a, b) => (a.r + a.g + a.b) - (b.r + b.g + b.b))
+      .map((rgb) => rgbToHex(rgb)),
+  )]
 }

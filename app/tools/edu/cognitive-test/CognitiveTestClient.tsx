@@ -3,33 +3,24 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './cognitive-test.module.css'
+import {
+  ROUNDS, REACTION_DELAY_MS, REACTION_GRADES, getReactionGrade, gradeRangeText,
+  STROOP_BANDS, DUAL_BANDS, interferenceBand, BAND_LABEL, bandsText, calcTotalScore,
+} from './cognitiveTestUtils'
 
 // ─────────────────────────────────────────────
 // 상수·데이터
 // ─────────────────────────────────────────────
-const ROUNDS = { reaction: 6, stroop: 20, dualSingle: 5, dualDouble: 10 } as const
-// reaction은 6회 시행 중 첫 1회 warm-up 제외하여 5회 평균
+// 시행 수·등급·점수 환산은 cognitiveTestUtils (가이드 표와 단일 소스)
 
 const STROOP_COLORS = [
   { name: '빨강', code: '#FF4444' },
   { name: '파랑', code: '#3E5BFF' },
-  { name: '초록', code: '#059669' },
-  { name: '노랑', code: '#A16207' },
-  { name: '보라', code: '#9B59B6' },
-  { name: '주황', code: '#EA580C' },
+  { name: '초록', code: 'var(--emerald-600)' },
+  { name: '노랑', code: 'var(--yellow-700)' },
+  { name: '보라', code: 'var(--amethyst)' },
+  { name: '주황', code: 'var(--orange-600)' },
 ]
-
-type Grade = { key: string; label: string; emoji: string; range: [number, number]; color: string }
-const REACTION_GRADES: Grade[] = [
-  { key: 'excellent', label: '매우 빠름',   emoji: '🚀', range: [0, 200],     color: '#0D9488' },
-  { key: 'fast',      label: '빠름',         emoji: '✨', range: [201, 250],   color: '#059669' },
-  { key: 'avg',       label: '평균',         emoji: '⭐', range: [251, 300],   color: 'var(--accent)' },
-  { key: 'below',     label: '평균 이하',    emoji: '👍', range: [301, 350],   color: '#A16207' },
-  { key: 'slow',      label: '느림',         emoji: '🐢', range: [351, 9999],  color: '#EA580C' },
-]
-function getReactionGrade(ms: number): Grade {
-  return REACTION_GRADES.find(g => ms >= g.range[0] && ms <= g.range[1]) ?? REACTION_GRADES[4]
-}
 
 // ─────────────────────────────────────────────
 // 공유 결과 (localStorage)
@@ -47,14 +38,35 @@ type Records = {
 const RECORDS_KEY = 'youtil-cognitive-records-v1'
 
 function loadRecords(): Records {
+  if (typeof window === 'undefined') return { totalTests: 0 }
   try {
     const raw = localStorage.getItem(RECORDS_KEY)
-    if (raw) return JSON.parse(raw)
+    if (!raw) return { totalTests: 0 }
+    const j: unknown = JSON.parse(raw)
+    if (!j || typeof j !== 'object') return { totalTests: 0 }
+    const o = j as Record<string, unknown>
+    // 필드별 숫자 검증 — 문자열이 섞이면 '총 테스트 횟수 01' 같은 문자열 결합이 생김
+    const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : undefined)
+    return {
+      bestReaction: num(o.bestReaction),
+      bestStroopInterference: num(o.bestStroopInterference),
+      bestDualInterference: num(o.bestDualInterference),
+      totalTests: num(o.totalTests) ?? 0,
+      lastTested: typeof o.lastTested === 'string' && !Number.isNaN(Date.parse(o.lastTested)) ? o.lastTested : undefined,
+      lastReaction: num(o.lastReaction),
+      lastStroop: num(o.lastStroop),
+      lastDual: num(o.lastDual),
+    }
   } catch {}
   return { totalTests: 0 }
 }
 function saveRecords(r: Records) {
   try { localStorage.setItem(RECORDS_KEY, JSON.stringify(r)) } catch {}
+}
+
+/** 부호 표기 — 음수 간섭(표본이 적어 생기는 오차)도 '+-35'가 아니라 '−35'로 */
+function fmtSigned(n: number): string {
+  return n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : '0'
 }
 
 // 통계 계산
@@ -112,7 +124,7 @@ export default function CognitiveTestClient() {
   function startReactionRound() {
     if (rTimeoutRef.current) clearTimeout(rTimeoutRef.current)
     setRPhase('waiting')
-    const delay = 1500 + Math.random() * 3500
+    const delay = REACTION_DELAY_MS.min + Math.random() * (REACTION_DELAY_MS.max - REACTION_DELAY_MS.min)
     rTimeoutRef.current = window.setTimeout(() => {
       rStartRef.current = performance.now()
       setRPhase('go')
@@ -171,6 +183,8 @@ export default function CognitiveTestClient() {
   const [sIdx, setSIdx] = useState<number>(0)
   const [sFlash, setSFlash] = useState<'correct' | 'wrong' | ''>('')
   const sStartRef = useRef<number>(0)
+  // 한 문항 1회 응답 잠금 — 250ms 피드백 중 연속 클릭이 같은 문항 기록을 덮어쓰고 다음 문항 시작 시각을 늦추던 문제
+  const sLockRef = useRef<boolean>(false)
 
   function generateStroop(): StroopTrial[] {
     const trials: StroopTrial[] = []
@@ -191,9 +205,12 @@ export default function CognitiveTestClient() {
     setSTrials(generateStroop())
     setSIdx(0)
     setSPhase('running')
+    sLockRef.current = false
     sStartRef.current = performance.now()
   }
   function answerStroop(chosen: string) {
+    if (sLockRef.current) return
+    sLockRef.current = true
     const trial = sTrials[sIdx]
     // eslint-disable-next-line react-hooks/purity
     const rt = performance.now() - sStartRef.current
@@ -214,10 +231,12 @@ export default function CognitiveTestClient() {
           const congMean = cong.reduce((a, b) => a + b, 0) / cong.length
           const incMean = inc.reduce((a, b) => a + b, 0) / inc.length
           const interference = Math.round(incMean - congMean)
+          // 음수 간섭은 측정 오차 — 최고 기록에는 0으로 반영
+          const forBest = Math.max(0, interference)
           updateRecords({
             bestStroopInterference: records.bestStroopInterference === undefined
-              ? interference
-              : Math.min(records.bestStroopInterference, interference),
+              ? forBest
+              : Math.min(Math.max(0, records.bestStroopInterference), forBest),
             lastStroop: interference,
             totalTests: records.totalTests + 1,
           })
@@ -226,13 +245,25 @@ export default function CognitiveTestClient() {
         setSIdx(next)
         sStartRef.current = performance.now()
       }
+      sLockRef.current = false
     }, 250)
   }
   function resetStroop() {
+    sLockRef.current = false
     setSPhase('idle')
     setSTrials([])
     setSIdx(0)
   }
+  // 결과 단계의 정답률 — 한 조건 정답이 0개라 stroopStats가 null이어도 안내·재시작을 보여 주기 위함
+  const stroopAcc = useMemo(() => {
+    if (sPhase !== 'result' || sTrials.length === 0) return null
+    const congTotal = sTrials.filter(t => t.congruent).length
+    const incTotal = sTrials.filter(t => !t.congruent).length
+    return {
+      congCorrect: sTrials.filter(t => t.congruent && t.correct).length, congTotal,
+      incCorrect: sTrials.filter(t => !t.congruent && t.correct).length, incTotal,
+    }
+  }, [sTrials, sPhase])
   const stroopStats = useMemo(() => {
     if (sTrials.length === 0 || sPhase !== 'result') return null
     const cong = sTrials.filter(t => t.congruent && t.correct).map(t => t.rt ?? 0)
@@ -262,6 +293,8 @@ export default function CognitiveTestClient() {
   const [dIdx, setDIdx] = useState<number>(0)
   const [dDotPressed, setDDotPressed] = useState<boolean>(false)
   const dStartRef = useRef<number>(0)
+  // 한 문항 1회 응답 잠금 (연타·키 반복 시 타이머가 겹쳐 다음 문항 시작 시각이 늦게 재설정되던 문제)
+  const dLockRef = useRef<boolean>(false)
 
   function generateDual(count: number, withDot: boolean): DualTrial[] {
     const trials: DualTrial[] = []
@@ -278,6 +311,7 @@ export default function CognitiveTestClient() {
     setDIdx(0)
     setDPhase('single')
     setDDotPressed(false)
+    dLockRef.current = false
     dStartRef.current = performance.now()
   }
   function startDualDouble() {
@@ -286,10 +320,13 @@ export default function CognitiveTestClient() {
     setDIdx(ROUNDS.dualSingle)
     setDPhase('double')
     setDDotPressed(false)
+    dLockRef.current = false
     dStartRef.current = performance.now()
   }
 
   const answerDual = useCallback((ans: 'odd' | 'even') => {
+    if (dLockRef.current) return
+    dLockRef.current = true
     setDTrials(prev => {
       if (dIdx >= prev.length) return prev
       const trial = prev[dIdx]
@@ -319,10 +356,11 @@ export default function CognitiveTestClient() {
                 const sm = single.reduce((a, b) => a + b, 0) / single.length
                 const dm = dbl.reduce((a, b) => a + b, 0) / dbl.length
                 const interferencePct = Math.round(((dm - sm) / sm) * 100)
+                const forBest = Math.max(0, interferencePct)  // 음수는 측정 오차 — 최고 기록엔 0
                 updateRecords({
                   bestDualInterference: records.bestDualInterference === undefined
-                    ? interferencePct
-                    : Math.min(records.bestDualInterference, interferencePct),
+                    ? forBest
+                    : Math.min(Math.max(0, records.bestDualInterference), forBest),
                   lastDual: interferencePct,
                   totalTests: records.totalTests + 1,
                 })
@@ -335,6 +373,7 @@ export default function CognitiveTestClient() {
         setDIdx(next)
         dStartRef.current = performance.now()
       }
+      dLockRef.current = false
     }, 200)
   }, [dIdx, dPhase, dDotPressed, records, updateRecords])   
 
@@ -358,12 +397,22 @@ export default function CognitiveTestClient() {
   }, [dPhase, answerDual])
 
   function resetDual() {
+    dLockRef.current = false
     setDPhase('idle')
     setDTrials([])
     setDIdx(0)
     setDDotPressed(false)
   }
 
+  const dualAcc = useMemo(() => {
+    if (dPhase !== 'result' || dTrials.length === 0) return null
+    const single = dTrials.slice(0, ROUNDS.dualSingle)
+    const dbl = dTrials.slice(ROUNDS.dualSingle)
+    return {
+      singleCorrect: single.filter(t => t.numCorrect).length, singleTotal: single.length,
+      dualCorrect: dbl.filter(t => t.numCorrect).length, dualTotal: dbl.length,
+    }
+  }, [dPhase, dTrials])
   const dualStats = useMemo(() => {
     if (dPhase !== 'result' || dTrials.length === 0) return null
     const single = dTrials.slice(0, ROUNDS.dualSingle)
@@ -390,27 +439,10 @@ export default function CognitiveTestClient() {
   // ─────────────────────────────────────────────
   // 종합 점수 (탭 4)
   // ─────────────────────────────────────────────
-  const totalScore = useMemo(() => {
-    let score = 0
-    let count = 0
-    if (records.lastReaction !== undefined) {
-      // 반응속도 점수: 200ms=100, 350ms=0
-      const r = Math.max(0, Math.min(100, ((350 - records.lastReaction) / 150) * 100))
-      score += r; count++
-    }
-    if (records.lastStroop !== undefined) {
-      // 스트룹 간섭: 0ms=100, 500ms=0
-      const r = Math.max(0, Math.min(100, ((500 - records.lastStroop) / 500) * 100))
-      score += r; count++
-    }
-    if (records.lastDual !== undefined) {
-      // 이중 과제 간섭률: 0%=100, 50%=0
-      const r = Math.max(0, Math.min(100, ((50 - records.lastDual) / 50) * 100))
-      score += r; count++
-    }
-    if (count === 0) return null
-    return Math.round(score / count)
-  }, [records])
+  const totalScore = useMemo(
+    () => calcTotalScore({ reaction: records.lastReaction, stroop: records.lastStroop, dual: records.lastDual }),
+    [records],
+  )
 
   function clearRecords() {
     if (!confirm('모든 기록을 삭제하시겠습니까?')) return
@@ -424,10 +456,10 @@ export default function CognitiveTestClient() {
       `🧠 인지 능력 테스트 결과`,
       ``,
       records.lastReaction !== undefined ? `🚀 반응속도: ${records.lastReaction}ms` : `🚀 반응속도: 미측정`,
-      records.lastStroop   !== undefined ? `🎨 스트룹 간섭: +${records.lastStroop}ms` : `🎨 스트룹 간섭: 미측정`,
-      records.lastDual     !== undefined ? `🔄 이중 과제 간섭: +${records.lastDual}%` : `🔄 이중 과제 간섭: 미측정`,
+      records.lastStroop   !== undefined ? `🎨 스트룹 간섭: ${fmtSigned(records.lastStroop)}ms` : `🎨 스트룹 간섭: 미측정`,
+      records.lastDual     !== undefined ? `🔄 이중 과제 간섭: ${fmtSigned(records.lastDual)}%` : `🔄 이중 과제 간섭: 미측정`,
       ``,
-      totalScore !== null ? `종합 점수: ${totalScore} / 100` : '',
+      totalScore !== null ? `${totalScore.count === 3 ? '종합 점수' : `점수(${totalScore.count}/3개 테스트)`}: ${totalScore.value} / 100` : '',
       `※ 게임형 참고 지표 — 의학 진단 X`,
       ``,
       `https://youtil.kr/tools/edu/cognitive-test`,
@@ -435,7 +467,7 @@ export default function CognitiveTestClient() {
     try {
       await navigator.clipboard.writeText(lines)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -450,7 +482,7 @@ export default function CognitiveTestClient() {
         related={[
           { href: '/tools/edu/review-interval', label: '복습 간격' },
           { href: '/tools/edu/fermi-estimate', label: '페르미 추정' },
-          { href: '/tools/edu/sci-units', label: '과학 단위' },
+          { href: '/tools/edu/sig-figs?tab=notation', label: '과학적 표기·단위' },
         ]}
       >
         본 도구는 인지 심리학 게임을 시각화한 <strong>참고용</strong>이며 의학적 진단·평가가 아닙니다. 실제 인지 능력은 수면·피로·스트레스·집중도, 기기 성능·입력 지연·모니터 주사율(60Hz vs 144Hz), 시간대·주변 환경에 따라 달라집니다. <strong>ADHD·인지 장애·치매 등 진단은 신경과·정신건강의학과 전문의</strong>에게 받으시고, 본 결과로 자가 진단하지 마세요.
@@ -458,16 +490,16 @@ export default function CognitiveTestClient() {
 
       {/* 디바이스 안내 */}
       <div className={s.deviceNote}>
-        <strong>모바일 안내:</strong> 모바일은 터치 지연으로 데스크탑보다 약 20~50ms 느릴 수 있습니다.
+        <strong>모바일 안내:</strong> 터치 입력은 기기에 따라 마우스보다 수십 ms 느릴 수 있습니다.
         정확한 측정은 마우스·키보드 사용을 권장합니다.
       </div>
 
       {/* 탭 */}
       <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'reaction' ? s.tabActive : ''}`} onClick={() => setTab('reaction')}>반응 속도</button>
-        <button className={`${s.tabBtn} ${tab === 'stroop'   ? s.tabActive : ''}`} onClick={() => setTab('stroop')}>스트룹 효과</button>
-        <button className={`${s.tabBtn} ${tab === 'dual'     ? s.tabActive : ''}`} onClick={() => setTab('dual')}>이중 과제</button>
-        <button className={`${s.tabBtn} ${tab === 'summary'  ? s.tabActive : ''}`} onClick={() => setTab('summary')}>종합·기록</button>
+        <button type="button" aria-pressed={tab === 'reaction'} className={`${s.tabBtn} ${tab === 'reaction' ? s.tabActive : ''}`} onClick={() => setTab('reaction')}>반응 속도</button>
+        <button type="button" aria-pressed={tab === 'stroop'}   className={`${s.tabBtn} ${tab === 'stroop'   ? s.tabActive : ''}`} onClick={() => setTab('stroop')}>스트룹 효과</button>
+        <button type="button" aria-pressed={tab === 'dual'}     className={`${s.tabBtn} ${tab === 'dual'     ? s.tabActive : ''}`} onClick={() => setTab('dual')}>이중 과제</button>
+        <button type="button" aria-pressed={tab === 'summary'}  className={`${s.tabBtn} ${tab === 'summary'  ? s.tabActive : ''}`} onClick={() => setTab('summary')}>종합·기록</button>
       </div>
 
       {/* ─── TAB 1: 반응 속도 ─── */}
@@ -479,10 +511,10 @@ export default function CognitiveTestClient() {
               <p className={s.startTitle}>반응 속도 테스트</p>
               <p className={s.startDesc}>
                 <strong style={{ color: '#FF4444' }}>화면이 빨간색</strong>일 때는 기다리고,
-                <br /><strong style={{ color: '#059669' }}>초록색으로 바뀌면 즉시 클릭</strong>하세요.
-                <br />6회 측정 (첫 1회 warm-up 제외, 5회 평균)
+                <br /><strong style={{ color: 'var(--emerald-600)' }}>초록색으로 바뀌면 즉시 클릭</strong>하세요.
+                <br />{ROUNDS.reaction}회 측정 (첫 1회 연습 제외, {ROUNDS.reaction - 1}회 평균)
               </p>
-              <button className={s.startBtn} onClick={() => setRPhase('idle')}>아래 영역을 클릭하세요</button>
+              <button type="button" className={s.startBtn} onClick={startReactionRound}>테스트 시작</button>
             </div>
           )}
 
@@ -538,16 +570,16 @@ export default function CognitiveTestClient() {
             const heroCls = grade.key === 'excellent' ? s.heroSafe : grade.key === 'fast' ? s.heroFast : grade.key === 'avg' ? s.heroAvg : grade.key === 'below' ? s.heroBelow : s.heroSlow
             return (
               <>
-                <div className={`${s.hero} ${heroCls}`}>
+                <div className={`${s.hero} ${heroCls}`} role="status">
                   <p className={s.heroLead}>평균 반응속도</p>
                   <div>
                     <span className={s.heroNum}>{reactionStats.mean}</span>
                     <span className={s.heroUnit}>ms</span>
                   </div>
-                  <p className={s.heroBadge} style={{ background: `${grade.color}22`, color: grade.color }}>
+                  <p className={s.heroBadge} style={{ background: `color-mix(in srgb, ${grade.color} 13%, transparent)`, color: grade.color }}>
                     {grade.emoji} {grade.label}
                   </p>
-                  <p className={s.heroSub}>5회 평균 (warm-up 1회 제외) · 일반 성인 250~300ms</p>
+                  <p className={s.heroSub}>{ROUNDS.reaction - 1}회 평균 (연습 1회 제외)</p>
                 </div>
 
                 <div className={s.card}>
@@ -555,8 +587,8 @@ export default function CognitiveTestClient() {
                   <table className={s.statsTable}>
                     <tbody>
                       <tr><td>평균</td><td>{reactionStats.mean}ms</td></tr>
-                      <tr><td>최고 (가장 빠름)</td><td style={{ color: '#0D9488' }}>{reactionStats.min}ms</td></tr>
-                      <tr><td>최저 (가장 느림)</td><td style={{ color: '#EA580C' }}>{reactionStats.max}ms</td></tr>
+                      <tr><td>최고 (가장 빠름)</td><td style={{ color: 'var(--teal-600)' }}>{reactionStats.min}ms</td></tr>
+                      <tr><td>최저 (가장 느림)</td><td style={{ color: 'var(--orange-600)' }}>{reactionStats.max}ms</td></tr>
                       <tr><td>중앙값</td><td>{reactionStats.median}ms</td></tr>
                       <tr><td>표준편차</td><td>{reactionStats.stdDev}ms</td></tr>
                       <tr><td>너무 빨리 누른 횟수</td><td>{rEarlyCount}회</td></tr>
@@ -571,15 +603,10 @@ export default function CognitiveTestClient() {
                       <div key={g.key} className={`${s.gradeRow} ${grade.key === g.key ? s.gradeRowActive : ''}`} style={{ color: g.color }}>
                         <span className={s.gradeEmoji}>{g.emoji}</span>
                         <span className={s.gradeLabel}>{g.label}</span>
-                        <span className={s.gradeRange} style={{ color: g.color }}>{g.range[1] >= 9999 ? '351ms+' : `${g.range[0]}~${g.range[1]}ms`}</span>
+                        <span className={s.gradeRange} style={{ color: g.color }}>{gradeRangeText(g)}</span>
                       </div>
                     ))}
                   </div>
-                </div>
-
-                <div className={s.compareCard}>
-                  <strong>참고:</strong> F1 드라이버 약 <strong>200ms</strong> · 프로 게이머 <strong>180~220ms</strong> · 일반 성인 <strong>250ms</strong>.
-                  실제 반응속도는 수면·피로·집중도·기기 성능에 따라 달라집니다.
                 </div>
 
                 <div className={s.actionRow}>
@@ -600,11 +627,11 @@ export default function CognitiveTestClient() {
               <p style={{ fontSize: 36, marginBottom: 8 }}>🎨</p>
               <p className={s.startTitle}>스트룹 효과 테스트</p>
               <p className={s.startDesc}>
-                글자의 <strong style={{ color: '#DC2626' }}>의미가 아닌</strong> 글자 <strong style={{ color: '#0D9488' }}>색상</strong>을 선택하세요.
+                글자의 <strong style={{ color: 'var(--red-600)' }}>의미가 아닌</strong> 글자 <strong style={{ color: 'var(--teal-600)' }}>색상</strong>을 선택하세요.
                 <br />20회 시행 (일치 10회 + 불일치 10회)
               </p>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
-                예: <strong style={{ color: '#3E5BFF' }}>빨강</strong> → <strong style={{ color: '#0D9488' }}>파랑</strong> 선택 (글자 색이 파란색)
+                예: <strong style={{ color: '#3E5BFF' }}>빨강</strong> → <strong style={{ color: 'var(--teal-600)' }}>파랑</strong> 선택 (글자 색이 파란색)
               </p>
               <button className={s.startBtn} onClick={startStroop}>테스트 시작</button>
             </div>
@@ -621,9 +648,11 @@ export default function CognitiveTestClient() {
                   {STROOP_COLORS.map(c => (
                     <button
                       key={c.name}
+                      type="button"
                       className={s.stroopColorBtn}
                       style={{ background: c.code }}
                       onClick={() => answerStroop(c.name)}
+                      disabled={sFlash !== ''}
                     >
                       {c.name}
                     </button>
@@ -637,17 +666,33 @@ export default function CognitiveTestClient() {
             </>
           )}
 
+          {sPhase === 'result' && !stroopStats && stroopAcc && (
+            <>
+              <div className={s.warnCard} role="status">
+                ⚠️ <strong>유효 응답 부족:</strong> 일치 조건 정답 {stroopAcc.congCorrect}/{stroopAcc.congTotal}개, 불일치 조건 정답 {stroopAcc.incCorrect}/{stroopAcc.incTotal}개라 간섭 시간을 계산할 수 없습니다.
+                글자의 뜻이 아니라 <strong>글자 색</strong>을 골라 다시 해 보세요.
+              </div>
+              <div className={s.actionRow}>
+                <button type="button" className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetStroop}>다시 도전</button>
+              </div>
+            </>
+          )}
+
           {sPhase === 'result' && stroopStats && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLead}>스트룹 간섭 시간</p>
                 <div>
-                  <span className={s.heroNum}>+{stroopStats.interference}</span>
+                  <span className={s.heroNum}>{fmtSigned(stroopStats.interference)}</span>
                   <span className={s.heroUnit}>ms</span>
                 </div>
                 <p className={s.heroSub}>
-                  불일치 조건이 일치 조건보다 <strong style={{ color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{stroopStats.interference}ms</strong> 느림
-                  <br />일반 성인 범위: 150~400ms
+                  {stroopStats.interference > 0 ? (
+                    <>불일치 조건이 일치 조건보다 <strong style={{ color: 'var(--teal-600)', fontFamily: 'var(--font-sans)' }}>{stroopStats.interference}ms</strong> 느림</>
+                  ) : (
+                    <>이번 측정에서는 간섭이 거의 나타나지 않았습니다 (조건별 10회라 오차 범위일 수 있어요)</>
+                  )}
+                  <br />이 도구 기준: {bandsText(STROOP_BANDS, 'ms')}
                 </p>
               </div>
 
@@ -671,9 +716,9 @@ export default function CognitiveTestClient() {
                 </div>
                 <table className={s.statsTable} style={{ marginTop: 12 }}>
                   <tbody>
-                    <tr><td>일치 정답률</td><td style={{ color: '#0D9488' }}>{stroopStats.congAcc}%</td></tr>
-                    <tr><td>불일치 정답률</td><td style={{ color: '#EA580C' }}>{stroopStats.incAcc}%</td></tr>
-                    <tr><td>간섭 시간</td><td style={{ color: '#EA580C' }}>+{stroopStats.interference}ms</td></tr>
+                    <tr><td>일치 정답률</td><td style={{ color: 'var(--teal-600)' }}>{stroopStats.congAcc}%</td></tr>
+                    <tr><td>불일치 정답률</td><td style={{ color: 'var(--orange-600)' }}>{stroopStats.incAcc}%</td></tr>
+                    <tr><td>간섭 시간</td><td style={{ color: 'var(--orange-600)' }}>{fmtSigned(stroopStats.interference)}ms</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -685,7 +730,7 @@ export default function CognitiveTestClient() {
               </div>
 
               <div className={s.actionRow}>
-                <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetStroop}>다시 도전</button>
+                <button type="button" className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetStroop}>다시 도전</button>
                 <button className={s.actionBtn} onClick={() => setTab('dual')}>다음: 이중 과제 →</button>
               </div>
             </>
@@ -757,17 +802,33 @@ export default function CognitiveTestClient() {
             </>
           )}
 
+          {dPhase === 'result' && !dualStats && dualAcc && (
+            <>
+              <div className={s.warnCard} role="status">
+                ⚠️ <strong>유효 응답 부족:</strong> 1단계 정답 {dualAcc.singleCorrect}/{dualAcc.singleTotal}개, 2단계 정답 {dualAcc.dualCorrect}/{dualAcc.dualTotal}개라 간섭률을 계산할 수 없습니다.
+                숫자의 홀수·짝수를 정확히 골라 다시 해 보세요.
+              </div>
+              <div className={s.actionRow}>
+                <button type="button" className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetDual}>다시 도전</button>
+              </div>
+            </>
+          )}
+
           {dPhase === 'result' && dualStats && (
             <>
-              <div className={s.hero}>
+              <div className={s.hero} role="status">
                 <p className={s.heroLead}>멀티태스킹 간섭률</p>
                 <div>
-                  <span className={s.heroNum}>+{dualStats.interferencePct}</span>
+                  <span className={s.heroNum}>{fmtSigned(dualStats.interferencePct)}</span>
                   <span className={s.heroUnit}>%</span>
                 </div>
                 <p className={s.heroSub}>
-                  이중 과제에서 <strong style={{ color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{dualStats.interferenceMs}ms ({dualStats.interferencePct}%)</strong> 더 느려짐
-                  <br />일반 성인 범위: 20~40%
+                  {dualStats.interferenceMs > 0 ? (
+                    <>이중 과제에서 <strong style={{ color: 'var(--teal-600)', fontFamily: 'var(--font-sans)' }}>{dualStats.interferenceMs}ms ({dualStats.interferencePct}%)</strong> 더 느려짐</>
+                  ) : (
+                    <>이번 측정에서는 이중 과제가 더 느려지지 않았습니다 (1단계 5회가 먼저라 익숙해진 효과일 수 있어요)</>
+                  )}
+                  <br />이 도구 기준: {bandsText(DUAL_BANDS, '%')}
                 </p>
               </div>
 
@@ -791,22 +852,22 @@ export default function CognitiveTestClient() {
                 </div>
                 <table className={s.statsTable} style={{ marginTop: 12 }}>
                   <tbody>
-                    <tr><td>단일 정답률</td><td style={{ color: '#0D9488' }}>{dualStats.singleAcc}%</td></tr>
-                    <tr><td>이중 정답률 (숫자)</td><td style={{ color: '#EA580C' }}>{dualStats.dualAcc}%</td></tr>
+                    <tr><td>단일 정답률</td><td style={{ color: 'var(--teal-600)' }}>{dualStats.singleAcc}%</td></tr>
+                    <tr><td>이중 정답률 (숫자)</td><td style={{ color: 'var(--orange-600)' }}>{dualStats.dualAcc}%</td></tr>
                     <tr><td>이중 정답률 (빨간 점)</td><td>{dualStats.dotAcc}%</td></tr>
-                    <tr><td>간섭 시간</td><td style={{ color: '#EA580C' }}>+{dualStats.interferenceMs}ms</td></tr>
+                    <tr><td>간섭 시간</td><td style={{ color: 'var(--orange-600)' }}>{fmtSigned(dualStats.interferenceMs)}ms</td></tr>
                   </tbody>
                 </table>
               </div>
 
               <div className={s.interpretCard}>
                 💡 <strong>이중 과제 간섭</strong>은 두 작업을 동시에 수행할 때 인지 자원이 분산되는 정도입니다.
-                연구에 따르면 진정한 멀티태스킹은 사실상 불가능하며, 뇌는 빠르게 작업을 전환할 뿐입니다(Task Switching).
-                한 번에 한 작업에 집중할 때 효율이 가장 높습니다.
+                두 과제가 &lsquo;어떤 반응을 할지 고르는 단계&rsquo;에서 겹치면 한쪽이 기다려야 해(Pashler 1994), 둘 다 주의가 필요한 일을 동시에 하면 반응이 느려지거나 틀리기 쉽습니다.
+                아주 익숙한 동작끼리는 간섭이 작습니다.
               </div>
 
               <div className={s.actionRow}>
-                <button className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetDual}>다시 도전</button>
+                <button type="button" className={`${s.actionBtn} ${s.actionBtnPrimary}`} onClick={resetDual}>다시 도전</button>
                 <button className={s.actionBtn} onClick={() => setTab('summary')}>결과 종합 →</button>
               </div>
             </>
@@ -822,17 +883,17 @@ export default function CognitiveTestClient() {
             <div className={s.totalScoreCard}>
               <p className={s.totalScoreLabel}>인지 처리 속도 점수</p>
               <div>
-                <span className={s.totalScoreValue}>{totalScore}</span>
+                <span className={s.totalScoreValue}>{totalScore.value}</span>
                 <span className={s.totalScoreUnit}>/ 100</span>
               </div>
               <p className={s.totalScoreSub}>
-                3가지 테스트 가중 평균 · <strong style={{ color: '#EA580C' }}>게임형 참고 지표 — 의학 진단 X</strong>
+                {totalScore.count === 3 ? '3가지 테스트 단순 평균' : `${totalScore.count}/3개 테스트 평균 (나머지를 마치면 종합 점수)`} · <strong style={{ color: 'var(--orange-600)' }}>게임형 참고 지표 — 의학 진단 X</strong>
               </p>
             </div>
           ) : (
             <div className={s.card}>
               <p style={{ textAlign: 'center', color: 'var(--muted)', fontSize: 13, padding: '20px 0' }}>
-                3가지 테스트를 완료하면 종합 점수가 표시됩니다.
+                테스트를 하나 이상 마치면 점수가 표시되고, 3가지를 모두 마치면 종합 점수가 됩니다.
               </p>
             </div>
           )}
@@ -853,11 +914,11 @@ export default function CognitiveTestClient() {
               <p className={s.summaryEmoji}>🎨</p>
               <p className={s.summaryLabel}>스트룹 간섭</p>
               <p className={s.summaryValue}>
-                {records.lastStroop !== undefined ? `+${records.lastStroop}` : '-'}<span className={s.summaryUnit}>ms</span>
+                {records.lastStroop !== undefined ? fmtSigned(records.lastStroop) : '-'}<span className={s.summaryUnit}>ms</span>
               </p>
               <p className={s.summaryStatus}>
                 {records.lastStroop !== undefined
-                  ? records.lastStroop < 200 ? '낮음 (좋음)' : records.lastStroop < 400 ? '평균' : '높음'
+                  ? BAND_LABEL[interferenceBand(records.lastStroop, STROOP_BANDS)]
                   : '미측정'}
               </p>
             </div>
@@ -865,11 +926,11 @@ export default function CognitiveTestClient() {
               <p className={s.summaryEmoji}>🔄</p>
               <p className={s.summaryLabel}>이중 과제 간섭</p>
               <p className={s.summaryValue}>
-                {records.lastDual !== undefined ? `+${records.lastDual}` : '-'}<span className={s.summaryUnit}>%</span>
+                {records.lastDual !== undefined ? fmtSigned(records.lastDual) : '-'}<span className={s.summaryUnit}>%</span>
               </p>
               <p className={s.summaryStatus}>
                 {records.lastDual !== undefined
-                  ? records.lastDual < 25 ? '낮음 (좋음)' : records.lastDual < 40 ? '평균' : '높음'
+                  ? BAND_LABEL[interferenceBand(records.lastDual, DUAL_BANDS)]
                   : '미측정'}
               </p>
             </div>
@@ -891,13 +952,13 @@ export default function CognitiveTestClient() {
                 {records.bestStroopInterference !== undefined && (
                   <div className={s.recordRow}>
                     <span>스트룹 최저 간섭</span>
-                    <strong>+{records.bestStroopInterference}ms</strong>
+                    <strong>{fmtSigned(records.bestStroopInterference)}ms</strong>
                   </div>
                 )}
                 {records.bestDualInterference !== undefined && (
                   <div className={s.recordRow}>
                     <span>이중 과제 최저 간섭</span>
-                    <strong>+{records.bestDualInterference}%</strong>
+                    <strong>{fmtSigned(records.bestDualInterference)}%</strong>
                   </div>
                 )}
                 <div className={s.recordRow}>
@@ -923,15 +984,15 @@ export default function CognitiveTestClient() {
                   <div className={s.shareItem}><span>🚀 반응 속도</span><strong>{records.lastReaction}ms</strong></div>
                 )}
                 {records.lastStroop !== undefined && (
-                  <div className={s.shareItem}><span>🎨 스트룹 간섭</span><strong>+{records.lastStroop}ms</strong></div>
+                  <div className={s.shareItem}><span>🎨 스트룹 간섭</span><strong>{fmtSigned(records.lastStroop)}ms</strong></div>
                 )}
                 {records.lastDual !== undefined && (
-                  <div className={s.shareItem}><span>🔄 이중 과제 간섭</span><strong>+{records.lastDual}%</strong></div>
+                  <div className={s.shareItem}><span>🔄 이중 과제 간섭</span><strong>{fmtSigned(records.lastDual)}%</strong></div>
                 )}
               </div>
               <div className={s.shareScore}>
-                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', marginBottom: 4 }}>종합 점수</p>
-                <p className={s.shareScoreNum}>{totalScore} <small style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)' }}>/ 100</small></p>
+                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', marginBottom: 4 }}>{totalScore.count === 3 ? '종합 점수' : `점수 (${totalScore.count}/3개 테스트)`}</p>
+                <p className={s.shareScoreNum}>{totalScore.value} <small style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)' }}>/ 100</small></p>
               </div>
               <div className={s.shareWatermark}>youtil.kr 🧠</div>
             </div>

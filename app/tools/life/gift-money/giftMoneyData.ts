@@ -62,6 +62,13 @@ export function snapCustomary(man: number): number {
   return best
 }
 
+// 4(死)·9(아홉수)로 시작하는 금액은 피하는 관례 — 해당하면 바로 위 관례 금액으로 올린다 (예: 40 → 50)
+export function avoidUnlucky(man: number): number {
+  const lead = String(man)[0]
+  if (lead !== '4' && lead !== '9') return man
+  return CUSTOMARY.find((c) => c > man) ?? man
+}
+
 export interface Result {
   recommend: number // 만원
   low: number
@@ -69,6 +76,7 @@ export interface Result {
   attendBased: boolean
   base: number      // 관계 기준액(관례 보정 후, 만원)
   mealAdd: number   // 동반 식대 가산(만원)
+  roundedUp: boolean // 기준액+식대가 4·9로 시작해 관례 금액으로 올렸는지
 }
 
 export function calcGift(
@@ -88,12 +96,14 @@ export function calcGift(
     ? companionExtra * MEAL_COST
     : 0
 
-  const recommend = base + mealAdd
+  // 단, 합계가 4·9로 시작하면(가까운 친척 30 + 가족 동반 10 = 40) 금기 금액이 되므로 바로 위 관례 금액으로.
+  const raw = base + mealAdd
+  const recommend = avoidUnlucky(raw)
 
   const low = Math.min(pair.absent, pair.attend)
   const high = Math.max(pair.attend, recommend)
 
-  return { recommend, low, high, attendBased: pair.attend !== pair.absent, base, mealAdd }
+  return { recommend, low, high, attendBased: pair.attend !== pair.absent, base, mealAdd, roundedUp: recommend !== raw }
 }
 
 // ── 봉투 문구 ──

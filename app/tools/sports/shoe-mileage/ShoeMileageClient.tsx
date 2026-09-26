@@ -1,8 +1,11 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Disclaimer from '@/components/Disclaimer'
-import { MIDSOLES, LANDINGS, calcShoeLife, replaceDate } from './shoeMileageData'
+import {
+  MIDSOLES, LANDINGS, calcShoeLife, replaceDate,
+  ROTATION_PAIRS_MIN, ROTATION_PAIRS_MAX, MAX_DAYS_SHOWN,
+} from './shoeMileageData'
 import s from './shoe-mileage.module.css'
 
 export default function ShoeMileageClient() {
@@ -12,14 +15,22 @@ export default function ShoeMileageClient() {
   const [midsoleId, setMidsoleId] = useState('eva')
   const [landingId, setLandingId] = useState('mid')
   const [rotate, setRotate] = useState(false)
+  const [pairs, setPairs] = useState(ROTATION_PAIRS_MIN)
+  // 오늘 날짜는 마운트 후에 잡는다 — 렌더 중 new Date()는 정적 HTML(빌드일)과 달라 하이드레이션 불일치
+  const [today, setToday] = useState<Date | null>(null)
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setToday(new Date()) }, [])
 
-  const weeklyNum = parseFloat(weekly) || 0
+  // 상한 클램프 — 오타로 비현실적인 값이 들어가도 날짜 계산이 깨지지 않게
+  const weeklyNum = Math.min(500, Math.max(0, parseFloat(weekly) || 0))
+  const currentNum = Math.min(10000, Math.max(0, parseFloat(current) || 0))
+  const weightNum = Math.min(250, Math.max(0, parseFloat(weight) || 0))
   const midsole = MIDSOLES.find((m) => m.id === midsoleId) ?? MIDSOLES[0]
   const landing = LANDINGS.find((l) => l.id === landingId) ?? LANDINGS[1]
 
   const result = useMemo(
-    () => calcShoeLife(midsole, parseFloat(weight) || 0, landing, rotate, parseFloat(current) || 0, weeklyNum),
-    [midsole, weight, landing, rotate, current, weeklyNum],
+    () => calcShoeLife(midsole, weightNum, landing, rotate, currentNum, weeklyNum, pairs),
+    [midsole, weightNum, landing, rotate, currentNum, weeklyNum, pairs],
   )
 
   const fmt = (n: number) => Math.round(n).toLocaleString('ko-KR')
@@ -47,7 +58,7 @@ export default function ShoeMileageClient() {
       <div className={s.card}>
         <div className={s.dualRow}>
           <div className={s.dualField}>
-            <label className={s.fieldLabel} htmlFor="sm-weekly">주간 러닝 거리</label>
+            <label className={s.fieldLabel} htmlFor="sm-weekly">주간 러닝 거리 (전체)</label>
             <div className={s.inputWrap}>
               <input id="sm-weekly" type="number" inputMode="decimal" min={0} step={5}
                 className={s.input} value={weekly}
@@ -98,10 +109,23 @@ export default function ShoeMileageClient() {
             <strong>2족 이상 번갈아 신어요</strong> — 미드솔이 회복할 시간이 생겨 수명이 늘어납니다(약 +15%)
           </span>
         </label>
+        {rotate && (
+          <div className={s.segRow} role="group" aria-label="번갈아 신는 켤레 수"
+            style={{ marginTop: 12, gridTemplateColumns: `repeat(${ROTATION_PAIRS_MAX - ROTATION_PAIRS_MIN + 1}, minmax(0, 1fr))` }}>
+            {Array.from({ length: ROTATION_PAIRS_MAX - ROTATION_PAIRS_MIN + 1 }, (_, i) => ROTATION_PAIRS_MIN + i).map((n) => (
+              <button key={n} type="button"
+                aria-pressed={pairs === n}
+                className={`${s.segBtn} ${pairs === n ? s.segBtnActive : ''}`}
+                onClick={() => setPairs(n)}>
+                {n}켤레
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 결과 */}
-      {weeklyNum > 0 || (parseFloat(current) || 0) > 0 ? (
+      {weeklyNum > 0 || currentNum > 0 ? (
         <div className={s.resultCard} role="status">
           <p className={s.resultLabel}>예상 수명</p>
           <p className={s.hero}>{fmt(result.lifespanKm)}<span className={s.heroUnit}>km</span></p>
@@ -111,14 +135,17 @@ export default function ShoeMileageClient() {
             <div className={s.replaceBox} data-worn="true">
               <span className={s.replaceLabel}>교체 시기</span>
               <strong className={s.replaceVal}>지금 교체 권장</strong>
-              <span className={s.replaceNote}>누적 {fmt(parseFloat(current) || 0)}km가 예상 수명을 넘었습니다</span>
+              <span className={s.replaceNote}>누적 {fmt(currentNum)}km가 예상 수명을 넘었습니다</span>
             </div>
           ) : result.daysLeft !== null ? (
             <div className={s.replaceBox}>
               <span className={s.replaceLabel}>교체 예상일</span>
-              <strong className={s.replaceVal}>{replaceDate(new Date(), result.daysLeft)}</strong>
+              <strong className={s.replaceVal}>
+                {result.daysLeft > MAX_DAYS_SHOWN ? '10년 이상 뒤' : today ? replaceDate(today, result.daysLeft) : '—'}
+              </strong>
               <span className={s.replaceNote}>
-                남은 {fmt(result.remainKm)}km · 주 {fmt(weeklyNum)}km 기준 약 {Math.round(result.weeksLeft ?? 0)}주 후
+                남은 {fmt(result.remainKm)}km · {rotate ? `주 ${fmt(weeklyNum)}km ÷ ${pairs}켤레 = 이 신발 주 ${result.weeklyPerShoe.toFixed(1).replace(/\.0$/, '')}km` : `주 ${fmt(weeklyNum)}km`} 기준{' '}
+                {(result.weeksLeft ?? 0) >= 1 ? `약 ${Math.round(result.weeksLeft ?? 0)}주 후` : result.daysLeft > 1 ? `약 ${result.daysLeft}일 후` : '며칠 안에 교체 시점'}
               </span>
             </div>
           ) : (
@@ -147,7 +174,7 @@ export default function ShoeMileageClient() {
           { href: '/tools/sports/race-predictor', label: '마라톤 기록 계산기' },
         ]}
       >
-        미드솔 소재별 기본 수명은 브랜드 가이드·러닝 문헌의 통용 범위(EVA 400~600·TPU/PEBA 500~700km)이며, 체중·착지·로테이션 보정은 관행 배수입니다. 실제 수명은 노면·주법·보관 상태에 따라 크게 달라지니 착화감으로 최종 판단하세요.
+        미드솔 소재별 기본 수명은 브랜드 가이드·러닝 문헌의 통용 범위(EVA 400~600km, TPU 500~700km, PEBA 데일리 450~650km, 카본 레이싱화 300~500km)이며, 체중·착지·로테이션 보정은 관행 배수입니다. 로테이션을 켜면 주간 거리를 켤레 수만큼 똑같이 나눠 신는다고 보고 계산합니다. 실제 수명은 노면·주법·보관 상태에 따라 크게 달라지니 착화감으로 최종 판단하세요.
       </Disclaimer>
     </div>
   )

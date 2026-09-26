@@ -2,14 +2,14 @@
 .wrap { display: flex; flex-direction: column; gap: 10px; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px 22px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
 
 /* 태명 입력 */
 .nicknameInput {
   width: 100%; box-sizing: border-box;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 12px 14px; font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+  padding: 12px 14px; font-size: 15px; font-family: var(--font-sans);
   color: var(--text); outline: none; transition: border-color 0.2s;
 }
 .nicknameInput::placeholder { color: var(--muted); }
@@ -18,9 +18,9 @@
 /* 입력 방식 탭 */
 .modeRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .modeBtn {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s);
   padding: 10px 8px; font-size: 12px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; font-family: var(--font-sans);
   transition: all 0.15s; text-align: center; line-height: 1.4;
 }@media (hover: hover) {
   .modeBtn:hover { border-color: var(--border-hover); color: var(--text); }
@@ -48,7 +48,7 @@
   border-radius: 10px;
   padding: 12px 36px 12px 14px;
   font-size: 16px;       /* iOS Safari 자동 확대 방지 (<16px 시 줌) */
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   cursor: pointer;
@@ -70,26 +70,26 @@
 }
 
 /* 히어로 */
-.heroCard { background: var(--bg2); border: 1px solid rgba(255,107,213,0.3); border-radius: 14px; padding: 28px 24px; text-align: center; }
+.heroCard { background: var(--bg2); border: 1px solid rgba(255,107,213,0.3); border-radius: var(--radius-card); padding: 28px 24px; text-align: center; }
 .heroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
-.heroNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(32px, 6vw, 52px); font-weight: 800; color: #FF6BD9; letter-spacing: -1px; }
+.heroNum { font-family: var(--font-sans); font-size: clamp(32px, 6vw, 52px); font-weight: 800; color: #FF6BD9; letter-spacing: -1px; }
 .heroSub { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
 
 /* 태아 크기 */
-.fetalCard { background: var(--bg2); border: 1px solid rgba(14,165,233,0.2); border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
+.fetalCard { background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent); border-radius: var(--radius-card); padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
 .fetalEmoji { font-size: 42px; flex-shrink: 0; }
 .fetalTitle { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 4px; }
 .fetalSub { font-size: 11px; color: var(--muted); opacity: 0.7; }
 
 /* 진행률 */
 .progressHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.progressPct { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: var(--accent); }
-.progressBar { width: 100%; height: 10px; background: var(--bg3); border-radius: 999px; overflow: hidden; margin-bottom: 14px; }
-.progressFill { height: 100%; background: linear-gradient(90deg, #0891B2, #FF6BD9); border-radius: 999px; transition: width 0.5s ease; }
+.progressPct { font-family: var(--font-sans); font-size: 18px; font-weight: 800; color: var(--accent); }
+.progressBar { width: 100%; height: 10px; background: var(--bg3); border-radius: var(--radius-pill); overflow: hidden; margin-bottom: 14px; }
+.progressFill { height: 100%; background: linear-gradient(90deg, var(--cyan-600), #FF6BD9); border-radius: var(--radius-pill); transition: width 0.5s ease; }
 .trimesterRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.trimesterItem { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.trimesterItem { border: 1px solid var(--border); border-radius: var(--radius-s); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
 .trimesterActive { background: rgba(255,107,217,0.06); font-weight: 600; }
-.trimesterLabel { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.trimesterLabel { font-size: 12px; color: var(--muted); font-family: var(--font-sans); }
 .trimesterRange { font-size: 11px; color: var(--muted); }
 
 /* 체크리스트 */
@@ -98,7 +98,7 @@
 .checklistDot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; }
 
 /* 날짜 카드 */
-.statCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.statCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 16px 18px; }
 .statLabel { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
 .statValue { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.5; }
 .accentValue { color: #FF6BD9; font-weight: 700; }
@@ -109,7 +109,7 @@
 .scheduleItem:last-child { border-bottom: none; }
 .scheduleDone { color: var(--text); }
 .scheduleCheck { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; color: #FF6BD9; }
-.scheduleWeek { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); width: 36px; flex-shrink: 0; }
+.scheduleWeek { font-family: var(--font-sans); font-weight: 700; color: var(--accent); width: 36px; flex-shrink: 0; }
 .scheduleLabel { flex: 1; }
 .scheduleDone .scheduleLabel { text-decoration: line-through; opacity: 0.6; }
 
@@ -118,11 +118,11 @@
   display: flex; align-items: flex-start; gap: 10px;
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px; padding: 14px 16px;
+  border-radius: var(--radius-m); padding: 14px 16px;
   font-size: 13px; color: var(--muted); line-height: 1.7;
 }
 
-.empty { padding: 32px; text-align: center; font-size: 14px; color: var(--muted); background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px; }
+.empty { padding: 32px; text-align: center; font-size: 14px; color: var(--muted); background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius-card); }
 
 @media (max-width: 500px) {
   .grid2 { grid-template-columns: 1fr; }
@@ -139,7 +139,7 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
@@ -147,35 +147,35 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveTests    { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
-.tabActiveFetal    { background: rgba(219,39,119,0.12); color: #DB2777; font-weight: 700; }
-.tabActiveChecklist{ background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
-.tabActiveReverse  { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
+.tabActive         { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
+.tabActiveTests    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
+.tabActiveFetal    { background: rgba(219,39,119,0.12); color: var(--pink-600); font-weight: 700; }
+.tabActiveChecklist{ background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
+.tabActiveReverse  { background: rgba(155,89,182,0.10); color: var(--purple-600); font-weight: 700; }
 
 /* 위급 경고 박스 */
 .emergencyBox {
   background: rgba(220,38,38,0.18);
-  border: 2px solid #DC2626;
-  border-radius: 12px;
+  border: 2px solid var(--red-600);
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.75;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.emergencyBox strong { color: #DC2626; font-weight: 800; }
+.emergencyBox strong { color: var(--red-600); font-weight: 800; }
 .emergencyBox ul { padding-left: 18px; margin: 6px 0 0; }
 .emergencyBox li { margin-bottom: 3px; font-size: 13px; }
 
@@ -186,32 +186,32 @@
 .optionBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }@media (hover: hover) {
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.optionActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 토글 */
 .toggleRow { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
 .toggleBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }
-.toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.toggleActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 삼분기 진행 게이지 (3단계) */
 .triBar {
@@ -230,7 +230,7 @@
   font-size: 11px;
   font-weight: 700;
   color: rgba(0,0,0,0.7);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   border-right: 1px solid rgba(0,0,0,0.2);
 }
 .triSeg:last-child { border-right: none; }
@@ -247,7 +247,7 @@
   position: absolute;
   top: -28px;
   transform: translateX(-50%);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 12px;
   color: var(--text);
@@ -267,10 +267,10 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .milestonePast {
   opacity: 0.55;
@@ -278,13 +278,13 @@
 }
 .milestoneName { color: var(--text); }
 .milestoneWeek {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--muted);
   font-size: 12px;
 }
 .milestoneDday {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -305,16 +305,16 @@
   border-left: 4px solid;
   border-radius: 10px;
   padding: 11px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .testRowUpcoming { border-left-color: var(--border); }
-.testRowCurrent  { border-left-color: #A16207; background: rgba(161,98,7,0.14); }
+.testRowCurrent  { border-left-color: var(--yellow-700); background: rgba(161,98,7,0.14); }
 .testRowPast     { border-left-color: var(--muted); opacity: 0.55; }
 .testName { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 3px; overflow-wrap: anywhere; }
 .testRowPast .testName { text-decoration: line-through; color: var(--muted); }
 .testDesc { font-size: 12px; color: var(--muted); line-height: 1.55; }
 .testWindow {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 12px;
   color: var(--accent);
@@ -327,29 +327,29 @@
   color: var(--muted);
   margin-top: 2px;
   text-align: right;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.testStatusCurrent { color: #A16207; font-weight: 700; }
+.testStatusCurrent { color: var(--yellow-700); font-weight: 700; }
 
 /* 태아 크기 카드 (큰) */
 .fetalBig {
   background: linear-gradient(135deg, rgba(255,208,225,0.10), rgba(255,107,217,0.05));
   border: 1px solid rgba(255,208,225,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .fetalEmojiBig { font-size: 56px; line-height: 1; margin-bottom: 10px; display: block; }
 .fetalSizeBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(28px, 6vw, 40px);
   letter-spacing: -1px;
-  color: #DB2777;
+  color: var(--pink-600);
   margin-bottom: 4px;
 }
 .fetalLength {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 16px;
   color: var(--text);
@@ -360,7 +360,7 @@
   font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 태아 크기 그리드 (40주) */
@@ -374,10 +374,10 @@
 .fetalCell {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 4px;
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: default;
   transition: transform 0.12s;
 }@media (hover: hover) {
@@ -385,18 +385,18 @@
 }
 .fetalCellActive {
   background: rgba(219,39,119,0.10);
-  border-color: #DB2777;
+  border-color: var(--pink-600);
   box-shadow: 0 0 0 2px rgba(219,39,119,0.25);
 }
 .fetalCellWeek {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 .fetalCellEmoji { font-size: 22px; line-height: 1.1; margin: 4px 0; }
-.fetalCellSize { font-size: 10px; color: var(--muted); }
+.fetalCellSize { font-size: 11px; color: var(--muted); }
 
 /* 가이드 카드 */
 .guideGrid {
@@ -410,7 +410,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .guideTitle {
   font-size: 12px;
@@ -419,9 +419,9 @@
   text-transform: uppercase;
   margin-bottom: 6px;
 }
-.guideTitleGood { color: #059669; }
-.guideTitleBad  { color: #DC2626; }
-.guideTitleTip  { color: #0891B2; }
+.guideTitleGood { color: var(--emerald-600); }
+.guideTitleBad  { color: var(--red-600); }
+.guideTitleTip  { color: var(--cyan-600); }
 .guideList { padding-left: 16px; margin: 0; }
 .guideList li { font-size: 12px; color: var(--muted); line-height: 1.7; }
 
@@ -434,11 +434,11 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   user-select: none;
 }@media (hover: hover) {
@@ -463,7 +463,7 @@
 }
 .progressBarBigFill {
   height: 100%;
-  background: linear-gradient(to right, #A16207, #059669, #EA580C);
+  background: linear-gradient(to right, var(--yellow-700), var(--emerald-600), var(--orange-600));
   transition: width 0.3s;
 }
 
@@ -484,9 +484,9 @@
 .numInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -506,7 +506,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   font-size: 16px;
   color: var(--text);
@@ -524,14 +524,14 @@
 .advanced {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 8px 14px;
 }
 .advanced summary {
   cursor: pointer;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   padding: 6px 0;
   list-style: none;
@@ -541,7 +541,7 @@
   display: inline-block;
   margin-right: 4px;
   transition: transform 0.15s;
-  font-size: 9px;
+  font-size: 11px;
 }
 .advanced[open] summary::before { transform: rotate(90deg); }
 .advanced[open] summary { color: var(--text); margin-bottom: 8px; }
@@ -556,18 +556,18 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .miniBtn {
   background: var(--bg3);
@@ -576,27 +576,27 @@
   padding: 5px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+.miniDanger { color: var(--red-600); border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
   .miniDanger:hover { background: rgba(220,38,38,0.18); }
 }
 
 /* 정보 박스 (다른 도구와 동일) */
 .infoBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.75;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.infoBox strong { color: #0891B2; }
+.infoBox strong { color: var(--cyan-600); }
 
 .warnBox {
   background: rgba(220,38,38,0.14);
@@ -606,6 +606,6 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.warnBox strong { color: #DC2626; }
+.warnBox strong { color: var(--red-600); }

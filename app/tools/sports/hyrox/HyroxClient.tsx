@@ -95,21 +95,18 @@ export default function HyroxClient() {
   )
 
   // 분할표 (런/스테이션 교대, 누적)
+  // 록스존(전환)은 스테이션마다 1/8씩 누적에 포함 — 마지막에 한 번에 더하면 중간 체크포인트가 최대 수 분 빠르게 표시된다.
   const splits = useMemo(() => {
     const rows: { label: string; time: number; cum: number; isRun: boolean }[] = []
+    const roxPer = roxzoneSec / STATIONS.length
     let cum = 0
     STATIONS.forEach((st, i) => {
       cum += runPaceSec
       rows.push({ label: `${i + 1}km 런`, time: runPaceSec, cum, isRun: true })
       const t = stationSec[st.id] || 0
-      cum += t
+      cum += roxPer + t
       rows.push({ label: `${st.name}`, time: t, cum, isRun: false })
     })
-    // 록스존(전환)을 마지막 행으로 추가 — 누적 합계가 예상 완주 시간과 일치하도록
-    if (roxzoneSec > 0) {
-      cum += roxzoneSec
-      rows.push({ label: '록스존 (전환 8회)', time: roxzoneSec, cum, isRun: false })
-    }
     return rows
   }, [runPaceSec, stationSec, roxzoneSec])
 
@@ -153,9 +150,9 @@ export default function HyroxClient() {
             </div>
 
             <div style={{ marginTop: 14 }}>
-              <span className={s.fieldLabel}>1km 런 평균 페이스</span>
+              <label htmlFor="hx-pace-min" className={s.fieldLabel}>1km 런 평균 페이스</label>
               <div className={s.inputRow}>
-                <input className={s.numInput} inputMode="numeric" aria-label="런 페이스 분" value={paceMin} onChange={e => setPaceMin(clampStr(e.target.value, 59))} />
+                <input id="hx-pace-min" className={s.numInput} inputMode="numeric" aria-label="런 페이스 분" value={paceMin} onChange={e => setPaceMin(clampStr(e.target.value, 59))} />
                 <span className={s.unit}>분</span>
                 <input className={s.numInput} inputMode="numeric" aria-label="런 페이스 초" value={paceSec} onChange={e => setPaceSec(clampStr(e.target.value, 59))} />
                 <span className={s.unit}>초 / km</span>
@@ -184,9 +181,9 @@ export default function HyroxClient() {
               ))}
             </div>
             <div style={{ marginTop: 10 }}>
-              <span className={s.fieldLabel}>록스존 (전환 8회 총합)</span>
+              <label htmlFor="hx-rox" className={s.fieldLabel}>록스존 (전환 8회 총합)</label>
               <div className={s.inputRow}>
-                <input className={s.numInput} inputMode="numeric" aria-label="록스존 전환 시간 (초)" value={roxStr} onChange={e => setRoxStr(e.target.value.replace(/[^\d]/g, ''))} />
+                <input id="hx-rox" className={s.numInput} inputMode="numeric" aria-label="록스존 전환 시간 (초)" value={roxStr} onChange={e => setRoxStr(e.target.value.replace(/[^\d]/g, ''))} />
                 <span className={s.unit}>초</span>
               </div>
             </div>
@@ -243,6 +240,9 @@ export default function HyroxClient() {
                 ))}
               </tbody>
             </table>
+            {roxzoneSec > 0 && (
+              <p className={s.note}>누적 시간에는 록스존(전환) {fmtTime(roxzoneSec)}을 스테이션마다 {fmtTime(roxzoneSec / STATIONS.length)}씩 나눠 포함했습니다.</p>
+            )}
           </div>
         </>
       )}
@@ -254,15 +254,15 @@ export default function HyroxClient() {
             <span>목표 완주 시간 → 필요 런 페이스</span>
             <span className={s.cardHint}>위 스테이션 시간 가정</span>
           </div>
-          <span className={s.fieldLabel}>목표 완주 시간</span>
+          <label htmlFor="hx-tgt-h" className={s.fieldLabel}>목표 완주 시간</label>
           <div className={s.inputRow}>
-            <input className={s.numInput} inputMode="numeric" aria-label="목표 완주 시간(시)" value={tgtH} onChange={e => setTgtH(clampStr(e.target.value, 23))} />
+            <input id="hx-tgt-h" className={s.numInput} inputMode="numeric" aria-label="목표 완주 시간(시)" value={tgtH} onChange={e => setTgtH(clampStr(e.target.value, 23))} />
             <span className={s.unit}>시간</span>
             <input className={s.numInput} inputMode="numeric" aria-label="목표 완주 시간(분)" value={tgtM} onChange={e => setTgtM(clampStr(e.target.value, 59))} />
             <span className={s.unit}>분</span>
           </div>
 
-          <div className={s.revResult}>
+          <div className={s.revResult} role="status">
             {reqPace > 0 ? (
               <>
                 <div className={s.revPace}>{fmtPace(reqPace)}<span className={s.revPaceUnit}> /km</span></div>
@@ -324,7 +324,7 @@ export default function HyroxClient() {
                   {FIXED_SPECS.map(r => (
                     <tr key={r.station}>
                       <td>{r.station}</td>
-                      <td style={{ textAlign: 'right', fontFamily: "'Inter', system-ui, sans-serif" }}>{r.spec}</td>
+                      <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)' }}>{r.spec}</td>
                     </tr>
                   ))}
                 </tbody>

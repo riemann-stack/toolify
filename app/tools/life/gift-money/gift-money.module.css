@@ -8,7 +8,7 @@
   gap: 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .modeBtn {
@@ -16,13 +16,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 8px;
   font-size: 15px;
   font-weight: 700;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 48px;
 }
 .modeActive { color: #fff; }
@@ -31,7 +31,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -53,10 +53,10 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 36px 12px 14px;
   font-size: 15px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   cursor: pointer;
@@ -80,7 +80,7 @@
   gap: 4px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 4px;
 }
 .segBtn {
@@ -95,7 +95,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 42px;
 }
 .segActive { color: #fff; }
@@ -103,20 +103,20 @@
 /* ── 히어로(결과) ── */
 .hero {
   border: 1px solid;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLead { font-size: 13px; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(34px, 9vw, 46px);
   font-weight: 800;
   letter-spacing: -0.02em;
   margin: 0;
   line-height: 1.1;
 }
-.heroWon { font-size: 13px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; margin: 4px 0 0; }
+.heroWon { font-size: 13px; color: var(--muted); font-family: var(--font-sans); margin: 4px 0 0; }
 .heroSub { font-size: 13px; color: var(--muted); margin: 12px 0 0; line-height: 1.6; }
 .heroSub strong { color: var(--text); }
 
@@ -132,7 +132,7 @@
 }
 .envRow:last-child { border-bottom: none; }
 .envText { display: flex; align-items: baseline; gap: 9px; }
-.envKo { font-size: 15px; font-weight: 800; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.envKo { font-size: 15px; font-weight: 800; color: var(--text); font-family: var(--font-sans); }
 .envHanja { font-size: 13px; color: var(--muted); font-family: 'Noto Serif KR', serif; }
 .envNote { font-size: 12px; color: var(--muted); text-align: right; }
 

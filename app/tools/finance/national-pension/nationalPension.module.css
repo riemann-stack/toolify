@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -27,11 +27,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -52,7 +52,7 @@
   font-size: 13px;
   color: var(--muted);
   pointer-events: none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* select */
@@ -63,11 +63,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
 }
@@ -94,7 +94,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .seg:hover { color: var(--text); }
@@ -108,15 +108,15 @@
 
 /* ── 히어로 (주 결과) — clamp(44px,11vw,72px) ── */
 .hero {
-  background: linear-gradient(135deg, rgba(8, 145, 178, 0.10) 0%, rgba(13, 148, 136, 0.06) 100%);
-  border: 1px solid rgba(8, 145, 178, 0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan-600) 10%, transparent) 0%, rgba(13, 148, 136, 0.06) 100%);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(44px, 11vw, 72px);
   font-weight: 800;
   color: var(--accent);
@@ -132,18 +132,18 @@
   letter-spacing: 0;
 }
 .heroSub { font-size: 13px; color: var(--muted); margin: 12px 0 0; line-height: 1.7; }
-.heroSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.heroSub strong { color: var(--text); font-family: var(--font-sans); }
 
 /* 자격 미충족 안내 (히어로 대체) */
 .notEligible {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.35);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 26px 22px;
   text-align: center;
 }
 .notEligibleIcon { font-size: 30px; margin: 0 0 8px; }
-.notEligibleTitle { font-size: 16px; font-weight: 700; color: var(--warning); margin: 0 0 8px; font-family: 'Noto Sans KR', sans-serif; }
+.notEligibleTitle { font-size: 16px; font-weight: 700; color: var(--warning); margin: 0 0 8px; font-family: var(--font-sans); }
 .notEligibleSub { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.7; }
 .notEligibleSub strong { color: var(--text); }
 
@@ -159,7 +159,7 @@
   padding-top: 14px;
   border-top: 1px dashed var(--border);
 }
-.subline strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.subline strong { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 
 /* 복사 버튼 */
 .copyBtn {
@@ -172,9 +172,9 @@
   background: var(--bg3);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -186,12 +186,12 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.helpText strong { color: var(--text); font-family: var(--font-sans); }
 .cellAccent { color: var(--accent); }
 
 .tipBox {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   margin-top: 12px;
   font-size: 13px;
@@ -219,11 +219,11 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.cellMono { font-family: var(--font-sans); font-weight: 600; }
 .cellTotal td {
   background: rgba(13, 148, 136, 0.06);
   font-weight: 700;
@@ -238,7 +238,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--text);
   line-height: 1.9;
@@ -260,7 +260,7 @@
 .compareCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
 .compareRow {
@@ -274,18 +274,18 @@
 }
 .compareRow:last-child { border-bottom: none; }
 .compareRow .label { color: var(--muted); }
-.compareRow .val { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); }
+.compareRow .val { font-family: var(--font-sans); font-weight: 700; color: var(--text); }
 .compareRow .valAccent { color: var(--accent); }
 
 /* 안내·경고 */
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: var(--warning); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--warning); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* 크로스링크 */
@@ -293,7 +293,7 @@
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;

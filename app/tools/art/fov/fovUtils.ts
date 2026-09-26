@@ -45,20 +45,21 @@ export const getSensor = (id: SensorId) => SENSORS.find((s) => s.id === id) ?? S
 export interface FocalPreset {
   fl: number        // 35mm equivalent
   label: string
-  category: string
   color: string
 }
 
-/* 색은 디자인 토큰만 사용한다(막대·점 등 비텍스트 용도). */
+/* 색은 디자인 토큰만 사용한다(막대·점 등 비텍스트 용도).
+   ⚠️ 예전에는 여기에 분류명(24mm='초광각', 35mm='광각')을 따로 적어 LENS_CATEGORIES와 기준이 셋으로 갈렸다 —
+      분류는 getLensCategory(fl)로만 구한다. */
 export const POPULAR_FOCALS: FocalPreset[] = [
-  { fl: 14,  label: '14mm', category: '초광각',  color: 'var(--cat-date)' },
-  { fl: 24,  label: '24mm', category: '초광각',  color: 'var(--cat-life)' },
-  { fl: 35,  label: '35mm', category: '광각',    color: 'var(--cat-cooking)' },
-  { fl: 50,  label: '50mm', category: '표준',    color: 'var(--cat-edu)' },
-  { fl: 85,  label: '85mm', category: '단망원',  color: 'var(--cat-health)' },
-  { fl: 135, label: '135mm', category: '중망원', color: 'var(--cat-unit)' },
-  { fl: 200, label: '200mm', category: '망원',   color: 'var(--cat-art)' },
-  { fl: 400, label: '400mm', category: '초망원', color: 'var(--cat-finance)' },
+  { fl: 14,  label: '14mm',  color: 'var(--cat-date)' },
+  { fl: 24,  label: '24mm',  color: 'var(--cat-life)' },
+  { fl: 35,  label: '35mm',  color: 'var(--cat-cooking)' },
+  { fl: 50,  label: '50mm',  color: 'var(--cat-edu)' },
+  { fl: 85,  label: '85mm',  color: 'var(--cat-health)' },
+  { fl: 135, label: '135mm', color: 'var(--cat-unit)' },
+  { fl: 200, label: '200mm', color: 'var(--cat-art)' },
+  { fl: 400, label: '400mm', color: 'var(--cat-finance)' },
 ]
 
 /* ─────────────────────────────────────────────

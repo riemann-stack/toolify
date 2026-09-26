@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(8,145,178,0.14);
   border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--cyan-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,7 +20,7 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
@@ -29,31 +29,31 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.tabActive { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
 
 /* 탭별 색조 */
-.tabActiveA11y     { background: rgba(220,38,38,0.18);  color: #DC2626; font-weight: 700; }
+.tabActiveA11y     { background: rgba(220,38,38,0.18);  color: var(--red-600); font-weight: 700; }
 .tabActivePalette  { background: rgba(155,89,182,0.12);   color: #9333EA; font-weight: 700; }
 .tabActiveCss      { background: rgba(161,98,7,0.18);    color: #A16207; font-weight: 700; }
-.tabActiveGradient { background: rgba(8,145,178,0.18);   color: #0891B2; font-weight: 700; }
-.tabActiveExtract  { background: rgba(16,185,129,0.18);   color: #059669; font-weight: 700; }
+.tabActiveGradient { background: rgba(8,145,178,0.18);   color: var(--cyan-600); font-weight: 700; }
+.tabActiveExtract  { background: rgba(16,185,129,0.18);   color: var(--emerald-600); font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   width: 100%;
   box-sizing: border-box;
@@ -70,7 +70,7 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
 
 /* ── 큰 색상 미리보기 ── */
 .bigPreviewWrap {
@@ -85,7 +85,7 @@
   position: relative;
   aspect-ratio: 1;
   max-width: 240px;
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   border: 1px solid var(--border);
   overflow: hidden;
   background-image:
@@ -108,7 +108,7 @@
   position: absolute;
   bottom: 12px;
   left: 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 22px;
   letter-spacing: 1.5px;
@@ -117,20 +117,20 @@
 
 .colorPicker {
   width: 56px; height: 56px;
-  border: none; border-radius: 12px;
+  border: none; border-radius: var(--radius-m);
   cursor: pointer; padding: 0; background: none;
 }
 .colorPicker::-webkit-color-swatch-wrapper { padding: 0; }
-.colorPicker::-webkit-color-swatch { border-radius: 12px; border: 2px solid rgba(15,23,42,0.08); }
+.colorPicker::-webkit-color-swatch { border-radius: var(--radius-m); border: 2px solid rgba(15,23,42,0.08); }
 
 /* 직접 입력 */
 .hexInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   color: var(--text);
   outline: none;
   width: 100%;
@@ -153,7 +153,7 @@
   height: 18px;
   -webkit-appearance: none;
   appearance: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   background:
     linear-gradient(to right, transparent, currentColor),
@@ -175,7 +175,7 @@
   cursor: pointer;
 }
 .alphaValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 14px;
   color: var(--accent);
@@ -195,21 +195,21 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   transition: background 0.12s;
 }@media (hover: hover) {
   .formatRow:hover { background: rgba(14,165,233,0.14); }
 }
 .formatLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 12px;
   color: var(--accent);
   letter-spacing: 0.04em;
 }
 .formatValue {
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   word-break: break-all;
@@ -240,7 +240,7 @@
 .infoBoxValue {
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -255,7 +255,7 @@
 .presetItem {
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   cursor: pointer;
   transition: transform 0.15s;
   border: 1px solid var(--border);
@@ -276,7 +276,7 @@
   flex-shrink: 0;
   width: 38px;
   height: 38px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   cursor: pointer;
   border: 1px solid var(--border);
   transition: transform 0.12s;
@@ -288,11 +288,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
@@ -300,7 +300,7 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .miniCopyBtn {
   background: var(--bg2);
@@ -309,13 +309,13 @@
   padding: 4px 8px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
 }@media (hover: hover) {
   .miniCopyBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniCopied { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
+.miniCopied { color: var(--accent-ink); border-color: var(--accent); background: var(--accent-dim); }
 
 /* ── 액션 버튼 ── */
 .actionBtn {
@@ -324,8 +324,8 @@
   border-radius: 10px;
   padding: 11px 18px;
   font-size: 13px;
-  color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--accent-ink);
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -338,14 +338,14 @@
 .toggleBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
-.toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.toggleActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 코드 블록 ── */
 .codeBlock {
@@ -354,7 +354,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px 16px;
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   overflow-x: auto;
@@ -389,18 +389,18 @@
 }
 .a11yPicker {
   width: 40px; height: 40px;
-  border: none; border-radius: 8px;
+  border: none; border-radius: var(--radius-s);
   cursor: pointer; padding: 0; background: none;
 }
 .a11yPicker::-webkit-color-swatch-wrapper { padding: 0; }
-.a11yPicker::-webkit-color-swatch { border-radius: 8px; border: 2px solid rgba(15,23,42,0.08); }
+.a11yPicker::-webkit-color-swatch { border-radius: var(--radius-s); border: 2px solid rgba(15,23,42,0.08); }
 .a11yHexInput {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 7px 10px;
   font-size: 13px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--font-mono);
   color: var(--text);
   outline: none;
   /* text-transform 제거 — rgb()/hsl() 입력이 시각적으로 왜곡되지 않도록. hex는 커밋 시 대문자 정규화 */
@@ -411,34 +411,34 @@
 .swapBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .swapBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
 
 .a11yPreview {
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   border: 1px solid var(--border);
 }
-.a11yPreviewBig    { font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.4; margin-bottom: 8px; }
-.a11yPreviewBody   { font-family: 'Noto Sans KR', sans-serif; font-size: 16px; line-height: 1.6; margin-bottom: 6px; }
-.a11yPreviewSmall  { font-family: 'Noto Sans KR', sans-serif; font-size: 13px; line-height: 1.5; opacity: 0.9; }
+.a11yPreviewBig    { font-family: var(--font-sans); font-weight: 700; font-size: 22px; line-height: 1.4; margin-bottom: 8px; }
+.a11yPreviewBody   { font-family: var(--font-sans); font-size: 16px; line-height: 1.6; margin-bottom: 6px; }
+.a11yPreviewSmall  { font-family: var(--font-sans); font-size: 13px; line-height: 1.5; }
 
 .contrastHero {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   text-align: center;
 }
 .contrastValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 56px;
   letter-spacing: -1px;
@@ -450,9 +450,9 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.gradeAAA { color: #059669; }
-.gradeAA  { color: #0EA5E9; }
-.gradeFail { color: #DC2626; }
+.gradeAAA { color: var(--emerald-600); }
+.gradeAA  { color: var(--accent); }
+.gradeFail { color: var(--red-600); }
 
 .gradeTable {
   display: flex;
@@ -466,14 +466,14 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
 }
-.gradeName  { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
-.gradeReq   { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
-.gradePass  { background: rgba(16,185,129,0.18); color: #059669; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
-.gradeFailChip { background: rgba(220,38,38,0.18); color: #DC2626; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
+.gradeName  { color: var(--text); font-family: var(--font-sans); }
+.gradeReq   { color: var(--muted); font-family: var(--font-sans); font-weight: 700; text-align: right; }
+.gradePass  { background: rgba(16,185,129,0.18); color: var(--emerald-600); padding: 3px 9px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
+.gradeFailChip { background: rgba(220,38,38,0.18); color: var(--red-600); padding: 3px 9px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
 
 .suggestRow {
   display: grid;
@@ -497,7 +497,7 @@
   border: 1px solid var(--border);
 }
 .suggestHex {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
 }
@@ -517,7 +517,7 @@
 .cbCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 14px;
 }
 .cbCardLabel {
@@ -532,15 +532,15 @@
   align-items: center;
 }
 .cbPreview {
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 14px 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.5;
   margin-bottom: 6px;
 }
-.cbDistinct { font-size: 11px; color: #059669; }
-.cbWarning  { font-size: 11px; color: #DC2626; }
+.cbDistinct { font-size: 11px; color: var(--emerald-600); }
+.cbWarning  { font-size: 11px; color: var(--red-600); }
 
 /* ─────── 팔레트 탭 ─────── */
 .paletteTypeGrid {
@@ -558,7 +558,7 @@
   padding: 10px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -578,7 +578,7 @@
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   gap: 4px;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   overflow: hidden;
   border: 1px solid var(--border);
 }
@@ -595,13 +595,13 @@
   .paletteSwatch:hover { transform: translateY(-2px); }
 }
 .paletteSwatchHex {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 .paletteSwatchShade {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 800;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -633,8 +633,8 @@
   align-items: flex-end;
   justify-content: center;
   padding: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: 11px;
   font-weight: 800;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   transition: transform 0.12s;
@@ -651,11 +651,11 @@
 .exportBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   cursor: pointer;
 }@media (hover: hover) {
   .exportBtn:hover { color: var(--text); border-color: var(--border-hover); }
@@ -684,19 +684,19 @@
   border: 1px solid var(--border);
 }
 .tailwindMatchName {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   font-weight: 700;
 }
 .tailwindMatchHex {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   color: var(--muted);
   margin-top: 2px;
 }
 .tailwindMatchDist {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--muted);
   font-weight: 700;
@@ -714,12 +714,12 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
 }
-.uiStateName  { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.uiStateName  { font-size: 12px; color: var(--muted); font-family: var(--font-sans); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
 .uiStateSwatch { width: 36px; height: 24px; border-radius: 6px; border: 1px solid var(--border); }
-.uiStateCode  { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); }
+.uiStateCode  { font-family: var(--font-mono); font-size: 13px; color: var(--text); }
 @media (max-width: 360px) {
   .uiStateRow { grid-template-columns: 64px 28px minmax(0, 1fr) auto; gap: 6px; }
   .uiStateSwatch { width: 28px; }
@@ -744,15 +744,15 @@
 }
 .semanticSwatch { width: 28px; height: 28px; border-radius: 6px; }
 .semanticLabel { font-size: 13px; color: var(--text); font-weight: 600; }
-.semanticHex { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
+.semanticHex { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
 
 .colorNameInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 14px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   color: var(--text);
   outline: none;
   width: 100%;
@@ -771,7 +771,7 @@
 .gradPreview {
   width: 100%;
   aspect-ratio: 2;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   border: 1px solid var(--border);
   box-shadow: 0 2px 8px rgba(15,23,42,0.08);
 }
@@ -793,7 +793,7 @@
 }
 .gradStopPicker {
   width: 36px; height: 36px;
-  border: none; border-radius: 8px;
+  border: none; border-radius: var(--radius-s);
   cursor: pointer; padding: 0; background: none;
 }
 .gradStopHex {
@@ -802,14 +802,14 @@
   border-radius: 6px;
   padding: 6px 10px;
   font-size: 13px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   color: var(--text);
   outline: none;
   min-width: 0; /* grid 1fr 칸에서 input 기본 size 폭 오버플로 방지 (320px) */
   width: 100%;
 }
 .gradStopPos {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   color: var(--accent);
   font-weight: 700;
@@ -818,24 +818,24 @@
 .gradStopRemove {
   background: rgba(220,38,38,0.18);
   border: 1px solid rgba(220,38,38,0.40);
-  color: #DC2626;
+  color: var(--red-600);
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 11px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .gradStopRemove:hover { background: rgba(220,38,38,0.18); }
 }
 
 .gradAddBtn {
   background: rgba(8,145,178,0.18);
-  border: 1px dashed #0891B2;
+  border: 1px dashed var(--cyan-600);
   border-radius: 10px;
   padding: 9px;
   font-size: 12px;
-  color: #0891B2;
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--cyan-600);
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
 }@media (hover: hover) {
@@ -850,16 +850,16 @@
 .gradTypeBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .gradTypeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.gradTypeActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.gradTypeActive { background: rgba(8,145,178,0.18); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
 
 .gradAngleRow {
   display: grid;
@@ -867,8 +867,8 @@
   gap: 12px;
   align-items: center;
 }
-.gradAngleSlider { width: 100%; accent-color: #0891B2; }
-.gradAngleValue { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #0891B2; text-align: right; font-size: 14px; }
+.gradAngleSlider { width: 100%; accent-color: var(--cyan-600); }
+.gradAngleValue { font-family: var(--font-sans); font-weight: 800; color: var(--cyan-600); text-align: right; font-size: 14px; }
 
 .gradStepsRow {
   display: grid;
@@ -887,8 +887,8 @@
   align-items: flex-end;
   justify-content: center;
   padding: 3px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
@@ -907,7 +907,7 @@
   display: flex;
   align-items: flex-end;
   padding: 6px 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 700;
   color: #fff;
@@ -920,23 +920,23 @@
 /* ─────── 색상 추출 탭 ─────── */
 .dropArea {
   border: 2px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 36px 20px;
   text-align: center;
   cursor: pointer;
   transition: all 0.15s;
   background: var(--bg3);
 }@media (hover: hover) {
-  .dropArea:hover { border-color: #059669; color: #059669; }
+  .dropArea:hover { border-color: var(--emerald-600); color: var(--emerald-600); }
 }
-.dropAreaActive { border-color: #059669; background: rgba(16,185,129,0.14); }
+.dropAreaActive { border-color: var(--emerald-600); background: rgba(16,185,129,0.14); }
 .dropAreaIcon { font-size: 36px; margin-bottom: 8px; }
-.dropAreaText { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.dropAreaText { font-size: 13px; color: var(--text); font-family: var(--font-sans); }
 .dropAreaHint { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
 .imagePreviewWrap {
   position: relative;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   border: 1px solid var(--border);
   overflow: hidden;
 }
@@ -970,14 +970,14 @@
   .extractedCard:hover { transform: translateY(-2px); }
 }
 .extractedHex {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }
 .extractedPct {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: 11px;
   font-weight: 800;
   text-shadow: 0 1px 2px rgba(0,0,0,0.6);
   margin-top: 2px;
@@ -995,13 +995,13 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 13px;
 }
-.classifyLabel { color: var(--muted); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
+.classifyLabel { color: var(--muted); font-family: var(--font-sans); font-weight: 600; }
 .classifySwatch { width: 32px; height: 22px; border-radius: 4px; border: 1px solid var(--border); }
-.classifyHex { font-family: 'JetBrains Mono', monospace; color: var(--text); }
+.classifyHex { font-family: var(--font-mono); color: var(--text); }
 
 /* 빠른 색상 (브랜드 포함) */
 .brandRow {
@@ -1017,11 +1017,11 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 10px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
 }@media (hover: hover) {

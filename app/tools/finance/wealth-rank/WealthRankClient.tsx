@@ -6,6 +6,9 @@ import {
   computeRank,
   AGE_GROUPS,
   REGIONS,
+  SIDO_COUNT,
+  USD_KRW,
+  USD_KRW_ASOF,
   type Mode,
 } from './wealthData'
 
@@ -121,6 +124,9 @@ export default function WealthRankClient() {
               </option>
             ))}
           </select>
+          <p className={s.selectHint}>
+            2025년 조사 평균을 확인한 {REGIONS.length}개 시·도만 고를 수 있습니다. 나머지 {SIDO_COUNT - REGIONS.length}개 시·도는 &lsquo;전국&rsquo; 기준 결과를 참고하세요.
+          </p>
         </div>
       )}
       {mode === 'age' && (
@@ -337,7 +343,7 @@ export default function WealthRankClient() {
           )}
           {mode === 'world' && (
             <div className={s.noteCard}>
-              세계 기준은 <strong>UBS Global Wealth Report 2025</strong>의 <strong>성인 1인당</strong> 순자산 분포입니다 (환율 1달러 = 1,380원).
+              세계 기준은 <strong>UBS Global Wealth Report 2025</strong>의 <strong>성인 1인당</strong> 순자산 분포입니다 (환율 1달러 = {USD_KRW.toLocaleString('ko-KR')}원, {USD_KRW_ASOF} 근사 고정값).
               한국 통계는 가구 단위라, 위 <strong>가구 성인 수</strong>로 1인당 환산해 비교하세요. 1명 그대로 두면 부부·가족은 순위가 실제보다 높게 나올 수 있습니다.
             </div>
           )}
@@ -345,7 +351,9 @@ export default function WealthRankClient() {
             <div className={s.noteCard}>
               {mode === 'region' ? '시·도' : '연령대'} 비교는 전국 분포를 그룹 <strong>평균 순자산 비율로 스케일</strong>한 추정치입니다.
               분포 모양(예: 서울의 부동산 편중)은 반영하지 못해, <strong>특히 상위 10%·1% 진입선은 오차가 큰 추정</strong>입니다.
-              서울·세종·경기·제주·50대(실측 평균)를 제외한 값은 평균 수준 추정이니 그룹 내 대략적 위치 참고용으로만 보세요.
+              {mode === 'age'
+                ? '연령대 평균은 2025년 가계금융복지조사의 가구주 연령계층별 평균 순자산입니다. 분포 모양은 전국과 같다고 가정하므로 그룹 내 대략적 위치 참고용으로 보세요.'
+                : '시·도 평균은 2025년 가계금융복지조사의 시도별 평균 순자산입니다. 분포 모양은 전국과 같다고 가정하므로 그룹 내 대략적 위치 참고용으로 보세요.'}
             </div>
           )}
         </>

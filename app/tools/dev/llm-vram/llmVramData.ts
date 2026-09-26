@@ -16,7 +16,8 @@
    - 모델 스펙: HuggingFace 공식 config.json 실측 (검증 에이전트 재확인).
    - 오버헤드: CUDA 런타임 ~0.3-0.75GB + 컴퓨트 버퍼 여유 1~2GB (커뮤니티 관행 — 공식 수치 없음).
    - GPU 용량: NVIDIA 공표 스펙. 표기 GB는 GiB이므로 비교는 ×2^30 바이트 기준(약간 보수적 아님, 정확).
-   - Apple Silicon: Metal 기본 GPU 할당 상한 ≈ 통합메모리의 ~75% (llama.cpp Discussion #2182).
+   - Apple Silicon: Metal 기본 GPU 할당 상한(recommendedMaxWorkingSetSize) ≈ 통합메모리 36GB 이하 약 2/3,
+     그보다 크면 약 75% (llama.cpp Discussion #2182 등 관측치 — 공식 표는 없음).
    ────────────────────────────────────────────────────── */
 
 export interface Quant {
@@ -96,10 +97,13 @@ export const GPUS: GpuOption[] = [
   { id: 'mac', label: 'Mac 통합메모리 (직접 입력)', gb: 0 },
 ]
 
-/** Mac 통합메모리 중 GPU 사용 가능 비율 (Metal 기본 상한 관행) */
+/** Mac 통합메모리 중 GPU 사용 가능 비율 (Metal 기본 상한 관측치) — 36GB 이하 약 2/3, 초과 약 75% */
 export const MAC_GPU_RATIO = 0.75
+export function macGpuRatio(ramGb: number): number {
+  return ramGb > 36 ? MAC_GPU_RATIO : 2 / 3
+}
 
-const GIB = 1024 ** 3
+export const GIB = 1024 ** 3
 
 /** 가중치 크기 (bytes) */
 export function weightsBytes(paramsB: number, bpw: number): number {
@@ -110,7 +114,8 @@ export function weightsBytes(paramsB: number, bpw: number): number {
 export function kvCacheBytes(m: Pick<ModelSpec, 'layers' | 'kvHeads' | 'headDim' | 'swa'>, ctx: number, elemBytes: number): number {
   const perLayerPerTok = 2 * m.kvHeads * m.headDim * elemBytes
   if (m.swa) {
-    const globalL = Math.ceil(m.layers / m.swa.pattern)
+    // llama.cpp iSWA: (il % pattern) == pattern-1 인 레이어만 글로벌 → floor (Gemma 3 27B 62층 = 글로벌 10개)
+    const globalL = Math.floor(m.layers / m.swa.pattern)
     const localL = m.layers - globalL
     return perLayerPerTok * (globalL * ctx + localL * Math.min(ctx, m.swa.window))
   }

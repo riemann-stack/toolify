@@ -4,11 +4,11 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   box-sizing: border-box;
 }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 .cardLabel {
   display: flex;
   justify-content: space-between;
@@ -50,9 +50,9 @@
   color: var(--warning);
   background: rgba(217,119,6,0.14);
   border: 1px solid rgba(217,119,6,0.30);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   line-height: 1.6;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .warnNote strong { color: var(--warning); }
 
@@ -76,11 +76,11 @@
   gap: 1px;
   min-width: 0;
   transition: all 0.12s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) { .scaleBtn:hover { border-color: var(--border-hover); } }
 .scaleName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
   color: var(--text);
@@ -95,7 +95,7 @@
   border-color: var(--accent);
 }
 .scaleBtnActive .scaleName,
-.scaleBtnActive .scaleType { color: var(--accent); }
+.scaleBtnActive .scaleType { color: var(--accent-ink); }
 .scaleDesc {
   font-size: 13px;
   color: var(--muted);
@@ -116,7 +116,7 @@
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .inputRow {
   display: flex;
@@ -130,7 +130,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 20px;
   font-weight: 800;
   color: var(--text);
@@ -144,7 +144,7 @@
 .unit {
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -158,15 +158,15 @@
 .densityBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 4px 9px;
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .densityBtn small {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-left: 3px;
   color: var(--muted);
@@ -175,9 +175,9 @@
 .densityBtnActive {
   background: var(--accent-dim);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
-.densityBtnActive small { color: var(--accent); }
+.densityBtnActive small { color: var(--accent-ink); }
 
 /* ── 온도 토글 ── */
 .tempRow {
@@ -193,28 +193,28 @@
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .tempToggle {
   display: flex;
   gap: 4px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 3px;
 }
 .tempBtn {
   background: transparent;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
 }
 .tempBtn small {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   margin-left: 4px;
   color: var(--muted);
@@ -229,7 +229,7 @@
   color: var(--muted);
   flex: 1;
   min-width: 200px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .presetRow {
@@ -241,12 +241,12 @@
 .presetBtn {
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 11px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) { .presetBtn:hover { color: var(--accent); border-color: var(--accent); border-style: solid; } }
 
@@ -260,7 +260,7 @@
 .resCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 14px;
   display: flex;
   flex-direction: column;
@@ -269,7 +269,7 @@
   text-align: center;
 }
 .resCardInput {
-  background: linear-gradient(135deg, rgba(14,165,233,0.18), rgba(16,185,129,0.14));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), rgba(16,185,129,0.14));
   border-color: var(--accent);
 }
 .resHead {
@@ -279,23 +279,23 @@
   gap: 6px;
 }
 .resName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 800;
   color: var(--muted);
 }
 .resCardInput .resName { color: var(--accent); }
 .inputTag {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: var(--accent-strong);
   color: #ffffff;
   padding: 1px 6px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
 .resValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(20px, 4.5vw, 28px);
   font-weight: 800;
   color: var(--text);
@@ -307,7 +307,7 @@
 .resFull {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.5;
 }
 
@@ -321,22 +321,22 @@
 .saeChip {
   background: var(--accent-dim);
   border: 1px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 10px 14px;
   display: flex;
   align-items: baseline;
   gap: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   flex-wrap: wrap;
 }
 .saeChip strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 800;
   color: var(--accent);
 }
 .saeChip small {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--muted);
 }
@@ -351,7 +351,7 @@
   gap: 10px;
   padding: 6px 10px;
   border-radius: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   opacity: 0.55;
 }
@@ -360,13 +360,13 @@
   background: var(--accent-dim);
 }
 .saeGrade {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
 }
-.saeRowActive .saeGrade { color: var(--accent); }
+.saeRowActive .saeGrade { color: var(--accent-ink); }
 .saeRange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
@@ -375,22 +375,22 @@
 
 /* ── ISO VG 매칭 ── */
 .isoMatchedCard {
-  background: linear-gradient(135deg, rgba(8,145,178,0.18), rgba(16,185,129,0.14));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan-600) 18%, transparent), rgba(16,185,129,0.14));
   border: 1px solid var(--cat-health);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 18px;
   text-align: center;
   margin-bottom: 14px;
 }
 .isoMatchedNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 38px;
   font-weight: 800;
   color: var(--cat-health);
   letter-spacing: -1px;
 }
 .isoMatchedRange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--text);
   font-weight: 700;
@@ -399,7 +399,7 @@
 .isoMatchedUse {
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .isoFullList { padding-top: 4px; border-top: 1px dashed var(--border); }
@@ -411,22 +411,22 @@
   gap: 10px;
   padding: 6px 10px;
   border-radius: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   opacity: 0.65;
 }
 .isoRowActive {
   opacity: 1;
-  background: rgba(8,145,178,0.18);
+  background: color-mix(in srgb, var(--cyan-600) 18%, transparent);
 }
 .isoVg {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
 }
 .isoRowActive .isoVg { color: var(--cat-health); }
 .isoRange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   font-size: 12px;
@@ -437,7 +437,7 @@
 /* ── 자동차 오일 가이드 ── */
 .oilGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
   gap: 8px;
 }
 .oilCard {
@@ -453,31 +453,31 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .oilGrade { display: flex; flex-wrap: wrap; gap: 4px; }
 .gradeBadge {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   color: var(--accent);
-  border: 1px solid rgba(14,165,233,0.30);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-radius: 6px;
   padding: 2px 8px;
   font-size: 11px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   white-space: nowrap;
 }
 .gradeBadgeIso {
-  background: rgba(8,145,178,0.14);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
   color: var(--cat-health);
-  border-color: rgba(8,145,178,0.30);
+  border-color: color-mix(in srgb, var(--cyan-600) 30%, transparent);
 }
 .oilUse {
   margin: 0;
   font-size: 12px;
   color: var(--muted);
   line-height: 1.55;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 일상 유체 ── */
@@ -489,7 +489,7 @@
   gap: 10px;
   padding: 7px 4px;
   border-bottom: 1px dashed var(--border);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
 }
 .fluidRow:last-child { border-bottom: none; }
@@ -500,13 +500,13 @@
 .fluidEmoji { font-size: 18px; line-height: 1; text-align: center; }
 .fluidName { color: var(--text); font-weight: 600; }
 .fluidCp {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--accent);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 .fluidTemp {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--muted);
   font-size: 11px;
 }

@@ -88,27 +88,27 @@ export interface StarSignInfo {
 }
 
 export const STAR_SIGNS: StarSignInfo[] = [
-  { name: '양자리',     emoji: '♈', startMonth: 3, startDay: 21, endMonth: 4,  endDay: 19, element: '불',   color: '#DC2626',
+  { name: '양자리',     emoji: '♈', startMonth: 3, startDay: 21, endMonth: 4,  endDay: 19, element: '불',   color: 'var(--red-600)',
     traits: ['용기', '열정', '솔직함'], strengths: ['리더십', '추진력', '도전 정신'], cautions: ['성급함', '충동적', '독불장군'] },
-  { name: '황소자리',   emoji: '♉', startMonth: 4, startDay: 20, endMonth: 5,  endDay: 20, element: '지',   color: '#0EA5E9',
+  { name: '황소자리',   emoji: '♉', startMonth: 4, startDay: 20, endMonth: 5,  endDay: 20, element: '지',   color: 'var(--sky-500)',
     traits: ['안정', '인내', '신뢰'], strengths: ['끈기', '실용성', '신뢰감'], cautions: ['고집', '변화 거부', '느림'] },
-  { name: '쌍둥이자리', emoji: '♊', startMonth: 5, startDay: 21, endMonth: 6,  endDay: 21, element: '공기', color: '#0891B2',
+  { name: '쌍둥이자리', emoji: '♊', startMonth: 5, startDay: 21, endMonth: 6,  endDay: 21, element: '공기', color: 'var(--cyan-600)',
     traits: ['호기심', '유연성', '소통'], strengths: ['빠른 학습', '풍부한 대화', '적응력'], cautions: ['변덕', '집중 어려움', '결단력 ↓'] },
   { name: '게자리',     emoji: '♋', startMonth: 6, startDay: 22, endMonth: 7,  endDay: 22, element: '물',   color: '#6B8BFF',
     traits: ['감성', '보호본능', '직관'], strengths: ['공감력', '가족애', '책임감'], cautions: ['예민함', '변덕', '집착'] },
-  { name: '사자자리',   emoji: '♌', startMonth: 7, startDay: 23, endMonth: 8,  endDay: 22, element: '불',   color: '#DC2626',
+  { name: '사자자리',   emoji: '♌', startMonth: 7, startDay: 23, endMonth: 8,  endDay: 22, element: '불',   color: 'var(--red-600)',
     traits: ['자신감', '창의성', '관대함'], strengths: ['카리스마', '리더십', '관대함'], cautions: ['자만', '독선', '과시욕'] },
-  { name: '처녀자리',   emoji: '♍', startMonth: 8, startDay: 23, endMonth: 9,  endDay: 22, element: '지',   color: '#0EA5E9',
+  { name: '처녀자리',   emoji: '♍', startMonth: 8, startDay: 23, endMonth: 9,  endDay: 22, element: '지',   color: 'var(--sky-500)',
     traits: ['분석력', '꼼꼼함', '성실'], strengths: ['디테일', '분석력', '책임감'], cautions: ['완벽주의', '비판적', '걱정'] },
-  { name: '천칭자리',   emoji: '♎', startMonth: 9, startDay: 23, endMonth: 10, endDay: 23, element: '공기', color: '#0891B2',
+  { name: '천칭자리',   emoji: '♎', startMonth: 9, startDay: 23, endMonth: 10, endDay: 23, element: '공기', color: 'var(--cyan-600)',
     traits: ['균형', '공정함', '우아함'], strengths: ['중재', '미적 감각', '외교력'], cautions: ['우유부단', '회피', '의존적'] },
   { name: '전갈자리',   emoji: '♏', startMonth: 10, startDay: 24, endMonth: 11, endDay: 22, element: '물',   color: '#6B8BFF',
     traits: ['집중력', '열정', '통찰'], strengths: ['깊은 통찰', '집중력', '의지'], cautions: ['질투', '비밀스러움', '복수심'] },
-  { name: '사수자리',   emoji: '♐', startMonth: 11, startDay: 23, endMonth: 12, endDay: 21, element: '불',   color: '#DC2626',
+  { name: '사수자리',   emoji: '♐', startMonth: 11, startDay: 23, endMonth: 12, endDay: 21, element: '불',   color: 'var(--red-600)',
     traits: ['낙관', '자유', '철학'], strengths: ['모험심', '낙천적', '솔직함'], cautions: ['무책임', '말 많음', '경솔'] },
-  { name: '염소자리',   emoji: '♑', startMonth: 12, startDay: 22, endMonth: 1,  endDay: 19, element: '지',   color: '#0EA5E9',
+  { name: '염소자리',   emoji: '♑', startMonth: 12, startDay: 22, endMonth: 1,  endDay: 19, element: '지',   color: 'var(--sky-500)',
     traits: ['인내', '실용성', '야망'], strengths: ['책임감', '근면', '인내'], cautions: ['엄격함', '비관적', '지나친 야망'] },
-  { name: '물병자리',   emoji: '♒', startMonth: 1, startDay: 20, endMonth: 2,  endDay: 18, element: '공기', color: '#0891B2',
+  { name: '물병자리',   emoji: '♒', startMonth: 1, startDay: 20, endMonth: 2,  endDay: 18, element: '공기', color: 'var(--cyan-600)',
     traits: ['독창성', '인도주의', '독립'], strengths: ['창의성', '독립성', '개혁적'], cautions: ['고독', '냉정함', '예측 불가'] },
   { name: '물고기자리', emoji: '♓', startMonth: 2, startDay: 19, endMonth: 3,  endDay: 20, element: '물',   color: '#6B8BFF',
     traits: ['감수성', '직관력', '공감'], strengths: ['예술성', '공감력', '직관'], cautions: ['현실 도피', '예민함', '의존적'] },
@@ -258,7 +258,9 @@ export function evalElementPair(a: Element, b: Element): CompatRelation {
   return { score: 3, type: '평범', desc: '평범한 조합 — 노력으로 좋아짐' }
 }
 
-/* ─── 탄생석·탄생화·탄생색 ─── */
+/* ─── 탄생석·탄생화·탄생색 ───
+   탄생석: 미국 보석업계 현대 목록(GIA 안내 기준 — 12월 터키석·탄자나이트·지르콘). 청금석은 1912년 목록의 12월 보석으로 현대 목록에선 빠짐.
+   탄생화: 서양 관행(3월 대퍼딜·존퀼 — 존퀼은 수선화속 '노랑수선화'이며 재스민이 아님). 탄생색은 공인 목록이 없는 관용 표기. */
 export interface BirthMonthInfo {
   month: number
   stone: string
@@ -269,7 +271,7 @@ export interface BirthMonthInfo {
 export const BIRTH_MONTHS: BirthMonthInfo[] = [
   { month: 1,  stone: '가넷 (Garnet)',           flower: '카네이션·갈란투스',  color: '진홍·검정' },
   { month: 2,  stone: '아메시스트 (Amethyst)',   flower: '제비꽃·앵초',         color: '보라' },
-  { month: 3,  stone: '아쿠아마린 (Aquamarine)', flower: '수선화·재스민',       color: '연파랑' },
+  { month: 3,  stone: '아쿠아마린 (Aquamarine)', flower: '수선화·노랑수선화(존퀼)', color: '연파랑' },
   { month: 4,  stone: '다이아몬드 (Diamond)',    flower: '데이지·스위트피',     color: '하양' },
   { month: 5,  stone: '에메랄드 (Emerald)',      flower: '은방울꽃·산사나무',   color: '진녹·옥' },
   { month: 6,  stone: '진주·문스톤 (Pearl)',     flower: '장미·인동',           color: '연분홍·하양' },
@@ -278,7 +280,7 @@ export const BIRTH_MONTHS: BirthMonthInfo[] = [
   { month: 9,  stone: '사파이어 (Sapphire)',     flower: '아스터·나팔꽃',       color: '파랑' },
   { month: 10, stone: '오팔·전기석 (Opal)',      flower: '코스모스·금잔화',     color: '무지개' },
   { month: 11, stone: '토파즈·시트린 (Topaz)',   flower: '국화',                color: '노랑·금' },
-  { month: 12, stone: '터키석·청금석 (Turquoise)', flower: '수선화·홀리',         color: '하늘·빨강' },
+  { month: 12, stone: '터키석·탄자나이트·지르콘 (Turquoise)', flower: '수선화·홀리', color: '하늘·빨강' },
 ]
 
 export function getBirthMonth(month: number): BirthMonthInfo {
@@ -325,13 +327,23 @@ export interface FamilyMember {
 
 export const FAMILY_STORAGE_KEY = 'youtil-zodiac-family'
 
+const FAMILY_RELATIONS: FamilyMember['relation'][] = ['본인', '배우자', '자녀', '부모', '형제자매', '기타']
+function isFamilyMember(v: unknown): v is FamilyMember {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  const int = (x: unknown, lo: number, hi: number) => typeof x === 'number' && Number.isInteger(x) && x >= lo && x <= hi
+  return typeof o.id === 'string' && typeof o.name === 'string'
+    && FAMILY_RELATIONS.includes(o.relation as FamilyMember['relation'])
+    && int(o.year, 1, 9999) && int(o.month, 1, 12) && int(o.day, 1, 31)
+}
+
 export function loadFamily(): FamilyMember[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = window.localStorage.getItem(FAMILY_STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isFamilyMember) : []
   } catch { return [] }
 }
 

@@ -8,7 +8,7 @@ import {
   type FitnessLevel, type TerrainType, type PackWeight, type GroupType, type WeatherType,
   MOUNTAINS, FITNESS, TERRAIN, PACK, GROUP, WEATHER,
   SUN_AVERAGES, CHECKLIST, EMERGENCY,
-  calculate, buildTimeline,
+  calculate, buildTimeline, monthlySeoulSunset,
   fmtHHMM, fmtDuration, parseHHMM,
 } from './hikingUtils'
 
@@ -34,9 +34,14 @@ export default function HikingTimeClient() {
   const [activePreset, setActivePreset] = useState<string | null>(null)
   const [region, setRegion] = useState<string>('수도권')
   const [mounted, setMounted] = useState(false)
+  // 일몰을 사용자가 직접 입력했는지 — 아니면 매번 이번 달 서울 평균으로 채운다
+  const [sunsetUserSet, setSunsetUserSet] = useState(false)
 
   /* localStorage 복원 — 손상·변조 방어 (무검증 spread 시 NaN 결과 가능) */
   useEffect(() => {
+    // 일몰 기본값: 연중 18:30 고정 대신 이번 달 서울 평균 일몰 (hydration 뒤 적용)
+    let sunsetDefault = monthlySeoulSunset(new Date())
+    let userSet = false
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
@@ -47,6 +52,11 @@ export default function HikingTimeClient() {
             typeof v === 'number' && Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d
           const en = <T,>(v: unknown, arr: { id: T }[], d: T) => arr.some((x) => x.id === v) ? (v as T) : d
           const tm = (v: unknown, d: string) => typeof v === 'string' && /^\d{1,2}:\d{2}$/.test(v) ? v : d
+          // 직접 입력한 일몰만 복원(예전 저장값·자동값은 월이 바뀌면 틀리므로 이번 달 평균으로 대체)
+          if (o.sunsetUserSet === true && typeof o.sunsetTime === 'string' && /^\d{1,2}:\d{2}$/.test(o.sunsetTime)) {
+            sunsetDefault = o.sunsetTime
+            userSet = true
+          }
           const safe: CalcInputs = {
             distanceKm: n3(o.distanceKm, 1, 50, DEFAULT_INPUTS.distanceKm),
             elevGainM:  n3(o.elevGainM, 0, 2000, DEFAULT_INPUTS.elevGainM),
@@ -57,7 +67,7 @@ export default function HikingTimeClient() {
             group:   en(o.group, GROUP, DEFAULT_INPUTS.group),
             weather: en(o.weather, WEATHER, DEFAULT_INPUTS.weather),
             startTime:  tm(o.startTime, DEFAULT_INPUTS.startTime),
-            sunsetTime: tm(o.sunsetTime, DEFAULT_INPUTS.sunsetTime),
+            sunsetTime: sunsetDefault,
             restMode: o.restMode === 'manual' ? 'manual' : 'auto',
             manualRestMin: n3(o.manualRestMin, 0, 300, 0),
           }
@@ -66,20 +76,14 @@ export default function HikingTimeClient() {
         }
       }
     } catch { /* ignore */ }
-    // 현재 시각 ± 일몰 자동 설정 (hydration safe)
-    const now = new Date()
-    const h = now.getHours()
-    const m = now.getMinutes()
-    setInputs((prev) => ({
-      ...prev,
-      startTime: prev.startTime ?? `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`,
-    }))
+    setInputs((prev) => ({ ...prev, sunsetTime: sunsetDefault }))
+    setSunsetUserSet(userSet)
     setMounted(true)
   }, [])
   useEffect(() => {
     if (!mounted) return
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(inputs)) } catch { /* ignore */ }
-  }, [inputs, mounted])
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...inputs, sunsetUserSet })) } catch { /* ignore */ }
+  }, [inputs, mounted, sunsetUserSet])
 
   const update = <K extends keyof CalcInputs>(k: K, v: CalcInputs[K]) => {
     setInputs((prev) => ({ ...prev, [k]: v }))
@@ -136,7 +140,7 @@ export default function HikingTimeClient() {
 
       {/* ════════ 1. 한국 100대 명산 프리셋 ════════ */}
       <section>
-        <label className={styles.label}>한국 100대 명산 프리셋 ({MOUNTAINS.length}개)</label>
+        <p className={styles.label}>한국 100대 명산 프리셋 ({MOUNTAINS.length}개)</p>
         <div className={styles.regionTabs}>
           {REGIONS.map((r) => (
             <button key={r} type="button" aria-pressed={region === r}
@@ -180,9 +184,9 @@ export default function HikingTimeClient() {
           <div className={styles.sliderHead}>
             <span>거리</span>
             <span className={styles.headInput}>
-              <input type="number" inputMode="decimal" min={1} max={50} step={0.5}
-                aria-label="거리 직접 입력 (km)" value={inputs.distanceKm}
-                onChange={(e) => update('distanceKm', Math.min(50, Math.max(1, +e.target.value || 0)))}
+              <NumField min={1} max={50} inputMode="decimal"
+                ariaLabel="거리 직접 입력 (km)" value={inputs.distanceKm}
+                onCommit={(v) => update('distanceKm', v)}
                 className={styles.headNumber} />
               <span className={styles.headUnit}>km</span>
             </span>
@@ -195,9 +199,9 @@ export default function HikingTimeClient() {
           <div className={styles.sliderHead}>
             <span>오르막 표고차</span>
             <span className={styles.headInput}>
-              <input type="number" inputMode="numeric" min={0} max={2000} step={10}
-                aria-label="오르막 표고차 직접 입력 (m)" value={inputs.elevGainM}
-                onChange={(e) => update('elevGainM', Math.min(2000, Math.max(0, +e.target.value || 0)))}
+              <NumField min={0} max={2000} inputMode="numeric"
+                ariaLabel="오르막 표고차 직접 입력 (m)" value={inputs.elevGainM}
+                onCommit={(v) => update('elevGainM', v)}
                 className={styles.headNumber} />
               <span className={styles.headUnit}>m</span>
             </span>
@@ -210,9 +214,9 @@ export default function HikingTimeClient() {
           <div className={styles.sliderHead}>
             <span>내리막 표고차</span>
             <span className={styles.headInput}>
-              <input type="number" inputMode="numeric" min={0} max={2000} step={10}
-                aria-label="내리막 표고차 직접 입력 (m)" value={inputs.elevLossM}
-                onChange={(e) => update('elevLossM', Math.min(2000, Math.max(0, +e.target.value || 0)))}
+              <NumField min={0} max={2000} inputMode="numeric"
+                ariaLabel="내리막 표고차 직접 입력 (m)" value={inputs.elevLossM}
+                onCommit={(v) => update('elevLossM', v)}
                 className={styles.headNumber} />
               <span className={styles.headUnit}>m</span>
             </span>
@@ -309,10 +313,22 @@ export default function HikingTimeClient() {
             <label htmlFor="hiking-time-time-2">일몰 시각</label>
             <input id="hiking-time-time-2" type="time" className={styles.timeInput}
               value={inputs.sunsetTime}
-              onChange={(e) => update('sunsetTime', e.target.value)} />
+              onChange={(e) => { update('sunsetTime', e.target.value); setSunsetUserSet(true) }} />
           </div>
         </div>
-        <p className={styles.note}>일몰 시각은 네이버에서 &quot;[지역명] 일몰&quot; 검색 후 입력. 또는 아래 안전 가이드의 월별 평균표 참조.</p>
+        <p className={styles.note}>
+          {sunsetUserSet ? '직접 입력한 일몰 시각을 씁니다.' : '일몰 시각은 이번 달 서울 평균값(추정)으로 채워 둡니다.'}
+          {' '}정확한 값은 네이버에서 &quot;[지역명] 일몰&quot; 검색 후 입력하거나 아래 안전 가이드의 월별 평균표를 참고하세요.
+          {sunsetUserSet && (
+            <>
+              {' '}
+              <button type="button" className={styles.linkBtn}
+                onClick={() => { setSunsetUserSet(false); setInputs((prev) => ({ ...prev, sunsetTime: monthlySeoulSunset(new Date()) })) }}>
+                이번 달 평균으로 되돌리기
+              </button>
+            </>
+          )}
+        </p>
       </section>
 
       <section className={styles.optionCard}>
@@ -332,11 +348,10 @@ export default function HikingTimeClient() {
         {inputs.restMode === 'manual' && (
           <div className={styles.numberRow} style={{ marginTop: 10 }}>
             <label htmlFor="hiking-time-time-3">총 휴식 시간 (분)</label>
-            <input id="hiking-time-time-3"
-              type="number" inputMode="decimal" min={0} max={300}
+            <NumField id="hiking-time-time-3" min={0} max={300} inputMode="numeric"
               className={styles.smallNumber}
               value={inputs.manualRestMin}
-              onChange={(e) => update('manualRestMin', +e.target.value || 0)}
+              onCommit={(v) => update('manualRestMin', v)}
             />
             <span>분</span>
           </div>
@@ -407,7 +422,7 @@ export default function HikingTimeClient() {
 
       {/* ════════ 4. 단계별 타임라인 ════════ */}
       <section>
-        <label className={styles.label}>단계별 도착 예상 시각</label>
+        <p className={styles.label}>단계별 도착 예상 시각</p>
         <TimelineSvg timeline={timeline} sunsetMinutes={parseHHMM(inputs.sunsetTime)} startMinutes={parseHHMM(inputs.startTime)} />
         <div className={styles.timelineList}>
           {timeline.map((step, i) => {
@@ -415,7 +430,7 @@ export default function HikingTimeClient() {
             const risky = !dangerous && step.arrivalAtMinutes > result.turnaroundMinutes
             return (
               <div key={i} className={`${styles.timelineItem} ${step.isSummit ? styles.timelineSummit : ''} ${dangerous ? styles.timelineDanger : risky ? styles.timelineRisky : ''}`}>
-                <span className={styles.timelineKm}>{step.km.toFixed(0)}km</span>
+                <span className={styles.timelineKm}>{Number.isInteger(step.km) ? step.km : step.km.toFixed(1)}km</span>
                 <span className={styles.timelineLabel}>{step.label}</span>
                 <span className={styles.timelineTime}>{fmtHHMM(step.arrivalAtMinutes)}</span>
                 <span className={styles.timelineDuration}>+{fmtDuration(step.minutesFromStart)}</span>
@@ -427,7 +442,7 @@ export default function HikingTimeClient() {
 
       {/* ════════ 5. 안전 가이드 ════════ */}
       <section>
-        <label className={styles.label}>등산 안전 가이드</label>
+        <p className={styles.label}>등산 안전 가이드</p>
 
         {/* 일출·일몰 평균표 */}
         <div className={styles.optionCard}>
@@ -467,7 +482,7 @@ export default function HikingTimeClient() {
             </a>
             <a href="tel:1670-9201" className={styles.emergencyItem}>
               <span className={styles.emergencyNum}>1670-9201</span>
-              <span>국립공원공단 콜센터<br/>(국립공원 사고·문의)</span>
+              <span>국립공원공단 고객센터<br/>(예약·일반 문의, 사고는 119)</span>
             </a>
             <div className={styles.emergencyItem}>
               <span className={styles.emergencyApp}>📱</span>
@@ -506,6 +521,26 @@ export default function HikingTimeClient() {
   )
 }
 
+/* ─── 숫자 입력 (편집 중 빈칸 허용, 값 반영 시에만 클램프) ─── */
+function NumField({ value, min, max, onCommit, className, ariaLabel, id, inputMode }: {
+  value: number; min: number; max: number; onCommit: (v: number) => void
+  className?: string; ariaLabel?: string; id?: string; inputMode: 'decimal' | 'numeric'
+}) {
+  const [draft, setDraft] = useState<string | null>(null)  // null = 편집 중 아님
+  return (
+    <input id={id} type="text" inputMode={inputMode} aria-label={ariaLabel} className={className}
+      value={draft ?? String(value)}
+      onFocus={() => setDraft(String(value))}
+      onChange={(e) => {
+        const t = e.target.value.replace(inputMode === 'decimal' ? /[^0-9.]/g : /[^0-9]/g, '')
+        setDraft(t)
+        const v = parseFloat(t)
+        if (Number.isFinite(v)) onCommit(Math.min(max, Math.max(min, v)))
+      }}
+      onBlur={() => setDraft(null)} />
+  )
+}
+
 /* ─── SVG 타임라인 ─── */
 function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: TimelineStep[]; sunsetMinutes: number; startMinutes: number }) {
   if (timeline.length < 2) return null
@@ -513,12 +548,22 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
   const maxKm = timeline[timeline.length - 1].km
   const xOf = (km: number) => padL + (km / Math.max(0.1, maxKm)) * (W - padL - padR)
 
-  // 일몰 위치 (시간 → km로 역산)
+  // 일몰 위치 (시간 → km로 역산). 오르막·내리막 속도가 달라 시간과 거리가 비례하지 않으므로
+  // 시간 비율을 그대로 쓰지 않고 타임라인 구간을 시간 기준으로 보간해 km를 구한다.
   const totalMin = timeline[timeline.length - 1].minutesFromStart
   const sunsetMinFromStart = sunsetMinutes - startMinutes
-  const sunsetX = sunsetMinFromStart > 0 && sunsetMinFromStart < totalMin
-    ? padL + (sunsetMinFromStart / totalMin) * (W - padL - padR)
-    : null
+  let sunsetX: number | null = null
+  if (sunsetMinFromStart > 0 && sunsetMinFromStart < totalMin) {
+    for (let i = 1; i < timeline.length; i++) {
+      const a = timeline[i - 1], b = timeline[i]
+      if (sunsetMinFromStart <= b.minutesFromStart) {
+        const span = b.minutesFromStart - a.minutesFromStart
+        const km = span > 0 ? a.km + (b.km - a.km) * (sunsetMinFromStart - a.minutesFromStart) / span : b.km
+        sunsetX = xOf(km)
+        break
+      }
+    }
+  }
 
   return (
     <div className={styles.timelineSvgWrap}>
@@ -530,8 +575,8 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
         {/* 일몰 마커 */}
         {sunsetX !== null && (
           <>
-            <line x1={sunsetX} y1={padT-10} x2={sunsetX} y2={H-padB+10} stroke="#DC2626" strokeWidth="2" strokeDasharray="4 3" />
-            <text x={sunsetX} y={padT-12} fill="#DC2626" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
+            <line x1={sunsetX} y1={padT-10} x2={sunsetX} y2={H-padB+10} stroke="var(--red-600)" strokeWidth="2" strokeDasharray="4 3" />
+            <text x={sunsetX} y={padT-12} fill="var(--red-600)" fontSize="10" textAnchor="middle" fontWeight="700">
               🌅 일몰 {fmtHHMM(sunsetMinutes)}
             </text>
           </>
@@ -541,13 +586,13 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
         {timeline.map((step, i) => {
           const x = xOf(step.km)
           const isEdge = i === 0 || i === timeline.length - 1
-          const fill = step.isSummit ? '#0EA5E9' : isEdge ? '#0891B2' : 'var(--muted)'
+          const fill = step.isSummit ? 'var(--sky-500)' : isEdge ? 'var(--cyan-600)' : 'var(--muted)'
           const r = step.isSummit ? 7 : isEdge ? 6 : 4
           return (
             <g key={i}>
               <circle cx={x} cy={H/2} r={r} fill={fill} stroke="#0B0B0B" strokeWidth="2" />
               {(step.isSummit || isEdge) && (
-                <text x={x} y={H/2 + 22} fill="var(--text)" fontSize="10" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">
+                <text x={x} y={H/2 + 22} fill="var(--text)" fontSize="10" textAnchor="middle" fontWeight="700">
                   {fmtHHMM(step.arrivalAtMinutes)}
                 </text>
               )}

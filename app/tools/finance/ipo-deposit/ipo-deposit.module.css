@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -29,7 +29,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -39,13 +39,13 @@
 .tab {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -60,11 +60,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   box-sizing: border-box;
   outline: none;
 }
@@ -79,14 +79,14 @@
   padding: 6px 10px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   text-align: right;
 }
 .miniInput:focus { border-color: var(--accent); }
 .miniInput::-webkit-outer-spin-button,
 .miniInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.unitText { font-size: 13px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; margin-left: 2px; }
+.unitText { font-size: 13px; color: var(--muted); font-family: var(--font-sans); margin-left: 2px; }
 
 .row2 {
   display: grid;
@@ -111,17 +111,17 @@
 .quickChip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 14px;
   font-size: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
   flex-shrink: 0;
   scroll-snap-align: start;
   min-height: 32px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }@media (hover: hover) {
   .quickChip:hover { border-color: var(--accent); color: var(--accent); }
@@ -137,13 +137,13 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -157,15 +157,15 @@
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .checkRow input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
 
 /* ── 히어로 ── */
 .hero {
-  background: linear-gradient(135deg, rgba(14,165,233,0.1) 0%, rgba(8,145,178,0.14) 100%);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent) 0%, color-mix(in srgb, var(--cyan-600) 14%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
 }
@@ -176,7 +176,7 @@
   letter-spacing: 0.04em;
 }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 7vw, 42px);
   font-weight: 800;
   color: var(--text);
@@ -193,7 +193,7 @@
 .heroLimit {
   display: inline-block;
   margin-left: 4px;
-  color: #DC2626;
+  color: var(--red-600);
   font-weight: 600;
 }
 @media (max-width: 600px) {
@@ -213,12 +213,12 @@
 }
 .detailTable td:last-child {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellGood { color: #059669; }
+.cellGood { color: var(--emerald-600); }
 .rowBig td {
   background: var(--bg3);
   font-weight: 700;
@@ -258,7 +258,7 @@
   font-size: 13px;
   color: var(--text);
   border-bottom: 1px solid var(--border);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .scenarioTable tr:last-child td { border-bottom: none; }
 .rowDanger td { background: rgba(220, 38, 38, 0.06); }
@@ -273,26 +273,26 @@
 .dangerCard {
   background: rgba(220, 38, 38, 0.06);
   border: 1px solid rgba(220, 38, 38, 0.4);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
-.dangerCard strong { display: block; color: #DC2626; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.dangerCard strong { display: block; color: var(--red-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .dangerCard p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
 
 .cautionCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.4);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
-.cautionCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.cautionCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .cautionCard p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
 
 /* ── 빈 상태 ── */
 .empty {
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 32px 16px;
   text-align: center;
   font-size: 13px;
@@ -305,31 +305,31 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px;
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   min-height: 44px;
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtnDone { border-color: #059669; color: #059669; }
+.copyBtnDone { border-color: var(--emerald-600); color: var(--emerald-600); }
 
 /* ── 메모 ── */
 .saveBtn {
   width: 100%;
   background: var(--accent-strong);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px;
   font-size: 13px;
   font-weight: 700;
   color: #ffffff;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
   margin-top: 4px;
 }@media (hover: hover) {
@@ -341,14 +341,14 @@
   width: 100%;
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
-  .clearBtn:hover { border-color: #DC2626; color: #DC2626; }
+  .clearBtn:hover { border-color: var(--red-600); color: var(--red-600); }
 }
 
 .memoActions {
@@ -377,7 +377,7 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .memoRemove {
   background: transparent;
@@ -387,12 +387,12 @@
   cursor: pointer;
   padding: 4px 8px;
 }@media (hover: hover) {
-  .memoRemove:hover { color: #DC2626; }
+  .memoRemove:hover { color: var(--red-600); }
 }
 .memoMeta {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
 }
 .memoDates {
@@ -408,16 +408,16 @@
   border-radius: 6px;
   padding: 3px 8px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .memoDateChipAccent {
-  border-color: rgba(14,165,233,0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--accent);
 }
 .memoRefund {
   font-size: 12px;
-  color: #059669;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--emerald-600);
+  font-family: var(--font-sans);
 }
 .memoNotes {
   font-size: 11px;
@@ -429,7 +429,7 @@
 .disclaimer {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -437,9 +437,9 @@
 }
 .disclaimer strong {
   display: block;
-  color: #D97706;
+  color: var(--amber-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

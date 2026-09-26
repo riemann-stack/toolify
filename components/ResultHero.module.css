@@ -1,0 +1,39 @@
+/* components/ResultHero.module.css — 결과 카드: 라벨·요약 필 → 큰 숫자(검정) → 보조 줄 → 계산식 줄(필수)
+   → 구성 막대·범례(선택) → 내역표(선택) → 액션. role="status"는 숫자 1곳만 */
+.rh { margin-top: 12px; scroll-margin-top: calc(var(--header-h) + 16px); }
+.rhHead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.rhLabel { margin: 0; font-size: 15px; font-weight: 600; color: var(--muted-strong); }
+.rhNum { margin-top: 4px; font-size: clamp(44px, 11vw, 72px); font-weight: 700; line-height: 1.1; letter-spacing: -0.04em; color: var(--text); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.rhUnit { margin-left: 4px; font-size: 0.36em; font-weight: 600; letter-spacing: 0; color: var(--muted-strong); }
+.rhSub { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 10px; font-size: 15px; color: var(--muted-strong); }
+.rhSub b { color: var(--text); font-weight: 600; }
+/* 계산식 줄 — '어떻게 나온 숫자인지' (B) */
+.rhFormula { display: flex; gap: 8px; align-items: flex-start; margin-top: 16px; padding: 12px 14px; border-radius: var(--radius-m); background: var(--bg3); font-size: 13px; line-height: 1.7; color: var(--muted-strong); }
+.rhFormula svg { flex-shrink: 0; margin-top: 4px; color: var(--muted); }
+.rhFormula b { color: var(--text); font-weight: 600; }
+/* 구성 막대 + 범례 (막대는 보조 — 수치는 범례·표에 텍스트로 있으므로 role="img"+aria-label) */
+.rhStack { display: flex; gap: 2px; height: 12px; margin-top: 24px; border-radius: var(--radius-pill); overflow: hidden; background: var(--bg3); }
+.rhStack > span { display: block; height: 100%; }
+.rhLegend { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-top: 12px; font-size: 13px; color: var(--muted-strong); }
+.rhLegend > span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.rhLegend i { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.rhLegend b { color: var(--text); font-weight: 600; }
+/* 빈 상태 (입력 전) — 같은 높이로 자리 확보 → CLS 0 */
+.rhEmpty { display: grid; place-items: center; min-height: 176px; border-radius: var(--radius-m); background: var(--bg3); text-align: center; font-size: 15px; color: var(--muted); }
+/* 내역표 */
+.rhTable { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--divider); }
+.rhTableCap { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; font-size: 15px; font-weight: 700; color: var(--text); }
+.rhTableCap span { font-size: 12px; font-weight: 500; color: var(--muted); }
+.rhTable table { width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+.rhTable thead th { padding: 10px 0 8px; font-size: 12px; font-weight: 600; color: var(--muted); text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.rhTable tbody th, .rhTable td { padding: 12px 0; text-align: right; color: var(--text-body); border-bottom: 1px solid var(--divider); white-space: nowrap; }
+.rhTable th + th, .rhTable th + td, .rhTable td + td { padding-left: 16px; }
+.rhTable thead th:first-child, .rhTable tbody th { text-align: left; white-space: normal; }
+.rhTable tbody th { color: var(--text); font-weight: 500; }
+.rhTable tbody th small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--muted); }
+.rhTable i { display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 2px; vertical-align: 2px; }
+.rhSum th, .rhSum td { border-top: 1px solid var(--border-hover); border-bottom: 0; font-weight: 600; color: var(--text); }
+.rhNet th, .rhNet td { border-bottom: 0; padding-top: 12px; font-size: 15px; font-weight: 700; color: var(--accent-ink); }
+.rhNet th { color: var(--text); }
+.rhFoot { display: flex; align-items: center; gap: 6px; margin-top: 16px; font-size: 13px; color: var(--muted); }
+.rhFoot svg { flex-shrink: 0; color: var(--success); }

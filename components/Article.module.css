@@ -1,0 +1,30 @@
+/* components/Article.module.css — 가이드 본문 시트(ArticleSheet) + 머리(ArticleHead) + 인라인 목차
+   h2 자동 번호(01, 02 …)는 CSS counter — 200개 페이지에 번호를 손으로 넣지 않는다 */
+.ar { margin-top: 48px; padding: 40px 48px 44px; border-radius: var(--radius-lg); background: var(--bg2); border: 1px solid var(--border); }
+.arHead { padding-bottom: 24px; margin-bottom: 8px; border-bottom: 1px solid var(--divider); }
+.arKicker { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--accent-ink); }
+.arTitle { margin-top: 8px; margin-bottom: 0; color: var(--text); font-size: 26px; font-weight: 700; line-height: 1.35; letter-spacing: -0.035em; }
+.arByline { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.arAvatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; background: var(--text); color: var(--gray-0); font-size: 13px; font-weight: 700; }
+.arByText { margin: 0; max-width: none; font-size: 13px; line-height: 1.6; color: var(--muted); font-variant-numeric: tabular-nums; }
+.arByText b { color: var(--text); font-weight: 600; }
+.arByText a { color: var(--accent-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--accent-line); }
+/* 인라인 목차 — 레일이 없는 폭(<1200)에서만. 서버 렌더(높이 고정 → CLS 0) */
+.arToc { display: none; margin-top: 20px; padding: 16px 18px; border-radius: var(--radius-m); background: var(--bg3); }
+.arToc b { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 700; color: var(--muted-strong); }
+.arToc ol { list-style: none; counter-reset: t; display: grid; gap: 2px; margin: 0; padding: 0; max-width: none; }
+.arToc li { margin: 0; font-size: 15px; line-height: 1.5; }
+.arToc a { display: flex; gap: 10px; min-height: 32px; align-items: center; font-size: 15px; color: var(--text-body); text-decoration: none; }
+@media (hover: hover) { .arToc a:hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; } }
+.arToc a::before { counter-increment: t; content: counter(t, decimal-leading-zero); font-size: 12px; font-weight: 700; color: var(--accent-ink); }
+@media (max-width: 1199px) { .arToc { display: block; } }
+/* 터치: 탭 타깃 44(스펙 §0 원칙 7). 목록형 링크라 WCAG 2.5.8 인라인 예외가 아니다 */
+@media (pointer: coarse) { .arToc ol { gap: 0; } .arToc a { min-height: 44px; } }
+/* 본문 조판(p·h2·li…)은 globals.css의 `:where(.prose)` 규칙 — 특이도 0이라 Callout·DataFigure 등 컴포넌트 클래스가 항상 이긴다.
+   ArticleSheet는 className={`${styles.ar} prose`} 로 두 클래스를 함께 단다 */
+.arRef { font-size: 11px; font-weight: 700; line-height: 0; vertical-align: super; margin-left: 2px; }
+.arRef a { padding: 6px 2px; color: var(--accent-ink); text-decoration: none; } /* 인라인 각주 — 패딩으로 히트 영역만 확장(줄 높이 불변) */
+@media (max-width: 640px) {
+  .ar { margin: 40px -16px 0; padding: 32px 20px 36px; border-radius: 0; border-left: 0; border-right: 0; }
+  .arTitle { font-size: 22px; }
+}

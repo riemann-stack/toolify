@@ -35,12 +35,12 @@ const DRINK_PRESETS: DrinkPreset[] = [
   { id: 'cola',        cat: 'soda', name: '콜라 355ml',         caffeine: 35,  icon: '🥤' },
   { id: 'diet-cola',   cat: 'soda', name: '다이어트콜라 355ml', caffeine: 47,  icon: '🥤' },
   { id: 'mountain-dew',cat: 'soda', name: '마운틴듀 355ml',     caffeine: 54,  icon: '🥤' },
-  // ⚡ 에너지
-  { id: 'redbull',     cat: 'energy', name: '레드불 250ml',      caffeine: 80,  icon: '⚡' },
-  { id: 'monster',     cat: 'energy', name: '몬스터 473ml',      caffeine: 160, icon: '⚡' },
+  // ⚡ 에너지 — 국내 유통 제품 표기 기준 (레드불코리아: 250ml 62.5mg = 0.25mg/ml, 355ml는 같은 농도 환산 88.75mg / 몬스터 국내 355ml 100mg)
+  { id: 'redbull',     cat: 'energy', name: '레드불 250ml',      caffeine: 62.5, icon: '⚡' },
+  { id: 'monster',     cat: 'energy', name: '몬스터 355ml',      caffeine: 100, icon: '⚡' },
   { id: 'hot6',        cat: 'energy', name: '핫식스 250ml',      caffeine: 60,  icon: '⚡' },
   { id: 'bacchus',     cat: 'energy', name: '박카스',            caffeine: 30,  icon: '⚡' },
-  { id: 'redbull-l',   cat: 'energy', name: '레드불 라지 355ml', caffeine: 114, icon: '⚡' },
+  { id: 'redbull-l',   cat: 'energy', name: '레드불 355ml',      caffeine: 89,  icon: '⚡' },
   // 🍫 디저트
   { id: 'dark-choco',  cat: 'sweet', name: '다크초콜릿 28g',     caffeine: 24,  icon: '🍫' },
   { id: 'milk-choco',  cat: 'sweet', name: '밀크초콜릿 28g',     caffeine: 9,   icon: '🍫' },
@@ -83,6 +83,7 @@ interface DrinkEntry {
 const STORAGE_KEY = 'youtil_caffeine_v1'
 const SETTINGS_KEY = 'youtil_caffeine_settings_v1'
 const KST_OFFSET_MS = 9 * 3600 * 1000
+const CUSTOM_MG_MAX = 2000
 
 /* ─── 시각 포맷 ─── */
 function fmtHM(ms: number): string {
@@ -111,15 +112,24 @@ function remainAtTime(dose: number, consumedMs: number, atMs: number, halfHours:
 }
 
 /* ─── localStorage ─── */
+function isDrinkEntry(v: unknown): v is DrinkEntry {
+  if (!v || typeof v !== 'object') return false
+  const e = v as Record<string, unknown>
+  return typeof e.id === 'string' && typeof e.presetId === 'string' && typeof e.name === 'string'
+    && typeof e.caffeine === 'number' && Number.isFinite(e.caffeine) && e.caffeine > 0 && e.caffeine <= CUSTOM_MG_MAX
+    && typeof e.consumedAtMs === 'number' && Number.isFinite(e.consumedAtMs)
+}
+
 function loadEntries(): DrinkEntry[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw) as DrinkEntry[]
+    const arr: unknown = JSON.parse(raw)
+    if (!Array.isArray(arr)) return []
     // 72시간 지난 항목은 자동 정리 (느린 반감기 12h에서도 3일이면 잔존 ~1.5%)
     const cutoff = Date.now() - 72 * 3600 * 1000
-    return arr.filter(e => e.consumedAtMs > cutoff)
+    return arr.filter(isDrinkEntry).filter(e => e.consumedAtMs > cutoff)
   } catch {
     return []
   }
@@ -140,7 +150,10 @@ function loadSettings(): Partial<CaffeineSettings> | null {
   if (typeof window === 'undefined') return null
   try {
     const raw = localStorage.getItem(SETTINGS_KEY)
-    return raw ? (JSON.parse(raw) as Partial<CaffeineSettings>) : null
+    if (!raw) return null
+    const o: unknown = JSON.parse(raw)
+    // 필드별 검증은 호출부에서(enum·정규식) — 여기선 객체 여부만
+    return o && typeof o === 'object' && !Array.isArray(o) ? (o as Partial<CaffeineSettings>) : null
   } catch {
     return null
   }
@@ -160,6 +173,7 @@ export default function CaffeineClient() {
   const [selectedCat, setSelectedCat] = useState<DrinkCat>('coffee')
   const [customName, setCustomName] = useState('')
   const [customMg, setCustomMg] = useState('')
+  const [customErr, setCustomErr] = useState('')
   const [bedtime, setBedtime] = useState('23:30')
 
   // 입력 시각 — 기본 "지금", 직접 입력 가능
@@ -167,8 +181,10 @@ export default function CaffeineClient() {
   const [customH, setCustomH] = useState<number>(() => new Date(Date.now() + KST_OFFSET_MS).getUTCHours())
   const [customM, setCustomM] = useState<number>(() => new Date(Date.now() + KST_OFFSET_MS).getUTCMinutes())
 
-  // 실시간 시계
-  const [nowMs, setNowMs] = useState(() => Date.now())
+  // 실시간 시계 — SSG HTML에 빌드 시각이 박히지 않도록 마운트 후(rAF 첫 프레임)부터 시작
+  const [nowMs, setNowMs] = useState<number | null>(null)
+  const clockReady = nowMs !== null
+  const nowT = nowMs ?? 0
   const rafRef = useRef<number | null>(null)
   useEffect(() => {
     let last = 0
@@ -183,10 +199,26 @@ export default function CaffeineClient() {
 
   const settingsLoadedRef = useRef(false)
 
+  // 차트 폭 = 실제 렌더 폭(px) → viewBox 1단위 = 1px라 모바일에서도 축 글자가 11px로 유지됨
+  const [chartW, setChartW] = useState(600)
+  const chartRoRef = useRef<ResizeObserver | null>(null)
+  const chartRef = useCallback((el: SVGSVGElement | null) => {
+    chartRoRef.current?.disconnect()
+    chartRoRef.current = null
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(([entry]) => {
+      const w = Math.round(entry.contentRect.width)
+      if (w > 0) setChartW(Math.min(900, Math.max(260, w)))
+    })
+    ro.observe(el)
+    chartRoRef.current = ro
+  }, [])
+
   // 초기 로드 — 음료 기록 + 개인 설정(반감기·한도·취침)
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
     setEntries(loadEntries())
+    setNowMs(Date.now())  // 기록과 같은 커밋에 시계 시작 — 1970 기준 계산이 한 프레임이라도 보이지 않게
     const st = loadSettings()
     if (st) {
       if (st.halfLifeId && HALF_LIFE_PRESETS.some(p => p.id === st.halfLifeId)) {
@@ -214,7 +246,7 @@ export default function CaffeineClient() {
 
   // 현재 시각 입력 모드일 때 매분 customH/M 갱신
   useEffect(() => {
-    if (timeMode !== 'now') return
+    if (timeMode !== 'now' || nowMs === null) return
     const d = new Date(nowMs + KST_OFFSET_MS)
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCustomH(d.getUTCHours())
@@ -253,7 +285,11 @@ export default function CaffeineClient() {
   const addCustom = () => {
     const mg = parseFloat(customMg)
     const name = customName.trim() || '직접 입력'
-    if (!mg || mg <= 0 || mg > 2000) return
+    if (!Number.isFinite(mg) || mg <= 0 || mg > CUSTOM_MG_MAX) {
+      setCustomErr(`카페인은 0보다 크고 ${CUSTOM_MG_MAX.toLocaleString('ko-KR')}mg 이하로 입력하세요.`)
+      return
+    }
+    setCustomErr('')
     setEntries(prev => [
       ...prev,
       {
@@ -270,7 +306,7 @@ export default function CaffeineClient() {
 
   const removeEntry = (id: string) => setEntries(prev => prev.filter(e => e.id !== id))
   const clearAll = () => {
-    if (confirm('오늘 기록을 모두 지울까요?')) setEntries([])
+    if (confirm('저장된 기록(최근 72시간)을 모두 지울까요?')) setEntries([])
   }
 
   /* ─── 계산 ─── */
@@ -281,10 +317,10 @@ export default function CaffeineClient() {
 
   // 오늘 누적 (KST 자정 ~ 지금)
   const todayStartMs = useMemo(() => {
-    const d = new Date(nowMs + KST_OFFSET_MS)
+    const d = new Date(nowT + KST_OFFSET_MS)
     d.setUTCHours(0, 0, 0, 0)
     return d.getTime() - KST_OFFSET_MS
-  }, [nowMs])
+  }, [nowT])
 
   const todayTotalMg = useMemo(
     () => entries.filter(e => e.consumedAtMs >= todayStartMs).reduce((s, e) => s + e.caffeine, 0),
@@ -293,8 +329,8 @@ export default function CaffeineClient() {
 
   // 현재 체내 잔존 mg
   const currentBodyMg = useMemo(
-    () => entries.reduce((s, e) => s + remainAtTime(e.caffeine, e.consumedAtMs, nowMs, halfHours), 0),
-    [entries, nowMs, halfHours],
+    () => entries.reduce((s, e) => s + remainAtTime(e.caffeine, e.consumedAtMs, nowT, halfHours), 0),
+    [entries, nowT, halfHours],
   )
 
   // 잠자리 영향 — 목표 취침 시각에서의 잔존량
@@ -303,12 +339,12 @@ export default function CaffeineClient() {
     if (!m) return null
     const h = parseInt(m[1], 10), mn = parseInt(m[2], 10)
     if (h > 23 || mn > 59) return null
-    const d = new Date(nowMs + KST_OFFSET_MS)
+    const d = new Date(nowT + KST_OFFSET_MS)
     d.setUTCHours(h, mn, 0, 0)
     let ts = d.getTime() - KST_OFFSET_MS
-    if (ts < nowMs) ts += 24 * 3600 * 1000
+    if (ts < nowT) ts += 24 * 3600 * 1000
     return ts
-  }, [bedtime, nowMs])
+  }, [bedtime, nowT])
 
   const bedtimeBodyMg = useMemo(() => {
     if (bedtimeMs === null) return 0
@@ -320,7 +356,7 @@ export default function CaffeineClient() {
   // 100mg / 50mg / 30mg 마지노선까지 가능한 양 역산
   const maxAddableForSafe = useMemo(() => {
     if (bedtimeMs === null) return null
-    const decayFromNowToBed = Math.exp(-Math.LN2 / halfHours * ((bedtimeMs - nowMs) / 3600000))
+    const decayFromNowToBed = Math.exp(-Math.LN2 / halfHours * ((bedtimeMs - nowT) / 3600000))
     const dailyHeadroom = Math.max(0, dailyLimit - todayTotalMg)  // 일일 권장량 잔여
     // 취침 잔존 기준치와 일일 권장량 잔여 중 더 작은 값으로 제한 (오늘 누적+추가가 한도를 넘지 않도록)
     const result = (threshold: number) =>
@@ -331,12 +367,12 @@ export default function CaffeineClient() {
       caution100: result(100),
       dailyHeadroom,
     }
-  }, [bedtimeMs, nowMs, halfHours, bedtimeBodyMg, dailyLimit, todayTotalMg])
+  }, [bedtimeMs, nowT, halfHours, bedtimeBodyMg, dailyLimit, todayTotalMg])
 
   // 곡선 데이터 (6시간 전 ~ 12시간 후)
   const chartData = useMemo(() => {
-    const startMs = nowMs - 6 * 3600 * 1000
-    const endMs = nowMs + 12 * 3600 * 1000
+    const startMs = nowT - 6 * 3600 * 1000
+    const endMs = nowT + 12 * 3600 * 1000
     const points: { t: number; mg: number }[] = []
     const steps = 72
     for (let i = 0; i <= steps; i++) {
@@ -345,7 +381,7 @@ export default function CaffeineClient() {
       points.push({ t, mg })
     }
     return { points, startMs, endMs }
-  }, [entries, nowMs, halfHours])
+  }, [entries, nowT, halfHours])
 
   /* ─── 상태 ─── */
   const sleepImpact = (() => {
@@ -367,7 +403,8 @@ export default function CaffeineClient() {
     : { label: '✅ 여유', color: '#059669' }
 
   /* ─── 차트 SVG ─── */
-  const W = 600, H = 220, PL = 44, PR = 16, PT = 16, PB = 32
+  const W = chartW, H = 220, PL = 44, PR = 16, PT = 18, PB = 32
+  const xLabelStep = W < 420 ? 2 : 1  // 좁은 화면에선 시각 라벨 격자 하나 건너 표시
   const plotW = W - PL - PR, plotH = H - PT - PB
   const allMg = chartData.points.map(p => p.mg)
   const maxMg = Math.max(50, ...allMg) * 1.15
@@ -376,7 +413,7 @@ export default function CaffeineClient() {
   const yFromMg = (mg: number) => PT + (1 - mg / maxMg) * plotH
   const linePath = `M ${chartData.points.map(p => `${xFromT(p.t).toFixed(1)},${yFromMg(p.mg).toFixed(1)}`).join(' L ')}`
   const areaPath = `${linePath} L ${xFromT(chartData.endMs).toFixed(1)},${yFromMg(0).toFixed(1)} L ${xFromT(chartData.startMs).toFixed(1)},${yFromMg(0).toFixed(1)} Z`
-  const nowX = xFromT(nowMs)
+  const nowX = xFromT(nowT)
   const bedX = bedtimeMs !== null && bedtimeMs <= chartData.endMs ? xFromT(bedtimeMs) : null
 
   const filteredPresets = DRINK_PRESETS.filter(p => p.cat === selectedCat)
@@ -399,9 +436,10 @@ export default function CaffeineClient() {
       </Disclaimer>
 
       {/* ─── 메인 히어로: 현재 체내 카페인 ─── */}
-      <div className={s.heroCard}>
+      <div className={s.heroCard} role="status">
         <div className={s.heroLabel}>현재 체내 카페인</div>
-        <div className={s.heroNumRow}>
+        {/* 잔존량은 시간에 따라 계속 줄어 매번 읽히지 않도록 이 부분만 live 끔 (오늘 누적 변화는 안내됨) */}
+        <div className={s.heroNumRow} aria-live="off">
           <span className={s.heroNum}>{Math.round(currentBodyMg)}</span>
           <span className={s.heroUnit}>mg</span>
         </div>
@@ -474,7 +512,11 @@ export default function CaffeineClient() {
             type="button"
             aria-pressed={timeMode === 'custom'}
             className={`${s.timeModeBtn} ${timeMode === 'custom' ? s.optionActive : ''}`}
-            onClick={() => setTimeMode('custom')}
+            onClick={() => {
+              // 분 선택지는 5분 단위 — 현재 분(예: 37)을 그대로 두면 화면은 '00분'인데 37분으로 저장되는 불일치
+              setCustomM(m => Math.floor(m / 5) * 5)
+              setTimeMode('custom')
+            }}
           >직접 입력</button>
           {timeMode === 'custom' && (
             <div className={s.timeInputs}>
@@ -537,9 +579,11 @@ export default function CaffeineClient() {
               aria-label="카페인 함량 (mg)"
               placeholder="mg"
               value={customMg}
-              onChange={e => setCustomMg(e.target.value)}
+              onChange={e => { setCustomMg(e.target.value); setCustomErr('') }}
               min={1}
-              max={2000}
+              max={CUSTOM_MG_MAX}
+              aria-invalid={customErr ? true : undefined}
+              aria-describedby={customErr ? 'caf-custom-err' : undefined}
               onKeyDown={e => { if (e.key === 'Enter') addCustom() }}
             />
             <button
@@ -548,6 +592,7 @@ export default function CaffeineClient() {
               onClick={addCustom}
               disabled={!customMg || !parseFloat(customMg)}
             >+ 추가</button>
+            {customErr && <p id="caf-custom-err" className={s.customErr} role="alert">{customErr}</p>}
           </div>
         )}
       </div>
@@ -565,7 +610,7 @@ export default function CaffeineClient() {
         ) : (
           <ul className={s.entryList}>
             {sortedEntries.map(e => {
-              const remain = remainAtTime(e.caffeine, e.consumedAtMs, nowMs, halfHours)
+              const remain = remainAtTime(e.caffeine, e.consumedAtMs, nowT, halfHours)
               const pctRemain = (remain / e.caffeine) * 100
               return (
                 <li key={e.id} className={s.entryItem}>
@@ -602,7 +647,7 @@ export default function CaffeineClient() {
           />
         </div>
 
-        {bedtimeMs !== null && sleepImpact && (
+        {clockReady && bedtimeMs !== null && sleepImpact && (
           <>
             <div className={s.sleepResult}>
               <div className={s.sleepLeft}>
@@ -616,7 +661,7 @@ export default function CaffeineClient() {
               </div>
             </div>
 
-            {maxAddableForSafe && (
+            {clockReady && maxAddableForSafe && (
               <div className={s.addableBox}>
                 <div className={s.addableTitle}>취침 시 잔존을 기준치 이하로 두려면 (참고 · 내부 추정)</div>
                 <div className={s.addableGrid}>
@@ -646,28 +691,29 @@ export default function CaffeineClient() {
       </div>
 
       {/* ─── 시간별 곡선 ─── */}
-      {entries.length > 0 && (
+      {clockReady && entries.length > 0 && (
         <div className={s.chartCard}>
           <div className={s.cardLabel}>시간별 체내 카페인 (6h 전 ~ 12h 후)</div>
-          <svg viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
+          <svg ref={chartRef} viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
             {/* 그리드 */}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
               <line key={t} x1={PL} x2={W - PR} y1={PT + t * plotH} y2={PT + t * plotH}
-                stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                stroke="var(--border)" strokeWidth="1" />
             ))}
             {/* Y축 */}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
               <text key={t} x={PL - 6} y={PT + (1 - t) * plotH + 3}
-                fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                fill="var(--muted)" fontSize="11" textAnchor="end">
                 {Math.round(t * maxMg)}
               </text>
             ))}
             {/* X축 (시) */}
             {Array.from({ length: 7 }, (_, i) => {
+              if (i % xLabelStep !== 0) return null
               const t = chartData.startMs + (chartData.endMs - chartData.startMs) * (i / 6)
               return (
-                <text key={i} x={xFromT(t)} y={H - PB + 14}
-                  fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                <text key={i} x={xFromT(t)} y={H - PB + 16}
+                  fill="var(--muted)" fontSize="11" textAnchor="middle">
                   {fmtHM(t)}
                 </text>
               )
@@ -680,7 +726,7 @@ export default function CaffeineClient() {
                   strokeWidth="1" strokeDasharray="3 4" opacity="0.6" />
                 <text x={W - PR - 4} y={yFromMg(t) - 3}
                   fill={t === 30 ? '#059669' : t === 100 ? '#D97706' : '#DC2626'}
-                  fontSize="9" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{t}mg</text>
+                  fontSize="11" textAnchor="end">{t}mg</text>
               </g>
             ))}
             {/* 영역·곡선 */}
@@ -688,15 +734,15 @@ export default function CaffeineClient() {
             <path d={linePath} fill="none" stroke="var(--accent)" strokeWidth="2" />
             {/* 현재 시각 */}
             <line x1={nowX} x2={nowX} y1={PT} y2={H - PB}
-              stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" strokeDasharray="2 3" />
-            <circle cx={nowX} cy={yFromMg(currentBodyMg)} r="4" fill="var(--accent)" stroke="#000" strokeWidth="1.5" />
-            <text x={nowX} y={PT - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>지금</text>
+              stroke="var(--muted)" strokeWidth="1.5" strokeDasharray="2 3" />
+            <circle cx={nowX} cy={yFromMg(currentBodyMg)} r="4" fill="var(--accent)" stroke="var(--bg2)" strokeWidth="1.5" />
+            <text x={nowX} y={PT - 5} fill="var(--muted)" fontSize="11" textAnchor="middle">지금</text>
             {/* 취침 시각 */}
             {bedX !== null && (
               <>
                 <line x1={bedX} x2={bedX} y1={PT} y2={H - PB}
-                  stroke="#B885DA" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.7" />
-                <text x={bedX} y={PT - 4} fill="#B885DA" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>취침</text>
+                  stroke="var(--cat-unit)" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.7" />
+                <text x={bedX} y={PT - 5} fill="var(--cat-unit-ink)" fontSize="11" textAnchor="middle">취침</text>
               </>
             )}
           </svg>

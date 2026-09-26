@@ -169,10 +169,11 @@ export function dateOffsetLabel(baseY: number, baseM: number, baseD: number, tgt
 // 시간대 카테고리 (해당 도시 현지 hour 기준)
 export type TimeBucket = 'sleep' | 'morning' | 'work' | 'evening' | 'late'
 
-export function classifyHour(hour: number): TimeBucket {
+/** hour는 소수 허용(분/60). 근무 구간은 사용자가 정한 근무시간을 따른다 — 회의 슬롯 판정(findMeetingSlots)과 같은 기준 */
+export function classifyHour(hour: number, workStart = 9, workEnd = 18): TimeBucket {
+  if (hour >= workStart && hour < workEnd) return 'work'
   if (hour < 6) return 'sleep'
-  if (hour < 9) return 'morning'
-  if (hour < 18) return 'work'
+  if (hour < workStart) return 'morning'
   if (hour < 22) return 'evening'
   return 'late'
 }

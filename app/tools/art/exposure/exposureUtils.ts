@@ -210,7 +210,8 @@ export const CROPS: CropMeta[] = [
   { id: 'apsc',       label: 'APS-C (Sony·Nikon·Fuji)',      factor: 1.5,  desc: '약 23.5×15.7mm — 소니 a6700·니콘 Z50II·Z fc(DX)·후지 X-T5' },
   { id: 'apscCanon',  label: 'APS-C (Canon)',                factor: 1.6,  desc: '약 22.3×14.9mm — 캐논 R7·R10·R50·R100' },
   { id: 'm43',        label: 'M4/3 (OM SYSTEM·Panasonic)',   factor: 2.0,  desc: '17.3×13.0mm — OM SYSTEM OM-1·파나소닉 GH 시리즈' },
-  { id: 'inch1',      label: '1형 (1인치)',                   factor: 2.7,  desc: '13.2×8.8mm — 소니 RX100 시리즈·캐논 G7 X (실 대각선 15.86mm)' },
+  /* 1형 크롭은 43.27 ÷ 15.86 = 2.73 — 같은 사이트 화각 계산기(fov)와 같은 값을 쓴다(예전 2.7). */
+  { id: 'inch1',      label: '1형 (1인치)',                   factor: 2.73, desc: '13.2×8.8mm — 소니 RX100 시리즈·캐논 G7 X (실 대각선 15.86mm)' },
 ]
 
 export const getCrop = (id: CropFactor) => CROPS.find((c) => c.id === id) ?? CROPS[0]
@@ -548,8 +549,11 @@ export function calcNDStackedShutter(originalShutter: number, totalStops: number
 /** 셔터 시간 → 가독적 라벨 */
 export function fmtShutter(seconds: number): string {
   if (seconds >= 60) {
-    const m = Math.floor(seconds / 60)
-    const s = Math.round(seconds - m * 60)
+    /* 총 초를 먼저 반올림한 뒤 분·초로 나눈다 — 나머지를 반올림하면 59.6초가 60이 되어
+       '1분 60초'·'499999분 60초' 같은 표기가 나왔다. */
+    const total = Math.round(seconds)
+    const m = Math.floor(total / 60)
+    const s = total % 60
     return s > 0 ? `${m}분 ${s}초` : `${m}분`
   }
   if (seconds >= 1) return `${seconds.toFixed(seconds < 10 ? 1 : 0)} 초`

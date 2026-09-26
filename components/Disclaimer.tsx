@@ -1,13 +1,14 @@
 /* ──────────────────────────────────────────────────────
-   components/Disclaimer.tsx
-   사이트 전체 통일된 면책 고지 컴포넌트.
-   - 페이지 하단에 단일 배치 권장 (중복 표시 X)
-   - variant: 'default' (참고용 일반) | 'medical' (의료) | 'finance' (금융) | 'legal' (법률) | 'safety' (안전·산행 등)
+   components/Disclaimer.tsx — 사이트 전체 통일 면책 고지 (스펙 §10.11)
+   ─ props 불변: variant · children · related · sources · open (200곳 호출 호환)
+   ─ variant별 녹·적·보라 색 테마를 폐지하고 전 variant 같은 중립 박스 — 문구만 variant별
+   ─ 기본 접힘 · 페이지 맨 끝(관련 도구 아래)에 1회. <ToolPage>가 가이드 안의 Disclaimer를 본문 시트 밖 끝으로 옮긴다.
+   ─ variant: 'default'(참고용) | 'medical'(의료) | 'finance'(금융) | 'legal'(법률) | 'safety'(안전)
    ────────────────────────────────────────────────────── */
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 import UiIcon from './UiIcon'
 import styles from './Disclaimer.module.css'
-import type { ReactNode } from 'react'
 
 export type DisclaimerVariant = 'default' | 'medical' | 'finance' | 'legal' | 'safety'
 
@@ -69,49 +70,34 @@ const VARIANT_CONFIG: Record<DisclaimerVariant, { title: string; baseLines: stri
 }
 
 export default function Disclaimer({ variant = 'default', children, related, sources, open = false }: Props) {
-  const cfg = VARIANT_CONFIG[variant]
-
+  const cfg = VARIANT_CONFIG[variant] ?? VARIANT_CONFIG.default
   return (
-    <details className={styles.disclaimer} data-variant={variant} aria-label="이용 안내" open={open || undefined}>
-      <summary className={styles.head}>
-        {/* variant별 이모지(OS 상이 렌더링) → 통일 경고 라인 아이콘. 색은 variant 테마 상속 */}
-        <span className={styles.emoji} aria-hidden>
-          <UiIcon name="alert" size={14} />
-        </span>
-        <strong className={styles.title}>{cfg.title}</strong>
-        <span className={styles.toggle} aria-hidden>자세히</span>
-        <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" aria-hidden>
-          <path d="M3 4.5 L6 7.5 L9 4.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+    <details className={styles.dc} data-variant={variant} open={open || undefined}>
+      <summary>
+        <UiIcon name="info" size={18} />
+        <span className={styles.dcTitle}>{cfg.title}</span>
+        <span className={styles.dcMore} aria-hidden="true">자세히<UiIcon name="chev-d" size={16} /></span>
       </summary>
-      <div className={styles.body}>
-        <ul className={styles.list}>
-          {cfg.baseLines.map((line, i) => (
-            <li key={`base-${i}`}>{line}</li>
-          ))}
-          {children && <li className={styles.custom}>{children}</li>}
+      <div className={styles.dcBody}>
+        <ul>
+          {cfg.baseLines.map(line => <li key={line}>{line}</li>)}
+          {children && <li className={styles.dcCustom}>{children}</li>}
         </ul>
         {sources && sources.length > 0 && (
-          <div className={styles.sources}>
-            <span className={styles.sourcesLabel}>근거 자료</span>
-            {sources.map((sc, i) => (
-              <span key={sc.href}>
-                <a href={sc.href} className={styles.sourceLink} target="_blank" rel="noopener noreferrer">{sc.label} ↗</a>
-                {i < sources.length - 1 && <span className={styles.dot}> · </span>}
-              </span>
+          <p className={styles.dcRow}>
+            <span className={styles.dcRowLabel}>근거 자료</span>
+            {sources.map(s => (
+              <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer">
+                {s.label}<UiIcon name="ext" size={14} /><span className="srOnly">(새 창)</span>
+              </a>
             ))}
-          </div>
+          </p>
         )}
         {related && related.length > 0 && (
-          <div className={styles.related}>
-            관련 도구:{' '}
-            {related.map((r, i) => (
-              <span key={r.href}>
-                <Link href={r.href} className={styles.relatedLink}>{r.label}</Link>
-                {i < related.length - 1 && <span className={styles.dot}> · </span>}
-              </span>
-            ))}
-          </div>
+          <p className={styles.dcRow}>
+            <span className={styles.dcRowLabel}>관련 도구</span>
+            {related.map(r => <Link key={r.href} href={r.href}>{r.label}</Link>)}
+          </p>
         )}
       </div>
     </details>

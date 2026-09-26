@@ -3,8 +3,11 @@ import ParkGolfClient from './ParkGolfClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { DEFAULT_PARS_9, MAX_STROKES, scoreTerm, playerTotal, rankPlayers } from './parkGolfData'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/park-golf',
@@ -16,8 +19,26 @@ export const metadata = buildMetadata({
   ],
 })
 
+/* ── 예시 라운드 — 도구와 같은 함수(parkGolfData)로 빌드 시 계산 ── */
+const PAR_SUM = DEFAULT_PARS_9.reduce((a, b) => a + b, 0)
+const PAR_COUNT = [3, 4, 5].map((p) => ({ p, n: DEFAULT_PARS_9.filter((x) => x === p).length }))
+const EX_A = [4, 3, 5, 5, 2, 4, 3, 6, 3] // 8번 홀: 티샷 OB(1타 + 2벌타) 후 3타 더 → 6타
+const EX_B = [3, 3, 4, 4, 3, 5, 1, 4, 3] // 7번 홀(파3) 홀인원
+const EX_TOT = [playerTotal(EX_A, DEFAULT_PARS_9), playerTotal(EX_B, DEFAULT_PARS_9)]
+const EX_RANK = rankPlayers(EX_TOT)
+// 진행 중 비교: A는 5홀, C는 4홀까지 입력 — 총타수는 C가 적지만 파 대비로는 A가 앞선다
+const MID_A = playerTotal(EX_A.slice(0, 5), DEFAULT_PARS_9.slice(0, 5))
+const MID_B = playerTotal([4, 4, 5, 4], DEFAULT_PARS_9.slice(0, 4))
+const MID_RANK = rankPlayers([MID_A, MID_B])
+const toParStr = (n: number) => (n === 0 ? 'E' : n > 0 ? `+${n}` : `${n}`)
+
+const TH: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12, whiteSpace: 'nowrap' }
+const TD: React.CSSProperties = { padding: '10px 12px', color: 'var(--text)', verticalAlign: 'top' }
+const TDN: React.CSSProperties = { ...TD, fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }
+const ROW = (i: number): React.CSSProperties => ({ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' })
+
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -65,14 +86,11 @@ const RELATED = [
 
 export default function ParkGolfPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        스포츠
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/sports/park-golf">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />파크골프 스코어카드
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         9홀 파33부터 18홀까지 — <strong style={{ color: 'var(--text)' }}>최대 4인 실시간 합계·순위</strong>에 라운드 기록 저장까지. 종이 스코어카드는 이제 그만.
       </p>
 
@@ -89,15 +107,74 @@ export default function ParkGolfPage() {
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
-        {/* 1. 스코어 용어 */}
+        {/* 1. 계산 방식 */}
         <section>
-          <h2 style={sectionTitle}>스코어 용어 — 골프와 똑같아요</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">스코어카드는 이렇게 계산합니다</h2>
+          <p className="g-p">
+            홀마다 <strong>벌타까지 포함한 총 타수</strong>를 적으면 합계·파 대비 점수·순위가 바로 갱신됩니다. 각 칸의 ＋를 처음 누르면 그 홀의 파 타수부터 시작해 입력이 빠르고, 한 홀은 최대 {MAX_STROKES}타까지 기록됩니다. 홀별 파는 3~5 사이에서 바꿀 수 있어 구장마다 다른 홀 배치를 그대로 옮길 수 있습니다.
+          </p>
+          <ul className="g-list">
+            <li><strong>합계</strong> — 입력한 홀의 타수를 모두 더합니다. 18홀이면 전반(1~9홀)·후반(10~18홀) 합을 괄호로 함께 보여 줍니다.</li>
+            <li><strong>파 대비</strong> — 합계에서 <strong>입력한 홀들의 파 합</strong>을 뺀 값입니다. 0이면 E(이븐), 음수면 언더, 양수면 오버입니다.</li>
+            <li><strong>순위</strong> — 총타수가 아니라 파 대비 점수로 매깁니다. 같은 점수면 공동 순위이고, 아직 입력이 없는 사람은 순위에서 빠집니다.</li>
+            <li><strong>더블파 컷</strong> — 켜면 각 홀 타수가 파의 2배를 넘지 않게 잘립니다. 켜는 순간 이미 적은 점수와 이후 파를 낮춘 홀에도 소급 적용됩니다.</li>
+          </ul>
+          <p className="g-p">
+            순위를 파 대비로 매기는 이유는 진행 중 비교 때문입니다. 예를 들어 A가 5홀까지 {MID_A.total}타({toParStr(MID_A.toPar)}), C가 4홀까지 {MID_B.total}타({toParStr(MID_B.toPar)})라면 총타수로는 C가 앞서 보이지만 그건 한 홀을 덜 쳤기 때문입니다. 파 대비로 비교하면 A {MID_RANK[0]}위, C {MID_RANK[1]}위가 되고, 모두가 같은 홀을 마치면 총타수 순위와 같아집니다.
+          </p>
+        </section>
+
+        {/* 2. 예시 라운드 */}
+        <section>
+          <h2 className="g-h2">예시 라운드 — 표준 9홀 파{PAR_SUM}</h2>
+          <p className="g-p">
+            도구의 기본 홀 배치(파 {DEFAULT_PARS_9.join('·')})로 두 사람이 친 라운드를 스코어카드에 넣으면 아래처럼 표시됩니다. A의 8번 홀은 티샷이 OB가 나 1타 + 2벌타로 3타를 쓴 뒤, 처치한 공으로 3타 만에 컵인해 총 6타(더블보기)입니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 360 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['홀', '파', 'A', 'B'].map((h) => <th scope="col" key={h} style={TH}>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {DEFAULT_PARS_9.map((par, h) => (
+                  <tr key={h} style={ROW(h)}>
+                    <th scope="row" style={{ ...TDN, textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h + 1}</th>
+                    <td style={TDN}>{par}</td>
+                    {[EX_A[h], EX_B[h]].map((sc, k) => (
+                      <td key={k} style={TDN}>
+                        <strong>{sc}</strong> <span style={{ color: 'var(--muted)', fontSize: 12 }}>{scoreTerm(sc, par)?.label}</span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                <tr style={{ borderTop: '2px solid var(--border)' }}>
+                  <th scope="row" style={{ ...TD, textAlign: 'left', fontWeight: 700 }}>합계</th>
+                  <td style={{ ...TDN, fontWeight: 700 }}>{PAR_SUM}</td>
+                  {EX_TOT.map((t, k) => (
+                    <td key={k} style={{ ...TDN, fontWeight: 700, color: 'var(--accent-ink)' }}>
+                      {t.total}타 ({toParStr(t.toPar)}) · {EX_RANK[k]}위
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            B의 7번 홀처럼 1타 만에 넣으면 파와 관계없이 &lsquo;홀인원&rsquo;으로 표시됩니다(파3 홀인원 = −2, 파4 홀인원 = −3).
+          </p>
+        </section>
+
+        {/* 3. 스코어 용어 */}
+        <section>
+          <h2 className="g-h2">스코어 용어 — 골프와 똑같아요</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 400 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['파 대비', '명칭', '파4 홀 기준'].map((h) => (
-                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                    <th scope="col" key={h} style={TH}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -111,74 +188,91 @@ export default function ParkGolfPage() {
                   ['+2', '더블보기', '6타'],
                   ['파×2', '더블파 (양파)', '8타'],
                 ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{r[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[2]}</td>
+                  <tr key={i} style={ROW(i)}>
+                    <td style={{ ...TDN, color: 'var(--accent-ink)', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ ...TD, fontWeight: 600 }}>{r[1]}</td>
+                    <td style={{ ...TD, color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 파크골프는 홀이 짧아 파4·파5 홀인원도 실제로 나옵니다 — 파4 홀인원은 −3으로 알바트로스와 같은 값이에요.
+          <p className="g-note">
+            파크골프는 홀이 짧아 파4·파5 홀인원도 실제로 나옵니다 — 파4 홀인원은 −3으로 알바트로스와 같은 값이에요.
           </p>
         </section>
 
-        {/* 2. OB 규칙 */}
+        {/* 4. OB 규칙 */}
         <section>
-          <h2 style={sectionTitle}>OB 처리 3단계 — 스코어가 갈리는 지점</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-            {[
-              { t: '1️⃣ 2벌타 가산', d: '협회 규칙상 모든 벌타는 2타. OB가 확인되면 지금까지 친 타수에 2벌타를 더합니다. 티샷 OB면 1+2=3타 소진.' },
-              { t: '2️⃣ 처치 위치', d: '공이 나간 것으로 추정되는 지점에서 깃대를 보고 서서 좌우 2클럽 이내, 홀컵에 가깝지 않은 곳에 공을 놓아요.' },
-              { t: '3️⃣ 다음 샷 계산', d: '티샷 OB라면 처치 후 치는 샷이 4타째. 그 샷이 바로 컵인되면 총 4타 — 파4 홀이면 파로 기록됩니다.' },
-            ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{c.t}</p>
-                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
-              </div>
-            ))}
+          <h2 className="g-h2">OB 처리 3단계 — 스코어가 갈리는 지점</h2>
+          <ol className="g-list">
+            <li><strong>2벌타 가산</strong> — 협회 규칙상 모든 벌타는 2타입니다. OB가 확인되면 지금까지 친 타수에 2벌타를 더합니다. 티샷 OB면 1 + 2 = 3타를 쓴 셈입니다.</li>
+            <li><strong>처치 위치</strong> — 공이 나간 것으로 추정되는 지점에서 깃대를 보고 서서 좌우 2클럽 이내, 홀컵에 가깝지 않은 곳에 공을 놓습니다.</li>
+            <li><strong>다음 샷 계산</strong> — 티샷 OB라면 처치 후 치는 샷이 4타째입니다. 그 샷이 바로 컵인되면 총 4타 — 파4 홀이면 파로 기록됩니다.</li>
+          </ol>
+          <Callout tone="warn">
+            처치한 공을 홀컵 쪽(전방)에 놓으면 추가 2벌타가 붙습니다. 벌타는 별도 칸이 아니라 그 홀의 타수에 합산해 적으세요.
+          </Callout>
+        </section>
+
+        {/* 5. 코스 규격 */}
+        <section>
+          <h2 className="g-h2">코스 규격 — 국내 기준 vs 국제 기준</h2>
+          <p className="g-p">
+            파는 홀 길이로 정해집니다. 표준 9홀 파{PAR_SUM}의 구성과 파별 홀 길이 기준은 아래와 같고, 국제 기준(IPGA·일본 NPGA)은 같은 파 구성을 더 짧은 코스에 담습니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['파', '표준 9홀 개수', '국내 협회 계열 홀 길이', '국제(IPGA)'].map((h) => <th scope="col" key={h} style={TH}>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {PAR_COUNT.map(({ p, n }, i) => (
+                  <tr key={p} style={ROW(i)}>
+                    <th scope="row" style={{ ...TDN, textAlign: 'left', fontWeight: 700 }}>파{p}</th>
+                    <td style={TDN}>{n}개</td>
+                    <td style={TDN}>{p === 3 ? '40~60m' : p === 4 ? '60~100m' : '100~150m'}</td>
+                    <td style={{ ...TD, color: 'var(--muted)' }}>1홀 최대 100m</td>
+                  </tr>
+                ))}
+                <tr style={{ borderTop: '2px solid var(--border)' }}>
+                  <th scope="row" style={{ ...TD, textAlign: 'left', fontWeight: 700 }}>9홀 합</th>
+                  <td style={{ ...TDN, fontWeight: 700 }}>파{PAR_SUM}</td>
+                  <td style={TDN}>500~790m (확장형 허용)</td>
+                  <td style={{ ...TD, color: 'var(--muted)' }}>총 500m 이내</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 처치한 공을 홀컵 쪽(전방)에 놓으면 추가 2벌타가 붙으니 주의하세요. 벌타는 별도 칸이 아니라 홀 타수에 합산해 기록합니다.
+        </section>
+
+        {/* 6. 자주 틀리는 기록 */}
+        <section>
+          <h2 className="g-h2">스코어를 적을 때 자주 틀리는 부분</h2>
+          <ul className="g-list">
+            <li><strong>벌타를 따로 적기</strong> — 종이 카드 습관으로 벌타를 옆에 메모만 하고 합계에서 빠뜨리는 경우가 많습니다. OB 한 번이면 그 홀 타수에 바로 +2를 더하세요.</li>
+            <li><strong>구장 배치를 그대로 두기</strong> — 기본값은 표준 파 배열일 뿐, 1번 홀이 파3인 구장도 흔합니다. 첫 홀을 치기 전에 구장 안내판대로 파를 맞춰야 파 대비 점수가 맞습니다.</li>
+            <li><strong>더블파 컷을 공식 규칙으로 착각</strong> — 컷은 진행 속도를 위한 로컬룰입니다. 대회라면 요강에 컷 규정이 있는지 확인하고, 없으면 컵인까지의 실제 타수를 적습니다.</li>
+            <li><strong>중간 순위를 총타수로 비교</strong> — 동반자마다 입력한 홀 수가 다르면 총타수는 공정하지 않습니다. 리더보드의 파 대비 점수와 &lsquo;입력한 홀 수/전체 홀&rsquo; 표시를 함께 보세요.</li>
+          </ul>
+          <p className="g-p">
+            라운드를 저장하면 날짜·구장·홀 수·인원과 베스트 스코어가 이 브라우저에 최근 30개까지 남습니다. 같은 구장의 기록을 쌓아 두면 홀별로 어디서 타수를 잃는지 비교하기 쉽습니다. 공식 대회 기록은 대회 규정과 경기위원 판정이 우선합니다.
           </p>
         </section>
 
-        {/* 3. 코스 규격 */}
-        <section>
-          <h2 style={sectionTitle}>코스 규격 — 국내 기준 vs 국제 기준</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 8 }}>🇰🇷 국내 (협회 계열 공인)</p>
-              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>파3 40~60m · 파4 60~100m · 파5 100~150m</li>
-                <li>9홀 합계 500~790m — 확장형 코스 허용</li>
-                <li>9홀 파33 (파3×4 + 파4×4 + 파5×1)</li>
-              </ul>
-            </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cat-health)', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 8 }}>🌏 국제 (IPGA·일본 NPGA 기준)</p>
-              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>1홀 최대 100m</li>
-                <li>9홀 총 500m 이내 — 콤팩트 지향</li>
-                <li>파 구성은 국내와 동일 (9홀 파33)</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. FAQ */}
+        {/* 7. FAQ */}
         <section>
           <Faq items={FAQ_LD} />
         </section>
 
-        {/* 5. 관련 도구 */}
+        {/* 8. 관련 도구 */}
         <section>
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>
@@ -188,6 +282,6 @@ export default function ParkGolfPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

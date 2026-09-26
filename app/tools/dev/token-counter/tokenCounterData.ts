@@ -14,28 +14,59 @@ export interface ModelInfo {
   name: string
   vendor: Vendor
   vendorLabel: string
-  badge?: string                // 예: '최신', '저가', '대용량'
+  badge?: string                // 예: '저가', '균형'
   contextWindow: number         // 토큰
   inputPricePerM: number        // USD / 1M input tokens
   outputPricePerM: number       // USD / 1M output tokens
+  /** 긴 프롬프트 할증 — 입력이 threshold 토큰을 넘으면 요청 전체에 이 단가 적용 (Gemini 2.5 Pro 등) */
+  longContext?: { threshold: number; inputPricePerM: number; outputPricePerM: number }
+  /** 가이드 표의 한 줄 설명 */
+  note: string
   /** 추정 토크나이저 효율 — 'baseline' 가중치에 곱해지는 계수 */
   efficiency: 'gpt' | 'claude' | 'gemini'
 }
 
-/** 2026년 5월 기준 참고 단가. 정확한 가격은 각 공식 페이지에서 확인. */
+/** 가격 점검 시점 — page.tsx UpdatedMeta·표 제목과 Client 안내문이 함께 사용 */
+export const PRICE_CHECKED = '2026년 9월'
+
+/**
+ * 공개 표준 단가(USD/1M 토큰, 배치·캐시 할인 제외) — 대표 모델만 추린 참고표.
+ * 출처: Anthropic platform.claude.com/docs/en/about-claude/pricing (Opus 5 $5/$25·1M, Sonnet 5 $2/$10·1M, Haiku 4.5 $1/$5·200K),
+ *       OpenAI openai.com/api/pricing (GPT-5 $1.25/$10, GPT-5 mini $0.25/$2, GPT-4o $2.50/$10),
+ *       Google ai.google.dev/gemini-api/docs/pricing (2.5 Pro $1.25/$10, 200K 초과 $2.50/$15 · 1,048,576 토큰, 2.5 Flash $0.30/$2.50).
+ * 새 모델 출시·가격 변경이 잦으므로 PRICE_CHECKED와 함께 주기적으로 갱신할 것.
+ */
 export const MODELS: ModelInfo[] = [
   // OpenAI
-  { id: 'gpt-4o',        name: 'GPT-4o',        vendor: 'openai',    vendorLabel: 'OpenAI',    badge: '주력',  contextWindow: 128_000,   inputPricePerM: 2.50, outputPricePerM: 10.00, efficiency: 'gpt' },
-  { id: 'gpt-4o-mini',   name: 'GPT-4o mini',   vendor: 'openai',    vendorLabel: 'OpenAI',    badge: '저가',  contextWindow: 128_000,   inputPricePerM: 0.15, outputPricePerM: 0.60,  efficiency: 'gpt' },
-  { id: 'gpt-4-turbo',   name: 'GPT-4 Turbo',   vendor: 'openai',    vendorLabel: 'OpenAI',                  contextWindow: 128_000,   inputPricePerM: 10.00,outputPricePerM: 30.00, efficiency: 'gpt' },
+  { id: 'gpt-5',         name: 'GPT-5',         vendor: 'openai',    vendorLabel: 'OpenAI',                  contextWindow: 400_000,   inputPricePerM: 1.25, outputPricePerM: 10.00, efficiency: 'gpt', note: '범용 추론 모델 (입력+출력 합산 400K)' },
+  { id: 'gpt-5-mini',    name: 'GPT-5 mini',    vendor: 'openai',    vendorLabel: 'OpenAI',    badge: '저가',  contextWindow: 400_000,   inputPricePerM: 0.25, outputPricePerM: 2.00,  efficiency: 'gpt', note: '저가형 — 분류·요약·추출' },
+  { id: 'gpt-4o',        name: 'GPT-4o',        vendor: 'openai',    vendorLabel: 'OpenAI',    badge: '이전 세대', contextWindow: 128_000, inputPricePerM: 2.50, outputPricePerM: 10.00, efficiency: 'gpt', note: '이전 세대 멀티모달 모델' },
   // Anthropic
-  { id: 'claude-opus',   name: 'Claude Opus 4', vendor: 'anthropic', vendorLabel: 'Anthropic', badge: '최강',  contextWindow: 200_000,   inputPricePerM: 15.00,outputPricePerM: 75.00, efficiency: 'claude' },
-  { id: 'claude-sonnet', name: 'Claude Sonnet 4',vendor: 'anthropic',vendorLabel: 'Anthropic', badge: '균형',  contextWindow: 200_000,   inputPricePerM: 3.00, outputPricePerM: 15.00, efficiency: 'claude' },
-  { id: 'claude-haiku',  name: 'Claude Haiku 4.5',vendor:'anthropic',vendorLabel: 'Anthropic', badge: '저가',  contextWindow: 200_000,   inputPricePerM: 0.80, outputPricePerM: 4.00,  efficiency: 'claude' },
+  { id: 'claude-opus-5',   name: 'Claude Opus 5',    vendor: 'anthropic', vendorLabel: 'Anthropic', badge: '고성능', contextWindow: 1_000_000, inputPricePerM: 5.00, outputPricePerM: 25.00, efficiency: 'claude', note: '복잡한 추론·코딩·장문 작업' },
+  { id: 'claude-sonnet-5', name: 'Claude Sonnet 5',  vendor: 'anthropic', vendorLabel: 'Anthropic', badge: '균형',   contextWindow: 1_000_000, inputPricePerM: 2.00, outputPricePerM: 10.00, efficiency: 'claude', note: '성능·비용 균형형' },
+  { id: 'claude-haiku-4-5',name: 'Claude Haiku 4.5', vendor: 'anthropic', vendorLabel: 'Anthropic', badge: '저가',   contextWindow: 200_000,   inputPricePerM: 1.00, outputPricePerM: 5.00,  efficiency: 'claude', note: '빠르고 저렴 — 분류·태깅' },
   // Google
-  { id: 'gemini-2.5-pro',  name: 'Gemini 2.5 Pro',  vendor: 'google', vendorLabel: 'Google', badge: '대용량', contextWindow: 2_000_000, inputPricePerM: 1.25, outputPricePerM: 10.00, efficiency: 'gemini' },
-  { id: 'gemini-2.5-flash',name: 'Gemini 2.5 Flash',vendor: 'google', vendorLabel: 'Google', badge: '빠름',   contextWindow: 1_000_000, inputPricePerM: 0.30, outputPricePerM: 2.50,  efficiency: 'gemini' },
+  { id: 'gemini-2.5-pro',  name: 'Gemini 2.5 Pro',  vendor: 'google', vendorLabel: 'Google', badge: '장문', contextWindow: 1_048_576, inputPricePerM: 1.25, outputPricePerM: 10.00, efficiency: 'gemini', note: '긴 문서 — 입력 200K 초과 시 $2.50/$15', longContext: { threshold: 200_000, inputPricePerM: 2.50, outputPricePerM: 15.00 } },
+  { id: 'gemini-2.5-flash',name: 'Gemini 2.5 Flash',vendor: 'google', vendorLabel: 'Google', badge: '저가', contextWindow: 1_048_576, inputPricePerM: 0.30, outputPricePerM: 2.50,  efficiency: 'gemini', note: '저가 + 1M 컨텍스트' },
 ]
+
+/** 입력 토큰 수에 따라 적용되는 단가 (긴 프롬프트 할증 반영) */
+export function priceFor(m: ModelInfo, inputTokens: number): { input: number; output: number } {
+  if (m.longContext && inputTokens > m.longContext.threshold) {
+    return { input: m.longContext.inputPricePerM, output: m.longContext.outputPricePerM }
+  }
+  return { input: m.inputPricePerM, output: m.outputPricePerM }
+}
+
+/** 컨텍스트 한도 표기 — 1,048,576(2^20)·1,000,000은 1M, 그 밖은 K 단위 */
+export function fmtContext(n: number): string {
+  if (n % 1_048_576 === 0) return `${n / 1_048_576}M`
+  if (n >= 1_000_000) return `${Math.round(n / 100_000) / 10}M`
+  return `${Math.round(n / 1000).toLocaleString('en-US')}K`
+}
+
+/** 컨텍스트 막대 기준(가장 큰 모델 한도) */
+export const MAX_CONTEXT = Math.max(...MODELS.map((m) => m.contextWindow))
 
 export const VENDOR_COLOR: Record<Vendor, string> = {
   openai:    '#10A37F',
@@ -130,7 +161,7 @@ export const SAMPLES: { id: string; label: string; text: string }[] = [
   {
     id: 'mix',
     label: '한영 혼합',
-    text: 'GPT-4o의 context window는 128K token입니다. 긴 문서를 한 번에 요약하려면 Gemini 2.5 Pro (2M tokens)을 고려해보세요. Claude도 200K로 충분합니다.',
+    text: 'GPT-4o의 context window는 128K token입니다. 긴 문서를 한 번에 요약하려면 Gemini 2.5 Pro (1M tokens)를 고려해보세요. Claude Sonnet 5도 1M을 지원합니다.',
   },
   {
     id: 'code',

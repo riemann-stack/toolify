@@ -120,7 +120,7 @@ export default function CharCountClient() {
     const twc = twitterCount(text)
     const tw = twc.weighted
 
-    // 읽기·말하기 시간 (한국어 기준 약 300자/분 묵독, 150자/분 발화)
+    // 읽기·말하기 시간 — 300자/분 묵독·150자/분 발화는 계산용 가정값(공식 통계 아님)
     const readingMin = len / 300
     const speakingMin = len / 150
     const englishWPM = words / 200
@@ -145,8 +145,12 @@ export default function CharCountClient() {
     }
   }, [text])
 
-  // 플랫폼별 카운트 — 각 플랫폼이 실제로 쓰는 계산 방식으로
+  // 플랫폼별 카운트 — 각 플랫폼이 실제로 쓰는 계산 방식으로.
+  // 이미 stats에서 센 값은 다시 계산하지 않는다(X 가중치·EUC-KR·UTF-8은 행마다 전체 순회).
   function platformCount(p: PlatformLimit): number {
+    if (p.method === 'twitterWeighted') return stats.tw
+    if (p.method === 'eucKrBytes') return stats.eucKr
+    if (p.method === 'utf8Bytes') return stats.utf8
     return countFor(text, p.method)
   }
 
@@ -191,7 +195,8 @@ export default function CharCountClient() {
       const re = new RegExp(findStr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), flags)
       const matches = text.match(re)
       count = matches ? matches.length : 0
-      const replaced = text.replace(re, replaceStr)
+      /* 콜백으로 넘겨야 바꿀 문자열의 '$&'·'$$' 같은 치환 패턴이 해석되지 않고 그대로 들어간다 */
+      const replaced = text.replace(re, () => replaceStr)
       return { count, replaced }
     } catch {
       return { count: 0, replaced: text }
@@ -206,9 +211,9 @@ export default function CharCountClient() {
     <div className={s.wrap}>
       {/* 탭 */}
       <div className={`${s.tabs} ${s.tabsThree}`}>
-        <button type="button" role="tab" aria-selected={tab === 'count'} className={`${s.tabBtn} ${tab === 'count'     ? s.tabActive : ''}`} onClick={() => setTab('count')}>실시간 통계</button>
-        <button type="button" role="tab" aria-selected={tab === 'platforms'} className={`${s.tabBtn} ${tab === 'platforms' ? s.tabActive : ''}`} onClick={() => setTab('platforms')}>플랫폼별 제한</button>
-        <button type="button" role="tab" aria-selected={tab === 'tools'} className={`${s.tabBtn} ${tab === 'tools'     ? s.tabActive : ''}`} onClick={() => setTab('tools')}>변환·찾기·빈도</button>
+        <button type="button" aria-pressed={tab === 'count'} className={`${s.tabBtn} ${tab === 'count'     ? s.tabActive : ''}`} onClick={() => setTab('count')}>실시간 통계</button>
+        <button type="button" aria-pressed={tab === 'platforms'} className={`${s.tabBtn} ${tab === 'platforms' ? s.tabActive : ''}`} onClick={() => setTab('platforms')}>플랫폼별 제한</button>
+        <button type="button" aria-pressed={tab === 'tools'} className={`${s.tabBtn} ${tab === 'tools'     ? s.tabActive : ''}`} onClick={() => setTab('tools')}>변환·찾기·빈도</button>
       </div>
 
       {/* 입력 — 모든 탭 공통 */}
@@ -246,7 +251,7 @@ export default function CharCountClient() {
             marginTop: 10, fontSize: 12, lineHeight: 1.75, color: 'var(--text)',
             background: 'color-mix(in srgb, var(--warning) 8%, transparent)',
             border: '1px solid color-mix(in srgb, var(--warning) 35%, transparent)',
-            borderRadius: 8, padding: '10px 12px',
+            borderRadius: 'var(--radius-s)', padding: '10px 12px',
           }}>
             ⚠️ EUC-KR로 표현할 수 없는 문자가 <strong>{stats.eucUnsupported.length}개</strong> 있습니다
             ({[...new Set(stats.eucUnsupported)].slice(0, 8).join(' ')}
@@ -280,13 +285,13 @@ export default function CharCountClient() {
                   onChange={e => setTargetLimit(e.target.value.replace(/[^\d]/g, ''))}
                   style={{
                     width: 110, background: 'var(--bg3)', border: '1px solid var(--border)',
-                    borderRadius: 8, padding: '7px 10px', fontFamily: 'var(--font-mono)',
+                    borderRadius: 'var(--radius-s)', padding: '7px 10px', fontFamily: 'var(--font-mono)',
                     fontSize: 14, color: 'var(--text)', textAlign: 'right',
                   }}
                 />
                 <span style={{ fontSize: 12, color: 'var(--muted)' }}>자 (공백 포함)</span>
                 {hasTarget && (
-                  <span style={{ marginLeft: 'auto', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 14, color: over ? 'var(--danger)' : 'var(--accent-ink)' }}>
+                  <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 14, color: over ? 'var(--danger)' : 'var(--accent-ink)' }}>
                     {over ? `초과 ${fmt(stats.len - targetN)}자` : `남은 ${fmt(targetN - stats.len)}자`}
                     <span style={{ color: 'var(--muted)', fontWeight: 600, fontSize: 12, marginLeft: 6 }}>{fmt(stats.len)} / {fmt(targetN)}</span>
                   </span>
@@ -307,7 +312,7 @@ export default function CharCountClient() {
         <>
           {/* 핵심 4개 요약 */}
           <div className={s.summaryGrid}>
-            <div className={`${s.summaryItem} ${s.summaryItemBig}`}>
+            <div className={`${s.summaryItem} ${s.summaryItemBig}`} role="status">
               <p className={s.summaryItemLabel}>총 글자수</p>
               <p className={s.summaryItemNum}>{fmt(stats.len)}</p>
             </div>
@@ -362,7 +367,7 @@ export default function CharCountClient() {
           </div>
 
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-            ※ 원고지는 200자 기준(공백 포함) · 묵독 약 300자/분 · 발화 약 150자/분 (한국어 표준 기준 추정)
+            ※ 원고지는 200자 기준(공백 포함) · 묵독 약 300자/분 · 발화 약 150자/분 (계산용 가정값 — 공식 통계 아님)
           </p>
         </>
       )}
@@ -386,7 +391,7 @@ export default function CharCountClient() {
                           <span
                             title={SOURCE_TIER_LABEL[p.tier]}
                             style={{
-                              fontSize: 10, marginLeft: 6, padding: '1px 6px', borderRadius: 999,
+                              fontSize: 11, marginLeft: 6, padding: '1px 6px', borderRadius: 'var(--radius-pill)',
                               border: '1px solid var(--border)',
                               color: p.tier === 'official' ? 'var(--success)' : 'var(--muted)',
                               background: 'var(--bg3)', whiteSpace: 'nowrap',
@@ -420,7 +425,7 @@ export default function CharCountClient() {
             </p>
             <p style={{ margin: '0 0 6px' }}>
               계산 방식도 플랫폼마다 다릅니다 — X는 가중치(한글·이모지 2, URL은 길이 무관 23),
-              SMS는 EUC-KR 바이트, Threads는 UTF-8 바이트, 나머지는 UTF-16 길이입니다.
+              SMS는 EUC-KR 바이트, Threads는 글자 수(이모지만 UTF-8 바이트로 가산), 나머지는 UTF-16 길이입니다.
             </p>
             <p style={{ margin: 0 }}>
               ※ 2026년 8월 확인 기준이며 플랫폼 정책은 예고 없이 바뀝니다. 중요한 게시물은 공식 페이지에서 최신 한도를 확인하세요.
@@ -471,7 +476,7 @@ export default function CharCountClient() {
             <div className={s.cardTop}>
               <label className={s.cardLabel}>찾기·바꾸기</label>
               {findReplaceResult && (
-                <span style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>
+                <span style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
                   {findReplaceResult.count}회 일치
                 </span>
               )}
@@ -479,21 +484,23 @@ export default function CharCountClient() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 8 }}>
               <input
                 type="text"
+                aria-label="찾을 문자열"
                 placeholder="찾을 문자열"
                 value={findStr}
                 onChange={e => setFindStr(e.target.value)}
                 style={{
-                  background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8,
+                  background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
                   padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)',
                 }}
               />
               <input
                 type="text"
+                aria-label="바꿀 문자열"
                 placeholder="바꿀 문자열"
                 value={replaceStr}
                 onChange={e => setReplaceStr(e.target.value)}
                 style={{
-                  background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8,
+                  background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
                   padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)',
                 }}
               />

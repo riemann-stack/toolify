@@ -3,14 +3,25 @@
 //   - 농산물 가격 조회 — KAMIS OpenAPI (한국농수산식품유통공사)
 //   - 환경변수 KAMIS_API_KEY / KAMIS_API_ID 설정 시 실시간 조회
 //   - 미설정 또는 응답 없음 시 폴백: 최근 평균 소매가
-//   - 1시간 캐싱 (revalidate)
+//   - 1시간 캐싱 (revalidate + 응답 Cache-Control s-maxage)
+//   - 같은 출처 클라이언트(kimjang·holiday-table) 전용: CORS 헤더 없음 + 교차 사이트 브라우저 호출 403
+//   - KAMIS 호출 시간 예산: 카테고리당 총 8초(날짜 재시도 합산), 네트워크 오류·타임아웃이면 재시도 중단
 // ─────────────────────────────────────────────────────────────
+
+import { timingSafeEqual } from 'node:crypto'
+import { apiJson, crossSiteForbidden, isCrossSiteRequest } from '../_lib/http'
 
 // KAMIS는 해외·글로벌 IP에서 응답이 막히거나 매우 느립니다(타임아웃).
 // 서울 리전(icn1) Node 런타임에서 호출해 국내 IP로 도달 가능성을 높입니다.
 export const runtime = 'nodejs'
 export const preferredRegion = 'icn1'
 export const revalidate = 3600  // 1h 캐시
+
+/** 카테고리별 KAMIS 호출 총 예산(날짜 재시도 합산) · 1회 호출 상한 */
+const KAMIS_BUDGET_MS = 8000
+const KAMIS_ATTEMPT_MAX_MS = 6000
+/** items 파라미터 상한 (매핑 표가 12종이라 그 이상은 무의미) */
+const MAX_ITEMS = 20
 
 /** 김장·명절 도구의 ingredient id → KAMIS 품목/품종 코드 매핑
  *  실측 코드는 https://www.kamis.or.kr/customer/reference/openapi_list.do 참조
@@ -58,14 +69,7 @@ interface KamisItem {
 }
 
 function json(data: { ok: boolean; results?: PriceResult[]; error?: string }, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
-      'Access-Control-Allow-Origin': '*',
-    },
-  })
+  return apiJson(data, status, 'public, max-age=3600, s-maxage=3600')
 }
 
 /** UTC 기준 daysAgo일 전 날짜 (YYYY-MM-DD). KAMIS는 KST/UTC 모두 같은 날짜로 인식. */
@@ -77,11 +81,14 @@ function kamisDate(daysAgo: number): string {
   return `${y}-${m}-${day}`
 }
 
+/** 1회 호출 결과 — 'error'면 네트워크·HTTP 문제(다른 날짜 재시도 무의미), 'ok'인데 빈 배열이면 그 날짜 데이터 없음 */
+type KamisFetch = { status: 'ok'; items: KamisItem[] } | { status: 'error' }
+
 /** 카테고리 단위로 1회 호출 — 결과를 응답 그대로의 item 배열로 돌려줍니다. */
-async function fetchKamisCategory(categoryCode: string, regday: string): Promise<KamisItem[]> {
+async function fetchKamisCategory(categoryCode: string, regday: string, timeoutMs: number): Promise<KamisFetch> {
   const apiKey = process.env.KAMIS_API_KEY
   const apiId = process.env.KAMIS_API_ID
-  if (!apiKey || !apiId) return []
+  if (!apiKey || !apiId) return { status: 'error' }
 
   const url = new URL('https://www.kamis.or.kr/service/price/xml.do')
   url.searchParams.set('action', 'dailyPriceByCategoryList')
@@ -95,33 +102,39 @@ async function fetchKamisCategory(categoryCode: string, regday: string): Promise
   url.searchParams.set('p_returntype', 'json')
 
   try {
-    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(8000) })
+    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(timeoutMs) })
     if (!res.ok) {
       console.error('[kamis] HTTP', res.status, categoryCode, regday)
-      return []
+      return { status: 'error' }
     }
     const j: unknown = await res.json()
     // 응답 구조 변종 흡수: {data:{item:[...]}} | {data:[...]} | {price:[...]}
     type AnyShape = { data?: { item?: KamisItem[] } | KamisItem[]; price?: KamisItem[]; error_code?: string }
-    const root = j as AnyShape
-    if (Array.isArray(root.data)) return root.data
+    const root = (j ?? {}) as AnyShape
+    if (Array.isArray(root.data)) return { status: 'ok', items: root.data }
     if (root.data && Array.isArray((root.data as { item?: KamisItem[] }).item)) {
-      return (root.data as { item?: KamisItem[] }).item ?? []
+      return { status: 'ok', items: (root.data as { item?: KamisItem[] }).item ?? [] }
     }
-    if (Array.isArray(root.price)) return root.price
-    return []
+    if (Array.isArray(root.price)) return { status: 'ok', items: root.price }
+    return { status: 'ok', items: [] }
   } catch (e) {
     console.error('[kamis] fetch error', categoryCode, regday, String(e))
-    return []
+    return { status: 'error' }
   }
 }
 
-/** 어제·그제·3일·5일 전까지 차례로 시도. 주말/공휴일 데이터 공백 대응. */
+/** 어제·그제·3일·5일 전까지 차례로 시도(주말/공휴일 데이터 공백 대응).
+ *  총 예산 KAMIS_BUDGET_MS 안에서만, 그리고 '데이터 없음'일 때만 다음 날짜로 — 타임아웃·HTTP 오류면 즉시 중단
+ *  (기존: 날짜마다 8초 × 4회 순차 = 최악 32초). */
 async function fetchKamisCategoryWithRetry(categoryCode: string): Promise<{ items: KamisItem[]; date: string }> {
+  const deadline = Date.now() + KAMIS_BUDGET_MS
   for (const daysAgo of [1, 2, 3, 5]) {
+    const remain = deadline - Date.now()
+    if (remain < 500) break
     const date = kamisDate(daysAgo)
-    const items = await fetchKamisCategory(categoryCode, date)
-    if (items.length > 0) return { items, date }
+    const r = await fetchKamisCategory(categoryCode, date, Math.min(KAMIS_ATTEMPT_MAX_MS, remain))
+    if (r.status === 'error') break
+    if (r.items.length > 0) return { items: r.items, date }
   }
   return { items: [], date: '' }
 }
@@ -140,7 +153,19 @@ function matchItem(items: KamisItem[], itemCode: string, kindCode: string): Kami
   })
 }
 
-/** KAMIS 연결 진단 — /api/produce-price?debug=1
+/** 진단 모드 인가 — 환경변수 KAMIS_DEBUG_TOKEN(16자 이상)이 설정돼 있고 요청 헤더 x-debug-token이 일치할 때만.
+ *  토큰 미설정이면 진단 모드는 꺼져 있다(공개 호출로 키 레이트리밋 소진·원본 응답 노출 방지).
+ *  사용: curl -H "x-debug-token: $KAMIS_DEBUG_TOKEN" "https://youtil.kr/api/produce-price?debug=1" */
+function debugAuthorized(req: Request): boolean {
+  const expected = process.env.KAMIS_DEBUG_TOKEN
+  const given = req.headers.get('x-debug-token')
+  if (!expected || expected.length < 16 || !given) return false
+  const a = Buffer.from(given)
+  const b = Buffer.from(expected)
+  return a.length === b.length && timingSafeEqual(a, b)
+}
+
+/** KAMIS 연결 진단 — /api/produce-price?debug=1 (+ x-debug-token 헤더, debugAuthorized 참고)
  *  키/ID는 응답에 노출하지 않고(REDACTED), HTTP 상태·소요시간·원본 응답 일부만 반환.
  *  Vercel 배포 환경에서 직접 호출해 "키는 맞는데 왜 안 되는지"를 확인할 수 있습니다. */
 async function debugKamis(): Promise<Record<string, unknown>> {
@@ -181,7 +206,7 @@ async function debugKamis(): Promise<Record<string, unknown>> {
 
   try {
     const t0 = Date.now()
-    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(8000) })
+    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(KAMIS_ATTEMPT_MAX_MS), cache: 'no-store' })
     diag.httpStatus = res.status
     diag.elapsedMs = Date.now() - t0
     const text = await res.text()
@@ -199,26 +224,23 @@ async function debugKamis(): Promise<Record<string, unknown>> {
 export async function GET(req: Request): Promise<Response> {
   const sp = new URL(req.url).searchParams
 
-  // 진단 모드
-  if (sp.get('debug') === '1') {
+  // 진단 모드 — 토큰 인가된 요청만. 그 외 debug 파라미터는 존재를 드러내지 않고 404.
+  if (sp.has('debug')) {
+    if (!debugAuthorized(req)) return apiJson({ ok: false, error: 'not found' }, 404, 'no-store')
     const diag = await debugKamis()
-    return new Response(JSON.stringify({ ok: true, debug: diag }, null, 2), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Cache-Control': 'no-store',
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
+    return apiJson({ ok: true, debug: diag }, 200, 'no-store')
   }
 
-  const itemsParam = sp.get('items') ?? ''
-  const ids = itemsParam.split(',').map((s) => s.trim()).filter(Boolean)
+  if (isCrossSiteRequest(req)) return crossSiteForbidden()
+
+  const itemsParam = (sp.get('items') ?? '').slice(0, 512)
+  const ids = Array.from(new Set(itemsParam.split(',').map((s) => s.trim()).filter(Boolean))).slice(0, MAX_ITEMS)
   if (ids.length === 0) return json({ ok: false, error: 'items 파라미터 필요' }, 400)
 
   // 매핑된 항목만 추출
   const targets = ids
-    .map((id) => ({ id, m: KAMIS_MAP[id] }))
+    // hasOwnProperty — '__proto__'·'constructor' 같은 프로토타입 키가 매핑으로 오인되지 않게
+    .map((id) => ({ id, m: Object.prototype.hasOwnProperty.call(KAMIS_MAP, id) ? KAMIS_MAP[id] : undefined }))
     .filter((x): x is { id: string; m: typeof KAMIS_MAP[string] } => !!x.m)
 
   // 카테고리별로 1회씩만 호출 (9개 아이템이라도 200+400 두 번이면 끝)

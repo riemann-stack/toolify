@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   calcHoldingTax,
-  propertyFmvRatio,
   compElderRate,
   compLongHoldRate,
   COMP_DEDUCT_ONEHOUSE,
@@ -22,6 +21,7 @@ const STORAGE_KEY = 'youtil:property-holding-tax:inputs-v1'
 const PRICE_MAX = 100_000_000_000
 const MAX_YEARS = 99
 const MAX_AGE = 120
+const MAX_HOUSE_INPUTS = 10 // 다주택 주택별 입력칸 상한
 
 const HOUSE_SEGS: { id: HouseCount; label: string }[] = [
   { id: 1, label: '1주택' },
@@ -65,6 +65,7 @@ interface Stored {
   holdYears?: unknown
   age?: unknown
   prevPropTax?: unknown
+  prices?: unknown
 }
 
 export default function PropertyHoldingTaxClient() {
@@ -75,6 +76,8 @@ export default function PropertyHoldingTaxClient() {
   const [holdYears, setHoldYears] = useState('0')
   const [age, setAge] = useState('0')
   const [prevPropTax, setPrevPropTax] = useState('')
+  // 다주택: 주택별 공시가격 (재산세는 물건별 과세라 합산 입력하면 누진이 과대 적용됨)
+  const [prices, setPrices] = useState<string[]>(['', ''])
   const [copied, setCopied] = useState(false)
 
   /* localStorage 복원 — 무검증 as 금지: 타입·범위·enum 검증 */
@@ -84,6 +87,7 @@ export default function PropertyHoldingTaxClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j: Stored = JSON.parse(raw)
+      /* eslint-disable react-hooks/set-state-in-effect -- 마운트 후 1회 복원(하이드레이션 안전 패턴) */
       if (typeof j.price === 'string') setPrice(commafy(j.price))
       if (isHouseCount(j.houses)) setHouses(j.houses)
       if (typeof j.oneHouse === 'boolean') setOneHouse(j.oneHouse)
@@ -91,6 +95,10 @@ export default function PropertyHoldingTaxClient() {
       if (typeof j.holdYears === 'string' && /^\d{1,2}$/.test(j.holdYears)) setHoldYears(j.holdYears)
       if (typeof j.age === 'string' && /^\d{1,3}$/.test(j.age)) setAge(j.age)
       if (typeof j.prevPropTax === 'string') setPrevPropTax(commafy(j.prevPropTax))
+      if (Array.isArray(j.prices) && j.prices.length <= MAX_HOUSE_INPUTS && j.prices.every((v) => typeof v === 'string')) {
+        setPrices((j.prices as string[]).map(commafy))
+      }
+      /* eslint-enable react-hooks/set-state-in-effect */
     } catch {}
   }, [])
 
@@ -100,18 +108,31 @@ export default function PropertyHoldingTaxClient() {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ price, houses, oneHouse, urbanArea, holdYears, age, prevPropTax }),
+        JSON.stringify({ price, houses, oneHouse, urbanArea, holdYears, age, prevPropTax, prices }),
       )
     } catch {}
-  }, [price, houses, oneHouse, urbanArea, holdYears, age, prevPropTax])
+  }, [price, houses, oneHouse, urbanArea, holdYears, age, prevPropTax, prices])
 
   /* 2주택 이상이면 1세대1주택은 자동 해제 (논리적 모순 방지) */
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 주택 수와 1세대1주택 플래그의 규칙적 제약 동기화
     if (houses !== 1 && oneHouse) setOneHouse(false)
   }, [houses, oneHouse])
 
   /* 파싱 + 입력단 클램프 */
   const priceN = useMemo(() => Math.min(PRICE_MAX, Math.max(0, parseAmount(price))), [price])
+  const multi = houses !== 1
+  const houseInputCount = houses === 2 ? 2 : Math.min(MAX_HOUSE_INPUTS, Math.max(3, prices.length))
+  const housePricesN = useMemo(
+    () => (multi ? Array.from({ length: houseInputCount }, (_, i) => Math.min(PRICE_MAX, Math.max(0, parseAmount(prices[i] ?? '')))) : []),
+    [multi, houseInputCount, prices],
+  )
+  /* lib가 0원 칸을 걸러내므로 perHouse 인덱스 ≠ 입력칸 번호 → 입력칸 번호(1-based)를 따로 보존 */
+  const houseNos = useMemo(
+    () => housePricesN.flatMap((v, i) => (Number.isFinite(v) && v > 0 ? [i + 1] : [])),
+    [housePricesN],
+  )
+  const totalPriceN = multi ? housePricesN.reduce((a, b) => a + b, 0) : priceN
   const holdYearsN = Math.min(MAX_YEARS, Math.max(0, parseInt(holdYears, 10) || 0))
   const ageN = Math.min(MAX_AGE, Math.max(0, parseInt(age, 10) || 0))
   const prevPropTaxN = Math.min(PRICE_MAX, Math.max(0, parseAmount(prevPropTax)))
@@ -123,38 +144,51 @@ export default function PropertyHoldingTaxClient() {
   const r = useMemo(
     () =>
       calcHoldingTax({
-        publicPrice: priceN,
+        publicPrice: totalPriceN,
+        publicPrices: multi ? housePricesN : undefined,
         houses,
         oneHouse: isOneHouseEffective,
         urbanArea,
         holdYears: isOneHouseEffective ? holdYearsN : 0,
         age: isOneHouseEffective ? ageN : 0,
       }),
-    [priceN, houses, isOneHouseEffective, urbanArea, holdYearsN, ageN],
+    [totalPriceN, multi, housePricesN, houses, isOneHouseEffective, urbanArea, holdYearsN, ageN],
   )
 
   const { property: p, comp: c } = r
 
   /* 표시용 적용 요율 (lib 헬퍼 — 재구현 아님) */
-  const fmvRatioApplied = propertyFmvRatio(priceN, isOneHouseEffective) // === p.fmvRatio
   const elderRate = compElderRate(isOneHouseEffective ? ageN : 0)
   const longHoldRate = compLongHoldRate(isOneHouseEffective ? holdYearsN : 0)
 
-  const hasPrice = priceN > 0
+  const hasPrice = totalPriceN > 0
+
+  /* 주택 수 변경 — 다주택으로 처음 바꿀 때 1주택 입력값을 첫 칸으로 옮겨 준다 */
+  const changeHouses = (h: HouseCount) => {
+    setHouses(h)
+    if (h !== 1 && prices.every((v) => !v) && price) setPrices([price, ...prices.slice(1)])
+  }
+  const setHousePrice = (i: number, v: string) =>
+    setPrices((prev) => {
+      const next = [...prev]
+      while (next.length <= i) next.push('')
+      next[i] = commafy(v)
+      return next
+    })
 
   /* 복사 */
   const summary = useMemo(() => {
     const houseLabel = HOUSE_SEGS.find((h) => h.id === houses)!.label
     return (
       `[주택 보유세 추정]\n` +
-      `공시가격 ${fmtWon(priceN)}원 · ${houseLabel}${isOneHouseEffective ? ' · 1세대1주택' : ''}\n` +
+      `공시가격${multi ? ' 합계' : ''} ${fmtWon(totalPriceN)}원 · ${houseLabel}${isOneHouseEffective ? ' · 1세대1주택' : ''}\n` +
       `연간 총 보유세 약 ${fmtWon(r.total)}원 (월 ${fmtWon(r.monthly)}원)\n` +
       `· 재산세 ${fmtWon(p.total)}원 (본세 ${fmtWon(p.baseTax)} + 도시지역분 ${fmtWon(p.urbanTax)} + 지방교육세 ${fmtWon(p.eduTax)})\n` +
       `· 종합부동산세 ${c.taxable ? `${fmtWon(c.total)}원 (결정세액 ${fmtWon(c.decidedTax)} + 농특세 ${fmtWon(c.ruralTax)})` : '비과세'}\n` +
       `· 공시가 대비 실효세율 ${pct(r.effectiveRate)}\n` +
       `※ 2026 기준 단순 추정 · 위택스/홈택스 확인 · youtil.kr`
     )
-  }, [priceN, houses, isOneHouseEffective, r, p, c])
+  }, [totalPriceN, multi, houses, isOneHouseEffective, r, p, c])
 
   const onCopy = async () => {
     try {
@@ -169,30 +203,72 @@ export default function PropertyHoldingTaxClient() {
       {/* ── 공시가격 ── */}
       <div className={s.card}>
         <span className={s.cardLabel}>주택 공시가격</span>
-        <div className={s.field}>
-          <label className={s.fieldLabel} htmlFor="pht-price">공시가격 (원)</label>
-          <input
-            id="pht-price"
-            type="text"
-            inputMode="numeric"
-            className={s.input}
-            value={price}
-            onChange={(e) => setPrice(commafy(e.target.value))}
-            placeholder="800,000,000"
-          />
-          <p className={s.helpText}>
-            {hasPrice ? (
-              <>
-                <strong className={s.cellAccent}>{eokLabel(priceN)}</strong> 입력됨 · 부동산 공시가격 알리미(공동주택공시가격) 기준
-              </>
-            ) : (
-              '국토부 부동산 공시가격 알리미의 공시가격을 입력하세요'
+        {!multi ? (
+          <div className={s.field}>
+            <label className={s.fieldLabel} htmlFor="pht-price">공시가격 (원)</label>
+            <input
+              id="pht-price"
+              type="text"
+              inputMode="numeric"
+              className={s.input}
+              value={price}
+              onChange={(e) => setPrice(commafy(e.target.value))}
+              placeholder="800,000,000"
+            />
+            <p className={s.helpText}>
+              {hasPrice ? (
+                <>
+                  <strong className={s.cellAccent}>{eokLabel(priceN)}</strong> 입력됨 · 부동산 공시가격 알리미(공동주택공시가격) 기준
+                </>
+              ) : (
+                '국토부 부동산 공시가격 알리미의 공시가격을 입력하세요'
+              )}
+            </p>
+          </div>
+        ) : (
+          <>
+            {Array.from({ length: houseInputCount }, (_, i) => (
+              <div className={s.field} key={i}>
+                <label className={s.fieldLabel} htmlFor={`pht-price-${i + 1}`}>{i + 1}번 주택 공시가격 (원)</label>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <input
+                    id={`pht-price-${i + 1}`}
+                    type="text"
+                    inputMode="numeric"
+                    className={s.input}
+                    value={prices[i] ?? ''}
+                    onChange={(e) => setHousePrice(i, e.target.value)}
+                    placeholder="0"
+                  />
+                  {houses === 3 && i >= 3 && i === houseInputCount - 1 && (
+                    <button
+                      type="button"
+                      className={s.houseBtn}
+                      onClick={() => setPrices((prev) => prev.slice(0, i))}
+                      aria-label={`${i + 1}번 주택 입력칸 삭제`}
+                    >
+                      삭제
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+            {houses === 3 && houseInputCount < MAX_HOUSE_INPUTS && (
+              <button
+                type="button"
+                className={s.houseBtn}
+                style={{ alignSelf: 'flex-start', marginBottom: 12 }}
+                onClick={() => setHousePrice(houseInputCount, '')}
+              >
+                + 주택 추가
+              </button>
             )}
-            {houses !== 1 && (
-              <> · <strong>다주택은 보유 주택 합산 공시가격</strong>을 입력 (단일 합계 전제)</>
-            )}
-          </p>
-        </div>
+            <p className={s.helpText}>
+              {hasPrice && <><strong className={s.cellAccent}>합계 {eokLabel(totalPriceN)}</strong> · </>}
+              재산세는 주택마다 따로 계산해 더하고, 종합부동산세는 공시가격 합계로 계산합니다.
+            </p>
+          </>
+        )}
       </div>
 
       {/* ── 보유 주택 수 ── */}
@@ -204,7 +280,7 @@ export default function PropertyHoldingTaxClient() {
               key={h.id}
               type="button"
               className={`${s.seg} ${houses === h.id ? s.segActive : ''}`}
-              onClick={() => setHouses(h.id)}
+              onClick={() => changeHouses(h.id)}
               aria-pressed={houses === h.id}
             >
               {h.label}
@@ -400,7 +476,7 @@ export default function PropertyHoldingTaxClient() {
                 <caption>재산세 (주택분)</caption>
                 <tbody>
                   <tr>
-                    <td>과세표준 (공시 {fmtWon(priceN)} × {pct(p.fmvRatio)})</td>
+                    <td>{multi ? `과세표준 (주택별 공시 × ${pct(p.fmvRatio)} 합계)` : `과세표준 (공시 ${fmtWon(priceN)} × ${pct(p.fmvRatio)})`}</td>
                     <td className={s.cellMono}>{fmtWon(p.taxBase)}원</td>
                   </tr>
                   <tr>
@@ -422,6 +498,12 @@ export default function PropertyHoldingTaxClient() {
                     <td><strong>재산세 합계</strong></td>
                     <td className={`${s.cellMono} ${s.cellAccent}`}><strong>{fmtWon(p.total)}원</strong></td>
                   </tr>
+                  {r.perHouse.length > 1 && r.perHouse.map((h, i) => (
+                    <tr className={s.subRow} key={i}>
+                      <td>┗ 주택 {houseNos[i] ?? i + 1} (공시 {eokLabel(Math.round(h.taxBase / h.fmvRatio))})</td>
+                      <td className={s.cellMono}>{fmtWon(h.total)}원</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -453,7 +535,7 @@ export default function PropertyHoldingTaxClient() {
                       <td className={s.cellMono}>{fmtWon(c.computedTax)}원</td>
                     </tr>
                     <tr className={s.subRow}>
-                      <td>┗ 재산세 중복분 공제 (약식)</td>
+                      <td>┗ 재산세 중복분 공제</td>
                       <td className={s.cellMono}>−{fmtWon(c.propOverlap)}원</td>
                     </tr>
                     {isOneHouseEffective && (
@@ -482,7 +564,7 @@ export default function PropertyHoldingTaxClient() {
             )}
             {c.taxable && (
               <p className={s.helpText}>
-                ※ 재산세 중복분 공제는 표준 재산세 본세 기준 <strong>약식</strong> 산정입니다. 세액공제(고령·장기)는 1세대 1주택자만 적용되며 합산 한도 80%입니다.
+                ※ 재산세 중복분 공제는 종부세 과세표준에 해당하는 재산세 상당액(과세표준 × 재산세 공정시장가액비율 × 0.4%)을 부과된 재산세 비율로 환산한 값입니다(세부담상한 미반영). 세액공제(고령·장기)는 1세대 1주택자만 적용되며 합산 한도 80%입니다.
               </p>
             )}
           </div>

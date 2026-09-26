@@ -2,9 +2,20 @@ import Link from 'next/link'
 import EggTimerClient from './EggTimerClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import styles from './egg-timer.module.css'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { calculate, fmtMS, DONENESS, SIZES, type CalcInputs } from './eggUtils'
+import { eggGrade, eggGradeRangeText } from '@/lib/krEggGrades'
+
+// 크기별 흔한 용도 (중량 기준은 lib/krEggGrades · 시간 보정은 eggUtils.SIZES)
+const SIZE_USE: Record<string, string> = {
+  wang: '대형마트·이중노른자 가능성', teuk: '마트·편의점 표준 (가장 흔함)', dae: '소형마트·재래시장', jung: '계란말이·간편식', so: '베이킹·도시락',
+}
+const XL_RANGE = eggGradeRangeText(eggGrade('XL'))
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/egg-timer',
@@ -26,19 +37,21 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '22px',
-  fontWeight: 700,
-  marginBottom: '14px',
-  letterSpacing: '-0.01em',
-}
-const faqAnswer: React.CSSProperties = {
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
-  margin: 0,
-}
+/* ── 보정표·계산 예시 — 도구의 calculate()로 빌드 시 생성 ── */
+const calc = (donenessId: string, over: Partial<CalcInputs> = {}) =>
+  calculate({ donenessId, sizeId: 'teuk', tempId: 'room', methodId: 'boil', count: 1, altitudeM: 0, ...over })
+const MATRIX_COLS: { label: string; over: Partial<CalcInputs> }[] = [
+  { label: '특란·실온 (기준)', over: {} },
+  { label: '특란·냉장', over: { tempId: 'fridge' } },
+  { label: '왕란·냉장', over: { sizeId: 'wang', tempId: 'fridge' } },
+  { label: '대란·실온', over: { sizeId: 'dae' } },
+  { label: '찜기·특란·실온', over: { methodId: 'steam' } },
+]
+const MATRIX = DONENESS.map(d => ({ id: d.id, label: d.label, cells: MATRIX_COLS.map(c => fmtMS(calc(d.id, c.over).totalSec)) }))
+const EX1 = calc('jammy', { sizeId: 'wang', tempId: 'fridge' })
+const EX2 = calc('hard', { methodId: 'steam', count: 12 })
+const EX3 = calc('soft', { sizeId: 'dae', altitudeM: 1000 })
+const HARD_SEC = DONENESS.find(d => d.id === 'hard')!.seconds
 
 const FAQ_LD = [
               {
@@ -51,11 +64,11 @@ const FAQ_LD = [
               },
               {
                 q: '노른자가 회녹색이 되는 이유?',
-                a: '<strong>너무 오래 끓이면</strong> 흰자의 황(S)과 노른자의 철(Fe)이 반응해 황화철(FeS)이 형성됩니다. 회색-녹색 띠처럼 보이며 황 냄새가 납니다.<br/><br/><strong>안전성 문제는 없지만</strong> 식감과 비주얼이 떨어집니다.<br/>예방 —<br/>· 12분 이내로 끝내기<br/>· 완성 즉시 얼음물에 5분 (반응 정지)<br/>· 자주 발생하면 시간 1~2분 단축',
+                a: '<strong>너무 오래 끓이면</strong> 흰자의 황(S)과 노른자의 철(Fe)이 반응해 황화철(FeS)이 형성됩니다. 회색-녹색 띠처럼 보이며 황 냄새가 납니다.<br/><br/><strong>안전성 문제는 없지만</strong> 식감과 비주얼이 떨어집니다.<br/>예방 —<br/>· 13분 넘게 삶았다면 그대로 두지 말고 바로 식히기<br/>· 완성 즉시 얼음물에 5분 (반응 정지) — 단단한 완숙(14분)은 특히 필수<br/>· 자주 발생하면 시간 1~2분 단축',
               },
               {
                 q: '잼 노른자 정확한 시간은?',
-                a: '<strong>7분 (특란 + 실온 + 끓는 물 투입)</strong>이 표준. 라멘 아지타마와 양념장계란(마야크 에그)의 핵심 단계입니다. 흰자는 완전히 익고 노른자는 걸쭉한 잼 농도.<br/><br/>정확도가 중요하니 다음 조건 통일 —<br/>· 크기: 특란 (68~78g)<br/>· 온도: 실온 (30분 꺼낸 상태) — 냉장 시 8분<br/>· 조리법: 끓는 물 투입 → 정확히 7분 → 즉시 얼음물 5분<br/>· 껍질 까기: 5~7일 묵은 계란 사용 + 둥근 쪽부터<br/><br/>±15초 차이로 농도가 크게 달라지므로 타이머 필수.',
+                a: `<strong>7분 (특란 + 실온 + 끓는 물 투입)</strong>이 표준. 라멘 아지타마와 양념장계란(마야크 에그)의 핵심 단계입니다. 흰자는 완전히 익고 노른자는 걸쭉한 잼 농도.<br/><br/>정확도가 중요하니 다음 조건 통일 —<br/>· 크기: 특란(XL, ${XL_RANGE})<br/>· 온도: 실온 (30분 꺼낸 상태) — 냉장 시 8분<br/>· 조리법: 끓는 물 투입 → 정확히 7분 → 즉시 얼음물 5분<br/>· 껍질 까기: 5~7일 묵은 계란 사용 + 둥근 쪽부터<br/><br/>±15초 차이로 농도가 크게 달라지므로 타이머 필수.`,
               },
               {
                 q: '라면 계란 반숙은 몇 분?',
@@ -85,14 +98,22 @@ const FAQ_LD = [
 
 export default function EggTimerPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={880} slug="/tools/cooking/egg-timer">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />계란 삶는 시간 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         반숙·완숙·잼노른자 <strong style={{ color: 'var(--text)' }}>8단계 익힘</strong> + 계란 크기·시작 온도 자동 보정 + 실시간 타이머.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="계란 크기는 축산법 시행규칙 중량규격(2XL~S, 2026.5.21 명칭 개편) · 가열 기준은 식약처 살모넬라 예방 수칙(중심온도 75℃ 1분 이상)"
+        sources={[
+          { label: '농림축산식품부 계란 중량규격 명칭 개편(2026.5.21)', href: 'https://www.mafra.go.kr/home/5109/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaG9tZSUyRjc5MiUyRjU3Nzk4MiUyRmFydGNsVmlldy5kbyUzRg%3D%3D' },
+          { label: '식약처 살모넬라 식중독 예방', href: 'https://www.mfds.go.kr/brd/m_99/view.do?seq=43647' },
+          { label: 'USDA FSIS Shell Eggs from Farm to Table', href: 'https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/eggs/shell-eggs-farm-table' },
+        ]}
+      />
 
       <EggTimerClient />
 
@@ -101,11 +122,11 @@ export default function EggTimerPage() {
 
         {/* 1. 익힘 8단계 시간표 */}
         <section>
-          <h2 style={sectionTitle}>익힘 8단계 — 30초 단위로 기억하자</h2>
-          <p style={{ ...faqAnswer, marginBottom: '14px' }}>
-            끓는 물에 특란을 투입한 시점부터 측정한 시간 기준. 30초 단위로 노른자 농도가 크게 달라지므로 본 도구로 정확히 맞추세요.
+          <h2 className="g-h2">익힘 8단계 — 30초 단위로 기억하자</h2>
+          <p className="g-p">
+            끓는 물에 특란을 넣은 순간부터 잰 시간 기준입니다. 30초 단위로 노른자 농도가 크게 달라지므로 타이머로 정확히 맞추세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -126,7 +147,7 @@ export default function EggTimerPage() {
                   ['14:00',  '단단한 완숙',      '아주 단단',           '장조림·김밥·백숙용'],
                 ].map(([t, stage, yolk, use], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{t}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{t}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{stage}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{yolk}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{use}</td>
@@ -135,15 +156,18 @@ export default function EggTimerPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ ...faqAnswer, marginTop: '12px', fontSize: '12px' }}>
-            ※ 특란(68~78g) + 실온(20°C) + 끓는 물 투입 기준. 냉장 계란은 +1분, 왕란은 +30초.
+          <p className="g-note">
+            ※ 특란({XL_RANGE}) + 실온(20°C) + 끓는 물 투입 기준. 냉장 계란은 +1분, 왕란은 +30초.
           </p>
         </section>
 
         {/* 2. 한국 계란 크기 */}
         <section>
-          <h2 style={sectionTitle}>한국 계란 크기 (축산물품질평가원 중량 규격)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">한국 계란 크기 (축산물 등급판정 세부기준 중량규격)</h2>
+          <p className="g-p">
+            2026년 5월 21일 축산법 시행규칙 개정으로 명칭이 왕란→2XL, 특란→XL, 대란→L, 중란→M, 소란→S로 바뀌었습니다. 중량 기준은 그대로이고, 2026년 11월까지 6개월 유예기간 동안은 두 명칭이 함께 쓰입니다.
+          </p>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -154,17 +178,16 @@ export default function EggTimerPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['왕란', '78g+',     '+30초',  '대형마트·이중노른자 가능성'],
-                  ['특란', '68~78g',   '기준',   '마트·편의점 표준 (가장 흔함)'],
-                  ['대란', '60~68g',   '-15초',  '소형마트·재래시장'],
-                  ['중란', '52~60g',   '-30초',  '계란말이·간편식'],
-                  ['소란', '44~52g',   '-45초',  '베이킹·도시락'],
-                ].map(([size, w, adj, use], i) => (
+                {SIZES.map(z => [
+                  z.label.replace('(', ' ('),
+                  z.rangeG.replace('g+', 'g 이상'),
+                  z.adjustmentSec === 0 ? '기준' : `${z.adjustmentSec > 0 ? '+' : '-'}${Math.abs(z.adjustmentSec)}초`,
+                  SIZE_USE[z.id] ?? '',
+                ]).map(([size, w, adj, use], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{size}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{w}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{adj}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{w}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}>{adj}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{use}</td>
                   </tr>
                 ))}
@@ -175,8 +198,8 @@ export default function EggTimerPage() {
 
         {/* 3. 한국 요리 추천표 — 핵심 팁 컬럼 제거, 모바일 1줄 표시 */}
         <section>
-          <h2 style={sectionTitle}>한국 요리별 익힘 추천</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">한국 요리별 익힘 추천</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 380 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -201,57 +224,97 @@ export default function EggTimerPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{dish}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{stage}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, textAlign: 'right' }}>{time}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700, textAlign: 'right' }}>{time}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ ...faqAnswer, marginTop: '10px', fontSize: '12px' }}>
-            💡 <strong style={{ color: 'var(--text)' }}>특란 + 끓는 물 투입 + 실온</strong> 기준. 냉장 계란은 +1분, 왕란은 +30초. 라면 계란은 라면 끓이기와 별도로 삶은 뒤 토핑하는 것이 정확합니다 (라면 자체 조리 시간이 3~5분이라 동시 조리 어려움).
+          <div style={{ marginTop: 12 }}>
+            <Callout tone="tip">
+              <strong>특란 + 끓는 물 투입 + 실온</strong> 기준. 냉장 계란은 +1분, 왕란은 +30초. 라면 계란은 라면 끓이기와 별도로 삶은 뒤 토핑하는 것이 정확합니다 (라면 자체 조리 시간이 3~5분이라 동시 조리 어려움).
+            </Callout>
+          </div>
+        </section>
+
+        {/* 3-1. 보정 계산 방식 — calculate()로 생성 */}
+        <section>
+          <h2 className="g-h2">시간 보정은 이렇게 계산됩니다</h2>
+          <p className="g-p">
+            계산기는 익힘 단계의 기준 시간(특란·실온·끓는 물 투입)에서 출발해 순서대로 보정합니다. 먼저 <strong>찜기는 기준 시간 × 1.1</strong>을 하고, 계란 크기(왕란 +30초 · 대란 −15초 · 중란 −30초 · 소란 −45초)와 시작 온도(냉장 +1분 · 미지근 −30초)를 더합니다.
+            찬물에 계란을 같이 넣고 끓이는 <strong>냉수 시작</strong>은 물이 끓는 순간 타이머를 켜고, 기준 시간에서 1분을 뺍니다. 그다음 <strong>고도 100m당 1%</strong>를 곱하고, 마지막으로 한 번에 <strong>12~17개는 +1분, 18개 이상은 +2분</strong>을 더합니다. 인스턴트팟(5-5-5 룰)은 이 보정과 관계없이 압력 5분·자연감압 5분·얼음물 5분으로 고정됩니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>익힘 단계</th>
+                  {MATRIX_COLS.map(c => (
+                    <th scope="col" key={c.label} style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>{c.label}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {MATRIX.map((r, i) => (
+                  <tr key={r.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r.label}</td>
+                    {r.cells.map((v, j) => (
+                      <td key={j} style={{ padding: '10px 12px', textAlign: 'right', color: j === 0 ? 'var(--accent-ink)' : 'var(--text)', fontWeight: j === 0 ? 700 : 400, whiteSpace: 'nowrap' }}>{v}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            몇 가지 예를 풀어 보면 이렇습니다. 냉장고에서 바로 꺼낸 <strong>왕란으로 잼 노른자</strong>를 만들면 7분 + 30초(왕란) + 1분(냉장) = <strong>{fmtMS(EX1.totalSec)}</strong>입니다.
+            <strong> 찜기에 특란 12개를 표준 완숙</strong>으로 찌면 11분 30초 × 1.1에 1분(12개)을 더해 <strong>{fmtMS(EX2.totalSec)}</strong>이 나옵니다.
+            해발 1,000m 캠핑장에서 <strong>대란 반숙</strong>을 삶으면 (6분 − 15초) × 1.10 = <strong>{fmtMS(EX3.totalSec)}</strong>으로, 물이 100℃보다 낮은 온도에서 끓는 만큼 시간을 늘립니다.
+            보정값은 가정용 냄비·가스레인지에서 흔히 쓰는 경험치라, 화력이 약하거나 물이 적어 계란을 넣은 뒤 다시 끓기까지 오래 걸리면 표보다 30초~1분 더 필요할 수 있습니다. 한 번 삶아 잘라 보고 다음번에 30초 단위로 조정하세요.
+          </p>
+        </section>
+
+        {/* 3-2. 식품 안전·보관 */}
+        <section>
+          <h2 className="g-h2">반숙 계란과 식품 안전 · 삶은 계란 보관</h2>
+          <p className="g-p">
+            달걀 껍데기와 드물게 내용물에는 살모넬라균이 있을 수 있습니다. 식약처는 달걀 요리를 <strong>중심온도 75℃에서 1분 이상</strong> 가열하고, 가급적 <strong>노른자와 흰자가 모두 단단해질 때까지</strong> 익혀 먹도록 권합니다.
+            표의 반숙·잼 노른자처럼 노른자가 흐르는 단계는 이 기준에 못 미치므로, 영유아·임신부·고령자·면역력이 약한 사람에게는 노른자까지 굳는 <strong>표준 완숙({fmtMS(HARD_SEC)}) 이상</strong>을 고르는 것이 안전합니다.
+            생달걀을 만진 뒤에는 비누로 손을 씻고, 금이 간 달걀은 삶기 전에 버리거나 바로 완전히 익혀 쓰세요.
+          </p>
+          <p className="g-p">
+            삶은 계란은 식힌 뒤 냉장 보관하고 실온에는 2시간 이상 두지 마세요. 미국 USDA 식품안전검사청(FSIS)은 삶은 계란을 조리 후 2시간 안에 냉장하면 <strong>껍질째든 깐 것이든 냉장 7일</strong>까지 안전하다고 안내합니다. 다만 껍질을 깐 계란은 표면이 마르고 냉장고 냄새를 쉽게 흡수하므로, 맛을 생각하면 밀폐 용기에 담아 되도록 빨리 먹는 편이 낫습니다.
+            장조림·양념장 계란(마야크 에그)처럼 절이는 계란도 반드시 냉장 보관하고, 반숙으로 만든 절임 계란은 완숙보다 빨리 먹는 편이 좋습니다. 노른자 테두리가 회녹색으로 변한 것은 오래 익혀 생긴 황화철로, 먹어도 안전합니다.
           </p>
         </section>
 
         {/* 4. FAQ — 아코디언 */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 5. 응고 온도 과학 */}
         <section>
-          <h2 style={sectionTitle}>흰자·노른자 응고 온도 (왜 30초 차이로 농도가 달라지나)</h2>
-          <p style={faqAnswer}>
-            계란은 단백질 덩어리. 단백질은 일정 온도에 도달하면 변성·응고합니다. 끓는 물(100°C)에서 계란 내부 온도가 다음 임계점에 도달하는 시점을 정확히 계산한 것이 본 도구의 8단계 시간입니다:
+          <h2 className="g-h2">흰자·노른자 응고 온도 (왜 30초 차이로 농도가 달라지나)</h2>
+          <p className="g-p">
+            계란은 단백질 덩어리이고, 단백질은 일정 온도에 도달하면 변성·응고합니다. 흰자와 노른자는 굳기 시작하는 온도가 다르고, 끓는 물(100°C)에 넣은 계란은 바깥부터 데워지므로 시간이 지날수록 중심 온도가 아래 임계점을 차례로 지납니다.
+            본 도구의 8단계 시간은 열전달을 직접 계산한 값이 아니라, 특란·실온·끓는 물 투입 조건에서 각 단계의 노른자 상태가 나오는 <strong>경험적 표준 시간</strong>입니다.
           </p>
-          <ul style={{ paddingLeft: '20px', fontSize: '14px', color: 'var(--muted)', lineHeight: 2, marginTop: '12px' }}>
+          <ul className="g-list">
             <li><strong style={{ color: 'var(--text)' }}>흰자 응고 시작: 62°C</strong> — 투명한 액체 → 불투명 흰색</li>
             <li><strong style={{ color: 'var(--text)' }}>흰자 완전 응고: 80°C</strong> — 단단한 흰자</li>
             <li><strong style={{ color: 'var(--text)' }}>노른자 응고 시작: 65°C</strong> — 점도 ↑</li>
             <li><strong style={{ color: 'var(--text)' }}>노른자 잼 농도: 70°C</strong> — 라멘 아지타마</li>
             <li><strong style={{ color: 'var(--text)' }}>노른자 완전 응고: 78°C</strong> — 단단한 완숙</li>
           </ul>
-          <p style={{ ...faqAnswer, marginTop: '12px' }}>
+          <p className="g-p">
             계란 내부는 외부보다 천천히 데워지므로(특히 노른자는 중심에 있음), 같은 끓는 물이라도 시간에 따라 노른자 중심 온도가 65~78°C 사이를 통과합니다. 30초 차이가 큰 이유 — 임계 온도 구간이 좁아 30초만 더 익혀도 잼이 굳어지기 시작.
           </p>
         </section>
 
         {/* 6. 관련 도구 — 2열 카드 그리드 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div className={styles.relatedGrid}>
             {[
               { href: '/tools/cooking/microwave',     icon: '🔥', name: '전자레인지 출력 환산기', desc: '600~1200W 양방향 변환·식품 프리셋' },
@@ -264,7 +327,7 @@ export default function EggTimerPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>
@@ -277,6 +340,6 @@ export default function EggTimerPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

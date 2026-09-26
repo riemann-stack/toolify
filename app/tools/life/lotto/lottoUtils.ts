@@ -317,10 +317,14 @@ export type SimResult = {
   returnRate: number  // 회수율 %
 }
 
-const AVG_PRIZES: Record<number, number> = {
-  1: 2_500_000_000,
-  2:    60_000_000,
-  3:     1_700_000,
+/** 시뮬레이터 가정 당첨금 — 1·2·3등은 회차 판매액·당첨자 수로 정해져 고정값이 없으므로 역대 평균 근사
+ *  (동행복권 누적 통계: 1등 평균 약 20.1억 원, 2등 약 5,560만 원, 3등 약 147만 원 — 2026-09 확인).
+ *  4·5등은 고정. 이 값으로 1게임(1,000원) 기대 회수액 ≈ 507원 — 판매액의 50%를 당첨금으로 쓰는 구조와 맞는다.
+ *  (이전 값 25억·6천만·170만은 기대 회수율을 약 58%로 부풀렸다) */
+export const AVG_PRIZES: Record<number, number> = {
+  1: 2_000_000_000,
+  2:    55_000_000,
+  3:     1_450_000,
   4:        50_000,
   5:         5_000,
 }
@@ -501,13 +505,28 @@ export type SavedNumber = {
   savedAt: string
 }
 
+/* mode는 문자열이기만 하면 통과 — 없어진 모드('quick-pick' 등)로 저장한 번호도 버리지 않고
+   loadSaved에서 'random'으로 바꿔 보존 */
+function isSavedNumber(v: unknown): v is Omit<SavedNumber, 'mode'> & { mode: string } {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  return typeof o.id === 'string'
+    && Array.isArray(o.numbers) && o.numbers.length === 6
+    && o.numbers.every((n) => Number.isInteger(n) && (n as number) >= 1 && (n as number) <= 45)
+    && typeof o.mode === 'string'
+    && typeof o.savedAt === 'string'
+    && (o.memo === undefined || typeof o.memo === 'string')
+}
+const isModeId = (v: string): v is ModeId => GENERATION_MODES.some((m) => m.id === v)
+
 export function loadSaved(): SavedNumber[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    if (!Array.isArray(arr)) return []
+    return arr.filter(isSavedNumber).map((it) => ({ ...it, mode: isModeId(it.mode) ? it.mode : 'random' }))
   } catch { return [] }
 }
 export function saveSaved(items: SavedNumber[]) {

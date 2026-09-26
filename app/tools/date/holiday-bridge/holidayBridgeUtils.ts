@@ -7,7 +7,7 @@
    ※ 날짜는 항상 new Date(y, m-1, d) 분해 파싱 — new Date('YYYY-MM-DD') 금지(UTC 버그)
    ────────────────────────────────────────────────────── */
 
-import { isHolidayStr, HOLIDAY_YEARS, HOLIDAY_YEAR_MIN, HOLIDAY_YEAR_MAX } from '@/lib/krHolidays'
+import { isHolidayStr, isHolidayDataCovered, HOLIDAY_YEARS, HOLIDAY_YEAR_MIN, HOLIDAY_YEAR_MAX } from '@/lib/krHolidays'
 
 /** 탐색 가능한 연도 = 공휴일 데이터를 보유한 연도 (하드코딩하지 말 것 — 데이터가 늘면 자동 반영) */
 export const SELECTABLE_YEARS = HOLIDAY_YEARS
@@ -120,6 +120,12 @@ export interface DayInfo {
 
 const LABOR_DAY_MMDD = '05-01'
 
+/** 공휴일 데이터가 없는 연도(스캔 여유분이 HOLIDAY_YEAR_MAX 다음 해로 넘어갈 때)의 폴백.
+   날짜가 고정된 양력 공휴일 중 스캔 여유(연말 +24일) 안에 드는 것은 신정뿐이다.
+   출처: 「관공서의 공휴일에 관한 규정」 제2조 (1월 1일).
+   TODO: lib/krHolidays에 데이터 범위 밖 고정 양력 공휴일 폴백을 두면 이 상수를 제거 */
+const UNCOVERED_FIXED_HOLIDAYS: Record<string, string> = { '01-01': '신정' }
+
 /**
  * 기간 내 모든 날짜를 분류.
  * OFF 우선순위: 공휴일 > 회사휴일 > 근로자의날 > 일요일 > 토요일(근무토글에 따라)
@@ -143,6 +149,9 @@ export function buildDays(settings: BridgeSettings): DayInfo[] {
     const date = toYmd(cur)
     const dow = cur.getDay()
     const holiday = isHolidayStr(date)
+      ?? (!isHolidayDataCovered(cur.getFullYear()) && UNCOVERED_FIXED_HOLIDAYS[date.slice(5)]
+        ? { date, name: UNCOVERED_FIXED_HOLIDAYS[date.slice(5)] }
+        : null)
     const isLaborDay = date.slice(5) === LABOR_DAY_MMDD
     const laborDayWorked = isLaborDay && !settings.laborDay
 
@@ -431,6 +440,8 @@ export interface BridgeResult {
   baselineMaxRun: number     // 연차 0 기준 최장 자연 연휴 길이
   fromDate: string | null    // 과거 제외 기준일 (없으면 기간 전체)
   droppedPast: boolean       // fromDate 때문에 실제로 빠진 구간이 있는가 (UI 고지용)
+  /** 기간 끝 여유분이 공휴일 데이터가 없는 다음 해로 넘어가는가 (신정만 폴백 반영 — UI 고지용) */
+  tailUncoveredYear: number | null
 }
 
 export function computeBridge(settings: BridgeSettings): BridgeResult {
@@ -463,6 +474,10 @@ export function computeBridge(settings: BridgeSettings): BridgeResult {
     baselineMaxRun: liveRuns.reduce((m, r) => Math.max(m, r.days), 0),
     fromDate: from,
     droppedPast: from !== null && (periodPlans.length > plans.length || periodRuns.length > liveRuns.length),
+    tailUncoveredYear: (() => {
+      const lastY = Number(scanDays[scanDays.length - 1]?.date.slice(0, 4))
+      return Number.isFinite(lastY) && !isHolidayDataCovered(lastY) ? lastY : null
+    })(),
   }
 }
 

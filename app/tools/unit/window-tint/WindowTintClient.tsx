@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from 'react'
 import styles from './window-tint.module.css'
+import { WINDOW_TINT_MIN_VLT } from '@/lib/krWindowTint'
 
 // ──────────────────────────────────────
-// 도로교통법 시행령 제28조 — 최소 투과율(VLT) 기준선
+// 도로교통법 시행령 제28조 — 최소 투과율(VLT) 기준선 (값은 lib/krWindowTint 단일 소스)
 //   앞면(앞유리) 70% 이상 / 1열 옆면(운전석·조수석) 40% 이상
 //   뒷면·2열 이후 옆면은 제한 없음
 //   ※ 어린이운송용 승합자동차는 별도 체계(자동차규칙 제94조제3항): 모든 창유리 70% 이상, 정기검사 부적합으로 집행
@@ -12,8 +13,8 @@ import styles from './window-tint.module.css'
 type Pos = 'front' | 'side1' | 'rear'
 
 const POSITIONS: { id: Pos; label: string; zone: string; limit: number | null }[] = [
-  { id: 'front', label: '앞면(앞유리)', zone: '전면 유리', limit: 70 },
-  { id: 'side1', label: '운전석 옆면', zone: '1열 옆유리', limit: 40 },
+  { id: 'front', label: '앞면(앞유리)', zone: '전면 유리', limit: WINDOW_TINT_MIN_VLT.front },
+  { id: 'side1', label: '운전석 옆면', zone: '1열 옆유리', limit: WINDOW_TINT_MIN_VLT.driverSide },
   { id: 'rear',  label: '뒷면·2열',    zone: '뒷유리·뒷좌석', limit: null },
 ]
 

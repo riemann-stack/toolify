@@ -1,226 +1,129 @@
-/* @hover-wrapped */
-/* ── 카테고리 허브 — 페이퍼 캔버스 + 솔리드 컬러 히어로 (홈 벤토 타일과 동일 문법) ── */
-.canvas { background: var(--paper); }
+/* components/CategoryView.module.css — 분야 허브 (스펙 §10.19): 흰 히어로(+TOP3) → sticky 하위 분류 → 대표 계산 예시
+   → 그룹별 목록(기준 메타·N개 더 보기) → 분야 안내 본문 시트(CategoryGuide) → 다른 분야 둘러보기.
+   분야색은 [data-cat] 스코프의 --c / --c-ink / --c-soft 로 칩·점·라인에만. 새 hex 없음(흰 글자 #FFFFFF만). 간격 짝수 px. */
+.cv { padding-bottom: 64px; }
+/* 키보드 포커스로 스크롤될 때 sticky 헤더 + 하위 분류 바(약 64px) 아래에 멈추게 */
+.cv :is(a, button, [tabindex]) { scroll-margin-top: calc(var(--header-h) + 72px); }
+.cvWrap { max-width: var(--w-shell); margin: 0 auto; padding: 0 24px; }
+.cvBand { background: var(--bg2); border-bottom: 1px solid var(--border); }
 
-.wrap {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 32px 24px 80px;
-}
+/* 브레드크럼 — AutoToolJsonLd BreadcrumbList(홈 › 전체 도구 › 분야)와 같은 경로 */
+.cvCrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding-top: 20px; font-size: 13px; color: var(--muted); }
+.cvCrumb a { position: relative; display: inline-flex; align-items: center; min-height: 24px; color: var(--muted); }
+.cvCrumb a::after { content: ''; position: absolute; inset: -10px 0; } /* 히트 영역 44 */
+.cvCrumb a:hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+.cvCrumb svg { color: var(--gray-400); }
+.cvCrumb [aria-current='page'] { font-weight: 600; color: var(--text); }
 
-/* ── 히어로 타일 — 배경은 --cat 76% + 잉크(~700레벨)로 흰 글자 AA 확보 ── */
-.hero {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  background: color-mix(in srgb, var(--cat-color, var(--accent)) 76%, var(--paper-ink));
-  border-radius: var(--radius-lg);
-  padding: 28px 28px 26px;
-  color: #ffffff;
-  margin-bottom: 32px;
-}
-.crumb {
-  font-size: 12px;
-  color: #ffffff;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin: 0;
-}
-.title {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: clamp(30px, 4.6vw, 44px);
-  font-weight: 800;
-  letter-spacing: -1px;
-  line-height: 1.12;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.titleIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-card);
-  background: rgba(255, 255, 255, 0.18);
-  flex-shrink: 0;
-}
-.titleText { line-height: 1.12; }
-.desc {
-  font-size: 15px;
-  color: #ffffff;
-  line-height: 1.7;
-  margin: 0;
-  max-width: 720px;
-}
-.metaRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 2px;
-}
-.metaChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #ffffff;
-  /* 잉크 틴트 — 흰 글자 대비 확보 (밝은 반투명은 중간 명도 히어로에서 대비 저하) */
-  background: color-mix(in srgb, var(--paper-ink) 28%, transparent);
-  border-radius: var(--radius-pill);
-  padding: 5px 12px;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-.metaChipDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  display: inline-block;
-}
+.cvHero { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 48px; align-items: start; padding: 20px 0 36px; }
+.cvId { display: flex; align-items: center; gap: 12px; }
+.cvEyebrow { font-size: 14px; font-weight: 700; color: var(--c-ink); }
+.cvEyebrow span { margin-left: 8px; font-weight: 500; color: var(--muted); }
+.cvH1 { margin-top: 16px; font-size: clamp(28px, 6vw, 40px); font-weight: 800; line-height: 1.25; letter-spacing: -0.04em; color: var(--text); }
+.cvLead { margin-top: 10px; max-width: 640px; font-size: 17px; line-height: 1.7; color: var(--muted-strong); font-variant-numeric: normal; }
+.cvStats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.cvStat { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: var(--radius-pill); background: var(--bg3); font-size: 13px; font-weight: 600; color: var(--muted-strong); font-variant-numeric: tabular-nums; }
+.cvStat b { color: var(--text); }
+.cvStatOk { background: var(--success-soft); color: var(--success); }
 
-/* ── 도구 그리드 ── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-@media (max-width: 720px) {
-  .grid { grid-template-columns: 1fr; }
-}
+/* TOP 3 — 모바일에서는 리드 아래 폴드 안에 바로 도구 링크 */
+.cvTop { padding: 18px 20px 8px; border-radius: var(--radius-card); background: var(--bg2); border: 1px solid var(--border); box-shadow: var(--shadow-lift); }
+.cvTopH { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; font-weight: 700; color: var(--text); }
+.cvTopH span { flex-shrink: 0; font-size: 12px; font-weight: 500; color: var(--muted); }
+.cvTop ol { list-style: none; margin-top: 6px; }
+.cvTop li + li { border-top: 1px solid var(--divider); }
+.cvTop a { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 8px 0; }
+.cvTop a:hover b { color: var(--accent-ink); }
+.cvRank { width: 20px; flex-shrink: 0; font-size: 16px; font-weight: 800; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.cvTop b { display: block; font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+.cvTop small { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cvTop a > span:nth-child(2) { flex: 1; min-width: 0; }
+.cvTop a > svg { color: var(--gray-400); flex-shrink: 0; }
 
-.card {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  background: var(--paper-card);
-  border: 1px solid transparent;
-  border-radius: var(--radius-lg);
-  padding: 18px 20px;
-  text-decoration: none;
-  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-  overflow: hidden;
-}
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  background: var(--cat-color, var(--accent));
-  opacity: 0;
-  transition: opacity 0.18s ease;
-}@media (hover: hover) {
-  .card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 40%, var(--paper-line));
-  box-shadow: var(--shadow-lift);
-}
-}@media (hover: hover) {
-  .card:hover::before { opacity: 1; }
-}
+/* sticky 하위 분류 — top은 반드시 var(--header-h) (모바일 56 / 데스크톱 64). z는 헤더보다 낮게 */
+.cvFilter { position: sticky; top: var(--header-h); z-index: 20; background: rgba(246, 247, 249, 0.94); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.cvFilterIn { display: flex; gap: 8px; margin: 0 -4px; padding: 12px 4px; overflow-x: auto; scrollbar-width: none; } /* 좌우 4 = 포커스 링 여백 */
+.cvFilterIn::-webkit-scrollbar { display: none; }
+.cvFchip { position: relative; flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; height: 40px; min-height: 0; padding: 0 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-hover); background: var(--bg2); font-size: 14px; font-weight: 600; color: var(--muted-strong); white-space: nowrap; transition: border-color .15s, color .15s; }
+.cvFchip::after { content: ''; position: absolute; inset: -2px 0; } /* 히트 영역 44 (행 패딩 12 안) */
+.cvFchip:hover { border-color: var(--muted); color: var(--text); }
+.cvFchip small { font-size: 12px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
 
-.iconBox {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-m);
-  background: color-mix(in srgb, var(--cat-color, var(--accent)) 10%, var(--paper-card));
-  color: var(--cat-color, var(--accent));
-  flex-shrink: 0;
-  transition: background 0.18s ease;
-}@media (hover: hover) {
-  .card:hover .iconBox {
-  background: color-mix(in srgb, var(--cat-color, var(--accent)) 16%, var(--paper-card));
-}
-}
+/* 섹션 */
+.cvSec { padding-top: 48px; scroll-margin-top: calc(var(--header-h) + 72px); }
+.cvSecH { display: flex; align-items: baseline; gap: 8px; }
+.cvSecH h2 { font-size: 22px; font-weight: 700; line-height: 1.4; letter-spacing: -0.03em; color: var(--text); }
+.cvSecH span { font-size: 15px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cvSecD { margin: 4px 0 16px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.cvSecH + .cvGrid, .cvSecH + .cvOther { margin-top: 16px; }
 
-.body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--paper-ink);
-  font-family: 'Noto Sans KR', sans-serif;
-  line-height: 1.4;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.descLine {
-  font-size: 13px;
-  color: var(--paper-ink-soft);
-  line-height: 1.55;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+/* 대표 계산 예시 (toolMeta.example 이 있을 때만) */
+.cvFeat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cvFcard { display: flex; flex-direction: column; padding: 22px; border-radius: var(--radius-card); background: var(--bg2); border: 1px solid var(--border); transition: border-color .15s, box-shadow .15s; }
+.cvFcard:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); }
+.cvFcard h3 { margin-top: 14px; font-size: 17px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+.cvFcard p { margin-top: 4px; font-size: 14px; line-height: 1.55; color: var(--muted); }
+.cvEx { margin-top: 16px; padding: 14px 16px; border-radius: var(--radius-m); background: var(--bg3); }
+.cvEx span { display: block; font-size: 12px; font-weight: 600; color: var(--muted); }
+.cvEx b { display: block; margin-top: 2px; font-size: 24px; font-weight: 700; letter-spacing: -0.03em; color: var(--text); font-variant-numeric: tabular-nums; }
+.cvEx b small { margin-left: 2px; font-size: 14px; font-weight: 600; color: var(--muted-strong); }
+.cvEx em { display: block; margin-top: 2px; font-style: normal; font-size: 13px; color: var(--muted-strong); }
+.cvGo { margin-top: 16px; display: inline-flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 600; color: var(--accent-ink); }
 
-.arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  color: var(--paper-ink-faint);
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.18s ease, transform 0.18s ease, color 0.18s ease;
-  align-self: center;
-}@media (hover: hover) {
-  .card:hover .arrow {
-  opacity: 1;
-  transform: translateX(0);
-  color: var(--cat-color, var(--accent));
-}
-}
+/* 도구 행 */
+.cvGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cvRow { display: flex; align-items: flex-start; gap: 14px; padding: 16px 16px 14px; border-radius: var(--radius-m); background: var(--bg2); border: 1px solid var(--border); transition: border-color .15s, box-shadow .15s; }
+.cvRow:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); }
+.cvRow:hover .cvRowT { color: var(--accent-ink); }
+.cvRowBody { flex: 1; min-width: 0; }
+.cvRowT { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 16px; font-weight: 700; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); }
+.cvRowD { display: -webkit-box; margin-top: 2px; font-size: 14px; line-height: 1.55; color: var(--muted); -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cvRowM { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; margin-top: 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cvRowOk { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--success); }
+.cvRow > svg { margin-top: 10px; flex-shrink: 0; color: var(--gray-400); }
+.cvMore { margin-top: 8px; }
+.cvMore > summary { list-style: none; display: flex; align-items: center; justify-content: center; gap: 4px; height: 44px; border-radius: var(--radius-m); border: 1px dashed var(--border-hover); font-size: 14px; font-weight: 600; color: var(--muted-strong); cursor: pointer; }
+.cvMore > summary:hover { border-color: var(--muted); color: var(--text); }
+.cvMore > summary::-webkit-details-marker { display: none; }
+.cvMore[open] > summary { display: none; }
+.cvMore[open] > .cvGrid { margin-top: 0; }
 
-/* 배지 — 홈 인기 카드와 동일 문법 */
-.badge {
-  font-size: 10px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: var(--radius-pill);
-  letter-spacing: 0.05em;
-  line-height: 1.4;
-  border: 1px solid;
-}
-.badgeHot {
-  color: var(--coral-ink);
-  background: var(--coral-soft);
-  border-color: color-mix(in srgb, var(--accent-coral) 45%, transparent);
-}
-.badgeNew {
-  /* 원색(600)은 12% 틴트 위 9/11 카테고리 AA 미달(QA 검산) — 잉크 믹스로 다크닝 */
-  color: color-mix(in srgb, var(--cat-color, var(--accent)) 70%, var(--paper-ink));
-  background: color-mix(in srgb, var(--cat-color, var(--accent)) 12%, transparent);
-  border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, transparent);
-}
+/* 분야 안내 본문 시트 (CategoryGuide) — ArticleSheet(.ar prose) 안의 상황 표 셀 링크 */
+.cgSit a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.cgSit td { white-space: normal; }
+.cgSit td:first-child { min-width: 104px; }
+.cgSit .cgSep { color: var(--gray-400); }
+.cgNote { font-size: 14px; line-height: 1.7; color: var(--muted); }
 
-/* 광고 슬롯 여백 */
-.adSlot { margin-top: 40px; }
+/* 다른 분야 둘러보기 */
+.cvOther { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.cvOtherT { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 12px 14px; border-radius: var(--radius-m); background: var(--bg2); border: 1px solid var(--border); font-size: 14px; font-weight: 700; color: var(--text); transition: border-color .15s; }
+.cvOtherT > span:last-child { min-width: 0; }
+.cvOtherT small { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cvOtherT:hover { border-color: var(--border-hover); }
 
-/* ── 모바일 ── */
-@media (max-width: 600px) {
-  .wrap { padding-top: 20px; }
-  .hero { padding: 22px 20px; margin-bottom: 24px; }
-  .titleIcon { width: 44px; height: 44px; border-radius: var(--radius-m); }
-  .card { padding: 15px 16px; gap: 13px; }
-  .iconBox { width: 38px; height: 38px; }
+@media (max-width: 1023px) {
+  .cvHero { grid-template-columns: minmax(0, 1fr); gap: 20px; padding-bottom: 28px; }
+  .cvOther { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .cvGrid { grid-template-columns: minmax(0, 1fr); }
+  .cvFeat { grid-template-columns: repeat(3, 82%); overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -24px; padding: 0 24px 4px; scroll-padding: 0 24px; scrollbar-width: none; }
+  .cvFeat::-webkit-scrollbar { display: none; }
+  .cvFcard { scroll-snap-align: start; }
+}
+@media (max-width: 640px) {
+  .cv { padding-bottom: 48px; }
+  .cvWrap { padding: 0 16px; }
+  .cvCrumb { padding-top: 16px; }
+  .cvHero { padding: 16px 0 24px; }
+  .cvLead { font-size: 16px; }
+  .cvStats { margin-top: 14px; }
+  .cvTop { padding: 14px 16px 4px; box-shadow: none; }
+  .cvFeat { margin: 0 -16px; padding: 0 16px 4px; scroll-padding: 0 16px; }
+  .cvRow { padding: 14px 14px 12px; gap: 12px; }
+  .cvRowD { -webkit-line-clamp: 1; }
+  .cvSec { padding-top: 40px; }
+  .cvSecH h2 { font-size: 20px; }
+  .cvOther { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

@@ -2,8 +2,12 @@ import Link from 'next/link'
 import NutsClient from './NutsClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { NUTS_DATA, POPULAR_MIXES, PROC_DATA, SELENIUM_RDA, SELENIUM_UL, dangerThresholdOf } from './nutsData'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/nuts',
@@ -12,18 +16,10 @@ export const metadata = buildMetadata({
   keywords: ['견과류 적정량', '아몬드 하루', '호두 하루', '브라질너트 셀레늄', '견과류 혼합 계산', '견과류 알레르기', '다이어트 견과류', '견과류 칼로리', '셀레늄 과다', '하루 한 줌'],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '22px',
-  fontWeight: 700,
-  marginBottom: '14px',
-  marginTop: '48px',
-  letterSpacing: '-0.5px',
-}
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
@@ -43,180 +39,232 @@ const headCell: React.CSSProperties = {
   borderBottom: '1px solid var(--border)',
   background: 'var(--bg3)',
 }
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
+
+/* ── 가이드 표·예시 — 도구와 같은 데이터(nutsData)로 빌드 시 생성 ── */
+const nutOf = (key: string) => NUTS_DATA.find(n => n.key === key)!
+const r1 = (v: number) => Math.round(v * 10) / 10
+/** 도구와 같은 비례 계산 — 1회 기준 영양값 × (g ÷ 1회 기준 g) */
+const portion = (key: string, grams: number) => {
+  const n = nutOf(key)
+  const ratio = grams / n.servingGrams
+  return { kcal: n.caloriePerServing * ratio, protein: n.protein * ratio, selenium: n.selenium * ratio }
 }
-const faqSummary: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '15px',
-  fontWeight: 600,
-  color: 'var(--text)',
-  padding: '4px 0',
-}
-const faqAnswer: React.CSSProperties = {
-  marginTop: '10px',
-  paddingTop: '10px',
-  borderTop: '1px solid var(--border)',
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
-}
+const BRAZIL = nutOf('brazilNut')
+const BRAZIL_UL_G = dangerThresholdOf(BRAZIL)            // 브라질너트만으로 셀레늄 상한(400μg)에 닿는 양
+const BRAZIL_PER_NUT = BRAZIL.servingCount ? BRAZIL.selenium / BRAZIL.servingCount : 0
+const MIX_ROWS = POPULAR_MIXES.map(m => {
+  const parts = m.items.map(it => ({ name: nutOf(it.key).name, grams: it.grams, ...portion(it.key, it.grams) }))
+  return {
+    id: m.id, name: m.name, desc: m.desc,
+    recipe: parts.map(p => `${p.name} ${p.grams}g`).join(' + '),
+    grams: parts.reduce((a, p) => a + p.grams, 0),
+    kcal: Math.round(parts.reduce((a, p) => a + p.kcal, 0)),
+    protein: r1(parts.reduce((a, p) => a + p.protein, 0)),
+    selenium: r1(parts.reduce((a, p) => a + p.selenium, 0)),
+  }
+})
+const MIX_MAX_SE = Math.max(...MIX_ROWS.map(m => m.selenium))
+// 계산 예시 — 아몬드 28g + 브라질너트 10g (생/무염)
+const EX_A = portion('almond', 28)
+const EX_B = portion('brazilNut', 10)
+const EX_KCAL = Math.round(EX_A.kcal + EX_B.kcal)
+const EX_SE = r1(EX_A.selenium + EX_B.selenium)
+const EX_SE20 = EX_A.selenium + portion('brazilNut', 20).selenium
 
 const FAQ_LD = [
-  { "q":"견과류는 하루에 얼마나 먹어야 하나요?","a":"대부분의 견과류는 하루 28g(1온스, 한 줌)이 국제 영양 학회의 표준 1회 제공량입니다. 아몬드 약 23알, 호두 반쪽 14개, 피스타치오 약 49알. 하루 열량의 10~15%를 초과하지 않는 것이 좋으며, 2000kcal 기준 하루 약 160~200kcal(28g 내외)가 적절합니다." },
-  { "q":"브라질너트는 왜 2~3알만 먹어야 하나요?","a":"브라질너트는 셀레늄 함량이 매우 높아 1알에만 약 68~137μg의 셀레늄이 들어있습니다. 성인 하루 셀레늄 상한 섭취량은 400μg인데, 함량이 높은 개체(1알 약 137μg) 기준 3알부터 상한을 넘을 수 있어 하루 2~3알 이하가 권장됩니다. 셀레늄 과잉 섭취 시 탈모, 손발톱 변형, 신경계 손상이 발생할 수 있어요. 본 도구의 셀레늄 자동 경고 활용." },
-  { "q":"여러 견과류를 섞어 먹는 게 더 좋나요?","a":"네, 일반적으로 권장됩니다. 영양소 다양성 ↑ (각 견과류 강점 다름), 단조로움 ↓ (꾸준한 섭취), 셀레늄·오메가3·비타민E 균형. 본 도구의 인기 믹스 6종 프리셋(다이어트·근육·뇌 건강·심혈관·균형·트레일) 한 번 클릭으로 적용. 알레르기 그룹 자동 필터." },
-  { "q":"견과류를 먹으면 살이 찌나요?","a":"견과류는 칼로리가 높지만(28g당 150~200kcal) 연구에 따르면 오히려 체중 관리에 도움이 됩니다. 포화지방 대신 불포화지방이 많고 식이섬유와 단백질이 포만감을 높여 전체 식사량을 줄이는 효과. 단, 대량 섭취는 칼로리 과잉으로 이어질 수 있으니 적정량 준수." },
-  { "q":"견과류 알레르기는 어떻게 구분하나요?","a":"크게 세 그룹: 핵과류(아몬드·캐슈넛·피스타치오·호두·피칸·헤이즐넛·마카다미아·브라질너트·잣) → 서로 교차 반응, 콩과(땅콩) → 별도 그룹, 씨앗류(해바라기·호박씨) → 또 다른 그룹. 본 도구의 알레르기 필터 활용 — 그룹 체크 시 해당 견과류 자동 숨김." },
-  { "q":"영유아·어린이는 견과류 언제부터 먹어도 되나요?","a":"일반 가이드(의사 상담 우선): 12개월 이전 X(질식·알레르기), 12~24개월 잘게 갈기·페이스트, 3세 이상 작은 알갱이, 5세 이하 통째 X(질식 위험). 가족력 있으면 의사 상담 후 도입, 첫 도입 시 소량부터, 응급 약(에피펜) 준비. 한국 영유아 알레르기 흔한 견과류는 땅콩·핵과류." },
-  { "q":"신장·갑상선 환자도 견과류 먹어도 되나요?","a":"의사 상담 필수. 신장 질환: 인·칼륨 제한 필요. 견과류는 칼륨이 높아 의사 처방 식단 우선. 본 도구 결과 그대로 적용 X. 갑상선 질환: 셀레늄(브라질너트) 영향. 갑상선 호르몬 약 복용 시 의사 상담 필수, 일반인보다 엄격한 제한. 당뇨: 견과류 일반적 OK(혈당 안정). 단 가공된(꿀·초콜릿) 주의. 본 도구는 일반 가이드 — 기저 질환은 의사·영양사 상담 우선." },
-  { "q":"견과류 알레르기 의심되면 어떻게 확인하나요?","a":"반드시 의료진 진단. 증상은 가벼움(입 가려움·두드러기) → 중간(부종·복통·구토) → 심함(호흡 곤란·아나필락시스). 🚨 아나필락시스(응급): 호흡 곤란·의식 저하·전신 두드러기 → 즉시 119 호출, 에피펜(있으면) 즉시 사용. 진단: 알레르기 전문의·소아과 → 피부 단자 시험·혈액 IgE 검사·경구 유발 시험(전문의 감독). 본 도구 결과로 자가 판단 X." },
-  { "q":"가공 견과류(꿀·초콜릿·시즈닝) 먹어도 되나요?","a":"건강 효과 ↓ · 가끔 OK. 가염: 나트륨 +150mg/28g (고혈압 주의) · 볶음: 항산화 일부 ↓·풍미 ↑ · 오일 코팅: 지방 +10%·트랜스 우려 · 초콜릿: 설탕·트랜스지방·나트륨 +60% (간식 분류) · 꿀 코팅: 당분 +20% (당뇨 주의). 평일 무염·생/건조, 주말 가벼운 가공 OK 정도가 적정. 본 도구의 가공 상태 토글로 칼로리·나트륨 자동 보정." },
-  { "q":"어떤 견과류가 가장 건강에 좋나요?","a":"목적에 따라 다릅니다. 심혈관에는 오메가3가 풍부한 호두, 항산화에는 비타민E가 많은 아몬드·해바라기씨, 단백질에는 땅콩, 면역·갑상선에는 브라질너트(소량). 특정 견과류에 집중하기보다 혼합 견과류를 다양하게 섭취하는 것이 영양소 균형 면에서 가장 좋습니다 — 본 도구의 균형 믹스 프리셋 추천." }
+  {
+    q: '견과류는 하루에 얼마나 먹어야 하나요?',
+    a: '본 도구는 대부분의 견과류 1회 기준을 <strong>28g(1온스, 한 줌)</strong>으로 잡습니다. 미국 영양성분 표시와 USDA FoodData Central에서 흔히 쓰는 단위로, 아몬드 약 23알, 호두 반쪽 약 14개, 피스타치오 약 49알에 해당합니다(브라질너트만 셀레늄 때문에 10g, 약 2알). 28g은 150~200kcal 정도라 하루 2,000kcal를 먹는 사람의 간식 몫(총 열량의 10~15%, 200~300kcal) 안에 들어갑니다. 도구의 합산 칼로리가 300kcal를 넘으면 경고가 뜨는 이유입니다.',
+  },
+  {
+    q: '브라질너트는 왜 1~2알만 먹어야 하나요?',
+    a: `브라질너트는 셀레늄 함량이 매우 높아 USDA 성분표 평균으로 1알(약 5g)에 약 ${Math.round(BRAZIL_PER_NUT)}μg이 들어 있고, 산지 토양에 따라 개체 편차도 큽니다. 2020 한국인 영양소 섭취기준의 성인 셀레늄 권장섭취량은 <strong>${SELENIUM_RDA}μg</strong>, 상한섭취량은 <strong>${SELENIUM_UL}μg</strong>이라 1알로도 권장량을 넘기고, 브라질너트만으로 약 ${Math.round(BRAZIL_UL_G)}g(4알 남짓)이면 상한에 닿습니다. 다른 음식으로 먹는 셀레늄까지 생각해 하루 1~2알이 권장됩니다. 셀레늄을 장기간 과잉 섭취하면 탈모, 손발톱 변형, 신경 증상이 나타날 수 있습니다. 도구는 입력한 견과류의 셀레늄을 합산해 권장량·상한 대비 비율로 보여줍니다.`,
+  },
+  {
+    q: '여러 견과류를 섞어 먹는 게 더 좋나요?',
+    a: '일반적으로 권장됩니다. 견과류마다 강점이 다르고(호두 오메가3, 아몬드·해바라기씨 비타민E, 호박씨 아연, 땅콩 단백질), 한 가지만 먹을 때보다 질리지 않아 꾸준히 먹기 쉽습니다. 본 도구의 인기 믹스 6종 프리셋(다이어트·근육·뇌 건강·심혈관·균형·트레일)은 한 번 클릭으로 적용되며, 알레르기 그룹을 체크하면 해당 견과가 든 믹스는 비활성화됩니다.',
+  },
+  {
+    q: '견과류를 먹으면 살이 찌나요?',
+    a: '견과류는 칼로리가 높지만(28g당 150~200kcal) 적정량을 지키면 체중 관리에 불리하지 않다는 연구가 많습니다. 불포화지방과 식이섬유·단백질이 포만감을 높여 다른 간식을 줄이는 효과가 있기 때문입니다. 다만 봉지째 먹다 보면 100g(600kcal 안팎)도 금방이니, 도구로 하루 양을 정해 덜어 먹는 것이 핵심입니다.',
+  },
+  {
+    q: '견과류 알레르기는 어떻게 구분하나요?',
+    a: '크게 세 그룹입니다. <strong>나무 견과류</strong>(아몬드·캐슈넛·피스타치오·호두·피칸·헤이즐넛·마카다미아·브라질너트·잣)는 서로 교차 반응이 흔하고, <strong>땅콩</strong>은 식물학적으로 콩과라 별도 그룹, <strong>씨앗류</strong>(해바라기씨·호박씨)는 또 다른 그룹입니다. 단, 그룹이 달라도 같은 공장에서 가공되며 교차 오염될 수 있습니다. 본 도구의 알레르기 필터는 그룹 단위로 해당 견과를 숨기고 합산에서 뺍니다.',
+  },
+  {
+    q: '영유아·어린이는 견과류를 언제부터 먹어도 되나요?',
+    a: '두 가지를 구분해야 합니다. <strong>통견과·큰 조각은 질식 위험</strong> 때문에 만 5세 이하에게 주지 않는 것이 일반적인 안전 수칙이고, 그 전에는 곱게 갈거나 페이스트로 풀어 먹입니다. 반면 <strong>알레르기 예방을 이유로 도입을 늦출 필요는 없다</strong>는 것이 최근 지침입니다 — 미국 NIAID 지침(2017)은 이유식을 시작한 영아에게 땅콩을 곱게 간 가루나 물에 묽힌 땅콩버터 형태로 넣도록 권하고, 심한 아토피 피부염이나 달걀 알레르기가 있는 고위험 영아는 먼저 전문의 평가를 거쳐 생후 4~6개월 무렵 시작하도록 합니다. 해당되거나 가족력이 있으면 소아청소년과·알레르기 전문의와 먼저 상담하세요.',
+  },
+  {
+    q: '신장·갑상선 환자도 견과류 먹어도 되나요?',
+    a: '<strong>의사 상담이 먼저입니다.</strong> 신장 질환은 인·칼륨 제한이 필요한 경우가 많은데 견과류는 두 성분이 모두 많은 편이라 처방 식단이 우선이고, 본 도구 결과를 그대로 적용하면 안 됩니다. 갑상선 질환은 셀레늄(브라질너트)이 관여하므로 갑상선 호르몬제를 복용 중이면 보충제·브라질너트 섭취를 주치의와 상의하세요. 당뇨는 무가당 견과류라면 대체로 괜찮지만 꿀·초콜릿 코팅 제품은 당분이 더해집니다.',
+  },
+  {
+    q: '견과류 알레르기가 의심되면 어떻게 확인하나요?',
+    a: '<strong>반드시 의료진 진단을 받으세요.</strong> 증상은 가벼움(입 가려움·두드러기) → 중간(부종·복통·구토) → 심함(호흡 곤란·아나필락시스) 순입니다. 호흡 곤란·의식 저하·전신 두드러기가 나타나면 아나필락시스 응급 상황이니 즉시 119에 신고하고, 처방받은 에피네프린 자가주사기가 있으면 바로 사용하세요. 진단은 알레르기 전문의·소아청소년과에서 피부 단자 시험, 혈액 특이 IgE 검사, 전문의 감독하의 경구 유발 시험으로 합니다.',
+  },
+  {
+    q: '가공 견과류(가염·꿀·초콜릿)는 얼마나 다른가요?',
+    a: `본 도구의 가공 상태 토글은 입력한 g을 견과 자체 무게로 보고, 코팅·기름·꿀·소금으로 더해지는 열량과 나트륨을 배수·추가량으로 어림합니다(실측값이 아닌 도구 추정값) — ${PROC_DATA.filter(p => p.key !== 'raw').map(p => `${p.label}: 칼로리 ×${p.calFactor}${p.sodiumAdd ? `, 나트륨 +${p.sodiumAdd}mg/28g` : ''}`).join(' · ')}. 초콜릿·꿀 코팅은 설탕이 더해지고, 가염·시즈닝 제품은 나트륨이 더해집니다. 같은 무게로 비교하면 코팅 제품은 견과 비율이 그만큼 줄어 열량 차이가 생각보다 작을 수 있으니, 실제 값은 제품 영양성분표를 우선하세요. 건강 목적이라면 평소엔 무염·생/건조, 가공 제품은 가끔 정도가 적당합니다.`,
+  },
+  {
+    q: '어떤 견과류가 가장 건강에 좋나요?',
+    a: '목적에 따라 다릅니다. 오메가3(ALA)는 호두, 비타민E는 아몬드·해바라기씨, 단백질은 땅콩·호박씨, 셀레늄은 브라질너트(소량)가 강점입니다. 특정 견과 하나에 집중하기보다 여러 종류를 한 줌 안에서 돌려 먹는 편이 영양 균형에 유리합니다 — 도구의 균형 믹스 프리셋이 그런 예시입니다.',
+  },
 ]
 
 export default function NutsPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={880} slug="/tools/cooking/nuts">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="cooking" />견과류 섭취량 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
+      <p className="tp-lead">
         12종 견과류 일일 권장 알 수·칼로리·영양소. 알레르기 필터와 <strong style={{ color: 'var(--text)' }}>셀레늄 자동 경고</strong>.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="셀레늄 권장 60μg·상한 400μg(2020 한국인 영양소 섭취기준) · 영양 성분은 USDA FoodData Central 평균값"
+        sources={[
+          { label: '보건복지부 2020 한국인 영양소 섭취기준', href: 'https://www.mohw.go.kr/board.es?mid=a10411010100&bid=0019&act=view&list_no=362385' },
+          { label: 'USDA FoodData Central', href: 'https://fdc.nal.usda.gov/' },
+          { label: 'NIH ODS 셀레늄 팩트시트', href: 'https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/' },
+          { label: 'NIAID 땅콩 알레르기 예방 지침(2017)', href: 'https://www.niaid.nih.gov/sites/default/files/addendum-peanut-allergy-prevention-guidelines.pdf' },
+        ]}
+      />
 
       <NutsClient />
 
       <GuideDivider />
 
-      {/* 1. 빠른 참조표 */}
-      <h2 style={sectionTitle}>12종 견과류 빠른 참조표</h2>
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 420 }}>
+      {/* 1. 빠른 참조표 — NUTS_DATA에서 생성 */}
+      <h2 className="g-h2">12종 견과류 빠른 참조표</h2>
+      <p className="g-p">
+        계산기가 쓰는 견과류별 1회 기준량과 그때의 칼로리·단백질·대표 영양소, 그리고 하루 권장 한도입니다. 입력한 무게가 이 한도를 넘으면 &lsquo;초과&rsquo;로, 한도의 3배(브라질너트는 셀레늄 상한 도달량) 이상이면 &lsquo;위험&rsquo;으로 표시됩니다.
+        알 수는 알 크기가 고른 견과만 적었고, 해바라기씨·호박씨·잣처럼 알이 작은 것은 무게로 재는 편이 정확합니다.
+      </p>
+      <div className="tableScroll">
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 560 }}>
           <thead>
             <tr>
               <th scope="col" style={headCell}>견과류</th>
               <th scope="col" style={headCell}>1회</th>
               <th scope="col" style={headCell}>알 수</th>
               <th scope="col" style={headCell}>칼로리</th>
-              <th scope="col" style={headCell}>핵심 영양소</th>
+              <th scope="col" style={headCell}>단백질</th>
+              <th scope="col" style={headCell}>대표 영양소</th>
+              <th scope="col" style={headCell}>하루 한도</th>
             </tr>
           </thead>
           <tbody>
-            {[
-              { n: '아몬드',       s: '28g', c: '약 23알',    k: '164kcal', v: '비타민E' },
-              { n: '호두',         s: '28g', c: '반쪽 14개',  k: '185kcal', v: '오메가3' },
-              { n: '캐슈넛',       s: '28g', c: '약 18알',    k: '157kcal', v: '마그네슘' },
-              { n: '브라질너트',   s: '10g', c: '2~3알',      k: '66kcal',  v: '셀레늄' },
-              { n: '땅콩',         s: '28g', c: '약 28알',    k: '161kcal', v: '단백질' },
-              { n: '해바라기씨',   s: '28g', c: '—',          k: '165kcal', v: '비타민E' },
-              { n: '호박씨',       s: '28g', c: '—',          k: '151kcal', v: '아연' },
-              { n: '피스타치오',   s: '28g', c: '약 49알',    k: '159kcal', v: '비타민B6' },
-              { n: '피칸',         s: '28g', c: '약 19알',    k: '196kcal', v: '망간' },
-              { n: '마카다미아',   s: '28g', c: '약 10알',    k: '204kcal', v: '단일불포화' },
-              { n: '헤이즐넛',     s: '28g', c: '약 21알',    k: '178kcal', v: '비타민E' },
-              { n: '잣',           s: '28g', c: '—',          k: '191kcal', v: '철분' },
-            ].map((r, i) => (
-              <tr key={i}>
-                <td style={{ ...cell, fontWeight: 500 }}>{r.n}</td>
-                <td style={{ ...cell, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.s}</td>
-                <td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.c}</td>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
-                <td style={cell}>{r.v}</td>
+            {NUTS_DATA.map(n => (
+              <tr key={n.key}>
+                <td style={{ ...cell, fontWeight: 600, whiteSpace: 'nowrap' }}>{n.name}</td>
+                <td style={{ ...cell, color: 'var(--muted)' }}>{n.servingGrams}g</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap' }}>{n.servingCount === null ? '—' : n.key === 'walnut' ? `반쪽 약 ${n.servingCount}개` : `약 ${n.servingCount}알`}</td>
+                <td style={{ ...cell, color: 'var(--accent-ink)', fontWeight: 700, whiteSpace: 'nowrap' }}>{n.caloriePerServing}kcal</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap' }}>{n.protein}g</td>
+                <td style={cell}>{n.keyNutrient} {n.keyNutrientAmount.replace(/\s*\(.*\)$/, '')}</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap', color: n.danger ? 'var(--danger)' : 'var(--text)' }}>{n.maxDaily}g</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-        출처: 영양 성분 <a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>USDA FoodData Central</a>, 1회 제공량·권장 섭취 기준 <a href="https://www.kns.or.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>한국영양학회</a>(한국인 영양소 섭취기준). 값은 품종·가공·브랜드에 따라 달라지는 평균치입니다.
+      <p className="g-note">
+        영양 성분은 <a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>USDA FoodData Central</a> 평균값, 셀레늄 권장·상한 기준은 2020 한국인 영양소 섭취기준(보건복지부·한국영양학회)입니다. 값은 품종·가공·브랜드에 따라 달라지는 평균치입니다.
       </p>
 
-      {/* 2. 브라질너트 셀레늄 */}
-      <h2 style={sectionTitle}>🚨 브라질너트 셀레늄 주의</h2>
-      <div style={{ background: 'rgba(255,50,50,0.06)', border: '2px solid rgba(255,80,80,0.4)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
-        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>
-          브라질너트 1알 = 셀레늄 약 68~137μg
-        </p>
-        <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: 20, margin: 0 }}>
-          <li>성인 하루 셀레늄 권장량(RDA): <strong>55μg</strong></li>
-          <li>상한 섭취량(UL): <strong>400μg</strong> — 이 이상 독성</li>
-          <li>브라질너트 <strong>2~3알</strong>이면 이미 일일 권장량 초과</li>
-          <li>브라질너트는 함량 높은 개체(1알 약 137μg) 기준 <strong>3알부터 상한(400μg) 초과 가능</strong> — 하루 2~3알 이하 권장</li>
+      {/* 2. 계산 방식 */}
+      <h2 className="g-h2">계산 방식 — 칼로리·셀레늄은 이렇게 합산됩니다</h2>
+      <p className="g-p">
+        계산기는 견과마다 <strong>1회 기준 영양값 × (입력 g ÷ 1회 기준 g)</strong>로 비례 계산한 뒤 모두 더합니다. 칼로리에는 가공 상태 배수(볶음 ×1.05, 초콜릿·시즈닝 ×1.6 등)를 곱하고, 나트륨은 가공으로 더해지는 양을 28g당 값으로 환산해 더합니다.
+        셀레늄 합계는 성인 권장섭취량 60μg과 상한섭취량 400μg 대비 비율로 표시되고, 하루 칼로리 목표를 비워 두면 체중 × 25(감량)·32(유지)·40(증량)kcal를 10kcal 단위로 반올림해 자동으로 잡습니다.
+      </p>
+      <p className="g-p">
+        예를 들어 생 아몬드 28g과 브라질너트 10g을 함께 넣으면 칼로리는 {Math.round(EX_A.kcal)} + {Math.round(EX_B.kcal)} = <strong>{EX_KCAL}kcal</strong>, 셀레늄은 {r1(EX_A.selenium)} + {r1(EX_B.selenium)} = <strong>{EX_SE}μg</strong>입니다.
+        권장량의 {Math.round(EX_SE / SELENIUM_RDA * 100)}%이지만 상한의 {Math.round(EX_SE / SELENIUM_UL * 100)}%라 하루 몫으로는 괜찮은 수준입니다. 여기서 브라질너트만 20g(약 4알)으로 늘리면 셀레늄이 {Math.round(EX_SE20)}μg, 상한의 {Math.round(EX_SE20 / SELENIUM_UL * 100)}%까지 올라가고 브라질너트 하루 한도(10g) 초과 표시가 뜹니다.
+        몸무게 65kg·유지 목표라면 자동 목표는 2,080kcal이고, 위 조합은 그 약 {Math.round(EX_KCAL / 2080 * 100)}%로 간식 몫(10~15%) 안에 들어옵니다.
+      </p>
+
+      {/* 3. 브라질너트 셀레늄 */}
+      <h2 className="g-h2">브라질너트 셀레늄 주의</h2>
+      <Callout tone="warn" title={`브라질너트 1알(약 5g) = 셀레늄 약 ${Math.round(BRAZIL_PER_NUT)}μg (개체 편차 큼)`}>
+        <ul className="g-list" style={{ margin: 0 }}>
+          <li>성인 하루 셀레늄 권장섭취량 <strong>{SELENIUM_RDA}μg</strong>, 상한섭취량 <strong>{SELENIUM_UL}μg</strong> (2020 한국인 영양소 섭취기준)</li>
+          <li>브라질너트 <strong>1알</strong>로도 하루 권장섭취량을 채울 수 있음</li>
+          <li>브라질너트만으로 약 <strong>{Math.round(BRAZIL_UL_G)}g(4알 남짓)</strong>이면 상한에 도달 — 다른 음식의 셀레늄까지 고려해 하루 1~2알 권장</li>
         </ul>
-      </div>
-      <div style={card}>
-        <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '8px' }}>셀레늄 과잉 섭취 증상 (Selenosis)</p>
-        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
-          탈모 · 손발톱 변형·탈락 · 구토·설사 · 신경계 손상 · 마늘 냄새 호흡 · 피로감
-        </p>
-        <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '8px' }}>
-          ⚠️ 본 도구는 합산 셀레늄을 자동 계산해 RDA·UL 대비 표시합니다. 견과류 혼합팩 구매 시 브라질너트 비율 반드시 확인.
-        </p>
-      </div>
-
-      {/* 3. 견과류 혼합 가이드 (NEW) */}
-      <h2 style={sectionTitle}>견과류 혼합 가이드 — 인기 믹스 6종</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        본 도구의 <strong style={{ color: 'var(--text)' }}>인기 믹스 프리셋</strong>은 한 번의 클릭으로 적용됩니다. 각 믹스는 한국 사용자 식습관과 한국영양학회 권장 비율 참고.
+      </Callout>
+      <p className="g-p" style={{ marginTop: 14 }}>
+        <strong>셀레늄 과잉 섭취 증상(셀레늄 중독)</strong>: 탈모, 손발톱이 부서지거나 빠짐, 구토·설사, 피로감, 숨에서 나는 마늘 냄새, 심하면 신경 증상. 셀레늄 함량은 브라질너트가 자란 토양에 따라 몇 배씩 차이 나서 성분표 평균보다 훨씬 많은 알도 있습니다.
+        견과류 혼합팩은 브라질너트 비율을 반드시 확인하고, 셀레늄이 든 종합비타민을 먹고 있다면 <Link href="/tools/health/supplement" style={{ color: 'var(--accent-ink)' }}>영양제 성분 체크</Link>로 중복을 함께 보세요.
       </p>
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
+
+      {/* 4. 견과류 혼합 가이드 — POPULAR_MIXES에서 생성 */}
+      <h2 className="g-h2">견과류 혼합 가이드 — 인기 믹스 6종</h2>
+      <p className="g-p">
+        계산기의 <strong>인기 믹스 프리셋</strong>은 목적별로 짠 예시 조합이며, 한 번 클릭하면 아래 무게가 그대로 입력됩니다. 칼로리·단백질·셀레늄은 생/무염 기준으로 계산기와 같은 방식으로 합산한 값입니다.
+        브라질너트가 빠져 있어 셀레늄은 가장 많은 믹스도 {MIX_MAX_SE}μg으로 권장량의 {Math.round(MIX_MAX_SE / SELENIUM_RDA * 100)}% 수준입니다 — 셀레늄까지 채우고 싶다면 믹스에 브라질너트 1알(약 5g)만 더해 보세요.
+      </p>
+      <div className="tableScroll">
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
           <thead>
             <tr>
               <th scope="col" style={headCell}>믹스</th>
               <th scope="col" style={headCell}>구성</th>
               <th scope="col" style={headCell}>총량</th>
-              <th scope="col" style={headCell}>특징</th>
+              <th scope="col" style={headCell}>칼로리</th>
+              <th scope="col" style={headCell}>단백질</th>
+              <th scope="col" style={headCell}>셀레늄</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>다이어트</strong></td><td style={cell}>아몬드 12g + 피스타치오 12g</td><td style={cell}>24g</td><td style={cell}>저칼로리·고섬유·포만감</td></tr>
-            <tr><td style={cell}><strong>근육</strong></td><td style={cell}>땅콩 14g + 호박씨 10g + 아몬드 10g</td><td style={cell}>34g</td><td style={cell}>고단백·운동 후 회복</td></tr>
-            <tr><td style={cell}><strong>뇌 건강</strong></td><td style={cell}>호두 14g + 아몬드 14g</td><td style={cell}>28g</td><td style={cell}>오메가3·비타민E</td></tr>
-            <tr><td style={cell}><strong>심혈관</strong></td><td style={cell}>호두 10g + 아몬드 10g + 피칸 8g</td><td style={cell}>28g</td><td style={cell}>불포화지방·항염증</td></tr>
-            <tr><td style={cell}><strong>균형</strong></td><td style={cell}>아몬드·호두·캐슈넛·호박씨 각 6~8g</td><td style={cell}>30g</td><td style={cell}>종합 영양</td></tr>
-            <tr><td style={cell}><strong>트레일</strong></td><td style={cell}>아몬드 12g + 캐슈넛 10g + 호박씨 8g</td><td style={cell}>30g</td><td style={cell}>등산·러닝 행동식</td></tr>
+            {MIX_ROWS.map(m => (
+              <tr key={m.id}>
+                <td style={{ ...cell, whiteSpace: 'nowrap' }}><strong>{m.name}</strong><br /><span style={{ color: 'var(--muted)', fontSize: 12 }}>{m.desc}</span></td>
+                <td style={cell}>{m.recipe}</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap' }}>{m.grams}g</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap', color: 'var(--accent-ink)', fontWeight: 700 }}>{m.kcal}kcal</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap' }}>{m.protein}g</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap' }}>{m.selenium}μg</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-        본 도구의 알레르기 필터를 켜면 해당 그룹 견과류가 포함된 믹스는 자동 비활성화됩니다.
+      <p className="g-note">
+        알레르기 필터를 켜면 해당 그룹 견과류가 포함된 믹스는 자동으로 비활성화됩니다.
       </p>
 
-      {/* 4. 알레르기 그룹 가이드 (NEW) */}
-      <h2 style={sectionTitle}>🛡️ 알레르기 그룹 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        견과류 알레르기는 그룹별로 교차 반응이 발생할 수 있습니다. 본 도구의 알레르기 필터로 해당 그룹 전체를 한 번에 제외 가능.
+      {/* 5. 알레르기 그룹 가이드 */}
+      <h2 className="g-h2">알레르기 그룹 가이드</h2>
+      <p className="g-p">
+        견과류 알레르기는 그룹 안에서 교차 반응이 생길 수 있습니다. 본 도구의 알레르기 필터로 해당 그룹 전체를 한 번에 제외할 수 있습니다.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
         {[
-          { group: '핵과류 (Tree nuts)', color: '#EA580C', list: '아몬드 · 캐슈넛 · 피스타치오 · 호두 · 피칸 · 헤이즐넛 · 마카다미아 · 브라질너트 · 잣', note: '하나에 알레르기가 있으면 다른 핵과류도 주의 (교차 반응 흔함)' },
-          { group: '콩과 (Legume)', color: '#0891B2', list: '땅콩', note: '식물학적으로 견과류 X — 별도 알레르기 그룹. 한국 영유아 알레르기 흔함.' },
-          { group: '씨앗류 (Seeds)', color: '#0EA5E9', list: '해바라기씨 · 호박씨', note: '핵과류 알레르기와 별개. 단, 가공 시 교차 오염 가능.' },
+          { group: '나무 견과류 (Tree nuts)', list: '아몬드 · 캐슈넛 · 피스타치오 · 호두 · 피칸 · 헤이즐넛 · 마카다미아 · 브라질너트 · 잣', note: '하나에 알레르기가 있으면 다른 나무 견과류도 주의 (교차 반응 흔함)' },
+          { group: '콩과 (Legume)', list: '땅콩', note: '식물학적으로 견과류가 아닌 콩과 — 별도 알레르기 그룹. 영유아에게 흔한 알레르기 식품.' },
+          { group: '씨앗류 (Seeds)', list: '해바라기씨 · 호박씨', note: '나무 견과류 알레르기와 별개. 단, 가공 시 교차 오염 가능.' },
         ].map((g, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
-            <p style={{ fontSize: '13px', color: g.color, fontWeight: 700, marginBottom: '6px' }}>{g.group}</p>
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--accent-ink)', fontWeight: 700, marginBottom: '6px' }}>{g.group}</p>
             <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '6px', lineHeight: 1.6 }}>{g.list}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{g.note}</p>
           </div>
         ))}
       </div>
-      <div style={{ ...card, marginTop: 14, background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.3)' }}>
-        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '6px' }}>🚨 아나필락시스 (응급)</p>
-        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
-          호흡 곤란 · 의식 저하 · 전신 두드러기 → 즉시 <strong style={{ color: '#DC2626' }}>119 호출</strong>, 에피펜(있으면) 즉시 사용. 본 도구는 진단 X — 의심 시 알레르기 전문의 진료.
-        </p>
+      <div style={{ marginTop: 14 }}>
+        <Callout tone="warn" title="아나필락시스 (응급)">
+          호흡 곤란 · 의식 저하 · 전신 두드러기 → 즉시 <strong>119 신고</strong>, 처방받은 에피네프린 자가주사기가 있으면 바로 사용. 본 도구는 진단 도구가 아닙니다 — 의심되면 알레르기 전문의 진료를 받으세요.
+        </Callout>
       </div>
 
-      {/* 5. 영유아·임산부·환자 가이드 (NEW) */}
-      <h2 style={sectionTitle}>👶 영유아·임산부·환자 가이드</h2>
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+      {/* 6. 영유아·임산부·환자 가이드 */}
+      <h2 className="g-h2">영유아·임산부·환자 가이드</h2>
+      <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 440 }}>
           <thead>
             <tr>
@@ -225,78 +273,89 @@ export default function NutsPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>12개월 미만</strong></td><td style={cell}>견과류 X (질식·알레르기 위험)</td></tr>
-            <tr><td style={cell}><strong>12~24개월</strong></td><td style={cell}>잘게 갈거나 페이스트 형태로만</td></tr>
-            <tr><td style={cell}><strong>3세 이상</strong></td><td style={cell}>작은 알갱이 가능. 5세 이하 통째 X (질식 위험).</td></tr>
-            <tr><td style={cell}><strong>가족력 있는 영유아</strong></td><td style={cell}>의사 상담 후 도입. 첫 도입 시 소량부터, 응급 약(에피펜) 처방 가능.</td></tr>
-            <tr><td style={cell}><strong>임산부</strong></td><td style={cell}>일반적 OK (혈관 건강·DHA). 단 가족력 있으면 의사 상담.</td></tr>
-            <tr><td style={cell}><strong>신장 질환</strong></td><td style={cell}>인·칼륨 제한 필요. 견과류 ↑ 칼륨, 의사 처방 식단 우선.</td></tr>
-            <tr><td style={cell}><strong>갑상선 질환</strong></td><td style={cell}>셀레늄(브라질너트) 영향. 호르몬 약 복용 시 의사 상담 필수.</td></tr>
-            <tr><td style={cell}><strong>당뇨</strong></td><td style={cell}>견과류 일반적 OK (혈당 안정). 단 가공된(꿀·초콜릿) 주의.</td></tr>
+            <tr><td style={cell}><strong>이유식 시작~돌 무렵</strong></td><td style={cell}>통견과·조각 금지(질식). 알레르기 예방을 위해 늦출 필요는 없어 곱게 간 가루·묽힌 땅콩버터로 소량 도입 (NIAID 2017)</td></tr>
+            <tr><td style={cell}><strong>심한 습진·달걀 알레르기 영아</strong></td><td style={cell}>땅콩 알레르기 고위험 — 전문의 평가 후 생후 4~6개월 무렵 도입</td></tr>
+            <tr><td style={cell}><strong>만 5세 이하</strong></td><td style={cell}>통견과는 질식 위험. 잘게 부수거나 갈아서 제공</td></tr>
+            <tr><td style={cell}><strong>가족력 있는 영유아</strong></td><td style={cell}>소아청소년과 상담 후 도입. 첫 도입은 소량·낮 시간·집에서</td></tr>
+            <tr><td style={cell}><strong>임산부</strong></td><td style={cell}>알레르기가 없다면 적정량은 일반적으로 무방. 브라질너트는 셀레늄 상한 주의</td></tr>
+            <tr><td style={cell}><strong>신장 질환</strong></td><td style={cell}>인·칼륨 제한이 필요한 경우가 많음 — 처방 식단 우선</td></tr>
+            <tr><td style={cell}><strong>갑상선 질환</strong></td><td style={cell}>셀레늄(브라질너트)·보충제 섭취는 주치의와 상의</td></tr>
+            <tr><td style={cell}><strong>당뇨</strong></td><td style={cell}>무가당 견과류는 대체로 무방. 꿀·초콜릿 코팅 제품은 당분 추가</td></tr>
           </tbody>
         </table>
       </div>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-        ⚠️ 본 도구는 일반 가이드. 기저 질환·임신·영유아는 반드시 의사·영양사 상담 후. 응급 119 / 식약처 식품안전 1399 / 한국영양학회 (kns.or.kr).
+      <p className="g-note">
+        본 도구는 일반 가이드입니다. 기저 질환·임신·영유아는 반드시 의사·영양사와 상담하세요. 응급 119 · 식약처 식품안전 상담 1399.
       </p>
 
-      {/* 6. 견과류 가성비 (NEW) */}
-      <h2 style={sectionTitle}>견과류 가성비 (한국 마트 평균 참고)</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-        <strong style={{ color: 'var(--text)' }}>2026년 초</strong> 한국 대형 마트·온라인 평균 가격 기준 (참고용 · 실시간 가격 아님). 정확한 가격 비교는 <Link href="/tools/life/unit-price" style={{ color: 'var(--accent)' }}>단가 비교 계산기</Link>에서.
+      {/* 7. 견과류 가성비 */}
+      <h2 className="g-h2">견과류 가성비 (가격대 참고)</h2>
+      <p className="g-p">
+        견과류 가격은 원산지·시즌·구매 채널에 따라 크게 달라서, 아래는 종류 간 <strong>상대 비교용 대략적 가격대</strong>입니다(실시간 시세·공식 조사값 아님). 실제로 살 때는 <Link href="/tools/life/unit-price" style={{ color: 'var(--accent-ink)' }}>단가 비교 계산기</Link>로 g당 가격을 직접 비교하세요.
       </p>
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
+      <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 460 }}>
           <thead>
             <tr>
               <th scope="col" style={headCell}>견과류</th>
-              <th scope="col" style={headCell}>1g당 평균</th>
-              <th scope="col" style={headCell}>1회분(28g) 단가</th>
+              <th scope="col" style={headCell}>1g당 가격대</th>
+              <th scope="col" style={headCell}>1회분(28g) 환산</th>
               <th scope="col" style={headCell}>가성비</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>땅콩</td><td style={cell}>~12원</td><td style={cell}>~330원</td><td style={{ ...cell, color: '#059669' }}>★★★★★</td></tr>
-            <tr><td style={cell}>해바라기씨</td><td style={cell}>~20원</td><td style={cell}>~560원</td><td style={{ ...cell, color: '#059669' }}>★★★★</td></tr>
-            <tr><td style={cell}>호박씨</td><td style={cell}>~30원</td><td style={cell}>~840원</td><td style={{ ...cell, color: '#0EA5E9' }}>★★★★</td></tr>
-            <tr><td style={cell}>아몬드</td><td style={cell}>~50원</td><td style={cell}>~1,400원</td><td style={{ ...cell, color: '#0EA5E9' }}>★★★</td></tr>
-            <tr><td style={cell}>호두</td><td style={cell}>~60원</td><td style={cell}>~1,680원</td><td style={{ ...cell, color: '#D97706' }}>★★★</td></tr>
-            <tr><td style={cell}>캐슈넛</td><td style={cell}>~70원</td><td style={cell}>~1,960원</td><td style={{ ...cell, color: '#D97706' }}>★★★</td></tr>
-            <tr><td style={cell}>브라질너트</td><td style={cell}>~90원</td><td style={cell}>~900원 (10g)</td><td style={{ ...cell, color: '#D97706' }}>★★ (소량만)</td></tr>
-            <tr><td style={cell}>피스타치오</td><td style={cell}>~120원</td><td style={cell}>~3,360원</td><td style={{ ...cell, color: '#D97706' }}>★★</td></tr>
-            <tr><td style={cell}>마카다미아</td><td style={cell}>~200원</td><td style={cell}>~5,600원</td><td style={{ ...cell, color: '#DC2626' }}>★</td></tr>
-            <tr><td style={cell}>잣</td><td style={cell}>~250원</td><td style={cell}>~7,000원</td><td style={{ ...cell, color: '#DC2626' }}>★</td></tr>
+            <tr><td style={cell}>땅콩</td><td style={cell}>~12원</td><td style={cell}>~330원</td><td style={{ ...cell, color: 'var(--success)' }}>★★★★★</td></tr>
+            <tr><td style={cell}>해바라기씨</td><td style={cell}>~20원</td><td style={cell}>~560원</td><td style={{ ...cell, color: 'var(--success)' }}>★★★★</td></tr>
+            <tr><td style={cell}>호박씨</td><td style={cell}>~30원</td><td style={cell}>~840원</td><td style={{ ...cell, color: 'var(--success)' }}>★★★★</td></tr>
+            <tr><td style={cell}>아몬드</td><td style={cell}>~50원</td><td style={cell}>~1,400원</td><td style={{ ...cell, color: 'var(--accent-ink)' }}>★★★</td></tr>
+            <tr><td style={cell}>호두</td><td style={cell}>~60원</td><td style={cell}>~1,680원</td><td style={{ ...cell, color: 'var(--warning)' }}>★★★</td></tr>
+            <tr><td style={cell}>캐슈넛</td><td style={cell}>~70원</td><td style={cell}>~1,960원</td><td style={{ ...cell, color: 'var(--warning)' }}>★★★</td></tr>
+            <tr><td style={cell}>브라질너트</td><td style={cell}>~90원</td><td style={cell}>~900원 (10g)</td><td style={{ ...cell, color: 'var(--warning)' }}>★★ (소량만)</td></tr>
+            <tr><td style={cell}>피스타치오</td><td style={cell}>~120원</td><td style={cell}>~3,360원</td><td style={{ ...cell, color: 'var(--warning)' }}>★★</td></tr>
+            <tr><td style={cell}>마카다미아</td><td style={cell}>~200원</td><td style={cell}>~5,600원</td><td style={{ ...cell, color: 'var(--danger)' }}>★</td></tr>
+            <tr><td style={cell}>잣</td><td style={cell}>~250원</td><td style={cell}>~7,000원</td><td style={{ ...cell, color: 'var(--danger)' }}>★</td></tr>
           </tbody>
         </table>
       </div>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-        ⚠️ 특정 브랜드 추천 X. 가격은 마트·시즌·구매 채널에 따라 변동 큼. 단백질 가성비는 땅콩·호박씨, 비타민E는 아몬드·해바라기씨가 우수.
+      <p className="g-note">
+        특정 브랜드 추천이 아닙니다. 영양 대비로 보면 단백질은 땅콩·호박씨, 비타민E는 아몬드·해바라기씨가 값에 비해 효율적입니다.
       </p>
 
-      {/* 7. 가공 상태 비교 */}
-      <h2 style={sectionTitle}>무염 vs 가염 vs 가공 견과류</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {[
-          { n: '무염 건조',     c: '#059669', d: '가장 건강. 원래 영양소 그대로 보존. 건강 목적이면 이 선택이 기본.' },
-          { n: '가염',          c: '#0891B2', d: '나트륨 추가 (28g당 약 150mg). 고혈압·신장 질환 있으면 주의.' },
-          { n: '볶음',          c: '#D97706', d: '일부 항산화 성분 감소, 칼로리 소폭 증가(+5%). 풍미는 향상.' },
-          { n: '오일 코팅',     c: '#EA580C', d: '불필요한 지방 추가(+10%). 기름 종류에 따라 트랜스지방 우려.' },
-          { n: '초콜릿·시즈닝', c: '#DC2626', d: '설탕·트랜스지방·나트륨 급증(+60%). 건강 효과 크게 감소 — 간식 분류.' },
-          { n: '꿀 코팅',       c: '#D97706', d: '당분 추가(+20%). 혈당 상승 빠름, 당뇨 주의.' },
-        ].map((s, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderLeft: `3px solid ${s.c}`, borderRadius: '10px', padding: '12px 16px' }}>
-            <p style={{ fontSize: '13px', color: s.c, fontWeight: 700, marginBottom: '4px' }}>{s.n}</p>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{s.d}</p>
-          </div>
-        ))}
+      {/* 8. 가공 상태 비교 — PROC_DATA에서 생성 */}
+      <h2 className="g-h2">무염 vs 가염 vs 가공 견과류</h2>
+      <p className="g-p">
+        계산기의 가공 상태 선택은 입력한 g을 견과 자체 무게로 보고, 코팅·기름·꿀·소금으로 더해지는 열량과 나트륨을 아래 배수·추가량으로 어림합니다. 실측 영양값이 아니라 도구의 추정값이므로, 포장 제품은 영양성분표의 100g당 열량·나트륨을 우선하세요. 가공 방식은 견과 자체의 영양보다 <strong>더해지는 설탕·기름·소금</strong>의 차이가 크다는 점이 핵심입니다.
+        볶음은 풍미가 좋아지는 대신 열에 약한 성분이 일부 줄고, 오일 코팅·꿀·초콜릿은 칼로리를, 가염·시즈닝은 나트륨을 끌어올립니다.
+      </p>
+      <div className="tableScroll">
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+          <thead>
+            <tr>
+              <th scope="col" style={headCell}>가공 상태</th>
+              <th scope="col" style={headCell}>칼로리 배수</th>
+              <th scope="col" style={headCell}>나트륨 추가(28g당)</th>
+              <th scope="col" style={headCell}>도구 안내</th>
+            </tr>
+          </thead>
+          <tbody>
+            {PROC_DATA.map(p => (
+              <tr key={p.key}>
+                <td style={{ ...cell, fontWeight: 600, whiteSpace: 'nowrap' }}>{p.label}</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap' }}>×{p.calFactor}</td>
+                <td style={{ ...cell, whiteSpace: 'nowrap' }}>{p.sodiumAdd ? `+${p.sodiumAdd}mg` : '—'}</td>
+                <td style={{ ...cell, color: 'var(--muted)' }}>{p.warning ?? '건강 목적이면 기본 선택'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
-      {/* 8. 보관법 */}
-      <h2 style={sectionTitle}>📦 견과류 보관법 & 산패 주의</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
-        견과류는 <strong style={{ color: 'var(--text)' }}>불포화지방산이 풍부해 산패되기 쉽습니다</strong>. 냄새가 이상하거나 쓴맛이 나면 산패 신호이므로 즉시 폐기하세요.
+      {/* 9. 보관법 */}
+      <h2 className="g-h2">견과류 보관법 & 산패 주의</h2>
+      <p className="g-p">
+        견과류는 <strong>불포화지방산이 풍부해 산패되기 쉽습니다</strong>. 기름 쩐 냄새가 나거나 쓴맛이 나면 산패 신호이므로 먹지 말고 버리세요. 곰팡이가 핀 견과는 곰팡이독소 위험이 있어 해당 부분만 골라내지 말고 봉지째 폐기하는 것이 안전합니다.
       </p>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+      <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -315,130 +374,32 @@ export default function NutsPage() {
               <tr key={i}>
                 <td style={cell}>{r.m}</td>
                 <td style={{ ...cell, color: 'var(--muted)' }}>{r.p}</td>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                <td style={{ ...cell, color: 'var(--accent-ink)', fontWeight: 700 }}>{r.t}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-        💡 분쇄한 견과류는 통째보다 산패가 3~5배 빠릅니다. 필요할 때만 갈아서 사용.
+      <p className="g-note">
+        갈거나 다진 견과류는 공기와 닿는 표면이 넓어 통견과보다 훨씬 빨리 산패합니다. 필요할 때만 갈아서 쓰세요.
       </p>
 
-      {/* 9. FAQ — accordion */}
-      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-      <FaqJsonLd items={FAQ_LD} />
+      {/* 10. FAQ */}
+      <Faq items={FAQ_LD} />
 
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q1. 견과류는 하루에 얼마나 먹어야 하나요?</summary>
-        <div style={faqAnswer}>
-          대부분의 견과류는 <strong style={{ color: 'var(--text)' }}>하루 28g(1온스, 한 줌)</strong>이 국제 영양 학회의 표준 1회 제공량입니다. 아몬드 약 23알, 호두 반쪽 14개, 피스타치오 약 49알. 하루 열량의 10~15%를 초과하지 않는 것이 좋으며, 2000kcal 기준 하루 약 160~200kcal(28g 내외)가 적절합니다.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q2. 브라질너트는 왜 2~3알만 먹어야 하나요?</summary>
-        <div style={faqAnswer}>
-          브라질너트는 셀레늄 함량이 매우 높아 <strong style={{ color: 'var(--text)' }}>1알에만 약 68~137μg</strong>의 셀레늄이 들어있습니다. 성인 하루 셀레늄 상한 섭취량은 400μg인데, 함량이 높은 개체(1알 약 137μg) 기준 3알부터 상한을 넘을 수 있어 하루 2~3알 이하가 권장됩니다. 셀레늄 과잉 섭취 시 탈모, 손발톱 변형, 신경계 손상이 발생할 수 있어요. 본 도구의 셀레늄 자동 경고 활용.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q3. 여러 견과류를 섞어 먹는 게 더 좋나요?</summary>
-        <div style={faqAnswer}>
-          네, 일반적으로 권장됩니다. 영양소 다양성 ↑ (각 견과류 강점 다름), 단조로움 ↓ (꾸준한 섭취), 셀레늄·오메가3·비타민E 균형. 본 도구의 <strong style={{ color: 'var(--text)' }}>인기 믹스 6종 프리셋</strong>(다이어트·근육·뇌 건강·심혈관·균형·트레일) 한 번 클릭으로 적용. 알레르기 그룹 자동 필터.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q4. 견과류를 먹으면 살이 찌나요?</summary>
-        <div style={faqAnswer}>
-          견과류는 칼로리가 높지만(28g당 150~200kcal) 연구에 따르면 오히려 체중 관리에 도움이 됩니다. 포화지방 대신 불포화지방이 많고 식이섬유와 단백질이 포만감을 높여 전체 식사량을 줄이는 효과. 단, 대량 섭취는 칼로리 과잉으로 이어질 수 있으니 적정량 준수.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q5. 견과류 알레르기는 어떻게 구분하나요?</summary>
-        <div style={faqAnswer}>
-          크게 세 그룹: <strong style={{ color: 'var(--text)' }}>핵과류</strong>(아몬드·캐슈넛·피스타치오·호두·피칸·헤이즐넛·마카다미아·브라질너트·잣) → 서로 교차 반응, <strong style={{ color: 'var(--text)' }}>콩과</strong>(땅콩) → 별도 그룹, <strong style={{ color: 'var(--text)' }}>씨앗류</strong>(해바라기·호박씨) → 또 다른 그룹.
-          본 도구의 알레르기 필터 활용 — 그룹 체크 시 해당 견과류 자동 숨김.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q6. 영유아·어린이는 견과류 언제부터 먹어도 되나요?</summary>
-        <div style={faqAnswer}>
-          일반 가이드(의사 상담 우선): 12개월 이전 X(질식·알레르기), 12~24개월 잘게 갈기·페이스트, 3세 이상 작은 알갱이, 5세 이하 통째 X(질식 위험). 가족력 있으면 의사 상담 후 도입, 첫 도입 시 소량부터, 응급 약(에피펜) 준비. 한국 영유아 알레르기 흔한 견과류는 땅콩·핵과류.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q7. 신장·갑상선 환자도 견과류 먹어도 되나요?</summary>
-        <div style={faqAnswer}>
-          <strong style={{ color: 'var(--text)' }}>의사 상담 필수.</strong>
-          <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li><strong>신장 질환</strong>: 인·칼륨 제한 필요. 견과류는 칼륨이 높아 의사 처방 식단 우선. 본 도구 결과 그대로 적용 X.</li>
-            <li><strong>갑상선 질환</strong>: 셀레늄(브라질너트) 영향. 갑상선 호르몬 약 복용 시 의사 상담 필수, 일반인보다 엄격한 제한.</li>
-            <li><strong>당뇨</strong>: 견과류 일반적 OK(혈당 안정). 단 가공된(꿀·초콜릿) 주의.</li>
-          </ul>
-          본 도구는 일반 가이드 — 기저 질환은 의사·영양사 상담 우선.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q8. 견과류 알레르기 의심되면 어떻게 확인하나요?</summary>
-        <div style={faqAnswer}>
-          <strong style={{ color: 'var(--text)' }}>반드시 의료진 진단.</strong> 증상은 가벼움(입 가려움·두드러기) → 중간(부종·복통·구토) → 심함(호흡 곤란·아나필락시스).
-          <br /><br />
-          🚨 <strong style={{ color: '#DC2626' }}>아나필락시스(응급)</strong>: 호흡 곤란·의식 저하·전신 두드러기 → 즉시 119 호출, 에피펜(있으면) 즉시 사용.
-          <br /><br />
-          진단: 알레르기 전문의·소아과 → 피부 단자 시험·혈액 IgE 검사·경구 유발 시험(전문의 감독). 본 도구 결과로 자가 판단 X.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q9. 가공 견과류(꿀·초콜릿·시즈닝) 먹어도 되나요?</summary>
-        <div style={faqAnswer}>
-          <strong style={{ color: 'var(--text)' }}>건강 효과 ↓ · 가끔 OK.</strong>
-          <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li>가염: 나트륨 +150mg/28g (고혈압 주의)</li>
-            <li>볶음: 항산화 일부 ↓·풍미 ↑</li>
-            <li>오일 코팅: 지방 +10%·트랜스 우려</li>
-            <li>초콜릿: 설탕·트랜스지방·나트륨 +60% (간식 분류)</li>
-            <li>꿀 코팅: 당분 +20% (당뇨 주의)</li>
-          </ul>
-          평일 무염·생/건조, 주말 가벼운 가공 OK 정도가 적정. 본 도구의 가공 상태 토글로 칼로리·나트륨 자동 보정.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q10. 어떤 견과류가 가장 건강에 좋나요?</summary>
-        <div style={faqAnswer}>
-          목적에 따라 다릅니다. 심혈관에는 오메가3가 풍부한 호두, 항산화에는 비타민E가 많은 아몬드·해바라기씨, 단백질에는 땅콩, 면역·갑상선에는 브라질너트(소량). 특정 견과류에 집중하기보다 <strong style={{ color: 'var(--text)' }}>혼합 견과류</strong>를 다양하게 섭취하는 것이 영양소 균형 면에서 가장 좋습니다 — 본 도구의 균형 믹스 프리셋 추천.
-        </div>
-      </details>
-
-      {/* 10. 의료 면책 */}
-      <h2 style={sectionTitle}>⚠️ 의료 면책</h2>
-      <div style={{
-        background: 'rgba(217, 119, 6, 0.06)',
-        border: '1px solid rgba(217, 119, 6, 0.25)',
-        borderRadius: '12px',
-        padding: '18px 22px',
-        fontSize: '14px',
-        color: 'var(--text)',
-        lineHeight: 1.8,
-      }}>
-        <ul style={{ paddingLeft: '20px', margin: 0 }}>
-          <li>본 도구는 <strong>일반 영양 가이드</strong>입니다. 영양 정보는 평균값(<a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>USDA FoodData Central</a> · <a href="https://www.kns.or.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>한국영양학회</a> 섭취기준).</li>
-          <li>알레르기·기저 질환(신장·갑상선)은 적정량이 다름 → 의사·영양사 상담.</li>
-          <li>본 도구는 <strong>정확한 영양 진단·알레르기 진단·특정 브랜드 추천·의약품/보충제 비교</strong>를 제공하지 않습니다.</li>
-          <li>도움 받기: <a href="https://www.kns.or.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>한국영양학회</a>, <a href="https://www.foodsafetykorea.go.kr/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>식약처 식품안전나라</a>(1399), 응급(아나필락시스) 119.</li>
+      {/* 11. 의료 면책 */}
+      <h2 className="g-h2">의료 면책</h2>
+      <Callout tone="warn">
+        <ul className="g-list" style={{ margin: 0 }}>
+          <li>본 도구는 <strong>일반 영양 가이드</strong>입니다. 영양 정보는 평균값(<a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer">USDA FoodData Central</a> · 2020 한국인 영양소 섭취기준)입니다.</li>
+          <li>알레르기·기저 질환(신장·갑상선)이 있으면 적정량이 다릅니다 → 의사·영양사 상담.</li>
+          <li>본 도구는 <strong>영양 진단·알레르기 진단·특정 브랜드 추천·의약품/보충제 비교</strong>를 제공하지 않습니다.</li>
+          <li>도움 받기: <a href="https://www.kns.or.kr/" target="_blank" rel="noopener noreferrer">한국영양학회</a>, <a href="https://www.foodsafetykorea.go.kr/" target="_blank" rel="noopener noreferrer">식약처 식품안전나라</a>(1399), 응급(아나필락시스) 119.</li>
         </ul>
-      </div>
+      </Callout>
 
-      {/* 11. 함께 쓰면 좋은 도구 */}
-      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+      {/* 함께 쓰면 좋은 도구 */}
+      <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
         <Link href="/tools/health/bmr" style={{ ...card, display: 'block', textDecoration: 'none', marginBottom: 0 }}>
           <div style={{ fontSize: '22px', marginBottom: '6px' }}>🔥</div>
@@ -471,6 +432,6 @@ export default function NutsPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>베이킹 견과</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

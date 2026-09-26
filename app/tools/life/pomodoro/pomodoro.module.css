@@ -1,24 +1,24 @@
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
 
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; box-sizing: border-box; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px 20px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
 
 /* ── 탭 ── */
-.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 4px; }
-.tabBtn { background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 9px 4px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }@media (hover: hover) {
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 4px; }
+.tabBtn { background: transparent; border: 1px solid transparent; border-radius: var(--radius-s); padding: 9px 4px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: var(--font-sans); transition: all 0.15s; }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
 .tabBtnActive { background: var(--bg3); color: var(--text); border-color: var(--border); }
 
 /* ── 작업 입력 ── */
-.taskInput { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 14px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; box-sizing: border-box; }
+.taskInput { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 14px; color: var(--text); font-family: var(--font-sans); box-sizing: border-box; }
 .taskInput:focus { outline: none; border-color: var(--accent); }
 .taskInput::placeholder { color: var(--muted); }
 
 /* ── 페이즈 선택 ── */
 .phaseRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.phaseBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }@media (hover: hover) {
+.phaseBtn { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: var(--font-sans); transition: all 0.15s; }@media (hover: hover) {
   .phaseBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
 .phaseBtnActive { background: var(--bg2); font-weight: 600; }
@@ -27,7 +27,7 @@
 .timerWrap { position: relative; width: 240px; height: 240px; margin: 12px auto; }
 .timerCenter { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
 .timerPhase { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
-.timerTime { font-family: 'Inter', system-ui, sans-serif; font-size: 50px; font-weight: 800; color: var(--text); letter-spacing: -2px; line-height: 1; }
+.timerTime { font-family: var(--font-sans); font-size: 50px; font-weight: 800; color: var(--text); letter-spacing: -2px; line-height: 1; }
 .timerCycle { font-size: 12px; color: var(--muted); }
 .timerTask { font-size: 12px; color: var(--muted); max-width: 180px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
 
@@ -36,14 +36,14 @@
 .ctrlBtn { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; }@media (hover: hover) {
   .ctrlBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.mainBtn { padding: 14px 40px; border: none; border-radius: 999px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; color: #ffffff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }@media (hover: hover) {
+.mainBtn { padding: 14px 40px; border: none; border-radius: var(--radius-pill); font-size: 16px; font-weight: 700; font-family: var(--font-sans); color: #ffffff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }@media (hover: hover) {
   .mainBtn:hover { opacity: 0.9; transform: scale(1.03); }
 }
 
 /* ── 통계 ── */
 .statsRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.statItem { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
-.statNum { font-family: 'Inter', system-ui, sans-serif; font-size: 24px; font-weight: 800; color: var(--text); }
+.statItem { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 14px 10px; text-align: center; }
+.statNum { font-family: var(--font-sans); font-size: 24px; font-weight: 800; color: var(--text); }
 .statLabel { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 /* ── 일일 목표 진행바 ── */
@@ -55,7 +55,7 @@
 
 /* ── 키보드 단축키 ── */
 .kbdRow { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.kbd { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; color: var(--muted); }
+.kbd { font-family: var(--font-sans); font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; color: var(--muted); }
 .kbd strong { color: var(--text); margin-right: 4px; }
 
 /* ── 설정 ── */
@@ -66,7 +66,7 @@
 .settingBtn { width: 28px; height: 28px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; font-size: 16px; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }@media (hover: hover) {
   .settingBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.settingValue { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 22px; text-align: center; }
+.settingValue { font-family: var(--font-sans); font-size: 18px; font-weight: 700; color: var(--text); min-width: 22px; text-align: center; }
 
 /* ── 프리셋 그리드 ── */
 .presetGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -75,17 +75,17 @@
 }
 .presetCardActive { border-color: var(--accent); background: var(--bg2); }
 .presetTitle { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-.presetTime { font-family: 'Inter', system-ui, sans-serif; font-size: 12px; color: var(--accent); margin-bottom: 4px; }
+.presetTime { font-family: var(--font-sans); font-size: 12px; color: var(--accent); margin-bottom: 4px; }
 .presetDesc { font-size: 11px; color: var(--muted); line-height: 1.5; }
-.presetBadge { position: absolute; top: 8px; right: 8px; font-size: 10px; background: var(--accent-strong); color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.presetBadge { position: absolute; top: 8px; right: 8px; font-size: 11px; background: var(--accent-strong); color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
 
 /* ── 알림음 ── */
 .soundList { display: flex; flex-direction: column; gap: 6px; }
-.soundRow { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; }@media (hover: hover) {
+.soundRow { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s); cursor: pointer; transition: all 0.15s; }@media (hover: hover) {
   .soundRow:hover { border-color: var(--border-hover); }
 }
 .soundRowActive { border-color: var(--accent); background: var(--bg2); }
-.soundSelect { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; text-align: left; }
+.soundSelect { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; font-family: var(--font-sans); text-align: left; }
 .soundName { display: block; font-size: 13px; color: var(--text); font-weight: 500; }
 .soundDesc { display: block; font-size: 11px; color: var(--muted); }
 .soundTest { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--muted); cursor: pointer; transition: all 0.15s; }@media (hover: hover) {
@@ -97,35 +97,35 @@
 .optionRow + .optionRow { border-top: 1px solid var(--border); }
 .optionLabel { font-size: 13px; color: var(--text); }
 .optionDesc { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.toggle { width: 40px; height: 22px; background: var(--bg3); border: 1px solid var(--border); border-radius: 999px; position: relative; cursor: pointer; transition: all 0.15s; flex-shrink: 0; appearance: none; -webkit-appearance: none; padding: 0; }
+.toggle { width: 40px; height: 22px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-pill); position: relative; cursor: pointer; transition: all 0.15s; flex-shrink: 0; appearance: none; -webkit-appearance: none; padding: 0; }
 .toggleOn { background: var(--accent); border-color: var(--accent); }
 .toggleDot { width: 16px; height: 16px; background: var(--bg2); border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: all 0.15s; }
 .toggleOn .toggleDot { left: 20px; background: #0D0D0D; }
 
 /* ── 통계 탭 ── */
-.bigStat { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+.bigStat { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 18px 20px; }
 .bigStatLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-.bigStatValue { font-family: 'Inter', system-ui, sans-serif; font-size: 28px; font-weight: 800; color: var(--text); }
+.bigStatValue { font-family: var(--font-sans); font-size: 28px; font-weight: 800; color: var(--text); }
 .bigStatHint { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
 .barChart { display: flex; align-items: flex-end; gap: 4px; height: 100px; padding: 8px 0 4px; }
 .barCol { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .bar { width: 100%; background: var(--bg3); border-radius: 4px 4px 0 0; min-height: 4px; transition: all 0.3s; }
-.barLabel { font-size: 10px; color: var(--muted); }
+.barLabel { font-size: 11px; color: var(--muted); }
 
-.insightCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.insightCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
 .insightIcon { font-size: 22px; flex-shrink: 0; }
 .insightTitle { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .insightDesc { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
 .historyList { display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow-y: auto; }
-.historyRow { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; }
-.historyTime { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--muted); flex-shrink: 0; min-width: 60px; }
+.historyRow { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s); }
+.historyTime { font-family: var(--font-sans); font-size: 11px; color: var(--muted); flex-shrink: 0; min-width: 60px; }
 .historyTask { font-size: 12px; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.historyDur { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--accent); flex-shrink: 0; }
+.historyDur { font-family: var(--font-sans); font-size: 11px; color: var(--accent); flex-shrink: 0; }
 
 /* ── 가이드 ── */
-.guideCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.guideCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
 .guideEmoji { font-size: 22px; flex-shrink: 0; }
 .guideTitle { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .guideDesc { font-size: 12px; color: var(--muted); line-height: 1.6; }

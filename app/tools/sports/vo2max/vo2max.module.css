@@ -6,7 +6,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .cardLabel {
@@ -15,14 +15,14 @@
   color: var(--text);
   font-weight: 800;
   margin-bottom: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .subLabel {
   font-size: 12px;
   color: var(--muted);
   font-weight: 700;
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 신체 정보 ── */
@@ -39,7 +39,7 @@
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .sexRow { display: flex; gap: 4px; }
@@ -47,15 +47,15 @@
   flex: 1;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px;
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .sexActive {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -67,7 +67,7 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 12px;
   gap: 6px;
   min-height: 40px;
@@ -78,7 +78,7 @@
   background: transparent;
   border: none;
   outline: none;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
@@ -107,7 +107,7 @@
   gap: 10px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 14px;
   cursor: pointer;
   text-align: left;
@@ -118,7 +118,7 @@
   .methodBtn:hover { border-color: var(--accent); }
 }
 .methodActive {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: var(--accent);
 }
 .methodEmoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
@@ -127,14 +127,14 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .methodActive .methodName { color: var(--accent); }
 .methodDesc {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.5;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .methodMeta {
   display: flex;
@@ -143,16 +143,16 @@
   font-size: 11px;
   color: var(--muted);
   margin-top: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .methodDiff {
   padding: 1px 6px;
   border-radius: 4px;
   font-weight: 700;
 }
-.diff_easy { background: rgba(16,185,129,0.18); color: #059669; }
-.diff_medium { background: rgba(217,119,6,0.18); color: #D97706; }
-.diff_hard { background: rgba(220,38,38,0.18); color: #DC2626; }
+.diff_easy { background: rgba(16,185,129,0.18); color: var(--emerald-600); }
+.diff_medium { background: rgba(217,119,6,0.18); color: var(--amber-600); }
+.diff_hard { background: rgba(220,38,38,0.18); color: var(--red-600); }
 .methodAccuracy {
   background: var(--bg2);
   padding: 1px 6px;
@@ -165,7 +165,7 @@
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .timeRow {
   display: grid;
@@ -177,8 +177,8 @@
   color: var(--muted);
   margin: 8px 0 0;
   line-height: 1.7;
-  background: rgba(14,165,233,0.14);
-  border-left: 2px solid rgba(14,165,233,0.4);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-left: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
   padding: 8px 10px;
   border-radius: 6px;
 }
@@ -198,7 +198,7 @@
 .paLabel {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .paOptions {
@@ -212,16 +212,16 @@
 .paOpt {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   line-height: 1.4;
 }
 .paOptActive {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -229,9 +229,9 @@
 
 /* ── 히어로 ── */
 .heroCard {
-  background: linear-gradient(140deg, rgba(14,165,233,0.18), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 16px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   text-align: center;
 }
@@ -250,19 +250,19 @@
   margin-top: 6px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(56px, 14vw, 88px);
   font-weight: 800;
   letter-spacing: -2px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 28px rgba(14,165,233,0.20);
+  text-shadow: 0 0 28px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 .heroUnit {
   font-size: 14px;
   font-weight: 700;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .heroGrade {
   display: inline-block;
@@ -270,15 +270,15 @@
   font-weight: 700;
   padding: 6px 14px;
   border: 1px solid;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-top: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .heroMethod {
   font-size: 12px;
   color: var(--muted);
   margin-top: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 5단계 컷오프 ── */
@@ -295,7 +295,7 @@
   align-items: center;
   gap: 4px;
   padding: 8px 4px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background: var(--bg3);
   border: 1px solid var(--border);
   min-width: 0;
@@ -311,16 +311,16 @@
 .segBar {
   width: 100%;
   height: 6px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 .segLabel {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 700;
   line-height: 1.2;
 }
 .segRange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 800;
   color: var(--text);
@@ -329,16 +329,16 @@
 .segMe {
   position: absolute;
   top: -9px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   color: #fff;
   background: var(--accent-strong);
   padding: 1px 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
 @media (max-width: 480px) {
-  .segLabel { font-size: 10px; }
+  .segLabel { font-size: 11px; }
   .segRange { font-size: 11px; }
   .seg { padding: 7px 2px 9px; }
 }
@@ -374,7 +374,7 @@
   font-weight: 700;
 }
 .raceTime {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);
@@ -383,7 +383,7 @@
 .racePace {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
 }
 
@@ -397,7 +397,7 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-left: 3px solid;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
 }
@@ -407,18 +407,18 @@
 }
 .paceLeft { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
 .paceCode {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
 }
 .paceName {
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .paceVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
   color: var(--text);
@@ -427,7 +427,7 @@
 .paceDesc {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 개선 방법 ── */
@@ -446,7 +446,7 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 4px;
 }
 .improveDesc {
@@ -458,6 +458,6 @@
 .improveWeeks {
   font-size: 11px;
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }

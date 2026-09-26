@@ -11,7 +11,7 @@ export default function UnitCategoryPage() {
   return (
     <CategoryView
       catId="unit"
-      description="길이·무게부터 한국 전통 단위(자·근·돈·평·홉)까지 — 일상에서 자주 쓰는 모든 변환."
+      description="평수·옷 사이즈·연비·타이어 공기압처럼 자주 헷갈리는 단위를 표준 환산 계수로 바꿉니다."
     />
   )
 }

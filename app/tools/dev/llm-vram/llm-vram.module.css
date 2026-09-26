@@ -1,7 +1,7 @@
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 
 .groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
 .groupNote { font-size: 12px; color: var(--muted); line-height: 1.65; margin: 8px 0 0; }
@@ -27,7 +27,7 @@
 .numInput {
   width: 100%; min-width: 0; font-size: 16px; font-weight: 700; color: var(--text);
   background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s);
-  padding: 8px 10px; text-align: right; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  padding: 8px 10px; text-align: right; font-family: var(--font-sans);
 }
 .numInput:focus { outline: none; border-color: var(--accent); }
 
@@ -36,7 +36,7 @@
 .pill {
   border: 1px solid var(--border); background: var(--bg); color: var(--text);
   font-size: 12px; font-weight: 600; padding: 7px 11px; border-radius: var(--radius-pill);
-  cursor: pointer; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  cursor: pointer; font-family: var(--font-sans);
 }
 .pill:disabled, .pillOff { opacity: 0.35; cursor: not-allowed; }
 
@@ -45,7 +45,7 @@
 /* 결과 */
 .resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 20px; text-align: center; }
 .resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
-.hero { font-family: Inter, "Noto Sans KR", system-ui, sans-serif; font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; color: var(--accent-ink); }
+.hero { font-family: var(--font-sans); font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; color: var(--accent-ink); }
 .heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 0.1em; }
 .resultSub { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 .emptyNote { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; }
@@ -74,5 +74,5 @@
 .tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 12px; }
 .refTable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 360px; }
 .refTable th { padding: 8px 10px; text-align: left; color: var(--muted); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
-.refTable td { padding: 8px 10px; color: var(--text); border-bottom: 1px solid var(--border); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.refTable td { padding: 8px 10px; color: var(--text); border-bottom: 1px solid var(--border); font-family: var(--font-sans); }
 .refTable .rowOn td { background: color-mix(in srgb, var(--accent) 6%, transparent); }

@@ -1,7 +1,7 @@
 .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 18px; }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 
 .groupLabel { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 10px; }
 .groupNote { font-size: 12px; color: var(--muted); line-height: 1.65; margin: 10px 0 0; }
@@ -28,7 +28,7 @@
 .wonInput {
   flex: 1; min-width: 0; font-size: 16px; font-weight: 700; color: var(--text);
   background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s);
-  padding: 10px 12px; text-align: right; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  padding: 10px 12px; text-align: right; font-family: var(--font-sans);
 }
 .wonInput:focus { outline: none; border-color: var(--accent); }
 .unit { font-size: 13px; color: var(--muted); font-weight: 600; white-space: nowrap; }
@@ -36,7 +36,7 @@
 .numInput {
   width: 64px; min-width: 0; font-size: 16px; font-weight: 700; color: var(--text);
   background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s);
-  padding: 10px; text-align: right; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  padding: 10px; text-align: right; font-family: var(--font-sans);
 }
 .numInput:focus { outline: none; border-color: var(--accent); }
 .dateInput {
@@ -57,7 +57,7 @@
 /* 결과 */
 .resultCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 22px 20px; text-align: center; }
 .resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
-.hero { font-family: Inter, "Noto Sans KR", system-ui, sans-serif; font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; color: var(--accent-ink); }
+.hero { font-family: var(--font-sans); font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1; margin: 0; letter-spacing: -0.02em; color: var(--accent-ink); }
 .heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 0.1em; }
 .resultSub { font-size: 13px; color: var(--muted); margin: 10px 0 0; line-height: 1.7; }
 .resultSub strong { color: var(--text); }
@@ -73,12 +73,12 @@
 .feeRow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .feeRow .wonBox { flex: 0 1 200px; }
 .feeOut { font-size: 14px; color: var(--muted); }
-.feeOut strong { color: var(--accent-ink); font-size: 16px; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.feeOut strong { color: var(--accent-ink); font-size: 16px; font-family: var(--font-sans); }
 
 /* 표 */
 .tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .refTable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 280px; }
 .refTable th { padding: 8px 12px; text-align: left; color: var(--muted); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--border); }
-.refTable td { padding: 8px 12px; color: var(--text); border-bottom: 1px solid var(--border); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.refTable td { padding: 8px 12px; color: var(--text); border-bottom: 1px solid var(--border); font-family: var(--font-sans); }
 .refTable .rowOn td { background: color-mix(in srgb, var(--accent) 8%, transparent); }
 .refTable strong { color: var(--accent-ink); }

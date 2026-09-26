@@ -5,7 +5,7 @@
    ────────────────────────────────────────────────────── */
 
 import {
-  findIngredient, findUnit, isSeasoning, INGREDIENT_DENSITY, SHOP_GROUP_LABELS,
+  findIngredient, findUnit, isSeasoning, INGREDIENT_DENSITY, SHOP_GROUP_LABELS, UNITS,
   type UnitKey, type IngredientShoppingGroup,
 } from './ingredientDensity'
 
@@ -78,12 +78,17 @@ export function scaleRecipe(
     let ratio = baseRatio
     let corrected = false
     if (opts.reduceSeasoning && seasoning && scaleUp) {
-      ratio = baseRatio * opts.seasoningRatio
-      corrected = true
+      // 늘어나는 양(증가분)에만 보정 — 배율 전체에 곱하면 4→5인분·75%에서 ×0.94처럼
+      // 인분을 늘렸는데 양념이 원래보다 줄어드는 역전이 생김. 이 식은 항상 1 이상.
+      ratio = 1 + (baseRatio - 1) * opts.seasoningRatio
+      corrected = opts.seasoningRatio < 1
     }
     let amt = ing.amount * ratio
-    if (opts.roundHalfMode) amt = roundHalf(amt)
-    else amt = roundSensible(amt)
+    if (opts.roundHalfMode) {
+      const half = roundHalf(amt)
+      // 0.5 단위로 반올림해 0이 되는 소량 재료(예: 소금 1작은술 6→1인분 ≈ 0.17)는 자릿수 반올림으로 유지
+      amt = half === 0 && amt > 0 ? roundSensible(amt) : half
+    } else amt = roundSensible(amt)
     return {
       ...ing,
       baseAmount: ing.amount,
@@ -205,7 +210,7 @@ export function fmtRecipeText(
     return `${s.name}: ${s.amount}${u?.name ?? s.unit}${tag}`
   })
   const footer = opts.reduceSeasoning
-    ? `\n* 양념 자동 보정 ${Math.round(opts.seasoningRatio * 100)}% 적용 — 첫 사용 시 80%부터 간 보면서 조절 권장`
+    ? `\n* 양념 자동 보정 적용 (늘어나는 양의 ${Math.round(opts.seasoningRatio * 100)}%만 반영) — 간을 보면서 조절 권장`
     : ''
   return `${head}\n──────────────\n${lines.join('\n')}${footer}\n— youtil.kr 레시피 비율 계산기`
 }
@@ -218,9 +223,36 @@ export function loadRecipes(): SavedRecipe[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isSavedRecipe) : []
   } catch { return [] }
+}
+
+const UNIT_KEYS = new Set<string>(UNITS.map(u => u.key))
+
+function isRecipeIngredient(v: unknown): v is RecipeIngredient {
+  if (!v || typeof v !== 'object') return false
+  const x = v as Record<string, unknown>
+  return typeof x.id === 'string'
+    && typeof x.name === 'string'
+    && typeof x.amount === 'number' && Number.isFinite(x.amount) && x.amount >= 0
+    && typeof x.unit === 'string' && UNIT_KEYS.has(x.unit)
+    && (x.note === undefined || typeof x.note === 'string')
+}
+
+/** 저장·백업 레시피 스키마 검증 — basePeople이 없으면 장보기 합산이 NaN, 카드에 'undefined인분' */
+export function isSavedRecipe(v: unknown): v is SavedRecipe {
+  if (!v || typeof v !== 'object') return false
+  const x = v as Record<string, unknown>
+  return typeof x.id === 'string'
+    && typeof x.title === 'string'
+    && typeof x.category === 'string'
+    && typeof x.basePeople === 'number' && Number.isFinite(x.basePeople) && x.basePeople > 0
+    && Array.isArray(x.ingredients) && x.ingredients.every(isRecipeIngredient)
+    && (x.emoji === undefined || typeof x.emoji === 'string')
+    && (x.notes === undefined || typeof x.notes === 'string')
+    && typeof x.createdAt === 'string'
+    && typeof x.updatedAt === 'string'
 }
 
 export function saveRecipes(recipes: SavedRecipe[]) {
@@ -238,13 +270,12 @@ export function exportRecipes(recipes: SavedRecipe[]): string {
 
 export function importRecipes(json: string): SavedRecipe[] | null {
   try {
-    const obj = JSON.parse(json)
-    const list = Array.isArray(obj) ? obj : (Array.isArray(obj.recipes) ? obj.recipes : null)
-    if (!list) return null
-    return list.filter((r: unknown): r is SavedRecipe => {
-      const x = r as SavedRecipe
-      return !!x && typeof x.id === 'string' && typeof x.title === 'string' && Array.isArray(x.ingredients)
-    })
+    const obj: unknown = JSON.parse(json)
+    const list: unknown = Array.isArray(obj)
+      ? obj
+      : (obj && typeof obj === 'object' ? (obj as { recipes?: unknown }).recipes : null)
+    if (!Array.isArray(list)) return null
+    return list.filter(isSavedRecipe)
   } catch { return null }
 }
 

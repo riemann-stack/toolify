@@ -3,9 +3,29 @@
    페이스, 반복 D-day, localStorage 관리
    ────────────────────────────────────────────────────── */
 
-import { isHoliday, type RecurrenceId } from './koreanHolidays'
+import { isHoliday, RECURRENCE_OPTIONS, type RecurrenceId } from './koreanHolidays'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24
+
+/** 'YYYY-MM-DD'를 기기 로컬 자정으로 분해 파싱.
+   new Date('YYYY-MM-DD')는 UTC 자정으로 해석돼 UTC 음수 시간대(미주 등)에서 하루 앞당겨진다.
+   ISO 타임스탬프(createdAt 등 'T' 포함) 문자열은 그대로 Date로 해석한 뒤 로컬 자정으로 맞춘다.
+   TODO: lib/date.ts로 이관 (공용 parseYmd) */
+export function parseYmd(s: string): Date {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s)
+  const d = m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : new Date(s)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+/** 유효한 'YYYY-MM-DD' 문자열인지 (롤오버 날짜 2-31 등 거부) */
+export function isYmd(s: unknown): s is string {
+  if (typeof s !== 'string') return false
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s)
+  if (!m) return false
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+  return d.getFullYear() === Number(m[1]) && d.getMonth() === Number(m[2]) - 1 && d.getDate() === Number(m[3])
+}
 
 export type DdayGoal = {
   totalAmount: number
@@ -48,7 +68,7 @@ export type DdayCalc = {
   urgency: 'today' | 'urgent' | 'soon' | 'ok' | 'past'   // 색상 등급
 }
 export function calcDday(targetStr: string, ref: Date = new Date()): DdayCalc {
-  const target = new Date(targetStr)
+  const target = parseYmd(targetStr)
   const diff = dayDiff(target, ref)
   const days = Math.abs(diff)
   const isToday = diff === 0
@@ -76,8 +96,8 @@ export type ProgressCalc = {
   percent: number
 }
 export function calcProgress(startStr: string, targetStr: string, ref: Date = new Date()): ProgressCalc | null {
-  const start = new Date(startStr)
-  const target = new Date(targetStr)
+  const start = parseYmd(startStr)
+  const target = parseYmd(targetStr)
   if (target <= start) return null
   const total = dayDiff(target, start)
   const elapsed = Math.max(0, dayDiff(ref, start))
@@ -92,8 +112,8 @@ export function calcProgress(startStr: string, targetStr: string, ref: Date = ne
 
 /** 평일 (월~금) — 시작일·종료일 모두 포함 */
 export function calcWeekdays(startStr: string, endStr: string): number {
-  const start = new Date(startStr); start.setHours(0,0,0,0)
-  const end   = new Date(endStr);   end.setHours(0,0,0,0)
+  const start = parseYmd(startStr)
+  const end   = parseYmd(endStr)
   if (end < start) return 0
   let count = 0
   const cur = new Date(start)
@@ -107,8 +127,8 @@ export function calcWeekdays(startStr: string, endStr: string): number {
 
 /** 영업일 (평일 + 한국 공휴일 제외) */
 export function calcBusinessDays(startStr: string, endStr: string): number {
-  const start = new Date(startStr); start.setHours(0,0,0,0)
-  const end   = new Date(endStr);   end.setHours(0,0,0,0)
+  const start = parseYmd(startStr)
+  const end   = parseYmd(endStr)
   if (end < start) return 0
   let count = 0
   const cur = new Date(start)
@@ -123,8 +143,8 @@ export function calcBusinessDays(startStr: string, endStr: string): number {
 
 /** 주말 횟수 — 토·일이 모두 들어간 주말 수 (일요일 카운트 기준) */
 export function calcWeekendCount(startStr: string, endStr: string): number {
-  const start = new Date(startStr); start.setHours(0,0,0,0)
-  const end   = new Date(endStr);   end.setHours(0,0,0,0)
+  const start = parseYmd(startStr)
+  const end   = parseYmd(endStr)
   if (end < start) return 0
   let count = 0
   const cur = new Date(start)
@@ -137,8 +157,8 @@ export function calcWeekendCount(startStr: string, endStr: string): number {
 
 /** 두 날짜 사이의 공휴일 목록 */
 export function holidaysBetween(startStr: string, endStr: string) {
-  const start = new Date(startStr); start.setHours(0,0,0,0)
-  const end   = new Date(endStr);   end.setHours(0,0,0,0)
+  const start = parseYmd(startStr)
+  const end   = parseYmd(endStr)
   if (end < start) return []
   const out: { date: string; name: string }[] = []
   const cur = new Date(start)
@@ -167,8 +187,8 @@ function addMonthsClamped(date: Date, n: number): Date {
 /** 두 날짜 사이의 (년·월·일) 분해 — 앵커 방식으로 월경계 음수일 버그 방지.
    (구 로직은 1/31→3/1을 '1월 -2일'로 잘못 계산) */
 export function calcYMDDiff(startStr: string, endStr: string) {
-  const start = new Date(startStr); start.setHours(0,0,0,0)
-  const end   = new Date(endStr);   end.setHours(0,0,0,0)
+  const start = parseYmd(startStr)
+  const end   = parseYmd(endStr)
   if (end < start) return { years: 0, months: 0, days: 0 }
   // 총 개월 수를 구한 뒤, start+months가 end를 넘으면 1개월 줄여 앵커를 end 이하로 맞춘다.
   let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
@@ -180,8 +200,11 @@ export function calcYMDDiff(startStr: string, endStr: string) {
 
 /** N일 후 (모드별) */
 export type AddDaysMode = 'calendar' | 'weekday' | 'business'
+/** N 상한 (±100년) — 큰 값이면 평일·영업일 루프가 UI를 멈추고 달력일은 Invalid Date가 된다 */
+export const ADD_DAYS_MAX = 36_500
 export function addDays(startStr: string, n: number, mode: AddDaysMode): Date {
-  const cur = new Date(startStr); cur.setHours(0,0,0,0)
+  const cur = parseYmd(startStr)
+  n = Math.max(-ADD_DAYS_MAX, Math.min(ADD_DAYS_MAX, Math.trunc(n) || 0))
   if (mode === 'calendar') {
     cur.setDate(cur.getDate() + n)
     return cur
@@ -216,8 +239,7 @@ export function nextBusinessDay(ref: Date = new Date()): Date {
 
 /** 반복 D-day의 다음 발생일 */
 export function nextRecurrence(item: DdayItem, ref: Date = new Date()): Date {
-  const target = new Date(item.targetDate)
-  target.setHours(0,0,0,0)
+  const target = parseYmd(item.targetDate)
   const refMid = new Date(ref); refMid.setHours(0,0,0,0)
   if (item.recurrence === 'none' || target >= refMid) return target
 
@@ -245,16 +267,22 @@ export function nextRecurrence(item: DdayItem, ref: Date = new Date()): Date {
   return target
 }
 
+/** 카드 표시·정렬 공용 — 반복 D-day는 다음 발생일, 아니면 원래 목표일 (YYYY-MM-DD) */
+export function effectiveTargetStr(item: DdayItem, ref: Date = new Date()): string {
+  return item.recurrence !== 'none' ? fmtDate(nextRecurrence(item, ref)) : item.targetDate
+}
+
 /** 페이스 계산 (학습·저축 등) */
 export type PaceCalc = {
   remainingDays: number
   remainingAmount: number
   dailyTarget: number
   weeklyTarget: number
-  currentPace: number
+  /** 시작일이 없거나 경과일이 0이면 null — 페이스 비교 불가 (0으로 두면 '달성 어려움' 오판) */
+  currentPace: number | null
   elapsedDays: number
-  expectedFinish: number
-  isOnTrack: boolean
+  expectedFinish: number | null
+  isOnTrack: boolean | null
   deficit: number
   additionalDailyNeeded: number
   percent: number
@@ -269,26 +297,26 @@ export function calcPace(
   if (totalAmount <= 0) return null
   // 음수 완료량은 의미가 없으므로 0으로 클램프 (진행률·예상 완료량이 음수로 표시되는 것 방지)
   const completed = Math.max(0, completedAmount)
-  const target = new Date(targetStr)
+  const target = parseYmd(targetStr)
   const remaining = dayDiff(target, ref)
   const remainingAmount = Math.max(0, totalAmount - completed)
-  const start = startStr ? new Date(startStr) : new Date(ref)
-  const elapsed = Math.max(0, dayDiff(ref, start))
-  const currentPace = elapsed > 0 ? completed / elapsed : 0
+  const elapsed = startStr ? Math.max(0, dayDiff(ref, parseYmd(startStr))) : 0
+  const hasPace = elapsed > 0
+  const currentPace = hasPace ? completed / elapsed : 0
   const dailyTarget = remaining > 0 ? remainingAmount / remaining : 0
   const expectedFinish = completed + currentPace * Math.max(0, remaining)
   const isOnTrack = expectedFinish >= totalAmount
-  const deficit = Math.max(0, totalAmount - expectedFinish)
+  const deficit = hasPace ? Math.max(0, totalAmount - expectedFinish) : 0
   const additionalDailyNeeded = remaining > 0 ? deficit / remaining : 0
   return {
     remainingDays: remaining,
     remainingAmount,
     dailyTarget: Math.ceil(dailyTarget * 100) / 100,
     weeklyTarget: Math.ceil(dailyTarget * 7 * 10) / 10,
-    currentPace: Math.round(currentPace * 100) / 100,
+    currentPace: hasPace ? Math.round(currentPace * 100) / 100 : null,
     elapsedDays: elapsed,
-    expectedFinish: Math.round(expectedFinish * 10) / 10,
-    isOnTrack,
+    expectedFinish: hasPace ? Math.round(expectedFinish * 10) / 10 : null,
+    isOnTrack: hasPace ? isOnTrack : null,
     deficit: Math.round(deficit * 10) / 10,
     additionalDailyNeeded: Math.ceil(additionalDailyNeeded * 100) / 100,
     percent: totalAmount > 0 ? Math.min(100, (completed / totalAmount) * 100) : 0,
@@ -300,13 +328,52 @@ export function calcPace(
    ────────────────────────────────────────────────────── */
 const STORAGE_KEY = 'youtil-ddays-v1'
 
+const RECURRENCE_IDS: readonly string[] = RECURRENCE_OPTIONS.map(r => r.id)
+
+/** 예전 버전·가져오기로 들어온 느슨한 날짜('2026-9-5', '2026/10/10', '2026.10.10', 'YYYY-MM-DDT…')를 YYYY-MM-DD로 정규화 — 로드 직후 저장 시 항목 유실 방지 */
+function normalizeYmd(v: unknown): unknown {
+  if (typeof v !== 'string') return v
+  const m = /^\s*(\d{4})\s*[-/.]\s*(\d{1,2})\s*[-/.]\s*(\d{1,2})\.?(?:[T\s].*)?$/.exec(v)
+  return m ? `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}` : v
+}
+
+/** 저장·백업 JSON 한 건 검증 — 필수 필드가 깨졌으면 null, 선택 필드는 안전한 기본값으로 */
+function sanitizeItem(it: unknown): DdayItem | null {
+  if (!it || typeof it !== 'object') return null
+  const x = it as Record<string, unknown>
+  const targetDate = normalizeYmd(x.targetDate)
+  const startDate = normalizeYmd(x.startDate)
+  if (typeof x.id !== 'string' || typeof x.title !== 'string' || !isYmd(targetDate)) return null
+  const g = x.goal as Record<string, unknown> | undefined
+  const goal = g && typeof g === 'object'
+    && typeof g.totalAmount === 'number' && Number.isFinite(g.totalAmount) && g.totalAmount > 0
+    && typeof g.completedAmount === 'number' && Number.isFinite(g.completedAmount)
+    ? { totalAmount: g.totalAmount, completedAmount: Math.max(0, g.completedAmount), unit: typeof g.unit === 'string' ? g.unit : '' }
+    : undefined
+  return {
+    id: x.id,
+    title: x.title,
+    emoji: typeof x.emoji === 'string' ? x.emoji : '',
+    category: typeof x.category === 'string' ? x.category : 'other',
+    targetDate,
+    startDate: isYmd(startDate) ? startDate : undefined,
+    recurrence: typeof x.recurrence === 'string' && RECURRENCE_IDS.includes(x.recurrence) ? x.recurrence as RecurrenceId : 'none',
+    isPinned: x.isPinned === true,
+    isCompleted: x.isCompleted === true,
+    goal,
+    notes: typeof x.notes === 'string' ? x.notes : undefined,
+    createdAt: typeof x.createdAt === 'string' && !isNaN(new Date(x.createdAt).getTime()) ? x.createdAt : new Date().toISOString(),
+  }
+}
+
 export function loadDdays(): DdayItem[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    if (!Array.isArray(arr)) return []
+    return arr.map(sanitizeItem).filter((x): x is DdayItem => x !== null)
   } catch { return [] }
 }
 
@@ -325,14 +392,11 @@ export function exportDdays(items: DdayItem[]): string {
 
 export function importDdays(json: string): DdayItem[] | null {
   try {
-    const obj = JSON.parse(json)
-    const list = Array.isArray(obj) ? obj : (Array.isArray(obj.items) ? obj.items : null)
+    const obj: unknown = JSON.parse(json)
+    const items = obj && typeof obj === 'object' ? (obj as { items?: unknown }).items : undefined
+    const list: unknown[] | null = Array.isArray(obj) ? obj : (Array.isArray(items) ? items : null)
     if (!list) return null
-    // 최소 필드만 확인
-    return list.filter((it: unknown) => {
-      const x = it as DdayItem
-      return x && typeof x.id === 'string' && typeof x.title === 'string' && typeof x.targetDate === 'string'
-    })
+    return list.map(sanitizeItem).filter((x): x is DdayItem => x !== null)
   } catch { return null }
 }
 
@@ -343,7 +407,7 @@ export function newId(): string {
 
 /* 포맷 헬퍼 */
 export function fmtDate(d: Date | string): string {
-  const date = typeof d === 'string' ? new Date(d) : d
+  const date = typeof d === 'string' ? parseYmd(d) : d
   const y = date.getFullYear()
   const m = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
@@ -351,7 +415,7 @@ export function fmtDate(d: Date | string): string {
 }
 
 export function fmtDateKo(d: Date | string, withDow = true): string {
-  const date = typeof d === 'string' ? new Date(d) : d
+  const date = typeof d === 'string' ? parseYmd(d) : d
   const dow = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()]
   const base = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`
   return withDow ? `${base} (${dow})` : base

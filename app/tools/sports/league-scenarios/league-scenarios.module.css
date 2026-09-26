@@ -1,10 +1,29 @@
-/* 축구 순위 경우의 수 계산기 — 스타일. 토큰만 사용, 신규 hex 금지. */
+/* 축구 순위·승점 경우의 수 계산기 — 스타일(순위 경우의 수 탭 + 모드 탭). 시즌 승점 탭은 season.module.css. 토큰만 사용, 신규 hex 금지. */
 .wrap { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+
+/* ── 모드 탭 (순위 경우의 수 / 시즌 승점) ── */
+.modeTabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 4px;
+}
+.modeTab {
+  min-width: 0; background: transparent; border: none; border-radius: var(--radius-s);
+  padding: 10px 8px; font-size: 14px; font-weight: 700; color: var(--muted); line-height: 1.35;
+  font-family: var(--font-sans); text-align: center; cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.modeTab small { display: block; margin-top: 2px; font-size: 11px; font-weight: 500; }
+@media (hover: hover) {
+  .modeTab:not(.modeTabActive):hover { color: var(--text); }
+}
+.modeTabActive { background: var(--accent-strong); color: #fff; }
+/* 탭 패널 — hidden 속성이 display:flex에 덮이지 않게 */
+.panel { display: flex; flex-direction: column; gap: 12px; }
+.panel[hidden] { display: none; }
 
 /* ── 카드 ── */
 .card {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 18px 20px; box-sizing: border-box;
+  border-radius: var(--radius-card); padding: 18px 20px; box-sizing: border-box;
 }
 .cardLabel {
   display: block; font-size: 11px; color: var(--muted);
@@ -20,7 +39,7 @@
   width: 100%; box-sizing: border-box;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 14px; font-size: 14px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; outline: none; min-height: 48px;
+  font-family: var(--font-sans); outline: none; min-height: 48px;
 }
 .select:focus { border-color: var(--accent); }
 
@@ -33,23 +52,25 @@
 .orderChips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
 .orderChip {
   display: inline-flex; align-items: center; gap: 5px;
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 999px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-pill);
   padding: 4px 10px; font-size: 11px; color: var(--text); font-weight: 600;
 }
 .orderNum {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 800;
-  color: var(--accent-ink); background: var(--accent-dim); border-radius: 999px;
+  font-family: var(--font-sans); font-size: 11px; font-weight: 800;
+  color: var(--accent-ink); background: var(--accent-dim); border-radius: var(--radius-pill);
   width: 15px; height: 15px; display: inline-flex; align-items: center; justify-content: center;
 }
 .orderArrow { color: var(--muted); font-size: 11px; }
 .h2hBadge {
   display: inline-block; margin-top: 8px;
-  background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 999px;
+  background: var(--accent-dim); border: 1px solid var(--accent); border-radius: var(--radius-pill);
   padding: 4px 10px; font-size: 11px; color: var(--accent-ink); font-weight: 700;
 }
 
 /* ── 순위표 입력 ── */
-.tableScroll { border-radius: 10px; }
+/* position: relative — 표 안 시각 숨김 라벨(.srOnly, absolute)의 기준을 스크롤 래퍼로 가둔다.
+   없으면 라벨이 초기 컨테이닝 블록 기준으로 배치돼 360px 폭에서 페이지 가로 스크롤(scrollWidth 366)이 생겼다 */
+.tableScroll { border-radius: 10px; position: relative; }
 .standTable { width: 100%; border-collapse: collapse; font-size: 13px; }
 .standTable th {
   padding: 8px 6px; text-align: center; color: var(--muted);
@@ -60,25 +81,25 @@
 .standTable tr:last-child td { border-bottom: none; }
 .teamNameInput {
   width: 100%; min-width: 86px; box-sizing: border-box;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s);
   padding: 9px 10px; font-size: 13px; font-weight: 600; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; outline: none;
+  font-family: var(--font-sans); outline: none;
 }
 .teamNameInput:focus { border-color: var(--accent); }
 .numCell {
   width: 44px; box-sizing: border-box; text-align: center;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s);
   padding: 9px 4px; font-size: 14px; font-weight: 700; color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif; outline: none;
+  font-family: var(--font-sans); outline: none;
 }
 .numCell:focus { border-color: var(--accent); }
 .derived {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 800;
   color: var(--accent); text-align: center; white-space: nowrap;
 }
 .derivedMuted { color: var(--muted); font-weight: 700; }
 .rowDel {
-  background: transparent; border: 1px solid var(--border); border-radius: 8px;
+  background: transparent; border: 1px solid var(--border); border-radius: var(--radius-s);
   width: 30px; height: 30px; color: var(--muted); cursor: pointer; font-size: 16px;
   line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s;
 }@media (hover: hover) {
@@ -87,7 +108,7 @@
 .addRowBtn {
   margin-top: 10px; background: var(--bg3); border: 1px dashed var(--border); border-radius: 10px;
   padding: 10px 14px; font-size: 13px; color: var(--accent-ink); cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 600; width: 100%; min-height: 44px; transition: all 0.15s;
+  font-family: var(--font-sans); font-weight: 600; width: 100%; min-height: 44px; transition: all 0.15s;
 }@media (hover: hover) {
   .addRowBtn:hover { border-color: var(--accent); }
 }
@@ -97,9 +118,9 @@
 .matchRow { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .matchSelect {
   flex: 1; min-width: 0; box-sizing: border-box;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s);
   padding: 9px 8px; font-size: 13px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; outline: none; min-height: 42px;
+  font-family: var(--font-sans); outline: none; min-height: 42px;
 }
 .matchSelect:focus { border-color: var(--accent); }
 .vs { font-size: 12px; color: var(--muted); font-weight: 700; flex-shrink: 0; }
@@ -107,11 +128,11 @@
 .matchCountWarn { color: var(--warning); font-weight: 600; }
 
 /* 맞대결 결과 세그먼트 (홈승/무/원정승) */
-.resSeg { display: inline-flex; gap: 2px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 2px; flex-shrink: 0; }
+.resSeg { display: inline-flex; gap: 2px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 2px; flex-shrink: 0; }
 .resBtn {
   border: none; background: transparent; border-radius: 6px;
   padding: 7px 9px; font-size: 12px; color: var(--muted); cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 600; white-space: nowrap; transition: all 0.15s;
+  font-family: var(--font-sans); font-weight: 600; white-space: nowrap; transition: all 0.15s;
 }
 .resBtnActive { background: var(--accent-strong); color: #fff; }
 
@@ -121,13 +142,13 @@
   width: 100%; box-sizing: border-box;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 14px; font-size: 16px; font-weight: 700; color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif; outline: none; text-align: center; min-height: 48px;
+  font-family: var(--font-sans); outline: none; text-align: center; min-height: 48px;
 }
 .advInput:focus { border-color: var(--accent); }
 
 /* ── 접기 섹션 (맞대결 입력) ── */
 .collapse {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card);
   padding: 0 20px; box-sizing: border-box;
 }
 .collapseSummary {
@@ -140,11 +161,11 @@
 
 /* ── 관심 팀 시나리오 카드 ── */
 .focusCard {
-  background: var(--bg2); border: 1px solid var(--accent); border-radius: 14px;
+  background: var(--bg2); border: 1px solid var(--accent); border-radius: var(--radius-card);
   padding: 18px 20px; box-sizing: border-box;
 }
 .focusTitle {
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif; font-size: 16px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 16px; font-weight: 800;
   color: var(--text); margin: 0 0 14px; line-height: 1.4;
 }
 .pathRow {
@@ -163,22 +184,22 @@
 .pathVerdict { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; }
 .pathVerdict strong { color: var(--accent); }
 .selfTag {
-  display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 800;
-  background: var(--success); color: #fff; border-radius: 999px; padding: 2px 7px; vertical-align: middle;
+  display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 800;
+  background: var(--success); color: #fff; border-radius: var(--radius-pill); padding: 2px 7px; vertical-align: middle;
 }
 .depTag {
-  display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 800;
-  background: var(--accent-dim); color: var(--accent-ink); border-radius: 999px; padding: 2px 7px; vertical-align: middle;
+  display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 800;
+  background: var(--accent-dim); color: var(--accent-ink); border-radius: var(--radius-pill); padding: 2px 7px; vertical-align: middle;
 }
 
 /* ── 히어로 요약 ── */
 .hero {
-  background: var(--bg2); border: 1px solid var(--accent); border-radius: 14px;
+  background: var(--bg2); border: 1px solid var(--accent); border-radius: var(--radius-card);
   padding: 22px 24px; text-align: center;
 }
 .heroTop { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(44px, 11vw, 72px); font-weight: 800; color: var(--accent);
   letter-spacing: -2px; line-height: 1.05;
 }
@@ -187,7 +208,7 @@
 .heroUnit { font-size: 0.36em; font-weight: 700; color: var(--muted); margin-left: 8px; letter-spacing: 0; }
 .heroBadges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
 .badge {
-  font-size: 12px; font-weight: 700; border-radius: 999px; padding: 5px 12px;
+  font-size: 12px; font-weight: 700; border-radius: var(--radius-pill); padding: 5px 12px;
   border: 1px solid var(--border); color: var(--muted); background: var(--bg3);
 }
 .badgeOk { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-ink); }
@@ -200,15 +221,15 @@
 }
 .probRow { display: flex; align-items: baseline; gap: 8px; justify-content: center; }
 .probLabel { font-size: 12px; color: var(--muted); }
-.probVal { font-family: 'Inter', system-ui, sans-serif; font-size: 24px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+.probVal { font-family: var(--font-sans); font-size: 24px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
 .probWarn {
   font-size: 11px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; text-align: left;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 10px 12px;
 }
 
 /* ── 전체 시나리오 표 ── */
 .tableDetails {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card);
   padding: 0 20px; box-sizing: border-box;
 }
 .tableSummary {
@@ -225,7 +246,7 @@
 .scenTable tr:last-child td { border-bottom: none; }
 .cellOwn { font-weight: 700; color: var(--text); white-space: nowrap; }
 .cellOther { color: var(--muted); line-height: 1.6; }
-.cellRank { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); text-align: center; white-space: nowrap; }
+.cellRank { font-family: var(--font-sans); font-weight: 700; color: var(--text); text-align: center; white-space: nowrap; }
 .statusAdv { color: var(--success); font-weight: 800; white-space: nowrap; }
 .statusElim { color: var(--danger); font-weight: 800; white-space: nowrap; }
 .statusUnd { color: var(--warning); font-weight: 700; white-space: nowrap; }
@@ -233,7 +254,7 @@
 
 /* ── 안내(에러/tooMany) ── */
 .notice {
-  background: var(--bg2); border: 1px solid var(--warning); border-radius: 14px;
+  background: var(--bg2); border: 1px solid var(--warning); border-radius: var(--radius-card);
   padding: 18px 20px; font-size: 13px; color: var(--text); line-height: 1.8;
 }
 .noticeTitle { font-weight: 700; margin: 0 0 6px; }
@@ -242,15 +263,15 @@
 .copyBtn {
   width: 100%; background: var(--accent-strong); color: #fff; border: none;
   padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif; cursor: pointer; transition: opacity 0.15s; min-height: 48px;
+  font-family: var(--font-sans); cursor: pointer; transition: opacity 0.15s; min-height: 48px;
 }@media (hover: hover) {
   .copyBtn:hover { opacity: 0.88; }
 }
 .copyBtnDone { background: var(--success); }
 
 .toast {
-  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
-  background: var(--text); color: var(--bg2); padding: 10px 18px; border-radius: 999px;
+  position: fixed; left: 50%; bottom: calc(var(--bottom-nav-h, 0px) + 28px); transform: translateX(-50%);
+  background: var(--text); color: var(--bg2); padding: 10px 18px; border-radius: var(--radius-pill);
   font-size: 13px; font-weight: 600; z-index: 50; box-shadow: 0 4px 16px rgba(0,0,0,0.18);
 }
 

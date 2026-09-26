@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -17,7 +17,7 @@
   margin-bottom: 14px;
 }
 .cardTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -31,19 +31,19 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tab {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 8px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
@@ -58,11 +58,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   box-sizing: border-box;
   outline: none;
 }
@@ -85,7 +85,7 @@
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   transition: all 0.15s;
   display: flex;
@@ -105,18 +105,18 @@
   display: inline-flex;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 3px;
 }
 .unitBtn {
   background: transparent;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 14px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .unitBtnActive {
@@ -170,17 +170,17 @@
   cursor: pointer;
   border: 2px solid var(--bg2);
 }
-.sliderWarn::-webkit-slider-thumb { background: #EA580C; }
-.sliderWarn::-moz-range-thumb { background: #EA580C; }
+.sliderWarn::-webkit-slider-thumb { background: var(--orange-600); }
+.sliderWarn::-moz-range-thumb { background: var(--orange-600); }
 
 .sliderValInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 10px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: center;
   outline: none;
@@ -197,12 +197,12 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 14px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .pillActive {
@@ -213,9 +213,9 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(14, 165, 233, 0.02));
-  border: 1px solid rgba(14, 165, 233, 0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent), color-mix(in srgb, var(--accent) 2%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 26px 24px;
   text-align: center;
 }
@@ -227,7 +227,7 @@
   margin-bottom: 6px;
 }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 48px;
   font-weight: 800;
   color: var(--accent);
@@ -238,7 +238,7 @@
   font-size: 13px;
   color: var(--muted);
   margin-top: 10px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .heroBodyweight {
   font-size: 12px;
@@ -247,7 +247,7 @@
   padding-top: 10px;
   border-top: 1px dashed var(--border);
 }
-.heroBodyweight strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.heroBodyweight strong { color: var(--accent); font-family: var(--font-sans); }
 
 /* ── 결과 표 ── */
 .resultTable {
@@ -272,7 +272,7 @@
 }
 .resultTable tr:last-child td { border-bottom: none; }
 .rowAccent {
-  background: rgba(14, 165, 233, 0.08);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   font-weight: 700;
 }
 .rowAccent td {
@@ -280,12 +280,12 @@
 }
 
 .formulaName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
 }
 .formulaVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
@@ -307,20 +307,20 @@
   margin-bottom: 6px;
 }
 .intensityStrong { border-left-color: var(--accent); }
-.intensityHypertrophy { border-left-color: #059669; }
+.intensityHypertrophy { border-left-color: var(--emerald-600); }
 .intensityEndurance { border-left-color: var(--muted); }
 .intensityCurrent {
-  background: rgba(14, 165, 233, 0.08);
-  box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.3);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 .intensityPct {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 800;
   color: var(--text);
 }
 .intensityWt {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
   color: var(--accent);
@@ -328,7 +328,7 @@
 .intensityReps {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .intensityPurpose {
   font-size: 12px;
@@ -345,7 +345,7 @@
 }@media (hover: hover) {
   .intensityCopy:hover { color: var(--accent); border-color: var(--accent); }
 }
-.intensityCopyDone { color: #059669; border-color: #059669; }
+.intensityCopyDone { color: var(--emerald-600); border-color: var(--emerald-600); }
 
 @media (max-width: 640px) {
   .intensityRow {
@@ -358,7 +358,7 @@
 .levelCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
 }
 .levelHead {
@@ -369,13 +369,13 @@
 }
 .levelLabel { font-size: 12px; color: var(--muted); }
 .levelValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);
 }
 .levelRatio {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
@@ -383,7 +383,7 @@
 .levelBar {
   position: relative;
   height: 10px;
-  background: linear-gradient(90deg, #DC2626 0%, #EA580C 33%, #0EA5E9 66%, #059669 100%);
+  background: linear-gradient(90deg, var(--red-600) 0%, var(--orange-600) 33%, var(--sky-500) 66%, var(--emerald-600) 100%);
   border-radius: 5px;
 }
 .levelMarker {
@@ -402,7 +402,7 @@
   margin-top: 6px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   text-align: center;
 }
 
@@ -415,18 +415,18 @@
 .plateCheck {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 10px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: center;
   user-select: none;
 }
 .plateCheckActive {
-  background: rgba(14, 165, 233, 0.1);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -441,7 +441,7 @@
   margin-bottom: 4px;
 }
 .plateResultValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 800;
   color: var(--accent);
@@ -450,7 +450,7 @@
   font-size: 12px;
   color: var(--muted);
   margin-top: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .plateListCard {
@@ -458,7 +458,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   color: var(--text);
   line-height: 1.8;
@@ -468,7 +468,7 @@
 .plateViz {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px;
   display: flex;
   justify-content: center;
@@ -485,7 +485,7 @@
   color: var(--text);
   line-height: 1.7;
 }
-.plateError strong { color: #EA580C; }
+.plateError strong { color: var(--orange-600); }
 
 /* ── 진행 추적 ── */
 .historyList {
@@ -504,12 +504,12 @@
   font-size: 13px;
   align-items: center;
 }
-.historyDate { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-size: 12px; }
+.historyDate { color: var(--muted); font-family: var(--font-sans); font-size: 12px; }
 .historyEx { color: var(--text); }
-.historyVal { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
-.historyDiff { font-size: 11px; font-family: 'Inter', system-ui, sans-serif; text-align: right; }
-.historyDiffUp { color: #059669; }
-.historyDiffDown { color: #DC2626; }
+.historyVal { color: var(--accent); font-family: var(--font-sans); font-weight: 700; text-align: right; }
+.historyDiff { font-size: 11px; font-family: var(--font-sans); text-align: right; }
+.historyDiffUp { color: var(--emerald-600); }
+.historyDiffDown { color: var(--red-600); }
 .historyDiffSame { color: var(--muted); }
 .historyRemove {
   background: transparent;
@@ -520,7 +520,7 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .historyRemove:hover { color: #DC2626; border-color: #DC2626; }
+  .historyRemove:hover { color: var(--red-600); border-color: var(--red-600); }
 }
 
 .addRecordBtn {
@@ -532,10 +532,10 @@
   color: var(--accent);
   cursor: pointer;
   width: 100%;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }@media (hover: hover) {
-  .addRecordBtn:hover { background: rgba(14, 165, 233, 0.05); }
+  .addRecordBtn:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); }
 }
 
 .historyChart {
@@ -559,7 +559,7 @@
 .safetyCard {
   background: rgba(234, 88, 12, 0.06);
   border: 1px solid rgba(234, 88, 12, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -570,14 +570,14 @@
 /* ── 경고 ── */
 .warnMsg {
   font-size: 12px;
-  color: #EA580C;
+  color: var(--orange-600);
   margin-top: 4px;
 }
 
 /* ── 구분선 ── */
 .sectionDivider { height: 1px; background: var(--border); margin: 16px 0; }
 .sectionTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -592,7 +592,7 @@
   padding: 12px 16px;
 }
 .programHead {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--accent);
@@ -603,7 +603,7 @@
   color: var(--text);
   line-height: 1.7;
 }
-.programItem strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.programItem strong { color: var(--accent); font-family: var(--font-sans); }
 
 /* ── row utility ── */
 .rowInline {
@@ -648,12 +648,12 @@
 .select {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 14px;
   min-height: 44px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
   min-width: 110px;
@@ -666,12 +666,12 @@
   padding: 10px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 12px;
   color: var(--muted);
   line-height: 1.6;
 }
-.warmupHint strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.warmupHint strong { color: var(--accent); font-family: var(--font-sans); }
 
 /* 기록 안내 (CalcTab) */
 .recordsHint {
@@ -701,7 +701,7 @@
 .statCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 10px;
   display: flex;
   flex-direction: column;
@@ -714,13 +714,13 @@
   letter-spacing: 0.04em;
 }
 .statValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
 }
-.statUp { color: #059669; }
-.statDown { color: #DC2626; }
+.statUp { color: var(--emerald-600); }
+.statDown { color: var(--red-600); }
 
 /* 기록 탭 — 전체 삭제 */
 .clearBtn {
@@ -728,16 +728,16 @@
   width: 100%;
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .clearBtn:hover {
-  border-color: #DC2626;
-  color: #DC2626;
+  border-color: var(--red-600);
+  color: var(--red-600);
 }
 }
 
@@ -745,7 +745,7 @@
 .injuryCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -754,7 +754,7 @@
   display: block;
   color: var(--accent);
   margin-bottom: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .injuryList {
   margin: 0;

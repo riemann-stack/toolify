@@ -4,12 +4,15 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import Callout from '@/components/Callout'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/area',
   title: '평수 변환기 — 아파트 평형·전용·공급면적·평형별 방 가이드',
   description:
-    '아파트 평형·전용·공급·계약면적을 서로 환산하고 84㎡=34평형 같은 국민평형 조견표, 전용률·서비스면적까지 한 번에 확인합니다. 부동산 매물 비교·인테리어 면적 감 잡기용.',
+    '㎡와 평을 서로 환산하고, 84㎡=34평형 같은 국민평형 조견표로 아파트 평형이 전용·공급·계약면적 중 무엇을 기준으로 하는지 확인합니다. 전용률과 서비스면적 설명도 담았습니다.',
   keywords: [
     '평수계산기', '평수변환', '제곱미터변환', '㎡평수', '아파트평수',
     '평수㎡변환', '전용면적', '공급면적', '계약면적',
@@ -40,7 +43,7 @@ const FAQ_LD = [
               },
               {
                 q: '평형별 적정 가구 수는?',
-                a: '전용면적 환산 평수 기준으로 보는 한국 부동산 통상 기준 — 11~14평(원룸·1인) / 17평(전용 59㎡, 1~2인) / 25평(전용 84㎡, 3~4인 표준) / 30평(전용 102㎡, 4인 여유) / 40평+(전용 135㎡, 4~5인 대가족). 분양 평형(공급면적 기준)과는 다르니 주의하세요. 1인당 약 5~7평이 쾌적한 기준이며, 한국 표준은 4인 가족 25~34평입니다.',
+                a: '전용면적 환산 평수 기준으로 보는 한국 부동산 통상 기준 — 11~14평(원룸·1인) / 17평(전용 59㎡, 1~2인) / 25평(전용 84㎡, 3~4인 표준) / 30평(전용 102㎡, 4인 여유) / 40평+(전용 135㎡, 4~5인 대가족). 분양 평형(공급면적 기준)과는 다르니 주의하세요. 법으로 정한 하한선인 최저주거기준은 4인 가구 전용 43㎡(약 13평)로, 위에서 4인 표준으로 꼽은 전용 84㎡의 절반 남짓입니다 — 적정 면적은 가구의 생활 방식에 따라 정하는 것이고, 최저선은 그 아래로 내려가지 말라는 기준입니다.',
               },
               {
                 q: '평(坪)은 일본식 단위인가요?',
@@ -65,16 +68,43 @@ const headCell: React.CSSProperties = {
   background: 'var(--bg3)',
 }
 
+// 본문 수치는 변환기(AreaClient)와 같은 1평 = 400/121㎡·소수 둘째 자리까지 반올림으로 빌드 시 계산
+const PY = 400 / 121
+const f2 = (n: number) => (Math.round(n * 100) / 100).toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+const manwon = (n: number) => Math.round(n / 10000).toLocaleString('ko-KR')
+// 계산 예시: 공급 110㎡(전용 84㎡) · 분양가 8억 원의 '3.3㎡당 가격'을 분모별로
+const EX_PRICE = 800_000_000
+const PER33_SUPPLY = EX_PRICE / (110 / 3.3)
+const PER33_EXCL = EX_PRICE / (84 / 3.3)
+// 최저주거기준 (국토해양부 공고 제2011-490호 — 당시 주택법 제5조의2 근거, 현 주거기본법 제17조) — 면적은 주거전용면적
+const MIN_HOUSING: [string, string, string, number][] = [
+  ['1인', '1인 가구', '1K (방 1 + 부엌)', 14],
+  ['2인', '부부', '1DK (방 1 + 식사실 겸 부엌)', 26],
+  ['3인', '부부 + 자녀 1', '2DK', 36],
+  ['4인', '부부 + 자녀 2', '3DK', 43],
+  ['5인', '부부 + 자녀 3', '3DK', 46],
+  ['6인', '노부모 + 부부 + 자녀 2', '4DK', 55],
+]
+
 export default function AreaPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/unit/area">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="unit" />평수 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         아파트 평형·전용·공급·계약면적 환산 + <strong style={{ color: 'var(--text)' }}>평형별 방 크기</strong> 가이드.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="1평 = 400/121㎡(6자×6자) 환산 · 국민주택규모(전용 85㎡ 이하)는 주택법, 발코니 바닥면적 산정 제외는 건축법 시행령 제119조, 최저주거기준은 국토해양부 공고 제2011-490호(당시 주택법 근거, 현 주거기본법 제17조) 기준"
+        sources={[
+          { label: '국가법령정보센터 주택법', href: 'https://www.law.go.kr/법령/주택법' },
+          { label: '국가법령정보센터 건축법 시행령', href: 'https://www.law.go.kr/법령/건축법시행령' },
+          { label: '국가법령정보센터 주거기본법', href: 'https://www.law.go.kr/법령/주거기본법' },
+        ]}
+      />
 
       <AreaClient />
 
@@ -83,27 +113,28 @@ export default function AreaPage() {
 
         {/* 평수 공식 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평수 계산 공식</h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(176,62,255,0.20)', borderRadius: 14, padding: '20px 22px', textAlign: 'center', marginBottom: 12 }}>
-            <p style={{ fontSize: 12, color: '#9333EA', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 12 }}>평수 환산 공식</p>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>
-              1 평 = 400/121 ㎡ ≈ <strong style={{ color: '#9333EA' }}>3.305785 ㎡</strong>
+          <h2 className="g-h2">평수 계산 공식</h2>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '20px 22px', textAlign: 'center', marginBottom: 12 }}>
+            <p style={{ fontSize: 12, color: 'var(--purple-600)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 12 }}>평수 환산 공식</p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>
+              1 평 = 400/121 ㎡ ≈ <strong style={{ color: 'var(--purple-600)' }}>3.305785 ㎡</strong>
             </p>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>
               평 → ㎡: 평수 × 3.3058 / ㎡ → 평: 면적 ÷ 3.3058
             </p>
           </div>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            1평은 정확히 6자×6자 = 36 제곱자입니다. 일반적으로 3.3㎡로 어림하지만 정확히는 약 3.3058㎡로 약간 큽니다.
-            <strong style={{ color: 'var(--text)' }}> 한국 부동산에서 가장 흔한 환산 — 84㎡ ≈ 25.4평 (분양 34평) / 59㎡ ≈ 17.85평 (분양 24평).</strong>
+          <p className="g-p">
+            1평은 정확히 6자×6자 = 36 제곱자입니다. 1자(尺)를 10/33m로 정한 곡척 기준이라 1평 = 36 × (10/33)² = 400/121㎡가 되고,
+            소수로 풀면 3.305785…㎡입니다. 일반적으로 3.3㎡로 어림하지만 정확히는 약 3.3058㎡로 약간 큽니다.
+            <strong> 한국 부동산에서 가장 흔한 환산 — 84㎡ ≈ 25.4평 (분양 34평) / 59㎡ ≈ 17.85평 (분양 24평).</strong>
           </p>
         </section>
 
         {/* 국민평형 조견표 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>국민평형 조견표 — 전용면적 ↔ 분양 평형</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
-            아파트 분양 평형은 <strong style={{ color: 'var(--text)' }}>공급면적(전용 + 주거공용)</strong> 기준입니다.
+          <h2 className="g-h2">국민평형 조견표 — 전용면적 ↔ 분양 평형</h2>
+          <p className="g-p">
+            아파트 분양 평형은 <strong>공급면적(전용 + 주거공용)</strong> 기준입니다.
             전용 84㎡는 환산하면 25.4평이지만 계단·복도·엘리베이터 같은 주거공용면적(약 26㎡)을 더한 공급면적이 약 110㎡가 되어
             &lsquo;34평형&rsquo;으로 불립니다. 실무에서 자주 마주치는 전용면적 5종의 대응 관계입니다.
           </p>
@@ -119,61 +150,132 @@ export default function AreaPage() {
               </thead>
               <tbody>
                 <tr><td style={cell}><strong>59㎡</strong></td><td style={cell}>약 17.8평</td><td style={cell}>24~25평형</td><td style={cell}>2~3인 가구 표준 — &lsquo;새 국민평형&rsquo;으로 불릴 만큼 선호 상승</td></tr>
-                <tr><td style={cell}><strong>74㎡</strong></td><td style={cell}>약 22.4평</td><td style={cell}>30평형</td><td style={cell}>59와 84 사이 틈새 평면</td></tr>
-                <tr><td style={{ ...cell, color: '#9333EA', fontWeight: 700 }}><strong>84㎡</strong></td><td style={cell}>약 25.4평</td><td style={cell}>33~34평형</td><td style={cell}>&lsquo;국민평형&rsquo; — 국민주택 규모(전용 85㎡ 이하)를 꽉 채우는 평면</td></tr>
+                <tr><td style={cell}><strong>74㎡</strong></td><td style={cell}>약 22.4평</td><td style={cell}>29~30평형</td><td style={cell}>59와 84 사이 틈새 평면</td></tr>
+                <tr><td style={{ ...cell, color: 'var(--purple-600)', fontWeight: 700 }}><strong>84㎡</strong></td><td style={cell}>약 25.4평</td><td style={cell}>33~34평형</td><td style={cell}>&lsquo;국민평형&rsquo; — 국민주택 규모(전용 85㎡ 이하)를 꽉 채우는 평면</td></tr>
                 <tr><td style={cell}><strong>102㎡</strong></td><td style={cell}>약 30.9평</td><td style={cell}>40평형</td><td style={cell}>전용 85㎡ 초과 중대형 — 청약·세제 기준이 달라짐</td></tr>
                 <tr><td style={cell}><strong>114㎡</strong></td><td style={cell}>약 34.5평</td><td style={cell}>43~46평형</td><td style={cell}>대형 — 단지 전용률에 따라 표기 편차가 가장 큼</td></tr>
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: 12, marginBottom: 12 }}>
+          <p className="g-note">
             ※ 같은 전용 84㎡라도 단지마다 주거공용면적이 달라 공급면적이 108~113㎡ 안팎으로 벌어지고,
             표기도 33평형·34평형으로 갈립니다. 정확한 값은 해당 단지 입주자모집공고의 타입별 면적표가 기준입니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            기준선인 <strong style={{ color: 'var(--text)' }}>&lsquo;전용 85㎡ 이하(국민주택 규모)&rsquo;</strong>는
-            1973년 1인당 적정 주거면적을 5평으로 보고 국민주택을 25평(약 82.6㎡)으로 정한 데서 출발했습니다.
+          <p className="g-p">
+            기준선인 <strong>&lsquo;전용 85㎡ 이하(국민주택 규모)&rsquo;</strong>는
+            1970년대 초 주택건설촉진법 시절 1인당 적정 주거면적을 5평으로 보고 국민주택을 25평(약 82.6㎡)으로 잡은 데서 출발했습니다.
             지금도 청약 제도와 각종 세제의 경계선으로 쓰이며, 전용 84㎡가 &lsquo;국민평형&rsquo;이 된 것도 이 상한을 꽉 채우는 최대 평면이기 때문입니다.
           </p>
         </section>
 
         {/* 전용률 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>전용률 — 같은 &lsquo;25평형&rsquo;인데 실평수가 다른 이유</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
-            전용률은 분양면적에서 전용면적이 차지하는 비율입니다. <strong style={{ color: 'var(--text)' }}>아파트는 평균 80% 안팎이지만 오피스텔은 50% 수준</strong>까지 내려갑니다.
-            오피스텔은 분양면적을 공급면적이 아닌 <strong style={{ color: 'var(--text)' }}>계약면적(기타공용 포함)</strong> 기준으로 표기하는 관행이라 분모가 크고,
+          <h2 className="g-h2">전용률 — 같은 &lsquo;25평형&rsquo;인데 실평수가 다른 이유</h2>
+          <p className="g-p">
+            전용률은 분양면적에서 전용면적이 차지하는 비율입니다. <strong>아파트는 평균 80% 안팎이지만 오피스텔은 50% 수준</strong>까지 내려갑니다.
+            오피스텔은 분양면적을 공급면적이 아닌 <strong>계약면적(기타공용 포함)</strong> 기준으로 표기하는 관행이라 분모가 크고,
             2014년 12월까지는 벽 두께가 들어가는 중심선치수로 전용면적을 쟀기 때문입니다(아파트는 1998년부터 벽 안쪽만 재는 안목치수 적용).
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginBottom: 14 }}>
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              📌 <strong style={{ color: 'var(--text)' }}>같은 &lsquo;25평형&rsquo;(분양면적 약 82.6㎡) 매물 비교</strong><br />
-              · 아파트 (전용률 80%): 전용 약 <strong style={{ color: '#9333EA' }}>66㎡</strong><br />
-              · 오피스텔 (전용률 50%): 전용 약 <strong style={{ color: '#9333EA' }}>41㎡</strong><br />
-              평형 표기가 같아도 실면적이 1.6배 차이 날 수 있습니다 — 비교는 반드시 전용면적(㎡) 기준으로.
-            </p>
-          </div>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            같은 아파트끼리도 구조에 따라 갈립니다. <strong style={{ color: 'var(--text)' }}>복도식은 가로로 긴 복도 전체가 주거공용면적</strong>에 들어가
+          <Callout tone="note" title="같은 ‘25평형’(분양면적 약 82.6㎡) 매물 비교">
+            · 아파트 (전용률 80%): 전용 약 <strong>66㎡</strong><br />
+            · 오피스텔 (전용률 50%): 전용 약 <strong>41㎡</strong><br />
+            평형 표기가 같아도 실면적이 1.6배 차이 날 수 있습니다 — 비교는 반드시 전용면적(㎡) 기준으로.
+          </Callout>
+          <p className="g-p">
+            같은 아파트끼리도 구조에 따라 갈립니다. <strong>복도식은 가로로 긴 복도 전체가 주거공용면적</strong>에 들어가
             엘리베이터 홀만 공용인 계단식보다 전용률이 낮습니다. 같은 공급면적의 구축 복도식과 신축 계단식은 실평수가 다를 수 있다는 뜻입니다.
           </p>
         </section>
 
         {/* 서비스면적 — 84A vs 84B */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>같은 전용 84㎡인데 84A가 더 넓은 이유 — 서비스면적</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
+          <h2 className="g-h2">같은 전용 84㎡인데 84A가 더 넓은 이유 — 서비스면적</h2>
+          <p className="g-p">
             분양 공고의 84A·84B·84C는 전용면적이 똑같이 84㎡인 서로 다른 평면 타입입니다.
-            그런데 <strong style={{ color: 'var(--text)' }}>발코니는 전용·공급 어느 면적에도 들어가지 않는 서비스면적</strong>입니다 —
+            그런데 <strong>발코니는 전용·공급 어느 면적에도 들어가지 않는 서비스면적</strong>입니다 —
             건축법 시행령(제119조)이 폭 1.5m까지의 발코니를 바닥면적 산정에서 빼주기 때문입니다.
             2005년 발코니 구조변경(확장)이 합법화된 뒤로는 발코니를 방·거실로 터서 쓰는 것이 사실상 표준이 되어,
             서비스면적이 큰 타입일수록 확장 후 실사용 면적이 커집니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <p className="g-p">
             서비스면적은 발코니가 접하는 외벽 길이에 비례하므로 평면 모양의 영향이 큽니다.
-            거실과 방들이 한 면에 나란히 붙는 <strong style={{ color: 'var(--text)' }}>4베이 판상형은 발코니 접면이 길어 서비스면적이 대체로 크고, 타워형은 상대적으로 작은 편</strong>입니다.
+            거실과 방들이 한 면에 나란히 붙는 <strong>4베이 판상형은 발코니 접면이 길어 서비스면적이 대체로 크고, 타워형은 상대적으로 작은 편</strong>입니다.
             같은 전용 84㎡라도 타입에 따라 확장 후 체감 면적이 달라지는 이유입니다.
             계약 전에는 입주자모집공고·분양 카탈로그의 타입별 면적표에서 서비스면적(발코니) 항목을 직접 비교하고, 평면도에서 확장 대상 발코니 표시를 확인하세요.
+          </p>
+        </section>
+
+        {/* 계산 예시 · 자주 하는 실수 */}
+        <section>
+          <h2 className="g-h2">계산 예시와 자주 하는 실수</h2>
+          <p className="g-p">
+            변환기는 마지막으로 입력한 칸을 기준으로 반대쪽을 계산하고 소수 셋째 자리에서 반올림해 둘째 자리까지 보여 줍니다.
+            ㎡ 칸에 84를 넣으면 84 ÷ 3.305785 = <strong>{f2(84 / PY)}평</strong>,
+            평 칸에 34를 넣으면 34 × 3.305785 = <strong>{f2(34 * PY)}㎡</strong>가 나옵니다.
+            그런데 흔히 말하는 &lsquo;34평&rsquo;은 공급면적 기준 분양 평형이라, 전용 {f2(34 * PY)}㎡짜리 집이 있다는 뜻이 아닙니다.
+            그래서 평 칸에 24·34·40처럼 평형 숫자를 넣으면 결과 아래에 &lsquo;34평형이면 전용 약 84㎡&rsquo; 같은 안내가 함께 표시됩니다.
+          </p>
+          <ul className="g-list">
+            <li>
+              <strong>3.3으로 나누기</strong> — 어림값 3.3을 쓰면 84㎡가 {f2(84 / 3.3)}평으로, 정확한 값({f2(84 / PY)}평)보다
+              약 {((PY / 3.3 - 1) * 100).toFixed(2)}% 크게 나옵니다. 평수 감을 잡는 데는 충분하지만 계약서·감정 자료처럼 소수점까지 맞춰야 하는 곳에서는 400/121을 쓰세요.
+            </li>
+            <li>
+              <strong>3.3㎡당 가격의 분모 혼동</strong> — 2007년 법정계량단위 시행 이후 광고에서 &lsquo;평당&rsquo; 대신 쓰는 &lsquo;3.3㎡당 가격&rsquo;은
+              아파트의 경우 공급면적이 분모입니다. 공급 110㎡(전용 84㎡)·분양가 8억 원이면 3.3㎡당 약 {manwon(PER33_SUPPLY)}만 원이지만,
+              같은 금액을 전용 84㎡로 나누면 약 {manwon(PER33_EXCL)}만 원으로 {Math.round((PER33_EXCL / PER33_SUPPLY - 1) * 100)}% 비싸 보입니다.
+              단지끼리 비교할 때는 분모가 같은지부터 확인하세요.
+            </li>
+            <li>
+              <strong>오피스텔·아파트 평당가 직접 비교</strong> — 오피스텔은 계약면적(기타공용 포함)을 분모로 쓰는 경우가 많아 같은 돈이라도 평당가가 낮게 나옵니다.
+              두 상품을 비교하려면 가격을 전용면적으로 다시 나눠 보는 것이 가장 공정합니다.
+            </li>
+            <li>
+              <strong>확장한 발코니를 전용면적에 더하기</strong> — 확장으로 늘어난 실사용 공간은 등기부·청약·세금 어디에서도 면적으로 잡히지 않습니다.
+              국민주택규모(85㎡) 판단도 확장 전 전용면적 그대로입니다.
+            </li>
+          </ul>
+        </section>
+
+        {/* 최저주거기준 */}
+        <section>
+          <h2 className="g-h2">가구원수별 최저주거기준 — 법이 정한 최소 면적</h2>
+          <p className="g-p">
+            &lsquo;몇 평이 적당한가&rsquo;에 정답은 없지만 하한선은 법에 있습니다. 주거기본법 제17조에 따라 국토교통부가 공고하는
+            <strong> 최저주거기준</strong>은 가구 구성별 최소 주거면적과 방 구성, 전용 부엌·수세식 화장실·목욕시설 같은 필수 설비를 정하고,
+            이에 못 미치는 가구는 공공임대주택 공급·주거비 지원 등에서 우선 지원 대상으로 다뤄집니다. 아래 평 환산은 이 페이지 변환기와 같은 1평 = 400/121㎡ 기준입니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', minWidth: 520, borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={headCell}>가구원수</th>
+                  <th scope="col" style={headCell}>표준 가구 구성</th>
+                  <th scope="col" style={headCell}>방 구성</th>
+                  <th scope="col" style={headCell}>최소 주거면적</th>
+                  <th scope="col" style={headCell}>평 환산</th>
+                </tr>
+              </thead>
+              <tbody>
+                {MIN_HOUSING.map(([n, fam, rooms, sqm]) => (
+                  <tr key={n}>
+                    <td style={cell}><strong>{n}</strong></td>
+                    <td style={cell}>{fam}</td>
+                    <td style={cell}>{rooms}</td>
+                    <td style={cell}>{sqm}㎡</td>
+                    <td style={cell}>{f2(sqm / PY)}평</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            국토해양부 공고 제2011-490호 기준. K는 부엌, DK는 식사실 겸 부엌을 뜻하며 면적은 주거전용면적입니다. 개정 공고가 나오면 그 값이 우선합니다.
+          </p>
+          <p className="g-p">
+            이 표의 면적은 <strong>전용면적</strong>이라 분양 평형과 바로 비교하면 안 됩니다. 예컨대 4인 가구 최저선 43㎡는 {f2(43 / PY)}평으로,
+            흔히 &lsquo;24평형&rsquo;이라 부르는 전용 59㎡({f2(59 / PY)}평)보다도 작습니다. 최저주거기준은 &lsquo;이보다 좁으면 주거 여건이 미흡하다&rsquo;는
+            정책 판정선일 뿐 권장 면적이 아니므로, 실제 집을 고를 때는 방 개수·수납·동선을 함께 따져 보세요.
           </p>
         </section>
 
@@ -184,7 +286,7 @@ export default function AreaPage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',     desc: '14개 분야 + 한국 전통 단위' },
@@ -195,7 +297,7 @@ export default function AreaPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div style={{ minWidth: 0 }}>
@@ -208,6 +310,6 @@ export default function AreaPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

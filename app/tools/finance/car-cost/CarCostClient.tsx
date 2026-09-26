@@ -23,6 +23,7 @@ import {
   compareOwnVsShare,
   type Consumable,
 } from './carCostUtils'
+import { GASOLINE_PRICE } from '@/lib/krFuelPrices'
 
 type Mode = 'simple' | 'detail'
 type FuelTypeBasic = 'gas' | 'ev' | 'hybrid'
@@ -86,7 +87,7 @@ export default function CarCostClient() {
   const [fuelType, setFuelType] = useState<FuelTypeBasic>('gas')
   const [monthlyKm, setMonthlyKm] = useState(1500)
   const [efficiency, setEfficiency] = useState(12)
-  const [fuelPrice, setFuelPrice] = useState(1650)
+  const [fuelPrice, setFuelPrice] = useState<number>(GASOLINE_PRICE)   // 오피넷 전국 평균 휘발유 — lib/krFuelPrices.ts (unit/fuel-economy와 공유)
   const [evEff, setEvEff] = useState(5.5)
   const [chargePrice, setChargePrice] = useState(200)
 
@@ -229,7 +230,7 @@ export default function CarCostClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1800)
+      setTimeout(() => setCopied(false), 1500)
     } catch {/* noop */}
   }
 
@@ -283,7 +284,7 @@ export default function CarCostClient() {
 
             <div className={s.subLabel}>월 주행거리</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" min={0}
+              <input aria-label="월 주행거리 (km)" className={s.numInput} type="number" inputMode="decimal" min={0}
                 value={monthlyKm || ''}
                 onChange={e => setMonthlyKm(Math.max(0, parseInt(e.target.value || '0', 10)))} />
               <span className={s.unit}>km</span>
@@ -299,7 +300,7 @@ export default function CarCostClient() {
                 <div>
                   <div className={`${s.subLabel} ${s.firstSub}`}>연비</div>
                   <div className={s.inputRow}>
-                    <input className={s.numInput} type="number" inputMode="decimal" step="0.1"
+                    <input aria-label="연비 (km/L)" className={s.numInput} type="number" inputMode="decimal" step="0.1"
                       value={efficiency || ''}
                       onChange={e => setEfficiency(parseAmount(e.target.value))} />
                     <span className={s.unit}>km/L</span>
@@ -308,7 +309,7 @@ export default function CarCostClient() {
                 <div>
                   <div className={`${s.subLabel} ${s.firstSub}`}>유가</div>
                   <div className={s.inputRow}>
-                    <input className={s.numInput} type="number" inputMode="decimal"
+                    <input aria-label="유가 (원/L)" className={s.numInput} type="number" inputMode="decimal"
                       value={fuelPrice || ''}
                       onChange={e => setFuelPrice(parseAmount(e.target.value))} />
                     <span className={s.unit}>원/L</span>
@@ -320,7 +321,7 @@ export default function CarCostClient() {
                 <div>
                   <div className={`${s.subLabel} ${s.firstSub}`}>전비</div>
                   <div className={s.inputRow}>
-                    <input className={s.numInput} type="number" inputMode="decimal" step="0.1"
+                    <input aria-label="전비 (km/kWh)" className={s.numInput} type="number" inputMode="decimal" step="0.1"
                       value={evEff || ''}
                       onChange={e => setEvEff(parseAmount(e.target.value))} />
                     <span className={s.unit}>km/kWh</span>
@@ -329,7 +330,7 @@ export default function CarCostClient() {
                 <div>
                   <div className={`${s.subLabel} ${s.firstSub}`}>충전 단가</div>
                   <div className={s.inputRow}>
-                    <input className={s.numInput} type="number" inputMode="decimal"
+                    <input aria-label="충전 단가 (원/kWh)" className={s.numInput} type="number" inputMode="decimal"
                       value={chargePrice || ''}
                       onChange={e => setChargePrice(parseAmount(e.target.value))} />
                     <span className={s.unit}>원/kWh</span>
@@ -366,21 +367,21 @@ export default function CarCostClient() {
                     <div>
                       <div className={`${s.subLabel} ${s.firstSub}`}>구매가</div>
                       <div className={s.inputRow}>
-                        <input className={s.numInput} type="number" inputMode="decimal" value={buyPrice || ''} onChange={e => setBuyPrice(parseAmount(e.target.value))} />
+                        <input aria-label="구매가 (원)" className={s.numInput} type="text" inputMode="numeric" value={buyPrice ? buyPrice.toLocaleString('ko-KR') : ''} onChange={e => setBuyPrice(parseAmount(e.target.value))} />
                         <span className={s.unit}>원</span>
                       </div>
                     </div>
                     <div>
                       <div className={`${s.subLabel} ${s.firstSub}`}>현재 예상 중고가</div>
                       <div className={s.inputRow}>
-                        <input className={s.numInput} type="number" inputMode="decimal" value={currentPriceA || ''} onChange={e => setCurrentPriceA(parseAmount(e.target.value))} />
+                        <input aria-label="현재 예상 중고가 (원)" className={s.numInput} type="text" inputMode="numeric" value={currentPriceA ? currentPriceA.toLocaleString('ko-KR') : ''} onChange={e => setCurrentPriceA(parseAmount(e.target.value))} />
                         <span className={s.unit}>원</span>
                       </div>
                     </div>
                     <div>
                       <div className={`${s.subLabel} ${s.firstSub}`}>보유 기간</div>
                       <div className={s.inputRow}>
-                        <input className={s.numInput} type="number" inputMode="decimal" value={holdMonths || ''} onChange={e => setHoldMonths(Math.max(1, parseInt(e.target.value || '1', 10)))} />
+                        <input aria-label="보유 기간 (개월)" className={s.numInput} type="number" inputMode="decimal" value={holdMonths || ''} onChange={e => setHoldMonths(Math.max(1, parseInt(e.target.value || '1', 10)))} />
                         <span className={s.unit}>개월</span>
                       </div>
                     </div>
@@ -390,7 +391,7 @@ export default function CarCostClient() {
                     <div>
                       <div className={`${s.subLabel} ${s.firstSub}`}>차량 현재가</div>
                       <div className={s.inputRow}>
-                        <input className={s.numInput} type="number" inputMode="decimal" value={currentPrice || ''} onChange={e => setCurrentPrice(parseAmount(e.target.value))} />
+                        <input aria-label="차량 현재가 (원)" className={s.numInput} type="text" inputMode="numeric" value={currentPrice ? currentPrice.toLocaleString('ko-KR') : ''} onChange={e => setCurrentPrice(parseAmount(e.target.value))} />
                         <span className={s.unit}>원</span>
                       </div>
                     </div>
@@ -402,7 +403,7 @@ export default function CarCostClient() {
                         ))}
                       </div>
                       <div className={s.inputRow} style={{ marginTop: 8 }}>
-                        <input className={s.numInput} type="number" inputMode="decimal" step="0.1" value={annualRate || ''} onChange={e => setAnnualRate(parseAmount(e.target.value))} />
+                        <input aria-label="연 감가율 (%)" className={s.numInput} type="number" inputMode="decimal" step="0.1" value={annualRate || ''} onChange={e => setAnnualRate(parseAmount(e.target.value))} />
                         <span className={s.unit}>%/년</span>
                       </div>
                       <div className={s.helperText}>국산 소형 ~10~12% · 국산 중형 ~8~10% · 수입차 ~12~15% · 전기차 ~15~20%</div>
@@ -424,7 +425,7 @@ export default function CarCostClient() {
                   <HelpTip>2026년 한국 평균: 20대 신규 ~150만 / 30대 안정 ~90만 / 40~50대 무사고 ~70만 / 60대+ ~80만</HelpTip>
                 </div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={insurance || ''} onChange={e => setInsurance(parseAmount(e.target.value))} />
+                  <input aria-label="자동차 보험료 (원/년)" className={s.numInput} type="text" inputMode="numeric" value={insurance ? insurance.toLocaleString('ko-KR') : ''} onChange={e => setInsurance(parseAmount(e.target.value))} />
                   <span className={s.unit}>원/년</span>
                 </div>
                 <div className={s.optionRow4} style={{ marginTop: 6 }} role="group" aria-label="보험료 연령대 빠른 선택">
@@ -435,7 +436,7 @@ export default function CarCostClient() {
                       onClick={() => setInsurance(a.yearly)}
                       title={a.note}>
                       {a.ageRange.split(' ')[0]}<br/>
-                      <span style={{ fontSize: 10 }}>{(a.yearly/10_000)}만</span>
+                      <span style={{ fontSize: 11 }}>{(a.yearly/10_000)}만</span>
                     </button>
                   ))}
                 </div>
@@ -444,16 +445,16 @@ export default function CarCostClient() {
               <div>
                 <div className={`${s.subLabel} ${s.firstSub}`}>
                   자동차세 (연)
-                  <HelpTip>배기량별 (지방교육세 30% 포함): 1000cc↓ 10.4만 / 1500↓ 26만 / 2000↓ 52만 / 2500↓ 65만 / 3000↓ 78만 / 전기차 13만. 차령 5년 초과 시 단계 인하.</HelpTip>
+                  <HelpTip>배기량 × cc당 세액(1,000cc 이하 80원 / 1,600cc 이하 140원 / 초과 200원) + 지방교육세 30%. 예: 1,000cc 10.4만 / 1,600cc 29.1만 / 2,000cc 52만 / 3,000cc 78만 / 전기차 13만. 차령 3년차부터 매년 5% 경감(최대 50%).</HelpTip>
                 </div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={carTax || ''} onChange={e => setCarTax(parseAmount(e.target.value))} />
+                  <input aria-label="자동차세 (원/년)" className={s.numInput} type="text" inputMode="numeric" value={carTax ? carTax.toLocaleString('ko-KR') : ''} onChange={e => setCarTax(parseAmount(e.target.value))} />
                   <span className={s.unit}>원/년</span>
                 </div>
                 <div className={s.optionRow6} style={{ marginTop: 6 }} role="group" aria-label="자동차세 배기량 빠른 선택">
                   {fuelType === 'ev' ? (
                     <button aria-pressed={carTax === EV_AUTO_TAX} className={`${s.optionBtn} ${carTax === EV_AUTO_TAX ? s.optionActive : ''}`}
-                      onClick={() => setCarTax(EV_AUTO_TAX)}>전기차<br/><span style={{ fontSize: 10 }}>13만</span></button>
+                      onClick={() => setCarTax(EV_AUTO_TAX)}>전기차<br/><span style={{ fontSize: 11 }}>13만</span></button>
                   ) : (
                     AUTO_TAX_BRACKETS.slice(0, 6).map(b => (
                       <button key={b.ccMax}
@@ -461,8 +462,8 @@ export default function CarCostClient() {
                         className={`${s.optionBtn} ${carTax === b.yearly ? s.optionActive : ''}`}
                         onClick={() => setCarTax(b.yearly)}
                         title={b.desc}>
-                        {b.ccMax === Infinity ? '3000+' : b.ccMax + 'cc'}<br/>
-                        <span style={{ fontSize: 10 }}>{(b.yearly/10_000)}만</span>
+                        {b.ccMax.toLocaleString()}cc<br/>
+                        <span style={{ fontSize: 11 }}>{Math.round(b.yearly / 1_000) / 10}만</span>
                       </button>
                     ))
                   )}
@@ -474,7 +475,7 @@ export default function CarCostClient() {
               <div>
                 <div className={`${s.subLabel} ${s.firstSub}`}>월 주차비</div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={parking || ''} onChange={e => setParking(parseAmount(e.target.value))} />
+                  <input aria-label="월 주차비 (원)" className={s.numInput} type="text" inputMode="numeric" value={parking ? parking.toLocaleString('ko-KR') : ''} onChange={e => setParking(parseAmount(e.target.value))} />
                   <span className={s.unit}>원/월</span>
                 </div>
               </div>
@@ -489,7 +490,7 @@ export default function CarCostClient() {
                   <HelpTip>현재 월 납입 중인 할부금. 할부 종료 후 0이 됨.</HelpTip>
                 </div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={loanMonthly || ''} onChange={e => setLoanMonthly(parseAmount(e.target.value))} />
+                  <input aria-label="할부금 (원/월)" className={s.numInput} type="text" inputMode="numeric" value={loanMonthly ? loanMonthly.toLocaleString('ko-KR') : ''} onChange={e => setLoanMonthly(parseAmount(e.target.value))} />
                   <span className={s.unit}>원/월</span>
                 </div>
               </div>
@@ -499,7 +500,7 @@ export default function CarCostClient() {
                   <HelpTip>현재부터 남은 할부 개월 수. 5년·10년 총비용 계산 시 이 기간만 가산됩니다.</HelpTip>
                 </div>
                 <div className={s.inputRow}>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={loanRemainingMonths || ''} onChange={e => setLoanRemainingMonths(parseAmount(e.target.value))} />
+                  <input aria-label="남은 할부 기간 (개월)" className={s.numInput} type="number" inputMode="decimal" value={loanRemainingMonths || ''} onChange={e => setLoanRemainingMonths(parseAmount(e.target.value))} />
                   <span className={s.unit}>개월</span>
                 </div>
               </div>
@@ -522,8 +523,8 @@ export default function CarCostClient() {
                     <HelpTip>셀프 세차 1만 / 자동 세차 2~3만 / 손세차 5~8만. 평균 1~3만 원/월.</HelpTip>
                   </div>
                   <div className={s.inputRow}>
-                    <input className={s.numInput} type="number" inputMode="decimal" placeholder="예: 20000"
-                      value={washSimple || ''} onChange={e => setWashSimple(parseAmount(e.target.value))} />
+                    <input aria-label="세차비 월 평균 (원)" className={s.numInput} type="text" inputMode="numeric" placeholder="예: 20000"
+                      value={washSimple ? washSimple.toLocaleString('ko-KR') : ''} onChange={e => setWashSimple(parseAmount(e.target.value))} />
                     <span className={s.unit}>원/월</span>
                   </div>
                   <div className={s.exampleHint}>일반 평균 1~3만 원</div>
@@ -534,8 +535,8 @@ export default function CarCostClient() {
                     <HelpTip>엔진오일(1만km/12개월) 약 월 1.2만 + 타이어(4만km) 월 1.5~2.5만 + 와이퍼·에어컨 필터·정비점검 월 1~2만 = 합계 약 4~6만 원/월. 고연식·고주행 차량은 7~10만 원.</HelpTip>
                   </div>
                   <div className={s.inputRow}>
-                    <input className={s.numInput} type="number" inputMode="decimal" placeholder="예: 50000"
-                      value={variableCost || ''} onChange={e => setVariableCost(parseAmount(e.target.value))} />
+                    <input aria-label="정비·소모품 월 평균 (원)" className={s.numInput} type="text" inputMode="numeric" placeholder="예: 50000"
+                      value={variableCost ? variableCost.toLocaleString('ko-KR') : ''} onChange={e => setVariableCost(parseAmount(e.target.value))} />
                     <span className={s.unit}>원/월</span>
                   </div>
                   <div className={s.exampleHint}>엔진오일·타이어·정비비 합산 평균 4~6만 원</div>
@@ -558,13 +559,13 @@ export default function CarCostClient() {
                     return (
                       <div key={c.key} className={`${s.consumableRow} ${!c.enabled ? s.disabled : ''}`}>
                         <div className={s.consumableName}>{c.icon} {c.name}</div>
-                        <input className={s.smallNum} type="number" inputMode="decimal" placeholder="비용"
-                          value={c.cost || ''} onChange={e => upd({ cost: parseAmount(e.target.value) })} disabled={!c.enabled}
+                        <input aria-label={`${c.name} 1회 교체 비용 (원)`} className={s.smallNum} type="text" inputMode="numeric" placeholder="비용"
+                          value={c.cost ? c.cost.toLocaleString('ko-KR') : ''} onChange={e => upd({ cost: parseAmount(e.target.value) })} disabled={!c.enabled}
                           data-label="1회 비용(원)" />
-                        <input className={s.smallNum} type="number" inputMode="decimal" placeholder="km 주기"
+                        <input aria-label={`${c.name} 교체 주기 (km)`} className={s.smallNum} type="number" inputMode="decimal" placeholder="km 주기"
                           value={c.cycleKm ?? ''} onChange={e => upd({ cycleKm: e.target.value ? parseAmount(e.target.value) : null })} disabled={!c.enabled}
                           data-label="주기(km)" />
-                        <input className={s.smallNum} type="number" inputMode="decimal" placeholder="개월"
+                        <input aria-label={`${c.name} 교체 주기 (개월)`} className={s.smallNum} type="number" inputMode="decimal" placeholder="개월"
                           value={c.cycleMon ?? ''} onChange={e => upd({ cycleMon: e.target.value ? parseAmount(e.target.value) : null })} disabled={!c.enabled}
                           data-label="주기(개월)" />
                         <div className={s.consumableMonthly}>{c.enabled ? formatKRW(monthly) : '제외'}</div>
@@ -689,7 +690,7 @@ export default function CarCostClient() {
             <span className={s.cardLabel}>대중교통과 비교</span>
             <div className={`${s.subLabel} ${s.firstSub}`}>월 대중교통비</div>
             <div className={s.inputRow}>
-              <input className={s.numInput} type="number" inputMode="decimal" value={transitCost || ''} onChange={e => setTransitCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
+              <input aria-label="월 대중교통비 (원)" className={s.numInput} type="text" inputMode="numeric" value={transitCost ? transitCost.toLocaleString('ko-KR') : ''} onChange={e => setTransitCost(parseAmount(e.target.value))} style={{ fontSize: 16 }} />
               <span className={s.unit}>원/월</span>
             </div>
             <div className={s.transitGrid}>
@@ -704,9 +705,9 @@ export default function CarCostClient() {
             </div>
             <div className={s.transitDiff}>
               {(deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) > transitCost ? (
-                <>차이: 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter' }}>{formatKRW((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost)}</strong>, 연간 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter' }}>{formatKoreanCurrency(((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost) * 12)}</strong></>
+                <>차이: 월 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{formatKRW((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost)}</strong>, 연간 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{formatKoreanCurrency(((deprOn ? result.monthlyInclDepr : result.monthlyExclDepr) - transitCost) * 12)}</strong></>
               ) : (
-                <>차량이 대중교통보다 월 <strong style={{ color: '#059669', fontFamily: 'Inter' }}>{formatKRW(transitCost - (deprOn ? result.monthlyInclDepr : result.monthlyExclDepr))}</strong> 저렴 (편의성 가치 별도)</>
+                <>차량이 대중교통보다 월 <strong style={{ color: 'var(--emerald-600)', fontFamily: 'var(--font-sans)' }}>{formatKRW(transitCost - (deprOn ? result.monthlyInclDepr : result.monthlyExclDepr))}</strong> 저렴 (편의성 가치 별도)</>
               )}
             </div>
           </div>
@@ -731,16 +732,16 @@ export default function CarCostClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>차량 가격</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" value={pCarPrice || ''} onChange={e => setPCarPrice(parseAmount(e.target.value))} />
+                <input aria-label="차량 가격 (원)" className={s.numInput} type="text" inputMode="numeric" value={pCarPrice ? pCarPrice.toLocaleString('ko-KR') : ''} onChange={e => setPCarPrice(parseAmount(e.target.value))} />
                 <span className={s.unit}>원</span>
               </div>
               <div className={s.helperText}>{formatKoreanCurrency(pCarPrice)}</div>
             </div>
             <div className={s.card}>
               <span className={s.cardLabel}>차량 카테고리</span>
-              <select className={s.selectInput} value={pCarCategory} onChange={e => setPCarCategory(e.target.value)} style={{
+              <select aria-label="차종 (감가율 기준)" className={s.selectInput} value={pCarCategory} onChange={e => setPCarCategory(e.target.value)} style={{
                 background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 14px',
-                fontSize: 14, fontFamily: 'Noto Sans KR, sans-serif', color: 'var(--text)', outline: 'none', width: '100%', cursor: 'pointer'
+                fontSize: 14, fontFamily: 'var(--font-sans)', color: 'var(--text)', outline: 'none', width: '100%', cursor: 'pointer'
               }}>
                 {CAR_CATEGORIES.map(c => (
                   <option key={c.id} value={c.id}>{c.name} (감가 {(c.depreciationRate*100).toFixed(0)}%/년)</option>
@@ -750,7 +751,7 @@ export default function CarCostClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>보유 기간</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" value={pYears || ''} onChange={e => setPYears(Math.max(1, parseInt(e.target.value || '1', 10)))} />
+                <input aria-label="보유 기간 (년)" className={s.numInput} type="number" inputMode="decimal" value={pYears || ''} onChange={e => setPYears(Math.max(1, parseInt(e.target.value || '1', 10)))} />
                 <span className={s.unit}>년</span>
               </div>
               <div className={s.pills} role="group" aria-label="보유 기간 빠른 선택">
@@ -765,7 +766,7 @@ export default function CarCostClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>할부 금리 (연)</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" step="0.1" value={pLoanRate || ''} onChange={e => setPLoanRate(parseAmount(e.target.value))} />
+                <input aria-label="할부 금리 (연 %)" className={s.numInput} type="number" inputMode="decimal" step="0.1" value={pLoanRate || ''} onChange={e => setPLoanRate(parseAmount(e.target.value))} />
                 <span className={s.unit}>%</span>
               </div>
               <div className={s.helperText}>2026 한국 평균 5~7%</div>
@@ -773,14 +774,14 @@ export default function CarCostClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>할부 기간</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" value={pLoanMonths || ''} onChange={e => setPLoanMonths(parseAmount(e.target.value))} />
+                <input aria-label="할부 기간 (개월)" className={s.numInput} type="number" inputMode="decimal" value={pLoanMonths || ''} onChange={e => setPLoanMonths(parseAmount(e.target.value))} />
                 <span className={s.unit}>개월</span>
               </div>
             </div>
             <div className={s.card}>
               <span className={s.cardLabel}>선수금</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" value={pLoanDown || ''} onChange={e => setPLoanDown(parseAmount(e.target.value))} />
+                <input aria-label="선수금 (원)" className={s.numInput} type="text" inputMode="numeric" value={pLoanDown ? pLoanDown.toLocaleString('ko-KR') : ''} onChange={e => setPLoanDown(parseAmount(e.target.value))} />
                 <span className={s.unit}>원</span>
               </div>
               <div className={s.helperText}>{formatKoreanCurrency(pLoanDown)}</div>
@@ -800,8 +801,8 @@ export default function CarCostClient() {
                   <div className={s.purchaseDetail}>{r.detail}</div>
                   <div className={s.purchaseProsCons}>
                     <div>📌 <strong>소유:</strong> {r.ownership}</div>
-                    <div style={{ color: '#059669' }}>✅ {r.pros}</div>
-                    <div style={{ color: '#DC2626' }}>⚠️ {r.cons}</div>
+                    <div style={{ color: 'var(--emerald-600)' }}>✅ {r.pros}</div>
+                    <div style={{ color: 'var(--red-600)' }}>⚠️ {r.cons}</div>
                   </div>
                 </div>
               )
@@ -817,9 +818,9 @@ export default function CarCostClient() {
             <strong>본인 상황별 추천:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
               <li>자금 충분 + 5년+ 보유: <strong style={{ color: 'var(--accent)' }}>현금 구매</strong></li>
-              <li>자금 부족 + 5년+ 보유: <strong style={{ color: '#A16207' }}>할부</strong></li>
-              <li>사업자 (비용 처리·절세): <strong style={{ color: '#EA580C' }}>리스</strong></li>
-              <li>관리 편함 + 신차 자주: <strong style={{ color: '#9333EA' }}>장기렌트</strong></li>
+              <li>자금 부족 + 5년+ 보유: <strong style={{ color: 'var(--yellow-700)' }}>할부</strong></li>
+              <li>사업자 (비용 처리·절세): <strong style={{ color: 'var(--orange-600)' }}>리스</strong></li>
+              <li>관리 편함 + 신차 자주: <strong style={{ color: 'var(--purple-600)' }}>장기렌트</strong></li>
             </ul>
           </div>
         </>
@@ -835,7 +836,7 @@ export default function CarCostClient() {
           {carRows.map((row) => (
             <div key={row.id} className={s.carInputRow}>
               <div className={s.carInputHeader}>
-                <input className={s.carInputName} type="text"
+                <input aria-label="비교 차량 이름" className={s.carInputName} type="text"
                   value={row.name}
                   onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, name: e.target.value } : r))}
                   placeholder="차량 이름" />
@@ -846,43 +847,43 @@ export default function CarCostClient() {
               <div className={s.carInputGrid}>
                 <div>
                   <div className={s.subLabel} style={{ fontSize: 11, marginBottom: 4 }}>차량 가격</div>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={row.carPrice || ''}
+                  <input aria-label={`${row.name} 차량 가격 (원)`} className={s.numInput} type="text" inputMode="numeric" value={row.carPrice ? row.carPrice.toLocaleString('ko-KR') : ''}
                     onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, carPrice: parseAmount(e.target.value) } : r))}
                     style={{ fontSize: 14 }} />
                 </div>
                 <div>
                   <div className={s.subLabel} style={{ fontSize: 11, marginBottom: 4 }}>연료 / 연비</div>
                   <div style={{ display: 'flex', gap: 4 }}>
-                    <select value={row.fuelTypeId} onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, fuelTypeId: e.target.value } : r))}
+                    <select aria-label={`${row.name} 연료`} value={row.fuelTypeId} onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, fuelTypeId: e.target.value } : r))}
                       style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 6, padding: '6px', fontSize: 12, color: 'var(--text)', flex: 1 }}>
                       {FUEL_DATA_2026.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
                     </select>
-                    <input className={s.smallNum} type="number" inputMode="decimal" step="0.1" value={row.efficiency || ''}
+                    <input aria-label={`${row.name} 연비`} className={s.smallNum} type="number" inputMode="decimal" step="0.1" value={row.efficiency || ''}
                       onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, efficiency: parseAmount(e.target.value) } : r))}
                       placeholder="km/L" style={{ fontSize: 14 }} />
                   </div>
                 </div>
                 <div>
                   <div className={s.subLabel} style={{ fontSize: 11, marginBottom: 4 }}>보험료 (연)</div>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={row.insuranceYearly || ''}
+                  <input aria-label={`${row.name} 보험료 (원/년)`} className={s.numInput} type="text" inputMode="numeric" value={row.insuranceYearly ? row.insuranceYearly.toLocaleString('ko-KR') : ''}
                     onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, insuranceYearly: parseAmount(e.target.value) } : r))}
                     style={{ fontSize: 14 }} />
                 </div>
                 <div>
                   <div className={s.subLabel} style={{ fontSize: 11, marginBottom: 4 }}>자동차세 (연)</div>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={row.carTaxYearly || ''}
+                  <input aria-label={`${row.name} 자동차세 (원/년)`} className={s.numInput} type="text" inputMode="numeric" value={row.carTaxYearly ? row.carTaxYearly.toLocaleString('ko-KR') : ''}
                     onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, carTaxYearly: parseAmount(e.target.value) } : r))}
                     style={{ fontSize: 14 }} />
                 </div>
                 <div>
                   <div className={s.subLabel} style={{ fontSize: 11, marginBottom: 4 }}>월 소모품·정비</div>
-                  <input className={s.numInput} type="number" inputMode="decimal" value={row.variableCostMonthly || ''}
+                  <input aria-label={`${row.name} 월 소모품·정비 (원)`} className={s.numInput} type="text" inputMode="numeric" value={row.variableCostMonthly ? row.variableCostMonthly.toLocaleString('ko-KR') : ''}
                     onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, variableCostMonthly: parseAmount(e.target.value) } : r))}
                     style={{ fontSize: 14 }} />
                 </div>
                 <div>
                   <div className={s.subLabel} style={{ fontSize: 11, marginBottom: 4 }}>연 감가율 (%)</div>
-                  <input className={s.numInput} type="number" inputMode="decimal" step="0.5" value={row.depreciationRate || ''}
+                  <input aria-label={`${row.name} 연 감가율 (%)`} className={s.numInput} type="number" inputMode="decimal" step="0.5" value={row.depreciationRate || ''}
                     onChange={e => setCarRows(carRows.map(r => r.id === row.id ? { ...r, depreciationRate: parseAmount(e.target.value) } : r))}
                     style={{ fontSize: 14 }} />
                 </div>
@@ -916,22 +917,22 @@ export default function CarCostClient() {
                   <tr><td>연 보험</td>{carCompareResults.map((c, i) => <td key={i}>{formatKoreanCurrency(c.yearlyInsurance)}</td>)}</tr>
                   <tr><td>연 자동차세</td>{carCompareResults.map((c, i) => <td key={i}>{formatKoreanCurrency(c.yearlyTax)}</td>)}</tr>
                   <tr><td>연 소모품·정비</td>{carCompareResults.map((c, i) => <td key={i}>{formatKoreanCurrency(c.yearlyVariable)}</td>)}</tr>
-                  <tr><td>연 감가</td>{carCompareResults.map((c, i) => <td key={i} style={{ color: '#EA580C' }}>{formatKoreanCurrency(c.yearlyDep)}</td>)}</tr>
+                  <tr><td>연 감가</td>{carCompareResults.map((c, i) => <td key={i} style={{ color: 'var(--orange-600)' }}>{formatKoreanCurrency(c.yearlyDep)}</td>)}</tr>
                   <tr className={s.totalRow}>
                     <td>연 총비용</td>
                     {carCompareResults.map((c, i) => (
-                      <td key={i} style={{ color: i === carBestIdx ? '#059669' : 'var(--accent)' }}>
+                      <td key={i} style={{ color: i === carBestIdx ? 'var(--emerald-600)' : 'var(--accent)' }}>
                         {formatKoreanCurrency(c.yearlyTotal)}{i === carBestIdx && ' ★'}
                       </td>
                     ))}
                   </tr>
-                  <tr><td>5년 총비용</td>{carCompareResults.map((c, i) => <td key={i} style={{ fontSize: 14, color: i === carBestIdx ? '#059669' : 'var(--text)' }}>{formatKoreanCurrency(c.fiveYearTotal)}</td>)}</tr>
+                  <tr><td>5년 총비용</td>{carCompareResults.map((c, i) => <td key={i} style={{ fontSize: 14, color: i === carBestIdx ? 'var(--emerald-600)' : 'var(--text)' }}>{formatKoreanCurrency(c.fiveYearTotal)}</td>)}</tr>
                   <tr><td>1km당 비용</td>{carCompareResults.map((c, i) => <td key={i}>{formatKRW(c.perKm)}</td>)}</tr>
                 </tbody>
               </table>
             </div>
             <div className={s.helperText} style={{ marginTop: 10 }}>
-              ★ 가장 저렴: <strong style={{ color: '#059669' }}>{carCompareResults[carBestIdx]?.name}</strong> ({formatKoreanCurrency(carCompareResults[carBestIdx]?.fiveYearTotal ?? 0)})
+              ★ 가장 저렴: <strong style={{ color: 'var(--emerald-600)' }}>{carCompareResults[carBestIdx]?.name}</strong> ({formatKoreanCurrency(carCompareResults[carBestIdx]?.fiveYearTotal ?? 0)})
             </div>
           </div>
 
@@ -953,7 +954,7 @@ export default function CarCostClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>일반 차량 가격</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" value={fCarPrice || ''} onChange={e => setFCarPrice(parseAmount(e.target.value))} />
+                <input aria-label="일반 차량 가격 (원)" className={s.numInput} type="text" inputMode="numeric" value={fCarPrice ? fCarPrice.toLocaleString('ko-KR') : ''} onChange={e => setFCarPrice(parseAmount(e.target.value))} />
                 <span className={s.unit}>원</span>
               </div>
               <div className={s.helperText}>{formatKoreanCurrency(fCarPrice)}</div>
@@ -961,7 +962,7 @@ export default function CarCostClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>전기차 가격</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" value={fEvCarPrice || ''} onChange={e => setFEvCarPrice(parseAmount(e.target.value))} />
+                <input aria-label="전기차 가격 (원)" className={s.numInput} type="text" inputMode="numeric" value={fEvCarPrice ? fEvCarPrice.toLocaleString('ko-KR') : ''} onChange={e => setFEvCarPrice(parseAmount(e.target.value))} />
                 <span className={s.unit}>원</span>
               </div>
               <div className={s.helperText}>{formatKoreanCurrency(fEvCarPrice)} (보조금 후)</div>
@@ -969,7 +970,7 @@ export default function CarCostClient() {
             <div className={s.card}>
               <span className={s.cardLabel}>보유 기간</span>
               <div className={s.inputRow}>
-                <input className={s.numInput} type="number" inputMode="decimal" value={fYears || ''} onChange={e => setFYears(Math.max(1, parseInt(e.target.value || '1', 10)))} />
+                <input aria-label="보유 기간 (년)" className={s.numInput} type="number" inputMode="decimal" value={fYears || ''} onChange={e => setFYears(Math.max(1, parseInt(e.target.value || '1', 10)))} />
                 <span className={s.unit}>년</span>
               </div>
               <div className={s.pills} role="group" aria-label="보유 기간 빠른 선택">
@@ -1001,8 +1002,8 @@ export default function CarCostClient() {
                       <td>{formatKoreanCurrency(r.carPrice)}</td>
                       <td>{formatKoreanCurrency(r.yearlyFuelCost)}</td>
                       <td>{formatKoreanCurrency(r.totalFuelCost)}</td>
-                      <td style={{ color: '#EA580C' }}>{formatKoreanCurrency(r.totalDep)}</td>
-                      <td style={{ color: i === fuelBestIdx ? '#059669' : 'var(--accent)' }}>
+                      <td style={{ color: 'var(--orange-600)' }}>{formatKoreanCurrency(r.totalDep)}</td>
+                      <td style={{ color: i === fuelBestIdx ? 'var(--emerald-600)' : 'var(--accent)' }}>
                         {formatKoreanCurrency(r.totalCost)}
                       </td>
                     </tr>
@@ -1011,7 +1012,7 @@ export default function CarCostClient() {
               </table>
             </div>
             <div className={s.helperText} style={{ marginTop: 10 }}>
-              ★ 가장 저렴: <strong style={{ color: '#059669' }}>{fuelCompare[fuelBestIdx]?.fuel.name}</strong>
+              ★ 가장 저렴: <strong style={{ color: 'var(--emerald-600)' }}>{fuelCompare[fuelBestIdx]?.fuel.name}</strong>
             </div>
           </div>
 
@@ -1050,17 +1051,17 @@ export default function CarCostClient() {
             <div className={s.threeCol}>
               <div>
                 <div className={s.subLabel}>시간당 요금</div>
-                <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{formatKRW(CARSHARING_RATES.hourlyRate)}</div>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 18, fontWeight: 800, color: 'var(--purple-600)' }}>{formatKRW(CARSHARING_RATES.hourlyRate)}</div>
                 <div className={s.helperText}>소형 기준</div>
               </div>
               <div>
                 <div className={s.subLabel}>km당 요금</div>
-                <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{formatKRW(CARSHARING_RATES.perKmRate)}</div>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 18, fontWeight: 800, color: 'var(--purple-600)' }}>{formatKRW(CARSHARING_RATES.perKmRate)}</div>
                 <div className={s.helperText}>보험·연료 포함</div>
               </div>
               <div>
                 <div className={s.subLabel}>100km당 평균 시간</div>
-                <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, fontWeight: 800, color: '#9333EA' }}>{CARSHARING_RATES.avgHoursPer100km}시간</div>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 18, fontWeight: 800, color: 'var(--purple-600)' }}>{CARSHARING_RATES.avgHoursPer100km}시간</div>
                 <div className={s.helperText}>도심 운전 가정</div>
               </div>
             </div>
@@ -1074,7 +1075,7 @@ export default function CarCostClient() {
               </div>
               {shareCompare.map(row => (
                 <div key={row.monthlyKm} className={s.shareRow}>
-                  <span style={{ fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row.monthlyKm.toLocaleString()}km</span>
+                  <span style={{ fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{row.monthlyKm.toLocaleString()}km</span>
                   <span className={s.shareRowOwn}>{formatKRW(row.ownCost)}</span>
                   <span className={s.shareRowShare}>{formatKRW(row.shareCost)}</span>
                   <span className={`${s.winnerCell} ${row.winner === '쏘카' ? s.shareRowShare : row.winner === '보유' ? s.shareRowOwn : s.shareRowEqual}`}>
@@ -1088,10 +1089,10 @@ export default function CarCostClient() {
           <div className={s.infoBox}>
             <strong>손익분기 가이드:</strong>
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
-              <li>월 500km 미만: <strong style={{ color: '#9333EA' }}>쏘카·그린카 압도적 유리</strong></li>
+              <li>월 500km 미만: <strong style={{ color: 'var(--purple-600)' }}>쏘카·그린카 압도적 유리</strong></li>
               <li>월 500~800km: 카쉐어링 약간 유리</li>
               <li>월 800~1,200km: 비슷 (편의성 가치 따라)</li>
-              <li>월 1,200km+: <strong style={{ color: '#0891B2' }}>보유 유리</strong></li>
+              <li>월 1,200km+: <strong style={{ color: 'var(--cyan-600)' }}>보유 유리</strong></li>
             </ul>
           </div>
 

@@ -32,7 +32,7 @@ const FRYING_DATA: FryingData[] = [
   { key: 'frenchFry',   name: '감자튀김',   emoji: '🍟',
     oilTemp: { min: 160, max: 170 }, time1: { min: 180, max: 240 }, time2: { min: 60, max: 90 },
     secondFry: 'recommended', targetColor: 'golden', interiorCheck: false,
-    tip: '1차 160°C에서 속까지 익히고, 2차 180°C에서 30초~1분 겉면 바삭하게. 2차 튀김 후 소금은 즉시 뿌리기.',
+    tip: '1차 160°C에서 속까지 익히고, 2차 180°C에서 1분~1분 30초 겉면 바삭하게. 2차 튀김 후 소금은 즉시 뿌리기.',
     colorGuide: '2차 후 밝은 황금색이 목표. 진갈색은 과튀김.',
     airfryer: { temp: 200, timeMinMin: 15, timeMinMax: 20 } },
   { key: 'shrimp',      name: '새우튀김',   emoji: '🍤',
@@ -77,7 +77,7 @@ const FRYING_DATA: FryingData[] = [
     tip: '김이 타기 쉬우니 온도 조절 주의. 굴려가며 고르게 튀기기. 고온에서 빠르게 완성.',
     colorGuide: '황금갈색. 김이 검게 타지 않도록 주의.',
     airfryer: { temp: 180, timeMinMin: 7, timeMinMax: 10 } },
-  { key: 'eggplant',    name: '가지튀김',   emoji: '🫙',
+  { key: 'eggplant',    name: '가지튀김',   emoji: '🍆',
     oilTemp: { min: 170, max: 180 }, time1: { min: 90, max: 150 }, time2: null,
     secondFry: 'unnecessary', targetColor: 'light-yellow', interiorCheck: false,
     tip: '가지는 기름 흡수가 많음. 과도한 기름 흡수 방지를 위해 고온에서 빠르게. 소금에 절여 수분 제거 후 튀기면 덜 기름짐.',
@@ -103,8 +103,10 @@ const QTY_F: Record<QtyK, number> = { small: 0.95, medium: 1.0, large: 1.25 }
 
 // ── Utils ──────────────────────────────────────
 function fmtSec(sec: number): string {
-  const m = Math.floor(sec / 60)
-  const s = Math.round(sec % 60)
+  // 전체 초를 먼저 반올림 — 359.7초가 '5분 60초'가 되지 않도록
+  const total = Math.round(sec)
+  const m = Math.floor(total / 60)
+  const s = total % 60
   if (m === 0) return `${s}초`
   if (s === 0) return `${m}분`
   return `${m}분 ${s}초`
@@ -240,8 +242,8 @@ export default function FryingClient() {
 
       {/* ── 1. 재료 선택 ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>1. 재료 선택 (복수 선택 가능)</label>
-        <div className={styles.ingGrid}>
+        <span className={styles.cardLabel} id="fry-lbl-ing">1. 재료 선택 (복수 선택 가능)</span>
+        <div className={styles.ingGrid} role="group" aria-labelledby="fry-lbl-ing">
           {FRYING_DATA.map((d) => {
             const active = selected.includes(d.key)
             const badgeNum = active ? selected.indexOf(d.key) + 1 : 0
@@ -267,8 +269,8 @@ export default function FryingClient() {
 
       {/* ── 2. 조건 설정 ── */}
       <div className={styles.card}>
-        <label className={styles.cardLabel}>2. 재료 상태</label>
-        <div className={styles.condRow}>
+        <span className={styles.cardLabel} id="fry-lbl-state">2. 재료 상태</span>
+        <div className={styles.condRow} role="group" aria-labelledby="fry-lbl-state">
           {[
             { k: 'fresh',  label: '🌱 생재료', cls: styles.stateFresh },
             { k: 'fridge', label: '❄️ 냉장',   cls: styles.stateFridge },
@@ -289,8 +291,8 @@ export default function FryingClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.cardLabel}>3. 크기·두께</label>
-        <div className={styles.condRow}>
+        <span className={styles.cardLabel} id="fry-lbl-thick">3. 크기·두께</span>
+        <div className={styles.condRow} role="group" aria-labelledby="fry-lbl-thick">
           {[
             { k: 'thin',   label: '얇음' },
             { k: 'medium', label: '보통' },
@@ -306,8 +308,8 @@ export default function FryingClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.cardLabel}>4. 튀김옷</label>
-        <div className={styles.condRow}>
+        <span className={styles.cardLabel} id="fry-lbl-batter">4. 튀김옷</span>
+        <div className={styles.condRow} role="group" aria-labelledby="fry-lbl-batter">
           {[
             { k: 'none',   label: '없음' },
             { k: 'thin',   label: '얇음' },
@@ -327,15 +329,15 @@ export default function FryingClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.cardLabel}>
+        <span className={styles.cardLabel} id="fry-lbl-temp">
           5. 기름 온도
           {recTemp && (
             <span className={styles.recBadge}>
               {recTemp.conflict ? '재료별 권장 온도 상이' : `권장 ${recTemp.min}~${recTemp.max}°C`}
             </span>
           )}
-        </label>
-        <div className={styles.condRow}>
+        </span>
+        <div className={styles.condRow} role="group" aria-labelledby="fry-lbl-temp">
           {[160, 170, 180, 190].map(t => {
             const isRec = recTemp && !recTemp.conflict && t >= recTemp.min && t <= recTemp.max
             return (
@@ -356,6 +358,7 @@ export default function FryingClient() {
           <input
             type="number" inputMode="decimal"
             className={styles.customTempInput}
+            aria-label="기름 온도 직접 입력 (°C)"
             placeholder="직접 입력"
             value={customTemp}
             min={100} max={220} step={1}
@@ -374,8 +377,8 @@ export default function FryingClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.cardLabel}>6. 한 번에 넣는 양</label>
-        <div className={styles.condRow}>
+        <span className={styles.cardLabel} id="fry-lbl-qty">6. 한 번에 넣는 양</span>
+        <div className={styles.condRow} role="group" aria-labelledby="fry-lbl-qty">
           {[
             { k: 'small',  label: '적음 (20%)',  cls: styles.qtySmall },
             { k: 'medium', label: '보통 (50%)',  cls: '' },
@@ -396,8 +399,8 @@ export default function FryingClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.cardLabel}>7. 옵션</label>
-        <div className={styles.optRow}>
+        <span className={styles.cardLabel} id="fry-lbl-opt">7. 옵션</span>
+        <div className={styles.optRow} role="group" aria-labelledby="fry-lbl-opt">
           <label className={styles.optItem}>
             <input type="checkbox" checked={showAir} onChange={e => setShowAir(e.target.checked)} />
             에어프라이어 병행 안내 표시
@@ -522,12 +525,13 @@ export default function FryingClient() {
               {d.interiorCheck && (
                 <div className={styles.warnBox}>
                   <strong>⚠️ 속 익힘 확인 필수</strong><br />
+                  {/* 중심온도는 식약처 기준(육류·가금류 75°C, 어패류 85°C, 1분 이상)으로 통일 — USDA 수치는 page.tsx 참고 표에만 */}
                   {d.name === '치킨'
-                    ? '닭고기 내부 온도 75°C 이상 확인. 가장 두꺼운 부분을 잘랐을 때 분홍기·투명 육즙이 없어야 합니다.'
+                    ? '닭고기 중심 온도 75°C에서 1분 이상(식약처 기준). 가장 두꺼운 부분을 잘랐을 때 분홍기·투명 육즙이 없어야 합니다.'
                     : d.name === '돈까스'
-                    ? '돼지고기 내부 온도 63°C 이상 확인(3분 휴지). 가장 두꺼운 부분에 분홍기가 없어야 합니다.'
+                    ? '돼지고기 중심 온도 75°C에서 1분 이상(식약처 기준). 가장 두꺼운 부분에 분홍기가 없어야 합니다.'
                     : d.name === '생선튀김'
-                    ? '생선 내부 온도 63°C 이상. 살이 불투명하고 포크로 쉽게 부서지면 익은 것입니다.'
+                    ? '어패류 중심 온도 85°C에서 1분 이상(식약처 기준). 살이 불투명하고 포크로 쉽게 부서지면 익은 것입니다.'
                     : '중심부까지 완전히 익었는지 확인 후 꺼내세요. 덜 익으면 식중독 위험.'}
                   {frozenNote && <><br />{frozenNote}</>}
                 </div>
@@ -567,7 +571,7 @@ export default function FryingClient() {
       {/* ── TIMER ── */}
       {showTimer && timerTotal > 0 && (
         <div id="frying-timer" className={`${styles.timerCard} ${timerDone ? styles.timerCardDone : ''}`}>
-          <div className={`${styles.timerTitle} ${timerDone ? styles.timerTitleDone : ''}`}>
+          <div className={`${styles.timerTitle} ${timerDone ? styles.timerTitleDone : ''}`} role="status">
             {timerDone
               ? (timerSecond === 'unnecessary' ? '✅ 튀김 완료!' : '✅ 1차 튀김 완료!')
               : timerRunning ? '🔥 튀김 진행 중' : '⏸ 일시정지'}
@@ -611,11 +615,11 @@ function TimerRing({ secondsLeft, total, done }: { secondsLeft: number; total: n
   const c = Math.PI * 2 * r
   const pct = total > 0 ? Math.max(0, Math.min(1, secondsLeft / total)) : 0
   const dashOffset = c * (1 - pct)
-  const color = done ? '#059669' : 'var(--accent)'
+  const color = done ? 'var(--emerald-600)' : 'var(--accent)'
 
   return (
     <div className={styles.timerRing}>
-      <svg width={size} height={size}>
+      <svg width={size} height={size} aria-hidden="true">
         <circle cx={size / 2} cy={size / 2} r={r}
           fill="none" stroke="var(--bg3)" strokeWidth={stroke} />
         <circle cx={size / 2} cy={size / 2} r={r}
@@ -627,7 +631,7 @@ function TimerRing({ secondsLeft, total, done }: { secondsLeft: number; total: n
           style={{ transition: 'stroke-dashoffset 0.9s linear' }}
         />
       </svg>
-      <div className={`${styles.timerCenter} ${done ? styles.timerCenterDone : ''}`}>
+      <div className={`${styles.timerCenter} ${done ? styles.timerCenterDone : ''}`} role="timer" aria-label="남은 튀김 시간">
         {done ? '완료!' : fmtTimerSec(secondsLeft)}
       </div>
     </div>

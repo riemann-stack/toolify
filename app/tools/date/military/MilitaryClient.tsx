@@ -49,7 +49,9 @@ const SERVICE_TYPES: ServiceType[] = [
    따라서 입대 기준 누적 2·8·14개월. 군별로 다른 것은 진급 시점이 아니라 '병장으로 복무하는 잔여 기간'뿐.
    ※ 같은 조 제3항은 근무성적 우수자(총진급인원의 1/10 이내)에게 상병 4개월·병장 5개월 단축을 허용하고,
      제2항 단서는 참모총장이 국방부장관 승인을 받아 1개월 범위에서 연장할 수 있게 한다 → 개인차 있음.
-   ※ 제32조제1항은 2024-02-29 개정으로 '진급심사를 거쳐' 진급시키도록 바뀌었다(자동 진급 아님). */
+   ※ 제32조제1항은 2024-02-29 개정으로 '진급심사를 거쳐' 진급시키도록 바뀌었다(자동 진급 아님).
+   ※ 병 진급은 매월 1일 자로 일괄 시행 → 최저복무기간을 채운 날 이후 첫 1일이 진급일
+     (1일 입대면 그대로, 5/2 입대 → 일병 8/1). promotionDate() 참고. */
 const RANK_MONTHS = [
   { rank: '일병', from: '이병', months: 2 },
   { rank: '상병', from: '일병', months: 8 },
@@ -111,6 +113,12 @@ function addDays(d: Date, n: number): Date {
 function diffDays(a: Date, b: Date): number {
   return Math.round((a.getTime() - b.getTime()) / 86400000)
 }
+/** 진급일 — 입대 후 N개월(최저복무기간)을 채운 날 이후 첫 번째 '매월 1일'.
+ *  'N개월이 지난' 시점 = N개월 기간 만료일(민법 §160, 전역일과 같은 규칙)의 다음 날. 그날이 1일이면 그대로. */
+function promotionDate(enlist: Date, months: number): Date {
+  const eligible = addDays(dischargeDate(enlist, months), 1)
+  return eligible.getDate() === 1 ? eligible : new Date(eligible.getFullYear(), eligible.getMonth() + 1, 1)
+}
 /* ─────────────────────────────────────────────────────────
  * 메인
  * ───────────────────────────────────────────────────────── */
@@ -138,6 +146,8 @@ export default function MilitaryClient() {
   /* 복무 형태 */
   const [serviceId, setServiceId] = useState('army')
   const [customMonths, setCustomMonths] = useState(18)
+  /* 숫자칸 입력 중 상태 — 지우자마자 1로 강제되지 않도록 문자열로 두고 blur 때 클램프 */
+  const [customMonthsText, setCustomMonthsText] = useState('18')
 
   /* 기준일 */
   const [refMode, setRefMode] = useState<'today' | 'custom'>('today')
@@ -251,8 +261,8 @@ export default function MilitaryClient() {
        (예: 직접 입력 6개월이면 상병·병장 진급은 도달하지 않는다). */
     const promotions = ranked
       ? RANK_MONTHS
-          // 'N개월이 지난' 시점 = N개월 기간의 만료일 다음 날 (민법 §160 기준을 전역일과 동일하게 적용)
-          .map(r => ({ ...r, date: addDays(dischargeDate(enlist, r.months), 1) }))
+          // 최저복무기간을 채운 뒤 첫 '매월 1일' (병 진급은 매월 1일 자로 시행)
+          .map(r => ({ ...r, date: promotionDate(enlist, r.months) }))
           .filter(r => diffDays(dischargeStart, r.date) >= 0)   // 전역 후 진급은 표시하지 않음
       : []
 
@@ -260,8 +270,8 @@ export default function MilitaryClient() {
     const daysUntil = (d: Date) => diffDays(d, referenceDate)
 
     /* 오늘 마일스톤 알림 (today === referenceDate일 때만).
-       100일은 '진급일'이 아니다 — 일병 진급 최저복무기간은 이병 2개월(약 60일)이라
-       100일차는 이미 진급 후 40일쯤이다(「군인사법 시행규칙」 제32조제2항). 문화적 기념일로만 표기. */
+       100일은 '진급일'이 아니다 — 일병 진급 최저복무기간은 이병 2개월이고 매월 1일 진급이라
+       일병 진급은 입대 약 60~92일차, 100일차엔 이미 일병이다(「군인사법 시행규칙」 제32조제2항). 문화적 기념일로만 표기. */
     let todayMilestone: { icon: string; text: string } | null = null
     if (todayState && diffDays(todayState, referenceDate) === 0) {
       if (diffDays(referenceDate, ms.discharge) === 0)          todayMilestone = { icon: '🎖️', text: `${endTerm} 축하합니다!` }
@@ -451,7 +461,7 @@ export default function MilitaryClient() {
                 max={60}
                 step={1}
                 value={customMonths}
-                onChange={e => setCustomMonths(Number(e.target.value))}
+                onChange={e => { const v = Number(e.target.value); setCustomMonths(v); setCustomMonthsText(String(v)) }}
               />
               <input
                 className={styles.smallNum}
@@ -459,8 +469,14 @@ export default function MilitaryClient() {
                 aria-label="복무 개월 수 직접 입력"
                 min={1}
                 max={60}
-                value={customMonths}
-                onChange={e => setCustomMonths(clamp(Number(e.target.value) || 1, 1, 60))}
+                value={customMonthsText}
+                onChange={e => {
+                  const t = e.target.value
+                  setCustomMonthsText(t)
+                  const v = Math.trunc(Number(t))
+                  if (t !== '' && Number.isFinite(v) && v >= 1) setCustomMonths(clamp(v, 1, 60))
+                }}
+                onBlur={() => setCustomMonthsText(String(customMonths))}
               />
             </div>
           )}
@@ -635,7 +651,7 @@ export default function MilitaryClient() {
                   sub: '면회·100일 휴가 (진급일 아님)', date: result.milestones.day100, reached: result.reached.day100 }] : []),
                 /* 진급은 복무율이 아니라 입대 기준 절대 시점 — 계급이 있는 복무 형태에서만 */
                 ...result.promotions.map(p => ({ key: `rank-${p.rank}`, icon: '🎖️', label: `${p.rank} 진급 가능`,
-                  sub: `${p.from}으로서 ${p.rank === '일병' ? 2 : 6}개월 (최저복무기간)`, date: p.date, reached: p.reached })),
+                  sub: `${p.from}으로서 ${p.rank === '일병' ? 2 : 6}개월 채운 뒤 첫 1일 (매월 1일 진급 기준)`, date: p.date, reached: p.reached })),
                 { key: 'halfway', icon: '⏱️', label: '복무 50% (반환점)', sub: '절반 통과', date: result.milestones.halfway, reached: result.reached.halfway },
                 { key: 'threeQuarter', icon: '🎯', label: '복무 75%', sub: '4분의 3 통과', date: result.milestones.threeQuarter, reached: result.reached.threeQuarter },
                 ...(result.show.last100 ? [{ key: 'last100', icon: '🔥', label: `${result.endTerm} D-100 (말년 시작)`,
@@ -668,7 +684,7 @@ export default function MilitaryClient() {
             {result.endTerm === '전역' ? (
               <> 휴가는 전역일을 바꾸지 않습니다. 전역이 밀리는 건 「병역법」 제18조제3항의
                 <strong> 형 집행일수·군기교육처분일수·복무이탈일수</strong>뿐이며, 해당 일수만큼 그대로 연기됩니다.</>
-            ) : result.endTerm === '소집해제' ? (
+            ) : serviceId === 'social' ? (
               <> 복무 연장 사유는 현역병과 다릅니다 — 사회복무요원은 공무 외 질병·부상 병가가
                 <strong> 통산 30일까지만 산입</strong>되고 초과분만큼 연장복무합니다.</>
             ) : (

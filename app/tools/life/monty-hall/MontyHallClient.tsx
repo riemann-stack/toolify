@@ -444,7 +444,7 @@ function SimTab() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setTimeout(() => setCopied(false), 1500)
     } catch { /* noop */ }
   }
 
@@ -677,7 +677,7 @@ function ConvergenceGraph({
         return (
           <g key={`y${y}`}>
             <line x1={padL} x2={W - padR} y1={toY(y)} y2={toY(y)}
-              stroke={isTheory ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)'} />
+              stroke={isTheory ? 'var(--muted)' : 'var(--border)'} strokeOpacity={isTheory ? 0.35 : 1} />
             <text x={padL - 6} y={toY(y) + 4} textAnchor="end" className={styles.graphAxis}>{y}%</text>
           </g>
         )
@@ -685,7 +685,7 @@ function ConvergenceGraph({
       {/* X 그리드 + 레이블 */}
       {xTicks.map(x => (
         <g key={`x${x}`}>
-          <line x1={toX(x)} x2={toX(x)} y1={padT} y2={padT + plotH} stroke="rgba(255,255,255,0.04)" />
+          <line x1={toX(x)} x2={toX(x)} y1={padT} y2={padT + plotH} stroke="var(--border)" />
           <text x={toX(x)} y={H - 12} textAnchor="middle" className={styles.graphAxis}>
             {x >= 1000 ? `${x / 1000}k` : x}
           </text>

@@ -18,7 +18,10 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'guide',    label: '가이드' },
 ]
 
-const ORIG_TITLE = '뽀모도로 타이머 — 집중력 향상 25분 공부 타이머'
+const OPTS_KEY = 'pomodoro:opts:v1'
+/* 저장 옵션 검증용 — 설정 탭 스테퍼 범위와 동일 */
+const intIn = (v: unknown, lo: number, hi: number): v is number =>
+  typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= hi
 
 export default function PomodoroClient() {
   const [tab, setTab] = useState<Tab>('timer')
@@ -56,19 +59,21 @@ export default function PomodoroClient() {
 
   // ── 초기 로드 ──
   useEffect(() => {
+    if (typeof window === 'undefined') return
     setSessions(loadSessions())
     try {
-      const opts = JSON.parse(localStorage.getItem('pomodoro:opts:v1') ?? '{}')
-      if (opts.focusMin) setFocusMin(opts.focusMin)
-      if (opts.shortMin) setShortMin(opts.shortMin)
-      if (opts.longMin)  setLongMin(opts.longMin)
-      if (opts.longEvery) setLongEvery(opts.longEvery)
-      if (opts.soundId)   setSoundId(opts.soundId)
+      const parsed: unknown = JSON.parse(localStorage.getItem(OPTS_KEY) ?? '{}')
+      const opts = (parsed && typeof parsed === 'object' ? parsed : {}) as Record<string, unknown>
+      if (intIn(opts.focusMin, 1, 120)) setFocusMin(opts.focusMin)
+      if (intIn(opts.shortMin, 1, 30)) setShortMin(opts.shortMin)
+      if (intIn(opts.longMin, 1, 60))  setLongMin(opts.longMin)
+      if (intIn(opts.longEvery, 2, 10)) setLongEvery(opts.longEvery)
+      if (SOUND_THEMES.some(t => t.id === opts.soundId)) setSoundId(opts.soundId as string)
       if (typeof opts.autoNext === 'boolean')  setAutoNext(opts.autoNext)
       if (typeof opts.tickTitle === 'boolean') setTickTitle(opts.tickTitle)
       if (typeof opts.notifOn === 'boolean')   setNotifOn(opts.notifOn)
-      if (opts.dailyGoal) setDailyGoal(opts.dailyGoal)
-      if (opts.activePreset) setActivePreset(opts.activePreset)
+      if ((DAILY_GOAL_OPTIONS as readonly unknown[]).includes(opts.dailyGoal)) setDailyGoal(opts.dailyGoal as number)
+      if (typeof opts.activePreset === 'string') setActivePreset(opts.activePreset)
       // 저장된 집중 시간 → 초기 타이머 동기화는 위의 '단계 시간 동기화' effect가 처리
     } catch {}
     setHydrated(true)
@@ -78,7 +83,7 @@ export default function PomodoroClient() {
   useEffect(() => {
     if (!hydrated) return
     try {
-      localStorage.setItem('pomodoro:opts:v1', JSON.stringify({
+      localStorage.setItem(OPTS_KEY, JSON.stringify({
         focusMin, shortMin, longMin, longEvery, soundId,
         autoNext, tickTitle, notifOn, dailyGoal, activePreset,
       }))
@@ -113,7 +118,8 @@ export default function PomodoroClient() {
     playSound(theme)
 
     const completedPhase = phase
-    const completedDuration = Math.round(getTotal(completedPhase) / 60)
+    // 실제로 돌린 단계 길이 — 실행 중에 설정을 바꿔도 시작 당시 길이로 기록 (totalRef는 단계 시작·리셋 때만 갱신)
+    const completedDuration = Math.round((totalRef.current || getTotal(completedPhase)) / 60)
 
     // 세션 기록
     const session: PomodoroSession = {
@@ -173,34 +179,64 @@ export default function PomodoroClient() {
       startedAtRef.current = Date.now()
       startSecondsRef.current = seconds
     }
-    intervalRef.current = setInterval(() => {
+    let doneTimer: ReturnType<typeof setTimeout> | null = null
+    const stop = () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+      if (doneTimer) clearTimeout(doneTimer)
+    }
+    const tick = () => {
       const elapsed = Math.floor((Date.now() - (startedAtRef.current ?? Date.now())) / 1000)
       const remain = startSecondsRef.current - elapsed
       if (remain <= 0) {
+        stop()   // 인터벌·완료 타이머·가시성 이벤트가 겹쳐 완료가 두 번 기록되지 않게 먼저 정지
         setSeconds(0)
         handleComplete()
       } else {
         setSeconds(remain)
       }
-    }, 250)
+    }
+    intervalRef.current = setInterval(tick, 250)
+    // 백그라운드 탭은 반복 타이머가 분 단위로 묶일 수 있어, 완료 시각에 맞춘 단발 타이머를 따로 둔다
+    const remainMs = startSecondsRef.current * 1000 - (Date.now() - startedAtRef.current)
+    doneTimer = setTimeout(tick, Math.max(0, remainMs) + 30)
+    // 탭으로 돌아오면 즉시 다시 계산
+    const onVisible = () => { if (document.visibilityState === 'visible') tick() }
+    document.addEventListener('visibilitychange', onVisible)
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      stop()
+      document.removeEventListener('visibilitychange', onVisible)
     }
   }, [running, handleComplete, seconds])
 
   // ── 탭 타이틀 동적 변경 ──
+  // 원래 제목(메타데이터 title)은 마운트 때 저장해 두고, 이 도구가 바꾼 제목일 때만 되돌린다
+  // (페이지 이동 후 새 페이지 제목을 덮어쓰지 않도록)
+  const origTitleRef = useRef<string | null>(null)
+  const lastSetTitleRef = useRef<string | null>(null)
+  useEffect(() => {
+    origTitleRef.current = document.title
+    return () => {
+      if (lastSetTitleRef.current !== null && document.title === lastSetTitleRef.current && origTitleRef.current !== null) {
+        document.title = origTitleRef.current
+      }
+    }
+  }, [])
   useEffect(() => {
     if (typeof document === 'undefined') return
-    if (!tickTitle) {
-      document.title = ORIG_TITLE
+    if (!tickTitle || !running) {
+      if (lastSetTitleRef.current !== null && document.title === lastSetTitleRef.current && origTitleRef.current !== null) {
+        document.title = origTitleRef.current
+      }
+      lastSetTitleRef.current = null
       return
     }
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     const t = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
     const emoji = phase === 'focus' ? '🍅' : (phase === 'short' ? '☕' : '🌙')
-    document.title = running ? `${emoji} ${t} — ${PHASES[phase].label}` : ORIG_TITLE
-    return () => { document.title = ORIG_TITLE }
+    const next = `${emoji} ${t} — ${PHASES[phase].label}`
+    document.title = next
+    lastSetTitleRef.current = next
   }, [seconds, phase, running, tickTitle])
 
   // ── 키보드 단축키 ──
@@ -213,20 +249,21 @@ export default function PomodoroClient() {
         target.tagName === 'BUTTON' || target.tagName === 'SELECT' ||
         target.tagName === 'A' || target.isContentEditable
       )) return
+      // 최신 렌더의 액션을 ref로 호출 — 설정(집중 시간 등)을 바꾼 뒤에도 옛 값으로 리셋되지 않게
+      const a = actionsRef.current
       if (e.key === ' ') { e.preventDefault(); setRunning(r => !r) }
-      else if (e.key === 'r' || e.key === 'R') { handleReset() }
-      else if (e.key === 's' || e.key === 'S') { handleNext() }
-      else if (e.key === '1') { switchPhase('focus') }
-      else if (e.key === '2') { switchPhase('short') }
-      else if (e.key === '3') { switchPhase('long') }
+      else if (e.key === 'r' || e.key === 'R') { a.handleReset() }
+      else if (e.key === 's' || e.key === 'S') { a.handleNext() }
+      else if (e.key === '1') { a.switchPhase('focus') }
+      else if (e.key === '2') { a.switchPhase('short') }
+      else if (e.key === '3') { a.switchPhase('long') }
       else if (e.key === 'f' || e.key === 'F') {
         document.documentElement.requestFullscreen?.().catch(() => {})
       }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, longEvery, completed])
+  }, [])
 
   // ── 액션 ──
   const switchPhase = (p: Phase) => {
@@ -260,6 +297,10 @@ export default function PomodoroClient() {
       switchPhase('focus')
     }
   }
+
+  /* 키보드 단축키 핸들러가 항상 최신 액션을 쓰도록 매 렌더 갱신 */
+  const actionsRef = useRef({ handleReset, handleNext, switchPhase })
+  useEffect(() => { actionsRef.current = { handleReset, handleNext, switchPhase } })
 
   const applyPreset = (id: string) => {
     const p = POMODORO_PRESETS.find(x => x.id === id)
@@ -462,7 +503,7 @@ export default function PomodoroClient() {
                 const h = (d.focusCount / maxBar) * 90 + 4
                 return (
                   <div key={i} className={styles.barCol}>
-                    <div className={styles.bar} style={{ height: `${h}px`, background: d.focusCount > 0 ? '#0EA5E9' : 'var(--bg3)' }} />
+                    <div className={styles.bar} style={{ height: `${h}px`, background: d.focusCount > 0 ? 'var(--sky-500)' : 'var(--bg3)' }} />
                     <div className={styles.barLabel}>{DOW_KO[dt.getDay()]}</div>
                     <div className={styles.barLabel}>{d.focusCount}</div>
                   </div>
@@ -536,7 +577,7 @@ export default function PomodoroClient() {
                     setSessions([]); saveSessions([])
                   }
                 }}
-                style={{ marginTop: 10, background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, padding: '6px 12px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
+                style={{ marginTop: 10, background: 'transparent', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '6px 12px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
                 전체 기록 삭제
               </button>
             )}
@@ -674,8 +715,8 @@ export default function PomodoroClient() {
                     background: dailyGoal === n ? 'var(--accent)' : 'var(--bg3)',
                     color: dailyGoal === n ? '#0D0D0D' : 'var(--muted)',
                     border: '1px solid var(--border)',
-                    borderRadius: 8, padding: '8px 14px', fontSize: 13, fontWeight: 600,
-                    cursor: 'pointer', fontFamily: 'Noto Sans KR, sans-serif',
+                    borderRadius: 'var(--radius-s)', padding: '8px 14px', fontSize: 13, fontWeight: 600,
+                    cursor: 'pointer', fontFamily: 'var(--font-sans)',
                   }}>
                   {n}회
                 </button>
@@ -700,7 +741,7 @@ export default function PomodoroClient() {
                 { step: '4', title: '긴 휴식', desc: '4사이클(2시간) 후 15~30분 긴 휴식. 산책·낮잠 등 뇌를 식혀주세요.' },
               ].map(s => (
                 <div key={s.step} className={styles.guideCard}>
-                  <span className={styles.guideEmoji} style={{ color: '#0EA5E9', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{s.step}</span>
+                  <span className={styles.guideEmoji} style={{ color: 'var(--sky-500)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{s.step}</span>
                   <div>
                     <div className={styles.guideTitle}>{s.title}</div>
                     <div className={styles.guideDesc}>{s.desc}</div>
@@ -754,7 +795,7 @@ export default function PomodoroClient() {
       )}
 
       {/* 면책 */}
-      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, padding: '10px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, lineHeight: 1.7 }}>
+      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, padding: '10px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', lineHeight: 1.7 }}>
         ⚠️ 본 도구는 집중 보조용 타이머이며, 학습·업무 효과는 개인의 컨디션·환경·작업 성격에 따라 달라집니다. 충분한 수면·휴식·운동이 어떤 시간 관리 기법보다 우선합니다. 무리한 연속 사용은 권장하지 않습니다.
       </p>
     </div>

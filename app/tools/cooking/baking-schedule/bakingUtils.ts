@@ -4,7 +4,7 @@
    ────────────────────────────────────────────────────── */
 
 import {
-  BREAD_PRESETS, TEMP_MULTIPLIERS, MIXING_METHODS, emojiForStep,
+  BREAD_PRESETS, TEMP_MULTIPLIERS, MIXING_METHODS, FERMENTATION_MODES, emojiForStep,
   type BreadPreset, type StepDef, type TempInfo, type FermentationMode,
   type MixingMethod,
 } from './breadPresets'
@@ -42,18 +42,61 @@ export function getTempInfo(roomTempC: number): TempInfo {
   )
 }
 
+/** 프리셋이 일정에 반영하는 발효 방식 목록 */
+export function supportedModesOf(preset: BreadPreset): FermentationMode[] {
+  return preset.supportedModes ?? FERMENTATION_MODES.map(m => m.id)
+}
+
+/** 프리셋이 지원하지 않는 방식이면 첫 지원 방식으로 대체 */
+export function resolveFermentationMode(preset: BreadPreset, mode: FermentationMode): FermentationMode {
+  const sup = supportedModesOf(preset)
+  return sup.includes(mode) ? mode : sup[0]
+}
+
+/** 성형 후 냉장 발효(cold-proof)를 뺄 때 대신 넣는 실온 2차 발효 */
+const ROOM_FINAL_PROOF: StepDef = {
+  id: 'final-proof',
+  name: '2차 발효 (실온)',
+  minutes: 150,
+  tempSensitive: true,
+  observationKey: 'final-proof',
+  flexible: true,
+  minRange: 120,
+  maxRange: 240,
+  guide: '⭐ 성형 후 실온 2~3시간 — 손가락 자국이 천천히 회복되면 OK',
+}
+
+/** cold-proof가 성형(shape) 뒤에 있으면 2차 발효 역할 (사워도우). 앞이면 1차 뒤 냉장 숙성 (피자) */
+function coldProofIsFinal(steps: StepDef[]): boolean {
+  const ci = steps.findIndex(s => s.id === 'cold-proof')
+  const si = steps.findIndex(s => s.id === 'shape')
+  return ci >= 0 && si >= 0 && ci > si
+}
+
 /** 발효 방식에 따라 단계 조정 */
 function applyFermentationMode(steps: StepDef[], mode: FermentationMode): StepDef[] {
+  const hadCold = steps.some(s => s.id === 'cold-proof')
+  const coldIsFinal = coldProofIsFinal(steps)
+
   // 'sameday' 기준은 그대로 두고, cold 모드는 냉장 단계 활성화·실온 단축
   if (mode === 'sameday') {
-    // 냉장 발효 단계 제거
-    return steps.filter(s => s.id !== 'cold-proof')
+    return steps.flatMap<StepDef>(s => {
+      // 냉장 2차 발효 → 실온 2차 발효로 교체 (빼기만 하면 성형 후 발효가 0분이 됨)
+      if (s.id === 'cold-proof') return coldIsFinal ? [ROOM_FINAL_PROOF] : []
+      // 냉장 단계가 없어졌으니 '냉장 → 실온' 꺼내기 단계도 제거
+      if (s.id === 'remove' && hadCold) return []
+      // 1차 뒤 냉장 숙성(피자)을 빼면 실온 1차를 늘려 발효량 보충
+      if (s.id === 'bulk' && hadCold && !coldIsFinal) {
+        return [{ ...s, minutes: Math.max(s.minutes, 120), guide: '⭐ 당일 발효 — 실온에서 약 2배 부피까지 (1.5~2시간)' }]
+      }
+      return [s]
+    })
   }
 
   if (mode === 'cold-bulk') {
-    // 1차 발효를 냉장 발효로 대체 (10시간), 냉장 최종 발효 제거
+    // 1차 발효를 냉장 발효로 대체 (10시간), 냉장 최종 발효는 실온 2차 발효로
     return steps.flatMap<StepDef>(s => {
-      if (s.id === 'cold-proof') return []
+      if (s.id === 'cold-proof') return coldIsFinal ? [ROOM_FINAL_PROOF] : []
       if (s.id === 'bulk') {
         return [{
           id: 'bulk',
@@ -89,9 +132,9 @@ function applyFermentationMode(steps: StepDef[], mode: FermentationMode): StepDe
   }
 
   if (mode === 'cold-bulk-final') {
-    // 1차를 냉장(8시간)으로 옮기고 다음날 성형 — 기존 냉장 최종 발효는 제거(냉장은 1차로 이동)
+    // 1차를 냉장(8시간)으로 옮기고 다음날 성형 — 기존 냉장 최종 발효는 실온 2차 발효로(냉장은 1차로 이동)
     return steps.flatMap<StepDef>(s => {
-      if (s.id === 'cold-proof') return []
+      if (s.id === 'cold-proof') return coldIsFinal ? [ROOM_FINAL_PROOF] : []
       if (s.id === 'bulk') {
         return [{
           id: 'bulk',
@@ -121,6 +164,7 @@ export function generateForwardSchedule(
 ): ScheduleResult | null {
   const preset = BREAD_PRESETS.find(p => p.id === presetId)
   if (!preset) return null
+  fermentationMode = resolveFermentationMode(preset, fermentationMode)
 
   let stepDefs = applyFermentationMode(preset.steps, fermentationMode)
   if (!includeOptional) stepDefs = stepDefs.filter(s => !s.optional)
@@ -175,6 +219,7 @@ export function generateBackwardSchedule(
 ): ScheduleResult | null {
   const preset = BREAD_PRESETS.find(p => p.id === presetId)
   if (!preset) return null
+  fermentationMode = resolveFermentationMode(preset, fermentationMode)
 
   let stepDefs = applyFermentationMode(preset.steps, fermentationMode)
   if (!includeOptional) stepDefs = stepDefs.filter(s => !s.optional)
@@ -282,9 +327,28 @@ export function loadRecipes(): SavedRecipe[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    if (!Array.isArray(arr)) return []
+    // 요소 검증 — 잘못된 presetId·fermentationMode면 일정이 null이 되거나 모드가 조용히 무시되므로 걸러냄
+    return arr.filter(isSavedRecipe).map(r => ({
+      ...r,
+      roomTempC: Math.min(32, Math.max(16, Math.round(r.roomTempC))),
+    }))
   } catch { return [] }
+}
+
+function isSavedRecipe(v: unknown): v is SavedRecipe {
+  if (!v || typeof v !== 'object') return false
+  const r = v as Record<string, unknown>
+  return typeof r.id === 'string'
+    && typeof r.name === 'string'
+    && typeof r.presetId === 'string' && BREAD_PRESETS.some(p => p.id === r.presetId)
+    && typeof r.fermentationMode === 'string' && FERMENTATION_MODES.some(m => m.id === r.fermentationMode)
+    && typeof r.roomTempC === 'number' && Number.isFinite(r.roomTempC)
+    && typeof r.includeOptional === 'boolean'
+    && (r.notes === undefined || typeof r.notes === 'string')
+    && typeof r.createdAt === 'string'
+    && typeof r.updatedAt === 'string'
 }
 
 export function saveRecipes(recipes: SavedRecipe[]) {
@@ -298,8 +362,10 @@ export function newRecipeId(): string {
 
 /** datetime-local 입력값을 Date로 변환 */
 export function parseDateTimeLocal(s: string): Date | null {
-  if (!s) return null
-  const d = new Date(s)
+  // 'YYYY-MM-DDTHH:MM' 분해 파싱 (문자열 Date 생성자 해석 차이 회피 — 로컬 시각 고정)
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(s)
+  if (!m) return null
+  const d = new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], 0, 0)
   return isNaN(d.getTime()) ? null : d
 }
 
@@ -394,7 +460,7 @@ export function calcWaterTemp(input: DDTInput): DDTResult {
 
 /** 계절별 물 온도 가이드 — 실내 온도 기반 */
 export function seasonalWaterGuide(roomTempC: number): { season: string; advice: string } {
-  if (roomTempC <= 18)      return { season: '겨울 (실내 18℃ 이하)', advice: '물 35~40℃ + 따뜻한 곳에서 발효. 목표 반죽 온도를 낮게 잡아 자연 보온' }
+  if (roomTempC <= 18)      return { season: '겨울 (실내 18℃ 이하)', advice: '물 35~40℃로 목표 반죽 온도(24~26℃)를 맞추고, 따뜻한 곳에서 발효' }
   if (roomTempC <= 24)      return { season: '봄·가을 (19~24℃)',     advice: '물 20~25℃ — 수돗물로 충분. 표준 발효 환경' }
   if (roomTempC <= 28)      return { season: '여름 (25~28℃)',         advice: '물 10~18℃ + 얼음 1~2개. 발효 빠름, 부피 자주 확인' }
   return                          { season: '폭염 (29℃ 이상)',         advice: '⚠️ 물 5~10℃ + 얼음 + 차가운 밀가루(냉장 보관). 냉장 발효 적극 활용' }

@@ -30,13 +30,20 @@ function getDaysInMonth(year: number, month: number) {
   return new Date(year, month, 0).getDate()
 }
 
-const currentYear = new Date().getFullYear()
+/* 연도 목록 상한 — 모듈 최상위에서 new Date()를 쓰면 SSG HTML이 빌드 연도로 굳어
+   해가 바뀐 뒤 재빌드 전까지 하이드레이션 불일치가 난다. 첫 렌더는 고정값, 마운트 후 올해로 갱신 */
+const YEAR_MAX_FALLBACK = 2026
 // 1924 = 갑자년(60갑자 시작) — 본문 60갑자 표와 범위 일치 + 고령 사용자 입력 허용
-const YEARS = Array.from({ length: currentYear - 1924 + 1 }, (_, i) => currentYear - i)
+const makeYears = (maxYear: number) => Array.from({ length: maxYear - 1924 + 1 }, (_, i) => maxYear - i)
+/* 1~2월(2/20 이전) 출생 — 음력 설·입춘 이전이면 전통적으로 전년 띠 */
+const isLunarRisk = (m: number, d: number) => m === 1 || (m === 2 && d <= 20)
 const MAX_FAMILY = 12   // 궁합 매트릭스가 N² 라서 모바일 부하 방지 상한
 
 export default function ZodiacClient() {
   const [tab, setTab] = useState<TabId>('profile')
+  const [maxYear, setMaxYear] = useState(YEAR_MAX_FALLBACK)
+  useEffect(() => { setMaxYear(new Date().getFullYear()) }, [])
+  const YEARS = useMemo(() => makeYears(maxYear), [maxYear])
 
   // ── 프로필 탭 (기존 강화) ──
   const [year,  setYear]  = useState('')
@@ -82,7 +89,7 @@ export default function ZodiacClient() {
     const birthMonth = getBirthMonth(m)
     const ageInfo = getAgeInfo(y, m, d)
     // 1~2월 출생: 음력 설(보통 1/21~2/20)·입춘(2/4경) 이전이면 전통적으로 전년 띠
-    const lunarRisk = m === 1 || (m === 2 && d <= 20)
+    const lunarRisk = isLunarRisk(m, d)
     const prevChinese = lunarRisk ? getZodiacByYear(y - 1) : null
     const prevGanji = lunarRisk ? getGanji(y - 1) : null
     return { chinese, star, ganji, birthMonth, ageInfo, year: y, month: m, day: d, lunarRisk, prevChinese, prevGanji }
@@ -93,8 +100,8 @@ export default function ZodiacClient() {
     const y1 = parseInt(aYear), m1 = parseInt(aMonth), d1 = parseInt(aDay)
     const y2 = parseInt(bYear), m2 = parseInt(bMonth), d2 = parseInt(bDay)
     if (!y1 || !m1 || !d1 || !y2 || !m2 || !d2) return null
-    const a = { chinese: getZodiacByYear(y1), star: getStarSign(m1, d1), ganji: getGanji(y1) }
-    const b = { chinese: getZodiacByYear(y2), star: getStarSign(m2, d2), ganji: getGanji(y2) }
+    const a = { chinese: getZodiacByYear(y1), star: getStarSign(m1, d1), ganji: getGanji(y1), prevChinese: isLunarRisk(m1, d1) ? getZodiacByYear(y1 - 1) : null }
+    const b = { chinese: getZodiacByYear(y2), star: getStarSign(m2, d2), ganji: getGanji(y2), prevChinese: isLunarRisk(m2, d2) ? getZodiacByYear(y2 - 1) : null }
     const zodiacEval = evalZodiacPair(a.chinese.name, b.chinese.name)
     const elementEval = evalElementPair(a.star.element, b.star.element)
     // 종합: 띠 60% + 별자리 40% (재미용 임의 배분). 0.5점 단위로 반올림해 과도한 정밀도 인상 방지.
@@ -194,7 +201,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
               💡 <strong style={{ color: 'var(--text)' }}>음력 생년월일</strong>이라면{' '}
-              <Link href="/tools/date/lunar" style={{ color: '#0891B2', textDecoration: 'underline' }}>양력 음력 변환기</Link>로
+              <Link href="/tools/date/lunar" style={{ color: 'var(--cyan-600)', textDecoration: 'underline' }}>양력 음력 변환기</Link>로
               먼저 양력 변환 후 입력하세요. 음력 설날 전후 출생자는 띠가 1년 차이날 수 있습니다.
             </div>
           </div>
@@ -202,7 +209,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
           {profile ? (
             <>
               {/* ★ 통합 프로필 카드 (NEW) */}
-              <div className={styles.profileCard} aria-live="polite">
+              <div className={styles.profileCard} role="status" aria-live="polite">
                 <div className={styles.profileTitle}>
                   {profile.year}년 {profile.month}월 {profile.day}일 (양력)
                 </div>
@@ -253,7 +260,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <div className={styles.lunarCaveat}>
                   📅 <strong>1~2월 출생</strong> — 음력 설(보통 1/21~2/20)이나 입춘(2/4경) <strong>이전</strong> 출생이라면
                   전통적으로 <strong>{profile.prevChinese.emoji} {profile.prevChinese.name}띠 · {profile.prevGanji.hanja}({profile.prevGanji.hangul})</strong>(전년 기준)일 수 있습니다.
-                  정확히는 <Link href="/tools/date/lunar" style={{ color: '#A16207', textDecoration: 'underline' }}>음력 변환기</Link>로 확인하세요.
+                  정확히는 <Link href="/tools/date/lunar" style={{ color: 'var(--yellow-700)', textDecoration: 'underline' }}>음력 변환기</Link>로 확인하세요.
                 </div>
               )}
 
@@ -275,11 +282,11 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <label className={styles.cardLabel}>{profile.star.emoji} {profile.star.name} — 강점·주의점</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 6 }}>
                   <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 10, padding: '10px 12px' }}>
-                    <p style={{ fontSize: 12, color: '#059669', fontWeight: 700, marginBottom: 4 }}>💪 강점</p>
+                    <p style={{ fontSize: 12, color: 'var(--emerald-600)', fontWeight: 700, marginBottom: 4 }}>💪 강점</p>
                     <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.strengths.join(' · ')}</p>
                   </div>
                   <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 10, padding: '10px 12px' }}>
-                    <p style={{ fontSize: 12, color: '#EA580C', fontWeight: 700, marginBottom: 4 }}>⚠️ 주의점</p>
+                    <p style={{ fontSize: 12, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 4 }}>⚠️ 주의점</p>
                     <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.cautions.join(' · ')}</p>
                   </div>
                 </div>
@@ -327,7 +334,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
             </>
           ) : profileFuture ? (
             <div className={styles.empty}>
-              <strong style={{ color: '#EA580C' }}>⚠️ 미래 날짜는 입력할 수 없습니다.</strong>
+              <strong style={{ color: 'var(--orange-600)' }}>⚠️ 미래 날짜는 입력할 수 없습니다.</strong>
               <div style={{ marginTop: 4 }}>오늘 이전의 생년월일을 선택하세요.</div>
             </div>
           ) : (
@@ -415,10 +422,10 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 compatResult.overall >= 4 ? styles.compatScoreCardSamhap :
                 compatResult.overall >= 3 ? styles.compatScoreCardOk :
                 styles.compatScoreCardChung
-              }`} aria-live="polite">
+              }`} role="status" aria-live="polite">
                 <div className={styles.compatScoreLabel}>종합 궁합 (재미용)</div>
                 <div className={styles.compatScoreNum}
-                  style={{ color: compatResult.overall >= 4 ? '#059669' : compatResult.overall >= 3 ? '#A16207' : '#DC2626' }}>
+                  style={{ color: compatResult.overall >= 4 ? 'var(--emerald-600)' : compatResult.overall >= 3 ? 'var(--yellow-700)' : 'var(--red-600)' }}>
                   {compatResult.overall.toFixed(1)} / 5.0
                 </div>
                 <div className={styles.starRow} role="img" aria-label={`5점 만점에 ${compatResult.overall.toFixed(1)}점`}>
@@ -432,6 +439,13 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <div className={styles.compatScoreDesc}>
                   띠 60% + 별자리 40% 가중 (재미용 임의 배분 · 과학적 근거 아님)
                 </div>
+                {(compatResult.a.prevChinese || compatResult.b.prevChinese) && (
+                  <div className={styles.compatScoreDesc}>
+                    ※ 1~2월(설 이전) 출생은 전통적으로 전년도 띠로 보기도 해요
+                    {compatResult.a.prevChinese && <> · 첫 번째 사람은 {compatResult.a.prevChinese.name}띠일 수 있음</>}
+                    {compatResult.b.prevChinese && <> · 두 번째 사람은 {compatResult.b.prevChinese.name}띠일 수 있음</>}
+                  </div>
+                )}
               </div>
 
               {/* 띠 궁합 */}
@@ -528,7 +542,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                             <td>{f.relation}</td>
                             <td><strong>{f.name}</strong></td>
                             <td className="numCol">{f.year}.{f.month}.{f.day}</td>
-                            <td>{z.emoji} {z.name}</td>
+                            <td>{z.emoji} {z.name}{isLunarRisk(f.month, f.day) && <small title="1~2월(설 이전) 출생은 전통적으로 전년도 띠일 수 있어요"> (또는 {getZodiacByYear(f.year - 1).name})</small>}</td>
                             <td>{s.emoji} {s.name}</td>
                             <td className="numCol">{g.hanja}</td>
                             <td><button type="button" className={styles.familyDelBtn} aria-label={`${f.name} 삭제`} onClick={() => handleDelFamily(f.id)}>×</button></td>
@@ -561,7 +575,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                               const aZ = getZodiacByYear(a.year)
                               const bZ = getZodiacByYear(b.year)
                               const ev = evalZodiacPair(aZ.name, bZ.name)
-                              const color = ev.score >= 4 ? '#059669' : ev.score === 3 ? '#A16207' : '#DC2626'
+                              const color = ev.score >= 4 ? 'var(--emerald-600)' : ev.score === 3 ? 'var(--yellow-700)' : 'var(--red-600)'
                               const icon = ev.score >= 4 ? '🟢' : ev.score === 3 ? '🟡' : '🔴'
                               return (
                                 <td key={b.id} style={{ color, fontSize: 11 }}>

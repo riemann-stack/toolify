@@ -32,21 +32,27 @@ export default function BrewingClient() {
   const [abvInput, setAbvInput] = useState('40')
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw) as Record<string, unknown>
+      const parsed: unknown = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return
+      const j = parsed as Record<string, unknown>
+      // 숫자 입력 문자열 검증 — 길이 제한 + 숫자 형태만 복원 (오염값이 입력칸을 깨뜨리지 않도록)
+      const numStr = (v: unknown): v is string => typeof v === 'string' && v.length <= 12 && /^\d*\.?\d*$/.test(v)
       // enum 검증 — 오염된 scale/proofMode가 UI를 무너뜨리지 않도록
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if (typeof j.scale === 'string' && SCALES.some((sc) => sc.id === j.scale)) setScale(j.scale as Scale)
-      if (typeof j.input === 'string') setInput(j.input)
-      if (typeof j.ogSg === 'string') setOgSg(j.ogSg)
-      if (typeof j.fgSg === 'string') setFgSg(j.fgSg)
-      if (typeof j.abvInput === 'string') setAbvInput(j.abvInput)
+      if (numStr(j.input)) setInput(j.input)
+      if (numStr(j.ogSg)) setOgSg(j.ogSg)
+      if (numStr(j.fgSg)) setFgSg(j.fgSg)
+      if (numStr(j.abvInput)) setAbvInput(j.abvInput)
       if (j.proofMode === 'us' || j.proofMode === 'uk') setProofMode(j.proofMode)
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ scale, input, ogSg, fgSg, abvInput, proofMode })) } catch {}
   }, [scale, input, ogSg, fgSg, abvInput, proofMode])
 
@@ -97,7 +103,7 @@ export default function BrewingClient() {
           { label: 'OIV — 국제 양조 규범(와인 기준)', href: 'https://www.oiv.int/' },
         ]}
       >
-        환산식은 ASBC·OIV 표준 다항식 기반 추정치(±0.1°, 검증범위 0~40°Bx). 굴절계는 25°C 기준이라 다른 온도에서는 보정 필요. ABV 공식은 일반 양조용 — 상업 도수 표기는 증류·블렌딩 후 실측이 우선입니다.
+        환산식은 ASBC·OIV 표준 다항식 기반 추정치(±0.1°, 40°Bx를 넘는 잼·시럽 구간은 참고값). 굴절계·Brix 표는 20°C 기준이라 다른 온도에서는 보정 필요. ABV 공식은 일반 양조용 — 상업 도수 표기는 증류·블렌딩 후 실측이 우선입니다.
       </Disclaimer>
 
       {/* 스케일 선택 */}
@@ -260,8 +266,8 @@ export default function BrewingClient() {
             />
           </div>
           <div className={s.inputField}>
-            <label className={s.fieldLabel}>Proof 단위</label>
-            <div className={s.proofToggle}>
+            <span className={s.fieldLabel} id="brewing-proof-label">Proof 단위</span>
+            <div className={s.proofToggle} role="group" aria-labelledby="brewing-proof-label">
               <button type="button"
                 aria-pressed={proofMode === 'us'}
                 className={`${s.proofBtn} ${proofMode === 'us' ? s.proofBtnActive : ''}`}

@@ -26,6 +26,9 @@ export default function BabyPorridgeClient() {
   const batch = useMemo(() => calcBatch(stage, days, activeRatio), [stage, days, activeRatio])
 
   const basisInfo = BASES.find((b) => b.id === basis)!
+  // 밥·쌀가루 기준은 단계별 고정 배수(밥 1:bapRatio, 쌀가루 15~20배)로 계산 — 되기 버튼은 히어로 물양엔 반영되지 않고
+  // 일괄 조리량(calcBatch, 항상 불린쌀 기준)에만 반영되므로 버튼은 활성 유지하고 안내만 붙임
+  const fixedBasis = basis === 'bap' || basis === 'flour'
   const fmt = (n: number) => n.toLocaleString('ko-KR')
 
   return (
@@ -94,12 +97,13 @@ export default function BabyPorridgeClient() {
           {basis === 'dry' && `생쌀은 불리면 약 ${SOAK_FACTOR}배(1.2~1.35배)가 돼요 — 불린쌀로 환산해 계산합니다.`}
           {basis === 'flour' && '쌀가루는 수분을 많이 흡수해 불린쌀보다 물을 1.5~2배 더 잡아요(초기 15~20배).'}
           {basis === 'bap' && `밥은 이미 생쌀의 약 ${COOK_FACTOR}배 무게(수분 포함)라 물을 훨씬 적게 넣어요.`}
+          {fixedBasis && stage.ratioOptions.length > 1 && ' 밥죽·쌀가루 미음의 물양은 단계별로 고정이라, 되기 선택은 아래 일괄 조리량(불린쌀 기준)에만 반영돼요.'}
         </p>
       </div>
 
       {/* 결과 히어로 */}
       <div className={s.resultCard} role="status">
-        <p className={s.resultLabel}>{stage.label} {basis === 'bap' ? '밥죽' : `${activeRatio}배죽`} — 물양</p>
+        <p className={s.resultLabel}>{stage.label} {basis === 'bap' ? '밥죽' : basis === 'flour' ? '쌀가루 미음' : `${activeRatio}배죽`} — 물양</p>
         {result.waterMl !== null ? (
           <>
             <p className={s.hero}>

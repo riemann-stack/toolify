@@ -5,7 +5,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
 }
 .cardLabel {
@@ -43,7 +43,7 @@
   border-radius: 10px;
   padding: 10px 8px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -74,15 +74,15 @@
   font-size: 14px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .genderBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
 .genderActive {
   background: var(--accent-dim);
-  border-color: rgba(14,165,233,0.4);
-  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent-ink);
 }
 
 /* ── ACTIVITY ── */
@@ -103,7 +103,7 @@
 }
 .activityActive {
   background: var(--accent-dim);
-  border-color: rgba(14,165,233,0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 .activityLabel { font-size: 13px; font-weight: 500; color: var(--text); }
 .activityDesc  { font-size: 12px; color: var(--muted); }
@@ -111,14 +111,14 @@
 /* ── RESULT HERO ── */
 .resultHero {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
 }
 .resultHeroLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
-.resultHeroNum   { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(40px, 8vw, 64px); font-weight: 800; color: var(--accent); letter-spacing: -2px; line-height: 1; }
+.resultHeroNum   { font-family: var(--font-sans); font-size: clamp(40px, 8vw, 64px); font-weight: 800; color: var(--accent); letter-spacing: -2px; line-height: 1; }
 .resultHeroUnit  { font-size: 14px; color: var(--muted); margin-top: 6px; }
 .resultCategory  { font-size: 20px; font-weight: 700; margin-top: 8px; }
 .resultDesc      { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
@@ -129,7 +129,7 @@
   position: relative;
   display: flex;
   height: 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: visible;
 }
 .gaugeSegment { height: 100%; }
@@ -148,29 +148,29 @@
   z-index: 1;
 }
 .gaugeLabels { display: flex; }
-.gaugeLabel  { flex: 1; font-size: 10px; color: var(--muted); text-align: center; }
+.gaugeLabel  { flex: 1; font-size: 11px; color: var(--muted); text-align: center; }
 
 /* ── INFO GRID ── */
 .infoGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.infoCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 12px; text-align: center; }
-.infoNum   { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.infoCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 16px 12px; text-align: center; }
+.infoNum   { font-family: var(--font-sans); font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
 .infoLabel { font-size: 12px; color: var(--muted); }
 .infoSub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 /* ── TDEE GRID ── */
 .tdeeGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .tdeeCard {
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 14px;
   text-align: center;
   border: 1px solid var(--border);
 }
 .tdeeMaintain { background: var(--bg2); }
-.tdeeDiet     { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.25); }
+.tdeeDiet     { background: color-mix(in srgb, var(--cyan-600) 14%, transparent); border-color: color-mix(in srgb, var(--cyan-600) 25%, transparent); }
 .tdeeBulk     { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.25); }
 
 .tdeeLabel { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
-.tdeeNum   { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--text); }
+.tdeeNum   { font-family: var(--font-sans); font-size: 22px; font-weight: 800; color: var(--text); }
 .tdeeSub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 /* ── DISTANCE ── */
@@ -183,15 +183,15 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .distBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
 .distActive {
   background: var(--accent-dim);
-  border-color: rgba(14,165,233,0.4);
-  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent-ink);
 }
 
 /* ── TIME ROW ── */
@@ -213,7 +213,7 @@
 }
 .splitRow:last-child { border-bottom: none; }
 .splitLabel { font-size: 13px; color: var(--muted); }
-.splitTime  { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.splitTime  { font-family: var(--font-sans); font-size: 15px; font-weight: 700; color: var(--text); }
 
 /* ── EMPTY ── */
 .empty {
@@ -223,7 +223,7 @@
   color: var(--muted);
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 @media (max-width: 500px) {

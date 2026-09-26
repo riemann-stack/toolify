@@ -57,7 +57,7 @@ export const FOOD_TIPS: FoodTipDetail[] = [
     '⏰ 해동 후 즉시 조리·섭취',
   ] },
   { key: 'cooked', emoji: '🍱', name: '조리된 음식', isHighRisk: true, cookingHours: 24, tips: [
-    '🌡️ 재가열 시 중심부 74°C 이상 (식약처 권장)',
+    '🌡️ 재가열 시 중심부 75°C에서 1분 이상 (식약처 권장)',
     '🍲 국·찌개: 약불 천천히 끓임 (충분히 펄펄)',
     '🍚 밥: 전자레인지 1~2분 + 물 1큰술 (촉촉)',
     '🥗 반찬: 찜기·전자레인지 (덮개)',
@@ -154,23 +154,24 @@ export function evaluateRisk(input: RiskInput): RiskResult {
   let levelColor: string
   let recommendation: string
   if (score === 0) {
-    level = 'safe'; levelLabel = '🟢 안전'; levelColor = '#059669'
+    level = 'safe'; levelLabel = '🟢 안전'; levelColor = 'var(--emerald-600)'
     recommendation = '안전한 해동 조건입니다. 식품 안전 가이드를 따라 진행하세요.'
   } else if (score <= 2) {
-    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#A16207'
+    level = 'caution'; levelLabel = '🟡 주의'; levelColor = 'var(--yellow-700)'
     recommendation = '약간의 주의가 필요합니다. 권장 사항을 따라 진행하세요.'
   } else if (score <= 4) {
-    level = 'warning'; levelLabel = '🟠 위험'; levelColor = '#EA580C'
+    level = 'warning'; levelLabel = '🟠 위험'; levelColor = 'var(--orange-600)'
     recommendation = '위험 요소가 있습니다. 다른 해동 방법 (냉장 또는 찬물) 검토를 권장합니다.'
   } else {
-    level = 'danger'; levelLabel = '🔴 매우 위험'; levelColor = '#DC2626'
+    level = 'danger'; levelLabel = '🔴 매우 위험'; levelColor = 'var(--red-600)'
     recommendation = '매우 위험. 냉장 또는 찬물 해동으로 변경 강력 권장. 의심스러우면 폐기 권장.'
   }
 
   return { level, levelLabel, levelColor, factors, recommendation, score }
 }
 
-/* ─── 전자레인지 출력별 보정 ─── */
+/* ─── 전자레인지 출력별 보정 ───
+   factor = 900W 대비 시간 배수 (microFactor가 900W 기준 분/100g). 기본 선택은 가정용에 흔한 700W. */
 export interface MicrowavePower {
   id: string
   power: number
@@ -179,8 +180,8 @@ export interface MicrowavePower {
 }
 
 export const MICROWAVE_POWERS: MicrowavePower[] = [
-  { id: '700',  power: 700,  name: '700W (소형·구식)',  factor: 900 / 700 },
-  { id: '900',  power: 900,  name: '900W (한국 표준) ⭐', factor: 1.0 },
+  { id: '700',  power: 700,  name: '700W',  factor: 900 / 700 },
+  { id: '900',  power: 900,  name: '900W', factor: 1.0 },
   { id: '1100', power: 1100, name: '1,100W (대형)',      factor: 900 / 1100 },
   { id: '1500', power: 1500, name: '1,500W (인버터)',    factor: 900 / 1500 },
 ]
@@ -227,8 +228,9 @@ export const QUICK_WARNINGS: QuickWarning[] = [
   },
   {
     id: 'cooked-long',
-    matches: x => x.foodKey === 'cooked' && x.expectedHours >= 4,
-    message: '🔴 조리된 음식 + 4시간+ 노출 = 폐기 권장. 위험 온도대 2시간 규칙 위반.',
+    // 실온 해동에만 해당 — 냉장 해동은 위험 온도대 노출이 아니므로 제외
+    matches: x => x.foodKey === 'cooked' && x.method === 'room' && x.expectedHours >= 4,
+    message: '🔴 조리된 음식 + 실온 4시간+ 노출 = 폐기 권장. 위험 온도대 2시간 규칙 위반.',
   },
   {
     id: 'fish-microwave',
@@ -236,39 +238,6 @@ export const QUICK_WARNINGS: QuickWarning[] = [
     message: '🟠 생선 + 전자레인지 = 식감 손상 큼. 냉장 해동 권장 (식감·맛 유지).',
   },
 ]
-
-/* ─── 포맷 헬퍼 ─── */
-export function formatHours(h: number): string {
-  if (h < 1) return `${Math.round(h * 60)}분`
-  if (h < 10) {
-    const hi = Math.floor(h)
-    const mm = Math.round((h - hi) * 60)
-    return mm === 0 ? `${hi}시간` : `${hi}시간 ${mm}분`
-  }
-  return `${Math.round(h * 10) / 10}시간`
-}
-
-export function formatMinutes(m: number): string {
-  if (m < 60) return `${Math.round(m)}분`
-  const h = Math.floor(m / 60)
-  const rest = Math.round(m - h * 60)
-  return rest === 0 ? `${h}시간` : `${h}시간 ${rest}분`
-}
-
-/* ─── 시각 포맷 (ETA) ─── */
-export function eta(minutes: number, baseTime?: Date): string {
-  const now = baseTime ?? new Date()
-  const target = new Date(now.getTime() + minutes * 60 * 1000)
-  const sameDay = target.getDate() === now.getDate() && target.getMonth() === now.getMonth()
-  const hh = String(target.getHours()).padStart(2, '0')
-  const mm = String(target.getMinutes()).padStart(2, '0')
-  if (sameDay) return `오늘 ${hh}:${mm}`
-  const diffDays = Math.floor((target.getTime() - new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()) / (24 * 60 * 60 * 1000))
-  if (diffDays === 1) return `내일 ${hh}:${mm}`
-  if (diffDays === -1) return `어제 ${hh}:${mm}`
-  if (diffDays < 0) return `${Math.abs(diffDays)}일 전 ${hh}:${mm}`
-  return `${target.getMonth() + 1}월 ${target.getDate()}일 ${hh}:${mm}`
-}
 
 /* ─── 역산: 조리 시각 → 해동 시작 ─── */
 export function reverseStartTime(cookAtHour: number, cookAtMin: number, totalThawingMinutes: number, today = new Date()): {

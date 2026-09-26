@@ -5,31 +5,31 @@
 .tabs {
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tab {
   padding: 11px 8px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 카드 공통 ── */
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px 22px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
 .cardLabelRow { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .cardLabelRow .cardLabel { margin-bottom: 0; }
 .note { font-size: 11px; color: var(--muted); line-height: 1.7; margin-top: 10px; }
 
 /* ── 노테이션 토글(샵/플랫) ── */
-.notationToggle { display: inline-flex; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
+.notationToggle { display: inline-flex; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 3px; }
 .notationBtn {
   background: transparent; border: none; padding: 4px 12px; border-radius: 6px;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 700;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .notationBtn:hover { color: var(--text); }
@@ -43,7 +43,7 @@
   min-height: 52px; padding: 6px 8px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif; color: var(--text);
+  font-family: var(--font-sans); color: var(--text);
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .keyBtn:hover { border-color: var(--accent); color: var(--accent); }
@@ -56,7 +56,7 @@
   .keyBtnActive:hover { color: #ffffff !important; }
 }
 .keyBtnMain { font-size: 18px; font-weight: 700; line-height: 1; }
-.keyBtnSub { font-size: 10px; opacity: 0.7; line-height: 1; }
+.keyBtnSub { font-size: 11px; opacity: 0.7; line-height: 1; }
 .keyBtnActive .keyBtnSub { opacity: 0.8; }
 
 @media (min-width: 480px) {
@@ -67,13 +67,13 @@
 .typeSection { margin-bottom: 14px; }
 .typeSection:last-child { margin-bottom: 0; }
 .typeSectionLabel {
-  display: block; font-size: 10px; color: var(--muted);
+  display: block; font-size: 11px; color: var(--muted);
   letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px;
 }
 .typeRow { display: flex; gap: 6px; flex-wrap: wrap; }
 .typeBtn {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
-  padding: 7px 14px; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 7px 14px; font-family: var(--font-sans); font-size: 13px; font-weight: 700;
   color: var(--text); cursor: pointer; transition: all 0.15s;
   letter-spacing: 0.02em;
 }@media (hover: hover) {
@@ -87,8 +87,8 @@
 
 /* ── 코드명 히어로 ── */
 .hero {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px; padding: 24px 22px; animation: chordFadeUp 0.25s ease;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card); padding: 24px 22px; animation: chordFadeUp 0.25s ease;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
 }
 .heroLabel {
@@ -96,7 +96,7 @@
   text-transform: uppercase;
 }
 .heroChord {
-  font-family: 'Inter', system-ui, sans-serif; font-size: clamp(40px, 9vw, 56px);
+  font-family: var(--font-sans); font-size: clamp(40px, 9vw, 56px);
   font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px;
 }
 .heroSub { font-size: 12px; color: var(--muted); margin-top: 4px; }
@@ -110,18 +110,18 @@
   background: var(--bg3); color: var(--text);
   border: 1px solid var(--border);
   padding: 10px 18px; border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 18px; font-weight: 700;
   letter-spacing: 0.02em; line-height: 1;
 }
 .chipRoot {
   background: var(--accent-strong); color: #ffffff;
   border-color: var(--accent);
 }
-.chipDeg { font-size: 10px; color: var(--muted); letter-spacing: 0.02em; }
+.chipDeg { font-size: 11px; color: var(--muted); letter-spacing: 0.02em; }
 
 /* ── 피아노 ── */
 .pianoWrap {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-m);
   padding: 16px 12px; overflow-x: auto;
   display: flex; flex-direction: column; align-items: center; gap: 12px;
 }
@@ -138,7 +138,7 @@
 .copyBtn {
   width: 100%; background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px; padding: 12px; font-size: 13px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.15s;
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -147,16 +147,16 @@
 .recCard {
   background: rgba(16,185,129,0.14);
   border: 1px solid rgba(16,185,129,0.3);
-  border-radius: 14px; padding: 16px 20px;
+  border-radius: var(--radius-card); padding: 16px 20px;
 }
 .recLabel {
-  font-size: 12px; color: #059669; font-weight: 600; letter-spacing: 0.04em;
+  font-size: 12px; color: var(--emerald-600); font-weight: 600; letter-spacing: 0.04em;
   margin-bottom: 12px;
 }
 .recChips { display: flex; gap: 8px; flex-wrap: wrap; }
 .recChip {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
-  padding: 8px 14px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-s);
+  padding: 8px 14px; font-family: var(--font-sans); font-weight: 700; font-size: 14px;
   color: var(--text); cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .recChip:hover { border-color: var(--accent); color: var(--accent); }
@@ -170,12 +170,12 @@
 .scopeBtn {
   padding: 10px; border-radius: 10px; border: 1px solid var(--border);
   background: var(--bg3); color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 500;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 500;
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .scopeBtn:hover { color: var(--text); }
 }
-.scopeBtnActive { background: var(--accent-dim); color: var(--accent); border-color: rgba(14,165,233,0.4); }
+.scopeBtnActive { background: var(--accent-dim); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 
 .matchTable { width: 100%; border-collapse: collapse; font-size: 13px; }
 .matchTable th {
@@ -188,27 +188,27 @@
   color: var(--text); font-size: 13px;
 }
 .matchRowFull {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-left: 3px solid var(--accent);
 }
 .matchChord {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; color: var(--text);
+  font-family: var(--font-sans); font-weight: 800; font-size: 16px; color: var(--text);
   cursor: pointer;
 }@media (hover: hover) {
   .matchChord:hover { color: var(--accent); }
 }
-.matchNotes { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 12px; }
+.matchNotes { font-family: var(--font-sans); color: var(--muted); font-size: 12px; }
 .matchPct {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 13px;
   text-align: right;
 }
 .matchPctFull { color: var(--accent); }
-.matchPctPart { color: #0891B2; }
+.matchPctPart { color: var(--cyan-600); }
 
 .emptyHint {
   text-align: center; padding: 30px 16px; color: var(--muted);
   font-size: 13px; line-height: 1.7;
-  background: var(--bg2); border: 1px dashed var(--border); border-radius: 12px;
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius-m);
 }
 .emptyHint strong { color: var(--text); display: block; margin-bottom: 4px; font-weight: 600; }
 
@@ -217,12 +217,12 @@
 .modeBtn {
   padding: 12px; border-radius: 10px; border: 1px solid var(--border);
   background: var(--bg3); color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 500;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 500;
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modeBtnActive { background: var(--accent-dim); color: var(--accent); border-color: rgba(14,165,233,0.4); }
+.modeBtnActive { background: var(--accent-dim); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 
 .diatonicTable { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
 .diatonicTable th {
@@ -237,25 +237,25 @@
 .diatonicRow { cursor: pointer; transition: background 0.15s; }@media (hover: hover) {
   .diatonicRow:hover { background: var(--bg3); }
 }
-.diatonicRowTonic { border-left: 3px solid #059669; }
-.diatonicRowSub   { border-left: 3px solid #0891B2; }
-.diatonicRowDom   { border-left: 3px solid #EA580C; }
+.diatonicRowTonic { border-left: 3px solid var(--emerald-600); }
+.diatonicRowSub   { border-left: 3px solid var(--cyan-600); }
+.diatonicRowDom   { border-left: 3px solid var(--orange-600); }
 .tdRoman {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 16px;
   color: var(--accent); width: 50px;
 }
 .tdChord {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 18px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 18px;
   color: var(--text); width: 90px;
 }
-.tdNotes { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 12px; }
+.tdNotes { font-family: var(--font-sans); color: var(--muted); font-size: 12px; }
 .tdFunc {
   font-size: 11px; color: var(--muted); text-align: right;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.funcTonic { color: #059669; }
-.funcSub   { color: #0891B2; }
-.funcDom   { color: #EA580C; }
+.funcTonic { color: var(--emerald-600); }
+.funcSub   { color: var(--cyan-600); }
+.funcDom   { color: var(--orange-600); }
 
 .progList { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
 .progItem {
@@ -267,14 +267,14 @@
   gap: 8px; flex-wrap: wrap; margin-bottom: 8px;
 }
 .progName {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--accent);
+  font-family: var(--font-sans); font-weight: 700; font-size: 14px; color: var(--accent);
   letter-spacing: 0.04em;
 }
 .progNick { font-size: 11px; color: var(--muted); }
 .progChords { display: flex; gap: 6px; flex-wrap: wrap; }
 .progChord {
   background: var(--bg2); border: 1px solid var(--border); border-radius: 6px;
-  padding: 4px 10px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
+  padding: 4px 10px; font-family: var(--font-sans); font-weight: 700; font-size: 13px;
   color: var(--text);
 }
 
@@ -282,7 +282,7 @@
   display: flex; align-items: center; justify-content: center; gap: 6px;
   width: 100%; background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px; padding: 12px; font-size: 13px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.15s;
   text-decoration: none; margin-top: 12px;
 }@media (hover: hover) {
   .linkBtn:hover { border-color: var(--accent); color: var(--accent); }

@@ -5,7 +5,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -28,11 +28,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -52,7 +52,7 @@
   gap: 4px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 4px;
 }
 .segBtn {
@@ -66,7 +66,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 40px;
 }
 .segActive { background: var(--accent-strong); color: #fff; }
@@ -78,13 +78,13 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }
 @media (hover: hover) { .pill:hover { border-color: var(--accent); color: var(--text); } }
@@ -101,13 +101,13 @@
 .hero {
   background: linear-gradient(135deg, rgba(161,98,7,0.12) 0%, rgba(220,38,38,0.05) 100%);
   border: 1px solid rgba(161,98,7,0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 6vw, 40px);
   font-weight: 800;
   color: var(--text);
@@ -121,8 +121,8 @@
   font-size: 14px;
   font-weight: 800;
   padding: 6px 18px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
 
 /* ── 점수 카드 (DOTS·Wilks·IPF GL 3개) ── */
@@ -130,7 +130,7 @@
 .scoreCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 10px;
   text-align: center;
   display: flex;
@@ -144,7 +144,7 @@
   letter-spacing: 0.06em;
 }
 .scoreValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(20px, 6vw, 28px);
   font-weight: 800;
   color: var(--accent);
@@ -156,7 +156,7 @@
 .liftList { display: flex; flex-direction: column; gap: 18px; }
 .liftRow { display: flex; flex-direction: column; gap: 8px; }
 .liftHead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-.liftName { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.liftName { font-size: 14px; font-weight: 700; color: var(--text); font-family: var(--font-sans); }
 .liftMeta { font-size: 13px; text-align: right; }
 .liftRatio { color: var(--muted); font-size: 12px; }
 
@@ -173,13 +173,13 @@
   width: 100%;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px;
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: border-color 0.18s, background 0.18s;
 }
 @media (hover: hover) { .copyBtn:hover { border-color: var(--accent); } }
@@ -189,7 +189,7 @@
 .emptyHint {
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 18px;
   text-align: center;
   font-size: 13px;
@@ -200,13 +200,13 @@
 /* ── 탭 ── */
 .tabs {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 4px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 4px;
 }
 .tabBtn {
   appearance: none; -webkit-appearance: none;
-  background: transparent; border: none; border-radius: 8px;
+  background: transparent; border: none; border-radius: var(--radius-s);
   padding: 10px 2px; font-size: 13px; font-weight: 700; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 42px;
+  cursor: pointer; font-family: var(--font-sans); min-height: 42px;
   transition: all 0.15s; white-space: nowrap;
 }
 @media (hover: hover) { .tabBtn:hover { color: var(--text); } }
@@ -215,14 +215,14 @@
 /* ── 시도 전략 ── */
 .attemptList { display: flex; flex-direction: column; gap: 10px; }
 .attemptRow { display: flex; flex-direction: column; gap: 8px; }
-.attemptName { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.attemptName { font-size: 14px; font-weight: 700; color: var(--text); font-family: var(--font-sans); }
 .attemptVals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .attBox {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 8px 4px;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 800; color: var(--text);
+  font-family: var(--font-sans); font-size: 15px; font-weight: 800; color: var(--text);
 }
-.attN { font-size: 10px; font-weight: 700; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.attN { font-size: 11px; font-weight: 700; color: var(--muted); font-family: var(--font-sans); }
 .attThird { border-color: rgba(161,98,7,0.45); background: rgba(161,98,7,0.1); color: var(--accent); }
 .projBox {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px;
@@ -230,8 +230,8 @@
   background: rgba(161,98,7,0.1); border: 1px solid rgba(161,98,7,0.3);
   font-size: 14px; color: var(--text);
 }
-.projBox strong { font-family: 'Inter', system-ui, sans-serif; color: var(--accent); }
-.projScore { font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.projBox strong { font-family: var(--font-sans); color: var(--accent); }
+.projScore { font-size: 12px; color: var(--muted); font-family: var(--font-sans); }
 
 /* ── 대회 원판 ── */
 .plateInputRow { display: flex; align-items: center; gap: 8px; }
@@ -239,9 +239,9 @@
 .plateQuick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .quickBtn {
   appearance: none; -webkit-appearance: none;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 999px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-pill);
   padding: 7px 12px; font-size: 12px; font-weight: 600; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; min-height: 34px;
+  cursor: pointer; font-family: var(--font-sans); min-height: 34px;
 }
 @media (hover: hover) { .quickBtn:hover { border-color: var(--accent); color: var(--text); } }
 .plateStack {
@@ -251,13 +251,13 @@
 .plateChip {
   display: inline-flex; align-items: center; justify-content: center;
   min-width: 34px; height: 40px; padding: 0 8px; border-radius: 6px;
-  border: 1px solid; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 800;
+  border: 1px solid; font-family: var(--font-sans); font-size: 13px; font-weight: 800;
 }
 .plateNone { font-size: 13px; color: var(--muted); }
-.plateLine { margin: 12px 0 0; font-size: 13px; color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.plateLine { margin: 12px 0 0; font-size: 13px; color: var(--text); font-family: var(--font-sans); }
 .plateWarn {
   margin: 10px 0 0; font-size: 12px; color: #B45309; line-height: 1.6;
-  background: rgba(234,88,12,0.08); border: 1px solid rgba(234,88,12,0.28); border-radius: 8px; padding: 9px 12px;
+  background: rgba(234,88,12,0.08); border: 1px solid rgba(234,88,12,0.28); border-radius: var(--radius-s); padding: 9px 12px;
 }
 .plateWarn strong { color: #B45309; }
 
@@ -267,22 +267,22 @@
   margin-top: 14px; padding: 12px 14px; border-radius: 10px;
   background: var(--bg3); border: 1px solid var(--border); font-size: 13px; color: var(--muted);
 }
-.trendBox strong { font-family: 'Inter', system-ui, sans-serif; }
-.trendUp { color: #059669; }
-.trendDown { color: #DC2626; }
+.trendBox strong { font-family: var(--font-sans); }
+.trendUp { color: var(--emerald-600); }
+.trendDown { color: var(--red-600); }
 .recList { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
 .recItem {
   display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 8px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px;
 }
-.recDate { font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
-.recTotal { font-size: 14px; font-weight: 800; color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
-.recScore { font-size: 11px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; text-align: right; }
+.recDate { font-size: 12px; color: var(--muted); font-family: var(--font-sans); }
+.recTotal { font-size: 14px; font-weight: 800; color: var(--text); font-family: var(--font-sans); }
+.recScore { font-size: 11px; color: var(--muted); font-family: var(--font-sans); text-align: right; }
 .recDel {
   appearance: none; -webkit-appearance: none; background: transparent; border: none;
   color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer; padding: 4px 6px; min-width: 30px; min-height: 30px;
 }
-@media (hover: hover) { .recDel:hover { color: #DC2626; } }
+@media (hover: hover) { .recDel:hover { color: var(--red-600); } }
 
 @media (max-width: 380px) {
   .recItem { grid-template-columns: auto 1fr auto; }

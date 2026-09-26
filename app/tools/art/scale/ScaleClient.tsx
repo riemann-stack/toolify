@@ -65,6 +65,20 @@ export default function ScaleClient() {
   const playEndTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
+  /* 언마운트(사이트 안 다른 페이지로 이동) 시 예약된 오실레이터·타이머를 정리하고 AudioContext를 닫는다.
+     정리가 없으면 순차 재생 중 이동해도 남은 음이 새 페이지에서 계속 울리고, 방문마다 컨텍스트가 쌓인다(morse-code와 같은 패턴).
+     언마운트 뒤 setState를 피하려고 stopAll() 대신 ref만 정리한다. */
+  useEffect(() => () => {
+    activeNodesRef.current.forEach(({ osc, gain }) => {
+      try { osc.stop() } catch {}
+      try { osc.disconnect(); gain.disconnect() } catch {}
+    })
+    activeNodesRef.current = []
+    if (playEndTimerRef.current) { clearTimeout(playEndTimerRef.current); playEndTimerRef.current = null }
+    try { audioCtxRef.current?.close().catch(() => {}) } catch {}
+    audioCtxRef.current = null
+  }, [])
+
   const stopAll = () => {
     activeNodesRef.current.forEach(({ osc, gain }) => {
       try { osc.stop() } catch {}
@@ -185,8 +199,8 @@ export default function ScaleClient() {
         <span className={s.cardLabel}>키 · 스케일</span>
 
         <div className={s.field}>
-          <label className={s.fieldLabel}>키 (Root)</label>
-          <div className={s.keyRow}>
+          <span className={s.fieldLabel} id="scale-root-label">키 (Root)</span>
+          <div className={s.keyRow} role="group" aria-labelledby="scale-root-label">
             {KEYS.map((k) => (
               <button
                 key={k.index}
@@ -209,8 +223,8 @@ export default function ScaleClient() {
         </div>
 
         <div className={s.field}>
-          <label className={s.fieldLabel}>스케일 (12종)</label>
-          <div className={s.scaleGrid}>
+          <span className={s.fieldLabel} id="scale-type-label">스케일 (12종)</span>
+          <div className={s.scaleGrid} role="group" aria-labelledby="scale-type-label">
             {SCALES.map((sc) => (
               <button
                 key={sc.id}
@@ -285,8 +299,8 @@ export default function ScaleClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>옥타브 · 주파수</span>
             <div className={s.field}>
-              <label className={s.fieldLabel}>재생 옥타브</label>
-              <div className={s.pillRow}>
+              <span className={s.fieldLabel} id="scale-octave-label">재생 옥타브</span>
+              <div className={s.pillRow} role="group" aria-labelledby="scale-octave-label">
                 {[3, 4, 5].map((o) => (
                   <button
                     key={o}
@@ -375,7 +389,7 @@ export default function ScaleClient() {
               • <strong>1박스 (5포지션)</strong>: minor pentatonic의 가장 흔한 박스<br />
               • Minor Pentatonic A → 5프렛부터 시작<br />
               • 박스를 외운 후 다른 박스로 확장<br />
-              • 루트(빨강) 위치를 우선 익히면 키 변경 쉬움
+              • 루트 음(범례의 루트 색) 위치를 우선 익히면 키 변경 쉬움
             </p>
           </div>
         </>
@@ -447,6 +461,7 @@ export default function ScaleClient() {
                       const ctx = getAudioCtx()
                       if (!ctx) return
                       if (ctx.state === 'suspended') ctx.resume()
+                      stopAll()  // 다른 진행·코드 재생과 겹치지 않게 이전 예약 취소
                       const start = ctx.currentTime + 0.05
                       chords.forEach((c, ci) => {
                         const freqs = c.notes.map((n, j) => noteFreq(n % 12, octave + (j > 0 && n < c.notes[0] ? 1 : 0)))
@@ -561,7 +576,7 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, nameByPc, baseOctave, showI
   const blackW = 22
   const blackH = 88
 
-  // 13 흰 건반 (약 1.85옥타브: C4~F5)
+  // 13 흰 건반 (약 1.85옥타브: C~다음 옥타브 A)
   const totalWhites = 13
   const totalW = totalWhites * whiteW
 
@@ -607,7 +622,6 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, nameByPc, baseOctave, showI
           fill={textColor}
           fontSize="11"
           textAnchor="middle"
-          fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
           fontWeight={isInScale ? 800 : 500}
         >
           {showInterval && isInScale ? intervalMap[noteIdx] : (isInScale ? nameByPc[noteIdx] ?? noteName(noteIdx, acc) : noteName(noteIdx, acc))}
@@ -618,7 +632,8 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, nameByPc, baseOctave, showI
 
   /** 검은 건반 그리기 */
   const blackKeys: React.ReactElement[] = []
-  for (let w = 0; w < totalWhites; w++) {
+  // 마지막 흰 건반(A) 오른쪽의 A♯은 뒤따르는 B 건반이 없어 뷰박스 밖으로 잘리므로 제외
+  for (let w = 0; w < totalWhites - 1; w++) {
     const within = w % 7
     blackIdx.forEach((bIdx) => {
       if (blackPos[bIdx] === within) {
@@ -655,7 +670,6 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, nameByPc, baseOctave, showI
               fill={textColor}
               fontSize="9"
               textAnchor="middle"
-              fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
               fontWeight={isInScale ? 800 : 500}
             >
               {showInterval && isInScale ? intervalMap[bIdx] : (isInScale ? nameByPc[bIdx] ?? noteName(bIdx, acc) : noteName(bIdx, acc))}
@@ -695,7 +709,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval
   const numFrets = 15
   const fretW = 50
   const stringSpacing = 26
-  const padLeft = 30
+  const padLeft = 54   // 줄 이름 라벨과 개방현(0프렛) 마커가 겹치지 않도록 여백 확보
   const padRight = 10
   const padTop = 22
   const padBottom = 30
@@ -774,7 +788,7 @@ function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval
             const fill = isRoot
               ? COLORS.root
               : (intervalFromRoot === 4 || intervalFromRoot === 3 || intervalFromRoot === 7 || intervalFromRoot === 6 ? COLORS.third : COLORS.other)
-            const cx = f === 0 ? padLeft - 14 : padLeft + (f - 0.5) * fretW
+            const cx = f === 0 ? padLeft - 18 : padLeft + (f - 0.5) * fretW
             const r = 11
             elements.push(
               <g key={`n-${sIdx}-${f}`}>
@@ -785,7 +799,6 @@ function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval
                   fill="#0D0D0D"
                   fontSize="10"
                   textAnchor="middle"
-                  fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                   fontWeight="800"
                 >
                   {showInterval ? intervalLabel[noteIdx] : nameByPc[noteIdx] ?? noteName(noteIdx, acc)}
@@ -800,12 +813,11 @@ function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval
         {Array.from({ length: numFrets + 1 }).map((_, f) => (
           <text
             key={`fn-${f}`}
-            x={f === 0 ? padLeft - 14 : padLeft + (f - 0.5) * fretW}
+            x={f === 0 ? padLeft - 18 : padLeft + (f - 0.5) * fretW}
             y={padTop + stringSpacing * 6 + 16}
             fill="var(--muted)"
             fontSize="10"
             textAnchor="middle"
-            fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
           >
             {f}
           </text>
@@ -815,12 +827,11 @@ function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval
         {stringNotes.map((openNote, sIdx) => (
           <text
             key={`sl-${sIdx}`}
-            x={padLeft - 22}
+            x={11}
             y={padTop + sIdx * stringSpacing + stringSpacing / 2 + 3}
             fill="var(--muted)"
             fontSize="10"
             textAnchor="middle"
-            fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
             fontWeight="700"
           >
             {noteName(openNote, acc)}

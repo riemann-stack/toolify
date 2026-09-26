@@ -2,19 +2,30 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { useState, useMemo, useEffect } from 'react'
+import { todayStr } from '@/lib/date'
+import { useInitialTab } from '@/components/useInitialTab'
 import s from './baking-recipe.module.css'
 import {
-  BAKING_ITEMS, PRESET_RECIPES, MOLD_PRESETS, CAKE_ROUND_MOLDS,
+  BAKING_ITEMS, PRESET_RECIPES, MOLD_PRESETS,
   INGREDIENT_LABEL,
-  type IngredientKey, type BakingItem,
+  type IngredientKey, type BakingItem, type MoldPreset,
 } from './bakingData'
 import {
   diagnose, scaleRatios, totalWeight, buildRecipeMarkdown,
   TEXTURE_ADJUSTS,
 } from './bakingUtils'
 
-type TabKey = 'recipe' | 'diagnose' | 'mold' | 'preset'
+type TabKey = 'recipe' | 'diagnose' | 'mold' | 'preset' | 'pan'
+// ?tab= 딥링크 허용 목록 — 'pan'은 구 /tools/cooking/cake-pan 301 목적지
+const TABS: readonly TabKey[] = ['pan', 'recipe', 'diagnose', 'mold', 'preset']
+
+// 케이크 팬 탭(구 cake-pan) — 지연 로드로 기본 '레시피' 탭 번들 유지
+const CakePanTab = dynamic(() => import('./CakePanTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
 interface SavedRecipe {
   id: string
@@ -38,6 +49,32 @@ function uid(): string {
   return Math.random().toString(36).slice(2, 10)
 }
 
+/* 저장 레시피 검증 — 손상·구버전 값은 버리고 형식이 맞는 항목만 복원 */
+function parseSaved(raw: unknown): SavedRecipe[] {
+  if (!Array.isArray(raw)) return []
+  const isKey = (k: unknown): k is IngredientKey => typeof k === 'string' && Object.prototype.hasOwnProperty.call(INGREDIENT_LABEL, k)
+  const out: SavedRecipe[] = []
+  for (const r of raw) {
+    if (!r || typeof r !== 'object') continue
+    const o = r as Record<string, unknown>
+    if (typeof o.id !== 'string' || typeof o.name !== 'string') continue
+    if (typeof o.itemId !== 'string' || !BAKING_ITEMS.some((b) => b.id === o.itemId)) continue
+    if (!isKey(o.baseKey)) continue
+    if (typeof o.baseAmount !== 'number' || !isFinite(o.baseAmount) || o.baseAmount <= 0) continue
+    if (!o.ratios || typeof o.ratios !== 'object' || Array.isArray(o.ratios)) continue
+    const ratios: Partial<Record<IngredientKey, number>> = {}
+    for (const [k, v] of Object.entries(o.ratios as Record<string, unknown>)) {
+      if (isKey(k) && typeof v === 'number' && isFinite(v)) ratios[k] = v
+    }
+    out.push({
+      id: o.id, name: o.name, itemId: o.itemId, ratios,
+      baseKey: o.baseKey, baseAmount: o.baseAmount,
+      createdAt: typeof o.createdAt === 'string' ? o.createdAt : '',
+    })
+  }
+  return out
+}
+
 function getDefaultRatios(item: BakingItem): Partial<Record<IngredientKey, number>> {
   const out: Partial<Record<IngredientKey, number>> = {}
   for (const [k, v] of Object.entries(item.typicalRatios)) {
@@ -48,6 +85,13 @@ function getDefaultRatios(item: BakingItem): Partial<Record<IngredientKey, numbe
 
 export default function BakingRecipeClient() {
   const [tab, setTab] = useState<TabKey>('recipe')
+  // 케이크 팬 탭은 처음 열 때 마운트하고, 이후 다른 탭으로 가도 숨김만 해 입력(팬 호수·치수)을 유지
+  const [panMounted, setPanMounted] = useState(false)
+  const selectTab = (t: TabKey) => {
+    setTab(t)
+    if (t === 'pan') setPanMounted(true)
+  }
+  useInitialTab(TABS, selectTab)
   const [itemId, setItemId] = useState<string>('madeleine')
   const item = BAKING_ITEMS.find((i) => i.id === itemId) ?? BAKING_ITEMS[0]
 
@@ -82,7 +126,7 @@ export default function BakingRecipeClient() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) setSaved(JSON.parse(raw))
+      if (raw) setSaved(parseSaved(JSON.parse(raw)))
     } catch { /* ignore */ }
     setMounted(true)
   }, [])
@@ -103,7 +147,7 @@ export default function BakingRecipeClient() {
       ratios: { ...ratios },
       baseKey,
       baseAmount: baseAmountNum || 100,
-      createdAt: new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10),
+      createdAt: todayStr(),
     }
     setSaved((p) => [...p, rec])
     setSaveName('')
@@ -130,14 +174,18 @@ export default function BakingRecipeClient() {
           { href: '/tools/cooking/microwave', label: '전자레인지 환산' },
           { href: '/tools/cooking/egg-timer', label: '계란 삶는 시간' }
         ]}
+        sources={[
+          { label: '카우2004 — 케이크 팬 판매 규격', href: 'https://www.cow2004.com' },
+          { label: '웰베이킹 — 케이크 팬 판매 규격', href: 'https://wellbaking.co.kr' },
+        ]}
       >
-        본 도구는 일반 가이드입니다 레시피 비율은 출발점·정확한 결과는 본인 테스트 필요 오븐별 온도·시간 편차 큼 (가정용 ±20°C·±3분) 재료 (특히 버터·밀가루) 브랜드별 차이 있음
+        본 도구는 일반 가이드입니다. 레시피 비율은 출발점이고 정확한 결과는 직접 구워 확인해야 합니다. 가정용 오븐은 설정 온도와 실제 온도가 다른 경우가 많고, 재료(특히 버터·밀가루) 브랜드별로도 차이가 있습니다. 케이크 팬 탭의 배율은 팬 부피 비율 기준 산술값이며, 호수 규격(1호 15cm·호당 +3cm·높은팬 7cm)은 베이킹 자재상 판매 규격을 교차 확인한 값입니다(2026년 7월 점검). 사각팬·파운드(오란다)팬은 표준 규격이 없어 실측 치수를 입력하세요.
       </Disclaimer>
 
       <div className={s.diffNotice}>
         <strong>어떤 도구가 맞나요?</strong>
         <div className={s.diffRow}>
-          <span>🍞 빵 (식빵·바게트·치아바타·발효 반죽) → <a href="/tools/cooking/baker-percent" className={s.diffLink}>베이커 퍼센트 계산기</a></span>
+          <span>🍞 빵 (식빵·바게트·치아바타·발효 반죽) → <Link href="/tools/cooking/baker-percent" className={s.diffLink}>베이커 퍼센트 계산기</Link></span>
         </div>
         <div className={s.diffRow}>
           <span>🧁 제과 (마들렌·파운드·쿠키·머핀·디저트) → 본 도구</span>
@@ -145,10 +193,11 @@ export default function BakingRecipeClient() {
       </div>
 
       <div className={s.tabs} role="tablist" aria-label="제과 레시피 계산기 메뉴">
-        <button role="tab" aria-selected={tab === 'recipe'} className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => setTab('recipe')}>레시피</button>
-        <button role="tab" aria-selected={tab === 'diagnose'} className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => setTab('diagnose')}>비율 진단</button>
-        <button role="tab" aria-selected={tab === 'mold'} className={`${s.tab} ${tab === 'mold' ? s.tabActive : ''}`} onClick={() => setTab('mold')}>분량 변환</button>
-        <button role="tab" aria-selected={tab === 'preset'} className={`${s.tab} ${tab === 'preset' ? s.tabActive : ''}`} onClick={() => setTab('preset')}>인기 레시피</button>
+        <button role="tab" aria-selected={tab === 'recipe'} className={`${s.tab} ${tab === 'recipe' ? s.tabActive : ''}`} onClick={() => selectTab('recipe')}>레시피</button>
+        <button role="tab" aria-selected={tab === 'diagnose'} className={`${s.tab} ${tab === 'diagnose' ? s.tabActive : ''}`} onClick={() => selectTab('diagnose')}>비율 진단</button>
+        <button role="tab" aria-selected={tab === 'mold'} className={`${s.tab} ${tab === 'mold' ? s.tabActive : ''}`} onClick={() => selectTab('mold')}>분량 변환</button>
+        <button role="tab" aria-selected={tab === 'preset'} className={`${s.tab} ${tab === 'preset' ? s.tabActive : ''}`} onClick={() => selectTab('preset')}>인기 레시피</button>
+        <button type="button" role="tab" aria-selected={tab === 'pan'} className={`${s.tab} ${tab === 'pan' ? s.tabActive : ''}`} onClick={() => selectTab('pan')}>케이크 팬</button>
       </div>
 
       {tab === 'recipe' && (
@@ -190,6 +239,7 @@ export default function BakingRecipeClient() {
           baseKey={baseKey}
           totalG={totalG}
           weights={weights}
+          onOpenPan={() => selectTab('pan')}
         />
       )}
 
@@ -198,8 +248,15 @@ export default function BakingRecipeClient() {
           itemId={itemId}
           handleItemChange={handleItemChange}
           setRatios={setRatios}
-          setTab={setTab}
+          setTab={selectTab}
         />
+      )}
+
+      {/* 탭 5 — 케이크 팬 (호수·부피비 배율·굽기 보정) — 한 번 연 뒤엔 숨김만 해서 입력 유지 */}
+      {panMounted && (
+        <div hidden={tab !== 'pan'}>
+          <CakePanTab onOpenMold={() => selectTab('mold')} />
+        </div>
       )}
 
     </div>
@@ -290,8 +347,9 @@ function RecipeTab(props: RecipeTabProps) {
           </div>
         </div>
         <div className={s.field} style={{ marginBottom: 0 }}>
-          <label className={s.fieldLabel}>{INGREDIENT_LABEL[baseKey]} 무게 (g)</label>
+          <label className={s.fieldLabel} htmlFor="baking-base-amount">{INGREDIENT_LABEL[baseKey]} 무게 (g)</label>
           <input
+            id="baking-base-amount"
             type="number"
             inputMode="decimal"
             className={s.input}
@@ -327,6 +385,7 @@ function RecipeTab(props: RecipeTabProps) {
                       type="number"
                       inputMode="decimal"
                       className={s.miniInput}
+                      aria-label={`${INGREDIENT_LABEL[k]} 비율 (%)`}
                       value={r ?? ''}
                       onChange={(e) => updateRatio(k, e.target.value)}
                       min={0}
@@ -339,7 +398,7 @@ function RecipeTab(props: RecipeTabProps) {
             <tr className={s.totalRow}>
               <td className={s.rowName}>합계</td>
               <td>—</td>
-              <td className={s.weightCell}>{fmt(totalG, 1)} g</td>
+              <td className={s.weightCell} aria-live="polite" aria-atomic="true">{fmt(totalG, 1)} g</td>
             </tr>
           </tbody>
         </table>
@@ -368,7 +427,7 @@ function RecipeTab(props: RecipeTabProps) {
             )}
           </div>
           <div className={s.bakeWarn}>
-            ⚠️ 가정용 오븐별 편차 ±20°C·±3분. 첫 시도는 권장 시간 -1분 후 확인. 표면 갈색 + 가운데 살짝 통통하면 완성.
+            ⚠️ 가정용 오븐은 설정 온도와 실제 온도가 다른 경우가 많아요. 첫 시도는 권장 시간 1분 전에 확인. 표면 갈색 + 가운데 살짝 통통하면 완성.
           </div>
         </div>
       )}
@@ -397,6 +456,7 @@ function RecipeTab(props: RecipeTabProps) {
           <input
             type="text"
             className={s.input}
+            aria-label="저장할 레시피 이름"
             placeholder="예: 엄마 마들렌, 첫째 생일 머핀…"
             value={saveName}
             onChange={(e) => setSaveName(e.target.value)}
@@ -449,8 +509,8 @@ function DiagnoseTab({ item, ratios, setRatios }: DiagnoseTabProps) {
 
   const sevColor: Record<string, string> = {
     info: 'var(--accent)',
-    caution: '#D97706',
-    warning: '#DC2626',
+    caution: 'var(--warning)',
+    warning: 'var(--danger)',
   }
   const sevIcon: Record<string, string> = {
     info: 'ℹ️',
@@ -543,22 +603,21 @@ interface MoldTabProps {
   baseKey: IngredientKey
   totalG: number
   weights: Partial<Record<IngredientKey, number>>
+  /** 원형 케이크틀·무스링·사각팬 → '케이크 팬' 탭으로 전환 */
+  onOpenPan: () => void
 }
 
-function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
-  const molds = MOLD_PRESETS[item.id] ?? CAKE_ROUND_MOLDS
-  const isPiece = molds[0]?.perPiece != null
+function MoldTab({ item, ratios, baseKey, totalG, weights, onOpenPan }: MoldTabProps) {
+  const moldList = MOLD_PRESETS[item.id] ?? []
+  const isPiece = moldList[0]?.perPiece != null
 
   const [moldIdx, setMoldIdx] = useState(0)
   const [count, setCount] = useState('12')
 
-  // 케이크 원형도 같이
-  const useCake = !MOLD_PRESETS[item.id]
-  const moldList = useCake ? CAKE_ROUND_MOLDS : molds
-  const mold = moldList[Math.min(moldIdx, moldList.length - 1)]
-  const countNum = parseInt(count) || 1
+  const mold: MoldPreset | undefined = moldList[Math.min(moldIdx, moldList.length - 1)]
+  const countNum = Math.min(500, Math.max(1, parseInt(count) || 1))
 
-  const targetG = mold.perPiece != null
+  const targetG = !mold ? 0 : mold.perPiece != null
     ? mold.perPiece * countNum
     : (mold.volume ?? 0)
 
@@ -568,6 +627,18 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
     if (v != null) scaledWeights[k as IngredientKey] = v * factor
   }
   const scaledTotal = totalG * factor
+
+  // 원형 케이크틀은 호수·높이별 부피 환산이 필요해 '케이크 팬' 탭으로 안내
+  if (!mold) {
+    return (
+      <div className={s.card}>
+        <span className={s.cardLabel}>틀 종류</span>
+        <p className={s.moldHint}>
+          {item.name}은 전용 틀 데이터가 없습니다. 원형 케이크틀(미니~5호)·무스링·사각팬은 <button type="button" className={s.linkBtn} onClick={onOpenPan}>케이크 팬 탭</button>에서 부피 기준으로 환산하세요.
+        </p>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -590,37 +661,39 @@ function MoldTab({ item, ratios, baseKey, totalG, weights }: MoldTabProps) {
             >
               <span>{m.name}</span>
               <span className={s.moldSpec}>
-                {m.perPiece != null ? `1개당 ${m.perPiece}g` : `용량 ${m.volume}g`}
+                {m.perPiece != null ? `1개당 ${m.perPiece}g` : `반죽 약 ${m.volume}g`}
               </span>
             </button>
           ))}
         </div>
-        {useCake && (
-          <p className={s.moldHint}>※ {item.name}은 전용 틀 데이터가 없어 케이크 원형 기준으로 표시합니다.</p>
+        {!isPiece && (item.id === 'poundcake' || item.id === 'castella') && (
+          <p className={s.moldHint}>※ 틀 부피 ÷ 비용적({item.id === 'poundcake' ? '파운드 2.4' : '카스테라 약 3.5'}cm³/g)으로 구한 적정 반죽량입니다. 부풀 공간을 남기고 틀 높이의 절반~60% 정도만 채우는 양이에요.</p>
         )}
+        <p className={s.moldHint}>※ 원형 케이크틀(미니~5호)·무스링·사각팬의 호수·치수 간 환산은 <button type="button" className={s.linkBtn} onClick={onOpenPan}>케이크 팬 탭</button>을 쓰세요.</p>
       </div>
 
-      {isPiece && !useCake && (
+      {isPiece && (
         <div className={s.card}>
           <span className={s.cardLabel}>목표 개수{item.id === 'macaron' ? ' (껍질 기준)' : ''}</span>
           <input
             type="number"
             inputMode="numeric"
             className={s.input}
+            aria-label="목표 개수"
             value={count}
             onChange={(e) => setCount(e.target.value)}
             min={1}
             max={500}
           />
           {item.id === 'macaron' && (
-            <p className={s.moldHint}>※ 1개당 g은 <strong>껍질 1장</strong> 기준 — 완성품 1개 = 껍질 2장. 50개(껍질) ≈ 25쌍.</p>
+            <p className={s.moldHint}>※ 1개당 g은 <strong>껍질 1장</strong> 기준 — 완성품 1개 = 껍질 2장. 50개(껍질) ≈ 25쌍. 흰자 100g 반죽이면 4cm 껍질 60~70장 정도 나옵니다.</p>
           )}
         </div>
       )}
 
       <div className={s.card}>
         <span className={s.cardLabel}>환산 결과</span>
-        <p className={s.moldResult}>
+        <p className={s.moldResult} role="status">
           <strong>{mold.name}</strong>
           {mold.perPiece != null && ` × ${countNum}개`}
           {' = '}

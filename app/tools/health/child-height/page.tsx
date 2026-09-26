@@ -6,6 +6,8 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { predictHeight, BAND, KR_ADULT_AVG, KR_AVG_LABEL, round1 } from './childHeightUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/health/child-height',
@@ -59,36 +61,36 @@ const FAQ_LD = [
   },
 ]
 
-const h2Style = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-} as const
-
-const pMuted = {
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.85,
-  marginBottom: '12px',
-} as const
+/* ── 본문 표: 도구와 같은 predictHeight(중간부모키)로 빌드 시점에 계산 ── */
+const FATHERS = [165, 170, 175, 180, 185]
+const MOTHERS = [150, 155, 160, 165, 170]
+const MPH_TABLE = FATHERS.map(f => ({
+  f,
+  cells: MOTHERS.map(m => ({ m, son: round1(predictHeight(f, m, 'male')), daughter: round1(predictHeight(f, m, 'female')) })),
+}))
+// 본문 예시(아버지 178·어머니 162)와 한국 20~24세 평균 비교
+const EX_SON = predictHeight(178, 162, 'male')
+const EX_DAUGHTER = predictHeight(178, 162, 'female')
+const EX_SON_DIFF = round1(EX_SON - KR_ADULT_AVG.male)
+const EX_DAUGHTER_DIFF = round1(EX_DAUGHTER - KR_ADULT_AVG.female)
+const signed = (n: number) => `${n >= 0 ? '+' : '−'}${Math.abs(n).toFixed(1)}`
 
 export default function ChildHeightPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/health/child-height">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />자녀 예상 키 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         아버지·어머니 키만 입력하면 <strong style={{ color: 'var(--text)' }}>중간부모키(MPH) 공식</strong>으로 아들·딸의 예상 성인 키와 ±8.5cm 범위를 계산합니다. 통계적 추정이며 의학 진단이 아닙니다.
       </p>
 
       <UpdatedMeta
         date="2026년 6월"
-        basis="Tanner 중간부모키(MPH) 공식 · 한국 성인 평균 키는 참고치"
+        basis="Tanner 중간부모키(MPH) 공식 · 한국 평균 비교는 8차 사이즈코리아 20~24세 평균(남 175.0·여 161.8cm)"
         sources={[
-          { label: 'Tanner MPH (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/5440182/' },
+          { label: 'Tanner MPH (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/5491878/' },
+          { label: '사이즈코리아 인체치수조사', href: 'https://sizekorea.kr' },
           { label: '질병관리청 소아청소년 성장도표', href: 'https://knhanes.kdca.go.kr/' },
         ]}
       />
@@ -96,14 +98,14 @@ export default function ChildHeightPage() {
       <Disclaimer
         variant="medical"
         sources={[
-          { label: 'Tanner et al., 중간부모키 (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/5440182/' },
+          { label: 'Tanner et al., 중간부모키 (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/5491878/' },
           { label: '질병관리청 소아청소년 성장도표', href: 'https://knhanes.kdca.go.kr/' },
         ]}
         related={[
           { href: '/tools/health/bmi', label: 'BMI 계산기' },
         ]}
       >
-        이 계산기는 <strong>중간부모키(MPH) 공식에 기반한 통계적 추정</strong>이며 의학적 진단이 아닙니다. 실제 성인 키는 유전 외에도 영양·수면·운동·사춘기 시기·성장판·질환 등 다양한 변수에 크게 좌우됩니다. 예측 범위(±8.5cm)는 평균적인 분포일 뿐 개별 보장이 아니며, <strong>저성장이 의심되거나 성장이 걱정되면 반드시 소아청소년과·성장 전문의의 뼈나이(골연령) 검사 등 정식 진료</strong>를 받으세요. 한국 성인 평균 키는 참고치이며 백분위·우열의 근거가 아닙니다.
+        이 계산기는 <strong>중간부모키(MPH) 공식에 기반한 통계적 추정</strong>이며 의학적 진단이 아닙니다. 실제 성인 키는 유전 외에도 영양·수면·운동·사춘기 시기·성장판·질환 등 다양한 변수에 크게 좌우됩니다. 예측 범위(±8.5cm)는 평균적인 분포일 뿐 개별 보장이 아니며, <strong>저성장이 의심되거나 성장이 걱정되면 반드시 소아청소년과·성장 전문의의 뼈나이(골연령) 검사 등 정식 진료</strong>를 받으세요. 한국 20~24세 평균 키와의 비교는 단순 차이일 뿐 백분위·우열의 근거가 아닙니다.
       </Disclaimer>
 
       <ChildHeightClient />
@@ -113,14 +115,14 @@ export default function ChildHeightPage() {
 
         {/* ── 1. MPH란 + 13cm 보정 ── */}
         <div>
-          <h2 style={h2Style}>중간부모키(MPH)란? — 13cm 보정의 의미</h2>
-          <p style={pMuted}>
+          <h2 className="g-h2">중간부모키(MPH)란? — 13cm 보정의 의미</h2>
+          <p className="g-p">
             중간부모키(Mid-Parental Height, MPH)는 부모의 키 평균에서 자녀의 성인 키를 추정하는 방법으로, 1970년 Tanner가 정리한 공식이 표준으로 쓰입니다. 핵심은 <strong style={{ color: 'var(--text)' }}>부모 두 사람 키의 평균</strong>에 성별 차이를 보정하는 것입니다.
           </p>
-          <p style={pMuted}>
+          <p className="g-p">
             보정값 <strong style={{ color: 'var(--text)' }}>13cm</strong>는 성인 남성이 성인 여성보다 평균적으로 약 13cm 크다는 통계에서 나옵니다. 자녀가 아들이면 어머니 키를 13cm 끌어올려(부모를 &lsquo;남성 기준&rsquo;으로 맞춰) 평균을 내고, 딸이면 아버지 키를 13cm 내려(부모를 &lsquo;여성 기준&rsquo;으로 맞춰) 평균을 냅니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', fontFamily: 'var(--font-sans)' }}>
             <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.9 }}>
               아들 = (아버지 + 어머니 + 13) ÷ 2 &nbsp;·&nbsp; 딸 = (아버지 + 어머니 − 13) ÷ 2
             </p>
@@ -129,20 +131,20 @@ export default function ChildHeightPage() {
 
         {/* ── 2. 남아·여아 공식 + 계산 예시 ── */}
         <div>
-          <h2 style={h2Style}>아들·딸 예상키 공식과 계산 예시</h2>
-          <p style={pMuted}>
+          <h2 className="g-h2">아들·딸 예상키 공식과 계산 예시</h2>
+          <p className="g-p">
             아버지 178cm·어머니 162cm를 예로 들어 보겠습니다. 부모 키 합은 <strong style={{ color: 'var(--text)' }}>340cm</strong>입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>👦 아들</p>
-              <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>아들</p>
+              <p className="g-p">
                 (178 + 162 + 13) ÷ 2 = 353 ÷ 2 = <strong style={{ color: 'var(--accent-ink)' }}>176.5cm</strong>
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>👧 딸</p>
-              <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>딸</p>
+              <p className="g-p">
                 (178 + 162 − 13) ÷ 2 = 327 ÷ 2 = <strong style={{ color: 'var(--accent-ink)' }}>163.5cm</strong>
               </p>
             </div>
@@ -150,23 +152,65 @@ export default function ChildHeightPage() {
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
             같은 부모라도 아들과 딸의 예상 중앙값은 정확히 <strong style={{ color: 'var(--text)' }}>13cm 차이</strong>가 납니다(176.5 − 163.5 = 13). 보정값을 한쪽은 더하고 다른 쪽은 빼기 때문입니다.
           </p>
+          <p className="g-p" style={{ marginTop: '12px' }}>
+            결과 화면의 「한국 평균과 비교」는 예상 중앙값에서 같은 성별의 {KR_AVG_LABEL}을 뺀 단순 차이입니다. 위 예시라면 아들은 {KR_ADULT_AVG.male}cm 대비 <strong>{signed(EX_SON_DIFF)}cm</strong>, 딸은 {KR_ADULT_AVG.female}cm 대비 <strong>{signed(EX_DAUGHTER_DIFF)}cm</strong>로 표시됩니다.
+            자녀가 성인이 될 무렵의 또래와 비교하려고 전 연령 평균이 아닌 20~24세 평균을 쓰며, 이 차이를 백분위나 「크다·작다」의 판정으로 읽으면 안 됩니다.
+          </p>
+        </div>
+
+        {/* ── 2-1. 부모 키 조합별 예상 키 표 (빌드 시 계산) ── */}
+        <div>
+          <h2 className="g-h2">부모 키 조합별 예상 키 한눈에 보기</h2>
+          <p className="g-p">
+            아버지 키(행)와 어머니 키(열)의 조합마다 아들·딸의 예상 중앙값을 계산기와 같은 공식으로 미리 계산했습니다. 표에 없는 키는 가까운 칸 사이를 어림하거나 위 계산기에 직접 입력하세요.
+            부모 중 한 사람의 키가 5cm 달라지면 자녀 예상 중앙값은 그 절반인 <strong>2.5cm</strong>씩 달라집니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <caption className="srOnly">아버지·어머니 키 조합별 아들·딸 예상 성인 키(cm)</caption>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>아버지 ↓ · 어머니 →</th>
+                  {MOTHERS.map(m => (
+                    <th scope="col" key={m} style={{ padding: '9px 10px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>{m}cm</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {MPH_TABLE.map((row, i) => (
+                  <tr key={row.f} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--text)', fontWeight: 600 }}>{row.f}cm</th>
+                    {row.cells.map(c => (
+                      <td key={c.m} style={{ padding: '9px 10px', textAlign: 'right', lineHeight: 1.5 }}>
+                        <span style={{ color: 'var(--text)', fontWeight: 600 }}>아들 {c.son.toFixed(1)}</span><br />
+                        <span style={{ color: 'var(--muted)' }}>딸 {c.daughter.toFixed(1)}</span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+            ※ 모든 칸은 중앙값이며 실제 성인 키는 각 값의 ±{BAND}cm 범위에서 흔히 나타납니다. 예를 들어 아버지 175cm·어머니 160cm의 아들은 중앙값 {round1(predictHeight(175, 160, 'male')).toFixed(1)}cm, 범위 약 {round1(predictHeight(175, 160, 'male') - BAND).toFixed(1)}~{round1(predictHeight(175, 160, 'male') + BAND).toFixed(1)}cm입니다.
+          </p>
         </div>
 
         {/* ── 3. ±8.5cm 범위는 왜 ── */}
         <div>
-          <h2 style={h2Style}>예측 범위(±8.5cm)는 왜 생기나 — 유전 외 변수</h2>
-          <p style={pMuted}>
+          <h2 className="g-h2">예측 범위(±8.5cm)는 왜 생기나 — 유전 외 변수</h2>
+          <p className="g-p">
             MPH가 알려주는 값은 <strong style={{ color: 'var(--text)' }}>중앙값(가장 가능성 높은 한 점)</strong>일 뿐, 실제 키는 그 주변에 흩어져 나타납니다. 일반적으로 중앙값 ±8.5cm(약 ±2 표준편차) 안에 들어올 확률을 95% 정도로 봅니다. 즉 예상 176.5cm라면 실제는 대략 <strong style={{ color: 'var(--text)' }}>168 ~ 185cm</strong> 사이가 흔합니다.
           </p>
-          <p style={pMuted}>
+          <p className="g-p">
             이 폭이 생기는 이유는 키가 부모 두 사람의 평균으로만 결정되지 않기 때문입니다. 조부모 등 더 윗세대 유전자, 영양 상태, 수면, 운동량, <strong style={{ color: 'var(--text)' }}>사춘기가 빠른지 늦은지</strong>, 만성질환 유무 등이 모두 영향을 줍니다. 특히 사춘기 시작 시점은 최종 키를 크게 흔드는 변수입니다 — 일찍 시작하면 성장판이 일찍 닫혀 예상보다 작을 수 있습니다.
           </p>
         </div>
 
         {/* ── 4. 다른 예측법과의 차이 ── */}
         <div>
-          <h2 style={h2Style}>두배법·뼈나이 등 다른 예측법과의 차이</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">두배법·뼈나이 등 다른 예측법과의 차이</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -198,17 +242,17 @@ export default function ChildHeightPage() {
 
         {/* ── 5. 후천적 요인 ── */}
         <div>
-          <h2 style={h2Style}>키 성장에 영향을 주는 후천적 요인</h2>
-          <p style={pMuted}>
+          <h2 className="g-h2">키 성장에 영향을 주는 후천적 요인</h2>
+          <p className="g-p">
             키는 유전이 큰 비중(흔히 60~80%로 인용)을 차지하지만, 나머지는 후천적 환경이 좌우합니다. 다음 세 가지가 핵심입니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { icon: '😴', t: '수면', d: '성장호르몬은 깊은 잠(특히 밤 10시~새벽 2시 깊은 수면 구간)에 가장 많이 분비됩니다. 초등학생 9~11시간, 청소년 8~10시간 수면이 권장됩니다.' },
+              { icon: '😴', t: '수면', d: '성장호르몬은 잠든 뒤 처음 찾아오는 깊은 잠(서파수면) 구간에 가장 많이 분비됩니다. 흔히 말하는 「밤 10시~새벽 2시」처럼 시계 시각이 정해진 것이 아니라 잠드는 시점을 따라 움직이므로, 규칙적인 취침과 충분한 수면 시간이 핵심입니다. 초등학생 9~11시간, 청소년 8~10시간 수면이 권장됩니다.' },
               { icon: '🥗', t: '영양', d: '근육·뼈를 만드는 단백질, 뼈 성장의 칼슘과 흡수를 돕는 비타민D가 중요합니다. 다만 과도한 열량으로 비만이 되면 사춘기가 빨라져 오히려 최종 키에 불리할 수 있습니다.' },
               { icon: '🏃', t: '운동', d: '점프·달리기·스트레칭처럼 뼈에 적당한 자극을 주는 활동이 성장판을 돕습니다. 반대로 지나친 고강도 훈련·과도한 체중 부하는 역효과일 수 있습니다.' },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', display: 'flex', gap: '14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', display: 'flex', gap: '14px' }}>
                 <span style={{ fontSize: '22px', flexShrink: 0, marginTop: '2px' }}>{r.icon}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{r.t}</p>
@@ -224,8 +268,8 @@ export default function ChildHeightPage() {
 
         {/* ── 6. 작게 나오면 병원 안내 ── */}
         <div>
-          <h2 style={h2Style}>예상키가 작게 나오면 — 병원 성장 검사 안내</h2>
-          <p style={pMuted}>
+          <h2 className="g-h2">예상키가 작게 나오면 — 병원 성장 검사 안내</h2>
+          <p className="g-p">
             예상 중앙값이 낮다는 것만으로 문제가 있는 것은 아닙니다. 부모가 작으면 자녀의 예상 중앙값도 자연히 낮게 나오는 것이 정상입니다. 다만 아래 같은 <strong style={{ color: 'var(--text)' }}>저성장 신호</strong>가 보이면 소아청소년과·성장클리닉 상담을 권합니다.
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, listStyle: 'none', padding: 0, margin: '0 0 12px' }}>
@@ -246,7 +290,7 @@ export default function ChildHeightPage() {
 
         {/* ── 관련 도구 ── */}
         <div>
-          <h2 style={h2Style}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmi', icon: '⚖️', name: 'BMI 계산기', desc: '키·체중으로 비만도와 정상 체중 범위' },
@@ -258,7 +302,7 @@ export default function ChildHeightPage() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   background: 'var(--bg2)', border: '1px solid var(--border)',
-                  borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                  borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
                 }}
               >
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
@@ -272,6 +316,6 @@ export default function ChildHeightPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

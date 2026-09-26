@@ -17,6 +17,16 @@ const fmt = (v: number, dp = 0): string => {
   return v.toLocaleString('ko-KR', { minimumFractionDigits: dp, maximumFractionDigits: dp })
 }
 const round1 = (v: number) => Math.round(v * 10) / 10
+const round2 = (v: number) => Math.round(v * 100) / 100
+/** 재료 무게 표시 — 이스트·소금처럼 10g 미만은 소수 1자리(1g 미만은 2자리)까지 보여야 계량 오차가 없다.
+ *  (바게트 이스트 0.5% × 밀가루 500g = 2.5g을 '3g'으로 반올림하면 20% 과다) */
+const fmtG = (w: number): string => {
+  if (!Number.isFinite(w)) return '-'
+  const dp = w > 0 && w < 1 ? 2 : w > 0 && w < 10 ? 1 : 0
+  return w.toLocaleString('ko-KR', { minimumFractionDigits: 0, maximumFractionDigits: dp })
+}
+/** 재료 % 표시 — 입력칸이 소수 2자리(예: 이스트 0.25%)를 받으므로 표시도 2자리까지 */
+const pctStr = (p: number): number => round2(p)
 
 // ─────────────────────────────────────────────
 // 타입·카테고리
@@ -44,11 +54,11 @@ const catMeta = (k: Category) => CATEGORIES.find(c => c.key === k) ?? CATEGORIES
 
 // 카테고리별 SVG 색상 (CSS dot 색상과 일치)
 const CATEGORY_COLORS: Record<Category, string> = {
-  flour:  '#0EA5E9',
-  liquid: '#0891B2',
-  salt:   '#D97706',
-  yeast:  '#9B59B6',
-  sugar:  '#EA580C',
+  flour:  'var(--sky-500)',
+  liquid: 'var(--cyan-600)',
+  salt:   'var(--amber-600)',
+  yeast:  'var(--amethyst)',
+  sugar:  'var(--orange-600)',
   fat:    '#E8B947',
   other:  '#94A3B8',
 }
@@ -156,14 +166,15 @@ function textureDesc(a: AnalysisLike): { headline: string; detail: string; tags:
     `${sg >= 5 ? `당분 ${round1(sg)}% 로 발효와 갈변이 활발하며, ` : ''}` +
     `소금 ${round1(sa)}% 가 글루텐을 강화하고 발효 속도를 조절합니다.`
 
-  // 빵 종류 추정 태그
+  // 빵 종류 추정 태그 — 지방 15% 이상(브리오슈·크루아상)을 먼저 판정해야 단과자빵 분기에 가려지지 않음.
+  // 린 반죽은 수분 58~75%(바게트 70% 포함), 사워도우 75~80%, 치아바타·포카치아 80~90%
   const tags: string[] = []
-  if (h < 58 && f < 5)                        tags.push('베이글·비스킷 류')
-  else if (h < 68 && f < 5 && sg < 3)         tags.push('린 식빵·바게트')
+  if (h < 75 && f >= 15)                      tags.push('브리오슈·크루아상')
+  else if (h < 58 && f < 5)                   tags.push('베이글·비스킷 류')
   else if (h < 70 && f >= 4 && sg >= 4)       tags.push('단과자빵·식빵')
-  else if (h < 75 && f >= 15)                 tags.push('브리오슈·크루아상')
-  else if (h >= 75 && h < 82 && f < 5)        tags.push('사워도우·캄파뉴')
-  else if (h >= 80 && f < 8)                  tags.push('치아바타·포카치아')
+  else if (h < 75 && f < 5 && sg < 3)         tags.push('린 식빵·바게트')
+  else if (h >= 75 && h < 80 && f < 5)        tags.push('사워도우·캄파뉴')
+  else if (h >= 80 && h < 90 && f < 8)        tags.push('치아바타·포카치아')
   else if (h >= 90)                            tags.push('극고수분 — 다루기 어려움')
 
   if (sa >= 1.8 && sa <= 2.2) tags.push('소금 표준')
@@ -197,7 +208,7 @@ function CompositionChart({ ingredients }: { ingredients: Ingredient[] }) {
               {catMeta(g.category).label}
               <small>· {CATEGORY_DESC[g.category]}</small>
             </span>
-            <span className={s.pieLegendWeight}>{fmt(g.weight)}g</span>
+            <span className={s.pieLegendWeight}>{fmtG(g.weight)}g</span>
             <span className={s.pieLegendPct}>{round1(g.pct)}%</span>
           </div>
         ))}
@@ -279,7 +290,9 @@ const PRESETS: Preset[] = [
     { name: '소금',   percent: 2,   category: 'salt' },
     { name: '르방 (100% 수분율)', percent: 20, category: 'other' },
   ]},
-  { key: 'pizzaDough', name: '피자 도우', icon: '🍕', note: '나폴리탄 스타일', ingredients: [
+  // 가정용 오븐(250℃ 안팎)용 배합 — 올리브오일로 낮은 온도에서도 갈변·부드러움을 보탠다.
+  // 나폴리 피자(AVPN 규정)는 밀가루·물·소금·이스트만 쓰므로 '나폴리탄'으로 표기하지 않는다.
+  { key: 'pizzaDough', name: '피자 도우', icon: '🍕', note: '가정용 오븐 스타일', ingredients: [
     { name: '강력분', percent: 100, category: 'flour' },
     { name: '물',     percent: 60,  category: 'liquid' },
     { name: '소금',   percent: 2.5, category: 'salt' },
@@ -379,6 +392,47 @@ type Favorite = {
 
 const FAV_KEY = 'youtil-baker-percent-favs-v1'
 
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
+function isIngredient(v: unknown): v is Ingredient {
+  if (!v || typeof v !== 'object') return false
+  const x = v as Record<string, unknown>
+  return typeof x.id === 'string'
+    && typeof x.name === 'string'
+    && isFiniteNum(x.weight) && isFiniteNum(x.percent)
+    && typeof x.category === 'string' && CATEGORIES.some(c => c.key === x.category)
+    && (x.liquidRatio === undefined || isFiniteNum(x.liquidRatio))
+}
+/** 즐겨찾기 요소 검증 — 배열이 아니거나 필드가 깨진 값이면 favorites.slice·map에서 크래시 */
+function isFavorite(v: unknown): v is Favorite {
+  if (!v || typeof v !== 'object') return false
+  const x = v as Record<string, unknown>
+  return typeof x.id === 'string'
+    && typeof x.name === 'string'
+    && isFiniteNum(x.baseFlour) && isFiniteNum(x.hydration) && isFiniteNum(x.totalWeight) && isFiniteNum(x.savedAt)
+    && Array.isArray(x.ingredients) && x.ingredients.every(isIngredient)
+}
+
+/* 소수 입력칸 — 타이핑 중엔 입력 문자열(draft)을 그대로 보여 준다.
+   값만 제어하면 '0.25'를 칠 때 첫 '0'이 0 → 빈칸으로 바뀌어 지워지고(0.x% 입력 불가), 반올림 값이 입력을 덮어쓴다. */
+function DraftNumInput({ value, onValue, ariaLabel, placeholder, step }: {
+  value: number; onValue: (v: number) => void; ariaLabel: string; placeholder: string; step: string
+}) {
+  const [draft, setDraft] = useState<string | null>(null)
+  return (
+    <input
+      type="number"
+      inputMode="decimal"
+      min="0"
+      step={step}
+      value={draft ?? (value === 0 ? '' : round2(value))}
+      onChange={e => { setDraft(e.target.value); onValue(round2(Math.max(0, n(e.target.value, 0)))) }}
+      onBlur={() => setDraft(null)}
+      aria-label={ariaLabel}
+      placeholder={placeholder}
+    />
+  )
+}
+
 /* ─────────────────────────────────────────────
    재료 행 (모듈 레벨 — 매 렌더마다 재정의되지 않도록)
    레이아웃: × / 카테고리 / dot / 이름 / 입력 / 결과
@@ -400,13 +454,13 @@ function IngredientRowEditable({ items, mode, onUpdateWeight, onUpdatePct, onUpd
         return (
           <div key={i.id} className={`${s.ingredientRow} ${meta.cls}`}>
             {/* 1) 삭제 */}
-            <button className={s.removeBtn} onClick={() => onRemove(i.id)} type="button" aria-label="삭제">×</button>
+            <button className={s.removeBtn} onClick={() => onRemove(i.id)} type="button" aria-label={`${i.name || '재료'} 삭제`}>×</button>
             {/* 2) 카테고리 선택 */}
             <select
               className={s.catSelect}
               value={i.category}
               onChange={e => onUpdateField(i.id, { category: e.target.value as Category })}
-              aria-label="카테고리"
+              aria-label={`${i.name || '재료'} 카테고리`}
               title={meta.label}
             >
               {CATEGORIES.map(c => (
@@ -421,32 +475,31 @@ function IngredientRowEditable({ items, mode, onUpdateWeight, onUpdatePct, onUpd
                 type="text"
                 value={i.name}
                 placeholder="재료명"
+                aria-label="재료명"
                 onChange={e => onUpdateField(i.id, { name: e.target.value })}
               />
             </div>
             {/* 5) 입력 (모드에 따라 무게 또는 %) */}
             {mode === 'weight' ? (
               <div className={s.weightCell}>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
+                <DraftNumInput
                   step="0.1"
-                  value={i.weight === 0 ? '' : i.weight}
-                  onChange={e => onUpdateWeight?.(i.id, n(e.target.value, 0))}
+                  value={i.weight}
+                  onValue={w => onUpdateWeight?.(i.id, w)}
+                  ariaLabel={`${i.name || '재료'} 무게 (g)`}
                   placeholder="g"
                 />
                 <span className={s.unit}>g</span>
               </div>
             ) : (
               <div className={s.weightCell}>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="0.1"
-                  value={round1(i.percent) === 0 ? '' : round1(i.percent)}
-                  onChange={e => onUpdatePct?.(i.id, n(e.target.value, 0))}
+                {/* step="any"는 방향키·스피너가 1씩 움직여(이스트 0.5→1.5%) 쓰지 않는다.
+                    0.05면 0.25·0.75% 같은 ¼% 값도 제약 검증상 유효하고, 한 번에 0.05%씩만 바뀐다. */}
+                <DraftNumInput
+                  step="0.05"
+                  value={i.percent}
+                  onValue={p => onUpdatePct?.(i.id, p)}
+                  ariaLabel={`${i.name || '재료'} 베이커스 퍼센트 (%)`}
                   placeholder="%"
                 />
                 <span className={s.unit}>%</span>
@@ -455,8 +508,8 @@ function IngredientRowEditable({ items, mode, onUpdateWeight, onUpdatePct, onUpd
             {/* 6) 결과 (입력 반대) */}
             <div className={s.pctCell}>
               {mode === 'weight'
-                ? `${round1(i.percent)}%`
-                : `${fmt(i.weight)}g`}
+                ? `${pctStr(i.percent)}%`
+                : `${fmtG(i.weight)}g`}
             </div>
           </div>
         )
@@ -492,6 +545,7 @@ export default function BakerPercentClient() {
 
   // ─ 즐겨찾기 ─
   const [favorites, setFavorites] = useState<Favorite[]>([])
+  const [favLoaded, setFavLoaded] = useState(false)
   const [favName, setFavName] = useState<string>('')
 
   // ─ 복사 ─
@@ -501,13 +555,18 @@ export default function BakerPercentClient() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(FAV_KEY)
-      if (raw) setFavorites(JSON.parse(raw))
+      if (raw) {
+        const parsed: unknown = JSON.parse(raw)
+        if (Array.isArray(parsed)) setFavorites(parsed.filter(isFavorite).slice(0, 20))
+      }
     } catch {}
+    setFavLoaded(true)
   }, [])
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    // 로드 전에 빈 배열로 덮어쓰지 않도록 로드 완료 후에만 저장
+    if (typeof window === 'undefined' || !favLoaded) return
     try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites.slice(0, 20))) } catch {}
-  }, [favorites])
+  }, [favorites, favLoaded])
 
   // 프리셋 변경 시 반영 (tab 2)
   useEffect(() => {
@@ -696,7 +755,7 @@ export default function BakerPercentClient() {
         `[베이커 퍼센트 분석]`,
         `밀가루 ${fmt(analysis1.flourTotal)}g (100%)`,
         ``,
-        ...ing1.filter(i => i.weight > 0).map(i => `${i.name}: ${fmt(i.weight)}g (${round1(i.percent)}%)`),
+        ...ing1.filter(i => i.weight > 0).map(i => `${i.name}: ${fmtG(i.weight)}g (${pctStr(i.percent)}%)`),
         ``,
         `총 반죽량: ${fmt(analysis1.totalWeight)}g`,
         `수분율: ${round1(analysis1.hydration)}%`,
@@ -708,7 +767,7 @@ export default function BakerPercentClient() {
         `[베이커 퍼센트 — ${PRESETS.find(p => p.key === presetKey)?.name ?? '커스텀'}]`,
         `밀가루 기준: ${flourWeight}g`,
         ``,
-        ...ing2.filter(i => i.percent > 0).map(i => `${i.name}: ${fmt(i.weight)}g (${round1(i.percent)}%)`),
+        ...ing2.filter(i => i.percent > 0).map(i => `${i.name}: ${fmtG(i.weight)}g (${pctStr(i.percent)}%)`),
         ``,
         `총 반죽량: ${fmt(analysis2.totalWeight)}g · 수분율 ${round1(analysis2.hydration)}%`,
         ``,
@@ -717,9 +776,9 @@ export default function BakerPercentClient() {
     } else if (tab === 'fromTotal') {
       text = [
         `[베이커 퍼센트 — 총 반죽량 ${targetTotal}g 역산]`,
-        `밀가루: ${fmt(tab3Calc.flour)}g (총 배합률 ${round1(tab3Calc.totalPct)}%)`,
+        `밀가루: ${fmt(tab3Calc.flour)}g (총 배합률 ${pctStr(tab3Calc.totalPct)}%)`,
         ``,
-        ...tab3Calc.ings.filter(i => i.percent > 0).map(i => `${i.name}: ${fmt(i.weight)}g (${round1(i.percent)}%)`),
+        ...tab3Calc.ings.filter(i => i.percent > 0).map(i => `${i.name}: ${fmtG(i.weight)}g (${pctStr(i.percent)}%)`),
         ``,
         `https://youtil.kr/tools/cooking/baker-percent`,
       ].join('\n')
@@ -730,7 +789,7 @@ export default function BakerPercentClient() {
         ` ├ 밀가루: ${fmt(tab4Calc.pfFlour)}g`,
         ` └ 물: ${fmt(tab4Calc.pfWater)}g`,
         ``,
-        `본반죽 — 밀가루 ${mainFlour}g · 물 ${mainWater}g · 소금 ${mainSalt}g`,
+        `본반죽 — 밀가루 ${mainFlour}g · 물 ${mainWater}g · 소금 ${fmtG(mainSalt)}g`,
         ``,
         `전체 — 밀가루 ${fmt(tab4Calc.totalFlour)}g · 물 ${fmt(tab4Calc.totalWater)}g`,
         `전체 수분율: ${round1(tab4Calc.totalHydration)}%`,
@@ -741,7 +800,7 @@ export default function BakerPercentClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -877,12 +936,12 @@ export default function BakerPercentClient() {
                 </div>
                 <div className={`${s.metricCard} ${s.metricSalt}`}>
                   <p className={s.metricLabel}>소금</p>
-                  <p className={s.metricValue}>{round1(analysis1.saltPct)}%</p>
+                  <p className={s.metricValue}>{pctStr(analysis1.saltPct)}%</p>
                   <p className={s.metricHint}>{saltDesc(analysis1.saltPct).split(' — ')[0]}</p>
                 </div>
                 <div className={`${s.metricCard} ${s.metricYeast}`}>
                   <p className={s.metricLabel}>이스트</p>
-                  <p className={s.metricValue}>{round1(analysis1.yeastPct)}%</p>
+                  <p className={s.metricValue}>{pctStr(analysis1.yeastPct)}%</p>
                   <p className={s.metricHint}>{yeastDesc(analysis1.yeastPct).split(' — ')[0]}</p>
                 </div>
                 <div className={`${s.metricCard} ${s.metricSugar}`}>
@@ -901,10 +960,10 @@ export default function BakerPercentClient() {
                 <div className={s.gaugeWrap}>
                   <div className={s.gaugeBar} style={{ position: 'relative' }}>
                     {/* 구간 라벨 — 게이지 안에 배치 */}
-                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
-                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
-                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
-                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
+                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
+                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
+                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
+                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
                     <div className={s.gaugeMarker} style={{ left: `${gaugePct(analysis1.hydration)}%` }} />
                   </div>
                   {/* 구간 경계 숫자 — 정확한 위치에 표시 */}
@@ -917,7 +976,7 @@ export default function BakerPercentClient() {
                   </div>
                 </div>
                 <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 16, lineHeight: 1.7 }}>
-                  현재 <strong style={{ color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
+                  현재 <strong style={{ color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
                 </p>
               </div>
 
@@ -941,8 +1000,8 @@ export default function BakerPercentClient() {
               사용자 배합 분석:
               <ul>
                 <li>전체 수분율 <strong>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}</li>
-                <li>소금 <strong>{round1(analysis1.saltPct)}%</strong> — {saltDesc(analysis1.saltPct)}</li>
-                <li>이스트 <strong>{round1(analysis1.yeastPct)}%</strong> — {yeastDesc(analysis1.yeastPct)}</li>
+                <li>소금 <strong>{pctStr(analysis1.saltPct)}%</strong> — {saltDesc(analysis1.saltPct)}</li>
+                <li>이스트 <strong>{pctStr(analysis1.yeastPct)}%</strong> — {yeastDesc(analysis1.yeastPct)}</li>
                 {analysis1.fatPct > 0 && <li>지방 <strong>{round1(analysis1.fatPct)}%</strong> — {analysis1.fatPct < 5 ? '담백' : analysis1.fatPct < 15 ? '풍미 식빵' : '버터 풍부 (브리오슈·크루아상)'}</li>}
               </ul>
             </div>
@@ -985,12 +1044,13 @@ export default function BakerPercentClient() {
           {/* 밀가루 양 */}
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>목표 밀가루 양</span>
+              <label htmlFor="bp-flour-weight" id="bp-flour-weight-label">목표 밀가루 양</label>
               <span className={s.cardLabelHint}>{flourWeight}g</span>
             </div>
             <div className={s.sliderRow}>
-              <input type="range" min={100} max={5000} step={5} value={flourWeight} onChange={e => setFlourAndRecalc(Number(e.target.value))} />
+              <input type="range" min={100} max={5000} step={5} value={flourWeight} onChange={e => setFlourAndRecalc(Number(e.target.value))} aria-labelledby="bp-flour-weight-label" />
               <input
+                id="bp-flour-weight"
                 type="number"
                 inputMode="decimal"
                 min={50}
@@ -1000,8 +1060,8 @@ export default function BakerPercentClient() {
                 onChange={e => setFlourAndRecalc(Math.max(0, Number(e.target.value) || 0))}
                 style={{
                   width: 80, padding: '6px 10px', background: 'var(--bg3)',
-                  border: '1px solid var(--border)', borderRadius: 8,
-                  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14,
+                  border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
+                  fontFamily: 'var(--font-sans)', fontSize: 14,
                   fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
                 }}
               />
@@ -1042,14 +1102,14 @@ export default function BakerPercentClient() {
 
           {/* HERO */}
           {analysis2.flourTotal > 0 && (
-            <div className={s.hero}>
+            <div className={s.hero} role="status">
               <p className={s.heroLead}>총 반죽량</p>
               <div>
                 <span className={s.heroNum}>{fmt(analysis2.totalWeight)}</span>
                 <span className={s.heroUnit}>g</span>
               </div>
               <p className={s.heroSub}>
-                밀가루 {fmt(analysis2.flourTotal)}g · 총 배합률 <span className={s.heroSubAccent}>{round1(analysis2.totalPercent)}%</span>
+                밀가루 {fmt(analysis2.flourTotal)}g · 총 배합률 <span className={s.heroSubAccent}>{pctStr(analysis2.totalPercent)}%</span>
                 {' · '}수분율 <span className={s.heroSubAccent}>{round1(analysis2.hydration)}%</span>
               </p>
             </div>
@@ -1075,15 +1135,15 @@ export default function BakerPercentClient() {
                     <tr key={i.id} className={i.category === 'flour' ? s.flourRow : i.category === 'liquid' ? s.liquidRow : ''}>
                       <td>{i.name || '—'}</td>
                       <td>{catMeta(i.category).emoji} {catMeta(i.category).label.replace(/^[^\s]+\s/, '')}</td>
-                      <td>{fmt(i.weight)}g</td>
-                      <td>{round1(i.percent)}%</td>
+                      <td>{fmtG(i.weight)}g</td>
+                      <td>{pctStr(i.percent)}%</td>
                     </tr>
                   ))}
                   <tr className={s.totalRow}>
                     <td>총 반죽량</td>
                     <td>—</td>
                     <td>{fmt(analysis2.totalWeight)}g</td>
-                    <td>{round1(analysis2.totalPercent)}%</td>
+                    <td>{pctStr(analysis2.totalPercent)}%</td>
                   </tr>
                 </tbody>
               </table>
@@ -1135,7 +1195,7 @@ export default function BakerPercentClient() {
               <span className={s.cardLabelHint}>{favorites.length} / 20</span>
             </div>
             <div className={s.favSaveRow}>
-              <input className={s.textInput} type="text" value={favName} onChange={e => setFavName(e.target.value)} placeholder="예: 우리집 식빵" maxLength={20} />
+              <input className={s.textInput} type="text" value={favName} onChange={e => setFavName(e.target.value)} placeholder="예: 우리집 식빵" maxLength={20} aria-label="즐겨찾기 레시피 이름" />
               <button className={s.favSaveBtn} onClick={saveFav} type="button">+ 저장</button>
             </div>
             {favorites.length > 0 && (
@@ -1183,12 +1243,13 @@ export default function BakerPercentClient() {
 
           <div className={s.card}>
             <div className={s.cardLabel}>
-              <span>목표 총 반죽량</span>
+              <label htmlFor="bp-target-total" id="bp-target-total-label">목표 총 반죽량</label>
               <span className={s.cardLabelHint}>{targetTotal}g</span>
             </div>
             <div className={s.sliderRow}>
-              <input type="range" min={100} max={10000} step={5} value={targetTotal} onChange={e => setTargetTotal(Number(e.target.value))} />
+              <input type="range" min={100} max={10000} step={5} value={targetTotal} onChange={e => setTargetTotal(Number(e.target.value))} aria-labelledby="bp-target-total-label" />
               <input
+                id="bp-target-total"
                 type="number"
                 inputMode="decimal"
                 min={50}
@@ -1198,8 +1259,8 @@ export default function BakerPercentClient() {
                 onChange={e => setTargetTotal(Math.max(0, Number(e.target.value) || 0))}
                 style={{
                   width: 80, padding: '6px 10px', background: 'var(--bg3)',
-                  border: '1px solid var(--border)', borderRadius: 8,
-                  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14,
+                  border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
+                  fontFamily: 'var(--font-sans)', fontSize: 14,
                   fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
                 }}
               />
@@ -1238,14 +1299,14 @@ export default function BakerPercentClient() {
 
           {/* HERO */}
           {tab3Calc.totalPct > 0 && (
-            <div className={s.hero}>
+            <div className={s.hero} role="status">
               <p className={s.heroLead}>총 반죽량 {fmt(targetTotal)}g 기준</p>
               <div>
                 <span className={s.heroNum}>{fmt(tab3Calc.flour)}</span>
                 <span className={s.heroUnit}>g 밀가루</span>
               </div>
               <p className={s.heroSub}>
-                총 배합률 <span className={s.heroSubAccent}>{round1(tab3Calc.totalPct)}%</span> ·
+                총 배합률 <span className={s.heroSubAccent}>{pctStr(tab3Calc.totalPct)}%</span> ·
                 {' '}수분율 <span className={s.heroSubAccent}>{round1(tab3Calc.hydration)}%</span>
               </p>
             </div>
@@ -1271,15 +1332,15 @@ export default function BakerPercentClient() {
                     <tr key={i.id} className={i.category === 'flour' ? s.flourRow : i.category === 'liquid' ? s.liquidRow : ''}>
                       <td>{i.name || '—'}</td>
                       <td>{catMeta(i.category).emoji}</td>
-                      <td>{fmt(i.weight)}g</td>
-                      <td>{round1(i.percent)}%</td>
+                      <td>{fmtG(i.weight)}g</td>
+                      <td>{pctStr(i.percent)}%</td>
                     </tr>
                   ))}
                   <tr className={s.totalRow}>
                     <td>총 반죽량</td>
                     <td>—</td>
                     <td>{fmt(targetTotal)}g</td>
-                    <td>{round1(tab3Calc.totalPct)}%</td>
+                    <td>{pctStr(tab3Calc.totalPct)}%</td>
                   </tr>
                 </tbody>
               </table>
@@ -1333,20 +1394,20 @@ export default function BakerPercentClient() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
               <div>
-                <span className={s.subLabel}>밀가루 (g)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
+                <label htmlFor="bp-main-flour" className={s.subLabel}>밀가루 (g)</label>
+                <input id="bp-main-flour" className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
                   value={mainFlour === 0 ? '' : mainFlour}
                   onChange={e => setMainFlour(n(e.target.value, 0))} />
               </div>
               <div>
-                <span className={s.subLabel}>물 (g)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
+                <label htmlFor="bp-main-water" className={s.subLabel}>물 (g)</label>
+                <input id="bp-main-water" className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
                   value={mainWater === 0 ? '' : mainWater}
                   onChange={e => setMainWater(n(e.target.value, 0))} />
               </div>
               <div>
-                <span className={s.subLabel}>소금 (g)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="0.5"
+                <label htmlFor="bp-main-salt" className={s.subLabel}>소금 (g)</label>
+                <input id="bp-main-salt" className={s.bigInput} type="number" inputMode="decimal" min="0" step="0.5"
                   value={mainSalt === 0 ? '' : mainSalt}
                   onChange={e => setMainSalt(n(e.target.value, 0))} />
               </div>
@@ -1359,14 +1420,14 @@ export default function BakerPercentClient() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
-                <span className={s.subLabel}>총 사용량 (g)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
+                <label htmlFor="bp-pf-total" className={s.subLabel}>총 사용량 (g)</label>
+                <input id="bp-pf-total" className={s.bigInput} type="number" inputMode="decimal" min="0" step="10"
                   value={pfTotal === 0 ? '' : pfTotal}
                   onChange={e => setPfTotal(n(e.target.value, 0))} />
               </div>
               <div>
-                <span className={s.subLabel}>수분율 (%)</span>
-                <input className={s.bigInput} type="number" inputMode="decimal" min="0" max="200" step="5"
+                <label htmlFor="bp-pf-hydration" className={s.subLabel}>수분율 (%)</label>
+                <input id="bp-pf-hydration" className={s.bigInput} type="number" inputMode="decimal" min="0" max="200" step="5"
                   value={pfHydration === 0 ? '' : pfHydration}
                   onChange={e => setPfHydration(n(e.target.value, 0))} />
               </div>
@@ -1375,7 +1436,7 @@ export default function BakerPercentClient() {
 
           {/* HERO */}
           {tab4Calc.totalFlour > 0 && (
-            <div className={s.hero}>
+            <div className={s.hero} role="status">
               <p className={s.heroLead}>전체 수분율</p>
               <div>
                 <span className={s.heroNum}>{round1(tab4Calc.totalHydration)}</span>
@@ -1419,9 +1480,9 @@ export default function BakerPercentClient() {
                   </tr>
                   <tr>
                     <td>소금</td>
-                    <td className={s.colMain}>{fmt(mainSalt)}g</td>
+                    <td className={s.colMain}>{fmtG(mainSalt)}g</td>
                     <td className={`${s.colPreferment} ${s.zero}`}>—</td>
-                    <td className={s.colTotal}>{fmt(mainSalt)}g</td>
+                    <td className={s.colTotal}>{fmtG(mainSalt)}g</td>
                   </tr>
                   <tr className={s.totalRow}>
                     <td>수분율</td>

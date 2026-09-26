@@ -378,13 +378,21 @@ export type SavedList = {
   updatedAt: string
 }
 
+function isSavedList(v: unknown): v is SavedList {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  return typeof o.id === 'string' && typeof o.name === 'string'
+    && Array.isArray(o.items) && o.items.every((x) => typeof x === 'string')
+    && typeof o.createdAt === 'string' && typeof o.updatedAt === 'string'
+}
+
 export function loadLists(): SavedList[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isSavedList) : []
   } catch { return [] }
 }
 export function saveLists(items: SavedList[]) {

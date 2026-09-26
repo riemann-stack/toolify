@@ -6,12 +6,20 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import {
+  calcYearEnd, cardDeduction, childTaxCredit, childCreditBirthYears, CHILD_CREDIT_AGE_RULES, YEAR_END_TAX_YEAR,
+  CARD_LIMIT_LOW, CARD_LIMIT_HIGH, CARD_CHILD_ADD_LOW, CARD_CHILD_ADD_HIGH, CARD_CHILD_ADD_MAX_KIDS,
+  CARD_EXTRA_LIMIT_LOW, CARD_EXTRA_LIMIT_HIGH, CARD_THRESHOLD_RATE, CARD_RATE_CREDIT, CARD_RATE_CHECK, CARD_RATE_MARKET, CARD_RATE_CULTURE,
+  CARD_LOW_GROSS_CUT, PERSONAL_DEDUCTION, MEDICAL_OTHERS_LIMIT, MEDICAL_RATE_PREMATURE, MEDICAL_RATE_INFERTILITY,
+  type ChildCreditAgeRule, type YearEndInput,
+} from '@/lib/krYearEndTax'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/year-end-tax',
-  title: '연말정산 계산기 — 2026 환급·추가납부 시뮬레이터',
+  title: '연말정산 계산기 — 2026년 귀속 환급·추가납부 시뮬레이터',
   description:
-    '총급여와 신용카드·연금저축·의료비·월세 등 공제를 넣으면 결정세액과 기납부세액을 비교해 예상 환급·추가납부액을 추정합니다. 2026년 기준.',
+    '총급여와 신용카드·연금저축·의료비·월세 등 공제를 넣으면 결정세액과 기납부세액을 비교해 예상 환급·추가납부액을 추정합니다. 2026년 귀속 소득(2027년 초 연말정산) 기준.',
   keywords: [
     '연말정산 계산기',
     '환급금 계산',
@@ -24,24 +32,72 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '12px',
-}
-const para: React.CSSProperties = {
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.85,
-  marginBottom: '12px',
-}
 const strong: React.CSSProperties = { color: 'var(--text)' }
 const th: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }
 const tdLabel: React.CSSProperties = { padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }
-const tdVal: React.CSSProperties = { padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }
+
+const TH: React.CSSProperties = { padding: '9px 10px', textAlign: 'right', color: 'var(--muted)', fontWeight: 600, fontSize: 12, borderBottom: '1px solid var(--border)', whiteSpace: 'nowrap' }
+const TD: React.CSSProperties = { padding: '9px 10px', textAlign: 'right', borderBottom: '1px solid var(--border)', color: 'var(--text)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }
+
+/* ── 본문 표 — 계산기와 같은 lib/krYearEndTax(calcYearEnd)로 빌드 시점 계산 ──
+   가정: 본인 1명(부양가족 없음), 국민연금·건강·고용보험료는 계산기 추정값, 그 밖의 공제 없음. 금액은 지방소득세 포함 */
+const won = (v: number) => `${Math.round(v).toLocaleString('ko-KR')}원`
+const input = (gross: number, o: Partial<YearEndInput> = {}): YearEndInput => ({
+  gross, dependents: 0, children: 0, youngChildren: 0, elderly: 0, disabled: 0,
+  creditCard: 0, checkCash: 0, marketTransit: 0, pensionSavings: 0, irp: 0, insurance: 0,
+  medical: 0, education: 0, donation: 0, monthlyRent: 0, isHomeless: false,
+  nationalPension: null, otherInsurance: null, prepaidTax: null, prepaidIncludesLocal: true, ...o,
+})
+const GROSS_ROWS = [30_000_000, 40_000_000, 50_000_000, 70_000_000, 100_000_000].map((gross) => {
+  const base = calcYearEnd(input(gross))
+  const saved = (o: Partial<YearEndInput>) => base.decidedTotal - calcYearEnd(input(gross, o)).decidedTotal
+  return {
+    gross,
+    base,
+    pension6: saved({ pensionSavings: 6_000_000 }),
+    pension9: saved({ pensionSavings: 6_000_000, irp: 3_000_000 }),
+    /* 신용카드로 25% 문턱을 채운 뒤 체크카드 500만원 추가 → 체크카드분 30% 소득공제 */
+    check5: saved({ creditCard: gross * 0.25, checkCash: 5_000_000 }),
+  }
+})
+const R30 = GROSS_ROWS[0]
+const R50 = GROSS_ROWS[2]
+/** 의료비 300만원을 총급여가 다른 두 배우자 중 누가 공제받느냐에 따른 세금 감소액(지방소득세 포함) */
+const medSaved = (gross: number) => calcYearEnd(input(gross)).decidedTotal - calcYearEnd(input(gross, { medical: 3_000_000 })).decidedTotal
+const MED40 = medSaved(40_000_000)
+const MED70 = medSaved(70_000_000)
+
+const man = (v: number) => `${Math.round(v / 10_000).toLocaleString('ko-KR')}만`
+/** 전통시장·대중교통 추가한도 예시 — 총급여 5,000만, 신용 1,250만(문턱 25%)·체크 1,000만·전통시장·대중교통 600만 */
+const CARD_EX = { gross: 50_000_000, creditCard: 50_000_000 * CARD_THRESHOLD_RATE, checkCash: 10_000_000, marketTransit: 6_000_000 }
+const CARD_EX_DED = cardDeduction(input(CARD_EX.gross, CARD_EX))
+const CARD_EX_NO_MARKET = cardDeduction(input(CARD_EX.gross, { ...CARD_EX, marketTransit: 0 }))
+const CARD_EX_EXTRA = CARD_EX_DED - Math.min(CARD_EX_DED, CARD_LIMIT_LOW) // 기본한도를 넘어 추가한도로 인정된 금액
+
+/* 자녀세액공제 나이 단계 상향 (소득세법 §59의2, 2026.4.21 개정 부칙) — lib 표에서 문장 생성.
+   개정 내용은 귀속연도(YEAR_END_TAX_YEAR)와 무관하게 표 전체로 설명한다: 첫 키 = 개정 전, 나머지 = 단계 적용~본칙 */
+const CHILD_YEARS = childCreditBirthYears(YEAR_END_TAX_YEAR)
+const CHILD_RULES = (Object.entries(CHILD_CREDIT_AGE_RULES) as [string, ChildCreditAgeRule][])
+  .map(([y, r]) => [Number(y), r] as const)
+  .sort((a, b) => a[0] - b[0])
+const CHILD_BEFORE = CHILD_RULES[0][1]
+const CHILD_PHASE = CHILD_RULES.slice(1)
+const CHILD_PHASE_TEXT = CHILD_PHASE.map(([y, r]) => `${y}년 ${r.minAge}세`).join(', ')
+const CHILD_ONE_STEP = CHILD_PHASE.every(([, r], i) => r.minAge === (i === 0 ? CHILD_BEFORE : CHILD_PHASE[i - 1][1]).minAge + 1)
+const CHILD_FINAL = CHILD_PHASE[CHILD_PHASE.length - 1]
+const CHILD_EXCLUDED = [...new Set(CHILD_PHASE.flatMap(([, r]) => r.excludeBirthYears))]
+const CHILD_EXCLUDED_TEXT = CHILD_EXCLUDED.length
+  ? ` ${CHILD_EXCLUDED.join('·')}년생은 아동수당을 ${CHILD_FINAL[1].minAge}세 전까지 계속 받는 대신 이 단계 적용에서 빠져 ${CHILD_FINAL[1].minAge}세가 되는 ${CHILD_EXCLUDED.map((y) => y + CHILD_FINAL[1].minAge).join('·')}년부터 공제됩니다.`
+  : ''
+/* 신용카드·인적공제 문구용 (lib 값 보간) */
+const pct = (r: number) => `${Math.round(r * 100)}%`
+const CARD_CUT = `${man(CARD_LOW_GROSS_CUT)}원` // 기본·추가한도 총급여 경계
 
 const FAQ_LD = [
+  {
+    q: '자녀세액공제는 몇 살 자녀부터 받나요?',
+    a: `2026년 4월 소득세법 개정으로 자녀세액공제 나이 기준이 ${CHILD_BEFORE.minAge}세 이상에서 ${CHILD_FINAL[1].minAge}세 이상으로 올라갑니다. 한 번에 올리지 않고 ${CHILD_PHASE_TEXT} 이상으로 ${CHILD_ONE_STEP ? '1세씩' : '단계적으로'} 높입니다.${CHILD_EXCLUDED_TEXT} 그래서 ${YEAR_END_TAX_YEAR}년 귀속 연말정산(${YEAR_END_TAX_YEAR + 1}년 초)에서는 <strong>${CHILD_YEARS.from}~${CHILD_YEARS.to}년생</strong> 자녀만 1명 ${man(childTaxCredit(1))}원·2명 ${man(childTaxCredit(2))}원(3명째부터 1명당 ${man(childTaxCredit(3) - childTaxCredit(2))}원 추가)을 받습니다. 공제 대상이 아닌 어린 자녀도 기본공제(1인당 ${man(PERSONAL_DEDUCTION)}원)와 신용카드 한도 가산은 그대로 받으니 계산기의 &lsquo;그 밖의 자녀&rsquo; 칸에 넣으세요.`,
+  },
   {
     q: '연말정산 환급금은 어떻게 계산되나요?',
     a: '연말정산은 1년 동안 매월 떼인 세금(<strong>기납부세액</strong>)과 각종 공제를 반영해 확정한 진짜 세금(<strong>결정세액</strong>)을 비교하는 절차입니다. 결정세액이 기납부세액보다 적으면 그 차액을 돌려받고(환급), 많으면 더 냅니다(추가 납부). 결정세액은 총급여 → 근로소득공제 → 소득공제 → 과세표준 → 누진세율 → 세액공제 순서로 산출됩니다. 즉 공제가 많아 결정세액이 줄어들수록 환급이 커집니다.',
@@ -56,7 +112,7 @@ const FAQ_LD = [
   },
   {
     q: '연금저축·IRP는 얼마 넣으면 세액공제를 다 받나요?',
-    a: '연금저축은 연 <strong>600만원</strong>, IRP를 합치면 <strong>900만원</strong>까지 세액공제 대상입니다. 공제율은 총급여 5,500만원 이하면 15%, 초과면 12%입니다. 900만원을 모두 넣으면 총급여 5,500만 이하 기준 135만원(900만×15%), 초과 기준 108만원(900만×12%)을 결정세액에서 직접 깎습니다. 연말까지 추가 납입한 금액도 당해 공제 대상이라 막판 절세 수단으로 자주 쓰입니다.',
+    a: '연금저축은 연 <strong>600만원</strong>, IRP를 합치면 <strong>900만원</strong>까지 세액공제 대상입니다. 공제율은 총급여 5,500만원 이하면 15%, 초과면 12%입니다. 900만원을 모두 넣으면 총급여 5,500만 이하 기준 135만원(900만×15%), 초과 기준 108만원(900만×12%)을 결정세액에서 직접 깎습니다. 다만 깎을 결정세액이 그보다 적으면 남은 결정세액까지만 줄어듭니다. 연말까지 추가 납입한 금액도 당해 공제 대상이라 막판 절세 수단으로 자주 쓰입니다.',
   },
   {
     q: '월세 세액공제는 총급여 얼마까지 받나요?',
@@ -64,23 +120,23 @@ const FAQ_LD = [
   },
   {
     q: '맞벌이 부부는 의료비·카드를 누구에게 몰아주는 게 유리한가요?',
-    a: '<strong>의료비</strong>는 총급여 3% 초과분만 공제되므로 문턱이 낮은 <strong>소득이 적은 배우자</strong>에게 몰면 공제 대상이 커지는 경우가 많습니다. 반면 <strong>신용카드</strong>도 25% 문턱이 있어 소득이 적은 쪽이 채우기 쉽지만, 세액공제·소득공제 효과는 <strong>한계세율이 높은(소득이 많은) 배우자</strong>에게서 더 큽니다. 부양가족 기본공제는 한 명에게만 적용되므로, 두 경우를 모두 넣어 결정세액 합계가 작은 조합을 고르는 것이 정답입니다.',
+    a: '<strong>의료비</strong>는 총급여 3% 초과분만 공제되므로 문턱이 낮은 <strong>소득이 적은 배우자</strong>에게 모으면 공제 대상이 커지는 경우가 많습니다. 의료비·교육비 세액공제의 공제율(15%)은 소득과 무관하지만, 의료비 문턱(각자 총급여의 3%)과 공제 가능 여부(교육비·자녀 의료비는 그 가족을 기본공제받는 사람만)는 사람마다 달라 마음대로 옮길 수 없고, 받는 사람의 결정세액이 공제액보다 작으면 남는 공제는 사라집니다. 반면 <strong>신용카드 소득공제</strong>는 과세표준을 줄이는 방식이라 <strong>한계세율이 높은(소득이 많은) 배우자</strong>에게서 효과가 크고, 대신 25% 문턱도 높습니다. 소득이 있는 맞벌이 배우자는 기본공제대상자가 아니어서 배우자 카드 사용액을 합산할 수 없으니, 카드는 한쪽 명의로 몰아 쓰는 방식으로 조정합니다. 부양가족 기본공제도 한 명에게만 적용되므로, 두 경우를 모두 넣어 결정세액 합계가 작은 조합을 고르세요.',
   },
   {
     q: '표준세액공제 13만원은 언제 적용되나요?',
-    a: '의료비·교육비·기부금·보험료·월세 등 항목별 특별세액공제 합계가 <strong>13만원에 못 미칠 때</strong> 자동으로 표준세액공제 13만원이 적용됩니다(둘 중 큰 쪽). 공제할 항목이 거의 없는 사회초년생·1인 가구는 보통 표준 13만원이 적용됩니다. 이 계산기는 입력한 항목 합계와 13만원을 비교해 더 큰 쪽을 자동으로 반영합니다.',
+    a: '표준세액공제 13만원은 <strong>건강·고용보험료 등 특별소득공제, 의료비·교육비·기부금·보험료 특별세액공제, 월세 세액공제를 하나도 신청하지 않을 때만</strong> 적용됩니다. 그래서 단순히 특별세액공제 합계와 13만원을 비교하는 것이 아니라, 건강·고용보험료 소득공제를 포기하는 대가까지 따져 유리한 쪽을 고릅니다. 급여가 낮아 건강·고용보험료 공제 효과가 작은 경우에는 표준 13만원이, 급여가 어느 정도 높으면 보험료 소득공제 쪽이 유리한 경우가 많습니다. 이 계산기는 두 경우의 결정세액을 모두 계산해 작은 쪽을 자동으로 반영합니다.',
   },
   {
     q: '이 계산기 결과가 홈택스 연말정산 미리보기와 다른 이유는?',
-    a: '이 도구는 신용카드·연금계좌·의료비·교육비·기부금·월세 등 <strong>핵심 공제만</strong> 반영한 간이 추정입니다. 난임·중증질환 의료비 가중, 중소기업 취업자 감면, 주택자금(전세·주택담보 이자)공제, 회사별 비과세 항목, 실제 원천징수 기납부세액 차이 등은 반영하지 않아 실제와 차이가 납니다. 정확한 금액은 국세청 홈택스 연말정산 간소화·모의계산 또는 세무 전문가로 확인하세요.',
+    a: `이 도구는 신용카드·연금계좌·의료비·교육비·기부금·월세 등 <strong>핵심 공제만</strong> 반영한 간이 추정입니다. 난임시술비(${pct(MEDICAL_RATE_INFERTILITY)})·미숙아·선천성이상아(${pct(MEDICAL_RATE_PREMATURE)}) 의료비의 높은 공제율, 중소기업 취업자 감면, 주택자금(전세·주택담보 이자)공제, 회사별 비과세 항목, 실제 원천징수 기납부세액 차이 등은 반영하지 않아 실제와 차이가 납니다. 정확한 금액은 국세청 홈택스 연말정산 간소화·모의계산 또는 세무 전문가로 확인하세요.`,
   },
 ]
 
-/* 공제 한도표 (정적·표시용 — 수치는 본문 가이드 설명용) */
+/* 공제 한도표 (표시용 — 신용카드·의료비 한도는 lib/krYearEndTax 값 보간) */
 const limitRows: [string, string, string][] = [
-  ['신용카드 등', '총급여 25% 초과분', '신용 15%·체크/현금 30%·전통시장·대중교통 40% (기본 300만 한도, 총급여 7천만 초과 시 250만)'],
+  ['신용카드 등', `총급여 ${pct(CARD_THRESHOLD_RATE)} 초과분`, `신용 ${pct(CARD_RATE_CREDIT)}·체크/현금 ${pct(CARD_RATE_CHECK)}·전통시장·대중교통 ${pct(CARD_RATE_MARKET)} (기본 ${man(CARD_LIMIT_LOW)} 한도, 총급여 ${man(CARD_LOW_GROSS_CUT)} 초과 시 ${man(CARD_LIMIT_HIGH)} · 2026년 사용분부터 자녀 1인당 ${man(CARD_CHILD_ADD_LOW)}원, ${man(CARD_LOW_GROSS_CUT)} 초과 ${man(CARD_CHILD_ADD_HIGH)}원 추가, 최대 ${CARD_CHILD_ADD_MAX_KIDS}명 · 기본한도 초과분은 전통시장·대중교통 ${pct(CARD_RATE_MARKET)}분에서 최대 ${man(CARD_EXTRA_LIMIT_LOW)}, ${man(CARD_LOW_GROSS_CUT)} 초과 ${man(CARD_EXTRA_LIMIT_HIGH)} 추가 — ${man(CARD_LOW_GROSS_CUT)} 이하는 문화체육 사용분 ${pct(CARD_RATE_CULTURE)}도 이 추가한도에 포함, 계산기 미반영)`],
   ['연금계좌(연금저축+IRP)', '900만원 (연금저축 600만)', '총급여 5,500만 이하 15% / 초과 12%'],
-  ['의료비', '총급여 3% 초과분', '공제율 15% (세액공제)'],
+  ['의료비', `총급여 3% 초과분 (본인·65세 이상·6세 이하·장애인 등 외 부양가족분은 연 ${man(MEDICAL_OTHERS_LIMIT)}원 한도)`, '공제율 15% (세액공제)'],
   ['교육비', '본인 전액·자녀 한도', '공제율 15% (세액공제)'],
   ['월세', '연 1,000만원 (총급여 8천만 이하)', '5,500만 이하 17% / 초과 15%'],
   ['기부금', '소득금액 한도', '1천만 이하 15% / 초과분 30%'],
@@ -88,21 +144,22 @@ const limitRows: [string, string, string][] = [
 
 export default function YearEndTaxPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        금융·재테크
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={880} slug="/tools/finance/year-end-tax">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />연말정산 환급·추가납부 시뮬레이터
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
-        총급여와 신용카드·연금저축·의료비·월세 등 공제를 넣으면 <strong style={strong}>결정세액과 기납부세액을 비교</strong>해 예상 환급·추가납부액을 추정합니다. 2026년 기준.
+      <p className="tp-lead">
+        총급여와 신용카드·연금저축·의료비·월세 등 공제를 넣으면 <strong style={strong}>결정세액과 기납부세액을 비교</strong>해 예상 환급·추가납부액을 추정합니다. 2026년 귀속 소득(2027년 1~2월 연말정산) 기준입니다.
       </p>
 
       <UpdatedMeta
         date="2026년"
-        basis="2026년 종합소득세율·근로소득공제·공제 한도 기준"
-        sources={[{ label: '국세청 홈택스(hometax.go.kr)', href: 'https://hometax.go.kr' }]}
+        basis="2026년 귀속(2027년 1~2월 정산) 종합소득세율·근로소득공제·공제 한도 기준, 신용카드 자녀 한도 가산(2026년 사용분부터)·자녀세액공제 나이 상향(2026.4.21 소득세법 개정) 반영"
+        sources={[
+          { label: '국세청 홈택스(hometax.go.kr)', href: 'https://hometax.go.kr' },
+          { label: '국가법령정보센터 소득세법', href: 'https://www.law.go.kr/법령/소득세법' },
+          { label: '국가법령정보센터 조세특례제한법', href: 'https://www.law.go.kr/법령/조세특례제한법' },
+        ]}
       />
 
       <Disclaimer
@@ -115,23 +172,23 @@ export default function YearEndTaxPage() {
       <YearEndTaxClient />
 
       <GuideDivider />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
+      <div>
 
         {/* 1. 연말정산이란 */}
         <section>
-          <h2 style={sectionTitle}>연말정산이란 — 환급과 추가 납부가 갈리는 원리</h2>
-          <p style={para}>
-            연말정산은 1년 동안 매월 떼인 세금(<strong style={strong}>기납부세액</strong>)과, 각종 공제를 모두 반영해 확정한 진짜 세금(<strong style={strong}>결정세액</strong>)을 맞춰보는 절차입니다. 두 값의 차이로 환급·추가 납부가 갈립니다.
+          <h2 className="g-h2">연말정산이란 — 환급과 추가 납부가 갈리는 원리</h2>
+          <p className="g-p">
+            연말정산은 1년 동안 매월 떼인 세금(<strong>기납부세액</strong>)과, 각종 공제를 모두 반영해 확정한 진짜 세금(<strong>결정세액</strong>)을 맞춰보는 절차입니다. 두 값의 차이로 환급·추가 납부가 갈립니다.
           </p>
-          <p style={{ ...para, marginBottom: 0 }}>
-            결정세액이 기납부세액보다 <strong style={strong}>적으면 차액을 돌려받고(환급)</strong>, <strong style={strong}>많으면 더 냅니다(추가 납부)</strong>. 매월 원천징수는 평균적인 공제만 반영하므로, 카드·의료비·연금 등 공제가 평균보다 많으면 환급이, 적으면 추가 납부가 발생합니다.
+          <p className="g-p">
+            결정세액이 기납부세액보다 <strong>적으면 차액을 돌려받고(환급)</strong>, <strong>많으면 더 냅니다(추가 납부)</strong>. 매월 원천징수는 평균적인 공제만 반영하므로, 카드·의료비·연금 등 공제가 평균보다 많으면 환급이, 적으면 추가 납부가 발생합니다.
           </p>
         </section>
 
         {/* 2. 결정세액 5단계 */}
         <section>
-          <h2 style={sectionTitle}>결정세액이 정해지는 5단계</h2>
-          <p style={para}>총급여에서 출발해 두 종류의 공제를 거쳐 결정세액이 확정됩니다.</p>
+          <h2 className="g-h2">결정세액이 정해지는 5단계</h2>
+          <p className="g-p">총급여에서 출발해 두 종류의 공제를 거쳐 결정세액이 확정됩니다.</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               ['① 총급여', '비과세를 뺀 연간 급여에서 근로소득공제를 차감해 근로소득금액을 구합니다.'],
@@ -140,22 +197,22 @@ export default function YearEndTaxPage() {
               ['④ 산출세액', '과세표준에 6~45% 누진세율을 적용합니다.'],
               ['⑤ 세액공제', '근로소득·자녀·연금계좌·특별(의료·교육·기부·월세) 공제를 산출세액에서 직접 깎아 결정세액(소득세)이 나오고, 지방소득세 10%가 더해집니다.'],
             ].map(([k, v], i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px' }}>
-                <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-ink)', margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{k}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 16px' }}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-ink)', margin: '0 0 4px', fontFamily: 'var(--font-sans)' }}>{k}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{v}</p>
               </div>
             ))}
           </div>
-          <p style={{ ...para, marginTop: '12px', marginBottom: 0 }}>
-            <strong style={strong}>소득공제</strong>는 과세표준을 낮춰 절세효과가 한계세율에 비례하고, <strong style={strong}>세액공제</strong>는 세금을 직접 깎습니다. 그래서 같은 1만원이라도 어떤 공제냐에 따라 환급 효과가 다릅니다.
+          <p className="g-p" style={{ marginTop: 16 }}>
+            <strong>소득공제</strong>는 과세표준을 낮춰 절세효과가 한계세율에 비례하고, <strong>세액공제</strong>는 세금을 직접 깎습니다. 그래서 같은 1만원이라도 어떤 공제냐에 따라 환급 효과가 다릅니다.
           </p>
         </section>
 
         {/* 3. 핵심 공제 6가지 한도표 */}
         <section>
-          <h2 style={sectionTitle}>핵심 공제 6가지 — 2026 한도·공제율</h2>
-          <p style={para}>환급을 좌우하는 대표 공제 6가지의 한도와 공제율입니다.</p>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">핵심 공제 6가지 — 2026 한도·공제율</h2>
+          <p className="g-p">환급을 좌우하는 대표 공제 6가지의 한도와 공제율입니다.</p>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -177,31 +234,74 @@ export default function YearEndTaxPage() {
           </div>
         </section>
 
+        {/* 3-1. 총급여별 결정세액·공제 효과 */}
+        <section>
+          <h2 className="g-h2">총급여별 결정세액과 공제 1건의 실제 효과</h2>
+          <p className="g-p">
+            같은 공제라도 소득에 따라 돌려받는 금액이 다릅니다. 아래 표는 부양가족 없는 1인 근로자가 다른 공제 없이 연말정산할 때의 결정세액(지방소득세 포함)과, 공제 하나를 더했을 때 결정세액이 얼마나 줄어드는지를 계산기와 같은 함수로 구한 값입니다. 연금계좌는 세액공제, 체크카드는 소득공제라 줄어드는 방식이 다릅니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 640 }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={{ ...TH, textAlign: 'left' }}>총급여</th>
+                  <th scope="col" style={TH}>과세표준</th>
+                  <th scope="col" style={TH}>결정세액</th>
+                  <th scope="col" style={TH}>한계세율</th>
+                  <th scope="col" style={TH}>연금저축 600만</th>
+                  <th scope="col" style={TH}>+IRP 합계 900만</th>
+                  <th scope="col" style={TH}>체크카드 500만</th>
+                </tr>
+              </thead>
+              <tbody>
+                {GROSS_ROWS.map((r) => (
+                  <tr key={r.gross}>
+                    <th scope="row" style={{ ...TD, textAlign: 'left', fontWeight: 700 }}>{(r.gross / 10_000).toLocaleString('ko-KR')}만원</th>
+                    <td style={TD}>{won(r.base.taxBase)}</td>
+                    <td style={{ ...TD, fontWeight: 700 }}>{won(r.base.decidedTotal)}</td>
+                    <td style={TD}>{r.base.marginalRatePct}%</td>
+                    <td style={{ ...TD, color: 'var(--accent-ink)' }}>−{won(r.pension6)}</td>
+                    <td style={{ ...TD, color: 'var(--accent-ink)' }}>−{won(r.pension9)}</td>
+                    <td style={{ ...TD, color: 'var(--accent-ink)' }}>−{won(r.check5)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">체크카드 열은 신용카드로 총급여 25% 문턱을 채운 뒤 체크카드를 500만원 더 쓴 경우(체크카드분 30% = 150만원 소득공제). 국민연금·건강·고용보험료는 총급여로 추정했고, 실제 원천징수액과 비교한 환급액은 계산기에 기납부세액을 넣어 확인하세요.</p>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            두 가지가 눈에 띕니다. 첫째, 총급여 {(R30.gross / 10_000).toLocaleString('ko-KR')}만원이면 결정세액이 {won(R30.base.decidedTotal)}뿐이라 연금저축에 600만원을 넣어도 세금은 {won(R30.pension6)}만 줄고 나머지 공제는 사라집니다. 세액공제는 낼 세금이 있어야 받을 수 있으므로, 세금만 놓고 보면 소득이 낮을수록 납입액을 결정세액 범위 안에서 맞추는 편이 효율적입니다(공제받지 못한 납입분도 노후 자금으로는 그대로 쌓입니다). 둘째, 체크카드 같은 소득공제는 한계세율에 비례해 총급여 {(R50.gross / 10_000).toLocaleString('ko-KR')}만원에서는 {won(R50.check5)}이 줄지만, 소득이 낮으면 산출세액과 함께 근로소득세액공제도 줄어 효과가 더 작아집니다.
+          </p>
+        </section>
+
         {/* 4. 신용카드 활용법 */}
         <section>
-          <h2 style={sectionTitle}>신용카드 소득공제 활용법 — 25% 문턱 전략</h2>
-          <p style={para}>
-            신용카드 등 사용액은 <strong style={strong}>총급여의 25%를 넘는 분부터</strong> 공제됩니다. 총급여 5,000만원이면 1,250만원까지는 공제가 없습니다. 이 문턱은 결제수단과 무관하게 채워집니다.
+          <h2 className="g-h2">신용카드 소득공제 활용법 — 25% 문턱 전략</h2>
+          <p className="g-p">
+            신용카드 등 사용액은 <strong>총급여의 25%를 넘는 분부터</strong> 공제됩니다. 총급여 5,000만원이면 1,250만원까지는 공제가 없습니다. 이 문턱은 결제수단과 무관하게 채워집니다.
           </p>
-          <p style={{ ...para, marginBottom: 0 }}>
-            그래서 <strong style={strong}>문턱(25%)까지는 혜택 큰 신용카드(공제율 15%)</strong>로 쓰고, <strong style={strong}>초과분은 공제율 높은 체크카드·현금영수증(30%)이나 전통시장·대중교통(40%)</strong>으로 채우는 편이 유리합니다. 전통시장·대중교통은 추가 한도가 별도로 있어 공제가 더 늘 수 있습니다.
+          <p className="g-p">
+            그래서 <strong>문턱(25%)까지는 혜택 큰 신용카드(공제율 15%)</strong>로 쓰고, <strong>초과분은 공제율 높은 체크카드·현금영수증(30%)이나 전통시장·대중교통(40%)</strong>으로 채우는 편이 유리합니다.
+          </p>
+          <p className="g-p">
+            공제액에는 기본한도({man(CARD_LIMIT_LOW)}원, 총급여 {CARD_CUT} 초과 {man(CARD_LIMIT_HIGH)}원, 자녀 가산 별도)가 있고, 전통시장·대중교통 공제분도 이 한도를 먼저 채웁니다. 한도를 넘친 금액은 전통시장·대중교통 사용액의 {pct(CARD_RATE_MARKET)} 범위에서 최대 {man(CARD_EXTRA_LIMIT_LOW)}원({CARD_CUT} 초과 {man(CARD_EXTRA_LIMIT_HIGH)}원)까지 추가로 공제됩니다. 총급여 {CARD_CUT} 이하라면 도서·신문·공연·박물관·미술관·영화, 수영장·체력단련장 같은 문화체육 사용분의 {pct(CARD_RATE_CULTURE)}도 이 추가한도에 함께 들어가지만, 이 계산기는 문화체육 사용액을 따로 입력받지 않아 반영하지 않습니다. 예로 총급여 {man(CARD_EX.gross)}원인 사람이 신용카드 {man(CARD_EX.creditCard)}원으로 문턱을 채우고 체크카드 {man(CARD_EX.checkCash)}원을 더 쓰면 소득공제는 {man(CARD_EX_NO_MARKET)}원입니다. 같은 사람이 전통시장·대중교통에도 {man(CARD_EX.marketTransit)}원을 썼다면 기본한도 {man(CARD_LIMIT_LOW)}원을 넘친 {man(CARD_EX_EXTRA)}원이 추가한도로 인정돼 소득공제가 {man(CARD_EX_DED)}원으로 늘어납니다.
           </p>
         </section>
 
         {/* 5. 맞벌이·몰아주기 vs 표준 */}
         <section>
-          <h2 style={sectionTitle}>맞벌이 몰아주기와 표준세액공제 13만원 비교</h2>
-          <p style={para}>
-            맞벌이 부부는 <strong style={strong}>의료비</strong>(총급여 3% 초과분만 공제)는 문턱이 낮은 소득이 적은 배우자에게, 효과는 한계세율이 높은 배우자에게서 큽니다. 부양가족 기본공제는 한 명에게만 적용되므로, 두 조합을 모두 넣어 결정세액 합계가 작은 쪽을 고릅니다.
+          <h2 className="g-h2">맞벌이 몰아주기와 표준세액공제 13만원 비교</h2>
+          <p className="g-p">
+            맞벌이 부부가 항목별로 누구에게 모을지의 원칙은 아래 FAQ에 정리했고, 여기서는 의료비 문턱 차이를 숫자로만 봅니다. 같은 의료비 300만원이라도 총급여 7,000만원인 배우자가 공제받으면 문턱 210만원을 넘는 90만원만 대상이라 세금이 {won(MED70)} 줄지만, 총급여 4,000만원인 배우자는 문턱이 120만원이라 {won(MED40)} 줄어듭니다(지방소득세 포함). 다만 자녀 의료비·교육비는 그 자녀를 기본공제받는 쪽만 공제받을 수 있으니, 부양가족을 누구에게 올릴지부터 정한 뒤 두 조합을 계산기로 각각 돌려 결정세액 합계가 작은 쪽을 고르세요.
           </p>
-          <p style={{ ...para, marginBottom: 0 }}>
-            한편 의료비·교육비·기부금·월세 등 특별세액공제 합계가 <strong style={strong}>13만원에 못 미치면 표준세액공제 13만원</strong>이 자동 적용됩니다. 공제할 항목이 거의 없는 사회초년생은 보통 표준 13만원이 적용되니, 굳이 영수증을 모으기보다 연금계좌처럼 효과 큰 공제에 집중하는 편이 낫습니다.
+          <p className="g-p">
+            한편 <strong>표준세액공제 13만원</strong>은 건강·고용보험료 소득공제와 의료비·교육비·기부금·월세 등 특별·월세 세액공제를 하나도 받지 않을 때만 적용되는 택일 항목입니다. 급여가 낮고 공제할 항목이 거의 없는 사회초년생은 표준 13만원이 유리한 경우가 많으니, 굳이 영수증을 모으기보다 연금계좌처럼 효과 큰 공제에 집중하는 편이 낫습니다.
           </p>
         </section>
 
         {/* 6. 막판 절세 체크리스트 */}
         <section>
-          <h2 style={sectionTitle}>환급 늘리는 막판 절세 체크리스트</h2>
+          <h2 className="g-h2">환급 늘리는 막판 절세 체크리스트</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               ['연금저축·IRP 추가 납입', '연 900만원 한도까지. 12월 말 추가 납입분도 당해 공제(15·12%).'],
@@ -211,7 +311,7 @@ export default function YearEndTaxPage() {
               ['의료비 영수증 합산', '안경·렌즈·산후조리원 등 누락분 합산해 3% 문턱 초과 여부 확인.'],
               ['기부금 영수증 챙기기', '정치자금·종교·지정기부금 영수증 확보(1천만 초과분 30%).'],
             ].map(([k, v], i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' }}>{k}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{v}</p>
               </div>
@@ -221,9 +321,9 @@ export default function YearEndTaxPage() {
 
         {/* 7. 홈택스와 다른 이유 */}
         <section>
-          <h2 style={sectionTitle}>이 계산기와 홈택스가 다른 이유</h2>
-          <p style={{ ...para, marginBottom: 0 }}>
-            이 도구는 신용카드·연금계좌·의료비·교육비·기부금·월세 등 <strong style={strong}>핵심 공제만</strong> 반영한 간이 추정입니다. 난임·중증질환 의료비 가중, 중소기업 취업자 감면, 주택자금(전세·주택담보 이자)공제, 회사별 비과세 항목, 실제 원천징수된 기납부세액 차이는 반영하지 않아 실제 결과와 차이가 납니다. 기납부세액을 비우면 의무공제만 반영한 원천징수 추정치를 쓰므로, 원천징수영수증의 실제 결정세액을 입력하면 정확도가 올라갑니다. 확정 금액은 국세청 홈택스 연말정산 간소화·모의계산으로 확인하세요.
+          <h2 className="g-h2">이 계산기와 홈택스가 다른 이유</h2>
+          <p className="g-p">
+            이 도구는 신용카드·연금계좌·의료비·교육비·기부금·월세 등 <strong>핵심 공제만</strong> 반영한 간이 추정입니다. 난임시술비({pct(MEDICAL_RATE_INFERTILITY)})·미숙아·선천성이상아({pct(MEDICAL_RATE_PREMATURE)}) 의료비의 높은 공제율, 중소기업 취업자 감면, 주택자금(전세·주택담보 이자)공제, 회사별 비과세 항목, 실제 원천징수된 기납부세액 차이는 반영하지 않아 실제 결과와 차이가 납니다. 기납부세액을 비우면 의무공제만 반영한 원천징수 추정치를 쓰므로, 급여명세서의 월별 소득세를 1년치 더한 실제 기납부세액(원천징수 합계)을 입력하면 정확도가 올라갑니다. 확정 금액은 국세청 홈택스 연말정산 간소화·모의계산으로 확인하세요.
           </p>
         </section>
 
@@ -234,7 +334,7 @@ export default function YearEndTaxPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/salary', icon: '💰', name: '연봉 실수령액 계산기', desc: '매달 떼이는 세금·4대보험·세후 월급' },
@@ -248,7 +348,7 @@ export default function YearEndTaxPage() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   background: 'var(--bg2)', border: '1px solid var(--border)',
-                  borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                  borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
                 }}
               >
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
@@ -262,6 +362,6 @@ export default function YearEndTaxPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -11,11 +11,11 @@ export const MAX_INPUT_BYTES = 50 * 1024  /* 50KB */
    메서드 색상
    ───────────────────────────────────────────── */
 export const METHOD_COLORS: Record<Method, string> = {
-  GET:     '#0D9488',
-  POST:    '#0891B2',
-  PUT:     '#D97706',
-  DELETE:  '#DB2777',
-  PATCH:   '#9B59B6',
+  GET:     'var(--teal-600)',
+  POST:    'var(--cyan-600)',
+  PUT:     'var(--amber-600)',
+  DELETE:  'var(--pink-600)',
+  PATCH:   'var(--amethyst)',
   HEAD:    '#888888',
   OPTIONS: '#888888',
 }
@@ -215,6 +215,31 @@ export function tokenize(input: string): string[] {
 
     inToken = true
 
+    /* ANSI-C 따옴표 $'…' — Chrome "Copy as cURL (bash)"가 ' · ! · 개행이 든 값에 사용 */
+    if (c === '$' && text[i + 1] === "'") {
+      i += 2
+      while (i < text.length && text[i] !== "'") {
+        /* 연속된 \xHH는 바이트열(UTF-8)로 모아서 해석 — bash와 같게 */
+        const hexBytes = /^(?:\\x[0-9a-fA-F]{2})+/.exec(text.slice(i, i + 400))
+        if (hexBytes) {
+          const bytes = hexBytes[0].split('\\x').filter(Boolean).map((h) => parseInt(h, 16))
+          cur += new TextDecoder().decode(new Uint8Array(bytes))
+          i += hexBytes[0].length
+          continue
+        }
+        if (text[i] === '\\' && i + 1 < text.length) {
+          const [str, len] = readAnsiCEscape(text, i + 1)
+          cur += str
+          i += 1 + len
+        } else {
+          cur += text[i]
+          i++
+        }
+      }
+      i++  /* 닫는 ' 스킵 */
+      continue
+    }
+
     /* 단일 따옴표 — 그대로 (이스케이프 X) */
     if (c === "'") {
       i++
@@ -266,6 +291,38 @@ export function tokenize(input: string): string[] {
   return tokens
 }
 
+/* $'…' 안의 백슬래시 이스케이프 1개 해석 — [해석된 문자열, 소비한 글자 수(백슬래시 뒤부터)] */
+function readAnsiCEscape(text: string, p: number): [string, number] {
+  const ch = text[p]
+  const SIMPLE: Record<string, string> = {
+    n: '\n', r: '\r', t: '\t', a: '\x07', b: '\b', e: '\x1b', E: '\x1b',
+    f: '\f', v: '\v', '\\': '\\', "'": "'", '"': '"', '?': '?',
+  }
+  if (ch in SIMPLE) return [SIMPLE[ch], 1]
+  const hexRun = (start: number, max: number) => {
+    let j = start
+    while (j < text.length && j - start < max && /[0-9a-fA-F]/.test(text[j])) j++
+    return text.slice(start, j)
+  }
+  const fromCode = (code: number) => {
+    try { return String.fromCodePoint(code) } catch { return '' }
+  }
+  if (ch === 'x' || ch === 'u' || ch === 'U') {
+    const hex = hexRun(p + 1, ch === 'x' ? 2 : ch === 'u' ? 4 : 8)
+    if (!hex) return ['\\' + ch, 1]
+    return [fromCode(parseInt(hex, 16)), 1 + hex.length]
+  }
+  if (/[0-7]/.test(ch)) {
+    let j = p
+    while (j < text.length && j - p < 3 && /[0-7]/.test(text[j])) j++
+    return [fromCode(parseInt(text.slice(p, j), 8)), j - p]
+  }
+  if (ch === 'c' && p + 1 < text.length) {
+    return [String.fromCharCode(text.charCodeAt(p + 1) & 0x1f), 2]
+  }
+  return ['\\' + ch, 1]  /* 알 수 없는 이스케이프 → 그대로 */
+}
+
 /* ═════════════════════════════════════════════
    파서
    ═════════════════════════════════════════════ */
@@ -302,14 +359,36 @@ export interface ParseError {
 }
 
 const UNSUPPORTED_FLAGS = new Set([
-  '--cert', '--key', '--cacert', '--cert-type',
-  '--proxy', '--proxy-user', '--socks5', '--socks4',
+  '--cert', '-E', '--key', '--cacert', '--cert-type',
+  '--proxy', '-x', '--proxy-user', '--socks5', '--socks4',
   '-T', '--upload-file',
-  '-o', '--output', '-O', '--remote-name',
+  '-o', '--output', '-O', '--remote-name', '-J', '--remote-header-name',
   '-r', '--range', '-C', '--continue-at',
   '--resolve', '--connect-to',
   '--no-buffer', '--limit-rate',
 ])
+
+/* 짧은 옵션 결합(-sSL)·붙여 쓴 값(-XPUT, -H'…') 분해용 */
+const SHORT_NO_ARG = new Set('sSLkviIGnfOqRNgjl0123456JZBapM#'.split(''))
+const SHORT_WITH_ARG = new Set('XHdubAeFoTrCExmwDcKyYzUQPt'.split(''))
+
+function expandShortCluster(t: string): string[] | null {
+  if (t.startsWith('--') || t.length <= 2) return null
+  const out: string[] = []
+  const chars = t.slice(1)
+  for (let k = 0; k < chars.length; k++) {
+    const ch = chars[k]
+    if (SHORT_WITH_ARG.has(ch)) {
+      out.push('-' + ch)
+      const rest = chars.slice(k + 1)
+      if (rest) out.push(rest)
+      return out
+    }
+    if (!SHORT_NO_ARG.has(ch)) return null  /* 모르는 글자 → 분해하지 않음 */
+    out.push('-' + ch)
+  }
+  return out
+}
 
 export function parseCurl(input: string): ParsedCurl | ParseError {
   if (!input.trim()) {
@@ -339,6 +418,12 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
   const flags = { insecure: false, followRedirects: false, compressed: false, get: false, verbose: false }
   const unsupportedFlags: string[] = []
   const warnings: string[] = []
+  let headMode = false
+  let jsonMode = false
+  /* -d @파일처럼 본문을 파일에서 읽는 옵션 — 본문은 코드에 못 옮기지만 curl은 POST로 보낸다 */
+  let bodyFromFile = false
+  /* 도구가 추정해 붙인 Content-Type (-G로 본문이 쿼리로 옮겨가면 다시 뺀다) */
+  let autoContentType = false
 
   let i = 0
   while (i < tokens.length) {
@@ -350,11 +435,19 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
       continue
     }
 
+    /* -sSL → -s -S -L, -XPUT → -X PUT (값 토큰은 next()로 소비되므로 여기 오지 않음) */
+    const expanded = expandShortCluster(t)
+    if (expanded) {
+      tokens.splice(i, 1, ...expanded)
+      continue
+    }
+
     /* 미지원 옵션 */
     if (UNSUPPORTED_FLAGS.has(t)) {
       unsupportedFlags.push(t)
       /* 일부는 다음 토큰을 값으로 가짐 → 스킵 */
-      if (['--cert', '--key', '--cacert', '--cert-type', '--proxy', '--proxy-user',
+      if (['--cert', '-E', '--key', '--cacert', '--cert-type', '--proxy', '-x', '--proxy-user',
+            '--socks5', '--socks4',  /* host[:port] 값을 받음 — 건너뛰지 않으면 URL로 오인 */
             '-T', '--upload-file', '-o', '--output', '-r', '--range',
             '-C', '--continue-at', '--resolve', '--connect-to', '--limit-rate'].includes(t)) {
         i += 2
@@ -403,10 +496,11 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         i++
         break
       }
-      case '-d': case '--data': {
+      case '-d': case '--data': case '--data-ascii': {
         const v = next()
         if (v.startsWith('@')) {
           warnings.push(`-d @${v.slice(1)} (파일 업로드) — 미지원, 직접 처리 필요`)
+          bodyFromFile = true
         } else {
           dataItems.push({ value: v, mode: 'data' })
         }
@@ -422,6 +516,7 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         const v = next()
         if (v.startsWith('@')) {
           warnings.push(`--data-binary @${v.slice(1)} (파일 업로드) — 미지원`)
+          bodyFromFile = true
         } else {
           dataItems.push({ value: v, mode: 'data-binary' })
         }
@@ -433,6 +528,26 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         i++
         break
       }
+      case '--json': {
+        /* curl 7.82+: --data-binary + Content-Type/Accept: application/json */
+        const v = next()
+        if (v.startsWith('@')) {
+          warnings.push(`--json @${v.slice(1)} (파일 업로드) — 미지원`)
+          bodyFromFile = true
+        } else {
+          dataItems.push({ value: v, mode: 'data-binary' })
+        }
+        jsonMode = true
+        i++
+        break
+      }
+      case '--url': {
+        const v = next()
+        if (!url) url = v
+        i++
+        break
+      }
+      case '-I': case '--head':      headMode = true; i++; break
       case '-u': case '--user': {
         const v = next()
         const colonIdx = v.indexOf(':')
@@ -483,6 +598,7 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
       case '-S': case '--show-error': i++; break /* 무시 */
       case '-n': case '--netrc':     i++; break  /* 무시 */
       case '--no-progress-meter':    i++; break
+      case '-#': case '--progress-bar': i++; break  /* 진행 막대 표시 — 무시 */
       case '--http1.1': case '--http2': case '--http3': i++; break  /* HTTP 버전 — 무시 */
       default: {
         /* 알 수 없는 옵션 → 경고하고 스킵 (값 있으면 함께) */
@@ -495,6 +611,10 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
             warnings.push(`알 수 없는 옵션 ${optName}`)
             i++
           }
+        } else if (optName.length === 2 && SHORT_WITH_ARG.has(optName[1])) {
+          /* -m 10, -w '%{http_code}' 등 값을 받는 짧은 옵션 → 값까지 건너뜀 (URL로 오인 방지) */
+          warnings.push(`알 수 없는 짧은 옵션 ${optName} (값 함께 무시)`)
+          i += 2
         } else {
           warnings.push(`알 수 없는 짧은 옵션 ${optName}`)
           i++
@@ -502,6 +622,12 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         break
       }
     }
+  }
+
+  if (jsonMode) {
+    const has = (k: string) => headers.some((h) => h.key.toLowerCase() === k)
+    if (!has('content-type')) headers.push({ key: 'Content-Type', value: 'application/json' })
+    if (!has('accept')) headers.push({ key: 'Accept', value: 'application/json' })
   }
 
   if (!url) {
@@ -561,22 +687,30 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         bodyParsed = JSON.parse(singleBody)
         rawBody = singleBody
       } catch {
-        /* JSON 파싱 실패 → raw로 처리 */
+        /* JSON 파싱 실패 → raw로 처리 (본문이 코드에서 빠지지 않도록) */
+        bodyType = 'raw'
+        warnings.push('Content-Type은 JSON이지만 본문이 올바른 JSON이 아닙니다 — 본문을 원문 그대로 보내는 코드로 생성했습니다')
       }
     } else if (ct?.includes('application/x-www-form-urlencoded') || ct === null) {
       /* Content-Type이 명시 없을 때도 form-urlencoded로 추정 (curl 기본) */
       const looksLikeForm = /^[^\s={}[\]]+=[^&]*(&[^\s={}[\]]+=[^&]*)*$/.test(rawBody)
       if (looksLikeForm) {
         bodyType = 'urlencode'
+        let badPercent = false
+        const safeDecode = (v: string) => {
+          try { return decodeURIComponent(v) } catch { badPercent = true; return v }
+        }
         bodyForm = rawBody.split('&').map((kv) => {
           const eq = kv.indexOf('=')
           return eq >= 0
-            ? { key: kv.slice(0, eq), value: decodeURIComponent(kv.slice(eq + 1).replace(/\+/g, ' ')) }
+            ? { key: kv.slice(0, eq), value: safeDecode(kv.slice(eq + 1).replace(/\+/g, ' ')) }
             : { key: kv, value: '' }
         })
+        if (badPercent) warnings.push('본문에 잘못된 % 인코딩이 있어 해당 값은 원문 그대로 두었습니다 (예: 50% → 50%25로 써야 정확)')
         /* Content-Type 없으면 추가 */
         if (!ct) {
           headers.push({ key: 'Content-Type', value: 'application/x-www-form-urlencoded' })
+          autoContentType = true
         }
       } else {
         /* JSON 시도 */
@@ -585,7 +719,10 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
           if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
             bodyParsed = JSON.parse(trimmed)
             bodyType = 'json'
-            if (!ct) headers.push({ key: 'Content-Type', value: 'application/json' })
+            if (!ct) {
+              headers.push({ key: 'Content-Type', value: 'application/json' })
+              autoContentType = true
+            }
           } else {
             bodyType = 'raw'
           }
@@ -617,8 +754,9 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
 
   /* 메서드 자동 결정 */
   if (!method) {
-    if (flags.get) method = 'GET'
-    else if (rawBody || formItems.length > 0) method = 'POST'
+    if (headMode) method = 'HEAD'
+    else if (flags.get) method = 'GET'
+    else if (rawBody || formItems.length > 0 || bodyFromFile) method = 'POST'
     else method = 'GET'
   }
 
@@ -628,6 +766,13 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
     finalUrl = url + (url.includes('?') ? '&' : '?') + rawBody
     rawBody = ''
     bodyType = null
+    bodyParsed = undefined
+    bodyForm = undefined
+    /* 본문이 없어졌으니 도구가 추정해 붙인 Content-Type도 뺀다 (curl -G도 보내지 않음) */
+    if (autoContentType) {
+      const idx = headers.findIndex((h) => h.key.toLowerCase() === 'content-type')
+      if (idx >= 0) headers.splice(idx, 1)
+    }
   }
 
   /* URL 분해 */
@@ -685,12 +830,45 @@ function effectiveValue(h: ParsedHeader, opts: GenOpts): string {
   return h.value
 }
 
+/* Basic 인증 user:pass → Base64. btoa()는 Latin-1 밖 문자(한글 등)에서 예외 → UTF-8 바이트로 먼저 변환 (curl도 입력 바이트 그대로 인코딩) */
+function basicAuthB64(userPass: string): string {
+  let bin = ''
+  for (const b of new TextEncoder().encode(userPass)) bin += String.fromCharCode(b)
+  return btoa(bin)
+}
+
 function escapePyString(s: string): string {
   return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r')
 }
 
 function escapeGoString(s: string): string {
   return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r')
+}
+
+/* multipart는 각 런타임이 boundary를 붙인 Content-Type을 만들어야 함 → 사용자가 준 헤더는 제외 */
+function skipHeader(p: ParsedCurl, h: ParsedHeader): boolean {
+  return p.bodyType === 'multipart' && h.key.toLowerCase() === 'content-type'
+}
+
+/* JSON 값 → Python 리터럴 (문자열 안의 true/null 등은 건드리지 않음) */
+function toPyLiteral(v: unknown, level = 0): string {
+  const pad = '  '.repeat(level + 1)
+  const end = '  '.repeat(level)
+  if (v === null || v === undefined) return 'None'
+  if (v === true) return 'True'
+  if (v === false) return 'False'
+  if (typeof v === 'number') return Number.isFinite(v) ? JSON.stringify(v) : 'None'
+  if (typeof v === 'string') return JSON.stringify(v)  /* JSON 이스케이프는 Python 문자열 이스케이프와 호환 */
+  if (Array.isArray(v)) {
+    if (v.length === 0) return '[]'
+    return `[\n${v.map((x) => pad + toPyLiteral(x, level + 1)).join(',\n')}\n${end}]`
+  }
+  if (typeof v === 'object') {
+    const entries = Object.entries(v as Record<string, unknown>)
+    if (entries.length === 0) return '{}'
+    return `{\n${entries.map(([k, x]) => `${pad}${JSON.stringify(k)}: ${toPyLiteral(x, level + 1)}`).join(',\n')}\n${end}}`
+  }
+  return 'None'
 }
 
 /* ═════════════════════════════════════════════
@@ -701,11 +879,12 @@ export function generateFetch(p: ParsedCurl, opts: GenOpts): string {
   const headers: Record<string, string> = {}
 
   for (const h of p.headers) {
+    if (skipHeader(p, h)) continue
     headers[h.key] = effectiveValue(h, opts)
   }
   if (p.auth) {
     const userPass = `${p.auth.user}:${p.auth.password}`
-    const masked = opts.maskSensitive ? '***' : btoa(userPass)
+    const masked = opts.maskSensitive ? '***' : basicAuthB64(userPass)
     headers['Authorization'] = `Basic ${masked}`
   }
 
@@ -730,6 +909,9 @@ export function generateFetch(p: ParsedCurl, opts: GenOpts): string {
 
   const initBlock = init.join(',\n')
   const url = JSON.stringify(p.url)
+  /* HEAD 응답에는 본문이 없어 .json()이 실패 → 상태·헤더 출력 */
+  const isHead = p.method === 'HEAD'
+  const readRes = isHead ? '{ status: response.status, headers: Object.fromEntries(response.headers) }' : 'await response.json()'
 
   if (p.bodyType === 'multipart' && p.bodyMultipart) {
     lines.push(`const formData = new FormData()`)
@@ -748,19 +930,21 @@ export function generateFetch(p: ParsedCurl, opts: GenOpts): string {
       lines.push(`try {`)
       lines.push(`  const response = await fetch(${url}, {\n${initBlock}\n  })`)
       lines.push(`  if (!response.ok) throw new Error(\`HTTP \${response.status}\`)`)
-      lines.push(`  const data = await response.json()`)
+      lines.push(`  const data = ${readRes}`)
       lines.push(`  console.log(data)`)
       lines.push(`} catch (err) {`)
       lines.push(`  console.error('Fetch failed:', err)`)
       lines.push(`}`)
     } else {
       lines.push(`const response = await fetch(${url}, {\n${initBlock}\n  })`)
-      lines.push(`const data = await response.json()`)
+      lines.push(`const data = ${readRes}`)
       lines.push(`console.log(data)`)
     }
   } else {
     lines.push(`fetch(${url}, {\n${initBlock}\n  })`)
-    lines.push(`  .then(response => response.json())`)
+    lines.push(isHead
+      ? `  .then(response => ({ status: response.status, headers: Object.fromEntries(response.headers) }))`
+      : `  .then(response => response.json())`)
     if (opts.tryCatch) {
       lines.push(`  .then(data => console.log(data))`)
       lines.push(`  .catch(err => console.error('Fetch failed:', err))`)
@@ -783,7 +967,7 @@ export function generateAxios(p: ParsedCurl, opts: GenOpts): string {
   const headers: Record<string, string> = {}
   for (const h of p.headers) {
     /* axios가 multipart에서 Content-Type 자동 처리 → 제거 */
-    if (p.bodyType === 'multipart' && h.key.toLowerCase() === 'content-type') continue
+    if (skipHeader(p, h)) continue
     headers[h.key] = effectiveValue(h, opts)
   }
 
@@ -865,7 +1049,7 @@ export function generatePython(p: ParsedCurl, opts: GenOpts): string {
   /* headers */
   const headers: Record<string, string> = {}
   for (const h of p.headers) {
-    if (p.bodyType === 'multipart' && h.key.toLowerCase() === 'content-type') continue
+    if (skipHeader(p, h)) continue
     headers[h.key] = effectiveValue(h, opts)
   }
   if (Object.keys(headers).length > 0) {
@@ -884,9 +1068,7 @@ export function generatePython(p: ParsedCurl, opts: GenOpts): string {
 
   /* body */
   if (p.bodyType === 'json' && p.bodyParsed !== undefined) {
-    const jsonStr = JSON.stringify(p.bodyParsed, null, 2).replace(/\n/g, '\n    ')
-    /* JSON → Python dict (간이) — true/false/null만 변환 */
-    const pyDict = jsonStr.replace(/\btrue\b/g, 'True').replace(/\bfalse\b/g, 'False').replace(/\bnull\b/g, 'None')
+    const pyDict = toPyLiteral(p.bodyParsed).replace(/\n/g, '\n    ')
     args.push(`json=${pyDict}`)
   } else if (p.bodyType === 'urlencode' && p.bodyForm) {
     const formStr = p.bodyForm.map((f) => `        '${escapePyString(f.key)}': '${escapePyString(f.value)}'`).join(',\n')
@@ -913,13 +1095,13 @@ export function generatePython(p: ParsedCurl, opts: GenOpts): string {
     lines.push(`try:`)
     lines.push(`    response = ${requestCall.replace(/^/gm, '    ').slice(4)}`)
     lines.push(`    response.raise_for_status()`)
-    lines.push(`    data = response.json()`)
+    lines.push(`    data = ${p.method === 'HEAD' ? 'dict(response.headers)' : 'response.json()'}`)
     lines.push(`    print(data)`)
     lines.push(`except requests.RequestException as err:`)
     lines.push(`    print(f'Request failed: {err}')`)
   } else {
     lines.push(`response = ${requestCall}`)
-    lines.push(`data = response.json()`)
+    lines.push(`data = ${p.method === 'HEAD' ? 'dict(response.headers)' : 'response.json()'}`)
     lines.push(`print(data)`)
   }
 
@@ -937,16 +1119,22 @@ export function generateNodeHttp(p: ParsedCurl, opts: GenOpts): string {
     proto = u.protocol === 'http:' ? 'http' : 'https'
   } catch {}
 
+  const isMultipart = p.bodyType === 'multipart' && !!p.bodyMultipart
   lines.push(`const ${proto} = require('${proto}')`)
+  if (isMultipart) {
+    lines.push(`const FormData = require('form-data') /* npm i form-data */`)
+    if (p.bodyMultipart!.some((m) => m.isFile)) lines.push(`const fs = require('fs')`)
+  }
   lines.push('')
 
   const headers: Record<string, string> = {}
   for (const h of p.headers) {
+    if (skipHeader(p, h)) continue
     headers[h.key] = effectiveValue(h, opts)
   }
   if (p.auth) {
     const userPass = `${p.auth.user}:${p.auth.password}`
-    const auth64 = opts.maskSensitive ? '***' : btoa(userPass)
+    const auth64 = opts.maskSensitive ? '***' : basicAuthB64(userPass)
     headers['Authorization'] = `Basic ${auth64}`
   }
 
@@ -958,21 +1146,22 @@ export function generateNodeHttp(p: ParsedCurl, opts: GenOpts): string {
     bodyVar = `const body = new URLSearchParams({\n${formObj}\n}).toString()`
   } else if (p.bodyType === 'raw' && p.rawBody) {
     bodyVar = `const body = ${JSON.stringify(p.rawBody)}`
-  } else if (p.bodyType === 'multipart') {
-    bodyVar = `/* multipart는 'form-data' 패키지 사용 권장: npm i form-data */`
+  } else if (isMultipart) {
+    const appends = p.bodyMultipart!.map((m) => m.isFile
+      ? `form.append(${JSON.stringify(m.name)}, fs.createReadStream(${JSON.stringify(m.filePath ?? '')}))`
+      : `form.append(${JSON.stringify(m.name)}, ${JSON.stringify(m.value)})`)
+    bodyVar = [`const form = new FormData()`, ...appends].join('\n')
   }
 
   if (bodyVar) {
     lines.push(bodyVar)
-    if (p.bodyType !== 'multipart') {
-      headers['Content-Length'] = 'Buffer.byteLength(body)' as unknown as string
-    }
     lines.push('')
   }
 
-  const headersJson = Object.entries(headers)
-    .map(([k, v]) => k === 'Content-Length' ? `    'Content-Length': Buffer.byteLength(body)` : `    ${JSON.stringify(k)}: ${JSON.stringify(v)}`)
-    .join(',\n')
+  const headerLines: string[] = []
+  if (isMultipart) headerLines.push(`    ...form.getHeaders()`)  /* boundary 포함 Content-Type */
+  for (const [k, v] of Object.entries(headers)) headerLines.push(`    ${JSON.stringify(k)}: ${JSON.stringify(v)}`)
+  if (bodyVar && !isMultipart) headerLines.push(`    'Content-Length': Buffer.byteLength(body)`)
 
   lines.push(`const url = new URL(${JSON.stringify(p.url)})`)
   lines.push(`const options = {`)
@@ -980,25 +1169,33 @@ export function generateNodeHttp(p: ParsedCurl, opts: GenOpts): string {
   lines.push(`  port: url.port || ${proto === 'https' ? 443 : 80},`)
   lines.push(`  path: url.pathname + url.search,`)
   lines.push(`  method: ${JSON.stringify(p.method)},`)
-  lines.push(`  headers: {\n${headersJson}\n  }`)
+  lines.push(`  headers: {\n${headerLines.join(',\n')}\n  }`)
   lines.push(`}`)
   lines.push('')
   lines.push(`const req = ${proto}.request(options, (res) => {`)
-  lines.push(`  let chunks = []`)
-  lines.push(`  res.on('data', (chunk) => chunks.push(chunk))`)
-  lines.push(`  res.on('end', () => {`)
-  lines.push(`    const data = Buffer.concat(chunks).toString()`)
-  lines.push(`    console.log(JSON.parse(data))`)
-  lines.push(`  })`)
+  if (p.method === 'HEAD') {
+    /* HEAD 응답에는 본문이 없음 → 상태·헤더 출력 */
+    lines.push(`  console.log(res.statusCode, res.headers)`)
+    lines.push(`  res.resume()`)
+  } else {
+    lines.push(`  let chunks = []`)
+    lines.push(`  res.on('data', (chunk) => chunks.push(chunk))`)
+    lines.push(`  res.on('end', () => {`)
+    lines.push(`    const data = Buffer.concat(chunks).toString()`)
+    lines.push(`    console.log(JSON.parse(data))`)
+    lines.push(`  })`)
+  }
   lines.push(`})`)
   if (opts.tryCatch) {
     lines.push(``)
     lines.push(`req.on('error', (err) => console.error('Request failed:', err))`)
   }
-  if (bodyVar && p.bodyType !== 'multipart') {
-    lines.push(`req.write(body)`)
+  if (isMultipart) {
+    lines.push(`form.pipe(req) /* 전송 후 자동으로 req.end() */`)
+  } else {
+    if (bodyVar) lines.push(`req.write(body)`)
+    lines.push(`req.end()`)
   }
-  lines.push(`req.end()`)
 
   return lines.join('\n')
 }
@@ -1012,20 +1209,48 @@ export function generateGo(p: ParsedCurl, opts: GenOpts): string {
   lines.push('')
 
   const imports = ['fmt', 'io', 'net/http']
+  const isMultipart = p.bodyType === 'multipart' && !!p.bodyMultipart
   let bodyVar = ''
   if (p.bodyType === 'json' && p.bodyParsed !== undefined) {
     imports.push('bytes')
-    bodyVar = `body := bytes.NewReader([]byte(\`${JSON.stringify(p.bodyParsed, null, 2)}\`))`
+    const json = JSON.stringify(p.bodyParsed, null, 2)
+    /* 백틱이 들어 있으면 raw string을 쓸 수 없음 → 일반 문자열 */
+    bodyVar = json.includes('`')
+      ? `body := bytes.NewReader([]byte("${escapeGoString(json)}"))`
+      : `body := bytes.NewReader([]byte(\`${json}\`))`
   } else if (p.bodyType === 'urlencode' && p.bodyForm) {
     imports.push('strings', 'net/url')
-    const formAssigns = p.bodyForm.map((f) => `    data.Set("${escapeGoString(f.key)}", "${escapeGoString(f.value)}")`).join('\n')
-    bodyVar = `data := url.Values{}\n${formAssigns}\n  body := strings.NewReader(data.Encode())`
+    const formAssigns = p.bodyForm.map((f) => `form.Set("${escapeGoString(f.key)}", "${escapeGoString(f.value)}")`).join('\n')
+    /* 변수명 form — 아래 응답 본문 변수 data와 겹치지 않게 */
+    bodyVar = `form := url.Values{}\n${formAssigns}\nbody := strings.NewReader(form.Encode())`
   } else if (p.bodyType === 'raw' && p.rawBody) {
     imports.push('strings')
     bodyVar = `body := strings.NewReader("${escapeGoString(p.rawBody)}")`
-  } else if (p.bodyType === 'multipart') {
-    imports.push('mime/multipart', 'os')
-    bodyVar = `/* multipart 처리는 mime/multipart 패키지 사용 — 이 코드는 단순 예시입니다 */`
+  } else if (isMultipart) {
+    imports.push('bytes', 'mime/multipart')
+    const parts: string[] = [`body := &bytes.Buffer{}`, `mw := multipart.NewWriter(body)`]
+    let fileIdx = 0
+    for (const m of p.bodyMultipart!) {
+      if (m.isFile) {
+        if (fileIdx === 0) imports.push('os')
+        fileIdx++
+        const fv = `f${fileIdx}`
+        const path = m.filePath ?? ''
+        const base = path.split(/[\\/]/).pop() || path
+        parts.push(
+          `${fv}, err := os.Open("${escapeGoString(path)}")`,
+          `if err != nil {`, `  fmt.Println("Error:", err)`, `  return`, `}`,
+          `defer ${fv}.Close()`,
+          `${fv}w, err := mw.CreateFormFile("${escapeGoString(m.name)}", "${escapeGoString(base)}")`,
+          `if err != nil {`, `  fmt.Println("Error:", err)`, `  return`, `}`,
+          `io.Copy(${fv}w, ${fv})`,
+        )
+      } else {
+        parts.push(`mw.WriteField("${escapeGoString(m.name)}", "${escapeGoString(m.value)}")`)
+      }
+    }
+    parts.push(`mw.Close()`)
+    bodyVar = parts.join('\n')
   }
 
   if (imports.length === 1) {
@@ -1044,14 +1269,16 @@ export function generateGo(p: ParsedCurl, opts: GenOpts): string {
     lines.push(``)
   }
 
-  const bodyArg = bodyVar && p.bodyType !== 'multipart' ? 'body' : 'nil'
+  const bodyArg = bodyVar ? 'body' : 'nil'
   lines.push(`  req, err := http.NewRequest("${p.method}", "${escapeGoString(p.url)}", ${bodyArg})`)
   lines.push(`  if err != nil {`)
   lines.push(`    fmt.Println("Error:", err)`)
   lines.push(`    return`)
   lines.push(`  }`)
 
+  if (isMultipart) lines.push(`  req.Header.Set("Content-Type", mw.FormDataContentType())`)
   for (const h of p.headers) {
+    if (skipHeader(p, h)) continue
     const v = effectiveValue(h, opts)
     lines.push(`  req.Header.Set("${escapeGoString(h.key)}", "${escapeGoString(v)}")`)
   }

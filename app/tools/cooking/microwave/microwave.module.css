@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -23,7 +23,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -33,13 +33,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -56,11 +56,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -105,13 +105,13 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -123,13 +123,13 @@
 .hero {
   background: linear-gradient(135deg, rgba(232, 151, 87, 0.12) 0%, rgba(217, 119, 6, 0.06) 100%);
   border: 1px solid rgba(232, 151, 87, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 6vw, 40px);
   font-weight: 800;
   color: var(--text);
@@ -147,14 +147,14 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 12px 28px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
-  .playBtn:hover { background: #D97706; }
+  .playBtn:hover { background: var(--amber-600); }
 }
 .playBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -162,12 +162,12 @@
   background: var(--bg3);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 12px 24px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin: 14px 4px 0;
 }@media (hover: hover) {
   .pauseBtn:hover, .resetBtn:hover { border-color: var(--accent); }
@@ -189,7 +189,7 @@
   font-size: 12px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .barTrack {
   height: 28px;
@@ -208,7 +208,7 @@
   transition: width 0.3s ease;
 }
 .barValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 800;
   color: #ffffff;
@@ -232,7 +232,7 @@
   border-radius: 10px;
   padding: 12px 8px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .foodBtn:hover { border-color: var(--accent); }
 }
@@ -245,7 +245,7 @@
   border-color: rgba(219, 39, 119, 0.5);
 }@media (hover: hover) {
   .foodBtnDanger:hover {
-  border-color: #DB2777;
+  border-color: var(--pink-600);
 }
 }
 .foodEmoji { font-size: 24px; }
@@ -258,11 +258,11 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.helpText strong { color: var(--text); font-family: var(--font-sans); }
 
 .tipBox {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
   color: var(--text);
@@ -273,11 +273,11 @@
 
 .warnNote {
   background: rgba(217, 119, 6, 0.08);
-  border-left: 3px solid #D97706;
+  border-left: 3px solid var(--amber-600);
   border-radius: 4px;
   padding: 8px 12px;
   font-size: 13px;
-  color: #D97706;
+  color: var(--amber-600);
   line-height: 1.7;
 }
 
@@ -290,11 +290,11 @@
 }
 .detailTable td:nth-child(2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.cellMono { font-family: var(--font-sans); font-weight: 600; }
 
 .tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tableScroll table { min-width: 320px; }
@@ -303,7 +303,7 @@
 .timerHero {
   background: linear-gradient(135deg, rgba(219, 39, 119, 0.06) 0%, rgba(232, 151, 87, 0.04) 100%);
   border: 1px solid rgba(219, 39, 119, 0.2);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 30px 22px;
   display: flex;
   flex-direction: column;
@@ -340,7 +340,7 @@
   gap: 8px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .vesselEmoji { font-size: 18px; }
 .vesselHead strong { font-weight: 700; }
@@ -367,7 +367,7 @@
   margin: 0 0 4px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .tipHead strong { font-weight: 700; }
 .tipDesc {
@@ -382,7 +382,7 @@
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;
@@ -400,29 +400,29 @@
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 .warnCardStrong {
   background: rgba(219, 39, 119, 0.08);
   border: 1px solid rgba(219, 39, 119, 0.4);
-  border-left: 4px solid #DB2777;
-  border-radius: 12px;
+  border-left: 4px solid var(--pink-600);
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
 }
-.warnCardStrong strong { display: block; color: #DB2777; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCardStrong strong { display: block; color: var(--pink-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCardStrong p { margin: 0; color: var(--text); line-height: 1.75; }
 
 /* 면책 */
 .disclaimer {
   background: rgba(232, 151, 87, 0.05);
   border: 1px solid rgba(232, 151, 87, 0.2);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -432,7 +432,7 @@
   display: block;
   color: var(--accent);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;
@@ -479,11 +479,11 @@
 .compactSelect {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 10px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
   min-width: 0;
@@ -494,9 +494,9 @@
   width: 64px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 10px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);

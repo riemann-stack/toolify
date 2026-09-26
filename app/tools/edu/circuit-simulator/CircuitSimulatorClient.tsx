@@ -71,16 +71,16 @@ function CircuitDiagram({ voltage, type, perResistor, ledDropV = 0 }: { voltage:
           <g transform={`translate(0, ${(bottomY - wireY) / 2})`}>
             <line x1="-12" y1="-12" x2="-12" y2="12" stroke="var(--text)" strokeWidth="3" />
             <line x1="-6"  y1="-6"  x2="-6"  y2="6"  stroke="var(--text)" strokeWidth="2" />
-            <text x="-25" y="0" fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
-            <text x="-25" y={bottomY - wireY - 30} fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>−</text>
+            <text x="-25" y="0" fontSize="13" fill="var(--teal-700)" textAnchor="middle" fontWeight={800}>+</text>
+            <text x="-25" y={bottomY - wireY - 30} fontSize="13" fill="var(--muted)" textAnchor="middle" fontWeight={800}>−</text>
           </g>
         </g>
         {/* 전압 라벨 — 그룹 안 x=−50은 viewBox 왼쪽 밖(절대 −20)이라 보이지 않았다 */}
-        <text x={padX - 30} y={wireY - 45} fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
+        <text x={padX - 30} y={wireY - 45} fontSize="13" fill="var(--teal-700)" textAnchor="middle" fontWeight={800}>{fmtV(voltage)}</text>
 
         {/* 상단 전선 */}
         <line x1={padX - 30} y1={wireY - 30} x2={padX - 30 + 30} y2={wireY - 30} stroke="var(--text)" strokeWidth="2" />
-        <line className={s.currentLine} x1={padX - 30} y1={wireY - 30} x2={W - padX + 30} y2={wireY - 30} stroke="#0D9488" strokeWidth="2.5" />
+        <line className={s.currentLine} x1={padX - 30} y1={wireY - 30} x2={W - padX + 30} y2={wireY - 30} stroke="var(--teal-600)" strokeWidth="2.5" />
         <line x1={padX - 30} y1={wireY - 30} x2={padX - 30} y2={wireY - 30} stroke="var(--text)" strokeWidth="2" />
         {/* 메인 가로선 */}
         <line x1={padX} y1={wireY - 30} x2={W - padX} y2={wireY - 30} stroke="var(--text)" strokeWidth="2" />
@@ -93,8 +93,8 @@ function CircuitDiagram({ voltage, type, perResistor, ledDropV = 0 }: { voltage:
             <line x1={ledCx + 7} y1={wY - 9} x2={ledCx + 7} y2={wY + 9} stroke="#B91C1C" strokeWidth="2" />
             <line x1={ledCx + 2} y1={wY - 12} x2={ledCx + 9} y2={wY - 19} stroke="#B91C1C" strokeWidth="1.5" />
             <line x1={ledCx + 7} y1={wY - 10} x2={ledCx + 14} y2={wY - 17} stroke="#B91C1C" strokeWidth="1.5" />
-            <text x={ledCx} y={wY - 26} fontSize="12" fill="#B91C1C" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>LED</text>
-            <text x={ledCx} y={wY + 25} fontSize="11" fill="#B91C1C" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>−{fmtV(ledDropV)}</text>
+            <text x={ledCx} y={wY - 26} fontSize="12" fill="#B91C1C" textAnchor="middle" fontWeight={800}>LED</text>
+            <text x={ledCx} y={wY + 25} fontSize="11" fill="#B91C1C" textAnchor="middle" fontWeight={700}>−{fmtV(ledDropV)}</text>
           </g>
         )}
 
@@ -105,17 +105,17 @@ function CircuitDiagram({ voltage, type, perResistor, ledDropV = 0 }: { voltage:
           const y = wireY - 30 - rectH / 2
           return (
             <g key={r.id}>
-              <rect x={x} y={y} width={rectW} height={rectH} fill="var(--bg2)" stroke="#A16207" strokeWidth="2" rx="2" />
+              <rect x={x} y={y} width={rectW} height={rectH} fill="var(--bg2)" stroke="var(--yellow-700)" strokeWidth="2" rx="2" />
               {/* 지그재그 inside */}
               <polyline
                 points={`${x + 4},${y + rectH / 2} ${x + 8},${y + 4} ${x + 14},${y + rectH - 4} ${x + 20},${y + 4} ${x + 26},${y + rectH - 4} ${x + 32},${y + 4} ${x + 38},${y + rectH - 4} ${x + 42},${y + rectH / 2} ${x + rectW - 4},${y + rectH / 2}`}
-                fill="none" stroke="#A16207" strokeWidth="1.5"
+                fill="none" stroke="var(--yellow-700)" strokeWidth="1.5"
               />
               {/* 라벨 */}
-              <text x={cx} y={y - 18} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{r.label}</text>
-              <text x={cx} y={y - 4}  fontSize="11" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmtR(r.resistance)}</text>
-              <text x={cx} y={y + rectH + 14} fontSize="11" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>{fmtV(r.voltage)}</text>
-              <text x={cx} y={y + rectH + 28} fontSize="10" fill={r.powerExceeded ? '#DC2626' : 'var(--muted)'} textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+              <text x={cx} y={y - 18} fontSize="12" fill="var(--yellow-700)" textAnchor="middle" fontWeight={800}>{r.label}</text>
+              <text x={cx} y={y - 4}  fontSize="11" fill="var(--muted)" textAnchor="middle">{fmtR(r.resistance)}</text>
+              <text x={cx} y={y + rectH + 14} fontSize="11" fill="var(--teal-700)" textAnchor="middle" fontWeight={700}>{fmtV(r.voltage)}</text>
+              <text x={cx} y={y + rectH + 28} fontSize="10" fill={r.powerExceeded ? 'var(--red-600)' : 'var(--muted)'} textAnchor="middle">
                 {fmtW(r.power)}{r.powerExceeded ? ' ⚠️' : ''}
               </text>
             </g>
@@ -127,7 +127,7 @@ function CircuitDiagram({ voltage, type, perResistor, ledDropV = 0 }: { voltage:
         <line x1={W - padX + 30} y1={wireY - 30} x2={W - padX + 30} y2={bottomY} stroke="var(--text)" strokeWidth="2" />
         {/* 전류 라벨 — 상단(wireY−50)에 두면 홀수 개 저항의 이름·값 라벨과 겹친다.
             하단 전선 아래는 비어 있고, 귀환 경로라 방향은 ←가 물리적으로 맞다. */}
-        <text x={padX + innerW / 2} y={bottomY + 22} fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+        <text x={padX + innerW / 2} y={bottomY + 22} fontSize="13" fill="var(--teal-700)" textAnchor="middle" fontWeight={700}>
           ← I = {fmtA(totalI)}
         </text>
       </svg>
@@ -149,11 +149,11 @@ function CircuitDiagram({ voltage, type, perResistor, ledDropV = 0 }: { voltage:
         <line x1="0" y1={-(wireYBottom - wireYTop) / 2} x2="0" y2={(wireYBottom - wireYTop) / 2} stroke="var(--text)" strokeWidth="2" />
         <line x1="-12" y1="-12" x2="-12" y2="12" stroke="var(--text)" strokeWidth="3" />
         <line x1="-6"  y1="-6"  x2="-6"  y2="6"  stroke="var(--text)" strokeWidth="2" />
-        <text x="-25" y="-20" fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>+</text>
-        <text x="-25" y="28"  fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>−</text>
+        <text x="-25" y="-20" fontSize="13" fill="var(--teal-700)" textAnchor="middle" fontWeight={800}>+</text>
+        <text x="-25" y="28"  fontSize="13" fill="var(--muted)" textAnchor="middle" fontWeight={800}>−</text>
       </g>
       {/* 전압 라벨 — 그룹 안 x=−50은 viewBox 밖이라 보이지 않았다 */}
-      <text x={padX - 30} y={wireYTop - 25} fontSize="13" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{fmtV(voltage)}</text>
+      <text x={padX - 30} y={wireYTop - 25} fontSize="13" fill="var(--teal-700)" textAnchor="middle" fontWeight={800}>{fmtV(voltage)}</text>
 
       {/* 위 메인 라인 */}
       <line x1={padX - 30} y1={wireYTop} x2={W - padX + 30} y2={wireYTop} stroke="var(--text)" strokeWidth="2" />
@@ -183,17 +183,17 @@ function CircuitDiagram({ voltage, type, perResistor, ledDropV = 0 }: { voltage:
             <circle cx={branchX1} cy={branchY} r="3" fill="var(--text)" />
             <circle cx={branchX2} cy={branchY} r="3" fill="var(--text)" />
             {/* 저항 */}
-            <rect x={x} y={y} width={rectW} height={rectH} fill="var(--bg2)" stroke="#A16207" strokeWidth="2" rx="2" />
+            <rect x={x} y={y} width={rectW} height={rectH} fill="var(--bg2)" stroke="var(--yellow-700)" strokeWidth="2" rx="2" />
             <polyline
               points={`${x + 4},${y + rectH / 2} ${x + 8},${y + 4} ${x + 14},${y + rectH - 4} ${x + 20},${y + 4} ${x + 26},${y + rectH - 4} ${x + 32},${y + 4} ${x + 38},${y + rectH - 4} ${x + 42},${y + rectH / 2} ${x + rectW - 4},${y + rectH / 2}`}
-              fill="none" stroke="#A16207" strokeWidth="1.5"
+              fill="none" stroke="var(--yellow-700)" strokeWidth="1.5"
             />
-            <text x={cx} y={y - 6} fontSize="12" fill="#A16207" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>{r.label} = {fmtR(r.resistance)}</text>
-            <text x={x + rectW + 12} y={branchY + 4} fontSize="11" fill="#A16207" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>I = {fmtA(r.current)}</text>
+            <text x={cx} y={y - 6} fontSize="12" fill="var(--yellow-700)" textAnchor="middle" fontWeight={800}>{r.label} = {fmtR(r.resistance)}</text>
+            <text x={x + rectW + 12} y={branchY + 4} fontSize="11" fill="var(--yellow-700)" fontWeight={700}>I = {fmtA(r.current)}</text>
           </g>
         )
       })}
-      <text x={padX + 30} y={wireYTop - 10} fontSize="13" fill="#0F766E" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+      <text x={padX + 30} y={wireYTop - 10} fontSize="13" fill="var(--teal-700)" fontWeight={700}>
         → I_total = {fmtA(totalI)}
       </text>
     </svg>
@@ -417,7 +417,7 @@ export default function CircuitSimulatorClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -511,7 +511,7 @@ export default function CircuitSimulatorClient() {
                   type="button"
                   aria-pressed={Math.abs(voltage - q.v) < 0.01}
                 >
-                  {q.l}<br /><small style={{ fontSize: 9 }}>{q.n}</small>
+                  {q.l}<br /><small style={{ fontSize: 11 }}>{q.n}</small>
                 </button>
               ))}
             </div>
@@ -551,8 +551,8 @@ export default function CircuitSimulatorClient() {
               <span>회로 타입</span>
             </div>
             <div className={s.typeRow}>
-              <button className={`${s.typeBtn} ${s.typeSeries}   ${type === 'series'   ? s.typeActive : ''}`} aria-pressed={type === 'series'} onClick={() => { setType('series'); setActivePreset('') }}>━ 직렬 (Series)</button>
-              <button className={`${s.typeBtn} ${s.typeParallel} ${type === 'parallel' ? s.typeActive : ''}`} aria-pressed={type === 'parallel'} onClick={() => { setType('parallel'); setActivePreset(''); setLedDropV(0) }}>▥ 병렬 (Parallel)</button>
+              <button type="button" className={`${s.typeBtn} ${s.typeSeries}   ${type === 'series'   ? s.typeActive : ''}`} aria-pressed={type === 'series'} onClick={() => { setType('series'); setActivePreset('') }}>━ 직렬 (Series)</button>
+              <button type="button" className={`${s.typeBtn} ${s.typeParallel} ${type === 'parallel' ? s.typeActive : ''}`} aria-pressed={type === 'parallel'} onClick={() => { setType('parallel'); setActivePreset(''); setLedDropV(0) }}>▥ 병렬 (Parallel)</button>
             </div>
           </div>
 
@@ -627,7 +627,7 @@ export default function CircuitSimulatorClient() {
               <p className={s.resultLabel}>전체 저항</p>
               <p className={s.resultValue}>{fmtR(result.totalResistance)}</p>
             </div>
-            <div className={`${s.resultCard} ${s.resCurrent}`}>
+            <div className={`${s.resultCard} ${s.resCurrent}`} role="status">
               <p className={s.resultLabel}>전체 전류</p>
               <p className={s.resultValue}>{fmtA(result.totalCurrent)}</p>
             </div>
@@ -763,7 +763,7 @@ export default function CircuitSimulatorClient() {
           </div>
 
           {/* 결과 — 단락·개방·모순 입력은 0이 아니라 '—'로 표시하고 이유를 적는다 */}
-          <div className={s.resultGrid}>
+          <div className={s.resultGrid} role="status">
             <div className={`${s.resultCard} ${s.resVoltage}`}>
               <p className={s.resultLabel}>전압 V</p>
               <p className={s.resultValue}>{ohmCalc.V === null ? '—' : fmtV(ohmCalc.V)}</p>
@@ -824,7 +824,7 @@ export default function CircuitSimulatorClient() {
                 <button key={x.c} type="button" className={`${s.voltQuickBtn} ${Math.abs(parseFloat(ledVf) - x.vf) < 0.001 ? s.voltQuickActive : ''}`}
                   aria-pressed={Math.abs(parseFloat(ledVf) - x.vf) < 0.001}
                   onClick={() => setLedVf(String(x.vf))}>
-                  {x.c}<br /><small style={{ fontSize: 9 }}>{x.vf}V</small>
+                  {x.c}<br /><small style={{ fontSize: 11 }}>{x.vf}V</small>
                 </button>
               ))}
             </div>
@@ -872,9 +872,9 @@ export default function CircuitSimulatorClient() {
               <span className={s.cardLabelHint}>회로 시뮬레이터 탭에서 회로 변경 가능</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>
-              회로: <strong style={{ color: '#0F766E' }}>{type === 'series' ? '직렬' : '병렬'}</strong> ·
-              {' '}저항 <strong style={{ color: '#A16207' }}>{resistors.length}개</strong> ·
-              {' '}전원 <strong style={{ color: '#0F766E' }}>{fmtV(voltage)}</strong>
+              회로: <strong style={{ color: 'var(--teal-700)' }}>{type === 'series' ? '직렬' : '병렬'}</strong> ·
+              {' '}저항 <strong style={{ color: 'var(--yellow-700)' }}>{resistors.length}개</strong> ·
+              {' '}전원 <strong style={{ color: 'var(--teal-700)' }}>{fmtV(voltage)}</strong>
             </p>
           </div>
 

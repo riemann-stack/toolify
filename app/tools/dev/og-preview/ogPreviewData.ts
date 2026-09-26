@@ -16,6 +16,10 @@ export interface MetaData {
   twitterDescription: string
   twitterImage: string
   canonical: string
+  /** og:title 원값 (폴백 없이) — 검증용 */
+  ogTitle: string
+  /** og:image 계열 원값 (twitter:image 폴백 없이) — 카카오·Facebook·LinkedIn 미리보기·검증용 */
+  ogImage: string
 }
 
 const EMPTY: MetaData = {
@@ -30,24 +34,43 @@ const EMPTY: MetaData = {
   twitterDescription: '',
   twitterImage: '',
   canonical: '',
+  ogTitle: '',
+  ogImage: '',
 }
 
 /** raw tags(예: { 'og:title': '…', 'description': '…' })를 화면 데이터로 정규화 */
 export function normalizeTags(raw: Record<string, string>): MetaData {
   const get = (k: string) => raw[k.toLowerCase()] ?? ''
+  const ogImage = get('og:image') || get('og:image:url') || get('og:image:secure_url')
   return {
     title:              get('og:title')       || get('twitter:title') || get('title'),
     description:        get('og:description') || get('twitter:description') || get('description'),
-    image:              get('og:image')       || get('og:image:url') || get('og:image:secure_url') || get('twitter:image') || get('twitter:image:src'),
+    image:              ogImage               || get('twitter:image') || get('twitter:image:src'),
     url:                get('og:url')         || get('canonical'),
     siteName:           get('og:site_name')   || get('application-name') || '',
     type:               get('og:type')        || '',
     twitterCard:        get('twitter:card')   || '',
     twitterTitle:       get('twitter:title')  || get('og:title'),
     twitterDescription: get('twitter:description') || get('og:description'),
-    twitterImage:       get('twitter:image')  || get('twitter:image:src') || get('og:image'),
+    twitterImage:       get('twitter:image')  || get('twitter:image:src') || ogImage,
     canonical:          get('canonical')      || get('og:url'),
+    ogTitle:            get('og:title'),
+    ogImage,
   }
+}
+
+/* 태그 속성을 앞에서부터 차례로 읽음. 값은 "…" · '…' · 따옴표 없는 값 —
+   여는 따옴표와 같은 종류에서만 닫으므로 content="'국민 MC' …"나 content="Don't …"에서 끊기지 않음 */
+function parseAttrs(tag: string): Record<string, string> {
+  const out: Record<string, string> = {}
+  const body = tag.replace(/^<[a-z]+/i, '').replace(/\/?>$/, '')
+  const re = /([^\s"'<>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+)))?/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(body)) !== null) {
+    const name = m[1].toLowerCase()
+    if (!(name in out)) out[name] = m[2] ?? m[3] ?? m[4] ?? ''
+  }
+  return out
 }
 
 /** 사용자가 직접 입력한 HTML(또는 <head> 일부)에서 메타태그 추출 — 클라이언트 사이드 */
@@ -57,36 +80,46 @@ export function parseHtmlInput(html: string): Record<string, string> {
   const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)
   if (titleMatch) tags['title'] = decode(titleMatch[1].replace(/\s+/g, ' ').trim())
 
-  const metaRegex = /<meta\b[^>]*>/gi
+  /* 태그 끝 '>'는 따옴표 밖의 것만 — content="a > b"에서 잘리지 않게 */
+  const metaRegex = /<meta\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi
   let m: RegExpExecArray | null
   while ((m = metaRegex.exec(html)) !== null) {
-    const tag = m[0]
-    const propAttr =
-      tag.match(/\bproperty\s*=\s*["']([^"']+)["']/i)?.[1] ??
-      tag.match(/\bname\s*=\s*["']([^"']+)["']/i)?.[1]
-    const content = tag.match(/\bcontent\s*=\s*["']([^"']*)["']/i)?.[1]
+    const a = parseAttrs(m[0])
+    const propAttr = a['property'] || a['name']
+    const content = a['content']
     if (propAttr && content !== undefined) {
       const key = propAttr.toLowerCase()
       if (!(key in tags)) tags[key] = decode(content)
     }
   }
 
-  const linkRegex = /<link\b[^>]*>/gi
+  const linkRegex = /<link\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi
   while ((m = linkRegex.exec(html)) !== null) {
-    const tag = m[0]
-    const rel = tag.match(/\brel\s*=\s*["']([^"']+)["']/i)?.[1]?.toLowerCase()
-    const href = tag.match(/\bhref\s*=\s*["']([^"']+)["']/i)?.[1]
-    if (rel === 'canonical' && href) tags['canonical'] = href
+    const a = parseAttrs(m[0])
+    const rel = a['rel']?.toLowerCase()
+    const href = a['href']
+    if (rel === 'canonical' && href) tags['canonical'] = decode(href)
   }
   return tags
 }
 
+/** 코드 포인트 → 문자. 범위 밖·서로게이트 단독값은 원문 유지 (app/api/og-preview/route.ts와 동일 규칙) */
+function fromCodePointSafe(cp: number, raw: string): string {
+  if (!Number.isFinite(cp) || cp < 0 || cp > 0x10ffff || (cp >= 0xd800 && cp <= 0xdfff)) return raw
+  return String.fromCodePoint(cp)
+}
+
+/* 서버(URL 모드) decodeEntities와 같은 순서 — 16진 엔티티 지원, &amp;는 마지막(이중 디코딩 방지) */
 function decode(s: string): string {
   return s
-    .replace(/&amp;/g, '&').replace(/&quot;/g, '"')
-    .replace(/&#039;|&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/&#(\d+);/g, (_, c) => String.fromCharCode(parseInt(c, 10)))
+    .replace(/&#(\d+);/g, (raw, c: string) => fromCodePointSafe(parseInt(c, 10), raw))
+    .replace(/&#x([0-9a-f]+);/gi, (raw, c: string) => fromCodePointSafe(parseInt(c, 16), raw))
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;|&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
     .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
 }
 
 // ─── 검증 ─────────────────────────────────────────────────
@@ -102,6 +135,8 @@ export function validate(m: MetaData): ValidationIssue[] {
 
   if (!m.title) {
     out.push({ field: 'og:title', severity: 'error', message: '필수 — 카드 헤드라인이 비어있어 미리보기 카드가 표시되지 않을 수 있습니다.' })
+  } else if (!m.ogTitle) {
+    out.push({ field: 'og:title', severity: 'warn', message: `og:title이 없어 <title>·twitter:title 값(${m.title.length}자)으로 대신 표시했습니다. 플랫폼마다 대체 규칙이 달라 og:title을 따로 넣는 것이 안전합니다.` })
   } else if (m.title.length > 60) {
     out.push({ field: 'og:title', severity: 'warn', message: `${m.title.length}자 — 60자 초과 시 카카오톡·X 등에서 잘릴 수 있어요(권장 ≤60).` })
   } else if (m.title.length < 10) {
@@ -122,8 +157,10 @@ export function validate(m: MetaData): ValidationIssue[] {
 
   if (!m.image) {
     out.push({ field: 'og:image', severity: 'error', message: '필수 — 이미지가 없으면 카카오톡·Slack 등 다수 플랫폼에서 미리보기가 표시되지 않습니다.' })
+  } else if (!m.ogImage) {
+    out.push({ field: 'og:image', severity: 'warn', message: 'og:image 없음 — twitter:image만 있습니다. 카카오톡·Facebook·LinkedIn은 og:image를 읽으므로 이미지 없는 카드가 됩니다. og:image를 추가하세요.' })
   } else {
-    out.push({ field: 'og:image', severity: 'ok', message: '이미지 URL 감지. 1200×630(2:1) 권장 · 5MB 이하 · jpg/png/webp.' })
+    out.push({ field: 'og:image', severity: 'ok', message: '이미지 URL 감지. 1200×630(약 1.91:1) 권장 · 5MB 이하 · jpg/png/webp.' })
   }
 
   if (!m.url) {

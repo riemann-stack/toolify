@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -23,31 +23,35 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
-.tabs3 { grid-template-columns: repeat(3, 1fr); }
-/* 모바일에서도 가로 3열 유지 */
+.tabs4 { grid-template-columns: repeat(4, 1fr); }
+/* 모바일에서도 가로 4열 한 줄 유지 — 높이가 늘지 않게(첫 화면 보존) */
 @media (max-width: 480px) {
-  .tabs3 { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .tabs4 { gap: 4px; }
 }
 .tab {
   appearance: none;
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
   white-space: nowrap;
 }
 @media (max-width: 480px) {
   .tab { font-size: 12px; padding: 10px 2px; }
+}
+/* 320px대 — 4열 라벨(‘볼트·스패너’)이 넘치지 않게 캡션 하한 11px */
+@media (max-width: 350px) {
+  .tab { font-size: 11px; }
 }
 @media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -64,11 +68,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -80,7 +84,7 @@
   gap: 8px;
   margin-top: 8px;
 }
-.unitText { font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.unitText { font-size: 12px; color: var(--muted); font-family: var(--font-sans); }
 
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } }
@@ -92,13 +96,13 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -114,7 +118,7 @@
 @media (max-width: 540px) {
   .convertSplit { gap: 6px; }
   .convertSplit .card { padding: 10px 12px; }
-  .convertSplit .cardLabel { font-size: 10px; }
+  .convertSplit .cardLabel { font-size: 11px; }
   .convertSplit .pill { font-size: 11px; padding: 5px 8px; }
 }
 /* 좁은 모바일에서는 2열이 넘쳐 1열로 — 인치↔mm 카드 세로 스택 */
@@ -145,7 +149,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
 }@media (hover: hover) {
   .systemBtn:hover { border-color: var(--accent); }
@@ -177,7 +181,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
 }@media (hover: hover) {
   .materialBtn:hover { border-color: var(--accent); }
@@ -193,15 +197,15 @@
 
 /* 히어로 */
 .hero {
-  background: linear-gradient(135deg, rgba(232, 151, 87, 0.1) 0%, rgba(14, 165, 233, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(232, 151, 87, 0.1) 0%, color-mix(in srgb, var(--accent) 5%, transparent) 100%);
   border: 1px solid rgba(232, 151, 87, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
@@ -230,12 +234,12 @@
 }
 .detailTable td:last-child {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; }
+.cellMono { font-family: var(--font-sans); }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -289,7 +293,7 @@
 }
 .convertLabel { font-size: 12px; color: var(--muted); margin: 0 0 4px; }
 .convertValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 800;
   color: var(--accent);
@@ -299,7 +303,7 @@
 .convertSub {
   font-size: 12px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   margin: 0;
 }
 
@@ -314,22 +318,37 @@
   line-height: 1.6;
 }
 .noteSmall strong { color: var(--text); }
+/* 안내 문구 속 탭 전환 버튼(볼트·스패너 탭) — 링크처럼 보이게 */
+.inlineLink {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
 
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* 면책 */
 .disclaimer {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -337,9 +356,9 @@
 }
 .disclaimer strong {
   display: block;
-  color: #D97706;
+  color: var(--amber-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

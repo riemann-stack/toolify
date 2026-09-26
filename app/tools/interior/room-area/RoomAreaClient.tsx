@@ -25,6 +25,12 @@ function n(v: string | number, min = 0): number {
   if (!Number.isFinite(x) || x < min) return min
   return x
 }
+/** 입력 문자열 → 숫자. 빈 값·비숫자는 fallback, 범위 밖은 [min, max]로 클램프 (계산 단계 전용 — onChange 클램프는 첫 타자를 치환함) */
+function parseClamp(s: string, min: number, max: number, fallback = min): number {
+  const x = parseFloat(s)
+  if (!Number.isFinite(x)) return fallback
+  return Math.min(max, Math.max(min, x))
+}
 function fmt(v: number, dec = 1): string {
   return (Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec)).toLocaleString('ko-KR')
 }
@@ -50,9 +56,14 @@ function calcRoom(i: RoomCalc) {
   return { perimeter, floorArea, ceilingArea, totalWallArea, netWallArea, windowArea, doorArea, volume, floorPyeong, wallPyeong, totalSurface }
 }
 
-/* 도배 롤 수 추정 (실크벽지 기준 16.5㎡/롤, 10% 로스율) */
-function estimateWallpaperRolls(netWallArea: number): number {
-  return Math.ceil((netWallArea * 1.10) / 16.5)
+/* 도배 롤 수 추정 — 도배 계산기와 같은 방식: 실크(폭 1.06m × 15.6m) 기준 면적(10% 로스율)과
+ * 장 수(천장고 + 재단 여유 10cm) 중 큰 값. 면적 기준만 쓰면 도배 계산기보다 1롤 적게 나올 수 있다 */
+const SILK_W = 1.06, SILK_LEN = 15.6, WP_TRIM_M = 0.1
+function estimateWallpaperRolls(netWallArea: number, perimeter: number, heightM: number): number {
+  const areaRolls = Math.ceil((netWallArea * 1.10) / (SILK_W * SILK_LEN))
+  const stripsPerRoll = Math.max(1, Math.floor(SILK_LEN / (Math.max(0.1, heightM) + WP_TRIM_M) + 1e-9))
+  const stripRolls = Math.ceil(Math.ceil(perimeter / SILK_W) / stripsPerRoll)
+  return Math.max(areaRolls, stripRolls)
 }
 /* 페인트 L 추정 (수성 1L=10㎡, 2회 도장, 10% 로스율) */
 function estimatePaintL(netWallArea: number): number {
@@ -80,10 +91,12 @@ export default function RoomAreaClient() {
   /* 공간 정보 (탭 1) */
   const [sizeMode, setSizeMode] = useState<SizeMode>('pyung')
   const [pyung, setPyung] = useState(15)
-  const [pyungCustom, setPyungCustom] = useState<number | null>(null)
+  const [pyungCustom, setPyungCustom] = useState<string | null>(null)
   const [widthM, setWidthM]   = useState('5.0')
   const [lengthM, setLengthM] = useState('4.0')
-  const [heightM, setHeightM] = useState(2.4)
+  // 천장 높이·평수 직접입력은 문자열로 보관하고 계산 시 클램프 — onChange 클램프는 '1.8' 입력을 1.58로 만든다
+  const [heightStr, setHeightStr] = useState('2.4')
+  const heightM = parseClamp(heightStr, 1.5, 5, 2.4)
 
   /* 창문·문 (탭 1) */
   const [winPreset, setWinPreset] = useState<typeof WIN_PRESETS[number]['id']>('std')
@@ -103,10 +116,11 @@ export default function RoomAreaClient() {
     id: string; name: string
     walls: WallInput[]
     h: number   // 천장 높이
+    hStr?: string  // 천장 높이 입력 원문 (클램프 전) — 타이핑 중 값이 치환되지 않도록
     floorW: number; floorL: number  // 바닥 가로/세로 (천장도 동일)
+    wallsTouched?: boolean  // 벽 가로를 직접 고쳤으면 바닥 치수 → 벽 자동 연동 중단
   }
-  // ID 생성 — Date.now()/Math.random()은 렌더 외부에서 호출 (이벤트 핸들러·useState 초기값)
-  // eslint-disable-next-line react-hooks/purity
+  // ID 생성 — Date.now()/Math.random()은 렌더 외부에서 호출 (이벤트 핸들러·useState 지연 초기값)
   const newId = () => String(Date.now()) + '-' + Math.floor(Math.random() * 1e6)
   function makeWall(label: string, w = 4, h = 2.4): WallInput {
     return { id: newId(), label, wallW: w, wallH: h, openings: [] }
@@ -124,13 +138,13 @@ export default function RoomAreaClient() {
       h, floorW: w, floorL: l,
     }
   }
-  const [rooms, setRooms] = useState<RoomInput[]>([{ ...makeRoom('거실', 5, 4, 2.4) }])
+  const [rooms, setRooms] = useState<RoomInput[]>(() => [makeRoom('거실', 5, 4, 2.4)])
 
   /* 복사 피드백 */
   const [copied, setCopied] = useState(false)
 
   /* 평수 ↔ 가로·세로 */
-  const effectivePyung = pyungCustom ?? pyung
+  const effectivePyung = pyungCustom !== null ? parseClamp(pyungCustom, 1, 300) : pyung
   const tab1Dims = useMemo(() => {
     if (sizeMode === 'pyung') {
       const m2 = effectivePyung * PYUNG_TO_M2
@@ -174,7 +188,7 @@ export default function RoomAreaClient() {
       const ceiling = floor
       const volume = floor * r.h
       return {
-        id: r.id, name: r.name,
+        id: r.id, name: r.name.trim() || '이름 없는 방',
         wallGross, wallNet, floor, ceiling, volume,
         openings,
       }
@@ -203,8 +217,22 @@ export default function RoomAreaClient() {
   }
   function updateWall(roomId: string, wallId: string, patch: Partial<WallInput>) {
     setRooms(rooms.map(r => r.id === roomId
-      ? { ...r, walls: r.walls.map(w => w.id === wallId ? { ...w, ...patch } : w) }
+      ? {
+        ...r,
+        walls: r.walls.map(w => w.id === wallId ? { ...w, ...patch } : w),
+        wallsTouched: r.wallsTouched || patch.wallW !== undefined,
+      }
       : r))
+  }
+  /* 바닥 가로·세로 변경 — 벽을 직접 고치지 않은 방이면 벽 A·C = 가로, B·D = 세로로 함께 맞춤
+     (연동이 없으면 바닥만 바뀌고 벽은 기본 5·4m로 남아 벽 면적이 크게 부풀었다) */
+  function updateFloor(r: RoomInput, patch: { floorW?: number; floorL?: number }) {
+    const floorW = patch.floorW ?? r.floorW
+    const floorL = patch.floorL ?? r.floorL
+    const walls = r.wallsTouched || r.walls.length !== 4
+      ? r.walls
+      : r.walls.map((w, i) => ({ ...w, wallW: i % 2 === 0 ? floorW : floorL }))
+    updateRoom(r.id, { floorW, floorL, walls })
   }
   function addOpening(roomId: string, wallId: string, type: 'window' | 'door') {
     setRooms(rooms.map(r => r.id === roomId
@@ -253,14 +281,14 @@ export default function RoomAreaClient() {
     }
     lines.push('youtil.kr/tools/interior/room-area')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
   const pyungOptions = [5, 7, 10, 12, 15, 18, 20, 22, 25, 28, 30, 33, 35, 40]
 
   /* 활용 추천: 탭 1 기준 자동 계산 */
-  const wallpaperRolls = estimateWallpaperRolls(t1.netWallArea)
+  const wallpaperRolls = estimateWallpaperRolls(t1.netWallArea, t1.perimeter, heightM)
   const paintL = estimatePaintL(t1.netWallArea)
   const airConP = estimateAirConPyung(t1.floorPyeong, heightM)
   const lumen = estimateLumenRange(t1.floorArea)
@@ -297,8 +325,8 @@ export default function RoomAreaClient() {
 
             {sizeMode === 'pyung' ? (
               <>
-                <select className={styles.pyungSelect} value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
-                  if (e.target.value === 'custom') { setPyungCustom(15) }
+                <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
+                  if (e.target.value === 'custom') { setPyungCustom('15') }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
                   {pyungOptions.map(p => <option key={p} value={p}>{p}평</option>)}
@@ -309,11 +337,11 @@ export default function RoomAreaClient() {
                     <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={300}
                       aria-label="평수 직접 입력"
                       value={pyungCustom}
-                      onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
+                      onChange={e => setPyungCustom(e.target.value)} />
                   </div>
                 )}
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (정사각형 가정)</p>
-                <p style={{ fontSize: 12, color: 'var(--warning)', lineHeight: 1.6, marginTop: 6, fontFamily: 'Noto Sans KR, sans-serif' }}>
+                <p style={{ fontSize: 12, color: 'var(--warning)', lineHeight: 1.6, marginTop: 6, fontFamily: 'var(--font-sans)' }}>
                   ⚠️ 바닥 면적은 정확하지만, 정사각형은 둘레가 가장 짧아 <strong>벽 면적이 실제보다 작게</strong> 나올 수 있어요. 도배·페인트용 벽 면적은 <strong>가로×세로(m)</strong> 모드로 실측 입력을 권장합니다.
                 </p>
               </>
@@ -331,12 +359,12 @@ export default function RoomAreaClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} aria-label="천장 높이 (m)" value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} aria-label="천장 높이 (m)" value={heightStr} onChange={e => setHeightStr(e.target.value)} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightStr(String(h))}>{h}m</button>
               ))}
             </div>
           </div>
@@ -463,32 +491,32 @@ export default function RoomAreaClient() {
                   <svg className={styles.boxSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-label="평면도">
                     {/* 외곽선 */}
                     <rect x={x0} y={y0} width={w} height={d}
-                      fill="rgba(14,165,233,0.08)" stroke="#0EA5E9" strokeWidth={2} />
+                      fill="color-mix(in srgb, var(--accent) 8%, transparent)" stroke="var(--sky-500)" strokeWidth={2} />
                     {/* 면적 라벨 */}
                     <text x={x0 + w / 2} y={y0 + d / 2 - 4} textAnchor="middle"
-                      fill="#0EA5E9" fontSize="18" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
+                      fill="var(--sky-500)" fontSize="18" fontWeight={800}>
                       {fmt(t1.floorArea)}㎡
                     </text>
                     <text x={x0 + w / 2} y={y0 + d / 2 + 16} textAnchor="middle"
-                      fill="var(--muted)" fontSize="13" fontFamily="Noto Sans KR">
+                      fill="var(--muted)" fontSize="13">
                       ({fmt(t1.floorPyeong, 1)}평)
                     </text>
                     {/* 가로 치수 */}
                     <line x1={x0} y1={y0 + d + 14} x2={x0 + w} y2={y0 + d + 14} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0} y1={y0 + d + 10} x2={x0} y2={y0 + d + 18} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w} y1={y0 + d + 10} x2={x0 + w} y2={y0 + d + 18} stroke="var(--muted)" strokeWidth={1} />
-                    <text x={x0 + w / 2} y={y0 + d + 28} textAnchor="middle" fill="var(--muted)" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                    <text x={x0 + w / 2} y={y0 + d + 28} textAnchor="middle" fill="var(--muted)" fontSize="12">
                       {W.toFixed(1)}m
                     </text>
                     {/* 세로 치수 */}
                     <line x1={x0 + w + 14} y1={y0} x2={x0 + w + 14} y2={y0 + d} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w + 10} y1={y0} x2={x0 + w + 18} y2={y0} stroke="var(--muted)" strokeWidth={1} />
                     <line x1={x0 + w + 10} y1={y0 + d} x2={x0 + w + 18} y2={y0 + d} stroke="var(--muted)" strokeWidth={1} />
-                    <text x={x0 + w + 22} y={y0 + d / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                    <text x={x0 + w + 22} y={y0 + d / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="12">
                       {L.toFixed(1)}m
                     </text>
                     {/* 라벨 */}
-                    <text x={x0 + 6} y={y0 + 14} fill="var(--muted)" fontSize="11.5" fontFamily="Noto Sans KR">평면도 (위에서 본 모습)</text>
+                    <text x={x0 + 6} y={y0 + 14} fill="var(--muted)" fontSize="11">평면도 (위에서 본 모습)</text>
                   </svg>
                 )
               })()}
@@ -519,37 +547,37 @@ export default function RoomAreaClient() {
                         fill={face.fill} stroke={face.stroke} strokeWidth={1.5} />
                     ))}
                     {/* 면적 라벨 — 바닥은 아래로, 정면은 위로 오프셋해 겹침 방지 */}
-                    <text x={floorC.x} y={floorC.y + 16} textAnchor="middle" fill="#0EA5E9" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+                    <text x={floorC.x} y={floorC.y + 16} textAnchor="middle" fill="var(--sky-500)" fontSize="12" fontWeight={700}>
                       바닥 {fmt(t1.floorArea)}㎡
                     </text>
-                    <text x={frontC.x} y={frontC.y - 8} textAnchor="middle" fill="#EA580C" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+                    <text x={frontC.x} y={frontC.y - 8} textAnchor="middle" fill="var(--orange-600)" fontSize="12" fontWeight={700}>
                       정면 {fmt(tab1Dims.width * heightM)}㎡
                     </text>
-                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="#EA580C" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+                    <text x={rightC.x} y={rightC.y + 4} textAnchor="middle" fill="var(--orange-600)" fontSize="12" fontWeight={700}>
                       우측 {fmt(tab1Dims.length * heightM)}㎡
                     </text>
-                    <text x={ceilC.x} y={ceilC.y + 4} textAnchor="middle" fill="#9B59B6" fontSize="12.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+                    <text x={ceilC.x} y={ceilC.y + 4} textAnchor="middle" fill="var(--amethyst)" fontSize="12" fontWeight={700}>
                       천장
                     </text>
                     {/* 치수선 — 가로 */}
-                    <text x={(box.flf.x + box.frf.x) / 2} y={box.flf.y + 18} textAnchor="middle" fill="var(--muted)" fontSize="11.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                    <text x={(box.flf.x + box.frf.x) / 2} y={box.flf.y + 18} textAnchor="middle" fill="var(--muted)" fontSize="11">
                       {tab1Dims.width.toFixed(1)}m
                     </text>
                     {/* 치수선 — 세로 (깊이) */}
-                    <text x={box.frb.x + 6} y={(box.frf.y + box.frb.y) / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="11.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                    <text x={box.frb.x + 6} y={(box.frf.y + box.frb.y) / 2 + 4} textAnchor="start" fill="var(--muted)" fontSize="11">
                       {tab1Dims.length.toFixed(1)}m
                     </text>
                     {/* 치수선 — 높이 */}
-                    <text x={box.flf.x - 6} y={(box.flf.y + box.clf.y) / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="11.5" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                    <text x={box.flf.x - 6} y={(box.flf.y + box.clf.y) / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="11">
                       {heightM}m
                     </text>
                     {/* 라벨 */}
-                    <text x={6} y={14} fill="var(--muted)" fontSize="11.5" fontFamily="Noto Sans KR">3D 박스 (캐비넷 투영)</text>
+                    <text x={6} y={14} fill="var(--muted)" fontSize="11">3D 박스 (캐비넷 투영)</text>
                   </svg>
                 )
               })()}
             </div>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7, fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7, fontFamily: 'var(--font-sans)' }}>
               ⓘ 평면도는 가로·세로 정확한 비율, 3D 박스는 캐비넷 투영(깊이 50% 축소)으로 표시됩니다. 본 시각화는 입력값 기반 비례 도형이며 실제 시공 도면이 아닙니다.
             </p>
           </div>
@@ -583,7 +611,7 @@ export default function RoomAreaClient() {
                 <span className={styles.usageIcon}>❄️</span>
                 <div className={styles.usageBody}>
                   <span className={styles.usageTitle}>에어컨 평형</span>
-                  <span className={styles.usageDesc}>바닥 {fmt(t1.floorArea)}㎡ · 천장 {heightM}m → 약 <strong>{airConP}평형</strong> 권장 (천장 높이 반영)</span>
+                  <span className={styles.usageDesc}>바닥 {fmt(t1.floorArea)}㎡ · 천장 {heightM}m → 약 <strong>{airConP}평형</strong> (기본 부하만 본 약식 — 향·층·인원 보정은 에어컨 평형 계산기에서)</span>
                 </div>
                 <span className={styles.usageBtn}>자세히 →</span>
               </Link>
@@ -609,7 +637,7 @@ export default function RoomAreaClient() {
             return (
               <div key={r.id} className={styles.roomBlock}>
                 <div className={styles.roomHeader}>
-                  <input className={styles.roomHeaderInput} type="text" aria-label="방 이름" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value || '방' })} />
+                  <input className={styles.roomHeaderInput} type="text" aria-label="방 이름" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value })} />
                   {rooms.length > 1 && (
                     <button type="button" className={styles.removeRoomBtn} onClick={() => removeRoom(r.id)}>방 삭제</button>
                   )}
@@ -618,17 +646,22 @@ export default function RoomAreaClient() {
                 <div className={styles.wallDimRow}>
                   <div>
                     <span className={styles.subLabel}>바닥 가로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="바닥 가로 (m)" value={r.floorW} onChange={e => updateRoom(r.id, { floorW: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="바닥 가로 (m)" value={r.floorW} onChange={e => updateFloor(r, { floorW: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>바닥 세로 (m)</span>
-                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="바닥 세로 (m)" value={r.floorL} onChange={e => updateRoom(r.id, { floorL: n(e.target.value) })} />
+                    <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={0} aria-label="바닥 세로 (m)" value={r.floorL} onChange={e => updateFloor(r, { floorL: n(e.target.value) })} />
                   </div>
                 </div>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6, lineHeight: 1.6 }}>
+                  {r.wallsTouched
+                    ? '벽 가로를 직접 고쳐서 바닥 치수와 따로 계산합니다.'
+                    : '벽 A·C 가로는 바닥 가로, B·D는 바닥 세로에 맞춰 함께 바뀝니다. 벽을 직접 고치면 그때부터 따로 계산합니다.'}
+                </p>
                 <div style={{ height: 8 }} />
                 <span className={styles.subLabel}>천장 높이 (m) <span className={styles.cardLabelHint}>· 전체 벽 높이에 적용</span></span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} aria-label="천장 높이 (m) — 전체 벽 높이에 적용" value={r.h} onChange={e => { const nh = Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)); updateRoom(r.id, { h: nh, walls: r.walls.map(w => ({ ...w, wallH: nh })) }) }} />
+                  <input className={styles.smallInput} type="number" inputMode="decimal" step={0.1} min={1.5} max={5} aria-label="천장 높이 (m) — 전체 벽 높이에 적용" value={r.hStr ?? r.h} onChange={e => { const nh = parseClamp(e.target.value, 1.5, 5, 2.4); updateRoom(r.id, { h: nh, hStr: e.target.value, walls: r.walls.map(w => ({ ...w, wallH: nh })) }) }} />
                   <span className={styles.unit}>m</span>
                 </div>
 
@@ -681,15 +714,15 @@ export default function RoomAreaClient() {
                 }}>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>바닥</p>
-                    <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: '#0EA5E9', fontSize: 16 }}>{fmt(calc.floor)}㎡</p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--sky-500)', fontSize: 16 }}>{fmt(calc.floor)}㎡</p>
                   </div>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>벽 (실)</p>
-                    <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)', fontSize: 16 }}>{fmt(calc.wallNet)}㎡</p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)', fontSize: 16 }}>{fmt(calc.wallNet)}㎡</p>
                   </div>
                   <div>
                     <p style={{ color: 'var(--muted)', fontSize: 11 }}>부피</p>
-                    <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: '#A16207', fontSize: 16 }}>{fmt(calc.volume, 1)}㎥</p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--yellow-700)', fontSize: 16 }}>{fmt(calc.volume, 1)}㎥</p>
                   </div>
                 </div>
               </div>

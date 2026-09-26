@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
 import s from './grip-size.module.css'
 import {
-  recommendTennis, gloveByHandLength, golfGripByGlove,
+  recommendTennis, tennisFromPencil, TENNIS_GRIPS, gloveByHandLength, golfGripByGlove,
   recommendBadminton, recommendSquash,
   palmToFullHand, cmToInchFraction,
   INJURIES,
@@ -29,8 +29,10 @@ export default function GripSizeClient() {
   const [tennisOvergrip, setTennisOvergrip] = useState<0 | 1 | 2>(0)
   const [badmintonOvergrip, setBadmintonOvergrip] = useState<0 | 1 | 2>(1)
 
-  /* 펜슬 테스트 결과 입력 */
+  /* 펜슬 테스트 결과 입력 — 지금 쓰는 라켓 그립(L 번호 인덱스)과 검지 테스트 결과.
+     손 치수(palmCm)는 건드리지 않는다(예전엔 ±0.3cm씩 누적 조정해 자로 잰 값까지 오염됐음). */
   const [pencilResult, setPencilResult] = useState<'snug' | 'fit' | 'gap' | null>(null)
+  const [currentL, setCurrentL] = useState<number | null>(null)
 
   /* 손 전체 길이를 직접 조정했는지 — 조정 후엔 손바닥 값과 독립(각각 실측 입력 허용) */
   const [fullTouched, setFullTouched] = useState(false)
@@ -87,7 +89,9 @@ export default function GripSizeClient() {
   }, [palmCm, fullCm, gloveSize, useDirectGlove, tennisOvergrip, badmintonOvergrip, method])
 
   /* 추천 결과 */
-  const tennis = useMemo(() => recommendTennis(palmCm, tennisOvergrip), [palmCm, tennisOvergrip])
+  const tennisByPalm = useMemo(() => recommendTennis(palmCm, tennisOvergrip), [palmCm, tennisOvergrip])
+  const pencilGrip = method === 'pencil' && currentL !== null && pencilResult ? tennisFromPencil(currentL, pencilResult) : null
+  const tennis = pencilGrip ? { grip: pencilGrip } : tennisByPalm
   const effectiveGlove = useDirectGlove ? gloveSize : gloveByHandLength(fullCm)
   const golf = useMemo(() => golfGripByGlove(effectiveGlove), [effectiveGlove])
   const badminton = useMemo(() => recommendBadminton(palmCm, badmintonOvergrip), [palmCm, badmintonOvergrip])
@@ -202,15 +206,30 @@ export default function GripSizeClient() {
           <PencilTestSvg result={pencilResult} />
 
           <ol className={s.steps}>
+            <li>지금 쓰는 라켓의 <strong>그립 사이즈</strong>(손잡이 끝이나 목에 적힌 L 번호)를 고르세요.</li>
             <li>라켓을 <strong>이스턴 포핸드 그립</strong>으로 잡으세요 (악수하듯).</li>
             <li>잡지 않은 손의 <strong>검지</strong>를 손가락 끝과 손바닥 사이 빈 공간에 넣어보세요.</li>
             <li>아래에서 결과를 선택하세요.</li>
           </ol>
 
+          <div className={s.subLabel}>지금 쓰는 라켓 그립</div>
+          <div className={s.overgripRow} role="group" aria-label="지금 쓰는 라켓 그립 사이즈" style={{ flexWrap: 'wrap', marginBottom: 12 }}>
+            {TENNIS_GRIPS.slice(0, 6).map((g, i) => (
+              <button key={g.eu} type="button"
+                aria-pressed={currentL === i}
+                aria-label={`${g.eu} (${g.size.replace('"', '인치')})`}
+                title={g.size}
+                className={`${s.overgripBtn} ${currentL === i ? s.overgripActive : ''}`}
+                onClick={() => setCurrentL(i)}>
+                {g.eu}
+              </button>
+            ))}
+          </div>
+
           <div className={s.pencilResultRow}>
             <button type="button" aria-pressed={pencilResult === 'snug'}
               className={`${s.pencilBtn} ${pencilResult === 'snug' ? s.pencilActiveS : ''}`}
-              onClick={() => { setPencilResult('snug'); const next = Math.min(13, palmCm + 0.3); setPalmCm(next); setFullCm(palmToFullHand(next)) }}
+              onClick={() => setPencilResult('snug')}
             >
               <span className={s.pencilEmoji}>🔴</span>
               <strong>검지가 안 들어감</strong>
@@ -226,7 +245,7 @@ export default function GripSizeClient() {
             </button>
             <button type="button" aria-pressed={pencilResult === 'gap'}
               className={`${s.pencilBtn} ${pencilResult === 'gap' ? s.pencilActiveG : ''}`}
-              onClick={() => { setPencilResult('gap'); const next = Math.max(8, palmCm - 0.3); setPalmCm(next); setFullCm(palmToFullHand(next)) }}
+              onClick={() => setPencilResult('gap')}
             >
               <span className={s.pencilEmoji}>🟠</span>
               <strong>검지보다 여유 있음</strong>
@@ -234,9 +253,14 @@ export default function GripSizeClient() {
             </button>
           </div>
 
-          {pencilResult && pencilResult !== 'fit' && (
+          {pencilResult && currentL === null && (
             <p className={s.pencilNote}>
-              💡 자동으로 측정값을 조정했습니다. 더 정확한 권장을 위해 「자로 측정」 모드에서 직접 입력하세요.
+              💡 지금 쓰는 라켓 그립(L 번호)을 고르면 테니스 권장 사이즈를 그 기준으로 알려 드려요.
+            </p>
+          )}
+          {pencilGrip && (
+            <p className={s.pencilNote}>
+              💡 테니스는 지금 라켓 {TENNIS_GRIPS[currentL ?? 0].eu} 기준으로 {pencilResult === 'fit' ? '그대로 쓰면 됩니다' : pencilResult === 'snug' ? '한 사이즈 크게' : '한 사이즈 작게'} 권장합니다. 배드민턴·골프·스쿼시는 「자로 측정」 손 치수(현재 {palmCm.toFixed(1)}cm) 기준이에요.
             </p>
           )}
         </div>
@@ -308,7 +332,7 @@ export default function GripSizeClient() {
       {/* ── 4. 결과 — 4종목 카드 ── */}
       <div className={s.resultGrid} role="status" aria-label="그립 사이즈 추천 결과">
         {/* 테니스 */}
-        <div className={s.resultCard} style={{ '--accent': '#FFD93E' } as React.CSSProperties}>
+        <div className={s.resultCard} style={{ '--card-accent': 'var(--cat-sports)' } as React.CSSProperties}>
           <div className={s.resultHeader}>
             <span className={s.resultSport}>테니스</span>
             <span className={s.resultBadge}>{tennis.grip.eu}</span>
@@ -318,34 +342,36 @@ export default function GripSizeClient() {
             US #{tennis.grip.us} · {tennis.grip.cm.toFixed(2)} cm
           </div>
           <p className={s.resultDesc}>{tennis.grip.desc}</p>
-          {tennisOvergrip > 0 && (
+          {pencilGrip ? (
+            <p className={s.resultNote}>펜슬 테스트 결과 기준</p>
+          ) : tennisOvergrip > 0 && (
             <p className={s.resultNote}>오버그립 {tennisOvergrip}겹 반영</p>
           )}
         </div>
 
         {/* 골프 */}
-        <div className={s.resultCard} style={{ '--accent': '#059669' } as React.CSSProperties}>
+        <div className={s.resultCard} style={{ '--card-accent': 'var(--success)' } as React.CSSProperties}>
           <div className={s.resultHeader}>
             <span className={s.resultSport}>골프</span>
             <span className={s.resultBadge}>{effectiveGlove}호</span>
           </div>
           <div className={s.resultBig}>{golf.name}</div>
           <div className={s.resultSub}>
-            지름 {golf.diameter} · {golf.delta}
+            {golf.deltaMm ? `표준 대비 외경 ${golf.delta} (${golf.deltaMm})` : '표준 굵기 (기준)'}
           </div>
           <p className={s.resultDesc}>{golf.desc}</p>
           <p className={s.resultNote}>{golf.recommendedGlove}</p>
         </div>
 
         {/* 배드민턴 */}
-        <div className={s.resultCard} style={{ '--accent': '#0891B2' } as React.CSSProperties}>
+        <div className={s.resultCard} style={{ '--card-accent': 'var(--cat-health)' } as React.CSSProperties}>
           <div className={s.resultHeader}>
             <span className={s.resultSport}>배드민턴</span>
             <span className={s.resultBadge}>{badminton.id}</span>
           </div>
           <div className={s.resultBig}>{badminton.id}</div>
           <div className={s.resultSub}>
-            둘레 {badminton.circumferenceMm} mm
+            {badminton.circumference}
           </div>
           <p className={s.resultDesc}>{badminton.desc}</p>
           {badmintonOvergrip > 0 && (
@@ -354,14 +380,14 @@ export default function GripSizeClient() {
         </div>
 
         {/* 스쿼시 */}
-        <div className={s.resultCard} style={{ '--accent': '#B885DA' } as React.CSSProperties}>
+        <div className={s.resultCard} style={{ '--card-accent': 'var(--cat-art)' } as React.CSSProperties}>
           <div className={s.resultHeader}>
             <span className={s.resultSport}>스쿼시</span>
             <span className={s.resultBadge}>{cmToInchFraction(squash.inches * 2.54)}</span>
           </div>
           <div className={s.resultBig}>{squash.size.split(' (')[0]}</div>
           <div className={s.resultSub}>
-            지름 {squash.size.split(' (')[1]?.replace(')', '')}
+            둘레 {squash.size.split(' (')[1]?.replace(')', '')}
           </div>
           <p className={s.resultDesc}>{squash.desc}</p>
         </div>

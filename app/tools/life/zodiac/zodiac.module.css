@@ -1,9 +1,9 @@
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
 
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px 22px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
-.cardTitle { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; color: var(--text); font-weight: 700; margin-bottom: 12px; }
+.cardTitle { font-family: var(--font-sans); font-size: 14px; color: var(--text); font-weight: 700; margin-bottom: 12px; }
 
 /* ── 드롭다운 ── */
 .selectRow {
@@ -21,7 +21,7 @@
   border-radius: 10px;
   padding: 12px 36px 12px 14px;
   font-size: 16px;       /* iOS Safari 자동 확대 방지 (<16px 시 줌) */
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   cursor: pointer;
@@ -29,7 +29,7 @@
   transition: border-color 0.2s;
   box-sizing: border-box;
 }
-.select:focus { border-color: rgba(14,165,233,0.5); }
+.select:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .select:disabled { opacity: 0.4; cursor: not-allowed; }
 .select option { background: var(--bg2); color: var(--text); }
 .selectArrow {
@@ -46,8 +46,8 @@
 .resultRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .resultCard {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.2);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border-radius: var(--radius-card);
   padding: 24px 18px;
   text-align: center;
   display: flex;
@@ -57,21 +57,21 @@
 }
 .resultEmoji { font-size: 52px; line-height: 1; }
 .resultType { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.resultName { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); }
+.resultName { font-family: var(--font-sans); font-size: 22px; font-weight: 800; color: var(--accent); }
 .traitsRow { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
-.trait { font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; color: var(--muted); }
+.trait { font-size: 11px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 2px 8px; color: var(--muted); }
 .element { font-size: 12px; font-weight: 600; }
 
 /* ── 간지 카드 ── */
 .ganjiCard {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.2);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .ganjiHanja {
-  font-family: 'Inter', 'Noto Serif KR', serif;
+  font-family: var(--font-sans);
   font-size: 48px;
   font-weight: 800;
   color: var(--accent);
@@ -88,7 +88,7 @@
 .ganjiSub {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .ganjiSub strong { color: var(--accent); font-weight: 700; }
 
@@ -118,8 +118,8 @@
   align-items: center;
   gap: 4px;
 }
-.compatBest .compatHead { color: #059669; }
-.compatAvoid .compatHead { color: #EA580C; }
+.compatBest .compatHead { color: var(--emerald-600); }
+.compatAvoid .compatHead { color: var(--orange-600); }
 .compatList {
   display: flex;
   gap: 6px;
@@ -128,7 +128,7 @@
 .compatPill {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 10px;
   font-size: 13px;
   color: var(--text);
@@ -148,7 +148,7 @@
   display: inline-block;
   font-weight: 700;
   padding: 1px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
   margin-right: 4px;
 }
@@ -172,18 +172,18 @@
 .famousPill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 음력 안내 배너 ── */
 .lunarBanner {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.25);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -198,11 +198,11 @@
   flex: 1;
   min-width: 220px;
 }
-.lunarText strong { color: #0891B2; }
+.lunarText strong { color: var(--cyan-600); }
 .lunarLink {
-  background: rgba(8,145,178,0.15);
-  border: 1px solid rgba(8,145,178,0.4);
-  color: #0891B2;
+  background: color-mix(in srgb, var(--cyan-600) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 40%, transparent);
+  color: var(--cyan-600);
   padding: 8px 14px;
   border-radius: 10px;
   font-size: 13px;
@@ -211,14 +211,14 @@
   white-space: nowrap;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .lunarLink:hover { background: rgba(8,145,178,0.25); }
+  .lunarLink:hover { background: color-mix(in srgb, var(--cyan-600) 25%, transparent); }
 }
 
 /* ── 공유 카드 ── */
 .shareCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
   display: flex;
   align-items: center;
@@ -241,13 +241,13 @@
   border-radius: 10px;
   font-size: 13px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .shareBtn:hover { opacity: 0.85; }
 }
-.shareBtn.copied { background: #059669; }
+.shareBtn.copied { background: var(--emerald-600); }
 
 /* ── 같은 띠 연도 ── */
 .yearSection {
@@ -265,16 +265,16 @@
   font-size: 13px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .yearTagActive {
   background: var(--accent-dim);
-  border-color: rgba(14,165,233,0.4);
-  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -286,7 +286,7 @@
   color: var(--muted);
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 /* ── 반응형 ── */
@@ -304,18 +304,18 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
   margin-bottom: 12px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 4px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
@@ -325,32 +325,32 @@
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveCompat    { background: rgba(220,38,38,0.18); color: #DC2626; font-weight: 700; }
-.tabActiveFamily    { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
+.tabActive          { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
+.tabActiveCompat    { background: rgba(220,38,38,0.18); color: var(--red-600); font-weight: 700; }
+.tabActiveFamily    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
 
 /* 면책 강화 */
 .disclaimerStrong {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.disclaimerStrong strong { color: #EA580C; }
+.disclaimerStrong strong { color: var(--orange-600); }
 .disclaimerStrong ul { margin: 6px 0 0; padding-left: 18px; }
 .disclaimerStrong li { margin-bottom: 3px; color: var(--muted); }
 
 /* 통합 프로필 카드 */
 .profileCard {
-  background: linear-gradient(135deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 16px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 22px 22px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .profileTitle {
   font-size: 12px;
@@ -370,7 +370,7 @@
 .profileBigItem {
   padding: 14px 8px;
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
 }
 .profileBigEmoji {
   font-size: clamp(36px, 9vw, 48px);
@@ -378,7 +378,7 @@
   margin-bottom: 8px;
 }
 .profileBigName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(20px, 4.5vw, 26px);
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -401,27 +401,27 @@
 }
 .profileMetaLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .profileMetaValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   color: var(--text);
 }
 .profileMetaSub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.profileFootNote { margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; }
+.profileFootNote { margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.6; font-family: var(--font-sans); }
 .profileFootNote strong { color: var(--text); }
 
 /* 1~2월 음력/입춘 경계 안내 */
 .lunarCaveat {
   background: rgba(161,98,7,0.10);
   border: 1px solid rgba(161,98,7,0.35);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.8;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.lunarCaveat strong { color: #A16207; }
+.lunarCaveat strong { color: var(--yellow-700); }
 
 /* 두 사람 입력 */
 .twoPersonRow {
@@ -434,7 +434,7 @@
 .personPanel {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 14px;
 }
 .personPanelTitle {
@@ -444,7 +444,7 @@
   text-transform: uppercase;
   margin-bottom: 8px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .personPanelRow {
   display: grid;
@@ -455,12 +455,12 @@
 .personPanelSelect {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 10px;
   font-size: 16px;   /* iOS Safari 포커스 시 자동 확대(zoom) 방지 — <16px 금지 */
   color: var(--text);
   outline: none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-width: 0;
   box-sizing: border-box;
 }
@@ -468,25 +468,25 @@
   margin-top: 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .personSummary strong { color: var(--text); }
 
 /* 궁합 결과 */
 .compatScoreCard {
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 18px;
   text-align: center;
   border-width: 1px;
   border-style: solid;
 }
 .compatScoreCardSamhap { background: rgba(16,185,129,0.14); border-color: rgba(16,185,129,0.40); }
-.compatScoreCardYukhap { background: rgba(14,165,233,0.14); border-color: rgba(14,165,233,0.40); }
+.compatScoreCardYukhap { background: color-mix(in srgb, var(--accent) 14%, transparent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .compatScoreCardOk     { background: rgba(161,98,7,0.14);  border-color: rgba(161,98,7,0.30); }
 .compatScoreCardChung  { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.40); }
-.compatScoreLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.compatScoreLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; font-family: var(--font-sans); }
 .compatScoreNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(28px, 6vw, 40px);
   letter-spacing: -1px;
@@ -497,13 +497,13 @@
   color: var(--text);
   margin-top: 8px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.compatScoreDesc { font-size: 13px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.7; }
+.compatScoreDesc { font-size: 13px; color: var(--muted); margin-top: 6px; font-family: var(--font-sans); line-height: 1.7; }
 
 /* 별 5개 시각화 */
 .starRow { display: inline-flex; gap: 4px; margin-top: 6px; }
-.starOn { color: #A16207; font-size: 18px; }
+.starOn { color: var(--yellow-700); font-size: 18px; }
 .starOff { color: var(--muted); font-size: 18px; opacity: 0.4; }
 
 /* 가족 표 */
@@ -513,7 +513,7 @@
   min-width: 480px;
   border-collapse: collapse;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .familyTable thead th {
   font-size: 11px;
@@ -531,7 +531,7 @@
   border-bottom: 1px solid var(--border);
   color: var(--text);
 }
-.familyTable tbody td.numCol { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+.familyTable tbody td.numCol { font-family: var(--font-sans); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 .familyAddRow {
   display: grid;
@@ -581,13 +581,13 @@
 .familyDelBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   width: 36px; height: 36px;
   cursor: pointer;
   color: var(--muted);
   font-size: 16px;
 }@media (hover: hover) {
-  .familyDelBtn:hover { color: #DC2626; border-color: #DC2626; }
+  .familyDelBtn:hover { color: var(--red-600); border-color: var(--red-600); }
 }
 
 .familyAddBtn {
@@ -598,11 +598,11 @@
   padding: 11px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   margin-top: 6px;
 }@media (hover: hover) {
-  .familyAddBtn:hover:not(:disabled) { border-color: #0891B2; color: #0891B2; }
+  .familyAddBtn:hover:not(:disabled) { border-color: var(--cyan-600); color: var(--cyan-600); }
 }
 .familyAddBtn:disabled { opacity: 0.45; cursor: not-allowed; }
 
@@ -616,30 +616,30 @@
 .relationKindBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }@media (hover: hover) {
   .relationKindBtn:hover { color: var(--text); }
 }
-.relationKindBtnActive { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.relationKindBtnActive { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
 .relationKindEmoji { font-size: 16px; display: block; margin-bottom: 2px; }
 
 /* 관계 팁 */
 .relationTipBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.75;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 8px;
 }
-.relationTipBox strong { color: #0891B2; }
+.relationTipBox strong { color: var(--cyan-600); }
 

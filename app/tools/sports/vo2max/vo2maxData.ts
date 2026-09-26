@@ -2,7 +2,7 @@
    VO2 Max 계산기 데이터
    ─────────────────────────────────────────────────────────── */
 
-import { timeFromVdot, paceFromVdot } from '../race-predictor/racePredictorUtils'
+import { timeFromVdot, paceFromVdot, DANIELS_PCT } from '@/lib/running'
 
 export type MethodId = 'cooper' | 'mile1_5' | 'rockport' | 'queens' | 'norway' | 'hrr'
 export type Sex = 'male' | 'female'
@@ -43,12 +43,13 @@ export function calcCooper(distanceM: number): number {
 }
 
 /** 2) 1.5마일 달리기 — 시간(분) + 체중(kg) + 성별 → VO2max
- *  공식 (George 1993): VO2max = 88.02 + 3.716(남=1·여=0) − 0.0769·체중(lb) − 2.767·시간(min) */
+ *  공식 (George 1993): VO2max = 88.02 + 3.716(남=1·여=0) − 0.0753·체중(lb) − 2.767·시간(min)
+ *  (0.0753/lb = 0.1656/kg — 0.0769는 락포트 걷기 공식의 체중 계수) */
 export function calcMile15(timeMin: number, weightKg: number, sex: Sex): number {
   if (timeMin <= 0 || weightKg <= 0) return 0
   const sexN = sex === 'male' ? 1 : 0
   const weightLb = weightKg * 2.20462
-  const v = 88.02 + 3.716 * sexN - 0.0769 * weightLb - 2.767 * timeMin
+  const v = 88.02 + 3.716 * sexN - 0.0753 * weightLb - 2.767 * timeMin
   return Math.max(0, v)
 }
 
@@ -96,7 +97,8 @@ export function calcHRR(hrRest: number, age: number): number {
   return Math.max(0, 15.3 * (hrMax / hrRest))
 }
 
-/* ─── 5단계 등급 (ACSM·Cooper Institute 기준) ─── */
+/* ─── 5단계 등급 (ACSM·Cooper Institute 규준을 참고해 단순화 — 백분위와 1:1 대응 아님) ───
+   각 구간은 하한 이상·다음 하한 미만 (예: below 38 ≤ v < average 44) */
 export type FitnessLevel = 'excellent' | 'good' | 'average' | 'below' | 'poor'
 
 export interface NormBand {
@@ -135,15 +137,15 @@ export function classifyLevel(vo2: number, age: number, sex: Sex): FitnessLevel 
 }
 
 export const LEVEL_META: Record<FitnessLevel, { label: string; color: string; desc: string }> = {
-  excellent: { label: '매우 우수',   color: '#059669', desc: '동년배 상위 10% — 엘리트 러너 수준' },
-  good:      { label: '우수',        color: '#0891B2', desc: '동년배 상위 30% — 규칙적 유산소 운동 중' },
-  average:   { label: '평균',        color: '#A16207', desc: '동년배 중간 — 일반 활동 수준' },
-  below:     { label: '미흡',        color: '#EA580C', desc: '동년배 하위 30% — 운동량 ↑ 권장' },
-  poor:      { label: '매우 미흡',   color: '#DC2626', desc: '심혈관 위험 ↑ — 의사 상담 후 점진 운동 시작' },
+  excellent: { label: '매우 우수',   color: 'var(--emerald-600)', desc: '동년배 최상위권 — 지구력 운동을 꾸준히 하는 수준' },
+  good:      { label: '우수',        color: 'var(--cyan-600)', desc: '동년배 평균 이상 — 규칙적 유산소 운동 중' },
+  average:   { label: '평균',        color: 'var(--yellow-700)', desc: '동년배 중간 — 일반 활동 수준' },
+  below:     { label: '미흡',        color: 'var(--orange-600)', desc: '동년배 평균 아래 — 운동량 ↑ 권장' },
+  poor:      { label: '매우 미흡',   color: 'var(--red-600)', desc: '심혈관 위험 ↑ — 의사 상담 후 점진 운동 시작' },
 }
 
 /* ─── 마라톤·구간 페이스 예측 (VDOT ≈ VO2max 매핑) ─── */
-/** Riegel 공식 + Daniels VDOT 단순화 */
+/** Daniels VDOT 역산 (Riegel은 쓰지 않음) */
 export interface RacePrediction {
   fiveK: number      // 초
   tenK: number
@@ -151,7 +153,7 @@ export interface RacePrediction {
   fullM: number
 }
 
-/** VO2max를 Daniels VDOT로 보고 거리별 예상 시간(초) 산출 (race-predictor의 검증된 VDOT 역산 재사용) */
+/** VO2max를 Daniels VDOT로 보고 거리별 예상 시간(초) 산출 (lib/running.ts의 검증된 VDOT 역산 재사용) */
 export function predictRaces(vo2: number): RacePrediction {
   if (vo2 <= 0) return { fiveK: 0, tenK: 0, halfM: 0, fullM: 0 }
   return {
@@ -160,6 +162,13 @@ export function predictRaces(vo2: number): RacePrediction {
     halfM: timeFromVdot(21.0975, vo2),
     fullM: timeFromVdot(42.195, vo2),
   }
+}
+
+/** 레이스 예측을 보여 줄지 — 걷기 테스트(락포트)나 VO2max 25 미만은 달리기 기록 환산 오차가 크고,
+ *  VO2 한 자릿수에서는 timeFromVdot 탐색 상한(10시간)에 걸려 풀코스가 10:00:00으로 잘린다 */
+export const RACE_PREDICT_MIN_VO2 = 25
+export function showRacePrediction(vo2: number, method: MethodId): boolean {
+  return vo2 >= RACE_PREDICT_MIN_VO2 && method !== 'rockport'
 }
 
 /** 초 → "HH:MM:SS" 또는 "MM:SS" */
@@ -193,47 +202,49 @@ export interface TrainingPaces {
 }
 export function trainingPaces(vo2: number): TrainingPaces {
   if (vo2 <= 0) return { E: 0, M: 0, T: 0, I: 0, R: 0 }
-  // VO2max를 VDOT로 보고 Daniels %VO2max 강도로 페이스 산출 (race-predictor·buildup과 동일 기준)
+  // VO2max를 VDOT로 보고 Daniels %VO2max 강도로 페이스 산출 (lib/running.ts DANIELS_PCT — race-predictor·buildup과 동일 기준)
   return {
-    E: paceFromVdot(vo2, 0.59),
-    M: paceFromVdot(vo2, 0.82),
-    T: paceFromVdot(vo2, 0.88),
-    I: paceFromVdot(vo2, 0.97),
-    R: paceFromVdot(vo2, 1.06),
+    E: paceFromVdot(vo2, DANIELS_PCT.E),
+    M: paceFromVdot(vo2, DANIELS_PCT.M),
+    T: paceFromVdot(vo2, DANIELS_PCT.T),
+    I: paceFromVdot(vo2, DANIELS_PCT.I),
+    R: paceFromVdot(vo2, DANIELS_PCT.R),
   }
 }
 
-/* ─── 개선 가이드 ─── */
+/* ─── 개선 가이드 ───
+   수치는 출처가 있는 것만 적는다 (4×4 인터벌 — Helgerud 외 2007, Med Sci Sports Exerc).
+   나머지 항목은 연구마다 대상·기간이 달라 단일 향상 폭을 제시하지 않는다. */
 export const IMPROVE_TIPS = [
   {
     title: '🏃 LSD (Long Slow Distance)',
-    desc: '주 1회 60~120분, 대화 가능한 페이스 (E 강도). 모세혈관·미토콘드리아 발달 → VO2max 기반 다지기.',
-    weeks: '8~12주에 +2~3 mL/kg/min',
+    desc: '주 1회 60~120분, 대화 가능한 페이스 (E 강도). 모세혈관·미토콘드리아 발달 → 고강도 훈련을 버티는 기반.',
+    weeks: '몇 달 단위로 꾸준히 — 기반 체력',
   },
   {
     title: '⚡ HIIT (고강도 인터벌)',
-    desc: '4×4분 인터벌 (90~95% HRmax) + 3분 회복 × 2~3회/주. VO2max 직접 자극.',
-    weeks: '6~8주에 +3~5 mL/kg/min',
+    desc: '4분 (최대심박 90~95%) + 3분 회복(약 70%) × 4세트. VO2max를 직접 자극하는 대표 훈련.',
+    weeks: '주 3회 8주에 약 7% (Helgerud 2007)',
   },
   {
     title: '🎯 역치 훈련 (Tempo)',
-    desc: '20~40분 T 페이스 (1시간 race pace). 젖산 역치 향상 → 더 오래 빠르게.',
-    weeks: '6~8주에 +1~2 mL/kg/min',
+    desc: '20~40분 T 페이스 (약 1시간 레이스 강도). 젖산 역치 향상 → 같은 VO2max로 더 오래 빠르게.',
+    weeks: 'VO2max보다 지속 능력을 키움',
   },
   {
-    title: '💪 근력 + 폐활량',
-    desc: '주 2회 하체 근력(스쿼트·런지) + 호흡근 훈련(파워 브리드). 산소 운반력 ↑.',
-    weeks: '12주에 +1~2 mL/kg/min',
+    title: '💪 하체 근력',
+    desc: '주 2회 스쿼트·런지 등 하체 근력 운동. VO2max를 직접 올리는 훈련은 아니고 부상 예방용 보조 훈련.',
+    weeks: '보조 훈련 — VO2max 직접 효과는 작음',
   },
   {
     title: '🛌 회복·수면',
-    desc: '주 1~2일 완전 휴식 + 7~9시간 수면. 회복 부족은 VO2max 정체의 가장 흔한 원인.',
-    weeks: '즉시 효과',
+    desc: '주 1~2일 완전 휴식 + 7~9시간 수면. 회복이 부족하면 훈련 효과가 쌓이지 않고 기록이 정체되기 쉬움.',
+    weeks: '훈련 효과가 쌓이는 조건',
   },
   {
     title: '🍎 체중 관리',
-    desc: 'VO2max는 mL/kg/min — 체중 1kg 감량 시 자동 +0.5~1 향상. 단 급격한 감량은 X.',
-    weeks: '4~8주 점진 감량',
+    desc: 'VO2max는 체중 1kg당 값(mL/kg/min) — 심폐 능력이 같아도 체중이 줄면 수치가 오름 (예: 70kg·45 → 69kg이면 약 45.7). 급격한 감량은 금물.',
+    weeks: '점진 감량 (근육 손실 주의)',
   },
 ]
 

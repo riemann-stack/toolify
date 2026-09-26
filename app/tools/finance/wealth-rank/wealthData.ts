@@ -14,10 +14,12 @@ export interface Point { p: number; v: number } // p: 하위 누적 백분율(%)
 //    - 순자산 10억(100,000) 이상 = 상위 11.8%       → p88.2= 100,000
 //    - 5분위 중앙값 ≈ 90th pct = 11억               → p90  = 110,000
 //    - 상위 5% 컷 15.2억 / 1% 33억 / 0.5% 44.2억 / 0.1% 86.7억
+//    - 순자산 마이너스 가구 3.0%(2025.3말)         → p3   = 0
 //  ● 그 외 하위~중간 구간은 평균 4.71억·지니 0.625에 맞춘 보간 추정.
 // ──────────────────────────────────────────────────────────
 export const NATIONAL: Point[] = [
   { p: 0, v: -3000 },
+  { p: 3, v: 0 }, // 실측: 순자산 음수 가구 3.0% → 0원은 하위 3%(상위 97%)
   { p: 10, v: 2000 },
   { p: 20, v: 5000 },
   { p: 30, v: 9500 },
@@ -54,39 +56,41 @@ export const GLOBAL: Point[] = [
   { p: 100, v: 100000000 },
 ]
 
-export const USD_KRW = 1380 // 참고용 고정 환율 (2026년 기준 근사)
+export const USD_KRW = 1340 // 참고용 고정 환율 — 2026년 9월 초 근사(9/9 종가 약 1,336원). 실시간 환율 아님
+export const USD_KRW_ASOF = '2026년 9월 초'
 
-// ── 연령대별 평균 순자산 (가구주 기준, 만원) ──
-//   50대는 실측(5억 5,161만). 나머지는 연령 프로파일 기반 추정.
+// ── 연령대별 평균 순자산 (가구주 연령계층 기준, 2025.3말, 만원) ──
+//   2025년 가계금융복지조사 가구주 연령계층별 순자산 평균. 원 보도자료 표(국가데이터처·KOSIS)는
+//   2026-09 검증 환경에서 열람이 막혀 보도 인용치를 교차 확인해 사용:
+//     - 39세 이하 2억 1,950만(전년比 −0.9%)·40대 4억 8,389만(+7.4%)·50대 5억 5,161만(+7.9%)
+//       — 문화일보 2026.2.12 「50대 5.5억 > 39세 이하 2.1억」(국가데이터처 인용)
+//     - 29세 이하 1억 796만·30대 2억 5,060만·40대 4억 8,389만·50대 5억 5,161만·60세 이상 5억 3,591만
+//       — 아주경제 2026.9.12 (2025 가계금융복지조사 인용)
+//   정합성: 39세 이하(2억 1,950만)는 29세 이하·30대 값 사이에 있고, 60세 이상이 전국 평균(4억 7,144만)보다
+//   높아야 연령대 가중 평균이 전국 평균과 맞음(옛 추정 4억 5,500만은 전국 평균보다 낮아 모순이었음).
+//   다음 조사 공표(매년 12월) 때 KOSIS 원표로 갱신할 것.
 export interface Group { id: string; label: string; mean: number; real: boolean }
 export const AGE_GROUPS: Group[] = [
-  { id: 'u39', label: '39세 이하', mean: 23000, real: false },
-  { id: '40s', label: '40대', mean: 44600, real: false },
+  { id: 'u39', label: '39세 이하', mean: 21950, real: true },
+  { id: '40s', label: '40대', mean: 48389, real: true },
   { id: '50s', label: '50대', mean: 55161, real: true },
-  { id: '60p', label: '60세 이상', mean: 45500, real: false },
+  { id: '60p', label: '60세 이상', mean: 53591, real: true },
 ]
 
-// ── 시도별 평균 순자산 (가구 기준, 만원) ──
-//   서울·세종·경기·제주는 2025 실측. 그 외 13개 시도는
-//   전국 평균(4.71억) 대비 상대 수준으로 보정한 추정치.
+// ── 시도별 평균 순자산 (가구 기준, 2025.3말, 만원) ──
+//   2025년 가계금융복지조사 시도별 평균 순자산 중 보도로 확인한 값만 둔다:
+//     서울 7억 1,288만·세종 6억 648만·경기 5억 6,006만·제주 4억 8,103만(제주 '전국 4위')
+//     — 제주매일 「제주 가구당 순자산 4억8103만원 '전국 4위'」(국가데이터처 인용), 전국 평균 4억 7,144만.
+//   나머지 13개 시·도도 조사가 공표하지만(KOSIS 시도별 통계표) 2026-09 검증 환경에서 원표
+//   (KOSIS·국가데이터처·한국은행)를 열람할 수 없어 값을 확인하지 못했다. 지어낸 추정치를 쓰지 않도록
+//   목록에서 뺐으며(옛 추정치 대전 4.85억은 공표 순위 4위 제주보다 높아 모순이었음), 원표 확인 시
+//   real:true로 추가할 것. 화면은 REGIONS를 그대로 돌리므로 여기만 고치면 된다.
+export const SIDO_COUNT = 17 // 전국 광역자치단체(시·도) 수 — '나머지 N개 시·도' 문구 보간용
 export const REGIONS: Group[] = [
   { id: 'seoul', label: '서울', mean: 71288, real: true },
   { id: 'sejong', label: '세종', mean: 60648, real: true },
   { id: 'gyeonggi', label: '경기', mean: 56006, real: true },
-  { id: 'daejeon', label: '대전', mean: 48500, real: false },
   { id: 'jeju', label: '제주', mean: 48103, real: true },
-  { id: 'ulsan', label: '울산', mean: 47500, real: false },
-  { id: 'busan', label: '부산', mean: 45500, real: false },
-  { id: 'daegu', label: '대구', mean: 45000, real: false },
-  { id: 'incheon', label: '인천', mean: 44000, real: false },
-  { id: 'gwangju', label: '광주', mean: 42000, real: false },
-  { id: 'chungnam', label: '충남', mean: 41000, real: false },
-  { id: 'gyeongnam', label: '경남', mean: 40500, real: false },
-  { id: 'chungbuk', label: '충북', mean: 39500, real: false },
-  { id: 'gangwon', label: '강원', mean: 38500, real: false },
-  { id: 'gyeongbuk', label: '경북', mean: 38000, real: false },
-  { id: 'jeonnam', label: '전남', mean: 37500, real: false },
-  { id: 'jeonbuk', label: '전북', mean: 37000, real: false },
 ]
 
 // ──────────────────────────────────────────────────────────

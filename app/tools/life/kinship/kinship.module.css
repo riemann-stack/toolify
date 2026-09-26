@@ -6,7 +6,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -39,7 +39,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .genderBtn:hover { color: var(--text); border-color: var(--border-hover); }
@@ -58,11 +58,11 @@
 .chipMe {
   background: var(--accent-light);
   color: var(--accent-ink);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .chip {
   display: inline-flex;
@@ -70,23 +70,23 @@
   gap: 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .chipArrow { color: var(--muted); font-weight: 400; }
 .chipUndo {
   background: transparent;
   border: 1px dashed var(--border-hover);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--muted-strong);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .chipUndo:hover { color: var(--text); border-color: var(--accent); }
 }
@@ -108,7 +108,7 @@
   font-weight: 600;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
   min-height: 44px;
 }@media (hover: hover) {
@@ -126,13 +126,13 @@
   flex-shrink: 0;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted-strong);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .resetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
@@ -141,13 +141,13 @@
 .hero {
   background: var(--accent-light);
   border: 1px solid var(--accent);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 26px 24px;
   text-align: center;
 }
 .heroLead { font-size: 13px; color: var(--muted-strong); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(30px, 7vw, 44px);
   font-weight: 800;
   letter-spacing: -1px;
@@ -172,7 +172,7 @@
   /* hero 틴트(--accent-light) 위 12px 텍스트 — 반투명 accent 합성은 대비 4.50 경계라 불투명 배경 사용 */
   background: var(--bg2);
   color: var(--accent-ink);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 2px 10px;
   font-size: 12px;
   font-weight: 700;
@@ -182,7 +182,7 @@
 .heroEmpty {
   background: var(--bg2);
   border: 1px dashed var(--border-hover);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 26px 24px;
   text-align: center;
   font-size: 13px;
@@ -197,7 +197,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .legalText {
   font-size: 15px;
@@ -229,7 +229,7 @@
   font-weight: 600;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
   min-height: 44px;
   line-height: 1.4;
@@ -242,14 +242,14 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
   width: 100%;
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent-ink); }

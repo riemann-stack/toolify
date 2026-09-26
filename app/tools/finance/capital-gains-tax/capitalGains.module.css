@@ -8,7 +8,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -31,11 +31,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -56,7 +56,7 @@
   font-size: 13px;
   color: var(--muted);
   pointer-events: none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 라디오 세그먼트 (주택 종류) */
@@ -80,7 +80,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .seg:hover { color: var(--text); }
@@ -107,26 +107,26 @@
 /* 보유기간 자동산출 표시 줄 */
 .holdInfo {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   margin-top: 4px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.holdInfo strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.holdInfo strong { color: var(--accent); font-family: var(--font-sans); }
 
 /* ── 히어로 (주 결과) — clamp(44px,11vw,72px) ── */
 .hero {
-  background: linear-gradient(135deg, rgba(8, 145, 178, 0.10) 0%, rgba(13, 148, 136, 0.06) 100%);
-  border: 1px solid rgba(8, 145, 178, 0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan-600) 10%, transparent) 0%, rgba(13, 148, 136, 0.06) 100%);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(44px, 11vw, 72px);
   font-weight: 800;
   color: var(--accent);
@@ -146,13 +146,13 @@
 .heroFree {
   background: linear-gradient(135deg, rgba(5, 150, 105, 0.12) 0%, rgba(5, 150, 105, 0.05) 100%);
   border: 1px solid rgba(5, 150, 105, 0.4);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 28px 22px;
   text-align: center;
 }
 .heroFreeIcon { font-size: 30px; margin: 0 0 8px; }
 .heroFreeValue {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(34px, 9vw, 56px);
   font-weight: 800;
   color: var(--success);
@@ -172,11 +172,11 @@
   font-size: 12px;
   font-weight: 600;
   padding: 5px 12px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
 .badgeFree { background: rgba(5, 150, 105, 0.12); color: var(--success); border: 1px solid rgba(5, 150, 105, 0.35); }
-.badgeApportion { background: rgba(8, 145, 178, 0.10); color: var(--accent); border: 1px solid rgba(8, 145, 178, 0.3); }
+.badgeApportion { background: color-mix(in srgb, var(--cyan-600) 10%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent); }
 .badgeShort { background: rgba(220, 38, 38, 0.08); color: var(--danger); border: 1px solid rgba(220, 38, 38, 0.3); }
 
 /* 보조 결과 줄 */
@@ -191,7 +191,7 @@
   padding-top: 14px;
   border-top: 1px dashed var(--border);
 }
-.subline strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.subline strong { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 
 /* 복사 버튼 */
 .copyBtn {
@@ -204,9 +204,9 @@
   background: var(--bg3);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -218,7 +218,7 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.helpText strong { color: var(--text); font-family: var(--font-sans); }
 .cellAccent { color: var(--accent); }
 
 /* 상세표 */
@@ -240,13 +240,13 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .rowNote td:first-child { color: var(--muted); font-size: 12px; }
 .rowSub td:first-child { padding-left: 22px; color: var(--muted); }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.cellMono { font-family: var(--font-sans); font-weight: 600; }
 .cellMinus { color: var(--danger); }
 .cellTotal td {
   background: rgba(13, 148, 136, 0.06);
@@ -264,11 +264,11 @@
   color: var(--text);
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.basisChip strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.basisChip strong { color: var(--accent); font-family: var(--font-sans); }
 
 /* 공제율 표 펼침 */
 .formulaDetails > summary {
@@ -286,7 +286,7 @@
 /* 안내 박스 */
 .tipBox {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   margin-top: 12px;
   font-size: 13px;
@@ -300,7 +300,7 @@
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;

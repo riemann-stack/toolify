@@ -3,7 +3,7 @@
 import Disclaimer from '@/components/Disclaimer'
 /* eslint-disable react-hooks/set-state-in-effect */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './bmr.module.css'
 import {
   Gender, FormulaId,
@@ -61,15 +61,20 @@ export default function BmrClient() {
     bodyFat: bodyFatN, leanMass: leanMassN,
   }), [gender, heightN, weightN, ageN, bodyFatN, leanMassN])
 
-  const bmr = useMemo(() => {
-    if (!inputValid) return null
-    return calcBMR(formulaInput, formula)
-  }, [inputValid, formulaInput, formula])
-
   const allFormulas = useMemo(() => {
     if (!inputValid) return []
     return calcAllFormulas(formulaInput)
   }, [inputValid, formulaInput])
+
+  // 선택한 공식에 필요한 체지방률·LBM이 없거나 범위 밖이면 Mifflin으로 계산(선택은 유지)
+  const formulaFallback = allFormulas.some(r => r.id === formula && !r.available)
+  const effectiveFormula: FormulaId = formulaFallback ? 'mifflin' : formula
+  const effectiveFormulaName = FORMULAS.find(f => f.id === effectiveFormula)?.name
+
+  const bmr = useMemo(() => {
+    if (!inputValid) return null
+    return calcBMR(formulaInput, effectiveFormula)
+  }, [inputValid, formulaInput, effectiveFormula])
 
   /* ─── 활동 정밀화 입력 ─── */
   const [jobLevel, setJobLevel] = useState('sedentary')
@@ -116,11 +121,14 @@ export default function BmrClient() {
 
   /* ─── 복사 / 저장 ─── */
   const [copied, setCopied] = useState(false)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (copyTimer.current) clearTimeout(copyTimer.current) }, [])
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+      copyTimer.current = setTimeout(() => setCopied(false), 1500)
     } catch { /* */ }
   }
 
@@ -133,7 +141,7 @@ export default function BmrClient() {
       id: newBmrId(),
       date: new Date().toISOString(),
       height: heightN, weight: weightN, age: ageN,
-      bmr, tdee: tdeeSimple, formula,
+      bmr, tdee: tdeeSimple, formula: effectiveFormula,
       ...(bodyFatN !== undefined ? { bodyFat: bodyFatN } : {}),
     }
     const next = [item, ...history].slice(0, 60)
@@ -212,9 +220,9 @@ export default function BmrClient() {
           </div>
         </div>
         <div className={styles.card}>
-          <label className={styles.cardLabel}>나이</label>
+          <label className={styles.cardLabel} htmlFor="bmr-age">나이</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="bmr-age" className={styles.numInput} type="number" inputMode="numeric"
               placeholder="30" value={age} onChange={e => setAge(e.target.value)} />
             <span className={styles.unit}>세</span>
           </div>
@@ -233,17 +241,17 @@ export default function BmrClient() {
         <summary>고급 입력 (Katch-McArdle / Cunningham 공식용)</summary>
         <div className={styles.fieldRow}>
           <div>
-            <span className={styles.subLabel}>체지방률 (%)</span>
+            <label className={styles.subLabel} htmlFor="bmr-bodyfat">체지방률 (%)</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
+              <input id="bmr-bodyfat" className={styles.numInput} type="number" inputMode="decimal"
                 placeholder="18" value={bodyFat} onChange={e => setBodyFat(e.target.value)} />
               <span className={styles.unit}>%</span>
             </div>
           </div>
           <div>
-            <span className={styles.subLabel}>제지방량 (LBM, kg)</span>
+            <label className={styles.subLabel} htmlFor="bmr-lbm">제지방량 (LBM, kg)</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="number" inputMode="decimal"
+              <input id="bmr-lbm" className={styles.numInput} type="number" inputMode="decimal"
                 placeholder="55" value={leanMass} onChange={e => setLeanMass(e.target.value)} />
               <span className={styles.unit}>kg</span>
             </div>
@@ -275,6 +283,11 @@ export default function BmrClient() {
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
               {FORMULAS.find(f => f.id === formula)?.desc} · 정확도: {FORMULAS.find(f => f.id === formula)?.accuracy}
             </p>
+            {formulaFallback && (
+              <p style={{ fontSize: 12, color: 'var(--warning)', marginTop: 4, lineHeight: 1.7 }}>
+                선택한 공식에 필요한 {formula === 'katch-mcardle' ? '체지방률(1~59%)' : '제지방량(LBM)'}이 없어 Mifflin-St Jeor로 계산하고 있습니다. 고급 입력에서 값을 넣어주세요.
+              </p>
+            )}
           </div>
 
           <div className={styles.card}>
@@ -325,14 +338,14 @@ export default function BmrClient() {
                       onClick={() => setJobLevel(j.id)} title={j.desc}>
                       {j.name}
                       <br />
-                      <small style={{ fontSize: 10, opacity: 0.7 }}>{j.desc}</small>
+                      <small style={{ fontSize: 11, opacity: 0.7 }}>{j.desc}</small>
                     </button>
                   ))}
                 </div>
               </div>
 
               <div className={styles.card}>
-                <label className={styles.cardLabel}>일일 걸음 — {fmt(dailySteps)}보 <span className={styles.cardLabelHint}>한국 성인 평균 약 5,800보</span></label>
+                <label className={styles.cardLabel}>운동 외 일일 걸음 — {fmt(dailySteps)}보 <span className={styles.cardLabelHint}>한국 성인 평균 약 5,800보</span></label>
                 <div className={styles.sliderRow}>
                   <input className={styles.slider} type="range"
                     min="0" max="20000" step="100"
@@ -373,7 +386,7 @@ export default function BmrClient() {
                       onClick={() => setExerciseIntensity(e.id)}>
                       {e.name}
                       <br />
-                      <small style={{ fontSize: 10, opacity: 0.7 }}>약 {fmt(e.met * (weightN || 70))}kcal/h</small>
+                      <small style={{ fontSize: 11, opacity: 0.7 }}>약 {fmt(e.met * (weightN || 70))}kcal/h</small>
                     </button>
                   ))}
                 </div>
@@ -388,9 +401,9 @@ export default function BmrClient() {
                       <span>직업 활동·소화(TEF) (×{JOB_ACTIVITY_LEVELS.find(j => j.id === jobLevel)?.factor}×1.1)</span>
                       <span>+{fmt(detailed.baseDailyTDEE - detailed.bmr)} kcal</span>
                     </div>
-                    <div className={styles.detailRow}><span>일일 걸음 보너스</span><span>+{fmt(detailed.dailyStepsBonus)} kcal</span></div>
+                    <div className={styles.detailRow}><span>운동 외 걸음 보너스 (5,000보 초과분)</span><span>+{fmt(detailed.dailyStepsBonus)} kcal</span></div>
                     <div className={styles.detailRow}>
-                      <span>운동 일일 평균 ({weeklyExercises}회 × {exerciseDuration}분)</span>
+                      <span>운동 일일 평균 ({weeklyExercises}회 × {exerciseDuration}분, 안정 대사 제외)</span>
                       <span>+{fmt(detailed.dailyExerciseAvg)} kcal</span>
                     </div>
                     <div className={styles.detailRow}><span>휴식일 TDEE</span><span>{fmt(detailed.restDayTDEE)} kcal</span></div>
@@ -406,8 +419,8 @@ export default function BmrClient() {
 
           {bmr !== null && tdeeSimple !== null ? (
             <>
-              <div className={styles.hero}
-                style={{ borderColor: 'rgba(14,165,233,0.30)', background: 'rgba(14,165,233,0.06)' }}>
+              <div className={styles.hero} role="status"
+                style={{ borderColor: 'color-mix(in srgb, var(--accent) 30%, transparent)', background: 'color-mix(in srgb, var(--accent) 6%, transparent)' }}>
                 <div className={styles.heroLabel}>BMR · 기초대사량</div>
                 <div className={styles.heroNum} style={{ color: 'var(--accent)' }}>
                   {fmt(bmr)}<span className={styles.heroNumUnit}>kcal</span>
@@ -417,7 +430,7 @@ export default function BmrClient() {
                   {fmt(tdeeSimple)}<span style={{ fontSize: '0.4em', marginLeft: 6 }}>kcal</span>
                 </div>
                 <div className={styles.heroDesc}>
-                  {FORMULAS.find(f => f.id === formula)?.name} · {actMode === 'detailed' ? '정밀 (직업·걸음·운동)' : `${ACTIVITY_FACTORS[actIdx].name} (×${ACTIVITY_FACTORS[actIdx].factor})`}
+                  {effectiveFormulaName} · {actMode === 'detailed' ? '정밀 (직업·걸음·운동)' : `${ACTIVITY_FACTORS[actIdx].name} (×${ACTIVITY_FACTORS[actIdx].factor})`}
                 </div>
                 <div className={styles.heroDisclaimer}>
                   💡 BMR은 자동차 공회전, TDEE는 실제 주행 — 식단 설계는 TDEE 기준
@@ -506,21 +519,21 @@ export default function BmrClient() {
               {/* 안전 경고 */}
               {safety && safety.warnings.length > 0 && (
                 <div className={styles.criticalBox}>
-                  <strong>⚠️ 안전 경고</strong>
+                  <strong>⚠️ 「빠른 감량(TDEE −20%)」 목표{dietGoal ? ` ${fmt(dietGoal.daily)}kcal` : ''}를 적용하면</strong>
                   <ul style={{ paddingLeft: 18, marginTop: 6, marginBottom: 0 }}>
                     {safety.warnings.map((w, i) => (
                       <li key={i} style={{ marginBottom: 4 }}>{w}</li>
                     ))}
                   </ul>
                   <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>109</strong> (24시간)
+                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: 'var(--red-600)' }}>1577-0199</strong> · 자살예방 <strong style={{ color: 'var(--red-600)' }}>109</strong> (24시간)
                   </p>
                 </div>
               )}
 
               <div className={styles.resultActions}>
                 <button type="button" className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
-                  onClick={() => copy(`BMR ${fmt(bmr)} / TDEE ${fmt(tdeeSimple)} kcal (${FORMULAS.find(f => f.id === formula)?.name}, ${actMode === 'detailed' ? '정밀' : ACTIVITY_FACTORS[actIdx].name})`)}>
+                  onClick={() => copy(`BMR ${fmt(bmr)} / TDEE ${fmt(tdeeSimple)} kcal (${effectiveFormulaName}, ${actMode === 'detailed' ? '정밀' : ACTIVITY_FACTORS[actIdx].name})`)}>
                   {copied ? '✓ 복사됨' : '복사'}
                 </button>
                 <button type="button" className={styles.copyBtn} onClick={() => setTab('budget')}>칼로리 예산</button>
@@ -568,9 +581,9 @@ export default function BmrClient() {
               </div>
 
               <div className={styles.hero}
-                style={{ borderColor: 'rgba(8,145,178,0.30)', background: 'rgba(8,145,178,0.06)' }}>
+                style={{ borderColor: 'color-mix(in srgb, var(--cyan-600) 30%, transparent)', background: 'color-mix(in srgb, var(--cyan-600) 6%, transparent)' }}>
                 <div className={styles.heroLabel}>오늘의 칼로리 예산</div>
-                <div className={styles.heroNum} style={{ color: '#0891B2' }}>
+                <div className={styles.heroNum} style={{ color: 'var(--cyan-600)' }}>
                   {fmt(budgetGoal.daily)}<span className={styles.heroNumUnit}>kcal</span>
                 </div>
                 <div className={styles.heroDesc}>{budgetGoal.name} 목표 적용</div>
@@ -590,16 +603,16 @@ export default function BmrClient() {
                   return (
                     <>
                       <div className={styles.budgetBar}>
-                        <div className={styles.budgetSeg} style={{ width: `${bmrPct}%`, background: '#0891B2' }}>
+                        <div className={styles.budgetSeg} style={{ width: `${bmrPct}%`, background: 'var(--cyan-600)' }}>
                           <span>BMR</span><b>{fmt(bmr)}</b>
                         </div>
-                        <div className={styles.budgetSeg} style={{ width: `${actPct}%`, background: '#A16207' }}>
+                        <div className={styles.budgetSeg} style={{ width: `${actPct}%`, background: 'var(--yellow-700)' }}>
                           <span>활동</span><b>+{fmt(activity)}</b>
                         </div>
                         {adjustment !== 0 && (
                           <div className={styles.budgetSeg} style={{
                             width: `${adjPct}%`,
-                            background: isDeficit ? '#DC2626' : '#059669',
+                            background: isDeficit ? 'var(--red-600)' : 'var(--emerald-600)',
                           }}>
                             <span>{isDeficit ? '감량' : '증량'}</span>
                             <b>{isDeficit ? '−' : '+'}{fmt(Math.abs(adjustment))}</b>
@@ -608,17 +621,17 @@ export default function BmrClient() {
                       </div>
                       <div className={styles.budgetLegend}>
                         <div className={styles.budgetLegendItem}>
-                          <span className={styles.budgetSwatch} style={{ background: '#0891B2' }} />
+                          <span className={styles.budgetSwatch} style={{ background: 'var(--cyan-600)' }} />
                           기본 생명유지 (BMR) <b>{fmt(bmr)}</b>
                         </div>
                         <div className={styles.budgetLegendItem}>
-                          <span className={styles.budgetSwatch} style={{ background: '#A16207' }} />
+                          <span className={styles.budgetSwatch} style={{ background: 'var(--yellow-700)' }} />
                           일상 활동·운동 <b>+{fmt(activity)}</b>
                         </div>
                         {adjustment !== 0 && (
                           <div className={styles.budgetLegendItem}>
                             <span className={styles.budgetSwatch} style={{
-                              background: isDeficit ? '#DC2626' : '#059669',
+                              background: isDeficit ? 'var(--red-600)' : 'var(--emerald-600)',
                             }} />
                             {isDeficit ? '감량 차감' : '증량 추가'} <b>{isDeficit ? '−' : '+'}{fmt(Math.abs(adjustment))}</b>
                           </div>
@@ -676,7 +689,7 @@ export default function BmrClient() {
                   ))}
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                  💡 오늘 예산 <strong style={{ color: '#0891B2' }}>{fmt(budgetGoal.daily)}kcal</strong> ≈ 밥 {Math.floor(budgetGoal.daily / 300)}공기 + 단백질·지방·야채 균형
+                  💡 오늘 예산 <strong style={{ color: 'var(--cyan-600)' }}>{fmt(budgetGoal.daily)}kcal</strong> ≈ 밥 {Math.floor(budgetGoal.daily / 300)}공기 + 단백질·지방·야채 균형
                 </p>
               </div>
             </>

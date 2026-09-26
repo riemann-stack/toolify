@@ -1,7 +1,8 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useEffect, useMemo, useState } from 'react'
+import { todayStr } from '@/lib/date'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import s from './housing-score.module.css'
 import {
   calcTotalScore,
@@ -20,6 +21,10 @@ const STORAGE_KEY = 'youtil_housing_score_v1'
 
 type HouseStatus = 'none' | 'one_sell' | 'one_keep' | 'multi'
 type MarriedStatus = 'single' | 'married'
+const HOUSE_STATUSES: readonly HouseStatus[] = ['none', 'one_sell', 'one_keep', 'multi']
+const ISO_RE = /^\d{4}-\d{2}-\d{2}$/
+const isIntIn = (v: unknown, min: number, max: number): v is number =>
+  typeof v === 'number' && Number.isInteger(v) && v >= min && v <= max
 
 /** 청약 1순위 가입기간·납입횟수 요건 (지역별) */
 type RankRegion = 'regulated' | 'metro' | 'nonmetro'
@@ -29,11 +34,10 @@ const RANK_RULES: Record<RankRegion, { years: number; count: number; label: stri
   nonmetro:  { years: 0.5, count: 6,  label: '비수도권', period: '6개월' },
 }
 
-function toISODate(d: Date): string {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
+/* 기준일(오늘) — SSG·hydration 첫 렌더는 page.tsx가 넘긴 빌드일을 쓰고, 직후 기기 날짜로 다시 렌더 (불일치 방지) */
+const noopSubscribe = () => () => {}
+function useToday(buildDate: string): string {
+  return useSyncExternalStore(noopSubscribe, todayStr, () => buildDate)
 }
 function fromISO(s: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null
@@ -42,9 +46,9 @@ function fromISO(s: string): Date | null {
   return d
 }
 
-export default function HousingScoreClient() {
+export default function HousingScoreClient({ buildDate }: { buildDate?: string }) {
   /* 신청자 정보 */
-  const today = useMemo(() => toISODate(new Date()), [])
+  const today = useToday(buildDate ?? '')
   const [birthDate, setBirthDate] = useState<string>('1990-01-01')
   const [marriedStatus, setMarriedStatus] = useState<MarriedStatus>('married')
   const [marriedDate, setMarriedDate] = useState<string>('2020-01-01')
@@ -72,21 +76,30 @@ export default function HousingScoreClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (j.birthDate) setBirthDate(j.birthDate)
-      if (j.marriedStatus) setMarriedStatus(j.marriedStatus)
-      if (j.marriedDate) setMarriedDate(j.marriedDate)
-      if (j.houseStatus) setHouseStatus(j.houseStatus)
-      if (typeof j.overrideUnhomedYears === 'number' || j.overrideUnhomedYears === null) setOverrideUnhomedYears(j.overrideUnhomedYears)
+      const parsed: unknown = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return
+      const j = parsed as Record<string, unknown>
+      const isIso = (v: unknown): v is string => typeof v === 'string' && ISO_RE.test(v) && fromISO(v) !== null
+      /* eslint-disable react-hooks/set-state-in-effect */
+      if (isIso(j.birthDate)) setBirthDate(j.birthDate)
+      if (j.marriedStatus === 'single' || j.marriedStatus === 'married') setMarriedStatus(j.marriedStatus)
+      if (isIso(j.marriedDate)) setMarriedDate(j.marriedDate)
+      if (typeof j.houseStatus === 'string' && (HOUSE_STATUSES as readonly string[]).includes(j.houseStatus)) setHouseStatus(j.houseStatus as HouseStatus)
+      if (j.overrideUnhomedYears === null || (typeof j.overrideUnhomedYears === 'number' && Number.isFinite(j.overrideUnhomedYears) && j.overrideUnhomedYears >= 0 && j.overrideUnhomedYears <= 20)) setOverrideUnhomedYears(j.overrideUnhomedYears)
       if (typeof j.hasSpouse === 'boolean') setHasSpouse(j.hasSpouse)
-      if (typeof j.childrenCount === 'number') setChildrenCount(j.childrenCount)
-      if (typeof j.parentsCount === 'number') setParentsCount(j.parentsCount)
+      if (isIntIn(j.childrenCount, 0, 10)) setChildrenCount(j.childrenCount)
+      if (isIntIn(j.parentsCount, 0, 4)) setParentsCount(j.parentsCount)
       if (typeof j.parents3Years === 'boolean') setParents3Years(j.parents3Years)
-      if (j.bankbookJoinDate) setBankbookJoinDate(j.bankbookJoinDate)
-      if (typeof j.bankbookCount === 'number') setBankbookCount(j.bankbookCount)
+      if (isIso(j.bankbookJoinDate)) setBankbookJoinDate(j.bankbookJoinDate)
+      if (isIntIn(j.bankbookCount, 0, 60)) setBankbookCount(j.bankbookCount)
       if (j.rankRegion === 'regulated' || j.rankRegion === 'metro' || j.rankRegion === 'nonmetro') setRankRegion(j.rankRegion)
-      if (j.specialChecks) setSpecialChecks(j.specialChecks)
+      const sc = j.specialChecks
+      if (sc && typeof sc === 'object' && !Array.isArray(sc)) {
+        const clean: Record<string, boolean> = {}
+        for (const [k, v] of Object.entries(sc as Record<string, unknown>)) if (typeof v === 'boolean') clean[k] = v
+        setSpecialChecks(clean)
+      }
+      /* eslint-enable react-hooks/set-state-in-effect */
     } catch {}
   }, [])
   useEffect(() => {
@@ -103,16 +116,18 @@ export default function HousingScoreClient() {
     bankbookJoinDate, bankbookCount, rankRegion, specialChecks,
   ])
 
-  /* 계산 — 무주택 기간 (다주택·1주택 미서약은 가점제 대상 아님 → 0) */
-  const unhomedYears = useMemo(() => {
-    if (houseStatus === 'multi' || houseStatus === 'one_keep') return 0
-    if (overrideUnhomedYears !== null) return overrideUnhomedYears
+  /* 계산 — 무주택 기간. 모집공고일 현재 주택을 소유한 세대(1주택 처분서약 포함)는 무주택 기간 0점 → null.
+     무주택자라도 만 30세 미만 미혼이면 기산 전 → null(0점). 직접 보정은 기산이 시작된 경우에만 적용 */
+  const unhomedYears = useMemo((): number | null => {
+    if (houseStatus !== 'none') return null
 
     const birth = fromISO(birthDate)
-    if (!birth) return 0
+    const refDate = fromISO(today)
+    if (!birth || !refDate) return null
     const married = marriedStatus === 'married' ? fromISO(marriedDate) : null
-    const refDate = fromISO(today)!
-    return computeUnhomedYears(birth, married, refDate)
+    const auto = computeUnhomedYears(birth, married, refDate)
+    if (auto === null) return null
+    return overrideUnhomedYears !== null ? overrideUnhomedYears : auto
   }, [houseStatus, overrideUnhomedYears, birthDate, marriedStatus, marriedDate, today])
 
   /* 부양가족 합산 */
@@ -127,8 +142,9 @@ export default function HousingScoreClient() {
   /* 통장 기간 */
   const bankbookYears = useMemo(() => {
     const d = fromISO(bankbookJoinDate)
-    if (!d) return 0
-    return computeBankbookYears(d, fromISO(today)!)
+    const refDate = fromISO(today)
+    if (!d || !refDate) return 0
+    return computeBankbookYears(d, refDate)
   }, [bankbookJoinDate, today])
 
   /* 종합 점수 */
@@ -229,8 +245,8 @@ export default function HousingScoreClient() {
             className={`${s.statusBtn} ${houseStatus === 'one_sell' ? s.statusActive : ''}`}
             onClick={() => setHouseStatus('one_sell')}
           >
-            <strong>1주택 (처분 서약)</strong>
-            <small>입주 전 처분 동의 → 가점제</small>
+            <strong>1주택 (처분 조건)</strong>
+            <small>무주택 기간 0점 — 주로 추첨제</small>
           </button>
           <button
             type="button"
@@ -252,9 +268,14 @@ export default function HousingScoreClient() {
           </button>
         </div>
 
+        {houseStatus === 'one_sell' && (
+          <p className={s.warnBox}>
+            ⚠️ 입주자모집공고일 현재 주택을 가진 세대는 처분 조건이어도 <strong>무주택 기간 가점이 0점</strong>입니다. 처분 조건은 주로 추첨제 청약 자격과 관련된 제도입니다. 이미 집을 팔았다면 「무주택」을 고르고, 무주택 기간은 처분일부터 다시 셉니다(아래 「직접 보정」 활용).
+          </p>
+        )}
         {houseStatus === 'one_keep' && (
           <p className={s.warnBox}>
-            ⚠️ 처분서약을 하지 않은 1주택자는 <strong>가점제 청약 대상이 아닙니다</strong> — 민영 추첨제로만 신청 가능. 가점으로 청약하려면 입주 전 <strong>처분서약(매도 동의)</strong>이 필요합니다.
+            ⚠️ 처분서약을 하지 않은 1주택자는 <strong>가점제 청약 대상이 아닙니다</strong> — 민영 추첨제로만 신청 가능. 1주택자는 처분 조건을 걸어도 <strong>무주택 기간 가점이 0점</strong>이며, 처분 조건은 주로 추첨제 청약 자격과 관련됩니다.
           </p>
         )}
         {houseStatus === 'multi' && (
@@ -263,32 +284,28 @@ export default function HousingScoreClient() {
           </p>
         )}
 
-        {(houseStatus === 'none' || houseStatus === 'one_sell') && (
+        {houseStatus === 'none' && (
           <>
             <div className={s.autoBox}>
               <div className={s.autoBoxRow}>
                 <span className={s.autoBoxLabel}>자동 산정 무주택 기간</span>
                 <span className={s.autoBoxVal}>
-                  {(overrideUnhomedYears ?? unhomedYears).toFixed(1)}년
+                  {unhomedYears === null ? '산정 전' : `${unhomedYears.toFixed(1)}년`}
                 </span>
               </div>
               <p className={s.autoBoxHint}>
-                {marriedStatus === 'married' ? '결혼일 또는 만 30세 중 빠른 쪽부터 카운트' : '만 30세 생일부터 카운트 (미혼 30세 미만 = 0년)'}
+                {marriedStatus === 'married' ? '혼인신고일 또는 만 30세 중 빠른 쪽부터 카운트' : '만 30세 생일부터 카운트 (만 30세 미만 미혼은 산정 전이라 0점)'}
               </p>
-              {houseStatus === 'one_sell' && overrideUnhomedYears === null && (
-                <p className={s.warnBox}>
-                  ⚠️ 1주택자의 무주택 기간은 <strong>주택 매도(처분 예정)일부터</strong> 다시 기산됩니다. 위 자동값은 계속 무주택이었다고 가정한 값이므로, 아래 <strong>「직접 보정」</strong>으로 매도일 기준 기간을 입력하세요.
-                </p>
-              )}
               <label className={s.toggleLabel}>
                 <input
                   type="checkbox"
-                  checked={overrideUnhomedYears !== null}
-                  onChange={e => setOverrideUnhomedYears(e.target.checked ? Math.round(unhomedYears * 10) / 10 : null)}
+                  checked={overrideUnhomedYears !== null && unhomedYears !== null}
+                  disabled={unhomedYears === null}
+                  onChange={e => setOverrideUnhomedYears(e.target.checked ? Math.round((unhomedYears ?? 0) * 10) / 10 : null)}
                 />
-                <span>직접 보정 (1주택 매도일 기준 등 특수 케이스)</span>
+                <span>직접 보정 (과거 주택을 처분한 경우 처분일 기준 등)</span>
               </label>
-              {overrideUnhomedYears !== null && (
+              {overrideUnhomedYears !== null && unhomedYears !== null && (
                 <div className={s.sliderRow}>
                   <input
                     type="range" min={0} max={20} step={0.5}
@@ -310,7 +327,7 @@ export default function HousingScoreClient() {
       <div className={s.card}>
         <div className={s.cardLabel}>3. 부양가족 ({dependentScore(dependentCount)}점 / 35점)</div>
 
-        <p className={s.cardHint}>본인 제외. 배우자·미성년 자녀·만 30세 미만 미혼 자녀·동거 직계존속만 인정.</p>
+        <p className={s.cardHint}>본인 제외. 배우자·미혼 자녀(만 30세 이상은 최근 1년 이상 같은 등본)·최근 3년 이상 같은 등본의 직계존속만 인정.</p>
 
         {marriedStatus === 'married' && (
           <label className={s.toggleLabel}>
@@ -325,7 +342,7 @@ export default function HousingScoreClient() {
 
         <div className={s.fieldRow} style={{ marginTop: 10, gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
           <div className={s.field}>
-            <div className={s.subLabel} style={{ marginBottom: 4 }}>자녀 수 <small style={{ fontWeight: 400 }}>(미성년·만30세미만 미혼)</small></div>
+            <div className={s.subLabel} style={{ marginBottom: 4 }}>자녀 수 <small style={{ fontWeight: 400 }}>(미혼 · 만30세 이상은 1년 이상 동일 등본)</small></div>
             <div className={s.numRow}>
               <button type="button" aria-label="자녀 수 감소" onClick={() => setChildrenCount(Math.max(0, childrenCount - 1))}>−</button>
               <span>{childrenCount}</span>
@@ -349,12 +366,12 @@ export default function HousingScoreClient() {
               checked={parents3Years}
               onChange={e => setParents3Years(e.target.checked)}
             />
-            <span>3년 이상 동일 세대 등록 + 만 60세 이상 (필수 요건)</span>
+            <span>본인이 세대주 + 최근 3년 이상 같은 등본 + 부모(와 그 배우자) 모두 무주택</span>
           </label>
         )}
         {parentsCount > 0 && !parents3Years && (
           <p className={s.warnBox}>
-            ⚠️ 직계존속은 <strong>만 60세 이상 + 3년 이상 동일 세대</strong> 요건 미충족 시 부양가족 X.
+            ⚠️ 직계존속은 <strong>신청자가 세대주이고 최근 3년 이상 같은 주민등록표에 올라 있어야</strong> 부양가족으로 인정됩니다. 직계존속이나 그 배우자가 주택을 가지고 있으면 제외됩니다. 나이 요건은 없습니다.
           </p>
         )}
 
@@ -411,13 +428,13 @@ export default function HousingScoreClient() {
               : <strong style={{ color: '#EA580C' }}>미충족 — {rankRule.period} 가입 + {rankRule.count}회 납입 필요</strong>}
           </p>
           <p className={s.autoBoxHint} style={{ marginTop: 4 }}>
-            ※ 규제지역 = 투기과열·청약과열지역(강남3구·용산 등). 그 외 수도권 1년·12회, 비수도권 6개월·6회. 가점은 가입기간만 반영하며, 민영은 지역·평형별 예치금도 충족해야 1순위.
+            ※ 규제지역 = 투기과열지구·청약과열지역(2025.10.15 이후 서울 전역·경기 12곳 등). 그 외 수도권 1년·12회, 비수도권 6개월·6회. 가점은 가입기간만 반영하며, 민영은 지역·평형별 예치금도 충족해야 1순위.
           </p>
         </div>
       </div>
 
       {/* ─── 메인 히어로 ─── */}
-      <div className={s.heroCard}>
+      <div className={s.heroCard} role="status">
         <div className={s.heroLabel}>총 청약 가점</div>
         <div className={s.heroBigRow}>
           <span className={s.heroNum} style={{ color: score.grade.color }}>{score.total}</span>
