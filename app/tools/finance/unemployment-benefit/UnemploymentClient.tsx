@@ -182,7 +182,6 @@ export default function UnemploymentClient() {
     <div className={s.wrap}>
       <Disclaimer
         variant="finance"
-        open
         related={[
           { href: '/tools/finance/severance', label: '퇴직금 계산기' },
           { href: '/tools/finance/salary', label: '연봉 실수령액' },
