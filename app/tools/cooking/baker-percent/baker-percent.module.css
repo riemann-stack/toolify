@@ -277,12 +277,23 @@
   padding: 8px 10px;
 }
 @media (max-width: 600px) {
+  /* 모바일: 한 줄 6열(고정 폭 합 310px)이 카드 폭(375px 기준 약 280px)을 넘어 재료명 칸이 0이 되던 문제 →
+     2줄 배치. 1줄: × · dot · 재료명 · 결과 / 2줄: 카테고리 · 입력 */
+  .card { padding: 16px 14px; }
   .ingredientRow {
-    grid-template-columns: 26px 78px 10px 1fr 86px 60px;
+    grid-template-columns: 26px 10px minmax(0, 1fr) minmax(0, 1fr) 64px;
+    grid-template-areas:
+      "rm  dot name name out"
+      "cat cat cat  in   in";
     gap: 6px;
     padding: 6px 8px;
   }
-  .ingredientRow .catSelect { font-size: 12px; padding: 6px 18px 6px 8px; background-position: calc(100% - 8px) center, calc(100% - 5px) center; }
+  .ingredientRow .removeBtn  { grid-area: rm; }
+  .ingredientRow .dotIcon    { grid-area: dot; }
+  .ingredientRow .nameCell   { grid-area: name; min-width: 0; }
+  .ingredientRow .pctCell    { grid-area: out; }
+  .ingredientRow .catSelect  { grid-area: cat; min-width: 0; padding: 6px 18px 6px 8px; background-position: calc(100% - 8px) center, calc(100% - 5px) center; }
+  .ingredientRow .weightCell { grid-area: in; min-width: 0; }
 }
 .ingredientRow input { background: transparent; border: 1px solid transparent; outline: none; padding: 4px 6px; border-radius: 6px; box-sizing: border-box; width: 100%; font-family: 'Noto Sans KR', sans-serif; }@media (hover: hover) {
   .ingredientRow input:hover { border-color: var(--border); }

@@ -7,7 +7,7 @@ import s from './cycle.module.css'
 import {
   PHASE_META, REGULARITY_LABEL, PMS_LEVEL_LABEL, LIFESTYLE_LABEL,
   PHASE_GUIDES,
-  calcCycle, buildCalendar, phaseAngles, arcPath, polarToCartesian,
+  calcCycle, buildCalendar, phaseAngles, phaseDayBounds, arcPath, polarToCartesian,
   fmtKor, fmtMonthDay, isoDate, fromIso, dateAdd, dateDiff, startOfDay,
   loadCycleData, saveCycleData, clearCycleData,
   recordsToCSV, csvToRecords, analyzeRecords,
@@ -17,6 +17,12 @@ import {
 } from './cycleUtils'
 
 type TabKey = 'calendar' | 'guide' | 'fertility' | 'records'
+const TABS: { key: TabKey; label: string }[] = [
+  { key: 'calendar', label: '주기 캘린더' },
+  { key: 'guide', label: '컨디션 가이드' },
+  { key: 'fertility', label: '가임기 참고' },
+  { key: 'records', label: '내 기록' },
+]
 
 const PERIOD_LEN_QUICK = [3, 4, 5, 6, 7]
 const CYCLE_QUICK = [24, 26, 28, 30, 32, 35]
@@ -27,10 +33,16 @@ export default function CycleClient() {
   const [tab, setTab] = useState<TabKey>('calendar')
 
   // ── 입력 ───────────────────────────
-  const today = useMemo(() => startOfDay(new Date()), [])
-  const [lastPeriodIso, setLastPeriodIso] = useState<string>(isoDate(dateAdd(today, -7)))  // 기본: 7일 전
+  // 오늘·기본 날짜는 마운트 후에 정한다 — SSG HTML에 빌드일 기준 결과가 박혀 hydration 불일치·지난 날짜 색인이 생기는 문제 방지
+  const [today, setToday] = useState<Date | null>(null)
+  const [lastPeriodIso, setLastPeriodIso] = useState<string>('')  // 마운트 시 저장값 또는 7일 전
   const [periodLength, setPeriodLength] = useState<number>(5)
   const [avgCycle, setAvgCycle] = useState<number>(28)
+  // 평균 주기 직접 입력 — 타이핑 중 값(예: '3')을 그대로 두고 21~45일 때만 반영 (키 입력마다 클램프하면 31 → 45로 튐)
+  const [avgCycleText, setAvgCycleText] = useState('28')
+  const applyAvgCycle = (n: number) => { setAvgCycle(n); setAvgCycleText(String(n)) }
+  const avgCycleTextNum = Number(avgCycleText)
+  const avgCycleTextBad = !(Number.isInteger(avgCycleTextNum) && avgCycleTextNum >= 21 && avgCycleTextNum <= 45)
   const [regularity, setRegularity] = useState<Regularity>('regular')
   const [pmsLevel, setPmsLevel] = useState<PMSLevel>('mild')
   const [lifestyle, setLifestyle] = useState<Lifestyle[]>([])
@@ -39,26 +51,31 @@ export default function CycleClient() {
   // ── localStorage 로드/저장 ─────────
   const [records, setRecords] = useState<CycleRecord[]>([])
   const [mounted, setMounted] = useState(false)
-  const initialLoadRef = useRef(false)
+  const skipNextSaveRef = useRef(false)
+  // 캘린더 월 — 오늘이 정해지는 마운트 시점에 설정
+  const [calMonth, setCalMonth] = useState<{ year: number; month: number } | null>(null)
 
   useEffect(() => {
+    const t = startOfDay(new Date())
+    setToday(t)
+    setCalMonth({ year: t.getFullYear(), month: t.getMonth() })
     const data = loadCycleData()
+    setLastPeriodIso(data?.lastPeriodDate || isoDate(dateAdd(t, -7)))  // 기본: 7일 전
     if (data) {
-      setLastPeriodIso(data.lastPeriodDate)
       setPeriodLength(data.periodLength)
-      setAvgCycle(data.avgCycle)
+      applyAvgCycle(data.avgCycle)
       if (data.regularity) setRegularity(data.regularity)
       if (data.pmsLevel) setPmsLevel(data.pmsLevel)
       if (data.lifestyle) setLifestyle(data.lifestyle)
       if (data.trackingPregnancy !== undefined) setTrackingPregnancy(data.trackingPregnancy)
       setRecords(data.records ?? [])
     }
-    initialLoadRef.current = true
     setMounted(true)
   }, [])
 
   useEffect(() => {
-    if (!initialLoadRef.current) return
+    if (!mounted) return  // 첫 로드 전 기본값으로 덮어쓰기 방지
+    if (skipNextSaveRef.current) { skipNextSaveRef.current = false; return }  // 전체 삭제 직후 기본값 재저장 방지
     saveCycleData({
       lastPeriodDate: lastPeriodIso,
       periodLength, avgCycle,
@@ -67,31 +84,32 @@ export default function CycleClient() {
       lifestyle,
       records,
     })
-  }, [lastPeriodIso, periodLength, avgCycle, regularity, pmsLevel, trackingPregnancy, lifestyle, records])
+  }, [mounted, lastPeriodIso, periodLength, avgCycle, regularity, pmsLevel, trackingPregnancy, lifestyle, records])
 
   // ── 계산 ──────────────────────────
-  const validationError = validateInput(lastPeriodIso, periodLength, avgCycle)
+  const validationError = today ? validateInput(lastPeriodIso, periodLength, avgCycle, today) : null
   const lastPeriod = useMemo(() => fromIso(lastPeriodIso), [lastPeriodIso])
-  const cycleInput = useMemo(() => ({
+  const cycleInput = useMemo(() => today ? ({
     lastPeriod, periodLength, avgCycle, today,
-  }), [lastPeriod, periodLength, avgCycle, today])
+  }) : null, [lastPeriod, periodLength, avgCycle, today])
 
   const result = useMemo(
-    () => validationError ? null : calcCycle(cycleInput),
+    () => validationError || !cycleInput ? null : calcCycle(cycleInput),
     [cycleInput, validationError],
   )
 
   // ── 캘린더 월 ──────────────────────
-  const [calMonth, setCalMonth] = useState(() => ({ year: today.getFullYear(), month: today.getMonth() }))
   const calendar = useMemo(
-    () => validationError ? [] : buildCalendar(calMonth.year, calMonth.month, cycleInput),
+    () => validationError || !cycleInput || !calMonth ? [] : buildCalendar(calMonth.year, calMonth.month, cycleInput),
     [calMonth, cycleInput, validationError],
   )
   const goPrevMonth = () => setCalMonth((p) => {
+    if (!p) return p
     const d = new Date(p.year, p.month - 1, 1)
     return { year: d.getFullYear(), month: d.getMonth() }
   })
   const goNextMonth = () => setCalMonth((p) => {
+    if (!p) return p
     const d = new Date(p.year, p.month + 1, 1)
     return { year: d.getFullYear(), month: d.getMonth() }
   })
@@ -101,8 +119,8 @@ export default function CycleClient() {
   const [todayIsPeriodStart, setTodayIsPeriodStart] = useState(false)
   const [todayNotes, setTodayNotes] = useState('')
 
-  const todayIso = isoDate(today)
-  const todayRecord = records.find((r) => r.date === todayIso)
+  const todayIso = today ? isoDate(today) : ''
+  const todayRecord = todayIso ? records.find((r) => r.date === todayIso) : undefined
   useEffect(() => {
     if (todayRecord) {
       setTodayMood(todayRecord.mood ?? '')
@@ -112,6 +130,7 @@ export default function CycleClient() {
   }, [todayRecord])
 
   const saveTodayCheck = () => {
+    if (!todayIso) return
     const newRec: CycleRecord = {
       id: todayRecord?.id ?? uid(),
       date: todayIso,
@@ -136,13 +155,16 @@ export default function CycleClient() {
   // ── CSV ──────────────────────────
   const downloadCSV = () => {
     const csv = recordsToCSV(records)
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    // BOM: 한국어 Windows 엑셀이 UTF-8로 인식하도록 (없으면 CP949로 읽어 한글 메모가 깨짐)
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
     a.download = `youtil-cycle-records-${todayIso}.csv`
+    document.body.appendChild(a)
     a.click()
-    URL.revokeObjectURL(url)
+    a.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)  // 즉시 revoke하면 일부 브라우저에서 다운로드 실패
   }
   const importCSV = (file: File) => {
     const reader = new FileReader()
@@ -164,9 +186,10 @@ export default function CycleClient() {
   const wipeAllData = () => {
     if (!confirm('모든 입력·기록을 삭제하시겠습니까? (되돌릴 수 없음)')) return
     clearCycleData()
-    setLastPeriodIso(isoDate(dateAdd(today, -7)))
+    skipNextSaveRef.current = true  // 아래 기본값 복원이 저장 effect를 다시 돌려 키를 재생성하지 않도록
+    if (today) setLastPeriodIso(isoDate(dateAdd(today, -7)))
     setPeriodLength(5)
-    setAvgCycle(28)
+    applyAvgCycle(28)
     setRegularity('regular')
     setPmsLevel('mild')
     setLifestyle([])
@@ -187,6 +210,21 @@ export default function CycleClient() {
     const inFertility = d >= result.fertilityStart && d <= result.fertilityEnd
     return { ovDiff, inFertility }
   }, [intimacyDateIso, result])
+
+  // 탭 키보드 이동 (←/→/Home/End) — WAI-ARIA tabs 패턴
+  const onTabKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const idx = TABS.findIndex((t) => t.key === tab)
+    let next = -1
+    if (e.key === 'ArrowRight') next = (idx + 1) % TABS.length
+    else if (e.key === 'ArrowLeft') next = (idx - 1 + TABS.length) % TABS.length
+    else if (e.key === 'Home') next = 0
+    else if (e.key === 'End') next = TABS.length - 1
+    if (next < 0) return
+    e.preventDefault()
+    const key = TABS[next].key
+    setTab(key)
+    document.getElementById(`cycle-tab-${key}`)?.focus()
+  }
 
   return (
     <div className={s.wrap}>
@@ -210,25 +248,28 @@ export default function CycleClient() {
           { label: '보건복지부', href: 'https://www.mohw.go.kr' },
         ]}
       >
-        본 도구는 일반 참고 가이드입니다 본 도구는 <strong>피임 방법 X · 임신 확진 X · 의학 진단 X</strong> 호르몬 약물·의약품 추천 X · 영양사 처방 X · 특정 브랜드 추천 X 다음 경우 <strong>산부인과 상담</strong>: 주기 변동 ±8일 이상 / 부정출혈·과다 출혈 / 6개월+ 무월경 / 심한 PMS·통증 / 임신 계획·피임
+        이 도구는 평균 주기로 날짜를 어림하는 일반 참고용이며, <strong>피임 방법이나 임신 확인, 의학적 진단을 대신하지 않습니다</strong>. 약물·영양 처방이나 특정 제품 추천도 하지 않습니다.
+        주기 변동이 ±8일 이상이거나 부정출혈·과다 출혈, 6개월 이상 무월경, 일상에 지장을 주는 PMS·통증이 있을 때, 그리고 임신 계획이나 피임을 정할 때는 <strong>산부인과 상담</strong>을 받으세요.
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="생리주기 도구 탭">
-        <button type="button" role="tab" aria-selected={tab === 'calendar'} className={`${s.tab} ${tab === 'calendar' ? s.tabActive : ''}`} onClick={() => setTab('calendar')}>주기 캘린더</button>
-        <button type="button" role="tab" aria-selected={tab === 'guide'} className={`${s.tab} ${tab === 'guide' ? s.tabActive : ''}`} onClick={() => setTab('guide')}>컨디션 가이드</button>
-        <button type="button" role="tab" aria-selected={tab === 'fertility'} className={`${s.tab} ${tab === 'fertility' ? s.tabActive : ''}`} onClick={() => setTab('fertility')}>가임기 참고</button>
-        <button type="button" role="tab" aria-selected={tab === 'records'} className={`${s.tab} ${tab === 'records' ? s.tabActive : ''}`} onClick={() => setTab('records')}>내 기록</button>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="생리주기 도구 탭" onKeyDown={onTabKeyDown}>
+        {TABS.map((t) => (
+          <button key={t.key} type="button" role="tab"
+            id={`cycle-tab-${t.key}`} aria-controls={`cycle-panel-${t.key}`}
+            aria-selected={tab === t.key} tabIndex={tab === t.key ? 0 : -1}
+            className={`${s.tab} ${tab === t.key ? s.tabActive : ''}`}
+            onClick={() => setTab(t.key)}>{t.label}</button>
+        ))}
       </div>
 
       {/* ══════════ TAB 1: 주기 캘린더 ══════════ */}
       {tab === 'calendar' && (
-        <>
+        <div className={s.tabPanel} role="tabpanel" id="cycle-panel-calendar" aria-labelledby="cycle-tab-calendar">
           <div className={s.card}>
-            <span className={s.cardLabel}>① 마지막 생리 시작일</span>
-            <input type="date" className={s.input}
-              aria-label="마지막 생리 시작일"
-              max={isoDate(today)}
+            <label className={s.cardLabel} htmlFor="cycle-last-period">① 마지막 생리 시작일</label>
+            <input id="cycle-last-period" type="date" className={s.input}
+              max={today ? isoDate(today) : undefined}
               value={lastPeriodIso}
               onChange={(e) => setLastPeriodIso(e.target.value)} />
           </div>
@@ -248,17 +289,28 @@ export default function CycleClient() {
             <div className={s.pillRow} role="group" aria-label="평균 주기 빠른 선택">
               {CYCLE_QUICK.map((d) => (
                 <button key={d} type="button" aria-pressed={avgCycle === d} className={`${s.pill} ${avgCycle === d ? s.pillActive : ''}`}
-                  onClick={() => setAvgCycle(d)}>{d}일</button>
+                  onClick={() => applyAvgCycle(d)}>{d}일</button>
               ))}
             </div>
             <div className={s.customRow}>
-              <input type="number" inputMode="numeric" min={21} max={45}
+              <input type="text" inputMode="numeric" pattern="[0-9]*" maxLength={2}
                 className={s.miniInput}
                 aria-label="평균 주기 (일)"
-                value={avgCycle}
-                onChange={(e) => setAvgCycle(Math.max(21, Math.min(45, parseInt(e.target.value) || 28)))} />
+                aria-invalid={avgCycleTextBad || undefined}
+                aria-describedby={avgCycleTextBad ? 'cycle-avg-err' : undefined}
+                value={avgCycleText}
+                onChange={(e) => {
+                  const v = e.target.value.replace(/[^0-9]/g, '')
+                  setAvgCycleText(v)
+                  const n = Number(v)
+                  if (v !== '' && Number.isInteger(n) && n >= 21 && n <= 45) setAvgCycle(n)
+                }}
+                onBlur={() => { if (avgCycleTextBad) setAvgCycleText(String(avgCycle)) }} />
               <span className={s.unitText}>일 (21~45)</span>
             </div>
+            {avgCycleTextBad && (
+              <p id="cycle-avg-err" className={s.inputError}>21~45일 사이로 입력하세요. 지금은 {avgCycle}일로 계산 중입니다.</p>
+            )}
           </div>
 
           <div className={s.card}>
@@ -281,6 +333,7 @@ export default function CycleClient() {
             </div>
           </div>
 
+          {!mounted && <div className={s.empty}>불러오는 중…</div>}
           {validationError && (
             <div className={s.empty}>{validationError}</div>
           )}
@@ -294,7 +347,7 @@ export default function CycleClient() {
                 <p className={s.heroDDay}>
                   {result.daysToNextPeriod > 0 ? `D-${result.daysToNextPeriod}` : result.daysToNextPeriod === 0 ? 'D-DAY' : `D+${-result.daysToNextPeriod}`}
                   {' · '}
-                  <span style={{ color: PHASE_META[result.phase].color }}>
+                  <span style={{ color: PHASE_META[result.phase].ink }}>
                     {PHASE_META[result.phase].emoji} {PHASE_META[result.phase].label} ({result.dayInCycle}일차)
                   </span>
                 </p>
@@ -309,7 +362,7 @@ export default function CycleClient() {
               )}
 
               {/* 원형 차트 */}
-              <CircleChart input={cycleInput} result={result} />
+              {cycleInput && <CircleChart input={cycleInput} result={result} />}
 
               {/* 요약 */}
               <div className={s.card}>
@@ -323,19 +376,31 @@ export default function CycleClient() {
                     <tr>
                       <td>현재 phase</td>
                       <td>
-                        <span style={{ color: PHASE_META[result.phase].color }}>
+                        <span style={{ color: PHASE_META[result.phase].ink }}>
                           {PHASE_META[result.phase].emoji} {PHASE_META[result.phase].label}
                         </span> ({result.dayInCycle}일차)
                       </td>
                     </tr>
                     <tr>
                       <td>배란 예상일</td>
-                      <td>{fmtKor(result.ovulationDate)}</td>
+                      <td>
+                        {fmtKor(result.ovulationDate)}
+                        {result.ovulationPassed && <span className={s.passedTag}> (지남)</span>}
+                      </td>
                     </tr>
                     <tr>
                       <td>가임기 (참고)</td>
-                      <td>{fmtMonthDay(result.fertilityStart)} ~ {fmtMonthDay(result.fertilityEnd)}</td>
+                      <td>
+                        {fmtMonthDay(result.fertilityStart)} ~ {fmtMonthDay(result.fertilityEnd)}
+                        {result.fertilityPassed && <span className={s.passedTag}> (지남)</span>}
+                      </td>
                     </tr>
+                    {result.fertilityPassed && (
+                      <tr>
+                        <td>다음 가임기 (예상)</td>
+                        <td>{fmtMonthDay(result.nextFertilityStart)} ~ {fmtMonthDay(result.nextFertilityEnd)} · 배란 {fmtMonthDay(result.nextOvulationDate)}</td>
+                      </tr>
+                    )}
                     <tr>
                       <td>PMS 예상 구간</td>
                       <td>{fmtMonthDay(result.pmsStart)} ~ {fmtMonthDay(result.pmsEnd)}</td>
@@ -348,7 +413,7 @@ export default function CycleClient() {
               <div className={s.card}>
                 <div className={s.calHeader}>
                   <button className={s.calNav} onClick={goPrevMonth} aria-label="이전 달">‹</button>
-                  <span className={s.calTitle}>{calMonth.year}년 {calMonth.month + 1}월</span>
+                  <span className={s.calTitle}>{calMonth ? `${calMonth.year}년 ${calMonth.month + 1}월` : ''}</span>
                   <button className={s.calNav} onClick={goNextMonth} aria-label="다음 달">›</button>
                 </div>
                 <div className={s.calLegend}>
@@ -366,11 +431,20 @@ export default function CycleClient() {
                     let bg = 'transparent'
                     if (cell.isInPMS && cell.phase === 'luteal') bg = 'rgba(255, 184, 224, 0.25)'
                     else if (cell.isInFertility) bg = PHASE_META.ovulation.bgColor
+                    // 색·점으로만 표시되던 정보를 스크린리더에도 전달
+                    const srInfo = [
+                      cell.isToday ? '오늘' : '',
+                      cell.phase === 'menstrual' ? (cell.isPeriodStart ? '생리 시작 예상' : '생리 예상') : '',
+                      cell.isOvulation ? '배란 예상일' : '',
+                      cell.isInFertility ? '가임기' : '',
+                      cell.isInPMS && cell.phase === 'luteal' ? 'PMS 예상' : '',
+                    ].filter(Boolean).join(', ')
                     return (
                       <div key={i}
                         className={`${s.calCell} ${cell.inCurrentMonth ? '' : s.calCellOther} ${cell.isToday ? s.calCellToday : ''}`}
                         style={{ background: bg }}>
                         <span className={s.calDate}>{cell.date.getDate()}</span>
+                        {srInfo && <span className={s.srOnly}>{srInfo}</span>}
                         <div className={s.calDots}>
                           {cell.phase === 'menstrual' && (
                             <span
@@ -400,12 +474,12 @@ export default function CycleClient() {
               )}
             </>
           )}
-        </>
+        </div>
       )}
 
       {/* ══════════ TAB 2: 컨디션 가이드 ══════════ */}
       {tab === 'guide' && (
-        <>
+        <div className={s.tabPanel} role="tabpanel" id="cycle-panel-guide" aria-labelledby="cycle-tab-guide">
           <div className={s.card}>
             <span className={s.cardLabel}>라이프스타일 (선택 — 가이드 강조)</span>
             <div className={s.pillRow} role="group" aria-label="라이프스타일 선택">
@@ -429,7 +503,7 @@ export default function CycleClient() {
           {result && (
             <div className={s.guideCurrentBox} style={{ borderColor: PHASE_META[result.phase].color }}>
               <p className={s.guideCurrentLabel}>현재 단계</p>
-              <p className={s.guideCurrentName} style={{ color: PHASE_META[result.phase].color }}>
+              <p className={s.guideCurrentName} style={{ color: PHASE_META[result.phase].ink }}>
                 {PHASE_META[result.phase].emoji} {PHASE_META[result.phase].label} · {result.dayInCycle}일차
               </p>
             </div>
@@ -445,7 +519,7 @@ export default function CycleClient() {
                 style={{ borderColor: isCurrent ? meta.color : undefined }}>
                 <div className={s.guideHead}>
                   <span className={s.guideEmoji}>{meta.emoji}</span>
-                  <span className={s.guideName} style={{ color: meta.color }}>{meta.label}</span>
+                  <span className={s.guideName} style={{ color: meta.ink }}>{meta.label}</span>
                   {isCurrent && <span className={s.guideCurrent}>지금</span>}
                 </div>
                 <p className={s.guideDesc}>{guide.desc}</p>
@@ -498,12 +572,12 @@ export default function CycleClient() {
             </table>
             <p className={s.noteSmall}>⚠️ 개인차 큼 — 본인 컨디션 우선. 통증·이상 시 즉시 중단.</p>
           </div>
-        </>
+        </div>
       )}
 
       {/* ══════════ TAB 3: 가임기 참고 ══════════ */}
       {tab === 'fertility' && (
-        <>
+        <div className={s.tabPanel} role="tabpanel" id="cycle-panel-fertility" aria-labelledby="cycle-tab-fertility">
           <div className={s.dangerCard}>
             <strong>⚠️ 본 도구는 피임 방법이 아닙니다</strong>
             <p>
@@ -531,14 +605,36 @@ export default function CycleClient() {
                 <span className={s.cardLabel}>가임기 참고 정보</span>
                 <table className={s.summaryTable}>
                   <tbody>
-                    <tr>
-                      <td>가임기 (참고)</td>
-                      <td className={s.tdAccent}>{fmtKor(result.fertilityStart)} ~ {fmtKor(result.fertilityEnd)}</td>
-                    </tr>
-                    <tr>
-                      <td>배란 예상일</td>
-                      <td>{fmtKor(result.ovulationDate)}</td>
-                    </tr>
+                    {result.fertilityPassed ? (
+                      <>
+                        <tr>
+                          <td>다음 가임기 (예상)</td>
+                          <td className={s.tdAccent}>{fmtKor(result.nextFertilityStart)} ~ {fmtKor(result.nextFertilityEnd)}</td>
+                        </tr>
+                        <tr>
+                          <td>다음 배란 예상일</td>
+                          <td>{fmtKor(result.nextOvulationDate)}</td>
+                        </tr>
+                        <tr>
+                          <td>이번 주기 가임기</td>
+                          <td>{fmtMonthDay(result.fertilityStart)} ~ {fmtMonthDay(result.fertilityEnd)}<span className={s.passedTag}> (지남)</span></td>
+                        </tr>
+                      </>
+                    ) : (
+                      <>
+                        <tr>
+                          <td>가임기 (참고)</td>
+                          <td className={s.tdAccent}>{fmtKor(result.fertilityStart)} ~ {fmtKor(result.fertilityEnd)}</td>
+                        </tr>
+                        <tr>
+                          <td>배란 예상일</td>
+                          <td>
+                            {fmtKor(result.ovulationDate)}
+                            {result.ovulationPassed && <span className={s.passedTag}> (지남)</span>}
+                          </td>
+                        </tr>
+                      </>
+                    )}
                     <tr>
                       <td>다음 생리 예정</td>
                       <td>{fmtKor(result.nextPeriodDate)}</td>
@@ -551,10 +647,9 @@ export default function CycleClient() {
               </div>
 
               <div className={s.card}>
-                <span className={s.cardLabel}>관계일 입력 (선택 — 가임기 거리 확인)</span>
-                <input type="date" className={s.input}
-                  aria-label="관계일"
-                  max={isoDate(today)}
+                <label className={s.cardLabel} htmlFor="cycle-intimacy">관계일 입력 (선택 — 가임기 거리 확인)</label>
+                <input id="cycle-intimacy" type="date" className={s.input}
+                  max={today ? isoDate(today) : undefined}
                   value={intimacyDateIso}
                   onChange={(e) => setIntimacyDateIso(e.target.value)} />
                 {intimacyAnalysis && (
@@ -596,18 +691,18 @@ export default function CycleClient() {
               </p>
             </div>
           )}
-        </>
+        </div>
       )}
 
       {/* ══════════ TAB 4: 내 기록 ══════════ */}
       {tab === 'records' && (
-        <>
+        <div className={s.tabPanel} role="tabpanel" id="cycle-panel-records" aria-labelledby="cycle-tab-records">
           <div className={s.card}>
-            <span className={s.cardLabel}>오늘 자가체크 ({fmtKor(today)})</span>
+            <span className={s.cardLabel}>오늘 자가체크{today ? ` (${fmtKor(today)})` : ''}</span>
 
             <div className={s.field}>
-              <label className={s.fieldLabel}>오늘 컨디션</label>
-              <div className={s.pillRow} role="group" aria-label="오늘 컨디션 선택">
+              <span className={s.fieldLabel} id="cycle-mood-label">오늘 컨디션</span>
+              <div className={s.pillRow} role="group" aria-labelledby="cycle-mood-label">
                 {(['good', 'normal', 'bad'] as const).map((m) => (
                   <button key={m}
                     type="button"
@@ -631,31 +726,49 @@ export default function CycleClient() {
             </div>
 
             <div className={s.field}>
-              <label className={s.fieldLabel}>메모 (선택, 30자)</label>
-              <input type="text" maxLength={30} className={s.input}
-                aria-label="오늘 메모"
+              <label className={s.fieldLabel} htmlFor="cycle-note">메모 (선택, 30자)</label>
+              <input id="cycle-note" type="text" maxLength={30} className={s.input}
                 placeholder="예: 약간 두통, 운동 X"
                 value={todayNotes} onChange={(e) => setTodayNotes(e.target.value)} />
             </div>
 
-            <button className={s.saveBtn} onClick={saveTodayCheck}>오늘 기록 저장</button>
+            <button className={s.saveBtn} onClick={saveTodayCheck} disabled={!todayIso}>오늘 기록 저장</button>
           </div>
 
-          {/* 누적 분석 */}
-          {analysis && analysis.count >= 2 && (
+          {/* 누적 분석 — 시작 기록 2건 이상인데 쓸 수 있는 간격이 없으면 병합·제외 사유만 안내 */}
+          {analysis && analysis.cycles.length === 0 && (
+            <div className={s.card}>
+              <span className={s.cardLabel}>누적 주기 분석</span>
+              <p className={s.noteSmall}>
+                아직 분석할 수 있는 주기가 없어요.{' '}
+                {analysis.mergedDuplicates > 0 && `15일 안에 겹친 시작 기록 ${analysis.mergedDuplicates}건은 같은 생리로 보고 합쳤어요. `}
+                {analysis.excludedGaps > 0 && `60일이 넘는 간격 ${analysis.excludedGaps}건은 기록 누락으로 보고 제외했어요. `}
+                다음 생리 시작일을 기록하면 주기를 계산할 수 있어요.
+              </p>
+            </div>
+          )}
+          {analysis && analysis.cycles.length > 0 && analysis.count >= 2 && (
             <div className={`${s.card} ${analysis.isRegular ? s.analysisGood : s.analysisCaution}`}>
               <span className={s.cardLabel}>누적 주기 분석 ({analysis.count}회)</span>
               <p style={{ fontSize: 14, color: 'var(--text)', margin: '0 0 8px' }}>
                 최근 {analysis.cycles.length}개 주기: {analysis.cycles.join('·')}일
               </p>
               <p style={{ fontSize: 14, color: 'var(--text)', margin: '0 0 8px' }}>
-                평균 <strong style={{ color: 'var(--accent)' }}>{analysis.avg.toFixed(1)}일</strong> · 변동폭 ±{(analysis.variance / 2).toFixed(1)}일
+                평균 <strong style={{ color: 'var(--accent-ink)' }}>{analysis.avg.toFixed(1)}일</strong> · 변동폭 ±{(analysis.variance / 2).toFixed(1)}일
               </p>
               <p className={analysis.isRegular ? s.analysisOk : s.analysisWarn}>
-                {analysis.isRegular
+                {analysis.level === 'regular'
                   ? '✓ 규칙적 — 최근 기록 기준 참고 신뢰도 양호 (예측은 어디까지나 추정)'
-                  : '⚠️ 불규칙 — 산부인과 상담 권장 (PCOS·갑상선 등 점검)'}
+                  : analysis.level === 'mild'
+                    ? '약간 불규칙 — 스트레스·수면·체중 변화를 점검해 보세요. 이 정도 변동은 흔합니다.'
+                    : '⚠️ 불규칙 (변동 ±8일 이상) — 계속되면 산부인과 상담 권장 (PCOS·갑상선 등 점검)'}
               </p>
+              {(analysis.mergedDuplicates > 0 || analysis.excludedGaps > 0) && (
+                <p className={s.noteSmall}>
+                  {analysis.mergedDuplicates > 0 && `15일 안에 겹친 시작 기록 ${analysis.mergedDuplicates}건은 같은 생리로 보고 합쳤습니다. `}
+                  {analysis.excludedGaps > 0 && `60일이 넘는 간격 ${analysis.excludedGaps}건은 기록 누락으로 보고 계산에서 뺐습니다.`}
+                </p>
+              )}
             </div>
           )}
 
@@ -668,9 +781,9 @@ export default function CycleClient() {
                   <div key={r.id} className={s.recordItem}>
                     <span className={s.recordDate}>{r.date}</span>
                     {r.isPeriodStart && <span className={s.recordTag} style={{ background: PHASE_META.menstrual.bgColor, color: PHASE_META.menstrual.color }}>🩸 시작</span>}
-                    {r.mood === 'good' && <span className={s.recordTag} style={{ color: PHASE_META.ovulation.color }}>😊 좋음</span>}
+                    {r.mood === 'good' && <span className={s.recordTag} style={{ color: PHASE_META.ovulation.ink }}>😊 좋음</span>}
                     {r.mood === 'normal' && <span className={s.recordTag}>😐 보통</span>}
-                    {r.mood === 'bad' && <span className={s.recordTag} style={{ color: PHASE_META.menstrual.color }}>😩 안좋음</span>}
+                    {r.mood === 'bad' && <span className={s.recordTag} style={{ color: PHASE_META.menstrual.ink }}>😩 안좋음</span>}
                     {r.notes && <span className={s.recordNotes}>{r.notes}</span>}
                     <button className={s.recordRemove}
                       onClick={() => setRecords((p) => p.filter((x) => x.id !== r.id))}
@@ -712,7 +825,7 @@ export default function CycleClient() {
               위 &ldquo;오늘 자가체크&rdquo;에 입력 후 저장해보세요.
             </div>
           )}
-        </>
+        </div>
       )}
 
     </div>
@@ -736,15 +849,14 @@ function CircleChart({
 
   const angles = phaseAngles(input)
 
-  // ── phase 변경 지점의 날짜 (1, 생리기 끝, 배란기 시작, 배란기 끝) ──
-  const periodLen = input.periodLength
-  const ovulationDay = input.avgCycle - 14
+  // ── phase 변경 지점의 날짜 (1, 생리기 끝, 배란기 시작, 배란기 끝) — 겹침·역전 보정된 경계 ──
+  const { mEnd, oStart, oEnd } = phaseDayBounds(input.periodLength, input.avgCycle)
   const boundaryDays = Array.from(new Set([
-    1,                     // 생리기 시작 (12시)
-    periodLen + 1,         // 난포기 시작
-    ovulationDay - 1,      // 배란기 시작
-    ovulationDay + 2,      // 황체기 시작
-  ])).filter((d) => d >= 1 && d < input.avgCycle).sort((a, b) => a - b)
+    1,        // 생리기 시작 (12시)
+    mEnd,     // 난포기 시작
+    oStart,   // 배란기 시작
+    oEnd,     // 황체기 시작
+  ])).filter((d) => d >= 1 && d <= input.avgCycle).sort((a, b) => a - b)
 
   // ── 오늘 마커 ──
   const todayAngle = ((result.dayInCycle - 1) / input.avgCycle) * 360
@@ -761,6 +873,7 @@ function CircleChart({
         {/* 4 phase 부채꼴 */}
         {(Object.keys(angles) as Phase[]).map((p) => {
           const { start, end } = angles[p]
+          if (end - start <= 0) return null  // 빈 구간(짧은 주기 + 긴 생리 등)은 그리지 않음
           const meta = PHASE_META[p]
           const outerPath = arcPath(cx, cy, rOuter, start, end)
           return (
@@ -787,9 +900,9 @@ function CircleChart({
         <line x1={spokeStart.x} y1={spokeStart.y} x2={spokeEnd.x} y2={spokeEnd.y}
           stroke="var(--accent)" strokeWidth={3} strokeLinecap="round" />
         <circle cx={spokeEnd.x} cy={spokeEnd.y} r={7}
-          fill="var(--accent)" stroke="#0D0D0D" strokeWidth={2} />
+          fill="var(--accent)" stroke="var(--bg2)" strokeWidth={2} />
         <text x={todayLabelPos.x} y={todayLabelPos.y}
-          fontSize="13" fill="var(--accent)" textAnchor="middle" dominantBaseline="middle"
+          fontSize="13" fill="var(--accent-ink)" textAnchor="middle" dominantBaseline="middle"
           fontFamily="Noto Sans KR" fontWeight={800}>
           오늘 {result.dayInCycle}일
         </text>
@@ -799,7 +912,7 @@ function CircleChart({
           textAnchor="middle" dominantBaseline="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
           {result.daysToNextPeriod > 0 ? `D-${result.daysToNextPeriod}` : result.daysToNextPeriod === 0 ? 'D-DAY' : `D+${-result.daysToNextPeriod}`}
         </text>
-        <text x={cx} y={cy + 24} fontSize="15" fill={PHASE_META[result.phase].color}
+        <text x={cx} y={cy + 24} fontSize="15" fill={PHASE_META[result.phase].ink}
           textAnchor="middle" dominantBaseline="middle" fontFamily="Noto Sans KR" fontWeight={600}>
           {PHASE_META[result.phase].emoji} {PHASE_META[result.phase].label}
         </text>

@@ -4,11 +4,12 @@ import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './serving.module.css'
+import { todayStr } from '@/lib/date'
 import {
   SERVING_DATA, CAT_LABEL, MEAL_LABEL, APPETITE_LABEL, AGE_LABEL,
   APPETITE_MULT, VARIANT_CHOICES, DIETARY_LABEL,
   AGE_BAND_LABEL, AGE_BAND_FACTOR,
-  loadFamily, saveFamily, familyToEffectivePeople, todayKST,
+  loadFamily, saveFamily, familyToEffectivePeople,
   type Category, type ServingData, type MealType, type Appetite,
   type AgeGroup, type Carb, type DietaryFlag,
   type FamilyMember, type AgeBand,
@@ -50,10 +51,14 @@ function calcItem(item: ServingData, peopleEff: number, a: Applied) {
   if (base < 0) base = 0
   const perPerson = base * APPETITE_MULT[a.appetite]
   const total = perPerson * peopleEff
-  const step = item.category === 'meat' || item.category === 'noodle' ? 10 : 5
-  const mid = roundTo(total, step)
-  const min = roundTo(total * 0.9, step)
-  const max = roundTo(total * 1.1, step)
+  // '개' 단위(만두)는 1개 단위로 — 5단위 반올림하면 1인 메인 4개가 '5~5개', 곁들임 2개가 '0~0개'가 됨
+  const isCount = item.unit === '개'
+  const step = isCount ? 1 : (item.category === 'meat' || item.category === 'noodle' ? 10 : 5)
+  // 필요량이 있으면 반올림으로 0이 되지 않도록 최소 1단위 보장
+  const floor = total > 0 ? step : 0
+  const mid = Math.max(floor, roundTo(total, step))
+  const min = isCount ? Math.max(floor, Math.floor(total * 0.9)) : Math.max(floor, roundTo(total * 0.9, step))
+  const max = isCount ? Math.max(min, Math.ceil(total * 1.1)) : Math.max(floor, roundTo(total * 1.1, step))
   return {
     perPerson, mid, min, max,
     cookedMin: Math.round(min * item.rawToCooked),
@@ -67,6 +72,9 @@ export default function ServingClient() {
 
   const [selected, setSelected] = useState<string[]>(['pasta'])
   const [people, setPeople] = useState(2)
+  // 입력 중 임시 문자열 — 비워 두고 다시 입력할 수 있도록 (blur 시 유효값으로 복귀)
+  const [peopleDraft, setPeopleDraft] = useState<string | null>(null)
+  const [childrenDraft, setChildrenDraft] = useState<string | null>(null)
   const [ageGroup, setAgeGroup] = useState<AgeGroup>('adultOnly')
   const [children, setChildren] = useState(1)
   const [mealType, setMealType] = useState<MealType>('main')
@@ -185,7 +193,7 @@ export default function ServingClient() {
   // 마크다운 장보기 카드
   const shoppingMarkdown = useMemo(() => {
     if (finalShoppingItems.length === 0) return ''
-    const today = todayKST()
+    const today = todayStr()
     const lines: string[] = []
     lines.push(`# 🛒 ${peopleLabel} 장보기 — ${MEAL_LABEL[mealType]}`)
     lines.push(`📅 ${today}`)
@@ -348,11 +356,14 @@ export default function ServingClient() {
                     onClick={() => setPeople((p) => Math.max(1, p - 1))} disabled={people <= 1}>−</button>
                   <input type="number" inputMode="numeric"
                     className={styles.peopleInput}
-                    min={1} max={20} value={people}
+                    aria-label="인원 (명)"
+                    min={1} max={20} value={peopleDraft ?? people}
                     onChange={(e) => {
+                      setPeopleDraft(e.target.value)
                       const v = parseInt(e.target.value, 10)
                       if (!isNaN(v)) setPeople(Math.max(1, Math.min(20, v)))
-                    }} />
+                    }}
+                    onBlur={() => setPeopleDraft(null)} />
                   <span className={styles.peopleUnit}>명</span>
                   <button type="button" className={styles.stepBtn}
                     onClick={() => setPeople((p) => Math.min(20, p + 1))} disabled={people >= 20}>+</button>
@@ -376,14 +387,16 @@ export default function ServingClient() {
                   </div>
                   {ageGroup === 'adultChild' && (
                     <div className={styles.subRow}>
-                      <span className={styles.subLabel}>아이 인원</span>
-                      <input type="number" inputMode="numeric"
+                      <label className={styles.subLabel} htmlFor="serving-children">아이 인원</label>
+                      <input id="serving-children" type="number" inputMode="numeric"
                         className={styles.kidInput}
-                        min={0} max={people} value={children}
+                        min={0} max={people} value={childrenDraft ?? children}
                         onChange={(e) => {
+                          setChildrenDraft(e.target.value)
                           const v = parseInt(e.target.value, 10)
                           if (!isNaN(v)) setChildren(Math.max(0, Math.min(people, v)))
-                        }} />
+                        }}
+                        onBlur={() => setChildrenDraft(null)} />
                       <span className={styles.effPeople}>실질 {peopleEff.toFixed(1)}인분</span>
                     </div>
                   )}

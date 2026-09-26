@@ -3,7 +3,7 @@
    영양제 — 약물 상호작용 / 특수 상황 / 오메가3 합산 / 한국 인기 프리셋
    ※ 본 도구는 일반 정보 제공이며 의학적 진단·처방·복용 권유 도구가 아닙니다.
    처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사 상담.
-   한국 식약처 식품안전정보: 1577-1255 / 의약품안전사용서비스: 1577-2334
+   식품의약품안전처 종합상담센터: 1577-1255
    ────────────────────────────────────────────────────── */
 
 /* ─── 오메가3 EPA+DHA 합산 가이드 ─── */
@@ -12,7 +12,8 @@ export const OMEGA3_GUIDELINES = {
   idealMin: 250,
   idealMax: 500,
   cardiacMin: 1000, // 심혈관 치료 (의사 처방)
-  upperLimit: 3000, // FDA 상한
+  supplementMax: 2000, // FDA 권고: 보충제로는 2,000mg/일 이하 (식품 포함 총 3,000mg)
+  upperLimit: 3000, // FDA 권고 총량 한도 (식품 포함)
 }
 
 export interface Omega3Analysis {
@@ -43,11 +44,17 @@ export function analyzeOmega3(epa: number, dha: number): Omega3Analysis | null {
     statusLabel = '🟢 목표 범위'
     statusColor = '#059669'
     interpretation = `${total}mg은 일반적 섭취 목표 범위(250~500mg) 안입니다.`
-  } else if (total <= OMEGA3_GUIDELINES.upperLimit) {
+  } else if (total <= OMEGA3_GUIDELINES.supplementMax) {
     status = 'over'
     statusLabel = '🟡 목표보다 높음 (한도 이내)'
     statusColor = '#EA580C'
-    interpretation = `${total}mg은 일반 목표보다 높지만 FDA 권고 한도(보충제 2,000mg·총 3,000mg) 안입니다. 심혈관 목적의 고용량은 의사와 상담하세요.`
+    interpretation = `${total}mg은 일반 목표보다 높지만 FDA의 보충제 권고 한도(2,000mg) 안입니다. 심혈관 목적의 고용량은 의사와 상담하세요.`
+  } else if (total <= OMEGA3_GUIDELINES.upperLimit) {
+    // 본 도구의 합계는 영양제(보충제)에서 온 양이므로 보충제 기준 2,000mg 초과부터 경고
+    status = 'exceed'
+    statusLabel = '🟠 보충제 권고 한도(2,000mg) 초과'
+    statusColor = '#EA580C'
+    interpretation = `${total}mg은 FDA가 권고하는 보충제 한도(2,000mg/일, 식품 포함 총 3,000mg)를 넘습니다. 식약처 건강기능식품 기준도 EPA+DHA 하루 0.5~2g입니다. 출혈 위험이 커질 수 있어 용량 조정이나 의사 상담을 권합니다.`
   } else {
     status = 'exceed'
     statusLabel = '🔴 권고 한도 초과'
@@ -199,18 +206,21 @@ export interface SpecialAlert {
   ingredientName: string
   type: 'recommend' | 'caution' | 'avoid'
   desc: string
+  /** 권장 범위 — min은 목표(권장량)로 사용, max는 참고 표시용(상한 아님) */
   recommendedAmount?: { min?: number; max?: number; unit: string }
+  /** 이 상황에서 적용할 상한(UL·주의 기준) — recommendedAmount.unit 단위. 없으면 성인 일반 상한 유지 */
+  ul?: number
 }
 
 export const SPECIAL_MODE_ALERTS: Record<LifeStage, SpecialAlert[]> = {
   general: [],
   pregnant: [
-    { ingredientName: '비타민B9(엽산)',       type: 'recommend', desc: '600~800μg/일 권장 (신경관 결손 예방). 임신 전 3개월부터 시작 이상적.', recommendedAmount: { min: 600, max: 1000, unit: 'μg' } },
+    { ingredientName: '비타민B9(엽산)',       type: 'recommend', desc: '600~800μg/일 권장 (신경관 결손 예방). 임신 전 3개월부터 시작 이상적.', recommendedAmount: { min: 600, max: 800, unit: 'μg' }, ul: 1000 },
     { ingredientName: '철분',                 type: 'recommend', desc: '27mg/일 권장 (임산부 빈혈 예방). 의사 처방 권장.', recommendedAmount: { min: 27, unit: 'mg' } },
-    { ingredientName: '요오드',               type: 'recommend', desc: '150μg/일 정확 (과다·부족 모두 위험).', recommendedAmount: { min: 150, max: 220, unit: 'μg' } },
+    { ingredientName: '요오드',               type: 'recommend', desc: '임신 중에는 권장량이 늘어납니다(미국 기준 220μg/일). 과다·부족 모두 갑상선에 영향을 줄 수 있습니다.', recommendedAmount: { min: 220, unit: 'μg' } },
     { ingredientName: '오메가3(DHA)',         type: 'recommend', desc: '200mg+ 권장 (태아 뇌·시각 발달).', recommendedAmount: { min: 200, unit: 'mg' } },
-    { ingredientName: '비타민A(레티놀)',      type: 'caution',   desc: '레티놀 형태 고용량 (3,000μg+) → 1삼분기 기형아 위험. 베타카로틴 형태로 변경 권장.', recommendedAmount: { max: 3000, unit: 'μg' } },
-    { ingredientName: '비타민D',              type: 'caution',   desc: '4,000IU 초과 → 태아 위험. 권장 600~2,000IU.', recommendedAmount: { max: 4000, unit: 'IU' } },
+    { ingredientName: '비타민A(레티놀)',      type: 'caution',   desc: '레티놀 형태 고용량 (3,000μg+) → 1삼분기 기형아 위험. 베타카로틴 형태로 변경 권장.', recommendedAmount: { unit: 'μg' }, ul: 3000 },
+    { ingredientName: '비타민D',              type: 'caution',   desc: '4,000IU 초과 → 태아 위험. 권장 600~2,000IU.', recommendedAmount: { min: 600, max: 2000, unit: 'IU' }, ul: 4000 },
   ],
   lactating: [
     { ingredientName: '오메가3(DHA)',     type: 'recommend', desc: '300mg+ 권장 (모유 통해 영아에게 전달).', recommendedAmount: { min: 300, unit: 'mg' } },
@@ -220,14 +230,15 @@ export const SPECIAL_MODE_ALERTS: Record<LifeStage, SpecialAlert[]> = {
   teen: [
     { ingredientName: '칼슘',         type: 'recommend', desc: '1,300mg/일 (성장기 골밀도)', recommendedAmount: { min: 1300, unit: 'mg' } },
     { ingredientName: '비타민D',      type: 'recommend', desc: '600IU/일 (성장기)', recommendedAmount: { min: 600, unit: 'IU' } },
-    { ingredientName: '비타민A(레티놀)', type: 'caution',   desc: '청소년 상한 (남 2,800μg / 여 2,400μg) — 성인보다 낮음', recommendedAmount: { max: 2800, unit: 'μg' } },
+    { ingredientName: '비타민A(레티놀)', type: 'caution',   desc: '청소년 상한 (남 2,800μg / 여 2,400μg) — 성인보다 낮음', recommendedAmount: { unit: 'μg' }, ul: 2800 },
   ],
   elderly: [
     { ingredientName: '비타민D',              type: 'recommend', desc: '800~1,000IU/일 (낙상·골절 예방)', recommendedAmount: { min: 800, max: 2000, unit: 'IU' } },
     { ingredientName: '칼슘',                 type: 'recommend', desc: '1,200mg/일 (남 1,000, 여 1,200)', recommendedAmount: { min: 1200, unit: 'mg' } },
     { ingredientName: '비타민B12(코발라민)',  type: 'recommend', desc: '2.4μg+ (위산 ↓로 흡수 ↓)', recommendedAmount: { min: 2.4, unit: 'μg' } },
     { ingredientName: '마그네슘',             type: 'recommend', desc: '부족 흔함 (수면·근육)' },
-    { ingredientName: '비타민E',              type: 'caution',   desc: '400IU 초과 → 출혈 위험 ↑', recommendedAmount: { max: 400, unit: 'mg' } },
+    // 천연형 400IU = 400/1.49 ≈ 268.46mg → 올림 269로 둬야 400IU 자체는 '초과'가 아니고 401IU부터 초과
+    { ingredientName: '비타민E',              type: 'caution',   desc: '약 269mg(천연형 400IU) 초과 → 출혈 위험 ↑ (고령자 주의 기준)', recommendedAmount: { unit: 'mg' }, ul: Math.ceil(400 / 1.49) },
     { ingredientName: '철분',                 type: 'caution',   desc: '결핍 진단 없으면 X. 노년 산화 스트레스 ↑' },
   ],
   chronic: [

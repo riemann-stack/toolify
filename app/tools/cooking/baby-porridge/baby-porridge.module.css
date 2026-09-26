@@ -83,3 +83,4 @@
 
 .convList { padding-left: 18px; margin: 0; font-size: 13px; color: var(--text); line-height: 2; }
 .convList strong { color: var(--accent-ink); }
+.ratioBtn:disabled { opacity: 0.45; cursor: not-allowed; }

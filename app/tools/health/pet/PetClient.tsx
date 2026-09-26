@@ -1,6 +1,6 @@
 'use client'
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './pet.module.css'
 import {
   Activity, Species,
@@ -13,6 +13,34 @@ import {
 type CatEnv   = 'indoor' | 'both' | 'outdoor'
 type FoodMode = 'dry' | 'wet' | 'mix'
 
+// ─── 공통 훅·유틸 ─────────────────────────────────────────────────────────
+
+/* 복사 — 실패(권한 거부·비보안 컨텍스트) 시 조용히 무시, 토스트 1500ms */
+function useCopy() {
+  const [copied, setCopied] = useState(false)
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current) }, [])
+  const copy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      if (timer.current) clearTimeout(timer.current)
+      timer.current = setTimeout(() => setCopied(false), 1500)
+    } catch { /* 복사 실패 무시 */ }
+  }
+  return { copied, copy }
+}
+
+/* 사료 칼로리 밀도 — 입력 중에는 문자열 그대로 두고, 범위 안의 값만 계산에 사용 */
+function parseDensity(str: string, min: number, max: number): number | null {
+  const v = parseFloat(str)
+  return Number.isFinite(v) && v >= min && v <= max ? v : null
+}
+function clampDensityStr(str: string, min: number, max: number, fallback: number): string {
+  const v = parseFloat(str)
+  return Number.isFinite(v) ? String(Math.min(max, Math.max(min, v))) : String(fallback)
+}
+
 // ─── 공통 서브컴포넌트 ─────────────────────────────────────────────────────
 
 const DOG_STAGES = ['퍼피', '청년견', '중년견', '노령견']
@@ -20,7 +48,7 @@ const CAT_STAGES = ['키튼', '성묘', '시니어', '슈퍼시니어']
 const STAGE_COLORS = ['#0891B2', '#059669', '#0EA5E9', '#EA580C']
 
 function CalCard({ title, num, unit, sub, treat = false }: {
-  title: string; num: number; unit: string; sub: string; treat?: boolean
+  title: string; num: number | string; unit: string; sub: string; treat?: boolean
 }) {
   return (
     <div className={styles.calCard}>
@@ -33,6 +61,7 @@ function CalCard({ title, num, unit, sub, treat = false }: {
 }
 
 function BodyConditionCard({ body, weight, species }: { body: BodyEvaluation; weight: number; species: Species }) {
+  const growing = body.status === 'growing'
   // 막대 위치 — bcsBar 그라데이션(저체중 0~20 / 적정 25~55 / 과체중 60~75 / 비만 80~100)에 맞춤
   let pct = 40
   if (species === 'dog' && body.range) {
@@ -67,12 +96,14 @@ function BodyConditionCard({ body, weight, species }: { body: BodyEvaluation; we
           {body.range.sizeName} 정상 범위: <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{body.range.min}~{body.range.max}kg</strong>
         </div>
       )}
-      <div className={styles.bcsBar}>
-        <div className={styles.bcsMarker} style={{ left: `${pct}%` }} />
-      </div>
+      {!growing && (
+        <div className={styles.bcsBar}>
+          <div className={styles.bcsMarker} style={{ left: `${pct}%` }} />
+        </div>
+      )}
       <div className={styles.bcsMessage}>{body.message}</div>
       <div className={styles.lifeNote}>
-        ⓘ 본 평가는 품종 크기·체중만 반영한 추정입니다. 정확한 BCS(1~9 또는 1~5)는 수의사가 갈비뼈·허리·복부를 직접 만져 평가합니다.
+        ⓘ 본 평가는 {species === 'dog' ? '품종 표준 체중(기타·믹스는 크기 구간)' : '일반 고양이 체중 범위'}과 체중만 반영한 추정입니다. 정확한 BCS(1~9 또는 1~5)는 수의사가 갈비뼈·허리·복부를 직접 만져 평가합니다.
       </div>
     </div>
   )
@@ -156,32 +187,34 @@ function DogTab() {
   const [breedId,   setBreedId]   = useState('beagle')
   const [neutered,  setNeutered]  = useState(true)
   const [activity,  setActivity]  = useState<Activity>('normal')
-  const [calDen,    setCalDen]    = useState(350)
-  const [copied,    setCopied]    = useState(false)
+  const [calDenStr, setCalDenStr] = useState('350')
+  const { copied, copy } = useCopy()
 
   const weight = parseFloat(weightStr) || 0
+  const hasWeight = weight > 0
   const size = sizeOfBreed(breedId)
+  const calDen = parseDensity(calDenStr, 100, 600)
 
   // ★ 단일 useMemo로 모든 결과 계산 — 의존성 변경 시 즉시 리렌더
   const result = useMemo(
     () => calculateAll({
-      species: 'dog', yrs: ageYrs, mos: ageMos, weight, size,
-      isNeutered: neutered, activity, foodKcalPer100g: calDen,
+      species: 'dog', yrs: ageYrs, mos: ageMos, weight, size, breedId,
+      isNeutered: neutered, activity, foodKcalPer100g: calDen ?? undefined,
     }),
-    [ageYrs, ageMos, weight, size, neutered, activity, calDen],
+    [ageYrs, ageMos, weight, size, breedId, neutered, activity, calDen],
   )
 
   const stageIdx = DOG_STAGES.indexOf(result.stage)
-  const foodG = calDen > 0 ? Math.round(result.der / calDen * 100) : 0
+  const foodG = calDen ? Math.round(result.der / calDen * 100) : null
 
   function handleCopy() {
-    navigator.clipboard.writeText(
+    copy(
       `🐶 강아지 계산 결과\n사람 나이: ${result.humanAge}세 (${result.stage})\n` +
       `일일 권장 칼로리: ${result.der}kcal (RER ${result.rerVal} × ${result.derFactor})\n` +
-      `사료 권장량: ${foodG}g/일 (${calDen}kcal/100g 기준)\n` +
+      `사료 권장량: ${foodG ?? '—'}g/일 (${calDen ?? '—'}kcal/100g 기준)\n` +
       `간식 허용: ${result.treatKcal}kcal/일\n권장 수분: ${result.waterMl}ml/일\n` +
       `체중 평가: ${result.body.label} · 수명 진행률: ${Math.round(result.life.progressPercent)}%`,
-    ).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
+    )
   }
 
   return (
@@ -223,7 +256,7 @@ function DogTab() {
             </optgroup>
           ))}
         </select>
-        <div className={styles.breedHint}>선택한 품종의 크기 기준으로 나이·적정 체중·수명을 계산합니다.</div>
+        <div className={styles.breedHint}>선택한 품종의 표준 체중과 크기 기준으로 나이·적정 체중·수명을 계산합니다.</div>
       </div>
 
       {/* 중성화 + 활동량 */}
@@ -251,7 +284,7 @@ function DogTab() {
       </div>
 
       {/* 결과 */}
-      <div className={styles.heroCard}>
+      <div className={styles.heroCard} role="status">
         <div className={styles.heroLeft}>
           <div className={styles.heroTop}>
             <span className={styles.heroNum}>{result.humanAge}</span>
@@ -265,7 +298,7 @@ function DogTab() {
       </div>
 
       {/* 체중 평가 */}
-      <BodyConditionCard body={result.body} weight={weight} species="dog" />
+      {hasWeight && <BodyConditionCard body={result.body} weight={weight} species="dog" />}
 
       {/* 수명 진행률 */}
       <LifeProgressCard life={result.life} color="#FFB347" />
@@ -277,36 +310,47 @@ function DogTab() {
           {[{ n: '로얄캐닌', v: 380 }, { n: '힐스', v: 360 }, { n: '퓨리나', v: 350 }].map(p => (
             <button key={p.n} type="button" aria-pressed={calDen === p.v}
               className={`${styles.presetBtn}${calDen === p.v ? ' ' + styles.presetDogActive : ''}`}
-              onClick={() => setCalDen(p.v)}>{p.n} {p.v}</button>
+              onClick={() => setCalDenStr(String(p.v))}>{p.n} {p.v}</button>
           ))}
           <span style={{ fontSize: '11px', color: 'var(--muted)', alignSelf: 'center' }}>참고용 근사값</span>
         </div>
         <div className={styles.calDenRow}>
           <input type="number" inputMode="decimal" aria-label="사료 칼로리 밀도 (kcal/100g)" min={100} max={600} className={styles.calDenInput}
-            value={calDen} onChange={e => setCalDen(Math.max(100, Number(e.target.value)) || 350)} />
+            value={calDenStr} onChange={e => setCalDenStr(e.target.value)}
+            onBlur={() => setCalDenStr(clampDensityStr(calDenStr, 100, 600, 350))} />
           <span className={styles.calDenUnit}>kcal / 100g</span>
         </div>
+        {calDen === null && (
+          <div className={styles.breedHint}>100~600 사이 값을 입력하세요.</div>
+        )}
       </div>
 
-      <div className={styles.calGrid}>
-        <CalCard title="일일 권장 칼로리" num={result.der} unit="kcal / 일" sub={`RER ${result.rerVal} × ${result.derFactor}`} />
-        <CalCard title="사료 권장량" num={foodG} unit="g / 일" sub={`${calDen}kcal/100g 기준`} />
-        <CalCard title="간식 허용 칼로리" num={result.treatKcal} unit="kcal / 일" sub="일일 칼로리의 10% · 사료에서 차감" treat />
-      </div>
+      {hasWeight ? (
+        <>
+          <div className={styles.calGrid}>
+            <CalCard title="일일 권장 칼로리" num={result.der} unit="kcal / 일" sub={`RER ${result.rerVal} × ${result.derFactor}`} />
+            <CalCard title="사료 권장량" num={foodG ?? '—'} unit="g / 일" sub={calDen ? `${calDen}kcal/100g 기준` : '칼로리 밀도 입력 필요'} />
+            <CalCard title="간식 허용 칼로리" num={result.treatKcal} unit="kcal / 일" sub="일일 칼로리의 10% · 사료에서 차감" treat />
+          </div>
 
-      <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>ⓘ 사료 권장량은 간식 미급여 기준입니다. 간식을 주면 그만큼(최대 10%) 사료를 줄여 하루 총 칼로리를 유지하세요.</p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>ⓘ 사료 권장량은 간식 미급여 기준입니다. 간식을 주면 그만큼(최대 10%) 사료를 줄여 하루 총 칼로리를 유지하세요.</p>
 
-      <div className={styles.waterCard}>
-        <span className={styles.waterIcon}>💧</span>
-        <div>
-          <span className={styles.waterNum}>{result.waterMl}ml</span>
-          <span className={styles.waterLabel}> 권장 수분 섭취량 / 일</span>
-        </div>
-      </div>
+          <div className={styles.waterCard}>
+            <span className={styles.waterIcon}>💧</span>
+            <div>
+              <span className={styles.waterNum}>{result.waterMl}ml</span>
+              <span className={styles.waterLabel}> 권장 수분 섭취량 / 일</span>
+            </div>
+          </div>
 
-      <button type="button" className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '결과 복사'}
-      </button>    </div>
+          <button type="button" className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
+            {copied ? '✓ 복사 완료' : '결과 복사'}
+          </button>
+        </>
+      ) : (
+        <div className={styles.waterTip}>체중을 입력하면 체중 평가와 하루 권장 칼로리·사료량·수분량을 계산합니다.</div>
+      )}
+    </div>
   )
 }
 
@@ -320,11 +364,14 @@ function CatTab() {
   const [env,       setEnv]       = useState<CatEnv>('indoor')
   const [activity,  setActivity]  = useState<Activity>('normal')
   const [foodMode,  setFoodMode]  = useState<FoodMode>('dry')
-  const [dryDen,    setDryDen]    = useState(350)
-  const [wetDen,    setWetDen]    = useState(90)
-  const [copied,    setCopied]    = useState(false)
+  const [dryDenStr, setDryDenStr] = useState('350')
+  const [wetDenStr, setWetDenStr] = useState('90')
+  const { copied, copy } = useCopy()
 
   const weight = parseFloat(weightStr) || 0
+  const hasWeight = weight > 0
+  const dryDen = parseDensity(dryDenStr, 100, 600)
+  const wetDen = parseDensity(wetDenStr, 50, 200)
 
   // ★ 환경(env) → 활동(activity) 보정: 실외/겸용은 활동 한 단계 ↑로 환산
   // 단, 사용자가 명시적으로 활동을 설정한 경우엔 그대로 적용 (env는 보조)
@@ -338,28 +385,28 @@ function CatTab() {
     () => calculateAll({
       species: 'cat', yrs: ageYrs, mos: ageMos, weight, size: 'small',
       isNeutered: neutered, activity: effectiveActivity,
-      catOutdoor: env === 'outdoor', foodKcalPer100g: dryDen,
+      catOutdoor: env === 'outdoor', foodKcalPer100g: dryDen ?? undefined,
     }),
     [ageYrs, ageMos, weight, neutered, effectiveActivity, env, dryDen],
   )
 
   const stageIdx = CAT_STAGES.indexOf(result.stage)
-  const dryG    = dryDen > 0 ? Math.round(result.der / dryDen * 100) : 0
-  const wetG    = wetDen > 0 ? Math.round(result.der / wetDen * 100) : 0
+  const dryG    = dryDen ? Math.round(result.der / dryDen * 100) : null
+  const wetG    = wetDen ? Math.round(result.der / wetDen * 100) : null
   // 혼합 급여 비율 — 본문 권장과 동일하게 건식 70% : 습식 30%
-  const mixDryG = dryDen > 0 ? Math.round(result.der * 0.7 / dryDen * 100) : 0
-  const mixWetG = wetDen > 0 ? Math.round(result.der * 0.3 / wetDen * 100) : 0
+  const mixDryG = dryDen ? Math.round(result.der * 0.7 / dryDen * 100) : null
+  const mixWetG = wetDen ? Math.round(result.der * 0.3 / wetDen * 100) : null
 
   function handleCopy() {
-    const foodTxt = foodMode === 'dry' ? `건식 ${dryG}g` :
-      foodMode === 'wet' ? `습식 ${wetG}g` :
-      `건식 ${mixDryG}g + 습식 ${mixWetG}g`
-    navigator.clipboard.writeText(
+    const foodTxt = foodMode === 'dry' ? `건식 ${dryG ?? '—'}g` :
+      foodMode === 'wet' ? `습식 ${wetG ?? '—'}g` :
+      `건식 ${mixDryG ?? '—'}g + 습식 ${mixWetG ?? '—'}g`
+    copy(
       `🐱 고양이 계산 결과\n사람 나이: ${result.humanAge}세 (${result.stage})\n` +
       `일일 권장 칼로리: ${result.der}kcal (RER ${result.rerVal} × ${result.derFactor})\n` +
       `사료 권장량: ${foodTxt}/일\n간식 허용: ${result.treatKcal}kcal/일\n` +
       `체중 평가: ${result.body.label} · 수명 진행률: ${Math.round(result.life.progressPercent)}%`,
-    ).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
+    )
   }
 
   return (
@@ -433,7 +480,7 @@ function CatTab() {
       </div>
 
       {/* 결과 */}
-      <div className={styles.heroCard}>
+      <div className={styles.heroCard} role="status">
         <div className={styles.heroLeft}>
           <div className={styles.heroTop}>
             <span className={styles.heroNum}>{result.humanAge}</span>
@@ -447,7 +494,7 @@ function CatTab() {
       </div>
 
       {/* 체중 평가 */}
-      <BodyConditionCard body={result.body} weight={weight} species="cat" />
+      {hasWeight && <BodyConditionCard body={result.body} weight={weight} species="cat" />}
 
       {/* 수명 진행률 */}
       <LifeProgressCard life={result.life} color="#C084FC" />
@@ -475,12 +522,13 @@ function CatTab() {
                 {[{ n: '로얄캐닌', v: 380 }, { n: '힐스', v: 360 }, { n: '퓨리나', v: 350 }].map(p => (
                   <button key={p.n} type="button" aria-pressed={dryDen === p.v}
                     className={`${styles.presetBtn}${dryDen === p.v ? ' ' + styles.presetCatActive : ''}`}
-                    onClick={() => setDryDen(p.v)}>{p.n}</button>
+                    onClick={() => setDryDenStr(String(p.v))}>{p.n}</button>
                 ))}
               </div>
               <div className={styles.calDenRow}>
                 <input type="number" inputMode="decimal" aria-label="건식 사료 칼로리 밀도 (kcal/100g)" min={100} max={600} className={styles.calDenInput}
-                  value={dryDen} onChange={e => setDryDen(Math.max(100, Number(e.target.value)) || 350)} />
+                  value={dryDenStr} onChange={e => setDryDenStr(e.target.value)}
+                  onBlur={() => setDryDenStr(clampDensityStr(dryDenStr, 100, 600, 350))} />
                 <span className={styles.calDenUnit}>kcal/100g</span>
               </div>
             </div>
@@ -492,12 +540,13 @@ function CatTab() {
                 {[{ n: '로얄캐닌', v: 85 }, { n: '힐스', v: 90 }, { n: '퓨리나', v: 95 }].map(p => (
                   <button key={p.n} type="button" aria-pressed={wetDen === p.v}
                     className={`${styles.presetBtn}${wetDen === p.v ? ' ' + styles.presetCatActive : ''}`}
-                    onClick={() => setWetDen(p.v)}>{p.n}</button>
+                    onClick={() => setWetDenStr(String(p.v))}>{p.n}</button>
                 ))}
               </div>
               <div className={styles.calDenRow}>
                 <input type="number" inputMode="decimal" aria-label="습식 사료 칼로리 밀도 (kcal/100g)" min={50} max={200} className={styles.calDenInput}
-                  value={wetDen} onChange={e => setWetDen(Math.max(50, Number(e.target.value)) || 90)} />
+                  value={wetDenStr} onChange={e => setWetDenStr(e.target.value)}
+                  onBlur={() => setWetDenStr(clampDensityStr(wetDenStr, 50, 200, 90))} />
                 <span className={styles.calDenUnit}>kcal/100g</span>
               </div>
             </div>
@@ -505,30 +554,42 @@ function CatTab() {
         </div>
       </div>
 
+      {(dryDen === null && foodMode !== 'wet') || (wetDen === null && foodMode !== 'dry') ? (
+        <div className={styles.breedHint}>칼로리 밀도는 건식 100~600, 습식 50~200 사이로 입력하세요.</div>
+      ) : null}
+
       {/* 칼로리 카드 */}
-      {foodMode === 'mix' ? (
+      {!hasWeight ? (
+        <div className={styles.waterTip}>체중을 입력하면 체중 평가와 하루 권장 칼로리·사료량을 계산합니다.</div>
+      ) : foodMode === 'mix' ? (
         <div className={styles.calGrid4}>
           <CalCard title="일일 권장 칼로리" num={result.der} unit="kcal / 일" sub={`RER ${result.rerVal} × ${result.derFactor}`} />
-          <CalCard title="건식 사료 (70%)" num={mixDryG} unit="g / 일" sub={`${dryDen}kcal/100g`} />
-          <CalCard title="습식 사료 (30%)" num={mixWetG} unit="g / 일" sub={`${wetDen}kcal/100g`} />
+          <CalCard title="건식 사료 (70%)" num={mixDryG ?? '—'} unit="g / 일" sub={dryDen ? `${dryDen}kcal/100g` : '밀도 입력 필요'} />
+          <CalCard title="습식 사료 (30%)" num={mixWetG ?? '—'} unit="g / 일" sub={wetDen ? `${wetDen}kcal/100g` : '밀도 입력 필요'} />
           <CalCard title="간식 허용 칼로리" num={result.treatKcal} unit="kcal / 일" sub="일일 칼로리의 10% · 사료에서 차감" treat />
         </div>
       ) : (
         <div className={styles.calGrid}>
           <CalCard title="일일 권장 칼로리" num={result.der} unit="kcal / 일" sub={`RER ${result.rerVal} × ${result.derFactor}`} />
-          <CalCard title={foodMode === 'dry' ? '건식 사료량' : '습식 사료량'} num={foodMode === 'dry' ? dryG : wetG} unit="g / 일" sub={`${foodMode === 'dry' ? dryDen : wetDen}kcal/100g`} />
+          <CalCard title={foodMode === 'dry' ? '건식 사료량' : '습식 사료량'} num={(foodMode === 'dry' ? dryG : wetG) ?? '—'} unit="g / 일"
+            sub={(foodMode === 'dry' ? dryDen : wetDen) ? `${foodMode === 'dry' ? dryDen : wetDen}kcal/100g` : '밀도 입력 필요'} />
           <CalCard title="간식 허용 칼로리" num={result.treatKcal} unit="kcal / 일" sub="일일 칼로리의 10% · 사료에서 차감" treat />
         </div>
       )}
 
-      <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>ⓘ 사료 권장량은 간식 미급여 기준입니다. 간식을 주면 그만큼(최대 10%) 사료를 줄여 하루 총 칼로리를 유지하세요.</p>
+      {hasWeight && (
+        <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>ⓘ 사료 권장량은 간식 미급여 기준입니다. 간식을 주면 그만큼(최대 10%) 사료를 줄여 하루 총 칼로리를 유지하세요.</p>
+      )}
 
       <div className={styles.waterTip}>
         💧 <strong style={{ color: 'var(--text)' }}>고양이 수분 섭취 팁:</strong> 고양이는 본능적으로 물을 잘 마시지 않아 만성 탈수와 신장병 위험이 높습니다. 습식 사료(수분 약 70~80%)를 활용하거나, 흐르는 물 분수를 사용하면 수분 섭취를 늘릴 수 있습니다.
       </div>
 
-      <button type="button" className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
-        {copied ? '✓ 복사 완료' : '결과 복사'}
-      </button>    </div>
+      {hasWeight && (
+        <button type="button" className={`${styles.copyBtn}${copied ? ' ' + styles.copyBtnDone : ''}`} onClick={handleCopy}>
+          {copied ? '✓ 복사 완료' : '결과 복사'}
+        </button>
+      )}
+    </div>
   )
 }

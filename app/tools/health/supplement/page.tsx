@@ -2,7 +2,7 @@ import Link from 'next/link'
 import SupplementClient from './SupplementClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
@@ -41,9 +41,9 @@ const FAQ_LD = [
               { q: '수용성 비타민은 과잉 섭취해도 괜찮나요?', a: '비타민C·B군 등 수용성 비타민은 소변으로 배출되어 지용성 비타민(A·D·E·K)보다 축적 위험이 낮습니다. 하지만 비타민C 2,000mg 이상은 신장 결석 위험, 비타민B6 100mg 이상 장기 복용은 신경 손상 가능성이 있습니다. 수용성도 상한량 초과는 주의가 필요합니다.' },
               { q: '영양제와 약을 같이 먹을 때 주의사항은?', a: '오메가3·비타민E는 혈액 응고를 억제해 항응고제(와파린 등)와 상호작용할 수 있습니다. 칼슘·마그네슘은 일부 항생제 흡수를 방해하고, 철분은 갑상선약(신지로이드 등)과 4시간 이상 간격이 필요합니다. 본 도구의 「약물·특수 상황」 탭에서 자동 체크 가능. 처방약 복용 중이라면 반드시 의사·약사와 상담하세요.' },
               { q: '영양제는 언제 먹는 게 가장 효과적인가요?', a: '지용성 비타민(A·D·E·K)과 오메가3·코엔자임Q10은 지방이 포함된 식사 후가 흡수율이 높습니다. 철분은 공복에 비타민C와 함께 복용하면 흡수율이 올라가지만 위 자극이 강하면 식후 복용도 가능합니다. 마그네슘은 저녁에 복용하면 수면 개선 효과를 볼 수 있습니다.' },
-              { q: '이 계산기로 나온 결과를 믿어도 되나요?', a: '본 계산기는 공개된 영양소 섭취 기준(한국영양학회, WHO)을 바탕으로 성분 합산량을 정리하는 참고용 도구입니다. 개인의 건강 상태, 체중, 기저 질환, 복용 약물에 따라 적정 섭취량이 달라질 수 있으므로 의사·약사와 상담하는 것을 권장합니다.' },
+              { q: '이 계산기로 나온 결과를 믿어도 되나요?', a: '본 계산기는 공개된 영양소 섭취 기준(미국 NIH 기준을 중심으로 한국인 영양소 섭취기준을 일부 함께 참고한 성인 대표값, WHO 등)을 바탕으로 성분 합산량을 정리하는 참고용 도구입니다. 개인의 건강 상태, 체중, 기저 질환, 복용 약물에 따라 적정 섭취량이 달라질 수 있으므로 의사·약사와 상담하는 것을 권장합니다.' },
               { q: '오메가3 EPA와 DHA를 따로 보지 않고 합산해도 되나요?', a: '일반 건강 목적에서는 EPA+DHA 합산 기준이 더 의미 있습니다 (WHO·미국심장협회 250~500mg/일). 다만 심혈관 (EPA 비중 ↑) / 뇌·시각 (DHA 비중 ↑) / 우울증 (EPA ↑) / 임산부 (DHA ↑) 등 목적에 따라 비율도 고려. 본 도구가 자동 합산 표시.' },
-              { q: '임산부는 어떤 영양제를 먹어야 하나요?', a: '임산부 전용 종합비타민 권장. 핵심: 엽산 600~800μg (신경관 결손 예방), 철분 27mg (빈혈 예방), 요오드 150μg, DHA 200mg+, 콜린 450mg. 주의: 비타민A 레티놀 고용량 X (베타카로틴 OK), 성요한초 X. 본 도구의 「약물·특수 상황」 탭 「임신 중」 모드에서 자동 체크.' },
+              { q: '임산부는 어떤 영양제를 먹어야 하나요?', a: '임산부 전용 종합비타민 권장. 핵심: 엽산 600~800μg (신경관 결손 예방), 철분 27mg (빈혈 예방), 요오드(임신 중 권장량 증가, 미국 기준 220μg), DHA 200mg+, 콜린 450mg. 주의: 비타민A 레티놀 고용량 X (베타카로틴 OK), 성요한초 X. 본 도구의 「약물·특수 상황」 탭 「임신 중」 모드에서 자동 체크.' },
               { q: '65세 이상 고령자는 일반 종합비타민으로 충분한가요?', a: '충분하지 않을 수 있습니다. 고령자 권장 추가: 비타민D 800~1,000IU, B12 2.4μg+, 칼슘 1,200mg, 오메가3 EPA+DHA 250mg+, 마그네슘. 주의: 비타민E 고용량 X, 약물 복용률 ↑로 상호작용 주의. 「실버 종합비타민」 권장.' },
               { q: '영양제 라벨 보고 입력하기 어려운데 도움이 있나요?', a: '본 도구의 「영양제 등록」 탭 빠른 입력 프리셋에서 종합비타민·비타민D 1,000~5,000IU·오메가3 (rTG)·임산부 종합비타민·프로바이오틱스·글루코사민·콜라겐 등 인기 제품 자동 입력 가능. 정확한 성분량은 제품마다 다를 수 있으니 라벨 확인 후 조정 권장.' },
               { q: '본 도구는 영양제를 추천해주나요?', a: '아닙니다. 본 도구는 일반 정보 제공 목적의 「성분 정보 정리」 참고용이며, 영양제 권유·복용 처방 도구가 아닙니다. 영양제는 식품(한국 식약처 분류)이며 효과·안전성은 의약품 수준 평가 X. 「많이 먹을수록 좋다」는 절대 X — 영양제는 부족분 보충용이며, 균형 잡힌 식단이 우선. 영양 상태 정확 평가는 혈액 검사 (병원·건강검진) 권장.' },
@@ -60,7 +60,7 @@ export default function SupplementPage() {
         복용 중인 영양제 50종 자동 합산 → <strong style={{ color: 'var(--text)' }}>상한 초과·약물 상호작용</strong> 경고.
       </p>
 
-      <UpdatedMeta date="2026년 7월" basis="영양소 권장량·상한량(한국인 영양소 섭취기준 등 공개 기준) · 오메가3 EPA+DHA 합산 250~500mg 목표·총 3,000mg 한도(미국 FDA 권고)" sources={[{ label: '보건복지부·한국영양학회 (KDRIs)', href: 'https://www.kns.or.kr' }, { label: 'NIH ODS 오메가3', href: 'https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/' }]} />
+      <UpdatedMeta date="2026년 9월" basis="영양소 권장량·상한량(미국 NIH 영양소 섭취기준 중심의 성인 대표값 — 비타민C·B6·칼슘 등 일부 권장량은 한국인 영양소 섭취기준 값) · 오메가3 EPA+DHA 합산 250~500mg 목표·보충제 2,000mg(식품 포함 총 3,000mg) 한도(미국 FDA 권고)" sources={[{ label: 'NIH ODS 영양소 섭취기준(DRI)', href: 'https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx' }, { label: '보건복지부·한국영양학회 (KDRIs)', href: 'https://www.kns.or.kr' }, { label: 'NIH ODS 오메가3', href: 'https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/' }]} />
 
       <SupplementClient />
 
@@ -92,7 +92,7 @@ export default function SupplementPage() {
         {/* 2. RDA/UL 표 */}
         <div>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>주요 영양소 1일 권장량 & 상한 섭취량</h2>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '12px' }}>한국인 영양소 섭취기준(2020 KDRIs) · 성인 기준 — 성별·연령에 따라 권장량이 다를 수 있습니다</p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '12px' }}>미국 NIH 영양소 섭취기준(DRI) 중심의 성인 대표값입니다. 비타민C·B6·칼슘 권장량은 한국인 영양소 섭취기준 값이며, 그 밖의 성분은 한국 기준(보건복지부, 2025 개정)과 다를 수 있고 성별·연령에 따라서도 달라집니다</p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
               <thead>
@@ -207,8 +207,9 @@ export default function SupplementPage() {
               <tbody>
                 <tr><td style={cell}>250mg 미만</td><td style={cell}><strong style={{ color: '#A16207' }}>🟡 목표 미달</strong></td><td style={cell}>식사(등푸른 생선) 보충 고려</td></tr>
                 <tr><td style={cell}>250~500mg</td><td style={cell}><strong style={{ color: '#059669' }}>🟢 목표 범위</strong></td><td style={cell}>WHO·심장협회 참고 목표 (공식 RDA 미설정)</td></tr>
-                <tr><td style={cell}>500~3,000mg</td><td style={cell}><strong style={{ color: '#EA580C' }}>🟠 목표보다 높음</strong></td><td style={cell}>심혈관 목적 고용량은 의사 상담</td></tr>
-                <tr><td style={cell}>3,000mg 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>🔴 권고 한도 초과</strong></td><td style={cell}>FDA 권고 한도(총 3,000mg) 초과 — 출혈 위험 ↑</td></tr>
+                <tr><td style={cell}>500~2,000mg</td><td style={cell}><strong style={{ color: '#EA580C' }}>🟡 목표보다 높음</strong></td><td style={cell}>심혈관 목적 고용량은 의사 상담</td></tr>
+                <tr><td style={cell}>2,000~3,000mg</td><td style={cell}><strong style={{ color: '#EA580C' }}>🟠 보충제 권고 한도 초과</strong></td><td style={cell}>FDA 보충제 권고 한도(2,000mg) 초과 — 용량 조정·의사 상담</td></tr>
+                <tr><td style={cell}>3,000mg 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>🔴 권고 한도 초과</strong></td><td style={cell}>FDA 권고 한도(식품 포함 총 3,000mg) 초과 — 출혈 위험 ↑</td></tr>
               </tbody>
             </table>
           </div>
@@ -326,22 +327,9 @@ export default function SupplementPage() {
           </div>
         </div>
 
-        {/* 10. FAQ (accordion - salary style) */}
+        {/* 10. FAQ */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* 11. 면책 */}
@@ -354,7 +342,7 @@ export default function SupplementPage() {
               { label: 'NIH Office of Dietary Supplements', href: 'https://ods.od.nih.gov' },
             ]}
           >
-            본 도구는 공개된 섭취 기준(KDRIs·NIH ODS 등)을 바탕으로 <strong>성분 합산량을 정리하는 참고용</strong>이며, 영양제는 의약품이 아니고 본 도구도 처방·진단 도구가 아닙니다.
+            본 도구는 공개된 섭취 기준(미국 NIH ODS 기준 중심, 한국인 영양소 섭취기준 일부 병행)을 바탕으로 <strong>성분 합산량을 정리하는 참고용</strong>이며, 영양제는 의약품이 아니고 본 도구도 처방·진단 도구가 아닙니다.
             약물 상호작용 표는 <strong>대표적인 패턴만</strong> 담고 있어 개인의 질환·처방약 조합을 모두 반영하지 못합니다.
             영양제 시작·중단·용량 변경 전, 특히 처방약 복용 중·임신·수유·기저질환이 있다면 반드시 의사·약사와 상담하세요.
           </Disclaimer>

@@ -5,6 +5,7 @@
    ────────────────────────────────────────────────────── */
 
 import { calcBMI, classifyBMI } from '../bmi/bmiUtils'
+import { todayStr } from '@/lib/date'
 
 export type Gender = 'male' | 'female'
 export type Severity = 'safe' | 'caution' | 'warning' | 'danger'
@@ -142,29 +143,36 @@ export interface WeightLossPlan {
   safety: SafetyResult
 }
 
-/* ─── 날짜 헬퍼 ─── */
+/* ─── 날짜 헬퍼 ───
+   'YYYY-MM-DD'를 로컬 자정으로 분해 파싱 — new Date('YYYY-MM-DD')는 UTC로 해석돼
+   해외 시간대에서 하루 밀리고, toISOString()은 DST·자정 전후로 날짜가 어긋난다. */
+function parseYmd(date: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date)
+  if (!m) return null
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+  return isNaN(d.getTime()) ? null : d
+}
 export function addDays(date: string, days: number): string {
-  const d = new Date(date)
-  if (isNaN(d.getTime())) return date
+  const d = parseYmd(date)
+  if (!d) return date
   d.setDate(d.getDate() + days)
-  return d.toISOString().slice(0, 10)
+  return todayStr(d)
 }
 export function addWeeks(date: string, weeks: number): string {
   return addDays(date, Math.round(weeks * 7))
 }
 export function daysBetween(a: string, b: string): number {
-  const da = new Date(a); const db = new Date(b)
-  if (isNaN(da.getTime()) || isNaN(db.getTime())) return 0
+  const da = parseYmd(a); const db = parseYmd(b)
+  if (!da || !db) return 0
   return Math.round((db.getTime() - da.getTime()) / (24 * 60 * 60 * 1000))
 }
 export function todayISO(): string {
-  // 로컬(사용자 시간대) 기준 날짜 — toISOString()은 UTC라 자정 전후로 하루가 밀릴 수 있음
-  const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  // 로컬(사용자 시간대) 기준 날짜 — lib/date 단일 소스
+  return todayStr()
 }
 export function formatDateKo(date: string): string {
-  const d = new Date(date)
-  if (isNaN(d.getTime())) return date
+  const d = parseYmd(date)
+  if (!d) return date
   const days = ['일', '월', '화', '수', '목', '금', '토']
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} (${days[d.getDay()]})`
 }
@@ -461,18 +469,34 @@ export interface Macros {
   protein: { g: number; kcal: number; percent: number }
   fat:     { g: number; kcal: number; percent: number }
   carb:    { g: number; kcal: number; percent: number }
+  /** 목표 섭취량이 너무 낮아 지방 비율을 20%로 줄였거나 단백질을 40%로 제한함 */
+  adjusted: boolean
 }
+
+export const MACRO_MIN_FAT_RATIO = 0.20
+export const MACRO_MAX_PROTEIN_RATIO = 0.40
 
 export function calcMacros(
   targetCalories: number, weight: number, proteinPerKg: number = 1.6, fatRatio: number = 0.25,
 ): Macros {
-  const proteinG = weight * proteinPerKg
-  const proteinKcal = proteinG * 4
-  const fatKcal = targetCalories * fatRatio
+  let proteinKcal = weight * proteinPerKg * 4
+  let fatKcal = targetCalories * fatRatio
+  let adjusted = false
+  // 단백질(g/kg 고정) + 지방이 목표 칼로리를 넘으면: ① 지방을 20%까지 낮추고
+  // ② 그래도 넘으면 단백질을 목표 칼로리의 40%로 제한 → 합계가 목표 칼로리를 넘지 않게
+  if (proteinKcal + fatKcal > targetCalories) {
+    adjusted = true
+    fatKcal = targetCalories * Math.min(fatRatio, MACRO_MIN_FAT_RATIO)
+    if (proteinKcal + fatKcal > targetCalories) {
+      proteinKcal = Math.min(proteinKcal, targetCalories * MACRO_MAX_PROTEIN_RATIO)
+    }
+  }
+  const proteinG = proteinKcal / 4
   const fatG = fatKcal / 9
   const carbKcal = Math.max(0, targetCalories - proteinKcal - fatKcal)
   const carbG = carbKcal / 4
   return {
+    adjusted,
     protein: { g: Math.round(proteinG), kcal: Math.round(proteinKcal), percent: Math.round((proteinKcal / targetCalories) * 100) },
     fat:     { g: Math.round(fatG),     kcal: Math.round(fatKcal),     percent: Math.round((fatKcal / targetCalories) * 100) },
     carb:    { g: Math.round(carbG),    kcal: Math.round(carbKcal),    percent: Math.round((carbKcal / targetCalories) * 100) },

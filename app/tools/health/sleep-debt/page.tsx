@@ -2,7 +2,7 @@ import Link from 'next/link'
 import SleepDebtClient from './SleepDebtClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -49,37 +49,14 @@ const headCell: React.CSSProperties = {
   borderBottom: '1px solid var(--border)',
   background: 'var(--bg3)',
 }
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '15px',
-  fontWeight: 600,
-  color: 'var(--text)',
-  listStyle: 'none',
-  padding: '4px 0',
-}
-const faqAnswer: React.CSSProperties = {
-  marginTop: '10px',
-  paddingTop: '10px',
-  borderTop: '1px solid var(--border)',
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
-}
 
 const FAQ_LD = [
-  { "q":"수면 부채는 정말 회복되나요?","a":"단기(1~2주) 부채는 대체로 회복됩니다. 다만 본 도구는 초과 수면의 회복 효율을 50%로 보기 때문에, 목표보다 +1시간씩 더 자면 하루 약 0.5시간씩 부채가 줄어듭니다 — 7시간 부채라면 약 2주(또는 +2시간씩이면 약 1주)가 걸립니다. 1개월 이상 만성 부족은 회복이 더디거나 불완전할 수 있고, 장기적으로 인지 저하·치매·심혈관·대사 질환 위험 증가와 연관된다고 보고됩니다(Belenky et al. 2003 등). 자세한 인과는 아직 연구 중이며, 만성화 전에 회복하는 것이 좋습니다." },
+  { "q":"수면 부채는 정말 회복되나요?","a":"단기(1~2주) 부채는 대체로 회복됩니다. 다만 본 도구는 초과 수면의 회복 효율을 50%로 보기 때문에, 목표보다 +1시간씩 더 자면 하루 약 0.5시간씩 부채가 줄어듭니다 — 7시간 부채라면 약 2주(또는 +2시간씩이면 약 1주)가 걸립니다. 며칠간 수면을 줄인 뒤에는 짧은 회복 기간만으로 수행 능력이 완전히 돌아오지 않았다는 연구(Belenky 외 2003)가 있고, 만성적인 짧은 수면은 심혈관 질환(Cappuccio 외 2011 메타분석)·치매(Sabia 외 2021 코호트) 위험 증가와 연관된다고 보고됩니다. 연관이 곧 인과는 아니지만, 만성화되기 전에 회복하는 것이 좋습니다." },
   { "q":"주말에 몰아 자면 부채 0이 되나요?","a":"아닙니다. 연구상 회복 효율은 30~50% — 7시간 부채를 14시간 몰아 자도 약 3~5시간만 회복. 게다가 주말 늦잠은 사회적 시차(social jet lag)를 만들어 월요일 아침 더 피곤하고 다음 주 부채를 가속합니다. 본 도구는 매일 +1시간 점진 회복을 권장." },
   { "q":"수면 시간은 충분한데 피곤한 이유는?","a":"수면 「질」이 낮을 수 있습니다. 시간만큼 중요한 요인들 — ① 수면 규칙성(취침·기상 시각 일관성, 본 도구 표시) ② 방해 요소(소음·빛·온도·반려동물·아이) ③ 수면 무호흡·코골이(본인은 알기 어려워 가족 관찰 필요) ④ 알코올·카페인·과식(깊은 수면 차단) ⑤ 스트레스·우울(표면적 수면만 가능). 지속되면 수면 클리닉 진단(수면 다원 검사, PSG)을 권장합니다." },
   { "q":"낮잠은 부채 회복에 도움이 되나요?","a":"20~30분 낮잠은 효과적입니다. 10~20분은 가벼운 회복과 인지·기분 향상 / 20~30분은 부채 일부 상쇄(특히 오후 1~3시) / 30~60분은 깊은 수면 단계에 들어가 깰 때 멍함(잠 관성) / 60분 이상은 야간 수면을 방해할 수 있습니다. 본 도구는 낮잠을 별도 기록하지 않지만, 야간 수면이 부족한 날은 직접 입력 모드로 「6h + 낮잠 0.5h = 6.5h」로 합산 가능합니다." },
-  { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. ✅ youtil 서버 전송 X ✅ 익명 사용 (이름·이메일 X) ⚠️ 시크릿 모드·다른 기기는 자동 동기화 X ⚠️ 브라우저 데이터 삭제 시 사라짐 민감한 생활 기록인 만큼 본인 책임으로 관리됩니다." },
-  { "q":"한국 평균 수면 시간은?","a":"OECD 수면 통계상 한국이 OECD 최하위권입니다. 한국 성인 평균은 약 7시간 41분(OECD 평균 8시간 22분 대비 41분 부족) / 한국 청소년은 약 6.3시간(권장 8~10시간 대비 2~4시간 부족) / 주당 부채는 성인 약 5시간, 청소년 약 17시간 누적입니다. 본 도구는 한국인의 만성 수면 부족을 객관적으로 파악하기 위한 첫걸음입니다." },
+  { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장되며 youtil 서버로는 전송하지 않습니다. 이름이나 이메일 없이 익명으로 쓸 수 있습니다. 시크릿 모드나 다른 기기와는 자동으로 동기화되지 않고, 브라우저 데이터를 지우면 기록도 함께 사라집니다." },
+  { "q":"한국 평균 수면 시간은?","a":"OECD 수면 통계상 한국이 OECD 최하위권입니다. 한국 성인 평균은 약 7시간 41분(OECD 평균 8시간 22분 대비 41분 부족) / 한국 청소년은 약 6.3시간(권장 8~10시간 대비 2~4시간 부족)입니다. 평균은 개인차를 가리므로, 내 수면이 부족한지는 본인 목표 수면과 비교해 보는 것이 정확합니다." },
   { "q":"수면 클리닉은 언제 가야 하나요?","a":"다음 신호가 있으면 수면 클리닉 진단을 권장합니다 — ① 주 3회 이상·3개월 이상 잠들기 어려움 또는 자주 깸(만성 불면, NHLBI 기준) ② 심한 코골이와 가족이 「숨이 멎는 듯」 관찰(수면 무호흡) ③ 7~8시간 자도 낮에 졸리고 집중력 저하 ④ 다리 불편함·움찔거림으로 잠 못 듦(하지불안증후군) ⑤ 악몽·잠꼬대·몽유 빈번 ⑥ 본 도구 누적 부채 30시간 이상 만성 상태. 한국 수면학회 등록 클리닉에서 수면 다원 검사(PSG)가 가능합니다." }
 ]
 
@@ -208,9 +185,9 @@ export default function SleepDebtPage() {
               </thead>
               <tbody>
                 <tr>
-                  <td style={cell}>매일 +1h × 7~10일</td>
+                  <td style={cell}>매일 +1h씩 꾸준히</td>
                   <td style={cell}><strong style={{ color: '#059669' }}>⭐⭐⭐⭐⭐</strong></td>
-                  <td style={cell}>최고. 생체리듬 유지 + 점진적 회복</td>
+                  <td style={cell}>최고. 생체리듬 유지 + 점진적 회복 (이 도구 모델로 부채 7h면 약 2주)</td>
                 </tr>
                 <tr>
                   <td style={cell}>20~30분 낮잠 (오후 1~3시)</td>
@@ -244,101 +221,7 @@ export default function SleepDebtPage() {
 
         {/* 6. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q1. 수면 부채는 정말 회복되나요?</summary>
-            <div style={faqAnswer}>
-              <strong style={{ color: 'var(--text)' }}>단기(1~2주) 부채는 대체로 회복</strong>됩니다.
-              다만 본 도구는 초과 수면의 회복 효율을 50%로 보기 때문에, 목표보다 +1시간씩 더 자면 하루 약 0.5시간씩 줄어 <strong style={{ color: 'var(--text)' }}>7시간 부채는 약 2주</strong>(또는 +2시간씩이면 약 1주)가 걸립니다.
-              <br /><br />
-              <strong style={{ color: '#EA580C' }}>1개월 이상 만성 부족</strong>은 회복이 더디거나 불완전할 수 있고, 장기적으로 인지 저하·치매·심혈관·대사 질환 <strong style={{ color: 'var(--text)' }}>위험 증가와 연관</strong>된다고 보고됩니다(Belenky et al. 2003 등). 자세한 인과는 아직 연구 중이며, 만성화 전에 회복하는 것이 좋습니다.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q2. 주말에 몰아 자면 부채 0이 되나요?</summary>
-            <div style={faqAnswer}>
-              <strong style={{ color: '#DC2626' }}>아닙니다.</strong>
-              연구상 회복 효율은 30~50% — 7시간 부채를 14시간 몰아 자도 약 3~5시간만 회복.
-              <br /><br />
-              게다가 주말 늦잠은 <strong style={{ color: 'var(--text)' }}>사회적 시차(social jet lag)</strong>를 만들어
-              월요일 아침 더 피곤하고 다음 주 부채를 가속합니다. 본 도구는 매일 +1시간 점진 회복을 권장.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q3. 수면 시간은 충분한데 피곤한 이유는?</summary>
-            <div style={faqAnswer}>
-              <strong style={{ color: 'var(--text)' }}>수면 「질」</strong>이 낮을 수 있습니다. 시간만큼 중요한 요인들:
-              <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li>수면 규칙성 (취침·기상 시각 일관성) — 본 도구 표시</li>
-                <li>방해 요소 (소음·빛·온도·반려동물·아이)</li>
-                <li>수면 무호흡·코골이 — 본인 인지 어려움, 가족 관찰 필요</li>
-                <li>알코올·카페인·과식 — 깊은 수면 차단</li>
-                <li>스트레스·우울 — 표면적 수면만 가능</li>
-              </ul>
-              지속되면 수면 클리닉 진단 (수면 다원 검사 / PSG) 권장.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q4. 낮잠은 부채 회복에 도움이 되나요?</summary>
-            <div style={faqAnswer}>
-              <strong style={{ color: '#059669' }}>20~30분 낮잠은 효과적</strong>입니다.
-              <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li>10~20분: 가벼운 회복 + 인지·기분 ↑</li>
-                <li>20~30분: 부채 일부 상쇄 (특히 오후 1~3시)</li>
-                <li>30~60분: 깊은 수면 단계 진입 → 깰 때 멍함 (잠 관성)</li>
-                <li>60분+: 야간 수면 방해 가능 (지속 X)</li>
-              </ul>
-              본 도구는 낮잠을 별도 기록하지 않지만, 야간 수면이 부족한 날은 직접 입력 모드로 「6h + 낮잠 0.5h = 6.5h」로 합산 가능.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q5. 본 도구의 데이터는 어디 저장되나요?</summary>
-            <div style={faqAnswer}>
-              <strong style={{ color: '#059669' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
-              <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li>✅ youtil 서버 전송 X</li>
-                <li>✅ 익명 사용 (이름·이메일 X)</li>
-                <li>⚠️ 시크릿 모드·다른 기기는 자동 동기화 X</li>
-                <li>⚠️ 브라우저 데이터 삭제 시 사라짐</li>
-              </ul>
-              민감한 생활 기록인 만큼 본인 책임으로 관리됩니다.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q6. 한국 평균 수면 시간은?</summary>
-            <div style={faqAnswer}>
-              OECD 수면 통계상 <strong style={{ color: '#DC2626' }}>한국이 OECD 최하위권</strong>입니다.
-              <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li>한국 성인 평균: <strong style={{ color: 'var(--text)' }}>약 7시간 41분</strong> (OECD 평균 8시간 22분 대비 41분 부족)</li>
-                <li>한국 청소년: <strong style={{ color: 'var(--text)' }}>약 6.3시간</strong> (권장 8~10h 대비 2~4h 부족)</li>
-                <li>주당 부채: 성인 ≈ 5h, 청소년 ≈ 17h 누적</li>
-              </ul>
-              본 도구는 한국인의 만성 수면 부족을 객관적으로 파악하기 위한 첫걸음.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q7. 수면 클리닉은 언제 가야 하나요?</summary>
-            <div style={faqAnswer}>
-              다음 신호가 있으면 수면 클리닉 진단 권장:
-              <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li>주 3회 이상·3개월 이상 잠들기 어려움 또는 자주 깸 (만성 불면, NHLBI 기준)</li>
-                <li>심한 코골이 + 가족이 「숨이 멎는 듯」 관찰 (수면 무호흡)</li>
-                <li>7~8시간 자도 낮에 졸림 + 집중력 ↓</li>
-                <li>다리 불편함·움찔거림으로 잠 못 듦 (하지불안증후군)</li>
-                <li>악몽·잠꼬대·몽유 빈번</li>
-                <li>본 도구 누적 부채 30h+ 만성 상태</li>
-              </ul>
-              한국 수면학회 등록 클리닉에서 <strong style={{ color: 'var(--text)' }}>수면 다원 검사(PSG)</strong> 가능.
-            </div>
-          </details>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 7. 면책 */}

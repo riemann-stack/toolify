@@ -66,11 +66,13 @@ const STORAGE_DATA: Record<string, StorageInfo> = {
   riceCooked:     { category: '밥(조리)',      emoji: '🍚', group: 'grain', fridgeCooked: 2, freezerCooked: 30, warning: '냉장 시 굳어 풍미가 떨어집니다. 1회분씩 냉동 권장', freezeRecommendDay: 1, defaultCondition: 'cooked', defaultStorage: 'fridge' },
   noodleCooked:   { category: '면(조리)',      emoji: '🍜', group: 'grain', fridgeCooked: 2, warning: '시간이 지나면 식감이 크게 저하됩니다', defaultCondition: 'cooked', defaultStorage: 'fridge' },
   bread:          { category: '빵',            emoji: '🍞', group: 'grain', roomTemp: 3, freezerRaw: 90, warning: '냉장은 빨리 굳습니다. 장기 보관은 냉동 권장', defaultCondition: 'raw', defaultStorage: 'roomTemp' },
-  kimchi:         { category: '김치',          emoji: '🌶️', group: 'grain', fridgeRaw: 180, warning: '익을수록 신맛이 증가. 김치냉장고 권장', defaultCondition: 'raw', defaultStorage: 'kimchi' },
+  // 가정에서 담근 김치 기준(공인 기준 없음). 시판 포장 김치는 포장의 소비기한(식약처 참고값 35일)을 따르도록 안내
+  kimchi:         { category: '김치(가정 담금)', emoji: '🌶️', group: 'grain', fridgeRaw: 180, warning: '익을수록 신맛이 증가. 김치냉장고 권장. 시판 포장 김치는 포장에 표시된 소비기한을 따르세요', defaultCondition: 'raw', defaultStorage: 'kimchi' },
   banchan:        { category: '밑반찬',        emoji: '🥢', group: 'grain', fridgeCooked: 5, warning: '국물이 있는 반찬은 더 빨리 상합니다', defaultCondition: 'cooked', defaultStorage: 'fridge' },
-  soup:           { category: '국·찌개',       emoji: '🍲', group: 'grain', fridgeCooked: 3, freezerCooked: 30, warning: '하루 한 번 끓여 먹으면 보관 기간을 연장할 수 있습니다', freezeRecommendDay: 2, defaultCondition: 'cooked', defaultStorage: 'fridge' },
+  soup:           { category: '국·찌개',       emoji: '🍲', group: 'grain', fridgeCooked: 3, freezerCooked: 30, warning: '다시 끓여도 보관 기한은 늘어나지 않습니다(일부 세균의 포자·독소는 남음). 먹을 만큼만 덜어 데우고, 남는 양은 1회분씩 냉동하세요', freezeRecommendDay: 2, defaultCondition: 'cooked', defaultStorage: 'fridge' },
 
-  tofu:           { category: '두부',          emoji: '⬜', group: 'processed', fridgeRaw: 4, warning: '개봉 후 물에 담가 보관, 매일 물 교체 권장 (냉동 시 식감 변화)', defaultCondition: 'opened', defaultStorage: 'fridge' },
+  // 개봉 후 기준(3~4일). 미개봉 제품은 포장의 소비기한(식약처 참고값 23일)을 따르도록 안내
+  tofu:           { category: '두부(개봉 후)', emoji: '⬜', group: 'processed', fridgeRaw: 4, warning: '개봉 후 물에 담가 보관, 매일 물 교체 권장 (냉동 시 식감 변화). 미개봉 두부는 포장에 표시된 소비기한을 따르세요', defaultCondition: 'opened', defaultStorage: 'fridge' },
 }
 
 const CATEGORY_KEYS = Object.keys(STORAGE_DATA)
@@ -212,6 +214,29 @@ function todayValues() {
   const t = new Date()
   return { y: t.getFullYear(), m: t.getMonth() + 1, d: t.getDate() }
 }
+function startOfToday(): Date {
+  const t = new Date()
+  t.setHours(0, 0, 0, 0)
+  return t
+}
+const STORAGE_METHODS: readonly StorageMethod[] = ['roomTemp', 'fridge', 'freezer', 'kimchi']
+const CONDITIONS: readonly Condition[] = ['raw', 'cooked', 'opened']
+const BASE_DATE_TYPES: readonly BaseDateType[] = ['purchase', 'cook', 'open', 'freeze']
+function isFoodItem(v: unknown): v is FoodItem {
+  if (!v || typeof v !== 'object') return false
+  const x = v as Record<string, unknown>
+  const isInt = (n: unknown): n is number => typeof n === 'number' && Number.isInteger(n)
+  return typeof x.id === 'string'
+    && typeof x.category === 'string' && x.category in STORAGE_DATA
+    && typeof x.baseDateType === 'string' && (BASE_DATE_TYPES as readonly string[]).includes(x.baseDateType)
+    && isInt(x.year) && x.year >= 2000 && x.year <= 2100
+    && isInt(x.month) && x.month >= 1 && x.month <= 12
+    && isInt(x.day) && x.day >= 1 && x.day <= 31
+    && typeof x.storage === 'string' && (STORAGE_METHODS as readonly string[]).includes(x.storage)
+    && typeof x.condition === 'string' && (CONDITIONS as readonly string[]).includes(x.condition)
+    && (x.customName === undefined || typeof x.customName === 'string')
+    && (x.memo === undefined || typeof x.memo === 'string')
+}
 // 보관 일수를 읽기 좋게 — 30일 이상은 개월로
 function fmtDuration(days: number): string {
   return days >= 30 ? `${Math.round(days / 30)}개월` : `${days}일`
@@ -232,8 +257,14 @@ export default function FoodStorageClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const parsed = JSON.parse(raw) as FoodItem[]
-        if (Array.isArray(parsed)) setItems(parsed)
+        const parsed: unknown = JSON.parse(raw)
+        // 요소 검증 — 알 수 없는 카테고리·잘못된 날짜 항목은 제외 (무검증 as T 금지).
+        // 예전 버그(연도 변경 시 일자 미보정)로 저장된 '2027-02-29' 같은 항목은 버리지 않고 그달 말일로 보정
+        if (Array.isArray(parsed)) {
+          setItems(parsed.filter(isFoodItem)
+            .map(it => ({ ...it, day: Math.min(it.day, daysInMonth(it.year, it.month)) }))
+            .slice(0, MAX_ITEMS))
+        }
       }
     } catch {}
   }, [])
@@ -246,11 +277,20 @@ export default function FoodStorageClient() {
     } catch {}
   }, [items, mounted])
 
-  // 오늘 (한 번만 계산)
-  const today = useMemo(() => {
-    const t = new Date()
-    t.setHours(0, 0, 0, 0)
-    return t
+  // 오늘 — 페이지를 열어 둔 채 자정을 넘기거나 탭으로 돌아오면 다시 계산 (D-day 갱신)
+  const [today, setToday] = useState(startOfToday)
+  useEffect(() => {
+    const refresh = () => setToday(prev => {
+      const t = startOfToday()
+      return t.getTime() === prev.getTime() ? prev : t
+    })
+    const onVisible = () => { if (document.visibilityState === 'visible') refresh() }
+    document.addEventListener('visibilitychange', onVisible)
+    const id = setInterval(refresh, 60_000)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisible)
+      clearInterval(id)
+    }
   }, [])
 
   // 계산 + 정렬
@@ -334,7 +374,7 @@ export default function FoodStorageClient() {
           {itemsWithCalc.length > 0 && (
             <div className={s.card}>
               <span className={s.cardLabel}>요약</span>
-              <div className={s.summaryGrid}>
+              <div className={s.summaryGrid} role="status">
                 <SummaryCell label="등록"       value={itemsWithCalc.length} cls={s.summaryValueDefault} />
                 <SummaryCell label="안전"       value={summary.safe}         cls={s.summaryValueSafe} />
                 <SummaryCell label="주의·위급"  value={summary.warning + summary.urgent} cls={s.summaryValueWarning} />
@@ -598,9 +638,9 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
 
         {/* 카테고리 */}
         <div>
-          <span className={s.fieldLabel}>식재료 카테고리</span>
+          <label className={s.fieldLabel} htmlFor="fs-category">식재료 카테고리</label>
           <div className={s.selectWrap}>
-            <select className={s.select} value={category} onChange={e => setCategory(e.target.value)}>
+            <select id="fs-category" className={s.select} value={category} onChange={e => setCategory(e.target.value)}>
               {(Object.keys(groupedKeys) as GroupKey[]).map(g => (
                 <optgroup key={g} label={`${GROUP_META[g].emoji} ${GROUP_META[g].label}`}>
                   {groupedKeys[g].map(k => (
@@ -615,8 +655,9 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
 
         {/* 커스텀 이름 */}
         <div>
-          <span className={s.fieldLabel}>이름 (선택)</span>
+          <label className={s.fieldLabel} htmlFor="fs-name">이름 (선택)</label>
           <input
+            id="fs-name"
             className={s.textInput}
             placeholder={`예: ${STORAGE_DATA[category]?.category} — 정육점`}
             value={customName}
@@ -627,8 +668,8 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
 
         {/* 기준일 라디오 */}
         <div>
-          <span className={s.fieldLabel}>기준일</span>
-          <div className={s.radioRow}>
+          <span className={s.fieldLabel} id="fs-basedate-label">기준일</span>
+          <div className={s.radioRow} role="group" aria-labelledby="fs-basedate-label">
             {(['purchase','cook','open'] as BaseDateType[]).map(b => (
               <button
                 key={b}
@@ -644,16 +685,22 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
 
         {/* 날짜 선택 */}
         <div>
-          <span className={s.fieldLabel}>날짜</span>
+          <label className={s.fieldLabel} htmlFor="fs-year">날짜</label>
           <div className={s.dateRow}>
             <div className={s.selectWrap}>
-              <select className={s.select} value={year} onChange={e => setYear(parseInt(e.target.value))}>
+              <select id="fs-year" aria-label="연도" className={s.select} value={year} onChange={e => {
+                // 연도 변경 시에도 일자 클램프 (윤년 2/29 → 평년 선택 시 2/28)
+                const y = parseInt(e.target.value)
+                setYear(y)
+                const dim2 = daysInMonth(y, month)
+                if (day > dim2) setDay(dim2)
+              }}>
                 {[t.y - 1, t.y].map(y => <option key={y} value={y}>{y}년</option>)}
               </select>
               <span className={s.selectArrow}>▾</span>
             </div>
             <div className={s.selectWrap}>
-              <select className={s.select} value={month} onChange={e => {
+              <select aria-label="월" className={s.select} value={month} onChange={e => {
                 const m = parseInt(e.target.value)
                 setMonth(m)
                 const dim2 = daysInMonth(year, m)
@@ -664,7 +711,7 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
               <span className={s.selectArrow}>▾</span>
             </div>
             <div className={s.selectWrap}>
-              <select className={s.select} value={day} onChange={e => setDay(parseInt(e.target.value))}>
+              <select aria-label="일" className={s.select} value={day} onChange={e => setDay(parseInt(e.target.value))}>
                 {days.map(d => <option key={d} value={d}>{d}일</option>)}
               </select>
               <span className={s.selectArrow}>▾</span>
@@ -674,8 +721,8 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
 
         {/* 보관 방식 */}
         <div>
-          <span className={s.fieldLabel}>보관 방식</span>
-          <div className={s.storageRow}>
+          <span className={s.fieldLabel} id="fs-storage-label">보관 방식</span>
+          <div className={s.storageRow} role="group" aria-labelledby="fs-storage-label">
             <button aria-pressed={storage === 'roomTemp'} className={`${s.storageBtn} ${s.storageBtnRoom}    ${storage === 'roomTemp' ? s.storageBtnActive : ''}`} onClick={() => setStorage('roomTemp')}>🌡️ 실온</button>
             <button aria-pressed={storage === 'fridge'} className={`${s.storageBtn} ${s.storageBtnFridge}  ${storage === 'fridge'   ? s.storageBtnActive : ''}`} onClick={() => setStorage('fridge')}>❄️ 냉장</button>
             <button aria-pressed={storage === 'freezer'} className={`${s.storageBtn} ${s.storageBtnFreezer} ${storage === 'freezer'  ? s.storageBtnActive : ''}`} onClick={() => setStorage('freezer')}>🧊 냉동</button>
@@ -685,8 +732,8 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
 
         {/* 상태 */}
         <div>
-          <span className={s.fieldLabel}>상태</span>
-          <div className={s.radioRow}>
+          <span className={s.fieldLabel} id="fs-condition-label">상태</span>
+          <div className={s.radioRow} role="group" aria-labelledby="fs-condition-label">
             {(['raw','cooked','opened'] as Condition[]).map(c => (
               <button
                 key={c}
@@ -702,8 +749,9 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
 
         {/* 메모 */}
         <div>
-          <span className={s.fieldLabel}>메모 (선택)</span>
+          <label className={s.fieldLabel} htmlFor="fs-memo">메모 (선택)</label>
           <input
+            id="fs-memo"
             className={s.textInput}
             placeholder="예: 냉장 상단 칸 / 진공팩 / 1회분"
             value={memo}

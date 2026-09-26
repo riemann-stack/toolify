@@ -6,6 +6,15 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import { getWeightRanges } from './bmiUtils'
+
+/* 키별 체중 구간 — 계산기와 같은 getWeightRanges(대한비만학회 기준)로 빌드 시 생성 */
+const rangeOf = (h: number, id: string) => getWeightRanges(h, 'KOREA').find(r => r.id === id)!
+const HEIGHT_TABLE = [150, 155, 160, 165, 170, 175, 180, 185].map(h => {
+  const n = rangeOf(h, 'normal'), o = rangeOf(h, 'overweight'), ob = rangeOf(h, 'obese-1')
+  return [`${h}cm`, `${n.minWeight} ~ ${n.maxWeight}kg`, `${o.minWeight} ~ ${o.maxWeight}kg`, `${ob.minWeight}kg 이상`]
+})
+const N170 = rangeOf(170, 'normal')
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmi',
@@ -55,7 +64,7 @@ const FAQ_LD = [
               },
               {
                 q: '키별 정상 체중 범위는 어떻게 계산하나요?',
-                a: '본 도구는 입력한 키에 따라 자동으로 계산합니다 — 저체중(BMI 18.5 미만)·정상(18.5~22.9 한국 / 18.5~24.9 WHO)·과체중·비만 모든 구간을 본인 키 기준 kg 범위로 변환해 표시합니다. 예: 키 170cm → 정상 53.5~66.5kg (한국 기준). 결과 화면의 <strong>"키별 체중 구간 표"</strong>에서 모든 구간이 한눈에 보입니다.',
+                a: `본 도구는 입력한 키에 따라 자동으로 계산합니다 — 저체중(BMI 18.5 미만)·정상(18.5~22.9 한국 / 18.5~24.9 WHO)·과체중·비만 모든 구간을 본인 키 기준 kg 범위로 변환해 표시합니다. 예: 키 170cm → 정상 ${N170.minWeight}~${N170.maxWeight}kg (한국 기준, 소수 첫째 자리 BMI 18.5~22.9). 결과 화면의 <strong>"키별 체중 구간 표"</strong>에서 모든 구간이 한눈에 보입니다.`,
               },
               {
                 q: '허리-신장비는 무엇이며 어떻게 활용하나요?',
@@ -171,16 +180,7 @@ export default function BmiPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['150cm', '41.6 ~ 51.5kg', '51.6 ~ 56.2kg', '56.3kg 이상'],
-                  ['155cm', '44.4 ~ 55.0kg', '55.1 ~ 60.1kg', '60.2kg 이상'],
-                  ['160cm', '47.4 ~ 58.6kg', '58.7 ~ 64.0kg', '64.1kg 이상'],
-                  ['165cm', '50.3 ~ 62.3kg', '62.4 ~ 68.1kg', '68.2kg 이상'],
-                  ['170cm', '53.5 ~ 66.2kg', '66.3 ~ 72.3kg', '72.4kg 이상'],
-                  ['175cm', '56.7 ~ 70.2kg', '70.3 ~ 76.6kg', '76.7kg 이상'],
-                  ['180cm', '59.9 ~ 74.2kg', '74.3 ~ 81.0kg', '81.1kg 이상'],
-                  ['185cm', '63.3 ~ 78.4kg', '78.5 ~ 85.6kg', '85.7kg 이상'],
-                ].map(([height, normal, over, obese], i) => (
+                {HEIGHT_TABLE.map(([height, normal, over, obese], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{height}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: '#059669' }}>{normal}</td>
@@ -192,7 +192,7 @@ export default function BmiPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ 본 도구의 결과 화면은 입력한 키 기준으로 모든 구간을 자동 표시합니다.
+            ⓘ BMI를 소수 첫째 자리로 반올림해 분류한 기준입니다(정상 18.5~22.9). 본 도구의 결과 화면은 입력한 키 기준으로 모든 구간을 자동 표시합니다.
           </p>
         </section>
 
@@ -295,7 +295,7 @@ export default function BmiPage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
             {[
-              { icon: '⚡', color: '#0EA5E9', title: '체중과 러닝 기록의 관계',   content: '스포츠 과학 연구에 따르면 체중 1kg 감량 시 10km 레이스에서 약 2~3분, 마라톤에서 약 8~12분 기록이 향상될 수 있습니다. 단, 이는 근육량을 유지한 상태의 체지방 감량일 때 해당합니다.' },
+              { icon: '⚡', color: '#0EA5E9', title: '체중과 러닝 기록의 관계',   content: '체중이 1% 줄면 기록도 대략 1% 단축된다는 경험칙이 있습니다. 예를 들어 70kg 러너가 1kg을 빼면 10km에서 약 30~40초, 풀코스에서 약 2~3분 정도입니다. 근육량을 유지한 채 체지방을 줄였을 때의 이야기이며 개인차가 큽니다.' },
               { icon: '⚠️', color: '#EA580C', title: '무리한 감량의 위험',         content: '마라톤과 같은 지구력 운동에서 낮은 BMI가 유리할 수 있지만, 무리한 체중 감량은 피로 골절, 근육 손실, 면역력 저하 등 부상 위험을 크게 높입니다. 특히 여성 러너의 경우 지나친 저체중은 골밀도 감소와 호르몬 이상을 유발할 수 있습니다.' },
               { icon: '🎯', color: '#0891B2', title: '러너에게 권장하는 BMI 범위', content: '엘리트 마라토너의 평균 BMI는 남성 약 18~20, 여성 약 17~19 수준이지만, 일반 러너는 정상 범위(18.5~22.9)를 목표로 하는 것이 건강하고 지속 가능합니다.' },
             ].map((tip, i) => (

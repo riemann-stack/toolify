@@ -294,6 +294,7 @@
   font-variant-numeric: tabular-nums;
 }
 .customInput:focus, .customMg:focus { border-color: var(--accent); }
+.customErr { grid-column: 1 / -1; margin: 2px 0 0; font-size: 12px; line-height: 1.5; color: var(--danger); }
 .customAddBtn {
   background: var(--accent-strong);
   color: #ffffff;

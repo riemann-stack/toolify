@@ -2,7 +2,7 @@ import Link from 'next/link'
 import CaffeineClient from './CaffeineClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -50,36 +50,13 @@ const headCell: React.CSSProperties = {
   borderBottom: '1px solid var(--border)',
   background: 'var(--bg3)',
 }
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '15px',
-  fontWeight: 600,
-  color: 'var(--text)',
-  listStyle: 'none',
-  padding: '4px 0',
-}
-const faqAnswer: React.CSSProperties = {
-  marginTop: '10px',
-  paddingTop: '10px',
-  borderTop: '1px solid var(--border)',
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
-}
 
 const FAQ_LD = [
   { "q":"디카페인 커피는 정말 카페인이 없나요?","a":"아니요, 약 5~15mg 정도 남습니다. EU 규정상 디카페인은 카페인 0.1% 이하인데, Tall 사이즈 기준 약 10mg 수준. 임산부나 매우 민감한 사람은 디카페인이라도 늦은 오후 이후엔 자제 권장." },
   { "q":"콜드브루가 아메리카노보다 카페인이 많은 이유는?","a":"오랜 추출 시간 + 더 많은 원두 사용 때문입니다. 차가운 물은 추출 효율이 낮아 12~24시간 우려내며, 그만큼 원두를 1.5~2배 사용. 결과적으로 Tall 기준 195mg ≈ 아메리카노 그란데(225mg)와 비슷한 수준. 「부드러운 맛 = 약함」 통념과 달리 카페인은 높음." },
-  { "q":"카페인 마지노선 = &ldquo;취침 6시간 전&rdquo;이 진짜?","a":"유명한 2013년 Sleep Medicine 연구에서 취침 6시간 전 400mg 카페인도 수면을 1시간 단축시킨다고 밝혔습니다. 본 도구의 모델로는 14:00에 아메리카노 150mg → 23:00 취침 시 잔존 약 43mg (가벼운 영향 가능 수준). 하지만 본인 반감기가 길거나 (피임약·임신) 양이 많으면 8~12시간 전부터 컷이 필요할 수 있습니다." },
+  { "q":"카페인 마지노선 = “취침 6시간 전”이 진짜?","a":"2013년 Journal of Clinical Sleep Medicine에 실린 연구(Drake 외)에서 <strong>취침 6시간 전에 마신 400mg 카페인도 수면을 1시간 넘게 줄였다</strong>고 보고했습니다. 본 도구의 모델로는 14:00에 아메리카노 150mg → 23:00 취침 시 잔존 약 43mg (가벼운 영향 가능 수준). 하지만 본인 반감기가 길거나 (피임약·임신) 양이 많으면 8~12시간 전부터 컷이 필요할 수 있습니다." },
   { "q":"카페인 내성·금단이 진짜 있나요?","a":"둘 다 진짜입니다. 내성: 매일 같은 양 섭취 시 1~2주 내 효과 ↓. 「커피 마셔도 안 깬다」 호소. 금단: 갑자기 끊으면 12~24시간 후 두통·피로·집중력 ↓·짜증 (1~3일 지속). 해결: 2주마다 1~2일 「카페인 휴식일」 또는 양 점진적 감량." },
-  { "q":"&ldquo;커피 낮잠(Coffee Nap)&rdquo;이 효과 있다는 게 진짜?","a":"네, 여러 연구로 확인됐습니다. 방법: 커피 200mg을 빠르게 마시고 즉시 20분 낮잠. 카페인 효과 발현이 약 20~30분 후라 낮잠 후 깰 때 카페인 효과 + 졸음 클리어 모두 작용. 30분 넘게 자면 깊은 수면 단계에 들어가 오히려 더 멍해집니다." },
+  { "q":"“커피 낮잠(Coffee Nap)”이 효과 있다는 게 진짜?","a":"네, 여러 연구로 확인됐습니다. 방법: 커피 200mg을 빠르게 마시고 즉시 20분 낮잠. 카페인 효과 발현이 약 20~30분 후라 낮잠 후 깰 때 카페인 효과 + 졸음 클리어 모두 작용. 30분 넘게 자면 깊은 수면 단계에 들어가 오히려 더 멍해집니다." },
   { "q":"임산부 200mg은 어느 정도인가요?","a":"아메리카노 Tall 약 1.3잔 또는 Grande 1잔 정도입니다. 주의: 임신 중에는 반감기가 10~15시간으로 매우 길어져 평소 양도 체내에 오래 남습니다(수유 중에는 출산 후 보통 수준으로 회복). 본 도구 「반감기: 임신 중」 선택 시 자동 반영됩니다. 차·콜라·초콜릿, 그리고 일부 복합 진통제·감기약(카페인 함유 제품)에도 카페인이 들어 있어 합산에 주의하세요." },
   { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. youtil 서버로는 전송하지 않습니다. 72시간이 지난 항목은 자동으로 정리됩니다(느린 반감기 12시간에서도 3일이면 잔존이 미미). 시크릿 모드나 다른 기기와는 자동 동기화되지 않습니다." }
 ]
@@ -143,8 +120,8 @@ export default function CaffeinePage() {
                   <tr><td style={cell}>🍵 말차 1잔</td><td style={cell}>200ml</td><td style={cell}>70mg</td><td style={cell}>0.5배</td></tr>
                   <tr><td style={cell}>🥤 콜라 캔</td><td style={cell}>355ml</td><td style={cell}>35mg</td><td style={cell}>0.2배</td></tr>
                   <tr><td style={cell}>🥤 다이어트콜라</td><td style={cell}>355ml</td><td style={cell}>47mg</td><td style={cell}>0.3배</td></tr>
-                  <tr><td style={cell}>⚡ 레드불</td><td style={cell}>250ml</td><td style={cell}><strong style={{ color: '#D97706' }}>80mg</strong></td><td style={cell}>0.5배</td></tr>
-                  <tr><td style={cell}>⚡ 몬스터</td><td style={cell}>473ml</td><td style={cell}><strong style={{ color: '#EA580C' }}>160mg</strong></td><td style={cell}>1.1배</td></tr>
+                  <tr><td style={cell}>⚡ 레드불</td><td style={cell}>250ml</td><td style={cell}><strong style={{ color: '#D97706' }}>62.5mg</strong></td><td style={cell}>0.4배</td></tr>
+                  <tr><td style={cell}>⚡ 몬스터</td><td style={cell}>355ml</td><td style={cell}><strong style={{ color: '#EA580C' }}>100mg</strong></td><td style={cell}>0.7배</td></tr>
                   <tr><td style={cell}>⚡ 핫식스</td><td style={cell}>250ml</td><td style={cell}>60mg</td><td style={cell}>0.4배</td></tr>
                   <tr><td style={cell}>⚡ 박카스</td><td style={cell}>100ml</td><td style={cell}>30mg</td><td style={cell}>0.2배</td></tr>
                   <tr><td style={cell}>🍫 다크초콜릿 28g</td><td style={cell}>—</td><td style={cell}>24mg</td><td style={cell}>0.16배</td></tr>
@@ -154,7 +131,7 @@ export default function CaffeinePage() {
             </div>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px' }}>
-            ※ 평균값. 브랜드·로스팅·추출법·계절에 따라 ±20% 차이 가능 (출처: 스타벅스 영양 정보, USDA, 식약처).
+            ※ 평균값. 브랜드·로스팅·추출법·계절에 따라 ±20% 차이 가능 (출처: 스타벅스 영양 정보, USDA, 식약처). 에너지음료는 국내 유통 제품의 표기 기준이며(레드불코리아 250ml 62.5mg, 국내 몬스터 355ml 100mg), 해외 제품은 용량·함량이 다릅니다.
           </p>
         </section>
 
@@ -261,79 +238,7 @@ export default function CaffeinePage() {
 
         {/* 6. FAQ */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q1. 디카페인 커피는 정말 카페인이 없나요?</summary>
-            <div style={faqAnswer}>
-              아니요, <strong style={{ color: 'var(--text)' }}>약 5~15mg</strong> 정도 남습니다.
-              EU 규정상 디카페인은 카페인 0.1% 이하인데, Tall 사이즈 기준 약 10mg 수준.
-              임산부나 매우 민감한 사람은 디카페인이라도 늦은 오후 이후엔 자제 권장.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q2. 콜드브루가 아메리카노보다 카페인이 많은 이유는?</summary>
-            <div style={faqAnswer}>
-              <strong style={{ color: 'var(--text)' }}>오랜 추출 시간 + 더 많은 원두 사용</strong> 때문입니다.
-              차가운 물은 추출 효율이 낮아 12~24시간 우려내며, 그만큼 원두를 1.5~2배 사용. 결과적으로 Tall 기준 195mg ≈ 아메리카노 그란데(225mg)와 비슷한 수준.
-              「부드러운 맛 = 약함」 통념과 달리 카페인은 높음.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q3. 카페인 마지노선 = &ldquo;취침 6시간 전&rdquo;이 진짜?</summary>
-            <div style={faqAnswer}>
-              유명한 2013년 Sleep Medicine 연구에서 <strong style={{ color: 'var(--text)' }}>취침 6시간 전 400mg 카페인도 수면을 1시간 단축</strong>시킨다고 밝혔습니다.
-              본 도구의 모델로는 14:00에 아메리카노 150mg → 23:00 취침 시 잔존 약 43mg (가벼운 영향 가능 수준).
-              하지만 본인 반감기가 길거나 (피임약·임신) 양이 많으면 8~12시간 전부터 컷이 필요할 수 있습니다.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q4. 카페인 내성·금단이 진짜 있나요?</summary>
-            <div style={faqAnswer}>
-              <strong style={{ color: 'var(--text)' }}>둘 다 진짜</strong>입니다.
-              <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li><strong>내성</strong>: 매일 같은 양 섭취 시 1~2주 내 효과 ↓. 「커피 마셔도 안 깬다」 호소.</li>
-                <li><strong>금단</strong>: 갑자기 끊으면 12~24시간 후 두통·피로·집중력 ↓·짜증 (1~3일 지속).</li>
-              </ul>
-              해결: <strong style={{ color: 'var(--text)' }}>2주마다 1~2일 「카페인 휴식일」</strong> 또는 양 점진적 감량.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q5. &ldquo;커피 낮잠(Coffee Nap)&rdquo;이 효과 있다는 게 진짜?</summary>
-            <div style={faqAnswer}>
-              네, 여러 연구로 확인됐습니다.
-              방법: <strong style={{ color: 'var(--text)' }}>커피 200mg을 빠르게 마시고 즉시 20분 낮잠</strong>.
-              카페인 효과 발현이 약 20~30분 후라 낮잠 후 깰 때 카페인 효과 + 졸음 클리어 모두 작용.
-              30분 넘게 자면 깊은 수면 단계에 들어가 오히려 더 멍해집니다.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q6. 임산부 200mg은 어느 정도인가요?</summary>
-            <div style={faqAnswer}>
-              아메리카노 Tall 약 1.3잔 또는 Grande 1잔 정도입니다.
-              주의: 임신 중에는 반감기가 <strong style={{ color: 'var(--text)' }}>10~15시간으로 매우 길어져</strong>
-              평소 양도 체내에 오래 남습니다 (수유 중에는 출산 후 보통 수준으로 회복).  본 도구 「반감기: 임신 중」 선택 시 자동 반영.
-              차·콜라·초콜릿, 그리고 일부 복합 진통제·감기약(카페인 함유 제품)에도 카페인이 들어 있어 합산에 주의하세요.
-            </div>
-          </details>
-
-          <details style={faqDetails}>
-            <summary style={faqSummary}>Q7. 본 도구의 데이터는 어디 저장되나요?</summary>
-            <div style={faqAnswer}>
-              <strong style={{ color: '#059669' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
-              <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-                <li>✅ youtil 서버 전송 X</li>
-                <li>✅ 72시간 지난 항목은 자동 정리 (느린 반감기 12h에서도 3일이면 잔존 미미)</li>
-                <li>⚠️ 시크릿 모드·다른 기기는 자동 동기화 X</li>
-              </ul>
-            </div>
-          </details>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 7. 면책 */}

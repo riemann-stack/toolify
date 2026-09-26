@@ -7,11 +7,15 @@ import { todayStr } from '@/lib/date'
 
 export type Phase = 'menstrual' | 'follicular' | 'ovulation' | 'luteal'
 
-export const PHASE_META: Record<Phase, { label: string; emoji: string; color: string; bgColor: string }> = {
-  menstrual:  { label: '생리기', emoji: '🩸', color: '#DC2626', bgColor: 'rgba(220, 38, 38, 0.18)' },
-  follicular: { label: '난포기', emoji: '🌱', color: '#FFD93E', bgColor: 'rgba(255, 217, 62, 0.18)' },
-  ovulation:  { label: '배란기', emoji: '🥚', color: '#059669', bgColor: 'rgba(16, 185, 129, 0.20)' },
-  luteal:     { label: '황체기', emoji: '🌙', color: '#B885DA', bgColor: 'rgba(184, 133, 218, 0.18)' },
+/**
+ * color·bgColor = 도넛 채움·범례 점·배경 전용 (난포기 노랑·황체기 연보라는 흰 배경 글자 대비 미달).
+ * ink = 글자(텍스트·SVG text)용 토큰 — 흰 배경 AA(4.5:1) 이상.
+ */
+export const PHASE_META: Record<Phase, { label: string; emoji: string; color: string; bgColor: string; ink: string }> = {
+  menstrual:  { label: '생리기', emoji: '🩸', color: '#DC2626', bgColor: 'rgba(220, 38, 38, 0.18)', ink: 'var(--danger)' },
+  follicular: { label: '난포기', emoji: '🌱', color: '#FFD93E', bgColor: 'rgba(255, 217, 62, 0.18)', ink: 'var(--warning)' },
+  ovulation:  { label: '배란기', emoji: '🥚', color: '#059669', bgColor: 'rgba(16, 185, 129, 0.20)', ink: 'var(--cat-finance-ink)' },
+  luteal:     { label: '황체기', emoji: '🌙', color: '#B885DA', bgColor: 'rgba(184, 133, 218, 0.18)', ink: 'var(--cat-unit-ink)' },
 }
 
 export type Regularity = 'regular' | 'mild-irregular' | 'irregular'
@@ -68,6 +72,35 @@ export function fmtMonthDay(d: Date): string {
   return `${d.getMonth() + 1}월 ${d.getDate()}일`
 }
 
+// ── 주기 모델 ────────────────────────
+/**
+ * 배란일(1-indexed 주기 일차) — 황체기 14일 고정 모델: 배란일 = 다음 생리 시작일 − 14일.
+ * 다음 생리 시작 = 주기 (avgCycle+1)일차 → 배란 = (avgCycle+1−14) = (avgCycle−13)일차.  예: 28일 주기 → 15일차.
+ */
+export function ovulationDayOf(avgCycle: number): number {
+  return avgCycle - 13
+}
+
+/**
+ * phase 경계 일차(각 구간의 시작 일차, 1-indexed). 분류 우선순위(생리기 > 배란기 > 난포기/황체기)와 같게 정합해
+ * 짧은 주기 + 긴 생리(예: 21일·10일)에서도 구간이 겹치거나 역전되지 않는다. 빈 구간은 start === end.
+ */
+export function phaseDayBounds(periodLen: number, avgCycle: number) {
+  const ov = ovulationDayOf(avgCycle)
+  const mEnd = periodLen + 1                 // 난포기 시작(생리기 끝 다음 날)
+  const oStart = Math.max(ov - 1, mEnd)      // 배란기 시작
+  const oEnd = Math.max(ov + 2, oStart)      // 황체기 시작
+  return { ov, mEnd, oStart, oEnd }
+}
+
+function classifyDay(day: number, periodLen: number, avgCycle: number): Phase {
+  const ov = ovulationDayOf(avgCycle)
+  if (day <= periodLen) return 'menstrual'
+  if (day < ov - 1) return 'follicular'
+  if (day <= ov + 1) return 'ovulation'
+  return 'luteal'
+}
+
 // ── 메인 계산 ────────────────────────
 export interface CycleInput {
   lastPeriod: Date           // 마지막 생리 시작일
@@ -83,6 +116,11 @@ export interface CycleResult {
   nextPeriodDate: Date       // 다음 생리 예정
   pmsStart: Date             // PMS 예상 시작 (다음 생리 -7)
   pmsEnd: Date               // PMS 예상 끝 (다음 생리 -1)
+  ovulationPassed: boolean   // 이번 주기 배란 예상일이 오늘 이전
+  fertilityPassed: boolean   // 이번 주기 가임기가 이미 끝남
+  nextOvulationDate: Date    // 다음 주기 배란 예상일 (= 이번 + avgCycle)
+  nextFertilityStart: Date
+  nextFertilityEnd: Date
   dayInCycle: number         // 1-indexed
   phase: Phase
   daysToNextPeriod: number   // 다음 생리까지 남은 일수 (앵커링으로 항상 1~avgCycle)
@@ -106,25 +144,29 @@ export function calcCycle(input: CycleInput): CycleResult {
   let dayInCycle = dateDiff(today, cycleStart) + 1  // 1..avgCycle (cycleStart ≤ today < cycleStart + avgCycle)
   while (dayInCycle < 1) dayInCycle += avgCycle      // 방어: 검증을 우회한 미래 입력 등 예외 상황
 
-  const ovulationDay = avgCycle - 14  // 1-indexed, e.g., 28일 주기 → 14일
-  const ovulationDate = dateAdd(cycleStart, ovulationDay - 1)
+  const nextPeriodDate = dateAdd(cycleStart, avgCycle)  // 항상 today 이후 (1~avgCycle일 뒤)
+  const ovulationDate = dateAdd(nextPeriodDate, -14)    // 배란 = 다음 생리 − 14일 (= 주기 avgCycle−13일차)
   const fertilityStart = dateAdd(ovulationDate, -5)
   const fertilityEnd = dateAdd(ovulationDate, 1)
-  const nextPeriodDate = dateAdd(cycleStart, avgCycle)  // 항상 today 이후 (1~avgCycle일 뒤)
   const pmsStart = dateAdd(nextPeriodDate, -7)
   const pmsEnd = dateAdd(nextPeriodDate, -1)
 
-  let phase: Phase
-  if (dayInCycle <= periodLen) phase = 'menstrual'
-  else if (dayInCycle < ovulationDay - 1) phase = 'follicular'
-  else if (dayInCycle <= ovulationDay + 1) phase = 'ovulation'
-  else phase = 'luteal'
+  // 황체기 등 배란이 지난 뒤에는 다음 주기 배란·가임기를 함께 안내
+  const ovulationPassed = dateDiff(ovulationDate, today) < 0
+  const fertilityPassed = dateDiff(fertilityEnd, today) < 0
+  const nextOvulationDate = dateAdd(ovulationDate, avgCycle)
+  const nextFertilityStart = dateAdd(fertilityStart, avgCycle)
+  const nextFertilityEnd = dateAdd(fertilityEnd, avgCycle)
+
+  const phase = classifyDay(dayInCycle, periodLen, avgCycle)
 
   const daysToNextPeriod = dateDiff(nextPeriodDate, today)
 
   return {
     ovulationDate, fertilityStart, fertilityEnd,
     nextPeriodDate, pmsStart, pmsEnd,
+    ovulationPassed, fertilityPassed,
+    nextOvulationDate, nextFertilityStart, nextFertilityEnd,
     dayInCycle, phase, daysToNextPeriod,
     cycleLength: avgCycle,
     cyclesSinceLog,
@@ -147,7 +189,7 @@ export function phaseOfDate(date: Date, input: CycleInput): {
   const target = startOfDay(date)
   const avgCycle = input.avgCycle
   const periodLen = input.periodLength
-  const ovulationDay = avgCycle - 14
+  const ovulationDay = ovulationDayOf(avgCycle)
 
   let cycleDay = dateDiff(target, start) + 1
   // 미래로 멀어진 경우 다음 주기로 점프 (현재 주기 +1, +2 ...)
@@ -162,11 +204,7 @@ export function phaseOfDate(date: Date, input: CycleInput): {
     cyclesAhead--
   }
 
-  let phase: Phase
-  if (cycleDay <= periodLen) phase = 'menstrual'
-  else if (cycleDay < ovulationDay - 1) phase = 'follicular'
-  else if (cycleDay <= ovulationDay + 1) phase = 'ovulation'
-  else phase = 'luteal'
+  const phase = classifyDay(cycleDay, periodLen, avgCycle)
 
   const isPeriodStart = cycleDay === 1
   const isOvulation = cycleDay === ovulationDay
@@ -239,26 +277,29 @@ export function arcPath(cx: number, cy: number, r: number, startAngle: number, e
   return `M ${cx} ${cy} L ${startPos.x} ${startPos.y} A ${r} ${r} 0 ${largeArc} 1 ${endPos.x} ${endPos.y} Z`
 }
 
-/** Phase별 각도 (0deg = 12시·day 1) */
+/** Phase별 각도 (0deg = 12시·day 1). 빈 구간은 start === end — 렌더 시 건너뛴다. */
 export function phaseAngles(input: CycleInput): Record<Phase, { start: number; end: number }> {
   const avgCycle = input.avgCycle
-  const periodLen = input.periodLength
-  const ovulationDay = avgCycle - 14
-  const deg = (day: number) => (day - 1) / avgCycle * 360
+  const { mEnd, oStart, oEnd } = phaseDayBounds(input.periodLength, avgCycle)
+  const deg = (day: number) => Math.min(360, (day - 1) / avgCycle * 360)
   return {
-    menstrual:  { start: 0,                          end: deg(periodLen + 1) },
-    follicular: { start: deg(periodLen + 1),         end: deg(ovulationDay - 1) },
-    ovulation:  { start: deg(ovulationDay - 1),      end: deg(ovulationDay + 2) },
-    luteal:     { start: deg(ovulationDay + 2),      end: 360 },
+    menstrual:  { start: 0,            end: deg(mEnd) },
+    follicular: { start: deg(mEnd),    end: deg(oStart) },
+    ovulation:  { start: deg(oStart),  end: deg(oEnd) },
+    luteal:     { start: deg(oEnd),    end: 360 },
   }
 }
 
 // ── 데이터 검증 ─────────────────────
-export function validateInput(lastPeriodIso: string, periodLength: number, avgCycle: number): string | null {
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+/** YYYY-MM-DD 형식 + 실제 존재하는 날짜(2026-13-45처럼 넘치는 값 거부) */
+export function isValidIsoDate(s: string): boolean {
+  return ISO_DATE_RE.test(s) && isoDate(fromIso(s)) === s
+}
+export function validateInput(lastPeriodIso: string, periodLength: number, avgCycle: number, today: Date = new Date()): string | null {
   if (!lastPeriodIso) return '마지막 생리 시작일을 입력하세요.'
+  if (!isValidIsoDate(lastPeriodIso)) return '날짜 형식이 올바르지 않습니다.'
   const date = fromIso(lastPeriodIso)
-  if (isNaN(date.getTime())) return '날짜 형식이 올바르지 않습니다.'
-  const today = new Date()
   const diff = dateDiff(today, date)
   if (diff < 0) return '미래 날짜는 입력할 수 없어요 (오늘 또는 과거).'
   if (diff > 365) return '1년 이상 지난 날짜는 정확도가 떨어져요.'
@@ -290,11 +331,54 @@ export interface UserCycleSettings {
 
 export const STORAGE_KEY = 'youtil:cycle:v1'
 
+const MOODS = ['good', 'normal', 'bad'] as const
+const REGULARITIES: Regularity[] = ['regular', 'mild-irregular', 'irregular']
+const PMS_LEVELS: PMSLevel[] = ['none', 'mild', 'severe']
+const LIFESTYLES: Lifestyle[] = ['exercise', 'diet', 'sleep']
+
+function isMood(v: unknown): v is NonNullable<CycleRecord['mood']> {
+  return typeof v === 'string' && (MOODS as readonly string[]).includes(v)
+}
+
+/** 손상·구버전 데이터 방어 — 형식이 맞는 기록만 남긴다 */
+export function sanitizeRecords(v: unknown): CycleRecord[] {
+  if (!Array.isArray(v)) return []
+  const out: CycleRecord[] = []
+  for (const r of v) {
+    if (!r || typeof r !== 'object') continue
+    const o = r as Record<string, unknown>
+    if (typeof o.id !== 'string' || typeof o.date !== 'string' || !isValidIsoDate(o.date)) continue
+    out.push({
+      id: o.id,
+      date: o.date,
+      isPeriodStart: o.isPeriodStart === true ? true : undefined,
+      mood: isMood(o.mood) ? o.mood : undefined,
+      notes: typeof o.notes === 'string' && o.notes ? o.notes.slice(0, 200) : undefined,
+    })
+  }
+  return out
+}
+
 export function loadCycleData(): UserCycleSettings | null {
   if (typeof window === 'undefined') return null
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as UserCycleSettings) : null
+    if (!raw) return null
+    const o: unknown = JSON.parse(raw)
+    if (!o || typeof o !== 'object' || Array.isArray(o)) return null
+    const d = o as Record<string, unknown>
+    const isInt = (v: unknown, lo: number, hi: number): v is number =>
+      typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= hi
+    return {
+      lastPeriodDate: typeof d.lastPeriodDate === 'string' && isValidIsoDate(d.lastPeriodDate) ? d.lastPeriodDate : '',
+      periodLength: isInt(d.periodLength, 2, 10) ? d.periodLength : 5,
+      avgCycle: isInt(d.avgCycle, 21, 45) ? d.avgCycle : 28,
+      regularity: REGULARITIES.includes(d.regularity as Regularity) ? (d.regularity as Regularity) : undefined,
+      pmsLevel: PMS_LEVELS.includes(d.pmsLevel as PMSLevel) ? (d.pmsLevel as PMSLevel) : undefined,
+      trackingPregnancy: typeof d.trackingPregnancy === 'boolean' ? d.trackingPregnancy : undefined,
+      lifestyle: Array.isArray(d.lifestyle) ? d.lifestyle.filter((x): x is Lifestyle => LIFESTYLES.includes(x as Lifestyle)) : undefined,
+      records: sanitizeRecords(d.records),
+    }
   } catch { return null }
 }
 export function saveCycleData(data: UserCycleSettings): void {
@@ -311,14 +395,28 @@ export function clearCycleData(): void {
 }
 
 // ── 자가체크 누적 분석 ───────────────
+/** 인접 시작일 간격 필터 — 15일 미만은 같은 생리의 중복 체크, 60일 초과는 기록 누락으로 보고 제외 */
+export const CYCLE_GAP_MIN = 15
+export const CYCLE_GAP_MAX = 60
+
+export type RegularityLevel = 'regular' | 'mild' | 'irregular'
+
 export interface CycleAnalysis {
-  count: number
-  cycles: number[]       // 인접 period start 사이 일수
-  avg: number
+  count: number          // 분석에 쓴 생리 시작일 수 (중복 제외)
+  cycles: number[]       // 인접 period start 사이 일수 (누락 의심 간격 제외) — 비어 있으면 분석할 주기 없음
+  avg: number            // cycles가 비면 NaN (호출부는 cycles.length로 분기)
   variance: number       // 변동폭 (max - min)
-  isRegular: boolean     // 변동 ≤±3일
+  level: RegularityLevel // 변동폭 ≤6(±3일) 규칙 / 7~15(±4~7일) 약간 불규칙 / ≥16(±8일+) 불규칙 — 페이지 FAQ 기준과 동일
+  isRegular: boolean     // level === 'regular'
+  mergedDuplicates: number  // 15일 미만 간격으로 합친 중복 시작 기록 수
+  excludedGaps: number      // 60일 초과로 제외한 간격 수 (기록 누락 의심)
 }
 
+/**
+ * 생리 시작 기록이 2건 미만이면 null.
+ * 2건 이상인데 모든 간격이 병합(15일 미만)·제외(60일 초과)되면 cycles: [] 로 반환해
+ * 호출부가 병합·제외 건수를 안내할 수 있게 한다(카드가 설명 없이 사라지지 않도록).
+ */
 export function analyzeRecords(records: CycleRecord[]): CycleAnalysis | null {
   const periodStarts = records
     .filter((r) => r.isPeriodStart)
@@ -328,16 +426,34 @@ export function analyzeRecords(records: CycleRecord[]): CycleAnalysis | null {
   if (periodStarts.length < 2) return null
 
   const cycles: number[] = []
+  let kept = 1, mergedDuplicates = 0, excludedGaps = 0
+  let prev = periodStarts[0]
   for (let i = 1; i < periodStarts.length; i++) {
-    cycles.push(dateDiff(periodStarts[i], periodStarts[i - 1]))
+    const gap = dateDiff(periodStarts[i], prev)
+    if (gap < CYCLE_GAP_MIN) { mergedDuplicates++; continue }   // 같은 생리를 연달아 체크 → 앞 날짜 유지
+    if (gap > CYCLE_GAP_MAX) excludedGaps++                        // 중간 기록 누락 의심 → 간격만 제외
+    else cycles.push(gap)
+    prev = periodStarts[i]
+    kept++
   }
+  if (cycles.length === 0) {
+    return {
+      count: kept, cycles: [], avg: NaN, variance: 0,
+      level: 'regular', isRegular: false,
+      mergedDuplicates, excludedGaps,
+    }
+  }
+
   const avg = cycles.reduce((s, n) => s + n, 0) / cycles.length
   const variance = Math.max(...cycles) - Math.min(...cycles)
+  const level: RegularityLevel = variance <= 6 ? 'regular' : variance <= 15 ? 'mild' : 'irregular'
   return {
-    count: periodStarts.length,
+    count: kept,
     cycles, avg,
     variance,
-    isRegular: variance <= 6,  // ±3일 ≈ 6일 변동폭
+    level,
+    isRegular: level === 'regular',
+    mergedDuplicates, excludedGaps,
   }
 }
 
@@ -358,13 +474,13 @@ export function csvToRecords(csv: string): CycleRecord[] {
   for (let i = 1; i < lines.length; i++) {  // skip header
     const parts = lines[i].match(/(?:"([^"]*(?:""[^"]*)*)"|([^,]*))(,|$)/g) ?? []
     const cells = parts.map((p) => p.replace(/,$/, '').replace(/^"|"$/g, '').replace(/""/g, '"'))
-    if (cells[0] && /^\d{4}-\d{2}-\d{2}/.test(cells[0])) {
+    if (cells[0] && isValidIsoDate(cells[0])) {
       out.push({
         id: Math.random().toString(36).slice(2, 10),
         date: cells[0],
-        isPeriodStart: cells[1] === '1',
-        mood: (cells[2] as CycleRecord['mood']) || undefined,
-        notes: cells[3] || undefined,
+        isPeriodStart: cells[1] === '1' ? true : undefined,
+        mood: isMood(cells[2]) ? cells[2] : undefined,
+        notes: cells[3] ? cells[3].slice(0, 200) : undefined,
       })
     }
   }

@@ -70,7 +70,9 @@ export const ITEMS: Record<string, Item> = {
   surimi:    { id: 'surimi',    name: '맛살 (잡채용)',   category: '수산', unit: 'g', pricePerUnit: 30 },
 }
 
-/* ─── 명절·상 형식별 구성 ─── */
+/* ─── 명절·상 형식별 구성 ───
+   차례상(정석·간소)은 제수 음식에 고추·마늘을 쓰지 않는 관행에 따라 다진 마늘을 넣지 않음.
+   식사 위주·음복 식사는 일반 가정식이라 포함. */
 export interface HolidayFormatConfig {
   formal: { name: string; desc: string; items: { id: string; perPerson: number }[] }
   simple: { name: string; desc: string; items: { id: string; perPerson: number }[] }
@@ -129,7 +131,6 @@ const SEOL: HolidayConfig = {
         { id: 'jeongjong',      perPerson: 50 },
         { id: 'sikhye',         perPerson: 200 },
         { id: 'hangwa',         perPerson: 0.1 },
-        { id: 'maneul',         perPerson: 25 },
         { id: 'yangnyeom',      perPerson: 1 },
       ],
     },
@@ -149,7 +150,6 @@ const SEOL: HolidayConfig = {
         { id: 'sagua',          perPerson: 0.5 },
         { id: 'bae',            perPerson: 0.3 },
         { id: 'daechu',         perPerson: 15 },
-        { id: 'maneul',         perPerson: 20 },
         { id: 'yangnyeom',      perPerson: 1 },
       ],
     },
@@ -221,7 +221,6 @@ const CHUSEOK: HolidayConfig = {
         { id: 'jeongjong',      perPerson: 50 },
         { id: 'sikhye',         perPerson: 200 },
         { id: 'hangwa',         perPerson: 0.1 },
-        { id: 'maneul',         perPerson: 25 },
         { id: 'yangnyeom',      perPerson: 1 },
       ],
     },
@@ -240,7 +239,6 @@ const CHUSEOK: HolidayConfig = {
         { id: 'sagua',          perPerson: 0.5 },
         { id: 'bae',            perPerson: 0.3 },
         { id: 'daechu',         perPerson: 15 },
-        { id: 'maneul',         perPerson: 20 },
         { id: 'yangnyeom',      perPerson: 1 },
       ],
     },
@@ -308,7 +306,6 @@ const JESA: HolidayConfig = {
         { id: 'sikhye',         perPerson: 200 },
         { id: 'jat',            perPerson: 5 },
         { id: 'hangwa',         perPerson: 0.1 },
-        { id: 'maneul',         perPerson: 25 },
         { id: 'yangnyeom',      perPerson: 1 },
       ],
     },
@@ -327,7 +324,6 @@ const JESA: HolidayConfig = {
         { id: 'bae',            perPerson: 0.5 },
         { id: 'daechu',         perPerson: 20 },
         { id: 'jeongjong',      perPerson: 50 },
-        { id: 'maneul',         perPerson: 20 },
         { id: 'yangnyeom',      perPerson: 1 },
       ],
     },
@@ -385,6 +381,8 @@ export function calcRows(
       let displayAmount: string
       let displayUnit = item.unit
       let purchaseAmount = amount   // g·ml·kg·L: 실사용량 그대로
+      // 0.1×3 = 0.30000000000000004 같은 부동소수 오차로 올림이 한 칸 더 되지 않게 소수 6자리에서 정리
+      const clean = (x: number) => Math.round(x * 1e6) / 1e6
       if (item.unit === 'g' && amount >= 1000) {
         displayAmount = (amount / 1000).toFixed(1)
         displayUnit = 'kg'
@@ -394,10 +392,10 @@ export function calcRows(
       } else if (item.unit === 'g' || item.unit === 'ml') {
         displayAmount = Math.round(amount).toLocaleString()
       } else if (item.unit === '개' || item.unit === '마리') {
-        purchaseAmount = Math.ceil(amount)          // 낱개 구매 → 올림
+        purchaseAmount = Math.ceil(clean(amount))   // 낱개 구매 → 올림
         displayAmount = purchaseAmount.toString()
       } else if (item.unit === '포기' || item.unit === '단' || item.unit === '두름' || item.unit === '세트' || item.unit === '인분') {
-        purchaseAmount = Math.ceil(amount * 10) / 10
+        purchaseAmount = Math.ceil(clean(amount * 10)) / 10
         displayAmount = purchaseAmount + ''
       } else {
         displayAmount = amount.toFixed(1)
@@ -409,13 +407,16 @@ export function calcRows(
     .filter(Boolean) as CalcRow[]
 }
 
-/* ─── 차례상 5열 배치 규칙 (가이드용) ─── */
+/* ─── 차례상 5열 배치 규칙 (가이드용) ───
+   통용 5열 배치: 신위 쪽(북)부터
+   1열 메·갱 → 2열 적·전 → 3열 탕 → 4열 포·나물·식혜 → 5열 과일·조과.
+   방위는 제주가 신위를 바라보는 기준 — 제주의 오른쪽이 동쪽, 왼쪽이 서쪽. */
 export const CHARYE_LAYOUT = [
-  { row: 1, label: '제일 앞 (북)', items: '메(밥)·갱(국)·시접·잔반', principle: '신위(영혼) 가까운 자리' },
-  { row: 2, label: '둘째 열',       items: '면(국수)·송편·편·꿀',     principle: '주식·후식' },
-  { row: 3, label: '셋째 열',       items: '적(구이)·전·조림',         principle: '어동육서·두동미서' },
-  { row: 4, label: '넷째 열',       items: '탕 3종 (육탕·소탕·어탕)',  principle: '5열 차림에서 별도 열' },
-  { row: 5, label: '맨 뒤 (남)',    items: '포·식혜·나물·과일·견과',    principle: '조율이시·홍동백서' },
+  { row: 1, label: '신위 쪽 (북)', items: '메(밥)·갱(국)·잔·시접·면(국수)·떡', principle: '반서갱동 — 밥은 서쪽(왼쪽), 국은 동쪽(오른쪽)' },
+  { row: 2, label: '둘째 열',       items: '적(구이)·전',                       principle: '어동육서 — 생선은 동쪽(오른쪽), 고기는 서쪽(왼쪽)' },
+  { row: 3, label: '셋째 열',       items: '탕 (육탕·소탕·어탕)',               principle: '어탕은 동쪽, 육탕은 서쪽' },
+  { row: 4, label: '넷째 열',       items: '포·나물·식혜',                      principle: '좌포우혜 — 포는 왼쪽, 식혜는 오른쪽' },
+  { row: 5, label: '제주 쪽 (남)',  items: '과일·한과(조과)',                   principle: '조율이시·홍동백서' },
 ]
 
 /* ─── 명절 절약 팁 ─── */

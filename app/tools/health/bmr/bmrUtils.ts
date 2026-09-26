@@ -83,6 +83,8 @@ export function calcAllFormulas(input: BmrFormulaInput): FormulaResult[] {
   return FORMULAS.map(f => {
     if (f.id === 'katch-mcardle' && (!input.bodyFat || input.bodyFat <= 0))
       return { id: f.id, name: f.name, bmr: null, available: false, reason: '체지방률 입력 필요' }
+    if (f.id === 'katch-mcardle' && input.bodyFat !== undefined && input.bodyFat >= 60)
+      return { id: f.id, name: f.name, bmr: null, available: false, reason: '체지방률 1~59%만 지원' }
     if (f.id === 'cunningham' && (!input.leanMass || input.leanMass <= 0))
       return { id: f.id, name: f.name, bmr: null, available: false, reason: '제지방량(LBM) 입력 필요' }
     const v = calcBMR(input, f.id)
@@ -123,7 +125,8 @@ export const JOB_ACTIVITY_LEVELS: JobActivityLevel[] = [
 
 /* ─── 운동 강도 (MET 계수) ─── */
 // 1 MET ≈ 1 kcal/kg/시간 → 운동 칼로리는 체중에 비례한다(50kg과 100kg이 달라야 함).
-// kcalPerHour = met × 체중(kg). 아래 MET는 약 70kg 기준 250~800kcal/h와 일치.
+// kcalPerHour = met × 체중(kg). 아래 MET는 약 70kg 기준 250~800kcal/h와 일치(총 소비, 안정 대사 포함).
+// TDEE에 더할 때는 BMR에 이미 들어 있는 안정 대사(1 MET)를 빼고 (MET−1)만 더한다.
 export interface ExerciseIntensity {
   id: string
   name: string
@@ -173,8 +176,8 @@ export function calcDetailedTDEE(bmr: number, activity: ActivityInput): Detailed
   const stepsBonus = activity.dailySteps && activity.dailySteps > 5000
     ? ((activity.dailySteps - 5000) / 1000) * 50
     : 0
-  // 운동 칼로리 = MET × 체중(kg) × 시간 → 체중에 비례(50kg과 100kg이 다름)
-  const exercisePerSession = (activity.exerciseDuration / 60) * exerciseKcalPerHour(intensity.met, activity.weight)
+  // 운동 추가 칼로리 = (MET − 1) × 체중(kg) × 시간 — 운동 중 안정 대사(1 MET)는 BMR에 이미 포함되어 제외
+  const exercisePerSession = (activity.exerciseDuration / 60) * exerciseKcalPerHour(intensity.met - 1, activity.weight)
   const weeklyExerciseKcal = exercisePerSession * activity.weeklyExercises
   const dailyExerciseAvg = weeklyExerciseKcal / 7
 
@@ -322,13 +325,27 @@ export interface BmrRecord {
 
 const STORAGE_KEY = 'youtil_bmr_history_v1'
 
+const FORMULA_IDS: FormulaId[] = ['mifflin', 'harris-benedict', 'katch-mcardle', 'cunningham']
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
+
+function isBmrRecord(v: unknown): v is BmrRecord {
+  if (!v || typeof v !== 'object') return false
+  const r = v as Record<string, unknown>
+  return typeof r.id === 'string'
+    && typeof r.date === 'string' && !Number.isNaN(new Date(r.date).getTime())
+    && isFiniteNum(r.height) && isFiniteNum(r.weight) && isFiniteNum(r.age)
+    && isFiniteNum(r.bmr) && isFiniteNum(r.tdee)
+    && typeof r.formula === 'string' && (FORMULA_IDS as string[]).includes(r.formula)
+    && (r.bodyFat === undefined || isFiniteNum(r.bodyFat))
+}
+
 export function loadBmrHistory(): BmrRecord[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isBmrRecord) : []
   } catch { return [] }
 }
 

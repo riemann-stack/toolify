@@ -27,7 +27,7 @@ const sectionTitle: React.CSSProperties = {
 const FAQ_LD = [
   {
     q: '하루에 물을 얼마나 마셔야 하나요?',
-    a: '일반 성인은 <strong>체중 1kg당 약 30~33mL</strong>의 음료를 기준으로 삼습니다(체중 65kg이면 약 2.0~2.1L). 다만 이는 음식에 든 수분을 뺀 <strong>마시는 양</strong>이고, 총 수분 필요량에는 밥·국·과일 속 수분도 포함됩니다. 폭염·운동으로 땀을 많이 흘리면 잃은 만큼 더 보충해야 하며, 갈증·소변 색(진한 노란색이면 부족)으로도 확인할 수 있습니다.',
+    a: '이 계산기는 <strong>체중 1kg당 약 30~33mL</strong>를 하루 마실 양 목표로 잡습니다(체중 65kg이면 약 2.0~2.1L). 이 체중 비례식은 본래 음식 속 수분까지 합친 총량을 어림할 때 흔히 쓰이는데, 폭염기에는 여유를 두는 편이 안전해 마시는 양 목표로 사용했습니다. 참고로 2020 한국인 영양소 섭취기준의 수분 충분섭취량(19~29세)은 음식을 포함한 총량이 남성 2.6L·여성 2.1L이고, 그중 물·음료로 마시는 양은 남성 1.2L·여성 1.0L 수준입니다. 폭염·운동으로 땀을 많이 흘리면 잃은 만큼 더 보충해야 하며, 갈증과 소변 색(진한 노란색이면 부족)으로도 확인할 수 있습니다.',
   },
   {
     q: '폭염중대경보가 뭔가요? (2026년 신설)',
@@ -43,7 +43,7 @@ const FAQ_LD = [
   },
   {
     q: '물을 너무 많이 마시면 위험한가요?',
-    a: '네. 짧은 시간에 지나치게 많은 물(대략 시간당 1L 이상)을 마시면 혈중 나트륨 농도가 떨어지는 <strong>저나트륨혈증(물 중독)</strong>이 생길 수 있습니다. 두통·구역·혼란·심하면 경련까지 올 수 있어, 특히 마라톤처럼 오래 운동하며 물만 계속 마실 때 주의해야 합니다. <strong>갈증에 맞춰 조금씩 자주</strong>가 원칙이며, 한 번에 몰아 마시지 마세요.',
+    a: '네. 몸이 흡수할 수 있는 양(대략 시간당 1.2L)을 넘겨 물을 계속 마시면 혈중 나트륨 농도가 떨어지는 <strong>저나트륨혈증(물 중독)</strong>이 생길 수 있습니다. 두통·구역·혼란·심하면 경련까지 올 수 있어, 특히 마라톤처럼 오래 운동하며 물만 계속 마실 때 주의해야 합니다. <strong>갈증에 맞춰 조금씩 자주</strong>가 원칙이며, 한 번에 몰아 마시지 마세요.',
   },
   {
     q: '신장이 안 좋은데 폭염엔 물을 더 마셔야 하나요?',
@@ -75,7 +75,7 @@ export default function HeatHydrationPage() {
 
       <UpdatedMeta
         date="2026년 7월"
-        basis="기상청 폭염특보 3단계(2026 개편)·산업안전보건규칙 폭염 조항(2025-07-17 시행)·ACSM/NATA 수분 보충 지침 기준"
+        basis="기상청 폭염특보 3단계(2026 개편)·산업안전보건규칙 폭염 조항(2025-07-17 시행)·ACSM/NATA 수분 보충 지침·미 육군 TB MED 507(하루 음용 상한) 기준"
         sources={[
           { label: '질병관리청', href: 'https://www.kdca.go.kr' },
           { label: '기상청 날씨누리', href: 'https://www.weather.go.kr' },
@@ -96,13 +96,15 @@ export default function HeatHydrationPage() {
             padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
             fontSize: '13px', color: 'var(--text)', lineHeight: 2.1,
           }}>
-            <div><span style={{ color: 'var(--muted)' }}>기본 수분(음료)</span> = 체중(kg) × 30~33 mL</div>
-            <div><span style={{ color: 'var(--muted)' }}>활동 보충</span> = 활동 시간 × 발한율(L/h)</div>
+            <div><span style={{ color: 'var(--muted)' }}>기본 수분</span> = 체중(kg) × 30~33 mL</div>
+            <div><span style={{ color: 'var(--muted)' }}>활동 보충</span> = 활동 시간 × 발한율(L/h, 최대 1.2)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>발한율: 가벼운 활동 0.4~0.8 · 격한/폭염작업 1.0~1.8 L/h (ACSM)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>폭염 경보 이상 → 발한 상단 가정 + 휴식·행동요령 강화</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>시간당 흡수 한계 약 1.2L 초과분 → 활동 후 줄어든 체중의 약 1.5배로 보충 (ACSM)</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>하루 합계는 약 11.4L에서 상한 (미 육군 TB MED 507)</div>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 기본 수분은 체중 비례 관행 기준이며 <strong style={{ color: 'var(--text)' }}>총 수분에는 음식 속 수분이 별도로 포함</strong>됩니다. 폭염 특보 단계는 물의 양을 일정 배수로 곱하는 공식이 아니라(공인 계수 없음), 활동 발한 가정과 행동요령·휴식 주기를 조정하는 축으로 반영했습니다.
+            ※ 기본 수분은 흔히 쓰이는 체중 비례 어림식이며, 본래 음식 속 수분까지 포함한 총량 기준이라 <strong style={{ color: 'var(--text)' }}>마시는 양 목표로는 넉넉한 편</strong>입니다(2020 한국인 영양소 섭취기준 액체 충분섭취량은 19~29세 남 1.2L·여 1.0L). 폭염 특보 단계는 물의 양을 일정 배수로 곱하는 공식이 아니라(공인 계수 없음), 활동 발한 가정과 행동요령·휴식 주기를 조정하는 축으로 반영했습니다.
           </p>
         </section>
 
@@ -140,7 +142,7 @@ export default function HeatHydrationPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 위 계산기는 소변량 0을 가정하므로, 중간에 화장실을 다녀왔다면 그 양만큼 &quot;마신 물&quot;에서 빼고 입력하세요. 목표는 <strong style={{ color: 'var(--text)' }}>운동 후 체중 감소 2% 이내</strong>(ACSM·NATA 공통)이고, 다음 활동까지 4시간이 안 남았다면 잃은 양의 <strong style={{ color: 'var(--text)' }}>100~150%</strong>를 나눠 보충합니다(NATA 2017). 발한율이 위(胃) 흡수 한계(시간당 약 1.2L)를 넘으면 운동 중 전량 보충은 불가능하니 나머지는 운동 후에 채우세요.
+            ※ 위 계산기는 소변량 0을 가정하므로, 중간에 화장실을 다녀왔다면 그 양만큼 &quot;마신 물&quot;에서 빼고 입력하세요. 목표는 <strong style={{ color: 'var(--text)' }}>운동 후 체중 감소 2% 이내</strong>(ACSM·NATA 공통)이고, 다음 활동까지 시간이 빠듯하다면 줄어든 체중의 <strong style={{ color: 'var(--text)' }}>약 1.5배</strong>(1kg 감소당 물 약 1.5L)를 나눠 보충합니다(ACSM 2007). 발한율이 위(胃) 흡수 한계(시간당 약 1.2L)를 넘으면 운동 중 전량 보충은 불가능하니 나머지는 운동 후에 채우세요.
           </p>
         </section>
 

@@ -3,7 +3,7 @@ import RamenClient from './RamenClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import { RAMEN_TYPES, formatTime } from './ramenUtils'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -25,7 +25,7 @@ const RAMEN_BY_SODIUM = [...RAMEN_TYPES].sort((a, b) => b.sodium - a.sodium)
 const FAQ_LD = [
               {
                 q: '라면 2개 끓일 때 물양은 얼마가 적당한가요?',
-                a: '라면 종류에 따라 다르지만 일반 국물라면 기준 약 880~990ml (신라면 기준 940ml). 「550ml × 2 = 1,100ml」로 넣으면 싱거우므로 1.7배(약 940ml) 권장. 국물 진하게 좋아하면 880ml, 국물 넉넉하게면 1,000ml까지. 본 도구의 「물양 계산」 탭에서 자동 보정.',
+                a: '라면 종류에 따라 다르지만 일반 국물라면 기준 약 890~980ml (신라면 기준 940ml). 「550ml × 2 = 1,100ml」로 넣으면 싱거우므로 1.7배(약 940ml) 권장. 짜게(진하게) 먹으려면 약 840ml, 싱겁게는 약 1,040ml, 국물을 넉넉하게 하려면 약 1,140ml입니다. 본 도구의 「물양 계산」 탭에서 자동 보정.',
               },
               {
                 q: '짜파게티 물양과 끓이는 법은?',
@@ -98,7 +98,7 @@ export default function RamenPage() {
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>물양</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>시간</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>칼로리</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 500, whiteSpace: 'nowrap' }}>나트륨</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--warning)', fontWeight: 500, whiteSpace: 'nowrap' }}>나트륨</th>
                 </tr>
               </thead>
               <tbody>
@@ -112,7 +112,7 @@ export default function RamenPage() {
                     </td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{formatTime(r.cookTime)}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.kcal}kcal</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'right', color: r.sodium >= 1800 ? '#DC2626' : '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.sodium.toLocaleString()}mg</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: r.sodium >= 1800 ? 'var(--danger)' : 'var(--warning)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.sodium.toLocaleString()}mg</td>
                   </tr>
                 ))}
               </tbody>
@@ -129,7 +129,7 @@ export default function RamenPage() {
             ⚠️ 라면 2개에 단순 ×2가 안 되는 이유
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            「550ml × 2 = 1,100ml」 넣으면 <strong style={{ color: '#DC2626' }}>국물이 싱거워집니다</strong>. 이유:
+            「550ml × 2 = 1,100ml」 넣으면 <strong style={{ color: 'var(--danger)' }}>국물이 싱거워집니다</strong>. 이유:
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18, marginBottom: 16 }}>
             <li>냄비 표면적 증가 → 증발량 증가</li>
@@ -143,7 +143,7 @@ export default function RamenPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>개수</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontWeight: 700 }}>단순 ×N (X)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--danger)', fontWeight: 700 }}>단순 ×N (X)</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700 }}>권장 (✓)</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>배수</th>
                 </tr>
@@ -158,7 +158,7 @@ export default function RamenPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textDecoration: 'line-through', opacity: 0.7 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--danger)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textDecoration: 'line-through', opacity: 0.7 }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[3]}</td>
                   </tr>
@@ -179,9 +179,9 @@ export default function RamenPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { emoji: '⚫', name: '짜파게티', color: '#A16207', steps: ['600ml로 끓이기 (5분)', '면이 익으면 8큰술(120ml)만 남기고 따라냄', '분말스프 + 올리브유 + 비비기'] },
-              { emoji: '🔥', name: '불닭볶음면', color: '#DC2626', steps: ['600ml로 끓이기 (5분)', '8큰술 남기고 따라냄', '액상소스 + 후레이크 + 김 비비기'] },
-              { emoji: '❄️', name: '비빔면', color: '#0891B2', steps: ['600ml로 면만 익히기 (3분)', '물 전부 따라내고 찬물에 헹굼', '비빔장 + 비비기'] },
+              { emoji: '⚫', name: '짜파게티', color: 'var(--cat-cooking-ink)', steps: ['600ml로 끓이기 (5분)', '면이 익으면 8큰술(120ml)만 남기고 따라냄', '분말스프 + 올리브유 + 비비기'] },
+              { emoji: '🔥', name: '불닭볶음면', color: 'var(--danger)', steps: ['600ml로 끓이기 (5분)', '8큰술 남기고 따라냄', '액상소스 + 후레이크 + 김 비비기'] },
+              { emoji: '❄️', name: '비빔면', color: 'var(--cat-health)', steps: ['600ml로 면만 익히기 (3분)', '물 전부 따라내고 찬물에 헹굼', '비빔장 + 비비기'] },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.color}55`, borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: s.color, fontWeight: 700, marginBottom: 10, fontFamily: 'Noto Sans KR, sans-serif' }}>
@@ -202,8 +202,8 @@ export default function RamenPage() {
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
             <strong style={{ color: 'var(--text)' }}>물양 보정 기준</strong> — 끓이는 동안 재료가 흡수·증발시키는 물을 더하거나 빼서 국물 농도를 유지합니다.
-            전분류(떡·만두·면사리)는 물을 흡수하므로 <strong style={{ color: '#EA580C' }}>보충(+)</strong>, 순두부처럼 자체 수분이 많은 재료는
-            <strong style={{ color: '#0891B2' }}> 차감(−)</strong>, 계란·치즈·대파처럼 물 흡수가 거의 없는 재료는 <strong>0</strong>입니다.
+            전분류(떡·만두·면사리)는 물을 흡수하므로 <strong style={{ color: 'var(--warning)' }}>보충(+)</strong>, 순두부처럼 자체 수분이 많은 재료는
+            <strong style={{ color: 'var(--cat-health)' }}> 차감(−)</strong>, 계란·치즈·대파처럼 물 흡수가 거의 없는 재료는 <strong>0</strong>입니다.
             <br />
             <strong style={{ color: 'var(--text)' }}>투입 타이밍 기준</strong> — 재료가 익는 데 필요한 시간을 면 투입 시점에 맞춰 환산했습니다.
             냉동 만두·떡은 면보다 <strong>먼저</strong>, 계란·치즈·대파는 풀어지지 않도록 <strong>나중에</strong> 넣습니다.
@@ -214,7 +214,7 @@ export default function RamenPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>토핑</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 700 }}>물양 보정</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--warning)', fontWeight: 700 }}>물양 보정</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>칼로리</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>투입 타이밍</th>
                 </tr>
@@ -232,7 +232,7 @@ export default function RamenPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}{row[1] !== '0' ? '' : ''}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--warning)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}{row[1] !== '0' ? '' : ''}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
@@ -287,7 +287,7 @@ export default function RamenPage() {
             💪 라면 칼로리·나트륨 비교 (나트륨 많은 순)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            제조사 표기 기준 1봉/1용기 영양정보입니다. <strong style={{ color: '#DC2626' }}>나트륨 1,800mg = WHO 일일 권장(2,000mg)의 90%</strong> —
+            제조사 표기 기준 1봉/1용기 영양정보입니다. <strong style={{ color: 'var(--danger)' }}>나트륨 1,800mg = WHO 일일 권장(2,000mg)의 90%</strong> —
             국물을 남기면 실제 섭취 나트륨은 절반 수준으로 줄어듭니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
@@ -295,7 +295,7 @@ export default function RamenPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>라면</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontWeight: 700, whiteSpace: 'nowrap' }}>나트륨</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--warning)', fontWeight: 700, whiteSpace: 'nowrap' }}>나트륨</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>WHO 대비</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>칼로리</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>단백질</th>
@@ -305,7 +305,7 @@ export default function RamenPage() {
                 {RAMEN_BY_SODIUM.map((r, i) => (
                   <tr key={r.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r.emoji} {r.name}</td>
-                    <td style={{ padding: '9px 12px', textAlign: 'right', color: r.sodium >= 1800 ? '#DC2626' : '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.sodium.toLocaleString()}mg</td>
+                    <td style={{ padding: '9px 12px', textAlign: 'right', color: r.sodium >= 1800 ? 'var(--danger)' : 'var(--warning)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.sodium.toLocaleString()}mg</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{Math.round(r.sodium / 2000 * 100)}%</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.kcal}kcal</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r.protein}g</td>
@@ -355,25 +355,12 @@ export default function RamenPage() {
 
         {/* 8. FAQ — accordion */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {faq.q}
-                </summary>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* 9. 면책 */}
         <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '16px 20px' }}>
-          <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 10 }}>🍜 면책</p>
+          <p style={{ fontSize: 13, color: 'var(--warning)', fontWeight: 700, marginBottom: 10 }}>🍜 면책</p>
           <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
             본 도구의 권장 물양은 <strong style={{ color: 'var(--text)' }}>일반 가이드</strong>입니다. 정확한 양은 다음에 따라 다를 수 있음:
           </p>

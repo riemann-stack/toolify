@@ -3,7 +3,7 @@ import UvProtectionClient from './UvProtectionClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -25,7 +25,7 @@ const FAQ_LD = [
               },
               {
                 q: '흐린 날에도 자외선 차단제를 발라야 하나요?',
-                a: '<strong>네, 흐린 날에도 자외선의 약 70~80%는 구름을 통과합니다.</strong> 얇은 구름은 거의 자외선을 차단하지 않으며, 두꺼운 구름이라도 약 30%만 감쇠시킵니다. 특히 봄·가을의 흐린 날에 자외선 차단을 소홀히 해 화상을 입는 경우가 많으므로, 외출 시에는 일년 내내 차단제 사용을 권장합니다.',
+                a: '<strong>네, 옅은 구름은 자외선의 최대 80%까지 통과시킵니다(WHO).</strong> 얇은 구름은 자외선을 거의 막지 못하고, 두꺼운 먹구름은 상당 부분을 줄이지만 0이 되지는 않습니다. 본 도구의 구름 보정은 보수적으로 최대 30%만 줄여 계산합니다. 특히 봄·가을의 흐린 날에 자외선 차단을 소홀히 해 화상을 입는 경우가 많으므로, 외출 시에는 일년 내내 차단제 사용을 권장합니다.',
               },
               {
                 q: '러닝할 때 SPF 30이면 충분할까요?',
@@ -232,12 +232,12 @@ export default function UvProtectionPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '🏖️ 해변·수영장', m: '× 1.5',  c: '#0891B2', d: '모래 반사 15% + 물 반사 25%' },
+              { t: '🏖️ 해변·수영장', m: '× 1.5',  c: '#0891B2', d: '모래(최대 약 15%)·물거품(약 25%) 반사 + 긴 노출을 보수적으로 반영' },
               { t: '⛷️ 눈·스키',     m: '× 1.8',  c: '#DC2626', d: '신선한 눈 반사 80% — 가장 강력' },
-              { t: '⛰️ 등산·고지대', m: '+12%/km', c: '#EA580C', d: '해발 2km: +24%, 3km: +36%' },
-              { t: '🚤 수상 스포츠', m: '× 1.5',  c: '#0891B2', d: '물 반사로 자외선 50% 증가' },
+              { t: '⛰️ 등산·고지대', m: '+12%/km', c: '#EA580C', d: '해발 2km: +24%, 3km: +36% (고도 미입력·1.7km 미만은 +20% 가정)' },
+              { t: '🚤 수상 스포츠', m: '× 1.5',  c: '#0891B2', d: '물 반사 + 그늘 없는 긴 노출을 보수적으로 반영' },
               { t: '🚗 운전·실내',   m: '× 0.5',  c: '#9B59B6', d: 'UVB 95% 차단, UVA 50% 통과' },
-              { t: '☁️ 두꺼운 구름',  m: '−30%',   c: '#A8A29E', d: '얇은 구름은 거의 영향 없음' },
+              { t: '☁️ 구름 (도구 보정)', m: '최대 −30%', c: '#A8A29E', d: '얇은 구름은 거의 영향 없음 · 두꺼운 먹구름은 실제로 더 많이 줄 수 있으나 보수적으로 제한' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
@@ -327,23 +327,7 @@ export default function UvProtectionPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 9. 관련 도구 ── */}

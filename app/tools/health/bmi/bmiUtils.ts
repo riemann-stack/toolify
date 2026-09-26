@@ -72,6 +72,22 @@ export function classifyBMI(bmi: number, standard: Standard): BmiCategory {
   return list.find(c => bmi >= c.min && bmi < c.max) ?? list[list.length - 1]
 }
 
+/* 표시·분류 공통 BMI (소수 1자리 반올림).
+   화면에 보이는 값으로 분류해야 '23.0 정상' 같은 모순이 생기지 않는다(weightloss 도구와 동일 기준). */
+export function roundBMI(bmi: number): number {
+  return Math.round(bmi * 10) / 10
+}
+
+/* 반올림 BMI가 cut 이상이 되는 경계 체중(연속값) = (cut − 0.05) × 키² */
+function cutoffWeight(cut: number, heightSq: number): number {
+  return (cut - 0.05) * heightSq
+}
+
+/* 0.1kg 단위 올림 (부동소수 오차 흡수) */
+function ceil1(v: number): number {
+  return Math.ceil(v * 10 - 1e-9) / 10
+}
+
 export interface WeightRange {
   id: string
   name: string
@@ -80,6 +96,7 @@ export interface WeightRange {
   maxWeight: number | null  // null = 무한
 }
 
+/* 구간별 체중(0.1kg 단위, 겹치지 않게): 해당 분류가 되는 첫 체중 ~ 다음 분류 직전 체중 */
 export function getWeightRanges(height: number, standard: Standard): WeightRange[] {
   const heightM = height / 100
   const heightSq = heightM * heightM
@@ -87,8 +104,8 @@ export function getWeightRanges(height: number, standard: Standard): WeightRange
     id: cat.id,
     name: cat.name,
     color: cat.color,
-    minWeight: cat.min === 0 ? 0 : Math.round(cat.min * heightSq * 10) / 10,
-    maxWeight: cat.max >= 999 ? null : Math.round(cat.max * heightSq * 10) / 10,
+    minWeight: cat.min === 0 ? 0 : ceil1(cutoffWeight(cat.min, heightSq)),
+    maxWeight: cat.max >= 999 ? null : Math.round((ceil1(cutoffWeight(cat.max, heightSq)) - 0.1) * 10) / 10,
   }))
 }
 
@@ -111,35 +128,43 @@ export function calcRichResult(
   if (height <= 0 || weight <= 0) return null
   const heightM = height / 100
   const heightSq = heightM * heightM
-  const bmi = calcBMI(height, weight)
+  const bmi = roundBMI(calcBMI(height, weight))   // 표시값 = 분류 기준값
   const category = classifyBMI(bmi, standard)
   const ranges = BMI_CATEGORIES[standard]
+  const weightRanges = getWeightRanges(height, standard)
 
   const normal = ranges.find(c => c.id === 'normal')!
-  const normalMin = Math.round(normal.min * heightSq * 10) / 10
-  const normalMax = Math.round(normal.max * heightSq * 10) / 10
+  const normalRange = weightRanges.find(r => r.id === 'normal')!
+  const normalMin = normalRange.minWeight
+  const normalMax = normalRange.maxWeight ?? 0
 
   let nextStage: RichResult['nextStage'] = null
   for (const cat of ranges) {
     if (cat.min > bmi) {
       nextStage = {
         name: cat.name,
-        weight: Math.round(cat.min * heightSq * 10) / 10,
+        weight: ceil1(cutoffWeight(cat.min, heightSq)),
         bmi: cat.min,
       }
       break
     }
   }
 
-  // 방향은 실제 분류(category)와 일치시킨다 — 반올림된 체중 경계로 비교하면
-  // BMI 23.01(과체중)인데 "정상까지 범위 내"가 되는 모순이 생긴다.
-  // kg은 반올림 없는 정상 경계(BMI×키²)와의 차이로 계산.
+  // 방향은 실제 분류(category)와 일치시킨다. kg은 반올림 BMI가 정상 구간에
+  // 들어오는 경계 체중((기준−0.05)×키²)까지의 차이를 0.1kg 단위로 올림.
   let toNormal: RichResult['toNormal'] = { direction: 'in', kg: 0 }
   if (category.id !== 'normal') {
-    if (bmi < normal.min)
-      toNormal = { direction: 'gain', kg: Math.round(Math.max(0, normal.min * heightSq - weight) * 10) / 10 }
-    else
-      toNormal = { direction: 'lose', kg: Math.round(Math.max(0, weight - normal.max * heightSq) * 10) / 10 }
+    const direction = bmi < normal.min ? 'gain' : 'lose'
+    let kg = Math.max(0, direction === 'gain'
+      ? ceil1(cutoffWeight(normal.min, heightSq) - weight)
+      : ceil1(weight - cutoffWeight(normal.max, heightSq)))
+    // 경계값 정확히 일치(반올림 half-up) 시 0.1kg 더 필요 — 실제 분류로 확인
+    for (let i = 0; i < 3; i++) {
+      const w2 = direction === 'gain' ? weight + kg : weight - kg
+      if (classifyBMI(roundBMI(w2 / heightSq), standard).id === 'normal') break
+      kg = Math.round((kg + 0.1) * 10) / 10
+    }
+    toNormal = { direction, kg }
   }
 
   // BMI 22 까지
@@ -152,9 +177,9 @@ export function calcRichResult(
   const bmiPerKg = Math.round(heightSq * 10) / 10
 
   return {
-    bmi: Math.round(bmi * 10) / 10,
+    bmi,
     category,
-    weightRanges: getWeightRanges(height, standard),
+    weightRanges,
     normalMin, normalMax,
     nextStage,
     toNormal,
@@ -339,12 +364,12 @@ export function simulateWeightChange(
   if (!milestones.includes(totalWeeks)) milestones.push(totalWeeks)
   for (const w of milestones) {
     const wt = Math.max(20, currentWeight + perWeek * w)
-    const bmi = calcBMI(height, wt)
+    const bmi = roundBMI(calcBMI(height, wt))
     const cat = classifyBMI(bmi, standard)
     steps.push({
       weeks: w,
       weight: Math.round(wt * 10) / 10,
-      bmi: Math.round(bmi * 10) / 10,
+      bmi,
       category: cat.name,
       color: cat.color,
     })
@@ -365,13 +390,25 @@ export interface BmiRecord {
 
 const STORAGE_KEY = 'youtil_bmi_history_v1'
 
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
+
+function isBmiRecord(v: unknown): v is BmiRecord {
+  if (!v || typeof v !== 'object') return false
+  const r = v as Record<string, unknown>
+  return typeof r.id === 'string'
+    && typeof r.date === 'string' && !Number.isNaN(new Date(r.date).getTime())
+    && isFiniteNum(r.height) && isFiniteNum(r.weight) && isFiniteNum(r.bmi)
+    && (r.waist === undefined || isFiniteNum(r.waist))
+    && (r.bodyFat === undefined || isFiniteNum(r.bodyFat))
+}
+
 export function loadBmiHistory(): BmiRecord[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isBmiRecord) : []
   } catch { return [] }
 }
 

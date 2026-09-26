@@ -135,11 +135,11 @@ export interface BrothStrength {
 }
 
 export const BROTH_STRENGTH: BrothStrength[] = [
-  { id: 'very-strong', name: '매우 진하게', delta: -100, desc: '소금기 매우 강함', color: '#DC2626' },
-  { id: 'strong',      name: '짜게',        delta:  -50, desc: '국물 진함',         color: '#EA580C' },
+  { id: 'very-strong', name: '매우 진하게', delta: -100, desc: '소금기 매우 강함', color: 'var(--danger)' },
+  { id: 'strong',      name: '짜게',        delta:  -50, desc: '국물 진함',         color: 'var(--warning)' },
   { id: 'normal',      name: '기본',        delta:    0, desc: '봉지 권장량',       color: 'var(--accent)' },
-  { id: 'mild',        name: '싱겁게',      delta:  +50, desc: '나트륨 ↓',          color: '#0891B2' },
-  { id: 'extra-broth', name: '국물 넉넉',   delta: +100, desc: '밥 말아 먹기 좋음', color: '#9333EA' },
+  { id: 'mild',        name: '싱겁게',      delta:  +50, desc: '나트륨 ↓',          color: 'var(--cat-health)' },
+  { id: 'extra-broth', name: '국물 넉넉',   delta: +100, desc: '밥 말아 먹기 좋음', color: 'var(--cat-unit)' },
 ]
 
 /* ─── 면 익힘 ─── */
@@ -245,6 +245,16 @@ export const RAMEN_NUTRITION_DEFAULT = {
 export const WHO_DAILY_SODIUM = 2000   // mg
 export const RECOMMENDED_DAILY_KCAL = 2000
 
+/** 1일 영양성분 기준치 — 식약처 「식품등의 표시기준」 [별지 1] (영양표시 %의 분모)
+ *  TODO: 법정 수치이므로 lib/ 단일 소스로 이전 예정 */
+export const KR_DAILY_VALUE = {
+  kcal: 2000,     // kcal
+  sodium: 2000,   // mg
+  protein: 55,    // g
+  fat: 54,        // g
+  carb: 324,      // g
+} as const
+
 /* ─── 메인 계산 ─── */
 export interface RamenInput {
   ramenId: string
@@ -307,7 +317,9 @@ export function calcRamen(input: RamenInput): RamenResult | null {
     .filter((t): t is Topping => t !== undefined)
   const toppingWaterDelta = toppingDetails.reduce((s, t) => s + t.waterDelta, 0)
 
-  const finalWater = Math.max(100, waterAfterBroth + toppingWaterDelta)
+  // 컵라면은 물선까지 붓는 방식이라 토핑 물 보정 없음 (보정하면 컵 용량을 넘는 물양이 나옴)
+  const isCup = ramen.type === 'cup'
+  const finalWater = Math.max(100, waterAfterBroth + (isCup ? 0 : toppingWaterDelta))
   const recommendedWater = Math.round(finalWater / 10) * 10
   const rangeMin = Math.round((finalWater * 0.95) / 10) * 10
   const rangeMax = Math.round((finalWater * 1.05) / 10) * 10
@@ -332,16 +344,23 @@ export function calcRamen(input: RamenInput): RamenResult | null {
   const totalCarb = baseCarb + toppingDetails.reduce((s, t) => s + (t.carb ?? 0), 0)
 
   // 7. 토핑 타임라인 — beforeEndSec(완성 N초 전) 토핑은 조리 시간에 맞춰 위치 환산
-  const resolveOffset = (t: Topping) =>
-    t.beforeEndSec !== undefined ? Math.max(0, cookTimeSeconds - t.beforeEndSec) : t.timeOffsetSec
+  //    컵라면은 냄비에 끓이지 않으므로 '면보다 먼저 넣어 끓이는' 토핑도 미리 익혀 물 부은 뒤 얹는 것으로 안내
+  const resolveOffset = (t: Topping) => {
+    const off = t.beforeEndSec !== undefined ? Math.max(0, cookTimeSeconds - t.beforeEndSec) : t.timeOffsetSec
+    return isCup ? Math.max(0, off) : off
+  }
   const toppingTimeline = toppingDetails
-    .map(t => ({ topping: t.name, emoji: t.emoji, addAt: t.timeAt, offsetSec: resolveOffset(t), note: t.note }))
+    .map(t => ({
+      topping: t.name, emoji: t.emoji,
+      addAt: isCup && t.timeOffsetSec < 0 ? '미리 익혀 두었다가 물 부은 뒤 얹기' : t.timeAt,
+      offsetSec: resolveOffset(t), note: t.note,
+    }))
     .sort((a, b) => a.offsetSec - b.offsetSec)
 
   // 8. 경고
   const warnings: string[] = []
   if (input.count >= 4 && (ramen.type === 'broth' || ramen.type === 'jjajang')) {
-    warnings.push(`${input.count}개는 22cm+ 큰 냄비 필요. 물 넘침 주의.`)
+    warnings.push(`${input.count}개는 ${pot.diameter}cm 이상 큰 냄비 필요. 물 넘침 주의.`)
   }
   if (totalSodium > 4500) {
     warnings.push(`나트륨 ${(totalSodium / 1000).toFixed(1)}g — WHO 일일 권장(${WHO_DAILY_SODIUM/1000}g)의 ${Math.round(totalSodium / WHO_DAILY_SODIUM * 100)}%.`)
@@ -349,8 +368,9 @@ export function calcRamen(input: RamenInput): RamenResult | null {
   if (totalKcal > 1500) {
     warnings.push(`칼로리 ${totalKcal.toLocaleString()}kcal — 한 끼 권장량(700kcal)의 ${Math.round(totalKcal / 700 * 100)}%.`)
   }
-  if (toppingDetails.some(t => t.id === 'cheese' || t.id === 'kimchi') && broth.id === 'strong') {
-    warnings.push('치즈/김치 추가 + 짜게 농도 — 나트륨 매우 많음. 「싱겁게」 또는 「기본」 권장.')
+  // 농도 보정이 실제로 적용되는 국물 라면에서 '짜게'·'매우 진하게'일 때만
+  if (toppingDetails.some(t => t.id === 'cheese' || t.id === 'kimchi') && brothApplies && broth.delta < 0) {
+    warnings.push(`치즈/김치 추가 + ${broth.name} 농도 — 나트륨 매우 많음. 「싱겁게」 또는 「기본」 권장.`)
   }
 
   // 9. 짜장·볶음·비빔 안내

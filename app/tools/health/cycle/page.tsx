@@ -2,7 +2,7 @@ import Link from 'next/link'
 import CycleClient from './CycleClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -44,40 +44,17 @@ const headCell: React.CSSProperties = {
   borderBottom: '1px solid var(--border)',
   background: 'var(--bg3)',
 }
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '15px',
-  fontWeight: 600,
-  color: 'var(--text)',
-  listStyle: 'none',
-  padding: '4px 0',
-}
-const faqAnswer: React.CSSProperties = {
-  marginTop: '10px',
-  paddingTop: '10px',
-  borderTop: '1px solid var(--border)',
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
-}
 
 const FAQ_LD = [
   { "q":"평균 주기 28일이 아닌데 정상인가요?","a":"성인은 21~35일, 청소년(초경 후 몇 년)은 최대 45일까지 정상 범위입니다(NICHD·NHS 기준). \"28일\"은 평균값일 뿐이며, 본인의 일정한 리듬(예: 항상 26일 또는 32일)이 있으면 정상입니다. 21일 미만이거나 성인이 35일을 꾸준히 넘으면 산부인과 상담을 권합니다. 같은 사람이 매월 들쭉날쭉하면(변동폭 ±8일 이상) 상담을 권장합니다." },
-  { "q":"가임기는 어떻게 계산하나요?","a":"본 도구의 모델: 배란일 -5일 ~ +1일이 가임기. 이유: 정자는 자궁 내에서 최대 5일 생존, 난자는 배란 후 약 24시간 수정 가능. 배란일은 다음 생리 -14일 (황체기 길이가 가장 일정). ⚠️ 이는 통계 평균 — 실제 배란일은 ±2일 변동 가능. 정확한 진단은 산부인과 초음파·LH 검사." },
+  { "q":"가임기는 어떻게 계산하나요?","a":"이 도구는 <strong>배란 예상일 5일 전부터 1일 후까지</strong>를 가임기로 봅니다. 정자는 몸속에서 최대 5일, 난자는 배란 뒤 약 24시간 동안 수정이 가능하기 때문입니다. 배란 예상일은 황체기 길이가 비교적 일정하다는 점을 이용해 <strong>다음 생리 예정일에서 14일을 빼서</strong> 구합니다(28일 주기라면 15일째). 통계적 평균이라 실제 배란일은 ±2일 이상 달라질 수 있고, 정확한 확인은 산부인과 초음파나 LH 검사로 합니다." },
   { "q":"본 도구를 피임으로 써도 되나요?","a":"절대 비추천입니다. 캘린더·주기 기반 피임은 방법과 실천에 따라 일반적인 사용 실패율 편차가 크고 높은 편입니다(미국 CDC 기준 대략 2~23%대). 배란일은 스트레스·수면·체중·여행 등으로 ±2일 이상 변동할 수 있습니다. 본 도구는 참고 정보만 제공합니다. 피임 방법은 산부인과 상담이 필수입니다(호르몬·기구·자연 등 다양한 옵션). 보건복지상담센터 129." },
   { "q":"주기가 들쭉날쭉한데 어떻게 해야 하나요?","a":"본 도구의 주기 규칙성에서 \"많이 불규칙\"을 선택하면 안내가 표시됩니다. 변동폭이 ±3일 이내면 정상(규칙적)이고, ±4~7일이면 약간 불규칙이므로 스트레스·체중 변화를 점검하세요. ±8일 이상이면 불규칙으로 산부인과 상담을 권장합니다(PCOS·갑상선·조기난소부전 등 가능성). 내 기록 탭에서 매번 생리 시작일을 체크하면 본인 변동폭이 자동 분석됩니다." },
-  { "q":"PMS는 무엇이고 언제 산부인과 가야 하나요?","a":"PMS(생리전증후군) = 생리 1주~수일 전 나타나는 신체·정서 변화. 가임기 여성 약 75% 경험. 일반 PMS: 붓기·기분 변동·식욕 ↑ → 본 도구의 컨디션 가이드 참고. 심한 PMS (PMDD): 일상에 심각한 영향 (출근·관계 등) → 산부인과·정신건강의학과 상담 권장. 보건복지상담센터 129." },
-  { "q":"임신 테스트기는 언제 사용하면 정확한가요?","a":"일반 안내: 생리 예정일 이후가 더 정확. 너무 이른 검사는 음성이라도 확정 X. 본 도구의 👶 가임기 참고 탭에서 임신 준비 중 선택 시, 생리 예정일 기준 안내 표시. 정확한 진단은 산부인과 HCG 검사·초음파." },
-  { "q":"황체기에 체중이 늘어요. 살이 찐 건가요?","a":"황체기 후반(생리 직전)에는 호르몬 영향으로 1~3kg 일시 변동이 흔합니다. 이는 수분 보유·소화 변화·식욕 증가 등 복합 요인 — 지방 증가가 아닌 경우가 많음. 정확한 체중 추세는 주간 평균으로 보세요. 다이어트 중이라면 황체기는 유지 모드, 난포기에 집중." },
+  { "q":"PMS는 무엇이고 언제 산부인과 가야 하나요?","a":"PMS(생리전증후군)는 생리 시작 1주~며칠 전부터 나타나는 몸과 기분의 변화로, 가임기 여성의 약 75%가 경험합니다. 붓기·기분 변화·식욕 증가 같은 흔한 증상은 이 도구의 컨디션 가이드를 참고해 관리할 수 있습니다. 출근이나 대인관계가 힘들 만큼 일상에 큰 지장을 준다면 월경전불쾌장애(PMDD)일 수 있으니 산부인과나 정신건강의학과 상담을 권합니다(보건복지상담센터 129)." },
+  { "q":"임신 테스트기는 언제 사용하면 정확한가요?","a":"<strong>생리 예정일이 지난 뒤</strong>에 쓰는 편이 더 정확합니다. 너무 일찍 검사하면 임신이어도 음성이 나올 수 있어, 음성 결과만으로 임신이 아니라고 확정할 수는 없습니다. 이 도구의 가임기 참고 탭에서 임신 준비 중을 선택하면 생리 예정일을 기준으로 안내하며, 정확한 진단은 산부인과의 혈액(hCG) 검사와 초음파로 합니다." },
+  { "q":"황체기에 체중이 늘어요. 살이 찐 건가요?","a":"황체기 후반(생리 직전)에는 호르몬 영향으로 <strong>1~3kg 정도 일시적으로 변하는 일이 흔합니다</strong>. 몸에 수분이 머물고 소화·식욕이 달라지는 것이 주된 원인이라, 지방이 늘어난 것이 아닌 경우가 많습니다. 체중 추세는 주간 평균으로 보고, 다이어트 중이라면 황체기에는 유지에 집중하고 난포기에 감량을 이어가 보세요." },
   { "q":"본 도구의 데이터는 어디 저장되나요?","a":"본인 브라우저(localStorage)에만 저장됩니다. youtil 서버나 외부 서비스로 전송하지 않고, Google Analytics에도 cycle 데이터는 보내지 않습니다(일반 페이지뷰만 집계). 이름·이메일·전화 입력 없이 익명으로 사용하며, 페이지 상단이나 데이터 관리에서 한 번 클릭으로 전체 삭제할 수 있습니다. 다른 기기·브라우저로는 자동 동기화되지 않으므로 CSV 백업을 권장하고, 시크릿 모드나 브라우저 데이터 삭제 시 사라집니다." },
-  { "q":"본 도구와 임신 주수 계산기 차이는?","a":"영역이 다릅니다. 🌙 본 도구 (생리주기·배란일): 임신 전 주기 트래킹·시각화·가임기 참고 🤰 임신 주수 계산기: 임신 확인 후 주차·태아 발달·검사 일정·출산 준비 본 도구의 가임기 모드 → 임신 가능성 점검 → 임신 확인 시 임신 주수 계산기로 이동하는 동선." },
+  { "q":"본 도구와 임신 주수 계산기 차이는?","a":"쓰는 시기가 다릅니다. 이 도구는 <strong>임신 전</strong> 주기를 기록하고 다음 생리·가임기를 가늠하는 용도이고, <a href=\"/tools/health/pregnancy\">임신 주수 계산기</a>는 <strong>임신을 확인한 뒤</strong> 주수·태아 발달·검사 일정·출산 준비를 보는 용도입니다. 가임기 참고로 준비하다가 임신이 확인되면 임신 주수 계산기로 넘어가면 됩니다." },
   { "q":"청소년인데 사용해도 되나요?","a":"본 도구는 일반 주기 트래킹 도구이므로 누구나 사용할 수 있습니다. 다만 초경 후 2~3년은 주기가 매우 불규칙한 것이 정상이고, 심한 통증이나 과다 출혈이 있으면 부모와 함께 산부인과를 찾으세요. 임신·피임 관련 정보는 전문가 상담이 우선입니다(학교 보건교사·소아청소년과·산부인과). 청소년 상담 1388(24시간)·보건복지상담센터 129를 이용할 수 있습니다. 본 도구는 의료 상담을 대체하지 않습니다." }
 ]
 
@@ -121,23 +98,23 @@ export default function CyclePage() {
           </thead>
           <tbody>
             <tr>
-              <td style={cell}><strong style={{ color: '#DC2626' }}>🩸 생리기</strong></td>
+              <td style={cell}><strong style={{ color: 'var(--danger)' }}>🩸 생리기</strong></td>
               <td style={cell}>1~5일</td>
               <td style={cell}>몸 회복 집중 · 컨디션 ↓ · 가벼운 운동·휴식 우선</td>
             </tr>
             <tr>
-              <td style={cell}><strong style={{ color: '#FFD93E' }}>🌱 난포기</strong></td>
-              <td style={cell}>6~12일</td>
+              <td style={cell}><strong style={{ color: 'var(--warning)' }}>🌱 난포기</strong></td>
+              <td style={cell}>6~13일</td>
               <td style={cell}>에너지·집중력 ↑ · 새 운동 루틴 시작에 적합</td>
             </tr>
             <tr>
-              <td style={cell}><strong style={{ color: '#059669' }}>🥚 배란기</strong></td>
-              <td style={cell}>13~15일</td>
+              <td style={cell}><strong style={{ color: 'var(--cat-finance-ink)' }}>🥚 배란기</strong></td>
+              <td style={cell}>14~16일</td>
               <td style={cell}>체온 0.3~0.5°C ↑ · 분비물 변화 · 일부 중간통</td>
             </tr>
             <tr>
-              <td style={cell}><strong style={{ color: '#B885DA' }}>🌙 황체기</strong></td>
-              <td style={cell}>16~28일</td>
+              <td style={cell}><strong style={{ color: 'var(--cat-unit-ink)' }}>🌙 황체기</strong></td>
+              <td style={cell}>17~28일</td>
               <td style={cell}>후반부 PMS 가능 · 붓기·식욕·기분 변동 · 강도 조절</td>
             </tr>
           </tbody>
@@ -172,7 +149,7 @@ export default function CyclePage() {
         </p>
         <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '18px', margin: 0 }}>
           <li><strong style={{ color: 'var(--text)' }}>다음 생리</strong> = 마지막 생리일 + 평균 주기</li>
-          <li><strong style={{ color: 'var(--text)' }}>배란일</strong> = 다음 생리일 - 14일 (황체기 길이가 가장 일정해서)</li>
+          <li><strong style={{ color: 'var(--text)' }}>배란일</strong> = 다음 생리일 - 14일 (황체기 길이가 가장 일정해서 · 28일 주기면 15일째)</li>
           <li><strong style={{ color: 'var(--text)' }}>가임기</strong> = 배란일 -5일 ~ +1일 (정자 생존 ~5일 + 난자 24시간)</li>
           <li><strong style={{ color: 'var(--text)' }}>PMS 예상</strong> = 다음 생리 -7일 ~ -1일</li>
         </ul>
@@ -189,12 +166,12 @@ export default function CyclePage() {
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
         {[
-          { name: '신체 증상', color: '#D97706', items: '붓기·체중 일시 ↑·복부 팽만·유방 압통·두통·여드름·피로' },
-          { name: '정서 증상', color: '#B885DA', items: '기분 변동·짜증·불안·우울·집중력 ↓·식욕 ↑·수면 변화' },
-          { name: '일반 대처', color: '#059669', items: '카페인·염분 ↓·수분 ↑·규칙 운동·충분한 수면·일정 여유' },
-          { name: '🚨 심한 PMS (PMDD)', color: '#DC2626', items: '일상에 심각한 영향 → 산부인과·정신건강의학과 상담 권장' },
+          { name: '신체 증상', color: 'var(--warning)', items: '붓기·체중 일시 ↑·복부 팽만·유방 압통·두통·여드름·피로' },
+          { name: '정서 증상', color: 'var(--cat-unit-ink)', items: '기분 변동·짜증·불안·우울·집중력 ↓·식욕 ↑·수면 변화' },
+          { name: '일반 대처', color: 'var(--cat-finance-ink)', items: '카페인·염분 ↓·수분 ↑·규칙 운동·충분한 수면·일정 여유' },
+          { name: '🚨 심한 PMS (PMDD)', color: 'var(--danger)', items: '일상에 심각한 영향 → 산부인과·정신건강의학과 상담 권장' },
         ].map((b, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
+          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${b.color} 27%, transparent)`, borderRadius: '12px', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px' }}>{b.name}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{b.items}</p>
           </div>
@@ -218,131 +195,14 @@ export default function CyclePage() {
           <li>21일 미만 / 45일 초과 주기</li>
         </ul>
         <p style={{ fontSize: '13px', color: 'var(--text)', marginTop: '14px', lineHeight: 1.7, marginBottom: 0 }}>
-          📞 <strong>도움 받기</strong>: 보건복지상담센터 <strong style={{ color: '#D97706' }}>129</strong> · 청소년 상담 <strong style={{ color: '#D97706' }}>1388</strong> · 응급 <strong style={{ color: '#D97706' }}>119</strong>
+          📞 <strong>도움 받기</strong>: 보건복지상담센터 <strong style={{ color: 'var(--warning)' }}>129</strong> · 청소년 상담 <strong style={{ color: 'var(--warning)' }}>1388</strong> · 응급 <strong style={{ color: 'var(--warning)' }}>119</strong>
         </p>
       </div>
 
       {/* 6. FAQ */}
-      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-      <FaqJsonLd items={FAQ_LD} />
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q1. 평균 주기 28일이 아닌데 정상인가요?</summary>
-        <div style={faqAnswer}>
-          <strong style={{ color: 'var(--text)' }}>성인은 21~35일, 청소년은 최대 45일까지</strong> 정상 범위입니다(NICHD·NHS 기준). &ldquo;28일&rdquo;은 평균값일 뿐이고, 본인의 일정한 리듬(예: 항상 26일 또는 32일)이 있으면 정상입니다.
-          <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li>21일 미만이거나, 성인이 35일을 꾸준히 넘으면 → 산부인과 상담</li>
-            <li>같은 사람이 매월 들쭉날쭉 (변동폭 ±8일+) → 상담 권장</li>
-          </ul>
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q2. 가임기는 어떻게 계산하나요?</summary>
-        <div style={faqAnswer}>
-          본 도구의 모델: <strong style={{ color: 'var(--text)' }}>배란일 -5일 ~ +1일</strong>이 가임기.
-          이유: 정자는 자궁 내에서 최대 5일 생존, 난자는 배란 후 약 24시간 수정 가능.
-          배란일은 다음 생리 -14일 (황체기 길이가 가장 일정).
-          <br /><br />
-          ⚠️ 이는 통계 평균 — 실제 배란일은 ±2일 변동 가능. 정확한 진단은 산부인과 초음파·LH 검사.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q3. 본 도구를 피임으로 써도 되나요?</summary>
-        <div style={faqAnswer}>
-          <strong style={{ color: '#DC2626' }}>절대 비추천.</strong> 캘린더·주기 기반 피임은 방법과 실천에 따라 일반적인 사용 실패율 편차가 크고 높은 편입니다(미국 CDC 기준 <strong>대략 2~23%대</strong>).
-          배란일은 스트레스·수면·체중·여행 등으로 ±2일 이상 변동 가능. 본 도구는 <strong>참고 정보 제공</strong>만 합니다.
-          <br /><br />
-          피임 방법은 산부인과 상담 필수 (호르몬·기구·자연 등 다양한 옵션). 보건복지상담센터 <strong>129</strong>.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q4. 주기가 들쭉날쭉한데 어떻게 해야 하나요?</summary>
-        <div style={faqAnswer}>
-          본 도구의 <strong>주기 규칙성 → &ldquo;많이 불규칙&rdquo;</strong> 선택 시 안내가 표시됩니다.
-          <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li>변동폭 ±3일 이내: 정상 (규칙적)</li>
-            <li>±4~7일: 약간 불규칙 — 스트레스·체중 변화 점검</li>
-            <li>±8일+: 불규칙 — <strong style={{ color: 'var(--text)' }}>산부인과 상담 권장</strong> (PCOS·갑상선·조기난소부전 등 가능성)</li>
-          </ul>
-          <strong>📋 내 기록 탭</strong>에서 매번 생리 시작일을 체크하면 본인 변동폭 자동 분석.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q5. PMS는 무엇이고 언제 산부인과 가야 하나요?</summary>
-        <div style={faqAnswer}>
-          PMS(생리전증후군) = 생리 1주~수일 전 나타나는 신체·정서 변화. 가임기 여성 약 75% 경험.
-          <br /><br />
-          일반 PMS: 붓기·기분 변동·식욕 ↑ → 본 도구의 컨디션 가이드 참고.
-          <br /><br />
-          <strong style={{ color: '#DC2626' }}>심한 PMS (PMDD)</strong>: 일상에 심각한 영향 (출근·관계 등) → 산부인과·정신건강의학과 상담 권장. 보건복지상담센터 129.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q6. 임신 테스트기는 언제 사용하면 정확한가요?</summary>
-        <div style={faqAnswer}>
-          일반 안내: <strong style={{ color: 'var(--text)' }}>생리 예정일 이후</strong>가 더 정확. 너무 이른 검사는 음성이라도 확정 X.
-          <br /><br />
-          본 도구의 <strong>👶 가임기 참고 탭</strong>에서 임신 준비 중 선택 시, 생리 예정일 기준 안내 표시.
-          정확한 진단은 산부인과 HCG 검사·초음파.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q7. 황체기에 체중이 늘어요. 살이 찐 건가요?</summary>
-        <div style={faqAnswer}>
-          황체기 후반(생리 직전)에는 호르몬 영향으로 <strong style={{ color: 'var(--text)' }}>1~3kg 일시 변동</strong>이 흔합니다.
-          이는 수분 보유·소화 변화·식욕 증가 등 복합 요인 — <strong>지방 증가가 아닌 경우가 많음</strong>.
-          <br /><br />
-          정확한 체중 추세는 <strong style={{ color: 'var(--text)' }}>주간 평균</strong>으로 보세요. 다이어트 중이라면 황체기는 유지 모드, 난포기에 집중.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q8. 본 도구의 데이터는 어디 저장되나요?</summary>
-        <div style={faqAnswer}>
-          <strong style={{ color: '#059669' }}>본인 브라우저(localStorage)에만 저장</strong>됩니다.
-          <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li>✅ youtil 서버 전송 X · 외부 서비스 X</li>
-            <li>✅ Google Analytics에 cycle 데이터 X (일반 페이지뷰만)</li>
-            <li>✅ 익명 사용 (이름·이메일·전화 입력 X)</li>
-            <li>✅ 한 번 클릭 전체 삭제 (페이지 상단 또는 데이터 관리)</li>
-            <li>⚠️ 다른 기기·브라우저 자동 동기화 X — CSV 백업 권장</li>
-            <li>⚠️ 시크릿 모드/브라우저 데이터 삭제 시 사라짐</li>
-          </ul>
-          민감 데이터인 만큼 <strong>본인 자유 + 책임</strong>으로 관리됩니다.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q9. 본 도구와 임신 주수 계산기 차이는?</summary>
-        <div style={faqAnswer}>
-          영역이 다릅니다.
-          <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li>🌙 <strong style={{ color: 'var(--text)' }}>본 도구 (생리주기·배란일)</strong>: <strong>임신 전</strong> 주기 트래킹·시각화·가임기 참고</li>
-            <li>🤰 <Link href="/tools/health/pregnancy" style={{ color: 'var(--accent)' }}>임신 주수 계산기</Link>: <strong>임신 확인 후</strong> 주차·태아 발달·검사 일정·출산 준비</li>
-          </ul>
-          본 도구의 가임기 모드 → 임신 가능성 점검 → 임신 확인 시 임신 주수 계산기로 이동하는 동선.
-        </div>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q10. 청소년인데 사용해도 되나요?</summary>
-        <div style={faqAnswer}>
-          본 도구는 일반 주기 트래킹 도구이므로 누구나 사용 가능. 단:
-          <ul style={{ paddingLeft: 18, marginTop: 8 }}>
-            <li>초경 후 2~3년은 주기가 매우 불규칙한 게 정상</li>
-            <li>심한 통증·과다 출혈 시 부모와 함께 산부인과</li>
-            <li>임신·피임 관련 정보는 <strong style={{ color: 'var(--text)' }}>전문가 상담</strong>이 우선 (학교 보건교사·소아청소년과·산부인과)</li>
-            <li>청소년 상담 1388 (24시간) · 보건복지상담센터 129</li>
-          </ul>
-          본 도구는 의료 상담을 대체하지 않습니다.
-        </div>
-      </details>
+      <div style={{ marginTop: '48px' }}>
+        <Faq items={FAQ_LD} />
+      </div>
 
       {/* 7. 면책 */}
       <h2 style={sectionTitle}>⚠️ 의료 면책</h2>

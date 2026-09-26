@@ -86,9 +86,10 @@ export default function ChildHeightPage() {
 
       <UpdatedMeta
         date="2026년 6월"
-        basis="Tanner 중간부모키(MPH) 공식 · 한국 성인 평균 키는 참고치"
+        basis="Tanner 중간부모키(MPH) 공식 · 한국 평균 비교는 8차 사이즈코리아 20~24세 평균(남 175.0·여 161.8cm)"
         sources={[
           { label: 'Tanner MPH (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/5440182/' },
+          { label: '사이즈코리아 인체치수조사', href: 'https://sizekorea.kr' },
           { label: '질병관리청 소아청소년 성장도표', href: 'https://knhanes.kdca.go.kr/' },
         ]}
       />
@@ -103,7 +104,7 @@ export default function ChildHeightPage() {
           { href: '/tools/health/bmi', label: 'BMI 계산기' },
         ]}
       >
-        이 계산기는 <strong>중간부모키(MPH) 공식에 기반한 통계적 추정</strong>이며 의학적 진단이 아닙니다. 실제 성인 키는 유전 외에도 영양·수면·운동·사춘기 시기·성장판·질환 등 다양한 변수에 크게 좌우됩니다. 예측 범위(±8.5cm)는 평균적인 분포일 뿐 개별 보장이 아니며, <strong>저성장이 의심되거나 성장이 걱정되면 반드시 소아청소년과·성장 전문의의 뼈나이(골연령) 검사 등 정식 진료</strong>를 받으세요. 한국 성인 평균 키는 참고치이며 백분위·우열의 근거가 아닙니다.
+        이 계산기는 <strong>중간부모키(MPH) 공식에 기반한 통계적 추정</strong>이며 의학적 진단이 아닙니다. 실제 성인 키는 유전 외에도 영양·수면·운동·사춘기 시기·성장판·질환 등 다양한 변수에 크게 좌우됩니다. 예측 범위(±8.5cm)는 평균적인 분포일 뿐 개별 보장이 아니며, <strong>저성장이 의심되거나 성장이 걱정되면 반드시 소아청소년과·성장 전문의의 뼈나이(골연령) 검사 등 정식 진료</strong>를 받으세요. 한국 20~24세 평균 키와의 비교는 단순 차이일 뿐 백분위·우열의 근거가 아닙니다.
       </Disclaimer>
 
       <ChildHeightClient />

@@ -265,8 +265,8 @@ export default function BmrPage() {
             <p style={{ fontSize: '13px', fontWeight: 700, color: '#A16207', marginBottom: '8px' }}>본 도구의 정밀 분석</p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
               <li>① <strong style={{ color: 'var(--text)' }}>직업 활동 (4단계)</strong> — 사무·서비스·도보·육체노동</li>
-              <li>② <strong style={{ color: 'var(--text)' }}>일일 걸음 (5,000보 기준)</strong> — 1,000보당 +50kcal</li>
-              <li>③ <strong style={{ color: 'var(--text)' }}>운동 횟수 + 시간 + 강도 + 체중 (MET 기반)</strong> — 운동 칼로리가 체중에 비례</li>
+              <li>② <strong style={{ color: 'var(--text)' }}>운동 외 일일 걸음 (5,000보 기준)</strong> — 1,000보당 +50kcal</li>
+              <li>③ <strong style={{ color: 'var(--text)' }}>운동 횟수 + 시간 + 강도 + 체중 (MET 기반)</strong> — 운동 칼로리가 체중에 비례하며, BMR에 이미 포함된 안정 대사분(1 MET)은 빼고 더함</li>
               <li>④ <strong style={{ color: 'var(--text)' }}>휴식일·운동일 TDEE 자동 분리</strong></li>
             </ul>
             <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: 10 }}>

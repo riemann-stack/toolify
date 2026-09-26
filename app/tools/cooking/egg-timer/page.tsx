@@ -2,7 +2,7 @@ import Link from 'next/link'
 import EggTimerClient from './EggTimerClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import styles from './egg-timer.module.css'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
@@ -51,11 +51,11 @@ const FAQ_LD = [
               },
               {
                 q: '노른자가 회녹색이 되는 이유?',
-                a: '<strong>너무 오래 끓이면</strong> 흰자의 황(S)과 노른자의 철(Fe)이 반응해 황화철(FeS)이 형성됩니다. 회색-녹색 띠처럼 보이며 황 냄새가 납니다.<br/><br/><strong>안전성 문제는 없지만</strong> 식감과 비주얼이 떨어집니다.<br/>예방 —<br/>· 12분 이내로 끝내기<br/>· 완성 즉시 얼음물에 5분 (반응 정지)<br/>· 자주 발생하면 시간 1~2분 단축',
+                a: '<strong>너무 오래 끓이면</strong> 흰자의 황(S)과 노른자의 철(Fe)이 반응해 황화철(FeS)이 형성됩니다. 회색-녹색 띠처럼 보이며 황 냄새가 납니다.<br/><br/><strong>안전성 문제는 없지만</strong> 식감과 비주얼이 떨어집니다.<br/>예방 —<br/>· 13분 넘게 삶았다면 그대로 두지 말고 바로 식히기<br/>· 완성 즉시 얼음물에 5분 (반응 정지) — 단단한 완숙(14분)은 특히 필수<br/>· 자주 발생하면 시간 1~2분 단축',
               },
               {
                 q: '잼 노른자 정확한 시간은?',
-                a: '<strong>7분 (특란 + 실온 + 끓는 물 투입)</strong>이 표준. 라멘 아지타마와 양념장계란(마야크 에그)의 핵심 단계입니다. 흰자는 완전히 익고 노른자는 걸쭉한 잼 농도.<br/><br/>정확도가 중요하니 다음 조건 통일 —<br/>· 크기: 특란 (68~78g)<br/>· 온도: 실온 (30분 꺼낸 상태) — 냉장 시 8분<br/>· 조리법: 끓는 물 투입 → 정확히 7분 → 즉시 얼음물 5분<br/>· 껍질 까기: 5~7일 묵은 계란 사용 + 둥근 쪽부터<br/><br/>±15초 차이로 농도가 크게 달라지므로 타이머 필수.',
+                a: '<strong>7분 (특란 + 실온 + 끓는 물 투입)</strong>이 표준. 라멘 아지타마와 양념장계란(마야크 에그)의 핵심 단계입니다. 흰자는 완전히 익고 노른자는 걸쭉한 잼 농도.<br/><br/>정확도가 중요하니 다음 조건 통일 —<br/>· 크기: 특란(XL, 60~68g)<br/>· 온도: 실온 (30분 꺼낸 상태) — 냉장 시 8분<br/>· 조리법: 끓는 물 투입 → 정확히 7분 → 즉시 얼음물 5분<br/>· 껍질 까기: 5~7일 묵은 계란 사용 + 둥근 쪽부터<br/><br/>±15초 차이로 농도가 크게 달라지므로 타이머 필수.',
               },
               {
                 q: '라면 계란 반숙은 몇 분?',
@@ -136,13 +136,16 @@ export default function EggTimerPage() {
             </table>
           </div>
           <p style={{ ...faqAnswer, marginTop: '12px', fontSize: '12px' }}>
-            ※ 특란(68~78g) + 실온(20°C) + 끓는 물 투입 기준. 냉장 계란은 +1분, 왕란은 +30초.
+            ※ 특란(60~68g) + 실온(20°C) + 끓는 물 투입 기준. 냉장 계란은 +1분, 왕란은 +30초.
           </p>
         </section>
 
         {/* 2. 한국 계란 크기 */}
         <section>
-          <h2 style={sectionTitle}>한국 계란 크기 (축산물품질평가원 중량 규격)</h2>
+          <h2 style={sectionTitle}>한국 계란 크기 (축산물 등급판정 세부기준 중량규격)</h2>
+          <p style={{ ...faqAnswer, marginBottom: '14px' }}>
+            2026년 5월 21일 축산법 시행규칙 개정으로 명칭이 왕란→2XL, 특란→XL, 대란→L, 중란→M, 소란→S로 바뀌었습니다. 중량 기준은 그대로이고, 2026년 11월까지 6개월 유예기간 동안은 두 명칭이 함께 쓰입니다.
+          </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
@@ -155,11 +158,11 @@ export default function EggTimerPage() {
               </thead>
               <tbody>
                 {[
-                  ['왕란', '78g+',     '+30초',  '대형마트·이중노른자 가능성'],
-                  ['특란', '68~78g',   '기준',   '마트·편의점 표준 (가장 흔함)'],
-                  ['대란', '60~68g',   '-15초',  '소형마트·재래시장'],
-                  ['중란', '52~60g',   '-30초',  '계란말이·간편식'],
-                  ['소란', '44~52g',   '-45초',  '베이킹·도시락'],
+                  ['왕란 (2XL)', '68g 이상',   '+30초',  '대형마트·이중노른자 가능성'],
+                  ['특란 (XL)',  '60~68g',     '기준',   '마트·편의점 표준 (가장 흔함)'],
+                  ['대란 (L)',   '52~60g',     '-15초',  '소형마트·재래시장'],
+                  ['중란 (M)',   '44~52g',     '-30초',  '계란말이·간편식'],
+                  ['소란 (S)',   '44g 미만',   '-45초',  '베이킹·도시락'],
                 ].map(([size, w, adj, use], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{size}</td>
@@ -214,21 +217,7 @@ export default function EggTimerPage() {
 
         {/* 4. FAQ — 아코디언 */}
         <section>
-          <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 5. 응고 온도 과학 */}

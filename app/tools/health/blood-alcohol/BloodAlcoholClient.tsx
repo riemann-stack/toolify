@@ -1,7 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useId } from 'react'
 import s from './blood-alcohol.module.css'
 import {
   DECAY_RATES,
@@ -10,6 +10,12 @@ import {
   BAC_THRESHOLDS,
   calcTomorrowMorning,
   calcCumulativeBAC,
+  resolveDrinkEndEpoch,
+  BICYCLE_PM_FINES,
+  DRUNK_DRIVING_MAX_PENALTY,
+  DRUNK_DRIVING_REPEAT_WINDOW_YEARS,
+  fmtManwonWon,
+  fmtLawDate,
   alcoholGrams as calcAlcoholGrams,
   fmtTimeMin,
   fmtBAC,
@@ -79,12 +85,16 @@ export default function BloodAlcoholClient() {
   const [nowH, setNowH] = useState(23)
   const [nowM, setNowM] = useState(0)
 
-  /* 실시간 카운트다운 — 매초 갱신 */
-  const [realNowMs, setRealNowMs] = useState<number>(() => Date.now())
+  /* 실시간 카운트다운 — 매초 갱신 (SSG HTML에 빌드 시각이 박히지 않도록 마운트 후 시작) */
+  const [realNowMs, setRealNowMs] = useState<number | null>(null)
   useEffect(() => {
+    // 마운트 직후 1회 동기화(hydration 안전) — 이후 1초 간격 갱신
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRealNowMs(Date.now())
     const id = setInterval(() => setRealNowMs(Date.now()), 1000)
     return () => clearInterval(id)
   }, [])
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '')
 
   const addDrink = () => {
     if (drinks.length >= 5) return
@@ -118,7 +128,9 @@ export default function BloodAlcoholClient() {
   }
 
   // ── 계산 ──
-  const weightN = parseFloat(weight) || 0
+  // 체중: 30kg 미만(입력 중 포함)은 계산하지 않고, 200kg 초과는 200으로 클램프
+  const weightRaw = parseFloat(weight)
+  const weightN = weightRaw >= 30 ? Math.min(weightRaw, 200) : 0
   const r = sex === 'male' ? 0.68 : 0.55
   // 분해 속도·식사 상태 (정밀 보정) — 모든 탭(메인 포함) 공통 적용
   const decayRate = DECAY_RATES.find(d => d.id === decayRateId)?.rate ?? 0.015
@@ -197,26 +209,22 @@ export default function BloodAlcoholClient() {
   const hourOptions = Array.from({ length: 24 }, (_, i) => i)
   const minOptions  = [0, 10, 20, 30, 40, 50]
 
-  // ── 실시간 KST 시각·운전 가능까지 카운트다운 ──
+  // ── 실시간 KST 시각·기준 도달까지 카운트다운 (추정) ──
   const KST_OFFSET_MS = 9 * 3600 * 1000
-  const kstNowDate = new Date(realNowMs + KST_OFFSET_MS)
+  const liveNowMs = realNowMs ?? 0
+  const kstNowDate = new Date(liveNowMs + KST_OFFSET_MS)
   const realHH = kstNowDate.getUTCHours()
   const realMM = kstNowDate.getUTCMinutes()
   const realSS = kstNowDate.getUTCSeconds()
-  // 오늘의 음주 종료 시각 (KST) → epoch ms
-  const todayEndKst = new Date(realNowMs + KST_OFFSET_MS)
-  todayEndKst.setUTCHours(endH, endM, 0, 0)
-  let endEpochMs = todayEndKst.getTime() - KST_OFFSET_MS
-  // 음주 종료가 미래 (오늘 저녁 마실 예정) — 그대로 사용
-  // 음주 종료가 과거 24h 이내 — 그대로 사용 (오늘)
-  // 음주 종료가 미래 + 12시간 초과 — 어제 음주라고 가정
-  if (endEpochMs - realNowMs > 12 * 3600 * 1000) endEpochMs -= 24 * 3600 * 1000
+  // 음주 종료 시각(KST) → epoch ms: 시작 시각을 함께 써서 자정 넘김·어제 음주를 판별
+  // (지난 술자리 알코올이 남아 있을 시간이면 그 술자리 기준으로 카운트다운 유지)
+  const endEpochMs = resolveDrinkEndEpoch(liveNowMs, toMin(startH, startM), endMin, KST_OFFSET_MS, zeroHoursFromEnd * 3600 * 1000)
   const suspendEpochMs = endEpochMs + suspendHoursFromEnd * 3600 * 1000
   const revokeEpochMs  = endEpochMs + revokeHoursFromEnd * 3600 * 1000
   const zeroEpochMs    = endEpochMs + zeroHoursFromEnd * 3600 * 1000
-  const remainSuspendMs = Math.max(0, suspendEpochMs - realNowMs)
-  const remainRevokeMs  = Math.max(0, revokeEpochMs - realNowMs)
-  const remainZeroMs    = Math.max(0, zeroEpochMs - realNowMs)
+  const remainSuspendMs = Math.max(0, suspendEpochMs - liveNowMs)
+  const remainRevokeMs  = Math.max(0, revokeEpochMs - liveNowMs)
+  const remainZeroMs    = Math.max(0, zeroEpochMs - liveNowMs)
   const fmtRemain = (ms: number) => {
     const totalSec = Math.floor(ms / 1000)
     const h = Math.floor(totalSec / 3600)
@@ -224,7 +232,7 @@ export default function BloodAlcoholClient() {
     const s = totalSec % 60
     return `${pad2(h)}:${pad2(m)}:${pad2(s)}`
   }
-  const endInFuture = endEpochMs > realNowMs
+  const endInFuture = endEpochMs > liveNowMs
 
   return (
     <div className={s.wrap}>
@@ -298,6 +306,11 @@ export default function BloodAlcoholClient() {
           value={weight} onChange={e => setWeight(e.target.value)}
         />
         <div className={s.sliderLabels}><span>40</span><span>95</span><span>150</span></div>
+        {weightRaw > 0 && weightRaw < 30 && (
+          <div className={s.infoBox} style={{ marginTop: 10 }}>
+            체중은 30~200kg 범위에서 계산합니다. 30kg 이상으로 입력하면 결과가 표시됩니다.
+          </div>
+        )}
       </div>
 
       {/* ── 섹션 2: 음주 시각 ── */}
@@ -330,6 +343,10 @@ export default function BloodAlcoholClient() {
             </div>
           </div>
         </div>
+
+        <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: '0 0 12px' }}>
+          보수적으로 마신 술이 음주 종료 시점에 모두 흡수됐다고 가정합니다. 시작 시각은 자정을 넘긴 술자리인지 판단하는 데 쓰입니다.
+        </p>
 
         <label className={s.drinkLabel}>현재 시각 (BAC 확인용)</label>
         <div className={s.btnGroup} style={{ marginBottom: '10px' }} role="group" aria-label="현재 시각 기준">
@@ -373,30 +390,33 @@ export default function BloodAlcoholClient() {
           {drinks.map(d => (
             <div key={d.id} className={s.drinkRow}>
               <div>
-                <label className={s.drinkLabel}>주류</label>
+                <label className={s.drinkLabel} htmlFor={`${uid}-name-${d.id}`}>주류</label>
                 <input
+                  id={`${uid}-name-${d.id}`}
                   type="text" className={s.drinkInputText}
                   value={d.name} onChange={e => updateDrink(d.id, 'name', e.target.value)}
                   placeholder="예: 소주"
                 />
               </div>
               <div>
-                <label className={s.drinkLabel}>용량(ml)</label>
+                <label className={s.drinkLabel} htmlFor={`${uid}-vol-${d.id}`}>용량(ml)</label>
                 <input
+                  id={`${uid}-vol-${d.id}`}
                   type="number" inputMode="decimal" className={s.drinkInput}
                   value={d.volume} onChange={e => updateDrink(d.id, 'volume', e.target.value)}
                   placeholder="360"
                 />
               </div>
               <div>
-                <label className={s.drinkLabel}>도수(%)</label>
+                <label className={s.drinkLabel} htmlFor={`${uid}-abv-${d.id}`}>도수(%)</label>
                 <input
+                  id={`${uid}-abv-${d.id}`}
                   type="number" inputMode="decimal" step="0.1" className={s.drinkInput}
                   value={d.abv} onChange={e => updateDrink(d.id, 'abv', e.target.value)}
                   placeholder="16"
                 />
               </div>
-              <button type="button" className={s.drinkDelete} onClick={() => removeDrink(d.id)} aria-label="삭제">×</button>
+              <button type="button" className={s.drinkDelete} onClick={() => removeDrink(d.id)} aria-label={`${d.name || '주류'} 삭제`}>×</button>
             </div>
           ))}
         </div>
@@ -439,7 +459,7 @@ export default function BloodAlcoholClient() {
       {/* ── 결과: BAC 히어로 ── */}
       {peakBAC > 0 && (
         <>
-          <div className={`${s.hero} ${status.heroCls}`}>
+          <div className={`${s.hero} ${status.heroCls}`} role="status">
             <div>
               <div className={s.heroLabel}>현재 추정 BAC</div>
               <div>
@@ -507,9 +527,11 @@ export default function BloodAlcoholClient() {
           <div className={s.liveCard}>
             <div className={s.liveHeader}>
               <span className={s.liveBadge}>실시간 카운트다운 (KST)</span>
-              <span className={s.liveClock}>{pad2(realHH)}:{pad2(realMM)}:{pad2(realSS)}</span>
+              <span className={s.liveClock}>{realNowMs === null ? '--:--:--' : `${pad2(realHH)}:${pad2(realMM)}:${pad2(realSS)}`}</span>
             </div>
-            {endInFuture ? (
+            {realNowMs === null ? (
+              <p className={s.liveNote}>현재 시각을 불러오는 중입니다.</p>
+            ) : endInFuture ? (
               <p className={s.liveNote}>
                 음주 종료 시각이 아직 미래입니다 ({pad2(endH)}:{pad2(endM)}).
                 음주 종료 후 다시 확인하세요.
@@ -520,7 +542,7 @@ export default function BloodAlcoholClient() {
                   <div className={`${s.liveBox} ${remainSuspendMs === 0 ? s.liveBoxDone : s.liveBoxWarn}`}>
                     <div className={s.liveLabel}>🚫 0.03 미만 추정까지</div>
                     <div className={s.liveTime}>
-                      {remainSuspendMs === 0 ? '✓ 통과' : fmtRemain(remainSuspendMs)}
+                      {remainSuspendMs === 0 ? '추정 도달' : fmtRemain(remainSuspendMs)}
                     </div>
                   </div>
                 )}
@@ -528,20 +550,20 @@ export default function BloodAlcoholClient() {
                   <div className={`${s.liveBox} ${remainRevokeMs === 0 ? s.liveBoxDone : s.liveBoxDanger}`}>
                     <div className={s.liveLabel}>❌ 0.08 미만 추정까지</div>
                     <div className={s.liveTime}>
-                      {remainRevokeMs === 0 ? '✓ 통과' : fmtRemain(remainRevokeMs)}
+                      {remainRevokeMs === 0 ? '추정 도달' : fmtRemain(remainRevokeMs)}
                     </div>
                   </div>
                 )}
                 <div className={`${s.liveBox} ${remainZeroMs === 0 ? s.liveBoxDone : s.liveBoxSafe}`}>
                   <div className={s.liveLabel}>✅ 완전 분해까지 (0.000)</div>
                   <div className={s.liveTime}>
-                    {remainZeroMs === 0 ? '✓ 통과' : fmtRemain(remainZeroMs)}
+                    {remainZeroMs === 0 ? '추정 도달' : fmtRemain(remainZeroMs)}
                   </div>
                 </div>
               </div>
             )}
             <p className={s.liveCaveat}>
-              ⚠️ 위 카운트다운은 종료 시각 <strong>{pad2(endH)}:{pad2(endM)}</strong> 기준이며,
+              ⚠️ 위 카운트다운은 음주 {pad2(startH)}:{pad2(startM)}~<strong>{pad2(endH)}:{pad2(endM)}</strong> 기준 추정이며,
               ALDH2 결손·수면 부족·식사량 등으로 ±20~30% 오차 가능 — <strong>계산값과 관계없이 음주 후 운전은 금지</strong>입니다.
             </p>
           </div>
@@ -764,18 +786,18 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
   return (
     <>
       <div className={s.infoBox}>
-        💡 <strong>한국 음주운전 단속 가장 흔한 시각: 오전 7~9시</strong>.
-        전날 과음 후 다음날 출근길 단속 매우 많음.「잠 자고 일어났으니 깼겠지」는 잘못된 통념.
+        💡 전날 과음한 뒤 <strong>다음날 아침 출근길</strong>에 단속되는 사례가 적지 않습니다.
+        「잠 자고 일어났으니 깼겠지」는 잘못된 통념입니다. 자는 동안에도 분해 속도는 그대로입니다.
       </div>
 
       <div className={s.card}>
-        <span className={s.cardLabel}>다음날 운전 예정 시각</span>
+        <span className={s.cardLabel}>확인할 시각 (음주 종료 후 처음 오는 시각)</span>
         <div className={s.timeRow}>
-          <select aria-label="다음날 운전 시" className={s.timeSelect} value={morningH} onChange={e => setMorningH(+e.target.value)}>
+          <select aria-label="확인할 시" className={s.timeSelect} value={morningH} onChange={e => setMorningH(+e.target.value)}>
             {hourOptions.map(h => <option key={h} value={h}>{h < 10 ? '0' + h : h}시</option>)}
           </select>
           <span className={s.timeColon}>:</span>
-          <select aria-label="다음날 운전 분" className={s.timeSelect} value={morningM} onChange={e => setMorningM(+e.target.value)}>
+          <select aria-label="확인할 분" className={s.timeSelect} value={morningM} onChange={e => setMorningM(+e.target.value)}>
             {minOptions.map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
           </select>
         </div>
@@ -794,9 +816,9 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
       </div>
 
       {/* 히어로 */}
-      <div className={s.tomorrowHero}>
+      <div className={s.tomorrowHero} role="status">
         <div className={s.tomorrowHeroLabel}>
-          내일 {morningH < 10 ? '0' + morningH : morningH}:{morningM < 10 ? '0' + morningM : morningM} 운전 시 BAC
+          {fmtTimeMin(result.morningMin)} 추정 BAC
         </div>
         <div className={s.tomorrowHeroNum}
           style={{ color: result.statusColor }}>
@@ -814,13 +836,13 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
       {/* 법적 추정(BAC 0) ≠ 보수적 안전 권고 — 분리 안내 */}
       {result.status === 'safe' && result.morningMin < result.recommendedSafeMin && (
         <div className={s.warnBox}>
-          ⚠️ <strong>법적 기준(BAC 0 추정)은 통과</strong>하나, ±20~30% 오차를 감안한 <strong>보수적 안전 권고 시각은 {fmtTimeMin(result.recommendedSafeMin)}</strong>(완전 분해 추정 +1시간)입니다. 그 전 운전은 측정 시 양성 위험이 남습니다.
+          ⚠️ 이 시각의 <strong>추정 BAC는 0</strong>이지만 ±20~30% 오차를 감안하면 <strong>{fmtTimeMin(result.recommendedSafeMin)}</strong>(완전 분해 추정 +1시간) 전까지는 알코올이 남아 있을 수 있습니다. 추정치는 운전해도 된다는 판단 근거가 아닙니다.
         </div>
       )}
 
       {/* 타임라인 */}
       <div className={s.card}>
-        <span className={s.cardLabel}>안전 운전 타임라인</span>
+        <span className={s.cardLabel}>알코올 분해 추정 타임라인</span>
         <div className={s.timelineList}>
           <div className={s.timelineRow}>
             <span className={s.timelineTime}>{fmtTimeMin(result.endMin)}</span>
@@ -840,11 +862,11 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
           )}
           <div className={`${s.timelineRow} ${s.timelineRowSafe}`}>
             <span className={s.timelineTime}>{fmtTimeMin(result.zeroMin)}</span>
-            <span className={s.timelineLabel}>✅ 알코올 완전 분해</span>
+            <span className={s.timelineLabel}>✅ 완전 분해 추정</span>
           </div>
           <div className={`${s.timelineRow} ${s.timelineRowSafe}`}>
             <span className={s.timelineTime}>{fmtTimeMin(result.recommendedSafeMin)}</span>
-            <span className={s.timelineLabel}>⭐ 권장 안전 운전 시각 (1시간 여유)</span>
+            <span className={s.timelineLabel}>완전 분해 추정 + 1시간 (오차 여유)</span>
           </div>
           <div className={s.timelineRow}
             style={{ background: result.status === 'safe' ? 'rgba(16,185,129,0.06)' : 'rgba(220,38,38,0.06)',
@@ -854,9 +876,9 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
               {fmtTimeMin(result.morningMin)}
             </span>
             <span className={s.timelineLabel} style={{ fontWeight: 700 }}>
-              내일 운전 예정 — BAC {fmtBAC(result.morningBAC)}{' '}
+              확인 시각 — 추정 BAC {fmtBAC(result.morningBAC)}{' '}
               <span style={{ color: result.status === 'safe' ? '#059669' : '#DC2626' }}>
-                {result.status === 'safe' ? '✓ 완전 분해' : '✕ 운전 불가'}
+                {result.status === 'safe' ? '(0 추정)' : '✕ 알코올 잔존 추정'}
               </span>
             </span>
           </div>
@@ -875,7 +897,7 @@ function TomorrowMorningTab({ peakBAC, decayRate, endH, endM, drinkEndDayOffset 
       </div>
 
       <div className={s.warnBox}>
-        <strong>⚠️ 한국 음주운전 단속 최다 케이스:</strong> 새벽 2~3시까지 음주 → 다음날 8시 운전 시 BAC 0.05~0.08 초과 가능성 큼.
+        <strong>⚠️ 새벽까지 과음했다면</strong> 다음날 아침 8시에도 BAC가 0.03을 넘을 수 있습니다.
         「술이 깬 것 같다」는 주관적 판단 ≠ 실제 BAC. 본 도구 결과 ±20~30% 오차 가능 — 계산값과 관계없이 음주 후 운전은 금지.
       </div>
     </>
@@ -986,18 +1008,18 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
           <div className={s.sessionHeader}>
             <span className={s.sessionTitle}>{idx + 1}차</span>
             {sessions.length > 1 && (
-              <button type="button" className={s.sessionDelBtn} onClick={() => removeSession(ses.id)}>×</button>
+              <button type="button" className={s.sessionDelBtn} onClick={() => removeSession(ses.id)} aria-label={`${idx + 1}차 삭제`}>×</button>
             )}
           </div>
           <div className={s.sessionTimeRow}>
             <div>
               <div className={s.drinkLabel}>시작</div>
               <div className={s.timeRow}>
-                <select className={s.timeSelect} value={ses.startH} onChange={e => updateSession(ses.id, { startH: +e.target.value })}>
+                <select aria-label={`${idx + 1}차 시작 시`} className={s.timeSelect} value={ses.startH} onChange={e => updateSession(ses.id, { startH: +e.target.value })}>
                   {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{i < 10 ? '0' + i : i}시</option>)}
                 </select>
                 <span className={s.timeColon}>:</span>
-                <select className={s.timeSelect} value={ses.startM} onChange={e => updateSession(ses.id, { startM: +e.target.value })}>
+                <select aria-label={`${idx + 1}차 시작 분`} className={s.timeSelect} value={ses.startM} onChange={e => updateSession(ses.id, { startM: +e.target.value })}>
                   {[0, 10, 20, 30, 40, 50].map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
                 </select>
               </div>
@@ -1005,11 +1027,11 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
             <div>
               <div className={s.drinkLabel}>종료</div>
               <div className={s.timeRow}>
-                <select className={s.timeSelect} value={ses.endH} onChange={e => updateSession(ses.id, { endH: +e.target.value })}>
+                <select aria-label={`${idx + 1}차 종료 시`} className={s.timeSelect} value={ses.endH} onChange={e => updateSession(ses.id, { endH: +e.target.value })}>
                   {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{i < 10 ? '0' + i : i}시</option>)}
                 </select>
                 <span className={s.timeColon}>:</span>
-                <select className={s.timeSelect} value={ses.endM} onChange={e => updateSession(ses.id, { endM: +e.target.value })}>
+                <select aria-label={`${idx + 1}차 종료 분`} className={s.timeSelect} value={ses.endM} onChange={e => updateSession(ses.id, { endM: +e.target.value })}>
                   {[0, 10, 20, 30, 40, 50].map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
                 </select>
               </div>
@@ -1017,13 +1039,13 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
           </div>
           {ses.drinks.map(d => (
             <div key={d.id} className={s.sessionAlcoholRow}>
-              <input type="text" className={s.drinkInputText} value={d.name}
+              <input type="text" aria-label={`${idx + 1}차 주류`} className={s.drinkInputText} value={d.name}
                 onChange={e => updateDrink(ses.id, d.id, 'name', e.target.value)} placeholder="주류" />
-              <input type="number" inputMode="decimal" className={s.drinkInput} value={d.volume}
+              <input type="number" inputMode="decimal" aria-label={`${idx + 1}차 용량(ml)`} className={s.drinkInput} value={d.volume}
                 onChange={e => updateDrink(ses.id, d.id, 'volume', e.target.value)} placeholder="용량(ml)" />
-              <input type="number" inputMode="decimal" step="0.1" className={s.drinkInput} value={d.abv}
+              <input type="number" inputMode="decimal" step="0.1" aria-label={`${idx + 1}차 도수(%)`} className={s.drinkInput} value={d.abv}
                 onChange={e => updateDrink(ses.id, d.id, 'abv', e.target.value)} placeholder="도수(%)" />
-              <button type="button" className={s.drinkDelete} onClick={() => removeDrink(ses.id, d.id)}>×</button>
+              <button type="button" className={s.drinkDelete} onClick={() => removeDrink(ses.id, d.id)} aria-label={`${idx + 1}차 ${d.name || '주류'} 삭제`}>×</button>
             </div>
           ))}
           <button type="button" className={s.addBtn} onClick={() => addDrink(ses.id)}>+ 주류 추가</button>
@@ -1037,7 +1059,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
       {/* 결과 */}
       {result.peakBAC > 0 && (
         <>
-          <div className={s.tomorrowHero} style={{ borderColor: 'rgba(220,38,38,0.40)', background: 'rgba(220,38,38,0.04)' }}>
+          <div className={s.tomorrowHero} role="status" style={{ borderColor: 'rgba(220,38,38,0.40)', background: 'rgba(220,38,38,0.04)' }}>
             <div className={s.tomorrowHeroLabel}>최고 BAC ({result.totalAlcoholGrams.toFixed(1)}g 알코올 = 표준잔 {standardDrinks.toFixed(1)})</div>
             <div className={s.tomorrowHeroNum} style={{ color: '#DC2626' }}>
               {fmtBAC(result.peakBAC)}
@@ -1113,11 +1135,11 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
             </div>
           </div>
 
-          {result.totalAlcoholGrams > 80 && (
+          {result.totalAlcoholGrams > (sex === 'male' ? 60 : 40) && (
             <div className={s.warnBox}>
               <strong>⚠️ 위험 음주 수준</strong> — 알코올 {result.totalAlcoholGrams.toFixed(0)}g (표준잔 {standardDrinks.toFixed(1)})은
-              WHO 위험 음주 (남 60g·여 40g) 초과. 본인뿐 아니라 다른 사람에게도 위험 (사고·폭력·건강).
-              한국알코올중독상담센터 <strong>1899-0975</strong>.
+              WHO 위험 음주 기준({sex === 'male' ? '남성 60g' : '여성 40g'})을 넘습니다. 본인뿐 아니라 다른 사람에게도 위험합니다 (사고·폭력·건강).
+              음주 문제 상담은 지역 중독관리통합지원센터나 정신건강위기상담 <strong>1577-0199</strong>에서 받을 수 있습니다.
             </div>
           )}
         </>
@@ -1182,14 +1204,14 @@ function GuideTab() {
             <tbody>
               <tr><td>일반 면허</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>자가용</td></tr>
               <tr><td>영업용 (택시·버스·화물)</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>법적 기준 동일 + 자격정지·해고 등 추가 제재</td></tr>
-              <tr><td>자전거</td><td>0.03</td><td>—</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>2021년부터 처벌 (3만원 범칙금)</td></tr>
-              <tr><td>전동킥보드</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>도로교통법 (10~20만원)</td></tr>
+              <tr><td>자전거</td><td>0.03</td><td>—</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>{fmtLawDate(BICYCLE_PM_FINES.bicycle.since, 'dot')}부터 범칙금 {fmtManwonWon(BICYCLE_PM_FINES.bicycle.fine)} (측정 불응 {fmtManwonWon(BICYCLE_PM_FINES.bicycle.refusal)})</td></tr>
+              <tr><td>전동킥보드</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>{fmtLawDate(BICYCLE_PM_FINES.pm.since, 'dot')}부터 범칙금 {fmtManwonWon(BICYCLE_PM_FINES.pm.fine)} (측정 불응 {fmtManwonWon(BICYCLE_PM_FINES.pm.refusal)}) + 운전면허 정지·취소</td></tr>
             </tbody>
           </table>
         </div>
         <div className={s.warnBox} style={{ marginTop: 10 }}>
           <strong>⚠️ 자전거·전동킥보드도 음주운전 처벌 대상.</strong>{' '}
-          「자전거니까 괜찮아」 잘못된 통념. 2021년 도로교통법 개정 — 도심 자전거·킥보드는 보행자 사고 위험 큼.
+          「자전거니까 괜찮아」는 잘못된 통념입니다. 자전거는 {fmtLawDate(BICYCLE_PM_FINES.bicycle.since, 'ym')}, 전동킥보드는 {fmtLawDate(BICYCLE_PM_FINES.pm.since, 'ym')}부터 범칙금이 부과되며, 도심에서는 보행자 사고 위험도 큽니다.
         </div>
       </div>
 
@@ -1225,8 +1247,8 @@ function GuideTab() {
         )}
 
         <div className={s.infoBox} style={{ marginTop: 12 }}>
-          ⚠️ 본 정보는 일반 안내. 정확한 약물·알코올 상호작용은 약사·의사 상담 필수.
-          한국 식약처 의약품안전사용서비스: <strong>1577-2334</strong>
+          ⚠️ 본 정보는 일반 안내입니다. 복용 중인 약과 알코올의 상호작용은 약사·의사에게 확인하세요.
+          식품의약품안전처 종합상담센터: <strong>1577-1255</strong>
         </div>
       </div>
 
@@ -1234,7 +1256,7 @@ function GuideTab() {
       <div className={s.disclaimerStrong}>
         <strong>🚨 음주운전은 범죄 — 절대 X</strong>
         <ul>
-          <li>음주운전 처벌 (윤창호법): 면허정지·취소 + 1~5년 징역, 500만~2,000만원 벌금</li>
+          <li>BAC 0.03% 이상 운전은 면허정지·취소와 함께 형사처벌 (최대 징역 {DRUNK_DRIVING_MAX_PENALTY.prisonYears}년·벌금 {fmtManwonWon(DRUNK_DRIVING_MAX_PENALTY.fineWon)}, {DRUNK_DRIVING_REPEAT_WINDOW_YEARS}년 내 재범은 가중)</li>
           <li>사망사고 시 무기징역까지</li>
           <li>본 도구 결과 ≠ 면책 근거 (±20~30% 오차)</li>
           <li>「측정기에 안 잡힐 정도」 X — 측정 시 양성이면 단속</li>
@@ -1242,12 +1264,10 @@ function GuideTab() {
         </ul>
         <strong>안전 귀가</strong>
         <ul>
-          <li>카카오 T 대리: <strong>1577-1577</strong></li>
-          <li>티맵 대리: <strong>1644-3030</strong></li>
-          <li>음주운전 신고: <strong>080-911-7700</strong></li>
+          <li>대리운전 앱 호출 또는 택시·대중교통 이용</li>
+          <li>음주운전 신고: <strong>112</strong></li>
           <li>응급: <strong>119</strong></li>
-          <li>한국알코올중독상담센터: <strong>1899-0975</strong></li>
-          <li>정신건강 위기상담: <strong>1577-0199</strong></li>
+          <li>정신건강 위기상담 (음주 문제 포함): <strong>1577-0199</strong></li>
         </ul>
       </div>
     </>

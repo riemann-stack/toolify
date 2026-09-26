@@ -39,7 +39,7 @@ const FAQ_LD = [
               },
               {
                 q: '노령견·노령묘는 사료를 얼마나 줄여야 하나요?',
-                a: '노령 반려동물은 기초대사량이 줄어들어 성견 대비 약 10~20% 칼로리를 감량하는 것이 일반적입니다. 다만 근감소증 예방을 위해 단백질 함량은 유지해야 합니다. 고단백·저지방의 시니어 전용 사료를 선택하고, 정확한 관리는 수의사와 상담하시기 바랍니다.',
+                a: '노령 반려동물은 기초대사량이 줄어들어 성견 대비 약 10~20% 칼로리를 감량하는 것이 일반적입니다(본 도구는 중성화·활동량에 따른 성견 계수에서 15%를 줄여 계산합니다). 다만 근감소증 예방을 위해 단백질 함량은 유지해야 합니다. 고단백·저지방의 시니어 전용 사료를 선택하고, 정확한 관리는 수의사와 상담하시기 바랍니다.',
               },
               {
                 q: '우리 강아지 체중이 정상인지 어떻게 알 수 있나요?',
@@ -64,7 +64,7 @@ export default function PetPage() {
 
       <UpdatedMeta
         date="2026년 7월"
-        basis="RER = 70 × 체중(kg)^0.75, DER = RER × 생활계수(중성화×활동 6조합 1.2~1.8·퍼피/키튼 2.0~3.0·시니어 1.1) — 수의영양 표준"
+        basis="RER = 70 × 체중(kg)^0.75, DER = RER × 생활계수(중성화×활동 6조합 1.2~1.8·퍼피/키튼 2.0~3.0·노령 = 성견 계수 × 0.85) — 수의영양 표준"
         sources={[
           { label: 'Merck Veterinary Manual — 소동물 영양요구량', href: 'https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/nutritional-requirements-of-small-animals' },
           { label: 'WSAVA — Global Nutrition Guidelines', href: 'https://wsava.org/global-guidelines/global-nutrition-guidelines/' },
@@ -184,7 +184,7 @@ export default function PetPage() {
                       ['미중성화 + 활동 낮음',                    '× 1.4'],
                       ['미중성화 + 활동 보통',                    '× 1.6'],
                       ['미중성화 + 활동 높음 (실외 고양이 포함)', '× 1.8'],
-                      ['노령견·시니어 고양이',                    '× 1.1'],
+                      ['노령견·슈퍼시니어 고양이 (성견 계수 기준)', '× 0.85 (약 15% 감량)'],
                     ].map(([sit, fac], i) => (
                       <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg3)' }}>
                         <td style={{ padding: '7px 8px', color: 'var(--muted)' }}>{sit}</td>
@@ -207,10 +207,10 @@ export default function PetPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '12px' }}>
             {/* 예시 수치 = 계산기 엔진(calculateAll)에서 직접 도출 — 예시와 계산기 값 영구 일치 */}
             {([
-              { label: '예시 1', name: '말티즈',       size: 'tiny'  as const, weight: 4,  yrs: 5, neutered: true,  activity: 'low'  as const, envLabel: '실내(낮은 활동)', kcal: 350, color: '#FFB347' },
-              { label: '예시 2', name: '골든리트리버', size: 'large' as const, weight: 30, yrs: 3, neutered: false, activity: 'high' as const, envLabel: '활동 높음',       kcal: 350, color: '#C084FC' },
+              { label: '예시 1', name: '말티즈',       breedId: 'maltese', size: 'tiny'  as const, weight: 4,  yrs: 5, neutered: true,  activity: 'low'  as const, envLabel: '실내(낮은 활동)', kcal: 350, color: '#FFB347' },
+              { label: '예시 2', name: '골든리트리버', breedId: 'golden',  size: 'large' as const, weight: 30, yrs: 3, neutered: false, activity: 'high' as const, envLabel: '활동 높음',       kcal: 350, color: '#C084FC' },
             ]).map((ex, i) => {
-              const r = calculateAll({ species: 'dog', yrs: ex.yrs, mos: 0, weight: ex.weight, size: ex.size, isNeutered: ex.neutered, activity: ex.activity, foodKcalPer100g: ex.kcal })
+              const r = calculateAll({ species: 'dog', yrs: ex.yrs, mos: 0, weight: ex.weight, size: ex.size, breedId: ex.breedId, isNeutered: ex.neutered, activity: ex.activity, foodKcalPer100g: ex.kcal })
               const foodG = Math.round(r.der / ex.kcal * 100)
               const desc = `${ex.name} ${ex.weight}kg · ${ex.yrs}세 · ${ex.neutered ? '중성화' : '미중성화'} · ${ex.envLabel}`
               const items = [
@@ -238,11 +238,11 @@ export default function PetPage() {
         <section>
           <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>적정 체중 평가</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
-            본 도구는 입력한 체중을 품종 크기 기준 정상 범위와 비교해 <strong style={{ color: 'var(--text)' }}>저체중·적정·과체중·비만 4단계</strong>로 자동 평가합니다.
+            본 도구는 입력한 체중을 품종별 표준 체중(기타·믹스는 아래 크기 구간)과 비교해 <strong style={{ color: 'var(--text)' }}>저체중·적정·과체중·비만 4단계</strong>로 평가합니다. 성장기(1세 미만, 대형견은 18개월 미만)에는 성견·성묘 기준을 적용하지 않습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 10, marginBottom: 12 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,179,71,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#FFB347', marginBottom: '8px' }}>🐶 강아지 정상 체중</p>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#FFB347', marginBottom: '8px' }}>🐶 강아지 정상 체중 (기타·믹스)</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 초소형: <strong style={{ color: 'var(--text)' }}>1.5~5kg</strong></li>
                 <li>· 소형: <strong style={{ color: 'var(--text)' }}>5~10kg</strong></li>

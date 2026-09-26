@@ -16,7 +16,7 @@ export interface TeaMeta {
   tempMin: number
   tempMax: number
   ratioWaterPerLeaf: number   // 1g 찻잎당 물 ml
-  caffeineMgPerG: number      // 카페인 mg/g
+  caffeineMgPerG: number      // 카페인 mg/g (건조 찻잎·가루 기준 함량)
   rinse: boolean              // 세차 필요
   rinseSec: number            // 세차 시간 (초)
   steeps: number[]            // 1탕·2탕·3탕·4탕 시간 (초)
@@ -72,7 +72,7 @@ export const TEAS: TeaMeta[] = [
     shortName: '말차',
     tempMin: 70, tempMax: 80,
     ratioWaterPerLeaf: 35,   // 2g/70ml
-    caffeineMgPerG: 65,
+    caffeineMgPerG: 32,      // 일본식품표준성분표 2020(8정) 抹茶 카페인 3.2g/100g
     rinse: false, rinseSec: 0,
     steeps: [10],            // 격불 = 즉시
     maxSteeps: 1,
@@ -90,7 +90,7 @@ export const TEAS: TeaMeta[] = [
     shortName: '백차',
     tempMin: 75, tempMax: 85,
     ratioWaterPerLeaf: 50,
-    caffeineMgPerG: 10,
+    caffeineMgPerG: 25,      // 싹 비율에 따라 편차 큼 — 녹차와 비슷하거나 더 높은 분석 결과가 많아 '저카페인' 아님
     rinse: false, rinseSec: 0,
     steeps: [150, 210, 270, 360],
     maxSteeps: 4,
@@ -98,7 +98,7 @@ export const TEAS: TeaMeta[] = [
     origin: '중국 복건성 정화·복정',
     vessel: 'gaiwan',
     desc: '가장 가공이 적은 차. 부드럽고 은은한 단맛.',
-    tip: '저카페인이라 저녁에 좋고, 임산부도 한 잔 정도는 가능.',
+    tip: '카페인이 적다는 통념과 달리 녹차와 비슷하거나 더 높을 수 있어요. 싹이 많은 백호은침일수록 높은 편.',
   },
   {
     id: 'oolong',
@@ -115,7 +115,7 @@ export const TEAS: TeaMeta[] = [
     origin: '중국 복건·광동, 대만 (고산차·동방미인)',
     vessel: 'gaiwan',
     desc: '반산화차. 산화도(20~80%)에 따라 풍미가 매우 다양.',
-    tip: '게이완으로 짧게 여러 번 우림이 정석. 6~8탕까지 가능.',
+    tip: '게이완으로 짧게 여러 번 우림이 정석. 기본 5탕 이후에도 시간을 조금씩 늘리면 7~8탕까지 가능.',
   },
   {
     id: 'black',
@@ -149,7 +149,7 @@ export const TEAS: TeaMeta[] = [
     origin: '중국 운남성',
     vessel: 'gaiwan',
     desc: '발효차. 생차(생보이)는 그린, 숙차(숙보이)는 갈색.',
-    tip: '세차(헹굼) 10초 후 버리고 본 추출 시작. 8~10탕까지 가능.',
+    tip: '세차(헹굼) 10초 후 버리고 본 추출 시작. 기본 6탕 이후에도 시간을 늘리며 8~10탕까지 가능.',
   },
   {
     id: 'herbal',
@@ -187,7 +187,7 @@ export const TEAS: TeaMeta[] = [
   },
 ]
 
-export const getTea = (id: TeaId) => TEAS.find((t) => t.id === id)!
+export const getTea = (id: TeaId): TeaMeta => TEAS.find((t) => t.id === id) ?? TEAS[0]
 
 /* 다구 메타 */
 export interface VesselMeta {
@@ -205,7 +205,7 @@ export const VESSELS: VesselMeta[] = [
   { id: 'teabag',  emoji: '🏷️', label: '티백',                   desc: '편의·휴대용. 시간을 30~50% 단축.',                recommend: '홍차·허브 (간편)' },
 ]
 
-export const getVessel = (id: Vessel) => VESSELS.find((v) => v.id === id)!
+export const getVessel = (id: Vessel): VesselMeta => VESSELS.find((v) => v.id === id) ?? VESSELS[0]
 
 /* 진하기 보정 */
 export interface StrengthMeta {

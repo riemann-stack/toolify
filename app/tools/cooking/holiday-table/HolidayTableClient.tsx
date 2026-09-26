@@ -4,11 +4,13 @@ import Disclaimer from '@/components/Disclaimer'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import s from './holiday-table.module.css'
 import {
-  HOLIDAYS, calcRows, CHARYE_LAYOUT, SAVING_TIPS,
+  HOLIDAYS, ITEMS, calcRows, CHARYE_LAYOUT, SAVING_TIPS,
   type Category, type HolidayId, type FormatId,
 } from './holidayData'
 
 const STORAGE_KEY = 'youtil_holiday_table_v1'
+const FORMAT_IDS: FormatId[] = ['formal', 'simple', 'meal']
+const LIVE_TARGETS = ['mu', 'sagua', 'bae', 'gam', 'sigeumchi', 'hobak', 'daepa', 'maneul']
 
 interface LivePrice {
   id: string
@@ -30,31 +32,44 @@ export default function HolidayTableClient() {
   const [priceError, setPriceError] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  /* localStorage */
+  /* 단가 입력 중인 문자열 — 칸을 비워도 기본가로 즉시 되돌아가지 않게 편집 중에는 따로 보관 */
+  const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({})
+
+  /* localStorage — 저장값은 목록·범위 검증 후에만 반영 (알 수 없는 holidayId로 깨지지 않게) */
+  const [hydrated, setHydrated] = useState(false)
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.holidayId) setHolidayId(j.holidayId)
-      if (j.formatId) setFormatId(j.formatId)
-      if (typeof j.people === 'number') setPeople(j.people)
-      if (j.priceOverrides) setPriceOverrides(j.priceOverrides)
+      const raw = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null
+      const j: unknown = raw ? JSON.parse(raw) : null
+      if (j && typeof j === 'object' && !Array.isArray(j)) {
+        const o = j as Record<string, unknown>
+        if (typeof o.holidayId === 'string' && Object.prototype.hasOwnProperty.call(HOLIDAYS, o.holidayId)) setHolidayId(o.holidayId as HolidayId)
+        if (FORMAT_IDS.includes(o.formatId as FormatId)) setFormatId(o.formatId as FormatId)
+        if (typeof o.people === 'number' && Number.isInteger(o.people) && o.people >= 1 && o.people <= 20) setPeople(o.people)
+        if (o.priceOverrides && typeof o.priceOverrides === 'object' && !Array.isArray(o.priceOverrides)) {
+          const clean: Record<string, number> = {}
+          for (const [k, v] of Object.entries(o.priceOverrides as Record<string, unknown>)) {
+            if (Object.prototype.hasOwnProperty.call(ITEMS, k) && typeof v === 'number' && isFinite(v) && v >= 0) clean[k] = v
+          }
+          setPriceOverrides(clean)
+        }
+      }
     } catch {}
+    setHydrated(true)
   }, [])
   useEffect(() => {
+    if (!hydrated) return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ holidayId, formatId, people, priceOverrides }))
     } catch {}
-  }, [holidayId, formatId, people, priceOverrides])
+  }, [hydrated, holidayId, formatId, people, priceOverrides])
 
   /* 실시간 시세 조회 */
   const fetchLivePrices = useCallback(async () => {
     setPriceLoading(true)
     setPriceError(false)
     try {
-      const target = ['mu', 'sagua', 'bae', 'gam', 'sigeumchi', 'hobak', 'daepa', 'maneul']
-      const res = await fetch(`/api/produce-price?items=${target.join(',')}`, { cache: 'no-store' })
+      const res = await fetch(`/api/produce-price?items=${LIVE_TARGETS.join(',')}`, { cache: 'no-store' })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json() as { ok: boolean; results?: LivePrice[] }
       if (data.ok && data.results) {
@@ -118,14 +133,19 @@ export default function HolidayTableClient() {
 
   /* 가격 직접 수정 */
   const onPriceEdit = (itemId: string, val: string) => {
+    setPriceDrafts(prev => ({ ...prev, [itemId]: val }))
     const n = parseFloat(val)
     if (!isFinite(n) || n < 0) {
+      // 빈칸·잘못된 값은 계산에서만 기본가로 대체하고, 입력칸은 사용자가 친 그대로 둠
       setPriceOverrides(prev => { const c = { ...prev }; delete c[itemId]; return c })
     } else {
-      setPriceOverrides(prev => ({ ...prev, [itemId]: n }))
+      setPriceOverrides(prev => ({ ...prev, [itemId]: Math.min(n, 10000000) }))
     }
   }
-  const resetPrices = () => setPriceOverrides({})
+  const onPriceBlur = (itemId: string) => {
+    setPriceDrafts(prev => { const c = { ...prev }; delete c[itemId]; return c })
+  }
+  const resetPrices = () => { setPriceOverrides({}); setPriceDrafts({}) }
 
   /* 마크다운 복사 */
   const copyMarkdown = async () => {
@@ -157,7 +177,9 @@ export default function HolidayTableClient() {
 
   const cfg = HOLIDAYS[holidayId]
   const fmt = cfg.formats[formatId]
-  const hasLive = priceLoaded && Object.values(livePrices).some(p => p.source === 'kamis')
+  // 현재 형식에 실제로 들어가는 시세 품목만 셈 (예: 간소 차림은 8종 중 3종)
+  const liveTargetsHere = LIVE_TARGETS.filter(id => fmt.items.some(i => i.id === id))
+  const liveCount = priceLoaded ? liveTargetsHere.filter(id => livePrices[id]?.source === 'kamis').length : 0
 
   return (
     <div className={s.wrap}>
@@ -225,6 +247,8 @@ export default function HolidayTableClient() {
           <input
             type="range"
             min={1} max={20} step={1}
+            aria-label={countTitle}
+            aria-valuetext={`${people}${unitWord}`}
             value={people}
             onChange={e => setPeople(parseInt(e.target.value))}
             className={s.slider}
@@ -249,6 +273,8 @@ export default function HolidayTableClient() {
 
       {/* ── 메인 결과 히어로 ── */}
       <div className={s.heroCard}>
+        {/* 라이브 영역은 라벨+숫자만 — 새로고침 버튼·출처 문구(heroFootRow)는 제외 */}
+        <div role="status">
         <div className={s.heroLabel}>
           {cfg.emoji} {cfg.name} {fmt.name} · {people}{unitWord}
         </div>
@@ -267,13 +293,16 @@ export default function HolidayTableClient() {
             <div className={s.heroSub}>1{unitWord}당 비용</div>
           </div>
         </div>
+        </div>
         <div className={s.heroFootRow}>
           <span className={s.priceSource}>
             {priceError
               ? '※ 시세 조회 실패 — 평균가 적용 (참고용)'
-              : hasLive
-                ? '✓ KAMIS 실시간 시세 적용 (농산물 8종)'
-                : '※ 최근 시장 평균가 (참고용)'}
+              : liveTargetsHere.length > 0 && liveCount === liveTargetsHere.length
+                ? `✓ KAMIS 실시간 시세 적용 (농산물 ${liveTargetsHere.length}종)`
+                : liveCount > 0
+                  ? `✓ KAMIS 실시간 시세 ${liveCount}/${liveTargetsHere.length}종 적용 · 나머지는 평균가`
+                  : '※ 최근 시장 평균가 (참고용)'}
           </span>
           <button
             type="button"
@@ -323,8 +352,9 @@ export default function HolidayTableClient() {
                         <input
                           type="number" inputMode="decimal"
                           className={s.itemPriceInput}
-                          value={currentPrice}
+                          value={priceDrafts[r.item.id] ?? currentPrice}
                           onChange={e => onPriceEdit(r.item.id, e.target.value)}
+                          onBlur={() => onPriceBlur(r.item.id)}
                           min={0}
                           step={1}
                           aria-label={`${r.item.name} 단가`}
@@ -373,7 +403,7 @@ export default function HolidayTableClient() {
             ))}
           </div>
           <p className={s.layoutNote}>
-            💡 <strong>어동육서</strong>: 동쪽에 어물, 서쪽에 육류 · <strong>홍동백서</strong>: 동쪽에 붉은 과일, 서쪽에 흰 과일 · <strong>조율이시</strong>: 대추·밤·배·감(곶감) 순서로 배치
+            💡 방향은 제주가 신위를 바라보는 기준으로, <strong>제주의 오른쪽이 동쪽</strong>입니다. <strong>어동육서</strong>는 생선을 오른쪽(동), 고기를 왼쪽(서)에 놓는다는 뜻이고, <strong>홍동백서</strong>는 붉은 과일을 오른쪽, 흰 과일을 왼쪽에 둡니다. <strong>조율이시</strong>는 왼쪽부터 대추·밤·배·감(곶감) 순서인데, 홍동백서와 겹치는 부분은 집안마다 따르는 방식이 다릅니다.
           </p>
         </div>
       )}
@@ -391,63 +421,71 @@ export default function HolidayTableClient() {
   )
 }
 
-/* ─── 차례상 5열 배치 SVG ─── */
+/* ─── 차례상 5열 배치 SVG ───
+   위(북)=신위, 아래(남)=제주. 제주가 바라볼 때 오른쪽=동·왼쪽=서.
+   글자색은 배경(var(--bg3)) 위에서 읽히는 토큰만 사용 */
 function CharyeLayoutSvg() {
+  const font = 'Noto Sans KR, sans-serif'
+  const T = (x: number, y: number, label: string, opts: { fill?: string; size?: number; bold?: boolean; anchor?: 'start' | 'middle' | 'end' } = {}) => (
+    <text x={x} y={y} fill={opts.fill ?? 'var(--text)'} fontSize={opts.size ?? 11} fontFamily={font}
+      fontWeight={opts.bold ? 700 : 400} textAnchor={opts.anchor ?? 'middle'}>{label}</text>
+  )
   return (
-    <svg viewBox="0 0 500 280" className={s.charyeSvg} preserveAspectRatio="xMidYMid meet" role="img" aria-label="차례상 5열 배치도">
+    <svg viewBox="0 0 500 290" className={s.charyeSvg} preserveAspectRatio="xMidYMid meet" role="img"
+      aria-label="차례상 5열 배치도 — 위쪽이 신위(북), 제주 기준 오른쪽이 동쪽. 1열 메·갱, 2열 적·전(어동육서), 3열 탕, 4열 포·나물·식혜, 5열 과일·한과">
       {/* 상 외곽 (격자) */}
       <rect x="20" y="20" width="460" height="240" rx="8"
-        fill="rgba(217,119,6,0.04)" stroke="#D97706" strokeWidth="2" />
+        fill="var(--cat-cooking-soft)" stroke="var(--cat-cooking)" strokeWidth="2" />
 
-      {/* 5개 가로 행 (북=위, 남=아래) */}
-      {[0, 1, 2, 3, 4].map(i => (
+      {/* 5개 가로 행 구분선 (북=위, 남=아래) */}
+      {[1, 2, 3, 4].map(i => (
         <line key={i}
           x1="20" x2="480"
-          y1={20 + (i + 1) * 48}
-          y2={20 + (i + 1) * 48}
-          stroke="#D97706" strokeWidth="1" opacity="0.4" strokeDasharray="3 3"
+          y1={20 + i * 48}
+          y2={20 + i * 48}
+          stroke="var(--cat-cooking)" strokeWidth="1" opacity="0.4" strokeDasharray="3 3"
         />
       ))}
 
-      {/* 신위 (북쪽) 표시 */}
-      <text x="250" y="14" textAnchor="middle" fill="#D97706" fontSize="11"
-        fontFamily="Noto Sans KR, sans-serif" fontWeight="700">↑ 신위 (북)</text>
+      {/* 방위 */}
+      {T(250, 14, '↑ 신위 (북)', { fill: 'var(--cat-cooking-ink)', bold: true })}
+      {T(24, 14, '서', { fill: 'var(--muted-strong)', bold: true, anchor: 'start' })}
+      {T(476, 14, '동', { fill: 'var(--muted-strong)', bold: true, anchor: 'end' })}
 
-      {/* 1열: 메·갱 */}
-      <text x="100" y="48" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">메(밥)</text>
-      <text x="200" y="48" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">갱(국)</text>
-      <text x="300" y="48" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">잔</text>
-      <text x="400" y="48" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">시접</text>
+      {/* 1열: 면·메 (서) · 잔·시접 · 갱·떡 (동) — 반서갱동 */}
+      {T(70, 48, '면(국수)')}
+      {T(150, 48, '메(밥)', { bold: true })}
+      {T(250, 48, '잔 · 시접')}
+      {T(350, 48, '갱(국)', { bold: true })}
+      {T(430, 48, '떡')}
 
-      {/* 2열: 면·떡·송편 */}
-      <text x="120" y="96" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif">면·국수</text>
-      <text x="250" y="96" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">송편·떡</text>
-      <text x="380" y="96" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif">편·꿀</text>
+      {/* 2열: 적·전 — 어동육서 (고기 왼쪽=서, 생선 오른쪽=동) */}
+      {T(48, 96, '육 (서)', { fill: 'var(--warning)', size: 10, bold: true })}
+      {T(135, 96, '산적·갈비찜', { size: 10 })}
+      {T(250, 96, '전 (동그랑땡·호박전)', { size: 10 })}
+      {T(365, 96, '조기·동태전', { size: 10 })}
+      {T(452, 96, '어 (동)', { fill: 'var(--cat-health)', size: 10, bold: true })}
 
-      {/* 3열: 적·전 (어동육서) */}
-      <text x="60" y="144" fill="#0891B2" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">어 (동)</text>
-      <text x="120" y="144" fill="#fff" fontSize="10" fontFamily="Noto Sans KR, sans-serif">조기·동태전</text>
-      <text x="250" y="144" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">동그랑땡·전</text>
-      <text x="370" y="144" fill="#fff" fontSize="10" fontFamily="Noto Sans KR, sans-serif">갈비찜·산적</text>
-      <text x="430" y="144" fill="#EA580C" fontSize="10" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">육 (서)</text>
+      {/* 3열: 탕 — 육탕(서)·소탕·어탕(동) */}
+      {T(140, 144, '육탕')}
+      {T(250, 144, '소탕')}
+      {T(360, 144, '어탕')}
 
-      {/* 4열: 탕 (육탕·소탕·어탕) */}
-      <text x="140" y="192" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif">육탕</text>
-      <text x="250" y="192" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif" textAnchor="middle">소탕</text>
-      <text x="360" y="192" fill="#fff" fontSize="11" fontFamily="Noto Sans KR, sans-serif">어탕</text>
+      {/* 4열: 포·나물·식혜 — 좌포우혜 */}
+      {T(80, 192, '포 (북어)')}
+      {T(250, 192, '나물 (시금치·도라지·고사리)', { size: 10 })}
+      {T(420, 192, '식혜')}
 
-      {/* 5열: 포·나물·과일 (조율이시·홍동백서) */}
-      <text x="50" y="240" fill="#059669" fontSize="9" fontFamily="Noto Sans KR, sans-serif">대추</text>
-      <text x="100" y="240" fill="#059669" fontSize="9" fontFamily="Noto Sans KR, sans-serif">밤</text>
-      <text x="150" y="240" fill="#059669" fontSize="9" fontFamily="Noto Sans KR, sans-serif">배</text>
-      <text x="200" y="240" fill="#059669" fontSize="9" fontFamily="Noto Sans KR, sans-serif">감</text>
-      <text x="245" y="240" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">시금치</text>
-      <text x="300" y="240" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">도라지</text>
-      <text x="355" y="240" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">고사리</text>
-      <text x="410" y="240" fill="#fff" fontSize="9" fontFamily="Noto Sans KR, sans-serif">한과·식혜</text>
+      {/* 5열: 과일·한과 — 조율이시 (왼쪽부터 대추·밤·배·감) */}
+      {T(55, 240, '대추', { fill: 'var(--success)', size: 10 })}
+      {T(105, 240, '밤', { fill: 'var(--success)', size: 10 })}
+      {T(155, 240, '배', { fill: 'var(--success)', size: 10 })}
+      {T(205, 240, '감', { fill: 'var(--success)', size: 10 })}
+      {T(280, 240, '사과', { fill: 'var(--success)', size: 10 })}
+      {T(390, 240, '한과·약과', { size: 10 })}
 
-      {/* 5열 라벨 */}
-      <text x="30" y="265" fill="#D97706" fontSize="10" fontFamily="Noto Sans KR, sans-serif">조율이시 + 홍동백서</text>
+      {/* 제주 위치 */}
+      {T(250, 280, '↓ 제주 (남) — 제주가 바라볼 때 오른쪽이 동쪽', { fill: 'var(--muted-strong)', size: 10 })}
     </svg>
   )
 }

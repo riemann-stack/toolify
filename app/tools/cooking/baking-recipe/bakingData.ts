@@ -289,6 +289,15 @@ export interface MoldPreset {
   volume?: number    // 1틀 g (용량형)
 }
 
+// 틀 부피(cm³) ÷ 비용적(굽기 후 부피 cm³ / 반죽 g) = 적정 반죽 g — 10g 단위 반올림.
+// 비용적: 파운드 2.40 (제과기능사 실기 표준 비용적)
+//         카스테라 3.5 (거품 반죽 비중 ≈0.5를 틀의 약 60%까지 채우는 팬닝 기준, 스펀지 표준 5.08보다 무거운 꿀 반죽)
+const POUND_SPECIFIC_VOLUME = 2.4
+const CASTELLA_SPECIFIC_VOLUME = 3.5
+function batterForPan(l: number, w: number, h: number, specificVolume: number): number {
+  return Math.round((l * w * h) / specificVolume / 10) * 10
+}
+
 export const MOLD_PRESETS: Record<string, MoldPreset[]> = {
   madeleine: [
     { name: '미니 마들렌틀', perPiece: 18 },
@@ -296,10 +305,10 @@ export const MOLD_PRESETS: Record<string, MoldPreset[]> = {
     { name: '대형 마들렌틀', perPiece: 40 },
   ],
   poundcake: [
-    { name: '미니 파운드 (8×4×4)', volume: 200 },
-    { name: '소형 파운드 (15×6×6)', volume: 450 },
-    { name: '표준 파운드 (20×8×7)', volume: 800 },
-    { name: '대형 파운드 (25×10×8)', volume: 1500 },
+    { name: '미니 파운드 (8×4×4)', volume: batterForPan(8, 4, 4, POUND_SPECIFIC_VOLUME) },
+    { name: '소형 파운드 (15×6×6)', volume: batterForPan(15, 6, 6, POUND_SPECIFIC_VOLUME) },
+    { name: '표준 파운드 (20×8×7)', volume: batterForPan(20, 8, 7, POUND_SPECIFIC_VOLUME) },
+    { name: '대형 파운드 (25×10×8)', volume: batterForPan(25, 10, 8, POUND_SPECIFIC_VOLUME) },
   ],
   muffin: [
     { name: '미니 머핀', perPiece: 30 },
@@ -312,9 +321,10 @@ export const MOLD_PRESETS: Record<string, MoldPreset[]> = {
     { name: '큰 쿠키 (지름 8cm)', perPiece: 50 },
   ],
   macaron: [
-    { name: '미니 마카롱 (지름 3cm)', perPiece: 8 },
-    { name: '표준 마카롱 (지름 4cm)', perPiece: 12 },
-    { name: '큰 마카롱 (지름 5cm)', perPiece: 18 },
+    // 흰자 100g 프렌치 머랭 반죽(약 460g)으로 4cm 꼬끄 60~70장 → 장당 약 7g. 3·5cm는 면적 비례.
+    { name: '미니 마카롱 (지름 3cm)', perPiece: 4 },
+    { name: '표준 마카롱 (지름 4cm)', perPiece: 7 },
+    { name: '큰 마카롱 (지름 5cm)', perPiece: 10 },
   ],
   scone: [
     { name: '미니 스콘', perPiece: 35 },
@@ -326,8 +336,8 @@ export const MOLD_PRESETS: Record<string, MoldPreset[]> = {
     { name: '표준 휘낭시에틀', perPiece: 30 },
   ],
   castella: [
-    { name: '미니 카스테라 (15×8)', volume: 600 },
-    { name: '표준 카스테라 (24×8×7)', volume: 1200 },
+    { name: '미니 카스테라 (15×8×7)', volume: batterForPan(15, 8, 7, CASTELLA_SPECIFIC_VOLUME) },
+    { name: '표준 카스테라 (24×8×7)', volume: batterForPan(24, 8, 7, CASTELLA_SPECIFIC_VOLUME) },
   ],
   brownie: [
     { name: '소형 브라우니팬 (15×15)', volume: 600 },
@@ -341,9 +351,3 @@ export const MOLD_PRESETS: Record<string, MoldPreset[]> = {
   ],
 }
 
-// 케이크 원형 (참고용)
-export const CAKE_ROUND_MOLDS: MoldPreset[] = [
-  { name: '원형 1호 (15cm)', volume: 700 },
-  { name: '원형 2호 (18cm)', volume: 1100 },
-  { name: '원형 3호 (21cm)', volume: 1500 },
-]

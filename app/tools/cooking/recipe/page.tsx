@@ -2,7 +2,7 @@ import RecipeClient from './RecipeClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -20,7 +20,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '비율 계산 시 주의할 점은?',
-                a: '<strong>양념류(소금·간장·고추장 등)는 단순 배율로 늘리면 너무 짤 수 있습니다.</strong> 특히 4인분 이상으로 늘릴 때는 계산된 양의 80~90%부터 시작해 간을 보면서 조절하세요. 마늘·고추 같은 향신료도 배율 그대로 늘리면 향이 과해질 수 있습니다. 본 도구의 "양념 자동 보정" 옵션을 활성화하면 양념·향신료에만 85% 보정이 자동 적용됩니다.',
+                a: '<strong>양념류(소금·간장·고추장 등)는 단순 배율로 늘리면 너무 짤 수 있습니다.</strong> 특히 4인분 이상으로 늘릴 때는 계산된 양의 80~90%부터 시작해 간을 보면서 조절하세요. 마늘·고추 같은 향신료도 배율 그대로 늘리면 향이 과해질 수 있습니다. 본 도구의 "양념 자동 보정" 옵션을 켜면 양념·향신료는 늘어나는 양의 85%만 더해지도록 자동 보정됩니다(표준 기준).',
               },
               {
                 q: '큰술과 그램(g)을 어떻게 변환하나요?',
@@ -67,7 +67,7 @@ export default function RecipePage() {
             기본 공식: <code style={{ color: 'var(--text)', fontFamily: 'JetBrains Mono, monospace' }}>변환량 = 기준량 × (목표 인분 ÷ 기준 인분)</code>
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            예: 2인분 100g → 4인분 200g, 2인분 1큰술 → 6인분 3큰술. 본 도구는 자동으로 모든 재료에 배율을 적용하고, <strong style={{ color: 'var(--text)' }}>양념(소금·간장·고추장·고춧가루·마늘 등)에는 자동 보정 80~90%</strong>를 적용해 짠맛 과다를 방지합니다.
+            예: 2인분 100g → 4인분 200g, 2인분 1큰술 → 6인분 3큰술. 본 도구는 자동으로 모든 재료에 배율을 적용하고, <strong style={{ color: 'var(--text)' }}>양념(소금·간장·고추장·고춧가루·마늘 등)은 늘어나는 양을 조금 덜 더하도록 자동 보정</strong>해 짠맛 과다를 방지합니다. 예: 2인분 간장 2큰술 → 4인분은 단순 배율 4큰술 대신 약 3.7큰술(표준).
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 10, padding: '11px 14px' }}>
             ⚠️ 양념을 단순 배율로 늘리면 너무 짤 수 있습니다. 4인분 이상 늘릴 때는 계산값의 80%부터 시작해 간을 보면서 조절하는 것이 안전합니다.
@@ -152,7 +152,7 @@ export default function RecipePage() {
             ))}
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
-            <strong style={{ color: 'var(--text)' }}>적용 조건</strong>: 인분이 늘어날 때만 (줄어들 때는 X). 기본값은 <strong style={{ color: 'var(--text)' }}>표준(양념 15% 줄임)</strong>이며 입맛에 따라 <strong style={{ color: 'var(--text)' }}>간 약하게 / 표준 / 간 진하게</strong> 중 선택할 수 있습니다.
+            <strong style={{ color: 'var(--text)' }}>적용 조건</strong>: 인분이 늘어날 때만 (줄어들 때는 X). 기본값은 <strong style={{ color: 'var(--text)' }}>표준(늘어나는 양념의 15% 줄임)</strong>이며 입맛에 따라 <strong style={{ color: 'var(--text)' }}>간 약하게 / 표준 / 간 진하게</strong> 중 선택할 수 있습니다.
           </p>
         </section>
 
@@ -226,23 +226,7 @@ export default function RecipePage() {
 
         {/* 8. FAQ — 펼침 (accordion) */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 관련 도구 */}

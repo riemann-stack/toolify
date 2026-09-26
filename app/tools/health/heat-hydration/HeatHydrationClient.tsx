@@ -4,7 +4,9 @@ import { useState, useMemo } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import {
   ACTIVITIES, HEAT_STAGES, RESTRICT_CONDITIONS,
-  calcHydration,
+  WEIGHT_MIN_KG, WEIGHT_MAX_KG, HOURS_MAX, HOURLY_ABSORB_CAP_L, DAILY_MAX_L,
+  MEASURE_HOURS_MIN, MEASURE_HOURS_MAX,
+  calcHydration, calcSweatRate,
 } from './hydrationData'
 import s from './heat-hydration.module.css'
 
@@ -19,26 +21,30 @@ export default function HeatHydrationClient() {
   const [before, setBefore] = useState('')
   const [after, setAfter] = useState('')
   const [drank, setDrank] = useState('')
+  const [measureHours, setMeasureHours] = useState('1')
 
   const weightNum = parseFloat(weight) || 0
-  const valid = weightNum > 0
+  const weightOutOfRange = weightNum > 0 && (weightNum < WEIGHT_MIN_KG || weightNum > WEIGHT_MAX_KG)
+  const valid = weightNum > 0 && !weightOutOfRange
+  const hoursNum = parseFloat(hours) || 0
+  const hoursOver = hoursNum > HOURS_MAX
 
   const activity = ACTIVITIES.find((a) => a.id === activityId) ?? ACTIVITIES[0]
   const stage = HEAT_STAGES.find((h) => h.id === stageId) ?? HEAT_STAGES[0]
 
   const result = useMemo(() => {
     if (!valid) return null
-    return calcHydration(weightNum, activity, parseFloat(hours) || 0, stage)
-  }, [valid, weightNum, activity, hours, stage])
+    return calcHydration(weightNum, activity, hoursNum, stage)
+  }, [valid, weightNum, activity, hoursNum, stage])
 
-  // 실측 발한율 = (전 - 후 + 마신량) / 시간
-  const sweatRate = useMemo(() => {
-    const b = parseFloat(before), af = parseFloat(after), d = parseFloat(drank) || 0, h = parseFloat(hours) || 0
-    if (!isFinite(b) || !isFinite(af) || h <= 0) return null
-    const lossKg = b - af + d          // kg ≈ L (땀 손실 + 마신 물)
-    if (lossKg <= 0) return null
-    return { rate: lossKg / h, total: lossKg }
-  }, [before, after, drank, hours])
+  // 실측 발한율 = (전 - 후 + 마신량) / 측정 운동 시간 — 하루 활동 시간과 별개로 입력
+  const measureHoursNum = parseFloat(measureHours)
+  const measureHoursBad = measureHours.trim() !== '' &&
+    (!isFinite(measureHoursNum) || measureHoursNum < MEASURE_HOURS_MIN || measureHoursNum > MEASURE_HOURS_MAX)
+  const sweatRate = useMemo(
+    () => calcSweatRate(parseFloat(before), parseFloat(after), parseFloat(drank) || 0, measureHoursNum),
+    [before, after, drank, measureHoursNum],
+  )
 
   const fmt = (n: number, d = 2) => n.toLocaleString('ko-KR', { minimumFractionDigits: d, maximumFractionDigits: d })
   const ml = (l: number) => Math.round(l * 1000).toLocaleString('ko-KR')
@@ -76,10 +82,14 @@ export default function HeatHydrationClient() {
             <div className={s.hoursInputWrap}>
               <input id="hy-hours" type="number" inputMode="decimal" min={0} max={16} step={0.5}
                 className={s.hoursInput} value={hours}
-                onChange={(e) => setHours(e.target.value)} aria-label="야외·활동 시간(시간)" />
+                onChange={(e) => setHours(e.target.value)} aria-label="야외·활동 시간(시간)"
+                aria-invalid={hoursOver || undefined} aria-describedby={hoursOver ? 'hy-hours-err' : undefined} />
               <span className={s.hoursUnit}>시간</span>
             </div>
           </div>
+        )}
+        {activity.needHours && hoursOver && (
+          <p id="hy-hours-err" className={s.stageCriteria}>하루 활동 시간은 최대 {HOURS_MAX}시간까지만 반영합니다.</p>
         )}
       </div>
 
@@ -121,22 +131,40 @@ export default function HeatHydrationClient() {
         </div>
       ) : result ? (
         <div className={s.resultCard} role="status">
-          <p className={s.resultLabel}>오늘 권장 수분 (음료 기준)</p>
+          <p className={s.resultLabel}>오늘 마실 수분 목표</p>
           <p className={s.hero}>
-            {fmt(result.totalLo, 1)}~{fmt(result.totalHi, 1)}<span className={s.heroUnit}>L</span>
+            {fmt(result.totalLo, 1) === fmt(result.totalHi, 1) ? fmt(result.totalHi, 1) : `${fmt(result.totalLo, 1)}~${fmt(result.totalHi, 1)}`}<span className={s.heroUnit}>L</span>
           </p>
           <p className={s.resultSub}>
             기본 {ml(result.baseLo)}~{ml(result.baseHi)}mL
             {result.addHi > 0 && <> + 활동 보충 {ml(result.addLo)}~{ml(result.addHi)}mL</>}
+            {result.dailyCapped && <> (하루 상한 {fmt(DAILY_MAX_L, 1)}L 적용)</>}
           </p>
 
           {result.addHi > 0 && (
             <div className={s.infoBox}>
               <p className={s.infoTitle}>💧 활동 중 음용 패턴</p>
               <p className={s.infoBody}>
-                운동·작업 중에는 <strong>시간당 {ml(result.hourlyLo)}~{ml(result.hourlyHi)}mL</strong>를
+                운동·작업 중에는 <strong>시간당 {ml(result.hourlyLo) === ml(result.hourlyHi) ? ml(result.hourlyHi) : `${ml(result.hourlyLo)}~${ml(result.hourlyHi)}`}mL</strong>를
                 <strong> 15~20분마다 한 컵(약 150~250mL)씩</strong> 나눠 마시세요.
-                {result.hourlyCapped && ' 한 번에 많이 마셔도 흡수되지 않고 배탈·저나트륨혈증 위험만 커집니다.'}
+                {result.hourlyCapped && ` 이 활동은 땀이 시간당 ${fmt(HOURLY_ABSORB_CAP_L, 1)}L보다 많이 날 수 있지만, 그 이상 마셔도 흡수되지 않고 배탈·저나트륨혈증 위험만 커집니다. 모자라는 양은 활동이 끝난 뒤 줄어든 체중의 약 1.5배(1kg 줄었다면 물 약 1.5L)를 몇 시간에 걸쳐 나눠 채우세요.`}
+              </p>
+            </div>
+          )}
+
+          {result.totalHi >= 10 && (
+            <div className={s.infoBox}>
+              <p className={s.infoTitle}>⏱️ 장시간 작업이라면</p>
+              <p className={s.infoBody}>
+                {result.dailyCapped ? (
+                  <>
+                    하루에 <strong>약 {fmt(DAILY_MAX_L, 1)}L 넘게 마시는 것은 권하지 않기 때문에</strong>(미 육군 열손상 예방 지침 TB MED 507) 목표를 이 상한에서 멈췄습니다.
+                    시간당 양을 하루 종일 이어 가면 상한을 넘게 되니, 모자라는 수분은 더 마셔서 채우기보다 <strong>작업 시간을 줄이고 그늘 휴식을 늘려</strong> 땀 손실 자체를 줄이세요.
+                    작업이 끝난 뒤 남은 부족분은 식사와 음료로 천천히 채우세요.
+                  </>
+                ) : (
+                  <>목표량이 10L를 넘는 것은 긴 시간 땀을 많이 흘리는 상황을 가정했기 때문입니다. 이런 날은 마시는 양을 더 늘리기보다 <strong>작업 시간을 줄이고 그늘 휴식을 자주</strong> 갖는 것이 먼저이며, 물과 스포츠음료를 나눠 마시세요.</>
+                )}
               </p>
             </div>
           )}
@@ -153,12 +181,16 @@ export default function HeatHydrationClient() {
           )}
 
           <div className={s.cautionBox}>
-            ⚠️ <strong>물만 과다 섭취는 위험</strong>합니다. 짧은 시간에 너무 많이(시간당 1L 이상) 마시면 혈중 나트륨이 묽어지는 <strong>저나트륨혈증</strong>(두통·구역·경련)이 생길 수 있어요. 갈증에 맞춰 <strong>조금씩 자주</strong>가 원칙입니다.
+            ⚠️ <strong>물만 과다 섭취는 위험</strong>합니다. 흡수 한계(시간당 약 {fmt(HOURLY_ABSORB_CAP_L, 1)}L)를 넘겨 마시면 혈중 나트륨이 묽어지는 <strong>저나트륨혈증</strong>(두통·구역·경련)이 생길 수 있어요. 갈증에 맞춰 <strong>조금씩 자주</strong>가 원칙입니다.
           </div>
         </div>
       ) : (
         <div className={s.card} role="status">
-          <p className={s.emptyNote}>체중을 입력하면 오늘 활동·폭염 단계에 맞는 권장 수분량을 계산합니다.</p>
+          <p className={s.emptyNote}>
+            {weightOutOfRange
+              ? `체중은 ${WEIGHT_MIN_KG}~${WEIGHT_MAX_KG}kg 사이로 입력하세요.`
+              : '체중을 입력하면 오늘 활동·폭염 단계에 맞는 권장 수분량을 계산합니다.'}
+          </p>
         </div>
       )}
 
@@ -205,11 +237,24 @@ export default function HeatHydrationClient() {
                 <span className={s.measureUnit}>L</span>
               </div>
             </div>
+            <div className={s.measureField}>
+              <label className={s.measureLabel} htmlFor="hy-mhours">운동 시간</label>
+              <div className={s.measureInputWrap}>
+                <input id="hy-mhours" type="number" inputMode="decimal" min={MEASURE_HOURS_MIN} max={MEASURE_HOURS_MAX} step={0.25}
+                  className={s.measureInput}
+                  value={measureHours} onChange={(e) => setMeasureHours(e.target.value)} aria-label="측정한 운동 시간(시간)" placeholder="1"
+                  aria-invalid={measureHoursBad || undefined} aria-describedby={measureHoursBad ? 'hy-mhours-err' : undefined} />
+                <span className={s.measureUnit}>시간</span>
+              </div>
+            </div>
           </div>
+          {measureHoursBad && (
+            <p id="hy-mhours-err" className={s.measureWarn}>운동 시간은 {MEASURE_HOURS_MIN}~{MEASURE_HOURS_MAX}시간 사이로 입력하세요.</p>
+          )}
           {sweatRate && (
             <div className={s.measureResult} role="status">
               시간당 발한율 <strong>{fmt(sweatRate.rate, 2)} L/h</strong>
-              <span className={s.measureResultSub}>총 {fmt(sweatRate.total, 2)}L 손실 · {parseFloat(hours) || 0}시간 기준</span>
+              <span className={s.measureResultSub}>총 {fmt(sweatRate.total, 2)}L 손실 · 운동 {measureHoursNum}시간 기준</span>
               {sweatRate.rate > 2 && <span className={s.measureWarn}>발한율이 매우 높습니다 — 무리한 활동은 피하고 자주 보충하세요.</span>}
             </div>
           )}
@@ -228,7 +273,7 @@ export default function HeatHydrationClient() {
           { label: '기상청 폭염 특보 기준', href: 'https://www.weather.go.kr' },
         ]}
       >
-        수분 권장량은 체중 비례 관행 기준(음료 30~33mL/kg)에 활동 발한(ACSM 범위)을 더한 추정치입니다. 총수분은 음식 속 수분이 별도로 포함되며, 개인 체질·약물·질환에 따라 달라집니다. 어지럼·근육경련·의식저하 등 온열질환 의심 시 즉시 시원한 곳으로 옮기고 119에 신고하세요.
+        수분 목표는 체중 비례 어림식(30~33mL/kg)에 활동 발한(ACSM 범위, 시간당 흡수 한계 {fmt(HOURLY_ABSORB_CAP_L, 1)}L까지)을 더한 추정치입니다. 폭염기 여유를 두어 한국인 영양소 섭취기준의 액체 충분섭취량보다 넉넉하게 잡았으며, 개인 체질·약물·질환에 따라 달라집니다. 어지럼·근육경련·의식저하 등 온열질환 의심 시 즉시 시원한 곳으로 옮기고 119에 신고하세요.
       </Disclaimer>
     </div>
   )

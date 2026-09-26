@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './brew.module.css'
@@ -16,6 +16,21 @@ type Tab = 'ratio' | 'pour' | 'intensity' | 'cost'
 
 const STORAGE_KEY = 'youtil_brew_v1'
 
+const INPUT_MODES: InputMode[] = ['coffee', 'water', 'cups']
+
+/* 양수만 받고 상한으로 자름 — 빈칸·음수·문자는 0 */
+const posNum = (v: string, max: number) => {
+  const n = parseFloat(v)
+  return isFinite(n) && n > 0 ? Math.min(n, max) : 0
+}
+
+/* 비율 슬라이더 범위 (에스프레소는 인풋:아웃풋이라 별도) */
+const sliderRange = (method: BrewMethod): [number, number] => method === 'espresso' ? [1, 4] : [5, 25]
+
+/* 숫자 입력 문자열 복원 — 형식이 맞는 값만 */
+const numStr = (v: unknown): string | undefined =>
+  typeof v === 'string' && v.length <= 10 && /^\d*\.?\d*$/.test(v) ? v : undefined
+
 export default function BrewClient() {
   const [tab, setTab] = useState<Tab>('ratio')
 
@@ -23,8 +38,9 @@ export default function BrewClient() {
   const [method, setMethod] = useState<BrewMethod>('drip')
   const [ratio, setRatio] = useState<number>(16)
 
-  /* 탭 2: 푸어 스케줄 전용 비율 (핸드드립 전용 — 공통 ratio와 분리해 에스프레소 비율 누출 방지) */
-  const [pourRatio, setPourRatio] = useState<number>(16)
+  /* 탭 2: 푸어 스케줄 전용 비율 (핸드드립 전용 — 공통 ratio와 분리해 에스프레소 비율 누출 방지)
+     입력은 문자열로 두고 계산할 때만 파싱 — 칸을 비워도 16으로 튀지 않게 */
+  const [pourRatioStr, setPourRatioStr] = useState('16')
 
   /* 탭 1: 비율 계산 */
   const [inputMode, setInputMode] = useState<InputMode>('coffee')
@@ -37,67 +53,84 @@ export default function BrewClient() {
   const [roast, setRoast] = useState<RoastLevel>('medium')
 
   /* 탭 4: 비용 */
-  const [pricePer100g, setPricePer100g] = useState('25000')
+  const [pricePer100g, setPricePer100g] = useState('8000')
   const [cafePrice, setCafePrice] = useState(4500)
   const [dailyCups, setDailyCups] = useState('1')
 
-  /* localStorage */
+  /* localStorage — 저장값은 목록·형식 검증 후에만 반영 */
+  const [hydrated, setHydrated] = useState(false)
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.method) setMethod(j.method)
-      if (typeof j.ratio === 'number') setRatio(j.ratio)
-      if (j.inputMode) setInputMode(j.inputMode)
-      if (j.coffeeG) setCoffeeG(j.coffeeG)
-      if (j.waterMl) setWaterMl(j.waterMl)
-      if (j.cups) setCups(j.cups)
-      if (j.mlPerCup) setMlPerCup(j.mlPerCup)
-      if (j.roast) setRoast(j.roast)
+      const raw = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null
+      const j: unknown = raw ? JSON.parse(raw) : null
+      if (j && typeof j === 'object' && !Array.isArray(j)) {
+        const o = j as Record<string, unknown>
+        const savedMethod = BREW_METHODS.find((bm) => bm.id === o.method)?.id
+        if (savedMethod) setMethod(savedMethod)
+        const mForRatio = savedMethod ?? 'drip'
+        const [rMin, rMax] = sliderRange(mForRatio)
+        if (typeof o.ratio === 'number' && isFinite(o.ratio)) {
+          setRatio(o.ratio >= rMin && o.ratio <= rMax ? o.ratio : getMethod(mForRatio).ratioDefault)
+        }
+        if (INPUT_MODES.includes(o.inputMode as InputMode)) setInputMode(o.inputMode as InputMode)
+        const cg = numStr(o.coffeeG); if (cg) setCoffeeG(cg)
+        const wm = numStr(o.waterMl); if (wm) setWaterMl(wm)
+        const cu = numStr(o.cups); if (cu) setCups(cu)
+        const mp = numStr(o.mlPerCup); if (mp) setMlPerCup(mp)
+        const savedRoast = ROASTS.find((r) => r.id === o.roast)?.id
+        if (savedRoast) setRoast(savedRoast)
+      }
     } catch {}
+    setHydrated(true)
   }, [])
   useEffect(() => {
+    if (!hydrated) return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         method, ratio, inputMode, coffeeG, waterMl, cups, mlPerCup, roast,
       }))
     } catch {}
-  }, [method, ratio, inputMode, coffeeG, waterMl, cups, mlPerCup, roast])
+  }, [hydrated, method, ratio, inputMode, coffeeG, waterMl, cups, mlPerCup, roast])
 
-  /* 추출법 변경 시에만 비율을 보정 — 같은 추출법 안에서는 사용자가 1:12 등 자유 조정 가능.
-     새 추출법 권장 범위를 벗어난 비율은 기본값으로 (콜드브루 1:9 → 에스프레소 전환 시 1:9 잔류 방지) */
-  useEffect(() => {
-    const meta = getMethod(method)
+  /* 추출법을 직접 바꿀 때만 비율 보정 — 같은 추출법 안에서는 1:12 등 자유 조정 가능하고,
+     새로고침으로 복원한 비율도 그대로 유지. 새 추출법 권장 범위를 벗어난 비율만 기본값으로
+     (콜드브루 1:9 → 에스프레소 전환 시 1:9 잔류 방지) */
+  const selectMethod = (id: BrewMethod) => {
+    const meta = getMethod(id)
+    setMethod(id)
     setRatio((prev) => (prev < meta.ratioMin || prev > meta.ratioMax) ? meta.ratioDefault : prev)
-  }, [method])
+  }
 
   /* 계산 */
   const m = getMethod(method)
   // 에스프레소는 '물'이 아니라 추출 샷(아웃풋, g) 기준 → 입력 모드를 원두→샷으로 고정
   const isEspresso = method === 'espresso'
   const effMode: InputMode = isEspresso ? 'coffee' : inputMode
+  // 입력값은 양수·상한으로 클램프 (원두 500g · 물 10L · 잔수 50 · 1잔 2L) — 음수 입력이 결과에 새지 않게
+  const coffeeNum = posNum(coffeeG, 500)
+  const waterNum = posNum(waterMl, 10000)
+  const cupsNum = Math.floor(posNum(cups, 50))
+  const mlPerCupNum = Math.floor(posNum(mlPerCup, 2000))
   const calcCoffee = useMemo(() => {
-    if (effMode === 'coffee') return parseFloat(coffeeG) || 0
-    if (effMode === 'water') return waterToCoffee(parseFloat(waterMl) || 0, ratio)
+    if (effMode === 'coffee') return coffeeNum
+    if (effMode === 'water') return waterToCoffee(waterNum, ratio)
     // cups
-    const w = (parseInt(cups) || 0) * (parseInt(mlPerCup) || 0)
-    return waterToCoffee(w, ratio)
-  }, [effMode, coffeeG, waterMl, ratio, cups, mlPerCup])
+    return waterToCoffee(cupsNum * mlPerCupNum, ratio)
+  }, [effMode, coffeeNum, waterNum, ratio, cupsNum, mlPerCupNum])
 
   const calcWater = useMemo(() => {
-    if (effMode === 'coffee') return coffeeToWater(parseFloat(coffeeG) || 0, ratio)
-    if (effMode === 'water') return parseFloat(waterMl) || 0
-    return (parseInt(cups) || 0) * (parseInt(mlPerCup) || 0)
-  }, [effMode, coffeeG, waterMl, ratio, cups, mlPerCup])
+    if (effMode === 'coffee') return coffeeToWater(coffeeNum, ratio)
+    if (effMode === 'water') return waterNum
+    return cupsNum * mlPerCupNum
+  }, [effMode, coffeeNum, waterNum, ratio, cupsNum, mlPerCupNum])
 
   const cupsCount = effMode === 'cups'
-    ? (parseInt(cups) || 0)
-    : Math.max(1, Math.round(calcWater / (parseInt(mlPerCup) || 250)))
+    ? cupsNum
+    : Math.max(1, Math.round(calcWater / (mlPerCupNum || 250)))
   // 비용용 잔수는 반올림하지 않음 — 320ml(1.28잔)를 1잔으로 반올림하면 1잔 원가가 과대평가됨
   const costCups = effMode === 'cups'
-    ? Math.max(1, parseInt(cups) || 1)
-    : Math.max(1, calcWater / (parseInt(mlPerCup) || 250))
+    ? Math.max(1, cupsNum || 1)
+    : Math.max(1, calcWater / (mlPerCupNum || 250))
   const intensity = getIntensity(ratio)
   // 방식별 해석 — 현재 추출법 권장 범위 대비 위치
   const methodFit = ratio < m.ratioMin ? `${m.shortName} 권장보다 진함`
@@ -111,17 +144,24 @@ export default function BrewClient() {
   const sliderStep = isEspresso ? 0.1 : 0.5
 
   /* 푸어 스케줄 — 핸드드립 전용 pourRatio 사용 (공통 ratio의 에스프레소 값 누출 방지) */
-  const pourCoffee = parseFloat(coffeeG) || 20
+  const pourCoffee = coffeeNum || 20
+  const pourRatioNum = posNum(pourRatioStr, 30)
+  const pourRatio = pourRatioNum >= 1 ? pourRatioNum : 16
   const pourWater = pourCoffee * pourRatio
   const schedule = useMemo(() => buildPourSchedule(pourCoffee, pourWater), [pourCoffee, pourWater])
 
   /* 비용 */
-  const price100g = parseFloat(pricePer100g) || 0
+  const price100g = posNum(pricePer100g, 1000000)
   const dailyN = parseInt(dailyCups) || 1
   const homeCostPerCup = (calcCoffee / costCups) * (price100g / 100)
   const cafeSaving = (cafePrice - homeCostPerCup) * dailyN
   const monthlySaving = cafeSaving * 30
   const yearlySaving = cafeSaving * 365
+  const savingLabel = cafeSaving >= 0 ? '절감액' : '추가 비용'
+
+  /* 강도 게이지 — 비율 5~25를 0~420px로. 마커·눈금이 같은 좌표계를 쓰도록 한 함수로 */
+  const gaugeX = (r: number) => Math.min(Math.max(((r - 5) / 20) * 420, 0), 420)
+  const gradId = `intensityGrad-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
 
   return (
     <div className={s.wrap}>
@@ -170,7 +210,7 @@ export default function BrewClient() {
                   key={bm.id}
                   aria-pressed={method === bm.id}
                   className={`${s.methodBtn} ${method === bm.id ? s.methodBtnActive : ''}`}
-                  onClick={() => setMethod(bm.id)}
+                  onClick={() => selectMethod(bm.id)}
                   type="button"
                 >
                   <span className={s.methodEmoji}>{bm.emoji}</span>
@@ -252,8 +292,8 @@ export default function BrewClient() {
 
             {effMode === 'coffee' && (
               <div className={s.field} style={{ marginTop: 12 }}>
-                <label className={s.fieldLabel}>{isEspresso ? '원두 인풋 (g)' : '원두 (g)'}</label>
-                <input
+                <label className={s.fieldLabel} htmlFor="brew-coffee">{isEspresso ? '원두 인풋 (g)' : '원두 (g)'}</label>
+                <input id="brew-coffee"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={coffeeG}
@@ -413,8 +453,8 @@ export default function BrewClient() {
                 <input id="brew-ratio"
                   type="number" inputMode="decimal"
                   className={s.input}
-                  value={pourRatio}
-                  onChange={(e) => setPourRatio(parseFloat(e.target.value) || 16)}
+                  value={pourRatioStr}
+                  onChange={(e) => setPourRatioStr(e.target.value)}
                   min={10} max={20} step={0.5}
                 />
               </div>
@@ -426,7 +466,7 @@ export default function BrewClient() {
             <p className={s.heroValue}>
               원두 <strong>{fmt(pourCoffee, 0)}g</strong> · 물 <strong>{fmt(pourWater, 0)}ml</strong>
             </p>
-            <p className={s.heroSub}>총 시간 약 2:30~3:30</p>
+            <p className={s.heroSub}>1:{pourRatio} · 총 시간 약 2:30~3:30</p>
           </div>
 
           {/* SVG 타임라인 */}
@@ -516,7 +556,7 @@ export default function BrewClient() {
             {/* SVG 게이지 */}
             <svg viewBox="0 0 420 70" width="100%" style={{ marginTop: 12, maxWidth: 600 }} role="img" aria-label="추출 비율 농도 게이지">
               <defs>
-                <linearGradient id="intensityGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#DB2777" />
                   <stop offset="30%" stopColor="#D97706" />
                   <stop offset="50%" stopColor="#0D9488" />
@@ -524,18 +564,18 @@ export default function BrewClient() {
                   <stop offset="100%" stopColor="#9B9B9B" />
                 </linearGradient>
               </defs>
-              <rect x={0} y={20} width={420} height={26} rx={6} fill="url(#intensityGrad)" />
+              <rect x={0} y={20} width={420} height={26} rx={6} fill={`url(#${gradId})`} />
               {/* 슬라이더 위치 표시 (5~25 범위) */}
               <line
-                x1={Math.min(((ratio - 5) / 20) * 420, 420)}
+                x1={gaugeX(ratio)}
                 y1={10}
-                x2={Math.min(((ratio - 5) / 20) * 420, 420)}
+                x2={gaugeX(ratio)}
                 y2={56}
                 stroke="var(--text)"
                 strokeWidth="3"
               />
               <text
-                x={Math.min(((ratio - 5) / 20) * 420, 420)}
+                x={Math.min(Math.max(gaugeX(ratio), 28), 392)}
                 y={9}
                 fill="var(--text)"
                 fontSize="10"
@@ -547,12 +587,12 @@ export default function BrewClient() {
               </text>
               {/* 구간 레이블 */}
               {[
-                { x: 50, label: '1:12' },
-                { x: 145, label: '1:15 ⭐' },
-                { x: 240, label: '1:17' },
-                { x: 335, label: '1:20' },
+                { r: 12, label: '1:12' },
+                { r: 15, label: '1:15 ⭐' },
+                { r: 18, label: '1:18' },
+                { r: 20, label: '1:20' },
               ].map((t, i) => (
-                <text key={i} x={t.x} y={66} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                <text key={i} x={gaugeX(t.r)} y={66} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
                   {t.label}
                 </text>
               ))}
@@ -648,15 +688,16 @@ export default function BrewClient() {
                   className={s.input}
                   value={pricePer100g}
                   onChange={(e) => setPricePer100g(e.target.value)}
-                  min={1000} max={200000} step={500}
+                  min={500} max={200000} step={500}
                 />
                 <div className={s.pillRow} style={{ marginTop: 8 }}>
-                  {[15000, 20000, 25000, 35000, 50000].map((p) => (
+                  {[3000, 5000, 8000, 12000, 20000].map((p) => (
                     <button key={p} className={s.pill} onClick={() => setPricePer100g(String(p))} type="button">
                       {(p / 1000).toFixed(0)}k
                     </button>
                   ))}
                 </div>
+                <p className={s.helpText} style={{ marginTop: 6 }}>대용량 일반 원두는 100g 2~3천원대, 스페셜티는 7천~1만4천원 정도예요.</p>
               </div>
               <div className={s.field}>
                 <label className={s.fieldLabel}>카페 1잔 가격 (원)</label>
@@ -700,8 +741,10 @@ export default function BrewClient() {
             </p>
             <p className={s.heroSub}>
               vs 카페 {cafePrice.toLocaleString()}원 ={' '}
-              <strong style={{ color: 'var(--accent)' }}>
-                1잔당 {fmt(cafePrice - homeCostPerCup, 0)}원 절감
+              <strong style={{ color: cafePrice >= homeCostPerCup ? 'var(--accent)' : 'var(--danger)' }}>
+                {cafePrice >= homeCostPerCup
+                  ? `1잔당 ${fmt(cafePrice - homeCostPerCup, 0)}원 절감`
+                  : `카페보다 1잔당 ${fmt(homeCostPerCup - cafePrice, 0)}원 비쌈`}
               </strong>
             </p>
           </div>
@@ -715,11 +758,11 @@ export default function BrewClient() {
                   <tr><td>1잔 사용 원두</td><td className={s.cellMono}>{fmt(calcCoffee / costCups, 1)} g</td></tr>
                   <tr><td>홈브루 1잔 원가</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(homeCostPerCup, 0)} 원</td></tr>
                   <tr><td>카페 1잔 가격</td><td className={s.cellMono}>{cafePrice.toLocaleString()} 원</td></tr>
-                  <tr><td>1잔 절감액</td><td className={s.cellMono}>{fmt(cafePrice - homeCostPerCup, 0)} 원</td></tr>
+                  <tr><td>{savingLabel} (1잔)</td><td className={s.cellMono}>{fmt(Math.abs(cafePrice - homeCostPerCup), 0)} 원</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>{dailyN}잔/일 기준</td></tr>
-                  <tr><td>일 절감액</td><td className={s.cellMono}>{fmt(cafeSaving, 0)} 원</td></tr>
-                  <tr><td>월 절감액 (30일)</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(monthlySaving, 0)} 원</td></tr>
-                  <tr><td>연 절감액 (365일)</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(yearlySaving, 0)} 원</td></tr>
+                  <tr><td>일 {savingLabel}</td><td className={s.cellMono}>{fmt(Math.abs(cafeSaving), 0)} 원</td></tr>
+                  <tr><td>월 {savingLabel} (30일)</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(Math.abs(monthlySaving), 0)} 원</td></tr>
+                  <tr><td>연 {savingLabel} (365일)</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmt(Math.abs(yearlySaving), 0)} 원</td></tr>
                 </tbody>
               </table>
             </div>

@@ -137,7 +137,7 @@
   .fieldRow4 { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 4px; }
   .fieldRow4 .card { padding: 8px 6px; }
   .fieldRow4 .cardLabel { font-size: 10px; letter-spacing: 0.04em; margin-bottom: 6px; justify-content: center; }
-  .fieldRow4 .numInput { font-size: 14px; padding: 6px 4px; }
+  .fieldRow4 .numInput { font-size: 16px; padding: 6px 4px; } /* 16px 미만이면 iOS Safari가 포커스 시 확대 */
   .fieldRow4 .inputRow { gap: 2px; }
   .fieldRow4 .unit { font-size: 10px; }
   .fieldRow4 .toggleRow { gap: 3px; }

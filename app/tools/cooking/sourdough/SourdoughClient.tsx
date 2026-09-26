@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useSyncExternalStore } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './sourdough.module.css'
 
@@ -153,6 +153,17 @@ function fmtDayClock(d: Date, now: Date) {
   return `${prefix} ${fmtClock(d)}`
 }
 
+/* 현재 시각 — SSR·하이드레이션 중엔 0(빌드 시각의 '오늘/내일'이 정적 HTML에 박히지 않도록),
+   마운트 후 실제 시각을 쓰고 1분마다 갱신. 스냅샷은 모듈 변수에 캐시해 렌더 간 안정적으로 유지. */
+let nowSnapshot = 0
+const subscribeNow = (cb: () => void) => {
+  nowSnapshot = Date.now()
+  const id = setInterval(() => { nowSnapshot = Date.now(); cb() }, 60_000)
+  return () => clearInterval(id)
+}
+const getNowSnapshot = () => nowSnapshot || (nowSnapshot = Date.now())
+const getServerNowSnapshot = () => 0
+
 // ──────────────────────────────────────
 export default function SourdoughClient() {
   const [tab, setTab] = useState<Tab>('diagnose')
@@ -205,17 +216,21 @@ export default function SourdoughClient() {
     : diag.stage === 'stabilizing' && checks.has('doubling') ? 'maybe'
     : 'no'
 
+  // 현재 시각 (마운트 전 null)
+  const nowMs = useSyncExternalStore(subscribeNow, getNowSnapshot, getServerNowSnapshot)
+  const now = useMemo(() => (nowMs > 0 ? new Date(nowMs) : null), [nowMs])
+
   // 다음 급이 & 피크 시각
   const feedDate = useMemo(() => {
-    const ref = new Date()
-    const d = new Date(ref); d.setHours(feedHour, feedMin, 0, 0)
+    if (!now) return null
+    const d = new Date(now); d.setHours(feedHour, feedMin, 0, 0)
     // 선택한 급이 시각이 현재보다 미래면 '어제'로 해석 (가장 최근 급이)
-    if (d.getTime() > ref.getTime()) d.setDate(d.getDate() - 1)
+    if (d.getTime() > now.getTime()) d.setDate(d.getDate() - 1)
     return d
-  }, [feedHour, feedMin])
-  const nextFeed = addHours(feedDate, freq === 2 ? 12 : recInterval)
-  const peakStart = addHours(feedDate, diagPeak.min)
-  const peakEnd = addHours(feedDate, diagPeak.max)
+  }, [now, feedHour, feedMin])
+  const nextFeed = feedDate ? addHours(feedDate, freq === 2 ? 12 : recInterval) : null
+  const peakStart = feedDate ? addHours(feedDate, diagPeak.min) : null
+  const peakEnd = feedDate ? addHours(feedDate, diagPeak.max) : null
 
   /* ════ 탭2 상태 ════ */
   const [pRatio, setPRatio] = useState<Ratio>(2)
@@ -242,17 +257,12 @@ export default function SourdoughClient() {
   }, [predict.base])
 
   // 현재 시각 기준 최적 사용 타이밍
-  const [now, setNow] = useState(() => new Date())
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 60_000)
-    return () => clearInterval(id)
-  }, [])
-
-  const useStart = addHours(now, predict.min - 0.5)
-  const useEnd = addHours(now, predict.max + 1)
+  const useStart = now ? addHours(now, predict.min - 0.5) : null
+  const useEnd = now ? addHours(now, predict.max + 1) : null
 
   // 역산: 내일 bakeHour에 반죽하려면 언제 급이?
   const reverseFeedTime = useMemo(() => {
+    if (!now) return null
     const target = new Date(now); target.setDate(target.getDate() + 1)
     target.setHours(bakeHour, 0, 0, 0)
     const minFeed = addHours(target, -predict.max)
@@ -276,11 +286,11 @@ export default function SourdoughClient() {
 
       {/* ── 탭 ── */}
       <div className={styles.tabs} role="tablist" aria-label="사워도우 계산 모드">
-        <button type="button" role="tab" aria-selected={tab === 'diagnose'}
+        <button type="button" role="tab" aria-selected={tab === 'diagnose'} id="sd-tab-diagnose" aria-controls="sd-panel-diagnose"
           className={`${styles.tab} ${tab === 'diagnose' ? styles.tabActive : ''}`} onClick={() => setTab('diagnose')}>
           안정화 진단
         </button>
-        <button type="button" role="tab" aria-selected={tab === 'predict'}
+        <button type="button" role="tab" aria-selected={tab === 'predict'} id="sd-tab-predict" aria-controls="sd-panel-predict"
           className={`${styles.tab} ${tab === 'predict' ? styles.tabActive : ''}`} onClick={() => setTab('predict')}>
           피크 시간 예측
         </button>
@@ -288,7 +298,7 @@ export default function SourdoughClient() {
 
       {/* ═══════════════ 탭1 ═══════════════ */}
       {tab === 'diagnose' && (
-        <div className={styles.panel}>
+        <div className={styles.panel} role="tabpanel" id="sd-panel-diagnose" aria-labelledby="sd-tab-diagnose">
           {/* 기본 정보 */}
           <section>
             <h3 className={styles.secTitle}>1. 기본 정보</h3>
@@ -316,8 +326,8 @@ export default function SourdoughClient() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>밀가루 종류</label>
-              <div className={styles.segRow}>
+              <span className={styles.label} id="sourdough-grp-1">밀가루 종류</span>
+              <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-1">
                 {([
                   { k: 'bread',        l: '강력분(백밀)' },
                   { k: 'mixed-whole',  l: '통밀 혼합' },
@@ -333,8 +343,8 @@ export default function SourdoughClient() {
 
             {flour !== 'bread' && (
               <div className={styles.field}>
-                <label className={styles.label}>통밀/호밀 비율</label>
-                <div className={styles.segRow}>
+                <span className={styles.label} id="sourdough-grp-2">통밀/호밀 비율</span>
+                <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-2">
                   {([
                     { v: 0 as WholePct,  l: '0%' },
                     { v: 15 as WholePct, l: '10~20%' },
@@ -349,8 +359,8 @@ export default function SourdoughClient() {
             )}
 
             <div className={styles.field}>
-              <label className={styles.label}>하루 급이 횟수</label>
-              <div className={styles.segRow}>
+              <span className={styles.label} id="sourdough-grp-3">하루 급이 횟수</span>
+              <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-3">
                 {([1, 2] as FeedFreq[]).map(f => (
                   <button key={f}
                     className={`${styles.segBtn} ${freq === f ? styles.segBtnActive : ''}`}
@@ -360,8 +370,8 @@ export default function SourdoughClient() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>급이 비율 <span className={styles.labelSub}>(스타터:물:밀가루)</span></label>
-              <div className={styles.segRow}>
+              <span className={styles.label} id="sourdough-grp-4">급이 비율 <span className={styles.labelSub}>(스타터:물:밀가루)</span></span>
+              <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-4">
                 {([1, 2, 3, 5] as Ratio[]).map(r => (
                   <button key={r}
                     className={`${styles.segBtn} ${!customRatio && ratio === r ? styles.segBtnActive : ''}`}
@@ -371,6 +381,7 @@ export default function SourdoughClient() {
               <div className={styles.customRow}>
                 <span className={styles.customLabel}>직접 입력 1:</span>
                 <input type="number" inputMode="decimal" min={1} step={0.5} value={customRatio}
+                  aria-label="급이 비율 직접 입력 (스타터 1 대비 물·밀가루)"
                   onChange={e => setCustomRatio(e.target.value)}
                   className={styles.customInput} placeholder="예: 4" />
                 <span className={styles.customLabel}>:{customRatio || '?'}</span>
@@ -394,7 +405,7 @@ export default function SourdoughClient() {
             <h3 className={styles.secTitle}>3. 진단 결과</h3>
 
             {/* 상태 카드 */}
-            <div className={`${styles.statusCard} ${styles[STAGE_META[diag.stage].className]}`}>
+            <div className={`${styles.statusCard} ${styles[STAGE_META[diag.stage].className]}`} role="status">
               <div className={styles.statusHead}>
                 <span className={styles.statusEmoji}>{STAGE_META[diag.stage].emoji}</span>
                 <div>
@@ -452,13 +463,13 @@ export default function SourdoughClient() {
               <div className={styles.schedRow}>
                 <span className={styles.schedLabel}>마지막 급이 시각</span>
                 <div className={styles.schedInputs}>
-                  <select value={feedHour} onChange={e => setFeedHour(+e.target.value)} className={styles.schedSel}>
+                  <select value={feedHour} onChange={e => setFeedHour(+e.target.value)} className={styles.schedSel} aria-label="마지막 급이 시">
                     {Array.from({ length: 24 }, (_, i) => i).map(h => (
                       <option key={h} value={h}>{pad(h)}시</option>
                     ))}
                   </select>
                   <span className={styles.schedColon}>:</span>
-                  <select value={feedMin} onChange={e => setFeedMin(+e.target.value)} className={styles.schedSel}>
+                  <select value={feedMin} onChange={e => setFeedMin(+e.target.value)} className={styles.schedSel} aria-label="마지막 급이 분">
                     {[0, 15, 30, 45].map(m => (
                       <option key={m} value={m}>{pad(m)}분</option>
                     ))}
@@ -469,12 +480,12 @@ export default function SourdoughClient() {
               <div className={styles.schedResult}>
                 <div>
                   <p className={styles.schedResLabel}>다음 급이</p>
-                  <p className={styles.schedResVal}>{fmtDayClock(nextFeed, now)}</p>
+                  <p className={styles.schedResVal}>{nextFeed && now ? fmtDayClock(nextFeed, now) : '—'}</p>
                 </div>
                 <div>
                   <p className={styles.schedResLabel}>피크 예상 시간대</p>
                   <p className={styles.schedResVal}>
-                    {fmtClock(peakStart)} ~ {fmtClock(peakEnd)}
+                    {peakStart && peakEnd ? `${fmtClock(peakStart)} ~ ${fmtClock(peakEnd)}` : '—'}
                   </p>
                 </div>
               </div>
@@ -485,14 +496,14 @@ export default function SourdoughClient() {
 
       {/* ═══════════════ 탭2 ═══════════════ */}
       {tab === 'predict' && (
-        <div className={styles.panel}>
+        <div className={styles.panel} role="tabpanel" id="sd-panel-predict" aria-labelledby="sd-tab-predict">
           {/* 급이 정보 */}
           <section>
             <h3 className={styles.secTitle}>1. 급이 정보</h3>
 
             <div className={styles.field}>
-              <label className={styles.label}>급이 비율</label>
-              <div className={styles.segRow}>
+              <span className={styles.label} id="sourdough-grp-5">급이 비율</span>
+              <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-5">
                 {([1, 2, 3, 5] as Ratio[]).map(r => (
                   <button key={r}
                     className={`${styles.segBtn} ${!pCustomRatio && pRatio === r ? styles.segBtnActive : ''}`}
@@ -502,6 +513,7 @@ export default function SourdoughClient() {
               <div className={styles.customRow}>
                 <span className={styles.customLabel}>직접 입력 1:</span>
                 <input type="number" inputMode="decimal" min={1} step={0.5} value={pCustomRatio}
+                  aria-label="급이 비율 직접 입력 (스타터 1 대비 물·밀가루)"
                   onChange={e => setPCustomRatio(e.target.value)}
                   className={styles.customInput} placeholder="예: 4" />
                 <span className={styles.customLabel}>:{pCustomRatio || '?'}</span>
@@ -509,8 +521,8 @@ export default function SourdoughClient() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>밀가루 종류</label>
-              <div className={styles.segRow}>
+              <span className={styles.label} id="sourdough-grp-6">밀가루 종류</span>
+              <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-6">
                 {([
                   { k: 'bread' as PFlour, l: '강력분' },
                   { k: 'whole' as PFlour, l: '통밀 혼합' },
@@ -541,8 +553,8 @@ export default function SourdoughClient() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>스타터 상태</label>
-              <div className={styles.condGrid}>
+              <span className={styles.label} id="sourdough-grp-7">스타터 상태</span>
+              <div className={styles.condGrid} role="group" aria-labelledby="sourdough-grp-7">
                 {([
                   { k: 'peak' as Cond,      e: '🔝', l: '피크에서 급이',      d: '가장 활발' },
                   { k: 'afterPeak' as Cond, e: '📉', l: '피크 직후 급이',      d: '보통' },
@@ -566,7 +578,7 @@ export default function SourdoughClient() {
             <h3 className={styles.secTitle}>3. 예측 결과</h3>
 
             {/* 히어로 */}
-            <div className={styles.peakHero}>
+            <div className={styles.peakHero} role="status">
               <p className={styles.peakLabel}>예상 피크 도달 시간</p>
               <p className={styles.peakTime}>급이 후 약 <span>{predict.min}~{predict.max}</span>시간</p>
               <p className={styles.peakSub}>기준 피크: {predict.base.toFixed(1)}시간</p>
@@ -580,7 +592,7 @@ export default function SourdoughClient() {
               <p className={styles.useLabel}>사용 적정 타이밍</p>
               <p className={styles.useDesc}>피크 전 30분 ~ 피크 직후 1시간이 최적 윈도우입니다</p>
               <div className={styles.useBadge}>
-                지금 급이 시 → <strong>{fmtDayClock(useStart, now)} ~ {fmtDayClock(useEnd, now)}</strong>
+                지금 급이 시 → <strong>{useStart && useEnd && now ? `${fmtDayClock(useStart, now)} ~ ${fmtDayClock(useEnd, now)}` : '—'}</strong>
               </div>
             </div>
 
@@ -615,7 +627,7 @@ export default function SourdoughClient() {
               <p className={styles.reverseTitle}>빵 굽는 날 역산 타이머</p>
               <div className={styles.reverseRow}>
                 <span className={styles.reverseLabel}>내일 반죽 예정 시각</span>
-                <select value={bakeHour} onChange={e => setBakeHour(+e.target.value)} className={styles.schedSel}>
+                <select value={bakeHour} onChange={e => setBakeHour(+e.target.value)} className={styles.schedSel} aria-label="내일 반죽 예정 시각">
                   {Array.from({ length: 24 }, (_, i) => i).map(h => (
                     <option key={h} value={h}>{pad(h)}시</option>
                   ))}
@@ -624,7 +636,7 @@ export default function SourdoughClient() {
               <div className={styles.reverseResult}>
                 <p className={styles.reverseResLabel}>최적 급이 시각</p>
                 <p className={styles.reverseResVal}>
-                  {fmtDayClock(reverseFeedTime.minFeed, now)} ~ {fmtClock(reverseFeedTime.maxFeed)}
+                  {reverseFeedTime && now ? `${fmtDayClock(reverseFeedTime.minFeed, now)} ~ ${fmtClock(reverseFeedTime.maxFeed)}` : '—'}
                 </p>
                 <p className={styles.reverseHint}>
                   위 시각에 급이하면 내일 {pad(bakeHour)}시에 피크 상태로 반죽을 시작할 수 있습니다
@@ -702,7 +714,9 @@ function FermentationGraph({
   const yTicks = [0, 100, 200, 300]
   // X grid step 4h
   const xTicks: number[] = []
-  for (let t = 0; t <= graph.maxH; t += 4) xTicks.push(t)
+  // 눈금 간격을 그래프 길이에 맞춤 (냉장 후 급이 등 maxH 97h에서 4h 간격 25개가 겹치던 문제)
+  const tickStep = graph.maxH <= 36 ? 4 : graph.maxH <= 72 ? 8 : 12
+  for (let t = 0; t <= graph.maxH; t += tickStep) xTicks.push(t)
 
   const peakX = toX(graph.peakH)
   const peakY = toY(200)
@@ -725,13 +739,13 @@ function FermentationGraph({
         {/* 그리드 */}
         {yTicks.map(v => (
           <g key={`y${v}`}>
-            <line x1={padL} x2={W - padR} y1={toY(v)} y2={toY(v)} stroke="rgba(255,255,255,0.05)" />
+            <line x1={padL} x2={W - padR} y1={toY(v)} y2={toY(v)} stroke="var(--border)" />
             <text x={padL - 6} y={toY(v) + 4} textAnchor="end" className={styles.graphAxis}>{v}%</text>
           </g>
         ))}
         {xTicks.map(t => (
           <g key={`x${t}`}>
-            <line x1={toX(t)} x2={toX(t)} y1={padT} y2={padT + plotH} stroke="rgba(255,255,255,0.04)" />
+            <line x1={toX(t)} x2={toX(t)} y1={padT} y2={padT + plotH} stroke="var(--border)" />
             <text x={toX(t)} y={H - 8} textAnchor="middle" className={styles.graphAxis}>{t}h</text>
           </g>
         ))}

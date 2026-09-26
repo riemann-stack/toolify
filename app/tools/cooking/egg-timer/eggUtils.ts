@@ -34,7 +34,8 @@ export const DONENESS: DonenessStage[] = [
     yolkColor: '#F5DC8A', yolkTexture: 'hard',    whiteSet: 100, yolkSet: 100 },
 ]
 
-/* ─── 한국 계란 크기 (축산물품질평가원 표준) ─── */
+/* ─── 한국 계란 크기 — 축산물 등급판정 세부기준 [별표] 계란 중량규격
+   (2026.5.21 축산법 시행규칙 개정으로 명칭 2XL·XL·L·M·S 병행, 중량 기준은 동일) ─── */
 export interface SizeDef {
   id: string
   label: string
@@ -44,11 +45,11 @@ export interface SizeDef {
 }
 
 export const SIZES: SizeDef[] = [
-  { id: 'wang',  label: '왕란', rangeG: '78g+',   avgG: 80, adjustmentSec:  +30 },
-  { id: 'teuk',  label: '특란', rangeG: '68~78g', avgG: 73, adjustmentSec:    0 },
-  { id: 'dae',   label: '대란', rangeG: '60~68g', avgG: 64, adjustmentSec:  -15 },
-  { id: 'jung',  label: '중란', rangeG: '52~60g', avgG: 56, adjustmentSec:  -30 },
-  { id: 'so',    label: '소란', rangeG: '44~52g', avgG: 48, adjustmentSec:  -45 },
+  { id: 'wang',  label: '왕란(2XL)', rangeG: '68g+',     avgG: 72, adjustmentSec:  +30 },
+  { id: 'teuk',  label: '특란(XL)', rangeG: '60~68g',   avgG: 64, adjustmentSec:    0 },
+  { id: 'dae',   label: '대란(L)', rangeG: '52~60g',   avgG: 56, adjustmentSec:  -15 },
+  { id: 'jung',  label: '중란(M)', rangeG: '44~52g',   avgG: 48, adjustmentSec:  -30 },
+  { id: 'so',    label: '소란(S)', rangeG: '44g 미만', avgG: 40, adjustmentSec:  -45 },
 ]
 
 /* ─── 시작 온도 ─── */
@@ -80,8 +81,10 @@ export interface MethodDef {
 export const METHODS: MethodDef[] = [
   { id: 'boil',     label: '끓는 물 투입',    emoji: '🍳', factor: 1.0,  flatAdjustSec:   0, desc: '물 끓이기 → 계란 투입 → 타이머 시작',
     note: '가장 정확. 본 도구 기본 기준.' },
-  { id: 'cold',     label: '냉수 시작',       emoji: '❄️', factor: 1.0,  flatAdjustSec: 120, desc: '계란 + 찬물 → 같이 끓이기',
-    note: '껍질이 잘 벗겨짐. 끓기 시작점부터 -1~2분이지만 끓이는 시간 포함하면 비슷. +2분 가산' },
+  // 냉수 시작은 찬물에서 같이 데우는 동안 이미 익기 시작하므로, 물이 끓는 순간부터 재면 끓는 물 투입보다 짧다.
+  // 데우는 속도(화력·물양)에 따라 편차가 커서 보정값은 -1분으로 보수적으로 둔다.
+  { id: 'cold',     label: '냉수 시작',       emoji: '❄️', factor: 1.0,  flatAdjustSec: -60, desc: '계란 + 찬물 → 같이 끓이기 → 물이 끓는 순간 타이머 시작',
+    note: '물이 끓기 시작하는 순간 타이머를 켜세요. 끓는 물 투입보다 1분 짧게 잡지만 화력에 따라 편차가 큽니다' },
   { id: 'steam',    label: '찜기',           emoji: '♨️', factor: 1.1,  flatAdjustSec:   0, desc: '찜기에 계란 + 뚜껑',
     note: '균일한 익힘. 끓이기 대비 +10% 가산' },
   { id: 'instapot', label: '인스턴트팟',      emoji: '🍶', factor: 0,    flatAdjustSec: 600, desc: '5-5-5 룰 (압력 5분·자연감압 5분·얼음물 5분)',
@@ -106,7 +109,7 @@ export const RECIPES: RecipePreset[] = [
     tip: '잼 노른자 7분이 라면 토핑 황금 비율. 라면과 별도로 삶아 완성 직전 올리기 (라면 조리 3~5분이라 동시 조리는 어려움)' },
   { id: 'gimbap',    label: '🍙 김밥 계란',          emoji: '🍙',
     donenessId: 'extra', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
-    tip: '단단한 완숙으로 자르기 좋게. 식초 1Ts 첨가하면 갈라짐 방지. 껍질이 잘 안 까지면 냉수 시작으로 바꾸면 잘 벗겨짐 (+2분)' },
+    tip: '단단한 완숙으로 자르기 좋게. 식초 1Ts 첨가하면 갈라짐 방지. 껍질을 깔끔하게 까려면 끓는 물에 넣어 삶고 끝나자마자 얼음물에 5분 이상 식히기' },
   { id: 'jangjorim', label: '🥩 장조림 계란',        emoji: '🥩',
     donenessId: 'hard', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '메추리알도 같은 시간. 양념장에 1~2일 절이면 풍미 ↑' },
@@ -115,19 +118,19 @@ export const RECIPES: RecipePreset[] = [
     tip: '잼 노른자가 핵심. 7분 정확히. 양념장(간장+물엿+참기름+파+마늘+홍고추)에 6시간+ 절임' },
   { id: 'ajitama',   label: '🍜 라멘 아지타마',      emoji: '🍜',
     donenessId: 'jammy', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
-    tip: '라멘 표준 7분 (잼 노른자, 실온 기준). 미림+간장+물 1:1:1 절임 12시간+. 냉수 시작·얼음물로 껍질 깔끔하게' },
+    tip: '라멘 표준 7분 (잼 노른자, 실온 기준). 미림+간장+물 1:1:1 절임 12시간+. 끓는 물에 넣어 삶고 바로 얼음물에 식혀야 껍질이 깔끔하게 벗겨짐' },
   { id: 'mayo',      label: '🥚 마요계란 (에그샐러드)', emoji: '🥚',
     donenessId: 'hard', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '완숙 후 으깨고 마요네즈+소금+후추. 머스타드 1Ts 추가 시 풍미 ↑' },
   { id: 'deviled',   label: '🍳 데빌드 에그',        emoji: '🍳',
     donenessId: 'extra', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
-    tip: '단단한 완숙 후 반으로 잘라 노른자만 빼서 마요+머스타드+파프리카. 껍질은 냉수 시작이 잘 벗겨짐' },
+    tip: '단단한 완숙 후 반으로 잘라 노른자만 빼서 마요+머스타드+파프리카. 껍질은 끓는 물 투입 후 바로 얼음물에 식히면 잘 벗겨짐' },
   { id: 'salad',     label: '🥗 반숙 샐러드 토핑',   emoji: '🥗',
     donenessId: 'flowing', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '6분 30초가 가장 예쁨. 자르면 반쯤 흐르는 노른자' },
   { id: 'baeksuk',   label: '🐔 백숙용 한 알',       emoji: '🐔',
     donenessId: 'extra', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
-    tip: '백숙 위에 올리는 단단한 완숙. 14분 권장' },
+    tip: '백숙 위에 올리는 단단한 완숙. 14분 권장 — 오래 삶는 만큼 끝나자마자 얼음물에 식혀야 노른자 테두리가 회녹색으로 변하지 않음' },
   { id: 'daily',     label: '🥚 데일리 한 알',       emoji: '🥚',
     donenessId: 'soft', sizeId: 'teuk', tempId: 'room', methodId: 'boil',
     tip: '아침 한 알 — 흰자 다 익고 노른자 약간 흐름. 6분이 가장 무난' },
@@ -195,7 +198,7 @@ export function calculate(inputs: CalcInputs): CalcResult {
   // 조리법 절대 보정
   if (method.flatAdjustSec !== 0) {
     total += method.flatAdjustSec
-    adjustments.push({ label: `${method.label} +${method.flatAdjustSec}초`, sec: method.flatAdjustSec })
+    adjustments.push({ label: `${method.label} ${method.flatAdjustSec > 0 ? '+' : ''}${method.flatAdjustSec}초`, sec: method.flatAdjustSec })
   }
 
   // 고도 보정 (100m당 1%)
@@ -266,7 +269,7 @@ export const TROUBLESHOOTS: Troubleshoot[] = [
     problem: '노른자 표면이 회색-녹색으로 변했어요.',
     solution: [
       '너무 오래 끓이면 황(S)·철(Fe) 반응 → 황화철 형성',
-      '12분 이내 끝내고 즉시 얼음물에 식히기',
+      '13분 넘게 삶고 그대로 두면 잘 생김 — 단단한 완숙(14분)은 끝나자마자 얼음물에 5분 이상',
       '냄새는 황 냄새 — 신선도 문제 아님 (먹어도 안전)',
       '자주 발생하면 조리 시간 1~2분 단축',
     ],

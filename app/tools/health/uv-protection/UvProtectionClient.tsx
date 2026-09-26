@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './uv-protection.module.css'
 
@@ -48,10 +48,10 @@ type EnvId = 'daily' | 'running' | 'beach' | 'hiking' | 'snow' | 'water' | 'driv
 const ENVIRONMENTS: { id: EnvId; name: string; mult: number; icon: string; cls: string; note: string }[] = [
   { id: 'daily',   name: '일상 외출',  mult: 1.0, icon: '🚶', cls: '',          note: '' },
   { id: 'running', name: '러닝·운동',  mult: 1.0, icon: '🏃', cls: '',          note: '땀으로 SPF 효과 단축' },
-  { id: 'beach',   name: '해변·수영장',mult: 1.5, icon: '🏖️', cls: s.envBeach,  note: '모래·물 반사로 자외선 약 50% 증가' },
-  { id: 'hiking',  name: '등산·고지대',mult: 1.2, icon: '⛰️', cls: s.envHiking, note: '고도 1km당 자외선 약 12% 증가' },
+  { id: 'beach',   name: '해변·수영장',mult: 1.5, icon: '🏖️', cls: s.envBeach,  note: '모래·물거품 반사와 긴 노출을 보수적으로 반영해 자외선 1.5배로 계산' },
+  { id: 'hiking',  name: '등산·고지대',mult: 1.2, icon: '⛰️', cls: s.envHiking, note: '고도 1km당 자외선 약 12% 증가 — 고도 미입력·1,700m 미만이면 +20%로 보수적 가정' },
   { id: 'snow',    name: '눈·스키',    mult: 1.8, icon: '⛷️', cls: s.envSnow,   note: '눈 반사로 자외선 약 80% 증가' },
-  { id: 'water',   name: '수상 스포츠',mult: 1.5, icon: '🚤', cls: s.envWater,  note: '물 반사로 자외선 약 50% 증가' },
+  { id: 'water',   name: '수상 스포츠',mult: 1.5, icon: '🚤', cls: s.envWater,  note: '물 반사와 그늘 없는 긴 노출을 보수적으로 반영해 자외선 1.5배로 계산' },
   { id: 'driving', name: '운전·실내',  mult: 0.5, icon: '🚗', cls: s.envDriving,note: '유리창 UVB 차단, UVA 일부 통과' },
 ]
 
@@ -87,8 +87,12 @@ function calcBurnTime(input: {
   const env = ENVIRONMENTS.find(x => x.id === input.envId)!
 
   const altitudeMult = 1 + Math.max(0, input.altitude / 1000) * 0.12
+  // '등산·고지대'의 1.2배 자체가 고도 보정(약 1,700m 가정)이므로 고도 슬라이더와 곱하지 않고
+  // 둘 중 큰 값만 적용 (이중 보정 방지, 1,700m 미만 입력 시에도 보수적으로 1.2배 유지)
+  const envAltMult = env.id === 'hiking' ? Math.max(env.mult, altitudeMult) : env.mult * altitudeMult
+  // 구름 보정은 보수적으로 최대 30%만 감쇠 (실제 두꺼운 먹구름은 더 많이 줄일 수 있음)
   const cloudMult = 1 - (Math.min(100, Math.max(0, input.cloudCover)) / 100) * 0.3
-  const adjustedUvi = Math.max(0.1, input.uvIndex * env.mult * altitudeMult * cloudMult)
+  const adjustedUvi = Math.max(0.1, input.uvIndex * envAltMult * cloudMult)
 
   // 단순 공식
   const t1 = (200 * skin.multiplier) / (3 * adjustedUvi)
@@ -158,18 +162,28 @@ export default function UvProtectionClient() {
   // 재도포 카운트다운
   const [reapplyStartedAt, setReapplyStartedAt] = useState<number | null>(null)
   const [now, setNow] = useState<number>(() => Date.now())
-  useEffect(() => {
-    if (reapplyStartedAt === null) return
-    const tid = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(tid)
-  }, [reapplyStartedAt])
 
   // 복사
   const [copied, setCopied] = useState<boolean>(false)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (copyTimer.current) clearTimeout(copyTimer.current) }, [])
 
   const result = useMemo(() => calcBurnTime({
     uvIndex, skinTypeId, spfId, envId, altitude, cloudCover, isWaterContact,
   }), [uvIndex, skinTypeId, spfId, envId, altitude, cloudCover, isWaterContact])
+
+  // 1초 갱신 — 재도포 시점이 지나면 인터벌 정지('재도포 필요!' 상태에서 불필요한 리렌더 방지)
+  const reapplyMs = result.reapplyMinutes * 60 * 1000
+  useEffect(() => {
+    if (reapplyStartedAt === null) return
+    const dueAt = reapplyStartedAt + reapplyMs
+    const tid = setInterval(() => {
+      const t = Date.now()
+      setNow(t)
+      if (t >= dueAt) clearInterval(tid)
+    }, 1000)
+    return () => clearInterval(tid)
+  }, [reapplyStartedAt, reapplyMs])
 
   const env = ENVIRONMENTS.find(e => e.id === envId)!
 
@@ -205,7 +219,7 @@ export default function UvProtectionClient() {
       notes.push('자외선이 매우 강함 — 차단복·그늘·SPF 50 + 방수 권장')
     }
     if (envId === 'hiking' && altitude >= 1000) {
-      notes.push(`해발 ${altitude}m — 평지보다 자외선 ${round((altitude / 1000) * 12, 0)}% 증가`)
+      notes.push(`해발 ${altitude}m — 평지보다 자외선 ${round((altitude / 1000) * 12, 0)}% 증가 (고도 입력값으로 보정)`)
     }
     if (envId === 'driving') {
       notes.push('UVA는 유리창 통과 — 장시간 운전 시 SPF 30+ 사용 권장 (특히 왼팔·얼굴)')
@@ -239,7 +253,8 @@ export default function UvProtectionClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+      copyTimer.current = setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -407,7 +422,7 @@ export default function UvProtectionClient() {
           </details>
 
           {/* HERO */}
-          <div className={`${s.hero} ${result.uvLevel.heroCls}`}>
+          <div className={`${s.hero} ${result.uvLevel.heroCls}`} role="status">
             <p className={s.heroLead}>{result.spfApplied ? '재도포 전 보호 가능 시간' : '화상 위험 추정 시간'}</p>
             <p className={s.heroLevelLabel}>{result.uvLevel.icon} {result.uvLevel.level} (UV 지수 {round(result.adjustedUvi, 1)})</p>
             <div>
@@ -502,7 +517,7 @@ export default function UvProtectionClient() {
               ) : reapplyCountdown.isDue ? (
                 <>
                   <p className={s.reapplyValue} style={{ color: '#EA580C' }}>재도포 필요!<small>지금</small></p>
-                  <button className={s.reapplyBtn} onClick={() => setReapplyStartedAt(Date.now())} type="button">
+                  <button className={s.reapplyBtn} onClick={() => { setReapplyStartedAt(Date.now()); setNow(Date.now()) }} type="button">
                     다시 도포
                   </button>
                 </>
@@ -547,7 +562,7 @@ export default function UvProtectionClient() {
             },
             {
               cls: s.actBorderBeach, emoji: '🏖️', name: '해변·수영장',
-              uvGuide: ['🚨 가장 위험한 환경', '모래 반사 15% + 물 반사 25% = 자외선 약 50% 증가'],
+              uvGuide: ['🚨 가장 위험한 환경', '모래(최대 약 15%)·물거품(약 25%) 반사가 직사광에 더해짐 — 본 도구는 1.5배로 보수적 보정'],
               gear: ['SPF 50 이상 + 방수(Water Resistant 80분)', '래시가드·수영복 활용', '챙 넓은 모자·UV 차단 비치 우산'],
               caution: ['1시간마다 재도포 (수영 후 즉시)', '12~14시 직사광 피하기', '얕은 물에서도 자외선 통과'],
             },
@@ -670,7 +685,7 @@ export default function UvProtectionClient() {
                     <th scope="col">피부 타입</th>
                     <th scope="col">한국인 비율</th>
                     <th scope="col">무보호 시간</th>
-                    <th scope="col">SPF 30 적용</th>
+                    <th scope="col">SPF 30 적용 (재도포 전)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -682,7 +697,7 @@ export default function UvProtectionClient() {
                         <td>{t.name}</td>
                         <td>{t.koreanRatio}</td>
                         <td>{fmtMinutes(r1.base)}</td>
-                        <td>{fmtMinutes(r2.withSpf)}</td>
+                        <td>{r2.fullyCapped ? `약 ${fmtMinutes(r2.reapplyMinutes)} (재도포 주기)` : fmtRange(r2.displayMin, r2.displayMax)}</td>
                       </tr>
                     )
                   })}

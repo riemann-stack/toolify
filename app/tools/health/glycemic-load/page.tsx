@@ -107,7 +107,7 @@ const RICE_ROWS: RiceRow[] = [
 const FAQ_LD = [
   {
     q: 'GI와 GL(당부하지수)의 차이가 뭔가요?',
-    a: '<strong>GI(혈당지수)</strong>는 그 음식의 탄수화물이 <strong>얼마나 빨리 혈당을 올리는지</strong>를 포도당(100) 기준으로 나타낸 값입니다. 하지만 GI는 "실제로 얼마나 먹는지"를 반영하지 못합니다. 대표적으로 <strong>수박은 GI가 72로 높지만</strong> 한 쪽에 든 탄수화물이 적어 실제 혈당 영향은 작습니다. 이를 보완한 것이 <strong>GL(당부하지수) = 탄수화물량 × GI ÷ 100</strong>으로, 먹는 양까지 반영해 더 현실적입니다.',
+    a: '<strong>GI(혈당지수)</strong>는 그 음식의 탄수화물이 <strong>얼마나 빨리 혈당을 올리는지</strong>를 포도당(100) 기준으로 나타낸 값입니다. 하지만 GI는 "실제로 얼마나 먹는지"를 반영하지 못합니다. 대표적인 예가 수박입니다. 국제 GI 표 2008판에서는 <strong>GI 76으로 높게</strong> 보고됐지만(2021판은 약 50), 한 쪽에 든 탄수화물이 적어 GL은 한 자릿수로 낮고 실제 혈당 영향도 작습니다. 이를 보완한 것이 <strong>GL(당부하지수) = 탄수화물량 × GI ÷ 100</strong>으로, 먹는 양까지 반영해 더 현실적입니다.',
   },
   {
     q: 'GL은 얼마부터 높은 건가요?',
@@ -183,13 +183,13 @@ export default function GlycemicLoadPage() {
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>예: 흰쌀밥 1공기 = 66g × 70 ÷ 100 ≈ 46 (고)</div>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ GI가 높아도 실제 먹는 양의 탄수화물이 적으면 GL은 낮습니다(예: 수박). 그래서 <strong style={{ color: 'var(--text)' }}>양까지 반영한 GL</strong>이 혈당 영향을 더 현실적으로 보여줍니다.
+            ※ GI가 높아도 실제 먹는 양의 탄수화물이 적으면 GL은 낮습니다(예: 2008판 기준 GI 76인 수박). 그래서 <strong style={{ color: 'var(--text)' }}>양까지 반영한 GL</strong>이 혈당 영향을 더 현실적으로 보여줍니다.
           </p>
         </section>
 
         {/* 2. GI vs GL 대표 예 */}
         <section>
-          <h2 style={sectionTitle}>GI는 높은데 GL은 낮은 음식</h2>
+          <h2 style={sectionTitle}>GI와 GL이 다르게 보이는 음식</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
@@ -201,7 +201,7 @@ export default function GlycemicLoadPage() {
               </thead>
               <tbody>
                 {[
-                  ['수박 (1쪽)', '50', '11g', '5.5', '낮음', 'var(--success)'],
+                  ['수박 (1쪽 150g)', '50~76', '11g', '6~8', '낮음', 'var(--success)'],
                   ['흰쌀밥 (1공기)', '70', '66g', '46', '높음', 'var(--danger)'],
                   ['사과 (중 1개)', '36', '25g', '9', '낮음', 'var(--success)'],
                   ['감자 찐 (중 1개)', '94', '24g', '23', '높음', 'var(--danger)'],
@@ -218,8 +218,8 @@ export default function GlycemicLoadPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            수박·사과는 GI만 보면 오해할 수 있지만, 실제 먹는 양 기준 GL은 낮습니다. 반대로 흰쌀밥·감자는 GI도 높고 양도 많아 GL이 큽니다.
-            GI는 아래 조회표와 같은 값(흰쌀밥·찐감자는 국내 인체시험, 수박·사과는 국제표)을 쓰며, 조리법·숙성도에 따라 달라질 수 있습니다.
+            수박은 국제표 2008판 기준 GI 76의 고GI 식품이지만(2021판은 약 50) 1쪽에 든 탄수화물이 적어 어느 값을 써도 GL은 낮습니다. 사과는 GI와 GL이 모두 낮은 쪽이고, 반대로 흰쌀밥·감자는 GI도 높고 양도 많아 GL이 큽니다.
+            흰쌀밥·찐감자는 국내 인체시험, 수박·사과는 국제표 값이며(계산기의 수박은 2021판 50 적용), 조리법·숙성도에 따라 달라질 수 있습니다.
           </p>
         </section>
 
@@ -268,7 +268,7 @@ export default function GlycemicLoadPage() {
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--text)' }}>※1 현미밥</strong> — 국제표는 65(2021판 현미 평균)~68±4(2008판)인데 국내 인체시험은 87.6±12.0으로 20 이상 벌어집니다. 품종·조리 조건에 따라 연구 간 차이가 커서 어느 값이 한국 현미밥을 대표하는지 확정할 수 없어 두 값을 함께 적었습니다.<br />
               <strong style={{ color: 'var(--text)' }}>※2 생바나나</strong> — 숙성도에 따라 덜 익은 것 39, 잘 익은 것 47±5, 과숙 57±8(2021판)로 달라집니다.<br />
-              <strong style={{ color: 'var(--text)' }}>※3 수박</strong> — 2008판 대표값은 여러 연구 평균 76±4(개별 호주 시험 72±13·80±3), 2021판은 말레이시아 ISO 준수 시험 4건 평균 약 50입니다. 다만 1회 120 g의 이용가능 탄수화물이 6 g뿐이어서 <strong style={{ color: 'var(--text)' }}>GL은 4~5로 낮다</strong>는 결론은 양쪽이 같습니다.
+              <strong style={{ color: 'var(--text)' }}>※3 수박</strong> — 2008판 대표값은 여러 연구 평균 76±4(개별 호주 시험 72±13·80±3), 2021판은 말레이시아 ISO 준수 시험 4건 평균 약 50입니다. 다만 1회 120 g의 이용가능 탄수화물이 6 g뿐이어서 <strong style={{ color: 'var(--text)' }}>GL은 4~5로 낮다</strong>는 결론은 양쪽이 같습니다. 이 페이지의 표와 계산기는 1쪽 150 g(탄수화물 11 g)을 1회분으로 잡기 때문에 GL이 6~8(계산기는 GI 50 기준 약 6)로 조금 높게 나오지만, 역시 낮음 구간입니다.
             </p>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.8 }}>

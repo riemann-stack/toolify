@@ -1,3 +1,5 @@
+import { todayStr } from '@/lib/date'
+
 // ─────────────────────────────────────────────────────────────
 // 재료 데이터 + 마트 패키지 + 식이 제한 + 가족 구성·localStorage
 // ─────────────────────────────────────────────────────────────
@@ -100,8 +102,9 @@ export const SERVING_DATA: ServingData[] = [
     variantAdjust: { '전골': -10 },
     marketPackage: '1팩 300·500g', notFor: ['vegetarian', 'vegan'] },
   { key: 'porkGrill', name: '돼지고기 구이', emoji: '🥩', category: 'meat', unit: 'g',
+    // 밥·쌈과 함께(탄수화물 포함) 1인 200g — cookingNote·페이지 표(1인분 200~250g)와 일치하도록 보정 (기존 -50 → 170g)
     basePerPerson: { main: 220, side: 120, snack: 180, light: 150 },
-    withCarbReduction: 50, withoutCarbIncrease: 0, rawToCooked: 0.75,
+    withCarbReduction: 20, withoutCarbIncrease: 0, rawToCooked: 0.75,
     prepNote: '생고기 기준', cookingNote: '삼겹살 기준. 쌈채소와 함께면 1인당 200g, 고기만이면 250g+.',
     variantAdjust: { '구이': 0 },
     marketPackage: '1팩 400·600·1000g', notFor: ['vegetarian', 'vegan'] },
@@ -211,7 +214,7 @@ export const SERVING_DATA: ServingData[] = [
     withCarbReduction: 1, withoutCarbIncrease: 2, rawToCooked: 1.0,
     prepNote: '완제품 (1개 20~25g)', cookingNote: '만두국·군만두·찐만두. 단독 메인이면 6~8개.',
     variantAdjust: { '국물': 0, '찜': 0 },
-    marketPackage: '1봉 16~30개', notFor: ['glutenFree'] },
+    marketPackage: '1봉 16~30개', notFor: ['glutenFree', 'vegetarian', 'vegan'] },
   { key: 'tofu', name: '두부', emoji: '⬜', category: 'soup', unit: 'g (모)',
     basePerPerson: { main: 100, side: 50, snack: 80, light: 80 },
     withCarbReduction: 20, withoutCarbIncrease: 0, rawToCooked: 0.9,
@@ -258,7 +261,7 @@ export const DIETARY_LABEL: Record<DietaryFlag, string> = {
 export type AgeBand = 'adult' | 'teen' | 'school' | 'preschool' | 'toddler'
 
 export const AGE_BAND_LABEL: Record<AgeBand, string> = {
-  adult:     '성인 (만 14세+)',
+  adult:     '성인 (만 18세+)',
   teen:      '중·고생 (만 14~17세)',
   school:    '초등생 (만 7~13세)',
   preschool: '유아 (만 4~6세)',
@@ -290,22 +293,40 @@ export interface UserFamilySettings {
 
 export const STORAGE_KEY = 'youtil:serving:family-v1'
 
-// 한국 시간(KST, UTC+9 · DST 없음) 기준 오늘 날짜 YYYY-MM-DD
-export function todayKST(): string {
-  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
+const MEAL_TYPES: readonly MealType[] = ['main', 'side', 'snack', 'light']
+const APPETITES: readonly Appetite[] = ['small', 'normal', 'large']
+
+function isFamilyMember(v: unknown): v is FamilyMember {
+  if (!v || typeof v !== 'object') return false
+  const m = v as Record<string, unknown>
+  return typeof m.id === 'string'
+    && (m.name === undefined || typeof m.name === 'string')
+    && typeof m.age === 'string' && m.age in AGE_BAND_FACTOR
+    && typeof m.appetite === 'string' && (APPETITES as readonly string[]).includes(m.appetite)
 }
 
+/** 저장값 스키마 검증 — members가 배열이 아니면 members.length·familyToEffectivePeople에서 크래시하므로 걸러냄 */
 export function loadFamily(): UserFamilySettings {
   if (typeof window === 'undefined') return { members: [] }
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as UserFamilySettings) : { members: [] }
+    if (!raw) return { members: [] }
+    const v: unknown = JSON.parse(raw)
+    if (!v || typeof v !== 'object') return { members: [] }
+    const o = v as Record<string, unknown>
+    const out: UserFamilySettings = {
+      members: Array.isArray(o.members) ? o.members.filter(isFamilyMember).slice(0, 20) : [],
+    }
+    if (typeof o.defaultMealType === 'string' && (MEAL_TYPES as readonly string[]).includes(o.defaultMealType)) out.defaultMealType = o.defaultMealType as MealType
+    if (o.carb === 'yes' || o.carb === 'no') out.carb = o.carb
+    if (Array.isArray(o.dietary)) out.dietary = o.dietary.filter((f): f is DietaryFlag => typeof f === 'string' && f in DIETARY_LABEL)
+    return out
   } catch { return { members: [] } }
 }
 export function saveFamily(s: UserFamilySettings): void {
   if (typeof window === 'undefined') return
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...s, updatedAt: todayKST() }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...s, updatedAt: todayStr() }))
   } catch { /* quota */ }
 }
 

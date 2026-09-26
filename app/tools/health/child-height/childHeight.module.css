@@ -43,6 +43,7 @@
 
 .inputRow { display: flex; gap: 6px; align-items: center; }
 .inputRow .numInput { flex: 1; }
+.inputError { margin: 6px 0 0; font-size: 12px; line-height: 1.5; color: var(--danger); }
 .unit {
   font-size: 13px;
   color: var(--muted);

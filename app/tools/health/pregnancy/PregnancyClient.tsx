@@ -2,7 +2,7 @@
 
 /* eslint-disable react-hooks/set-state-in-effect */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './pregnancy.module.css'
 import {
@@ -57,6 +57,8 @@ export default function PregnancyClient() {
 
   /* localStorage 자동 불러오기 */
   const [loadedFromStorage, setLoadedFromStorage] = useState(false)
+  const [hasStored, setHasStored] = useState(false)   // 저장본 존재 여부 (삭제 버튼 노출)
+  const [hydrated, setHydrated] = useState(false)     // 불러오기 완료 후에만 자동 저장
   useEffect(() => {
     const saved = loadProfile()
     if (saved) {
@@ -67,8 +69,26 @@ export default function PregnancyClient() {
       setIsMultiple(!!saved.isMultiple)
       setChecklistProgress(saved.checklistProgress ?? {})
       setLoadedFromStorage(true)
+      setHasStored(true)
     }
+    setHydrated(true)
   }, [])
+
+  /* 자동 저장 — 입력·체크 변경 시 0.4초 디바운스 (비어 있으면 저장하지 않음) */
+  useEffect(() => {
+    if (!hydrated) return
+    if (!date && !babyName && !Object.values(checklistProgress).some(Boolean)) return
+    const t = setTimeout(() => {
+      saveProfile({
+        inputMode, date, cycleLength, isMultiple,
+        babyName: babyName || undefined,
+        checklistProgress,
+        savedAt: new Date().toISOString(),
+      })
+      setHasStored(true)
+    }, 400)
+    return () => clearTimeout(t)
+  }, [hydrated, inputMode, date, cycleLength, isMultiple, babyName, checklistProgress])
 
   /* 메인 계산 */
   const result = useMemo(() => {
@@ -89,7 +109,14 @@ export default function PregnancyClient() {
     setChecklistProgress(next)
   }
 
-  /* 자동 저장 */
+  /* 즉시 저장 (자동 저장과 별개로 체크리스트 탭 버튼) */
+  const savedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => {
+    if (savedTimer.current) clearTimeout(savedTimer.current)
+    if (copyTimer.current) clearTimeout(copyTimer.current)
+  }, [])
+
   const handleSave = () => {
     saveProfile({
       inputMode, date, cycleLength, isMultiple,
@@ -97,8 +124,10 @@ export default function PregnancyClient() {
       checklistProgress,
       savedAt: new Date().toISOString(),
     })
+    setHasStored(true)
     setSaved(true)
-    setTimeout(() => setSaved(false), 1600)
+    if (savedTimer.current) clearTimeout(savedTimer.current)
+    savedTimer.current = setTimeout(() => setSaved(false), 1500)
   }
 
   const handleClear = () => {
@@ -108,6 +137,7 @@ export default function PregnancyClient() {
     setDate('')
     setChecklistProgress({})
     setLoadedFromStorage(false)
+    setHasStored(false)
   }
 
   const [saved, setSaved] = useState(false)
@@ -117,7 +147,8 @@ export default function PregnancyClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+      copyTimer.current = setTimeout(() => setCopied(false), 1500)
     } catch { /* */ }
   }
 
@@ -223,10 +254,10 @@ export default function PregnancyClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.label}>
+        <label className={styles.label} htmlFor="pregnancy-date">
           {inputMode === 'lmp' ? '마지막 생리 시작일' : inputMode === 'conception' ? '수정일' : '출산 예정일'}
         </label>
-        <input className={styles.dateInput} type="date"
+        <input id="pregnancy-date" className={styles.dateInput} type="date"
           min={inputMode === 'duedate' ? undefined : (minDate || undefined)}
           max={inputMode === 'duedate' ? undefined : (maxDate || undefined)}
           value={date} onChange={e => setDate(e.target.value)} />
@@ -280,7 +311,9 @@ export default function PregnancyClient() {
           borderRadius: 14, padding: '30px 20px', textAlign: 'center',
           color: 'var(--muted)', fontSize: 13, fontFamily: 'Noto Sans KR, sans-serif',
         }}>
-          {inputMode === 'lmp' ? '마지막 생리 시작일' : inputMode === 'conception' ? '수정일' : '출산 예정일'}을 선택하면 임신 주수가 계산됩니다
+          {date
+            ? '입력한 날짜로는 아직 임신 기간이 시작되지 않아 주수를 계산할 수 없습니다. 날짜와 입력 방식을 확인하세요.'
+            : `${inputMode === 'lmp' ? '마지막 생리 시작일' : inputMode === 'conception' ? '수정일' : '출산 예정일'}을 선택하면 임신 주수가 계산됩니다`}
         </div>
       )}
 
@@ -292,7 +325,7 @@ export default function PregnancyClient() {
               ⚠️ <strong>임신 {result.currentWeek}주는 정상 분만 범위(보통 37~42주)를 벗어납니다.</strong> 입력한 날짜·입력 방식을 다시 확인하세요. 실제로 예정일이 지났다면 즉시 산부인과 진료가 필요합니다.
             </div>
           )}
-          <div className={styles.heroCard}>
+          <div className={styles.heroCard} role="status">
             <div className={styles.heroLabel}>
               {babyName ? `🤱 ${babyName}` : '현재 임신 주수'}
             </div>
@@ -347,8 +380,8 @@ export default function PregnancyClient() {
               <div className={`${styles.statValue} ${styles.accentValue}`}>{fmtDateKo(result.dueDate)}</div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statLabel}>임신 개월수 (의학)</div>
-              <div className={styles.statValue}>약 {result.monthsApprox}개월 ({TRIMESTERS.find(t => t.id === result.trimester)?.name})</div>
+              <div className={styles.statLabel}>임신 개월 (4주 = 1개월)</div>
+              <div className={styles.statValue}>임신 {result.monthsApprox}개월 ({TRIMESTERS.find(t => t.id === result.trimester)?.name})</div>
             </div>
           </div>
 
@@ -364,7 +397,7 @@ export default function PregnancyClient() {
                       <span className={styles.milestoneName}>{m.name}</span>
                       <span className={styles.milestoneWeek}>{m.week}주</span>
                       <span className={styles.milestoneDday}>
-                        {isPast ? `완료` : `D-${m.daysUntil}`}
+                        {isPast ? `지남` : `D-${m.daysUntil}`}
                       </span>
                     </div>
                   )
@@ -390,7 +423,7 @@ export default function PregnancyClient() {
             </div>
           )}
 
-          {loadedFromStorage && (
+          {hasStored && (
             <button type="button" className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={handleClear} style={{ alignSelf: 'flex-end' }}>
               저장된 정보 삭제
             </button>
@@ -419,7 +452,7 @@ export default function PregnancyClient() {
                   <div key={t.test.id} className={`${styles.testRow} ${cls}`}>
                     <div>
                       <div className={styles.testName}>
-                        {t.status === 'past' ? '✅' : t.status === 'current' ? '🟡' : '📅'}
+                        {t.status === 'past' ? '○' : t.status === 'current' ? '🟡' : '📅'}
                         {' '}{t.test.name}
                         {t.test.importance === 'essential' && (
                           <span style={{ marginLeft: 6, fontSize: 10, color: '#EA580C', fontWeight: 700 }}>핵심</span>
@@ -433,7 +466,7 @@ export default function PregnancyClient() {
                       </div>
                       <div className={`${styles.testStatus} ${t.status === 'current' ? styles.testStatusCurrent : ''}`}>
                         {t.test.startWeek}~{t.test.endWeek}주 ·
-                        {' '}{t.status === 'past' ? '완료' :
+                        {' '}{t.status === 'past' ? '권장 시기 지남' :
                               t.status === 'current' ? '진행 중' :
                               t.daysUntil > 0 ? `D-${t.daysUntil}` : ''}
                       </div>
@@ -630,6 +663,12 @@ export default function PregnancyClient() {
               onChange={e => setReverseDate(e.target.value)} />
           </div>
 
+          {reverseDate && !reverseResult && (
+            <div className={styles.warnBox}>
+              ⚠️ 입력한 예정일은 280일(40주) 넘게 남아 있어 아직 임신 기간이 시작되기 전입니다. 예정일을 다시 확인하세요.
+            </div>
+          )}
+
           {reverseResult && (
             <>
               {reverseOverdue && (
@@ -659,8 +698,8 @@ export default function PregnancyClient() {
                   <div className={styles.statValue}>{reverseResult.currentWeek}주 {reverseResult.currentDay}일 ({TRIMESTERS.find(t => t.id === reverseResult.trimester)?.name})</div>
                 </div>
                 <div className={styles.statCard}>
-                  <div className={styles.statLabel}>임신 개월수 (의학)</div>
-                  <div className={styles.statValue}>약 {reverseResult.monthsApprox}개월</div>
+                  <div className={styles.statLabel}>임신 개월 (4주 = 1개월)</div>
+                  <div className={styles.statValue}>임신 {reverseResult.monthsApprox}개월</div>
                 </div>
               </div>
 

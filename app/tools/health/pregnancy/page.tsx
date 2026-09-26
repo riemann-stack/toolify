@@ -6,12 +6,13 @@ import { GuideDivider } from "@/components/ToolSection"
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import { FETAL_SIZE_COMPARISON } from './pregnancyUtils'
 
 const PREGNANCY_FAQ = [
   { q: '임신 주수는 어떻게 계산하나요?', a: '임신 주수는 마지막 생리 시작일로부터 계산합니다. 실제 수정은 배란일(생리 시작 후 약 14일)에 일어나지만, 정확한 배란일을 알기 어렵기 때문에 의학적으로는 마지막 생리 시작일을 기준으로 삼습니다. 따라서 임신 1주차는 아직 수정 전인 시기입니다.' },
-  { q: '출산 예정일은 어떻게 계산하나요?', a: '출산 예정일은 마지막 생리 시작일로부터 280일(40주) 후입니다. 네겔레 공식에 따라 마지막 생리 시작일에 7일을 더하고 3개월을 빼면 됩니다. 실제 출산은 예정일 ±2주 사이에 일어나는 경우가 많습니다.' },
+  { q: '출산 예정일은 어떻게 계산하나요?', a: '출산 예정일은 마지막 생리 시작일로부터 280일(40주) 후입니다. 손으로 셈할 때는 네겔레 공식(마지막 생리 시작일 + 7일 − 3개월 + 1년)을 쓰는데, 달마다 일수가 달라 280일을 직접 더한 날짜와 최대 3일 정도 차이가 날 수 있습니다. 본 도구는 280일을 직접 더해 계산합니다. 실제 출산은 예정일 ±2주 사이에 일어나는 경우가 많습니다.' },
   { q: '초음파 주수와 생리 기준 주수가 달라요!', a: '초기 초음파 검사에서 태아의 크기(CRL, 두부-둔부 길이)를 측정하여 주수를 보정할 수 있습니다. 이 경우 의사가 새로 지정해 준 주수가 더 정확합니다. 본 계산기는 생리 기준 주수를 사용하므로 초음파 결과와 1~2주 차이가 날 수 있으며, <strong>산부인과에서 보정받은 주수가 있다면 그 결과를 우선 적용</strong>하세요.' },
-  { q: '임신 주수를 개월로 환산하면?', a: '의학적으로는 4주를 1개월로 봅니다. 예를 들어 28주는 7개월이 됩니다. 하지만 일반적인 달력 기준(30~31일/월)과는 차이가 있을 수 있으므로, 임신 경과는 주수(week)로 소통하는 것이 가장 정확합니다.' },
+  { q: '임신 주수를 개월로 환산하면?', a: '국내에서는 4주를 1개월로 묶어 0~3주를 임신 1개월, 4~7주를 2개월로 셉니다. 예를 들어 28~31주는 임신 8개월, 36주부터 출산까지는 10개월(막달)입니다. 달력 기준(30~31일/월)과는 차이가 있으므로 임신 경과는 주수(week)로 소통하는 것이 가장 정확합니다.' },
   { q: '임신 초기 증상에는 어떤 것이 있나요?', a: '착상혈(소량 출혈), 유방 팽창 및 압통, 입덧(메스꺼움·구토), 피로감, 빈뇨, 미각·후각 변화 등이 나타날 수 있습니다. 증상의 정도는 개인차가 매우 크며, 아무런 증상이 없는 경우도 있습니다. <strong>구체적 증상 해석은 산부인과 상담을 권장합니다.</strong>' },
   { q: '산전 검사는 꼭 다 받아야 하나요?', a: '본 도구가 안내하는 검사들은 표준 권장 사항이지만 모두 필수는 아닙니다.<br><br><strong>안전·태아 건강 직결 (필수에 가까움)</strong> — 첫 산전 검사 / 정밀 초음파 / 임신성 당뇨 검사 / GBS 검사.<br><br><strong>선택적 검사 (산모 상황·가족력에 따라)</strong> — 기형아 검사(NIPT·쿼드 등) / 양수 검사(고위험 시).<br><br>비용·시기·필요성은 담당 산부인과와 상담 후 결정하세요. 국민건강보험에서 일부 검사 비용을 지원합니다 (본인부담률 차이).' },
   { q: '태동을 언제부터 느끼나요?', a: '<strong>첫 임신(초산모)</strong>: 보통 18~22주차에 처음 느낌.<br><strong>경험 임신(경산모)</strong>: 보통 16~18주차에 더 빠름.<br><br>태동 종류:<br>· 초기: 가벼운 떨림·기포 터지는 느낌<br>· 중기: 분명한 발차기·움직임<br>· 후기: 강한 움직임·딸꾹질<br><br>28주차 이후는 매일 태동 횟수 기록을 권장하며, <strong>태동이 감소하면 즉시 산부인과 상담</strong>하세요.' },
@@ -97,7 +98,8 @@ export default function PregnancyPage() {
             <div style={{ background: 'var(--bg3)', borderRadius: '8px', padding: '12px 14px' }}>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 마지막 생리 시작일이 <strong style={{ color: 'var(--text)' }}>2026년 5월 1일</strong>이라면<br />
-                → 5월 1일 + 7일 = 5월 8일 → 5월 − 3개월 = 2월 8일 → + 1년 = <strong style={{ color: '#DB2777' }}>2027년 2월 8일</strong>이 출산 예정일
+                → 5월 1일 + 7일 = 5월 8일 → 5월 − 3개월 = 2월 8일 → + 1년 = 2027년 2월 8일 (네겔레 셈법)<br />
+                → 280일을 직접 더하면 <strong style={{ color: '#DB2777' }}>2027년 2월 5일</strong>로, 본 도구는 이 날짜를 출산 예정일로 표시합니다. 달마다 일수가 달라 두 방법은 최대 3일 차이가 날 수 있습니다.
               </p>
             </div>
           </div>
@@ -180,18 +182,10 @@ export default function PregnancyPage() {
             주차별 태아 크기 일반 비유 (참고용 · 의학적 진단 X) —
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
-            {[
-              ['4주', '🌱 양귀비씨 (~2mm)'],
-              ['8주', '🥜 강낭콩 (~16mm)'],
-              ['12주', '🟣 자두 (~5cm)'],
-              ['16주', '🥑 아보카도 (~11cm)'],
-              ['20주', '🍌 바나나 (~17cm)'],
-              ['24주', '🌽 옥수수 (~30cm)'],
-              ['28주', '🍆 큰 가지 (~37cm)'],
-              ['32주', '🎃 호박 (~42cm)'],
-              ['36주', '🍈 파파야 (~47cm)'],
-              ['40주', '🍉 큰 수박 (~51cm)'],
-            ].map(([w, label], i) => (
+            {[4, 8, 12, 16, 20, 24, 28, 32, 36, 40].map(wk => {
+              const f = FETAL_SIZE_COMPARISON[wk]
+              return [`${wk}주`, `${f.emoji} ${f.size} (${f.length})`]
+            }).map(([w, label], i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.25)', borderRadius: 10, padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                 <span style={{ fontSize: 13, color: '#DB2777', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{w}</span>
                 <span style={{ fontSize: 13, color: 'var(--text)' }}>{label}</span>
@@ -199,7 +193,7 @@ export default function PregnancyPage() {
             ))}
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.7 }}>
-            ⓘ 비유는 일반 가이드이며 정확한 태아 크기는 초음파 검사로만 확인 가능합니다. 본 도구 [태아 크기] 탭에서 1~40주 전체 그리드를 확인할 수 있습니다.
+            ⓘ 20주까지는 머리~엉덩이 길이, 21주부터는 머리~발끝 길이 기준이라 그 사이 수치가 크게 늘어납니다. 비유는 일반 가이드이며 정확한 태아 크기는 초음파 검사로만 확인 가능합니다. 본 도구 [태아 크기] 탭에서 1~40주 전체 그리드를 확인할 수 있습니다.
           </p>
         </section>
 

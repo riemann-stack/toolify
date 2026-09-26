@@ -218,7 +218,7 @@
   padding: 0 4px 6px;
 }
 @media (max-width: 540px) {
-  .colLabels { grid-template-columns: 1.4fr 60px 80px 26px; gap: 4px; font-size: 10px; }
+  .colLabels { grid-template-columns: 1.4fr 60px 80px 26px; gap: 4px; font-size: 11px; }
 }
 
 .ingredientList {
@@ -441,7 +441,7 @@
   color: #EA580C;
   border-radius: 999px;
   padding: 2px 7px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   margin-left: 6px;
 }
@@ -530,7 +530,7 @@
   font-variant-numeric: tabular-nums;
 }
 .convertBoxUnit { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; margin-top: 2px; }
-.convertApprox { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.convertApprox { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 .quickRefTable {
   width: 100%;

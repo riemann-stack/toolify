@@ -51,13 +51,28 @@ export interface TempMeta {
   desc: string
 }
 
+/* factor는 '냉동에서 시작'을 1.0으로 둔 상대 시간. 실제 보정은 식품 라벨이 전제하는
+   보관 상태(FoodPreset.labelTemp) 대비 비율로 적용함 → tempFactor() */
 export const TEMPS: TempMeta[] = [
-  { id: 'frozen', emoji: '❄️', label: '냉동 (-18°C)', factor: 1.00, desc: '표준 (라벨 시간 기준)' },
-  { id: 'fridge', emoji: '🧊', label: '냉장 (4°C)',    factor: 0.80, desc: '냉동 대비 시간 -20%' },
-  { id: 'room',   emoji: '🌡️', label: '상온 (20°C)',  factor: 0.60, desc: '냉동 대비 시간 -40%' },
+  { id: 'frozen', emoji: '❄️', label: '냉동 (-18°C)', factor: 1.00, desc: '냉동 상태에서 시작' },
+  { id: 'fridge', emoji: '🧊', label: '냉장 (4°C)',    factor: 0.80, desc: '냉동 대비 시간 약 -20%' },
+  { id: 'room',   emoji: '🌡️', label: '상온 (20°C)',  factor: 0.60, desc: '냉동 대비 시간 약 -40%' },
 ]
 
-export const getTemp = (id: StartTemp) => TEMPS.find((t) => t.id === id)!
+export const isStartTemp = (v: unknown): v is StartTemp =>
+  v === 'frozen' || v === 'fridge' || v === 'room'
+
+export const getTemp = (id: StartTemp) => TEMPS.find((t) => t.id === id) ?? TEMPS[0]
+
+/** 라벨 기준 보관 상태(labelTemp) 대비 시작 온도(sel)의 시간 배수 */
+export function tempFactor(sel: StartTemp, labelTemp: StartTemp): number {
+  return getTemp(sel).factor / getTemp(labelTemp).factor
+}
+
+/** 해동 모드: 해동 모드(약 200W) 100g당 약 2분 — 제조사 해동 가이드 수준(100g당 1.5~2.5분) */
+export const DEFROST_SEC_PER_100G = 120
+/** 해동 프리셋의 1단위 무게 (슬라이더 1칸 = 200g) */
+export const DEFROST_UNIT_G = 200
 
 /* ─────────────────────────────────────────────
    식품 프리셋 12종 (한국 시장)
@@ -69,7 +84,8 @@ export interface FoodPreset {
   label: string
   shortLabel: string
   baseW: number          // 표준 W
-  baseSec: number        // 표준 시간 (초)
+  baseSec: number        // 표준 시간 (초) — labelTemp 상태에서 시작 기준
+  labelTemp: StartTemp   // 라벨 시간이 전제하는 보관 상태 (햇반·즉석국=상온, 편의점 도시락=냉장 등)
   restSec: number        // 휴지 시간 (초)
   restAdditionalSec: number  // 휴지 후 추가 가열
   container: string
@@ -84,11 +100,11 @@ export const FOODS: FoodPreset[] = [
   {
     id: 'rice',
     emoji: '🍚',
-    label: '냉동밥 (햇반·즉석밥)',
-    shortLabel: '냉동밥',
-    baseW: 700, baseSec: 120, restSec: 0, restAdditionalSec: 0,
+    label: '즉석밥·냉동밥 (햇반 등)',
+    shortLabel: '즉석밥',
+    baseW: 700, baseSec: 120, labelTemp: 'room', restSec: 0, restAdditionalSec: 0,
     container: '용기 그대로 OK',
-    tip: '뚜껑 살짝 열거나 비닐 일부 제거. 데운 후 한 번 섞으면 균일.',
+    tip: '햇반 같은 즉석밥은 상온 보관 제품이라 라벨 시간이 상온 기준입니다. 집에서 얼린 밥이면 시작 온도를 냉동으로 바꾸세요. 뚜껑 살짝 열거나 비닐 일부 제거, 데운 후 한 번 섞으면 균일.',
     vessel: '햇반 전용 용기 (PP 5번)',
   },
   {
@@ -96,7 +112,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🥟',
     label: '냉동만두',
     shortLabel: '냉동만두',
-    baseW: 700, baseSec: 90, restSec: 30, restAdditionalSec: 60,
+    baseW: 700, baseSec: 90, labelTemp: 'frozen', restSec: 30, restAdditionalSec: 60,
     container: '내열 접시 + 키친타올',
     tip: '1.5분 가열 → 30초 휴지(균일 가열) → 1분 추가. 휴지가 핵심.',
     vessel: '도자기·내열유리',
@@ -106,7 +122,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🍕',
     label: '냉동피자',
     shortLabel: '냉동피자',
-    baseW: 700, baseSec: 180, restSec: 0, restAdditionalSec: 0,
+    baseW: 700, baseSec: 180, labelTemp: 'frozen', restSec: 0, restAdditionalSec: 0,
     container: '내열 접시',
     tip: '가장자리 타기 쉬움. 70% 시간으로 시작 → 추가 가열 권장. 오븐 토스터가 더 좋음.',
     vessel: '도자기·내열유리 (금색 X)',
@@ -116,7 +132,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🍱',
     label: '냉동도시락',
     shortLabel: '도시락',
-    baseW: 700, baseSec: 240, restSec: 60, restAdditionalSec: 60,
+    baseW: 700, baseSec: 240, labelTemp: 'frozen', restSec: 60, restAdditionalSec: 60,
     container: '용기 그대로 OK',
     tip: '4분 가열 → 1분 휴지 → 1분 추가. 위치별 가열 차이 큼. 중간 회전 권장.',
     vessel: 'PP 전용 용기',
@@ -126,7 +142,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🥣',
     label: 'CJ·오뚜기 즉석국·찌개',
     shortLabel: '즉석국',
-    baseW: 700, baseSec: 150, restSec: 0, restAdditionalSec: 0,
+    baseW: 700, baseSec: 150, labelTemp: 'room', restSec: 0, restAdditionalSec: 0,
     container: '비닐 끝 살짝 자르기',
     tip: '비닐 끝을 1~2cm 잘라야 폭발 방지. 끓어 넘침 주의.',
     vessel: '내열 그릇에 옮기면 더 안전',
@@ -136,7 +152,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🍙',
     label: '편의점 도시락',
     shortLabel: '편의점',
-    baseW: 700, baseSec: 150, restSec: 0, restAdditionalSec: 0,
+    baseW: 700, baseSec: 150, labelTemp: 'fridge', restSec: 0, restAdditionalSec: 0,
     container: '비닐 일부 제거',
     tip: '뚜껑 비닐 끝부터 제거. CU·GS·세븐 모두 700W 2~3분 표준.',
     vessel: '도시락 용기 그대로',
@@ -146,7 +162,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🥛',
     label: '우유·음료 (200ml)',
     shortLabel: '우유',
-    baseW: 700, baseSec: 60, restSec: 0, restAdditionalSec: 0,
+    baseW: 700, baseSec: 60, labelTemp: 'fridge', restSec: 0, restAdditionalSec: 0,
     container: '내열 머그',
     warning: '끓어 넘침 주의 — 처음엔 30초씩 분할 가열',
     tip: '30초 → 저어주기 → 추가 30초 패턴이 안전. 컵 80%만 채우기.',
@@ -157,7 +173,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🍞',
     label: '빵·베이커리',
     shortLabel: '빵',
-    baseW: 700, baseSec: 15, restSec: 0, restAdditionalSec: 0,
+    baseW: 700, baseSec: 15, labelTemp: 'room', restSec: 0, restAdditionalSec: 0,
     container: '키친타올로 감싸기',
     tip: '10초 단위 가열. 너무 데우면 딱딱해지므로 살짝만. 물 한 방울 뿌리면 부드러움 유지.',
     vessel: '내열 접시 + 키친타올',
@@ -167,7 +183,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🍳',
     label: '⚠️ 계란 (통째)',
     shortLabel: '계란',
-    baseW: 0, baseSec: 0, restSec: 0, restAdditionalSec: 0,
+    baseW: 0, baseSec: 0, labelTemp: 'fridge', restSec: 0, restAdditionalSec: 0,
     container: '절대 사용 금지',
     warning: '🚨 통째 가열 시 폭발 위험 — 절대 금지. 부상 사례 다수.',
     tip: '계란을 데우려면 ① 노른자에 칼집 ② 흰자 풀기 ③ 그릇에 풀어 사용. 통째 X.',
@@ -179,7 +195,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🍡',
     label: '떡 (가래·인절미)',
     shortLabel: '떡',
-    baseW: 700, baseSec: 30, restSec: 0, restAdditionalSec: 0,
+    baseW: 700, baseSec: 30, labelTemp: 'room', restSec: 0, restAdditionalSec: 0,
     container: '내열 접시 + 물',
     tip: '물 1~2 스푼 뿌려서 가열. 비닐 X (눌어붙음). 30초 단위로 확인.',
     vessel: '도자기·내열유리',
@@ -189,10 +205,10 @@ export const FOODS: FoodPreset[] = [
     emoji: '🥩',
     label: '냉동 고기 (해동)',
     shortLabel: '냉동고기',
-    baseW: 200, baseSec: 60, restSec: 0, restAdditionalSec: 0,
+    baseW: 200, baseSec: DEFROST_SEC_PER_100G * (DEFROST_UNIT_G / 100), labelTemp: 'frozen', restSec: 0, restAdditionalSec: 0,
     container: '내열 접시',
     warning: '해동은 출력 W와 무관 — 반드시 해동 모드(약 200W)로. 일반 출력은 가장자리만 익습니다.',
-    tip: '해동 모드(약 200W) 200g당 1분 → 중간에 뒤집기. 가장자리 익기 시작하면 정지하고 휴지. 정밀 해동은 해동 시간 계산기 권장.',
+    tip: '해동 모드(약 200W) 100g당 약 2분(200g 약 4분). 2분마다 뒤집고, 가장자리가 익기 시작하면 멈추고 휴지하세요. 두께·부위별로 차이가 크니 정밀 해동은 해동 시간 계산기를 권장합니다.',
     vessel: '도자기·내열유리',
     defrostMode: true,
   },
@@ -201,7 +217,7 @@ export const FOODS: FoodPreset[] = [
     emoji: '🥦',
     label: '냉동 채소',
     shortLabel: '냉동채소',
-    baseW: 700, baseSec: 90, restSec: 0, restAdditionalSec: 0,
+    baseW: 700, baseSec: 90, labelTemp: 'frozen', restSec: 0, restAdditionalSec: 0,
     container: '뚜껑 있는 내열 그릇 + 물 약간',
     tip: '물 1~2 스푼 + 뚜껑 (찜 효과). 200g 1~2분, 중간 한 번 섞기.',
     vessel: '내열 뚜껑 그릇',
@@ -282,10 +298,18 @@ export const fmt = (n: number, digits = 0) =>
 
 /** 초 → "M분 S초" 또는 "S초" */
 export function fmtSec(sec: number): string {
-  if (sec < 60) return `${Math.round(sec)}초`
-  const m = Math.floor(sec / 60)
-  const s = Math.round(sec - m * 60)
+  // 전체 초를 먼저 반올림해야 119.7초가 '1분 60초'가 아닌 '2분'이 됨
+  const total = Math.round(sec)
+  if (total < 60) return `${total}초`
+  const m = Math.floor(total / 60)
+  const s = total % 60
   return s > 0 ? `${m}분 ${s}초` : `${m}분`
+}
+
+/** 초 → 타이머 입력칸용 { 분, 초 } (반올림 후 분할해 60초 방지) */
+export function splitMinSec(sec: number): { m: number; s: number } {
+  const total = Math.max(0, Math.round(sec))
+  return { m: Math.floor(total / 60), s: total % 60 }
 }
 
 /** 초 → "MM:SS" (타이머용) */

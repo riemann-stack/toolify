@@ -54,10 +54,11 @@ export const NUTS_DATA: NutData[] = [
     benefit: ['뼈 건강', '혈압 조절', '에너지 대사'] },
   { key: 'brazilNut',    name: '브라질너트',   color: '#4A2C20',
     servingGrams: 10, servingCount: 2, caloriePerServing: 66,
-    protein: 1.4, fat: 6.6, carbs: 1.2, fiber: 0.7, selenium: 137,
-    keyNutrient: '셀레늄', keyNutrientAmount: '137μg (RDA 249%)',
+    // 셀레늄: USDA SR Legacy 1,917μg/100g (NIH ODS 1온스 544μg) → 10g 약 192μg. 개체 편차 큼
+    protein: 1.4, fat: 6.6, carbs: 1.2, fiber: 0.7, selenium: 192,
+    keyNutrient: '셀레늄', keyNutrientAmount: '192μg (권장량 320%)',
     maxDaily: 10,
-    warning: '하루 2~3알(10g) 초과 절대 금지. 셀레늄 독성(탈모·손발톱 변형·신경 손상) 위험.',
+    warning: '하루 1~2알(약 5~10g) 이내. 매일 3알 이상이면 셀레늄 상한(400μg)에 가까워지고, 넘으면 독성(탈모·손발톱 변형·신경 손상) 위험.',
     danger: true, allergyGroup: 'tree',
     benefit: ['셀레늄 보충', '항산화', '갑상선 기능'] },
   { key: 'peanut',       name: '땅콩',         color: '#C8956D',
@@ -192,8 +193,15 @@ export const PROC_DATA: ProcData[] = [
 ]
 
 // ── 셀레늄 권장량 ────────────────────────
-export const SELENIUM_RDA = 55      // μg, 성인 권장량
-export const SELENIUM_UL = 400      // μg, 상한 섭취량 (Tolerable Upper Intake Level)
+// 출처: 2020 한국인 영양소 섭취기준(보건복지부·한국영양학회) 성인 권장섭취량 60μg, 상한섭취량 400μg
+export const SELENIUM_RDA = 60      // μg, 성인 권장섭취량 (KDRI)
+export const SELENIUM_UL = 400      // μg, 상한섭취량
+
+/** 위험 판정 기준(g) — 셀레늄 위험 견과는 해당 견과만으로 셀레늄 상한(UL)에 닿는 양, 그 외는 권장 한도의 3배 */
+export function dangerThresholdOf(n: Pick<NutData, 'danger' | 'maxDaily' | 'servingGrams' | 'selenium'>): number {
+  if (n.danger && n.selenium > 0) return n.servingGrams * (SELENIUM_UL / n.selenium)
+  return n.maxDaily * 3
+}
 
 // ── localStorage ─────────────────────────
 export interface UserNutSettings {
@@ -206,11 +214,26 @@ export interface UserNutSettings {
 
 export const STORAGE_KEY = 'youtil:nuts:settings-v1'
 
+const GOALS = ['diet', 'maintain', 'gain'] as const
+
+/** 저장값 필드별 검증 — 잘못된 proc면 PROC_DATA.find가 undefined가 되어 렌더가 깨지므로 걸러냄 */
 export function loadSettings(): UserNutSettings {
   if (typeof window === 'undefined') return {}
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as UserNutSettings) : {}
+    if (!raw) return {}
+    const v: unknown = JSON.parse(raw)
+    if (!v || typeof v !== 'object') return {}
+    const o = v as Record<string, unknown>
+    const out: UserNutSettings = {}
+    if (typeof o.weight === 'number' && Number.isFinite(o.weight)) out.weight = Math.min(120, Math.max(40, Math.round(o.weight)))
+    if (typeof o.goal === 'string' && (GOALS as readonly string[]).includes(o.goal)) out.goal = o.goal as UserNutSettings['goal']
+    if (typeof o.dailyKcal === 'string' && /^\d{0,5}$/.test(o.dailyKcal)) out.dailyKcal = o.dailyKcal
+    if (typeof o.proc === 'string' && PROC_DATA.some(p => p.key === o.proc)) out.proc = o.proc as ProcK
+    if (Array.isArray(o.allergies)) {
+      out.allergies = o.allergies.filter((g): g is AllergyGroup => typeof g === 'string' && g in ALLERGY_GROUP_LABEL)
+    }
+    return out
   } catch { return {} }
 }
 export function saveSettings(s: UserNutSettings): void {

@@ -178,7 +178,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
       { name: '꿀',         ratio: 0.75, ratioNote: '설탕 100g → 꿀 75g, 액체 1/4컵 줄이기', grade: 'good', useFor: ['머핀', '쿠키', '드레싱'], taste: '꿀 특유의 향', texture: '더 촉촉, 갈색 더 진함', warning: '160°C 이하로 굽기 (꿀이 빨리 탐)' },
       { name: '메이플시럽',  ratio: 0.75, substituteUnit: 'ml', ratioNote: '설탕 100g → 시럽 75ml, 액체 줄이기', grade: 'good', useFor: ['팬케이크', '머핀', '쿠키'], taste: '메이플 향, 풍부함', texture: '약간 더 촉촉' },
       { name: '알룰로스',    ratio: 1.3,  ratioNote: '설탕 100g → 알룰로스 130g (단맛 약함)', grade: 'good', useFor: ['저당 디저트', '음료', '드레싱'], taste: '깔끔한 단맛', texture: '거의 동일', warning: '캐러멜화 약함 (색·풍미 약간 차이)' },
-      { name: '스테비아',    ratio: 0.01, ratioNote: '설탕 1컵 = 스테비아 1작은술', grade: 'okay', useFor: ['음료', '드레싱', '제로 디저트'], taste: '쓴맛 후미 (제품에 따라 다름)', texture: '부피 손실로 베이킹은 부피 보충 필요', warning: '베이킹은 다른 부피 재료 추가 필요' },
+      { name: '스테비아',    ratio: 0.02, ratioNote: '설탕 1컵 = 스테비아 1작은술', grade: 'okay', useFor: ['음료', '드레싱', '제로 디저트'], taste: '쓴맛 후미 (제품에 따라 다름)', texture: '부피 손실로 베이킹은 부피 보충 필요', warning: '베이킹은 다른 부피 재료 추가 필요' },
       { name: '바나나 (으깬 것)', ratio: 1.0, ratioNote: '설탕 100g → 바나나 100g, 액체 1/4 줄이기', grade: 'okay', useFor: ['머핀', '브라우니', '바나나브레드'], taste: '바나나 향', texture: '훨씬 촉촉, 진한 색' },
       { name: '코코넛 슈가',  ratio: 1.0, grade: 'good', useFor: ['쿠키', '머핀'], taste: '캐러멜 풍미', texture: '약간 더 진한 색' },
       { name: '황설탕',      ratio: 1.0, grade: 'good', useFor: ['쿠키', '브라우니'], taste: '캐러멜·당밀 풍미', texture: '약간 더 촉촉' },
@@ -283,7 +283,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   gingerPaste: {
     original: '다진생강', emoji: '🧄', category: '양념', group: 'season',
     options: [
-      { name: '생강가루',         ratio: 0.25, ratioNote: '다진생강 1큰술 = 생강가루 1/4 작은술', grade: 'good', useFor: ['베이킹', '드레싱'], taste: '약간 다른 풍미', texture: '식감 없음' },
+      { name: '생강가루',         ratio: 0.08, ratioNote: '다진생강 1큰술 = 생강가루 1/4 작은술', grade: 'good', useFor: ['베이킹', '드레싱'], taste: '약간 다른 풍미', texture: '식감 없음' },
       { name: '생강 (생, 으깬 것)', ratio: 1.0, grade: 'perfect', useFor: ['모든 요리'], taste: '신선하고 더 매운', texture: '동일' },
     ],
   },
@@ -649,6 +649,7 @@ function SearchTab(props: {
               type="text"
               className={styles.searchInput}
               placeholder="예: 버터, 설탕, 계란"
+              aria-label="재료 검색"
               value={searchTerm}
               onChange={e => { setSearchTerm(e.target.value); setShowSuggestions(true) }}
               onFocus={() => setShowSuggestions(true)}
@@ -697,8 +698,9 @@ function SearchTab(props: {
         {/* 양 + 단위 — 2열 그리드 */}
         <div className={styles.amountRow}>
           <div>
-            <span className={styles.fieldLabel}>원재료 양</span>
+            <label htmlFor="sub-amount" className={styles.fieldLabel}>원재료 양</label>
             <input
+              id="sub-amount"
               type="number" inputMode="decimal"
               className={`${styles.input} ${amount && parseFloat(amount) > 0 ? styles.inputFilled : ''}`}
               value={amount}
@@ -709,9 +711,9 @@ function SearchTab(props: {
             />
           </div>
           <div>
-            <span className={styles.fieldLabel}>단위</span>
+            <label htmlFor="sub-unit" className={styles.fieldLabel}>단위</label>
             <div className={styles.selectWrap}>
-              <select className={styles.select} value={unit} onChange={e => setUnit(e.target.value)}>
+              <select id="sub-unit" className={styles.select} value={unit} onChange={e => setUnit(e.target.value)}>
                 {UNIT_OPTIONS.map(u => <option key={u} value={u}>{u}</option>)}
               </select>
               <span className={styles.selectArrow}>▼</span>
@@ -772,10 +774,13 @@ function SearchTab(props: {
 // ──────────────────────────────────────
 function OptionCard({ opt, amount, unit }: { opt: SubstituteOption; amount: number; unit: string }) {
   const grade = GRADE_INFO[opt.grade]
-  const subUnit = opt.substituteUnit || unit
+  // substituteUnit(예: 'ml')은 'g 입력 → ml' 무게→부피 비율이라 g로 입력했을 때만 적용.
+  // 부피 단위(ml·큰술·작은술·컵)는 같은 단위에 ratio만 곱함 (버터 1컵 → 오일 3/4컵).
+  const subUnit = opt.substituteUnit !== undefined && unit === 'g' ? opt.substituteUnit : unit
   // 단위가 바뀌거나(가루·혼합·개수) substituteUnit이 없는데 환산 노트가 있으면
-  // 단순 ×ratio(같은 단위)는 오해를 줌 → 숫자 대신 단위 인식 노트만 표시
-  const reliableNumeric = opt.ratio > 0 && (opt.substituteUnit !== undefined || !opt.ratioNote)
+  // 단순 ×ratio(같은 단위)는 오해를 줌 → 숫자 대신 단위 인식 노트만 표시.
+  // substituteUnit이 있는 무게·부피 비율은 '개' 입력에 의미가 없으므로 숫자를 숨김.
+  const reliableNumeric = opt.ratio > 0 && (opt.substituteUnit !== undefined ? unit !== '개' : !opt.ratioNote)
   const showNumeric = amount > 0 && reliableNumeric
 
   return (
@@ -889,7 +894,7 @@ function BrowseTab({ onDetail }: { onDetail: (key: string) => void }) {
                             <div key={i} className={styles.browseOption}>
                               <span className={`${styles.browseOptionDot} ${gradeMeta.dotClass}`} />
                               <span className={styles.browseOptionName}>{opt.name}</span>
-                              <span className={styles.browseOptionRatio}>×{opt.ratio}</span>
+                              {opt.ratio > 0 && <span className={styles.browseOptionRatio}>×{opt.ratio}</span>}
                             </div>
                           )
                         })}
