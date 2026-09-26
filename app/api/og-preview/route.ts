@@ -1,11 +1,26 @@
 // ─────────────────────────────────────────────────────────────
 // /api/og-preview?url=https://example.com
 //   - 외부 페이지 HTML을 받아와 og:* / twitter:* / title / canonical 메타태그 추출
-//   - CORS 우회용. SSRF 보호 + 5분 캐시.
+//   - 같은 출처 클라이언트(OgPreviewClient) 전용. CORS 헤더 없음 + 교차 사이트 브라우저 호출 403.
+//   - SSRF 방어: URL·리다이렉트 홉별 검증 + DNS 해석 결과 검증·핀 고정(fetchHtml.ts), 8초 예산, 본문 512KB 상한.
+//   - 5분 CDN 캐시(s-maxage) — 같은 URL 반복 조회 시 함수·대상 서버 호출 절감.
+// 응답 계약(클라이언트): { ok, url?, fetchedUrl?, status?, tags?, error? }
 // ─────────────────────────────────────────────────────────────
 
-export const runtime = 'edge'
-export const revalidate = 300
+import { apiJson, crossSiteForbidden, isCrossSiteRequest } from '../_lib/http'
+import { checkTargetUrl } from '../_lib/ssrf'
+import { fetchHtml, FetchHtmlError } from './fetchHtml'
+
+// DNS 해석 검증(node:dns)·연결 핀 고정(node:https lookup 훅)이 필요해 Node 런타임.
+// 서울 리전 — 국내 사이트의 해외 IP 차단·지연 회피 (Edge 시절과 같은 근접성).
+export const runtime = 'nodejs'
+export const preferredRegion = 'icn1'
+export const dynamic = 'force-dynamic'
+
+const TIMEOUT_MS = 8000
+const MAX_BYTES = 512 * 1024
+const MAX_REDIRECTS = 5
+const CACHE_OK = 'public, max-age=300, s-maxage=300'
 
 interface MetaResponse {
   ok: boolean
@@ -16,22 +31,16 @@ interface MetaResponse {
   error?: string
 }
 
-const PRIVATE_HOST = /^(localhost|127\.|0\.0\.0\.0|169\.254\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/i
-
 function json(data: MetaResponse, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'public, max-age=300, s-maxage=300',
-      'Access-Control-Allow-Origin': '*',
-    },
-  })
+  return apiJson(data, status, CACHE_OK)
 }
 
 export async function GET(req: Request): Promise<Response> {
+  if (isCrossSiteRequest(req)) return crossSiteForbidden()
+
   const param = new URL(req.url).searchParams.get('url')?.trim()
   if (!param) return json({ ok: false, error: 'url 파라미터가 필요합니다.' }, 400)
+  if (param.length > 2048) return json({ ok: false, error: 'URL이 너무 깁니다 (최대 2,048자).' }, 400)
 
   let target: URL
   try {
@@ -39,47 +48,42 @@ export async function GET(req: Request): Promise<Response> {
   } catch {
     return json({ ok: false, error: '유효한 URL 형식이 아닙니다 (http:// 또는 https:// 시작).' }, 400)
   }
-  if (!['http:', 'https:'].includes(target.protocol)) {
-    return json({ ok: false, error: 'http(s) 프로토콜만 지원합니다.' }, 400)
-  }
-  if (PRIVATE_HOST.test(target.hostname)) {
-    return json({ ok: false, error: '내부망·로컬 주소는 차단됩니다.' }, 400)
-  }
+  const bad = checkTargetUrl(target)
+  if (bad) return json({ ok: false, error: bad.message }, 400)
 
   try {
-    const res = await fetch(target.toString(), {
-      signal: AbortSignal.timeout(8000),
-      redirect: 'follow',
+    const { finalUrl, status, html } = await fetchHtml(target, {
+      timeoutMs: TIMEOUT_MS,
+      maxBytes: MAX_BYTES,
+      maxRedirects: MAX_REDIRECTS,
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; YoutilOGPreview/1.0; +https://youtil.kr)',
-        'Accept': 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.5',
         'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.8',
       },
     })
-    const ct = res.headers.get('content-type') ?? ''
-    if (!ct.includes('text/html') && !ct.includes('application/xhtml')) {
-      return json({ ok: false, error: `HTML 페이지가 아닙니다 (Content-Type: ${ct || '없음'}).`, status: res.status })
-    }
-    // 본문 상한 200KB
-    const reader = res.body?.getReader()
-    if (!reader) return json({ ok: false, error: '응답 본문을 읽을 수 없습니다.' })
-    const decoder = new TextDecoder('utf-8')
-    let html = ''
-    const MAX = 200_000
-    while (html.length < MAX) {
-      const { done, value } = await reader.read()
-      if (done) break
-      html += decoder.decode(value, { stream: true })
-    }
-    try { await reader.cancel() } catch {}
-
     const tags = extractMetaTags(html)
-    return json({ ok: true, url: target.toString(), fetchedUrl: res.url, status: res.status, tags })
+    return json({ ok: true, url: target.toString(), fetchedUrl: finalUrl, status, tags })
   } catch (e) {
-    const msg = (e as Error)?.name === 'TimeoutError'
-      ? '응답 시간 초과 (8초). 대상 서버가 느리거나 차단했을 수 있습니다.'
-      : '페이지를 불러올 수 없습니다 — 네트워크 오류 또는 봇 차단.'
-    return json({ ok: false, error: msg })
+    if (e instanceof FetchHtmlError) {
+      switch (e.code) {
+        case 'blocked':
+          return json({
+            ok: false,
+            error: e.redirected ? `리다이렉트 목적지 차단: ${e.message}` : e.message,
+          }, 400)
+        case 'timeout':
+          return json({ ok: false, error: '응답 시간 초과 (8초). 대상 서버가 느리거나 차단했을 수 있습니다.' })
+        case 'not_html':
+          return json({ ok: false, error: e.message, status: e.status })
+        case 'dns':
+        case 'too_many_redirects':
+        case 'bad_redirect':
+          return json({ ok: false, error: e.message })
+        default:
+          break
+      }
+    }
+    return json({ ok: false, error: '페이지를 불러올 수 없습니다 — 네트워크 오류 또는 봇 차단.' })
   }
 }
 
@@ -119,14 +123,20 @@ function extractMetaTags(html: string): Record<string, string> {
   return tags
 }
 
+/** 코드 포인트 → 문자. 범위 밖·서로게이트 단독값은 원문 유지 (fromCharCode는 이모지 등 BMP 밖을 깨뜨림) */
+function fromCodePointSafe(cp: number, raw: string): string {
+  if (!Number.isFinite(cp) || cp < 0 || cp > 0x10ffff || (cp >= 0xd800 && cp <= 0xdfff)) return raw
+  return String.fromCodePoint(cp)
+}
+
 function decodeEntities(s: string): string {
   return s
-    .replace(/&amp;/g, '&')
+    .replace(/&#(\d+);/g, (raw, c: string) => fromCodePointSafe(parseInt(c, 10), raw))
+    .replace(/&#x([0-9a-f]+);/gi, (raw, c: string) => fromCodePointSafe(parseInt(c, 16), raw))
     .replace(/&quot;/g, '"')
     .replace(/&#039;|&apos;/g, "'")
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
-    .replace(/&#(\d+);/g, (_, c) => String.fromCharCode(parseInt(c, 10)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, c) => String.fromCharCode(parseInt(c, 16)))
     .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&') // 마지막 — '&amp;lt;'가 '<'로 이중 해석되지 않게
 }

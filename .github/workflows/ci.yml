@@ -1,0 +1,56 @@
+# PR·main 푸시 검증 — 타입 검사 · 테스트 · 프로덕션 빌드.
+# (배포 자체는 Vercel Git 연동이 main 푸시마다 수행. 이 워크플로는 깨진 코드가 main에 들어가기 전에 알리는 게이트.)
+#
+# lint: 기존 오류(react/no-unescaped-entities, set-state-in-effect 등)가 정리될 때까지 결과만 보고하고
+#       실패로 처리하지 않는다(continue-on-error). 정리 후 continue-on-error를 제거해 차단 게이트로 올릴 것.
+#
+# 참고: refresh-popular.yml 봇 커밋은 제목에 [skip ci]가 있어 이 워크플로를 트리거하지 않는다.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# 같은 브랜치/PR에 새 푸시가 오면 이전 실행 취소
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # next-env.d.ts는 .gitignore 대상이고 .next/types/routes.d.ts를 import한다 →
+      # 새 체크아웃에서는 먼저 생성해야 tsc가 CSS Module·라우트 타입을 찾는다.
+      - name: Generate Next.js types
+        run: npx next typegen
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Test
+        run: npm test
+
+      - name: Lint (non-blocking)
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build

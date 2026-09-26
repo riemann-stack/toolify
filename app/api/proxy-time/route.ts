@@ -2,8 +2,13 @@
 // /api/proxy-time?url=<target>
 // 임의 외부 사이트의 HTTP `Date` 응답 헤더를 프록시로 측정
 // — 클라이언트는 CORS 차단으로 직접 못 가져오므로 Edge에서 대신 HEAD 요청
+// — 같은 출처 클라이언트(server-time·network-test) 전용: CORS 헤더 없음 + 교차 사이트 브라우저 호출 403
 // ─────────────────────────────────────────────────────────────
 
+import { apiJson, crossSiteForbidden, isCrossSiteRequest, NO_STORE } from '../_lib/http'
+import { checkTargetUrl } from '../_lib/ssrf'
+
+// Edge 유지: 사용자와 가까운 PoP에서 대상 서버까지의 RTT를 재야 시계 오프셋 추정이 정확하다.
 export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -31,42 +36,21 @@ interface ErrorResult {
 type Result = SuccessResult | ErrorResult
 
 function json(data: Result, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-      'Access-Control-Allow-Origin': '*',
-    },
-  })
+  return apiJson(data, status, NO_STORE)
 }
 
-/* 대상 URL 검증 — 리다이렉트 홉마다 재호출 (SSRF 방지)
-   ※ DNS rebinding(도메인이 사설 IP로 해석)은 Edge 런타임에서 IP 피닝이 불가해 막을 수 없음 —
-   응답에서 Date 헤더·상태코드만 노출하므로 잔여 위험은 제한적. */
+/* 대상 URL 검증 — 리다이렉트 홉마다 재호출 (SSRF 방지). 규칙은 app/api/_lib/ssrf.ts 단일 소스
+   (스킴·계정정보·포트·localhost/사설 접미사·단일 라벨·IPv4 사설/특수 대역·IPv6 루프백/ULA/링크로컬/매핑 등).
+   ※ DNS rebinding(도메인이 사설 IP로 해석)은 Edge 런타임에서 DNS 조회·IP 피닝이 불가해 막을 수 없음 —
+   응답에서 Date 헤더·상태코드·최종 URL만 노출하므로 잔여 위험은 제한적(본문은 읽지 않음). */
 function validateTarget(target: URL): ErrorResult | null {
-  if (target.protocol !== 'https:' && target.protocol !== 'http:') {
-    return { ok: false, error: 'http(s) 프로토콜만 지원합니다.', reason: 'invalid_url' }
+  const bad = checkTargetUrl(target)
+  if (!bad) return null
+  return {
+    ok: false,
+    error: bad.message,
+    reason: bad.kind === 'protocol' || bad.kind === 'credentials' ? 'invalid_url' : 'blocked_host',
   }
-  // IPv6 리터럴은 URL.hostname이 대괄호를 포함([::1])하므로 벗겨서 비교
-  const host = target.hostname.replace(/^\[|\]$/g, '').toLowerCase()
-  const blockedHosts = ['localhost', '0.0.0.0', '::', '::1']
-  if (blockedHosts.includes(host) || host.endsWith('.local') || host.endsWith('.internal')) {
-    return { ok: false, error: '내부망 호스트는 접근할 수 없습니다.', reason: 'blocked_host' }
-  }
-  // 사설·루프백·링크로컬 대역 (10/8, 172.16/12, 192.168/16, 127/8, 169.254/16, 0/8)
-  if (/^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.|127\.|169\.254\.|0\.)/.test(host)) {
-    return { ok: false, error: '사설망 IP는 접근할 수 없습니다.', reason: 'blocked_host' }
-  }
-  // IPv4를 단일 10진수/16진수로 우회 표기(예: 2130706433, 0x7f000001)하는 형태 차단
-  if (/^(\d+|0x[0-9a-f]+)$/.test(host)) {
-    return { ok: false, error: '숫자형 호스트 표기는 지원하지 않습니다.', reason: 'blocked_host' }
-  }
-  // IPv6 루프백·링크로컬·ULA·v4-매핑 차단
-  if (host.includes(':') && /^(fe80:|fc|fd|::ffff:)/.test(host)) {
-    return { ok: false, error: '내부망 호스트는 접근할 수 없습니다.', reason: 'blocked_host' }
-  }
-  return null
 }
 
 const COMMON_HEADERS = {
@@ -105,9 +89,12 @@ const MAX_REDIRECTS = 5
 const TOTAL_BUDGET_MS = 8000
 
 export async function GET(req: Request): Promise<Response> {
+  if (isCrossSiteRequest(req)) return crossSiteForbidden()
+
   const url = new URL(req.url).searchParams.get('url')?.trim()
 
   if (!url) return json({ ok: false, error: 'URL 파라미터가 필요합니다.', reason: 'invalid_url' }, 400)
+  if (url.length > 2048) return json({ ok: false, error: 'URL이 너무 깁니다 (최대 2,048자).', reason: 'invalid_url' }, 400)
 
   // URL 검증
   let target: URL
@@ -140,7 +127,7 @@ export async function GET(req: Request): Promise<Response> {
         if (e instanceof Error && e.name === 'TimeoutError') {
           return json({ ok: false, error: `${TIMEOUT_MS}ms 안에 응답이 없습니다.`, reason: 'timeout' })
         }
-        return json({ ok: false, error: e instanceof Error ? e.message : '네트워크 오류', reason: 'network' })
+        return json({ ok: false, error: '대상 사이트에 연결할 수 없습니다 (네트워크 오류 또는 차단).', reason: 'network' })
       }
       const loc = res.headers.get('location')
       if (res.status >= 300 && res.status < 400 && loc) {
@@ -191,7 +178,7 @@ export async function GET(req: Request): Promise<Response> {
     }
     return json({
       ok: false,
-      error: e instanceof Error ? e.message : '네트워크 오류',
+      error: '대상 사이트에 연결할 수 없습니다 (네트워크 오류 또는 차단).',
       reason: 'network',
     })
   }

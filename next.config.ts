@@ -20,8 +20,11 @@ const nextConfig: NextConfig = {
       { source: '/tools/life/golf-distance',    destination: '/tools/sports/golf-distance',  permanent: true },
 
       // ─────────────────────────────────────────────────────────────────────────
-      // 음악 → 예술·창작 카테고리 확장 (2026-05-05) — TODO: 2026-11-05 이후 삭제
+      // 음악 → 예술·창작 카테고리 확장 (2026-05-05)
       // music/* → art/* + 디자인·글쓰기 도구 4종을 dev/life에서 art로 이동
+      // ※ 영구 유지 — 삭제 금지. 외부 백링크·북마크·검색 색인(네이버 포함)에 옛 URL이 남아 있는 한
+      //   301/308은 계속 필요하고 유지 비용은 0이다. 지우면 옛 경로가 404가 되어 링크 가치·유입을 잃는다.
+      //   (이 파일의 다른 리다이렉트 블록도 모두 같은 원칙)
       // ─────────────────────────────────────────────────────────────────────────
       { source: '/tools/music',              destination: '/tools/art',              permanent: true },
       { source: '/tools/music/vocal-range',  destination: '/tools/art/vocal-range',  permanent: true },

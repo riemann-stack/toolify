@@ -3,6 +3,8 @@
 // 캐시 완전 금지. Edge runtime 사용.
 // ─────────────────────────────────────────────────────────────
 
+import { API_BASE_HEADERS } from '../_lib/http'
+
 export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -22,6 +24,7 @@ export async function GET(): Promise<Response> {
         'Pragma': 'no-cache',
         'Expires': '0',
         'Date': new Date(now).toUTCString(),
+        ...API_BASE_HEADERS,
       },
     }
   )
@@ -32,6 +35,7 @@ export async function HEAD(): Promise<Response> {
     headers: {
       'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       'Date': new Date().toUTCString(),
+      ...API_BASE_HEADERS,
     },
   })
 }
