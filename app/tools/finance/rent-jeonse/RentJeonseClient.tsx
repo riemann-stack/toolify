@@ -20,6 +20,7 @@ const DEFAULT_INPUTS: CalcInputs = {
   jeonseLoanRate: 4.0,
   hugInsurance: true,
   hugRateBp: 12.8,
+  jeonseLoanDeductionEligible: true,
   monthlyDeposit: 50_000_000,
   monthlyRent: 1_500_000,
   monthlyTaxCreditEligible: false,
@@ -32,6 +33,28 @@ const DEFAULT_INPUTS: CalcInputs = {
   months: 36,
   expectedReturn: 4.0,
   annualRentIncrease: 5.0,
+}
+
+/** localStorage 복원 — 알려진 필드만 타입·범위 검증 (문자열·NaN이 계산에 섞이지 않게) */
+function sanitizeStored(raw: unknown): Partial<CalcInputs> {
+  if (!raw || typeof raw !== 'object') return {}
+  const o = raw as Record<string, unknown>
+  const out: Partial<CalcInputs> = {}
+  const numRanges: [keyof CalcInputs, number, number][] = [
+    ['marketPrice', 0, 100_000_000_000], ['jeonseDeposit', 0, 100_000_000_000], ['jeonseLoanRatio', 0, 80],
+    ['jeonseLoanRate', 0, 15], ['hugRateBp', 0, 100], ['monthlyDeposit', 0, 100_000_000_000],
+    ['monthlyRent', 0, 100_000_000_000], ['monthlyDepositLoanRate', 0, 30], ['conversionRate', 2, 10],
+    ['semiJeonseRatio', 10, 70], ['maintenance', 0, 100_000_000_000], ['totalSalary', 0, 100_000_000_000],
+    ['ownCapital', 0, 100_000_000_000], ['months', 6, 120], ['expectedReturn', 0, 20], ['annualRentIncrease', 0, 20],
+  ]
+  for (const [k, min, max] of numRanges) {
+    const v = o[k]
+    if (typeof v === 'number' && Number.isFinite(v)) (out as Record<string, unknown>)[k] = Math.min(max, Math.max(min, v))
+  }
+  for (const k of ['hugInsurance', 'monthlyTaxCreditEligible', 'jeonseLoanDeductionEligible'] as const) {
+    if (typeof o[k] === 'boolean') out[k] = o[k] as boolean
+  }
+  return out
 }
 
 const TABS = [
@@ -49,7 +72,7 @@ export default function RentJeonseClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const parsed = JSON.parse(raw)
+        const parsed = sanitizeStored(JSON.parse(raw))
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setInputs((prev) => ({ ...prev, ...parsed }))
       }
@@ -116,16 +139,16 @@ function CompareTab({ inputs, update, results, best }: {
     <div className={styles.panel}>
       {/* 매물 시세 */}
       <section>
-        <label className={styles.label}>매물 시세</label>
-        <AmountInput value={inputs.marketPrice} onChange={(n) => update('marketPrice', n)} />
+        <label className={styles.label} htmlFor="rj-market">매물 시세</label>
+        <AmountInput id="rj-market" value={inputs.marketPrice} onChange={(n) => update('marketPrice', n)} />
       </section>
 
       {/* 전세 옵션 */}
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>전세 옵션</p>
         <div className={styles.numberRow}>
-          <label>전세 보증금</label>
-          <CompactInput value={inputs.jeonseDeposit} onChange={(n) => update('jeonseDeposit', n)} />
+          <label htmlFor="rj-jeonse-deposit">전세 보증금</label>
+          <CompactInput id="rj-jeonse-deposit" value={inputs.jeonseDeposit} onChange={(n) => update('jeonseDeposit', n)} />
         </div>
         <div className={styles.sliderRow}>
           <div className={styles.sliderHead}>
@@ -138,8 +161,8 @@ function CompareTab({ inputs, update, results, best }: {
             aria-valuetext={`${inputs.jeonseLoanRatio}% (${fmtKRW(inputs.jeonseDeposit * inputs.jeonseLoanRatio / 100)})`} />
         </div>
         <div className={styles.numberRow}>
-          <label>전세대출 금리</label>
-          <PercentInput value={inputs.jeonseLoanRate} onChange={(n) => update('jeonseLoanRate', n)} min={0} max={15} />
+          <label htmlFor="rj-jeonse-rate">전세대출 금리</label>
+          <PercentInput id="rj-jeonse-rate" value={inputs.jeonseLoanRate} onChange={(n) => update('jeonseLoanRate', n)} min={0} max={15} />
         </div>
         <label className={styles.checkLabel}>
           <input type="checkbox" checked={inputs.hugInsurance}
@@ -149,18 +172,23 @@ function CompareTab({ inputs, update, results, best }: {
         <p className={styles.smallNote}>
           ※ 보증료율은 보증금액·주택유형·부채비율에 따라 약 0.097~0.211%로 달라집니다 (HUG 공식 산정 기준 확인 필요).
         </p>
+        <label className={styles.checkLabel}>
+          <input type="checkbox" checked={inputs.jeonseLoanDeductionEligible}
+            onChange={(e) => update('jeonseLoanDeductionEligible', e.target.checked)} />
+          <span>전세대출 이자 소득공제 자격 (무주택 세대주 + 전용 85㎡ 이하 + 금융기관 대출)</span>
+        </label>
       </section>
 
       {/* 월세 옵션 */}
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>월세 옵션</p>
         <div className={styles.numberRow}>
-          <label>월세 보증금</label>
-          <CompactInput value={inputs.monthlyDeposit} onChange={(n) => update('monthlyDeposit', n)} />
+          <label htmlFor="rj-monthly-deposit">월세 보증금</label>
+          <CompactInput id="rj-monthly-deposit" value={inputs.monthlyDeposit} onChange={(n) => update('monthlyDeposit', n)} />
         </div>
         <div className={styles.numberRow}>
-          <label>월 임대료</label>
-          <CompactInput value={inputs.monthlyRent} onChange={(n) => update('monthlyRent', n)} placeholder="1,500,000" />
+          <label htmlFor="rj-monthly-rent">월 임대료</label>
+          <CompactInput id="rj-monthly-rent" value={inputs.monthlyRent} onChange={(n) => update('monthlyRent', n)} placeholder="1,500,000" />
         </div>
         <label className={styles.checkLabel}>
           <input type="checkbox" checked={inputs.monthlyTaxCreditEligible}
@@ -180,8 +208,8 @@ function CompareTab({ inputs, update, results, best }: {
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>반전세 시뮬 (전세 일부 → 월세 전환)</p>
         <div className={styles.numberRow}>
-          <label>전월세 전환율</label>
-          <PercentInput value={inputs.conversionRate} onChange={(n) => update('conversionRate', n)} min={2} max={10} />
+          <label htmlFor="rj-conversion">전월세 전환율</label>
+          <PercentInput id="rj-conversion" value={inputs.conversionRate} onChange={(n) => update('conversionRate', n)} min={2} max={10} />
         </div>
         <div className={styles.sliderRow}>
           <div className={styles.sliderHead}>
@@ -202,16 +230,16 @@ function CompareTab({ inputs, update, results, best }: {
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>공통 조건</p>
         <div className={styles.numberRow}>
-          <label>관리비 (월)</label>
-          <CompactInput value={inputs.maintenance} onChange={(n) => update('maintenance', n)} placeholder="200,000" />
+          <label htmlFor="rj-maintenance">관리비 (월)</label>
+          <CompactInput id="rj-maintenance" value={inputs.maintenance} onChange={(n) => update('maintenance', n)} placeholder="200,000" />
         </div>
         <div className={styles.numberRow}>
-          <label>본인 자기자본</label>
-          <CompactInput value={inputs.ownCapital} onChange={(n) => update('ownCapital', n)} />
+          <label htmlFor="rj-own-capital">본인 자기자본</label>
+          <CompactInput id="rj-own-capital" value={inputs.ownCapital} onChange={(n) => update('ownCapital', n)} />
         </div>
         <div className={styles.numberRow}>
-          <label>본인 총급여 (세액공제용)</label>
-          <CompactInput value={inputs.totalSalary} onChange={(n) => update('totalSalary', n)} />
+          <label htmlFor="rj-salary">본인 총급여 (세액·소득공제용)</label>
+          <CompactInput id="rj-salary" value={inputs.totalSalary} onChange={(n) => update('totalSalary', n)} />
         </div>
         <div className={styles.sliderRow}>
           <div className={styles.sliderHead}>
@@ -224,8 +252,8 @@ function CompareTab({ inputs, update, results, best }: {
             aria-valuetext={`${Math.floor(inputs.months / 12)}년 ${inputs.months % 12}개월`} />
         </div>
         <div className={styles.numberRow}>
-          <label>기회비용 기대수익률</label>
-          <PercentInput value={inputs.expectedReturn} onChange={(n) => update('expectedReturn', n)} min={0} max={20} />
+          <label htmlFor="rj-return">기회비용 기대수익률</label>
+          <PercentInput id="rj-return" value={inputs.expectedReturn} onChange={(n) => update('expectedReturn', n)} min={0} max={20} />
         </div>
       </section>
 
@@ -237,7 +265,7 @@ function CompareTab({ inputs, update, results, best }: {
             <ResultCard key={r.option} result={r} months={inputs.months} isBest={r.option === best} />
           ))}
         </div>
-        <div className={styles.bestSummary}>
+        <div className={styles.bestSummary} role="status">
           <strong>권장:</strong> 입력 조건 기준 <strong className={styles.bestText}>{results.find((r) => r.option === best)?.label}</strong>가 누적 비용이 가장 낮습니다.
           가장 비싼 옵션 대비 <strong className={styles.bestText}>{fmtKRW(Math.max(...results.map((r) => r.cumulativeCost)) - Math.min(...results.map((r) => r.cumulativeCost)))}</strong> 절약.
         </div>
@@ -262,7 +290,7 @@ function ResultCard({ result, months, isBest }: { result: OptionResult; months: 
         {result.monthlyRentPaid > 0 && <div><span>월 임대료</span><span>{fmtKRW(result.monthlyRentPaid)}</span></div>}
         {result.monthlyMaintenance > 0 && <div><span>관리비</span><span>{fmtKRW(result.monthlyMaintenance)}</span></div>}
         {result.monthlyInsurance > 0 && <div><span>HUG 보증료</span><span>{fmtKRW(result.monthlyInsurance)}</span></div>}
-        {result.monthlyTaxSaving > 0 && <div className={styles.saving}><span>세액공제</span><span>-{fmtKRW(result.monthlyTaxSaving)}</span></div>}
+        {result.monthlyTaxSaving > 0 && <div className={styles.saving}><span>{result.option === 'jeonse' ? '소득공제 절세' : result.option === 'semi' ? '세액·소득공제 절세' : '세액공제'}</span><span>-{fmtKRW(result.monthlyTaxSaving)}</span></div>}
       </div>
 
       {result.taxCreditAnnual > 0 && (
@@ -315,7 +343,11 @@ function SimTab({ inputs, results, breakeven }: {
       {/* ROI 시뮬 */}
       <section>
         <label className={styles.label}>자기자본 ROI 시뮬 <span className={styles.labelSub}>(보증금에 묶지 않고 운용 시)</span></label>
-        <RoiChart scenarios={roi} initial={inputs.ownCapital} months={inputs.months} />
+        {inputs.ownCapital > 0 ? (
+          <RoiChart scenarios={roi} initial={inputs.ownCapital} months={inputs.months} />
+        ) : (
+          <p className={styles.note}>본인 자기자본을 입력하면 운용 시뮬레이션 차트가 표시됩니다.</p>
+        )}
         <div className={styles.roiTable}>
           <div className={styles.roiHead}>
             <span>시나리오</span>
@@ -399,7 +431,8 @@ function RoiChart({ scenarios, initial, months }: { scenarios: ReturnType<typeof
   const colors = ['#0891B2', '#0EA5E9', '#EA580C', '#E11D48']
 
   const xOf = (i: number) => padL + (i / Math.max(1, months - 1)) * (W - padL - padR)
-  const yOf = (v: number) => padT + (H - padT - padB) - ((v - initial * 0.95) / (maxV - initial * 0.95)) * (H - padT - padB)
+  const span = Math.max(1, maxV - initial * 0.95) // 자기자본 0원이면 분모 0 → NaN 좌표 방지
+  const yOf = (v: number) => padT + (H - padT - padB) - ((v - initial * 0.95) / span) * (H - padT - padB)
 
   return (
     <div className={styles.chartWrap}>
@@ -471,19 +504,19 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
         <div className={styles.riskScoreCard} style={{ borderColor: levelColor[assessment.level] + '60' }}>
           <p className={styles.riskScoreLabel}>위험 점수</p>
           <p className={styles.riskScoreBig} style={{ color: levelColor[assessment.level] }}>
-            {assessment.totalScore} <span className={styles.riskScoreUnit}>/100</span>
+            {assessment.totalScore} <span className={styles.riskScoreUnit}>/{assessment.maxScore}</span>
           </p>
           <p className={styles.riskScoreLevel} style={{ color: levelColor[assessment.level] }}>
             {levelText[assessment.level]}
           </p>
-          <p className={styles.note}>전세가율 {jeonsePriceRatio.toFixed(0)}% (시세 대비)</p>
+          <p className={styles.note}>전세가율 {jeonsePriceRatio.toFixed(0)}% (시세 대비) · 확인한 항목에 체크하면 점수가 내려갑니다</p>
         </div>
 
         <div className={styles.riskFactorsList}>
           {assessment.factors.map((f) => (
             <label key={f.id} className={`${styles.riskFactor} ${f.applied ? styles.riskFactorApplied : ''}`}>
               {f.id === 'high_ratio' ? (
-                <input type="checkbox" checked={f.applied} disabled />
+                <input type="checkbox" checked={!f.applied} disabled />
               ) : (
                 <input
                   type="checkbox"
@@ -500,8 +533,8 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
                 />
               )}
               <div>
-                <span className={styles.riskFactorLabel}>{f.label}</span>
-                <span className={styles.riskFactorWeight}>+{f.weight}점</span>
+                <span className={styles.riskFactorLabel}>{f.safeLabel}</span>
+                <span className={styles.riskFactorWeight}>{f.applied ? `미확인 +${f.weight}점` : '확인됨'}</span>
               </div>
             </label>
           ))}
@@ -578,10 +611,11 @@ function GuideTab({ inputs }: { inputs: CalcInputs }) {
 }
 
 /* ─── 공통 입력 컴포넌트 ─── */
-function AmountInput({ value, onChange, placeholder }: { value: number; onChange: (n: number) => void; placeholder?: string }) {
+function AmountInput({ id, value, onChange, placeholder }: { id?: string; value: number; onChange: (n: number) => void; placeholder?: string }) {
   return (
     <div className={styles.amountRow}>
       <input
+        id={id}
         type="text"
         inputMode="numeric"
         className={styles.amountInput}
@@ -597,10 +631,11 @@ function AmountInput({ value, onChange, placeholder }: { value: number; onChange
   )
 }
 
-function CompactInput({ value, onChange, placeholder }: { value: number; onChange: (n: number) => void; placeholder?: string }) {
+function CompactInput({ id, value, onChange, placeholder }: { id?: string; value: number; onChange: (n: number) => void; placeholder?: string }) {
   return (
     <div className={styles.compactInputWrap}>
       <input
+        id={id}
         type="text"
         inputMode="numeric"
         className={styles.compactInput}
@@ -616,18 +651,32 @@ function CompactInput({ value, onChange, placeholder }: { value: number; onChang
   )
 }
 
-function PercentInput({ value, onChange, min = 0, max = 20 }: { value: number; onChange: (n: number) => void; min?: number; max?: number }) {
+/** % 입력 — 문자열 버퍼로 빈칸·'4.' 같은 중간 입력을 허용하고, 범위 클램프는 blur 때만 (비우는 즉시 min으로 채워지던 문제 수정) */
+function PercentInput({ id, value, onChange, min = 0, max = 20 }: { id?: string; value: number; onChange: (n: number) => void; min?: number; max?: number }) {
+  const [buf, setBuf] = useState<string | null>(null)
+  const display = buf !== null ? buf : String(value)
   return (
     <div className={styles.compactInputWrap}>
       <input
-        type="number"
+        id={id}
+        type="text"
         inputMode="decimal"
-        step={0.1}
-        min={min}
-        max={max}
         className={styles.percentInput}
-        value={value}
-        onChange={(e) => onChange(Math.max(min, Math.min(max, +e.target.value || 0)))}
+        value={display}
+        onChange={(e) => {
+          const v = e.target.value.replace(/[^0-9.]/g, '')
+          if (!/^\d{0,3}(\.\d{0,2})?$/.test(v)) return
+          setBuf(v)
+          const n = parseFloat(v)
+          if (Number.isFinite(n) && n >= min && n <= max) onChange(n)
+        }}
+        onBlur={() => {
+          if (buf !== null) {
+            const n = parseFloat(buf)
+            onChange(Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : value)
+          }
+          setBuf(null)
+        }}
       />
       <span>%</span>
     </div>

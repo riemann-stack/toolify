@@ -185,8 +185,9 @@
   .karatPill:hover { color: var(--text); border-color: var(--karat-color); }
 }
 .karatPillActive {
-  background: var(--karat-color);
-  color: #ffffff;
+  /* 연한 금색(22K·21K) 배경에 흰 글자는 대비 부족 — 색은 옅은 배경·테두리로만 쓰고 글자는 본문색 */
+  background: color-mix(in srgb, var(--karat-color) 24%, var(--bg2));
+  color: var(--text);
   border-color: var(--karat-color);
 }
 @media (max-width: 480px) {
@@ -277,7 +278,7 @@
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 800;
-  color: var(--karat-color);
+  color: var(--text); /* karat hex(22K #FFC940 등)는 흰 배경 대비 약 1.5:1 — 글자에 쓰지 않음 */
   margin: 0 0 4px;
 }
 .purityCardWeight {

@@ -6,6 +6,8 @@ import {
   computeRank,
   AGE_GROUPS,
   REGIONS,
+  USD_KRW,
+  USD_KRW_ASOF,
   type Mode,
 } from './wealthData'
 
@@ -337,7 +339,7 @@ export default function WealthRankClient() {
           )}
           {mode === 'world' && (
             <div className={s.noteCard}>
-              세계 기준은 <strong>UBS Global Wealth Report 2025</strong>의 <strong>성인 1인당</strong> 순자산 분포입니다 (환율 1달러 = 1,380원).
+              세계 기준은 <strong>UBS Global Wealth Report 2025</strong>의 <strong>성인 1인당</strong> 순자산 분포입니다 (환율 1달러 = {USD_KRW.toLocaleString('ko-KR')}원, {USD_KRW_ASOF} 근사 고정값).
               한국 통계는 가구 단위라, 위 <strong>가구 성인 수</strong>로 1인당 환산해 비교하세요. 1명 그대로 두면 부부·가족은 순위가 실제보다 높게 나올 수 있습니다.
             </div>
           )}

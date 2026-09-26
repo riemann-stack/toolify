@@ -3,35 +3,10 @@
    2026년 월세 vs 전세 vs 반전세 비교
    ────────────────────────────────────────────────────── */
 
-import { marginalRate } from '@/lib/krIncomeTax'
+import { earnedIncomeDeduction, progressiveTax } from '@/lib/krIncomeTax'
+import { INSURANCE_RATES } from '@/lib/krInsuranceRates'
 
 export type Option = 'jeonse' | 'monthly' | 'semi'
-
-export interface CityAvg {
-  city: string
-  region: string
-  apt33: { price: number; jeonse: number; monthlyDeposit: number; monthlyRent: number }
-}
-
-/** 한국 도시별 33평 아파트 평균 시세 (참고용 · 2026년 추정) */
-export const CITY_AVERAGES: CityAvg[] = [
-  { city: '서울 강남',     region: '서울', apt33: { price: 2_500_000_000, jeonse: 1_200_000_000, monthlyDeposit: 200_000_000, monthlyRent: 4_500_000 } },
-  { city: '서울 서초',     region: '서울', apt33: { price: 2_300_000_000, jeonse: 1_150_000_000, monthlyDeposit: 200_000_000, monthlyRent: 4_200_000 } },
-  { city: '서울 송파',     region: '서울', apt33: { price: 2_000_000_000, jeonse: 1_000_000_000, monthlyDeposit: 150_000_000, monthlyRent: 3_500_000 } },
-  { city: '서울 마포',     region: '서울', apt33: { price: 1_500_000_000, jeonse:   800_000_000, monthlyDeposit: 100_000_000, monthlyRent: 2_800_000 } },
-  { city: '서울 성동',     region: '서울', apt33: { price: 1_400_000_000, jeonse:   750_000_000, monthlyDeposit: 100_000_000, monthlyRent: 2_500_000 } },
-  { city: '서울 노원',     region: '서울', apt33: { price:   900_000_000, jeonse:   500_000_000, monthlyDeposit:  50_000_000, monthlyRent: 1_700_000 } },
-  { city: '경기 분당',     region: '경기', apt33: { price: 1_500_000_000, jeonse:   800_000_000, monthlyDeposit: 100_000_000, monthlyRent: 2_500_000 } },
-  { city: '경기 판교',     region: '경기', apt33: { price: 1_700_000_000, jeonse:   900_000_000, monthlyDeposit: 100_000_000, monthlyRent: 2_800_000 } },
-  { city: '경기 수원',     region: '경기', apt33: { price:   800_000_000, jeonse:   450_000_000, monthlyDeposit:  50_000_000, monthlyRent: 1_500_000 } },
-  { city: '인천 송도',     region: '인천', apt33: { price:   900_000_000, jeonse:   500_000_000, monthlyDeposit:  50_000_000, monthlyRent: 1_600_000 } },
-  { city: '부산 해운대',   region: '부산', apt33: { price:   900_000_000, jeonse:   500_000_000, monthlyDeposit:  50_000_000, monthlyRent: 1_600_000 } },
-  { city: '대구 수성',     region: '대구', apt33: { price:   700_000_000, jeonse:   400_000_000, monthlyDeposit:  40_000_000, monthlyRent: 1_300_000 } },
-  { city: '대전 둔산',     region: '대전', apt33: { price:   600_000_000, jeonse:   350_000_000, monthlyDeposit:  30_000_000, monthlyRent: 1_200_000 } },
-  { city: '광주 봉선',     region: '광주', apt33: { price:   500_000_000, jeonse:   300_000_000, monthlyDeposit:  30_000_000, monthlyRent: 1_000_000 } },
-  { city: '울산 남구',     region: '울산', apt33: { price:   600_000_000, jeonse:   350_000_000, monthlyDeposit:  30_000_000, monthlyRent: 1_100_000 } },
-  { city: '세종',          region: '세종', apt33: { price:   650_000_000, jeonse:   380_000_000, monthlyDeposit:  30_000_000, monthlyRent: 1_200_000 } },
-]
 
 /* ─── 입력 ─── */
 export interface CalcInputs {
@@ -43,6 +18,7 @@ export interface CalcInputs {
   jeonseLoanRate: number       // 전세대출 금리 (%)
   hugInsurance: boolean        // HUG 보증보험 가입
   hugRateBp: number            // 보증료율 (bp · 10000분의 1) · 12.8 / 15.4
+  jeonseLoanDeductionEligible: boolean // 주택임차차입금 소득공제 자격 (무주택 세대주·국민주택규모·금융기관 차입)
 
   // 월세
   monthlyDeposit: number       // 월세 보증금
@@ -114,17 +90,25 @@ export function monthlyTaxCredit(annualRent: number, totalSalary: number, eligib
   return Math.floor(eligibleRent * rate)
 }
 
-/* ─── 전세대출 이자 소득공제 ─── */
-export function jeonseLoanDeduction(annualPaid: number, marginalRate: number): number {
-  // 원리금 상환액 × 40% (한도 400만 공제) → 한계세율만큼 절세
-  const deductible = Math.min(4_000_000, annualPaid * 0.4)
-  return Math.floor(deductible * marginalRate)
+/* ─── 과세표준 근사 (총급여 → 공제 전 과세표준) ───
+   총급여를 그대로 과세표준으로 보면 한계세율이 한 단계 높게 잡혀(예: 총급여 9천만 → 35%, 실제 과표 약 6천만 → 24%)
+   전세대출 소득공제 절세액이 과대해진다. 근로소득공제·본인 기본공제 150만·4대보험 본인부담(2026 요율)을 빼서 근사.
+   (국민연금은 기준소득월액 상한을 무시한 단순 근사 — 고소득자는 과표가 약간 낮게 잡힘) */
+export function approxTaxBase(salary: number): number {
+  const s = Math.max(0, salary)
+  const r = INSURANCE_RATES[2026]
+  const insuranceRate = (r.pension.employee + r.health.employee + r.ltc.employee + r.unemp.employee) / 100
+  return Math.max(0, s - earnedIncomeDeduction(s) - 1_500_000 - s * insuranceRate)
 }
 
-/* ─── 한계세율 추정 (총급여 → 추정) ─── */
-export function estimateMarginalRate(salary: number): number {
-  // 매우 단순화 (근로소득 기준) — 총급여를 과세표준으로 간주, 지방세 10% 포함
-  return marginalRate(salary, { localTax: true })
+/* ─── 전세대출 이자 소득공제 절세액 (주택임차차입금 원리금상환액 공제, 소득세법 §52④) ───
+   공제액 = 상환액 × 40% (한도 400만) — 절세액 = 공제 전후 산출세액 차이 × 1.1(지방소득세). 자격이 없으면 0 */
+export function jeonseLoanDeduction(annualPaid: number, salary: number, eligible = true): number {
+  if (!eligible || annualPaid <= 0) return 0
+  const deductible = Math.min(4_000_000, annualPaid * 0.4)
+  const base = approxTaxBase(salary)
+  const saved = progressiveTax(base) - progressiveTax(Math.max(0, base - deductible))
+  return Math.floor(saved * 1.1)
 }
 
 /* ─── 전세 옵션 계산 ─── */
@@ -144,9 +128,8 @@ export function calculateJeonse(inputs: CalcInputs): OptionResult {
   const annualInsurance = inputs.hugInsurance ? inputs.jeonseDeposit * (inputs.hugRateBp / 10000) : 0
   const monthlyInsurance = annualInsurance / 12
 
-  // 전세대출 이자 소득공제
-  const marginalRate = estimateMarginalRate(inputs.totalSalary)
-  const taxCreditAnnual = jeonseLoanDeduction(annualInterest, marginalRate)
+  // 전세대출 이자 소득공제 (과세표준 근사 기준, 자격 체크 반영)
+  const taxCreditAnnual = jeonseLoanDeduction(annualInterest, inputs.totalSalary, inputs.jeonseLoanDeductionEligible)
   const monthlyTaxSaving = taxCreditAnnual / 12
 
   const monthlyNetCost = monthlyInterest + monthlyOpportunity + monthlyMaintenance + monthlyInsurance - monthlyTaxSaving
@@ -275,9 +258,8 @@ export function calculateSemi(inputs: CalcInputs): OptionResult {
   // 월세 세액공제 적용 가능 (월세 부분에 한해)
   const annualRent = monthlyConvertedRent * 12
   const taxCreditAnnual = monthlyTaxCredit(annualRent, inputs.totalSalary, inputs.monthlyTaxCreditEligible)
-  // 전세 부분 이자 소득공제도 가능
-  const marginalRate = estimateMarginalRate(inputs.totalSalary)
-  const jeonseDed = jeonseLoanDeduction(annualLoanInterest, marginalRate)
+  // 전세 부분 이자 소득공제도 가능 (자격 체크 반영)
+  const jeonseDed = jeonseLoanDeduction(annualLoanInterest, inputs.totalSalary, inputs.jeonseLoanDeductionEligible)
   const totalTaxAnnual = taxCreditAnnual + jeonseDed
   const monthlyTaxSaving = totalTaxAnnual / 12
 
@@ -382,12 +364,15 @@ export function simulateOpportunity(amount: number, months: number): RoiScenario
 export interface RiskFactor {
   id: string
   label: string
+  safeLabel: string   // 체크박스 문구 — 체크 = 안전(확인 완료) 상태
   weight: number
   applied: boolean
 }
 
 export interface RiskAssessment {
   totalScore: number
+  maxScore: number    // 가중치 합 (현재 120) — 표시는 totalScore / maxScore
+  percent: number     // totalScore / maxScore × 100 (반올림)
   level: 'low' | 'medium' | 'high' | 'danger'
   factors: RiskFactor[]
   recommendations: string[]
@@ -403,15 +388,17 @@ export function assessRisk(opts: {
   multipleHouseholds: boolean  // 다가구·다세대 (선순위 위험)
 }): RiskAssessment {
   const factors: RiskFactor[] = [
-    { id: 'high_ratio', label: '전세가율 80% 초과 (깡통전세 경계)',  weight: 30, applied: opts.jeonsePriceRatio > 80 },
-    { id: 'hug',        label: 'HUG 전세보증보험 미가입',                weight: 20, applied: !opts.hugInsured },
-    { id: 'register',   label: '확정일자·전입신고 미완료',               weight: 20, applied: !opts.registered },
-    { id: 'registry',   label: '등기부등본 미확인 (근저당·신탁 위험)',    weight: 15, applied: !opts.registryChecked },
-    { id: 'landlord',   label: '임대인 신원·소유권 미확인',              weight: 15, applied: !opts.landlordVerified },
-    { id: 'realprice',  label: '실거래가·시세 미확인',                  weight: 10, applied: !opts.realPriceChecked },
-    { id: 'multi',      label: '다가구·다세대 (선순위 보증금 잔존)',      weight: 10, applied: opts.multipleHouseholds },
+    { id: 'high_ratio', label: '전세가율 80% 초과 (깡통전세 경계)',  safeLabel: '전세가율 80% 이하 (시세·보증금으로 자동 판정)', weight: 30, applied: opts.jeonsePriceRatio > 80 },
+    { id: 'hug',        label: 'HUG 전세보증보험 미가입',                safeLabel: 'HUG 전세보증보험 가입',                    weight: 20, applied: !opts.hugInsured },
+    { id: 'register',   label: '확정일자·전입신고 미완료',               safeLabel: '확정일자·전입신고 완료',                   weight: 20, applied: !opts.registered },
+    { id: 'registry',   label: '등기부등본 미확인 (근저당·신탁 위험)',    safeLabel: '등기부등본 확인 (근저당·신탁·압류)',         weight: 15, applied: !opts.registryChecked },
+    { id: 'landlord',   label: '임대인 신원·소유권 미확인',              safeLabel: '임대인 신원·소유권 확인',                  weight: 15, applied: !opts.landlordVerified },
+    { id: 'realprice',  label: '실거래가·시세 미확인',                  safeLabel: '실거래가·시세 확인',                       weight: 10, applied: !opts.realPriceChecked },
+    { id: 'multi',      label: '다가구·다세대 (선순위 보증금 잔존)',      safeLabel: '다가구·다세대가 아님 (선순위 보증금 걱정 없음)', weight: 10, applied: opts.multipleHouseholds },
   ]
   const totalScore = factors.filter((f) => f.applied).reduce((s, f) => s + f.weight, 0)
+  const maxScore = factors.reduce((s, f) => s + f.weight, 0)
+  const percent = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0
 
   let level: RiskAssessment['level'] = 'low'
   if (totalScore >= 60) level = 'danger'
@@ -427,5 +414,5 @@ export function assessRisk(opts: {
   if (!opts.realPriceChecked) recommendations.push('국토부 실거래가 공개시스템에서 시세 확인')
   if (opts.multipleHouseholds) recommendations.push('다가구·다세대는 선순위 보증금 합계 확인 필수')
 
-  return { totalScore, level, factors, recommendations }
+  return { totalScore, maxScore, percent, level, factors, recommendations }
 }

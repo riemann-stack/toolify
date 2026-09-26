@@ -9,6 +9,7 @@ import {
   PENSIONS,
   type PensionMode,
   parseDate, isoDate, daysBetween, addDays,
+  periodEndDate, hasServedYears, taxServiceYears,
   calcThreeMonthPeriod,
   calcThreeMonthTotal, calcAverageWageDaily, calcOrdinaryWageDaily,
   calcSeverance, calcSeveranceTax, checkEligibility,
@@ -32,6 +33,10 @@ function isValidIso(iso: unknown): iso is string {
   if (typeof iso !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false
   const d = parseDate(iso)
   return !Number.isNaN(d.getTime()) && isoDate(d) === iso
+}
+/** localStorage 복원용 — 숫자 입력칸 문자열(부호·소수 허용, 길이 제한)만 통과 */
+function isNumStr(v: unknown): v is string {
+  return typeof v === 'string' && v.length > 0 && v.length <= 10 && /^-?\d*\.?\d*$/.test(v)
 }
 
 export default function SeveranceClient() {
@@ -77,20 +82,22 @@ export default function SeveranceClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
+      const parsed: unknown = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object') return
+      const j = parsed as Record<string, unknown>
       if (isValidIso(j.startIso)) setStartIso(j.startIso)
       if (isValidIso(j.endIso)) setEndIso(j.endIso)
-      if (j.weekHours) setWeekHours(j.weekHours)
-      if (j.dailyHours) setDailyHours(j.dailyHours)
-      if (j.m1Base) setM1Base(j.m1Base)
-      if (j.m2Base) setM2Base(j.m2Base)
-      if (j.m3Base) setM3Base(j.m3Base)
-      if (j.m1Allow) setM1Allow(j.m1Allow)
-      if (j.m2Allow) setM2Allow(j.m2Allow)
-      if (j.m3Allow) setM3Allow(j.m3Allow)
-      if (j.yearlyBonus) setYearlyBonus(j.yearlyBonus)
-      if (j.unusedLeave) setUnusedLeave(j.unusedLeave)
-      if (j.monthlyOrdinary) setMonthlyOrdinary(j.monthlyOrdinary)
+      if (isNumStr(j.weekHours)) setWeekHours(j.weekHours)
+      if (isNumStr(j.dailyHours)) setDailyHours(j.dailyHours)
+      if (isNumStr(j.m1Base)) setM1Base(j.m1Base)
+      if (isNumStr(j.m2Base)) setM2Base(j.m2Base)
+      if (isNumStr(j.m3Base)) setM3Base(j.m3Base)
+      if (isNumStr(j.m1Allow)) setM1Allow(j.m1Allow)
+      if (isNumStr(j.m2Allow)) setM2Allow(j.m2Allow)
+      if (isNumStr(j.m3Allow)) setM3Allow(j.m3Allow)
+      if (isNumStr(j.yearlyBonus)) setYearlyBonus(j.yearlyBonus)
+      if (isNumStr(j.unusedLeave)) setUnusedLeave(j.unusedLeave)
+      if (isNumStr(j.monthlyOrdinary)) setMonthlyOrdinary(j.monthlyOrdinary)
     } catch {}
   }, [])
   useEffect(() => {
@@ -130,7 +137,9 @@ export default function SeveranceClient() {
   const severanceMan = useMemo(() => calcSeverance(dailyAppliedWage, eligibility.daysWorked), [dailyAppliedWage, eligibility.daysWorked])
   /* 자격 미충족(1년 미만·주15h 미만)이면 법정 퇴직금 0 — 표시·세금·총입금 모두 0 처리 */
   const displaySev = eligibility.eligible ? severanceMan : 0
-  const tax = useMemo(() => calcSeveranceTax(displaySev, eligibility.daysWorked), [displaySev, eligibility.daysWorked])
+  /* 세법상 근속연수 — 달력 기준 만 연수 + 1년 미만 절상 (재직일수/365 올림 아님) */
+  const serviceYearsTax = datesValid ? taxServiceYears(startDate, endDate) : 0
+  const tax = useMemo(() => calcSeveranceTax(displaySev, serviceYearsTax), [displaySev, serviceYearsTax])
 
   /* 시뮬레이터: 퇴사일 ±90일 */
   const simData = useMemo(() => {
@@ -138,8 +147,8 @@ export default function SeveranceClient() {
     for (let off = -30; off <= 90; off += 1) {
       const newEnd = addDays(endDate, off)
       const days = daysBetween(startDate, newEnd)
-      /* 주 15시간 미만이면 일수와 무관하게 법정 퇴직금 0 */
-      if (weekHrs < 15 || days < 365 || days > 365 * 50) {
+      /* 주 15시간 미만이면 일수와 무관하게 법정 퇴직금 0 · 1년 요건은 달력 기준(윤일 포함 구간은 366일) */
+      if (weekHrs < 15 || !hasServedYears(startDate, newEnd, 1) || days > 365 * 50) {
         points.push({ offset: off, days, severance: 0 })
         continue
       }
@@ -149,12 +158,12 @@ export default function SeveranceClient() {
     return points
   }, [startDate, endDate, dailyAppliedWage, weekHrs])
 
-  /* 마일스톤 (1년/2년/3년/5년/10년) 도달 일자 */
+  /* 마일스톤 (1년/2년/3년/5년/10년) 도달 일자 — 달력 기준 만료일(응당일 전날, 윤일 반영) */
   const milestones = useMemo(() => {
-    return [365, 730, 1095, 1825, 3650].map((d) => {
-      const target = addDays(startDate, d - 1)
-      const offset = Math.floor((target.getTime() - endDate.getTime()) / 86400000)
-      return { years: Math.floor(d / 365), days: d, target, offset }
+    return [1, 2, 3, 5, 10].map((y) => {
+      const target = periodEndDate(startDate, 12 * y)
+      const offset = Math.round((target.getTime() - endDate.getTime()) / 86400000)
+      return { years: y, days: daysBetween(startDate, target), target, offset }
     }).filter((m) => Math.abs(m.offset) <= 90)
   }, [startDate, endDate])
 
@@ -324,12 +333,16 @@ export default function SeveranceClient() {
                   <div key={i} className={s.monthCard}>
                     <p className={s.monthLabel}>{mLabel} 급여</p>
                     <div className={s.field}>
-                      <label className={s.fieldLabel}>기본급 (만원)</label>
-                      <input type="number" inputMode="decimal" className={s.input} value={baseGetter} onChange={(e) => baseSetter(e.target.value)} min={0} max={5000} step={1} />
+                      <label className={s.fieldLabel} htmlFor={`severance-m${i + 1}-base`}>
+                        기본급 (만원)<span className="srOnly"> — {mLabel}</span>
+                      </label>
+                      <input id={`severance-m${i + 1}-base`} type="number" inputMode="decimal" className={s.input} value={baseGetter} onChange={(e) => baseSetter(e.target.value)} min={0} max={5000} step={1} />
                     </div>
                     <div className={s.field}>
-                      <label className={s.fieldLabel}>고정수당 (식대·교통 등, 만원)</label>
-                      <input type="number" inputMode="decimal" className={s.input} value={allowGetter} onChange={(e) => allowSetter(e.target.value)} min={0} max={500} step={1} />
+                      <label className={s.fieldLabel} htmlFor={`severance-m${i + 1}-allow`}>
+                        고정수당 (식대·교통 등, 만원)<span className="srOnly"> — {mLabel}</span>
+                      </label>
+                      <input id={`severance-m${i + 1}-allow`} type="number" inputMode="decimal" className={s.input} value={allowGetter} onChange={(e) => allowSetter(e.target.value)} min={0} max={500} step={1} />
                     </div>
                   </div>
                 )
@@ -359,7 +372,7 @@ export default function SeveranceClient() {
           </div>
 
           {/* 메인 결과 */}
-          <div className={s.hero}>
+          <div className={s.hero} role="status" aria-label="예상 퇴직금">
             <p className={s.heroLabel}>예상 퇴직금</p>
             <p className={s.heroValue}>
               세전 <strong>{fmtMan(displaySev)}</strong>
@@ -510,8 +523,9 @@ export default function SeveranceClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>퇴사일 ±90일 슬라이더</span>
             <div className={s.field}>
-              <label className={s.fieldLabel}>현재 퇴사일 ({fmtDate(endDate)}) 기준 ±일</label>
+              <label className={s.fieldLabel} htmlFor="severance-sim">현재 퇴사일 ({fmtDate(endDate)}) 기준 ±일</label>
               <input
+                id="severance-sim"
                 type="range"
                 min={-30}
                 max={90}

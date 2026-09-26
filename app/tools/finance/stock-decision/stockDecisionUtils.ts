@@ -139,7 +139,7 @@ export const MODE_META: Record<RandomMode, { label: string; emoji: string; story
   chinchilla: { label: '친칠라 픽',         emoji: '🐭', story: '러시아 침팬지 Lusha(2009) 영감. 펀드 매니저 94% 이김.' },
   dart:       { label: '다트 던지기',       emoji: '🎯', story: 'Burton Malkiel "눈 가린 원숭이"(1973) 영감.' },
   cat:        { label: '고양이 발',         emoji: '🐱', story: '영국 고양이 Orlando(2012) 영감. Observer 1년 실험 1등.' },
-  roulette:   { label: '룰렛',              emoji: '🎡', story: 'Cass Business School(2013) — 1만 무작위 포트폴리오.' },
+  roulette:   { label: '룰렛',              emoji: '🎡', story: 'Cass Business School(2013) — 1,000만 개 무작위 포트폴리오.' },
 }
 
 // ── 행동경제학 편향 7개 ─────────────
@@ -200,20 +200,20 @@ export const CASES: CaseStudy[] = [
     source: 'CBS·TASS 등 언론 보도' },
   { key: 'orlando', title: 'Orlando 고양이 (영국)', year: '2012',
     who: 'Observer 1년 실험 — 전문가팀 vs 학생팀 vs 고양이(쥐 인형으로 종목 선택)',
-    result: '고양이 1등. 전문가팀 ₤8,400 vs 고양이 ₤10,800.',
+    result: '각 팀 £5,000로 시작해 고양이 1등 — 고양이 £5,542 / 전문가 £5,176 / 학생 £4,840.',
     source: 'The Observer / The Guardian' },
   { key: 'monkey', title: 'Burton Malkiel "눈 가린 원숭이"', year: '1973',
     who: 'Princeton 교수 Burton Malkiel "A Random Walk Down Wall Street"',
-    result: '"눈 가린 원숭이가 던지는 다트가 펀드 매니저와 통계적 차이 없다"',
-    source: 'Princeton·WSJ "Investment Dartboard" 14년 후속 실험' },
-  { key: 'cass', title: 'Cass Business School 1만 원숭이', year: '2013',
-    who: '미국 1,000개 대형주 무작위 포트폴리오 1만 개 시뮬',
-    result: '시총가중 지수보다 거의 모든 무작위 포트폴리오가 우수',
+    result: '"눈 가린 원숭이가 신문 주식면에 다트를 던져 고른 포트폴리오도 전문가가 고른 것만큼 성과를 낼 수 있다"는 주장',
+    source: 'A Random Walk Down Wall Street (1973). 참고: WSJ 다트보드 실험(1988~2002)에선 전문가가 142회 중 87회 앞섬 — 발표 효과 논란' },
+  { key: 'cass', title: 'Cass Business School 1,000만 원숭이', year: '2013',
+    who: '미국 1,000개 대형주로 무작위 포트폴리오 1,000만 개를 1968~2011년 시뮬',
+    result: '거의 모든 무작위 포트폴리오가 시가총액 가중 지수보다 높은 수익',
     source: 'Cass Business School (현 Bayes)' },
-  { key: 'dalbar', title: 'DALBAR — 인간 vs 펀드', year: '매년',
-    who: '미국 일반 투자자 vs S&P 500 평균 비교 (DALBAR 매년 발표)',
-    result: '20년 평균 일반 투자자 ~3% / S&P 500 ~7~10% — 절반 이하',
-    source: 'DALBAR QAIB Report (1994~)' },
+  { key: 'dalbar', title: 'DALBAR — 투자자 vs 지수', year: '매년',
+    who: '미국 일반 주식형 펀드 투자자의 실제 수익률 vs S&P 500 비교 (DALBAR 매년 발표)',
+    result: '2025년 보고서 20년 평균: 투자자 연 9.24% vs S&P 500 연 10.35% — 사고파는 시점 때문에 매년 격차',
+    source: 'DALBAR QAIB 2025 (2024년 말 기준)' },
 ]
 
 /** 오늘 날짜 (KST 기준) YYYY-MM-DD — UTC 자정 직후 하루 밀림 방지 */

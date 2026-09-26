@@ -6,7 +6,7 @@ import Disclaimer from '@/components/Disclaimer'
 import styles from './freelance-tax.module.css'
 import {
   type CalcInputs, type CalcResult, type Scenario,
-  INDUSTRIES, PROGRESSIVE_BRACKETS, COMPLEX_BOOK_THRESHOLD,
+  INDUSTRIES, PROGRESSIVE_BRACKETS, getIndustry, effectiveRates, simpleExcessRate,
   calculate, buildScenarios, simulateDeduction, recommendSavings,
   yellowUmbrellaLimit, fmtKRW, fmtKRWPrecise,
 } from './freelanceTaxUtils'
@@ -21,16 +21,91 @@ const DEFAULT_INPUTS: CalcInputs = {
   expenseMode: 'simple',
   bookExpenses: 0,
   isNewBusiness: false,
+  customRates: false,
+  customSimpleRate: 0,
+  customBaseRate: 0,
   spouseExempt: false,
   dependents: 0,
   pensionPaid: 0,
-  healthPaid: 0,
   yellowUmbrella: 0,
   pensionSavings: 0,
   donations: 0,
   useStandard: true,
   prevYearWithholding: 0,
   withholdingMode: 'auto',
+}
+
+/** localStorage 복원 — 알려진 필드만 타입·범위·enum 검증 후 반영 (무검증 spread 금지) */
+function sanitizeStored(raw: unknown): Partial<CalcInputs> {
+  if (!raw || typeof raw !== 'object') return {}
+  const o = raw as Record<string, unknown>
+  const out: Partial<CalcInputs> = {}
+  const num = (k: keyof CalcInputs, max: number, int = true): number | undefined => {
+    const v = o[k]
+    if (typeof v !== 'number' || !Number.isFinite(v) || v < 0) return undefined
+    return Math.min(max, int ? Math.floor(v) : v)
+  }
+  const MAX_WON = 10_000_000_000
+  const set = <K extends keyof CalcInputs>(k: K, v: CalcInputs[K] | undefined) => { if (v !== undefined) out[k] = v }
+  set('revenue', num('revenue', MAX_WON))
+  set('bookExpenses', num('bookExpenses', MAX_WON))
+  set('dependents', num('dependents', 10))
+  set('pensionPaid', num('pensionPaid', MAX_WON))
+  set('yellowUmbrella', num('yellowUmbrella', MAX_WON))
+  set('pensionSavings', num('pensionSavings', MAX_WON))
+  set('donations', num('donations', MAX_WON))
+  set('prevYearWithholding', num('prevYearWithholding', MAX_WON))
+  set('customSimpleRate', num('customSimpleRate', 99.9, false))
+  set('customBaseRate', num('customBaseRate', 99.9, false))
+  for (const k of ['isNewBusiness', 'customRates', 'spouseExempt', 'useStandard'] as const) {
+    if (typeof o[k] === 'boolean') out[k] = o[k] as boolean
+  }
+  if (o.expenseMode === 'simple' || o.expenseMode === 'book') out.expenseMode = o.expenseMode
+  if (o.withholdingMode === 'auto' || o.withholdingMode === 'manual') out.withholdingMode = o.withholdingMode
+  if (typeof o.industryId === 'string') {
+    // 목록에서 빠진 옛 직군(음악가·미용 등)은 '기타 인적용역'으로 — 필요하면 경비율 직접 입력
+    out.industryId = INDUSTRIES.some((i) => i.id === o.industryId) ? o.industryId : 'other'
+  }
+  return out
+}
+
+/** 저장값의 업종 id가 현재 목록에서 빠진 옛 직군인지 — 복원 시 'other'로 바뀐 사실을 안내하기 위함 */
+function isRemovedIndustry(raw: unknown): boolean {
+  if (!raw || typeof raw !== 'object') return false
+  const id = (raw as Record<string, unknown>).industryId
+  return typeof id === 'string' && !INDUSTRIES.some((i) => i.id === id)
+}
+
+/** 경비율(%) 입력 — 문자열 버퍼로 '64.' 같은 중간 입력 유지 (소수점 흡수 버그 방지) */
+function RateInput({ id, value, onChange, label }: { id: string; value: number; onChange: (v: number) => void; label: string }) {
+  const show = (v: number) => (v > 0 ? String(v) : '')
+  const [buf, setBuf] = useState(show(value))
+  const [prev, setPrev] = useState(value)
+  if (value !== prev) {
+    setPrev(value)
+    if (parseFloat(buf) !== value) setBuf(show(value))
+  }
+  return (
+    <div className={styles.numberRow}>
+      <label htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        type="text"
+        inputMode="decimal"
+        className={styles.smallNumber}
+        value={buf}
+        placeholder="예: 64.1"
+        onChange={(e) => {
+          const v = e.target.value.replace(/[^0-9.]/g, '')
+          if (!/^\d{0,2}(\.\d?)?$/.test(v)) return
+          setBuf(v)
+          const n = parseFloat(v)
+          onChange(Number.isFinite(n) ? Math.min(99.9, n) : 0)
+        }}
+      />
+      <span>%</span>
+    </div>
+  )
 }
 
 const TABS = [
@@ -44,15 +119,21 @@ export default function FreelanceTaxClient() {
   const [tab, setTab] = useState<TabKey>('quick')
   const [inputs, setInputs] = useState<CalcInputs>(DEFAULT_INPUTS)
   const [mounted, setMounted] = useState(false)
+  const [legacyIndustry, setLegacyIndustry] = useState(false)
 
   /* localStorage 복원·저장 */
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const parsed = JSON.parse(raw)
+        const obj: unknown = JSON.parse(raw)
+        const parsed = sanitizeStored(obj)
+        // 옛 직군은 'other'로 복원되므로 안내하고, 홈택스 경비율 직접 입력 칸을 열어 둔다
+        const legacy = isRemovedIndustry(obj)
+        if (legacy) parsed.customRates = true
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setInputs((prev) => ({ ...prev, ...parsed }))
+        setLegacyIndustry(legacy)
       }
     } catch { /* 무시 */ }
     setMounted(true)
@@ -65,8 +146,10 @@ export default function FreelanceTaxClient() {
   const result = useMemo(() => calculate(inputs), [inputs])
   const scenarios = useMemo(() => buildScenarios(inputs), [inputs])
 
-  const update = <K extends keyof CalcInputs>(k: K, v: CalcInputs[K]) =>
+  const update = <K extends keyof CalcInputs>(k: K, v: CalcInputs[K]) => {
+    if (k === 'industryId') setLegacyIndustry(false)
     setInputs((prev) => ({ ...prev, [k]: v }))
+  }
 
   return (
     <div className={styles.wrap}>
@@ -101,7 +184,7 @@ export default function FreelanceTaxClient() {
       </div>
 
       {/* ══════════ TAB 1: 빠른 계산 ══════════ */}
-      {tab === 'quick' && <QuickCalcTab inputs={inputs} result={result} update={update} />}
+      {tab === 'quick' && <QuickCalcTab inputs={inputs} result={result} update={update} legacyIndustry={legacyIndustry} />}
 
       {/* ══════════ TAB 2: 시나리오 비교 ══════════ */}
       {tab === 'compare' && <CompareTab base={result} scenarios={scenarios} />}
@@ -117,10 +200,11 @@ export default function FreelanceTaxClient() {
 }
 
 /* ═════════════════════ TAB 1: 빠른 계산 ═════════════════════ */
-function QuickCalcTab({ inputs, result, update }: {
+function QuickCalcTab({ inputs, result, update, legacyIndustry }: {
   inputs: CalcInputs
   result: CalcResult
   update: <K extends keyof CalcInputs>(k: K, v: CalcInputs[K]) => void
+  legacyIndustry: boolean
 }) {
   const groupedIndustries = useMemo(() => {
     const map = new Map<string, typeof INDUSTRIES>()
@@ -132,7 +216,8 @@ function QuickCalcTab({ inputs, result, update }: {
     return Array.from(map.entries())
   }, [])
 
-  const industry = INDUSTRIES.find((i) => i.id === inputs.industryId) ?? INDUSTRIES[INDUSTRIES.length - 1]
+  const industry = getIndustry(inputs.industryId)
+  const rates = effectiveRates(inputs)
   const refundColor = result.refund >= 0 ? styles.refundPos : styles.refundNeg
 
   return (
@@ -154,8 +239,13 @@ function QuickCalcTab({ inputs, result, update }: {
             </optgroup>
           ))}
         </select>
+        {legacyIndustry && !rates.custom && (
+          <p className={styles.note} role="note">
+            이전에 고른 업종은 목록에서 빠져 ‘기타 인적용역’으로 바꿔 두었습니다. 홈택스에서 조회한 본인 업종 경비율을 아래에 직접 입력하세요.
+          </p>
+        )}
         <p className={styles.note}>
-          {industry.desc} · 업종코드 <strong>{industry.code}</strong> · 단순경비율 한도 <strong>{fmtKRW(result.appliedSimpleLimit)}</strong>
+          {industry.desc} · 업종코드 <strong>{industry.code}</strong> · 단순경비율 <strong>{industry.simpleRate}%</strong>(4,000만원 초과분 {simpleExcessRate(industry.simpleRate)}%) · 기준경비율 <strong>{industry.baseRate}%</strong> · 단순경비율 한도 <strong>{fmtKRW(result.appliedSimpleLimit)}</strong>
           {inputs.isNewBusiness ? ' (신규·복식부기 기준)' : ' (계속·직전연도 기준)'}
         </p>
         <label className={styles.checkLabel} style={{ marginTop: 6 }}>
@@ -163,8 +253,23 @@ function QuickCalcTab({ inputs, result, update }: {
           <span>개업 첫해(신규사업자) — 단순경비율 한도가 복식부기 의무 기준까지 확대</span>
         </label>
         <p className={styles.note} style={{ marginTop: 6 }}>
-          ⚠️ 업종코드·경비율은 <strong>참고용</strong>입니다. 본인 정확한 코드는 <a href="https://hometax.go.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>홈택스</a> 신고 화면에서 확인하세요. 940909는 별도 세분 코드가 없을 때의 ‘기타 자영업’ 분류로, 직군별 전용 코드가 있으면 그쪽이 우선입니다.
+          ⚠️ 경비율은 국세청 2024년 귀속 경비율 고시 기준 <strong>참고값</strong>입니다(매년 3월 새로 고시). 본인 정확한 코드는 <a href="https://hometax.go.kr" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)' }}>홈택스</a> 신고 화면이나 지급명세서에서 확인하세요. 940909는 별도 세분 코드가 없을 때의 ‘기타 자영업’ 분류로, 직군별 전용 코드가 있으면 그쪽이 우선입니다.
         </p>
+        <label className={styles.checkLabel} style={{ marginTop: 6 }}>
+          <input type="checkbox" checked={inputs.customRates} onChange={(e) => update('customRates', e.target.checked)} />
+          <span>목록에 없는 직군이거나 올해 고시값이 다르면 — 홈택스에서 조회한 경비율 직접 입력</span>
+        </label>
+        {inputs.customRates && (
+          <div style={{ marginTop: 6 }}>
+            <RateInput id="ft-custom-simple" label="단순경비율 (일반율)" value={inputs.customSimpleRate} onChange={(v) => update('customSimpleRate', v)} />
+            <RateInput id="ft-custom-base" label="기준경비율" value={inputs.customBaseRate} onChange={(v) => update('customBaseRate', v)} />
+            <p className={styles.note}>
+              {rates.custom
+                ? `직접 입력한 경비율로 계산 중 (4,000만원 초과분 초과율 ${rates.excessRate}%)`
+                : '두 칸을 모두 입력하면 직접 입력값으로 계산합니다. 그 전까지는 위 업종의 경비율을 씁니다.'}
+            </p>
+          </div>
+        )}
       </section>
 
       <section>
@@ -207,7 +312,7 @@ function QuickCalcTab({ inputs, result, update }: {
             aria-pressed={inputs.expenseMode === 'simple'}
             className={`${styles.pill} ${inputs.expenseMode === 'simple' ? styles.pillActive : ''}`}
             onClick={() => update('expenseMode', 'simple')}>
-            단순경비율 ({industry.simpleRate}%)
+            단순경비율 ({rates.simpleRate}%)
           </button>
           <button
             type="button"
@@ -233,6 +338,9 @@ function QuickCalcTab({ inputs, result, update }: {
             <span className={styles.amountUnit}>원</span>
           </div>
         )}
+        {inputs.expenseMode === 'book' && (
+          <p className={styles.note}>지역 건강보험료는 소득공제가 아니라 장부의 필요경비로 넣습니다. 실경비 금액에 포함하세요.</p>
+        )}
         {!result.canUseSimple && inputs.expenseMode === 'simple' && (
           <p className={styles.warn}>
             ⚠️ 단순경비율 한도({fmtKRW(result.appliedSimpleLimit)}, {inputs.isNewBusiness ? '신규 기준' : '계속사업자 직전연도 기준'}) 초과 — 기준경비율 추계 적용. 본 도구는 주요경비(매입·임차·인건비) 증빙 미반영·배율 비교한도 기준이라, 증빙이 많으면 장부 작성이 유리할 수 있습니다.
@@ -240,7 +348,7 @@ function QuickCalcTab({ inputs, result, update }: {
         )}
         {result.isComplexBookRequired && (
           <p className={styles.warn}>
-            📒 매출 {fmtKRW(COMPLEX_BOOK_THRESHOLD[industry.category])} 초과 — <strong>복식부기 의무 대상</strong>. 미작성 시 무기장 가산세 20%.
+            📒 매출 {fmtKRW(result.bookThreshold)} 초과 — <strong>복식부기 의무 대상</strong>. 미작성 시 무기장 가산세 20%.
           </p>
         )}
       </section>
@@ -279,17 +387,9 @@ function QuickCalcTab({ inputs, result, update }: {
           <span>원/연</span>
         </div>
 
-        <div className={styles.numberRow}>
-          <label htmlFor="freelance-tax-f4">건강보험료</label>
-          <input id="freelance-tax-f4"
-            type="text"
-            inputMode="numeric"
-            className={styles.midInput}
-            value={inputs.healthPaid.toLocaleString()}
-            onChange={(e) => update('healthPaid', parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0)}
-          />
-          <span>원/연</span>
-        </div>
+        <p className={styles.note}>
+          지역 건강보험료는 사업소득만 있으면 소득공제 대상이 아닙니다(근로소득자 전용 특별소득공제). 장부로 신고할 때 필요경비로 넣을 수 있어요.
+        </p>
 
         <div className={styles.numberRow}>
           <label htmlFor="freelance-tax-f5">노란우산공제 <span className={styles.smallNote}>(한도 {fmtKRW(yellowUmbrellaLimit(result.businessIncome))})</span></label>
@@ -324,10 +424,17 @@ function QuickCalcTab({ inputs, result, update }: {
             inputMode="numeric"
             className={styles.midInput}
             value={inputs.donations.toLocaleString()}
+            disabled={!result.donationEligible}
+            aria-describedby="freelance-tax-f7-note"
             onChange={(e) => update('donations', parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0)}
           />
           <span>원/연</span>
         </div>
+        <p className={styles.note} id="freelance-tax-f7-note">
+          {result.donationEligible
+            ? '연말정산 대상 사업소득자(보험설계사 등)는 기부금 세액공제를 받을 수 있습니다.'
+            : '사업소득만 있으면 기부금 세액공제 대상이 아닙니다(연말정산 대상 사업소득자 제외). 장부로 신고할 때 필요경비에 넣는 방법을 검토하세요.'}
+        </p>
 
         <label className={styles.checkLabel} style={{ marginTop: 8 }}>
           <input type="checkbox" checked={inputs.useStandard} onChange={(e) => update('useStandard', e.target.checked)} />
@@ -371,8 +478,8 @@ function QuickCalcTab({ inputs, result, update }: {
 
       {/* 결과 */}
       <section>
-        <label className={styles.label}>계산 결과</label>
-        <div className={styles.resultMain}>
+        <p className={styles.label}>계산 결과</p>
+        <div className={styles.resultMain} role="status">
           <p className={styles.resultLabel}>예상 환급/납부</p>
           <p className={`${styles.resultBig} ${refundColor}`}>
             {result.refund >= 0 ? '+' : ''}{fmtKRWPrecise(result.refund)}
@@ -435,7 +542,8 @@ function CompareTab({ base, scenarios }: { base: CalcResult; scenarios: Scenario
       <div className={styles.scenarioGrid}>
         {scenarios.map((s, idx) => {
           const diff = s.result.refund - baseRefund
-          const isBest = scenarios.slice(1).every((other) => other.result.refund <= s.result.refund) && idx > 0
+          // BEST는 실제로 절세 효과가 있는(diff>0) 시나리오 중 최대일 때만 — 매출 0원 등 전부 동일하면 표시 안 함
+          const isBest = idx > 0 && diff > 0 && scenarios.slice(1).every((other) => other.result.refund <= s.result.refund)
           return (
             <div key={s.key} className={`${styles.scenarioCard} ${isBest ? styles.scenarioCardBest : ''} ${idx === 0 ? styles.scenarioCardCurrent : ''}`}>
               {isBest && <span className={styles.bestBadge}>BEST</span>}
@@ -449,7 +557,7 @@ function CompareTab({ base, scenarios }: { base: CalcResult; scenarios: Scenario
               </p>
               {idx > 0 && (
                 <p className={`${styles.scenarioDiff} ${diff >= 0 ? styles.diffPos : styles.diffNeg}`}>
-                  {diff >= 0 ? '▲ +' : '▼ '}{fmtKRW(diff)} 절세
+                  {diff > 0 ? `▲ ${fmtKRW(diff)} 절세` : diff < 0 ? `▼ ${fmtKRW(-diff)} 불리` : '변화 없음'}
                 </p>
               )}
               <div className={styles.scenarioMini}>
@@ -514,7 +622,7 @@ function OptimizeTab({ inputs, result }: { inputs: CalcInputs; result: CalcResul
           })}
         </div>
         <p className={styles.note}>
-          현재 한계세율 <strong>{result.marginalRate.toFixed(1)}%</strong> (지방세 포함) — 다음 100만원 추가 매출 시 세금 약 <strong>{fmtKRW(Math.floor(result.marginalRate * 10_000))}</strong> 추가 부담.
+          현재 한계세율 <strong>{result.marginalRate.toFixed(1)}%</strong> (지방세 포함) — 과세표준이 100만원 늘면 세금 약 <strong>{fmtKRW(Math.floor(result.marginalRate * 10_000))}</strong> 추가 부담. 경비율을 적용하므로 매출 100만원이 늘 때 과세표준은 그보다 적게 늘어납니다.
         </p>
       </section>
 
@@ -610,13 +718,16 @@ function GuideTab() {
   const [today, setToday] = useState<{ now: Date; deadline: Date; daysLeft: number } | null>(null)
   useEffect(() => {
     const now = new Date()
-    let year = now.getFullYear()
-    if (now.getMonth() > 4) year += 1  // 5월 지났으면 다음 해
-    const deadline = new Date(year, 4, 31, 23, 59, 59)  // 5월 31일
-    // 마감일이 주말이면 다음 영업일(월)로 보정
-    const dow = deadline.getDay()  // 0=일, 6=토
-    if (dow === 0) deadline.setDate(deadline.getDate() + 1)       // 일 → 6/1(월)
-    else if (dow === 6) deadline.setDate(deadline.getDate() + 2)  // 토 → 6/2(월)
+    // 5월 31일, 주말이면 다음 월요일로 보정 — 올해 마감이 지난 뒤에만 다음 해로 (6/1·6/2 연장 마감일 당일 대응)
+    const deadlineFor = (year: number) => {
+      const d = new Date(year, 4, 31, 23, 59, 59)
+      const dow = d.getDay()  // 0=일, 6=토
+      if (dow === 0) d.setDate(d.getDate() + 1)       // 일 → 6/1(월)
+      else if (dow === 6) d.setDate(d.getDate() + 2)  // 토 → 6/2(월)
+      return d
+    }
+    let deadline = deadlineFor(now.getFullYear())
+    if (now.getTime() > deadline.getTime()) deadline = deadlineFor(now.getFullYear() + 1)
     const ms = deadline.getTime() - now.getTime()
     const daysLeft = Math.max(0, Math.ceil(ms / (1000 * 60 * 60 * 24)))
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -631,7 +742,7 @@ function GuideTab() {
     '📒 장부 (간편/복식) — 매출 기준에 따라',
     '☂️ 노란우산공제 납입증명서',
     '💰 연금저축·IRP 납입증명서',
-    '🏥 국민건강보험·국민연금 납부확인서',
+    '🏥 국민연금 납부확인서 (지역 건강보험료는 장부 신고 시 경비 증빙)',
     '👨‍👩‍👦 부양가족 가족관계증명서·소득증빙 (필요 시)',
     '🎁 기부금 영수증 (종교·법정 단체)',
   ]

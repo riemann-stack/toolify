@@ -52,7 +52,7 @@ const faqAnswer: React.CSSProperties = {
 }
 
 const FAQ_LD = [
-  { "q":"정말 무작위가 인간보다 나은가요?","a":"장기·평균적으로는 그런 통계가 많습니다. DALBAR(매년), Cass Business School(2013, 1만 무작위 포트폴리오), Burton Malkiel(1973)·Lusha 침팬지(2009)·Orlando 고양이(2012) 등. 단, 이는 인간 평균 이야기 — 일관된 원칙으로 투자하는 소수는 무작위보다 훨씬 잘합니다. 본 도구의 메시지는 &ldquo;무작위가 천재다&rdquo;가 아니라 &ldquo;인간이 자기 편향을 이기는 게 어렵다&rdquo;입니다." },
+  { "q":"정말 무작위가 인간보다 나은가요?","a":"장기·평균적으로는 그런 통계가 많습니다. DALBAR(매년), Cass Business School(2013, 1,000만 개 무작위 포트폴리오), Burton Malkiel(1973)·Lusha 침팬지(2009)·Orlando 고양이(2012) 등. 단, 이는 인간 평균 이야기 — 일관된 원칙으로 투자하는 소수는 무작위보다 훨씬 잘합니다. 본 도구의 메시지는 &ldquo;무작위가 천재다&rdquo;가 아니라 &ldquo;인간이 자기 편향을 이기는 게 어렵다&rdquo;입니다." },
   { "q":"이 도구로 종목 추천도 받을 수 있나요?","a":"아니요 — 절대 X. 본 도구는 종목 정보 검색·DB·추천 기능을 제공하지 않습니다. 사용자가 입력한 종목명도 화면에만 표시되고 서버·localStorage 저장 X. 종목 정보는 DART 증권신고서·본인 거래 증권사 안내에서 직접 확인." },
   { "q":"자가진단 결과가 빨강(🔴)이면 사면 안 되나요?","a":"금지가 아니라 보류 권장입니다. 매수/매도 권유는 하지 않습니다. 빨강이 나오면: ① 24~48시간 보류 후 재진단 ② 같은 결정이 다시 나오면 본인 판단 신뢰 ③ 다른 결정이 나오면 그게 본심. 모든 결정의 책임은 본인에게 있습니다." },
   { "q":"친칠라 모드의 주인공 Lusha는 무슨 동물인가요?","a":"Lusha는 2009년 러시아 서커스 침팬지입니다 (쥐가 아닙니다). 종목명 큐브 30개 중 8개를 골라 펀드 매니저 94%를 이긴 이야기에서 영감을 받았고, 본 도구 마스코트는 더 친근한 친칠라로 표현했을 뿐 — 동물 자체가 중요한 게 아니라 &ldquo;인간 편향이 없는 무작위 선택의 힘&rdquo;이 핵심." },
@@ -80,7 +80,7 @@ export default function StockDecisionPage() {
       <h2 style={sectionTitle}>📊 왜 인간은 자기 편향을 이기기 어려운가</h2>
       <div style={card}>
         <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
-          DALBAR 보고서가 매년 보여주는 충격적 사실 — <strong>일반 투자자는 본인이 산 펀드 자체 수익률보다 절반 이하만 가져갑니다</strong>. 이유는 단순:
+          DALBAR 보고서가 매년 보여주는 사실 — <strong>일반 투자자는 시장 지수보다 낮은 수익을 가져갑니다</strong>(2025년 보고서 20년 평균: 투자자 연 9.24% vs S&amp;P 500 연 10.35%). 격차가 생기는 이유는 단순:
         </p>
         <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '10px', paddingLeft: '18px', marginBottom: 0 }}>
           <li>오를 때 사고 (FOMO) → 고점 매수</li>
@@ -101,7 +101,7 @@ export default function StockDecisionPage() {
           { emoji: '🐭', name: '친칠라 픽', story: 'Lusha 침팬지 (러시아, 2009) — 펀드 매니저 94% 이김', use: '3~8개 옵션 픽' },
           { emoji: '🎯', name: '다트', story: 'Burton Malkiel 원숭이 (1973)', use: '4분면 결정' },
           { emoji: '🐱', name: '고양이 발', story: 'Orlando 고양이 (영국, 2012) — Observer 1년 1등', use: '여러 옵션 톡톡' },
-          { emoji: '🎡', name: '룰렛', story: 'Cass Business School (2013) — 1만 원숭이', use: '시각적 회전 — 결정 대행이 아닌 감정 점검용' },
+          { emoji: '🎡', name: '룰렛', story: 'Cass Business School (2013) — 1,000만 원숭이', use: '시각적 회전 — 결정 대행이 아닌 감정 점검용' },
         ].map((m, i) => (
           <div key={i} style={{ ...card, marginBottom: 0 }}>
             <p style={{ fontSize: '24px', marginBottom: '6px' }}>{m.emoji}</p>
@@ -124,11 +124,11 @@ export default function StockDecisionPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {[
             { color: '#059669', name: '🟢 비교적 이성적', desc: '본인 판단 신뢰. 다만 과신 위험 — 5초 더 생각.' },
-            { color: '#FFD93E', name: '🟡 균형 (보류 권장)', desc: '판단·감정 비슷. 1~2일 보류 후 재점검.' },
+            { color: 'var(--warning)', name: '🟡 균형 (보류 권장)', desc: '판단·감정 비슷. 1~2일 보류 후 재점검.' },
             { color: '#EA580C', name: '🟠 감정 ↑ (신중)', desc: '분할 진행·소액 테스트로 영향 줄이기.' },
             { color: '#DC2626', name: '🔴 강한 감정 신호', desc: '24~48시간 보류 강력 권장. 정말 같은 결정인지 재검토.' },
           ].map((b, i) => (
-            <div key={i} style={{ background: 'var(--bg3)', border: `1px solid ${b.color}55`, borderLeft: `3px solid ${b.color}`, borderRadius: '8px', padding: '10px 14px' }}>
+            <div key={i} style={{ background: 'var(--bg3)', border: `1px solid color-mix(in srgb, ${b.color} 33%, transparent)`, borderLeft: `3px solid ${b.color}`, borderRadius: '8px', padding: '10px 14px' }}>
               <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '4px' }}>{b.name}</p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{b.desc}</p>
             </div>
@@ -189,7 +189,7 @@ export default function StockDecisionPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. 정말 무작위가 인간보다 나은가요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: 'var(--text)' }}>장기·평균적</strong>으로는 그런 통계가 많습니다. DALBAR(매년), Cass Business School(2013, 1만 무작위 포트폴리오), Burton Malkiel(1973)·Lusha 침팬지(2009)·Orlando 고양이(2012) 등. 단, 이는 <strong>인간 평균</strong> 이야기 — 일관된 원칙으로 투자하는 소수는 무작위보다 훨씬 잘합니다. 본 도구의 메시지는 &ldquo;무작위가 천재다&rdquo;가 아니라 &ldquo;<strong>인간이 자기 편향을 이기는 게 어렵다</strong>&rdquo;입니다.
+          <strong style={{ color: 'var(--text)' }}>장기·평균적</strong>으로는 그런 통계가 많습니다. DALBAR(매년), Cass Business School(2013, 1,000만 개 무작위 포트폴리오), Burton Malkiel(1973)·Lusha 침팬지(2009)·Orlando 고양이(2012) 등. 단, 이는 <strong>인간 평균</strong> 이야기 — 일관된 원칙으로 투자하는 소수는 무작위보다 훨씬 잘합니다. 본 도구의 메시지는 &ldquo;무작위가 천재다&rdquo;가 아니라 &ldquo;<strong>인간이 자기 편향을 이기는 게 어렵다</strong>&rdquo;입니다.
         </div>
       </details>
 

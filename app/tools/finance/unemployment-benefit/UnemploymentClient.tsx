@@ -13,8 +13,9 @@ import {
   COVERAGE_BRACKETS,
   BENEFIT_DAYS_2019,
   UI_DAILY_CAP_2026,
-  UI_DAILY_FLOOR_2026,
+  UI_DAILY_WORK_HOURS,
   UI_WAGE_DAILY_CAP_2026,
+  uiDailyFloor,
   type CoverageBracket,
   type AgeGroup,
 } from '@/lib/krUnemployment'
@@ -82,7 +83,10 @@ function priorThreeMonthDays(iso: string): number {
   // 퇴사일 직전 3개월 = 퇴사일 전날부터 90일 구간이 아니라, '사유 발생일 이전 3개월'의 달력일수.
   // 통상 산정: 이직일 직전 3개월간의 총 일수(이직일 당일 제외, 직전 3개월 경계까지).
   // 분해 파싱한 end에서 3개월 전 같은 날을 빼서 일수 차이로 근사.
-  const start = new Date(y, m - 1 - 3, d)
+  // 3개월 전 달에 같은 날이 없으면(5/31 → 2/31) 그 달 말일로 클램프 — Date 롤오버(→3/3)로 일수가 줄지 않게.
+  const first = new Date(y, m - 1 - 3, 1)
+  const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate()
+  const start = new Date(first.getFullYear(), first.getMonth(), Math.min(d, lastDay))
   const diff = Math.round((end.getTime() - start.getTime()) / 86_400_000)
   if (diff < 80 || diff > 100) return 0 // 비정상값 방어 → fallback 90
   return diff
@@ -90,11 +94,14 @@ function priorThreeMonthDays(iso: string): number {
 
 const BRACKET_IDS = COVERAGE_BRACKETS.map((b) => b.id)
 const AGE_GROUPS: AgeGroup[] = ['under50', '50plus']
+/* 이직 전 1일 소정근로시간 선택지 (8 → 1) — 하한액이 이 시간에 비례 */
+const WORK_HOUR_OPTIONS = [8, 7, 6, 5, 4, 3, 2, 1]
 
 export default function UnemploymentClient() {
   const [age, setAge] = useState('35')
   const [bracket, setBracket] = useState<CoverageBracket>('y1to3')
   const [disabled, setDisabled] = useState(false)
+  const [workHours, setWorkHours] = useState<number>(UI_DAILY_WORK_HOURS)
 
   const [wageMode, setWageMode] = useState<WageMode>('simple')
   const [monthly, setMonthly] = useState('3,000,000')
@@ -118,6 +125,7 @@ export default function UnemploymentClient() {
         setBracket(o.bracket as CoverageBracket)
       }
       if (typeof o.disabled === 'boolean') setDisabled(o.disabled)
+      if (typeof o.workHours === 'number' && WORK_HOUR_OPTIONS.includes(o.workHours)) setWorkHours(o.workHours)
       if (o.wageMode === 'simple' || o.wageMode === 'detail') setWageMode(o.wageMode)
       if (typeof o.monthly === 'string') setMonthly(o.monthly)
       if (typeof o.m1 === 'string') setM1(o.m1)
@@ -133,10 +141,10 @@ export default function UnemploymentClient() {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ age, bracket, disabled, wageMode, monthly, m1, m2, m3, leaveDate, involuntary }),
+        JSON.stringify({ age, bracket, disabled, workHours, wageMode, monthly, m1, m2, m3, leaveDate, involuntary }),
       )
     } catch {}
-  }, [age, bracket, disabled, wageMode, monthly, m1, m2, m3, leaveDate, involuntary])
+  }, [age, bracket, disabled, workHours, wageMode, monthly, m1, m2, m3, leaveDate, involuntary])
 
   const ageN = parseAge(age)
   const totalDays = useMemo(() => {
@@ -153,9 +161,10 @@ export default function UnemploymentClient() {
   }, [wageMode, monthly, m1, m2, m3, totalDays])
 
   const result = useMemo(
-    () => calcUnemployment(avgDailyRaw, ageN, disabled, BRACKET_REP_MONTHS[bracket]),
-    [avgDailyRaw, ageN, disabled, bracket],
+    () => calcUnemployment(avgDailyRaw, ageN, disabled, BRACKET_REP_MONTHS[bracket], workHours),
+    [avgDailyRaw, ageN, disabled, bracket, workHours],
   )
+  const dailyFloor = result.dailyFloor
 
   const currentAgeGroup = ageGroup(ageN, disabled)
   const bracketLabel = COVERAGE_BRACKETS.find((b) => b.id === bracket)?.label ?? ''
@@ -163,7 +172,7 @@ export default function UnemploymentClient() {
 
   const resetAll = () => {
     try { localStorage.removeItem(STORAGE_KEY) } catch {}
-    setAge('35'); setBracket('y1to3'); setDisabled(false)
+    setAge('35'); setBracket('y1to3'); setDisabled(false); setWorkHours(UI_DAILY_WORK_HOURS)
     setWageMode('simple'); setMonthly('3,000,000')
     setM1('3,000,000'); setM2('3,000,000'); setM3('3,000,000')
     setLeaveDate(''); setInvoluntary(false)
@@ -236,6 +245,24 @@ export default function UnemploymentClient() {
             <span className={s.checkDesc}>장애인은 만 50세 미만이어도 50세 이상 소정급여일수 표가 적용됩니다.</span>
           </span>
         </label>
+        <div className={s.field} style={{ marginTop: 12 }}>
+          <label className={s.fieldLabel} htmlFor="ub-hours">이직 전 1일 소정근로시간</label>
+          <select
+            id="ub-hours"
+            className={s.select}
+            value={workHours}
+            onChange={(e) => setWorkHours(Number(e.target.value))}
+          >
+            {WORK_HOUR_OPTIONS.map((h) => (
+              <option key={h} value={h}>
+                {h}시간{h === UI_DAILY_WORK_HOURS ? ' (풀타임)' : ''} · 하한 {won(uiDailyFloor(h))}원
+              </option>
+            ))}
+          </select>
+          <p className={s.helpText}>
+            하한액은 최저시급 × 1일 소정근로시간 × 80%라서, 하루 4시간 근무했다면 하한도 8시간 기준의 절반입니다.
+          </p>
+        </div>
       </div>
 
       {/* 임금 입력 */}
@@ -413,7 +440,7 @@ export default function UnemploymentClient() {
             <div className={s.tipBox}>
               {result.capped === 'lower' && (
                 <>
-                  📉 평균임금의 60%({won(result.rawDaily)}원)가 <strong>하한액 {won(UI_DAILY_FLOOR_2026)}원</strong>보다 낮아 하한액으로 지급됩니다.
+                  📉 평균임금의 60%({won(result.rawDaily)}원)가 <strong>하한액 {won(dailyFloor)}원</strong>(1일 {result.workHours}시간 기준)보다 낮아 하한액으로 지급됩니다.
                 </>
               )}
               {result.capped === 'upper' && (
@@ -423,11 +450,15 @@ export default function UnemploymentClient() {
               )}
               {result.capped === 'none' && (
                 <>
-                  ✅ 평균임금의 60%({won(result.rawDaily)}원)가 상한 {won(UI_DAILY_CAP_2026)}원·하한 {won(UI_DAILY_FLOOR_2026)}원 사이라 그대로 지급됩니다.
+                  ✅ 평균임금의 60%({won(result.rawDaily)}원)가 상한 {won(UI_DAILY_CAP_2026)}원·하한 {won(dailyFloor)}원 사이라 그대로 지급됩니다.
                 </>
               )}
-              <br />
-              2026년 상한({won(UI_DAILY_CAP_2026)}원)과 하한({won(UI_DAILY_FLOOR_2026)}원)의 폭이 {won(UI_DAILY_CAP_2026 - UI_DAILY_FLOOR_2026)}원으로 매우 좁아, 많은 경우 상한 또는 하한에서 금액이 결정됩니다.
+              {result.workHours === UI_DAILY_WORK_HOURS && (
+                <>
+                  <br />
+                  2026년 상한({won(UI_DAILY_CAP_2026)}원)과 8시간 기준 하한({won(dailyFloor)}원)의 폭이 {won(UI_DAILY_CAP_2026 - dailyFloor)}원으로 매우 좁아, 많은 경우 상한 또는 하한에서 금액이 결정됩니다.
+                </>
+              )}
             </div>
           </div>
 
@@ -435,7 +466,7 @@ export default function UnemploymentClient() {
           <div className={s.warnCard}>
             <strong>⏳ 수급기간 12개월 제한</strong>
             <p>
-              구직급여는 <strong>이직일 다음 날부터 12개월 이내</strong>에만 받을 수 있습니다. 이 기간을 넘기면 소정급여일수({result.benefitDays}일)가 남아 있어도 지급이 종료됩니다. 퇴사 후 지체 없이 워크넷 구직등록·수급자격을 신청하세요.
+              구직급여는 <strong>이직일 다음 날부터 12개월 이내</strong>에만 받을 수 있습니다. 이 기간을 넘기면 소정급여일수({result.benefitDays}일)가 남아 있어도 지급이 종료됩니다. 퇴사 후 지체 없이 고용24(work24.go.kr) 구직등록과 수급자격 신청을 하세요.
             </p>
           </div>
 

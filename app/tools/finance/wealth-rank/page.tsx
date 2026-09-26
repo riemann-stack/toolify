@@ -7,6 +7,10 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { USD_KRW, USD_KRW_ASOF } from './wealthData'
+
+/** USD → '약 N억' (FAQ 예시를 고정 환율에서 파생) */
+const usdToEok = (usd: number) => `약 ${(Math.round((usd * USD_KRW) / 1e7) / 10).toLocaleString('ko-KR')}억`
 
 export const metadata = buildMetadata({
   path: '/tools/finance/wealth-rank',
@@ -100,7 +104,7 @@ const FAQ_LD = [
   { q: '상위 10%·상위 1%에 들려면 순자산이 얼마여야 하나요?', a: '가구 순자산이 <strong>약 11억이면 상위 10%</strong>, <strong>약 33억이면 상위 1%</strong>입니다(분포는 2025 가계금융복지조사, 상위 1%·5% 컷은 상위 구간 보도치 기준). 참고로 <strong>10억 이상은 상위 11.8%</strong>, <strong>15.2억이면 상위 5%</strong>입니다. 순자산 3억 미만 가구가 전체의 57%로, 중앙값은 <strong>2억 3,860만원</strong>입니다.' },
   { q: '데이터 출처와 기준 시점은 어떻게 되나요?', a: '한국 기준은 통계청·한국은행·금융감독원이 함께 발표한 <strong>「2025년 가계금융복지조사」(기준일 2025년 3월 31일, 2025년 12월 공표)</strong>와 상위 구간 보도치를 사용했습니다. 세계 기준은 <strong>UBS Global Wealth Report 2025</strong>(2024년 말, 성인 1인당)를 사용했습니다. 모두 가장 최근 공개 통계입니다.' },
   { q: '시도·연령대 순위는 얼마나 정확한가요?', a: '시·도와 연령대 비교는 <strong>전국 순자산 분포를 해당 그룹의 평균 순자산으로 보정한 추정치</strong>입니다. <strong>서울·세종·경기·제주(2025 실측 평균)와 50대(실측 평균)</strong>는 실제 통계값을 쓰지만, 그 외 시·도와 연령대는 평균 수준을 반영한 추정이라 실제 분포와 차이가 있을 수 있습니다. 그룹 안에서의 대략적 위치를 보는 용도로 참고하세요.' },
-  { q: '세계 순위는 어떻게 계산되나요?', a: 'UBS 보고서의 <strong>성인 1인당 순자산 분포</strong>에 입력값을 1달러 = 1,380원으로 환산해 대입합니다. 세계 기준 상위 10%는 약 <strong>$307,000(약 4.2억)</strong>, 상위 1%는 약 <strong>$1.45M(약 20억)</strong> 수준입니다. 다만 우리 조사는 <strong>가구 단위</strong>, UBS는 <strong>1인 단위</strong>라 그대로 비교하면 순위가 다소 높게 나오므로 <strong>참고용</strong>으로 봐 주세요.' },
+  { q: '세계 순위는 어떻게 계산되나요?', a: `UBS 보고서의 <strong>성인 1인당 순자산 분포</strong>에 입력값을 1달러 = ${USD_KRW.toLocaleString('ko-KR')}원(${USD_KRW_ASOF} 근사 고정 환율)으로 환산해 대입합니다. 세계 기준 상위 10%는 약 <strong>$307,000(${usdToEok(307_000)})</strong>, 상위 1%는 약 <strong>$1.45M(${usdToEok(1_450_000)})</strong> 수준입니다. 다만 우리 조사는 <strong>가구 단위</strong>, UBS는 <strong>1인 단위</strong>라 그대로 비교하면 순위가 다소 높게 나오므로 <strong>참고용</strong>으로 봐 주세요.` },
   { q: '왜 가구 기준인가요? 개인 기준은 없나요?', a: '한국의 자산 통계인 가계금융복지조사가 <strong>가구(세대) 단위</strong>로 조사되기 때문에, 국내 순위는 가구 기준이 가장 정확합니다. 혼자 사는 1인 가구라면 입력한 순자산이 곧 개인 자산이 됩니다. 부부·가족이라면 <strong>가구 전체 합산 순자산</strong>을 넣어야 통계와 같은 기준으로 비교됩니다.' },
   { q: '통계의 부채에는 무엇이 포함되나요? 순자산이 마이너스인 가구도 있나요?', a: '가계금융복지조사의 부채는 <strong>금융부채(담보대출·신용대출·카드 관련 대출 등)와 임대보증금(내가 세입자에게 받아 둔 보증금)</strong>을 합한 값입니다. 2025년 조사의 가구 평균 부채 9,534만원은 금융부채 6,795만원 + 임대보증금 2,739만원으로 구성됩니다. 부채가 자산보다 많아 <strong>순자산이 마이너스인 가구도 전체의 3.0%</strong>(2025년 3월 말 기준)이며, 이 계산기에도 음수 순자산을 입력할 수 있습니다.' },
   { q: '전세·월세 보증금은 자산인가요, 부채인가요?', a: '방향에 따라 다릅니다. <strong>내가 집주인에게 맡긴 전·월세보증금은 내 금융자산</strong>입니다(2025년 가구 평균 3,730만원, 금융자산의 약 27%). 반대로 <strong>내가 세입자에게서 받아 둔 임대보증금은 갚아야 할 부채</strong>입니다(평균 2,739만원, 부채의 28.7%). 통계도 같은 기준을 쓰며, 순자산 1분위(하위 20%) 가구는 자산의 36.6%가 전·월세보증금일 정도로 비중이 큽니다.' },

@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './savings.module.css'
 import {
-  HOUSEHOLD_AVG_EXPENSE, AGE_GROUPS, FIXED_ITEMS, VAR_ITEMS,
+  HOUSEHOLD_AVG_EXPENSE, ALL_HOUSEHOLD_AVG_EXPENSE_2024, AGE_GROUPS, FIXED_ITEMS, VAR_ITEMS,
   JARS, TAX_PRODUCTS, GOAL_PRESETS,
   type Household, type AgeGroup,
-  getAgeGroup, getGrade,
+  getAgeGroup, getGrade, isHousehold, isAgeGroup,
   calcSavings, calcSavingsRate,
   monthlyForGoal, simulateGrowth,
   fmt, fmtMan,
@@ -17,10 +17,24 @@ import {
 
 type Tab = 'diagnose' | 'jars' | 'goal' | 'tax'
 
-const STORAGE_KEY = 'youtil_savings_v1'
+const STORAGE_KEY = 'youtil_savings_v1' // 옛 키 규칙이지만 개명 금지(데이터 유실) — 유지
+
+/** 숫자 입력칸 문자열(부호·소수, 길이 제한)만 복원 */
+function isNumStr(v: unknown): v is string {
+  return typeof v === 'string' && v.length <= 10 && /^-?\d*\.?\d*$/.test(v)
+}
+/** { id: 숫자문자열 } 레코드 — 알려진 id만 골라 복원 */
+function pickNumRecord(v: unknown, ids: string[]): Record<string, string> {
+  const out: Record<string, string> = {}
+  if (!v || typeof v !== 'object') return out
+  const src = v as Record<string, unknown>
+  ids.forEach((id) => { if (isNumStr(src[id])) out[id] = src[id] as string })
+  return out
+}
 
 export default function SavingsClient() {
   const [tab, setTab] = useState<Tab>('diagnose')
+  const gradId = `rateGrad-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
 
   /* 공통 입력 */
   const [income, setIncome] = useState('300')
@@ -57,16 +71,20 @@ export default function SavingsClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.income) setIncome(j.income)
-      if (j.extraIncome) setExtraIncome(j.extraIncome)
-      if (j.household) setHousehold(j.household)
-      if (j.ageGroup) setAgeGroup(j.ageGroup)
-      if (j.expenses) setExpenses(j.expenses)
-      if (j.jarUser) setJarUser(j.jarUser)
-      if (j.goalAmount) setGoalAmount(j.goalAmount)
-      if (j.goalYears) setGoalYears(j.goalYears)
-      if (j.goalRate) setGoalRate(j.goalRate)
+      const parsed: unknown = JSON.parse(raw)
+      if (!parsed || typeof parsed !== 'object') return
+      const j = parsed as Record<string, unknown>
+      if (isNumStr(j.income)) setIncome(j.income)
+      if (isNumStr(j.extraIncome)) setExtraIncome(j.extraIncome)
+      if (isHousehold(j.household)) setHousehold(j.household)
+      if (isAgeGroup(j.ageGroup)) setAgeGroup(j.ageGroup)
+      const exp = pickNumRecord(j.expenses, [...FIXED_ITEMS, ...VAR_ITEMS].map((e) => e.id))
+      if (Object.keys(exp).length) setExpenses((prev) => ({ ...prev, ...exp }))
+      const jars = pickNumRecord(j.jarUser, JARS.map((jr) => jr.id))
+      if (Object.keys(jars).length) setJarUser((prev) => ({ ...prev, ...jars }))
+      if (isNumStr(j.goalAmount)) setGoalAmount(j.goalAmount)
+      if (isNumStr(j.goalYears)) setGoalYears(j.goalYears)
+      if (isNumStr(j.goalRate)) setGoalRate(j.goalRate)
     } catch {}
   }, [])
   useEffect(() => {
@@ -101,8 +119,8 @@ export default function SavingsClient() {
   const grade = getGrade(savingsRate)
 
   /* 평균·권장 비교 */
-  const avgExp = HOUSEHOLD_AVG_EXPENSE[household].expense
-  const expVsAvg = totalExpense - avgExp
+  const avgExp = HOUSEHOLD_AVG_EXPENSE[household].expense   // 1인 가구만 비교값 있음 (null이면 비교 생략)
+  const expVsAvg = avgExp !== null ? totalExpense - avgExp : 0
   const ageMeta = getAgeGroup(ageGroup)
   const recoMid = (ageMeta.rateMin + ageMeta.rateMax) / 2
 
@@ -119,6 +137,7 @@ export default function SavingsClient() {
   // 상한 60년 — 극단 입력의 Infinity 표시 방지
   const yearsN = Math.min(60, Math.max(1, parseFloat(goalYears) || 1))
   const rateN = Math.max(0, parseFloat(goalRate) || 0)
+  const goalMonths = Math.max(1, Math.round(yearsN * 12)) // utils와 같은 정수 개월
   const monthlyNeeded = useMemo(() => monthlyForGoal(goalMan, yearsN, rateN), [goalMan, yearsN, rateN])
   const growth = useMemo(() => simulateGrowth(monthlyNeeded, yearsN, rateN), [monthlyNeeded, yearsN, rateN])
 
@@ -235,11 +254,12 @@ export default function SavingsClient() {
             <div className={s.expenseGrid}>
               {FIXED_ITEMS.map((e) => (
                 <div key={e.id} className={s.expenseItem}>
-                  <label className={s.expenseLabel}>
+                  <label className={s.expenseLabel} htmlFor={`savings-exp-${e.id}`}>
                     {e.emoji} <strong>{e.label}</strong>
                     <span className={s.expenseDesc}>{e.desc}</span>
                   </label>
                   <input
+                    id={`savings-exp-${e.id}`}
                     type="number" inputMode="decimal"
                     className={s.input}
                     value={expenses[e.id]}
@@ -260,11 +280,12 @@ export default function SavingsClient() {
             <div className={s.expenseGrid}>
               {VAR_ITEMS.map((e) => (
                 <div key={e.id} className={s.expenseItem}>
-                  <label className={s.expenseLabel}>
+                  <label className={s.expenseLabel} htmlFor={`savings-exp-${e.id}`}>
                     {e.emoji} <strong>{e.label}</strong>
                     <span className={s.expenseDesc}>{e.desc}</span>
                   </label>
                   <input
+                    id={`savings-exp-${e.id}`}
                     type="number" inputMode="decimal"
                     className={s.input}
                     value={expenses[e.id]}
@@ -298,7 +319,7 @@ export default function SavingsClient() {
             {/* SVG 게이지 */}
             <svg viewBox="0 0 420 60" width="100%" style={{ marginTop: 14, maxWidth: 480 }} role="img" aria-label="저축률 게이지">
               <defs>
-                <linearGradient id="rateGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#DB2777" />
                   <stop offset="20%" stopColor="#D97706" />
                   <stop offset="50%" stopColor="#0891B2" />
@@ -307,7 +328,7 @@ export default function SavingsClient() {
                 </linearGradient>
               </defs>
               <rect x={0} y={20} width={420} height={20} rx={5} fill="var(--bg3)" />
-              <rect x={0} y={20} width={Math.max(0, Math.min((savingsRate / 50) * 420, 420))} height={20} rx={5} fill="url(#rateGrad)" />
+              <rect x={0} y={20} width={Math.max(0, Math.min((savingsRate / 50) * 420, 420))} height={20} rx={5} fill={`url(#${gradId})`} />
               {/* 권장 라인 */}
               <line x1={(recoMid / 50) * 420} y1={12} x2={(recoMid / 50) * 420} y2={48} stroke="var(--accent)" strokeWidth="2" strokeDasharray="3,2" />
               <text x={(recoMid / 50) * 420} y={9} fill="var(--accent)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>권장 {recoMid}%</text>
@@ -329,8 +350,14 @@ export default function SavingsClient() {
                 <tr><td>{isDeficit ? '월 적자' : '저축액'}</td><td className={s.cellMono} style={{ color: isDeficit ? '#DC2626' : 'var(--accent)', fontWeight: 700 }}>{fmtMan(savings)}</td></tr>
                 <tr><td>저축률</td><td className={`${s.cellMono}`} style={{ color: isDeficit ? '#DC2626' : grade.color }}>{savingsRate.toFixed(1)}%</td></tr>
                 <tr className={s.cellSubtitle}><td colSpan={2}>비교</td></tr>
-                <tr><td>평균 지출 ({HOUSEHOLD_AVG_EXPENSE[household].label})</td><td className={s.cellMono}>{avgExp} 만원</td></tr>
-                <tr><td>본인 vs 평균</td><td className={s.cellMono} style={{ color: expVsAvg > 0 ? '#DB2777' : 'var(--accent)' }}>{expVsAvg > 0 ? '+' : ''}{fmt(expVsAvg)} 만원</td></tr>
+                {avgExp !== null ? (
+                  <>
+                    <tr><td>평균 소비지출 ({HOUSEHOLD_AVG_EXPENSE[household].label}, 2024)</td><td className={s.cellMono}>{avgExp} 만원</td></tr>
+                    <tr><td>본인 vs 평균</td><td className={s.cellMono} style={{ color: expVsAvg > 0 ? '#DB2777' : 'var(--accent)' }}>{expVsAvg > 0 ? '+' : ''}{fmt(expVsAvg)} 만원</td></tr>
+                  </>
+                ) : (
+                  <tr><td>참고: 전체 가구 평균 소비지출 (2024, 가구원수 구분 없음)</td><td className={s.cellMono}>{ALL_HOUSEHOLD_AVG_EXPENSE_2024} 만원</td></tr>
+                )}
                 <tr><td>권장 저축률 ({ageMeta.label.split(' ')[0]})</td><td className={s.cellMono}>{ageMeta.rateMin}~{ageMeta.rateMax}%</td></tr>
                 <tr><td>본인 vs 권장</td><td className={s.cellMono} style={{ color: savingsRate >= recoMid ? 'var(--accent)' : '#D97706' }}>{(savingsRate - recoMid > 0 ? '+' : '')}{(savingsRate - recoMid).toFixed(1)}%p</td></tr>
               </tbody>
@@ -344,8 +371,9 @@ export default function SavingsClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>변동비 절감 시뮬레이션</span>
             <div className={s.field}>
-              <label className={s.fieldLabel}>외식·카페 지출 절감 (%)</label>
+              <label className={s.fieldLabel} htmlFor="savings-eatout-cut">외식·카페 지출 절감 (%)</label>
               <input
+                id="savings-eatout-cut"
                 type="range"
                 min={0}
                 max={100}
@@ -423,6 +451,7 @@ export default function SavingsClient() {
                       <input
                         type="number" inputMode="decimal"
                         className={s.input}
+                        aria-label={`${j.label} 본인 배분 비율 (%)`}
                         value={jarUser[j.id]}
                         onChange={(e) => updateJar(j.id, e.target.value)}
                         min={0} max={100} step={1}
@@ -536,7 +565,7 @@ export default function SavingsClient() {
               월 <strong>{fmt(monthlyNeeded, 1)} 만원</strong>
             </p>
             <p className={s.heroSub}>
-              총 적립 {fmtMan(monthlyNeeded * yearsN * 12)} + 이자 {fmtMan(goalMan - monthlyNeeded * yearsN * 12)}
+              총 적립 {fmtMan(monthlyNeeded * goalMonths)} + 이자 {fmtMan(goalMan - monthlyNeeded * goalMonths)}
               {' · '}현재 저축액 대비 <strong style={{ color: monthlyNeeded <= savings ? 'var(--accent)' : '#DB2777' }}>
                 {monthlyNeeded <= savings ? '✅ 달성 가능' : `❌ ${fmt(monthlyNeeded - savings, 1)} 만원 부족`}
               </strong>
@@ -588,12 +617,13 @@ export default function SavingsClient() {
       {tab === 'tax' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>한국 절세 상품 5종 — {ageMeta.label.split(' ')[0]} 적합도</span>
+            <span className={s.cardLabel}>한국 절세 상품 {TAX_PRODUCTS.length}종 — {ageMeta.label.split(' ')[0]} 적합도</span>
             <div className={s.taxGrid}>
               {TAX_PRODUCTS.map((p) => {
-                const isYouth = p.id === 'youth_jump'
+                const isYouth = p.id === 'youth_future'
                 const youthConditional = isYouth && (ageGroup === '30s_single' || ageGroup === '30s_married')
                 const youthIneligible = isYouth && (ageGroup === '40s' || ageGroup === '50s')
+                const isLegacy = p.id === 'youth_jump'
                 return (
                   <div key={p.id} className={s.taxCard} style={{ borderTopColor: p.color }}>
                     <p className={s.taxHead}>
@@ -625,10 +655,13 @@ export default function SavingsClient() {
                       <strong>추천 대상</strong>: {p.recommendFor}
                     </p>
                     {youthConditional && (
-                      <p className={s.taxWarn}>⚠️ 청년도약계좌는 만 19~34세 — 30대는 만 34세 이하만 신규 가입 가능 (35세부터 제외)</p>
+                      <p className={s.taxWarn}>⚠️ 청년미래적금은 만 19~34세 — 30대는 만 34세 이하만 가입 가능 (35세부터 제외)</p>
                     )}
                     {youthIneligible && (
-                      <p className={s.taxWarn}>⚠️ 청년도약계좌는 만 19~34세만 가입 가능 — 본인 연령대 부적합</p>
+                      <p className={s.taxWarn}>⚠️ 청년미래적금은 만 19~34세만 가입 가능 — 본인 연령대 부적합</p>
+                    )}
+                    {isLegacy && (
+                      <p className={s.taxWarn}>⚠️ 신규 가입은 2025년 12월에 끝났습니다. 새로 시작한다면 청년미래적금을 확인하세요.</p>
                     )}
                   </div>
                 )
@@ -649,11 +682,12 @@ export default function SavingsClient() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>🌱 청년도약</td><td className={s.cellMono}>840만원</td><td className={s.cellMono}>5년</td><td className={`${s.cellMono} ${s.cellAccent}`}>월 최대 3.3만원 기여금 + 비과세</td></tr>
+                  <tr><td>🌱 청년미래적금</td><td className={s.cellMono}>600만원</td><td className={s.cellMono}>3년</td><td className={`${s.cellMono} ${s.cellAccent}`}>정부기여금 6~12% 매칭</td></tr>
                   <tr><td>💼 ISA</td><td className={s.cellMono}>2,000만원</td><td className={s.cellMono}>3년+</td><td className={`${s.cellMono} ${s.cellAccent}`}>200만원 비과세</td></tr>
                   <tr><td>🏦 연금저축</td><td className={s.cellMono}>600만원</td><td className={s.cellMono}>~만 55세</td><td className={`${s.cellMono} ${s.cellAccent}`}>연 99만원 환급</td></tr>
                   <tr><td>📊 IRP</td><td className={s.cellMono}>900만원 (저축 합산)</td><td className={s.cellMono}>~만 55세</td><td className={`${s.cellMono} ${s.cellAccent}`}>연 148만원 환급</td></tr>
                   <tr><td>🏠 주택청약</td><td className={s.cellMono}>300만원</td><td className={s.cellMono}>장기</td><td className={`${s.cellMono} ${s.cellAccent}`}>120만원 소득공제</td></tr>
+                  <tr><td>🌿 청년도약 (기존 가입자)</td><td className={s.cellMono}>840만원</td><td className={s.cellMono}>5년</td><td className={s.cellMono}>기여금 + 비과세 (신규 가입 종료)</td></tr>
                 </tbody>
               </table>
             </div>
@@ -662,10 +696,10 @@ export default function SavingsClient() {
           <div className={s.warnCard}>
             <strong>절세 상품 우선순위 추천</strong>
             <p>
-              • <strong>20~30대 청년</strong>: 청년도약계좌 → 주택청약 → ISA → 연금저축 순<br />
+              • <strong>20~30대 청년</strong>: 청년미래적금(모집 기간 확인) → 주택청약 → ISA → 연금저축 순. 청년도약계좌에 이미 가입했다면 만기까지 유지를 먼저 검토<br />
               • <strong>30~40대 직장인</strong>: 연금저축 600 → IRP 300 추가 (총 900) → ISA → 주택청약<br />
               • <strong>50대 은퇴 준비</strong>: 연금저축·IRP 한도 채우기 → ISA<br />
-              • <strong>주의</strong>: 청년도약·연금저축은 중도해지 시 정부지원금·세제혜택 환수
+              • <strong>주의</strong>: 청년 적금·연금저축은 중도해지 시 정부지원금·세제혜택이 환수될 수 있음
             </p>
           </div>
         </>

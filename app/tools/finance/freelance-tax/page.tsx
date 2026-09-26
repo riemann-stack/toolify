@@ -6,12 +6,19 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { EXPENSE_RATES, INDUSTRIES, simpleExcessRate } from './freelanceTaxUtils'
+
+/* 경비율 표 — 계산기와 같은 단일 표(EXPENSE_RATES)에서 렌더 */
+const RATE_ROWS = Object.values(EXPENSE_RATES).map((r) => ({
+  ...r,
+  jobs: INDUSTRIES.filter((i) => i.code === r.code).map((i) => i.name).join('·'),
+}))
 
 export const metadata = buildMetadata({
   path: '/tools/finance/freelance-tax',
   title: '프리랜서 종합소득세 계산기 — 단순경비율 자동 + 공제 시뮬 + 시나리오 비교 (2026년)',
   description:
-    '업종별 단순경비율 자동(30+ 직군) + 8단계 누진세율과 노란우산·연금저축 절세 시나리오 5종 비교. 2026년 5월 신고 D-day.',
+    '국세청 고시 업종별 단순경비율 자동 적용 + 8단계 누진세율과 노란우산·연금저축 절세 시나리오 5종 비교. 2026년 5월 신고 D-day.',
   keywords: [
     '프리랜서 종합소득세', '종소세 계산기', '종합소득세 환급',
     '3.3 원천징수', '프리랜서 세금', '프리랜서 환급',
@@ -52,7 +59,7 @@ const relCard: React.CSSProperties = { display: 'block', background: 'var(--bg2)
 
 const FAQ_LD = [
   { q: '3.3% 원천징수만 내면 되는 거 아닌가요?', a: '아닙니다. 3.3%(소득세 3% + 지방소득세 0.3%)는 <strong style="color:var(--text)">임시로 미리 낸 세금</strong>일 뿐, 진짜 세금은 매년 5월 종합소득세 신고로 정산합니다. 본인의 실제 세율(6~45% 누진)에 따라 더 받거나 더 내야 합니다. 매출이 적고 경비·공제가 충분하면 <strong style="color:#059669">환급</strong>, 매출이 크고 한계세율 24% 이상이면 <strong style="color:#DC2626">추가 납부</strong>가 일반적입니다.' },
-  { q: '단순경비율과 장부 작성, 어느 게 유리한가요?', a: '<strong style="color:var(--text)">실제 경비가 단순경비율보다 크면 장부, 적으면 단순경비율</strong>이 유리합니다. 예: IT 개발자 매출 5천만원 → 단순경비율 64.1%로 3,205만 경비 자동 인정. 실제로 사무실·장비·소프트웨어에 4천만 썼다면 장부 작성이 800만 차이만큼 유리합니다. 다만 장부 작성에는 <strong style="color:var(--text)">증빙(영수증·세금계산서·신용카드)</strong> 보관과 매출·경비 기록 의무가 있습니다. 단순경비율은 <strong style="color:var(--text)">계속사업자 직전년도 수입이 인적용역 3,600만(도소매 6,000만) 미만</strong>일 때 적용되고, 그 이상이면 기준경비율로 전환됩니다. 신규(개업 첫해)는 복식부기 의무 기준(인적용역 7,500만)까지 단순경비율이 가능하며, 그 기준을 넘으면 복식부기 의무로 장부가 필수입니다.' },
+  { q: '단순경비율과 장부 작성, 어느 게 유리한가요?', a: '<strong style="color:var(--text)">실제 경비가 단순경비율보다 크면 장부, 적으면 단순경비율</strong>이 유리합니다. 예: IT 개발자 매출 3천만원 → 단순경비율 64.1%로 1,923만 경비 자동 인정. 실제로 사무실·장비·소프트웨어에 2,500만을 썼다면 장부로 경비를 577만 더 인정받아 장부 작성이 유리합니다. 다만 장부 작성에는 <strong style="color:var(--text)">증빙(영수증·세금계산서·신용카드)</strong> 보관과 매출·경비 기록 의무가 있습니다. 단순경비율은 <strong style="color:var(--text)">계속사업자 직전년도 수입이 인적용역 3,600만(도소매 6,000만) 미만</strong>일 때 적용되고, 그 이상이면 기준경비율로 전환됩니다. 신규(개업 첫해)는 복식부기 의무 기준(인적용역 7,500만)까지 단순경비율이 가능하며, 그 기준을 넘으면 복식부기 의무로 장부가 필수입니다. 신규사업자가 단순경비율을 쓸 때는 매출 4천만원을 넘는 부분에 더 낮은 초과율이 붙습니다(IT 개발자 64.1% → 49.7%).' },
   { q: '노란우산공제 vs 연금저축, 뭐가 절세 효과가 큰가요?', a: '<strong style="color:var(--text)">본인 한계세율에 따라 다릅니다.</strong><ul style="margin:8px 0;padding-left:18px"><li><strong>노란우산</strong>은 소득공제 → 한계세율만큼 절세. 한계세율 24%면 200만 납입 시 약 53만 절세(지방세 포함).</li><li><strong>연금저축</strong>은 세액공제 → 종합소득금액 4,500만 이하 16.5%, 초과 13.2% 정액. 600만 납입 시 79~99만 절세.</li></ul>과세표준 5천만 이상(한계세율 24%+)이면 노란우산이, 4,500만 이하 저소득 구간이면 연금저축의 16.5% 정률이 유리합니다. 본 도구의 「시나리오 비교」 탭에서 즉시 확인할 수 있습니다.' },
   { q: '직장인 + 부업 프리랜서, 합산 신고 어떻게 하나요?', a: '근로소득과 사업소득은 <strong style="color:var(--text)">합산되어 종합과세</strong>됩니다. 회사에서 연말정산을 마쳐도 부업 사업소득이 있으면 5월에 종소세 신고 의무가 있습니다. 합산 시 한계세율이 더 높은 구간으로 점프해 <strong style="color:#DC2626">추가 납부</strong>가 발생하는 경우가 흔합니다. 예: 본업 7,000만(24% 구간) + 부업 1,500만 → 합산 8,500만으로 일부는 35% 적용 가능. 본 계산기는 단독 사업소득 기준이므로 겸업자는 본업 근로소득과 합산해 계산해야 정확합니다.' },
   { q: '신고 안 하면 어떻게 되나요?', a: '무신고 시 다음 가산세가 부과됩니다.<ul style="margin:8px 0;padding-left:18px"><li><strong style="color:#DC2626">무신고 가산세 20%</strong>(부정 무신고 40%)</li><li><strong style="color:#DC2626">납부지연 가산세 일 0.022%</strong>(연 약 8.0%, 2022년 2월 15일 시행령 개정 이후)</li><li><strong style="color:#DC2626">무기장 가산세 20%</strong>(복식부기 의무자가 미작성 시)</li></ul>또한 환급 대상이었어도 신고하지 않으면 <strong style="color:var(--text)">환급 받지 못합니다</strong>. 5월 1~31일 신고 의무는 매출 규모와 무관하게 모든 사업소득자에게 적용됩니다.' },
@@ -72,7 +79,7 @@ export default function FreelanceTaxPage() {
         업종별 단순경비율·8단계 누진세 자동 + <strong style={{ color: 'var(--text)' }}>노란우산·연금 절세 시나리오</strong> 5종 비교.
       </p>
 
-      <UpdatedMeta date="2026년 5월" basis="2026년 종합소득세율 기준" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스","href":"https://hometax.go.kr"}]} />
+      <UpdatedMeta date="2026년 9월" basis="2026년 종합소득세율 · 국세청 2024년 귀속 경비율 고시 기준" sources={[{"label":"국세청","href":"https://www.nts.go.kr"},{"label":"홈택스 기준(단순)경비율 조회","href":"https://hometax.go.kr"}]} />
 
       <FreelanceTaxClient />
 
@@ -129,37 +136,29 @@ export default function FreelanceTaxPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['업종', '단순경비율', '기준경비율', '한도 매출'].map(h => (
+                  {['업종코드·업종', '단순경비율', '4천만 초과분', '기준경비율', '한도 매출'].map(h => (
                     <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['작가·번역가',          '75.0%', '24.6%', '3,600만'],
-                  ['학원·과외 강사',       '60% (학원) / 75% (개인)', '17.6% / 24.6%', '3,600만'],
-                  ['IT 개발자·디자이너',   '64.1%', '19.5%', '3,600만'],
-                  ['유튜버·BJ·콘텐츠',     '64.1%', '19.5%', '3,600만'],
-                  ['음악가·작곡가',        '75.0%', '24.6%', '3,600만'],
-                  ['모델·연기자',          '64.1%', '19.5%', '3,600만'],
-                  ['미용·메이크업',        '62.0%', '17.0%', '3,600만'],
-                  ['배달 라이더·대리',     '79.4%', '27.4%', '3,600만'],
-                  ['부동산 중개',          '50.5%', '18.4%', '2,400만'],
-                  ['음식점업',             '89.0%', '6.7%',  '3,600만'],
-                  ['소매업',               '86.0%', '5.5%',  '6,000만'],
-                ].map(([job, simple, base, limit], i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{job}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{simple}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{base}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{limit}</td>
+                {RATE_ROWS.map((r, i) => (
+                  <tr key={r.code} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>
+                      {r.code} {r.name}
+                      {r.jobs && <span style={{ display: 'block', fontSize: '12px', color: 'var(--muted)' }}>{r.jobs}</span>}
+                    </td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.simpleRate.toFixed(1)}%</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{simpleExcessRate(r.simpleRate).toFixed(1)}%</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.baseRate.toFixed(1)}%</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>3,600만</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ ...faqAnswer, marginTop: '12px', fontSize: '12px' }}>
-            ※ 매년 5월 국세청 단순경비율 고시 갱신. 정확한 본인 업종코드는 홈택스 &gt; 사업소득 신고 화면에서 확인 가능.
+            ※ 국세청 2024년 귀속 경비율 고시 기준(940100은 2023년 귀속 확인값). 경비율은 매년 3월 새 귀속연도분이 고시되니 신고 전 홈택스 「기준(단순)경비율 조회」로 확인하세요. 인적용역은 수입 4,000만원 초과분에 더 낮은 초과율이 붙습니다. 목록에 없는 직군은 계산기에서 조회한 경비율을 직접 입력할 수 있습니다.
           </p>
         </section>
 
@@ -179,7 +178,7 @@ export default function FreelanceTaxPage() {
                 {[
                   ['본인 인적공제',    '150만',       '한계세율만큼 절세'],
                   ['배우자·부양가족',  '1명당 150만', '한계세율만큼 절세 (1명 22.5만~67.5만)'],
-                  ['국민연금·건보료',  '납부액 전액', '한계세율만큼 절세'],
+                  ['국민연금 (연금보험료공제)', '납부액 전액', '한계세율만큼 절세 — 지역 건강보험료는 소득공제 대상이 아니며 장부 신고 때 필요경비로 처리'],
                   ['노란우산공제',     '200~600만',   '한계세율만큼 절세 (소기업·소상공인 전용, 2025 상향)'],
                 ].map(([item, lim, effect], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -203,9 +202,9 @@ export default function FreelanceTaxPage() {
               <tbody>
                 {[
                   ['연금저축·IRP',   '600만 + 300만', '13.2% 또는 16.5% 정액 세액공제'],
-                  ['기부금',         '소득의 30%',    '15% (1천 초과 30%)'],
+                  ['기부금',         '연말정산 사업소득자만', '15% (1천 초과 30%) — 사업소득만 있는 프리랜서는 세액공제 불가, 장부 신고 시 필요경비로 처리'],
                   ['표준세액공제',   '7만원',         '다른 공제 없을 시 자동'],
-                  ['자녀세액공제',   '자녀별 차등',   '1자녀 25만 / 2자녀 55만 / 3자녀+ 100만~'],
+                  ['자녀세액공제',   '자녀별 차등',   '1자녀 25만 / 2자녀 55만 / 3자녀 95만 (이후 1명당 40만 추가)'],
                 ].map(([item, lim, effect], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{item}</td>
@@ -262,7 +261,7 @@ export default function FreelanceTaxPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/salary',      icon: '💰', name: '연봉 실수령액 계산기', desc: '본업 + 부업 합산 시 실수령' },
-              { href: '/tools/finance/4-insurance', icon: '🏥', name: '4대보험 계산기',       desc: '국민연금·건강보험 (전액 소득공제)' },
+              { href: '/tools/finance/4-insurance', icon: '🏥', name: '4대보험 계산기',       desc: '국민연금·건강보험 부담액' },
               { href: '/tools/finance/vat',         icon: '🧾', name: '부가세 계산기',         desc: '별개 세금 (분기·반기 신고)' },
               { href: '/tools/finance/severance',   icon: '💼', name: '퇴직금 실수령액 계산기', desc: '퇴직 후 프리랜서 전환 시' },
               { href: '/tools/finance/savings',     icon: '💰', name: '저축액 계산기',         desc: '환급액으로 절세 상품 시뮬' },

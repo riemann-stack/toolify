@@ -3,13 +3,18 @@
 export type Household = '1' | '2' | '3' | '4'
 export type AgeGroup = '20s' | '30s_single' | '30s_married' | '40s' | '50s'
 
-/* 한국 가구 평균 월 지출 (만원, 통계청 2024 가계동향조사 일반 참고치) */
-export const HOUSEHOLD_AVG_EXPENSE: Record<Household, { label: string; expense: number }> = {
-  '1': { label: '1인 가구',     expense: 159 },
-  '2': { label: '2인 가구',     expense: 229 },
-  '3': { label: '3인 가구',     expense: 290 },
-  '4': { label: '4인+ 가구',    expense: 340 },
+/* 가구 월평균 소비지출 (만원) — 국가데이터처 2024년 연간 가계동향조사
+   · 1인 가구 168.9만원 (「2025 통계로 보는 1인가구」) · 전체 가구 289만원
+   2~4인 가구별 값은 KOSIS 「가구원수별 가구당 월평균 가계수지」 확인 전까지 비교하지 않는다(null) —
+   전체 평균을 다인 가구에 대면 지출이 많은 4인 가구가 '과다'로 잘못 판정되기 때문. */
+export const ALL_HOUSEHOLD_AVG_EXPENSE_2024 = 289
+export const HOUSEHOLD_AVG_EXPENSE: Record<Household, { label: string; expense: number | null }> = {
+  '1': { label: '1인 가구',     expense: 169 },
+  '2': { label: '2인 가구',     expense: null },
+  '3': { label: '3인 가구',     expense: null },
+  '4': { label: '4인+ 가구',    expense: null },
 }
+export const isHousehold = (v: unknown): v is Household => v === '1' || v === '2' || v === '3' || v === '4'
 
 /* 연령대별 권장 저축률 (%) */
 export interface AgeGroupMeta {
@@ -28,7 +33,8 @@ export const AGE_GROUPS: AgeGroupMeta[] = [
   { id: '50s',          label: '50대 (은퇴 준비)',        rateMin: 30, rateMax: 40, desc: '자녀 독립 + 은퇴 대비 마지막 저축 시기' },
 ]
 
-export const getAgeGroup = (id: AgeGroup) => AGE_GROUPS.find((a) => a.id === id)!
+export const getAgeGroup = (id: AgeGroup) => AGE_GROUPS.find((a) => a.id === id) ?? AGE_GROUPS[1]
+export const isAgeGroup = (v: unknown): v is AgeGroup => AGE_GROUPS.some((a) => a.id === v)
 
 /* ─────────────────────────────────────────────
    고정비·변동비 카테고리
@@ -65,7 +71,7 @@ export const FIXED_ITEMS = EXPENSE_ITEMS.filter((e) => e.type === 'fixed')
 export const VAR_ITEMS = EXPENSE_ITEMS.filter((e) => e.type === 'variable')
 
 /* ─────────────────────────────────────────────
-   저축 진단 등급
+   저축 진단 등급 — 가이드용 구간 (통계 백분위 아님)
    ───────────────────────────────────────────── */
 
 export interface SavingsGrade {
@@ -78,10 +84,10 @@ export interface SavingsGrade {
 }
 
 export const GRADES: SavingsGrade[] = [
-  { grade: 'S', rateMin: 50, label: '절약왕',     emoji: '🏆', color: '#0D9488', desc: '상위 1% 저축률. 자산 형성 가속 단계' },
-  { grade: 'A', rateMin: 35, label: '우수',       emoji: '⭐', color: '#059669', desc: '한국 상위 10% 수준. 목표 달성 빠름' },
-  { grade: 'B', rateMin: 20, label: '양호',       emoji: '👍', color: '#0891B2', desc: '평균 이상. 일반 가계 권장 수준' },
-  { grade: 'C', rateMin: 10, label: '보통',       emoji: '😐', color: '#D97706', desc: '한국 평균. 변동비 점검 필요' },
+  { grade: 'S', rateMin: 50, label: '절약왕',     emoji: '🏆', color: '#0D9488', desc: '수입의 절반 이상을 모으는 단계. 자산 형성이 빠르게 진행됩니다' },
+  { grade: 'A', rateMin: 35, label: '우수',       emoji: '⭐', color: '#059669', desc: '권장 구간의 상단. 목표 달성이 빠릅니다' },
+  { grade: 'B', rateMin: 20, label: '양호',       emoji: '👍', color: '#0891B2', desc: '일반적으로 권하는 저축 수준입니다' },
+  { grade: 'C', rateMin: 10, label: '보통',       emoji: '😐', color: '#D97706', desc: '저축은 되고 있지만 권장 수준보다 낮아요. 변동비를 점검해 보세요' },
   { grade: 'D', rateMin: 0,  label: '점검 필요',  emoji: '⚠️', color: '#DB2777', desc: '저축액 부족. 고정비·변동비 재구성 필요' },
 ]
 
@@ -138,7 +144,7 @@ export function calcSavingsRate(income: number, savings: number): number {
  */
 export function monthlyForGoal(goalMan: number, years: number, annualRatePct: number): number {
   if (!(goalMan > 0) || !(years > 0)) return 0   // 음수·0 입력 방어
-  const n = years * 12
+  const n = Math.max(1, Math.round(years * 12))  // 소수 연수(1.3년)도 정수 개월로
   const r = Math.max(0, annualRatePct) / 100 / 12
   if (r === 0) return goalMan / n
   const denom = (Math.pow(1 + r, n) - 1) / r
@@ -149,10 +155,11 @@ export function monthlyForGoal(goalMan: number, years: number, annualRatePct: nu
 export function simulateGrowth(monthlyMan: number, years: number, annualRatePct: number): { month: number; balance: number }[] {
   const result: { month: number; balance: number }[] = []
   const r = annualRatePct / 100 / 12
+  const n = Math.max(1, Math.round(years * 12))  // 소수 연수면 마지막(목표) 행이 빠지지 않도록 정수 개월
   let balance = 0
-  for (let m = 1; m <= years * 12; m++) {
+  for (let m = 1; m <= n; m++) {
     balance = balance * (1 + r) + monthlyMan
-    if (m % 12 === 0 || m === years * 12) {
+    if (m % 12 === 0 || m === n) {
       result.push({ month: m, balance })
     }
   }
@@ -181,17 +188,18 @@ export interface TaxProduct {
 
 export const TAX_PRODUCTS: TaxProduct[] = [
   {
-    id: 'youth_jump',
+    // 2026년 6월 출시 (정책브리핑). 소득 요건·우대형 대상 등 세부는 금융위원회 공고로 확인 — 확인 안 된 수치는 싣지 않음
+    id: 'youth_future',
     emoji: '🌱',
-    label: '청년도약계좌',
-    shortLabel: '청년도약',
-    qualify: '만 19~34세 + 개인소득 7,500만원 이하 + 가구소득 중위 250%',
-    monthlyMaxMan: 70,
-    yearlyMaxMan: 840,
-    durationYears: 5,
-    taxBenefitDesc: '정부 기여금 (소득별 월 최대 약 3.3만원, 2025년 확대) + 만기 비과세 + 우대금리',
-    pros: ['정부 기여금 (월 최대 약 3.3만원)', '5년 만기 비과세', '청년 전용 우대금리'],
-    cons: ['소득 제한 있음', '5년 의무 가입', '중도해지 시 정부지원금 환수'],
+    label: '청년미래적금',
+    shortLabel: '청년미래',
+    qualify: '만 19~34세 · 소득 요건 있음 (2026년 6월 출시, 매년 6월·12월 모집 — 금융위원회 공고 확인)',
+    monthlyMaxMan: 50,
+    yearlyMaxMan: 600,
+    durationYears: 3,
+    taxBenefitDesc: '납입액에 정부기여금 매칭 — 일반형 6%, 우대형 12% (우대형 요건은 공고 확인)',
+    pros: ['정부기여금 매칭 (일반형 6%·우대형 12%)', '3년 만기 — 청년도약계좌(5년)보다 짧음', '청년 전용 상품'],
+    cons: ['나이·소득 요건', '모집 기간(6월·12월)에만 가입', '중도해지 시 정부기여금을 받지 못할 수 있음'],
     recommendFor: '20~30대 초반 사회초년생',
     color: '#0D9488',
   },
@@ -254,6 +262,21 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     cons: ['금리 낮음', '청약 사용 시 해지', '소득공제 자격 까다로움'],
     recommendFor: '무주택 청년·세대주',
     color: '#DB2777',
+  },
+  {
+    id: 'youth_jump',
+    emoji: '🌿',
+    label: '청년도약계좌 (기존 가입자)',
+    shortLabel: '청년도약',
+    qualify: '신규 가입은 2025년 12월 종료 — 이미 가입한 사람의 유지·만기 참고용',
+    monthlyMaxMan: 70,
+    yearlyMaxMan: 840,
+    durationYears: 5,
+    taxBenefitDesc: '정부 기여금 (소득별 월 최대 약 3.3만원) + 만기 비과세 + 우대금리',
+    pros: ['정부 기여금 (월 최대 약 3.3만원)', '5년 만기 비과세', '청년 전용 우대금리'],
+    cons: ['신규 가입 불가 (2025년 12월 종료)', '5년 유지해야 혜택', '중도해지 시 정부지원금 환수'],
+    recommendFor: '이미 가입한 청년 — 가능하면 만기까지 유지',
+    color: '#059669',
   },
 ]
 

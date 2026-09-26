@@ -13,6 +13,7 @@ import {
   UI_DAILY_CAP_2026,
   UI_DAILY_FLOOR_2026,
   UI_WAGE_DAILY_CAP_2026,
+  uiDailyFloor,
   type AgeGroup,
 } from '@/lib/krUnemployment'
 
@@ -51,7 +52,7 @@ const BRACKET_SHORT: Record<string, string> = {
 const FAQ_LD = [
   {
     q: '2026년 실업급여는 하루 얼마인가요? (상한·하한)',
-    a: `2026년 1일 구직급여 <strong>상한액은 ${won(UI_DAILY_CAP_2026)}원</strong>, <strong>하한액은 ${won(UI_DAILY_FLOOR_2026)}원</strong>입니다. 본인 평균임금일액의 60%로 계산하되 이 상·하한 사이로 정해집니다. 상한은 6년 만에 올랐고, 하한은 최저임금(시급 × 8시간 × 80%)에 연동됩니다. 두 값의 폭이 ${won(UI_DAILY_CAP_2026 - UI_DAILY_FLOOR_2026)}원으로 좁아, 실제로는 대부분 상한 또는 하한 부근에서 결정됩니다.`,
+    a: `2026년 1일 구직급여 <strong>상한액은 ${won(UI_DAILY_CAP_2026)}원</strong>, <strong>하한액은 ${won(UI_DAILY_FLOOR_2026)}원</strong>입니다. 본인 평균임금일액의 60%로 계산하되 이 상·하한 사이로 정해집니다. 상한은 6년 만에 올랐고, 하한은 최저임금에 연동됩니다(최저시급 × 이직 전 1일 소정근로시간 × 80%). ${won(UI_DAILY_FLOOR_2026)}원은 하루 8시간 근무 기준이고, 하루 4시간 근무했다면 하한도 절반인 ${won(uiDailyFloor(4))}원입니다. 두 값의 폭이 ${won(UI_DAILY_CAP_2026 - UI_DAILY_FLOOR_2026)}원으로 좁아, 실제로는 대부분 상한 또는 하한 부근에서 결정됩니다.`,
   },
   {
     q: '실업급여는 한 달에 얼마 받나요?',
@@ -75,11 +76,11 @@ const FAQ_LD = [
   },
   {
     q: '신청 기간이 지나면(이직 후 12개월) 어떻게 되나요?',
-    a: '구직급여는 <strong>이직일 다음 날부터 12개월 이내</strong>에만 받을 수 있습니다. 이 12개월을 넘기면 소정급여일수가 남아 있어도 더 이상 지급되지 않습니다. 예를 들어 소정급여일수가 150일이어도 신청·수급이 늦어 12개월이 지나면 남은 일수는 소멸합니다. 그래서 퇴사 직후 워크넷 구직등록과 수급자격 신청을 서두르는 것이 중요합니다.',
+    a: '구직급여는 <strong>이직일 다음 날부터 12개월 이내</strong>에만 받을 수 있습니다. 이 12개월을 넘기면 소정급여일수가 남아 있어도 더 이상 지급되지 않습니다. 예를 들어 소정급여일수가 150일이어도 신청·수급이 늦어 12개월이 지나면 남은 일수는 소멸합니다. 그래서 퇴사 직후 고용24(work24.go.kr) 구직등록과 수급자격 신청을 서두르는 것이 중요합니다.',
   },
   {
     q: '월급 300만원이면 실업급여가 얼마인가요?',
-    a: `세전 월급 300만원이면 평균임금일액이 약 10만원(300만 × 3 ÷ 90일)이고, 그 60%는 6만원입니다. 그런데 이 값이 2026년 하한액 ${won(UI_DAILY_FLOOR_2026)}원보다 낮아 <strong>하한액 ${won(UI_DAILY_FLOOR_2026)}원</strong>이 적용됩니다. 만 35세·가입기간 1~3년이면 소정급여일수 ${BENEFIT_DAYS_2019.under50.y1to3}일, 총 예상 수급액은 약 ${won(UI_DAILY_FLOOR_2026 * BENEFIT_DAYS_2019.under50.y1to3)}원입니다.`,
+    a: `세전 월급 300만원이면 평균임금일액이 약 10만원(300만 × 3 ÷ 90일)이고, 그 60%는 6만원입니다. 그런데 이 값이 2026년 하한액 ${won(UI_DAILY_FLOOR_2026)}원(하루 8시간 근무 기준)보다 낮아 <strong>하한액 ${won(UI_DAILY_FLOOR_2026)}원</strong>이 적용됩니다. 만 35세·가입기간 1~3년이면 소정급여일수 ${BENEFIT_DAYS_2019.under50.y1to3}일, 총 예상 수급액은 약 ${won(UI_DAILY_FLOOR_2026 * BENEFIT_DAYS_2019.under50.y1to3)}원입니다.`,
   },
 ]
 
@@ -155,7 +156,7 @@ export default function UnemploymentBenefitPage() {
             </p>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            2026년은 상한과 하한의 폭이 <strong style={{ color: 'var(--text)' }}>{won(UI_DAILY_CAP_2026 - UI_DAILY_FLOOR_2026)}원에 불과</strong>합니다. 하한은 최저임금(시급 × 8시간 × 80%)에 연동돼 매년 오르는데 상한은 오랫동안 묶여 있어 두 값이 가까워졌습니다. 그래서 평균임금이 어지간히 높지 않으면 대부분 하한액 부근에서 결정됩니다.
+            2026년은 상한과 하한의 폭이 <strong style={{ color: 'var(--text)' }}>{won(UI_DAILY_CAP_2026 - UI_DAILY_FLOOR_2026)}원에 불과</strong>합니다. 하한은 최저임금에 연동돼(최저시급 × 1일 소정근로시간 × 80%) 매년 오르는데 상한은 오랫동안 묶여 있어 두 값이 가까워졌습니다. 그래서 평균임금이 어지간히 높지 않으면 대부분 하한액 부근에서 결정됩니다. 하루 근무시간이 8시간보다 짧았던 단시간 근로자는 하한도 그만큼 낮아지니, 위 도구에서 1일 소정근로시간을 함께 선택하세요.
           </p>
         </div>
 
@@ -239,7 +240,7 @@ export default function UnemploymentBenefitPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { n: '1', t: '이직확인서 처리 확인', d: '회사가 고용보험에 이직확인서·피보험자격 상실 신고를 제출했는지 확인.' },
-              { n: '2', t: '워크넷 구직등록', d: '워크넷(work.go.kr)에서 구직신청을 등록.' },
+              { n: '2', t: '고용24 구직등록', d: '고용24(work24.go.kr)에서 구직신청을 등록. 옛 워크넷은 고용24로 통합됐습니다.' },
               { n: '3', t: '수급자격 신청교육', d: '고용보험 누리집 온라인 또는 고용센터에서 교육 수강.' },
               { n: '4', t: '수급자격 인정 신청', d: '거주지 관할 고용센터 방문해 수급자격 인정 신청.' },
               { n: '5', t: '실업인정·급여 수급', d: '정해진 실업인정일마다 구직활동 신고 → 급여 지급.' },
@@ -252,7 +253,7 @@ export default function UnemploymentBenefitPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            상세 절차·서식은 고용보험(ei.go.kr)과 워크넷(work.go.kr)에서 확인하고, 절차가 헷갈리면 고용센터(국번없이 1350)에 문의하세요.
+            상세 절차·서식은 고용24(work24.go.kr)에서 확인하고, 절차가 헷갈리면 고용센터(국번없이 1350)에 문의하세요.
           </p>
         </div>
 

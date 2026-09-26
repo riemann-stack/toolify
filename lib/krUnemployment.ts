@@ -1,6 +1,7 @@
 /* 실업급여(구직급여) 법정 수치·산식 단일 소스 — 2026년 이직자 기준.
    출처: 고용노동부(moel.go.kr)·고용보험(ei.go.kr). 2026 상한 68,100원(6년 만에 인상),
-   하한 66,048원(= 최저임금일액 × 80%). 하한은 최저시급에 연동되므로 krInsuranceRates에서 파생.
+   하한 66,048원(= 최저시급 × 1일 소정근로시간 8h × 80%). 단시간 근로자는 소정근로시간에 비례해 하한이 낮아짐.
+   하한은 최저시급에 연동되므로 krInsuranceRates에서 파생.
    소정급여일수 표는 2019.10 이후 이직자 기준. 수급'자격'(자발/비자발·피보험 180일)은 계산 범위 밖. */
 
 import { MIN_HOURLY_WAGE } from './krInsuranceRates'
@@ -9,12 +10,24 @@ export const UI_BENEFIT_RATE = 0.6              // 구직급여 = 평균임금�
 export const UI_DAILY_CAP_2026 = 68_100         // 1일 구직급여 상한액 (2026)
 export const UI_WAGE_DAILY_CAP_2026 = 113_500   // 임금일액(평균임금일액) 상한 (2026)
 export const UI_DAILY_FLOOR_RATE = 0.8          // 하한액 = 최저임금일액 × 80%
-export const UI_DAILY_WORK_HOURS = 8            // 최저임금일액 환산 1일 소정근로시간
+export const UI_DAILY_WORK_HOURS = 8            // 최저임금일액 환산 1일 소정근로시간 (풀타임 기준·상한)
+export const UI_MIN_WORK_HOURS = 1              // 입력 하한 (주 15시간 미만 초단시간은 대부분 적용 제외 — 호출측 안내)
 
-/** 2026 1일 구직급여 하한액 = 최저시급 × 8h × 80% = 66,048원 (최저시급 갱신 시 자동 반영) */
-export const UI_DAILY_FLOOR_2026 = Math.round(
-  MIN_HOURLY_WAGE[2026] * UI_DAILY_WORK_HOURS * UI_DAILY_FLOOR_RATE,
-)
+/** 1일 소정근로시간 정규화 — 1~8시간(8시간 초과는 8시간으로 봄). NaN이면 8시간. */
+export function normWorkHours(hours: number): number {
+  if (!Number.isFinite(hours)) return UI_DAILY_WORK_HOURS
+  return Math.min(UI_DAILY_WORK_HOURS, Math.max(UI_MIN_WORK_HOURS, hours))
+}
+
+/** 1일 구직급여 하한액 = 최저시급 × 이직 전 1일 소정근로시간 × 80%.
+ *  고용보험법 §45④(최저기초일액 = 최저임금 × 1일 소정근로시간)·§46②(구직급여일액 하한 = 최저기초일액 × 80%).
+ *  단시간 근로자(예: 1일 4시간)는 하한도 비례해 낮아진다. */
+export function uiDailyFloor(hours: number = UI_DAILY_WORK_HOURS): number {
+  return Math.round(MIN_HOURLY_WAGE[2026] * normWorkHours(hours) * UI_DAILY_FLOOR_RATE)
+}
+
+/** 2026 1일 구직급여 하한액(1일 8시간 기준) = 최저시급 × 8h × 80% = 66,048원 (최저시급 갱신 시 자동 반영) */
+export const UI_DAILY_FLOOR_2026 = uiDailyFloor(UI_DAILY_WORK_HOURS)
 
 export type AgeGroup = 'under50' | '50plus' // 50plus = 이직 당시 만 50세 이상 또는 장애인
 export type CoverageBracket = 'lt1' | 'y1to3' | 'y3to5' | 'y5to10' | 'y10plus'
@@ -56,6 +69,8 @@ export interface UnemploymentResult {
   avgDailyWage: number    // 평균임금일액 (상한 클램프 후)
   wageCapped: boolean     // 임금일액 상한(113,500) 적용 여부
   rawDaily: number        // 평균임금일액 × 60% (상·하한 클램프 전)
+  dailyFloor: number      // 적용된 1일 하한액 (1일 소정근로시간 비례)
+  workHours: number       // 적용된 1일 소정근로시간 (1~8)
   dailyBenefit: number    // 1일 구직급여액 (상·하한 클램프 후)
   capped: 'upper' | 'lower' | 'none'
   benefitDays: number     // 소정급여일수
@@ -64,16 +79,20 @@ export interface UnemploymentResult {
 }
 
 /** 평균임금일액 → 1일 구직급여액·총수급액.
- *  avgDailyWageRaw: 퇴직 전 3개월 임금총액 ÷ 그 기간 총일수 (호출측에서 산정) */
+ *  avgDailyWageRaw: 퇴직 전 3개월 임금총액 ÷ 그 기간 총일수 (호출측에서 산정)
+ *  workHours: 이직 전 1일 소정근로시간 (기본 8 — 하한액이 이 시간에 비례) */
 export function calcUnemployment(
   avgDailyWageRaw: number,
   age: number,
   disabled: boolean,
   totalMonths: number,
+  workHours: number = UI_DAILY_WORK_HOURS,
 ): UnemploymentResult {
   const wageCapped = avgDailyWageRaw > UI_WAGE_DAILY_CAP_2026
   const avgDailyWage = Math.min(avgDailyWageRaw, UI_WAGE_DAILY_CAP_2026)
   const rawDaily = Math.round(avgDailyWage * UI_BENEFIT_RATE)
+  const hours = normWorkHours(workHours)
+  const dailyFloor = uiDailyFloor(hours)
 
   // 상·하한 적용. 경계값(==상한/==하한)도 배지로 안내하도록 >= / <= 사용.
   // (2026 상·하한 폭이 좁아 대부분 하한 또는 상한에서 결정됨)
@@ -82,8 +101,8 @@ export function calcUnemployment(
   if (rawDaily >= UI_DAILY_CAP_2026) {
     dailyBenefit = UI_DAILY_CAP_2026
     capped = 'upper'
-  } else if (rawDaily <= UI_DAILY_FLOOR_2026) {
-    dailyBenefit = UI_DAILY_FLOOR_2026
+  } else if (rawDaily <= dailyFloor) {
+    dailyBenefit = dailyFloor
     capped = 'lower'
   }
 
@@ -93,6 +112,8 @@ export function calcUnemployment(
     avgDailyWage,
     wageCapped,
     rawDaily,
+    dailyFloor,
+    workHours: hours,
     dailyBenefit,
     capped,
     benefitDays: days,
