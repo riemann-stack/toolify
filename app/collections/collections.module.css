@@ -29,6 +29,12 @@
 .clMeta { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
 .clSeason { color: var(--c-ink, var(--accent-ink)); }
 
+/* 목록 — 가이드를 읽는 법·시기별로 찾기 */
+.clAbout { max-width: var(--w-content); padding-top: 24px; }
+.clMonthT a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.clMonthT td { white-space: normal; }
+.clMonthT td:first-child { width: 56px; }
+
 /* 상세 — 엮은이 노트 */
 .clNote { margin-top: 40px; padding: 28px 32px; border-radius: var(--radius-lg); background: var(--bg2); border: 1px solid var(--border); }
 .clNoteK { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--accent-ink); }

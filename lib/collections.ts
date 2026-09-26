@@ -3,6 +3,7 @@
 // 도구는 href로만 참조하고 allTools에서 해석 → 이름/설명 중복·끊긴 링크 방지
 // ──────────────────────────────────────────────────────
 import { allTools, type Tool } from './tools'
+import { WINDOW_TINT_MIN_VLT } from './krWindowTint'
 
 export interface CollectionStep {
   /** 단계명 (예: '출발 전 준비') */
@@ -27,8 +28,14 @@ export interface Collection {
   color: string
   /** 이 컬렉션이 부각될 월(1-12). 없으면 상시 */
   seasonMonths?: number[]
+  /** 한 가지 상황의 진행 순서가 아니라 느슨한 도구 묶음이라 본문 가이드를 두지 않는 컬렉션 → 검색 색인 제외
+      (상세 페이지 robots index:false·follow:true, sitemap 제외). 사람에게는 그대로 보인다 */
+  noindex?: true
   steps: CollectionStep[]
 }
+
+/** 창유리 가시광선 투과율 하한(%) — lib/krWindowTint(도구와 같은 단일 소스). 아래 car-ownership 단계 설명과 가이드 본문이 보간한다 */
+export { WINDOW_TINT_MIN_VLT }
 
 export const COLLECTIONS: Collection[] = [
   {
@@ -228,6 +235,8 @@ export const COLLECTIONS: Collection[] = [
     intro: '교과서 속 공식이 눈앞에서 움직이면 과학은 한결 재미있어집니다. 옴의 법칙으로 회로를 시뮬레이션하고, 천둥까지의 거리를 음속으로 재고, 138억 년 우주의 역사를 1년 달력으로 압축해 보세요. 학생·교사·과학 덕후를 위한 탐구 도구를 모았어요.',
     emoji: '🔬',
     color: '#2563EB',
+    // 한 상황의 진행 순서가 아니라 과학 탐구 도구 묶음 — 본문 가이드 없이 색인 제외(사람에게는 그대로 노출)
+    noindex: true,
     steps: [
       { title: '전기·소리·음향', note: '옴의 법칙으로 직렬·병렬 회로를, 음속으로 천둥 거리를, 룸 모드로 방의 음향 특성을 계산하세요.', toolHrefs: ['/tools/edu/circuit-simulator', '/tools/edu/sound-speed', '/tools/edu/room-mode'] },
       { title: '우주·스케일', note: '다른 행성에서의 내 몸무게와 나이, 138억 년을 1년으로 압축한 코스믹 캘린더로 스케일 감각을 키우세요.', toolHrefs: ['/tools/edu/planet-comparison', '/tools/edu/cosmic-calendar'] },
@@ -259,7 +268,7 @@ export const COLLECTIONS: Collection[] = [
     color: '#475569',
     steps: [
       { title: '사기 전 비용 점검', note: '유류·보험·세금·감가까지 더한 연간 유지비, 취득세·자동차세, 할부 이자를 미리 계산해 예산을 잡으세요.', toolHrefs: ['/tools/finance/car-cost', '/tools/finance/car-tax', '/tools/finance/installment'] },
-      { title: '출고 후 관리', note: '연비를 기록·환산하고, 타이어 공기압을 점검하고, 엔진오일 점도(0W-20·5W-30 등)를 맞게 고르세요. 썬팅은 합산 투과율이 법규(앞 70%·옆 40%) 안에 드는지 확인하세요.', toolHrefs: ['/tools/unit/fuel-economy', '/tools/unit/tire-pressure', '/tools/unit/viscosity', '/tools/unit/window-tint'] },
+      { title: '출고 후 관리', note: `연비를 기록·환산하고, 타이어 공기압을 점검하고, 엔진오일 점도(0W-20·5W-30 등)를 맞게 고르세요. 썬팅은 합산 투과율이 법규(앞면 ${WINDOW_TINT_MIN_VLT.front}%·1열 옆면 ${WINDOW_TINT_MIN_VLT.driverSide}%) 안에 드는지 확인하세요.`, toolHrefs: ['/tools/unit/fuel-economy', '/tools/unit/tire-pressure', '/tools/unit/viscosity', '/tools/unit/window-tint'] },
     ],
   },
   {
@@ -389,12 +398,49 @@ export const COLLECTIONS: Collection[] = [
   },
 ]
 
+/* ─── 상황별 가이드 본문(app/collections/_guides)이 쓰는 공식 수치 — 연결된 도구에 아직 lib 소스가 없는 값만 ───
+   도구가 같은 값을 lib로 옮기면(예: krCustoms에 여행자 휴대품 면세) 여기 값을 지우고 그쪽을 import한다.
+   기준일 2026-09-26. 조문·고시를 주석에 적는다. */
+
+/** 여행자 휴대품 면세 범위 (1인) — 관세법 시행규칙 §48: 기본 USD 800(2022.9.6~) · 주류 2L·USD 400 이하(병 수 제한은 2025.3.21 폐지)
+    · 향수 100mL(2024.1.1~) · 담배 200개비. 직구(전자상거래 소액면세 USD 150·미국 목록통관 200, lib/krCustoms)와 별개 제도다 */
+export const TRAVELER_DUTY_FREE = { baseUsd: 800, liquorLiters: 2, liquorUsd: 400, cigarettes: 200, perfumeMl: 100 } as const
+/** 여행자 휴대품 자진신고 감면 — 관세법 §96② : 관세의 30%, 20만원 한도 */
+export const TRAVELER_SELF_REPORT_RELIEF = { rate: 0.3, capWon: 200_000 } as const
+/** 여행자 휴대품 미신고 가산세 — 관세법 §241⑤ : 납부세액의 40%, 최근 2년 내 2회 이상 미신고 적발이면 60% */
+export const TRAVELER_NON_REPORT_PENALTY = { rate: 0.4, repeatRate: 0.6 } as const
+
+/** 여객 휴대 리튬이온 배터리(보조배터리) 기준 — ICAO 위험물 기술지침·국토교통부 항공위험물 운송기준:
+    100Wh 이하 승인 없이 휴대, 100Wh 초과~160Wh 이하 항공사 승인, 160Wh 초과 반입 불가. 예비 배터리는 위탁 수하물 불가.
+    개수: 2026-04-20부터 국내 공항·국적 항공사 기준 보조배터리 1인당 최대 2개(100Wh 이하도 개수에 포함)이고 기내 충전·사용 금지
+    — 국토교통부가 제안해 ICAO 이사회가 국제기준으로 채택(정책브리핑 2026-04, newsId=148962298). unit/battery 도구의 '국내' 판정과 같은 값.
+    TODO: 이 값을 unit/battery와 함께 쓰는 lib 파일로 옮기면 여기서 지운다 */
+export const AIR_BATTERY_WH = { noApproval: 100, withApproval: 160, perPersonMax: 2, perPersonSince: '2026-04-20' } as const
+
+/** 무기장 가산세(장부의 기록·보관 불성실 가산세) — 소득세법 §81의5: 종합소득산출세액 × (무기장 소득금액 ÷ 종합소득금액) × 20%.
+    소규모사업자(소득세법 시행령 §132④: 신규 개시·직전 과세기간 수입금액 합계 4,800만원 미달·연말정산 사업소득만 있는 자)는 제외.
+    개인지방소득세에도 그 가산세의 10%가 더해진다(지방세법 §99 — 비율은 lib/krIncomeTax LOCAL_INCOME_TAX_RATIO).
+    freelance-tax 계산기는 이 가산세를 결과에 넣지 않으므로 가이드가 따로 더한다. 기준일 2026-09-26 */
+export const NO_BOOK_PENALTY = { rate: 0.2, smallBizRevenueBelow: 48_000_000 } as const
+
+/** 사업자 세금 신고·납부 기한 (개인) — 부가가치세법 §49①(일반과세자 확정신고: 과세기간 끝난 뒤 25일 이내 — 1기 1~6월·2기 7~12월),
+    §67①(간이과세자: 1~12월 과세기간, 다음 해 1월 25일), 소득세법 §70①(종합소득세: 다음 해 5월 1일~31일)·§70의2②(성실신고확인대상: 6월 30일) */
+export const BIZ_TAX_DEADLINES = {
+  vatGeneral: ['7월 25일', '다음 해 1월 25일'],
+  vatSimplified: '다음 해 1월 25일',
+  incomeTax: '5월 31일',
+  incomeTaxDiligent: '6월 30일',
+} as const
+
 // href → Tool 매핑 (단일 소스 유지)
 const TOOL_MAP = new Map<string, Tool>(allTools.map((t) => [t.href, t]))
 
 export function resolveTools(hrefs: string[]): Tool[] {
   return hrefs.map((h) => TOOL_MAP.get(h)).filter((t): t is Tool => Boolean(t))
 }
+
+/** 검색 색인 대상인가 — 상세 페이지 robots·sitemap이 같은 기준을 쓴다 */
+export const isCollectionIndexable = (c: Collection): boolean => c.noindex !== true
 
 export function getCollection(slug: string): Collection | undefined {
   return COLLECTIONS.find((c) => c.slug === slug)
