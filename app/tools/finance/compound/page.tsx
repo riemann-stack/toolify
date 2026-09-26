@@ -6,6 +6,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/compound',
@@ -61,7 +62,7 @@ const FAQ_LD = [
 
 export default function CompoundPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/compound">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />복리 계산기
@@ -79,15 +80,15 @@ export default function CompoundPage() {
 
         {/* ── 1. 복리의 마법 + 그래프 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             복리의 마법 — 눈덩이 효과(Snowball Effect)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             복리(複利)는 원금에서 발생한 이자가 다시 원금에 합산되어 그 다음 기간의 이자를 계산하는 방식입니다.
             시간이 지날수록 이자가 이자를 낳는 <strong style={{ color: 'var(--text)' }}>「눈덩이 효과(Snowball Effect)」</strong>가 발생합니다.
             처음에는 단리와 큰 차이가 없어 보이지만, 10년이 넘어가면서 그 차이가 기하급수적으로 벌어집니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             아래 그래프는 1,000만 원을 금리별로 30년간 투자했을 때의 누적 자산을 보여줍니다.
             연 3%와 연 10%의 차이가 30년 후 얼마나 벌어지는지 확인해보세요.
           </p>
@@ -98,10 +99,10 @@ export default function CompoundPage() {
 
         {/* ── 2. 복리 계산 공식 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             복리 계산 공식
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             복리 계산의 핵심 공식은 아래와 같습니다. 적립식의 경우 매월 납입금에 대해 별도로 복리 계산 후 합산합니다.
           </p>
 
@@ -153,10 +154,10 @@ export default function CompoundPage() {
 
         {/* ── 3. 72의 법칙 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             복리의 마법: 원금이 2배가 되는 「72의 법칙」
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>72를 연 수익률(%)로 나누면</strong> 원금이 약 2배가 되는 기간(년)을 빠르게 계산할 수 있습니다.
             복잡한 계산 없이 투자 목표를 직관적으로 파악하는 데 유용한 법칙입니다.
           </p>
@@ -170,7 +171,7 @@ export default function CompoundPage() {
             </p>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -206,10 +207,10 @@ export default function CompoundPage() {
 
         {/* ── 4. 목표 역산 — "1억 만들려면 월 얼마?" ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🎯 목표 역산 — &ldquo;1억 만들려면 월 얼마?&rdquo;
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             대부분의 사람은 「얼마를 적립할까」가 아니라 「언제까지 얼마를 모으고 싶다」로 생각합니다.
             본 도구의 <strong style={{ color: '#A16207' }}>목표 역산</strong> 기능은 목표 금액·기간·수익률을 고정하고
             필요한 월 적립액을 <strong style={{ color: 'var(--text) ' }}>이진 탐색(Binary Search)</strong>으로 계산합니다.
@@ -251,10 +252,10 @@ export default function CompoundPage() {
 
         {/* ── 5. 계좌 유형별 세율 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🇰🇷 계좌 유형별 세율 비교 — 절세 계좌 4종 + 비교 기준 2종
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국에서 복리 투자 수익에 대한 일반 과세는 <strong style={{ color: '#DC2626' }}>15.4%</strong>(이자·배당소득세 14% + 지방소득세 1.4%)입니다.
             절세 계좌를 활용하면 세금을 크게 줄일 수 있으니 자신의 상황에 맞는 계좌를 선택해 운용하세요.
           </p>
@@ -295,10 +296,10 @@ export default function CompoundPage() {
 
         {/* ── 6. 인플레이션과 실질 가치 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             💸 인플레이션 — 30년 후 1억의 실질 가치
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             화폐 가치는 시간이 지나면 떨어집니다. 한국은행 목표 인플레이션은 2.0%, 최근 10년(2016~2025년) 소비자물가 상승률 평균은 약 2.1%이고,
             미국 장기 평균도 2.5~3% 수준입니다. <strong style={{ color: '#0891B2' }}>실질 수익률 = 명목 수익률 − 인플레이션</strong>으로
             장기 투자 의사결정을 해야 합니다.
@@ -339,10 +340,10 @@ export default function CompoundPage() {
 
         {/* ── 7. 시나리오 비교 — 4가지 수익률 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             📊 수익률 가정 시나리오
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             단일 수익률만 가정하면 미래 자산을 과대 또는 과소평가하기 쉽습니다.
             본 도구는 4가지 시나리오를 동시에 비교해 <strong style={{ color: 'var(--text)' }}>「현실적 범위」</strong>를 제공합니다.
           </p>
@@ -368,13 +369,13 @@ export default function CompoundPage() {
 
         {/* ── 8. 복리 주기 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🔁 복리 주기 — 일·월·분기·연 차이
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             연 10%로 표시된 상품도 복리 주기에 따라 실효 수익률이 다릅니다. 주기가 짧을수록 유리합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -406,7 +407,7 @@ export default function CompoundPage() {
 
         {/* ── 10. FAQ (accordion) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 className="g-h2">자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((faq, i) => (
@@ -424,7 +425,7 @@ export default function CompoundPage() {
 
         {/* ── 11. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/salary',   icon: '💰', name: '연봉 실수령액 계산기', desc: '매월 얼마를 투자할 수 있는지 확인' },
@@ -448,6 +449,6 @@ export default function CompoundPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

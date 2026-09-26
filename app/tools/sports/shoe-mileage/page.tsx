@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/shoe-mileage',
@@ -60,7 +61,7 @@ const RELATED = [
 
 export default function ShoeMileagePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/shoe-mileage">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
@@ -98,7 +99,7 @@ export default function ShoeMileagePage() {
         {/* 2. 소재별 표 */}
         <section>
           <h2 style={sectionTitle}>미드솔 소재별 수명 가이드</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -131,7 +132,7 @@ export default function ShoeMileagePage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
             제조사 공식 안내는 하나로 모이지 않습니다. 같은 브랜드 안에서도 지역판·문서마다 권장치가 달라 출처를 나눠 봐야 정확합니다(2026년 7월 확인).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -203,7 +204,7 @@ export default function ShoeMileagePage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
             누적 거리를 수첩에 적는 대신 앱에 신발(기어)을 등록해두면 러닝마다 자동으로 쌓입니다. 각 앱 공식 도움말에 안내된 경로입니다(2026년 7월 확인).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -263,6 +264,6 @@ export default function ShoeMileagePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

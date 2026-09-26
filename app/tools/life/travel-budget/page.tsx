@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/travel-budget',
@@ -67,7 +68,7 @@ const FAQ_LD = [
 
 export default function TravelBudgetPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/life/travel-budget">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
@@ -103,7 +104,7 @@ export default function TravelBudgetPage() {
       {/* 2. 도시별 1박 평균 */}
       <h2 style={sectionTitle}>🌆 도시별 1박 평균 비용 (인기 도시 12곳 — 전체 18곳은 위 계산기)</h2>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
@@ -154,7 +155,7 @@ export default function TravelBudgetPage() {
       {/* 3. 시즌별 항공권 */}
       <h2 style={sectionTitle}>✈️ 시즌별 항공권 평균 (LCC vs 풀서비스)</h2>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
@@ -392,6 +393,6 @@ export default function TravelBudgetPage() {
           </p>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

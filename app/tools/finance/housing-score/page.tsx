@@ -6,6 +6,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { todayStr } from '@/lib/date'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/housing-score',
@@ -86,7 +87,7 @@ const FAQ_LD = [
 
 export default function HousingScorePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/housing-score">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />청약 가점 계산기
@@ -106,7 +107,7 @@ export default function HousingScorePage() {
         {/* 1. 가점제 84점 구조 */}
         <section>
           <h2 style={sectionTitle}>청약 가점제 84점 구조 (2026 기준)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             「주택공급에 관한 규칙」 별표1 기준 — 가점제는 <strong style={{ color: 'var(--text)' }}>3개 영역의 합계 84점</strong>입니다.
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -228,7 +229,7 @@ export default function HousingScorePage() {
         {/* 4. 청약통장 */}
         <section>
           <h2 style={sectionTitle}>💳 청약통장 — 가입기간 vs 1순위 조건</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             가점은 <strong style={{ color: 'var(--text)' }}>가입기간</strong>만 봅니다 (납입 횟수와 무관).
             그러나 <strong style={{ color: 'var(--text)' }}>청약 1순위 자격</strong>은 가입기간 + 납입 횟수가 모두 충족돼야 합니다.
           </p>
@@ -307,11 +308,11 @@ export default function HousingScorePage() {
         {/* 6. 특별공급 5종 비교 */}
         <section>
           <h2 style={sectionTitle}>✨ 특별공급 5종 — 가점 부족 시 차선책</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             가점이 부족해도 특별공급 자격이 있다면 당첨 확률이 크게 올라갑니다. 본 도구의 「특별공급 자격 가이드」에서 조건 확인.
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '560px' }}>
                 <thead>
                   <tr>
@@ -483,6 +484,6 @@ export default function HousingScorePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/charcount',
@@ -24,7 +25,7 @@ const FAQ_LD = [
 
 export default function CharCountPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/art/charcount">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작
       </p>
@@ -64,7 +65,7 @@ export default function CharCountPage() {
 
         {/* ── 1. 무엇을 측정하나 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             글자수 vs 바이트 — 정확히 알아야 할 차이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -84,10 +85,10 @@ export default function CharCountPage() {
 
         {/* ── 2. 한글 1자의 진실 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한글 1자는 몇 바이트?
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -118,17 +119,17 @@ export default function CharCountPage() {
 
         {/* ── 결합 이모지·그래핌 단위 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             결합 이모지 👨‍👩‍👧는 왜 8글자로 세어질까
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             가족 이모지 👨‍👩‍👧는 눈에는 1글자지만, 실제로는 👨·👩·👧 세 이모지를 폭이 없는 결합 문자 <strong style={{ color: 'var(--text)' }}>ZWJ(U+200D)</strong> 2개로
             이어 붙인 시퀀스입니다. 어떤 단위로 세느냐에 따라 1(그래핌)·5(코드포인트)·8(UTF-16 코드 유닛)로 답이 전부 달라지는데,
             글자수 카운터마다 결과가 다른 이유가 바로 이것입니다. 본 도구의 총 글자수는 JavaScript <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text)' }}>String.length</span>와
             같은 <strong style={{ color: 'var(--text)' }}>UTF-16 코드 유닛 기준</strong>입니다. HTML 표준의 입력창 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text)' }}>maxlength</span>도
             같은 코드 유닛 단위로 정의되어 있어, 웹 입력 폼의 글자수 제한과 대부분 일치합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -164,7 +165,7 @@ export default function CharCountPage() {
 
         {/* ── 3. SMS 한도 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 SMS·LMS·MMS 글자수 한도
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -198,7 +199,7 @@ export default function CharCountPage() {
 
         {/* ── 4. SEO 메타 길이 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             SEO 메타 태그 권장 길이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -221,14 +222,14 @@ export default function CharCountPage() {
 
         {/* ── 플랫폼 공식 한도 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             주요 플랫폼 글자수 한도 — 공식 문서 확인값
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             플랫폼 글자수 제한은 블로그마다 값이 제각각이라, 공식 고객센터·공식 명세로 확인되는 값 위주로 정리했습니다.
             입력한 텍스트가 각 한도의 몇 %인지 실시간 비교는 계산기의 &lsquo;플랫폼별 제한&rsquo; 탭에서 할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -263,10 +264,10 @@ export default function CharCountPage() {
 
         {/* ── 5. 자기소개서 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자기소개서·이력서 글자수 가이드
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -297,10 +298,10 @@ export default function CharCountPage() {
 
         {/* ── 5-2. 원고지 매수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             원고지 매수 계산 기준
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             국내에서 통용되는 원고지는 <strong style={{ color: 'var(--text)' }}>200자 원고지(20자 × 10행)</strong>입니다.
             본 도구의 원고지 매수는 <strong style={{ color: 'var(--text)' }}>공백 포함 글자수 ÷ 200을 올림</strong>한 값으로,
             띄어쓰기도 원고지에서 한 칸을 차지하기 때문에 공백 포함으로 세는 것이 관례입니다.
@@ -314,7 +315,7 @@ export default function CharCountPage() {
 
         {/* ── 6. 묵독·발화 시간 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             묵독·발화 시간 추정
           </h2>
           <div style={{
@@ -359,7 +360,7 @@ export default function CharCountPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -382,7 +383,7 @@ export default function CharCountPage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -416,6 +417,6 @@ export default function CharCountPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

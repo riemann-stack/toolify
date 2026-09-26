@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/weightloss',
@@ -60,7 +61,7 @@ const FAQ_LD = [
 
 export default function WeightLossPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/weightloss">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />체중 감량 기간 계산기
@@ -78,10 +79,10 @@ export default function WeightLossPage() {
 
         {/* ── 1. 감량 공식 (기존 유지·보완) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             감량 소요 기간 계산 공식
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             체중 감량의 핵심은 <strong style={{ color: 'var(--text)' }}>칼로리 적자</strong>입니다.
             섭취 칼로리가 소비 칼로리보다 적으면 신체는 저장된 지방을 에너지원으로 사용합니다.
             지방 1kg을 소모하려면 약 <strong style={{ color: 'var(--text)' }}>7,700kcal</strong>의 누적 적자가 필요합니다 (Wishnofsky, 1958).
@@ -106,10 +107,10 @@ export default function WeightLossPage() {
 
         {/* ── 2. 안전한 감량 속도 (✨ 핵심) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             안전한 감량 속도 — 주당 체중 0.5~1% 
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             국제 영양학(ACSM·미국 스포츠의학회) 표준은 <strong style={{ color: 'var(--text)' }}>주당 체중의 0.5~1% 감량</strong>입니다.
             70kg 기준 주당 0.35~0.7kg, 하루 적자 385~770kcal에 해당합니다.
           </p>
@@ -128,10 +129,10 @@ export default function WeightLossPage() {
 
         {/* ── 3. 목표 BMI 자동 체크  ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             목표 BMI 자동 체크 
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구는 입력한 키와 목표 체중으로 <strong style={{ color: 'var(--text)' }}>목표 BMI를 자동 검증</strong>합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -155,11 +156,11 @@ export default function WeightLossPage() {
 
         {/* ── 4. 칼로리 적자별 감량 속도 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>칼로리 적자별 감량 속도</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <h2 className="g-h2">칼로리 적자별 감량 속도</h2>
+          <p className="g-p">
             지방 1kg을 태우려면 약 7,700kcal의 칼로리 적자가 필요합니다. 하루 칼로리 적자에 따른 주당 감량 속도는 다음과 같습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -191,10 +192,10 @@ export default function WeightLossPage() {
 
         {/* ── 5. 요요 없이 감량 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             요요 현상 없이 감량하는 법
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             빠른 감량보다 <strong style={{ color: 'var(--text)' }}>지속 가능한 속도</strong>로 줄이는 것이 장기적으로 훨씬 효과적입니다.
             급격한 체중 감량은 근육량 손실과 기초대사량 저하를 유발해 요요 현상의 주요 원인이 됩니다.
           </p>
@@ -217,7 +218,7 @@ export default function WeightLossPage() {
 
         {/* ── 6. 정체기·유지기  ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             정체기와 유지기 — 다이어트 흔한 함정 
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
@@ -247,10 +248,10 @@ export default function WeightLossPage() {
 
         {/* ── 7. 식단 vs 운동 적자  ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             식단 vs 운동 적자 비율 
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             추천 분배: <strong style={{ color: 'var(--text)' }}>식단 60% + 운동 40%</strong> — 근육 유지 + 심혈관 건강 + 지속 가능.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -272,13 +273,13 @@ export default function WeightLossPage() {
 
         {/* ── 8. 단백질  ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             단백질 — 감량의 핵심 
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             감량 시 단백질 <strong style={{ color: 'var(--text)' }}>1.6g/kg 권장</strong> (일반 1.2g/kg보다 ↑) — 근육 손실 방지·포만감 유지·음식의 열효과(TEF) 30% 칼로리·식단 만족감.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -332,7 +333,7 @@ export default function WeightLossPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmr',     icon: '🔥', name: '기초대사량 계산기',     desc: 'BMR·TDEE 4공식 비교, 정밀 활동' },
@@ -358,6 +359,6 @@ export default function WeightLossPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -7,6 +7,7 @@ import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { getWeightRanges } from './bmiUtils'
+import ToolPage from '@/components/ToolPage'
 
 /* 키별 체중 구간 — 계산기와 같은 getWeightRanges(대한비만학회 기준)로 빌드 시 생성 */
 const rangeOf = (h: number, id: string) => getWeightRanges(h, 'KOREA').find(r => r.id === id)!
@@ -86,7 +87,7 @@ const FAQ_LD = [
 
 export default function BmiPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/bmi">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />BMI 계산기
@@ -104,10 +105,10 @@ export default function BmiPage() {
 
         {/* ── 1. BMI 공식 (기존 유지·보완) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             BMI 체질량지수 산출 공식
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             BMI(Body Mass Index)는 체중(kg)을 키(m)의 제곱으로 나눈 값입니다.
             1832년 벨기에 통계학자 아돌프 케틀레가 개발한 지표로, 현재 WHO와 전 세계 의료 기관에서
             비만도 판정의 표준 지표로 사용됩니다.
@@ -127,10 +128,10 @@ export default function BmiPage() {
 
         {/* ── 2. WHO vs 대한비만학회 기준표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             BMI 기준표 — WHO vs 대한비만학회
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -166,10 +167,10 @@ export default function BmiPage() {
 
         {/* ── 3. 키별 정상 체중 범위 (기존 유지·확장) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             키별 정상 체중 범위 (대한비만학회 기준)
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -198,10 +199,10 @@ export default function BmiPage() {
 
         {/* ── 4. 풍부한 결과 활용 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             풍부한 결과 활용 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 결과 카드는 다음 정보를 포함합니다 — &lsquo;내가 어디쯤인지&rsquo;, &lsquo;얼마나 더/덜 가야 하는지&rsquo;를 한눈에 파악할 수 있습니다.
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
@@ -217,10 +218,10 @@ export default function BmiPage() {
 
         {/* ── 5. 허리둘레와 복부비만 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             허리둘레와 복부비만 — BMI의 한계 보완
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             BMI의 가장 큰 약점은 <strong style={{ color: 'var(--text)' }}>체지방 분포를 반영하지 못한다</strong>는 점입니다.
             근육 우세형(운동선수)·마른 비만 모두 BMI 단독으로는 구분할 수 없습니다. 본 도구는 허리둘레로 이를 보완합니다.
           </p>
@@ -255,10 +256,10 @@ export default function BmiPage() {
 
         {/* ── 6. 목표 BMI 설정 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             목표 BMI 설정 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             모든 사람에게 동일한 BMI 목표가 최적이지는 않습니다. 상황별로 다음을 권장합니다 —
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -286,10 +287,10 @@ export default function BmiPage() {
 
         {/* ── 7. 러너 전용 팁 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🏃 러닝 효율을 높이는 체중 관리
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             마라톤과 같은 지구력 운동에서는 체중과 기록이 밀접하게 연결됩니다.
             단순히 체중을 줄이는 것이 아니라 <strong style={{ color: 'var(--text)' }}>근육량을 유지하면서 체지방률을 조절</strong>하는 것이 기록 향상의 핵심입니다.
           </p>
@@ -325,14 +326,14 @@ export default function BmiPage() {
 
         {/* ── 8. 체지방률 추정 정확도 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             체지방률 추정 정확도
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 체지방률 추정은 <strong style={{ color: 'var(--text)' }}>미 해군 군 측정법(Navy formula)</strong> 기반입니다 —
             성별·키·허리·목(여성은 엉덩이 추가)만으로 추정 가능하지만, 정확도는 <strong style={{ color: 'var(--text)' }}>±3~5%</strong>로 빠른 참고용입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -382,7 +383,7 @@ export default function BmiPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmr',         icon: '🔥', name: '기초대사량(BMR) 계산기',     desc: '하루 기본 소비 칼로리 계산' },
@@ -408,6 +409,6 @@ export default function BmiPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -7,6 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { EVENTS, cosmicPosition, yearsAgoOf, fmtRealYears, COSMIC_SECOND_REAL_YEARS, type CatKey } from './cosmicData'
+import ToolPage from '@/components/ToolPage'
 
 /* 안내 표에 실을 사건 — 도구와 같은 데이터에서 날짜를 계산한다 */
 const TABLE_IDS = ['bigbang', 'firstGalaxies', 'milkyWay', 'solarSystem', 'earth', 'firstLife',
@@ -56,7 +57,7 @@ const FAQ_LD = [
 
 export default function CosmicCalendarPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/edu/cosmic-calendar">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
@@ -87,7 +88,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 1. 코스믹 캘린더란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             코스믹 캘린더란?
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
@@ -116,7 +117,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 2. 주요 사건 요약 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             우주 달력의 주요 사건 (요약)
           </h2>
           <div className="tableScroll">
@@ -157,7 +158,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 3. 12월 31일 충격 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             12월 31일 - 인류 등장
           </h2>
           <div style={{
@@ -184,7 +185,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 4. 압축 단위 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             우주 1년 vs 24시간 vs 1km 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -205,7 +206,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 5. 138억 년 핵심 시기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             핵심 사건
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -226,7 +227,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 6. 칼 세이건 관점 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             칼 세이건의 코스믹 관점
           </h2>
           <div style={{
@@ -255,7 +256,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 7. 우주 시간 이해의 의미 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             우주 시간 이해의 의미
           </h2>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 16 }}>
@@ -282,7 +283,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -303,7 +304,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -338,7 +339,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 10. 참고 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             참고 자료
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
@@ -354,6 +355,6 @@ export default function CosmicCalendarPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

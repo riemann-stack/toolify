@@ -6,6 +6,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/severance',
@@ -67,7 +68,7 @@ const FAQ_LD = [
 
 export default function SeverancePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/severance">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -341,6 +342,6 @@ export default function SeverancePage() {
           </p>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

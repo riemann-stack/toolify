@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/grip-size',
@@ -83,7 +84,7 @@ const FAQ_LD = [
 
 export default function GripSizePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/sports/grip-size">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />그립 사이즈 계산기
@@ -100,12 +101,12 @@ export default function GripSizePage() {
         {/* 1. 왜 그립 사이즈가 중요한가 */}
         <section>
           <h2 style={sectionTitle}>그립 사이즈가 왜 중요한가?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             라켓·골프 클럽의 그립이 손 크기와 맞지 않으면 <strong style={{ color: 'var(--text)' }}>쥐는 힘의 크기와 분포가 달라져</strong>
             컨트롤과 편안함이 떨어집니다. 잘못된 그립 사이즈는 테니스 엘보(외측 상과염)의 원인으로 흔히 지목되지만,
             이를 뒷받침하는 연구 근거는 생각보다 제한적입니다 — 아래 &lsquo;그립 굵기와 부상&rsquo; 섹션에서 자세히 다룹니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             반대로 너무 큰 그립은 손목 회전을 방해해 컨트롤·스핀이 떨어지고, 골프에서는 슬라이스(우측 빠짐)의 원인이 됩니다.
             본 도구는 일반적으로 알려진 손 크기 분포·라켓 표준을 Youtil이 정리한 추정 기준(공식 통계 아님, 기준 2026.06)으로 출발점을 제시하니, 매장 시타와 함께 결정하세요.
           </p>
@@ -115,7 +116,7 @@ export default function GripSizePage() {
         <section>
           <h2 style={sectionTitle}>측정 방법 2가지 — 자 vs 펜슬 테스트</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr>
@@ -244,7 +245,7 @@ export default function GripSizePage() {
         {/* 4. 오버그립 가이드 */}
         <section>
           <h2 style={sectionTitle}>오버그립 — 사이즈 미세 조정의 정석</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             오버그립 1겹은 두께가 <strong style={{ color: 'var(--text)' }}>0.5mm 안팎</strong>이지만 당겨 감으면서 얇아지고 겹치는 부분도 달라, 흔히 그립이 약 1/16인치(반 사이즈) 굵어진다고 봅니다.
             테니스/배드민턴 그립 한 단계 차이의 약 절반에 해당하므로 <strong style={{ color: 'var(--text)' }}>오버그립 2겹으로 한 사이즈 키우는 효과</strong>가 있습니다.
           </p>
@@ -266,7 +267,7 @@ export default function GripSizePage() {
         {/* 5. 부상 가이드 */}
         <section>
           <h2 style={sectionTitle}>그립 굵기와 부상 — 통념과 연구가 말하는 것</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             &ldquo;그립이 가늘면 라켓을 더 세게 쥐게 되어 테니스 엘보가 온다&rdquo;는 이야기는 동호인 사이에서 정설처럼 통합니다.
             그런데 이 통념을 직접 검증한 연구진조차 논문 서두에서, 부적절한 그립 굵기가 전완·팔꿈치 과사용 부상의 위험 요인으로
             자주 지목되는 곳으로 <strong style={{ color: 'var(--text)' }}>대중 매체</strong>를 들며 시작합니다(Hatch 외, AJSM 2006).
@@ -282,19 +283,19 @@ export default function GripSizePage() {
               측정법은 출발점으로 쓰되 실제 선택은 가장 편하게 느껴지는 굵기로 하라고 권했습니다.
             </p>
           </div>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             물론 한계도 분명합니다. 통증이 없는 선수들의 순간적인 근육 활동만 본 실험실 연구라서, 그립 굵기가 실제 부상
             발생률을 바꾸는지에 대한 근거는 여전히 제한적입니다. &lsquo;가늘어도 무해하다&rsquo;는 단정도 &lsquo;가늘면 위험하다&rsquo;는
             단정도 어렵다는 뜻입니다. 다만 분명한 것은, <strong style={{ color: 'var(--text)' }}>권장 치수 근처의 한두 단계 차이에
             과민할 이유가 연구로는 확인되지 않는다</strong>는 점입니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             참고로 본 도구의 자 측정 방식 — <strong style={{ color: 'var(--text)' }}>근위 손바닥 주름(손바닥 안쪽 큰 주름)에서 약지
             끝까지의 거리</strong> — 는 Nirschl이 제안한 측정법으로, 라켓 제조사들이 권장 그립 사이즈를 정할 때 널리 쓰는
             업계 표준 관행이라는 사실이 같은 논문(Hatch 2006) 본문에 명시돼 있습니다. 측정법 자체는 출처가 분명한 셈이고,
             연구가 유보하는 것은 &lsquo;거기서 벗어나면 다친다&rsquo;는 주장 쪽입니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             실전 기준은 이렇게 정리됩니다. ① 측정값(본 도구 추천)으로 출발 ② 시타에서 쥐었을 때 편하고 스트로크 중 그립이
             돌지 않는 굵기를 선택 ③ 애매하면 작은 쪽 + 오버그립 미세 조정(위 섹션). 그리고 팔꿈치·손목 통증이 몇 주째
             계속된다면 그립 교체로 해결을 기대하기보다 <strong style={{ color: 'var(--text)' }}>플레이 시간·빈도를 줄이고 의료 상담을
@@ -429,6 +430,6 @@ export default function GripSizePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

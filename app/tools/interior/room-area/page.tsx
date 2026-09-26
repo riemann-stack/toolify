@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/room-area',
@@ -50,7 +51,7 @@ const FAQ_LD = [
 
 export default function RoomAreaPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/interior/room-area">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
@@ -71,13 +72,13 @@ export default function RoomAreaPage() {
 
         {/* ── 1. 6가지 면적 한눈에 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             공간 면적 6가지 한눈에 정리
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             같은 방의 면적을 6가지로 계산할 수 있습니다. 각 면적이 어떤 시공·계산에 사용되는지 정리한 표입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -108,7 +109,7 @@ export default function RoomAreaPage() {
 
         {/* ── 2. 셀프 실측 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             📏 셀프 실측 가이드 — 줄자·레이저로 정확히 재는 법
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -171,7 +172,7 @@ export default function RoomAreaPage() {
 
         {/* ── 3. 평수 ↔ ㎡ 환산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             평수 ↔ ㎡ 환산
           </h2>
           <div style={{
@@ -219,7 +220,7 @@ export default function RoomAreaPage() {
 
         {/* ── 4. 한국 아파트 천장 높이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 아파트 천장 높이 표준
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -252,7 +253,7 @@ export default function RoomAreaPage() {
 
         {/* ── 5. 시공별 활용 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🛠️ 시공별 활용 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -274,10 +275,10 @@ export default function RoomAreaPage() {
 
         {/* ── 6. 창문·문 차감 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🪟 창문·문 일반 크기 예시 (차감 참고)
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -323,13 +324,13 @@ export default function RoomAreaPage() {
 
         {/* ── 7. ㄱ자 방 계산 워크스루 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             📐 ㄱ자 방 계산 워크스루 — 직사각형 2개로 나누기
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             ㄱ자(L자) 방은 꺾이는 지점에서 잘라 <strong style={{ color: 'var(--text)' }}>직사각형 2개로 나눈 뒤 더하면</strong> 됩니다. 실제 수치 예제로 따라 해보세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -384,7 +385,7 @@ export default function RoomAreaPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -417,6 +418,6 @@ export default function RoomAreaPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

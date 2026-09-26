@@ -7,6 +7,7 @@ import Faq from '@/components/Faq'
 import { KBO_SEASON_RECORDS as REC, fmtRecord, KBO_RECORDS_CHECKED } from './kboRecords'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/baseball-stats',
@@ -41,7 +42,7 @@ const FAQ_LD = [
 
 export default function BaseballStatsPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/baseball-stats">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
@@ -71,7 +72,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 1. 핵심 타격 지표 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             야구 핵심 타격 지표 공식
           </h2>
           <div style={{
@@ -94,7 +95,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 1-1. 타석(PA) vs 타수(AB) 구분 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             타석(PA) vs 타수(AB) — 입력 실수 방지 가이드
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginBottom: '14px' }}>
@@ -140,7 +141,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 2. OPS 수준 평가 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             OPS 수준 평가 기준
           </h2>
           <div className="tableScroll">
@@ -174,7 +175,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 3. 투수 핵심 지표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             투수 핵심 지표
           </h2>
           <div style={{
@@ -199,7 +200,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 3-1. 규정타석·규정이닝 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             규정타석·규정이닝 — 순위표에 오르는 최소 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginBottom: '14px' }}>
@@ -243,7 +244,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 4. 세이버메트릭스 입문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             세이버메트릭스 입문 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -264,7 +265,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 5. KBO 역대 기록 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             KBO 역대 단일시즌 주요 기록
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
@@ -294,7 +295,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 6. 자주 검색되는 질문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 검색되는 시나리오
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -323,7 +324,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -356,6 +357,6 @@ export default function BaseballStatsPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

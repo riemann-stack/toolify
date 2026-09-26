@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/converter',
@@ -116,7 +117,7 @@ const FAQ_LD = [
 
 export default function ConverterPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/unit/converter">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />단위 변환기
@@ -143,14 +144,14 @@ export default function ConverterPage() {
 
         {/* 자주 쓰는 변환 표 — 분야별 서브탭 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 쓰는 변환</h2>
+          <h2 className="g-h2">자주 쓰는 변환</h2>
           <ConversionTableTabs />
         </section>
 
         {/* 한국 전통 단위 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>한국 전통·생활 단위 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <h2 className="g-h2">한국 전통·생활 단위 가이드</h2>
+          <p className="g-p">
             본 도구는 한국에서 일상적으로 쓰이는 전통·생활 단위를 모두 지원합니다. 시대·지역·용도에 따라 차이가 있어 주의가 필요한 단위도 있습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -175,7 +176,7 @@ export default function ConverterPage() {
 
         {/* 카테고리별 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>14개 카테고리 가이드</h2>
+          <h2 className="g-h2">14개 카테고리 가이드</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
               { icon: '📏', name: '길이', desc: 'mm·cm·m·km / inch·ft·yard·mile / 푼·치·자(척)·보·간·정·리(한국)' },
@@ -203,8 +204,8 @@ export default function ConverterPage() {
 
         {/* 당도·염도 활용 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🍯 당도·염도 활용 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <h2 className="g-h2">🍯 당도·염도 활용 가이드</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>Brix(°Bx)</strong>는 100g 용액에 녹은 자당(설탕)의 그램 수로, 굴절계로 측정하는 표준 당도 단위입니다.
             염도(salinity)는 소금물에서 100g 용액에 녹은 소금의 그램 수로, Brix와 동일한 % 단위지만 측정 대상이 다릅니다.
           </p>
@@ -244,8 +245,8 @@ export default function ConverterPage() {
 
         {/* 농도 활용 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>🧪 농도 활용 가이드 — 소독액·수질·비료</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <h2 className="g-h2">🧪 농도 활용 가이드 — 소독액·수질·비료</h2>
+          <p className="g-p">
             농도 단위는 절대 환산 관계가 있습니다. <strong style={{ color: 'var(--text)' }}>1% = 10,000 ppm = 10,000,000 ppb = 10 g/L = 10,000 mg/L</strong>(수용액 가정).
             mg/L와 ppm은 수용액에서 거의 같으며, ppb는 ppm의 1/1,000입니다.
           </p>
@@ -288,8 +289,8 @@ export default function ConverterPage() {
 
         {/* 각도·기울기 활용 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>📐 각도·기울기 활용 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <h2 className="g-h2">📐 각도·기울기 활용 가이드</h2>
+          <p className="g-p">
             기울기는 분야마다 표기가 다릅니다. 수학·물리는 <strong style={{ color: 'var(--text)' }}>도(°)</strong>·<strong style={{ color: 'var(--text)' }}>라디안</strong>, 도로는 <strong style={{ color: 'var(--text)' }}>%</strong>, 철도·하수는 <strong style={{ color: 'var(--text)' }}>1/n 구배</strong> 또는 <strong style={{ color: 'var(--text)' }}>‰</strong>, 한옥 지붕은 <strong style={{ color: 'var(--text)' }}>물매(치/자)</strong>를 씁니다.
             모두 <strong>tan(각도)</strong> 한 함수로 환산됩니다.
           </p>
@@ -337,7 +338,7 @@ export default function ConverterPage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/unit/area',          icon: '🏠', name: '평수 변환기',     desc: '아파트 평형·전용·공급면적' },
@@ -363,6 +364,6 @@ export default function ConverterPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

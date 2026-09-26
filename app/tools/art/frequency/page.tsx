@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/frequency',
@@ -28,7 +29,7 @@ const FAQ_LD = [
 
 export default function FrequencyPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/art/frequency">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />주파수↔음정 변환기
@@ -53,10 +54,10 @@ export default function FrequencyPage() {
 
         {/* ── 1. 음정과 주파수의 관계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             음정과 주파수의 관계
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             서양 음악의 12음 평균율(Equal Temperament)에서는 한 옥타브(12반음)를 수학적으로 균등하게 나눕니다.
             A4 = 440 Hz를 기준으로 반음마다 2^(1/12) ≈ 1.0595배씩 주파수가 증가합니다.
           </p>
@@ -78,7 +79,7 @@ export default function FrequencyPage() {
             </div>
           </div>
 
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             한 옥타브 위의 음은 주파수가 정확히 2배입니다.
             예: A4 = 440 Hz → A5 = 880 Hz → A3 = 220 Hz.
             1200센트 = 1옥타브, 100센트 = 1반음.
@@ -88,10 +89,10 @@ export default function FrequencyPage() {
 
         {/* ── 2. 주요 음정 주파수 기준표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             주요 음정 주파수 기준표 (A4 = 440 Hz)
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -132,7 +133,7 @@ export default function FrequencyPage() {
 
         {/* ── 3. 기준음 A4 변천사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             기준음 A4 변천사와 용도
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -180,16 +181,16 @@ export default function FrequencyPage() {
 
         {/* ── 4. 현악기 개방현 튜닝 주파수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             현악기 개방현 튜닝 주파수 (A4 = 440 Hz)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             기타 외의 현악기도 같은 방식으로 튜닝할 수 있습니다.
             평균율 A4 = 440 Hz 기준으로 계산한 주요 현악기의 개방현 주파수입니다.
             바이올린·첼로는 인접한 현이 완전5도 간격, 더블베이스는 완전4도 간격으로 조율되며,
             우쿨렐레(하이 G 표준 튜닝)는 4번줄 G4가 3번줄 C4보다 높은 &lsquo;리엔트런트(reentrant)&rsquo; 배열이라는 점이 특징입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -237,15 +238,15 @@ export default function FrequencyPage() {
 
         {/* ── 5. 평균율 vs 순정률 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             평균율 vs 순정률 — 주요 음정 센트 비교
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             평균율(12-TET)은 옥타브를 정확히 100센트짜리 반음 12개로 균등 분할한 체계이고,
             순정률(Just Intonation)은 3:2, 5:4처럼 단순한 정수비로 음정을 쌓는 체계입니다.
             순정률 음정을 센트로 환산(1200 × log₂(비율))해 평균율과 비교하면 두 체계의 차이가 명확해집니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -287,10 +288,10 @@ export default function FrequencyPage() {
 
         {/* ── 6. 출처가 확인된 기준 주파수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             출처가 확인된 기준 주파수
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             아래는 국제 표준 문서·제조사 공식 자료·대학 규준표에서 원문이 확인되는 값만 모은 표입니다.
           </p>
 
@@ -303,7 +304,7 @@ export default function FrequencyPage() {
             </p>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -347,10 +348,10 @@ export default function FrequencyPage() {
 
         {/* ── 7. 가청 범위와 주파수 대역 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             가청 범위와 주파수 대역 — 어디까지가 사실인가
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             OpenStax College Physics는 정상 청력을 20 Hz ~ 20,000 Hz로 보고 20 Hz 미만을 초저주파(infrasound), 20 kHz 초과를 초음파(ultrasound)로 구분하며,
             귀의 감도가 가장 높은 구간을 <strong style={{ color: 'var(--text)' }}>2,000~5,000 Hz</strong>로 서술합니다 — 세기가 같아도 더 크게 들립니다.
             Shure도 마이크 주파수 응답 차트를 20 Hz~20 kHz로 그리며 인간의 청각 범위라고 명시합니다.
@@ -366,7 +367,7 @@ export default function FrequencyPage() {
             </p>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -449,7 +450,7 @@ export default function FrequencyPage() {
 
         {/* ── 9. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: '음표별 딜레이 타임 ms 계산' },
@@ -473,6 +474,6 @@ export default function FrequencyPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

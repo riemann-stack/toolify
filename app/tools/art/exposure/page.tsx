@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/exposure',
@@ -67,7 +68,7 @@ const FAQ_LD = [
 
 export default function ExposurePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/art/exposure">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 사진
       </p>
@@ -414,6 +415,6 @@ export default function ExposurePage() {
           </p>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

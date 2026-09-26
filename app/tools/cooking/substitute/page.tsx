@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/substitute',
@@ -33,7 +34,7 @@ const FAQ_LD = [
 
 export default function SubstitutePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/cooking/substitute">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />식재료 대체 계산기
@@ -49,13 +50,13 @@ export default function SubstitutePage() {
 
         {/* ── 1. 빠른 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 검색되는 대체 가이드 빠른 참조표
           </h2>
 
           {/* 버터 대체 */}
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>🧈 버터 대체</h3>
-          <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
+          <div className="tableScroll" style={{ marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -84,7 +85,7 @@ export default function SubstitutePage() {
 
           {/* 설탕 대체 */}
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>🍯 설탕 대체</h3>
-          <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
+          <div className="tableScroll" style={{ marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -113,7 +114,7 @@ export default function SubstitutePage() {
 
           {/* 생크림 대체 */}
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>🥛 생크림 대체</h3>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -142,7 +143,7 @@ export default function SubstitutePage() {
 
         {/* ── 2. 베이킹소다 vs 베이킹파우더 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             베이킹소다 vs 베이킹파우더 차이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px', marginBottom: '14px' }}>
@@ -176,7 +177,7 @@ export default function SubstitutePage() {
 
         {/* ── 3. 비건 대체 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             비건 대체 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -204,7 +205,7 @@ export default function SubstitutePage() {
 
         {/* ── 4. 글루텐프리 대체 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             글루텐프리 대체 (밀가루 1컵 대체)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -227,13 +228,13 @@ export default function SubstitutePage() {
 
         {/* ── 5. 한국 식재료 대체 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🇰🇷 한국 식재료 대체 가이드 (14종+)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             본 도구의 「카테고리 둘러보기」 → <strong style={{ color: 'var(--text)' }}>🇰🇷 한국 식재료</strong>에서 자세히. 해외 거주·재료 부족 시 응급 대체용.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -273,13 +274,13 @@ export default function SubstitutePage() {
 
         {/* ── 6. 양 변환 정확 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             ⚖️ 양 변환 정확 가이드 — 같은 1컵이라도 다름
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             식재료마다 밀도가 달라 1컵 무게가 다릅니다. 베이킹은 ±10g 차이로도 결과가 달라지므로 <strong style={{ color: 'var(--text)' }}>저울 사용 강력 권장</strong>.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -316,7 +317,7 @@ export default function SubstitutePage() {
 
         {/* ── 7. 알레르기·식이 제한 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🚨 알레르기·식이 제한 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
@@ -349,7 +350,7 @@ export default function SubstitutePage() {
 
         {/* ── 8. FAQ (accordion - salary style) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 className="g-h2">자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((faq, i) => (
@@ -384,7 +385,7 @@ export default function SubstitutePage() {
 
         {/* ── 6. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',     desc: '인분 변경 시 재료 비율 조정' },
@@ -409,6 +410,6 @@ export default function SubstitutePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

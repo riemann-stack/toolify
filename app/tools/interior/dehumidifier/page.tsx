@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { KEPCO_RESIDENTIAL_TIER_KRW } from './dehumidifierData'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/dehumidifier',
@@ -62,7 +63,7 @@ const RELATED = [
 
 export default function DehumidifierPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/interior/dehumidifier">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
@@ -110,7 +111,7 @@ export default function DehumidifierPage() {
         {/* 2. 평수별 권장 용량 표 */}
         <section>
           <h2 style={sectionTitle}>평수별 권장 제습기 용량 (아파트 기준)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -211,6 +212,6 @@ export default function DehumidifierPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

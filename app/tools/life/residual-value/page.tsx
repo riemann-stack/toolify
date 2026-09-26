@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/residual-value',
@@ -65,7 +66,7 @@ const RELATED = [
 
 export default function ResidualValuePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/residual-value">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
@@ -113,7 +114,7 @@ export default function ResidualValuePage() {
         {/* 2. 내용연수 표 */}
         <section>
           <h2 style={sectionTitle}>품목별 내용연수 (별표Ⅲ 부품보유기간)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -183,6 +184,6 @@ export default function ResidualValuePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/llm-vram',
@@ -98,7 +99,7 @@ const RELATED = [
 
 export default function LlmVramPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/dev/llm-vram">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
@@ -144,7 +145,7 @@ export default function LlmVramPage() {
         {/* 2. 양자화 크기표 */}
         <section>
           <h2 style={sectionTitle}>양자화별 크기 — Llama 3.1 8B 기준 실측</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -186,7 +187,7 @@ export default function LlmVramPage() {
             양자화별 크기를 알아도 &lsquo;그래서 내 카드엔 뭐가 올라가나&rsquo;가 남죠. 위 계산기를 모델 6종 × GPU 7종으로 돌려,
             각 조합에서 <strong style={{ color: 'var(--text)' }}>표기 용량(8GB=8GiB로 환산)의 92% 이하로 들어가는 가장 높은 양자화</strong>를 뽑았습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 700 }}>
               <caption style={{ captionSide: 'bottom', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, textAlign: 'left', paddingTop: 10 }}>
                 컨텍스트 8K · KV 캐시 F16 · GPU 표기 용량을 GiB(×2<sup>30</sup>)로 환산한 바이트의 92% 이하 사용 기준. 셀의 GB는 10진 GB라 표기 숫자끼리 나눈 비율은 이보다 커 보입니다(예: 24GB 카드의 22.7GB = 실제 88%). 본 계산기와 같은 공식으로 산출한 값 — 실측은 런타임(llama.cpp·ollama·vLLM)·OS·드라이버에 따라 다릅니다.
@@ -240,7 +241,7 @@ export default function LlmVramPage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             KV 캐시는 컨텍스트 길이에 정비례합니다. 같은 모델·같은 양자화라도 컨텍스트를 어디까지 열어두느냐로 필요량이 <strong style={{ color: 'var(--text)' }}>3배 넘게</strong> 벌어져요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <caption style={{ captionSide: 'bottom', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, textAlign: 'left', paddingTop: 10 }}>
                 Llama 3.1 8B · Q4_K_M · KV 캐시 F16 기준. 본 계산기와 같은 공식으로 산출한 값 — 실측은 런타임·OS·드라이버에 따라 다릅니다.
@@ -268,7 +269,7 @@ export default function LlmVramPage() {
           <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: 16, fontWeight: 700, margin: '28px 0 10px' }}>
             Q4_K_M 기준 모델별 소요량 — 가중치 + KV + 오버헤드
           </h3>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <caption style={{ captionSide: 'bottom', fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, textAlign: 'left', paddingTop: 10 }}>
                 컨텍스트 8K · KV 캐시 F16 기준. 본 계산기와 같은 공식으로 산출한 값 — 실측은 런타임·OS·드라이버에 따라 다릅니다.
@@ -341,6 +342,6 @@ export default function LlmVramPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

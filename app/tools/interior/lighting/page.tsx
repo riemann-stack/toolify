@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/lighting',
@@ -39,7 +40,7 @@ const FAQ_LD = [
 
 export default function LightingPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/interior/lighting">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
@@ -66,7 +67,7 @@ export default function LightingPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             조명 밝기 핵심 공식
           </h2>
           <div style={{
@@ -92,13 +93,13 @@ export default function LightingPage() {
 
         {/* ── 2. 공간별 권장 lux ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 공간별 권장 lux (KS A 3011 참고)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
             한국산업표준 <strong style={{ color: 'var(--text)' }}>KS A 3011</strong>(조도 기준)의 권장 범위를 가정용으로 정리한 <strong style={{ color: 'var(--text)' }}>참고 대표값</strong>입니다. 실제 적정 조도는 작업 종류·연령·취향에 따라 달라집니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -135,7 +136,7 @@ export default function LightingPage() {
 
         {/* ── 3. W vs lm vs lux ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             ⚡ 와트(W) vs 루멘(lm) vs lux — 차이 이해
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px', marginBottom: 14 }}>
@@ -166,10 +167,10 @@ export default function LightingPage() {
 
         {/* ── 4. W ↔ lm 환산표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             W ↔ 루멘 환산 빠른 참조표
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -205,7 +206,7 @@ export default function LightingPage() {
 
         {/* ── 5. 색온도 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎨 색온도 가이드 (Kelvin)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -226,7 +227,7 @@ export default function LightingPage() {
 
         {/* ── 6. 한국 LED 표준 와트 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🇰🇷 한국 LED 시장 표준 와트 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
@@ -248,7 +249,7 @@ export default function LightingPage() {
 
         {/* ── 7. 조명 종류별 활용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             💡 조명 종류별 활용 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -279,7 +280,7 @@ export default function LightingPage() {
 
         {/* ── 8. LED 방등 교체 체크리스트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🔧 LED 방등 교체 체크리스트
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
@@ -299,7 +300,7 @@ export default function LightingPage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
             <strong style={{ color: 'var(--text)' }}>기존 형광등 방등 → LED 와트 매칭.</strong> 핵심은 W가 아니라 <strong style={{ color: 'var(--text)' }}>루멘</strong>입니다. LED 광효율 100 lm/W 기준으로 시장 대체품 값을 정리하면:
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -332,13 +333,13 @@ export default function LightingPage() {
 
         {/* ── 9. 천장 높이·반사율 루멘 보정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             📏 천장 높이·벽 반사율에 따른 루멘 보정
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
             앞의 공식은 등에서 나온 빛이 모두 바닥·책상 높이에 닿는다고 보는(조명률 1) 약식입니다. 실제 조명설계의 <strong style={{ color: 'var(--text)' }}>광속법</strong>에서는 실제 작업면에 도달하는 빛의 비율인 <strong style={{ color: 'var(--text)' }}>조명률(U)</strong>을 곱하는데, 이 값은 천장이 높을수록, 벽·천장·바닥이 어두울수록 낮아집니다. 즉 조건이 나쁠수록 <strong style={{ color: 'var(--text)' }}>더 많은 루멘</strong>이 필요합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -378,7 +379,7 @@ export default function LightingPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -411,6 +412,6 @@ export default function LightingPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

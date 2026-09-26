@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/battery',
@@ -51,7 +52,7 @@ const FAQ_LD = [
 
 export default function BatteryPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/unit/battery">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />배터리 용량 변환기
@@ -80,10 +81,10 @@ export default function BatteryPage() {
 
         {/* ── 1. mAh와 Wh의 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             mAh와 Wh의 차이 — 왜 Wh로 환산해야 하나?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             보조배터리에 보통 적혀 있는 <strong style={{ color: 'var(--text)' }}>mAh(밀리암페어시)</strong>는 <strong style={{ color: 'var(--text)' }}>전류 × 시간</strong>을 나타내는 단위로, 같은 전압에서만 비교가 됩니다. 반면 <strong style={{ color: 'var(--accent)' }}>Wh(와트시)</strong>는 <strong style={{ color: 'var(--text)' }}>전압 × 전류 × 시간</strong>으로, 전압이 달라도 동일한 “에너지의 양”을 비교할 수 있는 절대적 단위입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -107,7 +108,7 @@ export default function BatteryPage() {
 
         {/* ── 2. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             핵심 공식
           </h2>
           <div style={{ background: 'color-mix(in srgb, var(--accent) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '20px', textAlign: 'center' }}>
@@ -135,13 +136,13 @@ export default function BatteryPage() {
 
         {/* ── 3. 인기 보조배터리 모델별 Wh 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             인기 보조배터리 모델별 Wh 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             대표 브랜드의 보조배터리를 3.7V 기준으로 환산한 표입니다. 실제 제품 표기 Wh가 우선이며, 제조사 공식 Wh는 셀 정격전압(대개 3.6~3.65V)을 쓰기 때문에 3.7V 환산치보다 약간 낮을 수 있습니다(예: Anker 737 공식 86.4Wh). 반입 판정(100Wh·160Wh 경계)에는 영향이 없습니다. 맨 아래 EcoFlow RIVER 2는 <strong style={{ color: 'var(--text)' }}>보조배터리가 아니라 포터블 파워스테이션</strong>(LiFePO4·AC 콘센트 내장)으로, 별개 제품군이며 대부분 160Wh를 초과해 기내 반입이 불가합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -176,7 +177,7 @@ export default function BatteryPage() {
 
         {/* ── 4. 항공사별 보조배터리 정책 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             항공사별 보조배터리 정책
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -212,10 +213,10 @@ export default function BatteryPage() {
 
         {/* ── 4-1. 2025~2026년 달라진 한국 기내 보조배터리 규정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             2025~2026년 달라진 한국 기내 보조배터리 규정
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             2025년 1월 에어부산 화재 사고를 계기로 국토교통부가 기내 안전관리 표준안을 시행했고, 이 한국 기준이 <strong style={{ color: 'var(--text)' }}>ICAO 국제기준(항공위험물운송기술지침 Doc 9284)</strong>으로 채택되어 <strong style={{ color: 'var(--accent)' }}>2026년 4월 20일부터 전면 시행</strong> 중입니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -253,7 +254,7 @@ export default function BatteryPage() {
 
         {/* ── 5. 자주 검색되는 사례 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 검색되는 사례
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -284,7 +285,7 @@ export default function BatteryPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -316,6 +317,6 @@ export default function BatteryPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

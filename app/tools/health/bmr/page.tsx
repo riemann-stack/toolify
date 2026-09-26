@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmr',
@@ -64,7 +65,7 @@ const FAQ_LD = [
 
 export default function BmrPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/bmr">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />기초대사량 계산기
@@ -82,10 +83,10 @@ export default function BmrPage() {
 
         {/* ── 1. BMR과 TDEE란? (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             기초대사량(BMR)과 TDEE란?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             기초대사량(BMR, Basal Metabolic Rate)은 생명 유지를 위해 최소한으로 필요한 에너지량입니다.
             아무것도 하지 않고 누워있어도 심장 박동, 호흡, 체온 유지 등에 소모되는 칼로리로,
             전체 에너지 소비의 약 <strong style={{ color: 'var(--text)' }}>60~70%</strong>를 차지합니다.
@@ -119,10 +120,10 @@ export default function BmrPage() {
 
         {/* ── 2. BMR 4공식 비교 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             BMR 4공식 비교
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구는 4가지 BMR 공식을 모두 비교 표시합니다. 각 공식은 입력값과 정확도가 다릅니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -154,10 +155,10 @@ export default function BmrPage() {
 
         {/* ── 3. Harris-Benedict 공식 시각화 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             Harris-Benedict 공식
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             1919년 발표 후 1984년 개정된(Roza-Shizgal) 기초대사량 공식으로, 아래는 본 도구가 사용하는 <strong style={{ color: 'var(--text)' }}>개정판 계수</strong>입니다.
             체중, 키, 나이, 성별을 반영해 비교적 정확한 BMR 추정이 가능합니다.
           </p>
@@ -201,13 +202,13 @@ export default function BmrPage() {
 
         {/* ── 4. 활동 수준별 TDEE 표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             활동 수준별 TDEE 계산
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             BMR에 아래 활동 계수를 곱하면 하루 총 소비 칼로리(TDEE)가 됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -249,10 +250,10 @@ export default function BmrPage() {
 
         {/* ── 5. 정밀 활동 수준 분석 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             정밀 활동 수준 분석 — 5단계의 한계
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             5단계 활동 계수는 빠른 추정에는 좋지만 다음 한계가 있습니다 —
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0, marginBottom: 14 }}>
@@ -277,10 +278,10 @@ export default function BmrPage() {
 
         {/* ── 6. 운동일/휴식일 칼로리 사이클링 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             운동일/휴식일 칼로리 사이클링
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             한국에서 잘 알려지지 않은 개념이지만, 해외 다이어트 커뮤니티에서는 표준 전략입니다.
             <strong style={{ color: 'var(--text)' }}> 운동일에 더 먹고, 휴식일에 적게 먹는 방식</strong>은 회복·근성장·식단 만족감 모두에 유리합니다.
           </p>
@@ -315,10 +316,10 @@ export default function BmrPage() {
 
         {/* ── 7. 안전 하한선 — 거식증 예방 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             안전 하한선 — 거식증·식이장애 예방
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구는 아래 <strong style={{ color: 'var(--text)' }}>🔴 조건</strong>에서 강한 경고를 자동 표시합니다. <strong style={{ color: 'var(--text)' }}>🟡 상황</strong>은 도구가 일일이 잡지 못하므로 스스로 점검하세요 —
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
@@ -350,7 +351,7 @@ export default function BmrPage() {
 
         {/* ── 8. 목표별 칼로리 가이드 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             목표별 칼로리 설정 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -384,7 +385,7 @@ export default function BmrPage() {
 
         {/* ── 9. 스마트워치 vs 공식 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             스마트워치 vs 공식 — 어느 게 정확?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
@@ -431,7 +432,7 @@ export default function BmrPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmi',         icon: '⚖️', name: 'BMI 계산기',                 desc: '체질량지수·키별 정상 체중·허리둘레' },
@@ -457,6 +458,6 @@ export default function BmrPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/one-rm',
@@ -82,7 +83,7 @@ const FAQ_LD = [
 
 export default function OneRMPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/sports/one-rm">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />1RM &amp; 훈련 중량 계산기
@@ -97,7 +98,7 @@ export default function OneRMPage() {
 
       {/* 1. 공식 4가지 비교 */}
       <h2 style={sectionTitle}>📐 1RM 추정 공식 4가지 비교</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         1RM은 직접 측정이 어렵고 부상 위험이 크기 때문에, 서브맥시멀 세트(2~10회)의 수행 기록을 바탕으로 추정하는 것이 일반적입니다. 대표적인 4가지 공식은 각기 다른 데이터셋에서 유도되어 결과가 조금씩 다릅니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -139,7 +140,7 @@ export default function OneRMPage() {
 
       {/* 2. RPE 보정 가이드 (NEW) */}
       <h2 style={sectionTitle}>🎯 RPE / RIR — 체감 강도 보정의 원리</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         모든 1RM 공식은 <strong style={{ color: 'var(--text)' }}>&ldquo;마지막 한 번도 더 못 드는 상태(AMRAP)&rdquo;</strong>를 가정합니다. 하지만 실제 훈련에서는 1~3회 여유를 두고 끝내는 경우가 많죠. 그대로 공식에 넣으면 1RM이 과소 추정됩니다. <strong style={{ color: 'var(--text)' }}>RPE/RIR 보정</strong>은 이 차이를 메워줍니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -192,7 +193,7 @@ export default function OneRMPage() {
 
       {/* 3. 성별·연령 보정 (NEW) */}
       <h2 style={sectionTitle}>👥 성별·연령별 수준 보정 — 같은 무게라도 평가가 달라집니다</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         상대적 근력은 절대 무게가 아니라 <strong style={{ color: 'var(--text)' }}>체중·성별·연령에 대한 비율</strong>로 봐야 정확합니다. 본 도구는 20대 남성 기준의 ExRx·Strength Level 데이터에 다음 보정을 적용합니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -233,7 +234,7 @@ export default function OneRMPage() {
 
       {/* 4. 워밍업 5세트 — 부상 예방의 핵심 (NEW) */}
       <h2 style={sectionTitle}>🔥 워밍업 5세트 — 부상 예방의 핵심</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         본 세트 강도가 80% 이상이면 <strong style={{ color: 'var(--text)' }}>최소 5세트의 점진적 워밍업</strong>이 필요합니다. 갑자기 무거운 무게를 들면 관절·인대가 적응할 시간이 없어 부상 위험이 급증합니다. 본 도구의 &ldquo;훈련 중량&rdquo; 탭에서 본 세트 강도(%1RM)를 선택하면 자동으로 워밍업 세트가 생성됩니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -292,7 +293,7 @@ export default function OneRMPage() {
 
       {/* 5. 종목별 체중 대비 수준 기준표 (확장) */}
       <h2 style={sectionTitle}>📊 11종 운동 체중 대비 수준 기준표</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         20대 남성 기준입니다. 도구 내에서 성별·연령을 선택하면 자동 보정된 값으로 평가됩니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto', marginBottom: '14px' }}>
@@ -327,7 +328,7 @@ export default function OneRMPage() {
 
       {/* 6. 훈련 강도 완전 가이드 */}
       <h2 style={sectionTitle}>💪 훈련 강도 완전 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         목표에 따라 1RM 대비 사용 중량과 반복 수를 조절해야 합니다. 근력·근비대·근지구력은 요구 강도가 다르며, 세트 사이 휴식 시간도 달라집니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -355,7 +356,7 @@ export default function OneRMPage() {
 
       {/* 7. 한국 헬스장 환경 — 원판·바벨 가이드 (NEW) */}
       <h2 style={sectionTitle}>🇰🇷 한국 헬스장 환경 — 원판·바벨 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         한국 일반 헬스장은 미국·유럽과 환경이 조금 다릅니다. 운동 계획 시 참고하세요.
       </p>
       <div style={{ ...card }}>
@@ -370,7 +371,7 @@ export default function OneRMPage() {
 
       {/* 8. 프로그램 추천 (NEW) */}
       <h2 style={sectionTitle}>📅 1RM 기반 인기 프로그램 — 어떤 걸 골라야 할까?</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         본 도구로 추정한 1RM은 다양한 프로그램의 작업 중량 계산에 그대로 쓰입니다. 자신의 경력·목표에 맞는 프로그램을 골라보세요.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -429,7 +430,7 @@ export default function OneRMPage() {
 
       {/* 9. 원판 조합 빠른 참조표 */}
       <h2 style={sectionTitle}>⚖️ 원판 조합 빠른 참조표</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         20kg 올림픽 바벨 기준, 양쪽에 끼울 원판 조합입니다. 실제 헬스장에서 자주 쓰이는 중량만 정리했어요.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -577,6 +578,6 @@ export default function OneRMPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>마라톤 목표 기록별 페이스</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

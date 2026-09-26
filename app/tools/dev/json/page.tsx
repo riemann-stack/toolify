@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/json',
@@ -38,7 +39,7 @@ const FAQ_LD = [
 
 export default function JsonPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/dev/json">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
@@ -58,7 +59,7 @@ export default function JsonPage() {
 
         {/* ── 1. JSON 기본 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             JSON(JavaScript Object Notation)이란?
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -85,7 +86,7 @@ export default function JsonPage() {
 
         {/* ── 2. 자주 발생하는 오류 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 발생하는 JSON 오류 7가지
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -108,7 +109,7 @@ export default function JsonPage() {
 
         {/* ── 3. 2^53 정밀도 한계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             JSON.parse가 64비트 ID를 조용히 바꾸는 이유 — 2⁵³ 한계
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -145,10 +146,10 @@ export default function JsonPage() {
 
         {/* ── 4. JSON vs JSON5 vs JSONC ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             JSON vs JSON5 vs JSONC
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -179,7 +180,7 @@ export default function JsonPage() {
 
         {/* ── 5. 정렬 vs 압축 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             JSON 정렬(Beautify) vs 압축(Minify)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -206,7 +207,7 @@ export default function JsonPage() {
 
         {/* ── 6. JSON → TypeScript ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             JSON → TypeScript 인터페이스 자동 생성
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -242,7 +243,7 @@ export default function JsonPage() {
 
         {/* ── 7. JSON ↔ YAML ↔ CSV ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             JSON ↔ YAML ↔ CSV 변환
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -262,7 +263,7 @@ export default function JsonPage() {
 
         {/* ── 8. 한글 이스케이프 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한글 이스케이프 — JS와 Python의 기본값이 반대입니다
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -271,7 +272,7 @@ export default function JsonPage() {
             <code>{'\\ud55c'}</code> 형태로 이스케이프합니다. 두 표기는 표준상 완전히 동등해서 어떤 파서든 같은 문자열로 읽지만,
             파일 크기와 사람이 읽을 수 있는지가 달라집니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -307,7 +308,7 @@ export default function JsonPage() {
 
         {/* ── 9. JSON Pointer / 활용 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             JSON 활용 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -329,7 +330,7 @@ export default function JsonPage() {
 
         {/* ── 10. jq 실전 치트시트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             jq 실전 치트시트 — 화면에서 확인, CLI에서 반복
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -337,7 +338,7 @@ export default function JsonPage() {
             아래는 예시 JSON <code>{'{"users":[{"name":"kim","age":32},{"name":"lee","age":25},{"name":"park","age":41}]}'}</code> 기준,
             jq 1.7 실행 결과로 확인한 자주 쓰는 필터입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -392,7 +393,7 @@ export default function JsonPage() {
 
         {/* ── 11. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -413,7 +414,7 @@ export default function JsonPage() {
 
         {/* ── 12. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -447,6 +448,6 @@ export default function JsonPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

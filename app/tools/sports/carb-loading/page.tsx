@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/carb-loading',
@@ -62,7 +63,7 @@ const RELATED = [
 
 export default function CarbLoadingPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/carb-loading">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
@@ -107,7 +108,7 @@ export default function CarbLoadingPage() {
         {/* 2. 대회 유형별 표 */}
         <section>
           <h2 style={sectionTitle}>대회 유형별 로딩 가이드</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -140,7 +141,7 @@ export default function CarbLoadingPage() {
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             미국스포츠의학회(ACSM)·미국영양학회(AND)·캐나다영양사협회(DC)가 함께 낸 공동 성명 <strong style={{ color: 'var(--text)' }}>Nutrition and Athletic Performance(2016)</strong>의 Table 2는 경기 전·중 탄수화물 섭취량을 상황별로 못 박아 두었습니다. 아래는 그 표에서 지구력 대회에 해당하는 행을 그대로 옮긴 것입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -188,7 +189,7 @@ export default function CarbLoadingPage() {
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             &lsquo;하루 700 g&rsquo;이 얼마나 되는 양인지 감이 오지 않는다면 아래 표를 기준으로 잡으세요. 농촌진흥청 국가표준식품성분표(<strong style={{ color: 'var(--text)' }}>국가표준식품성분 DB 10.4, 2026</strong>) 수록값이며 모두 <strong style={{ color: 'var(--text)' }}>100 g 기준</strong>입니다. 면류는 삶으면 물을 머금어 100 g당 탄수화물이 크게 낮아지므로 조리 상태를 함께 봐야 합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -291,6 +292,6 @@ export default function CarbLoadingPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

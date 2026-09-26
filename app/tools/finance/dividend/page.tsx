@@ -6,6 +6,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/dividend',
@@ -68,7 +69,7 @@ const FAQ_LD = [
 
 export default function DividendPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/dividend">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />월배당 목표 자산 계산기
@@ -86,7 +87,7 @@ export default function DividendPage() {
 
         {/* ── 1. 핵심 계산 공식 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             핵심 계산 공식 4단계
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
@@ -113,13 +114,13 @@ export default function DividendPage() {
 
         {/* ── 2. 목표 월배당금별 필요 원금 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             목표 월배당금별 필요 원금
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '10px' }}>
             * 세율 15.4%, 연 4.5% 배당수익률 기준
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -150,7 +151,7 @@ export default function DividendPage() {
 
         {/* ── 3. 배당소득세 완전 가이드 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             배당소득세 완전 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '16px' }}>
@@ -167,7 +168,7 @@ export default function DividendPage() {
             ))}
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -209,7 +210,7 @@ export default function DividendPage() {
 
         {/* ── 4. 고배당 함정 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             ⚠️ 고배당 함정 주의 안내
           </h2>
           <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '14px' }}>
@@ -241,7 +242,7 @@ export default function DividendPage() {
 
         {/* ── 5. 배당 성장 투자 전략 DGI (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             배당 성장 투자 전략 (DGI)
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '18px 22px', marginBottom: '14px' }}>
@@ -255,7 +256,7 @@ export default function DividendPage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '10px' }}>
             배당 성장률 연 <strong style={{ color: 'var(--text)' }}>7%</strong> 가정 시 원금 대비 수익률 변화:
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -286,15 +287,15 @@ export default function DividendPage() {
 
         {/* ── 6. 월 적립 역산 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🎯 월 적립 역산 — &ldquo;월배당 100만 만들려면 월 얼마?&rdquo;
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             「월 적립 역산」 탭은 목표 월배당 + 기간 + 시드 + 배당 재투자 가정을 받아 <strong style={{ color: '#A16207' }}>이진 탐색</strong>으로 필요 월 적립액을 계산하고,
             결과를 4단계(매우 합리적/합리적/도전적/비현실적) 배지로 평가합니다.
           </p>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -329,14 +330,14 @@ export default function DividendPage() {
 
         {/* ── 7. 배당 포트폴리오 구성 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             📊 배당 포트폴리오 구성 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 「포트폴리오」 탭은 자산별 투자금·수익률·배당 주기를 입력하면 종합 가중평균 + 월별 현금흐름 + 환율 영향을 자동 계산합니다.
             현실적인 1.5억 가정 조합:
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -371,10 +372,10 @@ export default function DividendPage() {
 
         {/* ── 8. 월별 현금흐름 — 분기 배당의 함정 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             📅 월별 현금흐름 — 분기 배당의 함정
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국·미국 분기 배당주 대부분이 <strong style={{ color: 'var(--text)' }}>3·6·9·12월</strong>에 집중 지급되어,
             1·2·4·5·7·8·10·11월에는 배당이 거의 없어 현금흐름이 들쭉날쭉할 수 있습니다.
             본 도구의 「포트폴리오」 탭에서 12개월 막대 차트로 시각화 가능.
@@ -401,10 +402,10 @@ export default function DividendPage() {
 
         {/* ── 9. 종합과세 회피 전략 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🛡️ 금융소득 종합과세 회피 전략
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             금융소득(이자+배당) 합계가 연 <strong style={{ color: 'var(--text)' }}>2,000만원 초과</strong> 시 종합과세 누진세 (최대 49.5%)로 전환됩니다.
             본 도구의 「종합과세 경계」 탭에서 한도 진행률·세율 적용을 시각화합니다.
           </p>
@@ -430,15 +431,15 @@ export default function DividendPage() {
 
         {/* ── 10. 환율 변동 영향 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             💱 환율 변동 영향 — 미국 ETF (서학개미)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             USD/KRW 변동 ±10% → 원화 배당 ±10%. 장기 평균은 1,200~1,400 변동.
             예: SCHD 분배금 $100 기준, 환율별 원화 수령액은 아래와 같습니다.
           </p>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 360 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -470,7 +471,7 @@ export default function DividendPage() {
 
         {/* ── 11. FAQ (accordion - salary style) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 className="g-h2">자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((faq, i) => (
@@ -507,7 +508,7 @@ export default function DividendPage() {
 
         {/* ── 13. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '배당 재투자 시뮬레이션 — ISA·연금 절세 비교' },
@@ -533,6 +534,6 @@ export default function DividendPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

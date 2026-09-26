@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/sound-speed',
@@ -38,7 +39,7 @@ const FAQ_LD = [
 
 export default function SoundSpeedPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/edu/sound-speed">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
@@ -58,7 +59,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 1. 음속 기본 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             음속 기본 공식
           </h2>
           <div style={{
@@ -88,7 +89,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 2. 천둥 번개 거리 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             천둥 번개 거리 계산
           </h2>
           <div style={{
@@ -129,7 +130,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 3. 빛 vs 소리 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             빛 vs 소리 — 우주의 두 속도
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -168,7 +169,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 4. 매질별 음속 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             매질별 음속 차이
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -176,7 +177,7 @@ export default function SoundSpeedPage() {
             고체는 밀도가 커도 탄성이 훨씬 크게 앞서기 때문에 대체로 기체 → 액체 → 고체 순으로 빨라집니다.
             아래 값은 대표 근사값으로, 나무는 결 방향·수종, 금속은 합금·파동 종류(종파 기준)에 따라 달라집니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -213,7 +214,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 5. 마하·소닉붐 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             마하와 음속 — 소닉붐의 비밀
           </h2>
           <div style={{
@@ -250,7 +251,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 6. 에코·잔향 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             에코(반향) 원리와 잔향 시간 RT60
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -309,7 +310,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 7. 흥미로운 사실 모음 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🤓 음속·광속 흥미로운 사실
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -331,7 +332,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 7.5 계산 가정·참고 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             계산 가정과 참고 자료
           </h2>
           <ul style={{ paddingLeft: 20, margin: '0 0 12px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.9 }}>
@@ -353,7 +354,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -374,7 +375,7 @@ export default function SoundSpeedPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -408,6 +409,6 @@ export default function SoundSpeedPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

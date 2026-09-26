@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/nesin-5grade',
@@ -61,7 +62,7 @@ const RELATED = [
 
 export default function Nesin5GradePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/edu/nesin-5grade">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
@@ -107,7 +108,7 @@ export default function Nesin5GradePage() {
         {/* 2. 5 vs 9 구간 비교 표 */}
         <section>
           <h2 style={sectionTitle}>5등급 vs 9등급 구간 비교</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -145,7 +146,7 @@ export default function Nesin5GradePage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             「학교생활기록 작성 및 관리지침」(교육부훈령 제555호, 시행 2026-03-01) <strong style={{ color: 'var(--text)' }}>[별표 9] 제4조 라목 4)</strong>는 석차누적비율 상한을 10 · 34 · 66 · 90 · 100%로 정합니다. 같은 항의 단서는 <strong style={{ color: 'var(--text)' }}>“등급별 누적 학생수는 수강자수와 누적 등급비율을 곱한 값을 반올림하여 계산한다”</strong>고 규정합니다. 즉 커트라인은 비율이 아니라 <strong style={{ color: 'var(--text)' }}>반올림한 누적 인원</strong>입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -214,7 +215,7 @@ export default function Nesin5GradePage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             훈령 제555호 <strong style={{ color: 'var(--text)' }}>제15조 제4항</strong>은 석차등급을 산출하지 않는 과목을 세 유형으로 나눕니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -269,6 +270,6 @@ export default function Nesin5GradePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

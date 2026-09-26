@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/life-time',
@@ -40,7 +41,7 @@ const FAQ_LD = [
 
 export default function LifeTimePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/date/life-time">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         날짜·시간
       </p>
@@ -61,7 +62,7 @@ export default function LifeTimePage() {
 
         {/* ── 1. 도구 소개 (긍정적 프레이밍) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             이 도구를 만든 이유
           </h2>
           <div style={{
@@ -87,7 +88,7 @@ export default function LifeTimePage() {
 
         {/* ── 2. 메멘토 모리 철학 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             📿 메멘토 모리 — 철학적 배경
           </h2>
           <div style={{
@@ -114,7 +115,7 @@ export default function LifeTimePage() {
 
         {/* ── 3. 한국인 기대수명 통계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국인 기대수명 통계 (2024년 생명표)
           </h2>
           <UpdatedMeta
@@ -122,7 +123,7 @@ export default function LifeTimePage() {
             basis="국가데이터처(구 통계청) 2024년 생명표 (2025년 12월 발표)"
             sources={[{ label: '국가데이터처 2024년 생명표 보도자료', href: 'https://mods.go.kr/board.es?mid=a10301010000&bid=208&act=view&list_no=439533' }]}
           />
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -155,7 +156,7 @@ export default function LifeTimePage() {
 
         {/* ── 4. 1만 시간 법칙 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎯 1만 시간 법칙과 시간 환산
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -182,7 +183,7 @@ export default function LifeTimePage() {
 
         {/* ── 5. 시간 활용 명언 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             시간 활용에 관한 통찰
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -202,7 +203,7 @@ export default function LifeTimePage() {
 
         {/* ── 6. 작은 습관 누적 효과 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🌱 하루 작은 습관의 누적 효과 (실제 연구)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -235,7 +236,7 @@ export default function LifeTimePage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -268,6 +269,6 @@ export default function LifeTimePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

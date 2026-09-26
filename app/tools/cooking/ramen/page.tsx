@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import { RAMEN_TYPES, formatTime } from './ramenUtils'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/ramen',
@@ -67,7 +68,7 @@ const FAQ_LD = [
 
 export default function RamenPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/cooking/ramen">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />라면 물양 계산기
@@ -83,14 +84,14 @@ export default function RamenPage() {
 
         {/* 1. 제품별 물양·시간·영양 종합표 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🍜 라면 종류별 물양·조리시간·칼로리·나트륨 (제품 표기 기준)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국 인기 라면 <strong style={{ color: 'var(--text)' }}>{RAMEN_TYPES.length}종</strong>의 1개(1봉/1용기) 기준 권장 물양·조리 시간과
             제조사 표기 영양정보입니다. 본 도구는 여기에 <strong style={{ color: 'var(--text)' }}>개수·국물 농도·토핑·면 익힘</strong>까지 자동 보정합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -125,10 +126,10 @@ export default function RamenPage() {
 
         {/* 2. 다개수 보정 — 단순 ×N 안 되는 이유 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             ⚠️ 라면 2개에 단순 ×2가 안 되는 이유
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             「550ml × 2 = 1,100ml」 넣으면 <strong style={{ color: 'var(--danger)' }}>국물이 싱거워집니다</strong>. 이유:
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 18, marginBottom: 16 }}>
@@ -138,7 +139,7 @@ export default function RamenPage() {
             <li>끓는 시간 증가</li>
           </ul>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -173,7 +174,7 @@ export default function RamenPage() {
 
         {/* 3. 짜장·볶음·비빔 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             ⚫ 짜파게티·🔥 불닭·❄️ 비빔면 — 물 빼기 가이드
           </h2>
 
@@ -197,7 +198,7 @@ export default function RamenPage() {
 
         {/* 4. 토핑 추가 시 보정 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🥢 토핑 추가 시 물양 보정
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
@@ -209,7 +210,7 @@ export default function RamenPage() {
             냉동 만두·떡은 면보다 <strong>먼저</strong>, 계란·치즈·대파는 풀어지지 않도록 <strong>나중에</strong> 넣습니다.
             (칼로리·단백질·나트륨 등 토핑 영양은 USDA·식약처 일반 평균으로 제품·분량에 따라 차이가 있습니다.)
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -247,10 +248,10 @@ export default function RamenPage() {
 
         {/* 5. 면 익힘 시간 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             ⏱️ 면 익힘 정도별 시간
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -283,14 +284,14 @@ export default function RamenPage() {
 
         {/* 6. 칼로리·나트륨 비교 (제품별 순위) */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             💪 라면 칼로리·나트륨 비교 (나트륨 많은 순)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             제조사 표기 기준 1봉/1용기 영양정보입니다. <strong style={{ color: 'var(--danger)' }}>나트륨 1,800mg = WHO 일일 권장(2,000mg)의 90%</strong> —
             국물을 남기면 실제 섭취 나트륨은 절반 수준으로 줄어듭니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -322,10 +323,10 @@ export default function RamenPage() {
 
         {/* 7. 냄비 크기 가이드 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🍲 라면 개수별 냄비 크기 가이드
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -377,7 +378,7 @@ export default function RamenPage() {
 
         {/* 10. 함께 쓰면 좋은 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기', desc: '인분 환산 + 단위 변환' },
@@ -402,6 +403,6 @@ export default function RamenPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

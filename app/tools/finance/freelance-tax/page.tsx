@@ -7,6 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { EXPENSE_RATES, INDUSTRIES, simpleExcessRate } from './freelanceTaxUtils'
+import ToolPage from '@/components/ToolPage'
 
 /* 경비율 표 — 계산기와 같은 단일 표(EXPENSE_RATES)에서 렌더 */
 const RATE_ROWS = Object.values(EXPENSE_RATES).map((r) => ({
@@ -70,7 +71,7 @@ const FAQ_LD = [
 
 export default function FreelanceTaxPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/freelance-tax">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />프리랜서 종합소득세 계산기
@@ -92,7 +93,7 @@ export default function FreelanceTaxPage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             과세표준 (사업소득금액 − 종합소득공제) 구간별로 6%부터 45%까지 누진 적용됩니다. 본인 한계세율을 알아야 어떤 절세 전략이 효율적인지 판단할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -132,7 +133,7 @@ export default function FreelanceTaxPage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             장부를 작성하지 않은 프리랜서는 국세청이 정한 업종별 단순경비율로 필요경비를 추정 적용받습니다. 아래 한도는 <strong style={{ color: 'var(--text)' }}>계속사업자(직전년도 수입) 기준</strong>이며, <strong style={{ color: 'var(--text)' }}>신규(개업 첫해)는 복식부기 의무 기준(인적용역 7,500만 등)까지</strong> 단순경비율 적용이 가능합니다. 한도를 넘으면 기준경비율로 전환됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -167,7 +168,7 @@ export default function FreelanceTaxPage() {
           <h2 style={sectionTitle}>주요 소득공제·세액공제 항목</h2>
 
           <p style={{ ...dedTitle, color: 'var(--cyan-600)' }}>소득공제</p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={dedTable}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -192,7 +193,7 @@ export default function FreelanceTaxPage() {
           </div>
 
           <p style={{ ...dedTitle, color: 'var(--emerald-600)', marginTop: '22px' }}>세액공제</p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={dedTable}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -276,6 +277,6 @@ export default function FreelanceTaxPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

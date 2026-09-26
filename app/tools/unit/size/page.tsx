@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import { SHOE_M, SHOE_F } from './sizeData'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/size',
@@ -34,7 +35,7 @@ const FAQ_LD = [
 
 export default function SizePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/unit/size">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />사이즈 변환기
@@ -67,7 +68,7 @@ export default function SizePage() {
 
         {/* ── 1. 카테고리별 측정 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             카테고리별 측정 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -94,10 +95,10 @@ export default function SizePage() {
 
         {/* ── 2. 직구 사이트별 사이즈 가이드 위치 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             주요 직구 사이트별 사이즈 가이드 위치
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -133,7 +134,7 @@ export default function SizePage() {
 
         {/* ── 3. 브랜드별 사이즈 특징 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             브랜드별 사이즈 특징 (참고)
           </h2>
           <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '12px' }}>
@@ -181,12 +182,12 @@ export default function SizePage() {
 
         {/* ── 4. 국가별 옷 사이즈 비교표 (남/여 분리) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             국가별 옷 사이즈 비교표
           </h2>
 
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👨 남성 상의</h3>
-          <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
+          <div className="tableScroll" style={{ marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -217,7 +218,7 @@ export default function SizePage() {
           </div>
 
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👩 여성 상의</h3>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -250,7 +251,7 @@ export default function SizePage() {
 
         {/* ── 5. 신발 사이즈 핵심 변환표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             신발 사이즈 핵심 변환표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
@@ -258,7 +259,7 @@ export default function SizePage() {
           </p>
 
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👨 남성 신발 (240~290mm)</h3>
-          <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
+          <div className="tableScroll" style={{ marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 400 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -281,7 +282,7 @@ export default function SizePage() {
           </div>
 
           <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>👩 여성 신발 (220~265mm)</h3>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 400 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -309,13 +310,13 @@ export default function SizePage() {
 
         {/* ── 6. 반지 호수 요약 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             반지 호수 요약표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
             한국 호수는 손가락 둘레·내경 기준이며, US 사이즈는 내경 기준(ISO 표준)입니다. 대표 호수만 추린 요약표로, 짝수 호수와 UK·EU·일본 표기는 위 변환기에서 확인할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 400 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -354,7 +355,7 @@ export default function SizePage() {
 
         {/* ── 7. 직구 실패 줄이기 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             해외 직구 사이즈 실패 줄이는 5가지 방법
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -378,7 +379,7 @@ export default function SizePage() {
 
         {/* ── 8. 직구 반품·면세 실전 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             직구 반품·면세 실전
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -419,7 +420,7 @@ export default function SizePage() {
 
         {/* ── 10. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/unit/converter',  icon: '📐', name: '단위 변환기',     desc: '길이·무게·온도 통합 변환' },
@@ -443,6 +444,6 @@ export default function SizePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

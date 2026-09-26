@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-distance',
@@ -57,7 +58,7 @@ const FAQ_LD = [
 
 export default function GolfDistancePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/golf-distance">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />골프 비거리 계산기
@@ -73,7 +74,7 @@ export default function GolfDistancePage() {
 
         {/* ── 1. 아마추어 평균 비거리 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             아마추어 평균 클럽별 비거리
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
@@ -83,7 +84,7 @@ export default function GolfDistancePage() {
 
           {/* 남성 */}
           <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>👨 남성 아마추어 평균</p>
-          <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
+          <div className="tableScroll" style={{ marginBottom: '20px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -117,7 +118,7 @@ export default function GolfDistancePage() {
 
           {/* 여성 */}
           <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '8px' }}>👩 여성 아마추어 평균</p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -152,7 +153,7 @@ export default function GolfDistancePage() {
 
         {/* ── 2. Gap 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             클럽 간 이상적인 거리 간격(Gap) 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '14px' }}>
@@ -180,7 +181,7 @@ export default function GolfDistancePage() {
 
         {/* ── 3. AW 필요성 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎯 갭웨지(AW)가 필요한 이유
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(96px, 1fr))', gap: '10px', marginBottom: '14px' }}>
@@ -208,7 +209,7 @@ export default function GolfDistancePage() {
 
         {/* ── 4. 7I 기준 클럽 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             7번 아이언이 골프 기준 클럽인 이유
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -237,13 +238,13 @@ export default function GolfDistancePage() {
 
         {/* ── 5. 환경 보정 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🌬️ 환경 보정 가이드 — 기온·바람·고도·경사
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [🌬️ 환경 보정] 탭에서 자동 계산. 비거리 변화가 ±10% 이상이면 한 클럽 위/아래 사용 권장.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -280,10 +281,10 @@ export default function GolfDistancePage() {
 
         {/* ── 6. 한국 시즌별 비거리 변화 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🍂 한국 시즌별 비거리 변화
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국 사계절 기온차(약 35°C)는 비거리에 의미 있는 영향을 줍니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px' }}>
@@ -304,13 +305,13 @@ export default function GolfDistancePage() {
 
         {/* ── 7. 시니어 골퍼 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             👴 시니어 골퍼 가이드 (60대+)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국 시니어 골퍼 인구가 급증 중입니다. 비거리는 점차 감소(10년에 약 5~10%)하나 정확도·일관성이 더 중요합니다. 본 도구의 [성별·연령]에서 [시니어]를 선택하면 평균 기준이 자동 조정됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -345,10 +346,10 @@ export default function GolfDistancePage() {
 
         {/* ── 8. 비거리 기록 활용법 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📅 내 비거리 기록 활용법
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [📅 내 기록] 탭에서 라운딩·연습장 비거리를 누적 기록 (브라우저 로컬, 1년 보관). 시즌별·장소별 변화를 추적해 발전 추이를 확인하세요.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -377,7 +378,7 @@ export default function GolfDistancePage() {
 
         {/* ── 6. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/golf-handicap', icon: '⛳', name: '골프 핸디캡 계산기',   desc: 'WHS 핸디캡 지수·코스 핸디캡' },
@@ -401,6 +402,6 @@ export default function GolfDistancePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

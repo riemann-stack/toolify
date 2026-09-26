@@ -6,6 +6,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/dsr',
@@ -51,7 +52,7 @@ const FAQ_LD = [
 
 export default function DsrPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/dsr">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />DSR·LTV·스트레스DSR 계산기
@@ -132,7 +133,7 @@ export default function DsrPage() {
             기준 스트레스 금리는 「과거 5년 중 최고 월별 가계대출 가중평균금리 − 현재 금리」로 산정하되 <strong style={{ color: 'var(--text)' }}>하한 1.5%p·상한 3.0%p</strong>를 둡니다(금융위원회).
             여기에 단계별 적용률과 금리유형별 적용비율을 곱한 값이 실제 가산금리 — 단계가 올라갈수록, 금리 변동 위험이 클수록(변동형 &gt; 혼합형 &gt; 주기형 &gt; 고정형) 가산폭이 커져 한도가 줄어듭니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -173,7 +174,7 @@ export default function DsrPage() {
             <strong style={{ color: 'var(--text)' }}>명목금리 연 4.0% · 만기 40년 · 원리금균등 · 기존 대출 0원 · DSR 40% · 스트레스 3단계(기준 1.5%p)</strong>{' '}
             조건에서 본 계산기와 같은 엔진으로 산출한 스트레스 DSR 기준 최대 한도입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -256,7 +257,7 @@ export default function DsrPage() {
             금융위원회 규정이 아니라 <strong style={{ color: 'var(--text)' }}>금융감독원장이 정하는 시행세칙</strong>이라는 점이 인용 시 자주 헷갈리는 부분이고,
             2026년 7월 기준 현행 세칙(시행 2026.6.30)에도 같은 값이 그대로 실려 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -402,6 +403,6 @@ export default function DsrPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

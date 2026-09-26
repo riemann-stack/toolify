@@ -6,6 +6,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/auction',
@@ -67,7 +68,7 @@ const FAQ_LD = [
 
 export default function AuctionPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/auction">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -102,7 +103,7 @@ export default function AuctionPage() {
       {/* 2. 부대비용 10대 항목 */}
       <h2 style={sectionTitle}>💵 경매 부대비용 어디까지 들어가나요? (10대 항목)</h2>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
@@ -408,6 +409,6 @@ export default function AuctionPage() {
           </p>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

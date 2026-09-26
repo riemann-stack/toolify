@@ -11,6 +11,7 @@ import {
   INSURANCE_RATES, PENSION_BASE_CURRENT, previousPensionBase, pensionBasePeriodLabel,
   WORKERS_COMP_INDUSTRIES, WORKERS_COMP_COMMUTE_PERMILLE, WAGE_CLAIM_LEVY_PERMILLE,
 } from '@/lib/krInsuranceRates'
+import ToolPage from '@/components/ToolPage'
 
 const R26 = INSURANCE_RATES[2026]
 
@@ -59,7 +60,7 @@ const FAQ_LD = [
 
 export default function FourInsurancePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/4-insurance">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -83,10 +84,10 @@ export default function FourInsurancePage() {
 
         {/* ── 1. 2026 요율 한눈에 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             2026년 4대보험 요율 한눈에 보기
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -122,7 +123,7 @@ export default function FourInsurancePage() {
 
         {/* ── 2. 2026 변경사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             2026년 4대보험 변경사항
           </h2>
           <div style={{
@@ -148,7 +149,7 @@ export default function FourInsurancePage() {
 
         {/* ── 3. 보험별 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             보험별 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -169,7 +170,7 @@ export default function FourInsurancePage() {
 
         {/* ── 4. 직원 1명 채용 시 회사 부담 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 className="g-h2">
             직원 1명 채용 시 회사 실제 부담
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.6 }}>
@@ -209,7 +210,7 @@ export default function FourInsurancePage() {
 
         {/* ── 5. 두루누리 지원 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             두루누리 사회보험료 지원
           </h2>
           <div style={{
@@ -237,7 +238,7 @@ export default function FourInsurancePage() {
 
         {/* ── 6. 알바 의무 가입 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             알바 4대보험 의무 가입 기준
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -262,7 +263,7 @@ export default function FourInsurancePage() {
 
         {/* ── 7. 프리랜서 vs 4대보험 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             프리랜서 3.3% vs 근로자 4대보험 차이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -306,7 +307,7 @@ export default function FourInsurancePage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -327,7 +328,7 @@ export default function FourInsurancePage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -361,6 +362,6 @@ export default function FourInsurancePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

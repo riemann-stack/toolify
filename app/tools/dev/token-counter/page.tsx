@@ -6,6 +6,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { MODELS, PRICE_CHECKED, fmtContext } from './tokenCounterData'
+import ToolPage from '@/components/ToolPage'
 
 const fmtPrice = (n: number) => `$${n.toFixed(2)}`
 
@@ -67,7 +68,7 @@ const FAQ_LD = [
 
 export default function TokenCounterPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/dev/token-counter">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />AI 프롬프트 토큰 카운터
@@ -93,7 +94,7 @@ export default function TokenCounterPage() {
         {/* 1. 토큰이란? */}
         <section>
           <h2 style={sectionTitle}>토큰(token)이란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             LLM은 문자가 아닌 <strong style={{ color: 'var(--text)' }}>토큰</strong>이라는 단위로 텍스트를 처리합니다. 한 토큰은
             영문 기준 약 <strong style={{ color: 'var(--text)' }}>4글자(¾ 단어)</strong>에 해당하며, 한국어는 한 음절이
             대략 <strong style={{ color: 'var(--text)' }}> 1~1.5 토큰</strong>으로 쪼개집니다(모델마다 다름). 모델 가격·컨텍스트 한도·응답 속도가 모두 토큰 단위로 매겨지므로
@@ -117,7 +118,7 @@ export default function TokenCounterPage() {
         {/* 2. 모델별 한도·가격 */}
         <section>
           <h2 style={sectionTitle}>모델별 컨텍스트 한도·가격 ({PRICE_CHECKED} 점검)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -149,7 +150,7 @@ export default function TokenCounterPage() {
         {/* 3. 한국어 토큰 효율 */}
         <section>
           <h2 style={sectionTitle}>한국어 토큰 효율 — 왜 영문보다 비쌀까?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             LLM 토크나이저는 영어 위주 코퍼스로 학습되어 <strong style={{ color: 'var(--text)' }}>한국어 음절을 더 잘게 쪼갭니다</strong>. 동일 의미를 표현해도
             한국어는 영문 대비 약 1.5~2배 토큰을 소비. 모델별 차이도 큽니다 — GPT-4o의 o200k_base는 이전 cl100k 대비 한국어를 30~40% 효율적으로 처리하며,
             Claude는 한국어가 가장 비효율적인 편입니다.
@@ -165,7 +166,7 @@ export default function TokenCounterPage() {
         {/* 4. 컨텍스트 윈도우 활용 */}
         <section>
           <h2 style={sectionTitle}>컨텍스트 윈도우(context window) 활용 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             모델이 한 번에 읽을 수 있는 토큰 수. 입력 + 출력 합산 한도로, 초과 시 오래된 메시지가 잘리거나 에러가 발생합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -230,6 +231,6 @@ export default function TokenCounterPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

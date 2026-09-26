@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/fight-weight',
@@ -63,7 +64,7 @@ const FAQ_LD = [
 
 export default function FightWeightPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/fight-weight">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
@@ -103,7 +104,7 @@ export default function FightWeightPage() {
 
         {/* ── 2. 종목별 체급 비교 (체중 70kg 기준) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             종목별 체급 비교 — 체중 69kg 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -129,7 +130,7 @@ export default function FightWeightPage() {
 
         {/* ── 3. 격투기 감량 3단계 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             격투기 감량의 3단계 완전 가이드
           </h2>
           <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: 'var(--radius-m)', padding: '12px 16px', marginBottom: 12, fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
@@ -168,7 +169,7 @@ export default function FightWeightPage() {
 
         {/* ── 4. 단체별 정책 비교표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             종목·단체별 감량·계체 정책 비교
           </h2>
           <div className="tableScroll">
@@ -205,7 +206,7 @@ export default function FightWeightPage() {
 
         {/* ── 4-1. 체중 1kg = 며칠? 감량 기간 추정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             감량 필요량별 권장 기간 — 한눈에 보기
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -246,7 +247,7 @@ export default function FightWeightPage() {
 
         {/* ── 4-2. 감량 단계별 영양 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             감량 단계별 영양·식단 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -298,7 +299,7 @@ export default function FightWeightPage() {
 
         {/* ── 4-3. 체급 선택 전략 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎯 체급 선택 전략 — 어떤 체급이 유리할까?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -339,7 +340,7 @@ export default function FightWeightPage() {
 
         {/* ── 5. 위험 사례 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             ⚠️ 위험한 감량 사례 — 경각심 환기
           </h2>
           <div style={{
@@ -372,7 +373,7 @@ export default function FightWeightPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -405,6 +406,6 @@ export default function FightWeightPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

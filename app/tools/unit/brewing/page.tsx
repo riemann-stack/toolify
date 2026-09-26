@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/brewing',
@@ -64,7 +65,7 @@ const FAQ_LD = [
 
 export default function BrewingPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/unit/brewing">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />양조 도수·당도 변환기
@@ -81,7 +82,7 @@ export default function BrewingPage() {
         {/* 1. 5종 스케일 개요 */}
         <section>
           <h2 style={sectionTitle}>5종 당도·비중 단위 — 언제 어떤 걸 쓰나</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -113,7 +114,7 @@ export default function BrewingPage() {
         {/* 2. ABV 계산 */}
         <section>
           <h2 style={sectionTitle}>ABV 계산 — 발효 도수의 정확한 산출</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             ABV(Alcohol By Volume)는 <strong style={{ color: 'var(--text)' }}>발효 전 비중(OG, Original Gravity)과 발효 후 비중(FG, Final Gravity)의 차이</strong>로 계산합니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -168,10 +169,10 @@ export default function BrewingPage() {
         {/* 4. 비중계 온도 보정 */}
         <section>
           <h2 style={sectionTitle}>비중계 온도 보정 — 교정 온도와 시료 온도가 다를 때</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             비중계는 <strong style={{ color: 'var(--text)' }}>교정 온도에서만 정확</strong>합니다. 최근 제품은 대부분 20°C, 구형·수입품은 15.6°C(60°F) 교정이며 내부 스케일 종이에 표기되어 있습니다. 시료가 교정 온도보다 따뜻하면 밀도가 낮아져 실제보다 낮게 읽히고, 차가우면 반대입니다. 아래 보정값을 읽은 값에 그대로 더하세요(음수면 빼기).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -210,7 +211,7 @@ export default function BrewingPage() {
         {/* 5. 굴절계 FG 보정 워크스루 */}
         <section>
           <h2 style={sectionTitle}>발효 후 굴절계 보정 — Sean Terrill 공식 워크스루</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             굴절계는 알코올이 생기면 실제보다 높게 읽으므로, 굴절계만으로 발효 후 도수를 구하려면 보정식이 필요합니다. <strong style={{ color: 'var(--text)' }}>발효 전 12.5 Brix, 발효 후 6.0 Brix</strong>로 측정한 맥주를 예로 순서대로 계산하면:
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -255,7 +256,7 @@ export default function BrewingPage() {
         {/* 5b. 공식·출처 */}
         <section>
           <h2 style={sectionTitle}>계산식·표준 출처</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 환산·계산은 아래 공개 표준·논문을 근거로 합니다. 상업 표기·규격 판정은 원문 확인이 우선입니다.
           </p>
           <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 2.0 }}>
@@ -297,6 +298,6 @@ export default function BrewingPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

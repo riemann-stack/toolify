@@ -7,6 +7,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import { MORSE_EN, MORSE_KO, NATO } from './morseData'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/morse-code',
@@ -60,7 +61,7 @@ const FAQ_LD = [
 
 export default function MorseCodePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/art/morse-code">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />모스 부호 · NATO 변환기
@@ -258,6 +259,6 @@ export default function MorseCodePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

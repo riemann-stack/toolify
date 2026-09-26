@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/gpa-converter',
@@ -63,7 +64,7 @@ const FAQ_LD = [
 
 export default function GpaConverterPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/edu/gpa-converter">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />학점(GPA) 환산기
@@ -80,10 +81,10 @@ export default function GpaConverterPage() {
         {/* 1. 한국 vs 미국 vs 영국 */}
         <section>
           <h2 style={sectionTitle}>한국 ↔ 미국 ↔ 영국 학점 체계 비교</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             국가마다 학점·등급 표기가 달라 단순 비례 환산만으로는 부정확할 수 있습니다. 주요 3개 체계의 차이는 다음과 같습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -153,7 +154,7 @@ export default function GpaConverterPage() {
         {/* 3. 영국 학위 등급 */}
         <section>
           <h2 style={sectionTitle}>영국 학위 등급 (Honours classification)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             영국 학사 학위는 백분율 기반으로 4단계 등급이 매겨집니다. 영국 대학원 지원 시 본인의 한국 학점이 어느 등급에 해당하는지 미리 알아두면 유리합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10 }}>
@@ -216,6 +217,6 @@ export default function GpaConverterPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

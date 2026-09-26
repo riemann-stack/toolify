@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/capo',
@@ -31,7 +32,7 @@ const FAQ_LD = [
 
 export default function CapoPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/art/capo">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />기타 카포 계산기
@@ -47,10 +48,10 @@ export default function CapoPage() {
 
         {/* ── 1. 카포란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             카포(Capo)란 무엇인가?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             카포(Capo)는 기타·우쿨렐레 등 프렛 악기의 특정 프렛에 끼워 <strong style={{ color: 'var(--text)' }}>모든 현을 동시에 높이 조율하는 장치</strong>입니다.
             카포를 1프렛에 끼우면 모든 현이 반음 올라가고, 3프렛에 끼우면 단3도 올라갑니다.
             쉬운 코드 모양을 유지하면서 다른 키로 이조할 수 있어 기타 편곡의 핵심 도구입니다.
@@ -83,13 +84,13 @@ export default function CapoPage() {
 
         {/* ── 2. 카포 위치별 코드 변환 예시 (C키 기준) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             카포 위치별 코드 변환 — C키 기준
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             같은 C키 곡이라도 카포 위치에 따라 잡는 코드 모양과 난이도가 완전히 달라집니다. 아래는 C키 곡을 카포별로 어떻게 연주할 수 있는지 정리한 표입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -122,7 +123,7 @@ export default function CapoPage() {
 
         {/* ── 3. 오픈 코드 vs 바레 코드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             오픈 코드 vs 바레 코드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
@@ -151,10 +152,10 @@ export default function CapoPage() {
 
         {/* ── 4. 자주 쓰는 키별 추천 카포 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 쓰는 키별 추천 카포 위치
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -192,17 +193,17 @@ export default function CapoPage() {
 
         {/* ── 5. 통기타 애창곡 실전 카포 사례 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             통기타 애창곡 실전 카포 사례
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             악보 사이트에서 통용되는 편곡 기준으로, 통기타로 많이 연주되는 곡들의 원곡 키와 카포 위치를 정리했습니다.
             플랫(♭) 계열 키(B♭·E♭·A♭)의 곡은 오픈 코드 모양이 없어 — 바레·부분 보이싱으로 칠 수는 있지만 — 오픈 코드 위주의 통기타 편곡에서는 카포 사용이 표준이고,
             벚꽃 엔딩(A장조)처럼 샤프 키 곡도 실음 첫 코드가 Bm7이라 카포 2 + G키 모양으로 치는 편곡이 표준입니다.
             모양 키는 편곡의 첫 코드가 아니라 <strong style={{ color: 'var(--text)' }}>다이아토닉 코드 세트 기준</strong>입니다 —
             밤편지 편곡은 F로 시작하지만 F·G·Em·Am·Dm은 C키 세트라 &lsquo;C키 모양&rsquo;입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -237,15 +238,15 @@ export default function CapoPage() {
 
         {/* ── 6. 카포 종류별 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             카포 종류별 비교 — 스프링·스크류·롤링·파셜
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             카포는 장착 방식에 따라 속도와 튜닝 안정성이 크게 달라집니다.
             스프링(트리거)식은 한 손으로 가장 빠르게 옮길 수 있지만 압력이 고정이라 세게 눌리면 음이 샤프(♯)하게 뜰 수 있고,
             스크류식은 느린 대신 나사로 압력을 미세 조절할 수 있어 튜닝이 가장 안정적입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -279,10 +280,10 @@ export default function CapoPage() {
 
         {/* ── 7. 남성 키 ↔ 여성 키 전환 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             남성 키 ↔ 여성 키 전환 — 카포 역산 3단계
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             같은 곡도 남성·여성 보컬의 음역이 달라 키를 옮겨 부르는 경우가 많습니다.
             몇 키를 옮길지 정해진 표준은 없으며, <strong style={{ color: 'var(--text)' }}>통상 3~5키(반음) 범위에서 곡과 본인 음역대에 맞춰 조정</strong>하는 것이 일반적입니다.
             노래방 반주기의 키 조절 1단계(&lsquo;한 키&rsquo;)는 반음 1개입니다. 키를 정한 뒤에는 아래 순서로 카포를 역산하면 익숙한 코드 모양을 그대로 쓸 수 있습니다.
@@ -317,7 +318,7 @@ export default function CapoPage() {
 
         {/* ── 9. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기',      desc: '내 음역대 측정 → 부르기 편한 키 결정' },
@@ -341,6 +342,6 @@ export default function CapoPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

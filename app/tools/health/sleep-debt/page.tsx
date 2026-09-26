@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/sleep-debt',
@@ -62,7 +63,7 @@ const FAQ_LD = [
 
 export default function SleepDebtPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/health/sleep-debt">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />수면 부채 트래커
@@ -88,11 +89,11 @@ export default function SleepDebtPage() {
         {/* 1. 수면 부채란? */}
         <section>
           <h2 style={sectionTitle}>수면 부채(Sleep Debt)란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             수면 부채는 <strong style={{ color: 'var(--text)' }}>본인의 권장 수면량 대비 부족한 시간이 누적된 양</strong>입니다.
             예: 매일 8시간 필요한데 7시간만 자면 1시간씩 부채가 쌓여, 일주일이면 7시간 부채.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             짧은 기간의 부채도 며칠 몰아 잔다고 곧바로 100% 회복되지는 않습니다 — Belenky et al.(2003)은 수면을 제한한 뒤 <strong style={{ color: 'var(--text)' }}>제한된 회복 기간 안에서는 수행능력이 완전히 돌아오지 않았다</strong>고 보고했습니다.
             또한 <strong style={{ color: 'var(--text)' }}>만성적인 수면 부족은 장기적으로 인지 저하·치매·심혈관·대사 질환 위험 증가와 연관</strong>된다고 알려져 있습니다. 다만 &ldquo;1개월이면 영구 손상&rdquo;처럼 특정 시점을 경계로 단정할 근거는 분명치 않으므로, 정확한 시점보다 <strong style={{ color: 'var(--text)' }}>만성화 전 꾸준한 회복</strong>이 중요합니다.
           </p>
@@ -311,6 +312,6 @@ export default function SleepDebtPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -7,6 +7,7 @@ import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/military',
@@ -65,7 +66,7 @@ const FAQ_LD = [
 
 export default function MilitaryPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/date/military">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />군대 전역일 계산기
@@ -96,10 +97,10 @@ export default function MilitaryPage() {
 
         {/* ── 2. 복무 기간·형태 통합표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             2026년 기준 병역 복무 형태 한눈에 보기
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             본 계산기가 지원하는 10가지 복무 형태입니다. 육·해·공·해병대 현역 기간은 <strong style={{ color: 'var(--text)' }}>국방개혁 2.0</strong>에 따라
             2018년 10월 1일 전역자부터 2주 단위로 1일씩 점진 단축되어 <strong style={{ color: 'var(--text)' }}>2021년 12월 14일에 완료</strong>됐습니다.
             병무청 「병역이행안내」의 복무제도 분류는 이보다 넓어 예술체육요원·승선근무예비역·공중보건의사 등도 포함합니다(본 계산기는 미지원 — 직접 입력을 쓰세요).
@@ -143,7 +144,7 @@ export default function MilitaryPage() {
 
         {/* ── 3. 군 복무 마일스톤 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎯 군 복무 주요 마일스톤 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
@@ -166,10 +167,10 @@ export default function MilitaryPage() {
 
         {/* ── 4. 휴가·징계와 전역일 영향 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             무엇이 전역일을 바꾸나 — 휴가·징계·병가
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             현역병의 전역일은 <strong style={{ color: 'var(--text)' }}>입영일 + 복무기간</strong>으로 고정됩니다. 이를 바꾸는 사유는
             「병역법」 제18조제3항이 <strong style={{ color: 'var(--text)' }}>딱 세 가지만 한정해서 열거</strong>하고 있고, 셋 다 복무기간에
             산입되지 않아 <strong style={{ color: 'var(--text)' }}>전역일이 그만큼 뒤로 밀립니다</strong>. 전역일을 앞당기는 조항은 병역법에 없습니다.
@@ -225,10 +226,10 @@ export default function MilitaryPage() {
 
         {/* ── 5. 계급 진급 시점 (육군 18개월 기준) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎖️ 현역병 계급 진급 시점
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             근거는 <strong style={{ color: 'var(--text)' }}>「군인사법 시행규칙」 제32조</strong>(병의 진급 등)입니다. 최저복무기간이 지나면
             <strong style={{ color: 'var(--text)' }}> 진급심사를 거쳐</strong> 1계급씩 진급합니다(제1항, 2024-02-29 개정 — 이전에는 심사 없이 진급했습니다).
             같은 조 제2항의 표에는 <strong style={{ color: 'var(--text)' }}>군별 구분이 없어</strong> 육·해·공·해병대의 진급 시점이 같습니다.
@@ -281,10 +282,10 @@ export default function MilitaryPage() {
 
         {/* ── 5-1. 한국 군 복무 기간 단축 역사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             📜 한국 군 복무 기간 단축 역사
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             육군 기준 복무 기간은 6·25 직후 36개월에서 시작해 현재 <strong style={{ color: 'var(--text)' }}>18개월</strong>까지 줄었습니다.
             다만 <strong style={{ color: 'var(--text)' }}>단조 감소가 아닙니다</strong> — 1968년 1·21 사태 직후에는 오히려 연장됐습니다.
           </p>
@@ -322,7 +323,7 @@ export default function MilitaryPage() {
 
         {/* ── 6. 직접 계산 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             전역일 직접 계산 공식
           </h2>
           <div style={{
@@ -369,7 +370,7 @@ export default function MilitaryPage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -415,6 +416,6 @@ export default function MilitaryPage() {
         </Disclaimer>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

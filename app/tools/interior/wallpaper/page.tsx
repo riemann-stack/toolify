@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/wallpaper',
@@ -55,7 +56,7 @@ const FAQ_LD = [
 
 export default function WallpaperPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/interior/wallpaper">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
@@ -81,7 +82,7 @@ export default function WallpaperPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             도배 소요량 핵심 공식
           </h2>
           <div style={{
@@ -108,7 +109,7 @@ export default function WallpaperPage() {
 
         {/* ── 2. 벽지 종류별 표준 사이즈 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 벽지 종류별 표준 사이즈
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -131,13 +132,13 @@ export default function WallpaperPage() {
 
         {/* ── 3. 평수별 빠른 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             평수별 벽지 롤 수 빠른 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             천장 2.4m, 창문·문 1개씩, 10% 로스율, 실크벽지, <strong style={{ color: 'var(--text)' }}>한 공간(정사각형) 기준</strong> — 계산기 [간편 계산]과 동일 기준입니다. [천장 포함] 열은 같은 조건에 천장 면적(≈바닥 면적)을 더해 계산한 값입니다. 칸막이 벽이 많은 아파트 전체는 [상세 계산] 탭에서 방별로 합산하세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -171,7 +172,7 @@ export default function WallpaperPage() {
 
         {/* ── 3-1. 천장 포함 소요량 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             천장 도배 포함 시 소요량 계산
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.8 }}>
@@ -198,7 +199,7 @@ export default function WallpaperPage() {
 
         {/* ── 3-2. 포인트 벽 폭 수 계산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             포인트 벽(부분 도배) 폭 수 계산
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.8 }}>
@@ -216,7 +217,7 @@ export default function WallpaperPage() {
 
         {/* ── 4. 로스율 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎯 로스율(여유분) 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
@@ -249,7 +250,7 @@ export default function WallpaperPage() {
 
         {/* ── 5. 셀프 vs 전문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🛠️ 셀프 도배 vs 전문 시공
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -276,7 +277,7 @@ export default function WallpaperPage() {
 
         {/* ── 6. 부자재 체크리스트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             📋 도배 부자재 체크리스트
           </h2>
           <div style={{
@@ -313,7 +314,7 @@ export default function WallpaperPage() {
 
         {/* ── 7. 도배 시기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🗓️ 도배 시기 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
@@ -342,7 +343,7 @@ export default function WallpaperPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -374,6 +375,6 @@ export default function WallpaperPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

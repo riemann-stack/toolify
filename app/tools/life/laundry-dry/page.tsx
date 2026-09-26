@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { KRW_PER_KWH, KEPCO_RATES_ASOF, KEPCO_RESIDENTIAL_LOW_TIERS } from './laundryUtils'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/laundry-dry',
@@ -38,7 +39,7 @@ const FAQ_LD = [
 
 export default function LaundryDryPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/laundry-dry">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />빨래 건조 시간 계산기
@@ -54,7 +55,7 @@ export default function LaundryDryPage() {
 
         {/* ── 1. 핵심 4요소 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             건조에 영향을 주는 4가지 핵심 요소
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -74,13 +75,13 @@ export default function LaundryDryPage() {
 
         {/* ── 2. 소재별·의류별 평균 건조 시간표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             소재별·의류별 평균 건조 시간
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
             기준 조건(계산기 기본값): 베란다·간접광, 온도 18°C, 습도 60%, 바람 약함, 탈수·간격 보통. 조건을 바꾸면 위 계산기가 더 정밀하게 산출합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -113,13 +114,13 @@ export default function LaundryDryPage() {
 
         {/* ── 3. 환경별 건조 속도 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             환경별 건조 속도 비교
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
             동일 조건 기준: 면 티셔츠, 탈수 보통, 간격 보통
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -149,7 +150,7 @@ export default function LaundryDryPage() {
 
         {/* ── 4. 장마·겨울 실내 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             장마철·겨울 실내 건조 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
@@ -176,7 +177,7 @@ export default function LaundryDryPage() {
 
         {/* ── 5. 빨리 말리는 법 TOP 7 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             빨래 빨리 말리는 법 TOP 7
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -208,13 +209,13 @@ export default function LaundryDryPage() {
 
         {/* ── 6. 한국 장비별 효과 비교 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             한국 가정 장비별 효과 & 전력 비교
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [최단 조합 추천] 탭에서 보유 장비를 체크하면 모든 조합(2<sup>N</sup>개)을 평가해 가장 효율적인 조합을 자동 추천합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -252,13 +253,13 @@ export default function LaundryDryPage() {
 
         {/* ── 7. 한국 전기료 누진제 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             한국 전기료 누진제 영향
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구는 기본요금·기후환경요금·부가세 등을 모두 합친 가구 평균 약 <strong style={{ color: 'var(--text)' }}>{KRW_PER_KWH}원/kWh</strong>로 전기료를 추정합니다. 실제 요금은 누진 단계에 따라 큰 차이가 납니다. 아래는 한전 주택용(저압) 구간별 전력량요금입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -289,10 +290,10 @@ export default function LaundryDryPage() {
 
         {/* ── 8. 욕실 건조 가이드 (NEW, 한국 핵심) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🚿 욕실 빨래 건조 가이드 (한국 가정 인기 방법)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국 가정에서 흔한 욕실 건조법. 작은 공간 + 환풍기 효율로 시간 25% 단축 효과. 단, 곰팡이 주의가 필수입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
@@ -324,7 +325,7 @@ export default function LaundryDryPage() {
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/pomodoro',    icon: '🍅', name: '뽀모도로 타이머',  desc: '건조 시간 동안 집중 작업' },
@@ -347,6 +348,6 @@ export default function LaundryDryPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

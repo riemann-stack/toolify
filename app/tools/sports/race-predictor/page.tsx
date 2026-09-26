@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/race-predictor',
@@ -80,7 +81,7 @@ const FAQ_LD = [
 
 export default function RacePredictorPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/sports/race-predictor">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />마라톤 기록 계산기
@@ -148,7 +149,7 @@ export default function RacePredictorPage() {
 
       {/* 3. 환경 자동 보정 (NEW) */}
       <h2 style={sectionTitle}>🌡️ 환경 자동 보정 — 대회 당일은 평시와 다릅니다</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         본 도구의 <strong style={{ color: 'var(--text)' }}>환경 보정</strong> 체크박스를 켜면 기온·습도·고도 슬라이더로 즉시 보정된 기록을 확인할 수 있습니다. 봄·가을 평시 기록과 한여름 대회 기록은 같은 능력에서도 5~10% 차이 납니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -184,7 +185,7 @@ export default function RacePredictorPage() {
 
       {/* 4. 목표 역산 (NEW) */}
       <h2 style={sectionTitle}>🎯 목표 ↔ 필요 능력 역산 — 어디까지 가야 할까</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         도구의 <strong style={{ color: 'var(--text)' }}>목표 역산 탭</strong>에서 풀 마라톤 목표 시간을 넣으면, 그 능력에 도달하기 위한 5km·10km·하프 기록을 자동 계산합니다. 본인 현재 기록을 함께 입력하면 격차(VDOT 차)와 예상 향상 기간까지 보여줍니다.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -213,7 +214,7 @@ export default function RacePredictorPage() {
 
       {/* 5. 연령·성별 보정 */}
       <h2 style={sectionTitle}>👥 연령·성별 보정 가이드 — 같은 능력도 평가는 다릅니다</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         WMA(World Masters Athletics) 통계 평균을 기준으로, 본 도구의 연령·성별 보정 옵션은 본인 기록을 동급 능력의 20대 남성 환산 시간으로 비교 표시합니다. 통계 평균이며 개인차 큼 — 꾸준한 훈련 = 연령 극복 가능.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -407,6 +408,6 @@ export default function RacePredictorPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>다음 마라톤까지</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/jet-lag',
@@ -57,7 +58,7 @@ const FAQ_LD = [
 
 export default function JetLagPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/date/jet-lag">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />시차 적응 계산기
@@ -73,12 +74,12 @@ export default function JetLagPage() {
 
         {/* 1. 과학 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>시차 적응의 과학 — 왜 힘든가</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">시차 적응의 과학 — 왜 힘든가</h2>
+          <p className="g-p">
             인간의 뇌에는 약 <strong style={{ color: 'var(--text)' }}>24.2시간 주기</strong>로 작동하는 생체시계(서카디안 리듬)가 있습니다.
             어두워지면 <strong style={{ color: 'var(--text)' }}>멜라토닌</strong>이 분비돼 수면 신호를 보내고, 아침엔 <strong style={{ color: 'var(--text)' }}>코르티솔</strong>이 분비돼 각성 신호를 보냅니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             장거리 비행 뒤엔 이 두 호르몬의 분비 타이밍이 현지 시간과 어긋나면서 피로·불면·소화장애가 생깁니다.
             특히 <strong style={{ color: 'var(--accent)' }}>동쪽 이동(시계를 앞당김)이 서쪽 이동(시계를 늦춤)보다 힘든 이유</strong>는 생체시계가 24시간보다 약간 길기 때문입니다. 늘리는 건 쉽지만 줄이는 건 어렵습니다.
           </p>
@@ -86,8 +87,8 @@ export default function JetLagPage() {
 
         {/* 2. 여행지별 시차 표 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>인기 여행지별 시차 & 적응 기간</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">인기 여행지별 시차 & 적응 기간</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -128,7 +129,7 @@ export default function JetLagPage() {
 
         {/* 3. 공식 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>시차 적응 핵심 공식</h2>
+          <h2 className="g-h2">시차 적응 핵심 공식</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { title: '적응 기간 (동쪽·앞당김)', formula: '위상이동 시간 ÷ 1시간/일 (예: 호놀룰루 5시간 앞당김 → 약 5일)' },
@@ -146,7 +147,7 @@ export default function JetLagPage() {
 
         {/* 4. 방향별 가이드 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이동 방향별 완전 가이드</h2>
+          <h2 className="g-h2">이동 방향별 완전 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ background: 'color-mix(in srgb, var(--cyan-600) 6%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-health)', marginBottom: '10px' }}>← 서쪽 이동 (미주·유럽)</p>
@@ -175,7 +176,7 @@ export default function JetLagPage() {
 
         {/* 5. 단기 vs 장기 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>단기 출장 vs 장기 여행 전략</h2>
+          <h2 className="g-h2">단기 출장 vs 장기 여행 전략</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>단기 출장 (2~3일)</p>
@@ -207,7 +208,7 @@ export default function JetLagPage() {
 
         {/* 7. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',      emoji: '📅', name: 'D-Day 계산기', desc: '여행 출발 D-day·기간' },
@@ -226,6 +227,6 @@ export default function JetLagPage() {
           </div>
         </div>
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/tap-tempo',
@@ -27,7 +28,7 @@ const FAQ_LD = [
 
 export default function TapTempoPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/art/tap-tempo">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />탭 템포 계산기
@@ -43,10 +44,10 @@ export default function TapTempoPage() {
 
         {/* ── 1. BPM이란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             BPM이란?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             BPM(Beats Per Minute)은 1분에 몇 번의 박이 있는지를 나타내는 음악 템포 단위입니다.
             BPM 120은 1초에 2박(= 500ms 간격), BPM 60은 1초에 1박(= 1000ms 간격)입니다.
             이 계산기는 탭한 간격의 <strong style={{ color: 'var(--text)' }}>평균값</strong>으로 BPM을 계산합니다.
@@ -65,16 +66,16 @@ export default function TapTempoPage() {
 
         {/* ── 2. 템포 용어표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             이탈리아어 템포 용어 표
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             클래식 악보에서 자주 보이는 템포 지시어와 해당 BPM 범위입니다.
             템포 용어에는 단일 표준이 없어 <strong style={{ color: 'var(--text)' }}>구간이 자료마다 다르고 서로 겹칩니다</strong>
             (예: Grave와 Largo의 40~45 구간). 실제로는 작곡가·지휘자에 따라 더 유연하게 해석됩니다.
             아래 계산기 배지는 이 표를 비겹침 경계로 단순화해 분류합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -109,10 +110,10 @@ export default function TapTempoPage() {
 
         {/* ── 3. 장르별 BPM ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             장르별 대표 BPM 범위 — 측정값 검증용
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             탭으로 측정한 BPM이 장르의 통상 범위에서 크게 벗어난다면(특히 절반·2배) 강박을 잘못 잡았을 가능성이 큽니다.
             장르별 곡 느낌과 함께 탭 기준을 어디에 두면 좋은지 정리했습니다.
           </p>
@@ -143,15 +144,15 @@ export default function TapTempoPage() {
 
         {/* ── 4. K-POP 실측 BPM 앵커 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             K-POP 실측 BPM 앵커 — 아는 곡으로 검증하기
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             장르 범위표만으로 감이 안 잡히면 이미 아는 곡을 틀어 놓고 탭한 뒤, 공개된 BPM과 비교해 보세요.
             탭 결과가 표의 값과 ±2 이내면 강박을 제대로 잡은 것이고, 절반이나 2배가 나오면 하프타임·더블타임 문제입니다.
             아래 수치는 <a href="https://tunebat.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>Tunebat</a>·<a href="https://songbpm.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)' }}>SongBPM</a> 등 공개 BPM 데이터베이스 기준(2026-07 확인)으로, 분석 소스에 따라 ±1 BPM 정도 차이가 날 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -187,7 +188,7 @@ export default function TapTempoPage() {
 
         {/* ── 5. 사용 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             정확한 BPM 측정 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -209,21 +210,21 @@ export default function TapTempoPage() {
 
         {/* ── 6. 러닝 케이던스 ↔ BPM ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             러닝 케이던스(spm) ↔ BPM 매칭
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             러닝 케이던스는 분당 걸음 수(spm)로, BPM과 구조가 같은 단위입니다. 러닝머신에서 발이 닿는 순간마다(양발 모두) 탭하면
             측정값이 그대로 내 케이던스가 됩니다. 한쪽 발만 세어 탭했다면 2배 하세요.
             흔히 말하는 &lsquo;이상적 케이던스 180&rsquo;은 잭 대니얼스 코치가 1984년 올림픽 장거리 선수들을 관찰한 데서 나온
             벤치마크일 뿐 절대 규칙이 아니며, 일반 러너는 편한 페이스에서 155~175spm대가 흔합니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             선곡은 두 가지 방법이 있습니다. 케이던스와 같은 BPM 곡에 한 박 = 한 걸음을 맞추는 <strong style={{ color: 'var(--text)' }}>정박 매칭</strong>이 기본이지만,
             170~180 BPM 곡은 주류 음악에 드뭅니다. 대신 <strong style={{ color: 'var(--text)' }}>절반 BPM(85~90) 곡에 한 박당 두 걸음</strong>을
             맞추는 더블타임 활용법을 쓰면 발라드·힙합까지 선곡 폭이 크게 넓어집니다. 85 BPM × 2 = 170spm으로 효과는 동일합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -262,7 +263,7 @@ export default function TapTempoPage() {
 
         {/* ── 8. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/bpm',         icon: '🎛️', name: 'BPM 딜레이 계산기',   desc: '측정한 BPM으로 음표별 딜레이 ms 계산' },
@@ -286,6 +287,6 @@ export default function TapTempoPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/vo2max',
@@ -83,7 +84,7 @@ const FAQ_LD = [
 
 export default function VO2MaxPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/sports/vo2max">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />VO₂ Max 계산기
@@ -100,11 +101,11 @@ export default function VO2MaxPage() {
         {/* 1. VO2max란? */}
         <section>
           <h2 style={sectionTitle}>VO₂ Max란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             VO₂ Max(최대 산소 섭취량)는 <strong style={{ color: 'var(--text)' }}>운동 중 1분에 체중 1kg당 흡수할 수 있는 산소량(mL/kg/min)</strong>입니다.
             심폐 체력의 <strong style={{ color: 'var(--text)' }}>객관적 단일 지표</strong>로, 러닝·사이클·수영 등 지구력 종목의 잠재력을 결정합니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             높은 VO₂max는 단순히 운동 능력뿐 아니라 <strong style={{ color: 'var(--text)' }}>심혈관 질환·당뇨·전체 사망률을 낮추는 가장 강력한 단일 예측 인자</strong>로 알려져 있으며 (Mandsager 2018, JAMA Network Open 등), 치매 위험과의 연관도 보고됩니다.
           </p>
         </section>
@@ -113,7 +114,7 @@ export default function VO2MaxPage() {
         <section>
           <h2 style={sectionTitle}>6가지 측정 방법 비교</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '560px' }}>
                 <thead>
                   <tr>
@@ -184,7 +185,7 @@ export default function VO2MaxPage() {
           {/* 남성 */}
           <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>♂ 남성</p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '13px' }}>
                 <thead>
                   <tr>
@@ -210,7 +211,7 @@ export default function VO2MaxPage() {
           {/* 여성 */}
           <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', margin: '20px 0 8px' }}>♀ 여성</p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px', fontSize: '13px' }}>
                 <thead>
                   <tr>
@@ -434,6 +435,6 @@ export default function VO2MaxPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -9,6 +9,7 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { todayStr } from '@/lib/date'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/salary',
@@ -85,7 +86,7 @@ const FAQ_LD = [
 
 export default function SalaryPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/salary">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -106,17 +107,17 @@ export default function SalaryPage() {
 
         {/* ── 1. 연봉 실수령액 표 (SEO 핵심) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             연봉 실수령액 표
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '8px' }}>
+          <p className="g-p">
             부양가족 1인(본인만)·비과세 없는 순수 급여 기준 <strong style={{ color: 'var(--text)' }}>2026년</strong> 연봉별 실수령액(1,800만~2억). 국민연금·건강보험·장기요양·고용보험·근로소득세를 모두 반영했습니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--accent)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span>💡</span>
             표에 없는 연봉, 부양가족·자녀·비과세 조건은 상단 계산기에서 직접 확인하세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -147,13 +148,13 @@ export default function SalaryPage() {
 
         {/* ── 2. 4대보험 요율 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             근로자 4대보험 요율 및 변경사항 총정리
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             2026년에는 국민연금 보험료율이 1998년 이후 28년 만에 인상되고 건강보험·장기요양보험 요율도 조정되었습니다.
           </p>
-          <div style={{ overflowX: 'auto', marginBottom: '8px' }}>
+          <div className="tableScroll" style={{ marginBottom: '8px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -196,8 +197,8 @@ export default function SalaryPage() {
 
         {/* ── 3. 비과세 항목 (기존 유지·확장) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>주요 비과세 급여 항목</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <h2 className="g-h2">주요 비과세 급여 항목</h2>
+          <p className="g-p">
             비과세 수당은 4대보험료와 근로소득세 산정 기준에서 제외됩니다.
             <strong style={{ color: 'var(--text)' }}> 월 60만원 비과세(식대·자가운전·육아) 적용 시 연 약 170만원 실수령 ↑</strong>이 가능합니다 (연봉 4,000만 기준).
           </p>
@@ -221,14 +222,14 @@ export default function SalaryPage() {
 
         {/* ── 4. 소득세 누진 구간 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             소득세 (근로소득 간이세액표) — 누진 구간
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <p className="g-p">
             국세청이 매년 발표하는 간이세액표 기반 매월 원천징수 → 연말정산으로 정산.
             과세표준에 따라 6~45% 누진 세율이 적용되며, 지방소득세는 소득세의 10%가 별도 부과됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -264,13 +265,13 @@ export default function SalaryPage() {
 
         {/* ── 5. 월 실수령 역산 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             월 실수령 역산 — 연봉 협상 활용
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>&lsquo;월 300만원 받으려면 연봉 얼마?&rsquo;</strong> — 1인 가구·식대 미적용 기준 추정 —
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -297,10 +298,10 @@ export default function SalaryPage() {
 
         {/* ── 6. 시급·체감 시급 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             시급·체감 시급
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>세전 시급</strong> = 연봉 ÷ (12개월 × 209시간) — 한국 표준은 주 40시간 + 주휴 포함 209시간/월. 연봉 4,000만원 기준 약 16,000원.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -323,13 +324,13 @@ export default function SalaryPage() {
 
         {/* ── 7. 연봉별 실수령률 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             연봉별 실수령률 — 누진 구조
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             세전 대비 실수령률은 누진 세율로 고연봉일수록 낮아집니다 (1인 가구·식대 미적용 추정).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -353,10 +354,10 @@ export default function SalaryPage() {
 
         {/* ── 8. 한국 직장인 연봉 분포 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             한국 직장인 연봉 분포 — 국세청 2024년 귀속 기준
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <p className="g-p">
             국세청이 2025년 12월 공표한 <strong style={{ color: 'var(--text)' }}>2024년 귀속 연말정산 국세통계</strong> 기준, 연말정산 신고 근로자 2,108만명의 1인당 평균 총급여는 <strong style={{ color: 'var(--text)' }}>4,475만원</strong>입니다.
             반면 중위값은 약 3,400만원으로 평균보다 1,000만원 이상 낮습니다 — 상위 1%(21.1만명) 평균이 3억4,630만원, 최상위 0.1% 구간 평균이 9억9,937만원에 이를 만큼 상위 소득이 평균을 끌어올리는 구조라, 연봉이 &lsquo;평균 이하&rsquo;여도 전체 근로자의 절반보다 높을 수 있습니다.
           </p>
@@ -401,7 +402,7 @@ export default function SalaryPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',    desc: '월 실수령으로 감당 가능한 대출' },
@@ -427,6 +428,6 @@ export default function SalaryPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

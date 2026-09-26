@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/cycle',
@@ -60,7 +61,7 @@ const FAQ_LD = [
 
 export default function CyclePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/health/cycle">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />생리주기·배란일 계산기
@@ -84,7 +85,7 @@ export default function CyclePage() {
 
       {/* 1. 4 phase 가이드 */}
       <h2 style={sectionTitle}>🌙 4단계 phase 가이드 (생리주기 변화)</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         평균 28일 주기 기준 — 4단계로 컨디션·호르몬·체감이 자연스럽게 순환합니다 (개인차 큼).
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -161,7 +162,7 @@ export default function CyclePage() {
 
       {/* 4. PMS 일반 가이드 */}
       <h2 style={sectionTitle}>💆 PMS·생리전증후군 일반 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         PMS(Premenstrual Syndrome)는 생리 시작 1주~수일 전부터 나타나는 신체·정서 변화. 가임기 여성의 75% 정도가 경험.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -280,6 +281,6 @@ export default function CyclePage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>생리·검진 일정</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

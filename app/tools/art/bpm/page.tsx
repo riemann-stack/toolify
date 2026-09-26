@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/bpm',
@@ -42,7 +43,7 @@ export default async function BpmPage({
   /* 소수 1자리 보존 — FAQ가 소수 BPM 지원을 명시하고 탭 템포 연동값도 소수일 수 있음 (정수 반올림 금지) */
   const initialBpm = parsed >= 1 && parsed <= 300 ? String(Math.round(parsed * 10) / 10) : '120'
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/art/bpm">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />BPM 딜레이 계산기
@@ -58,10 +59,10 @@ export default async function BpmPage({
 
         {/* ── 1. 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             BPM 딜레이 타임 계산 공식
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             BPM(Beats Per Minute)은 1분당 박자 수를 나타냅니다. 딜레이 타임(ms)은 60,000을 BPM으로 나누어 구하며,
             음표의 종류에 따라 추가로 나눕니다. 점음표(dotted)는 ×1.5, 셋잇단음표(triplet)는 ×⅔를 곱합니다.
           </p>
@@ -91,14 +92,14 @@ export default async function BpmPage({
 
         {/* ── 1-1. 음표값 전체 딜레이 타임 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             음표값별 딜레이 타임 전체 표 (BPM 120 기준)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             기본값은 <strong style={{ color: 'var(--text)' }}>60,000 ÷ BPM × 배수</strong>(온음표 ×4, 2분음표 ×2, 4분음표 ×1, 8분음표 ×0.5, 16분음표 ×0.25, 32분음표 ×0.125)로 계산합니다.
             점음표는 기본값 ×1.5, 셋잇단음표는 기본값 ×⅔입니다. 아래는 BPM 120(4분음표 = 500ms) 기준 예시입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -134,14 +135,14 @@ export default async function BpmPage({
 
         {/* ── 2. 장르별 딜레이 설정 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             장르별 딜레이 타임 설정 참고표
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             장르의 통상 BPM 범위를 기준으로 자주 쓰는 딜레이 타임을 미리 계산한 표입니다(60,000 ÷ BPM × 배수).
             4분음표는 비트와 딱 맞는 기본 딜레이, 점8분음표(×0.75)는 핑퐁 딜레이 등에서 리듬감을 줄 때 많이 쓰는 설정입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -178,7 +179,7 @@ export default async function BpmPage({
 
         {/* ── 3. DAW 설정 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🎛️ DAW에서 딜레이·리버브 설정하는 법
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -200,14 +201,14 @@ export default async function BpmPage({
 
         {/* ── 3-1. 리버브 프리딜레이 통용 범위 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🌊 리버브 타입별 프리딜레이 통용 범위
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             프리딜레이는 공간이 클수록 길게 잡는 것이 일반적입니다. 아래는 해외 오디오 엔지니어링 가이드(iZotope·Loopmasters·eMastered, 2026-06 확인 기준)에서
             통용되는 범위로, 절대 규칙이 아닌 <strong style={{ color: 'var(--text)' }}>출발점</strong>으로 활용하고 곡의 템포·질감에 맞게 조정하는 것이 권장됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -239,10 +240,10 @@ export default async function BpmPage({
 
         {/* ── 3-2. BPM 동기화 활용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🔄 딜레이 외 BPM 동기화 활용법
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             60,000 ÷ BPM 공식으로 구한 ms 값은 딜레이뿐 아니라 시간 파라미터가 있는 거의 모든 이펙터에 응용할 수 있습니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -269,7 +270,7 @@ export default async function BpmPage({
 
         {/* ── 5. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/tap-tempo',   icon: '🥁', name: '탭 템포',             desc: '박자에 맞춰 탭해 BPM 즉시 측정' },
@@ -293,6 +294,6 @@ export default async function BpmPage({
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

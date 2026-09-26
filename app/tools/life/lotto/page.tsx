@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/lotto',
@@ -46,7 +47,7 @@ const FAQ_LD = [
 
 export default function LottoPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/life/lotto">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />로또 번호 생성기
@@ -62,11 +63,11 @@ export default function LottoPage() {
 
         {/* 1. 로또 6/45 당첨 확률 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>로또 6/45 당첨 확률</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">로또 6/45 당첨 확률</h2>
+          <p className="g-p">
             한국 로또는 1~45 중 6개 번호를 맞추는 게임입니다. 가능한 조합 수 = <code style={{ color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>C(45,6) = 8,145,060</code>가지.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -99,8 +100,8 @@ export default function LottoPage() {
 
         {/* 2. 8가지 모드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>8가지 번호 생성 모드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">8가지 번호 생성 모드</h2>
+          <p className="g-p">
             각 모드는 번호 조합의 패턴만 다를 뿐, <strong style={{ color: 'var(--text)' }}>1등 당첨 확률은 모두 1/8,145,060로 동일</strong>합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -124,8 +125,8 @@ export default function LottoPage() {
 
         {/* 3. 번호 분석 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>번호 분석 — 통계적 패턴 학습</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">번호 분석 — 통계적 패턴 학습</h2>
+          <p className="g-p">
             본 도구의 [번호 분석] 탭에서 6개 번호의 통계 패턴을 확인할 수 있습니다:
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, listStyle: 'none', padding: 0, margin: 0 }}>
@@ -144,11 +145,11 @@ export default function LottoPage() {
 
         {/* 4. 균형형 선호 이유 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>왜 사람들은 균형형을 선호할까?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">왜 사람들은 균형형을 선호할까?</h2>
+          <p className="g-p">
             행동경제학적으로 사람들은 <code style={{ color: 'var(--text)' }}>1, 2, 3, 4, 5, 6</code>보다 <code style={{ color: 'var(--text)' }}>7, 12, 19, 24, 33, 41</code>이 더 &quot;무작위 같다&quot;고 느낍니다 — 인간 직관은 &quot;균등 분포 = 자연스러움&quot;으로 인식하기 때문.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             실제 두 조합 모두 <strong style={{ color: 'var(--text)' }}>같은 1/8,145,060 확률</strong>입니다. 다만 균형형 선택의 실용적 이유:
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -168,8 +169,8 @@ export default function LottoPage() {
 
         {/* 5. 생일 번호 함정 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>생일 번호의 함정</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">생일 번호의 함정</h2>
+          <p className="g-p">
             많은 사람이 가족·연인 생일로 번호를 고르면 다음과 같은 편중이 생깁니다:
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0, marginBottom: '12px' }}>
@@ -184,8 +185,8 @@ export default function LottoPage() {
 
         {/* 6. 한국 로또 세금 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 로또 세금 (2026년 기준)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">한국 로또 세금 (2026년 기준)</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -218,8 +219,8 @@ export default function LottoPage() {
 
         {/* 7. 도박 의존 예방 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>도박 의존 예방 — 건강하게 즐기기</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">도박 의존 예방 — 건강하게 즐기기</h2>
+          <p className="g-p">
             로또는 합법 사행성 게임이지만, 의존 우려가 발생할 수 있습니다. <strong style={{ color: 'var(--text)' }}>다음 신호가 있다면 주의가 필요</strong>합니다:
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '14px' }}>
@@ -251,7 +252,7 @@ export default function LottoPage() {
 
         {/* 8. FAQ — accordion */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -272,7 +273,7 @@ export default function LottoPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/life/random',         icon: '🎲', name: '랜덤 추첨기',           desc: '범용 무작위 뽑기' },
@@ -295,7 +296,7 @@ export default function LottoPage() {
 
         {/* 참고 자료 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
+          <h2 className="g-h2">참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>동행복권 공식</strong> — dhlottery.co.kr</li>
             <li><strong style={{ color: 'var(--text)' }}>한국도박문제예방치유원</strong> — 헬프라인 1336 (24시간·365일 운영, 2026년 9월 확인), kcgp.or.kr</li>
@@ -305,6 +306,6 @@ export default function LottoPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

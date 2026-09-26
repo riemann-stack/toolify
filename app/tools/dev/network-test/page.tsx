@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/network-test',
@@ -84,7 +85,7 @@ const FAQ_LD = [
 
 export default function NetworkTestPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/dev/network-test">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />인터넷 회선 진단
@@ -110,12 +111,12 @@ export default function NetworkTestPage() {
         {/* 1. 왜 회선 진단이 중요한가 */}
         <section>
           <h2 style={sectionTitle}>왜 티켓팅·수강신청에 회선이 중요한가?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             티켓팅·수강신청은 「누가 먼저 서버에 도달하느냐」 경쟁입니다.
             정확한 시각을 알아도 <strong style={{ color: 'var(--text)' }}>회선이 100ms 느리면 0.1초가 그대로 손해</strong>입니다.
             인기 콘서트 매진은 보통 0.5~3초 사이 — 핑 100ms 차이가 당락을 가릅니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             중요한 두 지표는 <strong style={{ color: 'var(--text)' }}>핑(요청-응답 시간)</strong>과
             <strong style={{ color: 'var(--text)' }}> 지터(핑의 변동성)</strong>.
             평균 핑이 30ms여도 지터가 50ms면 어떤 요청은 100ms 넘게 걸려 페이지 로딩이 끊깁니다.
@@ -126,7 +127,7 @@ export default function NetworkTestPage() {
         <section>
           <h2 style={sectionTitle}>측정 지표 의미</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '500px' }}>
                 <thead>
                   <tr>
@@ -339,6 +340,6 @@ export default function NetworkTestPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

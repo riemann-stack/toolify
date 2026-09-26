@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/tire-pressure',
@@ -58,7 +59,7 @@ const FAQ_LD = [
 
 export default function TirePressurePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/unit/tire-pressure">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />타이어 계산기
@@ -77,7 +78,7 @@ export default function TirePressurePage() {
 
         {/* ── 1. 국가별 공기압 단위 표기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             국가별 공기압 단위 표기
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -104,7 +105,7 @@ export default function TirePressurePage() {
 
         {/* ── 2. 차종별 권장 공기압 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             차종별 권장 공기압 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -113,7 +114,7 @@ export default function TirePressurePage() {
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             도어 스티커에는 전륜과 후륜 값이 따로 적힌 경우도 많습니다. 예를 들어 제가 타는 GV70(18인치)은 도어 스티커가 앞 33 / 뒤 36 psi입니다. 측정은 꼭 아침 첫 주행 전 <strong style={{ color: 'var(--text)' }}>냉간</strong>에서 하세요 — 한참 달린 뒤 주유소에서 재면 타이어가 데워져 높게 나오고(제 차는 4~5psi쯤 차이 났습니다), 그 숫자에 맞추면 오히려 공기가 모자라게 됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -155,7 +156,7 @@ export default function TirePressurePage() {
 
         {/* ── 3. 공기압 부족·과다의 영향 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             공기압 부족·과다의 영향 (연비·마모·안전)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -189,13 +190,13 @@ export default function TirePressurePage() {
 
         {/* ── 4. 계절별 변화 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             계절별 공기압 변화 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             기체는 온도에 따라 부피가 변하므로, 공기압도 외부 기온에 영향을 받습니다. 일반적으로 <strong style={{ color: 'var(--accent)' }}>기온 10°C 변화 시 약 1~2 psi(≈ 7~14 kPa)</strong> 변동합니다(기온이 내려가면 공기압도 내려감).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -228,10 +229,10 @@ export default function TirePressurePage() {
 
         {/* ── 5. 자전거 공기압 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자전거 공기압 (로드 / 그래블 / MTB)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             자전거는 자동차보다 훨씬 광범위한 공기압을 사용합니다. <strong style={{ color: 'var(--text)' }}>타이어 옆면(사이드월)</strong>에 표기된 최소~최대 범위를 반드시 확인하세요.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -253,7 +254,7 @@ export default function TirePressurePage() {
 
         {/* ── 6. 자주 검색되는 변환 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 검색되는 변환
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -276,13 +277,13 @@ export default function TirePressurePage() {
 
         {/* ── 6b. 타이어 규격 해석 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             타이어 규격 보는 법 (예: 205/55R16)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             타이어 옆면(사이드월)의 숫자는 크기를 나타냅니다. 위 <strong style={{ color: 'var(--text)' }}>규격 해석</strong> 탭에 입력하면 외경·사이드월·인치업 조합이 자동 계산됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -316,7 +317,7 @@ export default function TirePressurePage() {
 
         {/* ── 6c. 교체 시기·마모·DOT ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             타이어 교체 시기 — 트레드 마모 · 주행거리 · DOT 제조주차
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '14px' }}>
@@ -353,7 +354,7 @@ export default function TirePressurePage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -385,6 +386,6 @@ export default function TirePressurePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

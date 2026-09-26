@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/buildup',
@@ -83,7 +84,7 @@ const FAQ_LD = [
 
 export default function BuildupPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/sports/buildup">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />러닝 빌드업 계산기
@@ -98,7 +99,7 @@ export default function BuildupPage() {
 
       {/* 1. 빌드업 vs 인터벌 vs 템포런 */}
       <h2 style={sectionTitle}>📊 빌드업 vs 인터벌 vs 템포런 차이</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         세 훈련 모두 페이스 변화가 있지만 메커니즘과 효과가 다릅니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -358,6 +359,6 @@ export default function BuildupPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>대회 일정 추적</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

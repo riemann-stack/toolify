@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/radiation',
@@ -64,7 +65,7 @@ const FAQ_LD = [
 
 export default function RadiationPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/unit/radiation">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />방사선·전자파 단위 변환기
@@ -91,10 +92,10 @@ export default function RadiationPage() {
         {/* 1. 3가지 측정 단위 개요 */}
         <section>
           <h2 style={sectionTitle}>3가지 방사선 측정 단위 — 무엇이 다른가</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             방사선은 측정 관점에 따라 단위가 다릅니다 — <strong style={{ color: 'var(--text)' }}>방사능(얼마나 방출)</strong>, <strong style={{ color: 'var(--text)' }}>흡수선량(물질이 흡수)</strong>, <strong style={{ color: 'var(--text)' }}>유효선량(인체 영향)</strong>.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -127,7 +128,7 @@ export default function RadiationPage() {
         {/* 2. 일상 노출 가이드 */}
         <section>
           <h2 style={sectionTitle}>📊 일상 노출 — 한국인 평균 vs 의료·여행</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             한국인 평균 자연 방사선 노출은 <strong style={{ color: 'var(--text)' }}>약 3 mSv/년</strong>(라돈·우주선·식이 포함). 의료 영상이 가장 큰 인공 노출원이며, 항공 여행이 그 다음입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -149,7 +150,7 @@ export default function RadiationPage() {
         {/* 3. 이온화 vs 비이온화 */}
         <section>
           <h2 style={sectionTitle}>이온화 방사선 vs 비이온화 전자파</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             &ldquo;방사선&rdquo;과 &ldquo;전자파&rdquo;는 일상에서 혼용되지만 물리적으로 매우 다른 영역입니다. 본 도구의 단위 환산은 <strong style={{ color: 'var(--text)' }}>이온화 방사선</strong>(에너지가 원자에서 전자를 떼어낼 만큼 큰)에만 적용됩니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -205,6 +206,6 @@ export default function RadiationPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

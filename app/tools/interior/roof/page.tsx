@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/roof',
@@ -82,7 +83,7 @@ const FAQ_LD = [
 
 export default function RoofPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/interior/roof">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />지붕 면적 계산기
@@ -144,7 +145,7 @@ export default function RoofPage() {
 
       {/* 2. 물매 ↔ 경사각 변환 */}
       <h2 style={sectionTitle}>📏 물매 ↔ 경사각 변환표</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         한국 건축 표준 표기는 <strong style={{ color: 'var(--text)' }}>물매</strong> — 수평 10에 대한 수직 비율.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -201,7 +202,7 @@ export default function RoofPage() {
 
       {/* 4. 자재 일반 단가 */}
       <h2 style={sectionTitle}>💰 지붕재·방수재 일반 단가 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         ⚠️ <strong style={{ color: 'var(--text)' }}>2026년 기준</strong> 일반 가격 범위입니다. 정확한 가격은 자재·지역·시즌·구매처별로 ±30% 변동될 수 있으니 <Link href="/tools/life/unit-price" style={{ color: 'var(--accent)' }}>단가 비교 계산기</Link>·실제 시공사 견적으로 확인하세요.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -228,7 +229,7 @@ export default function RoofPage() {
 
       {/* 5. 지붕 시공 실무 가이드 */}
       <h2 style={sectionTitle}>🛠️ 지붕 시공 실무 가이드 (경험자 노하우)</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         실제 지붕 공사에서 자재 물량만큼 중요한 것이 <strong style={{ color: 'var(--text)' }}>시공 순서와 접합부 디테일</strong>입니다. 현장에서 자주 놓치는 포인트를 정리했습니다.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -410,6 +411,6 @@ export default function RoofPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>자재 가격 비교</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

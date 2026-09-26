@@ -6,6 +6,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/savings',
@@ -70,7 +71,7 @@ const FAQ_LD = [
 
 export default function SavingsPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/savings">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -150,7 +151,7 @@ export default function SavingsPage() {
       {/* 4. 절세 상품 비교 */}
       <h2 style={sectionTitle}>🌱 청년미래적금 vs ISA vs 연금저축 비교</h2>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
@@ -256,6 +257,6 @@ export default function SavingsPage() {
           ))}
         </div>
       </section>
-    </div>
+    </ToolPage>
   )
 }

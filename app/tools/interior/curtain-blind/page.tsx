@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/curtain-blind',
@@ -46,7 +47,7 @@ const FAQ_LD = [
 
 export default function CurtainBlindPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/interior/curtain-blind">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
@@ -67,7 +68,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             커튼·블라인드 사이즈 핵심 공식
           </h2>
           <div style={{
@@ -97,10 +98,10 @@ export default function CurtainBlindPage() {
 
         {/* ── 2. 한국 표준 창문 크기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 가정 표준 창문 크기
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -131,7 +132,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 3. 주름 배수 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎀 주름 배수 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
@@ -152,7 +153,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 3-1. 원단 소요량 감 잡기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🧵 원단 소요량 감 잡기 — 폭 140cm 원단 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -182,7 +183,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 3-2. 헤딩 방식별 주문 기준 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🧷 아일릿·나비주름 — '주문 폭' 기준이 다릅니다
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -206,7 +207,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 4. 커튼 길이 옵션 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             📏 커튼 길이 옵션 비교
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -229,7 +230,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 5. 설치 방식별 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🔧 설치 방식별 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -250,7 +251,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 6. 측정 시 주의사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             ⚠️ 측정 시 주의사항
           </h2>
           <div style={{
@@ -274,7 +275,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 7. 커튼 vs 블라인드 vs 롤스크린 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🤔 어떤 걸 골라야 할까?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -295,13 +296,13 @@ export default function CurtainBlindPage() {
 
         {/* ── 7-1. 암막 등급 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🌒 '1급 암막', 기준이 뭘까
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             쇼핑몰의 '차광 1급·2급' 표기 — 널리 쓰이는 1~3급 구분은 <strong style={{ color: 'var(--text)' }}>일본 인테리어패브릭협회(NIF)</strong>가 JIS L 1055 A법(차광성 시험)에 따라 정한 업계 기준이 국내에 통용된 것입니다(2026-07 확인 기준).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -346,7 +347,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -379,6 +380,6 @@ export default function CurtainBlindPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

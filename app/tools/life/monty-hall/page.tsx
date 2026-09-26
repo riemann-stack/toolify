@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/monty-hall',
@@ -37,7 +38,7 @@ const FAQ_LD = [
 
 export default function MontyHallPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/monty-hall">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />몬티홀 시뮬레이터
@@ -53,13 +54,13 @@ export default function MontyHallPage() {
 
         {/* ── 1. 몬티홀 문제란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             몬티홀 문제란?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             미국 TV 쇼 <strong style={{ color: 'var(--text)' }}>&ldquo;Let&rsquo;s Make a Deal&rdquo;</strong>의 진행자 <strong style={{ color: 'var(--text)' }}>몬티 홀(Monty Hall)</strong>의 이름을 딴 확률 퍼즐입니다. 1990년 매릴린 보스 사반트(Marilyn vos Savant)가 &ldquo;Ask Marilyn&rdquo; 칼럼에서 &ldquo;바꾸는 게 이득&rdquo;이라고 답하자, 전국의 수학자 1,000여 명이 반박 편지를 보낸 것으로 유명합니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             결과적으로 <strong style={{ color: 'var(--accent)' }}>사반트가 옳았습니다</strong>. 문을 바꾸면 당첨 확률이 2/3(약 66.7%)로, 유지했을 때의 1/3(약 33.3%)보다 두 배 높습니다. 이 문제는 직관과 확률이 충돌하는 대표 사례로 통계학·의사결정 교재에 자주 등장합니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: '10px', padding: '14px 18px' }}>
@@ -71,7 +72,7 @@ export default function MontyHallPage() {
 
         {/* ── 2. 정확한 규칙 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             정확한 규칙
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -95,7 +96,7 @@ export default function MontyHallPage() {
 
         {/* ── 3. 3가지 증명 방법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             3가지 증명 방법
           </h2>
 
@@ -115,7 +116,7 @@ export default function MontyHallPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '10px' }}>증명 2 · 모든 경우 표로 확인</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '10px' }}>참가자가 항상 1번 문을 고른다고 가정(대칭이므로 일반성 유지).</p>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 480 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -164,7 +165,7 @@ export default function MontyHallPage() {
 
         {/* ── 4. 왜 틀리는가 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             사람들이 틀리는 이유
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -184,7 +185,7 @@ export default function MontyHallPage() {
 
         {/* ── 5. 현실 응용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             현실에서의 응용
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -205,13 +206,13 @@ export default function MontyHallPage() {
 
         {/* ── 6. N문 확장 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🚪 N문 확장 — 문이 많을수록 직관 명확
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [⚡ 자동 시뮬레이션] 탭에서 문 개수를 3·5·10·100·1000개로 변경 가능합니다. 표준 몬티홀(진행자가 N-2개 염소 공개)에서 바꾸기 승률은 (N-1)/N로 수렴합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -246,10 +247,10 @@ export default function MontyHallPage() {
 
         {/* ── 7. 변형 규칙 3가지 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🎭 변형 규칙 3가지 — 진행자의 의도가 결과를 결정
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             같은 &ldquo;두 문 중 하나&rdquo; 상황이라도 그 상황이 어떻게 만들어졌는가에 따라 확률이 완전히 달라집니다. 본 도구의 [자동 시뮬레이션] 탭에서 3가지 모두 직접 비교 가능.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -284,7 +285,7 @@ export default function MontyHallPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/lotto',        icon: '🎰', name: '로또 번호 생성기',       desc: '1/8,145,060의 확률 세계' },
@@ -308,6 +309,6 @@ export default function MontyHallPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

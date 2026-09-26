@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/jwt',
@@ -57,7 +58,7 @@ const card: React.CSSProperties = {
 
 export default function JwtPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/dev/jwt">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
@@ -103,7 +104,7 @@ export default function JwtPage() {
             RFC 7519는 일곱 개의 표준 클레임을 정의합니다. 모두 선택 사항이지만 인증에서 자주 쓰입니다.
             나머지 키는 서비스가 자유롭게 정한 커스텀 클레임입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -173,7 +174,7 @@ export default function JwtPage() {
             서명 검증에서 가장 흔한 실수는 <strong style={{ color: 'var(--text)' }}>header에 적힌 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>alg</code> 값을 그대로 믿는 것</strong>입니다.
             공격자는 header만 고쳐도 되므로, 검증 서버가 알고리즘을 고정하지 않으면 두 가지 우회가 생깁니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -219,7 +220,7 @@ export default function JwtPage() {
             토큰의 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>exp − iat</code>로 종류를 역추정할 수 있습니다.
             수명이 짧으면 API 호출용 <strong style={{ color: 'var(--text)' }}>액세스 토큰</strong>, 며칠~몇 주로 길면 재발급용 <strong style={{ color: 'var(--text)' }}>리프레시 토큰</strong>일 가능성이 큽니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -293,6 +294,6 @@ export default function JwtPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

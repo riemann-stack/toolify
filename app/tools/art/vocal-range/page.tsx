@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/vocal-range',
@@ -51,7 +52,7 @@ const FAQ_LD = [
 
 export default function VocalRangePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/art/vocal-range">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />음역대 측정기
@@ -67,19 +68,19 @@ export default function VocalRangePage() {
 
         {/* 1. 보컬 음역대란 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>보컬 음역대란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">보컬 음역대란?</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>안정적으로 낼 수 있는 가장 낮은 음 ~ 가장 높은 음의 범위</strong>를 의미합니다. 보통 <strong>진성(흉성) 음역</strong>과 <strong>가성 음역</strong>으로 나뉘며, 본 도구는 둘을 분리해 측정할 수 있습니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <p className="g-p">
             노래에 실제로 쓰는 음역은 흔히 1.5~2옥타브(18~24반음)로 이야기되며, 훈련받은 성악가·가수에게서는 3옥타브를 넘는 측정치도 보고됩니다. 다만 이는 훈련 집단에서 관측된 값이지 훈련하면 누구나 도달한다는 보장이 아니며, 가성 포함 여부에 따라서도 크게 달라집니다.
           </p>
         </section>
 
         {/* 2. 음역대 분류 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>음역대 8단계 분류</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">음역대 8단계 분류</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -115,7 +116,7 @@ export default function VocalRangePage() {
 
         {/* 3. 작동 원리 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>본 도구의 작동 원리</h2>
+          <h2 className="g-h2">본 도구의 작동 원리</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
             <li>· <strong style={{ color: 'var(--text)' }}>마이크 입력</strong> — Web Audio API로 PCM 데이터 수집 (sampleRate 보통 44.1kHz)</li>
             <li>· <strong style={{ color: 'var(--text)' }}>피치 감지</strong> — pitchy 라이브러리 (McLeod Pitch Method 기반) — 약 30KB 경량 의존성</li>
@@ -129,7 +130,7 @@ export default function VocalRangePage() {
 
         {/* 4. 정확도 한계 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>측정 정확도 한계 (중요)</h2>
+          <h2 className="g-h2">측정 정확도 한계 (중요)</h2>
           <div style={{ background: 'rgba(220,38,38,0.05)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--red-600)', marginBottom: '8px' }}>⚠️ 본 도구의 정확도 한계</p>
             <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none' }}>
@@ -144,8 +145,8 @@ export default function VocalRangePage() {
 
         {/* 5. 한국 노래 키 매칭 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>한국 노래 키 매칭</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">한국 노래 키 매칭</h2>
+          <p className="g-p">
             본 도구는 한국 인기곡 <strong style={{ color: 'var(--text)' }}>30곡 이상</strong>의 음역 데이터를 보유합니다. 사용자 음역에 맞는 노래를 자동 추천하며, 노래방 키 변경(±6) 시뮬레이션을 통해 다음을 알려드립니다 —
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
@@ -160,8 +161,8 @@ export default function VocalRangePage() {
 
         {/* 6. 보컬 트레이닝 효과 추적 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>보컬 트레이닝 효과 추적</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">보컬 트레이닝 효과 추적</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>측정 기록 탭에서 localStorage에 최대 30회</strong> 저장됩니다 (서버 전송 X). 주간·월간 변화를 추적하면 트레이닝 효과를 시각적으로 확인할 수 있습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -181,7 +182,7 @@ export default function VocalRangePage() {
 
         {/* 7. 음역대 늘리기 일반 정보 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>음역대 늘리기 — 일반 정보</h2>
+          <h2 className="g-h2">음역대 늘리기 — 일반 정보</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
               <li><strong style={{ color: 'var(--text)' }}>워밍업 5~10분</strong> — 립트릴·립버즈로 성대 풀기</li>
@@ -219,7 +220,7 @@ export default function VocalRangePage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',  desc: 'Hz ↔ 음정·MIDI 번호' },
@@ -244,6 +245,6 @@ export default function VocalRangePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

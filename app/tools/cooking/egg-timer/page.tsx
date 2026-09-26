@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import styles from './egg-timer.module.css'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/egg-timer',
@@ -85,7 +86,7 @@ const FAQ_LD = [
 
 export default function EggTimerPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/cooking/egg-timer">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />계란 삶는 시간 계산기
@@ -105,7 +106,7 @@ export default function EggTimerPage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             끓는 물에 특란을 투입한 시점부터 측정한 시간 기준. 30초 단위로 노른자 농도가 크게 달라지므로 본 도구로 정확히 맞추세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -146,7 +147,7 @@ export default function EggTimerPage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             2026년 5월 21일 축산법 시행규칙 개정으로 명칭이 왕란→2XL, 특란→XL, 대란→L, 중란→M, 소란→S로 바뀌었습니다. 중량 기준은 그대로이고, 2026년 11월까지 6개월 유예기간 동안은 두 명칭이 함께 쓰입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -179,7 +180,7 @@ export default function EggTimerPage() {
         {/* 3. 한국 요리 추천표 — 핵심 팁 컬럼 제거, 모바일 1줄 표시 */}
         <section>
           <h2 style={sectionTitle}>한국 요리별 익힘 추천</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 380 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -266,6 +267,6 @@ export default function EggTimerPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/fart-risk',
@@ -35,7 +36,7 @@ const FAQ_LD = [
 
 export default function FartRiskPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/fart-risk">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />방귀 위험도 계산기
@@ -51,12 +52,12 @@ export default function FartRiskPage() {
 
         {/* 1. 과학 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스를 만드는 음식의 과학</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">가스를 만드는 음식의 과학</h2>
+          <p className="g-p">
             방귀는 음식을 먹을 때 함께 삼킨 공기와 장내 세균이 특정 성분을 <strong style={{ color: 'var(--text)' }}>발효</strong>할 때 생기는 가스가 섞여 만들어집니다.
             작은창자에서 미처 흡수되지 못한 탄수화물이 대장까지 내려오면 세균이 이를 분해하면서 수소·메탄·이산화탄소가 만들어지고, 황 성분이 있으면 고약한 냄새가 납니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             가스 생성의 주범은 크게 4가지입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -79,7 +80,7 @@ export default function FartRiskPage() {
 
         {/* 2. TOP 7 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스 유발 음식 TOP 7</h2>
+          <h2 className="g-h2">가스 유발 음식 TOP 7</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               { rank: '1', emoji: '🫘', name: '콩류',            desc: '올리고당 함량이 가장 높은 슈퍼 발효 재료.' },
@@ -104,7 +105,7 @@ export default function FartRiskPage() {
 
         {/* 3. 조합 비교 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>나쁜 조합 vs 괜찮은 조합</h2>
+          <h2 className="g-h2">나쁜 조합 vs 괜찮은 조합</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ background: 'rgba(255,70,70,0.06)', border: '1px solid rgba(255,70,70,0.3)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#DC2626', marginBottom: '10px' }}>🚨 최악 조합</p>
@@ -135,7 +136,7 @@ export default function FartRiskPage() {
 
         {/* 4. 실용 팁 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스 줄이는 실용 팁</h2>
+          <h2 className="g-h2">가스 줄이는 실용 팁</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>즉각 효과</p>
@@ -163,10 +164,10 @@ export default function FartRiskPage() {
 
         {/* 5. 원인 유형 5가지 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             가스 원인 유형 5가지
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [오늘 점수] 탭은 음식·조건에서 가장 유력한 원인 유형 TOP 2를 자동 분류해 보여줍니다. 본인 패턴 파악에 활용하세요.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -187,13 +188,13 @@ export default function FartRiskPage() {
 
         {/* 6. 고FODMAP vs 저FODMAP 종합 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             고FODMAP vs 저FODMAP 음식 한눈에
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             카테고리별로 정리한 고/저 FODMAP 식품 분류표. 본 도구의 [🔄 대체 음식] 탭에서 한 번의 클릭으로 대체 추천을 확인할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -230,13 +231,13 @@ export default function FartRiskPage() {
 
         {/* 7. 단백질 보충제 종류별 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             💪 단백질 보충제 종류별 가스 위험
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             가스 자주 차는 사람은 WPC → WPI 또는 식물성 단백질로 변경, 인공감미료(소르비톨·자일리톨) 라벨 확인 권장.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -313,7 +314,7 @@ export default function FartRiskPage() {
 
         {/* 7. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/supplement',  emoji: '💊', name: '영양제 성분 체크',   desc: '단백질 보충제 안전' },
@@ -332,6 +333,6 @@ export default function FartRiskPage() {
           </div>
         </div>
       </div>
-    </div>
+    </ToolPage>
   )
 }

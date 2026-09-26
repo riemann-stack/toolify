@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/ladder',
@@ -49,7 +50,7 @@ const FAQ_LD = [
 
 export default function LadderPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/life/ladder">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />사다리타기
@@ -65,11 +66,11 @@ export default function LadderPage() {
 
         {/* 1. 사다리타기 원리 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사다리타기 원리</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">사다리타기 원리</h2>
+          <p className="g-p">
             참가자 N명이 위에서 출발해 사다리를 따라 내려가며 가로줄을 만나면 옆으로 이동, 결국 N개 결과 중 하나에 도착하는 게임입니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 알고리즘:
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
@@ -82,7 +83,7 @@ export default function LadderPage() {
 
         {/* 2. 결과 공개 방식 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>결과 공개 — 3가지 방법</h2>
+          <h2 className="g-h2">결과 공개 — 3가지 방법</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               { icon: '🖱️', name: '클릭 개별 공개', desc: '이름을 클릭하면 그 사람의 경로만 그려지며 공개·숨김 (느림·빠름 그리기 속도 선택)' },
@@ -99,8 +100,8 @@ export default function LadderPage() {
 
         {/* 3. 실시간 미리보기 + 셔플 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실시간 입력 반영 + 순서 셔플</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">실시간 입력 반영 + 순서 셔플</h2>
+          <p className="g-p">
             참가자·결과를 입력하는 즉시 사다리에 반영됩니다. 단, <strong style={{ color: 'var(--text)' }}>가로줄은 공개 전까지 숨겨져</strong>(암산 스포일러 방지) 결과를 미리 알 수 없고, 인원·세로줄 구조만 실시간으로 보입니다. <strong style={{ color: 'var(--text)' }}>[🔀 순서 섞기]</strong> 버튼으로 참가자·결과 입력 순서를 무작위로 섞고 새 가로줄을 생성할 수 있습니다.
           </p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 10, padding: '11px 14px' }}>
@@ -110,7 +111,7 @@ export default function LadderPage() {
 
         {/* 4. 6가지 활용 템플릿 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>6가지 빠른 시작 템플릿</h2>
+          <h2 className="g-h2">6가지 빠른 시작 템플릿</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { icon: '🍱', name: '점심 메뉴',           desc: '못 정할 때 무작위 선택 — 김치찌개·비빔밥·돈가스·국밥' },
@@ -130,8 +131,8 @@ export default function LadderPage() {
 
         {/* 5. 캐릭터 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>캐릭터 자동 배정</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">캐릭터 자동 배정</h2>
+          <p className="g-p">
             본 도구는 참가자별로 16가지 동물 캐릭터 이모지를 자동 배정해 시각적 재미를 더합니다:
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textAlign: 'center', fontSize: 28, lineHeight: 1.6, letterSpacing: 4 }}>
@@ -145,7 +146,7 @@ export default function LadderPage() {
 
         {/* 6. 옵션 (속도·난이도) */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>옵션 — 애니메이션 속도·가로줄 난이도</h2>
+          <h2 className="g-h2">옵션 — 애니메이션 속도·가로줄 난이도</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>⏱️ 애니메이션 속도</p>
@@ -169,7 +170,7 @@ export default function LadderPage() {
 
         {/* 7. 사다리타기 vs 다른 추첨 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사다리타기 vs 다른 추첨</h2>
+          <h2 className="g-h2">사다리타기 vs 다른 추첨</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>🪜 사다리타기</p>
@@ -199,7 +200,7 @@ export default function LadderPage() {
 
         {/* 8. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -220,7 +221,7 @@ export default function LadderPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/life/random',     icon: '🎲', name: '랜덤 추첨기', desc: '가중치 추첨·룰렛·팀 나누기' },
@@ -242,6 +243,6 @@ export default function LadderPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

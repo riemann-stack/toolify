@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/kinship',
@@ -27,7 +28,7 @@ const FAQ_LD = [
 
 export default function KinshipPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/kinship">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·일상
       </p>
@@ -47,7 +48,7 @@ export default function KinshipPage() {
 
         {/* ── 1. 호칭어 vs 지칭어 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             호칭어와 지칭어 — 부를 때와 말할 때
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -85,7 +86,7 @@ export default function KinshipPage() {
 
         {/* ── 2. 촌수 계산법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             촌수 계산법 — 민법 제770조
           </h2>
           <div style={{
@@ -110,7 +111,7 @@ export default function KinshipPage() {
 
         {/* ── 3. 친가·외가 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             친가·외가 호칭 한눈에
           </h2>
           <div className="tableScroll">
@@ -151,7 +152,7 @@ export default function KinshipPage() {
 
         {/* ── 4. 시가·처가 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             시가·처가 호칭 한눈에
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
@@ -184,7 +185,7 @@ export default function KinshipPage() {
 
         {/* ── 5. 2011 표준과 2020 안내 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             표준 언어 예절(2011)과 2020 안내서
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
@@ -202,7 +203,7 @@ export default function KinshipPage() {
 
         {/* ── FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -223,7 +224,7 @@ export default function KinshipPage() {
 
         {/* ── 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -253,6 +254,6 @@ export default function KinshipPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -6,6 +6,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/car-tax',
@@ -86,7 +87,7 @@ const FAQ_LD = [
 
 export default function CarTaxPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/car-tax">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />자동차 세금 종합 계산기
@@ -105,7 +106,7 @@ export default function CarTaxPage() {
         {/* 1. 자동차 관련 세금 한눈에 */}
         <section>
           <h2 style={sectionTitle}>자동차 관련 세금 한눈에</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             자동차에 부과되는 세금은 <strong style={{ color: 'var(--text)' }}>구매·보유·운행·양도</strong> 4단계로 나눌 수 있습니다. 본 도구는 이 4단계를 모두 자동 계산합니다.
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -173,7 +174,7 @@ export default function CarTaxPage() {
         {/* 3. 자동차세 cc별 */}
         <section>
           <h2 style={sectionTitle}>🗓️ 자동차세 — cc당 단가와 감면</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             자동차세 본세 + 지방교육세(30%) + 환경부담금(경유차)이 매년 부과됩니다.
             <strong style={{ color: 'var(--text)' }}> 차령(등록한 해를 1년으로 셈) 3년부터 5%씩, 최대 50%(차령 12년 이상)</strong> 경감됩니다. 예를 들어 2024년에 등록한 차는 2026년에 차령 3년이라 5%가 줄어듭니다.
           </p>
@@ -202,7 +203,7 @@ export default function CarTaxPage() {
         {/* 4. 공채 매입 */}
         <section>
           <h2 style={sectionTitle}>🎫 공채 매입 — 잊기 쉬운 숨은 비용</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             차량 등록 시 의무적으로 매입하는 <strong style={{ color: 'var(--text)' }}>도시철도채권 / 지역개발채권</strong>입니다.
             보유 시 만기에 원금 + 이자를 받지만, 대부분 <strong style={{ color: '#D97706' }}>즉시 매도(10~15% 할인)</strong>해서 실비용으로 처리합니다.
           </p>
@@ -232,7 +233,7 @@ export default function CarTaxPage() {
         {/* 5. 유류세 */}
         <section>
           <h2 style={sectionTitle}>⛽ 유류세 — 주유할 때마다 내는 간접세</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             주유소 표시 가격에 이미 포함되어 있어 의식하기 어렵지만, <strong style={{ color: 'var(--text)' }}>휘발유 가격의 약 45%·경유 35%가 세금</strong>입니다.
             교통·에너지·환경세 + 교육세 + 주행세 + 부가가치세 4중 부과.
           </p>
@@ -428,6 +429,6 @@ export default function CarTaxPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

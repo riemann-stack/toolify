@@ -5,6 +5,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/historical-money',
@@ -65,7 +66,7 @@ const FAQ_LD = [
 
 export default function HistoricalMoneyPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/historical-money">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />한국 화폐가치 환산기
@@ -84,10 +85,10 @@ export default function HistoricalMoneyPage() {
         {/* 1. 한국 화폐사 한눈에 */}
         <section>
           <h2 style={sectionTitle}>한국 화폐사 — 圓·환·원 한눈에</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             대한민국은 광복 이후 두 번의 화폐개혁(1953·1962)을 거치며 통화 단위가 바뀌었습니다. 단순 단위 변환과 구매력 변환을 혼동하지 않는 게 중요해요 — 화폐개혁은 단위 이름만 바꾸는 <strong style={{ color: 'var(--text)' }}>리디노미네이션(redenomination)</strong>이라 그 시점 구매력은 동일하지만, 시간이 흐르면 인플레이션으로 가치가 달라집니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -141,7 +142,7 @@ export default function HistoricalMoneyPage() {
         {/* 3. CPI 기반 구매력 환산 작동 원리 */}
         <section>
           <h2 style={sectionTitle}>구매력 환산은 어떻게 계산되나</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 환산은 통계청 KOSIS 소비자물가지수(CPI)를 기반으로 합니다. 두 단계로 진행돼요:
           </p>
           <ol style={{ paddingLeft: 20, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
@@ -196,6 +197,6 @@ export default function HistoricalMoneyPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

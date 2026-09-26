@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-handicap',
@@ -57,7 +58,7 @@ const FAQ_LD = [
 
 export default function GolfHandicapPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/golf-handicap">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />골프 핸디캡 계산기
@@ -73,7 +74,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 1. 공식 시각화 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             WHS 핵심 공식
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
@@ -101,7 +102,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 2. 계산 예시 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             계산 예시
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -140,10 +141,10 @@ export default function GolfHandicapPage() {
 
         {/* ── 3. 라운드 수별 사용 디퍼런셜 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             라운드 수별 사용 디퍼런셜 개수
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -182,10 +183,10 @@ export default function GolfHandicapPage() {
 
         {/* ── 4. 슬로프 레이팅 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             📊 슬로프 레이팅 기준 안내
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             슬로프 레이팅은 &ldquo;평균 보기 플레이어 난이도&rdquo;를 나타내는 수치입니다.
             <strong style={{ color: 'var(--text)' }}>113이 표준 기준값</strong>이며, 숫자가 클수록 일반 아마추어에게 어려운 코스입니다.
           </p>
@@ -215,7 +216,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 5. 핸디캡 등급 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🏆 핸디캡 등급
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
@@ -238,10 +239,10 @@ export default function GolfHandicapPage() {
 
         {/* ── 6. 라운드 자동 저장 활용 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📅 라운드 자동 저장 활용
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [📅 내 기록] 탭에서 라운드를 추가하면 브라우저(localStorage)에 자동 저장. WHS 핸디캡은 20라운드 누적 시 안정화됩니다 (최대 50라운드 보관).
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
@@ -266,13 +267,13 @@ export default function GolfHandicapPage() {
 
         {/* ── 7. 발전 추이 분석 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📈 핸디캡 발전 추이 분석
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             [📅 내 기록] 탭의 SVG 라인 차트 — 라운드별 핸디캡 변화를 시각화. 좋은 라운드 추가 시 핸디캡 ↓ 곡선이 보입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -303,13 +304,13 @@ export default function GolfHandicapPage() {
 
         {/* ── 8. 티별 차이 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🏌️ 티별 차이 — 본인 실력에 맞는 티 선택
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             같은 골프장도 티에 따라 CR·슬로프가 달라집니다. 본 도구의 [코스 핸디캡] 탭에서 본인 핸디캡 + 티별 코스 핸디캡 자동 계산.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -343,10 +344,10 @@ export default function GolfHandicapPage() {
 
         {/* ── 9. 9홀 라운드 환산 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🏌️ 9홀 라운드 환산
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국은 9홀 라운딩 비중이 높습니다. 본 도구는 9홀 → 18홀 단순 2배 환산을 씁니다(편의 우선). 각 라운드에서 [9홀]을 고르면 CR 칸이 9홀 코스 레이팅으로 바뀌고, 이미 넣어 둔 18홀 CR은 절반으로 자동 환산됩니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
@@ -363,10 +364,10 @@ export default function GolfHandicapPage() {
 
         {/* ── 10. 한국 공식 핸디캡 인증 안내 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📌 한국 공식 핸디캡 인증
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구는 WHS 핸디캡 지수 공식을 따르지만(홀별 네트 더블보기 보정·PCC 등 일부 절차는 생략) <strong style={{ color: '#EA580C' }}>비공식 산출 (참고용)</strong>입니다. 공식 핸디캡 인증은 별도 절차가 필요합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -401,7 +402,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/golf-distance', icon: '🎯', name: '골프 비거리 계산기', desc: '클럽별 비거리·환경 보정' },
@@ -427,6 +428,6 @@ export default function GolfHandicapPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

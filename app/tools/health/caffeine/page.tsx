@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/caffeine',
@@ -63,7 +64,7 @@ const FAQ_LD = [
 
 export default function CaffeinePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/health/caffeine">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />카페인 잔존량 트래커
@@ -82,12 +83,12 @@ export default function CaffeinePage() {
         {/* 1. 카페인 반감기란? */}
         <section>
           <h2 style={sectionTitle}>카페인 반감기란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>반감기(half-life)</strong>는 체내 카페인이 절반으로 줄어드는 데 걸리는 시간입니다.
             성인 평균 <strong style={{ color: 'var(--accent)' }}>약 5시간</strong> — 즉, 오후 2시에 아메리카노 150mg을 마시면
             오후 7시(5시간) ≈ 75mg, 자정(약 10시간) ≈ 약 38mg이 남습니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             카페인은 간의 <strong style={{ color: 'var(--text)' }}>CYP1A2 효소</strong>에 의해 분해됩니다.
             이 효소 활성은 유전·약물·생활 습관에 따라 큰 차이가 나서 같은 양을 마셔도 사람마다 효과·지속 시간이 다릅니다.
           </p>
@@ -97,7 +98,7 @@ export default function CaffeinePage() {
         <section>
           <h2 style={sectionTitle}>음료별 카페인 함량 (한국 시장 기준)</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr>
@@ -138,7 +139,7 @@ export default function CaffeinePage() {
         {/* 3. 대사 속도 보정 */}
         <section>
           <h2 style={sectionTitle}>왜 사람마다 카페인 효과가 다른가? (CYP1A2)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             카페인 분해 속도는 간 효소 <strong style={{ color: 'var(--text)' }}>CYP1A2</strong>가 결정합니다. 다음 요인으로 반감기가 크게 달라집니다:
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -212,7 +213,7 @@ export default function CaffeinePage() {
         {/* 5. 수면과 카페인 */}
         <section>
           <h2 style={sectionTitle}>카페인과 수면 — 왜 「잠은 잘 자지는데 피곤」한가?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             카페인은 뇌의 <strong style={{ color: 'var(--text)' }}>아데노신 수용체</strong>를 막아 졸음을 느끼지 못하게 합니다.
             잠드는 데 큰 문제 없어도, 깊은 수면(N3·서파수면)이 줄어 다음날 피로감이 누적됩니다.
           </p>
@@ -301,6 +302,6 @@ export default function CaffeinePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

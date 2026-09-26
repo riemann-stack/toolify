@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/golden-ratio',
@@ -27,7 +28,7 @@ const FAQ_LD = [
 
 export default function GoldenRatioPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/art/golden-ratio">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />황금 비율 계산기
@@ -43,10 +44,10 @@ export default function GoldenRatioPage() {
 
         {/* ── 1. 황금 비율이란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             황금 비율(φ)이란?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             황금 비율(Golden Ratio)은 두 양 a, b(a &gt; b)에 대해 <strong style={{ color: 'var(--text)' }}>(a+b) : a = a : b</strong>가 성립할 때의 비율로,
             그리스 문자 <strong style={{ color: 'var(--text)' }}>φ(피, phi)</strong>로 표기합니다 — 원주율 π(파이)와는 다른 문자입니다.
             예로부터 &ldquo;가장 아름다운 비율&rdquo;로 불려 왔지만, 널리 알려진 자연·예술 사례 중 상당수는 근거가 약합니다(아래 사실·속설 정리 참고).
@@ -62,7 +63,7 @@ export default function GoldenRatioPage() {
             </p>
           </div>
 
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             피보나치 수열(1, 1, 2, 3, 5, 8, 13, 21, 34...)에서 인접한 두 수의 비율은
             항이 커질수록 φ에 수렴합니다. 예를 들어 21 ÷ 13 = 1.615, 34 ÷ 21 = 1.619, 55 ÷ 34 = 1.6176...
             수학·자연·디자인을 연결하는 핵심 상수입니다.
@@ -71,10 +72,10 @@ export default function GoldenRatioPage() {
 
         {/* ── 2. 자연과 예술 속 황금 비율 — 사실과 속설 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             자연과 예술 속 황금 비율 — 사실과 속설
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             파르테논·모나리자·앵무조개 같은 유명 사례 대부분은 후대에 덧씌워진 통설로, 수학계 검증에서 반박됐습니다.
             실제로 확인되는 사례와 구분해 정리했습니다.
           </p>
@@ -101,7 +102,7 @@ export default function GoldenRatioPage() {
 
         {/* ── 3. 디자이너를 위한 활용 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             디자이너를 위한 활용 팁
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -138,14 +139,14 @@ export default function GoldenRatioPage() {
 
         {/* ── 4. 피보나치 수열표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             피보나치 수열과 φ의 수렴
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             피보나치 수열은 앞 두 항을 더해 다음 항을 만드는 수열입니다: <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144...</strong>
             인접한 두 항의 비율은 항이 커질수록 φ = 1.618에 수렴합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -185,13 +186,13 @@ export default function GoldenRatioPage() {
 
         {/* ── 5. 황금 비율 vs 다른 비율 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             황금 비율 vs 다른 비율
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             황금 비율은 디자인·예술의 미적 가이드입니다. 매체·목적에 따라 다른 비율이 더 적합할 수 있으니 본 도구의 [비율 비교 시각화]에서 한눈에 확인하세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -232,7 +233,7 @@ export default function GoldenRatioPage() {
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/color',     icon: '🎨', name: '색상 코드 변환기',  desc: 'HEX·RGB·HSL 즉시 변환' },
@@ -256,6 +257,6 @@ export default function GoldenRatioPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

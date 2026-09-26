@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/pace',
@@ -35,7 +36,7 @@ const FAQ_LD = [
 
 export default function PacePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/pace">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />러닝 페이스 계산기
@@ -51,10 +52,10 @@ export default function PacePage() {
 
         {/* ── 1. 페이스 기준표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             페이스별 완주 예상 시간 기준표
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             아래 표는 일정 페이스를 끝까지 유지했을 때의 이론적 완주 시간입니다. 초반 오버페이스는 후반 급저하의 가장 큰 원인이므로, 특히 초·중급 러너는 <strong style={{ color: 'var(--text)' }}>일정 페이스</strong> 또는 <strong style={{ color: 'var(--text)' }}>네거티브 스플릿(후반을 약간 빠르게)</strong>을 권장합니다.
           </p>
           <div className="tableScroll">
@@ -96,10 +97,10 @@ export default function PacePage() {
 
         {/* ── 2. 트레드밀 시속 ↔ 페이스 변환표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             트레드밀 시속 ↔ 페이스 변환표
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             런닝머신에는 페이스 대신 <strong style={{ color: 'var(--text)' }}>시속(km/h)</strong>이 표시됩니다. 야외 러닝 페이스와 동일하게 설정하려면 아래 표를 참고하세요. 400m 트랙 1바퀴 기준 소요 시간도 함께 확인할 수 있습니다.
           </p>
           <div className="tableScroll">
@@ -138,10 +139,10 @@ export default function PacePage() {
 
         {/* ── 3. 거리별 레이스 페이스 전략 (전면 개편) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📐 거리별 레이스 페이스 전략
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             거리마다 페이스 분배가 다릅니다. 본 도구의 자동 스플릿과 함께 아래 전략을 참고하세요.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -213,10 +214,10 @@ export default function PacePage() {
 
         {/* ── 4. 네거티브 스플릿 전략 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             💡 네거티브 스플릿 전략
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>후반을 전반보다 약간 빠르게</strong> 달리는 전략. 본 도구의 하프·풀 결과 카드에 자동 표시됩니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -239,10 +240,10 @@ export default function PacePage() {
 
         {/* ── 5. 한국 인기 페이스 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🇰🇷 한국 마라톤 인기 목표 페이스
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국 러너들의 흔한 마라톤 목표 시간과 필요 페이스. &lsquo;서브&rsquo; 목표는 끝까지 유지하면 목표 시간 안에 들어오는 페이스(초 단위 내림)입니다. 서브3~서브5는 위 계산기의 「빠른 입력」 칩에서 한 탭으로 적용됩니다.
           </p>
           <div className="tableScroll">
@@ -280,10 +281,10 @@ export default function PacePage() {
 
         {/* ── 6. 트레드밀 vs 야외 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🏃 트레드밀 vs 야외
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             같은 시속이라도 트레드밀이 야외보다 약간 쉽게 느껴집니다. 야외 시뮬을 위해 경사 1~1.5% 권장.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -308,7 +309,7 @@ export default function PacePage() {
 
         {/* ── 4. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/interval-training', icon: '🏃‍♂️', name: '인터벌 훈련 계산기',     desc: 'VDOT·인터벌 페이스·훈련 스케줄' },
@@ -334,6 +335,6 @@ export default function PacePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

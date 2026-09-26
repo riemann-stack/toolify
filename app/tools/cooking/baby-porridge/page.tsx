@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/baby-porridge',
@@ -61,7 +62,7 @@ const RELATED = [
 
 export default function BabyPorridgePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/cooking/baby-porridge">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         요리·식품
       </p>
@@ -106,7 +107,7 @@ export default function BabyPorridgePage() {
         {/* 2. 단계별 진행 */}
         <section>
           <h2 style={sectionTitle}>단계별 배죽 진행 로드맵</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -174,6 +175,6 @@ export default function BabyPorridgePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

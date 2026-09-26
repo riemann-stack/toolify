@@ -11,6 +11,7 @@ import {
   DRUNK_DRIVING_REPEAT_PENALTIES, DRUNK_DRIVING_REPEAT_WINDOW_YEARS, LICENSE_DISQUALIFICATION_YEARS, BICYCLE_PM_FINES,
   fmtPenaltyLong, fmtPenaltyShort, fmtManwonWon, fmtLawDate, BAC_THRESHOLDS,
 } from './bacUtils'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/blood-alcohol',
@@ -95,7 +96,7 @@ const FAQ_LD = [
 
 export default function BloodAlcoholPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/blood-alcohol">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />혈중알코올 잔존량 추정기
@@ -113,7 +114,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 1. Widmark 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             Widmark 공식
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
@@ -137,10 +138,10 @@ export default function BloodAlcoholPage() {
 
         {/* ── 2. 음주운전 처벌 기준표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             음주운전 처벌 기준 (현행 · {fmtLawDate(DRUNK_DRIVING_LAW_SINCE, 'ym')}~)
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -167,13 +168,13 @@ export default function BloodAlcoholPage() {
 
         {/* ── 3. 음주량별 BAC 예시 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 className="g-h2">
             음주량별 BAC 예시
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '16px', lineHeight: 1.6 }}>
             70kg 남성, 식사 후 기준. 개인차 있음 — 참고용
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -199,7 +200,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 4. 알코올 분해 영향 요인 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🧬 알코올 분해에 영향을 주는 요인
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -224,7 +225,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 5. 다음날 아침 운전 — 한국 단속 최다 케이스 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🌅 다음날 아침에도 알코올이 남는 이유
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -249,13 +250,13 @@ export default function BloodAlcoholPage() {
 
         {/* ── 6. 여러 자리 음주 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🔢 1차·2차·3차 누적 음주 위험
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             여러 자리 음주는 BAC 누적이 매우 빠릅니다. 본 도구의 「🔢 여러 자리 누적」 탭에서 곡선 시각화.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -283,7 +284,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 7. ALDH2 결손 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🧬 ALDH2 결손 — 한국인 30~40%
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
@@ -303,7 +304,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 8. 자전거·전동킥보드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🚲 자전거·전동킥보드 음주운전
           </h2>
           <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
@@ -319,10 +320,10 @@ export default function BloodAlcoholPage() {
 
         {/* ── 9. 약물 + 알코올 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             💊 약물 + 알코올 위험
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -406,7 +407,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/alcohol',  icon: '🍺', name: '알코올 도수 계산기', desc: '혼합 음료 도수·표준 음주량' },
@@ -430,6 +431,6 @@ export default function BloodAlcoholPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -8,6 +8,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { autoTaxYearlyForCC } from './carCostUtils'
+import ToolPage from '@/components/ToolPage'
 
 const taxWon = (cc: number) => `${autoTaxYearlyForCC(cc).toLocaleString('ko-KR')}원`
 
@@ -104,7 +105,7 @@ const FAQ_LD = [
 
 export default function CarCostPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/car-cost">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />자동차 유지비 계산기
@@ -223,7 +224,7 @@ export default function CarCostPage() {
           한국 평균 자동차 보유 기간은 약 <strong style={{ color: 'var(--text)' }}>5.5년</strong>입니다.
           일반적으로 10년 보유가 더 경제적이지만, 정비비·안전·신차감 우선순위에 따라 달라집니다.
         </p>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -265,7 +266,7 @@ export default function CarCostPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
         3,000만 차량 / 5년 보유 가정 — 본 도구의 「구매 방식 비교」 탭에서 정량 비교 가능.
       </p>
-      <div style={{ overflowX: 'auto' }}>
+      <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -314,7 +315,7 @@ export default function CarCostPage() {
       <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
         5년 보유 / 월 1,500km(연 1만 8천km) 가정 — 본 도구의 「연료 타입 비교」 탭에서 6가지(가솔린·디젤·LPG·하이브리드·전기 가정/급속) 비교 가능.
       </p>
-      <div style={{ overflowX: 'auto' }}>
+      <div className="tableScroll">
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -446,6 +447,6 @@ export default function CarCostPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>차 vs 부동산 투자</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

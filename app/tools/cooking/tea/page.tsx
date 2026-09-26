@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/tea',
@@ -65,7 +66,7 @@ const FAQ_LD = [
 
 export default function TeaPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/cooking/tea">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         요리·식품
       </p>
@@ -98,7 +99,7 @@ export default function TeaPage() {
       {/* 2. 매트릭스 */}
       <h2 style={sectionTitle}>📊 차 종류별 권장 온도·시간 매트릭스</h2>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
@@ -344,6 +345,6 @@ export default function TeaPage() {
           </p>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/screw',
@@ -83,7 +84,7 @@ const FAQ_LD = [
 
 export default function ScrewPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/interior/screw">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />나사 규격 계산기
@@ -144,7 +145,7 @@ export default function ScrewPage() {
 
       {/* 3. 결합률 비교 */}
       <h2 style={sectionTitle}>📊 결합률 50/75/85% 비교</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         결합률(Thread Engagement) = 나사산이 모재와 얼마나 깊게 맞물리는지. 높을수록 강한 결합·낮을수록 분리 쉬움.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -204,7 +205,7 @@ export default function ScrewPage() {
 
       {/* 4-1. 한국 DIY 시나리오별 권장 나사 — 신규 */}
       <h2 style={sectionTitle}>🏠 한국 DIY 시나리오별 권장 나사</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+      <p className="g-p">
         한국 가정에서 자주 쓰이는 셀프 설치 시나리오와 추천 규격입니다. 벽재(석고/콘크리트/목재)에 따라 칼블록·앵커 필요 여부가 다릅니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -431,6 +432,6 @@ export default function ScrewPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>공구·자재 가격</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

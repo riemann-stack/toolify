@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/pomodoro',
@@ -63,7 +64,7 @@ const FAQ_LD = [
 
 export default function PomodoroPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/pomodoro">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />뽀모도로 타이머
@@ -79,8 +80,8 @@ export default function PomodoroPage() {
 
         {/* ── 1. 뽀모도로 기법이란? (기존 유지·SEO 보호) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>뽀모도로 기법이란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <h2 className="g-h2">뽀모도로 기법이란?</h2>
+          <p className="g-p">
             뽀모도로(Pomodoro) 기법은 1980년대 프란체스코 시릴로가 개발한 시간 관리 방법론입니다. 토마토 모양 주방 타이머(이탈리아어로 &lsquo;뽀모도로&rsquo;)에서 이름을 따왔으며, 짧은 집중과 규칙적인 휴식의 반복으로 인지 피로를 최소화합니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -103,13 +104,13 @@ export default function PomodoroPage() {
 
         {/* ── 2. 7가지 검증된 뽀모도로 프리셋 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             상황별 뽀모도로 프리셋 7가지
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             25/5 클래식 외에도 작업 성격·집중 패턴에 따라 자주 쓰이는 시간 조합이 있습니다(일부는 연구 기반, 일부는 경험적 패턴). 본 도구의 <strong style={{ color: 'var(--text)' }}>[설정·기법] 탭</strong>에서 한 번의 클릭으로 적용됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -148,10 +149,10 @@ export default function PomodoroPage() {
 
         {/* ── 3. 키보드 단축키 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             키보드 단축키 — 마우스 없이 빠르게 조작
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             작업 입력란에 포커스되어 있지 않을 때 동작합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '8px' }}>
@@ -174,10 +175,10 @@ export default function PomodoroPage() {
 
         {/* ── 4. 통계 활용법 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             통계로 집중 패턴 발견하기
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구는 완료한 모든 세션을 자동 기록(브라우저 로컬, 90일 보관)합니다. <strong style={{ color: 'var(--text)' }}>[통계] 탭</strong>에서 다음을 확인할 수 있습니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -200,13 +201,13 @@ export default function PomodoroPage() {
 
         {/* ── 5. 백색소음 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             집중을 돕는 백색소음·앰비언트 8가지
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             한 연구(Mehta 등)에선 적당한(약 70dB) 주변 소음이 <strong style={{ color: 'var(--text)' }}>집중 그 자체보다 창의적·발산적 사고 과제</strong>에서 도움이 된다고 보고합니다(지나치게 크면 오히려 방해). 효과는 사람·과제마다 다르니 참고용으로 활용하세요. 본 도구는 직접 재생을 제공하지 않으며, YouTube·노이즐리(noisli.com) 등에서 검색해 활용할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -251,7 +252,7 @@ export default function PomodoroPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기',     desc: '시험·마감까지 남은 날' },
@@ -275,6 +276,6 @@ export default function PomodoroPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

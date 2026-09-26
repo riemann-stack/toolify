@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/park-golf',
@@ -65,7 +66,7 @@ const RELATED = [
 
 export default function ParkGolfPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/park-golf">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
@@ -92,7 +93,7 @@ export default function ParkGolfPage() {
         {/* 1. 스코어 용어 */}
         <section>
           <h2 style={sectionTitle}>스코어 용어 — 골프와 똑같아요</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 400 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -188,6 +189,6 @@ export default function ParkGolfPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

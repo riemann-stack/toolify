@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/kimjang',
@@ -82,7 +83,7 @@ const FAQ_LD = [
 
 export default function KimjangPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/cooking/kimjang">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />김장 양 계산기
@@ -99,7 +100,7 @@ export default function KimjangPage() {
         {/* 1. 김장 양 계산 원리 */}
         <section>
           <h2 style={sectionTitle}>김장 양 계산 원리</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구는 <strong style={{ color: 'var(--text)' }}>한국식품과학회·한식진흥원 표준 비율</strong>을 기반으로 계산합니다.
             핵심 가정:
           </p>
@@ -310,6 +311,6 @@ export default function KimjangPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

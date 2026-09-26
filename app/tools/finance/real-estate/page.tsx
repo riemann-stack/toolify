@@ -8,6 +8,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { calcHouseAcquisitionTax, calcNonHouseAcquisitionTax } from '@/lib/krAcquisitionTax'
+import ToolPage from '@/components/ToolPage'
 
 /* 취득세 예시표 — lib/krAcquisitionTax 단일 소스로 빌드 시 생성 (취득세+지방교육세+농특세 합계) */
 const ACQ_PRICES = [500_000_000, 750_000_000, 1_200_000_000]
@@ -82,7 +83,7 @@ const FAQ_LD = [
 
 export default function RealEstatePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/real-estate">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -113,7 +114,7 @@ export default function RealEstatePage() {
 
         {/* ── 2. 핵심 공식 박스 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             핵심 계산 공식
           </h2>
           <div style={{
@@ -138,7 +139,7 @@ export default function RealEstatePage() {
 
         {/* ── 3. 한국 취득세 자동 계산 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 취득세 자동 계산 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -205,10 +206,10 @@ export default function RealEstatePage() {
 
         {/* ── 4. 한국 중개수수료 법정 요율표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 중개수수료 법정 요율 (매매 기준)
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -242,7 +243,7 @@ export default function RealEstatePage() {
 
         {/* ── 5. 대출 레버리지 효과 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🔑 대출 레버리지 효과 완전 가이드
           </h2>
           <div style={{
@@ -299,7 +300,7 @@ export default function RealEstatePage() {
 
         {/* ── 6. 갭투자 vs 일반 매수 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             갭투자 vs 일반 매수 + 임대 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
@@ -328,7 +329,7 @@ export default function RealEstatePage() {
 
         {/* ── 6-1. 양도소득세 참고 가이드 (2026.6 추가) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             양도소득세 참고 가이드 (2026년 6월 기준)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -336,7 +337,7 @@ export default function RealEstatePage() {
             매도 시점에 아래 양도소득세가 별도로 발생하므로, 계산된 세전 수익에서 양도세를 차감해야 실제 손에 쥐는 금액이 됩니다.
             아래는 국세청이 안내하는 현행 보유기간별 세율 골격입니다(주택·조합원입주권 기준).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -392,7 +393,7 @@ export default function RealEstatePage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -413,7 +414,7 @@ export default function RealEstatePage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -446,6 +447,6 @@ export default function RealEstatePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

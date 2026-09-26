@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/css-converter',
@@ -52,7 +53,7 @@ const FAQ_LD = [
 
 export default function CssConverterPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/dev/css-converter">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />CSS 단위 변환기
@@ -68,7 +69,7 @@ export default function CssConverterPage() {
 
         {/* 1. 핵심 공식 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>CSS 단위 핵심 공식 참조표</h2>
+          <h2 className="g-h2">CSS 단위 핵심 공식 참조표</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -100,8 +101,8 @@ export default function CssConverterPage() {
 
         {/* 1.5 px → rem 조견표 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>px → rem 조견표 (root 16px)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">px → rem 조견표 (root 16px)</h2>
+          <p className="g-p">
             아래 표는 root font-size 16px 기준의 <span style={{ fontFamily: 'var(--font-mono)' }}>px ÷ 16</span> 산술입니다. 한 가지 주의 — <strong style={{ color: 'var(--text)' }}>16px은 CSS 표준이 정한 수치가 아닙니다</strong>. W3C 명세(CSS Values Level 4)는 rem을 &ldquo;루트 요소 font-size와 같다&rdquo;로만 정의하고 숫자를 정하지 않으며, MDN도 &ldquo;일반적인 브라우저 기본값(common browser default)이 16px이지만 사용자 설정으로 바뀔 수 있다&rdquo;고 서술합니다. rem을 쓰는 이유가 정확히 이 지점입니다 — 사용자가 브라우저 설정에서 기본 글꼴을 20px로 키우면 px로 고정한 텍스트는 그대로지만, rem으로 쓴 텍스트는 20 ÷ 16 = 1.25배로 함께 커져 사용자의 선택을 존중합니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
@@ -143,7 +144,7 @@ export default function CssConverterPage() {
 
         {/* 2. rem vs em */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>rem vs em 완전 비교</h2>
+          <h2 className="g-h2">rem vs em 완전 비교</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -173,8 +174,8 @@ export default function CssConverterPage() {
 
         {/* 3. 62.5% 트릭의 함정 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>px→rem 62.5% 트릭(1rem = 10px)의 함정</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">px→rem 62.5% 트릭(1rem = 10px)의 함정</h2>
+          <p className="g-p">
             html에 <strong style={{ color: 'var(--text)' }}>font-size: 62.5%</strong>를 선언하면 브라우저 기본 16px × 0.625 = <strong style={{ color: 'var(--text)' }}>10px</strong>가 되어 1.6rem = 16px, 2.4rem = 24px처럼 암산이 쉬워집니다. 문제는 rem이 <strong style={{ color: 'var(--text)' }}>문서 전체에 적용되는 전역 기준</strong>이라는 점입니다. Shadow DOM 내부의 rem까지 예외 없이 바뀌므로, 1rem = 16px를 전제로 만들어진 서드파티 코드가 전부 62.5% 크기로 줄어듭니다.
           </p>
           <div style={codeBox}>
@@ -194,8 +195,8 @@ h1   { font-size: 3.2rem; }   /* 32px ✅ */
 
         {/* 3.5 Tailwind와 rem */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Tailwind와 rem — spacing scale·임의값</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">Tailwind와 rem — spacing scale·임의값</h2>
+          <p className="g-p">
             Tailwind의 spacing 유틸리티는 rem 기반입니다. v3 공식 문서의 명문은 <strong style={{ color: 'var(--text)' }}>&ldquo;spacing 1단위 = 0.25rem, 일반적인 브라우저 기본값에서 4px&rdquo;</strong> — v4는 같은 결과를 테마 변수 <span style={{ fontFamily: 'var(--font-mono)' }}>--spacing: 0.25rem</span>에 숫자를 곱하는 방식으로 만듭니다(2026-07 v3·v4 문서 기준). 단위가 rem이므로 위에서 본 &lsquo;사용자 글꼴 설정 존중&rsquo;이 유틸리티 전체에 자동으로 적용됩니다.
           </p>
           <div style={codeBox}>
@@ -215,8 +216,8 @@ p-3 = 0.75rem = 12px      p-8 = 2rem   = 32px
 
         {/* 4. clamp() 가이드 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>clamp() 완전 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">clamp() 완전 가이드</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>clamp(최솟값, 선호값, 최댓값)</strong>은 뷰포트 크기에 따라 값을 부드럽게 변화시키면서도 안전한 상·하한을 보장합니다.
           </p>
           <div style={codeBox}>
@@ -241,8 +242,8 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 4.5 타이포 스케일 실전 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>타이포 스케일 실전 — h1~캡션 clamp() 세트</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">타이포 스케일 실전 — h1~캡션 clamp() 세트</h2>
+          <p className="g-p">
             위 선형 보간 공식을 실제 타이포 단계에 적용한 세트입니다. 뷰포트 기준은 360~1440px — 이 페이지 clamp() 생성기의 기본값과 같아서, 같은 px를 입력하면 아래와 동일한 코드가 나옵니다. MDN 정의대로 <strong style={{ color: 'var(--text)' }}>clamp(MIN, VAL, MAX)는 max(MIN, min(VAL, MAX))로 해석</strong>되므로, 선호값(가운데 vw 식)이 어떤 값이 되어도 결과는 항상 MIN~MAX 사이로 잘립니다. 이 등가식을 그대로 계산해 보면, 실수로 MIN을 MAX보다 크게 지정했을 때 바깥쪽 max()가 마지막에 적용되어 MIN이 이긴다는 것도 도출됩니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
@@ -278,8 +279,8 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 5. 100vh 문제와 dvh·svh·lvh */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>100vh 모바일 주소창 문제 — dvh·svh·lvh</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">100vh 모바일 주소창 문제 — dvh·svh·lvh</h2>
+          <p className="g-p">
             모바일 브라우저의 주소창은 스크롤에 따라 나타났다 사라지지만, 기존 <strong style={{ color: 'var(--text)' }}>100vh는 주소창이 접힌 가장 큰 화면 기준</strong>으로 계산되는 경우가 대부분입니다. 그래서 첫 화면에서 100vh 요소의 하단 — 고정 버튼·CTA — 이 주소창에 가려지는 문제가 생깁니다. CSS Values Level 4는 이를 해결하는 세 가지 뷰포트 높이 단위를 추가했습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
@@ -322,7 +323,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 6. aspect-ratio vs padding-top */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>aspect-ratio vs padding-top trick</h2>
+          <h2 className="g-h2">aspect-ratio vs padding-top trick</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>✨ 최신 방법 (aspect-ratio)</p>
@@ -352,8 +353,8 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 7. line-height unitless */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>line-height unitless 권장 이유</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">line-height unitless 권장 이유</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>unitless</strong>(단위 없는) line-height는 자식 요소에 상속될 때 <strong style={{ color: 'var(--text)' }}>자식의 font-size</strong>로 재계산됩니다. 반면 em·%는 계산된 px값이 그대로 상속되어 의도와 달라질 수 있습니다.
           </p>
           <div style={codeBox}>
@@ -370,7 +371,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 8. Figma → CSS */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Figma → CSS 변환 치트시트</h2>
+          <h2 className="g-h2">Figma → CSS 변환 치트시트</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -399,7 +400,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 9. FAQ */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -420,7 +421,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 10. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/color',     emoji: '🎨', name: '색상 코드 변환기',   desc: 'HEX·RGB·HSL 변환' },
@@ -439,6 +440,6 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
           </div>
         </div>
       </div>
-    </div>
+    </ToolPage>
   )
 }

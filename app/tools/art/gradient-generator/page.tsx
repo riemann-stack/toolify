@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/art/gradient-generator',
@@ -74,7 +75,7 @@ const FAQ_LD = [
 
 export default function GradientGeneratorPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/art/gradient-generator">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />CSS 그라디언트 생성기
@@ -94,7 +95,7 @@ export default function GradientGeneratorPage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             그라디언트의 품질은 두 색상 사이를 어떤 색공간에서 보간하느냐에 크게 좌우됩니다. RGB는 단순하지만 보색 사이 중간이 회색에 가까워지고, HSL은 hue가 짧은 길로 회전하며 채도가 떨어지기 쉽습니다. OKLCH는 인간 시각의 인지 균등성을 반영해 설계되어 UI 그라디언트에 적합합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -262,6 +263,6 @@ background-image:
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

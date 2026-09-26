@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/ac-capacity',
@@ -38,7 +39,7 @@ const FAQ_LD = [
 
 export default function AcCapacityPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/interior/ac-capacity">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
@@ -59,7 +60,7 @@ export default function AcCapacityPage() {
 
         {/* ── 1. 계산 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             에어컨 평형 계산 공식
           </h2>
           <div style={{
@@ -87,10 +88,10 @@ export default function AcCapacityPage() {
 
         {/* ── 2. 한국 평형 표준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 에어컨 평형 표준 (시판 모델)
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -122,7 +123,7 @@ export default function AcCapacityPage() {
 
         {/* ── 3. 평형 보정 계수 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎯 평형 보정 계수 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -169,7 +170,7 @@ export default function AcCapacityPage() {
 
         {/* ── 4. BTU·W·평형 환산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🌐 BTU·W·평형 환산 가이드
           </h2>
           <div style={{
@@ -197,7 +198,7 @@ export default function AcCapacityPage() {
 
         {/* ── 5. 평형이 너무 크거나 작으면 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             ⚖️ 평형이 너무 크거나 작으면 안 좋은 이유
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -235,7 +236,7 @@ export default function AcCapacityPage() {
 
         {/* ── 6. 인버터 vs 정속형 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             ⚡ 인버터 vs 정속형 — 어떤 걸 골라야 할까?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -264,7 +265,7 @@ export default function AcCapacityPage() {
 
         {/* ── 7. 언제, 몇 도로 틀까 (사용 가이드) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🌡️ 에어컨 언제, 몇 도로 틀까? — 사용 가이드
           </h2>
 
@@ -350,7 +351,7 @@ export default function AcCapacityPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -384,6 +385,6 @@ export default function AcCapacityPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

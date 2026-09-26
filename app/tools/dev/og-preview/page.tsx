@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/og-preview',
@@ -66,7 +67,7 @@ const FAQ_LD = [
 
 export default function OgPreviewPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/dev/og-preview">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />OG 미리보기 시뮬레이터
@@ -93,7 +94,7 @@ export default function OgPreviewPage() {
         {/* 1. Open Graph란? */}
         <section>
           <h2 style={sectionTitle}>Open Graph(OG) — 한 줄 요약</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             Open Graph는 2010년 Facebook이 만든 메타데이터 규약으로, <strong style={{ color: 'var(--text)' }}>URL이 공유될 때 어떤 카드로 표시될지</strong>를 페이지 작성자가 직접 지정할 수 있게 합니다.
             카카오톡·Facebook·LinkedIn·Slack·Discord는 모두 OG 태그를 따르고, X(Twitter)만 자체 <code style={{ color: 'var(--text)' }}>twitter:*</code> 태그를 우선 참조(없으면 OG로 폴백).
           </p>
@@ -111,7 +112,7 @@ export default function OgPreviewPage() {
         {/* 2. 카카오톡 OG 가이드 */}
         <section>
           <h2 style={sectionTitle}>🇰🇷 카카오톡 OG 가이드 — 가장 까다로움</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             한국에서 가장 중요한 공유 채널이면서 가장 까다로운 곳이 카카오톡입니다. 다음 규칙을 모르면 카드가 표시되지 않거나 깨집니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -142,7 +143,7 @@ export default function OgPreviewPage() {
         {/* 3. 플랫폼별 차이 */}
         <section>
           <h2 style={sectionTitle}>플랫폼별 카드 차이 한눈에</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -175,12 +176,12 @@ export default function OgPreviewPage() {
         {/* 4. OG 이미지 안전 영역 */}
         <section>
           <h2 style={sectionTitle}>1200×630 안전 영역 — 제목 텍스트, 어디까지 잘리나</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             1200×630 한 장으로 통일해도 플랫폼마다 <strong style={{ color: 'var(--text)' }}>표시 비율이 달라 가장자리가 잘립니다</strong>.
             X는 카드 비율에 맞춰 이미지를 중앙 기준으로 잘라내고, Facebook은 &ldquo;1.91:1에 가깝게 유지해야 피드에서 크롭 없이 전체가 표시된다&rdquo;고 공식 문서에 명시합니다.
             1200×630 원본이 각 비율에서 잃는 픽셀을 계산하면 이렇습니다(중앙 크롭 기준 — 크롭 위치는 앱 버전에 따라 달라질 수 있으니 중앙 배치가 안전).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -216,7 +217,7 @@ export default function OgPreviewPage() {
         {/* 5. 프레임워크별 OG 삽입 위치 */}
         <section>
           <h2 style={sectionTitle}>프레임워크별 삽입 위치 — 순수 HTML·Next.js·워드프레스</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             검증이 끝났으면 실제 코드에 넣을 차례. 순수 HTML이라면 <code style={{ color: 'var(--text)' }}>&lt;head&gt;</code> 안에 아래 5줄이 최소 세트입니다 — 이 도구의 코드 생성 결과와 같은 골격이에요.
           </p>
           <pre style={{ background: 'var(--bg2)', padding: '8px 12px', borderRadius: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text)', overflowX: 'auto', marginBottom: '12px' }}>
@@ -226,7 +227,7 @@ export default function OgPreviewPage() {
 <meta property="og:url" content="https://example.com/page" />
 <meta name="twitter:card" content="summary_large_image" />`}
           </pre>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>Next.js(App Router)</strong>는 메타태그를 직접 쓰지 않고 <code style={{ color: 'var(--text)' }}>page.tsx</code>의 <code style={{ color: 'var(--text)' }}>metadata</code> 객체로 선언합니다.
             같은 라우트 폴더에 <code style={{ color: 'var(--text)' }}>opengraph-image.png</code>(또는 ImageResponse를 반환하는 <code style={{ color: 'var(--text)' }}>opengraph-image.tsx</code>)를 두면 og:image 태그가 자동 생성됩니다.
           </p>
@@ -294,6 +295,6 @@ export const metadata = {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

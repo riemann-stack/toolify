@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/lunar',
@@ -51,7 +52,7 @@ const FAQ_LD = [
 
 export default function LunarPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/date/lunar">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />양력 음력 변환기
@@ -76,13 +77,13 @@ export default function LunarPage() {
 
         {/* 1. 양력 vs 음력 차이 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>양력과 음력, 무엇이 다를까?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">양력과 음력, 무엇이 다를까?</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>양력(태양력)</strong>은 지구가 태양을 한 바퀴 도는 365.25일을 기준으로 하며 현재 세계 표준 달력입니다.
             <strong style={{ color: 'var(--text)' }}> 음력(태음력)</strong>은 달이 차고 기우는 주기 약 29.5일을 한 달로 삼아 1년이 약 354일로 양력보다 11일가량 짧습니다.
             이 차이를 보정하기 위해 중기(中氣)가 들지 않는 달을 윤달로 삼는 <strong style={{ color: 'var(--accent)' }}>무중치윤법</strong>으로 윤달을 끼워 넣으며, 결과적으로 약 19년에 7번꼴(메톤 주기 근사)이 됩니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             한국의 공식 달력은 을미개혁 때 음력 1895년 11월 17일을 <strong style={{ color: 'var(--text)' }}>양력 1896년 1월 1일(건양 원년)</strong>로 삼은 이후 양력이지만, <strong style={{ color: 'var(--text)' }}>설날·추석·부처님오신날·단오·제사·음력 생일</strong> 등 전통 절기는 여전히 음력 기준으로 챙깁니다. 일부 가정은 음력 생일·양력 생일을 모두 챙기기도 합니다.
           </p>
           <div style={{ overflowX: 'auto', marginTop: 14 }}>
@@ -116,11 +117,11 @@ export default function LunarPage() {
 
         {/* 2. 한국 명절 음력 → 양력 (2026~2028) */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 명절 음력 → 양력 (2026~2028)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">한국 명절 음력 → 양력 (2026~2028)</h2>
+          <p className="g-p">
             매년 양력 날짜가 바뀝니다. 설·추석은 한국에서 가장 큰 명절(3일 연휴).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -157,11 +158,11 @@ export default function LunarPage() {
 
         {/* 3. 60갑자 — 천간 · 지지 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>60갑자 — 천간(10) × 지지(12)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">60갑자 — 천간(10) × 지지(12)</h2>
+          <p className="g-p">
             동아시아 전통 연도 표기. 천간 10개와 지지 12개를 순차로 조합해 60년마다 한 번 순환합니다 — 그래서 만 60세 환갑(還甲)은 「자기 출생 간지로 돌아오는」 의미.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             주기가 60년인 이유는 <strong style={{ color: 'var(--text)' }}>10과 12의 최소공배수가 60</strong>이기 때문입니다.
             또한 천간이 양(갑·병·무·경·임)이면 지지도 양(자·인·진·오·신·술)끼리만 짝지어지므로 120개가 아닌 <strong style={{ color: 'var(--text)' }}>60개 조합</strong>만 존재합니다 — 갑축(甲丑)·을자(乙子) 같은 간지는 없습니다.
             천간의 오행·색과 지지의 동물이 결합해 「청룡(갑진)」 「붉은 말(병오)」 같은 별칭이 만들어집니다.
@@ -213,7 +214,7 @@ export default function LunarPage() {
 
         {/* 4. 사용 방법 (기존 유지) */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사용 방법</h2>
+          <h2 className="g-h2">사용 방법</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { step: '1', title: '변환 방향 선택', content: '상단 토글에서 "양력 → 음력" 또는 "음력 → 양력" 을 고릅니다.' },
@@ -253,7 +254,7 @@ export default function LunarPage() {
 
         {/* 6. 관련 도구 — 2열 카드 그리드 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/zodiac',     icon: '🐲', name: '띠·별자리 계산기',   desc: '60갑자·궁합·삼합' },
@@ -279,6 +280,6 @@ export default function LunarPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 // FAQ 본문 + 구조화 데이터(FAQPage)를 함께 쓰기 위해 배열로 추출
 const FAQS = [
@@ -65,7 +66,7 @@ const sectionTitle: React.CSSProperties = {
 
 export default function ServerTimePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/date/server-time">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />실시간 서버 시간
@@ -82,13 +83,13 @@ export default function ServerTimePage() {
         {/* 1. 왜 정확한 서버 시간이 중요한가 */}
         <section>
           <h2 style={sectionTitle}>왜 정확한 서버 시간이 중요한가?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             수강신청·티켓팅에서는 서버 기준 시각보다 <strong style={{ color: 'var(--text)' }}>0.1초만 늦어도 매진</strong>되는 일이 흔합니다. 반대로 너무 빨리 새로고침하면 「아직 시작 안 됨」 페이지로 튕겨 다시 대기열에 밀려납니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             문제는 <strong style={{ color: 'var(--text)' }}>내 PC·스마트폰 시계가 NTP 동기화가 안 돼 있으면 수 초 안팎의 오차</strong>가 생길 수 있다는 점. Windows 10·11은 기본 설정에서 1주일에 한 번만 동기화하고, 일부 노트북은 슬립 후 시계가 어긋납니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             본 도구는 <strong style={{ color: 'var(--accent-ink)' }}>NTP와 같은 원리로 5회 측정 → 최소 RTT 채택</strong>해 일반적으로 수십 ms 정확도의 한국 표준시(KST)를 제공합니다. 새로고침 타이밍의 기준으로 활용하세요.
           </p>
         </section>
@@ -96,7 +97,7 @@ export default function ServerTimePage() {
         {/* 2. 한국 주요 티켓팅·신청 사이트 정시 */}
         <section>
           <h2 style={sectionTitle}>한국 주요 티켓팅·신청 사이트 정시</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             대부분 시스템은 KST 기준 정각/30분 단위로 열립니다. 사이트별 권장 새로고침 타이밍.
           </p>
           <div className="tableScroll">
@@ -136,10 +137,10 @@ export default function ServerTimePage() {
         {/* 3. 마라톤 대회 신청 — 광클 전쟁 + 성공 스토리 */}
         <section>
           <h2 style={sectionTitle}>마라톤 대회 신청, 이제는 콘서트 티켓팅만큼 어렵습니다</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             러닝 인구가 폭발적으로 늘면서 인기 대회는 <strong style={{ color: 'var(--text)' }}>접수 시작 수 분, 빠르면 수십 초 만에 마감</strong>됩니다. 동아마라톤(서울)·JTBC 서울마라톤·춘천마라톤·손기정평화마라톤 같은 메이저 대회는 물론, 지방 대회들도 오픈과 동시에 품절이 뜨는 게 일상이 됐습니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             경쟁이 갈수록 치열해져서 <strong style={{ color: 'var(--text)' }}>접수 페이지가 열리는 정확한 타이밍을 잡는 것</strong>이 중요합니다. 내 PC·폰 시계가 1~2초만 빠르거나 느려도 한 발 늦어 대기열 수천 번째로 밀리거나, 너무 일찍 눌러 아직 오픈 전 페이지가 보일 수도 있습니다. 대회 신청 사이트를 미리 추가해서 태블릿으로 띄워두고, 정확한 타이밍에 새로고침하세요.
           </p>
 
@@ -190,7 +191,7 @@ export default function ServerTimePage() {
         {/* 4. PC 시계 동기화 가이드 */}
         <section>
           <h2 style={sectionTitle}>내 PC·스마트폰 시계 동기화하기</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             본 도구로 오차가 ±1초 이상 나면 OS 시계를 강제 동기화하세요. 한국에서는 <strong style={{ color: 'var(--text)' }}>한국표준과학연구원(KRISS) NTP 서버 (ntp.kriss.re.kr)</strong>가 가장 정확합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -253,6 +254,6 @@ export default function ServerTimePage() {
           </div>
         </section>
       </div>
-    </div>
+    </ToolPage>
   )
 }

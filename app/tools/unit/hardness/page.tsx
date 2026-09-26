@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/hardness',
@@ -65,7 +66,7 @@ const FAQ_LD = [
 
 export default function HardnessPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/unit/hardness">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />경도(Hardness) 변환기
@@ -82,7 +83,7 @@ export default function HardnessPage() {
         {/* 1. 5개 스케일 개요 */}
         <section>
           <h2 style={sectionTitle}>5개 경도 스케일 — 언제 어떤 걸 쓰나</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 580 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -118,7 +119,7 @@ export default function HardnessPage() {
         {/* 2. ASTM E140 */}
         <section>
           <h2 style={sectionTitle}>ASTM E140 — 강철 경도 환산 표준</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 경도 상호 환산은 <strong style={{ color: 'var(--text)' }}>ASTM E140(Standard Hardness Conversion Tables for Metals)</strong>의 Table 1(비오스테나이트계 강 — 탄소강·합금강·공구강)과 Table 2(연질 구간·HRB)를 기반으로 합니다. 강철의 통계적 평균치를 정리한 표로, 1950년대부터 사용되어 산업 표준으로 자리 잡았어요. 인장강도 열은 E140에 없는 항목이라 <strong style={{ color: 'var(--text)' }}>ISO 18265(경도값의 인장강도 환산) 표 A.1</strong>(비합금·저합금강)을 따릅니다.
           </p>
           <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
@@ -134,7 +135,7 @@ export default function HardnessPage() {
         {/* 3. 칼 강재 가이드 */}
         <section>
           <h2 style={sectionTitle}>🔪 칼 강재(Steel) 경도 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             칼 경도는 <strong style={{ color: 'var(--text)' }}>날 끝 유지력(edge retention)</strong>과 <strong style={{ color: 'var(--text)' }}>인성(toughness)</strong>의 트레이드오프를 결정합니다. 일반적으로 60 HRC를 기준으로 위는 &ldquo;오래 가지만 잘 부러짐&rdquo;, 아래는 &ldquo;빨리 무뎌지지만 잘 안 부러짐&rdquo;. 아래 수치는 제조사 공표 HRC 스펙 기준 참고표이며, 스테인리스 칼 강재의 스케일 간 환산 편차는 위 ASTM E140 단락의 주의를 참고하세요.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -182,6 +183,6 @@ export default function HardnessPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

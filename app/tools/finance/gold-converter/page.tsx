@@ -5,6 +5,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/gold-converter',
@@ -77,7 +78,7 @@ const FAQ_LD = [
 
 export default function GoldConverterPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/gold-converter">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />금 단위·가격 계산기
@@ -99,7 +100,7 @@ export default function GoldConverterPage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             한국 금 거래는 전통적으로 <strong style={{ color: 'var(--text)' }}>돈</strong>을 사용합니다. 1돈 = 3.75g이며, 1냥 = 10돈 = 37.5g, 1푼 = 0.1돈 = 0.375g입니다. 국제 거래는 트로이온스(oz t = 31.1035g)가 기준.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -138,7 +139,7 @@ export default function GoldConverterPage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             K 숫자는 24분의 X로 순금 비율을 나타냅니다 (24K = 24/24 = 100% 기준점). 실제 거래되는 순금은 품위 999(99.9%)~999.9(99.99%) — 본 계산기는 24K를 100% 기준으로 환산합니다. 18K/14K는 합금이라 단단하고 색상이 다양해 일상 보석류에 적합합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -171,7 +172,7 @@ export default function GoldConverterPage() {
         {/* 3. KRX 비교표 */}
         <section>
           <h2 style={sectionTitle}>KRX 금현물 vs 골드바 vs 금통장</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -277,6 +278,6 @@ export default function GoldConverterPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/history-era',
@@ -92,7 +93,7 @@ const FAQ_LD = [
 
 export default function HistoryEraPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/date/history-era">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />연호·연대 변환기
@@ -118,8 +119,8 @@ export default function HistoryEraPage() {
 
         {/* ── 1. 연호 계산 방법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>연호 ↔ 서기 변환 원리</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <h2 className="g-h2">연호 ↔ 서기 변환 원리</h2>
+          <p className="g-p">
             모든 연호·기년법은 <strong style={{ color: 'var(--text)' }}>기준 연도(원년) + 재위년 - 1</strong> 공식으로 서기로 변환됩니다.
             아래 기준 연도를 알면 암산으로도 쉽게 계산할 수 있습니다.
           </p>
@@ -161,8 +162,8 @@ export default function HistoryEraPage() {
 
         {/* ── 2. 조선 27대 왕 연호표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>조선 27대 왕 재위·기년표</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <h2 className="g-h2">조선 27대 왕 재위·기년표</h2>
+          <p className="g-p">
             조선왕조실록의 기년은 원칙적으로 <strong style={{ color: 'var(--text)' }}>유년칭원법</strong> — 왕이 즉위한 <strong style={{ color: 'var(--text)' }}>이듬해</strong>를 원년(1년)으로 셉니다.
             예: 세종은 1418년에 즉위했고 원년은 1419년이므로, 세종 28년 = 1419 + 28 − 1 = <strong style={{ color: 'var(--text)' }}>1446년</strong> (훈민정음 반포).
             태조(개국)·세조·중종·인조(반정)는 예외로 즉위한 해가 곧 원년입니다.
@@ -197,8 +198,8 @@ export default function HistoryEraPage() {
 
         {/* ── 3. 60갑자 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>60갑자(六十甲子)란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <h2 className="g-h2">60갑자(六十甲子)란?</h2>
+          <p className="g-p">
             10개의 천간(甲~癸)과 12개의 지지(子~亥)를 순서대로 짝지어 60년마다 반복되는 연도 표기입니다 (예: 2026년 = 병오년).
             천간이 양(갑·병·무·경·임)이면 지지도 양(자·인·진·오·신·술), 음이면 음이어야 하므로 갑축(甲丑) 같은 조합은 존재하지 않습니다 — 본 도구의 [간지 변환] 탭이 이를 자동 검증합니다.
             천간·지지의 전체 구성과 띠·환갑 등 60갑자 순환 원리는{' '}
@@ -215,10 +216,10 @@ export default function HistoryEraPage() {
 
         {/* ── 4. 한국 통합 연표 (단군~현재) (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🇰🇷 한국 통합 연표 (단군~현재)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [역사 연표] 탭에서 70+ 사건을 시대별 필터로 조회 가능. 시대 구조:
           </p>
           <div className="tableScroll">
@@ -254,10 +255,10 @@ export default function HistoryEraPage() {
 
         {/* ── 5. 동아시아 연호 동시 비교 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🌏 동아시아 연호 동시 비교
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [서기→연호] 탭에서 한 연도 입력 시 한국·중국·일본·기타 매핑을 동시에 표시. 동아시아 격동기 비교.
           </p>
           <div className="tableScroll">
@@ -294,10 +295,10 @@ export default function HistoryEraPage() {
 
         {/* ── 6. 한국 주요 역사 사건 30선 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📌 한국 주요 역사 사건 30선
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             학교 과제·시험 자주 출제되는 사건. 본 도구의 [역사 연표] 탭 검색에서 사건명 또는 연도 입력으로 즉시 조회.
           </p>
           <div className="tableScroll">
@@ -345,10 +346,10 @@ export default function HistoryEraPage() {
 
         {/* ── 7. 한국 기년법 사용 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📚 한국에서 어떤 기년법을 쓰나?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             상황에 따라 다른 기년법을 사용합니다. 본 도구로 모두 즉시 변환 가능.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
@@ -371,10 +372,10 @@ export default function HistoryEraPage() {
 
         {/* ── 자료 기준 및 한계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📖 자료 기준 및 한계
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 변환 기준과, 사료·표기 방식에 따라 결과가 달라질 수 있는 지점입니다.
           </p>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -421,7 +422,7 @@ export default function HistoryEraPage() {
 
         {/* ── 5. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/age',     icon: '🎂', name: '만 나이 계산기',     desc: '2023 만 나이 통일법 기준' },
@@ -447,6 +448,6 @@ export default function HistoryEraPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

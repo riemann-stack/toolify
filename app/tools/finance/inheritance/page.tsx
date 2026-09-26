@@ -6,6 +6,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/inheritance',
@@ -104,7 +105,7 @@ const FAQ_LD = [
 
 export default function InheritancePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/inheritance">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />상속·증여세 계산기
@@ -121,7 +122,7 @@ export default function InheritancePage() {
 
       {/* 1. 증여세 공제 한도표 (기존 SEO 보존) */}
       <h2 style={sectionTitle}>📋 증여세 공제 한도 (2026년 기준)</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         증여 공제는 <strong style={{ color: 'var(--text)' }}>10년간 합산</strong>되어 적용됩니다. 즉, 동일인에게서 받은 증여는 10년 단위로 누적 계산되며, 누적 합계가 공제 한도를 넘는 부분만 과세됩니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -185,7 +186,7 @@ export default function InheritancePage() {
 
       {/* 4. 법정상속분 가이드 (NEW) */}
       <h2 style={sectionTitle}>👨‍👩‍👧‍👦 법정상속분 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+      <p className="g-p">
         한국 민법 기준 — 배우자는 다른 상속인보다 0.5만큼 더 많이 받습니다 (1.5 : 1).
         본 도구의 「상속인별 분배」 탭에서 자동 계산.
       </p>
@@ -225,7 +226,7 @@ export default function InheritancePage() {
 
       {/* 5. 배우자 상속공제 정량 가이드 (NEW) */}
       <h2 style={sectionTitle}>💍 배우자 상속공제 — 실제 상속분에 따른 차이</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+      <p className="g-p">
         배우자가 실제 상속받은 금액에 대해 <strong style={{ color: 'var(--text)' }}>최소 5억, 최대 30억</strong> 공제 (법정상속분 한도 내).
         본 도구의 「상속세 계산」 탭에서 자동 시뮬.
       </p>
@@ -259,7 +260,7 @@ export default function InheritancePage() {
 
       {/* 6. 10년 주기 활용 (NEW) */}
       <h2 style={sectionTitle}>📅 10년 주기 활용 — 30년 절세 계획</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+      <p className="g-p">
         10년마다 새로운 공제 한도가 시작됩니다. 일찍 시작할수록 비과세 증여 효과 ↑.
       </p>
       <div style={card}>
@@ -405,6 +406,6 @@ export default function InheritancePage() {
         </Link>
       </div>
 
-    </div>
+    </ToolPage>
   )
 }

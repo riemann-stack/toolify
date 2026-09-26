@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/sig-figs',
@@ -31,7 +32,7 @@ const FAQ_LD = [
 
 export default function SigFigsPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/edu/sig-figs">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />유효숫자·오차 계산기
@@ -95,7 +96,7 @@ export default function SigFigsPage() {
         {/* 3. 오차 전파 공식 */}
         <section>
           <h2 style={h2}>오차 전파 공식</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -161,7 +162,7 @@ export default function SigFigsPage() {
             사칙연산이 아닌 함수는 1차 근사 <strong style={{ color: 'var(--text)' }}>δR = |dR/dA| × δA</strong>로 전파합니다.
             pH·반감기·감쇠 계산에서 자주 쓰는 형태를 정리했습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -232,6 +233,6 @@ export default function SigFigsPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

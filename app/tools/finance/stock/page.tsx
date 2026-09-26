@@ -6,6 +6,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock',
@@ -72,7 +73,7 @@ const FAQ_LD = [
 
 export default function StockPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/stock">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />주식 물타기 계산기
@@ -97,10 +98,10 @@ export default function StockPage() {
 
         {/* ── 1. 평단가 산출 공식 (기존 SEO 보존) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             물타기 후 평균단가 산출 공식
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             물타기의 핵심은 <strong style={{ color: 'var(--text)' }}>총 투자 금액을 총 보유 수량으로 나누는 것</strong>입니다.
             수수료·거래세를 포함할 경우 실제 매수 단가에 수수료율을 반영해야 정확한 손익분기점을 파악할 수 있습니다.
           </p>
@@ -136,7 +137,7 @@ export default function StockPage() {
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '10px' }}>
               📌 계산 예시 — 평단 50,000원 / 100주 보유 시 현재가 40,000원에 25주 추가 매수 <span style={{ fontWeight: 400, color: 'var(--muted)' }}>(수수료·세금 제외 단순 예시)</span>
             </p>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -166,10 +167,10 @@ export default function StockPage() {
 
         {/* ── 2. 물타기 vs 손절 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             ⚖️ 물타기 vs 손절 — 어느 게 유리한가?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             정답은 <strong style={{ color: 'var(--text)' }}>본 종목의 회복 가능성</strong>에 달려 있습니다. 「손절 vs 물타기」 탭에서 시나리오별 손익을 비교할 수 있습니다.
           </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
@@ -229,15 +230,15 @@ export default function StockPage() {
 
         {/* ── 3. 분할 매수 (DCA) 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             📊 분할 매수(DCA) — 손실률별 추천 차수
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             「코스트 에버리지(Cost Average)」 효과를 살리려면 한 번에 다 사지 말고, 하락 가능성에 대비해 분할해서 매수합니다.
             본 도구의 「분할 매수」 탭은 차수별 평단·누적 투자금·수익률을 자동 계산합니다.
           </p>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -270,15 +271,15 @@ export default function StockPage() {
 
         {/* ── 4. 본전 필요 상승률 — 수수료·세금 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🧾 본전 필요 상승률 — 수수료·거래세 포함 (미국 양도세는 참고)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             진짜 본전은 <strong style={{ color: 'var(--text)' }}>매수 수수료 + 매도 수수료 + 거래세(코스피·코스닥 0.20%)</strong>를 모두 회수해야 합니다.
 미국 주식은 추가로 양도소득세 22%(연 250만 공제)도 고려해야 합니다 <span style={{ color: 'var(--muted)' }}>(계산기 미반영 — 별도 고려)</span>.
           </p>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -314,10 +315,10 @@ export default function StockPage() {
 
         {/* ── 5. 종목 비중 관리 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             📊 종목 비중 관리 — 한 종목에 몰빵해도 될까?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             물타기를 반복하면 한 종목 비중이 커집니다. 분산 효과가 깨지면 한 종목이 망할 때 자산 전체가 흔들립니다.
             「물타기 계산」 탭에서 총 자산을 입력하면 비중을 4단계로 평가합니다.
           </p>
@@ -344,10 +345,10 @@ export default function StockPage() {
 
         {/* ── 6. 미국 주식 (서학개미) (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             🇺🇸 미국 주식 (서학개미) — 환율·양도세까지 포함
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             미국 주식 본전은 <strong style={{ color: 'var(--text)' }}>달러 가격 회복 + 환율 동일 + 세후</strong>가 모두 충족되어야 합니다.
             「물타기 계산」 탭에서 「🇺🇸 미국 주식」 토글을 켜면 매수 환율·현재 환율 입력 후 원화 평가액·손익을 자동 계산합니다.
           </p>
@@ -378,7 +379,7 @@ export default function StockPage() {
 
         {/* ── 7. FAQ — accordion ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 className="g-h2">자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((faq, i) => (
@@ -415,7 +416,7 @@ export default function StockPage() {
 
         {/* ── 9. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '평단 낮춘 후 장기 보유하면 얼마나 불어날까?' },
@@ -439,6 +440,6 @@ export default function StockPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

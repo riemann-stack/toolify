@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/nuts',
@@ -81,7 +82,7 @@ const FAQ_LD = [
 
 export default function NutsPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/cooking/nuts">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />견과류 섭취량 계산기
@@ -162,7 +163,7 @@ export default function NutsPage() {
 
       {/* 3. 견과류 혼합 가이드 (NEW) */}
       <h2 style={sectionTitle}>견과류 혼합 가이드 — 인기 믹스 6종</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         본 도구의 <strong style={{ color: 'var(--text)' }}>인기 믹스 프리셋</strong>은 한 번의 클릭으로 적용됩니다. 각 믹스는 한국 사용자 식습관과 한국영양학회 권장 비율 참고.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -191,7 +192,7 @@ export default function NutsPage() {
 
       {/* 4. 알레르기 그룹 가이드 (NEW) */}
       <h2 style={sectionTitle}>🛡️ 알레르기 그룹 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         견과류 알레르기는 그룹별로 교차 반응이 발생할 수 있습니다. 본 도구의 알레르기 필터로 해당 그룹 전체를 한 번에 제외 가능.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -242,7 +243,7 @@ export default function NutsPage() {
 
       {/* 6. 견과류 가성비 (NEW) */}
       <h2 style={sectionTitle}>견과류 가성비 (한국 마트 평균 참고)</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         <strong style={{ color: 'var(--text)' }}>2026년 초</strong> 한국 대형 마트·온라인 평균 가격 기준 (참고용 · 실시간 가격 아님). 정확한 가격 비교는 <Link href="/tools/life/unit-price" style={{ color: 'var(--accent)' }}>단가 비교 계산기</Link>에서.
       </p>
       <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
@@ -293,7 +294,7 @@ export default function NutsPage() {
 
       {/* 8. 보관법 */}
       <h2 style={sectionTitle}>📦 견과류 보관법 & 산패 주의</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+      <p className="g-p">
         견과류는 <strong style={{ color: 'var(--text)' }}>불포화지방산이 풍부해 산패되기 쉽습니다</strong>. 냄새가 이상하거나 쓴맛이 나면 산패 신호이므로 즉시 폐기하세요.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -471,6 +472,6 @@ export default function NutsPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>베이킹 견과</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

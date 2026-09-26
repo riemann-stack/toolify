@@ -7,6 +7,7 @@ import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { FETAL_SIZE_COMPARISON } from './pregnancyUtils'
+import ToolPage from '@/components/ToolPage'
 
 const PREGNANCY_FAQ = [
   { q: '임신 주수는 어떻게 계산하나요?', a: '임신 주수는 마지막 생리 시작일로부터 계산합니다. 실제 수정은 배란일(생리 시작 후 약 14일)에 일어나지만, 정확한 배란일을 알기 어렵기 때문에 의학적으로는 마지막 생리 시작일을 기준으로 삼습니다. 따라서 임신 1주차는 아직 수정 전인 시기입니다.' },
@@ -35,7 +36,7 @@ export const metadata = buildMetadata({
 
 export default function PregnancyPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/pregnancy">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />임신 주수 계산기
@@ -60,10 +61,10 @@ export default function PregnancyPage() {
 
         {/* ── 1. 네겔레 공식 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             출산 예정일 산출법 — 네겔레 공식
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             네겔레 공식(Naegele&apos;s Rule)은 1800년대 독일 산부인과 의사 프란츠 카를 네겔레가 개발한 출산 예정일 계산법입니다.
             현재 전 세계 산부인과에서 가장 널리 사용되는 표준 방법입니다.
           </p>
@@ -112,7 +113,7 @@ export default function PregnancyPage() {
 
         {/* ── 2. 삼분기별 변화 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>삼분기별 주요 변화</h2>
+          <h2 className="g-h2">삼분기별 주요 변화</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { period: '1삼분기 (1~13주)', color: '#A16207', items: ['수정란 착상 → 배아 형성', '심장·뇌·척수 등 주요 장기 형성', '입덧 시작 (8~10주에 최고조)', '첫 산전 검사 및 기형아 1차 검사'] },
@@ -133,13 +134,13 @@ export default function PregnancyPage() {
 
         {/* ── 3. 산전 검사 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             산전 검사 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <p className="g-p">
             본 도구의 검사 일정은 다음 표준 기반 — <strong style={{ color: 'var(--text)' }}>보건복지부 임신·출산 가이드라인 / 대한산부인과학회(KSOG) 산전 진료 지침 / WHO 임산부 산전 진료 권고안</strong>.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -175,10 +176,10 @@ export default function PregnancyPage() {
 
         {/* ── 4. 태아 크기 비유 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             태아 크기 비유 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             주차별 태아 크기 일반 비유 (참고용 · 의학적 진단 X) —
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
@@ -199,7 +200,7 @@ export default function PregnancyPage() {
 
         {/* ── 5. 출산 준비 체크리스트 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             삼분기별 출산 준비 체크리스트
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -234,10 +235,10 @@ export default function PregnancyPage() {
 
         {/* ── 6. 생리주기 보정 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             생리주기 보정의 중요성
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <p className="g-p">
             네겔레 공식은 28일 주기 가정. 본인 주기가 다르면 실제 예정일과 차이가 발생합니다 —
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: 12 }}>
@@ -320,7 +321,7 @@ export default function PregnancyPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기',           desc: '출산 예정일 카운트다운' },
@@ -346,6 +347,6 @@ export default function PregnancyPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

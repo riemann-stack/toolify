@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/vat',
@@ -78,7 +79,7 @@ const FAQ_LD = [
 
 export default function VatPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/vat">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />부가세 계산기
@@ -97,7 +98,7 @@ export default function VatPage() {
         {/* ── 1. 역산 공식 (기존 SEO 보존) ── */}
         <Section>
           <H2>역산 공식 — 합계에서 공급가액 구하기</H2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             영수증이나 청구서에 찍힌 <strong style={{ color: 'var(--text)' }}>합계 금액(공급대가)</strong>에서
             공급가액과 부가세를 각각 구해야 할 때 역산 공식을 사용합니다.
             계산기 상단의 <strong style={{ color: 'var(--accent)' }}>「부가세 역산」</strong> 모드를 선택하면 자동으로 계산됩니다.
@@ -124,11 +125,11 @@ export default function VatPage() {
         {/* ── 2. 과세 유형 비교표 (기존 SEO 보존) ── */}
         <Section>
           <H2>부가세 과세 유형 비교</H2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             사업자 유형에 따라 부가세 신고 방식과 세율이 다릅니다.
             2024년부터 간이과세 기준 금액이 연 매출 <strong style={{ color: 'var(--text)' }}>1억 400만 원</strong>으로 상향되었습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -160,7 +161,7 @@ export default function VatPage() {
           {/* 간이과세 업종별 부가율 */}
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: '#0891B2', marginBottom: '10px' }}>간이과세자 업종별 부가가치율</p>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -231,12 +232,12 @@ export default function VatPage() {
         {/* ── 4. 실입금 역산 — 프리랜서·사업자 가이드 (NEW) ── */}
         <Section>
           <H2>💰 실입금 역산 — 프리랜서·사업자 가이드</H2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             「실제로 100만원 받으려면 얼마 청구해야 하나요?」 — 본 도구의 「실입금 역산」 탭에서
             사업자 유형·플랫폼 수수료를 반영해 청구액을 자동 계산합니다.
           </p>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -290,7 +291,7 @@ export default function VatPage() {
         {/* ── 5. 부가세 별도 vs 포함 (NEW) ── */}
         <Section>
           <H2>📝 부가세 별도 vs 포함 — 계약 시 주의</H2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             같은 「100만원 계약」이라도 「부가세 별도」와 「부가세 포함」은 본인 실수입이 약 9만원 차이납니다.
             프리랜서·사업자는 협상 시 「부가세 별도」 명시를 권장합니다.
           </p>
@@ -322,10 +323,10 @@ export default function VatPage() {
         {/* ── 6. 일반 vs 간이 — 결정 가이드 (NEW) ── */}
         <Section>
           <H2>⚖️ 일반과세 vs 간이과세 — 어떻게 결정?</H2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             본 도구의 「일반 vs 간이」 탭에서 자동 추천이 가능합니다. 일반적인 결정 가이드:
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -359,10 +360,10 @@ export default function VatPage() {
         {/* ── 7. 세금계산서 발급 가이드 (NEW) ── */}
         <Section>
           <H2>📄 세금계산서 발급 가이드</H2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             세금계산서는 사업자 간 거래의 법적 증빙 서류입니다. 사업자 유형에 따라 발급 의무가 다릅니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -486,6 +487,6 @@ export default function VatPage() {
         </Section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

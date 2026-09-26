@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/hba1c',
@@ -61,7 +62,7 @@ const RELATED = [
 
 export default function Hba1cPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/hba1c">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         건강·웰빙
       </p>
@@ -110,7 +111,7 @@ export default function Hba1cPage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
             ADAG 회귀식을 4.5~12.0%에 0.5%p 간격으로 적용한 값입니다. 대한당뇨병학회 2025 당뇨병 진료지침 제9판 표 4-1.1(당화혈색소와 평균혈당의 관계)에 실린 8개 행(5%→97, 6%→126, 7%→154, 8%→183, 9%→212, 10%→240, 11%→269, 12%→298mg/dL)과 mg/dL 정수 단위까지 일치합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -173,7 +174,7 @@ export default function Hba1cPage() {
         {/* 4. 진단 구간 표 */}
         <section>
           <h2 style={sectionTitle}>당뇨 진단 구간</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -276,6 +277,6 @@ export default function Hba1cPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

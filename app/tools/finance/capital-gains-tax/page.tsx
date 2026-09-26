@@ -7,6 +7,7 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/capital-gains-tax',
@@ -91,7 +92,7 @@ const FAQ_LD = [
 
 export default function CapitalGainsTaxPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/capital-gains-tax">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -294,6 +295,6 @@ export default function CapitalGainsTaxPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/rent-jeonse',
@@ -82,7 +83,7 @@ const FAQ_LD = [
 
 export default function RentJeonsePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/rent-jeonse">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />월세·전세 비교 계산기
@@ -101,7 +102,7 @@ export default function RentJeonsePage() {
         {/* 1. 옵션 비교표 */}
         <section>
           <h2 style={sectionTitle}>전세 vs 월세 vs 반전세 — 한눈에 비교</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -136,7 +137,7 @@ export default function RentJeonsePage() {
         {/* 2. 전세대출 종류 */}
         <section>
           <h2 style={sectionTitle}>전세자금대출 종류 비교 (2026년)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -284,6 +285,6 @@ export default function RentJeonsePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

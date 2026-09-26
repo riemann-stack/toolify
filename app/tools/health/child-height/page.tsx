@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/child-height',
@@ -75,7 +76,7 @@ const pMuted = {
 
 export default function ChildHeightPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/child-height">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />자녀 예상 키 계산기
@@ -137,13 +138,13 @@ export default function ChildHeightPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px', marginBottom: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>👦 아들</p>
-              <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
+              <p className="g-p">
                 (178 + 162 + 13) ÷ 2 = 353 ÷ 2 = <strong style={{ color: 'var(--accent-ink)' }}>176.5cm</strong>
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>👧 딸</p>
-              <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
+              <p className="g-p">
                 (178 + 162 − 13) ÷ 2 = 327 ÷ 2 = <strong style={{ color: 'var(--accent-ink)' }}>163.5cm</strong>
               </p>
             </div>
@@ -167,7 +168,7 @@ export default function ChildHeightPage() {
         {/* ── 4. 다른 예측법과의 차이 ── */}
         <div>
           <h2 style={h2Style}>두배법·뼈나이 등 다른 예측법과의 차이</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -273,6 +274,6 @@ export default function ChildHeightPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

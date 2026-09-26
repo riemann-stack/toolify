@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/packing',
@@ -66,7 +67,7 @@ const FAQ_LD = [
 
 export default function PackingPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/life/packing">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
@@ -100,7 +101,7 @@ export default function PackingPage() {
       {/* 2. 일수별 옷 개수 */}
       <h2 style={sectionTitle}>📅 여행 일수별 옷 개수 가이드</h2>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
@@ -176,7 +177,7 @@ export default function PackingPage() {
       {/* 5. 캐리어 사이즈 */}
       <h2 style={sectionTitle}>🛄 캐리어 사이즈·항공사 수하물</h2>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="tableScroll">
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
@@ -398,6 +399,6 @@ export default function PackingPage() {
           </p>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/stock-decision',
@@ -63,7 +64,7 @@ const FAQ_LD = [
 
 export default function StockDecisionPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/stock-decision">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />주식 매도·매수 심리 진단
@@ -301,6 +302,6 @@ export default function StockDecisionPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>확률 직관 교정</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

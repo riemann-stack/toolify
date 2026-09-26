@@ -6,6 +6,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/year-end-tax',
@@ -88,7 +89,7 @@ const limitRows: [string, string, string][] = [
 
 export default function YearEndTaxPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/year-end-tax">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -155,7 +156,7 @@ export default function YearEndTaxPage() {
         <section>
           <h2 style={sectionTitle}>핵심 공제 6가지 — 2026 한도·공제율</h2>
           <p style={para}>환급을 좌우하는 대표 공제 6가지의 한도와 공제율입니다.</p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -262,6 +263,6 @@ export default function YearEndTaxPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

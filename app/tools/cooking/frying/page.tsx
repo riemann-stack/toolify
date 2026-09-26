@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/frying',
@@ -29,7 +30,7 @@ const FAQ_LD = [
 
 export default function FryingPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/cooking/frying">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />튀김 시간 계산기
@@ -45,7 +46,7 @@ export default function FryingPage() {
 
         {/* ── 1. 기름 온도별 용도 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             기름 온도별 용도 완전 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
@@ -76,13 +77,13 @@ export default function FryingPage() {
 
         {/* ── 2. 재료별 빠른 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             재료별 튀김 시간 빠른 참조표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '10px' }}>
             * 기준: 생재료, 보통 크기, 보통 튀김옷, 각 재료 권장 온도 (위 계산기와 동일). 조건이 바뀌면 계산기에서 자동 보정됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -117,10 +118,10 @@ export default function FryingPage() {
 
         {/* ── 3. 2차 튀김의 과학 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             2차 튀김의 과학
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             두 번 튀기면 왜 바삭해질까? 핵심은 <strong style={{ color: 'var(--text)' }}>수분 제거 과정</strong>입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '16px' }}>
@@ -147,10 +148,10 @@ export default function FryingPage() {
 
         {/* ── 4. 냉동 재료 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             냉동 재료 튀김 완전 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             냉동 재료는 기름 온도를 <strong style={{ color: '#DC2626' }}>20~30°C 급락</strong>시킵니다. 한 번에 많이 넣으면 회복이 안 돼 기름 흡수가 폭증하고 눅눅해집니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
@@ -175,7 +176,7 @@ export default function FryingPage() {
 
         {/* ── 5. 에어프라이어 변환 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             에어프라이어 완전 변환 가이드
           </h2>
           <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 20px', marginBottom: '14px' }}>
@@ -187,7 +188,7 @@ export default function FryingPage() {
               <li>중간 뒤집기: <strong>필수</strong> (한 번)</li>
             </ul>
           </div>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -218,7 +219,7 @@ export default function FryingPage() {
 
         {/* ── 6. 겉바속촉 팁 10가지 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             겉바속촉을 위한 팁 10가지
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
@@ -244,7 +245,7 @@ export default function FryingPage() {
 
         {/* ── 7. 식품 안전 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             식품 안전 주의사항
           </h2>
           <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 20px', marginBottom: '14px' }}>
@@ -252,7 +253,7 @@ export default function FryingPage() {
               본 가이드는 일반적인 참고용입니다. 조리 환경, 재료 크기, 냉동/냉장 보관 상태에 따라 실제 시간이 다를 수 있습니다. 육류와 냉동 재료는 반드시 내부 익힘 상태를 확인하세요.
             </p>
           </div>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             안전 내부온도는 기관마다 체계가 다릅니다. <strong style={{ color: 'var(--text)' }}>한국 식약처는 부위 구분 없이 일괄 기준</strong>을 권고하고, <strong style={{ color: 'var(--text)' }}>미국 USDA FSIS는 부위·형태별로 세분</strong>합니다. 두 체계의 숫자를 한 표에 섞으면 안 됩니다 — 예컨대 닭고기 75°C는 식약처, 74°C(165°F)는 USDA 기준입니다.
           </p>
           <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>① 식약처 기준 — 일괄 권고 (중심온도 1분 이상 유지)</p>
@@ -298,7 +299,7 @@ export default function FryingPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 className="g-h2">자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {FAQ_LD.map((faq, i) => (
@@ -312,7 +313,7 @@ export default function FryingPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기', desc: '튀김 반죽 비율 자동 계산' },
@@ -335,6 +336,6 @@ export default function FryingPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

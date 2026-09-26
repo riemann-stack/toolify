@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/fruit-syrup',
@@ -63,7 +64,7 @@ const FAQ_LD = [
 
 export default function FruitSyrupPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/cooking/fruit-syrup">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />과일청 담그기 계산기
@@ -89,10 +90,10 @@ export default function FruitSyrupPage() {
         {/* 1. 왜 1:1인가 */}
         <section>
           <h2 style={sectionTitle}>과일청, 왜 설탕 1:1 비율이 기본일까?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             과일청·효소의 설탕은 단순히 단맛을 내는 재료가 아니라 <strong style={{ color: 'var(--text)' }}>보존제</strong> 역할을 합니다. 설탕이 과일 속 수분을 끌어내 삼투압을 높이면, 곰팡이·잡균이 살기 어려운 환경이 만들어집니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             그래서 <strong style={{ color: 'var(--text)' }}>과일 : 설탕 = 1 : 1</strong>이 표준으로 통하며, 식약처의 매실청 공식 안내도 무게 기준 1:1입니다. 설탕을 너무 줄이면(1:0.5 이하) 발효가 과해지거나 곰팡이가 피기 쉽고 너무 늘리면 끝까지 녹지 않고 바닥에 굳는다는 것이 담금 관행의 경험칙입니다(비율별 보존성을 수치로 규정한 정부·학회 기준은 확인되지 않았습니다). 저당으로 담그고 싶다면 1:0.8까지를 무난한 범위로 보며, 대신 <strong style={{ color: 'var(--text)' }}>냉장 보관</strong>하고 빨리 소비하세요.
           </p>
           <div style={{ ...card, borderLeft: `3px solid ${ACCENT}` }}>
@@ -127,7 +128,7 @@ export default function FruitSyrupPage() {
         {/* 3. 식약처 공식 매실청 담금법 */}
         <section>
           <h2 style={sectionTitle}>식약처 공식 매실청 안전 담금법 (2026)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             과일청 가운데 <strong style={{ color: 'var(--text)' }}>매실청</strong>은 식품의약품안전처가 2026년 5월 보도자료·카드뉴스로 담그는 방법을 공식 안내한 품목입니다. 매실 속 시안화합물이 매실 내 효소 등에 의해 분해되며 시안화수소를 생성할 수 있고, 과량 섭취 시 두통·어지러움·호흡곤란을 유발할 수 있어서입니다. 식약처 안내 절차는 다음과 같습니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
@@ -146,10 +147,10 @@ export default function FruitSyrupPage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
+          <p className="g-p">
             같은 자료의 단계별 <strong style={{ color: 'var(--text)' }}>시안화합물 감소율</strong>은 아래와 같습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 380 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -176,7 +177,7 @@ export default function FruitSyrupPage() {
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: '8px 0 12px' }}>
             ※ 감소율은 &lsquo;일반 매실청 대비 각 단계에서 감소된 비율&rsquo;(식약처 원문 각주) — 단계별 수치를 더하거나 곱해 누적 효과로 읽으면 안 됩니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             학술 연구에서도 설탕 비율이 높을수록 아미그달린이 낮게 검출됐습니다 — 매실:설탕을 1:0.7 / 1:1.0 / 1:1.3으로 담근 매실청의 발효 90일 시점 아미그달린은 1mL당 5.2 / 3.30 / 1.46μg이었고, 150일 이후에는 거의 검출되지 않았습니다(한국식품영양과학회지 46권 6호, 2017 — 정부 권고가 아닌 연구 결과).
           </p>
           <div style={{ ...card, borderLeft: `3px solid ${ACCENT}` }}>
@@ -189,10 +190,10 @@ export default function FruitSyrupPage() {
         {/* 4. 과일별 기준값 표 */}
         <section>
           <h2 style={sectionTitle}>과일별 설탕 비율·건지기·소비기한 — 본 도구 기준값</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             계산기가 쓰는 과일별 기본값입니다. 정부 공식 기준이 아니라 <strong style={{ color: 'var(--text)' }}>가정 담금에서 널리 쓰이는 통용 관행</strong>을 정리한 것으로, 환경·취향에 따라 조절할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -237,10 +238,10 @@ export default function FruitSyrupPage() {
         {/* 5. 제철 과일 캘린더 */}
         <section>
           <h2 style={sectionTitle}>제철 과일 캘린더 — 청 담그기 좋은 때</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             제철에 담가야 가장 향이 진하고 값도 쌉니다. 특히 <strong style={{ color: 'var(--text)' }}>매실은 5~6월 단 2~3주</strong>가 사실상 유일한 시기예요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -273,7 +274,7 @@ export default function FruitSyrupPage() {
         {/* 6. 과일 보관 궁합 */}
         <section>
           <h2 style={sectionTitle}>과일 보관 궁합 — 같이 두면 빨리 무릅니다</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             일부 과일은 <strong style={{ color: 'var(--text)' }}>에틸렌 가스</strong>를 많이 내뿜어 주변 과일·채소의 숙성·부패를 앞당깁니다. 청을 담그려고 사둔 과일이 금세 무르지 않도록, 보관 궁합을 알아두세요.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
@@ -341,6 +342,6 @@ export default function FruitSyrupPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

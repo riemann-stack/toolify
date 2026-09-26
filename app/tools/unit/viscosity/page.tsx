@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { FLUID_REFS } from './viscosityData'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/viscosity',
@@ -66,7 +67,7 @@ const FAQ_LD = [
 
 export default function ViscosityPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/unit/viscosity">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />점도(Viscosity) 변환기
@@ -83,7 +84,7 @@ export default function ViscosityPage() {
         {/* 1. 절대 vs 동 */}
         <section>
           <h2 style={sectionTitle}>절대점도 vs 동점도 — 무엇이 다른가</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             점도에는 두 종류가 있고, <strong style={{ color: 'var(--text)' }}>밀도(ρ)로 서로 변환</strong>됩니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -105,7 +106,7 @@ export default function ViscosityPage() {
         {/* 1b. 자주 찾는 변환 */}
         <section>
           <h2 style={sectionTitle}>자주 찾는 변환 3가지</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             실무에서 반복해서 찾게 되는 관계는 대부분 이 세 가지입니다 — 전부 본 도구가 내부 계산에 쓰는 공식 그대로예요.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -126,7 +127,7 @@ export default function ViscosityPage() {
         {/* 2. SAE J300 */}
         <section>
           <h2 style={sectionTitle}>SAE J300 — 엔진오일 등급의 의미</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>0W-20</strong>처럼 두 숫자로 표기되는 SAE J300 다등급(multigrade) 오일은:
           </p>
           <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
@@ -140,10 +141,10 @@ export default function ViscosityPage() {
         {/* 2b. 온도 민감성 */}
         <section>
           <h2 style={sectionTitle}>온도가 오르면 점도는 뚝 떨어진다</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             점도는 온도에 극도로 민감한 물성입니다. 본 도구의 프리셋·참고값(문헌 통용치)을 나란히 놓기만 해도 낙차가 그대로 보입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -176,10 +177,10 @@ export default function ViscosityPage() {
         {/* 3. ISO VG */}
         <section>
           <h2 style={sectionTitle}>ISO VG — 산업용 윤활유 등급 (ISO 3448)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             산업용 윤활유(유압유·기어유·터빈유)는 <strong style={{ color: 'var(--text)' }}>ISO Viscosity Grade</strong>로 분류됩니다. VG 번호 = <strong>40°C 동점도의 중심값(cSt)</strong>이며 ±10% 허용. 예를 들어 VG 46은 41.4~50.6 cSt @40°C.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -211,10 +212,10 @@ export default function ViscosityPage() {
         {/* 3b. 일상 유체 점도 표 */}
         <section>
           <h2 style={sectionTitle}>일상 유체 점도 한눈에</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             공기 0.018 cP에서 도로 아스팔트용 역청 ~10⁸ cP까지 — 같은 &lsquo;점도&rsquo;라는 물성이 수십억 배 스케일로 벌어집니다. 아래는 <strong style={{ color: 'var(--text)' }}>본 도구의 참고값(문헌 통용치)</strong>을 그대로 옮긴 표입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -269,6 +270,6 @@ export default function ViscosityPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

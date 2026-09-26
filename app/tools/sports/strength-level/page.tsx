@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/strength-level',
@@ -84,7 +85,7 @@ const FAQ_LD = [
 
 export default function StrengthLevelPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/sports/strength-level">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />파워리프팅 계산기
@@ -102,7 +103,7 @@ export default function StrengthLevelPage() {
 
       {/* 1. 스트렝스 레벨이란 */}
       <h2 style={sectionTitle}>🏅 스트렝스 레벨이란?</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         스트렝스 레벨은 <strong style={{ color: 'var(--text)' }}>절대 무게가 아니라 체중 대비 상대 근력</strong>으로 내 위치를 가늠하는 지표입니다.
         같은 100kg 벤치라도 체중 60kg과 100kg은 의미가 전혀 다르기 때문에, 체중·성별·연령을 함께 봐야 공정합니다.
         본 도구는 <strong style={{ color: 'var(--text)' }}>입문 → 초보 → 중급 → 상급 → 엘리트</strong> 5단계로 평가합니다.
@@ -110,7 +111,7 @@ export default function StrengthLevelPage() {
 
       {/* 2. 3대 운동 레벨 기준표 */}
       <h2 style={sectionTitle}>📊 3대 운동 체중 대비 레벨 기준표</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         20대 남성 기준 (체중 대비 1RM 배수)입니다. 도구에서 성별·연령을 선택하면 자동 보정된 값으로 평가되며,
         <Link href="/tools/sports/one-rm" style={{ color: 'var(--accent)' }}> 1RM 계산기</Link>와 동일한 기준을 사용합니다.
       </p>
@@ -141,7 +142,7 @@ export default function StrengthLevelPage() {
 
       {/* 3. Wilks vs DOTS vs IPF GL */}
       <h2 style={sectionTitle}>🧮 Wilks · DOTS · IPF GL — 세 보정 점수</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         모두 체중이 다른 사람의 근력을 한 줄로 세우기 위한 <strong style={{ color: 'var(--text)' }}>계수 보정 점수</strong>입니다.
         3대 합(kg)에 체중·성별 기반 계수를 곱해 산출하며, 본 도구는 세 점수를 모두 보여줍니다.
       </p>
@@ -175,7 +176,7 @@ export default function StrengthLevelPage() {
 
       {/* 3-2. 대회 시도·원판 */}
       <h2 style={sectionTitle}>🏁 대회 시도 전략과 원판 세팅</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
+      <p className="g-p">
         파워리프팅 대회는 종목별 <strong style={{ color: 'var(--text)' }}>3번의 시도</strong>가 주어지고, 성공한 가장 무거운 무게가 합계에 들어갑니다. [시도 전략] 탭에서 1RM을 넣으면 표준 배분을 제안합니다.
       </p>
       <div style={{ ...card }}>
@@ -189,7 +190,7 @@ export default function StrengthLevelPage() {
 
       {/* 4. 점수 해석 가이드 */}
       <h2 style={sectionTitle}>🔢 DOTS · Wilks 점수 해석 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         대략적인 해석 기준입니다 (남녀 공통, 점수 자체가 성별 보정을 포함). 절대선이 아니라 <strong style={{ color: 'var(--text)' }}>참고 구간</strong>으로 보세요.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -214,7 +215,7 @@ export default function StrengthLevelPage() {
 
       {/* 5. 성별·연령 보정 */}
       <h2 style={sectionTitle}>👥 성별·연령 보정 — 같은 무게라도 평가가 달라집니다</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         레벨 기준은 20대 남성을 기준으로, 여성·고연령일수록 같은 레벨에 더 낮은 절대 무게로 도달하도록 보정합니다
         (<Link href="/tools/sports/one-rm" style={{ color: 'var(--accent)' }}>1RM 계산기</Link>와 동일).
       </p>
@@ -300,6 +301,6 @@ export default function StrengthLevelPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>유산소·컨디셔닝 병행</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

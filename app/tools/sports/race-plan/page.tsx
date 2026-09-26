@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import { PACE_TABLE, fmtPace } from './racePlanUtils'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/race-plan',
@@ -41,7 +42,7 @@ const FAQ_LD = [
 
 export default function RacePlanPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/race-plan">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />레이스 페이스 플래너
@@ -96,7 +97,7 @@ export default function RacePlanPage() {
         {/* 3. 고도와 페이스 */}
         <section>
           <h2 style={sectionTitle}>코스 고도와 페이스</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             언덕은 페이스에 직접적인 영향을 줍니다. 본 도구는 각 구간의 경사를 추정해 페이스를 가감합니다 — <strong style={{ color: 'var(--text)' }}>오르막 1%당 약 +12초/km, 내리막 1%당 약 −6초/km</strong>(흔한 코칭 경험칙 + Strava GAP·Minetti 경사 비용 곡선을 단순화한 추정치).
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
@@ -115,7 +116,7 @@ export default function RacePlanPage() {
         {/* 3-1. GAP */}
         <section>
           <h2 style={sectionTitle}>GAP(경사 보정 페이스)란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>GAP(Grade Adjusted Pace)</strong>은 달린 지형의 경사를 반영해 &lsquo;평지였다면 이에 상응했을 페이스&rsquo;를 추정한 지표입니다(Strava 서포트 공식 문서). 오르막에서는 같은 페이스라도 더 많은 일이 필요하므로 GAP이 실제 페이스보다 <strong style={{ color: 'var(--text)' }}>빠르게</strong>, 내리막에서는 반대로 실제보다 <strong style={{ color: 'var(--text)' }}>느리게</strong> 표기됩니다. 같은 문서에 따르면 내리막 보정은 약 −10% 경사에서 최대가 되고 그보다 가파르면 소폭 완화되며, 지형의 기술적 난도나 노면 상태는 반영하지 않는 한계가 있습니다.
           </p>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, margin: 0 }}>
@@ -126,7 +127,7 @@ export default function RacePlanPage() {
         {/* 4. 목표 시간별 페이스 */}
         <section>
           <h2 style={sectionTitle}>완주 목표 시간별 필요 페이스 (균등 기준)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 380 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -156,7 +157,7 @@ export default function RacePlanPage() {
         {/* 4-1. 페이스 밴드 */}
         <section>
           <h2 style={sectionTitle}>페이스 밴드 만드는 법</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             페이스 밴드는 구간 통과 목표 시간을 적어 손목에 두르는 종이 띠입니다. 해외 전문 서비스 FindMyMarathon은 GPS 시계도 레이스 당일 항상 완벽하지는 않다는 점을 들어 밴드를 단순하고 믿을 수 있는 페이싱 기준물로 소개하며, 코스 고저까지 반영한 밴드를 서비스할 정도로 러너들 사이에 정착된 방법입니다. 본 도구의 결과로 직접 만들 수 있습니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -221,6 +222,6 @@ export default function RacePlanPage() {
           </div>
         </section>
       </div>
-    </div>
+    </ToolPage>
   )
 }

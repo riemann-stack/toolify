@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/vin-decoder',
@@ -39,7 +40,7 @@ const FAQ_LD = [
 
 export default function VinDecoderPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/life/vin-decoder">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />차대번호(VIN) 해석기
@@ -182,6 +183,6 @@ export default function VinDecoderPage() {
       <section style={{ marginTop: '48px' }}>
         <Faq items={FAQ_LD} />
       </section>
-    </div>
+    </ToolPage>
   )
 }

@@ -9,6 +9,7 @@ import {
   ALCOHOL_DENSITY, STANDARD_DRINK_G, calcAlcohol, riskLevel,
 } from './alcoholUtils'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/alcohol',
@@ -94,7 +95,7 @@ const FAQ_LD = [
 
 export default function AlcoholPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/alcohol">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />알코올 도수 계산기
@@ -110,13 +111,13 @@ export default function AlcoholPage() {
 
         {/* ── 1. 한국 잔 단위 가이드 (NEW·SEO 핵심) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             한국 표준 잔·병 단위 (ml 기준)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             본 도구는 한국 음주 환경에서 가장 많이 쓰이는 잔·병 규격을 기본 제공합니다. 본인이 마신 개수만 입력하면 자동 계산됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -160,13 +161,13 @@ export default function AlcoholPage() {
 
         {/* ── 2. 인기 칵테일·하이볼 도수 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             인기 한국 칵테일·하이볼 도수
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             아래 6가지는 본 도구의 [혼합 도수] 탭에서 한 번의 클릭으로 자동 채워집니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -200,13 +201,13 @@ export default function AlcoholPage() {
 
         {/* ── 3. 같은 알코올량 환산 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             같은 알코올량 환산 (본 도구 표시 기준 1잔 = 8g)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             순수 알코올 8g(본 도구 표시 기준)에 해당하는 각 술의 양을 비교하면, 같은 한 잔이라도 종류별로 알코올 양이 크게 다름을 알 수 있습니다. <strong style={{ color: 'var(--text)' }}>표준잔의 공식 정의는 기관마다 달라</strong>(보건복지부 7g · WHO 10g), 본 도구는 표시 편의상 8g을 쓰되 정확한 값은 순수 알코올 g으로 확인하세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -237,10 +238,10 @@ export default function AlcoholPage() {
 
         {/* ── 4. 술자리 1인당 알코올 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             술자리 1인당 알코올 가이드 (예시)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             본 도구의 [1인당 분배] 탭에서 자동 계산. 아래는 흔한 술자리 시나리오 예시입니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -279,13 +280,13 @@ export default function AlcoholPage() {
 
         {/* ── 5. 본인 기준 도수 변환 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             소주 도수가 제품마다 다른 이유
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
+          <p className="g-p">
             한국 소주는 브랜드별로 도수가 다르므로, 같은 1병이라도 알코올 양이 크게 차이납니다. 본 도구의 슬라이더로 본인이 마시는 소주 도수를 정확히 입력하세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -312,10 +313,10 @@ export default function AlcoholPage() {
 
         {/* ── 6. 표준 음주량 안내 (기존 유지·확장) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             📊 음주 참고 기준 & 표준잔 정의 (출처·기준일)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             &lsquo;표준잔(순수 알코올)&rsquo;의 정의는 기관마다 다릅니다 — <strong style={{ color: 'var(--text)' }}>보건복지부 절주 지침 약 7g</strong>, <strong style={{ color: 'var(--text)' }}>WHO 10g</strong>, 미국 NIAAA 14g. 본 도구는 표시 편의상 8g을 &lsquo;1잔&rsquo;으로 환산하며, 정확한 값은 순수 알코올 g으로 제공합니다. 아래는 <strong>참고용</strong> 권고이며, <strong style={{ color: 'var(--orange-600)' }}>WHO(2023)는 &ldquo;건강을 해치지 않는 안전한 음주량은 없다&rdquo;</strong>고 밝혔습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 15%, transparent)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
@@ -379,7 +380,7 @@ export default function AlcoholPage() {
 
         {/* ── 9. 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 계산기', desc: 'BAC 참고 추정 (운전 판단 불가)' },
@@ -403,6 +404,6 @@ export default function AlcoholPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import s from './baking-schedule.module.css'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/baking-schedule',
@@ -44,7 +45,7 @@ const FAQ_LD = [
 
 export default function BakingSchedulePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/cooking/baking-schedule">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />제빵 타임라인 계산기
@@ -60,8 +61,8 @@ export default function BakingSchedulePage() {
 
         {/* 1. 제빵 단계 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>제빵 단계 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">제빵 단계 가이드</h2>
+          <p className="g-p">
             대부분의 빵은 다음 8단계로 구성됩니다 (빵 종류에 따라 가감):
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -85,8 +86,8 @@ export default function BakingSchedulePage() {
 
         {/* 2. 발효 방식 비교 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>발효 방식 비교</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">발효 방식 비교</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -116,11 +117,11 @@ export default function BakingSchedulePage() {
 
         {/* 3. 온도와 발효 시간 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>온도와 발효 시간</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">온도와 발효 시간</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>22℃를 표준</strong>으로 1차·2차 발효 시간이 다음과 같이 변동됩니다:
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -153,7 +154,7 @@ export default function BakingSchedulePage() {
 
         {/* 4. 빵별 표준 일정 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>8가지 빵별 표준 일정</h2>
+          <h2 className="g-h2">8가지 빵별 표준 일정</h2>
           <div className={s.guideGrid2} style={{ gap: '8px' }}>
             {[
               { icon: '🌾', name: '사워도우 (24시간)',  desc: '오토리즈 30분 → 폴딩 4회 → 1차 발효 3시간 → 성형 → 냉장 12~16시간 → 굽기' },
@@ -175,7 +176,7 @@ export default function BakingSchedulePage() {
 
         {/* 6. 반죽 상태 판단 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>반죽 상태 판단 — 시간보다 중요</h2>
+          <h2 className="g-h2">반죽 상태 판단 — 시간보다 중요</h2>
           <div style={{ background: 'rgba(161,98,7,0.06)', border: '1px solid rgba(161,98,7,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
               ⭐ <strong style={{ color: 'var(--yellow-700)' }}>본 도구의 시간은 22℃ 표준 기준 가이드</strong>입니다. 실제 발효는 실내 온도, 밀가루, 이스트·르방 활성도, 수분율에 따라 크게 달라지므로 <strong style={{ color: 'var(--yellow-700)' }}>반죽 상태를 함께 확인</strong>하세요.
@@ -200,7 +201,7 @@ export default function BakingSchedulePage() {
 
         {/* 7. 흔한 실수 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>흔한 실수와 해결법</h2>
+          <h2 className="g-h2">흔한 실수와 해결법</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               { problem: '1차 발효 부족', signal: '빵 부피 작음, 무거움',         fix: '시간 더 주거나 따뜻한 곳' },
@@ -220,7 +221,7 @@ export default function BakingSchedulePage() {
 
         {/* 8. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -241,7 +242,7 @@ export default function BakingSchedulePage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div className={s.guideGrid2} style={{ gap: '8px' }}>
             {[
               { href: '/tools/cooking/baker-percent',    icon: '🥖', name: '베이커 퍼센트 계산기',    desc: '제빵 배합비·수분율·르방 자동' },
@@ -263,7 +264,7 @@ export default function BakingSchedulePage() {
 
         {/* 참고 자료 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
+          <h2 className="g-h2">참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>Tartine Bread</strong> by Chad Robertson — 사워도우 클래식</li>
             <li><strong style={{ color: 'var(--text)' }}>Flour Water Salt Yeast</strong> by Ken Forkish — 홈베이킹 기본서</li>
@@ -272,6 +273,6 @@ export default function BakingSchedulePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/age',
@@ -46,7 +47,7 @@ const FAQ_LD = [
 
 export default function AgePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/date/age">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />나이 계산기
@@ -62,8 +63,8 @@ export default function AgePage() {
 
         {/* 1. 만 나이 통일법 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>만 나이 통일법 — 무엇이 달라졌나?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">만 나이 통일법 — 무엇이 달라졌나?</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>2023년 6월 28일</strong>부터 민법(제158조) 및 행정기본법(제7조의2) 개정으로 법령·계약·공문서에서 나이 표기는 모두 만 나이로 통일되었습니다. 한국 사회에서 오랫동안 혼용되어 온 세는 나이·연 나이의 혼란을 줄이는 것이 목적입니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -82,7 +83,7 @@ export default function AgePage() {
 
         {/* 2. 3가지 나이 비교 — 카드 레이아웃 (모바일 가독성) */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>만 나이·세는 나이·연 나이 비교</h2>
+          <h2 className="g-h2">만 나이·세는 나이·연 나이 비교</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }} className="age-compare-grid">
             {[
               {
@@ -152,8 +153,8 @@ export default function AgePage() {
 
         {/* 3. 인생 시간 통계 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>인생 시간 통계 — 태어난 지 며칠?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">인생 시간 통계 — 태어난 지 며칠?</h2>
+          <p className="g-p">
             하루를 살면 약 <strong style={{ color: 'var(--text)' }}>24시간 = 1,440분 = 86,400초</strong>가 흐릅니다. 평균 70 BPM 기준 심장은 100,800회 뛰고, 호흡은 23,040회(16/분), 잠은 약 8시간(인생의 33%)을 차지합니다.
           </p>
           <div className="tableScroll">
@@ -189,8 +190,8 @@ export default function AgePage() {
 
         {/* 4. 띠 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>띠 (12간지) 가이드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">띠 (12간지) 가이드</h2>
+          <p className="g-p">
             12간지는 <strong style={{ color: 'var(--text)' }}>자축인묘진사오미신유술해(子丑寅卯辰巳午未申酉戌亥)</strong> 순으로 12년마다 순환합니다. 2024 = 용, 2025 = 뱀, 2026 = 말띠 순입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', marginBottom: '12px' }}>
@@ -211,8 +212,8 @@ export default function AgePage() {
 
         {/* 5. 별자리 가이드 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>별자리 가이드 (서양 12궁)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">별자리 가이드 (서양 12궁)</h2>
+          <p className="g-p">
             서양 12별자리는 <strong style={{ color: 'var(--text)' }}>4원소(불·흙·공기·물)</strong>로 분류됩니다. 양력 생일 기준이며, 별자리 경계일 출생자는 ±1일 차이를 인정하기도 합니다.
           </p>
           <div className="age-zodiac-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
@@ -246,7 +247,7 @@ export default function AgePage() {
 
         {/* 6. 탄생석·탄생화 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>월별 탄생석·탄생화</h2>
+          <h2 className="g-h2">월별 탄생석·탄생화</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
             {[
               ['1월', '가넷', '카네이션', '진실'],
@@ -273,8 +274,8 @@ export default function AgePage() {
 
         {/* 7. 한국 전통 호칭 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 전통 나이 호칭</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <h2 className="g-h2">한국 전통 나이 호칭</h2>
+          <p className="g-p">
             한국에는 60세 이후의 만 나이마다 한자에서 유래한 고유 호칭이 있습니다. 환갑·고희·희수 등은 한자의 형태를 풀어내거나 옛 시에서 유래한 멋진 작명법으로, 어른의 생신 때 많이 쓰입니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -305,7 +306,7 @@ export default function AgePage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/edu/cosmic-calendar',    icon: '🌌', name: '코스믹 캘린더',     desc: '우주 138억 년을 1년으로 압축' },
@@ -329,7 +330,7 @@ export default function AgePage() {
 
         {/* 참고 자료 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
+          <h2 className="g-h2">참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>만 나이 통일법</strong> — law.go.kr (행정기본법 제7조의2, 민법 제158조)</li>
             <li><strong style={{ color: 'var(--text)' }}>국가데이터처(구 통계청) 인구 통계</strong> — mods.go.kr</li>
@@ -339,6 +340,6 @@ export default function AgePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

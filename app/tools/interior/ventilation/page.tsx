@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/ventilation',
@@ -55,7 +56,7 @@ const FAQ_LD = [
 
 export default function VentilationPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/interior/ventilation">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />환기량 계산기
@@ -71,8 +72,8 @@ export default function VentilationPage() {
 
         {/* 1. ACH란 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>ACH (시간당 환기 횟수)란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">ACH (시간당 환기 횟수)란?</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>ACH (Air Changes per Hour)</strong> = 환기량(㎥/h) ÷ 공간 부피(㎥). 1 ACH는 1시간에 공간 공기를 1번 완전 교체한다는 의미입니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.20)', borderRadius: 'var(--radius-m)', padding: '16px 20px', textAlign: 'center' }}>
@@ -87,8 +88,8 @@ export default function VentilationPage() {
 
         {/* 2. 공간 용도별 권장 ACH */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>공간 용도별 한국 권장 ACH</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">공간 용도별 한국 권장 ACH</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -127,8 +128,8 @@ export default function VentilationPage() {
 
         {/* 3. CADR vs 한국 표시면적 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>CADR vs 한국 표시면적 — 공기청정기 비교</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">CADR vs 한국 표시면적 — 공기청정기 비교</h2>
+          <p className="g-p">
             한국 공기청정기는 <strong style={{ color: 'var(--text)' }}>표시면적(㎡)</strong>으로 표기되지만, 미국·국제 표준은 <strong style={{ color: 'var(--text)' }}>CADR(㎥/h)</strong>입니다. 환산 공식 —
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 18px', textAlign: 'center', marginBottom: 12 }}>
@@ -137,7 +138,7 @@ export default function VentilationPage() {
             </p>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>본 계산기는 보수적으로 7.5를 적용합니다.</p>
           </div>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -169,7 +170,7 @@ export default function VentilationPage() {
 
         {/* 4. 공기청정기 ≠ 환기 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>공기청정기 ≠ 환기 (중요)</h2>
+          <h2 className="g-h2">공기청정기 ≠ 환기 (중요)</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cyan-600)', marginBottom: '6px' }}>🌀 공기청정기</p>
@@ -200,8 +201,8 @@ export default function VentilationPage() {
 
         {/* 5. 창문 환기 효율 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>창문 환기 효율 (한국 가정 기준)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">창문 환기 효율 (한국 가정 기준)</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -233,8 +234,8 @@ export default function VentilationPage() {
 
         {/* 6. CO₂ 농도와 영향 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>CO₂ 농도와 영향</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">CO₂ 농도와 영향</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -268,7 +269,7 @@ export default function VentilationPage() {
 
         {/* 7. 냉난방 손실 줄이기 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>환기 시 냉난방 손실 줄이기</h2>
+          <h2 className="g-h2">환기 시 냉난방 손실 줄이기</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               { icon: '✅', title: '짧고 강한 맞통풍 (5~10분)', desc: '에너지 손실 최소 + 빠른 공기 교체 — 가장 권장' },
@@ -329,7 +330,7 @@ export default function VentilationPage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/interior/room-area', icon: '📐', name: '공간 면적 계산기',     desc: '벽·바닥·천장·평수·부피' },
@@ -355,6 +356,6 @@ export default function VentilationPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

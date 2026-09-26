@@ -7,6 +7,7 @@ import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { FUEL_PRICE_MONTH, FUEL_PRICE_AS_OF, GASOLINE_PRICE, DIESEL_PRICE, EV_SLOW_RATE, EV_FAST_RATE, EV_ULTRA_RATE } from './fuelEconomyUtils'
+import ToolPage from '@/components/ToolPage'
 
 // 본문 수치는 fuelEconomyUtils.ts 단가에서 계산 — 단가만 갱신하면 표·FAQ·배율이 함께 바뀜
 const won = (n: number) => n.toLocaleString('ko-KR')
@@ -52,7 +53,7 @@ const FAQ_LD = [
 
 export default function FuelEconomyPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/unit/fuel-economy">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />연비 변환기
@@ -80,7 +81,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 1. 국가별 연비 표기 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             국가별 연비 표기 차이
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -123,10 +124,10 @@ export default function FuelEconomyPage() {
 
         {/* ── 2. mpg US vs UK ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             mpg US vs mpg UK — 같은 단위, 다른 결과
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             mpg(miles per gallon)는 미국과 영국에서 모두 사용되지만, <strong style={{ color: 'var(--accent)' }}>1갤런의 용량 자체가 다릅니다</strong>. 같은 차량의 mpg 수치가 영국이 더 크게 나오는 이유입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -148,13 +149,13 @@ export default function FuelEconomyPage() {
 
         {/* ── 3. L/100km이 낮을수록 좋은 이유 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             L/100km이 낮을수록 좋은 이유
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             한국·미국식 표기는 <strong style={{ color: 'var(--text)' }}>“연료 1단위로 얼마나 가는가”</strong>(거리 ÷ 연료)인 반면, 유럽식 L/100km는 <strong style={{ color: 'var(--text)' }}>“100km 가는 데 얼마나 쓰는가”</strong>(연료 ÷ 거리)입니다. 즉 <strong style={{ color: 'var(--accent)' }}>소비량 기준</strong>이라 숫자가 작을수록 효율이 좋습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -187,13 +188,13 @@ export default function FuelEconomyPage() {
 
         {/* ── 4. 인기 차종별 연비 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             인기 차종별 연비 참고표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             제조사 공인 복합연비 기준 일반적인 수치입니다. 실제 운행 환경(시내/고속, 계절, 운전 습관)에 따라 ±20% 이상 차이날 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -230,13 +231,13 @@ export default function FuelEconomyPage() {
 
         {/* ── 4-1. 연료별 100km 비용 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🇰🇷 연료별 100km 주행 비용 비교
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             {FUEL_PRICE_MONTH} 기준 한국 평균 단가 추정. 실제는 차종·운전 습관·계절·충전 환경에 따라 ±20% 이상 차이.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -275,7 +276,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 4-2. 연비 향상 실전 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🚗 연비 향상 실전 팁 — 같은 차로 +15~20%
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -303,7 +304,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 5. 자주 검색되는 변환 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 검색되는 변환
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -334,7 +335,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -366,6 +367,6 @@ export default function FuelEconomyPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

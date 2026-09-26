@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/height-rank',
@@ -61,7 +62,7 @@ const RELATED = [
 
 export default function HeightRankPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/height-rank">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
@@ -107,7 +108,7 @@ export default function HeightRankPage() {
         {/* 2. 연령대별 평균표 */}
         <section>
           <h2 style={sectionTitle}>연령대별 평균 키 (8차 실측)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -149,7 +150,7 @@ export default function HeightRankPage() {
             나라별 키를 견줄 때는 성장이 거의 끝나는 <strong style={{ color: 'var(--text)' }}>19세</strong> 값을 씁니다.
             아래는 200개국 인구 기반 연구를 종합한 NCD-RisC(Lancet 2020)의 2019년 19세 평균 키예요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -216,7 +217,7 @@ export default function HeightRankPage() {
           </div>
 
           <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, marginTop: 18, marginBottom: 8 }}>출생 코호트 10년당 성인(18세) 키 증가폭</p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 360 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -297,6 +298,6 @@ export default function HeightRankPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

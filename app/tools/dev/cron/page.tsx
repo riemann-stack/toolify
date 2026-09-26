@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/cron',
@@ -46,7 +47,7 @@ const CODE = { background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fo
 
 export default function CronPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/dev/cron">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
@@ -91,7 +92,7 @@ export default function CronPage() {
         {/* ── 2. 특수문자 ── */}
         <div>
           <h2 style={H2}>특수문자 (* / , -) 의미</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -177,7 +178,7 @@ export default function CronPage() {
         {/* ── 5. Quartz·클라우드 차이 ── */}
         <div>
           <h2 style={H2}>Quartz·클라우드와 다른 점</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -221,7 +222,7 @@ export default function CronPage() {
             cron은 로그인 셸이 아니라 <code style={CODE}>SHELL=/bin/sh</code>, <code style={CODE}>PATH=/usr/bin:/bin</code>의
             최소 환경으로 명령을 실행합니다(crontab(5) 기준).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -261,7 +262,7 @@ export default function CronPage() {
             "매월 마지막 날"이나 "2주마다"는 표준 5필드 문법만으로 표현할 수 없습니다. 이럴 땐 트리거를
             조금 넓게 걸어 두고, 명령 앞에서 날짜 조건을 확인해 아니면 빠져나가는 패턴을 씁니다(GNU date 기준).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -333,6 +334,6 @@ export default function CronPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

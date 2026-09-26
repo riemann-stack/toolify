@@ -7,6 +7,7 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/property-holding-tax',
@@ -93,7 +94,7 @@ const fmvRows = [
 
 export default function PropertyHoldingTaxPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/property-holding-tax">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -157,7 +158,7 @@ export default function PropertyHoldingTaxPage() {
           <p style={{ ...para, marginTop: '12px', marginBottom: '12px' }}>
             공정시장가액비율은 1주택일수록 낮습니다. 도시지역에 있으면 도시지역분이 추가되며, 지방교육세는 본세의 20%로 함께 부과됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 320 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -266,6 +267,6 @@ export default function PropertyHoldingTaxPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

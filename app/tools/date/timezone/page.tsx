@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/timezone',
@@ -53,7 +54,7 @@ const FAQ_LD = [
 
 export default function TimezonePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/date/timezone">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />시간대(타임존) 변환기
@@ -70,7 +71,7 @@ export default function TimezonePage() {
 
         {/* 1. 사용법 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이렇게 쓰세요</h2>
+          <h2 className="g-h2">이렇게 쓰세요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { n: '1', t: '기준 도시 선택', d: '회의를 잡고 싶은 본인 위치 (보통 🇰🇷 서울)' },
@@ -91,13 +92,13 @@ export default function TimezonePage() {
 
         {/* 2. DST 설명 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>DST(서머타임) — 시기에 따라 시차가 바뀌는 이유</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <h2 className="g-h2">DST(서머타임) — 시기에 따라 시차가 바뀌는 이유</h2>
+          <p className="g-p">
             북미·유럽·호주 등 많은 국가는 <strong style={{ color: 'var(--text)' }}>여름철에 시계를 1시간 앞당기는 일광절약제(Daylight Saving Time)</strong>를 시행합니다.
             그래서 같은 서울→뉴욕이라도 <strong style={{ color: 'var(--accent)' }}>겨울엔 14시간 차이, 여름엔 13시간 차이</strong>가 납니다.
             본 도구는 IANA 시간대 데이터를 사용해 입력 날짜의 DST 적용 여부를 자동 판정합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -129,8 +130,8 @@ export default function TimezonePage() {
 
         {/* 3. 특수 오프셋 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>30분·45분 단위 시간대 — 인도·이란·네팔</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <h2 className="g-h2">30분·45분 단위 시간대 — 인도·이란·네팔</h2>
+          <p className="g-p">
             대부분의 시간대는 UTC에서 1시간 단위로 차이가 나지만, 일부 국가는 <strong style={{ color: 'var(--text)' }}>30분·45분 단위</strong>의 독특한 오프셋을 사용합니다.
             본 도구는 이 비표준 오프셋도 정확히 처리하며, 아래 여섯 지역 모두 위 도시 목록(＋ 도시 추가)에서 직접 선택할 수 있습니다.
           </p>
@@ -157,7 +158,7 @@ export default function TimezonePage() {
 
         {/* 4. 시간대 vs 시간차 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>UTC·GMT·KST — 약어 정리</h2>
+          <h2 className="g-h2">UTC·GMT·KST — 약어 정리</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { abbr: 'UTC', name: '협정 세계시', desc: '국제 표준시. 모든 시간대의 기준점. 1972년부터 GMT를 대체.' },
@@ -183,7 +184,7 @@ export default function TimezonePage() {
 
         {/* 5. 회의 잡기 팁 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>국제 회의 잡기 — 실전 팁</h2>
+          <h2 className="g-h2">국제 회의 잡기 — 실전 팁</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
             <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--emerald-600)', marginBottom: '10px' }}>✅ 권장</p>
@@ -218,7 +219,7 @@ export default function TimezonePage() {
 
         {/* 7. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/date/jet-lag',     emoji: '✈️', name: '시차 적응 계산기',  desc: '여행 전·중·후 수면 일정' },
@@ -237,6 +238,6 @@ export default function TimezonePage() {
           </div>
         </div>
       </div>
-    </div>
+    </ToolPage>
   )
 }

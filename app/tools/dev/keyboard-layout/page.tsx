@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/keyboard-layout',
@@ -55,7 +56,7 @@ const relatedTools = [
 
 export default function KeyboardLayoutPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/dev/keyboard-layout">
       <p style={{ fontSize: '12px', color: 'var(--cat-dev)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 700 }}>
         개발자
       </p>
@@ -93,7 +94,7 @@ export default function KeyboardLayoutPage() {
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             두벌식은 자음 19개와 모음 21개를 QWERTY 키에 배치합니다. 왼손 자리에 자음, 오른손 자리에 모음이 모여 있어 한 손씩 번갈아 누르도록 설계됐습니다. Shift를 함께 누르면 된소리(ㅃㅉㄸㄲㅆ)와 이중모음(ㅒㅖ)이 나옵니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -130,7 +131,7 @@ export default function KeyboardLayoutPage() {
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             한/영 전환 실수는 인사말·감사 인사처럼 손에 익어 빠르게 치는 문장에서 자주 반복됩니다. 많이 찾는 오타 문자열과 복원 결과를 조견표로 정리했습니다. 된소리(ㅃㅉㄸㄲㅆ)와 ㅒ·ㅖ는 Shift 키에 있으므로 <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>dPQmek</code>처럼 <strong style={{ color: 'var(--text)' }}>대문자를 그대로 유지</strong>해야 정확히 복원됩니다. 마지막 세 줄은 반대로 한글 모드인 채 영어 단어를 친 경우로, 한글 → 영문 방향의 복원 결과입니다. 표에 없는 문장은 공백·숫자·문장부호가 섞여 있어도 그대로 두고 변환되므로, 통째로 붙여넣으면 됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -178,7 +179,7 @@ export default function KeyboardLayoutPage() {
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             두벌식 자판의 자음 키에는 초성용·종성용 구분이 없습니다. 그래서 입력기는 모음 뒤에 온 자음을 <strong style={{ color: 'var(--text)' }}>일단 받침으로 붙여 두고</strong>, 다음 입력이 모음이면 그 받침을 떼어 다음 음절의 초성으로 넘깁니다. 받침이 다음 칸으로 옮겨붙으며 화면 글자가 깜빡이듯 바뀌는 모습 때문에 이를 <strong style={{ color: 'var(--text)' }}>도깨비불 현상</strong>이라고 부릅니다. <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>rkrtk</code>를 한 키씩 눌렀을 때 화면이 바뀌는 과정입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -252,6 +253,6 @@ export default function KeyboardLayoutPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

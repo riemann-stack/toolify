@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/unit-price',
@@ -39,7 +40,7 @@ const FAQ_LD = [
 
 export default function UnitPricePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/life/unit-price">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />단가 비교 계산기
@@ -55,7 +56,7 @@ export default function UnitPricePage() {
 
         {/* ── 1. 기본 공식 (단순화) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>단가 계산 기본 공식</h2>
+          <h2 className="g-h2">단가 계산 기본 공식</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '20px 22px' }}>
             <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '16px 18px', textAlign: 'center', fontFamily: 'var(--font-sans)', fontSize: '17px', lineHeight: 1.8, color: 'var(--text)', marginBottom: '14px' }}>
               가격 ÷ (용량 × 개수) × 기준 단위
@@ -79,13 +80,13 @@ export default function UnitPricePage() {
 
         {/* ── 2. 1+1·2+1 입력 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🎁 1+1·2+1 행사 — 개수만 입력하면 끝
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구는 행사 옵션을 따로 두지 않습니다. <strong style={{ color: 'var(--text)' }}>개수에 받는 개수를 그대로 입력</strong>하면 단가가 정확히 계산됩니다 (가격은 실제 결제 금액).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -115,7 +116,7 @@ export default function UnitPricePage() {
 
         {/* ── 3. 실제 마트 비교 예시 (코스트코 함정 포함) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>실제 마트·편의점·코스트코 비교 예시</h2>
+          <h2 className="g-h2">실제 마트·편의점·코스트코 비교 예시</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
               {
@@ -155,13 +156,13 @@ export default function UnitPricePage() {
 
         {/* ── 4. 소비 가능량 반영 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             💡 소비 가능량 반영 — 실질 단가
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             대용량 = 무조건 싸다 X. <strong style={{ color: 'var(--text)' }}>다 쓰지 못하면 실질 단가는 ↑</strong>. 각 상품 카드의 [⚙️ 실제 소비 가능량]에서 100/75/50% 버튼 또는 직접입력(예: 25%).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -193,7 +194,7 @@ export default function UnitPricePage() {
 
         {/* ── 5. 단가 함정 6가지 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이런 단가 함정 조심하세요</h2>
+          <h2 className="g-h2">이런 단가 함정 조심하세요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { title: '대용량 = 무조건 싸다?',     desc: '코스트코·대용량이 단가가 더 비싸거나 비슷할 때 多. 100g·100ml당으로 비교 + 소비 가능량 반영.' },
@@ -213,13 +214,13 @@ export default function UnitPricePage() {
 
         {/* ── 6. 단위 비교 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             단위 비교 가이드 — 자동 추천 기준
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구는 입력한 단위에 따라 비교 기준을 자동 추천합니다([자동 추천] 토글). 직접 변경도 가능.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -250,10 +251,10 @@ export default function UnitPricePage() {
 
         {/* ── 7. 모바일 사용 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📱 모바일 마트 현장 사용 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구는 마트 현장 모바일 사용에 최적화되어 있습니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -277,7 +278,7 @@ export default function UnitPricePage() {
 
         {/* ── 8. 추천 단위 표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 비교하는 상품별 추천 단위</h2>
+          <h2 className="g-h2">자주 비교하는 상품별 추천 단위</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -316,7 +317,7 @@ export default function UnitPricePage() {
 
         {/* ── 10. 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/dutch',         emoji: '🍻', name: '더치페이 계산기',   desc: '공동구매 정산' },
@@ -335,6 +336,6 @@ export default function UnitPricePage() {
           </div>
         </section>
       </div>
-    </div>
+    </ToolPage>
   )
 }

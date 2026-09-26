@@ -5,6 +5,7 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/glycemic-load',
@@ -142,7 +143,7 @@ const RELATED = [
 
 export default function GlycemicLoadPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/glycemic-load">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         건강·웰빙
       </p>
@@ -190,7 +191,7 @@ export default function GlycemicLoadPage() {
         {/* 2. GI vs GL 대표 예 */}
         <section>
           <h2 style={sectionTitle}>GI와 GL이 다르게 보이는 음식</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -231,7 +232,7 @@ export default function GlycemicLoadPage() {
             국제표 2008판 부록(정상 내당능 1,879항목)과 2021판 ISO 26642 준수 표(약 2,100항목)에서 한국에서 시험된 식품 항목은 확인되지 않아,
             밥·떡·국수처럼 한국 식단 고유 항목은 국내 연구 값을 별도 행으로 병기했습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -306,7 +307,7 @@ export default function GlycemicLoadPage() {
             </p>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -429,6 +430,6 @@ export default function GlycemicLoadPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

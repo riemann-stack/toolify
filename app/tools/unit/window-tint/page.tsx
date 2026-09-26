@@ -7,6 +7,7 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/window-tint',
@@ -52,7 +53,7 @@ const FAQ_LD = [
 
 export default function WindowTintPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/unit/window-tint">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />썬팅 투과율(VLT) 계산기
@@ -84,10 +85,10 @@ export default function WindowTintPage() {
 
         {/* ── 1. VLT란 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             VLT란? — 투과율·농도·차광률 정리
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             VLT(Visible Light Transmission)는 <strong style={{ color: 'var(--text)' }}>가시광선 투과율</strong>, 즉 유리·필름을 통과해 들어오는 빛의 비율(%)입니다. 썬팅 가게에서 말하는 &lsquo;농도 35&rsquo;가 바로 이 투과율을 가리킵니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
@@ -110,10 +111,10 @@ export default function WindowTintPage() {
 
         {/* ── 2. 왜 곱셈인가 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             왜 더하지 않고 곱하나 — 75% × 35% ≈ 26%
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             빛은 유리를 먼저 지나고, 살아남은 빛이 필름을 다시 지납니다. 원유리에서 75%가 통과하고 그중 35%가 필름을 통과하면 남는 건 <strong style={{ color: 'var(--text)' }}>75% × 35% = 26.25%</strong>입니다. 더해서 110%가 될 수는 없습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', fontFamily: 'var(--font-sans)' }}>
@@ -128,10 +129,10 @@ export default function WindowTintPage() {
 
         {/* ── 3. 표기 농도의 함정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             표기 농도의 함정 — 자체값 vs 부착 후 값
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             여기서 많이들 헷갈립니다. 제품 카탈로그·스펙표에 적힌 투과율이 <strong style={{ color: 'var(--text)' }}>필름 자체값</strong>인지, <strong style={{ color: 'var(--text)' }}>표준유리에 붙여 잰 합산값</strong>인지에 따라 계산이 달라집니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -155,10 +156,10 @@ export default function WindowTintPage() {
 
         {/* ── 3b. VLT ≠ 열차단 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             VLT ≠ 열차단 — TSER·IR·UV는 별개 지표
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             VLT는 <strong style={{ color: 'var(--text)' }}>가시광선(눈에 보이는 빛)</strong>이 얼마나 통과하는지만 나타냅니다. &lsquo;짙으면 시원하다&rsquo;는 통념과 달리 열차단 성능은 별도 지표로 확인해야 합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
@@ -181,13 +182,13 @@ export default function WindowTintPage() {
 
         {/* ── 4. 한국 법규 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 썬팅 법규 — 앞면 70% · 옆면 40%
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>도로교통법 시행령 제28조</strong>는 운전에 직접 영향을 주는 창의 최소 투과율을 정합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -221,13 +222,13 @@ export default function WindowTintPage() {
 
         {/* ── 5. 농도별 야간 시인성 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             농도별 야간 시인성·안전
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             투과율이 낮을수록 들어오는 빛이 줄어 야간·우천·터널에서 보이는 거리가 짧아집니다. 아래는 일반적인 체감 기준으로, 개인 시력·도로 조명에 따라 차이가 큽니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -260,10 +261,10 @@ export default function WindowTintPage() {
 
         {/* ── 6. 최종은 정기검사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             최종 확인은 측정기·정기검사로
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
+          <p className="g-p">
             이 계산기는 곱셈식 추정값입니다. 같은 &lsquo;농도 35&rsquo; 필름도 제조사·시공·유리 곡면에 따라 실측값이 달라지고, 표기가 부착 후 값인지 자체값인지에 따라 결과가 크게 갈립니다. 단속·검사는 <strong style={{ color: 'var(--text)' }}>투과율 측정기</strong>로 실제 값을 잽니다. 적합 여부가 빠듯하면 시공 전후로 측정기 수치를 직접 확인하는 것이 안전합니다. 일반 출고 차의 유리가 이미 약 75% 안팎 투과한다는 점을 감안하면, 옆면에 짙은 농도를 붙일 때 40% 기준을 넘기기는 생각보다 쉽지 않습니다.
           </p>
         </div>
@@ -278,7 +279,7 @@ export default function WindowTintPage() {
 
         {/* ── 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -309,6 +310,6 @@ export default function WindowTintPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

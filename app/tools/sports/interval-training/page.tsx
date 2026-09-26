@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/interval-training',
@@ -58,7 +59,7 @@ const FAQ_LD = [
 
 export default function IntervalTrainingPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/interval-training">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
@@ -79,10 +80,10 @@ export default function IntervalTrainingPage() {
 
         {/* ── 1. Jack Daniels 5가지 강도 (E·M·T·I·R) 자세히 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '10px' }}>
+          <h2 className="g-h2">
             러닝 훈련의 5가지 강도 — E · M · T · I · R 완벽 정리
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '18px' }}>
+          <p className="g-p">
             미국 러닝 코치 <strong style={{ color: 'var(--text)' }}>잭 다니엘스(Jack Daniels)</strong>는 모든 러닝 훈련을 <strong style={{ color: 'var(--text)' }}>딱 5가지 강도</strong>로 나눴습니다.
             느린 것부터 빠른 순서로 <strong style={{ color: 'var(--text)' }}>E → M → T → I → R</strong>이며, 강도마다 키워지는 능력이 다릅니다.
             아래 카드는 강도마다 키우는 능력과 체감을 정리한 것이고, 본인 기록을 입력하면 위 계산기가 VDOT 공식으로 <strong style={{ color: 'var(--text)' }}>강도별 페이스</strong>를 계산해 줍니다.
@@ -147,10 +148,10 @@ export default function IntervalTrainingPage() {
 
         {/* ── 2. 거리별 추천 메뉴 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             거리별 인터벌 추천 메뉴
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -182,7 +183,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 3. 야소 800 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             야소 800 완전 가이드 (한국 러너에게 인기)
           </h2>
           <div style={{
@@ -230,10 +231,10 @@ export default function IntervalTrainingPage() {
 
         {/* ── 4. VDOT 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             VDOT 표 — 5km 기록별 인터벌 페이스
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -268,7 +269,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 5. 회복 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             회복 시간·거리 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -300,7 +301,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 6. 트랙 환산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             트랙 거리 환산 (표준 트랙 1바퀴 = 400m)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8 }}>
@@ -322,7 +323,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 7. 주의사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             인터벌 훈련 시 주의사항
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -343,10 +344,10 @@ export default function IntervalTrainingPage() {
 
         {/* ── 8. 16주 풀 스케줄 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📅 16주 풀 인터벌 스케줄 구조
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [훈련 스케줄] 탭은 4~16주 자동 생성. 점진적 강도 증가 + 회복주 + 피크 + 테이퍼 4단계 구조 — 매주 같은 강도는 정체·부상 위험.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
@@ -370,13 +371,13 @@ export default function IntervalTrainingPage() {
 
         {/* ── 9. 1바퀴(400m) 페이스 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🏟️ 1바퀴(400m) 페이스 일정성 — 인터벌 효과의 핵심
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 거리별 랩타임 표에 <strong style={{ color: 'var(--text)' }}>1바퀴(400m) 환산 컬럼</strong>이 추가되었습니다. 인터벌 효과는 페이스 일정성에 좌우됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -411,13 +412,13 @@ export default function IntervalTrainingPage() {
 
         {/* ── 10. 목적별 거리 선택 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🎯 목적별 인터벌 거리 선택
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             위 [추천 인터벌 세션]에서 거리와 횟수를 고르면 워밍업~쿨다운까지 한 세션이 정리됩니다. 어떤 거리를 고를지는 <strong style={{ color: 'var(--text)' }}>훈련 목적</strong>에 따라 달라지며, 한 가지 거리만 고집하지 말고 주기별로 다양화하는 것이 좋습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -447,10 +448,10 @@ export default function IntervalTrainingPage() {
 
         {/* ── 11. 한국 인기 대회 시즌 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🏃 한국 인기 마라톤 대회 시즌
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             본 도구의 [훈련 스케줄] 탭에서 <strong style={{ color: 'var(--text)' }}>대회 빠른 선택</strong>으로 D-day 자동 입력. 봄(2~4월)과 가을(10~11월)에 큰 대회가 몰립니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -476,7 +477,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 12. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
@@ -497,7 +498,7 @@ export default function IntervalTrainingPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -531,6 +532,6 @@ export default function IntervalTrainingPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

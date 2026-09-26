@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/hiking-time',
@@ -84,7 +85,7 @@ const FAQ: { q: string; a: string }[] = [
 
 export default function HikingTimePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/sports/hiking-time">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />등산 시간 계산기
@@ -113,7 +114,7 @@ export default function HikingTimePage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             등산 시간 계산 공식은 130년간 발전해왔습니다. 각 공식은 다른 가정과 환경에 최적화되어 있어, 본인 산행 환경에 맞는 공식을 선택하는 것이 중요합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -147,7 +148,7 @@ export default function HikingTimePage() {
           <p style={{ ...faqAnswer, marginBottom: '14px' }}>
             기본 공식 외에 본인 상황에 맞는 5가지 보정을 적용해 정확도를 높입니다. 각 보정은 곱 연산되므로 누적 효과가 큼.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -179,7 +180,7 @@ export default function HikingTimePage() {
         {/* 3. 인기 명산 시간표 */}
         <section>
           <h2 style={sectionTitle}>한국 인기 명산 시간 (일반 페이스 기준)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -237,7 +238,7 @@ export default function HikingTimePage() {
             지리산에서 처음 시행됐고, 2015년 5월 16일부터 태안해안을 제외한 전국 국립공원으로 확대됐습니다. 일부 탐방로는 &ldquo;일몰 후부터 다음 날
             일출 2시간 전까지&rdquo; 탐방이 제한되며, 시간대는 공원·탐방로마다 다릅니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -266,7 +267,7 @@ export default function HikingTimePage() {
             공고로 시행되며, 제한·금지된 구역에 출입하면 같은 법 제86조제2항에 따라 <strong style={{ color: 'var(--text)' }}>50만원 이하의
             과태료</strong>(시행령 별표 3: 1차 20만·2차 30만·3차 50만원)가 부과될 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -326,6 +327,6 @@ export default function HikingTimePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

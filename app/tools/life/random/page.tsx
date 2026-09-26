@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/life/random',
@@ -58,7 +59,7 @@ const FAQ_LD = [
 
 export default function RandomPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/life/random">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />랜덤 추첨기
@@ -94,7 +95,7 @@ export default function RandomPage() {
         {/* 2. 빠른 입력 (칩) */}
         <section>
           <h2 style={sectionTitle}>모바일에서도 빠른 칩 입력</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             텍스트박스에 줄바꿈으로 명단을 채우던 방식 대신, <strong style={{ color: 'var(--text)' }}>이름 한 개씩 Enter</strong>로 칩이 추가되는 방식을 채택했습니다. 모바일 키보드에서도 자연스럽게 입력·삭제할 수 있습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
@@ -112,7 +113,7 @@ export default function RandomPage() {
         {/* 3. 룰렛 활용 */}
         <section>
           <h2 style={sectionTitle}>룰렛 — 가장 자주 쓰는 모드</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 룰렛은 단순 추첨과 가중치 추첨을 <strong style={{ color: 'var(--text)' }}>모두 포함</strong>합니다. 평소엔 모든 칸 같은 크기로 균등 추첨, <strong style={{ color: 'var(--accent)' }}>가중치 토글</strong>을 켜면 항목별 ×1~×10 비중을 슬라이더로 조정해 칸 크기가 달라집니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -133,7 +134,7 @@ export default function RandomPage() {
         {/* 4. 가중치 추첨 */}
         <section>
           <h2 style={sectionTitle}>가중치 추첨 — 확률 차등</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             같은 항목을 여러 번 입력하는 대신 가중치로 확률을 조절합니다. <strong style={{ color: 'var(--text)' }}>확률 = 항목 가중치 / 전체 가중치 합</strong>.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '12px' }}>
@@ -150,7 +151,7 @@ export default function RandomPage() {
         {/* 5. 팀 나누기 알고리즘 */}
         <section>
           <h2 style={sectionTitle}>팀 나누기 알고리즘</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             결과는 <strong style={{ color: 'var(--text)' }}>좌우 2열 카드</strong>로 표시 — 한 화면에 A팀·B팀이 동시에 보입니다. 모바일에서도 가로 분할 유지.
           </p>
           <ol style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: 20, margin: 0 }}>
@@ -167,7 +168,7 @@ export default function RandomPage() {
         {/* 6. 발표 순서·자리 */}
         <section>
           <h2 style={sectionTitle}>발표 순서·자리 배치</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             자리 배치 결과는 행·열 수에 따라 <strong style={{ color: 'var(--text)' }}>폰트 크기가 자동 조정</strong>됩니다. 다만 열이 많거나 이름이 매우 길면 좁은 셀에서 잘릴 수 있으며, 셀에 마우스를 올리면 툴팁으로 전체 이름을 확인할 수 있습니다. 발표 순서는 1번·마지막 고정과 제외자 옵션 지원.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -190,10 +191,10 @@ export default function RandomPage() {
         {/* 7. 공정성 검증 */}
         <section>
           <h2 style={sectionTitle}>공정성 검증 — 큰 수의 법칙</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구가 정말 공정한지 의심된다면 <strong style={{ color: 'var(--text)' }}>[공정성] 탭</strong>에서 직접 시뮬레이션할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -227,10 +228,10 @@ export default function RandomPage() {
         {/* 8. 사다리 게임 공정성 */}
         <section>
           <h2 style={sectionTitle}>사다리 게임은 정말 공정할까</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             사다리타기(아미다쿠지)는 의외로 <strong style={{ color: 'var(--text)' }}>완전한 균등 추첨이 아닙니다</strong>. 통계물리 학술지 분석(Inoue, &ldquo;Statistical analysis on Amida-kuji&rdquo;, Physica A 369권 2호, 2006)에 따르면 사다리에서 도착 위치의 확률분포는 1차원 확산 과정을 따릅니다 — 가로줄 하나가 확산의 한 걸음이어서, 가로줄이 적으면 <strong style={{ color: 'var(--text)' }}>출발 위치 바로 아래 근처에 도착할 확률이 균등보다 높아집니다</strong>.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -265,7 +266,7 @@ export default function RandomPage() {
         {/* 9. 난수 생성 방식 */}
         <section>
           <h2 style={sectionTitle}>이 도구의 난수는 어떻게 만들어지나</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             명단 섞기(팀·순서·자리)는 <strong style={{ color: 'var(--text)' }}>Fisher-Yates 셔플</strong>을 사용합니다. 배열 끝에서부터 각 자리를 아직 확정되지 않은 자리 중 하나와 무작위로 맞바꾸는 방식으로, 모든 순열이 같은 확률로 나오는 균등 셔플의 표준 알고리즘입니다(컴퓨터용 O(n) 구현 원전: Durstenfeld, CACM Algorithm 235, 1964). 가중치 추첨은 <code>Math.random()</code> 값을 가중치 합의 누적 구간에 대응시켜 뽑습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '12px' }}>
@@ -333,6 +334,6 @@ export default function RandomPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

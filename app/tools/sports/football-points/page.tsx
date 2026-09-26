@@ -6,6 +6,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/football-points',
@@ -40,7 +41,7 @@ const FAQ_LD = [
 
 export default function FootballPointsPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/football-points">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
@@ -70,7 +71,7 @@ export default function FootballPointsPage() {
 
         {/* ── 1. 축구 승점 시스템 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             축구 승점 시스템 가이드
           </h2>
           <div style={{
@@ -94,7 +95,7 @@ export default function FootballPointsPage() {
 
         {/* ── 2. EPL·K리그1 최근 10시즌 실측 우승·강등 승점 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             EPL·K리그1 최근 10시즌 — 실제 우승·강등 승점
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -189,7 +190,7 @@ export default function FootballPointsPage() {
 
         {/* ── 3. 순위 결정 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             순위 결정 기준 (Tie-Breaker)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -223,7 +224,7 @@ export default function FootballPointsPage() {
 
         {/* ── 4. K리그1 파이널 라운드 승점 계산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             K리그1 파이널 라운드 — 승점 계산이 달라지는 지점
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -247,7 +248,7 @@ export default function FootballPointsPage() {
 
         {/* ── 5. PPG로 최종 승점 예측 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             경기당 승점(PPG)으로 최종 승점 예측하기
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -271,7 +272,7 @@ export default function FootballPointsPage() {
 
         {/* ── 6. 자주 검색되는 시나리오 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 검색되는 시나리오 예시
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
@@ -292,7 +293,7 @@ export default function FootballPointsPage() {
 
         {/* ── 7. 무승부 가치 전략 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🎯 승점 활용 전략 — 무승부 가치
           </h2>
           <div style={{
@@ -328,7 +329,7 @@ export default function FootballPointsPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -360,6 +361,6 @@ export default function FootballPointsPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/baking-recipe',
@@ -78,7 +79,7 @@ const FAQ_LD = [
 
 export default function BakingRecipePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/cooking/baking-recipe">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />제과 레시피 계산기
@@ -93,7 +94,7 @@ export default function BakingRecipePage() {
 
       {/* 1. 품목별 황금비율 가이드 */}
       <h2 style={sectionTitle}>📐 품목별 황금비율 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         제과는 품목마다 기준 재료가 다릅니다. 빵은 밀가루 100%(베이커 퍼센트)지만, 마들렌은 계란 100%, 파운드는 버터 100%처럼 직관적인 기준을 사용합니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -125,7 +126,7 @@ export default function BakingRecipePage() {
 
       {/* 2. 비율 진단 가이드 */}
       <h2 style={sectionTitle}>🔍 비율 진단 가이드 — 어떤 재료가 어떤 식감을 만드나</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         같은 품목이라도 비율이 5~10%만 달라져도 식감이 크게 바뀝니다. 본 도구의 &ldquo;비율 진단&rdquo; 탭은 입력값을 분석해 식감과 풍미를 미리 예측합니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -151,7 +152,7 @@ export default function BakingRecipePage() {
 
       {/* 3. 틀 용량 기준 분량 가이드 */}
       <h2 style={sectionTitle}>📦 틀 용량 기준 분량 가이드</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         한국 홈베이커들이 가장 많이 묻는 것: &ldquo;이 레시피를 내 틀에 맞게 어떻게 줄여요?&rdquo; 본 도구의 &ldquo;분량 변환&rdquo; 탭에서 틀 종류만 고르면 자동 환산됩니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -336,6 +337,6 @@ export default function BakingRecipePage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>생일 케이크 일정</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

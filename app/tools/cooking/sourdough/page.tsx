@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/sourdough',
@@ -31,7 +32,7 @@ const FAQ_LD = [
 
 export default function SourdoughPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/cooking/sourdough">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />사워도우 스타터 &amp; 르방 피크 계산기
@@ -47,10 +48,10 @@ export default function SourdoughPage() {
 
         {/* ── 1. 사워도우 스타터란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             사워도우 스타터(르방)란?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             사워도우 스타터는 <strong style={{ color: 'var(--text)' }}>야생 효모(Wild Yeast)와 젖산균(LAB)의 공생 배양체</strong>입니다. 밀가루와 물만으로 공기 중의 미생물을 포집해 만드는 천연 발효종으로, 프랑스어로는 <strong style={{ color: 'var(--text)' }}>르방(Levain)</strong>이라 부릅니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -69,10 +70,10 @@ export default function SourdoughPage() {
 
         {/* ── 2. 7~14일 로드맵 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             사워도우 스타터 7~14일 로드맵
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -104,7 +105,7 @@ export default function SourdoughPage() {
 
         {/* ── 3. 급이 비율 시각화 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             급이 비율 이해하기
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '18px 22px', marginBottom: '14px' }}>
@@ -115,7 +116,7 @@ export default function SourdoughPage() {
               스타터 : 물 : 밀가루 &nbsp;·&nbsp; 예) 20g : 20g : 20g
             </p>
           </div>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -148,7 +149,7 @@ export default function SourdoughPage() {
 
         {/* ── 4. 온도별 발효 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             온도별 발효 속도 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -170,13 +171,13 @@ export default function SourdoughPage() {
 
         {/* ── 5. 냉장 보관과 부활(revive) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             냉장 보관과 부활(revive) 절차
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             매일 굽지 않는다면 냉장이 현실적입니다. 콜로라도 주립대 익스텐션은 냉장을 <strong style={{ color: 'var(--text)' }}>급이 간격을 늘리는 수단</strong>으로 설명합니다 — 규칙적으로 급이한다면 반드시 필요한 것은 아니라는 뜻입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -221,10 +222,10 @@ export default function SourdoughPage() {
 
         {/* ── 6. 후치(hooch)와 위험 신호 구분 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             후치(hooch)와 위험 신호 구분
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             스타터 위에 고이는 액체를 후치라고 부릅니다. King Arthur는 이를 <strong style={{ color: 'var(--text)' }}>야생 효모가 먹이를 먹으며 만들어낸 알코올과 물</strong>, 즉 발효 부산물로 정의합니다. 상했다는 신호가 아니라 급이가 필요하다는 신호이며, 액체 색이 짙어지는 것은 입자가 산화되기 때문이라 색만으로 판단할 수 없습니다. 처리는 <strong style={{ color: 'var(--text)' }}>따라 버리기·다시 섞어 넣기 둘 다 공식 허용</strong>입니다(King Arthur·콜로라도 주립대 익스텐션 동일). 알코올이 풍미를 더할 수 있어 섞는 쪽을 택하기도 하고, 액체가 0.5인치(약 1.3cm) 이상으로 많고 아주 어두울 때는 수분율이 달라지므로 따라내라는 안내가 함께 있습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -245,7 +246,7 @@ export default function SourdoughPage() {
 
         {/* ── 7. 자주 하는 실수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 하는 실수 &amp; 해결법
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -266,10 +267,10 @@ export default function SourdoughPage() {
 
         {/* ── 8. 플로트 테스트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             플로트 테스트(Float Test) 해석 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             스타터 한 찻숟가락을 물에 넣어 떠오르는지 확인하는 간단한 성숙도 테스트입니다. 충분히 가스가 차 있으면 떠오릅니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
@@ -289,7 +290,7 @@ export default function SourdoughPage() {
 
         {/* ── 9. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 className="g-h2">자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {FAQ_LD.map((faq, i) => (
@@ -306,7 +307,7 @@ export default function SourdoughPage() {
 
         {/* ── 10. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기',    desc: '르방 양에 맞춰 재료 비율 자동 계산' },
@@ -329,6 +330,6 @@ export default function SourdoughPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/ftp-zones',
@@ -60,7 +61,7 @@ const RELATED = [
 
 export default function FtpZonesPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/ftp-zones">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
@@ -101,7 +102,7 @@ export default function FtpZonesPage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
             20분 테스트는 <strong style={{ color: 'var(--text)' }}>&ldquo;20분만 전력으로 타는 것&rdquo;이 아닙니다</strong>. 프로토콜을 공개한 Hunter Allen(<em>Training and Racing with a Power Meter</em> 공저자·WKO 공동 개발자)의 순서를 보면 본 측정 앞에 45분가량의 준비 구간이 붙고, 그 안에 <strong style={{ color: 'var(--text)' }}>5분 올아웃</strong>이 반드시 들어갑니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -168,7 +169,7 @@ export default function FtpZonesPage() {
         {/* 2. Coggan 7존 표 */}
         <section>
           <h2 style={sectionTitle}>Coggan 파워존 (FTP 대비 %)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -208,7 +209,7 @@ export default function FtpZonesPage() {
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
             존 경계만 안다고 훈련이 되지는 않습니다. Coggan은 각 존이 실제로 어떤 <strong style={{ color: 'var(--text)' }}>지속 시간의 인터벌</strong>로 수행되는지도 함께 적어 두었습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -238,7 +239,7 @@ export default function FtpZonesPage() {
           </p>
 
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginTop: 20, marginBottom: 10 }}>파워미터가 없다면 — 심박(%LTHR)·RPE로</p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -317,6 +318,6 @@ export default function FtpZonesPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

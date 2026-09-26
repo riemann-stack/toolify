@@ -5,6 +5,7 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/golf-cost',
@@ -58,7 +59,7 @@ const FAQ_LD = [
 
 export default function GolfCostPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/sports/golf-cost">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />골프 비용 계산기
@@ -82,13 +83,13 @@ export default function GolfCostPage() {
 
         {/* ── 1. 골프장 타입별 평균 비용표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             골프장 타입별 평균 비용 (참고)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
             그린피는 한국레저산업연구소 그린피 조사의 <strong style={{ color: 'var(--text)' }}>18홀 이상 골프장 평균</strong>을 반올림한 값입니다. 대중형은 2025년 5월·10월 조사, 회원제 비회원은 『레저백서 2026』에 실린 2026년 5월 조사 기준입니다. 카트비·캐디피는 같은 연구소가 발표한 팀당 평균(2025년 대중형 카트비 약 9.75만원, 대중형 캐디피는 15만원대가 다수)을 바탕으로 한 근사치입니다. 평균일 뿐이라 지역·시즌·티타임에 따라 차이가 크니 예약 시 명세를 확인하세요.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -122,7 +123,7 @@ export default function GolfCostPage() {
 
         {/* ── 2. 1인당 라운딩 비용 예시 시나리오 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             1인당 라운딩 비용 예시
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -180,7 +181,7 @@ export default function GolfCostPage() {
 
         {/* ── 3. 캐디피 정산 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🧾 캐디피 정산 완전 가이드
           </h2>
 
@@ -220,13 +221,13 @@ export default function GolfCostPage() {
 
         {/* ── 4. 회원권 손익분기 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🏆 회원권 손익분기 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             아래는 <strong style={{ color: 'var(--text)' }}>[🏆 회원권 손익] 탭 기본값과 동일한 가정</strong> — 5억 회원권·연회비 200만·매각 잔존 3억·10년 보유, 비회원 1라운드 32.4만(오늘 정산 기본값)·회원 8만. 탭에서 본인 값으로 바로 시뮬레이션할 수 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -260,10 +261,10 @@ export default function GolfCostPage() {
 
         {/* ── 5. 시즌·요일별 가격 변동 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             📅 시즌·요일별 그린피 변동
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국 골프장 그린피는 시즌·요일에 따라 ±50% 변동. 가성비 라운딩 시점 가이드.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
@@ -288,10 +289,10 @@ export default function GolfCostPage() {
 
         {/* ── 6. 한국 인기 골프장 타입 비교 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             🏌️ 한국 인기 골프장 타입 한눈에
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -322,10 +323,10 @@ export default function GolfCostPage() {
 
         {/* ── 7. 동남아 골프 가이드 (NEW, 참고만) ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 className="g-h2">
             ✈️ 동남아 골프 패키지 평균 (참고)
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             한국 라운딩 1인당 ~32만(대중형 주말·4인) vs 동남아 패키지 (항공·숙박 포함). 정확한 가격은 여행사·예약 사이트 직접 확인 필수.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
@@ -355,7 +356,7 @@ export default function GolfCostPage() {
 
         {/* ── 5. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/dutch',          icon: '🍻', name: '더치페이 계산기',       desc: '식사·카트비 N빵 정산' },
@@ -381,6 +382,6 @@ export default function GolfCostPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

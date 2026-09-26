@@ -16,6 +16,7 @@ import {
   uiDailyFloor,
   type AgeGroup,
 } from '@/lib/krUnemployment'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/unemployment-benefit',
@@ -86,7 +87,7 @@ const FAQ_LD = [
 
 export default function UnemploymentBenefitPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/unemployment-benefit">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />실업급여(구직급여) 계산기
@@ -114,10 +115,10 @@ export default function UnemploymentBenefitPage() {
 
         {/* ── 1. 실업급여란·요건 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             실업급여(구직급여)란? 수급 요건
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             실업급여 중 구직급여는 고용보험 가입 근로자가 비자발적으로 일자리를 잃고 재취업을 준비하는 동안 받는 급여입니다. 흔히 말하는 &lsquo;실업급여&rsquo;가 이 구직급여입니다. 핵심 요건은 네 가지입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
@@ -141,10 +142,10 @@ export default function UnemploymentBenefitPage() {
 
         {/* ── 2. 1일 구직급여액 계산법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             1일 구직급여액 — 평균임금의 60%와 2026 상·하한
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             1일 구직급여액은 <strong style={{ color: 'var(--text)' }}>평균임금일액 × 60%</strong>로 계산하되, 2026년 상한 {won(UI_DAILY_CAP_2026)}원과 하한 {won(UI_DAILY_FLOOR_2026)}원 사이로 정해집니다. 60%로 계산한 값이 하한보다 낮으면 하한액을, 상한보다 높으면 상한액을 받습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', fontFamily: 'var(--font-sans)' }}>
@@ -162,10 +163,10 @@ export default function UnemploymentBenefitPage() {
 
         {/* ── 3. 소정급여일수 전체 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             소정급여일수 — 내 나이·가입기간이면 며칠 받나
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             며칠 동안 받는지는 이직 당시 <strong style={{ color: 'var(--text)' }}>만 나이</strong>와 <strong style={{ color: 'var(--text)' }}>고용보험 총 가입기간</strong>으로 정해집니다(2019.10. 이후 이직자 기준). 장애인은 나이와 무관하게 50세 이상 표가 적용됩니다.
           </p>
           <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
@@ -199,13 +200,13 @@ export default function UnemploymentBenefitPage() {
 
         {/* ── 4. 평균임금·임금일액 상한 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             평균임금 산정과 임금일액 상한 {won(UI_WAGE_DAILY_CAP_2026)}원
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             평균임금일액은 <strong style={{ color: 'var(--text)' }}>퇴직 직전 3개월 임금 총액 ÷ 그 기간 총 달력일수</strong>입니다. 3개월이 달력상 며칠인지에 따라 분모가 89~92일로 달라지므로, 위 도구에 퇴사일을 입력하면 직전 3개월 총일수를 자동 산정합니다(미입력 시 90일 가정).
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             평균임금일액 자체에도 상한이 있습니다. 2026년 임금일액 상한은 <strong style={{ color: 'var(--text)' }}>{won(UI_WAGE_DAILY_CAP_2026)}원</strong>으로, 고소득자는 임금일액이 이 값으로 잘린 뒤 60%가 적용됩니다. 다만 {won(UI_WAGE_DAILY_CAP_2026)}원의 60%는 {won(Math.round(UI_WAGE_DAILY_CAP_2026 * 0.6))}원이라, 결국 1일액 상한 {won(UI_DAILY_CAP_2026)}원으로 다시 한 번 제한됩니다.
           </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -215,13 +216,13 @@ export default function UnemploymentBenefitPage() {
 
         {/* ── 5. 수급기간·반복수급 주의 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             수급기간 12개월 제한과 반복수급 주의
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             구직급여는 <strong style={{ color: 'var(--text)' }}>이직일 다음 날부터 12개월(수급기간) 이내</strong>에만 받을 수 있습니다. 소정급여일수가 며칠 남았든 이 12개월을 넘기면 지급이 종료됩니다. 예컨대 소정급여일수가 150일이어도 신청이 늦거나 중간에 길게 비우면 남은 일수가 소멸할 수 있습니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-p">
             또한 짧은 기간에 실업급여를 반복해 받는 <strong style={{ color: 'var(--text)' }}>반복수급</strong>의 경우 지급액이 단계적으로 감액되는 제도가 있습니다. 적용 기준·감액률은 제도 개정에 따라 달라질 수 있어, 본 계산기에는 반영하지 않습니다. 해당 가능성이 있으면 고용센터에 별도로 확인하세요.
           </p>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -231,10 +232,10 @@ export default function UnemploymentBenefitPage() {
 
         {/* ── 6. 신청 절차·서류 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             신청 절차와 필요 서류
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
+          <p className="g-p">
             퇴사 후 다음 순서로 진행합니다. 자격 신청 교육과 구직등록을 마쳐야 수급자격 인정 신청이 가능합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -278,7 +279,7 @@ export default function UnemploymentBenefitPage() {
 
         {/* ── 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -308,6 +309,6 @@ export default function UnemploymentBenefitPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

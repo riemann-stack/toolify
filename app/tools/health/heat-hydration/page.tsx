@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import Disclaimer from '@/components/Disclaimer'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/heat-hydration',
@@ -62,7 +63,7 @@ const RELATED = [
 
 export default function HeatHydrationPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/health/heat-hydration">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         건강·웰빙
       </p>
@@ -114,7 +115,7 @@ export default function HeatHydrationPage() {
           <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 12 }}>
             발한율은 개인차가 커서 표준 범위(위 계산기의 0.4~1.8 L/h)만으로는 부족할 수 있습니다. 대회나 한여름 장거리 훈련을 준비한다면 스포츠의학 표준 절차(NATA 2017 공식·코네티컷대 Korey Stringer Institute 측정법)로 <strong>내 값을 직접 재는 것</strong>이 정확합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -149,7 +150,7 @@ export default function HeatHydrationPage() {
         {/* 2. 폭염 특보 3단계 표 */}
         <section>
           <h2 style={sectionTitle}>폭염 특보 3단계 (기상청 2026 개편)</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -184,7 +185,7 @@ export default function HeatHydrationPage() {
           <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 12 }}>
             2024년 10월 개정된 <strong>산업안전보건법 제39조제1항제7호</strong>(2025-06-01 시행)가 폭염에 장시간 작업할 때 생기는 건강장해를 사업주의 보건조치 의무로 명문화했고, 구체적인 조치는 <strong>2025-07-17 공포·시행</strong>된 산업안전보건기준에 관한 규칙 개정이 정했습니다. 규칙상 &quot;폭염작업&quot;은 <strong>체감온도 31℃ 이상</strong>인 작업장소에서의 장시간 작업이며, 체감온도는 바닥에서 1.2~1.5m 높이에서 측정합니다(배달 등 이동작업은 기상청 발표 체감온도로 대체 가능).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -303,6 +304,6 @@ export default function HeatHydrationPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

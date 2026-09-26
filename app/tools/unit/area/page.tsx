@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/unit/area',
@@ -67,7 +68,7 @@ const headCell: React.CSSProperties = {
 
 export default function AreaPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/unit/area">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />평수 변환기
@@ -83,7 +84,7 @@ export default function AreaPage() {
 
         {/* 평수 공식 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평수 계산 공식</h2>
+          <h2 className="g-h2">평수 계산 공식</h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(176,62,255,0.20)', borderRadius: 'var(--radius-card)', padding: '20px 22px', textAlign: 'center', marginBottom: 12 }}>
             <p style={{ fontSize: 12, color: 'var(--purple-600)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 12 }}>평수 환산 공식</p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>
@@ -93,7 +94,7 @@ export default function AreaPage() {
               평 → ㎡: 평수 × 3.3058 / ㎡ → 평: 면적 ÷ 3.3058
             </p>
           </div>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <p className="g-p">
             1평은 정확히 6자×6자 = 36 제곱자입니다. 일반적으로 3.3㎡로 어림하지만 정확히는 약 3.3058㎡로 약간 큽니다.
             <strong style={{ color: 'var(--text)' }}> 한국 부동산에서 가장 흔한 환산 — 84㎡ ≈ 25.4평 (분양 34평) / 59㎡ ≈ 17.85평 (분양 24평).</strong>
           </p>
@@ -101,7 +102,7 @@ export default function AreaPage() {
 
         {/* 국민평형 조견표 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>국민평형 조견표 — 전용면적 ↔ 분양 평형</h2>
+          <h2 className="g-h2">국민평형 조견표 — 전용면적 ↔ 분양 평형</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
             아파트 분양 평형은 <strong style={{ color: 'var(--text)' }}>공급면적(전용 + 주거공용)</strong> 기준입니다.
             전용 84㎡는 환산하면 25.4평이지만 계단·복도·엘리베이터 같은 주거공용면적(약 26㎡)을 더한 공급면적이 약 110㎡가 되어
@@ -130,7 +131,7 @@ export default function AreaPage() {
             ※ 같은 전용 84㎡라도 단지마다 주거공용면적이 달라 공급면적이 108~113㎡ 안팎으로 벌어지고,
             표기도 33평형·34평형으로 갈립니다. 정확한 값은 해당 단지 입주자모집공고의 타입별 면적표가 기준입니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <p className="g-p">
             기준선인 <strong style={{ color: 'var(--text)' }}>&lsquo;전용 85㎡ 이하(국민주택 규모)&rsquo;</strong>는
             1973년 1인당 적정 주거면적을 5평으로 보고 국민주택을 25평(약 82.6㎡)으로 정한 데서 출발했습니다.
             지금도 청약 제도와 각종 세제의 경계선으로 쓰이며, 전용 84㎡가 &lsquo;국민평형&rsquo;이 된 것도 이 상한을 꽉 채우는 최대 평면이기 때문입니다.
@@ -139,7 +140,7 @@ export default function AreaPage() {
 
         {/* 전용률 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>전용률 — 같은 &lsquo;25평형&rsquo;인데 실평수가 다른 이유</h2>
+          <h2 className="g-h2">전용률 — 같은 &lsquo;25평형&rsquo;인데 실평수가 다른 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
             전용률은 분양면적에서 전용면적이 차지하는 비율입니다. <strong style={{ color: 'var(--text)' }}>아파트는 평균 80% 안팎이지만 오피스텔은 50% 수준</strong>까지 내려갑니다.
             오피스텔은 분양면적을 공급면적이 아닌 <strong style={{ color: 'var(--text)' }}>계약면적(기타공용 포함)</strong> 기준으로 표기하는 관행이라 분모가 크고,
@@ -153,7 +154,7 @@ export default function AreaPage() {
               평형 표기가 같아도 실면적이 1.6배 차이 날 수 있습니다 — 비교는 반드시 전용면적(㎡) 기준으로.
             </p>
           </div>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <p className="g-p">
             같은 아파트끼리도 구조에 따라 갈립니다. <strong style={{ color: 'var(--text)' }}>복도식은 가로로 긴 복도 전체가 주거공용면적</strong>에 들어가
             엘리베이터 홀만 공용인 계단식보다 전용률이 낮습니다. 같은 공급면적의 구축 복도식과 신축 계단식은 실평수가 다를 수 있다는 뜻입니다.
           </p>
@@ -161,7 +162,7 @@ export default function AreaPage() {
 
         {/* 서비스면적 — 84A vs 84B */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>같은 전용 84㎡인데 84A가 더 넓은 이유 — 서비스면적</h2>
+          <h2 className="g-h2">같은 전용 84㎡인데 84A가 더 넓은 이유 — 서비스면적</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
             분양 공고의 84A·84B·84C는 전용면적이 똑같이 84㎡인 서로 다른 평면 타입입니다.
             그런데 <strong style={{ color: 'var(--text)' }}>발코니는 전용·공급 어느 면적에도 들어가지 않는 서비스면적</strong>입니다 —
@@ -169,7 +170,7 @@ export default function AreaPage() {
             2005년 발코니 구조변경(확장)이 합법화된 뒤로는 발코니를 방·거실로 터서 쓰는 것이 사실상 표준이 되어,
             서비스면적이 큰 타입일수록 확장 후 실사용 면적이 커집니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85 }}>
+          <p className="g-p">
             서비스면적은 발코니가 접하는 외벽 길이에 비례하므로 평면 모양의 영향이 큽니다.
             거실과 방들이 한 면에 나란히 붙는 <strong style={{ color: 'var(--text)' }}>4베이 판상형은 발코니 접면이 길어 서비스면적이 대체로 크고, 타워형은 상대적으로 작은 편</strong>입니다.
             같은 전용 84㎡라도 타입에 따라 확장 후 체감 면적이 달라지는 이유입니다.
@@ -184,7 +185,7 @@ export default function AreaPage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',     desc: '14개 분야 + 한국 전통 단위' },
@@ -208,6 +209,6 @@ export default function AreaPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

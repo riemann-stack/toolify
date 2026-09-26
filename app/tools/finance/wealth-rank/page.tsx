@@ -8,6 +8,7 @@ import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { USD_KRW, USD_KRW_ASOF } from './wealthData'
+import ToolPage from '@/components/ToolPage'
 
 /** USD → '약 N억' (FAQ 예시를 고정 환율에서 파생) */
 const usdToEok = (usd: number) => `약 ${(Math.round((usd * USD_KRW) / 1e7) / 10).toLocaleString('ko-KR')}억`
@@ -113,7 +114,7 @@ const FAQ_LD = [
 
 export default function WealthRankPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/wealth-rank">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />자산 순위 계산기
@@ -344,6 +345,6 @@ export default function WealthRankPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

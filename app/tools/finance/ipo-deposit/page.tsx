@@ -6,6 +6,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/ipo-deposit',
@@ -83,7 +84,7 @@ const FAQ_LD = [
 
 export default function IpoDepositPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={880} slug="/tools/finance/ipo-deposit">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
       <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />공모주 증거금 계산기
@@ -100,7 +101,7 @@ export default function IpoDepositPage() {
 
       {/* 1. 비례·균등 구조 가이드 */}
       <h2 style={sectionTitle}>📊 비례·균등 배정 구조 가이드 (균등 50% 이상)</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         2021년부터 일반 청약자 배정 물량의 <strong style={{ color: 'var(--text)' }}>50% 이상</strong>을 균등 배정하도록 의무화됐습니다(금융위 규정). 나머지는 비례 배정으로, 각각 다른 메커니즘으로 작동합니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -127,7 +128,7 @@ export default function IpoDepositPage() {
 
       {/* 2. 청약단위 표 */}
       <h2 style={sectionTitle}>📏 청약단위 구간별 표 (일반 패턴)</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         한국 증권사 일반 패턴 — 종목·증권사별 다를 수 있음. 본 도구는 자동 추천하며 직접 입력도 가능.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -154,7 +155,7 @@ export default function IpoDepositPage() {
 
       {/* 3. 5사6입 룰 */}
       <h2 style={sectionTitle}>🔢 5사6입 룰 — 비례 배정 소수점 처리</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         비례배정 = <strong style={{ color: 'var(--text)' }}>청약 주수 ÷ 경쟁률</strong> 결과는 정수가 아닐 수 있습니다. 5사6입(소수 첫째 자리 5 이하 버림·6 이상 올림 — 반올림과 달리 0.5는 버림)을 적용합니다.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -208,7 +209,7 @@ export default function IpoDepositPage() {
 
       {/* 5. 자금 묶임 일정 */}
       <h2 style={sectionTitle}>📅 자금 묶임 일정 (D~D+10 일반)</h2>
-      <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
+      <p className="g-p">
         한국 공모주 청약 일정 일반 흐름. 종목·증권사별 1~2일 차이 가능. 본 도구의 메모 탭에서 종목별 D-day 자동 계산.
       </p>
       <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
@@ -412,6 +413,6 @@ export default function IpoDepositPage() {
           <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>자금 계획 참고</div>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

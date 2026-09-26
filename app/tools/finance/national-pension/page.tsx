@@ -9,6 +9,7 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import { todayStr } from '@/lib/date'
 import { PENSION_BASE_CURRENT, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
+import ToolPage from '@/components/ToolPage'
 
 /* 기준소득월액 상·하한 — lib 스케줄에서 빌드 시점 구간 보간 (매년 7월 개정) */
 const PB = PENSION_BASE_CURRENT
@@ -102,7 +103,7 @@ const ageRows = [
 
 export default function NationalPensionPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <ToolPage width={760} slug="/tools/finance/national-pension">
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
@@ -191,7 +192,7 @@ export default function NationalPensionPage() {
           <p style={para}>
             노령연금을 받기 시작하는 나이는 출생연도에 따라 단계적으로 늦춰져 왔습니다. <strong style={strong}>1969년생 이후는 만 65세</strong>가 기준입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 320 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -257,6 +258,6 @@ export default function NationalPensionPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }
