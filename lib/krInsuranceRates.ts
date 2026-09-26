@@ -108,7 +108,7 @@ export function pensionBaseAt(when: string | Date | YearMonth): PensionBasePerio
 
 /** 직전 구간 (첫 구간이면 null) — "637만 → 659만" 같은 변경 안내용 */
 export function previousPensionBase(p: PensionBasePeriod): PensionBasePeriod | null {
-  const i = PENSION_BASE_SCHEDULE.indexOf(p)
+  const i = PENSION_BASE_SCHEDULE.findIndex(q => q.from === p.from)
   return i > 0 ? PENSION_BASE_SCHEDULE[i - 1] : null
 }
 
@@ -132,7 +132,7 @@ export function clampPensionBase(monthlyIncome: number, p: Pick<PensionBasePerio
   return Math.min(p.max, Math.max(p.min, monthlyIncome))
 }
 
-/** 편의값: 모듈 평가 시점의 '오늘'(lib/date.ts todayStr — 기기 로컬, 한국 사용자·KST 기준)에 적용되는 구간.
+/** 편의값: 모듈 평가 시점의 '오늘'(lib/date.ts todayStr — 기기 로컬 날짜 — 한국 사용자 브라우저는 KST, Vercel 빌드 서버는 UTC)에 적용되는 구간.
  *  ⚠ 서버 컴포넌트(page.tsx)에서는 빌드 시점 값으로 정적 HTML에 박힌다.
  *    클라이언트 컴포넌트에서 이 값을 SSG 초기 렌더에 쓰면 '7월 1일 이전 빌드·이후 방문' 때 hydration 불일치가
  *    날 수 있으므로, 클라이언트는 page.tsx가 넘긴 빌드일(asOf)을 useSyncExternalStore의 서버 스냅샷으로 쓰고

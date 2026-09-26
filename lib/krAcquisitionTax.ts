@@ -102,6 +102,11 @@ function mulPpm(price: number, ppm: number): number {
 const floor10 = (won: number) => Math.floor(won / 10) * 10
 
 /** 1주택 표준세율(ppm) — 지방세법 §11①8호. 6~9억은 소수점 이하 다섯째자리 반올림(=0.01%p 단위) */
+/** 주택 수 정규화 — NaN·음수·소수 입력은 1주택으로 (잘못된 localStorage 값이 조용히 표준세율이 되지 않도록) */
+function normHomeCount(v: number): number {
+  return Number.isFinite(v) ? Math.max(1, Math.floor(v)) : 1
+}
+
 export function standardHouseRatePpm(price: number): number {
   if (price <= 600_000_000) return 10_000          // 1%
   if (price > 900_000_000) return 30_000           // 3%
@@ -134,7 +139,7 @@ function build(
 function surchargeRatePct(input: HouseAcqInput): { pct: 8 | 12; label: string } | null {
   if (input.lowValueHouse) return null
   if (input.corporate) return { pct: 12, label: '법인 취득 중과 12%' }
-  const n = Math.max(1, Math.floor(input.homeCount))
+  const n = normHomeCount(input.homeCount)
   if (input.adjusted) {
     if (n >= 3) return { pct: 12, label: `조정대상지역 ${n >= 4 ? '4주택 이상' : '3주택'} 중과 12%` }
     if (n === 2 && !input.temporaryTwoHomes) return { pct: 8, label: '조정대상지역 2주택 중과 8%' }
@@ -160,7 +165,7 @@ export function calcHouseAcquisitionTax(input: HouseAcqInput): AcqTaxBreakdown {
   const acqPpm = standardHouseRatePpm(price)
   const eduPpm = acqPpm / 10                                        // 취득세율 × 1/2 × 20%
   const ruralPpm = input.over85 ? 2_000 : 0                         // 0.2%
-  const n = Math.max(1, Math.floor(input.homeCount))
+  const n = normHomeCount(input.homeCount)
   const why = input.lowValueHouse
     ? '시가표준액 1억 이하 — 중과 제외, 표준세율'
     : input.corporate
