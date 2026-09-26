@@ -39,8 +39,8 @@ export interface BoltData {
   spannerJIS: number      // JIS 소형 6각 (JIS B 1180 부속서 소형) — M8 12·M10 14·M12 17 … 일본차·옛 설비
   /* 내부 6각 (알렌렌치) — 머리 종류별로 다름 */
   allenSocket: number     // 소켓캡 (DIN 912 / ISO 4762)
-  allenButton: number     // 버튼헤드 (ISO 7380)
-  allenFlat: number       // 플랫헤드 (ISO 10642 / DIN 7991)
+  allenButton: number     // 버튼헤드 (ISO 7380-1 — M3~M16만 규격값, 그 밖은 참고값: ISO7380_SIZES)
+  allenFlat: number       // 플랫헤드 (ISO 10642 M3~M20 / 그 밖 M18·M22·M24는 DIN 7991: ISO10642_SIZES)
   allenSet: number        // 세트스크류 (DIN 913·914·915·916)
   /* 너트 높이 (mm) */
   nutStd: number          // 표준 6각 너트 높이 — DIN 934 계열 일반 유통값 (ISO 4032는 약간 더 높음)
@@ -57,7 +57,8 @@ export interface BoltData {
   clearanceHole: number
   /* 피치 (표준 거친나사) */
   pitchCoarse: number
-  /* 참고 체결 토크 (Nm) — 표준 강도등급, 마찰계수 0.14 ISO 16047 일반치 */
+  /* 참고 체결 토크 (Nm) — 표준 강도등급, 마찰계수 0.14 가정 일반 참고치
+     (ISO 16047은 토크–체결력 '시험 방법' 규격이라 이 값의 출처가 아니다 — 2026-09 표기 정정) */
   torque4_8: number
   torque8_8: number
   torque10_9: number
@@ -158,6 +159,12 @@ export function isStandardDifferent(size: BoltSize): boolean {
   const d = BOLT_DATA[size]
   return d.spannerISO !== d.spannerDIN || d.spannerISO !== d.spannerJIS
 }
+
+/* 머리별 알렌 사이즈의 근거 규격이 다루는 호칭 범위 (2026-09 확인)
+   · ISO 7380-1:2011 버튼헤드 — M3·M4·M5·M6·M8·M10·M12·M16 (M14·M18 이상 없음 → 그 사이즈의 allenButton은 규격값이 아닌 참고값)
+   · ISO 10642:2004 접시머리 — M3~M20 (M14는 비선호, M18 없음). M18·M22·M24는 구 DIN 7991(M3~M24) 값 */
+export const ISO7380_SIZES: ReadonlySet<BoltSize> = new Set<BoltSize>(['M3', 'M4', 'M5', 'M6', 'M8', 'M10', 'M12', 'M16'])
+export const ISO10642_SIZES: ReadonlySet<BoltSize> = new Set<BoltSize>(['M3', 'M4', 'M5', 'M6', 'M8', 'M10', 'M12', 'M14', 'M16', 'M20'])
 
 export function getAllen(size: BoltSize, type: BoltType): number | null {
   const d = BOLT_DATA[size]
@@ -338,7 +345,7 @@ export const GRADE_INFO: GradeInfo[] = [
   { grade: '4.8',  tensile: '400 MPa', yield: '320 MPa', use: '일반 강·가구·전기',           color: '#9B9B9B' },
   { grade: '8.8',  tensile: '800 MPa', yield: '640 MPa', use: '범용 기계·자동차 일반부',     color: 'var(--teal-600)' },
   { grade: '10.9', tensile: '1000 MPa',yield: '900 MPa', use: '엔진·서스펜션·구조물',         color: 'var(--amber-600)' },
-  { grade: '12.9', tensile: '1200 MPa',yield: '1080 MPa',use: '고강도 구조·항공·공구',        color: 'var(--pink-600)' },
+  { grade: '12.9', tensile: '1200 MPa',yield: '1080 MPa',use: '금형·공작기계·고강도 소켓볼트', color: 'var(--pink-600)' },
 ]
 
 /* 숫자 포맷 */

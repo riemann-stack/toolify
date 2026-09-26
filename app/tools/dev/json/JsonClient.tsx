@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import dynamic from 'next/dynamic'
 import s from '../dev.module.css'
-import { jsonToInterfaces, unescapeJson } from './jsonUtils'
+import { analyzeJson, jsonToCsv, jsonToInterfaces, unescapeJson } from './jsonUtils'
 import { useInitialTab } from '@/components/useInitialTab'
 
 type YamlDump = typeof import('js-yaml').dump
@@ -25,30 +25,6 @@ function looksLikeYaml(text: string): boolean {
 const inlineLinkBtn: CSSProperties = {
   background: 'none', border: 'none', padding: 0, minHeight: 0, font: 'inherit',
   color: 'var(--accent-ink)', fontWeight: 700, textDecoration: 'underline', cursor: 'pointer',
-}
-
-// ─────────────────────────────────────────────
-// JSON 통계
-// ─────────────────────────────────────────────
-type JsonStats = { keys: number; arrays: number; objects: number; strings: number; numbers: number; depth: number }
-function analyzeJson(value: unknown, depth = 1, acc: JsonStats = { keys: 0, arrays: 0, objects: 0, strings: 0, numbers: 0, depth: 1 }): JsonStats {
-  acc.depth = Math.max(acc.depth, depth)
-  if (Array.isArray(value)) {
-    acc.arrays++
-    for (const v of value) analyzeJson(v, depth + 1, acc)
-  } else if (value !== null && typeof value === 'object') {
-    acc.objects++
-    const obj = value as Record<string, unknown>
-    for (const k of Object.keys(obj)) {
-      acc.keys++
-      analyzeJson(obj[k], depth + 1, acc)
-    }
-  } else if (typeof value === 'string') {
-    acc.strings++
-  } else if (typeof value === 'number') {
-    acc.numbers++
-  }
-  return acc
 }
 
 // ─────────────────────────────────────────────
@@ -236,20 +212,7 @@ export default function JsonClient() {
           // noCompatMode 기본(false): yes·on 같은 YAML 1.1 불리언 문자열과 날짜형 문자열은 따옴표로 감싸 타입이 바뀌지 않게 함
           return yamlDump ? yamlDump(parsed.data, { indent: 2, lineWidth: -1, noRefs: true }) : ''
         case 'ts':       return jsonToInterfaces(parsed.data, 'Root').join('\n\n')
-        case 'csvFlat': {
-          if (!Array.isArray(parsed.data) || parsed.data.length === 0) return '⚠️ CSV 변환은 객체 배열이 필요합니다 (예: [{"a":1,"b":2}])'
-          const arr = parsed.data as Record<string, unknown>[]
-          if (typeof arr[0] !== 'object') return '⚠️ 배열의 요소가 객체가 아닙니다'
-          const headers = Array.from(new Set(arr.flatMap(o => Object.keys(o))))
-          const escapeCsv = (v: unknown) => {
-            if (v === null || v === undefined) return ''
-            const str = typeof v === 'object' ? JSON.stringify(v) : String(v)
-            if (/[",\n]/.test(str)) return `"${str.replace(/"/g, '""')}"`
-            return str
-          }
-          const rows = arr.map(o => headers.map(h => escapeCsv(o[h])).join(','))
-          return [headers.join(','), ...rows].join('\n')
-        }
+        case 'csvFlat':  return jsonToCsv(parsed.data)
       }
     } catch (e) {
       return '⚠️ 변환 오류: ' + (e as Error).message

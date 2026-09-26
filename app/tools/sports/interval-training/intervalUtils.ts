@@ -30,6 +30,20 @@ export function getPace(vdot: number, intensity: Intensity): number {
 
 export { timeFromVdot }
 
+// ── 회복 조깅 규칙 — Daniels' Running Formula(4판)의 강도별 회복 ─────────
+//   R: 달린 시간의 2~3배, 달린 거리만큼 조깅 · I: 달린 시간과 같거나 짧게(거리는 절반 안팎) · T(크루즈 인터벌): 5분당 약 1분
+//   jogM: 조깅 거리(T는 null = 짧은 조깅·제자리 휴식) · loSec~hiSec: 회복 시간 범위 · sec: 예상 소요 시간 합산용 대표값(R 2.5배 · I 1배 · T 1/5)
+//   M 등 그 밖의 강도는 null(메뉴에 적힌 회복을 쓴다)
+export type RecoveryRule = { jogM: number | null; loSec: number; hiSec: number; sec: number }
+export function recoveryRule(intensity: Intensity, distM: number, lapSec: number): RecoveryRule | null {
+  if (!(lapSec > 0) || !(distM > 0)) return null
+  const L = Math.round(lapSec)   // 화면에 보이는 초 단위 랩타임에서 배수를 계산해 표시값끼리 맞춘다(1:38 → 3:16~4:54)
+  if (intensity === 'R') return { jogM: distM, loSec: L * 2, hiSec: L * 3, sec: Math.round(L * 2.5) }
+  if (intensity === 'I') return { jogM: Math.max(100, Math.round(distM / 200) * 100), loSec: L, hiSec: L, sec: L }
+  if (intensity === 'T') return { jogM: null, loSec: L / 5, hiSec: L / 5, sec: Math.round(L / 5) }
+  return null
+}
+
 // ── 한국 인기 대회 ─────────────────────────
 // 개최일은 해마다 바뀌므로 최근 개최 요일 규칙으로 추정한다(카드에 '추정'으로 표시).
 // 2026 실제 개최일: 대구 2/22, 서울(동아) 3/15, 서울하프 4/26, 춘천 10/25, JTBC 11/1

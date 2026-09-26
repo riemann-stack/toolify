@@ -176,7 +176,7 @@ export default function CakePanTab({ onOpenMold }: { onOpenMold?: () => void }) 
             <li>굽는 시간을 배율({result.ratio.toFixed(2)}배)만큼 <strong>비례 계산하면 안 됩니다</strong> — 두께가 관건이에요.</li>
             <li>팬이 커지거나 깊어지면(반죽이 두꺼워지면) <strong>온도를 조금 낮추고 시간을 5분 단위로 늘려가며</strong> 확인하세요.</li>
             <li>최종 판정은 <strong>꼬치(이쑤시개) 테스트</strong> — 중앙에 찔러 반죽이 묻어나지 않으면 완료.</li>
-            <li>반죽은 틀의 <strong>60~70%</strong>까지만 채우세요. 실측 사례: 2호 제누와즈 170℃ 30~35분 → 3호 약 40분.</li>
+            <li>반죽은 틀의 <strong>60~70%</strong>까지만 채우세요. 반죽 깊이가 같으면 시간은 거의 그대로, 더 깊으면 5분 단위로 늘려 확인합니다.</li>
           </ul>
         </div>
       )}

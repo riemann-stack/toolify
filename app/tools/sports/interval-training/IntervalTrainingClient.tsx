@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import Disclaimer from '@/components/Disclaimer'
 import { useInitialTab } from '@/components/useInitialTab'
 import { todayStr } from '@/lib/date'
 import dynamic from 'next/dynamic'
@@ -9,7 +8,7 @@ import { useEffect, useMemo, useState } from 'react'
 import s from './interval-training.module.css'
 import {
   type Intensity, type SchedRaceType, INTENSITY_PCT, E_FAST_PCT, VDOT_MIN, VDOT_MAX, isVdotInRange,
-  calcVDOT, getPace, KOREA_RACES, raceTiming, SCHED_DIST_M, SCHED_DEFAULT_RECORD, convertRecord,
+  calcVDOT, getPace, KOREA_RACES, raceTiming, SCHED_DIST_M, SCHED_DEFAULT_RECORD, convertRecord, recoveryRule,
 } from './intervalUtils'
 import { paceFromVdot } from '@/lib/running'
 
@@ -47,6 +46,19 @@ const fmtHMS = (totalSec: number): string => {
   if (sec === 60) { sec = 0; m += 1 }
   if (m === 60) { m = 0; h += 1 }
   return `${h}:${pad(m)}:${pad(sec)}`
+}
+
+// 회복 조깅 표시 — 규칙은 intervalUtils.recoveryRule(아래 '회복 시간·거리 가이드' 표와 같은 Daniels 기준)
+function recoveryPlan(intensity: Intensity, distM: number, lapSec: number): { what: string; time: string; sec: number } | null {
+  const r = recoveryRule(intensity, distM, lapSec)
+  if (!r) return null
+  const what = r.jogM === null ? '짧은 조깅·휴식' : `${r.jogM}m 조깅`
+  const time = intensity === 'R' ? `${fmtMS(r.loSec)}~${fmtMS(r.hiSec)}` : intensity === 'I' ? `${fmtMS(r.hiSec)} 이내` : `약 ${fmtMS(r.hiSec)}`
+  return { what, time, sec: r.sec }
+}
+const recoveryText = (m: { intensity: Intensity; dist: number; recovery: string }, lapSec: number): string => {
+  const r = recoveryPlan(m.intensity, m.dist, lapSec)
+  return r ? `${r.what} (${r.time})` : m.recovery
 }
 const toSec = (m: number, sec: number, h = 0) => h * 3600 + m * 60 + sec
 
@@ -306,35 +318,36 @@ export default function IntervalTrainingClient() {
     const injuryMult = injuryHistory ? 1.1 : 1
     const paceOf = (it: Intensity) => (vdot > 0 ? getPace(vdot, it) * injuryMult : 0)
 
+    // recovery: 화면은 recoveryText()가 강도·랩타임으로 다시 계산한다(R·I·T). 여기 문구는 M 메뉴와 페이스가 없을 때의 대체값
     type Menu = { name: string; goal: string; intensity: Intensity; recovery: string; dist: number; reps: number }
     const menuPool: Record<typeof schedRaceType, Menu[]> = {
       '5k': [
-        { name: '400m × 6회',  goal: '스피드',     intensity: 'R', recovery: '200m 조깅', dist: 400, reps: 6 },
+        { name: '400m × 6회',  goal: '스피드',     intensity: 'R', recovery: '400m 조깅', dist: 400, reps: 6 },
         { name: '600m × 5회',  goal: '5km 페이스', intensity: 'I', recovery: '300m 조깅', dist: 600, reps: 5 },
         { name: '800m × 5회',  goal: '5km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 5 },
-        { name: '1km × 4회',   goal: 'V̇O2',       intensity: 'I', recovery: '400m 조깅', dist: 1000, reps: 4 },
-        { name: '400m × 8회',  goal: '스피드',     intensity: 'R', recovery: '200m 조깅', dist: 400, reps: 8 },
+        { name: '1km × 4회',   goal: 'V̇O2',       intensity: 'I', recovery: '500m 조깅', dist: 1000, reps: 4 },
+        { name: '400m × 8회',  goal: '스피드',     intensity: 'R', recovery: '400m 조깅', dist: 400, reps: 8 },
       ],
       '10k': [
         { name: '800m × 5회',  goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 5 },
         { name: '800m × 6회',  goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 6 },
-        { name: '1km × 5회',   goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 1000, reps: 5 },
-        { name: '1.6km × 3회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 3 },
-        { name: '1.2km × 4회', goal: 'V̇O2',        intensity: 'I', recovery: '400m 조깅', dist: 1200, reps: 4 },
-        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 4 },
+        { name: '1km × 5회',   goal: '10km 페이스', intensity: 'I', recovery: '500m 조깅', dist: 1000, reps: 5 },
+        { name: '1.6km × 3회', goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 3 },
+        { name: '1.2km × 4회', goal: 'V̇O2',        intensity: 'I', recovery: '600m 조깅', dist: 1200, reps: 4 },
+        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 4 },
       ],
       half: [
-        { name: '1km × 6회',   goal: '역치',        intensity: 'T', recovery: '400m 조깅', dist: 1000, reps: 6 },
-        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 4 },
-        { name: '2km × 3회',   goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 2000, reps: 3 },
-        { name: '3km × 2회',   goal: '하프 페이스', intensity: 'T', recovery: '800m 조깅', dist: 3000, reps: 2 },
-        { name: '1.6km × 5회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 5 },
+        { name: '1km × 6회',   goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1000, reps: 6 },
+        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 4 },
+        { name: '2km × 3회',   goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 2000, reps: 3 },
+        { name: '3km × 2회',   goal: '하프 페이스', intensity: 'T', recovery: '짧은 조깅·휴식', dist: 3000, reps: 2 },
+        { name: '1.6km × 5회', goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 5 },
       ],
       marathon: [
         { name: '800m × 6회 (야소)',   goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 6 },
         { name: '800m × 8회 (야소)',   goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 8 },
         { name: '800m × 10회 (야소)',  goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 10 },
-        { name: '1.6km × 4회',         goal: '역치',     intensity: 'T', recovery: '800m 조깅', dist: 1600, reps: 4 },
+        { name: '1.6km × 4회',         goal: '역치',     intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 4 },
         { name: '2km × 3회 (M 페이스)', goal: 'M 페이스', intensity: 'M', recovery: '600m 조깅', dist: 2000, reps: 3 },
       ],
     }
@@ -488,17 +501,7 @@ export default function IntervalTrainingClient() {
   // ─────────────────────────────────────────────
   return (
     <div className={s.wrap}>
-      {/* 면책 */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
-          { href: '/tools/sports/pace', label: '러닝 페이스' },
-          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
-        ]}
-      >
-        참고용 훈련 가이드입니다.
-      </Disclaimer>
+      {/* 면책은 page.tsx 끝의 <Disclaimer variant="safety">(ToolPage가 페이지 맨 끝으로 옮김) — 계산기 위에 두면 모바일 첫 화면 입력칸이 밀린다 */}
 
       {/* 탭 */}
       <div className={s.tabs} role="tablist" aria-label="인터벌 계산 기능">
@@ -798,17 +801,25 @@ export default function IntervalTrainingClient() {
                 const lapSec = (intervalPaceSec * customDist) / 1000
                 const distLabel = customDist >= 1000 ? `${customDist / 1000}km` : `${customDist}m`
                 const paceKm = fmtMS(intervalPaceSec)
-                const recoveryDist = customDist <= 400 ? 200 : customDist <= 1200 ? 400 : 600
-                const recoverySec = customDist <= 400 ? 75 : customDist <= 1200 ? 150 : 200
                 const recoveryReps = Math.max(0, customReps - 1)
-                const intensityLabel = customDist <= 400 ? '🔴 R · 스피드 (반복주)'
-                  : customDist <= 1200 ? '🟡 I · V̇O₂max (인터벌)'
+                // 강도 표시는 실제로 쓰는 페이스를 따른다 — 기록 모드는 훈련 목적의 강도(R·I·T),
+                // 목표 페이스 모드는 강도를 알 수 없어 거리로 어림한다(예전엔 항상 거리로 정해 5km 목적 400m가 I 페이스인데 'R'로 표시됨)
+                const sessionIntensity: Intensity = inputMode === 'record'
+                  ? GOAL_INTENSITY[goal]
+                  : customDist <= 400 ? 'R' : customDist <= 1200 ? 'I' : 'T'
+                const intensityLabel = sessionIntensity === 'R' ? '🔴 R · 스피드 (반복주)'
+                  : sessionIntensity === 'I' ? '🟡 I · V̇O₂max (인터벌)'
                   : '🔵 T · 역치 (템포)'
+                // 회복은 강도 규칙을 따른다(예전엔 거리만 보고 200/400/600m로 잡아 R·T 회복이 아래 표와 어긋남)
+                const rec = recoveryPlan(sessionIntensity, customDist, lapSec) ?? { what: '가벼운 조깅', time: '', sec: 0 }
+                // Daniels: R은 한 번 2분 이내, I는 3~5분 반복이 기준 — 넘으면 거리를 줄이라는 안내
+                const tooLong = sessionIntensity === 'R' ? lapSec > 120 : sessionIntensity === 'I' ? lapSec > 300 : false
                 const warmupSec = 9 * 60   // 1.5km 가벼운 조깅
                 const cooldownSec = 9 * 60
-                const totalSec = lapSec * customReps + recoverySec * recoveryReps + warmupSec + cooldownSec
+                const totalSec = lapSec * customReps + rec.sec * recoveryReps + warmupSec + cooldownSec
                 const fastKm = (customDist * customReps) / 1000
                 return (
+                  <>
                   <div className={s.sessionPlan}>
                     <div className={s.sessionRow}>
                       <span className={s.sessionStage}>워밍업</span>
@@ -827,10 +838,10 @@ export default function IntervalTrainingClient() {
                       <div className={s.sessionRow}>
                         <span className={s.sessionStage}>회복 (조깅)</span>
                         <span className={s.sessionDetail}>
-                          <strong>{recoveryDist}m</strong>
+                          <strong>{rec.what}</strong>
                           <span className={s.sessionSep}>×</span>
                           <strong>{recoveryReps}회</strong>
-                          <span className={s.sessionPaceMuted}>천천히 ({fmtMS(recoverySec)})</span>
+                          {rec.time && <span className={s.sessionPaceMuted}>({rec.time})</span>}
                         </span>
                       </div>
                     )}
@@ -852,6 +863,14 @@ export default function IntervalTrainingClient() {
                       <span className={s.sessionDetail}>{intensityLabel}</span>
                     </div>
                   </div>
+                  {tooLong && (
+                    <p className={s.recoHint}>
+                      ※ {sessionIntensity === 'R'
+                        ? `R 강도는 한 번에 2분 이내(보통 200~400m) 반복이 기준입니다. ${distLabel} 1회가 ${fmtMS(lapSec)}라 R로 뛰기엔 길어요 — 거리를 줄이세요.`
+                        : `I 강도는 한 번에 3~5분 반복이 기준입니다. ${distLabel} 1회가 ${fmtMS(lapSec)}로 5분을 넘으니 거리를 줄이세요.`}
+                    </p>
+                  )}
+                  </>
                 )
               })()}
               <p className={s.recoHint}>
@@ -876,9 +895,10 @@ export default function IntervalTrainingClient() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>R 페이스</td><td>운동 시간의 1.5~2배</td><td>운동 거리의 1배</td></tr>
-                  <tr><td>I 페이스</td><td>운동 시간과 동일</td><td>운동 거리의 50%</td></tr>
-                  <tr><td>T 페이스</td><td>운동 시간의 25~50%</td><td>운동 거리의 25%</td></tr>
+                  {/* Daniels' Running Formula 기준 — R 2~3배(또는 같은 거리 조깅) · I 같거나 짧게 · T 크루즈 인터벌 5분당 1분 */}
+                  <tr><td>R 페이스</td><td>운동 시간의 2~3배</td><td>운동 거리와 같게</td></tr>
+                  <tr><td>I 페이스</td><td>운동 시간과 같거나 짧게</td><td>운동 거리의 50% 안팎</td></tr>
+                  <tr><td>T 페이스</td><td>5분 달리기당 약 1분</td><td>짧은 조깅·제자리 휴식</td></tr>
                 </tbody>
               </table>
             </div>
@@ -888,7 +908,7 @@ export default function IntervalTrainingClient() {
           <div className={s.warnCard}>
             <p className={s.warnTitle}>⚠️ 안전한 인터벌 훈련을 위해</p>
             <ul className={s.warnList}>
-              <li>주간 거리의 10~15% 이상을 고강도로 X</li>
+              <li>1회 세션의 빠른 구간은 주간 거리의 T 10%·I 8%·R 5% 이내</li>
               <li>인터벌은 보통 주 1~2회까지 (초보 주 1회)</li>
               <li>전날 장거리주·고강도 후에는 피하기</li>
               <li>통증·이상 증상 시 즉시 중단</li>
@@ -1102,7 +1122,7 @@ export default function IntervalTrainingClient() {
                 </tbody>
               </table>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                목표 페이스: <strong style={{ color: '#A16207', fontFamily: 'var(--font-sans)' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
+                목표 페이스: <strong style={{ color: '#A16207', fontFamily: 'var(--font-sans)' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복: 같은 시간({fmtMS(yassoCalc.yassoSec)}) 조깅
               </p>
             </div>
           )}
@@ -1271,7 +1291,7 @@ export default function IntervalTrainingClient() {
                           <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
                             {fmtMS(lapSec)}<span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 2 }}>/{distLabel}</span>
                           </td>
-                          <td style={{ color: 'var(--muted)', fontSize: 12 }}>{w.menu1.recovery}</td>
+                          <td style={{ color: 'var(--muted)', fontSize: 12 }}>{recoveryText(w.menu1, lapSec)}</td>
                           <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>
                             {totalKm.toFixed(1)}km
                           </td>
@@ -1322,7 +1342,7 @@ export default function IntervalTrainingClient() {
                       <div><strong>{w.menu1.name}</strong>{w.menu2 && <span style={{ color: 'var(--muted)', fontSize: 11 }}> · + {w.menu2.name}</span>}</div>
                       <div className={s.weekCardMeta}>
                         <span>페이스: <strong style={{ color: 'var(--accent)' }}>{fmtMS(lapSec)}/{distLabel}</strong></span>
-                        <span>회복: {w.menu1.recovery}</span>
+                        <span>회복: {recoveryText(w.menu1, lapSec)}</span>
                         <span>총: <strong>{totalKm.toFixed(1)}km</strong></span>
                       </div>
                     </div>

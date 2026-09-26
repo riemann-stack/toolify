@@ -551,10 +551,45 @@
  },
  "/tools/cooking/baking-recipe": {
   "slug": "/tools/cooking/baking-recipe",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "케이크 팬 호수 규격 — 베이킹 자재상 판매 규격(1호 15cm·호당 +3cm·높은팬 7cm) 교차 확인",
+  "basis": "품목별 기본 비율은 통용 동량 배합(마들렌·파운드 1:1:1:1)과 제과기능사 실기 공개문제 대조 · 케이크 팬은 부피비 환산(원형 1호 15cm·호당 +3cm·높은팬 7cm, 판매 규격 교차 확인) · 계란 무게는 축산법 시행규칙 중량규격",
   "sources": [
+   {
+    "label": "Q-Net — 제과기능사 실기 공개문제(2026)",
+    "org": "",
+    "href": "https://www.q-net.or.kr/cst006.do?id=cst00602&gSite=Q&gId=&artlSeq=5250954&brdId=Q006&code=1204"
+   },
+   {
+    "label": "King Arthur Baking — 팬 크기와 부피",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/blog/2025/08/18/baking-pan-size"
+   },
+   {
+    "label": "King Arthur Baking — 6인치 팬으로 나눠 굽기",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/blog/2022/09/28/how-to-turn-any-cake-recipe-into-6-inch-mini-cakes"
+   },
+   {
+    "label": "국가법령정보센터 — 축산법 시행규칙(계란 중량규격)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/축산법시행규칙"
+   },
+   {
+    "label": "Illinois Extension — 계란 구조·구성비",
+    "org": "",
+    "href": "https://extension.illinois.edu/eggs-structure"
+   },
+   {
+    "label": "국가법령정보센터 — 식품표시광고법 시행규칙(알레르기 표시)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/식품등의표시ㆍ광고에관한법률시행규칙"
+   },
+   {
+    "label": "식품의약품안전처 — 식품표시광고법 시행규칙 개정안 입법예고(알레르기 표시 대상 확대)",
+    "org": "",
+    "href": "https://www.mfds.go.kr/brd/m_209/view.do?seq=44285"
+   },
    {
     "label": "카우2004 — 케이크 팬 판매 규격",
     "org": "",
@@ -1435,16 +1470,43 @@
  },
  "/tools/dev/json": {
   "slug": "/tools/dev/json",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "JSON 문법 RFC 8259·ECMA-404 · YAML 1.2.2(코어 스키마) · 브라우저 JSON.parse/stringify · YAML 처리 js-yaml 4 · CSV 따옴표 규칙 RFC 4180",
+  "sources": [
+   {
+    "label": "RFC 8259 JSON 데이터 교환 형식",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc8259"
+   },
+   {
+    "label": "ECMA-404 JSON 문법",
+    "org": "",
+    "href": "https://ecma-international.org/publications-and-standards/standards/ecma-404/"
+   },
+   {
+    "label": "YAML 1.2.2 명세",
+    "org": "",
+    "href": "https://yaml.org/spec/1.2.2/"
+   },
+   {
+    "label": "MDN JSON.stringify()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"
+   },
+   {
+    "label": "RFC 4180 CSV 형식",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc4180"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/dev/jwt": {
   "slug": "/tools/dev/jwt",
   "reviewed": "2026-09",
-  "updated": "2026-07-29",
+  "updated": "2026-09-26",
   "basis": "RFC 7519(JWT) 등록 클레임 · RFC 8725(JWT 보안 권고) · RFC 9700(OAuth 2.0 보안 권고)",
   "sources": [
    {
@@ -1739,7 +1801,7 @@
  "/tools/edu/cognitive-test": {
   "slug": "/tools/edu/cognitive-test",
   "reviewed": "2026-09",
-  "updated": "2026-07-29",
+  "updated": "2026-09-26",
   "basis": "인지심리학 표준 과제(단순 반응시간 · Stroop 1935 · 이중 과제 간섭)를 게임화한 참고 지표 — 임상 검사 아님",
   "sources": [
    {
@@ -2475,7 +2537,7 @@
  "/tools/finance/cost-rate": {
   "slug": "/tools/finance/cost-rate",
   "reviewed": "2026-06",
-  "updated": "2026-07-29",
+  "updated": "2026-09-26",
   "basis": "2025년 시행 배달앱 차등수수료(상생요금제 2.0~7.8%, 3년 한시) 기준",
   "sources": [
    {
@@ -4214,9 +4276,46 @@
  },
  "/tools/interior/screw": {
   "slug": "/tools/interior/screw",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "미터 나사 KS B 0201·0204(ISO 261) · 탭드릴 외경 − 피치(ISO 2306 계열) · 관통홀 ISO 273(KS B ISO 273) 정밀·중간·거친 · 관용 테이퍼 나사 KS B 0222(ISO 7-1)·NPT ASME B1.20.1 · 볼트 머리 ISO 4017·구 DIN 933·JIS 소형 · 알렌 ISO 4762 · 강도등급 ISO 898-1 · 토크는 마찰계수 0.14 가정 일반 참고치",
+  "sources": [
+   {
+    "label": "e나라표준인증 — KS B 0201 미터 보통 나사",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSB0201&tmprKsNo=KSB0201"
+   },
+   {
+    "label": "e나라표준인증 — KS B 0222 관용 테이퍼 나사",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSB0222&tmprKsNo=KSB0222"
+   },
+   {
+    "label": "ISO 273 — Clearance holes for bolts and screws",
+    "org": "",
+    "href": "https://www.iso.org/standard/4183.html"
+   },
+   {
+    "label": "ISO 2306 — Drills for use prior to tapping screw threads",
+    "org": "",
+    "href": "https://www.iso.org/standard/7135.html"
+   },
+   {
+    "label": "ISO 898-1 — 탄소강·합금강 볼트의 기계적 성질(강도등급)",
+    "org": "",
+    "href": "https://www.iso.org/standard/60610.html"
+   },
+   {
+    "label": "국가법령정보센터 — 산업안전보건기준에 관한 규칙(제95조 장갑의 사용 금지)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/산업안전보건기준에관한규칙"
+   },
+   {
+    "label": "ISO 16047 — Fasteners: Torque/clamp force testing",
+    "org": "",
+    "href": "https://www.iso.org/standard/27788.html"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -5221,9 +5320,56 @@
  },
  "/tools/sports/interval-training": {
   "slug": "/tools/sports/interval-training",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "페이스 — Daniels·Gilbert VDOT 공식과 Daniels 5단계 훈련 강도(%VO₂max), 이지·LSD 탭 — Riegel 거리 환산·Tanaka 최대심박·Karvonen 심박예비, 야소 800 — Bart Yasso의 경험칙",
+  "sources": [
+   {
+    "label": "VDOT O2 러닝 계산기 (Jack Daniels 공식)",
+    "org": "",
+    "href": "https://vdoto2.com/calculator/"
+   },
+   {
+    "label": "Seiler (2010) 지구력 선수의 훈련 강도 분포 — IJSPP",
+    "org": "",
+    "href": "https://doi.org/10.1123/ijspp.5.3.276"
+   },
+   {
+    "label": "Riegel (1981) Athletic Records and Human Endurance — American Scientist",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/7235349/"
+   },
+   {
+    "label": "Tanaka 외 (2001) 연령 예측 최대심박 재검토 — JACC",
+    "org": "",
+    "href": "https://doi.org/10.1016/S0735-1097(00)01054-8"
+   },
+   {
+    "label": "ACSM·AND·DC (2016) 영양과 운동 수행 공동 성명 — MSSE",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/26891166/"
+   },
+   {
+    "label": "World Athletics 경기·기술 규칙 (레인 폭·측정선, TR 14)",
+    "org": "",
+    "href": "https://worldathletics.org/about-iaaf/documents/book-of-rules"
+   },
+   {
+    "label": "World Athletics Track and Field Facilities Manual (표준 400m 트랙 규격)",
+    "org": "",
+    "href": "https://worldathletics.org/about-iaaf/documents/technical-information"
+   },
+   {
+    "label": "Jack Daniels, Daniels' Running Formula 4판 (Human Kinetics) — 강도별 회복·1회 분량 상한",
+    "org": "",
+    "href": "https://us.humankinetics.com/products/daniels-running-formula-4th-edition"
+   },
+   {
+    "label": "Bart Yasso — Yasso 800's (BartYasso.com)",
+    "org": "",
+    "href": "https://www.bartyasso.com/800s"
+   }
+  ],
   "verified": {
    "cases": 5,
    "scope": "VDOT 훈련 페이스",
@@ -5278,9 +5424,41 @@
  },
  "/tools/sports/pace": {
   "slug": "/tools/sports/pace",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "World Athletics 기술규칙의 도로 경기 거리(마라톤 42.195km·하프 21.0975km)·코스 측정·400m 트랙 레인 규격, 국제 마일 1,609.344m — 경사 페이스 보정 계수는 도구 자체 경험칙 추정치(Minetti 2002·Strava GAP는 배경 자료)",
+  "sources": [
+   {
+    "label": "World Athletics Book of Rules — C2.1 기술규칙(도로 경기·트랙 규격)",
+    "org": "",
+    "href": "https://worldathletics.org/about-iaaf/documents/book-of-rules"
+   },
+   {
+    "label": "대한육상연맹(KAAF) 자료실 — 2024~2025 육상경기규칙",
+    "org": "",
+    "href": "https://www.kaaf.or.kr/ver3/work/dataroom_view.asp?recno=213&search=&searcnt=&page=1"
+   },
+   {
+    "label": "NIST SP 811 부록 B.8 — 단위 환산 계수(마일 = 1,609.344m)",
+    "org": "",
+    "href": "https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b8"
+   },
+   {
+    "label": "Jones & Doust (1996) 트레드밀 1% 경사와 야외 달리기 에너지 비용 — J Sports Sci",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/8887211/"
+   },
+   {
+    "label": "Minetti 외 (2002) 경사별 걷기·달리기 에너지 비용 — J Appl Physiol",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/12183501/"
+   },
+   {
+    "label": "Strava 고객센터 — 경사 보정 페이스(GAP)",
+    "org": "",
+    "href": "https://support.strava.com/en-us/articles/15402117-grade-adjusted-pace-gap"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },

@@ -1,3 +1,4 @@
+import { eggGrade, eggGradeRangeText } from '@/lib/krEggGrades'
 /* ──────────────────────────────────────────────────────
    egg-timer/eggUtils.ts
    계란 삶기 시간 — 8단계 익힘·5크기·3시작온도·4조리법·고도·개수
@@ -34,8 +35,8 @@ export const DONENESS: DonenessStage[] = [
     yolkColor: '#F5DC8A', yolkTexture: 'hard',    whiteSet: 100, yolkSet: 100 },
 ]
 
-/* ─── 한국 계란 크기 — 축산물 등급판정 세부기준 [별표] 계란 중량규격
-   (2026.5.21 축산법 시행규칙 개정으로 명칭 2XL·XL·L·M·S 병행, 중량 기준은 동일) ─── */
+/* ─── 한국 계란 크기 — 축산법 시행규칙 계란 중량규격 (lib/krEggGrades 단일 소스)
+   (2026.5.21 개정으로 명칭 2XL·XL·L·M·S 병행, 중량 기준은 동일) ─── */
 export interface SizeDef {
   id: string
   label: string
@@ -45,11 +46,11 @@ export interface SizeDef {
 }
 
 export const SIZES: SizeDef[] = [
-  { id: 'wang',  label: '왕란(2XL)', rangeG: '68g+',     avgG: 72, adjustmentSec:  +30 },
-  { id: 'teuk',  label: '특란(XL)', rangeG: '60~68g',   avgG: 64, adjustmentSec:    0 },
-  { id: 'dae',   label: '대란(L)', rangeG: '52~60g',   avgG: 56, adjustmentSec:  -15 },
-  { id: 'jung',  label: '중란(M)', rangeG: '44~52g',   avgG: 48, adjustmentSec:  -30 },
-  { id: 'so',    label: '소란(S)', rangeG: '44g 미만', avgG: 40, adjustmentSec:  -45 },
+  { id: 'wang', label: `${eggGrade('2XL').old}(2XL)`, rangeG: eggGradeRangeText(eggGrade('2XL')), avgG: 72, adjustmentSec:  +30 },
+  { id: 'teuk', label: `${eggGrade('XL').old}(XL)`, rangeG: eggGradeRangeText(eggGrade('XL')), avgG: 64, adjustmentSec:    0 },
+  { id: 'dae', label: `${eggGrade('L').old}(L)`, rangeG: eggGradeRangeText(eggGrade('L')), avgG: 56, adjustmentSec:  -15 },
+  { id: 'jung', label: `${eggGrade('M').old}(M)`, rangeG: eggGradeRangeText(eggGrade('M')), avgG: 48, adjustmentSec:  -30 },
+  { id: 'so', label: `${eggGrade('S').old}(S)`, rangeG: eggGradeRangeText(eggGrade('S')), avgG: 40, adjustmentSec:  -45 },
 ]
 
 /* ─── 시작 온도 ─── */

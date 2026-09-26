@@ -89,3 +89,30 @@ describe('Riegel', () => {
     assert.equal(racePredictor.paceFromVdot(50, 0.88), paceFromVdot(50, 0.88))
   })
 })
+
+// ── 인터벌 회복 규칙 (app/tools/sports/interval-training/intervalUtils.recoveryRule)
+//    Daniels' Running Formula: R = 같은 거리 조깅·달린 시간의 2~3배 · I = 달린 시간 이내·거리 절반 안팎 · T = 5분당 약 1분
+import { recoveryRule } from '../../app/tools/sports/interval-training/intervalUtils'
+describe('인터벌 회복 규칙 (recoveryRule)', () => {
+  test('R 400m 랩 1:38 → 400m 조깅, 3:16~4:54, 소요 합산 2.5배', () => {
+    assert.deepEqual(recoveryRule('R', 400, 98), { jogM: 400, loSec: 196, hiSec: 294, sec: 245 })
+  })
+  test('R은 화면에 보이는 정수 초 랩타임에서 배수 계산 (97.6초 → 98초)', () => {
+    assert.deepEqual(recoveryRule('R', 400, 97.6), recoveryRule('R', 400, 98))
+  })
+  test('I 800m 3:32 → 400m 조깅, 3:32 이내', () => {
+    assert.deepEqual(recoveryRule('I', 800, 212), { jogM: 400, loSec: 212, hiSec: 212, sec: 212 })
+  })
+  test('I 조깅 거리는 100m 단위 반올림, 최소 100m', () => {
+    assert.equal(recoveryRule('I', 1000, 260)?.jogM, 500)
+    assert.equal(recoveryRule('I', 100, 20)?.jogM, 100)
+  })
+  test('T 1.6km 7:40 → 짧은 조깅·휴식 약 1:32 (1/5)', () => {
+    assert.deepEqual(recoveryRule('T', 1600, 460), { jogM: null, loSec: 92, hiSec: 92, sec: 92 })
+  })
+  test('M·E 등 그 밖의 강도, 0·음수 입력은 null', () => {
+    assert.equal(recoveryRule('M', 1000, 300), null)
+    assert.equal(recoveryRule('R', 400, 0), null)
+    assert.equal(recoveryRule('I', 0, 200), null)
+  })
+})

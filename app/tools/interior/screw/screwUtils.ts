@@ -45,12 +45,12 @@ export const MATERIALS: MaterialMeta[] = [
 export type Engagement = 50 | 75 | 85
 
 export const ENGAGEMENT_LABEL: Record<Engagement, string> = {
-  50: '50% (얕은 탭·분리 쉬움)',
-  75: '75% (표준)',
-  85: '85% (깊은 탭·강한 결합)',
+  50: '50% (단단한 소재·깊은 막힌 구멍)',
+  75: '75% (표준 · 외경−피치)',
+  85: '85% (얇은 판)',
 }
 
-/** ISO 표준 — engagementPct → 피치 곱계수 */
+/** 현장 관행 계수(ISO 규정값 아님) — engagementPct → 피치 곱계수. 75% = 외경 − 피치(ISO 2306 계열 탭드릴 표와 같은 값) */
 function engagementFactor(pct: Engagement): number {
   // 75% 표준 = ~1.0 (대략 D - P)
   // 50% = 더 큰 드릴 (작은 곱계수)
@@ -270,7 +270,7 @@ export const STD_MM_SIZES = [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 25, 32]
 // ── 일반 토크 가이드 (참고만, 8.8 등급 기준) ──
 export function generalTorque(diameter: number): { min: number; max: number } | null {
   // N·m 일반 범위 — 8.8 등급 기준 참고값.
-  // 상단은 볼트·스패너 탭의 ISO 16047 참고치(boltWrenchUtils BOLT_DATA.torque8_8, μ=0.14)를 포함해야 한다 —
+  // 상단은 볼트·스패너 탭의 참고치(boltWrenchUtils BOLT_DATA.torque8_8, μ=0.14 가정)를 포함해야 한다 —
   // M6 이상은 원래 포함, M3~M5는 상한이 그 값보다 낮아 한 화면에 두 값이 어긋나던 것을 상한만 올려 맞춤(2026-09-26)
   const map: Record<number, [number, number]> = {
     3:  [0.6, 1.3],

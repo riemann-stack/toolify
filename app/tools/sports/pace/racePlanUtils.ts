@@ -126,7 +126,8 @@ export function fillStrategy(baseSec: number, n: number, strategy: Strategy, dis
 }
 
 // ── 고도 경사 → 페이스 보정(추정) ───────
-// 코칭 경험칙 + Strava GAP·Minetti 곡선을 단순화한 추정치.
+// 도구 자체 경험칙 추정치 — Minetti 외(2002) 곡선·Strava GAP에서 직접 도출한 값이 아니라,
+// 오르막 손실을 내리막에서 다 되찾지 못한다는 경향만 반영한 보수적 계수(page.tsx 가이드와 같은 설명).
 // 오르막 1%당 +약 12초/km, 내리막 1%당 −약 6초/km. 과도한 값은 클램프.
 export const GRADE_UP_SEC = 12
 export const GRADE_DOWN_SEC = 6
@@ -222,7 +223,7 @@ export function planWarnings(res: PlanResult): string[] {
   const wrPace = res.totalKm <= 10 + 1e-6 ? 150 : res.totalKm <= 21.1 ? 160 : 170
   if (res.avgPaceSec > 0 && res.avgPaceSec < wrPace)
     w.push(`평균 ${fmtPace(res.avgPaceSec)}/km는 이 거리의 세계기록 페이스보다 빠릅니다 — 페이스를 다시 확인하세요.`)
-  // 비현실적으로 느림(20:00/km 초과) — "530"처럼 분:초 입력 실수 가능성
+  // 비현실적으로 느림(20:00/km 초과) — 5km 목표 '25'분을 페이스 칸에 넣어 25:00/km로 읽히는 식의 입력 실수 가능성
   if (res.avgPaceSec > 1200)
     w.push(`평균 ${fmtPace(res.avgPaceSec)}/km는 걷기보다 훨씬 느립니다 — 페이스는 분:초(예: 5:30) 형식으로 입력하세요.`)
   const fastest = Math.min(...res.rows.map(r => r.paceSec).filter(p => p > 0))

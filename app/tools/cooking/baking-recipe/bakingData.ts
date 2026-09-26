@@ -240,7 +240,7 @@ export const PRESET_RECIPES: PresetRecipe[] = [
   { item: 'madeleine', name: '초코 마들렌',
     ratios: { egg: 100, sugar: 100, flour: 90, butter: 100, bakingPowder: 3, honey: 10, cocoa: 10, milk: 10 } },
   // 파운드
-  { item: 'poundcake', name: '르 코르동 블루 클래식 (1:1:1:1)',
+  { item: 'poundcake', name: '클래식 동량 (1:1:1:1)',
     ratios: { butter: 100, sugar: 100, egg: 100, flour: 100, bakingPowder: 2 } },
   { item: 'poundcake', name: '촉촉한 파운드 (사워크림)',
     ratios: { butter: 100, sugar: 100, egg: 100, flour: 100, sourCream: 20, bakingPowder: 2 } },

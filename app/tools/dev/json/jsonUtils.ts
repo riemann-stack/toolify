@@ -1,4 +1,51 @@
-// JSON 도구 순수 로직 — TypeScript 인터페이스 생성·이스케이프 해제
+// JSON 도구 순수 로직 — 통계·TypeScript 인터페이스 생성·CSV·이스케이프 해제
+// (page.tsx 가이드의 예시 표도 같은 함수로 빌드 시 계산한다)
+
+// ─────────────────────────────────────────────
+// JSON 통계
+// ─────────────────────────────────────────────
+export type JsonStats = { keys: number; arrays: number; objects: number; strings: number; numbers: number; depth: number }
+
+/** 키 개수(중첩 포함)·객체/배열 수·최대 깊이.
+ *  깊이: 최상위 값 0, 객체·배열 안으로 들어갈 때마다 +1 — YAML ↔ JSON 탭 maxDepth('중첩 깊이')와 같은 기준 ({"a":1} → 1) */
+export function analyzeJson(value: unknown, depth = 0, acc: JsonStats = { keys: 0, arrays: 0, objects: 0, strings: 0, numbers: 0, depth: 0 }): JsonStats {
+  acc.depth = Math.max(acc.depth, depth)
+  if (Array.isArray(value)) {
+    acc.arrays++
+    for (const v of value) analyzeJson(v, depth + 1, acc)
+  } else if (value !== null && typeof value === 'object') {
+    acc.objects++
+    const obj = value as Record<string, unknown>
+    for (const k of Object.keys(obj)) {
+      acc.keys++
+      analyzeJson(obj[k], depth + 1, acc)
+    }
+  } else if (typeof value === 'string') {
+    acc.strings++
+  } else if (typeof value === 'number') {
+    acc.numbers++
+  }
+  return acc
+}
+
+// ─────────────────────────────────────────────
+// 객체 배열 → CSV (RFC 4180 방식 따옴표)
+// ─────────────────────────────────────────────
+/** 헤더 = 모든 요소 키의 합집합(처음 나온 순서). 중첩 객체·배열 값은 JSON 문자열, null은 빈 칸.
+ *  쉼표·큰따옴표·줄바꿈(CR/LF)이 든 칸은 큰따옴표로 감싸고 안의 " 는 "" 로. 헤더 칸에도 같은 규칙.
+ *  null·원시값 요소는 빈 행(요소 수 = 데이터 행 수). 첫 요소가 객체가 아니면 안내 문구를 돌려준다. */
+export function jsonToCsv(data: unknown): string {
+  if (!Array.isArray(data) || data.length === 0) return '⚠️ CSV 변환은 객체 배열이 필요합니다 (예: [{"a":1,"b":2}])'
+  if (data[0] === null || typeof data[0] !== 'object') return '⚠️ 배열의 요소가 객체가 아닙니다'
+  const rows = data.map((o) => (o !== null && typeof o === 'object' ? (o as Record<string, unknown>) : {}))
+  const headers = Array.from(new Set(rows.flatMap((o) => Object.keys(o))))
+  const cell = (v: unknown) => {
+    if (v === null || v === undefined) return ''
+    const str = typeof v === 'object' ? JSON.stringify(v) : String(v)
+    return /[",\r\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str
+  }
+  return [headers.map(cell).join(','), ...rows.map((o) => headers.map((h) => cell(o[h])).join(','))].join('\n')
+}
 
 // ─────────────────────────────────────────────
 // JSON → TypeScript Interface

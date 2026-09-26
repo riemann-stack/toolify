@@ -12,7 +12,7 @@ import {
   BOLT_SIZES, BOLT_TYPES, BOLT_DATA, BOLT_DATA_EXTRA,
   NUT_TYPES, WASHER_TYPES, TOOL_KITS, GRADE_INFO,
   INCH_SPANNERS, STANDARDS, STD_LABEL, STD_SHORT, type BoltSize, type BoltType, type Standard,
-  getSpanner, getAllen, isStandardDifferent,
+  getSpanner, getAllen, isStandardDifferent, ISO7380_SIZES, ISO10642_SIZES,
   reverseLookupSpanner, reverseLookupAllen, findClosestMetric,
   fmt,
 } from './boltWrenchUtils'
@@ -211,7 +211,7 @@ export default function BoltTab({ preset }: { preset?: BoltPreset | null }) {
             )}
             <p className={s.heroSub}>
               {usesAllen
-                ? `내부 6각 홈 대변 거리 (across-flat)`
+                ? `내부 6각 홈 대변 거리 (across-flat)${boltType === 'button' && !ISO7380_SIZES.has(size) ? ' · ISO 7380-1(M3~M16) 범위 밖 사이즈라 제품마다 다를 수 있음' : ''}`
                 : `머리 대변 거리 (across-flat) · 같은 사이즈 소켓도 동일`}
             </p>
             {!usesAllen && diffWarn && (
@@ -242,8 +242,8 @@ export default function BoltTab({ preset }: { preset?: BoltPreset | null }) {
                   <tr><td>JIS 소형</td><td className={`${s.cellMono} ${diffWarn ? s.cellAccent : ''}`}>{data.spannerJIS} mm</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>알렌렌치 (내부 6각, 머리 종류별)</td></tr>
                   <tr><td>소켓캡 (DIN 912)</td><td className={s.cellMono}>{data.allenSocket} mm</td></tr>
-                  <tr><td>버튼헤드 (ISO 7380)</td><td className={s.cellMono}>{data.allenButton} mm</td></tr>
-                  <tr><td>플랫헤드 (DIN 7991)</td><td className={s.cellMono}>{data.allenFlat} mm</td></tr>
+                  <tr><td>{ISO7380_SIZES.has(size) ? '버튼헤드 (ISO 7380-1)' : '버튼헤드 (ISO 7380-1 범위 밖 · 참고값)'}</td><td className={s.cellMono}>{data.allenButton} mm</td></tr>
+                  <tr><td>{ISO10642_SIZES.has(size) ? '플랫헤드 (ISO 10642 · DIN 7991)' : '플랫헤드 (DIN 7991)'}</td><td className={s.cellMono}>{data.allenFlat} mm</td></tr>
                   <tr><td>무두볼트 (DIN 913~916)</td><td className={s.cellMono}>{data.allenSet} mm</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>너트 높이</td></tr>
                   <tr><td>표준 너트 (DIN 934 계열)</td><td className={s.cellMono}>{data.nutStd} mm</td></tr>
@@ -263,7 +263,7 @@ export default function BoltTab({ preset }: { preset?: BoltPreset | null }) {
           <div className={s.card}>
             <span className={s.cardLabel}>참고 체결 토크 (Nm)</span>
             <p className={s.helpText}>
-              ISO 16047 일반 참고치(마찰계수 0.14). 정확한 값은 제조사 매뉴얼·도면을 따르세요.
+              마찰계수 0.14를 가정한 일반 참고치입니다. 윤활·도금 상태에 따라 달라지므로 정확한 값은 제조사 매뉴얼·도면을 따르세요.
             </p>
             <div className={s.tableScroll}>
               <table className={s.detailTable}>
@@ -301,7 +301,7 @@ export default function BoltTab({ preset }: { preset?: BoltPreset | null }) {
           <div className={s.warnCard}>
             <strong>⚠️ 안전 주의</strong>
             <p>
-              표시 토크는 ISO 일반 참고치이며 실제 적용은 제조사 매뉴얼이 우선입니다.
+              표시 토크는 마찰계수 0.14를 가정한 일반 참고치이며 실제 적용은 제조사 매뉴얼이 우선입니다.
               <br />안전부품(에어백·브레이크·휠너트·시트벨트 등)은 정비공장 권장.
               <br />JIS 소형 사이즈는 일본차·옛 일본산 설비 부품에 주로 남아 있습니다.
             </p>

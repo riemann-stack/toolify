@@ -8,6 +8,10 @@ import Disclaimer from '@/components/Disclaimer'
 import { useInitialTab } from '@/components/useInitialTab'
 import { todayStr } from '@/lib/date'
 import styles from './pace.module.css'
+import {
+  secToPace, secToPaceTenth, secToTime, secToHms, paceSecToKph, kphToPaceSec,
+  subGoalPaceSec, negativeSplit as calcNegativeSplit, MARATHON_GOALS, FULL_KM, MILE_KM, TRACK_LAP_KM,
+} from './paceUtils'
 
 type Mode = 'pace-to-time' | 'time-to-pace' | 'treadmill' | 'plan'
 // ?tab= 딥링크 허용 목록 — 'plan'은 구 /tools/sports/race-plan 301 목적지
@@ -22,35 +26,9 @@ const RacePlanTab = dynamic(() => import('./RacePlanTab'), {
 function paceToSec(mm: string, ss: string) {
   return parseInt(mm || '0') * 60 + parseInt(ss || '0')
 }
-function secToPace(sec: number) {
-  const t = Math.round(sec)          // 먼저 정수 초로 반올림 → "5:60" 같은 표기 방지
-  const m = Math.floor(t / 60)
-  const s = t % 60
-  return `${m}:${String(s).padStart(2, '0')}`
-}
 function timeToSec(hh: string, mm: string, ss: string) {
   return parseInt(hh || '0') * 3600 + parseInt(mm || '0') * 60 + parseInt(ss || '0')
 }
-function secToTime(sec: number) {
-  const t = Math.round(sec)
-  const h = Math.floor(t / 3600)
-  const m = Math.floor((t % 3600) / 60)
-  const s = t % 60
-  return h > 0
-    ? `${h}시간 ${m}분 ${String(s).padStart(2, '0')}초`
-    : `${m}분 ${String(s).padStart(2, '0')}초`
-}
-function secToHms(sec: number) {
-  const t = Math.round(sec)
-  const h = Math.floor(t / 3600)
-  const m = Math.floor((t % 3600) / 60)
-  const s = t % 60
-  return h > 0
-    ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-    : `${m}:${String(s).padStart(2, '0')}`
-}
-function paceSecToKph(paceSec: number) { return 3600 / paceSec }
-function kphToPaceSec(kph: number) { return 3600 / kph }
 // 입력 정수 클램프 (빈칸 허용) — 초 0~59, 분 비현실값·소수 차단
 function clampField(v: string, min: number, max: number) {
   if (v === '') return ''
@@ -124,16 +102,13 @@ function getSplits(distanceKm: number): SplitRow[] {
   return rows
 }
 
-// 빠른 페이스 칩
-// 한국 인기 마라톤 목표 페이스 (풀 42.195km 기준, 본문 표와 일치)
-// '서브'(미만) 목표이므로 floor(목표초 / 42.195) — 반올림하면 4:16×42.195 = 3:00:02처럼 목표를 넘는다
-const QUICK_PACES = [
-  { mm: 4, ss: 15, label: '서브3',    color: 'var(--red-600)' },
-  { mm: 4, ss: 58, label: '서브3:30', color: 'var(--orange-600)' },
-  { mm: 5, ss: 41, label: '서브4',    color: 'var(--yellow-700)' },
-  { mm: 6, ss: 23, label: '서브4:30', color: 'var(--cyan-600)' },
-  { mm: 7, ss: 6,  label: '서브5',    color: 'var(--emerald-600)' },
-]
+// 빠른 페이스 칩 — 풀코스 인기 목표(paceUtils.MARATHON_GOALS, 본문 표와 같은 목록)
+// '서브'(미만) 목표이므로 subGoalPaceSec = 내림 — 반올림하면 4:16×42.195 = 3:00:02처럼 목표를 넘는다
+const CHIP_COLORS = ['var(--red-600)', 'var(--orange-600)', 'var(--yellow-700)', 'var(--cyan-600)', 'var(--emerald-600)']
+const QUICK_PACES = MARATHON_GOALS.map((g, i) => {
+  const sec = subGoalPaceSec(g.goalSec, FULL_KM)
+  return { mm: Math.floor(sec / 60), ss: sec % 60, label: g.label, color: CHIP_COLORS[i % CHIP_COLORS.length] }
+})
 
 const isPresetKm = (km: number) => DISTANCES.some(d => d.km === km)
 // 직접 거리 입력 문자열 → km (0 초과만, 500 상한)
@@ -229,8 +204,8 @@ export default function PaceClient() {
     if (!ps || ps <= 0) return null
     const totalSec = ps * dist
     const kph = paceSecToKph(ps)
-    const track400 = ps * 0.4
-    const milePace = ps * 1.609344
+    const track400 = ps * TRACK_LAP_KM
+    const milePace = ps * MILE_KM
     return {
       totalSec,
       time: secToTime(totalSec),
@@ -248,7 +223,7 @@ export default function PaceClient() {
     if (!ts || ts <= 0 || !dist2) return null
     const ps = ts / dist2
     const kph = paceSecToKph(ps)
-    const track400 = ps * 0.4
+    const track400 = ps * TRACK_LAP_KM
     return { pace: secToPace(ps), kph: kph.toFixed(1), track400: secToPace(track400), paceSec: ps }
   }, [tHour, tMin, tSec, dist2])
 
@@ -257,7 +232,7 @@ export default function PaceClient() {
     const k = parseFloat(kphInput)
     if (!k || k <= 0) return null
     const ps = kphToPaceSec(k)
-    return { pace: secToPace(ps), track400: secToPace(ps * 0.4) }
+    return { pace: secToPace(ps), track400: secToPace(ps * TRACK_LAP_KM) }
   }, [kphInput])
 
   const treadmillFromPace = useMemo(() => {
@@ -275,16 +250,12 @@ export default function PaceClient() {
     return rows.map(r => ({ ...r, time: secToHms(ps * r.distanceKm) }))
   }, [paceMin, paceSec, dist])
 
-  // 네거티브 스플릿 (전반 +1.5초, 후반 -1.5초/km · 마라톤·하프 한정)
+  // 네거티브 스플릿 (전반 +1.5초, 후반 -1.5초/km · 21km 이상 한정)
+  // 반 초까지 표기 — 정수 반올림하면 5:30 기준 전반 5:32·후반 5:29처럼 둘 다 올라가 평균이 목표와 어긋나 보인다
   const negativeSplit = useMemo(() => {
-    const ps = paceToSec(paceMin, paceSec)
-    if (!ps || ps <= 0 || dist < 21) return null
-    const halfKm = dist / 2
-    return {
-      front: secToPace(ps + 1.5),
-      back: secToPace(ps - 1.5),
-      halfKm,
-    }
+    const ns = calcNegativeSplit(paceToSec(paceMin, paceSec), dist)
+    if (!ns) return null
+    return { front: secToPaceTenth(ns.frontSec), back: secToPaceTenth(ns.backSec), halfKm: ns.halfKm }
   }, [paceMin, paceSec, dist])
 
   const setQuickPace = (mm: number, ss: number) => {
@@ -584,7 +555,7 @@ export default function PaceClient() {
                 </div>
                 <div className={styles.infoCard}>
                   <div className={styles.infoLabel}>1마일 페이스</div>
-                  <div className={styles.infoVal}>{secToPace(result2.paceSec * 1.609344)}<span className={styles.infoUnit}>/mi</span></div>
+                  <div className={styles.infoVal}>{secToPace(result2.paceSec * MILE_KM)}<span className={styles.infoUnit}>/mi</span></div>
                 </div>
               </div>
             </>

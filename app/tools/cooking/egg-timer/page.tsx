@@ -8,7 +8,14 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import styles from './egg-timer.module.css'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
-import { calculate, fmtMS, DONENESS, type CalcInputs } from './eggUtils'
+import { calculate, fmtMS, DONENESS, SIZES, type CalcInputs } from './eggUtils'
+import { eggGrade, eggGradeRangeText } from '@/lib/krEggGrades'
+
+// 크기별 흔한 용도 (중량 기준은 lib/krEggGrades · 시간 보정은 eggUtils.SIZES)
+const SIZE_USE: Record<string, string> = {
+  wang: '대형마트·이중노른자 가능성', teuk: '마트·편의점 표준 (가장 흔함)', dae: '소형마트·재래시장', jung: '계란말이·간편식', so: '베이킹·도시락',
+}
+const XL_RANGE = eggGradeRangeText(eggGrade('XL'))
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/egg-timer',
@@ -61,7 +68,7 @@ const FAQ_LD = [
               },
               {
                 q: '잼 노른자 정확한 시간은?',
-                a: '<strong>7분 (특란 + 실온 + 끓는 물 투입)</strong>이 표준. 라멘 아지타마와 양념장계란(마야크 에그)의 핵심 단계입니다. 흰자는 완전히 익고 노른자는 걸쭉한 잼 농도.<br/><br/>정확도가 중요하니 다음 조건 통일 —<br/>· 크기: 특란(XL, 60~68g)<br/>· 온도: 실온 (30분 꺼낸 상태) — 냉장 시 8분<br/>· 조리법: 끓는 물 투입 → 정확히 7분 → 즉시 얼음물 5분<br/>· 껍질 까기: 5~7일 묵은 계란 사용 + 둥근 쪽부터<br/><br/>±15초 차이로 농도가 크게 달라지므로 타이머 필수.',
+                a: `<strong>7분 (특란 + 실온 + 끓는 물 투입)</strong>이 표준. 라멘 아지타마와 양념장계란(마야크 에그)의 핵심 단계입니다. 흰자는 완전히 익고 노른자는 걸쭉한 잼 농도.<br/><br/>정확도가 중요하니 다음 조건 통일 —<br/>· 크기: 특란(XL, ${XL_RANGE})<br/>· 온도: 실온 (30분 꺼낸 상태) — 냉장 시 8분<br/>· 조리법: 끓는 물 투입 → 정확히 7분 → 즉시 얼음물 5분<br/>· 껍질 까기: 5~7일 묵은 계란 사용 + 둥근 쪽부터<br/><br/>±15초 차이로 농도가 크게 달라지므로 타이머 필수.`,
               },
               {
                 q: '라면 계란 반숙은 몇 분?',
@@ -150,7 +157,7 @@ export default function EggTimerPage() {
             </table>
           </div>
           <p className="g-note">
-            ※ 특란(60~68g) + 실온(20°C) + 끓는 물 투입 기준. 냉장 계란은 +1분, 왕란은 +30초.
+            ※ 특란({XL_RANGE}) + 실온(20°C) + 끓는 물 투입 기준. 냉장 계란은 +1분, 왕란은 +30초.
           </p>
         </section>
 
@@ -171,13 +178,12 @@ export default function EggTimerPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['왕란 (2XL)', '68g 이상',   '+30초',  '대형마트·이중노른자 가능성'],
-                  ['특란 (XL)',  '60~68g',     '기준',   '마트·편의점 표준 (가장 흔함)'],
-                  ['대란 (L)',   '52~60g',     '-15초',  '소형마트·재래시장'],
-                  ['중란 (M)',   '44~52g',     '-30초',  '계란말이·간편식'],
-                  ['소란 (S)',   '44g 미만',   '-45초',  '베이킹·도시락'],
-                ].map(([size, w, adj, use], i) => (
+                {SIZES.map(z => [
+                  z.label.replace('(', ' ('),
+                  z.rangeG.replace('g+', 'g 이상'),
+                  z.adjustmentSec === 0 ? '기준' : `${z.adjustmentSec > 0 ? '+' : '-'}${Math.abs(z.adjustmentSec)}초`,
+                  SIZE_USE[z.id] ?? '',
+                ]).map(([size, w, adj, use], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{size}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{w}</td>
